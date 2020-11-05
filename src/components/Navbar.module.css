@@ -1,5 +1,8 @@
 .brand {
+  font-family: 'Ahpuch.Apollyon-Light', 'Open Sans', sans-serif;
   line-height: 60px;
+  text-transform: uppercase;
+  letter-spacing: 0.5rem;
 }
 
 .dropdownMenu {

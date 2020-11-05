@@ -19,6 +19,13 @@ class MyDocument extends Document {
           <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
           <link
             rel="preload"
+            href="/font/ahpuch-apollyon/light.woff2"
+            as="font"
+            type="font/woff2"
+            crossOrigin="anonymous"
+          />
+          <link
+            rel="preload"
             href="https://fonts.gstatic.com/s/opensans/v18/mem8YaGs126MiZpBA-UFVZ0bf8pkAg.woff2"
             as="font"
             type="font/woff2"
