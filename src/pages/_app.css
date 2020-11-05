@@ -1,0 +1,11 @@
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+
+html {
+  overflow-y: scroll;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  color: #333;
+}

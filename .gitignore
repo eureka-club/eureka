@@ -1,0 +1,31 @@
+# misc
+.DS_Store
+.idea
+.eslintcache
+*.pem
+my_resources
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# dependencies
+/node_modules
+
+# deployment
+/.dokku/.env
+
+# next.js
+/.next/
+/build
+/out/
+
+# local env files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# vercel
+.vercel

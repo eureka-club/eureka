@@ -1,0 +1,16 @@
+.brand {
+  line-height: 60px;
+}
+
+.dropdownMenu {
+  background-color: #28a745;
+  min-width: 7rem;
+}
+  .dropdownMenuItem {
+    color: #fff;
+    font-weight: bold;
+  }
+
+.profileDropdown {
+  transform: scale(1.5);
+}
