@@ -1,10 +1,10 @@
 import classNames from 'classnames';
 import { FunctionComponent } from 'react';
+import { Badge } from 'react-bootstrap';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 
 import styles from './Cycle.module.css';
-import { Badge } from 'react-bootstrap';
 
 interface Props {
   bookmarked?: boolean;
