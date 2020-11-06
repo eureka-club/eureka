@@ -1,0 +1,50 @@
+.post {
+  float: left;
+  margin-bottom: 2rem;
+}
+
+.imageContainer {
+  border-radius: 0.75rem;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.imageContainer img {
+  width: 100%;
+}
+
+.actions {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 2rem;
+  color: white;
+  transform: scale(1.5);
+}
+
+.actionBookmark,
+.actionLike {
+  cursor: pointer;
+  filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.5));
+}
+.actionBookmark:hover,
+.actionLike:hover {
+  transform: scale(1.15);
+}
+.actionBookmark {
+  margin-right: 0.25rem;
+}
+.actionLike {
+  color: #e3506d;
+}
+
+.title {
+  color: #333;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+}
+
+.author {
+  color: #333;
+}
