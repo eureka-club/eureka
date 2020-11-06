@@ -13,7 +13,7 @@ interface Props {
   title: string;
 }
 
-const IMG_URI_PREFIX = '/img/posts';
+const IMG_URI_PREFIX = '/app-assets';
 
 const Post: FunctionComponent<Props> = ({ author, bookmarked, image, liked, title }) => {
   return (
@@ -22,13 +22,15 @@ const Post: FunctionComponent<Props> = ({ author, bookmarked, image, liked, titl
         <a href="#test">
           <img src={`${IMG_URI_PREFIX}/${image}`} alt={title} />
         </a>
-        <div className={classNames('d-flex', styles.actions)}>
-          {bookmarked ? (
-            <BsBookmarkFill className={styles.actionBookmark} />
-          ) : (
-            <BsBookmark className={styles.actionBookmark} />
-          )}
-          {liked ? <AiFillHeart className={styles.actionLike} /> : <AiOutlineHeart className={styles.actionLike} />}
+        <div className={classNames('d-flex', styles.placer)}>
+          <div className={styles.actions}>
+            {bookmarked ? (
+              <BsBookmarkFill className={styles.actionBookmark} />
+            ) : (
+              <BsBookmark className={styles.actionBookmark} />
+            )}
+            {liked ? <AiFillHeart className={styles.actionLike} /> : <AiOutlineHeart className={styles.actionLike} />}
+          </div>
         </div>
       </div>
       <a href="#test">
