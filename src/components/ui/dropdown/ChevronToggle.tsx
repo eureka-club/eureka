@@ -10,7 +10,7 @@ interface Props {
 const ChevronToggle: ForwardRefRenderFunction<HTMLButtonElement, Props> = ({ children, onClick }, ref) => (
   <Button
     ref={ref}
-    variant="success"
+    variant="primary"
     onClick={(ev) => {
       ev.preventDefault();
       onClick(ev);

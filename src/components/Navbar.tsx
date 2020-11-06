@@ -22,13 +22,13 @@ const Navbar: FunctionComponent = () => {
         </Form>
 
         <Nav>
-          <Button variant="outline-secondary" className="mr-2">
+          <Button variant="outline-primary" className="mr-2">
             <BiCheck /> Cycle
           </Button>
-          <Button variant="outline-secondary" className="mr-2">
+          <Button variant="outline-primary" className="mr-2">
             <BiCheck /> Read
           </Button>
-          <Button variant="outline-secondary" className="">
+          <Button variant="outline-primary" className="">
             <BiCheck /> Watch
           </Button>
         </Nav>
