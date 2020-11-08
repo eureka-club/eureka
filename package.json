@@ -18,6 +18,10 @@
       "post-merge": "./scripts/write-git-sha .env.local GIT_REV"
     }
   },
+  "engines": {
+    "node": ">=14.15 || >=12.19",
+    "yarn": "^1.22"
+  },
   "dependencies": {
     "@sentry/browser": "^5.26.0",
     "@sentry/integrations": "^5.26.0",
