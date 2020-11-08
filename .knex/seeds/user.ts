@@ -10,7 +10,7 @@ export async function seed(knex: Knex): Promise<void> {
     {
       id: uuid.v4(),
       user_name: 'srigi@brno',
-      roles: ['guest', 'member', 'admin'],
+      roles: JSON.stringify(['guest', 'member', 'admin']),
       created_at: new Date(),
     },
   ]);

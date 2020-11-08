@@ -36,8 +36,8 @@ const DbPage: NextPage<Props> = ({ users }) => {
                   <tr key={user.id}>
                     <td>{user.id}</td>
                     <td>{user.userName}</td>
-                    <td>{user.roles}</td>
-                    <td>{new Date(user.createdAt).toISOString()}</td>
+                    <td>{user.roles.join(', ')}</td>
+                    <td>{user.createdAt}</td>
                   </tr>
                 ))}
               </tbody>
@@ -59,8 +59,8 @@ export const getServerSideProps: GetServerSideProps = async () => {
       users: users.map((user) => ({
         id: user.id,
         userName: user.user_name,
-        roles: user.roles,
-        createdAt: user.created_at,
+        ...(user.roles != null && { roles: JSON.parse(user.roles) }),
+        ...(user.created_at != null && { createdAt: new Date(user.created_at).toISOString() }),
       })),
     },
   };
