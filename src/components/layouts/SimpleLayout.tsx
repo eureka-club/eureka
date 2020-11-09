@@ -3,7 +3,6 @@ import { Container } from 'react-bootstrap';
 
 import Navbar from '../Navbar';
 import withTitle from '../../HOCs/withTitle';
-import styles from './SimpleLayout.module.css';
 
 type Props = {
   children: JSX.Element | JSX.Element[];
@@ -16,7 +15,7 @@ const SimpleLayout: FunctionComponent<Props> = ({ children }) => (
       <Navbar />
     </Container>
 
-    <Container className={styles.content}>{children}</Container>
+    <Container className="mt-5">{children}</Container>
   </>
 );
 

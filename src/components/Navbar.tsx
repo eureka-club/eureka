@@ -10,17 +10,17 @@ const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
 
 const Navbar: FunctionComponent = () => {
   return (
-    <BootstrapNavbar variant="light" expand="md" className="p-0">
-      <BootstrapNavbar.Brand href="/" className={classNames(styles.brand, 'mr-5')}>
+    <BootstrapNavbar variant="light" expand="xl" className="p-0">
+      <BootstrapNavbar.Brand href="/" className={classNames(styles.brand, 'mr-4')}>
         <img className="d-inline-block align-top mr-1" alt="Project logo" src="/img/logo.png" width={60} /> {siteName}
       </BootstrapNavbar.Brand>
+
+      <Form inline className="mr-auto">
+        <FormControl type="text" placeholder="Search" className="mr-sm-2" />
+      </Form>
+
       <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />
-
       <BootstrapNavbar.Collapse>
-        <Form inline className="mr-4">
-          <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-        </Form>
-
         <Nav>
           <Button variant="outline-primary" className="mr-2">
             <BiCheck /> Cycle
