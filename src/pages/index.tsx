@@ -1,8 +1,14 @@
 import { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { Col, Modal, Row } from 'react-bootstrap';
 
-import { MosaicItem } from '../types';
 import Mosaic from '../components/Mosaic';
 import SimpleLayout from '../components/layouts/SimpleLayout';
+import PostDetail from '../components/PostDetail';
+import { isPostObject, MosaicItem, PostObject } from '../types';
+import styles from './index.module.css';
+import DetailLayout from '../components/layouts/DetailLayout';
 
 export const mosaicItems: MosaicItem[] = [
   {
@@ -112,10 +118,55 @@ export const mosaicItems: MosaicItem[] = [
 ];
 
 const IndexPage: NextPage = () => {
+  const [selectedPost, setSelectedPost] = useState<PostObject>();
+  const router = useRouter();
+  const {
+    asPath,
+    query: { id },
+  } = router;
+
+  useEffect(() => {
+    if (id != null && asPath.indexOf('/post/') === 0) {
+      const post = mosaicItems.find((item: MosaicItem): boolean => item.id === id);
+      if (post != null && isPostObject(post)) {
+        setSelectedPost(post);
+      }
+    } else {
+      setSelectedPost(undefined);
+    }
+  }, [asPath, id]);
+
+  const handleModalClose = () => {
+    router.push('/');
+    setSelectedPost(undefined);
+  };
+
   return (
-    <SimpleLayout title="Welcome">
-      <Mosaic stock={mosaicItems} />
-    </SimpleLayout>
+    <>
+      <SimpleLayout title="Welcome">
+        <Mosaic stock={mosaicItems} />
+      </SimpleLayout>
+
+      <Modal
+        show={selectedPost != null}
+        onHide={handleModalClose}
+        dialogClassName={styles.responsiveModal}
+        backdropClassName={styles.lightOverlay}
+        contentClassName={styles.borderlessModal}
+      >
+        <Modal.Body>
+          {selectedPost != null && (
+            <DetailLayout title={selectedPost.title}>
+              <Row>
+                <Col md={{ offset: 1, span: 11 }}>
+                  <PostDetail post={selectedPost} />
+                </Col>
+              </Row>
+            </DetailLayout>
+          )}
+        </Modal.Body>
+      </Modal>
+    </>
   );
 };
 

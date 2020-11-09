@@ -14,10 +14,6 @@
   --color-secondary-raised: #312169;
 }
 
-html {
-  overflow-y: scroll;
-}
-
 body {
   font-family: 'Open Sans', sans-serif;
   color: #333;

@@ -20,7 +20,7 @@ const Post: FunctionComponent<Props> = ({ id, author, bookmarked, image, liked, 
   return (
     <article className={styles.post}>
       <div className={styles.imageContainer}>
-        <Link href={`/post/[id]?id=${id}`}>
+        <Link href={`/?id=${id}`} as={`/post/${id}`}>
           <a>
             <img src={`${IMG_URI_PREFIX}/${image}`} alt={title} />
           </a>
@@ -36,7 +36,7 @@ const Post: FunctionComponent<Props> = ({ id, author, bookmarked, image, liked, 
           </div>
         </div>
       </div>
-      <Link href={`/post/[id]?id=${id}`}>
+      <Link href={`/?id=${id}`} as={`/post/${id}`}>
         <a>
           <h3 className={styles.title}>{title}</h3>
         </a>

@@ -1,5 +1,7 @@
+import Link from 'next/link';
 import { FunctionComponent } from 'react';
-import { Container } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
+import { BiArrowBack } from 'react-icons/bi';
 
 import withTitle from '../../HOCs/withTitle';
 import styles from './DetailLayout.module.css';
@@ -11,7 +13,18 @@ type Props = {
 
 const DetailLayout: FunctionComponent<Props> = ({ children }) => (
   <>
-    <Container className={styles.content}>{children}</Container>
+    <Container className="mt-3 mb-2">
+      <Row>
+        <Col>
+          <Link href="/">
+            <a>
+              <BiArrowBack className={styles.returnLink} />
+            </a>
+          </Link>
+        </Col>
+      </Row>
+    </Container>
+    <Container>{children}</Container>
   </>
 );
 
