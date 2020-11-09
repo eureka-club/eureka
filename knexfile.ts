@@ -3,9 +3,8 @@ import * as dotenv from 'dotenv';
 dotenv.config({ path: '.env.local' });
 
 export default {
-  client: 'sqlite3',
-  connection:
-    process.env.DATABASE_FILENAME != null ? { filename: process.env.DATABASE_FILENAME } : process.env.DATABASE_URL,
+  client: process.env.DATABASE_ENGINE,
+  connection: process.env.DATABASE_ENGINE === 'sqlite3' ? { filename: '.data/main.sqlite3' } : process.env.DATABASE_URL,
   debug: process.env.NODE_ENV !== 'production',
   ...(process.env.NODE_ENV === 'production' && {
     pool: {
