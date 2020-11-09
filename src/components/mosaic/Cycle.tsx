@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import Link from 'next/link';
 import { FunctionComponent } from 'react';
 import { Badge } from 'react-bootstrap';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
@@ -8,6 +9,7 @@ import { IMG_URI_PREFIX } from '../../constants';
 import styles from './Cycle.module.css';
 
 interface Props {
+  id: string;
   bookmarked?: boolean;
   image: string;
   liked?: boolean;
@@ -16,18 +18,22 @@ interface Props {
   title: string;
 }
 
-const Cycle: FunctionComponent<Props> = ({ bookmarked, image, liked, startDate, endDate, title }) => {
+const Cycle: FunctionComponent<Props> = ({ id, bookmarked, image, liked, startDate, endDate, title }) => {
   return (
     <article className={styles.cycle}>
       <div className={styles.imageContainer}>
-        <a href="#test">
-          <img src={`${IMG_URI_PREFIX}/${image}`} alt={title} />
-        </a>
+        <Link href={`/?id=${id}`} as={`/cycle/${id}`}>
+          <a>
+            <img src={`${IMG_URI_PREFIX}/${image}`} alt={title} />
+          </a>
+        </Link>
 
         <div className={styles.placer}>
-          <a href="#test">
-            <h3 className={styles.title}>{title}</h3>
-          </a>
+          <Link href={`/?id=${id}`} as={`/cycle/${id}`}>
+            <a>
+              <h3 className={styles.title}>{title}</h3>
+            </a>
+          </Link>
           <span className={styles.dateRange}>
             {startDate}&#8209;{endDate}
           </span>
