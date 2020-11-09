@@ -6,9 +6,10 @@ import { Col, Modal, Row } from 'react-bootstrap';
 import Mosaic from '../components/Mosaic';
 import SimpleLayout from '../components/layouts/SimpleLayout';
 import PostDetail from '../components/PostDetail';
-import { isPostObject, MosaicItem, PostObject } from '../types';
+import { isCycleObject, isPostObject, MosaicItem } from '../types';
 import styles from './index.module.css';
 import DetailLayout from '../components/layouts/DetailLayout';
+import CycleDetail from '../components/CycleDetail';
 
 export const mosaicItems: MosaicItem[] = [
   {
@@ -117,28 +118,39 @@ export const mosaicItems: MosaicItem[] = [
   },
 ];
 
+const renderDetailedMosaicItem = (item: MosaicItem) => {
+  if (isCycleObject(item)) {
+    return <CycleDetail cycle={item} />;
+  }
+
+  if (isPostObject(item)) {
+    return <PostDetail post={item} />;
+  }
+
+  return '';
+};
+
 const IndexPage: NextPage = () => {
-  const [selectedPost, setSelectedPost] = useState<PostObject>();
+  const [selectedMosaicItem, setSelectedMosaicItem] = useState<MosaicItem>();
   const router = useRouter();
   const {
-    asPath,
     query: { id },
   } = router;
 
   useEffect(() => {
-    if (id != null && asPath.indexOf('/post/') === 0) {
-      const post = mosaicItems.find((item: MosaicItem): boolean => item.id === id);
-      if (post != null && isPostObject(post)) {
-        setSelectedPost(post);
+    if (id != null) {
+      const searchRes = mosaicItems.find((item: MosaicItem): boolean => item.id === id);
+      if (searchRes != null) {
+        setSelectedMosaicItem(searchRes);
       }
     } else {
-      setSelectedPost(undefined);
+      setSelectedMosaicItem(undefined);
     }
-  }, [asPath, id]);
+  }, [id]);
 
   const handleModalClose = () => {
+    setSelectedMosaicItem(undefined);
     router.push('/');
-    setSelectedPost(undefined);
   };
 
   return (
@@ -148,19 +160,17 @@ const IndexPage: NextPage = () => {
       </SimpleLayout>
 
       <Modal
-        show={selectedPost != null}
+        show={selectedMosaicItem != null}
         onHide={handleModalClose}
         dialogClassName={styles.responsiveModal}
         backdropClassName={styles.lightOverlay}
         contentClassName={styles.borderlessModal}
       >
         <Modal.Body>
-          {selectedPost != null && (
-            <DetailLayout title={selectedPost.title}>
+          {selectedMosaicItem != null && (
+            <DetailLayout title={selectedMosaicItem.title}>
               <Row>
-                <Col md={{ offset: 1, span: 11 }}>
-                  <PostDetail post={selectedPost} />
-                </Col>
+                <Col md={{ offset: 1, span: 11 }}>{renderDetailedMosaicItem(selectedMosaicItem)}</Col>
               </Row>
             </DetailLayout>
           )}
