@@ -8,6 +8,7 @@ import { IMG_URI_PREFIX } from '../../constants';
 import styles from './Post.module.css';
 
 interface Props {
+  id: string;
   author: string;
   bookmarked?: boolean;
   image: string;
@@ -15,11 +16,11 @@ interface Props {
   title: string;
 }
 
-const Post: FunctionComponent<Props> = ({ author, bookmarked, image, liked, title }) => {
+const Post: FunctionComponent<Props> = ({ id, author, bookmarked, image, liked, title }) => {
   return (
     <article className={styles.post}>
       <div className={styles.imageContainer}>
-        <Link href="/post">
+        <Link href={`/post/[id]?id=${id}`}>
           <a>
             <img src={`${IMG_URI_PREFIX}/${image}`} alt={title} />
           </a>
@@ -35,9 +36,11 @@ const Post: FunctionComponent<Props> = ({ author, bookmarked, image, liked, titl
           </div>
         </div>
       </div>
-      <a href="#test">
-        <h3 className={styles.title}>{title}</h3>
-      </a>
+      <Link href={`/post/[id]?id=${id}`}>
+        <a>
+          <h3 className={styles.title}>{title}</h3>
+        </a>
+      </Link>
       <a href="#test">
         <span className={styles.author}>{author}</span>
       </a>

@@ -1,16 +1,24 @@
+import { GetServerSideProps } from 'next';
 import { FunctionComponent } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
-import { IMG_URI_PREFIX } from '../constants';
-import DetailLayout from '../components/layouts/DetailLayout';
+import { IMG_URI_PREFIX } from '../../constants';
+import DetailLayout from '../../components/layouts/DetailLayout';
+import { MosaicItem, PostObject } from '../../types';
+import { mosaicItems } from '../index';
+import styles from './[id].module.css';
 
-const PostDetailPage: FunctionComponent = () => {
+interface Props {
+  post: PostObject;
+}
+
+const PostDetailPage: FunctionComponent<Props> = ({ post }) => {
   return (
-    <DetailLayout title="Magic night">
+    <DetailLayout title={post.title}>
       <Row>
         <Col md={{ span: 7 }}>
-          <h1>Magic night</h1>
-          <span>DAV-19</span>
+          <h1>{post.title}</h1>
+          <span>{post.author}</span>
 
           <p>
             Maecenas sollicitudin sollicitudin arcu, ac fringilla quam pellentesque et. Vivamus euismod ante et pulvinar
@@ -28,11 +36,29 @@ const PostDetailPage: FunctionComponent = () => {
         </Col>
 
         <Col md={{ span: 5 }}>
-          <img src={`${IMG_URI_PREFIX}/de7q9kj.png`} alt="Magic night" />
+          <div className={styles.imgWrapper}>
+            <img src={`${IMG_URI_PREFIX}/${post.image}`} alt={post.title} />
+          </div>
         </Col>
       </Row>
     </DetailLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const { id } = params!;
+  if (id == null) {
+    return { notFound: true }; // err 404
+  }
+
+  const post = mosaicItems.find((item: MosaicItem): boolean => item.kind === 'post' && item.id === id);
+  if (post == null) {
+    return { notFound: true };
+  }
+
+  return {
+    props: { post },
+  };
 };
 
 export default PostDetailPage;
