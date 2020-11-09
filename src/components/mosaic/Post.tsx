@@ -1,11 +1,14 @@
 import classNames from 'classnames';
+import Link from 'next/link';
 import { FunctionComponent } from 'react';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 
+import { IMG_URI_PREFIX } from '../../constants';
 import styles from './Post.module.css';
 
 interface Props {
+  id: string;
   author: string;
   bookmarked?: boolean;
   image: string;
@@ -13,15 +16,15 @@ interface Props {
   title: string;
 }
 
-const IMG_URI_PREFIX = '/app-assets';
-
-const Post: FunctionComponent<Props> = ({ author, bookmarked, image, liked, title }) => {
+const Post: FunctionComponent<Props> = ({ id, author, bookmarked, image, liked, title }) => {
   return (
     <article className={styles.post}>
       <div className={styles.imageContainer}>
-        <a href="#test">
-          <img src={`${IMG_URI_PREFIX}/${image}`} alt={title} />
-        </a>
+        <Link href={`/?id=${id}`} as={`/post/${id}`}>
+          <a>
+            <img src={`${IMG_URI_PREFIX}/${image}`} alt={title} />
+          </a>
+        </Link>
         <div className={classNames('d-flex', styles.placer)}>
           <div className={styles.actions}>
             {bookmarked ? (
@@ -33,9 +36,11 @@ const Post: FunctionComponent<Props> = ({ author, bookmarked, image, liked, titl
           </div>
         </div>
       </div>
-      <a href="#test">
-        <h3 className={styles.title}>{title}</h3>
-      </a>
+      <Link href={`/?id=${id}`} as={`/post/${id}`}>
+        <a>
+          <h3 className={styles.title}>{title}</h3>
+        </a>
+      </Link>
       <a href="#test">
         <span className={styles.author}>{author}</span>
       </a>

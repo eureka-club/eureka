@@ -4,6 +4,7 @@ import { Badge } from 'react-bootstrap';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 
+import { IMG_URI_PREFIX } from '../../constants';
 import styles from './Cycle.module.css';
 
 interface Props {
@@ -14,8 +15,6 @@ interface Props {
   endDate: string;
   title: string;
 }
-
-const IMG_URI_PREFIX = '/app-assets';
 
 const Cycle: FunctionComponent<Props> = ({ bookmarked, image, liked, startDate, endDate, title }) => {
   return (

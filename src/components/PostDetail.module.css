@@ -1,0 +1,5 @@
+.imgWrapper img {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  width: 100%;
+}

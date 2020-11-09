@@ -1,0 +1,29 @@
+.borderlessModal {
+  border: none;
+}
+
+@media (min-width: 576px) {
+  .responsiveModal {
+    max-width: 540px;
+  }
+}
+@media (min-width: 768px) {
+  .responsiveModal {
+    max-width: 720px;
+  }
+}
+@media (min-width: 992px) {
+  .responsiveModal {
+    max-width: 960px;
+  }
+}
+@media (min-width: 1200px) {
+  .responsiveModal {
+    max-width: 1140px;
+  }
+}
+
+.lightOverlay {
+  background-color: #fff;
+  opacity: 0.99 !important;
+}
