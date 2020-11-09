@@ -2,8 +2,8 @@ import classNames from 'classnames';
 import { FunctionComponent } from 'react';
 import Masonry from 'react-masonry-css';
 
-import Cycle from './Cycle';
-import Post from './Post';
+import Cycle from './mosaic/Cycle';
+import Post from './mosaic/Post';
 import styles from './Mosaic.module.css';
 
 const Mosaic: FunctionComponent = () => {
