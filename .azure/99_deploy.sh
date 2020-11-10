@@ -68,14 +68,22 @@ function create_app_service {
 			NEXT_TELEMETRY_DISABLED=1 \
 			DATABASE_ENGINE=${DATABASE_ENGINE} \
 			DATABASE_URL=${DATABASE_URL} \
-			GIT_REV=${GIT_REV} \
 			NEXT_PUBLIC_LOCAL_ASSETS_BASE_URL=${NEXT_PUBLIC_LOCAL_ASSETS_BASE_URL} \
 			LOCAL_ASSETS_HOST_DIR=${LOCAL_ASSETS_HOST_DIR} \
 		--output none
-	echo "done"
+	echo "done... waiting 15s"
+	sleep 15
 
 	echo -e "Deploying ${COLOR_YELLOW}sources${NC} with rev ${COLOR_GREEN}${GIT_REV}${NC} to webapp ${COLOR_BLUE}$3${NC}..."
 	git push -f azure ${GIT_BRANCH}:master
+
+	printf "Updating ${COLOR_GREEN}GIT_REV${NC} for webapp ${COLOR_BLUE}$3${NC}... "
+	az webapp config appsettings set \
+		--resource-group $1 \
+		--name $3 \
+		--settings GIT_REV=${GIT_REV} \
+		--output none
+	echo "done"
 }
 
 check_app_service_plan ${RESOURCE_GROUP_APP} ${WEBAPP_SERVICE_PLAN_NAME}
