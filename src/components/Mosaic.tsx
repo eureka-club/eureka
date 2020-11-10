@@ -25,7 +25,16 @@ const renderMosaicItem = (item: MosaicItem) => {
 
 const Mosaic: FunctionComponent<Props> = ({ stock }) => {
   return (
-    <Masonry breakpointCols={4} className={classNames('d-flex', styles.masonry)} columnClassName={styles.masonryColumn}>
+    <Masonry
+      breakpointCols={{
+        default: 4,
+        1199: 3,
+        768: 2,
+        576: 1,
+      }}
+      className={classNames('d-flex', styles.masonry)}
+      columnClassName={styles.masonryColumn}
+    >
       {stock.map((item: MosaicItem) => renderMosaicItem(item))}
     </Masonry>
   );
