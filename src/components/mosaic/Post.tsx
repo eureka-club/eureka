@@ -4,7 +4,7 @@ import { FunctionComponent } from 'react';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 
-import { IMG_URI_PREFIX } from '../../constants';
+import { ASSETS_BASE_URL } from '../../constants';
 import styles from './Post.module.css';
 
 interface Props {
@@ -22,7 +22,7 @@ const Post: FunctionComponent<Props> = ({ id, author, bookmarked, image, liked, 
       <div className={styles.imageContainer}>
         <Link href={`/?id=${id}`} as={`/post/${id}`}>
           <a>
-            <img src={`${IMG_URI_PREFIX}/${image}`} alt={title} />
+            <img src={`${ASSETS_BASE_URL}/${image}`} alt={title} />
           </a>
         </Link>
         <div className={classNames('d-flex', styles.placer)}>

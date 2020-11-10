@@ -1,1 +1,1 @@
-export const IMG_URI_PREFIX = '/app-assets';
+export const ASSETS_BASE_URL = process.env.NEXT_PUBLIC_LOCAL_ASSETS_BASE_URL;

@@ -5,7 +5,7 @@ import { Badge } from 'react-bootstrap';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 
-import { IMG_URI_PREFIX } from '../../constants';
+import { ASSETS_BASE_URL } from '../../constants';
 import styles from './Cycle.module.css';
 
 interface Props {
@@ -24,7 +24,7 @@ const Cycle: FunctionComponent<Props> = ({ id, bookmarked, image, liked, startDa
       <div className={styles.imageContainer}>
         <Link href={`/?id=${id}`} as={`/cycle/${id}`}>
           <a>
-            <img src={`${IMG_URI_PREFIX}/${image}`} alt={title} />
+            <img src={`${ASSETS_BASE_URL}/${image}`} alt={title} />
           </a>
         </Link>
 

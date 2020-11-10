@@ -1,7 +1,7 @@
 import { FunctionComponent } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
-import { IMG_URI_PREFIX } from '../constants';
+import { ASSETS_BASE_URL } from '../constants';
 import { PostObject } from '../types';
 import styles from './PostDetail.module.css';
 
@@ -35,7 +35,7 @@ const PostDetail: FunctionComponent<Props> = ({ post }) => {
 
       <Col md={{ span: 5 }}>
         <div className={styles.imgWrapper}>
-          <img src={`${IMG_URI_PREFIX}/${post.image}`} alt={post.title} />
+          <img src={`${ASSETS_BASE_URL}/${post.image}`} alt={post.title} />
         </div>
       </Col>
     </Row>
