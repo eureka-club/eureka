@@ -1,7 +1,7 @@
 import { FunctionComponent } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
-import { IMG_URI_PREFIX } from '../constants';
+import { ASSETS_BASE_URL } from '../constants';
 import { CycleObject } from '../types';
 import styles from './PostDetail.module.css';
 
@@ -37,7 +37,7 @@ const CycleDetail: FunctionComponent<Props> = ({ cycle }) => {
 
       <Col md={{ span: 5 }}>
         <div className={styles.imgWrapper}>
-          <img src={`${IMG_URI_PREFIX}/${cycle.image}`} alt={cycle.title} />
+          <img src={`${ASSETS_BASE_URL}/${cycle.image}`} alt={cycle.title} />
         </div>
       </Col>
     </Row>
