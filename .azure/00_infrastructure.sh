@@ -75,7 +75,6 @@ function created_database {
 			--server $2 \
 			--name $3 \
 			--service-objective $4 \
-			--backup-storage-redundancy Local \
 			--output none
 	fi
 	echo -e "${COLOR_GREEN}OK${NC}"
