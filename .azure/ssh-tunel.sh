@@ -14,4 +14,4 @@ function ssh_into_app-service {
 		--port ${LOCAL_PORT}
 }
 
-ssh_into_app-service ${SUBSCRIPTION} ${RESOURCE_GROUP_APP} ${WEBAPP_APP_SERVICE_NAME}
+ssh_into_app-service ${SUBSCRIPTION} ${RESOURCE_GROUP_APP} ${APP_SERVICE_NAME}

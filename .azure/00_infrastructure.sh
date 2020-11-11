@@ -4,16 +4,78 @@ __DIR__="$(cd "$(dirname "$BASH_SOURCE")" >/dev/null 2>&1 && pwd)"
 source ${__DIR__}/_common.sh
 source ${__DIR__}/.env
 
+databaseServerFqdn=''
 
 function create_resource_group {
 	printf "Checking existence of ${COLOR_YELLOW}resource group${NC} ${COLOR_BLUE}$1${NC}... "
-	res=$(az group show --name $1 2>/dev/null)
+	az group show --name $1 --output none 2>/dev/null
 	if [[ $? != 0 ]]; then
 		echo -e "${COLOR_RED}Missing!${NC}"
 		printf "Creating ${COLOR_YELLOW}resource group${NC} ${COLOR_BLUE}$1${NC}... "
 		az group create \
 			--location ${REGION} \
 			--name $1 \
+			--output none
+	fi
+	echo -e "${COLOR_GREEN}OK${NC}"
+}
+
+function created_database_server {
+	printf "Checking existence of ${COLOR_YELLOW}SQL database server${NC} ${COLOR_BLUE}$2${NC} in resource group ${COLOR_BLUE}$1${NC}... "
+	az sql server show --resource-group $1 --name $2 --output none 2>/dev/null
+	if [[ $? != 0 ]]; then
+		echo -e "${COLOR_RED}Missing!${NC}"
+		printf "Creating ${COLOR_YELLOW}SQL database server${NC} ${COLOR_BLUE}$2${NC}... "
+		databaseServerFqdn=$(az sql server create \
+			--resource-group $1 \
+			--name $2 \
+			--admin-user $3 \
+			--admin-password $4 \
+			--query fullyQualifiedDomainName \
+			--output tsv)
+		echo "done"
+
+		printf "Creating ${COLOR_YELLOW}SQL server firewall rule${NC} ${COLOR_BLUE}default${NC} (allows access from Azure services)... "
+		az sql server firewall-rule create \
+			--resource-group $1 \
+			--server $2 \
+			--name default \
+			--start-ip-address 0.0.0.0 \
+			--end-ip-address 0.0.0.0 \
+			--output none
+		echo "done"
+
+		printf "Creating ${COLOR_YELLOW}SQL server firewall rule${NC} ${COLOR_BLUE}$5${NC}... "
+		az sql server firewall-rule create \
+			--resource-group $1 \
+			--server $2 \
+			--name $5 \
+			--start-ip-address $6 \
+			--end-ip-address $7 \
+			--output none
+		echo "done"
+	else
+		echo -e "${COLOR_GREEN}OK${NC}"
+		databaseServerFqdn=$(az sql server show \
+			--resource-group $1 \
+			--name $2 \
+			--query fullyQualifiedDomainName\
+			--output tsv)
+	fi
+}
+
+function created_database {
+	printf "Checking existence of ${COLOR_YELLOW}SQL database${NC} ${COLOR_BLUE}$3${NC} at SQL server ${COLOR_BLUE}$2${NC}... "
+	az sql db show --resource-group $1 --server $2 --name $3 --output none 2>/dev/null
+	if [[ $? != 0 ]]; then
+		echo -e "${COLOR_RED}Missing!${NC}"
+		printf "Creating ${COLOR_YELLOW}SQL database${NC} ${COLOR_BLUE}$3${NC}... "
+		az sql db create \
+			--resource-group $1 \
+			--server $2 \
+			--name $3 \
+			--service-objective $4 \
+			--backup-storage-redundancy Local \
 			--output none
 	fi
 	echo -e "${COLOR_GREEN}OK${NC}"
@@ -29,12 +91,20 @@ function create_app_service_plan {
 			--resource-group $1 \
 			--name $2 \
 			--is-linux \
-			--sku ${WEBAPP_SERVICE_PLAN_SKU} \
+			--sku ${SERVICE_PLAN_SKU} \
 			--output none
 	fi
 	echo -e "${COLOR_GREEN}OK${NC}"
 }
 
 create_resource_group ${RESOURCE_GROUP_APP}
-create_app_service_plan ${RESOURCE_GROUP_APP} ${WEBAPP_SERVICE_PLAN_NAME}
+created_database_server ${RESOURCE_GROUP_APP} ${DATABASE_SERVER_NAME} \
+	${DATABASE_SERVER_ADMIN_USER} \
+	${DATABASE_SERVER_ADMIN_PASSWORD} \
+	${DATABASE_SERVER_FIREWALL_RULE_NAME} \
+	${DATABASE_SERVER_FIREWALL_START_IP_ASSRESS} \
+	${DATABASE_SERVER_FIREWALL_END_IP_ASSRESS}
+created_database ${RESOURCE_GROUP_APP} ${DATABASE_SERVER_NAME} ${DATABASE_NAME} ${DATABASE_SKU}
+echo -e "${COLOR_BLUE}Database DSN:${NC} ${COLOR_GREEN}'${DATABASE_ENGINE}://${DATABASE_SERVER_ADMIN_USER}:${DATABASE_SERVER_ADMIN_PASSWORD}@${databaseServerFqdn}/${DATABASE_NAME}'${NC}\n"
+create_app_service_plan ${RESOURCE_GROUP_APP} ${SERVICE_PLAN_NAME}
 echo -e "All infrastructure tasks ${COLOR_GREEN}completed successfully!${NC}"
