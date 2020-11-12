@@ -10,3 +10,14 @@ export const schema = (alias: string): Record<string, string> => ({
   [`${alias}.created_at`]: `${TABLE_NAME}.created_at`,
   [`${alias}.updated_at`]: `${TABLE_NAME}.updated_at`,
 });
+
+export interface WorkDbObject {
+  'work.id': string;
+  'work.type': string;
+  'work.title': string;
+  'work.author': string;
+  'work.year_created': string;
+  'work.link': string;
+  'work.created_at': string;
+  'work.updated_at': string;
+}

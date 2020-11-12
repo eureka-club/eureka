@@ -9,3 +9,13 @@ export const schema = (alias: string): Record<string, string> => ({
   [`${alias}.created_at`]: `${TABLE_NAME}.created_at`,
   [`${alias}.updated_at`]: `${TABLE_NAME}.updated_at`,
 });
+
+export interface LocalImageDbObject {
+  'local_image.id': string;
+  'local_image.original_filename': string;
+  'local_image.stored_file': string;
+  'local_image.mime_type': string;
+  'local_image.content_hash': string;
+  'local_image.created_at': string;
+  'local_image.updated_at': string;
+}

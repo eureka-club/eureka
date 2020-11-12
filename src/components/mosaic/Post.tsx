@@ -1,49 +1,40 @@
 import classNames from 'classnames';
 import Link from 'next/link';
 import { FunctionComponent } from 'react';
-import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
-import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
+import { AiOutlineHeart } from 'react-icons/ai';
+import { BsBookmark } from 'react-icons/bs';
 
 import { ASSETS_BASE_URL } from '../../constants';
+import { PostDbObject } from '../../models/Post';
 import styles from './Post.module.css';
 
-interface Props {
-  id: string;
-  author: string;
-  bookmarked?: boolean;
-  image: string;
-  liked?: boolean;
-  title: string;
-}
-
-const Post: FunctionComponent<Props> = ({ id, author, bookmarked, image, liked, title }) => {
+const Post: FunctionComponent<PostDbObject> = ({
+  'post.id': postId,
+  'local_image.stored_file': imagePath,
+  'work.author': workAuthor,
+  'work.title': workTitle,
+}) => {
   return (
     <article className={styles.post}>
       <div className={styles.imageContainer}>
-        <Link href={`/?id=${id}`} as={`/post/${id}`}>
+        <Link href={`/?id=${postId}`} as={`/post/${postId}`}>
           <a>
-            <img src={`${ASSETS_BASE_URL}/${image}`} alt={title} />
+            <img src={`${ASSETS_BASE_URL}/${imagePath}`} alt={workTitle} />
           </a>
         </Link>
         <div className={classNames('d-flex', styles.placer)}>
           <div className={styles.actions}>
-            {bookmarked ? (
-              <BsBookmarkFill className={styles.actionBookmark} />
-            ) : (
-              <BsBookmark className={styles.actionBookmark} />
-            )}
-            {liked ? <AiFillHeart className={styles.actionLike} /> : <AiOutlineHeart className={styles.actionLike} />}
+            <BsBookmark className={styles.actionBookmark} />
+            <AiOutlineHeart className={styles.actionLike} />
           </div>
         </div>
       </div>
-      <Link href={`/?id=${id}`} as={`/post/${id}`}>
+      <Link href={`/?id=${postId}`} as={`/post/${postId}`}>
         <a>
-          <h3 className={styles.title}>{title}</h3>
+          <h3 className={styles.title}>{workTitle}</h3>
         </a>
       </Link>
-      <a href="#test">
-        <span className={styles.author}>{author}</span>
-      </a>
+      <span className={styles.author}>{workAuthor}</span>
     </article>
   );
 };
