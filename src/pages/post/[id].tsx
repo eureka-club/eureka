@@ -4,16 +4,19 @@ import { Col, Row } from 'react-bootstrap';
 
 import DetailLayout from '../../components/layouts/DetailLayout';
 import PostDetail from '../../components/PostDetail';
-import { MosaicItem, PostObject } from '../../types';
-import { mosaicItems } from '../index';
+import { TABLE_NAME as LOCAL_IMAGE_TABLE_NAME } from '../../models/LocalImage';
+import { PostDbObject } from '../../models/Post';
+import { TABLE_NAME as USER_TABLE_NAME } from '../../models/User';
+import { TABLE_NAME as WORK_TABLE_NAME } from '../../models/Work';
+import { find } from '../../repositories/Post';
 
 interface Props {
-  post: PostObject;
+  post: PostDbObject;
 }
 
 const PostDetailPage: FunctionComponent<Props> = ({ post }) => {
   return (
-    <DetailLayout title={post.title}>
+    <DetailLayout title={post['work.title']}>
       <Row>
         <Col md={{ offset: 1, span: 11 }}>
           <PostDetail post={post} />
@@ -25,11 +28,11 @@ const PostDetailPage: FunctionComponent<Props> = ({ post }) => {
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const { id } = params!;
-  if (id == null) {
+  if (id == null || typeof id !== 'string') {
     return { notFound: true }; // err 404
   }
 
-  const post = mosaicItems.find((item: MosaicItem): boolean => item.kind === 'post' && item.id === id);
+  const post = await find(id, [{ table: USER_TABLE_NAME, alias: 'creator' }, LOCAL_IMAGE_TABLE_NAME, WORK_TABLE_NAME]);
   if (post == null) {
     return { notFound: true };
   }

@@ -1,5 +1,4 @@
 import * as Knex from 'knex';
-import * as uuid from 'uuid';
 
 export async function seed(knex: Knex): Promise<void> {
   // delete ALL existing entries
@@ -8,9 +7,14 @@ export async function seed(knex: Knex): Promise<void> {
   // insert seed entries
   await knex('user').insert([
     {
+      id: '340c3ef1-d00b-4480-b9a3-60ce197fdff8',
       user_name: 'srigi@brno',
-      roles: JSON.stringify(['guest', 'member', 'admin']),
-      created_at: new Date(),
+      roles: JSON.stringify(['member', 'admin']),
+    },
+    {
+      id: '2878d482-9922-426d-889e-ab1a816df96a',
+      user_name: 'deployer@connor',
+      roles: JSON.stringify(['member', 'admin']),
     },
   ]);
 }

@@ -2,11 +2,11 @@ import { FunctionComponent } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
 import { ASSETS_BASE_URL } from '../constants';
-import { PostObject } from '../types';
+import { PostDbObject } from '../models/Post';
 import styles from './PostDetail.module.css';
 
 interface Props {
-  post: PostObject;
+  post: PostDbObject;
 }
 
 const PostDetail: FunctionComponent<Props> = ({ post }) => {
@@ -14,8 +14,8 @@ const PostDetail: FunctionComponent<Props> = ({ post }) => {
     <Row>
       <Col>
         <div className="mb-4">
-          <h1>{post.title}</h1>
-          <span>{post.author}</span>
+          <h1>{post['work.title']}</h1>
+          <span>{post['work.author']}</span>
         </div>
 
         <p>
@@ -35,7 +35,7 @@ const PostDetail: FunctionComponent<Props> = ({ post }) => {
 
       <Col md={{ span: 5 }}>
         <div className={styles.imgWrapper}>
-          <img src={`${ASSETS_BASE_URL}/${post.image}`} alt={post.title} />
+          <img src={`${ASSETS_BASE_URL}/${post['local_image.stored_file']}`} alt={post['work.title']} />
         </div>
       </Col>
     </Row>
