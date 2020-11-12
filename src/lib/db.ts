@@ -35,13 +35,37 @@ export const hasLeftJoinDefinitionsTable = (leftJoinDefs: LeftJoinDefinition[] |
   });
 };
 
+export const createFindFn = (
+  tableName: string,
+  cb: (table: Knex.QueryBuilder, leftJoinDefs: LeftJoinDefinition[] | null) => Knex.QueryBuilder,
+) => {
+  return async (id: string, leftJoinDefs: LeftJoinDefinition[] | null = null): Promise<Knex.QueryBuilder> => {
+    const connection = await getDbConnection();
+    const table = connection(tableName);
+
+    table.where(`${tableName}.id`, id).first();
+
+    if (leftJoinDefs?.length) {
+      leftJoinDefs.forEach((joinDefinition) => {
+        if (typeof joinDefinition === 'string') {
+          table.leftJoin(joinDefinition, `post.${joinDefinition}_id`, '=', `${joinDefinition}.id`);
+        } else {
+          table.leftJoin(joinDefinition.table, `post.${joinDefinition.alias}_id`, '=', `${joinDefinition.table}.id`);
+        }
+      });
+    }
+
+    return cb(table, leftJoinDefs);
+  };
+};
+
 export const createFindAllFn = (
   tableName: string,
   cb: (table: Knex.QueryBuilder, leftJoinDefs: LeftJoinDefinition[] | null) => Knex.QueryBuilder,
 ) => {
   return async (
-    leftJoinDefs: LeftJoinDefinition[] | null,
-    orderBy: Record<string, string> | null,
+    leftJoinDefs: LeftJoinDefinition[] | null = null,
+    orderBy: Record<string, string> | null = null,
   ): Promise<Knex.QueryBuilder> => {
     const connection = await getDbConnection();
     const table = connection(tableName);
