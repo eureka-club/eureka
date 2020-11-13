@@ -22,6 +22,21 @@ export const fetchDetailPost = async (id: string): Promise<Knex.QueryBuilder> =>
   return findFn(id, [{ table: USER_TABLE_NAME, alias: 'creator' }, LOCAL_IMAGE_TABLE_NAME, WORK_TABLE_NAME]);
 };
 
+export const fetchFullPostDetail = async (id: string): Promise<Knex.QueryBuilder> => {
+  return createFindFn(POST_TABLE_NAME, (table) => {
+    table.leftJoin('user_image', 'user.id', '=', 'user_image.user_id');
+    table.leftJoin({ avatar: 'local_image' }, 'user_image.local_image_id', '=', 'avatar.id');
+
+    return table.select({
+      ...postSchema(POST_TABLE_NAME),
+      ...userSchema('creator'),
+      ...{ 'creator.avatar.file': 'avatar.stored_file' },
+      ...localImageSchema(LOCAL_IMAGE_TABLE_NAME),
+      ...workSchema(WORK_TABLE_NAME),
+    });
+  })(id, [{ table: USER_TABLE_NAME, alias: 'creator' }, LOCAL_IMAGE_TABLE_NAME, WORK_TABLE_NAME]);
+};
+
 export const fetchIndexMosaic = async (): Promise<Knex.QueryBuilder> => {
   const findFn = createFindAllFn(
     POST_TABLE_NAME,
