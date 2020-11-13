@@ -38,5 +38,29 @@ export async function seed(knex: Knex): Promise<void> {
       year_created: '2018',
       link: 'https://www.deviantart.com/thorsten-denk/art/VR-Dreams-772010046',
     },
+    {
+      id: 'aaa7da10-c7f0-44e1-b091-034438ce6ecb',
+      type: 'digital art',
+      title: 'Traveling with your octopus',
+      author: 'BrianKesinger',
+      year_created: '2014',
+      link: 'https://www.deviantart.com/briankesinger/art/Traveling-with-your-octopus-476470538',
+    },
+    {
+      id: 'faa0a56a-b92a-4e88-a433-a5751204da14',
+      type: 'digital art',
+      title: 'Emeraude',
+      author: 'AlexandraVBach',
+      year_created: '2019',
+      link: 'https://www.deviantart.com/alexandravbach/art/Emeraude-796070439',
+    },
+    {
+      id: 'ff2a05a8-4d61-4cb0-9e07-373d13dfa86c',
+      type: 'digital art',
+      title: 'The Mandalorian',
+      author: 'PatrickBrown',
+      year_created: '2020',
+      link: 'https://www.deviantart.com/patrickbrown/art/The-Mandalorian-849330562',
+    },
   ]);
 }
