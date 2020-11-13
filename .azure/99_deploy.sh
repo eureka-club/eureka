@@ -6,6 +6,7 @@ source ${__DIR__}/../.env
 source ${__DIR__}/../.env.local
 source ${__DIR__}/.env
 
+GIT_DEFAULT_BRANCH='master'
 GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 GIT_REV=$(git rev-parse HEAD)
 
@@ -20,7 +21,15 @@ function check_app_service_plan {
 	echo -e "${COLOR_GREEN}OK${NC}"
 }
 
-function create_app_service {
+function deploy_app_service {
+	if [[ $GIT_BRANCH != $GIT_DEFAULT_BRANCH ]]; then
+		printf " ${COLOR_YELLOW}You are not on default branch!${NC} Do you want to deploy current branch ${COLOR_BLUE}${GIT_BRANCH}${NC}? [y/N]: ";
+		read INP
+		if [[ ${INP} != 'y' && $INP != 'Y' ]]; then
+			exit 1
+		fi
+	fi
+
 	printf "Checking existence of ${COLOR_YELLOW}webapp${NC} ${COLOR_BLUE}$3${NC}... "
 	az webapp show --resource-group $1 --name $3 --output none 2>/dev/null
 	if [[ $? != 0 ]]; then
@@ -79,10 +88,10 @@ function create_app_service {
 		sleep 15
 	fi
 
-	echo -e "Deploying ${COLOR_YELLOW}sources${NC} with rev ${COLOR_GREEN}${GIT_REV}${NC} to webapp ${COLOR_BLUE}$3${NC}..."
-	git push -f azure master
+	echo -e "Deploying branch ${COLOR_YELLOW}${GIT_BRANCH}${NC} with rev ${COLOR_GREEN}${GIT_REV}${NC} to webapp ${COLOR_BLUE}$3${NC}..."
+	git push -f azure ${GIT_BRANCH}:master
 
-	printf "Updating ${COLOR_GREEN}GIT_REV${NC} for webapp ${COLOR_BLUE}$3${NC}... "
+	printf "Updating ${COLOR_GREEN}GIT_REV${NC} for webapp ${COLOR_BLUE}$3${NC} to ${COLOR_YELLOW}${GIT_REV}${NC}... "
 	az webapp config appsettings set \
 		--resource-group $1 \
 		--name $3 \
@@ -92,5 +101,5 @@ function create_app_service {
 }
 
 check_app_service_plan ${RESOURCE_GROUP_APP} ${SERVICE_PLAN_NAME}
-create_app_service ${RESOURCE_GROUP_APP} ${SERVICE_PLAN_NAME} ${APP_SERVICE_NAME}
+deploy_app_service ${RESOURCE_GROUP_APP} ${SERVICE_PLAN_NAME} ${APP_SERVICE_NAME}
 echo -e "All deployment tasks ${COLOR_GREEN}completed successfully!${NC}"
