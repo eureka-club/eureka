@@ -62,5 +62,19 @@ export async function seed(knex: Knex): Promise<void> {
       mime_type: 'image/jpeg',
       content_hash: '8667e00dc3dd2474d14f4048fc302196188fcca9',
     },
+    {
+      id: '88b74a91-1a2e-4ae6-8cde-9b73c5447637',
+      original_filename: 'srigi-avatar.png',
+      stored_file: '75/75303f22ffd3e75850cfc8fac12b6e254c3ec0a3.png',
+      mime_type: 'image/png',
+      content_hash: '75303f22ffd3e75850cfc8fac12b6e254c3ec0a3',
+    },
+    {
+      id: 'd67627e9-8ba2-4f39-885b-11a600fd5777',
+      original_filename: 'php-deployer.png',
+      stored_file: 'd9/d932fc7adc28a070fc906f93030fc4f1db8dea77.png',
+      mime_type: 'image/png',
+      content_hash: 'd932fc7adc28a070fc906f93030fc4f1db8dea77',
+    },
   ]);
 }
