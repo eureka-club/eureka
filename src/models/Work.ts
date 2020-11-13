@@ -1,6 +1,6 @@
 export const TABLE_NAME = 'work';
 
-export const schema = (alias: string): Record<string, string> => ({
+export const schema = (alias: string = TABLE_NAME): Record<string, string> => ({
   [`${alias}.id`]: `${TABLE_NAME}.id`,
   [`${alias}.type`]: `${TABLE_NAME}.type`,
   [`${alias}.title`]: `${TABLE_NAME}.title`,

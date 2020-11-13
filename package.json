@@ -31,6 +31,7 @@
     "react-icons": "^3.11.0",
     "react-masonry-css": "^1.0.14",
     "sqlite3": "^5.0.0",
+    "swr": "^0.3.8",
     "ts-node": "^9.0.0",
     "uuid": "^8.3.1"
   },

@@ -1,6 +1,6 @@
 export const TABLE_NAME = 'local_image';
 
-export const schema = (alias: string): Record<string, string> => ({
+export const schema = (alias: string = TABLE_NAME): Record<string, string> => ({
   [`${alias}.id`]: `${TABLE_NAME}.id`,
   [`${alias}.original_filename`]: `${TABLE_NAME}.original_filename`,
   [`${alias}.stored_file`]: `${TABLE_NAME}.stored_file`,
