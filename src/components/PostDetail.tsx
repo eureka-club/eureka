@@ -10,6 +10,8 @@ interface Props {
 }
 
 const PostDetail: FunctionComponent<Props> = ({ post }) => {
+  const contentTextTokens = post['post.content_text'].split('\n').filter((token: string) => token !== '');
+
   return (
     <Row>
       <Col>
@@ -18,19 +20,11 @@ const PostDetail: FunctionComponent<Props> = ({ post }) => {
           <span>{post['work.author']}</span>
         </div>
 
-        <p>
-          Maecenas sollicitudin sollicitudin arcu, ac fringilla quam pellentesque et. Vivamus euismod ante et pulvinar
-          imperdiet. Nullam finibus diam vitae tempus faucibus. Duis egestas pharetra lorem at ultricies. Donec ac
-          consequat erat. Maecenas congue varius urna a dignissim. Donec fringilla, magna ac posuere dictum, massa mi
-          posuere neque, eget pretium enim quam sed mauris.
-        </p>
-        <p>
-          Nunc efficitur rhoncus mattis. Nullam vitae mollis turpis. Suspendisse varius viverra nisi, sit amet convallis
-          libero fermentum a. Nam ut metus ac lacus faucibus dictum commodo eu dui. Duis eget nunc iaculis, gravida ex
-          vel, fringilla augue. Nunc euismod magna at accumsan molestie. Curabitur mattis ante sed lorem condimentum
-          mattis. Integer ac purus mattis, mattis odio id, facilisis enim. Nam scelerisque, risus vel aliquam finibus,
-          ex urna dapibus elit, eget ullamcorper ante nisl at velit.
-        </p>
+        <div className="contentText">
+          {contentTextTokens.map((token) => (
+            <p key={`${token[0]}${token[1]}-${token.length}`}>{token}</p>
+          ))}
+        </div>
       </Col>
 
       <Col md={{ span: 5 }}>
