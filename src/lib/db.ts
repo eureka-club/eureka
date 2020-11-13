@@ -1,6 +1,6 @@
 import Knex from 'knex';
 
-import knexConfig, { CLIENT_SQLITE3 } from '../../knexfile';
+import knexConfig from '../../knexfile';
 
 // eslint-disable-next-line no-underscore-dangle
 let _connection: Knex;
@@ -12,38 +12,23 @@ export type LeftJoinDefinition =
       alias: string;
     };
 
-export const getDbConnection = async (): Promise<Knex> => {
+export const getDbConnection = (): Knex => {
   if (_connection == null) {
     _connection = Knex(knexConfig);
-
-    if (knexConfig.client === CLIENT_SQLITE3) {
-      await _connection.raw('PRAGMA journal_mode = WAL');
-      await _connection.raw('PRAGMA foreign_keys = ON');
-    }
   }
 
   return _connection;
 };
 
-export const hasLeftJoinDefinitionsTable = (leftJoinDefs: LeftJoinDefinition[] | null, alias: string): boolean => {
-  if (leftJoinDefs == null) {
-    return false;
-  }
-
-  return leftJoinDefs.some((leftJoinDefinition) => {
-    return typeof leftJoinDefinition === 'string' ? leftJoinDefinition === alias : leftJoinDefinition.alias === alias;
-  });
-};
-
-export const createFindFn = (
+export const createFindFn = <T, R>(
   tableName: string,
-  cb: (table: Knex.QueryBuilder, leftJoinDefs: LeftJoinDefinition[] | null) => Knex.QueryBuilder,
-) => {
-  return async (id: string, leftJoinDefs: LeftJoinDefinition[] | null = null): Promise<Knex.QueryBuilder> => {
-    const connection = await getDbConnection();
-    const table = connection(tableName);
+  cb: (table: Knex.QueryBuilder<T, R>) => Knex.QueryBuilder<T, R>,
+): ((id: string, leftJoinDefs?: LeftJoinDefinition[]) => Knex.QueryBuilder<T, R>) => {
+  return (id: string, leftJoinDefs: LeftJoinDefinition[] | null = null): Knex.QueryBuilder<T, R> => {
+    const connection = getDbConnection();
+    const table = connection<T, R>(tableName);
 
-    table.where(`${tableName}.id`, id).first();
+    table.where(`${tableName}.id`, id);
 
     if (leftJoinDefs?.length) {
       leftJoinDefs.forEach((joinDefinition) => {
@@ -55,20 +40,20 @@ export const createFindFn = (
       });
     }
 
-    return cb(table, leftJoinDefs);
+    return cb(table);
   };
 };
 
-export const createFindAllFn = (
+export const createFindAllFn = <T, R>(
   tableName: string,
-  cb: (table: Knex.QueryBuilder, leftJoinDefs: LeftJoinDefinition[] | null) => Knex.QueryBuilder,
-) => {
-  return async (
+  cb: (table: Knex.QueryBuilder<T, R>) => Knex.QueryBuilder<T, R>,
+): ((leftJoinDefs?: LeftJoinDefinition[], orderBy?: Record<string, string>) => Knex.QueryBuilder<T, R>) => {
+  return (
     leftJoinDefs: LeftJoinDefinition[] | null = null,
     orderBy: Record<string, string> | null = null,
-  ): Promise<Knex.QueryBuilder> => {
-    const connection = await getDbConnection();
-    const table = connection(tableName);
+  ): Knex.QueryBuilder<T, R> => {
+    const connection = getDbConnection();
+    const table = connection<T, R>(tableName);
 
     if (orderBy != null) {
       Object.entries(orderBy).forEach((entry) => {
@@ -86,6 +71,6 @@ export const createFindAllFn = (
       });
     }
 
-    return cb(table, leftJoinDefs);
+    return cb(table);
   };
 };

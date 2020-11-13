@@ -27,9 +27,7 @@ interface Props {
 const IndexPage: NextPage<Props> = ({ posts }) => {
   const [selectedMosaicItem, setSelectedMosaicItem] = useState<MosaicItem>();
   const router = useRouter();
-  const {
-    query: { id },
-  } = router;
+  const { id } = router.query;
 
   useEffect(() => {
     if (id != null) {

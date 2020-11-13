@@ -5,7 +5,7 @@ import { Col, Row } from 'react-bootstrap';
 import DetailLayout from '../../components/layouts/DetailLayout';
 import PostDetail from '../../components/PostDetail';
 import { PostDbObject } from '../../models/Post';
-import { fetchDetailPost } from '../../repositories/Post';
+import { fetchFullPostDetail } from '../../repositories/Post';
 
 interface Props {
   post: PostDbObject;
@@ -29,13 +29,15 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     return { notFound: true }; // err 404
   }
 
-  const post = await fetchDetailPost(id);
+  const post = await fetchFullPostDetail(id);
   if (post == null) {
     return { notFound: true };
   }
 
   return {
-    props: { post },
+    props: {
+      post,
+    },
   };
 };
 
