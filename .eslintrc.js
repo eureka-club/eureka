@@ -29,7 +29,7 @@ module.exports = {
     '@typescript-eslint/camelcase': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
-    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_$', varsIgnorePattern: '^_$' }],
+    '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_$', varsIgnorePattern: '^_$' }],
     'func-style': ['error', 'declaration', { allowArrowFunctions: true }], // enforce arrow functions only is afaik not possible - this helps
     'import/extensions': ['error', 'never'],
     'import/prefer-default-export': 'off',
