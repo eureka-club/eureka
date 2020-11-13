@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import Link from 'next/link';
 import { FunctionComponent } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
@@ -13,7 +14,7 @@ type Props = {
 
 const DetailLayout: FunctionComponent<Props> = ({ children }) => (
   <>
-    <Container className="mt-3 mb-2">
+    <Container className={classNames(styles.xxlContainer, 'mt-3', 'mb-2')}>
       <Row>
         <Col>
           <Link href="/">

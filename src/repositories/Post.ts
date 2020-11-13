@@ -1,14 +1,14 @@
 import Knex from 'knex';
 
 import { createFindFn, createFindAllFn } from '../lib/db';
-import { TABLE_NAME as POST_TABLE_NAME, schema as postSchema, PostDbObject } from '../models/Post';
+import { TABLE_NAME as POST_TABLE_NAME, schema as postSchema, PostDbObject, FullPostDetail } from '../models/Post';
 import { TABLE_NAME as LOCAL_IMAGE_TABLE_NAME, schema as localImageSchema } from '../models/LocalImage';
 import { TABLE_NAME as WORK_TABLE_NAME, schema as workSchema } from '../models/Work';
 import { schema as userSchema, TABLE_NAME as USER_TABLE_NAME } from '../models/User';
 
 export const fetchFullPostDetail = async (
   id: string,
-): Promise<Knex.QueryBuilder<Record<string, unknown>, PostDbObject>> => {
+): Promise<Knex.QueryBuilder<Record<string, unknown>, FullPostDetail>> => {
   return createFindFn(POST_TABLE_NAME, (table) => {
     table.leftJoin('user_image', 'user.id', '=', 'user_image.user_id');
     table.leftJoin({ avatar: 'local_image' }, 'user_image.local_image_id', '=', 'avatar.id');

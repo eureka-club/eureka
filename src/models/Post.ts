@@ -17,3 +17,10 @@ export interface PostDbObject extends CreatorDbObject, LocalImageDbObject, WorkD
   'post.created_at': string;
   'post.updated_at': string;
 }
+
+export interface FullPostDetail extends PostDbObject {
+  'creator.avatar.file': string;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any,  @typescript-eslint/explicit-module-boundary-types
+export const isFullPostDetail = (object: any): object is FullPostDetail => object['creator.avatar.file'] != null;
