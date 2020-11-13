@@ -8,11 +8,8 @@ import SimpleLayout from '../components/layouts/SimpleLayout';
 import Mosaic from '../components/Mosaic';
 import PostDetail from '../components/PostDetail';
 import { PostDbObject } from '../models/Post';
-import { TABLE_NAME as LOCAL_IMAGE_TABLE_NAME } from '../models/LocalImage';
-import { TABLE_NAME as USER_TABLE_NAME } from '../models/User';
-import { TABLE_NAME as WORK_TABLE_NAME } from '../models/Work';
 import { isPostObject, MosaicItem } from '../types';
-import { findAll } from '../repositories/Post';
+import { fetchIndexMosaic } from '../repositories/Post';
 import styles from './index.module.css';
 
 const renderDetailedMosaicItem = (item: MosaicItem) => {
@@ -78,9 +75,7 @@ const IndexPage: NextPage<Props> = ({ posts }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const posts = await findAll([{ table: USER_TABLE_NAME, alias: 'creator' }, LOCAL_IMAGE_TABLE_NAME, WORK_TABLE_NAME], {
-    'post.created_at': 'DESC',
-  });
+  const posts = await fetchIndexMosaic();
 
   return {
     props: {

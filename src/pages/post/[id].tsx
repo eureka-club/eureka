@@ -4,11 +4,8 @@ import { Col, Row } from 'react-bootstrap';
 
 import DetailLayout from '../../components/layouts/DetailLayout';
 import PostDetail from '../../components/PostDetail';
-import { TABLE_NAME as LOCAL_IMAGE_TABLE_NAME } from '../../models/LocalImage';
 import { PostDbObject } from '../../models/Post';
-import { TABLE_NAME as USER_TABLE_NAME } from '../../models/User';
-import { TABLE_NAME as WORK_TABLE_NAME } from '../../models/Work';
-import { find } from '../../repositories/Post';
+import { fetchDetailPost } from '../../repositories/Post';
 
 interface Props {
   post: PostDbObject;
@@ -32,7 +29,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     return { notFound: true }; // err 404
   }
 
-  const post = await find(id, [{ table: USER_TABLE_NAME, alias: 'creator' }, LOCAL_IMAGE_TABLE_NAME, WORK_TABLE_NAME]);
+  const post = await fetchDetailPost(id);
   if (post == null) {
     return { notFound: true };
   }
