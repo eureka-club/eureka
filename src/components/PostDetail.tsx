@@ -31,6 +31,9 @@ const PostDetail: FunctionComponent<Props> = ({ post }) => {
                 <span className={classNames(styles.creatorAvatar, 'mr-3')} />
               )}
               <span>{post['creator.user_name']}</span>
+              <a href={post['work.link']} className={classNames(styles.workLink, 'ml-4')}>
+                Link to content
+              </a>
             </div>
           </div>
 
