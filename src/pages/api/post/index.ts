@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 import fs, { existsSync, mkdirSync } from 'fs';
 import { Form } from 'multiparty';
+import moveFile from 'move-file';
 import { NextApiRequest, NextApiResponse } from 'next';
 import path from 'path';
 import * as uuid from 'uuid';
@@ -48,7 +49,7 @@ const getFileHash = (filePath: string, algorithm = 'sha1'): string => {
   return sha1sum.digest('hex');
 };
 
-const moveUploadedFileByHash = (fileUpload: FileUpload, fileHash: string): string => {
+const moveUploadedFileByHash = async (fileUpload: FileUpload, fileHash: string): Promise<string> => {
   const fileDestDir = path.join(LOCAL_ASSETS_HOST_DIR!, fileHash.substr(0, FOLDER_SPREAD_CHAR_COUNT));
   if (!existsSync(fileDestDir)) {
     mkdirSync(fileDestDir);
@@ -56,7 +57,7 @@ const moveUploadedFileByHash = (fileUpload: FileUpload, fileHash: string): strin
 
   const fileDestPath = path.join(fileDestDir, fileHash + path.extname(fileUpload.path));
   console.info('Storing file upload under...', fileDestPath); // eslint-disable-line no-console
-  fs.renameSync(fileUpload.path, fileDestPath);
+  await moveFile(fileUpload.path, fileDestPath);
 
   return fileDestPath;
 };
@@ -142,7 +143,7 @@ export default getApiHandler().post<NextApiRequest, NextApiResponse>(
 
       const imageUpload: FileUpload = files.image[0];
       const imageHash = getFileHash(imageUpload.path);
-      const imageDestPath = moveUploadedFileByHash(imageUpload, imageHash);
+      const imageDestPath = await moveUploadedFileByHash(imageUpload, imageHash);
       const localImageDbRecordUuid = await saveImageUploadToDB(imageUpload, imageDestPath, imageHash);
       const workDbRecordUuid = await getPostWork(fields);
       const postUuid = await savePost(fields, localImageDbRecordUuid, workDbRecordUuid);
