@@ -1,11 +1,12 @@
+import { useAtom } from 'jotai';
 import { FunctionComponent } from 'react';
 import Container from 'react-bootstrap/Container';
 import Modal from 'react-bootstrap/Modal';
 
 import Navbar from '../Navbar';
+import CreatePostForm from '../forms/CreatePostForm';
 import withTitle from '../../HOCs/withTitle';
 import navbarAtom from '../../atoms/navbar';
-import { useAtom } from 'jotai';
 
 type Props = {
   children: JSX.Element | JSX.Element[];
@@ -27,8 +28,8 @@ const SimpleLayout: FunctionComponent<Props> = ({ children }) => {
 
       <Container className="mt-5">{children}</Container>
 
-      <Modal show={navbarState.createPostModalOpened} onHide={handleCreatePostModalClose}>
-        <Modal.Body>Lorem ipsum</Modal.Body>
+      <Modal size="lg" show={navbarState.createPostModalOpened} onHide={handleCreatePostModalClose}>
+        <CreatePostForm />
       </Modal>
     </>
   );
