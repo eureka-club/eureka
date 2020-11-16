@@ -1,3 +1,5 @@
+import { useAtom } from 'jotai';
+import { useRouter } from 'next/router';
 import { ChangeEvent, FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -13,6 +15,7 @@ import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 import { useMutation } from 'react-query';
 
+import navbarAtom from '../../atoms/navbar';
 import styles from './CreatePostForm.module.css';
 
 type NewPostData = {
@@ -36,9 +39,11 @@ const createPostApiHandler = async ({ image, payload }: NewPostData) => {
 
 const CreatePostForm: FunctionComponent = () => {
   const imageInputRef = useRef<HTMLInputElement>() as RefObject<HTMLInputElement>;
+  const router = useRouter();
   const [image, setImage] = useState<File>();
   const [imagePreview, setImagePreview] = useState<string>();
-  const [createNewPost, { error, isError, isLoading }] = useMutation(createPostApiHandler, {});
+  const [navbarState, setNavbarState] = useAtom(navbarAtom);
+  const [createNewPost, { data, error, isError, isLoading, isSuccess }] = useMutation(createPostApiHandler, {});
 
   const handleImageControlClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
@@ -95,6 +100,15 @@ const CreatePostForm: FunctionComponent = () => {
       setImagePreview(undefined);
     }
   }, [image]);
+
+  useEffect(() => {
+    if (router != null && setNavbarState != null && isSuccess && typeof data?.postUuid === 'string') {
+      (async () => {
+        await setNavbarState({ ...navbarState, ...{ createPostModalOpened: false } });
+        await router.push(`/post/${data.postUuid}`);
+      })();
+    }
+  }, [router, navbarState, setNavbarState, isSuccess, data]);
 
   return (
     <Form onSubmit={handleSubmit}>
