@@ -23,7 +23,7 @@ function check_app_service_plan {
 
 function deploy_app_service {
 	if [[ $GIT_BRANCH != $GIT_DEFAULT_BRANCH ]]; then
-		printf " ${COLOR_YELLOW}You are not on default branch!${NC} Do you want to deploy current branch ${COLOR_BLUE}${GIT_BRANCH}${NC}? [y/N]: ";
+		printf "> you ${COLOR_RED}are not on default branch!${NC} Do you want to deploy current branch ${COLOR_BLUE}${GIT_BRANCH}${NC}? [y/N]: ";
 		read INP
 		if [[ ${INP} != 'y' && $INP != 'Y' ]]; then
 			exit 1
@@ -70,7 +70,7 @@ function deploy_app_service {
 		echo -e "${COLOR_GREEN}OK${NC}"
 	fi
 
-	printf "Update ${COLOR_YELLOW}webapp's${NC} ${COLOR_BLUE}ENV vars${NC}? [y/N]: "
+	printf "> update ${COLOR_YELLOW}webapp's${NC} ${COLOR_BLUE}ENV vars${NC}? [y/N]: "
 	read INP
 	if [[ ${INP} == 'y' || $INP == 'Y' ]]; then
 		printf "Configuring ${COLOR_GREEN}app settings${NC} for webapp ${COLOR_BLUE}$3${NC}... "
