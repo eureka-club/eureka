@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
+import FormCheck from 'react-bootstrap/FormCheck';
 import FormControl from 'react-bootstrap/FormControl';
 import FormFile from 'react-bootstrap/FormFile';
 import FormGroup from 'react-bootstrap/FormGroup';
@@ -38,20 +39,27 @@ const CreatePostForm: FunctionComponent = () => {
     }
   };
 
-  const handleSubmit = (ev: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
     const form = ev.currentTarget;
+    const formData = new FormData();
     const payload = {
-      image: form.image.value,
-      cycle: form.cycle.value,
+      workLink: form.workLink.value,
       workTitle: form.workTitle.value,
       workAuthor: form.workAuthor.value,
       hashtags: form.hashtags.value,
       language: form.language.value,
       workType: form.workType.value,
       description: form.description.value,
+      public: form.public.checked,
     };
+
+    Object.entries(payload).forEach(([key, value]) => formData.append(key, value));
+
+    if (image != null) {
+      formData.append('image', image);
+    }
   };
 
   useEffect(() => {
@@ -77,39 +85,49 @@ const CreatePostForm: FunctionComponent = () => {
               <FormLabel>start by adding an image</FormLabel>
               <FormFile
                 accept="image/*"
-                ref={imageInputRef}
+                className={styles.imageFormControl}
                 onChange={handleImageInputChange}
-                style={{ display: 'none' }}
+                ref={imageInputRef}
+                required
               />
               <button onClick={handleImageControlClick} className={styles.imageControl} type="button">
                 {image != null ? <span className={styles.imageName}>{image.name}</span> : 'select file...'}
                 {imagePreview && <img src={imagePreview} className="float-right" alt="Post preview" />}
               </button>
             </FormGroup>
-            <FormGroup controlId="cycle" as={Col}>
-              <FormLabel>Add post to a cycle</FormLabel>
-              <FormControl type="text" placeholder="search for cycles" disabled />
-            </FormGroup>
+            <Col md={{ span: 3 }}>
+              <FormGroup controlId="cycle">
+                <FormLabel>Add post to a cycle</FormLabel>
+                <FormControl type="text" placeholder="search for cycles" disabled />
+              </FormGroup>
+            </Col>
+            <Col md={{ span: 3 }}>
+              <FormGroup controlId="workLink">
+                <FormLabel>Add link to work</FormLabel>
+                <FormControl type="text" placeholder="http://" required />
+              </FormGroup>
+            </Col>
           </Row>
           <Row>
             <FormGroup controlId="workTitle" as={Col}>
               <FormLabel>Title of the work (*)</FormLabel>
-              <FormControl type="text" />
+              <FormControl type="text" required />
             </FormGroup>
             <FormGroup controlId="workAuthor" as={Col}>
               <FormLabel>Author of the work</FormLabel>
-              <FormControl type="text" />
+              <FormControl type="text" required />
             </FormGroup>
           </Row>
           <Row>
             <FormGroup controlId="hashtags" as={Col}>
               <FormLabel>Main topics of this work (5 max) (*)</FormLabel>
-              <FormControl type="text" />
+              <FormControl type="text" required />
             </FormGroup>
             <Col md={{ span: 3 }}>
               <FormGroup controlId="language">
                 <FormLabel>Language of the post</FormLabel>
-                <FormControl type="text" as="select">
+                <FormControl type="text" as="select" required>
+                  <option value="">select...</option>
                   <option value="spanish">Spanish</option>
                   <option value="english">English</option>
                   <option value="hindi">Hindi</option>
@@ -125,9 +143,11 @@ const CreatePostForm: FunctionComponent = () => {
             <Col md={{ span: 3 }}>
               <FormGroup controlId="workType">
                 <FormLabel>Type</FormLabel>
-                <FormControl as="select">
+                <FormControl as="select" required>
+                  <option value="">select...</option>
                   <option value="book">Book</option>
                   <option value="digital art">Digital art</option>
+                  <option value="documentary">Documentary</option>
                   <option value="movie">Movie</option>
                 </FormControl>
               </FormGroup>
@@ -141,8 +161,11 @@ const CreatePostForm: FunctionComponent = () => {
           </Row>
         </Container>
       </Modal.Body>
+
       <Modal.Footer>
         <Container className="py-3">
+          <FormCheck type="checkbox" inline id="public" label="Public" />
+
           <Button variant="primary" type="submit" className="px-5 float-right">
             Create post
           </Button>

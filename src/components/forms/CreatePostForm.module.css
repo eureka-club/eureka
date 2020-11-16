@@ -1,3 +1,11 @@
+.imageFormControl {
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  position: relative;
+  top: -1px;
+}
+
 .imageControl {
   background-clip: padding-box;
   background-color: #fff;
