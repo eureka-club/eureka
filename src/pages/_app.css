@@ -36,6 +36,11 @@ h3 {
   border-color: var(--color-primary-raised);
   box-shadow: 0 0 0 0.2rem rgba(104, 207, 180, 0.25);
 }
+.form-control:disabled,
+.form-control[readonly] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
 
 .btn-link {
   color: var(--color-secondary);

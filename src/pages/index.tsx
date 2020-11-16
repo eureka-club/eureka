@@ -1,9 +1,7 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
-import Row from 'react-bootstrap/Row';
 import { useQuery } from 'react-query';
 
 import DetailLayout from '../components/layouts/DetailLayout';
@@ -65,6 +63,7 @@ const IndexPage: NextPage<Props> = ({ posts }) => {
       </SimpleLayout>
 
       <Modal
+        animation={false}
         show={selectedMosaicItem != null}
         onHide={handleModalClose}
         dialogClassName={styles.responsiveModal}
@@ -74,9 +73,7 @@ const IndexPage: NextPage<Props> = ({ posts }) => {
         <Modal.Body>
           {selectedMosaicItem != null && (
             <DetailLayout title={selectedMosaicItem['work.title']}>
-              <Row>
-                <Col md={{ offset: 1, span: 11 }}>{renderDetailedMosaicItem(selectedMosaicItem)}</Col>
-              </Row>
+              {renderDetailedMosaicItem(selectedMosaicItem)}
             </DetailLayout>
           )}
         </Modal.Body>

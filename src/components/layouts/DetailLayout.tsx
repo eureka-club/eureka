@@ -8,7 +8,7 @@ import withTitle from '../../HOCs/withTitle';
 import styles from './DetailLayout.module.css';
 
 type Props = {
-  children: JSX.Element | JSX.Element[];
+  children: string | JSX.Element | JSX.Element[];
   title?: string;
 };
 
