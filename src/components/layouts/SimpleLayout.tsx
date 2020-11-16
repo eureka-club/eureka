@@ -1,22 +1,37 @@
 import { FunctionComponent } from 'react';
-import { Container } from 'react-bootstrap';
+import Container from 'react-bootstrap/Container';
+import Modal from 'react-bootstrap/Modal';
 
 import Navbar from '../Navbar';
 import withTitle from '../../HOCs/withTitle';
+import navbarAtom from '../../atoms/navbar';
+import { useAtom } from 'jotai';
 
 type Props = {
   children: JSX.Element | JSX.Element[];
   title?: string;
 };
 
-const SimpleLayout: FunctionComponent<Props> = ({ children }) => (
-  <>
-    <Container>
-      <Navbar />
-    </Container>
+const SimpleLayout: FunctionComponent<Props> = ({ children }) => {
+  const [navbarState, setNavbarState] = useAtom(navbarAtom);
 
-    <Container className="mt-5">{children}</Container>
-  </>
-);
+  const handleCreatePostModalClose = () => {
+    setNavbarState({ ...navbarState, ...{ createPostModalOpened: false } });
+  };
+
+  return (
+    <>
+      <Container>
+        <Navbar />
+      </Container>
+
+      <Container className="mt-5">{children}</Container>
+
+      <Modal show={navbarState.createPostModalOpened} onHide={handleCreatePostModalClose}>
+        <Modal.Body>Lorem ipsum</Modal.Body>
+      </Modal>
+    </>
+  );
+};
 
 export default withTitle(SimpleLayout);

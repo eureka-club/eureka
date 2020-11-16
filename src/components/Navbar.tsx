@@ -1,14 +1,31 @@
 import classNames from 'classnames';
-import { FunctionComponent } from 'react';
-import { Button, Dropdown, Form, FormControl, Nav, Navbar as BootstrapNavbar, NavDropdown } from 'react-bootstrap';
+import { useAtom } from 'jotai';
+import { FunctionComponent, MouseEvent } from 'react';
+import Button from 'react-bootstrap/Button';
+import Dropdown from 'react-bootstrap/Dropdown';
+import Form from 'react-bootstrap/Form';
+import FormControl from 'react-bootstrap/FormControl';
+import Nav from 'react-bootstrap/Nav';
+import BootstrapNavbar from 'react-bootstrap/Navbar';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+import { DropdownItemProps } from 'react-bootstrap/DropdownItem';
 import { BiCheck, BiUser } from 'react-icons/bi';
 
 import ChevronToggle from './ui/dropdown/ChevronToggle';
+import navbarAtom from '../atoms/navbar';
 import styles from './Navbar.module.css';
 
 const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
 
 const Navbar: FunctionComponent = () => {
+  const [navbarState, setNavbarState] = useAtom(navbarAtom);
+
+  const handleCreatePost = (ev: MouseEvent<DropdownItemProps>) => {
+    ev.preventDefault();
+
+    setNavbarState({ ...navbarState, ...{ createPostModalOpened: true } });
+  };
+
   return (
     <BootstrapNavbar variant="light" expand="xl" className="p-0">
       <BootstrapNavbar.Brand href="/" className={classNames(styles.brand, 'mr-4')}>
@@ -40,7 +57,9 @@ const Navbar: FunctionComponent = () => {
             </Dropdown.Toggle>
             <Dropdown.Menu className={styles.dropdownMenu}>
               <Dropdown.Item className={styles.dropdownMenuItem}>Cycle</Dropdown.Item>
-              <Dropdown.Item className={styles.dropdownMenuItem}>Post</Dropdown.Item>
+              <Dropdown.Item className={styles.dropdownMenuItem} onClick={handleCreatePost}>
+                Post
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
 
