@@ -1,4 +1,4 @@
-export default async function swrFetcher<JSON = Record<string, unknown>>(
+export default async function xhrFetcher<JSON = Record<string, unknown>>(
   input: RequestInfo,
   init?: RequestInit,
 ): Promise<JSON> {

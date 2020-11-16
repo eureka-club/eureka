@@ -1,15 +1,19 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { Col, Modal, Row } from 'react-bootstrap';
+import Col from 'react-bootstrap/Col';
+import Modal from 'react-bootstrap/Modal';
+import Row from 'react-bootstrap/Row';
+import { useQuery } from 'react-query';
 
 import DetailLayout from '../components/layouts/DetailLayout';
 import SimpleLayout from '../components/layouts/SimpleLayout';
 import Mosaic from '../components/Mosaic';
 import PostDetail from '../components/PostDetail';
-import { PostDbObject } from '../models/Post';
+import { FullPostDetail, PostDbObject } from '../models/Post';
 import { isPostObject, MosaicItem } from '../types';
 import { fetchIndexMosaic } from '../repositories/Post';
+import xhrFetcher from '../lib/xhrFetcher';
 import styles from './index.module.css';
 
 const renderDetailedMosaicItem = (item: MosaicItem) => {
@@ -25,9 +29,12 @@ interface Props {
 }
 
 const IndexPage: NextPage<Props> = ({ posts }) => {
-  const [selectedMosaicItem, setSelectedMosaicItem] = useState<MosaicItem>();
   const router = useRouter();
   const { id } = router.query;
+  const [selectedMosaicItem, setSelectedMosaicItem] = useState<MosaicItem>();
+  const { data } = useQuery<{ post: FullPostDetail }>(`/api/post/${id}`, xhrFetcher, {
+    enabled: id != null,
+  });
 
   useEffect(() => {
     if (id != null) {
@@ -38,7 +45,13 @@ const IndexPage: NextPage<Props> = ({ posts }) => {
     } else {
       setSelectedMosaicItem(undefined);
     }
-  }, [id]);
+  }, [id, posts]);
+
+  useEffect(() => {
+    if (data != null) {
+      setSelectedMosaicItem(data.post);
+    }
+  }, [data]);
 
   const handleModalClose = () => {
     setSelectedMosaicItem(undefined);

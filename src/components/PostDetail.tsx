@@ -1,6 +1,8 @@
 import classNames from 'classnames';
 import { FunctionComponent } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Spinner from 'react-bootstrap/Spinner';
 
 import { FullPostDetail, isFullPostDetail, PostDbObject } from '../models/Post';
 import styles from './PostDetail.module.css';
@@ -28,7 +30,7 @@ const PostDetail: FunctionComponent<Props> = ({ post }) => {
                   className={classNames(styles.creatorAvatar, 'mr-3')}
                 />
               ) : (
-                <span className={classNames(styles.creatorAvatar, 'mr-3')} />
+                <Spinner animation="grow" variant="info" className={classNames(styles.creatorAvatar, 'mr-3')} />
               )}
               <span>{post['creator.user_name']}</span>
               <a href={post['work.link']} className={classNames(styles.workLink, 'ml-4')}>
