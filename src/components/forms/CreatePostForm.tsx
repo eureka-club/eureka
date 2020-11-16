@@ -10,13 +10,35 @@ import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
+import Spinner from 'react-bootstrap/Spinner';
+import { useMutation } from 'react-query';
 
 import styles from './CreatePostForm.module.css';
+
+type NewPostData = {
+  image: File;
+  payload: Record<string, string>;
+};
+
+const createPostApiHandler = async ({ image, payload }: NewPostData) => {
+  const formData = new FormData();
+
+  formData.append('image', image);
+  Object.entries(payload).forEach(([key, value]) => formData.append(key, value));
+
+  const res = await fetch('/api/post', {
+    method: 'POST',
+    body: formData,
+  });
+
+  return res.json();
+};
 
 const CreatePostForm: FunctionComponent = () => {
   const imageInputRef = useRef<HTMLInputElement>() as RefObject<HTMLInputElement>;
   const [image, setImage] = useState<File>();
   const [imagePreview, setImagePreview] = useState<string>();
+  const [createNewPost, { error, isError, isLoading }] = useMutation(createPostApiHandler, {});
 
   const handleImageControlClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
@@ -42,8 +64,11 @@ const CreatePostForm: FunctionComponent = () => {
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
+    if (image == null) {
+      return;
+    }
+
     const form = ev.currentTarget;
-    const formData = new FormData();
     const payload = {
       workLink: form.workLink.value,
       workTitle: form.workTitle.value,
@@ -55,11 +80,7 @@ const CreatePostForm: FunctionComponent = () => {
       public: form.public.checked,
     };
 
-    Object.entries(payload).forEach(([key, value]) => formData.append(key, value));
-
-    if (image != null) {
-      formData.append('image', image);
-    }
+    await createNewPost({ image, payload });
   };
 
   useEffect(() => {
@@ -166,8 +187,14 @@ const CreatePostForm: FunctionComponent = () => {
         <Container className="py-3">
           <FormCheck type="checkbox" inline id="public" label="Public" />
 
-          <Button variant="primary" type="submit" className="px-5 float-right">
+          <Button variant="primary" type="submit" className="pl-5 pr-4 float-right">
             Create post
+            {isLoading ? (
+              <Spinner animation="grow" variant="secondary" className={styles.loadIndicator} />
+            ) : (
+              <span className={styles.loadIndicator} />
+            )}
+            {isError && error}
           </Button>
         </Container>
       </Modal.Footer>
