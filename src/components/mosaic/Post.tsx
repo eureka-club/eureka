@@ -18,7 +18,7 @@ const Post: FunctionComponent<PostDbObject> = ({
     <article className={styles.post}>
       <div className={styles.imageContainer}>
         <Link href={`/?id=${postId}`} as={`/post/${postId}`}>
-          <a>
+          <a className="d-inline-block">
             <img src={`${ASSETS_BASE_URL}/${imagePath}`} alt={workTitle} />
           </a>
         </Link>
