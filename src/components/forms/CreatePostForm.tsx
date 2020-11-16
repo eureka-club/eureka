@@ -1,16 +1,44 @@
-import { FormEvent, FunctionComponent } from 'react';
+import { ChangeEvent, FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
+import FormFile from 'react-bootstrap/FormFile';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 
+import styles from './CreatePostForm.module.css';
+
 const CreatePostForm: FunctionComponent = () => {
-  const handleCreatePostSubmit = (ev: FormEvent<HTMLFormElement>) => {
+  const imageInputRef = useRef<HTMLInputElement>() as RefObject<HTMLInputElement>;
+  const [image, setImage] = useState<File>();
+  const [imagePreview, setImagePreview] = useState<string>();
+
+  const handleImageControlClick = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    imageInputRef.current?.click();
+  };
+
+  const handleImageInputChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    const fileList = ev.target.files;
+
+    if (fileList != null && fileList[0] != null) {
+      const file = fileList[0];
+
+      if (file.type.substr(0, 5) === 'image') {
+        setImage(fileList[0]);
+      } else {
+        alert('You must select image file!'); // eslint-disable-line no-alert
+      }
+    } else {
+      setImage(undefined);
+    }
+  };
+
+  const handleSubmit = (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
     const form = ev.currentTarget;
@@ -26,15 +54,37 @@ const CreatePostForm: FunctionComponent = () => {
     };
   };
 
+  useEffect(() => {
+    if (image != null) {
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(image);
+    } else {
+      setImagePreview(undefined);
+    }
+  }, [image]);
+
   return (
-    <Form onSubmit={handleCreatePostSubmit}>
+    <Form onSubmit={handleSubmit}>
       <Modal.Body>
         <Container>
           <h4 className="mt-2 mb-4">Create Post</h4>
           <Row>
             <FormGroup controlId="image" as={Col}>
               <FormLabel>start by adding an image</FormLabel>
-              <FormControl type="text" />
+              <FormFile
+                accept="image/*"
+                ref={imageInputRef}
+                onChange={handleImageInputChange}
+                style={{ display: 'none' }}
+              />
+              <button onClick={handleImageControlClick} className={styles.imageControl} type="button">
+                {image != null ? <span className={styles.imageName}>{image.name}</span> : 'select file...'}
+                {imagePreview && <img src={imagePreview} className="float-right" alt="Post preview" />}
+              </button>
             </FormGroup>
             <FormGroup controlId="cycle" as={Col}>
               <FormLabel>Add post to a cycle</FormLabel>
