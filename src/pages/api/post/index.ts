@@ -25,7 +25,7 @@ type PostProps = {
   language: string[];
   hashtags: string[];
   description: string[];
-  public: string[];
+  isPublic: string[];
 };
 
 const { LOCAL_ASSETS_HOST_DIR } = process.env;
@@ -102,11 +102,11 @@ const getPostWork = async (postProps: PostProps): Promise<string> => {
   const pk = uuid.v4();
   await table.insert({
     id: pk,
-    type: postProps.workType[0],
-    title: postProps.workTitle[0],
-    author: postProps.workAuthor[0],
+    type: postProps.workType[0].trim(),
+    title: postProps.workTitle[0].trim(),
+    author: postProps.workAuthor[0].trim(),
     year_created: '1900',
-    link: postProps.workLink[0],
+    link: postProps.workLink[0].trim(),
   });
 
   return pk;
@@ -122,7 +122,9 @@ const savePost = async (postProps: PostProps, localImageUuid: string, workUuid: 
     creator_id: TEMPORARY_POST_CREATOR_UUID,
     local_image_id: localImageUuid,
     work_id: workUuid,
-    content_text: postProps.description[0],
+    language: postProps.language[0].trim(),
+    content_text: postProps.description[0].trim(),
+    is_public: !!postProps.isPublic[0],
   });
 
   return pk;
@@ -141,14 +143,19 @@ export default getApiHandler().post<NextApiRequest, NextApiResponse>(
         return;
       }
 
-      const imageUpload: FileUpload = files.image[0];
-      const imageHash = getFileHash(imageUpload.path);
-      const imageDestPath = await moveUploadedFileByHash(imageUpload, imageHash);
-      const localImageDbRecordUuid = await saveImageUploadToDB(imageUpload, imageDestPath, imageHash);
-      const workDbRecordUuid = await getPostWork(fields);
-      const postUuid = await savePost(fields, localImageDbRecordUuid, workDbRecordUuid);
+      try {
+        const imageUpload: FileUpload = files.image[0];
+        const imageHash = getFileHash(imageUpload.path);
+        const imageDestPath = await moveUploadedFileByHash(imageUpload, imageHash);
+        const localImageDbRecordUuid = await saveImageUploadToDB(imageUpload, imageDestPath, imageHash);
+        const workDbRecordUuid = await getPostWork(fields);
+        const postUuid = await savePost(fields, localImageDbRecordUuid, workDbRecordUuid);
 
-      res.json({ postUuid });
+        res.json({ postUuid });
+      } catch (err) {
+        console.error(err); // eslint-disable-line no-console
+        res.status(500).end();
+      }
     });
   },
 );

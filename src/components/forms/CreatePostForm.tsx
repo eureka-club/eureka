@@ -82,7 +82,7 @@ const CreatePostForm: FunctionComponent = () => {
       language: form.language.value,
       workType: form.workType.value,
       description: form.description.value,
-      public: form.public.checked,
+      isPublic: form.isPublic.checked,
     };
 
     await createNewPost({ image, payload });
@@ -199,7 +199,7 @@ const CreatePostForm: FunctionComponent = () => {
 
       <Modal.Footer>
         <Container className="py-3">
-          <FormCheck type="checkbox" defaultChecked={true} inline id="public" label="Public" />
+          <FormCheck type="checkbox" defaultChecked={true} inline id="isPublic" label="Public?" />
 
           <Button variant="primary" type="submit" className="pl-5 pr-4 float-right">
             Create post
