@@ -28,7 +28,7 @@ const SimpleLayout: FunctionComponent<Props> = ({ children }) => {
 
       <Container className="mt-5">{children}</Container>
 
-      <Modal size="lg" show={navbarState.createPostModalOpened} onHide={handleCreatePostModalClose}>
+      <Modal animation={false} size="lg" show={navbarState.createPostModalOpened} onHide={handleCreatePostModalClose}>
         <CreatePostForm />
       </Modal>
     </>
