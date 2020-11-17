@@ -152,8 +152,8 @@ export default getApiHandler().post<NextApiRequest, NextApiResponse>(
         const postUuid = await savePost(fields, localImageDbRecordUuid, workDbRecordUuid);
 
         res.json({ postUuid });
-      } catch (err) {
-        console.error(err); // eslint-disable-line no-console
+      } catch (exc) {
+        console.error(exc); // eslint-disable-line no-console
         res.status(500).end();
       }
     });

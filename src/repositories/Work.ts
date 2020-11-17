@@ -2,7 +2,7 @@ import Knex from 'knex';
 import { ParsedQs } from 'qs';
 
 import { createFindAllFn } from '../lib/db';
-import { TABLE_NAME as POST_TABLE_NAME, schema as postSchema, PostDetail, PostFullDetail } from '../models/Post';
+import { TABLE_NAME as POST_TABLE_NAME } from '../models/Post';
 import { TABLE_NAME as LOCAL_IMAGE_TABLE_NAME, schema as localImageSchema } from '../models/LocalImage';
 import { TABLE_NAME as WORK_TABLE_NAME, schema as workSchema } from '../models/Work';
 
@@ -23,7 +23,6 @@ export const findAll = async (criteria?: ParsedQs): Promise<Knex.QueryBuilder> =
 
     return table.select({
       ...workSchema(),
-      // ...postSchema(),
       ...localImageSchema(),
     });
   })();
