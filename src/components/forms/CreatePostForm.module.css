@@ -14,16 +14,18 @@
   color: #495057;
   display: block;
   padding: 0.375rem 0.75rem;
+  position: relative;
   text-align: left;
   width: 100%;
   height: calc(1.5em + 0.75rem + 2px);
 }
 .imageControl img {
   border-radius: 5px;
-  height: 115%;
+  height: 32px;
   object-fit: cover;
-  position: relative;
-  top: -2px;
+  position: absolute;
+  top: 2px;
+  right: 4px;
 }
 
 .imageName {
