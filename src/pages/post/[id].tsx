@@ -3,7 +3,7 @@ import { FunctionComponent } from 'react';
 
 import DetailLayout from '../../components/layouts/DetailLayout';
 import PostDetail from '../../components/PostDetail';
-import { PostFullDetail } from '../../models/Post';
+import { PostFullDetail } from '../../types';
 import { fetchFullPostDetail } from '../../repositories/Post';
 
 interface Props {

@@ -1,10 +1,11 @@
 import Knex from 'knex';
 
 import { createFindFn, createFindAllFn } from '../lib/db';
-import { TABLE_NAME as POST_TABLE_NAME, schema as postSchema, PostDetail, PostFullDetail } from '../models/Post';
+import { TABLE_NAME as POST_TABLE_NAME, schema as postSchema } from '../models/Post';
 import { TABLE_NAME as LOCAL_IMAGE_TABLE_NAME, schema as localImageSchema } from '../models/LocalImage';
 import { TABLE_NAME as WORK_TABLE_NAME, schema as workSchema } from '../models/Work';
-import { schema as userSchema, TABLE_NAME as USER_TABLE_NAME } from '../models/User';
+import { TABLE_NAME as USER_TABLE_NAME, schema as userSchema } from '../models/User';
+import { PostDetail, PostFullDetail } from '../types';
 
 export const fetchFullPostDetail = async (
   id: string,

@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
 
-import { PostFullDetail, isPostFullDetail, PostDetail } from '../models/Post';
+import { PostFullDetail, PostDetail, isPostFullDetail } from '../types';
 import styles from './PostDetail.module.css';
 import LocalImage from './LocalImage';
 

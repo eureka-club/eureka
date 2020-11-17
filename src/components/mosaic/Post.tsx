@@ -5,7 +5,7 @@ import { AiOutlineHeart } from 'react-icons/ai';
 import { BsBookmark } from 'react-icons/bs';
 
 import { ASSETS_BASE_URL } from '../../constants';
-import { PostDetail } from '../../models/Post';
+import { PostDetail } from '../../types';
 import styles from './Post.module.css';
 
 const Post: FunctionComponent<PostDetail> = ({

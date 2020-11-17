@@ -1,7 +1,3 @@
-import { CreatorDbObject } from './User';
-import { LocalImageDbObject } from './LocalImage';
-import { WorkDbObject } from './Work';
-
 export const TABLE_NAME = 'post';
 
 export const schema = (alias: string = TABLE_NAME): Record<string, string> => ({
@@ -17,12 +13,3 @@ export interface PostDbObject {
   'post.created_at': string;
   'post.updated_at': string;
 }
-
-export interface PostDetail extends PostDbObject, CreatorDbObject, LocalImageDbObject, WorkDbObject {}
-
-export interface PostFullDetail extends PostDetail {
-  'creator.avatar.file': string;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any,  @typescript-eslint/explicit-module-boundary-types
-export const isPostFullDetail = (object: any): object is PostFullDetail => object['creator.avatar.file'] != null;
