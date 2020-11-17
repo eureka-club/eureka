@@ -43,7 +43,16 @@ const CreatePostForm: FunctionComponent = () => {
   const [navbarState, setNavbarState] = useAtom(navbarAtom);
   const [imageFile, setImageFile] = useState<File>();
   const [imagePreview, setImagePreview] = useState<string>();
-  const [createNewPost, { data, error, isError, isLoading, isSuccess }] = useMutation(createPostApiHandler, {});
+  const [
+    execCreateNewPost,
+    {
+      data: createPostReqResponse,
+      error: createPostError,
+      isError: isCreatePostError,
+      isLoading: isCreatePostLoading,
+      isSuccess: isCreatePostSuccess,
+    },
+  ] = useMutation(createPostApiHandler, {});
 
   const handleImageControlClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
@@ -85,7 +94,7 @@ const CreatePostForm: FunctionComponent = () => {
       isPublic: form.isPublic.checked,
     };
 
-    await createNewPost({ imageFile, payload });
+    await execCreateNewPost({ imageFile, payload });
   };
 
   useEffect(() => {
@@ -102,13 +111,18 @@ const CreatePostForm: FunctionComponent = () => {
   }, [imageFile]);
 
   useEffect(() => {
-    if (router != null && setNavbarState != null && isSuccess && typeof data?.postUuid === 'string') {
+    if (
+      router != null &&
+      setNavbarState != null &&
+      isCreatePostSuccess &&
+      typeof createPostReqResponse?.postUuid === 'string'
+    ) {
       (async () => {
         await setNavbarState({ ...navbarState, ...{ createPostModalOpened: false } });
-        await router.push(`/post/${data.postUuid}`);
+        await router.push(`/post/${createPostReqResponse.postUuid}`);
       })();
     }
-  }, [router, navbarState, setNavbarState, isSuccess, data]);
+  }, [router, navbarState, setNavbarState, isCreatePostSuccess, createPostReqResponse]);
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -203,12 +217,12 @@ const CreatePostForm: FunctionComponent = () => {
 
           <Button variant="primary" type="submit" className="pl-5 pr-4 float-right">
             Create post
-            {isLoading ? (
+            {isCreatePostLoading ? (
               <Spinner animation="grow" variant="secondary" className={styles.loadIndicator} />
             ) : (
               <span className={styles.loadIndicator} />
             )}
-            {isError && error}
+            {isCreatePostError && createPostError}
           </Button>
         </Container>
       </Modal.Footer>
