@@ -19,14 +19,14 @@ import navbarAtom from '../../atoms/navbar';
 import styles from './CreatePostForm.module.css';
 
 type NewPostData = {
-  image: File;
+  imageFile: File;
   payload: Record<string, string>;
 };
 
-const createPostApiHandler = async ({ image, payload }: NewPostData) => {
+const createPostApiHandler = async ({ imageFile, payload }: NewPostData) => {
   const formData = new FormData();
 
-  formData.append('image', image);
+  formData.append('image', imageFile);
   Object.entries(payload).forEach(([key, value]) => formData.append(key, value));
 
   const res = await fetch('/api/post', {
@@ -40,9 +40,9 @@ const createPostApiHandler = async ({ image, payload }: NewPostData) => {
 const CreatePostForm: FunctionComponent = () => {
   const imageInputRef = useRef<HTMLInputElement>() as RefObject<HTMLInputElement>;
   const router = useRouter();
-  const [image, setImage] = useState<File>();
-  const [imagePreview, setImagePreview] = useState<string>();
   const [navbarState, setNavbarState] = useAtom(navbarAtom);
+  const [imageFile, setImageFile] = useState<File>();
+  const [imagePreview, setImagePreview] = useState<string>();
   const [createNewPost, { data, error, isError, isLoading, isSuccess }] = useMutation(createPostApiHandler, {});
 
   const handleImageControlClick = (ev: MouseEvent<HTMLButtonElement>) => {
@@ -57,19 +57,19 @@ const CreatePostForm: FunctionComponent = () => {
       const file = fileList[0];
 
       if (file.type.substr(0, 5) === 'image') {
-        setImage(fileList[0]);
+        setImageFile(fileList[0]);
       } else {
         alert('You must select image file!'); // eslint-disable-line no-alert
       }
     } else {
-      setImage(undefined);
+      setImageFile(undefined);
     }
   };
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
-    if (image == null) {
+    if (imageFile == null) {
       return;
     }
 
@@ -85,21 +85,21 @@ const CreatePostForm: FunctionComponent = () => {
       isPublic: form.isPublic.checked,
     };
 
-    await createNewPost({ image, payload });
+    await createNewPost({ imageFile, payload });
   };
 
   useEffect(() => {
-    if (image != null) {
+    if (imageFile != null) {
       const reader = new FileReader();
 
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
       };
-      reader.readAsDataURL(image);
+      reader.readAsDataURL(imageFile);
     } else {
       setImagePreview(undefined);
     }
-  }, [image]);
+  }, [imageFile]);
 
   useEffect(() => {
     if (router != null && setNavbarState != null && isSuccess && typeof data?.postUuid === 'string') {
@@ -126,7 +126,7 @@ const CreatePostForm: FunctionComponent = () => {
                 required
               />
               <button onClick={handleImageControlClick} className={styles.imageControl} type="button">
-                {image != null ? <span className={styles.imageName}>{image.name}</span> : 'select file...'}
+                {imageFile != null ? <span className={styles.imageName}>{imageFile.name}</span> : 'select file...'}
                 {imagePreview && <img src={imagePreview} className="float-right" alt="Post preview" />}
               </button>
             </FormGroup>
