@@ -3,6 +3,7 @@ import { FunctionComponent } from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
+import { BsBoxArrowUpRight } from 'react-icons/bs';
 
 import { FullPostDetail, isFullPostDetail, PostDbObject } from '../models/Post';
 import styles from './PostDetail.module.css';
@@ -33,8 +34,13 @@ const PostDetail: FunctionComponent<Props> = ({ post }) => {
                 <Spinner animation="grow" variant="info" className={classNames(styles.creatorAvatar, 'mr-3')} />
               )}
               <span>{post['creator.user_name']}</span>
-              <a href={post['work.link']} className={classNames(styles.workLink, 'ml-4')}>
-                Link to content
+              <a
+                href={post['work.link']}
+                className={classNames(styles.workLink, 'ml-4')}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Link to content <BsBoxArrowUpRight />
               </a>
             </div>
           </div>
