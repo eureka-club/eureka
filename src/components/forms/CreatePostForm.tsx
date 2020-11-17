@@ -24,13 +24,13 @@ import styles from './CreatePostForm.module.css';
 
 type NewPostPayload = {
   image: File;
-  workLink: string;
+  workLink?: string;
   workTitle: string;
   workAuthor: string;
   hashtags: string;
   language: string;
   workType: string;
-  description: string;
+  description?: string;
   isPublic: string;
 };
 
@@ -142,13 +142,13 @@ const CreatePostForm: FunctionComponent = () => {
     const form = ev.currentTarget;
     const payload: NewPostPayload = {
       image: imageFile,
-      workLink: form.workLink.value,
+      workLink: form.workLink.value.lenght ? form.workLink.value : null,
       workTitle: form.workTitle.value,
       workAuthor: form.workAuthor.value,
       hashtags: form.hashtags.value,
       language: form.language.value,
       workType: form.workType.value,
-      description: form.description.value,
+      description: form.description.value.length ? form.description.value : null,
       isPublic: form.isPublic.checked,
     };
 
@@ -211,7 +211,7 @@ const CreatePostForm: FunctionComponent = () => {
             <Col md={{ span: 3 }}>
               <FormGroup controlId="workLink">
                 <FormLabel>Add link to work</FormLabel>
-                <FormControl type="text" placeholder="http://" required />
+                <FormControl type="text" placeholder="http://" />
               </FormGroup>
             </Col>
           </Row>

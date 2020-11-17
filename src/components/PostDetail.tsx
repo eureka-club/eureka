@@ -14,7 +14,10 @@ interface Props {
 }
 
 const PostDetailComponent: FunctionComponent<Props> = ({ post }) => {
-  const contentTextTokens = post['post.content_text'].split('\n').filter((token: string) => token !== '');
+  const contentTextTokens =
+    post['post.content_text'] != null
+      ? post['post.content_text'].split('\n').filter((token: string) => token !== '')
+      : [];
 
   return (
     <>
@@ -34,14 +37,16 @@ const PostDetailComponent: FunctionComponent<Props> = ({ post }) => {
                 <Spinner animation="grow" variant="info" className={classNames(styles.creatorAvatar, 'mr-3')} />
               )}
               <span>{post['creator.user_name']}</span>
-              <a
-                href={post['work.link']}
-                className={classNames(styles.workLink, 'ml-4')}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Link to content <BsBoxArrowUpRight />
-              </a>
+              {post['work.link'] != null && (
+                <a
+                  href={post['work.link']}
+                  className={classNames(styles.workLink, 'ml-4')}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Link to content <BsBoxArrowUpRight />
+                </a>
+              )}
             </div>
           </div>
 
