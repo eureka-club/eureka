@@ -36,6 +36,13 @@
   white-space: nowrap;
 }
 
+.typeaheadImageItem img {
+  margin-right: 0.5rem;
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
 .loadIndicator {
   display: inline-block;
   height: 16px;
