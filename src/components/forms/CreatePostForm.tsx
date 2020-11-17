@@ -199,7 +199,7 @@ const CreatePostForm: FunctionComponent = () => {
 
       <Modal.Footer>
         <Container className="py-3">
-          <FormCheck type="checkbox" inline id="public" label="Public" />
+          <FormCheck type="checkbox" defaultChecked={true} inline id="public" label="Public" />
 
           <Button variant="primary" type="submit" className="pl-5 pr-4 float-right">
             Create post
