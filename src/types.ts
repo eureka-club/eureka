@@ -1,4 +1,4 @@
-import { PostDbObject } from './models/Post';
+import { PostDetail } from './models/Post';
 
 export interface CycleObject {
   kind: 'cycle';
@@ -11,6 +11,6 @@ export interface CycleObject {
   liked?: boolean;
 }
 
-export type MosaicItem = PostDbObject;
+export type MosaicItem = PostDetail;
 
-export const isPostObject = (object: MosaicItem): object is PostDbObject => object['post.id'] != null;
+export const isPostObject = (object: MosaicItem): object is PostDetail => object['post.id'] != null;

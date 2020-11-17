@@ -3,11 +3,11 @@ import { FunctionComponent } from 'react';
 
 import DetailLayout from '../../components/layouts/DetailLayout';
 import PostDetail from '../../components/PostDetail';
-import { FullPostDetail } from '../../models/Post';
+import { PostFullDetail } from '../../models/Post';
 import { fetchFullPostDetail } from '../../repositories/Post';
 
 interface Props {
-  post: FullPostDetail;
+  post: PostFullDetail;
 }
 
 const PostDetailPage: FunctionComponent<Props> = ({ post }) => {

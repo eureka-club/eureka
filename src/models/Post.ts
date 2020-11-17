@@ -11,16 +11,18 @@ export const schema = (alias: string = TABLE_NAME): Record<string, string> => ({
   [`${alias}.updated_at`]: `${TABLE_NAME}.updated_at`,
 });
 
-export interface PostDbObject extends CreatorDbObject, LocalImageDbObject, WorkDbObject {
+export interface PostDbObject {
   'post.id': string;
   'post.content_text': string;
   'post.created_at': string;
   'post.updated_at': string;
 }
 
-export interface FullPostDetail extends PostDbObject {
+export interface PostDetail extends PostDbObject, CreatorDbObject, LocalImageDbObject, WorkDbObject {}
+
+export interface PostFullDetail extends PostDetail {
   'creator.avatar.file': string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any,  @typescript-eslint/explicit-module-boundary-types
-export const isFullPostDetail = (object: any): object is FullPostDetail => object['creator.avatar.file'] != null;
+export const isPostFullDetail = (object: any): object is PostFullDetail => object['creator.avatar.file'] != null;
