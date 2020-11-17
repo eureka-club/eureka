@@ -18,15 +18,21 @@ import { useMutation } from 'react-query';
 import navbarAtom from '../../atoms/navbar';
 import styles from './CreatePostForm.module.css';
 
-type NewPostData = {
-  imageFile: File;
-  payload: Record<string, string>;
+type NewPostPayload = {
+  image: File;
+  workLink: string;
+  workTitle: string;
+  workAuthor: string;
+  hashtags: string;
+  language: string;
+  workType: string;
+  description: string;
+  isPublic: string;
 };
 
-const createPostApiHandler = async ({ imageFile, payload }: NewPostData) => {
+const createPostApiHandler = async (payload: NewPostPayload) => {
   const formData = new FormData();
 
-  formData.append('image', imageFile);
   Object.entries(payload).forEach(([key, value]) => formData.append(key, value));
 
   const res = await fetch('/api/post', {
@@ -83,7 +89,8 @@ const CreatePostForm: FunctionComponent = () => {
     }
 
     const form = ev.currentTarget;
-    const payload = {
+    const payload: NewPostPayload = {
+      image: imageFile,
       workLink: form.workLink.value,
       workTitle: form.workTitle.value,
       workAuthor: form.workAuthor.value,
@@ -94,7 +101,7 @@ const CreatePostForm: FunctionComponent = () => {
       isPublic: form.isPublic.checked,
     };
 
-    await execCreateNewPost({ imageFile, payload });
+    await execCreateNewPost(payload);
   };
 
   useEffect(() => {
