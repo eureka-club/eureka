@@ -21,7 +21,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(
       res.json({ post });
     } catch (err) {
       console.error(err); // eslint-disable-line no-console
-      res.status(500).end();
+      res.status(500).json({ status: 'server error' });
     }
   },
 );

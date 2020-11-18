@@ -134,7 +134,7 @@ export default getApiHandler().post<NextApiRequest, NextApiResponse>(
     new Form().parse(req, async (err, fields, files) => {
       if (err != null) {
         console.error(err); // eslint-disable-line no-console
-        res.status(500).end();
+        res.status(500).json({ status: 'server error' });
         return;
       }
       if (files?.image == null) {
@@ -153,7 +153,7 @@ export default getApiHandler().post<NextApiRequest, NextApiResponse>(
         res.json({ postUuid });
       } catch (exc) {
         console.error(exc); // eslint-disable-line no-console
-        res.status(500).end();
+        res.status(500).json({ status: 'server error' });
       }
     });
   },
