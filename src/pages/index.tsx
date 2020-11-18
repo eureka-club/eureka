@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -83,10 +84,23 @@ const IndexPage: NextPage<Props> = ({ posts }) => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const posts = await fetchIndexMosaic();
+  const serializablePosts = posts.map((post) => {
+    if (post['cycle.id'] != null) {
+      return {
+        ...post,
+        ...{
+          'cycle.start_date': dayjs(post['cycle.start_date']).format('YYYY-MM-DD'),
+          'cycle.end_date': dayjs(post['cycle.end_date']).format('YYYY-MM-DD'),
+        },
+      };
+    }
+
+    return post;
+  });
 
   return {
     props: {
-      posts,
+      posts: serializablePosts,
     },
   };
 };

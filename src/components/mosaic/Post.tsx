@@ -1,11 +1,10 @@
-import classNames from 'classnames';
 import Link from 'next/link';
 import { FunctionComponent } from 'react';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { BsBookmark } from 'react-icons/bs';
 
-import { ASSETS_BASE_URL } from '../../constants';
 import { PostDetail } from '../../types';
+import LocalImage from '../LocalImage';
 import styles from './Post.module.css';
 
 const Post: FunctionComponent<PostDetail> = ({
@@ -19,14 +18,12 @@ const Post: FunctionComponent<PostDetail> = ({
       <div className={styles.imageContainer}>
         <Link href={`/?id=${postId}`} as={`/post/${postId}`}>
           <a className="d-inline-block">
-            <img src={`${ASSETS_BASE_URL}/${imagePath}`} alt={workTitle} />
+            <LocalImage filePath={imagePath} alt={workTitle} />
           </a>
         </Link>
-        <div className={classNames('d-flex', styles.placer)}>
-          <div className={styles.actions}>
-            <BsBookmark className={styles.actionBookmark} />
-            <AiOutlineHeart className={styles.actionLike} />
-          </div>
+        <div className={styles.actions}>
+          <BsBookmark className={styles.actionBookmark} />
+          <AiOutlineHeart className={styles.actionLike} />
         </div>
       </div>
       <Link href={`/?id=${postId}`} as={`/post/${postId}`}>
