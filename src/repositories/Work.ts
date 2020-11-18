@@ -6,7 +6,7 @@ import { TABLE_NAME as POST_TABLE_NAME, schema as postSchema } from '../models/P
 import { TABLE_NAME as LOCAL_IMAGE_TABLE_NAME, schema as localImageSchema } from '../models/LocalImage';
 import { TABLE_NAME as WORK_TABLE_NAME, schema as workSchema } from '../models/Work';
 
-export const findAll = async (criteria?: ParsedQs): Promise<Knex.QueryBuilder> => {
+export const findAll = async (criteria?: ParsedQs, limit = 25): Promise<Knex.QueryBuilder> => {
   const connection = getDbConnection();
   const table = connection(WORK_TABLE_NAME);
 
@@ -23,9 +23,11 @@ export const findAll = async (criteria?: ParsedQs): Promise<Knex.QueryBuilder> =
     });
   }
 
-  return table.select({
-    ...workSchema(),
-    ...postSchema(),
-    ...localImageSchema(),
-  });
+  return table
+    .select({
+      ...workSchema(),
+      ...postSchema(),
+      ...localImageSchema(),
+    })
+    .limit(limit);
 };
