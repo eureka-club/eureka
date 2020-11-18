@@ -1,58 +1,45 @@
-import classNames from 'classnames';
+import dayjs from 'dayjs';
 import Link from 'next/link';
 import { FunctionComponent } from 'react';
 import { Badge } from 'react-bootstrap';
-import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
-import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
+import { BsBookmark } from 'react-icons/bs';
+import { AiOutlineHeart } from 'react-icons/ai';
 
-import { ASSETS_BASE_URL } from '../../constants';
+import LocalImage from '../LocalImage';
+import { PostDetail } from '../../types';
 import styles from './Cycle.module.css';
 
-interface Props {
-  id: string;
-  bookmarked?: boolean;
-  image: string;
-  liked?: boolean;
-  startDate: string;
-  endDate: string;
-  title: string;
-}
-
-const Cycle: FunctionComponent<Props> = ({ id, bookmarked, image, liked, startDate, endDate, title }) => {
+const Cycle: FunctionComponent<PostDetail> = ({
+  'local_image.stored_file': imagePath,
+  'cycle.id': cycleId,
+  'cycle.title': cycleTitle,
+  'cycle.start_date': cycleStartDate,
+  'cycle.end_date': cycleEndDate,
+  'work.title': workTitle,
+}) => {
   return (
     <article className={styles.cycle}>
       <div className={styles.imageContainer}>
-        <Link href={`/?id=${id}`} as={`/cycle/${id}`}>
+        <Link href={`/?id=${cycleId}`} as={`/cycle/${cycleId}`}>
           <a>
-            <img src={`${ASSETS_BASE_URL}/${image}`} alt={title} />
+            <LocalImage filePath={imagePath} alt={workTitle} />
           </a>
         </Link>
+        <Link href={`/?id=${cycleId}`} as={`/cycle/${cycleId}`}>
+          <a>
+            <h3 className={styles.title}>{cycleTitle}</h3>
+          </a>
+        </Link>
+        <span className={styles.dateRange}>
+          {dayjs(cycleStartDate).format('MMM D YYYY')}&nbsp;&#8209;&nbsp;{dayjs(cycleEndDate).format('MMM D YYYY')}
+        </span>
 
-        <div className={styles.placer}>
-          <Link href={`/?id=${id}`} as={`/cycle/${id}`}>
-            <a>
-              <h3 className={styles.title}>{title}</h3>
-            </a>
-          </Link>
-          <span className={styles.dateRange}>
-            {startDate}&#8209;{endDate}
-          </span>
-
-          <div className={classNames('d-flex', styles.actionsWrapper)}>
-            <div>
-              <Badge pill variant="primary">
-                Cycle
-              </Badge>
-            </div>
-            <div className={styles.actions}>
-              {bookmarked ? (
-                <BsBookmarkFill className={styles.actionBookmark} />
-              ) : (
-                <BsBookmark className={styles.actionBookmark} />
-              )}
-              {liked ? <AiFillHeart className={styles.actionLike} /> : <AiOutlineHeart className={styles.actionLike} />}
-            </div>
-          </div>
+        <Badge pill variant="primary" className={styles.badge}>
+          Cycle
+        </Badge>
+        <div className={styles.actions}>
+          <BsBookmark className={styles.actionBookmark} />
+          <AiOutlineHeart className={styles.actionLike} />
         </div>
       </div>
     </article>
