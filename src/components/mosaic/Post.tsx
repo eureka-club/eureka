@@ -5,10 +5,10 @@ import { AiOutlineHeart } from 'react-icons/ai';
 import { BsBookmark } from 'react-icons/bs';
 
 import { ASSETS_BASE_URL } from '../../constants';
-import { PostDbObject } from '../../models/Post';
+import { PostDetail } from '../../types';
 import styles from './Post.module.css';
 
-const Post: FunctionComponent<PostDbObject> = ({
+const Post: FunctionComponent<PostDetail> = ({
   'post.id': postId,
   'local_image.stored_file': imagePath,
   'work.author': workAuthor,

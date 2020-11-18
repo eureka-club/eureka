@@ -7,30 +7,29 @@ import { useQuery } from 'react-query';
 import DetailLayout from '../components/layouts/DetailLayout';
 import SimpleLayout from '../components/layouts/SimpleLayout';
 import Mosaic from '../components/Mosaic';
-import PostDetail from '../components/PostDetail';
-import { FullPostDetail, PostDbObject } from '../models/Post';
-import { isPostObject, MosaicItem } from '../types';
+import PostDetailComponent from '../components/PostDetail';
+import { MosaicItem, PostFullDetail, PostDetail, isPostObject } from '../types';
 import { fetchIndexMosaic } from '../repositories/Post';
 import xhrFetcher from '../lib/xhrFetcher';
 import styles from './index.module.css';
 
 const renderDetailedMosaicItem = (item: MosaicItem) => {
   if (isPostObject(item)) {
-    return <PostDetail post={item} />;
+    return <PostDetailComponent post={item} />;
   }
 
   return '';
 };
 
 interface Props {
-  posts: PostDbObject[];
+  posts: PostDetail[];
 }
 
 const IndexPage: NextPage<Props> = ({ posts }) => {
   const router = useRouter();
   const { id } = router.query;
   const [selectedMosaicItem, setSelectedMosaicItem] = useState<MosaicItem>();
-  const { data } = useQuery<{ post: FullPostDetail }>(`/api/post/${id}`, xhrFetcher, {
+  const { data } = useQuery<{ post: PostFullDetail }>(`/api/post/${id}`, xhrFetcher, {
     enabled: id != null,
   });
 

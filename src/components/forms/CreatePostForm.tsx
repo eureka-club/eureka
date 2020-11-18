@@ -14,20 +14,43 @@ import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 import { useMutation } from 'react-query';
+import { AsyncTypeahead } from 'react-bootstrap-typeahead';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 
+import LocalImage from '../LocalImage';
+import { WorkDetail } from '../../types';
 import navbarAtom from '../../atoms/navbar';
 import styles from './CreatePostForm.module.css';
 
-type NewPostData = {
+type NewPostPayload = {
   image: File;
-  payload: Record<string, string>;
+  workLink?: string;
+  workTitle: string;
+  workAuthor: string;
+  hashtags: string;
+  language: string;
+  workType: string;
+  description?: string;
+  isPublic: string;
 };
 
-const createPostApiHandler = async ({ image, payload }: NewPostData) => {
+type WorkTitleSearchOptions = {
+  id: string;
+  author: string;
+  title: string;
+  type: string;
+  link: string;
+  localImagePath: string;
+};
+
+const createPostApiHandler = async (payload: NewPostPayload) => {
   const formData = new FormData();
 
-  formData.append('image', image);
-  Object.entries(payload).forEach(([key, value]) => formData.append(key, value));
+  Object.entries(payload).forEach(([key, value]) => {
+    if (value != null) {
+      formData.append(key, value);
+    }
+  });
 
   const res = await fetch('/api/post', {
     method: 'POST',
@@ -39,11 +62,23 @@ const createPostApiHandler = async ({ image, payload }: NewPostData) => {
 
 const CreatePostForm: FunctionComponent = () => {
   const imageInputRef = useRef<HTMLInputElement>() as RefObject<HTMLInputElement>;
+  const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
   const router = useRouter();
-  const [image, setImage] = useState<File>();
-  const [imagePreview, setImagePreview] = useState<string>();
   const [navbarState, setNavbarState] = useAtom(navbarAtom);
-  const [createNewPost, { data, error, isError, isLoading, isSuccess }] = useMutation(createPostApiHandler, {});
+  const [imageFile, setImageFile] = useState<File>();
+  const [imagePreview, setImagePreview] = useState<string>();
+  const [isWorkTitleSearchLoading, setIsWorkTitleSearchLoading] = useState(false);
+  const [workTitleSearchOptions, setWorkTitleSearchOptions] = useState<WorkTitleSearchOptions[]>([]);
+  const [
+    execCreateNewPost,
+    {
+      data: createPostReqResponse,
+      error: createPostError,
+      isError: isCreatePostError,
+      isLoading: isCreatePostLoading,
+      isSuccess: isCreatePostSuccess,
+    },
+  ] = useMutation(createPostApiHandler, {});
 
   const handleImageControlClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
@@ -57,61 +92,98 @@ const CreatePostForm: FunctionComponent = () => {
       const file = fileList[0];
 
       if (file.type.substr(0, 5) === 'image') {
-        setImage(fileList[0]);
+        setImageFile(fileList[0]);
       } else {
         alert('You must select image file!'); // eslint-disable-line no-alert
       }
     } else {
-      setImage(undefined);
+      setImageFile(undefined);
+    }
+  };
+
+  const handleWorkTitleSearch = async (query: string) => {
+    setIsWorkTitleSearchLoading(true);
+
+    const response = await fetch(`/api/work?q=title%3D${query}`);
+    const items: WorkDetail[] = await response.json();
+    const options = items.map((w) => ({
+      id: w['work.id'],
+      author: w['work.author'],
+      title: w['work.title'],
+      type: w['work.type'],
+      link: w['work.link'],
+      localImagePath: w['local_image.stored_file'],
+    }));
+
+    setWorkTitleSearchOptions(options);
+    setIsWorkTitleSearchLoading(false);
+  };
+
+  const handleWorkTitleSearchSelect = (selected: Array<WorkTitleSearchOptions>): void => {
+    if (selected[0] != null && formRef.current != null) {
+      const form = formRef.current;
+
+      form.workAuthor.value = selected[0].author;
+      form.workType.value = selected[0].type;
+
+      if (selected[0].link != null) {
+        form.workLink.value = selected[0].link;
+      }
     }
   };
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
-    if (image == null) {
+    if (imageFile == null) {
       return;
     }
 
     const form = ev.currentTarget;
-    const payload = {
-      workLink: form.workLink.value,
+    const payload: NewPostPayload = {
+      image: imageFile,
+      workLink: form.workLink.value.lenght ? form.workLink.value : null,
       workTitle: form.workTitle.value,
       workAuthor: form.workAuthor.value,
       hashtags: form.hashtags.value,
       language: form.language.value,
       workType: form.workType.value,
-      description: form.description.value,
+      description: form.description.value.length ? form.description.value : null,
       isPublic: form.isPublic.checked,
     };
 
-    await createNewPost({ image, payload });
+    await execCreateNewPost(payload);
   };
 
   useEffect(() => {
-    if (image != null) {
+    if (imageFile != null) {
       const reader = new FileReader();
 
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
       };
-      reader.readAsDataURL(image);
+      reader.readAsDataURL(imageFile);
     } else {
       setImagePreview(undefined);
     }
-  }, [image]);
+  }, [imageFile]);
 
   useEffect(() => {
-    if (router != null && setNavbarState != null && isSuccess && typeof data?.postUuid === 'string') {
+    if (
+      router != null &&
+      setNavbarState != null &&
+      isCreatePostSuccess &&
+      typeof createPostReqResponse?.postUuid === 'string'
+    ) {
       (async () => {
         await setNavbarState({ ...navbarState, ...{ createPostModalOpened: false } });
-        await router.push(`/post/${data.postUuid}`);
+        await router.push(`/post/${createPostReqResponse.postUuid}`);
       })();
     }
-  }, [router, navbarState, setNavbarState, isSuccess, data]);
+  }, [router, navbarState, setNavbarState, isCreatePostSuccess, createPostReqResponse]);
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} ref={formRef}>
       <Modal.Body>
         <Container>
           <h4 className="mt-2 mb-4">Create Post</h4>
@@ -126,7 +198,7 @@ const CreatePostForm: FunctionComponent = () => {
                 required
               />
               <button onClick={handleImageControlClick} className={styles.imageControl} type="button">
-                {image != null ? <span className={styles.imageName}>{image.name}</span> : 'select file...'}
+                {imageFile != null ? <span className={styles.imageName}>{imageFile.name}</span> : 'select file...'}
                 {imagePreview && <img src={imagePreview} className="float-right" alt="Post preview" />}
               </button>
             </FormGroup>
@@ -139,14 +211,42 @@ const CreatePostForm: FunctionComponent = () => {
             <Col md={{ span: 3 }}>
               <FormGroup controlId="workLink">
                 <FormLabel>Add link to work</FormLabel>
-                <FormControl type="text" placeholder="http://" required />
+                <FormControl type="text" placeholder="http://" />
               </FormGroup>
             </Col>
           </Row>
           <Row>
-            <FormGroup controlId="workTitle" as={Col}>
+            <FormGroup as={Col}>
               <FormLabel>Title of the work (*)</FormLabel>
-              <FormControl type="text" required />
+
+              {/* language=CSS */}
+              <style jsx global>{`
+                .rbt-menu {
+                  min-width: 550px;
+                  background-color: #d0f7ed;
+                  left: -1px !important;
+                }
+              `}</style>
+              <AsyncTypeahead
+                filterBy={
+                  () => true /* Bypass client-side filtering. Results are already filtered by the search endpoint */
+                }
+                id="work-title-search-menu"
+                inputProps={{ id: 'workTitle', required: true }}
+                isLoading={isWorkTitleSearchLoading}
+                minLength={2}
+                labelKey={(option) => `${option.title}`}
+                onSearch={handleWorkTitleSearch}
+                onChange={handleWorkTitleSearchSelect}
+                options={workTitleSearchOptions}
+                placeholder="Search for existing work..."
+                renderMenuItemChildren={(option) => (
+                  <div className={styles.typeaheadImageItem}>
+                    <LocalImage filePath={option.localImagePath} alt={option.title} />
+                    <strong>{option.title}</strong> by {option.author} ({option.type})
+                  </div>
+                )}
+              />
             </FormGroup>
             <FormGroup controlId="workAuthor" as={Col}>
               <FormLabel>Author of the work</FormLabel>
@@ -199,16 +299,16 @@ const CreatePostForm: FunctionComponent = () => {
 
       <Modal.Footer>
         <Container className="py-3">
-          <FormCheck type="checkbox" defaultChecked={true} inline id="isPublic" label="Public?" />
+          <FormCheck type="checkbox" defaultChecked inline id="isPublic" label="Public?" />
 
           <Button variant="primary" type="submit" className="pl-5 pr-4 float-right">
             Create post
-            {isLoading ? (
+            {isCreatePostLoading ? (
               <Spinner animation="grow" variant="secondary" className={styles.loadIndicator} />
             ) : (
               <span className={styles.loadIndicator} />
             )}
-            {isError && error}
+            {isCreatePostError && createPostError}
           </Button>
         </Container>
       </Modal.Footer>

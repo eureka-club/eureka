@@ -5,16 +5,19 @@ import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
 
-import { FullPostDetail, isFullPostDetail, PostDbObject } from '../models/Post';
+import { PostFullDetail, PostDetail, isPostFullDetail } from '../types';
 import styles from './PostDetail.module.css';
 import LocalImage from './LocalImage';
 
 interface Props {
-  post: PostDbObject | FullPostDetail;
+  post: PostDetail | PostFullDetail;
 }
 
-const PostDetail: FunctionComponent<Props> = ({ post }) => {
-  const contentTextTokens = post['post.content_text'].split('\n').filter((token: string) => token !== '');
+const PostDetailComponent: FunctionComponent<Props> = ({ post }) => {
+  const contentTextTokens =
+    post['post.content_text'] != null
+      ? post['post.content_text'].split('\n').filter((token: string) => token !== '')
+      : [];
 
   return (
     <>
@@ -24,7 +27,7 @@ const PostDetail: FunctionComponent<Props> = ({ post }) => {
             <h1>{post['work.title']}</h1>
             <span className={styles.titleWorkAuthor}>{post['work.author']}</span>
             <div>
-              {isFullPostDetail(post) ? (
+              {isPostFullDetail(post) ? (
                 <LocalImage
                   filePath={post['creator.avatar.file']}
                   alt="creator avatar"
@@ -34,14 +37,16 @@ const PostDetail: FunctionComponent<Props> = ({ post }) => {
                 <Spinner animation="grow" variant="info" className={classNames(styles.creatorAvatar, 'mr-3')} />
               )}
               <span>{post['creator.user_name']}</span>
-              <a
-                href={post['work.link']}
-                className={classNames(styles.workLink, 'ml-4')}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Link to content <BsBoxArrowUpRight />
-              </a>
+              {post['work.link'] != null && (
+                <a
+                  href={post['work.link']}
+                  className={classNames(styles.workLink, 'ml-4')}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Link to content <BsBoxArrowUpRight />
+                </a>
+              )}
             </div>
           </div>
 
@@ -72,4 +77,4 @@ const PostDetail: FunctionComponent<Props> = ({ post }) => {
   );
 };
 
-export default PostDetail;
+export default PostDetailComponent;

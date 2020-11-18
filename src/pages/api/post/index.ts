@@ -20,11 +20,11 @@ type FileUpload = {
 type PostProps = {
   workTitle: string[];
   workAuthor: string[];
-  workLink: string[];
+  workLink?: string[];
   workType: string[];
   language: string[];
   hashtags: string[];
-  description: string[];
+  description?: string[];
   isPublic: string[];
 };
 
@@ -90,9 +90,9 @@ const getPostWork = async (postProps: PostProps): Promise<string> => {
 
   const existingWork = await table
     .where({
-      author: postProps.workAuthor[0],
-      title: postProps.workTitle[0],
-      type: postProps.workType[0],
+      title: postProps.workTitle[0].trim(),
+      author: postProps.workAuthor[0].trim(),
+      type: postProps.workType[0].trim(),
     })
     .first();
   if (existingWork != null) {
@@ -105,8 +105,7 @@ const getPostWork = async (postProps: PostProps): Promise<string> => {
     type: postProps.workType[0].trim(),
     title: postProps.workTitle[0].trim(),
     author: postProps.workAuthor[0].trim(),
-    year_created: '1900',
-    link: postProps.workLink[0].trim(),
+    link: postProps.workLink != null ? postProps.workLink[0].trim() : null,
   });
 
   return pk;
@@ -123,7 +122,7 @@ const savePost = async (postProps: PostProps, localImageUuid: string, workUuid: 
     local_image_id: localImageUuid,
     work_id: workUuid,
     language: postProps.language[0].trim(),
-    content_text: postProps.description[0].trim(),
+    content_text: postProps.description != null ? postProps.description[0].trim() : null,
     is_public: !!postProps.isPublic[0],
   });
 
@@ -152,8 +151,8 @@ export default getApiHandler().post<NextApiRequest, NextApiResponse>(
         const postUuid = await savePost(fields, localImageDbRecordUuid, workDbRecordUuid);
 
         res.json({ postUuid });
-      } catch (err) {
-        console.error(err); // eslint-disable-line no-console
+      } catch (exc) {
+        console.error(exc); // eslint-disable-line no-console
         res.status(500).end();
       }
     });
