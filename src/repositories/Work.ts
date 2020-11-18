@@ -10,6 +10,8 @@ export const findAll = async (criteria?: ParsedQs, limit = 25): Promise<Knex.Que
   const connection = getDbConnection();
   const table = connection(WORK_TABLE_NAME);
 
+  // select Work & fist related Post
+  // https://stackoverflow.com/questions/2043259/how-to-join-to-first-row/2043290#2043290
   table.joinRaw(`join [${POST_TABLE_NAME}] on [${POST_TABLE_NAME}].[id] = (
     select TOP 1 [${POST_TABLE_NAME}].[id]
     from [${POST_TABLE_NAME}]

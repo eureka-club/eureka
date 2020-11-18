@@ -34,7 +34,9 @@ export const fetchFullPostDetail = async (
     .first();
 };
 
-export const fetchIndexMosaic = async (): Promise<Knex.QueryBuilder<Record<string, unknown>, PostDetail[]>> => {
+export const fetchIndexMosaic = async (
+  limit = 25,
+): Promise<Knex.QueryBuilder<Record<string, unknown>, PostDetail[]>> => {
   const connection = getDbConnection();
   const table = connection(POST_TABLE_NAME);
 
@@ -48,11 +50,13 @@ export const fetchIndexMosaic = async (): Promise<Knex.QueryBuilder<Record<strin
   table.orWhere('cycle_post.is_cover', null);
   table.orderBy('post.created_at', 'desc');
 
-  return table.select({
-    ...omit(postSchema(), ['post.created_at', 'post.updated_at']),
-    ...omit(userSchema('creator'), ['creator.created_at', 'creator.updated_at']),
-    ...omit(localImageSchema(), ['local_image.created_at', 'local_image.updated_at']),
-    ...omit(workSchema(), ['work.created_at', 'work.updated_at']),
-    ...omit(cycleSchema(), ['cycle.created_at', 'cycle.updated_at']),
-  });
+  return table
+    .select({
+      ...omit(postSchema(), ['post.created_at', 'post.updated_at']),
+      ...omit(userSchema('creator'), ['creator.created_at', 'creator.updated_at']),
+      ...omit(localImageSchema(), ['local_image.created_at', 'local_image.updated_at']),
+      ...omit(workSchema(), ['work.created_at', 'work.updated_at']),
+      ...omit(cycleSchema(), ['cycle.created_at', 'cycle.updated_at']),
+    })
+    .limit(limit);
 };
