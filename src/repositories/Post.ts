@@ -60,3 +60,24 @@ export const fetchIndexMosaic = async (
     })
     .limit(limit);
 };
+
+export const findRelatedPosts = async (
+  post: PostDetail,
+  limit = 25,
+): Promise<Knex.QueryBuilder<Record<string, unknown>, PostDetail[]>> => {
+  const connection = getDbConnection();
+  const table = connection(POST_TABLE_NAME);
+
+  table.leftJoin(LOCAL_IMAGE_TABLE_NAME, 'post.local_image_id', '=', `${LOCAL_IMAGE_TABLE_NAME}.id`);
+  table.leftJoin(WORK_TABLE_NAME, 'post.work_id', '=', `${WORK_TABLE_NAME}.id`);
+
+  table.where('post.work_id', post['work.id']).andWhere('post.id', '!=', post['post.id']);
+
+  return table
+    .select({
+      ...omit(postSchema(), ['post.created_at', 'post.updated_at']),
+      ...omit(localImageSchema(), ['local_image.created_at', 'local_image.updated_at']),
+      ...omit(workSchema(), ['work.created_at', 'work.updated_at']),
+    })
+    .limit(limit);
+};

@@ -70,7 +70,7 @@ const PostDetailComponent: FunctionComponent<Props> = ({ post }) => {
       </Row>
       <Row>
         <Col>
-          <h2>Related Posts and Cycles</h2>
+          <h2 className="mb-5">Related Posts and Cycles</h2>
         </Col>
       </Row>
     </>
