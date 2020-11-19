@@ -4,15 +4,10 @@ import { CycleDbObject } from './models/Cycle';
 import { LocalImageDbObject } from './models/LocalImage';
 import { WorkDbObject } from './models/Work';
 
-export interface CycleObject {
-  kind: 'cycle';
-  id: string;
-  title: string;
-  image: string;
-  startDate: string;
-  endDate: string;
-  bookmarked?: boolean;
-  liked?: boolean;
+export interface CycleDetail extends CycleDbObject, CreatorDbObject {}
+
+export interface CycleFullDetail extends CycleDetail {
+  'creator.avatar.file': string;
 }
 
 export interface PostDetail extends PostDbObject, CreatorDbObject, LocalImageDbObject, WorkDbObject, CycleDbObject {}
@@ -31,3 +26,6 @@ export const isCycleObject = (object: MosaicItem): object is PostDetail => objec
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any,  @typescript-eslint/explicit-module-boundary-types
 export const isPostFullDetail = (object: any): object is PostFullDetail => object['creator.avatar.file'] != null;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any,  @typescript-eslint/explicit-module-boundary-types
+export const isCycleFullDetail = (object: any): object is CycleFullDetail => object['creator.avatar.file'] != null;
