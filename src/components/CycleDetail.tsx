@@ -1,46 +1,127 @@
-import { FunctionComponent } from 'react';
+import classNames from 'classnames';
+import dayjs from 'dayjs';
+import { FunctionComponent, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
+import Spinner from 'react-bootstrap/Spinner';
+import { BiArrowBack } from 'react-icons/bi';
+import { Carousel } from 'react-responsive-carousel';
 
-import { ASSETS_BASE_URL } from '../constants';
-import { CycleObject } from '../types';
-import styles from './PostDetail.module.css';
+import { CycleFullDetail, isCycleFullDetail } from '../types';
+import LocalImage from './LocalImage';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import styles from './CycleDetail.module.css';
 
 interface Props {
-  cycle: CycleObject;
+  cycle: CycleFullDetail;
+  cycleContent: Record<string, string>[];
 }
 
-const CycleDetail: FunctionComponent<Props> = ({ cycle }) => {
+const CycleDetail: FunctionComponent<Props> = ({ cycle, cycleContent }) => {
+  const contentTextTokens =
+    cycle['cycle.content_text'] != null
+      ? cycle['cycle.content_text'].split('\n').filter((token: string) => token !== '')
+      : [];
+
+  const [currentGallerySlide, setCurrentGallerySlide] = useState(0);
+
+  const handleGalleryNext = () => {
+    setCurrentGallerySlide((actualSlide) => actualSlide + 1);
+  };
+
+  const handleGalleryPrevious = () => {
+    setCurrentGallerySlide((actualSlide) => actualSlide - 1);
+  };
+
+  const updateCurrentSlide = (index: number) => {
+    if (currentGallerySlide !== index) {
+      setCurrentGallerySlide(index);
+    }
+  };
+
   return (
-    <Row>
-      <Col>
-        <div className="mb-4">
-          <h1>{cycle.title}</h1>
-          <span>
-            Dates: {cycle.startDate}&#8209;{cycle.endDate}
-          </span>
-        </div>
+    <>
+      <Row>
+        <Col>
+          <section className="mb-4">
+            <h1>{cycle['cycle.title']}</h1>
+            <p>
+              Dates: {dayjs(cycle['cycle.start_date']).format('MMMM D YYYY')}&nbsp;&#8209;&nbsp;
+              {dayjs(cycle['cycle.end_date']).format('MMMM D YYYY')}
+            </p>
+            <p className={styles.cycleAuthor}>
+              {isCycleFullDetail(cycle) ? (
+                <LocalImage
+                  filePath={cycle['creator.avatar.file']}
+                  alt="creator avatar"
+                  className={classNames(styles.cycleAuthorAvatar, 'mr-3')}
+                />
+              ) : (
+                <Spinner animation="grow" variant="info" className={classNames(styles.cycleAuthorAvatar, 'mr-3')} />
+              )}
+              {cycle['creator.user_name']}
+            </p>
+          </section>
+          <section className="mb-4">
+            {contentTextTokens.map((token) => (
+              <p key={`${token[0]}${token[1]}-${token.length}`}>{token}</p>
+            ))}
+          </section>
+          <section className={classNames(styles.commentsPlaceholder, 'd-flex', 'mb-5')}>comments section</section>
+        </Col>
 
-        <p>
-          Maecenas sollicitudin sollicitudin arcu, ac fringilla quam pellentesque et. Vivamus euismod ante et pulvinar
-          imperdiet. Nullam finibus diam vitae tempus faucibus. Duis egestas pharetra lorem at ultricies. Donec ac
-          consequat erat. Maecenas congue varius urna a dignissim. Donec fringilla, magna ac posuere dictum, massa mi
-          posuere neque, eget pretium enim quam sed mauris.
-        </p>
-        <p>
-          Nunc efficitur rhoncus mattis. Nullam vitae mollis turpis. Suspendisse varius viverra nisi, sit amet convallis
-          libero fermentum a. Nam ut metus ac lacus faucibus dictum commodo eu dui. Duis eget nunc iaculis, gravida ex
-          vel, fringilla augue. Nunc euismod magna at accumsan molestie. Curabitur mattis ante sed lorem condimentum
-          mattis. Integer ac purus mattis, mattis odio id, facilisis enim. Nam scelerisque, risus vel aliquam finibus,
-          ex urna dapibus elit, eget ullamcorper ante nisl at velit.
-        </p>
-      </Col>
+        <Col md={{ span: 5 }}>
+          <div className={classNames(styles.galleryControls, 'float-right mb-4')}>
+            <button type="button" onClick={handleGalleryPrevious} data-direction="back">
+              <BiArrowBack />
+            </button>
+            <button type="button" onClick={handleGalleryNext} data-direction="forward">
+              <BiArrowBack />
+            </button>
+          </div>
+          <div className={styles.gallery}>
+            {/* language=CSS */}
+            <style jsx global>{`
+              .carousel-root {
+                width: 118%;
+              }
+              .carousel .slider {
+                width: 90%;
+              }
+              .carousel .slide {
+                background: transparent;
+              }
+              .carousel .slide.selected {
+              }
+            `}</style>
+            <Carousel
+              autoPlay={false}
+              onChange={updateCurrentSlide}
+              selectedItem={currentGallerySlide}
+              showArrows={false}
+              showIndicators={false}
+              showStatus={false}
+              showThumbs={false}
+            >
+              {cycleContent.map((work) => (
+                <div className={styles.galleryItem} key={work['work.id']}>
+                  <LocalImage filePath={work['local_image.stored_file']} alt={work['work.title']} />
+                  <div className={styles.workInitials}>
+                    <h4>{work['work.title']}</h4>
+                    <p>{work['work.author']}</p>
+                  </div>
+                </div>
+              ))}
+            </Carousel>
+          </div>
+        </Col>
+      </Row>
 
-      <Col md={{ span: 5 }}>
-        <div className={styles.imgWrapper}>
-          <img src={`${ASSETS_BASE_URL}/${cycle.image}`} alt={cycle.title} />
-        </div>
-      </Col>
-    </Row>
+      <Row>
+        <Col>
+          <h2 className="mb-5">Post from other users</h2>
+        </Col>
+      </Row>
+    </>
   );
 };
 

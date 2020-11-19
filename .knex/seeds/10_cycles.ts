@@ -17,11 +17,11 @@ export async function seed(knex: Knex): Promise<void> {
       end_date: '2020-12-31',
     },
     {
-      id: '79e5e92b-0d33-436b-b5c8-9bc43021af78',
+      id: 'c37550c9-63fb-48ba-a8ef-f31b7bbffffa',
       creator_id: '2878d482-9922-426d-889e-ab1a816df96a',
-      title: 'The Mandalorian streak',
+      title: 'Sci-fi marathon',
       languages: JSON.stringify(['english']),
-      content_text: 'Watch The Mandalorian together',
+      content_text: "Let's watch some sci-fi movies",
       start_date: '2020-06-01',
       end_date: '2020-12-31',
     },
@@ -34,13 +34,18 @@ export async function seed(knex: Knex): Promise<void> {
       is_cover: true,
     },
     {
-      cycle_id: '79e5e92b-0d33-436b-b5c8-9bc43021af78',
-      post_id: 'ae4efae2-de77-499d-81f5-04c7df1ab7c3',
+      cycle_id: 'c37550c9-63fb-48ba-a8ef-f31b7bbffffa',
+      post_id: '3772b05c-fe51-45f1-a7f1-b03542f921ee',
       is_cover: false,
     },
     {
-      cycle_id: '79e5e92b-0d33-436b-b5c8-9bc43021af78',
-      post_id: '3772b05c-fe51-45f1-a7f1-b03542f921ee',
+      cycle_id: 'c37550c9-63fb-48ba-a8ef-f31b7bbffffa',
+      post_id: 'ae4efae2-de77-499d-81f5-04c7df1ab7c3',
+      is_cover: true,
+    },
+    {
+      cycle_id: 'c37550c9-63fb-48ba-a8ef-f31b7bbffffa',
+      post_id: '015a2f84-137c-4a6f-89f3-27fa674647fd',
       is_cover: true,
     },
   ]);

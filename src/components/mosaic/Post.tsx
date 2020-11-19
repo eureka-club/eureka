@@ -16,7 +16,7 @@ const Post: FunctionComponent<PostDetail> = ({
   return (
     <article className={styles.post}>
       <div className={styles.imageContainer}>
-        <Link href={`/?id=${postId}`} as={`/post/${postId}`}>
+        <Link href={`/post/${postId}`}>
           <a className="d-inline-block">
             <LocalImage filePath={imagePath} alt={workTitle} />
           </a>
