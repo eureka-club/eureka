@@ -6,8 +6,8 @@ import Spinner from 'react-bootstrap/Spinner';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
 
 import { PostFullDetail, PostDetail, isPostFullDetail } from '../types';
-import styles from './PostDetail.module.css';
 import LocalImage from './LocalImage';
+import styles from './PostDetail.module.css';
 
 interface Props {
   post: PostDetail | PostFullDetail;
@@ -23,7 +23,7 @@ const PostDetailComponent: FunctionComponent<Props> = ({ post }) => {
     <>
       <Row>
         <Col>
-          <div className="mb-4">
+          <section className="mb-4">
             <h1>{post['work.title']}</h1>
             <span className={styles.titleWorkAuthor}>{post['work.author']}</span>
             <div>
@@ -48,14 +48,13 @@ const PostDetailComponent: FunctionComponent<Props> = ({ post }) => {
                 </a>
               )}
             </div>
-          </div>
-
-          <div className={classNames(styles.contentText, 'mb-4')}>
+          </section>
+          <section className="mb-4">
             {contentTextTokens.map((token) => (
               <p key={`${token[0]}${token[1]}-${token.length}`}>{token}</p>
             ))}
-          </div>
-          <div className={classNames(styles.commentsPlaceholder, 'd-flex', 'mb-5')}>comments section</div>
+          </section>
+          <section className={classNames(styles.commentsPlaceholder, 'd-flex', 'mb-5')}>comments section</section>
         </Col>
 
         <Col md={{ span: 5 }}>
@@ -68,6 +67,7 @@ const PostDetailComponent: FunctionComponent<Props> = ({ post }) => {
           </div>
         </Col>
       </Row>
+
       <Row>
         <Col>
           <h2 className="mb-5">Related Posts and Cycles</h2>
