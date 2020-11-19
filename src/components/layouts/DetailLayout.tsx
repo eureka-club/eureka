@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { FunctionComponent } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { BiArrowBack } from 'react-icons/bi';
@@ -12,21 +12,23 @@ type Props = {
   title?: string;
 };
 
-const DetailLayout: FunctionComponent<Props> = ({ children }) => (
-  <>
-    <Container className={classNames(styles.xxlContainer, 'mt-3', 'mb-2')}>
-      <Row>
-        <Col>
-          <Link href="/">
-            <a>
-              <BiArrowBack className={styles.returnLink} />
-            </a>
-          </Link>
-        </Col>
-      </Row>
-    </Container>
-    <Container>{children}</Container>
-  </>
-);
+const DetailLayout: FunctionComponent<Props> = ({ children }) => {
+  const router = useRouter();
+
+  return (
+    <>
+      <Container className={classNames(styles.xxlContainer, 'mt-3', 'mb-2')}>
+        <Row>
+          <Col>
+            <button className={styles.returnLink} onClick={() => router.back()} type="button">
+              <BiArrowBack />
+            </button>
+          </Col>
+        </Row>
+      </Container>
+      <Container>{children}</Container>
+    </>
+  );
+};
 
 export default withTitle(DetailLayout);

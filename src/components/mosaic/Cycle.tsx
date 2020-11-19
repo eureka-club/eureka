@@ -20,7 +20,7 @@ const Cycle: FunctionComponent<PostDetail> = ({
   return (
     <article className={styles.cycle}>
       <div className={styles.imageContainer}>
-        <Link href={`/?id=${cycleId}`} as={`/cycle/${cycleId}`}>
+        <Link href={`/cycle/${cycleId}`}>
           <a>
             <LocalImage filePath={imagePath} alt={workTitle} />
           </a>
