@@ -1,5 +1,5 @@
 import Knex from 'knex';
-import omit from 'lodash.omit';
+import omit from 'lodash/omit';
 
 import { getDbConnection } from '../lib/db';
 import { TABLE_NAME as CYCLE_TABLE_NAME, schema as cycleSchema } from '../models/Cycle';

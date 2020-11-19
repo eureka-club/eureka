@@ -21,3 +21,35 @@
   justify-content: center;
   align-items: center;
 }
+
+.galleryControls button {
+  background-color: #f7f7f7;
+  border: 1px solid #e8e8e8;
+  border-radius: 50%;
+  color: #313131;
+  margin: 0 0.2rem;
+  width: 38px;
+  height: 38px;
+  line-height: 1;
+}
+.galleryControls button[data-direction='forward'] {
+  transform: scaleX(-1);
+}
+
+.gallery {
+}
+.galleryItem {
+  margin-right: 2rem;
+}
+.galleryItem img {
+  border-radius: 0.5rem;
+}
+
+.workInitials {
+  text-align: left;
+  padding-left: 0.5rem;
+  margin-top: 0.75rem;
+}
+.workInitials h4 {
+  font-size: 1.1rem;
+}
