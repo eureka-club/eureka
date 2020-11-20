@@ -1,0 +1,24 @@
+.addWorkButton {
+  background: url(/img/ico-painting.png) 50% 4rem no-repeat;
+  background-size: 3rem;
+  border: 2px dashed var(--color-primary);
+  color: var(--text-color-secondary);
+  width: 100%;
+  height: 15rem;
+  margin-bottom: 2rem;
+  padding-top: 6rem;
+}
+.addWorkButton h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.addWorkButton p {
+  font-size: 0.85rem;
+}
+
+.loadIndicator {
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+  margin-left: 0.5rem;
+}

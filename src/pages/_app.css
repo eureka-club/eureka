@@ -12,11 +12,13 @@
   --color-primary-raised: #35d0a6;
   --color-secondary: #493788;
   --color-secondary-raised: #312169;
+  --text-color-primary: #333;
+  --text-color-secondary: #555;
 }
 
 body {
   font-family: 'Open Sans', sans-serif;
-  color: #333;
+  color: var(--text-color-primary);
 }
 
 h1 {
