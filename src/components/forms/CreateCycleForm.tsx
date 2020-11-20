@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
@@ -99,6 +100,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const [postSearchLoading, setPostSearchLoading] = useState(false);
   const [postSearchOptions, setPostSearchOptions] = useState<PostSearchOptions[]>([]);
   const [postSearchSelection, setPostSearchSelection] = useState<PostSearchOptions>();
+  const [selectedPostsForCycle, setSelectedPostsForCycle] = useState<PostSearchOptions[]>([]);
 
   const router = useRouter();
   const [
@@ -112,8 +114,9 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     },
   ] = useMutation(createCycleApiHandler);
 
-  const handleAddWork = (ev: MouseEvent<HTMLButtonElement>) => {
+  const handleAddWorkBegin = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
+    setPostSearchSelection(undefined);
     setAddWorkModalOpened(true);
   };
 
@@ -147,6 +150,15 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
       setPostSearchSelection(selected[0]);
     } else {
       setPostSearchSelection(undefined);
+    }
+  };
+
+  const handleAddWork = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+
+    if (postSearchSelection != null) {
+      setSelectedPostsForCycle([...selectedPostsForCycle, postSearchSelection]);
+      setAddWorkModalOpened(false);
     }
   };
 
@@ -186,6 +198,8 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     await execCreateNewCycle(payload);
   };
 
+  const chosenPostsBoxes = [0, 1, 2, 3, 4];
+
   useEffect(() => {
     if (router != null && isCreateCycleReqSuccess && typeof createCycleReqResponse?.newCycleUuid === 'string') {
       (async () => {
@@ -201,7 +215,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
         <Row className="mb-5">
           <Col md={{ span: 8 }}>
-            <button type="button" onClick={handleAddWork} className={styles.addWorkButton}>
+            <button type="button" onClick={handleAddWorkBegin} className={styles.addWorkButton}>
               <h4>Add work to a cycle</h4>
               <p>
                 Choose an existing post or
@@ -209,6 +223,22 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 create a new post
               </p>
             </button>
+
+            <div className={classNames(styles.chosenPosts, 'd-flex')}>
+              {chosenPostsBoxes.map((boxId) => (
+                <div key={boxId} className={styles.chosenPostsBox}>
+                  {selectedPostsForCycle[boxId] && (
+                    <>
+                      <LocalImage
+                        filePath={selectedPostsForCycle[boxId].localImagePath}
+                        alt={selectedPostsForCycle[boxId].workTitle}
+                      />
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+
             <FormCheck type="checkbox" defaultChecked inline id="isCyclePublic" label="Public?" />
           </Col>
           <Col md={{ span: 4 }}>
@@ -347,7 +377,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
               )}
             </Col>
             <Col md={{ span: 3 }}>
-              <Button variant="primary" type="button" className="float-right px-3">
+              <Button onClick={handleAddWork} variant="primary" type="button" className="float-right px-3">
                 Add to cycle
               </Button>
             </Col>
