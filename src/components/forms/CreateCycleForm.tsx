@@ -97,7 +97,7 @@ const createCycleApiHandler = async (payload: NewCyclePayload) => {
 
 const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
-  const [addWorkModalOpened, setAddWorkModalOpened] = useState(true);
+  const [addWorkModalOpened, setAddWorkModalOpened] = useState(false);
   const [postSearchLoading, setPostSearchLoading] = useState(false);
   const [postSearchOptions, setPostSearchOptions] = useState<PostSearchOptions[]>([]);
   const [postSearchSelection, setPostSearchSelection] = useState<PostSearchOptions>();
@@ -189,6 +189,10 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
+    if (!selectedPostsForCycle.length) {
+      return;
+    }
+
     const form = ev.currentTarget;
     const payload: NewCyclePayload = {
       cycleTitle: form.cycleTitle.value,
@@ -198,10 +202,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
       cycleEndDate: form.cycleEndDate.value,
       cycleDescription: form.cycleDescription.value.length ? form.cycleDescription.value : null,
       isCyclePublic: form.isCyclePublic.checked,
-      cycleContent: [
-        { postId: '015A2F84-137C-4A6F-89F3-27FA674647FD' },
-        { postId: '184AA581-9345-4912-87C2-46870E6A557D' },
-      ],
+      cycleContent: selectedPostsForCycle.map((post) => ({ postId: post.postId })),
     };
 
     await execCreateNewCycle(payload);
