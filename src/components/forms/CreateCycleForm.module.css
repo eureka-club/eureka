@@ -16,6 +16,33 @@
   font-size: 0.85rem;
 }
 
+.postSearchTypeaheadItem {
+  display: flex;
+  margin-bottom: 1rem;
+}
+.postSearchTypeaheadItem img {
+  margin-right: 0.5rem;
+  width: 76px;
+  height: 76px;
+  object-fit: contain;
+}
+.postSearchTypeaheadItem h4 {
+  font-size: 1rem;
+}
+.postSearchTypeaheadItem hr {
+  margin: 0 0 0.2rem;
+}
+.postSearchTypeaheadItem p {
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
+}
+.postSearchTypeaheadItem article {
+  max-width: 420px;
+  max-height: 10rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .loadIndicator {
   display: inline-block;
   height: 16px;
