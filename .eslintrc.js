@@ -25,6 +25,7 @@ module.exports = {
   rules: {
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/ban-ts-ignore': 'off',
+    '@typescript-eslint/no-empty-interface': 'warn',
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/no-unused-vars': 'warn',
     'import/extensions': ['error', 'never'],
