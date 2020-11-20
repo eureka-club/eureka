@@ -17,6 +17,7 @@ import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 import { useMutation } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
+import { BiTrash } from 'react-icons/bi';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import LocalImage from '../LocalImage';
@@ -162,6 +163,14 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     }
   };
 
+  const handleRemoveSelectedPost = (boxId: number) => {
+    setSelectedPostsForCycle(
+      selectedPostsForCycle.filter((post, idx) => {
+        return idx !== boxId;
+      }),
+    );
+  };
+
   const handleFormClear = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
 
@@ -233,6 +242,13 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                         filePath={selectedPostsForCycle[boxId].localImagePath}
                         alt={selectedPostsForCycle[boxId].workTitle}
                       />
+                      <button
+                        onClick={() => handleRemoveSelectedPost(boxId)}
+                        type="button"
+                        className={styles.chosenPostsBoxRemove}
+                      >
+                        <BiTrash />
+                      </button>
                     </>
                   )}
                 </div>
