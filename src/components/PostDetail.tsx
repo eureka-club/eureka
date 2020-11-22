@@ -1,10 +1,13 @@
 import classNames from 'classnames';
+import { useRouter } from 'next/router';
 import { FunctionComponent } from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
+import { DiscussionEmbed } from 'disqus-react';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
 
+import { DISQUS_SHORTNAME, WEBAPP_URL } from '../constants';
 import { PostFullDetail, PostDetail, isPostFullDetail } from '../types';
 import LocalImage from './LocalImage';
 import styles from './PostDetail.module.css';
@@ -14,6 +17,7 @@ interface Props {
 }
 
 const PostDetailComponent: FunctionComponent<Props> = ({ post }) => {
+  const { asPath } = useRouter();
   const contentTextTokens =
     post['post.content_text'] != null
       ? post['post.content_text'].split('\n').filter((token: string) => token !== '')
@@ -22,7 +26,7 @@ const PostDetailComponent: FunctionComponent<Props> = ({ post }) => {
   return (
     <>
       <Row>
-        <Col>
+        <Col md={{ span: 5 }}>
           <section className="mb-4">
             <h1>{post['work.title']}</h1>
             <span className={styles.titleWorkAuthor}>{post['work.author']}</span>
@@ -49,12 +53,28 @@ const PostDetailComponent: FunctionComponent<Props> = ({ post }) => {
               )}
             </div>
           </section>
-          <section className="mb-4">
+          <section className="mb-5">
             {contentTextTokens.map((token) => (
               <p key={`${token[0]}${token[1]}-${token.length}`}>{token}</p>
             ))}
           </section>
-          <section className={classNames(styles.commentsPlaceholder, 'd-flex', 'mb-5')}>comments section</section>
+
+          {/* language=CSS */}
+          <style jsx global>{`
+            #disqus_thread {
+              width: 100%;
+            }
+          `}</style>
+          <section className="mb-5">
+            <DiscussionEmbed
+              shortname={DISQUS_SHORTNAME!}
+              config={{
+                url: `${WEBAPP_URL}${asPath}`,
+                identifier: asPath,
+                title: post['work.title'],
+              }}
+            />
+          </section>
         </Col>
 
         <Col md={{ span: 5 }}>
