@@ -6,7 +6,7 @@ import { findAll } from '../../../repositories/Work';
 
 export default getApiHandler().get<NextApiRequest, NextApiResponse>(
   async (req, res): Promise<void> => {
-    const { q } = req.query;
+    const { all, q } = req.query;
     let criteria;
 
     if (typeof q === 'string') {
@@ -14,7 +14,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(
     }
 
     try {
-      const results = await findAll(criteria);
+      const results = await findAll(criteria, all != null);
       res.json(results);
     } catch (err) {
       console.error(err); // eslint-disable-line no-console

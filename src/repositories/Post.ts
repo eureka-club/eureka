@@ -46,8 +46,6 @@ export const fetchIndexMosaic = async (
   table.leftJoin('cycle_post', `${POST_TABLE_NAME}.id`, '=', 'cycle_post.post_id');
   table.leftJoin(CYCLE_TABLE_NAME, 'cycle_post.cycle_id', '=', `${CYCLE_TABLE_NAME}.id`);
 
-  table.where('cycle_post.is_cover', true);
-  table.orWhere('cycle_post.is_cover', null);
   table.orderBy('post.created_at', 'desc');
 
   return table

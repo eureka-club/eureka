@@ -78,7 +78,7 @@ const CreatePostForm: FunctionComponent = () => {
       isLoading: isCreatePostLoading,
       isSuccess: isCreatePostSuccess,
     },
-  ] = useMutation(createPostApiHandler, {});
+  ] = useMutation(createPostApiHandler);
 
   const handleImageControlClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();

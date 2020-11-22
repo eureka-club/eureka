@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { useAtom } from 'jotai';
+import Link from 'next/link';
 import { FunctionComponent, MouseEvent } from 'react';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -56,7 +57,9 @@ const Navbar: FunctionComponent = () => {
               Create
             </Dropdown.Toggle>
             <Dropdown.Menu className={styles.dropdownMenu}>
-              <Dropdown.Item className={styles.dropdownMenuItem}>Cycle</Dropdown.Item>
+              <Link href="/cycle/create">
+                <a className={classNames(styles.dropdownMenuItem, 'dropdown-item')}>Cycle</a>
+              </Link>
               <Dropdown.Item className={styles.dropdownMenuItem} onClick={handleCreatePost}>
                 Post
               </Dropdown.Item>
