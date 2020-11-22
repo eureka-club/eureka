@@ -1,11 +1,14 @@
 import classNames from 'classnames';
 import dayjs from 'dayjs';
+import { useRouter } from 'next/router';
 import { FunctionComponent, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
+import { DiscussionEmbed } from 'disqus-react';
 import { BiArrowBack } from 'react-icons/bi';
 import { Carousel } from 'react-responsive-carousel';
 
+import { DISQUS_SHORTNAME, WEBAPP_URL } from '../constants';
 import { CycleFullDetail, isCycleFullDetail } from '../types';
 import LocalImage from './LocalImage';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -17,6 +20,7 @@ interface Props {
 }
 
 const CycleDetail: FunctionComponent<Props> = ({ cycle, cycleContent }) => {
+  const { asPath } = useRouter();
   const contentTextTokens =
     cycle['cycle.content_text'] != null
       ? cycle['cycle.content_text'].split('\n').filter((token: string) => token !== '')
@@ -41,7 +45,7 @@ const CycleDetail: FunctionComponent<Props> = ({ cycle, cycleContent }) => {
   return (
     <>
       <Row>
-        <Col>
+        <Col md={{ span: 5 }}>
           <section className="mb-4">
             <h1>{cycle['cycle.title']}</h1>
             <p>
@@ -61,12 +65,27 @@ const CycleDetail: FunctionComponent<Props> = ({ cycle, cycleContent }) => {
               {cycle['creator.user_name']}
             </p>
           </section>
-          <section className="mb-4">
+          <section className="mb-5">
             {contentTextTokens.map((token) => (
               <p key={`${token[0]}${token[1]}-${token.length}`}>{token}</p>
             ))}
           </section>
-          <section className={classNames(styles.commentsPlaceholder, 'd-flex', 'mb-5')}>comments section</section>
+          {/* language=CSS */}
+          <style jsx global>{`
+            #disqus_thread {
+              width: 100%;
+            }
+          `}</style>
+          <section className="mb-5">
+            <DiscussionEmbed
+              shortname={DISQUS_SHORTNAME!}
+              config={{
+                url: `${WEBAPP_URL}${asPath}`,
+                identifier: asPath,
+                title: cycle['cycle.title'],
+              }}
+            />
+          </section>
         </Col>
 
         <Col md={{ span: 5 }}>
