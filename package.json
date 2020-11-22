@@ -20,6 +20,7 @@
     "bootstrap": "^4.5.3",
     "classnames": "^2.2.6",
     "dayjs": "^1.9.6",
+    "disqus-react": "^1.0.10",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jotai": "^0.10.5",
