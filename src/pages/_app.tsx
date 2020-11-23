@@ -1,5 +1,6 @@
 import { Provider } from 'jotai';
 import { AppProps } from 'next/app';
+import { Provider as NextAuthProvider } from 'next-auth/client';
 import { StrictMode, FunctionComponent } from 'react';
 import { QueryCache, ReactQueryCacheProvider } from 'react-query';
 
@@ -13,12 +14,14 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
 
   return (
     <StrictMode>
-      <Provider initialValues={initialState && [[navbarAtom, initialState]]}>
-        <ReactQueryCacheProvider queryCache={queryCache}>
-          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-          <Component {...pageProps} />
-        </ReactQueryCacheProvider>
-      </Provider>
+      <NextAuthProvider session={pageProps.session}>
+        <Provider initialValues={initialState && [[navbarAtom, initialState]]}>
+          <ReactQueryCacheProvider queryCache={queryCache}>
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+            <Component {...pageProps} />
+          </ReactQueryCacheProvider>
+        </Provider>
+      </NextAuthProvider>
     </StrictMode>
   );
 };
