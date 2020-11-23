@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { useAtom } from 'jotai';
+import { useSession, signOut } from 'next-auth/client';
 import Link from 'next/link';
 import { FunctionComponent, MouseEvent } from 'react';
 import Button from 'react-bootstrap/Button';
@@ -20,11 +21,20 @@ const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
 
 const Navbar: FunctionComponent = () => {
   const [homepageState, setHomepageState] = useAtom(homepageAtom);
+  const [session] = useSession();
+
+  const openSignInModal = () => {
+    setHomepageState({ ...homepageState, ...{ signInModalOpened: true } });
+  };
 
   const handleCreatePost = (ev: MouseEvent<DropdownItemProps>) => {
     ev.preventDefault();
 
-    setHomepageState({ ...homepageState, ...{ createPostModalOpened: true } });
+    if (session == null) {
+      openSignInModal();
+    } else {
+      setHomepageState({ ...homepageState, ...{ createPostModalOpened: true } });
+    }
   };
 
   return (
@@ -57,9 +67,15 @@ const Navbar: FunctionComponent = () => {
               Create
             </Dropdown.Toggle>
             <Dropdown.Menu className={styles.dropdownMenu}>
-              <Link href="/cycle/create">
-                <a className={classNames(styles.dropdownMenuItem, 'dropdown-item')}>Cycle</a>
-              </Link>
+              {session == null ? (
+                <Dropdown.Item className={styles.dropdownMenuItem} onClick={openSignInModal}>
+                  Cycle
+                </Dropdown.Item>
+              ) : (
+                <Link href="/cycle/create">
+                  <a className={classNames(styles.dropdownMenuItem, 'dropdown-item')}>Cycle</a>
+                </Link>
+              )}
               <Dropdown.Item className={styles.dropdownMenuItem} onClick={handleCreatePost}>
                 Post
               </Dropdown.Item>
@@ -68,8 +84,14 @@ const Navbar: FunctionComponent = () => {
 
           <Button variant="link">My cycles</Button>
           <NavDropdown title={<BiUser className={styles.profileDropdown} />} id="profile">
-            <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
-            <NavDropdown.Item href="/logout">Logout</NavDropdown.Item>
+            {session == null ? (
+              <NavDropdown.Item onClick={openSignInModal}>Sign-in</NavDropdown.Item>
+            ) : (
+              <>
+                <NavDropdown.ItemText>{session.user.email}</NavDropdown.ItemText>
+                <NavDropdown.Item onClick={() => signOut()}>Sign-out</NavDropdown.Item>
+              </>
+            )}
           </NavDropdown>
         </Nav>
       </BootstrapNavbar.Collapse>

@@ -1,0 +1,13 @@
+.buttonGoogle {
+  background: var(--color-primary) url(/img/logo-google.png) 1rem 50% no-repeat;
+  background-size: 36px;
+  border: 1px solid #52a58f;
+  color: var(--text-color-light);
+  display: block;
+  font-weight: 600;
+  height: 64px;
+  margin: 0 auto;
+  padding-left: 76px;
+  text-align: left;
+  width: 300px;
+}

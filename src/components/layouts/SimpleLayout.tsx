@@ -5,6 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 
 import Navbar from '../Navbar';
 import CreatePostForm from '../forms/CreatePostForm';
+import SignInForm from '../forms/SignInForm';
 import homepageAtom from '../../atoms/homepage';
 import withTitle from '../../HOCs/withTitle';
 
@@ -20,6 +21,10 @@ const SimpleLayout: FunctionComponent<Props> = ({ children }) => {
     setHomepageState({ ...homepageState, ...{ createPostModalOpened: false } });
   };
 
+  const handleSignInModalClose = () => {
+    setHomepageState({ ...homepageState, ...{ signInModalOpened: false } });
+  };
+
   return (
     <>
       <Container>
@@ -30,6 +35,10 @@ const SimpleLayout: FunctionComponent<Props> = ({ children }) => {
 
       <Modal animation={false} size="lg" show={homepageState.createPostModalOpened} onHide={handleCreatePostModalClose}>
         <CreatePostForm />
+      </Modal>
+
+      <Modal animation={false} show={homepageState.signInModalOpened} onHide={handleSignInModalClose}>
+        <SignInForm />
       </Modal>
     </>
   );
