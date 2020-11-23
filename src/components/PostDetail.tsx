@@ -3,17 +3,16 @@ import { useRouter } from 'next/router';
 import { FunctionComponent } from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import Spinner from 'react-bootstrap/Spinner';
 import { DiscussionEmbed } from 'disqus-react';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
 
 import { DISQUS_SHORTNAME, WEBAPP_URL } from '../constants';
-import { PostFullDetail, PostDetail, isPostFullDetail } from '../types';
+import { PostDetail } from '../types';
 import LocalImage from './LocalImage';
 import styles from './PostDetail.module.css';
 
 interface Props {
-  post: PostDetail | PostFullDetail;
+  post: PostDetail;
 }
 
 const PostDetailComponent: FunctionComponent<Props> = ({ post }) => {
@@ -31,16 +30,12 @@ const PostDetailComponent: FunctionComponent<Props> = ({ post }) => {
             <h1>{post['work.title']}</h1>
             <span className={styles.titleWorkAuthor}>{post['work.author']}</span>
             <div>
-              {isPostFullDetail(post) ? (
-                <LocalImage
-                  filePath={post['creator.avatar.file']}
-                  alt="creator avatar"
-                  className={classNames(styles.creatorAvatar, 'mr-3')}
-                />
-              ) : (
-                <Spinner animation="grow" variant="info" className={classNames(styles.creatorAvatar, 'mr-3')} />
-              )}
-              <span>{post['creator.user_name']}</span>
+              <img
+                src={post['creator.image']}
+                alt="creator avatar"
+                className={classNames(styles.creatorAvatar, 'mr-3')}
+              />
+              <span>{post['creator.name']}</span>
               {post['work.link'] != null && (
                 <a
                   href={post['work.link']}

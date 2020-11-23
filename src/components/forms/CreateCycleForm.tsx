@@ -138,7 +138,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
       postLanguage: work['post.language'],
       postContent: work['post.content_text'],
       postCreatedAt: work['post.created_at'],
-      postCreator: work['creator.user_name'],
+      postCreator: work['creator.name'],
       localImagePath: work['local_image.stored_file'],
     }));
 

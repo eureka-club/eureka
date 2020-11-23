@@ -4,12 +4,12 @@ import { FunctionComponent } from 'react';
 
 import DetailLayout from '../../components/layouts/DetailLayout';
 import PostDetailComponent from '../../components/PostDetail';
-import { PostDetail, PostFullDetail } from '../../types';
+import { PostDetail } from '../../types';
 import { fetchFullPostDetail, findRelatedPosts } from '../../repositories/Post';
 import Mosaic from '../../components/Mosaic';
 
 interface Props {
-  post: PostFullDetail;
+  post: PostDetail;
   relatedPosts: PostDetail[];
 }
 

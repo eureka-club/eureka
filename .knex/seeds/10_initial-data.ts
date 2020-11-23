@@ -2,10 +2,10 @@ import * as Knex from 'knex';
 
 export async function seed(knex: Knex): Promise<void> {
   // Deletes ALL existing entries
+  await knex('cycle_post').del();
+  await knex('cycle').del();
   await knex('post').del();
-  await knex('user_image').del();
   await knex('local_image').del();
-  await knex('user').del();
   await knex('work').del();
 
   // Inserts seed entries
@@ -56,19 +56,6 @@ export async function seed(knex: Knex): Promise<void> {
       title: 'The Mandalorian',
       author: 'PatrickBrown',
       link: 'https://www.deviantart.com/patrickbrown/art/The-Mandalorian-849330562',
-    },
-  ]);
-
-  await knex('user').insert([
-    {
-      id: '340c3ef1-d00b-4480-b9a3-60ce197fdff8',
-      user_name: 'srigi@brno',
-      roles: JSON.stringify(['member', 'admin']),
-    },
-    {
-      id: '2878d482-9922-426d-889e-ab1a816df96a',
-      user_name: 'deployer@connor',
-      roles: JSON.stringify(['member', 'admin']),
     },
   ]);
 
@@ -145,15 +132,10 @@ export async function seed(knex: Knex): Promise<void> {
     },
   ]);
 
-  await knex('user_image').insert([
-    { user_id: '340c3ef1-d00b-4480-b9a3-60ce197fdff8', local_image_id: '88b74a91-1a2e-4ae6-8cde-9b73c5447637' },
-    { user_id: '2878d482-9922-426d-889e-ab1a816df96a', local_image_id: 'd67627e9-8ba2-4f39-885b-11a600fd5777' },
-  ]);
-
   await knex('post').insert([
     {
       id: '184aa581-9345-4912-87c2-46870e6a557d',
-      creator_id: '340c3ef1-d00b-4480-b9a3-60ce197fdff8',
+      creator_id: 2,
       local_image_id: '076f972b-79ce-4d68-b891-cce9b7c3fd43',
       work_id: 'b7365c11-6ede-43b8-a202-b11f65b91b3e',
       language: 'english',
@@ -162,7 +144,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       id: '3772b05c-fe51-45f1-a7f1-b03542f921ee',
-      creator_id: '340c3ef1-d00b-4480-b9a3-60ce197fdff8',
+      creator_id: 1,
       local_image_id: 'a4671240-c3d1-4d6a-a45e-6d669a96b684',
       work_id: 'ff2a05a8-4d61-4cb0-9e07-373d13dfa86c',
       language: 'english',
@@ -171,7 +153,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       id: '0c255337-7430-41c8-b878-38840bb1f1fa',
-      creator_id: '340c3ef1-d00b-4480-b9a3-60ce197fdff8',
+      creator_id: 1,
       local_image_id: '42cd3b68-58e3-4238-b0be-d3a1b9c17a4f',
       work_id: '73bfee7a-e313-4e6f-918b-753ba0e5c9cd',
       language: 'english',
@@ -179,7 +161,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       id: '5d32b7a7-7d8a-4983-b461-8ef8c68206b1',
-      creator_id: '340c3ef1-d00b-4480-b9a3-60ce197fdff8',
+      creator_id: 1,
       local_image_id: 'afa8cef7-645b-4376-a23a-00b670fdd902',
       work_id: 'faa0a56a-b92a-4e88-a433-a5751204da14',
       language: 'english',
@@ -195,7 +177,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       id: '015a2f84-137c-4a6f-89f3-27fa674647fd',
-      creator_id: '340c3ef1-d00b-4480-b9a3-60ce197fdff8',
+      creator_id: 2,
       local_image_id: 'e4f447f5-644d-4516-8d72-7b6528c1dcbd',
       work_id: '39a57597-6be9-4228-ae30-a588711ea64e',
       language: 'english',
@@ -203,7 +185,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       id: 'bfa166ce-a698-43f5-86b4-ba0d3b85de45',
-      creator_id: '340c3ef1-d00b-4480-b9a3-60ce197fdff8',
+      creator_id: 1,
       local_image_id: '40c41c51-59b0-44ae-8459-346946e0d026',
       work_id: 'aaa7da10-c7f0-44e1-b091-034438ce6ecb',
       language: 'english',
@@ -213,7 +195,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       id: 'c04aeef8-551b-4fe3-be20-370dddb54981',
-      creator_id: '2878d482-9922-426d-889e-ab1a816df96a',
+      creator_id: 1,
       local_image_id: '58ecae62-d06f-4a66-8321-2bdd49f3efb2',
       work_id: '13bbaa4e-28f7-438e-b39f-2fa77a8893ce',
       language: 'english',
@@ -222,7 +204,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       id: 'ae4efae2-de77-499d-81f5-04c7df1ab7c3',
-      creator_id: '2878d482-9922-426d-889e-ab1a816df96a',
+      creator_id: 2,
       local_image_id: 'f53dbaaf-ecf4-421f-90f8-55b7a5d97b68',
       work_id: 'ff2a05a8-4d61-4cb0-9e07-373d13dfa86c',
       language: 'english',
@@ -236,6 +218,50 @@ export async function seed(knex: Knex): Promise<void> {
         '\n' +
         'www.instagram.com/patrickbrown…',
       is_public: true,
+    },
+  ]);
+
+  await knex('cycle').insert([
+    {
+      id: 'b6a3c0fc-b481-43f1-bae0-11e9a2f44a0a',
+      creator_id: 2,
+      title: 'Pulp Fiction material gathering',
+      languages: JSON.stringify(['english']),
+      content_text: 'Lets gather all info about movie',
+      start_date: '2020-06-01',
+      end_date: '2020-12-31',
+    },
+    {
+      id: 'c37550c9-63fb-48ba-a8ef-f31b7bbffffa',
+      creator_id: 1,
+      title: 'Sci-fi marathon',
+      languages: JSON.stringify(['english']),
+      content_text: "Let's watch some sci-fi movies",
+      start_date: '2020-06-01',
+      end_date: '2020-12-31',
+    },
+  ]);
+
+  await knex('cycle_post').insert([
+    {
+      cycle_id: 'b6a3c0fc-b481-43f1-bae0-11e9a2f44a0a',
+      post_id: '184AA581-9345-4912-87C2-46870E6A557D',
+      is_cover: true,
+    },
+    {
+      cycle_id: 'c37550c9-63fb-48ba-a8ef-f31b7bbffffa',
+      post_id: '3772b05c-fe51-45f1-a7f1-b03542f921ee',
+      is_cover: false,
+    },
+    {
+      cycle_id: 'c37550c9-63fb-48ba-a8ef-f31b7bbffffa',
+      post_id: 'ae4efae2-de77-499d-81f5-04c7df1ab7c3',
+      is_cover: true,
+    },
+    {
+      cycle_id: 'c37550c9-63fb-48ba-a8ef-f31b7bbffffa',
+      post_id: '015a2f84-137c-4a6f-89f3-27fa674647fd',
+      is_cover: true,
     },
   ]);
 }

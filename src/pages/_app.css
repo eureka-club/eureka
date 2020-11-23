@@ -14,6 +14,7 @@
   --color-secondary-raised: #312169;
   --text-color-primary: #333;
   --text-color-secondary: #555;
+  --text-color-light: #f7f7f7;
 }
 
 body {

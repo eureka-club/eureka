@@ -3,9 +3,11 @@ import fs, { existsSync, mkdirSync } from 'fs';
 import { Form } from 'multiparty';
 import moveFile from 'move-file';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { getSession } from 'next-auth/client';
 import path from 'path';
 import * as uuid from 'uuid';
 
+import { Session } from '../../../types';
 import getApiHandler from '../../../lib/getApiHandler';
 import { getDbConnection } from '../../../lib/db';
 
@@ -33,7 +35,6 @@ const DB_TABLE_LOCAL_IMAGE = 'local_image';
 const DB_TABLE_POST = 'post';
 const DB_TABLE_WORK = 'work';
 const FOLDER_SPREAD_CHAR_COUNT = 2;
-const TEMPORARY_POST_CREATOR_UUID = '340c3ef1-d00b-4480-b9a3-60ce197fdff8';
 
 export const config = {
   api: {
@@ -111,14 +112,19 @@ const getPostWork = async (postProps: PostProps): Promise<string> => {
   return pk;
 };
 
-const savePost = async (postProps: PostProps, localImageUuid: string, workUuid: string): Promise<string> => {
+const savePost = async (
+  postProps: PostProps,
+  localImageUuid: string,
+  workUuid: string,
+  creatorId: number,
+): Promise<string> => {
   const connection = await getDbConnection();
   const table = connection(DB_TABLE_POST);
 
   const pk = uuid.v4();
   await table.insert({
     id: pk,
-    creator_id: TEMPORARY_POST_CREATOR_UUID,
+    creator_id: creatorId,
     local_image_id: localImageUuid,
     work_id: workUuid,
     language: postProps.language[0].trim(),
@@ -131,6 +137,12 @@ const savePost = async (postProps: PostProps, localImageUuid: string, workUuid: 
 
 export default getApiHandler().post<NextApiRequest, NextApiResponse>(
   async (req, res): Promise<void> => {
+    const session = (await getSession({ req })) as Session;
+    if (session == null) {
+      res.status(401).end();
+      return;
+    }
+
     new Form().parse(req, async (err, fields, files) => {
       if (err != null) {
         console.error(err); // eslint-disable-line no-console
@@ -148,7 +160,7 @@ export default getApiHandler().post<NextApiRequest, NextApiResponse>(
         const imageDestPath = await moveUploadedFileByHash(imageUpload, imageHash);
         const localImageDbRecordUuid = await saveImageUploadToDB(imageUpload, imageDestPath, imageHash);
         const workDbRecordUuid = await getPostWork(fields);
-        const postUuid = await savePost(fields, localImageDbRecordUuid, workDbRecordUuid);
+        const postUuid = await savePost(fields, localImageDbRecordUuid, workDbRecordUuid, session.user.id);
 
         res.json({ postUuid });
       } catch (exc) {
