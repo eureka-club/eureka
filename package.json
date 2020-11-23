@@ -41,8 +41,10 @@
     "react-masonry-css": "^1.0.14",
     "react-query": "^2.26.2",
     "react-responsive-carousel": "^3.2.10",
+    "reflect-metadata": "^0.1.13",
     "sqlite3": "^5.0.0",
     "ts-node": "^9.0.0",
+    "typeorm": "^0.2.29",
     "uuid": "^8.3.1"
   },
   "devDependencies": {

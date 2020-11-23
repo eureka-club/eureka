@@ -7,19 +7,17 @@ import { TABLE_NAME as POST_TABLE_NAME, schema as postSchema } from '../models/P
 import { TABLE_NAME as LOCAL_IMAGE_TABLE_NAME, schema as localImageSchema } from '../models/LocalImage';
 import { TABLE_NAME as WORK_TABLE_NAME, schema as workSchema } from '../models/Work';
 import { TABLE_NAME as USER_TABLE_NAME, schema as userSchema } from '../models/User';
-import { PostDetail, PostFullDetail } from '../types';
+import { PostDetail } from '../types';
 
 export const fetchFullPostDetail = async (
   id: string,
-): Promise<Knex.QueryBuilder<Record<string, unknown>, PostFullDetail>> => {
+): Promise<Knex.QueryBuilder<Record<string, unknown>, PostDetail>> => {
   const connection = getDbConnection();
   const table = connection(POST_TABLE_NAME);
 
   table.leftJoin(USER_TABLE_NAME, 'post.creator_id', '=', `${USER_TABLE_NAME}.id`);
   table.leftJoin(LOCAL_IMAGE_TABLE_NAME, 'post.local_image_id', '=', `${LOCAL_IMAGE_TABLE_NAME}.id`);
   table.leftJoin(WORK_TABLE_NAME, 'post.work_id', '=', `${WORK_TABLE_NAME}.id`);
-  table.leftJoin('user_image', 'user.id', '=', 'user_image.user_id');
-  table.leftJoin({ avatar: 'local_image' }, 'user_image.local_image_id', '=', 'avatar.id');
 
   table.where(`${POST_TABLE_NAME}.id`, id);
 
@@ -27,7 +25,6 @@ export const fetchFullPostDetail = async (
     .select({
       ...omit(postSchema(), ['post.created_at', 'post.updated_at']),
       ...omit(userSchema('creator'), ['creator.created_at', 'creator.updated_at']),
-      ...{ 'creator.avatar.file': 'avatar.stored_file' },
       ...omit(localImageSchema(), ['local_image.created_at', 'local_image.updated_at']),
       ...omit(workSchema(), ['work.created_at', 'work.updated_at']),
     })

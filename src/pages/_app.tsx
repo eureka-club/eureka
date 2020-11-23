@@ -3,6 +3,7 @@ import { AppProps } from 'next/app';
 import { Provider as NextAuthProvider } from 'next-auth/client';
 import { StrictMode, FunctionComponent } from 'react';
 import { QueryCache, ReactQueryCacheProvider } from 'react-query';
+import 'reflect-metadata';
 
 import homepageAtom from '../atoms/homepage';
 import './_app.css';

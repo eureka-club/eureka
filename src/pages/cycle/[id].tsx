@@ -4,11 +4,11 @@ import { FunctionComponent } from 'react';
 
 import DetailLayout from '../../components/layouts/DetailLayout';
 import CycleDetailComponent from '../../components/CycleDetail';
-import { CycleFullDetail } from '../../types';
+import { CycleDetail } from '../../types';
 import { fetchCycleDetail, fetchCycleWorks } from '../../repositories/Cycle';
 
 interface Props {
-  cycle: CycleFullDetail;
+  cycle: CycleDetail;
   cycleContent: Record<string, string>[];
 }
 
@@ -26,7 +26,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     return { notFound: true }; // err 404
   }
 
-  const cycle: CycleFullDetail = await fetchCycleDetail(id);
+  const cycle: CycleDetail = await fetchCycleDetail(id);
   if (cycle == null) {
     return { notFound: true };
   }

@@ -3,23 +3,22 @@ import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { FunctionComponent, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import Spinner from 'react-bootstrap/Spinner';
 import { DiscussionEmbed } from 'disqus-react';
 import { BiArrowBack } from 'react-icons/bi';
 import { Carousel } from 'react-responsive-carousel';
 
 import { DISQUS_SHORTNAME, WEBAPP_URL } from '../constants';
-import { CycleFullDetail, isCycleFullDetail } from '../types';
+import { CycleDetail } from '../types';
 import LocalImage from './LocalImage';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import styles from './CycleDetail.module.css';
 
 interface Props {
-  cycle: CycleFullDetail;
+  cycle: CycleDetail;
   cycleContent: Record<string, string>[];
 }
 
-const CycleDetail: FunctionComponent<Props> = ({ cycle, cycleContent }) => {
+const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, cycleContent }) => {
   const { asPath } = useRouter();
   const contentTextTokens =
     cycle['cycle.content_text'] != null
@@ -53,16 +52,12 @@ const CycleDetail: FunctionComponent<Props> = ({ cycle, cycleContent }) => {
               {dayjs(cycle['cycle.end_date']).format('MMMM D YYYY')}
             </p>
             <p className={styles.cycleAuthor}>
-              {isCycleFullDetail(cycle) ? (
-                <LocalImage
-                  filePath={cycle['creator.avatar.file']}
-                  alt="creator avatar"
-                  className={classNames(styles.cycleAuthorAvatar, 'mr-3')}
-                />
-              ) : (
-                <Spinner animation="grow" variant="info" className={classNames(styles.cycleAuthorAvatar, 'mr-3')} />
-              )}
-              {cycle['creator.user_name']}
+              <img
+                src={cycle['creator.image']}
+                alt="creator avatar"
+                className={classNames(styles.cycleAuthorAvatar, 'mr-3')}
+              />
+              {cycle['creator.name']}
             </p>
           </section>
           <section className="mb-5">
@@ -144,4 +139,4 @@ const CycleDetail: FunctionComponent<Props> = ({ cycle, cycleContent }) => {
   );
 };
 
-export default CycleDetail;
+export default CycleDetailComponent;

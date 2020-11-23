@@ -1,14 +1,15 @@
 import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { getSession } from 'next-auth/client';
 import * as uuid from 'uuid';
 
 import { TABLE_NAME as CYCLE_TABLE_NAME } from '../../../models/Cycle';
+import { Session } from '../../../types';
 import getApiHandler from '../../../lib/getApiHandler';
 import { getDbConnection } from '../../../lib/db';
 import { asyncForEach } from '../../../lib/utils';
 
 const CYCLE_POST_TABLE_NAME = 'cycle_post';
-const TEMPORARY_CYCLE_CREATOR_UUID = '340c3ef1-d00b-4480-b9a3-60ce197fdff8';
 
 export const config = {
   api: {
@@ -16,14 +17,14 @@ export const config = {
   },
 };
 
-const createCycle = async (fields: Record<string, string[]>): Promise<string> => {
+const createCycle = async (fields: Record<string, string[]>, creatorId: number): Promise<string> => {
   const connection = getDbConnection();
   const table = connection(CYCLE_TABLE_NAME);
 
   const pk = uuid.v4();
   await table.insert({
     id: pk,
-    creator_id: TEMPORARY_CYCLE_CREATOR_UUID,
+    creator_id: creatorId,
     title: fields.cycleTitle[0].trim(),
     languages: JSON.stringify(fields.cycleLanguage[0]),
     content_text: fields.cycleDescription != null ? fields.cycleDescription[0].trim() : null,
@@ -51,6 +52,12 @@ const linkCycleToPosts = async (cycleUuid: string, fields: Record<string, string
 
 export default getApiHandler().post<NextApiRequest, NextApiResponse>(
   async (req, res): Promise<void> => {
+    const session = (await getSession({ req })) as Session;
+    if (session == null) {
+      res.status(401).end();
+      return;
+    }
+
     new Form().parse(req, async (err, fields, files) => {
       if (err != null) {
         console.error(err); // eslint-disable-line no-console
@@ -59,7 +66,7 @@ export default getApiHandler().post<NextApiRequest, NextApiResponse>(
       }
 
       try {
-        const cycleDbRecordUuid = await createCycle(fields);
+        const cycleDbRecordUuid = await createCycle(fields, session.user.id);
         await linkCycleToPosts(cycleDbRecordUuid, fields);
 
         res.json({ newCycleUuid: cycleDbRecordUuid });
