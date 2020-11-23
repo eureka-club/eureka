@@ -13,18 +13,18 @@ import { DropdownItemProps } from 'react-bootstrap/DropdownItem';
 import { BiCheck, BiUser } from 'react-icons/bi';
 
 import ChevronToggle from './ui/dropdown/ChevronToggle';
-import navbarAtom from '../atoms/navbar';
+import homepageAtom from '../atoms/homepage';
 import styles from './Navbar.module.css';
 
 const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
 
 const Navbar: FunctionComponent = () => {
-  const [navbarState, setNavbarState] = useAtom(navbarAtom);
+  const [homepageState, setHomepageState] = useAtom(homepageAtom);
 
   const handleCreatePost = (ev: MouseEvent<DropdownItemProps>) => {
     ev.preventDefault();
 
-    setNavbarState({ ...navbarState, ...{ createPostModalOpened: true } });
+    setHomepageState({ ...homepageState, ...{ createPostModalOpened: true } });
   };
 
   return (

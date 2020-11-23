@@ -5,8 +5,8 @@ import Modal from 'react-bootstrap/Modal';
 
 import Navbar from '../Navbar';
 import CreatePostForm from '../forms/CreatePostForm';
+import homepageAtom from '../../atoms/homepage';
 import withTitle from '../../HOCs/withTitle';
-import navbarAtom from '../../atoms/navbar';
 
 type Props = {
   children: JSX.Element | JSX.Element[];
@@ -14,10 +14,10 @@ type Props = {
 };
 
 const SimpleLayout: FunctionComponent<Props> = ({ children }) => {
-  const [navbarState, setNavbarState] = useAtom(navbarAtom);
+  const [homepageState, setHomepageState] = useAtom(homepageAtom);
 
   const handleCreatePostModalClose = () => {
-    setNavbarState({ ...navbarState, ...{ createPostModalOpened: false } });
+    setHomepageState({ ...homepageState, ...{ createPostModalOpened: false } });
   };
 
   return (
@@ -28,7 +28,7 @@ const SimpleLayout: FunctionComponent<Props> = ({ children }) => {
 
       <Container className="mt-5">{children}</Container>
 
-      <Modal animation={false} size="lg" show={navbarState.createPostModalOpened} onHide={handleCreatePostModalClose}>
+      <Modal animation={false} size="lg" show={homepageState.createPostModalOpened} onHide={handleCreatePostModalClose}>
         <CreatePostForm />
       </Modal>
     </>

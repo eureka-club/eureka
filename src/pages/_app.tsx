@@ -4,7 +4,7 @@ import { Provider as NextAuthProvider } from 'next-auth/client';
 import { StrictMode, FunctionComponent } from 'react';
 import { QueryCache, ReactQueryCacheProvider } from 'react-query';
 
-import navbarAtom from '../atoms/navbar';
+import homepageAtom from '../atoms/homepage';
 import './_app.css';
 
 const queryCache = new QueryCache();
@@ -15,7 +15,7 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   return (
     <StrictMode>
       <NextAuthProvider session={pageProps.session}>
-        <Provider initialValues={initialState && [[navbarAtom, initialState]]}>
+        <Provider initialValues={initialState && [[homepageAtom, initialState]]}>
           <ReactQueryCacheProvider queryCache={queryCache}>
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Component {...pageProps} />

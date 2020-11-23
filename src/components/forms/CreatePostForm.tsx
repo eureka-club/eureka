@@ -10,7 +10,10 @@ import FormControl from 'react-bootstrap/FormControl';
 import FormFile from 'react-bootstrap/FormFile';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
-import Modal from 'react-bootstrap/Modal';
+import ModalBody from 'react-bootstrap/ModalBody';
+import ModalFooter from 'react-bootstrap/ModalFooter';
+import ModalHeader from 'react-bootstrap/ModalHeader';
+import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 import { useMutation } from 'react-query';
@@ -19,7 +22,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import LocalImage from '../LocalImage';
 import { WorkDetail } from '../../types';
-import navbarAtom from '../../atoms/navbar';
+import homepageAtom from '../../atoms/homepage';
 import styles from './CreatePostForm.module.css';
 
 type NewPostPayload = {
@@ -64,7 +67,7 @@ const CreatePostForm: FunctionComponent = () => {
   const imageInputRef = useRef<HTMLInputElement>() as RefObject<HTMLInputElement>;
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
   const router = useRouter();
-  const [navbarState, setNavbarState] = useAtom(navbarAtom);
+  const [homepageState, setHomepageState] = useAtom(homepageAtom);
   const [imageFile, setImageFile] = useState<File>();
   const [imagePreview, setImagePreview] = useState<string>();
   const [isWorkTitleSearchLoading, setIsWorkTitleSearchLoading] = useState(false);
@@ -171,22 +174,27 @@ const CreatePostForm: FunctionComponent = () => {
   useEffect(() => {
     if (
       router != null &&
-      setNavbarState != null &&
+      setHomepageState != null &&
       isCreatePostSuccess &&
       typeof createPostReqResponse?.postUuid === 'string'
     ) {
       (async () => {
-        await setNavbarState({ ...navbarState, ...{ createPostModalOpened: false } });
+        await setHomepageState({ ...homepageState, ...{ createPostModalOpened: false } });
         await router.push(`/post/${createPostReqResponse.postUuid}`);
       })();
     }
-  }, [router, navbarState, setNavbarState, isCreatePostSuccess, createPostReqResponse]);
+  }, [router, homepageState, setHomepageState, isCreatePostSuccess, createPostReqResponse]);
 
   return (
     <Form onSubmit={handleSubmit} ref={formRef}>
-      <Modal.Body>
+      <ModalHeader closeButton>
         <Container>
-          <h4 className="mt-2 mb-4">Create Post</h4>
+          <ModalTitle>Create Post</ModalTitle>
+        </Container>
+      </ModalHeader>
+
+      <ModalBody>
+        <Container>
           <Row>
             <FormGroup controlId="image" as={Col}>
               <FormLabel>start by adding an image</FormLabel>
@@ -295,9 +303,9 @@ const CreatePostForm: FunctionComponent = () => {
             </FormGroup>
           </Row>
         </Container>
-      </Modal.Body>
+      </ModalBody>
 
-      <Modal.Footer>
+      <ModalFooter>
         <Container className="py-3">
           <FormCheck type="checkbox" defaultChecked inline id="isPublic" label="Public?" />
 
@@ -311,7 +319,7 @@ const CreatePostForm: FunctionComponent = () => {
             {isCreatePostError && createPostError}
           </Button>
         </Container>
-      </Modal.Footer>
+      </ModalFooter>
     </Form>
   );
 };
