@@ -13,14 +13,14 @@
 }
 
 .workLink {
-  background-color: #f5a623;
+  background-color: var(--color-emphasis);
   border-radius: 12px;
-  color: #ececec;
-  padding: 0 0.5rem;
+  color: var(--text-color-light);
+  padding: 0 1rem;
 }
 .workLink:hover {
-  background-color: #fca719;
-  color: #ffffff;
+  background-color: var(--color-emphasis-raised);
+  color: var(--text-color-extralight);
   text-decoration: none;
 }
 

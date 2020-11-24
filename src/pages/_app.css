@@ -12,9 +12,12 @@
   --color-primary-raised: #35d0a6;
   --color-secondary: #493788;
   --color-secondary-raised: #312169;
+  --color-emphasis: #f5a623;
+  --color-emphasis-raised: #fca719;
   --text-color-primary: #333;
   --text-color-secondary: #555;
   --text-color-light: #f7f7f7;
+  --text-color-extralight: #ffffff;
 }
 
 body {
