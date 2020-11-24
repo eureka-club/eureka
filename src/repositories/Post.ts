@@ -6,7 +6,7 @@ import { TABLE_NAME as CYCLE_TABLE_NAME, schema as cycleSchema } from '../models
 import { TABLE_NAME as POST_TABLE_NAME, schema as postSchema } from '../models/Post';
 import { TABLE_NAME as LOCAL_IMAGE_TABLE_NAME, schema as localImageSchema } from '../models/LocalImage';
 import { TABLE_NAME as WORK_TABLE_NAME, schema as workSchema } from '../models/Work';
-import { TABLE_NAME as USER_TABLE_NAME, schema as userSchema } from '../models/User';
+import { TABLE_NAME as USER_TABLE_NAME, CreatorDbObject, schema as userSchema } from '../models/User';
 import { MosaicItem, PostDetail } from '../types';
 
 export const fetchFullPostDetail = async (
@@ -72,5 +72,29 @@ export const findRelatedPosts = async (
       ...omit(localImageSchema(), ['local_image.created_at', 'local_image.updated_at']),
       ...omit(workSchema(), ['work.created_at', 'work.updated_at']),
     })
+    .limit(limit);
+};
+
+export const fetchCyclePosts = async (
+  cycleId: string,
+  limit = 255,
+): Promise<Knex.QueryBuilder<Record<string, unknown>, (MosaicItem & CreatorDbObject)[]>> => {
+  const connection = getDbConnection();
+  const table = connection(POST_TABLE_NAME);
+
+  table.leftJoin(LOCAL_IMAGE_TABLE_NAME, `${POST_TABLE_NAME}.local_image_id`, '=', `${LOCAL_IMAGE_TABLE_NAME}.id`);
+  table.leftJoin(WORK_TABLE_NAME, `${POST_TABLE_NAME}.work_id`, '=', `${WORK_TABLE_NAME}.id`);
+  table.leftJoin(USER_TABLE_NAME, 'post.creator_id', '=', `${USER_TABLE_NAME}.id`);
+  table.leftJoin('cycle_post', `${POST_TABLE_NAME}.id`, '=', 'cycle_post.post_id');
+  table.where('cycle_post.cycle_id', cycleId);
+
+  return table
+    .select({
+      ...omit(postSchema(), ['post.language', 'post.content_text', 'post.created_at', 'post.updated_at']),
+      ...omit(localImageSchema(), ['local_image.created_at', 'local_image.updated_at']),
+      ...omit(workSchema(), ['work.link', 'work.type', 'work.created_at', 'work.updated_at']),
+      ...omit(userSchema('creator'), ['creator.created_at', 'creator.updated_at']),
+    })
+    .orderBy('post.created_at', 'desc')
     .limit(limit);
 };

@@ -4,21 +4,35 @@ import { FunctionComponent } from 'react';
 
 import { DATE_FORMAT_PROPS } from '../../constants';
 import { LocalImageDbObject } from '../../models/LocalImage';
+import { CreatorDbObject } from '../../models/User';
 import { WorkDbObject } from '../../models/Work';
+import { CycleDetail, CyclePoster, MosaicItem } from '../../types';
 import DetailLayout from '../../components/layouts/DetailLayout';
 import CycleDetailComponent from '../../components/CycleDetail';
-import { CycleDetail } from '../../types';
+import Mosaic from '../../components/Mosaic';
 import { fetchCycleDetail, fetchCycleWorks } from '../../repositories/Cycle';
+import { fetchCyclePosts } from '../../repositories/Post';
 
 interface Props {
   cycle: CycleDetail;
   cycleContent: (WorkDbObject & LocalImageDbObject)[];
+  cyclePosts: (MosaicItem & CreatorDbObject)[];
 }
 
-const PostDetailPage: FunctionComponent<Props> = ({ cycle, cycleContent }) => {
+const PostDetailPage: FunctionComponent<Props> = ({ cycle, cycleContent, cyclePosts }) => {
+  const cyclePosters = cyclePosts.reduce<CyclePoster[]>((memo, post: MosaicItem & CreatorDbObject) => {
+    const alreadyAddedPoster = memo.find((poster) => poster.name === post['creator.name']);
+    if (alreadyAddedPoster == null) {
+      memo.push({ name: post['creator.name'], image: post['creator.image'] });
+    }
+
+    return memo;
+  }, []);
+
   return (
     <DetailLayout title={cycle['cycle.title']}>
-      <CycleDetailComponent cycle={cycle} cycleContent={cycleContent} />
+      <CycleDetailComponent cycle={cycle} cycleContent={cycleContent} cyclePosters={cyclePosters} />
+      <Mosaic stack={cyclePosts} />
     </DetailLayout>
   );
 };
@@ -40,11 +54,13 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   };
 
   const cycleContent = await fetchCycleWorks(id);
+  const cyclePosts = await fetchCyclePosts(id);
 
   return {
     props: {
       cycle: cycleForProps,
       cycleContent,
+      cyclePosts,
     },
   };
 };

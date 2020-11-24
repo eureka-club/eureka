@@ -10,6 +10,7 @@ export interface User {
   email: string;
   image: string;
 }
+
 export interface Session {
   user: User;
   accessToken?: string;
@@ -17,6 +18,11 @@ export interface Session {
 }
 
 export interface CycleDetail extends CycleDbObject, CreatorDbObject {}
+
+export interface CyclePoster {
+  name: string;
+  image: string;
+}
 
 export interface PostDetail extends PostDbObject, CreatorDbObject, LocalImageDbObject, WorkDbObject, CycleDbObject {}
 
