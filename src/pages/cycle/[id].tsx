@@ -3,6 +3,8 @@ import { GetServerSideProps } from 'next';
 import { FunctionComponent } from 'react';
 
 import { DATE_FORMAT_PROPS } from '../../constants';
+import { LocalImageDbObject } from '../../models/LocalImage';
+import { WorkDbObject } from '../../models/Work';
 import DetailLayout from '../../components/layouts/DetailLayout';
 import CycleDetailComponent from '../../components/CycleDetail';
 import { CycleDetail } from '../../types';
@@ -10,7 +12,7 @@ import { fetchCycleDetail, fetchCycleWorks } from '../../repositories/Cycle';
 
 interface Props {
   cycle: CycleDetail;
-  cycleContent: Record<string, string>[];
+  cycleContent: (WorkDbObject & LocalImageDbObject)[];
 }
 
 const PostDetailPage: FunctionComponent<Props> = ({ cycle, cycleContent }) => {

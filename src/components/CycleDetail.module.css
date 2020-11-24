@@ -14,6 +14,21 @@
   height: 22px;
 }
 
+.showContentBtn {
+  background-color: var(--color-emphasis);
+  border-radius: 12px;
+  border: none;
+  color: var(--text-color-light);
+  display: inline-block;
+  font-size: 0.9rem;
+  margin-left: 2rem;
+  padding: 0 1rem;
+}
+.showContentBtn:hover {
+  background-color: var(--color-emphasis-raised);
+  color: var(--text-color-extralight);
+}
+
 .galleryControls button {
   background-color: #f7f7f7;
   border: 1px solid #e8e8e8;
