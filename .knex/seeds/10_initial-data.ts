@@ -261,7 +261,7 @@ export async function seed(knex: Knex): Promise<void> {
     {
       cycle_id: 'c37550c9-63fb-48ba-a8ef-f31b7bbffffa',
       post_id: '015a2f84-137c-4a6f-89f3-27fa674647fd',
-      is_cover: true,
+      is_cover: false,
     },
   ]);
 }

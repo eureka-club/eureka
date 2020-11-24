@@ -13,7 +13,7 @@ interface Props {
 const IndexPage: NextPage<Props> = ({ posts }) => {
   return (
     <SimpleLayout title="Welcome">
-      <Mosaic stock={posts} />
+      <Mosaic stack={posts} />
     </SimpleLayout>
   );
 };
@@ -21,17 +21,13 @@ const IndexPage: NextPage<Props> = ({ posts }) => {
 export const getServerSideProps: GetServerSideProps = async () => {
   const posts = await fetchIndexMosaic();
   const serializablePosts = posts.map((post) => {
-    if (post['cycle.id'] != null) {
-      return {
-        ...post,
-        ...{
-          'cycle.start_date': dayjs(post['cycle.start_date']).format('YYYY-MM-DD'),
-          'cycle.end_date': dayjs(post['cycle.end_date']).format('YYYY-MM-DD'),
-        },
-      };
-    }
-
-    return post;
+    return {
+      ...post,
+      ...(post['cycle.start_date'] != null && {
+        'cycle.start_date': dayjs(post['cycle.start_date']).format('YYYY-MM-DD'),
+      }),
+      ...(post['cycle.end_date'] != null && { 'cycle.end_date': dayjs(post['cycle.start_date']).format('YYYY-MM-DD') }),
+    };
   });
 
   return {
