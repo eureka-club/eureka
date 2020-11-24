@@ -13,12 +13,14 @@ import { TABLE_NAME as USER_TABLE_NAME, schema as userSchema } from '../models/U
 import { TABLE_NAME as WORK_TABLE_NAME, WorkDbObject, schema as workSchema } from '../models/Work';
 import { PostDetail } from '../types';
 
-export const fetchCycleDetail = async (id: string): Promise<Knex.QueryBuilder<Record<string, unknown>, PostDetail>> => {
+export const fetchCycleDetail = async (
+  cycleId: string,
+): Promise<Knex.QueryBuilder<Record<string, unknown>, PostDetail>> => {
   const connection = getDbConnection();
   const table = connection(CYCLE_TABLE_NAME);
 
   table.leftJoin(USER_TABLE_NAME, `${CYCLE_TABLE_NAME}.creator_id`, '=', `${USER_TABLE_NAME}.id`);
-  table.where(`${CYCLE_TABLE_NAME}.id`, id);
+  table.where(`${CYCLE_TABLE_NAME}.id`, cycleId);
 
   return table
     .select({
@@ -29,7 +31,7 @@ export const fetchCycleDetail = async (id: string): Promise<Knex.QueryBuilder<Re
 };
 
 export const fetchCycleWorks = async (
-  id: string,
+  cycleId: string,
   limit = 255,
 ): Promise<Knex.QueryBuilder<Record<string, unknown>, (WorkDbObject & LocalImageDbObject)[]>> => {
   const connection = getDbConnection();
@@ -37,7 +39,7 @@ export const fetchCycleWorks = async (
   const cycleTable = connection(CYCLE_TABLE_NAME);
   cycleTable.leftJoin('cycle_post', `${CYCLE_TABLE_NAME}.id`, '=', 'cycle_post.cycle_id');
   cycleTable.leftJoin(POST_TABLE_NAME, 'cycle_post.post_id', '=', `${POST_TABLE_NAME}.id`);
-  const allWorkInCycle = (await cycleTable.select('work_id').distinct().where(`${CYCLE_TABLE_NAME}.id`, id)).map(
+  const allWorkInCycle = (await cycleTable.select('work_id').distinct().where(`${CYCLE_TABLE_NAME}.id`, cycleId)).map(
     (postRecord) => postRecord.work_id,
   );
 
