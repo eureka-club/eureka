@@ -19,7 +19,7 @@ export const fetchCycleDetail = async (id: string): Promise<Knex.QueryBuilder<Re
   return table
     .select({
       ...omit(cycleSchema(), ['cycle.created_at', 'cycle.updated_at']),
-      ...omit(userSchema('creator'), ['creator.created_at', 'creator.updated_at']),
+      ...omit(userSchema('creator'), ['creator.id', 'creator.email', 'creator.created_at', 'creator.updated_at']),
     })
     .first();
 };
