@@ -29,6 +29,13 @@
   color: var(--text-color-extralight);
 }
 
+.posters {
+  border-radius: 50%;
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+}
+
 .galleryControls button {
   background-color: #f7f7f7;
   border: 1px solid #e8e8e8;

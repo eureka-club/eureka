@@ -15,7 +15,7 @@ import { Carousel } from 'react-responsive-carousel';
 import { DATE_FORMAT_DISPLAY, DISQUS_SHORTNAME, WEBAPP_URL } from '../constants';
 import { LocalImageDbObject } from '../models/LocalImage';
 import { WorkDbObject } from '../models/Work';
-import { CycleDetail } from '../types';
+import { CycleDetail, CyclePoster } from '../types';
 import LocalImage from './LocalImage';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import styles from './CycleDetail.module.css';
@@ -23,9 +23,10 @@ import styles from './CycleDetail.module.css';
 interface Props {
   cycle: CycleDetail;
   cycleContent: (WorkDbObject & LocalImageDbObject)[];
+  cyclePosters: CyclePoster[];
 }
 
-const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, cycleContent }) => {
+const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, cycleContent, cyclePosters }) => {
   const { asPath } = useRouter();
   const contentTextTokens =
     cycle['cycle.content_text'] != null
@@ -68,16 +69,25 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, cycleContent })
               Dates: {dayjs(cycle['cycle.start_date']).format(DATE_FORMAT_DISPLAY)}&nbsp;&#8209;&nbsp;
               {dayjs(cycle['cycle.end_date']).format(DATE_FORMAT_DISPLAY)}
             </p>
-            <p className={styles.cycleAuthor}>
-              <img
-                src={cycle['creator.image']}
-                alt="creator avatar"
-                className={classNames(styles.cycleAuthorAvatar, 'mr-3')}
-              />
-              {cycle['creator.name']}
+            <p className="d-flex justify-content-between">
+              <span className={styles.cycleAuthor}>
+                <img
+                  src={cycle['creator.image']}
+                  alt="creator avatar"
+                  className={classNames(styles.cycleAuthorAvatar, 'mr-3')}
+                />
+                {cycle['creator.name']}
+              </span>
+
               <button onClick={handleShowCycleContent} type="button" className={styles.showContentBtn}>
                 Cycle content
               </button>
+
+              <span>
+                {cyclePosters.map((poster) => (
+                  <img key={poster.image} src={poster.image} alt={poster.name} className={styles.posters} />
+                ))}
+              </span>
             </p>
           </section>
           <section className="mb-5">
@@ -151,7 +161,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, cycleContent })
 
       <Row>
         <Col>
-          <h2 className="mb-5">Post from other users</h2>
+          <h2 className="mb-5">Cycle posts</h2>
         </Col>
       </Row>
 
