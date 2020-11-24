@@ -20,6 +20,7 @@ import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BiTrash } from 'react-icons/bi';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
+import { DATE_FORMAT_DISPLAY, DATE_FORMAT_PROPS } from '../../constants';
 import LocalImage from '../LocalImage';
 import { WorkDetail } from '../../types';
 import styles from './CreateCycleForm.module.css';
@@ -284,11 +285,11 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
             </FormGroup>
             <FormGroup controlId="cycleStartDate">
               <FormLabel>Start date of the cycle</FormLabel>
-              <FormControl type="date" required defaultValue={dayjs(new Date()).format('YYYY-MM-DD')} />
+              <FormControl type="date" required defaultValue={dayjs(new Date()).format(DATE_FORMAT_PROPS)} />
             </FormGroup>
             <FormGroup controlId="cycleEndDate">
               <FormLabel>End date of the cycle</FormLabel>
-              <FormControl type="date" required min={dayjs(new Date()).format('YYYY-MM-DD')} />
+              <FormControl type="date" required min={dayjs(new Date()).format(DATE_FORMAT_PROPS)} />
             </FormGroup>
             <FormGroup controlId="cycleDescription">
               <FormLabel>Explain in a few words what cycle is about</FormLabel>
@@ -361,7 +362,8 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                         <hr />
                         <p>
                           Post by <strong>{option.postCreator}</strong> at{' '}
-                          {dayjs(option.postCreatedAt).format('MMM D YYYY')} <small>({option.postLanguage})</small>
+                          {dayjs(option.postCreatedAt).format(DATE_FORMAT_DISPLAY)}{' '}
+                          <small>({option.postLanguage})</small>
                         </p>
                         <article>{option.postContent}</article>
                       </div>
@@ -385,7 +387,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                     <hr />
                     <p>
                       Post by <strong>{postSearchSelection.postCreator}</strong> at{' '}
-                      {dayjs(postSearchSelection.postCreatedAt).format('MMM D YYYY')}{' '}
+                      {dayjs(postSearchSelection.postCreatedAt).format(DATE_FORMAT_DISPLAY)}{' '}
                       <small>({postSearchSelection.postLanguage})</small>
                     </p>
                     <article>{postSearchSelection.postContent}</article>

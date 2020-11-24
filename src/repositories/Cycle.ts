@@ -3,11 +3,15 @@ import omit from 'lodash/omit';
 
 import { getDbConnection } from '../lib/db';
 import { TABLE_NAME as CYCLE_TABLE_NAME, schema as cycleSchema } from '../models/Cycle';
-import { schema as localImageSchema, TABLE_NAME as LOCAL_IMAGE_TABLE_NAME } from '../models/LocalImage';
+import {
+  TABLE_NAME as LOCAL_IMAGE_TABLE_NAME,
+  LocalImageDbObject,
+  schema as localImageSchema,
+} from '../models/LocalImage';
 import { TABLE_NAME as POST_TABLE_NAME } from '../models/Post';
 import { TABLE_NAME as USER_TABLE_NAME, schema as userSchema } from '../models/User';
+import { TABLE_NAME as WORK_TABLE_NAME, WorkDbObject, schema as workSchema } from '../models/Work';
 import { PostDetail } from '../types';
-import { schema as workSchema, TABLE_NAME as WORK_TABLE_NAME } from '../models/Work';
 
 export const fetchCycleDetail = async (id: string): Promise<Knex.QueryBuilder<Record<string, unknown>, PostDetail>> => {
   const connection = getDbConnection();
@@ -19,12 +23,15 @@ export const fetchCycleDetail = async (id: string): Promise<Knex.QueryBuilder<Re
   return table
     .select({
       ...omit(cycleSchema(), ['cycle.created_at', 'cycle.updated_at']),
-      ...omit(userSchema('creator'), ['creator.created_at', 'creator.updated_at']),
+      ...omit(userSchema('creator'), ['creator.id', 'creator.email', 'creator.created_at', 'creator.updated_at']),
     })
     .first();
 };
 
-export const fetchCycleWorks = async (id: string, limit = 25): Promise<Knex.QueryBuilder> => {
+export const fetchCycleWorks = async (
+  id: string,
+  limit = 255,
+): Promise<Knex.QueryBuilder<Record<string, unknown>, (WorkDbObject & LocalImageDbObject)[]>> => {
   const connection = getDbConnection();
 
   const cycleTable = connection(CYCLE_TABLE_NAME);

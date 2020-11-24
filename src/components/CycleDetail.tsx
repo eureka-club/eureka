@@ -1,13 +1,20 @@
 import classNames from 'classnames';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
-import { FunctionComponent, useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { FunctionComponent, MouseEvent, useState } from 'react';
+import Col from 'react-bootstrap/Col';
+import Modal from 'react-bootstrap/Modal';
+import ModalBody from 'react-bootstrap/ModalBody';
+import ModalHeader from 'react-bootstrap/ModalHeader';
+import ModalTitle from 'react-bootstrap/ModalTitle';
+import Row from 'react-bootstrap/Row';
 import { DiscussionEmbed } from 'disqus-react';
 import { BiArrowBack } from 'react-icons/bi';
 import { Carousel } from 'react-responsive-carousel';
 
-import { DISQUS_SHORTNAME, WEBAPP_URL } from '../constants';
+import { DATE_FORMAT_DISPLAY, DISQUS_SHORTNAME, WEBAPP_URL } from '../constants';
+import { LocalImageDbObject } from '../models/LocalImage';
+import { WorkDbObject } from '../models/Work';
 import { CycleDetail } from '../types';
 import LocalImage from './LocalImage';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -15,7 +22,7 @@ import styles from './CycleDetail.module.css';
 
 interface Props {
   cycle: CycleDetail;
-  cycleContent: Record<string, string>[];
+  cycleContent: (WorkDbObject & LocalImageDbObject)[];
 }
 
 const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, cycleContent }) => {
@@ -26,6 +33,16 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, cycleContent })
       : [];
 
   const [currentGallerySlide, setCurrentGallerySlide] = useState(0);
+  const [cycleContentModalOpened, setCycleContentModalOpened] = useState(false);
+
+  const handleShowCycleContent = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    setCycleContentModalOpened(true);
+  };
+
+  const handleCycleContentModalClose = () => {
+    setCycleContentModalOpened(false);
+  };
 
   const handleGalleryNext = () => {
     setCurrentGallerySlide((actualSlide) => actualSlide + 1);
@@ -48,8 +65,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, cycleContent })
           <section className="mb-4">
             <h1>{cycle['cycle.title']}</h1>
             <p>
-              Dates: {dayjs(cycle['cycle.start_date']).format('MMMM D YYYY')}&nbsp;&#8209;&nbsp;
-              {dayjs(cycle['cycle.end_date']).format('MMMM D YYYY')}
+              Dates: {dayjs(cycle['cycle.start_date']).format(DATE_FORMAT_DISPLAY)}&nbsp;&#8209;&nbsp;
+              {dayjs(cycle['cycle.end_date']).format(DATE_FORMAT_DISPLAY)}
             </p>
             <p className={styles.cycleAuthor}>
               <img
@@ -58,6 +75,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, cycleContent })
                 className={classNames(styles.cycleAuthorAvatar, 'mr-3')}
               />
               {cycle['creator.name']}
+              <button onClick={handleShowCycleContent} type="button" className={styles.showContentBtn}>
+                Cycle content
+              </button>
             </p>
           </section>
           <section className="mb-5">
@@ -82,7 +102,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, cycleContent })
             />
           </section>
         </Col>
-
         <Col md={{ span: 5 }}>
           <div className={classNames(styles.galleryControls, 'float-right mb-4')}>
             <button type="button" onClick={handleGalleryPrevious} data-direction="back">
@@ -135,6 +154,20 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, cycleContent })
           <h2 className="mb-5">Post from other users</h2>
         </Col>
       </Row>
+
+      <Modal show={cycleContentModalOpened} onHide={handleCycleContentModalClose} animation={false}>
+        <ModalHeader closeButton>
+          <ModalTitle>Cycle content</ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+          {cycleContent.map((work) => (
+            <div key={work['work.id']}>
+              <h4>{work['work.title']}</h4>
+              <p>{work['work.author']}</p>
+            </div>
+          ))}
+        </ModalBody>
+      </Modal>
     </>
   );
 };
