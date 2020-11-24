@@ -1,3 +1,6 @@
+export const DATE_FORMAT_DISPLAY = 'MMMM D YYYY';
+export const DATE_FORMAT_PROPS = 'YYYY-MM-DD';
+
 export const ASSETS_BASE_URL = process.env.NEXT_PUBLIC_LOCAL_ASSETS_BASE_URL;
 export const DISQUS_SHORTNAME = process.env.NEXT_PUBLIC_DISQUS_SHORTNAME;
 export const WEBAPP_URL = process.env.NEXT_PUBLIC_WEBAPP_URL;

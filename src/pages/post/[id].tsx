@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import { GetServerSideProps } from 'next';
 import { FunctionComponent } from 'react';
 
+import { DATE_FORMAT_PROPS } from '../../constants';
 import DetailLayout from '../../components/layouts/DetailLayout';
 import PostDetailComponent from '../../components/PostDetail';
 import { PostDetail } from '../../types';
@@ -39,8 +40,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       return {
         ...relatedPost,
         ...{
-          'cycle.start_date': dayjs(relatedPost['cycle.start_date']).format('YYYY-MM-DD'),
-          'cycle.end_date': dayjs(relatedPost['cycle.end_date']).format('YYYY-MM-DD'),
+          'cycle.start_date': dayjs(relatedPost['cycle.start_date']).format(DATE_FORMAT_PROPS),
+          'cycle.end_date': dayjs(relatedPost['cycle.end_date']).format(DATE_FORMAT_PROPS),
         },
       };
     }

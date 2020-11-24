@@ -7,7 +7,7 @@ import { DiscussionEmbed } from 'disqus-react';
 import { BiArrowBack } from 'react-icons/bi';
 import { Carousel } from 'react-responsive-carousel';
 
-import { DISQUS_SHORTNAME, WEBAPP_URL } from '../constants';
+import { DATE_FORMAT_DISPLAY, DISQUS_SHORTNAME, WEBAPP_URL } from '../constants';
 import { CycleDetail } from '../types';
 import LocalImage from './LocalImage';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -48,8 +48,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, cycleContent })
           <section className="mb-4">
             <h1>{cycle['cycle.title']}</h1>
             <p>
-              Dates: {dayjs(cycle['cycle.start_date']).format('MMMM D YYYY')}&nbsp;&#8209;&nbsp;
-              {dayjs(cycle['cycle.end_date']).format('MMMM D YYYY')}
+              Dates: {dayjs(cycle['cycle.start_date']).format(DATE_FORMAT_DISPLAY)}&nbsp;&#8209;&nbsp;
+              {dayjs(cycle['cycle.end_date']).format(DATE_FORMAT_DISPLAY)}
             </p>
             <p className={styles.cycleAuthor}>
               <img
@@ -82,7 +82,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, cycleContent })
             />
           </section>
         </Col>
-
         <Col md={{ span: 5 }}>
           <div className={classNames(styles.galleryControls, 'float-right mb-4')}>
             <button type="button" onClick={handleGalleryPrevious} data-direction="back">

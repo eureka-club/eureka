@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import { GetServerSideProps } from 'next';
 import { FunctionComponent } from 'react';
 
+import { DATE_FORMAT_PROPS } from '../../constants';
 import DetailLayout from '../../components/layouts/DetailLayout';
 import CycleDetailComponent from '../../components/CycleDetail';
 import { CycleDetail } from '../../types';
@@ -32,8 +33,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   }
   const cycleForProps = {
     ...cycle,
-    'cycle.start_date': dayjs(cycle['cycle.start_date']).format('YYYY-MM-DD'),
-    'cycle.end_date': dayjs(cycle['cycle.end_date']).format('YYYY-MM-DD'),
+    'cycle.start_date': dayjs(cycle['cycle.start_date']).format(DATE_FORMAT_PROPS),
+    'cycle.end_date': dayjs(cycle['cycle.end_date']).format(DATE_FORMAT_PROPS),
   };
 
   const cycleContent = await fetchCycleWorks(id);

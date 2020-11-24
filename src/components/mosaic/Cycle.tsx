@@ -5,6 +5,7 @@ import { Badge } from 'react-bootstrap';
 import { BsBookmark } from 'react-icons/bs';
 import { AiOutlineHeart } from 'react-icons/ai';
 
+import { DATE_FORMAT_DISPLAY } from '../../constants';
 import LocalImage from '../LocalImage';
 import { MosaicItem } from '../../types';
 import styles from './Cycle.module.css';
@@ -31,7 +32,8 @@ const Cycle: FunctionComponent<MosaicItem> = ({
           </a>
         </Link>
         <span className={styles.dateRange}>
-          {dayjs(cycleStartDate).format('MMM D YYYY')}&nbsp;&#8209;&nbsp;{dayjs(cycleEndDate).format('MMM D YYYY')}
+          {dayjs(cycleStartDate).format(DATE_FORMAT_DISPLAY)}&nbsp;&#8209;&nbsp;
+          {dayjs(cycleEndDate).format(DATE_FORMAT_DISPLAY)}
         </span>
 
         <Badge pill variant="primary" className={styles.badge}>
