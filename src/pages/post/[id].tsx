@@ -17,7 +17,7 @@ const PostDetailPage: FunctionComponent<Props> = ({ post, relatedPosts }) => {
   return (
     <DetailLayout title={post['work.title']}>
       <PostDetailComponent post={post} />
-      <Mosaic stock={relatedPosts} />
+      <Mosaic stack={relatedPosts} />
     </DetailLayout>
   );
 };

@@ -8,7 +8,7 @@ import Post from './mosaic/Post';
 import styles from './Mosaic.module.css';
 
 interface Props {
-  stock: MosaicItem[];
+  stack: MosaicItem[];
 }
 
 const renderMosaicItem = (item: MosaicItem) => {
@@ -19,7 +19,7 @@ const renderMosaicItem = (item: MosaicItem) => {
   return <Post key={item['post.id']} {...item} />; // eslint-disable-line react/jsx-props-no-spreading
 };
 
-const Mosaic: FunctionComponent<Props> = ({ stock }) => {
+const Mosaic: FunctionComponent<Props> = ({ stack }) => {
   return (
     <Masonry
       breakpointCols={{
@@ -31,7 +31,7 @@ const Mosaic: FunctionComponent<Props> = ({ stock }) => {
       className={classNames('d-flex', styles.masonry)}
       columnClassName={styles.masonryColumn}
     >
-      {stock.map((item: MosaicItem) => renderMosaicItem(item))}
+      {stack.map((item: MosaicItem) => renderMosaicItem(item))}
     </Masonry>
   );
 };

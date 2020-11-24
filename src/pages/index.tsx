@@ -13,7 +13,7 @@ interface Props {
 const IndexPage: NextPage<Props> = ({ posts }) => {
   return (
     <SimpleLayout title="Welcome">
-      <Mosaic stock={posts} />
+      <Mosaic stack={posts} />
     </SimpleLayout>
   );
 };
