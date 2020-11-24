@@ -20,4 +20,5 @@ export interface CycleDbObject {
   'cycle.end_date': string;
   'cycle.created_at': string;
   'cycle.updated_at': string;
+  'cycle.is_cover': boolean;
 }

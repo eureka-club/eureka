@@ -6,10 +6,10 @@ import { BsBookmark } from 'react-icons/bs';
 import { AiOutlineHeart } from 'react-icons/ai';
 
 import LocalImage from '../LocalImage';
-import { PostDetail } from '../../types';
+import { MosaicItem } from '../../types';
 import styles from './Cycle.module.css';
 
-const Cycle: FunctionComponent<PostDetail> = ({
+const Cycle: FunctionComponent<MosaicItem> = ({
   'local_image.stored_file': imagePath,
   'cycle.id': cycleId,
   'cycle.title': cycleTitle,

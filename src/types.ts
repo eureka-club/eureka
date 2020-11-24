@@ -22,8 +22,6 @@ export interface PostDetail extends PostDbObject, CreatorDbObject, LocalImageDbO
 
 export interface WorkDetail extends WorkDbObject, PostDbObject, LocalImageDbObject {}
 
-export type MosaicItem = PostDetail;
+export type MosaicItem = PostDbObject & LocalImageDbObject & WorkDbObject & CycleDbObject;
 
-export const isPostObject = (object: MosaicItem): object is PostDetail => object['post.id'] != null;
-
-export const isCycleObject = (object: MosaicItem): object is PostDetail => object['cycle.id'] != null;
+export const isCycleCover = (object: MosaicItem): object is MosaicItem => object['cycle.is_cover'];

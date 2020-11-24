@@ -7,7 +7,7 @@ import { TABLE_NAME as POST_TABLE_NAME, schema as postSchema } from '../models/P
 import { TABLE_NAME as LOCAL_IMAGE_TABLE_NAME, schema as localImageSchema } from '../models/LocalImage';
 import { TABLE_NAME as WORK_TABLE_NAME, schema as workSchema } from '../models/Work';
 import { TABLE_NAME as USER_TABLE_NAME, schema as userSchema } from '../models/User';
-import { PostDetail } from '../types';
+import { MosaicItem, PostDetail } from '../types';
 
 export const fetchFullPostDetail = async (
   id: string,
@@ -33,7 +33,7 @@ export const fetchFullPostDetail = async (
 
 export const fetchIndexMosaic = async (
   limit = 255,
-): Promise<Knex.QueryBuilder<Record<string, unknown>, PostDetail[]>> => {
+): Promise<Knex.QueryBuilder<Record<string, unknown>, MosaicItem[]>> => {
   const connection = getDbConnection();
   const table = connection(POST_TABLE_NAME);
 

@@ -3,11 +3,11 @@ import { FunctionComponent } from 'react';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { BsBookmark } from 'react-icons/bs';
 
-import { PostDetail } from '../../types';
+import { MosaicItem } from '../../types';
 import LocalImage from '../LocalImage';
 import styles from './Post.module.css';
 
-const Post: FunctionComponent<PostDetail> = ({
+const Post: FunctionComponent<MosaicItem> = ({
   'post.id': postId,
   'local_image.stored_file': imagePath,
   'work.author': workAuthor,
