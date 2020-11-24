@@ -135,6 +135,17 @@ const savePost = async (
   return pk;
 };
 
+const assignToCycle = async (postUuid: string, cycleId: string): Promise<void> => {
+  const connection = await getDbConnection();
+  const table = connection('cycle_post');
+
+  await table.insert({
+    cycle_id: cycleId,
+    post_id: postUuid,
+    is_cover: false,
+  });
+};
+
 export default getApiHandler().post<NextApiRequest, NextApiResponse>(
   async (req, res): Promise<void> => {
     const session = (await getSession({ req })) as Session;
@@ -161,6 +172,10 @@ export default getApiHandler().post<NextApiRequest, NextApiResponse>(
         const localImageDbRecordUuid = await saveImageUploadToDB(imageUpload, imageDestPath, imageHash);
         const workDbRecordUuid = await getPostWork(fields);
         const postUuid = await savePost(fields, localImageDbRecordUuid, workDbRecordUuid, session.user.id);
+
+        if (fields.cycleId != null) {
+          await assignToCycle(postUuid, fields.cycleId[0]);
+        }
 
         res.json({ postUuid });
       } catch (exc) {

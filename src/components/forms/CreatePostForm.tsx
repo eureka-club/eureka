@@ -21,7 +21,7 @@ import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import LocalImage from '../LocalImage';
-import { WorkDetail } from '../../types';
+import { CycleDetail, WorkDetail } from '../../types';
 import homepageAtom from '../../atoms/homepage';
 import styles from './CreatePostForm.module.css';
 
@@ -35,6 +35,7 @@ type NewPostPayload = {
   workType: string;
   description?: string;
   isPublic: string;
+  cycleId?: string;
 };
 
 type WorkTitleSearchOptions = {
@@ -45,6 +46,10 @@ type WorkTitleSearchOptions = {
   link: string;
   localImagePath: string;
 };
+
+interface Props {
+  cycle?: CycleDetail;
+}
 
 const createPostApiHandler = async (payload: NewPostPayload) => {
   const formData = new FormData();
@@ -63,7 +68,7 @@ const createPostApiHandler = async (payload: NewPostPayload) => {
   return res.json();
 };
 
-const CreatePostForm: FunctionComponent = () => {
+const CreatePostForm: FunctionComponent<Props> = ({ cycle }) => {
   const imageInputRef = useRef<HTMLInputElement>() as RefObject<HTMLInputElement>;
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
   const router = useRouter();
@@ -153,6 +158,7 @@ const CreatePostForm: FunctionComponent = () => {
       workType: form.workType.value,
       description: form.description.value.length ? form.description.value : null,
       isPublic: form.isPublic.checked,
+      cycleId: form.cycle.value || null,
     };
 
     await execCreateNewPost(payload);
@@ -172,18 +178,18 @@ const CreatePostForm: FunctionComponent = () => {
   }, [imageFile]);
 
   useEffect(() => {
-    if (
-      router != null &&
-      setHomepageState != null &&
-      isCreatePostSuccess &&
-      typeof createPostReqResponse?.postUuid === 'string'
-    ) {
+    if (isCreatePostSuccess && typeof createPostReqResponse?.postUuid === 'string') {
       (async () => {
-        await setHomepageState({ ...homepageState, ...{ createPostModalOpened: false } });
-        await router.push(`/post/${createPostReqResponse.postUuid}`);
+        if (cycle == null) {
+          await router.push(`/post/${createPostReqResponse.postUuid}`);
+          await setHomepageState({ ...homepageState, ...{ createPostModalOpened: false } });
+        } else {
+          router.reload();
+        }
       })();
     }
-  }, [router, homepageState, setHomepageState, isCreatePostSuccess, createPostReqResponse]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isCreatePostSuccess, createPostReqResponse]);
 
   return (
     <Form onSubmit={handleSubmit} ref={formRef}>
@@ -211,9 +217,15 @@ const CreatePostForm: FunctionComponent = () => {
               </button>
             </FormGroup>
             <Col md={{ span: 3 }}>
-              <FormGroup controlId="cycle">
-                <FormLabel>Add post to a cycle</FormLabel>
-                <FormControl type="text" placeholder="search for cycles" disabled />
+              <FormGroup>
+                <FormLabel>{cycle == null ? 'Add post to a cycle' : 'Post will be added to'}</FormLabel>
+                <FormControl type="hidden" id="cycle" defaultValue={cycle != null ? cycle['cycle.id'] : undefined} />
+                <FormControl
+                  type="text"
+                  placeholder="search for cycles"
+                  defaultValue={cycle != null ? cycle['cycle.title'] : undefined}
+                  disabled
+                />
               </FormGroup>
             </Col>
             <Col md={{ span: 3 }}>
