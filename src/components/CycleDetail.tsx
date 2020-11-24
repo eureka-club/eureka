@@ -1,7 +1,9 @@
 import classNames from 'classnames';
 import dayjs from 'dayjs';
+import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { FunctionComponent, MouseEvent, useState } from 'react';
+import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
 import ModalBody from 'react-bootstrap/ModalBody';
@@ -11,13 +13,14 @@ import Row from 'react-bootstrap/Row';
 import { DiscussionEmbed } from 'disqus-react';
 import { BiArrowBack } from 'react-icons/bi';
 import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 import { DATE_FORMAT_DISPLAY, DISQUS_SHORTNAME, WEBAPP_URL } from '../constants';
 import { LocalImageDbObject } from '../models/LocalImage';
 import { WorkDbObject } from '../models/Work';
 import { CycleDetail, CyclePoster } from '../types';
+import CreatePostForm from './forms/CreatePostForm';
 import LocalImage from './LocalImage';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import styles from './CycleDetail.module.css';
 
 interface Props {
@@ -27,14 +30,16 @@ interface Props {
 }
 
 const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, cycleContent, cyclePosters }) => {
+  const [currentGallerySlide, setCurrentGallerySlide] = useState(0);
+  const [cycleContentModalOpened, setCycleContentModalOpened] = useState(false);
+  const [createPostModalOpened, setCreatePostModalOpened] = useState(false);
+  const [session] = useSession();
   const { asPath } = useRouter();
+
   const contentTextTokens =
     cycle['cycle.content_text'] != null
       ? cycle['cycle.content_text'].split('\n').filter((token: string) => token !== '')
       : [];
-
-  const [currentGallerySlide, setCurrentGallerySlide] = useState(0);
-  const [cycleContentModalOpened, setCycleContentModalOpened] = useState(false);
 
   const handleShowCycleContent = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
@@ -59,6 +64,15 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, cycleContent, c
     }
   };
 
+  const handleCreatePostModalOpen = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    setCreatePostModalOpened(true);
+  };
+
+  const handleCreatePostModalClose = () => {
+    setCreatePostModalOpened(false);
+  };
+
   return (
     <>
       <Row>
@@ -78,11 +92,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, cycleContent, c
                 />
                 {cycle['creator.name']}
               </span>
-
               <button onClick={handleShowCycleContent} type="button" className={styles.showContentBtn}>
                 Cycle content
               </button>
-
               <span>
                 {cyclePosters.map((poster) => (
                   <img key={poster.image} src={poster.image} alt={poster.name} className={styles.posters} />
@@ -161,7 +173,14 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, cycleContent, c
 
       <Row>
         <Col>
-          <h2 className="mb-5">Cycle posts</h2>
+          <h2 className="mb-5">
+            Posts in Cycle
+            {session != null && (
+              <Button onClick={handleCreatePostModalOpen} className="ml-5">
+                +Post in this cycle
+              </Button>
+            )}
+          </h2>
         </Col>
       </Row>
 
@@ -177,6 +196,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, cycleContent, c
             </div>
           ))}
         </ModalBody>
+      </Modal>
+
+      <Modal show={createPostModalOpened} onHide={handleCreatePostModalClose} size="lg" animation={false}>
+        <CreatePostForm cycle={cycle} />
       </Modal>
     </>
   );
