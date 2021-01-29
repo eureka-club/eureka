@@ -1,22 +1,18 @@
+import { User } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextAuth from 'next-auth';
 import Adapters from 'next-auth/adapters';
 import Providers from 'next-auth/providers';
 
-import { DATABASE_DB_NAME, DATABASE_ENGINE, DATABASE_HOST, DATABASE_PASSWORD, DATABASE_USER } from '../../../constants';
-import { Session, User } from '../../../types';
+import prisma from '../../../lib/prisma';
+import { Session } from '../../../types';
 
 const options = {
-  adapter: Adapters.TypeORM.Adapter({
-    ...(DATABASE_ENGINE != null && { type: DATABASE_ENGINE as 'mssql' }),
-    ...(DATABASE_DB_NAME != null && { database: DATABASE_DB_NAME }),
-    ...(DATABASE_HOST != null && { host: DATABASE_HOST }),
-    ...(DATABASE_PASSWORD != null && { password: DATABASE_PASSWORD }),
-    ...(DATABASE_USER != null && { username: DATABASE_USER }),
-  }),
+  adapter: Adapters.Prisma.Adapter({ prisma }),
   callbacks: {
     session: async (session: Session, user: User) => {
       session.user.id = user.id; // eslint-disable-line no-param-reassign
+      session.user.roles = user.roles; // eslint-disable-line no-param-reassign
 
       return Promise.resolve(session);
     },
@@ -27,6 +23,7 @@ const options = {
       clientSecret: process.env.GOOGLE_SECRET!,
     }),
   ],
+  secret: process.env.SECRET,
 };
 
 export default (req: NextApiRequest, res: NextApiResponse): Promise<void> => NextAuth(req, res, options);

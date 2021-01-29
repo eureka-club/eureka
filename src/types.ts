@@ -1,3 +1,5 @@
+import { User as PrismaUser } from '@prisma/client';
+
 import { PostDbObject } from './models/Post';
 import { CreatorDbObject } from './models/User';
 import { CycleDbObject } from './models/Cycle';
@@ -12,9 +14,9 @@ export interface User {
 }
 
 export interface Session {
-  user: User;
   accessToken?: string;
   expires: string;
+  user: PrismaUser;
 }
 
 export interface CycleDetail extends CycleDbObject, CreatorDbObject {}
