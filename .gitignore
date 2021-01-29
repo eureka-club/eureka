@@ -13,6 +13,10 @@ yarn-error.log*
 # dependencies
 /node_modules
 
+# database
+prisma/migrations/migration_lock.toml
+prisma/.env
+
 # deployment
 /.dokku/.env
 
