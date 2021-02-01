@@ -1,7 +1,18 @@
-import { Work } from '@prisma/client';
+import { LocalImage, Work } from '@prisma/client';
 
 import { CreateWorkServerFields, CreateWorkServerPayload, StoredFileUpload } from '../types';
 import prisma from '../lib/prisma';
+
+export const fetchWorks = async (): Promise<
+  (Work & {
+    localImages: LocalImage[];
+  })[]
+> => {
+  return prisma.work.findMany({
+    orderBy: { createdAt: 'desc' },
+    include: { localImages: true },
+  });
+};
 
 export const createWork = async (fields: CreateWorkServerFields, coverImageUpload: StoredFileUpload): Promise<Work> => {
   const payload = Object.entries(fields).reduce((memo, field) => {
