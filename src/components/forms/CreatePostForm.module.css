@@ -43,7 +43,7 @@
   object-fit: contain;
 }
 
-.loadIndicator {
+.placeholder {
   display: inline-block;
   height: 16px;
   width: 16px;

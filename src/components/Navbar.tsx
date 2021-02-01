@@ -13,6 +13,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import { DropdownItemProps } from 'react-bootstrap/DropdownItem';
 import { BiCheck, BiUser } from 'react-icons/bi';
 
+import { Session } from '../types';
 import ChevronToggle from './ui/dropdown/ChevronToggle';
 import homepageAtom from '../atoms/homepage';
 import styles from './Navbar.module.css';
@@ -21,7 +22,7 @@ const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
 
 const Navbar: FunctionComponent = () => {
   const [homepageState, setHomepageState] = useAtom(homepageAtom);
-  const [session] = useSession();
+  const [session] = useSession() as [Session | null | undefined, boolean];
 
   const openSignInModal = () => {
     setHomepageState({ ...homepageState, ...{ signInModalOpened: true } });
@@ -35,6 +36,16 @@ const Navbar: FunctionComponent = () => {
     } else {
       setHomepageState({ ...homepageState, ...{ createPostModalOpened: true } });
     }
+  };
+
+  const handleCreateWork = (ev: MouseEvent<DropdownItemProps>) => {
+    ev.preventDefault();
+
+    if (session == null || !session.user.roles.includes('admin')) {
+      return;
+    }
+
+    setHomepageState({ ...homepageState, ...{ createWorkModalOpened: true } });
   };
 
   return (
@@ -79,6 +90,11 @@ const Navbar: FunctionComponent = () => {
               <Dropdown.Item className={styles.dropdownMenuItem} onClick={handleCreatePost}>
                 Post
               </Dropdown.Item>
+              {session?.user.roles.includes('admin') && (
+                <Dropdown.Item className={styles.dropdownMenuItem} onClick={handleCreateWork}>
+                  Work
+                </Dropdown.Item>
+              )}
             </Dropdown.Menu>
           </Dropdown>
 
