@@ -1,0 +1,1 @@
+DATABASE_URL="sqlserver://uniquename.database.windows.net:1433;database=db-name;user=db-user@uniquename;password=secret;trustServerCertificate=true"
