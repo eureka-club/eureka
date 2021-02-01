@@ -87,7 +87,7 @@ model LocalImage {
   mimeType          String    @map(name: "mime_type")
   contentHash       String    @map(name: "content_hash")
   createdAt         DateTime  @default(now()) @map(name: "created_at")
-  updatedAt         DateTime  @map(name: "updated_at")
+  updatedAt         DateTime  @updatedAt @map(name: "updated_at")
 
   cycles  Cycle[]
   posts   Post[]
@@ -111,7 +111,7 @@ model Work {
   countryOfOrigin  String?    @map(name: "country_of_origin")
   length           String?
   createdAt        DateTime   @default(now()) @map(name: "created_at")
-  updatedAt        DateTime   @map(name: "updated_at")
+  updatedAt        DateTime   @updatedAt @map(name: "updated_at")
 
   localImages  LocalImage[]
   cycles       Cycle[]
@@ -132,7 +132,7 @@ model Cycle {
   startDate    DateTime  @map(name: "start_date")
   endDate      DateTime  @map(name: "end_date")
   createdAt    DateTime  @default(now()) @map(name: "created_at")
-  updatedAt    DateTime  @map(name: "updated_at")
+  updatedAt    DateTime  @updatedAt @map(name: "updated_at")
 
   localImages  LocalImage[]
   posts        Post[]
@@ -152,7 +152,7 @@ model Post {
   contentText  String?   @map(name: "content_text")
   isPublic     Boolean   @map(name: "is_public")
   createdAt    DateTime  @default(now()) @map(name: "created_at")
-  updatedAt    DateTime  @map(name: "updated_at")
+  updatedAt    DateTime  @updatedAt @map(name: "updated_at")
 
   localImages  LocalImage[]
   cycles       Cycle[]

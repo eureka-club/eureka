@@ -326,7 +326,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ cycle }) => {
             {isCreatePostLoading ? (
               <Spinner animation="grow" variant="secondary" className={styles.loadIndicator} />
             ) : (
-              <span className={styles.loadIndicator} />
+              <span className={styles.placeholder} />
             )}
             {isCreatePostError && createPostError}
           </Button>
