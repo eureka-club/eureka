@@ -88,6 +88,7 @@ function deploy_app_service {
 				NEXT_PUBLIC_DISQUS_SHORTNAME=${NEXT_PUBLIC_DISQUS_SHORTNAME} \
 				NEXT_PUBLIC_LOCAL_ASSETS_BASE_URL=${NEXT_PUBLIC_LOCAL_ASSETS_BASE_URL} \
 				NEXT_PUBLIC_WEBAPP_URL=${NEXT_PUBLIC_WEBAPP_URL} \
+				SECRET=${SECRET} \
 			--output none
 		echo "done... waiting 15s"
 		sleep 15
