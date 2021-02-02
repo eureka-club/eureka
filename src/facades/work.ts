@@ -3,6 +3,20 @@ import { LocalImage, Work } from '@prisma/client';
 import { CreateWorkServerFields, CreateWorkServerPayload, StoredFileUpload } from '../types';
 import prisma from '../lib/prisma';
 
+export const findOne = async (
+  id: number,
+): Promise<
+  | (Work & {
+      localImages: LocalImage[];
+    })
+  | null
+> => {
+  return prisma.work.findUnique({
+    where: { id },
+    include: { localImages: true },
+  });
+};
+
 export const fetchWorks = async (): Promise<
   (Work & {
     localImages: LocalImage[];

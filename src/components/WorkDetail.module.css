@@ -1,0 +1,57 @@
+.titleWorkAuthor {
+  font-size: 1.3rem;
+}
+
+.workSummary {
+  font-family: 'Helvetica Neue', sans-serif;
+  font-weight: 200;
+  margin-bottom: 1rem;
+}
+
+.workLink {
+  background-color: var(--color-emphasis);
+  border-radius: 12px;
+  color: var(--text-color-light);
+  padding: 0 1rem;
+}
+.workLink:hover {
+  background-color: var(--color-emphasis-raised);
+  color: var(--text-color-extralight);
+  text-decoration: none;
+}
+
+.imgWrapper img {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  width: 100%;
+}
+
+.workInitials p {
+  margin-bottom: 0.25rem;
+}
+
+.contentText {
+  height: 21rem;
+  overflow: hidden;
+  position: relative;
+}
+.contentText::after {
+  content: '';
+  position: absolute;
+  bottom: 0rem;
+  right: 0;
+  width: 100%;
+  height: 3.5em;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9) 50%);
+}
+.contentTextUnclamped {
+  height: auto;
+}
+.contentTextUnclamped::after {
+  background: none;
+}
+
+.unclampButton {
+  color: var(--color-primary-raised);
+  padding: 0;
+}

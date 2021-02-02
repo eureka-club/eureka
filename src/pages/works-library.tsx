@@ -4,6 +4,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import Table from 'react-bootstrap/Table';
 
+import { DATE_FORMAT_ONLY_YEAR } from '../constants';
 import SimpleLayout from '../components/layouts/SimpleLayout';
 import LocalImageComponent from '../components/LocalImage';
 import { fetchWorks } from '../facades/work';
@@ -43,7 +44,7 @@ const WorksLibraryPage: NextPage<Props> = ({ works }) => {
               <td>{work.type}</td>
               <td>{work.title}</td>
               <td>{work.author}</td>
-              <td>{work.publicationYear && dayjs(work.publicationYear).format('YYYY')}</td>
+              <td>{work.publicationYear && dayjs(work.publicationYear).format(DATE_FORMAT_ONLY_YEAR)}</td>
               <td>
                 <Link href={`/work/${work.id}`}>
                   <a>detail</a>
