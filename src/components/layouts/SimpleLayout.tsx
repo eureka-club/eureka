@@ -23,7 +23,7 @@ const SimpleLayout: FunctionComponent<Props> = ({ children }) => {
   };
 
   const handleCreateWorkModalClose = () => {
-    setHomepageState({ ...homepageState, ...{ createPostModalOpened: false } });
+    setHomepageState({ ...homepageState, ...{ createWorkModalOpened: false } });
   };
 
   const handleSignInModalClose = () => {
