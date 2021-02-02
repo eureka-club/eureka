@@ -1,6 +1,7 @@
 import { LocalImage, Work } from '@prisma/client';
 import dayjs from 'dayjs';
 import { GetServerSideProps, NextPage } from 'next';
+import Link from 'next/link';
 import Table from 'react-bootstrap/Table';
 
 import SimpleLayout from '../components/layouts/SimpleLayout';
@@ -26,6 +27,7 @@ const WorksLibraryPage: NextPage<Props> = ({ works }) => {
             <th>title</th>
             <th>author</th>
             <th>publication year</th>
+            <th>[actions]</th>
           </tr>
         </thead>
         <tbody>
@@ -42,6 +44,11 @@ const WorksLibraryPage: NextPage<Props> = ({ works }) => {
               <td>{work.title}</td>
               <td>{work.author}</td>
               <td>{work.publicationYear && dayjs(work.publicationYear).format('YYYY')}</td>
+              <td>
+                <Link href={`/work/${work.id}`}>
+                  <a>detail</a>
+                </Link>
+              </td>
             </tr>
           ))}
         </tbody>
