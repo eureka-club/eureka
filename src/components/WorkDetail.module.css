@@ -1,4 +1,18 @@
-.titleWorkAuthor {
+.imgWrapper img {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  width: 100%;
+}
+
+.socialInfo {
+  color: var(--color-primary-raised);
+  font-size: 1.15rem;
+}
+.socialInfo span {
+  margin-right: 1rem;
+}
+
+.author {
   font-size: 1.3rem;
 }
 
@@ -18,16 +32,6 @@
   background-color: var(--color-emphasis-raised);
   color: var(--text-color-extralight);
   text-decoration: none;
-}
-
-.imgWrapper img {
-  border-radius: 0.75rem;
-  overflow: hidden;
-  width: 100%;
-}
-
-.workInitials p {
-  margin-bottom: 0.25rem;
 }
 
 .contentText {
@@ -50,7 +54,6 @@
 .contentTextUnclamped::after {
   background: none;
 }
-
 .unclampButton {
   color: var(--color-primary-raised);
   padding: 0;

@@ -4,8 +4,12 @@ import { LocalImage, Work } from '@prisma/client';
 import { FunctionComponent, MouseEvent, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
+import Nav from 'react-bootstrap/Nav';
 import Row from 'react-bootstrap/Row';
-import { BsBoxArrowUpRight, BsChevronDown } from 'react-icons/bs';
+import Tab from 'react-bootstrap/Tab';
+import { BsBookmarkFill, BsBoxArrowUpRight, BsChevronDown } from 'react-icons/bs';
+import { AiFillHeart } from 'react-icons/ai';
+import { FiShare2 } from 'react-icons/fi';
 
 import { DATE_FORMAT_ONLY_YEAR } from '../constants';
 import LocalImageComponent from './LocalImage';
@@ -44,16 +48,27 @@ const WorkDetail: FunctionComponent<Props> = ({ work }) => {
 
   return (
     <>
-      <Row>
+      <Row className="mb-5">
         <Col md={{ span: 4 }}>
           <div className={classNames(styles.imgWrapper, 'mb-3')}>
             <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
           </div>
+          <section className={styles.socialInfo}>
+            <span>
+              <BsBookmarkFill /> #
+            </span>
+            <span>
+              <AiFillHeart /> #
+            </span>
+            <span>
+              <FiShare2 /> #
+            </span>
+          </section>
         </Col>
         <Col md={{ span: 8 }}>
           <section className="mb-4">
             <h1>{work.title}</h1>
-            <h2 className={styles.titleWorkAuthor}>{work.author}</h2>
+            <h2 className={styles.author}>{work.author}</h2>
             <section className={styles.workSummary}>
               {[
                 work.publicationYear &&
@@ -87,6 +102,43 @@ const WorkDetail: FunctionComponent<Props> = ({ work }) => {
               view more <BsChevronDown />
             </Button>
           )}
+        </Col>
+      </Row>
+
+      <Row className="mb-5">
+        <Col>
+          <Tab.Container defaultActiveKey="all" transition={false}>
+            <Row className="mb-4">
+              <Col>
+                <Nav variant="tabs" fill>
+                  <Nav.Item>
+                    <Nav.Link eventKey="all">All related</Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="posts">Posts about this work</Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="cycles">Cycles including this work</Nav.Link>
+                  </Nav.Item>
+                </Nav>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Tab.Content>
+                  <Tab.Pane eventKey="all">
+                    <h4>All related</h4>
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="posts">
+                    <h4>Posts about this work</h4>
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="cycles">
+                    <h4>Cycles including this work</h4>
+                  </Tab.Pane>
+                </Tab.Content>
+              </Col>
+            </Row>
+          </Tab.Container>
         </Col>
       </Row>
     </>
