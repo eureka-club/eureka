@@ -27,6 +27,7 @@ const CreateWorkForm: FunctionComponent = () => {
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
   const router = useRouter();
   const [homepageState, setHomepageState] = useAtom(homepageAtom);
+  const [publicatonYearLabel, setPublicationYearLabel] = useState('Publication year');
   const [coverFile, setCoverFile] = useState<File>();
   const [imagePreview, setImagePreview] = useState<string>();
   const [
@@ -48,6 +49,18 @@ const CreateWorkForm: FunctionComponent = () => {
 
     return res.json();
   });
+
+  const handleWorkTypeChange = (ev: ChangeEvent<HTMLSelectElement>) => {
+    switch (ev.currentTarget.value) {
+      case 'movie':
+      case 'documentary':
+        setPublicationYearLabel('Release year');
+        break;
+
+      default:
+        setPublicationYearLabel('Publication year');
+    }
+  };
 
   const handleImageControlClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
@@ -132,7 +145,7 @@ const CreateWorkForm: FunctionComponent = () => {
             <Col>
               <FormGroup controlId="type">
                 <FormLabel>*Type of work</FormLabel>
-                <FormControl as="select" required>
+                <FormControl as="select" required onChange={handleWorkTypeChange}>
                   <option value="">select...</option>
                   <option value="book">Book</option>
                   <option value="documentary">Documentary</option>
@@ -186,7 +199,7 @@ const CreateWorkForm: FunctionComponent = () => {
           <Row>
             <Col>
               <FormGroup controlId="publicationYear">
-                <FormLabel>Publication year</FormLabel>
+                <FormLabel>{publicatonYearLabel}</FormLabel>
                 <FormControl type="number" min="-5000" max="2200" />
               </FormGroup>
             </Col>
