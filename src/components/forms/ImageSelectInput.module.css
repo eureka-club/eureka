@@ -1,0 +1,14 @@
+.fileControl {
+  width: 1px;
+  height: 0;
+  overflow: hidden;
+}
+
+.trigger {
+  background: none;
+  border: none;
+  outline: none;
+  padding: 0;
+  text-align: left;
+  width: 100%;
+}
