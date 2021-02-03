@@ -21,12 +21,14 @@ import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BiTrash } from 'react-icons/bi';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
-import { DATE_FORMAT_DISPLAY, DATE_FORMAT_PROPS } from '../../constants';
+import { DATE_FORMAT_PROPS } from '../../constants';
 import LocalImageComponent from '../LocalImage';
 import WorkSummary from '../work/WorkSummary';
-import { WorkDetail } from '../../types';
 import styles from './CreateCycleForm.module.css';
-import { CreatorDbObject } from '../../models/User';
+
+interface Props {
+  className?: string;
+}
 
 interface ExistingPostPayload {
   postId: string;
@@ -52,26 +54,9 @@ interface NewCyclePayload {
   cycleStartDate: string;
   cycleEndDate: string;
   isCyclePublic: boolean;
-  cycleContent: [NewPostPayload] | ExistingPostPayload[];
-}
-
-interface PostSearchOptions {
-  workTitle: string;
-  workAuthor: string;
-  workType: string;
-  postId: string;
-  postLanguage: string;
-  postContent: string;
-  postCreatedAt: string;
-  postCreator: string;
-  localImagePath: string;
 }
 
 type WorkSearchResult = (Work & { localImages: LocalImage[] })[];
-
-interface Props {
-  className?: string;
-}
 
 const createCycleApiHandler = async (payload: NewCyclePayload) => {
   const formData = new FormData();
@@ -105,8 +90,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const [addWorkModalOpened, setAddWorkModalOpened] = useState(false);
   const [postSearchLoading, setWorkSearchLoading] = useState(false);
   const [workSearchOptions, setWorkSearchResult] = useState<WorkSearchResult>([]);
-  const [workSearchSelection, setWorkSearchSelection] = useState<WorkSearchResult>();
-  const [selectedPostsForCycle, setSelectedPostsForCycle] = useState<WorkSearchResult>([]);
+  const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkSearchResult>([]);
 
   const router = useRouter();
   const [
@@ -122,7 +106,6 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
   const handleAddWorkBegin = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    setWorkSearchSelection(undefined);
     setAddWorkModalOpened(true);
   };
 
@@ -142,24 +125,14 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
   const handleWorkSearchSelect = (selected: WorkSearchResult): void => {
     if (selected[0] != null) {
-      setWorkSearchSelection(selected[0]);
-    } else {
-      setWorkSearchSelection(undefined);
-    }
-  };
-
-  const handleAddWork = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-
-    if (workSearchSelection != null) {
-      setSelectedPostsForCycle([...selectedPostsForCycle, workSearchSelection]);
+      setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
       setAddWorkModalOpened(false);
     }
   };
 
   const handleRemoveSelectedPost = (boxId: number) => {
-    setSelectedPostsForCycle(
-      selectedPostsForCycle.filter((post, idx) => {
+    setSelectedWorksForCycle(
+      selectedWorksForCycle.filter((post, idx) => {
         return idx !== boxId;
       }),
     );
@@ -168,22 +141,25 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const handleFormClear = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
 
-    if (formRef.current != null) {
-      const form = formRef.current;
-
-      form.cycleTitle.value = '';
-      form.cycleLanguage.value = '';
-      form.cycleHashtags.value = '';
-      form.cycleStartDate.value = '';
-      form.cycleEndDate.value = '';
-      form.cycleDescription.value = '';
+    if (formRef.current == null) {
+      return;
     }
+
+    const form = formRef.current;
+
+    form.cycleTitle.value = '';
+    form.cycleLanguage.value = '';
+    form.cycleHashtags.value = '';
+    form.cycleStartDate.value = '';
+    form.cycleEndDate.value = '';
+    form.cycleDescription.value = '';
+    setSelectedWorksForCycle([]);
   };
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
-    if (!selectedPostsForCycle.length) {
+    if (!selectedWorksForCycle.length) {
       return;
     }
 
@@ -196,13 +172,12 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
       cycleEndDate: form.cycleEndDate.value,
       cycleDescription: form.cycleDescription.value.length ? form.cycleDescription.value : null,
       isCyclePublic: form.isCyclePublic.checked,
-      cycleContent: selectedPostsForCycle.map((post) => ({ postId: post.postId })),
     };
 
     await execCreateNewCycle(payload);
   };
 
-  const chosenPostsBoxes = [0, 1, 2, 3, 4];
+  const chosenWorksBoxes = [0, 1, 2, 3, 4];
 
   useEffect(() => {
     if (router != null && isCreateCycleReqSuccess && typeof createCycleReqResponse?.newCycleUuid === 'string') {
@@ -224,19 +199,19 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
               <p>Search for work in our library</p>
             </button>
 
-            <div className={classNames(styles.chosenPosts, 'd-flex')}>
-              {chosenPostsBoxes.map((boxId) => (
-                <div key={boxId} className={styles.chosenPostsBox}>
-                  {selectedPostsForCycle[boxId] && (
+            <div className={classNames(styles.chosenWorks, 'd-flex')}>
+              {chosenWorksBoxes.map((boxId) => (
+                <div key={boxId} className={styles.chosenWorksBox}>
+                  {selectedWorksForCycle[boxId] && (
                     <>
                       <LocalImageComponent
-                        filePath={selectedPostsForCycle[boxId].localImagePath}
-                        alt={selectedPostsForCycle[boxId].workTitle}
+                        filePath={selectedWorksForCycle[boxId].localImages[0].storedFile}
+                        alt={selectedWorksForCycle[boxId].title}
                       />
                       <button
                         onClick={() => handleRemoveSelectedPost(boxId)}
                         type="button"
-                        className={styles.chosenPostsBoxRemove}
+                        className={styles.chosenWorksBoxRemove}
                       >
                         <BiTrash />
                       </button>
@@ -245,16 +220,14 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 </div>
               ))}
             </div>
-
-            <FormCheck type="checkbox" defaultChecked inline id="isCyclePublic" label="Public?" />
           </Col>
           <Col md={{ span: 4 }}>
             <FormGroup controlId="cycleTitle">
-              <FormLabel>Title of the Cycle</FormLabel>
-              <FormControl type="text" required />
+              <FormLabel>*Title of your cycle (80 characters max)</FormLabel>
+              <FormControl type="text" maxLength={80} required />
             </FormGroup>
             <FormGroup controlId="cycleLanguage">
-              <FormLabel>Main language of the cycle</FormLabel>
+              <FormLabel>*Main language of the cycle</FormLabel>
               <FormControl type="text" as="select" required>
                 <option value="">select...</option>
                 <option value="spanish">Spanish</option>
@@ -270,26 +243,37 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
             </FormGroup>
             <FormGroup controlId="cycleHashtags">
               <FormLabel>Main topics of the cycle</FormLabel>
-              <FormControl type="text" required />
+              <FormControl type="text" disabled />
             </FormGroup>
             <FormGroup controlId="cycleStartDate">
-              <FormLabel>Start date of the cycle</FormLabel>
+              <FormLabel>*Start date of the cycle</FormLabel>
               <FormControl type="date" required defaultValue={dayjs(new Date()).format(DATE_FORMAT_PROPS)} />
             </FormGroup>
             <FormGroup controlId="cycleEndDate">
-              <FormLabel>End date of the cycle</FormLabel>
+              <FormLabel>*End date of the cycle</FormLabel>
               <FormControl type="date" required min={dayjs(new Date()).format(DATE_FORMAT_PROPS)} />
             </FormGroup>
             <FormGroup controlId="cycleDescription">
-              <FormLabel>Explain in a few words what cycle is about</FormLabel>
-              <FormControl as="textarea" rows={5} />
+              <FormLabel>
+                *Cycle pitch: what is this cycle about and why is it a relevant topic. Why should people join this
+                cycle?
+              </FormLabel>
+              <FormControl as="textarea" rows={5} required />
             </FormGroup>
           </Col>
         </Row>
 
         <Row>
           <Col>
-            <Button variant="primary" type="submit" className="float-right pl-5 pr-4">
+            <FormCheck type="checkbox" defaultChecked inline id="isCyclePublic" label="This cycle is public" />
+          </Col>
+          <Col>
+            <Button
+              disabled={!selectedWorksForCycle.length}
+              variant="primary"
+              type="submit"
+              className="float-right pl-5 pr-4"
+            >
               Create cycle
               {isCreateCycleReqLoading ? (
                 <Spinner animation="grow" variant="secondary" className={styles.loadIndicator} />
@@ -308,6 +292,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
             </Button>
           </Col>
         </Row>
+        <pre>{JSON.stringify(selectedWorksForCycle, null, 2)}</pre>
       </Form>
 
       <Modal show={addWorkModalOpened} onHide={handleAddWorkModalClose} animation={false}>
@@ -316,7 +301,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
         </ModalHeader>
         <ModalBody>
           <Row className="mb-5">
-            <Col sm={{ span: 7 }}>
+            <Col>
               <FormGroup controlId="cycle">
                 <FormLabel>Select work:</FormLabel>
 
@@ -340,7 +325,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                   onSearch={handleWorkSearch}
                   onChange={handleWorkSearchSelect}
                   options={workSearchOptions}
-                  placeholder="Search for existing work..."
+                  placeholder="Search for existing work... (press ENTER to add to cycle)"
                   renderMenuItemChildren={(work) => (
                     <div className={styles.workSearchTypeaheadItem}>
                       <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
@@ -356,43 +341,6 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                   )}
                 />
               </FormGroup>
-            </Col>
-            <Col sm={{ span: 5 }}>
-              <Button
-                onClick={handleAddWork}
-                variant="primary"
-                block
-                type="button"
-                className={styles.addWorkModalButton}
-              >
-                Add work to cycle
-              </Button>
-            </Col>
-          </Row>
-
-          <Row>
-            <Col>
-              {workSearchSelection && (
-                <div className={styles.workSearchTypeaheadItem}>
-                  <LocalImageComponent
-                    filePath={workSearchSelection.localImagePath}
-                    alt={workSearchSelection.workTitle}
-                  />
-                  <div>
-                    <h4>
-                      {workSearchSelection.workTitle} <small>by</small> {workSearchSelection.workAuthor}{' '}
-                      <small>({workSearchSelection.workType})</small>
-                    </h4>
-                    <hr />
-                    <p>
-                      Post by <strong>{workSearchSelection.postCreator}</strong> at{' '}
-                      {dayjs(workSearchSelection.postCreatedAt).format(DATE_FORMAT_DISPLAY)}{' '}
-                      <small>({workSearchSelection.postLanguage})</small>
-                    </p>
-                    <article>{workSearchSelection.postContent}</article>
-                  </div>
-                </div>
-              )}
             </Col>
           </Row>
         </ModalBody>
