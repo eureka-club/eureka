@@ -229,7 +229,7 @@ const CreateWorkForm: FunctionComponent = () => {
           <Row>
             <FormGroup controlId="description" as={Col}>
               <FormLabel>Official summary of work</FormLabel>
-              <FormControl as="textarea" rows={6} />
+              <FormControl as="textarea" rows={6} maxLength={4000} />
             </FormGroup>
           </Row>
         </Container>
