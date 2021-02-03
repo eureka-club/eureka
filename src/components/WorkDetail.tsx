@@ -56,9 +56,12 @@ const WorkDetail: FunctionComponent<Props> = ({ work }) => {
             <h2 className={styles.titleWorkAuthor}>{work.author}</h2>
             <section className={styles.workSummary}>
               {[
-                work.publicationYear && dayjs(work.publicationYear).format(DATE_FORMAT_ONLY_YEAR),
-                work.countryOfOrigin,
-                work.length,
+                work.publicationYear &&
+                  `${work.type === 'book' ? 'Publication year' : 'Release year'}:  ${dayjs(work.publicationYear).format(
+                    DATE_FORMAT_ONLY_YEAR,
+                  )}`,
+                work.countryOfOrigin && `Country of origin: ${work.countryOfOrigin}`,
+                work.length && `Length: ${work.length} ${work.type === 'book' ? 'pages' : 'minutes'}`,
               ]
                 .filter((val) => val != null)
                 .join(', ')}
