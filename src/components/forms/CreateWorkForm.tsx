@@ -211,7 +211,9 @@ const CreateWorkForm: FunctionComponent = () => {
                   <option value="">select...</option>
                   <option value="female">Female</option>
                   <option value="male">Male</option>
-                  <option value="other">other</option>
+                  <option value="non-binary">Non-binary</option>
+                  <option value="trans">Trans</option>
+                  <option value="other">Other</option>
                 </FormControl>
               </FormGroup>
             </Col>
