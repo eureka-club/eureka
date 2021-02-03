@@ -321,15 +321,15 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
         </Row>
       </Form>
 
-      <Modal show={addWorkModalOpened} onHide={handleAddWorkModalClose} animation={false} size="lg">
+      <Modal show={addWorkModalOpened} onHide={handleAddWorkModalClose} animation={false}>
         <ModalHeader closeButton>
-          <ModalTitle>Add Work</ModalTitle>
+          <ModalTitle>Add work to cycle</ModalTitle>
         </ModalHeader>
         <ModalBody>
           <Row className="mb-5">
-            <Col>
+            <Col sm={{ span: 7 }}>
               <FormGroup controlId="cycle">
-                <FormLabel>Choose existing post</FormLabel>
+                <FormLabel>Select work:</FormLabel>
 
                 {/* language=CSS */}
                 <style jsx global>{`
