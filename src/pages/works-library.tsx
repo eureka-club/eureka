@@ -2,7 +2,14 @@ import { LocalImage, Work } from '@prisma/client';
 import dayjs from 'dayjs';
 import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import Button from 'react-bootstrap/Button';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Popover from 'react-bootstrap/Popover';
+import PopoverContent from 'react-bootstrap/PopoverContent';
 import Table from 'react-bootstrap/Table';
+import { useMutation } from 'react-query';
 
 import { DATE_FORMAT_ONLY_YEAR } from '../constants';
 import SimpleLayout from '../components/layouts/SimpleLayout';
@@ -16,6 +23,27 @@ interface Props {
 }
 
 const WorksLibraryPage: NextPage<Props> = ({ works }) => {
+  const router = useRouter();
+  const [execDeleteWork, { isSuccess: isDeleteWorkSucces }] = useMutation(async (work: Work) => {
+    const res = await fetch(`/api/work/${work.id}`, {
+      method: 'delete',
+    });
+    const data = await res.json();
+
+    return data;
+  });
+
+  const handleDeleteClick = (work: Work) => {
+    execDeleteWork(work);
+  };
+
+  useEffect(() => {
+    if (isDeleteWorkSucces === true) {
+      router.replace(router.asPath);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDeleteWorkSucces]);
+
   return (
     <SimpleLayout title="Works library">
       <h1 style={{ marginBottom: '2rem' }}>Works library</h1>
@@ -49,6 +77,25 @@ const WorksLibraryPage: NextPage<Props> = ({ works }) => {
                 <Link href={`/work/${work.id}`}>
                   <a>detail</a>
                 </Link>
+
+                <OverlayTrigger
+                  trigger="click"
+                  placement="bottom"
+                  transition={false}
+                  overlay={
+                    <Popover id="confirmDelete">
+                      <PopoverContent>
+                        <Button variant="danger" onClick={() => handleDeleteClick(work)}>
+                          confirm delete!!!
+                        </Button>
+                      </PopoverContent>
+                    </Popover>
+                  }
+                >
+                  <Button variant="link" className="ml-2">
+                    delete?
+                  </Button>
+                </OverlayTrigger>
               </td>
             </tr>
           ))}
