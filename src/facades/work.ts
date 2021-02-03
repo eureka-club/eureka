@@ -65,3 +65,9 @@ export const createWork = async (fields: CreateWorkServerFields, coverImageUploa
     },
   });
 };
+
+export const remove = async (id: number): Promise<Work> => {
+  return prisma.work.delete({
+    where: { id },
+  });
+};
