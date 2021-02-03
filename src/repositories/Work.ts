@@ -1,6 +1,5 @@
 import Knex from 'knex';
 import omit from 'lodash/omit';
-import { ParsedQs } from 'qs';
 
 import { getDbConnection } from '../lib/db';
 import { TABLE_NAME as POST_TABLE_NAME, schema as postSchema } from '../models/Post';
@@ -8,7 +7,11 @@ import { TABLE_NAME as LOCAL_IMAGE_TABLE_NAME, schema as localImageSchema } from
 import { TABLE_NAME as USER_TABLE_NAME, schema as userSchema } from '../models/User';
 import { TABLE_NAME as WORK_TABLE_NAME, schema as workSchema } from '../models/Work';
 
-export const findAll = async (criteria?: ParsedQs, returnAllPosts = false, limit = 25): Promise<Knex.QueryBuilder> => {
+export const findAll = async (
+  criteria?: Record<string, unknown>,
+  returnAllPosts = false,
+  limit = 25,
+): Promise<Knex.QueryBuilder> => {
   const connection = getDbConnection();
   const table = connection(WORK_TABLE_NAME);
 

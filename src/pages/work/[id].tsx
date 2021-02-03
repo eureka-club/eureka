@@ -2,8 +2,8 @@ import { GetServerSideProps, NextPage } from 'next';
 import { LocalImage, Work } from '@prisma/client';
 
 import DetailLayout from '../../components/layouts/DetailLayout';
-import WorkDetail from '../../components/WorkDetail';
-import { findOne } from '../../facades/work';
+import WorkDetail from '../../components/work/WorkDetail';
+import { find } from '../../facades/work';
 
 interface Props {
   work: Work & {
@@ -29,7 +29,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return { notFound: true };
   }
 
-  const work = await findOne(id);
+  const work = await find(id);
   if (work == null) {
     return { notFound: true };
   }

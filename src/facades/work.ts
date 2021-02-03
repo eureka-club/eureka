@@ -3,7 +3,7 @@ import { LocalImage, Work } from '@prisma/client';
 import { CreateWorkServerFields, CreateWorkServerPayload, StoredFileUpload } from '../types';
 import prisma from '../lib/prisma';
 
-export const findOne = async (
+export const find = async (
   id: number,
 ): Promise<
   | (Work & {
@@ -13,6 +13,22 @@ export const findOne = async (
 > => {
   return prisma.work.findUnique({
     where: { id },
+    include: { localImages: true },
+  });
+};
+
+export const search = async (
+  searchText: string,
+): Promise<
+  | (Work & {
+      localImages: LocalImage[];
+    })[]
+  | null
+> => {
+  return prisma.work.findMany({
+    where: {
+      OR: [{ title: { contains: searchText } }, { author: { contains: searchText } }],
+    },
     include: { localImages: true },
   });
 };

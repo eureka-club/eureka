@@ -1,3 +1,4 @@
+import { LocalImage, Work } from '@prisma/client';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
@@ -21,7 +22,8 @@ import { BiTrash } from 'react-icons/bi';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { DATE_FORMAT_DISPLAY, DATE_FORMAT_PROPS } from '../../constants';
-import LocalImage from '../LocalImage';
+import LocalImageComponent from '../LocalImage';
+import WorkSummary from '../work/WorkSummary';
 import { WorkDetail } from '../../types';
 import styles from './CreateCycleForm.module.css';
 import { CreatorDbObject } from '../../models/User';
@@ -65,6 +67,8 @@ interface PostSearchOptions {
   localImagePath: string;
 }
 
+type WorkSearchResult = (Work & { localImages: LocalImage[] })[];
+
 interface Props {
   className?: string;
 }
@@ -99,10 +103,10 @@ const createCycleApiHandler = async (payload: NewCyclePayload) => {
 const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
   const [addWorkModalOpened, setAddWorkModalOpened] = useState(false);
-  const [postSearchLoading, setPostSearchLoading] = useState(false);
-  const [postSearchOptions, setPostSearchOptions] = useState<PostSearchOptions[]>([]);
-  const [postSearchSelection, setPostSearchSelection] = useState<PostSearchOptions>();
-  const [selectedPostsForCycle, setSelectedPostsForCycle] = useState<PostSearchOptions[]>([]);
+  const [postSearchLoading, setWorkSearchLoading] = useState(false);
+  const [workSearchOptions, setWorkSearchResult] = useState<WorkSearchResult>([]);
+  const [workSearchSelection, setWorkSearchSelection] = useState<WorkSearchResult>();
+  const [selectedPostsForCycle, setSelectedPostsForCycle] = useState<WorkSearchResult>([]);
 
   const router = useRouter();
   const [
@@ -118,7 +122,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
   const handleAddWorkBegin = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    setPostSearchSelection(undefined);
+    setWorkSearchSelection(undefined);
     setAddWorkModalOpened(true);
   };
 
@@ -126,40 +130,29 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     setAddWorkModalOpened(false);
   };
 
-  const handlePostSearch = async (query: string) => {
-    setPostSearchLoading(true);
+  const handleWorkSearch = async (query: string) => {
+    setWorkSearchLoading(true);
 
-    const response = await fetch(`/api/work?q=title%3D${query}&all`);
-    const items: (WorkDetail & CreatorDbObject)[] = await response.json();
-    const options = items.map((work) => ({
-      workTitle: work['work.title'],
-      workAuthor: work['work.author'],
-      workType: work['work.type'],
-      postId: work['post.id'],
-      postLanguage: work['post.language'],
-      postContent: work['post.content_text'],
-      postCreatedAt: work['post.created_at'],
-      postCreator: work['creator.name'],
-      localImagePath: work['local_image.stored_file'],
-    }));
+    const response = await fetch(`/api/work?q=${query}`);
+    const items: (Work & { localImages: LocalImage[] })[] = await response.json();
 
-    setPostSearchOptions(options);
-    setPostSearchLoading(false);
+    setWorkSearchResult(items);
+    setWorkSearchLoading(false);
   };
 
-  const handlePostSearchSelect = (selected: Array<PostSearchOptions>): void => {
+  const handleWorkSearchSelect = (selected: WorkSearchResult): void => {
     if (selected[0] != null) {
-      setPostSearchSelection(selected[0]);
+      setWorkSearchSelection(selected[0]);
     } else {
-      setPostSearchSelection(undefined);
+      setWorkSearchSelection(undefined);
     }
   };
 
   const handleAddWork = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
 
-    if (postSearchSelection != null) {
-      setSelectedPostsForCycle([...selectedPostsForCycle, postSearchSelection]);
+    if (workSearchSelection != null) {
+      setSelectedPostsForCycle([...selectedPostsForCycle, workSearchSelection]);
       setAddWorkModalOpened(false);
     }
   };
@@ -227,12 +220,8 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
         <Row className="mb-5">
           <Col md={{ span: 8 }}>
             <button type="button" onClick={handleAddWorkBegin} className={styles.addWorkButton}>
-              <h4>Add work to a cycle</h4>
-              <p>
-                Choose an existing post or
-                <br />
-                create a new post
-              </p>
+              <h4>*Add work to a cycle</h4>
+              <p>Search for work in our library</p>
             </button>
 
             <div className={classNames(styles.chosenPosts, 'd-flex')}>
@@ -240,7 +229,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 <div key={boxId} className={styles.chosenPostsBox}>
                   {selectedPostsForCycle[boxId] && (
                     <>
-                      <LocalImage
+                      <LocalImageComponent
                         filePath={selectedPostsForCycle[boxId].localImagePath}
                         alt={selectedPostsForCycle[boxId].workTitle}
                       />
@@ -347,58 +336,63 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                   inputProps={{ id: 'workTitle', required: true }}
                   isLoading={postSearchLoading}
                   minLength={2}
-                  labelKey={(option) => `${option.workTitle}`}
-                  onSearch={handlePostSearch}
-                  onChange={handlePostSearchSelect}
-                  options={postSearchOptions}
+                  labelKey={(option) => `${option.title}`}
+                  onSearch={handleWorkSearch}
+                  onChange={handleWorkSearchSelect}
+                  options={workSearchOptions}
                   placeholder="Search for existing work..."
-                  renderMenuItemChildren={(option) => (
-                    <div className={styles.postSearchTypeaheadItem}>
-                      <LocalImage filePath={option.localImagePath} alt={option.workTitle} />
+                  renderMenuItemChildren={(work) => (
+                    <div className={styles.workSearchTypeaheadItem}>
+                      <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
                       <div>
-                        <h4>
-                          {option.workTitle} <small>by</small> {option.workAuthor} <small>({option.workType})</small>
-                        </h4>
+                        <h3>
+                          {work.title} <small>({work.type})</small>
+                        </h3>
+                        <h4>{work.author}</h4>
                         <hr />
-                        <p>
-                          Post by <strong>{option.postCreator}</strong> at{' '}
-                          {dayjs(option.postCreatedAt).format(DATE_FORMAT_DISPLAY)}{' '}
-                          <small>({option.postLanguage})</small>
-                        </p>
-                        <article>{option.postContent}</article>
+                        <WorkSummary work={work} />
                       </div>
                     </div>
                   )}
                 />
               </FormGroup>
             </Col>
+            <Col sm={{ span: 5 }}>
+              <Button
+                onClick={handleAddWork}
+                variant="primary"
+                block
+                type="button"
+                className={styles.addWorkModalButton}
+              >
+                Add work to cycle
+              </Button>
+            </Col>
           </Row>
 
           <Row>
             <Col>
-              {postSearchSelection && (
-                <div className={styles.postSearchTypeaheadItem}>
-                  <LocalImage filePath={postSearchSelection.localImagePath} alt={postSearchSelection.workTitle} />
+              {workSearchSelection && (
+                <div className={styles.workSearchTypeaheadItem}>
+                  <LocalImageComponent
+                    filePath={workSearchSelection.localImagePath}
+                    alt={workSearchSelection.workTitle}
+                  />
                   <div>
                     <h4>
-                      {postSearchSelection.workTitle} <small>by</small> {postSearchSelection.workAuthor}{' '}
-                      <small>({postSearchSelection.workType})</small>
+                      {workSearchSelection.workTitle} <small>by</small> {workSearchSelection.workAuthor}{' '}
+                      <small>({workSearchSelection.workType})</small>
                     </h4>
                     <hr />
                     <p>
-                      Post by <strong>{postSearchSelection.postCreator}</strong> at{' '}
-                      {dayjs(postSearchSelection.postCreatedAt).format(DATE_FORMAT_DISPLAY)}{' '}
-                      <small>({postSearchSelection.postLanguage})</small>
+                      Post by <strong>{workSearchSelection.postCreator}</strong> at{' '}
+                      {dayjs(workSearchSelection.postCreatedAt).format(DATE_FORMAT_DISPLAY)}{' '}
+                      <small>({workSearchSelection.postLanguage})</small>
                     </p>
-                    <article>{postSearchSelection.postContent}</article>
+                    <article>{workSearchSelection.postContent}</article>
                   </div>
                 </div>
               )}
-            </Col>
-            <Col md={{ span: 3 }}>
-              <Button onClick={handleAddWork} variant="primary" type="button" className="float-right px-3">
-                Add to cycle
-              </Button>
             </Col>
           </Row>
         </ModalBody>
