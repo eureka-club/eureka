@@ -23,6 +23,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { DATE_FORMAT_PROPS } from '../../constants';
 import LocalImageComponent from '../LocalImage';
+import ImageSelectInput from './ImageSelectInput';
 import WorkSummary from '../work/WorkSummary';
 import styles from './CreateCycleForm.module.css';
 
@@ -91,6 +92,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const [postSearchLoading, setWorkSearchLoading] = useState(false);
   const [workSearchOptions, setWorkSearchResult] = useState<WorkSearchResult>([]);
   const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkSearchResult>([]);
+  const [cycleCoverFile, setCycleCoverFile] = useState<File | null>(null);
 
   const router = useRouter();
   const [
@@ -154,6 +156,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     form.cycleEndDate.value = '';
     form.cycleDescription.value = '';
     setSelectedWorksForCycle([]);
+    setCycleCoverFile(null);
   };
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
@@ -194,32 +197,76 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
         <Row className="mb-5">
           <Col md={{ span: 8 }}>
-            <button type="button" onClick={handleAddWorkBegin} className={styles.addWorkButton}>
-              <h4>*Add work to a cycle</h4>
-              <p>Search for work in our library</p>
-            </button>
-
-            <div className={classNames(styles.chosenWorks, 'd-flex')}>
+            <Row className="mb-4">
+              <Col>
+                <button
+                  className={classNames(styles.outlinedBlock, styles.addWorkButton)}
+                  type="button"
+                  onClick={handleAddWorkBegin}
+                >
+                  <h4>*Add work to a cycle</h4>
+                  <p>Search for work in our library</p>
+                </button>
+              </Col>
+            </Row>
+            <Row className="mb-4">
               {chosenWorksBoxes.map((boxId) => (
-                <div key={boxId} className={styles.chosenWorksBox}>
-                  {selectedWorksForCycle[boxId] && (
-                    <>
-                      <LocalImageComponent
-                        filePath={selectedWorksForCycle[boxId].localImages[0].storedFile}
-                        alt={selectedWorksForCycle[boxId].title}
-                      />
-                      <button
-                        onClick={() => handleRemoveSelectedPost(boxId)}
-                        type="button"
-                        className={styles.chosenWorksBoxRemove}
-                      >
-                        <BiTrash />
-                      </button>
-                    </>
-                  )}
-                </div>
+                <Col key={boxId}>
+                  <div className={classNames(styles.outlinedBlock, styles.chosenWorksBox)}>
+                    {selectedWorksForCycle[boxId] && (
+                      <>
+                        <LocalImageComponent
+                          filePath={selectedWorksForCycle[boxId].localImages[0].storedFile}
+                          alt={selectedWorksForCycle[boxId].title}
+                        />
+                        <button
+                          onClick={() => handleRemoveSelectedPost(boxId)}
+                          type="button"
+                          className={styles.chosenWorksBoxRemove}
+                        >
+                          <BiTrash />
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </Col>
               ))}
-            </div>
+            </Row>
+            <Row>
+              <Col>
+                <ImageSelectInput
+                  acceptedFileTypes="image/*"
+                  file={cycleCoverFile}
+                  setFile={setCycleCoverFile}
+                  required
+                >
+                  {(imagePreview) => (
+                    <div className={classNames(styles.outlinedBlock)}>
+                      {imagePreview == null ? (
+                        <div className={styles.cycleCoverPrompt}>
+                          <h4>*Add cover image to cycle</h4>
+                          <p>Tips on choose a good image:</p>
+                          <ul>
+                            <li>Look for an image that illustrates the main topic of the cycle</li>
+                            <li>
+                              Please choose images under Creative Commons licenses. We recommend searching on Unsplash,
+                              Flickr, etc.
+                            </li>
+                            <li>Ideal size: 250 x 250px</li>
+                          </ul>
+                        </div>
+                      ) : (
+                        <div
+                          className={styles.cycleCoverPreview}
+                          style={{ backgroundImage: `url('${imagePreview}')` }}
+                        />
+                      )}
+                    </div>
+                  )}
+                </ImageSelectInput>
+              </Col>
+              <Col />
+            </Row>
           </Col>
           <Col md={{ span: 4 }}>
             <FormGroup controlId="cycleTitle">
@@ -269,7 +316,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
           </Col>
           <Col>
             <Button
-              disabled={!selectedWorksForCycle.length}
+              disabled={!selectedWorksForCycle.length || !cycleCoverFile}
               variant="primary"
               type="submit"
               className="float-right pl-5 pr-4"
@@ -292,7 +339,6 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
             </Button>
           </Col>
         </Row>
-        <pre>{JSON.stringify(selectedWorksForCycle, null, 2)}</pre>
       </Form>
 
       <Modal show={addWorkModalOpened} onHide={handleAddWorkModalClose} animation={false}>
