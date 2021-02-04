@@ -14,6 +14,12 @@ export interface FileUpload {
   size: number;
 }
 
+export interface Session {
+  accessToken?: string;
+  expires: string;
+  user: PrismaUser;
+}
+
 export interface StoredFileUpload {
   contentHash: string;
   originalFilename: string;
@@ -61,17 +67,43 @@ export interface CreateWorkServerPayload {
   length?: string;
 }
 
+export interface CreateCycleClientPayload {
+  includedWorksIds: number[];
+  coverImage: File;
+  isPublic: boolean;
+  title: string;
+  languages: string;
+  startDate: string;
+  endDate: string;
+  contentText: string;
+}
+
+export interface CreateCycleServerFields {
+  includedWorksIds: string[];
+  isPublic: boolean[];
+  title: string[];
+  languages: string[];
+  startDate: string[];
+  endDate: string[];
+  contentText: string[];
+}
+
+export interface CreateCycleServerPayload {
+  isPublic: boolean;
+  title: string;
+  languages: string;
+  contentText: string;
+  startDate: Date;
+  endDate: Date;
+}
+
+// old Knex.js types below
+
 export interface User {
   id: number;
   name: string;
   email: string;
   image: string;
-}
-
-export interface Session {
-  accessToken?: string;
-  expires: string;
-  user: PrismaUser;
 }
 
 export interface CycleDetail extends CycleDbObject, CreatorDbObject {}

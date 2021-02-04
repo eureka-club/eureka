@@ -22,69 +22,17 @@ import { BiTrash } from 'react-icons/bi';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { DATE_FORMAT_PROPS } from '../../constants';
+import { CreateCycleClientPayload } from '../../types';
 import LocalImageComponent from '../LocalImage';
 import ImageSelectInput from './ImageSelectInput';
 import WorkSummary from '../work/WorkSummary';
 import styles from './CreateCycleForm.module.css';
 
+type WorkSearchResult = (Work & { localImages: LocalImage[] })[];
+
 interface Props {
   className?: string;
 }
-
-interface ExistingPostPayload {
-  postId: string;
-}
-
-interface NewPostPayload {
-  image: File;
-  workLink?: string;
-  workTitle: string;
-  workAuthor: string;
-  hashtags: string;
-  language: string;
-  workType: string;
-  description?: string;
-  isPublic: string;
-}
-
-interface NewCyclePayload {
-  cycleTitle: string;
-  cycleLanguage: string;
-  cycleHashtags: string;
-  cycleDescription?: string;
-  cycleStartDate: string;
-  cycleEndDate: string;
-  isCyclePublic: boolean;
-}
-
-type WorkSearchResult = (Work & { localImages: LocalImage[] })[];
-
-const createCycleApiHandler = async (payload: NewCyclePayload) => {
-  const formData = new FormData();
-
-  Object.entries(payload).forEach(([key, value]) => {
-    if (value != null) {
-      if (Array.isArray(value)) {
-        value.forEach((valueEntry: NewPostPayload | ExistingPostPayload) => {
-          Object.entries(valueEntry).forEach(([subKey, subValue]) => {
-            if (subValue != null) {
-              formData.append(subKey, subValue);
-            }
-          });
-        });
-      } else {
-        formData.append(key, value);
-      }
-    }
-  });
-
-  const res = await fetch('/api/cycle', {
-    method: 'POST',
-    body: formData,
-  });
-
-  return res.json();
-};
 
 const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
@@ -92,19 +40,40 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const [postSearchLoading, setWorkSearchLoading] = useState(false);
   const [workSearchOptions, setWorkSearchResult] = useState<WorkSearchResult>([]);
   const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkSearchResult>([]);
-  const [cycleCoverFile, setCycleCoverFile] = useState<File | null>(null);
+  const [cycleCoverImageFile, setCycleCoverImageFile] = useState<File | null>(null);
 
   const router = useRouter();
   const [
-    execCreateNewCycle,
+    execCreateCycle,
     {
-      data: createCycleReqResponse,
       error: createCycleReqError,
-      isError: isCreateCycleReqError,
       isLoading: isCreateCycleReqLoading,
+      isError: isCreateCycleReqError,
       isSuccess: isCreateCycleReqSuccess,
     },
-  ] = useMutation(createCycleApiHandler);
+  ] = useMutation(async (payload: CreateCycleClientPayload) => {
+    const formData = new FormData();
+
+    Object.entries(payload).forEach(([key, value]) => {
+      if (value != null) {
+        switch (key) {
+          case 'includedWorksIds':
+            value.forEach((val: number) => formData.append(key, String(val)));
+            break;
+          default:
+            formData.append(key, value);
+            break;
+        }
+      }
+    });
+
+    const res = await fetch('/api/cycle', {
+      method: 'POST',
+      body: formData,
+    });
+
+    return res.json();
+  });
 
   const handleAddWorkBegin = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
@@ -143,52 +112,51 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const handleFormClear = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
 
-    if (formRef.current == null) {
-      return;
-    }
-
-    const form = formRef.current;
-
-    form.cycleTitle.value = '';
-    form.cycleLanguage.value = '';
-    form.cycleHashtags.value = '';
-    form.cycleStartDate.value = '';
-    form.cycleEndDate.value = '';
-    form.cycleDescription.value = '';
     setSelectedWorksForCycle([]);
-    setCycleCoverFile(null);
+    setCycleCoverImageFile(null);
+
+    if (formRef.current != null) {
+      const form = formRef.current;
+
+      form.cycleTitle.value = '';
+      form.cycleLanguage.value = '';
+      form.cycleHashtags.value = '';
+      form.cycleStartDate.value = '';
+      form.cycleEndDate.value = '';
+      form.cycleDescription.value = '';
+    }
   };
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
-    if (!selectedWorksForCycle.length) {
+    if (!selectedWorksForCycle.length || !cycleCoverImageFile) {
       return;
     }
 
     const form = ev.currentTarget;
-    const payload: NewCyclePayload = {
-      cycleTitle: form.cycleTitle.value,
-      cycleLanguage: form.cycleLanguage.value,
-      cycleHashtags: form.cycleHashtags.value,
-      cycleStartDate: form.cycleStartDate.value,
-      cycleEndDate: form.cycleEndDate.value,
-      cycleDescription: form.cycleDescription.value.length ? form.cycleDescription.value : null,
-      isCyclePublic: form.isCyclePublic.checked,
+    const payload: CreateCycleClientPayload = {
+      includedWorksIds: selectedWorksForCycle.map((work) => work.id),
+      coverImage: cycleCoverImageFile,
+      isPublic: form.isPublic.checked,
+      title: form.cycleTitle.value,
+      languages: form.languages.value,
+      startDate: form.startDate.value,
+      endDate: form.endDate.value,
+      contentText: form.description.value,
     };
 
-    await execCreateNewCycle(payload);
+    await execCreateCycle(payload);
   };
 
   const chosenWorksBoxes = [0, 1, 2, 3, 4];
 
   useEffect(() => {
-    if (router != null && isCreateCycleReqSuccess && typeof createCycleReqResponse?.newCycleUuid === 'string') {
-      (async () => {
-        await router.push(`/cycle/${createCycleReqResponse.newCycleUuid}`);
-      })();
+    if (isCreateCycleReqSuccess) {
+      router.push('/');
     }
-  }, [router, isCreateCycleReqSuccess, createCycleReqResponse]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isCreateCycleReqSuccess]);
 
   return (
     <>
@@ -236,8 +204,8 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
               <Col>
                 <ImageSelectInput
                   acceptedFileTypes="image/*"
-                  file={cycleCoverFile}
-                  setFile={setCycleCoverFile}
+                  file={cycleCoverImageFile}
+                  setFile={setCycleCoverImageFile}
                   required
                 >
                   {(imagePreview) => (
@@ -273,7 +241,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
               <FormLabel>*Title of your cycle (80 characters max)</FormLabel>
               <FormControl type="text" maxLength={80} required />
             </FormGroup>
-            <FormGroup controlId="cycleLanguage">
+            <FormGroup controlId="languages">
               <FormLabel>*Main language of the cycle</FormLabel>
               <FormControl type="text" as="select" required>
                 <option value="">select...</option>
@@ -288,19 +256,19 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 <option value="french">French</option>
               </FormControl>
             </FormGroup>
-            <FormGroup controlId="cycleHashtags">
+            <FormGroup controlId="topics">
               <FormLabel>Main topics of the cycle</FormLabel>
               <FormControl type="text" disabled />
             </FormGroup>
-            <FormGroup controlId="cycleStartDate">
+            <FormGroup controlId="startDate">
               <FormLabel>*Start date of the cycle</FormLabel>
               <FormControl type="date" required defaultValue={dayjs(new Date()).format(DATE_FORMAT_PROPS)} />
             </FormGroup>
-            <FormGroup controlId="cycleEndDate">
+            <FormGroup controlId="endDate">
               <FormLabel>*End date of the cycle</FormLabel>
               <FormControl type="date" required min={dayjs(new Date()).format(DATE_FORMAT_PROPS)} />
             </FormGroup>
-            <FormGroup controlId="cycleDescription">
+            <FormGroup controlId="description">
               <FormLabel>
                 *Cycle pitch: what is this cycle about and why is it a relevant topic. Why should people join this
                 cycle?
@@ -312,11 +280,11 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
         <Row>
           <Col>
-            <FormCheck type="checkbox" defaultChecked inline id="isCyclePublic" label="This cycle is public" />
+            <FormCheck type="checkbox" defaultChecked inline id="isPublic" label="This cycle is public" />
           </Col>
           <Col>
             <Button
-              disabled={!selectedWorksForCycle.length || !cycleCoverFile}
+              disabled={!selectedWorksForCycle.length || !cycleCoverImageFile}
               variant="primary"
               type="submit"
               className="float-right pl-5 pr-4"
