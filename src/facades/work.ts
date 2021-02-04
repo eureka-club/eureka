@@ -3,7 +3,7 @@ import { LocalImage, Work } from '@prisma/client';
 import { CreateWorkServerFields, CreateWorkServerPayload, StoredFileUpload } from '../types';
 import prisma from '../lib/prisma';
 
-export const findOne = async (
+export const find = async (
   id: number,
 ): Promise<
   | (Work & {
@@ -17,7 +17,23 @@ export const findOne = async (
   });
 };
 
-export const fetchWorks = async (): Promise<
+export const search = async (
+  searchText: string,
+): Promise<
+  | (Work & {
+      localImages: LocalImage[];
+    })[]
+  | null
+> => {
+  return prisma.work.findMany({
+    where: {
+      OR: [{ title: { contains: searchText } }, { author: { contains: searchText } }],
+    },
+    include: { localImages: true },
+  });
+};
+
+export const findAll = async (): Promise<
   (Work & {
     localImages: LocalImage[];
   })[]
@@ -28,7 +44,10 @@ export const fetchWorks = async (): Promise<
   });
 };
 
-export const createWork = async (fields: CreateWorkServerFields, coverImageUpload: StoredFileUpload): Promise<Work> => {
+export const createFromServerFields = async (
+  fields: CreateWorkServerFields,
+  coverImageUpload: StoredFileUpload,
+): Promise<Work> => {
   const payload = Object.entries(fields).reduce((memo, field) => {
     const [fieldName, fieldValues] = field;
 

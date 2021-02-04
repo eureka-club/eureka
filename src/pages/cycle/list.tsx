@@ -1,7 +1,6 @@
-import { LocalImage, Work } from '@prisma/client';
+import { Cycle, LocalImage } from '@prisma/client';
 import dayjs from 'dayjs';
 import { GetServerSideProps, NextPage } from 'next';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
@@ -11,21 +10,21 @@ import PopoverContent from 'react-bootstrap/PopoverContent';
 import Table from 'react-bootstrap/Table';
 import { useMutation } from 'react-query';
 
-import { DATE_FORMAT_ONLY_YEAR } from '../constants';
-import SimpleLayout from '../components/layouts/SimpleLayout';
-import LocalImageComponent from '../components/LocalImage';
-import { findAll } from '../facades/work';
+import { DATE_FORMAT_DISPLAY } from '../../constants';
+import SimpleLayout from '../../components/layouts/SimpleLayout';
+import LocalImageComponent from '../../components/LocalImage';
+import { findAll } from '../../facades/cycle';
 
 interface Props {
-  works: (Work & {
+  cycles: (Cycle & {
     localImages: LocalImage[];
   })[];
 }
 
-const WorksLibraryPage: NextPage<Props> = ({ works }) => {
+const CyclesListPage: NextPage<Props> = ({ cycles }) => {
   const router = useRouter();
-  const [execDeleteWork, { isSuccess: isDeleteWorkSucces }] = useMutation(async (work: Work) => {
-    const res = await fetch(`/api/work/${work.id}`, {
+  const [execDeleteWork, { isSuccess: isDeleteCycleSucces }] = useMutation(async (cycle: Cycle) => {
+    const res = await fetch(`/api/cycle/${cycle.id}`, {
       method: 'delete',
     });
     const data = await res.json();
@@ -33,51 +32,49 @@ const WorksLibraryPage: NextPage<Props> = ({ works }) => {
     return data;
   });
 
-  const handleDeleteClick = (work: Work) => {
-    execDeleteWork(work);
+  const handleDeleteClick = (cycle: Cycle) => {
+    execDeleteWork(cycle);
   };
 
   useEffect(() => {
-    if (isDeleteWorkSucces === true) {
+    if (isDeleteCycleSucces === true) {
       router.replace(router.asPath);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDeleteWorkSucces]);
+  }, [isDeleteCycleSucces]);
 
   return (
     <SimpleLayout title="Works library">
-      <h1 style={{ marginBottom: '2rem' }}>Works library</h1>
+      <h1 style={{ marginBottom: '2rem' }}>Cycles list</h1>
 
       <Table>
         <thead>
           <tr>
             <th>&nbsp;</th>
-            <th>type</th>
+            <th>is public?</th>
             <th>title</th>
-            <th>author</th>
-            <th>publication year</th>
+            <th>languages</th>
+            <th>start date</th>
+            <th>end date</th>
             <th>[actions]</th>
           </tr>
         </thead>
         <tbody>
-          {works.map((work) => (
-            <tr key={work.id}>
+          {cycles.map((cycle) => (
+            <tr key={cycle.id}>
               <td>
                 <LocalImageComponent
                   alt="work cover"
-                  filePath={work.localImages[0].storedFile}
+                  filePath={cycle.localImages[0].storedFile}
                   style={{ height: '96px', marginRight: '1rem' }}
                 />
               </td>
-              <td>{work.type}</td>
-              <td>{work.title}</td>
-              <td>{work.author}</td>
-              <td>{work.publicationYear && dayjs(work.publicationYear).format(DATE_FORMAT_ONLY_YEAR)}</td>
+              <td>{JSON.stringify(cycle.isPublic)}</td>
+              <td>{cycle.title}</td>
+              <td>{cycle.languages}</td>
+              <td>{dayjs(cycle.startDate).format(DATE_FORMAT_DISPLAY)}</td>
+              <td>{dayjs(cycle.endDate).format(DATE_FORMAT_DISPLAY)}</td>
               <td>
-                <Link href={`/work/${work.id}`}>
-                  <a>detail</a>
-                </Link>
-
                 <OverlayTrigger
                   trigger="click"
                   placement="bottom"
@@ -85,7 +82,7 @@ const WorksLibraryPage: NextPage<Props> = ({ works }) => {
                   overlay={
                     <Popover id="confirmDelete">
                       <PopoverContent>
-                        <Button variant="danger" onClick={() => handleDeleteClick(work)}>
+                        <Button variant="danger" onClick={() => handleDeleteClick(cycle)}>
                           confirm delete!!!
                         </Button>
                       </PopoverContent>
@@ -106,13 +103,13 @@ const WorksLibraryPage: NextPage<Props> = ({ works }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const works = await findAll();
+  const cycles = await findAll();
 
   return {
     props: {
-      works,
+      cycles,
     },
   };
 };
 
-export default WorksLibraryPage;
+export default CyclesListPage;

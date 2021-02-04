@@ -1,12 +1,11 @@
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
-import { ChangeEvent, FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, FunctionComponent, RefObject, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
-import FormFile from 'react-bootstrap/FormFile';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
 import ModalBody from 'react-bootstrap/ModalBody';
@@ -19,36 +18,35 @@ import { useMutation } from 'react-query';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { CreateWorkClientPayload } from '../../types';
+import ImageSelectInput from './ImageSelectInput';
 import homepageAtom from '../../atoms/homepage';
 import styles from './CreatePostForm.module.css';
 
 const CreateWorkForm: FunctionComponent = () => {
-  const coverInputRef = useRef<HTMLInputElement>() as RefObject<HTMLInputElement>;
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
   const router = useRouter();
   const [homepageState, setHomepageState] = useAtom(homepageAtom);
   const [publicatonYearLabel, setPublicationYearLabel] = useState('Publication year');
-  const [coverFile, setCoverFile] = useState<File>();
-  const [imagePreview, setImagePreview] = useState<string>();
-  const [
-    execCreateWork,
-    { data: createWorkReqResponse, error: createWorkError, isError, isLoading, isSuccess },
-  ] = useMutation(async (payload: CreateWorkClientPayload) => {
-    const formData = new FormData();
+  const [coverFile, setCoverFile] = useState<File | null>(null);
 
-    Object.entries(payload).forEach(([key, value]) => {
-      if (value != null) {
-        formData.append(key, value);
-      }
-    });
+  const [execCreateWork, { error: createWorkError, isError, isLoading, isSuccess }] = useMutation(
+    async (payload: CreateWorkClientPayload) => {
+      const formData = new FormData();
 
-    const res = await fetch('/api/work', {
-      method: 'POST',
-      body: formData,
-    });
+      Object.entries(payload).forEach(([key, value]) => {
+        if (value != null) {
+          formData.append(key, value);
+        }
+      });
 
-    return res.json();
-  });
+      const res = await fetch('/api/work', {
+        method: 'POST',
+        body: formData,
+      });
+
+      return res.json();
+    },
+  );
 
   const handleWorkTypeChange = (ev: ChangeEvent<HTMLSelectElement>) => {
     switch (ev.currentTarget.value) {
@@ -59,27 +57,6 @@ const CreateWorkForm: FunctionComponent = () => {
 
       default:
         setPublicationYearLabel('Publication year');
-    }
-  };
-
-  const handleImageControlClick = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-    coverInputRef.current?.click();
-  };
-
-  const handleCoverChange = (ev: ChangeEvent<HTMLInputElement>) => {
-    const fileList = ev.target.files;
-
-    if (fileList != null && fileList[0] != null) {
-      const file = fileList[0];
-
-      if (file.type.substr(0, 5) === 'image') {
-        setCoverFile(fileList[0]);
-      } else {
-        alert('You must select image file!'); // eslint-disable-line no-alert
-      }
-    } else {
-      setCoverFile(undefined);
     }
   };
 
@@ -107,19 +84,6 @@ const CreateWorkForm: FunctionComponent = () => {
 
     await execCreateWork(payload);
   };
-
-  useEffect(() => {
-    if (coverFile != null) {
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(coverFile);
-    } else {
-      setImagePreview(undefined);
-    }
-  }, [coverFile]);
 
   useEffect(() => {
     if (isSuccess === true) {
@@ -181,20 +145,23 @@ const CreateWorkForm: FunctionComponent = () => {
                 <FormControl type="text" disabled />
               </FormGroup>
             </Col>
-            <FormGroup controlId="cover" as={Col}>
-              <FormLabel>*Cover of work</FormLabel>
-              <FormFile
-                accept="image/*"
-                className={styles.imageFormControl}
-                onChange={handleCoverChange}
-                ref={coverInputRef}
-                required
-              />
-              <button onClick={handleImageControlClick} className={styles.imageControl} type="button">
-                {coverFile != null ? <span className={styles.imageName}>{coverFile.name}</span> : 'select file...'}
-                {imagePreview && <img src={imagePreview} className="float-right" alt="Work cover" />}
-              </button>
-            </FormGroup>
+            <Col>
+              <ImageSelectInput acceptedFileTypes="image/*" file={coverFile} setFile={setCoverFile} required>
+                {(imagePreview) => (
+                  <FormGroup>
+                    <FormLabel>*Cover of work</FormLabel>
+                    <div className={styles.imageControl}>
+                      {(coverFile != null && imagePreview) != null ? (
+                        <span className={styles.imageName}>{coverFile?.name}</span>
+                      ) : (
+                        'select file...'
+                      )}
+                      {imagePreview && <img src={imagePreview} className="float-right" alt="Work cover" />}
+                    </div>
+                  </FormGroup>
+                )}
+              </ImageSelectInput>
+            </Col>
           </Row>
           <Row>
             <Col>

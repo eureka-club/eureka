@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import dayjs from 'dayjs';
 import { LocalImage, Work } from '@prisma/client';
 import { FunctionComponent, MouseEvent, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
@@ -11,8 +10,8 @@ import { BsBookmarkFill, BsBoxArrowUpRight, BsChevronDown } from 'react-icons/bs
 import { AiFillHeart } from 'react-icons/ai';
 import { FiShare2 } from 'react-icons/fi';
 
-import { DATE_FORMAT_ONLY_YEAR } from '../constants';
-import LocalImageComponent from './LocalImage';
+import LocalImageComponent from '../LocalImage';
+import WorkSummary from './WorkSummary';
 import styles from './WorkDetail.module.css';
 
 interface Props {
@@ -69,18 +68,8 @@ const WorkDetail: FunctionComponent<Props> = ({ work }) => {
           <section className="mb-4">
             <h1>{work.title}</h1>
             <h2 className={styles.author}>{work.author}</h2>
-            <section className={styles.workSummary}>
-              {[
-                work.publicationYear &&
-                  `${work.type === 'book' ? 'Publication year' : 'Release year'}:  ${dayjs(work.publicationYear).format(
-                    DATE_FORMAT_ONLY_YEAR,
-                  )}`,
-                work.countryOfOrigin && `Country of origin: ${work.countryOfOrigin}`,
-                work.length && `Length: ${work.length} ${work.type === 'book' ? 'pages' : 'minutes'}`,
-              ]
-                .filter((val) => val != null)
-                .join(', ')}
-            </section>
+            <WorkSummary work={work} />
+
             {work.link != null && (
               <a href={work.link} className={styles.workLink} target="_blank" rel="noreferrer">
                 Link to work <BsBoxArrowUpRight />

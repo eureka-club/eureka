@@ -3,9 +3,7 @@ import { NextPage } from 'next';
 import SimpleLayout from '../../components/layouts/SimpleLayout';
 import CreateCycleForm from '../../components/forms/CreateCycleForm';
 
-interface Props {}
-
-const IndexPage: NextPage<Props> = () => {
+const IndexPage: NextPage = () => {
   return (
     <SimpleLayout title="Create cycle">
       <CreateCycleForm className="mb-5" />

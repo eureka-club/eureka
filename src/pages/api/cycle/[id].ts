@@ -3,7 +3,7 @@ import { getSession } from 'next-auth/client';
 
 import { Session } from '../../../types';
 import getApiHandler from '../../../lib/getApiHandler';
-import { find, remove } from '../../../facades/work';
+import { find, remove } from '../../../facades/cycle';
 import prisma from '../../../lib/prisma';
 
 export default getApiHandler().delete<NextApiRequest, NextApiResponse>(
@@ -27,8 +27,8 @@ export default getApiHandler().delete<NextApiRequest, NextApiResponse>(
     }
 
     try {
-      const work = await find(idNum);
-      if (work == null) {
+      const cycle = await find(idNum);
+      if (cycle == null) {
         res.status(404).end();
         return;
       }

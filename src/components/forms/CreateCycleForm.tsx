@@ -1,3 +1,4 @@
+import { LocalImage, Work } from '@prisma/client';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
@@ -20,105 +21,62 @@ import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BiTrash } from 'react-icons/bi';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
-import { DATE_FORMAT_DISPLAY, DATE_FORMAT_PROPS } from '../../constants';
-import LocalImage from '../LocalImage';
-import { WorkDetail } from '../../types';
+import { DATE_FORMAT_PROPS } from '../../constants';
+import { CreateCycleClientPayload } from '../../types';
+import LocalImageComponent from '../LocalImage';
+import ImageSelectInput from './ImageSelectInput';
+import WorkSummary from '../work/WorkSummary';
 import styles from './CreateCycleForm.module.css';
-import { CreatorDbObject } from '../../models/User';
 
-interface ExistingPostPayload {
-  postId: string;
-}
-
-interface NewPostPayload {
-  image: File;
-  workLink?: string;
-  workTitle: string;
-  workAuthor: string;
-  hashtags: string;
-  language: string;
-  workType: string;
-  description?: string;
-  isPublic: string;
-}
-
-interface NewCyclePayload {
-  cycleTitle: string;
-  cycleLanguage: string;
-  cycleHashtags: string;
-  cycleDescription?: string;
-  cycleStartDate: string;
-  cycleEndDate: string;
-  isCyclePublic: boolean;
-  cycleContent: [NewPostPayload] | ExistingPostPayload[];
-}
-
-interface PostSearchOptions {
-  workTitle: string;
-  workAuthor: string;
-  workType: string;
-  postId: string;
-  postLanguage: string;
-  postContent: string;
-  postCreatedAt: string;
-  postCreator: string;
-  localImagePath: string;
-}
+type WorkSearchResult = (Work & { localImages: LocalImage[] })[];
 
 interface Props {
   className?: string;
 }
 
-const createCycleApiHandler = async (payload: NewCyclePayload) => {
-  const formData = new FormData();
-
-  Object.entries(payload).forEach(([key, value]) => {
-    if (value != null) {
-      if (Array.isArray(value)) {
-        value.forEach((valueEntry: NewPostPayload | ExistingPostPayload) => {
-          Object.entries(valueEntry).forEach(([subKey, subValue]) => {
-            if (subValue != null) {
-              formData.append(subKey, subValue);
-            }
-          });
-        });
-      } else {
-        formData.append(key, value);
-      }
-    }
-  });
-
-  const res = await fetch('/api/cycle', {
-    method: 'POST',
-    body: formData,
-  });
-
-  return res.json();
-};
-
 const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
   const [addWorkModalOpened, setAddWorkModalOpened] = useState(false);
-  const [postSearchLoading, setPostSearchLoading] = useState(false);
-  const [postSearchOptions, setPostSearchOptions] = useState<PostSearchOptions[]>([]);
-  const [postSearchSelection, setPostSearchSelection] = useState<PostSearchOptions>();
-  const [selectedPostsForCycle, setSelectedPostsForCycle] = useState<PostSearchOptions[]>([]);
+  const [postSearchLoading, setWorkSearchLoading] = useState(false);
+  const [workSearchOptions, setWorkSearchResult] = useState<WorkSearchResult>([]);
+  const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkSearchResult>([]);
+  const [cycleCoverImageFile, setCycleCoverImageFile] = useState<File | null>(null);
 
   const router = useRouter();
   const [
-    execCreateNewCycle,
+    execCreateCycle,
     {
-      data: createCycleReqResponse,
       error: createCycleReqError,
-      isError: isCreateCycleReqError,
       isLoading: isCreateCycleReqLoading,
+      isError: isCreateCycleReqError,
       isSuccess: isCreateCycleReqSuccess,
     },
-  ] = useMutation(createCycleApiHandler);
+  ] = useMutation(async (payload: CreateCycleClientPayload) => {
+    const formData = new FormData();
+
+    Object.entries(payload).forEach(([key, value]) => {
+      if (value != null) {
+        switch (key) {
+          case 'includedWorksIds':
+            value.forEach((val: number) => formData.append(key, String(val)));
+            break;
+          default:
+            formData.append(key, value);
+            break;
+        }
+      }
+    });
+
+    const res = await fetch('/api/cycle', {
+      method: 'POST',
+      body: formData,
+    });
+
+    return res.json();
+  });
 
   const handleAddWorkBegin = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    setPostSearchSelection(undefined);
     setAddWorkModalOpened(true);
   };
 
@@ -126,47 +84,26 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     setAddWorkModalOpened(false);
   };
 
-  const handlePostSearch = async (query: string) => {
-    setPostSearchLoading(true);
+  const handleWorkSearch = async (query: string) => {
+    setWorkSearchLoading(true);
 
-    const response = await fetch(`/api/work?q=title%3D${query}&all`);
-    const items: (WorkDetail & CreatorDbObject)[] = await response.json();
-    const options = items.map((work) => ({
-      workTitle: work['work.title'],
-      workAuthor: work['work.author'],
-      workType: work['work.type'],
-      postId: work['post.id'],
-      postLanguage: work['post.language'],
-      postContent: work['post.content_text'],
-      postCreatedAt: work['post.created_at'],
-      postCreator: work['creator.name'],
-      localImagePath: work['local_image.stored_file'],
-    }));
+    const response = await fetch(`/api/work?q=${query}`);
+    const items: (Work & { localImages: LocalImage[] })[] = await response.json();
 
-    setPostSearchOptions(options);
-    setPostSearchLoading(false);
+    setWorkSearchResult(items);
+    setWorkSearchLoading(false);
   };
 
-  const handlePostSearchSelect = (selected: Array<PostSearchOptions>): void => {
+  const handleWorkSearchSelect = (selected: WorkSearchResult): void => {
     if (selected[0] != null) {
-      setPostSearchSelection(selected[0]);
-    } else {
-      setPostSearchSelection(undefined);
-    }
-  };
-
-  const handleAddWork = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-
-    if (postSearchSelection != null) {
-      setSelectedPostsForCycle([...selectedPostsForCycle, postSearchSelection]);
+      setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
       setAddWorkModalOpened(false);
     }
   };
 
   const handleRemoveSelectedPost = (boxId: number) => {
-    setSelectedPostsForCycle(
-      selectedPostsForCycle.filter((post, idx) => {
+    setSelectedWorksForCycle(
+      selectedWorksForCycle.filter((post, idx) => {
         return idx !== boxId;
       }),
     );
@@ -174,6 +111,9 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
   const handleFormClear = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
+
+    setSelectedWorksForCycle([]);
+    setCycleCoverImageFile(null);
 
     if (formRef.current != null) {
       const form = formRef.current;
@@ -190,34 +130,33 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
-    if (!selectedPostsForCycle.length) {
+    if (!selectedWorksForCycle.length || !cycleCoverImageFile) {
       return;
     }
 
     const form = ev.currentTarget;
-    const payload: NewCyclePayload = {
-      cycleTitle: form.cycleTitle.value,
-      cycleLanguage: form.cycleLanguage.value,
-      cycleHashtags: form.cycleHashtags.value,
-      cycleStartDate: form.cycleStartDate.value,
-      cycleEndDate: form.cycleEndDate.value,
-      cycleDescription: form.cycleDescription.value.length ? form.cycleDescription.value : null,
-      isCyclePublic: form.isCyclePublic.checked,
-      cycleContent: selectedPostsForCycle.map((post) => ({ postId: post.postId })),
+    const payload: CreateCycleClientPayload = {
+      includedWorksIds: selectedWorksForCycle.map((work) => work.id),
+      coverImage: cycleCoverImageFile,
+      isPublic: form.isPublic.checked,
+      title: form.cycleTitle.value,
+      languages: form.languages.value,
+      startDate: form.startDate.value,
+      endDate: form.endDate.value,
+      contentText: form.description.value,
     };
 
-    await execCreateNewCycle(payload);
+    await execCreateCycle(payload);
   };
 
-  const chosenPostsBoxes = [0, 1, 2, 3, 4];
+  const chosenWorksBoxes = [0, 1, 2, 3, 4];
 
   useEffect(() => {
-    if (router != null && isCreateCycleReqSuccess && typeof createCycleReqResponse?.newCycleUuid === 'string') {
-      (async () => {
-        await router.push(`/cycle/${createCycleReqResponse.newCycleUuid}`);
-      })();
+    if (isCreateCycleReqSuccess) {
+      router.push('/cycle/list');
     }
-  }, [router, isCreateCycleReqSuccess, createCycleReqResponse]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isCreateCycleReqSuccess]);
 
   return (
     <>
@@ -226,46 +165,84 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
         <Row className="mb-5">
           <Col md={{ span: 8 }}>
-            <button type="button" onClick={handleAddWorkBegin} className={styles.addWorkButton}>
-              <h4>Add work to a cycle</h4>
-              <p>
-                Choose an existing post or
-                <br />
-                create a new post
-              </p>
-            </button>
-
-            <div className={classNames(styles.chosenPosts, 'd-flex')}>
-              {chosenPostsBoxes.map((boxId) => (
-                <div key={boxId} className={styles.chosenPostsBox}>
-                  {selectedPostsForCycle[boxId] && (
-                    <>
-                      <LocalImage
-                        filePath={selectedPostsForCycle[boxId].localImagePath}
-                        alt={selectedPostsForCycle[boxId].workTitle}
-                      />
-                      <button
-                        onClick={() => handleRemoveSelectedPost(boxId)}
-                        type="button"
-                        className={styles.chosenPostsBoxRemove}
-                      >
-                        <BiTrash />
-                      </button>
-                    </>
-                  )}
-                </div>
+            <Row className="mb-4">
+              <Col>
+                <button
+                  className={classNames(styles.outlinedBlock, styles.addWorkButton)}
+                  type="button"
+                  onClick={handleAddWorkBegin}
+                >
+                  <h4>*Add work to a cycle</h4>
+                  <p>Search for work in our library</p>
+                </button>
+              </Col>
+            </Row>
+            <Row className="mb-4">
+              {chosenWorksBoxes.map((boxId) => (
+                <Col key={boxId}>
+                  <div className={classNames(styles.outlinedBlock, styles.chosenWorksBox)}>
+                    {selectedWorksForCycle[boxId] && (
+                      <>
+                        <LocalImageComponent
+                          filePath={selectedWorksForCycle[boxId].localImages[0].storedFile}
+                          alt={selectedWorksForCycle[boxId].title}
+                        />
+                        <button
+                          onClick={() => handleRemoveSelectedPost(boxId)}
+                          type="button"
+                          className={styles.chosenWorksBoxRemove}
+                        >
+                          <BiTrash />
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </Col>
               ))}
-            </div>
-
-            <FormCheck type="checkbox" defaultChecked inline id="isCyclePublic" label="Public?" />
+            </Row>
+            <Row>
+              <Col>
+                <ImageSelectInput
+                  acceptedFileTypes="image/*"
+                  file={cycleCoverImageFile}
+                  setFile={setCycleCoverImageFile}
+                  required
+                >
+                  {(imagePreview) => (
+                    <div className={classNames(styles.outlinedBlock)}>
+                      {imagePreview == null ? (
+                        <div className={styles.cycleCoverPrompt}>
+                          <h4>*Add cover image to cycle</h4>
+                          <p>Tips on choose a good image:</p>
+                          <ul>
+                            <li>Look for an image that illustrates the main topic of the cycle</li>
+                            <li>
+                              Please choose images under Creative Commons licenses. We recommend searching on Unsplash,
+                              Flickr, etc.
+                            </li>
+                            <li>Ideal size: 250 x 250px</li>
+                          </ul>
+                        </div>
+                      ) : (
+                        <div
+                          className={styles.cycleCoverPreview}
+                          style={{ backgroundImage: `url('${imagePreview}')` }}
+                        />
+                      )}
+                    </div>
+                  )}
+                </ImageSelectInput>
+              </Col>
+              <Col />
+            </Row>
           </Col>
           <Col md={{ span: 4 }}>
             <FormGroup controlId="cycleTitle">
-              <FormLabel>Title of the Cycle</FormLabel>
-              <FormControl type="text" required />
+              <FormLabel>*Title of your cycle (80 characters max)</FormLabel>
+              <FormControl type="text" maxLength={80} required />
             </FormGroup>
-            <FormGroup controlId="cycleLanguage">
-              <FormLabel>Main language of the cycle</FormLabel>
+            <FormGroup controlId="languages">
+              <FormLabel>*Main language of the cycle</FormLabel>
               <FormControl type="text" as="select" required>
                 <option value="">select...</option>
                 <option value="spanish">Spanish</option>
@@ -279,28 +256,39 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 <option value="french">French</option>
               </FormControl>
             </FormGroup>
-            <FormGroup controlId="cycleHashtags">
+            <FormGroup controlId="topics">
               <FormLabel>Main topics of the cycle</FormLabel>
-              <FormControl type="text" required />
+              <FormControl type="text" disabled />
             </FormGroup>
-            <FormGroup controlId="cycleStartDate">
-              <FormLabel>Start date of the cycle</FormLabel>
+            <FormGroup controlId="startDate">
+              <FormLabel>*Start date of the cycle</FormLabel>
               <FormControl type="date" required defaultValue={dayjs(new Date()).format(DATE_FORMAT_PROPS)} />
             </FormGroup>
-            <FormGroup controlId="cycleEndDate">
-              <FormLabel>End date of the cycle</FormLabel>
+            <FormGroup controlId="endDate">
+              <FormLabel>*End date of the cycle</FormLabel>
               <FormControl type="date" required min={dayjs(new Date()).format(DATE_FORMAT_PROPS)} />
             </FormGroup>
-            <FormGroup controlId="cycleDescription">
-              <FormLabel>Explain in a few words what cycle is about</FormLabel>
-              <FormControl as="textarea" rows={5} />
+            <FormGroup controlId="description">
+              <FormLabel>
+                *Cycle pitch: what is this cycle about and why is it a relevant topic. Why should people join this
+                cycle?
+              </FormLabel>
+              <FormControl as="textarea" rows={5} required />
             </FormGroup>
           </Col>
         </Row>
 
         <Row>
           <Col>
-            <Button variant="primary" type="submit" className="float-right pl-5 pr-4">
+            <FormCheck type="checkbox" defaultChecked inline id="isPublic" label="This cycle is public" />
+          </Col>
+          <Col>
+            <Button
+              disabled={!selectedWorksForCycle.length || !cycleCoverImageFile}
+              variant="primary"
+              type="submit"
+              className="float-right pl-5 pr-4"
+            >
               Create cycle
               {isCreateCycleReqLoading ? (
                 <Spinner animation="grow" variant="secondary" className={styles.loadIndicator} />
@@ -321,15 +309,15 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
         </Row>
       </Form>
 
-      <Modal show={addWorkModalOpened} onHide={handleAddWorkModalClose} animation={false} size="lg">
+      <Modal show={addWorkModalOpened} onHide={handleAddWorkModalClose} animation={false}>
         <ModalHeader closeButton>
-          <ModalTitle>Add Work</ModalTitle>
+          <ModalTitle>Add work to cycle</ModalTitle>
         </ModalHeader>
         <ModalBody>
           <Row className="mb-5">
             <Col>
               <FormGroup controlId="cycle">
-                <FormLabel>Choose existing post</FormLabel>
+                <FormLabel>Select work:</FormLabel>
 
                 {/* language=CSS */}
                 <style jsx global>{`
@@ -347,58 +335,26 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                   inputProps={{ id: 'workTitle', required: true }}
                   isLoading={postSearchLoading}
                   minLength={2}
-                  labelKey={(option) => `${option.workTitle}`}
-                  onSearch={handlePostSearch}
-                  onChange={handlePostSearchSelect}
-                  options={postSearchOptions}
-                  placeholder="Search for existing work..."
-                  renderMenuItemChildren={(option) => (
-                    <div className={styles.postSearchTypeaheadItem}>
-                      <LocalImage filePath={option.localImagePath} alt={option.workTitle} />
+                  labelKey={(option) => `${option.title}`}
+                  onSearch={handleWorkSearch}
+                  onChange={handleWorkSearchSelect}
+                  options={workSearchOptions}
+                  placeholder="Search for existing work... (press ENTER to add to cycle)"
+                  renderMenuItemChildren={(work) => (
+                    <div className={styles.workSearchTypeaheadItem}>
+                      <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
                       <div>
-                        <h4>
-                          {option.workTitle} <small>by</small> {option.workAuthor} <small>({option.workType})</small>
-                        </h4>
+                        <h3>
+                          {work.title} <small>({work.type})</small>
+                        </h3>
+                        <h4>{work.author}</h4>
                         <hr />
-                        <p>
-                          Post by <strong>{option.postCreator}</strong> at{' '}
-                          {dayjs(option.postCreatedAt).format(DATE_FORMAT_DISPLAY)}{' '}
-                          <small>({option.postLanguage})</small>
-                        </p>
-                        <article>{option.postContent}</article>
+                        <WorkSummary work={work} />
                       </div>
                     </div>
                   )}
                 />
               </FormGroup>
-            </Col>
-          </Row>
-
-          <Row>
-            <Col>
-              {postSearchSelection && (
-                <div className={styles.postSearchTypeaheadItem}>
-                  <LocalImage filePath={postSearchSelection.localImagePath} alt={postSearchSelection.workTitle} />
-                  <div>
-                    <h4>
-                      {postSearchSelection.workTitle} <small>by</small> {postSearchSelection.workAuthor}{' '}
-                      <small>({postSearchSelection.workType})</small>
-                    </h4>
-                    <hr />
-                    <p>
-                      Post by <strong>{postSearchSelection.postCreator}</strong> at{' '}
-                      {dayjs(postSearchSelection.postCreatedAt).format(DATE_FORMAT_DISPLAY)}{' '}
-                      <small>({postSearchSelection.postLanguage})</small>
-                    </p>
-                    <article>{postSearchSelection.postContent}</article>
-                  </div>
-                </div>
-              )}
-            </Col>
-            <Col md={{ span: 3 }}>
-              <Button onClick={handleAddWork} variant="primary" type="button" className="float-right px-3">
-                Add to cycle
-              </Button>
             </Col>
           </Row>
         </ModalBody>

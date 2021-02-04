@@ -118,6 +118,7 @@ model Work {
   posts        Post[]
 
   @@index([title], name: "works_title_index")
+  @@index([author], name: "works_author_index")
 
   @@map(name: "works")
 }
@@ -126,6 +127,7 @@ model Cycle {
   id           Int       @default(autoincrement()) @id
   creator      User      @relation(fields: [creatorId], references: [id])
   creatorId    Int       @map(name: "creator_id")
+  isPublic     Boolean   @map(name: "is_public")
   title        String
   languages    String
   contentText  String?   @map(name: "content_text")

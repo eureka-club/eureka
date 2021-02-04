@@ -1,13 +1,11 @@
 import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
-import qs from 'qs';
 
 import { FileUpload, Session } from '../../../types';
 import getApiHandler from '../../../lib/getApiHandler';
 import { storeUpload } from '../../../facades/fileUpload';
-import { createWork } from '../../../facades/work';
-import { findAll } from '../../../repositories/Work';
+import { createFromServerFields, search } from '../../../facades/work';
 import prisma from '../../../lib/prisma';
 
 export const config = {
@@ -19,15 +17,14 @@ export const config = {
 export default getApiHandler()
   .get<NextApiRequest, NextApiResponse>(
     async (req, res): Promise<void> => {
-      const { all, q } = req.query;
-      let criteria;
-
-      if (typeof q === 'string') {
-        criteria = qs.parse(q);
+      const { q } = req.query;
+      if (typeof q !== 'string') {
+        res.status(412).json({ error: 'Required parameter "q" is invalid/missing' });
+        return;
       }
 
       try {
-        const results = await findAll(criteria, all != null);
+        const results = await search(q);
         res.json(results);
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
@@ -57,7 +54,7 @@ export default getApiHandler()
         const coverImage: FileUpload = files.cover[0];
         try {
           const uploadData = await storeUpload(coverImage);
-          const work = await createWork(fields, uploadData);
+          const work = await createFromServerFields(fields, uploadData);
 
           res.status(201).json(work);
         } catch (exc) {

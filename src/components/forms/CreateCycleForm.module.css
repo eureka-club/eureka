@@ -1,53 +1,39 @@
-.addWorkButton {
-  background: url(/img/ico-painting.png) 50% 4rem no-repeat;
-  background-size: 3rem;
-  border: 2px dashed var(--color-primary);
+.outlinedBlock {
+  border: 2px dotted var(--color-primary);
   border-radius: 0.5rem;
-  color: var(--text-color-secondary);
+}
+
+.addWorkButton {
+  background: url(/img/ico-work.png) 50% 4rem no-repeat;
+  background-size: 5rem;
   width: 100%;
   height: 15rem;
-  margin-bottom: 2rem;
-  padding-top: 6rem;
+  padding-top: 8rem;
 }
 .addWorkButton h4 {
   font-size: 1.1rem;
-  font-weight: 600;
+  font-weight: 200;
 }
 .addWorkButton p {
   font-size: 0.85rem;
 }
 
-.chosenPosts {
-  justify-content: space-between;
-  margin-bottom: 2rem;
+.addWorkModalButton {
+  border-radius: 2rem;
+  font-size: 0.85rem;
+  margin-top: 2.1rem;
 }
-.chosenPostsBox {
-  width: 19%;
-  height: 6rem;
-  border: 2px dotted var(--color-primary);
-  border-radius: 0.5rem;
+
+.chosenWorksBox {
+  height: 7rem;
   position: relative;
 }
-.chosenPostsBox:nth-child(1):before {
-  background-color: var(--color-primary);
-  border-radius: 0.4rem;
-  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.5);
-  color: #f1f1f1;
-  content: 'cover';
-  font-size: 0.8rem;
-  left: 0.5rem;
-  line-height: 1;
-  overflow: hidden;
-  padding: 0 0.5rem 0.1rem;
-  position: absolute;
-  top: 0.5rem;
-}
-.chosenPostsBox img {
+.chosenWorksBox img {
   object-fit: contain;
   width: 100%;
   height: 100%;
 }
-.chosenPostsBoxRemove {
+.chosenWorksBoxRemove {
   background-color: transparent;
   border: none;
   color: #adadad;
@@ -60,27 +46,63 @@
   top: 0.35rem;
 }
 
-.postSearchTypeaheadItem {
+.cycleCoverPrompt {
+  background: url(/img/ico-painting.png) 50% 2rem no-repeat;
+  background-size: 52px;
+  color: var(--color-primary);
+  font-size: 0.75rem;
+  padding: 5.5rem 1rem 0;
+}
+.cycleCoverPrompt h4 {
+  color: var(--color-secondary-raised);
+  font-size: 1.15rem;
+  text-align: center;
+}
+.cycleCoverPrompt p {
+  margin-bottom: 0;
+}
+.cycleCoverPrompt ul {
+  list-style-type: none;
+  padding: 0;
+}
+.cycleCoverPrompt ul li {
+  text-indent: 0.25rem;
+}
+.cycleCoverPrompt ul li::before {
+  content: '- ';
+}
+
+.cycleCoverPreview {
+  background-size: contain;
+  background-position: top center;
+  background-repeat: no-repeat;
+  height: 244px;
+}
+
+.workSearchTypeaheadItem {
   display: flex;
   margin-bottom: 1rem;
 }
-.postSearchTypeaheadItem img {
+.workSearchTypeaheadItem img {
   margin-right: 0.5rem;
   width: 76px;
   height: 76px;
   object-fit: contain;
 }
-.postSearchTypeaheadItem h4 {
+.workSearchTypeaheadItem h3 {
+  font-size: 1.15rem;
+}
+.workSearchTypeaheadItem h4 {
   font-size: 1rem;
 }
-.postSearchTypeaheadItem hr {
+.workSearchTypeaheadItem hr {
   margin: 0 0 0.2rem;
 }
-.postSearchTypeaheadItem p {
+.workSearchTypeaheadItem p {
   font-size: 0.85rem;
   margin-bottom: 0.25rem;
 }
-.postSearchTypeaheadItem article {
+.workSearchTypeaheadItem article {
   max-width: 420px;
   max-height: 10rem;
   overflow: hidden;
