@@ -44,7 +44,10 @@ export const fetchWorks = async (): Promise<
   });
 };
 
-export const createWork = async (fields: CreateWorkServerFields, coverImageUpload: StoredFileUpload): Promise<Work> => {
+export const createFromServerFields = async (
+  fields: CreateWorkServerFields,
+  coverImageUpload: StoredFileUpload,
+): Promise<Work> => {
   const payload = Object.entries(fields).reduce((memo, field) => {
     const [fieldName, fieldValues] = field;
 

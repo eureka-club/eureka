@@ -5,7 +5,7 @@ import { getSession } from 'next-auth/client';
 import { FileUpload, Session } from '../../../types';
 import getApiHandler from '../../../lib/getApiHandler';
 import { storeUpload } from '../../../facades/fileUpload';
-import { createWork, search } from '../../../facades/work';
+import { createFromServerFields, search } from '../../../facades/work';
 import prisma from '../../../lib/prisma';
 
 export const config = {
@@ -54,7 +54,7 @@ export default getApiHandler()
         const coverImage: FileUpload = files.cover[0];
         try {
           const uploadData = await storeUpload(coverImage);
-          const work = await createWork(fields, uploadData);
+          const work = await createFromServerFields(fields, uploadData);
 
           res.status(201).json(work);
         } catch (exc) {
