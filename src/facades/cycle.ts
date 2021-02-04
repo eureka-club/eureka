@@ -1,7 +1,32 @@
-import { Cycle, User } from '@prisma/client';
+import { Cycle, LocalImage, User } from '@prisma/client';
 
 import { CreateCycleServerFields, CreateCycleServerPayload, StoredFileUpload } from '../types';
 import prisma from '../lib/prisma';
+
+export const find = async (
+  id: number,
+): Promise<
+  | (Cycle & {
+      localImages: LocalImage[];
+    })
+  | null
+> => {
+  return prisma.cycle.findUnique({
+    where: { id },
+    include: { localImages: true },
+  });
+};
+
+export const findAll = async (): Promise<
+  (Cycle & {
+    localImages: LocalImage[];
+  })[]
+> => {
+  return prisma.cycle.findMany({
+    orderBy: { createdAt: 'desc' },
+    include: { localImages: true },
+  });
+};
 
 export const createFromServerFields = async (
   fields: CreateCycleServerFields,
@@ -51,5 +76,11 @@ export const createFromServerFields = async (
         create: { ...coverImageUpload },
       },
     },
+  });
+};
+
+export const remove = async (id: number): Promise<Cycle> => {
+  return prisma.cycle.delete({
+    where: { id },
   });
 };

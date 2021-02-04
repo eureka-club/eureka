@@ -33,7 +33,7 @@ export const search = async (
   });
 };
 
-export const fetchWorks = async (): Promise<
+export const findAll = async (): Promise<
   (Work & {
     localImages: LocalImage[];
   })[]
