@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 import Row from 'react-bootstrap/Row';
 import Tab from 'react-bootstrap/Tab';
-import { BsBookmarkFill, BsBoxArrowUpRight, BsChevronDown } from 'react-icons/bs';
+import { BsBookmarkFill, BsBoxArrowUpRight, BsChevronDown, BsChevronUp } from 'react-icons/bs';
 import { AiFillHeart } from 'react-icons/ai';
 import { FiShare2 } from 'react-icons/fi';
 
@@ -26,14 +26,13 @@ const WorkDetail: FunctionComponent<Props> = ({ work }) => {
   const contentTextClampRef = useRef<HTMLElement>(null);
   const contentTextRef = useRef<HTMLDivElement>(null);
   const [unclampButtonVisible, setUnclampButtonVisible] = useState(false);
-  const [unclampStylesApplied, setUnclampStylesApplied] = useState(false);
+  const [descriptionUnclamped, setDescriptionUnclamped] = useState(false);
 
   const handleExpandContentTextClick = (ev: MouseEvent) => {
     ev.preventDefault();
 
     if (contentTextClampRef?.current != null) {
-      setUnclampStylesApplied(true);
-      setUnclampButtonVisible(false);
+      setDescriptionUnclamped(!descriptionUnclamped);
     }
   };
 
@@ -77,7 +76,7 @@ const WorkDetail: FunctionComponent<Props> = ({ work }) => {
             )}
           </section>
           <section
-            className={classNames(styles.contentText, { [styles.contentTextUnclamped]: unclampStylesApplied })}
+            className={classNames(styles.contentText, { [styles.contentTextUnclamped]: descriptionUnclamped })}
             ref={contentTextClampRef}
           >
             <div ref={contentTextRef}>
@@ -88,7 +87,15 @@ const WorkDetail: FunctionComponent<Props> = ({ work }) => {
           </section>
           {unclampButtonVisible && (
             <Button variant="link" onClick={handleExpandContentTextClick} className={styles.unclampButton}>
-              view more <BsChevronDown />
+              {descriptionUnclamped === true ? (
+                <>
+                  view less <BsChevronUp />
+                </>
+              ) : (
+                <>
+                  view more <BsChevronDown />
+                </>
+              )}
             </Button>
           )}
         </Col>

@@ -17,7 +17,7 @@ const WorkSummary: FunctionComponent<Props> = ({ work }) => {
           `${work.type === 'book' ? 'Publication year' : 'Release year'}:  ${dayjs(work.publicationYear).format(
             DATE_FORMAT_ONLY_YEAR,
           )}`,
-        work.countryOfOrigin && `Country of origin: ${work.countryOfOrigin}`,
+        work.countryOfOrigin && `Country: ${work.countryOfOrigin}`,
         work.length && `Length: ${work.length} ${work.type === 'book' ? 'pages' : 'minutes'}`,
       ]
         .filter((val) => val != null)
