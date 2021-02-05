@@ -1,6 +1,7 @@
 import { Cycle, LocalImage } from '@prisma/client';
 import dayjs from 'dayjs';
 import { GetServerSideProps, NextPage } from 'next';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
@@ -75,6 +76,10 @@ const CyclesListPage: NextPage<Props> = ({ cycles }) => {
               <td>{dayjs(cycle.startDate).format(DATE_FORMAT_DISPLAY)}</td>
               <td>{dayjs(cycle.endDate).format(DATE_FORMAT_DISPLAY)}</td>
               <td>
+                <Link href={`/cycle/${cycle.id}`}>
+                  <a>detail</a>
+                </Link>
+
                 <OverlayTrigger
                   trigger="click"
                   placement="bottom"

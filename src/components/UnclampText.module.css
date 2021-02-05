@@ -1,0 +1,25 @@
+.outer {
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+  position: relative;
+}
+.outer::after {
+  content: '';
+  position: absolute;
+  bottom: 0rem;
+  right: 0;
+  width: 100%;
+  height: 3.5em;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9) 50%);
+}
+.contentTextUnclamped {
+  height: auto;
+}
+.contentTextUnclamped::after {
+  background: none;
+}
+
+.unclampButton {
+  color: var(--color-primary-raised);
+  padding: 0;
+}

@@ -1,0 +1,24 @@
+.imgWrapper img {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  width: 100%;
+}
+
+.cycleCreator {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+.cycleCreatorAvatar {
+  border-radius: 50%;
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+}
+
+.socialInfo {
+  color: var(--color-primary-raised);
+  font-size: 1.15rem;
+}
+.socialInfo span {
+  margin-right: 1rem;
+}

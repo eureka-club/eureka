@@ -1,0 +1,68 @@
+import classNames from 'classnames';
+import { FunctionComponent, MouseEvent, useEffect, useRef, useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
+
+import styles from './UnclampText.module.css';
+
+interface Props {
+  clampHeight: string;
+  text: string;
+}
+
+const UnclampText: FunctionComponent<Props> = ({ clampHeight, text }) => {
+  const textRows = text.split('\n').filter((row) => row.length);
+
+  const outerRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
+  const [textIsUnclamped, setTextIsUnclamped] = useState(false);
+  const [unclampButtonVisible, setUnclampButtonVisible] = useState(false);
+
+  const handleExpandContentTextClick = (ev: MouseEvent) => {
+    ev.preventDefault();
+
+    if (outerRef?.current != null) {
+      setTextIsUnclamped(!textIsUnclamped);
+    }
+  };
+
+  useEffect(() => {
+    if (innerRef?.current?.offsetHeight != null && outerRef?.current?.offsetHeight != null) {
+      if (innerRef.current.offsetHeight > outerRef.current.offsetHeight) {
+        setUnclampButtonVisible(true);
+      }
+    }
+  }, [outerRef, innerRef]);
+
+  return (
+    <>
+      <div
+        ref={outerRef}
+        className={classNames(styles.outer, { [styles.contentTextUnclamped]: textIsUnclamped })}
+        style={{ height: textIsUnclamped ? 'auto' : clampHeight }}
+      >
+        <div ref={innerRef}>
+          {textRows.map((row) => (
+            <p key={`${row[0]}${row[1]}-${row.length}`}>{row}</p>
+          ))}
+        </div>
+      </div>
+
+      {unclampButtonVisible && (
+        <Button variant="link" onClick={handleExpandContentTextClick} className={styles.unclampButton}>
+          {textIsUnclamped === true ? (
+            <>
+              view less <BsChevronUp />
+            </>
+          ) : (
+            <>
+              view more <BsChevronDown />
+            </>
+          )}
+        </Button>
+      )}
+    </>
+  );
+};
+
+export default UnclampText;
