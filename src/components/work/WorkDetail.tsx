@@ -1,7 +1,6 @@
 import classNames from 'classnames';
 import { LocalImage, Work } from '@prisma/client';
-import { FunctionComponent, MouseEvent, useEffect, useRef, useState } from 'react';
-import Button from 'react-bootstrap/Button';
+import { FunctionComponent } from 'react';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 import NavItem from 'react-bootstrap/NavItem';
@@ -11,10 +10,11 @@ import TabContainer from 'react-bootstrap/TabContainer';
 import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
 import { AiFillHeart } from 'react-icons/ai';
-import { BsBookmarkFill, BsBoxArrowUpRight, BsChevronDown, BsChevronUp } from 'react-icons/bs';
+import { BsBookmarkFill, BsBoxArrowUpRight } from 'react-icons/bs';
 import { FiShare2 } from 'react-icons/fi';
 
 import LocalImageComponent from '../LocalImage';
+import UnclampText from '../UnclampText';
 import WorkSummary from './WorkSummary';
 import styles from './WorkDetail.module.css';
 
@@ -25,29 +25,6 @@ interface Props {
 }
 
 const WorkDetail: FunctionComponent<Props> = ({ work }) => {
-  const contentTextTokens =
-    work.contentText != null ? work.contentText.split('\n').filter((token: string) => token !== '') : [];
-  const contentTextClampRef = useRef<HTMLElement>(null);
-  const contentTextRef = useRef<HTMLDivElement>(null);
-  const [unclampButtonVisible, setUnclampButtonVisible] = useState(false);
-  const [descriptionUnclamped, setDescriptionUnclamped] = useState(false);
-
-  const handleExpandContentTextClick = (ev: MouseEvent) => {
-    ev.preventDefault();
-
-    if (contentTextClampRef?.current != null) {
-      setDescriptionUnclamped(!descriptionUnclamped);
-    }
-  };
-
-  useEffect(() => {
-    if (contentTextRef?.current?.offsetHeight != null && contentTextClampRef?.current?.offsetHeight != null) {
-      if (contentTextRef.current.offsetHeight > contentTextClampRef.current.offsetHeight) {
-        setUnclampButtonVisible(true);
-      }
-    }
-  }, [contentTextClampRef, contentTextRef]);
-
   return (
     <>
       <Row className="mb-5">
@@ -72,36 +49,14 @@ const WorkDetail: FunctionComponent<Props> = ({ work }) => {
             <h1>{work.title}</h1>
             <h2 className={styles.author}>{work.author}</h2>
             <WorkSummary work={work} />
-
             {work.link != null && (
               <a href={work.link} className={styles.workLink} target="_blank" rel="noreferrer">
                 Link to work <BsBoxArrowUpRight />
               </a>
             )}
           </section>
-          <section
-            className={classNames(styles.contentText, { [styles.contentTextUnclamped]: descriptionUnclamped })}
-            ref={contentTextClampRef}
-          >
-            <div ref={contentTextRef}>
-              {contentTextTokens.map((token) => (
-                <p key={`${token[0]}${token[1]}-${token.length}`}>{token}</p>
-              ))}
-            </div>
-          </section>
-          {unclampButtonVisible && (
-            <Button variant="link" onClick={handleExpandContentTextClick} className={styles.unclampButton}>
-              {descriptionUnclamped === true ? (
-                <>
-                  view less <BsChevronUp />
-                </>
-              ) : (
-                <>
-                  view more <BsChevronDown />
-                </>
-              )}
-            </Button>
-          )}
+
+          {work.contentText != null && <UnclampText text={work.contentText} clampHeight="20rem" />}
         </Col>
       </Row>
 

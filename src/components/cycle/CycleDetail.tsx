@@ -1,7 +1,6 @@
 import { Cycle, LocalImage, User } from '@prisma/client';
 import classNames from 'classnames';
-import dayjs from 'dayjs';
-import { FunctionComponent, MouseEvent, useState } from 'react';
+import { FunctionComponent } from 'react';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 import NavItem from 'react-bootstrap/NavItem';
@@ -11,10 +10,11 @@ import TabContainer from 'react-bootstrap/TabContainer';
 import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
 import { AiFillHeart } from 'react-icons/ai';
-import { BsBookmarkFill, BsBoxArrowUpRight, BsChevronDown, BsChevronUp } from 'react-icons/bs';
+import { BsBookmarkFill } from 'react-icons/bs';
 import { FiShare2 } from 'react-icons/fi';
 
 import LocalImageComponent from '../LocalImage';
+import UnclampText from '../UnclampText';
 import CycleSummary from './CycleSummary';
 import styles from './CycleDetail.module.css';
 
@@ -83,7 +83,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle }) => {
               <Col>
                 <TabContent>
                   <TabPane eventKey="cycle-content">
-                    <h4>Cycle content</h4>
+                    {cycle.contentText != null && <UnclampText text={cycle.contentText} clampHeight="7rem" />}
                   </TabPane>
                   <TabPane eventKey="posts">
                     <h4>Posts</h4>
