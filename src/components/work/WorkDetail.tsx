@@ -4,8 +4,12 @@ import { FunctionComponent, MouseEvent, useEffect, useRef, useState } from 'reac
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
+import NavItem from 'react-bootstrap/NavItem';
+import NavLink from 'react-bootstrap/NavLink';
 import Row from 'react-bootstrap/Row';
-import Tab from 'react-bootstrap/Tab';
+import TabContainer from 'react-bootstrap/TabContainer';
+import TabContent from 'react-bootstrap/TabContent';
+import TabPane from 'react-bootstrap/TabPane';
 import { BsBookmarkFill, BsBoxArrowUpRight, BsChevronDown, BsChevronUp } from 'react-icons/bs';
 import { AiFillHeart } from 'react-icons/ai';
 import { FiShare2 } from 'react-icons/fi';
@@ -103,38 +107,38 @@ const WorkDetail: FunctionComponent<Props> = ({ work }) => {
 
       <Row className="mb-5">
         <Col>
-          <Tab.Container defaultActiveKey="all" transition={false}>
+          <TabContainer defaultActiveKey="all" transition={false}>
             <Row className="mb-4">
               <Col>
                 <Nav variant="tabs" fill>
-                  <Nav.Item>
-                    <Nav.Link eventKey="all">All related</Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link eventKey="posts">Posts about this work</Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link eventKey="cycles">Cycles including this work</Nav.Link>
-                  </Nav.Item>
+                  <NavItem>
+                    <NavLink eventKey="all">All related</NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink eventKey="posts">Posts about this work</NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink eventKey="cycles">Cycles including this work</NavLink>
+                  </NavItem>
                 </Nav>
               </Col>
             </Row>
             <Row>
               <Col>
-                <Tab.Content>
-                  <Tab.Pane eventKey="all">
+                <TabContent>
+                  <TabPane eventKey="all">
                     <h4>All related</h4>
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="posts">
+                  </TabPane>
+                  <TabPane eventKey="posts">
                     <h4>Posts about this work</h4>
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="cycles">
+                  </TabPane>
+                  <TabPane eventKey="cycles">
                     <h4>Cycles including this work</h4>
-                  </Tab.Pane>
-                </Tab.Content>
+                  </TabPane>
+                </TabContent>
               </Col>
             </Row>
-          </Tab.Container>
+          </TabContainer>
         </Col>
       </Row>
     </>
