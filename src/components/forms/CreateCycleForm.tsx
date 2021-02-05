@@ -119,11 +119,11 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
       const form = formRef.current;
 
       form.cycleTitle.value = '';
-      form.cycleLanguage.value = '';
-      form.cycleHashtags.value = '';
-      form.cycleStartDate.value = '';
-      form.cycleEndDate.value = '';
-      form.cycleDescription.value = '';
+      form.languages.value = '';
+      form.topics.value = '';
+      form.startDate.value = '';
+      form.endDate.value = '';
+      form.description.value = '';
     }
   };
 
