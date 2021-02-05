@@ -10,10 +10,10 @@ import PopoverContent from 'react-bootstrap/PopoverContent';
 import Table from 'react-bootstrap/Table';
 import { useMutation } from 'react-query';
 
-import { DATE_FORMAT_DISPLAY } from '../../constants';
-import SimpleLayout from '../../components/layouts/SimpleLayout';
-import LocalImageComponent from '../../components/LocalImage';
-import { findAll } from '../../facades/cycle';
+import { DATE_FORMAT_DISPLAY } from '../../src/constants';
+import SimpleLayout from '../../src/components/layouts/SimpleLayout';
+import LocalImageComponent from '../../src/components/LocalImage';
+import { findAll } from '../../src/facades/cycle';
 
 interface Props {
   cycles: (Cycle & {

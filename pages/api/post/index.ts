@@ -7,9 +7,9 @@ import { getSession } from 'next-auth/client';
 import path from 'path';
 import * as uuid from 'uuid';
 
-import { Session } from '../../../types';
-import getApiHandler from '../../../lib/getApiHandler';
-import { getDbConnection } from '../../../lib/db';
+import { Session } from '../../../src/types';
+import getApiHandler from '../../../src/lib/getApiHandler';
+import { getDbConnection } from '../../../src/lib/db';
 
 type FileUpload = {
   fieldName: string;

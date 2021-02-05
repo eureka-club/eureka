@@ -2,16 +2,16 @@ import dayjs from 'dayjs';
 import { GetServerSideProps } from 'next';
 import { FunctionComponent } from 'react';
 
-import { DATE_FORMAT_PROPS } from '../../constants';
-import { LocalImageDbObject } from '../../models/LocalImage';
-import { CreatorDbObject } from '../../models/User';
-import { WorkDbObject } from '../../models/Work';
-import { CycleDetail, CyclePoster, MosaicItem } from '../../types';
-import DetailLayout from '../../components/layouts/DetailLayout';
-import CycleDetailComponent from '../../components/CycleDetail';
-import Mosaic from '../../components/Mosaic';
-import { fetchCycleDetail, fetchCycleWorks } from '../../repositories/Cycle';
-import { fetchCyclePosts } from '../../repositories/Post';
+import { DATE_FORMAT_PROPS } from '../../src/constants';
+import { LocalImageDbObject } from '../../src/models/LocalImage';
+import { CreatorDbObject } from '../../src/models/User';
+import { WorkDbObject } from '../../src/models/Work';
+import { CycleDetail, CyclePoster, MosaicItem } from '../../src/types';
+import DetailLayout from '../../src/components/layouts/DetailLayout';
+import CycleDetailComponent from '../../src/components/CycleDetail';
+import Mosaic from '../../src/components/Mosaic';
+import { fetchCycleDetail, fetchCycleWorks } from '../../src/repositories/Cycle';
+import { fetchCyclePosts } from '../../src/repositories/Post';
 
 interface Props {
   cycle: CycleDetail;

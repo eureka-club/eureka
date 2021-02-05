@@ -2,11 +2,11 @@ import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
 
-import { FileUpload, Session } from '../../../types';
-import getApiHandler from '../../../lib/getApiHandler';
-import { storeUpload } from '../../../facades/fileUpload';
-import { createFromServerFields } from '../../../facades/cycle';
-import prisma from '../../../lib/prisma';
+import { FileUpload, Session } from '../../../src/types';
+import getApiHandler from '../../../src/lib/getApiHandler';
+import { storeUpload } from '../../../src/facades/fileUpload';
+import { createFromServerFields } from '../../../src/facades/cycle';
+import prisma from '../../../src/lib/prisma';
 
 export const config = {
   api: {

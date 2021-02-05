@@ -1,6 +1,6 @@
 import { GetServerSideProps, NextPage } from 'next';
 
-import SimpleLayout from '../components/layouts/SimpleLayout';
+import SimpleLayout from '../src/components/layouts/SimpleLayout';
 
 const IndexPage: NextPage = () => {
   return (

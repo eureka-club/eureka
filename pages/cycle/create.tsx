@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 
-import SimpleLayout from '../../components/layouts/SimpleLayout';
-import CreateCycleForm from '../../components/forms/CreateCycleForm';
+import SimpleLayout from '../../src/components/layouts/SimpleLayout';
+import CreateCycleForm from '../../src/components/forms/CreateCycleForm';
 
 const IndexPage: NextPage = () => {
   return (

@@ -5,7 +5,7 @@ import { StrictMode, FunctionComponent } from 'react';
 import { QueryCache, ReactQueryCacheProvider } from 'react-query';
 import 'reflect-metadata';
 
-import homepageAtom from '../atoms/homepage';
+import homepageAtom from '../src/atoms/homepage';
 import './_app.css';
 
 const queryCache = new QueryCache();

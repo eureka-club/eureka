@@ -11,10 +11,10 @@ import PopoverContent from 'react-bootstrap/PopoverContent';
 import Table from 'react-bootstrap/Table';
 import { useMutation } from 'react-query';
 
-import { DATE_FORMAT_ONLY_YEAR } from '../constants';
-import SimpleLayout from '../components/layouts/SimpleLayout';
-import LocalImageComponent from '../components/LocalImage';
-import { findAll } from '../facades/work';
+import { DATE_FORMAT_ONLY_YEAR } from '../src/constants';
+import SimpleLayout from '../src/components/layouts/SimpleLayout';
+import LocalImageComponent from '../src/components/LocalImage';
+import { findAll } from '../src/facades/work';
 
 interface Props {
   works: (Work & {

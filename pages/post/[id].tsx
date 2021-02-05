@@ -2,12 +2,12 @@ import dayjs from 'dayjs';
 import { GetServerSideProps } from 'next';
 import { FunctionComponent } from 'react';
 
-import { DATE_FORMAT_PROPS } from '../../constants';
-import DetailLayout from '../../components/layouts/DetailLayout';
-import PostDetailComponent from '../../components/PostDetail';
-import { PostDetail } from '../../types';
-import { fetchFullPostDetail, findRelatedPosts } from '../../repositories/Post';
-import Mosaic from '../../components/Mosaic';
+import { DATE_FORMAT_PROPS } from '../../src/constants';
+import DetailLayout from '../../src/components/layouts/DetailLayout';
+import PostDetailComponent from '../../src/components/PostDetail';
+import { PostDetail } from '../../src/types';
+import { fetchFullPostDetail, findRelatedPosts } from '../../src/repositories/Post';
+import Mosaic from '../../src/components/Mosaic';
 
 interface Props {
   post: PostDetail;

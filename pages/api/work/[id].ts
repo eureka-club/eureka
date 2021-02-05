@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
 
-import { Session } from '../../../types';
-import getApiHandler from '../../../lib/getApiHandler';
-import { find, remove } from '../../../facades/cycle';
-import prisma from '../../../lib/prisma';
+import { Session } from '../../../src/types';
+import getApiHandler from '../../../src/lib/getApiHandler';
+import { find, remove } from '../../../src/facades/work';
+import prisma from '../../../src/lib/prisma';
 
 export default getApiHandler().delete<NextApiRequest, NextApiResponse>(
   async (req, res): Promise<void> => {
@@ -27,8 +27,8 @@ export default getApiHandler().delete<NextApiRequest, NextApiResponse>(
     }
 
     try {
-      const cycle = await find(idNum);
-      if (cycle == null) {
+      const work = await find(idNum);
+      if (work == null) {
         res.status(404).end();
         return;
       }

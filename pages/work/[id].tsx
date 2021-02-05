@@ -1,9 +1,9 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { LocalImage, Work } from '@prisma/client';
 
-import DetailLayout from '../../components/layouts/DetailLayout';
-import WorkDetail from '../../components/work/WorkDetail';
-import { find } from '../../facades/work';
+import DetailLayout from '../../src/components/layouts/DetailLayout';
+import WorkDetail from '../../src/components/work/WorkDetail';
+import { find } from '../../src/facades/work';
 
 interface Props {
   work: Work & {
