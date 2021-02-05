@@ -1,0 +1,43 @@
+.typeaheadImageItem img {
+  margin-right: 0.5rem;
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.imageControl {
+  background-clip: padding-box;
+  background-color: #fff;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  color: #495057;
+  display: block;
+  padding: 0.375rem 0.75rem;
+  position: relative;
+  text-align: left;
+  width: 100%;
+  height: calc(1.5em + 0.75rem + 2px);
+}
+.imageControl img {
+  border-radius: 5px;
+  height: 32px;
+  object-fit: cover;
+  position: absolute;
+  top: 2px;
+  right: 4px;
+}
+
+.imageName {
+  display: inline-block;
+  max-width: 50%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.placeholder {
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+  margin-left: 0.5rem;
+}

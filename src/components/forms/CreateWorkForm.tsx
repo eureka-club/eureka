@@ -20,7 +20,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { CreateWorkClientPayload } from '../../types';
 import ImageSelectInput from './ImageSelectInput';
 import homepageAtom from '../../atoms/homepage';
-import styles from './CreatePostForm.module.css';
+import styles from './CreateWorkForm.module.css';
 
 const CreateWorkForm: FunctionComponent = () => {
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
