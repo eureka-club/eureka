@@ -13,7 +13,10 @@ export const find = async (
 > => {
   return prisma.cycle.findUnique({
     where: { id },
-    include: { localImages: true },
+    include: {
+      creator: true,
+      localImages: true,
+    },
   });
 };
 

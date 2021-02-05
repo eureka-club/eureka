@@ -13,19 +13,19 @@ interface Props {
 
 const WorkDetailPage: NextPage<Props> = ({ work }) => {
   return (
-    <DetailLayout>
+    <DetailLayout title={work.title}>
       <WorkDetail work={work} />
     </DetailLayout>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  if (ctx.params?.id == null || typeof ctx.params.id !== 'string') {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  if (params?.id == null || typeof params.id !== 'string') {
     return { notFound: true };
   }
 
-  const id = parseInt(ctx.params.id, 10);
-  if (typeof id !== 'number') {
+  const id = parseInt(params.id, 10);
+  if (!Number.isInteger(id)) {
     return { notFound: true };
   }
 

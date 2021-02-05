@@ -1,66 +1,43 @@
-import dayjs from 'dayjs';
-import { GetServerSideProps } from 'next';
-import { FunctionComponent } from 'react';
+import { GetServerSideProps, NextPage } from 'next';
+import { Cycle, LocalImage, User } from '@prisma/client';
 
-import { DATE_FORMAT_PROPS } from '../../src/constants';
-import { LocalImageDbObject } from '../../src/models/LocalImage';
-import { CreatorDbObject } from '../../src/models/User';
-import { WorkDbObject } from '../../src/models/Work';
-import { CycleDetail, CyclePoster, MosaicItem } from '../../src/types';
 import DetailLayout from '../../src/components/layouts/DetailLayout';
-import CycleDetailComponent from '../../src/components/CycleDetail';
-import Mosaic from '../../src/components/Mosaic';
-import { fetchCycleDetail, fetchCycleWorks } from '../../src/repositories/Cycle';
-import { fetchCyclePosts } from '../../src/repositories/Post';
+import CycleDetail from '../../src/components/cycle/CycleDetail';
+import { find } from '../../src/facades/cycle';
 
 interface Props {
-  cycle: CycleDetail;
-  cycleContent: (WorkDbObject & LocalImageDbObject)[];
-  cyclePosts: (MosaicItem & CreatorDbObject)[];
+  cycle: Cycle & {
+    creator: User;
+    localImages: LocalImage[];
+  };
 }
 
-const PostDetailPage: FunctionComponent<Props> = ({ cycle, cycleContent, cyclePosts }) => {
-  const cyclePosters = cyclePosts.reduce<CyclePoster[]>((memo, post: MosaicItem & CreatorDbObject) => {
-    const alreadyAddedPoster = memo.find((poster) => poster.name === post['creator.name']);
-    if (alreadyAddedPoster == null) {
-      memo.push({ name: post['creator.name'], image: post['creator.image'] });
-    }
-
-    return memo;
-  }, []);
-
+const PostDetailPage: NextPage<Props> = ({ cycle }) => {
   return (
-    <DetailLayout title={cycle['cycle.title']}>
-      <CycleDetailComponent cycle={cycle} cycleContent={cycleContent} cyclePosters={cyclePosters} />
-      <Mosaic stack={cyclePosts} />
+    <DetailLayout title={cycle.title}>
+      <CycleDetail cycle={cycle} />
     </DetailLayout>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const { id } = params!;
-  if (id == null || typeof id !== 'string') {
-    return { notFound: true }; // err 404
+  if (params?.id == null || typeof params.id !== 'string') {
+    return { notFound: true };
   }
 
-  const cycle: CycleDetail = await fetchCycleDetail(id);
+  const id = parseInt(params.id, 10);
+  if (!Number.isInteger(id)) {
+    return { notFound: true };
+  }
+
+  const cycle = await find(id);
   if (cycle == null) {
     return { notFound: true };
   }
-  const cycleForProps = {
-    ...cycle,
-    'cycle.start_date': dayjs(cycle['cycle.start_date']).format(DATE_FORMAT_PROPS),
-    'cycle.end_date': dayjs(cycle['cycle.end_date']).format(DATE_FORMAT_PROPS),
-  };
-
-  const cycleContent = await fetchCycleWorks(id);
-  const cyclePosts = await fetchCyclePosts(id);
 
   return {
     props: {
-      cycle: cycleForProps,
-      cycleContent,
-      cyclePosts,
+      cycle,
     },
   };
 };
