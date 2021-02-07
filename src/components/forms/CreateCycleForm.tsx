@@ -36,9 +36,11 @@ interface Props {
 
 const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
+  const typeaheadRef = useRef<AsyncTypeahead<WorkSearchResult>>(null);
   const [addWorkModalOpened, setAddWorkModalOpened] = useState(false);
   const [postSearchLoading, setWorkSearchLoading] = useState(false);
   const [workSearchOptions, setWorkSearchResult] = useState<WorkSearchResult[]>([]);
+  const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkSearchResult | null>(null);
   const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkSearchResult[]>([]);
   const [cycleCoverImageFile, setCycleCoverImageFile] = useState<File | null>(null);
 
@@ -77,7 +79,10 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
   const handleAddWorkBegin = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
+    setWorkSearchHighlightedOption(null);
     setAddWorkModalOpened(true);
+    // @ts-expect-error
+    setTimeout(() => typeaheadRef.current?.focus());
   };
 
   const handleAddWorkModalClose = () => {
@@ -97,6 +102,15 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const handleWorkSearchSelect = (selected: WorkSearchResult[]): void => {
     if (selected[0] != null) {
       setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
+      setAddWorkModalOpened(false);
+    }
+  };
+
+  const handeWorkSearchAppend = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+
+    if (workSearchHighlightedOption != null) {
+      setSelectedWorksForCycle([...selectedWorksForCycle, workSearchHighlightedOption]);
       setAddWorkModalOpened(false);
     }
   };
@@ -315,7 +329,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
         </ModalHeader>
         <ModalBody>
           <Row className="mb-5">
-            <Col>
+            <Col sm={{ span: 7 }}>
               <FormGroup controlId="cycle">
                 <FormLabel>Select work:</FormLabel>
 
@@ -328,6 +342,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                   }
                 `}</style>
                 <AsyncTypeahead
+                  ref={typeaheadRef}
                   filterBy={
                     () => true /* Bypass client-side filtering. Results are already filtered by the search endpoint */
                   }
@@ -353,8 +368,26 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                       </div>
                     </div>
                   )}
-                />
+                >
+                  {({ activeIndex, results }: { activeIndex: number; results: WorkSearchResult[] }) => {
+                    if (activeIndex !== -1) {
+                      // wait for component rendering with setTimeout(fn, undefinded)
+                      setTimeout(() => setWorkSearchHighlightedOption(results[activeIndex]));
+                    }
+                  }}
+                </AsyncTypeahead>
               </FormGroup>
+            </Col>
+            <Col sm={{ span: 5 }}>
+              <Button
+                onClick={handeWorkSearchAppend}
+                variant="primary"
+                block
+                type="button"
+                className={styles.addWorkModalButton}
+              >
+                Add work to cycle
+              </Button>
             </Col>
           </Row>
         </ModalBody>
