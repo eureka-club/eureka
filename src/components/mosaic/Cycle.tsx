@@ -1,11 +1,11 @@
-import dayjs from 'dayjs';
 import Link from 'next/link';
 import { FunctionComponent } from 'react';
 import { Badge } from 'react-bootstrap';
 import { BsBookmark } from 'react-icons/bs';
 import { AiOutlineHeart } from 'react-icons/ai';
 
-import { DATE_FORMAT_DISPLAY } from '../../constants';
+import { DATE_FORMAT_HUMANIC_ADVANCED } from '../../constants';
+import { advancedDayjs } from '../../lib/utils';
 import LocalImage from '../LocalImage';
 import { MosaicItem } from '../../types';
 import styles from './Cycle.module.css';
@@ -32,8 +32,8 @@ const Cycle: FunctionComponent<MosaicItem> = ({
           </a>
         </Link>
         <span className={styles.dateRange}>
-          {dayjs(cycleStartDate).format(DATE_FORMAT_DISPLAY)}&nbsp;&#8209;&nbsp;
-          {dayjs(cycleEndDate).format(DATE_FORMAT_DISPLAY)}
+          {advancedDayjs(cycleStartDate).format(DATE_FORMAT_HUMANIC_ADVANCED)}&nbsp;&#8209;&nbsp;
+          {advancedDayjs(cycleEndDate).format(DATE_FORMAT_HUMANIC_ADVANCED)}
         </span>
 
         <Badge pill variant="primary" className={styles.badge}>

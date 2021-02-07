@@ -1,5 +1,4 @@
-export const DATE_FORMAT_DISPLAY = 'MMMM D YYYY';
-export const DATE_FORMAT_FULL_MONTH_YEAR = 'MMMM YYYY';
+export const DATE_FORMAT_HUMANIC_ADVANCED = 'MMMM Do YYYY';
 export const DATE_FORMAT_PROPS = 'YYYY-MM-DD';
 export const DATE_FORMAT_ONLY_YEAR = 'YYYY';
 

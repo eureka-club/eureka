@@ -1,3 +1,12 @@
+import dayjs from 'dayjs';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
+
+export const advancedDayjs = (date: string | number | Date): dayjs.Dayjs => {
+  dayjs.extend(advancedFormat);
+
+  return dayjs(date);
+};
+
 export const asyncForEach = async (
   array: Array<unknown>,
   callback: (item: unknown, index: number, arr: Array<unknown>) => Promise<void>,

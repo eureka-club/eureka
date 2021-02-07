@@ -1,5 +1,4 @@
 import { Cycle, LocalImage } from '@prisma/client';
-import dayjs from 'dayjs';
 import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -11,7 +10,8 @@ import PopoverContent from 'react-bootstrap/PopoverContent';
 import Table from 'react-bootstrap/Table';
 import { useMutation } from 'react-query';
 
-import { DATE_FORMAT_DISPLAY } from '../../src/constants';
+import { DATE_FORMAT_HUMANIC_ADVANCED } from '../../src/constants';
+import { advancedDayjs } from '../../src/lib/utils';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import LocalImageComponent from '../../src/components/LocalImage';
 import { findAll } from '../../src/facades/cycle';
@@ -73,8 +73,8 @@ const CyclesListPage: NextPage<Props> = ({ cycles }) => {
               <td>{JSON.stringify(cycle.isPublic)}</td>
               <td>{cycle.title}</td>
               <td>{cycle.languages}</td>
-              <td>{dayjs(cycle.startDate).format(DATE_FORMAT_DISPLAY)}</td>
-              <td>{dayjs(cycle.endDate).format(DATE_FORMAT_DISPLAY)}</td>
+              <td>{advancedDayjs(cycle.startDate).format(DATE_FORMAT_HUMANIC_ADVANCED)}</td>
+              <td>{advancedDayjs(cycle.endDate).format(DATE_FORMAT_HUMANIC_ADVANCED)}</td>
               <td>
                 <Link href={`/cycle/${cycle.id}`}>
                   <a>detail</a>
