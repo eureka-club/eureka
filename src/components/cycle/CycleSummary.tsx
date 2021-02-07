@@ -1,4 +1,5 @@
 import { Cycle, LocalImage, User } from '@prisma/client';
+import dayjs from 'dayjs';
 import { FunctionComponent } from 'react';
 
 import { DATE_FORMAT_HUMANIC_ADVANCED } from '../../constants';
@@ -18,9 +19,13 @@ const WorkSummary: FunctionComponent<Props> = ({ cycle }) => {
   return (
     <section className={styles.workSummary}>
       {[
-        `${advancedDayjs(cycle.endDate).isBefore(now, 'day') ? 'Inactive' : 'Active'} cycle:  ${advancedDayjs(
-          cycle.startDate,
-        ).format(DATE_FORMAT_HUMANIC_ADVANCED)}—${advancedDayjs(cycle.endDate).format(DATE_FORMAT_HUMANIC_ADVANCED)}`,
+        `${
+          advancedDayjs(now).isBetween(dayjs(cycle.startDate), dayjs(cycle.endDate), 'day', '[]')
+            ? 'Active'
+            : 'Inactive'
+        } cycle:  ${advancedDayjs(cycle.startDate).format(DATE_FORMAT_HUMANIC_ADVANCED)}—${advancedDayjs(
+          cycle.endDate,
+        ).format(DATE_FORMAT_HUMANIC_ADVANCED)}`,
       ].join(', ')}
     </section>
   );
