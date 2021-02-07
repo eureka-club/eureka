@@ -28,7 +28,7 @@ import ImageSelectInput from './ImageSelectInput';
 import WorkSummary from '../work/WorkSummary';
 import styles from './CreateCycleForm.module.css';
 
-type WorkSearchResult = (Work & { localImages: LocalImage[] })[];
+type WorkSearchResult = Work & { localImages: LocalImage[] };
 
 interface Props {
   className?: string;
@@ -38,8 +38,8 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
   const [addWorkModalOpened, setAddWorkModalOpened] = useState(false);
   const [postSearchLoading, setWorkSearchLoading] = useState(false);
-  const [workSearchOptions, setWorkSearchResult] = useState<WorkSearchResult>([]);
-  const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkSearchResult>([]);
+  const [workSearchOptions, setWorkSearchResult] = useState<WorkSearchResult[]>([]);
+  const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkSearchResult[]>([]);
   const [cycleCoverImageFile, setCycleCoverImageFile] = useState<File | null>(null);
 
   const router = useRouter();
@@ -94,7 +94,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     setWorkSearchLoading(false);
   };
 
-  const handleWorkSearchSelect = (selected: WorkSearchResult): void => {
+  const handleWorkSearchSelect = (selected: WorkSearchResult[]): void => {
     if (selected[0] != null) {
       setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
       setAddWorkModalOpened(false);
