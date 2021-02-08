@@ -1,10 +1,4 @@
-import { User as PrismaUser } from '@prisma/client';
-
-import { PostDbObject } from './models/Post';
-import { CreatorDbObject } from './models/User';
-import { CycleDbObject } from './models/Cycle';
-import { LocalImageDbObject } from './models/LocalImage';
-import { WorkDbObject } from './models/Work';
+import { User as PrismaUser, Prisma } from '@prisma/client';
 
 export interface FileUpload {
   fieldName: string;
@@ -97,26 +91,13 @@ export interface CreateCycleServerPayload {
   endDate: Date;
 }
 
-// old Knex.js types below
+export type MosaicWork = Prisma.WorkGetPayload<{
+  include: {
+    localImages: true;
+  };
+}>;
 
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-  image: string;
-}
+export type MosaicItem = MosaicWork;
 
-export interface CycleDetail extends CycleDbObject, CreatorDbObject {}
-
-export interface CyclePoster {
-  name: string;
-  image: string;
-}
-
-export interface PostDetail extends PostDbObject, CreatorDbObject, LocalImageDbObject, WorkDbObject, CycleDbObject {}
-
-export interface WorkDetail extends WorkDbObject, PostDbObject, LocalImageDbObject {}
-
-export type MosaicItem = PostDbObject & LocalImageDbObject & WorkDbObject & CycleDbObject;
-
-export const isCycleCover = (object: MosaicItem): object is MosaicItem => object['cycle.is_cover'];
+export const isMosaicWork = (obj: MosaicItem): obj is MosaicWork =>
+  typeof obj.type === 'string' && typeof obj.title === 'string' && typeof obj.author === 'string';

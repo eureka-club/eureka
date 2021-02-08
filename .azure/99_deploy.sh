@@ -79,7 +79,6 @@ function deploy_app_service {
 			--name $3 \
 			--settings \
 				NEXT_TELEMETRY_DISABLED=1 \
-				DATABASE_ENGINE=${DATABASE_ENGINE} \
 				DATABASE_URL=${DATABASE_URL} \
 				GOOGLE_ID=${GOOGLE_ID} \
 				GOOGLE_SECRET=${GOOGLE_SECRET} \

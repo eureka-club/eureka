@@ -1,6 +1,6 @@
 import { Cycle, LocalImage, User } from '@prisma/client';
 
-import { CreateCycleServerFields, CreateCycleServerPayload, StoredFileUpload } from '../types';
+import { CreateCycleServerFields, CreateCycleServerPayload, MosaicWork, StoredFileUpload } from '../types';
 import prisma from '../lib/prisma';
 
 export const find = async (
@@ -8,6 +8,7 @@ export const find = async (
 ): Promise<
   | (Cycle & {
       localImages: LocalImage[];
+      works: MosaicWork[];
     })
   | null
 > => {
@@ -16,6 +17,14 @@ export const find = async (
     include: {
       creator: true,
       localImages: true,
+      works: {
+        include: {
+          localImages: true,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      },
     },
   });
 };

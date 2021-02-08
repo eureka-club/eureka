@@ -13,7 +13,9 @@ import { AiFillHeart } from 'react-icons/ai';
 import { BsBookmarkFill } from 'react-icons/bs';
 import { FiShare2 } from 'react-icons/fi';
 
+import { MosaicWork } from '../../types';
 import LocalImageComponent from '../LocalImage';
+import Mosaic from '../Mosaic';
 import UnclampText from '../UnclampText';
 import CycleSummary from './CycleSummary';
 import styles from './CycleDetail.module.css';
@@ -22,6 +24,7 @@ interface Props {
   cycle: Cycle & {
     creator: User;
     localImages: LocalImage[];
+    works: MosaicWork[];
   };
 }
 
@@ -83,7 +86,19 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle }) => {
               <Col>
                 <TabContent>
                   <TabPane eventKey="cycle-content">
-                    {cycle.contentText != null && <UnclampText text={cycle.contentText} clampHeight="7rem" />}
+                    {cycle.contentText != null && (
+                      <div className="mb-5">
+                        <UnclampText text={cycle.contentText} clampHeight="7rem" />
+                      </div>
+                    )}
+                    {cycle.works.length && (
+                      <>
+                        <h2 className="mb-4">
+                          {cycle.works.length === 1 ? '1 Work' : `${cycle.works.length} Works`} in cycle
+                        </h2>
+                        <Mosaic stack={cycle.works} />
+                      </>
+                    )}
                   </TabPane>
                   <TabPane eventKey="posts">
                     <h4>Posts</h4>

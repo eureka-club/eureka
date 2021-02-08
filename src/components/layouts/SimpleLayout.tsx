@@ -4,7 +4,6 @@ import Container from 'react-bootstrap/Container';
 import Modal from 'react-bootstrap/Modal';
 
 import Navbar from '../Navbar';
-import CreatePostForm from '../forms/CreatePostForm';
 import CreateWorkForm from '../forms/CreateWorkForm';
 import SignInForm from '../forms/SignInForm';
 import homepageAtom from '../../atoms/homepage';
@@ -39,7 +38,7 @@ const SimpleLayout: FunctionComponent<Props> = ({ children }) => {
       <Container className="mt-5">{children}</Container>
 
       <Modal animation={false} size="lg" show={homepageState.createPostModalOpened} onHide={handleCreatePostModalClose}>
-        <CreatePostForm />
+        {/* <CreatePostForm /> */}
       </Modal>
 
       <Modal animation={false} size="lg" show={homepageState.createWorkModalOpened} onHide={handleCreateWorkModalClose}>

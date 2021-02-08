@@ -2,9 +2,8 @@ import classNames from 'classnames';
 import { FunctionComponent } from 'react';
 import Masonry from 'react-masonry-css';
 
-import { MosaicItem, isCycleCover } from '../types';
-import Cycle from './mosaic/Cycle';
-import Post from './mosaic/Post';
+import { MosaicItem, isMosaicWork } from '../types';
+import MosaicItemWork from './work/MosaicItem';
 import styles from './Mosaic.module.css';
 
 interface Props {
@@ -12,11 +11,12 @@ interface Props {
 }
 
 const renderMosaicItem = (item: MosaicItem) => {
-  if (isCycleCover(item)) {
-    return <Cycle key={item['post.id']} {...item} />; // eslint-disable-line react/jsx-props-no-spreading
+  if (isMosaicWork(item)) {
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    return <MosaicItemWork key={`work-${item.id}`} {...item} />;
   }
 
-  return <Post key={item['post.id']} {...item} />; // eslint-disable-line react/jsx-props-no-spreading
+  return '';
 };
 
 const Mosaic: FunctionComponent<Props> = ({ stack }) => {
