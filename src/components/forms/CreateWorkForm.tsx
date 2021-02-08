@@ -17,7 +17,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { useMutation } from 'react-query';
 
 import { CreateWorkClientPayload } from '../../types';
-import ImageSelectInput from './ImageSelectInput';
+import ImageFileSelect from './controls/ImageFileSelect';
 import homepageAtom from '../../atoms/homepage';
 import styles from './CreateWorkForm.module.css';
 
@@ -145,7 +145,7 @@ const CreateWorkForm: FunctionComponent = () => {
               </FormGroup>
             </Col>
             <Col>
-              <ImageSelectInput acceptedFileTypes="image/*" file={coverFile} setFile={setCoverFile} required>
+              <ImageFileSelect acceptedFileTypes="image/*" file={coverFile} setFile={setCoverFile} required>
                 {(imagePreview) => (
                   <FormGroup>
                     <FormLabel>*Cover of work</FormLabel>
@@ -159,7 +159,7 @@ const CreateWorkForm: FunctionComponent = () => {
                     </div>
                   </FormGroup>
                 )}
-              </ImageSelectInput>
+              </ImageFileSelect>
             </Col>
           </Row>
           <Row>

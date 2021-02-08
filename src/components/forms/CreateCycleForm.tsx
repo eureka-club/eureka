@@ -24,7 +24,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { DATE_FORMAT_PROPS } from '../../constants';
 import { CreateCycleClientPayload } from '../../types';
 import LocalImageComponent from '../LocalImage';
-import ImageSelectInput from './ImageSelectInput';
+import ImageFileSelect from './controls/ImageFileSelect';
 import WorkSummary from '../work/WorkSummary';
 import styles from './CreateCycleForm.module.css';
 
@@ -214,7 +214,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
             </Row>
             <Row>
               <Col>
-                <ImageSelectInput
+                <ImageFileSelect
                   acceptedFileTypes="image/*"
                   file={cycleCoverImageFile}
                   setFile={setCycleCoverImageFile}
@@ -243,7 +243,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                       )}
                     </div>
                   )}
-                </ImageSelectInput>
+                </ImageFileSelect>
               </Col>
               <Col />
             </Row>
