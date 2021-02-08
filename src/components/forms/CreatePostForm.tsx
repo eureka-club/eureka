@@ -77,16 +77,14 @@ const CreatePostForm: FunctionComponent<Props> = ({ cycle }) => {
   const [imagePreview, setImagePreview] = useState<string>();
   const [isWorkTitleSearchLoading, setIsWorkTitleSearchLoading] = useState(false);
   const [workTitleSearchOptions, setWorkTitleSearchOptions] = useState<WorkTitleSearchOptions[]>([]);
-  const [
-    execCreateNewPost,
-    {
-      data: createPostReqResponse,
-      error: createPostError,
-      isError: isCreatePostError,
-      isLoading: isCreatePostLoading,
-      isSuccess: isCreatePostSuccess,
-    },
-  ] = useMutation(createPostApiHandler);
+  const {
+    mutate: execCreateNewPost,
+    data: createPostReqResponse,
+    error: createPostError,
+    isError: isCreatePostError,
+    isLoading: isCreatePostLoading,
+    isSuccess: isCreatePostSuccess,
+  } = useMutation(createPostApiHandler);
 
   const handleImageControlClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();

@@ -29,7 +29,7 @@ const CreateWorkForm: FunctionComponent = () => {
   const [publicatonYearLabel, setPublicationYearLabel] = useState('Publication year');
   const [coverFile, setCoverFile] = useState<File | null>(null);
 
-  const [execCreateWork, { error: createWorkError, isError, isLoading, isSuccess }] = useMutation(
+  const { mutate: execCreateWork, error: createWorkError, isError, isLoading, isSuccess } = useMutation(
     async (payload: CreateWorkClientPayload) => {
       const formData = new FormData();
 

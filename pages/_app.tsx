@@ -2,13 +2,13 @@ import { Provider } from 'jotai';
 import { AppProps } from 'next/app';
 import { Provider as NextAuthProvider } from 'next-auth/client';
 import { StrictMode, FunctionComponent } from 'react';
-import { QueryCache, ReactQueryCacheProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import 'reflect-metadata';
 
 import homepageAtom from '../src/atoms/homepage';
 import './_app.css';
 
-const queryCache = new QueryCache();
+const queryClient = new QueryClient();
 
 const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   const { initialState } = pageProps;
@@ -17,10 +17,10 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
     <StrictMode>
       <NextAuthProvider session={pageProps.session}>
         <Provider initialValues={initialState && [[homepageAtom, initialState]]}>
-          <ReactQueryCacheProvider queryCache={queryCache}>
+          <QueryClientProvider client={queryClient}>
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Component {...pageProps} />
-          </ReactQueryCacheProvider>
+          </QueryClientProvider>
         </Provider>
       </NextAuthProvider>
     </StrictMode>

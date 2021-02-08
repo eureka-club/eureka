@@ -24,7 +24,7 @@ interface Props {
 
 const WorksLibraryPage: NextPage<Props> = ({ works }) => {
   const router = useRouter();
-  const [execDeleteWork, { isSuccess: isDeleteWorkSucces }] = useMutation(async (work: Work) => {
+  const { mutate: execDeleteWork, isSuccess: isDeleteWorkSucces } = useMutation(async (work: Work) => {
     const res = await fetch(`/api/work/${work.id}`, {
       method: 'delete',
     });

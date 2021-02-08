@@ -45,15 +45,13 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const [cycleCoverImageFile, setCycleCoverImageFile] = useState<File | null>(null);
 
   const router = useRouter();
-  const [
-    execCreateCycle,
-    {
-      error: createCycleReqError,
-      isLoading: isCreateCycleReqLoading,
-      isError: isCreateCycleReqError,
-      isSuccess: isCreateCycleReqSuccess,
-    },
-  ] = useMutation(async (payload: CreateCycleClientPayload) => {
+  const {
+    mutate: execCreateCycle,
+    error: createCycleReqError,
+    isLoading: isCreateCycleReqLoading,
+    isError: isCreateCycleReqError,
+    isSuccess: isCreateCycleReqSuccess,
+  } = useMutation(async (payload: CreateCycleClientPayload) => {
     const formData = new FormData();
 
     Object.entries(payload).forEach(([key, value]) => {

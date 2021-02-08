@@ -24,7 +24,7 @@ interface Props {
 
 const CyclesListPage: NextPage<Props> = ({ cycles }) => {
   const router = useRouter();
-  const [execDeleteWork, { isSuccess: isDeleteCycleSucces }] = useMutation(async (cycle: Cycle) => {
+  const { mutate: execDeleteWork, isSuccess: isDeleteCycleSucces } = useMutation(async (cycle: Cycle) => {
     const res = await fetch(`/api/cycle/${cycle.id}`, {
       method: 'delete',
     });
