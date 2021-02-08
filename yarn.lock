@@ -1608,7 +1608,7 @@ callsites@^3.0.0:
   resolved "https://registry.yarnpkg.com/callsites/-/callsites-3.1.0.tgz#b3630abd8943432f54b3f0519238e33cd7df2f73"
   integrity sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==
 
-camelcase@5.3.1, camelcase@^5.0.0:
+camelcase@5.3.1:
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-5.3.1.tgz#e3c9b31569e106811df242f715725a1f4c494320"
   integrity sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
@@ -5787,12 +5787,10 @@ react-easy-swipe@^0.0.21:
   dependencies:
     prop-types "^15.5.8"
 
-react-icons@^3.11.0:
-  version "3.11.0"
-  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-3.11.0.tgz#2ca2903dfab8268ca18ebd8cc2e879921ec3b254"
-  integrity sha512-JRgiI/vdF6uyBgyZhVyYJUZAop95Sy4XDe/jmT3R/bKliFWpO/uZBwvSjWEdxwzec7SYbEPNPck0Kff2tUGM2Q==
-  dependencies:
-    camelcase "^5.0.0"
+react-icons@~4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.2.0.tgz#6dda80c8a8f338ff96a1851424d63083282630d0"
+  integrity sha512-rmzEDFt+AVXRzD7zDE21gcxyBizD/3NqjbX6cmViAgdqfJ2UiLer8927/QhhrXQV7dEj/1EGuOTPp7JnLYVJKQ==
 
 react-is@16.13.1, react-is@^16.3.2, react-is@^16.7.0, react-is@^16.8.1:
   version "16.13.1"
@@ -6756,10 +6754,10 @@ stylis@3.5.4:
   resolved "https://registry.yarnpkg.com/stylis/-/stylis-3.5.4.tgz#f665f25f5e299cf3d64654ab949a57c768b73fbe"
   integrity sha512-8/3pSmthWM7lsPBKv7NXkzn2Uc9W7NotcwGNpJaa3k7WMM1XDCA4MgT5k/8BIexd5ydZdboXtU90XH9Ec4Bv/Q==
 
-superjson@^1.5.2:
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/superjson/-/superjson-1.5.2.tgz#bf8620adcc35dc77834d3fc69b2c929cb152f236"
-  integrity sha512-ko6wjKha8KwUdl6K9NwnRcRTsylW8bt3E7bp0ixIiO8nVJP+qzHzwLLZ1WARIxPmrqkxvEB79w4xLtis1QlT3g==
+superjson@~1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/superjson/-/superjson-1.6.1.tgz#4a9a54f996eac039b60ca27f6f4b2e97c401fc84"
+  integrity sha512-pmz0ufGURwFb6qE63ILe4JSdabvTdlP/T+uAkoZawSn/+S4zfkbQjymaqD3wcHjTbd6MWEkmOWXI4JcxWesYmQ==
 
 supports-color@^2.0.0:
   version "2.0.0"
