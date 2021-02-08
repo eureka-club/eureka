@@ -1,4 +1,4 @@
-import { User as PrismaUser, Prisma } from '@prisma/client';
+import { LocalImage, Prisma, User, Work } from '@prisma/client';
 
 export interface FileUpload {
   fieldName: string;
@@ -11,7 +11,7 @@ export interface FileUpload {
 export interface Session {
   accessToken?: string;
   expires: string;
-  user: PrismaUser;
+  user: User;
 }
 
 export interface StoredFileUpload {
@@ -59,6 +59,10 @@ export interface CreateWorkServerPayload {
   countryOfOrigin?: string;
   publicationYear?: Date;
   length?: string;
+}
+
+export interface WorkSearchResult extends Work {
+  localImages: LocalImage[];
 }
 
 export interface CreateCycleClientPayload {

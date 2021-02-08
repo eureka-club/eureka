@@ -22,28 +22,26 @@ import { BiTrash } from 'react-icons/bi';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { DATE_FORMAT_PROPS } from '../../constants';
-import { CreateCycleClientPayload } from '../../types';
+import { CreateCycleClientPayload, WorkSearchResult } from '../../types';
 import LocalImageComponent from '../LocalImage';
 import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
-import WorkSummary from '../work/WorkSummary';
+import WorkTypeaheadSearchItem from '../work/TypeaheadSearchItem';
 import styles from './CreateCycleForm.module.css';
-
-type WorkSearchResult = Work & { localImages: LocalImage[] };
 
 interface Props {
   className?: string;
 }
 
 const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
-  const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
-  const typeaheadRef = useRef<AsyncTypeahead<WorkSearchResult>>(null);
   const [addWorkModalOpened, setAddWorkModalOpened] = useState(false);
-  const [postSearchLoading, setWorkSearchLoading] = useState(false);
-  const [workSearchOptions, setWorkSearchResult] = useState<WorkSearchResult[]>([]);
+  const [isWorkSearchLoading, setIsWorkSearchLoading] = useState(false);
+  const [workSearchResults, setWorkSearchResults] = useState<WorkSearchResult[]>([]);
   const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkSearchResult | null>(null);
   const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkSearchResult[]>([]);
   const [cycleCoverImageFile, setCycleCoverImageFile] = useState<File | null>(null);
+  const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
+  const typeaheadRef = useRef<AsyncTypeahead<WorkSearchResult>>(null);
 
   const router = useRouter();
   const {
@@ -89,13 +87,26 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   };
 
   const handleWorkSearch = async (query: string) => {
-    setWorkSearchLoading(true);
+    setIsWorkSearchLoading(true);
 
     const response = await fetch(`/api/work?q=${query}`);
-    const items: (Work & { localImages: LocalImage[] })[] = await response.json();
+    const items: WorkSearchResult[] = await response.json();
 
-    setWorkSearchResult(items);
-    setWorkSearchLoading(false);
+    setWorkSearchResults(items);
+    setIsWorkSearchLoading(false);
+  };
+
+  const handleWorkSearchHighlightChange = ({
+    activeIndex,
+    results,
+  }: {
+    activeIndex: number;
+    results: WorkSearchResult[];
+  }) => {
+    if (activeIndex !== -1) {
+      // wait for component rendering with setTimeout(fn, undefinded)
+      setTimeout(() => setWorkSearchHighlightedOption(results[activeIndex]));
+    }
   };
 
   const handleWorkSearchSelect = (selected: WorkSearchResult[]): void => {
@@ -324,45 +335,26 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 {/* language=CSS */}
                 <style jsx global>{`
                   .rbt-menu {
-                    min-width: 550px;
                     background-color: #d0f7ed;
-                    left: -1px !important;
+                    min-width: 468px;
                   }
                 `}</style>
                 <AsyncTypeahead
+                  id="create-cycle--search-work"
+                  // Bypass client-side filtering. Results are already filtered by the search endpoint
+                  filterBy={() => true}
+                  inputProps={{ required: true }}
+                  placeholder="Search for existing work..."
                   ref={typeaheadRef}
-                  filterBy={
-                    () => true /* Bypass client-side filtering. Results are already filtered by the search endpoint */
-                  }
-                  id="post-search-in-cycle"
-                  inputProps={{ id: 'workTitle', required: true }}
-                  isLoading={postSearchLoading}
+                  isLoading={isWorkSearchLoading}
+                  labelKey={(res) => `${res.title}`}
                   minLength={2}
-                  labelKey={(option) => `${option.title}`}
                   onSearch={handleWorkSearch}
+                  options={workSearchResults}
                   onChange={handleWorkSearchSelect}
-                  options={workSearchOptions}
-                  placeholder="Search for existing work... (press ENTER to add to cycle)"
-                  renderMenuItemChildren={(work) => (
-                    <div className={styles.workSearchTypeaheadItem}>
-                      <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
-                      <div>
-                        <h3>
-                          {work.title} <small>({work.type})</small>
-                        </h3>
-                        <h4>{work.author}</h4>
-                        <hr />
-                        <WorkSummary work={work} />
-                      </div>
-                    </div>
-                  )}
+                  renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work} />}
                 >
-                  {({ activeIndex, results }: { activeIndex: number; results: WorkSearchResult[] }) => {
-                    if (activeIndex !== -1) {
-                      // wait for component rendering with setTimeout(fn, undefinded)
-                      setTimeout(() => setWorkSearchHighlightedOption(results[activeIndex]));
-                    }
-                  }}
+                  {handleWorkSearchHighlightChange}
                 </AsyncTypeahead>
               </FormGroup>
             </Col>
