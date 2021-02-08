@@ -25,6 +25,7 @@ import { DATE_FORMAT_PROPS } from '../../constants';
 import { CreateCycleClientPayload } from '../../types';
 import LocalImageComponent from '../LocalImage';
 import ImageFileSelect from './controls/ImageFileSelect';
+import LanguageSelect from './controls/LanguageSelect';
 import WorkSummary from '../work/WorkSummary';
 import styles from './CreateCycleForm.module.css';
 
@@ -255,18 +256,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
             </FormGroup>
             <FormGroup controlId="languages">
               <FormLabel>*Main language of the cycle</FormLabel>
-              <FormControl type="text" as="select" required>
-                <option value="">select...</option>
-                <option value="spanish">Spanish</option>
-                <option value="english">English</option>
-                <option value="hindi">Hindi</option>
-                <option value="portuguese">Portuguese</option>
-                <option value="bengali">Bengali</option>
-                <option value="russian">Russian</option>
-                <option value="japanese">Japanese</option>
-                <option value="german">German</option>
-                <option value="french">French</option>
-              </FormControl>
+              <LanguageSelect />
             </FormGroup>
             <FormGroup controlId="topics">
               <FormLabel>Main topics of the cycle</FormLabel>
