@@ -154,7 +154,7 @@ const CreatePostForm: FunctionComponent = () => {
   useEffect(() => {
     if (isCreatePostSuccess === true) {
       setHomepageState({ ...homepageState, ...{ createPostModalOpened: false } });
-      router.push('/post/list');
+      router.push('/list/posts');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCreatePostSuccess]);

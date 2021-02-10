@@ -1,3 +1,16 @@
+import { LocalImage, Post, Prisma } from '@prisma/client';
+
+export interface PostWithImages extends Post {
+  localImages: LocalImage[];
+}
+
+export type PostWithCyclesWorks = Prisma.PostGetPayload<{
+  include: {
+    cycles: true;
+    works: true;
+  };
+}>;
+
 interface CreatePostClientPayloadBase {
   title: string;
   image: File;

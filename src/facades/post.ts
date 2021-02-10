@@ -1,8 +1,25 @@
 import { Cycle, Post, User, Work } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
-import { CreatePostServerFields, CreatePostServerPayload } from '../types/post';
+import { CreatePostServerFields, CreatePostServerPayload, PostWithImages, PostWithCyclesWorks } from '../types/post';
 import prisma from '../lib/prisma';
+
+export const find = async (id: number): Promise<PostWithCyclesWorks | null> => {
+  return prisma.post.findUnique({
+    where: { id },
+    include: {
+      cycles: true,
+      works: true,
+    },
+  });
+};
+
+export const findAll = async (): Promise<PostWithImages[]> => {
+  return prisma.post.findMany({
+    orderBy: { createdAt: 'desc' },
+    include: { localImages: true },
+  });
+};
 
 export const createFromServerFields = async (
   fields: CreatePostServerFields,
@@ -57,5 +74,37 @@ export const createFromServerFields = async (
       ...(existingCycle != null && { cycles: { connect: { id: existingCycle.id } } }),
       ...(existingWork != null && { works: { connect: { id: existingWork.id } } }),
     },
+  });
+};
+
+export const remove = async (post: PostWithCyclesWorks): Promise<Post> => {
+  if (post.cycles.length) {
+    await prisma.post.update({
+      where: { id: post.id },
+      data: {
+        cycles: {
+          disconnect: post.cycles.map((cycle) => ({
+            id: cycle.id,
+          })),
+        },
+      },
+    });
+  }
+
+  if (post.works.length) {
+    await prisma.post.update({
+      where: { id: post.id },
+      data: {
+        works: {
+          disconnect: post.works.map((work) => ({
+            id: work.id,
+          })),
+        },
+      },
+    });
+  }
+
+  return prisma.post.delete({
+    where: { id: post.id },
   });
 };

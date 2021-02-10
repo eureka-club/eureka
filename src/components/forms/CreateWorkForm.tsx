@@ -87,7 +87,7 @@ const CreateWorkForm: FunctionComponent = () => {
   useEffect(() => {
     if (isSuccess === true) {
       (async () => {
-        await router.push('/works-library');
+        await router.push('/list/works');
         await setHomepageState({ ...homepageState, ...{ createWorkModalOpened: false } });
       })();
     }

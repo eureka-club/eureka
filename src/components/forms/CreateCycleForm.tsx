@@ -177,7 +177,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
   useEffect(() => {
     if (isCreateCycleReqSuccess) {
-      router.push('/cycle/list');
+      router.push('/list/cycles');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCreateCycleReqSuccess]);
