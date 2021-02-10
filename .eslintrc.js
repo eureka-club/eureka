@@ -38,8 +38,10 @@ module.exports = {
         aspects: ['invalidHref', 'preferButton'],
       },
     ],
+    'no-nested-ternary': 'off',
     'react/jsx-filename-extension': ['error', { extensions: ['.tsx'] }], // fix for TypeScript
     'react/prop-types': 'off', // we have types
     'react/react-in-jsx-scope': 'off', // not needed since new JSX transform
+    'spaced-comment': 'warn', //nonspaced comment like this should not crash linting
   },
 };
