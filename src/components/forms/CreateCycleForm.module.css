@@ -79,36 +79,6 @@
   height: 244px;
 }
 
-.workSearchTypeaheadItem {
-  display: flex;
-  margin-bottom: 1rem;
-}
-.workSearchTypeaheadItem img {
-  margin-right: 0.5rem;
-  width: 76px;
-  height: 76px;
-  object-fit: contain;
-}
-.workSearchTypeaheadItem h3 {
-  font-size: 1.15rem;
-}
-.workSearchTypeaheadItem h4 {
-  font-size: 1rem;
-}
-.workSearchTypeaheadItem hr {
-  margin: 0 0 0.2rem;
-}
-.workSearchTypeaheadItem p {
-  font-size: 0.85rem;
-  margin-bottom: 0.25rem;
-}
-.workSearchTypeaheadItem article {
-  max-width: 420px;
-  max-height: 10rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .loadIndicator {
   display: inline-block;
   height: 16px;

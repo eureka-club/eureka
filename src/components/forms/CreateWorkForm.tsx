@@ -15,19 +15,18 @@ import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 import { useMutation } from 'react-query';
-import 'react-bootstrap-typeahead/css/Typeahead.css';
 
-import { CreateWorkClientPayload } from '../../types';
-import ImageSelectInput from './ImageSelectInput';
+import { CreateWorkClientPayload } from '../../types/work';
+import ImageFileSelect from './controls/ImageFileSelect';
 import homepageAtom from '../../atoms/homepage';
 import styles from './CreateWorkForm.module.css';
 
 const CreateWorkForm: FunctionComponent = () => {
-  const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
-  const router = useRouter();
   const [homepageState, setHomepageState] = useAtom(homepageAtom);
   const [publicatonYearLabel, setPublicationYearLabel] = useState('Publication year');
   const [coverFile, setCoverFile] = useState<File | null>(null);
+  const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
+  const router = useRouter();
 
   const { mutate: execCreateWork, error: createWorkError, isError, isLoading, isSuccess } = useMutation(
     async (payload: CreateWorkClientPayload) => {
@@ -88,7 +87,7 @@ const CreateWorkForm: FunctionComponent = () => {
   useEffect(() => {
     if (isSuccess === true) {
       (async () => {
-        await router.push('/works-library');
+        await router.push('/list/works');
         await setHomepageState({ ...homepageState, ...{ createWorkModalOpened: false } });
       })();
     }
@@ -146,7 +145,7 @@ const CreateWorkForm: FunctionComponent = () => {
               </FormGroup>
             </Col>
             <Col>
-              <ImageSelectInput acceptedFileTypes="image/*" file={coverFile} setFile={setCoverFile} required>
+              <ImageFileSelect acceptedFileTypes="image/*" file={coverFile} setFile={setCoverFile} required>
                 {(imagePreview) => (
                   <FormGroup>
                     <FormLabel>*Cover of work</FormLabel>
@@ -160,7 +159,7 @@ const CreateWorkForm: FunctionComponent = () => {
                     </div>
                   </FormGroup>
                 )}
-              </ImageSelectInput>
+              </ImageFileSelect>
             </Col>
           </Row>
           <Row>

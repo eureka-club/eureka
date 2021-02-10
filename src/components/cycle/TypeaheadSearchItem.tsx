@@ -1,0 +1,27 @@
+import { FunctionComponent } from 'react';
+
+import { CycleWithImage } from '../../types/cycle';
+import LocalImageComponent from '../LocalImage';
+import CycleSummary from './CycleSummary';
+import styles from './TypeaheadSearchItem.module.css';
+
+interface Props {
+  cycle: CycleWithImage;
+}
+
+const TypeaheadSearchItem: FunctionComponent<Props> = ({ cycle }) => {
+  return (
+    <div className={styles.workSearchTypeaheadItem}>
+      <div className={styles.imageWrapper}>
+        <LocalImageComponent filePath={cycle.localImages[0].storedFile} alt={cycle.title} />
+      </div>
+      <div>
+        <h3>{cycle.title}</h3>
+        <hr />
+        <CycleSummary cycle={cycle} />
+      </div>
+    </div>
+  );
+};
+
+export default TypeaheadSearchItem;

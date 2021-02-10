@@ -1,7 +1,7 @@
 import { ChangeEvent, FunctionComponent, MouseEvent, ReactNode, RefObject, useEffect, useRef, useState } from 'react';
 import FormFile from 'react-bootstrap/FormFile';
 
-import styles from './ImageSelectInput.module.css';
+import styles from './ImageFileSelect.module.css';
 
 interface Props {
   acceptedFileTypes: string;
@@ -11,7 +11,7 @@ interface Props {
   required: boolean;
 }
 
-const ImageSelectInput: FunctionComponent<Props> = ({ acceptedFileTypes, children, file, setFile, required }) => {
+const ImageFileSelect: FunctionComponent<Props> = ({ acceptedFileTypes, children, file, setFile, required }) => {
   const coverInputRef = useRef<HTMLInputElement>() as RefObject<HTMLInputElement>;
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -63,4 +63,4 @@ const ImageSelectInput: FunctionComponent<Props> = ({ acceptedFileTypes, childre
   );
 };
 
-export default ImageSelectInput;
+export default ImageFileSelect;

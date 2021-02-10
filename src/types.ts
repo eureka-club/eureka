@@ -1,4 +1,7 @@
-import { User as PrismaUser, Prisma } from '@prisma/client';
+import { User } from '@prisma/client';
+
+import { CycleWithImage } from './types/cycle';
+import { WorkWithImage } from './types/work';
 
 export interface FileUpload {
   fieldName: string;
@@ -11,7 +14,7 @@ export interface FileUpload {
 export interface Session {
   accessToken?: string;
   expires: string;
-  user: PrismaUser;
+  user: User;
 }
 
 export interface StoredFileUpload {
@@ -21,83 +24,18 @@ export interface StoredFileUpload {
   mimeType: string;
 }
 
-export interface CreateWorkClientPayload {
-  cover: File;
-  type: string;
-  title: string;
-  author: string;
-  authorGender: string | null;
-  authorRace: string | null;
-  contentText: string | null;
-  link: string | null;
-  countryOfOrigin: string | null;
-  publicationYear: string | null;
-  length: string | null;
-}
+/*
+ * TS type guards
+ */
 
-export interface CreateWorkServerFields {
-  type: string[];
-  title: string[];
-  author: string[];
-  authorGender?: string[];
-  authorRace?: string[];
-  contentText?: string[];
-  link?: string[];
-  countryOfOrigin?: string[];
-  publicationYear?: string[];
-  length?: string[];
-}
+export type MosaicItem = CycleWithImage | WorkWithImage;
+export type SearchResult = CycleWithImage | WorkWithImage;
 
-export interface CreateWorkServerPayload {
-  type: string;
-  title: string;
-  author: string;
-  authorGender?: string;
-  authorRace?: string;
-  contentText?: string;
-  link?: string;
-  countryOfOrigin?: string;
-  publicationYear?: Date;
-  length?: string;
-}
-
-export interface CreateCycleClientPayload {
-  includedWorksIds: number[];
-  coverImage: File;
-  isPublic: boolean;
-  title: string;
-  languages: string;
-  startDate: string;
-  endDate: string;
-  contentText: string;
-}
-
-export interface CreateCycleServerFields {
-  includedWorksIds: string[];
-  isPublic: boolean[];
-  title: string[];
-  languages: string[];
-  startDate: string[];
-  endDate: string[];
-  contentText: string[];
-}
-
-export interface CreateCycleServerPayload {
-  isPublic: boolean;
-  title: string;
-  languages: string;
-  contentText: string;
-  startDate: Date;
-  endDate: Date;
-}
-
-export type MosaicWork = Prisma.WorkGetPayload<{
-  include: {
-    localImages: true;
-  };
-}>;
-
-export type MosaicItem = MosaicWork;
-
-export const isMosaicWork = (obj: MosaicItem): obj is MosaicWork =>
-  typeof obj.type === 'string' && typeof obj.title === 'string' && typeof obj.author === 'string';
+export const isCycle = (obj: MosaicItem | SearchResult): obj is CycleWithImage =>
+  typeof (obj as CycleWithImage).title === 'string' &&
+  typeof (obj as CycleWithImage).startDate === 'string' &&
+  typeof (obj as CycleWithImage).endDate === 'string';
+export const isWork = (obj: MosaicItem | SearchResult): obj is WorkWithImage =>
+  typeof (obj as WorkWithImage).title === 'string' &&
+  typeof (obj as WorkWithImage).author === 'string' &&
+  typeof (obj as WorkWithImage).type === 'string';

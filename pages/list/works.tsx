@@ -11,10 +11,10 @@ import PopoverContent from 'react-bootstrap/PopoverContent';
 import Table from 'react-bootstrap/Table';
 import { useMutation } from 'react-query';
 
-import { DATE_FORMAT_ONLY_YEAR } from '../src/constants';
-import SimpleLayout from '../src/components/layouts/SimpleLayout';
-import LocalImageComponent from '../src/components/LocalImage';
-import { findAll } from '../src/facades/work';
+import { DATE_FORMAT_ONLY_YEAR } from '../../src/constants';
+import SimpleLayout from '../../src/components/layouts/SimpleLayout';
+import LocalImageComponent from '../../src/components/LocalImage';
+import { findAll } from '../../src/facades/work';
 
 interface Props {
   works: (Work & {
@@ -22,7 +22,7 @@ interface Props {
   })[];
 }
 
-const WorksLibraryPage: NextPage<Props> = ({ works }) => {
+const ListWorksPage: NextPage<Props> = ({ works }) => {
   const router = useRouter();
   const { mutate: execDeleteWork, isSuccess: isDeleteWorkSucces } = useMutation(async (work: Work) => {
     const res = await fetch(`/api/work/${work.id}`, {
@@ -115,4 +115,4 @@ export const getServerSideProps: GetServerSideProps = async () => {
   };
 };
 
-export default WorksLibraryPage;
+export default ListWorksPage;

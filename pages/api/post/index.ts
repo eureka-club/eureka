@@ -5,7 +5,7 @@ import { getSession } from 'next-auth/client';
 import { FileUpload, Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { storeUpload } from '../../../src/facades/fileUpload';
-import { createFromServerFields } from '../../../src/facades/work';
+import { createFromServerFields } from '../../../src/facades/post';
 import prisma from '../../../src/lib/prisma';
 
 export const config = {
@@ -28,19 +28,25 @@ export default getApiHandler().post<NextApiRequest, NextApiResponse>(
         res.status(500).json({ status: 'Server error' });
         return;
       }
-      if (files?.cover == null) {
-        res.status(422).json({ error: 'No cover image received' });
+      if (files?.image == null) {
+        res.status(422).json({ error: 'No image received' });
         return;
       }
 
-      const coverImage: FileUpload = files.cover[0];
+      const image: FileUpload = files.image[0];
       try {
-        const uploadData = await storeUpload(coverImage);
-        const work = await createFromServerFields(fields, uploadData);
+        const uploadData = await storeUpload(image);
+        const post = await createFromServerFields(fields, uploadData, session.user);
 
-        res.status(201).json(work);
-      } catch (exc) {
-        console.error(exc); // eslint-disable-line no-console
+        res.status(201).json(post);
+      } catch (excp) {
+        const excpMessageTokens = excp.message.match(/\[(\d{3})\] (.*)/);
+        if (excpMessageTokens != null) {
+          res.status(excpMessageTokens[1]).json({ status: 'client error', error: excpMessageTokens[2] });
+          return;
+        }
+
+        console.error(excp); // eslint-disable-line no-console
         res.status(500).json({ status: 'server error' });
       } finally {
         prisma.$disconnect();

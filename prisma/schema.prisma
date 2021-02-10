@@ -150,6 +150,7 @@ model Post {
   id           Int       @default(autoincrement()) @id
   creator      User      @relation(fields: [creatorId], references: [id])
   creatorId    Int       @map(name: "creator_id")
+  title        String
   language     String
   contentText  String?   @map(name: "content_text")
   isPublic     Boolean   @map(name: "is_public")

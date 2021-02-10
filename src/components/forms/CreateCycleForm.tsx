@@ -1,4 +1,3 @@
-import { LocalImage, Work } from '@prisma/client';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
@@ -22,27 +21,27 @@ import { BiTrash } from 'react-icons/bi';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { DATE_FORMAT_PROPS } from '../../constants';
-import { CreateCycleClientPayload } from '../../types';
+import { CreateCycleClientPayload } from '../../types/cycle';
+import { WorkWithImage } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
-import ImageSelectInput from './ImageSelectInput';
-import WorkSummary from '../work/WorkSummary';
+import ImageFileSelect from './controls/ImageFileSelect';
+import LanguageSelect from './controls/LanguageSelect';
+import WorkTypeaheadSearchItem from '../work/TypeaheadSearchItem';
 import styles from './CreateCycleForm.module.css';
-
-type WorkSearchResult = Work & { localImages: LocalImage[] };
 
 interface Props {
   className?: string;
 }
 
 const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
-  const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
-  const typeaheadRef = useRef<AsyncTypeahead<WorkSearchResult>>(null);
   const [addWorkModalOpened, setAddWorkModalOpened] = useState(false);
-  const [postSearchLoading, setWorkSearchLoading] = useState(false);
-  const [workSearchOptions, setWorkSearchResult] = useState<WorkSearchResult[]>([]);
-  const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkSearchResult | null>(null);
-  const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkSearchResult[]>([]);
+  const [isWorkSearchLoading, setIsWorkSearchLoading] = useState(false);
+  const [workSearchResults, setWorkSearchResults] = useState<WorkWithImage[]>([]);
+  const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkWithImage | null>(null);
+  const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkWithImage[]>([]);
   const [cycleCoverImageFile, setCycleCoverImageFile] = useState<File | null>(null);
+  const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
+  const typeaheadRef = useRef<AsyncTypeahead<WorkWithImage>>(null);
 
   const router = useRouter();
   const {
@@ -87,24 +86,37 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     setAddWorkModalOpened(false);
   };
 
-  const handleWorkSearch = async (query: string) => {
-    setWorkSearchLoading(true);
+  const handleSearchWork = async (query: string) => {
+    setIsWorkSearchLoading(true);
 
-    const response = await fetch(`/api/work?q=${query}`);
-    const items: (Work & { localImages: LocalImage[] })[] = await response.json();
+    const response = await fetch(`/api/search/work?q=${query}`);
+    const items: WorkWithImage[] = await response.json();
 
-    setWorkSearchResult(items);
-    setWorkSearchLoading(false);
+    setWorkSearchResults(items);
+    setIsWorkSearchLoading(false);
   };
 
-  const handleWorkSearchSelect = (selected: WorkSearchResult[]): void => {
+  const handleSearchWorkHighlightChange = ({
+    activeIndex,
+    results,
+  }: {
+    activeIndex: number;
+    results: WorkWithImage[];
+  }) => {
+    if (activeIndex !== -1) {
+      // wait for component rendering with setTimeout(fn, undefinded)
+      setTimeout(() => setWorkSearchHighlightedOption(results[activeIndex]));
+    }
+  };
+
+  const handleSearchWorkSelect = (selected: WorkWithImage[]): void => {
     if (selected[0] != null) {
       setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
       setAddWorkModalOpened(false);
     }
   };
 
-  const handeWorkSearchAppend = (ev: MouseEvent<HTMLButtonElement>) => {
+  const handleWorkSearchAppend = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
 
     if (workSearchHighlightedOption != null) {
@@ -165,7 +177,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
   useEffect(() => {
     if (isCreateCycleReqSuccess) {
-      router.push('/cycle/list');
+      router.push('/list/cycles');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCreateCycleReqSuccess]);
@@ -214,7 +226,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
             </Row>
             <Row>
               <Col>
-                <ImageSelectInput
+                <ImageFileSelect
                   acceptedFileTypes="image/*"
                   file={cycleCoverImageFile}
                   setFile={setCycleCoverImageFile}
@@ -243,7 +255,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                       )}
                     </div>
                   )}
-                </ImageSelectInput>
+                </ImageFileSelect>
               </Col>
               <Col />
             </Row>
@@ -255,18 +267,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
             </FormGroup>
             <FormGroup controlId="languages">
               <FormLabel>*Main language of the cycle</FormLabel>
-              <FormControl type="text" as="select" required>
-                <option value="">select...</option>
-                <option value="spanish">Spanish</option>
-                <option value="english">English</option>
-                <option value="hindi">Hindi</option>
-                <option value="portuguese">Portuguese</option>
-                <option value="bengali">Bengali</option>
-                <option value="russian">Russian</option>
-                <option value="japanese">Japanese</option>
-                <option value="german">German</option>
-                <option value="french">French</option>
-              </FormControl>
+              <LanguageSelect />
             </FormGroup>
             <FormGroup controlId="topics">
               <FormLabel>Main topics of the cycle</FormLabel>
@@ -334,51 +335,32 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 {/* language=CSS */}
                 <style jsx global>{`
                   .rbt-menu {
-                    min-width: 550px;
                     background-color: #d0f7ed;
-                    left: -1px !important;
+                    min-width: 468px;
                   }
                 `}</style>
                 <AsyncTypeahead
+                  id="create-cycle--search-work"
+                  // Bypass client-side filtering. Results are already filtered by the search endpoint
+                  filterBy={() => true}
+                  inputProps={{ required: true }}
+                  placeholder="Search for existing work..."
                   ref={typeaheadRef}
-                  filterBy={
-                    () => true /* Bypass client-side filtering. Results are already filtered by the search endpoint */
-                  }
-                  id="post-search-in-cycle"
-                  inputProps={{ id: 'workTitle', required: true }}
-                  isLoading={postSearchLoading}
+                  isLoading={isWorkSearchLoading}
+                  labelKey={(res) => `${res.title}`}
                   minLength={2}
-                  labelKey={(option) => `${option.title}`}
-                  onSearch={handleWorkSearch}
-                  onChange={handleWorkSearchSelect}
-                  options={workSearchOptions}
-                  placeholder="Search for existing work... (press ENTER to add to cycle)"
-                  renderMenuItemChildren={(work) => (
-                    <div className={styles.workSearchTypeaheadItem}>
-                      <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
-                      <div>
-                        <h3>
-                          {work.title} <small>({work.type})</small>
-                        </h3>
-                        <h4>{work.author}</h4>
-                        <hr />
-                        <WorkSummary work={work} />
-                      </div>
-                    </div>
-                  )}
+                  onSearch={handleSearchWork}
+                  options={workSearchResults}
+                  onChange={handleSearchWorkSelect}
+                  renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work} />}
                 >
-                  {({ activeIndex, results }: { activeIndex: number; results: WorkSearchResult[] }) => {
-                    if (activeIndex !== -1) {
-                      // wait for component rendering with setTimeout(fn, undefinded)
-                      setTimeout(() => setWorkSearchHighlightedOption(results[activeIndex]));
-                    }
-                  }}
+                  {handleSearchWorkHighlightChange}
                 </AsyncTypeahead>
               </FormGroup>
             </Col>
             <Col sm={{ span: 5 }}>
               <Button
-                onClick={handeWorkSearchAppend}
+                onClick={handleWorkSearchAppend}
                 variant="primary"
                 block
                 type="button"

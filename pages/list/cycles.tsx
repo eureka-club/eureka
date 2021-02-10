@@ -22,9 +22,9 @@ interface Props {
   })[];
 }
 
-const CyclesListPage: NextPage<Props> = ({ cycles }) => {
+const ListCyclesPage: NextPage<Props> = ({ cycles }) => {
   const router = useRouter();
-  const { mutate: execDeleteWork, isSuccess: isDeleteCycleSucces } = useMutation(async (cycle: Cycle) => {
+  const { mutate: execDeleteCycle, isSuccess: isDeleteCycleSucces } = useMutation(async (cycle: Cycle) => {
     const res = await fetch(`/api/cycle/${cycle.id}`, {
       method: 'delete',
     });
@@ -34,7 +34,7 @@ const CyclesListPage: NextPage<Props> = ({ cycles }) => {
   });
 
   const handleDeleteClick = (cycle: Cycle) => {
-    execDeleteWork(cycle);
+    execDeleteCycle(cycle);
   };
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const CyclesListPage: NextPage<Props> = ({ cycles }) => {
   }, [isDeleteCycleSucces]);
 
   return (
-    <SimpleLayout title="Works library">
+    <SimpleLayout title="Cycles list">
       <h1 style={{ marginBottom: '2rem' }}>Cycles list</h1>
 
       <Table>
@@ -65,7 +65,7 @@ const CyclesListPage: NextPage<Props> = ({ cycles }) => {
             <tr key={cycle.id}>
               <td>
                 <LocalImageComponent
-                  alt="work cover"
+                  alt="cycle cover"
                   filePath={cycle.localImages[0].storedFile}
                   style={{ height: '96px', marginRight: '1rem' }}
                 />
@@ -117,4 +117,4 @@ export const getServerSideProps: GetServerSideProps = async () => {
   };
 };
 
-export default CyclesListPage;
+export default ListCyclesPage;
