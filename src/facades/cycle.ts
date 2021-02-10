@@ -1,6 +1,8 @@
 import { Cycle, LocalImage, User } from '@prisma/client';
 
-import { CreateCycleServerFields, CreateCycleServerPayload, MosaicWork, StoredFileUpload } from '../types';
+import { StoredFileUpload } from '../types';
+import { CreateCycleServerFields, CreateCycleServerPayload } from '../types/cycle';
+import { WorkWithImage } from '../types/work';
 import prisma from '../lib/prisma';
 
 export const find = async (
@@ -8,7 +10,7 @@ export const find = async (
 ): Promise<
   | (Cycle & {
       localImages: LocalImage[];
-      works: MosaicWork[];
+      works: WorkWithImage[];
     })
   | null
 > => {
@@ -25,6 +27,21 @@ export const find = async (
           createdAt: 'desc',
         },
       },
+    },
+  });
+};
+
+export const search = async (
+  searchText: string,
+): Promise<
+  (Cycle & {
+    localImages: LocalImage[];
+  })[]
+> => {
+  return prisma.cycle.findMany({
+    include: { localImages: true },
+    where: {
+      title: { contains: searchText },
     },
   });
 };

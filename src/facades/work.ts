@@ -1,6 +1,7 @@
 import { LocalImage, Work } from '@prisma/client';
 
-import { CreateWorkServerFields, CreateWorkServerPayload, StoredFileUpload } from '../types';
+import { StoredFileUpload } from '../types';
+import { CreateWorkServerFields, CreateWorkServerPayload } from '../types/work';
 import prisma from '../lib/prisma';
 
 export const find = async (
@@ -20,16 +21,15 @@ export const find = async (
 export const search = async (
   searchText: string,
 ): Promise<
-  | (Work & {
-      localImages: LocalImage[];
-    })[]
-  | null
+  (Work & {
+    localImages: LocalImage[];
+  })[]
 > => {
   return prisma.work.findMany({
+    include: { localImages: true },
     where: {
       OR: [{ title: { contains: searchText } }, { author: { contains: searchText } }],
     },
-    include: { localImages: true },
   });
 };
 

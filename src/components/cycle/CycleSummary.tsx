@@ -1,4 +1,4 @@
-import { Cycle, LocalImage, User } from '@prisma/client';
+import { Cycle } from '@prisma/client';
 import dayjs from 'dayjs';
 import { FunctionComponent } from 'react';
 
@@ -7,10 +7,7 @@ import { advancedDayjs } from '../../lib/utils';
 import styles from './CycleSummary.module.css';
 
 interface Props {
-  cycle: Cycle & {
-    creator: User;
-    localImages: LocalImage[];
-  };
+  cycle: Cycle;
 }
 
 const WorkSummary: FunctionComponent<Props> = ({ cycle }) => {

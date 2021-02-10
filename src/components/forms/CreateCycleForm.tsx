@@ -1,4 +1,3 @@
-import { LocalImage, Work } from '@prisma/client';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
@@ -22,7 +21,8 @@ import { BiTrash } from 'react-icons/bi';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { DATE_FORMAT_PROPS } from '../../constants';
-import { CreateCycleClientPayload, WorkSearchResult } from '../../types';
+import { CreateCycleClientPayload } from '../../types/cycle';
+import { WorkWithImage } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
 import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
@@ -36,12 +36,12 @@ interface Props {
 const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const [addWorkModalOpened, setAddWorkModalOpened] = useState(false);
   const [isWorkSearchLoading, setIsWorkSearchLoading] = useState(false);
-  const [workSearchResults, setWorkSearchResults] = useState<WorkSearchResult[]>([]);
-  const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkSearchResult | null>(null);
-  const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkSearchResult[]>([]);
+  const [workSearchResults, setWorkSearchResults] = useState<WorkWithImage[]>([]);
+  const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkWithImage | null>(null);
+  const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkWithImage[]>([]);
   const [cycleCoverImageFile, setCycleCoverImageFile] = useState<File | null>(null);
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
-  const typeaheadRef = useRef<AsyncTypeahead<WorkSearchResult>>(null);
+  const typeaheadRef = useRef<AsyncTypeahead<WorkWithImage>>(null);
 
   const router = useRouter();
   const {
@@ -86,22 +86,22 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     setAddWorkModalOpened(false);
   };
 
-  const handleWorkSearch = async (query: string) => {
+  const handleSearchWork = async (query: string) => {
     setIsWorkSearchLoading(true);
 
-    const response = await fetch(`/api/work?q=${query}`);
-    const items: WorkSearchResult[] = await response.json();
+    const response = await fetch(`/api/search/work?q=${query}`);
+    const items: WorkWithImage[] = await response.json();
 
     setWorkSearchResults(items);
     setIsWorkSearchLoading(false);
   };
 
-  const handleWorkSearchHighlightChange = ({
+  const handleSearchWorkHighlightChange = ({
     activeIndex,
     results,
   }: {
     activeIndex: number;
-    results: WorkSearchResult[];
+    results: WorkWithImage[];
   }) => {
     if (activeIndex !== -1) {
       // wait for component rendering with setTimeout(fn, undefinded)
@@ -109,14 +109,14 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     }
   };
 
-  const handleWorkSearchSelect = (selected: WorkSearchResult[]): void => {
+  const handleSearchWorkSelect = (selected: WorkWithImage[]): void => {
     if (selected[0] != null) {
       setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
       setAddWorkModalOpened(false);
     }
   };
 
-  const handeWorkSearchAppend = (ev: MouseEvent<HTMLButtonElement>) => {
+  const handleWorkSearchAppend = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
 
     if (workSearchHighlightedOption != null) {
@@ -349,18 +349,18 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                   isLoading={isWorkSearchLoading}
                   labelKey={(res) => `${res.title}`}
                   minLength={2}
-                  onSearch={handleWorkSearch}
+                  onSearch={handleSearchWork}
                   options={workSearchResults}
-                  onChange={handleWorkSearchSelect}
+                  onChange={handleSearchWorkSelect}
                   renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work} />}
                 >
-                  {handleWorkSearchHighlightChange}
+                  {handleSearchWorkHighlightChange}
                 </AsyncTypeahead>
               </FormGroup>
             </Col>
             <Col sm={{ span: 5 }}>
               <Button
-                onClick={handeWorkSearchAppend}
+                onClick={handleWorkSearchAppend}
                 variant="primary"
                 block
                 type="button"

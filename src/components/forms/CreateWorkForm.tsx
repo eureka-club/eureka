@@ -16,7 +16,7 @@ import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 import { useMutation } from 'react-query';
 
-import { CreateWorkClientPayload } from '../../types';
+import { CreateWorkClientPayload } from '../../types/work';
 import ImageFileSelect from './controls/ImageFileSelect';
 import homepageAtom from '../../atoms/homepage';
 import styles from './CreateWorkForm.module.css';

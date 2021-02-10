@@ -1,7 +1,7 @@
 import { Cycle, LocalImage, User } from '@prisma/client';
 import { GetServerSideProps, NextPage } from 'next';
 
-import { MosaicWork } from '../../src/types';
+import { WorkWithImage } from '../../src/types/work';
 import DetailLayout from '../../src/components/layouts/DetailLayout';
 import CycleDetail from '../../src/components/cycle/CycleDetail';
 import { find } from '../../src/facades/cycle';
@@ -10,7 +10,7 @@ interface Props {
   cycle: Cycle & {
     creator: User;
     localImages: LocalImage[];
-    works: MosaicWork[];
+    works: WorkWithImage[];
   };
 }
 
