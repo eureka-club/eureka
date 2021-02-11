@@ -20,9 +20,10 @@ import styles from './WorkDetail.module.css';
 
 interface Props {
   work: WorkWithImages;
+  postsCount: number;
 }
 
-const WorkDetail: FunctionComponent<Props> = ({ work }) => {
+const WorkDetail: FunctionComponent<Props> = ({ work, postsCount }) => {
   return (
     <>
       <Row className="mb-5">
@@ -68,7 +69,7 @@ const WorkDetail: FunctionComponent<Props> = ({ work }) => {
                     <NavLink eventKey="all">All related</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink eventKey="posts">Posts about this work</NavLink>
+                    <NavLink eventKey="posts">Posts about this work ({postsCount})</NavLink>
                   </NavItem>
                   <NavItem>
                     <NavLink eventKey="cycles">Cycles including this work</NavLink>

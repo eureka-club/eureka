@@ -1,4 +1,4 @@
-import { Work } from '@prisma/client';
+import { Prisma, Work } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
 import { CreateWorkServerFields, CreateWorkServerPayload, WorkWithImages } from '../types/work';
@@ -15,6 +15,15 @@ export const findAll = async (): Promise<WorkWithImages[]> => {
   return prisma.work.findMany({
     orderBy: { createdAt: 'desc' },
     include: { localImages: true },
+  });
+};
+
+export const countPosts = async (
+  work: Work,
+): Promise<Prisma.GetPostAggregateType<{ count: true; where: { works: { some: { id: number } } } }>> => {
+  return prisma.post.aggregate({
+    count: true,
+    where: { works: { some: { id: work.id } } },
   });
 };
 
