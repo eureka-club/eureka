@@ -3,11 +3,11 @@ import { FunctionComponent } from 'react';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { BsBookmark } from 'react-icons/bs';
 
-import { WorkWithImage } from '../../types/work';
+import { WorkWithImages } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 
-const MosaicItem: FunctionComponent<WorkWithImage> = ({ id, author, title, localImages, type }) => {
+const MosaicItem: FunctionComponent<WorkWithImages> = ({ id, author, title, localImages, type }) => {
   return (
     <article className={styles.post}>
       <div className={styles.imageContainer}>

@@ -1,12 +1,12 @@
 import { FunctionComponent } from 'react';
 
-import { WorkWithImage } from '../../types/work';
+import { WorkWithImages } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
 import WorkSummary from './WorkSummary';
 import styles from './TypeaheadSearchItem.module.css';
 
 interface Props {
-  work: WorkWithImage;
+  work: WorkWithImages;
 }
 
 const TypeaheadSearchItem: FunctionComponent<Props> = ({ work }) => {

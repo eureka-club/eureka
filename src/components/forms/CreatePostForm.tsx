@@ -22,8 +22,8 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { SearchResult, isCycle, isWork } from '../../types';
 import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload } from '../../types/post';
-import { CycleWithImage } from '../../types/cycle';
-import { WorkWithImage } from '../../types/work';
+import { CycleWithImages } from '../../types/cycle';
+import { WorkWithImages } from '../../types/work';
 import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
 import CycleTypeaheadSearchItem from '../cycle/TypeaheadSearchItem';
@@ -36,9 +36,9 @@ const CreatePostForm: FunctionComponent = () => {
   const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
   const [isSearchCycleLoading, setIsSearchCycleLoading] = useState(false);
   const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
-  const [searchCycleResults, setSearchCycleResults] = useState<CycleWithImage[]>([]);
-  const [selectedCycle, setSelectedCycle] = useState<CycleWithImage | null>(null);
-  const [selectedWork, setSelectedWork] = useState<WorkWithImage | null>(null);
+  const [searchCycleResults, setSearchCycleResults] = useState<CycleWithImages[]>([]);
+  const [selectedCycle, setSelectedCycle] = useState<CycleWithImages | null>(null);
+  const [selectedWork, setSelectedWork] = useState<WorkWithImages | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
@@ -81,7 +81,7 @@ const CreatePostForm: FunctionComponent = () => {
     setIsSearchCycleLoading(true);
 
     const response = await fetch(`/api/search/cycle?q=${query}`);
-    const items: CycleWithImage[] = await response.json();
+    const items: CycleWithImages[] = await response.json();
 
     setSearchCycleResults(items);
     setIsSearchCycleLoading(false);
@@ -99,7 +99,7 @@ const CreatePostForm: FunctionComponent = () => {
     }
   };
 
-  const handleSelectCycle = (selected: CycleWithImage[]): void => {
+  const handleSelectCycle = (selected: CycleWithImages[]): void => {
     const searchResult = selected[0];
     if (searchResult != null) {
       setSelectedCycle(searchResult);

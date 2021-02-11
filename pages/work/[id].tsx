@@ -1,14 +1,12 @@
 import { GetServerSideProps, NextPage } from 'next';
-import { LocalImage, Work } from '@prisma/client';
 
 import DetailLayout from '../../src/components/layouts/DetailLayout';
 import WorkDetail from '../../src/components/work/WorkDetail';
 import { find } from '../../src/facades/work';
+import { WorkWithImages } from '../../src/types/work';
 
 interface Props {
-  work: Work & {
-    localImages: LocalImage[];
-  };
+  work: WorkWithImages;
 }
 
 const WorkDetailPage: NextPage<Props> = ({ work }) => {

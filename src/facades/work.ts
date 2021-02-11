@@ -1,45 +1,28 @@
-import { LocalImage, Work } from '@prisma/client';
+import { Work } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
-import { CreateWorkServerFields, CreateWorkServerPayload } from '../types/work';
+import { CreateWorkServerFields, CreateWorkServerPayload, WorkWithImages } from '../types/work';
 import prisma from '../lib/prisma';
 
-export const find = async (
-  id: number,
-): Promise<
-  | (Work & {
-      localImages: LocalImage[];
-    })
-  | null
-> => {
+export const find = async (id: number): Promise<WorkWithImages | null> => {
   return prisma.work.findUnique({
     where: { id },
     include: { localImages: true },
   });
 };
 
-export const search = async (
-  searchText: string,
-): Promise<
-  (Work & {
-    localImages: LocalImage[];
-  })[]
-> => {
+export const findAll = async (): Promise<WorkWithImages[]> => {
   return prisma.work.findMany({
+    orderBy: { createdAt: 'desc' },
     include: { localImages: true },
-    where: {
-      OR: [{ title: { contains: searchText } }, { author: { contains: searchText } }],
-    },
   });
 };
 
-export const findAll = async (): Promise<
-  (Work & {
-    localImages: LocalImage[];
-  })[]
-> => {
+export const search = async (searchText: string): Promise<WorkWithImages[]> => {
   return prisma.work.findMany({
-    orderBy: { createdAt: 'desc' },
+    where: {
+      OR: [{ title: { contains: searchText } }, { author: { contains: searchText } }],
+    },
     include: { localImages: true },
   });
 };

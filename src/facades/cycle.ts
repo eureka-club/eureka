@@ -2,7 +2,7 @@ import { Cycle, LocalImage, User } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
 import { CreateCycleServerFields, CreateCycleServerPayload } from '../types/cycle';
-import { WorkWithImage } from '../types/work';
+import { WorkWithImages } from '../types/work';
 import prisma from '../lib/prisma';
 
 export const find = async (
@@ -10,7 +10,7 @@ export const find = async (
 ): Promise<
   | (Cycle & {
       localImages: LocalImage[];
-      works: WorkWithImage[];
+      works: WorkWithImages[];
     })
   | null
 > => {

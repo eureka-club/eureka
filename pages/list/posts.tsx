@@ -19,7 +19,7 @@ interface Props {
 
 const ListPostsPage: NextPage<Props> = ({ posts }) => {
   const router = useRouter();
-  const { mutate: execDeletePost, isSuccess: isDeletePostSucces } = useMutation(async (post: PostWithImages) => {
+  const { mutate: execDeletePost, isSuccess: isDeletePostSuccess } = useMutation(async (post: PostWithImages) => {
     const res = await fetch(`/api/post/${post.id}`, {
       method: 'delete',
     });
@@ -33,11 +33,11 @@ const ListPostsPage: NextPage<Props> = ({ posts }) => {
   };
 
   useEffect(() => {
-    if (isDeletePostSucces === true) {
+    if (isDeletePostSuccess === true) {
       router.replace(router.asPath);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDeletePostSucces]);
+  }, [isDeletePostSuccess]);
 
   return (
     <SimpleLayout title="Posts list">

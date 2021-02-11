@@ -13,7 +13,7 @@ import { AiFillHeart } from 'react-icons/ai';
 import { BsBookmarkFill } from 'react-icons/bs';
 import { FiShare2 } from 'react-icons/fi';
 
-import { WorkWithImage } from '../../types/work';
+import { WorkWithImages } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
 import Mosaic from '../Mosaic';
 import UnclampText from '../UnclampText';
@@ -24,7 +24,7 @@ interface Props {
   cycle: Cycle & {
     creator: User;
     localImages: LocalImage[];
-    works: WorkWithImage[];
+    works: WorkWithImages[];
   };
 }
 

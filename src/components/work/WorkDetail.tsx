@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import { LocalImage, Work } from '@prisma/client';
 import { FunctionComponent } from 'react';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
@@ -14,14 +13,13 @@ import { BsBookmarkFill, BsBoxArrowUpRight } from 'react-icons/bs';
 import { FiShare2 } from 'react-icons/fi';
 
 import LocalImageComponent from '../LocalImage';
+import { WorkWithImages } from '../../types/work';
 import UnclampText from '../UnclampText';
 import WorkSummary from './WorkSummary';
 import styles from './WorkDetail.module.css';
 
 interface Props {
-  work: Work & {
-    localImages: LocalImage[];
-  };
+  work: WorkWithImages;
 }
 
 const WorkDetail: FunctionComponent<Props> = ({ work }) => {
