@@ -320,8 +320,13 @@ const CreatePostForm: FunctionComponent = () => {
           <Row>
             <Col>
               <FormCheck type="checkbox" defaultChecked inline id="isPublic" label="This post is public" />
+              <small style={{ color: 'lightgrey', display: 'block', margin: '0.25rem 0 0 1.25rem' }}>
+                Public posts are accessible by all. Uncheck to make
+                <br />
+                post private (only you can see).{' '}
+              </small>
             </Col>
-            <Col>
+            <Col style={{ borderLeft: '1px solid lightgrey' }}>
               <Button variant="primary" type="submit" className="pl-5 pr-4 float-right">
                 Create post
                 {isCreatePostLoading ? (
