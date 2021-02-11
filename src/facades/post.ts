@@ -61,7 +61,7 @@ export const createFromServerFields = async (
   return prisma.post.create({
     data: {
       title: payload.title,
-      ...(payload.contentText != null && { contentText: payload.contentText }),
+      contentText: payload.contentText,
       language: payload.language,
       isPublic: payload.isPublic,
       creator: { connect: { id: creator.id } },

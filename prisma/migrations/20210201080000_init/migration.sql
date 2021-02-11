@@ -104,7 +104,7 @@ CREATE TABLE [dbo].[posts] (
     [id] INT IDENTITY(1,1),
     [creator_id] INT NOT NULL,
     [language] NVARCHAR(1000) NOT NULL,
-    [content_text] NVARCHAR(4000),
+    [content_text] NVARCHAR(4000) NOT NULL,
     [is_public] BIT NOT NULL,
     [created_at] DATETIME2 NOT NULL CONSTRAINT [DF__posts__created_at] DEFAULT CURRENT_TIMESTAMP,
     [updated_at] DATETIME2 NOT NULL,

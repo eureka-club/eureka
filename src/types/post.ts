@@ -15,7 +15,7 @@ interface CreatePostClientPayloadBase {
   title: string;
   image: File;
   language: string;
-  contentText: string | null;
+  contentText: string;
   isPublic: boolean;
 }
 export interface CreatePostAboutCycleClientPayload extends CreatePostClientPayloadBase {
@@ -32,7 +32,7 @@ export interface CreatePostServerFields {
   selectedWorkId?: string[];
   title: string[];
   language: string[];
-  contentText?: string[];
+  contentText: string[];
   isPublic: boolean[];
 }
 
@@ -41,6 +41,6 @@ export interface CreatePostServerPayload {
   selectedWorkId?: number;
   title: string;
   language: string;
-  contentText?: string;
+  contentText: string;
   isPublic: boolean;
 }

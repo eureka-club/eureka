@@ -307,9 +307,9 @@ const CreatePostForm: FunctionComponent = () => {
           <Row>
             <FormGroup controlId="description" as={Col}>
               <FormLabel>
-                Write what you thought and / or learned from this work or cycle. Why did you find it interesting?
+                *Write what you thought and / or learned from this work or cycle. Why did you find it interesting?
               </FormLabel>
-              <FormControl as="textarea" rows={6} maxLength={4000} />
+              <FormControl as="textarea" rows={6} maxLength={4000} required />
             </FormGroup>
           </Row>
         </Container>
