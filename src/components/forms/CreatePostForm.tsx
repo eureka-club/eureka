@@ -258,7 +258,7 @@ const CreatePostForm: FunctionComponent = () => {
           <Row>
             <Col sm={{ span: 6 }}>
               <FormGroup controlId="workOrCycle">
-                <FormLabel>Add to cycle:</FormLabel>
+                <FormLabel>Search for cycle in which post will be added...</FormLabel>
                 {!selectedCycle ? (
                   <>
                     {/* language=CSS */}
