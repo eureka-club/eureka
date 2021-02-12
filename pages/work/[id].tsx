@@ -1,20 +1,19 @@
 import { GetServerSideProps, NextPage } from 'next';
-import { LocalImage, Work } from '@prisma/client';
 
 import DetailLayout from '../../src/components/layouts/DetailLayout';
 import WorkDetail from '../../src/components/work/WorkDetail';
-import { find } from '../../src/facades/work';
+import { countPosts, find } from '../../src/facades/work';
+import { WorkWithImages } from '../../src/types/work';
 
 interface Props {
-  work: Work & {
-    localImages: LocalImage[];
-  };
+  work: WorkWithImages;
+  postsCount: number;
 }
 
-const WorkDetailPage: NextPage<Props> = ({ work }) => {
+const WorkDetailPage: NextPage<Props> = ({ work, postsCount }) => {
   return (
     <DetailLayout title={work.title}>
-      <WorkDetail work={work} />
+      <WorkDetail work={work} postsCount={postsCount} />
     </DetailLayout>
   );
 };
@@ -34,8 +33,13 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     return { notFound: true };
   }
 
+  const postsCount = await countPosts(work);
+
   return {
-    props: { work },
+    props: {
+      work,
+      postsCount: postsCount.count,
+    },
   };
 };
 

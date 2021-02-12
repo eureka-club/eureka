@@ -21,6 +21,25 @@ export const findAll = async (): Promise<PostWithImages[]> => {
   });
 };
 
+export const search = async (query: { [key: string]: string | string[] }): Promise<Post[]> => {
+  const { q, where, include } = query;
+  if (where == null && q == null) {
+    throw new Error("[412] Invalid invocation! Either 'q' or 'where' query parameter must be provided");
+  }
+
+  if (typeof q === 'string') {
+    return prisma.post.findMany({
+      where: { title: { contains: q } },
+      ...(typeof include === 'string' && { include: JSON.parse(include) }),
+    });
+  }
+
+  return prisma.post.findMany({
+    ...(typeof where === 'string' && { where: JSON.parse(where) }),
+    ...(typeof include === 'string' && { include: JSON.parse(include) }),
+  });
+};
+
 export const createFromServerFields = async (
   fields: CreatePostServerFields,
   coverImageUpload: StoredFileUpload,

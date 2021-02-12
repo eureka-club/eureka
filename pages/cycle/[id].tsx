@@ -1,23 +1,25 @@
-import { Cycle, LocalImage, User } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { GetServerSideProps, NextPage } from 'next';
 
-import { WorkWithImage } from '../../src/types/work';
 import DetailLayout from '../../src/components/layouts/DetailLayout';
 import CycleDetail from '../../src/components/cycle/CycleDetail';
-import { find } from '../../src/facades/cycle';
+import { countPosts, countWorks, find } from '../../src/facades/cycle';
 
 interface Props {
-  cycle: Cycle & {
-    creator: User;
-    localImages: LocalImage[];
-    works: WorkWithImage[];
-  };
+  cycle: Prisma.CycleGetPayload<{
+    include: {
+      creator: true;
+      localImages: true;
+    };
+  }>;
+  postsCount: number;
+  worksCount: number;
 }
 
-const PostDetailPage: NextPage<Props> = ({ cycle }) => {
+const PostDetailPage: NextPage<Props> = ({ cycle, postsCount, worksCount }) => {
   return (
     <DetailLayout title={cycle.title}>
-      <CycleDetail cycle={cycle} />
+      <CycleDetail cycle={cycle} postsCount={postsCount} worksCount={worksCount} />
     </DetailLayout>
   );
 };
@@ -37,9 +39,14 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     return { notFound: true };
   }
 
+  const postsCount = await countPosts(cycle);
+  const worksCount = await countWorks(cycle);
+
   return {
     props: {
       cycle,
+      postsCount: postsCount.count,
+      worksCount: worksCount.count,
     },
   };
 };

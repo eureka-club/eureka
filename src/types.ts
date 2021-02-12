@@ -1,7 +1,8 @@
 import { User } from '@prisma/client';
 
-import { CycleWithImage } from './types/cycle';
-import { WorkWithImage } from './types/work';
+import { CycleWithImages } from './types/cycle';
+import { PostMosaicItem, PostWithImages } from './types/post';
+import { WorkMosaicItem, WorkWithImages } from './types/work';
 
 export interface FileUpload {
   fieldName: string;
@@ -28,14 +29,20 @@ export interface StoredFileUpload {
  * TS type guards
  */
 
-export type MosaicItem = CycleWithImage | WorkWithImage;
-export type SearchResult = CycleWithImage | WorkWithImage;
+export type MosaicItem = CycleWithImages | PostMosaicItem | WorkMosaicItem;
+export type SearchResult = CycleWithImages | PostWithImages | WorkWithImages;
 
-export const isCycle = (obj: MosaicItem | SearchResult): obj is CycleWithImage =>
-  typeof (obj as CycleWithImage).title === 'string' &&
-  typeof (obj as CycleWithImage).startDate === 'string' &&
-  typeof (obj as CycleWithImage).endDate === 'string';
-export const isWork = (obj: MosaicItem | SearchResult): obj is WorkWithImage =>
-  typeof (obj as WorkWithImage).title === 'string' &&
-  typeof (obj as WorkWithImage).author === 'string' &&
-  typeof (obj as WorkWithImage).type === 'string';
+// TODO separate type-guard fns for Mosaic & Search
+export const isCycle = (obj: MosaicItem | SearchResult): obj is CycleWithImages =>
+  typeof (obj as CycleWithImages).title === 'string' &&
+  typeof (obj as CycleWithImages).startDate === 'string' &&
+  typeof (obj as CycleWithImages).endDate === 'string';
+export const isPost = (obj: MosaicItem | SearchResult): obj is PostMosaicItem =>
+  typeof (obj as PostMosaicItem).title === 'string' &&
+  typeof (obj as PostMosaicItem).creator === 'object' &&
+  typeof (obj as PostMosaicItem).works === 'object' &&
+  typeof (obj as PostMosaicItem).language === 'string';
+export const isWork = (obj: MosaicItem | SearchResult): obj is WorkMosaicItem =>
+  typeof (obj as WorkMosaicItem).title === 'string' &&
+  typeof (obj as WorkMosaicItem).author === 'string' &&
+  typeof (obj as WorkMosaicItem).type === 'string';

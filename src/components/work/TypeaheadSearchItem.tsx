@@ -1,19 +1,21 @@
 import { FunctionComponent } from 'react';
 
-import { WorkWithImage } from '../../types/work';
+import { WorkWithImages } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
 import WorkSummary from './WorkSummary';
 import styles from './TypeaheadSearchItem.module.css';
 
 interface Props {
-  work: WorkWithImage;
+  work: WorkWithImages;
 }
 
 const TypeaheadSearchItem: FunctionComponent<Props> = ({ work }) => {
   return (
     <div className={styles.workSearchTypeaheadItem}>
       <div className={styles.imageWrapper}>
-        <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
+        {work.localImages != null && work.localImages[0] != null && (
+          <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
+        )}
         <span>{work.type}</span>
       </div>
       <div>

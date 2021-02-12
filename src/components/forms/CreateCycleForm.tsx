@@ -22,7 +22,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { DATE_FORMAT_PROPS } from '../../constants';
 import { CreateCycleClientPayload } from '../../types/cycle';
-import { WorkWithImage } from '../../types/work';
+import { WorkWithImages } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
 import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
@@ -36,12 +36,12 @@ interface Props {
 const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const [addWorkModalOpened, setAddWorkModalOpened] = useState(false);
   const [isWorkSearchLoading, setIsWorkSearchLoading] = useState(false);
-  const [workSearchResults, setWorkSearchResults] = useState<WorkWithImage[]>([]);
-  const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkWithImage | null>(null);
-  const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkWithImage[]>([]);
+  const [workSearchResults, setWorkSearchResults] = useState<WorkWithImages[]>([]);
+  const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkWithImages | null>(null);
+  const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkWithImages[]>([]);
   const [cycleCoverImageFile, setCycleCoverImageFile] = useState<File | null>(null);
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
-  const typeaheadRef = useRef<AsyncTypeahead<WorkWithImage>>(null);
+  const typeaheadRef = useRef<AsyncTypeahead<WorkWithImages>>(null);
 
   const router = useRouter();
   const {
@@ -89,8 +89,9 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const handleSearchWork = async (query: string) => {
     setIsWorkSearchLoading(true);
 
-    const response = await fetch(`/api/search/work?q=${query}`);
-    const items: WorkWithImage[] = await response.json();
+    const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
+    const response = await fetch(`/api/search/works?q=${query}&include=${includeQP}`);
+    const items: WorkWithImages[] = await response.json();
 
     setWorkSearchResults(items);
     setIsWorkSearchLoading(false);
@@ -101,7 +102,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     results,
   }: {
     activeIndex: number;
-    results: WorkWithImage[];
+    results: WorkWithImages[];
   }) => {
     if (activeIndex !== -1) {
       // wait for component rendering with setTimeout(fn, undefinded)
@@ -109,7 +110,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     }
   };
 
-  const handleSearchWorkSelect = (selected: WorkWithImage[]): void => {
+  const handleSearchWorkSelect = (selected: WorkWithImages[]): void => {
     if (selected[0] != null) {
       setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
       setAddWorkModalOpened(false);

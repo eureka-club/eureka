@@ -1,4 +1,16 @@
-import { LocalImage, Work } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+
+export type WorkWithImages = Prisma.WorkGetPayload<{
+  include: {
+    localImages: true;
+  };
+}>;
+
+export type WorkMosaicItem = Prisma.WorkGetPayload<{
+  include: {
+    localImages: true;
+  };
+}>;
 
 export interface CreateWorkClientPayload {
   cover: File;
@@ -38,8 +50,4 @@ export interface CreateWorkServerPayload {
   countryOfOrigin?: string;
   publicationYear?: Date;
   length?: string;
-}
-
-export interface WorkWithImage extends Work {
-  localImages: LocalImage[];
 }

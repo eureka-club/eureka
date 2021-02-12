@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import { LocalImage, Work } from '@prisma/client';
 import { FunctionComponent } from 'react';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
@@ -14,17 +13,18 @@ import { BsBookmarkFill, BsBoxArrowUpRight } from 'react-icons/bs';
 import { FiShare2 } from 'react-icons/fi';
 
 import LocalImageComponent from '../LocalImage';
+import PostsMosaic from './PostsMosaic';
+import { WorkWithImages } from '../../types/work';
 import UnclampText from '../UnclampText';
 import WorkSummary from './WorkSummary';
 import styles from './WorkDetail.module.css';
 
 interface Props {
-  work: Work & {
-    localImages: LocalImage[];
-  };
+  work: WorkWithImages;
+  postsCount: number;
 }
 
-const WorkDetail: FunctionComponent<Props> = ({ work }) => {
+const WorkDetail: FunctionComponent<Props> = ({ work, postsCount }) => {
   return (
     <>
       <Row className="mb-5">
@@ -70,7 +70,7 @@ const WorkDetail: FunctionComponent<Props> = ({ work }) => {
                     <NavLink eventKey="all">All related</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink eventKey="posts">Posts about this work</NavLink>
+                    <NavLink eventKey="posts">Posts about this work ({postsCount})</NavLink>
                   </NavItem>
                   <NavItem>
                     <NavLink eventKey="cycles">Cycles including this work</NavLink>
@@ -84,9 +84,7 @@ const WorkDetail: FunctionComponent<Props> = ({ work }) => {
                   <TabPane eventKey="all">
                     <h4>All related</h4>
                   </TabPane>
-                  <TabPane eventKey="posts">
-                    <h4>Posts about this work</h4>
-                  </TabPane>
+                  <TabPane eventKey="posts">{postsCount > 0 && <PostsMosaic work={work} />}</TabPane>
                   <TabPane eventKey="cycles">
                     <h4>Cycles including this work</h4>
                   </TabPane>

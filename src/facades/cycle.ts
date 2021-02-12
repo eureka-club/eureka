@@ -1,47 +1,22 @@
-import { Cycle, LocalImage, User } from '@prisma/client';
+import { Cycle, LocalImage, Prisma, User } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
 import { CreateCycleServerFields, CreateCycleServerPayload } from '../types/cycle';
-import { WorkWithImage } from '../types/work';
 import prisma from '../lib/prisma';
 
 export const find = async (
   id: number,
-): Promise<
-  | (Cycle & {
-      localImages: LocalImage[];
-      works: WorkWithImage[];
-    })
-  | null
-> => {
+): Promise<Prisma.CycleGetPayload<{
+  include: {
+    creator: true;
+    localImages: true;
+  };
+}> | null> => {
   return prisma.cycle.findUnique({
     where: { id },
     include: {
       creator: true,
       localImages: true,
-      works: {
-        include: {
-          localImages: true,
-        },
-        orderBy: {
-          createdAt: 'desc',
-        },
-      },
-    },
-  });
-};
-
-export const search = async (
-  searchText: string,
-): Promise<
-  (Cycle & {
-    localImages: LocalImage[];
-  })[]
-> => {
-  return prisma.cycle.findMany({
-    include: { localImages: true },
-    where: {
-      title: { contains: searchText },
     },
   });
 };
@@ -54,6 +29,43 @@ export const findAll = async (): Promise<
   return prisma.cycle.findMany({
     orderBy: { createdAt: 'desc' },
     include: { localImages: true },
+  });
+};
+
+export const countPosts = async (
+  cycle: Cycle,
+): Promise<Prisma.GetPostAggregateType<{ count: true; where: { cycles: { some: { id: number } } } }>> => {
+  return prisma.post.aggregate({
+    count: true,
+    where: { cycles: { some: { id: cycle.id } } },
+  });
+};
+
+export const countWorks = async (
+  cycle: Cycle,
+): Promise<Prisma.GetWorkAggregateType<{ count: true; where: { cycles: { some: { id: number } } } }>> => {
+  return prisma.work.aggregate({
+    count: true,
+    where: { cycles: { some: { id: cycle.id } } },
+  });
+};
+
+export const search = async (query: { [key: string]: string | string[] }): Promise<Cycle[]> => {
+  const { q, where, include } = query;
+  if (where == null && q == null) {
+    throw new Error("[412] Invalid invocation! Either 'q' or 'where' query parameter must be provided");
+  }
+
+  if (typeof q === 'string') {
+    return prisma.cycle.findMany({
+      where: { title: { contains: q } },
+      ...(typeof include === 'string' && { include: JSON.parse(include) }),
+    });
+  }
+
+  return prisma.cycle.findMany({
+    ...(typeof where === 'string' && { where: JSON.parse(where) }),
+    ...(typeof include === 'string' && { include: JSON.parse(include) }),
   });
 };
 

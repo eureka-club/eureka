@@ -1,6 +1,6 @@
 import { Cycle, LocalImage } from '@prisma/client';
 
-export interface CycleWithImage extends Cycle {
+export interface CycleWithImages extends Cycle {
   localImages: LocalImage[];
 }
 

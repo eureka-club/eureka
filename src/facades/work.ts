@@ -1,46 +1,50 @@
-import { LocalImage, Work } from '@prisma/client';
+import { Prisma, Work } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
-import { CreateWorkServerFields, CreateWorkServerPayload } from '../types/work';
+import { CreateWorkServerFields, CreateWorkServerPayload, WorkWithImages } from '../types/work';
 import prisma from '../lib/prisma';
 
-export const find = async (
-  id: number,
-): Promise<
-  | (Work & {
-      localImages: LocalImage[];
-    })
-  | null
-> => {
+export const find = async (id: number): Promise<WorkWithImages | null> => {
   return prisma.work.findUnique({
     where: { id },
     include: { localImages: true },
   });
 };
 
-export const search = async (
-  searchText: string,
-): Promise<
-  (Work & {
-    localImages: LocalImage[];
-  })[]
-> => {
-  return prisma.work.findMany({
-    include: { localImages: true },
-    where: {
-      OR: [{ title: { contains: searchText } }, { author: { contains: searchText } }],
-    },
-  });
-};
-
-export const findAll = async (): Promise<
-  (Work & {
-    localImages: LocalImage[];
-  })[]
-> => {
+export const findAll = async (): Promise<WorkWithImages[]> => {
   return prisma.work.findMany({
     orderBy: { createdAt: 'desc' },
     include: { localImages: true },
+  });
+};
+
+export const search = async (query: { [key: string]: string | string[] }): Promise<Work[]> => {
+  const { q, where, include } = query;
+  if (where == null && q == null) {
+    throw new Error("[412] Invalid invocation! Either 'q' or 'where' query parameter must be provided");
+  }
+
+  if (typeof q === 'string') {
+    return prisma.work.findMany({
+      where: {
+        OR: [{ title: { contains: q } }, { author: { contains: q } }],
+      },
+      ...(typeof include === 'string' && { include: JSON.parse(include) }),
+    });
+  }
+
+  return prisma.work.findMany({
+    ...(typeof where === 'string' && { where: JSON.parse(where) }),
+    ...(typeof include === 'string' && { include: JSON.parse(include) }),
+  });
+};
+
+export const countPosts = async (
+  work: Work,
+): Promise<Prisma.GetPostAggregateType<{ count: true; where: { works: { some: { id: number } } } }>> => {
+  return prisma.post.aggregate({
+    count: true,
+    where: { works: { some: { id: work.id } } },
   });
 };
 

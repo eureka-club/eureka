@@ -22,8 +22,8 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { SearchResult, isCycle, isWork } from '../../types';
 import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload } from '../../types/post';
-import { CycleWithImage } from '../../types/cycle';
-import { WorkWithImage } from '../../types/work';
+import { CycleWithImages } from '../../types/cycle';
+import { WorkWithImages } from '../../types/work';
 import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
 import CycleTypeaheadSearchItem from '../cycle/TypeaheadSearchItem';
@@ -36,9 +36,9 @@ const CreatePostForm: FunctionComponent = () => {
   const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
   const [isSearchCycleLoading, setIsSearchCycleLoading] = useState(false);
   const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
-  const [searchCycleResults, setSearchCycleResults] = useState<CycleWithImage[]>([]);
-  const [selectedCycle, setSelectedCycle] = useState<CycleWithImage | null>(null);
-  const [selectedWork, setSelectedWork] = useState<WorkWithImage | null>(null);
+  const [searchCycleResults, setSearchCycleResults] = useState<CycleWithImages[]>([]);
+  const [selectedCycle, setSelectedCycle] = useState<CycleWithImages | null>(null);
+  const [selectedWork, setSelectedWork] = useState<WorkWithImages | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
@@ -70,7 +70,8 @@ const CreatePostForm: FunctionComponent = () => {
   const handleSearchWorkOrCycle = async (query: string) => {
     setIsSearchWorkOrCycleLoading(true);
 
-    const response = await fetch(`/api/search/work-or-cycle?q=${query}`);
+    const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
+    const response = await fetch(`/api/search/works-or-cycles?q=${query}&include=${includeQP}`);
     const items: SearchResult[] = await response.json();
 
     setSearchWorkOrCycleResults(items);
@@ -80,8 +81,9 @@ const CreatePostForm: FunctionComponent = () => {
   const handleSearchCycle = async (query: string) => {
     setIsSearchCycleLoading(true);
 
-    const response = await fetch(`/api/search/cycle?q=${query}`);
-    const items: CycleWithImage[] = await response.json();
+    const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
+    const response = await fetch(`/api/search/cycles?q=${query}&include=${includeQP}`);
+    const items: CycleWithImages[] = await response.json();
 
     setSearchCycleResults(items);
     setIsSearchCycleLoading(false);
@@ -99,7 +101,7 @@ const CreatePostForm: FunctionComponent = () => {
     }
   };
 
-  const handleSelectCycle = (selected: CycleWithImage[]): void => {
+  const handleSelectCycle = (selected: CycleWithImages[]): void => {
     const searchResult = selected[0];
     if (searchResult != null) {
       setSelectedCycle(searchResult);
@@ -263,9 +265,6 @@ const CreatePostForm: FunctionComponent = () => {
                   <>
                     {/* language=CSS */}
                     <style jsx global>{`
-                      .rbt-input#create-post--search-cycle::placeholder {
-                        font-size: 0.57rem;
-                      }
                       .rbt-menu {
                         background-color: #d0f7ed;
                         min-width: 468px;
@@ -275,7 +274,7 @@ const CreatePostForm: FunctionComponent = () => {
                       id="create-post--search-cycle"
                       filterBy={() => true}
                       inputProps={{ id: 'create-post--search-cycle' }}
-                      placeholder="Search Cycle to which post will be added (autoselected if post is about cycle)"
+                      placeholder="Search Cycle to which post will be added"
                       isLoading={isSearchCycleLoading}
                       labelKey={(res: SearchResult) => `${res.title}`}
                       minLength={2}
