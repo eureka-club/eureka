@@ -70,7 +70,7 @@ const CreatePostForm: FunctionComponent = () => {
   const handleSearchWorkOrCycle = async (query: string) => {
     setIsSearchWorkOrCycleLoading(true);
 
-    const response = await fetch(`/api/search/work-or-cycle?q=${query}`);
+    const response = await fetch(`/api/search/works-or-cycles?q=${query}`);
     const items: SearchResult[] = await response.json();
 
     setSearchWorkOrCycleResults(items);
@@ -80,7 +80,7 @@ const CreatePostForm: FunctionComponent = () => {
   const handleSearchCycle = async (query: string) => {
     setIsSearchCycleLoading(true);
 
-    const response = await fetch(`/api/search/cycle?q=${query}`);
+    const response = await fetch(`/api/search/cycles?q=${query}`);
     const items: CycleWithImages[] = await response.json();
 
     setSearchCycleResults(items);
