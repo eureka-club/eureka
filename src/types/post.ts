@@ -4,6 +4,14 @@ export interface PostWithImages extends Post {
   localImages: LocalImage[];
 }
 
+export type PostMosaicItem = Prisma.PostGetPayload<{
+  include: {
+    creator: true;
+    localImages: true;
+    works: true;
+  };
+}>;
+
 export type PostWithCyclesWorks = Prisma.PostGetPayload<{
   include: {
     cycles: true;

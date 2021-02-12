@@ -1,4 +1,4 @@
-import { Cycle, Post, Prisma, User, Work } from '@prisma/client';
+import { Cycle, Post, User, Work } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
 import { CreatePostServerFields, CreatePostServerPayload, PostWithImages, PostWithCyclesWorks } from '../types/post';
@@ -21,12 +21,22 @@ export const findAll = async (): Promise<PostWithImages[]> => {
   });
 };
 
-export const countPosts = async (
-  work: Work,
-): Promise<Prisma.GetPostAggregateType<{ count: true; where: { works: { some: { id: number } } } }>> => {
-  return prisma.post.aggregate({
-    count: true,
-    where: { works: { some: { id: work.id } } },
+export const search = async (query: { [key: string]: string | string[] }): Promise<Post[]> => {
+  const { q, where, include } = query;
+  if (where == null && q == null) {
+    throw new Error("[412] Invalid invocation! Either 'q' or 'where' query parameter must be provided");
+  }
+
+  if (typeof q === 'string') {
+    return prisma.post.findMany({
+      where: { title: { contains: q } },
+      ...(typeof include === 'string' && { include: JSON.parse(include) }),
+    });
+  }
+
+  return prisma.post.findMany({
+    ...(typeof where === 'string' && { where: JSON.parse(where) }),
+    ...(typeof include === 'string' && { include: JSON.parse(include) }),
   });
 };
 

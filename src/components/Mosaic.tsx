@@ -2,7 +2,8 @@ import classNames from 'classnames';
 import { FunctionComponent } from 'react';
 import Masonry from 'react-masonry-css';
 
-import { MosaicItem, isCycle, isWork } from '../types';
+import { MosaicItem, isCycle, isWork, isPost } from '../types';
+import MosaicItemPost from './post/MosaicItem';
 import MosaicItemWork from './work/MosaicItem';
 import styles from './Mosaic.module.css';
 
@@ -11,12 +12,16 @@ interface Props {
 }
 
 const renderMosaicItem = (item: MosaicItem) => {
+  if (isCycle(item)) {
+    return '';
+  }
+  if (isPost(item)) {
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    return <MosaicItemPost key={`post-${item.id}`} {...item} />;
+  }
   if (isWork(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
     return <MosaicItemWork key={`work-${item.id}`} {...item} />;
-  }
-  if (isCycle(item)) {
-    return '';
   }
 
   return '';

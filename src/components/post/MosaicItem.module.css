@@ -1,0 +1,81 @@
+.post {
+  margin-bottom: 2rem;
+}
+
+.imageContainer {
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.imageContainer .postImage {
+  width: 100%;
+}
+
+.cycleCreator {
+  color: #fff;
+  font-size: 0.7rem;
+  left: 0.5rem;
+  position: absolute;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.75);
+  top: 0.5rem;
+}
+.cycleCreatorAvatar {
+  border-radius: 50%;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.333);
+  height: 24px;
+  width: 24px;
+}
+
+.type {
+  background-color: #b0baca;
+  border-radius: 1rem;
+  border: 1px solid #a9b4c6;
+  bottom: 0.5rem;
+  font-size: 0.85rem;
+  left: 0.5rem;
+  line-height: 1;
+  padding: 0.25rem 0.75rem;
+  position: absolute;
+  text-transform: capitalize;
+}
+
+.actions {
+  bottom: 0.5rem;
+  color: #ffffff;
+  position: absolute;
+  right: 1rem;
+  transform: scale(1.5);
+}
+.actionBookmark,
+.actionLike {
+  cursor: pointer;
+  filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.5));
+  transition: transform 0.15s;
+}
+.actionBookmark:hover,
+.actionLike:hover {
+  transform: scale(1.15);
+}
+.actionBookmark {
+  margin-right: 0.25rem;
+}
+.actionLike {
+  color: #e3506d;
+}
+
+.title {
+  color: #333;
+  display: block;
+  font-size: 1rem;
+  font-weight: 300;
+  margin-bottom: 0.5rem;
+}
+
+.work {
+  color: #333;
+  display: block;
+  font-weight: 100;
+  font-size: 0.85rem;
+}

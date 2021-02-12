@@ -13,6 +13,7 @@ import { BsBookmarkFill, BsBoxArrowUpRight } from 'react-icons/bs';
 import { FiShare2 } from 'react-icons/fi';
 
 import LocalImageComponent from '../LocalImage';
+import PostsMosaic from './PostsMosaic';
 import { WorkWithImages } from '../../types/work';
 import UnclampText from '../UnclampText';
 import WorkSummary from './WorkSummary';
@@ -83,9 +84,7 @@ const WorkDetail: FunctionComponent<Props> = ({ work, postsCount }) => {
                   <TabPane eventKey="all">
                     <h4>All related</h4>
                   </TabPane>
-                  <TabPane eventKey="posts">
-                    <h4>Posts about this work</h4>
-                  </TabPane>
+                  <TabPane eventKey="posts">{postsCount > 0 && <PostsMosaic work={work} />}</TabPane>
                   <TabPane eventKey="cycles">
                     <h4>Cycles including this work</h4>
                   </TabPane>
