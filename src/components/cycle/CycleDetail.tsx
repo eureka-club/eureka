@@ -1,4 +1,4 @@
-import { Cycle, LocalImage, User } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import classNames from 'classnames';
 import { FunctionComponent } from 'react';
 import Col from 'react-bootstrap/Col';
@@ -13,22 +13,24 @@ import { AiFillHeart } from 'react-icons/ai';
 import { BsBookmarkFill } from 'react-icons/bs';
 import { FiShare2 } from 'react-icons/fi';
 
-import { WorkWithImages } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
-import Mosaic from '../Mosaic';
-import UnclampText from '../UnclampText';
 import CycleSummary from './CycleSummary';
+import PostsMosaic from './PostsMosaic';
+import UnclampText from '../UnclampText';
 import styles from './CycleDetail.module.css';
 
 interface Props {
-  cycle: Cycle & {
-    creator: User;
-    localImages: LocalImage[];
-    works: WorkWithImages[];
-  };
+  cycle: Prisma.CycleGetPayload<{
+    include: {
+      creator: true;
+      localImages: true;
+    };
+  }>;
+  postsCount: number;
+  worksCount: number;
 }
 
-const CycleDetailComponent: FunctionComponent<Props> = ({ cycle }) => {
+const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, postsCount, worksCount }) => {
   return (
     <>
       <Row className="mb-5">
@@ -71,10 +73,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle }) => {
               <Col>
                 <Nav variant="tabs" fill>
                   <NavItem>
-                    <NavLink eventKey="cycle-content">Cycle content</NavLink>
+                    <NavLink eventKey="cycle-content">Cycle content ({worksCount})</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink eventKey="posts">Posts</NavLink>
+                    <NavLink eventKey="posts">Posts ({postsCount})</NavLink>
                   </NavItem>
                   <NavItem>
                     <NavLink eventKey="forum">Forum</NavLink>
@@ -91,17 +93,15 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle }) => {
                         <UnclampText text={cycle.contentText} clampHeight="7rem" />
                       </div>
                     )}
-                    {cycle.works.length && (
-                      <>
-                        <h2 className="mb-4">
-                          {cycle.works.length === 1 ? '1 Work' : `${cycle.works.length} Works`} in cycle
-                        </h2>
-                        <Mosaic stack={cycle.works} />
-                      </>
-                    )}
+                    {worksCount === 0 && <h2>No Works in cycle</h2>}
+                    {worksCount === 1 && <h2>1 Work in cycle</h2>}
+                    {worksCount > 1 && <h2>{worksCount} Works in cycle</h2>}
                   </TabPane>
                   <TabPane eventKey="posts">
-                    <h4>Posts</h4>
+                    {postsCount === 0 && <h2>No Posts in cycle</h2>}
+                    {postsCount === 1 && <h2>1 Post in cycle</h2>}
+                    {postsCount > 1 && <h2>{postsCount} Posts in cycle</h2>}
+                    {postsCount > 0 && <PostsMosaic cycle={cycle} />}
                   </TabPane>
                   <TabPane eventKey="forum">
                     <h4>Forum</h4>

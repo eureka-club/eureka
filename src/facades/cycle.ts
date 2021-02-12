@@ -1,33 +1,52 @@
-import { Cycle, LocalImage, User } from '@prisma/client';
+import { Cycle, LocalImage, Prisma, User } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
 import { CreateCycleServerFields, CreateCycleServerPayload } from '../types/cycle';
-import { WorkWithImages } from '../types/work';
 import prisma from '../lib/prisma';
 
 export const find = async (
   id: number,
-): Promise<
-  | (Cycle & {
-      localImages: LocalImage[];
-      works: WorkWithImages[];
-    })
-  | null
-> => {
+): Promise<Prisma.CycleGetPayload<{
+  include: {
+    creator: true;
+    localImages: true;
+  };
+}> | null> => {
   return prisma.cycle.findUnique({
     where: { id },
     include: {
       creator: true,
       localImages: true,
-      works: {
-        include: {
-          localImages: true,
-        },
-        orderBy: {
-          createdAt: 'desc',
-        },
-      },
     },
+  });
+};
+
+export const findAll = async (): Promise<
+  (Cycle & {
+    localImages: LocalImage[];
+  })[]
+> => {
+  return prisma.cycle.findMany({
+    orderBy: { createdAt: 'desc' },
+    include: { localImages: true },
+  });
+};
+
+export const countPosts = async (
+  cycle: Cycle,
+): Promise<Prisma.GetPostAggregateType<{ count: true; where: { cycles: { some: { id: number } } } }>> => {
+  return prisma.post.aggregate({
+    count: true,
+    where: { cycles: { some: { id: cycle.id } } },
+  });
+};
+
+export const countWorks = async (
+  cycle: Cycle,
+): Promise<Prisma.GetWorkAggregateType<{ count: true; where: { cycles: { some: { id: number } } } }>> => {
+  return prisma.work.aggregate({
+    count: true,
+    where: { cycles: { some: { id: cycle.id } } },
   });
 };
 
@@ -43,17 +62,6 @@ export const search = async (
     where: {
       title: { contains: searchText },
     },
-  });
-};
-
-export const findAll = async (): Promise<
-  (Cycle & {
-    localImages: LocalImage[];
-  })[]
-> => {
-  return prisma.cycle.findMany({
-    orderBy: { createdAt: 'desc' },
-    include: { localImages: true },
   });
 };
 
