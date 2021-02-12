@@ -89,7 +89,8 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const handleSearchWork = async (query: string) => {
     setIsWorkSearchLoading(true);
 
-    const response = await fetch(`/api/search/works?q=${query}`);
+    const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
+    const response = await fetch(`/api/search/works?q=${query}&include=${includeQP}`);
     const items: WorkWithImages[] = await response.json();
 
     setWorkSearchResults(items);

@@ -70,7 +70,8 @@ const CreatePostForm: FunctionComponent = () => {
   const handleSearchWorkOrCycle = async (query: string) => {
     setIsSearchWorkOrCycleLoading(true);
 
-    const response = await fetch(`/api/search/works-or-cycles?q=${query}`);
+    const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
+    const response = await fetch(`/api/search/works-or-cycles?q=${query}&include=${includeQP}`);
     const items: SearchResult[] = await response.json();
 
     setSearchWorkOrCycleResults(items);
@@ -80,7 +81,8 @@ const CreatePostForm: FunctionComponent = () => {
   const handleSearchCycle = async (query: string) => {
     setIsSearchCycleLoading(true);
 
-    const response = await fetch(`/api/search/cycles?q=${query}`);
+    const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
+    const response = await fetch(`/api/search/cycles?q=${query}&include=${includeQP}`);
     const items: CycleWithImages[] = await response.json();
 
     setSearchCycleResults(items);
@@ -263,9 +265,6 @@ const CreatePostForm: FunctionComponent = () => {
                   <>
                     {/* language=CSS */}
                     <style jsx global>{`
-                      .rbt-input#create-post--search-cycle::placeholder {
-                        font-size: 0.57rem;
-                      }
                       .rbt-menu {
                         background-color: #d0f7ed;
                         min-width: 468px;
@@ -275,7 +274,7 @@ const CreatePostForm: FunctionComponent = () => {
                       id="create-post--search-cycle"
                       filterBy={() => true}
                       inputProps={{ id: 'create-post--search-cycle' }}
-                      placeholder="Search Cycle to which post will be added (autoselected if post is about cycle)"
+                      placeholder="Search Cycle to which post will be added"
                       isLoading={isSearchCycleLoading}
                       labelKey={(res: SearchResult) => `${res.title}`}
                       minLength={2}

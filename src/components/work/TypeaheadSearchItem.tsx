@@ -13,7 +13,9 @@ const TypeaheadSearchItem: FunctionComponent<Props> = ({ work }) => {
   return (
     <div className={styles.workSearchTypeaheadItem}>
       <div className={styles.imageWrapper}>
-        <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
+        {work.localImages != null && work.localImages[0] != null && (
+          <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
+        )}
         <span>{work.type}</span>
       </div>
       <div>

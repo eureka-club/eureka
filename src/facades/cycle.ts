@@ -50,18 +50,22 @@ export const countWorks = async (
   });
 };
 
-export const search = async (
-  searchText: string,
-): Promise<
-  (Cycle & {
-    localImages: LocalImage[];
-  })[]
-> => {
+export const search = async (query: { [key: string]: string | string[] }): Promise<Cycle[]> => {
+  const { q, where, include } = query;
+  if (where == null && q == null) {
+    throw new Error("[412] Invalid invocation! Either 'q' or 'where' query parameter must be provided");
+  }
+
+  if (typeof q === 'string') {
+    return prisma.cycle.findMany({
+      where: { title: { contains: q } },
+      ...(typeof include === 'string' && { include: JSON.parse(include) }),
+    });
+  }
+
   return prisma.cycle.findMany({
-    include: { localImages: true },
-    where: {
-      title: { contains: searchText },
-    },
+    ...(typeof where === 'string' && { where: JSON.parse(where) }),
+    ...(typeof include === 'string' && { include: JSON.parse(include) }),
   });
 };
 
