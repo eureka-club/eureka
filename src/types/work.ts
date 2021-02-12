@@ -6,6 +6,12 @@ export type WorkWithImages = Prisma.WorkGetPayload<{
   };
 }>;
 
+export type WorkMosaicItem = Prisma.WorkGetPayload<{
+  include: {
+    localImages: true;
+  };
+}>;
+
 export interface CreateWorkClientPayload {
   cover: File;
   type: string;

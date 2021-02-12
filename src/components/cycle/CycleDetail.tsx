@@ -16,6 +16,7 @@ import { FiShare2 } from 'react-icons/fi';
 import LocalImageComponent from '../LocalImage';
 import CycleSummary from './CycleSummary';
 import PostsMosaic from './PostsMosaic';
+import WorksMosaic from './WorksMosaic';
 import UnclampText from '../UnclampText';
 import styles from './CycleDetail.module.css';
 
@@ -96,6 +97,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, postsCount, wor
                     {worksCount === 0 && <h2>No Works in cycle</h2>}
                     {worksCount === 1 && <h2>1 Work in cycle</h2>}
                     {worksCount > 1 && <h2>{worksCount} Works in cycle</h2>}
+                    {worksCount > 0 && <WorksMosaic cycle={cycle} />}
                   </TabPane>
                   <TabPane eventKey="posts">
                     {postsCount === 0 && <h2>No Posts in cycle</h2>}
