@@ -79,10 +79,17 @@ const CreatePostForm: FunctionComponent = () => {
   };
 
   const handleSearchCycle = async (query: string) => {
-    setIsSearchCycleLoading(true);
-
+    let criteria = `q=${query}`;
+    if (selectedWork != null) {
+      criteria = `where=${JSON.stringify({
+        title: { contains: query },
+        works: { some: { id: selectedWork.id } },
+      })}`;
+    }
     const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
-    const response = await fetch(`/api/search/cycles?q=${query}&include=${includeQP}`);
+
+    setIsSearchCycleLoading(true);
+    const response = await fetch(`/api/search/cycles?${criteria}&include=${includeQP}`);
     const items: CycleWithImages[] = await response.json();
 
     setSearchCycleResults(items);
@@ -278,6 +285,7 @@ const CreatePostForm: FunctionComponent = () => {
                       isLoading={isSearchCycleLoading}
                       labelKey={(res: SearchResult) => `${res.title}`}
                       minLength={2}
+                      useCache={false}
                       onSearch={handleSearchCycle}
                       options={searchCycleResults}
                       onChange={handleSelectCycle}
