@@ -52,9 +52,14 @@
 }
 
 .title {
-  color: #333;
-  display: block;
-  font-weight: 600;
+  color: var(--text-color-primary);
+  font-weight: 300;
   font-size: 1rem;
   margin-bottom: 0.2rem;
+}
+.title a {
+  color: var(--text-color-primary);
+}
+.title a:hover {
+  color: #0056b3;
 }

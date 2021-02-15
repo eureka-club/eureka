@@ -29,7 +29,7 @@ const PostsMosaic: FunctionComponent<Props> = ({ cycle }) => {
           <span className="sr-only">Loading...</span>
         </Spinner>
       )}
-      {isSuccess && data != null && <Mosaic stack={data} />}
+      {isSuccess && data != null && <Mosaic stack={data} postsLinksTo={cycle} />}
     </>
   );
 };

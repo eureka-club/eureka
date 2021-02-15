@@ -22,9 +22,11 @@ const MosaicItem: FunctionComponent<CycleWithImages> = ({ id, title, localImages
           <AiOutlineHeart className={styles.actionLike} />
         </div>
       </div>
-      <Link href={`/cycle/${id}`}>
-        <a className={styles.title}>{title}</a>
-      </Link>
+      <h3 className={styles.title}>
+        <Link href={`/cycle/${id}`}>
+          <a>{title}</a>
+        </Link>
+      </h3>
     </article>
   );
 };

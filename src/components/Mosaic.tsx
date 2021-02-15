@@ -1,27 +1,28 @@
+import { Cycle, Work } from '@prisma/client';
 import classNames from 'classnames';
 import { FunctionComponent } from 'react';
 import Masonry from 'react-masonry-css';
 
-import { MosaicItem, isCycle, isWork, isPost } from '../types';
+import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem } from '../types';
 import MosaicItemCycle from './cycle/MosaicItem';
 import MosaicItemPost from './post/MosaicItem';
 import MosaicItemWork from './work/MosaicItem';
 import styles from './Mosaic.module.css';
 
 interface Props {
+  postsLinksTo?: Cycle | Work;
   stack: MosaicItem[];
 }
 
-const renderMosaicItem = (item: MosaicItem) => {
-  if (isCycle(item)) {
+const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefined) => {
+  if (isCycleMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
     return <MosaicItemCycle key={`cycle-${item.id}`} {...item} />;
   }
-  if (isPost(item)) {
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    return <MosaicItemPost key={`post-${item.id}`} {...item} />;
+  if (isPostMosaicItem(item)) {
+    return <MosaicItemPost key={`post-${item.id}`} post={item} postParent={postsParent} />;
   }
-  if (isWork(item)) {
+  if (isWorkMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
     return <MosaicItemWork key={`work-${item.id}`} {...item} />;
   }
@@ -29,7 +30,7 @@ const renderMosaicItem = (item: MosaicItem) => {
   return '';
 };
 
-const Mosaic: FunctionComponent<Props> = ({ stack }) => {
+const Mosaic: FunctionComponent<Props> = ({ postsLinksTo, stack }) => {
   return (
     <Masonry
       breakpointCols={{
@@ -41,7 +42,7 @@ const Mosaic: FunctionComponent<Props> = ({ stack }) => {
       className={classNames('d-flex', styles.masonry)}
       columnClassName={styles.masonryColumn}
     >
-      {stack.map((item: MosaicItem) => renderMosaicItem(item))}
+      {stack.map((item: MosaicItem) => renderMosaicItem(item, postsLinksTo))}
     </Masonry>
   );
 };

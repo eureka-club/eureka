@@ -20,7 +20,7 @@ import { BsFillXCircleFill } from 'react-icons/bs';
 import { useMutation } from 'react-query';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
-import { SearchResult, isCycle, isWork } from '../../types';
+import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
 import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload } from '../../types/post';
 import { CycleWithImages } from '../../types/cycle';
 import { WorkWithImages } from '../../types/work';
@@ -99,10 +99,10 @@ const CreatePostForm: FunctionComponent = () => {
   const handleSelectWorkOrCycle = (selected: SearchResult[]): void => {
     const searchResult = selected[0];
     if (searchResult != null) {
-      if (isCycle(searchResult)) {
+      if (isCycleMosaicItem(searchResult)) {
         setSelectedCycle(searchResult);
       }
-      if (isWork(searchResult)) {
+      if (isWorkMosaicItem(searchResult)) {
         setSelectedWork(searchResult);
       }
     }
@@ -218,10 +218,10 @@ const CreatePostForm: FunctionComponent = () => {
                       options={searchWorkOrCycleResults}
                       onChange={handleSelectWorkOrCycle}
                       renderMenuItemChildren={(searchResult) => {
-                        if (isCycle(searchResult)) {
+                        if (isCycleMosaicItem(searchResult)) {
                           return <CycleTypeaheadSearchItem cycle={searchResult} />;
                         }
-                        if (isWork(searchResult)) {
+                        if (isWorkMosaicItem(searchResult)) {
                           return <WorkTypeaheadSearchItem work={searchResult} />;
                         }
 

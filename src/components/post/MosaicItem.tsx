@@ -1,4 +1,6 @@
+import { Cycle, Work } from '@prisma/client';
 import classNames from 'classnames';
+import Link from 'next/link';
 import { FunctionComponent } from 'react';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { BsBookmark } from 'react-icons/bs';
@@ -6,28 +8,72 @@ import { BsBookmark } from 'react-icons/bs';
 import { PostMosaicItem } from '../../types/post';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
+import { isCycle, isWork } from '../../types';
 
-const MosaicItem: FunctionComponent<PostMosaicItem> = ({ creator, title, localImages, works }) => {
+interface Props {
+  post: PostMosaicItem;
+  postParent?: Cycle | Work;
+}
+
+const MosaicItem: FunctionComponent<Props> = ({ post, postParent }) => {
+  const postLinkHref = ((): string | null => {
+    if (postParent == null) {
+      return `/post/${post.id}`;
+    }
+    if (isCycle(postParent)) {
+      return `/cycle/${postParent.id}/post/${post.id}`;
+    }
+    if (isWork(postParent)) {
+      return `/work/${postParent.id}/post/${post.id}`;
+    }
+
+    return null;
+  })();
+
   return (
     <article className={styles.post}>
       <div className={styles.imageContainer}>
         <div className={styles.cycleCreator}>
           <img
-            src={creator.image || '/img/default-avatar.png'}
+            src={post.creator.image || '/img/default-avatar.png'}
             alt="creator avatar"
             className={classNames(styles.cycleCreatorAvatar, 'mr-2')}
           />
-          {creator.name}
+          {post.creator.name}
         </div>
-        <LocalImageComponent className={styles.postImage} filePath={localImages[0]?.storedFile} alt={title} />
+        {postLinkHref != null ? (
+          <Link href={postLinkHref}>
+            <a>
+              <LocalImageComponent
+                className={styles.postImage}
+                filePath={post.localImages[0]?.storedFile}
+                alt={post.title}
+              />
+            </a>
+          </Link>
+        ) : (
+          <LocalImageComponent
+            className={styles.postImage}
+            filePath={post.localImages[0]?.storedFile}
+            alt={post.title}
+          />
+        )}
         <span className={styles.type}>Post</span>
         <div className={styles.actions}>
           <BsBookmark className={styles.actionBookmark} />
           <AiOutlineHeart className={styles.actionLike} />
         </div>
       </div>
-      <h3 className={styles.title}>{title}</h3>
-      <h5 className={styles.work}>{works[0]?.title}</h5>
+      <h3 className={styles.title}>
+        {postLinkHref != null ? (
+          <Link href={postLinkHref}>
+            <a>{post.title}</a>
+          </Link>
+        ) : (
+          post.title
+        )}
+      </h3>
+      <h5 className={styles.work}>{post.works[0]?.title}</h5>
     </article>
   );
 };

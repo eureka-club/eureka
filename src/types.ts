@@ -1,4 +1,4 @@
-import { User } from '@prisma/client';
+import { Cycle, Post, User, Work } from '@prisma/client';
 
 import { CycleMosaicItem, CycleWithImages } from './types/cycle';
 import { PostMosaicItem, PostWithImages } from './types/post';
@@ -29,20 +29,34 @@ export interface StoredFileUpload {
  * TS type guards
  */
 
+export type BasicEntity = Cycle | Post | Work;
 export type MosaicItem = CycleMosaicItem | PostMosaicItem | WorkMosaicItem;
 export type SearchResult = CycleWithImages | PostWithImages | WorkWithImages;
 
-// TODO separate type-guard fns for Mosaic & Search
-export const isCycle = (obj: MosaicItem | SearchResult): obj is CycleMosaicItem =>
+export const isCycle = (obj: BasicEntity): obj is Cycle =>
+  typeof (obj as Cycle).title === 'string' &&
+  Object.prototype.toString.call((obj as Cycle).startDate) === '[object Date]' &&
+  Object.prototype.toString.call((obj as Cycle).endDate) === '[object Date]';
+export const isPost = (obj: BasicEntity): obj is Post =>
+  typeof (obj as Post).title === 'string' &&
+  typeof (obj as Post).creatorId === 'object' &&
+  typeof (obj as Post).language === 'string';
+export const isWork = (obj: BasicEntity): obj is Work =>
+  typeof (obj as Work).title === 'string' &&
+  typeof (obj as Work).author === 'string' &&
+  typeof (obj as Work).type === 'string';
+
+// TODO separate type-guards for MosaicItem and SearchResult
+export const isCycleMosaicItem = (obj: MosaicItem | SearchResult): obj is CycleMosaicItem =>
   typeof (obj as CycleMosaicItem).title === 'string' &&
   typeof (obj as CycleMosaicItem).startDate === 'string' &&
   typeof (obj as CycleMosaicItem).endDate === 'string';
-export const isPost = (obj: MosaicItem | SearchResult): obj is PostMosaicItem =>
+export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMosaicItem =>
   typeof (obj as PostMosaicItem).title === 'string' &&
   typeof (obj as PostMosaicItem).creator === 'object' &&
   typeof (obj as PostMosaicItem).works === 'object' &&
   typeof (obj as PostMosaicItem).language === 'string';
-export const isWork = (obj: MosaicItem | SearchResult): obj is WorkMosaicItem =>
+export const isWorkMosaicItem = (obj: MosaicItem | SearchResult): obj is WorkMosaicItem =>
   typeof (obj as WorkMosaicItem).title === 'string' &&
   typeof (obj as WorkMosaicItem).author === 'string' &&
   typeof (obj as WorkMosaicItem).type === 'string';

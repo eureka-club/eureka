@@ -66,16 +66,21 @@
 }
 
 .title {
-  color: #333;
+  color: var(--text-color-primary);
   display: block;
   font-size: 1rem;
   font-weight: 300;
   margin-bottom: 0.5rem;
 }
+.title a {
+  color: var(--text-color-primary);
+}
+.title a:hover {
+  color: #0056b3;
+}
 
 .work {
   color: #333;
-  display: block;
-  font-weight: 100;
   font-size: 0.85rem;
+  font-weight: 100;
 }

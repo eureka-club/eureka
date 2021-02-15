@@ -50,7 +50,7 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
           <span className="sr-only">Loading...</span>
         </Spinner>
       )}
-      {mosaicData.length && <Mosaic stack={mosaicData} />}
+      {mosaicData.length && <Mosaic stack={mosaicData} postsLinksTo={work} />}
     </>
   );
 };
