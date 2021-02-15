@@ -8,10 +8,19 @@
 }
 
 :root {
-  --color-primary: rgb(60, 209, 179);
-  --color-primary-raised: rgb(45, 195, 165);
-  --color-secondary: rgb(108, 77, 213);
-  --color-secondary-raised: rgb(92, 57, 208);
+  --eureka-blue: #6548c7;
+  --eureka-blue-dark: #6043c2;
+  --eureka-green: #68cfb4;
+  --eureka-green-dark: #63caaf;
+  --eureka-grey: #c1c6d2;
+  --eureka-grey-dark: #bcc1cd;
+  --eureka-purple: #493788;
+  --eureka-purple-dark: #443283;
+
+  --color-primary: var(--eureka-green);
+  --color-primary-raised: #63cab0;
+  --color-secondary: var(--eureka-purple);
+  --color-secondary-raised: var(--eureka-purple-dark);
   --color-emphasis: #f5a623;
   --color-emphasis-raised: #fca719;
   --text-color-primary: #333;

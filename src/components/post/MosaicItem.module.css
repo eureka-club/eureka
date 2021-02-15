@@ -29,12 +29,12 @@
 }
 
 .type {
-  background-color: #b0baca;
+  background-color: var(--eureka-green);
   border-radius: 1rem;
-  border: 1px solid #a9b4c6;
-  bottom: 0.5rem;
+  bottom: 0.85rem;
+  color: var(--text-color-primary);
   font-size: 0.85rem;
-  left: 0.5rem;
+  left: 0.85rem;
   line-height: 1;
   padding: 0.25rem 0.75rem;
   position: absolute;
@@ -42,10 +42,10 @@
 }
 
 .actions {
-  bottom: 0.5rem;
-  color: #ffffff;
+  bottom: 0.95rem;
+  color: var(--text-color-extralight);
   position: absolute;
-  right: 1rem;
+  right: 1.2rem;
   transform: scale(1.5);
 }
 .actionBookmark,
