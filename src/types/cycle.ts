@@ -1,8 +1,14 @@
-import { Cycle, LocalImage } from '@prisma/client';
+import { Cycle, LocalImage, Prisma } from '@prisma/client';
 
 export interface CycleWithImages extends Cycle {
   localImages: LocalImage[];
 }
+
+export type CycleMosaicItem = Prisma.CycleGetPayload<{
+  include: {
+    localImages: true;
+  };
+}>;
 
 export interface CreateCycleClientPayload {
   includedWorksIds: number[];

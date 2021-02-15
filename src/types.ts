@@ -1,6 +1,6 @@
 import { User } from '@prisma/client';
 
-import { CycleWithImages } from './types/cycle';
+import { CycleMosaicItem, CycleWithImages } from './types/cycle';
 import { PostMosaicItem, PostWithImages } from './types/post';
 import { WorkMosaicItem, WorkWithImages } from './types/work';
 
@@ -29,14 +29,14 @@ export interface StoredFileUpload {
  * TS type guards
  */
 
-export type MosaicItem = CycleWithImages | PostMosaicItem | WorkMosaicItem;
+export type MosaicItem = CycleMosaicItem | PostMosaicItem | WorkMosaicItem;
 export type SearchResult = CycleWithImages | PostWithImages | WorkWithImages;
 
 // TODO separate type-guard fns for Mosaic & Search
-export const isCycle = (obj: MosaicItem | SearchResult): obj is CycleWithImages =>
-  typeof (obj as CycleWithImages).title === 'string' &&
-  typeof (obj as CycleWithImages).startDate === 'string' &&
-  typeof (obj as CycleWithImages).endDate === 'string';
+export const isCycle = (obj: MosaicItem | SearchResult): obj is CycleMosaicItem =>
+  typeof (obj as CycleMosaicItem).title === 'string' &&
+  typeof (obj as CycleMosaicItem).startDate === 'string' &&
+  typeof (obj as CycleMosaicItem).endDate === 'string';
 export const isPost = (obj: MosaicItem | SearchResult): obj is PostMosaicItem =>
   typeof (obj as PostMosaicItem).title === 'string' &&
   typeof (obj as PostMosaicItem).creator === 'object' &&

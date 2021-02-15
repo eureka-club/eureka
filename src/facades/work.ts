@@ -39,6 +39,15 @@ export const search = async (query: { [key: string]: string | string[] }): Promi
   });
 };
 
+export const countCycles = async (
+  work: Work,
+): Promise<Prisma.GetCycleAggregateType<{ count: true; where: { works: { some: { id: number } } } }>> => {
+  return prisma.cycle.aggregate({
+    count: true,
+    where: { works: { some: { id: work.id } } },
+  });
+};
+
 export const countPosts = async (
   work: Work,
 ): Promise<Prisma.GetPostAggregateType<{ count: true; where: { works: { some: { id: number } } } }>> => {

@@ -13,6 +13,8 @@ import { BsBookmarkFill, BsBoxArrowUpRight } from 'react-icons/bs';
 import { FiShare2 } from 'react-icons/fi';
 
 import LocalImageComponent from '../LocalImage';
+import CombinedMosaic from './CombinedMosaic';
+import CyclesMosaic from './CyclesMosaic';
 import PostsMosaic from './PostsMosaic';
 import { WorkWithImages } from '../../types/work';
 import UnclampText from '../UnclampText';
@@ -21,10 +23,11 @@ import styles from './WorkDetail.module.css';
 
 interface Props {
   work: WorkWithImages;
+  cyclesCount: number;
   postsCount: number;
 }
 
-const WorkDetail: FunctionComponent<Props> = ({ work, postsCount }) => {
+const WorkDetail: FunctionComponent<Props> = ({ work, cyclesCount, postsCount }) => {
   return (
     <>
       <Row className="mb-5">
@@ -67,13 +70,13 @@ const WorkDetail: FunctionComponent<Props> = ({ work, postsCount }) => {
               <Col>
                 <Nav variant="tabs" fill>
                   <NavItem>
-                    <NavLink eventKey="all">All related</NavLink>
+                    <NavLink eventKey="all">All related ({cyclesCount + postsCount})</NavLink>
                   </NavItem>
                   <NavItem>
                     <NavLink eventKey="posts">Posts about this work ({postsCount})</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink eventKey="cycles">Cycles including this work</NavLink>
+                    <NavLink eventKey="cycles">Cycles including this work ({cyclesCount})</NavLink>
                   </NavItem>
                 </Nav>
               </Col>
@@ -82,12 +85,10 @@ const WorkDetail: FunctionComponent<Props> = ({ work, postsCount }) => {
               <Col>
                 <TabContent>
                   <TabPane eventKey="all">
-                    <h4>All related</h4>
+                    {(cyclesCount > 0 || postsCount > 0) && <CombinedMosaic work={work} />}
                   </TabPane>
                   <TabPane eventKey="posts">{postsCount > 0 && <PostsMosaic work={work} />}</TabPane>
-                  <TabPane eventKey="cycles">
-                    <h4>Cycles including this work</h4>
-                  </TabPane>
+                  <TabPane eventKey="cycles">{cyclesCount > 0 && <CyclesMosaic work={work} />}</TabPane>
                 </TabContent>
               </Col>
             </Row>

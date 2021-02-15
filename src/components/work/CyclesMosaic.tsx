@@ -1,22 +1,22 @@
-import { Cycle } from '@prisma/client';
+import { Work } from '@prisma/client';
 import { FunctionComponent } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import { useQuery } from 'react-query';
 
-import { WorkMosaicItem } from '../../types/work';
+import { CycleMosaicItem } from '../../types/cycle';
 import Mosaic from '../Mosaic';
 
 interface Props {
-  cycle: Cycle;
+  work: Work;
 }
 
-const WorksMosaic: FunctionComponent<Props> = ({ cycle }) => {
-  const { isLoading, isSuccess, data } = useQuery<WorkMosaicItem[]>(
-    ['cycle.mosaic.works', cycle.id],
-    async ({ queryKey: [, cycleId] }) => {
-      const whereQP = encodeURIComponent(JSON.stringify({ cycles: { some: { id: cycleId } } }));
+const CyclesMosaic: FunctionComponent<Props> = ({ work }) => {
+  const { isLoading, isSuccess, data } = useQuery<CycleMosaicItem[]>(
+    ['work.mosaic.cycles', work.id],
+    async ({ queryKey: [, workId] }) => {
+      const whereQP = encodeURIComponent(JSON.stringify({ works: { some: { id: workId } } }));
       const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
-      const res = await fetch(`/api/search/works?where=${whereQP}&include=${includeQP}`);
+      const res = await fetch(`/api/search/cycles?where=${whereQP}&include=${includeQP}`);
 
       return res.json();
     },
@@ -34,4 +34,4 @@ const WorksMosaic: FunctionComponent<Props> = ({ cycle }) => {
   );
 };
 
-export default WorksMosaic;
+export default CyclesMosaic;

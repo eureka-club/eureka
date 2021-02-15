@@ -2,18 +2,19 @@ import { GetServerSideProps, NextPage } from 'next';
 
 import DetailLayout from '../../src/components/layouts/DetailLayout';
 import WorkDetail from '../../src/components/work/WorkDetail';
-import { countPosts, find } from '../../src/facades/work';
+import { countCycles, countPosts, find } from '../../src/facades/work';
 import { WorkWithImages } from '../../src/types/work';
 
 interface Props {
   work: WorkWithImages;
+  cyclesCount: number;
   postsCount: number;
 }
 
-const WorkDetailPage: NextPage<Props> = ({ work, postsCount }) => {
+const WorkDetailPage: NextPage<Props> = ({ work, cyclesCount, postsCount }) => {
   return (
     <DetailLayout title={work.title}>
-      <WorkDetail work={work} postsCount={postsCount} />
+      <WorkDetail work={work} cyclesCount={cyclesCount} postsCount={postsCount} />
     </DetailLayout>
   );
 };
@@ -33,11 +34,13 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     return { notFound: true };
   }
 
+  const cyclesCount = await countCycles(work);
   const postsCount = await countPosts(work);
 
   return {
     props: {
       work,
+      cyclesCount: cyclesCount.count,
       postsCount: postsCount.count,
     },
   };

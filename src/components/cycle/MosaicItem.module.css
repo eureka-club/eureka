@@ -1,0 +1,61 @@
+.cycle {
+  margin-bottom: 2rem;
+}
+
+.imageContainer {
+  border: 3px solid var(--color-primary);
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.imageContainer img {
+  width: 100%;
+}
+
+.type {
+  background-color: var(--color-secondary);
+  border-radius: 1rem;
+  border: 1px solid var(--color-secondary-raised);
+  color: var(--text-color-light);
+  bottom: 1.5rem;
+  font-size: 0.85rem;
+  left: 1.5rem;
+  line-height: 1;
+  padding: 0.25rem 0.75rem;
+  position: absolute;
+  text-transform: capitalize;
+}
+
+.actions {
+  color: #ffffff;
+  position: absolute;
+  bottom: 1.5rem;
+  right: 2rem;
+  transform: scale(1.5);
+}
+.actionBookmark,
+.actionLike {
+  cursor: pointer;
+  filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.5));
+  transition: transform 0.15s;
+}
+.actionBookmark:hover,
+.actionLike:hover {
+  transform: scale(1.15);
+}
+.actionBookmark {
+  margin-right: 0.25rem;
+}
+.actionLike {
+  color: #e3506d;
+}
+
+.title {
+  color: #333;
+  display: block;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+}
