@@ -1,4 +1,5 @@
 .imgWrapper img {
+  border: 3px solid var(--eureka-green);
   border-radius: 0.75rem;
   overflow: hidden;
   width: 100%;

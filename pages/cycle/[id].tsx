@@ -16,7 +16,7 @@ interface Props {
   worksCount: number;
 }
 
-const PostDetailPage: NextPage<Props> = ({ cycle, postsCount, worksCount }) => {
+const CycleDetailPage: NextPage<Props> = ({ cycle, postsCount, worksCount }) => {
   return (
     <DetailLayout title={cycle.title}>
       <CycleDetail cycle={cycle} postsCount={postsCount} worksCount={worksCount} />
@@ -51,4 +51,4 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   };
 };
 
-export default PostDetailPage;
+export default CycleDetailPage;

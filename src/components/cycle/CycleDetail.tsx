@@ -1,5 +1,7 @@
 import { Prisma } from '@prisma/client';
 import classNames from 'classnames';
+import { CommentCount, DiscussionEmbed } from 'disqus-react';
+import { useRouter } from 'next/router';
 import { FunctionComponent } from 'react';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
@@ -13,6 +15,7 @@ import { AiFillHeart } from 'react-icons/ai';
 import { BsBookmarkFill } from 'react-icons/bs';
 import { FiShare2 } from 'react-icons/fi';
 
+import { DISQUS_SHORTNAME, WEBAPP_URL } from '../../constants';
 import LocalImageComponent from '../LocalImage';
 import CycleSummary from './CycleSummary';
 import PostsMosaic from './PostsMosaic';
@@ -32,6 +35,13 @@ interface Props {
 }
 
 const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, postsCount, worksCount }) => {
+  const { asPath } = useRouter();
+  const disqusConfig = {
+    identifier: asPath,
+    title: cycle.title,
+    url: `${WEBAPP_URL}${asPath}`,
+  };
+
   return (
     <>
       <Row className="mb-5">
@@ -80,7 +90,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, postsCount, wor
                     <NavLink eventKey="posts">Posts ({postsCount})</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink eventKey="forum">Forum</NavLink>
+                    <NavLink eventKey="forum">
+                      Forum (<CommentCount config={disqusConfig} shortname={DISQUS_SHORTNAME!} />)
+                    </NavLink>
                   </NavItem>
                 </Nav>
               </Col>
@@ -106,7 +118,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, postsCount, wor
                     {postsCount > 0 && <PostsMosaic cycle={cycle} />}
                   </TabPane>
                   <TabPane eventKey="forum">
-                    <h4>Forum</h4>
+                    <DiscussionEmbed config={disqusConfig} shortname={DISQUS_SHORTNAME!} />
                   </TabPane>
                 </TabContent>
               </Col>
