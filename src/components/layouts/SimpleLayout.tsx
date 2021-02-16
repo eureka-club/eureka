@@ -54,7 +54,7 @@ const SimpleLayout: FunctionComponent<Props> = ({ children }) => {
         <CreateWorkForm />
       </Modal>
 
-      <Modal animation={false} show={globalModalsState.signInModalOpened} onHide={handleSignInModalClose}>
+      <Modal size="lg" animation={false} show={globalModalsState.signInModalOpened} onHide={handleSignInModalClose}>
         <SignInForm />
       </Modal>
     </>
