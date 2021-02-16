@@ -25,7 +25,7 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
     },
   );
   const { isLoading: isPostsLoading, isSuccess: isPostsSuccess, data: postsData } = useQuery<PostMosaicItem[]>(
-    ['work.mosaic.posts', work.id],
+    ['posts.mosaic.work', work.id],
     async ({ queryKey: [, workId] }) => {
       const whereQP = encodeURIComponent(JSON.stringify({ works: { some: { id: workId } } }));
       const includeQP = encodeURIComponent(JSON.stringify({ creator: true, localImages: true, works: true }));
@@ -50,7 +50,7 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
           <span className="sr-only">Loading...</span>
         </Spinner>
       )}
-      {mosaicData.length && <Mosaic stack={mosaicData} postsLinksTo={work} />}
+      {mosaicData.length > 0 && <Mosaic stack={mosaicData} postsLinksTo={work} />}
     </>
   );
 };

@@ -12,7 +12,7 @@ interface Props {
 
 const PostsMosaic: FunctionComponent<Props> = ({ cycle }) => {
   const { isLoading, isSuccess, data } = useQuery<PostMosaicItem[]>(
-    ['cycle.mosaic.posts', cycle.id],
+    ['posts.mosaic.cycle', cycle.id],
     async ({ queryKey: [, cycleId] }) => {
       const whereQP = encodeURIComponent(JSON.stringify({ cycles: { some: { id: cycleId } } }));
       const includeQP = encodeURIComponent(JSON.stringify({ creator: true, localImages: true, works: true }));

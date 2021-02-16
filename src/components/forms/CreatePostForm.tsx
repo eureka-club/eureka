@@ -17,7 +17,7 @@ import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BsFillXCircleFill } from 'react-icons/bs';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
@@ -42,6 +42,7 @@ const CreatePostForm: FunctionComponent = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
+  const queryClient = useQueryClient();
   const router = useRouter();
 
   const {
@@ -163,7 +164,8 @@ const CreatePostForm: FunctionComponent = () => {
   useEffect(() => {
     if (isCreatePostSuccess === true) {
       setGlobalModalsState({ ...globalModalsState, ...{ createPostModalOpened: false } });
-      router.push('/list/posts');
+      queryClient.invalidateQueries('posts.mosaic');
+      router.replace(router.asPath);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCreatePostSuccess]);

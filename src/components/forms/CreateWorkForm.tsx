@@ -14,7 +14,7 @@ import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 
 import { CreateWorkClientPayload } from '../../types/work';
 import ImageFileSelect from './controls/ImageFileSelect';
@@ -26,6 +26,7 @@ const CreateWorkForm: FunctionComponent = () => {
   const [publicationYearLabel, setPublicationYearLabel] = useState('Publication year');
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
+  const queryClient = useQueryClient();
   const router = useRouter();
 
   const { mutate: execCreateWork, error: createWorkError, isError, isLoading, isSuccess } = useMutation(
@@ -86,10 +87,9 @@ const CreateWorkForm: FunctionComponent = () => {
 
   useEffect(() => {
     if (isSuccess === true) {
-      (async () => {
-        await router.push('/list/works');
-        await setGlobalModalsState({ ...globalModalsState, ...{ createWorkModalOpened: false } });
-      })();
+      setGlobalModalsState({ ...globalModalsState, ...{ createWorkModalOpened: false } });
+      queryClient.invalidateQueries('works.mosaic');
+      router.replace(router.asPath);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
