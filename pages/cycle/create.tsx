@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CreateCycleForm from '../../src/components/forms/CreateCycleForm';
 
-const IndexPage: NextPage = () => {
+const CreateCyclePage: NextPage = () => {
   return (
     <SimpleLayout title="Create cycle">
       <CreateCycleForm className="mb-5" />
@@ -11,4 +11,4 @@ const IndexPage: NextPage = () => {
   );
 };
 
-export default IndexPage;
+export default CreateCyclePage;

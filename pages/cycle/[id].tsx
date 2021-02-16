@@ -1,7 +1,7 @@
 import { GetServerSideProps, NextPage } from 'next';
 
 import { CycleDetail } from '../../src/types/cycle';
-import DetailLayout from '../../src/components/layouts/DetailLayout';
+import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '../../src/components/cycle/CycleDetail';
 import { countPosts, countWorks, find } from '../../src/facades/cycle';
 
@@ -13,9 +13,9 @@ interface Props {
 
 const CycleDetailPage: NextPage<Props> = ({ cycle, postsCount, worksCount }) => {
   return (
-    <DetailLayout title={cycle.title}>
+    <SimpleLayout title={cycle.title}>
       <CycleDetailComponent cycle={cycle} postsCount={postsCount} worksCount={worksCount} />
-    </DetailLayout>
+    </SimpleLayout>
   );
 };
 
