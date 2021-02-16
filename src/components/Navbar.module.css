@@ -1,19 +1,42 @@
+.container {
+  box-shadow: 0 15px 20px -30px rgba(0, 0, 0, 0.5);
+  max-width: 1440px;
+  padding-left: 4rem;
+  padding-right: 4rem;
+}
+
 .brand {
   font-family: 'Ahpuch.Apollyon-Light', 'Open Sans', sans-serif;
-  line-height: 60px;
+  line-height: 72px;
   text-transform: uppercase;
   letter-spacing: 0.5rem;
+}
+.brandText {
+  display: inline-block;
+  font-size: 1.1rem;
+  margin: 0;
+  position: relative;
+  top: 2px;
+}
+
+.nav {
+  margin-left: auto;
+}
+.nav button:global(.btn) {
+  border-radius: 3rem;
+  min-width: 6rem;
 }
 
 .dropdownMenu {
   background-color: var(--color-primary);
   min-width: 7rem;
 }
-  .dropdownMenuItem {
-    color: #fff;
-    font-weight: bold;
-  }
+.dropdownMenuItem {
+  color: #fff;
+  font-weight: bold;
+}
 
 .profileDropdown {
+  color: var(--eureka-green);
   transform: scale(1.5);
 }

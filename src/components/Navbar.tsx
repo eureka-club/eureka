@@ -4,14 +4,13 @@ import { useSession, signOut } from 'next-auth/client';
 import Link from 'next/link';
 import { FunctionComponent, MouseEvent } from 'react';
 import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
 import Dropdown from 'react-bootstrap/Dropdown';
-import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
 import Nav from 'react-bootstrap/Nav';
 import BootstrapNavbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { DropdownItemProps } from 'react-bootstrap/DropdownItem';
-import { BiCheck, BiUser } from 'react-icons/bi';
+import { BiUser } from 'react-icons/bi';
 
 import { Session } from '../types';
 import ChevronToggle from './ui/dropdown/ChevronToggle';
@@ -28,90 +27,58 @@ const Navbar: FunctionComponent = () => {
     setHomepageState({ ...homepageState, ...{ signInModalOpened: true } });
   };
 
-  const handleCreatePost = (ev: MouseEvent<DropdownItemProps>) => {
+  const handleCreatePostClick = (ev: MouseEvent<DropdownItemProps>) => {
     ev.preventDefault();
 
-    if (session == null) {
-      openSignInModal();
-    } else {
-      setHomepageState({ ...homepageState, ...{ createPostModalOpened: true } });
-    }
+    setHomepageState({ ...homepageState, ...{ createPostModalOpened: true } });
   };
 
-  const handleCreateWork = (ev: MouseEvent<DropdownItemProps>) => {
+  const handleCreateWorkClick = (ev: MouseEvent<DropdownItemProps>) => {
     ev.preventDefault();
-
-    if (session == null || !session.user.roles.includes('admin')) {
-      return;
-    }
 
     setHomepageState({ ...homepageState, ...{ createWorkModalOpened: true } });
   };
 
   return (
-    <BootstrapNavbar variant="light" expand="xl" className="p-0">
-      <BootstrapNavbar.Brand href="/" className={classNames(styles.brand, 'mr-4')}>
-        <img className="d-inline-block align-top mr-1" alt="Project logo" src="/img/logo.png" width={60} /> {siteName}
-      </BootstrapNavbar.Brand>
-
-      <Form inline className="mr-auto">
-        <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-      </Form>
-
-      <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />
-      <BootstrapNavbar.Collapse>
-        <Nav>
-          <Button variant="outline-primary" className="mr-2">
-            <BiCheck /> Cycle
-          </Button>
-          <Button variant="outline-primary" className="mr-2">
-            <BiCheck /> Read
-          </Button>
-          <Button variant="outline-primary" className="">
-            <BiCheck /> Watch
-          </Button>
-        </Nav>
-
-        <Nav className="ml-auto">
-          <Dropdown>
-            <Dropdown.Toggle as={ChevronToggle} id="create">
-              Create
-            </Dropdown.Toggle>
-            <Dropdown.Menu className={styles.dropdownMenu}>
-              {session == null ? (
-                <Dropdown.Item className={styles.dropdownMenuItem} onClick={openSignInModal}>
-                  Cycle
-                </Dropdown.Item>
-              ) : (
+    <Container className={styles.container}>
+      <BootstrapNavbar variant="light" className="p-0">
+        <BootstrapNavbar.Brand href="/" className={classNames(styles.brand, 'mr-4')}>
+          <img src="/img/logo.png" className="d-inline-block align-middle mr-4" width={52} alt="Project logo" />
+          <h1 className={styles.brandText}>{siteName}</h1>
+        </BootstrapNavbar.Brand>
+        {session == null ? (
+          <Nav className={styles.nav}>
+            <Button onClick={openSignInModal}>Login</Button>
+          </Nav>
+        ) : (
+          <Nav className="ml-auto">
+            <Dropdown className="mr-4">
+              <Dropdown.Toggle as={ChevronToggle} id="create">
+                Create
+              </Dropdown.Toggle>
+              <Dropdown.Menu className={styles.dropdownMenu}>
                 <Link href="/cycle/create">
                   <a className={classNames(styles.dropdownMenuItem, 'dropdown-item')}>Cycle</a>
                 </Link>
-              )}
-              <Dropdown.Item className={styles.dropdownMenuItem} onClick={handleCreatePost}>
-                Post
-              </Dropdown.Item>
-              {session?.user.roles.includes('admin') && (
-                <Dropdown.Item className={styles.dropdownMenuItem} onClick={handleCreateWork}>
-                  Work
+                <Dropdown.Item className={styles.dropdownMenuItem} onClick={handleCreatePostClick}>
+                  Post
                 </Dropdown.Item>
-              )}
-            </Dropdown.Menu>
-          </Dropdown>
+                {session?.user.roles.includes('admin') && (
+                  <Dropdown.Item className={styles.dropdownMenuItem} onClick={handleCreateWorkClick}>
+                    Work
+                  </Dropdown.Item>
+                )}
+              </Dropdown.Menu>
+            </Dropdown>
 
-          <Button variant="link">My cycles</Button>
-          <NavDropdown title={<BiUser className={styles.profileDropdown} />} id="profile">
-            {session == null ? (
-              <NavDropdown.Item onClick={openSignInModal}>Sign-in</NavDropdown.Item>
-            ) : (
-              <>
-                <NavDropdown.ItemText>{session.user.email}</NavDropdown.ItemText>
-                <NavDropdown.Item onClick={() => signOut()}>Sign-out</NavDropdown.Item>
-              </>
-            )}
-          </NavDropdown>
-        </Nav>
-      </BootstrapNavbar.Collapse>
-    </BootstrapNavbar>
+            <NavDropdown alignRight title={<BiUser className={styles.profileDropdown} />} id="profileDropdown">
+              <NavDropdown.ItemText>{session.user.email}</NavDropdown.ItemText>
+              <NavDropdown.Item onClick={() => signOut()}>Sign-out</NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+        )}
+      </BootstrapNavbar>
+    </Container>
   );
 };
 

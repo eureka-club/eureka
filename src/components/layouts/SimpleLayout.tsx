@@ -32,9 +32,7 @@ const SimpleLayout: FunctionComponent<Props> = ({ children }) => {
 
   return (
     <>
-      <Container>
-        <Navbar />
-      </Container>
+      <Navbar />
 
       <Container className="mt-5">{children}</Container>
 
