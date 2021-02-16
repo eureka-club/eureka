@@ -10,6 +10,13 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
   };
 }>;
 
+export type CycleDetail = Prisma.CycleGetPayload<{
+  include: {
+    creator: true;
+    localImages: true;
+  };
+}>;
+
 export interface CreateCycleClientPayload {
   includedWorksIds: number[];
   coverImage: File;

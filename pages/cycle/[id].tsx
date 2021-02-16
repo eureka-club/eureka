@@ -1,17 +1,12 @@
-import { Prisma } from '@prisma/client';
 import { GetServerSideProps, NextPage } from 'next';
 
+import { CycleDetail } from '../../src/types/cycle';
 import DetailLayout from '../../src/components/layouts/DetailLayout';
-import CycleDetail from '../../src/components/cycle/CycleDetail';
+import CycleDetailComponent from '../../src/components/cycle/CycleDetail';
 import { countPosts, countWorks, find } from '../../src/facades/cycle';
 
 interface Props {
-  cycle: Prisma.CycleGetPayload<{
-    include: {
-      creator: true;
-      localImages: true;
-    };
-  }>;
+  cycle: CycleDetail;
   postsCount: number;
   worksCount: number;
 }
@@ -19,7 +14,7 @@ interface Props {
 const CycleDetailPage: NextPage<Props> = ({ cycle, postsCount, worksCount }) => {
   return (
     <DetailLayout title={cycle.title}>
-      <CycleDetail cycle={cycle} postsCount={postsCount} worksCount={worksCount} />
+      <CycleDetailComponent cycle={cycle} postsCount={postsCount} worksCount={worksCount} />
     </DetailLayout>
   );
 };

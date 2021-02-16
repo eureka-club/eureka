@@ -1,4 +1,3 @@
-import { Prisma } from '@prisma/client';
 import classNames from 'classnames';
 import { CommentCount, DiscussionEmbed } from 'disqus-react';
 import { useRouter } from 'next/router';
@@ -16,7 +15,10 @@ import { BsBookmarkFill } from 'react-icons/bs';
 import { FiShare2 } from 'react-icons/fi';
 
 import { DISQUS_SHORTNAME, WEBAPP_URL } from '../../constants';
+import { CycleDetail } from '../../types/cycle';
+import { PostDetail } from '../../types/post';
 import LocalImageComponent from '../LocalImage';
+import PostDetailComponent from '../post/PostDetail';
 import CycleSummary from './CycleSummary';
 import PostsMosaic from './PostsMosaic';
 import WorksMosaic from './WorksMosaic';
@@ -24,17 +26,13 @@ import UnclampText from '../UnclampText';
 import styles from './CycleDetail.module.css';
 
 interface Props {
-  cycle: Prisma.CycleGetPayload<{
-    include: {
-      creator: true;
-      localImages: true;
-    };
-  }>;
+  cycle: CycleDetail;
+  post?: PostDetail;
   postsCount: number;
   worksCount: number;
 }
 
-const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, postsCount, worksCount }) => {
+const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, post, postsCount, worksCount }) => {
   const { asPath } = useRouter();
   const disqusConfig = {
     identifier: asPath,
@@ -45,36 +43,42 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, postsCount, wor
   return (
     <>
       <Row className="mb-5">
-        <Col md={{ span: 3 }}>
-          <div className={classNames(styles.imgWrapper, 'mb-3')}>
-            <LocalImageComponent filePath={cycle.localImages[0].storedFile} alt={cycle.title} />
-          </div>
-        </Col>
-        <Col md={{ span: 9 }}>
-          <div className="pt-3 px-4">
-            <div className={styles.cycleCreator}>
-              <img
-                src={cycle.creator.image || '/img/default-avatar.png'}
-                alt="creator avatar"
-                className={classNames(styles.cycleCreatorAvatar, 'mr-2')}
-              />
-              {cycle.creator.name}
-            </div>
-            <h1>{cycle.title}</h1>
-            <CycleSummary cycle={cycle} />
-            <section className={styles.socialInfo}>
-              <span>
-                <BsBookmarkFill /> #
-              </span>
-              <span>
-                <AiFillHeart /> #
-              </span>
-              <span>
-                <FiShare2 /> #
-              </span>
-            </section>
-          </div>
-        </Col>
+        {post == null ? (
+          <>
+            <Col md={{ span: 3 }}>
+              <div className={classNames(styles.imgWrapper, 'mb-3')}>
+                <LocalImageComponent filePath={cycle.localImages[0].storedFile} alt={cycle.title} />
+              </div>
+            </Col>
+            <Col md={{ span: 9 }}>
+              <div className="pt-3 px-4">
+                <div className={styles.cycleCreator}>
+                  <img
+                    src={cycle.creator.image || '/img/default-avatar.png'}
+                    alt="creator avatar"
+                    className={classNames(styles.cycleCreatorAvatar, 'mr-2')}
+                  />
+                  {cycle.creator.name}
+                </div>
+                <h1>{cycle.title}</h1>
+                <CycleSummary cycle={cycle} />
+                <section className={styles.socialInfo}>
+                  <span>
+                    <BsBookmarkFill /> #
+                  </span>
+                  <span>
+                    <AiFillHeart /> #
+                  </span>
+                  <span>
+                    <FiShare2 /> #
+                  </span>
+                </section>
+              </div>
+            </Col>
+          </>
+        ) : (
+          <PostDetailComponent post={post} />
+        )}
       </Row>
 
       <Row className="mb-5">
