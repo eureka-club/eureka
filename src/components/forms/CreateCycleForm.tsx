@@ -46,6 +46,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const router = useRouter();
   const {
     mutate: execCreateCycle,
+    data: newCycleData,
     error: createCycleReqError,
     isLoading: isCreateCycleReqLoading,
     isError: isCreateCycleReqError,
@@ -177,11 +178,11 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const chosenWorksBoxes = [0, 1, 2, 3, 4];
 
   useEffect(() => {
-    if (isCreateCycleReqSuccess) {
-      router.push('/list/cycles');
+    if (isCreateCycleReqSuccess && newCycleData != null) {
+      router.push(`/cycle/${newCycleData.id}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isCreateCycleReqSuccess]);
+  }, [isCreateCycleReqSuccess, newCycleData]);
 
   return (
     <>
