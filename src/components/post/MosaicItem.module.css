@@ -16,10 +16,10 @@
 .cycleCreator {
   color: #fff;
   font-size: 0.7rem;
-  left: 0.5rem;
+  left: 0.85rem;
   position: absolute;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.75);
-  top: 0.5rem;
+  top: 0.85rem;
 }
 .cycleCreatorAvatar {
   border-radius: 50%;
@@ -45,7 +45,7 @@
   bottom: 0.95rem;
   color: var(--text-color-extralight);
   position: absolute;
-  right: 1.2rem;
+  right: 1.3rem;
   transform: scale(1.5);
 }
 .actionBookmark,
