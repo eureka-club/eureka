@@ -12,6 +12,14 @@ export type PostMosaicItem = Prisma.PostGetPayload<{
   };
 }>;
 
+export type PostDetail = Prisma.PostGetPayload<{
+  include: {
+    creator: true;
+    localImages: true;
+    cycles: true;
+  };
+}>;
+
 export type PostWithCyclesWorks = Prisma.PostGetPayload<{
   include: {
     cycles: true;

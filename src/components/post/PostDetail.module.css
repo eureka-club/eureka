@@ -1,0 +1,55 @@
+.imgWrapper img {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  width: 100%;
+}
+
+.workInfoType,
+.cycleInfoType {
+  border-radius: 1rem;
+  color: var(--text-color-primary);
+  display: inline-block;
+  font-size: 0.85rem;
+  line-height: 1;
+  padding-bottom: 0.2rem;
+  padding-top: 0.2rem;
+  text-align: center;
+  text-transform: capitalize;
+  width: 3.5rem;
+}
+.workInfoType {
+  background-color: var(--eureka-grey);
+}
+.cycleInfoType {
+  background-color: var(--eureka-blue);
+  color: var(--text-color-light);
+}
+.cycleInfoType:hover {
+  color: var(--text-color-extralight);
+}
+
+.workInfoTitle {
+  font-size: 1rem;
+  font-weight: 300;
+}
+.workInfoAuthor {
+  font-size: 0.9rem;
+  font-weight: 200;
+}
+
+.postInfo {
+  align-items: center;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+.creatorAvatar {
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 0.5rem;
+  width: 22px;
+  height: 22px;
+}
+.postDate {
+  color: darkgrey;
+  margin-left: auto;
+}
