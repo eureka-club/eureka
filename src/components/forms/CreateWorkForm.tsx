@@ -18,12 +18,12 @@ import { useMutation } from 'react-query';
 
 import { CreateWorkClientPayload } from '../../types/work';
 import ImageFileSelect from './controls/ImageFileSelect';
-import homepageAtom from '../../atoms/homepage';
+import globalModalsAtom from '../../atoms/globalModals';
 import styles from './CreateWorkForm.module.css';
 
 const CreateWorkForm: FunctionComponent = () => {
-  const [homepageState, setHomepageState] = useAtom(homepageAtom);
-  const [publicatonYearLabel, setPublicationYearLabel] = useState('Publication year');
+  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
+  const [publicationYearLabel, setPublicationYearLabel] = useState('Publication year');
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
   const router = useRouter();
@@ -88,7 +88,7 @@ const CreateWorkForm: FunctionComponent = () => {
     if (isSuccess === true) {
       (async () => {
         await router.push('/list/works');
-        await setHomepageState({ ...homepageState, ...{ createWorkModalOpened: false } });
+        await setGlobalModalsState({ ...globalModalsState, ...{ createWorkModalOpened: false } });
       })();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -165,7 +165,7 @@ const CreateWorkForm: FunctionComponent = () => {
           <Row>
             <Col>
               <FormGroup controlId="publicationYear">
-                <FormLabel>{publicatonYearLabel}</FormLabel>
+                <FormLabel>{publicationYearLabel}</FormLabel>
                 <FormControl type="number" min="-5000" max="2200" />
               </FormGroup>
             </Col>

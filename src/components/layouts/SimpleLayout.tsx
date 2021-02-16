@@ -7,7 +7,7 @@ import Navbar from '../Navbar';
 import CreatePostForm from '../forms/CreatePostForm';
 import CreateWorkForm from '../forms/CreateWorkForm';
 import SignInForm from '../forms/SignInForm';
-import homepageAtom from '../../atoms/homepage';
+import globalModalsAtom from '../../atoms/globalModals';
 import withTitle from '../../HOCs/withTitle';
 
 type Props = {
@@ -16,18 +16,18 @@ type Props = {
 };
 
 const SimpleLayout: FunctionComponent<Props> = ({ children }) => {
-  const [homepageState, setHomepageState] = useAtom(homepageAtom);
+  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
 
   const handleCreatePostModalClose = () => {
-    setHomepageState({ ...homepageState, ...{ createPostModalOpened: false } });
+    setGlobalModalsState({ ...globalModalsState, ...{ createPostModalOpened: false } });
   };
 
   const handleCreateWorkModalClose = () => {
-    setHomepageState({ ...homepageState, ...{ createWorkModalOpened: false } });
+    setGlobalModalsState({ ...globalModalsState, ...{ createWorkModalOpened: false } });
   };
 
   const handleSignInModalClose = () => {
-    setHomepageState({ ...homepageState, ...{ signInModalOpened: false } });
+    setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: false } });
   };
 
   return (
@@ -36,15 +36,25 @@ const SimpleLayout: FunctionComponent<Props> = ({ children }) => {
 
       <Container className="mt-5">{children}</Container>
 
-      <Modal animation={false} size="lg" show={homepageState.createPostModalOpened} onHide={handleCreatePostModalClose}>
+      <Modal
+        animation={false}
+        size="lg"
+        show={globalModalsState.createPostModalOpened}
+        onHide={handleCreatePostModalClose}
+      >
         <CreatePostForm />
       </Modal>
 
-      <Modal animation={false} size="lg" show={homepageState.createWorkModalOpened} onHide={handleCreateWorkModalClose}>
+      <Modal
+        animation={false}
+        size="lg"
+        show={globalModalsState.createWorkModalOpened}
+        onHide={handleCreateWorkModalClose}
+      >
         <CreateWorkForm />
       </Modal>
 
-      <Modal animation={false} show={homepageState.signInModalOpened} onHide={handleSignInModalClose}>
+      <Modal animation={false} show={globalModalsState.signInModalOpened} onHide={handleSignInModalClose}>
         <SignInForm />
       </Modal>
     </>

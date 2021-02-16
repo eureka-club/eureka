@@ -14,29 +14,29 @@ import { BiUser } from 'react-icons/bi';
 
 import { Session } from '../types';
 import ChevronToggle from './ui/dropdown/ChevronToggle';
-import homepageAtom from '../atoms/homepage';
+import globalModalsAtom from '../atoms/globalModals';
 import styles from './Navbar.module.css';
 
 const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
 
 const Navbar: FunctionComponent = () => {
-  const [homepageState, setHomepageState] = useAtom(homepageAtom);
+  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [session] = useSession() as [Session | null | undefined, boolean];
 
   const openSignInModal = () => {
-    setHomepageState({ ...homepageState, ...{ signInModalOpened: true } });
+    setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
   };
 
   const handleCreatePostClick = (ev: MouseEvent<DropdownItemProps>) => {
     ev.preventDefault();
 
-    setHomepageState({ ...homepageState, ...{ createPostModalOpened: true } });
+    setGlobalModalsState({ ...globalModalsState, ...{ createPostModalOpened: true } });
   };
 
   const handleCreateWorkClick = (ev: MouseEvent<DropdownItemProps>) => {
     ev.preventDefault();
 
-    setHomepageState({ ...homepageState, ...{ createWorkModalOpened: true } });
+    setGlobalModalsState({ ...globalModalsState, ...{ createWorkModalOpened: true } });
   };
 
   return (
