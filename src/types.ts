@@ -35,8 +35,8 @@ export type SearchResult = CycleWithImages | PostWithImages | WorkWithImages;
 
 export const isCycle = (obj: BasicEntity): obj is Cycle =>
   typeof (obj as Cycle).title === 'string' &&
-  Object.prototype.toString.call((obj as Cycle).startDate) === '[object Date]' &&
-  Object.prototype.toString.call((obj as Cycle).endDate) === '[object Date]';
+  (obj as CycleMosaicItem).startDate !== undefined &&
+  (obj as CycleMosaicItem).endDate !== undefined;
 export const isPost = (obj: BasicEntity): obj is Post =>
   typeof (obj as Post).title === 'string' &&
   typeof (obj as Post).creatorId === 'object' &&
@@ -49,8 +49,8 @@ export const isWork = (obj: BasicEntity): obj is Work =>
 // TODO separate type-guards for MosaicItem and SearchResult
 export const isCycleMosaicItem = (obj: MosaicItem | SearchResult): obj is CycleMosaicItem =>
   typeof (obj as CycleMosaicItem).title === 'string' &&
-  typeof (obj as CycleMosaicItem).startDate === 'string' &&
-  typeof (obj as CycleMosaicItem).endDate === 'string';
+  (obj as CycleMosaicItem).startDate !== undefined &&
+  (obj as CycleMosaicItem).endDate !== undefined;
 export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMosaicItem =>
   typeof (obj as PostMosaicItem).title === 'string' &&
   typeof (obj as PostMosaicItem).creator === 'object' &&
