@@ -1,6 +1,6 @@
 import { GetServerSideProps, NextPage } from 'next';
 
-import DetailLayout from '../../src/components/layouts/DetailLayout';
+import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import WorkDetail from '../../src/components/work/WorkDetail';
 import { countCycles, countPosts, find } from '../../src/facades/work';
 import { WorkWithImages } from '../../src/types/work';
@@ -13,9 +13,9 @@ interface Props {
 
 const WorkDetailPage: NextPage<Props> = ({ work, cyclesCount, postsCount }) => {
   return (
-    <DetailLayout title={work.title}>
+    <SimpleLayout title={work.title}>
       <WorkDetail work={work} cyclesCount={cyclesCount} postsCount={postsCount} />
-    </DetailLayout>
+    </SimpleLayout>
   );
 };
 

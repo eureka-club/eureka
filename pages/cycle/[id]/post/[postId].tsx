@@ -2,7 +2,7 @@ import { GetServerSideProps, NextPage } from 'next';
 
 import { CycleDetail } from '../../../../src/types/cycle';
 import { PostDetail } from '../../../../src/types/post';
-import DetailLayout from '../../../../src/components/layouts/DetailLayout';
+import SimpleLayout from '../../../../src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '../../../../src/components/cycle/CycleDetail';
 import { countPosts, countWorks, find as findCycle } from '../../../../src/facades/cycle';
 import { search as searchPost } from '../../../../src/facades/post';
@@ -16,9 +16,9 @@ interface Props {
 
 const PostDetailInCyclePage: NextPage<Props> = ({ cycle, post, postsCount, worksCount }) => {
   return (
-    <DetailLayout title={`${post.title} · ${cycle.title}`}>
+    <SimpleLayout title={`${post.title} · ${cycle.title}`}>
       <CycleDetailComponent cycle={cycle} post={post} postsCount={postsCount} worksCount={worksCount} />
-    </DetailLayout>
+    </SimpleLayout>
   );
 };
 

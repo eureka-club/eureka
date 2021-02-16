@@ -18,12 +18,13 @@ const SignInForm: FunctionComponent = () => {
 
   return (
     <>
-      <ModalHeader closeButton>
+      <ModalHeader className={styles.modalHeader} closeButton>
         <Container>
           <ModalTitle>Sign-in</ModalTitle>
+          <p>Welcome back to Eureka</p>
         </Container>
       </ModalHeader>
-      <ModalBody className="py-5">
+      <ModalBody className="pt-0 pb-5">
         <Container>
           <Row>
             <Col>

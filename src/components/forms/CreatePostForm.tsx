@@ -28,11 +28,11 @@ import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
 import CycleTypeaheadSearchItem from '../cycle/TypeaheadSearchItem';
 import WorkTypeaheadSearchItem from '../work/TypeaheadSearchItem';
-import homepageAtom from '../../atoms/homepage';
+import globalModalsAtom from '../../atoms/globalModals';
 import styles from './CreatePostForm.module.css';
 
 const CreatePostForm: FunctionComponent = () => {
-  const [homepageState, setHomepageState] = useAtom(homepageAtom);
+  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
   const [isSearchCycleLoading, setIsSearchCycleLoading] = useState(false);
   const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
@@ -162,7 +162,7 @@ const CreatePostForm: FunctionComponent = () => {
 
   useEffect(() => {
     if (isCreatePostSuccess === true) {
-      setHomepageState({ ...homepageState, ...{ createPostModalOpened: false } });
+      setGlobalModalsState({ ...globalModalsState, ...{ createPostModalOpened: false } });
       router.push('/list/posts');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
