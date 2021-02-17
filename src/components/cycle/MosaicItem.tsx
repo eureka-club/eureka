@@ -1,13 +1,18 @@
 import Link from 'next/link';
+import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { BsBookmark } from 'react-icons/bs';
 
+import { DATE_FORMAT_HUMANIC_SHORT_ADVANCED } from '../../constants';
 import { CycleWithImages } from '../../types/cycle';
 import LocalImageComponent from '../LocalImage';
+import { advancedDayjs } from '../../lib/utils';
 import styles from './MosaicItem.module.css';
 
-const MosaicItem: FunctionComponent<CycleWithImages> = ({ id, title, localImages }) => {
+const MosaicItem: FunctionComponent<CycleWithImages> = ({ id, title, localImages, startDate, endDate }) => {
+  const { t } = useTranslation('common');
+
   return (
     <article className={styles.cycle}>
       <div className={styles.imageContainer}>
@@ -16,17 +21,22 @@ const MosaicItem: FunctionComponent<CycleWithImages> = ({ id, title, localImages
             <LocalImageComponent filePath={localImages[0].storedFile} alt={title} />
           </a>
         </Link>
-        <span className={styles.type}>Cycle</span>
-        <div className={styles.actions}>
-          <BsBookmark className={styles.actionBookmark} />
-          <AiOutlineHeart className={styles.actionLike} />
+        <div className={styles.embeddedInfo}>
+          <h3 className={styles.title}>{title}</h3>
+          <span className={styles.date}>
+            {advancedDayjs(startDate).format(DATE_FORMAT_HUMANIC_SHORT_ADVANCED)}
+            &mdash;
+            {advancedDayjs(endDate).format(DATE_FORMAT_HUMANIC_SHORT_ADVANCED)}
+          </span>
+          <div className="d-flex justify-content-between">
+            <span className={styles.type}>{t('cycle')}</span>
+            <div className={styles.actions}>
+              <BsBookmark className={styles.actionBookmark} />
+              <AiOutlineHeart className={styles.actionLike} />
+            </div>
+          </div>
         </div>
       </div>
-      <h3 className={styles.title}>
-        <Link href={`/cycle/${id}`}>
-          <a>{title}</a>
-        </Link>
-      </h3>
     </article>
   );
 };

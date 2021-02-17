@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
@@ -31,6 +32,8 @@ interface Props {
 }
 
 const WorkDetail: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCount }) => {
+  const { t } = useTranslation('workDetail');
+
   return (
     <>
       <Row className="mb-5">
@@ -59,7 +62,7 @@ const WorkDetail: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCo
                 <WorkSummary work={work} />
                 {work.link != null && (
                   <a href={work.link} className={styles.workLink} target="_blank" rel="noreferrer">
-                    Link to work <BsBoxArrowUpRight />
+                    {t('workLinkLabel')} <BsBoxArrowUpRight />
                   </a>
                 )}
               </section>
@@ -78,13 +81,19 @@ const WorkDetail: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCo
               <Col>
                 <Nav variant="tabs" fill>
                   <NavItem>
-                    <NavLink eventKey="all">All related ({cyclesCount + postsCount})</NavLink>
+                    <NavLink eventKey="all">
+                      {t('tabHeaderAll')} ({cyclesCount + postsCount})
+                    </NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink eventKey="posts">Posts about this work ({postsCount})</NavLink>
+                    <NavLink eventKey="posts">
+                      {t('tabHeaderPosts')} ({postsCount})
+                    </NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink eventKey="cycles">Cycles including this work ({cyclesCount})</NavLink>
+                    <NavLink eventKey="cycles">
+                      {t('tabHeaderCycles')} ({cyclesCount})
+                    </NavLink>
                   </NavItem>
                 </Nav>
               </Col>

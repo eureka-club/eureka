@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { BsBookmark } from 'react-icons/bs';
@@ -8,6 +9,8 @@ import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 
 const MosaicItem: FunctionComponent<WorkWithImages> = ({ id, author, title, localImages, type }) => {
+  const { t } = useTranslation('common');
+
   return (
     <article className={styles.post}>
       <div className={styles.imageContainer}>
@@ -16,7 +19,7 @@ const MosaicItem: FunctionComponent<WorkWithImages> = ({ id, author, title, loca
             <LocalImageComponent filePath={localImages[0].storedFile} alt={title} />
           </a>
         </Link>
-        <span className={styles.type}>{type}</span>
+        <span className={styles.type}>{t(type)}</span>
         <div className={styles.actions}>
           <BsBookmark className={styles.actionBookmark} />
           <AiOutlineHeart className={styles.actionLike} />

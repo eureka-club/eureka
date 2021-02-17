@@ -1,5 +1,6 @@
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
+import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, FormEvent, FunctionComponent, RefObject, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -28,6 +29,7 @@ const CreateWorkForm: FunctionComponent = () => {
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
   const queryClient = useQueryClient();
   const router = useRouter();
+  const { t } = useTranslation('createWorkForm');
 
   const { mutate: execCreateWork, error: createWorkError, isError, isLoading, isSuccess } = useMutation(
     async (payload: CreateWorkClientPayload) => {
@@ -52,11 +54,11 @@ const CreateWorkForm: FunctionComponent = () => {
     switch (ev.currentTarget.value) {
       case 'movie':
       case 'documentary':
-        setPublicationYearLabel('Release year');
+        setPublicationYearLabel(t('releaseYearFieldLabel'));
         break;
 
       default:
-        setPublicationYearLabel('Publication year');
+        setPublicationYearLabel(t('publicationYearFieldLabel'));
     }
   };
 
@@ -98,7 +100,7 @@ const CreateWorkForm: FunctionComponent = () => {
     <Form onSubmit={handleSubmit} ref={formRef}>
       <ModalHeader closeButton>
         <Container>
-          <ModalTitle>Add new Work to the library</ModalTitle>
+          <ModalTitle>{t('title')}</ModalTitle>
         </Container>
       </ModalHeader>
 
@@ -107,18 +109,18 @@ const CreateWorkForm: FunctionComponent = () => {
           <Row>
             <Col>
               <FormGroup controlId="type">
-                <FormLabel>*Type of work</FormLabel>
+                <FormLabel>*{t('typeFieldLabel')}</FormLabel>
                 <FormControl as="select" required onChange={handleWorkTypeChange}>
-                  <option value="">select...</option>
-                  <option value="book">Book</option>
-                  <option value="documentary">Documentary</option>
-                  <option value="movie">Movie</option>
+                  <option value="">{t('typeFieldPlaceholder')}</option>
+                  <option value="book">{t('typeBook')}</option>
+                  <option value="documentary">{t('typeDocumentary')}</option>
+                  <option value="movie">{t('typeMovie')}</option>
                 </FormControl>
               </FormGroup>
             </Col>
             <Col>
               <FormGroup controlId="link">
-                <FormLabel>Link to work</FormLabel>
+                <FormLabel>{t('linkFieldLabel')}</FormLabel>
                 <FormControl type="text" placeholder="http://" />
               </FormGroup>
             </Col>
@@ -126,13 +128,13 @@ const CreateWorkForm: FunctionComponent = () => {
           <Row>
             <Col>
               <FormGroup controlId="workTitle">
-                <FormLabel>*Title of work</FormLabel>
+                <FormLabel>*{t('titleFieldLabel')}</FormLabel>
                 <FormControl type="text" required />
               </FormGroup>
             </Col>
             <Col>
               <FormGroup controlId="author">
-                <FormLabel>*Author or director of work</FormLabel>
+                <FormLabel>*{t('authorFieldLabel')}</FormLabel>
                 <FormControl type="text" required />
               </FormGroup>
             </Col>
@@ -140,7 +142,7 @@ const CreateWorkForm: FunctionComponent = () => {
           <Row>
             <Col>
               <FormGroup controlId="topics">
-                <FormLabel>Main topics of this work</FormLabel>
+                <FormLabel>{t('topicsFieldLabel')}</FormLabel>
                 <FormControl type="text" disabled />
               </FormGroup>
             </Col>
@@ -148,12 +150,12 @@ const CreateWorkForm: FunctionComponent = () => {
               <ImageFileSelect acceptedFileTypes="image/*" file={coverFile} setFile={setCoverFile} required>
                 {(imagePreview) => (
                   <FormGroup>
-                    <FormLabel>*Cover of work</FormLabel>
+                    <FormLabel>*{t('imageCoverFieldLabel')}</FormLabel>
                     <div className={styles.imageControl}>
                       {(coverFile != null && imagePreview) != null ? (
                         <span className={styles.imageName}>{coverFile?.name}</span>
                       ) : (
-                        'select file...'
+                        t('imageCoverFieldPlaceholder')
                       )}
                       {imagePreview && <img src={imagePreview} className="float-right" alt="Work cover" />}
                     </div>
@@ -171,13 +173,13 @@ const CreateWorkForm: FunctionComponent = () => {
             </Col>
             <Col>
               <FormGroup controlId="countryOfOrigin">
-                <FormLabel>Country of origin</FormLabel>
+                <FormLabel>{t('countryFieldLabel')}</FormLabel>
                 <FormControl type="text" />
               </FormGroup>
             </Col>
             <Col>
               <FormGroup controlId="workLength">
-                <FormLabel>Length</FormLabel>
+                <FormLabel>{t('workLengthFieldLabel')}</FormLabel>
                 <FormControl type="text" />
               </FormGroup>
             </Col>
@@ -185,31 +187,31 @@ const CreateWorkForm: FunctionComponent = () => {
           <Row>
             <Col>
               <FormGroup controlId="authorGender">
-                <FormLabel>Gender of author of director</FormLabel>
+                <FormLabel>{t('authorGenderFieldLabel')}</FormLabel>
                 <FormControl as="select">
-                  <option value="">select...</option>
-                  <option value="female">Female</option>
-                  <option value="male">Male</option>
-                  <option value="non-binary">Non-binary</option>
-                  <option value="trans">Trans</option>
-                  <option value="other">Other</option>
+                  <option value="">{t('authorGenderFieldPlaceholder')}</option>
+                  <option value="female">{t('authorGenderFemale')}</option>
+                  <option value="male">{t('authorGenderMale')}</option>
+                  <option value="non-binary">{t('authorGenderNonbinary')}</option>
+                  <option value="trans">{t('authorGenderTrans')}</option>
+                  <option value="other">{t('authorGenderOther')}</option>
                 </FormControl>
               </FormGroup>
             </Col>
             <Col>
               <FormGroup controlId="authorRace">
-                <FormLabel>Is author or director white or non-white</FormLabel>
+                <FormLabel>{t('authorEthnicityFieldLabel')}</FormLabel>
                 <FormControl as="select">
-                  <option value="">select...</option>
-                  <option value="white">White</option>
-                  <option value="non-white">Non-white</option>
+                  <option value="">{t('authorEthnicityFieldPlaceholder')}</option>
+                  <option value="white">{t('authorEthnicityIsWhite')}</option>
+                  <option value="non-white">{t('authorEthnicityIsNotWhite')}</option>
                 </FormControl>
               </FormGroup>
             </Col>
           </Row>
           <Row>
             <FormGroup controlId="description" as={Col}>
-              <FormLabel>Official summary of work</FormLabel>
+              <FormLabel>{t('workSummaryFieldLabel')}</FormLabel>
               <FormControl as="textarea" rows={6} maxLength={4000} />
             </FormGroup>
           </Row>
@@ -219,7 +221,7 @@ const CreateWorkForm: FunctionComponent = () => {
       <ModalFooter>
         <Container className="py-3">
           <Button variant="primary" type="submit" className="pl-5 pr-4 float-right">
-            Add work to library
+            {t('submitButtonLabel')}Add work to library
             {isLoading ? (
               <Spinner animation="grow" variant="secondary" className={styles.loadIndicator} />
             ) : (

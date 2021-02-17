@@ -3,6 +3,7 @@ import { useAtom } from 'jotai';
 import { useSession, signOut } from 'next-auth/client';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import useTranslation from 'next-translate/useTranslation';
 import { setCookie } from 'nookies';
 import { FunctionComponent, MouseEvent } from 'react';
 import Button from 'react-bootstrap/Button';
@@ -26,6 +27,7 @@ const Navbar: FunctionComponent = () => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [session] = useSession() as [Session | null | undefined, boolean];
   const router = useRouter();
+  const { t } = useTranslation('navbar');
 
   const openSignInModal = () => {
     setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
@@ -62,24 +64,24 @@ const Navbar: FunctionComponent = () => {
 
         {session == null ? (
           <Nav className={styles.nav}>
-            <Button onClick={openSignInModal}>Login</Button>
+            <Button onClick={openSignInModal}>{t('login')}</Button>
           </Nav>
         ) : (
           <Nav className="ml-auto">
             <Dropdown className="mr-4">
               <Dropdown.Toggle as={ChevronToggle} id="create">
-                Create
+                {t('create')}
               </Dropdown.Toggle>
               <Dropdown.Menu className={styles.dropdownMenu}>
                 <Link href="/cycle/create">
-                  <a className={classNames(styles.dropdownMenuItem, 'dropdown-item')}>Cycle</a>
+                  <a className={classNames(styles.dropdownMenuItem, 'dropdown-item')}>{t('cycle')}</a>
                 </Link>
                 <Dropdown.Item className={styles.dropdownMenuItem} onClick={handleCreatePostClick}>
-                  Post
+                  {t('post')}
                 </Dropdown.Item>
                 {session?.user.roles.includes('admin') && (
                   <Dropdown.Item className={styles.dropdownMenuItem} onClick={handleCreateWorkClick}>
-                    Work
+                    {t('work')}
                   </Dropdown.Item>
                 )}
               </Dropdown.Menu>
@@ -87,7 +89,7 @@ const Navbar: FunctionComponent = () => {
 
             <NavDropdown alignRight title={<BiUser className={styles.profileDropdown} />} id="profileDropdown">
               <NavDropdown.ItemText>{session.user.email}</NavDropdown.ItemText>
-              <NavDropdown.Item onClick={() => signOut()}>Sign-out</NavDropdown.Item>
+              <NavDropdown.Item onClick={() => signOut()}>{t('logout')}</NavDropdown.Item>
             </NavDropdown>
           </Nav>
         )}

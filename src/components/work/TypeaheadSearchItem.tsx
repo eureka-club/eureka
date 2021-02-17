@@ -1,3 +1,4 @@
+import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 
 import { WorkWithImages } from '../../types/work';
@@ -10,13 +11,15 @@ interface Props {
 }
 
 const TypeaheadSearchItem: FunctionComponent<Props> = ({ work }) => {
+  const { t } = useTranslation('common');
+
   return (
     <div className={styles.workSearchTypeaheadItem}>
       <div className={styles.imageWrapper}>
         {work.localImages != null && work.localImages[0] != null && (
           <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
         )}
-        <span>{work.type}</span>
+        <span>{t(work.type)}</span>
       </div>
       <div>
         <h3>{work.title}</h3>

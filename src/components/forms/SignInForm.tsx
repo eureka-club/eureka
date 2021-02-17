@@ -1,4 +1,5 @@
 import { signIn } from 'next-auth/client';
+import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent } from 'react';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -15,13 +16,14 @@ const SignInForm: FunctionComponent = () => {
 
     signIn('google');
   };
+  const { t } = useTranslation('signInForm');
 
   return (
     <>
       <ModalHeader className={styles.modalHeader} closeButton>
         <Container>
-          <ModalTitle>Sign-in</ModalTitle>
-          <p>Welcome back to Eureka</p>
+          <ModalTitle>{t('login')}</ModalTitle>
+          <p>{t('loginGreeting')}</p>
         </Container>
       </ModalHeader>
       <ModalBody className="pt-0 pb-5">
@@ -29,7 +31,7 @@ const SignInForm: FunctionComponent = () => {
           <Row>
             <Col>
               <button type="button" onClick={handleSignInGoogle} className={styles.buttonGoogle}>
-                Sign-in with Google
+                {t('loginViaGoogle')}
               </button>
             </Col>
           </Row>
