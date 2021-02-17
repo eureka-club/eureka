@@ -3,6 +3,7 @@ import { useAtom } from 'jotai';
 import { useSession, signOut } from 'next-auth/client';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { setCookie } from 'nookies';
 import { FunctionComponent, MouseEvent } from 'react';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -13,6 +14,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import { DropdownItemProps } from 'react-bootstrap/DropdownItem';
 import { BiUser } from 'react-icons/bi';
 
+import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '../constants';
 import { Session } from '../types';
 import ChevronToggle from './ui/dropdown/ChevronToggle';
 import globalModalsAtom from '../atoms/globalModals';
@@ -39,6 +41,15 @@ const Navbar: FunctionComponent = () => {
     ev.preventDefault();
 
     setGlobalModalsState({ ...globalModalsState, ...{ createWorkModalOpened: true } });
+  };
+
+  const handleLanguageSelect = (locale: string | null) => {
+    if (locale != null) {
+      setCookie(null, LOCALE_COOKIE_NAME, locale, {
+        maxAge: LOCALE_COOKIE_TTL,
+        path: '/',
+      });
+    }
   };
 
   return (
@@ -83,13 +94,13 @@ const Navbar: FunctionComponent = () => {
 
         {router.locales?.length && (
           <Nav className={classNames('ml-4', styles.langSwitch)}>
-            <Dropdown alignRight>
+            <Dropdown alignRight onSelect={handleLanguageSelect}>
               <Dropdown.Toggle as={ChevronToggle} id="langSwitch">
                 <img src={`/img/lang-flags/${router.locale}.png`} alt={`Language flag '${router.locale}'`} />
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 {router.locales.map((locale) => (
-                  <Dropdown.Item key={locale} active={locale === router.locale}>
+                  <Dropdown.Item key={locale} eventKey={locale} active={locale === router.locale}>
                     <Link href={router.asPath} locale={locale}>
                       <img src={`/img/lang-flags/${locale}.png`} alt={`Language flag '${locale}'`} />
                     </Link>
