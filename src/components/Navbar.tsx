@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import { useAtom } from 'jotai';
 import { useSession, signOut } from 'next-auth/client';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { FunctionComponent, MouseEvent } from 'react';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -22,6 +23,7 @@ const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
 const Navbar: FunctionComponent = () => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [session] = useSession() as [Session | null | undefined, boolean];
+  const router = useRouter();
 
   const openSignInModal = () => {
     setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
@@ -46,6 +48,7 @@ const Navbar: FunctionComponent = () => {
           <img src="/img/logo.png" className="d-inline-block align-middle mr-4" width={52} alt="Project logo" />
           <h1 className={styles.brandText}>{siteName}</h1>
         </BootstrapNavbar.Brand>
+
         {session == null ? (
           <Nav className={styles.nav}>
             <Button onClick={openSignInModal}>Login</Button>
@@ -75,6 +78,25 @@ const Navbar: FunctionComponent = () => {
               <NavDropdown.ItemText>{session.user.email}</NavDropdown.ItemText>
               <NavDropdown.Item onClick={() => signOut()}>Sign-out</NavDropdown.Item>
             </NavDropdown>
+          </Nav>
+        )}
+
+        {router.locales?.length && (
+          <Nav className={classNames('ml-4', styles.langSwitch)}>
+            <Dropdown alignRight>
+              <Dropdown.Toggle as={ChevronToggle} id="langSwitch">
+                <img src={`/img/lang-flags/${router.locale}.png`} alt={`Language flag '${router.locale}'`} />
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                {router.locales.map((locale) => (
+                  <Dropdown.Item key={locale} active={locale === router.locale}>
+                    <Link href={router.asPath} locale={locale}>
+                      <img src={`/img/lang-flags/${locale}.png`} alt={`Language flag '${locale}'`} />
+                    </Link>
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
           </Nav>
         )}
       </BootstrapNavbar>

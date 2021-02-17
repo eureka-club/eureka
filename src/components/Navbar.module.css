@@ -40,3 +40,32 @@
   color: var(--eureka-green);
   transform: scale(1.5);
 }
+
+.langSwitch {
+}
+.langSwitch button {
+  padding-left: 0;
+  padding-right: 0;
+}
+.langSwitch button,
+.langSwitch button:hover,
+.langSwitch button:focus,
+.langSwitch button:not(:disabled):not(.disabled):active {
+  background-color: transparent;
+  border: none;
+  color: var(--eureka-green);
+}
+.langSwitch img {
+  border-radius: 0.25rem;
+  height: 24px;
+}
+.langSwitch :global(.dropdown-menu) {
+  min-width: auto;
+}
+.langSwitch :global(.dropdown-item) {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+.langSwitch :global(.dropdown-item.active) {
+  background-color: var(--eureka-green);
+}
