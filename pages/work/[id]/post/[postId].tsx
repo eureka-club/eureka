@@ -2,7 +2,7 @@ import { GetServerSideProps, NextPage } from 'next';
 
 import { PostDetail } from '../../../../src/types/post';
 import { WorkWithImages } from '../../../../src/types/work';
-import SimpleLayout from '../../../../src/components/layouts/SimpleLayout';
+import PopupLayout from '../../../../src/components/layouts/PopupLayout';
 import WorkDetail from '../../../../src/components/work/WorkDetail';
 import { search as searchPost } from '../../../../src/facades/post';
 import { countCycles, countPosts, find as findWork } from '../../../../src/facades/work';
@@ -16,9 +16,9 @@ interface Props {
 
 const PostDetailInWorkPage: NextPage<Props> = ({ post, work, cyclesCount, postsCount }) => {
   return (
-    <SimpleLayout title={`${post.title} · ${work.title}`}>
+    <PopupLayout title={`${post.title} · ${work.title}`}>
       <WorkDetail work={work} post={post} cyclesCount={cyclesCount} postsCount={postsCount} />
-    </SimpleLayout>
+    </PopupLayout>
   );
 };
 

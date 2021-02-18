@@ -1,0 +1,16 @@
+.navigationContainer {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  max-width: 1440px;
+}
+
+.returnLink {
+  background-color: #f7f7f7;
+  border: 1px solid #e8e8e8;
+  border-radius: 50%;
+  color: #313131;
+  padding: 0 0.8rem;
+  width: 42px;
+  height: 42px;
+  line-height: 1;
+}
