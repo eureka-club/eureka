@@ -1,3 +1,4 @@
+import { Post } from '@prisma/client';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
@@ -49,26 +50,29 @@ const CreatePostForm: FunctionComponent = () => {
 
   const {
     mutate: execCreatePost,
+    data: createdPost,
     error: createPostError,
     isError: isCreatePostError,
     isLoading: isCreatePostLoading,
     isSuccess: isCreatePostSuccess,
-  } = useMutation(async (payload: CreatePostAboutCycleClientPayload | CreatePostAboutWorkClientPayload) => {
-    const formData = new FormData();
+  } = useMutation(
+    async (payload: CreatePostAboutCycleClientPayload | CreatePostAboutWorkClientPayload): Promise<Post> => {
+      const formData = new FormData();
 
-    Object.entries(payload).forEach(([key, value]) => {
-      if (value != null) {
-        formData.append(key, value);
-      }
-    });
+      Object.entries(payload).forEach(([key, value]) => {
+        if (value != null) {
+          formData.append(key, value);
+        }
+      });
 
-    const res = await fetch('/api/post', {
-      method: 'POST',
-      body: formData,
-    });
+      const res = await fetch('/api/post', {
+        method: 'POST',
+        body: formData,
+      });
 
-    return res.json();
-  });
+      return res.json();
+    },
+  );
 
   const handleSearchWorkOrCycle = async (query: string) => {
     setIsSearchWorkOrCycleLoading(true);
@@ -164,13 +168,20 @@ const CreatePostForm: FunctionComponent = () => {
   };
 
   useEffect(() => {
-    if (isCreatePostSuccess === true) {
+    if (isCreatePostSuccess === true && createdPost != null) {
       setGlobalModalsState({ ...globalModalsState, ...{ createPostModalOpened: false } });
       queryClient.invalidateQueries('posts.mosaic');
-      router.replace(router.asPath);
+
+      if (selectedWork != null) {
+        router.push(`/work/${selectedWork.id}/post/${createdPost.id}`);
+        return;
+      }
+      if (selectedCycle != null) {
+        router.push(`/cycle/${selectedCycle.id}/post/${createdPost.id}`);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isCreatePostSuccess]);
+  }, [createdPost, isCreatePostSuccess]);
 
   return (
     <Form onSubmit={handleSubmit} ref={formRef}>
