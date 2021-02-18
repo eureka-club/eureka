@@ -22,19 +22,23 @@ const MosaicItem: FunctionComponent<CycleWithImages> = ({ id, title, localImages
           </a>
         </Link>
         <div className={styles.embeddedInfo}>
-          <h3 className={styles.title}>{title}</h3>
-          <span className={styles.date}>
-            {advancedDayjs(startDate).format(DATE_FORMAT_HUMANIC_SHORT_ADVANCED)}
-            &mdash;
-            {advancedDayjs(endDate).format(DATE_FORMAT_HUMANIC_SHORT_ADVANCED)}
-          </span>
-          <div className="d-flex justify-content-between">
-            <span className={styles.type}>{t('cycle')}</span>
-            <div className={styles.actions}>
-              <BsBookmark className={styles.actionBookmark} />
-              <AiOutlineHeart className={styles.actionLike} />
-            </div>
-          </div>
+          <h3 className={styles.title}>
+            <Link href={`/cycle/${id}`}>
+              <a>
+                {title}
+                <span className={styles.date}>
+                  {advancedDayjs(startDate).format(DATE_FORMAT_HUMANIC_SHORT_ADVANCED)}
+                  &mdash;
+                  {advancedDayjs(endDate).format(DATE_FORMAT_HUMANIC_SHORT_ADVANCED)}
+                </span>
+              </a>
+            </Link>
+          </h3>
+        </div>
+        <span className={styles.type}>{t('cycle')}</span>
+        <div className={styles.actions}>
+          <BsBookmark className={styles.actionBookmark} />
+          <AiOutlineHeart className={styles.actionLike} />
         </div>
       </div>
     </article>

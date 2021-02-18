@@ -15,9 +15,9 @@
 
 .embeddedInfo {
   position: absolute;
-  bottom: 0.85rem;
-  left: 0.85rem;
-  right: 1.2rem;
+  bottom: 3.5rem;
+  left: 1rem;
+  right: 1rem;
 }
 .embeddedInfo .title {
   color: var(--text-color-light);
@@ -25,26 +25,36 @@
   font-weight: 300;
   margin-bottom: 0.75rem;
 }
+.embeddedInfo .title a,
+.embeddedInfo .title a:hover {
+  color: var(--text-color-light);
+}
 .embeddedInfo .date {
   color: var(--text-color-light);
   display: inline-block;
   font-size: 0.8rem;
   font-weight: 200;
-  margin-bottom: 1.5rem;
+  margin-top: 1rem;
 }
 
 .type {
   background-color: var(--eureka-blue);
   border-radius: 1rem;
+  bottom: 0.85rem;
   color: var(--text-color-light);
   font-size: 0.85rem;
   line-height: 1;
+  left: 0.85rem;
   padding: 0.25rem 0.75rem;
+  position: absolute;
   text-transform: capitalize;
 }
 
 .actions {
+  bottom: 0.95rem;
   color: var(--text-color-extralight);
+  position: absolute;
+  right: 1.3rem;
   transform: scale(1.5);
 }
 .actionBookmark,
