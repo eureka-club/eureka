@@ -1,0 +1,18 @@
+{
+  "book": "Book",
+  "cycle": "Cycle",
+  "documentary": "Documentary",
+  "movie": "Movie",
+  "post": "Post",
+
+  "publicationYearLabel": "Publication year",
+  "releaseYearLabel": "Release year",
+  "countryLabel": "Country",
+  "cycleActiveLabel": "Active",
+  "cycleNotActiveLabel": "Inactive",
+  "workLengthLabel": "Length",
+  "workLengthAsPagesLabel": "pages",
+  "workLengthAsMinutesLabel": "minutes",
+  "unclampTextLess": "view less",
+  "unclampTextMore": "view more"
+}

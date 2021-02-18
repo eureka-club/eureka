@@ -1,7 +1,11 @@
 export const DATE_FORMAT_HUMANIC_ADVANCED = 'MMMM Do YYYY';
+export const DATE_FORMAT_HUMANIC_SHORT_ADVANCED = 'MMM Do YYYY';
 export const DATE_FORMAT_PROPS = 'YYYY-MM-DD';
 export const DATE_FORMAT_ONLY_YEAR = 'YYYY';
 
 export const ASSETS_BASE_URL = process.env.NEXT_PUBLIC_LOCAL_ASSETS_BASE_URL;
 export const DISQUS_SHORTNAME = process.env.NEXT_PUBLIC_DISQUS_SHORTNAME;
 export const WEBAPP_URL = process.env.NEXT_PUBLIC_WEBAPP_URL;
+
+export const LOCALE_COOKIE_NAME = 'NEXT_LOCALE';
+export const LOCALE_COOKIE_TTL = 60 * 60 * 24 * 90;

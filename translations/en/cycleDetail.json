@@ -1,0 +1,11 @@
+{
+  "tabHeaderCycleContent": "Cycle content",
+  "tabHeaderForum": " Forum",
+  "tabHeaderPosts": " Posts",
+  "worksCountHeader_0": "No work in the cycle",
+  "worksCountHeader": "1 work in the cycle",
+  "worksCountHeader_other": "{{count}} works in the cycle",
+  "postsCountHeader_0": "No post in the cycle",
+  "postsCountHeader": "1 post in the cycle",
+  "postsCountHeader_other": "{{count}} posts in the cycle"
+}

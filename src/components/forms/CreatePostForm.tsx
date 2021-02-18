@@ -1,5 +1,6 @@
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
+import useTranslation from 'next-translate/useTranslation';
 import { FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -44,6 +45,7 @@ const CreatePostForm: FunctionComponent = () => {
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
   const queryClient = useQueryClient();
   const router = useRouter();
+  const { t } = useTranslation('createPostForm');
 
   const {
     mutate: execCreatePost,
@@ -174,7 +176,7 @@ const CreatePostForm: FunctionComponent = () => {
     <Form onSubmit={handleSubmit} ref={formRef}>
       <ModalHeader closeButton>
         <Container>
-          <ModalTitle>Create a post</ModalTitle>
+          <ModalTitle>{t('title')}</ModalTitle>
         </Container>
       </ModalHeader>
 
@@ -183,7 +185,7 @@ const CreatePostForm: FunctionComponent = () => {
           <Row>
             <Col>
               <FormGroup controlId="workOrCycle">
-                <FormLabel>*What work or cycle is this post about?</FormLabel>
+                <FormLabel>*{t('searchCycleOrWorkFieldLabel')}</FormLabel>
                 {selectedWork != null ? (
                   <div className={styles.searchResult}>
                     <WorkTypeaheadSearchItem work={selectedWork} />
@@ -212,7 +214,7 @@ const CreatePostForm: FunctionComponent = () => {
                       // Bypass client-side filtering. Results are already filtered by the search endpoint
                       filterBy={() => true}
                       inputProps={{ required: true }}
-                      placeholder="Search for Work or Cycle in our library..."
+                      placeholder={t('searchCycleOrWorkFieldPlaceholder')}
                       isLoading={isSearchWorkOrCycleLoading}
                       labelKey={(res: SearchResult) => `${res.title}`}
                       minLength={2}
@@ -236,7 +238,7 @@ const CreatePostForm: FunctionComponent = () => {
             </Col>
             <Col>
               <FormGroup controlId="postTitle">
-                <FormLabel>*Title of your post (80 characters max)</FormLabel>
+                <FormLabel>*{t('titleFieldLabel')}</FormLabel>
                 <FormControl type="text" maxLength={80} required />
               </FormGroup>
             </Col>
@@ -246,12 +248,12 @@ const CreatePostForm: FunctionComponent = () => {
               <ImageFileSelect acceptedFileTypes="image/*" file={imageFile} setFile={setImageFile} required>
                 {(imagePreview) => (
                   <FormGroup>
-                    <FormLabel>*Add image to your post</FormLabel>
+                    <FormLabel>*{t('imageFieldLabel')}</FormLabel>
                     <div className={styles.imageControl}>
                       {(imageFile != null && imagePreview) != null ? (
                         <span className={styles.imageName}>{imageFile?.name}</span>
                       ) : (
-                        'select file...'
+                        t('imageFieldPlaceholder')
                       )}
                       {imagePreview && <img src={imagePreview} className="float-right" alt="Work cover" />}
                     </div>
@@ -261,7 +263,7 @@ const CreatePostForm: FunctionComponent = () => {
             </Col>
             <Col>
               <FormGroup controlId="language">
-                <FormLabel>*Language of the post</FormLabel>
+                <FormLabel>*{t('languageFieldLabel')}</FormLabel>
                 <LanguageSelect />
               </FormGroup>
             </Col>
@@ -269,7 +271,7 @@ const CreatePostForm: FunctionComponent = () => {
           <Row>
             <Col sm={{ span: 6 }}>
               <FormGroup controlId="workOrCycle">
-                <FormLabel>Search for cycle in which post will be added...</FormLabel>
+                <FormLabel>{t('searchCycleFieldLabel')}</FormLabel>
                 {!selectedCycle ? (
                   <>
                     {/* language=CSS */}
@@ -283,7 +285,7 @@ const CreatePostForm: FunctionComponent = () => {
                       id="create-post--search-cycle"
                       filterBy={() => true}
                       inputProps={{ id: 'create-post--search-cycle' }}
-                      placeholder="Search Cycle to which post will be added"
+                      placeholder={t('searchCycleFieldPlaceholder')}
                       isLoading={isSearchCycleLoading}
                       labelKey={(res: SearchResult) => `${res.title}`}
                       minLength={2}
@@ -308,16 +310,13 @@ const CreatePostForm: FunctionComponent = () => {
           <Row>
             <Col>
               <small style={{ color: 'lightgrey', position: 'relative', top: '-0.75rem' }}>
-                By adding your post to a cycle, you will automatically become a participant of the cycle (if you
-                aren&rsquo;t already).
+                {t('searchCycleInfotip')}
               </small>
             </Col>
           </Row>
           <Row>
             <FormGroup controlId="description" as={Col}>
-              <FormLabel>
-                *Write what you thought and / or learned from this work or cycle. Why did you find it interesting?
-              </FormLabel>
+              <FormLabel>*{t('descriptionFieldLabel')}</FormLabel>
               <FormControl as="textarea" rows={6} maxLength={4000} required />
             </FormGroup>
           </Row>
@@ -328,16 +327,14 @@ const CreatePostForm: FunctionComponent = () => {
         <Container className="py-3">
           <Row>
             <Col>
-              <FormCheck type="checkbox" defaultChecked inline id="isPublic" label="This post is public" />
+              <FormCheck type="checkbox" defaultChecked inline id="isPublic" label={t('isPublicFieldLabel')} />
               <small style={{ color: 'lightgrey', display: 'block', margin: '0.25rem 0 0 1.25rem' }}>
-                Public posts are accessible by all. Uncheck to make
-                <br />
-                post private (only you can see).{' '}
+                {t('isPublicInfotip')}
               </small>
             </Col>
             <Col style={{ borderLeft: '1px solid lightgrey' }}>
               <Button variant="primary" type="submit" className="pl-5 pr-4 float-right">
-                Create post
+                {t('submitButtonLabel')}
                 {isCreatePostLoading ? (
                   <Spinner animation="grow" variant="secondary" className={styles.loadIndicator} />
                 ) : (

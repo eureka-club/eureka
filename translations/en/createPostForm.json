@@ -1,0 +1,16 @@
+{
+  "title": "Create a post",
+  "searchCycleOrWorkFieldLabel": "What work or cycle is this post about?",
+  "searchCycleOrWorkFieldPlaceholder": "Search for Work or Cycle in our library...",
+  "titleFieldLabel": "Title of your post (80 characters max)",
+  "imageFieldLabel": "Add image to your post",
+  "imageFieldPlaceholder": "select file...",
+  "languageFieldLabel": "Language of the post",
+  "searchCycleFieldLabel": "Search for cycle in which post will be added...",
+  "searchCycleFieldPlaceholder": "Search Cycle to which post will be added",
+  "searchCycleInfotip": "By adding your post to a cycle, you will automatically become a participant of the cycle (if you aren't already).",
+  "descriptionFieldLabel": "Write what you thought and/or learned from this work or cycle. Why did you find it interesting?",
+  "isPublicFieldLabel": "This post is public",
+  "isPublicInfotip": "Public posts are accessible by all. Uncheck to make post private (only you can see).",
+  "submitButtonLabel": "Create post"
+}

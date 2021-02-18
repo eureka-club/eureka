@@ -1,0 +1,24 @@
+{
+  "createCycle": "Create a Cycle",
+  "addWrkBtnTitle": "Add work to a cycle",
+  "addWrkBtnSubtitle": "Search for work in our library",
+  "addCoverBtnTitle": "Add cover image to cycle",
+  "addCoverTipLeadLine": "Tips on choose a good image",
+  "addCoverTipLine1": "Look for an image that illustrates the main topic of the cycle",
+  "addCoverTipLine2": "Please choose images under Creative Commons licenses. We recommend searching on Unsplash, Flickr, etc.",
+  "addCoverTipLine3": "Ideal size: 250 x 250px",
+  "isPublicLabel": "This cycle is public",
+  "newCycleTitleLabel": "Title of your cycle (80 characters max)",
+  "newCycleLanguageLabel": "Main language of the cycle",
+  "newCycleTopicsLabel": "Main topics of the cycle",
+  "newCycleStartDateLabel": "Start date of the cycle",
+  "newCycleEndDateLabel": "End date of the cycle",
+  "newCyclePitchLabel": "Cycle pitch: what is this cycle about and why is it a relevant topic. Why should people join this cycle?",
+  "submitBtnLabel": "Create cycle",
+  "resetBtnLabel": "Clear",
+
+  "addWrkPopupTitle": "Add work to cycle",
+  "addWrkTypeaheadLabel": "Select work",
+  "addWrkTypeaheadPlaceholder": "Search for existing work...",
+  "addWrkAddBtnLabel": "Add work to cycle"
+}

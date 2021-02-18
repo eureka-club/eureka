@@ -1,9 +1,11 @@
 import { Provider } from 'jotai';
 import { AppProps } from 'next/app';
 import { Provider as NextAuthProvider } from 'next-auth/client';
+import appWithI18n from 'next-translate/appWithI18n';
 import { StrictMode, FunctionComponent } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
+import i18nConfig from '../i18n';
 import globalModalsAtom from '../src/atoms/globalModals';
 import './_app.css';
 
@@ -26,4 +28,5 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   );
 };
 
-export default App;
+// @ts-ignore
+export default appWithI18n(App, { ...i18nConfig, skipInitialProps: false });

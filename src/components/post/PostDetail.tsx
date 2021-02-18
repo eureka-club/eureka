@@ -2,6 +2,7 @@ import { Work } from '@prisma/client';
 import classNames from 'classnames';
 import { DiscussionEmbed } from 'disqus-react';
 import Link from 'next/link';
+import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { FunctionComponent } from 'react';
 import Col from 'react-bootstrap/Col';
@@ -20,6 +21,7 @@ interface Props {
 
 const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
   const { asPath } = useRouter();
+  const { t } = useTranslation('postDetail');
   const disqusConfig = {
     identifier: asPath,
     title: post.title,
@@ -36,7 +38,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
           <div className="d-flex mb-3">
             <div className="mr-3">
               <Link href={`/work/${work.id}`}>
-                <a className={styles.workInfoType}>{work.type}</a>
+                <a className={styles.workInfoType}>{t(`common:${work.type}`)}</a>
               </Link>
             </div>
             <div className="pt-1">
@@ -49,7 +51,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
           <div className="d-flex">
             <div className="mr-3">
               <Link href={`/cycle/${post.cycles[0].id}`}>
-                <a className={styles.cycleInfoType}>Cycle</a>
+                <a className={styles.cycleInfoType}>{t('common:cycle')}</a>
               </Link>
             </div>
             <div className="pt-1">

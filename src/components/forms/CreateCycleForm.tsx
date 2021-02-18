@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
+import useTranslation from 'next-translate/useTranslation';
 import { FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -42,6 +43,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const [cycleCoverImageFile, setCycleCoverImageFile] = useState<File | null>(null);
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
   const typeaheadRef = useRef<AsyncTypeahead<WorkWithImages>>(null);
+  const { t } = useTranslation('createCycleForm');
 
   const router = useRouter();
   const {
@@ -187,7 +189,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   return (
     <>
       <Form onSubmit={handleSubmit} ref={formRef} className={className}>
-        <h4 className="mt-2 mb-4">Create a Cycle</h4>
+        <h4 className="mt-2 mb-4">{t('createCycle')}</h4>
 
         <Row className="mb-5">
           <Col md={{ span: 8 }}>
@@ -198,8 +200,8 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                   type="button"
                   onClick={handleAddWorkBegin}
                 >
-                  <h4>*Add work to a cycle</h4>
-                  <p>Search for work in our library</p>
+                  <h4>*{t('addWrkBtnTitle')}</h4>
+                  <p>{t('addWrkBtnSubtitle')}</p>
                 </button>
               </Col>
             </Row>
@@ -238,15 +240,12 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                     <div className={classNames(styles.outlinedBlock)}>
                       {imagePreview == null ? (
                         <div className={styles.cycleCoverPrompt}>
-                          <h4>*Add cover image to cycle</h4>
-                          <p>Tips on choose a good image:</p>
+                          <h4>*{t('addCoverBtnTitle')}</h4>
+                          <p>{t('addCoverTipLeadLine')}:</p>
                           <ul>
-                            <li>Look for an image that illustrates the main topic of the cycle</li>
-                            <li>
-                              Please choose images under Creative Commons licenses. We recommend searching on Unsplash,
-                              Flickr, etc.
-                            </li>
-                            <li>Ideal size: 250 x 250px</li>
+                            <li>{t('addCoverTipLine1')}</li>
+                            <li>{t('addCoverTipLine2')}</li>
+                            <li>{t('addCoverTipLine3')}</li>
                           </ul>
                         </div>
                       ) : (
@@ -264,30 +263,27 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
           </Col>
           <Col md={{ span: 4 }}>
             <FormGroup controlId="cycleTitle">
-              <FormLabel>*Title of your cycle (80 characters max)</FormLabel>
+              <FormLabel>*{t('newCycleTitleLabel')}</FormLabel>
               <FormControl type="text" maxLength={80} required />
             </FormGroup>
             <FormGroup controlId="languages">
-              <FormLabel>*Main language of the cycle</FormLabel>
+              <FormLabel>*{t('newCycleLanguageLabel')}</FormLabel>
               <LanguageSelect />
             </FormGroup>
             <FormGroup controlId="topics">
-              <FormLabel>Main topics of the cycle</FormLabel>
+              <FormLabel>{t('newCycleTopicsLabel')}</FormLabel>
               <FormControl type="text" disabled />
             </FormGroup>
             <FormGroup controlId="startDate">
-              <FormLabel>*Start date of the cycle</FormLabel>
+              <FormLabel>*{t('newCycleStartDateLabel')}</FormLabel>
               <FormControl type="date" required defaultValue={dayjs(new Date()).format(DATE_FORMAT_PROPS)} />
             </FormGroup>
             <FormGroup controlId="endDate">
-              <FormLabel>*End date of the cycle</FormLabel>
+              <FormLabel>*{t('newCycleEndDateLabel')}</FormLabel>
               <FormControl type="date" required min={dayjs(new Date()).format(DATE_FORMAT_PROPS)} />
             </FormGroup>
             <FormGroup controlId="description">
-              <FormLabel>
-                *Cycle pitch: what is this cycle about and why is it a relevant topic. Why should people join this
-                cycle?
-              </FormLabel>
+              <FormLabel>*{t('newCyclePitchLabel')}</FormLabel>
               <FormControl as="textarea" rows={5} required />
             </FormGroup>
           </Col>
@@ -295,7 +291,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
         <Row>
           <Col>
-            <FormCheck type="checkbox" defaultChecked inline id="isPublic" label="This cycle is public" />
+            <FormCheck type="checkbox" defaultChecked inline id="isPublic" label={t('isPublicLabel')} />
           </Col>
           <Col>
             <Button
@@ -304,7 +300,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
               type="submit"
               className="float-right pl-5 pr-4"
             >
-              Create cycle
+              {t('submitBtnLabel')}
               {isCreateCycleReqLoading ? (
                 <Spinner animation="grow" variant="secondary" className={styles.loadIndicator} />
               ) : (
@@ -318,7 +314,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
               onClick={handleFormClear}
               className="float-right mr-4 px-3"
             >
-              Clear
+              {t('resetBtnLabel')}
             </Button>
           </Col>
         </Row>
@@ -326,13 +322,13 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
       <Modal show={addWorkModalOpened} onHide={handleAddWorkModalClose} animation={false}>
         <ModalHeader closeButton>
-          <ModalTitle>Add work to cycle</ModalTitle>
+          <ModalTitle>{t('addWrkPopupTitle')}</ModalTitle>
         </ModalHeader>
         <ModalBody>
           <Row className="mb-5">
             <Col sm={{ span: 7 }}>
               <FormGroup controlId="cycle">
-                <FormLabel>Select work:</FormLabel>
+                <FormLabel>{t('addWrkTypeaheadLabel')}:</FormLabel>
 
                 {/* language=CSS */}
                 <style jsx global>{`
@@ -346,7 +342,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                   // Bypass client-side filtering. Results are already filtered by the search endpoint
                   filterBy={() => true}
                   inputProps={{ required: true }}
-                  placeholder="Search for existing work..."
+                  placeholder={t('addWrkTypeaheadPlaceholder')}
                   ref={typeaheadRef}
                   isLoading={isWorkSearchLoading}
                   labelKey={(res) => `${res.title}`}
@@ -368,7 +364,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 type="button"
                 className={styles.addWorkModalButton}
               >
-                Add work to cycle
+                {t('addWrkAddBtnLabel')}
               </Button>
             </Col>
           </Row>

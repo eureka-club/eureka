@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { CommentCount, DiscussionEmbed } from 'disqus-react';
 import { useRouter } from 'next/router';
+import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
@@ -34,6 +35,7 @@ interface Props {
 
 const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, post, postsCount, worksCount }) => {
   const { asPath } = useRouter();
+  const { t } = useTranslation('cycleDetail');
   const disqusConfig = {
     identifier: asPath,
     title: cycle.title,
@@ -88,14 +90,18 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, post, postsCoun
               <Col>
                 <Nav variant="tabs" fill>
                   <NavItem>
-                    <NavLink eventKey="cycle-content">Cycle content ({worksCount})</NavLink>
+                    <NavLink eventKey="cycle-content">
+                      {t('tabHeaderCycleContent')} ({worksCount})
+                    </NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink eventKey="posts">Posts ({postsCount})</NavLink>
+                    <NavLink eventKey="posts">
+                      {t('tabHeaderPosts')} ({postsCount})
+                    </NavLink>
                   </NavItem>
                   <NavItem>
                     <NavLink eventKey="forum">
-                      Forum (<CommentCount config={disqusConfig} shortname={DISQUS_SHORTNAME!} />)
+                      {t('tabHeaderForum')} (<CommentCount config={disqusConfig} shortname={DISQUS_SHORTNAME!} />)
                     </NavLink>
                   </NavItem>
                 </Nav>
@@ -110,15 +116,11 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, post, postsCoun
                         <UnclampText text={cycle.contentText} clampHeight="7rem" />
                       </div>
                     )}
-                    {worksCount === 0 && <h2>No Works in cycle</h2>}
-                    {worksCount === 1 && <h2>1 Work in cycle</h2>}
-                    {worksCount > 1 && <h2>{worksCount} Works in cycle</h2>}
+                    <h2 className="mb-5">{t('worksCountHeader', { count: worksCount })}</h2>
                     {worksCount > 0 && <WorksMosaic cycle={cycle} />}
                   </TabPane>
                   <TabPane eventKey="posts">
-                    {postsCount === 0 && <h2>No Posts in cycle</h2>}
-                    {postsCount === 1 && <h2>1 Post in cycle</h2>}
-                    {postsCount > 1 && <h2>{postsCount} Posts in cycle</h2>}
+                    <h2 className="mb-5">{t('postsCountHeader', { count: postsCount })}</h2>
                     {postsCount > 0 && <PostsMosaic cycle={cycle} />}
                   </TabPane>
                   <TabPane eventKey="forum">

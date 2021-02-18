@@ -1,6 +1,7 @@
 import { Cycle, Work } from '@prisma/client';
 import classNames from 'classnames';
 import Link from 'next/link';
+import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { BsBookmark } from 'react-icons/bs';
@@ -29,6 +30,7 @@ const MosaicItem: FunctionComponent<Props> = ({ post, postParent }) => {
 
     return null;
   })();
+  const { t } = useTranslation('common');
 
   return (
     <article className={styles.post}>
@@ -58,7 +60,7 @@ const MosaicItem: FunctionComponent<Props> = ({ post, postParent }) => {
             alt={post.title}
           />
         )}
-        <span className={styles.type}>Post</span>
+        <span className={styles.type}>{t('post')}</span>
         <div className={styles.actions}>
           <BsBookmark className={styles.actionBookmark} />
           <AiOutlineHeart className={styles.actionLike} />

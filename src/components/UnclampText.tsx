@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
@@ -17,6 +18,7 @@ const UnclampText: FunctionComponent<Props> = ({ clampHeight, text }) => {
   const innerRef = useRef<HTMLDivElement>(null);
   const [textIsUnclamped, setTextIsUnclamped] = useState(false);
   const [unclampButtonVisible, setUnclampButtonVisible] = useState(false);
+  const { t } = useTranslation('common');
 
   const handleExpandContentTextClick = (ev: MouseEvent) => {
     ev.preventDefault();
@@ -52,11 +54,11 @@ const UnclampText: FunctionComponent<Props> = ({ clampHeight, text }) => {
         <Button variant="link" onClick={handleExpandContentTextClick} className={styles.unclampButton}>
           {textIsUnclamped === true ? (
             <>
-              view less <BsChevronUp />
+              {t('unclampTextLess')} <BsChevronUp />
             </>
           ) : (
             <>
-              view more <BsChevronDown />
+              {t('unclampTextMore')} <BsChevronDown />
             </>
           )}
         </Button>
