@@ -24,6 +24,7 @@
   font-size: 1.2rem;
   font-weight: 300;
   margin-bottom: 0.75rem;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
 }
 .embeddedInfo .title a,
 .embeddedInfo .title a:hover {
