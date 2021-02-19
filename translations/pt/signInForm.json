@@ -1,3 +1,7 @@
 {
-
+  "login": "Entrar",
+  "loginGreeting": "Bem-vindx de volta à Eureka!",
+  "loginViaGoogle": "Entrar com Google"
+  "alternativeText": "OU",
+  "emailFieldLabel": "Entrar com email"
 }
