@@ -1,3 +1,8 @@
 {
-
+  "login": "Entrar",
+  "logout": "Sair",
+  "create": "Criar",
+  "cycle": "Ciclo",
+  "post": "Publicação",
+  "work": "Obra"
 }
