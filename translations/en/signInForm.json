@@ -1,5 +1,7 @@
 {
   "login": "Login",
   "loginGreeting": "Welcome back to Eureka",
-  "loginViaGoogle": "Login with Google"
+  "loginViaGoogle": "Login with Google",
+  "alternativeText": "OR",
+  "emailFieldLabel": "Email address"
 }

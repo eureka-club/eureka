@@ -28,3 +28,17 @@
   margin: 0 auto;
   padding: 0.75rem 4rem 0.75rem 5rem;
 }
+
+.alternativeLabel {
+  color: var(--eureka-green);
+  margin-top: 2rem;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.submitButton {
+  border-radius: 1.5rem;
+  display: block;
+  margin-top: 2rem;
+  width: 100%;
+}
