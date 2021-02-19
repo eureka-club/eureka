@@ -1,3 +1,25 @@
 {
-  "createCycle": "Crear un ciclo"
+  "createCycle": "Crear un ciclo",
+  "addWrkBtnTitle": "Agregar obra al ciclo",
+  "addWrkBtnSubtitle": "Busca la obra en nuestra biblioteca",
+  "addCoverBtnTitle": "Agregar imagen de portada para el ciclo",
+  "addCoverTipLeadLine": "Consejos para elegir una buena imagen:",
+  "addCoverTipLine1": "Busca una imagen que ilustre el tema principal del ciclo",
+  "addCoverTipLine2": "Elige imágenes con licencias Creative Commons. Recomendamos buscar en Unsplash, Flickr, etc.",
+  "addCoverTipLine3": "Tamaño ideal: 250 x 250px",
+  "isPublicLabel": "Este ciclo es público",
+  "newCycleTitleLabel": "Título (80 caracteres máx)",
+  "newCycleLanguageLabel": "Idioma(s) principal(es) del ciclo (2 máx)",
+  "newCycleTopicsLabel": "Temas principales del ciclo (5 máx)",
+  "newCycleStartDateLabel": "Fecha de inicio",
+  "newCycleEndDateLabel": "Fecha de cierre",
+  "newCyclePitchLabel": "Presentación del ciclo: ¿cuál es el tema de este ciclo y por qué es un tema relevante? ¿Por qué la gente debería participar en este ciclo?",
+  "submitBtnLabel": "Crear ciclo",
+  "resetBtnLabel": "Borrar",
+
+  "addWrkPopupTitle": "Agregar obra al ciclo",
+  "addWrkTypeaheadLabel": "Selecciona una obra",
+  "addWrkTypeaheadPlaceholder": "Busca una obra...",
+  "addWrkAddBtnLabel": "Agregar obra al ciclo"
 }
+
