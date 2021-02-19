@@ -80,6 +80,11 @@ function deploy_app_service {
 			--settings \
 				NEXT_TELEMETRY_DISABLED=1 \
 				DATABASE_URL=${DATABASE_URL} \
+				EMAILING_FROM=${EMAILING_FROM} \
+				EMAIL_SERVER_HOST=${EMAIL_SERVER_HOST} \
+				EMAIL_SERVER_PORT=${EMAIL_SERVER_PORT} \
+				EMAIL_SERVER_USER=${EMAIL_SERVER_USER} \
+				EMAIL_SERVER_PASS=${EMAIL_SERVER_PASS} \
 				GOOGLE_ID=${GOOGLE_ID} \
 				GOOGLE_SECRET=${GOOGLE_SECRET} \
 				LOCAL_ASSETS_HOST_DIR=${LOCAL_ASSETS_HOST_DIR} \
@@ -89,8 +94,8 @@ function deploy_app_service {
 				NEXT_PUBLIC_WEBAPP_URL=${NEXT_PUBLIC_WEBAPP_URL} \
 				SECRET=${SECRET} \
 			--output none
-		echo "done... waiting 15s"
-		sleep 15
+		echo "done... waiting 30s"
+		sleep 30
 	fi
 
 	echo -e "Deploying branch ${COLOR_YELLOW}${GIT_BRANCH}${NC} with rev ${COLOR_GREEN}${GIT_REV}${NC} to webapp ${COLOR_BLUE}$3${NC}..."
