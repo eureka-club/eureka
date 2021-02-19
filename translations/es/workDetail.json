@@ -1,3 +1,6 @@
 {
-
+  "workLinkLabel": "Enlace a la obra",
+  "tabHeaderAll": "Todo",
+  "tabHeaderCycles": "Ciclos que incluyen esta obra",
+  "tabHeaderPosts": "Publicaciones sobre esta obra"
 }
