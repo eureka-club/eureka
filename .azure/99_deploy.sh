@@ -94,8 +94,8 @@ function deploy_app_service {
 				NEXT_PUBLIC_WEBAPP_URL=${NEXT_PUBLIC_WEBAPP_URL} \
 				SECRET=${SECRET} \
 			--output none
-		echo "done... waiting 15s"
-		sleep 15
+		echo "done... waiting 30s"
+		sleep 30
 	fi
 
 	echo -e "Deploying branch ${COLOR_YELLOW}${GIT_BRANCH}${NC} with rev ${COLOR_GREEN}${GIT_REV}${NC} to webapp ${COLOR_BLUE}$3${NC}..."
