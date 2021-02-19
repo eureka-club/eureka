@@ -1,3 +1,16 @@
 {
-
+  "title": "Crear una publicación",
+  "searchCycleOrWorkFieldLabel": "¿De qué obra o ciclo trata esta publicación?",
+  "searchCycleOrWorkFieldPlaceholder": "Busca la obra o el ciclo en nuestra biblioteca...",
+  "titleFieldLabel": "Título para tu publicación (80 caracteres máx)",
+  "imageFieldLabel": "Agrega una imagen a tu publicación",
+  "imageFieldPlaceholder": "seleccionar archivo...",
+  "languageFieldLabel": "Idioma de la publicación",
+  "searchCycleFieldLabel": "Agregar esta publicación a un ciclo (opcional)",
+  "searchCycleFieldPlaceholder": "Search Cycle to which post will be added",
+  "searchCycleInfotip": "Al agregar tu publicación a un ciclo, automáticamente te convertirás en un-a participante del ciclo (si aún no lo eres).",
+  "descriptionFieldLabel": "Escribe lo que piensas y/o aprendiste de esta obra o ciclo. ¿Por qué te pareció interesante?",
+  "isPublicFieldLabel": "Esta publicación es pública",
+  "isPublicInfotip": "Las publicaciones públicas son accesibles por todxs. Desmarca la caja para volver la publicación privada (solo tu puedes verla).",
+  "submitButtonLabel": "Crear publicación"
 }
