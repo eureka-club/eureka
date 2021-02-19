@@ -1,3 +1,11 @@
 {
-
+  "tabHeaderCycleContent": "Contenido del ciclo",
+  "tabHeaderForum": " Foro",
+  "tabHeaderPosts": " Publicaciones",
+  "worksCountHeader_0": "No hay obras en el ciclo",
+  "worksCountHeader": "1 obra en el ciclo",
+  "worksCountHeader_other": "{{count}} obras en el ciclo",
+  "postsCountHeader_0": "No hay publicaciones en el ciclo",
+  "postsCountHeader": "1 publicación en el ciclo",
+  "postsCountHeader_other": "{{count}} publicaciones en el ciclo"
 }
