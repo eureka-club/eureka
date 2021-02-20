@@ -91,7 +91,7 @@ const Navbar: FunctionComponent = () => {
             <NavItem>
               <Link href="/my-list">
                 <a className="nav-link mr-3">
-                  <BsBookmark /> My List
+                  <BsBookmark /> {t('myListLabel')}
                 </a>
               </Link>
             </NavItem>
