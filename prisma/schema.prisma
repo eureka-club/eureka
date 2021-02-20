@@ -24,7 +24,8 @@ model User {
   accounts       Account[]
   sessions       Session[]
 
-  cycles         Cycle[]
+  cycles         Cycle[]    @relation("CreatedBy")
+  joinedCycles   Cycle[]    @relation("CycleToParticipant")
   posts          Post[]
 
   @@map(name: "users")
@@ -125,7 +126,7 @@ model Work {
 
 model Cycle {
   id           Int       @default(autoincrement()) @id
-  creator      User      @relation(fields: [creatorId], references: [id])
+  creator      User      @relation(name:"CreatedBy", fields: [creatorId], references: [id])
   creatorId    Int       @map(name: "creator_id")
   isPublic     Boolean   @map(name: "is_public")
   title        String
@@ -137,6 +138,7 @@ model Cycle {
   updatedAt    DateTime  @updatedAt @map(name: "updated_at")
 
   localImages  LocalImage[]
+  participants User[]    @relation("CycleToParticipant")
   posts        Post[]
   works        Work[]
 

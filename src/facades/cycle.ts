@@ -32,6 +32,24 @@ export const findAll = async (): Promise<
   });
 };
 
+export const findParticipant = async (user: User, cycle: Cycle): Promise<User | null> => {
+  return prisma.user.findFirst({
+    where: {
+      id: user.id,
+      joinedCycles: { some: { id: cycle.id } },
+    },
+  });
+};
+
+export const countParticipants = async (
+  cycle: Cycle,
+): Promise<Prisma.GetUserAggregateType<{ count: true; where: { cycles: { some: { id: number } } } }>> => {
+  return prisma.user.aggregate({
+    count: true,
+    where: { joinedCycles: { some: { id: cycle.id } } },
+  });
+};
+
 export const countPosts = async (
   cycle: Cycle,
 ): Promise<Prisma.GetPostAggregateType<{ count: true; where: { cycles: { some: { id: number } } } }>> => {
@@ -112,11 +130,26 @@ export const createFromServerFields = async (
     data: {
       ...payload,
       creator: { connect: { id: creator.id } },
+      participants: { connect: { id: creator.id } },
       works: { connect: fields.includedWorksIds.map((id) => ({ id: parseInt(id, 10) })) },
       localImages: {
         create: { ...coverImageUpload },
       },
     },
+  });
+};
+
+export const addParticipant = async (cycle: Cycle, user: User): Promise<Cycle> => {
+  return prisma.cycle.update({
+    where: { id: cycle.id },
+    data: { participants: { connect: { id: user.id } } },
+  });
+};
+
+export const removeParticipant = async (cycle: Cycle, user: User): Promise<Cycle> => {
+  return prisma.cycle.update({
+    where: { id: cycle.id },
+    data: { participants: { disconnect: { id: user.id } } },
   });
 };
 
