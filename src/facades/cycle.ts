@@ -112,6 +112,7 @@ export const createFromServerFields = async (
     data: {
       ...payload,
       creator: { connect: { id: creator.id } },
+      participants: { connect: { id: creator.id } },
       works: { connect: fields.includedWorksIds.map((id) => ({ id: parseInt(id, 10) })) },
       localImages: {
         create: { ...coverImageUpload },
