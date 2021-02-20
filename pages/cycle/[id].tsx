@@ -3,18 +3,24 @@ import { GetServerSideProps, NextPage } from 'next';
 import { CycleDetail } from '../../src/types/cycle';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '../../src/components/cycle/CycleDetail';
-import { countPosts, countWorks, find } from '../../src/facades/cycle';
+import { countParticipants, countPosts, countWorks, find } from '../../src/facades/cycle';
 
 interface Props {
   cycle: CycleDetail;
+  participantsCount: number;
   postsCount: number;
   worksCount: number;
 }
 
-const CycleDetailPage: NextPage<Props> = ({ cycle, postsCount, worksCount }) => {
+const CycleDetailPage: NextPage<Props> = ({ cycle, participantsCount, postsCount, worksCount }) => {
   return (
     <SimpleLayout title={cycle.title}>
-      <CycleDetailComponent cycle={cycle} postsCount={postsCount} worksCount={worksCount} />
+      <CycleDetailComponent
+        cycle={cycle}
+        participantsCount={participantsCount}
+        postsCount={postsCount}
+        worksCount={worksCount}
+      />
     </SimpleLayout>
   );
 };
@@ -34,12 +40,14 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     return { notFound: true };
   }
 
+  const participantsCount = await countParticipants(cycle);
   const postsCount = await countPosts(cycle);
   const worksCount = await countWorks(cycle);
 
   return {
     props: {
       cycle,
+      participantsCount: participantsCount.count,
       postsCount: postsCount.count,
       worksCount: worksCount.count,
     },

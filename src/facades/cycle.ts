@@ -32,6 +32,15 @@ export const findAll = async (): Promise<
   });
 };
 
+export const countParticipants = async (
+  cycle: Cycle,
+): Promise<Prisma.GetUserAggregateType<{ count: true; where: { cycles: { some: { id: number } } } }>> => {
+  return prisma.user.aggregate({
+    count: true,
+    where: { joinedCycles: { some: { id: cycle.id } } },
+  });
+};
+
 export const countPosts = async (
   cycle: Cycle,
 ): Promise<Prisma.GetPostAggregateType<{ count: true; where: { cycles: { some: { id: number } } } }>> => {

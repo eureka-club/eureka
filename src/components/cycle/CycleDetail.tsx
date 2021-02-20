@@ -29,11 +29,12 @@ import styles from './CycleDetail.module.css';
 interface Props {
   cycle: CycleDetail;
   post?: PostDetail;
+  participantsCount: number;
   postsCount: number;
   worksCount: number;
 }
 
-const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, post, postsCount, worksCount }) => {
+const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, post, participantsCount, postsCount, worksCount }) => {
   const { asPath } = useRouter();
   const { t } = useTranslation('cycleDetail');
   const disqusConfig = {
@@ -64,16 +65,24 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, post, postsCoun
                 </div>
                 <h1>{cycle.title}</h1>
                 <CycleSummary cycle={cycle} />
-                <section className={styles.socialInfo}>
-                  <span>
-                    <BsBookmarkFill /> #
-                  </span>
-                  <span>
-                    <AiFillHeart /> #
-                  </span>
-                  <span>
-                    <FiShare2 /> #
-                  </span>
+                <section className={classNames('d-flex justify-content-between', styles.socialInfo)}>
+                  <div>
+                    <span>
+                      <BsBookmarkFill /> #
+                    </span>
+                    <span>
+                      <AiFillHeart /> #
+                    </span>
+                    <span>
+                      <FiShare2 /> #
+                    </span>
+                  </div>
+
+                  <div>
+                    <small className={styles.participantsCount}>
+                      {t('participantsCount', { count: participantsCount })}
+                    </small>
+                  </div>
                 </section>
               </div>
             </Col>

@@ -4,20 +4,27 @@ import { CycleDetail } from '../../../../src/types/cycle';
 import { PostDetail } from '../../../../src/types/post';
 import PopupLayout from '../../../../src/components/layouts/PopupLayout';
 import CycleDetailComponent from '../../../../src/components/cycle/CycleDetail';
-import { countPosts, countWorks, find as findCycle } from '../../../../src/facades/cycle';
+import { countParticipants, countPosts, countWorks, find as findCycle } from '../../../../src/facades/cycle';
 import { search as searchPost } from '../../../../src/facades/post';
 
 interface Props {
   cycle: CycleDetail;
   post: PostDetail;
+  participantsCount: number;
   postsCount: number;
   worksCount: number;
 }
 
-const PostDetailInCyclePage: NextPage<Props> = ({ cycle, post, postsCount, worksCount }) => {
+const PostDetailInCyclePage: NextPage<Props> = ({ cycle, participantsCount, post, postsCount, worksCount }) => {
   return (
     <PopupLayout title={`${post.title} · ${cycle.title}`}>
-      <CycleDetailComponent cycle={cycle} post={post} postsCount={postsCount} worksCount={worksCount} />
+      <CycleDetailComponent
+        cycle={cycle}
+        participantsCount={participantsCount}
+        post={post}
+        postsCount={postsCount}
+        worksCount={worksCount}
+      />
     </PopupLayout>
   );
 };
@@ -59,6 +66,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     return { notFound: true };
   }
 
+  const participantsCount = await countParticipants(cycle);
   const postsCount = await countPosts(cycle);
   const worksCount = await countWorks(cycle);
 
@@ -66,6 +74,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     props: {
       cycle,
       post: postResults[0],
+      participantsCount: participantsCount.count,
       postsCount: postsCount.count,
       worksCount: worksCount.count,
     },
