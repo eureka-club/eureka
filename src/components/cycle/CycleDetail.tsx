@@ -1,8 +1,10 @@
 import classNames from 'classnames';
 import { CommentCount, DiscussionEmbed } from 'disqus-react';
+import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
+import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 import NavItem from 'react-bootstrap/NavItem';
@@ -29,12 +31,20 @@ import styles from './CycleDetail.module.css';
 interface Props {
   cycle: CycleDetail;
   post?: PostDetail;
+  isCurrentUserJoinedToCycle: boolean;
   participantsCount: number;
   postsCount: number;
   worksCount: number;
 }
 
-const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, post, participantsCount, postsCount, worksCount }) => {
+const CycleDetailComponent: FunctionComponent<Props> = ({
+  cycle,
+  post,
+  isCurrentUserJoinedToCycle,
+  participantsCount,
+  postsCount,
+  worksCount,
+}) => {
   const { asPath } = useRouter();
   const { t } = useTranslation('cycleDetail');
   const disqusConfig = {
@@ -42,6 +52,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, post, participa
     title: cycle.title,
     url: `${WEBAPP_URL}${asPath}`,
   };
+  const [session] = useSession();
 
   return (
     <>
@@ -54,7 +65,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, post, participa
               </div>
             </Col>
             <Col md={{ span: 9 }}>
-              <div className="pt-3 px-4">
+              <div className="pt-2 pl-2">
                 <div className={styles.cycleCreator}>
                   <img
                     src={cycle.creator.image || '/img/default-avatar.png'}
@@ -77,11 +88,18 @@ const CycleDetailComponent: FunctionComponent<Props> = ({ cycle, post, participa
                       <FiShare2 /> #
                     </span>
                   </div>
-
                   <div>
                     <small className={styles.participantsCount}>
                       {t('participantsCount', { count: participantsCount })}
                     </small>
+                    {session != null &&
+                      (isCurrentUserJoinedToCycle ? (
+                        <Button variant="link" className="ml-3">
+                          Leave cycle
+                        </Button>
+                      ) : (
+                        <Button className="ml-3">Join cycle</Button>
+                      ))}
                   </div>
                 </section>
               </div>

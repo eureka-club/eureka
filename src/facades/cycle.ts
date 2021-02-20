@@ -32,6 +32,15 @@ export const findAll = async (): Promise<
   });
 };
 
+export const findParticipant = async (user: User, cycle: Cycle): Promise<User | null> => {
+  return prisma.user.findFirst({
+    where: {
+      id: user.id,
+      joinedCycles: { some: { id: cycle.id } },
+    },
+  });
+};
+
 export const countParticipants = async (
   cycle: Cycle,
 ): Promise<Prisma.GetUserAggregateType<{ count: true; where: { cycles: { some: { id: number } } } }>> => {

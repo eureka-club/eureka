@@ -1,25 +1,42 @@
 import { GetServerSideProps, NextPage } from 'next';
+import { getSession } from 'next-auth/client';
 
 import { CycleDetail } from '../../../../src/types/cycle';
 import { PostDetail } from '../../../../src/types/post';
+import { Session } from '../../../../src/types';
 import PopupLayout from '../../../../src/components/layouts/PopupLayout';
 import CycleDetailComponent from '../../../../src/components/cycle/CycleDetail';
-import { countParticipants, countPosts, countWorks, find as findCycle } from '../../../../src/facades/cycle';
+import {
+  countParticipants,
+  countPosts,
+  countWorks,
+  find as findCycle,
+  findParticipant,
+} from '../../../../src/facades/cycle';
 import { search as searchPost } from '../../../../src/facades/post';
 
 interface Props {
   cycle: CycleDetail;
   post: PostDetail;
+  isCurrentUserJoinedToCycle: boolean;
   participantsCount: number;
   postsCount: number;
   worksCount: number;
 }
 
-const PostDetailInCyclePage: NextPage<Props> = ({ cycle, participantsCount, post, postsCount, worksCount }) => {
+const PostDetailInCyclePage: NextPage<Props> = ({
+  cycle,
+  post,
+  isCurrentUserJoinedToCycle,
+  participantsCount,
+  postsCount,
+  worksCount,
+}) => {
   return (
     <PopupLayout title={`${post.title} · ${cycle.title}`}>
       <CycleDetailComponent
         cycle={cycle}
+        isCurrentUserJoinedToCycle={isCurrentUserJoinedToCycle}
         participantsCount={participantsCount}
         post={post}
         postsCount={postsCount}
@@ -29,7 +46,7 @@ const PostDetailInCyclePage: NextPage<Props> = ({ cycle, participantsCount, post
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
   if (
     params == null ||
     params.id == null ||
@@ -69,11 +86,18 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const participantsCount = await countParticipants(cycle);
   const postsCount = await countPosts(cycle);
   const worksCount = await countWorks(cycle);
+  let myParticipant = null;
+
+  const session = (await getSession({ req })) as Session;
+  if (session != null) {
+    myParticipant = await findParticipant(session.user, cycle);
+  }
 
   return {
     props: {
       cycle,
       post: postResults[0],
+      isCurrentUserJoinedToCycle: myParticipant != null,
       participantsCount: participantsCount.count,
       postsCount: postsCount.count,
       worksCount: worksCount.count,
