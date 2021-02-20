@@ -6,6 +6,7 @@ import { StrictMode, FunctionComponent } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import i18nConfig from '../i18n';
+import detailPagesAtom from '../src/atoms/detailPages';
 import globalModalsAtom from '../src/atoms/globalModals';
 import './_app.css';
 
@@ -17,7 +18,7 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   return (
     <StrictMode>
       <NextAuthProvider session={pageProps.session}>
-        <Provider initialValues={initialState && [[globalModalsAtom, initialState]]}>
+        <Provider initialValues={initialState && [[detailPagesAtom, globalModalsAtom, initialState]]}>
           <QueryClientProvider client={queryClient}>
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Component {...pageProps} />

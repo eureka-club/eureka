@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { CommentCount, DiscussionEmbed } from 'disqus-react';
+import { useAtom } from 'jotai';
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
@@ -28,6 +29,7 @@ import CycleSummary from './CycleSummary';
 import PostsMosaic from './PostsMosaic';
 import WorksMosaic from './WorksMosaic';
 import UnclampText from '../UnclampText';
+import detailPagesAtom from '../../atoms/detailPages';
 import styles from './CycleDetail.module.css';
 
 interface Props {
@@ -47,6 +49,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   postsCount,
   worksCount,
 }) => {
+  const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const router = useRouter();
   const [session] = useSession();
   const { t } = useTranslation('cycleDetail');
@@ -66,6 +69,12 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       await fetch(`/api/cycle/${cycle.id}/join`, { method: 'DELETE' });
     },
   );
+
+  const handleSubsectionChange = (key: string | null) => {
+    if (key != null) {
+      setDetailPagesState({ ...detailPagesState, selectedSubsectionCycle: key });
+    }
+  };
 
   const handleJoinCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
@@ -154,51 +163,57 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
       <Row className="mb-5">
         <Col>
-          <TabContainer defaultActiveKey="cycle-content" transition={false}>
-            <Row className="mb-4">
-              <Col>
-                <Nav variant="tabs" fill>
-                  <NavItem>
-                    <NavLink eventKey="cycle-content">
-                      {t('tabHeaderCycleContent')} ({worksCount})
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink eventKey="posts">
-                      {t('tabHeaderPosts')} ({postsCount})
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink eventKey="forum">
-                      {t('tabHeaderForum')} (<CommentCount config={disqusConfig} shortname={DISQUS_SHORTNAME!} />)
-                    </NavLink>
-                  </NavItem>
-                </Nav>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <TabContent>
-                  <TabPane eventKey="cycle-content">
-                    {cycle.contentText != null && (
-                      <div className="mb-5">
-                        <UnclampText text={cycle.contentText} clampHeight="7rem" />
-                      </div>
-                    )}
-                    <h2 className="mb-5">{t('worksCountHeader', { count: worksCount })}</h2>
-                    {worksCount > 0 && <WorksMosaic cycle={cycle} />}
-                  </TabPane>
-                  <TabPane eventKey="posts">
-                    <h2 className="mb-5">{t('postsCountHeader', { count: postsCount })}</h2>
-                    {postsCount > 0 && <PostsMosaic cycle={cycle} />}
-                  </TabPane>
-                  <TabPane eventKey="forum">
-                    <DiscussionEmbed config={disqusConfig} shortname={DISQUS_SHORTNAME!} />
-                  </TabPane>
-                </TabContent>
-              </Col>
-            </Row>
-          </TabContainer>
+          {detailPagesState.selectedSubsectionCycle != null && (
+            <TabContainer
+              defaultActiveKey={detailPagesState.selectedSubsectionCycle}
+              onSelect={handleSubsectionChange}
+              transition={false}
+            >
+              <Row className="mb-4">
+                <Col>
+                  <Nav variant="tabs" fill>
+                    <NavItem>
+                      <NavLink eventKey="cycle-content">
+                        {t('tabHeaderCycleContent')} ({worksCount})
+                      </NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink eventKey="posts">
+                        {t('tabHeaderPosts')} ({postsCount})
+                      </NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink eventKey="forum">
+                        {t('tabHeaderForum')} (<CommentCount config={disqusConfig} shortname={DISQUS_SHORTNAME!} />)
+                      </NavLink>
+                    </NavItem>
+                  </Nav>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <TabContent>
+                    <TabPane eventKey="cycle-content">
+                      {cycle.contentText != null && (
+                        <div className="mb-5">
+                          <UnclampText text={cycle.contentText} clampHeight="7rem" />
+                        </div>
+                      )}
+                      <h2 className="mb-5">{t('worksCountHeader', { count: worksCount })}</h2>
+                      {worksCount > 0 && <WorksMosaic cycle={cycle} />}
+                    </TabPane>
+                    <TabPane eventKey="posts">
+                      <h2 className="mb-5">{t('postsCountHeader', { count: postsCount })}</h2>
+                      {postsCount > 0 && <PostsMosaic cycle={cycle} />}
+                    </TabPane>
+                    <TabPane eventKey="forum">
+                      <DiscussionEmbed config={disqusConfig} shortname={DISQUS_SHORTNAME!} />
+                    </TabPane>
+                  </TabContent>
+                </Col>
+              </Row>
+            </TabContainer>
+          )}
         </Col>
       </Row>
     </>

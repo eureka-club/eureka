@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 import Col from 'react-bootstrap/Col';
@@ -22,6 +23,7 @@ import PostDetailComponent from '../post/PostDetail';
 import PostsMosaic from './PostsMosaic';
 import UnclampText from '../UnclampText';
 import WorkSummary from './WorkSummary';
+import detailPagesAtom from '../../atoms/detailPages';
 import styles from './WorkDetail.module.css';
 
 interface Props {
@@ -32,7 +34,14 @@ interface Props {
 }
 
 const WorkDetail: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCount }) => {
+  const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const { t } = useTranslation('workDetail');
+
+  const handleSubsectionChange = (key: string | null) => {
+    if (key != null) {
+      setDetailPagesState({ ...detailPagesState, selectedSubsectionWork: key });
+    }
+  };
 
   return (
     <>
@@ -76,40 +85,46 @@ const WorkDetail: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCo
 
       <Row className="mb-5">
         <Col>
-          <TabContainer defaultActiveKey="all" transition={false}>
-            <Row className="mb-4">
-              <Col>
-                <Nav variant="tabs" fill>
-                  <NavItem>
-                    <NavLink eventKey="all">
-                      {t('tabHeaderAll')} ({cyclesCount + postsCount})
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink eventKey="posts">
-                      {t('tabHeaderPosts')} ({postsCount})
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink eventKey="cycles">
-                      {t('tabHeaderCycles')} ({cyclesCount})
-                    </NavLink>
-                  </NavItem>
-                </Nav>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <TabContent>
-                  <TabPane eventKey="all">
-                    {(cyclesCount > 0 || postsCount > 0) && <CombinedMosaic work={work} />}
-                  </TabPane>
-                  <TabPane eventKey="posts">{postsCount > 0 && <PostsMosaic work={work} />}</TabPane>
-                  <TabPane eventKey="cycles">{cyclesCount > 0 && <CyclesMosaic work={work} />}</TabPane>
-                </TabContent>
-              </Col>
-            </Row>
-          </TabContainer>
+          {detailPagesState.selectedSubsectionWork != null && (
+            <TabContainer
+              defaultActiveKey={detailPagesState.selectedSubsectionWork}
+              onSelect={handleSubsectionChange}
+              transition={false}
+            >
+              <Row className="mb-4">
+                <Col>
+                  <Nav variant="tabs" fill>
+                    <NavItem>
+                      <NavLink eventKey="all">
+                        {t('tabHeaderAll')} ({cyclesCount + postsCount})
+                      </NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink eventKey="posts">
+                        {t('tabHeaderPosts')} ({postsCount})
+                      </NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink eventKey="cycles">
+                        {t('tabHeaderCycles')} ({cyclesCount})
+                      </NavLink>
+                    </NavItem>
+                  </Nav>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <TabContent>
+                    <TabPane eventKey="all">
+                      {(cyclesCount > 0 || postsCount > 0) && <CombinedMosaic work={work} />}
+                    </TabPane>
+                    <TabPane eventKey="posts">{postsCount > 0 && <PostsMosaic work={work} />}</TabPane>
+                    <TabPane eventKey="cycles">{cyclesCount > 0 && <CyclesMosaic work={work} />}</TabPane>
+                  </TabContent>
+                </Col>
+              </Row>
+            </TabContainer>
+          )}
         </Col>
       </Row>
     </>
