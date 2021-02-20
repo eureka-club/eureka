@@ -139,6 +139,20 @@ export const createFromServerFields = async (
   });
 };
 
+export const addParticipant = async (cycle: Cycle, user: User): Promise<Cycle> => {
+  return prisma.cycle.update({
+    where: { id: cycle.id },
+    data: { participants: { connect: { id: user.id } } },
+  });
+};
+
+export const removeParticipant = async (cycle: Cycle, user: User): Promise<Cycle> => {
+  return prisma.cycle.update({
+    where: { id: cycle.id },
+    data: { participants: { disconnect: { id: user.id } } },
+  });
+};
+
 export const remove = async (id: number): Promise<Cycle> => {
   return prisma.cycle.delete({
     where: { id },

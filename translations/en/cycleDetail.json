@@ -2,6 +2,8 @@
   "tabHeaderCycleContent": "Cycle content",
   "tabHeaderForum": " Forum",
   "tabHeaderPosts": " Posts",
+  "joinCycleLabel": "Join cycle",
+  "leaveCycleLabel": "Leave cycle",
   "participantsCount_0": "no participants",
   "participantsCount": "1 participant",
   "participantsCount_other": "{{count}} participants",

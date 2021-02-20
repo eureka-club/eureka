@@ -3,19 +3,21 @@ import { CommentCount, DiscussionEmbed } from 'disqus-react';
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, MouseEvent, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 import NavItem from 'react-bootstrap/NavItem';
 import NavLink from 'react-bootstrap/NavLink';
 import Row from 'react-bootstrap/Row';
+import Spinner from 'react-bootstrap/Spinner';
 import TabContainer from 'react-bootstrap/TabContainer';
 import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
 import { AiFillHeart } from 'react-icons/ai';
 import { BsBookmarkFill } from 'react-icons/bs';
 import { FiShare2 } from 'react-icons/fi';
+import { useMutation } from 'react-query';
 
 import { DISQUS_SHORTNAME, WEBAPP_URL } from '../../constants';
 import { CycleDetail } from '../../types/cycle';
@@ -45,14 +47,49 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   postsCount,
   worksCount,
 }) => {
-  const { asPath } = useRouter();
+  const router = useRouter();
+  const [session] = useSession();
   const { t } = useTranslation('cycleDetail');
   const disqusConfig = {
-    identifier: asPath,
+    identifier: router.asPath,
     title: cycle.title,
-    url: `${WEBAPP_URL}${asPath}`,
+    url: `${WEBAPP_URL}${router.asPath}`,
   };
-  const [session] = useSession();
+
+  const { mutate: execJoinCycle, isLoading: isJoinCycleLoading, isSuccess: isJoinCycleSuccess } = useMutation(
+    async () => {
+      await fetch(`/api/cycle/${cycle.id}/join`, { method: 'POST' });
+    },
+  );
+  const { mutate: execLeaveCycle, isLoading: isLeaveCycleLoading, isSuccess: isLeaveCycleSuccess } = useMutation(
+    async () => {
+      await fetch(`/api/cycle/${cycle.id}/join`, { method: 'DELETE' });
+    },
+  );
+
+  const handleJoinCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    execJoinCycle();
+  };
+
+  const handleLeaveCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    execLeaveCycle();
+  };
+
+  useEffect(() => {
+    if (isJoinCycleSuccess === true) {
+      router.replace(router.asPath);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isJoinCycleSuccess]);
+
+  useEffect(() => {
+    if (isLeaveCycleSuccess === true) {
+      router.replace(router.asPath);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLeaveCycleSuccess]);
 
   return (
     <>
@@ -92,14 +129,19 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                     <small className={styles.participantsCount}>
                       {t('participantsCount', { count: participantsCount })}
                     </small>
-                    {session != null &&
-                      (isCurrentUserJoinedToCycle ? (
-                        <Button variant="link" className="ml-3">
-                          Leave cycle
-                        </Button>
-                      ) : (
-                        <Button className="ml-3">Join cycle</Button>
-                      ))}
+                    {session != null && (
+                      <>
+                        <div className="d-inline-block mx-3" />
+                        {(isJoinCycleLoading || isLeaveCycleLoading) && <Spinner animation="border" size="sm" />}
+                        {isCurrentUserJoinedToCycle ? (
+                          <Button onClick={handleLeaveCycleClick} variant="link">
+                            {t('leaveCycleLabel')}
+                          </Button>
+                        ) : (
+                          <Button onClick={handleJoinCycleClick}>{t('joinCycleLabel')}</Button>
+                        )}
+                      </>
+                    )}
                   </div>
                 </section>
               </div>
