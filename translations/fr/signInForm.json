@@ -1,3 +1,7 @@
 {
-
+  "login": "Se connecter",
+  "loginGreeting": "Bienvenue de retour à Eureka",
+  "loginViaGoogle": "Connexion avec Google",
+  "alternativeText": "OU",
+  "emailFieldLabel": "Connexion avec adresse e-mail"
 }

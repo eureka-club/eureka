@@ -1,3 +1,11 @@
 {
-
+  "tabHeaderCycleContent": "Contenu du cycle",
+  "tabHeaderForum": " Forum",
+  "tabHeaderPosts": " Publications",
+  "worksCountHeader_0": "Pas d'oeuvres dans ce cycle",
+  "worksCountHeader": "1 oeuvre dans ce cycle",
+  "worksCountHeader_other": "{{count}} oeuvres dans ce cycle",
+  "postsCountHeader_0": "Pas de publications dans ce cycle",
+  "postsCountHeader": "1 publicacion dans ce cycle",
+  "postsCountHeader_other": "{{count}} publications dans ce cycle"
 }

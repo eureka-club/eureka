@@ -1,3 +1,8 @@
 {
-
+  "login": "Connexion",
+  "logout": "Se déconnecter",
+  "create": "Créer",
+  "cycle": "Cycle",
+  "post": "Publication",
+  "work": "Oeuvre"
 }

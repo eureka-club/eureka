@@ -1,3 +1,16 @@
 {
-
+  "title": "Créer une publication",
+  "searchCycleOrWorkFieldLabel": "À quelle oeuvre ou cycle cette publication fait-elle référence?",
+  "searchCycleOrWorkFieldPlaceholder": "Cherchez l'oeuvre ou le cycle dans notre bibliothèque...",
+  "titleFieldLabel": "Titre de votre publication (80 caractères max)",
+  "imageFieldLabel": "Ajoutez une image à votre publication",
+  "imageFieldPlaceholder": "sélectionnez le fichier...",
+  "languageFieldLabel": "Langue de la publication",
+  "searchCycleFieldLabel": "Ajouter cette publication à un cycle (optionnel)",
+  "searchCycleFieldPlaceholder": "Cherchez le cycle auquel sera ajoutée cette publication...",
+  "searchCycleInfotip": "En ajoutant votre publication à un cycle, vous deviendrez automatiquement un-e participant-e du cycle (si vous ne l'êtes pas déjà).",
+  "descriptionFieldLabel": "Écrivez ce que vous avez pensé et / ou appris de cette oeuvre ou cycle. Pourquoi avez-vous trouvé cela intéressant?",
+  "isPublicFieldLabel": "Cette publication est publique",
+  "isPublicInfotip": "Les publications publiques sont accessibles à tous. Décochez la case pour rendre la publication privée (uniquement vous pouvez la voir).",
+  "submitButtonLabel": "Créer la publication"
 }

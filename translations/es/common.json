@@ -1,7 +1,18 @@
 {
   "book": "Libro",
   "cycle": "Ciclo",
-
+  "documentary": "Documental",
   "movie": "Película",
-  "post": "Publicación"
+  "post": "Publicación",
+
+  "publicationYearLabel": "Año de publicación",
+  "releaseYearLabel": "Año de producción",
+  "countryLabel": "País",
+  "cycleActiveLabel": "Activo",
+  "cycleNotActiveLabel": "Inactivo",
+  "workLengthLabel": "Duración / nº pag.",
+  "workLengthAsPagesLabel": "páginas",
+  "workLengthAsMinutesLabel": "minutos",
+  "unclampTextLess": "ver más",
+  "unclampTextMore": "ver menos"
 }
