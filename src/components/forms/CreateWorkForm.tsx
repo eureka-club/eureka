@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { ChangeEvent, FormEvent, FunctionComponent, RefObject, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, FunctionComponent, useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -26,7 +26,6 @@ const CreateWorkForm: FunctionComponent = () => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [publicationYearLabel, setPublicationYearLabel] = useState('Publication year');
   const [coverFile, setCoverFile] = useState<File | null>(null);
-  const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
   const queryClient = useQueryClient();
   const router = useRouter();
   const { t } = useTranslation('createWorkForm');
@@ -97,7 +96,7 @@ const CreateWorkForm: FunctionComponent = () => {
   }, [isSuccess]);
 
   return (
-    <Form onSubmit={handleSubmit} ref={formRef}>
+    <Form onSubmit={handleSubmit}>
       <ModalHeader closeButton>
         <Container>
           <ModalTitle>{t('title')}</ModalTitle>
@@ -152,12 +151,14 @@ const CreateWorkForm: FunctionComponent = () => {
                   <FormGroup>
                     <FormLabel>*{t('imageCoverFieldLabel')}</FormLabel>
                     <div className={styles.imageControl}>
-                      {(coverFile != null && imagePreview) != null ? (
-                        <span className={styles.imageName}>{coverFile?.name}</span>
+                      {coverFile != null && imagePreview != null ? (
+                        <>
+                          <span className={styles.imageName}>{coverFile?.name}</span>
+                          <img src={imagePreview} className="float-right" alt="Work cover" />
+                        </>
                       ) : (
                         t('imageCoverFieldPlaceholder')
                       )}
-                      {imagePreview && <img src={imagePreview} className="float-right" alt="Work cover" />}
                     </div>
                   </FormGroup>
                 )}
