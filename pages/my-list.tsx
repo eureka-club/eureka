@@ -16,7 +16,7 @@ const MyListPage: NextPage<Props> = ({ cycles }) => {
   const { t } = useTranslation('common');
 
   return (
-    <SimpleLayout title="Welcome">
+    <SimpleLayout title={t('browserTitleMyList')}>
       <h4 className="mt-4 mb-5">{t('mosaicHeaderMyCycles')}</h4>
       <Mosaic stack={cycles} />
     </SimpleLayout>
