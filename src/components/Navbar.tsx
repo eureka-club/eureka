@@ -10,10 +10,12 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Nav from 'react-bootstrap/Nav';
+import NavItem from 'react-bootstrap/NavItem';
 import BootstrapNavbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { DropdownItemProps } from 'react-bootstrap/DropdownItem';
 import { BiUser } from 'react-icons/bi';
+import { BsBookmark } from 'react-icons/bs';
 
 import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '../constants';
 import { Session } from '../types';
@@ -86,7 +88,13 @@ const Navbar: FunctionComponent = () => {
                 )}
               </Dropdown.Menu>
             </Dropdown>
-
+            <NavItem>
+              <Link href="/my-list">
+                <a className="nav-link mr-3">
+                  <BsBookmark /> {t('myListLabel')}
+                </a>
+              </Link>
+            </NavItem>
             <NavDropdown alignRight title={<BiUser className={styles.profileDropdown} />} id="profileDropdown">
               <NavDropdown.ItemText>{session.user.email}</NavDropdown.ItemText>
               <NavDropdown.Item onClick={() => signOut()}>{t('logout')}</NavDropdown.Item>

@@ -1,5 +1,6 @@
 import { flatten, zip } from 'lodash';
 import { GetServerSideProps, NextPage } from 'next';
+import useTranslation from 'next-translate/useTranslation';
 
 import { CycleMosaicItem } from '../src/types/cycle';
 import { WorkMosaicItem } from '../src/types/work';
@@ -13,8 +14,10 @@ interface Props {
 }
 
 const IndexPage: NextPage<Props> = ({ homepageMosaicData }) => {
+  const { t } = useTranslation('common');
+
   return (
-    <SimpleLayout title="Welcome">
+    <SimpleLayout title={t('browserTitleWelcome')}>
       <Mosaic stack={homepageMosaicData} />
     </SimpleLayout>
   );
