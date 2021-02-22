@@ -1,5 +1,6 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
+import { getSession } from 'next-auth/client';
 import { useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
@@ -9,6 +10,7 @@ import Table from 'react-bootstrap/Table';
 import { useMutation } from 'react-query';
 
 import { PostWithImages } from '../../src/types/post';
+import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import LocalImageComponent from '../../src/components/LocalImage';
 import { findAll } from '../../src/facades/post';
@@ -94,7 +96,12 @@ const ListPostsPage: NextPage<Props> = ({ posts }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = (await getSession(ctx)) as Session;
+  if (session == null || !session.user.roles.includes('admin')) {
+    return { notFound: true };
+  }
+
   const posts = await findAll();
 
   return {
