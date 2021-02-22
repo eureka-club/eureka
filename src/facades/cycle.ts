@@ -1,22 +1,16 @@
 import { Cycle, CycleComplementaryMaterial, LocalImage, Prisma, User } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
-import { CreateCycleServerFields, CreateCycleServerPayload } from '../types/cycle';
+import { CreateCycleServerFields, CreateCycleServerPayload, CycleDetail } from '../types/cycle';
 import prisma from '../lib/prisma';
 
-export const find = async (
-  id: number,
-): Promise<Prisma.CycleGetPayload<{
-  include: {
-    creator: true;
-    localImages: true;
-  };
-}> | null> => {
+export const find = async (id: number): Promise<CycleDetail | null> => {
   return prisma.cycle.findUnique({
     where: { id },
     include: {
       creator: true,
       localImages: true,
+      complementaryMaterials: true,
     },
   });
 };

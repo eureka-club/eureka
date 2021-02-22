@@ -20,7 +20,7 @@ import { BsBookmarkFill } from 'react-icons/bs';
 import { FiShare2 } from 'react-icons/fi';
 import { useMutation } from 'react-query';
 
-import { DISQUS_SHORTNAME, WEBAPP_URL } from '../../constants';
+import { ASSETS_BASE_URL, DATE_FORMAT_MONTH_YEAR, DISQUS_SHORTNAME, WEBAPP_URL } from '../../constants';
 import { CycleDetail } from '../../types/cycle';
 import { PostDetail } from '../../types/post';
 import LocalImageComponent from '../LocalImage';
@@ -29,6 +29,7 @@ import CycleSummary from './CycleSummary';
 import PostsMosaic from './PostsMosaic';
 import WorksMosaic from './WorksMosaic';
 import UnclampText from '../UnclampText';
+import { advancedDayjs } from '../../lib/utils';
 import detailPagesAtom from '../../atoms/detailPages';
 import styles from './CycleDetail.module.css';
 
@@ -216,6 +217,27 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           )}
         </Col>
       </Row>
+
+      {cycle.complementaryMaterials.length > 0 && (
+        <Row className="mb-5">
+          <Col>
+            <h4 className="mb-4">{t('complementaryMaterialsTitle')}</h4>
+            <ul className={styles.complementaryMaterials}>
+              {cycle.complementaryMaterials.map((cm) => (
+                <li key={cm.id}>
+                  <a href={cm.link || `${ASSETS_BASE_URL}/${cm.storedFile}`} target="_blank" rel="noreferrer">
+                    <h5>{cm.title}</h5>
+                    <p>
+                      {cm.author} ({advancedDayjs(cm.publicationDate).format(DATE_FORMAT_MONTH_YEAR)})
+                    </p>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </Col>
+          <Col />
+        </Row>
+      )}
     </>
   );
 };
