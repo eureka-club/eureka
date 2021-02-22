@@ -124,6 +124,28 @@ model Work {
   @@map(name: "works")
 }
 
+model CycleComplementaryMaterial {
+  id                Int       @default(autoincrement()) @id
+  cycle             Cycle     @relation(fields: [cycleId], references: [id])
+  cycleId           Int       @map(name: "cycle_id")
+  title             String
+  author            String
+  publicationDate   DateTime  @map(name: "publication_name")
+  link              String?
+
+  originalFilename  String?   @map(name: "original_filename")
+  storedFile        String?   @map(name: "stored_file")
+  mimeType          String?   @map(name: "mime_type")
+  contentHash       String?   @map(name: "content_hash")
+
+  createdAt         DateTime  @default(now()) @map(name: "created_at")
+  updatedAt         DateTime  @updatedAt @map(name: "updated_at")
+
+  @@index([cycleId], name: "cycle_complementary_materials_cycle_id_index")
+
+  @@map(name: "cycle_complementary_materials")
+}
+
 model Cycle {
   id           Int       @default(autoincrement()) @id
   creator      User      @relation(name:"CreatedBy", fields: [creatorId], references: [id])
@@ -137,10 +159,11 @@ model Cycle {
   createdAt    DateTime  @default(now()) @map(name: "created_at")
   updatedAt    DateTime  @updatedAt @map(name: "updated_at")
 
-  localImages  LocalImage[]
-  participants User[]    @relation("CycleToParticipant")
-  posts        Post[]
-  works        Work[]
+  localImages             LocalImage[]
+  complementaryMaterials  CycleComplementaryMaterial[]
+  participants            User[]  @relation("CycleToParticipant")
+  posts                   Post[]
+  works                   Work[]
 
   @@index([creatorId], name: "cycles_creator_id_index")
   @@index([title], name: "cycles_title_index")

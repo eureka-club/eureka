@@ -2,12 +2,14 @@ import classNames from 'classnames';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
+import Trans from 'next-translate/Trans';
+import { ChangeEvent, FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import FormCheck from 'react-bootstrap/FormCheck';
 import FormControl from 'react-bootstrap/FormControl';
+import FormFile from 'react-bootstrap/FormFile';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
 import Modal from 'react-bootstrap/Modal';
@@ -21,31 +23,43 @@ import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BiTrash } from 'react-icons/bi';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
-import { DATE_FORMAT_PROPS } from '../../constants';
-import { CreateCycleClientPayload } from '../../types/cycle';
+import { DATE_FORMAT_MONTH_YEAR, DATE_FORMAT_PROPS } from '../../constants';
+import { ComplementaryMaterial, CreateCycleClientPayload } from '../../types/cycle';
 import { WorkWithImages } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
 import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
 import WorkTypeaheadSearchItem from '../work/TypeaheadSearchItem';
 import styles from './CreateCycleForm.module.css';
+import { advancedDayjs } from '../../lib/utils';
 
 interface Props {
   className?: string;
 }
 
+const COMPLEMENTARY_MATERIAL_MAX_SINGLE_FILE_SIZE = 1024 * 1024 * 10;
+
+/*
+ * This component grown oversize 😔
+ * At-least "Complementary content" modal should be separated into own file.
+ */
 const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
+  const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
+
   const [addWorkModalOpened, setAddWorkModalOpened] = useState(false);
   const [isWorkSearchLoading, setIsWorkSearchLoading] = useState(false);
   const [workSearchResults, setWorkSearchResults] = useState<WorkWithImages[]>([]);
   const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkWithImages | null>(null);
   const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkWithImages[]>([]);
-  const [cycleCoverImageFile, setCycleCoverImageFile] = useState<File | null>(null);
-  const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
   const typeaheadRef = useRef<AsyncTypeahead<WorkWithImages>>(null);
-  const { t } = useTranslation('createCycleForm');
 
-  const router = useRouter();
+  const [cycleCoverImageFile, setCycleCoverImageFile] = useState<File | null>(null);
+
+  const [addComplementaryMaterialModalOpened, setAddComplementaryMaterialModalOpened] = useState(false);
+  const [complementaryMaterialFile, setComplementaryMaterialFile] = useState<File | null>(null);
+  const [complementaryMaterialFileOversizeError, setComplementaryMaterialFileOversizeError] = useState(false);
+  const [complementaryMaterials, setComplementaryMaterials] = useState<ComplementaryMaterial[]>([]);
+
   const {
     mutate: execCreateCycle,
     data: newCycleData,
@@ -62,6 +76,15 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
           case 'includedWorksIds':
             value.forEach((val: number) => formData.append(key, String(val)));
             break;
+          case 'complementaryMaterials':
+            value.forEach((cm: ComplementaryMaterial, idx: number) => {
+              Object.entries(cm).forEach(([cmFieldName, cmFieldValue]) => {
+                if (cmFieldValue != null) {
+                  formData.append(`CM${idx}_${cmFieldName}`, cmFieldValue);
+                }
+              });
+            });
+            break;
           default:
             formData.append(key, value);
             break;
@@ -77,7 +100,10 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     return res.json();
   });
 
-  const handleAddWorkBegin = (ev: MouseEvent<HTMLButtonElement>) => {
+  const router = useRouter();
+  const { t } = useTranslation('createCycleForm');
+
+  const handleAddWorkClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
     setWorkSearchHighlightedOption(null);
     setAddWorkModalOpened(true);
@@ -85,8 +111,62 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     setTimeout(() => typeaheadRef.current?.focus());
   };
 
+  const handleAddComplementaryContentClick = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+
+    setComplementaryMaterialFile(null);
+    setComplementaryMaterialFileOversizeError(false);
+    setAddComplementaryMaterialModalOpened(true);
+  };
+
   const handleAddWorkModalClose = () => {
     setAddWorkModalOpened(false);
+  };
+
+  const handleAddComplementaryMaterialModalClose = () => {
+    setAddComplementaryMaterialModalOpened(false);
+  };
+
+  const handleComplementaryMaterialFileInputChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    const { files } = ev.currentTarget;
+    const file = files != null ? (files[0] != null ? files[0] : null) : null;
+
+    setComplementaryMaterialFileOversizeError(false);
+
+    if (file == null) {
+      setComplementaryMaterialFile(null);
+      return;
+    }
+
+    if (file.size > COMPLEMENTARY_MATERIAL_MAX_SINGLE_FILE_SIZE) {
+      setComplementaryMaterialFileOversizeError(true);
+    }
+
+    setComplementaryMaterialFile(file);
+  };
+
+  const handleAddComplementaryMaterialFormSubmit = (ev: FormEvent<HTMLFormElement>) => {
+    ev.preventDefault();
+
+    if (complementaryMaterialFileOversizeError) {
+      return;
+    }
+
+    const form = ev.currentTarget;
+    const title = form.complementaryMaterialTitle.value;
+    const author = form.complementaryMaterialAuthor.value;
+    const publicationDate = form.complementaryMaterialPublicationDate.value;
+    const link = form.complementaryMaterialLink.value.length ? form.complementaryMaterialLink.value : null;
+
+    setComplementaryMaterials([
+      ...complementaryMaterials,
+      { title, author, publicationDate, link, file: complementaryMaterialFile },
+    ]);
+    setAddComplementaryMaterialModalOpened(false);
+  };
+
+  const handleRemoveComplementaryMaterial = (cm: ComplementaryMaterial) => {
+    setComplementaryMaterials(complementaryMaterials.filter((m) => m !== cm));
   };
 
   const handleSearchWork = async (query: string) => {
@@ -172,6 +252,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
       startDate: form.startDate.value,
       endDate: form.endDate.value,
       contentText: form.description.value,
+      complementaryMaterials,
     };
 
     await execCreateCycle(payload);
@@ -198,7 +279,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 <button
                   className={classNames(styles.outlinedBlock, styles.addWorkButton)}
                   type="button"
-                  onClick={handleAddWorkBegin}
+                  onClick={handleAddWorkClick}
                 >
                   <h4>*{t('addWrkBtnTitle')}</h4>
                   <p>{t('addWrkBtnSubtitle')}</p>
@@ -258,7 +339,39 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                   )}
                 </ImageFileSelect>
               </Col>
-              <Col />
+              <Col>
+                <button
+                  className={classNames(styles.outlinedBlock, styles.complementaryContentPrompt)}
+                  type="button"
+                  disabled={complementaryMaterials.length >= 3}
+                  onClick={handleAddComplementaryContentClick}
+                >
+                  <h4>*{t('addComplementaryContentTitle')}</h4>
+                  {complementaryMaterials.length ? (
+                    <ul className={styles.complementaryMaterials}>
+                      {complementaryMaterials.map((cm) => (
+                        <li key={`${cm.author}-${cm.title}-${cm.publicationDate}`}>
+                          {cm.author} · {cm.title} ({advancedDayjs(cm.publicationDate).format(DATE_FORMAT_MONTH_YEAR)})
+                          <span
+                            className={styles.removeComplementaryMaterial}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={() => handleRemoveComplementaryMaterial(cm)}
+                            onClick={(ev) => {
+                              ev.stopPropagation();
+                              handleRemoveComplementaryMaterial(cm);
+                            }}
+                          >
+                            &times;
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>{t('addComplementaryContentDescription')}:</p>
+                  )}
+                </button>
+              </Col>
             </Row>
           </Col>
           <Col md={{ span: 4 }}>
@@ -368,6 +481,77 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
               </Button>
             </Col>
           </Row>
+        </ModalBody>
+      </Modal>
+
+      <Modal
+        show={addComplementaryMaterialModalOpened}
+        onHide={handleAddComplementaryMaterialModalClose}
+        animation={false}
+        size="lg"
+      >
+        <ModalHeader closeButton>
+          <ModalTitle>{t('addComplementaryMaterialPopupTitle')}</ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+          <Form onSubmit={handleAddComplementaryMaterialFormSubmit}>
+            <Row>
+              <FormGroup as={Col} controlId="complementaryMaterialTitle">
+                <FormLabel>*{t('complementaryMaterialTitleFieldLabel')}</FormLabel>
+                <FormControl type="text" required />
+              </FormGroup>
+            </Row>
+            <Row>
+              <FormGroup as={Col} controlId="complementaryMaterialAuthor">
+                <FormLabel>*{t('complementaryMaterialAuthorFieldLabel')}</FormLabel>
+                <FormControl type="text" required />
+              </FormGroup>
+            </Row>
+            <Row>
+              <FormGroup as={Col} controlId="complementaryMaterialPublicationDate">
+                <FormLabel>*{t('complementaryMaterialPublicationDateFieldLabel')}</FormLabel>
+                <FormControl type="month" required />
+              </FormGroup>
+            </Row>
+            <Row>
+              <FormGroup as={Col} controlId="complementaryMaterialLink">
+                <FormLabel>
+                  {complementaryMaterialFile == null && '*'}
+                  {t('complementaryMaterialLinkFieldLabel')}
+                </FormLabel>
+                <FormControl type="text" placeholder="https://..." required={complementaryMaterialFile == null} />
+              </FormGroup>
+              <Col sm={{ span: 1 }}>
+                <p className={styles.complementaryMaterialAlternativeText}>
+                  <Trans i18nKey="createCycleForm:complementaryMaterialAlternativeText" components={[<br key="1" />]} />
+                </p>
+              </Col>
+              <FormGroup as={Col} controlId="complementaryMaterialFile">
+                <FormLabel>{t('complementaryMaterialFileFieldLabel')}</FormLabel>
+                <FormFile
+                  custom
+                  onChange={handleComplementaryMaterialFileInputChange}
+                  label={
+                    complementaryMaterialFile != null ? (
+                      <>
+                        <small>[{Math.round((complementaryMaterialFile.size / 1024 / 1024) * 10) / 10}MB]</small>{' '}
+                        {complementaryMaterialFile.name}
+                      </>
+                    ) : (
+                      ''
+                    )
+                  }
+                  isInvalid={complementaryMaterialFileOversizeError}
+                  feedback={t('complementaryMaterialFileOversizeError')}
+                />
+              </FormGroup>
+            </Row>
+            <Row>
+              <Col className="d-flex flex-row-reverse">
+                <Button type="submit">{t('complementaryMaterialSubmitBtnLabel')}</Button>
+              </Col>
+            </Row>
+          </Form>
         </ModalBody>
       </Modal>
     </>

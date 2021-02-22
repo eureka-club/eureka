@@ -2,11 +2,12 @@ import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
 
-import { FileUpload, Session } from '../../../src/types';
+import { FileUpload, Session, StoredFileUpload } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { storeUpload } from '../../../src/facades/fileUpload';
 import { createFromServerFields } from '../../../src/facades/cycle';
 import prisma from '../../../src/lib/prisma';
+import { asyncForEach } from '../../../src/lib/utils';
 
 export const config = {
   api: {
@@ -33,10 +34,23 @@ export default getApiHandler().post<NextApiRequest, NextApiResponse>(
         return;
       }
 
-      const coverImage: FileUpload = files.coverImage[0];
       try {
-        const uploadData = await storeUpload(coverImage);
-        const cycle = await createFromServerFields(fields, uploadData, session.user);
+        const { coverImage, ...complementaryMaterialsFiles } = files;
+        const coverImageUploadData = await storeUpload(coverImage[0]);
+        const complementaryMaterialsUploadData: Record<string, StoredFileUpload> = {};
+        await asyncForEach(
+          Object.entries(complementaryMaterialsFiles),
+          async ([cmIndexName, cmFile]: [string, FileUpload[]]) => {
+            complementaryMaterialsUploadData[cmIndexName] = await storeUpload(cmFile[0]);
+          },
+        );
+
+        const cycle = await createFromServerFields(
+          session.user,
+          fields,
+          coverImageUploadData,
+          complementaryMaterialsUploadData,
+        );
 
         res.status(201).json(cycle);
       } catch (exc) {

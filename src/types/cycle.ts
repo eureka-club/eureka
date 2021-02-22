@@ -1,5 +1,13 @@
 import { Cycle, LocalImage, Prisma } from '@prisma/client';
 
+export interface ComplementaryMaterial {
+  author: string;
+  title: string;
+  publicationDate: Date;
+  link: string | null;
+  file: File | null;
+}
+
 export interface CycleWithImages extends Cycle {
   localImages: LocalImage[];
 }
@@ -14,6 +22,7 @@ export type CycleDetail = Prisma.CycleGetPayload<{
   include: {
     creator: true;
     localImages: true;
+    complementaryMaterials: true;
   };
 }>;
 
@@ -26,6 +35,7 @@ export interface CreateCycleClientPayload {
   startDate: string;
   endDate: string;
   contentText: string;
+  complementaryMaterials: ComplementaryMaterial[];
 }
 
 export interface CreateCycleServerFields {
