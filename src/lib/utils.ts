@@ -11,7 +11,7 @@ export const advancedDayjs = (date: string | number | Date): dayjs.Dayjs => {
 
 export const asyncForEach = async (
   array: Array<unknown>,
-  callback: (item: unknown, index: number, arr: Array<unknown>) => Promise<void>,
+  callback: (item: any, index?: number, arr?: Array<any>) => Promise<void>, // eslint-disable-line @typescript-eslint/no-explicit-any
 ): Promise<void> => {
   for (let index = 0; index < array.length; index += 1) {
     await callback(array[index], index, array); // eslint-disable-line no-await-in-loop

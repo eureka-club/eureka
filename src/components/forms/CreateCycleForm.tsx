@@ -24,7 +24,7 @@ import { BiTrash } from 'react-icons/bi';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { DATE_FORMAT_MONTH_YEAR, DATE_FORMAT_PROPS } from '../../constants';
-import { CreateCycleClientPayload } from '../../types/cycle';
+import { ComplementaryMaterial, CreateCycleClientPayload } from '../../types/cycle';
 import { WorkWithImages } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
 import ImageFileSelect from './controls/ImageFileSelect';
@@ -35,14 +35,6 @@ import { advancedDayjs } from '../../lib/utils';
 
 interface Props {
   className?: string;
-}
-
-interface ComplementaryMaterial {
-  author: string;
-  title: string;
-  publicationDate: Date;
-  link: string | null;
-  file: File | null;
 }
 
 const COMPLEMENTARY_MATERIAL_MAX_SINGLE_FILE_SIZE = 1024 * 1024 * 10;
@@ -83,6 +75,15 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
         switch (key) {
           case 'includedWorksIds':
             value.forEach((val: number) => formData.append(key, String(val)));
+            break;
+          case 'complementaryMaterials':
+            value.forEach((cm: ComplementaryMaterial, idx: number) => {
+              Object.entries(cm).forEach(([cmFieldName, cmFieldValue]) => {
+                if (cmFieldValue != null) {
+                  formData.append(`CM${idx}_${cmFieldName}`, cmFieldValue);
+                }
+              });
+            });
             break;
           default:
             formData.append(key, value);
@@ -251,6 +252,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
       startDate: form.startDate.value,
       endDate: form.endDate.value,
       contentText: form.description.value,
+      complementaryMaterials,
     };
 
     await execCreateCycle(payload);
