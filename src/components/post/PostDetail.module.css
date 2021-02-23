@@ -8,6 +8,19 @@
   width: 100%;
 }
 
+.parentContent {
+  width: 100%;
+}
+.parentContent td {
+  vertical-align: baseline;
+}
+.parentContent td.parentBadges {
+  padding-right: 0.75rem;
+  text-align: right;
+  width: 1px;
+  white-space: nowrap;
+}
+
 .workInfoType,
 .cycleInfoType {
   border-radius: 1rem;
@@ -15,11 +28,9 @@
   display: inline-block;
   font-size: 0.85rem;
   line-height: 1;
-  padding-bottom: 0.2rem;
-  padding-top: 0.2rem;
+  padding: 0.2rem 0.75rem;
   text-align: center;
   text-transform: capitalize;
-  width: 3.5rem;
 }
 .workInfoType {
   background-color: var(--eureka-grey);

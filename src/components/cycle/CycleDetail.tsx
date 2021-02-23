@@ -202,6 +202,31 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                       )}
                       <h2 className="mb-5">{t('worksCountHeader', { count: worksCount })}</h2>
                       {worksCount > 0 && <WorksMosaic cycle={cycle} />}
+
+                      {cycle.complementaryMaterials.length > 0 && (
+                        <Row className="mt-4 mb-5">
+                          <Col>
+                            <h4 className="mb-4">{t('complementaryMaterialsTitle')}</h4>
+                            <ul className={styles.complementaryMaterials}>
+                              {cycle.complementaryMaterials.map((cm) => (
+                                <li key={cm.id}>
+                                  <a
+                                    href={cm.link || `${ASSETS_BASE_URL}/${cm.storedFile}`}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                  >
+                                    <h5>{cm.title}</h5>
+                                    <p>
+                                      {cm.author} ({advancedDayjs(cm.publicationDate).format(DATE_FORMAT_MONTH_YEAR)})
+                                    </p>
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </Col>
+                          <Col />
+                        </Row>
+                      )}
                     </TabPane>
                     <TabPane eventKey="posts">
                       <h2 className="mb-5">{t('postsCountHeader', { count: postsCount })}</h2>
@@ -217,27 +242,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           )}
         </Col>
       </Row>
-
-      {cycle.complementaryMaterials.length > 0 && (
-        <Row className="mb-5">
-          <Col>
-            <h4 className="mb-4">{t('complementaryMaterialsTitle')}</h4>
-            <ul className={styles.complementaryMaterials}>
-              {cycle.complementaryMaterials.map((cm) => (
-                <li key={cm.id}>
-                  <a href={cm.link || `${ASSETS_BASE_URL}/${cm.storedFile}`} target="_blank" rel="noreferrer">
-                    <h5>{cm.title}</h5>
-                    <p>
-                      {cm.author} ({advancedDayjs(cm.publicationDate).format(DATE_FORMAT_MONTH_YEAR)})
-                    </p>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </Col>
-          <Col />
-        </Row>
-      )}
     </>
   );
 };
