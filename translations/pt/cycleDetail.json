@@ -12,5 +12,6 @@
   "worksCountHeader_other": "{{count}} obras no ciclo",
   "postsCountHeader_0": "Não há publicações no ciclo",
   "postsCountHeader": "1 publicação no ciclo",
-  "postsCountHeader_other": "{{count}} publicações no ciclo"
+  "postsCountHeader_other": "{{count}} publicações no ciclo",
+  "complementaryMaterialsTitle": "Conteúdo complementar"
 }
