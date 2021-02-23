@@ -34,31 +34,35 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
         <div className={classNames(styles.imgWrapper, 'mb-3')}>
           <LocalImageComponent filePath={post.localImages[0].storedFile} alt={post.title} />
         </div>
-        {work != null && (
-          <div className="d-flex mb-3">
-            <div className="mr-3">
-              <Link href={`/work/${work.id}`}>
-                <a className={styles.workInfoType}>{t(`common:${work.type}`)}</a>
-              </Link>
-            </div>
-            <div className="pt-1">
-              <h4 className={styles.workInfoTitle}>{work.title}</h4>
-              <h5 className={styles.workInfoAuthor}>{work.author}</h5>
-            </div>
-          </div>
-        )}
-        {post.cycles.length > 0 && (
-          <div className="d-flex">
-            <div className="mr-3">
-              <Link href={`/cycle/${post.cycles[0].id}`}>
-                <a className={styles.cycleInfoType}>{t('common:cycle')}</a>
-              </Link>
-            </div>
-            <div className="pt-1">
-              <h4 className={styles.workInfoTitle}>{post.cycles[0].title}</h4>
-            </div>
-          </div>
-        )}
+        <table className={styles.parentContent}>
+          <tbody>
+            {work != null && (
+              <tr>
+                <td className={styles.parentBadges}>
+                  <Link href={`/work/${work.id}`}>
+                    <a className={styles.workInfoType}>{t(`common:${work.type}`)}</a>
+                  </Link>
+                </td>
+                <td className="pb-2">
+                  <h4 className={styles.workInfoTitle}>{work.title}</h4>
+                  <h5 className={styles.workInfoAuthor}>{work.author}</h5>
+                </td>
+              </tr>
+            )}
+            {post.cycles.length > 0 && (
+              <tr>
+                <td className={styles.parentBadges}>
+                  <Link href={`/cycle/${post.cycles[0].id}`}>
+                    <a className={styles.cycleInfoType}>{t('common:cycle')}</a>
+                  </Link>
+                </td>
+                <td>
+                  <h4 className={styles.workInfoTitle}>{post.cycles[0].title}</h4>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </Col>
       <Col md={{ span: 8 }}>
         <div className="pt-3 px-4">
