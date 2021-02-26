@@ -60,6 +60,13 @@ Webapp is build on top of Next.js-10 and react-bootstrap-1.5. It is hosted as so
 ### Cloud deployment
 - run `yarn lt`!!!
 - commit all changes into git!
+- backup `public-assets` on the server machine!
+  - run `./.azure/ssh-tunnel.sh` in one terminal
+  - open a new terminal and `ssh -p 7777 root@localhost`, password is `Docker!`
+  - delete an existing archive of public assets `rm public-assets.tar.gz`
+  - create a new archive `tar czvf public-assets.tar.gz public-assets`
+  - terminate SSH session `exit`
+  - copy created archive to your machine `scp -P 7777 root@localhost:/home/public-assets.tar.gz backup/destination`
 - if DB migrations are needed, run them before deployment
   - change to production database in `prisma/.env`
   - apply pending migrations `yarn prisma-pf migrate deploy`
