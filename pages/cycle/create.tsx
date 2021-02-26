@@ -1,6 +1,8 @@
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
+import { getSession } from 'next-auth/client';
 import useTranslation from 'next-translate/useTranslation';
 
+import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CreateCycleForm from '../../src/components/forms/CreateCycleForm';
 
@@ -12,6 +14,17 @@ const CreateCyclePage: NextPage = () => {
       <CreateCycleForm className="mb-5" />
     </SimpleLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = (await getSession(ctx)) as Session;
+  if (session == null) {
+    return { notFound: true };
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default CreateCyclePage;

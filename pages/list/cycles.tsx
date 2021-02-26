@@ -2,6 +2,7 @@ import { Cycle, LocalImage } from '@prisma/client';
 import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { getSession } from 'next-auth/client';
 import { useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
@@ -11,6 +12,7 @@ import Table from 'react-bootstrap/Table';
 import { useMutation } from 'react-query';
 
 import { DATE_FORMAT_HUMANIC_ADVANCED } from '../../src/constants';
+import { Session } from '../../src/types';
 import { advancedDayjs } from '../../src/lib/utils';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import LocalImageComponent from '../../src/components/LocalImage';
@@ -107,7 +109,12 @@ const ListCyclesPage: NextPage<Props> = ({ cycles }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = (await getSession(ctx)) as Session;
+  if (session == null || !session.user.roles.includes('admin')) {
+    return { notFound: true };
+  }
+
   const cycles = await findAll();
 
   return {

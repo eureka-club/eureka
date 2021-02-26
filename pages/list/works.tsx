@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { getSession } from 'next-auth/client';
 import { useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
@@ -12,6 +13,7 @@ import Table from 'react-bootstrap/Table';
 import { useMutation } from 'react-query';
 
 import { DATE_FORMAT_ONLY_YEAR } from '../../src/constants';
+import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import LocalImageComponent from '../../src/components/LocalImage';
 import { findAll } from '../../src/facades/work';
@@ -105,7 +107,12 @@ const ListWorksPage: NextPage<Props> = ({ works }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = (await getSession(ctx)) as Session;
+  if (session == null || !session.user.roles.includes('admin')) {
+    return { notFound: true };
+  }
+
   const works = await findAll();
 
   return {
