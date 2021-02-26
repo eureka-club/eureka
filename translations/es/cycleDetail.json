@@ -2,10 +2,17 @@
   "tabHeaderCycleContent": "Contenido del ciclo",
   "tabHeaderForum": " Foro",
   "tabHeaderPosts": " Publicaciones",
+  "joinCycleLabel": "Unirse",
+  "leaveCycleLabel": "Salir del ciclo",
+  "participantsCount_0": "0 participantes",
+  "participantsCount": "1 participante",
+  "participantsCount_other": "{{count}} participantes",
   "worksCountHeader_0": "No hay obras en el ciclo",
   "worksCountHeader": "1 obra en el ciclo",
   "worksCountHeader_other": "{{count}} obras en el ciclo",
   "postsCountHeader_0": "No hay publicaciones en el ciclo",
   "postsCountHeader": "1 publicación en el ciclo",
-  "postsCountHeader_other": "{{count}} publicaciones en el ciclo"
+  "postsCountHeader_other": "{{count}} publicaciones en el ciclo",
+  "complementaryMaterialsTitle": "Contenido complementario"
+
 }
