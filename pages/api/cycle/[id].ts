@@ -33,7 +33,7 @@ export default getApiHandler().delete<NextApiRequest, NextApiResponse>(
         return;
       }
 
-      await remove(idNum);
+      await remove(cycle);
 
       res.status(200).json({ status: 'OK' });
     } catch (exc) {
