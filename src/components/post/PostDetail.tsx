@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { FunctionComponent } from 'react';
 import Col from 'react-bootstrap/Col';
 
-import { DATE_FORMAT_HUMANIC_ADVANCED, DISQUS_SHORTNAME, WEBAPP_URL } from '../../constants';
+import { DATE_FORMAT_SHORT, DISQUS_SHORTNAME, WEBAPP_URL } from '../../constants';
 import { PostDetail as PostDetailType } from '../../types/post';
 import LocalImageComponent from '../LocalImage';
 import UnclampText from '../UnclampText';
@@ -74,7 +74,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
             />
             {post.creator.name}
             <small className={styles.postDate}>
-              {advancedDayjs(post.createdAt).format(DATE_FORMAT_HUMANIC_ADVANCED)}
+              {advancedDayjs(post.createdAt).format(DATE_FORMAT_SHORT)}
             </small>
           </div>
           <h1>{post.title}</h1>
