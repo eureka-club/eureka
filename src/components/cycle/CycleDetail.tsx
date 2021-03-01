@@ -162,86 +162,88 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         )}
       </Row>
 
-      <Row className="mb-5">
-        <Col>
-          {detailPagesState.selectedSubsectionCycle != null && (
-            <TabContainer
-              defaultActiveKey={detailPagesState.selectedSubsectionCycle}
-              onSelect={handleSubsectionChange}
-              transition={false}
-            >
-              <Row className="mb-4">
-                <Col>
-                  <Nav variant="tabs" fill>
-                    <NavItem>
-                      <NavLink eventKey="cycle-content">
-                        {t('tabHeaderCycleContent')} ({worksCount})
-                      </NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink eventKey="posts">
-                        {t('tabHeaderPosts')} ({postsCount})
-                      </NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink eventKey="forum">
-                        {t('tabHeaderForum')} (<CommentCount config={disqusConfig} shortname={DISQUS_SHORTNAME!} />)
-                      </NavLink>
-                    </NavItem>
-                  </Nav>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <TabContent>
-                    <TabPane eventKey="cycle-content">
-                      {cycle.contentText != null && (
-                        <div className="mb-5">
-                          <UnclampText text={cycle.contentText} clampHeight="7rem" />
-                        </div>
-                      )}
-                      <h2 className="mb-5">{t('worksCountHeader', { count: worksCount })}</h2>
-                      {worksCount > 0 && <WorksMosaic cycle={cycle} />}
+      {post == null && (
+        <Row className="mb-5">
+          <Col>
+            {detailPagesState.selectedSubsectionCycle != null && (
+              <TabContainer
+                defaultActiveKey={detailPagesState.selectedSubsectionCycle}
+                onSelect={handleSubsectionChange}
+                transition={false}
+              >
+                <Row className="mb-4">
+                  <Col>
+                    <Nav variant="tabs" fill>
+                      <NavItem>
+                        <NavLink eventKey="cycle-content">
+                          {t('tabHeaderCycleContent')} ({worksCount})
+                        </NavLink>
+                      </NavItem>
+                      <NavItem>
+                        <NavLink eventKey="posts">
+                          {t('tabHeaderPosts')} ({postsCount})
+                        </NavLink>
+                      </NavItem>
+                      <NavItem>
+                        <NavLink eventKey="forum">
+                          {t('tabHeaderForum')} (<CommentCount config={disqusConfig} shortname={DISQUS_SHORTNAME!} />)
+                        </NavLink>
+                      </NavItem>
+                    </Nav>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <TabContent>
+                      <TabPane eventKey="cycle-content">
+                        {cycle.contentText != null && (
+                          <div className="mb-5">
+                            <UnclampText text={cycle.contentText} clampHeight="7rem" />
+                          </div>
+                        )}
+                        <h2 className="mb-5">{t('worksCountHeader', { count: worksCount })}</h2>
+                        {worksCount > 0 && <WorksMosaic cycle={cycle} />}
 
-                      {cycle.complementaryMaterials.length > 0 && (
-                        <Row className="mt-4 mb-5">
-                          <Col>
-                            <h4 className="mb-4">{t('complementaryMaterialsTitle')}</h4>
-                            <ul className={styles.complementaryMaterials}>
-                              {cycle.complementaryMaterials.map((cm) => (
-                                <li key={cm.id}>
-                                  <a
-                                    href={cm.link || `${ASSETS_BASE_URL}/${cm.storedFile}`}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                  >
-                                    <h5>{cm.title}</h5>
-                                    <p>
-                                      {cm.author} ({advancedDayjs(cm.publicationDate).format(DATE_FORMAT_MONTH_YEAR)})
-                                    </p>
-                                  </a>
-                                </li>
-                              ))}
-                            </ul>
-                          </Col>
-                          <Col />
-                        </Row>
-                      )}
-                    </TabPane>
-                    <TabPane eventKey="posts">
-                      <h2 className="mb-5">{t('postsCountHeader', { count: postsCount })}</h2>
-                      {postsCount > 0 && <PostsMosaic cycle={cycle} />}
-                    </TabPane>
-                    <TabPane eventKey="forum">
-                      <DiscussionEmbed config={disqusConfig} shortname={DISQUS_SHORTNAME!} />
-                    </TabPane>
-                  </TabContent>
-                </Col>
-              </Row>
-            </TabContainer>
-          )}
-        </Col>
-      </Row>
+                        {cycle.complementaryMaterials.length > 0 && (
+                          <Row className="mt-4 mb-5">
+                            <Col>
+                              <h4 className="mb-4">{t('complementaryMaterialsTitle')}</h4>
+                              <ul className={styles.complementaryMaterials}>
+                                {cycle.complementaryMaterials.map((cm) => (
+                                  <li key={cm.id}>
+                                    <a
+                                      href={cm.link || `${ASSETS_BASE_URL}/${cm.storedFile}`}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                    >
+                                      <h5>{cm.title}</h5>
+                                      <p>
+                                        {cm.author} ({advancedDayjs(cm.publicationDate).format(DATE_FORMAT_MONTH_YEAR)})
+                                      </p>
+                                    </a>
+                                  </li>
+                                ))}
+                              </ul>
+                            </Col>
+                            <Col />
+                          </Row>
+                        )}
+                      </TabPane>
+                      <TabPane eventKey="posts">
+                        <h2 className="mb-5">{t('postsCountHeader', { count: postsCount })}</h2>
+                        {postsCount > 0 && <PostsMosaic cycle={cycle} />}
+                      </TabPane>
+                      <TabPane eventKey="forum">
+                        <DiscussionEmbed config={disqusConfig} shortname={DISQUS_SHORTNAME!} />
+                      </TabPane>
+                    </TabContent>
+                  </Col>
+                </Row>
+              </TabContainer>
+            )}
+          </Col>
+        </Row>
+      )}
     </>
   );
 };
