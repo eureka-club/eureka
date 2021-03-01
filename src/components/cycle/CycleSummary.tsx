@@ -22,9 +22,7 @@ const WorkSummary: FunctionComponent<Props> = ({ cycle }) => {
           advancedDayjs(now).isBetween(dayjs(cycle.startDate), dayjs(cycle.endDate), 'day', '[]')
             ? t('cycleActiveLabel')
             : t('cycleNotActiveLabel')
-        } :  ${advancedDayjs(cycle.startDate).format(DATE_FORMAT_SHORT)}—${advancedDayjs(
-          cycle.endDate,
-        ).format(DATE_FORMAT_SHORT)}`,
+        } :  ${dayjs(cycle.startDate).format(DATE_FORMAT_SHORT)}—${dayjs(cycle.endDate).format(DATE_FORMAT_SHORT)}`,
       ].join(', ')}
     </section>
   );
