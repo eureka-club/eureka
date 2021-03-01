@@ -178,10 +178,14 @@ export const remove = async (cycle: Cycle): Promise<Cycle> => {
     data: {
       complementaryMaterials: { deleteMany: { cycleId: cycle.id } },
       participants: { set: [] },
+      posts: { set: [] },
+      works: { set: [] },
     },
     include: {
       complementaryMaterials: true,
       participants: true,
+      posts: true,
+      works: true,
     },
   });
 
