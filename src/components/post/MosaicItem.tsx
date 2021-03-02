@@ -60,6 +60,8 @@ const MosaicItem: FunctionComponent<Props> = ({ post, postParent }) => {
             alt={post.title}
           />
         )}
+
+        <div className={styles.gradient} />
         <span className={styles.type}>{t('post')}</span>
         <div className={styles.actions}>
           <BsBookmark className={styles.actionBookmark} />
