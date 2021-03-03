@@ -1,4 +1,7 @@
+/* eslint-disable react/no-danger */
 import Document, { Html, Head, Main, NextScript } from 'next/document';
+
+import { CLARITY_TRACKING_ID } from '../src/constants';
 
 class MyDocument extends Document {
   render(): JSX.Element {
@@ -42,6 +45,18 @@ class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;1,400;1,600&display=swap"
           />
+
+          {/* MS Clarity analytics */}
+          {CLARITY_TRACKING_ID != null && (
+            <>
+              <script
+                dangerouslySetInnerHTML={{
+                  __html: `window.clarity = window.clarity || function() { (window.clarity.q = window.clarity.q || []).push(arguments) };`,
+                }}
+              />
+              <script async src={`https://www.clarity.ms/tag/${CLARITY_TRACKING_ID}`} />
+            </>
+          )}
         </Head>
         <body>
           <Main />
