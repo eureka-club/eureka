@@ -14,7 +14,7 @@ app.prepare().then(() => {
   if (!dev) {
     server.use(({ hostname, method, path }, res, nextFn) => {
       if (method === 'GET' && hostname.slice(0, 3) !== 'www') {
-        res.redirect(`https://www.${hostname}${path}`, 308);
+        res.redirect(308, `https://www.${hostname}${path}`);
         return;
       }
 

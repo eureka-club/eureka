@@ -6,6 +6,7 @@ export const DATE_FORMAT_MONTH_YEAR = 'MMM YYYY';
 export const DATE_FORMAT_SHORT = 'D·MM·YYYY';
 
 export const ASSETS_BASE_URL = process.env.NEXT_PUBLIC_LOCAL_ASSETS_BASE_URL;
+export const CLARITY_TRACKING_ID = process.env.NEXT_PUBLIC_CLARITY_TRACKING_ID;
 export const DISQUS_SHORTNAME = process.env.NEXT_PUBLIC_DISQUS_SHORTNAME;
 export const WEBAPP_URL = process.env.NEXT_PUBLIC_WEBAPP_URL;
 
