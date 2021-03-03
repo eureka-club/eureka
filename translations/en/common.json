@@ -1,4 +1,5 @@
 {
+  "browserTitleAbout": "About",
   "browserTitleWelcome": "Welcome",
   "browserTitleMyList": "My list",
   "book": "Book",
@@ -7,6 +8,7 @@
   "movie": "Movie",
   "post": "Post",
 
+  "aboutPageHeading": "What is Eureka about",
   "mosaicHeaderMyCycles": "Cycles I'm joined in",
   "publicationYearLabel": "Publication year",
   "releaseYearLabel": "Release year",
