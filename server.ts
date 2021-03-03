@@ -11,6 +11,17 @@ const { NEXT_PUBLIC_LOCAL_ASSETS_BASE_URL, LOCAL_ASSETS_HOST_DIR } = process.env
 app.prepare().then(() => {
   const server = express();
 
+  if (!dev) {
+    server.use(({ hostname, method, path }, res, nextFn) => {
+      if (method === 'GET' && hostname.slice(0, 3) !== 'www') {
+        res.redirect(308, `https://www.${hostname}${path}`);
+        return;
+      }
+
+      nextFn();
+    });
+  }
+
   if (LOCAL_ASSETS_HOST_DIR != null && !existsSync(LOCAL_ASSETS_HOST_DIR)) {
     mkdirSync(LOCAL_ASSETS_HOST_DIR);
   }
@@ -20,7 +31,7 @@ app.prepare().then(() => {
       NEXT_PUBLIC_LOCAL_ASSETS_BASE_URL,
       express.static(LOCAL_ASSETS_HOST_DIR, {
         etag: false,
-        maxAge: dev ? '1h' : '30d',
+        maxAge: dev ? '1h' : '180d',
       }),
     );
   }
