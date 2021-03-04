@@ -1,15 +1,18 @@
 {
+  "browserTitleWelcome": "Bem-vindx",
+  "browserTitleMyList": "Minha Lista",
   "book": "Livro",
   "cycle": "Ciclo",
   "documentary": "Documentário",
   "movie": "Filme",
   "post": "Publicação",
-
+  
+  "mosaicHeaderMyCycles": "Ciclos dos quais estou participando",
   "publicationYearLabel": "Ano de publicação",
   "releaseYearLabel": "Ano de lançamento",
   "countryLabel": "País",
-  "cycleActiveLabel": "Ativo",
-  "cycleNotActiveLabel": "Inativo",
+  "cycleActiveLabel": "Ciclo ativo",
+  "cycleNotActiveLabel": "Ciclo inativo",
   "workLengthLabel": "Duração / nº pag.",
   "workLengthAsPagesLabel": "páginas",
   "workLengthAsMinutesLabel": "minutos",

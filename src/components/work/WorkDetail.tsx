@@ -106,50 +106,52 @@ const WorkDetail: FunctionComponent<Props> = ({
         )}
       </Row>
 
-      <Row className="mb-5">
-        <Col>
-          {detailPagesState.selectedSubsectionWork != null && (
-            <TabContainer
-              defaultActiveKey={detailPagesState.selectedSubsectionWork}
-              onSelect={handleSubsectionChange}
-              transition={false}
-            >
-              <Row className="mb-4">
-                <Col>
-                  <Nav variant="tabs" fill>
-                    <NavItem>
-                      <NavLink eventKey="all">
-                        {t('tabHeaderAll')} ({cyclesCount + postsCount})
-                      </NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink eventKey="posts">
-                        {t('tabHeaderPosts')} ({postsCount})
-                      </NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink eventKey="cycles">
-                        {t('tabHeaderCycles')} ({cyclesCount})
-                      </NavLink>
-                    </NavItem>
-                  </Nav>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <TabContent>
-                    <TabPane eventKey="all">
-                      {(cyclesCount > 0 || postsCount > 0) && <CombinedMosaic work={work} />}
-                    </TabPane>
-                    <TabPane eventKey="posts">{postsCount > 0 && <PostsMosaic work={work} />}</TabPane>
-                    <TabPane eventKey="cycles">{cyclesCount > 0 && <CyclesMosaic work={work} />}</TabPane>
-                  </TabContent>
-                </Col>
-              </Row>
-            </TabContainer>
-          )}
-        </Col>
-      </Row>
+      {post == null && (
+        <Row className="mb-5">
+          <Col>
+            {detailPagesState.selectedSubsectionWork != null && (
+              <TabContainer
+                defaultActiveKey={detailPagesState.selectedSubsectionWork}
+                onSelect={handleSubsectionChange}
+                transition={false}
+              >
+                <Row className="mb-4">
+                  <Col>
+                    <Nav variant="tabs" fill>
+                      <NavItem>
+                        <NavLink eventKey="all">
+                          {t('tabHeaderAll')} ({cyclesCount + postsCount})
+                        </NavLink>
+                      </NavItem>
+                      <NavItem>
+                        <NavLink eventKey="posts">
+                          {t('tabHeaderPosts')} ({postsCount})
+                        </NavLink>
+                      </NavItem>
+                      <NavItem>
+                        <NavLink eventKey="cycles">
+                          {t('tabHeaderCycles')} ({cyclesCount})
+                        </NavLink>
+                      </NavItem>
+                    </Nav>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <TabContent>
+                      <TabPane eventKey="all">
+                        {(cyclesCount > 0 || postsCount > 0) && <CombinedMosaic work={work} />}
+                      </TabPane>
+                      <TabPane eventKey="posts">{postsCount > 0 && <PostsMosaic work={work} />}</TabPane>
+                      <TabPane eventKey="cycles">{cyclesCount > 0 && <CyclesMosaic work={work} />}</TabPane>
+                    </TabContent>
+                  </Col>
+                </Row>
+              </TabContainer>
+            )}
+          </Col>
+        </Row>
+      )}
     </>
   );
 };

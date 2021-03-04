@@ -1,5 +1,6 @@
 import { Work } from '@prisma/client';
 import classNames from 'classnames';
+import dayjs from 'dayjs';
 import { DiscussionEmbed } from 'disqus-react';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
@@ -9,11 +10,10 @@ import Col from 'react-bootstrap/Col';
 import ActionButton from '../common/ActionButton';
 import { FiShare2 } from 'react-icons/fi';
 
-import { DATE_FORMAT_HUMANIC_ADVANCED, DISQUS_SHORTNAME, WEBAPP_URL } from '../../constants';
+import { DATE_FORMAT_SHORT, DISQUS_SHORTNAME, WEBAPP_URL } from '../../constants';
 import { PostDetail as PostDetailType } from '../../types/post';
 import LocalImageComponent from '../LocalImage';
 import UnclampText from '../UnclampText';
-import { advancedDayjs } from '../../lib/utils';
 import styles from './PostDetail.module.css';
 
 interface Props {
@@ -105,9 +105,7 @@ const PostDetail: FunctionComponent<Props> = ({
               className={styles.creatorAvatar}
             />
             {post.creator.name}
-            <small className={styles.postDate}>
-              {advancedDayjs(post.createdAt).format(DATE_FORMAT_HUMANIC_ADVANCED)}
-            </small>
+            <small className={styles.postDate}>{dayjs(post.createdAt).format(DATE_FORMAT_SHORT)}</small>
           </div>
           <h1>{post.title}</h1>
           {post.contentText != null && <UnclampText text={post.contentText} clampHeight="20rem" />}

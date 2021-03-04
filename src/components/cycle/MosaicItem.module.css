@@ -1,19 +1,25 @@
 .cycle {
-  margin-bottom: 2rem;
-}
-
-.imageContainer {
   border: 3px solid var(--eureka-green);
   border-radius: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 2rem;
   overflow: hidden;
   position: relative;
 }
-.imageContainer img {
+.cycle img {
   width: 100%;
 }
 
+.gradient {
+  background: linear-gradient(0deg, #00000080, #ffffff26 100%);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
 .embeddedInfo {
+  color: var(--text-color-light);
   position: absolute;
   bottom: 3.5rem;
   left: 1rem;
@@ -23,19 +29,13 @@
   color: var(--text-color-light);
   font-size: 1.2rem;
   font-weight: 300;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
 }
-.embeddedInfo .title a,
-.embeddedInfo .title a:hover {
-  color: var(--text-color-light);
-}
 .embeddedInfo .date {
-  color: var(--text-color-light);
   display: inline-block;
   font-size: 0.8rem;
   font-weight: 200;
-  margin-top: 1rem;
 }
 
 .type {

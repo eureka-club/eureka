@@ -175,6 +175,7 @@ export const removeParticipant = async (cycle: Cycle, user: User): Promise<Cycle
   });
 };
 
+
 export const updateAction = async (
   cycle: Cycle, user: User, action: string, is_add: boolean): Promise<Cycle> => {
   return prisma.cycle.update({
@@ -183,8 +184,24 @@ export const updateAction = async (
   });
 };
 
-export const remove = async (id: number): Promise<Cycle> => {
+export const remove = async (cycle: Cycle): Promise<Cycle> => {
+  await prisma.cycle.update({
+    where: { id: cycle.id },
+    data: {
+      complementaryMaterials: { deleteMany: { cycleId: cycle.id } },
+      participants: { set: [] },
+      posts: { set: [] },
+      works: { set: [] },
+    },
+    include: {
+      complementaryMaterials: true,
+      participants: true,
+      posts: true,
+      works: true,
+    },
+  });
+
   return prisma.cycle.delete({
-    where: { id },
+    where: { id: cycle.id },
   });
 };
