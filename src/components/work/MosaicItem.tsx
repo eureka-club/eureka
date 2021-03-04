@@ -20,10 +20,6 @@ const MosaicItem: FunctionComponent<WorkWithImages> = ({ id, author, title, loca
           </a>
         </Link>
         <span className={styles.type}>{t(type)}</span>
-        <div className={styles.actions}>
-          <BsBookmark className={styles.actionBookmark} />
-          <AiOutlineHeart className={styles.actionLike} />
-        </div>
       </div>
       <Link href={`/work/${id}`}>
         <a className={styles.title}>{title}</a>

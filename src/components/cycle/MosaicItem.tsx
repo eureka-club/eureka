@@ -35,10 +35,6 @@ const MosaicItem: FunctionComponent<CycleWithImages> = ({
             </span>
           </div>
           <span className={styles.type}>{t('cycle')}</span>
-          <div className={styles.actions}>
-            <BsBookmark className={styles.actionBookmark} />
-            <AiOutlineHeart className={styles.actionLike} />
-          </div>
         </a>
       </Link>
     </article>
