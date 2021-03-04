@@ -1,4 +1,4 @@
-import { Prisma, Work } from '@prisma/client';
+import { Prisma, Work, User } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
 import { CreateWorkServerFields, CreateWorkServerPayload, WorkWithImages } from '../types/work';
@@ -7,7 +7,11 @@ import prisma from '../lib/prisma';
 export const find = async (id: number): Promise<WorkWithImages | null> => {
   return prisma.work.findUnique({
     where: { id },
-    include: { localImages: true },
+    include: { 
+      localImages: true,
+      likes: true,
+      favs: true,
+    },
   });
 };
 
@@ -15,6 +19,36 @@ export const findAll = async (): Promise<WorkWithImages[]> => {
   return prisma.work.findMany({
     orderBy: { createdAt: 'desc' },
     include: { localImages: true },
+  });
+};
+
+
+export const findAction = async (
+  user: User, work: Work, action: string): Promise<User | null> => {
+  return prisma.user.count({
+    where: {
+      id: user.id,
+      [`${action}Works`]: { some: { id: work.id } },
+    },
+  });
+};
+
+
+export const findLike = async (user: User, work: Work): Promise<User | null> => {
+  return prisma.user.findFirst({
+    where: {
+      id: user.id,
+      likedWorks: { some: { id: work.id } },
+    },
+  });
+};
+
+export const findFav = async (user: User, work: Work): Promise<User | null> => {
+  return prisma.user.findFirst({
+    where: {
+      id: user.id,
+      favWorks: { some: { id: work.id } },
+    },
   });
 };
 
@@ -101,5 +135,14 @@ export const createFromServerFields = async (
 export const remove = async (id: number): Promise<Work> => {
   return prisma.work.delete({
     where: { id },
+  });
+};
+
+
+export const updateAction = async (
+  work: Work, user: User, action: string, is_add: boolean): Promise<Work> => {
+  return prisma.work.update({
+    where: { id: work.id },
+    data: { [action]: { [(is_add ? 'connect': 'disconnect')]: { id: user.id } } },
   });
 };

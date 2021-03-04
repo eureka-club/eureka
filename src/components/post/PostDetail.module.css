@@ -68,3 +68,11 @@
   color: darkgrey;
   margin-left: auto;
 }
+
+.socialInfo {
+  color: var(--color-primary-raised);
+  font-size: 1.15rem;
+}
+.socialInfo span {
+  margin-right: 1rem;
+}

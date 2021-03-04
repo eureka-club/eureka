@@ -15,12 +15,16 @@ import Spinner from 'react-bootstrap/Spinner';
 import TabContainer from 'react-bootstrap/TabContainer';
 import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
-import { AiFillHeart } from 'react-icons/ai';
-import { BsBookmarkFill } from 'react-icons/bs';
 import { FiShare2 } from 'react-icons/fi';
 import { useMutation } from 'react-query';
+import ActionButton from '../common/ActionButton';
 
-import { ASSETS_BASE_URL, DATE_FORMAT_MONTH_YEAR, DISQUS_SHORTNAME, WEBAPP_URL } from '../../constants';
+import {
+  ASSETS_BASE_URL, 
+  DATE_FORMAT_MONTH_YEAR,
+  DISQUS_SHORTNAME,
+  WEBAPP_URL
+} from '../../constants';
 import { CycleDetail } from '../../types/cycle';
 import { PostDetail } from '../../types/post';
 import LocalImageComponent from '../LocalImage';
@@ -36,19 +40,21 @@ import styles from './CycleDetail.module.css';
 interface Props {
   cycle: CycleDetail;
   post?: PostDetail;
-  isCurrentUserJoinedToCycle: boolean;
   participantsCount: number;
   postsCount: number;
   worksCount: number;
+  currentActions: object;
+  currentActionsPost: object;
 }
 
 const CycleDetailComponent: FunctionComponent<Props> = ({
   cycle,
   post,
-  isCurrentUserJoinedToCycle,
   participantsCount,
   postsCount,
   worksCount,
+  currentActions,
+  currentActionsPost,
 }) => {
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const router = useRouter();
@@ -59,15 +65,32 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     title: cycle.title,
     url: `${WEBAPP_URL}${router.asPath}`,
   };
-
-  const { mutate: execJoinCycle, isLoading: isJoinCycleLoading, isSuccess: isJoinCycleSuccess } = useMutation(
+  const { 
+    mutate: execJoinCycle,
+    isLoading: isJoinCycleLoading,
+    isSuccess: isJoinCycleSuccess 
+  } = useMutation(
     async () => {
       await fetch(`/api/cycle/${cycle.id}/join`, { method: 'POST' });
     },
   );
-  const { mutate: execLeaveCycle, isLoading: isLeaveCycleLoading, isSuccess: isLeaveCycleSuccess } = useMutation(
+  const {
+    mutate: execLeaveCycle,
+    isLoading: isLeaveCycleLoading,
+    isSuccess: isLeaveCycleSuccess
+  } = useMutation(
     async () => {
       await fetch(`/api/cycle/${cycle.id}/join`, { method: 'DELETE' });
+    },
+  );
+  
+  const { 
+    mutate: execLike,
+    isLoading: isLikeCycleLoading,
+    isSuccess: isLikeCycleSuccess 
+  } = useMutation(
+    async (method: string) => {
+      await fetch(`/api/cycle/${cycle.id}/like`, { method: method });
     },
   );
 
@@ -87,6 +110,16 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     execLeaveCycle();
   };
 
+  const handleLikeClick = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    console.log(cycle)
+    execLike(currentActions.like ? 'DELETE' : 'POST')
+    /*isCurrentUserLikedCycle
+      ? execLeaveLike()
+      : execLike()*/
+  };
+
+
   useEffect(() => {
     if (isJoinCycleSuccess === true) {
       router.replace(router.asPath);
@@ -101,6 +134,13 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLeaveCycleSuccess]);
 
+  useEffect(() => {
+    //if (isLikeCycleSuccess)
+      //router.replace(router.asPath);
+  }, [isLikeCycleSuccess]);
+
+  console.log(currentActions)
+
   return (
     <>
       <Row className="mb-5">
@@ -108,7 +148,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           <>
             <Col md={{ span: 3 }}>
               <div className={classNames(styles.imgWrapper, 'mb-3')}>
-                <LocalImageComponent filePath={cycle.localImages[0].storedFile} alt={cycle.title} />
+                <LocalImageComponent
+                  filePath={cycle.localImages[0].storedFile}
+                  alt={cycle.title} 
+                />
               </div>
             </Col>
             <Col md={{ span: 9 }}>
@@ -122,15 +165,25 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                   {cycle.creator.name}
                 </div>
                 <h1>{cycle.title}</h1>
+                <h1></h1>
+
                 <CycleSummary cycle={cycle} />
                 <section className={classNames('d-flex justify-content-between', styles.socialInfo)}>
                   <div>
-                    <span>
-                      <BsBookmarkFill /> #
-                    </span>
-                    <span>
-                      <AiFillHeart /> #
-                    </span>
+                    <ActionButton 
+                      level={cycle}
+                      level_name="cycle"
+                      action="fav"
+                      currentActions={currentActions}
+                      show_counts
+                    />
+                    <ActionButton 
+                      level={cycle}
+                      level_name="cycle"
+                      action="like"
+                      currentActions={currentActions}
+                      show_counts
+                    />
                     <span>
                       <FiShare2 /> #
                     </span>
@@ -142,13 +195,16 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                     {session != null && (
                       <>
                         <div className="d-inline-block mx-3" />
-                        {(isJoinCycleLoading || isLeaveCycleLoading) && <Spinner animation="border" size="sm" />}
-                        {isCurrentUserJoinedToCycle ? (
+                        {(isJoinCycleLoading || isLeaveCycleLoading) 
+                          && <Spinner animation="border" size="sm" />}
+                        {currentActions.joined ? (
                           <Button onClick={handleLeaveCycleClick} variant="link">
                             {t('leaveCycleLabel')}
                           </Button>
                         ) : (
-                          <Button onClick={handleJoinCycleClick}>{t('joinCycleLabel')}</Button>
+                          <Button onClick={handleJoinCycleClick}>
+                            {t('joinCycleLabel')}
+                           </Button>
                         )}
                       </>
                     )}
@@ -158,7 +214,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
             </Col>
           </>
         ) : (
-          <PostDetailComponent post={post} />
+          <PostDetailComponent 
+            post={post}
+            currentActionsPost={currentActionsPost}
+          />
         )}
       </Row>
 

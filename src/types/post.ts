@@ -9,6 +9,8 @@ export type PostMosaicItem = Prisma.PostGetPayload<{
     creator: true;
     localImages: true;
     works: true;
+    likes: true;
+    favs: true;    
   };
 }>;
 
@@ -17,6 +19,8 @@ export type PostDetail = Prisma.PostGetPayload<{
     creator: true;
     localImages: true;
     cycles: true;
+    likes: true;
+    favs: true;
   };
 }>;
 

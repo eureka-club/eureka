@@ -13,6 +13,7 @@ import TabPane from 'react-bootstrap/TabPane';
 import { AiFillHeart } from 'react-icons/ai';
 import { BsBookmarkFill, BsBoxArrowUpRight } from 'react-icons/bs';
 import { FiShare2 } from 'react-icons/fi';
+import ActionButton from '../common/ActionButton';
 
 import { WorkWithImages } from '../../types/work';
 import { PostDetail } from '../../types/post';
@@ -31,9 +32,18 @@ interface Props {
   post?: PostDetail;
   cyclesCount: number;
   postsCount: number;
+  currentActions: object;
+  currentActionsPost: object;
 }
 
-const WorkDetail: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCount }) => {
+const WorkDetail: FunctionComponent<Props> = ({ 
+  work,
+  post,
+  cyclesCount,
+  postsCount,
+  currentActions,
+  currentActionsPost,
+}) => {
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const { t } = useTranslation('workDetail');
 
@@ -53,12 +63,20 @@ const WorkDetail: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCo
                 <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
               </div>
               <section className={styles.socialInfo}>
-                <span>
-                  <BsBookmarkFill /> #
-                </span>
-                <span>
-                  <AiFillHeart /> #
-                </span>
+                <ActionButton 
+                  level={work}
+                  level_name="work"
+                  action="fav"
+                  currentActions={currentActions}
+                  show_counts
+                />
+                <ActionButton 
+                  level={work}
+                  level_name="work"
+                  action="like"
+                  currentActions={currentActions}
+                  show_counts
+                />
                 <span>
                   <FiShare2 /> #
                 </span>
@@ -79,7 +97,12 @@ const WorkDetail: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCo
             </Col>
           </>
         ) : (
-          <PostDetailComponent post={post} work={work} />
+          <PostDetailComponent 
+            post={post}
+            work={work}
+            currentActionsPost={currentActionsPost}
+            currentActions={currentActions}
+          />
         )}
       </Row>
 

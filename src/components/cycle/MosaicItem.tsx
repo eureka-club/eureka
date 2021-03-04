@@ -3,6 +3,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { BsBookmark } from 'react-icons/bs';
+import ActionButton from '../common/ActionButton';
 
 import { DATE_FORMAT_HUMANIC_SHORT_ADVANCED } from '../../constants';
 import { CycleWithImages } from '../../types/cycle';
@@ -10,7 +11,13 @@ import LocalImageComponent from '../LocalImage';
 import { advancedDayjs } from '../../lib/utils';
 import styles from './MosaicItem.module.css';
 
-const MosaicItem: FunctionComponent<CycleWithImages> = ({ id, title, localImages, startDate, endDate }) => {
+const MosaicItem: FunctionComponent<CycleWithImages> = ({
+  id,
+  title,
+  localImages,
+  startDate,
+  endDate
+}) => {
   const { t } = useTranslation('common');
 
   return (
@@ -36,9 +43,19 @@ const MosaicItem: FunctionComponent<CycleWithImages> = ({ id, title, localImages
           </h3>
         </div>
         <span className={styles.type}>{t('cycle')}</span>
-        <div className={styles.actions}>
-          <BsBookmark className={styles.actionBookmark} />
-          <AiOutlineHeart className={styles.actionLike} />
+        <div>
+          <ActionButton 
+            level={cycle}
+            level_name="cycle"
+            action="fav"
+            currentActions={currentActions}
+          />
+          <ActionButton 
+            level={cycle}
+            level_name="cycle"
+            action="like"
+            currentActions={currentActions}
+          /> 
         </div>
       </div>
     </article>

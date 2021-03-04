@@ -10,6 +10,8 @@ export const find = async (id: number): Promise<PostWithCyclesWorks | null> => {
     include: {
       cycles: true,
       works: true,
+      likes: true,
+      favs: true,
     },
   });
 };
@@ -18,6 +20,34 @@ export const findAll = async (): Promise<PostWithImages[]> => {
   return prisma.post.findMany({
     orderBy: { createdAt: 'desc' },
     include: { localImages: true },
+  });
+};
+
+export const findAction = async (
+  user: User, post: Post, action: string): Promise<User | null> => {
+  return prisma.user.count({
+    where: {
+      id: user.id,
+      [`${action}Posts`]: { some: { id: post.id } },
+    },
+  });
+};
+
+export const findLike = async (user: User, post: Post): Promise<User | null> => {
+  return prisma.user.findFirst({
+    where: {
+      id: user.id,
+      likedPosts: { some: { id: post.id } },
+    },
+  });
+};
+
+export const findFav = async (user: User, post: Post): Promise<User | null> => {
+  return prisma.user.findFirst({
+    where: {
+      id: user.id,
+      favPosts: { some: { id: post.id } },
+    },
   });
 };
 
@@ -125,5 +155,14 @@ export const remove = async (post: PostWithCyclesWorks): Promise<Post> => {
 
   return prisma.post.delete({
     where: { id: post.id },
+  });
+};
+
+
+export const updateAction = async (
+  post: Post, user: User, action: string, is_add: boolean): Promise<Post> => {
+  return prisma.post.update({
+    where: { id: post.id },
+    data: { [action]: { [(is_add ? 'connect': 'disconnect')]: { id: user.id } } },
   });
 };

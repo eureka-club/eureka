@@ -5,31 +5,37 @@ import { CycleDetail } from '../../src/types/cycle';
 import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '../../src/components/cycle/CycleDetail';
-import { countParticipants, countPosts, countWorks, find, findParticipant } from '../../src/facades/cycle';
+import { 
+  countParticipants,
+  countPosts,
+  countWorks,
+  find,
+  findAction,
+} from '../../src/facades/cycle';
 
 interface Props {
   cycle: CycleDetail;
-  isCurrentUserJoinedToCycle: boolean;
   participantsCount: number;
   postsCount: number;
   worksCount: number;
+  currentActions: object;
 }
 
 const CycleDetailPage: NextPage<Props> = ({
   cycle,
-  isCurrentUserJoinedToCycle,
   participantsCount,
   postsCount,
   worksCount,
+  currentActions,
 }) => {
   return (
     <SimpleLayout title={cycle.title}>
       <CycleDetailComponent
         cycle={cycle}
-        isCurrentUserJoinedToCycle={isCurrentUserJoinedToCycle}
         participantsCount={participantsCount}
         postsCount={postsCount}
         worksCount={worksCount}
+        currentActions={currentActions}
       />
     </SimpleLayout>
   );
@@ -53,17 +59,25 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
   const participantsCount = await countParticipants(cycle);
   const postsCount = await countPosts(cycle);
   const worksCount = await countWorks(cycle);
-  let myParticipant = null;
+  let current_actions = {}
+  let user_actions = ['like', 'fav', 'joined']
+  user_actions.forEach(action=>{
+    current_actions[action] = null
+  })
 
   const session = (await getSession({ req })) as Session;
-  if (session != null) {
-    myParticipant = await findParticipant(session.user, cycle);
+  const has_session = session != null
+
+  if (has_session) {
+    current_actions.like = !!(await findAction(session.user, cycle, 'liked'));
+    current_actions.fav = !!(await findAction(session.user, cycle, 'fav'));
+    current_actions.joined = !!(await findAction(session.user, cycle, 'joined'));
   }
 
   return {
     props: {
       cycle,
-      isCurrentUserJoinedToCycle: myParticipant != null,
+      currentActions: current_actions,
       participantsCount: participantsCount.count,
       postsCount: postsCount.count,
       worksCount: worksCount.count,

@@ -11,6 +11,8 @@ export const find = async (id: number): Promise<CycleDetail | null> => {
       creator: true,
       localImages: true,
       complementaryMaterials: true,
+      likes: true,
+      favs: true,
     },
   });
 };
@@ -26,11 +28,12 @@ export const findAll = async (): Promise<
   });
 };
 
-export const findParticipant = async (user: User, cycle: Cycle): Promise<User | null> => {
-  return prisma.user.findFirst({
+export const findAction = async (
+  user: User, cycle: Cycle, action: string): Promise<User | null> => {
+  return prisma.user.count({
     where: {
       id: user.id,
-      joinedCycles: { some: { id: cycle.id } },
+      [`${action}Cycles`]: { some: { id: cycle.id } },
     },
   });
 };
@@ -169,6 +172,14 @@ export const removeParticipant = async (cycle: Cycle, user: User): Promise<Cycle
   return prisma.cycle.update({
     where: { id: cycle.id },
     data: { participants: { disconnect: { id: user.id } } },
+  });
+};
+
+export const updateAction = async (
+  cycle: Cycle, user: User, action: string, is_add: boolean): Promise<Cycle> => {
+  return prisma.cycle.update({
+    where: { id: cycle.id },
+    data: { [action]: { [(is_add ? 'connect': 'disconnect')]: { id: user.id } } },
   });
 };
 
