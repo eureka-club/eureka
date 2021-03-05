@@ -1,10 +1,10 @@
 generator client {
   provider        = "prisma-client-js"
-//  previewFeatures = ["microsoftSqlServer"]
+  previewFeatures = ["microsoftSqlServer"]
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlserver"
   url      = env("DATABASE_URL")
 }
 
