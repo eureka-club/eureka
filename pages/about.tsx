@@ -38,7 +38,7 @@ const AboutPage: NextPage = () => {
         <hr />
         <br />
         <h1>{t('ethicsHeading')}</h1>
-        <p className="summary">{t('ethicsText1')} <a href="https://www.mozilla.org/en-US/about/governance/policies/participation/"> {t('hereLink')}</a>).</p>
+        <p className="summary">{t('ethicsText1')} <a href="https://www.mozilla.org/en-US/about/governance/policies/participation/"> {t('hereLinkENG')}</a>, <a href="https://www.mozilla.org/es-ES/about/governance/policies/participation/"> {t('hereLinkSPA')}</a>, <a href="https://www.mozilla.org/pt-BR/about/governance/policies/participation/"> {t('hereLinkPORT')}</a>, <a href="https://www.mozilla.org/fr/about/governance/policies/participation/"> {t('hereLinkFR')}</a>).</p>
         <p className="summary">{t('ethicsText2')}</p>
         <p>{t('ethicsText3')}</p>
         <ul style={{ textAlign: 'left' }}>
