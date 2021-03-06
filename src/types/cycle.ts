@@ -23,6 +23,7 @@ export type CycleDetail = Prisma.CycleGetPayload<{
     creator: true;
     localImages: true;
     complementaryMaterials: true;
+    participants: true;
     likes: true;
     favs: true;
   };

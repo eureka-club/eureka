@@ -11,6 +11,7 @@ export const find = async (id: number): Promise<CycleDetail | null> => {
       creator: true,
       localImages: true,
       complementaryMaterials: true,
+      participants: true,
       likes: true,
       favs: true,
     },

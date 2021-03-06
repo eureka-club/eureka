@@ -1,32 +1,23 @@
-.actions2 {
-  bottom: 0.95rem;
-  color: var(--text-color-extralight);
-  position: absolute;
-  right: 1.3rem;
-  transform: scale(1.5);
+.actions-container {
+  display: flex;
+  align-items: center;
 }
 
 .actions {
   color: var(--text-color-extralight);
   transform: scale(1.5);
-}
-
-.actionBookmark,
-.actionLike {
   cursor: pointer;
   filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.5));
   transition: transform 0.15s;
-}
-.actionBookmark:hover,
-.actionLike:hover {
-  transform: scale(1.15);
-}
-.actionBookmark {
   margin-right: 0.25rem;
 }
-.action-like {
+
+.actions:hover {
+  transform: scale(1.15);
+}
+.action-like path, .action-like span {
   color: #e3506d;
 }
-.action-fav {
+.action-fav path, .action-fav span {
   color: grey;
 }

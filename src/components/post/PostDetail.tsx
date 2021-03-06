@@ -46,26 +46,12 @@ const PostDetail: FunctionComponent<Props> = ({
             alt={post.title}
           />
         </div>
-        <section className={styles.socialInfo}>
-          <ActionButton 
-            level={post}
-            level_name="post"
-            action="fav"
-            currentActions={currentActionsPost}
-            show_counts
-          />
-          <ActionButton 
-            level={post}
-            level_name="post"
-            action="like"
-            currentActions={currentActionsPost}
-            show_counts
-          />
-          <span>
-            <FiShare2 /> #
-          </span>
-        </section>
-
+        <ActionButton
+          level={post}
+          level_name="post"
+          currentActions={currentActionsPost}
+          show_counts
+        />
         <table className={styles.parentContent}>
           <tbody>
             {work != null && (

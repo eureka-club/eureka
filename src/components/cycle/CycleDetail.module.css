@@ -44,3 +44,8 @@
   font-size: 1.25rem;
   margin-bottom: 0.25rem;
 }
+
+.actions-container {
+  display: flex;
+  align-items: space-between;
+}

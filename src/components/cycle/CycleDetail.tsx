@@ -15,7 +15,6 @@ import Spinner from 'react-bootstrap/Spinner';
 import TabContainer from 'react-bootstrap/TabContainer';
 import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
-import { FiShare2 } from 'react-icons/fi';
 import { useMutation } from 'react-query';
 import ActionButton from '../common/ActionButton';
 
@@ -114,9 +113,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     ev.preventDefault();
     console.log(cycle)
     execLike(currentActions.like ? 'DELETE' : 'POST')
-    /*isCurrentUserLikedCycle
-      ? execLeaveLike()
-      : execLike()*/
   };
 
 
@@ -168,26 +164,14 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 <h1></h1>
 
                 <CycleSummary cycle={cycle} />
+
                 <section className={classNames('d-flex justify-content-between', styles.socialInfo)}>
-                  <div>
-                    <ActionButton 
-                      level={cycle}
-                      level_name="cycle"
-                      action="fav"
-                      currentActions={currentActions}
-                      show_counts
-                    />
-                    <ActionButton 
-                      level={cycle}
-                      level_name="cycle"
-                      action="like"
-                      currentActions={currentActions}
-                      show_counts
-                    />
-                    <span>
-                      <FiShare2 /> #
-                    </span>
-                  </div>
+                  <ActionButton
+                    level={cycle}
+                    level_name="cycle"
+                    currentActions={currentActions}
+                    show_counts
+                  />
                   <div>
                     <small className={styles.participantsCount}>
                       {t('participantsCount', { count: participantsCount })}

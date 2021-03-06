@@ -62,25 +62,12 @@ const WorkDetail: FunctionComponent<Props> = ({
               <div className={classNames(styles.imgWrapper, 'mb-3')}>
                 <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
               </div>
-              <section className={styles.socialInfo}>
-                <ActionButton 
-                  level={work}
-                  level_name="work"
-                  action="fav"
-                  currentActions={currentActions}
-                  show_counts
-                />
-                <ActionButton 
-                  level={work}
-                  level_name="work"
-                  action="like"
-                  currentActions={currentActions}
-                  show_counts
-                />
-                <span>
-                  <FiShare2 /> #
-                </span>
-              </section>
+              <ActionButton
+                level={work}
+                level_name="work"
+                currentActions={currentActions}
+                show_counts
+              />
             </Col>
             <Col md={{ span: 8 }}>
               <section className="mb-4">

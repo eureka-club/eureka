@@ -5,6 +5,7 @@ import { useMutation } from 'react-query';
 import { AiOutlineHeart, AiFillHeart, } from 'react-icons/ai';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 import { useRouter } from 'next/router';
+import { FiShare2 } from 'react-icons/fi';
 
 import styles from './ActionButton.module.css';
 
@@ -12,7 +13,6 @@ import styles from './ActionButton.module.css';
 interface Props {
   level: any;
   level_name: string;
-  action: string;
   currentActions: object;
   show_counts?: boolean;
 }
@@ -20,7 +20,6 @@ interface Props {
 const ActionButton: FunctionComponent<Props> = ({ 
   level,
   level_name,
-  action,
   currentActions,
   show_counts=false,
 }) => {
@@ -29,30 +28,20 @@ const ActionButton: FunctionComponent<Props> = ({
     { name: 'like' , fill: AiFillHeart, outlined: AiOutlineHeart},
     { name: 'fav', fill: BsBookmarkFill, outlined: BsBookmark },
   ]
-
-  const components = {
-      one: AiOutlineHeart,
-      two: AiFillHeart
-  };
-
-  const action_obj = actions.find(x=>x.name == action)
-  
-  const Icon = action_obj[(currentActions[action] ? 'fill' : 'outlined')];
-
   const { 
     mutate: execAction,
     isLoading: isActionLoading,
     isSuccess: isActionSuccess,
   } = useMutation(
-    async (method: string) => {
-      //await fetch(`/api/cycle/${cycle.id}/like`, { method: method });
-      await fetch(`/api/${level_name}/${level.id}/${action}/`, { method: method });
+    async (params: object) => {
+      await fetch(`/api/${level_name}/${level.id}/${params.action_name}/`, { method: params.method });
     },
   );
 
-  const handleClick = (ev: MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (ev: MouseEvent<HTMLButtonElement>, action_name: string) => {
     ev.preventDefault();
-    execAction(currentActions[action] ? 'DELETE' : 'POST')
+    const method = currentActions[action_name] ? 'DELETE' : 'POST'
+    execAction({method: method, action_name: action_name})
   };
 
   useEffect(() => {
@@ -62,16 +51,33 @@ const ActionButton: FunctionComponent<Props> = ({
 
 
   return (
-    <span>
-      <Button 
-        variant="link-secondary"
-        onClick={ handleClick }
-        className={styles.actions}
-       >
-        <Icon className={styles[`action-${action}`]} /> 
-      </Button>
-      {show_counts && <span>{level[`${action}s`].length}</span>}
-    </span>
+
+    <div className={styles['actions-container']}>
+      { actions.map((action: object)=>{
+        const Icon = action[(currentActions[action.name] ? 'fill' : 'outlined')];
+        return  (
+        <span className={ classNames(styles['actions-container'], styles[`action-${action.name}`])}>
+          <Button 
+            variant="link-secondary"
+            onClick={(e)=> handleClick(e, action.name) }
+            className={styles[`actions`]}
+           >
+            <Icon /> 
+          </Button>
+          {show_counts && 
+            <span>
+              {level[`${action.name}s`].length}
+            </span>
+          }
+        </span>)
+      }) }
+      {false && <span>
+        <FiShare2 className={styles['actions']} />
+      </span>}
+  </div>
+
+
+
   );
 };
 

@@ -11,7 +11,6 @@ import {
   countPosts,
   countWorks,
   find as findCycle,
-  findParticipant,
 } from '../../../../src/facades/cycle';
 import {
   search as searchPost,
@@ -23,7 +22,6 @@ import {
 interface Props {
   cycle: CycleDetail;
   post: PostDetail;
-  //isCurrentUserJoinedToCycle: boolean;
   participantsCount: number;
   postsCount: number;
   worksCount: number;
@@ -34,7 +32,6 @@ interface Props {
 const PostDetailInCyclePage: NextPage<Props> = ({
   cycle,
   post,
-  //isCurrentUserJoinedToCycle,
   participantsCount,
   postsCount,
   worksCount,
@@ -45,7 +42,6 @@ const PostDetailInCyclePage: NextPage<Props> = ({
     <PopupLayout title={`${post.title} · ${cycle.title}`}>
       <CycleDetailComponent
         cycle={cycle}
-        //isCurrentUserJoinedToCycle={isCurrentUserJoinedToCycle}
         participantsCount={participantsCount}
         post={post}
         postsCount={postsCount}
@@ -99,7 +95,6 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
   const participantsCount = await countParticipants(cycle);
   const postsCount = await countPosts(cycle);
   const worksCount = await countWorks(cycle);
-  let myParticipant, myLike, myFav = null;
   const currPost = postResults[0]
   const current_post = postResults[0]
 
@@ -115,16 +110,12 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
   if (session != null) {
     current_actions.like = !!(await findAction(session.user, current_post, 'liked'));
     current_actions.fav = !!(await findAction(session.user, current_post, 'fav'));
-    myParticipant = await findParticipant(session.user, cycle);
-    //myLike = await findLikePost(session.user, current_post);
-    //myFav = await findFavPost(session.user, current_post);
   }
 
   return {
     props: {
       cycle,
       post: current_post,
-      //isCurrentUserJoinedToCycle: myParticipant != null,
       participantsCount: participantsCount.count,
       postsCount: postsCount.count,
       worksCount: worksCount.count,

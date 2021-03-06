@@ -171,7 +171,7 @@ model Cycle {
   complementaryMaterials  CycleComplementaryMaterial[]
   participants            User[]  @relation("CycleToParticipant")
   likes                   User[]  @relation("CycleToLikes")
-  favs                   User[]  @relation("CycleToFavs")
+  favs                    User[]  @relation("CycleToFavs")
   posts                   Post[]
   works                   Work[]
 
