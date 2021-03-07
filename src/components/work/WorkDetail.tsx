@@ -119,7 +119,10 @@ const WorkDetail: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCo
                       <TabPane eventKey="all">
                         {(cyclesCount > 0 || postsCount > 0) && <CombinedMosaic work={work} />}
                       </TabPane>
-                      <TabPane eventKey="posts">{postsCount > 0 && <PostsMosaic work={work} />}</TabPane>
+                      <TabPane eventKey="posts">
+                        <p className={styles.explanatoryText}>{t('explanatoryTextPosts')}</p>
+                        {postsCount > 0 && <PostsMosaic work={work} />}
+                      </TabPane>
                       <TabPane eventKey="cycles">{cyclesCount > 0 && <CyclesMosaic work={work} />}</TabPane>
                     </TabContent>
                   </Col>

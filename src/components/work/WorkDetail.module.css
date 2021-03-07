@@ -31,3 +31,8 @@
   color: var(--text-color-extralight);
   text-decoration: none;
 }
+
+.explanatoryText {
+  color: var(--eureka-green);
+  margin-bottom: 3rem;
+}
