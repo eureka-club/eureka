@@ -16,9 +16,9 @@ import Spinner from 'react-bootstrap/Spinner';
 import TabContainer from 'react-bootstrap/TabContainer';
 import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
-import { AiFillHeart } from 'react-icons/ai';
-import { BsBookmarkFill } from 'react-icons/bs';
-import { FiShare2 } from 'react-icons/fi';
+// import { AiFillHeart } from 'react-icons/ai';
+// import { BsBookmarkFill } from 'react-icons/bs';
+// import { FiShare2 } from 'react-icons/fi';
 import { useMutation } from 'react-query';
 
 import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
@@ -121,6 +121,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 <h1>{cycle.title}</h1>
                 <CycleSummary cycle={cycle} />
                 <section className={classNames('d-flex justify-content-between', styles.socialInfo)}>
+                  {/*
                   <div>
                     <span>
                       <BsBookmarkFill /> #
@@ -132,6 +133,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                       <FiShare2 /> #
                     </span>
                   </div>
+                  */}
                   <div>
                     <small className={styles.participantsCount}>
                       {t('participantsCount', { count: participantsCount })}

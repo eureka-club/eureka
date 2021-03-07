@@ -10,9 +10,9 @@ import Row from 'react-bootstrap/Row';
 import TabContainer from 'react-bootstrap/TabContainer';
 import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
-import { AiFillHeart } from 'react-icons/ai';
-import { BsBookmarkFill, BsBoxArrowUpRight } from 'react-icons/bs';
-import { FiShare2 } from 'react-icons/fi';
+// import { AiFillHeart } from 'react-icons/ai';
+import { /* BsBookmarkFill, */ BsBoxArrowUpRight } from 'react-icons/bs';
+// import { FiShare2 } from 'react-icons/fi';
 
 import { WorkWithImages } from '../../types/work';
 import { PostDetail } from '../../types/post';
@@ -52,6 +52,7 @@ const WorkDetail: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCo
               <div className={classNames(styles.imgWrapper, 'mb-3')}>
                 <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
               </div>
+              {/*
               <section className={styles.socialInfo}>
                 <span>
                   <BsBookmarkFill /> #
@@ -63,6 +64,7 @@ const WorkDetail: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCo
                   <FiShare2 /> #
                 </span>
               </section>
+              */}
             </Col>
             <Col md={{ span: 8 }}>
               <section className="mb-4">
