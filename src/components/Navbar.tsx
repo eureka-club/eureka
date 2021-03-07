@@ -64,47 +64,58 @@ const Navbar: FunctionComponent = () => {
           <h1 className={styles.brandText}>{siteName}</h1>
         </BootstrapNavbar.Brand>
 
-        {session == null ? (
-          <Nav className={styles.nav}>
+        <Nav className={styles.nav}>
+          {session == null ? (
             <Button onClick={openSignInModal}>{t('login')}</Button>
-          </Nav>
-        ) : (
-          <Nav className="ml-auto">
-            <Dropdown className="mr-4">
-              <Dropdown.Toggle as={ChevronToggle} id="create">
-                {t('create')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu className={styles.dropdownMenu}>
-                <Link href="/cycle/create">
-                  <a className={classNames(styles.dropdownMenuItem, 'dropdown-item')}>{t('cycle')}</a>
-                </Link>
-                <Dropdown.Item className={styles.dropdownMenuItem} onClick={handleCreatePostClick}>
-                  {t('post')}
-                </Dropdown.Item>
-                {session?.user.roles.includes('admin') && (
-                  <Dropdown.Item className={styles.dropdownMenuItem} onClick={handleCreateWorkClick}>
-                    {t('work')}
+          ) : (
+            <>
+              <Dropdown className="mr-4">
+                <Dropdown.Toggle as={ChevronToggle} id="create">
+                  {t('create')}
+                </Dropdown.Toggle>
+                <Dropdown.Menu className={styles.dropdownMenu}>
+                  <Link href="/cycle/create">
+                    <a className={classNames(styles.dropdownMenuItem, 'dropdown-item')}>{t('cycle')}</a>
+                  </Link>
+                  <Dropdown.Item className={styles.dropdownMenuItem} onClick={handleCreatePostClick}>
+                    {t('post')}
                   </Dropdown.Item>
-                )}
-              </Dropdown.Menu>
-            </Dropdown>
-            <NavItem>
-              <Link href="/my-list">
-                <a className="nav-link mr-3">
-                  <BsBookmark /> {t('myListLabel')}
-                </a>
-              </Link>
-            </NavItem>
-            <NavDropdown alignRight title={<BiUser className={styles.profileDropdown} />} id="profileDropdown">
-              <NavDropdown.ItemText>{session.user.email}</NavDropdown.ItemText>
-              <NavDropdown.Item onClick={() => signOut()}>{t('logout')}</NavDropdown.Item>
-            </NavDropdown>
-          </Nav>
-        )}
+                  {session?.user.roles.includes('admin') && (
+                    <Dropdown.Item className={styles.dropdownMenuItem} onClick={handleCreateWorkClick}>
+                      {t('work')}
+                    </Dropdown.Item>
+                  )}
+                </Dropdown.Menu>
+              </Dropdown>
+              <NavItem className="mr-4">
+                <Link href="/my-list">
+                  <a className="nav-link">
+                    <BsBookmark /> {t('myListLabel')}
+                  </a>
+                </Link>
+              </NavItem>
+              <NavDropdown
+                alignRight
+                className="mr-3"
+                title={<BiUser className={styles.profileDropdown} />}
+                id="profileDropdown"
+              >
+                <NavDropdown.ItemText>{session.user.email}</NavDropdown.ItemText>
+                <NavDropdown.Item onClick={() => signOut()}>{t('logout')}</NavDropdown.Item>
+              </NavDropdown>
+            </>
+          )}
 
-        {router.locales?.length && (
-          <Nav className={classNames('ml-4', styles.langSwitch)}>
-            <Dropdown alignRight onSelect={handleLanguageSelect}>
+          <NavItem className={classNames(styles.infoIco, 'mr-4')}>
+            <Link href="/about">
+              <a className="nav-link">
+                <img src="/img/ico-info.png" alt="info icon" />
+              </a>
+            </Link>
+          </NavItem>
+
+          {router.locales?.length && (
+            <Dropdown alignRight className={styles.langSwitch} onSelect={handleLanguageSelect}>
               <Dropdown.Toggle as={ChevronToggle} id="langSwitch">
                 <img src={`/img/lang-flags/${router.locale}.png`} alt={`Language flag '${router.locale}'`} />
               </Dropdown.Toggle>
@@ -118,8 +129,8 @@ const Navbar: FunctionComponent = () => {
                 ))}
               </Dropdown.Menu>
             </Dropdown>
-          </Nav>
-        )}
+          )}
+        </Nav>
       </BootstrapNavbar>
     </Container>
   );
