@@ -20,16 +20,17 @@ Webapp is build on top of Next.js-10 and react-bootstrap-1.5. It is hosted as so
 
 - install all libraries with `yarn install` command
 - create local MSSQL database for local development via Docker:
+
   ```
   docker run \
-    -e ACCEPT_EULA=Y \
-    -e SA_PASSWORD='$3cret123' \
-    -e MSSQL_PID=Express \
-    -p 1433:1433 \
-    -v $HOME/.docker/my_volumes/mssql-eureka:/var/opt/mssql \
-    --name mssql-eureka \
-    --restart on-failure \
-    -d mcr.microsoft.com/mssql/server:2019-latest
+      -e ACCEPT_EULA=Y \
+      -e SA_PASSWORD='$3cret123' \
+      -e MSSQL_PID=Express \
+      -p 1433:1433 \
+      -v $HOME/.docker/my_volumes/mssql-eureka:/var/opt/mssql \
+      --name mssql-eureka \
+      --restart on-failure \
+      -d mcr.microsoft.com/mssql/server:2019-latest
   ```
 *You can connect to MSSQL database via [TablePlus](https://tableplus.com/download) or similar app.*
 
