@@ -10,7 +10,13 @@ import { CycleWithImages } from '../../types/cycle';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 
-const MosaicItem: FunctionComponent<CycleWithImages> = ({ id, title, localImages, startDate, endDate }) => {
+const MosaicItem: FunctionComponent<CycleWithImages> = ({
+  id,
+  title,
+  localImages,
+  startDate,
+  endDate
+}) => {
   const { t } = useTranslation('common');
 
   return (
@@ -28,12 +34,6 @@ const MosaicItem: FunctionComponent<CycleWithImages> = ({ id, title, localImages
             </span>
           </div>
           <span className={styles.type}>{t('cycle')}</span>
-          {/*
-          <div className={styles.actions}>
-            <BsBookmark className={styles.actionBookmark} />
-            <AiOutlineHeart className={styles.actionLike} />
-          </div>
-          */}
         </a>
       </Link>
     </article>

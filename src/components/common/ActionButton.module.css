@@ -1,0 +1,23 @@
+.actions-container {
+  display: flex;
+  align-items: center;
+}
+
+.actions {
+  color: var(--text-color-extralight);
+  transform: scale(1.5);
+  cursor: pointer;
+  filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.5));
+  transition: transform 0.15s;
+  margin-right: 0.25rem;
+}
+
+.actions:hover {
+  transform: scale(1.15);
+}
+.action-like path, .action-like span {
+  color: #e3506d;
+}
+.action-fav path, .action-fav span {
+  color: grey;
+}

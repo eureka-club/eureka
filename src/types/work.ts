@@ -3,12 +3,16 @@ import { Prisma } from '@prisma/client';
 export type WorkWithImages = Prisma.WorkGetPayload<{
   include: {
     localImages: true;
+    likes: true;
+    favs: true;
   };
 }>;
 
 export type WorkMosaicItem = Prisma.WorkGetPayload<{
   include: {
     localImages: true;
+    likes: true;
+    favs: true;
   };
 }>;
 

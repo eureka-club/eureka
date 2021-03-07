@@ -10,9 +10,7 @@ import Row from 'react-bootstrap/Row';
 import TabContainer from 'react-bootstrap/TabContainer';
 import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
-// import { AiFillHeart } from 'react-icons/ai';
-import { /* BsBookmarkFill, */ BsBoxArrowUpRight } from 'react-icons/bs';
-// import { FiShare2 } from 'react-icons/fi';
+import { BsBoxArrowUpRight } from 'react-icons/bs';
 
 import { WorkWithImages } from '../../types/work';
 import { PostDetail } from '../../types/post';
@@ -31,9 +29,18 @@ interface Props {
   post?: PostDetail;
   cyclesCount: number;
   postsCount: number;
+  currentActions: object;
+  currentActionsPost: object;
 }
 
-const WorkDetail: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCount }) => {
+const WorkDetail: FunctionComponent<Props> = ({ 
+  work,
+  post,
+  cyclesCount,
+  postsCount,
+  currentActions,
+  currentActionsPost,
+}) => {
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const { t } = useTranslation('workDetail');
 
@@ -52,19 +59,12 @@ const WorkDetail: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCo
               <div className={classNames(styles.imgWrapper, 'mb-3')}>
                 <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
               </div>
-              {/*
-              <section className={styles.socialInfo}>
-                <span>
-                  <BsBookmarkFill /> #
-                </span>
-                <span>
-                  <AiFillHeart /> #
-                </span>
-                <span>
-                  <FiShare2 /> #
-                </span>
-              </section>
-              */}
+              <ActionButton
+                level={work}
+                level_name="work"
+                currentActions={currentActions}
+                show_counts
+              />
             </Col>
             <Col md={{ span: 8 }}>
               <section className="mb-4">
@@ -81,7 +81,12 @@ const WorkDetail: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCo
             </Col>
           </>
         ) : (
-          <PostDetailComponent post={post} work={work} />
+          <PostDetailComponent 
+            post={post}
+            work={work}
+            currentActionsPost={currentActionsPost}
+            currentActions={currentActions}
+          />
         )}
       </Row>
 

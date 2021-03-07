@@ -6,6 +6,8 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { FunctionComponent } from 'react';
 import Col from 'react-bootstrap/Col';
+import ActionButton from '../common/ActionButton';
+import { FiShare2 } from 'react-icons/fi';
 
 import { DATE_FORMAT_SHORT, WEBAPP_URL } from '../../constants';
 import { PostDetail as PostDetailType } from '../../types/post';
@@ -17,9 +19,16 @@ import styles from './PostDetail.module.css';
 interface Props {
   post: PostDetailType;
   work?: Work;
+  currentActions: object;
+  currentActionsPost: object;
 }
 
-const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
+const PostDetail: FunctionComponent<Props> = ({
+  post,
+  work,
+  currentActions,
+  currentActionsPost,
+}) => {
   const { asPath } = useRouter();
   const { t } = useTranslation('postDetail');
   const hyvorId = `${WEBAPP_URL}${asPath}`;
@@ -28,8 +37,17 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
     <>
       <Col md={{ span: 4 }}>
         <div className={classNames(styles.imgWrapper, 'mb-3')}>
-          <LocalImageComponent filePath={post.localImages[0].storedFile} alt={post.title} />
+          <LocalImageComponent
+            filePath={post.localImages[0].storedFile}
+            alt={post.title}
+          />
         </div>
+        <ActionButton
+          level={post}
+          level_name="post"
+          currentActions={currentActionsPost}
+          show_counts
+        />
         <table className={styles.parentContent}>
           <tbody>
             {work != null && (
