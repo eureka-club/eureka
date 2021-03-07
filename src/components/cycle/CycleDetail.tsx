@@ -1,5 +1,6 @@
 import classNames from 'classnames';
-import { CommentCount, DiscussionEmbed } from 'disqus-react';
+import dayjs from 'dayjs';
+import HyvorTalk from 'hyvor-talk-react';
 import { useAtom } from 'jotai';
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
@@ -17,11 +18,10 @@ import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
 import { useMutation } from 'react-query';
 import ActionButton from '../common/ActionButton';
-
 import {
   ASSETS_BASE_URL, 
-  DATE_FORMAT_MONTH_YEAR,
-  DISQUS_SHORTNAME,
+  DATE_FORMAT_SHORT_MONTH_YEAR,
+  HYVOR_WEBSITE_ID,
   WEBAPP_URL
 } from '../../constants';
 import { CycleDetail } from '../../types/cycle';
@@ -29,10 +29,10 @@ import { PostDetail } from '../../types/post';
 import LocalImageComponent from '../LocalImage';
 import PostDetailComponent from '../post/PostDetail';
 import CycleSummary from './CycleSummary';
+import HyvorComments from '../common/HyvorComments';
 import PostsMosaic from './PostsMosaic';
 import WorksMosaic from './WorksMosaic';
 import UnclampText from '../UnclampText';
-import { advancedDayjs } from '../../lib/utils';
 import detailPagesAtom from '../../atoms/detailPages';
 import styles from './CycleDetail.module.css';
 
@@ -59,16 +59,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const router = useRouter();
   const [session] = useSession();
   const { t } = useTranslation('cycleDetail');
-  const disqusConfig = {
-    identifier: router.asPath,
-    title: cycle.title,
-    url: `${WEBAPP_URL}${router.asPath}`,
-  };
-  const { 
-    mutate: execJoinCycle,
-    isLoading: isJoinCycleLoading,
-    isSuccess: isJoinCycleSuccess 
-  } = useMutation(
+  const hyvorId = `${WEBAPP_URL}cycle/${cycle.id}`;
+
+  const { mutate: execJoinCycle, isLoading: isJoinCycleLoading, isSuccess: isJoinCycleSuccess } = useMutation(
     async () => {
       await fetch(`/api/cycle/${cycle.id}/join`, { method: 'POST' });
     },
@@ -118,14 +111,14 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   useEffect(() => {
     if (isJoinCycleSuccess === true) {
-      router.replace(router.asPath);
+      router.replace(router.asPath); // refresh page
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isJoinCycleSuccess]);
 
   useEffect(() => {
     if (isLeaveCycleSuccess === true) {
-      router.replace(router.asPath);
+      router.replace(router.asPath); // refresh page
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLeaveCycleSuccess]);
@@ -229,7 +222,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                       </NavItem>
                       <NavItem>
                         <NavLink eventKey="forum">
-                          {t('tabHeaderForum')} (<CommentCount config={disqusConfig} shortname={DISQUS_SHORTNAME!} />)
+                          {t('tabHeaderForum')} (
+                          <HyvorTalk.CommentCount websiteId={Number(HYVOR_WEBSITE_ID!)} id={hyvorId} />)
                         </NavLink>
                       </NavItem>
                     </Nav>
@@ -261,7 +255,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                                     >
                                       <h5>{cm.title}</h5>
                                       <p>
-                                        {cm.author} ({advancedDayjs(cm.publicationDate).format(DATE_FORMAT_MONTH_YEAR)})
+                                        {cm.author} ({dayjs(cm.publicationDate).format(DATE_FORMAT_SHORT_MONTH_YEAR)})
                                       </p>
                                     </a>
                                   </li>
@@ -273,11 +267,14 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                         )}
                       </TabPane>
                       <TabPane eventKey="posts">
-                        <h2 className="mb-5">{t('postsCountHeader', { count: postsCount })}</h2>
+                        <h2 className="mb-3">{t('postsCountHeader', { count: postsCount })}</h2>
+                        <p className={styles.explanatoryText}>{t('explanatoryTextPosts')}</p>
                         {postsCount > 0 && <PostsMosaic cycle={cycle} />}
                       </TabPane>
                       <TabPane eventKey="forum">
-                        <DiscussionEmbed config={disqusConfig} shortname={DISQUS_SHORTNAME!} />
+                        <h3>{t('tabHeaderForum')}</h3>
+                        <p className={styles.explanatoryText}>{t('explanatoryTextComments')}</p>
+                        <HyvorComments id={hyvorId} />
                       </TabPane>
                     </TabContent>
                   </Col>

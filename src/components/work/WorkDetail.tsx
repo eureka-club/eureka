@@ -10,10 +10,7 @@ import Row from 'react-bootstrap/Row';
 import TabContainer from 'react-bootstrap/TabContainer';
 import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
-import { AiFillHeart } from 'react-icons/ai';
-import { BsBookmarkFill, BsBoxArrowUpRight } from 'react-icons/bs';
-import { FiShare2 } from 'react-icons/fi';
-import ActionButton from '../common/ActionButton';
+import { BsBoxArrowUpRight } from 'react-icons/bs';
 
 import { WorkWithImages } from '../../types/work';
 import { PostDetail } from '../../types/post';
@@ -129,7 +126,10 @@ const WorkDetail: FunctionComponent<Props> = ({
                       <TabPane eventKey="all">
                         {(cyclesCount > 0 || postsCount > 0) && <CombinedMosaic work={work} />}
                       </TabPane>
-                      <TabPane eventKey="posts">{postsCount > 0 && <PostsMosaic work={work} />}</TabPane>
+                      <TabPane eventKey="posts">
+                        <p className={styles.explanatoryText}>{t('explanatoryTextPosts')}</p>
+                        {postsCount > 0 && <PostsMosaic work={work} />}
+                      </TabPane>
                       <TabPane eventKey="cycles">{cyclesCount > 0 && <CyclesMosaic work={work} />}</TabPane>
                     </TabContent>
                   </Col>

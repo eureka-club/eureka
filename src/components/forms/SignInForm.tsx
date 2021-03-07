@@ -15,7 +15,11 @@ import Row from 'react-bootstrap/Row';
 
 import styles from './SignInForm.module.css';
 
-const SignInForm: FunctionComponent = () => {
+interface Props {
+  noModal?: boolean;
+}
+
+const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
   const { t } = useTranslation('signInForm');
 
   const handleSignInGoogle = (ev: MouseEvent<HTMLButtonElement>) => {
@@ -35,7 +39,7 @@ const SignInForm: FunctionComponent = () => {
 
   return (
     <>
-      <ModalHeader className={styles.modalHeader} closeButton>
+      <ModalHeader className={styles.modalHeader} closeButton={!noModal}>
         <Container>
           <ModalTitle>{t('login')}</ModalTitle>
           <p>{t('loginGreeting')}</p>

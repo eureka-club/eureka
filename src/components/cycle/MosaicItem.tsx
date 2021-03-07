@@ -2,8 +2,8 @@ import dayjs from 'dayjs';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
-import { AiOutlineHeart } from 'react-icons/ai';
-import { BsBookmark } from 'react-icons/bs';
+// import { AiOutlineHeart } from 'react-icons/ai';
+// import { BsBookmark } from 'react-icons/bs';
 
 import { DATE_FORMAT_SHORT } from '../../constants';
 import { CycleWithImages } from '../../types/cycle';

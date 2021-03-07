@@ -18,7 +18,7 @@ export const config = {
 export default getApiHandler().post<NextApiRequest, NextApiResponse>(
   async (req, res): Promise<void> => {
     const session = (await getSession({ req })) as Session;
-    if (session == null) {
+    if (session == null || !session.user.roles.includes('admin')) {
       res.status(401).json({ status: 'Unauthorized' });
       return;
     }
