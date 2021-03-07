@@ -13,5 +13,7 @@
   "postsCountHeader_0": "No post in the cycle",
   "postsCountHeader": "1 post in the cycle",
   "postsCountHeader_other": "{{count}} posts in the cycle",
-  "complementaryMaterialsTitle": "Complementary content"
+  "complementaryMaterialsTitle": "Complementary content",
+  "explanatoryTextComments": "Use this forum for short comments and questions. To write more and contribute to the cycle, please create a post instead! ",
+  "explanatoryTextPosts": "A post is a personal reflection about a work or a cycle, composed of a photo and a text. It is possibly the materialization of an Eureka moment! We encourage you to participate in the cycle by creating your own post."
 }

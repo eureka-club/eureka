@@ -28,6 +28,11 @@
   font-size: 0.8rem;
 }
 
+.explanatoryText {
+  color: var(--eureka-green);
+  margin-bottom: 3rem;
+}
+
 .complementaryMaterials {
   list-style: none;
   padding: 0 0 0 1rem;

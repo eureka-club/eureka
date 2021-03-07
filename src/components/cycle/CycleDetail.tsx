@@ -230,10 +230,12 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                         )}
                       </TabPane>
                       <TabPane eventKey="posts">
-                        <h2 className="mb-5">{t('postsCountHeader', { count: postsCount })}</h2>
+                        <h2 className="mb-3">{t('postsCountHeader', { count: postsCount })}</h2>
+                        <p className={styles.explanatoryText}>{t('explanatoryTextPosts')}</p>
                         {postsCount > 0 && <PostsMosaic cycle={cycle} />}
                       </TabPane>
                       <TabPane eventKey="forum">
+                        <p className={styles.explanatoryText}>{t('explanatoryTextComments')}</p>
                         <DiscussionEmbed config={disqusConfig} shortname={DISQUS_SHORTNAME!} />
                       </TabPane>
                     </TabContent>
