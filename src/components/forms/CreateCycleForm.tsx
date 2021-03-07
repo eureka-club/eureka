@@ -23,7 +23,7 @@ import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BiTrash } from 'react-icons/bi';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
-import { DATE_FORMAT_MONTH_YEAR, DATE_FORMAT_PROPS } from '../../constants';
+import { DATE_FORMAT_PROPS, DATE_FORMAT_SHORT_MONTH_YEAR } from '../../constants';
 import { ComplementaryMaterial, CreateCycleClientPayload } from '../../types/cycle';
 import { WorkWithImages } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
@@ -31,7 +31,6 @@ import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
 import WorkTypeaheadSearchItem from '../work/TypeaheadSearchItem';
 import styles from './CreateCycleForm.module.css';
-import { advancedDayjs } from '../../lib/utils';
 
 interface Props {
   className?: string;
@@ -346,12 +345,12 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                   disabled={complementaryMaterials.length >= 3}
                   onClick={handleAddComplementaryContentClick}
                 >
-                  <h4>*{t('addComplementaryContentTitle')}</h4>
+                  <h4>{t('addComplementaryContentTitle')}</h4>
                   {complementaryMaterials.length ? (
                     <ul className={styles.complementaryMaterials}>
                       {complementaryMaterials.map((cm) => (
                         <li key={`${cm.author}-${cm.title}-${cm.publicationDate}`}>
-                          {cm.author} · {cm.title} ({advancedDayjs(cm.publicationDate).format(DATE_FORMAT_MONTH_YEAR)})
+                          {cm.author} · {cm.title} ({dayjs(cm.publicationDate).format(DATE_FORMAT_SHORT_MONTH_YEAR)})
                           <span
                             className={styles.removeComplementaryMaterial}
                             role="button"

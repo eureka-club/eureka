@@ -1,15 +1,15 @@
 import { Work } from '@prisma/client';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
-import { DiscussionEmbed } from 'disqus-react';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { FunctionComponent } from 'react';
 import Col from 'react-bootstrap/Col';
 
-import { DATE_FORMAT_SHORT, DISQUS_SHORTNAME, WEBAPP_URL } from '../../constants';
+import { DATE_FORMAT_SHORT, WEBAPP_URL } from '../../constants';
 import { PostDetail as PostDetailType } from '../../types/post';
+import HyvorComments from '../common/HyvorComments';
 import LocalImageComponent from '../LocalImage';
 import UnclampText from '../UnclampText';
 import styles from './PostDetail.module.css';
@@ -22,11 +22,7 @@ interface Props {
 const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
   const { asPath } = useRouter();
   const { t } = useTranslation('postDetail');
-  const disqusConfig = {
-    identifier: asPath,
-    title: post.title,
-    url: `${WEBAPP_URL}${asPath}`,
-  };
+  const hyvorId = `${WEBAPP_URL}${asPath}`;
 
   return (
     <>
@@ -78,7 +74,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
           <h1>{post.title}</h1>
           {post.contentText != null && <UnclampText text={post.contentText} clampHeight="20rem" />}
         </div>
-        <DiscussionEmbed config={disqusConfig} shortname={DISQUS_SHORTNAME!} />
+        <HyvorComments id={hyvorId} />
       </Col>
     </>
   );
