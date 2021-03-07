@@ -6,14 +6,6 @@
   - You are about to alter the column `content_text` on the `works` table. The data in that column could be lost. The data in that column will be cast from `NVarChar(4000)` to `NVarChar(1000)`.
 
 */
--- AlterTable
-ALTER TABLE [dbo].[cycles] ALTER COLUMN [content_text] NVARCHAR(1000) NULL;
-
--- AlterTable
-ALTER TABLE [dbo].[posts] ALTER COLUMN [content_text] NVARCHAR(1000) NOT NULL;
-
--- AlterTable
-ALTER TABLE [dbo].[works] ALTER COLUMN [content_text] NVARCHAR(1000) NULL;
 
 -- CreateTable
 CREATE TABLE [dbo].[_CycleToLikes] (
