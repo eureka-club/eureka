@@ -16,6 +16,12 @@ import Spinner from 'react-bootstrap/Spinner';
 import TabContainer from 'react-bootstrap/TabContainer';
 import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
+<<<<<<< HEAD
+=======
+import { AiFillHeart } from 'react-icons/ai';
+import { BsBookmarkFill } from 'react-icons/bs';
+import { FiShare2 } from 'react-icons/fi';
+>>>>>>> parent of c94c816... Hide social icons
 import { useMutation } from 'react-query';
 import ActionButton from '../common/ActionButton';
 import {
@@ -159,12 +165,26 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 <CycleSummary cycle={cycle} />
 
                 <section className={classNames('d-flex justify-content-between', styles.socialInfo)}>
+<<<<<<< HEAD
                   <ActionButton
                     level={cycle}
                     level_name="cycle"
                     currentActions={currentActions}
                     show_counts
                   />
+=======
+                  <div>
+                    <span>
+                      <BsBookmarkFill /> #
+                    </span>
+                    <span>
+                      <AiFillHeart /> #
+                    </span>
+                    <span>
+                      <FiShare2 /> #
+                    </span>
+                  </div>
+>>>>>>> parent of c94c816... Hide social icons
                   <div>
                     <small className={styles.participantsCount}>
                       {t('participantsCount', { count: participantsCount })}
