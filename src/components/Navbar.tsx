@@ -74,9 +74,11 @@ const Navbar: FunctionComponent = () => {
                   {t('create')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu className={styles.dropdownMenu}>
-                  <Link href="/cycle/create">
-                    <a className={classNames(styles.dropdownMenuItem, 'dropdown-item')}>{t('cycle')}</a>
-                  </Link>
+                  {session?.user.roles.includes('admin') && (
+                    <Link href="/cycle/create">
+                      <a className={classNames(styles.dropdownMenuItem, 'dropdown-item')}>{t('cycle')}</a>
+                    </Link>
+                  )}
                   <Dropdown.Item className={styles.dropdownMenuItem} onClick={handleCreatePostClick}>
                     {t('post')}
                   </Dropdown.Item>

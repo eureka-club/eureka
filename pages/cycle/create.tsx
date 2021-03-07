@@ -18,7 +18,7 @@ const CreateCyclePage: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = (await getSession(ctx)) as Session;
-  if (session == null) {
+  if (session == null || !session.user.roles.includes('admin')) {
     return { notFound: true };
   }
 
