@@ -2,8 +2,8 @@ import dayjs from 'dayjs';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
-// import { AiOutlineHeart } from 'react-icons/ai';
-// import { BsBookmark } from 'react-icons/bs';
+import { AiOutlineHeart } from 'react-icons/ai';
+import { BsBookmark } from 'react-icons/bs';
 
 import { DATE_FORMAT_SHORT } from '../../constants';
 import { CycleWithImages } from '../../types/cycle';
@@ -34,6 +34,13 @@ const MosaicItem: FunctionComponent<CycleWithImages> = ({
             </span>
           </div>
           <span className={styles.type}>{t('cycle')}</span>
+<<<<<<< HEAD
+=======
+          <div className={styles.actions}>
+            <BsBookmark className={styles.actionBookmark} />
+            <AiOutlineHeart className={styles.actionLike} />
+          </div>
+>>>>>>> parent of c94c816... Hide social icons
         </a>
       </Link>
     </article>

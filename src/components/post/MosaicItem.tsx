@@ -3,8 +3,8 @@ import classNames from 'classnames';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
-// import { AiOutlineHeart } from 'react-icons/ai';
-// import { BsBookmark } from 'react-icons/bs';
+import { AiOutlineHeart } from 'react-icons/ai';
+import { BsBookmark } from 'react-icons/bs';
 
 import { PostMosaicItem } from '../../types/post';
 import LocalImageComponent from '../LocalImage';
@@ -66,6 +66,13 @@ const MosaicItem: FunctionComponent<Props> = ({ post, postParent }) => {
         )}
 
         <span className={styles.type}>{t('post')}</span>
+<<<<<<< HEAD
+=======
+        <div className={styles.actions}>
+          <BsBookmark className={styles.actionBookmark} />
+          <AiOutlineHeart className={styles.actionLike} />
+        </div>
+>>>>>>> parent of c94c816... Hide social icons
       </div>
       <h3 className={styles.title}>
         {postLinkHref != null ? (
