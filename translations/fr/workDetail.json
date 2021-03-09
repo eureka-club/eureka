@@ -2,5 +2,6 @@
   "workLinkLabel": "Lien vers l'oeuvre",
   "tabHeaderAll": "Tout",
   "tabHeaderCycles": "Cycles incluant cette oeuvre",
-  "tabHeaderPosts": "Publications à propos de cette oeuvre"
+  "tabHeaderPosts": "Publications à propos de cette oeuvre",
+  "explanatoryTextPosts": "Une publication est une réflexion personnelle sur une œuvre ou un cycle, composée d'une photo et d'un texte. Ça peut être la matérialisation d'un moment Eureka! Nous vous encourageons à créer votre propre publication à propos de cette oeuvre."
 }
