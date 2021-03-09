@@ -18,7 +18,7 @@ const HyvorComments: FunctionComponent<Props> = ({ id }) => {
     const userData = Buffer.from(JSON.stringify({})).toString('base64');
     const hash = crypto.HmacSHA1(userData, HYVOR_SSO_KEY!).toString();
 
-    hyvorSso = { hash, userData, loginURL: `${WEBAPP_URL}login` };
+    hyvorSso = { hash, userData, loginURL: `${WEBAPP_URL}/login` };
   } else {
     const { user } = session;
     const userDataObj = {
@@ -29,7 +29,7 @@ const HyvorComments: FunctionComponent<Props> = ({ id }) => {
     const userData = Buffer.from(JSON.stringify(userDataObj)).toString('base64');
     const hash = crypto.HmacSHA1(userData, HYVOR_SSO_KEY!).toString();
 
-    hyvorSso = { hash, userData, loginURL: `${WEBAPP_URL}login` };
+    hyvorSso = { hash, userData, loginURL: `${WEBAPP_URL}/login` };
   }
 
   return <HyvorTalk.Embed websiteId={Number(HYVOR_WEBSITE_ID!)} id={id} sso={hyvorSso} />;
