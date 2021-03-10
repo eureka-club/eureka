@@ -11,8 +11,12 @@ interface Props {
 }
 
 const HyvorComments: FunctionComponent<Props> = ({ id }) => {
-  const [session] = useSession() as [Session | null | undefined, boolean];
+  const [session, isSessionLoading] = useSession() as [Session | null | undefined, boolean];
   let hyvorSso = {};
+
+  if (isSessionLoading) {
+    return null;
+  }
 
   if (session == null) {
     const userData = Buffer.from(JSON.stringify({})).toString('base64');
