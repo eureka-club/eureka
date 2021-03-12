@@ -10,14 +10,9 @@ import Row from 'react-bootstrap/Row';
 import TabContainer from 'react-bootstrap/TabContainer';
 import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
-<<<<<<< HEAD
 import { BsBoxArrowUpRight } from 'react-icons/bs';
-=======
-import { AiFillHeart } from 'react-icons/ai';
-import { BsBookmarkFill, BsBoxArrowUpRight } from 'react-icons/bs';
-import { FiShare2 } from 'react-icons/fi';
->>>>>>> parent of c94c816... Hide social icons
 
+import ActionButton from '../common/ActionButton';
 import { WorkWithImages } from '../../types/work';
 import { PostDetail } from '../../types/post';
 import LocalImageComponent from '../LocalImage';
@@ -65,26 +60,12 @@ const WorkDetail: FunctionComponent<Props> = ({
               <div className={classNames(styles.imgWrapper, 'mb-3')}>
                 <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
               </div>
-<<<<<<< HEAD
               <ActionButton
                 level={work}
                 level_name="work"
                 currentActions={currentActions}
                 show_counts
               />
-=======
-              <section className={styles.socialInfo}>
-                <span>
-                  <BsBookmarkFill /> #
-                </span>
-                <span>
-                  <AiFillHeart /> #
-                </span>
-                <span>
-                  <FiShare2 /> #
-                </span>
-              </section>
->>>>>>> parent of c94c816... Hide social icons
             </Col>
             <Col md={{ span: 8 }}>
               <section className="mb-4">
@@ -105,7 +86,6 @@ const WorkDetail: FunctionComponent<Props> = ({
             post={post}
             work={work}
             currentActionsPost={currentActionsPost}
-            currentActions={currentActions}
           />
         )}
       </Row>

@@ -34,13 +34,6 @@ const MosaicItem: FunctionComponent<CycleWithImages> = ({
             </span>
           </div>
           <span className={styles.type}>{t('cycle')}</span>
-<<<<<<< HEAD
-=======
-          <div className={styles.actions}>
-            <BsBookmark className={styles.actionBookmark} />
-            <AiOutlineHeart className={styles.actionLike} />
-          </div>
->>>>>>> parent of c94c816... Hide social icons
         </a>
       </Link>
     </article>

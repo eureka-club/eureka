@@ -19,19 +19,17 @@ import styles from './PostDetail.module.css';
 interface Props {
   post: PostDetailType;
   work?: Work;
-  currentActions: object;
-  currentActionsPost: object;
+  currentActionsPost: { [key: string]: any };
 }
 
 const PostDetail: FunctionComponent<Props> = ({
   post,
   work,
-  currentActions,
   currentActionsPost,
 }) => {
   const { asPath } = useRouter();
   const { t } = useTranslation('postDetail');
-  const hyvorId = `${WEBAPP_URL}${asPath}`;
+  const hyvorId = `post-${post.id}`;
 
   return (
     <>

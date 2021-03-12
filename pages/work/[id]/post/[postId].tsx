@@ -1,5 +1,6 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/client';
+import { Session } from '../../../../src/types';
 
 import { PostDetail } from '../../../../src/types/post';
 import { WorkWithImages } from '../../../../src/types/work';
@@ -88,8 +89,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
 
   const cyclesCount = await countCycles(work);
   const postsCount = await countPosts(work);
-  let current_actions = {}
-  let current_actions_post = {}
+  var current_actions: { [key: string]: any } = {};
+  var current_actions_post: { [key: string]: any } = {};
   let user_actions = ['like', 'fav']
   user_actions.forEach(action=>{
     current_actions[action] = null

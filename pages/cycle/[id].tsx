@@ -36,6 +36,7 @@ const CycleDetailPage: NextPage<Props> = ({
         postsCount={postsCount}
         worksCount={worksCount}
         currentActions={currentActions}
+        currentActionsPost={currentActions}
       />
     </SimpleLayout>
   );
@@ -59,9 +60,9 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
   const participantsCount = await countParticipants(cycle);
   const postsCount = await countPosts(cycle);
   const worksCount = await countWorks(cycle);
-  let current_actions = {}
+  var current_actions: { [key: string]: any } = {};
   let user_actions = ['like', 'fav', 'joined']
-  user_actions.forEach(action=>{
+  user_actions.forEach((action: string)=>{
     current_actions[action] = null
   })
 

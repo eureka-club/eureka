@@ -16,12 +16,6 @@ import Spinner from 'react-bootstrap/Spinner';
 import TabContainer from 'react-bootstrap/TabContainer';
 import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
-<<<<<<< HEAD
-=======
-import { AiFillHeart } from 'react-icons/ai';
-import { BsBookmarkFill } from 'react-icons/bs';
-import { FiShare2 } from 'react-icons/fi';
->>>>>>> parent of c94c816... Hide social icons
 import { useMutation } from 'react-query';
 import ActionButton from '../common/ActionButton';
 import {
@@ -32,6 +26,7 @@ import {
 } from '../../constants';
 import { CycleDetail } from '../../types/cycle';
 import { PostDetail } from '../../types/post';
+import { Session } from '../../types';
 import LocalImageComponent from '../LocalImage';
 import PostDetailComponent from '../post/PostDetail';
 import CycleSummary from './CycleSummary';
@@ -48,8 +43,8 @@ interface Props {
   participantsCount: number;
   postsCount: number;
   worksCount: number;
-  currentActions: object;
-  currentActionsPost: object;
+  currentActions: { [key: string]: any };
+  currentActionsPost: { [key: string]: any };
 }
 
 const CycleDetailComponent: FunctionComponent<Props> = ({
@@ -63,9 +58,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 }) => {
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const router = useRouter();
-  const [session] = useSession();
+  const [session] = useSession() as [Session | null | undefined, boolean];
   const { t } = useTranslation('cycleDetail');
-  const hyvorId = `${WEBAPP_URL}cycle/${cycle.id}`;
+  const hyvorId = `cycle-${cycle.id}`;
 
   const { mutate: execJoinCycle, isLoading: isJoinCycleLoading, isSuccess: isJoinCycleSuccess } = useMutation(
     async () => {
@@ -165,26 +160,12 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 <CycleSummary cycle={cycle} />
 
                 <section className={classNames('d-flex justify-content-between', styles.socialInfo)}>
-<<<<<<< HEAD
                   <ActionButton
                     level={cycle}
                     level_name="cycle"
                     currentActions={currentActions}
                     show_counts
                   />
-=======
-                  <div>
-                    <span>
-                      <BsBookmarkFill /> #
-                    </span>
-                    <span>
-                      <AiFillHeart /> #
-                    </span>
-                    <span>
-                      <FiShare2 /> #
-                    </span>
-                  </div>
->>>>>>> parent of c94c816... Hide social icons
                   <div>
                     <small className={styles.participantsCount}>
                       {t('participantsCount', { count: participantsCount })}
@@ -294,7 +275,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                       <TabPane eventKey="forum">
                         <h3>{t('tabHeaderForum')}</h3>
                         <p className={styles.explanatoryText}>{t('explanatoryTextComments')}</p>
-                        <HyvorComments id={hyvorId} />
+                        { session &&
+                          <HyvorComments id={hyvorId} />
+                        }
                       </TabPane>
                     </TabContent>
                   </Col>

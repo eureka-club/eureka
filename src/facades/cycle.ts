@@ -30,7 +30,7 @@ export const findAll = async (): Promise<
 };
 
 export const findAction = async (
-  user: User, cycle: Cycle, action: string): Promise<User | null> => {
+  user: User, cycle: Cycle, action: string): Promise<number> => {
   return prisma.user.count({
     where: {
       id: user.id,

@@ -1,5 +1,6 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/client';
+import { Session } from '../../src/types';
 
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import WorkDetail from '../../src/components/work/WorkDetail';
@@ -29,6 +30,7 @@ const WorkDetailPage: NextPage<Props> = ({
         cyclesCount={cyclesCount}
         postsCount={postsCount} 
         currentActions={currentActions}
+        currentActionsPost={currentActions}
       />
     </SimpleLayout>
   );
@@ -51,7 +53,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
 
   const cyclesCount = await countCycles(work);
   const postsCount = await countPosts(work);
-  let current_actions = {}
+ let current_actions: { [key: string]: any } = {}
   let user_actions = ['like', 'fav']
   user_actions.forEach(action=>{
     current_actions[action] = null

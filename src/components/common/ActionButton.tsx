@@ -1,11 +1,14 @@
 import classNames from 'classnames';
-import { FunctionComponent, useEffect } from 'react';
-import Button from 'react-bootstrap/Button';
+import { FunctionComponent, useEffect, MouseEvent } from 'react';
+import { Button, Dropdown } from 'react-bootstrap';
 import { useMutation } from 'react-query';
 import { AiOutlineHeart, AiFillHeart, } from 'react-icons/ai';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 import { useRouter } from 'next/router';
 import { FiShare2 } from 'react-icons/fi';
+import ChevronToggle from '../ui/dropdown/ChevronToggle';
+import { WEBAPP_URL } from '../../constants';
+import { TwitterShareButton, TwitterIcon } from "react-share";
 
 import styles from './ActionButton.module.css';
 
@@ -13,7 +16,7 @@ import styles from './ActionButton.module.css';
 interface Props {
   level: any;
   level_name: string;
-  currentActions: object;
+  currentActions: { [key: string]: any };
   show_counts?: boolean;
 }
 
@@ -33,12 +36,12 @@ const ActionButton: FunctionComponent<Props> = ({
     isLoading: isActionLoading,
     isSuccess: isActionSuccess,
   } = useMutation(
-    async (params: object) => {
+    async (params: { [key: string]: any }) => {
       await fetch(`/api/${level_name}/${level.id}/${params.action_name}/`, { method: params.method });
     },
   );
 
-  const handleClick = (ev: MouseEvent<HTMLButtonElement>, action_name: string) => {
+  const handleClickAction = (ev: MouseEvent<HTMLButtonElement>, action_name: string) => {
     ev.preventDefault();
     const method = currentActions[action_name] ? 'DELETE' : 'POST'
     execAction({method: method, action_name: action_name})
@@ -53,13 +56,13 @@ const ActionButton: FunctionComponent<Props> = ({
   return (
 
     <div className={styles['actions-container']}>
-      { actions.map((action: object)=>{
+      { actions.map((action: { [key: string]: any })=>{
         const Icon = action[(currentActions[action.name] ? 'fill' : 'outlined')];
         return  (
         <span className={ classNames(styles['actions-container'], styles[`action-${action.name}`])}>
           <Button 
             variant="link-secondary"
-            onClick={(e)=> handleClick(e, action.name) }
+            onClick={(ev: MouseEvent<HTMLButtonElement>)=> handleClickAction(ev, action.name) }
             className={styles[`actions`]}
            >
             <Icon /> 
@@ -71,12 +74,22 @@ const ActionButton: FunctionComponent<Props> = ({
           }
         </span>)
       }) }
-      {false && <span>
-        <FiShare2 className={styles['actions']} />
-      </span>}
+      { show_counts &&  (
+        <Dropdown alignRight>
+          <Dropdown.Toggle as={ChevronToggle} id="langSwitch">
+            <FiShare2 className={styles[`actions`]}/> 
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item>
+              <TwitterShareButton url="https://yeeko.org" title="hola mundo">
+                <TwitterIcon size={32} round={true}/>
+              </TwitterShareButton>
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>        
+      )}
+
   </div>
-
-
 
   );
 };

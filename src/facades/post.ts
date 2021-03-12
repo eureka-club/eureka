@@ -24,7 +24,7 @@ export const findAll = async (): Promise<PostWithImages[]> => {
 };
 
 export const findAction = async (
-  user: User, post: Post, action: string): Promise<User | null> => {
+  user: User, post: Post, action: string): Promise<number> => {
   return prisma.user.count({
     where: {
       id: user.id,

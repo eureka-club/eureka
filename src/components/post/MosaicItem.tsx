@@ -66,13 +66,6 @@ const MosaicItem: FunctionComponent<Props> = ({ post, postParent }) => {
         )}
 
         <span className={styles.type}>{t('post')}</span>
-<<<<<<< HEAD
-=======
-        <div className={styles.actions}>
-          <BsBookmark className={styles.actionBookmark} />
-          <AiOutlineHeart className={styles.actionLike} />
-        </div>
->>>>>>> parent of c94c816... Hide social icons
       </div>
       <h3 className={styles.title}>
         {postLinkHref != null ? (

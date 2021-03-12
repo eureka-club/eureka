@@ -1,5 +1,4 @@
 import { Prisma, Work, User } from '@prisma/client';
-
 import { StoredFileUpload } from '../types';
 import { CreateWorkServerFields, CreateWorkServerPayload, WorkWithImages } from '../types/work';
 import prisma from '../lib/prisma';
@@ -7,7 +6,7 @@ import prisma from '../lib/prisma';
 export const find = async (id: number): Promise<WorkWithImages | null> => {
   return prisma.work.findUnique({
     where: { id },
-    include: { 
+    include: {
       localImages: true,
       likes: true,
       favs: true,
@@ -18,13 +17,11 @@ export const find = async (id: number): Promise<WorkWithImages | null> => {
 export const findAll = async (): Promise<WorkWithImages[]> => {
   return prisma.work.findMany({
     orderBy: { createdAt: 'desc' },
-    include: { localImages: true },
+    include: { localImages: true, likes: true, favs: true },
   });
 };
 
-
-export const findAction = async (
-  user: User, work: Work, action: string): Promise<User | null> => {
+export const findAction = async (user: User, work: Work, action: string): Promise<number> => {
   return prisma.user.count({
     where: {
       id: user.id,
@@ -32,7 +29,6 @@ export const findAction = async (
     },
   });
 };
-
 
 export const findLike = async (user: User, work: Work): Promise<User | null> => {
   return prisma.user.findFirst({
@@ -138,11 +134,9 @@ export const remove = async (id: number): Promise<Work> => {
   });
 };
 
-
-export const updateAction = async (
-  work: Work, user: User, action: string, is_add: boolean): Promise<Work> => {
+export const updateAction = async (work: Work, user: User, action: string, isAdd: boolean): Promise<Work> => {
   return prisma.work.update({
     where: { id: work.id },
-    data: { [action]: { [(is_add ? 'connect': 'disconnect')]: { id: user.id } } },
+    data: { [action]: { [isAdd ? 'connect' : 'disconnect']: { id: user.id } } },
   });
 };

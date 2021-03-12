@@ -99,7 +99,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
   const current_post = postResults[0]
 
 
-  let current_actions = {}
+  let current_actions: { [key: string]: any } = {}
   let user_actions = ['like', 'fav']
   user_actions.forEach(action=>{
     current_actions[action] = null
