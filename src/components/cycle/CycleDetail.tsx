@@ -18,12 +18,7 @@ import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
 import { useMutation } from 'react-query';
 import ActionButton from '../common/ActionButton';
-import {
-  ASSETS_BASE_URL, 
-  DATE_FORMAT_SHORT_MONTH_YEAR,
-  HYVOR_WEBSITE_ID,
-  WEBAPP_URL
-} from '../../constants';
+import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, HYVOR_WEBSITE_ID } from '../../constants';
 import { CycleDetail } from '../../types/cycle';
 import { PostDetail } from '../../types/post';
 import { Session } from '../../types';
@@ -43,8 +38,8 @@ interface Props {
   participantsCount: number;
   postsCount: number;
   worksCount: number;
-  currentActions: { [key: string]: any };
-  currentActionsPost: { [key: string]: any };
+  currentActions: { [key: string]: boolean };
+  currentActionsPost: { [key: string]: boolean };
 }
 
 const CycleDetailComponent: FunctionComponent<Props> = ({
@@ -67,23 +62,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       await fetch(`/api/cycle/${cycle.id}/join`, { method: 'POST' });
     },
   );
-  const {
-    mutate: execLeaveCycle,
-    isLoading: isLeaveCycleLoading,
-    isSuccess: isLeaveCycleSuccess
-  } = useMutation(
+  const { mutate: execLeaveCycle, isLoading: isLeaveCycleLoading, isSuccess: isLeaveCycleSuccess } = useMutation(
     async () => {
       await fetch(`/api/cycle/${cycle.id}/join`, { method: 'DELETE' });
-    },
-  );
-  
-  const { 
-    mutate: execLike,
-    isLoading: isLikeCycleLoading,
-    isSuccess: isLikeCycleSuccess 
-  } = useMutation(
-    async (method: string) => {
-      await fetch(`/api/cycle/${cycle.id}/like`, { method: method });
     },
   );
 
@@ -103,33 +84,17 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     execLeaveCycle();
   };
 
-  const handleLikeClick = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-    console.log(cycle)
-    execLike(currentActions.like ? 'DELETE' : 'POST')
-  };
-
-
   useEffect(() => {
     if (isJoinCycleSuccess === true) {
       router.replace(router.asPath); // refresh page
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isJoinCycleSuccess]);
 
   useEffect(() => {
     if (isLeaveCycleSuccess === true) {
       router.replace(router.asPath); // refresh page
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLeaveCycleSuccess]);
-
-  useEffect(() => {
-    //if (isLikeCycleSuccess)
-      //router.replace(router.asPath);
-  }, [isLikeCycleSuccess]);
-
-  console.log(currentActions)
 
   return (
     <>
@@ -138,10 +103,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           <>
             <Col md={{ span: 3 }}>
               <div className={classNames(styles.imgWrapper, 'mb-3')}>
-                <LocalImageComponent
-                  filePath={cycle.localImages[0].storedFile}
-                  alt={cycle.title} 
-                />
+                <LocalImageComponent filePath={cycle.localImages[0].storedFile} alt={cycle.title} />
               </div>
             </Col>
             <Col md={{ span: 9 }}>
@@ -155,17 +117,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                   {cycle.creator.name}
                 </div>
                 <h1>{cycle.title}</h1>
-                <h1></h1>
-
                 <CycleSummary cycle={cycle} />
 
                 <section className={classNames('d-flex justify-content-between', styles.socialInfo)}>
-                  <ActionButton
-                    level={cycle}
-                    level_name="cycle"
-                    currentActions={currentActions}
-                    show_counts
-                  />
+                  <ActionButton level={cycle} levelName="cycle" currentActions={currentActions} showCounts />
                   <div>
                     <small className={styles.participantsCount}>
                       {t('participantsCount', { count: participantsCount })}
@@ -173,16 +128,13 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                     {session != null && (
                       <>
                         <div className="d-inline-block mx-3" />
-                        {(isJoinCycleLoading || isLeaveCycleLoading) 
-                          && <Spinner animation="border" size="sm" />}
+                        {(isJoinCycleLoading || isLeaveCycleLoading) && <Spinner animation="border" size="sm" />}
                         {currentActions.joined ? (
                           <Button onClick={handleLeaveCycleClick} variant="link">
                             {t('leaveCycleLabel')}
                           </Button>
                         ) : (
-                          <Button onClick={handleJoinCycleClick}>
-                            {t('joinCycleLabel')}
-                           </Button>
+                          <Button onClick={handleJoinCycleClick}>{t('joinCycleLabel')}</Button>
                         )}
                       </>
                     )}
@@ -192,10 +144,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
             </Col>
           </>
         ) : (
-          <PostDetailComponent 
-            post={post}
-            currentActionsPost={currentActionsPost}
-          />
+          <PostDetailComponent post={post} currentActionsPost={currentActionsPost} cycle={cycle} />
         )}
       </Row>
 
@@ -275,9 +224,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                       <TabPane eventKey="forum">
                         <h3>{t('tabHeaderForum')}</h3>
                         <p className={styles.explanatoryText}>{t('explanatoryTextComments')}</p>
-                        { session &&
-                          <HyvorComments id={hyvorId} />
-                        }
+                        {session && <HyvorComments id={hyvorId} />}
                       </TabPane>
                     </TabContent>
                   </Col>

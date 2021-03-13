@@ -9,7 +9,7 @@ export interface ComplementaryMaterial {
 }
 
 export interface CycleWithImages extends Cycle {
-  localImages: LocalImage[];    
+  localImages: LocalImage[];
 }
 
 export type CycleMosaicItem = Prisma.CycleGetPayload<{

@@ -34,8 +34,8 @@ export default getApiHandler()
           return;
         }
 
-        const is_add = true
-        await updateAction(cycle, session.user, `${user_action}s`, is_add);
+        const isAdd = true
+        await updateAction(cycle, session.user, `${user_action}s`, isAdd);
 
         res.status(200).json({ status: 'OK' });
       } catch (exc) {
@@ -75,8 +75,8 @@ export default getApiHandler()
           return;
         }
 
-        const is_add = false
-        await updateAction(cycle, session.user, `${user_action}s`, is_add);
+        const isAdd = false
+        await updateAction(cycle, session.user, `${user_action}s`, isAdd);
 
         res.status(200).json({ status: 'OK' });
       } catch (exc) {

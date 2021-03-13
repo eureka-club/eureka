@@ -23,8 +23,7 @@ export const findAll = async (): Promise<PostWithImages[]> => {
   });
 };
 
-export const findAction = async (
-  user: User, post: Post, action: string): Promise<number> => {
+export const findAction = async (user: User, post: Post, action: string): Promise<number> => {
   return prisma.user.count({
     where: {
       id: user.id,
@@ -158,11 +157,9 @@ export const remove = async (post: PostWithCyclesWorks): Promise<Post> => {
   });
 };
 
-
-export const updateAction = async (
-  post: Post, user: User, action: string, is_add: boolean): Promise<Post> => {
+export const updateAction = async (post: Post, user: User, action: string, isAdd: boolean): Promise<Post> => {
   return prisma.post.update({
     where: { id: post.id },
-    data: { [action]: { [(is_add ? 'connect': 'disconnect')]: { id: user.id } } },
+    data: { [action]: { [isAdd ? 'connect' : 'disconnect']: { id: user.id } } },
   });
 };

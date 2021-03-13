@@ -22,8 +22,8 @@ interface Props {
   work: WorkWithImages;
   cyclesCount: number;
   postsCount: number;
-  currentActions: object;
-  currentActionsPost: object;
+  currentActions:  { [key: string]: boolean };
+  currentActionsPost:  { [key: string]: boolean };
 }
 
 const PostDetailInWorkPage: NextPage<Props> = ({
@@ -89,12 +89,12 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
 
   const cyclesCount = await countCycles(work);
   const postsCount = await countPosts(work);
-  var current_actions: { [key: string]: any } = {};
-  var current_actions_post: { [key: string]: any } = {};
+  var current_actions: { [key: string]: boolean } = {};
+  var current_actions_post: { [key: string]: boolean } = {};
   let user_actions = ['like', 'fav']
   user_actions.forEach(action=>{
-    current_actions[action] = null
-    current_actions_post[action] = null
+    current_actions[action] = false
+    current_actions_post[action] = false
   })
 
   const current_post = postResults[0]

@@ -30,11 +30,11 @@ interface Props {
   post?: PostDetail;
   cyclesCount: number;
   postsCount: number;
-  currentActions: object;
-  currentActionsPost: object;
+  currentActions: { [key: string]: boolean };
+  currentActionsPost: { [key: string]: boolean };
 }
 
-const WorkDetail: FunctionComponent<Props> = ({ 
+const WorkDetail: FunctionComponent<Props> = ({
   work,
   post,
   cyclesCount,
@@ -60,12 +60,7 @@ const WorkDetail: FunctionComponent<Props> = ({
               <div className={classNames(styles.imgWrapper, 'mb-3')}>
                 <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
               </div>
-              <ActionButton
-                level={work}
-                level_name="work"
-                currentActions={currentActions}
-                show_counts
-              />
+              <ActionButton level={work} levelName="work" currentActions={currentActions} showCounts />
             </Col>
             <Col md={{ span: 8 }}>
               <section className="mb-4">
@@ -82,11 +77,7 @@ const WorkDetail: FunctionComponent<Props> = ({
             </Col>
           </>
         ) : (
-          <PostDetailComponent 
-            post={post}
-            work={work}
-            currentActionsPost={currentActionsPost}
-          />
+          <PostDetailComponent post={post} work={work} currentActionsPost={currentActionsPost} />
         )}
       </Row>
 

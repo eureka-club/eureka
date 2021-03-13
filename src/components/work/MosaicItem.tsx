@@ -1,8 +1,6 @@
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
-import { AiOutlineHeart } from 'react-icons/ai';
-import { BsBookmark } from 'react-icons/bs';
 
 import { WorkWithImages } from '../../types/work';
 import LocalImageComponent from '../LocalImage';

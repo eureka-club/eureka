@@ -21,3 +21,12 @@
 .action-fav path, .action-fav span {
   color: grey;
 }
+
+.icon-share svg{
+  margin-right: 12px;
+}
+
+.toggle-share, .toggle-share:hover{
+  background-color: transparent;
+  border-color: transparent;
+}

@@ -12,7 +12,7 @@ interface Props {
 
 const HyvorComments: FunctionComponent<Props> = ({ id }) => {
   const [session] = useSession() as [Session | null | undefined, boolean];
-  let userDataObj = {}
+  let userDataObj = {};
   if (session != null) {
     const { user } = session;
     userDataObj = {
@@ -24,12 +24,8 @@ const HyvorComments: FunctionComponent<Props> = ({ id }) => {
   const userData = Buffer.from(JSON.stringify(userDataObj)).toString('base64');
   const hash = crypto.HmacSHA1(userData, HYVOR_SSO_KEY!).toString();
   const hyvorSso = { hash, userData, loginURL: `${WEBAPP_URL}/login` };
-  
-  return <HyvorTalk.Embed 
-    websiteId={Number(HYVOR_WEBSITE_ID!)}
-    id={id}
-    sso={hyvorSso}
-  />
+
+  return <HyvorTalk.Embed websiteId={Number(HYVOR_WEBSITE_ID!)} id={id} sso={hyvorSso} />;
 };
 
 export default HyvorComments;

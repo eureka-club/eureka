@@ -10,7 +10,7 @@ export type PostMosaicItem = Prisma.PostGetPayload<{
     localImages: true;
     works: true;
     likes: true;
-    favs: true;    
+    favs: true;
   };
 }>;
 

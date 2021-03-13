@@ -29,8 +29,7 @@ export const findAll = async (): Promise<
   });
 };
 
-export const findAction = async (
-  user: User, cycle: Cycle, action: string): Promise<number> => {
+export const findAction = async (user: User, cycle: Cycle, action: string): Promise<number> => {
   return prisma.user.count({
     where: {
       id: user.id,
@@ -176,12 +175,10 @@ export const removeParticipant = async (cycle: Cycle, user: User): Promise<Cycle
   });
 };
 
-
-export const updateAction = async (
-  cycle: Cycle, user: User, action: string, is_add: boolean): Promise<Cycle> => {
+export const updateAction = async (cycle: Cycle, user: User, action: string, isAdd: boolean): Promise<Cycle> => {
   return prisma.cycle.update({
     where: { id: cycle.id },
-    data: { [action]: { [(is_add ? 'connect': 'disconnect')]: { id: user.id } } },
+    data: { [action]: { [isAdd ? 'connect' : 'disconnect']: { id: user.id } } },
   });
 };
 

@@ -18,7 +18,7 @@ interface Props {
   participantsCount: number;
   postsCount: number;
   worksCount: number;
-  currentActions: object;
+  currentActions: { [key: string]: boolean };
 }
 
 const CycleDetailPage: NextPage<Props> = ({
@@ -60,10 +60,10 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
   const participantsCount = await countParticipants(cycle);
   const postsCount = await countPosts(cycle);
   const worksCount = await countWorks(cycle);
-  var current_actions: { [key: string]: any } = {};
+  var current_actions: { [key: string]: boolean } = {};
   let user_actions = ['like', 'fav', 'joined']
   user_actions.forEach((action: string)=>{
-    current_actions[action] = null
+    current_actions[action] = false
   })
 
   const session = (await getSession({ req })) as Session;

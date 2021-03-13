@@ -3,13 +3,12 @@ import classNames from 'classnames';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
 import { FunctionComponent } from 'react';
 import Col from 'react-bootstrap/Col';
 import ActionButton from '../common/ActionButton';
-import { FiShare2 } from 'react-icons/fi';
+import { CycleDetail } from '../../types/cycle';
 
-import { DATE_FORMAT_SHORT, WEBAPP_URL } from '../../constants';
+import { DATE_FORMAT_SHORT } from '../../constants';
 import { PostDetail as PostDetailType } from '../../types/post';
 import HyvorComments from '../common/HyvorComments';
 import LocalImageComponent from '../LocalImage';
@@ -19,15 +18,11 @@ import styles from './PostDetail.module.css';
 interface Props {
   post: PostDetailType;
   work?: Work;
-  currentActionsPost: { [key: string]: any };
+  cycle?: CycleDetail;
+  currentActionsPost: { [key: string]: boolean };
 }
 
-const PostDetail: FunctionComponent<Props> = ({
-  post,
-  work,
-  currentActionsPost,
-}) => {
-  const { asPath } = useRouter();
+const PostDetail: FunctionComponent<Props> = ({ post, work, currentActionsPost, cycle }) => {
   const { t } = useTranslation('postDetail');
   const hyvorId = `post-${post.id}`;
 
@@ -35,16 +30,14 @@ const PostDetail: FunctionComponent<Props> = ({
     <>
       <Col md={{ span: 4 }}>
         <div className={classNames(styles.imgWrapper, 'mb-3')}>
-          <LocalImageComponent
-            filePath={post.localImages[0].storedFile}
-            alt={post.title}
-          />
+          <LocalImageComponent filePath={post.localImages[0].storedFile} alt={post.title} />
         </div>
         <ActionButton
           level={post}
-          level_name="post"
+          levelName="post"
           currentActions={currentActionsPost}
-          show_counts
+          showCounts
+          parent={cycle || work || null}
         />
         <table className={styles.parentContent}>
           <tbody>

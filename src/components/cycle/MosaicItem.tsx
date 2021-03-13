@@ -2,21 +2,13 @@ import dayjs from 'dayjs';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
-import { AiOutlineHeart } from 'react-icons/ai';
-import { BsBookmark } from 'react-icons/bs';
 
 import { DATE_FORMAT_SHORT } from '../../constants';
 import { CycleWithImages } from '../../types/cycle';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 
-const MosaicItem: FunctionComponent<CycleWithImages> = ({
-  id,
-  title,
-  localImages,
-  startDate,
-  endDate
-}) => {
+const MosaicItem: FunctionComponent<CycleWithImages> = ({ id, title, localImages, startDate, endDate }) => {
   const { t } = useTranslation('common');
 
   return (

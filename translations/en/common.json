@@ -41,5 +41,19 @@
   "workLengthAsPagesLabel": "pages",
   "workLengthAsMinutesLabel": "minutes",
   "unclampTextLess": "view less",
-  "unclampTextMore": "view more"
+  "unclampTextMore": "view more",
+
+  "wayShare": "Vía",
+  
+  "cycleShare": "¡Checa el ciclo",
+
+  "postCycleShare": "Checa esta reflexión sobre el ciclo",
+  "postWorkShare": "Checa esta reflexión sobre la obra",
+  
+  "workShare": "Checa este contenido sobre el ciclo",
+  
+  "complementShare": "anímate a participar en la plataforma Eureka!",
+  "whatsappComplement": " Solo entra a",
+  "twitterComplement": "",
+  "facebookComplement": ""
 }

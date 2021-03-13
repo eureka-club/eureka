@@ -25,8 +25,8 @@ interface Props {
   participantsCount: number;
   postsCount: number;
   worksCount: number;
-  currentActions: object;
-  currentActionsPost: object;
+  currentActions:  { [key: string]: boolean };
+  currentActionsPost:  { [key: string]: boolean };
 }
 
 const PostDetailInCyclePage: NextPage<Props> = ({
@@ -99,10 +99,10 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
   const current_post = postResults[0]
 
 
-  let current_actions: { [key: string]: any } = {}
+  let current_actions: { [key: string]: boolean } = {}
   let user_actions = ['like', 'fav']
   user_actions.forEach(action=>{
-    current_actions[action] = null
+    current_actions[action] = false
   })
 
 
