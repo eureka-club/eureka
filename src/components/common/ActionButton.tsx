@@ -78,14 +78,7 @@ const ActionButton: FunctionComponent<Props> = ({ level, levelName, parent, curr
       {showCounts && (
         <Dropdown alignRight>
           <Dropdown.Toggle id="langSwitch" className={styles['toggle-share']}>
-            <Button
-              variant="outline-primary"
-              onClick={(ev) => {
-                ev.preventDefault();
-              }}
-            >
-              <FiShare2 className={styles.actions} />
-            </Button>
+            <FiShare2 className={styles.actions} />
           </Dropdown.Toggle>
           <Dropdown.Menu className={styles['icon-share']}>
             <Dropdown.Item>
