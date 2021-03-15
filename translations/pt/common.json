@@ -42,14 +42,14 @@
   "workLengthAsMinutesLabel": "minutos",
   "unclampTextLess": "ver mais",
   "unclampTextMore": "ver menos",
-  
-  "wayShare": "Vía",
-  "cycleShare": "¡Checa el ciclo",
-  "postCycleShare": "Checa esta reflexión sobre el ciclo",
-  "postWorkShare": "Checa esta reflexión sobre la obra",
-  "workShare": "Checa este contenido sobre la obra",
-  "complementShare": "anímate a participar en la plataforma Eureka!",
-  "whatsappComplement": " Solo entra a",
+
+  "wayShare": "",
+  "cycleShare": "Dá uma olhada no ciclo",
+  "postCycleShare": "Se inspire nesta reflexão sobre o ciclo",
+  "postWorkShare": "Se inspire nesta reflexão sobre a obra",
+  "workShare": "Dá uma olhada neste conteúdo sobre a obra",
+  "complementShare": "e participe da plataforma Eureka!",
+  "whatsappComplement": "Junte-se à nos aqui: ",
   "twitterComplement": "",
   "facebookComplement": ""
 

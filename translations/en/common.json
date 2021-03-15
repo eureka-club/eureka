@@ -43,17 +43,13 @@
   "unclampTextLess": "view less",
   "unclampTextMore": "view more",
 
-  "wayShare": "Vía",
-  
-  "cycleShare": "¡Checa el ciclo",
-
-  "postCycleShare": "Checa esta reflexión sobre el ciclo",
-  "postWorkShare": "Checa esta reflexión sobre la obra",
-  
-  "workShare": "Checa este contenido sobre el ciclo",
-  
-  "complementShare": "anímate a participar en la plataforma Eureka!",
-  "whatsappComplement": " Solo entra a",
+  "wayShare": "",
+  "cycleShare": "¡Check the cycle",
+  "postCycleShare": "Check this post about the cycle",
+  "postWorkShare": "Check this post about",
+  "workShare": "Check this content about",
+  "complementShare": "and join us on Eureka for further discussion!",
+  "whatsappComplement": "Join us here:",
   "twitterComplement": "",
   "facebookComplement": ""
 }
