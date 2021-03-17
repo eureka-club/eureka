@@ -1,28 +1,31 @@
-import { Work } from '@prisma/client';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
 import { FunctionComponent } from 'react';
 import Col from 'react-bootstrap/Col';
 
-import { DATE_FORMAT_SHORT, WEBAPP_URL } from '../../constants';
+import { DATE_FORMAT_SHORT } from '../../constants';
+import { MySocialInfo } from '../../types';
+import { CycleDetail } from '../../types/cycle';
 import { PostDetail as PostDetailType } from '../../types/post';
+import { WorkDetail } from '../../types/work';
 import HyvorComments from '../common/HyvorComments';
 import LocalImageComponent from '../LocalImage';
+import SocialInteraction from '../common/SocialInteraction';
 import UnclampText from '../UnclampText';
 import styles from './PostDetail.module.css';
 
 interface Props {
   post: PostDetailType;
-  work?: Work;
+  cycle?: CycleDetail;
+  work?: WorkDetail;
+  mySocialInfo: MySocialInfo;
 }
 
-const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
-  const { asPath } = useRouter();
+const PostDetail: FunctionComponent<Props> = ({ post, cycle, work, mySocialInfo }) => {
   const { t } = useTranslation('postDetail');
-  const hyvorId = `${WEBAPP_URL}${asPath}`;
+  const hyvorId = `post-${post.id}`;
 
   return (
     <>
@@ -30,6 +33,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
         <div className={classNames(styles.imgWrapper, 'mb-3')}>
           <LocalImageComponent filePath={post.localImages[0].storedFile} alt={post.title} />
         </div>
+        <SocialInteraction entity={post} parent={cycle || work || null} mySocialInfo={mySocialInfo} showCounts />
         <table className={styles.parentContent}>
           <tbody>
             {work != null && (

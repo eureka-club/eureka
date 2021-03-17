@@ -10,30 +10,31 @@ import Row from 'react-bootstrap/Row';
 import TabContainer from 'react-bootstrap/TabContainer';
 import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
-import { AiFillHeart } from 'react-icons/ai';
-import { BsBookmarkFill, BsBoxArrowUpRight } from 'react-icons/bs';
-import { FiShare2 } from 'react-icons/fi';
+import { BsBoxArrowUpRight } from 'react-icons/bs';
 
-import { WorkWithImages } from '../../types/work';
+import { MySocialInfo } from '../../types';
 import { PostDetail } from '../../types/post';
+import { WorkDetail } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
 import CombinedMosaic from './CombinedMosaic';
 import CyclesMosaic from './CyclesMosaic';
 import PostDetailComponent from '../post/PostDetail';
 import PostsMosaic from './PostsMosaic';
+import SocialInteraction from '../common/SocialInteraction';
 import UnclampText from '../UnclampText';
 import WorkSummary from './WorkSummary';
 import detailPagesAtom from '../../atoms/detailPages';
 import styles from './WorkDetail.module.css';
 
 interface Props {
-  work: WorkWithImages;
+  work: WorkDetail;
   post?: PostDetail;
   cyclesCount: number;
   postsCount: number;
+  mySocialInfo: MySocialInfo;
 }
 
-const WorkDetail: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCount }) => {
+const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCount, mySocialInfo }) => {
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const { t } = useTranslation('workDetail');
 
@@ -52,17 +53,7 @@ const WorkDetail: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCo
               <div className={classNames(styles.imgWrapper, 'mb-3')}>
                 <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
               </div>
-              <section className={styles.socialInfo}>
-                <span>
-                  <BsBookmarkFill /> #
-                </span>
-                <span>
-                  <AiFillHeart /> #
-                </span>
-                <span>
-                  <FiShare2 /> #
-                </span>
-              </section>
+              <SocialInteraction entity={work} mySocialInfo={mySocialInfo} showCounts />
             </Col>
             <Col md={{ span: 8 }}>
               <section className="mb-4">
@@ -79,7 +70,7 @@ const WorkDetail: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCo
             </Col>
           </>
         ) : (
-          <PostDetailComponent post={post} work={work} />
+          <PostDetailComponent post={post} work={work} mySocialInfo={mySocialInfo} />
         )}
       </Row>
 
@@ -136,4 +127,4 @@ const WorkDetail: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCo
   );
 };
 
-export default WorkDetail;
+export default WorkDetailComponent;

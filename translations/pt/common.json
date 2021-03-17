@@ -41,5 +41,16 @@
   "workLengthAsPagesLabel": "páginas",
   "workLengthAsMinutesLabel": "minutos",
   "unclampTextLess": "ver mais",
-  "unclampTextMore": "ver menos"
+  "unclampTextMore": "ver menos",
+
+  "wayShare": "",
+  "cycleShare": "Dá uma olhada no ciclo",
+  "postCycleShare": "Se inspire nesta reflexão sobre o ciclo",
+  "postWorkShare": "Se inspire nesta reflexão sobre a obra",
+  "workShare": "Dá uma olhada neste conteúdo sobre a obra",
+  "complementShare": "e participe da plataforma Eureka!",
+  "whatsappComplement": "Junte-se à nos aqui: ",
+  "twitterComplement": "",
+  "facebookComplement": ""
+
 }
