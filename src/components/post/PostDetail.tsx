@@ -1,28 +1,29 @@
-import { Work } from '@prisma/client';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 import Col from 'react-bootstrap/Col';
-import ActionButton from '../common/ActionButton';
-import { CycleDetail } from '../../types/cycle';
 
 import { DATE_FORMAT_SHORT } from '../../constants';
+import { MySocialInfo } from '../../types';
+import { CycleDetail } from '../../types/cycle';
 import { PostDetail as PostDetailType } from '../../types/post';
+import { WorkDetail } from '../../types/work';
 import HyvorComments from '../common/HyvorComments';
 import LocalImageComponent from '../LocalImage';
+import SocialInteraction from '../common/SocialInteraction';
 import UnclampText from '../UnclampText';
 import styles from './PostDetail.module.css';
 
 interface Props {
   post: PostDetailType;
-  work?: Work;
   cycle?: CycleDetail;
-  currentActionsPost: { [key: string]: boolean };
+  work?: WorkDetail;
+  mySocialInfo: MySocialInfo;
 }
 
-const PostDetail: FunctionComponent<Props> = ({ post, work, currentActionsPost, cycle }) => {
+const PostDetail: FunctionComponent<Props> = ({ post, cycle, work, mySocialInfo }) => {
   const { t } = useTranslation('postDetail');
   const hyvorId = `post-${post.id}`;
 
@@ -32,13 +33,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work, currentActionsPost, 
         <div className={classNames(styles.imgWrapper, 'mb-3')}>
           <LocalImageComponent filePath={post.localImages[0].storedFile} alt={post.title} />
         </div>
-        <ActionButton
-          level={post}
-          levelName="post"
-          currentActions={currentActionsPost}
-          showCounts
-          parent={cycle || work || null}
-        />
+        <SocialInteraction entity={post} parent={cycle || work || null} mySocialInfo={mySocialInfo} showCounts />
         <table className={styles.parentContent}>
           <tbody>
             {work != null && (

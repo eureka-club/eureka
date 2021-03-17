@@ -1,48 +1,31 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/client';
-import { Session } from '../../../../src/types';
 
+import { MySocialInfo, Session } from '../../../../src/types';
 import { PostDetail } from '../../../../src/types/post';
-import { WorkWithImages } from '../../../../src/types/work';
+import { WorkDetail } from '../../../../src/types/work';
 import PopupLayout from '../../../../src/components/layouts/PopupLayout';
-import WorkDetail from '../../../../src/components/work/WorkDetail';
-import { 
-  search as searchPost,
-  findAction as findActionPost,
-} from '../../../../src/facades/post';
-import { 
-  countCycles,
-  countPosts,
-  find as findWork,
-  findAction as findActionWork,
-} from '../../../../src/facades/work';
+import WorkDetailComponent from '../../../../src/components/work/WorkDetail';
+import { search as searchPost, isFavoritedByUser, isLikedByUser } from '../../../../src/facades/post';
+import { countCycles, countPosts, find as findWork } from '../../../../src/facades/work';
 
 interface Props {
   post: PostDetail;
-  work: WorkWithImages;
+  work: WorkDetail;
   cyclesCount: number;
   postsCount: number;
-  currentActions:  { [key: string]: boolean };
-  currentActionsPost:  { [key: string]: boolean };
+  mySocialInfo: MySocialInfo;
 }
 
-const PostDetailInWorkPage: NextPage<Props> = ({
-  post,
-  work,
-  cyclesCount,
-  postsCount,
-  currentActions,
-  currentActionsPost,
-}) => {
+const PostDetailInWorkPage: NextPage<Props> = ({ post, work, cyclesCount, postsCount, mySocialInfo }) => {
   return (
     <PopupLayout title={`${post.title} · ${work.title}`}>
-      <WorkDetail
+      <WorkDetailComponent
         work={work}
         post={post}
         cyclesCount={cyclesCount}
-        postsCount={postsCount} 
-        currentActions={currentActions}
-        currentActionsPost={currentActionsPost}
+        postsCount={postsCount}
+        mySocialInfo={mySocialInfo}
       />
     </PopupLayout>
   );
@@ -79,8 +62,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
       creator: true,
       cycles: true,
       localImages: true,
-      likes: true,
       favs: true,
+      likes: true,
     }),
   })) as PostDetail[];
   if (postResults.length === 0) {
@@ -89,32 +72,24 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
 
   const cyclesCount = await countCycles(work);
   const postsCount = await countPosts(work);
-  var current_actions: { [key: string]: boolean } = {};
-  var current_actions_post: { [key: string]: boolean } = {};
-  let user_actions = ['like', 'fav']
-  user_actions.forEach(action=>{
-    current_actions[action] = false
-    current_actions_post[action] = false
-  })
-
-  const current_post = postResults[0]
 
   const session = (await getSession({ req })) as Session;
+  const mySocialInfo: MySocialInfo = {
+    favoritedByMe: undefined,
+    likedByMe: undefined,
+  };
   if (session != null) {
-    current_actions.like = !!(await findActionWork(session.user, work, 'liked'));
-    current_actions.fav = !!(await findActionWork(session.user, work, 'fav'));
-    current_actions_post.like = !!(await findActionPost(session.user, current_post, 'liked'));
-    current_actions_post.fav = !!(await findActionPost(session.user, current_post, 'fav'));
+    mySocialInfo.favoritedByMe = !!(await isFavoritedByUser(postResults[0], session.user));
+    mySocialInfo.likedByMe = !!(await isLikedByUser(postResults[0], session.user));
   }
 
   return {
     props: {
       work,
-      post: current_post,
+      post: postResults[0],
       cyclesCount: cyclesCount.count,
       postsCount: postsCount.count,
-      currentActions: current_actions,
-      currentActionsPost: current_actions_post,
+      mySocialInfo,
     },
   };
 };

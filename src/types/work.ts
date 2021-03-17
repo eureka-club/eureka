@@ -1,10 +1,16 @@
 import { Prisma } from '@prisma/client';
 
-export type WorkWithImages = Prisma.WorkGetPayload<{
+export type WorkDetail = Prisma.WorkGetPayload<{
   include: {
     localImages: true;
     likes: true;
     favs: true;
+  };
+}>;
+
+export type WorkWithImages = Prisma.WorkGetPayload<{
+  include: {
+    localImages: true;
   };
 }>;
 

@@ -23,33 +23,6 @@ export const findAll = async (): Promise<PostWithImages[]> => {
   });
 };
 
-export const findAction = async (user: User, post: Post, action: string): Promise<number> => {
-  return prisma.user.count({
-    where: {
-      id: user.id,
-      [`${action}Posts`]: { some: { id: post.id } },
-    },
-  });
-};
-
-export const findLike = async (user: User, post: Post): Promise<User | null> => {
-  return prisma.user.findFirst({
-    where: {
-      id: user.id,
-      likedPosts: { some: { id: post.id } },
-    },
-  });
-};
-
-export const findFav = async (user: User, post: Post): Promise<User | null> => {
-  return prisma.user.findFirst({
-    where: {
-      id: user.id,
-      favPosts: { some: { id: post.id } },
-    },
-  });
-};
-
 export const search = async (query: { [key: string]: string | string[] }): Promise<Post[]> => {
   const { q, where, include } = query;
   if (where == null && q == null) {
@@ -66,6 +39,24 @@ export const search = async (query: { [key: string]: string | string[] }): Promi
   return prisma.post.findMany({
     ...(typeof where === 'string' && { where: JSON.parse(where) }),
     ...(typeof include === 'string' && { include: JSON.parse(include) }),
+  });
+};
+
+export const isFavoritedByUser = async (post: Post, user: User): Promise<number> => {
+  return prisma.post.count({
+    where: {
+      id: post.id,
+      favs: { some: { id: user.id } },
+    },
+  });
+};
+
+export const isLikedByUser = async (post: Post, user: User): Promise<number> => {
+  return prisma.post.count({
+    where: {
+      id: post.id,
+      likes: { some: { id: user.id } },
+    },
   });
 };
 
@@ -125,6 +116,18 @@ export const createFromServerFields = async (
   });
 };
 
+export const saveSocialInteraction = async (
+  post: Post,
+  user: User,
+  socialInteraction: 'fav' | 'like',
+  create: boolean,
+): Promise<Post> => {
+  return prisma.post.update({
+    where: { id: post.id },
+    data: { [`${socialInteraction}s`]: { [create ? 'connect' : 'disconnect']: { id: user.id } } },
+  });
+};
+
 export const remove = async (post: PostWithCyclesWorks): Promise<Post> => {
   if (post.cycles.length) {
     await prisma.post.update({
@@ -154,12 +157,5 @@ export const remove = async (post: PostWithCyclesWorks): Promise<Post> => {
 
   return prisma.post.delete({
     where: { id: post.id },
-  });
-};
-
-export const updateAction = async (post: Post, user: User, action: string, isAdd: boolean): Promise<Post> => {
-  return prisma.post.update({
-    where: { id: post.id },
-    data: { [action]: { [isAdd ? 'connect' : 'disconnect']: { id: user.id } } },
   });
 };

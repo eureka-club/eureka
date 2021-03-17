@@ -1,12 +1,3 @@
-/*
-  Warnings:
-
-  - You are about to alter the column `content_text` on the `cycles` table. The data in that column could be lost. The data in that column will be cast from `NVarChar(4000)` to `NVarChar(1000)`.
-  - You are about to alter the column `content_text` on the `posts` table. The data in that column could be lost. The data in that column will be cast from `NVarChar(4000)` to `NVarChar(1000)`.
-  - You are about to alter the column `content_text` on the `works` table. The data in that column could be lost. The data in that column will be cast from `NVarChar(4000)` to `NVarChar(1000)`.
-
-*/
-
 -- CreateTable
 CREATE TABLE [dbo].[_CycleToLikes] (
     [A] INT NOT NULL,
@@ -68,37 +59,37 @@ CREATE INDEX [_PostToLikes_B_index] ON [dbo].[_PostToLikes]([B]);
 CREATE INDEX [_PostToFavs_B_index] ON [dbo].[_PostToFavs]([B]);
 
 -- AddForeignKey
-ALTER TABLE [dbo].[_CycleToLikes] ADD CONSTRAINT [FK___CycleToLikes__A] FOREIGN KEY ([A]) REFERENCES [dbo].[cycles]([id]) ON UPDATE NO ACTION;
+ALTER TABLE [dbo].[_CycleToLikes] ADD CONSTRAINT [FK___CycleToLikes__A] FOREIGN KEY ([A]) REFERENCES [dbo].[cycles]([id]);
 
 -- AddForeignKey
-ALTER TABLE [dbo].[_CycleToLikes] ADD CONSTRAINT [FK___CycleToLikes__B] FOREIGN KEY ([B]) REFERENCES [dbo].[users]([id]) ON UPDATE NO ACTION;
+ALTER TABLE [dbo].[_CycleToLikes] ADD CONSTRAINT [FK___CycleToLikes__B] FOREIGN KEY ([B]) REFERENCES [dbo].[users]([id]);
 
 -- AddForeignKey
-ALTER TABLE [dbo].[_CycleToFavs] ADD CONSTRAINT [FK___CycleToFavs__A] FOREIGN KEY ([A]) REFERENCES [dbo].[cycles]([id]) ON UPDATE NO ACTION;
+ALTER TABLE [dbo].[_CycleToFavs] ADD CONSTRAINT [FK___CycleToFavs__A] FOREIGN KEY ([A]) REFERENCES [dbo].[cycles]([id]);
 
 -- AddForeignKey
-ALTER TABLE [dbo].[_CycleToFavs] ADD CONSTRAINT [FK___CycleToFavs__B] FOREIGN KEY ([B]) REFERENCES [dbo].[users]([id]) ON UPDATE NO ACTION;
+ALTER TABLE [dbo].[_CycleToFavs] ADD CONSTRAINT [FK___CycleToFavs__B] FOREIGN KEY ([B]) REFERENCES [dbo].[users]([id]);
 
 -- AddForeignKey
-ALTER TABLE [dbo].[_WorkToLikes] ADD CONSTRAINT [FK___WorkToLikes__A] FOREIGN KEY ([A]) REFERENCES [dbo].[users]([id]) ON UPDATE NO ACTION;
+ALTER TABLE [dbo].[_WorkToLikes] ADD CONSTRAINT [FK___WorkToLikes__A] FOREIGN KEY ([A]) REFERENCES [dbo].[users]([id]);
 
 -- AddForeignKey
-ALTER TABLE [dbo].[_WorkToLikes] ADD CONSTRAINT [FK___WorkToLikes__B] FOREIGN KEY ([B]) REFERENCES [dbo].[works]([id]) ON UPDATE NO ACTION;
+ALTER TABLE [dbo].[_WorkToLikes] ADD CONSTRAINT [FK___WorkToLikes__B] FOREIGN KEY ([B]) REFERENCES [dbo].[works]([id]);
 
 -- AddForeignKey
-ALTER TABLE [dbo].[_WorkToFavs] ADD CONSTRAINT [FK___WorkToFavs__A] FOREIGN KEY ([A]) REFERENCES [dbo].[users]([id]) ON UPDATE NO ACTION;
+ALTER TABLE [dbo].[_WorkToFavs] ADD CONSTRAINT [FK___WorkToFavs__A] FOREIGN KEY ([A]) REFERENCES [dbo].[users]([id]);
 
 -- AddForeignKey
-ALTER TABLE [dbo].[_WorkToFavs] ADD CONSTRAINT [FK___WorkToFavs__B] FOREIGN KEY ([B]) REFERENCES [dbo].[works]([id]) ON UPDATE NO ACTION;
+ALTER TABLE [dbo].[_WorkToFavs] ADD CONSTRAINT [FK___WorkToFavs__B] FOREIGN KEY ([B]) REFERENCES [dbo].[works]([id]);
 
 -- AddForeignKey
-ALTER TABLE [dbo].[_PostToLikes] ADD CONSTRAINT [FK___PostToLikes__A] FOREIGN KEY ([A]) REFERENCES [dbo].[posts]([id]) ON UPDATE NO ACTION;
+ALTER TABLE [dbo].[_PostToLikes] ADD CONSTRAINT [FK___PostToLikes__A] FOREIGN KEY ([A]) REFERENCES [dbo].[posts]([id]);
 
 -- AddForeignKey
-ALTER TABLE [dbo].[_PostToLikes] ADD CONSTRAINT [FK___PostToLikes__B] FOREIGN KEY ([B]) REFERENCES [dbo].[users]([id]) ON UPDATE NO ACTION;
+ALTER TABLE [dbo].[_PostToLikes] ADD CONSTRAINT [FK___PostToLikes__B] FOREIGN KEY ([B]) REFERENCES [dbo].[users]([id]);
 
 -- AddForeignKey
-ALTER TABLE [dbo].[_PostToFavs] ADD CONSTRAINT [FK___PostToFavs__A] FOREIGN KEY ([A]) REFERENCES [dbo].[posts]([id]) ON UPDATE NO ACTION;
+ALTER TABLE [dbo].[_PostToFavs] ADD CONSTRAINT [FK___PostToFavs__A] FOREIGN KEY ([A]) REFERENCES [dbo].[posts]([id]);
 
 -- AddForeignKey
-ALTER TABLE [dbo].[_PostToFavs] ADD CONSTRAINT [FK___PostToFavs__B] FOREIGN KEY ([B]) REFERENCES [dbo].[users]([id]) ON UPDATE NO ACTION;
+ALTER TABLE [dbo].[_PostToFavs] ADD CONSTRAINT [FK___PostToFavs__B] FOREIGN KEY ([B]) REFERENCES [dbo].[users]([id]);

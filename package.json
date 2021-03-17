@@ -47,6 +47,7 @@
     "react-masonry-css": "^1.0.14",
     "react-query": "~3.8.2",
     "react-responsive-carousel": "^3.2.10",
+    "react-share": "^4.4.0",
     "superjson": "~1.6.1",
     "ts-node": "^9.0.0"
   },

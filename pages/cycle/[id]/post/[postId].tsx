@@ -1,9 +1,9 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/client';
 
+import { MySocialInfo, Session } from '../../../../src/types';
 import { CycleDetail } from '../../../../src/types/cycle';
 import { PostDetail } from '../../../../src/types/post';
-import { Session } from '../../../../src/types';
 import PopupLayout from '../../../../src/components/layouts/PopupLayout';
 import CycleDetailComponent from '../../../../src/components/cycle/CycleDetail';
 import {
@@ -11,43 +11,39 @@ import {
   countPosts,
   countWorks,
   find as findCycle,
+  findParticipant,
 } from '../../../../src/facades/cycle';
-import {
-  search as searchPost,
-  findLike as findLikePost,
-  findFav as findFavPost,
-  findAction,
-} from '../../../../src/facades/post';
+import { isFavoritedByUser, isLikedByUser, search as searchPost } from '../../../../src/facades/post';
 
 interface Props {
   cycle: CycleDetail;
   post: PostDetail;
+  isCurrentUserJoinedToCycle: boolean;
   participantsCount: number;
   postsCount: number;
   worksCount: number;
-  currentActions:  { [key: string]: boolean };
-  currentActionsPost:  { [key: string]: boolean };
+  mySocialInfo: MySocialInfo;
 }
 
 const PostDetailInCyclePage: NextPage<Props> = ({
   cycle,
   post,
+  isCurrentUserJoinedToCycle,
   participantsCount,
   postsCount,
   worksCount,
-  currentActions,
-  currentActionsPost,
+  mySocialInfo,
 }) => {
   return (
     <PopupLayout title={`${post.title} · ${cycle.title}`}>
       <CycleDetailComponent
         cycle={cycle}
-        participantsCount={participantsCount}
         post={post}
+        isCurrentUserJoinedToCycle={isCurrentUserJoinedToCycle}
+        participantsCount={participantsCount}
         postsCount={postsCount}
         worksCount={worksCount}
-        currentActions={currentActions}
-        currentActionsPost={currentActionsPost}
+        mySocialInfo={mySocialInfo}
       />
     </PopupLayout>
   );
@@ -95,32 +91,28 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
   const participantsCount = await countParticipants(cycle);
   const postsCount = await countPosts(cycle);
   const worksCount = await countWorks(cycle);
-  const currPost = postResults[0]
-  const current_post = postResults[0]
-
-
-  let current_actions: { [key: string]: boolean } = {}
-  let user_actions = ['like', 'fav']
-  user_actions.forEach(action=>{
-    current_actions[action] = false
-  })
-
 
   const session = (await getSession({ req })) as Session;
+  const mySocialInfo: MySocialInfo = {
+    favoritedByMe: undefined,
+    likedByMe: undefined,
+  };
+  let myParticipant = null;
   if (session != null) {
-    current_actions.like = !!(await findAction(session.user, current_post, 'liked'));
-    current_actions.fav = !!(await findAction(session.user, current_post, 'fav'));
+    myParticipant = await findParticipant(session.user, cycle);
+    mySocialInfo.favoritedByMe = !!(await isFavoritedByUser(postResults[0], session.user));
+    mySocialInfo.likedByMe = !!(await isLikedByUser(postResults[0], session.user));
   }
 
   return {
     props: {
       cycle,
-      post: current_post,
+      post: postResults[0],
+      isCurrentUserJoinedToCycle: myParticipant != null,
       participantsCount: participantsCount.count,
       postsCount: postsCount.count,
       worksCount: worksCount.count,
-      currentActions: current_actions,
-      currentActionsPost: current_actions,
+      mySocialInfo,
     },
   };
 };

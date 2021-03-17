@@ -29,11 +29,11 @@ export const findAll = async (): Promise<
   });
 };
 
-export const findAction = async (user: User, cycle: Cycle, action: string): Promise<number> => {
-  return prisma.user.count({
+export const findParticipant = async (user: User, cycle: Cycle): Promise<User | null> => {
+  return prisma.user.findFirst({
     where: {
       id: user.id,
-      [`${action}Cycles`]: { some: { id: cycle.id } },
+      joinedCycles: { some: { id: cycle.id } },
     },
   });
 };
@@ -81,6 +81,24 @@ export const search = async (query: { [key: string]: string | string[] }): Promi
   return prisma.cycle.findMany({
     ...(typeof where === 'string' && { where: JSON.parse(where) }),
     ...(typeof include === 'string' && { include: JSON.parse(include) }),
+  });
+};
+
+export const isFavoritedByUser = async (cycle: Cycle, user: User): Promise<number> => {
+  return prisma.cycle.count({
+    where: {
+      id: cycle.id,
+      favs: { some: { id: user.id } },
+    },
+  });
+};
+
+export const isLikedByUser = async (cycle: Cycle, user: User): Promise<number> => {
+  return prisma.cycle.count({
+    where: {
+      id: cycle.id,
+      likes: { some: { id: user.id } },
+    },
   });
 };
 
@@ -175,10 +193,15 @@ export const removeParticipant = async (cycle: Cycle, user: User): Promise<Cycle
   });
 };
 
-export const updateAction = async (cycle: Cycle, user: User, action: string, isAdd: boolean): Promise<Cycle> => {
+export const saveSocialInteraction = async (
+  cycle: Cycle,
+  user: User,
+  socialInteraction: 'fav' | 'like',
+  create: boolean,
+): Promise<Cycle> => {
   return prisma.cycle.update({
     where: { id: cycle.id },
-    data: { [action]: { [isAdd ? 'connect' : 'disconnect']: { id: user.id } } },
+    data: { [`${socialInteraction}s`]: { [create ? 'connect' : 'disconnect']: { id: user.id } } },
   });
 };
 

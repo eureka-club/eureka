@@ -1,9 +1,9 @@
 import { Prisma, Work, User } from '@prisma/client';
 import { StoredFileUpload } from '../types';
-import { CreateWorkServerFields, CreateWorkServerPayload, WorkWithImages } from '../types/work';
+import { CreateWorkServerFields, CreateWorkServerPayload, WorkDetail, WorkWithImages } from '../types/work';
 import prisma from '../lib/prisma';
 
-export const find = async (id: number): Promise<WorkWithImages | null> => {
+export const find = async (id: number): Promise<WorkDetail | null> => {
   return prisma.work.findUnique({
     where: { id },
     include: {
@@ -18,33 +18,6 @@ export const findAll = async (): Promise<WorkWithImages[]> => {
   return prisma.work.findMany({
     orderBy: { createdAt: 'desc' },
     include: { localImages: true, likes: true, favs: true },
-  });
-};
-
-export const findAction = async (user: User, work: Work, action: string): Promise<number> => {
-  return prisma.user.count({
-    where: {
-      id: user.id,
-      [`${action}Works`]: { some: { id: work.id } },
-    },
-  });
-};
-
-export const findLike = async (user: User, work: Work): Promise<User | null> => {
-  return prisma.user.findFirst({
-    where: {
-      id: user.id,
-      likedWorks: { some: { id: work.id } },
-    },
-  });
-};
-
-export const findFav = async (user: User, work: Work): Promise<User | null> => {
-  return prisma.user.findFirst({
-    where: {
-      id: user.id,
-      favWorks: { some: { id: work.id } },
-    },
   });
 };
 
@@ -84,6 +57,24 @@ export const countPosts = async (
   return prisma.post.aggregate({
     count: true,
     where: { works: { some: { id: work.id } } },
+  });
+};
+
+export const isFavoritedByUser = async (work: Work, user: User): Promise<number> => {
+  return prisma.work.count({
+    where: {
+      id: work.id,
+      favs: { some: { id: user.id } },
+    },
+  });
+};
+
+export const isLikedByUser = async (work: Work, user: User): Promise<number> => {
+  return prisma.work.count({
+    where: {
+      id: work.id,
+      likes: { some: { id: user.id } },
+    },
   });
 };
 
@@ -128,15 +119,20 @@ export const createFromServerFields = async (
   });
 };
 
-export const remove = async (id: number): Promise<Work> => {
-  return prisma.work.delete({
-    where: { id },
+export const saveSocialInteraction = async (
+  work: Work,
+  user: User,
+  socialInteraction: 'fav' | 'like',
+  create: boolean,
+): Promise<Work> => {
+  return prisma.work.update({
+    where: { id: work.id },
+    data: { [`${socialInteraction}s`]: { [create ? 'connect' : 'disconnect']: { id: user.id } } },
   });
 };
 
-export const updateAction = async (work: Work, user: User, action: string, isAdd: boolean): Promise<Work> => {
-  return prisma.work.update({
-    where: { id: work.id },
-    data: { [action]: { [isAdd ? 'connect' : 'disconnect']: { id: user.id } } },
+export const remove = async (id: number): Promise<Work> => {
+  return prisma.work.delete({
+    where: { id },
   });
 };

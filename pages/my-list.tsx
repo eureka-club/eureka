@@ -6,14 +6,10 @@ import { flatten, zip } from 'lodash';
 import { Session } from '../src/types';
 import { CycleMosaicItem } from '../src/types/cycle';
 import { WorkMosaicItem } from '../src/types/work';
-import { PostMosaicItem } from '../src/types/post';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import { search as searchCycles } from '../src/facades/cycle';
-import { search as searchPosts } from '../src/facades/post';
 import { search as searchWork } from '../src/facades/work';
 import Mosaic from '../src/components/Mosaic';
-import { MosaicItem } from '../src/types';
-
 
 interface Props {
   myListMosaicData: (CycleMosaicItem | WorkMosaicItem)[];
@@ -26,19 +22,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
   const cycles = await searchCycles({
-    where: JSON.stringify(
-      {
-        OR: [
-          { participants: { some: { id: session.user.id } } },
-          { favs: { some: { id: session.user.id } } },
-        ]
-      }
-    ),
-    include: JSON.stringify({ localImages: true }),
-  });
-
-  const posts = await searchPosts({
-    where: JSON.stringify({ favs: { some: { id: session.user.id } } }),
+    where: JSON.stringify({
+      OR: [{ participants: { some: { id: session.user.id } } }, { favs: { some: { id: session.user.id } } }],
+    }),
     include: JSON.stringify({ localImages: true }),
   });
 
@@ -51,11 +37,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     props: {
-      myListMosaicData: interleavedResults,      
+      myListMosaicData: interleavedResults,
     },
   };
 };
-
 
 const MyListPage: NextPage<Props> = ({ myListMosaicData }) => {
   const { t } = useTranslation('common');
@@ -67,6 +52,5 @@ const MyListPage: NextPage<Props> = ({ myListMosaicData }) => {
     </SimpleLayout>
   );
 };
-
 
 export default MyListPage;

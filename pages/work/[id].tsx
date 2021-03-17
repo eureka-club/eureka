@@ -1,37 +1,23 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/client';
-import { Session } from '../../src/types';
 
+import { Session, MySocialInfo } from '../../src/types';
+import { WorkDetail } from '../../src/types/work';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
-import WorkDetail from '../../src/components/work/WorkDetail';
-import { countCycles, countPosts, find, findAction,
-  findFav,
-  findLike,
-} from '../../src/facades/work';
-import { WorkWithImages } from '../../src/types/work';
+import WorkDetailComponent from '../../src/components/work/WorkDetail';
+import { countCycles, countPosts, find, isFavoritedByUser, isLikedByUser } from '../../src/facades/work';
 
 interface Props {
-  work: WorkWithImages;
+  work: WorkDetail;
   cyclesCount: number;
   postsCount: number;
-  currentActions:  { [key: string]: boolean };
+  mySocialInfo: MySocialInfo;
 }
 
-const WorkDetailPage: NextPage<Props> = ({
-  work,
-  cyclesCount, 
-  postsCount,
-  currentActions
-}) => {
+const WorkDetailPage: NextPage<Props> = ({ work, cyclesCount, postsCount, mySocialInfo }) => {
   return (
     <SimpleLayout title={work.title}>
-      <WorkDetail 
-        work={work}
-        cyclesCount={cyclesCount}
-        postsCount={postsCount} 
-        currentActions={currentActions}
-        currentActionsPost={currentActions}
-      />
+      <WorkDetailComponent work={work} cyclesCount={cyclesCount} postsCount={postsCount} mySocialInfo={mySocialInfo} />
     </SimpleLayout>
   );
 };
@@ -53,24 +39,23 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
 
   const cyclesCount = await countCycles(work);
   const postsCount = await countPosts(work);
- let current_actions: { [key: string]: boolean } = {}
-  let user_actions = ['like', 'fav']
-  user_actions.forEach(action=>{
-    current_actions[action] = false
-  })
 
   const session = (await getSession({ req })) as Session;
+  const mySocialInfo: MySocialInfo = {
+    favoritedByMe: undefined,
+    likedByMe: undefined,
+  };
   if (session != null) {
-    current_actions.like = !!(await findAction(session.user, work, 'liked'));
-    current_actions.fav = !!(await findAction(session.user, work, 'fav'));
+    mySocialInfo.favoritedByMe = !!(await isFavoritedByUser(work, session.user));
+    mySocialInfo.likedByMe = !!(await isLikedByUser(work, session.user));
   }
 
   return {
     props: {
       work,
-      currentActions: current_actions,
       cyclesCount: cyclesCount.count,
       postsCount: postsCount.count,
+      mySocialInfo,
     },
   };
 };

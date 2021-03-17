@@ -17,15 +17,16 @@ import TabContainer from 'react-bootstrap/TabContainer';
 import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
 import { useMutation } from 'react-query';
-import ActionButton from '../common/ActionButton';
-import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, HYVOR_WEBSITE_ID } from '../../constants';
+
+import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
+import { MySocialInfo } from '../../types';
 import { CycleDetail } from '../../types/cycle';
 import { PostDetail } from '../../types/post';
-import { Session } from '../../types';
 import LocalImageComponent from '../LocalImage';
 import PostDetailComponent from '../post/PostDetail';
 import CycleSummary from './CycleSummary';
 import HyvorComments from '../common/HyvorComments';
+import SocialInteraction from '../common/SocialInteraction';
 import PostsMosaic from './PostsMosaic';
 import WorksMosaic from './WorksMosaic';
 import UnclampText from '../UnclampText';
@@ -35,27 +36,27 @@ import styles from './CycleDetail.module.css';
 interface Props {
   cycle: CycleDetail;
   post?: PostDetail;
+  isCurrentUserJoinedToCycle: boolean;
   participantsCount: number;
   postsCount: number;
   worksCount: number;
-  currentActions: { [key: string]: boolean };
-  currentActionsPost: { [key: string]: boolean };
+  mySocialInfo: MySocialInfo;
 }
 
 const CycleDetailComponent: FunctionComponent<Props> = ({
   cycle,
   post,
+  isCurrentUserJoinedToCycle,
   participantsCount,
   postsCount,
   worksCount,
-  currentActions,
-  currentActionsPost,
+  mySocialInfo,
 }) => {
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const router = useRouter();
-  const [session] = useSession() as [Session | null | undefined, boolean];
+  const [session] = useSession();
   const { t } = useTranslation('cycleDetail');
-  const hyvorId = `cycle-${cycle.id}`;
+  const hyvorId = `${WEBAPP_URL}cycle/${cycle.id}`;
 
   const { mutate: execJoinCycle, isLoading: isJoinCycleLoading, isSuccess: isJoinCycleSuccess } = useMutation(
     async () => {
@@ -88,12 +89,14 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     if (isJoinCycleSuccess === true) {
       router.replace(router.asPath); // refresh page
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isJoinCycleSuccess]);
 
   useEffect(() => {
     if (isLeaveCycleSuccess === true) {
       router.replace(router.asPath); // refresh page
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLeaveCycleSuccess]);
 
   return (
@@ -120,7 +123,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 <CycleSummary cycle={cycle} />
 
                 <section className={classNames('d-flex justify-content-between', styles.socialInfo)}>
-                  <ActionButton level={cycle} levelName="cycle" currentActions={currentActions} showCounts />
+                  <SocialInteraction entity={cycle} mySocialInfo={mySocialInfo} showCounts />
                   <div>
                     <small className={styles.participantsCount}>
                       {t('participantsCount', { count: participantsCount })}
@@ -129,7 +132,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                       <>
                         <div className="d-inline-block mx-3" />
                         {(isJoinCycleLoading || isLeaveCycleLoading) && <Spinner animation="border" size="sm" />}
-                        {currentActions.joined ? (
+                        {isCurrentUserJoinedToCycle ? (
                           <Button onClick={handleLeaveCycleClick} variant="link">
                             {t('leaveCycleLabel')}
                           </Button>
@@ -144,7 +147,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
             </Col>
           </>
         ) : (
-          <PostDetailComponent post={post} currentActionsPost={currentActionsPost} cycle={cycle} />
+          <PostDetailComponent post={post} cycle={cycle} mySocialInfo={mySocialInfo} />
         )}
       </Row>
 
@@ -224,7 +227,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                       <TabPane eventKey="forum">
                         <h3>{t('tabHeaderForum')}</h3>
                         <p className={styles.explanatoryText}>{t('explanatoryTextComments')}</p>
-                        {session && <HyvorComments id={hyvorId} />}
+                        <HyvorComments id={hyvorId} />
                       </TabPane>
                     </TabContent>
                   </Col>

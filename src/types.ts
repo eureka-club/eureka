@@ -25,6 +25,11 @@ export interface StoredFileUpload {
   mimeType: string;
 }
 
+export interface MySocialInfo {
+  favoritedByMe: boolean | undefined;
+  likedByMe: boolean | undefined;
+}
+
 /*
  * TS type guards
  */

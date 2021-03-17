@@ -12,36 +12,29 @@ import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
 
-import ActionButton from '../common/ActionButton';
-import { WorkWithImages } from '../../types/work';
+import { MySocialInfo } from '../../types';
 import { PostDetail } from '../../types/post';
+import { WorkDetail } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
 import CombinedMosaic from './CombinedMosaic';
 import CyclesMosaic from './CyclesMosaic';
 import PostDetailComponent from '../post/PostDetail';
 import PostsMosaic from './PostsMosaic';
+import SocialInteraction from '../common/SocialInteraction';
 import UnclampText from '../UnclampText';
 import WorkSummary from './WorkSummary';
 import detailPagesAtom from '../../atoms/detailPages';
 import styles from './WorkDetail.module.css';
 
 interface Props {
-  work: WorkWithImages;
+  work: WorkDetail;
   post?: PostDetail;
   cyclesCount: number;
   postsCount: number;
-  currentActions: { [key: string]: boolean };
-  currentActionsPost: { [key: string]: boolean };
+  mySocialInfo: MySocialInfo;
 }
 
-const WorkDetail: FunctionComponent<Props> = ({
-  work,
-  post,
-  cyclesCount,
-  postsCount,
-  currentActions,
-  currentActionsPost,
-}) => {
+const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCount, mySocialInfo }) => {
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const { t } = useTranslation('workDetail');
 
@@ -60,7 +53,7 @@ const WorkDetail: FunctionComponent<Props> = ({
               <div className={classNames(styles.imgWrapper, 'mb-3')}>
                 <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
               </div>
-              <ActionButton level={work} levelName="work" currentActions={currentActions} showCounts />
+              <SocialInteraction entity={work} mySocialInfo={mySocialInfo} showCounts />
             </Col>
             <Col md={{ span: 8 }}>
               <section className="mb-4">
@@ -77,7 +70,7 @@ const WorkDetail: FunctionComponent<Props> = ({
             </Col>
           </>
         ) : (
-          <PostDetailComponent post={post} work={work} currentActionsPost={currentActionsPost} />
+          <PostDetailComponent post={post} work={work} mySocialInfo={mySocialInfo} />
         )}
       </Row>
 
@@ -134,4 +127,4 @@ const WorkDetail: FunctionComponent<Props> = ({
   );
 };
 
-export default WorkDetail;
+export default WorkDetailComponent;
