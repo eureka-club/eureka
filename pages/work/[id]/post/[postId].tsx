@@ -1,28 +1,37 @@
 import { GetServerSideProps, NextPage } from 'next';
+import { getSession } from 'next-auth/client';
 
+import { MySocialInfo, Session } from '../../../../src/types';
 import { PostDetail } from '../../../../src/types/post';
-import { WorkWithImages } from '../../../../src/types/work';
+import { WorkDetail } from '../../../../src/types/work';
 import PopupLayout from '../../../../src/components/layouts/PopupLayout';
-import WorkDetail from '../../../../src/components/work/WorkDetail';
-import { search as searchPost } from '../../../../src/facades/post';
+import WorkDetailComponent from '../../../../src/components/work/WorkDetail';
+import { search as searchPost, isFavoritedByUser, isLikedByUser } from '../../../../src/facades/post';
 import { countCycles, countPosts, find as findWork } from '../../../../src/facades/work';
 
 interface Props {
   post: PostDetail;
-  work: WorkWithImages;
+  work: WorkDetail;
   cyclesCount: number;
   postsCount: number;
+  mySocialInfo: MySocialInfo;
 }
 
-const PostDetailInWorkPage: NextPage<Props> = ({ post, work, cyclesCount, postsCount }) => {
+const PostDetailInWorkPage: NextPage<Props> = ({ post, work, cyclesCount, postsCount, mySocialInfo }) => {
   return (
     <PopupLayout title={`${post.title} · ${work.title}`}>
-      <WorkDetail work={work} post={post} cyclesCount={cyclesCount} postsCount={postsCount} />
+      <WorkDetailComponent
+        work={work}
+        post={post}
+        cyclesCount={cyclesCount}
+        postsCount={postsCount}
+        mySocialInfo={mySocialInfo}
+      />
     </PopupLayout>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
   if (
     params == null ||
     params.id == null ||
@@ -53,6 +62,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       creator: true,
       cycles: true,
       localImages: true,
+      favs: true,
+      likes: true,
     }),
   })) as PostDetail[];
   if (postResults.length === 0) {
@@ -62,12 +73,23 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const cyclesCount = await countCycles(work);
   const postsCount = await countPosts(work);
 
+  const session = (await getSession({ req })) as Session;
+  const mySocialInfo: MySocialInfo = {
+    favoritedByMe: undefined,
+    likedByMe: undefined,
+  };
+  if (session != null) {
+    mySocialInfo.favoritedByMe = !!(await isFavoritedByUser(postResults[0], session.user));
+    mySocialInfo.likedByMe = !!(await isLikedByUser(postResults[0], session.user));
+  }
+
   return {
     props: {
       work,
       post: postResults[0],
       cyclesCount: cyclesCount.count,
       postsCount: postsCount.count,
+      mySocialInfo,
     },
   };
 };

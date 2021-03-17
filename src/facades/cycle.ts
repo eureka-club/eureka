@@ -11,6 +11,9 @@ export const find = async (id: number): Promise<CycleDetail | null> => {
       creator: true,
       localImages: true,
       complementaryMaterials: true,
+      participants: true,
+      likes: true,
+      favs: true,
     },
   });
 };
@@ -78,6 +81,24 @@ export const search = async (query: { [key: string]: string | string[] }): Promi
   return prisma.cycle.findMany({
     ...(typeof where === 'string' && { where: JSON.parse(where) }),
     ...(typeof include === 'string' && { include: JSON.parse(include) }),
+  });
+};
+
+export const isFavoritedByUser = async (cycle: Cycle, user: User): Promise<number> => {
+  return prisma.cycle.count({
+    where: {
+      id: cycle.id,
+      favs: { some: { id: user.id } },
+    },
+  });
+};
+
+export const isLikedByUser = async (cycle: Cycle, user: User): Promise<number> => {
+  return prisma.cycle.count({
+    where: {
+      id: cycle.id,
+      likes: { some: { id: user.id } },
+    },
   });
 };
 
@@ -169,6 +190,18 @@ export const removeParticipant = async (cycle: Cycle, user: User): Promise<Cycle
   return prisma.cycle.update({
     where: { id: cycle.id },
     data: { participants: { disconnect: { id: user.id } } },
+  });
+};
+
+export const saveSocialInteraction = async (
+  cycle: Cycle,
+  user: User,
+  socialInteraction: 'fav' | 'like',
+  create: boolean,
+): Promise<Cycle> => {
+  return prisma.cycle.update({
+    where: { id: cycle.id },
+    data: { [`${socialInteraction}s`]: { [create ? 'connect' : 'disconnect']: { id: user.id } } },
   });
 };
 

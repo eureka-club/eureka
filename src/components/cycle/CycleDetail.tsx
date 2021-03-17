@@ -16,18 +16,17 @@ import Spinner from 'react-bootstrap/Spinner';
 import TabContainer from 'react-bootstrap/TabContainer';
 import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
-// import { AiFillHeart } from 'react-icons/ai';
-// import { BsBookmarkFill } from 'react-icons/bs';
-// import { FiShare2 } from 'react-icons/fi';
 import { useMutation } from 'react-query';
 
 import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
+import { MySocialInfo } from '../../types';
 import { CycleDetail } from '../../types/cycle';
 import { PostDetail } from '../../types/post';
 import LocalImageComponent from '../LocalImage';
 import PostDetailComponent from '../post/PostDetail';
 import CycleSummary from './CycleSummary';
 import HyvorComments from '../common/HyvorComments';
+import SocialInteraction from '../common/SocialInteraction';
 import PostsMosaic from './PostsMosaic';
 import WorksMosaic from './WorksMosaic';
 import UnclampText from '../UnclampText';
@@ -41,6 +40,7 @@ interface Props {
   participantsCount: number;
   postsCount: number;
   worksCount: number;
+  mySocialInfo: MySocialInfo;
 }
 
 const CycleDetailComponent: FunctionComponent<Props> = ({
@@ -50,6 +50,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   participantsCount,
   postsCount,
   worksCount,
+  mySocialInfo,
 }) => {
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const router = useRouter();
@@ -120,20 +121,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 </div>
                 <h1>{cycle.title}</h1>
                 <CycleSummary cycle={cycle} />
+
                 <section className={classNames('d-flex justify-content-between', styles.socialInfo)}>
-                  {/*
-                  <div>
-                    <span>
-                      <BsBookmarkFill /> #
-                    </span>
-                    <span>
-                      <AiFillHeart /> #
-                    </span>
-                    <span>
-                      <FiShare2 /> #
-                    </span>
-                  </div>
-                  */}
+                  <SocialInteraction entity={cycle} mySocialInfo={mySocialInfo} showCounts />
                   <div>
                     <small className={styles.participantsCount}>
                       {t('participantsCount', { count: participantsCount })}
@@ -157,7 +147,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
             </Col>
           </>
         ) : (
-          <PostDetailComponent post={post} />
+          <PostDetailComponent post={post} cycle={cycle} mySocialInfo={mySocialInfo} />
         )}
       </Row>
 

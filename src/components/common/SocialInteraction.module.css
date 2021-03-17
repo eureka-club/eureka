@@ -1,0 +1,44 @@
+.container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.socialBtn {
+  background: none;
+  border: none;
+  color: var(--eureka-green);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 1.25rem;
+  transition: transform 0.15s;
+  margin-right: 0.5rem;
+}
+.socialBtn svg {
+  margin-right: 0.2rem;
+}
+.socialBtn:hover {
+  transform: scale(1.15);
+}
+
+.action-like path,
+.action-like span {
+  color: #e3506d;
+}
+
+.toggle-share svg,
+.toggle-share span {
+  color: #68cfb4;
+}
+
+.icon-share svg {
+  margin-right: 12px;
+  color: #68cfb4;
+}
+
+.toggle-share,
+.toggle-share:hover {
+  background-color: transparent;
+  border-color: transparent;
+}

@@ -1,20 +1,23 @@
-import { Prisma, Work } from '@prisma/client';
-
+import { Prisma, Work, User } from '@prisma/client';
 import { StoredFileUpload } from '../types';
-import { CreateWorkServerFields, CreateWorkServerPayload, WorkWithImages } from '../types/work';
+import { CreateWorkServerFields, CreateWorkServerPayload, WorkDetail, WorkWithImages } from '../types/work';
 import prisma from '../lib/prisma';
 
-export const find = async (id: number): Promise<WorkWithImages | null> => {
+export const find = async (id: number): Promise<WorkDetail | null> => {
   return prisma.work.findUnique({
     where: { id },
-    include: { localImages: true },
+    include: {
+      localImages: true,
+      likes: true,
+      favs: true,
+    },
   });
 };
 
 export const findAll = async (): Promise<WorkWithImages[]> => {
   return prisma.work.findMany({
     orderBy: { createdAt: 'desc' },
-    include: { localImages: true },
+    include: { localImages: true, likes: true, favs: true },
   });
 };
 
@@ -57,6 +60,24 @@ export const countPosts = async (
   });
 };
 
+export const isFavoritedByUser = async (work: Work, user: User): Promise<number> => {
+  return prisma.work.count({
+    where: {
+      id: work.id,
+      favs: { some: { id: user.id } },
+    },
+  });
+};
+
+export const isLikedByUser = async (work: Work, user: User): Promise<number> => {
+  return prisma.work.count({
+    where: {
+      id: work.id,
+      likes: { some: { id: user.id } },
+    },
+  });
+};
+
 export const createFromServerFields = async (
   fields: CreateWorkServerFields,
   coverImageUpload: StoredFileUpload,
@@ -95,6 +116,18 @@ export const createFromServerFields = async (
         create: { ...coverImageUpload },
       },
     },
+  });
+};
+
+export const saveSocialInteraction = async (
+  work: Work,
+  user: User,
+  socialInteraction: 'fav' | 'like',
+  create: boolean,
+): Promise<Work> => {
+  return prisma.work.update({
+    where: { id: work.id },
+    data: { [`${socialInteraction}s`]: { [create ? 'connect' : 'disconnect']: { id: user.id } } },
   });
 };
 

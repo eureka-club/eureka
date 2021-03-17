@@ -41,5 +41,15 @@
   "workLengthAsPagesLabel": "pages",
   "workLengthAsMinutesLabel": "minutes",
   "unclampTextLess": "view less",
-  "unclampTextMore": "view more"
+  "unclampTextMore": "view more",
+
+  "wayShare": "",
+  "cycleShare": "¡Check the cycle",
+  "postCycleShare": "Check this post about the cycle",
+  "postWorkShare": "Check this post about",
+  "workShare": "Check this content about",
+  "complementShare": "and join us on Eureka for further discussion!",
+  "whatsappComplement": "Join us here:",
+  "twitterComplement": "",
+  "facebookComplement": ""
 }

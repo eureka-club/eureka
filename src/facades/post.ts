@@ -10,6 +10,8 @@ export const find = async (id: number): Promise<PostWithCyclesWorks | null> => {
     include: {
       cycles: true,
       works: true,
+      likes: true,
+      favs: true,
     },
   });
 };
@@ -37,6 +39,24 @@ export const search = async (query: { [key: string]: string | string[] }): Promi
   return prisma.post.findMany({
     ...(typeof where === 'string' && { where: JSON.parse(where) }),
     ...(typeof include === 'string' && { include: JSON.parse(include) }),
+  });
+};
+
+export const isFavoritedByUser = async (post: Post, user: User): Promise<number> => {
+  return prisma.post.count({
+    where: {
+      id: post.id,
+      favs: { some: { id: user.id } },
+    },
+  });
+};
+
+export const isLikedByUser = async (post: Post, user: User): Promise<number> => {
+  return prisma.post.count({
+    where: {
+      id: post.id,
+      likes: { some: { id: user.id } },
+    },
   });
 };
 
@@ -93,6 +113,18 @@ export const createFromServerFields = async (
       ...(existingCycle != null && { cycles: { connect: { id: existingCycle.id } } }),
       ...(existingWork != null && { works: { connect: { id: existingWork.id } } }),
     },
+  });
+};
+
+export const saveSocialInteraction = async (
+  post: Post,
+  user: User,
+  socialInteraction: 'fav' | 'like',
+  create: boolean,
+): Promise<Post> => {
+  return prisma.post.update({
+    where: { id: post.id },
+    data: { [`${socialInteraction}s`]: { [create ? 'connect' : 'disconnect']: { id: user.id } } },
   });
 };
 

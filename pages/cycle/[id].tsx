@@ -2,10 +2,18 @@ import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/client';
 
 import { CycleDetail } from '../../src/types/cycle';
-import { Session } from '../../src/types';
+import { MySocialInfo, Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '../../src/components/cycle/CycleDetail';
-import { countParticipants, countPosts, countWorks, find, findParticipant } from '../../src/facades/cycle';
+import {
+  countParticipants,
+  countPosts,
+  countWorks,
+  find,
+  findParticipant,
+  isFavoritedByUser,
+  isLikedByUser,
+} from '../../src/facades/cycle';
 
 interface Props {
   cycle: CycleDetail;
@@ -13,6 +21,7 @@ interface Props {
   participantsCount: number;
   postsCount: number;
   worksCount: number;
+  mySocialInfo: MySocialInfo;
 }
 
 const CycleDetailPage: NextPage<Props> = ({
@@ -21,6 +30,7 @@ const CycleDetailPage: NextPage<Props> = ({
   participantsCount,
   postsCount,
   worksCount,
+  mySocialInfo,
 }) => {
   return (
     <SimpleLayout title={cycle.title}>
@@ -30,6 +40,7 @@ const CycleDetailPage: NextPage<Props> = ({
         participantsCount={participantsCount}
         postsCount={postsCount}
         worksCount={worksCount}
+        mySocialInfo={mySocialInfo}
       />
     </SimpleLayout>
   );
@@ -53,11 +64,17 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
   const participantsCount = await countParticipants(cycle);
   const postsCount = await countPosts(cycle);
   const worksCount = await countWorks(cycle);
-  let myParticipant = null;
 
   const session = (await getSession({ req })) as Session;
+  const mySocialInfo: MySocialInfo = {
+    favoritedByMe: undefined,
+    likedByMe: undefined,
+  };
+  let myParticipant = null;
   if (session != null) {
     myParticipant = await findParticipant(session.user, cycle);
+    mySocialInfo.favoritedByMe = !!(await isFavoritedByUser(cycle, session.user));
+    mySocialInfo.likedByMe = !!(await isLikedByUser(cycle, session.user));
   }
 
   return {
@@ -67,6 +84,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
       participantsCount: participantsCount.count,
       postsCount: postsCount.count,
       worksCount: worksCount.count,
+      mySocialInfo,
     },
   };
 };

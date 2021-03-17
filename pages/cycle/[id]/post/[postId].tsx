@@ -1,9 +1,9 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/client';
 
+import { MySocialInfo, Session } from '../../../../src/types';
 import { CycleDetail } from '../../../../src/types/cycle';
 import { PostDetail } from '../../../../src/types/post';
-import { Session } from '../../../../src/types';
 import PopupLayout from '../../../../src/components/layouts/PopupLayout';
 import CycleDetailComponent from '../../../../src/components/cycle/CycleDetail';
 import {
@@ -13,7 +13,7 @@ import {
   find as findCycle,
   findParticipant,
 } from '../../../../src/facades/cycle';
-import { search as searchPost } from '../../../../src/facades/post';
+import { isFavoritedByUser, isLikedByUser, search as searchPost } from '../../../../src/facades/post';
 
 interface Props {
   cycle: CycleDetail;
@@ -22,6 +22,7 @@ interface Props {
   participantsCount: number;
   postsCount: number;
   worksCount: number;
+  mySocialInfo: MySocialInfo;
 }
 
 const PostDetailInCyclePage: NextPage<Props> = ({
@@ -31,16 +32,18 @@ const PostDetailInCyclePage: NextPage<Props> = ({
   participantsCount,
   postsCount,
   worksCount,
+  mySocialInfo,
 }) => {
   return (
     <PopupLayout title={`${post.title} · ${cycle.title}`}>
       <CycleDetailComponent
         cycle={cycle}
+        post={post}
         isCurrentUserJoinedToCycle={isCurrentUserJoinedToCycle}
         participantsCount={participantsCount}
-        post={post}
         postsCount={postsCount}
         worksCount={worksCount}
+        mySocialInfo={mySocialInfo}
       />
     </PopupLayout>
   );
@@ -77,6 +80,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
       creator: true,
       cycles: true,
       localImages: true,
+      favs: true,
+      likes: true,
     }),
   })) as PostDetail[];
   if (postResults.length === 0) {
@@ -86,11 +91,17 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
   const participantsCount = await countParticipants(cycle);
   const postsCount = await countPosts(cycle);
   const worksCount = await countWorks(cycle);
-  let myParticipant = null;
 
   const session = (await getSession({ req })) as Session;
+  const mySocialInfo: MySocialInfo = {
+    favoritedByMe: undefined,
+    likedByMe: undefined,
+  };
+  let myParticipant = null;
   if (session != null) {
     myParticipant = await findParticipant(session.user, cycle);
+    mySocialInfo.favoritedByMe = !!(await isFavoritedByUser(postResults[0], session.user));
+    mySocialInfo.likedByMe = !!(await isLikedByUser(postResults[0], session.user));
   }
 
   return {
@@ -101,6 +112,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
       participantsCount: participantsCount.count,
       postsCount: postsCount.count,
       worksCount: worksCount.count,
+      mySocialInfo,
     },
   };
 };
