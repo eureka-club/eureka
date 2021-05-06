@@ -17,6 +17,7 @@ import TabContainer from 'react-bootstrap/TabContainer';
 import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
 import { useMutation } from 'react-query';
+import globalModalsAtom from '../../atoms/globalModals';
 
 import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
 import { MySocialInfo } from '../../types';
@@ -52,11 +53,16 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   worksCount,
   mySocialInfo,
 }) => {
+  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const router = useRouter();
   const [session] = useSession();
   const { t } = useTranslation('cycleDetail');
   const hyvorId = `${WEBAPP_URL}cycle/${cycle.id}`;
+
+  const openSignInModal = () => {
+    setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
+  };
 
   const { mutate: execJoinCycle, isLoading: isJoinCycleLoading, isSuccess: isJoinCycleSuccess } = useMutation(
     async () => {
@@ -77,6 +83,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   const handleJoinCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
+    if (!session) openSignInModal();
     execJoinCycle();
   };
 
@@ -128,19 +135,20 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                     <small className={styles.participantsCount}>
                       {t('participantsCount', { count: participantsCount })}
                     </small>
-                    {session != null && (
-                      <>
-                        <div className="d-inline-block mx-3" />
-                        {(isJoinCycleLoading || isLeaveCycleLoading) && <Spinner animation="border" size="sm" />}
-                        {isCurrentUserJoinedToCycle ? (
-                          <Button onClick={handleLeaveCycleClick} variant="link">
-                            {t('leaveCycleLabel')}
-                          </Button>
-                        ) : (
+
+                    <>
+                      <div className="d-inline-block mx-3" />
+                      {(isJoinCycleLoading || isLeaveCycleLoading) && <Spinner animation="border" size="sm" />}
+                      {isCurrentUserJoinedToCycle && session != null ? (
+                        <Button onClick={handleLeaveCycleClick} variant="link">
+                          {t('leaveCycleLabel')}
+                        </Button>
+                      ) : (
+                        !isCurrentUserJoinedToCycle && (
                           <Button onClick={handleJoinCycleClick}>{t('joinCycleLabel')}</Button>
-                        )}
-                      </>
-                    )}
+                        )
+                      )}
+                    </>
                   </div>
                 </section>
               </div>
