@@ -43,30 +43,25 @@ const SocialInteraction: FunctionComponent<Props> = ({ entity, parent, mySocialI
   const router = useRouter();
   const [session] = useSession();
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-  
+
   const [optimistLike, setOptimistLike] = useState<boolean | null>(mySocialInfo.likedByMe);
   const [optimistFav, setOptimistFav] = useState<boolean | null>(mySocialInfo.favoritedByMe);
 
   const [optimistLikeCount, setOptimistLikeCount] = useState<number>(entity.likes.length);
   const [optimistFavCount, setOptimistFavCount] = useState<number>(entity.favs.length);
 
-  // const [socialRequest, setSocialRequest] = useState<boolean>(false);
-
-  // setOptimistLikeCount(entity.likes.length);
-  // setOptimistFavCount(entity.favs.length);
-
   const openSignInModal = () => {
     setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
   };
 
-  const likeInc = () => {    
+  const likeInc = () => {
     if (!optimistLike) {
       return 1;
     }
     return optimistLikeCount ? -1 : 0;
   };
 
-  const favInc = () => {    
+  const favInc = () => {
     if (!optimistFav) {
       return 1;
     }
@@ -107,20 +102,42 @@ const SocialInteraction: FunctionComponent<Props> = ({ entity, parent, mySocialI
 
         throw new Error('Unknown entity');
       })();
-      
+
       if (session) {
-        if (socialInteraction === 'like') {
-          setOptimistLike(!optimistLike);
-          setOptimistLikeCount(optimistLikeCount + likeInc());
-        } else {
-          setOptimistFav(!optimistFav);
-          setOptimistFavCount(optimistFavCount + favInc());
-        }
-        return fetch(`/api/${entityEndpoint}/${entity.id}/${socialInteraction}`, {
+        let res = await (await fetch(`/api/${entityEndpoint}/${entity.id}/${socialInteraction}`, {
           method: doCreate ? 'POST' : 'DELETE',
-        });
+        })).json();
+        return res;
       }
       openSignInModal();
+    },
+    {
+      onMutate: (payload) => {
+        if (payload.socialInteraction === 'like') {
+          const ol = optimistLike;
+          setOptimistLike(!optimistLike);
+          const olc = optimistLikeCount;
+          setOptimistLikeCount(optimistLikeCount + likeInc());
+          return { optimistLike: ol, optimistLikeCount: olc };
+        }
+        const opf = optimistFav;
+        const opfc = optimistFavCount;
+        setOptimistFav(!optimistFav);
+        setOptimistFavCount(optimistFavCount + favInc());
+        return { optimistFav: opf, optimistFavCount: opfc };
+      },
+      onSuccess: (data, variables) => {
+        debugger;
+        if (data.status != "OK") {
+          if (variables.socialInteraction === 'like') {
+            setOptimistLike(mySocialInfo.likedByMe);
+            setOptimistLikeCount(entity.likes.length);
+          }
+          setOptimistFav(mySocialInfo.likedByMe);
+          setOptimistFavCount(entity.favs.length);
+        }
+      },
+
     },
   );
 
