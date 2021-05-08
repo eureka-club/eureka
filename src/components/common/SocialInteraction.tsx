@@ -127,7 +127,7 @@ const SocialInteraction: FunctionComponent<Props> = ({ entity, parent, mySocialI
         return { optimistFav: opf, optimistFavCount: opfc };
       },
       onSuccess: (data, variables) => {
-        debugger;
+        
         if (data.status != "OK") {
           if (variables.socialInteraction === 'like') {
             setOptimistLike(mySocialInfo.likedByMe);
