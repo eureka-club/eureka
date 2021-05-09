@@ -1,5 +1,7 @@
 import classNames from 'classnames';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
@@ -22,6 +24,9 @@ interface Props {
   work?: WorkDetail;
   mySocialInfo: MySocialInfo;
 }
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const PostDetail: FunctionComponent<Props> = ({ post, cycle, work, mySocialInfo }) => {
   const { t } = useTranslation('postDetail');
@@ -73,7 +78,12 @@ const PostDetail: FunctionComponent<Props> = ({ post, cycle, work, mySocialInfo 
               className={styles.creatorAvatar}
             />
             {post.creator.name}
-            <small className={styles.postDate}>{dayjs(post.createdAt).format(DATE_FORMAT_SHORT)}</small>
+            <small className={styles.postDate}>
+              {
+                dayjs(post.createdAt).tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)
+                // dayjs(post.createdAt).format(DATE_FORMAT_SHORT)
+              }
+            </small>
           </div>
           <h1>{post.title}</h1>
           {post.contentText != null && <UnclampText text={post.contentText} clampHeight="20rem" />}
