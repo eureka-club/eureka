@@ -1,5 +1,8 @@
 import { Cycle } from '@prisma/client';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 
@@ -11,9 +14,14 @@ interface Props {
   cycle: Cycle;
 }
 
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 const WorkSummary: FunctionComponent<Props> = ({ cycle }) => {
   const now = new Date();
   const { t } = useTranslation('common');
+  const startDate = dayjs(cycle.startDate).add(1, 'day').tz(dayjs.tz.guess());
+  const endDate = dayjs(cycle.endDate).add(1, 'day').tz(dayjs.tz.guess());
   return (
     <section className={styles.workSummary}>
       {[
@@ -21,9 +29,7 @@ const WorkSummary: FunctionComponent<Props> = ({ cycle }) => {
           advancedDayjs(now).isBetween(dayjs(cycle.startDate), dayjs(cycle.endDate), 'day', '[]')
             ? t('cycleActiveLabel')
             : t('cycleNotActiveLabel')
-        } :  ${dayjs(cycle.startDate).add(1, 'day').format(DATE_FORMAT_SHORT)}—${dayjs(cycle.endDate)
-          .add(1, 'day')
-          .format(DATE_FORMAT_SHORT)}`,
+        } :  ${startDate.format(DATE_FORMAT_SHORT)}—${endDate.format(DATE_FORMAT_SHORT)}`,
       ].join(', ')}
     </section>
   );
