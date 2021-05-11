@@ -6,6 +6,7 @@ import path from 'path';
 import { FileUpload, StoredFileUpload } from '../types';
 
 const { LOCAL_ASSETS_HOST_DIR } = process.env;
+const { PUBLIC_ASSETS_STORAGE_MECHANISM } = process.env;
 const HASHING_ALGO = 'sha256';
 const FOLDER_SPREAD_CHAR_COUNT = 2;
 
@@ -32,14 +33,22 @@ const moveUploaded = async (fileUpload: FileUpload, fileHash: string): Promise<s
 
 export const storeUpload = async (file: FileUpload): Promise<StoredFileUpload> => {
   const fileHash = getFileHash(file.path);
-  const fileDestPath = await moveUploaded(file, fileHash);
-  const assetsPathPrefixClean = LOCAL_ASSETS_HOST_DIR!.replace('./', '');
-  const cutLength = (assetsPathPrefixClean + path.delimiter).length;
 
-  return {
-    contentHash: fileHash,
-    originalFilename: file.originalFilename,
-    storedFile: fileDestPath.substr(cutLength),
-    mimeType: file.headers['content-type'],
-  };
+  switch (PUBLIC_ASSETS_STORAGE_MECHANISM) {
+    case 'local': {
+      const fileDestPath = await moveUploaded(file, fileHash);
+      const assetsPathPrefixClean = LOCAL_ASSETS_HOST_DIR!.replace('./', '');
+      const cutLength = (assetsPathPrefixClean + path.delimiter).length;
+
+      return {
+        contentHash: fileHash,
+        originalFilename: file.originalFilename,
+        storedFile: fileDestPath.substr(cutLength),
+        mimeType: file.headers['content-type'],
+      };
+    }
+
+    default:
+      throw new Error('Unknown PUBLIC_ASSETS_STORAGE_MECHANISM');
+  }
 };
