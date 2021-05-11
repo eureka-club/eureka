@@ -14,7 +14,6 @@ interface Props {
 const WorkSummary: FunctionComponent<Props> = ({ cycle }) => {
   const now = new Date();
   const { t } = useTranslation('common');
-
   return (
     <section className={styles.workSummary}>
       {[
@@ -22,7 +21,9 @@ const WorkSummary: FunctionComponent<Props> = ({ cycle }) => {
           advancedDayjs(now).isBetween(dayjs(cycle.startDate), dayjs(cycle.endDate), 'day', '[]')
             ? t('cycleActiveLabel')
             : t('cycleNotActiveLabel')
-        } :  ${dayjs(cycle.startDate).format(DATE_FORMAT_SHORT)}—${dayjs(cycle.endDate).format(DATE_FORMAT_SHORT)}`,
+        } :  ${dayjs(cycle.startDate).add(1, 'day').format(DATE_FORMAT_SHORT)}—${dayjs(cycle.endDate)
+          .add(1, 'day')
+          .format(DATE_FORMAT_SHORT)}`,
       ].join(', ')}
     </section>
   );

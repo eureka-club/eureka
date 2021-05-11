@@ -17,9 +17,9 @@ const WorkSummary: FunctionComponent<Props> = ({ work }) => {
     <section className={styles.workSummary}>
       {[
         work.publicationYear &&
-          `${work.type === 'book' ? t('publicationYearLabel') : t('releaseYearLabel')}:  ${dayjs(
-            work.publicationYear,
-          ).format(DATE_FORMAT_ONLY_YEAR)}`,
+          `${work.type === 'book' ? t('publicationYearLabel') : t('releaseYearLabel')}:  ${dayjs(work.publicationYear)
+            .add(1, 'day')
+            .format(DATE_FORMAT_ONLY_YEAR)}`,
         work.countryOfOrigin && `${t('countryLabel')}: ${work.countryOfOrigin}`,
         work.length &&
           `${t('workLengthLabel')}: ${work.length} ${
