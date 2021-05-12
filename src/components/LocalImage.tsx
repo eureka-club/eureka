@@ -2,7 +2,7 @@ import { FunctionComponent } from 'react';
 
 import { ASSETS_BASE_URL, STORAGE_MECHANISM_AZURE, STORAGE_MECHANISM_LOCAL_FILES } from '../constants';
 
-const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_NAME } = process.env;
+const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
 const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 const { NEXT_PUBLIC_PUBLIC_ASSETS_STORAGE_MECHANISM } = process.env;
 
@@ -18,7 +18,7 @@ const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, alt 
     case STORAGE_MECHANISM_AZURE:
       return (
         <img
-          src={`https://${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_NAME}.blob.core.windows.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${filePath}`}
+          src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${filePath}`}
           alt={alt}
           className={className}
           style={style}
