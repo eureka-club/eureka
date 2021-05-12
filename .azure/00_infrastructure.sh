@@ -125,6 +125,29 @@ function create_blob_storage {
 	echo -e "${COLOR_GREEN}OK${NC}"
 }
 
+function create_cdn {
+	printf "Checking existence of ${COLOR_YELLOW}CDN profile${NC} ${COLOR_BLUE}$2${NC} in resource group ${COLOR_BLUE}$1${NC}... "
+	az cdn profile show --resource-group $1 --name $2 --output none 2> /dev/null
+	if [[ $? != 0 ]]; then
+		echo -e "${COLOR_RED}Missing!${NC}"
+		printf "Creating ${COLOR_YELLOW}CDN profile${NC} ${COLOR_BLUE}$2${NC} in resource group ${COLOR_BLUE}$1${NC}...\n"
+		az cdn profile create \
+			--resource-group $1 \
+			--name $2 \
+			--sku $3 \
+			--output none
+
+		az cdn endpoint create \
+			--resource-group $1 \
+			--profile-name $2 \
+			--name $4 \
+			--origin "$5.blob.core.windows.net" \
+			--no-http \
+			--output none
+	fi
+	echo -e "${COLOR_GREEN}OK${NC}"
+}
+
 create_resource_group ${RESOURCE_GROUP_APP}
 created_sql_server ${RESOURCE_GROUP_APP} ${DATABASE_SERVER_NAME} \
 	${DATABASE_SERVER_ADMIN_USER} \
@@ -136,4 +159,5 @@ created_database ${RESOURCE_GROUP_APP} ${DATABASE_SERVER_NAME} ${DATABASE_NAME} 
 echo -e " ${COLOR_BLUE}DATABASE_URL=${COLOR_GREEN}'sqlserver://${databaseServerFqdn}:1433;database=${DATABASE_NAME};user=${DATABASE_SERVER_ADMIN_USER}@${DATABASE_SERVER_NAME};password=REDACTED'${NC}\n"
 create_app_service_plan ${RESOURCE_GROUP_APP} ${SERVICE_PLAN_NAME}
 create_blob_storage ${RESOURCE_GROUP_APP} ${STORAGE_ACCOUNT_NAME} ${STORAGE_ACCOUNT_SKU} ${STORAGE_BLOB_CONTAINER_NAME}
+create_cdn ${RESOURCE_GROUP_APP} ${CDN_PROFILE_NAME} ${CDN_PROFILE_SKU} ${CDN_ENDPOINT_NAME} ${STORAGE_ACCOUNT_NAME}
 echo -e "\nAll infrastructure tasks ${COLOR_GREEN}completed successfully!${NC}"
