@@ -8,6 +8,8 @@ export const ASSETS_BASE_URL = process.env.NEXT_PUBLIC_LOCAL_ASSETS_BASE_URL;
 export const CLARITY_TRACKING_ID = process.env.NEXT_PUBLIC_CLARITY_TRACKING_ID;
 export const HYVOR_SSO_KEY = process.env.NEXT_PUBLIC_HYVOR_SSO_KEY;
 export const HYVOR_WEBSITE_ID = process.env.NEXT_PUBLIC_HYVOR_WEBSITE_ID;
+export const STORAGE_MECHANISM_AZURE = 'azure';
+export const STORAGE_MECHANISM_LOCAL_FILES = 'local';
 export const WEBAPP_URL = process.env.NEXT_PUBLIC_WEBAPP_URL;
 
 export const LOCALE_COOKIE_NAME = 'NEXT_LOCALE';
