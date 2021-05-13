@@ -1,11 +1,13 @@
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, MouseEvent, useEffect } from 'react';
+import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 import { FiShare2 } from 'react-icons/fi';
 import { useMutation } from 'react-query';
+import { useSession } from 'next-auth/client';
+import { useAtom } from 'jotai';
 import {
   FacebookIcon,
   FacebookShareButton,
@@ -14,6 +16,8 @@ import {
   WhatsappShareButton,
   WhatsappIcon,
 } from 'react-share';
+import globalModalsAtom from '../../atoms/globalModals';
+// import Notification from '../ui/Notification';
 
 import { WEBAPP_URL } from '../../constants';
 import { CycleDetail } from '../../types/cycle';
@@ -37,6 +41,32 @@ interface Props {
 const SocialInteraction: FunctionComponent<Props> = ({ entity, parent, mySocialInfo, showCounts = false }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
+  const [session] = useSession();
+  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
+
+  const [optimistLike, setOptimistLike] = useState<boolean | null>(mySocialInfo.likedByMe);
+  const [optimistFav, setOptimistFav] = useState<boolean | null>(mySocialInfo.favoritedByMe);
+
+  const [optimistLikeCount, setOptimistLikeCount] = useState<number>(entity.likes.length);
+  const [optimistFavCount, setOptimistFavCount] = useState<number>(entity.favs.length);
+
+  const openSignInModal = () => {
+    setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
+  };
+
+  const likeInc = () => {
+    if (!optimistLike) {
+      return 1;
+    }
+    return optimistLikeCount ? -1 : 0;
+  };
+
+  const favInc = () => {
+    if (!optimistFav) {
+      return 1;
+    }
+    return optimistFavCount ? -1 : 0;
+  };
 
   const shareUrl = `${WEBAPP_URL}${router.asPath}`;
   const shareTextDynamicPart = (() => {
@@ -73,9 +103,41 @@ const SocialInteraction: FunctionComponent<Props> = ({ entity, parent, mySocialI
         throw new Error('Unknown entity');
       })();
 
-      return fetch(`/api/${entityEndpoint}/${entity.id}/${socialInteraction}`, {
-        method: doCreate ? 'POST' : 'DELETE',
-      });
+      if (session) {
+        let res = await (await fetch(`/api/${entityEndpoint}/${entity.id}/${socialInteraction}`, {
+          method: doCreate ? 'POST' : 'DELETE',
+        })).json();
+        return res;
+      }
+      openSignInModal();
+    },
+    {
+      onMutate: (payload) => {
+        if (payload.socialInteraction === 'like') {
+          const ol = optimistLike;
+          setOptimistLike(!optimistLike);
+          const olc = optimistLikeCount;
+          setOptimistLikeCount(optimistLikeCount + likeInc());
+          return { optimistLike: ol, optimistLikeCount: olc };
+        }
+        const opf = optimistFav;
+        const opfc = optimistFavCount;
+        setOptimistFav(!optimistFav);
+        setOptimistFavCount(optimistFavCount + favInc());
+        return { optimistFav: opf, optimistFavCount: opfc };
+      },
+      onSuccess: (data, variables) => {
+        
+        if (data.status != "OK") {
+          if (variables.socialInteraction === 'like') {
+            setOptimistLike(mySocialInfo.likedByMe);
+            setOptimistLikeCount(entity.likes.length);
+          }
+          setOptimistFav(mySocialInfo.likedByMe);
+          setOptimistFavCount(entity.favs.length);
+        }
+      },
+
     },
   );
 
@@ -90,24 +152,43 @@ const SocialInteraction: FunctionComponent<Props> = ({ entity, parent, mySocialI
   };
 
   useEffect(() => {
-    if (isSocialInteractionSuccess) {
-      router.replace(router.asPath); // refresh page
-    }
+    // if (!isSocialInteractionSuccess) {
+    //   if (optimistLikeCount && optimistLikeCount > entity.likes.length)
+    //     setOptimistLikeCount(entity.likes.length - 1);
+    //   if (optimistLikeCount && optimistLikeCount < entity.likes.length)
+    //     setOptimistLikeCount(entity.likes.length + 1);
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSocialInteractionSuccess]);
+  }, [isSocialInteractionSuccess, optimistLike]);
+
+  useEffect(() => {
+    // if (!isSocialInteractionSuccess) {
+    //   if (optimistFavCount && optimistFavCount > entity.favs.length)
+    //     setOptimistFavCount(entity.favs.length - 1);
+    //   if (optimistFavCount && optimistFavCount < entity.favs.length)
+    //     setOptimistFavCount(entity.favs.length + 1);
+    // }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSocialInteractionSuccess, optimistFav]);
+
+  // useEffect(() => {
+  //   if (isSocialInteractionSuccess) {
+  //     router.replace(router.asPath); // refresh page
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [isSocialInteractionSuccess]);
 
   return (
     <div className={styles.container}>
       <button className={styles.socialBtn} onClick={handleFavClick} type="button">
-        {mySocialInfo.favoritedByMe ? <BsBookmarkFill /> : <BsBookmark />}
-        {showCounts && entity.favs.length}
+        {optimistFav /* mySocialInfo.favoritedByMe */ ? <BsBookmarkFill /> : <BsBookmark />}
+        {showCounts && optimistFavCount}
       </button>
 
       <button className={styles.socialBtn} onClick={handleLikeClick} type="button">
-        {mySocialInfo.likedByMe ? <AiFillHeart /> : <AiOutlineHeart />}
-        {showCounts && entity.likes.length}
+        {optimistLike /* mySocialInfo.likedByMe */ ? <AiFillHeart /> : <AiOutlineHeart />}
+        {showCounts && optimistLikeCount}
       </button>
-
       <Dropdown>
         <Dropdown.Toggle id="langSwitch" className={styles['toggle-share']}>
           <FiShare2 className={styles.actions} />

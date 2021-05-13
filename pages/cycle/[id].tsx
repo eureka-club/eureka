@@ -46,7 +46,7 @@ const CycleDetailPage: NextPage<Props> = ({
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params, req, res }) => {
   if (params?.id == null || typeof params.id !== 'string') {
     return { notFound: true };
   }
@@ -66,11 +66,28 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
   const worksCount = await countWorks(cycle);
 
   const session = (await getSession({ req })) as Session;
+
   const mySocialInfo: MySocialInfo = {
     favoritedByMe: undefined,
     likedByMe: undefined,
   };
   let myParticipant = null;
+  
+  const toHomePage = () => {
+    res.writeHead(302, { Location: '/' });
+    res.end();
+  };
+  if (!cycle.isPublic) {
+    if (!session) {
+      toHomePage();
+    } else {
+      const participantIdx = cycle.participants.findIndex((i) => i.id === session.user.id);
+      if ((cycle.creatorId !== session.user.id && participantIdx === -1) || !session.user.roles.includes('admin')) {
+        toHomePage();
+      }
+    }
+  }
+
   if (session != null) {
     myParticipant = await findParticipant(session.user, cycle);
     mySocialInfo.favoritedByMe = !!(await isFavoritedByUser(cycle, session.user));
