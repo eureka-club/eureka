@@ -108,6 +108,7 @@ const CreatePostForm: FunctionComponent = () => {
     if (searchResult != null) {
       if (isCycleMosaicItem(searchResult)) {
         setSelectedCycle(searchResult);
+        if (formRef.current) formRef.current.isPublic.checked = searchResult.isPublic;
       }
       if (isWorkMosaicItem(searchResult)) {
         setSelectedWork(searchResult);
@@ -130,8 +131,8 @@ const CreatePostForm: FunctionComponent = () => {
 
   const handleClearSelectedCycle = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-
     setSelectedCycle(null);
+    if (formRef.current) formRef.current.isPublic.checked = true;
   };
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
