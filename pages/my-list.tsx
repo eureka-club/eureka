@@ -18,9 +18,11 @@ interface Props {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = (await getSession(ctx)) as Session;
   if (session == null) {
-    return { notFound: true };
+    ctx.res.writeHead(302, { Location: '/' });
+    ctx.res.end();
+    // return { notFound: true };
   }
-
+  
   const cycles = await searchCycles({
     where: JSON.stringify({
       OR: [{ participants: { some: { id: session.user.id } } }, { favs: { some: { id: session.user.id } } }],

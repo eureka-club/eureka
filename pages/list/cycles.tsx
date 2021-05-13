@@ -11,6 +11,9 @@ import PopoverContent from 'react-bootstrap/PopoverContent';
 import Table from 'react-bootstrap/Table';
 import { useMutation } from 'react-query';
 
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import { DATE_FORMAT_HUMANIC_ADVANCED } from '../../src/constants';
 import { Session } from '../../src/types';
 import { advancedDayjs } from '../../src/lib/utils';
@@ -18,6 +21,8 @@ import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import LocalImageComponent from '../../src/components/LocalImage';
 import { findAll } from '../../src/facades/cycle';
 
+dayjs.extend(utc);
+dayjs.extend(timezone);
 interface Props {
   cycles: (Cycle & {
     localImages: LocalImage[];
@@ -75,8 +80,16 @@ const ListCyclesPage: NextPage<Props> = ({ cycles }) => {
               <td>{JSON.stringify(cycle.isPublic)}</td>
               <td>{cycle.title}</td>
               <td>{cycle.languages}</td>
-              <td>{advancedDayjs(cycle.startDate).format(DATE_FORMAT_HUMANIC_ADVANCED)}</td>
-              <td>{advancedDayjs(cycle.endDate).format(DATE_FORMAT_HUMANIC_ADVANCED)}</td>
+              <td>
+                {advancedDayjs(dayjs(cycle.startDate).add(1, 'day').tz(dayjs.tz.guess()).format()).format(
+                  DATE_FORMAT_HUMANIC_ADVANCED,
+                )}
+              </td>
+              <td>
+                {advancedDayjs(dayjs(cycle.endDate).add(1, 'day').tz(dayjs.tz.guess()).format()).format(
+                  DATE_FORMAT_HUMANIC_ADVANCED,
+                )}
+              </td>
               <td>
                 <Link href={`/cycle/${cycle.id}`}>
                   <a>detail</a>
