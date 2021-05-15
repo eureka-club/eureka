@@ -12,20 +12,19 @@ const port = process.env.PORT != null ? parseInt(process.env.PORT, 10) : 3000;
 const { LOCAL_ASSETS_HOST_DIR } = process.env;
 const { NEXT_PUBLIC_LOCAL_ASSETS_BASE_URL } = process.env;
 const { NEXT_PUBLIC_PUBLIC_ASSETS_STORAGE_MECHANISM } = process.env;
+const HOSTNAME_NON_WWW_PRODUCTION = 'eureka.club'; // TODO ENV var
 
 app.prepare().then(() => {
   const server = express();
 
-  if (!dev) {
-    server.use(({ hostname, method, path }, res, nextFn) => {
-      if (method === 'GET' && hostname.slice(0, 3) !== 'www') {
-        res.redirect(308, `https://www.${hostname}${path}`);
-        return;
-      }
+  server.use(({ hostname, method, path, protocol }, res, nextFn) => {
+    if (hostname === HOSTNAME_NON_WWW_PRODUCTION && method === 'GET') {
+      res.redirect(308, `${protocol}://www.${hostname}${path}`);
+      return;
+    }
 
-      nextFn();
-    });
-  }
+    nextFn();
+  });
 
   if (
     NEXT_PUBLIC_PUBLIC_ASSETS_STORAGE_MECHANISM === STORAGE_MECHANISM_LOCAL_FILES &&
