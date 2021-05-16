@@ -4,38 +4,78 @@ import NextAuth, { InitOptions } from 'next-auth';
 import Adapters from 'next-auth/adapters';
 import Providers from 'next-auth/providers';
 
+import getT from 'next-translate/getT';
 import prisma from '../../../src/lib/prisma';
 import { Session } from '../../../src/types';
+import { sendMailSingIn } from '../../../src/facades/mail';
 
-const options: InitOptions = {
-  adapter: Adapters.Prisma.Adapter({ prisma }),
-  callbacks: {
-    session: async (session: Session, user: User) => {
-      session.user.id = user.id; // eslint-disable-line no-param-reassign
-      session.user.roles = user.roles; // eslint-disable-line no-param-reassign
+const getOptions = (req: NextApiRequest) => {
+  const options: InitOptions = {
+    adapter: Adapters.Prisma.Adapter({ prisma }),
+    callbacks: {
+      session: async (session: Session, user: User) => {
+        session.user.id = user.id; // eslint-disable-line no-param-reassign
+        session.user.roles = user.roles; // eslint-disable-line no-param-reassign
 
-      return Promise.resolve(session);
-    },
-  },
-  debug: process.env.NODE_ENV === 'development',
-  providers: [
-    Providers.Google({
-      clientId: process.env.GOOGLE_ID!,
-      clientSecret: process.env.GOOGLE_SECRET!,
-    }),
-    Providers.Email({
-      server: {
-        host: process.env.EMAIL_SERVER_HOST!,
-        port: Number(process.env.EMAIL_SERVER_PORT!),
-        auth: {
-          user: process.env.EMAIL_SERVER_USER!,
-          pass: process.env.EMAIL_SERVER_PASS!,
-        },
+        return Promise.resolve(session);
       },
-      from: process.env.EMAILING_FROM,
-    }),
-  ],
-  secret: process.env.SECRET,
+    },
+    debug: process.env.NODE_ENV === 'development',
+    providers: [
+      Providers.Google({
+        clientId: process.env.GOOGLE_ID!,
+        clientSecret: process.env.GOOGLE_SECRET!,
+      }),
+      Providers.Email({
+        server: {
+          host: process.env.EMAIL_SERVER_HOST!,
+          port: Number(process.env.EMAIL_SERVER_PORT!),
+          auth: {
+            user: process.env.EMAIL_SERVER_USER!,
+            pass: process.env.EMAIL_SERVER_PASS!,
+          },
+        },
+        from: process.env.EMAILING_FROM,
+        sendVerificationRequest: async ({ identifier: email, url, token, baseUrl, provider }): Promise<void> => {
+          const site = baseUrl.replace(/^https?:\/\//, '');
+          const t = await getT(req.query.__nextLocale as string, 'singInMail');
+          const title = t('title');
+          const subtitle = t('subtitle');
+          const singIngConfirmationUrl = t('singIngConfirmationUrl');
+          const ignoreEmailInf = t('ignoreEmailInf');
+          const aboutEureka = t('aboutEureka');
+          const emailReason = t('emailReason');
+          const opt = {
+            to: [
+              {
+                email,
+                name: 'Geordanis Baño Vega',
+              },
+            ],
+            from: {
+              email: process.env.EMAILING_FROM!,
+              name: 'EUREKA-CLUB',
+            },
+            subject: `Sign in to ${site} on: ${new Date().toUTCString()}`,
+            html: '',
+          };
+
+          await sendMailSingIn(opt, {
+            to: email,
+            url,
+            title,
+            subtitle,
+            singIngConfirmationUrl,
+            ignoreEmailInf,
+            aboutEureka,
+            emailReason,
+          });
+        },
+      }),
+    ],
+    secret: process.env.SECRET,
+  };
+  return options;
 };
 
-export default (req: NextApiRequest, res: NextApiResponse): Promise<void> => NextAuth(req, res, options);
+export default (req: NextApiRequest, res: NextApiResponse): Promise<void> => NextAuth(req, res, getOptions(req));

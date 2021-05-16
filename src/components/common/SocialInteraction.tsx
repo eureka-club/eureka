@@ -44,8 +44,8 @@ const SocialInteraction: FunctionComponent<Props> = ({ entity, parent, mySocialI
   const [session] = useSession();
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
 
-  const [optimistLike, setOptimistLike] = useState<boolean | null>(mySocialInfo.likedByMe);
-  const [optimistFav, setOptimistFav] = useState<boolean | null>(mySocialInfo.favoritedByMe);
+  const [optimistLike, setOptimistLike] = useState<boolean | null>(mySocialInfo.likedByMe!);
+  const [optimistFav, setOptimistFav] = useState<boolean | null>(mySocialInfo.favoritedByMe!);
 
   const [optimistLikeCount, setOptimistLikeCount] = useState<number>(entity.likes.length);
   const [optimistFavCount, setOptimistFavCount] = useState<number>(entity.favs.length);
@@ -104,9 +104,11 @@ const SocialInteraction: FunctionComponent<Props> = ({ entity, parent, mySocialI
       })();
 
       if (session) {
-        let res = await (await fetch(`/api/${entityEndpoint}/${entity.id}/${socialInteraction}`, {
-          method: doCreate ? 'POST' : 'DELETE',
-        })).json();
+        const res = await (
+          await fetch(`/api/${entityEndpoint}/${entity.id}/${socialInteraction}`, {
+            method: doCreate ? 'POST' : 'DELETE',
+          })
+        ).json();
         return res;
       }
       openSignInModal();
@@ -127,17 +129,15 @@ const SocialInteraction: FunctionComponent<Props> = ({ entity, parent, mySocialI
         return { optimistFav: opf, optimistFavCount: opfc };
       },
       onSuccess: (data, variables) => {
-        
-        if (data.status != "OK") {
+        if (data.status !== 'OK') {
           if (variables.socialInteraction === 'like') {
-            setOptimistLike(mySocialInfo.likedByMe);
+            setOptimistLike(mySocialInfo.likedByMe!);
             setOptimistLikeCount(entity.likes.length);
           }
-          setOptimistFav(mySocialInfo.likedByMe);
+          setOptimistFav(mySocialInfo.likedByMe!);
           setOptimistFavCount(entity.favs.length);
         }
       },
-
     },
   );
 
