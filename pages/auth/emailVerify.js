@@ -8,7 +8,7 @@ export default function EmailVerify({ csrfToken }) {
   return (
     <SimpleLayout title={t('title')}> 
       <p>{t('text')}</p>
-      <a class="btn btn-primary" href='/'>{t('common:goToHomepage')}</a>
+      <a className="btn btn-primary" href='/'>{t('common:goToHomepage')}</a>
     </SimpleLayout>
   )
 }
