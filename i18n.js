@@ -5,6 +5,7 @@ module.exports = {
   defaultLocale: 'es',
   pages: {
     '*': ['common', 'createWorkForm', 'createPostForm', 'navbar', 'signInForm', 'singInMail'],
+    '/auth/emailVerify': ['common', 'emailVerify'],
     '/cycle/create': ['createCycleForm'],
     'rgx:^/cycle/\\[id\\]': ['cycleDetail'],
     'rgx:^/work/\\[id\\]': ['workDetail'],

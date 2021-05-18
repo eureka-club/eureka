@@ -38,18 +38,21 @@ const getOptions = (req: NextApiRequest) => {
         from: process.env.EMAILING_FROM,
         sendVerificationRequest: async ({ identifier: email, url, token, baseUrl, provider }): Promise<void> => {
           const site = baseUrl.replace(/^https?:\/\//, '');
-          const t = await getT(req.query.__nextLocale as string, 'singInMail');
+          const languages = process.env.LANGUAGES!;
+          const localeFromURL = req.body.callbackUrl.split('/').slice(-1)[0];
+          const locale = languages.split(',').includes(localeFromURL) ? localeFromURL : req.query.__nextLocale;
+          const t = await getT(locale, 'singInMail');
           const title = t('title');
           const subtitle = t('subtitle');
           const singIngConfirmationUrl = t('singIngConfirmationUrl');
           const ignoreEmailInf = t('ignoreEmailInf');
           const aboutEureka = t('aboutEureka');
           const emailReason = t('emailReason');
+
           const opt = {
             to: [
               {
                 email,
-                name: 'Geordanis Baño Vega',
               },
             ],
             from: {
@@ -74,6 +77,9 @@ const getOptions = (req: NextApiRequest) => {
       }),
     ],
     secret: process.env.SECRET,
+    pages: {
+      verifyRequest: '/auth/emailVerify', // (used for check email message)
+    },
   };
   return options;
 };
