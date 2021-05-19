@@ -10,6 +10,7 @@ import { Session } from '../../../src/types';
 import { sendMailSingIn } from '../../../src/facades/mail';
 
 const getOptions = (req: NextApiRequest) => {
+  const locale = req.cookies.NEXT_LOCALE;
   const options: InitOptions = {
     adapter: Adapters.Prisma.Adapter({ prisma }),
     callbacks: {
@@ -38,9 +39,6 @@ const getOptions = (req: NextApiRequest) => {
         from: process.env.EMAILING_FROM,
         sendVerificationRequest: async ({ identifier: email, url, token, baseUrl, provider }): Promise<void> => {
           const site = baseUrl.replace(/^https?:\/\//, '');
-          const languages = process.env.LANGUAGES!;
-          const localeFromURL = req.body.callbackUrl.split('/').slice(-1)[0];
-          const locale = languages.split(',').includes(localeFromURL) ? localeFromURL : req.query.__nextLocale;
           const t = await getT(locale, 'singInMail');
           const title = t('title');
           const subtitle = t('subtitle');
@@ -78,7 +76,7 @@ const getOptions = (req: NextApiRequest) => {
     ],
     secret: process.env.SECRET,
     pages: {
-      verifyRequest: '/auth/emailVerify', // (used for check email message)
+      verifyRequest: `/${locale}/auth/emailVerify`, // (used for check email message)
     },
   };
   return options;
