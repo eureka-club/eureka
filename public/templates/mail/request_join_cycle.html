@@ -26,8 +26,8 @@
     <tr>
       <td align="center"
         style="padding: 10px 0px 0px 0px; font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: ${textColor};">
-        {{subtitle}} 
-        <strong>{{to}}</strong>
+        {{subtitle}}
+        <a href="mailto:{{applicantMail}}"><strong>{{applicant}} ({{applicantMail}})</strong>
       </td>
     </tr>
     <tr>
@@ -38,7 +38,7 @@
               <a href="{{url}}" target="_blank"
                 style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: #000000; text-decoration: none; text-decoration: none;border-radius: 5px; padding: 10px 20px; border: 1px solid ${buttonBorderColor}; display: inline-block;">
                 <!-- Click here to finalize your login to Eureka -->
-                {{singIngConfirmationUrl}}
+                {{urlInfo}}
               </a>
             </td>
           </tr>

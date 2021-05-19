@@ -7,7 +7,7 @@ const Handlebars = require('handlebars');
 
 sgMail.setApiKey(process.env.EMAIL_SERVER_PASS!);
 
-type EmailSingInSpecs = {
+export type EmailSingInSpecs = {
   url: string;
   to: string;
   title: string;
@@ -18,15 +18,14 @@ type EmailSingInSpecs = {
   emailReason: string;
 };
 
-type EmailRequestJoinCycleSpecs = {
+export type EmailRequestJoinCycleSpecs = {
   url: string;
-  to: string;
-  title: string;
-  subtitle: string;
-  singIngConfirmationUrl: string;
-  ignoreEmailInf: string;
-  aboutEureka: string;
-  emailReason: string;
+  // to: string;
+  title?: string;
+  subtitle?: string;
+  ignoreEmailInf?: string;
+  aboutEureka?: string;
+  emailReason?: string;
 };
 
 export const sendMail = async (opt: MailDataRequired): Promise<boolean> => {
@@ -76,6 +75,7 @@ export const sendMailRequestJoinCycle = async (
   opt: MailDataRequired,
   specs: EmailRequestJoinCycleSpecs,
 ): Promise<boolean> => {
+  
   const opts = { ...opt };
   if (process.env.TEMPLATE_ORIGIN === 'local') {
     const templatePath = path.join(process.cwd(), 'public', 'templates', 'mail', 'request_join_cycle.html');

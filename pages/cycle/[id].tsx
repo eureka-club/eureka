@@ -72,7 +72,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req, res 
     likedByMe: undefined,
   };
   let myParticipant = null;
-  
+
   const toHomePage = () => {
     res.writeHead(302, { Location: '/' });
     res.end();
@@ -80,12 +80,12 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req, res 
   if (!cycle.isPublic) {
     if (!session) {
       toHomePage();
-    } else {
+    }/*  else {
       const participantIdx = cycle.participants.findIndex((i) => i.id === session.user.id);
       if ((cycle.creatorId !== session.user.id && participantIdx === -1) || !session.user.roles.includes('admin')) {
         toHomePage();
       }
-    }
+    } */
   }
 
   if (session != null) {

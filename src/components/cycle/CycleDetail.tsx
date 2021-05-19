@@ -17,6 +17,7 @@ import TabContainer from 'react-bootstrap/TabContainer';
 import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
 import { useMutation } from 'react-query';
+// import { MailDataRequired } from '@sendgrid/helpers/classes/mail';
 import globalModalsAtom from '../../atoms/globalModals';
 
 import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
@@ -66,7 +67,43 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   const { mutate: execJoinCycle, isLoading: isJoinCycleLoading, isSuccess: isJoinCycleSuccess } = useMutation(
     async () => {
-      await fetch(`/api/cycle/${cycle.id}/join`, { method: 'POST' });
+      if (cycle.creator.email && session) {
+        const opt = {
+          to: [
+            {
+              email: cycle.creator.email,
+              name: cycle.creator.name! || '',
+            },
+          ],
+          subject: `Request join to Cycle ${cycle.title} on: ${new Date().toUTCString()}`,
+          html: '',
+        };
+        const specs = {
+          title: 'Eureka!',
+          subtitle: 'Cycle Join Request',
+          applicant: session.user.name!,
+          applicantMail: session.user.email!,
+          url: `${window.location.origin}/${router.locale}/api/cycle/${cycle.id}/join`,
+          urlInfo: t('singInMail:singIngConfirmationUrl'),
+          
+          ignoreEmailInf: t('singInMail:ignoreEmailInf'),
+          aboutEureka: t('singInMail:aboutEureka'),
+          // ignoreEmailInf?: string;
+          // aboutEureka?: string;
+          emailReason: t('singInMail:emailReason'),
+        };
+
+        const res = await fetch('/api/email/joinCycle', {
+          method: 'POST',
+          body: JSON.stringify({ opt, specs }),
+        });
+        debugger;
+        console.log(res);
+        if (res.ok) alert('Email sent, check up and confirm');
+        else alert('Email not sent, some error on server');
+      }
+
+      // await fetch(`/api/cycle/${cycle.id}/join`, { method: 'POST' });
     },
   );
   const { mutate: execLeaveCycle, isLoading: isLeaveCycleLoading, isSuccess: isLeaveCycleSuccess } = useMutation(
