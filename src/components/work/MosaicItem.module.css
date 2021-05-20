@@ -15,7 +15,7 @@
 }
 
 .type {
-  background-color: var(--eureka-grey);
+  background-color: var(--color-emphasis);
   border-radius: 1rem;
   bottom: 0.85rem;
   font-size: 0.85rem;

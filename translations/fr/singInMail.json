@@ -1,8 +1,8 @@
 {
-  "ignoreEmailInf": "If you did not request this email you can safely ignore it.",
-  "title": "Welcome to Eureka!",
-  "subtitle": "Sign in as",
-  "singIngConfirmationUrl": "Click here to finalize your login to Eureka",
-  "aboutEureka": "Eureka is a non-for-profit social network designed for anyone looking for meaningful content and conversations online. We believe that books and movies can help better understand societies and the world around us.",
-  "emailReason": "You’ve received this email because you registered for Eureka."
+  "ignoreEmailInf": "Si vous n'avez pas demandé cet e-mail, vous pouvez l'ignorer en toute sécurité.",
+  "title": "Nous vous souhaitons la bienvenue à Eureka!",
+  "subtitle": "Se connecter comme",
+  "singIngConfirmationUrl": "Cliquez ici pour finaliser votre connexion à Eureka",
+  "aboutEureka": "Eureka est un réseau social à but non lucratif conçu pour ceux qui recherchent un contenu et des conversations en ligne significatifs. Nous croyons que les livres et les films peuvent nous aider à mieux comprendre les sociétés et le monde qui nous entoure.",
+  "emailReason": "Vous avez reçu cet e-mail car vous avez réalisé votre inscription à Eureka."
 }
