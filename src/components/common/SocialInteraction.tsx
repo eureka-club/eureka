@@ -195,7 +195,7 @@ const SocialInteraction: FunctionComponent<Props> = ({ entity, parent, mySocialI
         </Dropdown.Toggle>
         <Dropdown.Menu className={styles['icon-share']}>
           <Dropdown.Item>
-            <TwitterShareButton url={shareUrl} title={shareText} via="eurekamundus">
+            <TwitterShareButton url={shareUrl} title={shareText} via="eleurekaclub">
               <TwitterIcon size={32} round />
               {`${t('wayShare')} Twitter`}
             </TwitterShareButton>
