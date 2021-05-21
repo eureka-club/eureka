@@ -72,7 +72,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req, res 
     likedByMe: undefined,
   };
   let myParticipant = null;
-  
+
   const toHomePage = () => {
     res.writeHead(302, { Location: '/' });
     res.end();

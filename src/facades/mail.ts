@@ -1,10 +1,10 @@
 import sgMail from '@sendgrid/mail';
 import { MailDataRequired } from '@sendgrid/helpers/classes/mail';
 import path from 'path';
+import Handlebars from 'handlebars';
 import readFile from './readFile';
 
-const Handlebars = require('handlebars');
-
+// const Handlebars = require('handlebars');
 sgMail.setApiKey(process.env.EMAIL_SERVER_PASS!);
 
 type EmailSingInSpecs = {
@@ -46,9 +46,11 @@ export const sendMail = async (opt: MailDataRequired): Promise<boolean> => {
     if (res) return true;
     return false;
   } catch (error) {
+    /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
     console.error(error);
 
     if (error.response) {
+      /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
       console.error(error.response.body);
     }
     return false;

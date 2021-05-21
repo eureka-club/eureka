@@ -37,7 +37,7 @@ const getOptions = (req: NextApiRequest) => {
           },
         },
         from: process.env.EMAILING_FROM,
-        sendVerificationRequest: async ({ identifier: email, url, token, baseUrl, provider }): Promise<void> => {
+        sendVerificationRequest: async ({ identifier: email, url, baseUrl }): Promise<void> => {
           const site = baseUrl.replace(/^https?:\/\//, '');
           const t = await getT(locale, 'singInMail');
           const title = t('title');
