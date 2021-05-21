@@ -22,7 +22,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     ctx.res.end();
     // return { notFound: true };
   }
-  
+
   const cycles = await searchCycles({
     where: JSON.stringify({
       OR: [{ participants: { some: { id: session.user.id } } }, { favs: { some: { id: session.user.id } } }],

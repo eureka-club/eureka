@@ -8,6 +8,7 @@ export default async (filePath: string, encoding: BufferEncoding = 'utf8'): Prom
     const res = buf.toString(encoding);
     return res;
   } catch (error) {
+    /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
     console.error(error);
     return null;
   }

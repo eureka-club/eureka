@@ -112,6 +112,7 @@ const SocialInteraction: FunctionComponent<Props> = ({ entity, parent, mySocialI
         return res;
       }
       openSignInModal();
+      return null;
     },
     {
       onMutate: (payload) => {
