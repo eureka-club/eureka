@@ -6,6 +6,19 @@ source ${__DIR__}/.env
 
 databaseServerFqdn=''
 
+function usage {
+	echo -e "Please specify the ${COLOR_BLUE}environment${NC} to provision!
+
+Environments:
+  ${COLOR_BLUE}prod${NC} or ${COLOR_BLUE}production${NC}
+  ${COLOR_BLUE}staging${NC}
+
+Usage:
+  ${COLOR_YELLOW}$0${NC} ${COLOR_BLUE}<environment>${NC}
+"
+	exit 1
+}
+
 function create_resource_group {
 	printf "Checking existence of ${COLOR_YELLOW}resource group${NC} ${COLOR_BLUE}$1${NC}... "
 	az group show --name $1 --output none 2>/dev/null
@@ -20,7 +33,20 @@ function create_resource_group {
 	echo -e "${COLOR_GREEN}OK${NC}"
 }
 
-function created_sql_server {
+function setup_deployment_user {
+	printf "> do you want to setup deployment user? (by default not needed) [y/N]: "
+	read INP
+	if [[ ${INP} == 'y' || $INP == 'Y' ]]; then
+		printf "Setting-up ${COLOR_GREEN}deployment user${NC} ${COLOR_BLUE}$1${NC}... "
+		az webapp deployment user set \
+			--user-name $1 \
+			--password "$2" \
+			--output none
+		echo "done"
+	fi
+}
+
+function create_sql_server {
 	printf "Checking existence of ${COLOR_YELLOW}SQL server${NC} ${COLOR_BLUE}$2${NC} in resource group ${COLOR_BLUE}$1${NC}... "
 	az sql server show --resource-group $1 --name $2 --output none 2>/dev/null
 	if [[ $? != 0 ]]; then
@@ -64,7 +90,7 @@ function created_sql_server {
 	fi
 }
 
-function created_database {
+function create_database {
 	printf "Checking existence of ${COLOR_YELLOW}SQL database${NC} ${COLOR_BLUE}$3${NC} at SQL server ${COLOR_BLUE}$2${NC}... "
 	az sql db show --resource-group $1 --server $2 --name $3 --output none 2>/dev/null
 	if [[ $? != 0 ]]; then
@@ -78,6 +104,7 @@ function created_database {
 			--output none
 	fi
 	echo -e "${COLOR_GREEN}OK${NC}"
+	echo -e " ${COLOR_BLUE}DATABASE_URL=${COLOR_GREEN}\"sqlserver://${databaseServerFqdn}:1433;database=$3;user=${DATABASE_SERVER_ADMIN_USER}@$2;password=REDACTED\"${NC}\n"
 }
 
 function create_app_service_plan {
@@ -148,16 +175,47 @@ function create_cdn {
 	echo -e "${COLOR_GREEN}OK${NC}"
 }
 
-create_resource_group ${RESOURCE_GROUP_APP}
-created_sql_server ${RESOURCE_GROUP_APP} ${DATABASE_SERVER_NAME} \
-	${DATABASE_SERVER_ADMIN_USER} \
-	${DATABASE_SERVER_ADMIN_PASSWORD} \
-	${DATABASE_SERVER_FIREWALL_RULE_NAME} \
-	${DATABASE_SERVER_FIREWALL_START_IP_ADDRESS} \
-	${DATABASE_SERVER_FIREWALL_END_IP_ADDRESS}
-created_database ${RESOURCE_GROUP_APP} ${DATABASE_SERVER_NAME} ${DATABASE_NAME} ${DATABASE_SKU}
-echo -e " ${COLOR_BLUE}DATABASE_URL=${COLOR_GREEN}'sqlserver://${databaseServerFqdn}:1433;database=${DATABASE_NAME};user=${DATABASE_SERVER_ADMIN_USER}@${DATABASE_SERVER_NAME};password=REDACTED'${NC}\n"
-create_app_service_plan ${RESOURCE_GROUP_APP} ${SERVICE_PLAN_NAME}
-create_blob_storage ${RESOURCE_GROUP_APP} ${STORAGE_ACCOUNT_NAME} ${STORAGE_ACCOUNT_SKU} ${STORAGE_BLOB_CONTAINER_NAME}
-create_cdn ${RESOURCE_GROUP_APP} ${CDN_PROFILE_NAME} ${CDN_PROFILE_SKU} ${CDN_ENDPOINT_NAME} ${STORAGE_ACCOUNT_NAME}
-echo -e "\nAll infrastructure tasks ${COLOR_GREEN}completed successfully!${NC}"
+function provision_production {
+	create_resource_group ${RESOURCE_GROUP_PRODUCTION}
+	setup_deployment_user ${DEPLOYMENT_USER} "${DEPLOYMENT_PASSWORD}"
+	create_sql_server ${RESOURCE_GROUP_PRODUCTION} ${DATABASE_SERVER_NAME_PRODUCTION} \
+		${DATABASE_SERVER_ADMIN_USER} \
+		${DATABASE_SERVER_ADMIN_PASSWORD_PRODUCTION} \
+		${DATABASE_SERVER_FIREWALL_RULE_NAME} \
+		${DATABASE_SERVER_FIREWALL_START_IP_ADDRESS} \
+		${DATABASE_SERVER_FIREWALL_END_IP_ADDRESS}
+	create_database ${RESOURCE_GROUP_PRODUCTION} ${DATABASE_SERVER_NAME_PRODUCTION} ${DATABASE_NAME_PRODUCTION} ${DATABASE_SKU_PRODUCTION}
+	create_app_service_plan ${RESOURCE_GROUP_PRODUCTION} ${SERVICE_PLAN_NAME}
+	create_blob_storage ${RESOURCE_GROUP_PRODUCTION} ${STORAGE_ACCOUNT_NAME_PRODUCTION} ${STORAGE_ACCOUNT_SKU_PRODUCTION} ${STORAGE_BLOB_CONTAINER_NAME}
+	create_cdn ${RESOURCE_GROUP_PRODUCTION} ${CDN_PROFILE_NAME_PRODUCTION} ${CDN_PROFILE_SKU_PRODUCTION} ${CDN_ENDPOINT_NAME_PRODUCTION} ${STORAGE_ACCOUNT_NAME_PRODUCTION}
+	echo -e "\nAll infrastructure tasks ${COLOR_GREEN}completed successfully!${NC}"
+}
+
+function provision_staging {
+	create_resource_group ${RESOURCE_GROUP_STAGING}
+	create_sql_server ${RESOURCE_GROUP_STAGING} ${DATABASE_SERVER_NAME_STAGING} \
+		${DATABASE_SERVER_ADMIN_USER} \
+		${DATABASE_SERVER_ADMIN_PASSWORD_STAGING} \
+		${DATABASE_SERVER_FIREWALL_RULE_NAME} \
+		${DATABASE_SERVER_FIREWALL_START_IP_ADDRESS} \
+		${DATABASE_SERVER_FIREWALL_END_IP_ADDRESS}
+	create_database ${RESOURCE_GROUP_STAGING} ${DATABASE_SERVER_NAME_STAGING} ${DATABASE_NAME_STAGING} ${DATABASE_SKU_STAGING}
+	create_blob_storage ${RESOURCE_GROUP_STAGING} ${STORAGE_ACCOUNT_NAME_STAGING} ${STORAGE_ACCOUNT_SKU_STAGING} ${STORAGE_BLOB_CONTAINER_NAME}
+	create_cdn ${RESOURCE_GROUP_STAGING} ${CDN_PROFILE_NAME_STAGING} ${CDN_PROFILE_SKU_STAGING} ${CDN_ENDPOINT_NAME_STAGING} ${STORAGE_ACCOUNT_NAME_STAGING}
+	echo -e "\nAll infrastructure tasks ${COLOR_GREEN}completed successfully!${NC}"
+}
+
+
+case $1 in
+	'prod'|'production')
+		provision_production
+		;;
+
+	'staging')
+		provision_staging
+		;;
+
+	'-h'|'--help'|*)
+		usage
+		;;
+esac
