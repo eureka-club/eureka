@@ -35,3 +35,5 @@ prisma/.env
 
 # vercel
 .vercel
+
+.vscode
