@@ -109,7 +109,7 @@ model Work {
   id               Int        @default(autoincrement()) @id
   type             String
   title            String
-  contentText      String?    @map(name: "content_text")
+  contentText      String?    @db.VarChar(4000) @map(name: "content_text")
   author           String
   authorGender     String?    @map(name: "author_gender")
   authorRace       String?    @map(name: "author_race")
@@ -125,7 +125,7 @@ model Work {
   posts        Post[]
   likes        User[]    @relation("WorkToLikes")
   favs         User[]    @relation("WorkToFavs")
-  tags         String
+  tags         String?
 
   @@index([title], name: "works_title_index")
   @@index([author], name: "works_author_index")
@@ -162,7 +162,7 @@ model Cycle {
   isPublic     Boolean   @map(name: "is_public")
   title        String
   languages    String
-  contentText  String?   @map(name: "content_text")
+  contentText  String?   @db.VarChar(4000)  @map(name: "content_text")
   startDate    DateTime  @map(name: "start_date")
   endDate      DateTime  @map(name: "end_date")
   createdAt    DateTime  @default(now()) @map(name: "created_at")
@@ -174,7 +174,7 @@ model Cycle {
   likes                   User[]  @relation("CycleToLikes")
   favs                    User[]  @relation("CycleToFavs")
   posts                   Post[]
-  works                   Work[]
+  works                   Work[]  
 
   @@index([creatorId], name: "cycles_creator_id_index")
   @@index([title], name: "cycles_title_index")
@@ -188,7 +188,7 @@ model Post {
   creatorId    Int       @map(name: "creator_id")
   title        String
   language     String
-  contentText  String    @map(name: "content_text")
+  contentText  String    @db.VarChar(4000) @map(name: "content_text")
   isPublic     Boolean   @map(name: "is_public")
   createdAt    DateTime  @default(now()) @map(name: "created_at")
   updatedAt    DateTime  @updatedAt @map(name: "updated_at")
