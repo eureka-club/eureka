@@ -34,6 +34,7 @@ export interface CreateWorkClientPayload {
   countryOfOrigin: string | null;
   publicationYear: string | null;
   length: string | null;
+  tags: string;
 }
 
 export interface CreateWorkServerFields {
@@ -47,6 +48,7 @@ export interface CreateWorkServerFields {
   countryOfOrigin?: string[];
   publicationYear?: string[];
   length?: string[];
+  tags: string;
 }
 
 export interface CreateWorkServerPayload {
@@ -60,4 +62,21 @@ export interface CreateWorkServerPayload {
   countryOfOrigin?: string;
   publicationYear?: Date;
   length?: string;
+  tags: string;
+}
+
+export interface EditWorkClientPayload {
+  // cover: File;
+  id: string;
+  type?: string;
+  title?: string;
+  author?: string;
+  authorGender?: string | null;
+  authorRace?: string | null;
+  contentText?: string | null;
+  link?: string | null;
+  countryOfOrigin?: string | null;
+  publicationYear?: string | null;
+  length?: string | null;
+  tags?: string;
 }

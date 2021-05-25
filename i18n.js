@@ -6,6 +6,7 @@ module.exports = {
   pages: {
     '*': ['common', 'createWorkForm', 'createPostForm', 'navbar', 'signInForm', 'singInMail'],
     '/auth/emailVerify': ['common', 'emailVerify'],
+    '/work/\\[id]\\': ['common', 'createWorkForm', 'editWorkForm'],
     '/cycle/create': ['createCycleForm'],
     'rgx:^/cycle/\\[id\\]': ['cycleDetail'],
     'rgx:^/work/\\[id\\]': ['workDetail'],

@@ -1,5 +1,6 @@
 {
   "title": "Add new work to the library",
+  "titleEdit": "Edit work",
   "typeFieldLabel": "Type of work",
   "typeFieldPlaceholder": "select...",
   "typeBook": "Book",
@@ -27,5 +28,6 @@
   "authorEthnicityIsWhite":"White",
   "authorEthnicityIsNotWhite": "Non-white",
   "workSummaryFieldLabel": "Official summary of work",
-  "submitButtonLabel": "Add work to library"
+  "submitButtonLabel": "Add work to library",
+  "tagsInputPlaceholder":"Write a tag and press Enter or Comma"
 }

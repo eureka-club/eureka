@@ -6,6 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import Navbar from '../Navbar';
 import CreatePostForm from '../forms/CreatePostForm';
 import CreateWorkForm from '../forms/CreateWorkForm';
+import EditWorkForm from '../forms/EditWorkForm';
 import SignInForm from '../forms/SignInForm';
 import globalModalsAtom from '../../atoms/globalModals';
 import withTitle from '../../HOCs/withTitle';
@@ -24,6 +25,10 @@ const SimpleLayout: FunctionComponent<Props> = ({ children }) => {
 
   const handleCreateWorkModalClose = () => {
     setGlobalModalsState({ ...globalModalsState, ...{ createWorkModalOpened: false } });
+  };
+
+  const handleEditWorkModalClose = () => {
+    setGlobalModalsState({ ...globalModalsState, ...{ editWorkModalOpened: false } });
   };
 
   const handleSignInModalClose = () => {
@@ -52,6 +57,10 @@ const SimpleLayout: FunctionComponent<Props> = ({ children }) => {
         onHide={handleCreateWorkModalClose}
       >
         <CreateWorkForm />
+      </Modal>
+
+      <Modal animation={false} size="lg" show={globalModalsState.editWorkModalOpened} onHide={handleEditWorkModalClose}>
+        <EditWorkForm />
       </Modal>
 
       <Modal size="lg" animation={false} show={globalModalsState.signInModalOpened} onHide={handleSignInModalClose}>

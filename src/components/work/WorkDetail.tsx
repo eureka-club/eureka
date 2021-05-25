@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, MouseEvent } from 'react';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 import NavItem from 'react-bootstrap/NavItem';
@@ -10,9 +10,10 @@ import Row from 'react-bootstrap/Row';
 import TabContainer from 'react-bootstrap/TabContainer';
 import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
+import { Button } from 'react-bootstrap';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
-
-import { MySocialInfo } from '../../types';
+import { useSession } from 'next-auth/client';
+import { MySocialInfo, Session } from '../../types';
 import { PostDetail } from '../../types/post';
 import { WorkDetail } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
@@ -24,7 +25,9 @@ import SocialInteraction from '../common/SocialInteraction';
 import UnclampText from '../UnclampText';
 import WorkSummary from './WorkSummary';
 import detailPagesAtom from '../../atoms/detailPages';
+import globalModalsAtom from '../../atoms/globalModals';
 import styles from './WorkDetail.module.css';
+import TagsInput from '../forms/controls/TagsInput';
 
 interface Props {
   work: WorkDetail;
@@ -36,16 +39,32 @@ interface Props {
 
 const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCount, mySocialInfo }) => {
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
+  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const { t } = useTranslation('workDetail');
-
+  const [session] = useSession() as [Session | null | undefined, boolean];
   const handleSubsectionChange = (key: string | null) => {
     if (key != null) {
       setDetailPagesState({ ...detailPagesState, selectedSubsectionWork: key });
     }
   };
 
+  const handleEditWorkClick = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    setGlobalModalsState({ ...globalModalsState, ...{ editWorkModalOpened: true } });
+  };
+
+  const canEditWork = (): boolean => {
+    if (session && session.user.roles === 'admin') return true;
+    return false;
+  };
+
   return (
     <>
+      {canEditWork() && (
+        <Button variant="warning" onClick={handleEditWorkClick} size="sm">
+          {t('edit')}
+        </Button>
+      )}
       <Row className="mb-5">
         {post == null ? (
           <>
@@ -60,6 +79,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
                 <h1>{work.title}</h1>
                 <h2 className={styles.author}>{work.author}</h2>
                 <WorkSummary work={work} />
+                {work.tags && <TagsInput tags={work.tags} readOnly label="" />}
                 {work.link != null && (
                   <a href={work.link} className={styles.workLink} target="_blank" rel="noreferrer">
                     {t('workLinkLabel')} <BsBoxArrowUpRight />

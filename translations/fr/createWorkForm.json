@@ -1,5 +1,6 @@
 {
   "title": "Ajouter une nouvelle oeuvre à la bibliothèque",
+  "titleEdit": "Modifier la oeuvre",
   "typeFieldLabel": "Type d'oeuvre",
   "typeFieldPlaceholder": "sélectioner...",
   "typeBook": "Livre",
@@ -19,13 +20,14 @@
   "authorGenderFieldPlaceholder": "sélectioner...",
   "authorGenderFemale": "Féminin",
   "authorGenderMale": "Masculin",
-  "authorGenderNonbinary":  "Non-binaire",
+  "authorGenderNonbinary": "Non-binaire",
   "authorGenderTrans": "Trans",
-  "authorGenderOther":  "Autre",
+  "authorGenderOther": "Autre",
   "authorEthnicityFieldLabel": "L'auteur-e ou réalisateur-rice est blanc-he ou non blanc-he?",
   "authorEthnicityFieldPlaceholder": "sélectioner...",
-  "authorEthnicityIsWhite":"Blanc-he",
+  "authorEthnicityIsWhite": "Blanc-he",
   "authorEthnicityIsNotWhite": "Non blanc-he",
   "workSummaryFieldLabel": "Résumé officiel de l'oeuvre",
-  "submitButtonLabel": "Ajouter l'oeuvre"
+  "submitButtonLabel": "Ajouter l'oeuvre",
+  "tagsInputPlaceholder": "Écrivez une étiquette et appuyez sur Entrée ou Virgule"
 }

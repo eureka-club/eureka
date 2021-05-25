@@ -384,7 +384,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
             </FormGroup>
             <FormGroup controlId="topics">
               <FormLabel>{t('newCycleTopicsLabel')}</FormLabel>
-              <FormControl type="text" disabled />
+              <FormControl type="text" />
             </FormGroup>
             <FormGroup controlId="startDate">
               <FormLabel>*{t('newCycleStartDateLabel')}</FormLabel>

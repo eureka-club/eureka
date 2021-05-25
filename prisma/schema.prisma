@@ -125,6 +125,7 @@ model Work {
   posts        Post[]
   likes        User[]    @relation("WorkToLikes")
   favs         User[]    @relation("WorkToFavs")
+  tags         String
 
   @@index([title], name: "works_title_index")
   @@index([author], name: "works_author_index")

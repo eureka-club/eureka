@@ -16,6 +16,7 @@ import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 import { useMutation, useQueryClient } from 'react-query';
+import TagsInput from './controls/TagsInput';
 
 import { CreateWorkClientPayload } from '../../types/work';
 import ImageFileSelect from './controls/ImageFileSelect';
@@ -26,6 +27,7 @@ const CreateWorkForm: FunctionComponent = () => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [publicationYearLabel, setPublicationYearLabel] = useState('Publication year');
   const [coverFile, setCoverFile] = useState<File | null>(null);
+  const [tags, setTags] = useState<string>('');
   const queryClient = useQueryClient();
   const router = useRouter();
   const { t } = useTranslation('createWorkForm');
@@ -81,6 +83,7 @@ const CreateWorkForm: FunctionComponent = () => {
       countryOfOrigin: form.countryOfOrigin.value.length ? form.countryOfOrigin.value : null,
       publicationYear: form.publicationYear.value.length ? form.publicationYear.value : null,
       length: form.workLength.value.length ? form.workLength.value : null,
+      tags,
     };
 
     await execCreateWork(payload);
@@ -140,10 +143,7 @@ const CreateWorkForm: FunctionComponent = () => {
           </Row>
           <Row>
             <Col>
-              <FormGroup controlId="topics">
-                <FormLabel>{t('topicsFieldLabel')}</FormLabel>
-                <FormControl type="text" disabled />
-              </FormGroup>
+              <TagsInput tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
             </Col>
             <Col>
               <ImageFileSelect acceptedFileTypes="image/*" file={coverFile} setFile={setCoverFile} required>
