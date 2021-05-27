@@ -8,8 +8,8 @@ export const find = async (id: number): Promise<PostWithCyclesWorks | null> => {
   return prisma.post.findUnique({
     where: { id },
     include: {
-      cycles: true,
-      works: true,
+      cycles: { include: { localImages: true } },
+      works: { include: { localImages: true } },
       likes: true,
       favs: true,
     },

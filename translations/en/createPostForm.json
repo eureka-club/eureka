@@ -12,5 +12,7 @@
   "descriptionFieldLabel": "Write what you thought and/or learned from this work or cycle. Why did you find it interesting?",
   "isPublicFieldLabel": "This post is public",
   "isPublicInfotip": "Public posts are accessible by all. Uncheck to make post private (only you can see).",
-  "submitButtonLabel": "Create post"
+  "submitButtonLabel": "Create post",
+  "titleEdit": "Edit a post",
+  "edit": "Edit"
 }

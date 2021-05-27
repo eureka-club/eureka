@@ -84,7 +84,7 @@ export default getApiHandler()
       }
     },
   )
-  .put<NextApiRequest, NextApiResponse>(
+  .patch<NextApiRequest, NextApiResponse>(
     async (req, res): Promise<void> => {
       const session = (await getSession({ req })) as Session;
       if (session == null || !session.user.roles.includes('admin')) {

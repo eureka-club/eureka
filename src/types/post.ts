@@ -18,7 +18,7 @@ export type PostDetail = Prisma.PostGetPayload<{
   include: {
     creator: true;
     localImages: true;
-    cycles: true;
+    cycles: { include: { localImages: true } };
     likes: true;
     favs: true;
   };
@@ -42,9 +42,31 @@ export interface CreatePostAboutCycleClientPayload extends CreatePostClientPaylo
   selectedCycleId: number;
   selectedWorkId: null;
 }
+
+export interface EditPostAboutCycleClientPayload {
+  id: string;
+  title?: string;
+  image?: File;
+  language?: string;
+  contentText?: string;
+  isPublic?: boolean;
+  selectedCycleId?: number;
+  selectedWorkId?: null;
+}
 export interface CreatePostAboutWorkClientPayload extends CreatePostClientPayloadBase {
   selectedCycleId: number | null;
   selectedWorkId: number;
+}
+
+export interface EditPostAboutWorkClientPayload {
+  id: string;
+  title?: string;
+  image?: File;
+  language?: string;
+  contentText?: string;
+  isPublic?: boolean;
+  selectedCycleId?: number | null;
+  selectedWorkId?: number;
 }
 
 export interface CreatePostServerFields {
@@ -56,6 +78,16 @@ export interface CreatePostServerFields {
   isPublic: boolean[];
 }
 
+export interface EditPostServerFields {
+  id: string;
+  selectedCycleId?: string[];
+  selectedWorkId?: string[];
+  title?: string[];
+  language?: string[];
+  contentText?: string[];
+  isPublic?: boolean[];
+}
+
 export interface CreatePostServerPayload {
   selectedCycleId?: number;
   selectedWorkId?: number;
@@ -63,4 +95,14 @@ export interface CreatePostServerPayload {
   language: string;
   contentText: string;
   isPublic: boolean;
+}
+
+export interface EditPostServerPayload {
+  id: string;
+  selectedCycleId?: number;
+  selectedWorkId?: number;
+  title?: string;
+  language?: string;
+  contentText?: string;
+  isPublic?: boolean;
 }

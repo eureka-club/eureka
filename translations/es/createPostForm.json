@@ -12,5 +12,7 @@
   "descriptionFieldLabel": "Escribe lo que piensas y/o aprendiste de esta obra o ciclo. ¿Por qué te pareció interesante?",
   "isPublicFieldLabel": "Esta publicación es pública",
   "isPublicInfotip": "Las publicaciones públicas son accesibles por todxs. Desmarca la caja para volver la publicación privada (solo tu puedes verla).",
-  "submitButtonLabel": "Crear publicación"
+  "submitButtonLabel": "Crear publicación",
+  "titleEdit": "Edit a post",
+  "edit": "Edit"
 }

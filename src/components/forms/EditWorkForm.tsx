@@ -50,14 +50,10 @@ const EditWorkForm: FunctionComponent = () => {
     fetchWork();
   }, [router.query.id]);
 
-  // useEffect(() => {
-  //   if (work) setTags(work.tags);
-  // }, [work]);
-
   const { mutate: execEditWork, error: editWorkError, isError, isLoading, isSuccess } = useMutation(
     async (payload: EditWorkClientPayload) => {
       const res = await fetch(`/api/work/${router.query.id}`, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });

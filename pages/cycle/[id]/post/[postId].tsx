@@ -4,7 +4,7 @@ import { getSession } from 'next-auth/client';
 import { MySocialInfo, Session } from '../../../../src/types';
 import { CycleDetail } from '../../../../src/types/cycle';
 import { PostDetail } from '../../../../src/types/post';
-import PopupLayout from '../../../../src/components/layouts/PopupLayout';
+import SimpleLayout from '../../../../src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '../../../../src/components/cycle/CycleDetail';
 import {
   countParticipants,
@@ -35,7 +35,7 @@ const PostDetailInCyclePage: NextPage<Props> = ({
   mySocialInfo,
 }) => {
   return (
-    <PopupLayout title={`${post.title} · ${cycle.title}`}>
+    <SimpleLayout title={`${post.title} · ${cycle.title}`}>
       <CycleDetailComponent
         cycle={cycle}
         post={post}
@@ -45,7 +45,7 @@ const PostDetailInCyclePage: NextPage<Props> = ({
         worksCount={worksCount}
         mySocialInfo={mySocialInfo}
       />
-    </PopupLayout>
+    </SimpleLayout>
   );
 };
 

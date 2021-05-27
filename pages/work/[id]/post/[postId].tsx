@@ -4,7 +4,7 @@ import { getSession } from 'next-auth/client';
 import { MySocialInfo, Session } from '../../../../src/types';
 import { PostDetail } from '../../../../src/types/post';
 import { WorkDetail } from '../../../../src/types/work';
-import PopupLayout from '../../../../src/components/layouts/PopupLayout';
+import SimpleLayout from '../../../../src/components/layouts/SimpleLayout';
 import WorkDetailComponent from '../../../../src/components/work/WorkDetail';
 import { search as searchPost, isFavoritedByUser, isLikedByUser } from '../../../../src/facades/post';
 import { countCycles, countPosts, find as findWork } from '../../../../src/facades/work';
@@ -19,7 +19,7 @@ interface Props {
 
 const PostDetailInWorkPage: NextPage<Props> = ({ post, work, cyclesCount, postsCount, mySocialInfo }) => {
   return (
-    <PopupLayout title={`${post.title} · ${work.title}`}>
+    <SimpleLayout title={`${post.title} · ${work.title}`}>
       <WorkDetailComponent
         work={work}
         post={post}
@@ -27,7 +27,7 @@ const PostDetailInWorkPage: NextPage<Props> = ({ post, work, cyclesCount, postsC
         postsCount={postsCount}
         mySocialInfo={mySocialInfo}
       />
-    </PopupLayout>
+    </SimpleLayout>
   );
 };
 

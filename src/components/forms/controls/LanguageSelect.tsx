@@ -1,9 +1,12 @@
 import { FunctionComponent } from 'react';
 import FormControl from 'react-bootstrap/FormControl';
 
-const LanguageSelect: FunctionComponent = () => {
+type Props = {
+  defaultValue?: string;
+};
+const LanguageSelect: FunctionComponent<Props> = ({ defaultValue }) => {
   return (
-    <FormControl type="text" as="select" required>
+    <FormControl type="text" as="select" required defaultValue={defaultValue}>
       <option value="">select...</option>
       <option value="spanish">Spanish</option>
       <option value="english">English</option>

@@ -13,6 +13,7 @@ import TabPane from 'react-bootstrap/TabPane';
 import { Button } from 'react-bootstrap';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
 import { useSession } from 'next-auth/client';
+import { useRouter } from 'next/router';
 import { MySocialInfo, Session } from '../../types';
 import { PostDetail } from '../../types/post';
 import { WorkDetail } from '../../types/work';
@@ -38,6 +39,8 @@ interface Props {
 }
 
 const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCount, mySocialInfo }) => {
+  const router = useRouter();
+
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const { t } = useTranslation('workDetail');
@@ -48,7 +51,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
     }
   };
 
-  const handleEditWorkClick = (ev: MouseEvent<HTMLButtonElement>) => {
+  const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
     setGlobalModalsState({ ...globalModalsState, ...{ editWorkModalOpened: true } });
   };
@@ -60,8 +63,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
 
   return (
     <>
-      {canEditWork() && (
-        <Button variant="warning" onClick={handleEditWorkClick} size="sm">
+      {!router.query.postId && canEditWork() && (
+        <Button variant="warning" onClick={handleEditClick} size="sm">
           {t('edit')}
         </Button>
       )}

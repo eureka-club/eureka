@@ -20,7 +20,7 @@ import { useMutation } from 'react-query';
 import globalModalsAtom from '../../atoms/globalModals';
 
 import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
-import { MySocialInfo } from '../../types';
+import { MySocialInfo, Session } from '../../types';
 import { CycleDetail } from '../../types/cycle';
 import { PostDetail } from '../../types/post';
 import LocalImageComponent from '../LocalImage';
@@ -56,7 +56,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const router = useRouter();
-  const [session] = useSession();
+  const [session] = useSession() as [Session | null | undefined, boolean];
   const { t } = useTranslation('cycleDetail');
   const hyvorId = `${WEBAPP_URL}cycle/${cycle.id}`;
 
@@ -106,8 +106,25 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLeaveCycleSuccess]);
 
+  const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    // if (router.query.postId) setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: true } });
+    // else
+    setGlobalModalsState({ ...globalModalsState, ...{ editWorkModalOpened: true } });
+  };
+
+  const canEditWork = (): boolean => {
+    if (session && session.user.roles === 'admin') return true;
+    return false;
+  };
+
   return (
     <>
+      {!router.query.postId && canEditWork() && (
+        <Button variant="warning" onClick={handleEditClick} size="sm">
+          {t('edit')}
+        </Button>
+      )}
       <Row className="mb-5">
         {post == null ? (
           <>
