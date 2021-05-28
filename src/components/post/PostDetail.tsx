@@ -32,6 +32,7 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const PostDetail: FunctionComponent<Props> = ({ post, cycle, work, mySocialInfo }) => {
+  const currentWork = work || (cycle!.works && cycle!.works[0]); debugger;
   const { t } = useTranslation('createPostForm');
   const hyvorId = `post-${post.id}`;
   const [session] = useSession() as [Session | null | undefined, boolean];
@@ -60,16 +61,16 @@ const PostDetail: FunctionComponent<Props> = ({ post, cycle, work, mySocialInfo 
           <SocialInteraction entity={post} parent={cycle || work || null} mySocialInfo={mySocialInfo} showCounts />
           <table className={styles.parentContent}>
             <tbody>
-              {work != null && (
+              {currentWork != null && (
                 <tr>
                   <td className={styles.parentBadges}>
-                    <Link href={`/work/${work.id}`}>
-                      <a className={styles.workInfoType}>{t(`common:${work.type}`)}</a>
+                    <Link href={`/work/${currentWork.id}`}>
+                      <a className={styles.workInfoType}>{t(`common:${currentWork.type}`)}</a>
                     </Link>
                   </td>
                   <td className="pb-2">
-                    <h4 className={styles.workInfoTitle}>{work.title}</h4>
-                    <h5 className={styles.workInfoAuthor}>{work.author}</h5>
+                    <h4 className={styles.workInfoTitle}>{currentWork.title}</h4>
+                    <h5 className={styles.workInfoAuthor}>{currentWork.author}</h5>
                   </td>
                 </tr>
               )}

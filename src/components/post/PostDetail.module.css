@@ -33,7 +33,7 @@
   text-transform: capitalize;
 }
 .workInfoType {
-  background-color: var(--eureka-grey);
+  background-color: var(--color-emphasis);
 }
 .cycleInfoType {
   background-color: var(--eureka-blue);

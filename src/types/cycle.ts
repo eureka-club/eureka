@@ -26,6 +26,7 @@ export type CycleDetail = Prisma.CycleGetPayload<{
     participants: true;
     likes: true;
     favs: true;
+    works: true;
   };
 }>;
 
