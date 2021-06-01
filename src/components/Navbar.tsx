@@ -121,18 +121,18 @@ const Navbar: FunctionComponent = () => {
             id="nav-dropdown-about"
             onSelect={handleAboutSelect}
           >
-            <NavDropdown.Item eventKey="aboutEureka">{t('aboutEureka')}</NavDropdown.Item>
+            <NavDropdown.Item eventKey="aboutEureka">{t('About Eureka')}</NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item eventKey="aboutUs">{t('aboutUs')}</NavDropdown.Item>
+            <NavDropdown.Item eventKey="aboutUs">{t('About Us')}</NavDropdown.Item>
           </NavDropdown>
 
-          <NavItem className={classNames(styles.infoIco, 'mr-4')}>
+          {/* <NavItem className={classNames(styles.infoIco, 'mr-4')}>
             <Link href="/about">
               <a className="nav-link">
                 <img src="/img/ico-info.png" alt="info icon" />
               </a>
             </Link>
-          </NavItem>
+          </NavItem> */}
 
           {router.locales?.length && (
             <Dropdown alignRight className={styles.langSwitch} onSelect={handleLanguageSelect}>
