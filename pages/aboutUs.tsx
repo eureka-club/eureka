@@ -207,17 +207,17 @@ const AboutPage: NextPage = () => {
               <h2 className="peopleName">Fernanda Pacheco</h2>
               <h3 className="professionName">{t('UI-UX Consultant')}</h3>
               <h4 className="positionName">{t('UX/UI Web & App designer')}</h4>
-              {/* <Badge pill variant="secondary">
-                nature
+              <Badge pill variant="secondary">
+                {t('technology')}
               </Badge>
               <br />
               <Badge pill variant="secondary">
-                good cinema
+                {t('watersports')}
               </Badge>
               <br />
               <Badge pill variant="secondary">
-                listen to music
-              </Badge> */}
+                {t('foodie')}
+              </Badge> 
             </Col>
 
             <Col style={{ textAlign: 'center', marginBottom: '5em' }} lg={3} md={3} xs={12}>
