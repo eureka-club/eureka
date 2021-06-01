@@ -175,6 +175,7 @@ model Cycle {
   favs                    User[]  @relation("CycleToFavs")
   posts                   Post[]
   works                   Work[]  
+  tags         String?
 
   @@index([creatorId], name: "cycles_creator_id_index")
   @@index([title], name: "cycles_title_index")

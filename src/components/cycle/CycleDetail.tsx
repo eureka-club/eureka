@@ -108,13 +108,13 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    // if (router.query.postId) setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: true } });
-    // else
-    setGlobalModalsState({ ...globalModalsState, ...{ editWorkModalOpened: true } });
+    router.push(`/cycle/${router.query.id}/edit`);
   };
 
   const canEditWork = (): boolean => {
-    if (session && session.user.roles === 'admin') return true;
+    if (session) {
+      if (session.user.roles === 'admin' || session!.user.id === cycle.creatorId) return true;
+    }
     return false;
   };
 
@@ -122,7 +122,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     <>
       {!router.query.postId && canEditWork() && (
         <Button variant="warning" onClick={handleEditClick} size="sm">
-          {t('edit')}
+          {t('Edit')}
         </Button>
       )}
       <Row className="mb-5">

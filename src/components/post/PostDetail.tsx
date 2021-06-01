@@ -32,7 +32,7 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const PostDetail: FunctionComponent<Props> = ({ post, cycle, work, mySocialInfo }) => {
-  const currentWork = work || (cycle!.works && cycle!.works[0]); debugger;
+  const currentWork = work || (cycle!.works && cycle!.works[0]);
   const { t } = useTranslation('createPostForm');
   const hyvorId = `post-${post.id}`;
   const [session] = useSession() as [Session | null | undefined, boolean];

@@ -217,7 +217,7 @@ const AboutPage: NextPage = () => {
               <br />
               <Badge pill variant="secondary">
                 {t('foodie')}
-              </Badge> 
+              </Badge>
             </Col>
 
             <Col style={{ textAlign: 'center', marginBottom: '5em' }} lg={3} md={3} xs={12}>

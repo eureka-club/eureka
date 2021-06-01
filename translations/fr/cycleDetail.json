@@ -15,5 +15,6 @@
   "postsCountHeader_other": "{{count}} publications dans ce cycle",
   "complementaryMaterialsTitle": "Contenu complémentaire",
   "explanatoryTextComments": "Utilisez ce forum pour de brefs commentaires et questions. Pour écrire davantage et contribuer au cycle, créez une publication!",
-  "explanatoryTextPosts": "Une publication est une réflexion personnelle sur une œuvre ou un cycle, composée d'une photo et d'un texte. Ça peut être la matérialisation d'un moment Eureka! Nous vous encourageons à participer au cycle en créant votre propre publication."
+  "explanatoryTextPosts": "Une publication est une réflexion personnelle sur une œuvre ou un cycle, composée d'une photo et d'un texte. Ça peut être la matérialisation d'un moment Eureka! Nous vous encourageons à participer au cycle en créant votre propre publication.",
+  "Edit":"Éditer"
 }

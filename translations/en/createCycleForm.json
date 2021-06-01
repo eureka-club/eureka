@@ -31,5 +31,7 @@
   "addWrkPopupTitle": "Add work to cycle",
   "addWrkTypeaheadLabel": "Select work",
   "addWrkTypeaheadPlaceholder": "Search for existing work...",
-  "addWrkAddBtnLabel": "Add work to cycle"
+  "addWrkAddBtnLabel": "Add work to cycle",
+  
+  "Edit Cycle":"Edit Cycle"
 }

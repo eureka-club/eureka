@@ -31,6 +31,8 @@
   "addWrkPopupTitle": "Agregar obra al ciclo",
   "addWrkTypeaheadLabel": "Selecciona una obra",
   "addWrkTypeaheadPlaceholder": "Busca una obra...",
-  "addWrkAddBtnLabel": "Agregar obra al ciclo"
+  "addWrkAddBtnLabel": "Agregar obra al ciclo",
+
+  "Edit Cycle":"Editar Ciclo"
 }
 

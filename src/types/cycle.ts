@@ -42,6 +42,20 @@ export interface CreateCycleClientPayload {
   complementaryMaterials: ComplementaryMaterial[];
 }
 
+export interface EditCycleClientPayload {
+  id: number;
+  includedWorksIds?: number[];
+  coverImage?: File;
+  isPublic?: boolean;
+  title?: string;
+  languages?: string;
+  startDate?: string;
+  endDate?: string;
+  contentText?: string;
+  complementaryMaterials?: ComplementaryMaterial[];
+  tags?: string;
+}
+
 export interface CreateCycleServerFields {
   includedWorksIds: string[];
   isPublic: boolean[];
@@ -52,6 +66,18 @@ export interface CreateCycleServerFields {
   contentText: string[];
 }
 
+export interface EditCycleServerFields {
+  // includedWorksIds: string[];
+  id: number;
+  isPublic?: boolean[];
+  title?: string[];
+  languages?: string[];
+  startDate?: string[];
+  endDate?: string[];
+  contentText?: string[];
+  tags?: string;
+}
+
 export interface CreateCycleServerPayload {
   isPublic: boolean;
   title: string;
@@ -59,4 +85,15 @@ export interface CreateCycleServerPayload {
   contentText: string;
   startDate: Date;
   endDate: Date;
+}
+
+export interface EditCycleServerPayload {
+  id: number;
+  isPublic?: boolean;
+  title?: string;
+  languages?: string;
+  contentText?: string;
+  startDate?: Date;
+  endDate?: Date;
+  tags?: string;
 }

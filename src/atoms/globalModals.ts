@@ -5,5 +5,6 @@ export default atom({
   createWorkModalOpened: false,
   editWorkModalOpened: false,
   editPostModalOpened: false,
+  editCycleModalOpened: false,
   signInModalOpened: false,
 });

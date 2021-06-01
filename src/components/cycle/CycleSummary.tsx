@@ -2,13 +2,14 @@ import { Cycle } from '@prisma/client';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import { useState, useEffect, FunctionComponent } from 'react';
 
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent } from 'react';
 
 import { DATE_FORMAT_SHORT } from '../../constants';
 import { advancedDayjs } from '../../lib/utils';
 import styles from './CycleSummary.module.css';
+import TagsInput from '../forms/controls/TagsInput';
 
 interface Props {
   cycle: Cycle;
@@ -20,8 +21,12 @@ dayjs.extend(timezone);
 const WorkSummary: FunctionComponent<Props> = ({ cycle }) => {
   const now = new Date();
   const { t } = useTranslation('common');
-  const startDate = dayjs(cycle.startDate).add(1, 'day').tz(dayjs.tz.guess());
-  const endDate = dayjs(cycle.endDate).add(1, 'day').tz(dayjs.tz.guess());
+  const startDate = dayjs(cycle.startDate).tz(dayjs.tz.guess());
+  const endDate = dayjs(cycle.endDate).tz(dayjs.tz.guess());
+  const [tags, setTags] = useState<string>('');
+  useEffect(() => {
+    setTags(cycle.tags!);
+  }, [cycle]);
   return (
     <section className={styles.workSummary}>
       {[
@@ -31,6 +36,7 @@ const WorkSummary: FunctionComponent<Props> = ({ cycle }) => {
             : t('cycleNotActiveLabel')
         } :  ${startDate.format(DATE_FORMAT_SHORT)}—${endDate.format(DATE_FORMAT_SHORT)}`,
       ].join(', ')}
+      <TagsInput tags={tags} readOnly label="" />
     </section>
   );
 };
