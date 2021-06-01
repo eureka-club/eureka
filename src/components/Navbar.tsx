@@ -16,6 +16,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import { DropdownItemProps } from 'react-bootstrap/DropdownItem';
 import { BiUser } from 'react-icons/bi';
 import { BsBookmark } from 'react-icons/bs';
+import { AiOutlineInfoCircle } from 'react-icons/ai';
 
 import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '../constants';
 import { Session } from '../types';
@@ -54,6 +55,11 @@ const Navbar: FunctionComponent = () => {
         path: '/',
       });
     }
+  };
+
+  const handleAboutSelect = (eventKey: string | null) => {
+    if (eventKey === 'aboutEureka') router.push('/about');
+    else if (eventKey === 'aboutUs') router.push('/aboutUs');
   };
 
   return (
@@ -108,13 +114,25 @@ const Navbar: FunctionComponent = () => {
             </>
           )}
 
-          <NavItem className={classNames(styles.infoIco, 'mr-4')}>
+          <NavDropdown
+            alignRight
+            className="mr-3"
+            title={<AiOutlineInfoCircle style={{ fontSize: '1.5em' }} />}
+            id="nav-dropdown-about"
+            onSelect={handleAboutSelect}
+          >
+            <NavDropdown.Item eventKey="aboutEureka">{t('About Eureka')}</NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item eventKey="aboutUs">{t('About Us')}</NavDropdown.Item>
+          </NavDropdown>
+
+          {/* <NavItem className={classNames(styles.infoIco, 'mr-4')}>
             <Link href="/about">
               <a className="nav-link">
                 <img src="/img/ico-info.png" alt="info icon" />
               </a>
             </Link>
-          </NavItem>
+          </NavItem> */}
 
           {router.locales?.length && (
             <Dropdown alignRight className={styles.langSwitch} onSelect={handleLanguageSelect}>
