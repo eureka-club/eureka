@@ -28,15 +28,18 @@
   padding: 10px 30px 40px 30px;
   vertical-align: middle;
 }
-.thanks {
+.thanks, .contact-me {
   width: 60%;
   margin: auto;
 }
 
 .fallowsSection a .ti{
   color: var(--eureka-green);
-  font-size: 2em;
+  font-size: 4em;
   cursor: pointer;
+}
+.fallowsSection a[href^="mailto:"] .ti{
+  font-size: 3.3em;
 }
 .fallowsSection .fallowsSectionTitle{
   font-size: 1em;
@@ -76,4 +79,8 @@
 .peopleCard .interest{
   
   background-color:#493788 !important;
+}
+.peopleCard a[href^="https://www.toptal"] .si,
+.peopleCard a[href^="https://www.upwork.com"] .si{
+  font-size:1.2em;
 }

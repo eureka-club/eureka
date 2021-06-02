@@ -111,10 +111,7 @@ const AboutPage: NextPage = () => {
         </p>
         <hr />
 
-        <div className="contact-me">
-          
-        </div>
-        
+        <div className="contact-me" />
       </div>
     </SimpleLayout>
   );

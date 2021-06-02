@@ -249,7 +249,7 @@ const AboutPage: NextPage = () => {
             </p>
           </div>
 
-          <div className="contact-me">
+          <div className={styles['contact-me']}>
             <br />
             <hr />
             <h4 style={{ color: 'var(--eureka-green)' }}>{t('common:eurekaSupport')}</h4>
@@ -274,7 +274,7 @@ const AboutPage: NextPage = () => {
               alt=""
             />
           </div>
-      
+
           <section className={styles.fallowsSection}>
             <h5 className={styles.fallowsSectionTitle}>{t('Follow us on social media')}:</h5>
             <a href="https://twitter.com/eleurekaclub">
