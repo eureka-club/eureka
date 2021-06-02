@@ -194,7 +194,7 @@ const EditPostForm: FunctionComponent = () => {
 
   const handlerchange = (ev: ChangeEvent<HTMLInputElement>) => {
     if (post && ev.currentTarget.id in post) {
-      const p: PostDetail & { [key: string]: any } = post;
+      const p: PostDetail & { [key: string]: unknown } = post;
       p[ev.currentTarget.id] = ev.currentTarget.value;
       setPost(p);
     }

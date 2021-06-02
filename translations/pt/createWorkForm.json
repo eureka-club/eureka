@@ -15,7 +15,12 @@
   "releaseYearFieldLabel": "Ano de lançamento",
   "publicationYearFieldLabel": "Ano de publicação",
   "countryFieldLabel": "País de origem (autoria)",
-  "workLengthFieldLabel": "Duração / nº pag.",
+  
+  "Duration":"Duração",
+  "Length": "Número",
+  "minutes": "minutos",
+  "pages": "páginas",
+  
   "authorGenderFieldLabel": "Gênero dx autorx ou diretorx",
   "authorGenderFieldPlaceholder": "selecionar...",
   "authorGenderFemale": "Feminino",

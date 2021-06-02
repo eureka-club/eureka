@@ -34,6 +34,24 @@ const EditWorkForm: FunctionComponent = () => {
   const router = useRouter();
   const [tags, setTags] = useState<string>('');
   const [work, setWork] = useState<WorkDetail | null>(null);
+  const [publicationLengthLabel, setPublicationLengthLabel] = useState(`${t('Length')} | ${t('Duration')}`);
+
+  const labelsChange = (fieldName: string) => {
+    switch (fieldName) {
+      case 'book':
+        setPublicationLengthLabel(`${t('Length')} (${t('pages')})`);
+        break;
+      case 'movie':
+      case 'documentary':
+        setPublicationYearLabel(t('releaseYearFieldLabel'));
+        setPublicationLengthLabel(`${t('Duration')} (${t('minutes')})`);
+        break;
+
+      default:
+        setPublicationYearLabel(t('publicationYearFieldLabel'));
+        setPublicationLengthLabel(`${t('Length')} | ${t('Duration')}`);
+    }
+  };
 
   useEffect(() => {
     const fetchWork = async () => {
@@ -45,6 +63,7 @@ const EditWorkForm: FunctionComponent = () => {
           const ts = w.tags;
           return ts;
         });
+        labelsChange(w.type);
       }
     };
     fetchWork();
@@ -62,15 +81,21 @@ const EditWorkForm: FunctionComponent = () => {
   );
 
   const handleWorkTypeChange = (ev: ChangeEvent<HTMLSelectElement>) => {
-    switch (ev.currentTarget.value) {
+    labelsChange(ev.currentTarget.value);
+    /* switch (ev.currentTarget.value) {
+      case 'book':
+        setPublicationLengthLabel(`${t('Length')} (${t('pages')})`);
+        break;
       case 'movie':
       case 'documentary':
         setPublicationYearLabel(t('releaseYearFieldLabel'));
+        setPublicationLengthLabel(`${t('Duration')} (${t('minutes')})`);
         break;
 
       default:
         setPublicationYearLabel(t('publicationYearFieldLabel'));
-    }
+        setPublicationLengthLabel(`${t('Length')} | ${t('Duration')}`);
+    } */
   };
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
@@ -102,7 +127,7 @@ const EditWorkForm: FunctionComponent = () => {
 
   const handlerchange = (ev: ChangeEvent<HTMLInputElement>) => {
     if (work && ev.currentTarget.id in work) {
-      let w: WorkDetail & { [key: string]: any } = work;
+      let w: WorkDetail & { [key: string]: unknown } = work;
       w = work;
       w[ev.currentTarget.id] = ev.currentTarget.value;
       setWork(w);
@@ -210,8 +235,8 @@ const EditWorkForm: FunctionComponent = () => {
               </Col>
               <Col>
                 <FormGroup controlId="workLength">
-                  <FormLabel>{t('workLengthFieldLabel')}</FormLabel>
-                  <FormControl defaultValue={work.length?.toString()} type="text" />
+                  <FormLabel>{publicationLengthLabel}</FormLabel>
+                  <FormControl defaultValue={work.length?.toString()} type="number" min="0" max="999999" />
                 </FormGroup>
               </Col>
             </Row>

@@ -66,9 +66,9 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
   const router = useRouter();
   const [tags, setTags] = useState<string>('');
 
-  useEffect(() => {
-    setTags(cycle.tags!);
-  }, []);
+  // useEffect(() => {
+  setTags(cycle.tags!);
+  // }, []);
 
   const {
     mutate: execEditCycle,
@@ -257,7 +257,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
 
   const handlerchange = (ev: ChangeEvent<HTMLInputElement>) => {
     if (cycle && ev.currentTarget.id in cycle) {
-      const c: CycleDetail & { [key: string]: any } = cycle;
+      const c: CycleDetail & { [key: string]: unknown } = cycle;
       c[ev.currentTarget.id] = ev.currentTarget.value;
     }
   };
