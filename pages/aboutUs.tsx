@@ -159,8 +159,8 @@ const AboutPage: NextPage = () => {
               />
               <h2 className={styles.peopleName}>
                 Daniela Gonçalves
-                <a href="https://www.upwork.com/freelancers/fernandaland" target="_blank" rel="noreferrer">
-                  <SiUpwork className={styles.si} />
+                <a href="https://www.linkedin.com/in/daniela-gonçalves-565aba50/" target="_blank" rel="noreferrer">
+                  <TiSocialLinkedinCircular className={styles.si} />
                 </a>
               </h2>
               <h3 className={styles.professionName}>{t('Advisor')}</h3>
@@ -188,8 +188,8 @@ const AboutPage: NextPage = () => {
               />
               <h2 className={styles.peopleName}>
                 Fernanda Pacheco
-                <a href="https://linkedin.com/company/eleurekaclub" target="_blank" rel="noreferrer">
-                  <TiSocialLinkedinCircular className={styles.si} />
+                <a href="https://www.upwork.com/freelancers/fernandaland" target="_blank" rel="noreferrer">
+                  <SiUpwork className={styles.si} />
                 </a>
               </h2>
               <h3 className={styles.professionName}>{t('UI-UX Consultant')}</h3>
@@ -239,9 +239,10 @@ const AboutPage: NextPage = () => {
         </Container>
         <div style={{ textAlign: 'center', marginBottom: '4em' }}>
           <div className={styles.thanks}>
-            <p style={{ color: 'var(--eureka-green)' }}>
+            <hr />
+            <h4 style={{ color: 'var(--eureka-green)' }}>
               {t('We are grateful for Eureka’s many friends that support us in a variety of ways!')}
-            </p>
+            </h4>
             <p>
               Roland Trompette, Aranzazu Zacarias, Ricardo Sanginés, Jacques Ricard, Rafael Millán, Daniel C. Zorrilla,
               Giovana Salazar, Amy Shapiro Raikar, Jessie Keating
@@ -250,6 +251,7 @@ const AboutPage: NextPage = () => {
 
           <div className="contact-me">
             <br />
+            <hr />
             <h4 style={{ color: 'var(--eureka-green)' }}>{t('common:eurekaSupport')}</h4>
             <img
               className={styles['logo-img2']}
@@ -272,9 +274,7 @@ const AboutPage: NextPage = () => {
               alt=""
             />
           </div>
-          <p>
-            {t('common:contact')} <a href="mailto:hola@eureka.club ">hola@eureka.club</a>
-          </p>
+      
           <section className={styles.fallowsSection}>
             <h5 className={styles.fallowsSectionTitle}>{t('Follow us on social media')}:</h5>
             <a href="https://twitter.com/eleurekaclub">

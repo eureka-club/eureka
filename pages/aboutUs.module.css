@@ -29,18 +29,19 @@
   vertical-align: middle;
 }
 .thanks {
-  width: 50%;
+  width: 60%;
   margin: auto;
 }
+
 .fallowsSection a .ti{
   color: var(--eureka-green);
   font-size: 2em;
-   cursor: pointer;
+  cursor: pointer;
 }
 .fallowsSection .fallowsSectionTitle{
   font-size: 1em;
+  color: var(--eureka-green);
 }
-
 
 .peopleCard{
   text-align: center;
