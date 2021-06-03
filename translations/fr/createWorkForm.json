@@ -13,13 +13,12 @@
   "imageCoverFieldLabel": "Couverture",
   "imageCoverFieldPlaceholder": "sélectionner fichier...",
   "releaseYearFieldLabel": "Année de sortie",
-  "publicationYearFieldLabel": "Année de publication",
   "countryFieldLabel": "Pays d'origine (auteur-e)",
   
-  "Length": "Quantité",
+  "Length pages": "Nombre de pages",
   "Duration":"Durée",
   "minutes": "minutes",
-  "pages": "pages",
+  "Publication year": "Année de publication",
   
   "authorGenderFieldLabel": "Genre de l'auteur-e ou réalisateur-rice",
   "authorGenderFieldPlaceholder": "sélectioner...",

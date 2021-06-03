@@ -13,13 +13,12 @@
   "imageCoverFieldLabel": "Capa",
   "imageCoverFieldPlaceholder": "selecionar arquivo...",
   "releaseYearFieldLabel": "Ano de lançamento",
-  "publicationYearFieldLabel": "Ano de publicação",
   "countryFieldLabel": "País de origem (autoria)",
   
   "Duration":"Duração",
-  "Length": "Número",
+  "Length pages": "Número de páginas",
   "minutes": "minutos",
-  "pages": "páginas",
+  "Publication year": "Ano de publicação",
   
   "authorGenderFieldLabel": "Gênero dx autorx ou diretorx",
   "authorGenderFieldPlaceholder": "selecionar...",

@@ -25,14 +25,14 @@ import styles from './CreateWorkForm.module.css';
 
 const CreateWorkForm: FunctionComponent = () => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-  const [publicationYearLabel, setPublicationYearLabel] = useState('Publication year');
+  const [publicationYearLabel, setPublicationYearLabel] = useState('...');
 
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [tags, setTags] = useState<string>('');
   const queryClient = useQueryClient();
   const router = useRouter();
   const { t } = useTranslation('createWorkForm');
-  const [publicationLengthLabel, setPublicationLengthLabel] = useState(`${t('Length')} | ${t('Duration')}`);
+  const [publicationLengthLabel, setPublicationLengthLabel] = useState('...');
 
   const { mutate: execCreateWork, error: createWorkError, isError, isLoading, isSuccess } = useMutation(
     async (payload: CreateWorkClientPayload) => {
@@ -55,18 +55,18 @@ const CreateWorkForm: FunctionComponent = () => {
 
   const handleWorkTypeChange = (ev: ChangeEvent<HTMLSelectElement>) => {
     switch (ev.currentTarget.value) {
-      case 'book':
-        setPublicationLengthLabel(`${t('Length')} (${t('pages')})`);
-        break;
       case 'movie':
       case 'documentary':
         setPublicationYearLabel(t('releaseYearFieldLabel'));
         setPublicationLengthLabel(`${t('Duration')} (${t('minutes')})`);
         break;
-
+      case 'book':
+        setPublicationLengthLabel(t('Length pages'));
+        setPublicationYearLabel(t('Publication year'));
+        break;
       default:
-        setPublicationYearLabel(t('publicationYearFieldLabel'));
-        setPublicationLengthLabel(`${t('Length')} | ${t('Duration')}`);
+        setPublicationYearLabel('...');
+        setPublicationLengthLabel('...');
     }
   };
 

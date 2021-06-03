@@ -27,19 +27,20 @@ import styles from './CreateWorkForm.module.css';
 dayjs.extend(utc);
 const EditWorkForm: FunctionComponent = () => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-  const [publicationYearLabel, setPublicationYearLabel] = useState('Publication year');
+  const [publicationYearLabel, setPublicationYearLabel] = useState('...');
   // const [coverFile, setCoverFile] = useState<File | null>(null);
   const queryClient = useQueryClient();
   const { t } = useTranslation('createWorkForm');
   const router = useRouter();
   const [tags, setTags] = useState<string>('');
   const [work, setWork] = useState<WorkDetail | null>(null);
-  const [publicationLengthLabel, setPublicationLengthLabel] = useState(`${t('Length')} | ${t('Duration')}`);
+  const [publicationLengthLabel, setPublicationLengthLabel] = useState('...');
 
   const labelsChange = (fieldName: string) => {
     switch (fieldName) {
       case 'book':
-        setPublicationLengthLabel(`${t('Length')} (${t('pages')})`);
+        setPublicationLengthLabel(t('Length pages'));
+        setPublicationYearLabel(t('Publication year'));
         break;
       case 'movie':
       case 'documentary':
@@ -48,8 +49,8 @@ const EditWorkForm: FunctionComponent = () => {
         break;
 
       default:
-        setPublicationYearLabel(t('publicationYearFieldLabel'));
-        setPublicationLengthLabel(`${t('Length')} | ${t('Duration')}`);
+        setPublicationYearLabel('...');
+        setPublicationLengthLabel('...');
     }
   };
 

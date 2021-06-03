@@ -13,13 +13,13 @@
   "imageCoverFieldLabel": "Cover",
   "imageCoverFieldPlaceholder": "select file...",
   "releaseYearFieldLabel": "Release year",
-  "publicationYearFieldLabel": "Publication year",
+  
   "countryFieldLabel": "Country of origin",
   
   "Duration":"Duration",
-  "Length": "Length",
+  "Length pages": "Length pages",
   "minutes": "minutes",
-  "pages": "pages",
+  "Publication year": "Publication year",
   
   "authorGenderFieldLabel": "Gender of author of director",
   "authorGenderFieldPlaceholder": "select...",
