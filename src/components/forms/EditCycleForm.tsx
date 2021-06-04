@@ -66,9 +66,9 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
   const router = useRouter();
   const [tags, setTags] = useState<string>('');
 
-  // useEffect(() => {
-  setTags(cycle.tags!);
-  // }, []);
+  useEffect(() => {
+    setTags(cycle.tags!);
+  }, []);
 
   const {
     mutate: execEditCycle,

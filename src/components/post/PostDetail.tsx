@@ -43,7 +43,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, cycle, work, mySocialInfo 
     setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: true } });
   };
   const canEditPost = (): boolean => {
-    if (session && session.user.roles === 'admin') return true;
+    if (session && session.user.id === post.creatorId) return true;
     return false;
   };
   return (

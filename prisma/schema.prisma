@@ -32,7 +32,7 @@ model User {
   favWorks       Work[]     @relation("WorkToFavs")
   likedPosts     Post[]     @relation("PostToLikes")
   favPosts       Post[]     @relation("PostToFavs")
-  posts          Post[]
+  posts          Post[]  
 
   @@map(name: "users")
 }
@@ -106,7 +106,8 @@ model LocalImage {
 }
 
 model Work {
-  id               Int        @default(autoincrement()) @id
+  id               Int       @default(autoincrement()) @id
+  creatorId        Int       @map(name: "creator_id") @default(1)
   type             String
   title            String
   contentText      String?    @db.VarChar(4000) @map(name: "content_text")
@@ -129,6 +130,7 @@ model Work {
 
   @@index([title], name: "works_title_index")
   @@index([author], name: "works_author_index")
+  @@index([creatorId], name: "works_creator_id_index")
 
   @@map(name: "works")
 }

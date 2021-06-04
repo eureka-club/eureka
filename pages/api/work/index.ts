@@ -14,37 +14,36 @@ export const config = {
   },
 };
 
-export default getApiHandler().post<NextApiRequest, NextApiResponse>(
-  async (req, res): Promise<void> => {
-    const session = (await getSession({ req })) as Session;
-    if (session == null) {
-      res.status(401).json({ status: 'Unauthorized' });
+export default getApiHandler().post<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+  const session = (await getSession({ req })) as unknown as Session;
+  if (session == null) {
+    res.status(401).json({ status: 'Unauthorized' });
+    return;
+  }
+
+  new Form().parse(req, async (err, fields, files) => {
+    if (err != null) {
+      console.error(err); // eslint-disable-line no-console
+      res.status(500).json({ status: 'Server error' });
+      return;
+    }
+    if (files?.cover == null) {
+      res.status(422).json({ error: 'No cover image received' });
       return;
     }
 
-    new Form().parse(req, async (err, fields, files) => {
-      if (err != null) {
-        console.error(err); // eslint-disable-line no-console
-        res.status(500).json({ status: 'Server error' });
-        return;
-      }
-      if (files?.cover == null) {
-        res.status(422).json({ error: 'No cover image received' });
-        return;
-      }
+    const coverImage: FileUpload = files.cover[0];
+    try {
+      const uploadData = await storeUpload(coverImage);
+      const fieldsA = { ...fields, creatorId: [session.user.id] };
+      const work = await createFromServerFields(fieldsA, uploadData);
 
-      const coverImage: FileUpload = files.cover[0];
-      try {
-        const uploadData = await storeUpload(coverImage);
-        const work = await createFromServerFields(fields, uploadData);
-
-        res.status(201).json(work);
-      } catch (exc) {
-        console.error(exc); // eslint-disable-line no-console
-        res.status(500).json({ status: 'server error' });
-      } finally {
-        prisma.$disconnect();
-      }
-    });
-  },
-);
+      res.status(201).json(work);
+    } catch (exc) {
+      console.error(exc); // eslint-disable-line no-console
+      res.status(500).json({ status: 'server error' });
+    } finally {
+      prisma.$disconnect();
+    }
+  });
+});

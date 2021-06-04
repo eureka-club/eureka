@@ -49,6 +49,7 @@ export interface CreateWorkServerFields {
   publicationYear?: string[];
   length?: string[];
   tags: string;
+  creatorId: number;
 }
 
 export interface CreateWorkServerPayload {
@@ -63,6 +64,7 @@ export interface CreateWorkServerPayload {
   publicationYear?: Date;
   length?: string;
   tags: string;
+  creatorId: number;
 }
 
 export interface EditWorkClientPayload {

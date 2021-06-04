@@ -7,79 +7,75 @@ import { addParticipant, find, removeParticipant } from '../../../../src/facades
 import prisma from '../../../../src/lib/prisma';
 
 export default getApiHandler()
-  .post<NextApiRequest, NextApiResponse>(
-    async (req, res): Promise<void> => {
-      const session = (await getSession({ req })) as Session;
-      if (session == null) {
-        res.status(401).json({ status: 'Unauthorized' });
-        return;
-      }
+  .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+    const session = (await getSession({ req })) as unknown as Session;
+    if (session == null) {
+      res.status(401).json({ status: 'Unauthorized' });
+      return;
+    }
 
-      const { id } = req.query;
-      if (typeof id !== 'string') {
+    const { id } = req.query;
+    if (typeof id !== 'string') {
+      res.status(404).end();
+      return;
+    }
+
+    const idNum = parseInt(id, 10);
+    if (!Number.isInteger(idNum)) {
+      res.status(404).end();
+      return;
+    }
+
+    try {
+      const cycle = await find(idNum);
+      if (cycle == null) {
         res.status(404).end();
         return;
       }
 
-      const idNum = parseInt(id, 10);
-      if (!Number.isInteger(idNum)) {
+      await addParticipant(cycle, session.user);
+
+      res.status(200).json({ status: 'OK' });
+    } catch (exc) {
+      console.error(exc); // eslint-disable-line no-console
+      res.status(500).json({ status: 'server error' });
+    } finally {
+      prisma.$disconnect();
+    }
+  })
+  .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+    const session = (await getSession({ req })) as unknown as Session;
+    if (session == null) {
+      res.status(401).json({ status: 'Unauthorized' });
+      return;
+    }
+
+    const { id } = req.query;
+    if (typeof id !== 'string') {
+      res.status(404).end();
+      return;
+    }
+
+    const idNum = parseInt(id, 10);
+    if (!Number.isInteger(idNum)) {
+      res.status(404).end();
+      return;
+    }
+
+    try {
+      const cycle = await find(idNum);
+      if (cycle == null) {
         res.status(404).end();
         return;
       }
 
-      try {
-        const cycle = await find(idNum);
-        if (cycle == null) {
-          res.status(404).end();
-          return;
-        }
+      await removeParticipant(cycle, session.user);
 
-        await addParticipant(cycle, session.user);
-
-        res.status(200).json({ status: 'OK' });
-      } catch (exc) {
-        console.error(exc); // eslint-disable-line no-console
-        res.status(500).json({ status: 'server error' });
-      } finally {
-        prisma.$disconnect();
-      }
-    },
-  )
-  .delete<NextApiRequest, NextApiResponse>(
-    async (req, res): Promise<void> => {
-      const session = (await getSession({ req })) as Session;
-      if (session == null) {
-        res.status(401).json({ status: 'Unauthorized' });
-        return;
-      }
-
-      const { id } = req.query;
-      if (typeof id !== 'string') {
-        res.status(404).end();
-        return;
-      }
-
-      const idNum = parseInt(id, 10);
-      if (!Number.isInteger(idNum)) {
-        res.status(404).end();
-        return;
-      }
-
-      try {
-        const cycle = await find(idNum);
-        if (cycle == null) {
-          res.status(404).end();
-          return;
-        }
-
-        await removeParticipant(cycle, session.user);
-
-        res.status(200).json({ status: 'OK' });
-      } catch (exc) {
-        console.error(exc); // eslint-disable-line no-console
-        res.status(500).json({ status: 'server error' });
-      } finally {
-        prisma.$disconnect();
-      }
-    },
-  );
+      res.status(200).json({ status: 'OK' });
+    } catch (exc) {
+      console.error(exc); // eslint-disable-line no-console
+      res.status(500).json({ status: 'server error' });
+    } finally {
+      prisma.$disconnect();
+    }
+  });

@@ -97,7 +97,7 @@ const ListPostsPage: NextPage<Props> = ({ posts }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const session = (await getSession(ctx)) as Session;
+  const session = (await getSession(ctx)) as unknown as Session;
   if (session == null || !session.user.roles.includes('admin')) {
     return { notFound: true };
   }

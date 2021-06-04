@@ -15,50 +15,48 @@ export const config = {
   },
 };
 
-export default getApiHandler().post<NextApiRequest, NextApiResponse>(
-  async (req, res): Promise<void> => {
-    const session = (await getSession({ req })) as Session;
-    if (session == null || !session.user.roles.includes('admin')) {
-      res.status(401).json({ status: 'Unauthorized' });
+export default getApiHandler().post<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+  const session = (await getSession({ req })) as unknown as Session;
+  if (session == null || !session.user.roles.includes('admin')) {
+    res.status(401).json({ status: 'Unauthorized' });
+    return;
+  }
+
+  new Form().parse(req, async (err, fields, files) => {
+    if (err != null) {
+      console.error(err); // eslint-disable-line no-console
+      res.status(500).json({ status: 'Server error' });
+      return;
+    }
+    if (files?.coverImage == null) {
+      res.status(422).json({ error: 'No cover image received' });
       return;
     }
 
-    new Form().parse(req, async (err, fields, files) => {
-      if (err != null) {
-        console.error(err); // eslint-disable-line no-console
-        res.status(500).json({ status: 'Server error' });
-        return;
-      }
-      if (files?.coverImage == null) {
-        res.status(422).json({ error: 'No cover image received' });
-        return;
-      }
+    try {
+      const { coverImage, ...complementaryMaterialsFiles } = files;
+      const coverImageUploadData = await storeUpload(coverImage[0]);
+      const complementaryMaterialsUploadData: Record<string, StoredFileUpload> = {};
+      await asyncForEach(
+        Object.entries(complementaryMaterialsFiles),
+        async ([cmIndexName, cmFile]: [string, FileUpload[]]) => {
+          complementaryMaterialsUploadData[cmIndexName] = await storeUpload(cmFile[0]);
+        },
+      );
 
-      try {
-        const { coverImage, ...complementaryMaterialsFiles } = files;
-        const coverImageUploadData = await storeUpload(coverImage[0]);
-        const complementaryMaterialsUploadData: Record<string, StoredFileUpload> = {};
-        await asyncForEach(
-          Object.entries(complementaryMaterialsFiles),
-          async ([cmIndexName, cmFile]: [string, FileUpload[]]) => {
-            complementaryMaterialsUploadData[cmIndexName] = await storeUpload(cmFile[0]);
-          },
-        );
+      const cycle = await createFromServerFields(
+        session.user,
+        fields,
+        coverImageUploadData,
+        complementaryMaterialsUploadData,
+      );
 
-        const cycle = await createFromServerFields(
-          session.user,
-          fields,
-          coverImageUploadData,
-          complementaryMaterialsUploadData,
-        );
-
-        res.status(201).json(cycle);
-      } catch (exc) {
-        console.error(exc); // eslint-disable-line no-console
-        res.status(500).json({ status: 'server error' });
-      } finally {
-        prisma.$disconnect();
-      }
-    });
-  },
-);
+      res.status(201).json(cycle);
+    } catch (exc) {
+      console.error(exc); // eslint-disable-line no-console
+      res.status(500).json({ status: 'server error' });
+    } finally {
+      prisma.$disconnect();
+    }
+  });
+});

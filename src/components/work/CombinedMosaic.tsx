@@ -14,26 +14,28 @@ interface Props {
 }
 
 const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
-  const { isLoading: isCyclesLoading, isSuccess: isCyclesSuccess, data: cyclesData } = useQuery<CycleMosaicItem[]>(
-    ['work.mosaic.cycles', work.id],
-    async ({ queryKey: [, workId] }) => {
-      const whereQP = encodeURIComponent(JSON.stringify({ works: { some: { id: workId } } }));
-      const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
-      const res = await fetch(`/api/search/cycles?where=${whereQP}&include=${includeQP}`);
+  const {
+    isLoading: isCyclesLoading,
+    isSuccess: isCyclesSuccess,
+    data: cyclesData,
+  } = useQuery<CycleMosaicItem[]>(['work.mosaic.cycles', work.id], async ({ queryKey: [, workId] }) => {
+    const whereQP = encodeURIComponent(JSON.stringify({ works: { some: { id: workId } } }));
+    const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
+    const res = await fetch(`/api/search/cycles?where=${whereQP}&include=${includeQP}`);
 
-      return res.json();
-    },
-  );
-  const { isLoading: isPostsLoading, isSuccess: isPostsSuccess, data: postsData } = useQuery<PostMosaicItem[]>(
-    ['posts.mosaic.work', work.id],
-    async ({ queryKey: [, workId] }) => {
-      const whereQP = encodeURIComponent(JSON.stringify({ works: { some: { id: workId } } }));
-      const includeQP = encodeURIComponent(JSON.stringify({ creator: true, localImages: true, works: true }));
-      const res = await fetch(`/api/search/posts?where=${whereQP}&include=${includeQP}`);
+    return res.json();
+  });
+  const {
+    isLoading: isPostsLoading,
+    isSuccess: isPostsSuccess,
+    data: postsData,
+  } = useQuery<PostMosaicItem[]>(['posts.mosaic.work', work.id], async ({ queryKey: [, workId] }) => {
+    const whereQP = encodeURIComponent(JSON.stringify({ works: { some: { id: workId } } }));
+    const includeQP = encodeURIComponent(JSON.stringify({ creator: true, localImages: true, works: true }));
+    const res = await fetch(`/api/search/posts?where=${whereQP}&include=${includeQP}`);
 
-      return res.json();
-    },
-  );
+    return res.json();
+  });
   const [mosaicData, setMosaicData] = useState<MosaicItem[]>([]);
 
   useEffect(() => {

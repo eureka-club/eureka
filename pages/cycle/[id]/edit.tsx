@@ -23,7 +23,7 @@ const EditCyclePage: NextPage<Props> = ({ cycle }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const session = (await getSession(ctx)) as Session;
+  const session = (await getSession(ctx)) as unknown as Session;
 
   const cycleId = parseInt(ctx.query.id as string, 10);
   const cycle = await find(cycleId);

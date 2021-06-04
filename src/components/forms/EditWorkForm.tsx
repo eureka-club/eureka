@@ -70,16 +70,20 @@ const EditWorkForm: FunctionComponent = () => {
     fetchWork();
   }, [router.query.id]);
 
-  const { mutate: execEditWork, error: editWorkError, isError, isLoading, isSuccess } = useMutation(
-    async (payload: EditWorkClientPayload) => {
-      const res = await fetch(`/api/work/${router.query.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      return res.json();
-    },
-  );
+  const {
+    mutate: execEditWork,
+    error: editWorkError,
+    isError,
+    isLoading,
+    isSuccess,
+  } = useMutation(async (payload: EditWorkClientPayload) => {
+    const res = await fetch(`/api/work/${router.query.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    return res.json();
+  });
 
   const handleWorkTypeChange = (ev: ChangeEvent<HTMLSelectElement>) => {
     labelsChange(ev.currentTarget.value);

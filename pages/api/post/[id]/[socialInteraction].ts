@@ -36,59 +36,55 @@ const validateReq = async (
 };
 
 export default getApiHandler()
-  .post<NextApiRequest, NextApiResponse>(
-    async (req, res): Promise<void> => {
-      const session = (await getSession({ req })) as Session;
-      const { id, socialInteraction } = req.query;
+  .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+    const session = (await getSession({ req })) as unknown as Session;
+    const { id, socialInteraction } = req.query;
 
-      if (!(await validateReq(session, id, socialInteraction, res))) {
+    if (!(await validateReq(session, id, socialInteraction, res))) {
+      return;
+    }
+
+    try {
+      const post = await find(Number(id));
+      if (post == null) {
+        res.status(404).end();
         return;
       }
 
-      try {
-        const post = await find(Number(id));
-        if (post == null) {
-          res.status(404).end();
-          return;
-        }
+      // @ts-ignore arguments checked in validateReq()
+      await saveSocialInteraction(post, session.user, socialInteraction, true);
 
-        // @ts-ignore arguments checked in validateReq()
-        await saveSocialInteraction(post, session.user, socialInteraction, true);
+      res.status(200).json({ status: 'OK' });
+    } catch (exc) {
+      console.error(exc); // eslint-disable-line no-console
+      res.status(500).json({ status: 'server error' });
+    } finally {
+      prisma.$disconnect();
+    }
+  })
+  .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+    const session = (await getSession({ req })) as unknown as Session;
+    const { id, socialInteraction } = req.query;
 
-        res.status(200).json({ status: 'OK' });
-      } catch (exc) {
-        console.error(exc); // eslint-disable-line no-console
-        res.status(500).json({ status: 'server error' });
-      } finally {
-        prisma.$disconnect();
-      }
-    },
-  )
-  .delete<NextApiRequest, NextApiResponse>(
-    async (req, res): Promise<void> => {
-      const session = (await getSession({ req })) as Session;
-      const { id, socialInteraction } = req.query;
+    if (!(await validateReq(session, id, socialInteraction, res))) {
+      return;
+    }
 
-      if (!(await validateReq(session, id, socialInteraction, res))) {
+    try {
+      const post = await find(Number(id));
+      if (post == null) {
+        res.status(404).end();
         return;
       }
 
-      try {
-        const post = await find(Number(id));
-        if (post == null) {
-          res.status(404).end();
-          return;
-        }
+      // @ts-ignore arguments checked in validateReq()
+      await saveSocialInteraction(post, session.user, socialInteraction, false);
 
-        // @ts-ignore arguments checked in validateReq()
-        await saveSocialInteraction(post, session.user, socialInteraction, false);
-
-        res.status(200).json({ status: 'OK' });
-      } catch (exc) {
-        console.error(exc); // eslint-disable-line no-console
-        res.status(500).json({ status: 'server error' });
-      } finally {
-        prisma.$disconnect();
-      }
-    },
-  );
+      res.status(200).json({ status: 'OK' });
+    } catch (exc) {
+      console.error(exc); // eslint-disable-line no-console
+      res.status(500).json({ status: 'server error' });
+    } finally {
+      prisma.$disconnect();
+    }
+  });

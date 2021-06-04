@@ -70,15 +70,13 @@ const EditPostForm: FunctionComponent = () => {
     isError: isEditPostError,
     isLoading: isEditPostLoading,
     isSuccess: isEditPostSuccess,
-  } = useMutation(
-    async (payload: EditPostAboutCycleClientPayload | EditPostAboutWorkClientPayload): Promise<Post> => {
-      const res = await fetch(`/api/post/${router.query.postId}`, {
-        method: 'PATCH',
-        body: JSON.stringify(payload),
-      });
-      return res.json();
-    },
-  );
+  } = useMutation(async (payload: EditPostAboutCycleClientPayload | EditPostAboutWorkClientPayload): Promise<Post> => {
+    const res = await fetch(`/api/post/${router.query.postId}`, {
+      method: 'PATCH',
+      body: JSON.stringify(payload),
+    });
+    return res.json();
+  });
 
   const handleSearchWorkOrCycle = async (query: string) => {
     setIsSearchWorkOrCycleLoading(true);

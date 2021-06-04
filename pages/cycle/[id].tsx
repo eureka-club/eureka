@@ -65,7 +65,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req, res 
   const postsCount = await countPosts(cycle);
   const worksCount = await countWorks(cycle);
 
-  const session = (await getSession({ req })) as Session;
+  const session = (await getSession({ req })) as unknown as Session;
 
   const mySocialInfo: MySocialInfo = {
     favoritedByMe: undefined,

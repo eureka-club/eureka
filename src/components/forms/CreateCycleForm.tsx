@@ -31,6 +31,7 @@ import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
 import WorkTypeaheadSearchItem from '../work/TypeaheadSearchItem';
 import styles from './CreateCycleForm.module.css';
+import TagsInput from './controls/TagsInput';
 
 interface Props {
   className?: string;
@@ -58,7 +59,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const [complementaryMaterialFile, setComplementaryMaterialFile] = useState<File | null>(null);
   const [complementaryMaterialFileOversizeError, setComplementaryMaterialFileOversizeError] = useState(false);
   const [complementaryMaterials, setComplementaryMaterials] = useState<ComplementaryMaterial[]>([]);
-
+  const [tags, setTags] = useState<string>('');
   const {
     mutate: execCreateCycle,
     data: newCycleData,
@@ -90,7 +91,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
         }
       }
     });
-
+    formData.append('tags', tags);
     const res = await fetch('/api/cycle', {
       method: 'POST',
       body: formData,
@@ -106,7 +107,6 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     ev.preventDefault();
     setWorkSearchHighlightedOption(null);
     setAddWorkModalOpened(true);
-    // @ts-expect-error
     setTimeout(() => typeaheadRef.current?.focus());
   };
 
@@ -383,8 +383,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
               <LanguageSelect />
             </FormGroup>
             <FormGroup controlId="topics">
-              <FormLabel>{t('newCycleTopicsLabel')}</FormLabel>
-              <FormControl type="text" />
+              <TagsInput tags={tags} setTags={setTags} label={t('newCycleTopicsLabel')} />
             </FormGroup>
             <FormGroup controlId="startDate">
               <FormLabel>*{t('newCycleStartDateLabel')}</FormLabel>

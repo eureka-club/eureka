@@ -34,24 +34,28 @@ const CreateWorkForm: FunctionComponent = () => {
   const { t } = useTranslation('createWorkForm');
   const [publicationLengthLabel, setPublicationLengthLabel] = useState('...');
 
-  const { mutate: execCreateWork, error: createWorkError, isError, isLoading, isSuccess } = useMutation(
-    async (payload: CreateWorkClientPayload) => {
-      const formData = new FormData();
+  const {
+    mutate: execCreateWork,
+    error: createWorkError,
+    isError,
+    isLoading,
+    isSuccess,
+  } = useMutation(async (payload: CreateWorkClientPayload) => {
+    const formData = new FormData();
 
-      Object.entries(payload).forEach(([key, value]) => {
-        if (value != null) {
-          formData.append(key, value);
-        }
-      });
+    Object.entries(payload).forEach(([key, value]) => {
+      if (value != null) {
+        formData.append(key, value);
+      }
+    });
 
-      const res = await fetch('/api/work', {
-        method: 'POST',
-        body: formData,
-      });
+    const res = await fetch('/api/work', {
+      method: 'POST',
+      body: formData,
+    });
 
-      return res.json();
-    },
-  );
+    return res.json();
+  });
 
   const handleWorkTypeChange = (ev: ChangeEvent<HTMLSelectElement>) => {
     switch (ev.currentTarget.value) {

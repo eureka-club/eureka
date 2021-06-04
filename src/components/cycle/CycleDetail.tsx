@@ -64,16 +64,20 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
   };
 
-  const { mutate: execJoinCycle, isLoading: isJoinCycleLoading, isSuccess: isJoinCycleSuccess } = useMutation(
-    async () => {
-      await fetch(`/api/cycle/${cycle.id}/join`, { method: 'POST' });
-    },
-  );
-  const { mutate: execLeaveCycle, isLoading: isLeaveCycleLoading, isSuccess: isLeaveCycleSuccess } = useMutation(
-    async () => {
-      await fetch(`/api/cycle/${cycle.id}/join`, { method: 'DELETE' });
-    },
-  );
+  const {
+    mutate: execJoinCycle,
+    isLoading: isJoinCycleLoading,
+    isSuccess: isJoinCycleSuccess,
+  } = useMutation(async () => {
+    await fetch(`/api/cycle/${cycle.id}/join`, { method: 'POST' });
+  });
+  const {
+    mutate: execLeaveCycle,
+    isLoading: isLeaveCycleLoading,
+    isSuccess: isLeaveCycleSuccess,
+  } = useMutation(async () => {
+    await fetch(`/api/cycle/${cycle.id}/join`, { method: 'DELETE' });
+  });
 
   const handleSubsectionChange = (key: string | null) => {
     if (key != null) {
