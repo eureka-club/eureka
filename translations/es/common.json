@@ -4,13 +4,13 @@
   "book": "Libro",
   "cycle": "Ciclo",
   "documentary": "Documental",
+  "Error": "Error",
   "movie": "Película",
   "post": "Publicación",
-
-  "browserTitleAbout":"Sobre",
+  "browserTitleAbout": "Sobre",
   "aboutPageHeading": "Nuestra misión es inducir tantos momentos Eureka como sea posible.",
   "aboutHeading": "Sobre",
-  "aboutText":"Eureka es una red social sin fines de lucro diseñada para quienes buscan contenido y conversaciones en línea con significado. Creemos que libros, películas y comunidades pueden ayudar a comprender mejor las sociedades y el mundo que nos rodea.",
+  "aboutText": "Eureka es una red social sin fines de lucro diseñada para quienes buscan contenido y conversaciones en línea con significado. Creemos que libros, películas y comunidades pueden ayudar a comprender mejor las sociedades y el mundo que nos rodea.",
   "whatisCycleHeading": "¿Qué es un ciclo?",
   "whatisCycleText": "Un ciclo es una colección de trabajos (libros, películas y/o documentales) curados por usuarixs sobre un tema de interés. Los ciclos son una oportunidad para descubrir un nuevo tema o para profundizar sobre temas que te apasionan, así como para conocer e intercambiar con demás usuarixs interesadxs en los mismos temas que tú.",
   "whatisPostHeading": "¿Qué es una publicación?",
@@ -30,7 +30,6 @@
   "ethicsText4": "El contenido o las personas que violen lo anterior se someterán a una revisión inmediata y exhaustiva y, en caso de ser necesario, se eliminarán de la plataforma.",
   "eurekaSupport": "Eureka tiene el apoyo de:",
   "contact": "Contacto:",
-
   "mosaicHeaderMyCycles": "Ciclos, obras y publicaciones favoritas",
   "publicationYearLabel": "Año de publicación",
   "releaseYearLabel": "Año de producción",
@@ -42,7 +41,6 @@
   "workLengthAsMinutesLabel": "minutos",
   "unclampTextLess": "ver más",
   "unclampTextMore": "ver menos",
-
   "wayShare": "Vía",
   "cycleShare": "¡Checa el ciclo",
   "postCycleShare": "¡Checa esta reflexión sobre el ciclo",
@@ -52,6 +50,5 @@
   "whatsappComplement": "Participa aquí: ",
   "twitterComplement": "",
   "facebookComplement": "",
-
-  "goToHomepage":"Ir al Inicio"
+  "goToHomepage": "Ir al Inicio"
 }

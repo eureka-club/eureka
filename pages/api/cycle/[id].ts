@@ -47,11 +47,11 @@ export default getApiHandler()
     }
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-    const session = (await getSession({ req })) as unknown as Session;
-    if (session == null || !session.user.roles.includes('admin')) {
-      res.status(401).json({ status: 'Unauthorized' });
-      return;
-    }
+    // const session = (await getSession({ req })) as unknown as Session;
+    // if (session == null || !session.user.roles.includes('admin')) {
+    //   res.status(401).json({ status: 'Unauthorized' });
+    //   return;
+    // }
 
     const { id } = req.query;
     if (typeof id !== 'string') {
