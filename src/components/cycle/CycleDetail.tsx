@@ -115,7 +115,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     router.push(`/cycle/${router.query.id}/edit`);
   };
 
-  const canEditWork = (): boolean => {
+  const canEditCycle = (): boolean => {
     if (session) {
       if (session.user.roles === 'admin' || session!.user.id === cycle.creatorId) return true;
     }
@@ -124,7 +124,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   return (
     <>
-      {!router.query.postId && canEditWork() && (
+      {!router.query.postId && canEditCycle() && (
         <Button variant="warning" onClick={handleEditClick} size="sm">
           {t('Edit')}
         </Button>

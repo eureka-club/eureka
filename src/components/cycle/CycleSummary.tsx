@@ -21,8 +21,8 @@ dayjs.extend(timezone);
 const WorkSummary: FunctionComponent<Props> = ({ cycle }) => {
   const now = new Date();
   const { t } = useTranslation('common');
-  const startDate = dayjs(cycle.startDate).tz(dayjs.tz.guess());
-  const endDate = dayjs(cycle.endDate).tz(dayjs.tz.guess());
+  const startDate = dayjs(cycle.startDate).utc();
+  const endDate = dayjs(cycle.endDate).utc();
   const [tags, setTags] = useState<string>('');
   useEffect(() => {
     setTags(cycle.tags!);

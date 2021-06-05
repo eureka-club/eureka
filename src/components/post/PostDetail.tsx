@@ -48,13 +48,13 @@ const PostDetail: FunctionComponent<Props> = ({ post, cycle, work, mySocialInfo 
   };
   return (
     <>
-      {canEditPost() && (
-        <Button variant="warning" onClick={handleEditClick} size="sm">
-          {t('edit')}
-        </Button>
-      )}
       <Row className="mb-5">
         <Col md={{ span: 4 }}>
+          {canEditPost() && (
+            <Button variant="warning" onClick={handleEditClick} size="sm">
+              {t('edit')}
+            </Button>
+          )}
           <div className={classNames(styles.imgWrapper, 'mb-3')}>
             <LocalImageComponent filePath={post.localImages[0].storedFile} alt={post.title} />
           </div>

@@ -80,16 +80,8 @@ const ListCyclesPage: NextPage<Props> = ({ cycles }) => {
               <td>{JSON.stringify(cycle.isPublic)}</td>
               <td>{cycle.title}</td>
               <td>{cycle.languages}</td>
-              <td>
-                {advancedDayjs(dayjs(cycle.startDate).add(1, 'day').tz(dayjs.tz.guess()).format()).format(
-                  DATE_FORMAT_HUMANIC_ADVANCED,
-                )}
-              </td>
-              <td>
-                {advancedDayjs(dayjs(cycle.endDate).add(1, 'day').tz(dayjs.tz.guess()).format()).format(
-                  DATE_FORMAT_HUMANIC_ADVANCED,
-                )}
-              </td>
+              <td>{advancedDayjs(dayjs(cycle.startDate).format()).utc().format(DATE_FORMAT_HUMANIC_ADVANCED)}</td>
+              <td>{advancedDayjs(dayjs(cycle.endDate).format()).utc().format(DATE_FORMAT_HUMANIC_ADVANCED)}</td>
               <td>
                 <Link href={`/cycle/${cycle.id}`}>
                   <a>detail</a>
