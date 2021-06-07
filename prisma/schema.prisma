@@ -128,6 +128,8 @@ model Work {
   favs         User[]    @relation("WorkToFavs")
   tags         String?
 
+  terms        Term[]    @relation("TaxonomyTermWork")
+  
   @@index([title], name: "works_title_index")
   @@index([author], name: "works_author_index")
   @@index([creatorId], name: "works_creator_id_index")
@@ -177,7 +179,9 @@ model Cycle {
   favs                    User[]  @relation("CycleToFavs")
   posts                   Post[]
   works                   Work[]  
-  tags         String?
+  tags                    String?
+
+  terms        Term[]    @relation("TaxonomyTermCycle")
 
   @@index([creatorId], name: "cycles_creator_id_index")
   @@index([title], name: "cycles_title_index")
@@ -202,7 +206,60 @@ model Post {
   likes        User[]    @relation("PostToLikes")
   favs         User[]    @relation("PostToFavs")
 
+  terms        Term[]    @relation("TaxonomyTermPost")
+
   @@index([creatorId], name: "posts_creator_id_index")
 
   @@map(name: "posts")
 }
+
+model Taxonomy {
+  id           Int       @default(autoincrement()) @id
+  creator      User      @relation(fields: [creatorId], references: [id])
+  creatorId    Int       @map(name: "creator_id")
+  label        String
+  code         String    @unique
+  description  String    @db.VarChar(4000) @map(name: "content_text")
+  weight       Int?      @default(1)
+  createdAt    DateTime  @default(now()) @map(name: "created_at")
+  updatedAt    DateTime  @updatedAt @map(name: "updated_at")
+  
+  @@index([code], name: "code_index")
+
+  @@map(name: "taxonomies")
+}
+
+model Term {
+  id           Int       @default(autoincrement()) @id
+  taxonomy     Taxonomy  @relation(fields: [taxonomyId], references: [id])
+  taxonomyId   Int       @map(name: "taxonomy_id")
+
+  parentId     Int?
+  parent       Term?   @relation("TermHierarchy", fields: [parentId], references: [id])
+
+  creator      User      @relation(fields: [creatorId], references: [id])
+  creatorId    Int       @map(name: "creator_id")
+  label        String
+  code         String    
+  description  String    @db.VarChar(4000) @map(name: "content_text")
+  weight       Int?      @default(1)
+  createdAt    DateTime  @default(now()) @map(name: "created_at")
+  updatedAt    DateTime  @updatedAt @map(name: "updated_at")
+  works        Work[]    @relation("TermWorkRelationship")
+  cycles       Cycle[]   @relation("TermCycleRelationship")
+  posts        Posts[]   @relation("TermPostRelationship")
+  @@index([code], name: "code_index")
+
+  @@map(name: "terms")
+}
+
+model CategoriesOnPosts {
+  post        Post     @relation(fields: [postId], references: [id])
+  postId      Int       // relation scalar field (used in the `@relation` attribute above)
+  category    Category @relation(fields: [categoryId], references: [id])
+  categoryId  Int      // relation scalar field (used in the `@relation` attribute above)
+  createdAt   DateTime @default(now())
+
+  @@id([postId, categoryId])
+}
+
