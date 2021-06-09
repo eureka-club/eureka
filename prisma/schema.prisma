@@ -33,6 +33,8 @@ model User {
   likedPosts     Post[]     @relation("PostToLikes")
   favPosts       Post[]     @relation("PostToFavs")
   posts          Post[]  
+  taxonomies     Taxonomy[]  
+  terms          Term[]  
 
   @@map(name: "users")
 }
@@ -215,14 +217,16 @@ model Post {
 
 model Taxonomy {
   id           Int       @default(autoincrement()) @id
-  creator      User      @relation(fields: [creatorId], references: [id])
-  creatorId    Int       @map(name: "creator_id")
+  creator      User?      @relation(fields: [creatorId], references: [id])
+  creatorId    Int?       @map(name: "creator_id")
   label        String
   code         String    @unique
   description  String    @db.VarChar(4000) @map(name: "content_text")
   weight       Int?      @default(1)
   createdAt    DateTime  @default(now()) @map(name: "created_at")
   updatedAt    DateTime  @updatedAt @map(name: "updated_at")
+
+  terms        Term[]
   
   @@index([code], name: "code_index")
 
@@ -234,32 +238,28 @@ model Term {
   taxonomy     Taxonomy  @relation(fields: [taxonomyId], references: [id])
   taxonomyId   Int       @map(name: "taxonomy_id")
 
-  parentId     Int?
-  parent       Term?   @relation("TermHierarchy", fields: [parentId], references: [id])
+  parentId     Int?      @map(name: "parent_id") 
+  parent       Term?     @relation("TermHierarchy", fields: [parentId], references: [id])
+  child        Term[]    @relation("TermHierarchy")
 
-  creator      User      @relation(fields: [creatorId], references: [id])
-  creatorId    Int       @map(name: "creator_id")
+  creator      User?      @relation(fields: [creatorId], references: [id])
+  creatorId    Int?       @map(name: "creator_id")
+  
   label        String
   code         String    
   description  String    @db.VarChar(4000) @map(name: "content_text")
   weight       Int?      @default(1)
+
   createdAt    DateTime  @default(now()) @map(name: "created_at")
   updatedAt    DateTime  @updatedAt @map(name: "updated_at")
-  works        Work[]    @relation("TermWorkRelationship")
-  cycles       Cycle[]   @relation("TermCycleRelationship")
-  posts        Posts[]   @relation("TermPostRelationship")
+
+  works        Work[]    @relation("TaxonomyTermWork")
+  cycles       Cycle[]   @relation("TaxonomyTermCycle")
+  posts        Post[]    @relation("TaxonomyTermPost")
+
   @@index([code], name: "code_index")
 
   @@map(name: "terms")
 }
 
-model CategoriesOnPosts {
-  post        Post     @relation(fields: [postId], references: [id])
-  postId      Int       // relation scalar field (used in the `@relation` attribute above)
-  category    Category @relation(fields: [categoryId], references: [id])
-  categoryId  Int      // relation scalar field (used in the `@relation` attribute above)
-  createdAt   DateTime @default(now())
-
-  @@id([postId, categoryId])
-}
 

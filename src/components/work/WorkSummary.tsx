@@ -20,7 +20,7 @@ const WorkSummary: FunctionComponent<Props> = ({ work }) => {
           `${work.type === 'book' ? t('publicationYearLabel') : t('releaseYearLabel')}:  ${dayjs(work.publicationYear)
             .add(1, 'day')
             .format(DATE_FORMAT_ONLY_YEAR)}`,
-        work.countryOfOrigin && `${t('countryLabel')}: ${work.countryOfOrigin}`,
+        work.countryOfOrigin && `${t('countryLabel')}: ${t(`countries:${work.countryOfOrigin}` as string)}`,
         work.length &&
           `${t('workLengthLabel')}: ${work.length} ${
             work.type === 'book' ? t('workLengthAsPagesLabel') : t('workLengthAsMinutesLabel')

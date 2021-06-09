@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { ChangeEvent, FormEvent, FunctionComponent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, FunctionComponent, useEffect, useState, useRef } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -16,6 +16,7 @@ import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 import { useMutation, useQueryClient } from 'react-query';
+import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import TagsInput from './controls/TagsInput';
 
 import { CreateWorkClientPayload } from '../../types/work';
@@ -33,7 +34,10 @@ const CreateWorkForm: FunctionComponent = () => {
   const router = useRouter();
   const { t } = useTranslation('createWorkForm');
   const [publicationLengthLabel, setPublicationLengthLabel] = useState('...');
-
+  const typeaheadRef = useRef<AsyncTypeahead<{ id: number; code: string; label: string }>>(null);
+  const [isCountriesSearchLoading, setIsCountriesSearchLoading] = useState(false);
+  const [countrySearchResults, setCountrySearchResults] = useState<{ id: number; code: string; label: string }[]>([]);
+  const [countryOrigin, setCountryOrigin] = useState<string>();
   const {
     mutate: execCreateWork,
     error: createWorkError,
@@ -74,6 +78,23 @@ const CreateWorkForm: FunctionComponent = () => {
     }
   };
 
+  const handleSearchCountry = async (query: string) => {
+    setIsCountriesSearchLoading(true);
+    const response = await fetch(`/api/taxonomy/countries?q=${query}`);
+    const items: { id: number; code: string; label: string }[] = (await response.json()).result;
+    setCountrySearchResults(items);
+    setIsCountriesSearchLoading(false);
+  };
+
+  const handleSearchCountrySelect = (selected: { id: number; code: string; label: string }[]): void => {
+    if (selected[0] != null) {
+      console.log(selected[0]);
+      setCountryOrigin(selected[0].code);
+      // setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
+      // setAddWorkModalOpened(false);
+    }
+  };
+
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
@@ -91,7 +112,7 @@ const CreateWorkForm: FunctionComponent = () => {
       cover: coverFile,
       contentText: form.description.value.length ? form.description.value : null,
       link: form.link.value.length ? form.link.value : null,
-      countryOfOrigin: form.countryOfOrigin.value.length ? form.countryOfOrigin.value : null,
+      countryOfOrigin: countryOrigin || null, // form.countryOfOrigin.value.length ? form.countryOfOrigin.value : null,
       publicationYear: form.publicationYear.value.length ? form.publicationYear.value : null,
       length: form.workLength.value.length ? form.workLength.value : null,
       tags,
@@ -183,10 +204,30 @@ const CreateWorkForm: FunctionComponent = () => {
                 <FormControl type="number" min="-5000" max="2200" />
               </FormGroup>
             </Col>
-            <Col>
+            {/* <Col>
               <FormGroup controlId="countryOfOrigin">
                 <FormLabel>{t('countryFieldLabel')}</FormLabel>
                 <FormControl type="text" />
+              </FormGroup>
+            </Col> */}
+            <Col>
+              <FormGroup controlId="countryOfOrigin1">
+                <FormLabel>{t('countryFieldLabel')}</FormLabel>
+                <AsyncTypeahead
+                  id="create-work--search-country"
+                  // Bypass client-side filtering. Results are already filtered by the search endpoint
+                  filterBy={() => true}
+                  // inputProps={{ required: true }}
+                  // placeholder={t('addWrkTypeaheadPlaceholder')}
+                  ref={typeaheadRef}
+                  isLoading={isCountriesSearchLoading}
+                  labelKey={(res) => `${res.label}`}
+                  minLength={2}
+                  onSearch={handleSearchCountry}
+                  options={countrySearchResults}
+                  onChange={handleSearchCountrySelect}
+                  // renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work} />}
+                />
               </FormGroup>
             </Col>
             <Col>
