@@ -119,6 +119,7 @@ model Work {
   link             String?
   publicationYear  DateTime?  @map(name: "publication_year")
   countryOfOrigin  String?    @map(name: "country_of_origin")
+  countryOfOrigin2 String?    @map(name: "country_of_origin2")
   length           String?
   createdAt        DateTime   @default(now()) @map(name: "created_at")
   updatedAt        DateTime   @updatedAt @map(name: "updated_at")
