@@ -279,7 +279,7 @@ async function main() {
       const promises: unknown[] = [];
       regionsAll.forEach((r: { code: string; id: number }) => {
         const countr = countriesData(r.code, regionTax.id, admin.id, r.id);
-        console.log("countr ",countr);
+        console.log('countr ', countr);
         promises.push(prisma.term.createMany({ data: countr }));
       });
       await Promise.all(promises);

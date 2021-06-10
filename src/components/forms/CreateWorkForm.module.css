@@ -39,3 +39,12 @@
   width: 16px;
   margin-left: 0.5rem;
 }
+
+.toogleSecondOriginCountry{
+  font-size:.8em;
+  padding: .3em !important;;
+  color: gray;
+  border: 0!important;
+  background-color: white;
+  font-style: italic;
+}

@@ -36,8 +36,12 @@ const CreateWorkForm: FunctionComponent = () => {
   const [publicationLengthLabel, setPublicationLengthLabel] = useState('...');
   const typeaheadRef = useRef<AsyncTypeahead<{ id: number; code: string; label: string }>>(null);
   const [isCountriesSearchLoading, setIsCountriesSearchLoading] = useState(false);
+  const [isCountriesSearchLoading2, setIsCountriesSearchLoading2] = useState(false);
   const [countrySearchResults, setCountrySearchResults] = useState<{ id: number; code: string; label: string }[]>([]);
   const [countryOrigin, setCountryOrigin] = useState<string>();
+  const [hasCountryOrigin2, setHasCountryOrigin2] = useState<boolean>();
+  const [countryOrigin2, setCountryOrigin2] = useState<string>();
+
   const {
     mutate: execCreateWork,
     error: createWorkError,
@@ -86,10 +90,26 @@ const CreateWorkForm: FunctionComponent = () => {
     setIsCountriesSearchLoading(false);
   };
 
+  const handleSearchCountry2 = async (query: string) => {
+    setIsCountriesSearchLoading2(true);
+    const response = await fetch(`/api/taxonomy/countries?q=${query}`);
+    const items: { id: number; code: string; label: string }[] = (await response.json()).result;
+    setCountrySearchResults(items);
+    setIsCountriesSearchLoading2(false);
+  };
+
   const handleSearchCountrySelect = (selected: { id: number; code: string; label: string }[]): void => {
     if (selected[0] != null) {
-      console.log(selected[0]);
       setCountryOrigin(selected[0].code);
+      // setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
+      // setAddWorkModalOpened(false);
+    }
+  };
+
+  const handleSearchCountry2Select = (selected: { id: number; code: string; label: string }[]): void => {
+    if (selected[0] != null) {
+      if (hasCountryOrigin2) setCountryOrigin2(selected[0].code);
+
       // setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
       // setAddWorkModalOpened(false);
     }
@@ -112,13 +132,19 @@ const CreateWorkForm: FunctionComponent = () => {
       cover: coverFile,
       contentText: form.description.value.length ? form.description.value : null,
       link: form.link.value.length ? form.link.value : null,
-      countryOfOrigin: countryOrigin || null, // form.countryOfOrigin.value.length ? form.countryOfOrigin.value : null,
+      countryOfOrigin: countryOrigin || null,
+      countryOfOrigin2: countryOrigin2 || null,
       publicationYear: form.publicationYear.value.length ? form.publicationYear.value : null,
       length: form.workLength.value.length ? form.workLength.value : null,
       tags,
     };
 
     await execCreateWork(payload);
+  };
+
+  const toogleCountryOrigin2Handler = (countryOpt?: number) => {
+    if (countryOpt === 2) setHasCountryOrigin2(false);
+    else setHasCountryOrigin2(true);
   };
 
   useEffect(() => {
@@ -228,8 +254,38 @@ const CreateWorkForm: FunctionComponent = () => {
                   onChange={handleSearchCountrySelect}
                   // renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work} />}
                 />
+                {!hasCountryOrigin2 && (
+                  <Button className={styles.toogleSecondOriginCountry} onClick={() => toogleCountryOrigin2Handler()}>
+                    {t('Add a second origin country')}
+                  </Button>
+                )}
               </FormGroup>
             </Col>
+            {hasCountryOrigin2 && (
+              <Col>
+                <FormGroup controlId="countryOfOrigin2">
+                  <FormLabel>{t('countryFieldLabel')} 2</FormLabel>
+                  <AsyncTypeahead
+                    id="create-work--search-country2"
+                    // Bypass client-side filtering. Results are already filtered by the search endpoint
+                    filterBy={() => true}
+                    // inputProps={{ required: true }}
+                    // placeholder={t('addWrkTypeaheadPlaceholder')}
+                    // ref={typeaheadRef}
+                    isLoading={isCountriesSearchLoading2}
+                    labelKey={(res) => res.code}
+                    minLength={2}
+                    onSearch={handleSearchCountry2}
+                    options={countrySearchResults}
+                    onChange={handleSearchCountry2Select}
+                    // renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work} />}
+                  />
+                  <Button className={styles.toogleSecondOriginCountry} onClick={() => toogleCountryOrigin2Handler(2)}>
+                    {t('Remove the second origin country')}
+                  </Button>
+                </FormGroup>
+              </Col>
+            )}
             <Col>
               <FormGroup controlId="workLength">
                 <FormLabel>{publicationLengthLabel}</FormLabel>

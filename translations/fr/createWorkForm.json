@@ -14,12 +14,10 @@
   "imageCoverFieldPlaceholder": "sélectionner fichier...",
   "releaseYearFieldLabel": "Année de sortie",
   "countryFieldLabel": "Pays d'origine (auteur-e)",
-  
   "Length pages": "Nombre de pages",
-  "Duration":"Durée",
+  "Duration": "Durée",
   "minutes": "minutes",
   "Publication year": "Année de publication",
-  
   "authorGenderFieldLabel": "Genre de l'auteur-e ou réalisateur-rice",
   "authorGenderFieldPlaceholder": "sélectioner...",
   "authorGenderFemale": "Féminin",
@@ -33,5 +31,7 @@
   "authorEthnicityIsNotWhite": "Non blanc-he",
   "workSummaryFieldLabel": "Résumé officiel de l'oeuvre",
   "submitButtonLabel": "Ajouter l'oeuvre",
-  "tagsInputPlaceholder": "Écrivez une étiquette et appuyez sur Entrée ou Virgule"
+  "tagsInputPlaceholder": "Écrivez une étiquette et appuyez sur Entrée ou Virgule",
+  "Add a second origin country": "Ajouter un deuxième pays d'origine",
+  "Remove the second origin country": "Supprimer le deuxième pays d'origine"
 }

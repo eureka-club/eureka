@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { isEmpty } from 'lodash';
 
-import { Prisma, Taxonomy, Term } from '@prisma/client';
+// import { Prisma, Taxonomy, Term } from '@prisma/client';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import prisma from '../../../src/lib/prisma';
 

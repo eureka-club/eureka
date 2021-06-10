@@ -32,6 +32,7 @@ export interface CreateWorkClientPayload {
   contentText: string | null;
   link: string | null;
   countryOfOrigin: string | null;
+  countryOfOrigin2: string | null;
   publicationYear: string | null;
   length: string | null;
   tags: string;

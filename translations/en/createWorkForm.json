@@ -13,26 +13,25 @@
   "imageCoverFieldLabel": "Cover",
   "imageCoverFieldPlaceholder": "select file...",
   "releaseYearFieldLabel": "Release year",
-  
   "countryFieldLabel": "Country of origin",
-  
-  "Duration":"Duration",
+  "Duration": "Duration",
   "Length pages": "Length pages",
   "minutes": "minutes",
   "Publication year": "Publication year",
-  
   "authorGenderFieldLabel": "Gender of author of director",
   "authorGenderFieldPlaceholder": "select...",
   "authorGenderFemale": "Female",
   "authorGenderMale": "Male",
-  "authorGenderNonbinary":  "Non-binary",
+  "authorGenderNonbinary": "Non-binary",
   "authorGenderTrans": "Trans",
-  "authorGenderOther":  "Other",
+  "authorGenderOther": "Other",
   "authorEthnicityFieldLabel": "Is author or director white or non-white",
   "authorEthnicityFieldPlaceholder": "select...",
-  "authorEthnicityIsWhite":"White",
+  "authorEthnicityIsWhite": "White",
   "authorEthnicityIsNotWhite": "Non-white",
   "workSummaryFieldLabel": "Official summary of work",
   "submitButtonLabel": "Add work to library",
-  "tagsInputPlaceholder":"Write a tag and press Enter or Comma"
+  "tagsInputPlaceholder": "Write a tag and press Enter or Comma",
+  "Add a second origin country": "Add a second origin country",
+  "Remove the second origin country": "Remove the second origin country"
 }
