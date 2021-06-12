@@ -3,12 +3,12 @@ import { getSession } from 'next-auth/client';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { isEmpty } from 'lodash';
-import getT from 'next-translate/getT';
 import * as removeAccents from 'remove-accents';
 
-// import { Prisma, Taxonomy, Term } from '@prisma/client';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import prisma from '../../../src/lib/prisma';
+
+import i18nConfig from '../../../i18n';
 
 import { Session } from '../../../src/types';
 
@@ -26,11 +26,15 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
   }
 
   try {
-    const t = await getT('en', 'countries');
+    // eslint-disable-next-line no-underscore-dangle
+    const namespace = await i18nConfig.loadLocaleFrom(req.cookies.NEXT_LOCALE, 'countries');
     const { q } = req.query;
-    const qWithoutAccents = removeAccents.remove(q as string);
-    const toEn = t(q as string); //TODO in fr user type "Allemagne" and the db store "germany" 😕
-    const qCmp = !toEn.match(/:/g) ? toEn : qWithoutAccents;
+    const qFormated = removeAccents.remove(q as string).toLowerCase();
+    const regExp = new RegExp(`${qFormated}`);
+    const codes = Object.entries(namespace)
+      .filter(([, value]) => (value as string).toLowerCase().match(regExp))
+      .map((i) => i[0]);
+
     const result = await prisma.term.findMany({
       ...(!isEmpty(q) && {
         where: {
@@ -38,12 +42,10 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
             not: null,
           },
           OR: [
-            { label: { contains: qCmp as string } },
-            { code: { contains: qCmp as string } },
-            { description: { contains: qCmp as string } },
+            { code: { in: codes } },
             {
               parent: {
-                code: { contains: qCmp as string },
+                code: { in: codes },
               },
             },
           ],

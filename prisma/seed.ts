@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+import { PrismaClient } from '@prisma/client';
 
-const { PrismaClient } = require('@prisma/client');
+import dayjs from 'dayjs';
 
-const dayjs = require('dayjs');
-// @typescript-eslint/no-var-requires
-const utc = require('dayjs/plugin/utc');
+import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 const forceDelete = true;
@@ -272,21 +270,6 @@ const regionsData = (taxonomyId: number, creatorId: number) => {
 };
 
 const forceDeleteCountriesFn = async () => {
-  // const removedTermChild = prisma.term.deleteMany({
-  //   where: {
-  //     parentId: {
-  //       not: null,
-  //     },
-  //     taxonomy: {
-  //       where: {
-  //         id: {
-  //           eq:
-  //         }
-  //       }
-  //     }
-  //   },
-  // });
-  // const removedTermParents = prisma.term.deleteMany();
   const removedTerms = prisma.taxonomy.update({
     where: {
       code: 'region',
@@ -343,9 +326,11 @@ const populateRegions = async (admin: { id: number }) => {
   if (!countriesAll.length) {
     const promises: unknown[] = [];
     regionsAll.forEach((r: { code: string; id: number }) => {
-      const countr = countriesData(r.code, regionTax.id as number, admin.id, r.id);
-      console.log('countr ', countr);
-      promises.push(prisma.term.createMany({ data: countr }));
+      if (regionTax) {
+        const countr = countriesData(r.code, regionTax.id as number, admin.id, r.id);
+        console.log('countr ', countr);
+        promises.push(prisma.term.createMany({ data: countr }));
+      }
     });
     await Promise.all(promises);
   }

@@ -279,7 +279,7 @@ const CreateWorkForm: FunctionComponent = () => {
                     // placeholder={t('addWrkTypeaheadPlaceholder')}
                     // ref={typeaheadRef}
                     isLoading={isCountriesSearchLoading2}
-                    labelKey={(res) => res.code}
+                    labelKey={(res) => `${res.label}`}
                     minLength={2}
                     onSearch={handleSearchCountry2}
                     options={countrySearchResults}
