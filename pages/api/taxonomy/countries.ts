@@ -3,6 +3,8 @@ import { getSession } from 'next-auth/client';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { isEmpty } from 'lodash';
+import getT from 'next-translate/getT';
+import * as removeAccents from 'remove-accents';
 
 // import { Prisma, Taxonomy, Term } from '@prisma/client';
 import getApiHandler from '../../../src/lib/getApiHandler';
@@ -24,7 +26,11 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
   }
 
   try {
+    const t = await getT('en', 'countries');
     const { q } = req.query;
+    const qWithoutAccents = removeAccents.remove(q as string);
+    const toEn = t(q as string); //TODO in fr user type "Allemagne" and the db store "germany" 😕
+    const qCmp = !toEn.match(/:/g) ? toEn : qWithoutAccents;
     const result = await prisma.term.findMany({
       ...(!isEmpty(q) && {
         where: {
@@ -32,12 +38,12 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
             not: null,
           },
           OR: [
-            { label: { contains: q as string } },
-            { code: { contains: q as string } },
-            { description: { contains: q as string } },
+            { label: { contains: qCmp as string } },
+            { code: { contains: qCmp as string } },
+            { description: { contains: qCmp as string } },
             {
               parent: {
-                code: { contains: q as string },
+                code: { contains: qCmp as string },
               },
             },
           ],

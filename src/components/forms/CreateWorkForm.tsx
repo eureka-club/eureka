@@ -86,6 +86,9 @@ const CreateWorkForm: FunctionComponent = () => {
     setIsCountriesSearchLoading(true);
     const response = await fetch(`/api/taxonomy/countries?q=${query}`);
     const items: { id: number; code: string; label: string }[] = (await response.json()).result;
+    items.forEach((i, idx: number) => {
+      items[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
+    });
     setCountrySearchResults(items);
     setIsCountriesSearchLoading(false);
   };
@@ -94,6 +97,9 @@ const CreateWorkForm: FunctionComponent = () => {
     setIsCountriesSearchLoading2(true);
     const response = await fetch(`/api/taxonomy/countries?q=${query}`);
     const items: { id: number; code: string; label: string }[] = (await response.json()).result;
+    items.forEach((i, idx: number) => {
+      items[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
+    });
     setCountrySearchResults(items);
     setIsCountriesSearchLoading2(false);
   };
