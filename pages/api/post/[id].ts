@@ -80,7 +80,7 @@ export default getApiHandler()
   })
   .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     const session = (await getSession({ req })) as unknown as Session;
-    if (session == null || !session.user.roles.includes('admin')) {
+    if (session == null) {
       res.status(401).json({ status: 'Unauthorized' });
       return;
     }
@@ -107,6 +107,7 @@ export default getApiHandler()
         if (existingCycle == null) {
           throw new Error('[412] Invalid Cycle ID provided');
         }
+        if (existingCycle.creatorId !== session.user.id) res.status(401).json({ status: 'Unauthorized' });
       }
 
       let existingWork: Work | null = null;

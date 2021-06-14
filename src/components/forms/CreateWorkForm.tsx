@@ -48,22 +48,29 @@ const CreateWorkForm: FunctionComponent = () => {
     isError,
     isLoading,
     isSuccess,
-  } = useMutation(async (payload: CreateWorkClientPayload) => {
-    const formData = new FormData();
+  } = useMutation(
+    async (payload: CreateWorkClientPayload) => {
+      const formData = new FormData();
 
-    Object.entries(payload).forEach(([key, value]) => {
-      if (value != null) {
-        formData.append(key, value);
-      }
-    });
+      Object.entries(payload).forEach(([key, value]) => {
+        if (value != null) {
+          formData.append(key, value);
+        }
+      });
 
-    const res = await fetch('/api/work', {
-      method: 'POST',
-      body: formData,
-    });
+      const res = await fetch('/api/work', {
+        method: 'POST',
+        body: formData,
+      });
 
-    return res.json();
-  });
+      return res.json();
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('WORKS'); // setQueryData could not be used because relations are not returned when the work is created :|
+      },
+    },
+  );
 
   const handleWorkTypeChange = (ev: ChangeEvent<HTMLSelectElement>) => {
     switch (ev.currentTarget.value) {

@@ -180,11 +180,11 @@ const EditPostForm: FunctionComponent = () => {
       queryClient.invalidateQueries('posts.mosaic');
 
       if (selectedWork != null) {
-        router.push(`/work/${selectedWork.id}/post/${editPost.id}`);
+        router.push(`/work/${selectedWork.id}/post/${router.query.postId}`);
         return;
       }
       if (selectedCycle != null) {
-        router.push(`/cycle/${selectedCycle.id}/post/${editPost.id}`);
+        router.push(`/cycle/${selectedCycle.id}/post/${router.query.postId}`);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

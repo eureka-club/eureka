@@ -1,0 +1,9 @@
+.container{
+  padding-bottom: 2em;
+  margin-bottom: 2em;
+  border-bottom: solid 1px rgb(240, 238, 238);
+}
+.formGroup{
+  display: inline;
+  margin-right: .2em;
+}
