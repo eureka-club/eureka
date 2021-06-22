@@ -1,12 +1,11 @@
 {
-  "Search for anything you wanna learn about": "Recherchez tout ce que vous voulez apprendre",
+  "Search for anything you wanna learn about": "Cherchez ce que vous voulez apprendre",
   "Cycles": "Cycles",
   "Eurekas": "Eurekas",
   "Films": "Films",
-  "Books": "Books",
-  "Fiction Books": "Fiction Books",
-  "Fiction/nonfiction": "Fiction/nonfiction",
-  "Geography": "Geography",
-  "Regions": "Regions",
-  "Countries": "Countries"
+  "Books": "Livres",
+  "Fiction/nonfiction": "Fiction/non-fiction",
+  "Geography": "Géographie",
+  "Regions": "Régions",
+  "Countries": "Pays"
 }

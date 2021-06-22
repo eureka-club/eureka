@@ -1,13 +1,15 @@
 {
   "browserTitleWelcome": "Bienvenidx",
   "browserTitleMyList": "Mi Lista",
-  "book": "Libro",
-  "fiction-book": "Fiction Book",
+  "Error": "Error",
+
+  "book": "Libro no-ficción",
+  "fiction-book": "Libro ficción",
   "cycle": "Ciclo",
   "documentary": "Documental",
-  "Error": "Error",
-  "movie": "Película",
-  "post": "Publicación",
+  "movie": "Película ficción",
+  "post": "Eureka",
+
   "browserTitleAbout": "Sobre",
   "aboutPageHeading": "Nuestra misión es inducir tantos momentos Eureka como sea posible.",
   "aboutHeading": "Sobre",
@@ -34,15 +36,18 @@
   "mosaicHeaderMyCycles": "Ciclos, obras y publicaciones favoritas",
   "publicationYearLabel": "Año de publicación",
   "releaseYearLabel": "Año de producción",
-  "Results about Topic": "Results about Topic",
+
+  "Results about Topic": "Results about",
   "countryLabel": "País",
   "cycleActiveLabel": "Ciclo activo",
   "cycleNotActiveLabel": "Ciclo inactivo",
   "workLengthLabel": "Duración / nº pag.",
   "workLengthAsPagesLabel": "páginas",
   "workLengthAsMinutesLabel": "minutos",
+
   "unclampTextLess": "ver más",
   "unclampTextMore": "ver menos",
+
   "wayShare": "Vía",
   "cycleShare": "¡Checa el ciclo",
   "postCycleShare": "¡Checa esta reflexión sobre el ciclo",
@@ -52,6 +57,7 @@
   "whatsappComplement": "Participa aquí: ",
   "twitterComplement": "",
   "facebookComplement": "",
-  "goToHomepage": "Ir al Inicio",
-  "Loading":"Loading"
+
+  "goToHomepage": "Ir al inicio",
+  "Loading":"Cargando"
 }

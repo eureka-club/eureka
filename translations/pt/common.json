@@ -1,13 +1,15 @@
 {
   "browserTitleWelcome": "Bem-vindx",
   "browserTitleMyList": "Minha Lista",
-  "book": "Livro",
-  "fiction-book": "Fiction Book",
+  "Error": "Erro",
+
+  "book": "Livro não-ficção",
+  "fiction-book": "Livro ficção",
   "cycle": "Ciclo",
   "documentary": "Documentário",
-  "Error": "Erro",
-  "movie": "Filme",
-  "post": "Publicação",
+  "movie": "Filme ficção",
+  "post": "Eureka",
+
   "browserTitleAbout": "Sobre",
   "aboutPageHeading": "Nossa missão é induzir o maior número possível de momentos Eureka.",
   "aboutHeading": "Sobre",
@@ -53,5 +55,6 @@
   "twitterComplement": "",
   "facebookComplement": "",
   "goToHomepage": "Voltar à página inicial",
-  "Loading": "Loading"
+
+  "Loading": "Carregando"
 }

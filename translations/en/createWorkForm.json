@@ -3,10 +3,7 @@
   "titleEdit": "Edit work",
   "typeFieldLabel": "Type of work",
   "typeFieldPlaceholder": "select...",
-  "typeBook": "Nonfiction book",
-  "Fiction Book": "Fiction book",
-  "typeDocumentary": "Documentary",
-  "typeMovie": "Fiction movie",
+  
   "linkFieldLabel": "Link to work",
   "titleFieldLabel": "Title",
   "authorFieldLabel": "Author or director",
@@ -16,7 +13,7 @@
   "releaseYearFieldLabel": "Release year",
   "countryFieldLabel": "Country of origin",
   "Duration": "Duration",
-  "Length pages": "Length pages",
+  "Length pages": "Length (pages)",
   "minutes": "minutes",
   "Publication year": "Publication year",
   "authorGenderFieldLabel": "Gender of author of director",
@@ -33,6 +30,6 @@
   "workSummaryFieldLabel": "Official summary of work",
   "submitButtonLabel": "Add work to library",
   "tagsInputPlaceholder": "Write a tag and press Enter or Comma",
-  "Add a second origin country": "Add a second origin country",
-  "Remove the second origin country": "Remove the second origin country"
+  "Add a second origin country": "Add 2nd country",
+  "Remove the second origin country": "Remove 2nd country"
 }

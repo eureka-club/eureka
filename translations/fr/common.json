@@ -1,13 +1,15 @@
 {
   "browserTitleWelcome": "Bienvenue",
   "browserTitleMyList": "Ma Liste",
-  "book": "Livre",
-  "fiction-book": "Fiction Book",
+  "Error": "Erreur",
+
+  "book": "Livre non-fiction",
+  "fiction-book": "Livre fiction",
   "cycle": "Cycle",
   "documentary": "Documentaire",
-  "Error": "Erreur",
-  "movie": "Film",
-  "post": "Publication",
+  "movie": "Film fiction",
+  "post": "Eureka",
+
   "browserTitleAbout": "À propos",
   "aboutPageHeading": "Notre mission est d'induire autant de moments Eureka que possible.",
   "aboutHeading": "À propos",
@@ -53,5 +55,6 @@
   "twitterComplement": "",
   "facebookComplement": "",
   "goToHomepage": "Retour à la page d'accueil",
-  "Loading":"Loading"
+
+  "Loading":"Chargement"
 }

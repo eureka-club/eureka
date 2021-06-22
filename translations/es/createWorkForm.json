@@ -3,10 +3,7 @@
   "titleEdit": "Editar obra",
   "typeFieldLabel": "Tipo de obra",
   "typeFieldPlaceholder": "seleccionar...",
-  "typeBook": "Libro noficción",
-  "Fiction Book": "Libro ficción",
-  "typeDocumentary": "Documental",
-  "typeMovie": "Película ficción",
+
   "linkFieldLabel": "Enlace a la obra",
   "titleFieldLabel": "Título",
   "authorFieldLabel": "Autoría",
@@ -33,6 +30,6 @@
   "workSummaryFieldLabel": "Resumen oficial de la obra",
   "submitButtonLabel": "Agregar la obra",
   "tagsInputPlaceholder": "Escribe una etiqueta y presione Enter o Coma",
-  "Add a second origin country": "Agregar un segundo país de origen",
-  "Remove the second origin country": "Eliminar el segundo país de origen"
+  "Add a second origin country": "Agregar 2o país",
+  "Remove the second origin country": "Eliminar 2o país"
 }
