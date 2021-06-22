@@ -79,6 +79,7 @@ const CreateWorkForm: FunctionComponent = () => {
         setPublicationYearLabel(t('releaseYearFieldLabel'));
         setPublicationLengthLabel(`${t('Duration')} (${t('minutes')})`);
         break;
+      case 'fiction-book':
       case 'book':
         setPublicationLengthLabel(t('Length pages'));
         setPublicationYearLabel(t('Publication year'));
@@ -186,6 +187,7 @@ const CreateWorkForm: FunctionComponent = () => {
                 <FormControl as="select" required onChange={handleWorkTypeChange}>
                   <option value="">{t('typeFieldPlaceholder')}</option>
                   <option value="book">{t('typeBook')}</option>
+                  <option value="fiction-book">{t('Fiction Book')}</option>
                   <option value="documentary">{t('typeDocumentary')}</option>
                   <option value="movie">{t('typeMovie')}</option>
                 </FormControl>

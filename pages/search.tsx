@@ -55,12 +55,20 @@ import useCountries from '../src/useCountries';
 //   return result;
 // };
 
-const IndexPage: NextPage = () => {
+const SearchPage: NextPage = () => {
   const { t } = useTranslation('common');
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
 
-  const { isLoading, isError, error, data: works } = useWorks();
-  const { isLoading: isLoadingCycles, isError: isErrorCycles, error: errorCycles, data: cycles } = useCycles();
+  // let where = encodeURIComponent(JSON.stringify({ title: { contains: globalSearchEngineState.q } }));
+  // const { isLoading, data: works } = useWorks(where);
+
+  // where = encodeURIComponent(JSON.stringify({ title: { contains: globalSearchEngineState.q } }));
+  // const { isLoading: isLoadingCycles, data: cycles } = useCycles(where);
+
+  // const [where, setWhere] = useState('');
+  // const [tempWhere, setTempWhere] = useState('');
+  const { isLoading, isError, error, data: works } = useWorks(true);
+  const { isLoading: isLoadingCycles, isError: isErrorCycles, error: errorCycles, data: cycles } = useCycles(true);
   const { data: onlyByCountriesAux } = useCountries();
 
   const [homepageMosaicData, setHomepageMosaicData] = useState<
@@ -72,9 +80,7 @@ const IndexPage: NextPage = () => {
       const w = works ? works.data : [];
       const c = cycles ? cycles.data : [];
       // const p = posts ? posts.data : [];
-      const res = [...w, ...c /* , ...p */].sort(
-        (i, j) => +(new Date(i.createdAt).getTime() >= new Date(j.createdAt).getTime() && -1),
-      );
+      const res = [...w, ...c /* , ...p */];
       setHomepageMosaicData(res);
     }
   }, [works, cycles /* , posts */]);
@@ -110,6 +116,10 @@ const IndexPage: NextPage = () => {
     if (homepageMosaicData) {
       const { only, onlyByCountries } = globalSearchEngineState;
       let filtered = null;
+      // if (q) {debugger;
+      //   const whereAux = encodeURIComponent(JSON.stringify({ title: { contains: globalSearchEngineState.q } }));
+      //   setTempWhere(whereAux);
+      // }
       if (only.length) {
         filtered = homepageMosaicData.filter((i) => {
           return only.includes(i.type);
@@ -184,4 +194,4 @@ export const getStaticProps: GetStaticProps = async () => {
 //   };
 // };
 
-export default IndexPage;
+export default SearchPage;

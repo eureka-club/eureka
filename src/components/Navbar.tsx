@@ -17,7 +17,7 @@ import { DropdownItemProps } from 'react-bootstrap/DropdownItem';
 import { BiUser } from 'react-icons/bi';
 import { BsBookmark } from 'react-icons/bs';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
-
+import SearchEngine from './SearchEngine';
 import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '../constants';
 import { Session } from '../types';
 import ChevronToggle from './ui/dropdown/ChevronToggle';
@@ -69,7 +69,7 @@ const Navbar: FunctionComponent = () => {
           <img src="/img/logo.png" className="d-inline-block align-middle mr-4" width={52} alt="Project logo" />
           <h1 className={styles.brandText}>{siteName}</h1>
         </BootstrapNavbar.Brand>
-
+        <SearchEngine />
         <Nav className={styles.nav}>
           {session == null ? (
             <Button onClick={openSignInModal}>{t('login')}</Button>

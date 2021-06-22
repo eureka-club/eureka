@@ -38,6 +38,7 @@ const EditWorkForm: FunctionComponent = () => {
 
   const labelsChange = (fieldName: string) => {
     switch (fieldName) {
+      case 'fiction-book':
       case 'book':
         setPublicationLengthLabel(t('Length pages'));
         setPublicationYearLabel(t('Publication year'));
@@ -165,6 +166,7 @@ const EditWorkForm: FunctionComponent = () => {
                   <FormControl as="select" required onChange={handleWorkTypeChange} defaultValue={work.type}>
                     <option value="">{t('typeFieldPlaceholder')}</option>
                     <option value="book">{t('typeBook')}</option>
+                    <option value="fiction-book">{t('Fiction Book')}</option>
                     <option value="documentary">{t('typeDocumentary')}</option>
                     <option value="movie">{t('typeMovie')}</option>
                   </FormControl>

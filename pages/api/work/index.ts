@@ -7,6 +7,7 @@ import getApiHandler from '../../../src/lib/getApiHandler';
 import { storeUpload } from '../../../src/facades/fileUpload';
 import { createFromServerFields, findAll } from '../../../src/facades/work';
 import prisma from '../../../src/lib/prisma';
+import { WorkWithImages } from '../../../src/types/work';
 
 export const config = {
   api: {
@@ -50,7 +51,26 @@ export default getApiHandler()
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
-      const data = await findAll();
+      const { q = null, where = null } = req.query;
+      let data = null;
+      if (typeof q === 'string') {
+        data = await prisma.work.findMany({
+          where: {
+            OR: [{ title: { contains: q } }, { author: { contains: q } }],
+          },
+          include: { localImages: true, likes: true, favs: true },
+        });
+      } else if (where) {
+        data = await prisma.work.findMany({
+          ...(typeof where === 'string' && { where: JSON.parse(where) }),
+          include: { localImages: true, likes: true, favs: true },
+        });
+      } else {
+        data = await prisma.work.findMany({
+          include: { localImages: true, likes: true, favs: true },
+        });
+      }
+
       res.status(200).json({ status: 'OK', data });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

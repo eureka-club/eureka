@@ -48,13 +48,11 @@
     "uganda": "Uganda",
     "zambia": "Zâmbia",
     "zimbabwe": "Zimbábue",
-
     "Northern America": "América do norte",
     "canada": "Canadá",
     "saint-pierre-and-miquelon": "São Pedro e Miquelão",
     "united-states": "Estados Unidos",
     "bermudas": "Bermudas",
-
     "Latin America and the Caribbean": "América Latina e Caribe",
     "antigua-and-barbuda": "Antigua e Barbuda",
     "argentina": "Argentina",
@@ -89,10 +87,8 @@
     "trinidad-and-tobago": "Trinidad e Tobago",
     "uruguay": "Uruguai",
     "venezuela": "Venezuela",
-
     "Antarctica": "Antártica",
     "antarctica": "Antártica",
-
     "Asia": "Ásia",
     "afghanistan": "Afeganistão",
     "azerbaijan": "Azerbaijão",
@@ -124,7 +120,6 @@
     "turkmenistan": "Turcomenistão",
     "uzbekistan": "Uzbequistão",
     "vietnam": "Vietnã",
-
     "Oceania": "Oceânia",
     "australia": "Austrália",
     "cook-islands": "Ilhas Cook",
@@ -142,7 +137,6 @@
     "tonga": "Tonga",
     "tuvalu": "Tuvalu",
     "vanuatu": "Vanuatu",
-
     "Europe": "Europa",
     "albania": "Albânia",
     "andorra": "Andorra",
@@ -193,8 +187,7 @@
     "ukraine": "Ucrânia",
     "united-kingdom": "Reino Unido",
     "vatican": "Vaticano",
-
-    "Middle East/North Africa": "Oriente Médio e Norte da África (MENA)",
+    "Middle East and North Africa": "Oriente Médio e Norte da África (MENA)",
     "algeria": "Argélia",
     "bahrain": "Barém",
     "egypt": "Egito",

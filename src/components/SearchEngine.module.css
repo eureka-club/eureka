@@ -1,9 +1,33 @@
 .container{
-  padding-bottom: 2em;
-  margin-bottom: 2em;
-  border-bottom: solid 1px rgb(240, 238, 238);
+  padding-bottom: 0;
+  margin-bottom: 0;
+  width:40%;
+  margin-top: 1em;
+  
+  /* border-bottom: solid 1px rgb(240, 238, 238); */
 }
 .formGroup{
   display: inline;
   margin-right: .2em;
+}
+.form-control {
+  border-color: var(--color-primary);
+  border: solid 1px #e0dede;
+  border-radius: 1em;
+  background: #f3f1f1;
+}
+.searchButton{
+  color: white;
+    border: solid 1px #54b99f;
+    background: #68cfb4;
+    border-radius: 50%;
+    width: 2em;
+    padding: .4em;
+    margin: 3px 0 0 -40px;
+    position: relative;
+    height: 2em;
+    cursor: pointer;
+}
+.rbt-input{
+  background: gray!important;
 }

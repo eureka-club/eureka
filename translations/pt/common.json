@@ -2,6 +2,7 @@
   "browserTitleWelcome": "Bem-vindx",
   "browserTitleMyList": "Minha Lista",
   "book": "Livro",
+  "fiction-book": "Fiction Book",
   "cycle": "Ciclo",
   "documentary": "Documentário",
   "Error": "Erro",
@@ -33,6 +34,7 @@
   "mosaicHeaderMyCycles": "Ciclos, obras e publicações favoritas",
   "publicationYearLabel": "Ano de publicação",
   "releaseYearLabel": "Ano de lançamento",
+  "Results about Topic": "Results about Topic",
   "countryLabel": "País",
   "cycleActiveLabel": "Ciclo ativo",
   "cycleNotActiveLabel": "Ciclo inativo",
@@ -50,5 +52,6 @@
   "whatsappComplement": "Junte-se à nos aqui: ",
   "twitterComplement": "",
   "facebookComplement": "",
-  "goToHomepage": "Voltar à página inicial"
+  "goToHomepage": "Voltar à página inicial",
+  "Loading": "Loading"
 }

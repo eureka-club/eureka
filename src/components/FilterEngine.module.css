@@ -1,0 +1,27 @@
+.container{
+  padding-bottom: 0;
+  margin-bottom: 0;
+  
+  margin: 1em 0 4em 0;
+  /* border-bottom: solid 1px rgb(240, 238, 238); */
+}
+.filter{
+  color: gray !important;
+}
+.filter label{
+  margin-left:.5em;
+  font-size: 1.2em;
+}
+.formGroup{
+  display: inline;
+  margin-right: .2em;
+}
+.popover label{
+  color: gray;
+}
+.popover .filter label{
+  margin-left:.5em;
+  margin-bottom:0;
+  font-size: 1.2em;
+  
+}

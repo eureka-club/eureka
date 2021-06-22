@@ -11,7 +11,7 @@ export type TagsInputProp = {
 };
 const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
   const { t } = useTranslation('createWorkForm');
-  const { tags, setTags, label = 'Topics', readOnly = false } = props;
+  const { tags, setTags, label = '', readOnly = false } = props;
 
   const [tagInput, setTagInput] = useState<string>('');
   const [items, setItems] = useState<string[]>([]);

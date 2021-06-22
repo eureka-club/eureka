@@ -2,16 +2,16 @@
   "browserTitleWelcome": "Welcome",
   "browserTitleMyList": "My List",
   "book": "Book",
+  "fiction-book": "Fiction Book",
   "cycle": "Cycle",
   "documentary": "Documentary",
-  "Error":"Error",
+  "Error": "Error",
   "movie": "Movie",
   "post": "Post",
-
-  "browserTitleAbout":"About",
+  "browserTitleAbout": "About",
   "aboutPageHeading": "Our mission is to induce as many Eureka moments as possible.",
   "aboutHeading": "About",
-  "aboutText":"Eureka is a non-for-profit social network designed for anyone looking for meaningful content and conversations online. We believe that books, movies and communities can help better understand societies and the world around us.",
+  "aboutText": "Eureka is a non-for-profit social network designed for anyone looking for meaningful content and conversations online. We believe that books, movies and communities can help better understand societies and the world around us.",
   "whatisCycleHeading": "What is a cycle?",
   "whatisCycleText": "A cycle is a collection of works (books, movies and/or documentaries) curated by a user about a topic of interest. Cycles are an opportunity to discover a new topic or to deepen your understanding of issues you are passionate about, and to meet and engage with other users interested in the same topics as you.",
   "whatisPostHeading": "What is a post?",
@@ -31,10 +31,10 @@
   "ethicsText4": "Content or individuals that violate the above will be promptly and thoroughly addressed and removed if deemed necessary.",
   "eurekaSupport": "Eureka is supported by:",
   "contact": "Contact:",
-
   "mosaicHeaderMyCycles": "Favorite cyles, works and posts",
   "publicationYearLabel": "Publication year",
   "releaseYearLabel": "Release year",
+  "Results about Topic":"Results about Topic",
   "countryLabel": "Country",
   "cycleActiveLabel": "Active cycle",
   "cycleNotActiveLabel": "Inactive cycle",
@@ -43,7 +43,6 @@
   "workLengthAsMinutesLabel": "minutes",
   "unclampTextLess": "view less",
   "unclampTextMore": "view more",
-
   "wayShare": "",
   "cycleShare": "¡Check the cycle",
   "postCycleShare": "Check this post about the cycle",
@@ -53,7 +52,6 @@
   "whatsappComplement": "Join us here:",
   "twitterComplement": "",
   "facebookComplement": "",
-
-  "goToHomepage":"Go to Homepage"
-  
+  "goToHomepage": "Go to Homepage",
+  "Loading":"Loading"
 }

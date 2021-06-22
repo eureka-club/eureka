@@ -1,0 +1,14 @@
+.textInput{
+    
+}
+.searchButton{
+    color: white;
+      border: solid 1px #54b99f;
+      background: #68cfb4;
+      border-radius: 50%;
+      width: 2em;
+      padding: .4em;
+      margin: 3px 0 0 -40px;
+      position: relative;
+      height: 2em;
+  }

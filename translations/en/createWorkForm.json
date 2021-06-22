@@ -4,6 +4,7 @@
   "typeFieldLabel": "Type of work",
   "typeFieldPlaceholder": "select...",
   "typeBook": "Book",
+  "Fiction Book": "Fiction Book",
   "typeDocumentary": "Documentary",
   "typeMovie": "Movie",
   "linkFieldLabel": "Link to work",

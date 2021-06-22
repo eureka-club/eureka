@@ -15,13 +15,13 @@ const regions: Record<string, unknown> = {
     botswana: 'Botswana',
     'burkina-faso': 'Burkina-Faso',
     burundi: 'Burundi',
-    'cabo-verde': 'Cabo Verde ',
+    'cabo-verde': 'Cape Verde',
     cameroon: 'Cameroon',
     'central-african-republic': 'Central African Republic',
     chad: 'Chad',
     'comoros-islands': 'Comoros Islands',
     congo: 'Congo',
-    'cote-d-ivoire': "Côte d'Ivoire",
+    'cote-d-ivoire': 'Ivory Coast',
     'democratic-republic-of-the-congo': 'Democratic Republic of the Congo',
     djibouti: 'Djibouti',
     'equatorial-guinea': 'Equatorial Guinea',
@@ -63,7 +63,7 @@ const regions: Record<string, unknown> = {
     canada: 'Canada',
     'saint-pierre-and-miquelon': 'Saint-Pierre and Miquelon',
     'united-states': 'United States',
-    bermudas: 'Bermudas',
+    bermudas: 'Bermuda',
   },
   'Latin America and the Caribbean': {
     'antigua-and-barbuda': 'Antigua and Barbuda',
@@ -138,9 +138,11 @@ const regions: Record<string, unknown> = {
   Oceania: {
     australia: 'Australia',
     'cook-islands': 'Cook Islands',
-    'kiribati-islands': 'Kiribati Islands',
-    'federated-states-of-micronesia': 'Federated States of Micronesia',
-    'fiji-islands': 'Fiji Islands',
+
+    'kiribati-islands': 'Kiribati',
+    'federated-states-of-micronesia': 'Micronesia',
+    'fiji-islands': 'Fiji',
+
     'marshall-islands': 'Marshall Islands',
     nauru: 'Nauru',
     niue: 'Niue',
@@ -189,7 +191,8 @@ const regions: Record<string, unknown> = {
     norway: 'Norway',
     poland: 'Poland',
     portugal: 'Portugal',
-    'republic-of-north-macedonia': 'Republic of North Macedonia',
+    'republic-of-north-macedonia': 'North Macedonia',
+
     romania: 'Romania',
     russia: 'Russia',
     'san-marino': 'San Marino',
@@ -204,7 +207,7 @@ const regions: Record<string, unknown> = {
     'united-kingdom': 'United Kingdom',
     vatican: 'Vatican',
   },
-  'Middle East/North Africa': {
+  'Middle East and North Africa': {
     algeria: 'Algeria',
     bahrain: 'Bahrain',
     egypt: 'Egypt',

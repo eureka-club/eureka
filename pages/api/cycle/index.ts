@@ -63,7 +63,26 @@ export default getApiHandler()
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
-      const data = await findAll();
+      const { q = null, where = null } = req.query;
+      let data = null;
+      if (typeof q === 'string') {
+        data = await prisma.cycle.findMany({
+          where: {
+            OR: [{ title: { contains: q } }, { tags: { contains: q } }],
+          },
+          include: { localImages: true, likes: true, favs: true },
+        });
+      } else if (where) {
+        data = await prisma.cycle.findMany({
+          ...(typeof where === 'string' && { where: JSON.parse(where) }),
+          include: { localImages: true, likes: true, favs: true },
+        });
+      } else {
+        data = await prisma.cycle.findMany({
+          include: { localImages: true, likes: true, favs: true },
+        });
+      }
+
       res.status(200).json({ status: 'OK', data });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

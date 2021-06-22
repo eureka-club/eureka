@@ -1,86 +1,137 @@
 // import classNames from 'classnames';
 import { useAtom } from 'jotai';
-import { useSession } from 'next-auth/client';
 // import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 // import { setCookie } from 'nookies';
-import { FunctionComponent, ChangeEvent } from 'react';
-import { Container, Row, Col, InputGroup, Form, FormControl } from 'react-bootstrap';
+import { FunctionComponent, ChangeEvent, useState } from 'react';
+import { InputGroup, Form } from 'react-bootstrap';
+import { AsyncTypeahead, Typeahead } from 'react-bootstrap-typeahead';
 
 import { AiOutlineSearch } from 'react-icons/ai';
+// import Fuse from 'fuse.js';
+import { useQuery } from 'react-query';
+import CycleTypeaheadSearchItem from './cycle/TypeaheadSearchItem';
+import WorkTypeaheadSearchItem from './work/TypeaheadSearchItem';
 
 // import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '../constants';
-import { Session } from '../types';
+import {
+  // Session,
+  SearchResult,
+  isCycleMosaicItem,
+  isWorkMosaicItem,
+} from '../types';
+
 import globalSearchEngineAtom from '../atoms/searchEngine';
 import styles from './SearchEngine.module.css';
+import { CycleMosaicItem, CycleWithImages } from '../types/cycle';
+import { WorkMosaicItem } from '../types/work';
+// import { WorkMosaicItem } from '../types/work';
+// import { CycleMosaicItem } from '../types/cycle';
+// import { PostMosaicItem } from '../types/post';
 
 const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
 
 const SearchEngine: FunctionComponent = () => {
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
-  const [session] = useSession() as [Session | null | undefined, boolean];
+  // const [session] = useSession() as [Session | null | undefined, boolean];
   const router = useRouter();
-  const { t } = useTranslation('common');
-  /*
-  const openSignInModal = () => {
-    setGlobalSearchEngineState({ ...globalSearchEngineState, ...{ signInModalOpened: true } });
+  const { t } = useTranslation('searchEngine');
+
+  const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
+  const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
+
+  const handleSearchWorkOrCycle = async (query: string) => {
+    setIsSearchWorkOrCycleLoading(true);
+
+    setGlobalSearchEngineState({ ...globalSearchEngineState, q: query });
+
+    const responseWork = await (await fetch(`/api/work/?q=${query}`)).json();
+    const responseCycle = await (await fetch(`/api/cycle/?q=${query}`)).json();
+
+    const items: SearchResult[] = [
+      ...((responseWork && responseWork.data) || []),
+      ...((responseCycle && responseCycle.data) || []).map((i: CycleMosaicItem & { type: string }) => ({
+        ...i,
+        type: 'cycle',
+      })),
+    ];
+
+    setSearchWorkOrCycleResults(items);
+    setIsSearchWorkOrCycleLoading(false);
   };
 
-  const handleCreatePostClick = (ev: MouseEvent<DropdownItemProps>) => {
-    ev.preventDefault();
-
-    setGlobalSearchEngineState({ ...globalSearchEngineState, ...{ createPostModalOpened: true } });
-  };
-
-  const handleCreateWorkClick = (ev: MouseEvent<DropdownItemProps>) => {
-    ev.preventDefault();
-
-    setGlobalSearchEngineState({ ...globalSearchEngineState, ...{ createWorkModalOpened: true } });
-  };
-
-  const handleLanguageSelect = (locale: string | null) => {
-    if (locale != null) {
-      setCookie(null, LOCALE_COOKIE_NAME, locale, {
-        maxAge: LOCALE_COOKIE_TTL,
-        path: '/',
-      });
+  const handleSelectWorkOrCycle = (selected: SearchResult[]): void => {
+    const searchResult = selected[0];
+    if (searchResult != null) {
+      const map: { [index: string]: string } = {
+        movie: 'work',
+        documentary: 'work',
+        book: 'work',
+        'fiction-book': 'work',
+        cycle: 'cycle',
+      };
+      if ('type' in searchResult) router.push(`/${map[searchResult.type]}/${searchResult.id}`);
     }
   };
-
-  const handleAboutSelect = (eventKey: string | null) => {
-    if (eventKey === 'aboutEureka') router.push('/about');
-    else if (eventKey === 'aboutUs') router.push('/aboutUs');
+  const onItemsFound = async () => {
+    if (!router.route.match('search')) {
+      if (globalSearchEngineState.q) {
+        const where = encodeURIComponent(JSON.stringify({ title: { contains: globalSearchEngineState.q } }));
+        setGlobalSearchEngineState({ ...globalSearchEngineState, where });
+      }
+      router.push('/search');
+    } else if (globalSearchEngineState.q) {
+      const where = encodeURIComponent(JSON.stringify({ title: { contains: globalSearchEngineState.q } }));
+      setGlobalSearchEngineState({ ...globalSearchEngineState, where });
+    }
   };
-*/
-  const handlerComboxesChange = (e: ChangeEvent<HTMLInputElement>, type: string) => {
-    let { only } = globalSearchEngineState;
-    if (only.includes(type)) only = only.filter((i) => i !== type);
-    else only.push(type);
-    setGlobalSearchEngineState({
-      ...globalSearchEngineState,
-      ...{ only },
-    });
-  };
-
   return (
-    <Container className={styles.container}>
-      <Row>
-        <Col>
-          <InputGroup className="mb-3">
-            <InputGroup.Append>
-              <InputGroup.Text id="inputGroup-sizing-default">
-                <AiOutlineSearch />
-              </InputGroup.Text>
-            </InputGroup.Append>
-            <FormControl
-              placeholder={t('Search for anything you wanna learn about')}
-              aria-label="Default"
-              aria-describedby="inputGroup-sizing-default"
-            />
-          </InputGroup>
-        </Col>
-        <Col>
+    <div className={styles.container}>
+      <Form.Group>
+        <InputGroup>
+          {/* language=CSS */}
+          <style jsx global>{`
+            .rbt-input {
+              border: solid #f5f5f5 1px !important;
+              background: #f5f5f5;
+            }
+          `}</style>
+          <AsyncTypeahead
+            id="create-post--search-work-or-cycle"
+            // Bypass client-side filtering. Results are already filtered by the search endpoint
+            filterBy={() => true}
+            inputProps={{ required: true }}
+            placeholder={t('Search for anything you wanna learn about')}
+            isLoading={isSearchWorkOrCycleLoading}
+            labelKey={(res: SearchResult) => `${res.title}`}
+            minLength={2}
+            onSearch={handleSearchWorkOrCycle}
+            options={searchWorkOrCycleResults}
+            onChange={handleSelectWorkOrCycle}
+            ignoreDiacritics
+            renderMenuItemChildren={(searchResult) => {
+              if (isCycleMosaicItem(searchResult)) {
+                return <CycleTypeaheadSearchItem cycle={searchResult} />;
+              }
+              if (isWorkMosaicItem(searchResult)) {
+                return <WorkTypeaheadSearchItem work={searchResult} />;
+              }
+
+              return null;
+            }}
+          />
+          <InputGroup.Append className={styles.searchButton}>
+            {/* <Button
+              onClick={() => { }}
+                variant="outline-secondary"> */}
+            <AiOutlineSearch onClick={onItemsFound} />
+            {/* </Button> */}
+          </InputGroup.Append>
+        </InputGroup>
+      </Form.Group>
+
+      {/* <Col>
           <Form>
             <Form.Group className={styles.formGroup}>
               <Form.Check inline type="checkbox" label="Cycles" onChange={(e) => handlerComboxesChange(e, 'cycle')} />
@@ -93,7 +144,7 @@ const SearchEngine: FunctionComponent = () => {
                 inline
                 type="checkbox"
                 label="Films"
-                onChange={(e) => handlerComboxesChange(e, 'work-film')}
+                onChange={(e) => handlerComboxesChange(e, 'work-movie')}
               />
             </Form.Group>
 
@@ -105,10 +156,17 @@ const SearchEngine: FunctionComponent = () => {
                 onChange={(e) => handlerComboxesChange(e, 'work-book')}
               />
             </Form.Group>
+            <Form.Group className={styles.formGroup} controlId="checkboxes">
+              <Form.Check
+                inline
+                type="checkbox"
+                label="Fiction Books"
+                onChange={(e) => handlerComboxesChange(e, 'work-fiction-book')}
+              />
+            </Form.Group>
           </Form>
-        </Col>
-      </Row>
-    </Container>
+        </Col> */}
+    </div>
   );
 };
 

@@ -2,6 +2,7 @@
   "browserTitleWelcome": "Bienvenidx",
   "browserTitleMyList": "Mi Lista",
   "book": "Libro",
+  "fiction-book": "Fiction Book",
   "cycle": "Ciclo",
   "documentary": "Documental",
   "Error": "Error",
@@ -33,6 +34,7 @@
   "mosaicHeaderMyCycles": "Ciclos, obras y publicaciones favoritas",
   "publicationYearLabel": "Año de publicación",
   "releaseYearLabel": "Año de producción",
+  "Results about Topic": "Results about Topic",
   "countryLabel": "País",
   "cycleActiveLabel": "Ciclo activo",
   "cycleNotActiveLabel": "Ciclo inactivo",
@@ -50,5 +52,6 @@
   "whatsappComplement": "Participa aquí: ",
   "twitterComplement": "",
   "facebookComplement": "",
-  "goToHomepage": "Ir al Inicio"
+  "goToHomepage": "Ir al Inicio",
+  "Loading":"Loading"
 }
