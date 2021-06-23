@@ -153,7 +153,7 @@ const IndexPage: NextPage = () => {
 
   return (
     <SimpleLayout title={t('browserTitleWelcome')}>
-      <h1 className={styles.title}>{t('Results about Topic')}</h1>
+      <h1 className={styles.title}>{t('Results about')}</h1>
       <FilterEngine />
       <Mosaic stack={homepageMosaicDataFiltered} />
       {genLoadingCmp()}

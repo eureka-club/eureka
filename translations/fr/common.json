@@ -34,7 +34,7 @@
   "mosaicHeaderMyCycles": "Cycles, oeuvres et publications favorites",
   "publicationYearLabel": "Année de publication",
   "releaseYearLabel": "Année de sortie",
-  "Results about Topic": "Results about Topic",
+  "Results about": "Results about",
   "countryLabel": "Pays",
   "cycleActiveLabel": "Cycle actif",
   "cycleNotActiveLabel": "Cycle inactif",
@@ -53,5 +53,5 @@
   "twitterComplement": "",
   "facebookComplement": "",
   "goToHomepage": "Retour à la page d'accueil",
-  "Loading":"Loading"
+  "Loading": "Loading"
 }
