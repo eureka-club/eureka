@@ -37,6 +37,7 @@ export interface CreateCycleClientPayload {
   title: string;
   languages: string;
   startDate: string;
+  countryOfOrigin?: string;
   endDate: string;
   contentText: string;
   complementaryMaterials: ComplementaryMaterial[];
@@ -51,6 +52,7 @@ export interface EditCycleClientPayload {
   languages?: string;
   startDate?: string;
   endDate?: string;
+  countryOfOrigin?: string | null;
   contentText?: string;
   complementaryMaterials?: ComplementaryMaterial[];
   tags?: string;
@@ -63,6 +65,7 @@ export interface CreateCycleServerFields {
   languages: string[];
   startDate: string[];
   endDate: string[];
+  countryOfOrigin?: string[];
   contentText: string[];
 }
 
@@ -74,6 +77,7 @@ export interface EditCycleServerFields {
   languages?: string[];
   startDate?: string[];
   endDate?: string[];
+  countryOfOrigin?: string[];
   contentText?: string[];
   tags?: string;
 }
@@ -85,6 +89,7 @@ export interface CreateCycleServerPayload {
   contentText: string;
   startDate: Date;
   endDate: Date;
+  countryOfOrigin?: string;
 }
 
 export interface EditCycleServerPayload {
@@ -95,5 +100,6 @@ export interface EditCycleServerPayload {
   contentText?: string;
   startDate?: Date;
   endDate?: Date;
+  countryOfOrigin?: string;
   tags?: string;
 }

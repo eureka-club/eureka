@@ -21,8 +21,9 @@ import Spinner from 'react-bootstrap/Spinner';
 import { useMutation } from 'react-query';
 // import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 // import { BiTrash } from 'react-icons/bi';
+import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import TagsInput from './controls/TagsInput';
-import 'react-bootstrap-typeahead/css/Typeahead.css';
+import i18nConfig from '../../../i18n';
 
 import {
   DATE_FORMAT_PROPS,
@@ -49,6 +50,7 @@ interface Props {
 
 const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
+  const { locale } = useRouter();
 
   // const [addWorkModalOpened, setAddWorkModalOpened] = useState(false);
   // const [isWorkSearchLoading, setIsWorkSearchLoading] = useState(false);
@@ -64,10 +66,20 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
   // const [complementaryMaterialFileOversizeError, setComplementaryMaterialFileOversizeError] = useState(false);
   // const [complementaryMaterials, setComplementaryMaterials] = useState<ComplementaryMaterial[]>([]);
   const router = useRouter();
+  const typeaheadRefOC = useRef<AsyncTypeahead<{ id: number; code: string; label: string }>>(null);
+  const [countryOrigin, setCountryOrigin] = useState<string>();
+  const [isCountriesSearchLoading, setIsCountriesSearchLoading] = useState(false);
+  const [countrySearchResults, setCountrySearchResults] = useState<{ id: number; code: string; label: string }[]>([]);
   const [tags, setTags] = useState<string>('');
+  const [namespace, setNamespace] = useState<Record<string, string>>();
 
   useEffect(() => {
     setTags(cycle.tags!);
+    const fn = async () => {
+      const r = await i18nConfig.loadLocaleFrom(locale, 'countries');
+      setNamespace(r);
+    };
+    fn();
   }, []);
 
   const {
@@ -238,6 +250,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
       languages: form.languages.value,
       startDate: form.startDate.value,
       endDate: form.endDate.value,
+      countryOfOrigin: countryOrigin,
       contentText: form.description.value,
       // complementaryMaterials,
       tags,
@@ -250,7 +263,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
 
   useEffect(() => {
     if (!isEditCycleReqError && isEditCycleReqSuccess && editedCycleData != null) {
-      router.push(`/cycle/${editedCycleData.id}`);
+      router.push(`/cycle/${router.query.id}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEditCycleReqError, isEditCycleReqSuccess, editedCycleData]);
@@ -259,6 +272,25 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
     if (cycle && ev.currentTarget.id in cycle) {
       const c: CycleDetail & { [key: string]: unknown } = cycle;
       c[ev.currentTarget.id] = ev.currentTarget.value;
+    }
+  };
+
+  const handleSearchCountry = async (query: string) => {
+    setIsCountriesSearchLoading(true);
+    const response = await fetch(`/api/taxonomy/countries?q=${query}`);
+    const items: { id: number; code: string; label: string }[] = (await response.json()).result;
+    items.forEach((i, idx: number) => {
+      items[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
+    });
+    setCountrySearchResults(items);
+    setIsCountriesSearchLoading(false);
+  };
+
+  const handleSearchCountrySelect = (selected: { id: number; code: string; label: string }[]): void => {
+    if (selected[0] != null) {
+      setCountryOrigin(selected[0].code);
+      // setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
+      // setAddWorkModalOpened(false);
     }
   };
 
@@ -400,6 +432,24 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
                   required
                   defaultValue={dayjs(cycle.endDate).utc().format(DATE_FORMAT_PROPS)}
                   min={dayjs(cycle.startDate).format(DATE_FORMAT_PROPS)}
+                />
+              </FormGroup>
+              <FormGroup>
+                <FormLabel>{t('countryFieldLabel')}</FormLabel>
+                <AsyncTypeahead
+                  id="create-work--search-country"
+                  // Bypass client-side filtering. Results are already filtered by the search endpoint
+                  filterBy={() => true}
+                  // inputProps={{ required: true }}
+                  // placeholder={t('addWrkTypeaheadPlaceholder')}
+                  ref={typeaheadRefOC}
+                  isLoading={isCountriesSearchLoading}
+                  labelKey={(res) => `${res.label}`}
+                  minLength={2}
+                  onSearch={handleSearchCountry}
+                  options={countrySearchResults}
+                  onChange={handleSearchCountrySelect}
+                  placeholder={namespace && cycle.countryOfOrigin ? namespace[cycle.countryOfOrigin] : ''}
                 />
               </FormGroup>
               <FormGroup controlId="description">

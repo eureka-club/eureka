@@ -6,15 +6,15 @@ import { GetStaticProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useState, useEffect, ReactElement } from 'react';
 
-import { useQuery, QueryClient } from 'react-query';
+import { QueryClient } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
-import { loadGetInitialProps } from 'next/dist/next-server/lib/utils';
+// import { loadGetInitialProps } from 'next/dist/next-server/lib/utils';
 import { Spinner } from 'react-bootstrap';
 import globalSearchEngineAtom from '../src/atoms/searchEngine';
 
 import { CycleMosaicItem } from '../src/types/cycle';
 import { WorkMosaicItem } from '../src/types/work';
-import { PostMosaicItem } from '../src/types/post';
+// import { PostMosaicItem } from '../src/types/post';
 import styles from './index.module.css';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 // import { findAll as findAllCycles } from '../src/facades/cycle';
@@ -67,8 +67,9 @@ const SearchPage: NextPage = () => {
 
   // const [where, setWhere] = useState('');
   // const [tempWhere, setTempWhere] = useState('');
-  const { isLoading, isError, error, data: works } = useWorks(true);
-  const { isLoading: isLoadingCycles, isError: isErrorCycles, error: errorCycles, data: cycles } = useCycles(true);
+  const { isLoading, /* isError, error, */ data: works } = useWorks(true);
+  const { isLoading: isLoadingCycles, /* isError: isErrorCycles, error: errorCycles, */ data: cycles } =
+    useCycles(true);
   const { data: onlyByCountriesAux } = useCountries();
 
   const [homepageMosaicData, setHomepageMosaicData] = useState<

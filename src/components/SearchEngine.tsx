@@ -4,13 +4,13 @@ import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 // import { setCookie } from 'nookies';
-import { FunctionComponent, ChangeEvent, useState, useCallback } from 'react';
+import { FunctionComponent, useState } from 'react';
 import { InputGroup, Form, Button } from 'react-bootstrap';
-import { AsyncTypeahead, Highlighter, Menu, MenuItem } from 'react-bootstrap-typeahead';
+import { AsyncTypeahead, Menu, MenuItem } from 'react-bootstrap-typeahead';
 
 import { AiOutlineSearch } from 'react-icons/ai';
 // import Fuse from 'fuse.js';
-import { useQuery } from 'react-query';
+// import { useQuery } from 'react-query';
 import { LocalImage, Work } from '@prisma/client';
 import CycleTypeaheadSearchItem from './cycle/TypeaheadSearchItem';
 import WorkTypeaheadSearchItem from './work/TypeaheadSearchItem';
@@ -26,12 +26,12 @@ import {
 import globalSearchEngineAtom from '../atoms/searchEngine';
 import styles from './SearchEngine.module.css';
 import { CycleMosaicItem, CycleWithImages } from '../types/cycle';
-import { WorkMosaicItem } from '../types/work';
+// import { WorkMosaicItem } from '../types/work';
 // import { WorkMosaicItem } from '../types/work';
 // import { CycleMosaicItem } from '../types/cycle';
 // import { PostMosaicItem } from '../types/post';
 
-const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
+// const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
 
 const SearchEngine: FunctionComponent = () => {
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);

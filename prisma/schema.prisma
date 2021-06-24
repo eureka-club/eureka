@@ -172,6 +172,7 @@ model Cycle {
   contentText  String?   @db.VarChar(4000)  @map(name: "content_text")
   startDate    DateTime  @map(name: "start_date")
   endDate      DateTime  @map(name: "end_date")
+  countryOfOrigin  String?    @map(name: "country_of_origin")
   createdAt    DateTime  @default(now()) @map(name: "created_at")
   updatedAt    DateTime  @updatedAt @map(name: "updated_at")
 

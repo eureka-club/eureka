@@ -27,11 +27,10 @@
   "newCyclePitchLabel": "Pitch du cycle: quel est le thème de ce cycle et pourquoi est-ce un thème pertinent? Pourquoi d'autres personnes devraient-elles rejoindre ce cycle?",
   "submitBtnLabel": "Créer",
   "resetBtnLabel": "Effacer",
-
   "addWrkPopupTitle": "Ajouter une oeuvre au cycle",
   "addWrkTypeaheadLabel": "Sélectionnez une oeuvre",
   "addWrkTypeaheadPlaceholder": "Cherchez une oeuvre...",
   "addWrkAddBtnLabel": "Ajouter l'oeuvre au cycle",
-
-  "Edit Cycle":"Modifier le Cycle"
+  "Edit Cycle": "Modifier le Cycle",
+  "countryFieldLabel": "Country or region of focus (if applicable)"
 }
