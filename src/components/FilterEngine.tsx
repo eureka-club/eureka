@@ -134,6 +134,7 @@ const SearchEngine: FunctionComponent = () => {
                 onChange={(e) => handlerComboxesChangeType(e, 'book')}
               />
             </Form.Group>
+            <br />
             <Form.Label>
               <strong>{t('Films')}</strong>
             </Form.Label>
@@ -215,7 +216,7 @@ const SearchEngine: FunctionComponent = () => {
                 onChange={(e) => handlerComboxesChangeRegion(e, 'Sub-Saharan Africa')}
               />
             </Form.Group>
-
+            <br />
             <Form.Label>
               <strong>{t('Countries')}</strong>
             </Form.Label>
