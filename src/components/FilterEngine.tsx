@@ -113,7 +113,7 @@ const SearchEngine: FunctionComponent = () => {
             />
           </Form.Group>
         </Col>
-        <Col md={4}>
+        <Col md={4} className={styles.lastCol}>
           <PopoverContainer title={t('Fiction/nonfiction')} className={styles.popover}>
             <Form.Label>
               <strong>{t('Books')}</strong>
