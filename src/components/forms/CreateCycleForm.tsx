@@ -52,7 +52,10 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkWithImages | null>(null);
   const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkWithImages[]>([]);
   const typeaheadRef = useRef<AsyncTypeahead<WorkWithImages>>(null);
-
+  const typeaheadRefOC = useRef<AsyncTypeahead<{ id: number; code: string; label: string }>>(null);
+  const [countryOrigin, setCountryOrigin] = useState<string>();
+  const [isCountriesSearchLoading, setIsCountriesSearchLoading] = useState(false);
+  const [countrySearchResults, setCountrySearchResults] = useState<{ id: number; code: string; label: string }[]>([]);
   const [cycleCoverImageFile, setCycleCoverImageFile] = useState<File | null>(null);
 
   const [addComplementaryMaterialModalOpened, setAddComplementaryMaterialModalOpened] = useState(false);
@@ -250,6 +253,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
       languages: form.languages.value,
       startDate: form.startDate.value,
       endDate: form.endDate.value,
+      countryOfOrigin: countryOrigin,
       contentText: form.description.value,
       complementaryMaterials,
     };
@@ -265,6 +269,25 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCreateCycleReqSuccess, newCycleData]);
+
+  const handleSearchCountry = async (query: string) => {
+    setIsCountriesSearchLoading(true);
+    const response = await fetch(`/api/taxonomy/countries?q=${query}`);
+    const items: { id: number; code: string; label: string }[] = (await response.json()).result;
+    items.forEach((i, idx: number) => {
+      items[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
+    });
+    setCountrySearchResults(items);
+    setIsCountriesSearchLoading(false);
+  };
+
+  const handleSearchCountrySelect = (selected: { id: number; code: string; label: string }[]): void => {
+    if (selected[0] != null) {
+      setCountryOrigin(selected[0].code);
+      // setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
+      // setAddWorkModalOpened(false);
+    }
+  };
 
   return (
     <>
@@ -392,6 +415,24 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
             <FormGroup controlId="endDate">
               <FormLabel>*{t('newCycleEndDateLabel')}</FormLabel>
               <FormControl type="date" required min={dayjs(new Date()).format(DATE_FORMAT_PROPS)} />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel>{t('countryFieldLabel')}</FormLabel>
+              <AsyncTypeahead
+                id="create-work--search-country"
+                // Bypass client-side filtering. Results are already filtered by the search endpoint
+                filterBy={() => true}
+                // inputProps={{ required: true }}
+                // placeholder={t('addWrkTypeaheadPlaceholder')}
+                ref={typeaheadRefOC}
+                isLoading={isCountriesSearchLoading}
+                labelKey={(res) => `${res.label}`}
+                minLength={2}
+                onSearch={handleSearchCountry}
+                options={countrySearchResults}
+                onChange={handleSearchCountrySelect}
+                // renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work} />}
+              />
             </FormGroup>
             <FormGroup controlId="description">
               <FormLabel>*{t('newCyclePitchLabel')}</FormLabel>

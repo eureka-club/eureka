@@ -10,7 +10,7 @@ import prisma from '../../../src/lib/prisma';
 
 import i18nConfig from '../../../i18n';
 
-import { Session } from '../../../src/types';
+// import { Session } from '../../../src/types';
 
 export const config = {
   api: {
@@ -30,6 +30,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     const namespace = await i18nConfig.loadLocaleFrom(req.cookies.NEXT_LOCALE, 'countries');
     const { q } = req.query;
     const codes: string[] = [];
+    let getAll = false;
     if (q) {
       const fn = (qi: string) => {
         const qFormated = removeAccents.remove(qi as string).toLowerCase();
@@ -43,9 +44,11 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
         );
       };
       const queries = (q as string).split(',');
-      queries.forEach((qi: string) => {
-        fn(qi);
-      });
+      getAll = !!queries.filter((i) => i === 'all').length;
+      if (!getAll)
+        queries.forEach((qi: string) => {
+          fn(qi);
+        });
       // const qFormated = removeAccents.remove(q as string).toLowerCase();
       // const regExp = new RegExp(`${qFormated}`, 'i');
       // codes = Object.entries(namespace)
@@ -57,18 +60,25 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
 
     const result = await prisma.term.findMany({
       ...(!isEmpty(q) && {
+        orderBy: [
+          {
+            code: 'asc',
+          },
+        ],
         where: {
           parentId: {
             not: null,
           },
-          OR: [
-            { ...(codes && codes.length && { code: { in: codes } }) },
-            {
-              parent: {
-                ...(codes && codes.length && { code: { in: codes } }),
+          ...(!getAll && {
+            OR: [
+              { ...(codes && codes.length && { code: { in: codes } }) },
+              {
+                parent: {
+                  ...(codes && codes.length && { code: { in: codes } }),
+                },
               },
-            },
-          ],
+            ],
+          }),
         },
       }),
     });

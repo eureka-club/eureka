@@ -35,7 +35,10 @@ const WorkSummary: FunctionComponent<Props> = ({ cycle }) => {
             ? t('cycleActiveLabel')
             : t('cycleNotActiveLabel')
         } :  ${startDate.format(DATE_FORMAT_SHORT)}—${endDate.format(DATE_FORMAT_SHORT)}`,
-      ].join(', ')}
+        cycle.countryOfOrigin && `${t('countryLabel')}: ${t(`countries:${cycle.countryOfOrigin}` as string)}`,
+      ]
+        .filter((i) => i)
+        .join(', ')}
       <TagsInput tags={tags} readOnly label="" />
     </section>
   );

@@ -47,6 +47,7 @@ export interface CreateWorkServerFields {
   contentText?: string[];
   link?: string[];
   countryOfOrigin?: string[];
+  countryOfOrigin2?: string[];
   publicationYear?: string[];
   length?: string[];
   tags: string;
@@ -62,6 +63,7 @@ export interface CreateWorkServerPayload {
   contentText?: string;
   link?: string;
   countryOfOrigin?: string;
+  countryOfOrigin2?: string;
   publicationYear?: Date;
   length?: string;
   tags: string;
@@ -79,6 +81,7 @@ export interface EditWorkClientPayload {
   contentText?: string | null;
   link?: string | null;
   countryOfOrigin?: string | null;
+  countryOfOrigin2?: string | null;
   publicationYear?: string | null;
   length?: string | null;
   tags?: string;

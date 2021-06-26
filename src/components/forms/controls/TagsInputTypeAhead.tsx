@@ -1,4 +1,4 @@
-import { FunctionComponent, useState, useEffect, useRef, ChangeEvent, KeyboardEvent } from 'react';
+import { FunctionComponent, useState, useEffect, useRef } from 'react';
 // import FormControl from 'react-bootstrap/FormControl';
 import { Form, Badge, InputGroup } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
@@ -6,8 +6,8 @@ import { Typeahead } from 'react-bootstrap-typeahead';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useAtom } from 'jotai';
 import { useQuery } from 'react-query';
-import { SearchResult } from '../../../types';
-import useCountries from '../../../useCountries';
+// import { SearchResult } from '../../../types';
+// import useCountries from '../../../useCountries';
 import styles from './TagsInputTypeAhead.module.css';
 import globalSearchEngineAtom from '../../../atoms/searchEngine';
 
@@ -24,7 +24,7 @@ const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputPr
   const ref = useRef<Typeahead<{ code: string; label: string }>>(null);
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
   const fetchCountries = async () => {
-    const res = await fetch(`/api/taxonomy/countries`);
+    const res = await fetch(`/api/taxonomy/countries?q=all`);
     const { result = [] } = await res.json();
     const codes = result.map((i: { code: string; label: string }) => ({
       code: i.code,

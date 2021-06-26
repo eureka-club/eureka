@@ -4,13 +4,14 @@ import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 // import { setCookie } from 'nookies';
-import { FunctionComponent, ChangeEvent, useState } from 'react';
-import { InputGroup, Form } from 'react-bootstrap';
-import { AsyncTypeahead, Typeahead } from 'react-bootstrap-typeahead';
+import { FunctionComponent, useState } from 'react';
+import { InputGroup, Form, Button } from 'react-bootstrap';
+import { AsyncTypeahead, Menu, MenuItem } from 'react-bootstrap-typeahead';
 
 import { AiOutlineSearch } from 'react-icons/ai';
 // import Fuse from 'fuse.js';
-import { useQuery } from 'react-query';
+// import { useQuery } from 'react-query';
+import { LocalImage, Work } from '@prisma/client';
 import CycleTypeaheadSearchItem from './cycle/TypeaheadSearchItem';
 import WorkTypeaheadSearchItem from './work/TypeaheadSearchItem';
 
@@ -25,12 +26,12 @@ import {
 import globalSearchEngineAtom from '../atoms/searchEngine';
 import styles from './SearchEngine.module.css';
 import { CycleMosaicItem, CycleWithImages } from '../types/cycle';
-import { WorkMosaicItem } from '../types/work';
+// import { WorkMosaicItem } from '../types/work';
 // import { WorkMosaicItem } from '../types/work';
 // import { CycleMosaicItem } from '../types/cycle';
 // import { PostMosaicItem } from '../types/post';
 
-const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
+// const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
 
 const SearchEngine: FunctionComponent = () => {
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
@@ -86,6 +87,7 @@ const SearchEngine: FunctionComponent = () => {
       setGlobalSearchEngineState({ ...globalSearchEngineState, where });
     }
   };
+
   return (
     <div className={styles.container}>
       <Form.Group>
@@ -96,11 +98,15 @@ const SearchEngine: FunctionComponent = () => {
               border: solid #f5f5f5 1px !important;
               background: #f5f5f5;
             }
+            .dropdown-menu {
+              padding: 0 !important;
+            }
           `}</style>
           <AsyncTypeahead
             id="create-post--search-work-or-cycle"
             // Bypass client-side filtering. Results are already filtered by the search endpoint
             filterBy={() => true}
+            maxResults={2}
             inputProps={{ required: true }}
             placeholder={t('Search for anything you wanna learn about')}
             isLoading={isSearchWorkOrCycleLoading}
@@ -110,16 +116,38 @@ const SearchEngine: FunctionComponent = () => {
             options={searchWorkOrCycleResults}
             onChange={handleSelectWorkOrCycle}
             ignoreDiacritics
-            renderMenuItemChildren={(searchResult) => {
-              if (isCycleMosaicItem(searchResult)) {
-                return <CycleTypeaheadSearchItem cycle={searchResult} />;
-              }
-              if (isWorkMosaicItem(searchResult)) {
-                return <WorkTypeaheadSearchItem work={searchResult} />;
-              }
+            // renderMenuItemChildren={(searchResult) => {
+            //   if (isCycleMosaicItem(searchResult)) {
+            //     return <CycleTypeaheadSearchItem cycle={searchResult} />;
+            //   }
+            //   if (isWorkMosaicItem(searchResult)) {
+            //     return <WorkTypeaheadSearchItem work={searchResult} />;
+            //   }
 
-              return null;
-            }}
+            //   return null;
+            // }}
+            renderMenu={(results, menuProps) => (
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              <Menu {...menuProps}>
+                {results.map((item, index) => (
+                  <MenuItem key={`${item.id}`} option={item} position={index}>
+                    {/* <Highlighter search={props.text}>{item}</Highlighter> */}
+                    {(isCycleMosaicItem(results[index]) && (
+                      <CycleTypeaheadSearchItem cycle={results[index] as CycleWithImages} />
+                    )) ||
+                      (isWorkMosaicItem(results[index]) && (
+                        <WorkTypeaheadSearchItem work={results[index] as Work & { localImages: LocalImage[] }} />
+                      ))}
+                  </MenuItem>
+                ))}
+                {(results.length && (
+                  <Button variant="light" className={styles.seeAllResults} onClick={onItemsFound}>
+                    {t('See all results')}
+                  </Button>
+                )) ||
+                  t('Not found')}
+              </Menu>
+            )}
           />
           <InputGroup.Append className={styles.searchButton}>
             {/* <Button

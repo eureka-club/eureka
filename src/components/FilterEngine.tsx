@@ -1,36 +1,36 @@
 // import classNames from 'classnames';
 import { useAtom } from 'jotai';
-import { useSession } from 'next-auth/client';
+// import { useSession } from 'next-auth/client';
 // import Link from 'next/link';
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 // import { setCookie } from 'nookies';
-import { FunctionComponent, ChangeEvent, useState, useEffect } from 'react';
-import { Container, Row, Col, InputGroup, Form, Button } from 'react-bootstrap';
-import { AsyncTypeahead, Typeahead } from 'react-bootstrap-typeahead';
+import { FunctionComponent, ChangeEvent, useState } from 'react';
+import { Container, Row, Col, Form } from 'react-bootstrap';
+// import { AsyncTypeahead, Typeahead } from 'react-bootstrap-typeahead';
 
-import { AiOutlineSearch } from 'react-icons/ai';
-import Fuse from 'fuse.js';
-import TagsInput from './forms/controls/TagsInput';
+// import { AiOutlineSearch } from 'react-icons/ai';
+// import Fuse from 'fuse.js';
+// import TagsInput from './forms/controls/TagsInput';
 import TagsInputTypeAhead from './forms/controls/TagsInputTypeAhead';
 
-import CycleTypeaheadSearchItem from './cycle/TypeaheadSearchItem';
-import WorkTypeaheadSearchItem from './work/TypeaheadSearchItem';
+// import CycleTypeaheadSearchItem from './cycle/TypeaheadSearchItem';
+// import WorkTypeaheadSearchItem from './work/TypeaheadSearchItem';
 import PopoverContainer from './PopoverContainer';
-import useCountries from '../useCountries';
+// import useCountries from '../useCountries';
 
 // import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '../constants';
-import { Session, SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../types';
+// import { Session, SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../types';
 
 import globalSearchEngineAtom from '../atoms/searchEngine';
 import styles from './FilterEngine.module.css';
 
-const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
+// const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
 
 const SearchEngine: FunctionComponent = () => {
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
-  const [session] = useSession() as [Session | null | undefined, boolean];
-  const router = useRouter();
+  // const [session] = useSession() as [Session | null | undefined, boolean];
+  // const router = useRouter();
   const { t } = useTranslation('searchEngine');
   const [tags, setTags] = useState<string>('');
   // const [onlyByCountries] = useState<string[]>([]);
@@ -99,7 +99,7 @@ const SearchEngine: FunctionComponent = () => {
               inline
               type="checkbox"
               label={t('Films')}
-              onChange={(e) => handlerComboxesChangeType(e, 'movie')}
+              onChange={(e) => handlerComboxesChangeType(e, 'movie|documentary')}
             />
           </Form.Group>
 
@@ -113,7 +113,7 @@ const SearchEngine: FunctionComponent = () => {
             />
           </Form.Group>
         </Col>
-        <Col md={4}>
+        <Col md={4} className={styles.lastCol}>
           <PopoverContainer title={t('Fiction/nonfiction')} className={styles.popover}>
             <Form.Label>
               <strong>{t('Books')}</strong>
@@ -134,6 +134,7 @@ const SearchEngine: FunctionComponent = () => {
                 onChange={(e) => handlerComboxesChangeType(e, 'book')}
               />
             </Form.Group>
+            <br />
             <Form.Label>
               <strong>{t('Films')}</strong>
             </Form.Label>
@@ -215,7 +216,7 @@ const SearchEngine: FunctionComponent = () => {
                 onChange={(e) => handlerComboxesChangeRegion(e, 'Sub-Saharan Africa')}
               />
             </Form.Group>
-
+            <br />
             <Form.Label>
               <strong>{t('Countries')}</strong>
             </Form.Label>

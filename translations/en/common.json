@@ -2,14 +2,12 @@
   "browserTitleWelcome": "Welcome",
   "browserTitleMyList": "My List",
   "Error": "Error",
-
   "book": "Nonfiction book",
   "fiction-book": "Fiction book",
   "documentary": "Documentary",
   "movie": "Fiction movie",
   "cycle": "Cycle",
   "post": "Eureka",
-
   "browserTitleAbout": "About",
   "aboutPageHeading": "Our mission is to induce as many Eureka moments as possible.",
   "aboutHeading": "About",
@@ -33,21 +31,18 @@
   "ethicsText4": "Content or individuals that violate the above will be promptly and thoroughly addressed and removed if deemed necessary.",
   "eurekaSupport": "Eureka is supported by:",
   "contact": "Contact:",
-
   "mosaicHeaderMyCycles": "Favorite cyles, works and posts",
   "publicationYearLabel": "Publication year",
   "releaseYearLabel": "Release year",
-  "Results about Topic":"Results about",
+  "Results about": "Results about",
   "countryLabel": "Country",
   "cycleActiveLabel": "Active cycle",
   "cycleNotActiveLabel": "Inactive cycle",
   "workLengthLabel": "Length",
   "workLengthAsPagesLabel": "pages",
   "workLengthAsMinutesLabel": "minutes",
-
   "unclampTextLess": "view less",
   "unclampTextMore": "view more",
-
   "wayShare": "",
   "cycleShare": "¡Check the cycle",
   "postCycleShare": "Check this post about the cycle",
@@ -57,7 +52,6 @@
   "whatsappComplement": "Join us here:",
   "twitterComplement": "",
   "facebookComplement": "",
-
   "goToHomepage": "Go to Homepage",
-  "Loading":"Loading"
+  "Loading": "Loading"
 }

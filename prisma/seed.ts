@@ -295,7 +295,7 @@ const forceDeleteCountriesFn = async () => {
   try {
     await prisma.$transaction(transactions);
   } catch (error) {
-    console.log({ error });
+    throw new Error(error);
   }
 };
 
@@ -331,7 +331,7 @@ const populateRegions = async (admin: { id: number }) => {
     regionsAll.forEach((r: { code: string; id: number }) => {
       if (regionTax) {
         const countr = countriesData(r.code, regionTax.id as number, admin.id, r.id);
-        console.log('countr ', countr);
+        // console.log('countr ', countr);
         promises.push(prisma.term.createMany({ data: countr }));
       }
     });

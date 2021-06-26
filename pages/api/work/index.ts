@@ -5,9 +5,9 @@ import { getSession } from 'next-auth/client';
 import { FileUpload, Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { storeUpload } from '../../../src/facades/fileUpload';
-import { createFromServerFields, findAll } from '../../../src/facades/work';
+import { createFromServerFields } from '../../../src/facades/work';
 import prisma from '../../../src/lib/prisma';
-import { WorkWithImages } from '../../../src/types/work';
+// import { WorkWithImages } from '../../../src/types/work';
 
 export const config = {
   api: {
