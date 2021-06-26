@@ -33,12 +33,14 @@ const SearchEngine: FunctionComponent = () => {
   // const router = useRouter();
   const { t } = useTranslation('searchEngine');
   const [tags, setTags] = useState<string>('');
+  const [filtersChecked, setFiltersChecked] = useState<Record<string, boolean>>({});
   // const [onlyByCountries] = useState<string[]>([]);
   // const [countryQuery, setCountryQuery] = useState<string[] | undefined>([]);
 
   const handlerComboxesChangeType = (e: ChangeEvent<HTMLInputElement>, type: string) => {
     let { only } = globalSearchEngineState;
     const types = type.split('|');
+    setFiltersChecked({ ...filtersChecked, [`${type}`]: e.target.checked });
     types.forEach((ty: string) => {
       if (only.includes(ty)) only = only.filter((i) => i !== ty);
       else only.push(ty);
@@ -50,6 +52,7 @@ const SearchEngine: FunctionComponent = () => {
   };
 
   const handlerComboxesChangeRegion = (e: ChangeEvent<HTMLInputElement>, q: string) => {
+    setFiltersChecked({ ...filtersChecked, [`${q}`]: e.target.checked });
     if (globalSearchEngineState.countryQuery!.includes(q))
       setGlobalSearchEngineState({
         ...globalSearchEngineState,
@@ -81,6 +84,7 @@ const SearchEngine: FunctionComponent = () => {
               inline
               type="checkbox"
               label={t('Cycles')}
+              checked={filtersChecked.cycle}
               onChange={(e) => handlerComboxesChangeType(e, 'cycle')}
             />
           </Form.Group>
@@ -122,7 +126,8 @@ const SearchEngine: FunctionComponent = () => {
               <Form.Check
                 className={styles.filter}
                 type="checkbox"
-                label="Fiction books"
+                label={t('Fiction books')}
+                checked={filtersChecked['fiction-book']}
                 onChange={(e) => handlerComboxesChangeType(e, 'fiction-book')}
               />
             </Form.Group>
@@ -130,7 +135,8 @@ const SearchEngine: FunctionComponent = () => {
               <Form.Check
                 className={styles.filter}
                 type="checkbox"
-                label="Nofictions books"
+                label={t('Nofictions books')}
+                checked={filtersChecked.book}
                 onChange={(e) => handlerComboxesChangeType(e, 'book')}
               />
             </Form.Group>
@@ -142,7 +148,8 @@ const SearchEngine: FunctionComponent = () => {
               <Form.Check
                 className={styles.filter}
                 type="checkbox"
-                label="Movies"
+                label={t('Movies')}
+                checked={filtersChecked.movie}
                 onChange={(e) => handlerComboxesChangeType(e, 'movie')}
               />
             </Form.Group>
@@ -150,7 +157,8 @@ const SearchEngine: FunctionComponent = () => {
               <Form.Check
                 className={styles.filter}
                 type="checkbox"
-                label="Documentary"
+                label={t('Documentary')}
+                checked={filtersChecked.documentary}
                 onChange={(e) => handlerComboxesChangeType(e, 'documentary')}
               />
             </Form.Group>
@@ -165,6 +173,7 @@ const SearchEngine: FunctionComponent = () => {
                 className={styles.filter}
                 type="checkbox"
                 label={`${t('countries:Asia')} `}
+                checked={filtersChecked.Asia}
                 onChange={(e) => handlerComboxesChangeRegion(e, 'Asia')}
               />
             </Form.Group>
@@ -173,6 +182,7 @@ const SearchEngine: FunctionComponent = () => {
                 className={styles.filter}
                 type="checkbox"
                 label={`${t('countries:Europe')} `}
+                checked={filtersChecked.Europe}
                 onChange={(e) => handlerComboxesChangeRegion(e, 'Europe')}
               />
             </Form.Group>
@@ -181,6 +191,7 @@ const SearchEngine: FunctionComponent = () => {
                 className={styles.filter}
                 type="checkbox"
                 label={`${t('countries:Latin America and the Caribbean')} `}
+                checked={filtersChecked['Latin America and the Caribbean']}
                 onChange={(e) => handlerComboxesChangeRegion(e, 'Latin America and the Caribbean')}
               />
             </Form.Group>
@@ -189,6 +200,7 @@ const SearchEngine: FunctionComponent = () => {
                 className={styles.filter}
                 type="checkbox"
                 label={`${t('countries:Middle East and North Africa')} `}
+                checked={filtersChecked['Middle East and North Africa']}
                 onChange={(e) => handlerComboxesChangeRegion(e, 'Middle East and North Africa')}
               />
             </Form.Group>
@@ -197,6 +209,7 @@ const SearchEngine: FunctionComponent = () => {
                 className={styles.filter}
                 type="checkbox"
                 label={`${t('countries:Northern America')} `}
+                checked={filtersChecked['Northern America']}
                 onChange={(e) => handlerComboxesChangeRegion(e, 'Northern America')}
               />
             </Form.Group>
@@ -205,6 +218,7 @@ const SearchEngine: FunctionComponent = () => {
                 className={styles.filter}
                 type="checkbox"
                 label={`${t('countries:Oceania')}`}
+                checked={filtersChecked.Oceania}
                 onChange={(e) => handlerComboxesChangeRegion(e, 'Oceania')}
               />
             </Form.Group>
@@ -213,6 +227,7 @@ const SearchEngine: FunctionComponent = () => {
                 className={styles.filter}
                 type="checkbox"
                 label={`${t('countries:Sub-Saharan Africa')}`}
+                checked={filtersChecked['Sub-Saharan Africa']}
                 onChange={(e) => handlerComboxesChangeRegion(e, 'Sub-Saharan Africa')}
               />
             </Form.Group>

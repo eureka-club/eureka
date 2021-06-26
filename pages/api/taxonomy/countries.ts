@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/client';
+// import { getSession } from 'next-auth/client';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { isEmpty } from 'lodash';
@@ -27,7 +27,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
 
   try {
     // eslint-disable-next-line no-underscore-dangle
-    const namespace = await i18nConfig.loadLocaleFrom(req.cookies.NEXT_LOCALE, 'countries');
+    const namespace = await i18nConfig.loadLocaleFrom(req.cookies.NEXT_LOCALE || 'es', 'countries');
     const { q } = req.query;
     const codes: string[] = [];
     let getAll = false;
@@ -59,16 +59,14 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     }
 
     const result = await prisma.term.findMany({
-      ...(!isEmpty(q) && {
-        orderBy: [
-          {
-            code: 'asc',
-          },
-        ],
-        where: {
-          parentId: {
-            not: null,
-          },
+      where: {
+        taxonomy: {
+          code: 'region',
+        },
+        parentId: {
+          not: null,
+        },
+        ...(!isEmpty(q) && {
           ...(!getAll && {
             OR: [
               { ...(codes && codes.length && { code: { in: codes } }) },
@@ -79,8 +77,13 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
               },
             ],
           }),
+        }),
+      },
+      orderBy: [
+        {
+          code: 'asc',
         },
-      }),
+      ],
     });
     res.status(200).json({ result });
   } catch (exc) {

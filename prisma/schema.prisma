@@ -219,8 +219,8 @@ model Post {
 
 model Taxonomy {
   id           Int       @default(autoincrement()) @id
-  creator      User?      @relation(fields: [creatorId], references: [id])
-  creatorId    Int?       @map(name: "creator_id")
+  creator      User?     @relation(fields: [creatorId], references: [id])
+  creatorId    Int?      @map(name: "creator_id")
   label        String
   code         String    @unique
   description  String    @db.VarChar(4000) @map(name: "content_text")
@@ -237,15 +237,15 @@ model Taxonomy {
 
 model Term {
   id           Int       @default(autoincrement()) @id
-  taxonomy     Taxonomy  @relation(fields: [taxonomyId], references: [id])
-  taxonomyId   Int       @map(name: "taxonomy_id")
+  taxonomy     Taxonomy  @relation(fields: [taxonomyCode], references: [code])
+  taxonomyCode String    @default("region") @map(name: "taxonomy_code") 
 
   parentId     Int?      @map(name: "parent_id") 
   parent       Term?     @relation("TermHierarchy", fields: [parentId], references: [id])
   child        Term[]    @relation("TermHierarchy")
 
-  creator      User?      @relation(fields: [creatorId], references: [id])
-  creatorId    Int?       @map(name: "creator_id")
+  creator      User?     @relation(fields: [creatorId], references: [id])
+  creatorId    Int?      @map(name: "creator_id")
   
   label        String
   code         String    

@@ -231,7 +231,7 @@ const regions: Record<string, unknown> = {
   },
 };
 type TermCreateManyInput = {
-  taxonomyId: number;
+  taxonomyCode: string;
   parentId?: number | null;
   creatorId?: number | null;
   label: string;
@@ -242,7 +242,12 @@ type TermCreateManyInput = {
   updatedAt?: Date | string;
 };
 
-const countriesData = (r: string, taxonomyId: number, creatorId: number, parentId?: number): TermCreateManyInput[] => {
+const countriesData = (
+  r: string,
+  taxonomyCode: string,
+  creatorId: number,
+  parentId?: number,
+): TermCreateManyInput[] => {
   const data = regions[r] as Record<string, unknown>;
   const res = Object.keys(data).map((d) => ({
     creatorId,
@@ -251,13 +256,13 @@ const countriesData = (r: string, taxonomyId: number, creatorId: number, parentI
     description: d,
     createdAt: dayjs().utc().format(),
     updatedAt: dayjs().utc().format(),
-    taxonomyId,
+    taxonomyCode,
     parentId: parentId || null,
   }));
   return res;
 };
 
-const regionsData = (taxonomyId: number, creatorId: number) => {
+const regionsData = (taxonomyCode: string, creatorId: number) => {
   const data = regions as Record<string, unknown>;
   return Object.keys(data).map((d) => {
     return {
@@ -267,7 +272,7 @@ const regionsData = (taxonomyId: number, creatorId: number) => {
       description: d,
       createdAt: dayjs().utc().format(),
       updatedAt: dayjs().utc().format(),
-      taxonomyId,
+      taxonomyCode,
     };
   });
 };
@@ -318,7 +323,7 @@ const populateRegions = async (admin: { id: number }) => {
 
   let regionsAll = await prisma.term.findMany();
   if (!regionsAll.length) {
-    await prisma.term.createMany({ data: regionsData(regionTax.id, admin.id) });
+    await prisma.term.createMany({ data: regionsData(regionTax.code, admin.id) });
   }
   regionsAll = await prisma.term.findMany();
 
@@ -330,7 +335,7 @@ const populateRegions = async (admin: { id: number }) => {
     const promises: unknown[] = [];
     regionsAll.forEach((r: { code: string; id: number }) => {
       if (regionTax) {
-        const countr = countriesData(r.code, regionTax.id as number, admin.id, r.id);
+        const countr = countriesData(r.code, regionTax.code, admin.id, r.id);
         // console.log('countr ', countr);
         promises.push(prisma.term.createMany({ data: countr }));
       }
