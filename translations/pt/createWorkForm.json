@@ -31,5 +31,6 @@
   "tagsInputPlaceholder": "Escreva uma tag e pressione Enter ou Vírgula",
   "Add a second origin country": "Adicionar um 2o país",
   "Remove the second origin country": "Remova o 2o país",
-  "Topics": "Topics"
+  "Topics": "Topics",
+  "topicsLabel": "Help us organize our library by adding category(ies) to which this work belongs to. (3 max)"
 }

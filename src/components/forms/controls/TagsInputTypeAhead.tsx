@@ -9,32 +9,37 @@ import { useAtom } from 'jotai';
 // import { SearchResult } from '../../../types';
 // import useCountries from '../../../useCountries';
 import styles from './TagsInputTypeAhead.module.css';
-import globalSearchEngineAtom from '../../../atoms/searchEngine';
+// import globalSearchEngineAtom from '../../../atoms/searchEngine';
 
 export type TagsInputProp = {
-  tags: string;
-  setTags?: (value: string) => void;
+  // tags: string;
+  // setTags?: (value: string) => void;
   label?: string;
   readOnly?: boolean | null;
   data: { code: string; label: string }[];
   items: string[];
+  setItems: (value: string[]) => void;
+  max?: number;
+  onTagCreated?: (e: { code: string; label: string }) => void;
+  onTagDeleted?: (code: string) => void;
 };
 
 const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
-  const { data, items } = props;
+  const { data, max = 5, onTagCreated, onTagDeleted } = props;
   const { t } = useTranslation('createWorkForm');
-  const { tags, setTags, label = '', readOnly = false } = props;
+  // const { tags, setTags, label = '', readOnly = false } = props;
+  const { items, setItems, label = '', readOnly = false } = props;
   const ref = useRef<Typeahead<{ code: string; label: string }>>(null);
-  const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
+  // const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
 
   // const [tagInput, setTagInput] = useState<string>('');
-  const [, setItems] = useState<string[]>([]);
+  // const [, setItems] = useState<string[]>([]);
   // const [isSearchLoading, setIsSearchLoading] = useState(false);
 
-  useEffect(() => {
-    if (tags) setItems(tags.split(','));
-    if (!tags) setItems([]);
-  }, [tags]);
+  // useEffect(() => {
+  //   if (tags) setItems(tags.split(','));
+  //   if (!tags) setItems([]);
+  // }, [tags]);
 
   // const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
   //   setTagInput(e.currentTarget.value);
@@ -49,9 +54,24 @@ const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputPr
       //   ...globalSearchEngineState,
       //   ...{ onlyByCountries },
       // });
-      if (setTags) setTags(items.join());
+      // if (setTags) setTags(items.join(','));
       ref.current!.clear();
+      if (onTagCreated) onTagCreated(e[0]);
     }
+  };
+
+  const deleteTag = (idx: number): void => {
+    const code = items.splice(idx, 1)[0];
+    setItems([...new Set(items)]);
+    // const onlyByCountries = [...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items])];
+    // const idxOBC = onlyByCountries.findIndex((i: string) => i === code);
+    // onlyByCountries.splice(idxOBC, 1);
+    // setGlobalSearchEngineState({
+    //   ...globalSearchEngineState,
+    //   ...{ onlyByCountries },
+    // });
+    // if (setTags) setTags(items.join(','));
+    if (onTagDeleted) onTagDeleted(code);
   };
 
   // useEffect(() => {
@@ -67,19 +87,6 @@ const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputPr
   //     (e.currentTarget as HTMLInputElement).value = '';
   //   }
   // };
-
-  const deleteTag = (idx: number): void => {
-    const code = items.splice(idx, 1)[0];
-    setItems([...new Set(items)]);
-    const onlyByCountries = [...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items])];
-    const idxOBC = onlyByCountries.findIndex((i: string) => i === code);
-    onlyByCountries.splice(idxOBC, 1);
-    setGlobalSearchEngineState({
-      ...globalSearchEngineState,
-      ...{ onlyByCountries },
-    });
-    if (setTags) setTags(items.join());
-  };
 
   // const handleSearchWorkOrCycle = async (query: string) => {
   //   setIsSearchWorkOrCycleLoading(true);
@@ -118,7 +125,7 @@ const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputPr
             </span>
           );
         })}
-        {!readOnly && items.length < 5 && data && data.length && (
+        {!readOnly && items.length < max && data && data.length && (
           <InputGroup>
             <Typeahead
               ref={ref}

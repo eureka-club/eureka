@@ -32,8 +32,7 @@ const CreateWorkForm: FunctionComponent = () => {
 
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [tags, setTags] = useState<string>('');
-  const [topicsTags, setTopicsTags] = useState<string>('');
-  const [items] = useState<string[]>([]);
+  const [items, setItems] = useState<string[]>([]);
 
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -157,7 +156,7 @@ const CreateWorkForm: FunctionComponent = () => {
       publicationYear: form.publicationYear.value.length ? form.publicationYear.value : null,
       length: form.workLength.value.length ? form.workLength.value : null,
       tags,
-      topics: items.join(),
+      topics: items.join(','),
     };
 
     await execCreateWork(payload);
@@ -211,29 +210,18 @@ const CreateWorkForm: FunctionComponent = () => {
               </FormGroup>
             </Col>
             <Col>
-              <FormGroup controlId="link">
-                <FormLabel>{t('linkFieldLabel')}</FormLabel>
-                <FormControl type="text" placeholder="http://" />
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
               <FormGroup controlId="workTitle">
                 <FormLabel>*{t('titleFieldLabel')}</FormLabel>
                 <FormControl type="text" required />
               </FormGroup>
             </Col>
+          </Row>
+          <Row>
             <Col>
               <FormGroup controlId="author">
                 <FormLabel>*{t('authorFieldLabel')}</FormLabel>
                 <FormControl type="text" required />
               </FormGroup>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <TagsInput tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
             </Col>
             <Col>
               <ImageFileSelect acceptedFileTypes="image/*" file={coverFile} setFile={setCoverFile} required>
@@ -253,14 +241,6 @@ const CreateWorkForm: FunctionComponent = () => {
                   </FormGroup>
                 )}
               </ImageFileSelect>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <FormGroup controlId="topics">
-                <FormLabel>{t('Topics')}</FormLabel>
-                <TagsInputTypeAhead data={topics} items={items} tags={topicsTags} setTags={setTopicsTags} />
-              </FormGroup>
             </Col>
           </Row>
           <Row>
@@ -335,6 +315,17 @@ const CreateWorkForm: FunctionComponent = () => {
           </Row>
           <Row>
             <Col>
+              <FormGroup controlId="link">
+                <FormLabel>{t('linkFieldLabel')}</FormLabel>
+                <FormControl type="text" placeholder="http://" />
+              </FormGroup>
+            </Col>
+            <Col>
+              <TagsInput tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
               <FormGroup controlId="authorGender">
                 <FormLabel>{t('authorGenderFieldLabel')}</FormLabel>
                 <FormControl as="select">
@@ -358,6 +349,16 @@ const CreateWorkForm: FunctionComponent = () => {
               </FormGroup>
             </Col>
           </Row>
+
+          <Row>
+            <Col>
+              <FormGroup controlId="topics">
+                <FormLabel>{t('topicsLabel')}</FormLabel>
+                <TagsInputTypeAhead data={topics} items={items} setItems={setItems} max={3} />
+              </FormGroup>
+            </Col>
+          </Row>
+
           <Row>
             <FormGroup controlId="description" as={Col}>
               <FormLabel>{t('workSummaryFieldLabel')}</FormLabel>

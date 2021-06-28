@@ -34,17 +34,19 @@ const SearchEngine: FunctionComponent = () => {
   // const router = useRouter();
   const { t } = useTranslation('searchEngine');
   const [tags, setTags] = useState<string>('');
-  const [items] = useState<string[]>([]);
+  const [items, setItems] = useState<string[]>([]);
   const [filtersChecked, setFiltersChecked] = useState<Record<string, boolean>>({});
   // const [onlyByCountries] = useState<string[]>([]);
   // const [countryQuery, setCountryQuery] = useState<string[] | undefined>([]);
   useEffect(() => {
+    // debugger;
     const onlyByCountries = [...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items])];
     setGlobalSearchEngineState({
       ...globalSearchEngineState,
       ...{ onlyByCountries },
     });
   }, [tags]);
+
   const fetchCountries = async () => {
     const res = await fetch(`/api/taxonomy/countries?q=all`);
     const { result = [] } = await res.json();
@@ -86,7 +88,7 @@ const SearchEngine: FunctionComponent = () => {
         ...{ countryQuery: [...globalSearchEngineState.countryQuery!, q] },
       });
     // setCountryQuery(globalSearchEngineState.countryQuery);
-    setTags('');
+    setItems([]);
   };
 
   // useEffect(() => {
@@ -257,7 +259,29 @@ const SearchEngine: FunctionComponent = () => {
             <Form.Label>
               <strong>{t('Countries')}</strong>
             </Form.Label>
-            <TagsInputTypeAhead data={countries} items={items} tags={tags} setTags={setTags} />
+            {/* <TagsInputTypeAhead data={countries} items={items} tags={tags} setTags={setTags} /> */}
+            <TagsInputTypeAhead
+              data={countries}
+              items={items}
+              setItems={setItems}
+              max={5}
+              onTagCreated={(e) => {
+                const onlyByCountries = [...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items])];
+                setGlobalSearchEngineState({
+                  ...globalSearchEngineState,
+                  ...{ onlyByCountries },
+                });
+              }}
+              onTagDeleted={(code) => {
+                const onlyByCountries = [...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items])];
+                const idxOBC = onlyByCountries.findIndex((i: string) => i === code);
+                onlyByCountries.splice(idxOBC, 1);
+                setGlobalSearchEngineState({
+                  ...globalSearchEngineState,
+                  ...{ onlyByCountries },
+                });
+              }}
+            />
           </PopoverContainer>
         </Col>
       </Row>

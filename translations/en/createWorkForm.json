@@ -3,7 +3,6 @@
   "titleEdit": "Edit work",
   "typeFieldLabel": "Type of work",
   "typeFieldPlaceholder": "select...",
-  
   "linkFieldLabel": "Link to work",
   "titleFieldLabel": "Title",
   "authorFieldLabel": "Author or director",
@@ -32,5 +31,6 @@
   "tagsInputPlaceholder": "Write a tag and press Enter or Comma",
   "Add a second origin country": "Add 2nd country",
   "Remove the second origin country": "Remove 2nd country",
-  "Topics":"Topics"
+  "Topics": "Topics",
+  "topicsLabel": "Help us organize our library by adding category(ies) to which this work belongs to. (3 max)"
 }

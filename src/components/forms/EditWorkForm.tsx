@@ -47,8 +47,7 @@ const EditWorkForm: FunctionComponent = () => {
   const [countryOrigin2, setCountryOrigin2] = useState<string | null>();
   const [hasCountryOrigin2, sethasCountryOrigin2] = useState<boolean>();
   const { data: topics } = useTopics();
-  const [topicsTags, setTopicsTags] = useState<string>('');
-  const [items] = useState<string[]>([]);
+  const [items, setItems] = useState<string[]>([]);
 
   const { locale } = useRouter();
   const [namespace, setNamespace] = useState<Record<string, string>>();
@@ -97,7 +96,11 @@ const EditWorkForm: FunctionComponent = () => {
   }, [router.query.id]);
 
   useEffect(() => {
-    if (work && work.countryOfOrigin2) setCountryOrigin2(work.countryOfOrigin2);
+    if (work) {
+      if (work.countryOfOrigin2) setCountryOrigin2(work.countryOfOrigin2);
+      // setTopicsTags(work.topics || '');
+      if (work.topics) items.push(...work.topics.split(','));
+    }
   }, [work]);
 
   const {
@@ -242,11 +245,25 @@ const EditWorkForm: FunctionComponent = () => {
                   <FormLabel>*{t('typeFieldLabel')}</FormLabel>
                   <FormControl as="select" required onChange={handleWorkTypeChange} defaultValue={work.type}>
                     <option value="">{t('typeFieldPlaceholder')}</option>
-                    <option value="book">{t('typeBook')}</option>
-                    <option value="fiction-book">{t('Fiction Book')}</option>
-                    <option value="documentary">{t('typeDocumentary')}</option>
-                    <option value="movie">{t('typeMovie')}</option>
+                    <option value="book">{t('common:book')}</option>
+                    <option value="fiction-book">{t('common:fiction-book')}</option>
+                    <option value="documentary">{t('common:documentary')}</option>
+                    <option value="movie">{t('common:movie')}</option>
                   </FormControl>
+                </FormGroup>
+              </Col>
+              <Col>
+                <FormGroup controlId="workTitle">
+                  <FormLabel>*{t('titleFieldLabel')}</FormLabel>
+                  <FormControl type="text" required defaultValue={work.title} />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <FormGroup controlId="author">
+                  <FormLabel>*{t('authorFieldLabel')}</FormLabel>
+                  <FormControl type="text" required defaultValue={work.author} />
                 </FormGroup>
               </Col>
               <Col>
@@ -258,52 +275,6 @@ const EditWorkForm: FunctionComponent = () => {
                     defaultValue={work.link?.toString()}
                     onChange={handlerchange}
                   />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <FormGroup controlId="workTitle">
-                  <FormLabel>*{t('titleFieldLabel')}</FormLabel>
-                  <FormControl type="text" required defaultValue={work.title} />
-                </FormGroup>
-              </Col>
-              <Col>
-                <FormGroup controlId="author">
-                  <FormLabel>*{t('authorFieldLabel')}</FormLabel>
-                  <FormControl type="text" required defaultValue={work.author} />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <TagsInput tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
-              </Col>
-              {/* <Col>
-                <ImageFileSelect acceptedFileTypes="image/*" file={coverFile} setFile={setCoverFile} required>
-                  {(imagePreview) => (
-                    <FormGroup>
-                      <FormLabel>*{t('imageCoverFieldLabel')}</FormLabel>
-                      <div className={styles.imageControl}>
-                        {coverFile != null && imagePreview != null ? (
-                          <>
-                            <span className={styles.imageName}>{coverFile?.name}</span>
-                            <img src={imagePreview} className="float-right" alt="Work cover" />
-                          </>
-                        ) : (
-                          t('imageCoverFieldPlaceholder')
-                        )}
-                      </div>
-                    </FormGroup>
-                  )}
-                </ImageFileSelect>
-              </Col> */}
-            </Row>
-            <Row>
-              <Col>
-                <FormGroup controlId="topics">
-                  <FormLabel>{t('Topics')}</FormLabel>
-                  <TagsInputTypeAhead data={topics} items={items} tags={topicsTags} setTags={setTopicsTags} />
                 </FormGroup>
               </Col>
             </Row>
@@ -380,6 +351,31 @@ const EditWorkForm: FunctionComponent = () => {
             </Row>
             <Row>
               <Col>
+                <TagsInput tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
+              </Col>
+              {/* <Col>
+                <ImageFileSelect acceptedFileTypes="image/*" file={coverFile} setFile={setCoverFile} required>
+                  {(imagePreview) => (
+                    <FormGroup>
+                      <FormLabel>*{t('imageCoverFieldLabel')}</FormLabel>
+                      <div className={styles.imageControl}>
+                        {coverFile != null && imagePreview != null ? (
+                          <>
+                            <span className={styles.imageName}>{coverFile?.name}</span>
+                            <img src={imagePreview} className="float-right" alt="Work cover" />
+                          </>
+                        ) : (
+                          t('imageCoverFieldPlaceholder')
+                        )}
+                      </div>
+                    </FormGroup>
+                  )}
+                </ImageFileSelect>
+              </Col> */}
+            </Row>
+
+            <Row>
+              <Col>
                 <FormGroup controlId="authorGender">
                   <FormLabel>{t('authorGenderFieldLabel')}</FormLabel>
                   <FormControl as="select" defaultValue={work.authorGender?.toString()}>
@@ -403,6 +399,15 @@ const EditWorkForm: FunctionComponent = () => {
                 </FormGroup>
               </Col>
             </Row>
+            <Row>
+              <Col>
+                <FormGroup controlId="topics">
+                  <FormLabel>{t('topicsLabel')}</FormLabel>
+                  <TagsInputTypeAhead data={topics} items={items} setItems={setItems} max={3} />
+                </FormGroup>
+              </Col>
+            </Row>
+
             <Row>
               <FormGroup controlId="description" as={Col}>
                 <FormLabel>{t('workSummaryFieldLabel')}</FormLabel>
