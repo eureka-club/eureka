@@ -31,5 +31,6 @@
   "submitButtonLabel": "Add work to library",
   "tagsInputPlaceholder": "Write a tag and press Enter or Comma",
   "Add a second origin country": "Add 2nd country",
-  "Remove the second origin country": "Remove 2nd country"
+  "Remove the second origin country": "Remove 2nd country",
+  "Topics":"Topics"
 }

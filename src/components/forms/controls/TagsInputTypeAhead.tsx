@@ -5,7 +5,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useAtom } from 'jotai';
-import { useQuery } from 'react-query';
+
 // import { SearchResult } from '../../../types';
 // import useCountries from '../../../useCountries';
 import styles from './TagsInputTypeAhead.module.css';
@@ -16,29 +16,19 @@ export type TagsInputProp = {
   setTags?: (value: string) => void;
   label?: string;
   readOnly?: boolean | null;
+  data: { code: string; label: string }[];
+  items: string[];
 };
 
 const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
+  const { data, items } = props;
   const { t } = useTranslation('createWorkForm');
   const { tags, setTags, label = '', readOnly = false } = props;
   const ref = useRef<Typeahead<{ code: string; label: string }>>(null);
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
-  const fetchCountries = async () => {
-    const res = await fetch(`/api/taxonomy/countries?q=all`);
-    const { result = [] } = await res.json();
-    const codes = result.map((i: { code: string; label: string }) => ({
-      code: i.code,
-      label: t(`countries:${i.code}`),
-    }));
-    return codes;
-  };
-
-  const { data: countries } = useQuery('COUNTRIESALL', fetchCountries, {
-    staleTime: 1000 * 60 * 60,
-  });
 
   // const [tagInput, setTagInput] = useState<string>('');
-  const [items, setItems] = useState<string[]>([]);
+  const [, setItems] = useState<string[]>([]);
   // const [isSearchLoading, setIsSearchLoading] = useState(false);
 
   useEffect(() => {
@@ -54,11 +44,11 @@ const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputPr
     if (e.length) {
       items.push(e[0].code);
       setItems([...new Set(items)]);
-      const onlyByCountries = [...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items])];
-      setGlobalSearchEngineState({
-        ...globalSearchEngineState,
-        ...{ onlyByCountries },
-      });
+      // const onlyByCountries = [...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items])];
+      // setGlobalSearchEngineState({
+      //   ...globalSearchEngineState,
+      //   ...{ onlyByCountries },
+      // });
       if (setTags) setTags(items.join());
       ref.current!.clear();
     }
@@ -128,7 +118,7 @@ const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputPr
             </span>
           );
         })}
-        {!readOnly && items.length < 5 && countries && countries.length && (
+        {!readOnly && items.length < 5 && data && data.length && (
           <InputGroup>
             <Typeahead
               ref={ref}
@@ -137,7 +127,7 @@ const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputPr
               labelKey={(res: { label: string }) => `${res.label}`}
               onChange={onNewTagAdded}
               // onKeyPress={onKeyPressOnInput}
-              options={countries}
+              options={data}
               className={styles.textInput}
             />
             <InputGroup.Append className={styles.searchButton}>

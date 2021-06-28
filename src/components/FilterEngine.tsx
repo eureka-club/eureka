@@ -1,11 +1,12 @@
 // import classNames from 'classnames';
 import { useAtom } from 'jotai';
+import { useQuery } from 'react-query';
 // import { useSession } from 'next-auth/client';
 // import Link from 'next/link';
 // import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 // import { setCookie } from 'nookies';
-import { FunctionComponent, ChangeEvent, useState } from 'react';
+import { FunctionComponent, ChangeEvent, useState, useEffect } from 'react';
 import { Container, Row, Col, Form } from 'react-bootstrap';
 // import { AsyncTypeahead, Typeahead } from 'react-bootstrap-typeahead';
 
@@ -33,9 +34,30 @@ const SearchEngine: FunctionComponent = () => {
   // const router = useRouter();
   const { t } = useTranslation('searchEngine');
   const [tags, setTags] = useState<string>('');
+  const [items] = useState<string[]>([]);
   const [filtersChecked, setFiltersChecked] = useState<Record<string, boolean>>({});
   // const [onlyByCountries] = useState<string[]>([]);
   // const [countryQuery, setCountryQuery] = useState<string[] | undefined>([]);
+  useEffect(() => {
+    const onlyByCountries = [...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items])];
+    setGlobalSearchEngineState({
+      ...globalSearchEngineState,
+      ...{ onlyByCountries },
+    });
+  }, [tags]);
+  const fetchCountries = async () => {
+    const res = await fetch(`/api/taxonomy/countries?q=all`);
+    const { result = [] } = await res.json();
+    const codes = result.map((i: { code: string; label: string }) => ({
+      code: i.code,
+      label: t(`countries:${i.code}`),
+    }));
+    return codes;
+  };
+
+  const { data: countries } = useQuery('COUNTRIESALL', fetchCountries, {
+    staleTime: 1000 * 60 * 60,
+  });
 
   const handlerComboxesChangeType = (e: ChangeEvent<HTMLInputElement>, type: string) => {
     let { only } = globalSearchEngineState;
@@ -235,7 +257,7 @@ const SearchEngine: FunctionComponent = () => {
             <Form.Label>
               <strong>{t('Countries')}</strong>
             </Form.Label>
-            <TagsInputTypeAhead tags={tags} setTags={setTags} />
+            <TagsInputTypeAhead data={countries} items={items} tags={tags} setTags={setTags} />
           </PopoverContainer>
         </Col>
       </Row>

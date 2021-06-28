@@ -19,12 +19,14 @@ import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 import { useMutation, useQueryClient } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
+import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import TagsInput from './controls/TagsInput';
 import { EditWorkClientPayload, WorkDetail } from '../../types/work';
 // import ImageFileSelect from './controls/ImageFileSelect';
 import globalModalsAtom from '../../atoms/globalModals';
 import styles from './CreateWorkForm.module.css';
 import i18nConfig from '../../../i18n';
+import useTopics from '../../useTopics';
 
 dayjs.extend(utc);
 const EditWorkForm: FunctionComponent = () => {
@@ -44,6 +46,9 @@ const EditWorkForm: FunctionComponent = () => {
   const [countryOrigin, setCountryOrigin] = useState<string>();
   const [countryOrigin2, setCountryOrigin2] = useState<string | null>();
   const [hasCountryOrigin2, sethasCountryOrigin2] = useState<boolean>();
+  const { data: topics } = useTopics();
+  const [topicsTags, setTopicsTags] = useState<string>('');
+  const [items] = useState<string[]>([]);
 
   const { locale } = useRouter();
   const [namespace, setNamespace] = useState<Record<string, string>>();
@@ -151,6 +156,7 @@ const EditWorkForm: FunctionComponent = () => {
       publicationYear: form.publicationYear.value.length ? form.publicationYear.value : null,
       length: form.workLength.value.length ? form.workLength.value : null,
       tags,
+      topics: items.join(),
     };
 
     await execEditWork(payload);
@@ -177,11 +183,11 @@ const EditWorkForm: FunctionComponent = () => {
   const handleSearchCountry = async (query: string) => {
     setIsCountriesSearchLoading(true);
     const response = await fetch(`/api/taxonomy/countries?q=${query}`);
-    const items: { id: number; code: string; label: string }[] = (await response.json()).result;
-    items.forEach((i, idx: number) => {
-      items[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
+    const itemsSC: { id: number; code: string; label: string }[] = (await response.json()).result;
+    itemsSC.forEach((i, idx: number) => {
+      itemsSC[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
     });
-    setCountrySearchResults(items);
+    setCountrySearchResults(itemsSC);
     setIsCountriesSearchLoading(false);
   };
 
@@ -211,11 +217,11 @@ const EditWorkForm: FunctionComponent = () => {
   const handleSearchCountry2 = async (query: string) => {
     setIsCountriesSearchLoading2(true);
     const response = await fetch(`/api/taxonomy/countries?q=${query}`);
-    const items: { id: number; code: string; label: string }[] = (await response.json()).result;
-    items.forEach((i, idx: number) => {
-      items[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
+    const itemsSC2: { id: number; code: string; label: string }[] = (await response.json()).result;
+    itemsSC2.forEach((i, idx: number) => {
+      itemsSC2[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
     });
-    setCountrySearchResults(items);
+    setCountrySearchResults(itemsSC2);
     setIsCountriesSearchLoading2(false);
   };
 
@@ -292,6 +298,14 @@ const EditWorkForm: FunctionComponent = () => {
                   )}
                 </ImageFileSelect>
               </Col> */}
+            </Row>
+            <Row>
+              <Col>
+                <FormGroup controlId="topics">
+                  <FormLabel>{t('Topics')}</FormLabel>
+                  <TagsInputTypeAhead data={topics} items={items} tags={topicsTags} setTags={setTopicsTags} />
+                </FormGroup>
+              </Col>
             </Row>
             <Row>
               <Col>

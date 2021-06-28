@@ -132,6 +132,7 @@ model Work {
   tags         String?
 
   terms        Term[]    @relation("TaxonomyTermWork")
+  topics       String?
   
   @@index([title], name: "works_title_index")
   @@index([author], name: "works_author_index")

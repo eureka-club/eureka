@@ -3,7 +3,6 @@
   "titleEdit": "Editar obra",
   "typeFieldLabel": "Tipo de obra",
   "typeFieldPlaceholder": "seleccionar...",
-
   "linkFieldLabel": "Enlace a la obra",
   "titleFieldLabel": "Título",
   "authorFieldLabel": "Autoría",
@@ -31,5 +30,6 @@
   "submitButtonLabel": "Agregar la obra",
   "tagsInputPlaceholder": "Escribe una etiqueta y presione Enter o Coma",
   "Add a second origin country": "Agregar 2o país",
-  "Remove the second origin country": "Eliminar 2o país"
+  "Remove the second origin country": "Eliminar 2o país",
+  "Topics": "Topics"
 }

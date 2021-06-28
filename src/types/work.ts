@@ -36,6 +36,7 @@ export interface CreateWorkClientPayload {
   publicationYear: string | null;
   length: string | null;
   tags: string;
+  topics: string;
 }
 
 export interface CreateWorkServerFields {
@@ -51,6 +52,7 @@ export interface CreateWorkServerFields {
   publicationYear?: string[];
   length?: string[];
   tags: string;
+  topics: string;
   creatorId: number;
 }
 
@@ -67,6 +69,7 @@ export interface CreateWorkServerPayload {
   publicationYear?: Date;
   length?: string;
   tags: string;
+  topics: string;
   creatorId: number;
 }
 
@@ -85,4 +88,5 @@ export interface EditWorkClientPayload {
   publicationYear?: string | null;
   length?: string | null;
   tags?: string;
+  topics?: string;
 }

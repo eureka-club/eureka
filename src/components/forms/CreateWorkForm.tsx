@@ -18,6 +18,8 @@ import Spinner from 'react-bootstrap/Spinner';
 import { useMutation, useQueryClient } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import TagsInput from './controls/TagsInput';
+import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
+import useTopics from '../../useTopics';
 
 import { CreateWorkClientPayload } from '../../types/work';
 import ImageFileSelect from './controls/ImageFileSelect';
@@ -30,6 +32,9 @@ const CreateWorkForm: FunctionComponent = () => {
 
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [tags, setTags] = useState<string>('');
+  const [topicsTags, setTopicsTags] = useState<string>('');
+  const [items] = useState<string[]>([]);
+
   const queryClient = useQueryClient();
   const router = useRouter();
   const { t } = useTranslation('createWorkForm');
@@ -41,6 +46,7 @@ const CreateWorkForm: FunctionComponent = () => {
   const [countryOrigin, setCountryOrigin] = useState<string>();
   const [hasCountryOrigin2, setHasCountryOrigin2] = useState<boolean>();
   const [countryOrigin2, setCountryOrigin2] = useState<string>();
+  const { data: topics } = useTopics();
 
   const {
     mutate: execCreateWork,
@@ -93,22 +99,22 @@ const CreateWorkForm: FunctionComponent = () => {
   const handleSearchCountry = async (query: string) => {
     setIsCountriesSearchLoading(true);
     const response = await fetch(`/api/taxonomy/countries?q=${query}`);
-    const items: { id: number; code: string; label: string }[] = (await response.json()).result;
-    items.forEach((i, idx: number) => {
-      items[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
+    const itemsSC: { id: number; code: string; label: string }[] = (await response.json()).result;
+    itemsSC.forEach((i, idx: number) => {
+      itemsSC[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
     });
-    setCountrySearchResults(items);
+    setCountrySearchResults(itemsSC);
     setIsCountriesSearchLoading(false);
   };
 
   const handleSearchCountry2 = async (query: string) => {
     setIsCountriesSearchLoading2(true);
     const response = await fetch(`/api/taxonomy/countries?q=${query}`);
-    const items: { id: number; code: string; label: string }[] = (await response.json()).result;
-    items.forEach((i, idx: number) => {
-      items[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
+    const itemsC: { id: number; code: string; label: string }[] = (await response.json()).result;
+    itemsC.forEach((i, idx: number) => {
+      itemsC[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
     });
-    setCountrySearchResults(items);
+    setCountrySearchResults(itemsC);
     setIsCountriesSearchLoading2(false);
   };
 
@@ -151,6 +157,7 @@ const CreateWorkForm: FunctionComponent = () => {
       publicationYear: form.publicationYear.value.length ? form.publicationYear.value : null,
       length: form.workLength.value.length ? form.workLength.value : null,
       tags,
+      topics: items.join(),
     };
 
     await execCreateWork(payload);
@@ -170,6 +177,16 @@ const CreateWorkForm: FunctionComponent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
+  // const onNewTagAdded = (e: { code: string; label: string }[]) => {
+  //   if (e.length) {
+  //     // topicsTags.push(e[0].code);
+  //     // setTopicsTags([...new Set(topicsTags)]);
+
+  //     // if (setTags) setTags(items.join());
+  //     refTopics.current!.clear();
+  //   }
+  // };
+
   return (
     <Form onSubmit={handleSubmit}>
       <ModalHeader closeButton>
@@ -186,10 +203,10 @@ const CreateWorkForm: FunctionComponent = () => {
                 <FormLabel>*{t('typeFieldLabel')}</FormLabel>
                 <FormControl as="select" required onChange={handleWorkTypeChange}>
                   <option value="">{t('typeFieldPlaceholder')}</option>
-                  <option value="book">{t('typeBook')}</option>
-                  <option value="fiction-book">{t('Fiction Book')}</option>
-                  <option value="documentary">{t('typeDocumentary')}</option>
-                  <option value="movie">{t('typeMovie')}</option>
+                  <option value="book">{t('common:book')}</option>
+                  <option value="fiction-book">{t('common:fiction-book')}</option>
+                  <option value="documentary">{t('common:documentary')}</option>
+                  <option value="movie">{t('common:movie')}</option>
                 </FormControl>
               </FormGroup>
             </Col>
@@ -236,6 +253,14 @@ const CreateWorkForm: FunctionComponent = () => {
                   </FormGroup>
                 )}
               </ImageFileSelect>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <FormGroup controlId="topics">
+                <FormLabel>{t('Topics')}</FormLabel>
+                <TagsInputTypeAhead data={topics} items={items} tags={topicsTags} setTags={setTopicsTags} />
+              </FormGroup>
             </Col>
           </Row>
           <Row>
