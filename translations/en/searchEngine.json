@@ -5,13 +5,13 @@
   "Films": "Films",
   "Books": "Books",
   "Fiction/nonfiction": "Fiction/nonfiction",
+  "Fiction books": "Fiction books",
+  "Nofictions books": "Nofictions books",
+  "Movies": "Fiction movies",
+  "Documentaries": "Documentaries",
   "Geography": "Geography",
   "Regions": "Regions",
   "Countries": "Countries",
   "See all results": "See all results",
-  "Not found": "Not found",
-  "Fiction books": "Fiction books",
-  "Nofictions books": "Nofictions books",
-  "Movies": "Movies",
-  "Documentary": "Documentary"
+  "Not found": "Not found"
 }

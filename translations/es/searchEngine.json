@@ -4,14 +4,14 @@
   "Eurekas": "Eurekas",
   "Films": "Filmes",
   "Books": "Libros",
-  "Fiction/nonfiction": "Ficción/no-ficciónn",
+  "Fiction/nonfiction": "Ficción/no-ficción",
+  "Nofictions books": "Libros no-ficción",
+  "Movies": "Películas ficción",
+  "Documentaries": "Documentales",
   "Geography": "Geografía",
   "Regions": "Regiones",
   "Countries": "Países",
   "See all results": "Ver todos los resultados",
-  "Not found": "No se encontró el recurso",
-  "Fiction books": "Libros de Ficción",
-  "Nofictions books": "Libros",
-  "Movies": "Películas",
-  "Documentary": "Documentales"
+  "Not found": "No encontrado",
+  "Fiction books": "Libros ficción"
 }
