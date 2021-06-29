@@ -213,6 +213,7 @@ model Post {
   favs         User[]    @relation("PostToFavs")
 
   terms        Term[]    @relation("TaxonomyTermPost")
+  topics       String?
 
   @@index([creatorId], name: "posts_creator_id_index")
 

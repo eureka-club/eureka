@@ -20,6 +20,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BsFillXCircleFill } from 'react-icons/bs';
 import { useMutation, useQueryClient } from 'react-query';
+import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
@@ -32,6 +33,7 @@ import CycleTypeaheadSearchItem from '../cycle/TypeaheadSearchItem';
 import WorkTypeaheadSearchItem from '../work/TypeaheadSearchItem';
 import globalModalsAtom from '../../atoms/globalModals';
 import styles from './CreatePostForm.module.css';
+import useTopics from '../../useTopics';
 
 const EditPostForm: FunctionComponent = () => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -43,6 +45,8 @@ const EditPostForm: FunctionComponent = () => {
   const [selectedWork, setSelectedWork] = useState<WorkWithImages | null>(null);
   const [post, setPost] = useState<PostDetail | null>(null);
   // const [imageFile, setImageFile] = useState<File | null>(null);
+  const { data: topics } = useTopics();
+  const [items, setItems] = useState<string[]>([]);
 
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
   const queryClient = useQueryClient();
@@ -62,6 +66,10 @@ const EditPostForm: FunctionComponent = () => {
     };
     fetchPost();
   }, [router.query.postId]);
+
+  useEffect(() => {
+    if (post && post.topics) items.push(...post.topics.split(','));
+  }, [post]);
 
   const {
     mutate: execEditPost,
@@ -83,9 +91,9 @@ const EditPostForm: FunctionComponent = () => {
 
     const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
     const response = await fetch(`/api/search/works-or-cycles?q=${query}&include=${includeQP}`);
-    const items: SearchResult[] = await response.json();
+    const itemsSWC: SearchResult[] = await response.json();
 
-    setSearchWorkOrCycleResults(items);
+    setSearchWorkOrCycleResults(itemsSWC);
     setIsSearchWorkOrCycleLoading(false);
   };
 
@@ -101,9 +109,9 @@ const EditPostForm: FunctionComponent = () => {
 
     setIsSearchCycleLoading(true);
     const response = await fetch(`/api/search/cycles?${criteria}&include=${includeQP}`);
-    const items: CycleWithImages[] = await response.json();
+    const itemsSCL: CycleWithImages[] = await response.json();
 
-    setSearchCycleResults(items);
+    setSearchCycleResults(itemsSCL);
     setIsSearchCycleLoading(false);
   };
 
@@ -157,6 +165,7 @@ const EditPostForm: FunctionComponent = () => {
         language: form.language.value,
         contentText: form.description.value.length ? form.description.value : null,
         isPublic: form.isPublic.checked,
+        topics: items.join(','),
       };
       await execEditPost(payload);
     } else if (selectedCycle != null) {
@@ -169,6 +178,7 @@ const EditPostForm: FunctionComponent = () => {
         language: form.language.value,
         contentText: form.description.value.length ? form.description.value : null,
         isPublic: form.isPublic.checked,
+        topics: items.join(','),
       };
       await execEditPost(payload);
     }
@@ -339,6 +349,14 @@ const EditPostForm: FunctionComponent = () => {
                 <small style={{ color: 'lightgrey', position: 'relative', top: '-0.75rem' }}>
                   {t('searchCycleInfotip')}
                 </small>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <FormGroup controlId="topics">
+                  <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel>
+                  <TagsInputTypeAhead data={topics} items={items} setItems={setItems} max={3} />
+                </FormGroup>
               </Col>
             </Row>
             <Row>

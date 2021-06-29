@@ -103,6 +103,7 @@ export const createFromServerFields = async (
       contentText: payload.contentText,
       language: payload.language,
       isPublic: payload.isPublic,
+      topics: payload.topics,
       creator: { connect: { id: creator.id } },
       localImages: {
         connectOrCreate: {
