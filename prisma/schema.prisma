@@ -187,6 +187,7 @@ model Cycle {
   tags                    String?
 
   terms        Term[]    @relation("TaxonomyTermCycle")
+  topics       String?
 
   @@index([creatorId], name: "cycles_creator_id_index")
   @@index([title], name: "cycles_title_index")

@@ -21,6 +21,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { useMutation } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BiTrash } from 'react-icons/bi';
+import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { DATE_FORMAT_PROPS, DATE_FORMAT_SHORT_MONTH_YEAR } from '../../constants';
@@ -32,6 +33,7 @@ import LanguageSelect from './controls/LanguageSelect';
 import WorkTypeaheadSearchItem from '../work/TypeaheadSearchItem';
 import styles from './CreateCycleForm.module.css';
 import TagsInput from './controls/TagsInput';
+import useTopics from '../../useTopics';
 
 interface Props {
   className?: string;
@@ -63,6 +65,10 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const [complementaryMaterialFileOversizeError, setComplementaryMaterialFileOversizeError] = useState(false);
   const [complementaryMaterials, setComplementaryMaterials] = useState<ComplementaryMaterial[]>([]);
   const [tags, setTags] = useState<string>('');
+  const [items, setItems] = useState<string[]>([]);
+
+  const { data: topics } = useTopics();
+
   const {
     mutate: execCreateCycle,
     data: newCycleData,
@@ -176,9 +182,9 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
     const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
     const response = await fetch(`/api/search/works?q=${query}&include=${includeQP}`);
-    const items: WorkWithImages[] = await response.json();
+    const itemsSW: WorkWithImages[] = await response.json();
 
-    setWorkSearchResults(items);
+    setWorkSearchResults(itemsSW);
     setIsWorkSearchLoading(false);
   };
 
@@ -256,6 +262,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
       countryOfOrigin: countryOrigin,
       contentText: form.description.value,
       complementaryMaterials,
+      topics: items.join(','),
     };
 
     await execCreateCycle(payload);
@@ -273,11 +280,11 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const handleSearchCountry = async (query: string) => {
     setIsCountriesSearchLoading(true);
     const response = await fetch(`/api/taxonomy/countries?q=${query}`);
-    const items: { id: number; code: string; label: string }[] = (await response.json()).result;
-    items.forEach((i, idx: number) => {
-      items[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
+    const itemsSC: { id: number; code: string; label: string }[] = (await response.json()).result;
+    itemsSC.forEach((i, idx: number) => {
+      itemsSC[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
     });
-    setCountrySearchResults(items);
+    setCountrySearchResults(itemsSC);
     setIsCountriesSearchLoading(false);
   };
 
@@ -434,6 +441,12 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 // renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work} />}
               />
             </FormGroup>
+
+            <FormGroup controlId="topics">
+              <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel>
+              <TagsInputTypeAhead data={topics} items={items} setItems={setItems} max={3} />
+            </FormGroup>
+
             <FormGroup controlId="description">
               <FormLabel>*{t('newCyclePitchLabel')}</FormLabel>
               <FormControl as="textarea" rows={5} required />

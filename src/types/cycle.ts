@@ -41,6 +41,7 @@ export interface CreateCycleClientPayload {
   endDate: string;
   contentText: string;
   complementaryMaterials: ComplementaryMaterial[];
+  topics?: string;
 }
 
 export interface EditCycleClientPayload {
@@ -56,6 +57,7 @@ export interface EditCycleClientPayload {
   contentText?: string;
   complementaryMaterials?: ComplementaryMaterial[];
   tags?: string;
+  topics?: string;
 }
 
 export interface CreateCycleServerFields {
@@ -80,6 +82,7 @@ export interface EditCycleServerFields {
   countryOfOrigin?: string[];
   contentText?: string[];
   tags?: string;
+  topics?: string;
 }
 
 export interface CreateCycleServerPayload {
@@ -102,4 +105,5 @@ export interface EditCycleServerPayload {
   endDate?: Date;
   countryOfOrigin?: string;
   tags?: string;
+  topics?: string;
 }

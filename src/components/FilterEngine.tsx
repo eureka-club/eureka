@@ -181,7 +181,7 @@ const SearchEngine: FunctionComponent = () => {
               <Form.Check
                 className={styles.filter}
                 type="checkbox"
-                label={t('Documentary')}
+                label={t('Documentaries')}
                 checked={filtersChecked.documentary}
                 onChange={(e) => handlerComboxesChangeType(e, 'documentary')}
               />

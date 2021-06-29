@@ -22,8 +22,10 @@ import { useMutation } from 'react-query';
 // import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 // import { BiTrash } from 'react-icons/bi';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
+import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import TagsInput from './controls/TagsInput';
 import i18nConfig from '../../../i18n';
+import useTopics from '../../useTopics';
 
 import {
   DATE_FORMAT_PROPS,
@@ -72,6 +74,8 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
   const [countrySearchResults, setCountrySearchResults] = useState<{ id: number; code: string; label: string }[]>([]);
   const [tags, setTags] = useState<string>('');
   const [namespace, setNamespace] = useState<Record<string, string>>();
+  const { data: topics } = useTopics();
+  const [items, setItems] = useState<string[]>([]);
 
   useEffect(() => {
     setTags(cycle.tags!);
@@ -80,6 +84,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
       setNamespace(r);
     };
     fn();
+    if (cycle.topics) items.push(...cycle.topics.split(','));
   }, []);
 
   const {
@@ -254,6 +259,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
       contentText: form.description.value,
       // complementaryMaterials,
       tags,
+      topics: items.join(','),
     };
 
     await execEditCycle(payload);
@@ -278,11 +284,11 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
   const handleSearchCountry = async (query: string) => {
     setIsCountriesSearchLoading(true);
     const response = await fetch(`/api/taxonomy/countries?q=${query}`);
-    const items: { id: number; code: string; label: string }[] = (await response.json()).result;
-    items.forEach((i, idx: number) => {
-      items[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
+    const itemsSC: { id: number; code: string; label: string }[] = (await response.json()).result;
+    itemsSC.forEach((i, idx: number) => {
+      itemsSC[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
     });
-    setCountrySearchResults(items);
+    setCountrySearchResults(itemsSC);
     setIsCountriesSearchLoading(false);
   };
 
@@ -451,6 +457,10 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
                   onChange={handleSearchCountrySelect}
                   placeholder={namespace && cycle.countryOfOrigin ? namespace[cycle.countryOfOrigin] : ''}
                 />
+              </FormGroup>
+              <FormGroup controlId="topics">
+                <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel>
+                <TagsInputTypeAhead data={topics} items={items} setItems={setItems} max={3} />
               </FormGroup>
               <FormGroup controlId="description">
                 <FormLabel>*{t('newCyclePitchLabel')}</FormLabel>
