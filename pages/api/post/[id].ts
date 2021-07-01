@@ -66,7 +66,8 @@ export default getApiHandler()
     try {
       const post = await find(idNum);
       if (post == null) {
-        res.status(404).end();
+        // res.status(404).end();
+        res.status(200).json({ status: 'OK', post: null });
         return;
       }
 

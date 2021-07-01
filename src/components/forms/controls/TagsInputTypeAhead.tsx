@@ -131,7 +131,7 @@ const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputPr
               ref={ref}
               id="TagsInputTypeAhead"
               filterBy={['label']}
-              labelKey={(res: { label: string }) => `${res.label}`}
+              labelKey={(res: { code: string }) => `${t(`topics:${res.code}`)}`}
               onChange={onNewTagAdded}
               // onKeyPress={onKeyPressOnInput}
               options={data}

@@ -4,7 +4,7 @@ module.exports = {
   locales: ['es', 'en', 'fr', 'pt'],
   defaultLocale: 'es',
   pages: {
-    '*': ['common', 'createWorkForm', 'createPostForm', 'navbar', 'signInForm', 'singInMail', 'searchEngine'],
+    '*': ['common', 'createWorkForm', 'createPostForm', 'navbar', 'signInForm', 'singInMail', 'searchEngine', 'topics'],
     '/': ['countries'],
     '/auth/emailVerify': ['common', 'emailVerify'],
     '/work/\\[id]\\': ['common', 'createWorkForm', 'editWorkForm'],

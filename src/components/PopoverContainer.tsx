@@ -46,7 +46,7 @@ const PopoverContainer: FunctionComponent<Props> = (props) => {
         placement="bottom"
         overlay={
           <Popover id="popover-positioned-bottom" className={className}>
-            <Popover.Title as="h3">{title}</Popover.Title>
+            {/* <Popover.Title as="h3">{title}</Popover.Title> */}
             <Popover.Content>{children}</Popover.Content>
           </Popover>
         }

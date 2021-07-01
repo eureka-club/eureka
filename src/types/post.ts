@@ -20,6 +20,7 @@ export type PostDetail = Prisma.PostGetPayload<{
     creator: true;
     localImages: true;
     cycles: { include: { localImages: true } };
+    works: true;
     likes: true;
     favs: true;
   };

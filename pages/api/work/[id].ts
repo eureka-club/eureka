@@ -97,7 +97,8 @@ export default getApiHandler()
 
     const idNum = parseInt(id, 10);
     if (!Number.isInteger(idNum)) {
-      res.status(404).end();
+      // res.status(404).end();
+      res.status(200).json({ status: 'OK', work: null });
       return;
     }
 

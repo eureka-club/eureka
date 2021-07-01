@@ -14,6 +14,7 @@ import {
   findParticipant,
 } from '../../../../src/facades/cycle';
 import { isFavoritedByUser, isLikedByUser, search as searchPost } from '../../../../src/facades/post';
+import { WorkDetail } from '../../../../src/types/work';
 
 interface Props {
   cycle: CycleDetail;
@@ -39,6 +40,7 @@ const PostDetailInCyclePage: NextPage<Props> = ({
       <CycleDetailComponent
         cycle={cycle}
         post={post}
+        work={post.works[0] as WorkDetail}
         isCurrentUserJoinedToCycle={isCurrentUserJoinedToCycle}
         participantsCount={participantsCount}
         postsCount={postsCount}
@@ -79,6 +81,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
     include: JSON.stringify({
       creator: true,
       cycles: true,
+      works: true,
       localImages: true,
       favs: true,
       likes: true,

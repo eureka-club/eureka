@@ -23,6 +23,8 @@ import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, HYVOR_WEBSITE_ID, WEBAPP
 import { MySocialInfo, Session } from '../../types';
 import { CycleDetail } from '../../types/cycle';
 import { PostDetail } from '../../types/post';
+import { WorkDetail } from '../../types/work';
+
 import LocalImageComponent from '../LocalImage';
 import PostDetailComponent from '../post/PostDetail';
 import CycleSummary from './CycleSummary';
@@ -37,6 +39,7 @@ import styles from './CycleDetail.module.css';
 interface Props {
   cycle: CycleDetail;
   post?: PostDetail;
+  work?: WorkDetail;
   isCurrentUserJoinedToCycle: boolean;
   participantsCount: number;
   postsCount: number;
@@ -47,6 +50,7 @@ interface Props {
 const CycleDetailComponent: FunctionComponent<Props> = ({
   cycle,
   post,
+  work,
   isCurrentUserJoinedToCycle,
   participantsCount,
   postsCount,
@@ -176,7 +180,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
             </Col>
           </>
         ) : (
-          <PostDetailComponent post={post} cycle={cycle} mySocialInfo={mySocialInfo} />
+          <PostDetailComponent post={post} cycle={cycle} work={work} mySocialInfo={mySocialInfo} />
         )}
       </Row>
 
