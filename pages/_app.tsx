@@ -15,7 +15,16 @@ import './_app.css';
 
 const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   const { initialState } = pageProps;
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+          },
+        },
+      }),
+  );
   return (
     <StrictMode>
       <NextAuthProvider session={pageProps.session}>

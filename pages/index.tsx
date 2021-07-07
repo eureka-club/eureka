@@ -22,6 +22,8 @@ import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import Mosaic from '../src/components/Mosaic';
 // import SearchEngine from '../src/components/SearchEngine';
 import FilterEngine from '../src/components/FilterEngine';
+import Carousel from '../src/components/Carousel';
+
 import useWorks from '../src/useWorks';
 import useCycles from '../src/useCycles';
 import useCountries from '../src/useCountries';
@@ -57,27 +59,27 @@ import useCountries from '../src/useCountries';
 
 const IndexPage: NextPage = () => {
   const { t } = useTranslation('common');
-  const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
+  // const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
 
-  const { isLoading, /* isError, error, */ data: works } = useWorks();
-  const { isLoading: isLoadingCycles, /* isError: isErrorCycles, error: errorCycles, */ data: cycles } = useCycles();
-  const { data: onlyByCountriesAux } = useCountries();
+  // const { isLoading, /* isError, error, */ data: works } = useWorks();
+  // const { isLoading: isLoadingCycles, /* isError: isErrorCycles, error: errorCycles, */ data: cycles } = useCycles();
+  // const { data: onlyByCountriesAux } = useCountries();
 
-  const [homepageMosaicData, setHomepageMosaicData] = useState<
-    ((CycleMosaicItem & { type: string }) | WorkMosaicItem)[]
-  >([]);
+  // const [homepageMosaicData, setHomepageMosaicData] = useState<
+  //   ((CycleMosaicItem & { type: string }) | WorkMosaicItem)[]
+  // >([]);
 
-  useEffect(() => {
-    if (works || cycles /* || posts */) {
-      const w = works ? works.data : [];
-      const c = cycles ? cycles.data : [];
-      // const p = posts ? posts.data : [];
-      const res = [...w, ...c /* , ...p */].sort(
-        (i, j) => +(new Date(i.createdAt).getTime() >= new Date(j.createdAt).getTime() && -1),
-      );
-      setHomepageMosaicData(res);
-    }
-  }, [works, cycles /* , posts */]);
+  // useEffect(() => {
+  //   if (works || cycles /* || posts */) {
+  //     const w = works ? works.data : [];
+  //     const c = cycles ? cycles.data : [];
+  //     // const p = posts ? posts.data : [];
+  //     const res = [...w, ...c /* , ...p */].sort(
+  //       (i, j) => +(new Date(i.createdAt).getTime() >= new Date(j.createdAt).getTime() && -1),
+  //     );
+  //     setHomepageMosaicData(res);
+  //   }
+  // }, [works, cycles /* , posts */]);
 
   /* type FilterWhere = {
     where: {
@@ -95,68 +97,73 @@ const IndexPage: NextPage = () => {
     work?: FilterWhere;
   }; */
 
-  const [homepageMosaicDataFiltered, setHomepageMosaicDataFiltered] = useState<
-    ((CycleMosaicItem & { type: string }) | WorkMosaicItem)[]
-  >([]);
-
-  useEffect(() => {
-    setGlobalSearchEngineState({
-      ...globalSearchEngineState,
-      ...{ onlyByCountries: onlyByCountriesAux },
-    });
-  }, [onlyByCountriesAux]);
-
-  useEffect(() => {
-    if (homepageMosaicData) {
-      const { only, onlyByCountries } = globalSearchEngineState;
-      let filtered = null;
-      if (only.length) {
-        filtered = homepageMosaicData.filter((i) => {
-          return only.includes(i.type);
-        });
-        setHomepageMosaicDataFiltered([...filtered]);
-      }
-      if (onlyByCountries && onlyByCountries.length) {
-        filtered = (filtered || homepageMosaicData).filter((i) => {
-          if (i.type !== 'cycle')
-            return (
-              onlyByCountries.includes((i as WorkMosaicItem).countryOfOrigin as string) ||
-              onlyByCountries.includes((i as WorkMosaicItem).countryOfOrigin2 as string)
-            );
-          return false;
-        });
-        setHomepageMosaicDataFiltered([...filtered]);
-      }
-      if (!filtered) {
-        setHomepageMosaicDataFiltered([...homepageMosaicData]);
-      }
-    }
-  }, [homepageMosaicData, globalSearchEngineState]);
+  // const [homepageMosaicDataFiltered, setHomepageMosaicDataFiltered] = useState<
+  //   ((CycleMosaicItem & { type: string }) | WorkMosaicItem)[]
+  // >([]);
 
   // useEffect(() => {
-  //   if (globalSearchEngineState.q) {
-  //     const { q } = globalSearchEngineState;
-  //     const where = JSON.stringify({ title: { contains: q } });
-  //     setGlobalSearchEngineState({ ...globalSearchEngineState, where });
-  //   }
-  // }, [globalSearchEngineState]);
+  //   setGlobalSearchEngineState({
+  //     ...globalSearchEngineState,
+  //     ...{ onlyByCountries: onlyByCountriesAux },
+  //   });
+  // }, [onlyByCountriesAux]);
 
-  const genLoadingCmp = (): ReactElement => {
-    if (isLoading || isLoadingCycles)
-      return (
-        <Spinner animation="border" role="status">
-          <span className="sr-only">{t('Loading')}</span>
-        </Spinner>
-      );
-    return <span>{`${''}`}</span>;
-  };
+  // useEffect(() => {
+  //   if (homepageMosaicData) {
+  //     const { only, onlyByCountries } = globalSearchEngineState;
+  //     let filtered = null;
+  //     if (only.length) {
+  //       filtered = homepageMosaicData.filter((i) => {
+  //         return only.includes(i.type);
+  //       });
+  //       setHomepageMosaicDataFiltered([...filtered]);
+  //     }
+  //     if (onlyByCountries && onlyByCountries.length) {
+  //       filtered = (filtered || homepageMosaicData).filter((i) => {
+  //         if (i.type !== 'cycle')
+  //           return (
+  //             onlyByCountries.includes((i as WorkMosaicItem).countryOfOrigin as string) ||
+  //             onlyByCountries.includes((i as WorkMosaicItem).countryOfOrigin2 as string)
+  //           );
+  //         return false;
+  //       });
+  //       setHomepageMosaicDataFiltered([...filtered]);
+  //     }
+  //     if (!filtered) {
+  //       setHomepageMosaicDataFiltered([...homepageMosaicData]);
+  //     }
+  //   }
+  // }, [homepageMosaicData, globalSearchEngineState]);
+
+  // const genLoadingCmp = (): ReactElement => {
+  //   if (isLoading || isLoadingCycles)
+  //     return (
+  //       <Spinner animation="border" role="status">
+  //         <span className="sr-only">{t('Loading')}</span>
+  //       </Spinner>
+  //     );
+  //   return <span>{`${''}`}</span>;
+  // };
 
   return (
     <SimpleLayout title={t('browserTitleWelcome')}>
-      <h1 className={styles.title}>{t('Results about')}</h1>
-      <FilterEngine />
-      <Mosaic stack={homepageMosaicDataFiltered} />
-      {genLoadingCmp()}
+      {/* <h1 className={styles.title}>{t('Results about')}</h1> */}
+      <h1 className={styles.title}>{t('Trending topics')}</h1>
+      {/* <FilterEngine /> */}
+      {/* <Mosaic stack={homepageMosaicDataFiltered} /> */}
+      {/* {genLoadingCmp()} */}
+
+      <Carousel topic="environment" />
+      <Carousel topic="gender-feminisms" />
+      <Carousel topic="history" />
+      <Carousel topic="introspection" />
+
+      <Carousel topic="politics-economics" />
+      <Carousel topic="racism-discrimination" />
+      <Carousel topic="social issues" />
+      <Carousel topic="sciences" />
+      <Carousel topic="technology" />
+      <Carousel topic="uncategorized" topicLabel={t('uncategorized')} />
     </SimpleLayout>
   );
 };

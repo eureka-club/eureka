@@ -1,0 +1,28 @@
+.masonry {
+  margin-left: -25px; /* gutter size */
+}
+
+.masonryColumn {
+  border-left-color: transparent!important;
+  border-left-style: solid;
+  border-left-width: 25px; /* gutter size */
+}
+
+.mainContainer {
+  position: relative;
+  height: 375px;
+}
+
+.rightButton{
+  position: absolute;
+  top:50%;
+  right:-3em;
+}
+
+.leftButton{
+  position: absolute;
+  top:50%;
+  left:-3em;
+}
+
+.right{text-align: right!important;}
