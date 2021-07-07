@@ -71,8 +71,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
 
   const fetchItems = async (pageParam: number) => {
-    // http://localhost:3000/api/getAllBy?topic=environment&cursor=0
-    const q = await fetch(`http://localhost:3000/api/getAllBy?topic=${topic}&cursor=${pageParam}
+    const q = await fetch(`/api/getAllBy?topic=${topic}&cursor=${pageParam}
     ${extraCyclesRequired && `&extraCyclesRequired=${extraCyclesRequired}`}
     ${extraWorksRequired && `&extraWorksRequired=${extraWorksRequired}`}
     `);
