@@ -10,7 +10,7 @@
 
 .mainContainer {
   position: relative;
-  height: 375px;
+  /* height: 375px; */
 }
 
 .rightButton{
@@ -26,3 +26,12 @@
 }
 
 .right{text-align: right!important;}
+
+.hashTagTopic{
+  width: 1.5em;
+    height: 1.5em;
+    display: inline-block;
+    text-align: center;
+    border: solid 1px #aba4a466;
+  border-radius: 50%;
+}

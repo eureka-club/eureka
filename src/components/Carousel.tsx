@@ -167,35 +167,41 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
             <Row>
               <Col>
                 <h5>
-                  # {` `} {topicLabel || t(`${topic}`)}
+                  <em className={styles.hashTagTopic}>#</em> {` `} {topicLabel || t(`${topic}`)}
                 </h5>
               </Col>
               <Col className={styles.right}>
-                <Link href="/search">
-                  <Button onClick={onItemsFound}>{t('common:See all')}</Button>
-                </Link>
+                {data.hasMore && (
+                  <Link href="/search">
+                    <Button onClick={onItemsFound}>{t('common:See all')}</Button>
+                  </Link>
+                )}
               </Col>
             </Row>
             <div>
               {build()}
-              <Button
-                className={styles.leftButton}
-                onClick={() => {
-                  setPage((old) => Math.max(old - 1, 0));
-                  setExtraCyclesRequired(null);
-                  setExtraWorksRequired(null);
-                }}
-                disabled={page === 0}
-              >{`<`}</Button>
-              <Button
-                className={styles.rightButton}
-                onClick={(ev) => {
-                  if (!isPreviousData && data.hasMore) {
-                    setPage((old) => old + 1);
-                  }
-                }}
-                disabled={isPreviousData || !data?.hasMore}
-              >{`>`}</Button>
+              {page !== 0 && (
+                <Button
+                  className={styles.leftButton}
+                  onClick={() => {
+                    setPage((old) => Math.max(old - 1, 0));
+                    setExtraCyclesRequired(null);
+                    setExtraWorksRequired(null);
+                  }}
+                  disabled={page === 0}
+                >{`<`}</Button>
+              )}
+              {data.hasMore && (
+                <Button
+                  className={styles.rightButton}
+                  onClick={(ev) => {
+                    if (!isPreviousData && data.hasMore) {
+                      setPage((old) => old + 1);
+                    }
+                  }}
+                  disabled={isPreviousData || !data?.hasMore}
+                >{`>`}</Button>
+              )}
             </div>
           </div>
         )}
