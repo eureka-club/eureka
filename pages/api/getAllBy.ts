@@ -18,6 +18,10 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     // const result: { [index: string]: (Work | (Cycle & { type: string }))[] } = {};
     const { cursor, topic, extraCyclesRequired = 0, extraWorksRequired = 0 } = req.query;
 
+    let { totalWorks = -1, totalCycles = -1 } = req.query;
+    totalWorks = parseInt(totalWorks as string, 10);
+    totalCycles = parseInt(totalCycles as string, 10);
+
     const c = parseInt(cursor as string, 10);
     const countItemsPerPage = 2;
     const toShow = ['work', 'cycle'];
@@ -66,9 +70,10 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     // const promisesCycles: PrismaPromise<Cycle[]>[] = [];
 
     // topics.forEach(async (topic) => {
+    if (totalWorks === -1) totalWorks = await prisma.work.count({ where });
+    if (totalCycles === -1) totalCycles = await prisma.cycle.count({ where });
 
-    const totalWorks = await prisma.work.count({ where });
-    const totalCycles = await prisma.cycle.count({ where });
+    // let rw = parseInt(remainingWorks, 10) - 2;
 
     const ewr = parseInt(extraWorksRequired as string, 10);
     const works = await prisma.work.findMany(getOpt(0, ewr));
@@ -127,6 +132,8 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
       extraCyclesRequired: cyclesPlus,
       extraWorksRequired: worksPlus,
       hasMore: c + 1 < (totalWorks + totalCycles) / (countItemsPerPage * toShow.length),
+      totalWorks,
+      totalCycles,
       prevCursor: c,
       nextCursor: c + 1,
     });

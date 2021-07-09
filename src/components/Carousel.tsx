@@ -53,6 +53,7 @@ interface ItemType {
   nextCursor: number;
   prevCursor: number;
   status: string;
+  delay?: number;
 }
 
 const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
@@ -66,40 +67,22 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
   //   setPage(selectedIndex);
   // };
 
-  const [extraCyclesRequired, setExtraCyclesRequired] = useState(null);
-  const [extraWorksRequired, setExtraWorksRequired] = useState(null);
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
+  const [extraCyclesRequired, setExtraCyclesRequired] = useState(0);
+  const [extraWorksRequired, setExtraWorksRequired] = useState(0);
+  const [totalWorks, setTotalWorks] = useState(-1);
 
   const fetchItems = async (pageParam: number) => {
-    const q = await fetch(`/api/getAllBy?topic=${topic}&cursor=${pageParam}
-    ${extraCyclesRequired && `&extraCyclesRequired=${extraCyclesRequired}`}
-    ${extraWorksRequired && `&extraWorksRequired=${extraWorksRequired}`}
-    `);
+    const url = `/api/getAllBy?topic=${topic}&cursor=${pageParam}
+    &extraCyclesRequired=${extraCyclesRequired || 0}
+    &extraWorksRequired=${extraWorksRequired || 0}
+    &totalWorks=${totalWorks}`;
+    const q = await fetch(url);
+    // debugger;
     const res = await q.json();
     // debugger;
     return res;
   };
-
-  // const {
-  //   status,
-  //   data,
-  //   isFetching,
-  //   isFetchingNextPage,
-  //   isFetchingPreviousPage,
-  //   fetchNextPage,
-  //   fetchPreviousPage,
-  //   hasNextPage,
-  //   hasPreviousPage,
-  // } = useInfiniteQuery(
-  //   'projects',
-  //   fetchItems,
-  //   {
-  //     getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
-  //     getPreviousPageParam: (firstPage, pages) => firstPage.prevCursor,
-  //   },
-  //   // {initialData:projects}
-  // );
-
   const { isLoading, isError, error, data, isFetching, isPreviousData } = useQuery(
     ['items', `${topic}${page}`],
     () => fetchItems(page),
@@ -113,6 +96,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
       setItems(data);
       if (data.extraCyclesRequired) setExtraCyclesRequired(data.extraCyclesRequired);
       if (data.extraWorksRequired) setExtraWorksRequired(data.extraWorksRequired);
+      setTotalWorks(data.totalWorks);
     }
   }, [data, page]);
 
@@ -146,6 +130,26 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
     return result;
   };
 
+  // const {
+  //   status,
+  //   data,
+  //   isFetching,
+  //   isFetchingNextPage,
+  //   isFetchingPreviousPage,
+  //   fetchNextPage,
+  //   fetchPreviousPage,
+  //   hasNextPage,
+  //   hasPreviousPage,
+  // } = useInfiniteQuery(
+  //   'projects',
+  //   fetchItems,
+  //   {
+  //     getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
+  //     getPreviousPageParam: (firstPage, pages) => firstPage.prevCursor,
+  //   },
+  //   // {initialData:projects}
+  // );
+
   const onItemsFound = async () => {
     const where = encodeURIComponent(
       JSON.stringify({
@@ -160,7 +164,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
   };
 
   return (
-    (items && items.data && items.data.length && (
+    (!isLoading && items && items.data && items.data.length && (
       <>
         {items && items.data && items.data.length && (
           <div className={styles.mainContainer}>
@@ -185,8 +189,8 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
                   className={styles.leftButton}
                   onClick={() => {
                     setPage((old) => Math.max(old - 1, 0));
-                    setExtraCyclesRequired(null);
-                    setExtraWorksRequired(null);
+                    setExtraCyclesRequired(0);
+                    setExtraWorksRequired(0);
                   }}
                   disabled={page === 0}
                 >{`<`}</Button>
@@ -206,7 +210,8 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
           </div>
         )}
       </>
-    )) || <>&nbsp;</>
+    )) ||
+    null
   );
 };
 

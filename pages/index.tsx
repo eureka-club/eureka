@@ -4,12 +4,13 @@ import { useAtom } from 'jotai';
 // import { GetServerSideProps, GetStaticProps, NextPage } from 'next';
 import { GetStaticProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
-import { useState, useEffect, ReactElement } from 'react';
+import { useState, useEffect, ReactElement, Children } from 'react';
+import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
 
 import { QueryClient } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
 // import { loadGetInitialProps } from 'next/dist/next-server/lib/utils';
-import { Spinner } from 'react-bootstrap';
+import { Spinner, Button } from 'react-bootstrap';
 import globalSearchEngineAtom from '../src/atoms/searchEngine';
 
 import { CycleMosaicItem } from '../src/types/cycle';
@@ -144,6 +145,31 @@ const IndexPage: NextPage = () => {
   //     );
   //   return <span>{`${''}`}</span>;
   // };
+  const [show, setShow] = useState<string[]>(['environment']);
+  const [hide, setHide] = useState<string[]>([
+    'gender',
+    'history',
+    'introspection',
+    'politics',
+    'racism',
+    'social',
+    'sciences',
+    'technology',
+  ]);
+
+  const showTopic = () => {
+    if (hide.length) {
+      const topic = hide.splice(0, 1);
+      setShow([...show, ...topic]);
+    }
+  };
+
+  const hideTopic = () => {
+    if (show.length > 1) {
+      const topic = show.pop() as string;
+      setHide([...hide, topic]);
+    }
+  };
 
   return (
     <SimpleLayout title={t('browserTitleWelcome')}>
@@ -153,17 +179,31 @@ const IndexPage: NextPage = () => {
       {/* <Mosaic stack={homepageMosaicDataFiltered} /> */}
       {/* {genLoadingCmp()} */}
 
-      <Carousel topic="environment" />
+      {/* <Carousel topic="environment" />
       <Carousel topic="gender-feminisms" />
       <Carousel topic="history" />
       <Carousel topic="introspection" />
-
       <Carousel topic="politics-economics" />
       <Carousel topic="racism-discrimination" />
       <Carousel topic="social issues" />
       <Carousel topic="sciences" />
       <Carousel topic="technology" />
-      <Carousel topic="uncategorized" topicLabel={t('uncategorized')} />
+      <Carousel topicLabel={t('uncategorized')} topic="uncategorized" /> */}
+      <>{show && show.map((item) => <Carousel key={item} topic={item} />)}</>
+      <Button
+        // className={styles.leftButton}
+        onClick={showTopic}
+        disabled={hide.length === 0}
+      >
+        <RiArrowDownSLine />
+      </Button>
+      <Button
+        // className={styles.leftButton}
+        onClick={hideTopic}
+        disabled={show.length <= 1}
+      >
+        <RiArrowUpSLine />
+      </Button>
     </SimpleLayout>
   );
 };
