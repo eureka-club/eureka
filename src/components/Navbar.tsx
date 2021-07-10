@@ -65,10 +65,12 @@ const Navbar: FunctionComponent = () => {
   return (
     <Container className={styles.container}>
       <BootstrapNavbar variant="light" className="p-0">
-        <BootstrapNavbar.Brand href="/" className={classNames(styles.brand, 'mr-4')}>
-          <img src="/img/logo.png" className="d-inline-block align-middle mr-4" width={52} alt="Project logo" />
-          <h1 className={styles.brandText}>{siteName}</h1>
-        </BootstrapNavbar.Brand>
+        <Link href="/">
+          <BootstrapNavbar.Brand className={classNames(styles.brand, 'mr-4')}>
+            <img src="/img/logo.png" className="d-inline-block align-middle mr-4" width={52} alt="Project logo" />
+            <h1 className={styles.brandText}>{siteName}</h1>
+          </BootstrapNavbar.Brand>
+        </Link>
         <SearchEngine />
         <Nav className={styles.nav}>
           {session == null ? (

@@ -10,6 +10,7 @@
   line-height: 72px;
   text-transform: uppercase;
   letter-spacing: 0.5rem;
+  cursor: pointer;
 }
 .brandText {
   display: inline-block;

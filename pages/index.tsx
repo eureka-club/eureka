@@ -146,30 +146,34 @@ const IndexPage: NextPage = () => {
   //   return <span>{`${''}`}</span>;
   // };
   const [show, setShow] = useState<string[]>(['environment']);
-  const [hide, setHide] = useState<string[]>([
-    'gender',
-    'history',
+  const [hide /* , setHide */] = useState<string[]>([
+    'social issues',
     'introspection',
-    'politics',
-    'racism',
-    'social',
-    'sciences',
+    'gender-feminisms',
+    'politics-economics',
     'technology',
+    'sciences',
+    'racism-discrimination',
+    'migrants-refugees',
+    'arts-culture',
+    'wellness-sports',
+    'philosophy',
+    'history',
   ]);
 
   const showTopic = () => {
     if (hide.length) {
-      const topic = hide.splice(0, 1);
+      const topic = hide.splice(0, 3);
       setShow([...show, ...topic]);
     }
   };
 
-  const hideTopic = () => {
-    if (show.length > 1) {
-      const topic = show.pop() as string;
-      setHide([...hide, topic]);
-    }
-  };
+  // const hideTopic = () => {
+  //   if (show.length > 1) {
+  //     const topic = show.pop() as string;
+  //     setHide([...hide, topic]);
+  //   }
+  // };
 
   return (
     <SimpleLayout title={t('browserTitleWelcome')}>
@@ -190,20 +194,16 @@ const IndexPage: NextPage = () => {
       <Carousel topic="technology" />
       <Carousel topicLabel={t('uncategorized')} topic="uncategorized" /> */}
       <>{show && show.map((item) => <Carousel key={item} topic={item} />)}</>
-      <Button
-        // className={styles.leftButton}
-        onClick={showTopic}
-        disabled={hide.length === 0}
-      >
+      <Button className={styles.carouselDowmButton} onClick={showTopic} disabled={hide.length === 0}>
         <RiArrowDownSLine />
       </Button>
-      <Button
+      {/* <Button
         // className={styles.leftButton}
         onClick={hideTopic}
         disabled={show.length <= 1}
       >
         <RiArrowUpSLine />
-      </Button>
+      </Button> */}
     </SimpleLayout>
   );
 };

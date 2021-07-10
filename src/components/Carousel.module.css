@@ -15,23 +15,41 @@
 
 .rightButton{
   position: absolute;
-  top:50%;
+  top:35%;
   right:-3em;
+  border-radius: 50%;
+  width: 2em;
+    height: 2em;
+    
+    padding: 0;
 }
 
 .leftButton{
   position: absolute;
-  top:50%;
+  top:35%;
   left:-3em;
+  border-radius: 50%;
+  width: 2em;
+    height: 2em;
+    
+    padding: 0;
 }
 
 .right{text-align: right!important;}
 
 .hashTagTopic{
-  width: 1.5em;
-    height: 1.5em;
+  width: 1.8em;
+    height: 1.8em;
     display: inline-block;
     text-align: center;
     border: solid 1px #aba4a466;
   border-radius: 50%;
+  padding: .2em;
+  margin-right: .5em;
+}
+.seeAllButton{
+  color: var(--eureka-green);
+  text-decoration: underline;
+  background-color: transparent;
+  border: none;
 }
