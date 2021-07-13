@@ -17,16 +17,17 @@ const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, alt 
   switch (NEXT_PUBLIC_PUBLIC_ASSETS_STORAGE_MECHANISM) {
     case STORAGE_MECHANISM_AZURE:
       return (
-        <Image
-          src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${filePath}`}
-          layout="fill"
-        />
-        // <img
+        // <Image
         //   src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${filePath}`}
-        //   alt={alt}
-        //   className={className}
-        //   style={{ ...style, ...{ height: '20em' } }}
+        //   // src={`/${filePath}`}
+        //   layout="fill"
         // />
+        <img
+          src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${filePath}`}
+          alt={alt}
+          className={className}
+          style={{ ...style, ...{ height: '24em' } }}
+        />
       );
 
     case STORAGE_MECHANISM_LOCAL_FILES:
