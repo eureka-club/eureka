@@ -99,7 +99,6 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     // let works = promisesWorksRes.reduce((p, current) => {
     //   return [...p, ...current];
     // }, []);
-    data.push(...works);
 
     // const promisesCyclesRes = await Promise.all(promisesCycles);
     // let cycles = promisesCyclesRes.reduce((p, current) => {
@@ -107,6 +106,8 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     // }, []);
 
     data.push(...cycles.map((c1) => ({ ...c1, type: 'cycle' })));
+
+    data.push(...works);
 
     // const o = getOpt('', true);
     // works = await prisma.work.findMany(o);

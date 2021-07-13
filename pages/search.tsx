@@ -161,11 +161,12 @@ const SearchPage: NextPage = () => {
       );
     return <span>{`${''}`}</span>;
   };
-
+  let qLabel = t(`topics:${globalSearchEngineState.q as string}`);
+  if (qLabel.match(':')) qLabel = globalSearchEngineState.q as string;
   return (
     <SimpleLayout title={t('browserTitleWelcome')}>
       <h1 className={styles.title}>
-        {t('Results about')}: {`"${t(`topics:${globalSearchEngineState.q as string}`)}"`}
+        {t('Results about')}: {`"${qLabel}"`}
       </h1>
       <FilterEngine />
       <Mosaic stack={homepageMosaicDataFiltered} />

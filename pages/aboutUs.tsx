@@ -181,7 +181,7 @@ const AboutPage: NextPage = () => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
-                src="/img/aboutUs/aranzazu-zaga.jpg"
+                src="/img/aboutUs/aranzazu-zaga.jpeg"
                 alt="Picture of Advisor"
                 width={200}
                 height={200}
