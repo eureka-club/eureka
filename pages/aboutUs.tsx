@@ -273,8 +273,8 @@ const AboutPage: NextPage = () => {
               {t('We are grateful for Eureka’s many friends that support us in a variety of ways!')}
             </h4>
             <p>
-              Roland Trompette, Aranzazu Zacarias, Ricardo Sanginés, Jacques Ricard, Rafael Millán, Daniel C. Zorrilla,
-              Giovana Salazar, Amy Shapiro Raikar, Jessie Keating
+              Roland Trompette, Giovana Salazar, Maïssa Hubert Chakour, Amy Shapiro Raikar, Jessie Keating,
+              Jacques Ricard, Ricardo Sanginés, Rafael Millán, Daniel C. Zorrilla
             </p>
           </div>
 
