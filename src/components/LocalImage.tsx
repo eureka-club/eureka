@@ -1,5 +1,5 @@
 import { FunctionComponent } from 'react';
-import Image from 'next/image';
+// import Image from 'next/image';
 import { ASSETS_BASE_URL, STORAGE_MECHANISM_AZURE, STORAGE_MECHANISM_LOCAL_FILES } from '../constants';
 
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
@@ -26,7 +26,7 @@ const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, alt 
           src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${filePath}`}
           alt={alt}
           className={className}
-          style={{ ...style, ...{ height: '24em' } }}
+          style={style}
         />
       );
 
