@@ -145,19 +145,17 @@ const IndexPage: NextPage = () => {
   //     );
   //   return <span>{`${''}`}</span>;
   // };
-  const [show, setShow] = useState<string[]>(['environment']);
+  const [show, setShow] = useState<string[]>(['gender-feminisms', 'environment', 'technology']);
   const [hide /* , setHide */] = useState<string[]>([
-    'social issues',
-    'introspection',
-    'gender-feminisms',
-    'politics-economics',
-    'technology',
-    'sciences',
     'racism-discrimination',
-    'migrants-refugees',
-    'arts-culture',
     'wellness-sports',
+    'social issues',
+    'politics-economics',
     'philosophy',
+    'migrants-refugees',
+    'introspection',
+    'sciences',
+    'arts-culture',
     'history',
   ]);
 

@@ -1,5 +1,6 @@
 {
   "createCycle": "Create a Cycle",
+  "editCycle": "Edit a Cycle",
   "addWrkBtnTitle": "Add work to a cycle",
   "addWrkBtnSubtitle": "Search for work in our library",
   "addCoverBtnTitle": "Add cover image to cycle",
@@ -27,12 +28,10 @@
   "newCyclePitchLabel": "Cycle pitch: what is this cycle about and why is it a relevant topic. Why should people join this cycle?",
   "submitBtnLabel": "Create cycle",
   "resetBtnLabel": "Clear",
-
   "addWrkPopupTitle": "Add work to cycle",
   "addWrkTypeaheadLabel": "Select work",
   "addWrkTypeaheadPlaceholder": "Search for existing work...",
   "addWrkAddBtnLabel": "Add work to cycle",
-  
-  "Edit Cycle":"Edit Cycle",
+  "Edit Cycle": "Edit Cycle",
   "countryFieldLabel": "Country or region of focus (if applicable)"
 }

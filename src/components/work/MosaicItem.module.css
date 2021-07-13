@@ -8,6 +8,7 @@
   margin-bottom: 1rem;
   overflow: hidden;
   position: relative;
+  height: 24em;
 }
 
 .imageContainer img {

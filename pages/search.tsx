@@ -165,7 +165,7 @@ const SearchPage: NextPage = () => {
   return (
     <SimpleLayout title={t('browserTitleWelcome')}>
       <h1 className={styles.title}>
-        {t('Results about')}: {`"${globalSearchEngineState.q}"`}
+        {t('Results about')}: {`"${t(`topics:${globalSearchEngineState.q as string}`)}"`}
       </h1>
       <FilterEngine />
       <Mosaic stack={homepageMosaicDataFiltered} />

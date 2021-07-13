@@ -403,7 +403,13 @@ const EditWorkForm: FunctionComponent = () => {
               <Col>
                 <FormGroup controlId="topics">
                   <FormLabel>{t('topicsLabel')}</FormLabel>
-                  <TagsInputTypeAhead data={topics} items={items} setItems={setItems} max={3} />
+                  <TagsInputTypeAhead
+                    data={topics}
+                    items={items}
+                    setItems={setItems}
+                    max={3}
+                    labelKey={(res) => t(`topics:${res.code}`)}
+                  />
                 </FormGroup>
               </Col>
             </Row>

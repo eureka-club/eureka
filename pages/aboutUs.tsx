@@ -34,8 +34,8 @@ const AboutPage: NextPage = () => {
                 className="rounded-circle"
                 src="/img/aboutUs/julie_ricard.jpg"
                 alt="Founder, Director"
-                width={180}
-                height={180}
+                width={200}
+                height={200}
               />
               <h2 className={styles.peopleName}>
                 Julie Ricard
@@ -63,8 +63,8 @@ const AboutPage: NextPage = () => {
                 className="rounded-circle"
                 src="/img/aboutUs/alejandro_noriega.jpeg"
                 alt="Co-creator from Prosperia"
-                width={180}
-                height={180}
+                width={200}
+                height={200}
               />
               <h2 className={styles.peopleName}>
                 Alejandro Noriega
@@ -96,8 +96,8 @@ const AboutPage: NextPage = () => {
                 className="rounded-circle"
                 src="/img/aboutUs/geordanis_bano_vega.png"
                 alt="Picture of Software Engineer"
-                width={180}
-                height={180}
+                width={200}
+                height={200}
               />
               <h2 className={styles.peopleName}>
                 Geordanis Baño Vega
@@ -125,8 +125,8 @@ const AboutPage: NextPage = () => {
                 className="rounded-circle"
                 src="/img/aboutUs/igor_hlina.jpg"
                 alt="Picture of Full-stack developer (via Toptal)"
-                width={180}
-                height={180}
+                width={200}
+                height={200}
               />
               <h2 className={styles.peopleName}>
                 Igor Hlina (via Toptal)
@@ -154,8 +154,8 @@ const AboutPage: NextPage = () => {
                 className="rounded-circle"
                 src="/img/aboutUs/daniela-goncalves.jpeg"
                 alt="Picture of Advisor"
-                width={180}
-                height={180}
+                width={200}
+                height={200}
               />
               <h2 className={styles.peopleName}>
                 Daniela Gonçalves
@@ -181,10 +181,39 @@ const AboutPage: NextPage = () => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
+                src="/img/aboutUs/aranzazu-zaga.jpg"
+                alt="Picture of Advisor"
+                width={200}
+                height={200}
+              />
+              <h2 className={styles.peopleName}>
+                Aranzazu Zaga
+                <a href="https://www.linkedin.com/in/aranzazuzg/" target="_blank" rel="noreferrer">
+                  <TiSocialLinkedinCircular className={styles.si} />
+                </a>
+              </h2>
+              <h3 className={styles.professionName}>{t('Advisor')}</h3>
+              <h4 className={styles.positionName}>{t('Narrative and public affairs expert')}</h4>
+              <Badge pill className={className('badge-secondary', styles.interest)}>
+                {t('Communication')}
+              </Badge>
+              <br />
+              <Badge pill className={className('badge-secondary', styles.interest)}>
+                {t('Crisis management')}
+              </Badge>
+              <br />
+              <Badge pill className={className('badge-secondary', styles.interest)}>
+                {t('Public relations')}
+              </Badge>
+            </Col>
+
+            <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
+              <Image
+                className="rounded-circle"
                 src="/img/aboutUs/fernanda-pacheco.jpeg"
                 alt="Picture of UI-UX Consultant"
-                width={180}
-                height={180}
+                width={200}
+                height={200}
               />
               <h2 className={styles.peopleName}>
                 Fernanda Pacheco
@@ -212,8 +241,8 @@ const AboutPage: NextPage = () => {
                 className="rounded-circle"
                 src="/img/aboutUs/don-zamna.jpeg"
                 alt="Picture of Mastermind"
-                width={180}
-                height={180}
+                width={200}
+                height={200}
               />
               <h2 className={styles.peopleName}>
                 Don Zamna

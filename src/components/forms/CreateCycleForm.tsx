@@ -444,7 +444,13 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
             <FormGroup controlId="topics">
               <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel>
-              <TagsInputTypeAhead data={topics} items={items} setItems={setItems} max={3} />
+              <TagsInputTypeAhead
+                data={topics}
+                items={items}
+                setItems={setItems}
+                labelKey={(res) => t(`topics:${res.code}`)}
+                max={3}
+              />
             </FormGroup>
 
             <FormGroup controlId="description">

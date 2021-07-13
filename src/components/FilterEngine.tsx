@@ -265,6 +265,7 @@ const SearchEngine: FunctionComponent = () => {
               items={items}
               setItems={setItems}
               max={5}
+              labelKey={(res) => `${t(`countries:${res.code}`)}`}
               onTagCreated={(e) => {
                 const onlyByCountries = [...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items])];
                 setGlobalSearchEngineState({

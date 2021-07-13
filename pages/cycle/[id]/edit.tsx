@@ -18,7 +18,7 @@ const EditCyclePage: NextPage<Props> = ({ cycle, notFound }) => {
   const { t } = useTranslation('createCycleForm');
 
   return (
-    <SimpleLayout title={t('createCycle')}>
+    <SimpleLayout title={t('editCycle')}>
       <>
         {!notFound && <EditCycleForm className="mb-5" cycle={cycle} />}
         {notFound && <Alert variant="danger">{t('common:Error')}</Alert>}

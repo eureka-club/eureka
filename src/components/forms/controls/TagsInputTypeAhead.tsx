@@ -15,6 +15,7 @@ export type TagsInputProp = {
   // tags: string;
   // setTags?: (value: string) => void;
   label?: string;
+  labelKey?: (res: { code: string }) => string;
   readOnly?: boolean | null;
   data: { code: string; label: string }[];
   items: string[];
@@ -25,7 +26,7 @@ export type TagsInputProp = {
 };
 
 const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
-  const { data, max = 5, onTagCreated, onTagDeleted } = props;
+  const { data, max = 5, onTagCreated, onTagDeleted, labelKey } = props;
   const { t } = useTranslation('createWorkForm');
   // const { tags, setTags, label = '', readOnly = false } = props;
   const { items, setItems, label = '', readOnly = false } = props;
@@ -131,7 +132,7 @@ const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputPr
               ref={ref}
               id="TagsInputTypeAhead"
               filterBy={['label']}
-              labelKey={(res: { code: string }) => `${t(`topics:${res.code}`)}`}
+              labelKey={(res: { code: string }) => (labelKey ? labelKey(res) : `${t(`${res.code}`)}`)}
               onChange={onNewTagAdded}
               // onKeyPress={onKeyPressOnInput}
               options={data}
