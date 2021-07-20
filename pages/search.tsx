@@ -14,7 +14,8 @@ import globalSearchEngineAtom from '../src/atoms/searchEngine';
 
 import { CycleMosaicItem } from '../src/types/cycle';
 import { WorkMosaicItem } from '../src/types/work';
-// import { PostMosaicItem } from '../src/types/post';
+import { PostMosaicItem } from '../src/types/post';
+
 import styles from './index.module.css';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 // import { findAll as findAllCycles } from '../src/facades/cycle';
@@ -25,6 +26,8 @@ import FilterEngine from '../src/components/FilterEngine';
 import useWorks from '../src/useWorks';
 import useCycles from '../src/useCycles';
 import useCountries from '../src/useCountries';
+
+type Item = (CycleMosaicItem & { type: string }) | WorkMosaicItem | (PostMosaicItem & { type: string });
 
 // interface Props {
 //   homepageMosaicData: (CycleMosaicItem | WorkMosaicItem)[];
@@ -67,24 +70,23 @@ const SearchPage: NextPage = () => {
 
   // const [where, setWhere] = useState('');
   // const [tempWhere, setTempWhere] = useState('');
-  const { isLoading, /* isError, error, */ data: works } = useWorks(true);
-  const { isLoading: isLoadingCycles, /* isError: isErrorCycles, error: errorCycles, */ data: cycles } =
-    useCycles(true);
+  const { isLoading, /* isError, error, */ data: works } = useWorks();
+  const { isLoading: isLoadingCycles, /* isError: isErrorCycles, error: errorCycles, */ data: cycles } = useCycles();
   const { data: onlyByCountriesAux } = useCountries();
 
-  const [homepageMosaicData, setHomepageMosaicData] = useState<
-    ((CycleMosaicItem & { type: string }) | WorkMosaicItem)[]
-  >([]);
+  const [homepageMosaicData, setHomepageMosaicData] = useState<Item[]>([]);
 
   useEffect(() => {
-    if (works || cycles /* || posts */) {
+    if (globalSearchEngineState.itemsFound) {
+      setHomepageMosaicData(globalSearchEngineState.itemsFound);
+    } else if (works || cycles /* || posts */) {
       const w = works ? works.data : [];
       const c = cycles ? cycles.data : [];
       // const p = posts ? posts.data : [];
       const res = [...w, ...c /* , ...p */];
       setHomepageMosaicData(res);
     }
-  }, [works, cycles /* , posts */]);
+  }, [works, cycles /* , posts */, globalSearchEngineState.itemsFound]);
 
   /* type FilterWhere = {
     where: {
@@ -102,9 +104,7 @@ const SearchPage: NextPage = () => {
     work?: FilterWhere;
   }; */
 
-  const [homepageMosaicDataFiltered, setHomepageMosaicDataFiltered] = useState<
-    ((CycleMosaicItem & { type: string }) | WorkMosaicItem)[]
-  >([]);
+  const [homepageMosaicDataFiltered, setHomepageMosaicDataFiltered] = useState<Item[]>([]);
 
   useEffect(() => {
     setGlobalSearchEngineState({

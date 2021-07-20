@@ -4,6 +4,7 @@ import { Provider as NextAuthProvider } from 'next-auth/client';
 import appWithI18n from 'next-translate/appWithI18n';
 import { StrictMode, FunctionComponent, useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 import { Hydrate } from 'react-query/hydration';
 
 import i18nConfig from '../i18n';
@@ -34,6 +35,7 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
               {/* eslint-disable-next-line react/jsx-props-no-spreading */}
               <Component {...pageProps} />
             </Hydrate>
+            <ReactQueryDevtools />
           </QueryClientProvider>
         </Provider>
       </NextAuthProvider>

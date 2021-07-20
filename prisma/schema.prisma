@@ -20,6 +20,7 @@ model User {
   roles          String     @default("member")
   createdAt      DateTime   @default(now()) @map(name: "created_at")
   updatedAt      DateTime   @updatedAt @map(name: "updated_at")
+  countryOfOrigin  String?    @map(name: "country_of_origin")
 
   accounts       Account[]
   sessions       Session[]
@@ -35,6 +36,7 @@ model User {
   posts          Post[]  
   taxonomies     Taxonomy[]  
   terms          Term[]  
+  tags           String?
 
   @@map(name: "users")
 }

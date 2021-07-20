@@ -3,9 +3,9 @@ import { useAtom } from 'jotai';
 import { CycleMosaicItem } from './types/cycle';
 import globalSearchEngineAtom from './atoms/searchEngine';
 
-const getRecords = async (where = '', searching = false) => {
-  if (searching && !where) return { data: [] };
-  const res = await fetch(`/api/cycle${searching && where ? `?where=${where}` : ''}`);
+const getRecords = async (where = '') => {
+  // if (!where) return { data: [] };
+  const res = await fetch(`/api/cycle${where ? `?where=${where}` : ''}`);
   const result = await res.json();
 
   type ItemType = CycleMosaicItem & { type: string };
@@ -21,11 +21,11 @@ const getRecords = async (where = '', searching = false) => {
   return result;
 };
 
-const useCycles = (searching = false) => {
+const useCycles = () => {
   const [globalSearchEngineState] = useAtom(globalSearchEngineAtom);
   const { where } = globalSearchEngineState;
 
-  return useQuery(['CYCLES', JSON.stringify({ where, searching })], () => getRecords(where, searching), {
+  return useQuery(['CYCLES', JSON.stringify({ where })], () => getRecords(where), {
     staleTime: 1000 * 60 * 60,
   });
 };

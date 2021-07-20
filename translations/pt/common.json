@@ -56,5 +56,13 @@
   "Loading": "Carregando",
   "Trending topics": "Temas populares",
   "uncategorized": "Uncategorized",
-  "See all": "Ver tudo"
+  "See all": "Ver tudo",
+  "Name": "Name",
+  "Email": "Email",
+  "Image": "Image",
+  "Country of origin": "Country of origin",
+  "Topics": "Topics",
+  "Edit Profile": "Edit Profile",
+  "countryFieldLabel": "Country or region of focus (if applicable)",
+  "Edit": "Edit"
 }

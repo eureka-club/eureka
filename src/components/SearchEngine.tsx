@@ -108,7 +108,7 @@ const SearchEngine: FunctionComponent = () => {
             filterBy={() => true}
             maxResults={2}
             inputProps={{ required: true }}
-            placeholder={t('Search for anything you wanna learn about')}
+            placeholder={t('Search')}
             isLoading={isSearchWorkOrCycleLoading}
             labelKey={(res: SearchResult) => `${res.title}`}
             minLength={2}

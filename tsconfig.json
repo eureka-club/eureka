@@ -14,7 +14,14 @@
     "strict": true,
     "target": "ESNext",
     "module": "commonjs",
-    
+    "baseUrl": ".",
+    "paths": {
+      "@/src/*": ["src/*"],
+      "@/lib/*": ["src/lib/*"],
+      "@/components/*": ["src/components/*"],
+      "@/types/*":["src/types/*"],
+      "@/atoms/*":["src/atoms/*"],
+    },
     
   },
   "exclude": [

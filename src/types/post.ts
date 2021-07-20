@@ -13,7 +13,7 @@ export type PostMosaicItem = Prisma.PostGetPayload<{
     likes: true;
     favs: true;
   };
-}>;
+}> & { type?: 'post' };
 
 export type PostDetail = Prisma.PostGetPayload<{
   include: {

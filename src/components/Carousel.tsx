@@ -25,6 +25,7 @@ import styles from './Carousel.module.css';
 // import { Work, Cycle, PrismaPromise } from '@prisma/client';
 import { WorkMosaicItem /* , WorkWithImages */ } from '../types/work';
 import { CycleMosaicItem /* , CycleWithImages */ } from '../types/cycle';
+import { PostMosaicItem /* , CycleWithImages */ } from '../types/post';
 
 type Props = {
   // page: number;
@@ -39,8 +40,8 @@ const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefine
     // eslint-disable-next-line react/jsx-props-no-spreading
     return <MosaicItemCycle key={`cycle-${item.id}`} {...item} />;
   }
-  if (isPostMosaicItem(item)) {
-    return <MosaicItemPost key={`post-${item.id}`} post={item} postParent={postsParent} />;
+  if (isPostMosaicItem(item) || item.type === 'post') {
+    return <MosaicItemPost key={`post-${item.id}`} post={item as PostMosaicItem} postParent={postsParent} />;
   }
   if (isWorkMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -102,7 +103,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
     }
   }, [data, page]);
 
-  const build = () => {
+  const buildMosaics = () => {
     const result: JSX.Element[] = [];
     if (items) {
       // debugger;
@@ -172,7 +173,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
           <div className={styles.mainContainer}>
             <Row>
               <Col>
-                <h5>
+                <h5 className={styles.carouselTitle}>
                   <BsHash className={styles.hashTagTopic} />
                   {` `} {topicLabel || t(`${topic}`)}
                 </h5>
@@ -188,7 +189,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
               </Col>
             </Row>
             <div>
-              {build()}
+              {buildMosaics()}
               {page !== 0 && (
                 <Button
                   className={styles.leftButton}

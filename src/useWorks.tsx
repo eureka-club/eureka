@@ -3,9 +3,9 @@ import { useAtom } from 'jotai';
 // import { WorkMosaicItem } from './types/work';
 import globalSearchEngineAtom from './atoms/searchEngine';
 
-const getRecords = async (where = '', searching = false) => {
-  if (searching && !where) return { data: [] };
-  const res = await fetch(`/api/work${searching && where ? `?where=${where}` : ''}`);
+const getRecords = async (where = '') => {
+  if (!where) return { data: [] };
+  const res = await fetch(`/api/work${where ? `?where=${where}` : ''}`);
   const result = await res.json();
 
   // type ItemType =
@@ -21,11 +21,11 @@ const getRecords = async (where = '', searching = false) => {
   return result;
 };
 
-const useWorks = (searching = false) => {
+const useWorks = () => {
   const [globalSearchEngineState] = useAtom(globalSearchEngineAtom);
   const { where } = globalSearchEngineState;
 
-  return useQuery(['WORKS', JSON.stringify({ where, searching })], () => getRecords(where, searching), {
+  return useQuery(['WORKS', JSON.stringify({ where })], () => getRecords(where), {
     staleTime: 1000 * 60 * 60,
   });
 };

@@ -8,6 +8,7 @@ import CreatePostForm from '../forms/CreatePostForm';
 import CreateWorkForm from '../forms/CreateWorkForm';
 import EditWorkForm from '../forms/EditWorkForm';
 import EditPostForm from '../forms/EditPostForm';
+import EditUserForm from '../forms/EditUserForm';
 import SignInForm from '../forms/SignInForm';
 import globalModalsAtom from '../../atoms/globalModals';
 import withTitle from '../../HOCs/withTitle';
@@ -34,6 +35,10 @@ const SimpleLayout: FunctionComponent<Props> = ({ children }) => {
 
   const handleEditPostModalClose = () => {
     setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: false } });
+  };
+
+  const handleEditUserModalClose = () => {
+    setGlobalModalsState({ ...globalModalsState, ...{ editUserModalOpened: false } });
   };
 
   const handleSignInModalClose = () => {
@@ -70,6 +75,10 @@ const SimpleLayout: FunctionComponent<Props> = ({ children }) => {
 
       <Modal animation={false} size="lg" show={globalModalsState.editPostModalOpened} onHide={handleEditPostModalClose}>
         <EditPostForm />
+      </Modal>
+
+      <Modal animation={false} size="lg" show={globalModalsState.editUserModalOpened} onHide={handleEditUserModalClose}>
+        <EditUserForm />
       </Modal>
 
       <Modal size="lg" animation={false} show={globalModalsState.signInModalOpened} onHide={handleSignInModalClose}>

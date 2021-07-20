@@ -11,12 +11,22 @@ import Container from 'react-bootstrap/Container';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Nav from 'react-bootstrap/Nav';
 import NavItem from 'react-bootstrap/NavItem';
-import BootstrapNavbar from 'react-bootstrap/Navbar';
+
+import {
+  // BootstrapNavbar,
+  Navbar,
+  // Brand,
+  // Toggle,
+  // Collapse
+  Col,
+} from 'react-bootstrap';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { DropdownItemProps } from 'react-bootstrap/DropdownItem';
 import { BiUser } from 'react-icons/bi';
 import { BsBookmark } from 'react-icons/bs';
+import { RiDashboardLine } from 'react-icons/ri';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
+import DropdownToggle from 'react-bootstrap/esm/DropdownToggle';
 import SearchEngine from './SearchEngine';
 import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '../constants';
 import { Session } from '../types';
@@ -26,7 +36,7 @@ import styles from './Navbar.module.css';
 
 const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
 
-const Navbar: FunctionComponent = () => {
+const NavBar: FunctionComponent = () => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [session] = useSession() as [Session | null | undefined, boolean];
   const router = useRouter();
@@ -48,6 +58,12 @@ const Navbar: FunctionComponent = () => {
     setGlobalModalsState({ ...globalModalsState, ...{ createWorkModalOpened: true } });
   };
 
+  const handlerEditUserClick = (ev: MouseEvent<DropdownItemProps>) => {
+    ev.preventDefault();
+
+    setGlobalModalsState({ ...globalModalsState, ...{ editUserModalOpened: true } });
+  };
+
   const handleLanguageSelect = (locale: string | null) => {
     if (locale != null) {
       setCookie(null, LOCALE_COOKIE_NAME, locale, {
@@ -57,26 +73,49 @@ const Navbar: FunctionComponent = () => {
     }
   };
 
+  const handlerLogout = () => {
+    signOut();
+  };
+
   const handleAboutSelect = (eventKey: string | null) => {
     if (eventKey === 'aboutEureka') router.push('/about');
     else if (eventKey === 'aboutUs') router.push('/aboutUs');
   };
 
+  const getAvatar = () => {
+    if (session && session.user.image)
+      return <img src={session.user.image} className={styles.navbarIconNav} alt="user" />;
+    return <BiUser className={styles.navbarIconNav} />;
+  };
+
   return (
     <Container className={styles.container}>
-      <BootstrapNavbar variant="light" className="p-0">
+      <Navbar collapseOnSelect expand="lg" variant="light">
+        {/* <Container> */}
         <Link href="/">
-          <BootstrapNavbar.Brand className={classNames(styles.brand, 'mr-4')}>
-            <img src="/img/logo.png" className="d-inline-block align-middle mr-4" width={52} alt="Project logo" />
-            <h1 className={styles.brandText}>{siteName}</h1>
-          </BootstrapNavbar.Brand>
+          <Navbar.Brand>
+            <Container>
+              <Col className={styles.brandContainer}>
+                <img src="/img/logo.png" className="d-inline-block align-middle mr-4" width={52} alt="Project logo" />
+              </Col>
+              <Col className={styles.brandInfo}>
+                {/* <h1 className={styles.brandText}> */}
+                {siteName}
+                {/* </h1> */}
+                <em>{t('Social media to foster awareness')}</em>
+              </Col>
+            </Container>
+          </Navbar.Brand>
         </Link>
-        <SearchEngine />
-        <Nav className={styles.nav}>
-          {session == null ? (
-            <Button onClick={openSignInModal}>{t('login')}</Button>
-          ) : (
-            <>
+
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className={styles.navbarNav}>
+            <SearchEngine />
+          </Nav>
+          <Nav className={styles.navbarNav}>{!session && <Button onClick={openSignInModal}>{t('login')}</Button>}</Nav>
+          <Nav className={styles.navbarNav}>
+            {session && session.user && (
               <Dropdown className="mr-4">
                 <Dropdown.Toggle as={ChevronToggle} id="create">
                   {t('create')}
@@ -97,65 +136,78 @@ const Navbar: FunctionComponent = () => {
                   )}
                 </Dropdown.Menu>
               </Dropdown>
-              <NavItem className="mr-4">
-                <Link href="/my-list">
-                  <a className="nav-link">
-                    <BsBookmark /> {t('myListLabel')}
-                  </a>
-                </Link>
-              </NavItem>
-              <NavDropdown
-                alignRight
-                className="mr-3"
-                title={<BiUser className={styles.profileDropdown} />}
-                id="profileDropdown"
-              >
-                <NavDropdown.ItemText>{session.user.email}</NavDropdown.ItemText>
-                <NavDropdown.Item onClick={() => signOut()}>{t('logout')}</NavDropdown.Item>
-              </NavDropdown>
-            </>
-          )}
-
-          <NavDropdown
-            alignRight
-            className="mr-3"
-            title={<AiOutlineInfoCircle style={{ fontSize: '1.5em' }} />}
-            id="nav-dropdown-about"
-            onSelect={handleAboutSelect}
-          >
-            <NavDropdown.Item eventKey="aboutEureka">{t('About Eureka')}</NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item eventKey="aboutUs">{t('About Us')}</NavDropdown.Item>
-          </NavDropdown>
-
-          {/* <NavItem className={classNames(styles.infoIco, 'mr-4')}>
-            <Link href="/about">
-              <a className="nav-link">
-                <img src="/img/ico-info.png" alt="info icon" />
-              </a>
-            </Link>
-          </NavItem> */}
-
-          {router.locales?.length && (
-            <Dropdown alignRight className={styles.langSwitch} onSelect={handleLanguageSelect}>
-              <Dropdown.Toggle as={ChevronToggle} id="langSwitch">
-                <img src={`/img/lang-flags/${router.locale}.png`} alt={`Language flag '${router.locale}'`} />
+            )}
+          </Nav>
+          <Nav className={styles.navbarNav}>
+            <Nav.Item>
+              <Link href="/mediatheque">
+                <a className={styles.navLink}>
+                  <RiDashboardLine className={styles.navbarIconNav} />
+                  <span className={styles.menuBottomInfo}>{t('My Mediatheque')}</span>
+                </a>
+              </Link>
+            </Nav.Item>
+          </Nav>
+          <Nav className={styles.navbarNav}>
+            <Dropdown alignRight className={styles.langSwitch}>
+              <Dropdown.Toggle as={ChevronToggle}>
+                <AiOutlineInfoCircle className={styles.navbarIconNav} />
               </Dropdown.Toggle>
+              <span className={styles.menuBottomInfo}>{t('About Eureka')}</span>
               <Dropdown.Menu>
-                {router.locales.map((locale) => (
-                  <Dropdown.Item key={locale} eventKey={locale} active={locale === router.locale}>
-                    <Link href={router.asPath} locale={locale}>
-                      <img src={`/img/lang-flags/${locale}.png`} alt={`Language flag '${locale}'`} />
-                    </Link>
-                  </Dropdown.Item>
-                ))}
+                <Dropdown.Item>
+                  <Link href="/about">{t('About Eureka')}</Link>
+                </Dropdown.Item>
+                <Dropdown.Item>
+                  <Link href="/aboutUs">{t('About Us')}</Link>
+                </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
+          </Nav>
+          <Nav className={styles.navbarNav}>
+            {router.locales?.length && (
+              <Dropdown alignRight className={styles.langSwitch} onSelect={handleLanguageSelect}>
+                <Dropdown.Toggle as={ChevronToggle} id="langSwitch">
+                  <img
+                    className={styles.navbarIconNav}
+                    src={`/img/lang-flags/${router.locale}.png`}
+                    alt={`Language flag '${router.locale}'`}
+                  />
+                </Dropdown.Toggle>
+                <span className={styles.menuBottomInfo}>&nbsp;</span>
+                <Dropdown.Menu>
+                  {router.locales.map((locale) => (
+                    <Dropdown.Item key={locale} eventKey={locale} active={locale === router.locale}>
+                      <Link href={router.asPath} locale={locale}>
+                        <img src={`/img/lang-flags/${locale}.png`} alt={`Language flag '${locale}'`} />
+                      </Link>
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            )}
+          </Nav>
+          {session && session.user && (
+            <Nav className={styles.navbarNav}>
+              <Dropdown alignRight className={styles.langSwitch}>
+                <Dropdown.Toggle as={ChevronToggle}>{getAvatar()}</Dropdown.Toggle>
+                <span className={styles.menuBottomInfo}>&nbsp;</span>
+                <Dropdown.Menu>
+                  <Dropdown.Item>
+                    <Button onClick={handlerEditUserClick}>{t('Profile')}</Button>
+                  </Dropdown.Item>
+                  <Dropdown.Item>
+                    <Button onClick={handlerLogout}>{t('logout')}</Button>
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Nav>
           )}
-        </Nav>
-      </BootstrapNavbar>
+        </Navbar.Collapse>
+        {/* </Container> */}
+      </Navbar>
     </Container>
   );
 };
 
-export default Navbar;
+export default NavBar;
