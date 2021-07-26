@@ -67,17 +67,17 @@ const Mediatheque: NextPage = () => {
       let P: Item[] = [];
       let FW: Item[] = [];
       let RW: Item[] = [];
-      if (user.cycles.length) {
+      if (user.cycles && user.cycles.length) {
         C = user.cycles.map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' }));
       }
-      if (user.joinedCycles.length) {
+      if (user.joinedCycles && user.joinedCycles.length) {
         JC = user.joinedCycles.map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' }));
       }
-      if (user.posts.length) {
+      if (user.posts && user.posts.length) {
         P = user.posts.map((p: PostMosaicItem) => ({ ...p, type: 'post' }));
       }
-      if (user.favWorks.length) FW = user.favWorks;
-      if (user.readOrWatchedWorks.length) {
+      if (user.favWorks && user.favWorks.length) FW = user.favWorks;
+      if (user.readOrWatchedWorks && user.readOrWatchedWorks.length) {
         RW = user.readOrWatchedWorks;
       }
       setCyclesAndPosts([...C, ...JC, ...P]);
@@ -104,7 +104,7 @@ const Mediatheque: NextPage = () => {
               <Col>
                 <img className={styles.avatar} src={user.image} alt={user.email} />
                 <br />
-                <em>{user.name}</em>
+                {/* <em>{user.name}</em> */}
               </Col>
               <Col xs={8}>
                 <h2>{user.name}</h2>

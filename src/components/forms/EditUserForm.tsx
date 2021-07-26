@@ -157,7 +157,8 @@ const EditUserForm: FunctionComponent = () => {
 
   // (data: TData, variables: TVariables, context: TContext | undefined)
   const onMutateSuccess = async (d: { r: any }) => {
-    await queryClient.setQueryData(['USERS', id], d.r);
+    await queryClient.setQueryData(['USERS', id], { ...user, ...d.r });
+    setUser((u) => ({ ...u, ...d.r }));
   };
   const {
     mutate: execEditUser,
