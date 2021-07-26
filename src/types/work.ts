@@ -5,6 +5,7 @@ export type WorkDetail = Prisma.WorkGetPayload<{
     localImages: true;
     likes: true;
     favs: true;
+    readOrWatcheds: true;
   };
 }>;
 
@@ -19,6 +20,7 @@ export type WorkMosaicItem = Prisma.WorkGetPayload<{
     localImages: true;
     likes: true;
     favs: true;
+    readOrWatcheds: true;
   };
 }>;
 

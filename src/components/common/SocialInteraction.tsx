@@ -2,8 +2,9 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
-import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
-import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
+import { GiBrain, GiStarsStack } from 'react-icons/gi';
+import { BsBookmark, BsBookmarkFill, BsEye } from 'react-icons/bs';
+import classnames from 'classnames';
 import { FiShare2 } from 'react-icons/fi';
 import { useMutation } from 'react-query';
 import { useSession } from 'next-auth/client';
@@ -16,6 +17,7 @@ import {
   WhatsappShareButton,
   WhatsappIcon,
 } from 'react-share';
+import { User } from '@prisma/client';
 import globalModalsAtom from '../../atoms/globalModals';
 // import Notification from '../ui/Notification';
 
@@ -23,32 +25,62 @@ import { WEBAPP_URL } from '../../constants';
 import { CycleDetail } from '../../types/cycle';
 import { PostDetail } from '../../types/post';
 import { WorkDetail } from '../../types/work';
-import { MySocialInfo, isCycle, isWork } from '../../types';
+import { MySocialInfo, isCycle, isWork, Session } from '../../types';
 import styles from './SocialInteraction.module.css';
 
 interface SocialInteractionClientPayload {
-  socialInteraction: 'fav' | 'like';
+  socialInteraction: 'fav' | 'like' | 'readOrWatched';
   doCreate: boolean;
 }
 
 interface Props {
   entity: CycleDetail | PostDetail | WorkDetail;
   parent?: CycleDetail | WorkDetail | null;
-  mySocialInfo: MySocialInfo;
+  // mySocialInfo: MySocialInfo;
   showCounts?: boolean;
+  showShare?: boolean;
 }
 
-const SocialInteraction: FunctionComponent<Props> = ({ entity, parent, mySocialInfo, showCounts = false }) => {
+const SocialInteraction: FunctionComponent<Props> = ({
+  entity,
+  parent /* ,  mySocialInfo */,
+  showShare = false,
+  showCounts = false,
+}) => {
   const { t } = useTranslation('common');
   const router = useRouter();
-  const [session] = useSession();
-  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
+  const [session] = useSession() as [Session | null | undefined, boolean];
 
-  const [optimistLike, setOptimistLike] = useState<boolean | null>(mySocialInfo.likedByMe!);
-  const [optimistFav, setOptimistFav] = useState<boolean | null>(mySocialInfo.favoritedByMe!);
+  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
+  const [mySocialInfo, setMySocialInfo] = useState<MySocialInfo>();
+
+  const [optimistLike, setOptimistLike] = useState<boolean | null>();
+  const [optimistFav, setOptimistFav] = useState<boolean | null>();
+  const [optimistReadOrWatched, setOptimistReadOrWatched] = useState<boolean | null>();
 
   const [optimistLikeCount, setOptimistLikeCount] = useState<number>(entity.likes.length);
   const [optimistFavCount, setOptimistFavCount] = useState<number>(entity.favs.length);
+  const [optimistReadOrWatchedCount, setOptimistReadOrWatchedCount] = useState<number | null>();
+
+  useEffect(() => {
+    if (entity && isWork(entity) && session) {
+      setOptimistReadOrWatchedCount(entity.readOrWatcheds.length);
+      const s = session as unknown as Session;
+
+      let idx = entity.likes.findIndex((i) => i.id === s.user!.id);
+      const likedByMe = idx !== -1;
+      setOptimistLike(likedByMe);
+
+      idx = entity.favs.findIndex((i) => i.id === s.user!.id);
+      const favoritedByMe = idx !== -1;
+      setOptimistFav(favoritedByMe);
+
+      idx = entity.readOrWatcheds.findIndex((i) => i.id === s.user!.id);
+      const readOrWatchedByMe = idx !== -1;
+      setOptimistReadOrWatched(readOrWatchedByMe);
+      setMySocialInfo({ likedByMe, favoritedByMe, readOrWatchedByMe });
+    }
+  }, [entity, session]);
 
   const openSignInModal = () => {
     setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
@@ -66,6 +98,13 @@ const SocialInteraction: FunctionComponent<Props> = ({ entity, parent, mySocialI
       return 1;
     }
     return optimistFavCount ? -1 : 0;
+  };
+
+  const readOrWatchedInc = () => {
+    if (!optimistReadOrWatched) {
+      return 1;
+    }
+    return optimistReadOrWatchedCount ? -1 : 0;
   };
 
   const shareUrl = `${WEBAPP_URL}${router.asPath}`;
@@ -123,6 +162,13 @@ const SocialInteraction: FunctionComponent<Props> = ({ entity, parent, mySocialI
           setOptimistLikeCount(optimistLikeCount + likeInc());
           return { optimistLike: ol, optimistLikeCount: olc };
         }
+        if (isWork(entity) && payload.socialInteraction === 'readOrWatched') {
+          const ol = optimistReadOrWatched;
+          setOptimistReadOrWatched(!optimistReadOrWatched);
+          const olc = optimistReadOrWatchedCount;
+          setOptimistReadOrWatchedCount(optimistReadOrWatchedCount! + readOrWatchedInc());
+          return { optimistreadOrWatched: ol, optimistreadOrWatchedCount: olc };
+        }
         const opf = optimistFav;
         const opfc = optimistFavCount;
         setOptimistFav(!optimistFav);
@@ -132,10 +178,13 @@ const SocialInteraction: FunctionComponent<Props> = ({ entity, parent, mySocialI
       onSuccess: (data, variables) => {
         if (data.status !== 'OK') {
           if (variables.socialInteraction === 'like') {
-            setOptimistLike(mySocialInfo.likedByMe!);
+            setOptimistLike(mySocialInfo!.likedByMe!);
             setOptimistLikeCount(entity.likes.length);
+          } else if (isWork(entity) && variables.socialInteraction === 'readOrWatched') {
+            setOptimistReadOrWatched(mySocialInfo!.readOrWatchedByMe!);
+            setOptimistReadOrWatchedCount((entity as WorkDetail).readOrWatcheds.length);
           }
-          setOptimistFav(mySocialInfo.likedByMe!);
+          setOptimistFav(mySocialInfo!.likedByMe!);
           setOptimistFavCount(entity.favs.length);
         }
       },
@@ -144,12 +193,17 @@ const SocialInteraction: FunctionComponent<Props> = ({ entity, parent, mySocialI
 
   const handleFavClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    execSocialInteraction({ socialInteraction: 'fav', doCreate: !mySocialInfo.favoritedByMe });
+    execSocialInteraction({ socialInteraction: 'fav', doCreate: !mySocialInfo!.favoritedByMe });
   };
 
   const handleLikeClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    execSocialInteraction({ socialInteraction: 'like', doCreate: !mySocialInfo.likedByMe });
+    execSocialInteraction({ socialInteraction: 'like', doCreate: !mySocialInfo!.likedByMe });
+  };
+
+  const handleReadOrWatchedClick = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    execSocialInteraction({ socialInteraction: 'readOrWatched', doCreate: !mySocialInfo!.readOrWatchedByMe });
   };
 
   useEffect(() => {
@@ -180,42 +234,74 @@ const SocialInteraction: FunctionComponent<Props> = ({ entity, parent, mySocialI
   // }, [isSocialInteractionSuccess]);
 
   return (
-    <div className={styles.container}>
-      <button className={styles.socialBtn} onClick={handleFavClick} type="button">
-        {optimistFav /* mySocialInfo.favoritedByMe */ ? <BsBookmarkFill /> : <BsBookmark />}
-        {showCounts && optimistFavCount}
-      </button>
+    (session && (
+      <div className={styles.container}>
+        {isWork(entity) && (
+          <button className={styles.socialBtn} onClick={handleReadOrWatchedClick} type="button">
+            {optimistReadOrWatched ? <BsEye className={styles.active} /> : <BsEye />}
+            {showCounts && optimistReadOrWatchedCount}
+            <span className={classnames(...[styles.info, ...[optimistReadOrWatched ? styles.active : '']])}>
+              {t('Read / watched')}
+            </span>
+          </button>
+        )}
+        <button className={styles.socialBtn} onClick={handleLikeClick} type="button">
+          {optimistLike /* mySocialInfo.likedByMe */ ? <GiBrain className={styles.active} /> : <GiBrain />}
+          {showCounts && optimistLikeCount}
+          <span className={classnames(...[styles.info, ...[optimistLike ? styles.active : '']])}>
+            {t('I learned')}!
+          </span>
+        </button>
 
-      <button className={styles.socialBtn} onClick={handleLikeClick} type="button">
-        {optimistLike /* mySocialInfo.likedByMe */ ? <AiFillHeart /> : <AiOutlineHeart />}
-        {showCounts && optimistLikeCount}
-      </button>
-      <Dropdown>
-        <Dropdown.Toggle id="langSwitch" className={styles['toggle-share']}>
-          <FiShare2 className={styles.actions} />
-        </Dropdown.Toggle>
-        <Dropdown.Menu className={styles['icon-share']}>
-          <Dropdown.Item>
-            <TwitterShareButton url={shareUrl} title={shareText} via="eleurekaclub">
-              <TwitterIcon size={32} round />
-              {`${t('wayShare')} Twitter`}
-            </TwitterShareButton>
-          </Dropdown.Item>
-          <Dropdown.Item>
-            <FacebookShareButton url={shareUrl} quote={shareText}>
-              <FacebookIcon size={32} round />
-              {`${t('wayShare')} Facebook`}
-            </FacebookShareButton>
-          </Dropdown.Item>
-          <Dropdown.Item>
-            <WhatsappShareButton url={shareUrl} title={`${shareText} ${t('whatsappComplement')}`}>
-              <WhatsappIcon size={32} round />
-              {`${t('wayShare')} Whatsapp`}
-            </WhatsappShareButton>
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
-    </div>
+        {isWork(entity) /* || isCycle(entity) */ && (
+          <button className={styles.socialBtn} type="button">
+            <GiStarsStack className={styles.active} />
+            {optimistReadOrWatchedCount! ? optimistLikeCount / optimistReadOrWatchedCount! : 0}%
+            <span className={classnames(...[styles.info, styles.active])}>{t('Rating Eureka')}*</span>
+          </button>
+        )}
+        <button className={styles.socialBtn} onClick={handleFavClick} type="button">
+          {optimistFav /* mySocialInfo.favoritedByMe */ ? <BsBookmarkFill className={styles.active} /> : <BsBookmark />}
+          {showCounts && optimistFavCount}
+          <br />
+          <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>
+            {t('Save for later')}
+          </span>
+        </button>
+
+        {showShare && (
+          <Dropdown>
+            <Dropdown.Toggle id="langSwitch" className={styles['toggle-share']}>
+              <FiShare2 className={styles.actions} />
+              <br />
+              <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>{` `}</span>
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu className={styles['icon-share']}>
+              <Dropdown.Item>
+                <TwitterShareButton url={shareUrl} title={shareText} via="eleurekaclub">
+                  <TwitterIcon size={32} round />
+                  {`${t('wayShare')} Twitter`}
+                </TwitterShareButton>
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <FacebookShareButton url={shareUrl} quote={shareText}>
+                  <FacebookIcon size={32} round />
+                  {`${t('wayShare')} Facebook`}
+                </FacebookShareButton>
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <WhatsappShareButton url={shareUrl} title={`${shareText} ${t('whatsappComplement')}`}>
+                  <WhatsappIcon size={32} round />
+                  {`${t('wayShare')} Whatsapp`}
+                </WhatsappShareButton>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        )}
+      </div>
+    )) ||
+    null
   );
 };
 

@@ -4,5 +4,7 @@ export interface EditUserClientPayload {
   email?: string;
   image?: string;
   countryOfOrigin?: string | null;
+  aboutMe?: string;
+  dashboardType: number;
   tags?: string;
 }

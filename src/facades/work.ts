@@ -10,6 +10,7 @@ export const find = async (id: number): Promise<WorkDetail | null> => {
       localImages: true,
       likes: true,
       favs: true,
+      readOrWatcheds: true,
     },
   });
 };
@@ -78,6 +79,15 @@ export const isLikedByUser = async (work: Work, user: User): Promise<number> => 
   });
 };
 
+export const isReadOrWatchedByUser = async (work: Work, user: User): Promise<number> => {
+  return prisma.work.count({
+    where: {
+      id: work.id,
+      readOrWatcheds: { some: { id: user.id } },
+    },
+  });
+};
+
 export const createFromServerFields = async (
   fields: CreateWorkServerFields,
   coverImageUpload: StoredFileUpload,
@@ -122,7 +132,7 @@ export const createFromServerFields = async (
 export const saveSocialInteraction = async (
   work: Work,
   user: User,
-  socialInteraction: 'fav' | 'like',
+  socialInteraction: 'fav' | 'like' | 'readOrWatched',
   create: boolean,
 ): Promise<Work> => {
   return prisma.work.update({

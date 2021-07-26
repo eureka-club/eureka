@@ -52,11 +52,11 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
       }),
     };
 
-    const getOpt = (takePlus = 0, skipPlus = 0) => ({
+    const getOpt = (takePlus = 0, skipPlus = 0, isWork = false) => ({
       skip: c * countItemsPerPage + skipPlus,
       take: takePlus || countItemsPerPage,
 
-      include: { localImages: true, likes: true, favs: true },
+      include: { localImages: true, likes: true, favs: true, ...(isWork && { readOrWatcheds: true }) },
       where,
     });
 
@@ -76,7 +76,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     // let rw = parseInt(remainingWorks, 10) - 2;
 
     const ewr = parseInt(extraWorksRequired as string, 10);
-    const works = await prisma.work.findMany(getOpt(0, ewr));
+    const works = await prisma.work.findMany(getOpt(0, ewr, true));
 
     let cyclesPlus = 0;
     if (works.length !== countItemsPerPage) cyclesPlus = countItemsPerPage - works.length;
@@ -87,7 +87,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     let worksPlus = 0;
     if (cycles.length < 2 && works.length === 2) {
       worksPlus = countItemsPerPage - cycles.length;
-      const extraWorks = await prisma.work.findMany(getOpt(worksPlus, ewr + 2));
+      const extraWorks = await prisma.work.findMany(getOpt(worksPlus, ewr + 2, true));
       works.push(...extraWorks);
     }
     // promisesCycles.push(cycles);

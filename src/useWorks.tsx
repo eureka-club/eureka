@@ -3,9 +3,13 @@ import { useAtom } from 'jotai';
 // import { WorkMosaicItem } from './types/work';
 import globalSearchEngineAtom from './atoms/searchEngine';
 
-const getRecords = async (where = '') => {
+const getRecords = async (where = '', id = '') => {
   if (!where) return { data: [] };
-  const res = await fetch(`/api/work${where ? `?where=${where}` : ''}`);
+  let url = '/api/work';
+  if (!where && !id) return null;
+  if (where) url = `${url}?where=${where}`;
+  else if (id) url = `/api/work?id=${id}`;
+  const res = await fetch(url);
   const result = await res.json();
 
   // type ItemType =
@@ -21,11 +25,12 @@ const getRecords = async (where = '') => {
   return result;
 };
 
-const useWorks = () => {
+const useWorks = (id?: string) => {
   const [globalSearchEngineState] = useAtom(globalSearchEngineAtom);
   const { where } = globalSearchEngineState;
-
-  return useQuery(['WORKS', JSON.stringify({ where })], () => getRecords(where), {
+  let key = encodeURIComponent(JSON.stringify({ where }));
+  if (id) key = id;
+  return useQuery(['WORKS', key], () => getRecords(where, id), {
     staleTime: 1000 * 60 * 60,
   });
 };

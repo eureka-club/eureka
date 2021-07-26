@@ -60,7 +60,6 @@ const NavBar: FunctionComponent = () => {
 
   const handlerEditUserClick = (ev: MouseEvent<DropdownItemProps>) => {
     ev.preventDefault();
-
     setGlobalModalsState({ ...globalModalsState, ...{ editUserModalOpened: true } });
   };
 
@@ -96,13 +95,14 @@ const NavBar: FunctionComponent = () => {
           <Navbar.Brand>
             <Container>
               <Col className={styles.brandContainer}>
-                <img src="/img/logo.png" className="d-inline-block align-middle mr-4" width={52} alt="Project logo" />
+                <img src="/img/logo.png" className="d-inline-block align-middle mr-2" width={52} alt="Project logo" />
               </Col>
-              <Col className={styles.brandInfo}>
+              <Col>
                 {/* <h1 className={styles.brandText}> */}
-                {siteName}
+                <div className={styles.siteName}>{siteName}</div>
+
                 {/* </h1> */}
-                <em>{t('Social media to foster awareness')}</em>
+                <div className={styles.brandInfo}>{t('Social media to foster awareness')}</div>
               </Col>
             </Container>
           </Navbar.Brand>
@@ -138,16 +138,18 @@ const NavBar: FunctionComponent = () => {
               </Dropdown>
             )}
           </Nav>
-          <Nav className={styles.navbarNav}>
-            <Nav.Item>
-              <Link href="/mediatheque">
-                <a className={styles.navLink}>
-                  <RiDashboardLine className={styles.navbarIconNav} />
-                  <span className={styles.menuBottomInfo}>{t('My Mediatheque')}</span>
-                </a>
-              </Link>
-            </Nav.Item>
-          </Nav>
+          {session && session.user && (
+            <Nav className={styles.navbarNav}>
+              <Nav.Item>
+                <Link href="/mediatheque">
+                  <a className={styles.navLink}>
+                    <RiDashboardLine className={styles.navbarIconNav} />
+                    <span className={styles.menuBottomInfo}>{t('My Mediatheque')}</span>
+                  </a>
+                </Link>
+              </Nav.Item>
+            </Nav>
+          )}
           <Nav className={styles.navbarNav}>
             <Dropdown alignRight className={styles.langSwitch}>
               <Dropdown.Toggle as={ChevronToggle}>
@@ -155,11 +157,15 @@ const NavBar: FunctionComponent = () => {
               </Dropdown.Toggle>
               <span className={styles.menuBottomInfo}>{t('About Eureka')}</span>
               <Dropdown.Menu>
-                <Dropdown.Item>
-                  <Link href="/about">{t('About Eureka')}</Link>
+                <Dropdown.Item onClick={() => router.push('/about')}>
+                  {/* <Link href="/about"> */}
+                  {t('About Eureka')}
+                  {/* </Link> */}
                 </Dropdown.Item>
-                <Dropdown.Item>
-                  <Link href="/aboutUs">{t('About Us')}</Link>
+                <Dropdown.Item onClick={() => router.push('/aboutUs')}>
+                  {/* <Link href="/aboutUs"> */}
+                  {t('About Us')}
+                  {/* </Link> */}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
@@ -193,11 +199,15 @@ const NavBar: FunctionComponent = () => {
                 <Dropdown.Toggle as={ChevronToggle}>{getAvatar()}</Dropdown.Toggle>
                 <span className={styles.menuBottomInfo}>&nbsp;</span>
                 <Dropdown.Menu>
-                  <Dropdown.Item>
-                    <Button onClick={handlerEditUserClick}>{t('Profile')}</Button>
+                  <Dropdown.Item onClick={handlerEditUserClick}>
+                    {/* <Button > */}
+                    {t('Profile')}
+                    {/* </Button> */}
                   </Dropdown.Item>
-                  <Dropdown.Item>
-                    <Button onClick={handlerLogout}>{t('logout')}</Button>
+                  <Dropdown.Item onClick={handlerLogout}>
+                    {/* <Button > */}
+                    {t('logout')}
+                    {/* </Button> */}
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>

@@ -12,31 +12,36 @@ datasource db {
 // Next-auth models (https://next-auth.js.org/schemas/adapters#prisma-schema)
 
 model User {
-  id             Int        @id @default(autoincrement())
-  name           String?
-  email          String?    @unique
-  emailVerified  DateTime?  @map(name: "email_verified")
-  image          String?
-  roles          String     @default("member")
-  createdAt      DateTime   @default(now()) @map(name: "created_at")
-  updatedAt      DateTime   @updatedAt @map(name: "updated_at")
-  countryOfOrigin  String?    @map(name: "country_of_origin")
-
+  id                Int        @id @default(autoincrement())
+  name              String?
+  email             String?    @unique
+  emailVerified     DateTime?  @map(name: "email_verified")
+  image             String?
+  roles             String     @default("member")
+  createdAt         DateTime   @default(now()) @map(name: "created_at")
+  updatedAt         DateTime   @updatedAt @map(name: "updated_at")
+  countryOfOrigin   String?    @map(name: "country_of_origin")
+  aboutMe           String?    @map(name: "about_me")
+  
+  // 1 public, 2 protected, 3 private
+  dashboardType     Int?       @map(name: "dashboard_type") @default(3)
+ 
   accounts       Account[]
   sessions       Session[]
 
-  cycles         Cycle[]    @relation("CreatedBy")
-  joinedCycles   Cycle[]    @relation("CycleToParticipant")
-  likedCycles    Cycle[]    @relation("CycleToLikes")
-  favCycles      Cycle[]    @relation("CycleToFavs")
-  likedWorks     Work[]     @relation("WorkToLikes")
-  favWorks       Work[]     @relation("WorkToFavs")
-  likedPosts     Post[]     @relation("PostToLikes")
-  favPosts       Post[]     @relation("PostToFavs")
-  posts          Post[]  
-  taxonomies     Taxonomy[]  
-  terms          Term[]  
-  tags           String?
+  cycles              Cycle[]    @relation("CreatedBy")
+  joinedCycles        Cycle[]    @relation("CycleToParticipant")
+  likedCycles         Cycle[]    @relation("CycleToLikes")
+  favCycles           Cycle[]    @relation("CycleToFavs")
+  likedWorks          Work[]     @relation("WorkToLikes")
+  favWorks            Work[]     @relation("WorkToFavs")
+  readOrWatchedWorks  Work[]     @relation("WorkReadOrWatched")
+  likedPosts          Post[]     @relation("PostToLikes")
+  favPosts            Post[]     @relation("PostToFavs")
+  posts               Post[]  
+  taxonomies          Taxonomy[]  
+  terms               Term[]  
+  tags                String?
 
   @@map(name: "users")
 }
@@ -126,15 +131,16 @@ model Work {
   createdAt        DateTime   @default(now()) @map(name: "created_at")
   updatedAt        DateTime   @updatedAt @map(name: "updated_at")
 
-  localImages  LocalImage[]
-  cycles       Cycle[]
-  posts        Post[]
-  likes        User[]    @relation("WorkToLikes")
-  favs         User[]    @relation("WorkToFavs")
-  tags         String?
+  localImages       LocalImage[]
+  cycles            Cycle[]
+  posts             Post[]
+  likes             User[]    @relation("WorkToLikes")
+  favs              User[]    @relation("WorkToFavs")
+  readOrWatcheds    User[]    @relation("WorkReadOrWatched")
+  tags              String?
 
-  terms        Term[]    @relation("TaxonomyTermWork")
-  topics       String?
+  terms             Term[]    @relation("TaxonomyTermWork")
+  topics            String?
   
   @@index([title], name: "works_title_index")
   @@index([author], name: "works_author_index")

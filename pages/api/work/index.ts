@@ -51,23 +51,28 @@ export default getApiHandler()
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
-      const { q = null, where = null } = req.query;
+      const { q = null, where = null, id = null } = req.query;
       let data = null;
       if (typeof q === 'string') {
         data = await prisma.work.findMany({
           where: {
             OR: [{ title: { contains: q } }, { author: { contains: q } }],
           },
-          include: { localImages: true, likes: true, favs: true },
+          include: { localImages: true, likes: true, favs: true, readOrWatcheds: true },
         });
       } else if (where) {
         data = await prisma.work.findMany({
           ...(typeof where === 'string' && { where: JSON.parse(where) }),
-          include: { localImages: true, likes: true, favs: true },
+          include: { localImages: true, likes: true, favs: true, readOrWatcheds: true },
+        });
+      } else if (id) {
+        data = await prisma.work.findMany({
+          where: { id: parseInt(id as string, 10) },
+          include: { localImages: true, likes: true, favs: true, readOrWatcheds: true },
         });
       } else {
         data = await prisma.work.findMany({
-          include: { localImages: true, likes: true, favs: true },
+          include: { localImages: true, likes: true, favs: true, readOrWatcheds: true },
         });
       }
 

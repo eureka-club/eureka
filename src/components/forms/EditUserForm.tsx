@@ -40,9 +40,20 @@ const EditUserForm: FunctionComponent = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const [tags, setTags] = useState<string>('');
-  const [user, setUser] = useState<(User & { countryOfOrigin: string }) | undefined>();
-  const [id, setId] = useState<string | undefined>();
+  const [user, setUser] = useState<User | undefined>();
+  const [id, setId] = useState<string>('');
   const [currentImg, setCurrentImg] = useState<string | undefined>();
+
+  const [dashboardType, setDashboardType] = useState<number>();
+  const [dashboardTypeChecked, setDashboardTypeChecked] = useState<{
+    public: boolean;
+    protected: boolean;
+    private: boolean;
+  }>({
+    private: false,
+    protected: false,
+    public: false,
+  });
 
   useEffect(() => {
     const s = session as unknown as Session;
@@ -55,6 +66,23 @@ const EditUserForm: FunctionComponent = () => {
     if (data) {
       setUser(data);
       setTags(() => data.tags);
+      setDashboardTypeChecked((res) => {
+        let v = 'private';
+        switch (data.dashboardType) {
+          case 2:
+            v = 'protected';
+            break;
+          case 1:
+            v = 'public';
+            break;
+          default:
+            v = 'private';
+        }
+        return {
+          ...res,
+          [`${v}`]: true,
+        };
+      });
       setCurrentImg(() => data.image);
     }
   }, [data]);
@@ -181,6 +209,8 @@ const EditUserForm: FunctionComponent = () => {
       email: form.email.value,
       image: form.image.value,
       countryOfOrigin: countryOrigin,
+      aboutMe: form.aboutMe.value,
+      dashboardType: dashboardType || 3,
       tags,
     };
 
@@ -249,6 +279,18 @@ const EditUserForm: FunctionComponent = () => {
   //   setCountrySearchResults(itemsSC2);
   //   setIsCountriesSearchLoading2(false);
   // };
+
+  const handlerDashboardTypeRadioChange = (val: string) => {
+    setDashboardTypeChecked(() => ({
+      private: false,
+      protected: false,
+      public: false,
+    }));
+    setDashboardType(() => {
+      return { public: 1, protected: 2, private: 3 }[`${val}`];
+    });
+    setDashboardTypeChecked((res) => ({ ...res, [`${val}`]: true }));
+  };
 
   return (
     <>
@@ -355,9 +397,57 @@ const EditUserForm: FunctionComponent = () => {
               )} */}
               </Row>
               <Row>
+                <Col xs={12}>
+                  <Form.Group controlId="aboutMe">
+                    <Form.Label>{t('About me')}</Form.Label>
+                    <Form.Control as="textarea" rows={3} />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
                 <Col>
                   <TagsInput tags={tags} setTags={setTags} label={t('Topics')} />
                 </Col>
+              </Row>
+              <Row>
+                <Form.Group controlId="dashboardType">
+                  <Form.Label>{t('Dashboard Type')}</Form.Label>
+
+                  <Form.Check type="radio" id="dashboardTypePublic">
+                    <Form.Check.Input
+                      type="radio"
+                      isValid
+                      onChange={() => handlerDashboardTypeRadioChange('public')}
+                      checked={dashboardTypeChecked.public}
+                    />
+                    <Form.Check.Label>{t('My Dashboard is public')}</Form.Check.Label>
+                    <Form.Control.Feedback type="valid">{t('Anyone can see my Dashboard')}</Form.Control.Feedback>
+                  </Form.Check>
+
+                  <Form.Check type="radio" id="dashboardTypeProtected">
+                    <Form.Check.Input
+                      type="radio"
+                      isValid
+                      onChange={() => handlerDashboardTypeRadioChange('protected')}
+                      checked={dashboardTypeChecked.protected}
+                    />
+                    <Form.Check.Label>{t('Fallowers can see my Dashboard')}</Form.Check.Label>
+                    <Form.Control.Feedback type="valid">
+                      {t('Users I fallow or that follow me can see my Dashboard')}
+                    </Form.Control.Feedback>
+                  </Form.Check>
+
+                  <Form.Check type="radio" id="dashboardTypePrivate">
+                    <Form.Check.Input
+                      type="radio"
+                      isValid
+                      onChange={() => handlerDashboardTypeRadioChange('private')}
+                      checked={dashboardTypeChecked.private}
+                    />
+                    <Form.Check.Label>{t('My Dashboard is secret')}</Form.Check.Label>
+                    <Form.Control.Feedback type="valid">{t('Only I can see my Dashboard')}</Form.Control.Feedback>
+                  </Form.Check>
+                </Form.Group>
               </Row>
             </Container>
           </ModalBody>

@@ -20,7 +20,7 @@ const validateReq = async (
   if (
     typeof id !== 'string' ||
     typeof socialInteraction !== 'string' ||
-    (socialInteraction !== 'fav' && socialInteraction !== 'like')
+    (socialInteraction !== 'fav' && socialInteraction !== 'like' && socialInteraction !== 'readOrWatched')
   ) {
     res.status(404).end();
     return false;
@@ -65,7 +65,7 @@ export default getApiHandler()
   .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     const session = (await getSession({ req })) as unknown as Session;
     const { id, socialInteraction } = req.query;
-
+    debugger;
     if (!(await validateReq(session, id, socialInteraction, res))) {
       return;
     }

@@ -81,14 +81,17 @@
 .langSwitch :global(.dropdown-item.active) {
   background-color: var(--eureka-green);
 }
-.brandInfo{
-  
+.siteName{
+  text-transform: uppercase;
   margin-left: 0;
     padding-left: 0;
+    letter-spacing: .4em;
+
+    /* display: inline-block; */
 }
-.brandInfo em{
+.brandInfo{
   font-size:.5em;
-  display:block;
+  /* display:block; */
 }
 .brandContainer{
   margin-right: 0;
@@ -100,6 +103,7 @@
 .menuBottomInfo{
   color:var(--eureka-secondary)!important;
   display: block;
+  font-size: .7em;
 }
 .navLink{
   color:var(--eureka-secondary)!important;

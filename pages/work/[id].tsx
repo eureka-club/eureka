@@ -1,11 +1,19 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/client';
 
+import { useQueryClient } from 'react-query';
 import { Session, MySocialInfo } from '../../src/types';
 import { WorkDetail } from '../../src/types/work';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import WorkDetailComponent from '../../src/components/work/WorkDetail';
-import { countCycles, countPosts, find, isFavoritedByUser, isLikedByUser } from '../../src/facades/work';
+import {
+  countCycles,
+  countPosts,
+  find,
+  isFavoritedByUser,
+  isLikedByUser,
+  isReadOrWatchedByUser,
+} from '../../src/facades/work';
 
 interface Props {
   work: WorkDetail;
@@ -15,6 +23,8 @@ interface Props {
 }
 
 const WorkDetailPage: NextPage<Props> = ({ work, cyclesCount, postsCount, mySocialInfo }) => {
+  const queryClient = useQueryClient();
+  queryClient.setQueryData(['WORKS', `${work.id}`], work);
   return (
     <SimpleLayout title={work.title}>
       <WorkDetailComponent work={work} cyclesCount={cyclesCount} postsCount={postsCount} mySocialInfo={mySocialInfo} />
@@ -44,10 +54,12 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
   const mySocialInfo: MySocialInfo = {
     favoritedByMe: undefined,
     likedByMe: undefined,
+    readOrWatchedByMe: undefined,
   };
   if (session != null) {
     mySocialInfo.favoritedByMe = !!(await isFavoritedByUser(work, session.user));
     mySocialInfo.likedByMe = !!(await isLikedByUser(work, session.user));
+    mySocialInfo.readOrWatchedByMe = !!(await isReadOrWatchedByUser(work, session.user));
   }
 
   return {

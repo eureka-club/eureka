@@ -20,9 +20,9 @@ import Spinner from 'react-bootstrap/Spinner';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BsFillXCircleFill } from 'react-icons/bs';
 import { useMutation, useQueryClient } from 'react-query';
+
 import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
-
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
 import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload } from '../../types/post';
 import { CycleWithImages } from '../../types/cycle';
@@ -34,6 +34,7 @@ import WorkTypeaheadSearchItem from '../work/TypeaheadSearchItem';
 import globalModalsAtom from '../../atoms/globalModals';
 import styles from './CreatePostForm.module.css';
 import useTopics from '../../useTopics';
+import useWorks from '../../useWorks';
 
 const CreatePostForm: FunctionComponent = () => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -48,10 +49,29 @@ const CreatePostForm: FunctionComponent = () => {
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
   const queryClient = useQueryClient();
   const router = useRouter();
+
+  // const [workId, setWorkId] = useState<string | undefined>();
+  const { data: work } = useWorks(router.query.id as string);
+
+  // useEffect(() => {
+  //   if (router) {
+  //     const routeValues = router.route.split('/').filter((i) => i);
+  //     if (routeValues.length) {
+  //       if (routeValues[0] === 'work') {
+  //         setWorkId(router.query.id as string);
+  //       }
+  //     }
+  //   }
+  // }, [router, router.query.id]);
+
+  useEffect(() => {
+    if (work) setSelectedWork(work);
+  }, [work]);
+
   const { t } = useTranslation('createPostForm');
 
   const { data: topics } = useTopics();
-
+  const [postId, setPostId] = useState<number | undefined>();
   const {
     mutate: execCreatePost,
     data: createdPost,
@@ -59,10 +79,10 @@ const CreatePostForm: FunctionComponent = () => {
     isError: isCreatePostError,
     isLoading: isCreatePostLoading,
     isSuccess: isCreatePostSuccess,
+    status,
   } = useMutation(
-    async (payload: CreatePostAboutCycleClientPayload | CreatePostAboutWorkClientPayload): Promise<Post> => {
+    async (payload: CreatePostAboutCycleClientPayload | CreatePostAboutWorkClientPayload): Promise<Post | null> => {
       const formData = new FormData();
-
       Object.entries(payload).forEach(([key, value]) => {
         if (value != null) {
           formData.append(key, value);
@@ -74,7 +94,12 @@ const CreatePostForm: FunctionComponent = () => {
         body: formData,
       });
 
-      return res.json();
+      const json = await res.json();
+      if (json.ok) {
+        setPostId(json.id);
+        return json.post;
+      }
+      return null;
     },
   );
 
@@ -180,12 +205,14 @@ const CreatePostForm: FunctionComponent = () => {
       queryClient.invalidateQueries('posts.mosaic');
 
       if (selectedWork != null) {
-        router.push(`/work/${selectedWork.id}/post/${createdPost.id}`);
+        router.push(`/work/${selectedWork.id}/post/${createdPost.id || postId}`);
         return;
       }
       if (selectedCycle != null) {
-        router.push(`/cycle/${selectedCycle.id}/post/${createdPost.id}`);
+        router.push(`/cycle/${selectedCycle.id}/post/${createdPost.id || postId}`);
       }
+    } else if (status === 'error') {
+      alert('Error creating the post');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createdPost, isCreatePostSuccess]);

@@ -64,5 +64,16 @@
   "Topics": "Topics",
   "Edit Profile": "Edit Profile",
   "countryFieldLabel": "Country or region of focus (if applicable)",
-  "Edit": "Edit"
+  "Edit": "Edit",
+  "Read / watched":"Read / watched",
+  "I learned":"I learned",
+  "Rating Eureka":"Rating Eureka",
+  "Save for later":"Save for later",
+  "Dashboard Type":"Dashboard Type",
+  "My Dashboard is public":"My Dashboard is public",
+  "Anyone can see my Dashboard":"Anyone can see my Dashboard",
+  "Fallowers can see my Dashboard":"Fallowers can see my Dashboard",
+  "Users I fallow or that follow me can see my Dashboard":"Users I fallow or that follow me can see my Dashboard",
+  "My Dashboard is secret":"My Dashboard is secret",
+  "Only I can see my Dashboard":"Only I can see my Dashboard"
 }

@@ -5,6 +5,7 @@
   overflow: hidden;
   position: relative;
   height:24em;
+  display: inline-block;
 }
 .cycle img {
   width: 100%;  

@@ -33,10 +33,13 @@ export const find = async (id: number): Promise<User | null> => {
         },
       },
       likedWorks: {
-        include: { localImages: true },
+        include: { localImages: true, likes: true, favs: true, readOrWatcheds: true },
       },
       favWorks: {
-        include: { localImages: true },
+        include: { localImages: true, likes: true, favs: true, readOrWatcheds: true },
+      },
+      readOrWatchedWorks: {
+        include: { localImages: true, likes: true, favs: true, readOrWatcheds: true },
       },
     },
   });

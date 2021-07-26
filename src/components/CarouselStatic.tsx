@@ -35,8 +35,8 @@ type Props = {
   // topic: string;
   // topicLabel?: string;
   title: string;
-  iconBefore: JSX.Element;
-  iconAfter: JSX.Element;
+  iconBefore?: JSX.Element;
+  iconAfter?: JSX.Element;
   onSeeAll: () => Promise<void>;
   data: Item[]; // ((CycleMosaicItem & { type: string }) | WorkMosaicItem)[];
 };
@@ -51,7 +51,7 @@ const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefine
   }
   if (isWorkMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
-    return <MosaicItemWork key={`work-${item.id}`} {...item} />;
+    return <MosaicItemWork key={`work-${item.id}`} work={item} />;
   }
 
   return '';

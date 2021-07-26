@@ -41,10 +41,11 @@ type Item = (CycleMosaicItem & { type: string }) | WorkMosaicItem | (PostMosaicI
 
 const Mediatheque: NextPage = () => {
   const [session] = useSession();
-  const [id, setId] = useState<string | undefined>();
+  const [id, setId] = useState<string>('');
   const router = useRouter();
   const [cyclesAndPost, setCyclesAndPosts] = useState<Item[]>([]);
   const [savedForLater, setSavedForLaters] = useState<Item[]>([]);
+  const [readOrWatched, setReadOrWatched] = useState<Item[]>([]);
 
   const { t } = useTranslation('mediatheque');
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
@@ -55,127 +56,36 @@ const Mediatheque: NextPage = () => {
 
   useEffect(() => {
     const s = session as unknown as Session;
-    if (!s || !s.user) router?.push('/');
-    else setId(s.user.id.toString());
+    if (s && s.user) setId(s.user.id.toString());
   }, [session, router]);
 
   const { isLoading, /* isError, error, */ data: user } = useUsers(id);
   useEffect(() => {
-    if (user) {
+    if (user && id) {
       let C: Item[] = [];
       let JC: Item[] = [];
       let P: Item[] = [];
       let FW: Item[] = [];
-      if (user.cycles) {
+      let RW: Item[] = [];
+      if (user.cycles.length) {
         C = user.cycles.map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' }));
       }
-      if (user.joinedCycles) {
+      if (user.joinedCycles.length) {
         JC = user.joinedCycles.map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' }));
       }
-      if (user.posts) {
+      if (user.posts.length) {
         P = user.posts.map((p: PostMosaicItem) => ({ ...p, type: 'post' }));
       }
-      if (user.favWorks) FW = user.favWorks;
+      if (user.favWorks.length) FW = user.favWorks;
+      if (user.readOrWatchedWorks.length) {
+        RW = user.readOrWatchedWorks;
+      }
       setCyclesAndPosts([...C, ...JC, ...P]);
       setSavedForLaters([...FW]);
+      setReadOrWatched([...RW]);
     }
-  }, [user]);
-  // const { isLoading, /* isError, error, */ data: works } = useWorks();
-  // const { isLoading: isLoadingCycles, /* isError: isErrorCycles, error: errorCycles, */ data: cycles } =
-  //   useCycles();
-  // const { data: onlyByCountriesAux } = useCountries();
+  }, [user, id]);
 
-  // const [homepageMosaicData, setHomepageMosaicData] = useState<
-  //   ((CycleMosaicItem & { type: string }) | WorkMosaicItem)[]
-  // >([]);
-
-  // useEffect(() => {
-  //   if (works || cycles /* || posts */) {
-  //     const w = works ? works.data : [];
-  //     const c = cycles ? cycles.data : [];
-  //     // const p = posts ? posts.data : [];
-  //     const res = [...w, ...c /* , ...p */];
-  //     setHomepageMosaicData(res);
-  //   }
-  // }, [works, cycles /* , posts */]);
-
-  /* type FilterWhere = {
-    where: {
-      OR: {
-        title: { contains: string };
-        contentText: { contains: string };
-      };
-    };
-  };
-
-  type Filter = {
-    [index: string]: Array<string> | FilterWhere | undefined;
-    only?: Array<string>;
-    cycle?: FilterWhere;
-    work?: FilterWhere;
-  }; */
-
-  // const [homepageMosaicDataFiltered, setHomepageMosaicDataFiltered] = useState<
-  //   ((CycleMosaicItem & { type: string }) | WorkMosaicItem)[]
-  // >([]);
-
-  // useEffect(() => {
-  //   setGlobalSearchEngineState({
-  //     ...globalSearchEngineState,
-  //     ...{ onlyByCountries: onlyByCountriesAux },
-  //   });
-  // }, [onlyByCountriesAux]);
-
-  // useEffect(() => {
-  //   if (homepageMosaicData) {
-  //     const { only, onlyByCountries } = globalSearchEngineState;
-  //     let filtered = null;
-  //     // if (q) {debugger;
-  //     //   const whereAux = encodeURIComponent(JSON.stringify({ title: { contains: globalSearchEngineState.q } }));
-  //     //   setTempWhere(whereAux);
-  //     // }
-  //     if (only.length) {
-  //       filtered = homepageMosaicData.filter((i) => {
-  //         return only.includes(i.type);
-  //       });
-  //       setHomepageMosaicDataFiltered([...filtered]);
-  //     }
-  //     if (onlyByCountries && onlyByCountries.length) {
-  //       filtered = (filtered || homepageMosaicData).filter((i) => {
-  //         if (i.type !== 'cycle')
-  //           return (
-  //             onlyByCountries.includes((i as WorkMosaicItem).countryOfOrigin as string) ||
-  //             onlyByCountries.includes((i as WorkMosaicItem).countryOfOrigin2 as string)
-  //           );
-  //         return false;
-  //       });
-  //       setHomepageMosaicDataFiltered([...filtered]);
-  //     }
-  //     if (!filtered) {
-  //       setHomepageMosaicDataFiltered([...homepageMosaicData]);
-  //     }
-  //   }
-  // }, [homepageMosaicData, globalSearchEngineState]);
-
-  // useEffect(() => {
-  //   if (globalSearchEngineState.q) {
-  //     const { q } = globalSearchEngineState;
-  //     const where = JSON.stringify({ title: { contains: q } });
-  //     setGlobalSearchEngineState({ ...globalSearchEngineState, where });
-  //   }
-  // }, [globalSearchEngineState]);
-
-  // const genLoadingCmp = (): ReactElement => {
-  //   if (isLoading || isLoadingCycles)
-  //     return (
-  //       <Spinner animation="border" role="status">
-  //         <span className="sr-only">{t('Loading')}</span>
-  //       </Spinner>
-  //     );
-  //   return <span>{`${''}`}</span>;
-  // };
-  // let qLabel = t(`topics:${globalSearchEngineState.q as string}`);
-  // if (qLabel.match(':')) qLabel = globalSearchEngineState.q as string;
   const seeAll = async (data: Item[], q: string): Promise<void> => {
     setGlobalSearchEngineState({
       ...globalSearchEngineState,
@@ -187,7 +97,7 @@ const Mediatheque: NextPage = () => {
   };
   return (
     <SimpleLayout title={t('Mediatheque')}>
-      {user && (
+      {session && user && (
         <Card className={styles.userHeader}>
           <Card.Body>
             <Row>
@@ -199,7 +109,7 @@ const Mediatheque: NextPage = () => {
               <Col xs={8}>
                 <h2>{user.name}</h2>
                 <em>
-                  <AiOutlineEnvironment /> Location
+                  <AiOutlineEnvironment /> {t(`countries:${user.countryOfOrigin}`)}
                 </em>
                 <p className={styles.description}>
                   Auto-layout for flexbox grid columns also means you can set the width of one column and have the
@@ -210,7 +120,7 @@ const Mediatheque: NextPage = () => {
                 <TagsInput tags={user.tags} readOnly label="" />
               </Col>
               <Col>
-                <BsCircleFill className={styles.infoCircle} />
+                {/* <BsCircleFill className={styles.infoCircle} /> */}
                 <Button>{t('Follow')}</Button>
               </Col>
             </Row>
@@ -224,7 +134,7 @@ const Mediatheque: NextPage = () => {
         title={t('Cycles and Eurekas I created or joined')}
         data={cyclesAndPost}
         iconBefore={<></>}
-        iconAfter={<BsCircleFill className={styles.infoCircle} />}
+        // iconAfter={<BsCircleFill className={styles.infoCircle} />}
       />
 
       <CarouselStatic
@@ -232,7 +142,15 @@ const Mediatheque: NextPage = () => {
         title={t('Saved for later of forever')}
         data={savedForLater}
         iconBefore={<BsBookmark />}
-        iconAfter={<BsCircleFill className={styles.infoCircle} />}
+        // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+      />
+
+      <CarouselStatic
+        onSeeAll={async () => seeAll(readOrWatched, t(`Movies/books i've watched/read`))}
+        title={t(`Movies/books i've watched/read`)}
+        data={readOrWatched}
+        iconBefore={<BsBookmark />}
+        // iconAfter={<BsCircleFill className={styles.infoCircle} />}
       />
     </SimpleLayout>
   );
