@@ -56,7 +56,7 @@ export default getApiHandler()
       if (typeof q === 'string') {
         data = await prisma.work.findMany({
           where: {
-            OR: [{ title: { contains: q } }, { author: { contains: q } }],
+            OR: [{ title: { contains: q } }, { contentText: { contains: q } }, { author: { contains: q } }],
           },
           include: { localImages: true, likes: true, favs: true, readOrWatcheds: true },
         });
