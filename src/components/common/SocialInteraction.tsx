@@ -18,6 +18,7 @@ import {
   WhatsappIcon,
 } from 'react-share';
 import { User } from '@prisma/client';
+import { OverlayTrigger, Popover, Button } from 'react-bootstrap';
 import globalModalsAtom from '../../atoms/globalModals';
 // import Notification from '../ui/Notification';
 
@@ -39,6 +40,7 @@ interface Props {
   // mySocialInfo: MySocialInfo;
   showCounts?: boolean;
   showShare?: boolean;
+  showButtonLabels?: boolean;
 }
 
 const SocialInteraction: FunctionComponent<Props> = ({
@@ -46,6 +48,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   parent /* ,  mySocialInfo */,
   showShare = false,
   showCounts = false,
+  showButtonLabels = true,
 }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
@@ -232,7 +235,26 @@ const SocialInteraction: FunctionComponent<Props> = ({
   //   }
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [isSocialInteractionSuccess]);
-
+  const popoverShares = (
+    <Popover id="popover-basic">
+      <Popover.Content>
+        <TwitterShareButton url={shareUrl} title={shareText} via="eleurekaclub">
+          <TwitterIcon size={32} round />
+          {` ${t('wayShare')} Twitter`}
+        </TwitterShareButton>
+        <br />
+        <FacebookShareButton url={shareUrl} quote={shareText}>
+          <FacebookIcon size={32} round />
+          {` ${t('wayShare')} Facebook`}
+        </FacebookShareButton>
+        <br />
+        <WhatsappShareButton url={shareUrl} title={`${shareText} ${t('whatsappComplement')}`}>
+          <WhatsappIcon size={32} round />
+          {` ${t('wayShare')} Whatsapp`}
+        </WhatsappShareButton>
+      </Popover.Content>
+    </Popover>
+  );
   return (
     (session && (
       <div className={styles.container}>
@@ -240,36 +262,54 @@ const SocialInteraction: FunctionComponent<Props> = ({
           <button className={styles.socialBtn} onClick={handleReadOrWatchedClick} type="button">
             {optimistReadOrWatched ? <BsEye className={styles.active} /> : <BsEye />}
             {showCounts && optimistReadOrWatchedCount}
-            <span className={classnames(...[styles.info, ...[optimistReadOrWatched ? styles.active : '']])}>
-              {t('Read / watched')}
-            </span>
+            {showButtonLabels && (
+              <span className={classnames(...[styles.info, ...[optimistReadOrWatched ? styles.active : '']])}>
+                {t('Read / watched')}
+              </span>
+            )}
           </button>
         )}
         <button className={styles.socialBtn} onClick={handleLikeClick} type="button">
           {optimistLike /* mySocialInfo.likedByMe */ ? <GiBrain className={styles.active} /> : <GiBrain />}
           {showCounts && optimistLikeCount}
-          <span className={classnames(...[styles.info, ...[optimistLike ? styles.active : '']])}>
-            {t('I learned')}!
-          </span>
+          {showButtonLabels && (
+            <span className={classnames(...[styles.info, ...[optimistLike ? styles.active : '']])}>
+              {t('I learned')}!
+            </span>
+          )}
         </button>
 
         {isWork(entity) /* || isCycle(entity) */ && (
           <button className={styles.socialBtn} type="button">
             <GiStarsStack className={styles.active} />
             {optimistReadOrWatchedCount! ? optimistLikeCount / optimistReadOrWatchedCount! : 0}%
-            <span className={classnames(...[styles.info, styles.active])}>{t('Rating Eureka')}*</span>
+            {showButtonLabels && (
+              <span className={classnames(...[styles.info, styles.active])}>{t('Rating Eureka')}*</span>
+            )}
           </button>
         )}
         <button className={styles.socialBtn} onClick={handleFavClick} type="button">
           {optimistFav /* mySocialInfo.favoritedByMe */ ? <BsBookmarkFill className={styles.active} /> : <BsBookmark />}
           {showCounts && optimistFavCount}
           <br />
-          <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>
-            {t('Save for later')}
-          </span>
+          {showButtonLabels && (
+            <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>
+              {t('Save for later')}
+            </span>
+          )}
         </button>
 
         {showShare && (
+          <OverlayTrigger trigger="click" placement="right" overlay={popoverShares}>
+            <Button variant="link" className={styles.socialBtn}>
+              <FiShare2 className={styles.active} />
+              <br />
+              {showButtonLabels && <span className={classnames(styles.info, styles.active)}>{t('Share')}</span>}
+            </Button>
+          </OverlayTrigger>
+        )}
+
+        {/* {showShare && (
           <Dropdown>
             <Dropdown.Toggle id="langSwitch" className={styles['toggle-share']}>
               <FiShare2 className={styles.actions} />
@@ -298,7 +338,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
-        )}
+        )} */}
       </div>
     )) ||
     null

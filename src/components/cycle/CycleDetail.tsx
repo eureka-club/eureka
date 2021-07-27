@@ -155,7 +155,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 <CycleSummary cycle={cycle} />
 
                 <section className={classNames('d-flex justify-content-between', styles.socialInfo)}>
-                  <SocialInteraction entity={cycle} mySocialInfo={mySocialInfo} showCounts />
+                  <SocialInteraction entity={cycle} showCounts />
                   <div>
                     <small className={styles.participantsCount}>
                       {t('participantsCount', { count: participantsCount })}

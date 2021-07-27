@@ -1,0 +1,4 @@
+.color-primary input, .color-primary label, .color-primary div{
+  color: var(--color-primary)!important;
+}
+.color-grey-dark input,.color-grey-dark label,.color-grey-dark div{color: #6c707a!important;}

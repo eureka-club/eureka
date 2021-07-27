@@ -16,8 +16,10 @@ import { Session } from '../../types';
 interface Props {
   // workWithImages: WorkWithImages;
   work: WorkDetail;
+  showButtonLabels?: boolean;
+  showShare?: boolean;
 }
-const MosaicItem: FunctionComponent<Props> = ({ work }) => {
+const MosaicItem: FunctionComponent<Props> = ({ work, showButtonLabels = true, showShare = false }) => {
   const { t } = useTranslation('common');
   const { id, author, title, localImages, type } = work;
   const [session] = useSession() as [Session | null | undefined, boolean];
@@ -41,7 +43,11 @@ const MosaicItem: FunctionComponent<Props> = ({ work }) => {
         <span className={styles.type}>{t(type)}</span>
       </div>
       {session && (
-        <Card.Footer className="text-muted">{work && <SocialInteraction showCounts entity={work} />}</Card.Footer>
+        <Card.Footer className="text-muted">
+          {work && (
+            <SocialInteraction showButtonLabels={showButtonLabels} showCounts showShare={showShare} entity={work} />
+          )}
+        </Card.Footer>
       )}
     </Card>
     // <article className={styles.post}>

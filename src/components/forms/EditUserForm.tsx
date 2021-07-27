@@ -28,7 +28,7 @@ import { EditUserClientPayload } from '../../types/user';
 import { useUsers, fetchUsers } from '../../useUsers';
 // import ImageFileSelect from './controls/ImageFileSelect';
 import globalModalsAtom from '../../atoms/globalModals';
-import styles from './CreateWorkForm.module.css';
+import styles from './EditUserForm.module.css';
 import i18nConfig from '../../../i18n';
 import useTopics from '../../useTopics';
 
@@ -401,7 +401,7 @@ const EditUserForm: FunctionComponent = () => {
                 <Col xs={12}>
                   <Form.Group controlId="aboutMe">
                     <Form.Label>{t('About me')}</Form.Label>
-                    <Form.Control as="textarea" rows={3} />
+                    <Form.Control as="textarea" rows={3} defaultValue={user.aboutMe || undefined} />
                   </Form.Group>
                 </Col>
               </Row>
@@ -414,7 +414,7 @@ const EditUserForm: FunctionComponent = () => {
                 <Form.Group controlId="dashboardType">
                   <Form.Label>{t('Dashboard Type')}</Form.Label>
 
-                  <Form.Check type="radio" id="dashboardTypePublic">
+                  <Form.Check type="radio" id="dashboardTypePublic" className={styles['color-primary']}>
                     <Form.Check.Input
                       type="radio"
                       isValid
@@ -425,7 +425,7 @@ const EditUserForm: FunctionComponent = () => {
                     <Form.Control.Feedback type="valid">{t('Anyone can see my Dashboard')}</Form.Control.Feedback>
                   </Form.Check>
 
-                  <Form.Check type="radio" id="dashboardTypeProtected">
+                  <Form.Check className={styles['color-grey-dark']} type="radio" id="dashboardTypeProtected">
                     <Form.Check.Input
                       type="radio"
                       isValid

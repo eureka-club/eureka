@@ -92,7 +92,7 @@ const NavBar: FunctionComponent = () => {
       <Navbar collapseOnSelect expand="lg" variant="light">
         {/* <Container> */}
         <Link href="/">
-          <Navbar.Brand>
+          <Navbar.Brand className={styles.brandLink}>
             <Container>
               <Col className={styles.brandContainer}>
                 <img src="/img/logo.png" className="d-inline-block align-middle mr-2" width={52} alt="Project logo" />
@@ -109,7 +109,7 @@ const NavBar: FunctionComponent = () => {
         </Link>
 
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
+        <Navbar.Collapse className={styles['responsive-navbar-nav']}>
           <Nav className={styles.navbarNav}>
             <SearchEngine />
           </Nav>
@@ -155,7 +155,7 @@ const NavBar: FunctionComponent = () => {
               <Dropdown.Toggle as={ChevronToggle}>
                 <AiOutlineInfoCircle className={styles.navbarIconNav} />
               </Dropdown.Toggle>
-              <span className={styles.menuBottomInfo}>{t('About Eureka')}</span>
+              <span className={styles.menuBottomInfo}>{t('About')}</span>
               <Dropdown.Menu>
                 <Dropdown.Item onClick={() => router.push('/about')}>
                   {/* <Link href="/about"> */}
@@ -180,7 +180,7 @@ const NavBar: FunctionComponent = () => {
                     alt={`Language flag '${router.locale}'`}
                   />
                 </Dropdown.Toggle>
-                <span className={styles.menuBottomInfo}>&nbsp;</span>
+                <span className={styles.menuBottomInfo}>{t('Language')}</span>
                 <Dropdown.Menu>
                   {router.locales.map((locale) => (
                     <Dropdown.Item key={locale} eventKey={locale} active={locale === router.locale}>
@@ -197,7 +197,7 @@ const NavBar: FunctionComponent = () => {
             <Nav className={styles.navbarNav}>
               <Dropdown alignRight className={styles.langSwitch}>
                 <Dropdown.Toggle as={ChevronToggle}>{getAvatar()}</Dropdown.Toggle>
-                <span className={styles.menuBottomInfo}>&nbsp;</span>
+                <span className={styles.menuBottomInfo}>{t('Account')}</span>
                 <Dropdown.Menu>
                   <Dropdown.Item onClick={handlerEditUserClick}>
                     {/* <Button > */}

@@ -68,7 +68,7 @@
 }
 .langSwitch img {
   border-radius: 50%;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  /* box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2); */
   height: 24px;
 }
 .langSwitch :global(.dropdown-menu) {
@@ -81,12 +81,15 @@
 .langSwitch :global(.dropdown-item.active) {
   background-color: var(--eureka-green);
 }
+.brandLink{
+  cursor:pointer;
+}
 .siteName{
   text-transform: uppercase;
   margin-left: 0;
     padding-left: 0;
     letter-spacing: .4em;
-
+    font-family: 'Ahpuch.Apollyon-Light';
     /* display: inline-block; */
 }
 .brandInfo{
@@ -112,4 +115,10 @@
 }
 .navLink .menuBottomInfo{
   margin-top:6px
+}
+.toRight{
+  margin-left: auto;
+}
+.responsive-navbar-nav{
+  justify-content: flex-end;
 }

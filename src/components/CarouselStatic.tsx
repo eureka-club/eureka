@@ -51,7 +51,7 @@ const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefine
   }
   if (isWorkMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
-    return <MosaicItemWork key={`work-${item.id}`} work={item} />;
+    return <MosaicItemWork showButtonLabels={false} key={`work-${item.id}`} work={item} />;
   }
 
   return '';

@@ -12,9 +12,10 @@ import styles from './Mosaic.module.css';
 interface Props {
   postsLinksTo?: Cycle | Work;
   stack: MosaicItem[];
+  showButtonLabels?: boolean;
 }
 
-const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefined) => {
+const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefined, showButtonLabels: boolean) => {
   if (isCycleMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
     return <MosaicItemCycle key={`cycle-${item.id}`} {...item} />;
@@ -24,13 +25,13 @@ const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefine
   }
   if (isWorkMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
-    return <MosaicItemWork key={`work-${item.id}`} {...item} />;
+    return <MosaicItemWork showShare={false} showButtonLabels={showButtonLabels} key={`work-${item.id}`} work={item} />;
   }
 
   return '';
 };
 
-const Mosaic: FunctionComponent<Props> = ({ postsLinksTo, stack }) => {
+const Mosaic: FunctionComponent<Props> = ({ postsLinksTo, stack, showButtonLabels = true }) => {
   return (
     <Masonry
       breakpointCols={{
@@ -42,7 +43,7 @@ const Mosaic: FunctionComponent<Props> = ({ postsLinksTo, stack }) => {
       className={classNames('d-flex', styles.masonry)}
       columnClassName={styles.masonryColumn}
     >
-      {stack.map((item: MosaicItem) => renderMosaicItem(item, postsLinksTo))}
+      {stack.map((item: MosaicItem) => renderMosaicItem(item, postsLinksTo, showButtonLabels))}
     </Masonry>
   );
 };

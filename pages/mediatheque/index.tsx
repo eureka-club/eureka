@@ -2,20 +2,20 @@
 import { useAtom } from 'jotai';
 
 // import { GetServerSideProps, GetStaticProps, NextPage } from 'next';
-import { GetStaticProps, NextPage } from 'next';
+import { /* GetStaticProps, */ NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/client';
-import { QueryClient } from 'react-query';
-import { dehydrate } from 'react-query/hydration';
-import { useState, useEffect, ReactElement } from 'react';
+// import { QueryClient } from 'react-query';
+// import { dehydrate } from 'react-query/hydration';
+import { useState, useEffect /* , ReactElement */ } from 'react';
 
 // import { loadGetInitialProps } from 'next/dist/next-server/lib/utils';
-import { Spinner, Card, Row, Col, Button } from 'react-bootstrap';
+import { /* Spinner, */ Card, Row, Col, Button } from 'react-bootstrap';
 import { AiOutlineEnvironment } from 'react-icons/ai';
-import { BsCircleFill, BsBookmark } from 'react-icons/bs';
+import { /* BsCircleFill, */ BsBookmark, BsEye } from 'react-icons/bs';
 
-import { Cycle, LocalImage, User, Work } from '@prisma/client';
+// import { Cycle, LocalImage, User, Work } from '@prisma/client';
 import styles from './index.module.css';
 import { useUsers } from '../../src/useUsers';
 
@@ -28,10 +28,10 @@ import CarouselStatic from '../../src/components/CarouselStatic';
 // import useWorks from '../src/useWorks';
 // import useCycles from '../src/useCycles';
 // import useCountries from '../src/useCountries';
-import { Session, MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem } from '../../src/types';
-import { CycleMosaicItem, CycleWithImages } from '../../src/types/cycle';
-import { PostMosaicItem, PostWithImages } from '../../src/types/post';
-import { WorkMosaicItem, WorkWithImages } from '../../src/types/work';
+import { Session /* , MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem */ } from '../../src/types';
+import { CycleMosaicItem /* , CycleWithImages */ } from '../../src/types/cycle';
+import { PostMosaicItem /* , PostWithImages */ } from '../../src/types/post';
+import { WorkMosaicItem /* , WorkWithImages */ } from '../../src/types/work';
 // import MosaicItemCycle from '../../src/components/cycle/MosaicItem';
 // import MosaicItemPost from '../../src/components/post/MosaicItem';
 // import MosaicItemWork from '../../src/components/work/MosaicItem';
@@ -59,7 +59,7 @@ const Mediatheque: NextPage = () => {
     if (s && s.user) setId(s.user.id.toString());
   }, [session, router]);
 
-  const { isLoading, /* isError, error, */ data: user } = useUsers(id);
+  const { /* isLoading, isError, error, */ data: user } = useUsers(id);
   useEffect(() => {
     if (user && id) {
       let C: Item[] = [];
@@ -71,7 +71,15 @@ const Mediatheque: NextPage = () => {
         C = user.cycles.map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' }));
       }
       if (user.joinedCycles && user.joinedCycles.length) {
-        JC = user.joinedCycles.map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' }));
+        JC = user.joinedCycles.reduce((p: CycleMosaicItem[], c: CycleMosaicItem) => {
+          if (c.creatorId !== parseInt(id, 10)) {
+            // otherwise will be already on C
+            p.push(c);
+          }
+          return p;
+        });
+        // .filter((c: CycleMosaicItem) => c.creatorId !== parseInt(id, 10))
+        // .map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' }));
       }
       if (user.posts && user.posts.length) {
         P = user.posts.map((p: PostMosaicItem) => ({ ...p, type: 'post' }));
@@ -138,17 +146,17 @@ const Mediatheque: NextPage = () => {
       />
 
       <CarouselStatic
-        onSeeAll={async () => seeAll(savedForLater, t('Saved for later of forever'))}
-        title={t('Saved for later of forever')}
-        data={savedForLater}
-        iconBefore={<BsBookmark />}
+        onSeeAll={async () => seeAll(readOrWatched, t(`Movies/books i've watched/read`))}
+        title={t(`Movies/books i've watched/read`)}
+        data={readOrWatched}
+        iconBefore={<BsEye />}
         // iconAfter={<BsCircleFill className={styles.infoCircle} />}
       />
 
       <CarouselStatic
-        onSeeAll={async () => seeAll(readOrWatched, t(`Movies/books i've watched/read`))}
-        title={t(`Movies/books i've watched/read`)}
-        data={readOrWatched}
+        onSeeAll={async () => seeAll(savedForLater, t('Saved for later of forever'))}
+        title={t('Saved for later of forever')}
+        data={savedForLater}
         iconBefore={<BsBookmark />}
         // iconAfter={<BsCircleFill className={styles.infoCircle} />}
       />

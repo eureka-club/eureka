@@ -6,9 +6,12 @@
   "post": "Publication",
   "work": "Oeuvre",
   "myListLabel": "Ma Liste",
-  "About Eureka":"À propos d'Eureka",
-  "About Us":"Qui sommes-nous",
-  "My Mediatheque":"My Mediatheque",
-  "Profile":"Profile",
-  "Social media to foster awareness":"Social media to foster awareness"
+  "About": "À propos",
+  "About Eureka": "À propos d'Eureka",
+  "About Us": "Qui sommes-nous",
+  "My Mediatheque": "My Mediatheque",
+  "Profile": "Profile",
+  "Social media to foster awareness": "Social media to foster awareness",
+  "Language": "Language",
+  "Account": "Account"
 }

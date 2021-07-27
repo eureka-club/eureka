@@ -14,7 +14,9 @@
   font-size: 1em;
   transition: transform 0.15s;
   margin-right: 0.25em;
+  text-decoration: none!important;
 }
+
 .socialBtn .info{
   display: block;
   font-size: .5em;
@@ -23,6 +25,7 @@
 .socialBtn svg {
   margin-right: 0.2rem;
   color: gray;
+  font-size: 1.4em;
 }
 .socialBtn .active{
   color: var(--eureka-green);

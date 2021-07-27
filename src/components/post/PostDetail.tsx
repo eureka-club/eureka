@@ -58,7 +58,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, cycle, work, mySocialInfo 
           <div className={classNames(styles.imgWrapper, 'mb-3')}>
             <LocalImageComponent filePath={post.localImages[0].storedFile} alt={post.title} />
           </div>
-          <SocialInteraction entity={post} parent={cycle || work || null} mySocialInfo={mySocialInfo} showCounts />
+          <SocialInteraction entity={post} parent={cycle || work || null} showCounts />
           <table className={styles.parentContent}>
             <tbody>
               {currentWork != null && (

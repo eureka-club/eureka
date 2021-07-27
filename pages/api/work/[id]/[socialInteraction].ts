@@ -65,7 +65,7 @@ export default getApiHandler()
   .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     const session = (await getSession({ req })) as unknown as Session;
     const { id, socialInteraction } = req.query;
-    debugger;
+
     if (!(await validateReq(session, id, socialInteraction, res))) {
       return;
     }

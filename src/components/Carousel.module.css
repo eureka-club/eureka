@@ -10,15 +10,23 @@
 
 .mainContainer {
   position: relative;
+  margin-bottom: 4em;
   /* height: 375px; */
 }
 
 .carouselTitle{
-  color: #4c4a72;
+  /* color: #4c4a72;
   font-weight: bold;
-  font-size: 1.3em;
+  font-size: 1.3em; */
 }
-
+.rightButton svg {
+  margin-top: -.2em;
+  margin-right: -.2em;
+}
+.leftButton svg{
+  margin-top: -.2em;
+  margin-left: -.2em;
+}
 .rightButton{
   position: absolute;
   top:35%;
