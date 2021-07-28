@@ -77,7 +77,7 @@ const Mediatheque: NextPage = () => {
             p.push(c);
           }
           return p;
-        });
+        }, []);
         // .filter((c: CycleMosaicItem) => c.creatorId !== parseInt(id, 10))
         // .map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' }));
       }
