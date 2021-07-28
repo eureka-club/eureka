@@ -1,6 +1,8 @@
 .container {
   display: flex;
   align-items: center;
+  overflow: auto;
+  /* text-align: center; */
   /* margin-bottom: 1rem; */
 }
 
@@ -15,6 +17,7 @@
   transition: transform 0.15s;
   margin-right: 0.25em;
   text-decoration: none!important;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .socialBtn .info{

@@ -2,10 +2,10 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
 // import Dropdown from 'react-bootstrap/Dropdown';
-import { GiBrain, GiStarsStack } from 'react-icons/gi';
-import { BsBookmark, BsBookmarkFill, BsEye } from 'react-icons/bs';
+import { GiBrain } from 'react-icons/gi';
+import { BsBookmark, BsBookmarkFill, BsEye, BsEyeFill } from 'react-icons/bs';
 import classnames from 'classnames';
-import { FiShare2 } from 'react-icons/fi';
+import { FiShare2, FiStar } from 'react-icons/fi';
 import { useMutation } from 'react-query';
 import { useSession } from 'next-auth/client';
 import { useAtom } from 'jotai';
@@ -283,7 +283,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
             onClick={handleReadOrWatchedClick}
             type="button"
           >
-            {optimistReadOrWatched ? <BsEye className={styles.active} /> : <BsEye />}
+            {optimistReadOrWatched ? <BsEyeFill className={styles.active} /> : <BsEye />}
             {showCounts && optimistReadOrWatchedCount}
             {showButtonLabels && (
               <span className={classnames(...[styles.info, ...[optimistReadOrWatched ? styles.active : '']])}>
@@ -304,7 +304,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
         {isWork(entity) /* || isCycle(entity) */ && (
           <button className={styles.socialBtn} title={t('Rating Eureka')} type="button">
-            <GiStarsStack className={styles.active} />
+            <FiStar className={styles.active} />
             {optimistReadOrWatchedCount! ? optimistLikeCount / optimistReadOrWatchedCount! : 0}%
             {showButtonLabels && (
               <span className={classnames(...[styles.info, styles.active])}>{t('Rating Eureka')}*</span>

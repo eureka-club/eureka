@@ -7,4 +7,6 @@
   border-left-style: solid;
   border-left-width: 25px; /* gutter size */
 }
-.mosaicContainer{height: 24em;}
+.mosaicContainer{
+  height: 24em;
+}

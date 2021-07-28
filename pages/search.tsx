@@ -77,7 +77,7 @@ const SearchPage: NextPage = () => {
   const [homepageMosaicData, setHomepageMosaicData] = useState<Item[]>([]);
 
   useEffect(() => {
-    if (globalSearchEngineState.itemsFound) {
+    if (globalSearchEngineState.itemsFound && globalSearchEngineState.itemsFound.length) {
       setHomepageMosaicData(globalSearchEngineState.itemsFound);
     } else if (works || cycles /* || posts */) {
       const w = works ? works.data : [];
@@ -169,7 +169,7 @@ const SearchPage: NextPage = () => {
         {t('Results about')}: {`"${qLabel}"`}
       </h1>
       <FilterEngine />
-      <Mosaic stack={homepageMosaicDataFiltered} />
+      <Mosaic showButtonLabels={false} stack={homepageMosaicDataFiltered} />
       {genLoadingCmp()}
     </SimpleLayout>
   );

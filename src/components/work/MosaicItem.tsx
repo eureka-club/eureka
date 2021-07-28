@@ -33,10 +33,10 @@ const MosaicItem: FunctionComponent<Props> = ({ work, showButtonLabels = true, s
   // }, [workData]);
 
   return (
-    <Card className="text-center">
+    <Card className={styles.container}>
       <div className={styles.imageContainer}>
         <Link href={`/work/${id}`}>
-          <a className="d-inline-block">
+          <a>
             <LocalImageComponent filePath={localImages[0].storedFile} alt={title} />
           </a>
         </Link>
