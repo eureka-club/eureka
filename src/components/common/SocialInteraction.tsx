@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
-import Dropdown from 'react-bootstrap/Dropdown';
+// import Dropdown from 'react-bootstrap/Dropdown';
 import { GiBrain, GiStarsStack } from 'react-icons/gi';
 import { BsBookmark, BsBookmarkFill, BsEye } from 'react-icons/bs';
 import classnames from 'classnames';
@@ -61,9 +61,9 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const [optimistFav, setOptimistFav] = useState<boolean | null>();
   const [optimistReadOrWatched, setOptimistReadOrWatched] = useState<boolean | null>();
 
-  const [optimistLikeCount, setOptimistLikeCount] = useState<number>(entity.likes.length);
-  const [optimistFavCount, setOptimistFavCount] = useState<number>(entity.favs.length);
-  const [optimistReadOrWatchedCount, setOptimistReadOrWatchedCount] = useState<number | null>();
+  const [optimistLikeCount, setOptimistLikeCount] = useState<number>(0);
+  const [optimistFavCount, setOptimistFavCount] = useState<number>(0);
+  const [optimistReadOrWatchedCount, setOptimistReadOrWatchedCount] = useState<number>(0);
 
   useEffect(() => {
     if (entity && isWork(entity) && session) {
@@ -73,15 +73,18 @@ const SocialInteraction: FunctionComponent<Props> = ({
       let idx = entity.likes.findIndex((i) => i.id === s.user!.id);
       const likedByMe = idx !== -1;
       setOptimistLike(likedByMe);
+      setOptimistLikeCount(entity.likes.length);
 
       idx = entity.favs.findIndex((i) => i.id === s.user!.id);
       const favoritedByMe = idx !== -1;
       setOptimistFav(favoritedByMe);
+      setOptimistFavCount(entity.favs.length);
 
       idx = entity.readOrWatcheds.findIndex((i) => i.id === s.user!.id);
       const readOrWatchedByMe = idx !== -1;
       setOptimistReadOrWatched(readOrWatchedByMe);
       setMySocialInfo({ likedByMe, favoritedByMe, readOrWatchedByMe });
+      setOptimistReadOrWatchedCount(entity.readOrWatcheds.length);
     }
   }, [entity, session]);
 

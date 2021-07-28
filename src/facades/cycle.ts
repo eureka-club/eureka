@@ -14,7 +14,14 @@ export const find = async (id: number): Promise<CycleDetail | null> => {
       participants: true,
       likes: true,
       favs: true,
-      works: true,
+      works: {
+        include: {
+          localImages: true,
+          likes: true,
+          favs: true,
+          readOrWatcheds: true,
+        },
+      },
     },
   });
 };

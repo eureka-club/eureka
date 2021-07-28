@@ -18,7 +18,7 @@ export const find = async (id: number): Promise<WorkDetail | null> => {
 export const findAll = async (): Promise<WorkWithImages[]> => {
   return prisma.work.findMany({
     orderBy: { createdAt: 'desc' },
-    include: { localImages: true, likes: true, favs: true },
+    include: { localImages: true, likes: true, favs: true, readOrWatcheds: true },
   });
 };
 
@@ -30,6 +30,12 @@ export const search = async (query: { [key: string]: string | string[] }): Promi
 
   if (typeof q === 'string') {
     return prisma.work.findMany({
+      include: {
+        // localImages: true,
+        likes: true,
+        favs: true,
+        readOrWatcheds: true,
+      },
       where: {
         OR: [{ title: { contains: q } }, { author: { contains: q } }],
       },
