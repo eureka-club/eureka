@@ -25,7 +25,7 @@
 .socialBtn svg {
   margin-right: 0.2rem;
   color: gray;
-  font-size: 1.4em;
+  font-size: 2em;
 }
 .socialBtn .active{
   color: var(--eureka-green);

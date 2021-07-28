@@ -66,9 +66,9 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const [optimistReadOrWatchedCount, setOptimistReadOrWatchedCount] = useState<number>(0);
 
   useEffect(() => {
-    if (entity && isWork(entity) && session) {
+    const s = session as unknown as Session;
+    if (entity && isWork(entity) && s) {
       setOptimistReadOrWatchedCount(entity.readOrWatcheds.length);
-      const s = session as unknown as Session;
 
       let idx = entity.likes.findIndex((i) => i.id === s.user!.id);
       const likedByMe = idx !== -1;
@@ -85,6 +85,21 @@ const SocialInteraction: FunctionComponent<Props> = ({
       setOptimistReadOrWatched(readOrWatchedByMe);
       setMySocialInfo({ likedByMe, favoritedByMe, readOrWatchedByMe });
       setOptimistReadOrWatchedCount(entity.readOrWatcheds.length);
+    } else if (entity && isCycle(entity) && s) {
+      setOptimistReadOrWatchedCount(0);
+
+      let idx = entity.likes.findIndex((i) => i.id === s.user!.id);
+      const likedByMe = idx !== -1;
+      setOptimistLike(likedByMe);
+      setOptimistLikeCount(entity.likes.length);
+
+      idx = entity.favs.findIndex((i) => i.id === s.user!.id);
+      const favoritedByMe = idx !== -1;
+      setOptimistFav(favoritedByMe);
+      setOptimistFavCount(entity.favs.length);
+
+      setMySocialInfo({ likedByMe, favoritedByMe });
+      setOptimistReadOrWatchedCount(0);
     }
   }, [entity, session]);
 
@@ -262,7 +277,12 @@ const SocialInteraction: FunctionComponent<Props> = ({
     (session && (
       <div className={styles.container}>
         {isWork(entity) && (
-          <button className={styles.socialBtn} onClick={handleReadOrWatchedClick} type="button">
+          <button
+            className={styles.socialBtn}
+            title={t('Read / watched')}
+            onClick={handleReadOrWatchedClick}
+            type="button"
+          >
             {optimistReadOrWatched ? <BsEye className={styles.active} /> : <BsEye />}
             {showCounts && optimistReadOrWatchedCount}
             {showButtonLabels && (
@@ -272,7 +292,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
             )}
           </button>
         )}
-        <button className={styles.socialBtn} onClick={handleLikeClick} type="button">
+        <button className={styles.socialBtn} title={t('I learned')} onClick={handleLikeClick} type="button">
           {optimistLike /* mySocialInfo.likedByMe */ ? <GiBrain className={styles.active} /> : <GiBrain />}
           {showCounts && optimistLikeCount}
           {showButtonLabels && (
@@ -283,7 +303,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
         </button>
 
         {isWork(entity) /* || isCycle(entity) */ && (
-          <button className={styles.socialBtn} type="button">
+          <button className={styles.socialBtn} title={t('Rating Eureka')} type="button">
             <GiStarsStack className={styles.active} />
             {optimistReadOrWatchedCount! ? optimistLikeCount / optimistReadOrWatchedCount! : 0}%
             {showButtonLabels && (
@@ -291,7 +311,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
             )}
           </button>
         )}
-        <button className={styles.socialBtn} onClick={handleFavClick} type="button">
+        <button className={styles.socialBtn} title={t('Save for later')} onClick={handleFavClick} type="button">
           {optimistFav /* mySocialInfo.favoritedByMe */ ? <BsBookmarkFill className={styles.active} /> : <BsBookmark />}
           {showCounts && optimistFavCount}
           <br />

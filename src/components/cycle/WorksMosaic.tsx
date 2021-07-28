@@ -1,7 +1,7 @@
-import { Cycle } from '@prisma/client';
+// import { Cycle } from '@prisma/client';
 import { FunctionComponent } from 'react';
-import Spinner from 'react-bootstrap/Spinner';
-import { useQuery } from 'react-query';
+// import Spinner from 'react-bootstrap/Spinner';
+// import { useQuery } from 'react-query';
 
 import { WorkMosaicItem } from '../../types/work';
 import Mosaic from '../Mosaic';
@@ -31,7 +31,11 @@ const WorksMosaic: FunctionComponent<Props> = ({ cycle }) => {
           <span className="sr-only">Loading...</span>
         </Spinner>
       )} */}
-      {/* isSuccess && */ cycle.works != null && <Mosaic stack={cycle.works as WorkMosaicItem[]} />}
+      {
+        /* isSuccess && */ cycle.works != null && (
+          <Mosaic showButtonLabels={false} stack={cycle.works as WorkMosaicItem[]} />
+        )
+      }
     </>
   );
 };
