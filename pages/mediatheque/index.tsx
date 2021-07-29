@@ -43,7 +43,7 @@ const Mediatheque: NextPage = () => {
   const [session] = useSession();
   const [id, setId] = useState<string>('');
   const router = useRouter();
-  const [cyclesAndPost, setCyclesAndPosts] = useState<Item[]>([]);
+  const [cyclesAndPost, setCycles] = useState<Item[]>([]);
   const [savedForLater, setSavedForLaters] = useState<Item[]>([]);
   const [readOrWatched, setReadOrWatched] = useState<Item[]>([]);
 
@@ -88,7 +88,7 @@ const Mediatheque: NextPage = () => {
       if (user.readOrWatchedWorks && user.readOrWatchedWorks.length) {
         RW = user.readOrWatchedWorks;
       }
-      setCyclesAndPosts([...C, ...JC, ...P]);
+      setCycles([...C, ...JC, ...P]);
       setSavedForLaters([...FW]);
       setReadOrWatched([...RW]);
     }
@@ -120,10 +120,7 @@ const Mediatheque: NextPage = () => {
                   <AiOutlineEnvironment /> {t(`countries:${user.countryOfOrigin}`)}
                 </em>
                 <p className={styles.description}>
-                  Auto-layout for flexbox grid columns also means you can set the width of one column and have the
-                  sibling columns automatically resize around it. You may use predefined grid classes (as shown below),
-                  grid mixins, or inline widths. Note that the other columns will resize no matter the width of the
-                  center column.
+                  { user.aboutMe}
                 </p>
                 <TagsInput tags={user.tags} readOnly label="" />
               </Col>
