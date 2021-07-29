@@ -101,7 +101,7 @@
   padding-right: 0;
 }
 .navbarNav{
-  margin-right:2em;
+  margin-right:.5em;
 }
 .menuBottomInfo{
   color:var(--eureka-secondary)!important;

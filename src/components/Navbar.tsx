@@ -144,7 +144,7 @@ const NavBar: FunctionComponent = () => {
                 <Link href="/mediatheque">
                   <a className={styles.navLink}>
                     <RiDashboardLine className={styles.navbarIconNav} />
-                    <span className={styles.menuBottomInfo}>{t('My Mediatheque')}</span>
+                    <span className={styles.menuBottomInfo}>{session.user.name || t('My Mediatheque')}</span>
                   </a>
                 </Link>
               </Nav.Item>
