@@ -63,7 +63,7 @@ const Mediatheque: NextPage = () => {
   useEffect(() => {
     if (user && id) {
       let C: Item[] = [];
-      let JC: Item[] = [];
+      const JC: Item[] = [];
       let P: Item[] = [];
       let FW: Item[] = [];
       let RW: Item[] = [];
@@ -71,13 +71,13 @@ const Mediatheque: NextPage = () => {
         C = user.cycles.map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' }));
       }
       if (user.joinedCycles && user.joinedCycles.length) {
-        JC = user.joinedCycles.reduce((p: CycleMosaicItem[], c: CycleMosaicItem) => {
+        user.joinedCycles.reduce((p: Item[], c: Item) => {
           if (c.creatorId !== parseInt(id, 10)) {
             // otherwise will be already on C
-            p.push(c);
+            p.push({ ...c, type: 'cycle' } as Item);
           }
           return p;
-        }, []);
+        }, JC);
         // .filter((c: CycleMosaicItem) => c.creatorId !== parseInt(id, 10))
         // .map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' }));
       }
