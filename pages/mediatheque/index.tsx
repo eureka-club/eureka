@@ -43,7 +43,8 @@ const Mediatheque: NextPage = () => {
   const [session] = useSession();
   const [id, setId] = useState<string>('');
   const router = useRouter();
-  const [cyclesAndPost, setCycles] = useState<Item[]>([]);
+  const [cycles, setCycles] = useState<Item[]>([]);
+  const [posts, setPosts] = useState<Item[]>([]);
   const [savedForLater, setSavedForLaters] = useState<Item[]>([]);
   const [readOrWatched, setReadOrWatched] = useState<Item[]>([]);
 
@@ -88,7 +89,8 @@ const Mediatheque: NextPage = () => {
       if (user.readOrWatchedWorks && user.readOrWatchedWorks.length) {
         RW = user.readOrWatchedWorks;
       }
-      setCycles([...C, ...JC, ...P]);
+      setCycles([...C, ...JC]);
+      setPosts([...P]);
       setSavedForLaters([...FW]);
       setReadOrWatched([...RW]);
     }
@@ -119,9 +121,7 @@ const Mediatheque: NextPage = () => {
                 <em>
                   <AiOutlineEnvironment /> {t(`countries:${user.countryOfOrigin}`)}
                 </em>
-                <p className={styles.description}>
-                  { user.aboutMe}
-                </p>
+                <p className={styles.description}>{user.aboutMe}</p>
                 <TagsInput tags={user.tags} readOnly label="" />
               </Col>
               <Col>
@@ -134,10 +134,19 @@ const Mediatheque: NextPage = () => {
       )}
       <h1 className={styles.title}>{t('Mediatheque')}</h1>
       <FilterEngine fictionOrNotFilter={false} geographyFilter={false} />
+
       <CarouselStatic
-        onSeeAll={async () => seeAll(cyclesAndPost, t('Cycles and Eurekas I created or joined'))}
-        title={t('Cycles and Eurekas I created or joined')}
-        data={cyclesAndPost}
+        onSeeAll={async () => seeAll(cycles, t('Cycles I created or joined'))}
+        title={t('Cycles I created or joined')}
+        data={cycles}
+        iconBefore={<></>}
+        // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+      />
+
+      <CarouselStatic
+        onSeeAll={async () => seeAll(cycles, t('Eurekas I created'))}
+        title={t('Eurekas I created')}
+        data={posts}
         iconBefore={<></>}
         // iconAfter={<BsCircleFill className={styles.infoCircle} />}
       />
