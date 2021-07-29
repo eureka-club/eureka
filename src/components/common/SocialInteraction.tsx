@@ -305,7 +305,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
         {isWork(entity) /* || isCycle(entity) */ && (
           <button className={styles.socialBtn} title={t('Rating Eureka')} type="button">
             <FiStar className={styles.active} />
-            {optimistReadOrWatchedCount! ? optimistLikeCount / optimistReadOrWatchedCount! : 0}%
+            {optimistReadOrWatchedCount! ? (optimistLikeCount / optimistReadOrWatchedCount!) * 100 : 0}%
             {showButtonLabels && (
               <span className={classnames(...[styles.info, styles.active])}>{t('Rating Eureka')}*</span>
             )}

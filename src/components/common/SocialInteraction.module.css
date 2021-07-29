@@ -1,7 +1,7 @@
 .container {
   display: flex;
   align-items: center;
-  overflow: auto;
+  /* overflow: auto; */
   /* text-align: center; */
   /* margin-bottom: 1rem; */
 }
