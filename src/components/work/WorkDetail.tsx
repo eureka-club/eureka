@@ -71,13 +71,13 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
       <Row className="mb-5">
         {post == null ? (
           <>
-            <Col md={{ span: 5 }}>
+            <Col md={{ span: 4 }}>
               <div className={classNames(styles.imgWrapper, 'mb-3')}>
                 <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
               </div>
               <SocialInteraction entity={work} showCounts showShare />
             </Col>
-            <Col md={{ span: 7 }}>
+            <Col md={{ span: 8 }}>
               <section className="mb-4">
                 <h1>{work.title}</h1>
                 <h2 className={styles.author}>{work.author}</h2>
