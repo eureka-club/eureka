@@ -43,6 +43,8 @@ const SearchEngine: FunctionComponent = () => {
   const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
 
   const handleSearchWorkOrCycle = async (query: string) => {
+    setSearchWorkOrCycleResults([]);
+
     setIsSearchWorkOrCycleLoading(true);
 
     setGlobalSearchEngineState({ ...globalSearchEngineState, q: query });
@@ -60,6 +62,7 @@ const SearchEngine: FunctionComponent = () => {
 
     setSearchWorkOrCycleResults(items);
     setIsSearchWorkOrCycleLoading(false);
+    // setGlobalSearchEngineState({ ...globalSearchEngineState, q: '' });
   };
 
   const handleSelectWorkOrCycle = (selected: SearchResult[]): void => {
@@ -78,12 +81,26 @@ const SearchEngine: FunctionComponent = () => {
   const onItemsFound = async () => {
     if (!router.route.match('search')) {
       if (globalSearchEngineState.q) {
-        const where = encodeURIComponent(JSON.stringify({ title: { contains: globalSearchEngineState.q } }));
+        const where = encodeURIComponent(
+          JSON.stringify({
+            OR: [
+              { title: { contains: globalSearchEngineState.q } },
+              { contentText: { contains: globalSearchEngineState.q } },
+            ],
+          }),
+        );
         setGlobalSearchEngineState({ ...globalSearchEngineState, where });
       }
       router.push('/search');
     } else if (globalSearchEngineState.q) {
-      const where = encodeURIComponent(JSON.stringify({ title: { contains: globalSearchEngineState.q } }));
+      const where = encodeURIComponent(
+        JSON.stringify({
+          OR: [
+            { title: { contains: globalSearchEngineState.q } },
+            { contentText: { contains: globalSearchEngineState.q } },
+          ],
+        }),
+      );
       setGlobalSearchEngineState({ ...globalSearchEngineState, where });
     }
   };

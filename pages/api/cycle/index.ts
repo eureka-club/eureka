@@ -5,7 +5,7 @@ import { getSession } from 'next-auth/client';
 import { FileUpload, Session, StoredFileUpload } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { storeUpload } from '../../../src/facades/fileUpload';
-import { createFromServerFields, findAll } from '../../../src/facades/cycle';
+import { createFromServerFields /* , findAll */ } from '../../../src/facades/cycle';
 import prisma from '../../../src/lib/prisma';
 import { asyncForEach } from '../../../src/lib/utils';
 
@@ -70,6 +70,7 @@ export default getApiHandler()
           where: {
             OR: [{ title: { contains: q } }, { contentText: { contains: q } }, { tags: { contains: q } }],
           },
+
           include: { localImages: true, likes: true, favs: true },
         });
       } else if (where) {
