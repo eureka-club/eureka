@@ -28,7 +28,7 @@ import CarouselStatic from '../../src/components/CarouselStatic';
 // import useWorks from '../src/useWorks';
 // import useCycles from '../src/useCycles';
 // import useCountries from '../src/useCountries';
-import { Session /* , MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem */ } from '../../src/types';
+// import { Session  , MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem  } from '../../src/types';
 import { CycleMosaicItem /* , CycleWithImages */ } from '../../src/types/cycle';
 import { PostMosaicItem /* , PostWithImages */ } from '../../src/types/post';
 import { WorkMosaicItem /* , WorkWithImages */ } from '../../src/types/work';
@@ -37,14 +37,16 @@ import { WorkMosaicItem /* , WorkWithImages */ } from '../../src/types/work';
 // import MosaicItemWork from '../../src/components/work/MosaicItem';
 
 type Item = (CycleMosaicItem & { type: string }) | WorkMosaicItem | (PostMosaicItem & { type: string });
+type ItemCycle = CycleMosaicItem & { type: string };
+type ItemPost = PostMosaicItem & { type: string };
 // | WorkMosaicItem | ;
 
 const Mediatheque: NextPage = () => {
   const [session] = useSession();
   const [id, setId] = useState<string>('');
   const router = useRouter();
-  const [cycles, setCycles] = useState<Item[]>([]);
-  const [posts, setPosts] = useState<Item[]>([]);
+  const [cycles, setCycles] = useState<ItemCycle[]>([]);
+  const [posts, setPosts] = useState<ItemPost[]>([]);
   const [savedForLater, setSavedForLaters] = useState<Item[]>([]);
   const [readOrWatched, setReadOrWatched] = useState<Item[]>([]);
 
@@ -56,26 +58,27 @@ const Mediatheque: NextPage = () => {
   // }
 
   useEffect(() => {
-    const s = session as unknown as Session;
-    if (s && s.user) setId(s.user.id.toString());
+    // const s = session as unknown as Session;
+    // if (s && s.user) setId(s.user.id.toString());
+    setId(router.query.id as string);
   }, [session, router]);
 
   const { /* isLoading, isError, error, */ data: user } = useUsers(id);
   useEffect(() => {
     if (user && id) {
-      let C: Item[] = [];
-      const JC: Item[] = [];
-      let P: Item[] = [];
+      let C: ItemCycle[] = [];
+      const JC: ItemCycle[] = [];
+      let P: ItemPost[] = [];
       let FW: Item[] = [];
       let RW: Item[] = [];
       if (user.cycles && user.cycles.length) {
         C = user.cycles.map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' }));
       }
       if (user.joinedCycles && user.joinedCycles.length) {
-        user.joinedCycles.reduce((p: Item[], c: Item) => {
+        user.joinedCycles.reduce((p: ItemCycle[], c: Item) => {
           if (c.creatorId !== parseInt(id, 10)) {
             // otherwise will be already on C
-            p.push({ ...c, type: 'cycle' } as Item);
+            p.push({ ...c, type: 'cycle' } as ItemCycle);
           }
           return p;
         }, JC);
@@ -107,7 +110,7 @@ const Mediatheque: NextPage = () => {
   };
   return (
     <SimpleLayout title={t('Mediatheque')}>
-      {session && user && (
+      {user && (
         <Card className={styles.userHeader}>
           <Card.Body>
             <Row>

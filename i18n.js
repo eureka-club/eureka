@@ -12,7 +12,7 @@ module.exports = {
     'rgx:^/cycle/\\[id\\]/edit': ['createCycleForm', 'countries'],
     '/aboutUs': ['aboutUs'],
     '/search': ['countries'],
-    '/mediatheque': ['mediatheque','countries'],
+    'rgx:^/mediatheque/\\[id\\]': ['mediatheque', 'countries'],
     'rgx:^/cycle/\\[id\\]': ['cycleDetail', 'countries'],
     'rgx:^/work/\\[id\\]': ['workDetail', 'countries'],
   },
