@@ -43,7 +43,7 @@ const MosaicItem: FunctionComponent<Props> = ({ work, showButtonLabels = true, s
         <span className={styles.type}>{t(type)}</span>
       </div>
       {session && (
-        <Card.Footer className="text-muted">
+        <Card.Footer className={styles.footer}>
           {work && (
             <SocialInteraction showButtonLabels={showButtonLabels} showCounts showShare={showShare} entity={work} />
           )}
