@@ -307,7 +307,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
           )}
         </button>
 
-        {isWork(entity) /* || isCycle(entity) */ && (
+        {/* {isWork(entity) && (
           <button className={styles.socialBtn} title={t('Rating Eureka')} type="button">
             <FiStar className={styles.active} />
             {optimistReadOrWatchedCount! ? (optimistLikeCount / optimistReadOrWatchedCount!) * 100 : 0}%
@@ -315,10 +315,10 @@ const SocialInteraction: FunctionComponent<Props> = ({
               <span className={classnames(...[styles.info, styles.active])}>{t('Rating Eureka')}*</span>
             )}
           </button>
-        )}
+        )} */}
         <button className={styles.socialBtn} title={t('Save for later')} onClick={handleFavClick} type="button">
           {optimistFav /* mySocialInfo.favoritedByMe */ ? <BsBookmarkFill className={styles.active} /> : <BsBookmark />}
-          {showCounts && optimistFavCount}
+          {/* {showCounts && optimistFavCount} */}
           <br />
           {showButtonLabels && (
             <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>
