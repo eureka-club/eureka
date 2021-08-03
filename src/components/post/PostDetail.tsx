@@ -92,12 +92,16 @@ const PostDetail: FunctionComponent<Props> = ({ post, cycle, work, mySocialInfo 
         <Col md={{ span: 8 }}>
           <div className="pt-3 px-4">
             <div className={classNames('d-flex', styles.postInfo)}>
-              <img
-                src={post.creator.image || '/img/default-avatar.png'}
-                alt="creator avatar"
-                className={styles.creatorAvatar}
-              />
-              {post.creator.name}
+              <Link href={`/mediatheque/${post.creator.id}`}>
+                <a>
+                  <img
+                    src={post.creator.image || '/img/default-avatar.png'}
+                    alt="creator avatar"
+                    className={styles.creatorAvatar}
+                  />
+                  {post.creator.name}
+                </a>
+              </Link>
               <small className={styles.postDate}>
                 {
                   dayjs(post.createdAt).tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)

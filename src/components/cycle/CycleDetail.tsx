@@ -16,6 +16,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import TabContainer from 'react-bootstrap/TabContainer';
 import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
+import Link from 'next/link';
 import { useMutation } from 'react-query';
 import globalModalsAtom from '../../atoms/globalModals';
 
@@ -144,12 +145,16 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
             <Col md={{ span: 9 }}>
               <div className="pt-2 pl-2">
                 <div className={styles.cycleCreator}>
-                  <img
-                    src={cycle.creator.image || '/img/default-avatar.png'}
-                    alt="creator avatar"
-                    className={classNames(styles.cycleCreatorAvatar, 'mr-2')}
-                  />
-                  {cycle.creator.name}
+                  <Link href={`/mediatheque/${cycle.creator.id}`}>
+                    <a>
+                      <img
+                        src={cycle.creator.image || '/img/default-avatar.png'}
+                        alt="creator avatar"
+                        className={classNames(styles.cycleCreatorAvatar, 'mr-2')}
+                      />
+                      {cycle.creator.name}
+                    </a>
+                  </Link>
                 </div>
                 <h1>{cycle.title}</h1>
                 <CycleSummary cycle={cycle} />
