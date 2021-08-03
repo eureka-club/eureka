@@ -411,44 +411,46 @@ const EditUserForm: FunctionComponent = () => {
                 </Col>
               </Row>
               <Row>
-                <Form.Group controlId="privacySettings" className={styles.privacySettings}>
-                  <Form.Label>{t('Privacy settings')}</Form.Label>
-                  <Form.Text>{t('mediathequeInfo')}.</Form.Text>
-                  <Form.Check type="radio" id="dashboardTypePublic" className={styles.checkPublic}>
-                    <Form.Check.Input
-                      type="radio"
-                      isValid
-                      onChange={() => handlerDashboardTypeRadioChange('public')}
-                      checked={dashboardTypeChecked.public}
-                    />
-                    <Form.Check.Label>{t('My Mediatheque is public')}</Form.Check.Label>
-                    <Form.Control.Feedback type="valid">{t('Anyone can see my Mediatheque')}</Form.Control.Feedback>
-                  </Form.Check>
+                <Col>
+                  <Form.Group controlId="privacySettings" className={styles.privacySettings}>
+                    <Form.Label>{t('Privacy settings')}</Form.Label>
+                    <Form.Text>{t('mediathequeInfo')}.</Form.Text>
+                    <Form.Check type="radio" id="dashboardTypePublic" className={styles.checkPublic}>
+                      <Form.Check.Input
+                        type="radio"
+                        isValid
+                        onChange={() => handlerDashboardTypeRadioChange('public')}
+                        checked={dashboardTypeChecked.public}
+                      />
+                      <Form.Check.Label>{t('My Mediatheque is public')}</Form.Check.Label>
+                      <Form.Control.Feedback type="valid">{t('Anyone can see my Mediatheque')}</Form.Control.Feedback>
+                    </Form.Check>
 
-                  <Form.Check className={styles.checkProtected} type="radio" id="dashboardTypeProtected">
-                    <Form.Check.Input
-                      type="radio"
-                      isValid
-                      onChange={() => handlerDashboardTypeRadioChange('protected')}
-                      checked={dashboardTypeChecked.protected}
-                    />
-                    <Form.Check.Label>{t('Fallowers can see my Dashboard')}</Form.Check.Label>
-                    <Form.Control.Feedback type="valid">
-                      {t('Users I fallow or that follow me can see my Dashboard')}
-                    </Form.Control.Feedback>
-                  </Form.Check>
+                    <Form.Check className={styles.checkProtected} type="radio" id="dashboardTypeProtected">
+                      <Form.Check.Input
+                        type="radio"
+                        isValid
+                        onChange={() => handlerDashboardTypeRadioChange('protected')}
+                        checked={dashboardTypeChecked.protected}
+                      />
+                      <Form.Check.Label>{t('Fallowers can see my Dashboard')}</Form.Check.Label>
+                      <Form.Control.Feedback type="valid">
+                        {t('Users I fallow or that follow me can see my Dashboard')}
+                      </Form.Control.Feedback>
+                    </Form.Check>
 
-                  <Form.Check type="radio" id="dashboardTypePrivate" className={styles.checkPrivate}>
-                    <Form.Check.Input
-                      type="radio"
-                      isValid
-                      onChange={() => handlerDashboardTypeRadioChange('private')}
-                      checked={dashboardTypeChecked.private}
-                    />
-                    <Form.Check.Label>{t('My Dashboard is secret')}</Form.Check.Label>
-                    <Form.Control.Feedback type="valid">{t('Only I can see my Dashboard')}</Form.Control.Feedback>
-                  </Form.Check>
-                </Form.Group>
+                    <Form.Check type="radio" id="dashboardTypePrivate" className={styles.checkPrivate}>
+                      <Form.Check.Input
+                        type="radio"
+                        isValid
+                        onChange={() => handlerDashboardTypeRadioChange('private')}
+                        checked={dashboardTypeChecked.private}
+                      />
+                      <Form.Check.Label>{t('My Dashboard is secret')}</Form.Check.Label>
+                      <Form.Control.Feedback type="valid">{t('Only I can see my Dashboard')}</Form.Control.Feedback>
+                    </Form.Check>
+                  </Form.Group>
+                </Col>
               </Row>
             </Container>
           </ModalBody>
