@@ -16,18 +16,25 @@ import { Button, Row, Col } from 'react-bootstrap';
 import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
 // import { BsHash } from 'react-icons/bs';
 import globalSearchEngineAtom from '../atoms/searchEngine';
-import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem } from '../types';
+import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem } from '../types';
 import MosaicItemCycle from './cycle/MosaicItem';
 import MosaicItemPost from './post/MosaicItem';
 import MosaicItemWork from './work/MosaicItem';
+import MosaicUserItem from './user/MosaicItem';
+
 import styles from './Carousel.module.css';
 // import { setCookie } from 'nookies';
 // import { Work, Cycle, PrismaPromise } from '@prisma/client';
 import { WorkMosaicItem /* , WorkWithImages */ } from '../types/work';
 import { CycleMosaicItem /* , CycleWithImages */ } from '../types/cycle';
 import { PostMosaicItem } from '../types/post';
+import { UserMosaicItem } from '../types/user';
 
-type Item = (CycleMosaicItem & { type: string }) | WorkMosaicItem | (PostMosaicItem & { type: string });
+type Item =
+  | (CycleMosaicItem & { type: string })
+  | WorkMosaicItem
+  | (PostMosaicItem & { type: string })
+  | UserMosaicItem;
 type Props = {
   // page: number;
   // setPage: (page: number) => void;
@@ -53,6 +60,9 @@ const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefine
     // eslint-disable-next-line react/jsx-props-no-spreading
     return <MosaicItemWork showButtonLabels={false} key={`work-${item.id}`} work={item} />;
   }
+  if (isUserMosaicItem(item)) {
+    return <MosaicUserItem user={item} showSocialInteraction={false} />;
+  }
 
   return '';
 };
@@ -66,43 +76,23 @@ const Carousel: FunctionComponent<Props> = ({ title, data, iconBefore, iconAfter
 
   const [globalSEState] = useAtom(globalSearchEngineAtom);
   useEffect(() => {
-    if (data && data.length) {
-      const d = [...data];
-      setDataFiltered((res) => [...res, ...d]);
-      const s = d.slice(0, 4);
-      setCurrent(() => [...s]);
-      setShow(() => [...d.slice(4, d.length)]);
+    if (data) {
+      if (data.length) {
+        let d = [...data];
+        if (globalSEState.only.length) {
+          d = data.filter((i) => globalSEState.only.includes(i.type));
+        }
+        setDataFiltered(() => d);
+        const s = d.slice(0, 4);
+        setCurrent(() => [...s]);
+        setShow(() => [...d.slice(4, d.length)]);
+      } else {
+        setDataFiltered(() => []);
+        setCurrent(() => []);
+        setShow(() => []);
+      }
     }
-  }, [data]);
-
-  /* const fetchItems = async (pageParam: number) => {
-    const url = `/api/getAllBy?topic=${topic}&cursor=${pageParam}
-    &extraCyclesRequired=${extraCyclesRequired || 0}
-    &extraWorksRequired=${extraWorksRequired || 0}
-    &totalWorks=${totalWorks}`;
-    const q = await fetch(url);
-    // debugger;
-    const res = await q.json();
-    // debugger;
-    return res;
-  }; */
-  /* const { isLoading, isError, error, data, isFetching, isPreviousData } = useQuery(
-    ['items', `${topic}${page}`],
-    () => fetchItems(page),
-    { keepPreviousData: true },
-  );
- */
-
-  useEffect(() => {
-    let df: Item[] = [];
-    if (globalSEState.only.length) {
-      df = data.filter((i) => globalSEState.only.includes(i.type));
-    } else df = [...data];
-    setDataFiltered(df);
-    setCurrent(() => [...df.slice(0, 4)]);
-    setShow(() => [...df.slice(4, df.length)]);
-    setHide([]);
-  }, [globalSEState]);
+  }, [data, globalSEState]);
 
   const buildMosaics = () => {
     const result: JSX.Element[] = [];
@@ -129,19 +119,6 @@ const Carousel: FunctionComponent<Props> = ({ title, data, iconBefore, iconAfter
     }
     return result;
   };
-
-  // const onItemsFound = async () => {
-  //   const where = encodeURIComponent(
-  //     JSON.stringify({
-  //       ...(topic !== 'uncategorized' && { topics: { contains: topic } }),
-  //       ...(topic === 'uncategorized' && {
-  //         OR: [{ topics: { equals: null } }, { topics: { equals: '' } }],
-  //       }),
-  //     }),
-  //   );
-  //   setGlobalSearchEngineState({ ...globalSearchEngineState, where, q: topic });
-  //   router.push('/search');
-  // };
 
   return (
     (

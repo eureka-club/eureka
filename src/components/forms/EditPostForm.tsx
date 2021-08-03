@@ -207,6 +207,10 @@ const EditPostForm: FunctionComponent = () => {
       setPost(p);
     }
   };
+  const labelKeyFn = (res: SearchResult) => {
+    if ('title' in res) return `${res.title}`;
+    return `${res.name}`;
+  };
 
   return (
     post && (
@@ -253,7 +257,7 @@ const EditPostForm: FunctionComponent = () => {
                         inputProps={{ required: true }}
                         placeholder={t('searchCycleOrWorkFieldPlaceholder')}
                         isLoading={isSearchWorkOrCycleLoading}
-                        labelKey={(res: SearchResult) => `${res.title}`}
+                        labelKey={labelKeyFn}
                         minLength={2}
                         onSearch={handleSearchWorkOrCycle}
                         options={searchWorkOrCycleResults}
@@ -324,7 +328,7 @@ const EditPostForm: FunctionComponent = () => {
                         inputProps={{ id: 'create-post--search-cycle' }}
                         placeholder={t('searchCycleFieldPlaceholder')}
                         isLoading={isSearchCycleLoading}
-                        labelKey={(res: SearchResult) => `${res.title}`}
+                        labelKey={labelKeyFn}
                         minLength={2}
                         useCache={false}
                         onSearch={handleSearchCycle}

@@ -3,6 +3,7 @@ import { Cycle, Post, User, Work } from '@prisma/client';
 import { CycleMosaicItem, CycleWithImages } from './types/cycle';
 import { PostMosaicItem, PostWithImages } from './types/post';
 import { WorkMosaicItem, WorkWithImages } from './types/work';
+import { UserMosaicItem } from './types/user';
 
 export interface FileUpload {
   fieldName: string;
@@ -35,9 +36,9 @@ export interface MySocialInfo {
  * TS type guards
  */
 
-export type BasicEntity = Cycle | Post | Work;
-export type MosaicItem = CycleMosaicItem | PostMosaicItem | WorkMosaicItem;
-export type SearchResult = CycleWithImages | PostWithImages | WorkWithImages;
+export type BasicEntity = Cycle | Post | Work | User;
+export type MosaicItem = CycleMosaicItem | PostMosaicItem | WorkMosaicItem | UserMosaicItem;
+export type SearchResult = CycleWithImages | PostWithImages | WorkWithImages | UserMosaicItem;
 
 export const isCycle = (obj: BasicEntity): obj is Cycle =>
   typeof (obj as Cycle).title === 'string' &&
@@ -51,6 +52,9 @@ export const isWork = (obj: BasicEntity): obj is Work =>
   typeof (obj as Work).title === 'string' &&
   typeof (obj as Work).author === 'string' &&
   typeof (obj as Work).type === 'string';
+
+export const isUser = (obj: BasicEntity): obj is User =>
+  typeof (obj as User).roles === 'string' && typeof (obj as User).email === 'string';
 
 // TODO separate type-guards for MosaicItem and SearchResult
 export const isCycleMosaicItem = (obj: MosaicItem | SearchResult): obj is CycleMosaicItem =>
@@ -66,3 +70,6 @@ export const isWorkMosaicItem = (obj: MosaicItem | SearchResult): obj is WorkMos
   typeof (obj as WorkMosaicItem).title === 'string' &&
   typeof (obj as WorkMosaicItem).author === 'string' &&
   typeof (obj as WorkMosaicItem).type === 'string';
+
+export const isUserMosaicItem = (obj: MosaicItem | SearchResult): obj is UserMosaicItem =>
+  typeof (obj as UserMosaicItem).roles === 'string' && typeof (obj as UserMosaicItem).email === 'string';

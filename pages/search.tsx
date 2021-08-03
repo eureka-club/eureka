@@ -15,6 +15,7 @@ import globalSearchEngineAtom from '../src/atoms/searchEngine';
 import { CycleMosaicItem } from '../src/types/cycle';
 import { WorkMosaicItem } from '../src/types/work';
 import { PostMosaicItem } from '../src/types/post';
+import { UserMosaicItem } from '../src/types/user';
 
 import styles from './index.module.css';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
@@ -27,7 +28,11 @@ import useWorks from '../src/useWorks';
 import useCycles from '../src/useCycles';
 import useCountries from '../src/useCountries';
 
-type Item = (CycleMosaicItem & { type: string }) | WorkMosaicItem | (PostMosaicItem & { type: string });
+type Item =
+  | (CycleMosaicItem & { type: string })
+  | WorkMosaicItem
+  | (PostMosaicItem & { type: string })
+  | UserMosaicItem;
 
 // interface Props {
 //   homepageMosaicData: (CycleMosaicItem | WorkMosaicItem)[];

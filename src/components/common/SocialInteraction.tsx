@@ -35,7 +35,7 @@ interface SocialInteractionClientPayload {
 }
 
 interface Props {
-  entity: CycleDetail | PostDetail | WorkDetail;
+  entity: CycleDetail | PostDetail | WorkDetail | User;
   parent?: CycleDetail | WorkDetail | null;
   // mySocialInfo: MySocialInfo;
   showCounts?: boolean;
@@ -145,7 +145,12 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
     throw new Error('Invalid entity or parent');
   })();
-  const shareText = `${shareTextDynamicPart} "${entity.title}" ${t('complementShare')}`;
+  const title = () => {
+    if ('title' in entity) return entity.title;
+    return entity.name; // an user;
+  };
+
+  const shareText = `${shareTextDynamicPart} "${title()}" ${t('complementShare')}`;
 
   const { mutate: execSocialInteraction, isSuccess: isSocialInteractionSuccess } = useMutation(
     async ({ socialInteraction, doCreate }: SocialInteractionClientPayload) => {
@@ -200,13 +205,13 @@ const SocialInteraction: FunctionComponent<Props> = ({
         if (data.status !== 'OK') {
           if (variables.socialInteraction === 'like') {
             setOptimistLike(mySocialInfo!.likedByMe!);
-            setOptimistLikeCount(entity.likes.length);
+            if ('likes' in entity) setOptimistLikeCount(entity.likes.length);
           } else if (isWork(entity) && variables.socialInteraction === 'readOrWatched') {
             setOptimistReadOrWatched(mySocialInfo!.readOrWatchedByMe!);
             setOptimistReadOrWatchedCount((entity as WorkDetail).readOrWatcheds.length);
           }
           setOptimistFav(mySocialInfo!.likedByMe!);
-          setOptimistFavCount(entity.favs.length);
+          if ('favs' in entity) setOptimistFavCount(entity.favs.length);
         }
       },
     },

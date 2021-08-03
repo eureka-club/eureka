@@ -6,7 +6,7 @@ import { /* GetStaticProps, */ NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/client';
-// import { QueryClient } from 'react-query';
+import { useQueryClient, useMutation } from 'react-query';
 // import { dehydrate } from 'react-query/hydration';
 import { useState, useEffect /* , ReactElement */ } from 'react';
 
@@ -15,7 +15,7 @@ import { /* Spinner, */ Card, Row, Col, Button } from 'react-bootstrap';
 import { AiOutlineEnvironment } from 'react-icons/ai';
 import { /* BsCircleFill, */ BsBookmark, BsEye } from 'react-icons/bs';
 
-// import { Cycle, LocalImage, User, Work } from '@prisma/client';
+import { User } from '@prisma/client';
 import styles from './index.module.css';
 import { useUsers } from '../../src/useUsers';
 
@@ -28,28 +28,33 @@ import CarouselStatic from '../../src/components/CarouselStatic';
 // import useWorks from '../src/useWorks';
 // import useCycles from '../src/useCycles';
 // import useCountries from '../src/useCountries';
-// import { Session  , MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem  } from '../../src/types';
+import { Session } from '../../src/types';
 import { CycleMosaicItem /* , CycleWithImages */ } from '../../src/types/cycle';
 import { PostMosaicItem /* , PostWithImages */ } from '../../src/types/post';
 import { WorkMosaicItem /* , WorkWithImages */ } from '../../src/types/work';
+import { UserMosaicItem, UserDetail /* , WorkWithImages */ } from '../../src/types/user';
 // import MosaicItemCycle from '../../src/components/cycle/MosaicItem';
 // import MosaicItemPost from '../../src/components/post/MosaicItem';
 // import MosaicItemWork from '../../src/components/work/MosaicItem';
 
 type Item = (CycleMosaicItem & { type: string }) | WorkMosaicItem | (PostMosaicItem & { type: string });
+
 type ItemCycle = CycleMosaicItem & { type: string };
 type ItemPost = PostMosaicItem & { type: string };
+
 // | WorkMosaicItem | ;
 
 const Mediatheque: NextPage = () => {
   const [session] = useSession();
   const [id, setId] = useState<string>('');
+  const [idSession, setIdSession] = useState<string>('');
   const router = useRouter();
   const [cycles, setCycles] = useState<ItemCycle[]>([]);
   const [posts, setPosts] = useState<ItemPost[]>([]);
-  const [savedForLater, setSavedForLaters] = useState<Item[]>([]);
+  const [savedForLater, setSavedForLater] = useState<Item[]>([]);
   const [readOrWatched, setReadOrWatched] = useState<Item[]>([]);
-
+  const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>();
+  const queryClient = useQueryClient();
   const { t } = useTranslation('mediatheque');
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
   // if (!s?.user) {
@@ -61,11 +66,18 @@ const Mediatheque: NextPage = () => {
     // const s = session as unknown as Session;
     // if (s && s.user) setId(s.user.id.toString());
     setId(router.query.id as string);
+    if (session) setIdSession((session as unknown as Session).user.id.toString());
   }, [session, router]);
 
   const { /* isLoading, isError, error, */ data: user } = useUsers(id);
+  const { /* isLoading, isError, error, */ data: dataUserSession } = useUsers(idSession);
+  const [userSession, setUserSession] = useState<UserDetail>();
+
   useEffect(() => {
-    if (user && id) {
+    if (user && id && session) {
+      setIsFollowedByMe(
+        user.followedBy.findIndex((i: User) => i.id === (session as unknown as Session).user.id) !== -1,
+      );
       let C: ItemCycle[] = [];
       const JC: ItemCycle[] = [];
       let P: ItemPost[] = [];
@@ -92,14 +104,63 @@ const Mediatheque: NextPage = () => {
       if (user.readOrWatchedWorks && user.readOrWatchedWorks.length) {
         RW = user.readOrWatchedWorks;
       }
-      setCycles([...C, ...JC]);
-      setPosts([...P]);
-      setSavedForLaters([...FW]);
-      setReadOrWatched([...RW]);
+      setCycles(() => [...C, ...JC]);
+      setPosts(() => [...P]);
+      setSavedForLater(() => [...FW]);
+      setReadOrWatched(() => [...RW]);
     }
-  }, [user, id]);
+  }, [user, id, session]);
 
-  const seeAll = async (data: Item[], q: string): Promise<void> => {
+  useEffect(() => {
+    if (dataUserSession) {
+      dataUserSession.following = dataUserSession.following.map((f: UserMosaicItem) => ({ ...f, type: 'user' }));
+      dataUserSession.followedBy = dataUserSession.followedBy.map((f: UserMosaicItem) => ({ ...f, type: 'user' }));
+
+      setUserSession(dataUserSession);
+    }
+  }, [dataUserSession]);
+
+  const { mutate: mutateFollowing } = useMutation<User>(
+    async () => {
+      const action = isFollowedByMe ? 'disconnect' : 'connect';
+      const res = await fetch(`/api/user/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          followedBy: {
+            [`${action}`]: [{ id: (session as unknown as Session).user.id }],
+          },
+        }),
+      });
+      const json = await res.json();
+
+      // if (json.status === 'OK') {
+      //   setIsFollowedByMe(!isFollowedByMe);
+      // }
+      return json;
+    },
+    {
+      onMutate: () => {
+        type UserFollow = User & { followedBy: User[]; following: User[] };
+        const followingUser = queryClient.getQueryData<UserFollow>(['USERS', id]);
+        const followedByUser = queryClient.getQueryData<UserFollow>(['USERS', idSession]);
+        let followedBy: User[] = [];
+        let following: User[] = [];
+        if (followingUser && followedByUser)
+          if (isFollowedByMe) {
+            followedBy = followingUser.followedBy.filter((i: User) => i.id !== +idSession);
+            following = followedByUser.following.filter((i: User) => i.id !== +id);
+          } else {
+            followedBy = [...followingUser.followedBy, followedByUser];
+            following = [...followedByUser.following, followingUser];
+          }
+        queryClient.setQueryData(['USERS', id], { ...followingUser, followedBy });
+        queryClient.setQueryData(['USERS', idSession], { ...followedByUser, following });
+      },
+    },
+  );
+
+  const seeAll = async (data: (Item | UserMosaicItem)[], q: string): Promise<void> => {
     setGlobalSearchEngineState({
       ...globalSearchEngineState,
       itemsFound: data,
@@ -108,6 +169,14 @@ const Mediatheque: NextPage = () => {
 
     router.push('/search');
   };
+
+  const followHandler = async () => {
+    const s = session;
+    if (user && s!.user) {
+      if (parseInt(id, 10) !== (s as unknown as Session).user.id) mutateFollowing();
+    }
+  };
+
   return (
     <SimpleLayout title={t('Mediatheque')}>
       {user && (
@@ -115,7 +184,7 @@ const Mediatheque: NextPage = () => {
           <Card.Body>
             <Row>
               <Col>
-                <img className={styles.avatar} src={user.image} alt={user.email} />
+                <img className={styles.avatar} src={user.image || '/assets/avatar.png'} alt={user.email} />
                 <br />
                 {/* <em>{user.name}</em> */}
               </Col>
@@ -127,10 +196,18 @@ const Mediatheque: NextPage = () => {
                 <p className={styles.description}>{user.aboutMe}</p>
                 <TagsInput tags={user.tags} readOnly label="" />
               </Col>
-              <Col>
-                {/* <BsCircleFill className={styles.infoCircle} /> */}
-                <Button>{t('Follow')}</Button>
-              </Col>
+              {session && (session as unknown as Session).user!.id !== user.id && !isFollowedByMe && (
+                <Col>
+                  {/* <BsCircleFill className={styles.infoCircle} /> */}
+                  <Button onClick={followHandler}>{t('Follow')}</Button>
+                </Col>
+              )}
+              {session && (session as unknown as Session).user!.id !== user.id && isFollowedByMe && (
+                <Col>
+                  {/* <BsCircleFill className={styles.infoCircle} /> */}
+                  <Button onClick={followHandler}>{t('Stop Following')}</Button>
+                </Col>
+              )}
             </Row>
           </Card.Body>
         </Card>
@@ -169,6 +246,16 @@ const Mediatheque: NextPage = () => {
         iconBefore={<BsBookmark />}
         // iconAfter={<BsCircleFill className={styles.infoCircle} />}
       />
+
+      {user && (
+        <CarouselStatic
+          onSeeAll={async () => seeAll(user!.following as UserMosaicItem[], t('Users I follow'))}
+          title={`${t('Users I follow')}  `}
+          data={user!.following as UserMosaicItem[]}
+          iconBefore={<BsBookmark />}
+          // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+        />
+      )}
     </SimpleLayout>
   );
 };

@@ -105,6 +105,11 @@ const SearchEngine: FunctionComponent = () => {
     }
   };
 
+  const labelKeyFn = (res: SearchResult) => {
+    if ('title' in res) return `${res.title}`;
+    return `${res.name}`;
+  };
+
   return (
     <div className={styles.container}>
       <Form.Group>
@@ -127,7 +132,7 @@ const SearchEngine: FunctionComponent = () => {
             inputProps={{ required: true }}
             placeholder={t('Search')}
             isLoading={isSearchWorkOrCycleLoading}
-            labelKey={(res: SearchResult) => `${res.title}`}
+            labelKey={labelKeyFn}
             minLength={2}
             onSearch={handleSearchWorkOrCycle}
             options={searchWorkOrCycleResults}

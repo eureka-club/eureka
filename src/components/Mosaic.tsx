@@ -3,10 +3,11 @@ import classNames from 'classnames';
 import { FunctionComponent } from 'react';
 import Masonry from 'react-masonry-css';
 
-import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem } from '../types';
+import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem } from '../types';
 import MosaicItemCycle from './cycle/MosaicItem';
 import MosaicItemPost from './post/MosaicItem';
 import MosaicItemWork from './work/MosaicItem';
+import MosaicItemUser from './user/MosaicItem';
 import styles from './Mosaic.module.css';
 
 interface Props {
@@ -26,6 +27,9 @@ const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefine
   if (isWorkMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
     return <MosaicItemWork showShare={false} showButtonLabels={showButtonLabels} key={`work-${item.id}`} work={item} />;
+  }
+  if (isUserMosaicItem(item)) {
+    return <MosaicItemUser key={`user-${item.id}`} user={item} />;
   }
 
   return '';

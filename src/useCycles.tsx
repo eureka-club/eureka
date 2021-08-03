@@ -4,7 +4,7 @@ import { CycleMosaicItem } from './types/cycle';
 import globalSearchEngineAtom from './atoms/searchEngine';
 
 const getRecords = async (where = '') => {
-  // if (!where) return { data: [] };
+  if (!where) return null;
   const res = await fetch(`/api/cycle${where ? `?where=${where}` : ''}`);
   const result = await res.json();
 

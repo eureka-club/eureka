@@ -4,9 +4,9 @@ import { useAtom } from 'jotai';
 import globalSearchEngineAtom from './atoms/searchEngine';
 
 const getRecords = async (where = '', id = '') => {
-  if (!where) return { data: [] };
-  let url = '/api/work';
+  // if (!where) return { data: [] };
   if (!where && !id) return null;
+  let url = '/api/work';
   if (where) url = `${url}?where=${where}`;
   else if (id) url = `/api/work?id=${id}`;
   const res = await fetch(url);
@@ -30,6 +30,7 @@ const useWorks = (id?: string) => {
   const { where } = globalSearchEngineState;
   let key = encodeURIComponent(JSON.stringify({ where }));
   if (id) key = id;
+
   return useQuery(['WORKS', key], () => getRecords(where, id), {
     staleTime: 1000 * 60 * 60,
   });
