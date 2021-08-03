@@ -44,7 +44,7 @@ const EditUserForm: FunctionComponent = () => {
   const [id, setId] = useState<string>('');
   const [currentImg, setCurrentImg] = useState<string | undefined>();
 
-  const [dashboardType, setDashboardType] = useState<number>();
+  const [privacySettings, setPrivacySettings] = useState<number>();
   const [dashboardTypeChecked, setDashboardTypeChecked] = useState<{
     public: boolean;
     protected: boolean;
@@ -68,7 +68,7 @@ const EditUserForm: FunctionComponent = () => {
       setTags(() => data.tags);
       setDashboardTypeChecked((res) => {
         let v = 'private';
-        switch (data.dashboardType) {
+        switch (data.privacySettings) {
           case 2:
             v = 'protected';
             break;
@@ -211,7 +211,7 @@ const EditUserForm: FunctionComponent = () => {
       image: form.image.value,
       countryOfOrigin: countryOrigin,
       aboutMe: form.aboutMe.value,
-      dashboardType: dashboardType || 3,
+      dashboardType: privacySettings || 3,
       tags,
     };
 
@@ -287,7 +287,7 @@ const EditUserForm: FunctionComponent = () => {
       protected: false,
       public: false,
     }));
-    setDashboardType(() => {
+    setPrivacySettings(() => {
       return { public: 1, protected: 2, private: 3 }[`${val}`];
     });
     setDashboardTypeChecked((res) => ({ ...res, [`${val}`]: true }));
@@ -411,21 +411,21 @@ const EditUserForm: FunctionComponent = () => {
                 </Col>
               </Row>
               <Row>
-                <Form.Group controlId="dashboardType">
-                  <Form.Label>{t('Dashboard Type')}</Form.Label>
-
-                  <Form.Check type="radio" id="dashboardTypePublic" className={styles['color-primary']}>
+                <Form.Group controlId="privacySettings" className={styles.privacySettings}>
+                  <Form.Label>{t('Privacy settings')}</Form.Label>
+                  <Form.Text>{t('mediathequeInfo')}.</Form.Text>
+                  <Form.Check type="radio" id="dashboardTypePublic" className={styles.checkPublic}>
                     <Form.Check.Input
                       type="radio"
                       isValid
                       onChange={() => handlerDashboardTypeRadioChange('public')}
                       checked={dashboardTypeChecked.public}
                     />
-                    <Form.Check.Label>{t('My Dashboard is public')}</Form.Check.Label>
-                    <Form.Control.Feedback type="valid">{t('Anyone can see my Dashboard')}</Form.Control.Feedback>
+                    <Form.Check.Label>{t('My Mediatheque is public')}</Form.Check.Label>
+                    <Form.Control.Feedback type="valid">{t('Anyone can see my Mediatheque')}</Form.Control.Feedback>
                   </Form.Check>
 
-                  <Form.Check className={styles['color-grey-dark']} type="radio" id="dashboardTypeProtected">
+                  <Form.Check className={styles.checkProtected} type="radio" id="dashboardTypeProtected">
                     <Form.Check.Input
                       type="radio"
                       isValid
@@ -438,7 +438,7 @@ const EditUserForm: FunctionComponent = () => {
                     </Form.Control.Feedback>
                   </Form.Check>
 
-                  <Form.Check type="radio" id="dashboardTypePrivate">
+                  <Form.Check type="radio" id="dashboardTypePrivate" className={styles.checkPrivate}>
                     <Form.Check.Input
                       type="radio"
                       isValid

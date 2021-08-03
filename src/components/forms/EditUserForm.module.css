@@ -1,4 +1,18 @@
-.color-primary input, .color-primary label, .color-primary div{
-  color: var(--color-primary)!important;
+.privacySettings > div{
+  margin-top:1em;
 }
-.color-grey-dark input,.color-grey-dark label,.color-grey-dark div{color: #6c707a!important;}
+.privacySettings > div > div{
+  color:gray;
+}
+.privacySettings > div > label{
+  color: var(--text-color-primary)!important;
+}
+ .checkPublic {
+  /* color:gray; */
+}
+.checkProtected div{
+  /* color:gray; */
+}
+.checkPrivate div{
+  /* color:gray; */
+} 
