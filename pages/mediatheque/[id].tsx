@@ -216,17 +216,17 @@ const Mediatheque: NextPage = () => {
       <FilterEngine fictionOrNotFilter={false} geographyFilter={false} />
 
       <CarouselStatic
-        onSeeAll={async () => seeAll(cycles, t('Cycles I created or joined'))}
-        title={t('Cycles I created or joined')}
-        data={cycles}
+        onSeeAll={async () => seeAll(cycles, t('Eurekas I created'))}
+        title={t('Eurekas I created')}
+        data={posts}
         iconBefore={<></>}
         // iconAfter={<BsCircleFill className={styles.infoCircle} />}
       />
 
       <CarouselStatic
-        onSeeAll={async () => seeAll(cycles, t('Eurekas I created'))}
-        title={t('Eurekas I created')}
-        data={posts}
+        onSeeAll={async () => seeAll(cycles, t('Cycles I created or joined'))}
+        title={t('Cycles I created or joined')}
+        data={cycles}
         iconBefore={<></>}
         // iconAfter={<BsCircleFill className={styles.infoCircle} />}
       />
