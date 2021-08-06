@@ -14,6 +14,7 @@ import { useState, useEffect /* , ReactElement */ } from 'react';
 import { /* Spinner, */ Card, Row, Col, Button } from 'react-bootstrap';
 import { AiOutlineEnvironment } from 'react-icons/ai';
 import { /* BsCircleFill, */ BsBookmark, BsEye } from 'react-icons/bs';
+import { HiOutlineUserGroup } from 'react-icons/hi';
 
 import { User } from '@prisma/client';
 import styles from './index.module.css';
@@ -257,7 +258,7 @@ const Mediatheque: NextPage = () => {
           onSeeAll={async () => seeAll(user!.following as UserMosaicItem[], t('Users I follow'))}
           title={`${t('Users I follow')}  `}
           data={user!.following as UserMosaicItem[]}
-          iconBefore={<BsBookmark />}
+          iconBefore={<HiOutlineUserGroup />}
           // iconAfter={<BsCircleFill className={styles.infoCircle} />}
         />
       )}

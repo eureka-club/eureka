@@ -284,7 +284,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
             user?.readOrWatchedWorks.push(entity);
             readOrWatchedWorks = user?.readOrWatchedWorks;
           }
-          queryClient.setQueryData(['USERS', user!.id], { ...user, readOrWatchedWorks });
+          queryClient.setQueryData(['USERS', `${user!.id}`], { ...user, readOrWatchedWorks });
           return { optimistreadOrWatched: ol, optimistreadOrWatchedCount: olc };
         }
         if (payload.socialInteraction === 'fav') {
@@ -328,17 +328,20 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
   const handleFavClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    execSocialInteraction({ socialInteraction: 'fav', doCreate: !mySocialInfo!.favoritedByMe });
+    execSocialInteraction({ socialInteraction: 'fav', doCreate: mySocialInfo ? !mySocialInfo!.favoritedByMe : true });
   };
 
   const handleLikeClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    execSocialInteraction({ socialInteraction: 'like', doCreate: !mySocialInfo!.likedByMe });
+    execSocialInteraction({ socialInteraction: 'like', doCreate: mySocialInfo ? !mySocialInfo!.likedByMe : true });
   };
 
   const handleReadOrWatchedClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    execSocialInteraction({ socialInteraction: 'readOrWatched', doCreate: !mySocialInfo!.readOrWatchedByMe });
+    execSocialInteraction({
+      socialInteraction: 'readOrWatched',
+      doCreate: mySocialInfo ? !mySocialInfo!.readOrWatchedByMe : true,
+    });
   };
 
   useEffect(() => {
