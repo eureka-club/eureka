@@ -200,21 +200,19 @@ const Mediatheque: NextPage = () => {
                 <p className={styles.description}>{user.aboutMe}</p>
                 <TagsInput tags={user.tags} readOnly label="" />
               </Col>
-              {session && (session as unknown as Session).user!.id !== user.id && !isFollowedByMe && (
-                <Col>
-                  {/* <BsCircleFill className={styles.infoCircle} /> */}
+              <Col>
+                {session && (session as unknown as Session).user!.id !== user.id && !isFollowedByMe && (
                   <Button onClick={followHandler}>{t('Follow')}</Button>
-                </Col>
-              )}
-              {session && (session as unknown as Session).user!.id !== user.id && isFollowedByMe && (
-                <Col>
-                  {/* <BsCircleFill className={styles.infoCircle} /> */}
+                )}
+
+                {session && (session as unknown as Session).user!.id !== user.id && isFollowedByMe && (
                   <Button className={styles.unFollowBtn} onClick={followHandler}>
                     {t('Unfollow')}
                   </Button>
-                </Col>
-              )}
+                )}
+              </Col>
             </Row>
+            {/* <BsCircleFill className={styles.infoCircle} /> */}
           </Card.Body>
         </Card>
       )}
