@@ -165,11 +165,12 @@ const Mediatheque: NextPage = () => {
     },
   );
 
-  const seeAll = async (data: (Item | UserMosaicItem)[], q: string): Promise<void> => {
+  const seeAll = async (data: (Item | UserMosaicItem)[], q: string, showFilterEngine = true): Promise<void> => {
     setGlobalSearchEngineState({
       ...globalSearchEngineState,
       itemsFound: data,
       q,
+      show: showFilterEngine,
     });
 
     router.push('/search');
@@ -255,7 +256,7 @@ const Mediatheque: NextPage = () => {
 
       {user && (
         <CarouselStatic
-          onSeeAll={async () => seeAll(user!.following as UserMosaicItem[], t('Users I follow'))}
+          onSeeAll={async () => seeAll(user!.following as UserMosaicItem[], t('Users I follow'), false)}
           title={`${t('Users I follow')}  `}
           data={user!.following as UserMosaicItem[]}
           iconBefore={<HiOutlineUserGroup />}

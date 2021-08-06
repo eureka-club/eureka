@@ -17,6 +17,7 @@ type Filter = {
   itemsFound?: Item[];
   q?: string;
   where?: string;
+  show?: boolean;
   // searchMosaicData?: ((CycleMosaicItem & { type: string }) | WorkMosaicItem)[];
 };
 const o: Filter = {
@@ -26,6 +27,7 @@ const o: Filter = {
   q: '',
   where: '',
   countryQuery: [],
+  show: true,
 };
 
 export default atom(o);

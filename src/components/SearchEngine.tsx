@@ -79,6 +79,7 @@ const SearchEngine: FunctionComponent = () => {
     }
   };
   const onItemsFound = async () => {
+    setGlobalSearchEngineState((res) => ({ ...res, show: true, itemsFound: [] }));
     if (!router.route.match('search')) {
       if (globalSearchEngineState.q) {
         const where = encodeURIComponent(
@@ -89,7 +90,7 @@ const SearchEngine: FunctionComponent = () => {
             ],
           }),
         );
-        setGlobalSearchEngineState({ ...globalSearchEngineState, where });
+        setGlobalSearchEngineState((res) => ({ ...res, where }));
       }
       router.push('/search');
     } else if (globalSearchEngineState.q) {
@@ -101,7 +102,7 @@ const SearchEngine: FunctionComponent = () => {
           ],
         }),
       );
-      setGlobalSearchEngineState({ ...globalSearchEngineState, where });
+      setGlobalSearchEngineState((res) => ({ ...res, where }));
     }
   };
 
@@ -133,7 +134,7 @@ const SearchEngine: FunctionComponent = () => {
             placeholder={t('Search')}
             isLoading={isSearchWorkOrCycleLoading}
             labelKey={labelKeyFn}
-            minLength={2}
+            minLength={10}
             onSearch={handleSearchWorkOrCycle}
             options={searchWorkOrCycleResults}
             onChange={handleSelectWorkOrCycle}
