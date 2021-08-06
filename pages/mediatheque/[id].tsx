@@ -209,7 +209,9 @@ const Mediatheque: NextPage = () => {
               {session && (session as unknown as Session).user!.id !== user.id && isFollowedByMe && (
                 <Col>
                   {/* <BsCircleFill className={styles.infoCircle} /> */}
-                  <Button onClick={followHandler}>{t('Stop Following')}</Button>
+                  <Button className={styles.unFollowBtn} onClick={followHandler}>
+                    {t('Unfollow')}
+                  </Button>
                 </Col>
               )}
             </Row>
