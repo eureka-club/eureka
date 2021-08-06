@@ -23,6 +23,7 @@ export const find = async (id: number): Promise<User | null> => {
           creator: true,
           localImages: true,
           works: true,
+          cycles: true,
           likes: true,
           favs: true,
         },

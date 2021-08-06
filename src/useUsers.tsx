@@ -1,6 +1,7 @@
 import { useQuery } from 'react-query';
 // import { useAtom } from 'jotai';
 // import globalSearchEngineAtom from './atoms/searchEngine';
+// import { UserDetail } from './types/user';
 
 const fetchUsers = async (id: string) => {
   if (!id) return null;

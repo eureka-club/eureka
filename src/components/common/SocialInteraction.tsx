@@ -6,7 +6,7 @@ import { GiBrain } from 'react-icons/gi';
 import { BsBookmark, BsBookmarkFill, BsEye, BsEyeFill } from 'react-icons/bs';
 import classnames from 'classnames';
 import { FiShare2, FiStar } from 'react-icons/fi';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/client';
 import { useAtom } from 'jotai';
 import {
@@ -17,8 +17,9 @@ import {
   WhatsappShareButton,
   WhatsappIcon,
 } from 'react-share';
-import { User } from '@prisma/client';
+import { Cycle, User, Work } from '@prisma/client';
 import { OverlayTrigger, Popover, Button } from 'react-bootstrap';
+import { useUsers } from '../../useUsers';
 import globalModalsAtom from '../../atoms/globalModals';
 // import Notification from '../ui/Notification';
 
@@ -64,36 +65,83 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const [optimistLikeCount, setOptimistLikeCount] = useState<number>(0);
   const [optimistFavCount, setOptimistFavCount] = useState<number>(0);
   const [optimistReadOrWatchedCount, setOptimistReadOrWatchedCount] = useState<number>(0);
+  const queryClient = useQueryClient();
+
+  const [idSession, setIdSession] = useState<string>('');
+  const { /* isLoading, isError, error, */ data: user } = useUsers((session as unknown as Session).user.id.toString());
+  // const [user, setuser] = useState<UserDetail>();
 
   useEffect(() => {
-    const s = session as unknown as Session;
-    if (entity && isWork(entity) && s) {
+    /* const s = session as unknown as Session;
+    if (s) setIdSession(s.user.id.toString()); */
+    // if (datauser) setuser(() => datauser);
+    if (user && entity) {
+      if (isWork(entity)) {
+        // if (entity.id === 125) debugger;
+        let idx = user.readOrWatchedWorks.findIndex((i: Work) => i.id === entity.id);
+        const readOrWatchedByMe = idx !== -1;
+        setOptimistReadOrWatched(readOrWatchedByMe);
+        setOptimistReadOrWatchedCount(entity.readOrWatcheds.length);
+
+        idx = user.likedWorks.findIndex((i: Work) => i.id === entity.id);
+        const likedByMe = idx !== -1;
+        setOptimistLike(likedByMe);
+        setOptimistLikeCount(entity.likes.length);
+
+        idx = user.favWorks.findIndex((i: Work) => i.id === entity.id);
+        const favoritedByMe = idx !== -1;
+        setOptimistFav(favoritedByMe);
+        setOptimistFavCount(entity.favs.length);
+
+        setMySocialInfo({ likedByMe, favoritedByMe, readOrWatchedByMe });
+      } else if (isCycle(entity)) {
+        setOptimistReadOrWatchedCount(0);
+
+        let idx = user.likedCycles.findIndex((i: Cycle) => i.id === entity.id);
+        const likedByMe = idx !== -1;
+        setOptimistLike(likedByMe);
+        setOptimistLikeCount(entity.likes.length);
+
+        idx = user.favCycles.findIndex((i: Cycle) => i.id === entity.id);
+        const favoritedByMe = idx !== -1;
+        setOptimistFav(favoritedByMe);
+        setOptimistFavCount(entity.favs.length);
+
+        setMySocialInfo({ likedByMe, favoritedByMe });
+        setOptimistReadOrWatchedCount(0);
+      }
+    }
+  }, [user, entity]);
+
+  /* useEffect(() => {
+    if (entity && isWork(entity) && user) {
+      // if (entity.id === 125) debugger;
       setOptimistReadOrWatchedCount(entity.readOrWatcheds.length);
 
-      let idx = entity.likes.findIndex((i) => i.id === s.user!.id);
+      let idx = entity.likes.findIndex((i) => i.id === user!.id);
       const likedByMe = idx !== -1;
       setOptimistLike(likedByMe);
       setOptimistLikeCount(entity.likes.length);
 
-      idx = entity.favs.findIndex((i) => i.id === s.user!.id);
+      idx = entity.favs.findIndex((i) => i.id === user!.id);
       const favoritedByMe = idx !== -1;
       setOptimistFav(favoritedByMe);
       setOptimistFavCount(entity.favs.length);
 
-      idx = entity.readOrWatcheds.findIndex((i) => i.id === s.user!.id);
-      const readOrWatchedByMe = idx !== -1;
-      setOptimistReadOrWatched(readOrWatchedByMe);
-      setMySocialInfo({ likedByMe, favoritedByMe, readOrWatchedByMe });
+      // idx = entity.readOrWatcheds.findIndex((i) => i.id === user!.id);
+      // const readOrWatchedByMe = idx !== -1;
+      // setOptimistReadOrWatched(readOrWatchedByMe);
+      // setMySocialInfo({ likedByMe, favoritedByMe, readOrWatchedByMe });
       setOptimistReadOrWatchedCount(entity.readOrWatcheds.length);
-    } else if (entity && isCycle(entity) && s) {
+    } else if (entity && isCycle(entity) && user) {
       setOptimistReadOrWatchedCount(0);
 
-      let idx = entity.likes.findIndex((i) => i.id === s.user!.id);
+      let idx = entity.likes.findIndex((i) => i.id === user!.id);
       const likedByMe = idx !== -1;
       setOptimistLike(likedByMe);
       setOptimistLikeCount(entity.likes.length);
 
-      idx = entity.favs.findIndex((i) => i.id === s.user!.id);
+      idx = entity.favs.findIndex((i) => i.id === user!.id);
       const favoritedByMe = idx !== -1;
       setOptimistFav(favoritedByMe);
       setOptimistFavCount(entity.favs.length);
@@ -101,8 +149,23 @@ const SocialInteraction: FunctionComponent<Props> = ({
       setMySocialInfo({ likedByMe, favoritedByMe });
       setOptimistReadOrWatchedCount(0);
     }
-  }, [entity, session]);
+  }, [entity, user]);
+ */
+  /* useEffect(() => {
+    debugger;
+    if (datauser) {
+      setuser(() => datauser);
 
+      const idx = datauser.readOrWatchedWorks.findIndex((i) => i.id === entity.id);
+      const readOrWatchedByMe = idx !== -1;
+      setOptimistReadOrWatched(readOrWatchedByMe);
+      setMySocialInfo({
+        ...mySocialInfo,
+        readOrWatchedByMe,
+      });
+    }
+  }, [datauser]);
+ */
   const openSignInModal = () => {
     setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
   };
@@ -186,6 +249,26 @@ const SocialInteraction: FunctionComponent<Props> = ({
           setOptimistLike(!optimistLike);
           const olc = optimistLikeCount;
           setOptimistLikeCount(optimistLikeCount + likeInc());
+
+          if (isWork(entity)) {
+            let likedWorks;
+            if (ol) {
+              likedWorks = user?.likedWorks.filter((i: Work) => i.id !== entity.id);
+            } else {
+              user?.likedWorks.push(entity);
+              likedWorks = user?.likedWorks;
+            }
+            queryClient.setQueryData(['USERS', user!.id], { ...user, likedWorks });
+          } else if (isCycle(entity)) {
+            let likedCycles;
+            if (ol) {
+              likedCycles = user?.likedCycles.filter((i: Cycle) => i.id !== entity.id);
+            } else {
+              user?.likedCycles.push(entity);
+              likedCycles = user?.likedCycles;
+            }
+            queryClient.setQueryData(['USERS', user!.id], { ...user, likedCycles });
+          }
           return { optimistLike: ol, optimistLikeCount: olc };
         }
         if (isWork(entity) && payload.socialInteraction === 'readOrWatched') {
@@ -193,13 +276,38 @@ const SocialInteraction: FunctionComponent<Props> = ({
           setOptimistReadOrWatched(!optimistReadOrWatched);
           const olc = optimistReadOrWatchedCount;
           setOptimistReadOrWatchedCount(optimistReadOrWatchedCount! + readOrWatchedInc());
+
+          let readOrWatchedWorks;
+          if (ol) {
+            readOrWatchedWorks = user?.readOrWatchedWorks.filter((i: Cycle) => i.id !== entity.id);
+          } else {
+            user?.readOrWatchedWorks.push(entity);
+            readOrWatchedWorks = user?.readOrWatchedWorks;
+          }
+          queryClient.setQueryData(['USERS', user!.id], { ...user, readOrWatchedWorks });
           return { optimistreadOrWatched: ol, optimistreadOrWatchedCount: olc };
         }
-        const opf = optimistFav;
-        const opfc = optimistFavCount;
-        setOptimistFav(!optimistFav);
-        setOptimistFavCount(optimistFavCount + favInc());
-        return { optimistFav: opf, optimistFavCount: opfc };
+        if (payload.socialInteraction === 'fav') {
+          const opfc = optimistFavCount;
+          const opf = optimistFav;
+          setOptimistFav(!optimistFav);
+          setOptimistFavCount(optimistFavCount + favInc());
+          let favWorks;
+          if (isWork(entity)) {
+            if (opf) favWorks = user?.favWorks.filter((i: Cycle) => i.id !== entity.id);
+            else {
+              user?.favWorks.push(entity);
+              favWorks = user?.favWorks;
+            }
+            queryClient.setQueryData(['USERS', `${user!.id}`], { ...user, favWorks });
+          }
+          return { optimistFav: opf, optimistFavCount: opfc };
+        }
+        // const opf = optimistFav;
+        // const opfc = optimistFavCount;
+        // setOptimistFav(!optimistFav);
+        // setOptimistFavCount(optimistFavCount + favInc());
+        return {};
       },
       onSuccess: (data, variables) => {
         if (data.status !== 'OK') {
@@ -213,6 +321,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
           setOptimistFav(mySocialInfo!.likedByMe!);
           if ('favs' in entity) setOptimistFavCount(entity.favs.length);
         }
+        queryClient.invalidateQueries(['USERS', `${user!.id}`]);
       },
     },
   );

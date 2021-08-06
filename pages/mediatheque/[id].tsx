@@ -71,9 +71,9 @@ const Mediatheque: NextPage = () => {
 
   const { /* isLoading, isError, error, */ data: user } = useUsers(id);
   const { /* isLoading, isError, error, */ data: dataUserSession } = useUsers(idSession);
-  const [userSession, setUserSession] = useState<UserDetail>();
+  const [userSession, setUserSession] = useState();
 
-  useEffect(() => {
+  const prepareData = () => {
     if (user && id && session) {
       setIsFollowedByMe(
         user.followedBy.findIndex((i: User) => i.id === (session as unknown as Session).user.id) !== -1,
@@ -109,6 +109,10 @@ const Mediatheque: NextPage = () => {
       setSavedForLater(() => [...FW]);
       setReadOrWatched(() => [...RW]);
     }
+  };
+
+  useEffect(() => {
+    prepareData();
   }, [user, id, session]);
 
   useEffect(() => {
@@ -236,6 +240,7 @@ const Mediatheque: NextPage = () => {
         title={t(`Movies/books i've watched/read`)}
         data={readOrWatched}
         iconBefore={<BsEye />}
+
         // iconAfter={<BsCircleFill className={styles.infoCircle} />}
       />
 

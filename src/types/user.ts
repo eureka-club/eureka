@@ -15,7 +15,7 @@ type UserFoolow = {
   include: {
     cycles: true;
     joinedCycles: true;
-    likesCycles: true;
+    likedCycles: true;
     favCycles: true;
     posts: true;
     likedWorks: true;
@@ -34,7 +34,7 @@ export type UserDetail = Prisma.UserGetPayload<{
   include: {
     cycles: true;
     joinedCycles: true;
-    likesCycles: true;
+    likedCycles: true;
     favCycles: true;
     posts: true;
     likedWorks: true;
@@ -44,23 +44,3 @@ export type UserDetail = Prisma.UserGetPayload<{
     followedBy: UserFoolow;
   };
 }>;
-
-// export type UserFollowDetail = Prisma.UserSelect & {
-//   following: { include: { following: true; followedBy: true } };
-//   followedBy: { include: { following: true; followedBy: true } };
-// };
-
-// export type UserMosaicItem = Prisma.UserGetPayload<{
-//   include: {
-//     cycles?: true;
-//     joinedCycles?: true;
-//     likesCycles?: true;
-//     favCycles?: true;
-//     likedWorks?: true;
-//     favWorks?: true;
-//     posts?: true;
-//     likedPosts?: true;
-//     favPosts?: true;
-//     readOrWatchedWorks?: true;
-//   };
-// }>;
