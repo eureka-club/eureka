@@ -174,7 +174,9 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
             <Row>
               <Col>
                 <h5 className={styles.carouselTitle}>
-                  <BsHash className={styles.hashTagTopic} />
+                  <span className={styles.iconBefore}>
+                    <BsHash />
+                  </span>
                   {` `} {topicLabel || t(`${topic}`)}
                 </h5>
               </Col>
