@@ -82,7 +82,7 @@ const Mediatheque: NextPage = () => {
       const ifbm = user.followedBy.findIndex((i: User) => i.id === s.user.id) !== -1;
       setIsFollowedByMe(() => ifbm);
       if (user.id !== s.user.id) {
-        if (!user.dashboardType || user.dashboardType === 3) {
+        if (user.dashboardType === 3) {
           router.push('/');
           return;
         }
