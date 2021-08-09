@@ -134,7 +134,7 @@ const SearchEngine: FunctionComponent = () => {
             placeholder={t('Search')}
             isLoading={isSearchWorkOrCycleLoading}
             labelKey={labelKeyFn}
-            minLength={10}
+            minLength={5}
             onSearch={handleSearchWorkOrCycle}
             options={searchWorkOrCycleResults}
             onChange={handleSelectWorkOrCycle}
