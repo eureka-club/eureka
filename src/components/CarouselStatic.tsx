@@ -54,14 +54,18 @@ const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefine
     return <MosaicItemCycle key={`cycle-${item.id}`} {...item} />;
   }
   if (isPostMosaicItem(item) || item.type === 'post') {
-    return <MosaicItemPost key={`post-${item.id}`} post={item as PostMosaicItem} postParent={postsParent} />;
+    let pp;
+    const it: PostMosaicItem = item as PostMosaicItem;
+    if (it.works && it.works.length > 0) [pp] = it.works;
+    else if (it.cycles && it.cycles.length > 0) [pp] = it.cycles;
+    return <MosaicItemPost key={`post-${item.id}`} post={item as PostMosaicItem} postParent={pp} />;
   }
   if (isWorkMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
     return <MosaicItemWork showButtonLabels={false} key={`work-${item.id}`} work={item} />;
   }
   if (isUserMosaicItem(item)) {
-    return <MosaicUserItem user={item} showSocialInteraction={false} />;
+    return <MosaicUserItem user={item} key={`user-${item.id}`} showSocialInteraction={false} />;
   }
 
   return '';

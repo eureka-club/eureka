@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { SearchResult } from '../types';
+// import { SearchResult } from '../types';
 import { CycleMosaicItem } from '../types/cycle';
 import { PostMosaicItem } from '../types/post';
 import { WorkMosaicItem } from '../types/work';
@@ -17,6 +17,7 @@ type Filter = {
   itemsFound?: Item[];
   q?: string;
   where?: string;
+  show?: boolean;
   // searchMosaicData?: ((CycleMosaicItem & { type: string }) | WorkMosaicItem)[];
 };
 const o: Filter = {
@@ -26,6 +27,7 @@ const o: Filter = {
   q: '',
   where: '',
   countryQuery: [],
+  show: true,
 };
 
 export default atom(o);

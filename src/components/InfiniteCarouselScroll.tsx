@@ -22,7 +22,7 @@ const FN = () => {
         setItems([...items, ...res]);
         // setValues(items);
       }
-      console.log(items);
+      // console.log(items);
     },
     [items],
   );

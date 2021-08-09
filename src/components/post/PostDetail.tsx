@@ -31,7 +31,7 @@ interface Props {
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const PostDetail: FunctionComponent<Props> = ({ post, cycle, work, mySocialInfo }) => {
+const PostDetail: FunctionComponent<Props> = ({ post, cycle, work }) => {
   const currentWork = work;
   const { t } = useTranslation('createPostForm');
   const hyvorId = `post-${post.id}`;

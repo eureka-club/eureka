@@ -10,7 +10,7 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Nav from 'react-bootstrap/Nav';
-import NavItem from 'react-bootstrap/NavItem';
+// import NavItem from 'react-bootstrap/NavItem';
 
 import {
   // BootstrapNavbar,
@@ -20,13 +20,13 @@ import {
   // Collapse
   Col,
 } from 'react-bootstrap';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+// import NavDropdown from 'react-bootstrap/NavDropdown';
 import { DropdownItemProps } from 'react-bootstrap/DropdownItem';
 import { BiUser } from 'react-icons/bi';
-import { BsBookmark } from 'react-icons/bs';
+// import { BsBookmark } from 'react-icons/bs';
 import { RiDashboardLine } from 'react-icons/ri';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
-import DropdownToggle from 'react-bootstrap/esm/DropdownToggle';
+// import DropdownToggle from 'react-bootstrap/esm/DropdownToggle';
 import SearchEngine from './SearchEngine';
 import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '../constants';
 import { Session } from '../types';
@@ -76,10 +76,10 @@ const NavBar: FunctionComponent = () => {
     signOut();
   };
 
-  const handleAboutSelect = (eventKey: string | null) => {
-    if (eventKey === 'aboutEureka') router.push('/about');
-    else if (eventKey === 'aboutUs') router.push('/aboutUs');
-  };
+  // const handleAboutSelect = (eventKey: string | null) => {
+  //   if (eventKey === 'aboutEureka') router.push('/about');
+  //   else if (eventKey === 'aboutUs') router.push('/aboutUs');
+  // };
 
   const getAvatar = () => {
     if (session && session.user.image)

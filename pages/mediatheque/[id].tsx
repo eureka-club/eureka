@@ -14,6 +14,7 @@ import { useState, useEffect /* , ReactElement */ } from 'react';
 import { /* Spinner, */ Card, Row, Col, Button } from 'react-bootstrap';
 import { AiOutlineEnvironment } from 'react-icons/ai';
 import { /* BsCircleFill, */ BsBookmark, BsEye } from 'react-icons/bs';
+import { HiOutlineUserGroup } from 'react-icons/hi';
 
 import { User } from '@prisma/client';
 import styles from './index.module.css';
@@ -32,7 +33,7 @@ import { Session } from '../../src/types';
 import { CycleMosaicItem /* , CycleWithImages */ } from '../../src/types/cycle';
 import { PostMosaicItem /* , PostWithImages */ } from '../../src/types/post';
 import { WorkMosaicItem /* , WorkWithImages */ } from '../../src/types/work';
-import { UserMosaicItem, UserDetail /* , WorkWithImages */ } from '../../src/types/user';
+import { UserMosaicItem /* , UserDetail, WorkWithImages */ } from '../../src/types/user';
 // import MosaicItemCycle from '../../src/components/cycle/MosaicItem';
 // import MosaicItemPost from '../../src/components/post/MosaicItem';
 // import MosaicItemWork from '../../src/components/work/MosaicItem';
@@ -71,13 +72,25 @@ const Mediatheque: NextPage = () => {
 
   const { /* isLoading, isError, error, */ data: user } = useUsers(id);
   const { /* isLoading, isError, error, */ data: dataUserSession } = useUsers(idSession);
-  const [userSession, setUserSession] = useState<UserDetail>();
+  const [userSession, setUserSession] = useState();
+  const [preparingData, setPreparingData] = useState<boolean>(true);
 
-  useEffect(() => {
+  const prepareData = (): void => {
+    setPreparingData(true);
     if (user && id && session) {
-      setIsFollowedByMe(
-        user.followedBy.findIndex((i: User) => i.id === (session as unknown as Session).user.id) !== -1,
-      );
+      const s = session as unknown as Session;
+      const ifbm = user.followedBy.findIndex((i: User) => i.id === s.user.id) !== -1;
+      setIsFollowedByMe(() => ifbm);
+      if (user.id !== s.user.id) {
+        if (user.dashboardType === 3) {
+          router.push('/');
+          return;
+        }
+        if (user.dashboardType === 2 && !ifbm) {
+          router.push('/');
+          return;
+        }
+      }
       let C: ItemCycle[] = [];
       const JC: ItemCycle[] = [];
       let P: ItemPost[] = [];
@@ -109,6 +122,11 @@ const Mediatheque: NextPage = () => {
       setSavedForLater(() => [...FW]);
       setReadOrWatched(() => [...RW]);
     }
+    setPreparingData(false);
+  };
+
+  useEffect(() => {
+    prepareData();
   }, [user, id, session]);
 
   useEffect(() => {
@@ -160,11 +178,12 @@ const Mediatheque: NextPage = () => {
     },
   );
 
-  const seeAll = async (data: (Item | UserMosaicItem)[], q: string): Promise<void> => {
+  const seeAll = async (data: (Item | UserMosaicItem)[], q: string, showFilterEngine = true): Promise<void> => {
     setGlobalSearchEngineState({
       ...globalSearchEngineState,
       itemsFound: data,
       q,
+      show: showFilterEngine,
     });
 
     router.push('/search');
@@ -179,7 +198,7 @@ const Mediatheque: NextPage = () => {
 
   return (
     <SimpleLayout title={t('Mediatheque')}>
-      {user && (
+      {!preparingData && user && (
         <Card className={styles.userHeader}>
           <Card.Body>
             <Row>
@@ -196,19 +215,19 @@ const Mediatheque: NextPage = () => {
                 <p className={styles.description}>{user.aboutMe}</p>
                 <TagsInput tags={user.tags} readOnly label="" />
               </Col>
-              {session && (session as unknown as Session).user!.id !== user.id && !isFollowedByMe && (
-                <Col>
-                  {/* <BsCircleFill className={styles.infoCircle} /> */}
+              <Col>
+                {session && (session as unknown as Session).user!.id !== user.id && !isFollowedByMe && (
                   <Button onClick={followHandler}>{t('Follow')}</Button>
-                </Col>
-              )}
-              {session && (session as unknown as Session).user!.id !== user.id && isFollowedByMe && (
-                <Col>
-                  {/* <BsCircleFill className={styles.infoCircle} /> */}
-                  <Button onClick={followHandler}>{t('Stop Following')}</Button>
-                </Col>
-              )}
+                )}
+
+                {session && (session as unknown as Session).user!.id !== user.id && isFollowedByMe && (
+                  <Button className={styles.unFollowBtn} onClick={followHandler}>
+                    {t('Unfollow')}
+                  </Button>
+                )}
+              </Col>
             </Row>
+            {/* <BsCircleFill className={styles.infoCircle} /> */}
           </Card.Body>
         </Card>
       )}
@@ -236,6 +255,7 @@ const Mediatheque: NextPage = () => {
         title={t(`Movies/books i've watched/read`)}
         data={readOrWatched}
         iconBefore={<BsEye />}
+
         // iconAfter={<BsCircleFill className={styles.infoCircle} />}
       />
 
@@ -249,10 +269,10 @@ const Mediatheque: NextPage = () => {
 
       {user && (
         <CarouselStatic
-          onSeeAll={async () => seeAll(user!.following as UserMosaicItem[], t('Users I follow'))}
+          onSeeAll={async () => seeAll(user!.following as UserMosaicItem[], t('Users I follow'), false)}
           title={`${t('Users I follow')}  `}
           data={user!.following as UserMosaicItem[]}
-          iconBefore={<BsBookmark />}
+          iconBefore={<HiOutlineUserGroup />}
           // iconAfter={<BsCircleFill className={styles.infoCircle} />}
         />
       )}
