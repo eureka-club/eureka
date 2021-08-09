@@ -86,7 +86,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
     // debugger;
     return res;
   };
-  const { isLoading, isError, error, data, isFetching, isPreviousData } = useQuery(
+  const { isLoading /* , isError, error, isFetching */, data, isPreviousData } = useQuery(
     ['items', `${topic}${page}`],
     () => fetchItems(page),
     { keepPreviousData: true },

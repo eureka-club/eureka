@@ -65,7 +65,7 @@ const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefine
     return <MosaicItemWork showButtonLabels={false} key={`work-${item.id}`} work={item} />;
   }
   if (isUserMosaicItem(item)) {
-    return <MosaicUserItem user={item} showSocialInteraction={false} />;
+    return <MosaicUserItem user={item} key={`user-${item.id}`} showSocialInteraction={false} />;
   }
 
   return '';

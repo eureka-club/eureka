@@ -41,7 +41,7 @@ const SearchEngine: FunctionComponent<Props> = ({
   // const [session] = useSession() as [Session | null | undefined, boolean];
   // const router = useRouter();
   const { t } = useTranslation('searchEngine');
-  const [tags, setTags] = useState<string>('');
+  const [tags /* , setTags */] = useState<string>('');
   const [items, setItems] = useState<string[]>([]);
   const [filtersChecked, setFiltersChecked] = useState<Record<string, boolean>>({});
   // const [onlyByCountries] = useState<string[]>([]);
@@ -278,7 +278,7 @@ const SearchEngine: FunctionComponent<Props> = ({
                   setItems={setItems}
                   max={5}
                   labelKey={(res) => `${t(`countries:${res.code}`)}`}
-                  onTagCreated={(e) => {
+                  onTagCreated={() => {
                     const onlyByCountries = [
                       ...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items]),
                     ];

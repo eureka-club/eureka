@@ -1,13 +1,13 @@
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, useEffect, useState } from 'react';
-import { Card, Button } from 'react-bootstrap';
+import { FunctionComponent /*  useEffect, useState */ } from 'react';
+import { Card /* Button */ } from 'react-bootstrap';
 // import { MySocialInfo } from '@/src/types';
 // import { CycleDetail } from '../../types/cycle';
 // import { PostDetail } from '../../types/post';
-import { useQuery } from 'react-query';
+// import { useQuery } from 'react-query';
 import { useSession } from 'next-auth/client';
-import { WorkWithImages, WorkDetail } from '../../types/work';
+import { /* WorkWithImages, */ WorkDetail } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import SocialInteraction from '../common/SocialInteraction';
@@ -21,7 +21,7 @@ interface Props {
 }
 const MosaicItem: FunctionComponent<Props> = ({ work, showButtonLabels = true, showShare = false }) => {
   const { t } = useTranslation('common');
-  const { id, author, title, localImages, type } = work;
+  const { id, /* author, */ title, localImages, type } = work;
   const [session] = useSession() as [Session | null | undefined, boolean];
   // const [work, setWork] = useState<WorkDetail>();
   // const s

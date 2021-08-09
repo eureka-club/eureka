@@ -25,12 +25,12 @@ import { User } from '@prisma/client';
 import TagsInput from './controls/TagsInput';
 import { Session } from '../../types';
 import { EditUserClientPayload } from '../../types/user';
-import { useUsers, fetchUsers } from '../../useUsers';
+import { useUsers } from '../../useUsers';
 // import ImageFileSelect from './controls/ImageFileSelect';
 import globalModalsAtom from '../../atoms/globalModals';
 import styles from './EditUserForm.module.css';
 import i18nConfig from '../../../i18n';
-import useTopics from '../../useTopics';
+// import useTopics from '../../useTopics';
 
 dayjs.extend(utc);
 const EditUserForm: FunctionComponent = () => {

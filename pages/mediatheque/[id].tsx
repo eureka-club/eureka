@@ -33,7 +33,7 @@ import { Session } from '../../src/types';
 import { CycleMosaicItem /* , CycleWithImages */ } from '../../src/types/cycle';
 import { PostMosaicItem /* , PostWithImages */ } from '../../src/types/post';
 import { WorkMosaicItem /* , WorkWithImages */ } from '../../src/types/work';
-import { UserMosaicItem, UserDetail /* , WorkWithImages */ } from '../../src/types/user';
+import { UserMosaicItem /* , UserDetail, WorkWithImages */ } from '../../src/types/user';
 // import MosaicItemCycle from '../../src/components/cycle/MosaicItem';
 // import MosaicItemPost from '../../src/components/post/MosaicItem';
 // import MosaicItemWork from '../../src/components/work/MosaicItem';
@@ -73,12 +73,24 @@ const Mediatheque: NextPage = () => {
   const { /* isLoading, isError, error, */ data: user } = useUsers(id);
   const { /* isLoading, isError, error, */ data: dataUserSession } = useUsers(idSession);
   const [userSession, setUserSession] = useState();
+  const [preparingData, setPreparingData] = useState<boolean>(true);
 
-  const prepareData = () => {
+  const prepareData = (): void => {
+    setPreparingData(true);
     if (user && id && session) {
-      setIsFollowedByMe(
-        user.followedBy.findIndex((i: User) => i.id === (session as unknown as Session).user.id) !== -1,
-      );
+      const s = session as unknown as Session;
+      const ifbm = user.followedBy.findIndex((i: User) => i.id === s.user.id) !== -1;
+      setIsFollowedByMe(() => ifbm);
+      if (user.id !== s.user.id) {
+        if (!user.dashboardType || user.dashboardType === 3) {
+          router.push('/');
+          return;
+        }
+        if (user.dashboardType === 2 && !ifbm) {
+          router.push('/');
+          return;
+        }
+      }
       let C: ItemCycle[] = [];
       const JC: ItemCycle[] = [];
       let P: ItemPost[] = [];
@@ -110,6 +122,7 @@ const Mediatheque: NextPage = () => {
       setSavedForLater(() => [...FW]);
       setReadOrWatched(() => [...RW]);
     }
+    setPreparingData(false);
   };
 
   useEffect(() => {
@@ -185,7 +198,7 @@ const Mediatheque: NextPage = () => {
 
   return (
     <SimpleLayout title={t('Mediatheque')}>
-      {user && (
+      {!preparingData && user && (
         <Card className={styles.userHeader}>
           <Card.Body>
             <Row>

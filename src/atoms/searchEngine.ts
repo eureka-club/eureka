@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { SearchResult } from '../types';
+// import { SearchResult } from '../types';
 import { CycleMosaicItem } from '../types/cycle';
 import { PostMosaicItem } from '../types/post';
 import { WorkMosaicItem } from '../types/work';
