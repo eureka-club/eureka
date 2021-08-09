@@ -68,12 +68,12 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const queryClient = useQueryClient();
 
   const [idSession, setIdSession] = useState<string>('');
-  const { /* isLoading, isError, error, */ data: user } = useUsers((session as unknown as Session).user.id.toString());
+  const { /* isLoading, isError, error, */ data: user } = useUsers(idSession);
   // const [user, setuser] = useState<UserDetail>();
 
   useEffect(() => {
-    /* const s = session as unknown as Session;
-    if (s) setIdSession(s.user.id.toString()); */
+    const s = session as unknown as Session;
+    if (s) setIdSession(s.user.id.toString());
     // if (datauser) setuser(() => datauser);
     if (user && entity) {
       if (isWork(entity)) {
