@@ -61,11 +61,14 @@ export const isCycleMosaicItem = (obj: MosaicItem | SearchResult): obj is CycleM
   typeof (obj as CycleMosaicItem).title === 'string' &&
   (obj as CycleMosaicItem).startDate !== undefined &&
   (obj as CycleMosaicItem).endDate !== undefined;
-export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMosaicItem =>
-  typeof (obj as PostMosaicItem).title === 'string' &&
-  typeof (obj as PostMosaicItem).creatorId === 'object' &&
-  typeof (obj as PostMosaicItem).works === 'object' &&
-  typeof (obj as PostMosaicItem).language === 'string';
+export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMosaicItem => {
+  return (
+    typeof (obj as PostMosaicItem).title === 'string' &&
+    typeof (obj as PostMosaicItem).creatorId === 'number' &&
+    typeof (obj as PostMosaicItem).works === 'object' &&
+    typeof (obj as PostMosaicItem).language === 'string'
+  );
+};
 export const isWorkMosaicItem = (obj: MosaicItem | SearchResult): obj is WorkMosaicItem =>
   typeof (obj as WorkMosaicItem).title === 'string' &&
   typeof (obj as WorkMosaicItem).author === 'string' &&
