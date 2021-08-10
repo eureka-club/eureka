@@ -116,9 +116,15 @@ const Mediatheque: NextPage = () => {
         P = user.posts.map((p: PostMosaicItem) => ({ ...p, type: 'post' }));
       }
 
-      if (user.favWorks && user.favWorks.length) FW = user.favWorks;
-      if (user.favCycles && user.favCycles.length) FC = user.favCycles;
-      if (user.favPosts && user.favPosts.length) FP = user.favPosts;
+      if (user.favWorks && user.favWorks.length) {
+        FW = user.favWorks;
+      }
+      if (user.favCycles && user.favCycles.length) {
+        FC = user.favCycles.map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' }));
+      }
+      if (user.favPosts && user.favPosts.length) {
+        FP = user.favPosts.map((p: PostMosaicItem) => ({ ...p, type: 'post' }));
+      }
 
       if (user.readOrWatchedWorks && user.readOrWatchedWorks.length) {
         RW = user.readOrWatchedWorks;
