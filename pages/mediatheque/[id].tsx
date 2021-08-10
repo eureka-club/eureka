@@ -95,6 +95,8 @@ const Mediatheque: NextPage = () => {
       const JC: ItemCycle[] = [];
       let P: ItemPost[] = [];
       let FW: Item[] = [];
+      let FC: Item[] = [];
+      let FP: Item[] = [];
       let RW: Item[] = [];
       if (user.cycles && user.cycles.length) {
         C = user.cycles.map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' }));
@@ -113,13 +115,17 @@ const Mediatheque: NextPage = () => {
       if (user.posts && user.posts.length) {
         P = user.posts.map((p: PostMosaicItem) => ({ ...p, type: 'post' }));
       }
+
       if (user.favWorks && user.favWorks.length) FW = user.favWorks;
+      if (user.favCycles && user.favCycles.length) FC = user.favCycles;
+      if (user.favPosts && user.favPosts.length) FP = user.favPosts;
+
       if (user.readOrWatchedWorks && user.readOrWatchedWorks.length) {
         RW = user.readOrWatchedWorks;
       }
       setCycles(() => [...C, ...JC]);
       setPosts(() => [...P]);
-      setSavedForLater(() => [...FW]);
+      setSavedForLater(() => [...FC, ...FP, ...FW]);
       setReadOrWatched(() => [...RW]);
     }
     setPreparingData(false);

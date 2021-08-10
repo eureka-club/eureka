@@ -16,7 +16,7 @@ export const find = async (id: number): Promise<User | null> => {
         include: { localImages: true },
       },
       favCycles: {
-        include: { localImages: true },
+        include: { likes: true, favs: true, works: true, localImages: true },
       },
       posts: {
         include: {
@@ -29,7 +29,7 @@ export const find = async (id: number): Promise<User | null> => {
         },
       },
       likedPosts: { include: { localImages: true } },
-      favPosts: { include: { localImages: true } },
+      favPosts: { include: { creator: true, likes: true, favs: true, cycles: true, works: true, localImages: true } },
       likedWorks: {
         include: { localImages: true, likes: true, favs: true, readOrWatcheds: true },
       },
