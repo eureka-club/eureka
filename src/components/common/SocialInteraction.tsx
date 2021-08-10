@@ -17,7 +17,7 @@ import {
   WhatsappShareButton,
   WhatsappIcon,
 } from 'react-share';
-import { Cycle, User, Work } from '@prisma/client';
+import { Cycle, User, Work, Post } from '@prisma/client';
 import { OverlayTrigger, Popover, Button } from 'react-bootstrap';
 import { useUsers } from '../../useUsers';
 import globalModalsAtom from '../../atoms/globalModals';
@@ -27,7 +27,7 @@ import { WEBAPP_URL } from '../../constants';
 import { CycleDetail } from '../../types/cycle';
 import { PostDetail } from '../../types/post';
 import { WorkDetail } from '../../types/work';
-import { MySocialInfo, isCycle, isWork, Session } from '../../types';
+import { MySocialInfo, isCycle, isWork, Session, isPost } from '../../types';
 import styles from './SocialInteraction.module.css';
 
 interface SocialInteractionClientPayload {
@@ -108,10 +108,23 @@ const SocialInteraction: FunctionComponent<Props> = ({
         setOptimistFavCount(entity.favs.length);
 
         setMySocialInfo({ likedByMe, favoritedByMe });
+      } else if (isPost(entity)) {
         setOptimistReadOrWatchedCount(0);
+
+        let idx = user.likedPosts.findIndex((i: Post) => i.id === entity.id);
+        const likedByMe = idx !== -1;
+        setOptimistLike(likedByMe);
+        setOptimistLikeCount(entity.likes.length);
+
+        idx = user.favPosts.findIndex((i: Post) => i.id === entity.id);
+        const favoritedByMe = idx !== -1;
+        setOptimistFav(favoritedByMe);
+        setOptimistFavCount(entity.favs.length);
+
+        setMySocialInfo({ likedByMe, favoritedByMe });
       }
     }
-  }, [user, entity]);
+  }, [user, entity, session]);
 
   /* useEffect(() => {
     if (entity && isWork(entity) && user) {
@@ -258,7 +271,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
               user?.likedWorks.push(entity);
               likedWorks = user?.likedWorks;
             }
-            queryClient.setQueryData(['USERS', user!.id], { ...user, likedWorks });
+            queryClient.setQueryData(['USERS', `${idSession}`], { ...user, likedWorks });
           } else if (isCycle(entity)) {
             let likedCycles;
             if (ol) {
@@ -267,7 +280,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
               user?.likedCycles.push(entity);
               likedCycles = user?.likedCycles;
             }
-            queryClient.setQueryData(['USERS', user!.id], { ...user, likedCycles });
+            queryClient.setQueryData(['USERS', `${idSession}`], { ...user, likedCycles });
           }
           return { optimistLike: ol, optimistLikeCount: olc };
         }
@@ -284,7 +297,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
             user?.readOrWatchedWorks.push(entity);
             readOrWatchedWorks = user?.readOrWatchedWorks;
           }
-          queryClient.setQueryData(['USERS', `${user!.id}`], { ...user, readOrWatchedWorks });
+          queryClient.setQueryData(['USERS', `${idSession}`], { ...user, readOrWatchedWorks });
           return { optimistreadOrWatched: ol, optimistreadOrWatchedCount: olc };
         }
         if (payload.socialInteraction === 'fav') {
@@ -299,7 +312,23 @@ const SocialInteraction: FunctionComponent<Props> = ({
               user?.favWorks.push(entity);
               favWorks = user?.favWorks;
             }
-            queryClient.setQueryData(['USERS', `${user!.id}`], { ...user, favWorks });
+            queryClient.setQueryData(['USERS', `${idSession}`], { ...user, favWorks });
+          } else if (isCycle(entity)) {
+            let favCycles;
+            if (opf) favCycles = user?.favCycles.filter((i: Cycle) => i.id !== entity.id);
+            else {
+              user?.favCycles.push(entity);
+              favCycles = user?.favCycles;
+            }
+            queryClient.setQueryData(['USERS', `${idSession}`], { ...user, favCycles });
+          } else if (isPost(entity)) {
+            let favPosts;
+            if (opf) favPosts = user?.favPosts.filter((i: Cycle) => i.id !== entity.id);
+            else {
+              user?.favPosts.push(entity);
+              favPosts = user?.favPosts;
+            }
+            queryClient.setQueryData(['USERS', `${idSession}`], { ...user, favPosts });
           }
           return { optimistFav: opf, optimistFavCount: opfc };
         }
@@ -321,7 +350,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
           setOptimistFav(mySocialInfo!.likedByMe!);
           if ('favs' in entity) setOptimistFavCount(entity.favs.length);
         }
-        queryClient.invalidateQueries(['USERS', `${user!.id}`]);
+        queryClient.invalidateQueries(['USERS', `${idSession}`]);
       },
     },
   );
@@ -391,7 +420,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
     </Popover>
   );
   return (
-    (session && (
+    (session && user && (
       <div className={styles.container}>
         {isWork(entity) && (
           <button

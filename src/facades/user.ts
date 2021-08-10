@@ -28,6 +28,8 @@ export const find = async (id: number): Promise<User | null> => {
           favs: true,
         },
       },
+      likedPosts: { include: { localImages: true } },
+      favPosts: { include: { localImages: true } },
       likedWorks: {
         include: { localImages: true, likes: true, favs: true, readOrWatcheds: true },
       },

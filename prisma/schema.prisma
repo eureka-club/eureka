@@ -24,7 +24,7 @@ model User {
   aboutMe           String?    @map(name: "about_me")
   
   // 1 public, 2 protected, 3 private
-  dashboardType     Int?       @map(name: "dashboard_type") @default(3)
+  dashboardType     Int?       @map(name: "dashboard_type") @default(1)
  
   accounts       Account[]
   sessions       Session[]
