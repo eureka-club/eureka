@@ -20,7 +20,7 @@ interface Props {
   // showShare?: boolean;
 }
 const openUserMediatheque = (id: number) => {
-  router.push(`/mediatheque/${id}`);
+  router.push(`/mediatheque/${id}`).then(() => window.scrollTo(0, 0));
 };
 
 const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = false }) => {
