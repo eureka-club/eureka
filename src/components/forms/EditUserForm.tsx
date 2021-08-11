@@ -68,7 +68,7 @@ const EditUserForm: FunctionComponent = () => {
       setTags(() => data.tags);
       setDashboardTypeChecked((res) => {
         let v = 'private';
-        switch (data.privacySettings) {
+        switch (data.dashboardType) {
           case 2:
             v = 'protected';
             break;
@@ -205,7 +205,6 @@ const EditUserForm: FunctionComponent = () => {
 
     const form = ev.currentTarget;
     const payload: EditUserClientPayload = {
-      id: id || '',
       name: form.userName.value,
       email: form.email.value,
       image: form.image.value,

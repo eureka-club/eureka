@@ -162,7 +162,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
         }),
       }),
     );
-    setGlobalSearchEngineState({ ...globalSearchEngineState, where, q: topic });
+    setGlobalSearchEngineState({ ...globalSearchEngineState, where, q: topic, show: true, itemsFound: [] });
     router.push('/search');
   };
 

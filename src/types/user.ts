@@ -1,7 +1,6 @@
 import { Prisma } from '@prisma/client';
 
 export interface EditUserClientPayload {
-  id: string;
   name?: string;
   email?: string;
   image?: string;
