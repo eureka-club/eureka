@@ -7,7 +7,7 @@ import timezone from 'dayjs/plugin/timezone';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent } from 'react';
-import { Row, Col, Button, Alert } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
 
 import { DATE_FORMAT_SHORT } from '../../constants';
 import { MySocialInfo, Session } from '../../types';

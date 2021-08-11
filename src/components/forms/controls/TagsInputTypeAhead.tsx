@@ -1,10 +1,10 @@
-import { FunctionComponent, useState, useEffect, useRef } from 'react';
+import { FunctionComponent, /* useState, useEffect, */ useRef } from 'react';
 // import FormControl from 'react-bootstrap/FormControl';
 import { Form, Badge, InputGroup } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { AiOutlineSearch } from 'react-icons/ai';
-import { useAtom } from 'jotai';
+// import { useAtom } from 'jotai';
 
 // import { SearchResult } from '../../../types';
 // import useCountries from '../../../useCountries';
