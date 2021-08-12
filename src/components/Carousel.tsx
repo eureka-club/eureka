@@ -24,7 +24,7 @@ import styles from './Carousel.module.css';
 // import { setCookie } from 'nookies';
 // import { Work, Cycle, PrismaPromise } from '@prisma/client';
 import { WorkMosaicItem /* , WorkWithImages */ } from '../types/work';
-import { CycleMosaicItem /* , CycleWithImages */ } from '../types/cycle';
+import { CycleDetail /* , CycleWithImages */ } from '../types/cycle';
 import { PostMosaicItem /* , CycleWithImages */ } from '../types/post';
 
 type Props = {
@@ -38,7 +38,15 @@ type Props = {
 const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefined) => {
   if (isCycleMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
-    return <MosaicItemCycle key={`cycle-${item.id}`} {...item} />;
+    return (
+      <MosaicItemCycle
+        detailed
+        showShare={false}
+        showButtonLabels={false}
+        key={`cycle-${item.id}`}
+        cycle={item as CycleDetail}
+      />
+    );
   }
   if (isPostMosaicItem(item) || item.type === 'post') {
     return <MosaicItemPost key={`post-${item.id}`} post={item as PostMosaicItem} postParent={postsParent} />;
@@ -108,7 +116,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
     if (items) {
       // debugger;
       // data.pages.forEach((page, idx) => {
-      const mosaics = items.data.map((i: (CycleMosaicItem & { type: string }) | WorkMosaicItem) =>
+      const mosaics = items.data.map((i: (CycleDetail & { type: string }) | WorkMosaicItem) =>
         renderMosaicItem(i, undefined),
       );
       const res = (

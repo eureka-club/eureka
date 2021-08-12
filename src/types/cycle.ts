@@ -14,7 +14,13 @@ export interface CycleWithImages extends Cycle {
 
 export type CycleMosaicItem = Prisma.CycleGetPayload<{
   include: {
+    creator: true;
     localImages: true;
+    complementaryMaterials: true;
+    participants: true;
+    likes: true;
+    favs: true;
+    works: true;
   };
 }>;
 
