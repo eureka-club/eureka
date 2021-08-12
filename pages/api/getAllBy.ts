@@ -51,12 +51,21 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
         ],
       }),
     };
-
-    const getOpt = (takePlus = 0, skipPlus = 0, isWork = false) => ({
+    interface PropsArgs {
+      isWork?: boolean;
+      isCycle?: boolean;
+    }
+    const getOpt = (takePlus = 0, skipPlus = 0, args: PropsArgs = { isWork: false, isCycle: false }) => ({
       skip: c * countItemsPerPage + skipPlus,
       take: takePlus || countItemsPerPage,
 
-      include: { localImages: true, likes: true, favs: true, ...(isWork && { readOrWatcheds: true }) },
+      include: {
+        localImages: true,
+        likes: true,
+        favs: true,
+        ...(args.isWork && { readOrWatcheds: true }),
+        ...(args.isCycle && { participants: true }),
+      },
       where,
     });
 
@@ -76,18 +85,18 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     // let rw = parseInt(remainingWorks, 10) - 2;
 
     const ewr = parseInt(extraWorksRequired as string, 10);
-    const works = await prisma.work.findMany(getOpt(0, ewr, true));
+    const works = await prisma.work.findMany(getOpt(0, ewr, { isWork: true }));
 
     let cyclesPlus = 0;
     if (works.length !== countItemsPerPage) cyclesPlus = countItemsPerPage - works.length;
     // promisesWorks.push(works);
     const ecr = parseInt(extraCyclesRequired as string, 10);
-    const cycles = await prisma.cycle.findMany(getOpt(countItemsPerPage + cyclesPlus, ecr));
+    const cycles = await prisma.cycle.findMany(getOpt(countItemsPerPage + cyclesPlus, ecr, { isCycle: true }));
 
     let worksPlus = 0;
     if (cycles.length < 2 && works.length === 2) {
       worksPlus = countItemsPerPage - cycles.length;
-      const extraWorks = await prisma.work.findMany(getOpt(worksPlus, ewr + 2, true));
+      const extraWorks = await prisma.work.findMany(getOpt(worksPlus, ewr + 2, { isWork: true }));
       works.push(...extraWorks);
     }
     // promisesCycles.push(cycles);
