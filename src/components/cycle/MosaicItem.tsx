@@ -4,16 +4,23 @@ import timezone from 'dayjs/plugin/timezone';
 import classNames from 'classnames';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useEffect, useState, MouseEvent } from 'react';
+import { useMutation, useQueryClient } from 'react-query';
 
-import { Card, Button } from 'react-bootstrap';
+import { Card, Button, Spinner } from 'react-bootstrap';
 import { useSession } from 'next-auth/client';
 import { CgMediaLive } from 'react-icons/cg';
+
+import { useAtom } from 'jotai';
+import { Cycle } from '@prisma/client';
 import { DATE_FORMAT_SHORT } from '../../constants';
 import { CycleMosaicItem } from '../../types/cycle';
+import { UserDetail } from '../../types/user';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
+import globalModalsAtom from '../../atoms/globalModals';
 
+import { useUsers } from '../../useUsers';
 import { Session } from '../../types';
 import SocialInteraction from '../common/SocialInteraction';
 
@@ -25,14 +32,97 @@ interface Props {
   showButtonLabels?: boolean;
   showShare?: boolean;
   detailed?: boolean;
+  cacheKey?: string[];
 }
-const MosaicItem: FunctionComponent<Props> = ({ cycle, showButtonLabels, showShare, detailed = false }) => {
+const MosaicItem: FunctionComponent<Props> = ({
+  cycle,
+  showButtonLabels = false,
+  showShare,
+  detailed = false,
+  cacheKey,
+}) => {
   const { id, title, localImages, startDate, endDate } = cycle;
   const { t } = useTranslation('common');
   const sd = dayjs(startDate).add(1, 'day').tz(dayjs.tz.guess());
   const ed = dayjs(endDate).add(1, 'day').tz(dayjs.tz.guess());
   const isActive = dayjs().isBefore(ed);
   const [session] = useSession() as [Session | null | undefined, boolean];
+  const { data: user } = useUsers((session && (session as unknown as Session).user.id)?.toString() || '');
+  const [isCurrentUserJoinedToCycle, setIsCurrentUserJoinedToCycle] = useState<boolean>(true);
+  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (user) {
+      if (!user.joinedCycles.length) setIsCurrentUserJoinedToCycle(false);
+      else {
+        const icujtc = user.joinedCycles.findIndex((c: CycleMosaicItem) => c.id === cycle.id) !== -1;
+        setIsCurrentUserJoinedToCycle(icujtc);
+      }
+    }
+  }, [user, cycle.id]);
+
+  const openSignInModal = () => {
+    setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
+  };
+  const {
+    mutate: execJoinCycle,
+    isLoading: isJoinCycleLoading,
+    isSuccess: isJoinCycleSuccess,
+  } = useMutation(
+    async () => {
+      await fetch(`/api/cycle/${cycle.id}/join`, { method: 'POST' });
+    },
+    {
+      onMutate: () => {
+        if (user) {
+          // debugger;
+          user.joinedCycles.push(cycle);
+          queryClient.setQueryData(['USERS', user.id.toString()], () => user);
+          setIsCurrentUserJoinedToCycle(true);
+        }
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries(['USERS', user.id.toString()]);
+      },
+    },
+  );
+  const {
+    mutate: execLeaveCycle,
+    isLoading: isLeaveCycleLoading,
+    isSuccess: isLeaveCycleSuccess,
+  } = useMutation(
+    async () => {
+      await fetch(`/api/cycle/${cycle.id}/join`, { method: 'DELETE' });
+    },
+    {
+      onMutate: () => {
+        if (user) {
+          const idx = user.joinedCycles.findIndex((c: Cycle) => c.id === cycle.id);
+          if (idx > -1) {
+            user.joinedCycles.splice(idx, 1);
+            queryClient.setQueryData(['USERS', user.id.toString()], () => user);
+            setIsCurrentUserJoinedToCycle(false);
+          }
+        }
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries(['USERS', user.id.toString()]);
+      },
+    },
+  );
+
+  const handleJoinCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    if (!session) openSignInModal();
+    execJoinCycle();
+  };
+
+  const handleLeaveCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    execLeaveCycle();
+  };
+
   return (
     <Card className={classNames(styles.container, isActive ? 'isActive' : '')} border={isActive ? 'success' : ''}>
       <div className={`${styles.imageContainer} ${detailed && styles.detailedImageContainer}`}>
@@ -54,10 +144,17 @@ const MosaicItem: FunctionComponent<Props> = ({ cycle, showButtonLabels, showSha
           </div>
 
           <div className={styles.joinButtonContainer}>
-            <Button variant="primary" size="sm">
-              {t('Join')}
-            </Button>
+            {(isJoinCycleLoading || isLeaveCycleLoading) && <Spinner animation="border" size="sm" />}
+            {!(isJoinCycleLoading || isLeaveCycleLoading) && isCurrentUserJoinedToCycle && user ? (
+              <Button onClick={handleLeaveCycleClick} variant="link">
+                {t('leaveCycleLabel')}
+              </Button>
+            ) : (
+              !(isJoinCycleLoading || isLeaveCycleLoading) &&
+              !isCurrentUserJoinedToCycle && <Button onClick={handleJoinCycleClick}>{t('joinCycleLabel')}</Button>
+            )}
           </div>
+
           <div className={styles.participantsInfo}>{`${cycle.participants.length} ${t('participants')}`}</div>
         </div>
       )}

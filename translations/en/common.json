@@ -79,6 +79,7 @@
   "Only I can see my Dashboard":"Only I can see my Mediatheque",
   "About me":"About me",
   "Share":"Share",
-  "Join":"Join",
+  "joinCycleLabel": "Join cycle",
+  "leaveCycleLabel": "Leave cycle",
   "participants":"participants"
 }

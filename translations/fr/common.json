@@ -79,6 +79,7 @@
   "Only I can see my Dashboard":"Je suis lx seul-e à voir ma Médiathèque",
   "About me":"À propos de moi",
   "Share":"Partager",
-  "Join":"Join",
+  "joinCycleLabel": "Join cycle",
+  "leaveCycleLabel": "Leave cycle",
   "participants":"participants"
 }

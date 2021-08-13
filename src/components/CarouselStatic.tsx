@@ -51,7 +51,7 @@ type Props = {
 const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefined) => {
   if (isCycleMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
-    return <MosaicItemCycle key={`cycle-${item.id}`} cycle={item} />;
+    return <MosaicItemCycle showButtonLabels={false} key={`cycle-${item.id}`} cycle={item} />;
   }
   if (isPostMosaicItem(item) || item.type === 'post') {
     let pp;

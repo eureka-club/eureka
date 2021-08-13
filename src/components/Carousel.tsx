@@ -35,7 +35,7 @@ type Props = {
   topicLabel?: string;
 };
 
-const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefined) => {
+const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefined, topic = '', page = '') => {
   if (isCycleMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
     return (
@@ -45,6 +45,7 @@ const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefine
         showButtonLabels={false}
         key={`cycle-${item.id}`}
         cycle={item as CycleDetail}
+        cacheKey={topic && page ? ['items', `${topic}${page}`] : undefined}
       />
     );
   }
@@ -117,7 +118,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
       // debugger;
       // data.pages.forEach((page, idx) => {
       const mosaics = items.data.map((i: (CycleDetail & { type: string }) | WorkMosaicItem) =>
-        renderMosaicItem(i, undefined),
+        renderMosaicItem(i, undefined, topic, page.toString()),
       );
       const res = (
         <Masonry
