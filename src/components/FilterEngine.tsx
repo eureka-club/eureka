@@ -43,7 +43,10 @@ const SearchEngine: FunctionComponent<Props> = ({
   const { t } = useTranslation('searchEngine');
   const [tags /* , setTags */] = useState<string>('');
   const [items, setItems] = useState<string[]>([]);
-  const [filtersChecked, setFiltersChecked] = useState<Record<string, boolean>>({});
+  const [filtersChecked, setFiltersChecked] = useState<Record<string, boolean>>({
+    movie: false,
+    documentary: false,
+  });
   // const [onlyByCountries] = useState<string[]>([]);
   // const [countryQuery, setCountryQuery] = useState<string[] | undefined>([]);
   useEffect(() => {
@@ -70,21 +73,30 @@ const SearchEngine: FunctionComponent<Props> = ({
   });
 
   const handlerComboxesChangeType = (e: ChangeEvent<HTMLInputElement>, type: string) => {
-    let { only } = globalSearchEngineState;
+    e.stopPropagation();
+    const { only } = globalSearchEngineState;
+
     const types = type.split('|');
-    setFiltersChecked({ ...filtersChecked, [`${type}`]: e.target.checked });
+
     types.forEach((ty: string) => {
-      if (only.includes(ty)) only = only.filter((i) => i !== ty);
-      else only.push(ty);
+      const idx = only.findIndex((i: string) => i === ty);
+      if (idx === -1) {
+        only.push(ty);
+        setFiltersChecked((res) => ({ ...res, [`${ty}`]: true }));
+      } else if (!e.target.checked) {
+        only.splice(idx, 1);
+        setFiltersChecked((res) => ({ ...res, [`${ty}`]: false }));
+      }
     });
     setGlobalSearchEngineState({
       ...globalSearchEngineState,
       ...{ only },
     });
+    console.log(filtersChecked);
   };
 
   const handlerComboxesChangeRegion = (e: ChangeEvent<HTMLInputElement>, q: string) => {
-    setFiltersChecked({ ...filtersChecked, [`${q}`]: e.target.checked });
+    setFiltersChecked((res) => ({ ...res, [`${q}`]: e.target.checked }));
     if (globalSearchEngineState.countryQuery!.includes(q))
       setGlobalSearchEngineState({
         ...globalSearchEngineState,
@@ -136,16 +148,18 @@ const SearchEngine: FunctionComponent<Props> = ({
                 inline
                 type="checkbox"
                 label={t('Films')}
+                checked={filtersChecked.movie && filtersChecked.documentary}
                 onChange={(e) => handlerComboxesChangeType(e, 'movie|documentary')}
               />
             </Form.Group>
 
-            <Form.Group className={styles.formGroup} controlId="checkboxes">
+            <Form.Group className={styles.formGroup}>
               <Form.Check
                 className={styles.filter}
                 inline
                 type="checkbox"
                 label={t('Books')}
+                checked={filtersChecked.book && filtersChecked['fiction-book']}
                 onChange={(e) => handlerComboxesChangeType(e, 'book|fiction-book')}
               />
             </Form.Group>
@@ -156,7 +170,7 @@ const SearchEngine: FunctionComponent<Props> = ({
                 <Form.Label>
                   <strong>{t('Books')}</strong>
                 </Form.Label>
-                <Form.Group className={styles.formGroup} controlId="checkboxes">
+                <Form.Group className={styles.formGroup}>
                   <Form.Check
                     className={styles.filter}
                     type="checkbox"
@@ -165,7 +179,7 @@ const SearchEngine: FunctionComponent<Props> = ({
                     onChange={(e) => handlerComboxesChangeType(e, 'fiction-book')}
                   />
                 </Form.Group>
-                <Form.Group className={styles.formGroup} controlId="checkboxes">
+                <Form.Group className={styles.formGroup}>
                   <Form.Check
                     className={styles.filter}
                     type="checkbox"
@@ -178,7 +192,7 @@ const SearchEngine: FunctionComponent<Props> = ({
                 <Form.Label>
                   <strong>{t('Films')}</strong>
                 </Form.Label>
-                <Form.Group className={styles.formGroup} controlId="checkboxes">
+                <Form.Group className={styles.formGroup}>
                   <Form.Check
                     className={styles.filter}
                     type="checkbox"
@@ -187,7 +201,7 @@ const SearchEngine: FunctionComponent<Props> = ({
                     onChange={(e) => handlerComboxesChangeType(e, 'movie')}
                   />
                 </Form.Group>
-                <Form.Group className={styles.formGroup} controlId="checkboxes">
+                <Form.Group className={styles.formGroup}>
                   <Form.Check
                     className={styles.filter}
                     type="checkbox"
@@ -204,7 +218,7 @@ const SearchEngine: FunctionComponent<Props> = ({
                 <Form.Label>
                   <strong>{t('Regions')}</strong>
                 </Form.Label>
-                <Form.Group className={styles.formGroup} controlId="checkboxes">
+                <Form.Group className={styles.formGroup}>
                   <Form.Check
                     className={styles.filter}
                     type="checkbox"
@@ -213,7 +227,7 @@ const SearchEngine: FunctionComponent<Props> = ({
                     onChange={(e) => handlerComboxesChangeRegion(e, 'Asia')}
                   />
                 </Form.Group>
-                <Form.Group className={styles.formGroup} controlId="checkboxes">
+                <Form.Group className={styles.formGroup}>
                   <Form.Check
                     className={styles.filter}
                     type="checkbox"
@@ -222,7 +236,7 @@ const SearchEngine: FunctionComponent<Props> = ({
                     onChange={(e) => handlerComboxesChangeRegion(e, 'Europe')}
                   />
                 </Form.Group>
-                <Form.Group className={styles.formGroup} controlId="checkboxes">
+                <Form.Group className={styles.formGroup}>
                   <Form.Check
                     className={styles.filter}
                     type="checkbox"
@@ -231,7 +245,7 @@ const SearchEngine: FunctionComponent<Props> = ({
                     onChange={(e) => handlerComboxesChangeRegion(e, 'Latin America and the Caribbean')}
                   />
                 </Form.Group>
-                <Form.Group className={styles.formGroup} controlId="checkboxes">
+                <Form.Group className={styles.formGroup}>
                   <Form.Check
                     className={styles.filter}
                     type="checkbox"
@@ -240,7 +254,7 @@ const SearchEngine: FunctionComponent<Props> = ({
                     onChange={(e) => handlerComboxesChangeRegion(e, 'Middle East and North Africa')}
                   />
                 </Form.Group>
-                <Form.Group className={styles.formGroup} controlId="checkboxes">
+                <Form.Group className={styles.formGroup}>
                   <Form.Check
                     className={styles.filter}
                     type="checkbox"
@@ -249,7 +263,7 @@ const SearchEngine: FunctionComponent<Props> = ({
                     onChange={(e) => handlerComboxesChangeRegion(e, 'Northern America')}
                   />
                 </Form.Group>
-                <Form.Group className={styles.formGroup} controlId="checkboxes">
+                <Form.Group className={styles.formGroup}>
                   <Form.Check
                     className={styles.filter}
                     type="checkbox"
@@ -258,7 +272,7 @@ const SearchEngine: FunctionComponent<Props> = ({
                     onChange={(e) => handlerComboxesChangeRegion(e, 'Oceania')}
                   />
                 </Form.Group>
-                <Form.Group className={styles.formGroup} controlId="checkboxes">
+                <Form.Group className={styles.formGroup}>
                   <Form.Check
                     className={styles.filter}
                     type="checkbox"
