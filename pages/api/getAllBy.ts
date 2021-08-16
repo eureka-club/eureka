@@ -65,6 +65,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
         favs: true,
         ...(args.isWork && { readOrWatcheds: true }),
         ...(args.isCycle && { participants: true }),
+        ...((args.isWork || args.isCycle) && { ratings: true }),
       },
       where,
     });

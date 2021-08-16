@@ -46,12 +46,27 @@ type Props = {
   iconAfter?: JSX.Element;
   onSeeAll: () => Promise<void>;
   data: Item[]; // ((CycleMosaicItem & { type: string }) | WorkMosaicItem)[];
+  showSocialInteraction?: boolean;
+  customMosaicStyle?: { [key: string]: string };
 };
 
-const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefined) => {
+const renderMosaicItem = (
+  item: MosaicItem,
+  postsParent: Cycle | Work | undefined,
+  showSocialInteraction = true,
+  customMosaicStyle?: { [key: string]: string },
+) => {
   if (isCycleMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
-    return <MosaicItemCycle showButtonLabels={false} key={`cycle-${item.id}`} cycle={item} />;
+    return (
+      <MosaicItemCycle
+        detailed
+        showSocialInteraction={showSocialInteraction}
+        showButtonLabels={false}
+        key={`cycle-${item.id}`}
+        cycle={item}
+      />
+    );
   }
   if (isPostMosaicItem(item) || item.type === 'post') {
     let pp;
@@ -62,7 +77,15 @@ const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefine
   }
   if (isWorkMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
-    return <MosaicItemWork showButtonLabels={false} key={`work-${item.id}`} work={item} />;
+    return (
+      <MosaicItemWork
+        showSocialInteraction={showSocialInteraction}
+        showButtonLabels={false}
+        key={`work-${item.id}`}
+        work={item}
+        style={customMosaicStyle}
+      />
+    );
   }
   if (isUserMosaicItem(item)) {
     return <MosaicUserItem user={item} key={`user-${item.id}`} showSocialInteraction={false} />;
@@ -71,7 +94,15 @@ const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefine
   return '';
 };
 
-const Carousel: FunctionComponent<Props> = ({ title, data, iconBefore, iconAfter, onSeeAll }) => {
+const Carousel: FunctionComponent<Props> = ({
+  title,
+  data,
+  iconBefore,
+  iconAfter,
+  onSeeAll,
+  showSocialInteraction = true,
+  customMosaicStyle = undefined,
+}) => {
   const { t } = useTranslation('topics');
   const [current, setCurrent] = useState<Item[]>([]);
   const [show, setShow] = useState<Item[]>([]);
@@ -101,7 +132,7 @@ const Carousel: FunctionComponent<Props> = ({ title, data, iconBefore, iconAfter
   const buildMosaics = () => {
     const result: JSX.Element[] = [];
     if (current) {
-      const mosaics = current.map((i) => renderMosaicItem(i, undefined));
+      const mosaics = current.map((i) => renderMosaicItem(i, undefined, showSocialInteraction, customMosaicStyle));
       const res = (
         <Masonry
           // key={`${topic}${item.id}`}

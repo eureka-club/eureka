@@ -7,16 +7,16 @@ export const find = async (id: number): Promise<User | null> => {
     where: { id },
     include: {
       cycles: {
-        include: { localImages: true },
+        include: { ratings: true, favs: true, works: true, localImages: true, participants: true },
       },
       joinedCycles: {
-        include: { localImages: true },
+        include: { ratings: true, favs: true, works: true, localImages: true, participants: true },
       },
-      likedCycles: {
-        include: { localImages: true },
-      },
+      // likedCycles: {
+      //   include: { localImages: true },
+      // },
       favCycles: {
-        include: { likes: true, favs: true, works: true, localImages: true },
+        include: { ratings: true, favs: true, works: true, localImages: true, participants: true },
       },
       posts: {
         include: {
@@ -29,18 +29,37 @@ export const find = async (id: number): Promise<User | null> => {
         },
       },
       likedPosts: { include: { localImages: true } },
-      favPosts: { include: { creator: true, likes: true, favs: true, cycles: true, works: true, localImages: true } },
+      favPosts: { include: { creator: true, favs: true, cycles: true, works: true, localImages: true } },
       likedWorks: {
-        include: { localImages: true, likes: true, favs: true, readOrWatcheds: true },
+        include: { localImages: true, ratings: true, favs: true },
       },
       favWorks: {
-        include: { localImages: true, likes: true, favs: true, readOrWatcheds: true },
+        include: { localImages: true, ratings: true, favs: true },
       },
-      readOrWatchedWorks: {
-        include: { localImages: true, likes: true, favs: true, readOrWatcheds: true },
-      },
+      // readOrWatchedWorks: {
+      //   include: { localImages: true, likes: true, favs: true, readOrWatcheds: true },
+      // },
       following: true,
       followedBy: true,
+
+      ratingWorks: {
+        select: {
+          qty: true,
+          ratingOnWorkId: true,
+          userId: true,
+          work: { include: { localImages: true, ratings: true, favs: true } },
+          workId: true,
+        },
+      },
+      ratingCycles: {
+        select: {
+          qty: true,
+          ratingOnCycleId: true,
+          userId: true,
+          cycle: { include: { ratings: true, favs: true, works: true, localImages: true, participants: true } },
+          cycleId: true,
+        },
+      },
     },
   });
 };

@@ -18,8 +18,20 @@ interface Props {
   work: WorkDetail;
   showButtonLabels?: boolean;
   showShare?: boolean;
+  showSocialInteraction?: boolean;
+  style?: { [k: string]: string };
+  cacheKey?: string[];
+  showTrash?: boolean;
 }
-const MosaicItem: FunctionComponent<Props> = ({ work, showButtonLabels = true, showShare = false }) => {
+const MosaicItem: FunctionComponent<Props> = ({
+  work,
+  showButtonLabels = true,
+  showShare = false,
+  showSocialInteraction = true,
+  style = undefined,
+  cacheKey = undefined,
+  showTrash = false,
+}) => {
   const { t } = useTranslation('common');
   const { id, /* author, */ title, localImages, type } = work;
   const [session] = useSession() as [Session | null | undefined, boolean];
@@ -34,7 +46,7 @@ const MosaicItem: FunctionComponent<Props> = ({ work, showButtonLabels = true, s
 
   return (
     <Card className={styles.container}>
-      <div className={styles.imageContainer}>
+      <div className={styles.imageContainer} style={style}>
         <Link href={`/work/${id}`}>
           <a>
             <LocalImageComponent filePath={localImages[0].storedFile} alt={title} />
@@ -42,11 +54,16 @@ const MosaicItem: FunctionComponent<Props> = ({ work, showButtonLabels = true, s
         </Link>
         <span className={styles.type}>{t(type)}</span>
       </div>
-      {session && (
+      {showSocialInteraction && work && (
         <Card.Footer className={styles.footer}>
-          {work && (
-            <SocialInteraction showButtonLabels={showButtonLabels} showCounts showShare={showShare} entity={work} />
-          )}
+          <SocialInteraction
+            cacheKey={cacheKey || undefined}
+            showButtonLabels={showButtonLabels}
+            showCounts
+            showShare={showShare}
+            entity={work}
+            showTrash={showTrash}
+          />
         </Card.Footer>
       )}
     </Card>

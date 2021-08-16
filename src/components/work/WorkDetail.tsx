@@ -29,6 +29,7 @@ import detailPagesAtom from '../../atoms/detailPages';
 import globalModalsAtom from '../../atoms/globalModals';
 import styles from './WorkDetail.module.css';
 import TagsInput from '../forms/controls/TagsInput';
+import MosaicItem from './MosaicItem';
 
 interface Props {
   work: WorkDetail;
@@ -71,13 +72,14 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
       <Row className="mb-5">
         {post == null ? (
           <>
-            <Col md={{ span: 4 }}>
-              <div className={classNames(styles.imgWrapper, 'mb-3')}>
+            <Col md={{ span: 3 }}>
+              <MosaicItem work={work} showTrash />
+              {/* <div className={classNames(styles.imgWrapper, 'mb-3')}>
                 <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
               </div>
-              <SocialInteraction entity={work} showCounts showShare />
+              <SocialInteraction cacheKey={['WORKS', `${work.id}`]} entity={work} showCounts showShare showTrash /> */}
             </Col>
-            <Col md={{ span: 8 }}>
+            <Col md={{ span: 9 }}>
               <section className="mb-4">
                 <h1>{work.title}</h1>
                 <h2 className={styles.author}>{work.author}</h2>

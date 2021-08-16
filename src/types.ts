@@ -28,8 +28,9 @@ export interface StoredFileUpload {
 
 export interface MySocialInfo {
   favoritedByMe: boolean | undefined;
-  likedByMe: boolean | undefined;
-  readOrWatchedByMe?: boolean | undefined;
+  // likedByMe: boolean | undefined;
+  // readOrWatchedByMe?: boolean | undefined;
+  ratingByMe?: boolean | undefined;
 }
 
 /*

@@ -20,7 +20,7 @@ const validateReq = async (
   if (
     typeof id !== 'string' ||
     typeof socialInteraction !== 'string' ||
-    (socialInteraction !== 'fav' && socialInteraction !== 'like' && socialInteraction !== 'readOrWatched')
+    !['fav', 'like', 'readOrWatched', 'rating'].includes(socialInteraction)
   ) {
     res.status(404).end();
     return false;
@@ -38,7 +38,9 @@ const validateReq = async (
 export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     const session = (await getSession({ req })) as unknown as Session;
+
     const { id, socialInteraction } = req.query;
+    const { qty } = req.body;
 
     if (!(await validateReq(session, id, socialInteraction, res))) {
       return;
@@ -52,7 +54,7 @@ export default getApiHandler()
       }
 
       // @ts-ignore arguments checked in validateReq()
-      await saveSocialInteraction(work, session.user, socialInteraction, true);
+      await saveSocialInteraction(work, session.user, socialInteraction, true, qty);
 
       res.status(200).json({ status: 'OK' });
     } catch (exc) {

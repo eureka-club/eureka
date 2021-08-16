@@ -5,10 +5,12 @@ import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
 import { GiBrain } from 'react-icons/gi';
 import { BsBookmark, BsBookmarkFill, BsEye, BsEyeFill } from 'react-icons/bs';
 import classnames from 'classnames';
-import { FiShare2, FiStar } from 'react-icons/fi';
+import { FiShare2, FiStar, FiTrash2 } from 'react-icons/fi';
+import { IoMdStarOutline, IoMdStar, IoMdStarHalf } from 'react-icons/io';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/client';
 import { useAtom } from 'jotai';
+import Rating from 'react-rating';
 import {
   FacebookIcon,
   FacebookShareButton,
@@ -17,7 +19,7 @@ import {
   WhatsappShareButton,
   WhatsappIcon,
 } from 'react-share';
-import { Cycle, User, Work, Post } from '@prisma/client';
+import { Cycle, User, Work, Post, RatingOnCycle, RatingOnWork } from '@prisma/client';
 import { OverlayTrigger, Popover, Button } from 'react-bootstrap';
 import { useUsers } from '../../useUsers';
 import globalModalsAtom from '../../atoms/globalModals';
@@ -31,8 +33,9 @@ import { MySocialInfo, isCycle, isWork, Session, isPost } from '../../types';
 import styles from './SocialInteraction.module.css';
 
 interface SocialInteractionClientPayload {
-  socialInteraction: 'fav' | 'like' | 'readOrWatched';
+  socialInteraction: 'fav' | 'rating';
   doCreate: boolean;
+  ratingQty?: number;
 }
 
 interface Props {
@@ -42,6 +45,8 @@ interface Props {
   showCounts?: boolean;
   showShare?: boolean;
   showButtonLabels?: boolean;
+  cacheKey?: string[];
+  showTrash?: boolean;
 }
 
 const SocialInteraction: FunctionComponent<Props> = ({
@@ -50,145 +55,110 @@ const SocialInteraction: FunctionComponent<Props> = ({
   showShare = false,
   showCounts = false,
   showButtonLabels = true,
+  cacheKey = '',
+  showTrash = false,
 }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const [session] = useSession() as [Session | null | undefined, boolean];
+  const [qty, setQty] = useState<number>(0);
 
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [mySocialInfo, setMySocialInfo] = useState<MySocialInfo>();
 
-  const [optimistLike, setOptimistLike] = useState<boolean | null>();
+  // const [optimistLike, setOptimistLike] = useState<boolean | null>();
   const [optimistFav, setOptimistFav] = useState<boolean | null>();
-  const [optimistReadOrWatched, setOptimistReadOrWatched] = useState<boolean | null>();
+  // const [optimistReadOrWatched, setOptimistReadOrWatched] = useState<boolean | null>();
 
-  const [optimistLikeCount, setOptimistLikeCount] = useState<number>(0);
+  // const [optimistLikeCount, setOptimistLikeCount] = useState<number>(0);
   const [optimistFavCount, setOptimistFavCount] = useState<number>(0);
-  const [optimistReadOrWatchedCount, setOptimistReadOrWatchedCount] = useState<number>(0);
+  // const [optimistReadOrWatchedCount, setOptimistReadOrWatchedCount] = useState<number>(0);
   const queryClient = useQueryClient();
 
   const [idSession, setIdSession] = useState<string>('');
   const { /* isLoading, isError, error, */ data: user } = useUsers(idSession);
   // const [user, setuser] = useState<UserDetail>();
 
+  const calculateQty = () => {
+    if (entity && (isWork(entity) || isCycle(entity))) {
+      let qtySum = 0;
+      entity.ratings.forEach((rating) => {
+        qtySum += rating.qty;
+      });
+      qtySum /= entity.ratings.length;
+      setQty(() => qtySum);
+    }
+  };
+
   useEffect(() => {
     const s = session as unknown as Session;
     if (s) setIdSession(s.user.id.toString());
     // if (datauser) setuser(() => datauser);
+
+    calculateQty();
+
+    let ratingByMe = false;
     if (user && entity) {
       if (isWork(entity)) {
         // if (entity.id === 125) debugger;
-        let idx = user.readOrWatchedWorks.findIndex((i: Work) => i.id === entity.id);
-        const readOrWatchedByMe = idx !== -1;
-        setOptimistReadOrWatched(readOrWatchedByMe);
-        setOptimistReadOrWatchedCount(entity.readOrWatcheds.length);
+        // let idx = user.readOrWatchedWorks.findIndex((i: Work) => i.id === entity.id);
+        // const readOrWatchedByMe = idx !== -1;
+        // setOptimistReadOrWatched(readOrWatchedByMe);
+        // setOptimistReadOrWatchedCount(entity.readOrWatcheds.length);
 
-        idx = user.likedWorks.findIndex((i: Work) => i.id === entity.id);
-        const likedByMe = idx !== -1;
-        setOptimistLike(likedByMe);
-        setOptimistLikeCount(entity.likes.length);
-
-        idx = user.favWorks.findIndex((i: Work) => i.id === entity.id);
+        let idx = user.favWorks.findIndex((i: Work) => i.id === entity.id);
         const favoritedByMe = idx !== -1;
         setOptimistFav(favoritedByMe);
         setOptimistFavCount(entity.favs.length);
 
-        setMySocialInfo({ likedByMe, favoritedByMe, readOrWatchedByMe });
+        idx = user.ratingWorks.findIndex((i: { workId: number; qty: number }) => i.workId === entity.id);
+        if (idx !== -1) {
+          ratingByMe = true;
+        }
+
+        setMySocialInfo({ favoritedByMe, ratingByMe });
       } else if (isCycle(entity)) {
-        setOptimistReadOrWatchedCount(0);
+        // setOptimistReadOrWatchedCount(0);
 
-        let idx = user.likedCycles.findIndex((i: Cycle) => i.id === entity.id);
-        const likedByMe = idx !== -1;
-        setOptimistLike(likedByMe);
-        setOptimistLikeCount(entity.likes.length);
+        // let idx = user.likedCycles.findIndex((i: Cycle) => i.id === entity.id);
+        // const likedByMe = idx !== -1;
+        // setOptimistLike(likedByMe);
+        // setOptimistLikeCount(entity.likes.length);
 
-        idx = user.favCycles.findIndex((i: Cycle) => i.id === entity.id);
+        let idx = user.favCycles.findIndex((i: Cycle) => i.id === entity.id);
         const favoritedByMe = idx !== -1;
         setOptimistFav(favoritedByMe);
         setOptimistFavCount(entity.favs.length);
 
-        setMySocialInfo({ likedByMe, favoritedByMe });
+        idx = user.ratingCycles.findIndex((i: { cycleId: number; qty: number }) => i.cycleId === entity.id);
+        if (idx !== -1) {
+          ratingByMe = true;
+        }
+
+        setMySocialInfo({ favoritedByMe, ratingByMe });
       } else if (isPost(entity)) {
-        setOptimistReadOrWatchedCount(0);
+        // setOptimistReadOrWatchedCount(0);
 
-        let idx = user.likedPosts.findIndex((i: Post) => i.id === entity.id);
-        const likedByMe = idx !== -1;
-        setOptimistLike(likedByMe);
-        setOptimistLikeCount(entity.likes.length);
-
-        idx = user.favPosts.findIndex((i: Post) => i.id === entity.id);
+        const idx = user.favPosts.findIndex((i: Post) => i.id === entity.id);
         const favoritedByMe = idx !== -1;
         setOptimistFav(favoritedByMe);
         setOptimistFavCount(entity.favs.length);
 
-        setMySocialInfo({ likedByMe, favoritedByMe });
+        setMySocialInfo({ favoritedByMe });
       }
     }
   }, [user, entity, session]);
 
-  /* useEffect(() => {
-    if (entity && isWork(entity) && user) {
-      // if (entity.id === 125) debugger;
-      setOptimistReadOrWatchedCount(entity.readOrWatcheds.length);
-
-      let idx = entity.likes.findIndex((i) => i.id === user!.id);
-      const likedByMe = idx !== -1;
-      setOptimistLike(likedByMe);
-      setOptimistLikeCount(entity.likes.length);
-
-      idx = entity.favs.findIndex((i) => i.id === user!.id);
-      const favoritedByMe = idx !== -1;
-      setOptimistFav(favoritedByMe);
-      setOptimistFavCount(entity.favs.length);
-
-      // idx = entity.readOrWatcheds.findIndex((i) => i.id === user!.id);
-      // const readOrWatchedByMe = idx !== -1;
-      // setOptimistReadOrWatched(readOrWatchedByMe);
-      // setMySocialInfo({ likedByMe, favoritedByMe, readOrWatchedByMe });
-      setOptimistReadOrWatchedCount(entity.readOrWatcheds.length);
-    } else if (entity && isCycle(entity) && user) {
-      setOptimistReadOrWatchedCount(0);
-
-      let idx = entity.likes.findIndex((i) => i.id === user!.id);
-      const likedByMe = idx !== -1;
-      setOptimistLike(likedByMe);
-      setOptimistLikeCount(entity.likes.length);
-
-      idx = entity.favs.findIndex((i) => i.id === user!.id);
-      const favoritedByMe = idx !== -1;
-      setOptimistFav(favoritedByMe);
-      setOptimistFavCount(entity.favs.length);
-
-      setMySocialInfo({ likedByMe, favoritedByMe });
-      setOptimistReadOrWatchedCount(0);
-    }
-  }, [entity, user]);
- */
-  /* useEffect(() => {
-    debugger;
-    if (datauser) {
-      setuser(() => datauser);
-
-      const idx = datauser.readOrWatchedWorks.findIndex((i) => i.id === entity.id);
-      const readOrWatchedByMe = idx !== -1;
-      setOptimistReadOrWatched(readOrWatchedByMe);
-      setMySocialInfo({
-        ...mySocialInfo,
-        readOrWatchedByMe,
-      });
-    }
-  }, [datauser]);
- */
   const openSignInModal = () => {
     setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
   };
 
-  const likeInc = () => {
-    if (!optimistLike) {
-      return 1;
-    }
-    return optimistLikeCount ? -1 : 0;
-  };
+  // const likeInc = () => {
+  //   if (!optimistLike) {
+  //     return 1;
+  //   }
+  //   return optimistLikeCount ? -1 : 0;
+  // };
 
   const favInc = () => {
     if (!optimistFav) {
@@ -197,12 +167,12 @@ const SocialInteraction: FunctionComponent<Props> = ({
     return optimistFavCount ? -1 : 0;
   };
 
-  const readOrWatchedInc = () => {
-    if (!optimistReadOrWatched) {
-      return 1;
-    }
-    return optimistReadOrWatchedCount ? -1 : 0;
-  };
+  // const readOrWatchedInc = () => {
+  //   if (!optimistReadOrWatched) {
+  //     return 1;
+  //   }
+  //   return optimistReadOrWatchedCount ? -1 : 0;
+  // };
 
   const shareUrl = `${WEBAPP_URL}${router.asPath}`;
   const shareTextDynamicPart = (() => {
@@ -229,7 +199,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const shareText = `${shareTextDynamicPart} "${title()}" ${t('complementShare')}`;
 
   const { mutate: execSocialInteraction, isSuccess: isSocialInteractionSuccess } = useMutation(
-    async ({ socialInteraction, doCreate }: SocialInteractionClientPayload) => {
+    async ({ socialInteraction, doCreate, ratingQty }: SocialInteractionClientPayload) => {
       const entityEndpoint = (() => {
         if (parent != null) {
           return 'post';
@@ -245,61 +215,64 @@ const SocialInteraction: FunctionComponent<Props> = ({
       })();
 
       if (session) {
-        const res = await (
-          await fetch(`/api/${entityEndpoint}/${entity.id}/${socialInteraction}`, {
-            method: doCreate ? 'POST' : 'DELETE',
-          })
-        ).json();
-        return res;
+        const res = await fetch(`/api/${entityEndpoint}/${entity.id}/${socialInteraction}`, {
+          method: doCreate ? 'POST' : 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            qty: ratingQty,
+          }),
+        });
+        return res.json();
       }
+      calculateQty();
       openSignInModal();
       return null;
     },
     {
       onMutate: (payload) => {
-        if (payload.socialInteraction === 'like') {
-          const ol = optimistLike;
-          setOptimistLike(!optimistLike);
-          const olc = optimistLikeCount;
-          setOptimistLikeCount(optimistLikeCount + likeInc());
+        // if (payload.socialInteraction === 'like') {
+        //   const ol = optimistLike;
+        //   setOptimistLike(!optimistLike);
+        //   const olc = optimistLikeCount;
+        //   setOptimistLikeCount(optimistLikeCount + likeInc());
 
-          if (isWork(entity)) {
-            let likedWorks;
-            if (ol) {
-              likedWorks = user?.likedWorks.filter((i: Work) => i.id !== entity.id);
-            } else {
-              user?.likedWorks.push(entity);
-              likedWorks = user?.likedWorks;
-            }
-            queryClient.setQueryData(['USERS', `${idSession}`], { ...user, likedWorks });
-          } else if (isCycle(entity)) {
-            let likedCycles;
-            if (ol) {
-              likedCycles = user?.likedCycles.filter((i: Cycle) => i.id !== entity.id);
-            } else {
-              user?.likedCycles.push(entity);
-              likedCycles = user?.likedCycles;
-            }
-            queryClient.setQueryData(['USERS', `${idSession}`], { ...user, likedCycles });
-          }
-          return { optimistLike: ol, optimistLikeCount: olc };
-        }
-        if (isWork(entity) && payload.socialInteraction === 'readOrWatched') {
-          const ol = optimistReadOrWatched;
-          setOptimistReadOrWatched(!optimistReadOrWatched);
-          const olc = optimistReadOrWatchedCount;
-          setOptimistReadOrWatchedCount(optimistReadOrWatchedCount! + readOrWatchedInc());
+        //   if (isWork(entity)) {
+        //     let likedWorks;
+        //     if (ol) {
+        //       likedWorks = user?.likedWorks.filter((i: Work) => i.id !== entity.id);
+        //     } else {
+        //       user?.likedWorks.push(entity);
+        //       likedWorks = user?.likedWorks;
+        //     }
+        //     queryClient.setQueryData(['USERS', `${idSession}`], { ...user, likedWorks });
+        //   } else if (isCycle(entity)) {
+        //     let likedCycles;
+        //     if (ol) {
+        //       likedCycles = user?.likedCycles.filter((i: Cycle) => i.id !== entity.id);
+        //     } else {
+        //       user?.likedCycles.push(entity);
+        //       likedCycles = user?.likedCycles;
+        //     }
+        //     queryClient.setQueryData(['USERS', `${idSession}`], { ...user, likedCycles });
+        //   }
+        //   return { optimistLike: ol, optimistLikeCount: olc };
+        // }
+        // if (isWork(entity) && payload.socialInteraction === 'readOrWatched') {
+        //   const ol = optimistReadOrWatched;
+        //   setOptimistReadOrWatched(!optimistReadOrWatched);
+        //   const olc = optimistReadOrWatchedCount;
+        //   setOptimistReadOrWatchedCount(optimistReadOrWatchedCount! + readOrWatchedInc());
 
-          let readOrWatchedWorks;
-          if (ol) {
-            readOrWatchedWorks = user?.readOrWatchedWorks.filter((i: Cycle) => i.id !== entity.id);
-          } else {
-            user?.readOrWatchedWorks.push(entity);
-            readOrWatchedWorks = user?.readOrWatchedWorks;
-          }
-          queryClient.setQueryData(['USERS', `${idSession}`], { ...user, readOrWatchedWorks });
-          return { optimistreadOrWatched: ol, optimistreadOrWatchedCount: olc };
-        }
+        //   let readOrWatchedWorks;
+        //   if (ol) {
+        //     readOrWatchedWorks = user?.readOrWatchedWorks.filter((i: Cycle) => i.id !== entity.id);
+        //   } else {
+        //     user?.readOrWatchedWorks.push(entity);
+        //     readOrWatchedWorks = user?.readOrWatchedWorks;
+        //   }
+        //   queryClient.setQueryData(['USERS', `${idSession}`], { ...user, readOrWatchedWorks });
+        //   return { optimistreadOrWatched: ol, optimistreadOrWatchedCount: olc };
+        // }
         if (payload.socialInteraction === 'fav') {
           const opfc = optimistFavCount;
           const opf = optimistFav;
@@ -338,19 +311,11 @@ const SocialInteraction: FunctionComponent<Props> = ({
         // setOptimistFavCount(optimistFavCount + favInc());
         return {};
       },
-      onSuccess: (data, variables) => {
-        if (data.status !== 'OK') {
-          if (variables.socialInteraction === 'like') {
-            setOptimistLike(mySocialInfo!.likedByMe!);
-            if ('likes' in entity) setOptimistLikeCount(entity.likes.length);
-          } else if (isWork(entity) && variables.socialInteraction === 'readOrWatched') {
-            setOptimistReadOrWatched(mySocialInfo!.readOrWatchedByMe!);
-            setOptimistReadOrWatchedCount((entity as WorkDetail).readOrWatcheds.length);
-          }
-          setOptimistFav(mySocialInfo!.likedByMe!);
-          if ('favs' in entity) setOptimistFavCount(entity.favs.length);
-        }
+      onSuccess: () => {
         queryClient.invalidateQueries(['USERS', `${idSession}`]);
+        if (!cacheKey) router.replace(router.asPath);
+        else if (queryClient.getQueryData(cacheKey)) queryClient.invalidateQueries(cacheKey);
+        else router.replace(router.asPath);
       },
     },
   );
@@ -360,38 +325,38 @@ const SocialInteraction: FunctionComponent<Props> = ({
     execSocialInteraction({ socialInteraction: 'fav', doCreate: mySocialInfo ? !mySocialInfo!.favoritedByMe : true });
   };
 
-  const handleLikeClick = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-    execSocialInteraction({ socialInteraction: 'like', doCreate: mySocialInfo ? !mySocialInfo!.likedByMe : true });
-  };
+  // const handleLikeClick = (ev: MouseEvent<HTMLButtonElement>) => {
+  //   ev.preventDefault();
+  //   execSocialInteraction({ socialInteraction: 'like', doCreate: mySocialInfo ? !mySocialInfo!.likedByMe : true });
+  // };
 
-  const handleReadOrWatchedClick = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-    execSocialInteraction({
-      socialInteraction: 'readOrWatched',
-      doCreate: mySocialInfo ? !mySocialInfo!.readOrWatchedByMe : true,
-    });
-  };
+  // const handleReadOrWatchedClick = (ev: MouseEvent<HTMLButtonElement>) => {
+  //   ev.preventDefault();
+  //   execSocialInteraction({
+  //     socialInteraction: 'readOrWatched',
+  //     doCreate: mySocialInfo ? !mySocialInfo!.readOrWatchedByMe : true,
+  //   });
+  // };
 
-  useEffect(() => {
-    // if (!isSocialInteractionSuccess) {
-    //   if (optimistLikeCount && optimistLikeCount > entity.likes.length)
-    //     setOptimistLikeCount(entity.likes.length - 1);
-    //   if (optimistLikeCount && optimistLikeCount < entity.likes.length)
-    //     setOptimistLikeCount(entity.likes.length + 1);
-    // }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSocialInteractionSuccess, optimistLike]);
+  // useEffect(() => {
+  //   // if (!isSocialInteractionSuccess) {
+  //   //   if (optimistLikeCount && optimistLikeCount > entity.likes.length)
+  //   //     setOptimistLikeCount(entity.likes.length - 1);
+  //   //   if (optimistLikeCount && optimistLikeCount < entity.likes.length)
+  //   //     setOptimistLikeCount(entity.likes.length + 1);
+  //   // }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [isSocialInteractionSuccess, optimistLike]);
 
-  useEffect(() => {
-    // if (!isSocialInteractionSuccess) {
-    //   if (optimistFavCount && optimistFavCount > entity.favs.length)
-    //     setOptimistFavCount(entity.favs.length - 1);
-    //   if (optimistFavCount && optimistFavCount < entity.favs.length)
-    //     setOptimistFavCount(entity.favs.length + 1);
-    // }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSocialInteractionSuccess, optimistFav]);
+  // useEffect(() => {
+  //   // if (!isSocialInteractionSuccess) {
+  //   //   if (optimistFavCount && optimistFavCount > entity.favs.length)
+  //   //     setOptimistFavCount(entity.favs.length - 1);
+  //   //   if (optimistFavCount && optimistFavCount < entity.favs.length)
+  //   //     setOptimistFavCount(entity.favs.length + 1);
+  //   // }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [isSocialInteractionSuccess, optimistFav]);
 
   // useEffect(() => {
   //   if (isSocialInteractionSuccess) {
@@ -419,10 +384,52 @@ const SocialInteraction: FunctionComponent<Props> = ({
       </Popover.Content>
     </Popover>
   );
+
+  const clearRating = () => {
+    setQty(0);
+    execSocialInteraction({
+      socialInteraction: 'rating',
+      ratingQty: 0,
+      doCreate: false,
+    });
+  };
+
+  const handlerChangeRating = (value: number) => {
+    setQty(value);
+    execSocialInteraction({
+      socialInteraction: 'rating',
+      ratingQty: value,
+      doCreate: true,
+    });
+  };
+
+  const getFullSymbol = () => {
+    if (session) {
+      if (user && mySocialInfo) {
+        if (mySocialInfo.ratingByMe) return <GiBrain style={{ color: 'var(--eureka-green)' }} />;
+        return <GiBrain style={{ color: 'var(--text-color-secondary)' }} />;
+      }
+    }
+    return <GiBrain style={{ color: 'var(--text-color-secondary)' }} />;
+  };
+
   return (
-    (session && user && (
-      <div className={styles.container}>
-        {isWork(entity) && (
+    // (session && user && (
+    <div className={styles.container}>
+      {showTrash && (
+        <button type="button" title="Clear rating" className={styles.clearRating} onClick={clearRating}>
+          <FiTrash2 />
+        </button>
+      )}
+      <Rating
+        initialRating={qty}
+        onChange={handlerChangeRating}
+        className={styles.rating}
+        stop={5}
+        emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
+        fullSymbol={getFullSymbol()}
+      />
+      {/* {isWork(entity) && (
           <button
             className={styles.socialBtn}
             title={t('Read / watched')}
@@ -439,7 +446,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
           </button>
         )}
         <button className={styles.socialBtn} title={t('I learned')} onClick={handleLikeClick} type="button">
-          {optimistLike /* mySocialInfo.likedByMe */ ? <GiBrain className={styles.active} /> : <GiBrain />}
+          {optimistLike  ? <GiBrain className={styles.active} /> : <GiBrain />}
           {showCounts && optimistLikeCount}
           {showButtonLabels && (
             <span className={classnames(...[styles.info, ...[optimistLike ? styles.active : '']])}>
@@ -447,70 +454,29 @@ const SocialInteraction: FunctionComponent<Props> = ({
             </span>
           )}
         </button>
-
-        {/* {isWork(entity) && (
-          <button className={styles.socialBtn} title={t('Rating Eureka')} type="button">
-            <FiStar className={styles.active} />
-            {optimistReadOrWatchedCount! ? (optimistLikeCount / optimistReadOrWatchedCount!) * 100 : 0}%
-            {showButtonLabels && (
-              <span className={classnames(...[styles.info, styles.active])}>{t('Rating Eureka')}*</span>
-            )}
-          </button>
-        )} */}
-        <button className={styles.socialBtn} title={t('Save for later')} onClick={handleFavClick} type="button">
-          {optimistFav /* mySocialInfo.favoritedByMe */ ? <BsBookmarkFill className={styles.active} /> : <BsBookmark />}
-          {/* {showCounts && optimistFavCount} */}
-          <br />
-          {showButtonLabels && (
-            <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>
-              {t('Save for later')}
-            </span>
-          )}
-        </button>
-
-        {showShare && (
-          <OverlayTrigger trigger="click" placement="right" overlay={popoverShares}>
-            <Button variant="link" className={styles.socialBtn}>
-              <FiShare2 className={styles.active} />
-              <br />
-              {showButtonLabels && <span className={classnames(styles.info, styles.active)}>{t('Share')}</span>}
-            </Button>
-          </OverlayTrigger>
+            */}
+      <button className={styles.socialBtn} title={t('Save for later')} onClick={handleFavClick} type="button">
+        {optimistFav ? <BsBookmarkFill className={styles.active} /> : <BsBookmark />}
+        <br />
+        {showButtonLabels && (
+          <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>
+            {t('Save for later')}
+          </span>
         )}
+      </button>
 
-        {/* {showShare && (
-          <Dropdown>
-            <Dropdown.Toggle id="langSwitch" className={styles['toggle-share']}>
-              <FiShare2 className={styles.actions} />
-              <br />
-              <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>{` `}</span>
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu className={styles['icon-share']}>
-              <Dropdown.Item>
-                <TwitterShareButton url={shareUrl} title={shareText} via="eleurekaclub">
-                  <TwitterIcon size={32} round />
-                  {`${t('wayShare')} Twitter`}
-                </TwitterShareButton>
-              </Dropdown.Item>
-              <Dropdown.Item>
-                <FacebookShareButton url={shareUrl} quote={shareText}>
-                  <FacebookIcon size={32} round />
-                  {`${t('wayShare')} Facebook`}
-                </FacebookShareButton>
-              </Dropdown.Item>
-              <Dropdown.Item>
-                <WhatsappShareButton url={shareUrl} title={`${shareText} ${t('whatsappComplement')}`}>
-                  <WhatsappIcon size={32} round />
-                  {`${t('wayShare')} Whatsapp`}
-                </WhatsappShareButton>
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        )} */}
-      </div>
-    )) ||
-    null
+      {showShare && (
+        <OverlayTrigger trigger="click" placement="right" overlay={popoverShares}>
+          <Button variant="link" className={styles.socialBtn}>
+            <FiShare2 className={styles.active} />
+            <br />
+            {showButtonLabels && <span className={classnames(styles.info, styles.active)}>{t('Share')}</span>}
+          </Button>
+        </OverlayTrigger>
+      )}
+    </div>
+    // )) ||
+    // null
   );
 };
 

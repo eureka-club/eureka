@@ -29,7 +29,7 @@
 .socialBtn svg {
   margin-right: 0.2rem;
   color: gray;
-  font-size: 2em;
+  font-size: 1.5em;
 }
 .socialBtn .active{
   color: var(--eureka-green);
@@ -57,4 +57,26 @@
 .toggle-share:hover {
   background-color: transparent;
   border-color: transparent;
+}
+
+
+.rating{
+  font-size:1em;
+}
+.rating span{
+  top: -.1em;
+}
+.select svg{
+  color: var(--yellow);
+}
+.unselect svg{
+  color: gray;
+}
+.clearRating{
+  font-size: 1.5em;
+    margin: -.3em -.1em 0 0;
+    color: var(--eureka-green); 
+    border: none;
+    padding: 0;
+    background: none;
 }

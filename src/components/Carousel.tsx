@@ -35,7 +35,13 @@ type Props = {
   topicLabel?: string;
 };
 
-const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefined, topic = '', page = '') => {
+const renderMosaicItem = (
+  item: MosaicItem,
+  postsParent: Cycle | Work | undefined,
+  topic = '',
+  page = '',
+  showSocialInteraction = true,
+) => {
   if (isCycleMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
     return (
@@ -46,6 +52,7 @@ const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefine
         key={`cycle-${item.id}`}
         cycle={item as CycleDetail}
         cacheKey={topic && page ? ['items', `${topic}${page}`] : undefined}
+        showSocialInteraction={showSocialInteraction}
       />
     );
   }
@@ -54,7 +61,16 @@ const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefine
   }
   if (isWorkMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
-    return <MosaicItemWork showShare={false} showButtonLabels={false} key={`work-${item.id}`} work={item} />;
+    return (
+      <MosaicItemWork
+        showSocialInteraction
+        showShare={false}
+        showButtonLabels={false}
+        key={`work-${item.id}`}
+        work={item}
+        cacheKey={topic && page ? ['items', `${topic}${page}`] : undefined}
+      />
+    );
   }
 
   return '';

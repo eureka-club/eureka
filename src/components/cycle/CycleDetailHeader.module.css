@@ -1,0 +1,22 @@
+.customCarouselStaticContainer{
+    /* padding:4em; */
+    margin-right: 2em;
+}
+.customCarouselStaticContainer .imageContainer{
+    height: 16em!important;
+    background-color: brown;
+}
+.customCarouselStaticContainer .card div > a img{
+    height: 16em!important;
+ }
+.cycleCreator {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+  .cycleCreatorAvatar {
+    border-radius: 50%;
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+  }
+  

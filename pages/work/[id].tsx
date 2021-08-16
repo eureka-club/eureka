@@ -6,6 +6,7 @@ import { Session, MySocialInfo } from '../../src/types';
 import { WorkDetail } from '../../src/types/work';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import WorkDetailComponent from '../../src/components/work/WorkDetail';
+
 import {
   countCycles,
   countPosts,
@@ -53,13 +54,13 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
   const session = (await getSession({ req })) as unknown as Session;
   const mySocialInfo: MySocialInfo = {
     favoritedByMe: undefined,
-    likedByMe: undefined,
-    readOrWatchedByMe: undefined,
+    // likedByMe: undefined,
+    // readOrWatchedByMe: undefined,
   };
   if (session != null) {
     mySocialInfo.favoritedByMe = !!(await isFavoritedByUser(work, session.user));
-    mySocialInfo.likedByMe = !!(await isLikedByUser(work, session.user));
-    mySocialInfo.readOrWatchedByMe = !!(await isReadOrWatchedByUser(work, session.user));
+    // mySocialInfo.likedByMe = !!(await isLikedByUser(work, session.user));
+    // mySocialInfo.readOrWatchedByMe = !!(await isReadOrWatchedByUser(work, session.user));
   }
 
   return {

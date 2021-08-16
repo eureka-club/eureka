@@ -16,7 +16,7 @@ import { AiOutlineEnvironment } from 'react-icons/ai';
 import { /* BsCircleFill, */ BsBookmark, BsEye } from 'react-icons/bs';
 import { HiOutlineUserGroup } from 'react-icons/hi';
 
-import { User } from '@prisma/client';
+import { RatingOnCycle, RatingOnWork, User } from '@prisma/client';
 import styles from './index.module.css';
 import { useUsers } from '../../src/useUsers';
 
@@ -30,9 +30,9 @@ import CarouselStatic from '../../src/components/CarouselStatic';
 // import useCycles from '../src/useCycles';
 // import useCountries from '../src/useCountries';
 import { Session } from '../../src/types';
-import { CycleMosaicItem /* , CycleWithImages */ } from '../../src/types/cycle';
+import { CycleDetail, CycleMosaicItem /* , CycleWithImages */ } from '../../src/types/cycle';
 import { PostMosaicItem /* , PostWithImages */ } from '../../src/types/post';
-import { WorkMosaicItem /* , WorkWithImages */ } from '../../src/types/work';
+import { WorkDetail, WorkMosaicItem /* , WorkWithImages */ } from '../../src/types/work';
 import { UserMosaicItem /* , UserDetail, WorkWithImages */ } from '../../src/types/user';
 // import MosaicItemCycle from '../../src/components/cycle/MosaicItem';
 // import MosaicItemPost from '../../src/components/post/MosaicItem';
@@ -126,8 +126,11 @@ const Mediatheque: NextPage = () => {
         FP = user.favPosts.map((p: PostMosaicItem) => ({ ...p, type: 'post' }));
       }
 
-      if (user.readOrWatchedWorks && user.readOrWatchedWorks.length) {
-        RW = user.readOrWatchedWorks;
+      if (user.ratingWorks && user.ratingWorks.length) {
+        RW = user.ratingWorks.map((w: RatingOnWork & { work: WorkMosaicItem }) => w.work!);
+      }
+      if (user.ratingCycles && user.ratingCycles.length) {
+        RW = [...RW, ...user.ratingCycles.map((c: RatingOnCycle & { cycle: CycleMosaicItem }) => c.cycle!)];
       }
       setCycles(() => [...C, ...JC]);
       setPosts(() => [...P]);

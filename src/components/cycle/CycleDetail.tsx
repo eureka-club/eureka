@@ -36,6 +36,7 @@ import WorksMosaic from './WorksMosaic';
 import UnclampText from '../UnclampText';
 import detailPagesAtom from '../../atoms/detailPages';
 import styles from './CycleDetail.module.css';
+import CycleDetailHeader from './CycleDetailHeader';
 
 interface Props {
   cycle: CycleDetail;
@@ -134,7 +135,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           {t('Edit')}
         </Button>
       )}
-      <Row className="mb-5">
+      <CycleDetailHeader cycle={cycle} />
+      {/* <Row className="mb-5">
         {post == null ? (
           <>
             <Col md={{ span: 3 }}>
@@ -187,7 +189,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         ) : (
           <PostDetailComponent post={post} cycle={cycle} work={work} mySocialInfo={mySocialInfo} />
         )}
-      </Row>
+      </Row> */}
 
       {post == null && (
         <Row className="mb-5">

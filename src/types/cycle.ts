@@ -18,9 +18,9 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
     localImages: true;
     complementaryMaterials: true;
     participants: true;
-    likes: true;
     favs: true;
     works: true;
+    ratings: true;
   };
 }>;
 
@@ -30,9 +30,9 @@ export type CycleDetail = Prisma.CycleGetPayload<{
     localImages: true;
     complementaryMaterials: true;
     participants: true;
-    likes: true;
     favs: true;
     works: true;
+    ratings: true;
   };
 }>;
 

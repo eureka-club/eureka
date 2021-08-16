@@ -3,9 +3,8 @@ import { Prisma } from '@prisma/client';
 export type WorkDetail = Prisma.WorkGetPayload<{
   include: {
     localImages: true;
-    likes: true;
     favs: true;
-    readOrWatcheds: true;
+    ratings: true;
   };
 }>;
 
@@ -18,9 +17,8 @@ export type WorkWithImages = Prisma.WorkGetPayload<{
 export type WorkMosaicItem = Prisma.WorkGetPayload<{
   include: {
     localImages: true;
-    likes: true;
     favs: true;
-    readOrWatcheds: true;
+    ratings: true;
   };
 }>;
 

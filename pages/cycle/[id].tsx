@@ -12,7 +12,7 @@ import {
   find,
   findParticipant,
   isFavoritedByUser,
-  isLikedByUser,
+  // isLikedByUser,
 } from '../../src/facades/cycle';
 
 interface Props {
@@ -69,7 +69,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req, res 
 
   const mySocialInfo: MySocialInfo = {
     favoritedByMe: undefined,
-    likedByMe: undefined,
+    // likedByMe: undefined,
   };
   let myParticipant = null;
 
@@ -91,7 +91,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req, res 
   if (session != null) {
     myParticipant = await findParticipant(session.user, cycle);
     mySocialInfo.favoritedByMe = !!(await isFavoritedByUser(cycle, session.user));
-    mySocialInfo.likedByMe = !!(await isLikedByUser(cycle, session.user));
+    // mySocialInfo.likedByMe = !!(await isLikedByUser(cycle, session.user));
   }
 
   return {

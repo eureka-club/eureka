@@ -98,13 +98,13 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
   const session = (await getSession({ req })) as unknown as Session;
   const mySocialInfo: MySocialInfo = {
     favoritedByMe: undefined,
-    likedByMe: undefined,
+    // likedByMe: undefined,
   };
   let myParticipant = null;
   if (session != null) {
     myParticipant = await findParticipant(session.user, cycle);
     mySocialInfo.favoritedByMe = !!(await isFavoritedByUser(postResults[0], session.user));
-    mySocialInfo.likedByMe = !!(await isLikedByUser(postResults[0], session.user));
+    // mySocialInfo.likedByMe = !!(await isLikedByUser(postResults[0], session.user));
   }
 
   return {

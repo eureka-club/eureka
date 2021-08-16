@@ -41,5 +41,8 @@ export type UserDetail = Prisma.UserGetPayload<{
     readOrWatchedWorks: true;
     following: UserFoolow;
     followedBy: UserFoolow;
+    ratingWorks: true;
+    ratingCycles: true;
+    ratingPosts: true;
   };
 }>;

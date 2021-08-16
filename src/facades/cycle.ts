@@ -1,4 +1,4 @@
-import { Cycle, CycleComplementaryMaterial, LocalImage, Prisma, User } from '@prisma/client';
+import { Cycle, CycleComplementaryMaterial, LocalImage, Prisma, User, RatingOnCycle } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
 import { CreateCycleServerFields, CreateCycleServerPayload, CycleDetail } from '../types/cycle';
@@ -12,14 +12,13 @@ export const find = async (id: number): Promise<CycleDetail | null> => {
       localImages: true,
       complementaryMaterials: true,
       participants: true,
-      likes: true,
+      ratings: { include: { cycle: true } },
       favs: true,
       works: {
         include: {
           localImages: true,
-          likes: true,
           favs: true,
-          readOrWatcheds: true,
+          ratings: { include: { work: true } },
         },
       },
     },
@@ -33,7 +32,7 @@ export const findAll = async (): Promise<
 > => {
   return prisma.cycle.findMany({
     orderBy: { createdAt: 'desc' },
-    include: { localImages: true },
+    include: { localImages: true, ratings: true },
   });
 };
 
@@ -82,13 +81,43 @@ export const search = async (query: { [key: string]: string | string[] }): Promi
   if (typeof q === 'string') {
     return prisma.cycle.findMany({
       where: { title: { contains: q } },
-      ...(typeof include === 'string' && { include: JSON.parse(include) }),
+      // ...(typeof include === 'string' && { include: JSON.parse(include) }),
+      include: {
+        creator: true,
+        localImages: true,
+        complementaryMaterials: true,
+        participants: true,
+        ratings: { include: { cycle: true } },
+        favs: true,
+        works: {
+          include: {
+            localImages: true,
+            favs: true,
+            ratings: { include: { work: true } },
+          },
+        },
+      },
     });
   }
 
   return prisma.cycle.findMany({
     ...(typeof where === 'string' && { where: JSON.parse(where) }),
-    ...(typeof include === 'string' && { include: JSON.parse(include) }),
+    // ...(typeof include === 'string' && { include: JSON.parse(include) }),
+    include: {
+      creator: true,
+      localImages: true,
+      complementaryMaterials: true,
+      participants: true,
+      ratings: { include: { cycle: true } },
+      favs: true,
+      works: {
+        include: {
+          localImages: true,
+          favs: true,
+          ratings: { include: { work: true } },
+        },
+      },
+    },
   });
 };
 
@@ -204,13 +233,123 @@ export const removeParticipant = async (cycle: Cycle, user: User): Promise<Cycle
 export const saveSocialInteraction = async (
   cycle: Cycle,
   user: User,
-  socialInteraction: 'fav' | 'like',
+  socialInteraction: 'fav' | 'like' | 'rating',
   create: boolean,
-): Promise<Cycle> => {
-  return prisma.cycle.update({
-    where: { id: cycle.id },
-    data: { [`${socialInteraction}s`]: { [create ? 'connect' : 'disconnect']: { id: user.id } } },
+  qty?: number,
+): Promise<Cycle | null> => {
+  if (socialInteraction !== 'rating') {
+    return prisma.cycle.update({
+      where: { id: cycle.id },
+      data: { [`${socialInteraction}s`]: { [create ? 'connect' : 'disconnect']: { id: user.id } } },
+    });
+  }
+  const rating: RatingOnCycle | null = await prisma.ratingOnCycle.findFirst({
+    where: { userId: user.id, cycleId: cycle.id },
   });
+  if (create) {
+    if (rating) {
+      const q1 = prisma.cycle.update({
+        where: { id: cycle.id },
+        data: {
+          ratings: {
+            disconnect: {
+              ratingOnCycleId: rating.ratingOnCycleId,
+            },
+          },
+        },
+      });
+
+      const q2 = prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          ratingCycles: {
+            disconnect: {
+              ratingOnCycleId: rating.ratingOnCycleId,
+            },
+          },
+        },
+      });
+
+      const q3 = prisma.ratingOnCycle.delete({
+        where: {
+          ratingOnCycleId: rating.ratingOnCycleId,
+        },
+      });
+
+      await prisma.$transaction([q1, q2, q3]);
+
+      return prisma.cycle.update({
+        where: { id: cycle.id },
+        data: {
+          ratings: {
+            connectOrCreate: {
+              where: {
+                ratingOnCycleId: -1, // faild always, so a create will be executed :-)
+              },
+              create: {
+                userId: user.id,
+                qty,
+              },
+            },
+          },
+        },
+      });
+    }
+
+    return prisma.cycle.update({
+      where: { id: cycle.id },
+      data: {
+        ratings: {
+          connectOrCreate: {
+            where: {
+              ratingOnCycleId: -1, // faild always, so a create will be executed :-)
+            },
+            create: {
+              userId: user.id,
+              qty,
+            },
+          },
+        },
+      },
+    });
+  }
+  if (rating) {
+    const q1 = prisma.cycle.update({
+      where: { id: cycle.id },
+      data: {
+        ratings: {
+          disconnect: {
+            ratingOnCycleId: rating.ratingOnCycleId,
+          },
+        },
+      },
+    });
+
+    const q2 = prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        ratingCycles: {
+          disconnect: {
+            ratingOnCycleId: rating.ratingOnCycleId,
+          },
+        },
+      },
+    });
+
+    const q3 = prisma.ratingOnCycle.delete({
+      where: {
+        ratingOnCycleId: rating.ratingOnCycleId,
+      },
+    });
+
+    const res = await prisma.$transaction([q1, q2, q3]);
+    return res[0];
+  }
+  return null;
 };
 
 export const remove = async (cycle: Cycle): Promise<Cycle> => {

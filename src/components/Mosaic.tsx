@@ -19,7 +19,7 @@ interface Props {
 const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefined, showButtonLabels: boolean) => {
   if (isCycleMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
-    return <MosaicItemCycle key={`cycle-${item.id}`} cycle={item} />;
+    return <MosaicItemCycle key={`cycle-${item.id}`} cycle={item} detailed />;
   }
   if (isPostMosaicItem(item)) {
     return <MosaicItemPost key={`post-${item.id}`} post={item} postParent={postsParent} />;

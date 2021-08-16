@@ -33,13 +33,17 @@ interface Props {
   showShare?: boolean;
   detailed?: boolean;
   cacheKey?: string[];
+  showSocialInteraction?: boolean;
+  showTrash?: boolean;
 }
 const MosaicItem: FunctionComponent<Props> = ({
   cycle,
   showButtonLabels = false,
   showShare,
   detailed = false,
-  cacheKey,
+  showSocialInteraction = true,
+  cacheKey = undefined,
+  showTrash = false,
 }) => {
   const { id, title, localImages, startDate, endDate } = cycle;
   const { t } = useTranslation('common');
@@ -49,10 +53,14 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [session] = useSession() as [Session | null | undefined, boolean];
   const { data: user } = useUsers((session && (session as unknown as Session).user.id)?.toString() || '');
   const [isCurrentUserJoinedToCycle, setIsCurrentUserJoinedToCycle] = useState<boolean>(true);
+  const [participants, setParticipants] = useState<number>(0);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const queryClient = useQueryClient();
 
   useEffect(() => {
+    if (cycle) {
+      setParticipants(cycle.participants.length);
+    }
     if (user) {
       if (!user.joinedCycles.length) setIsCurrentUserJoinedToCycle(false);
       else {
@@ -60,7 +68,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         setIsCurrentUserJoinedToCycle(icujtc);
       }
     }
-  }, [user, cycle.id]);
+  }, [user, cycle]);
 
   const openSignInModal = () => {
     setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
@@ -75,15 +83,17 @@ const MosaicItem: FunctionComponent<Props> = ({
     },
     {
       onMutate: () => {
-        if (user) {
-          // debugger;
-          user.joinedCycles.push(cycle);
-          queryClient.setQueryData(['USERS', user.id.toString()], () => user);
-          setIsCurrentUserJoinedToCycle(true);
-        }
+        //   if (user) {
+        //     // debugger;
+        //     user.joinedCycles.push(cycle);
+        //     queryClient.setQueryData(['USERS', user.id.toString()], () => user);
+        setIsCurrentUserJoinedToCycle(true);
+        setParticipants(cycle.participants.length + 1);
+        //   }
       },
       onSuccess: () => {
         queryClient.invalidateQueries(['USERS', user.id.toString()]);
+        queryClient.invalidateQueries(cacheKey);
       },
     },
   );
@@ -97,17 +107,19 @@ const MosaicItem: FunctionComponent<Props> = ({
     },
     {
       onMutate: () => {
-        if (user) {
-          const idx = user.joinedCycles.findIndex((c: Cycle) => c.id === cycle.id);
-          if (idx > -1) {
-            user.joinedCycles.splice(idx, 1);
-            queryClient.setQueryData(['USERS', user.id.toString()], () => user);
-            setIsCurrentUserJoinedToCycle(false);
-          }
-        }
+        // if (user) {
+        //   const idx = user.joinedCycles.findIndex((c: Cycle) => c.id === cycle.id);
+        //   if (idx > -1) {
+        //     user.joinedCycles.splice(idx, 1);
+        //     queryClient.setQueryData(['USERS', user.id.toString()], () => user);
+        setIsCurrentUserJoinedToCycle(false);
+        setParticipants(cycle.participants.length - 1);
+        //   }
+        // }
       },
       onSuccess: () => {
         queryClient.invalidateQueries(['USERS', user.id.toString()]);
+        queryClient.invalidateQueries(cacheKey);
       },
     },
   );
@@ -155,13 +167,20 @@ const MosaicItem: FunctionComponent<Props> = ({
             )}
           </div>
 
-          <div className={styles.participantsInfo}>{`${cycle.participants.length} ${t('participants')}`}</div>
+          <div className={styles.participantsInfo}>{`${participants} ${t('participants')}`}</div>
         </div>
       )}
-      {session && (
+      {showSocialInteraction && (
         <Card.Footer className={styles.footer}>
           {cycle && (
-            <SocialInteraction showButtonLabels={showButtonLabels} showCounts showShare={showShare} entity={cycle} />
+            <SocialInteraction
+              cacheKey={cacheKey}
+              showButtonLabels={showButtonLabels}
+              showCounts
+              showShare={showShare}
+              entity={cycle}
+              showTrash={showTrash}
+            />
           )}
         </Card.Footer>
       )}
