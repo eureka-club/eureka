@@ -82,7 +82,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req, res 
       toHomePage();
     } else {
       const participantIdx = cycle.participants.findIndex((i) => i.id === session.user.id);
-      if ((cycle.creatorId !== session.user.id && participantIdx === -1) || !session.user.roles.includes('admin')) {
+      if (cycle.creatorId !== session.user.id && participantIdx === -1 && !session.user.roles.includes('admin')) {
         toHomePage();
       }
     }
