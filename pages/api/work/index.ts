@@ -58,21 +58,21 @@ export default getApiHandler()
           where: {
             OR: [{ title: { contains: q } }, { contentText: { contains: q } }, { author: { contains: q } }],
           },
-          include: { localImages: true, likes: true, favs: true, readOrWatcheds: true },
+          include: { localImages: true, ratings: true, favs: true, readOrWatcheds: true },
         });
       } else if (where) {
         data = await prisma.work.findMany({
           ...(typeof where === 'string' && { where: JSON.parse(where) }),
-          include: { localImages: true, likes: true, favs: true, readOrWatcheds: true },
+          include: { localImages: true, ratings: true, favs: true, readOrWatcheds: true },
         });
       } else if (id) {
         data = await prisma.work.findMany({
           where: { id: parseInt(id as string, 10) },
-          include: { localImages: true, likes: true, favs: true, readOrWatcheds: true },
+          include: { localImages: true, ratings: true, favs: true, readOrWatcheds: true },
         });
       } else {
         data = await prisma.work.findMany({
-          include: { localImages: true, likes: true, favs: true, readOrWatcheds: true },
+          include: { localImages: true, ratings: true, favs: true, readOrWatcheds: true },
         });
       }
 

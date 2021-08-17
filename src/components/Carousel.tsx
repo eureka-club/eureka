@@ -206,13 +206,13 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
                 </h5>
               </Col>
               <Col className={styles.right}>
-                {data.hasMore && (
-                  <Link href="/search">
-                    <Button className={styles.seeAllButton} onClick={onItemsFound}>
-                      {t('common:See all')}
-                    </Button>
-                  </Link>
-                )}
+                {/* {data.hasMore && ( */}
+                <Link href="/search">
+                  <Button className={styles.seeAllButton} onClick={onItemsFound}>
+                    {t('common:See all')}
+                  </Button>
+                </Link>
+                {/* )} */}
               </Col>
             </Row>
             <div>

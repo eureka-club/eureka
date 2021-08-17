@@ -18,6 +18,7 @@ type Filter = {
   q?: string;
   where?: string;
   show?: boolean;
+  cacheKey?: string[];
   // searchMosaicData?: ((CycleMosaicItem & { type: string }) | WorkMosaicItem)[];
 };
 const o: Filter = {
@@ -28,6 +29,7 @@ const o: Filter = {
   where: '',
   countryQuery: [],
   show: true,
+  cacheKey: undefined,
 };
 
 export default atom(o);

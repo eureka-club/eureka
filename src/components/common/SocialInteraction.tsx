@@ -224,7 +224,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
         });
         return res.json();
       }
-      calculateQty();
+      // calculateQty();
       openSignInModal();
       return null;
     },

@@ -129,9 +129,6 @@ const Mediatheque: NextPage = () => {
       if (user.ratingWorks && user.ratingWorks.length) {
         RW = user.ratingWorks.map((w: RatingOnWork & { work: WorkMosaicItem }) => w.work!);
       }
-      if (user.ratingCycles && user.ratingCycles.length) {
-        RW = [...RW, ...user.ratingCycles.map((c: RatingOnCycle & { cycle: CycleMosaicItem }) => c.cycle!)];
-      }
       setCycles(() => [...C, ...JC]);
       setPosts(() => [...P]);
       setSavedForLater(() => [...FC, ...FP, ...FW]);

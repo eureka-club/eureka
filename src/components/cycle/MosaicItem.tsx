@@ -87,8 +87,8 @@ const MosaicItem: FunctionComponent<Props> = ({
         //     // debugger;
         //     user.joinedCycles.push(cycle);
         //     queryClient.setQueryData(['USERS', user.id.toString()], () => user);
-        setIsCurrentUserJoinedToCycle(true);
-        setParticipants(cycle.participants.length + 1);
+        // setIsCurrentUserJoinedToCycle(true);
+        // setParticipants(cycle.participants.length + 1);
         //   }
       },
       onSuccess: () => {
@@ -112,8 +112,8 @@ const MosaicItem: FunctionComponent<Props> = ({
         //   if (idx > -1) {
         //     user.joinedCycles.splice(idx, 1);
         //     queryClient.setQueryData(['USERS', user.id.toString()], () => user);
-        setIsCurrentUserJoinedToCycle(false);
-        setParticipants(cycle.participants.length - 1);
+        // setIsCurrentUserJoinedToCycle(false);
+        // setParticipants(cycle.participants.length - 1);
         //   }
         // }
       },

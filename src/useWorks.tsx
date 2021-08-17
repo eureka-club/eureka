@@ -27,11 +27,11 @@ const getRecords = async (where = '', id = '') => {
 
 const useWorks = (id?: string) => {
   const [globalSearchEngineState] = useAtom(globalSearchEngineAtom);
-  const { where } = globalSearchEngineState;
+  const { where, cacheKey } = globalSearchEngineState;
   let key = encodeURIComponent(JSON.stringify({ where }));
   if (id) key = id;
 
-  return useQuery(['WORKS', key], () => getRecords(where, id), {
+  return useQuery(cacheKey || ['WORKS', key], () => getRecords(where, id), {
     staleTime: 1000 * 60 * 60,
   });
 };
