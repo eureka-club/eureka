@@ -11,7 +11,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/client';
 import { useAtom } from 'jotai';
 import Rating from 'react-rating';
-import { Container, OverlayTrigger, Popover, Button, Badge } from 'react-bootstrap';
+import { Container, Row, Col, OverlayTrigger, Popover, Button, Spinner } from 'react-bootstrap';
 
 import {
   FacebookIcon,
@@ -200,7 +200,11 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
   const shareText = `${shareTextDynamicPart} "${title()}" ${t('complementShare')}`;
 
-  const { mutate: execSocialInteraction, isSuccess: isSocialInteractionSuccess } = useMutation(
+  const {
+    mutate: execSocialInteraction,
+    isSuccess: isSocialInteractionSuccess,
+    isLoading: loadingSocialInteraction,
+  } = useMutation(
     async ({ socialInteraction, doCreate, ratingQty }: SocialInteractionClientPayload) => {
       const entityEndpoint = (() => {
         if (parent != null) {
@@ -408,22 +412,26 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const getFullSymbol = () => {
     if (session) {
       if (user && mySocialInfo) {
-        if (mySocialInfo.ratingByMe) return <GiBrain style={{ color: 'var(--eureka-green)' }} />;
-        return <GiBrain style={{ color: 'var(--text-color-secondary)' }} />;
+        if (mySocialInfo.ratingByMe) return <GiBrain style={{ color: 'var(--cyan)' }} />;
       }
     }
-    return <GiBrain style={{ color: 'var(--text-color-secondary)' }} />;
+    return <GiBrain style={{ color: 'var(--teal)' }} />;
   };
 
-  const getQtyBadge = () => {
-    if (!session || (user && mySocialInfo && !mySocialInfo.ratingByMe))
-      return <Badge variant="secondary">{`${qty}`}</Badge>;
-    return <Badge variant="info">{`${qty}`}</Badge>;
+  const getRatingsCount = () => {
+    let count = 0;
+    if (isWork(entity)) count = (entity as WorkDetail).ratings.length;
+    else if (isCycle(entity)) count = (entity as CycleDetail).ratings.length;
+
+    // if (!session || (user && mySocialInfo && !mySocialInfo.ratingByMe))
+    return <span className={styles.ratingsCount}>{`(${count})`}</span>;
+    // return <Badge variant="secondary">{`${entity.ratings.length}`}</Badge>;
+    // return <Badge variant="info">{`${entity.ratings.length}`}</Badge>;
   };
 
   const getRatingLabelInfo = () => {
     if (!session || (user && mySocialInfo && !mySocialInfo.ratingByMe)) {
-      return <div className={styles.ratingLabelInfo}>{t('Rate it')}</div>;
+      return <span className={styles.ratingLabelInfo}>{t('Rate it')}</span>;
     }
     return undefined;
   };
@@ -431,32 +439,41 @@ const SocialInteraction: FunctionComponent<Props> = ({
   return (
     // (session && user && (
     <Container className={styles.container}>
-      {getRatingLabelInfo()}
-      <div className={styles.buttonsContainer}>
-        {showTrash && (
-          <button type="button" title="Clear rating" className={styles.clearRating} onClick={clearRating}>
-            <FiTrash2 />
-          </button>
-        )}
-        <Rating
-          initialRating={qty}
-          onChange={handlerChangeRating}
-          className={styles.rating}
-          stop={5}
-          emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
-          fullSymbol={getFullSymbol()}
-        />{' '}
-        {getQtyBadge()}
-        <button className={styles.socialBtn} title={t('Save for later')} onClick={handleFavClick} type="button">
-          {optimistFav ? <BsBookmarkFill className={styles.active} /> : <BsBookmark />}
-          <br />
-          {showButtonLabels && (
-            <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>
-              {t('Save for later')}
-            </span>
+      <Row>
+        <Col xs={10}>
+          {getRatingLabelInfo()}
+          {` `}
+          {showTrash && (
+            <button type="button" title="Clear rating" className={styles.clearRating} onClick={clearRating}>
+              <FiTrash2 />
+            </button>
           )}
-        </button>
-      </div>
+          <Rating
+            initialRating={qty}
+            onChange={handlerChangeRating}
+            className={styles.rating}
+            stop={5}
+            emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
+            fullSymbol={getFullSymbol()}
+          />{' '}
+          {!loadingSocialInteraction && getRatingsCount()}
+          {loadingSocialInteraction && (
+            <Spinner className={styles.ratingSpinner} size="sm" animation="grow" variant="secondary" />
+          )}
+        </Col>
+        <Col xs={2}>
+          <button className={styles.socialBtn} title={t('Save for later')} onClick={handleFavClick} type="button">
+            {optimistFav ? <BsBookmarkFill className={styles.active} /> : <BsBookmark />}
+            <br />
+            {showButtonLabels && (
+              <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>
+                {t('Save for later')}
+              </span>
+            )}
+          </button>
+        </Col>
+      </Row>
+
       {/* {isWork(entity) && (
           <button
             className={styles.socialBtn}

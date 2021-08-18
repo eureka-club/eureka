@@ -75,10 +75,15 @@
     padding: 0;
     background: none;
 }
-.buttonsContainer{
-  
-}
 .ratingLabelInfo{
   font-size: .8em;
   color: var(--eureka-green);  
+}
+.ratingsCount{
+  color: var(--eureka-grey);
+    font-size: .8em;
+    vertical-align: text-top;
+}
+.ratingSpinner{
+  vertical-align: inherit;
 }
