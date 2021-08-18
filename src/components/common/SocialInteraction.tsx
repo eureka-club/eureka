@@ -11,7 +11,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/client';
 import { useAtom } from 'jotai';
 import Rating from 'react-rating';
-import { Container, OverlayTrigger, Popover, Button } from 'react-bootstrap';
+import { Container, OverlayTrigger, Popover, Button, Badge } from 'react-bootstrap';
 
 import {
   FacebookIcon,
@@ -21,7 +21,7 @@ import {
   WhatsappShareButton,
   WhatsappIcon,
 } from 'react-share';
-import { Cycle, User, Work, Post, RatingOnCycle, RatingOnWork } from '@prisma/client';
+import { Cycle, User, Work, Post } from '@prisma/client';
 
 import { useUsers } from '../../useUsers';
 import globalModalsAtom from '../../atoms/globalModals';
@@ -415,6 +415,12 @@ const SocialInteraction: FunctionComponent<Props> = ({
     return <GiBrain style={{ color: 'var(--text-color-secondary)' }} />;
   };
 
+  const getQtyBadge = () => {
+    if (!session || (user && mySocialInfo && !mySocialInfo.ratingByMe))
+      return <Badge variant="secondary">{`${qty}`}</Badge>;
+    return <Badge variant="info">{`${qty}`}</Badge>;
+  };
+
   const getRatingLabelInfo = () => {
     if (!session || (user && mySocialInfo && !mySocialInfo.ratingByMe)) {
       return <div className={styles.ratingLabelInfo}>{t('Rate it')}</div>;
@@ -432,7 +438,6 @@ const SocialInteraction: FunctionComponent<Props> = ({
             <FiTrash2 />
           </button>
         )}
-
         <Rating
           initialRating={qty}
           onChange={handlerChangeRating}
@@ -440,7 +445,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
           stop={5}
           emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
           fullSymbol={getFullSymbol()}
-        />
+        />{' '}
+        {getQtyBadge()}
         <button className={styles.socialBtn} title={t('Save for later')} onClick={handleFavClick} type="button">
           {optimistFav ? <BsBookmarkFill className={styles.active} /> : <BsBookmark />}
           <br />
