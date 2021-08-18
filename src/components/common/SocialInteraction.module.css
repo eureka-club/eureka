@@ -1,5 +1,5 @@
 .container {
-  
+  padding-left: 0.25em;
 }
 
 .socialBtn {
@@ -23,7 +23,7 @@
 }
 .socialBtn svg {
   margin-right: 0.2rem;
-  color: gray;
+  color: var(--eureka-green);
   font-size: 1.5em;
 }
 .socialBtn .active{
@@ -54,12 +54,10 @@
   border-color: transparent;
 }
 
-
 .rating{
   font-size:1em;
 }
 .rating span{
-  top: -.1em;
 }
 .select svg{
   color: var(--yellow);
@@ -78,11 +76,12 @@
 .ratingLabelInfo{
   font-size: .8em;
   color: var(--eureka-green);  
+  vertical-align: text-center;
 }
 .ratingsCount{
   color: var(--eureka-grey);
     font-size: .8em;
-    vertical-align: text-top;
+    vertical-align: text-center;
 }
 .ratingSpinner{
   vertical-align: inherit;
