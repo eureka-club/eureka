@@ -11,6 +11,8 @@ import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/client';
 import { useAtom } from 'jotai';
 import Rating from 'react-rating';
+import { Container, OverlayTrigger, Popover, Button } from 'react-bootstrap';
+
 import {
   FacebookIcon,
   FacebookShareButton,
@@ -20,7 +22,7 @@ import {
   WhatsappIcon,
 } from 'react-share';
 import { Cycle, User, Work, Post, RatingOnCycle, RatingOnWork } from '@prisma/client';
-import { OverlayTrigger, Popover, Button } from 'react-bootstrap';
+
 import { useUsers } from '../../useUsers';
 import globalModalsAtom from '../../atoms/globalModals';
 // import Notification from '../ui/Notification';
@@ -413,22 +415,42 @@ const SocialInteraction: FunctionComponent<Props> = ({
     return <GiBrain style={{ color: 'var(--text-color-secondary)' }} />;
   };
 
+  const getRatingLabelInfo = () => {
+    if (!session || (user && mySocialInfo && !mySocialInfo.ratingByMe)) {
+      return <div className={styles.ratingLabelInfo}>{t('Rate it')}</div>;
+    }
+    return undefined;
+  };
+
   return (
     // (session && user && (
-    <div className={styles.container}>
-      {showTrash && (
-        <button type="button" title="Clear rating" className={styles.clearRating} onClick={clearRating}>
-          <FiTrash2 />
+    <Container className={styles.container}>
+      {getRatingLabelInfo()}
+      <div className={styles.buttonsContainer}>
+        {showTrash && (
+          <button type="button" title="Clear rating" className={styles.clearRating} onClick={clearRating}>
+            <FiTrash2 />
+          </button>
+        )}
+
+        <Rating
+          initialRating={qty}
+          onChange={handlerChangeRating}
+          className={styles.rating}
+          stop={5}
+          emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
+          fullSymbol={getFullSymbol()}
+        />
+        <button className={styles.socialBtn} title={t('Save for later')} onClick={handleFavClick} type="button">
+          {optimistFav ? <BsBookmarkFill className={styles.active} /> : <BsBookmark />}
+          <br />
+          {showButtonLabels && (
+            <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>
+              {t('Save for later')}
+            </span>
+          )}
         </button>
-      )}
-      <Rating
-        initialRating={qty}
-        onChange={handlerChangeRating}
-        className={styles.rating}
-        stop={5}
-        emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
-        fullSymbol={getFullSymbol()}
-      />
+      </div>
       {/* {isWork(entity) && (
           <button
             className={styles.socialBtn}
@@ -455,15 +477,6 @@ const SocialInteraction: FunctionComponent<Props> = ({
           )}
         </button>
             */}
-      <button className={styles.socialBtn} title={t('Save for later')} onClick={handleFavClick} type="button">
-        {optimistFav ? <BsBookmarkFill className={styles.active} /> : <BsBookmark />}
-        <br />
-        {showButtonLabels && (
-          <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>
-            {t('Save for later')}
-          </span>
-        )}
-      </button>
 
       {showShare && (
         <OverlayTrigger trigger="click" placement="right" overlay={popoverShares}>
@@ -474,7 +487,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
           </Button>
         </OverlayTrigger>
       )}
-    </div>
+    </Container>
     // )) ||
     // null
   );
