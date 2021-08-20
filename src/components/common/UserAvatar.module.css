@@ -1,0 +1,18 @@
+.cycleCreator{
+    
+    margin-bottom: 1rem;
+  }
+  .sm img{
+    width: 3em;
+    height: 3em;
+  }
+  .xs img{
+    width: 2em;
+    height: 2em;
+  }
+  
+.cycleCreatorAvatar {
+    border-radius: 50%;
+    display: inline-block;
+    
+  }

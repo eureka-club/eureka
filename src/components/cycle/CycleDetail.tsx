@@ -37,6 +37,7 @@ import UnclampText from '../UnclampText';
 import detailPagesAtom from '../../atoms/detailPages';
 import styles from './CycleDetail.module.css';
 import CycleDetailHeader from './CycleDetailHeader';
+import CycleDetailDiscussion from './CycleDetailDiscussion';
 
 interface Props {
   cycle: CycleDetail;
@@ -200,20 +201,38 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 onSelect={handleSubsectionChange}
                 transition={false}
               >
+                {/* language=CSS */}
+                <style jsx global>
+                  {`
+                    .nav-tabs .nav-item.show .nav-link,
+                    .nav-tabs .nav-link.active {
+                      color: #495057;
+                      background-color: #fff;
+                      border: none !important;
+                      border-bottom: solid 6px var(--eureka-green) !important;
+                    }
+                    .nav-tabs {
+                      border: none !important;
+                    }
+                  `}
+                </style>
                 <Row className="mb-4">
                   <Col>
                     <Nav variant="tabs" fill>
-                      <NavItem>
+                      <NavItem className={styles.tabBtn}>
                         <NavLink eventKey="cycle-content">
                           {t('tabHeaderCycleContent')} ({worksCount})
                         </NavLink>
                       </NavItem>
-                      <NavItem>
+                      <NavItem className={styles.tabBtn}>
+                        <NavLink eventKey="cycle-discussion">{t('Discussion')}</NavLink>
+                      </NavItem>
+                      <NavItem className={styles.tabBtn}>
                         <NavLink eventKey="posts">
                           {t('tabHeaderPosts')} ({postsCount})
                         </NavLink>
                       </NavItem>
-                      <NavItem>
+                      <NavItem className={styles.tabBtn}>
                         <NavLink eventKey="forum">
                           {t('tabHeaderForum')} (
                           <HyvorTalk.CommentCount websiteId={Number(HYVOR_WEBSITE_ID!)} id={hyvorId} />)
@@ -258,6 +277,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                             <Col />
                           </Row>
                         )}
+                      </TabPane>
+                      <TabPane eventKey="cycle-discussion">
+                        <CycleDetailDiscussion cycle={cycle} />
                       </TabPane>
                       <TabPane eventKey="posts">
                         <h2 className="mb-3">{t('postsCountHeader', { count: postsCount })}</h2>

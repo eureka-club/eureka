@@ -19,6 +19,8 @@ import TabPane from 'react-bootstrap/TabPane';
 import Link from 'next/link';
 import { useMutation } from 'react-query';
 import { Work } from '@prisma/client';
+import Rating from 'react-rating';
+import { GiBrain } from 'react-icons/gi';
 import globalModalsAtom from '../../atoms/globalModals';
 
 import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
@@ -39,6 +41,7 @@ import detailPagesAtom from '../../atoms/detailPages';
 import styles from './CycleDetailHeader.module.css';
 import MosaicItem from './MosaicItem';
 import TagsInput from '../forms/controls/TagsInput';
+import UserAvatar from '../common/UserAvatar';
 import CarouselStatic from '../CarouselStatic';
 import globalSearchEngineAtom from '../../atoms/searchEngine';
 
@@ -138,17 +141,58 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
     setGlobalSearchEngineState({
       ...globalSearchEngineState,
       itemsFound: data as WorkMosaicItem[],
-      q,
+      q: `${t('Works on Cycle')} ${cycle.id}`,
       show: showFilterEngine,
     });
 
     router.push('/search');
   };
+
+  const getFullSymbol = () => {
+    if (cycle && session) {
+      const s = session as unknown as Session;
+      const ratingByMe = cycle.ratings.findIndex((r) => r.userId === s.user.id);
+      if (ratingByMe) return <GiBrain style={{ color: 'var(--eureka-blue)' }} />;
+    }
+
+    return <GiBrain style={{ color: 'var(--eureka-green)' }} />;
+  };
+
+  const getRatingQty = () => {
+    if (cycle) {
+      return cycle.ratings.length;
+    }
+    return 0;
+  };
+
+  const getRatingAvg = () => {
+    if (cycle) {
+      let res = 0;
+      cycle.ratings.forEach((r) => {
+        res += r.qty;
+      });
+      res /= cycle.ratings.length;
+      return res;
+    }
+    return 0;
+  };
+
   return (
     <Row className="mb-5">
       <Col md={9}>
         <h2>{cycle.title}</h2>
         {cycle.topics && <TagsInput tags={cycle.topics} readOnly />}
+        <Rating
+          initialRating={getRatingAvg()}
+          // onChange={handlerChangeRating}
+          className={styles.rating}
+          stop={5}
+          emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
+          fullSymbol={getFullSymbol()}
+        />{' '}
+        {getRatingAvg()}
+        {' - '}
+        {getRatingQty()} {t('ratings')}
         <h3>Content calendar</h3>
         <CycleSummary cycle={cycle} />
         <div className={styles.customCarouselStaticContainer}>
@@ -164,18 +208,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         </div>
       </Col>
       <Col md={3}>
-        <div className={styles.cycleCreator}>
-          <Link href={`/mediatheque/${cycle.creator.id}`}>
-            <a>
-              <img
-                src={cycle.creator.image || '/img/default-avatar.png'}
-                alt="creator avatar"
-                className={classNames(styles.cycleCreatorAvatar, 'mr-2')}
-              />
-              {cycle.creator.name}
-            </a>
-          </Link>
-        </div>
+        <UserAvatar user={cycle.creator} />
         <MosaicItem cycle={cycle} detailed showTrash />
       </Col>
     </Row>
