@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+// import classNames from 'classnames';
 import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent } from 'react';
@@ -15,14 +15,14 @@ import { BsBoxArrowUpRight } from 'react-icons/bs';
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { MySocialInfo, Session } from '../../types';
-import { PostDetail } from '../../types/post';
-import { WorkDetail } from '../../types/work';
-import LocalImageComponent from '../LocalImage';
+import { PostMosaicItem } from '../../types/post';
+import { WorkMosaicItem } from '../../types/work';
+// import LocalImageComponent from '../LocalImage';
 import CombinedMosaic from './CombinedMosaic';
 import CyclesMosaic from './CyclesMosaic';
 import PostDetailComponent from '../post/PostDetail';
 import PostsMosaic from './PostsMosaic';
-import SocialInteraction from '../common/SocialInteraction';
+// import SocialInteraction from '../common/SocialInteraction';
 import UnclampText from '../UnclampText';
 import WorkSummary from './WorkSummary';
 import detailPagesAtom from '../../atoms/detailPages';
@@ -32,8 +32,8 @@ import TagsInput from '../forms/controls/TagsInput';
 import MosaicItem from './MosaicItem';
 
 interface Props {
-  work: WorkDetail;
-  post?: PostDetail;
+  work: WorkMosaicItem;
+  post?: PostMosaicItem;
   cyclesCount: number;
   postsCount: number;
   mySocialInfo: MySocialInfo;

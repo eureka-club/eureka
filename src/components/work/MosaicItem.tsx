@@ -7,7 +7,7 @@ import { Card /* Button */ } from 'react-bootstrap';
 // import { PostDetail } from '../../types/post';
 // import { useQuery } from 'react-query';
 import { useSession } from 'next-auth/client';
-import { /* WorkWithImages, */ WorkDetail } from '../../types/work';
+import { /* WorkWithImages, */ WorkMosaicItem } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import SocialInteraction from '../common/SocialInteraction';
@@ -15,7 +15,7 @@ import { Session } from '../../types';
 
 interface Props {
   // workWithImages: WorkWithImages;
-  work: WorkDetail;
+  work: WorkMosaicItem;
   showButtonLabels?: boolean;
   showShare?: boolean;
   showSocialInteraction?: boolean;

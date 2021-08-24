@@ -2,8 +2,8 @@ import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/client';
 
 import { MySocialInfo, Session } from '../../../../src/types';
-import { CycleDetail } from '../../../../src/types/cycle';
-import { PostDetail } from '../../../../src/types/post';
+import { CycleMosaicItem } from '../../../../src/types/cycle';
+import { PostMosaicItem } from '../../../../src/types/post';
 import SimpleLayout from '../../../../src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '../../../../src/components/cycle/CycleDetail';
 import {
@@ -14,11 +14,11 @@ import {
   findParticipant,
 } from '../../../../src/facades/cycle';
 import { isFavoritedByUser, isLikedByUser, search as searchPost } from '../../../../src/facades/post';
-import { WorkDetail } from '../../../../src/types/work';
+import { WorkMosaicItem } from '../../../../src/types/work';
 
 interface Props {
-  cycle: CycleDetail;
-  post: PostDetail;
+  cycle: CycleMosaicItem;
+  post: PostMosaicItem;
   isCurrentUserJoinedToCycle: boolean;
   participantsCount: number;
   postsCount: number;
@@ -30,9 +30,9 @@ const PostDetailInCyclePage: NextPage<Props> = ({
   cycle,
   post,
   isCurrentUserJoinedToCycle,
-  participantsCount,
-  postsCount,
-  worksCount,
+  // participantsCount,
+  // postsCount,
+  // worksCount,
   mySocialInfo,
 }) => {
   return (
@@ -40,11 +40,11 @@ const PostDetailInCyclePage: NextPage<Props> = ({
       <CycleDetailComponent
         cycle={cycle}
         post={post}
-        work={post.works[0] as WorkDetail}
+        work={post.works[0] as WorkMosaicItem}
         isCurrentUserJoinedToCycle={isCurrentUserJoinedToCycle}
-        participantsCount={participantsCount}
-        postsCount={postsCount}
-        worksCount={worksCount}
+        // participantsCount={participantsCount}
+        // postsCount={postsCount}
+        // worksCount={worksCount}
         mySocialInfo={mySocialInfo}
       />
     </SimpleLayout>
@@ -86,7 +86,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
       favs: true,
       likes: true,
     }),
-  })) as PostDetail[];
+  })) as PostMosaicItem[];
   if (postResults.length === 0) {
     return { notFound: true };
   }

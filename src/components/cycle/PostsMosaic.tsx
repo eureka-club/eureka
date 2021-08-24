@@ -3,14 +3,16 @@ import { FunctionComponent } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import { useQuery } from 'react-query';
 
+import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
 import Mosaic from '../Mosaic';
 
 interface Props {
-  cycle: Cycle;
+  cycle: CycleMosaicItem;
+  display?: 'horizontally' | 'vertically';
 }
 
-const PostsMosaic: FunctionComponent<Props> = ({ cycle }) => {
+const PostsMosaic: FunctionComponent<Props> = ({ cycle, display }) => {
   const { isLoading, isSuccess, data } = useQuery<PostMosaicItem[]>(
     ['posts.mosaic.cycle', cycle.id],
     async ({ queryKey: [, cycleId] }) => {
@@ -29,7 +31,9 @@ const PostsMosaic: FunctionComponent<Props> = ({ cycle }) => {
           <span className="sr-only">Loading...</span>
         </Spinner>
       )}
-      {isSuccess && data != null && <Mosaic stack={data} postsLinksTo={cycle} />}
+      {isSuccess && data != null && (
+        <Mosaic display={display} stack={cycle.posts as PostMosaicItem[]} postsLinksTo={cycle} />
+      )}
     </>
   );
 };

@@ -25,11 +25,12 @@ import {
 
 import globalSearchEngineAtom from '../atoms/searchEngine';
 import styles from './SearchEngine.module.css';
-import { CycleMosaicItem, CycleWithImages } from '../types/cycle';
+import { CycleMosaicItem } from '../types/cycle';
 // import { WorkMosaicItem } from '../types/work';
 // import { WorkMosaicItem } from '../types/work';
 // import { CycleMosaicItem } from '../types/cycle';
-// import { PostMosaicItem } from '../types/post';
+import { PostMosaicItem } from '../types/post';
+import { WorkMosaicItem } from '../types/work';
 
 // const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
 
@@ -51,10 +52,15 @@ const SearchEngine: FunctionComponent = () => {
 
     const responseWork = await (await fetch(`/api/work/?q=${query}`)).json();
     const responseCycle = await (await fetch(`/api/cycle/?q=${query}`)).json();
+    const responsePost = await (await fetch(`/api/post/?q=${query}`)).json();
 
     const items: SearchResult[] = [
       ...((responseWork && responseWork.data) || []),
-      ...((responseCycle && responseCycle.data) || []).map((i: CycleMosaicItem & { type: string }) => ({
+      ...((responseCycle && responseCycle.data) || []).map((i: CycleMosaicItem) => ({
+        ...i,
+        type: 'cycle',
+      })),
+      ...((responsePost && responsePost.data) || []).map((i: PostMosaicItem) => ({
         ...i,
         type: 'cycle',
       })),
@@ -65,7 +71,7 @@ const SearchEngine: FunctionComponent = () => {
     // setGlobalSearchEngineState({ ...globalSearchEngineState, q: '' });
   };
 
-  const handleSelectWorkOrCycle = (selected: SearchResult[]): void => {
+  const handleSelectItem = (selected: SearchResult[]): void => {
     const searchResult = selected[0];
     if (searchResult != null) {
       const map: { [index: string]: string } = {
@@ -74,8 +80,9 @@ const SearchEngine: FunctionComponent = () => {
         book: 'work',
         'fiction-book': 'work',
         cycle: 'cycle',
+        post: 'post',
       };
-      if ('type' in searchResult) router.push(`/${map[searchResult.type]}/${searchResult.id}`);
+      if ('type' in searchResult && searchResult.type) router.push(`/${map[searchResult.type]}/${searchResult.id}`);
     }
   };
   const onItemsFound = async () => {
@@ -107,8 +114,9 @@ const SearchEngine: FunctionComponent = () => {
   };
 
   const labelKeyFn = (res: SearchResult) => {
-    if ('title' in res) return `${res.title}`;
-    return `${res.name}`;
+    // if ('title' in res)
+    return `${res.title}`;
+    // return `${res.name}`;
   };
 
   return (
@@ -137,7 +145,7 @@ const SearchEngine: FunctionComponent = () => {
             minLength={5}
             onSearch={handleSearchWorkOrCycle}
             options={searchWorkOrCycleResults}
-            onChange={handleSelectWorkOrCycle}
+            onChange={handleSelectItem}
             ignoreDiacritics
             // renderMenuItemChildren={(searchResult) => {
             //   if (isCycleMosaicItem(searchResult)) {
@@ -156,10 +164,10 @@ const SearchEngine: FunctionComponent = () => {
                   <MenuItem key={`${item.id}`} option={item} position={index}>
                     {/* <Highlighter search={props.text}>{item}</Highlighter> */}
                     {(isCycleMosaicItem(results[index]) && (
-                      <CycleTypeaheadSearchItem cycle={results[index] as CycleWithImages} />
+                      <CycleTypeaheadSearchItem cycle={results[index] as CycleMosaicItem} />
                     )) ||
                       (isWorkMosaicItem(results[index]) && (
-                        <WorkTypeaheadSearchItem work={results[index] as Work & { localImages: LocalImage[] }} />
+                        <WorkTypeaheadSearchItem work={results[index] as WorkMosaicItem} />
                       ))}
                   </MenuItem>
                 ))}

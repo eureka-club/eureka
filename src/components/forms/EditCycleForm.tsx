@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 // import Trans from 'next-translate/Trans';
-import { ChangeEvent, FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
+import { FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -22,6 +22,7 @@ import { useMutation } from 'react-query';
 // import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 // import { BiTrash } from 'react-icons/bi';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
+import { Cycle } from '@prisma/client';
 import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import TagsInput from './controls/TagsInput';
 import i18nConfig from '../../../i18n';
@@ -34,7 +35,6 @@ import {
 import {
   // ComplementaryMaterial,
   EditCycleClientPayload,
-  CycleDetail,
 } from '../../types/cycle';
 // import { WorkWithImages } from '../../types/work';
 // import LocalImageComponent from '../LocalImage';
@@ -45,7 +45,7 @@ import styles from './CreateCycleForm.module.css';
 
 interface Props {
   className?: string;
-  cycle: CycleDetail;
+  cycle: Cycle;
 }
 
 // const COMPLEMENTARY_MATERIAL_MAX_SINGLE_FILE_SIZE = 1024 * 1024 * 10;
@@ -274,12 +274,12 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEditCycleReqError, isEditCycleReqSuccess, editedCycleData]);
 
-  const handlerchange = (ev: ChangeEvent<HTMLInputElement>) => {
-    if (cycle && ev.currentTarget.id in cycle) {
-      const c: CycleDetail & { [key: string]: unknown } = cycle;
-      c[ev.currentTarget.id] = ev.currentTarget.value;
-    }
-  };
+  // const handlerchange = (ev: ChangeEvent<HTMLInputElement>) => {
+  //   if (cycle && ev.currentTarget.id in cycle) {
+  //     const c: CycleMosaicItem = cycle;
+  //     c[ev.currentTarget.id] = ev.currentTarget.value;
+  //   }
+  // };
 
   const handleSearchCountry = async (query: string) => {
     setIsCountriesSearchLoading(true);
@@ -412,7 +412,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
             <Col /* md={{ span: 12 }} */>
               <FormGroup controlId="cycleTitle">
                 <FormLabel>*{t('newCycleTitleLabel')}</FormLabel>
-                <FormControl type="text" maxLength={80} required onChange={handlerchange} defaultValue={cycle.title} />
+                <FormControl type="text" maxLength={80} required defaultValue={cycle.title} />
               </FormGroup>
               <FormGroup controlId="languages">
                 <FormLabel>*{t('newCycleLanguageLabel')}</FormLabel>

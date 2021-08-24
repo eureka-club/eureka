@@ -1,8 +1,8 @@
 import { Cycle, Post, User, Work } from '@prisma/client';
 
-import { CycleMosaicItem, CycleWithImages } from './types/cycle';
-import { PostMosaicItem, PostWithImages } from './types/post';
-import { WorkMosaicItem, WorkWithImages } from './types/work';
+import { CycleMosaicItem } from './types/cycle';
+import { PostMosaicItem } from './types/post';
+import { WorkMosaicItem } from './types/work';
 import { UserMosaicItem } from './types/user';
 
 export interface FileUpload {
@@ -39,7 +39,7 @@ export interface MySocialInfo {
 
 export type BasicEntity = Cycle | Post | Work | User;
 export type MosaicItem = CycleMosaicItem | PostMosaicItem | WorkMosaicItem | UserMosaicItem;
-export type SearchResult = CycleWithImages | PostWithImages | WorkWithImages | UserMosaicItem;
+export type SearchResult = CycleMosaicItem | PostMosaicItem | WorkMosaicItem;
 
 export const isCycle = (obj: BasicEntity): obj is Cycle =>
   typeof (obj as Cycle).title === 'string' &&

@@ -1,7 +1,7 @@
 import { Cycle, Post, User, Work } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
-import { CreatePostServerFields, CreatePostServerPayload, PostWithImages, PostWithCyclesWorks } from '../types/post';
+import { CreatePostServerFields, CreatePostServerPayload, PostWithCyclesWorks, PostMosaicItem } from '../types/post';
 import prisma from '../lib/prisma';
 
 export const find = async (id: number): Promise<PostWithCyclesWorks | null> => {
@@ -16,10 +16,17 @@ export const find = async (id: number): Promise<PostWithCyclesWorks | null> => {
   });
 };
 
-export const findAll = async (): Promise<PostWithImages[]> => {
+export const findAll = async (): Promise<PostMosaicItem[]> => {
   return prisma.post.findMany({
     orderBy: { createdAt: 'desc' },
-    include: { localImages: true },
+    include: {
+      creator: true,
+      localImages: true,
+      cycles: { include: { localImages: true } },
+      works: { include: { localImages: true } },
+      likes: true,
+      favs: true,
+    },
   });
 };
 

@@ -1,4 +1,4 @@
-import { Cycle, LocalImage, Prisma } from '@prisma/client';
+import { /* Cycle, LocalImage */ Prisma } from '@prisma/client';
 
 export interface ComplementaryMaterial {
   author: string;
@@ -8,9 +8,9 @@ export interface ComplementaryMaterial {
   file: File | null;
 }
 
-export interface CycleWithImages extends Cycle {
-  localImages: LocalImage[];
-}
+// export interface CycleWithImages extends Cycle {
+//   localImages: LocalImage[];
+// }
 
 export type CycleMosaicItem = Prisma.CycleGetPayload<{
   include: {
@@ -21,20 +21,22 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
     favs: true;
     works: true;
     ratings: true;
+    posts: true;
   };
-}>;
+}> & { type?: 'cycle' };
 
-export type CycleDetail = Prisma.CycleGetPayload<{
-  include: {
-    creator: true;
-    localImages: true;
-    complementaryMaterials: true;
-    participants: true;
-    favs: true;
-    works: true;
-    ratings: true;
-  };
-}>;
+// export type CycleDetail = Prisma.CycleGetPayload<{
+//   include: {
+//     creator: true;
+//     localImages: true;
+//     complementaryMaterials: true;
+//     participants: true;
+//     favs: true;
+//     works: true;
+//     ratings: true;
+//     posts: true;
+//   };
+// }> & { type?: string };
 
 export interface CreateCycleClientPayload {
   includedWorksIds: number[];

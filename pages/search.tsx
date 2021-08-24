@@ -28,11 +28,7 @@ import useWorks from '../src/useWorks';
 import useCycles from '../src/useCycles';
 import useCountries from '../src/useCountries';
 
-type Item =
-  | (CycleMosaicItem & { type: string })
-  | WorkMosaicItem
-  | (PostMosaicItem & { type: string })
-  | UserMosaicItem;
+type Item = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | UserMosaicItem;
 
 // interface Props {
 //   homepageMosaicData: (CycleMosaicItem | WorkMosaicItem)[];
@@ -86,7 +82,7 @@ const SearchPage: NextPage = () => {
       setHomepageMosaicData(globalSearchEngineState.itemsFound);
     } else if (works || cycles /* || posts */) {
       const w = works ? works.data : [];
-      const c = cycles ? cycles.data : [];
+      const c = cycles ? ('length' in cycles ? cycles : [cycles]) : [];
       // const p = posts ? posts.data : [];
       const res = [...w, ...c /* , ...p */];
       setHomepageMosaicData(res);
@@ -128,7 +124,8 @@ const SearchPage: NextPage = () => {
       // }
       if (only.length) {
         filtered = homepageMosaicData.filter((i) => {
-          return only.includes(i.type);
+          if (i.type) return only.includes(i.type);
+          return false;
         });
         setHomepageMosaicDataFiltered([...filtered]);
       }

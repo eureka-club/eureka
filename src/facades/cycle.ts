@@ -1,10 +1,10 @@
 import { Cycle, CycleComplementaryMaterial, LocalImage, Prisma, User, RatingOnCycle } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
-import { CreateCycleServerFields, CreateCycleServerPayload, CycleDetail } from '../types/cycle';
+import { CreateCycleServerFields, CreateCycleServerPayload, CycleMosaicItem } from '../types/cycle';
 import prisma from '../lib/prisma';
 
-export const find = async (id: number): Promise<CycleDetail | null> => {
+export const find = async (id: number): Promise<CycleMosaicItem | null> => {
   return prisma.cycle.findUnique({
     where: { id },
     include: {
@@ -19,6 +19,14 @@ export const find = async (id: number): Promise<CycleDetail | null> => {
           localImages: true,
           favs: true,
           ratings: { include: { work: true } },
+        },
+      },
+      posts: {
+        include: {
+          creator: true,
+          localImages: true,
+          works: true,
+          favs: true,
         },
       },
     },

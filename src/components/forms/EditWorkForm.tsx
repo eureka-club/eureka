@@ -21,7 +21,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import TagsInput from './controls/TagsInput';
-import { EditWorkClientPayload, WorkDetail } from '../../types/work';
+import { EditWorkClientPayload, WorkMosaicItem } from '../../types/work';
 // import ImageFileSelect from './controls/ImageFileSelect';
 import globalModalsAtom from '../../atoms/globalModals';
 import styles from './CreateWorkForm.module.css';
@@ -37,7 +37,7 @@ const EditWorkForm: FunctionComponent = () => {
   const { t } = useTranslation('createWorkForm');
   const router = useRouter();
   const [tags, setTags] = useState<string>('');
-  const [work, setWork] = useState<WorkDetail | null>(null);
+  const [work, setWork] = useState<WorkMosaicItem | null>(null);
   const [publicationLengthLabel, setPublicationLengthLabel] = useState('...');
   const typeaheadRef = useRef<AsyncTypeahead<{ id: number; code: string; label: string }>>(null);
   const [isCountriesSearchLoading, setIsCountriesSearchLoading] = useState(false);
@@ -167,7 +167,7 @@ const EditWorkForm: FunctionComponent = () => {
 
   const handlerchange = (ev: ChangeEvent<HTMLInputElement>) => {
     if (work && ev.currentTarget.id in work) {
-      let w: WorkDetail & { [key: string]: unknown } = work;
+      let w: WorkMosaicItem & { [key: string]: unknown } = work;
       w = work;
       w[ev.currentTarget.id] = ev.currentTarget.value;
       setWork(w);

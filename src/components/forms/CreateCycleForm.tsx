@@ -26,7 +26,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { DATE_FORMAT_PROPS, DATE_FORMAT_SHORT_MONTH_YEAR } from '../../constants';
 import { ComplementaryMaterial, CreateCycleClientPayload } from '../../types/cycle';
-import { WorkWithImages } from '../../types/work';
+import { WorkMosaicItem } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
 import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
@@ -50,10 +50,10 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
   const [addWorkModalOpened, setAddWorkModalOpened] = useState(false);
   const [isWorkSearchLoading, setIsWorkSearchLoading] = useState(false);
-  const [workSearchResults, setWorkSearchResults] = useState<WorkWithImages[]>([]);
-  const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkWithImages | null>(null);
-  const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkWithImages[]>([]);
-  const typeaheadRef = useRef<AsyncTypeahead<WorkWithImages>>(null);
+  const [workSearchResults, setWorkSearchResults] = useState<WorkMosaicItem[]>([]);
+  const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkMosaicItem | null>(null);
+  const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkMosaicItem[]>([]);
+  const typeaheadRef = useRef<AsyncTypeahead<WorkMosaicItem>>(null);
   const typeaheadRefOC = useRef<AsyncTypeahead<{ id: number; code: string; label: string }>>(null);
   const [countryOrigin, setCountryOrigin] = useState<string>();
   const [isCountriesSearchLoading, setIsCountriesSearchLoading] = useState(false);
@@ -182,7 +182,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
     const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
     const response = await fetch(`/api/search/works?q=${query}&include=${includeQP}`);
-    const itemsSW: WorkWithImages[] = await response.json();
+    const itemsSW: WorkMosaicItem[] = await response.json();
 
     setWorkSearchResults(itemsSW);
     setIsWorkSearchLoading(false);
@@ -193,7 +193,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     results,
   }: {
     activeIndex: number;
-    results: WorkWithImages[];
+    results: WorkMosaicItem[];
   }) => {
     if (activeIndex !== -1) {
       // wait for component rendering with setTimeout(fn, undefinded)
@@ -201,7 +201,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     }
   };
 
-  const handleSearchWorkSelect = (selected: WorkWithImages[]): void => {
+  const handleSearchWorkSelect = (selected: WorkMosaicItem[]): void => {
     if (selected[0] != null) {
       setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
       setAddWorkModalOpened(false);

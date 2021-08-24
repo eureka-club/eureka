@@ -24,9 +24,9 @@ import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
-import { EditPostAboutCycleClientPayload, EditPostAboutWorkClientPayload, PostDetail } from '../../types/post';
-import { CycleWithImages } from '../../types/cycle';
-import { WorkWithImages } from '../../types/work';
+import { EditPostAboutCycleClientPayload, EditPostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
+import { CycleMosaicItem } from '../../types/cycle';
+import { WorkMosaicItem } from '../../types/work';
 // import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
 import CycleTypeaheadSearchItem from '../cycle/TypeaheadSearchItem';
@@ -40,10 +40,10 @@ const EditPostForm: FunctionComponent = () => {
   const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
   const [isSearchCycleLoading, setIsSearchCycleLoading] = useState(false);
   const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
-  const [searchCycleResults, setSearchCycleResults] = useState<CycleWithImages[]>([]);
-  const [selectedCycle, setSelectedCycle] = useState<CycleWithImages | null>(null);
-  const [selectedWork, setSelectedWork] = useState<WorkWithImages | null>(null);
-  const [post, setPost] = useState<PostDetail | null>(null);
+  const [searchCycleResults, setSearchCycleResults] = useState<CycleMosaicItem[]>([]);
+  const [selectedCycle, setSelectedCycle] = useState<CycleMosaicItem | null>(null);
+  const [selectedWork, setSelectedWork] = useState<WorkMosaicItem | null>(null);
+  const [post, setPost] = useState<PostMosaicItem | null>(null);
   // const [imageFile, setImageFile] = useState<File | null>(null);
   const { data: topics } = useTopics();
   const [items, setItems] = useState<string[]>([]);
@@ -109,7 +109,7 @@ const EditPostForm: FunctionComponent = () => {
 
     setIsSearchCycleLoading(true);
     const response = await fetch(`/api/search/cycles?${criteria}&include=${includeQP}`);
-    const itemsSCL: CycleWithImages[] = await response.json();
+    const itemsSCL: CycleMosaicItem[] = await response.json();
 
     setSearchCycleResults(itemsSCL);
     setIsSearchCycleLoading(false);
@@ -128,7 +128,7 @@ const EditPostForm: FunctionComponent = () => {
     }
   };
 
-  const handleSelectCycle = (selected: CycleWithImages[]): void => {
+  const handleSelectCycle = (selected: CycleMosaicItem[]): void => {
     const searchResult = selected[0];
     if (searchResult != null) {
       setSelectedCycle(searchResult);
@@ -202,14 +202,15 @@ const EditPostForm: FunctionComponent = () => {
 
   const handlerchange = (ev: ChangeEvent<HTMLInputElement>) => {
     if (post && ev.currentTarget.id in post) {
-      const p: PostDetail & { [key: string]: unknown } = post;
+      const p: PostMosaicItem & { [key: string]: unknown } = post;
       p[ev.currentTarget.id] = ev.currentTarget.value;
       setPost(p);
     }
   };
   const labelKeyFn = (res: SearchResult) => {
-    if ('title' in res) return `${res.title}`;
-    return `${res.name}`;
+    // if ('title' in res)
+    return `${res.title}`;
+    // return `${res.name}`;
   };
 
   return (

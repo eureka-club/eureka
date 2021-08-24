@@ -4,13 +4,13 @@ import useTranslation from 'next-translate/useTranslation';
 
 import { Alert } from 'react-bootstrap';
 import { Session } from '../../../src/types';
-import { CycleDetail } from '../../../src/types/cycle';
+import { CycleMosaicItem } from '../../../src/types/cycle';
 import SimpleLayout from '../../../src/components/layouts/SimpleLayout';
 import EditCycleForm from '../../../src/components/forms/EditCycleForm';
 import { find } from '../../../src/facades/cycle';
 
 interface Props {
-  cycle: CycleDetail;
+  cycle: CycleMosaicItem;
   notFound?: boolean;
 }
 

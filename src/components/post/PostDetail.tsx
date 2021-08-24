@@ -11,10 +11,10 @@ import { Row, Col, Button } from 'react-bootstrap';
 
 import { DATE_FORMAT_SHORT } from '../../constants';
 import { MySocialInfo, Session } from '../../types';
-import { CycleDetail } from '../../types/cycle';
-import { PostDetail as PostDetailType } from '../../types/post';
+import { CycleMosaicItem } from '../../types/cycle';
+import { PostMosaicItem } from '../../types/post';
 import globalModalsAtom from '../../atoms/globalModals';
-import { WorkDetail } from '../../types/work';
+import { WorkMosaicItem } from '../../types/work';
 import HyvorComments from '../common/HyvorComments';
 import LocalImageComponent from '../LocalImage';
 import SocialInteraction from '../common/SocialInteraction';
@@ -22,9 +22,9 @@ import UnclampText from '../UnclampText';
 import styles from './PostDetail.module.css';
 
 interface Props {
-  post: PostDetailType;
-  cycle?: CycleDetail;
-  work?: WorkDetail;
+  post: PostMosaicItem;
+  cycle?: CycleMosaicItem;
+  work?: WorkMosaicItem;
   mySocialInfo?: MySocialInfo;
 }
 

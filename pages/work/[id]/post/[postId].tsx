@@ -2,16 +2,16 @@ import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/client';
 
 import { MySocialInfo, Session } from '../../../../src/types';
-import { PostDetail } from '../../../../src/types/post';
-import { WorkDetail } from '../../../../src/types/work';
+import { PostMosaicItem } from '../../../../src/types/post';
+import { WorkMosaicItem } from '../../../../src/types/work';
 import SimpleLayout from '../../../../src/components/layouts/SimpleLayout';
 import WorkDetailComponent from '../../../../src/components/work/WorkDetail';
-import { search as searchPost, isFavoritedByUser, isLikedByUser } from '../../../../src/facades/post';
+import { search as searchPost, isFavoritedByUser } from '../../../../src/facades/post';
 import { countCycles, countPosts, find as findWork } from '../../../../src/facades/work';
 
 interface Props {
-  post: PostDetail;
-  work: WorkDetail;
+  post: PostMosaicItem;
+  work: WorkMosaicItem;
   cyclesCount: number;
   postsCount: number;
   mySocialInfo: MySocialInfo;
@@ -65,7 +65,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
       favs: true,
       likes: true,
     }),
-  })) as PostDetail[];
+  })) as PostMosaicItem[];
   if (postResults.length === 0) {
     return { notFound: true };
   }

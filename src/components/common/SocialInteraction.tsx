@@ -28,9 +28,9 @@ import globalModalsAtom from '../../atoms/globalModals';
 // import Notification from '../ui/Notification';
 
 import { WEBAPP_URL } from '../../constants';
-import { CycleDetail } from '../../types/cycle';
-import { PostDetail } from '../../types/post';
-import { WorkDetail } from '../../types/work';
+import { CycleMosaicItem } from '../../types/cycle';
+import { PostMosaicItem } from '../../types/post';
+import { WorkMosaicItem } from '../../types/work';
 import { MySocialInfo, isCycle, isWork, Session, isPost } from '../../types';
 import styles from './SocialInteraction.module.css';
 
@@ -41,14 +41,15 @@ interface SocialInteractionClientPayload {
 }
 
 interface Props {
-  entity: CycleDetail | PostDetail | WorkDetail | User;
-  parent?: CycleDetail | WorkDetail | null;
+  entity: CycleMosaicItem | PostMosaicItem | WorkMosaicItem | User;
+  parent?: Cycle | Work | null;
   // mySocialInfo: MySocialInfo;
   showCounts?: boolean;
   showShare?: boolean;
   showButtonLabels?: boolean;
   cacheKey?: string[];
   showTrash?: boolean;
+  showRating?: boolean;
 }
 
 const SocialInteraction: FunctionComponent<Props> = ({
@@ -59,6 +60,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   showButtonLabels = true,
   cacheKey = '',
   showTrash = false,
+  showRating = true,
 }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
@@ -420,8 +422,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
   const getRatingsCount = () => {
     let count = 0;
-    if (isWork(entity)) count = (entity as WorkDetail).ratings.length;
-    else if (isCycle(entity)) count = (entity as CycleDetail).ratings.length;
+    if (isWork(entity)) count = (entity as WorkMosaicItem).ratings.length;
+    else if (isCycle(entity)) count = (entity as CycleMosaicItem).ratings.length;
 
     // if (!session || (user && mySocialInfo && !mySocialInfo.ratingByMe))
     return <span className={styles.ratingsCount}>{`(${count})`}</span>;
@@ -441,22 +443,24 @@ const SocialInteraction: FunctionComponent<Props> = ({
     <Container className={styles.container}>
       <Row>
         <Col xs={10}>
-          {getRatingLabelInfo()}
+          {showRating && getRatingLabelInfo()}
           {` `}
           {showTrash && (
             <button type="button" title="Clear rating" className={styles.clearRating} onClick={clearRating}>
               <FiTrash2 />
             </button>
           )}
-          <Rating
-            initialRating={qty}
-            onChange={handlerChangeRating}
-            className={styles.rating}
-            stop={5}
-            emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
-            fullSymbol={getFullSymbol()}
-          />{' '}
-          {!loadingSocialInteraction && getRatingsCount()}
+          {showRating && (
+            <Rating
+              initialRating={qty}
+              onChange={handlerChangeRating}
+              className={styles.rating}
+              stop={5}
+              emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
+              fullSymbol={getFullSymbol()}
+            />
+          )}{' '}
+          {showRating && !loadingSocialInteraction && getRatingsCount()}
           {loadingSocialInteraction && (
             <Spinner className={styles.ratingSpinner} size="sm" animation="grow" variant="secondary" />
           )}
