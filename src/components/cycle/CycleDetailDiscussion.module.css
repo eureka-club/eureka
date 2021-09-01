@@ -20,23 +20,25 @@
 .optButtons .commentBtn{
   border:none;
   border-left: solid 1px #c2c6d0;
-  color: black;
-  background-color:white;
+  /* color: black; */
+  /* background-color:white; */
 }
 .optButtons .eurekaBtn{
   border:none;
-  background-color: white;
-  color:var(--eureka-green);
+  /* background-color: white;
+  color:var(--eureka-green); */
 }
 .optButtons .relatedWorkBtn{
   border:none;
   border-left: solid 1px #c2c6d0;
-  background-color: white;
-  color:var(--color-emphasis-raised);
+  /* background-color: white; */
+  /* color:var(--color-emphasis-raised); */
 }
 .optButton{
   text-align: left;
   padding: .3 .5em!important;
+  background-color: white; 
+  color:var(--eureka-green);
 }
 /* .optButtons > div:hover{
   background-color:white;

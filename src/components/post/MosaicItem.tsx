@@ -2,26 +2,46 @@ import { Cycle, User, Work } from '@prisma/client';
 import classNames from 'classnames';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, useState } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { FunctionComponent, useState, ChangeEvent } from 'react';
+import { Container, Row, Col, Card, Form, InputGroup } from 'react-bootstrap';
+import { FaRegComments } from 'react-icons/fa';
+import { BsJustifyLeft } from 'react-icons/bs';
 import SocialInteraction from '../common/SocialInteraction';
-
 import { PostMosaicItem } from '../../types/post';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import { isCycle, isWork } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
 import { WorkMosaicItem } from '../../types/work';
-
+import CommentsList from '../common/CommentsList';
 import Avatar from '../common/UserAvatar';
 
 interface Props {
   post: PostMosaicItem;
   postParent?: Cycle | Work;
   display?: 'vertically' | 'horizontally';
+
+  showButtonLabels?: boolean;
+  showShare?: boolean;
+  showSocialInteraction?: boolean;
+  style?: { [k: string]: string };
+  cacheKey?: string[];
+  showTrash?: boolean;
+  showComments?: boolean;
 }
 
-const MosaicItem: FunctionComponent<Props> = ({ post, postParent, display }) => {
+const MosaicItem: FunctionComponent<Props> = ({
+  post,
+  postParent,
+  display,
+  showButtonLabels,
+  showShare,
+  showSocialInteraction = true,
+  style,
+  cacheKey,
+  showTrash,
+  showComments = false,
+}) => {
   const postLinkHref = ((): string | null => {
     if (postParent == null) {
       return `/post/${post.id}`;
@@ -36,71 +56,78 @@ const MosaicItem: FunctionComponent<Props> = ({ post, postParent, display }) => 
     return null;
   })();
   const [creator] = useState(post.creator as User);
-
+  const { title, localImages, type, id } = post;
+  const [newCommentInput, setNewCommentInput] = useState<string>();
   const { t } = useTranslation('common');
   if (display === 'horizontally')
     return (
-      <Container className={`${styles.post} ${styles.postHorizontally}`}>
+      <Card className={`${styles.post} ${styles.postHorizontally}`}>
         <Row style={{ paddingTop: '1em' }}>
           <Col>
             {postParent && (
-              <h3 className={styles.title}>
+              <h2 className={styles.postParentTitle}>
                 {postLinkHref != null ? (
                   <Link href={postLinkHref}>
-                    <a>{postParent.title}</a>
+                    <a>
+                      <BsJustifyLeft /> <span>{postParent.title}</span>
+                    </a>
                   </Link>
                 ) : (
-                  postParent.title
+                  <h2 className={styles.postParentTitle}>
+                    <BsJustifyLeft /> <span>{postParent.title}</span>
+                  </h2>
                 )}
-              </h3>
+              </h2>
             )}
           </Col>
           <Col>
-            <div style={{ textAlign: 'right' }}>
+            <div style={{ textAlign: 'right', marginRight: '10px' }}>
               <span className={styles.type}>{t('post')}</span>
             </div>
           </Col>
         </Row>
         <Row>
-          <Col md={5} xs={5} className={styles.imageContainerHorizontally}>
-            {postLinkHref != null ? (
-              <Link href={postLinkHref}>
-                <a>
+          <Col md={5} xs={5}>
+            <div className={styles.imageContainerHorizontally}>
+              {postLinkHref != null ? (
+                <Link href={postLinkHref}>
+                  <a>
+                    <LocalImageComponent
+                      className={styles.postImage}
+                      filePath={post.localImages[0]?.storedFile}
+                      alt={post.title}
+                    />
+                    {/* <div className={styles.gradient} /> */}
+                  </a>
+                </Link>
+              ) : (
+                <>
                   <LocalImageComponent
                     className={styles.postImage}
                     filePath={post.localImages[0]?.storedFile}
                     alt={post.title}
                   />
                   {/* <div className={styles.gradient} /> */}
-                </a>
-              </Link>
-            ) : (
-              <>
-                <LocalImageComponent
-                  className={styles.postImage}
-                  filePath={post.localImages[0]?.storedFile}
-                  alt={post.title}
-                />
-                {/* <div className={styles.gradient} /> */}
-              </>
-            )}
-            <div className={styles.postDetail}>
-              {postParent && (
-                <>
-                  {creator && <Avatar user={creator} size="xs" />}
-                  {` `}
-                  {new Date(post.createdAt).toLocaleDateString()}
                 </>
               )}
+              <div className={styles.postDetail}>
+                {postParent && (
+                  <>
+                    <Avatar userId={post.creatorId} size="xs" />
+                    {` `}
+                    {new Date(post.createdAt).toLocaleDateString()}
+                  </>
+                )}
+              </div>
             </div>
-            <SocialInteraction
+            {/* <SocialInteraction
               entity={post as PostMosaicItem}
               parent={postParent}
               showRating={false}
               showButtonLabels={false}
-            />
+            /> */}
           </Col>
-          <Col md={7} xs={7}>
+          <Col md={7} xs={7} style={{ position: 'relative' }}>
             <Row>
               <Col md={12}>
                 <h5 className={styles.work}>{post.title}</h5>
@@ -109,13 +136,131 @@ const MosaicItem: FunctionComponent<Props> = ({ post, postParent, display }) => 
                 <p>{post.contentText}</p>
               </Col>
             </Row>
+            <Row className={styles.bottomRight}>
+              <Col md={9}>
+                <div className={styles.commentsInfo}>
+                  <FaRegComments /> <span>123 Comments</span>
+                </div>
+              </Col>
+              <Col md={3}>
+                <SocialInteraction
+                  cacheKey={cacheKey || undefined}
+                  showButtonLabels={false}
+                  showCounts={false}
+                  showShare={false}
+                  entity={post}
+                  parent={postParent}
+                  showRating={false}
+                  showTrash={false}
+                />
+              </Col>
+            </Row>
           </Col>
         </Row>
-      </Container>
+        <Card.Footer className={styles.footer}>
+          {/* <Row>
+            <Col xs={2}>
+              <Avatar user={post.creator} size="xs" showName={false} />
+            </Col>
+            <Col xs={10}> */}
+          {showComments && <CommentsList entity={post} parent={postParent} cacheKey={cacheKey} />}
+          {/* <InputGroup className="mt-2">
+            <Avatar user={post.creator} size="xs" showName={false} />
+            <Form.Control
+              value={newCommentInput}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setNewCommentInput(e.target.value)}
+              className={styles.newCommentInput}
+              type="email"
+              placeholder={`${t('Write a replay')}...`}
+            />
+          </InputGroup> */}
+
+          {/* </Col>
+          </Row> */}
+        </Card.Footer>
+      </Card>
     );
 
   return (
-    <article className={styles.post}>
+    <Card className={classNames(styles.container)}>
+      {postParent && (
+        <h2 className={styles.postParentTitle}>
+          {postLinkHref != null ? (
+            <Link href={postLinkHref}>
+              <a>
+                <BsJustifyLeft /> <span>{postParent.title}</span>
+              </a>
+            </Link>
+          ) : (
+            <h2 className={styles.postParentTitle}>
+              <BsJustifyLeft /> <span>{postParent.title}</span>
+            </h2>
+          )}
+        </h2>
+      )}
+      <div className={`${styles.imageContainer} ${styles.detailedImageContainer}`}>
+        {postLinkHref != null ? (
+          <Link href={postLinkHref}>
+            <a>
+              <LocalImageComponent
+                className={styles.postImage}
+                filePath={post.localImages[0]?.storedFile}
+                alt={post.title}
+              />
+              <div className={styles.gradient} />
+            </a>
+          </Link>
+        ) : (
+          <>
+            <LocalImageComponent
+              className={styles.postImage}
+              filePath={post.localImages[0]?.storedFile}
+              alt={post.title}
+            />
+            <div className={styles.gradient} />
+          </>
+        )}
+        <div className={styles.postDetail}>
+          {postParent && (
+            <>
+              <Avatar userId={post.creatorId} size="xs" />
+              {` `}
+              {new Date(post.createdAt).toLocaleDateString()}
+            </>
+          )}
+        </div>
+        <span className={styles.type}>{t(type || 'post')}</span>
+      </div>
+      <div className={styles.detailedInfo}>
+        <h5>{post.title}</h5>
+        <p>{post.contentText}</p>
+      </div>
+      {showSocialInteraction && post && (
+        <Card.Footer className={styles.footer}>
+          <Row>
+            <Col md={9}>
+              <div className={styles.commentsInfo}>
+                <FaRegComments /> <span>123 Comments</span>
+              </div>
+            </Col>
+            <Col md={3}>
+              <SocialInteraction
+                cacheKey={cacheKey || undefined}
+                showButtonLabels={false}
+                showCounts={false}
+                showShare={false}
+                entity={post}
+                parent={postParent}
+                showRating={false}
+                showTrash={false}
+              />
+            </Col>
+          </Row>
+        </Card.Footer>
+      )}
+    </Card>
+
+    /*  <article className={styles.post}>
       <div className={styles.imageContainer}>
         <div className={styles.cycleCreator}>
           <img
@@ -160,6 +305,7 @@ const MosaicItem: FunctionComponent<Props> = ({ post, postParent, display }) => 
       </h3>
       <h5 className={styles.work}>{post.works[0]?.title}</h5>
     </article>
+ */
   );
 };
 

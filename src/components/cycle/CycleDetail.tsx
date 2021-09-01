@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import HyvorTalk from 'hyvor-talk-react';
+// import HyvorTalk from 'hyvor-talk-react';
 import { useAtom } from 'jotai';
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
@@ -30,6 +30,7 @@ import HyvorComments from '../common/HyvorComments';
 // import SocialInteraction from '../common/SocialInteraction';
 import PostsMosaic from './PostsMosaic';
 import WorksMosaic from './WorksMosaic';
+import CommnetMosaic from '../comment/MosaicItem';
 import UnclampText from '../UnclampText';
 import detailPagesAtom from '../../atoms/detailPages';
 import styles from './CycleDetail.module.css';
@@ -131,6 +132,25 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     return false;
   };
 
+  const renderCycleOwnComments = () => {
+    if (cycle.comments)
+      return cycle.comments
+        .filter((c) => !c.workId && !c.postId && !c.commentId)
+        .map((c) => {
+          return (
+            <CommnetMosaic
+              key={c.id}
+              comment={c}
+              detailed
+              showComments
+              commentParent={cycle}
+              cacheKey={['CYCLES', `${cycle.id}`]}
+            />
+          );
+        });
+    return null;
+  };
+
   return (
     <>
       {!router.query.postId && canEditCycle() && (
@@ -222,8 +242,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                   <Col>
                     <Nav variant="tabs" fill>
                       <NavItem className={styles.tabBtn}>
-                        <NavLink eventKey="cycle-content">
-                          {t('tabHeaderCycleContent')} ({cycle.works.length})
+                        <NavLink eventKey="cycle-about">
+                          {t('About')} ({cycle.works.length})
                         </NavLink>
                       </NavItem>
                       <NavItem className={styles.tabBtn}>
@@ -236,8 +256,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                       </NavItem>
                       <NavItem className={styles.tabBtn}>
                         <NavLink eventKey="forum">
-                          {t('tabHeaderForum')} (
-                          <HyvorTalk.CommentCount websiteId={Number(HYVOR_WEBSITE_ID!)} id={hyvorId} />)
+                          {t('tabHeaderForum')}{' '}
+                          {/* (
+                           <HyvorTalk.CommentCount websiteId={Number(HYVOR_WEBSITE_ID!)} id={hyvorId} />
+                          ) */}
                         </NavLink>
                       </NavItem>
                     </Nav>
@@ -246,7 +268,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 <Row>
                   <Col>
                     <TabContent>
-                      <TabPane eventKey="cycle-content">
+                      <TabPane eventKey="cycle-about">
                         {cycle.contentText != null && (
                           <div className="mb-5">
                             <UnclampText text={cycle.contentText} clampHeight="7rem" />
@@ -282,12 +304,24 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                       </TabPane>
                       <TabPane eventKey="cycle-discussion">
                         <CycleDetailDiscussion cycle={cycle} />
-                        {cycle.posts.length && <PostsMosaic display="horizontally" cycle={cycle} />}
+                        {(cycle.posts.length && (
+                          <PostsMosaic
+                            display="horizontally"
+                            cycle={cycle}
+                            showComments
+                            cacheKey={['CYCLES', `${cycle.id}`]}
+                          />
+                        )) ||
+                          null}
+                        {renderCycleOwnComments()}
                       </TabPane>
                       <TabPane eventKey="posts">
                         <h2 className="mb-3">{t('postsCountHeader', { count: cycle.posts.length })}</h2>
                         <p className={styles.explanatoryText}>{t('explanatoryTextPosts')}</p>
-                        {cycle.posts.length && <PostsMosaic display="horizontally" cycle={cycle} />}
+                        {(cycle.posts.length && (
+                          <PostsMosaic display="horizontally" cycle={cycle} cacheKey={['CYCLES', `${cycle.id}`]} />
+                        )) ||
+                          null}
                       </TabPane>
                       <TabPane eventKey="forum">
                         <h3>{t('tabHeaderForum')}</h3>

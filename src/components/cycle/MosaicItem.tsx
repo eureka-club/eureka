@@ -76,7 +76,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const {
     mutate: execJoinCycle,
     isLoading: isJoinCycleLoading,
-    isSuccess: isJoinCycleSuccess,
+    // isSuccess: isJoinCycleSuccess,
   } = useMutation(
     async () => {
       await fetch(`/api/cycle/${cycle.id}/join`, { method: 'POST' });
@@ -100,7 +100,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const {
     mutate: execLeaveCycle,
     isLoading: isLeaveCycleLoading,
-    isSuccess: isLeaveCycleSuccess,
+    // isSuccess: isLeaveCycleSuccess,
   } = useMutation(
     async () => {
       await fetch(`/api/cycle/${cycle.id}/join`, { method: 'DELETE' });

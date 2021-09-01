@@ -10,9 +10,11 @@ import Mosaic from '../Mosaic';
 interface Props {
   cycle: CycleMosaicItem;
   display?: 'horizontally' | 'vertically';
+  showComments?: boolean;
+  cacheKey: [string, string];
 }
 
-const PostsMosaic: FunctionComponent<Props> = ({ cycle, display }) => {
+const PostsMosaic: FunctionComponent<Props> = ({ cycle, display, showComments, cacheKey }) => {
   const { isLoading, isSuccess, data } = useQuery<PostMosaicItem[]>(
     ['posts.mosaic.cycle', cycle.id],
     async ({ queryKey: [, cycleId] }) => {
@@ -31,9 +33,16 @@ const PostsMosaic: FunctionComponent<Props> = ({ cycle, display }) => {
           <span className="sr-only">Loading...</span>
         </Spinner>
       )}
-      {isSuccess && data != null && (
-        <Mosaic display={display} stack={cycle.posts as PostMosaicItem[]} postsLinksTo={cycle} />
-      )}
+      {(isSuccess && data != null && (
+        <Mosaic
+          display={display}
+          stack={cycle.posts as PostMosaicItem[]}
+          postsLinksTo={cycle}
+          showComments={showComments}
+          cacheKey={cacheKey}
+        />
+      )) ||
+        null}
     </>
   );
 };

@@ -140,11 +140,14 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
         ...res,
         selectedCycleId: cycle.id,
       }));
-    } else
-      setNewEureka((res) => ({
-        ...res,
-        selectedWorkId: parseInt(discussionItem, 10),
-      }));
+    } else {
+      const [entity, id] = discussionItem.split('-');
+      if (entity === 'work')
+        setNewEureka((res) => ({
+          ...res,
+          selectedWorkId: parseInt(id, 10),
+        }));
+    }
   }, [discussionItem, cycle.id]);
 
   const onChangeFieldEurekaForm = (e: ChangeEvent<HTMLInputElement>) => {

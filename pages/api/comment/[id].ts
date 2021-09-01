@@ -1,15 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 
-import { Cycle } from '@prisma/client';
+import { Work, Cycle } from '@prisma/client';
 import { Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
-import { find, remove } from '../../../src/facades/cycle';
+import { find, remove } from '../../../src/facades/comment';
 import prisma from '../../../src/lib/prisma';
 
-dayjs.extend(utc);
 export default getApiHandler()
   .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     const session = (await getSession({ req })) as unknown as Session;
@@ -31,13 +28,13 @@ export default getApiHandler()
     }
 
     try {
-      const cycle = await find(idNum);
-      if (cycle == null) {
+      const comment = await find(idNum);
+      if (comment == null) {
         res.status(404).end();
         return;
       }
 
-      await remove(cycle);
+      await remove(comment);
 
       res.status(200).json({ status: 'OK' });
     } catch (exc) {
@@ -67,14 +64,14 @@ export default getApiHandler()
     }
 
     try {
-      const cycle = await find(idNum);
-      if (cycle == null) {
+      const comment = await find(idNum);
+      if (comment == null) {
         // res.status(404).end();
-        res.status(200).json({ status: 'OK', post: null });
+        res.status(200).json({ status: 'OK', comment: null });
         return;
       }
 
-      res.status(200).json({ status: 'OK', cycle });
+      res.status(200).json({ status: 'OK', comment });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
       res.status(500).json({ status: 'server error' });
@@ -84,33 +81,55 @@ export default getApiHandler()
   })
   .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     const session = (await getSession({ req })) as unknown as Session;
-    if (session == null || !session.user.roles.includes('admin')) {
+    if (session == null) {
       res.status(401).json({ status: 'Unauthorized' });
       return;
     }
-    let data = req.body;
 
-    const { id, includedWorksIds } = data;
-    let r: Cycle;
-    if (includedWorksIds) {
-      r = await prisma.cycle.update({
-        where: { id },
-        data: {
-          updatedAt: dayjs().utc().format(),
-          works: { connect: includedWorksIds.map((workId: number) => ({ id: workId })) },
-        },
-      });
-    } else {
-      data.startDate = dayjs(`${data.startDate}`, 'YYYY').utc().format();
-      data.endDate = dayjs(`${data.endDate}`, 'YYYY').utc().format();
-      delete data.id;
-      data = {
-        ...data,
-      };
-      r = await prisma.cycle.update({ where: { id }, data });
+    let data = JSON.parse(req.body);
+    // data.publicationYear = dayjs(`${data.publicationYear}`, 'YYYY').utc().format();
+    const { id } = data;
+    if (typeof id !== 'string') {
+      res.status(404).end();
+      return;
+    }
+
+    const idNum = parseInt(id, 10);
+    if (!Number.isInteger(idNum)) {
+      res.status(404).end();
+      return;
     }
 
     try {
+      delete data.id;
+
+      let existingCycle: Cycle | null = null;
+      if (data.selectedCycleId != null) {
+        existingCycle = await prisma.cycle.findUnique({ where: { id: data.selectedCycleId } });
+        if (existingCycle == null) {
+          throw new Error('[412] Invalid Cycle ID provided');
+        }
+        if (existingCycle.creatorId !== session.user.id) res.status(401).json({ status: 'Unauthorized' });
+      }
+
+      let existingWork: Work | null = null;
+      if (data.selectedWorkId != null) {
+        existingWork = await prisma.work.findUnique({ where: { id: data.selectedWorkId } });
+        if (existingWork == null) {
+          throw new Error('[412] Invalid Work ID provided');
+        }
+      }
+      const cycle = existingCycle ? [{ id: existingCycle.id }] : [];
+      const work = existingWork ? [{ id: existingWork.id }] : [];
+      data = {
+        ...data,
+        cycle: { set: cycle },
+        work: { set: work },
+      };
+      delete data.selectedWorkId;
+      delete data.selectedCycleId;
+
+      const r = await prisma.comment.update({ where: { id: idNum }, data });
       res.status(200).json({ ...r });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

@@ -13,6 +13,7 @@ export type PostMosaicItem = Prisma.PostGetPayload<{
     cycles: true;
     likes: true;
     favs: true;
+    comments: true;
   };
 }> & { type?: 'post' };
 
@@ -31,6 +32,7 @@ export type PostWithCyclesWorks = Prisma.PostGetPayload<{
   include: {
     cycles: true;
     works: true;
+    comments: true;
   };
 }>;
 

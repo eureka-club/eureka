@@ -15,7 +15,9 @@ const PostsMosaic: FunctionComponent<Props> = ({ work }) => {
     ['posts.mosaic.work', work.id],
     async ({ queryKey: [, workId] }) => {
       const whereQP = encodeURIComponent(JSON.stringify({ works: { some: { id: workId } } }));
-      const includeQP = encodeURIComponent(JSON.stringify({ creator: true, localImages: true, works: true }));
+      const includeQP = encodeURIComponent(
+        JSON.stringify({ creator: true, localImages: true, works: true, favs: true }),
+      );
       const res = await fetch(`/api/search/posts?where=${whereQP}&include=${includeQP}`);
 
       return res.json();

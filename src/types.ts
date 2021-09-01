@@ -1,9 +1,10 @@
-import { Cycle, Post, User, Work } from '@prisma/client';
+import { Cycle, Post, User, Work, Comment } from '@prisma/client';
 
 import { CycleMosaicItem } from './types/cycle';
 import { PostMosaicItem } from './types/post';
 import { WorkMosaicItem } from './types/work';
 import { UserMosaicItem } from './types/user';
+import { CommentMosaicItem } from './types/comment';
 
 export interface FileUpload {
   fieldName: string;
@@ -37,8 +38,8 @@ export interface MySocialInfo {
  * TS type guards
  */
 
-export type BasicEntity = Cycle | Post | Work | User;
-export type MosaicItem = CycleMosaicItem | PostMosaicItem | WorkMosaicItem | UserMosaicItem;
+export type BasicEntity = Cycle | Post | Work | User | Comment;
+export type MosaicItem = CycleMosaicItem | PostMosaicItem | WorkMosaicItem | UserMosaicItem | CommentMosaicItem;
 export type SearchResult = CycleMosaicItem | PostMosaicItem | WorkMosaicItem;
 
 export const isCycle = (obj: BasicEntity): obj is Cycle =>
@@ -56,6 +57,8 @@ export const isWork = (obj: BasicEntity): obj is Work =>
 
 export const isUser = (obj: BasicEntity): obj is User =>
   typeof (obj as User).roles === 'string' && typeof (obj as User).email === 'string';
+
+export const isComment = (obj: BasicEntity): obj is Comment => 'commentId' in (obj as Comment);
 
 // TODO separate type-guards for MosaicItem and SearchResult
 export const isCycleMosaicItem = (obj: MosaicItem | SearchResult): obj is CycleMosaicItem =>

@@ -25,7 +25,7 @@ interface Props {
 }
 const MosaicItem: FunctionComponent<Props> = ({
   work,
-  showButtonLabels = true,
+  showButtonLabels = false,
   showShare = false,
   showSocialInteraction = true,
   style = undefined,

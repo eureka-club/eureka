@@ -442,30 +442,32 @@ const SocialInteraction: FunctionComponent<Props> = ({
     // (session && user && (
     <Container className={styles.container}>
       <Row>
-        <Col xs={10}>
-          {showRating && getRatingLabelInfo()}
-          {` `}
-          {showTrash && (
-            <button type="button" title="Clear rating" className={styles.clearRating} onClick={clearRating}>
-              <FiTrash2 />
-            </button>
-          )}
-          {showRating && (
-            <Rating
-              initialRating={qty}
-              onChange={handlerChangeRating}
-              className={styles.rating}
-              stop={5}
-              emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
-              fullSymbol={getFullSymbol()}
-            />
-          )}{' '}
-          {showRating && !loadingSocialInteraction && getRatingsCount()}
-          {loadingSocialInteraction && (
-            <Spinner className={styles.ratingSpinner} size="sm" animation="grow" variant="secondary" />
-          )}
-        </Col>
-        <Col xs={2}>
+        {showRating && (
+          <Col xs={10}>
+            {showRating && getRatingLabelInfo()}
+            {` `}
+            {showTrash && (
+              <button type="button" title="Clear rating" className={styles.clearRating} onClick={clearRating}>
+                <FiTrash2 />
+              </button>
+            )}
+            {showRating && (
+              <Rating
+                initialRating={qty}
+                onChange={handlerChangeRating}
+                className={styles.rating}
+                stop={5}
+                emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
+                fullSymbol={getFullSymbol()}
+              />
+            )}{' '}
+            {showRating && !loadingSocialInteraction && getRatingsCount()}
+            {loadingSocialInteraction && (
+              <Spinner className={styles.ratingSpinner} size="sm" animation="grow" variant="secondary" />
+            )}
+          </Col>
+        )}
+        <Col xs={showRating ? 2 : 12}>
           <button className={styles.socialBtn} title={t('Save for later')} onClick={handleFavClick} type="button">
             {optimistFav ? <BsBookmarkFill className={styles.active} /> : <BsBookmark />}
             <br />

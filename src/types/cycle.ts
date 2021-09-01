@@ -22,6 +22,9 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
     works: true;
     ratings: true;
     posts: true;
+    comments: {
+      include: { comments: true };
+    };
   };
 }> & { type?: 'cycle' };
 

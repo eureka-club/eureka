@@ -19,6 +19,7 @@ export type WorkMosaicItem = Prisma.WorkGetPayload<{
     localImages: true;
     favs: true;
     ratings: true;
+    comments: true;
   };
 }>;
 

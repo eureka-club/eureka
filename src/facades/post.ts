@@ -12,6 +12,9 @@ export const find = async (id: number): Promise<PostWithCyclesWorks | null> => {
       works: { include: { localImages: true } },
       likes: true,
       favs: true,
+      comments: {
+        include: { comments: true },
+      },
     },
   });
 };
@@ -26,6 +29,9 @@ export const findAll = async (): Promise<PostMosaicItem[]> => {
       works: { include: { localImages: true } },
       likes: true,
       favs: true,
+      comments: {
+        include: { comments: true },
+      },
     },
   });
 };
@@ -39,13 +45,15 @@ export const search = async (query: { [key: string]: string | string[] }): Promi
   if (typeof q === 'string') {
     return prisma.post.findMany({
       where: { title: { contains: q } },
-      ...(typeof include === 'string' && { include: JSON.parse(include) }),
+      // ...(typeof include === 'string' && { include: JSON.parse(include) }),
+      include: { creator: true, localImages: true, works: true, favs: true },
     });
   }
 
   return prisma.post.findMany({
     ...(typeof where === 'string' && { where: JSON.parse(where) }),
-    ...(typeof include === 'string' && { include: JSON.parse(include) }),
+    // ...(typeof include === 'string' && { include: JSON.parse(include) }),
+    include: { creator: true, localImages: true, works: true, favs: true },
   });
 };
 

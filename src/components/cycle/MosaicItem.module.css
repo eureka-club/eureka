@@ -1,83 +1,4 @@
-/* .cycle {
-  border: 3px solid var(--eureka-purple);
-  border-radius: 0.5rem;
-  margin-bottom: 2rem;
-  overflow: hidden;
-  position: relative;
-  height:24em;
-  display: inline-block;
-}
-.cycle img {
-  width: 100%;  
-}
 
-.gradient {
-  background: linear-gradient(0deg, #00000080, #ffffff26 100%);
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-}
-
-.embeddedInfo {
-  color: var(--text-color-light);
-  position: absolute;
-  bottom: 3.5rem;
-  left: 1rem;
-  right: 1rem;
-}
-
-
-.type {
-  background-color: var(--eureka-blue);
-  border-radius: 1rem;
-  bottom: 0.85rem;
-  color: var(--text-color-light);
-  font-size: 0.85rem;
-  line-height: 1;
-  left: 0.85rem;
-  padding: 0.25rem 0.75rem;
-  position: absolute;
-  text-transform: capitalize;
-}
-
-.actions {
-  bottom: 0.95rem;
-  color: var(--text-color-extralight);
-  position: absolute;
-  right: 1.3rem;
-  transform: scale(1.5);
-}
-.actionBookmark,
-.actionLike {
-  cursor: pointer;
-  filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.5));
-  transition: transform 0.15s;
-}
-.actionBookmark:hover,
-.actionLike:hover {
-  transform: scale(1.15);
-}
-.actionBookmark {
-  margin-right: 0.25rem;
-}
-.actionLike {
-  color: #e3506d;
-}
-
-.title {
-  color: var(--text-color-primary);
-  font-weight: 300;
-  font-size: 1rem;
-  margin-bottom: 0.2rem;
-}
-.title a {
-  color: var(--text-color-primary);
-}
-.title a:hover {
-  color: #0056b3;
-} */
 .container {
   margin-bottom: 2rem;
 
@@ -121,7 +42,7 @@
 }
 
 .type {
-  background-color: var(--eureka-blue);
+  background-color: var(--eureka-green);
   border-radius: 1rem;
   
   font-size: 0.85rem;
@@ -131,7 +52,7 @@
   top:3%;
   position: absolute;
   left: 0.85rem;
-  color:white;
+  color:black;
   /* bottom: 1rem;
    */
   /* text-transform: capitalize; */

@@ -20,7 +20,12 @@
   "ratings": "ratings",
   "Works on Cycle": "Works on Cycle",
   "Cycle itself": "Cycle itself",
+  "About": "About",
   "Discussion": "Discussion",
   "Image": "Image",
-  "Type to add tag": "Type to add tag"
+  "Type to add tag": "Type to add tag",
+  "Select work": "Select work",
+  "Suggest work": "Suggest work",
+  "Create work": "Create work",
+  "Didn't find the work you were looking for? You can add it to our library!": "Didn't find the work you were looking for? You can add it to our library!"
 }
