@@ -12,10 +12,10 @@ import { useSession } from 'next-auth/client';
 import { CgMediaLive } from 'react-icons/cg';
 
 import { useAtom } from 'jotai';
-import { Cycle } from '@prisma/client';
+// import { Cycle } from '@prisma/client';
 import { DATE_FORMAT_SHORT } from '../../constants';
 import { CycleMosaicItem } from '../../types/cycle';
-import { UserDetail } from '../../types/user';
+// import { UserDetail } from '../../types/user';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import globalModalsAtom from '../../atoms/globalModals';
@@ -76,7 +76,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const {
     mutate: execJoinCycle,
     isLoading: isJoinCycleLoading,
-    isSuccess: isJoinCycleSuccess,
+    // isSuccess: isJoinCycleSuccess,
   } = useMutation(
     async () => {
       await fetch(`/api/cycle/${cycle.id}/join`, { method: 'POST' });
@@ -100,7 +100,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const {
     mutate: execLeaveCycle,
     isLoading: isLeaveCycleLoading,
-    isSuccess: isLeaveCycleSuccess,
+    // isSuccess: isLeaveCycleSuccess,
   } = useMutation(
     async () => {
       await fetch(`/api/cycle/${cycle.id}/join`, { method: 'DELETE' });

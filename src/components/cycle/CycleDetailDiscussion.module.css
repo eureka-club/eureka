@@ -1,0 +1,53 @@
+.container{
+  background-color: #EFF0F3;
+  padding:1em;
+  border-radius: .2em;
+}
+.discussionItem{
+  border-radius: 2em;
+  border: solid 1px #c2c6d0;
+}
+.optButtons{
+  width: 100%;
+  margin-left: 0;
+  border: solid 1px #c2c6d0;
+  border-radius: .2em;
+}
+.optButtons .optButton:hover{
+  background-color: var(--eureka-green);
+  color: white;
+}
+.optButtons .commentBtn{
+  border:none;
+  border-left: solid 1px #c2c6d0;
+  /* color: black; */
+  /* background-color:white; */
+}
+.optButtons .eurekaBtn{
+  border:none;
+  /* background-color: white;
+  color:var(--eureka-green); */
+}
+.optButtons .relatedWorkBtn{
+  border:none;
+  border-left: solid 1px #c2c6d0;
+  /* background-color: white; */
+  /* color:var(--color-emphasis-raised); */
+}
+.optButton{
+  text-align: left;
+  padding: .3 .5em!important;
+  background-color: white; 
+  color:var(--eureka-green);
+}
+/* .optButtons > div:hover{
+  background-color:white;
+} */
+.optButtonIcon{
+  
+  margin-right: 1em;
+}
+.optButtonActive{
+  background-color: var(--eureka-green)!important;
+  color: white !important;;
+}

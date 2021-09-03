@@ -1,109 +1,193 @@
 import { GetServerSideProps, NextPage } from 'next';
-import { getSession } from 'next-auth/client';
-
-import { CycleDetail } from '../../src/types/cycle';
+import { getSession, useSession } from 'next-auth/client';
+import { QueryClient, useQuery } from 'react-query';
+import { dehydrate } from 'react-query/hydration';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { Spinner } from 'react-bootstrap';
+import { CycleMosaicItem } from '../../src/types/cycle';
 import { MySocialInfo, Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '../../src/components/cycle/CycleDetail';
-import {
-  countParticipants,
-  countPosts,
-  countWorks,
-  find,
-  findParticipant,
-  isFavoritedByUser,
-  // isLikedByUser,
-} from '../../src/facades/cycle';
 
-interface Props {
-  cycle: CycleDetail;
-  isCurrentUserJoinedToCycle: boolean;
-  participantsCount: number;
-  postsCount: number;
-  worksCount: number;
-  mySocialInfo: MySocialInfo;
-}
+// import {
+//   // countParticipants,
+//   // countPosts,
+//   // countWorks,
+//   // find,
+//   // findParticipant,
+//   // isFavoritedByUser,
+//   // isLikedByUser,
+// } from '../../src/facades/cycle';
+// import useCycles, { getRecords } from '../../src/useCycles';
+import useCycles from '../../src/useCycles';
 
-const CycleDetailPage: NextPage<Props> = ({
-  cycle,
-  isCurrentUserJoinedToCycle,
-  participantsCount,
-  postsCount,
-  worksCount,
-  mySocialInfo,
-}) => {
+// interface Props {
+//   // cycle: CycleDetail;
+//   isCurrentUserJoinedToCycle: boolean;
+//   participantsCount: number;
+//   postsCount: number;
+//   worksCount: number;
+//   mySocialInfo: MySocialInfo;
+// }
+
+const CycleDetailPage = () => {
+  // debugger;
+  const session = useSession as unknown as Session;
+  const router = useRouter();
+  const [id, setId] = useState<number>();
+  const { data, isLoading } = useCycles(id);
+  const [cycle, setCycle] = useState<CycleMosaicItem | undefined>(undefined);
+
+  useEffect(() => {
+    if (router && router.query) setId(() => parseInt(router.query.id as string, 10));
+  }, [router]);
+
+  useEffect(() => {
+    // debugger;
+    const c = data as CycleMosaicItem;
+    if (c) {
+      setCycle(c);
+      if (c) {
+        if (!c.isPublic) {
+          if (!session) {
+            router.push('/');
+          } else {
+            const participantIdx = c.participants.findIndex((i) => i.id === session.user.id);
+            if (c.creatorId !== session.user.id && participantIdx === -1 && !session.user.roles.includes('admin')) {
+              router.push('/');
+            }
+          }
+        }
+      }
+    }
+  }, [data]);
+
   return (
-    <SimpleLayout title={cycle.title}>
-      <CycleDetailComponent
-        cycle={cycle}
-        isCurrentUserJoinedToCycle={isCurrentUserJoinedToCycle}
-        participantsCount={participantsCount}
-        postsCount={postsCount}
-        worksCount={worksCount}
-        mySocialInfo={mySocialInfo}
-      />
+    <SimpleLayout title={cycle ? cycle.title : ''}>
+      <>
+        {cycle && (
+          <CycleDetailComponent
+            cycle={cycle}
+            // isCurrentUserJoinedToCycle={isCurrentUserJoinedToCycle}
+            // participantsCount={participantsCount}
+            // postsCount={postsCount}
+            // worksCount={worksCount}
+            // mySocialInfo={mySocialInfo}
+          />
+        )}
+        {isLoading && <Spinner animation="grow" variant="secondary" />}
+      </>
     </SimpleLayout>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ params, req, res }) => {
-  if (params?.id == null || typeof params.id !== 'string') {
-    return { notFound: true };
-  }
+// export const getServerSideProps: GetServerSideProps = async ({ params, req, res }) => {
+//   if (params?.id == null || typeof params.id !== 'string') {
+//     return { notFound: true };
+//   }
+//   const id = parseInt(params.id, 10);
+//   if (!Number.isInteger(id)) {
+//     return { notFound: true };
+//   }
+//   const session = (await getSession({ req })) as unknown as Session;
 
-  const id = parseInt(params.id, 10);
-  if (!Number.isInteger(id)) {
-    return { notFound: true };
-  }
+//   const queryClient = new QueryClient();
+//   // const fetchCycle = async () => {
+//   //   const cycle = await find(id);
+//   //   if (cycle == null) {
+//   //     return { notFound: true };
+//   //   }
+//   //   return cycle;
+//   // };
 
-  const cycle = await find(id);
-  if (cycle == null) {
-    return { notFound: true };
-  }
+//   const cacheKey = ['CYCLES', `${id}`];
+//   await queryClient.prefetchQuery(cacheKey, () => getRecords(undefined, id));
+//   // await queryClient.prefetchQuery(cacheKey, fetchCycle);
+//   const cycle = queryClient.getQueryData<CycleMosaicItem>(cacheKey);
 
-  const participantsCount = await countParticipants(cycle);
-  const postsCount = await countPosts(cycle);
-  const worksCount = await countWorks(cycle);
+//   const toHomePage = () => {
+//     res.writeHead(302, { Location: '/' });
+//     res.end();
+//   };
+//   if (cycle) {
+//     if (!cycle.isPublic) {
+//       if (!session) {
+//         toHomePage();
+//       } else {
+//         const participantIdx = cycle.participants.findIndex((i) => i.id === session.user.id);
+//         if (cycle.creatorId !== session.user.id && participantIdx === -1 && !session.user.roles.includes('admin')) {
+//           toHomePage();
+//         }
+//       }
+//     }
+//   }
 
-  const session = (await getSession({ req })) as unknown as Session;
+//   return {
+//     props: {
+//       dehydratedState: dehydrate(queryClient),
+//     },
+//   };
+// };
 
-  const mySocialInfo: MySocialInfo = {
-    favoritedByMe: undefined,
-    // likedByMe: undefined,
-  };
-  let myParticipant = null;
+// export const getServerSideProps: GetServerSideProps = async ({ params, req, res }) => {
+//   if (params?.id == null || typeof params.id !== 'string') {
+//     return { notFound: true };
+//   }
 
-  const toHomePage = () => {
-    res.writeHead(302, { Location: '/' });
-    res.end();
-  };
-  if (!cycle.isPublic) {
-    if (!session) {
-      toHomePage();
-    } else {
-      const participantIdx = cycle.participants.findIndex((i) => i.id === session.user.id);
-      if (cycle.creatorId !== session.user.id && participantIdx === -1 && !session.user.roles.includes('admin')) {
-        toHomePage();
-      }
-    }
-  }
+//   const id = parseInt(params.id, 10);
+//   if (!Number.isInteger(id)) {
+//     return { notFound: true };
+//   }
 
-  if (session != null) {
-    myParticipant = await findParticipant(session.user, cycle);
-    mySocialInfo.favoritedByMe = !!(await isFavoritedByUser(cycle, session.user));
-    // mySocialInfo.likedByMe = !!(await isLikedByUser(cycle, session.user));
-  }
+//   const cycle = await find(id);
+//   if (cycle == null) {
+//     return { notFound: true };
+//   }
 
-  return {
-    props: {
-      cycle,
-      isCurrentUserJoinedToCycle: myParticipant != null,
-      participantsCount: participantsCount.count,
-      postsCount: postsCount.count,
-      worksCount: worksCount.count,
-      mySocialInfo,
-    },
-  };
-};
+//   const participantsCount = await countParticipants(cycle);
+//   const postsCount = await countPosts(cycle);
+//   const worksCount = await countWorks(cycle);
+
+//   const session = (await getSession({ req })) as unknown as Session;
+
+//   const mySocialInfo: MySocialInfo = {
+//     favoritedByMe: undefined,
+//     // likedByMe: undefined,
+//   };
+//   let myParticipant = null;
+
+//   const toHomePage = () => {
+//     res.writeHead(302, { Location: '/' });
+//     res.end();
+//   };
+//   if (!cycle.isPublic) {
+//     if (!session) {
+//       toHomePage();
+//     } else {
+//       const participantIdx = cycle.participants.findIndex((i) => i.id === session.user.id);
+//       if (cycle.creatorId !== session.user.id && participantIdx === -1 && !session.user.roles.includes('admin')) {
+//         toHomePage();
+//       }
+//     }
+//   }
+
+//   if (session != null) {
+//     myParticipant = await findParticipant(session.user, cycle);
+//     mySocialInfo.favoritedByMe = !!(await isFavoritedByUser(cycle, session.user));
+//     // mySocialInfo.likedByMe = !!(await isLikedByUser(cycle, session.user));
+//   }
+
+//   return {
+//     props: {
+//       cycle,
+//       isCurrentUserJoinedToCycle: myParticipant != null,
+//       participantsCount: participantsCount.count,
+//       postsCount: postsCount.count,
+//       worksCount: worksCount.count,
+//       mySocialInfo,
+//     },
+//   };
+// };
 
 export default CycleDetailPage;

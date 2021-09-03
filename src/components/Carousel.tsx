@@ -24,7 +24,7 @@ import styles from './Carousel.module.css';
 // import { setCookie } from 'nookies';
 // import { Work, Cycle, PrismaPromise } from '@prisma/client';
 import { WorkMosaicItem /* , WorkWithImages */ } from '../types/work';
-import { CycleDetail /* , CycleWithImages */ } from '../types/cycle';
+import { CycleMosaicItem /* , CycleWithImages */ } from '../types/cycle';
 import { PostMosaicItem /* , CycleWithImages */ } from '../types/post';
 
 type Props = {
@@ -50,7 +50,7 @@ const renderMosaicItem = (
         showShare={false}
         showButtonLabels={false}
         key={`cycle-${item.id}`}
-        cycle={item as CycleDetail}
+        cycle={item as CycleMosaicItem}
         cacheKey={topic && page ? ['items', `${topic}${page}`] : undefined}
         showSocialInteraction={showSocialInteraction}
       />
@@ -133,7 +133,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
     if (items) {
       // debugger;
       // data.pages.forEach((page, idx) => {
-      const mosaics = items.data.map((i: (CycleDetail & { type: string }) | WorkMosaicItem) =>
+      const mosaics = items.data.map((i: CycleMosaicItem | WorkMosaicItem) =>
         renderMosaicItem(i, undefined, topic, page.toString()),
       );
       const res = (

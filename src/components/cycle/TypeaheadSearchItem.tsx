@@ -1,12 +1,12 @@
 import { FunctionComponent } from 'react';
 
-import { CycleWithImages } from '../../types/cycle';
+import { CycleMosaicItem } from '../../types/cycle';
 import LocalImageComponent from '../LocalImage';
 import CycleSummary from './CycleSummary';
 import styles from './TypeaheadSearchItem.module.css';
 
 interface Props {
-  cycle: CycleWithImages;
+  cycle: CycleMosaicItem;
 }
 
 const TypeaheadSearchItem: FunctionComponent<Props> = ({ cycle }) => {

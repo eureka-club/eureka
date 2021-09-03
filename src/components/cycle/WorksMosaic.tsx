@@ -5,11 +5,11 @@ import { FunctionComponent } from 'react';
 
 import { WorkMosaicItem } from '../../types/work';
 import Mosaic from '../Mosaic';
-import { CycleDetail } from '../../types/cycle';
+import { CycleMosaicItem } from '../../types/cycle';
 // import { MosaicItem } from '../types/work';
 
 interface Props {
-  cycle: CycleDetail;
+  cycle: CycleMosaicItem;
 }
 
 const WorksMosaic: FunctionComponent<Props> = ({ cycle }) => {

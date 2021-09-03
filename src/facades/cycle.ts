@@ -1,10 +1,10 @@
-import { Cycle, CycleComplementaryMaterial, LocalImage, Prisma, User, RatingOnCycle } from '@prisma/client';
+import { Cycle, CycleComplementaryMaterial, LocalImage, Prisma, User, RatingOnCycle, Work } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
-import { CreateCycleServerFields, CreateCycleServerPayload, CycleDetail } from '../types/cycle';
+import { CreateCycleServerFields, CreateCycleServerPayload, CycleMosaicItem } from '../types/cycle';
 import prisma from '../lib/prisma';
 
-export const find = async (id: number): Promise<CycleDetail | null> => {
+export const find = async (id: number): Promise<CycleMosaicItem | null> => {
   return prisma.cycle.findUnique({
     where: { id },
     include: {
@@ -19,7 +19,25 @@ export const find = async (id: number): Promise<CycleDetail | null> => {
           localImages: true,
           favs: true,
           ratings: { include: { work: true } },
+          comments: {
+            include: { comments: true },
+          },
         },
+      },
+      posts: {
+        include: {
+          creator: true,
+          localImages: true,
+          works: true,
+          favs: true,
+          comments: {
+            include: { comments: true },
+          },
+          cycles: true,
+        },
+      },
+      comments: {
+        include: { comments: true },
       },
     },
   });
@@ -94,6 +112,7 @@ export const search = async (query: { [key: string]: string | string[] }): Promi
             localImages: true,
             favs: true,
             ratings: { include: { work: true } },
+            comments: true,
           },
         },
       },
@@ -117,6 +136,7 @@ export const search = async (query: { [key: string]: string | string[] }): Promi
           ratings: { include: { work: true } },
         },
       },
+      comments: { include: { creator: true, comments: true } },
     },
   });
 };

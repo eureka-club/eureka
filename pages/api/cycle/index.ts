@@ -76,11 +76,11 @@ export default getApiHandler()
       } else if (where) {
         data = await prisma.cycle.findMany({
           ...(typeof where === 'string' && { where: JSON.parse(where) }),
-          include: { participants: true, localImages: true, ratings: true, favs: true },
+          include: { participants: true, localImages: true, ratings: true, favs: true, comments: true },
         });
       } else {
         data = await prisma.cycle.findMany({
-          include: { participants: true, localImages: true, ratings: true, favs: true },
+          include: { participants: true, localImages: true, ratings: true, favs: true, comments: true },
         });
       }
 

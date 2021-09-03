@@ -46,6 +46,7 @@ model User {
   following           User[]   @relation("_UserFollows", references: [id])
   ratingWorks         RatingOnWork[]
   ratingCycles        RatingOnCycle[]
+  comments            Comment[]
   
 
   @@map(name: "users")
@@ -148,6 +149,7 @@ model Work {
   topics            String?
 
   ratings           RatingOnWork[]
+  comments          Comment[]
   
   @@index([title], name: "works_title_index")
   @@index([author], name: "works_author_index")
@@ -188,7 +190,7 @@ model Cycle {
   contentText             String?   @db.VarChar(4000)  @map(name: "content_text")
   startDate               DateTime  @map(name: "start_date")
   endDate                 DateTime  @map(name: "end_date")
-  countryOfOrigin         String?    @map(name: "country_of_origin")
+  countryOfOrigin         String?   @map(name: "country_of_origin")
   createdAt               DateTime  @default(now()) @map(name: "created_at")
   updatedAt               DateTime  @updatedAt @map(name: "updated_at")
 
@@ -204,6 +206,7 @@ model Cycle {
   terms                   Term[]    @relation("TaxonomyTermCycle")
   topics                  String?
   ratings                 RatingOnCycle[]
+  comments                Comment[]
 
   @@index([creatorId], name: "cycles_creator_id_index")
   @@index([title], name: "cycles_title_index")
@@ -230,10 +233,38 @@ model Post {
 
   terms        Term[]    @relation("TaxonomyTermPost")
   topics       String?  
+  comments                Comment[]
 
   @@index([creatorId], name: "posts_creator_id_index")
 
   @@map(name: "posts")
+}
+
+model Comment {
+  id           Int         @default(autoincrement()) @id
+  creator      User        @relation(fields: [creatorId], references: [id])
+  creatorId    Int         @map(name: "creator_id")
+  contentText  String      @db.VarChar(4000) @map(name: "content_text")
+
+  cycle        Cycle?      @relation(fields: [cycleId], references: [id])
+  cycleId      Int?        @map(name: "cycle_id")
+
+  work         Work?       @relation(fields: [workId], references: [id])
+  workId       Int?        @map(name: "work_id")
+
+  post         Post?       @relation(fields: [postId], references: [id])
+  postId       Int?        @map(name: "post_id")
+
+  commentId    Int?
+  comment      Comment?    @relation("CommentCommented", fields: [commentId], references: [id])
+  comments     Comment[]   @relation("CommentCommented")
+
+  createdAt    DateTime    @default(now()) @map(name: "created_at")
+  updatedAt    DateTime    @updatedAt @map(name: "updated_at")
+
+  @@index([creatorId], name: "posts_creator_id_index")
+
+  @@map(name: "comments")
 }
 
 model Taxonomy {

@@ -1,89 +1,94 @@
-import classNames from 'classnames';
 import dayjs from 'dayjs';
-import HyvorTalk from 'hyvor-talk-react';
+// import HyvorTalk from 'hyvor-talk-react';
 import { useAtom } from 'jotai';
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, MouseEvent, useEffect } from 'react';
+import { FunctionComponent, MouseEvent } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 import NavItem from 'react-bootstrap/NavItem';
 import NavLink from 'react-bootstrap/NavLink';
 import Row from 'react-bootstrap/Row';
-import Spinner from 'react-bootstrap/Spinner';
+import { BiArrowBack } from 'react-icons/bi';
+
 import TabContainer from 'react-bootstrap/TabContainer';
 import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
-import Link from 'next/link';
-import { useMutation } from 'react-query';
 import globalModalsAtom from '../../atoms/globalModals';
 
 import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
 import { MySocialInfo, Session } from '../../types';
-import { CycleDetail } from '../../types/cycle';
-import { PostDetail } from '../../types/post';
-import { WorkDetail } from '../../types/work';
+import { CycleMosaicItem } from '../../types/cycle';
+import { PostMosaicItem } from '../../types/post';
+import { WorkMosaicItem } from '../../types/work';
 
-import LocalImageComponent from '../LocalImage';
+// import LocalImageComponent from '../LocalImage';
 import PostDetailComponent from '../post/PostDetail';
-import CycleSummary from './CycleSummary';
+// import CycleSummary from './CycleSummary';
 import HyvorComments from '../common/HyvorComments';
-import SocialInteraction from '../common/SocialInteraction';
+// import SocialInteraction from '../common/SocialInteraction';
 import PostsMosaic from './PostsMosaic';
 import WorksMosaic from './WorksMosaic';
+import CommnetMosaic from '../comment/MosaicItem';
 import UnclampText from '../UnclampText';
 import detailPagesAtom from '../../atoms/detailPages';
 import styles from './CycleDetail.module.css';
 import CycleDetailHeader from './CycleDetailHeader';
+import CycleDetailDiscussion from './CycleDetailDiscussion';
+// import useCycles from '../../useCycles';
 
 interface Props {
-  cycle: CycleDetail;
-  post?: PostDetail;
-  work?: WorkDetail;
-  isCurrentUserJoinedToCycle: boolean;
-  participantsCount: number;
-  postsCount: number;
-  worksCount: number;
-  mySocialInfo: MySocialInfo;
+  cycle: CycleMosaicItem;
+  post?: PostMosaicItem;
+  work?: WorkMosaicItem;
+  // isCurrentUserJoinedToCycle: boolean;
+
+  // mySocialInfo: MySocialInfo;
 }
 
 const CycleDetailComponent: FunctionComponent<Props> = ({
   cycle,
   post,
   work,
-  isCurrentUserJoinedToCycle,
-  participantsCount,
-  postsCount,
-  worksCount,
-  mySocialInfo,
+  // isCurrentUserJoinedToCycle,
+
+  // mySocialInfo,
 }) => {
-  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
+  // const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const router = useRouter();
   const [session] = useSession() as [Session | null | undefined, boolean];
   const { t } = useTranslation('cycleDetail');
-  const hyvorId = `${WEBAPP_URL}cycle/${cycle.id}`;
+  const hyvorId = `${WEBAPP_URL}cycle/${router.query.id}`;
 
-  const openSignInModal = () => {
-    setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
-  };
+  // const { data } = useCycles(1);
+  // const [cycle, setCycle] = useState<CycleDetail>();
+  // useEffect(() => {
+  //   if (data) {
+  //     setCycle(() => data as CycleDetail);
+  //   }
+  // }, [data]);
 
-  const {
-    mutate: execJoinCycle,
-    isLoading: isJoinCycleLoading,
-    isSuccess: isJoinCycleSuccess,
-  } = useMutation(async () => {
-    await fetch(`/api/cycle/${cycle.id}/join`, { method: 'POST' });
-  });
-  const {
-    mutate: execLeaveCycle,
-    isLoading: isLeaveCycleLoading,
-    isSuccess: isLeaveCycleSuccess,
-  } = useMutation(async () => {
-    await fetch(`/api/cycle/${cycle.id}/join`, { method: 'DELETE' });
-  });
+  // const openSignInModal = () => {
+  //   setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
+  // };
+
+  // const {
+  //   mutate: execJoinCycle,
+  //   isLoading: isJoinCycleLoading,
+  //   isSuccess: isJoinCycleSuccess,
+  // } = useMutation(async () => {
+  //   await fetch(`/api/cycle/${cycle.id}/join`, { method: 'POST' });
+  // });
+  // const {
+  //   mutate: execLeaveCycle,
+  //   isLoading: isLeaveCycleLoading,
+  //   isSuccess: isLeaveCycleSuccess,
+  // } = useMutation(async () => {
+  //   await fetch(`/api/cycle/${cycle.id}/join`, { method: 'DELETE' });
+  // });
 
   const handleSubsectionChange = (key: string | null) => {
     if (key != null) {
@@ -91,30 +96,30 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     }
   };
 
-  const handleJoinCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-    if (!session) openSignInModal();
-    execJoinCycle();
-  };
+  // const handleJoinCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
+  //   ev.preventDefault();
+  //   if (!session) openSignInModal();
+  //   execJoinCycle();
+  // };
 
-  const handleLeaveCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-    execLeaveCycle();
-  };
+  // const handleLeaveCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
+  //   ev.preventDefault();
+  //   execLeaveCycle();
+  // };
 
-  useEffect(() => {
-    if (isJoinCycleSuccess === true) {
-      router.replace(router.asPath); // refresh page
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isJoinCycleSuccess]);
+  // useEffect(() => {
+  //   if (isJoinCycleSuccess === true) {
+  //     router.replace(router.asPath); // refresh page
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [isJoinCycleSuccess]);
 
-  useEffect(() => {
-    if (isLeaveCycleSuccess === true) {
-      router.replace(router.asPath); // refresh page
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLeaveCycleSuccess]);
+  // useEffect(() => {
+  //   if (isLeaveCycleSuccess === true) {
+  //     router.replace(router.asPath); // refresh page
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [isLeaveCycleSuccess]);
 
   const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
@@ -122,10 +127,29 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   };
 
   const canEditCycle = (): boolean => {
-    if (session) {
+    if (session && cycle) {
       if (session.user.roles === 'admin' || session!.user.id === cycle.creatorId) return true;
     }
     return false;
+  };
+
+  const renderCycleOwnComments = () => {
+    if (cycle.comments)
+      return cycle.comments
+        .filter((c) => !c.workId && !c.postId && !c.commentId)
+        .map((c) => {
+          return (
+            <CommnetMosaic
+              key={c.id}
+              comment={c}
+              detailed
+              showComments
+              commentParent={cycle}
+              cacheKey={['CYCLES', `${cycle.id}`]}
+            />
+          );
+        });
+    return null;
   };
 
   return (
@@ -135,7 +159,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           {t('Edit')}
         </Button>
       )}
-      <CycleDetailHeader cycle={cycle} />
+      {!post && cycle && <CycleDetailHeader cycle={cycle} />}
       {/* <Row className="mb-5">
         {post == null ? (
           <>
@@ -190,8 +214,13 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           <PostDetailComponent post={post} cycle={cycle} work={work} mySocialInfo={mySocialInfo} />
         )}
       </Row> */}
-
-      {post == null && (
+      {post && (
+        <Button variant="info" onClick={() => router.push(`/cycle/${cycle.id}`)} size="sm">
+          <BiArrowBack />
+        </Button>
+      )}
+      {post && <PostDetailComponent post={post} cycle={cycle} work={work} />}
+      {cycle && post == null && (
         <Row className="mb-5">
           <Col>
             {detailPagesState.selectedSubsectionCycle != null && (
@@ -200,23 +229,45 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 onSelect={handleSubsectionChange}
                 transition={false}
               >
+                {/* language=CSS */}
+                <style jsx global>
+                  {`
+                    .nav-tabs .nav-item.show .nav-link,
+                    .nav-tabs .nav-link.active {
+                      color: #495057;
+                      background-color: #fff;
+                      border: none !important;
+                      border-bottom: solid 6px var(--eureka-green) !important;
+                    }
+                    .nav-tabs {
+                      border: none !important;
+                    }
+                  `}
+                </style>
                 <Row className="mb-4">
                   <Col>
                     <Nav variant="tabs" fill>
-                      <NavItem>
-                        <NavLink eventKey="cycle-content">
-                          {t('tabHeaderCycleContent')} ({worksCount})
+                      <NavItem className={styles.tabBtn}>
+                        <NavLink eventKey="cycle-about">
+                          {t('About')} ({cycle.works.length})
                         </NavLink>
                       </NavItem>
-                      <NavItem>
-                        <NavLink eventKey="posts">
-                          {t('tabHeaderPosts')} ({postsCount})
-                        </NavLink>
+                      <NavItem className={styles.tabBtn}>
+                        <NavLink eventKey="cycle-discussion">{t('Discussion')}</NavLink>
                       </NavItem>
-                      <NavItem>
-                        <NavLink eventKey="forum">
-                          {t('tabHeaderForum')} (
-                          <HyvorTalk.CommentCount websiteId={Number(HYVOR_WEBSITE_ID!)} id={hyvorId} />)
+                      <NavItem className={styles.tabBtn}>
+                        <NavLink eventKey="my_milestone">{t('My milestones')}</NavLink>
+                      </NavItem>
+                      <NavItem className={styles.tabBtn}>
+                        <NavLink eventKey="guidelines">{t('Guidelines')}</NavLink>
+                      </NavItem>
+
+                      <NavItem className={styles.tabBtn}>
+                        <NavLink eventKey="participants">
+                          {t('Participants')}{' '}
+                          {/* (
+                           <HyvorTalk.CommentCount websiteId={Number(HYVOR_WEBSITE_ID!)} id={hyvorId} />
+                          ) */}
                         </NavLink>
                       </NavItem>
                     </Nav>
@@ -225,14 +276,15 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 <Row>
                   <Col>
                     <TabContent>
-                      <TabPane eventKey="cycle-content">
+                      <TabPane eventKey="cycle-about">
+                        <h2 className="mb-3">{t('Why does this cycle matter')}?</h2>
                         {cycle.contentText != null && (
                           <div className="mb-5">
                             <UnclampText text={cycle.contentText} clampHeight="7rem" />
                           </div>
                         )}
-                        <h2 className="mb-5">{t('worksCountHeader', { count: worksCount })}</h2>
-                        {worksCount > 0 && <WorksMosaic cycle={cycle} />}
+                        <h2 className="mb-5">{t('worksCountHeader', { count: cycle.works.length })}</h2>
+                        {cycle.works.length > 0 && <WorksMosaic cycle={cycle} />}
 
                         {cycle.complementaryMaterials.length > 0 && (
                           <Row className="mt-4 mb-5">
@@ -259,15 +311,30 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                           </Row>
                         )}
                       </TabPane>
-                      <TabPane eventKey="posts">
-                        <h2 className="mb-3">{t('postsCountHeader', { count: postsCount })}</h2>
-                        <p className={styles.explanatoryText}>{t('explanatoryTextPosts')}</p>
-                        {postsCount > 0 && <PostsMosaic cycle={cycle} />}
+                      <TabPane eventKey="cycle-discussion">
+                        <CycleDetailDiscussion cycle={cycle} />
+                        {(cycle.posts.length && (
+                          <PostsMosaic
+                            display="horizontally"
+                            cycle={cycle}
+                            showComments
+                            cacheKey={['CYCLES', `${cycle.id}`]}
+                          />
+                        )) ||
+                          null}
+                        {renderCycleOwnComments()}
                       </TabPane>
-                      <TabPane eventKey="forum">
-                        <h3>{t('tabHeaderForum')}</h3>
-                        <p className={styles.explanatoryText}>{t('explanatoryTextComments')}</p>
-                        <HyvorComments id={hyvorId} />
+                      <TabPane eventKey="my_milestone">
+                        <h2 className="mb-3">{t('My milestones')}</h2>
+                        <p />
+                      </TabPane>
+                      <TabPane eventKey="guidelines">
+                        <h2 className="mb-3">{t('Guidelines')}</h2>
+                        <p />
+                      </TabPane>
+                      <TabPane eventKey="participants">
+                        <h2>{t('Participants')}</h2>
+                        <p />
                       </TabPane>
                     </TabContent>
                   </Col>

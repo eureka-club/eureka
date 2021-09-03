@@ -5,9 +5,9 @@ import { useQuery } from 'react-query';
 
 const fetchUsers = async (id: string) => {
   if (!id) return null;
-  const res = await fetch(`/api/user${id ? `?id=${id}` : ''}`);
-  const { data } = await res.json();
-  return data; // .map((i: { code: string; label: string }) => ({ code: i.code, label: i.label }));
+  const res = await fetch(`/api/user/${id}`);
+  const { data: user } = await res.json();
+  return user; // .map((i: { code: string; label: string }) => ({ code: i.code, label: i.label }));
 };
 
 const useUsers = (id: string) => {

@@ -3,6 +3,7 @@ import { getSession } from 'next-auth/client';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
+import { Cycle } from '@prisma/client';
 import { Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { find, remove } from '../../../src/facades/cycle';
@@ -52,7 +53,6 @@ export default getApiHandler()
     //   res.status(401).json({ status: 'Unauthorized' });
     //   return;
     // }
-
     const { id } = req.query;
     if (typeof id !== 'string') {
       res.status(404).end();
@@ -87,20 +87,29 @@ export default getApiHandler()
       res.status(401).json({ status: 'Unauthorized' });
       return;
     }
-
     let data = req.body;
 
-    const { id } = data;
-    data.startDate = dayjs(`${data.startDate}`, 'YYYY').utc().format();
-    data.endDate = dayjs(`${data.endDate}`, 'YYYY').utc().format();
-
-    try {
+    const { id, includedWorksIds } = data;
+    let r: Cycle;
+    if (includedWorksIds) {
+      r = await prisma.cycle.update({
+        where: { id },
+        data: {
+          updatedAt: dayjs().utc().format(),
+          works: { connect: includedWorksIds.map((workId: number) => ({ id: workId })) },
+        },
+      });
+    } else {
+      data.startDate = dayjs(`${data.startDate}`, 'YYYY').utc().format();
+      data.endDate = dayjs(`${data.endDate}`, 'YYYY').utc().format();
       delete data.id;
       data = {
         ...data,
       };
+      r = await prisma.cycle.update({ where: { id }, data });
+    }
 
-      const r = await prisma.cycle.update({ where: { id }, data });
+    try {
       res.status(200).json({ ...r });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

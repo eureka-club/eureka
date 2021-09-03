@@ -1,23 +1,33 @@
 import { Prisma, Work, User, RatingOnWork } from '@prisma/client';
 import { StoredFileUpload } from '../types';
-import { CreateWorkServerFields, CreateWorkServerPayload, WorkDetail, WorkWithImages } from '../types/work';
+import { CreateWorkServerFields, CreateWorkServerPayload, WorkMosaicItem } from '../types/work';
 import prisma from '../lib/prisma';
 
-export const find = async (id: number): Promise<WorkDetail | null> => {
+export const find = async (id: number): Promise<WorkMosaicItem | null> => {
   return prisma.work.findUnique({
     where: { id },
     include: {
       localImages: true,
       ratings: true,
       favs: true,
+      comments: {
+        include: { comments: true },
+      },
     },
   });
 };
 
-export const findAll = async (): Promise<WorkWithImages[]> => {
+export const findAll = async (): Promise<WorkMosaicItem[]> => {
   return prisma.work.findMany({
     orderBy: { createdAt: 'desc' },
-    include: { localImages: true, ratings: true, favs: true },
+    include: {
+      localImages: true,
+      ratings: true,
+      favs: true,
+      comments: {
+        include: { comments: true },
+      },
+    },
   });
 };
 

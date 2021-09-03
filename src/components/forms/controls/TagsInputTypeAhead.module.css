@@ -1,5 +1,5 @@
-.textInput{
-    
+.textInput input{
+    /* background-color: red; */
 }
 .searchButton{
     color: white;
@@ -8,7 +8,7 @@
       border-radius: 50%;
       width: 2em;
       padding: .4em;
-      margin: 3px 0 0 -40px;
+      /* margin: 3px 0 0 -40px; */
       position: relative;
       height: 2em;
   }

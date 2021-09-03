@@ -23,10 +23,12 @@ export type TagsInputProp = {
   max?: number;
   onTagCreated?: (e: { code: string; label: string }) => void;
   onTagDeleted?: (code: string) => void;
+  placeholder?: string;
+  style?: { [key: string]: string };
 };
 
 const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
-  const { data, max = 5, onTagCreated, onTagDeleted, labelKey } = props;
+  const { data, max = 5, onTagCreated, onTagDeleted, labelKey, placeholder, style } = props;
   const { t } = useTranslation('createWorkForm');
   // const { tags, setTags, label = '', readOnly = false } = props;
   const { items, setItems, label = '', readOnly = false } = props;
@@ -127,7 +129,7 @@ const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputPr
           );
         })}
         {!readOnly && items.length < max && data && data.length && (
-          <InputGroup>
+          <InputGroup style={style}>
             <Typeahead
               ref={ref}
               id="TagsInputTypeAhead"
@@ -137,14 +139,13 @@ const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputPr
               // onKeyPress={onKeyPressOnInput}
               options={data}
               className={styles.textInput}
+              placeholder={placeholder}
             />
-            <InputGroup.Append className={styles.searchButton}>
-              {/* <Button
-              onClick={() => { }}
-                variant="outline-secondary"> */}
+            {/* <InputGroup.Append className={styles.searchButton}>
+              
               <AiOutlineSearch onClick={() => ({})} />
-              {/* </Button> */}
-            </InputGroup.Append>
+              
+            </InputGroup.Append> */}
           </InputGroup>
         )}
       </div>

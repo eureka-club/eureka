@@ -9,19 +9,19 @@ import PopoverContent from 'react-bootstrap/PopoverContent';
 import Table from 'react-bootstrap/Table';
 import { useMutation } from 'react-query';
 
-import { PostWithImages } from '../../src/types/post';
+import { PostMosaicItem } from '../../src/types/post';
 import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import LocalImageComponent from '../../src/components/LocalImage';
 import { findAll } from '../../src/facades/post';
 
 interface Props {
-  posts: PostWithImages[];
+  posts: PostMosaicItem[];
 }
 
 const ListPostsPage: NextPage<Props> = ({ posts }) => {
   const router = useRouter();
-  const { mutate: execDeletePost, isSuccess: isDeletePostSuccess } = useMutation(async (post: PostWithImages) => {
+  const { mutate: execDeletePost, isSuccess: isDeletePostSuccess } = useMutation(async (post: PostMosaicItem) => {
     const res = await fetch(`/api/post/${post.id}`, {
       method: 'delete',
     });
@@ -30,7 +30,7 @@ const ListPostsPage: NextPage<Props> = ({ posts }) => {
     return data;
   });
 
-  const handleDeleteClick = (post: PostWithImages) => {
+  const handleDeleteClick = (post: PostMosaicItem) => {
     execDeletePost(post);
   };
 

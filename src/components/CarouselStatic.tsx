@@ -7,7 +7,7 @@
 import { useAtom } from 'jotai';
 import Masonry from 'react-masonry-css';
 import classNames from 'classnames';
-import { Cycle, Work } from '@prisma/client';
+// import { Cycle, Work } from '@prisma/client';
 import useTranslation from 'next-translate/useTranslation';
 // import { /* useInfiniteQuery, */ useQuery } from 'react-query';
 import { FunctionComponent /* , ChangeEvent */, useState, useEffect, Fragment } from 'react';
@@ -30,17 +30,8 @@ import { CycleMosaicItem /* , CycleWithImages */ } from '../types/cycle';
 import { PostMosaicItem } from '../types/post';
 import { UserMosaicItem } from '../types/user';
 
-type Item =
-  | (CycleMosaicItem & { type: string })
-  | WorkMosaicItem
-  | (PostMosaicItem & { type: string })
-  | UserMosaicItem;
+type Item = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | UserMosaicItem;
 type Props = {
-  // page: number;
-  // setPage: (page: number) => void;
-  // items: (WorkWithImages | CycleWithImages)[];
-  // topic: string;
-  // topicLabel?: string;
   title: string;
   iconBefore?: JSX.Element;
   iconAfter?: JSX.Element;
@@ -52,7 +43,7 @@ type Props = {
 
 const renderMosaicItem = (
   item: MosaicItem,
-  postsParent: Cycle | Work | undefined,
+  postsParent: CycleMosaicItem | WorkMosaicItem | undefined,
   showSocialInteraction = true,
   customMosaicStyle?: { [key: string]: string },
 ) => {
@@ -115,7 +106,7 @@ const Carousel: FunctionComponent<Props> = ({
       if (data.length) {
         let d = [...data];
         if (globalSEState.only.length) {
-          d = data.filter((i) => globalSEState.only.includes(i.type));
+          d = data.filter((i) => globalSEState.only.includes(i.type || ''));
         }
         setDataFiltered(() => d);
         const s = d.slice(0, 4);

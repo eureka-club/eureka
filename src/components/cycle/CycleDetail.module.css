@@ -54,3 +54,10 @@
   display: flex;
   align-items: space-between;
 }
+
+
+.tabBtn a{
+  border: none;
+  border-bottom: solid 2px var(--eureka-green)!important;
+  
+}

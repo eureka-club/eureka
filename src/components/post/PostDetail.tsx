@@ -11,21 +11,22 @@ import { Row, Col, Button } from 'react-bootstrap';
 
 import { DATE_FORMAT_SHORT } from '../../constants';
 import { MySocialInfo, Session } from '../../types';
-import { CycleDetail } from '../../types/cycle';
-import { PostDetail as PostDetailType } from '../../types/post';
+import { CycleMosaicItem } from '../../types/cycle';
+import { PostMosaicItem } from '../../types/post';
 import globalModalsAtom from '../../atoms/globalModals';
-import { WorkDetail } from '../../types/work';
+import { WorkMosaicItem } from '../../types/work';
 import HyvorComments from '../common/HyvorComments';
 import LocalImageComponent from '../LocalImage';
 import SocialInteraction from '../common/SocialInteraction';
 import UnclampText from '../UnclampText';
 import styles from './PostDetail.module.css';
+import Avatar from '../common/UserAvatar';
 
 interface Props {
-  post: PostDetailType;
-  cycle?: CycleDetail;
-  work?: WorkDetail;
-  mySocialInfo?: MySocialInfo;
+  post: PostMosaicItem;
+  cycle?: CycleMosaicItem;
+  work?: WorkMosaicItem;
+  // mySocialInfo?: MySocialInfo;
 }
 
 dayjs.extend(utc);
@@ -95,14 +96,15 @@ const PostDetail: FunctionComponent<Props> = ({ post, cycle, work }) => {
           <div className="pt-3 px-4">
             <div className={classNames('d-flex', styles.postInfo)}>
               <Link href={`/mediatheque/${post.creator.id}`}>
-                <a>
+                {/* <a>
                   <img
                     src={post.creator.image || '/img/default-avatar.png'}
                     alt="creator avatar"
                     className={styles.creatorAvatar}
                   />
                   {post.creator.name}
-                </a>
+                </a> */}
+                <Avatar userId={post.creatorId} size="xs" />
               </Link>
               <small className={styles.postDate}>
                 {

@@ -11,6 +11,8 @@ import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/client';
 import { useAtom } from 'jotai';
 import Rating from 'react-rating';
+import { Container, Row, Col, OverlayTrigger, Popover, Button, Spinner } from 'react-bootstrap';
+
 import {
   FacebookIcon,
   FacebookShareButton,
@@ -19,16 +21,16 @@ import {
   WhatsappShareButton,
   WhatsappIcon,
 } from 'react-share';
-import { Cycle, User, Work, Post, RatingOnCycle, RatingOnWork } from '@prisma/client';
-import { OverlayTrigger, Popover, Button } from 'react-bootstrap';
+import { Cycle, User, Work, Post } from '@prisma/client';
+
 import { useUsers } from '../../useUsers';
 import globalModalsAtom from '../../atoms/globalModals';
 // import Notification from '../ui/Notification';
 
 import { WEBAPP_URL } from '../../constants';
-import { CycleDetail } from '../../types/cycle';
-import { PostDetail } from '../../types/post';
-import { WorkDetail } from '../../types/work';
+import { CycleMosaicItem } from '../../types/cycle';
+import { PostMosaicItem } from '../../types/post';
+import { WorkMosaicItem } from '../../types/work';
 import { MySocialInfo, isCycle, isWork, Session, isPost } from '../../types';
 import styles from './SocialInteraction.module.css';
 
@@ -39,14 +41,15 @@ interface SocialInteractionClientPayload {
 }
 
 interface Props {
-  entity: CycleDetail | PostDetail | WorkDetail | User;
-  parent?: CycleDetail | WorkDetail | null;
+  entity: CycleMosaicItem | PostMosaicItem | WorkMosaicItem | User;
+  parent?: Cycle | Work | null;
   // mySocialInfo: MySocialInfo;
   showCounts?: boolean;
   showShare?: boolean;
   showButtonLabels?: boolean;
   cacheKey?: string[];
   showTrash?: boolean;
+  showRating?: boolean;
 }
 
 const SocialInteraction: FunctionComponent<Props> = ({
@@ -57,6 +60,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   showButtonLabels = true,
   cacheKey = '',
   showTrash = false,
+  showRating = true,
 }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
@@ -188,6 +192,9 @@ const SocialInteraction: FunctionComponent<Props> = ({
     if (isWork(entity)) {
       return t('workShare');
     }
+    if (isPost(entity)) {
+      return t('postWorkShare');
+    }
 
     throw new Error('Invalid entity or parent');
   })();
@@ -198,7 +205,11 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
   const shareText = `${shareTextDynamicPart} "${title()}" ${t('complementShare')}`;
 
-  const { mutate: execSocialInteraction, isSuccess: isSocialInteractionSuccess } = useMutation(
+  const {
+    mutate: execSocialInteraction,
+    isSuccess: isSocialInteractionSuccess,
+    isLoading: loadingSocialInteraction,
+  } = useMutation(
     async ({ socialInteraction, doCreate, ratingQty }: SocialInteractionClientPayload) => {
       const entityEndpoint = (() => {
         if (parent != null) {
@@ -406,29 +417,74 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const getFullSymbol = () => {
     if (session) {
       if (user && mySocialInfo) {
-        if (mySocialInfo.ratingByMe) return <GiBrain style={{ color: 'var(--eureka-green)' }} />;
-        return <GiBrain style={{ color: 'var(--text-color-secondary)' }} />;
+        if (mySocialInfo.ratingByMe) return <GiBrain style={{ color: 'var(--eureka-blue)' }} />;
       }
     }
-    return <GiBrain style={{ color: 'var(--text-color-secondary)' }} />;
+    return <GiBrain style={{ color: 'var(--eureka-green)' }} />;
+  };
+
+  const getRatingsCount = () => {
+    let count = 0;
+    if (isWork(entity)) count = (entity as WorkMosaicItem).ratings.length;
+    else if (isCycle(entity)) count = (entity as CycleMosaicItem).ratings.length;
+
+    // if (!session || (user && mySocialInfo && !mySocialInfo.ratingByMe))
+    return <span className={styles.ratingsCount}>{`(${count})`}</span>;
+    // return <Badge variant="secondary">{`${entity.ratings.length}`}</Badge>;
+    // return <Badge variant="info">{`${entity.ratings.length}`}</Badge>;
+  };
+
+  const getRatingLabelInfo = () => {
+    if (!session || (user && mySocialInfo && !mySocialInfo.ratingByMe)) {
+      return <span className={styles.ratingLabelInfo}>{t('Rate it')}</span>;
+    }
+    return undefined;
   };
 
   return (
     // (session && user && (
-    <div className={styles.container}>
-      {showTrash && (
-        <button type="button" title="Clear rating" className={styles.clearRating} onClick={clearRating}>
-          <FiTrash2 />
-        </button>
-      )}
-      <Rating
-        initialRating={qty}
-        onChange={handlerChangeRating}
-        className={styles.rating}
-        stop={5}
-        emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
-        fullSymbol={getFullSymbol()}
-      />
+    <Container className={styles.container}>
+      <Row>
+        {showRating && (
+          <Col xs={10}>
+            {showRating && getRatingLabelInfo()}
+            {` `}
+            {showTrash && (
+              <button type="button" title="Clear rating" className={styles.clearRating} onClick={clearRating}>
+                <FiTrash2 />
+              </button>
+            )}
+            {showRating && (
+              <Rating
+                initialRating={qty}
+                onChange={handlerChangeRating}
+                className={styles.rating}
+                stop={5}
+                emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
+                fullSymbol={getFullSymbol()}
+              />
+            )}{' '}
+            {showRating && !loadingSocialInteraction && getRatingsCount()}
+            {loadingSocialInteraction && (
+              <Spinner className={styles.ratingSpinner} size="sm" animation="grow" variant="secondary" />
+            )}
+          </Col>
+        )}
+        <Col xs={showRating ? 2 : 12}>
+          {!loadingSocialInteraction && (
+            <button className={styles.socialBtn} title={t('Save for later')} onClick={handleFavClick} type="button">
+              {optimistFav ? <BsBookmarkFill className={styles.active} /> : <BsBookmark />}
+              <br />
+              {showButtonLabels && (
+                <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>
+                  {t('Save for later')}
+                </span>
+              )}
+            </button>
+          )}
+        </Col>
+      </Row>
+
       {/* {isWork(entity) && (
           <button
             className={styles.socialBtn}
@@ -455,15 +511,6 @@ const SocialInteraction: FunctionComponent<Props> = ({
           )}
         </button>
             */}
-      <button className={styles.socialBtn} title={t('Save for later')} onClick={handleFavClick} type="button">
-        {optimistFav ? <BsBookmarkFill className={styles.active} /> : <BsBookmark />}
-        <br />
-        {showButtonLabels && (
-          <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>
-            {t('Save for later')}
-          </span>
-        )}
-      </button>
 
       {showShare && (
         <OverlayTrigger trigger="click" placement="right" overlay={popoverShares}>
@@ -474,7 +521,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
           </Button>
         </OverlayTrigger>
       )}
-    </div>
+    </Container>
     // )) ||
     // null
   );

@@ -30,9 +30,9 @@ import CarouselStatic from '../../src/components/CarouselStatic';
 // import useCycles from '../src/useCycles';
 // import useCountries from '../src/useCountries';
 import { Session } from '../../src/types';
-import { CycleDetail, CycleMosaicItem /* , CycleWithImages */ } from '../../src/types/cycle';
+import { CycleMosaicItem /* , CycleWithImages */ } from '../../src/types/cycle';
 import { PostMosaicItem /* , PostWithImages */ } from '../../src/types/post';
-import { WorkDetail, WorkMosaicItem /* , WorkWithImages */ } from '../../src/types/work';
+import { WorkMosaicItem /* , WorkWithImages */ } from '../../src/types/work';
 import { UserMosaicItem /* , UserDetail, WorkWithImages */ } from '../../src/types/user';
 // import MosaicItemCycle from '../../src/components/cycle/MosaicItem';
 // import MosaicItemPost from '../../src/components/post/MosaicItem';
@@ -247,7 +247,7 @@ const Mediatheque: NextPage = () => {
       <FilterEngine fictionOrNotFilter={false} geographyFilter={false} />
 
       <CarouselStatic
-        onSeeAll={async () => seeAll(cycles, t('Eurekas I created'))}
+        onSeeAll={async () => seeAll(posts, t('Eurekas I created'))}
         title={t('Eurekas I created')}
         data={posts}
         iconBefore={<></>}

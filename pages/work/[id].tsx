@@ -3,7 +3,7 @@ import { getSession } from 'next-auth/client';
 
 import { useQueryClient } from 'react-query';
 import { Session, MySocialInfo } from '../../src/types';
-import { WorkDetail } from '../../src/types/work';
+import { WorkMosaicItem } from '../../src/types/work';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import WorkDetailComponent from '../../src/components/work/WorkDetail';
 
@@ -17,7 +17,7 @@ import {
 } from '../../src/facades/work';
 
 interface Props {
-  work: WorkDetail;
+  work: WorkMosaicItem;
   cyclesCount: number;
   postsCount: number;
   mySocialInfo: MySocialInfo;

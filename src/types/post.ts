@@ -1,9 +1,9 @@
 import { LocalImage, Post, Prisma } from '@prisma/client';
 
-export interface PostWithImages extends Post {
-  localImages: LocalImage[];
-  // type: string;
-}
+// export interface PostWithImages extends Post {
+//   localImages: LocalImage[];
+//   // type: string;
+// }
 
 export type PostMosaicItem = Prisma.PostGetPayload<{
   include: {
@@ -13,24 +13,26 @@ export type PostMosaicItem = Prisma.PostGetPayload<{
     cycles: true;
     likes: true;
     favs: true;
+    comments: true;
   };
 }> & { type?: 'post' };
 
-export type PostDetail = Prisma.PostGetPayload<{
-  include: {
-    creator: true;
-    localImages: true;
-    cycles: { include: { localImages: true } };
-    works: true;
-    likes: true;
-    favs: true;
-  };
-}>;
+// export type PostDetail = Prisma.PostGetPayload<{
+//   include: {
+//     creator: true;
+//     localImages: true;
+//     cycles: { include: { localImages: true } };
+//     works: true;
+//     likes: true;
+//     favs: true;
+//   };
+// }> & { type?: string };
 
 export type PostWithCyclesWorks = Prisma.PostGetPayload<{
   include: {
     cycles: true;
     works: true;
+    comments: true;
   };
 }>;
 

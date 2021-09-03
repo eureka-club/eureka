@@ -99,10 +99,12 @@ const CreateWorkForm: FunctionComponent = () => {
     setIsCountriesSearchLoading(true);
     const response = await fetch(`/api/taxonomy/countries?q=${query}`);
     const itemsSC: { id: number; code: string; label: string }[] = (await response.json()).result;
-    itemsSC.forEach((i, idx: number) => {
-      itemsSC[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
-    });
-    setCountrySearchResults(itemsSC);
+    if (itemsSC) {
+      itemsSC.forEach((i, idx: number) => {
+        itemsSC[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
+      });
+      setCountrySearchResults(itemsSC);
+    }
     setIsCountriesSearchLoading(false);
   };
 

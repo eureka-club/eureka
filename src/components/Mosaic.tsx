@@ -9,20 +9,40 @@ import MosaicItemPost from './post/MosaicItem';
 import MosaicItemWork from './work/MosaicItem';
 import MosaicItemUser from './user/MosaicItem';
 import styles from './Mosaic.module.css';
+import { CycleMosaicItem } from '../types/cycle';
 
 interface Props {
-  postsLinksTo?: Cycle | Work;
+  postsLinksTo?: CycleMosaicItem | Work;
   stack: MosaicItem[];
   showButtonLabels?: boolean;
+  display?: 'horizontally' | 'vertically';
+  showComments?: boolean;
+  cacheKey?: string[];
 }
 
-const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefined, showButtonLabels: boolean) => {
+const renderMosaicItem = (
+  item: MosaicItem,
+  postsParent: CycleMosaicItem | Work | undefined,
+  showButtonLabels: boolean,
+  display: 'horizontally' | 'vertically',
+  showComments: boolean,
+  cacheKey?: string[],
+) => {
   if (isCycleMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
     return <MosaicItemCycle key={`cycle-${item.id}`} cycle={item} detailed />;
   }
   if (isPostMosaicItem(item)) {
-    return <MosaicItemPost key={`post-${item.id}`} post={item} postParent={postsParent} />;
+    return (
+      <MosaicItemPost
+        key={`post-${item.id}`}
+        showComments={showComments}
+        post={item}
+        postParent={postsParent}
+        display={display}
+        cacheKey={cacheKey}
+      />
+    );
   }
   if (isWorkMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -35,19 +55,28 @@ const renderMosaicItem = (item: MosaicItem, postsParent: Cycle | Work | undefine
   return '';
 };
 
-const Mosaic: FunctionComponent<Props> = ({ postsLinksTo, stack, showButtonLabels = true }) => {
+const Mosaic: FunctionComponent<Props> = ({
+  postsLinksTo,
+  stack,
+  showButtonLabels = true,
+  display = 'vertically',
+  showComments = false,
+  cacheKey,
+}) => {
   return (
     <Masonry
       breakpointCols={{
-        default: 4,
-        1199: 3,
-        768: 2,
+        default: display === 'vertically' ? 4 : 1,
+        1199: display === 'vertically' ? 3 : 1,
+        768: display === 'vertically' ? 2 : 1,
         576: 1,
       }}
       className={classNames('d-flex', styles.masonry)}
       columnClassName={styles.masonryColumn}
     >
-      {stack.map((item: MosaicItem) => renderMosaicItem(item, postsLinksTo, showButtonLabels))}
+      {stack.map((item: MosaicItem) =>
+        renderMosaicItem(item, postsLinksTo, showButtonLabels, display, showComments, cacheKey),
+      )}
     </Masonry>
   );
 };

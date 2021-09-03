@@ -26,23 +26,23 @@ type UserFoolow = {
 };
 
 export type UserMosaicItem = Prisma.UserGetPayload<UserFoolow> & {
-  type: string;
+  type?: 'user';
 };
 
-export type UserDetail = Prisma.UserGetPayload<{
-  include: {
-    cycles: true;
-    joinedCycles: true;
-    likedCycles: true;
-    favCycles: true;
-    posts: true;
-    likedWorks: true;
-    favWorks: true;
-    readOrWatchedWorks: true;
-    following: UserFoolow;
-    followedBy: UserFoolow;
-    ratingWorks: true;
-    ratingCycles: true;
-    ratingPosts: true;
-  };
-}>;
+// export type UserDetail = Prisma.UserGetPayload<{
+//   include: {
+//     cycles: true;
+//     joinedCycles: true;
+//     likedCycles: true;
+//     favCycles: true;
+//     posts: true;
+//     likedWorks: true;
+//     favWorks: true;
+//     readOrWatchedWorks: true;
+//     following: UserFoolow;
+//     followedBy: UserFoolow;
+//     ratingWorks: true;
+//     ratingCycles: true;
+//     ratingPosts: true;
+//   };
+// }>;
