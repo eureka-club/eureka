@@ -192,6 +192,9 @@ const SocialInteraction: FunctionComponent<Props> = ({
     if (isWork(entity)) {
       return t('workShare');
     }
+    if (isPost(entity)) {
+      return t('postWorkShare');
+    }
 
     throw new Error('Invalid entity or parent');
   })();
@@ -468,15 +471,17 @@ const SocialInteraction: FunctionComponent<Props> = ({
           </Col>
         )}
         <Col xs={showRating ? 2 : 12}>
-          <button className={styles.socialBtn} title={t('Save for later')} onClick={handleFavClick} type="button">
-            {optimistFav ? <BsBookmarkFill className={styles.active} /> : <BsBookmark />}
-            <br />
-            {showButtonLabels && (
-              <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>
-                {t('Save for later')}
-              </span>
-            )}
-          </button>
+          {!loadingSocialInteraction && (
+            <button className={styles.socialBtn} title={t('Save for later')} onClick={handleFavClick} type="button">
+              {optimistFav ? <BsBookmarkFill className={styles.active} /> : <BsBookmark />}
+              <br />
+              {showButtonLabels && (
+                <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>
+                  {t('Save for later')}
+                </span>
+              )}
+            </button>
+          )}
         </Col>
       </Row>
 

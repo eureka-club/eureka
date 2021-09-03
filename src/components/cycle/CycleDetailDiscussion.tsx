@@ -169,7 +169,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle }) => {
                   </div>
                 </>
               )}
-              {canCreateWork() && (
+              {isSuggestRelatedWork && canCreateWork() && (
                 <div className="mt-3">
                   <CycleDetailDiscussionSuggestRelatedWork cycle={cycle} />
                 </div>

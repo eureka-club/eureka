@@ -4,7 +4,7 @@ import { FunctionComponent, /* MouseEvent, */ useEffect, useState, ChangeEvent, 
 import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/client';
 
-import { Container, InputGroup, Form /* , Row, Col, Card, Popover, Button, Spinner */ } from 'react-bootstrap';
+import { Container, InputGroup, Form /* , Row, Col, Card, Popover, Button,*/, Spinner } from 'react-bootstrap';
 
 import { Cycle, User, Work, Post, Comment } from '@prisma/client';
 // import { MdReply, MdCancel } from 'react-icons/md';
@@ -65,7 +65,7 @@ const CommentsList: FunctionComponent<Props> = ({
   }, [session]);
 
   const {
-    // isLoading,
+    isLoading,
     // isError,
     mutate: createComment,
   } = useMutation(
@@ -173,6 +173,7 @@ const CommentsList: FunctionComponent<Props> = ({
         </Form>
       )}
       {renderComment()}
+      {isLoading && <Spinner animation="grow" variant="secondary" size="sm" />}
     </Container>
   );
 };

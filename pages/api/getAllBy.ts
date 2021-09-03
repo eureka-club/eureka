@@ -86,18 +86,33 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     // let rw = parseInt(remainingWorks, 10) - 2;
 
     const ewr = parseInt(extraWorksRequired as string, 10);
-    const works = await prisma.work.findMany(getOpt(0, ewr, { isWork: true }));
+    const works = await prisma.work.findMany({
+      ...getOpt(0, ewr, { isWork: true }),
+      orderBy: {
+        id: 'desc',
+      },
+    });
 
     let cyclesPlus = 0;
     if (works.length !== countItemsPerPage) cyclesPlus = countItemsPerPage - works.length;
     // promisesWorks.push(works);
     const ecr = parseInt(extraCyclesRequired as string, 10);
-    const cycles = await prisma.cycle.findMany(getOpt(countItemsPerPage + cyclesPlus, ecr, { isCycle: true }));
+    const cycles = await prisma.cycle.findMany({
+      ...getOpt(countItemsPerPage + cyclesPlus, ecr, { isCycle: true }),
+      orderBy: {
+        id: 'desc',
+      },
+    });
 
     let worksPlus = 0;
     if (cycles.length < 2 && works.length === 2) {
       worksPlus = countItemsPerPage - cycles.length;
-      const extraWorks = await prisma.work.findMany(getOpt(worksPlus, ewr + 2, { isWork: true }));
+      const extraWorks = await prisma.work.findMany({
+        ...getOpt(worksPlus, ewr + 2, { isWork: true }),
+        orderBy: {
+          id: 'desc',
+        },
+      });
       works.push(...extraWorks);
     }
     // promisesCycles.push(cycles);

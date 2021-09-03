@@ -27,7 +27,7 @@ export const getRecords = async (
     });
     return cycles;
   }
-  return result.cycle;
+  return { ...result.cycle, type: 'cycle' };
 };
 
 const useCycles = (id?: number) => {

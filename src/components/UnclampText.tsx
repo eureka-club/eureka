@@ -9,9 +9,10 @@ import styles from './UnclampText.module.css';
 interface Props {
   clampHeight: string;
   text: string;
+  showButtomMore?: boolean;
 }
 
-const UnclampText: FunctionComponent<Props> = ({ clampHeight, text }) => {
+const UnclampText: FunctionComponent<Props> = ({ clampHeight, text, showButtomMore = true }) => {
   const textRows = text.split('\n').filter((row) => row.length);
 
   const outerRef = useRef<HTMLDivElement>(null);
@@ -29,11 +30,14 @@ const UnclampText: FunctionComponent<Props> = ({ clampHeight, text }) => {
   };
 
   useEffect(() => {
-    if (innerRef?.current?.offsetHeight != null && outerRef?.current?.offsetHeight != null) {
-      if (innerRef.current.offsetHeight > outerRef.current.offsetHeight) {
-        setUnclampButtonVisible(true);
-      }
+    if (innerRef?.current != null && innerRef.current.innerText && innerRef.current.innerText.length > 100) {
+      setUnclampButtonVisible(true);
     }
+    // if (innerRef?.current?.offsetHeight != null && outerRef?.current?.offsetHeight != null) {
+    //   if (innerRef.current.offsetHeight > outerRef.current.offsetHeight) {
+    //     setUnclampButtonVisible(true);
+    //   }
+    // }
   }, [outerRef, innerRef]);
 
   return (
@@ -50,7 +54,7 @@ const UnclampText: FunctionComponent<Props> = ({ clampHeight, text }) => {
         </div>
       </div>
 
-      {unclampButtonVisible && (
+      {showButtomMore && unclampButtonVisible && (
         <Button variant="link" onClick={handleExpandContentTextClick} className={styles.unclampButton}>
           {textIsUnclamped === true ? (
             <>

@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react';
+import { FunctionComponent, SyntheticEvent } from 'react';
 
 import Link from 'next/link';
 import { Spinner } from 'react-bootstrap';
@@ -19,6 +19,11 @@ const UserAvatar: FunctionComponent<Props> = ({ userId, size = 'sm', showName = 
   // const [session] = useSession() as [Session | null | undefined, boolean];
 
   const { data: user, isLoading } = useUsers(`${userId}`);
+
+  const onLoadImgError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.src = '/img/default-avatar.png';
+  };
+
   return (
     <>
       {isLoading && <Spinner size="sm" animation="grow" variant="secondary" />}
@@ -27,6 +32,7 @@ const UserAvatar: FunctionComponent<Props> = ({ userId, size = 'sm', showName = 
           <Link href={`/mediatheque/${userId}`}>
             <a>
               <img
+                onError={onLoadImgError}
                 src={user.image || '/img/default-avatar.png'}
                 alt="creator avatar"
                 className={`${styles.cycleCreatorAvatar} mr-2`}

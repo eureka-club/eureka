@@ -247,7 +247,7 @@ const Mediatheque: NextPage = () => {
       <FilterEngine fictionOrNotFilter={false} geographyFilter={false} />
 
       <CarouselStatic
-        onSeeAll={async () => seeAll(cycles, t('Eurekas I created'))}
+        onSeeAll={async () => seeAll(posts, t('Eurekas I created'))}
         title={t('Eurekas I created')}
         data={posts}
         iconBefore={<></>}

@@ -1,20 +1,21 @@
-import { Cycle, User, Work } from '@prisma/client';
+import { Cycle, Work } from '@prisma/client';
 import classNames from 'classnames';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, useState, ChangeEvent } from 'react';
-import { Container, Row, Col, Card, Form, InputGroup } from 'react-bootstrap';
-import { FaRegComments } from 'react-icons/fa';
-import { BsJustifyLeft } from 'react-icons/bs';
+import { FunctionComponent } from 'react';
+import { Row, Col, Card } from 'react-bootstrap';
+import { FaRegComments, FaRegCompass } from 'react-icons/fa';
+
 import SocialInteraction from '../common/SocialInteraction';
 import { PostMosaicItem } from '../../types/post';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import { isCycle, isWork } from '../../types';
-import { CycleMosaicItem } from '../../types/cycle';
-import { WorkMosaicItem } from '../../types/work';
+// import { CycleMosaicItem } from '../../types/cycle';
+// import { WorkMosaicItem } from '../../types/work';
 import CommentsList from '../common/CommentsList';
 import Avatar from '../common/UserAvatar';
+import UnclampText from '../UnclampText';
 
 interface Props {
   post: PostMosaicItem;
@@ -34,13 +35,13 @@ const MosaicItem: FunctionComponent<Props> = ({
   post,
   postParent,
   display,
-  showButtonLabels,
-  showShare,
   showSocialInteraction = true,
-  style,
   cacheKey,
-  showTrash,
   showComments = false,
+  // showButtonLabels,
+  // showShare,
+  // style,
+  // showTrash,
 }) => {
   const postLinkHref = ((): string | null => {
     if (postParent == null) {
@@ -55,10 +56,16 @@ const MosaicItem: FunctionComponent<Props> = ({
 
     return null;
   })();
-  const [creator] = useState(post.creator as User);
-  const { title, localImages, type, id } = post;
-  const [newCommentInput, setNewCommentInput] = useState<string>();
+  // const [creator] = useState(post.creator as User);
+  const { /* title, localImages, id, */ type } = post;
+  // const [newCommentInput, setNewCommentInput] = useState<string>();
   const { t } = useTranslation('common');
+
+  const getDirectParent = () => {
+    if (post.works && post.works.length) return post.works[0];
+    return postParent;
+  };
+
   if (display === 'horizontally')
     return (
       <Card className={`${styles.post} ${styles.postHorizontally}`}>
@@ -69,12 +76,12 @@ const MosaicItem: FunctionComponent<Props> = ({
                 {postLinkHref != null ? (
                   <Link href={postLinkHref}>
                     <a>
-                      <BsJustifyLeft /> <span>{postParent.title}</span>
+                      <FaRegCompass /> <span>{getDirectParent()!.title}</span>
                     </a>
                   </Link>
                 ) : (
                   <h2 className={styles.postParentTitle}>
-                    <BsJustifyLeft /> <span>{postParent.title}</span>
+                    <FaRegCompass /> <span>{getDirectParent()!.title}</span>
                   </h2>
                 )}
               </h2>
@@ -111,7 +118,7 @@ const MosaicItem: FunctionComponent<Props> = ({
                 </>
               )}
               <div className={styles.postDetail}>
-                {postParent && (
+                {post && (
                   <>
                     <Avatar userId={post.creatorId} size="xs" />
                     {` `}
@@ -130,16 +137,18 @@ const MosaicItem: FunctionComponent<Props> = ({
           <Col md={7} xs={7} style={{ position: 'relative' }}>
             <Row>
               <Col md={12}>
-                <h5 className={styles.work}>{post.title}</h5>
+                <h2 className={styles.mosaicTitle}>{post.title}</h2>
               </Col>
               <Col md={12} className="d-none d-lg-block">
-                <p>{post.contentText}</p>
+                <div className="mb-5">
+                  <UnclampText text={post.contentText} clampHeight="5rem" />
+                </div>
               </Col>
             </Row>
             <Row className={styles.bottomRight}>
               <Col md={9}>
                 <div className={styles.commentsInfo}>
-                  <FaRegComments /> <span>123 Comments</span>
+                  <FaRegComments /> <span>{post.comments.length} Comments</span>
                 </div>
               </Col>
               <Col md={3}>
@@ -188,12 +197,12 @@ const MosaicItem: FunctionComponent<Props> = ({
           {postLinkHref != null ? (
             <Link href={postLinkHref}>
               <a>
-                <BsJustifyLeft /> <span>{postParent.title}</span>
+                <FaRegCompass /> <span>{postParent.title}</span>
               </a>
             </Link>
           ) : (
             <h2 className={styles.postParentTitle}>
-              <BsJustifyLeft /> <span>{postParent.title}</span>
+              <FaRegCompass /> <span>{postParent.title}</span>
             </h2>
           )}
         </h2>
@@ -221,7 +230,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           </>
         )}
         <div className={styles.postDetail}>
-          {postParent && (
+          {post && (
             <>
               <Avatar userId={post.creatorId} size="xs" />
               {` `}
@@ -233,14 +242,16 @@ const MosaicItem: FunctionComponent<Props> = ({
       </div>
       <div className={styles.detailedInfo}>
         <h5>{post.title}</h5>
-        <p>{post.contentText}</p>
+        <div className="mb-5">
+          <UnclampText text={post.contentText} clampHeight="5rem" showButtomMore={false} />
+        </div>
       </div>
       {showSocialInteraction && post && (
         <Card.Footer className={styles.footer}>
           <Row>
             <Col md={9}>
               <div className={styles.commentsInfo}>
-                <FaRegComments /> <span>123 Comments</span>
+                <FaRegComments /> <span>{123} Comments</span>
               </div>
             </Col>
             <Col md={3}>

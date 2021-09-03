@@ -1,14 +1,15 @@
 import { GetServerSideProps, NextPage } from 'next';
-import { getSession } from 'next-auth/client';
+import { getSession, useSession } from 'next-auth/client';
 import { QueryClient, useQuery } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-
+import { Spinner } from 'react-bootstrap';
 import { CycleMosaicItem } from '../../src/types/cycle';
 import { MySocialInfo, Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '../../src/components/cycle/CycleDetail';
+
 // import {
 //   // countParticipants,
 //   // countPosts,
@@ -18,26 +19,21 @@ import CycleDetailComponent from '../../src/components/cycle/CycleDetail';
 //   // isFavoritedByUser,
 //   // isLikedByUser,
 // } from '../../src/facades/cycle';
-import useCycles, { getRecords } from '../../src/useCycles';
+// import useCycles, { getRecords } from '../../src/useCycles';
+import useCycles from '../../src/useCycles';
 
-interface Props {
-  // cycle: CycleDetail;
-  isCurrentUserJoinedToCycle: boolean;
-  participantsCount: number;
-  postsCount: number;
-  worksCount: number;
-  mySocialInfo: MySocialInfo;
-}
+// interface Props {
+//   // cycle: CycleDetail;
+//   isCurrentUserJoinedToCycle: boolean;
+//   participantsCount: number;
+//   postsCount: number;
+//   worksCount: number;
+//   mySocialInfo: MySocialInfo;
+// }
 
-const CycleDetailPage: NextPage<Props> = ({
-  // cycle,
-  isCurrentUserJoinedToCycle,
-  // participantsCount,
-  // postsCount,
-  // worksCount,
-  mySocialInfo,
-}) => {
+const CycleDetailPage = () => {
   // debugger;
+  const session = useSession as unknown as Session;
   const router = useRouter();
   const [id, setId] = useState<number>();
   const { data, isLoading } = useCycles(id);
@@ -49,7 +45,22 @@ const CycleDetailPage: NextPage<Props> = ({
 
   useEffect(() => {
     // debugger;
-    setCycle(data as CycleMosaicItem);
+    const c = data as CycleMosaicItem;
+    if (c) {
+      setCycle(c);
+      if (c) {
+        if (!c.isPublic) {
+          if (!session) {
+            router.push('/');
+          } else {
+            const participantIdx = c.participants.findIndex((i) => i.id === session.user.id);
+            if (c.creatorId !== session.user.id && participantIdx === -1 && !session.user.roles.includes('admin')) {
+              router.push('/');
+            }
+          }
+        }
+      }
+    }
   }, [data]);
 
   return (
@@ -58,66 +69,66 @@ const CycleDetailPage: NextPage<Props> = ({
         {cycle && (
           <CycleDetailComponent
             cycle={cycle}
-            isCurrentUserJoinedToCycle={isCurrentUserJoinedToCycle}
+            // isCurrentUserJoinedToCycle={isCurrentUserJoinedToCycle}
             // participantsCount={participantsCount}
             // postsCount={postsCount}
             // worksCount={worksCount}
-            mySocialInfo={mySocialInfo}
+            // mySocialInfo={mySocialInfo}
           />
         )}
-        {isLoading && 'loading...'}
+        {isLoading && <Spinner animation="grow" variant="secondary" />}
       </>
     </SimpleLayout>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ params, req, res }) => {
-  if (params?.id == null || typeof params.id !== 'string') {
-    return { notFound: true };
-  }
-  const id = parseInt(params.id, 10);
-  if (!Number.isInteger(id)) {
-    return { notFound: true };
-  }
-  const session = (await getSession({ req })) as unknown as Session;
+// export const getServerSideProps: GetServerSideProps = async ({ params, req, res }) => {
+//   if (params?.id == null || typeof params.id !== 'string') {
+//     return { notFound: true };
+//   }
+//   const id = parseInt(params.id, 10);
+//   if (!Number.isInteger(id)) {
+//     return { notFound: true };
+//   }
+//   const session = (await getSession({ req })) as unknown as Session;
 
-  const queryClient = new QueryClient();
-  // const fetchCycle = async () => {
-  //   const cycle = await find(id);
-  //   if (cycle == null) {
-  //     return { notFound: true };
-  //   }
-  //   return cycle;
-  // };
+//   const queryClient = new QueryClient();
+//   // const fetchCycle = async () => {
+//   //   const cycle = await find(id);
+//   //   if (cycle == null) {
+//   //     return { notFound: true };
+//   //   }
+//   //   return cycle;
+//   // };
 
-  const cacheKey = ['CYCLES', `${id}`];
-  await queryClient.prefetchQuery(cacheKey, () => getRecords(undefined, id));
-  // await queryClient.prefetchQuery(cacheKey, fetchCycle);
-  const cycle = queryClient.getQueryData<CycleMosaicItem>(cacheKey);
+//   const cacheKey = ['CYCLES', `${id}`];
+//   await queryClient.prefetchQuery(cacheKey, () => getRecords(undefined, id));
+//   // await queryClient.prefetchQuery(cacheKey, fetchCycle);
+//   const cycle = queryClient.getQueryData<CycleMosaicItem>(cacheKey);
 
-  const toHomePage = () => {
-    res.writeHead(302, { Location: '/' });
-    res.end();
-  };
-  if (cycle) {
-    if (!cycle.isPublic) {
-      if (!session) {
-        toHomePage();
-      } else {
-        const participantIdx = cycle.participants.findIndex((i) => i.id === session.user.id);
-        if (cycle.creatorId !== session.user.id && participantIdx === -1 && !session.user.roles.includes('admin')) {
-          toHomePage();
-        }
-      }
-    }
-  }
+//   const toHomePage = () => {
+//     res.writeHead(302, { Location: '/' });
+//     res.end();
+//   };
+//   if (cycle) {
+//     if (!cycle.isPublic) {
+//       if (!session) {
+//         toHomePage();
+//       } else {
+//         const participantIdx = cycle.participants.findIndex((i) => i.id === session.user.id);
+//         if (cycle.creatorId !== session.user.id && participantIdx === -1 && !session.user.roles.includes('admin')) {
+//           toHomePage();
+//         }
+//       }
+//     }
+//   }
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-  };
-};
+//   return {
+//     props: {
+//       dehydratedState: dehydrate(queryClient),
+//     },
+//   };
+// };
 
 // export const getServerSideProps: GetServerSideProps = async ({ params, req, res }) => {
 //   if (params?.id == null || typeof params.id !== 'string') {

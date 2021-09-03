@@ -53,7 +53,6 @@ export default getApiHandler()
     //   res.status(401).json({ status: 'Unauthorized' });
     //   return;
     // }
-
     const { id } = req.query;
     if (typeof id !== 'string') {
       res.status(404).end();

@@ -56,7 +56,7 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
   }, [session]);
 
   const {
-    // isLoading,
+    isLoading,
     // isError,
     mutate: createComment,
   } = useMutation(
@@ -129,16 +129,18 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
                   className={styles.dangerouslySetInnerHTML}
                   dangerouslySetInnerHTML={{ __html: comment.contentText }}
                 />
-                <Button variant="default" onClick={() => setShowComment(() => true)} className={styles.replyButton}>
-                  <MdReply />
-                </Button>
-                {showComment && (
+                {!isLoading && (
+                  <Button variant="default" onClick={() => setShowComment(() => true)} className={styles.replyButton}>
+                    <MdReply />
+                  </Button>
+                )}
+                {!isLoading && showComment && (
                   <Button variant="default" onClick={() => setShowComment(() => false)} className={styles.replyButton}>
                     <MdCancel />
                   </Button>
                 )}
 
-                {showComment && (
+                {!isLoading && showComment && (
                   <Form onSubmit={handleFormSubmit}>
                     <Form.Control
                       value={newCommentInput}
@@ -151,10 +153,16 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
                 )}
                 {comment &&
                   comment.comments.map((c) => (
-                    <div key={c.id} className="pl-3">
-                      {c.contentText}
-                    </div>
+                    <Row key={c.id} className="mb-3">
+                      <Col md={1} className="pr-0">
+                        <Avatar userId={c.creatorId} size="xs" showName={false} />
+                      </Col>
+                      <Col md={11} className="pl-0">
+                        <div>{c.contentText}</div>
+                      </Col>
+                    </Row>
                   ))}
+                {isLoading && <Spinner animation="grow" variant="secondary" size="sm" />}
               </Col>
             </Row>
           </Card>

@@ -95,7 +95,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
             </Col>
           </>
         ) : (
-          <PostDetailComponent post={post} work={work} mySocialInfo={mySocialInfo} />
+          <PostDetailComponent post={post} work={work} />
         )}
       </Row>
 

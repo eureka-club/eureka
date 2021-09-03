@@ -33,6 +33,7 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
           comments: {
             include: { comments: true },
           },
+          cycles: true,
         },
       },
       comments: {

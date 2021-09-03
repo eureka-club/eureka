@@ -11,6 +11,7 @@ import Nav from 'react-bootstrap/Nav';
 import NavItem from 'react-bootstrap/NavItem';
 import NavLink from 'react-bootstrap/NavLink';
 import Row from 'react-bootstrap/Row';
+import { BiArrowBack } from 'react-icons/bi';
 
 import TabContainer from 'react-bootstrap/TabContainer';
 import TabContent from 'react-bootstrap/TabContent';
@@ -24,7 +25,7 @@ import { PostMosaicItem } from '../../types/post';
 import { WorkMosaicItem } from '../../types/work';
 
 // import LocalImageComponent from '../LocalImage';
-// import PostDetailComponent from '../post/PostDetail';
+import PostDetailComponent from '../post/PostDetail';
 // import CycleSummary from './CycleSummary';
 import HyvorComments from '../common/HyvorComments';
 // import SocialInteraction from '../common/SocialInteraction';
@@ -42,18 +43,18 @@ interface Props {
   cycle: CycleMosaicItem;
   post?: PostMosaicItem;
   work?: WorkMosaicItem;
-  isCurrentUserJoinedToCycle: boolean;
+  // isCurrentUserJoinedToCycle: boolean;
 
-  mySocialInfo: MySocialInfo;
+  // mySocialInfo: MySocialInfo;
 }
 
 const CycleDetailComponent: FunctionComponent<Props> = ({
   cycle,
   post,
   work,
-  isCurrentUserJoinedToCycle,
+  // isCurrentUserJoinedToCycle,
 
-  mySocialInfo,
+  // mySocialInfo,
 }) => {
   // const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
@@ -158,7 +159,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           {t('Edit')}
         </Button>
       )}
-      {cycle && <CycleDetailHeader cycle={cycle} />}
+      {!post && cycle && <CycleDetailHeader cycle={cycle} />}
       {/* <Row className="mb-5">
         {post == null ? (
           <>
@@ -213,7 +214,12 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           <PostDetailComponent post={post} cycle={cycle} work={work} mySocialInfo={mySocialInfo} />
         )}
       </Row> */}
-
+      {post && (
+        <Button variant="info" onClick={() => router.push(`/cycle/${cycle.id}`)} size="sm">
+          <BiArrowBack />
+        </Button>
+      )}
+      {post && <PostDetailComponent post={post} cycle={cycle} work={work} />}
       {cycle && post == null && (
         <Row className="mb-5">
           <Col>
@@ -250,13 +256,15 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                         <NavLink eventKey="cycle-discussion">{t('Discussion')}</NavLink>
                       </NavItem>
                       <NavItem className={styles.tabBtn}>
-                        <NavLink eventKey="posts">
-                          {t('tabHeaderPosts')} ({cycle.posts.length})
-                        </NavLink>
+                        <NavLink eventKey="my_milestone">{t('My milestones')}</NavLink>
                       </NavItem>
                       <NavItem className={styles.tabBtn}>
-                        <NavLink eventKey="forum">
-                          {t('tabHeaderForum')}{' '}
+                        <NavLink eventKey="guidelines">{t('Guidelines')}</NavLink>
+                      </NavItem>
+
+                      <NavItem className={styles.tabBtn}>
+                        <NavLink eventKey="participants">
+                          {t('Participants')}{' '}
                           {/* (
                            <HyvorTalk.CommentCount websiteId={Number(HYVOR_WEBSITE_ID!)} id={hyvorId} />
                           ) */}
@@ -269,6 +277,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                   <Col>
                     <TabContent>
                       <TabPane eventKey="cycle-about">
+                        <h2 className="mb-3">{t('Why does this cycle matter')}?</h2>
                         {cycle.contentText != null && (
                           <div className="mb-5">
                             <UnclampText text={cycle.contentText} clampHeight="7rem" />
@@ -315,18 +324,17 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                           null}
                         {renderCycleOwnComments()}
                       </TabPane>
-                      <TabPane eventKey="posts">
-                        <h2 className="mb-3">{t('postsCountHeader', { count: cycle.posts.length })}</h2>
-                        <p className={styles.explanatoryText}>{t('explanatoryTextPosts')}</p>
-                        {(cycle.posts.length && (
-                          <PostsMosaic display="horizontally" cycle={cycle} cacheKey={['CYCLES', `${cycle.id}`]} />
-                        )) ||
-                          null}
+                      <TabPane eventKey="my_milestone">
+                        <h2 className="mb-3">{t('My milestones')}</h2>
+                        <p />
                       </TabPane>
-                      <TabPane eventKey="forum">
-                        <h3>{t('tabHeaderForum')}</h3>
-                        <p className={styles.explanatoryText}>{t('explanatoryTextComments')}</p>
-                        <HyvorComments id={hyvorId} />
+                      <TabPane eventKey="guidelines">
+                        <h2 className="mb-3">{t('Guidelines')}</h2>
+                        <p />
+                      </TabPane>
+                      <TabPane eventKey="participants">
+                        <h2>{t('Participants')}</h2>
+                        <p />
                       </TabPane>
                     </TabContent>
                   </Col>
