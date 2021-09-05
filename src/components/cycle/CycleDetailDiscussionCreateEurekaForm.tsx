@@ -1,6 +1,6 @@
 import { useSession } from 'next-auth/client';
 import useTranslation from 'next-translate/useTranslation';
-import { ChangeEvent, FormEvent, FunctionComponent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, FunctionComponent, useEffect, useRef, useState } from 'react';
 
 import { Button, Col, Row, ButtonGroup, Form } from 'react-bootstrap';
 
@@ -11,6 +11,7 @@ import { ImCancelCircle } from 'react-icons/im';
 
 import { useMutation, useQueryClient } from 'react-query';
 
+import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import { Session } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
 import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload } from '../../types/post';
@@ -36,6 +37,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
   const [newEurekaImageFile, setNewEurekaImageFile] = useState<File | null>(null);
   const { data: topics } = useTopics();
   const [eurekaTopics, setEurekaTopics] = useState<string[]>([]);
+  const editorRef = useRef<any>(null);
   const [newEureka, setNewEureka] = useState({
     selectedCycleId: cycle.id,
     selectedWorkId: 0,
@@ -48,6 +50,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
   });
 
   const clearCreateEurekaForm = () => {
+    editorRef.current.setContent('');
     setEurekaTopics(() => []);
     setNewEurekaImageFile(null);
     setNewEureka((res) => ({
@@ -67,7 +70,6 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
           formData.append(key, value);
         }
       });
-
       const res = await fetch('/api/post', {
         method: 'POST',
         body: formData,
@@ -114,7 +116,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
         title: newEureka.title,
         image: newEurekaImageFile,
         language: newEureka.language,
-        contentText: newEureka.contentText,
+        contentText: editorRef.current.getContent(),
         isPublic: newEureka.isPublic,
         topics: eurekaTopics.join(','),
       };
@@ -126,7 +128,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
         title: newEureka.title,
         image: newEurekaImageFile,
         language: newEureka.language,
-        contentText: newEureka.contentText,
+        contentText: editorRef.current.getContent(),
         isPublic: newEureka.isPublic,
         topics: eurekaTopics.join(','),
       };
@@ -174,7 +176,31 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
         />
       </Form.Group>
 
-      <Form.Group controlId="eureka-contentText">
+      <EditorCmp
+        onInit={(_: any, editor) => {
+          editorRef.current = editor;
+        }}
+        initialValue={newEureka.contentText}
+        init={{
+          height: 300,
+          menubar: false,
+          plugins: [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste code help wordcount',
+          ],
+          relative_urls: false,
+          toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
+          // toolbar:
+          //   'undo redo | formatselect | ' +
+          //   'bold italic backcolor | alignleft aligncenter ' +
+          //   'alignright alignjustify | bullist numlist outdent indent | ' +
+          //   'removeformat | help',
+          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+        }}
+      />
+
+      {/* <Form.Group controlId="eureka-contentText">
         <Form.Control
           as="textarea"
           rows={3}
@@ -183,7 +209,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
           value={newEureka.contentText}
           onChange={onChangeFieldEurekaForm}
         />
-      </Form.Group>
+      </Form.Group> */}
 
       <ImageFileSelect acceptedFileTypes="image/*" file={newEurekaImageFile} setFile={setNewEurekaImageFile} required>
         {(imagePreview) => (
