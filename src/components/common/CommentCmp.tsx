@@ -122,7 +122,7 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
           <Card key={comment.id} className={`mt-3 ${styles.container}`}>
             <Row>
               <Col xs={2} md={1} className="pr-1">
-                <Avatar userId={comment.creatorId} size="xs" showName={false} />
+                <Avatar user={comment.creator} size="xs" showName={false} />
               </Col>
               <Col xs={10} md={11} className="pl-1">
                 <div
@@ -155,7 +155,7 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
                   comment.comments.map((c) => (
                     <Row key={c.id} className="mb-3">
                       <Col md={1} className="pr-0">
-                        <Avatar userId={c.creatorId} size="xs" showName={false} />
+                        <Avatar user={c.creator} size="xs" showName={false} />
                       </Col>
                       <Col md={11} className="pl-0">
                         <div>{c.contentText}</div>

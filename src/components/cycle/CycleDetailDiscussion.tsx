@@ -105,7 +105,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle }) => {
           {' '}
           <Row className={styles.discussionContainer}>
             <Col xs={12} md={1}>
-              {cycle.creator && <UserAvatar userId={cycle.creatorId} showName={false} />}
+              {cycle.creator && <UserAvatar user={cycle.creator} showName={false} />}
             </Col>
             <Col xs={12} md={11}>
               {(isCreateEureka || isCreateComment) && (

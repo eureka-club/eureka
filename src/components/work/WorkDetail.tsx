@@ -39,7 +39,7 @@ interface Props {
   mySocialInfo: MySocialInfo;
 }
 
-const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCount, mySocialInfo }) => {
+const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCount }) => {
   const router = useRouter();
 
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);

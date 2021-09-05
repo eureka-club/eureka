@@ -70,8 +70,8 @@ const Mediatheque: NextPage = () => {
     if (session) setIdSession((session as unknown as Session).user.id.toString());
   }, [session, router]);
 
-  const { /* isLoading, isError, error, */ data: user } = useUsers(id);
-  const { /* isLoading, isError, error, */ data: dataUserSession } = useUsers(idSession);
+  const { /* isLoading, isError, error, */ data: user } = useUsers({ id });
+  const { /* isLoading, isError, error, */ data: dataUserSession } = useUsers({ id: idSession });
   const [userSession, setUserSession] = useState();
   const [preparingData, setPreparingData] = useState<boolean>(true);
 

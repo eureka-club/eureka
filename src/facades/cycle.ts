@@ -1,4 +1,4 @@
-import { Cycle, CycleComplementaryMaterial, LocalImage, Prisma, User, RatingOnCycle, Work } from '@prisma/client';
+import { Cycle, CycleComplementaryMaterial, LocalImage, Prisma, User, RatingOnCycle } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
 import { CreateCycleServerFields, CreateCycleServerPayload, CycleMosaicItem } from '../types/cycle';
@@ -20,7 +20,10 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
           favs: true,
           ratings: { include: { work: true } },
           comments: {
-            include: { comments: true },
+            include: {
+              creator: { select: { id: true, name: true, image: true } },
+              comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+            },
           },
         },
       },
@@ -31,13 +34,19 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
           works: true,
           favs: true,
           comments: {
-            include: { comments: true },
+            include: {
+              creator: { select: { id: true, name: true, image: true } },
+              comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+            },
           },
           cycles: true,
         },
       },
       comments: {
-        include: { comments: true },
+        include: {
+          creator: { select: { id: true, name: true, image: true } },
+          comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+        },
       },
     },
   });
@@ -91,7 +100,7 @@ export const countWorks = async (
 };
 
 export const search = async (query: { [key: string]: string | string[] }): Promise<Cycle[]> => {
-  const { q, where, include } = query;
+  const { q, where /* , include */ } = query;
   if (where == null && q == null) {
     throw new Error("[412] Invalid invocation! Either 'q' or 'where' query parameter must be provided");
   }

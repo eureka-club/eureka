@@ -20,7 +20,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
       const data = await findAll();
       res.status(200).json({ status: 'OK', data });
     } else {
-      const data = await find(parseInt(id as string, 10));
+      const data = await find({ id: parseInt(id as string, 10) });
       res.status(200).json({ status: 'OK', data });
     }
   } catch (exc) {

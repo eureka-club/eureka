@@ -1,7 +1,7 @@
-import { Cycle } from '@prisma/client';
+// import { Cycle } from '@prisma/client';
 import { FunctionComponent } from 'react';
-import Spinner from 'react-bootstrap/Spinner';
-import { useQuery } from 'react-query';
+// import Spinner from 'react-bootstrap/Spinner';
+// import { useQuery } from 'react-query';
 
 import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';

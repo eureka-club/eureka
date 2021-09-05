@@ -2,34 +2,28 @@ import { FunctionComponent, SyntheticEvent } from 'react';
 
 import Link from 'next/link';
 import { Spinner } from 'react-bootstrap';
-// import { User } from '@prisma/client';
+import { User } from '@prisma/client';
 // import { Session } from '../../types';
 import styles from './UserAvatar.module.css';
 import { useUsers } from '../../useUsers';
 
 interface Props {
-  userId: number;
+  user: { id: number | null; name: string | null; image: string | null };
   showName?: boolean;
   size?: 'sm' | 'xs';
 }
 
-const UserAvatar: FunctionComponent<Props> = ({ userId, size = 'sm', showName = true }) => {
-  // const { t } = useTranslation('common');
-  // const router = useRouter();
-  // const [session] = useSession() as [Session | null | undefined, boolean];
-
-  const { data: user, isLoading } = useUsers(`${userId}`);
-
+const UserAvatar: FunctionComponent<Props> = ({ user, size = 'sm', showName = true }) => {
   const onLoadImgError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = '/img/default-avatar.png';
   };
 
   return (
     <>
-      {isLoading && <Spinner size="sm" animation="grow" variant="secondary" />}
-      {!isLoading && user && (
+      {/* {isLoading && <Spinner size="sm" animation="grow" variant="secondary" />} */}
+      {user && (
         <span className={`${styles.cycleCreator} ${styles[size]}`}>
-          <Link href={`/mediatheque/${userId}`}>
+          <Link href={`/mediatheque/${user.id}`}>
             <a>
               <img
                 onError={onLoadImgError}

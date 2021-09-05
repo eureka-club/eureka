@@ -1,22 +1,22 @@
-import { Cycle, User, Work, Comment, Post } from '@prisma/client';
-import classNames from 'classnames';
+import { Cycle, Work, Comment, Post } from '@prisma/client';
+
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, useState, ChangeEvent, useEffect } from 'react';
-import { Container, Row, Col, Card, Form, Button, InputGroup } from 'react-bootstrap';
+import { FunctionComponent } from 'react';
+import { Row, Col, Card, Button } from 'react-bootstrap';
 import { FaRegComments } from 'react-icons/fa';
 import { BsJustifyLeft } from 'react-icons/bs';
 import { MdReply } from 'react-icons/md';
 
 import { useSession } from 'next-auth/client';
-import SocialInteraction from '../common/SocialInteraction';
+// import SocialInteraction from '../common/SocialInteraction';
 import { CommentMosaicItem } from '../../types/comment';
-import LocalImageComponent from '../LocalImage';
+// import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import { isCycle, isWork, isPost, isComment, Session } from '../../types';
-import { CycleMosaicItem } from '../../types/cycle';
-import { WorkMosaicItem } from '../../types/work';
-import { useUsers } from '../../useUsers';
+// import { CycleMosaicItem } from '../../types/cycle';
+// import { WorkMosaicItem } from '../../types/work';
+// import { useUsers } from '../../useUsers';
 
 import Avatar from '../common/UserAvatar';
 import CommentsList from '../common/CommentsList';
@@ -114,7 +114,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           </Row>
           <Row className={styles.bottomRight}>
             <Col md={3}>
-              <Avatar userId={comment.creatorId} size="xs" />
+              <Avatar user={comment.creator} size="xs" />
             </Col>
             <Col md={9} className={styles.commentsInfoContainer}>
               <div className={styles.commentsInfo}>
@@ -136,7 +136,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 
       <Row>
         <Col xs={2} md={1} className="pr-1">
-          <Avatar userId={comment.creatorId} size="xs" showName={false} />
+          <Avatar user={comment.creator} size="xs" showName={false} />
         </Col>
         <Col xs={10} md={11} className="pl-1">
           <div className={styles.dangerouslySetInnerHTML} dangerouslySetInnerHTML={{ __html: contentText }} />

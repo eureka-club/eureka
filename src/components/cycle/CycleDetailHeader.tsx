@@ -5,7 +5,7 @@ import { useAtom } from 'jotai';
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, useEffect } from 'react';
+import { FunctionComponent } from 'react';
 // import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 // import Nav from 'react-bootstrap/Nav';
@@ -17,11 +17,11 @@ import Row from 'react-bootstrap/Row';
 // import TabContent from 'react-bootstrap/TabContent';
 // import TabPane from 'react-bootstrap/TabPane';
 // import Link from 'next/link';
-import { useMutation } from 'react-query';
+// import { useMutation } from 'react-query';
 // import { Work } from '@prisma/client';
 import Rating from 'react-rating';
 import { GiBrain } from 'react-icons/gi';
-import globalModalsAtom from '../../atoms/globalModals';
+// import globalModalsAtom from '../../atoms/globalModals';
 
 // import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
 import { MySocialInfo, Session } from '../../types';
@@ -78,20 +78,20 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   //   setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
   // };
 
-  const {
-    mutate: execJoinCycle,
-    isLoading: isJoinCycleLoading,
-    isSuccess: isJoinCycleSuccess,
-  } = useMutation(async () => {
-    await fetch(`/api/cycle/${cycle.id}/join`, { method: 'POST' });
-  });
-  const {
-    mutate: execLeaveCycle,
-    isLoading: isLeaveCycleLoading,
-    isSuccess: isLeaveCycleSuccess,
-  } = useMutation(async () => {
-    await fetch(`/api/cycle/${cycle.id}/join`, { method: 'DELETE' });
-  });
+  // const {
+  //   // mutate: execJoinCycle,
+  //   // isLoading: isJoinCycleLoading,
+  //   isSuccess: isJoinCycleSuccess,
+  // } = useMutation(async () => {
+  //   await fetch(`/api/cycle/${cycle.id}/join`, { method: 'POST' });
+  // });
+  // const {
+  //   // mutate: execLeaveCycle,
+  //   // isLoading: isLeaveCycleLoading,
+  //   isSuccess: isLeaveCycleSuccess,
+  // } = useMutation(async () => {
+  //   await fetch(`/api/cycle/${cycle.id}/join`, { method: 'DELETE' });
+  // });
 
   // const handleSubsectionChange = (key: string | null) => {
   //   if (key != null) {
@@ -110,19 +110,19 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   //   execLeaveCycle();
   // };
 
-  useEffect(() => {
-    if (isJoinCycleSuccess === true) {
-      router.replace(router.asPath); // refresh page
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isJoinCycleSuccess]);
+  // useEffect(() => {
+  //   if (isJoinCycleSuccess === true) {
+  //     router.replace(router.asPath); // refresh page
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [isJoinCycleSuccess]);
 
-  useEffect(() => {
-    if (isLeaveCycleSuccess === true) {
-      router.replace(router.asPath); // refresh page
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLeaveCycleSuccess]);
+  // useEffect(() => {
+  //   if (isLeaveCycleSuccess === true) {
+  //     router.replace(router.asPath); // refresh page
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [isLeaveCycleSuccess]);
 
   // const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
   //   ev.preventDefault();
@@ -208,7 +208,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         </div>
       </Col>
       <Col md={3}>
-        <UserAvatar userId={cycle.creatorId} />
+        <UserAvatar user={cycle.creator} />
         <MosaicItem cycle={cycle} detailed showTrash />
       </Col>
     </Row>

@@ -80,7 +80,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const queryClient = useQueryClient();
 
   const [idSession, setIdSession] = useState<string>('');
-  const { /* isLoading, isError, error, */ data: user } = useUsers(idSession);
+  const { /* isLoading, isError, error, */ data: user } = useUsers({ id: idSession });
   // const [user, setuser] = useState<UserDetail>();
 
   const calculateQty = () => {

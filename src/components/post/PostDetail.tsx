@@ -10,7 +10,7 @@ import { FunctionComponent, MouseEvent } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 
 import { DATE_FORMAT_SHORT } from '../../constants';
-import { MySocialInfo, Session } from '../../types';
+import { Session } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
 import globalModalsAtom from '../../atoms/globalModals';
@@ -104,7 +104,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, cycle, work }) => {
                   />
                   {post.creator.name}
                 </a> */}
-                <Avatar userId={post.creatorId} size="xs" />
+                <Avatar user={post.creator} size="xs" />
               </Link>
               <small className={styles.postDate}>
                 {

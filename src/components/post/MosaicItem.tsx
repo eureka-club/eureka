@@ -120,7 +120,7 @@ const MosaicItem: FunctionComponent<Props> = ({
               <div className={styles.postDetail}>
                 {post && (
                   <>
-                    <Avatar userId={post.creatorId} size="xs" />
+                    <Avatar user={post.creator} size="xs" />
                     {` `}
                     {new Date(post.createdAt).toLocaleDateString()}
                   </>
@@ -232,7 +232,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         <div className={styles.postDetail}>
           {post && (
             <>
-              <Avatar userId={post.creatorId} size="xs" />
+              <Avatar user={post.creator} size="xs" />
               {` `}
               {new Date(post.createdAt).toLocaleDateString()}
             </>

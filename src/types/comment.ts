@@ -1,12 +1,14 @@
-import { Comment, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
 export type CommentMosaicItem = Prisma.CommentGetPayload<{
   include: {
-    // creator: true;
+    creator: {
+      select: { id: true; name: true; image: true };
+    };
     // work: true;
     // cycle: true;
-    comments: true;
-    //{ include: { creator: true; comments: true } };
+    comments: { include: { creator: { select: { id: true; name: true; image: true } } } };
+    // { include: { creator: true; comments: true } };
   };
 }> & { type?: 'comment' };
 

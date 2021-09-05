@@ -1,4 +1,4 @@
-import { LocalImage, Post, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
 // export interface PostWithImages extends Post {
 //   localImages: LocalImage[];

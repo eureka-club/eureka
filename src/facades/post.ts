@@ -13,7 +13,10 @@ export const find = async (id: number): Promise<PostWithCyclesWorks | null> => {
       likes: true,
       favs: true,
       comments: {
-        include: { comments: true },
+        include: {
+          creator: { select: { id: true, name: true, image: true } },
+          comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+        },
       },
     },
   });
@@ -37,7 +40,7 @@ export const findAll = async (): Promise<PostMosaicItem[]> => {
 };
 
 export const search = async (query: { [key: string]: string | string[] }): Promise<Post[]> => {
-  const { q, where, include } = query;
+  const { q, where /*, include */ } = query;
   if (where == null && q == null) {
     throw new Error("[412] Invalid invocation! Either 'q' or 'where' query parameter must be provided");
   }

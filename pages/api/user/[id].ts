@@ -50,8 +50,10 @@ export default getApiHandler()
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
-      const { id } = req.query;
-      const data = await find(parseInt(id as string, 10));
+      const { id, select: s, include: i } = req.query;
+      const { select } = JSON.parse(s as string);
+      const include = i !== 'false';
+      const data = await find({ id: parseInt(id as string, 10), select, include });
       res.status(200).json({ status: 'OK', data });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

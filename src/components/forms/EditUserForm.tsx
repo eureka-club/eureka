@@ -61,7 +61,7 @@ const EditUserForm: FunctionComponent = () => {
     else setId(s.user.id.toString());
   }, []);
 
-  const { /* isLoading,  isError, error, */ data } = useUsers(id);
+  const { /* isLoading,  isError, error, */ data } = useUsers({ id });
   useEffect(() => {
     if (data) {
       setUser(data);

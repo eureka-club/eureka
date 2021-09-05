@@ -1,12 +1,12 @@
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, /* MouseEvent, */ useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/client';
 
-import { Container, InputGroup, Form /* , Row, Col, Card, Popover, Button,*/, Spinner } from 'react-bootstrap';
+import { Container, InputGroup, Form /* , Row, Col, Card, Popover, Button, */, Spinner } from 'react-bootstrap';
 
-import { Cycle, User, Work, Post, Comment } from '@prisma/client';
+import { Cycle, Work, Post, Comment } from '@prisma/client';
 // import { MdReply, MdCancel } from 'react-icons/md';
 import {
   CreateCommentAboutCycleClientPayload as CCACCP,
@@ -51,11 +51,11 @@ const CommentsList: FunctionComponent<Props> = ({
   // showRating = true,
 }) => {
   const { t } = useTranslation('common');
-  const router = useRouter();
+  // const router = useRouter();
   const [session] = useSession() as [Session | null | undefined, boolean];
   const [newCommentInput, setNewCommentInput] = useState<string>();
   const [idSession, setIdSession] = useState<string>('');
-  const { /* isLoading, isError, error, */ data: user } = useUsers(idSession);
+  const { /* isLoading, isError, error, */ data: user } = useUsers({ id: idSession });
 
   const queryClient = useQueryClient();
 
@@ -161,7 +161,7 @@ const CommentsList: FunctionComponent<Props> = ({
       {user && (
         <Form onSubmit={handleFormSubmit}>
           <InputGroup className="mt-2">
-            <Avatar userId={user.id} size="xs" showName={false} />
+            <Avatar user={user} size="xs" showName={false} />
             <Form.Control
               value={newCommentInput}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setNewCommentInput(e.target.value)}

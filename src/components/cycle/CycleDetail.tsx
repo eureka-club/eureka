@@ -16,13 +16,14 @@ import { BiArrowBack } from 'react-icons/bi';
 import TabContainer from 'react-bootstrap/TabContainer';
 import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
-import globalModalsAtom from '../../atoms/globalModals';
+// import globalModalsAtom from '../../atoms/globalModals';
 
 import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
-import { MySocialInfo, Session } from '../../types';
+import { Session } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
 import { WorkMosaicItem } from '../../types/work';
+import { CommentMosaicItem } from '../../types/comment';
 
 // import LocalImageComponent from '../LocalImage';
 import PostDetailComponent from '../post/PostDetail';
@@ -141,7 +142,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           return (
             <CommnetMosaic
               key={c.id}
-              comment={c}
+              comment={c as CommentMosaicItem}
               detailed
               showComments
               commentParent={cycle}

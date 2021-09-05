@@ -3,7 +3,7 @@ import { FunctionComponent, /* useState, useEffect, */ useRef } from 'react';
 import { Form, Badge, InputGroup } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
 import { Typeahead } from 'react-bootstrap-typeahead';
-import { AiOutlineSearch } from 'react-icons/ai';
+// import { AiOutlineSearch } from 'react-icons/ai';
 // import { useAtom } from 'jotai';
 
 // import { SearchResult } from '../../../types';
