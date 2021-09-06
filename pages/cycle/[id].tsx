@@ -52,7 +52,7 @@ const CycleDetailPage: NextPage = () => {
         if (!c.isPublic) {
           if (!session) {
             router.push('/');
-          } else if (c.participants) {
+          } else if (c.participants && session.user) {
             const participantIdx = c.participants.findIndex((i) => i.id === session.user.id);
             if (c.creatorId !== session.user.id && participantIdx === -1 && !session.user.roles.includes('admin')) {
               router.push('/');
