@@ -1,14 +1,14 @@
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, MouseEvent, useEffect, useState, ChangeEvent, FormEvent } from 'react';
+import { FunctionComponent, useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/client';
 
-import { Container, InputGroup, Form, Row, Col, Card, Popover, Button, Spinner } from 'react-bootstrap';
+import { Form, Row, Col, Card, Button, Spinner } from 'react-bootstrap';
 
-import { Cycle, User, Work, Post, Comment } from '@prisma/client';
+import { Comment } from '@prisma/client';
 import { MdReply, MdCancel } from 'react-icons/md';
-import { useComment } from '../../useComment';
+// import { useComment } from '../../useComment';
 import {
   CreateCommentAboutCycleClientPayload as CCACCP,
   CreateCommentAboutWorkClientPayload as CCAWCP,
@@ -16,11 +16,11 @@ import {
   CreateCommentAboutPostClientPayload as CCAPCP,
   CommentMosaicItem,
 } from '../../types/comment';
-import { isCycle, isWork, isComment, Session, isPost } from '../../types';
-import { CycleMosaicItem } from '../../types/cycle';
-import { PostMosaicItem } from '../../types/post';
-import { WorkMosaicItem } from '../../types/work';
-import { useUsers } from '../../useUsers';
+import { Session } from '../../types';
+// import { CycleMosaicItem } from '../../types/cycle';
+// import { PostMosaicItem } from '../../types/post';
+// import { WorkMosaicItem } from '../../types/work';
+// import { useUsers } from '../../useUsers';
 // import globalModalsAtom from '../../atoms/globalModals';
 
 // import { WEBAPP_URL } from '../../constants';
@@ -152,6 +152,7 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
                   </Form>
                 )}
                 {comment &&
+                  comment.comments &&
                   comment.comments.map((c) => (
                     <Row key={c.id} className="mb-3">
                       <Col md={1} className="pr-0">

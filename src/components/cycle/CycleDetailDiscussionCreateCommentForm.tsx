@@ -110,7 +110,7 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({ cycl
 
     if (newComment.selectedWorkId) {
       const payload: CreateCommentAboutWorkClientPayload = {
-        selectedCycleId: newComment.selectedCycleId ? newComment.selectedCycleId : undefined,
+        selectedCycleId: undefined,
         selectedWorkId: newComment.selectedWorkId,
         selectedCommentId: undefined,
         contentText: editorRef.current.getContent(),
@@ -128,13 +128,14 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({ cycl
       await execCreateComment(payload);
     } else if (newComment.selectedCommentId) {
       const payload: CreateCommentAboutCommentClientPayload = {
-        selectedCycleId: newComment.selectedCycleId ? newComment.selectedCycleId : undefined,
+        selectedCycleId: undefined, //newComment.selectedCycleId ? newComment.selectedCycleId : undefined,
         selectedCommentId: newComment.selectedCommentId,
         selectedWorkId: undefined,
         contentText: editorRef.current.getContent(),
         creatorId: cycle.creatorId,
       };
       await execCreateComment(payload);
+      clearCreateEurekaForm();
     }
   };
 

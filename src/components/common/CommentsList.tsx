@@ -151,9 +151,11 @@ const CommentsList: FunctionComponent<Props> = ({
   };
 
   const renderComment = () => {
-    return entityOwnsComment().map((c) => {
-      return <CommentCmp key={c.id} comment={c as CommentMosaicItem} cacheKey={cacheKey} />;
-    });
+    return entity.comments
+      .sort((p, c) => (p.id > c.id && -1) || 1)
+      .map((c) => {
+        return <CommentCmp key={c.id} comment={c as CommentMosaicItem} cacheKey={cacheKey} />;
+      });
   };
 
   return (

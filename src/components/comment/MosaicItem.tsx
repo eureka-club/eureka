@@ -1,19 +1,18 @@
 import { Cycle, Work, Comment, Post } from '@prisma/client';
-
 import Link from 'next/link';
-import useTranslation from 'next-translate/useTranslation';
+// import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
 import { FaRegComments } from 'react-icons/fa';
 import { BsJustifyLeft } from 'react-icons/bs';
 import { MdReply } from 'react-icons/md';
 
-import { useSession } from 'next-auth/client';
+// import { useSession } from 'next-auth/client';
 // import SocialInteraction from '../common/SocialInteraction';
 import { CommentMosaicItem } from '../../types/comment';
 // import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
-import { isCycle, isWork, isPost, isComment, Session } from '../../types';
+import { isCycle, isWork, isPost, isComment /* , Session */ } from '../../types';
 // import { CycleMosaicItem } from '../../types/cycle';
 // import { WorkMosaicItem } from '../../types/work';
 // import { useUsers } from '../../useUsers';
@@ -38,13 +37,13 @@ const MosaicItem: FunctionComponent<Props> = ({
   comment,
   commentParent,
   detailed = false,
-  showButtonLabels,
-  showShare,
-  showSocialInteraction = true,
-  style,
   cacheKey,
-  showTrash,
   showComments = true,
+  // showButtonLabels,
+  // showShare,
+  // showSocialInteraction = true,
+  // style,
+  // showTrash,
 }) => {
   // const commentLinkHref = ((): string | null => {
   //   if (isCycle(commentParent)) {
@@ -61,8 +60,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   // })();
 
   // const { data: creator } = useUsers(comment.creatorId.toString());
-  const { contentText, id } = comment;
-  const { t } = useTranslation('common');
+  const { contentText } = comment;
+  // const { t } = useTranslation('common');
   const getTitle = (): string => {
     if (isWork(commentParent)) return (commentParent as Work).title;
     if (isCycle(commentParent)) return (commentParent as Cycle).title;
@@ -84,7 +83,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     return null;
   })();
 
-  const [session] = useSession() as [Session | null | undefined, boolean];
+  // const [session] = useSession() as [Session | null | undefined, boolean];
 
   if (detailed)
     return (
@@ -113,10 +112,10 @@ const MosaicItem: FunctionComponent<Props> = ({
             </Col>
           </Row>
           <Row className={styles.bottomRight}>
-            <Col md={3}>
+            <Col md={4}>
               <Avatar user={comment.creator} size="xs" />
             </Col>
-            <Col md={9} className={styles.commentsInfoContainer}>
+            <Col md={8} className={styles.commentsInfoContainer}>
               <div className={styles.commentsInfo}>
                 <FaRegComments /> <span>{comment.comments.length} Comments</span>
               </div>
@@ -145,16 +144,6 @@ const MosaicItem: FunctionComponent<Props> = ({
           </Button>
         </Col>
       </Row>
-      {/* 
-      <InputGroup className="mt-2">
-        
-        {creator && <Avatar user={creator} size="xs" showName={false} />}
-        
-        
-          <div className={styles.dangerouslySetInnerHTML} dangerouslySetInnerHTML={{ __html: contentText }} />
-          <Button onClick={() => console.log(comment)}>Reply</Button>
-        
-      </InputGroup> */}
     </Card>
   );
 };
