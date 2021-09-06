@@ -19,6 +19,7 @@ export const getRecords = async (
   // const subTypeFn = (i: ItemType) => {
   //   return 'type' in i ? `-${type}` : '';
   // };
+  if (!result.ok) return undefined;
   if (where) {
     const cycles: CycleMosaicItem[] = [];
     result.data.forEach((i: CycleMosaicItem) => {

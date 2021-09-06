@@ -1,12 +1,12 @@
-import { GetServerSideProps, NextPage } from 'next';
-import { getSession, useSession } from 'next-auth/client';
-import { QueryClient, useQuery } from 'react-query';
-import { dehydrate } from 'react-query/hydration';
+import { NextPage } from 'next';
+import { useSession } from 'next-auth/client';
+// import { QueryClient, useQuery } from 'react-query';
+// import { dehydrate } from 'react-query/hydration';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { Spinner } from 'react-bootstrap';
+import { Spinner, Alert } from 'react-bootstrap';
 import { CycleMosaicItem } from '../../src/types/cycle';
-import { MySocialInfo, Session } from '../../src/types';
+import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '../../src/components/cycle/CycleDetail';
 
@@ -31,12 +31,12 @@ import useCycles from '../../src/useCycles';
 //   mySocialInfo: MySocialInfo;
 // }
 
-const CycleDetailPage = () => {
+const CycleDetailPage: NextPage = () => {
   // debugger;
   const session = useSession as unknown as Session;
   const router = useRouter();
   const [id, setId] = useState<number>();
-  const { data, isLoading } = useCycles(id);
+  const { data, isLoading, isFetching } = useCycles(id);
   const [cycle, setCycle] = useState<CycleMosaicItem | undefined>(undefined);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const CycleDetailPage = () => {
         if (!c.isPublic) {
           if (!session) {
             router.push('/');
-          } else {
+          } else if (c.participants) {
             const participantIdx = c.participants.findIndex((i) => i.id === session.user.id);
             if (c.creatorId !== session.user.id && participantIdx === -1 && !session.user.roles.includes('admin')) {
               router.push('/');
@@ -61,7 +61,7 @@ const CycleDetailPage = () => {
         }
       }
     }
-  }, [data]);
+  }, [data, session]);
 
   return (
     <SimpleLayout title={cycle ? cycle.title : ''}>
@@ -76,7 +76,8 @@ const CycleDetailPage = () => {
             // mySocialInfo={mySocialInfo}
           />
         )}
-        {isLoading && <Spinner animation="grow" variant="secondary" />}
+        {(isLoading || isFetching) && <Spinner animation="grow" variant="secondary" />}
+        {!isLoading && !isFetching && !cycle && <Alert variant="warning">Cycle not found</Alert>}
       </>
     </SimpleLayout>
   );

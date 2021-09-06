@@ -69,14 +69,14 @@ export default getApiHandler()
       const cycle = await find(idNum);
       if (cycle == null) {
         // res.status(404).end();
-        res.status(200).json({ status: 'OK', post: null });
+        res.status(200).json({ ok: true, post: null });
         return;
       }
 
-      res.status(200).json({ status: 'OK', cycle });
+      res.status(200).json({ ok: true, cycle });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
-      res.status(500).json({ status: 'server error' });
+      res.status(500).json({ ok: false, error: 'server error' });
     } finally {
       prisma.$disconnect();
     }

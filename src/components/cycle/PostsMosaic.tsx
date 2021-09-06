@@ -36,7 +36,7 @@ const PostsMosaic: FunctionComponent<Props> = ({ cycle, display, showComments, c
       {(cycle.posts && (
         <Mosaic
           display={display}
-          stack={cycle.posts as PostMosaicItem[]}
+          stack={cycle.posts.sort((p, c) => (p.id > c.id && 1) || -1) as PostMosaicItem[]}
           postsLinksTo={cycle}
           showComments={showComments}
           cacheKey={cacheKey}
