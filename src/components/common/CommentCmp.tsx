@@ -122,7 +122,7 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
           <Card key={comment.id} className={`mt-3 ${styles.container}`}>
             <Row>
               <Col xs={2} md={1} className="pr-1">
-                <Avatar user={comment.creator} size="xs" showName={false} />
+                <Avatar user={comment.creator} size="sm" showName={false} />
               </Col>
               <Col xs={10} md={11} className="pl-1">
                 <div

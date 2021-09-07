@@ -163,7 +163,7 @@ const CommentsList: FunctionComponent<Props> = ({
       {user && (
         <Form onSubmit={handleFormSubmit}>
           <InputGroup className="mt-2">
-            <Avatar user={user} size="xs" showName={false} />
+            <Avatar user={user} size="sm" showName={false} />
             <Form.Control
               value={newCommentInput}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setNewCommentInput(e.target.value)}

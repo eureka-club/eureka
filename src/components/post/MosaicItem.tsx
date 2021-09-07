@@ -120,7 +120,7 @@ const MosaicItem: FunctionComponent<Props> = ({
               <div className={styles.postDetail}>
                 {post && (
                   <>
-                    <Avatar user={post.creator} size="xs" />
+                    <Avatar user={post.creator} />
                     {` `}
                     {new Date(post.createdAt).toLocaleDateString()}
                   </>
@@ -169,12 +169,12 @@ const MosaicItem: FunctionComponent<Props> = ({
         <Card.Footer className={styles.footer}>
           {/* <Row>
             <Col xs={2}>
-              <Avatar user={post.creator} size="xs" showName={false} />
+              <Avatar user={post.creator} showName={false} />
             </Col>
             <Col xs={10}> */}
           {showComments && <CommentsList entity={post} parent={postParent} cacheKey={cacheKey} />}
           {/* <InputGroup className="mt-2">
-            <Avatar user={post.creator} size="xs" showName={false} />
+            <Avatar user={post.creator} showName={false} />
             <Form.Control
               value={newCommentInput}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setNewCommentInput(e.target.value)}
@@ -232,7 +232,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         <div className={styles.postDetail}>
           {post && (
             <>
-              <Avatar user={post.creator} size="xs" />
+              <Avatar user={post.creator} />
               {` `}
               {new Date(post.createdAt).toLocaleDateString()}
             </>

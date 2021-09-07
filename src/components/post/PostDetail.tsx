@@ -104,7 +104,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, cycle, work }) => {
                   />
                   {post.creator.name}
                 </a> */}
-                <Avatar user={post.creator} size="xs" />
+                <Avatar user={post.creator} />
               </Link>
               <small className={styles.postDate}>
                 {

@@ -113,7 +113,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           </Row>
           <Row className={styles.bottomRight}>
             <Col md={4}>
-              <Avatar user={comment.creator} size="xs" />
+              <Avatar user={comment.creator} />
             </Col>
             <Col md={8} className={styles.commentsInfoContainer}>
               <div className={styles.commentsInfo}>
@@ -135,7 +135,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 
       <Row>
         <Col xs={2} md={1} className="pr-1">
-          <Avatar user={comment.creator} size="xs" showName={false} />
+          <Avatar user={comment.creator} showName={false} />
         </Col>
         <Col xs={10} md={11} className="pl-1">
           <div className={styles.dangerouslySetInnerHTML} dangerouslySetInnerHTML={{ __html: contentText }} />

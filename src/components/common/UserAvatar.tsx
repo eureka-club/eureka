@@ -10,11 +10,11 @@ import { useUsers } from '../../useUsers';
 interface Props {
   user: { id: number | null; name: string | null; image: string | null };
   showName?: boolean;
-  size?: 'sm' | 'xs';
+  size?: 'md' | 'sm' | 'xs';
   className?: string;
 }
 
-const UserAvatar: FunctionComponent<Props> = ({ user, size = 'sm', showName = true, className = '' }) => {
+const UserAvatar: FunctionComponent<Props> = ({ user, size = 'md', showName = true, className = '' }) => {
   const onLoadImgError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = '/img/default-avatar.png';
   };

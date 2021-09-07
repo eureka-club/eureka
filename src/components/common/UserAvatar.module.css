@@ -2,9 +2,14 @@
     
     margin-bottom: 1rem;
   }
-  .sm img{
+  
+  .md img{
     width: 3em;
     height: 3em;
+  }
+  .sm img{
+    width: 2.5em;
+    height: 2.5em;
   }
   .xs img{
     width: 2em;
