@@ -174,7 +174,7 @@ const CommentsList: FunctionComponent<Props> = ({
           </InputGroup>
         </Form>
       )}
-      {renderComment()}
+      <div className="ml-5">{renderComment()}</div>
       {isLoading && <Spinner animation="grow" variant="secondary" size="sm" />}
     </Container>
   );
