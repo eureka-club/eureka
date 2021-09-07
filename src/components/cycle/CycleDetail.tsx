@@ -16,19 +16,22 @@ import { BiArrowBack } from 'react-icons/bi';
 import TabContainer from 'react-bootstrap/TabContainer';
 import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
+import UserAvatar from '../common/UserAvatar';
+import Mosaic from '../Mosaic';
 // import globalModalsAtom from '../../atoms/globalModals';
 
-import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
+import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR /* , HYVOR_WEBSITE_ID, WEBAPP_URL */ } from '../../constants';
 import { Session } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
 import { WorkMosaicItem } from '../../types/work';
 import { CommentMosaicItem } from '../../types/comment';
+import { UserMosaicItem } from '../../types/user';
 
 // import LocalImageComponent from '../LocalImage';
 import PostDetailComponent from '../post/PostDetail';
 // import CycleSummary from './CycleSummary';
-import HyvorComments from '../common/HyvorComments';
+// import HyvorComments from '../common/HyvorComments';
 // import SocialInteraction from '../common/SocialInteraction';
 import PostsMosaic from './PostsMosaic';
 import WorksMosaic from './WorksMosaic';
@@ -38,6 +41,7 @@ import detailPagesAtom from '../../atoms/detailPages';
 import styles from './CycleDetail.module.css';
 import CycleDetailHeader from './CycleDetailHeader';
 import CycleDetailDiscussion from './CycleDetailDiscussion';
+
 // import useCycles from '../../useCycles';
 
 interface Props {
@@ -62,7 +66,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const router = useRouter();
   const [session] = useSession() as [Session | null | undefined, boolean];
   const { t } = useTranslation('cycleDetail');
-  const hyvorId = `${WEBAPP_URL}cycle/${router.query.id}`;
+  // const hyvorId = `${WEBAPP_URL}cycle/${router.query.id}`;
 
   // const { data } = useCycles(1);
   // const [cycle, setCycle] = useState<CycleDetail>();
@@ -251,7 +255,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                     <Nav variant="tabs" fill>
                       <NavItem className={styles.tabBtn}>
                         <NavLink eventKey="cycle-about">
-                          {t('About')} ({cycle.works.length})
+                          {t('About')} ({cycle.works && cycle.works.length})
                         </NavLink>
                       </NavItem>
                       <NavItem className={styles.tabBtn}>
@@ -285,10 +289,12 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                             <UnclampText text={cycle.contentText} clampHeight="7rem" />
                           </div>
                         )}
-                        <h2 className="mb-5">{t('worksCountHeader', { count: cycle.works.length })}</h2>
-                        {cycle.works.length > 0 && <WorksMosaic cycle={cycle} />}
+                        {cycle.works && (
+                          <h2 className="mb-5">{t('worksCountHeader', { count: cycle.works.length })}</h2>
+                        )}
+                        {cycle.works && cycle.works.length > 0 && <WorksMosaic cycle={cycle} />}
 
-                        {cycle.complementaryMaterials.length > 0 && (
+                        {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (
                           <Row className="mt-4 mb-5">
                             <Col>
                               <h4 className="mb-4">{t('complementaryMaterialsTitle')}</h4>
@@ -315,7 +321,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                       </TabPane>
                       <TabPane eventKey="cycle-discussion">
                         <CycleDetailDiscussion cycle={cycle} />
-                        {(cycle.posts.length && (
+                        {(cycle.posts && cycle.posts.length && (
                           <PostsMosaic
                             display="horizontally"
                             cycle={cycle}
@@ -335,7 +341,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                         <p />
                       </TabPane>
                       <TabPane eventKey="participants">
-                        <h2>{t('Participants')}</h2>
+                        {/* {cycle.participants && cycle.participants.map((p) => <UserAvatar className="mb-3 mr-3" user={p} key={p.id} />)} */}
+                        {cycle.participants && (
+                          <Mosaic showButtonLabels={false} stack={cycle.participants as UserMosaicItem[]} />
+                        )}
                         <p />
                       </TabPane>
                     </TabContent>

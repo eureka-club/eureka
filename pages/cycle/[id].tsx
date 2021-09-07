@@ -35,12 +35,12 @@ const CycleDetailPage: NextPage = () => {
   // debugger;
   const session = useSession as unknown as Session;
   const router = useRouter();
-  const [id, setId] = useState<number>();
-  const { data, isLoading, isFetching } = useCycles(id);
+  const [id, setId] = useState<string>();
+  const { data, isSuccess, isFetching, isError, error } = useCycles(id);
   const [cycle, setCycle] = useState<CycleMosaicItem | undefined>(undefined);
 
   useEffect(() => {
-    if (router && router.query) setId(() => parseInt(router.query.id as string, 10));
+    if (router && router.query) setId(() => router.query.id as string);
   }, [router]);
 
   useEffect(() => {
@@ -78,8 +78,12 @@ const CycleDetailPage: NextPage = () => {
             // mySocialInfo={mySocialInfo}
           />
         )}
-        {(isLoading || isFetching) && <Spinner animation="grow" variant="secondary" />}
-        {!isLoading && !isFetching && !cycle && <Alert variant="warning">Cycle not found</Alert>}
+        {(isFetching || !isSuccess) && <Spinner animation="grow" variant="secondary" />}
+        {isError && !cycle && (
+          <Alert variant="warning">
+            <>{error}</>
+          </Alert>
+        )}
       </>
     </SimpleLayout>
   );

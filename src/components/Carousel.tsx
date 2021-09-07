@@ -51,7 +51,7 @@ const renderMosaicItem = (
         showButtonLabels={false}
         key={`cycle-${item.id}`}
         cycle={item as CycleMosaicItem}
-        cacheKey={topic && page ? ['items', `${topic}${page}`] : undefined}
+        cacheKey={topic && page ? ['ITEMS', `${topic}${page}`] : undefined}
         showSocialInteraction={showSocialInteraction}
       />
     );
@@ -68,7 +68,7 @@ const renderMosaicItem = (
         showButtonLabels={false}
         key={`work-${item.id}`}
         work={item}
-        cacheKey={topic && page ? ['items', `${topic}${page}`] : undefined}
+        cacheKey={topic && page ? ['ITEMS', `${topic}${page}`] : undefined}
       />
     );
   }
@@ -112,7 +112,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
     return res;
   };
   const { isLoading /* , isError, error, isFetching */, data, isPreviousData } = useQuery(
-    ['items', `${topic}${page}`],
+    ['ITEMS', `${topic}${page}`],
     () => fetchItems(page),
     { keepPreviousData: true },
   );
@@ -121,6 +121,11 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
     // debugger;
     // console.log(data);
     if (data) {
+      setGlobalSearchEngineState({
+        ...globalSearchEngineState,
+        cacheKey: undefined,
+      });
+
       setItems(data);
       if (data.extraCyclesRequired) setExtraCyclesRequired(data.extraCyclesRequired);
       if (data.extraWorksRequired) setExtraWorksRequired(data.extraWorksRequired);
@@ -187,7 +192,14 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
         }),
       }),
     );
-    setGlobalSearchEngineState({ ...globalSearchEngineState, where, q: topic, show: true, itemsFound: [] });
+    setGlobalSearchEngineState({
+      ...globalSearchEngineState,
+      where,
+      q: topic,
+      show: true,
+      itemsFound: [],
+      cacheKey: ['ITEMS', `${topic}`],
+    });
     router.push('/search');
   };
 

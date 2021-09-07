@@ -65,7 +65,7 @@ const CreatePostForm: FunctionComponent = () => {
   // }, [router, router.query.id]);
 
   useEffect(() => {
-    if (work) setSelectedWork(work);
+    if (work) setSelectedWork(work as WorkMosaicItem);
   }, [work]);
 
   const { t } = useTranslation('createPostForm');

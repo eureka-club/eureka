@@ -5,25 +5,21 @@ import globalSearchEngineAtom from './atoms/searchEngine';
 
 export const getRecords = async (
   where?: string,
-  id?: number,
+  id?: string,
 ): Promise<CycleMosaicItem[] | CycleMosaicItem | undefined> => {
   if (!where && !id) return undefined;
   let url = '';
   if (where) {
-    url = `http://localhost:3000/api/cycle${where ? `?where=${where}` : ''}`;
-  } else if (id) url = `http://localhost:3000/api/cycle/${id}`;
+    url = `/api/cycle${where ? `?where=${where}` : ''}`;
+  } else if (id) url = `/api/cycle/${id}`;
 
   const res = await fetch(url);
+  if (!res.ok) return undefined;
   const result = await res.json();
-  // const type = ['cycle-active', 'cycle-not-active'][0];
-  // const subTypeFn = (i: ItemType) => {
-  //   return 'type' in i ? `-${type}` : '';
-  // };
-  if (!result.ok) return undefined;
+
   if (where) {
     const cycles: CycleMosaicItem[] = [];
     result.data.forEach((i: CycleMosaicItem) => {
-      // result.data[k] = { ...i, TYPE: `${type}${subTypeFn(i)}` };
       cycles.push({ ...i, type: 'cycle' });
     });
     return cycles;
@@ -31,13 +27,13 @@ export const getRecords = async (
   return { ...result.cycle, type: 'cycle' };
 };
 
-const useCycles = (id?: number) => {
+const useCycles = (id?: string) => {
   const [globalSearchEngineState] = useAtom(globalSearchEngineAtom);
-  const { where } = globalSearchEngineState;
-  let cacheKey = ['CYCLES', JSON.stringify({ where })];
-  if (id) cacheKey = ['CYCLES', `${id}`];
+  const { where, cacheKey, q } = globalSearchEngineState;
+  let ck = ['CYCLES', q];
+  if (id) ck = ['CYCLES', `${id}`];
 
-  return useQuery<CycleMosaicItem[] | CycleMosaicItem | undefined>(cacheKey, () => getRecords(where, id), {
+  return useQuery<CycleMosaicItem[] | CycleMosaicItem | undefined>(cacheKey || ck, () => getRecords(where, id), {
     staleTime: 1000 * 60 * 60,
   });
 };

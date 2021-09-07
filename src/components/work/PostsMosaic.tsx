@@ -7,7 +7,7 @@ import { WorkMosaicItem } from '../../types/work';
 import Mosaic from '../Mosaic';
 
 interface Props {
-  work: Work;
+  work: WorkMosaicItem;
 }
 
 const PostsMosaic: FunctionComponent<Props> = ({ work }) => {

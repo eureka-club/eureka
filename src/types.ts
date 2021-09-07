@@ -75,8 +75,9 @@ export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMos
 };
 export const isWorkMosaicItem = (obj: MosaicItem | SearchResult): obj is WorkMosaicItem =>
   typeof (obj as WorkMosaicItem).title === 'string' &&
-  typeof (obj as WorkMosaicItem).author === 'string' &&
-  typeof (obj as WorkMosaicItem).type === 'string';
+  // typeof (obj as WorkMosaicItem).author === 'string' &&
+  typeof (obj as WorkMosaicItem).type === 'string' &&
+  ['book', 'fiction-book', 'movie', 'documentary'].includes((obj as WorkMosaicItem).type);
 
 export const isUserMosaicItem = (obj: MosaicItem | SearchResult): obj is UserMosaicItem =>
-  typeof (obj as UserMosaicItem).roles === 'string' && typeof (obj as UserMosaicItem).email === 'string';
+  typeof (obj as UserMosaicItem).name === 'string' && 'countryOfOrigin' in obj && 'image' in obj;

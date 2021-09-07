@@ -1,0 +1,58 @@
+import { useQuery } from 'react-query';
+import { useAtom } from 'jotai';
+import { WorkMosaicItem } from './types/work';
+import { CycleMosaicItem } from './types/cycle';
+import globalSearchEngineAtom from './atoms/searchEngine';
+
+type Item = WorkMosaicItem | CycleMosaicItem;
+
+const getRecordsWorks = async (where?: string): Promise<WorkMosaicItem[]> => {
+  let url = '/api/work';
+  if (where) {
+    url = `/api/work${where ? `?where=${where}` : ''}`;
+  }
+
+  const res = await fetch(url);
+  if (!res.ok) return [];
+  const result = await res.json();
+
+  return result.data as WorkMosaicItem[];
+};
+
+const getRecordsCycles = async (where?: string): Promise<CycleMosaicItem[]> => {
+  let url = '/api/cycle';
+  if (where) {
+    url = `/api/cycle${where ? `?where=${where}` : ''}`;
+  }
+
+  const res = await fetch(url);
+  if (!res.ok) return [];
+  const result = await res.json();
+
+  const cycles: CycleMosaicItem[] = [];
+  result.data.forEach((i: CycleMosaicItem) => {
+    cycles.push({ ...i, type: 'cycle' });
+  });
+  return cycles;
+};
+
+const getRecords = async (where?: string): Promise<Item[] | undefined> => {
+  if (!where) return undefined;
+  const cycles = await getRecordsCycles(where);
+  const works = await getRecordsWorks(where);
+
+  const result = [...cycles, ...works];
+  return result;
+};
+
+const useItems = () => {
+  const [globalSearchEngineState] = useAtom(globalSearchEngineAtom);
+  const { where, q, cacheKey } = globalSearchEngineState;
+  const ck = ['ITEMS', q];
+
+  return useQuery<Item[] | undefined>(cacheKey || ck, () => getRecords(where), {
+    staleTime: 1000 * 60 * 60,
+  });
+};
+
+export default useItems;

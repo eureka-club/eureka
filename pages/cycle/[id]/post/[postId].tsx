@@ -31,13 +31,13 @@ import { Post } from '.prisma/client';
 
 const PostDetailInCyclePage = () => {
   const router = useRouter();
-  const [cycleId, setCycleId] = useState<number>();
+  const [cycleId, setCycleId] = useState<string>();
   const { data, isLoading } = useCycles(cycleId);
   const [cycle, setCycle] = useState<CycleMosaicItem>();
   const [post, setPost] = useState<PostMosaicItem>();
 
   useEffect(() => {
-    if (router.query.id) setCycleId(parseInt(router.query.id as string, 10));
+    if (router.query.id) setCycleId(router.query.id as string);
   }, [router]);
 
   useEffect(() => {

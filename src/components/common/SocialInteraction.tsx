@@ -3,10 +3,9 @@ import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
 // import Dropdown from 'react-bootstrap/Dropdown';
 import { GiBrain } from 'react-icons/gi';
-import { BsBookmark, BsBookmarkFill, BsEye, BsEyeFill } from 'react-icons/bs';
+import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 import classnames from 'classnames';
-import { FiShare2, FiStar, FiTrash2 } from 'react-icons/fi';
-import { IoMdStarOutline, IoMdStar, IoMdStarHalf } from 'react-icons/io';
+import { FiShare2, FiTrash2 } from 'react-icons/fi';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/client';
 import { useAtom } from 'jotai';
@@ -22,6 +21,7 @@ import {
   WhatsappIcon,
 } from 'react-share';
 import { Cycle, User, Work, Post } from '@prisma/client';
+import globalSearchEngineAtom from '../../atoms/searchEngine';
 
 import { useUsers } from '../../useUsers';
 import globalModalsAtom from '../../atoms/globalModals';
@@ -31,6 +31,7 @@ import { WEBAPP_URL } from '../../constants';
 import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
 import { WorkMosaicItem } from '../../types/work';
+import { UserMosaicItem } from '../../types/user';
 import { MySocialInfo, isCycle, isWork, Session, isPost } from '../../types';
 import styles from './SocialInteraction.module.css';
 
@@ -41,7 +42,7 @@ interface SocialInteractionClientPayload {
 }
 
 interface Props {
-  entity: CycleMosaicItem | PostMosaicItem | WorkMosaicItem | User;
+  entity: CycleMosaicItem | PostMosaicItem | WorkMosaicItem | UserMosaicItem;
   parent?: Cycle | Work | null;
   // mySocialInfo: MySocialInfo;
   showCounts?: boolean;
@@ -68,6 +69,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const [qty, setQty] = useState<number>(0);
 
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
+  const [globalSearchEngineState] = useAtom(globalSearchEngineAtom);
+
   const [mySocialInfo, setMySocialInfo] = useState<MySocialInfo>();
 
   // const [optimistLike, setOptimistLike] = useState<boolean | null>();
@@ -323,10 +326,12 @@ const SocialInteraction: FunctionComponent<Props> = ({
         return {};
       },
       onSuccess: () => {
+        const ck = globalSearchEngineState ? globalSearchEngineState.cacheKey : cacheKey;
         queryClient.invalidateQueries(['USERS', `${idSession}`]);
-        if (!cacheKey) router.replace(router.asPath);
-        else if (queryClient.getQueryData(cacheKey)) queryClient.invalidateQueries(cacheKey);
-        else router.replace(router.asPath);
+        if (!ck) router.replace(router.asPath);
+        // else if (queryClient.getQueryData(ck))
+        queryClient.invalidateQueries(ck);
+        // else router.replace(router.asPath);
       },
     },
   );
@@ -449,11 +454,6 @@ const SocialInteraction: FunctionComponent<Props> = ({
           <Col xs={10}>
             {showRating && getRatingLabelInfo()}
             {` `}
-            {showTrash && (
-              <button type="button" title="Clear rating" className={styles.clearRating} onClick={clearRating}>
-                <FiTrash2 />
-              </button>
-            )}
             {showRating && (
               <Rating
                 initialRating={qty}
@@ -464,7 +464,12 @@ const SocialInteraction: FunctionComponent<Props> = ({
                 fullSymbol={getFullSymbol()}
               />
             )}{' '}
-            {showRating && !loadingSocialInteraction && getRatingsCount()}
+            {showRating && !loadingSocialInteraction && getRatingsCount()}{' '}
+            {showTrash && (
+              <button type="button" title="Clear rating" className={styles.clearRating} onClick={clearRating}>
+                <FiTrash2 />
+              </button>
+            )}
             {loadingSocialInteraction && (
               <Spinner className={styles.ratingSpinner} size="sm" animation="grow" variant="secondary" />
             )}

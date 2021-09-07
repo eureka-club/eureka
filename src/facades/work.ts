@@ -8,11 +8,9 @@ export const find = async (id: number): Promise<WorkMosaicItem | null> => {
     where: { id },
     include: {
       localImages: true,
-      ratings: true,
       favs: true,
-      comments: {
-        include: { comments: true },
-      },
+      ratings: true,
+      comments: { include: { comments: true } },
     },
   });
 };

@@ -26,6 +26,7 @@ import Mosaic from '../src/components/Mosaic';
 import FilterEngine from '../src/components/FilterEngine';
 import useWorks from '../src/useWorks';
 import useCycles from '../src/useCycles';
+import useItems from '../src/useItems';
 import useCountries from '../src/useCountries';
 
 type Item = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | UserMosaicItem;
@@ -71,8 +72,9 @@ const SearchPage: NextPage = () => {
 
   // const [where, setWhere] = useState('');
   // const [tempWhere, setTempWhere] = useState('');
-  const { isLoading, /* isError, error, */ data: works } = useWorks();
-  const { isLoading: isLoadingCycles, /* isError: isErrorCycles, error: errorCycles, */ data: cycles } = useCycles();
+  const { isLoading, data: items } = useItems();
+  // const { isLoading, /* isError, error, */ data: works } = useWorks();
+  // const { isLoading: isLoadingCycles, /* isError: isErrorCycles, error: errorCycles, */ data: cycles } = useCycles();
   const { data: onlyByCountriesAux } = useCountries();
 
   const [homepageMosaicData, setHomepageMosaicData] = useState<Item[]>([]);
@@ -80,14 +82,18 @@ const SearchPage: NextPage = () => {
   useEffect(() => {
     if (globalSearchEngineState.itemsFound && globalSearchEngineState.itemsFound.length) {
       setHomepageMosaicData(globalSearchEngineState.itemsFound);
-    } else if (works || cycles /* || posts */) {
-      const w = works ? works.data : [];
-      const c = cycles ? ('length' in cycles ? cycles : [cycles]) : [];
-      // const p = posts ? posts.data : [];
-      const res = [...w, ...c /* , ...p */];
-      setHomepageMosaicData(res);
     }
-  }, [works, cycles /* , posts */, globalSearchEngineState.itemsFound]);
+    // else if (works || cycles /* || posts */) {
+    //   const w = works ? ('length' in works ? works : [works]) : [];
+    //   const c = cycles ? ('length' in cycles ? cycles : [cycles]) : [];
+    //   // const p = posts ? posts.data : [];
+    //   const res = [...(w as WorkMosaicItem[]), ...c /* , ...p */];
+    //   setHomepageMosaicData(res);
+    // }
+    else if (items) {
+      setHomepageMosaicData(items);
+    }
+  }, [items /* works, cycles  , posts */, globalSearchEngineState.itemsFound]);
 
   /* type FilterWhere = {
     where: {
@@ -155,7 +161,7 @@ const SearchPage: NextPage = () => {
   // }, [globalSearchEngineState]);
 
   const genLoadingCmp = (): ReactElement => {
-    if (isLoading || isLoadingCycles)
+    if (isLoading)
       return (
         <Spinner animation="border" role="status">
           <span className="sr-only">{t('Loading')}</span>
@@ -177,16 +183,16 @@ const SearchPage: NextPage = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
-  const queryClient = new QueryClient();
-  // await queryClient.prefetchQuery('WORKS', getWorks);
+// export const getStaticProps: GetStaticProps = async () => {
+//   const queryClient = new QueryClient();
+//   // await queryClient.prefetchQuery('WORKS', getWorks);
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-  };
-};
+//   return {
+//     props: {
+//       dehydratedState: dehydrate(queryClient),
+//     },
+//   };
+// };
 
 // export const getServerSideProps: GetServerSideProps = async () => {
 //   const cycles = await findAllCycles();

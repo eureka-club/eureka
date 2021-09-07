@@ -19,6 +19,7 @@ const fetchUsers = async (props: fetchProps) => {
 
 const useUsers = (props: fetchProps) => {
   const { id, select = undefined, include = true } = props;
+
   return useQuery(['USERS', id], () => fetchUsers({ id, select, include }), {
     staleTime: 1000 * 60 * 60,
   });

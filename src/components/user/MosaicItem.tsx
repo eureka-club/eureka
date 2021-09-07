@@ -9,12 +9,14 @@ import { User } from '@prisma/client';
 import router from 'next/router';
 import styles from './MosaicItem.module.css';
 import SocialInteraction from '../common/SocialInteraction';
+import UserAvatar from '../common/UserAvatar';
 // import LocalImageComponent from '../LocalImage';
 // import TagsInput from '../forms/controls/TagsInput';
 import { Session } from '../../types';
+import { UserMosaicItem } from '../../types/user';
 
 interface Props {
-  user: User;
+  user: UserMosaicItem;
   showSocialInteraction?: boolean;
   // showButtonLabels?: boolean;
   // showShare?: boolean;
@@ -32,13 +34,16 @@ const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = fa
     <Card className={styles.container} onClick={() => openUserMediatheque(id)}>
       <Row>
         <Col xs={12} md={3}>
-          <img src={image || '/assets/avatar.png'} alt="User Avatar" />
+          <UserAvatar user={user} showName={false} />
+          {/* <img src={image || '/assets/avatar.png'} alt="User Avatar" /> */}
         </Col>
         <Col xs={12} md={9}>
           <h6>{name}</h6>
-          <em>
-            <AiOutlineEnvironment /> {t(`countries:${countryOfOrigin}`)}
-          </em>
+          {countryOfOrigin && (
+            <em>
+              <AiOutlineEnvironment /> {t(`countries:${countryOfOrigin}`)}
+            </em>
+          )}
           {/* <TagsInput tags={tags || ''} readOnly label="" /> */}
         </Col>
       </Row>

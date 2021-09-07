@@ -10,9 +10,10 @@ import MosaicItemWork from './work/MosaicItem';
 import MosaicItemUser from './user/MosaicItem';
 import styles from './Mosaic.module.css';
 import { CycleMosaicItem } from '../types/cycle';
+import { WorkMosaicItem } from '../types/work';
 
 interface Props {
-  postsLinksTo?: CycleMosaicItem | Work;
+  postsLinksTo?: CycleMosaicItem | WorkMosaicItem;
   stack: MosaicItem[];
   showButtonLabels?: boolean;
   display?: 'horizontally' | 'vertically';
@@ -22,7 +23,7 @@ interface Props {
 
 const renderMosaicItem = (
   item: MosaicItem,
-  postsParent: CycleMosaicItem | Work | undefined,
+  postsParent: CycleMosaicItem | WorkMosaicItem | undefined,
   showButtonLabels: boolean,
   display: 'horizontally' | 'vertically',
   showComments: boolean,
