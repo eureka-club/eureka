@@ -155,7 +155,7 @@ const Carousel: FunctionComponent<Props> = ({
               <Col>
                 <h5 className={styles.carouselTitle}>
                   {iconBefore ? <span className={styles.iconBefore}>{iconBefore}</span> : ''}
-                  {` `} {title} {`(${dataFiltered.length})`}
+                  {` `} {title} {/* {`(${dataFiltered.length})`} */}
                   {iconAfter ? <span className={styles.iconAfter}>{iconAfter}</span> : ''}
                 </h5>
               </Col>
