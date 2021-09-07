@@ -129,14 +129,24 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
                   className={styles.dangerouslySetInnerHTML}
                   dangerouslySetInnerHTML={{ __html: comment.contentText }}
                 />
+                <br />
                 {!isLoading && (
-                  <Button variant="default" onClick={() => setShowComment(() => true)} className={styles.replyButton}>
-                    <MdReply />
+                  <Button
+                    variant="default"
+                    onClick={() => setShowComment(() => true)}
+                    className={`pl-0 ${styles.replyButton}`}
+                  >
+                    <MdReply className="text-info" />
+                    <span className="text-info">{t('Reply')}</span>
                   </Button>
                 )}
                 {!isLoading && showComment && (
-                  <Button variant="default" onClick={() => setShowComment(() => false)} className={styles.replyButton}>
-                    <MdCancel />
+                  <Button
+                    variant="default"
+                    onClick={() => setShowComment(() => false)}
+                    className={`pl-0 ${styles.replyButton}`}
+                  >
+                    <MdCancel className="text-secondary" />
                   </Button>
                 )}
 
