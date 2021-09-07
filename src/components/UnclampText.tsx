@@ -48,8 +48,8 @@ const UnclampText: FunctionComponent<Props> = ({ clampHeight, text, showButtomMo
         style={{ height: textIsUnclamped ? 'auto' : clampHeight }}
       >
         <div ref={innerRef}>
-          {textRows.map((row) => (
-            <p key={`${row[0]}${row[1]}-${row.length}`}>{row}</p>
+          {textRows.map((row, idx) => (
+            <p key={`${idx + 1}${row[0]}${row[1]}-${row.length}`}>{row}</p>
           ))}
         </div>
       </div>

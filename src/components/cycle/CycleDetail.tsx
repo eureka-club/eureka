@@ -137,6 +137,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const renderCycleOwnComments = () => {
     if (cycle.comments)
       return cycle.comments
+        .filter((c) => !c.workId && !c.postId && !c.commentId)
         .sort((p, c) => (p.id > c.id && -1) || 1)
         .map((c) => {
           return (

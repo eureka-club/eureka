@@ -110,7 +110,7 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({ cycl
 
     if (newComment.selectedWorkId) {
       const payload: CreateCommentAboutWorkClientPayload = {
-        selectedCycleId: undefined,
+        selectedCycleId: newComment.selectedCycleId ? newComment.selectedCycleId : undefined,
         selectedWorkId: newComment.selectedWorkId,
         selectedCommentId: undefined,
         contentText: editorRef.current.getContent(),
@@ -128,7 +128,7 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({ cycl
       await execCreateComment(payload);
     } else if (newComment.selectedCommentId) {
       const payload: CreateCommentAboutCommentClientPayload = {
-        selectedCycleId: undefined, //newComment.selectedCycleId ? newComment.selectedCycleId : undefined,
+        selectedCycleId: newComment.selectedCycleId ? newComment.selectedCycleId : undefined,
         selectedCommentId: newComment.selectedCommentId,
         selectedWorkId: undefined,
         contentText: editorRef.current.getContent(),

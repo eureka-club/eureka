@@ -45,23 +45,25 @@ const CycleDetailPage: NextPage = () => {
 
   useEffect(() => {
     // debugger;
-    const c = data as CycleMosaicItem;
-    if (c) {
-      setCycle(c);
+    if (session && data && router) {
+      const c = data as CycleMosaicItem;
       if (c) {
-        if (!c.isPublic) {
-          if (!session) {
-            router.push('/');
-          } else if (c.participants && session.user) {
-            const participantIdx = c.participants.findIndex((i) => i.id === session.user.id);
-            if (c.creatorId !== session.user.id && participantIdx === -1 && !session.user.roles.includes('admin')) {
+        setCycle(c);
+        if (c) {
+          if (!c.isPublic) {
+            if (!session) {
               router.push('/');
+            } else if (c.participants && session.user) {
+              const participantIdx = c.participants.findIndex((i) => i.id === session.user.id);
+              if (c.creatorId !== session.user.id && participantIdx === -1 && !session.user.roles.includes('admin')) {
+                router.push('/');
+              }
             }
           }
         }
       }
     }
-  }, [data, session]);
+  }, [data, session, router]);
 
   return (
     <SimpleLayout title={cycle ? cycle.title : ''}>

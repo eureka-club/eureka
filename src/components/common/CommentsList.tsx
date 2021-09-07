@@ -141,7 +141,7 @@ const CommentsList: FunctionComponent<Props> = ({
       return entity.comments.filter((c) => !c.workId && !c.postId && !c.commentId);
     }
     if (isWork(entity)) {
-      return entity.comments.filter((c) => !c.postId && !c.commentId);
+      return entity.comments.filter((c) => c.workId && !c.postId && !c.commentId);
     }
     if (isPost(entity)) {
       return entity.comments.filter((c) => c.postId && !c.commentId);
@@ -151,7 +151,7 @@ const CommentsList: FunctionComponent<Props> = ({
   };
 
   const renderComment = () => {
-    return entity.comments
+    return entityOwnsComment()
       .sort((p, c) => (p.id > c.id && -1) || 1)
       .map((c) => {
         return <CommentCmp key={c.id} comment={c as CommentMosaicItem} cacheKey={cacheKey} />;
