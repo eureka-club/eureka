@@ -7,11 +7,11 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 // import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
+
 // import Nav from 'react-bootstrap/Nav';
 // import NavItem from 'react-bootstrap/NavItem';
 // import NavLink from 'react-bootstrap/NavLink';
-import Row from 'react-bootstrap/Row';
+import { Col, Row, Button } from 'react-bootstrap';
 // import Spinner from 'react-bootstrap/Spinner';
 // import TabContainer from 'react-bootstrap/TabContainer';
 // import TabContent from 'react-bootstrap/TabContent';
@@ -54,10 +54,14 @@ interface Props {
   postsCount?: number;
   worksCount?: number;
   mySocialInfo?: MySocialInfo;
+  onCarouselSeeAllAction?: () => Promise<void>;
+  onParticipantsAction?: () => Promise<void>;
 }
 
 const CycleDetailHeader: FunctionComponent<Props> = ({
   cycle,
+  onCarouselSeeAllAction,
+  onParticipantsAction,
   // post,
   // work,
   // isCurrentUserJoinedToCycle,
@@ -196,10 +200,14 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         {getRatingQty()} {t('ratings')}
         <h3>Content calendar ({cycle.works && cycle.works.length})</h3>
         <CycleSummary cycle={cycle} />
+        <Button className={`${styles.seeParticipantsBtn}`} onClick={onParticipantsAction}>
+          {cycle.participants.length} participants
+        </Button>
         <div className={styles.customCarouselStaticContainer}>
           <CarouselStatic
             showSocialInteraction={false}
-            onSeeAll={async () => seeAll(cycle.works as WorkMosaicItem[], t('Eurekas I created'))}
+            // onSeeAll={async () => seeAll(cycle.works as WorkMosaicItem[], t('Eurekas I created'))}
+            onSeeAll={onCarouselSeeAllAction}
             title=""
             data={cycle.works as WorkMosaicItem[]}
             iconBefore={<></>}

@@ -35,7 +35,7 @@ type Props = {
   title: string;
   iconBefore?: JSX.Element;
   iconAfter?: JSX.Element;
-  onSeeAll: () => Promise<void>;
+  onSeeAll?: () => Promise<void>;
   data: Item[]; // ((CycleMosaicItem & { type: string }) | WorkMosaicItem)[];
   showSocialInteraction?: boolean;
   customMosaicStyle?: { [key: string]: string };
@@ -161,7 +161,7 @@ const Carousel: FunctionComponent<Props> = ({
               </Col>
               <Col className={styles.right}>
                 {dataFiltered.length && (
-                  <Button className={styles.seeAllButton} onClick={onSeeAll}>
+                  <Button className={`mb-3 ${styles.seeAllButton}`} onClick={onSeeAll}>
                     {t('common:See all')}
                   </Button>
                 )}

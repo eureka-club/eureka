@@ -4,7 +4,7 @@ import { useAtom } from 'jotai';
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, MouseEvent } from 'react';
+import { FunctionComponent, MouseEvent, useState, useRef, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
@@ -66,6 +66,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const router = useRouter();
   const [session] = useSession() as [Session | null | undefined, boolean];
   const { t } = useTranslation('cycleDetail');
+  const [tabKey, setTabKey] = useState<string>();
+  const tabContainnerRef = useRef<HTMLDivElement>(null);
   // const hyvorId = `${WEBAPP_URL}cycle/${router.query.id}`;
 
   // const { data } = useCycles(1);
@@ -97,8 +99,26 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   const handleSubsectionChange = (key: string | null) => {
     if (key != null) {
+      setTabKey(key);
+
       setDetailPagesState({ ...detailPagesState, selectedSubsectionCycle: key });
     }
+  };
+
+  const onCarouselSeeAllAction = async () => {
+    setTabKey('cycle-about');
+    if (tabContainnerRef)
+      tabContainnerRef.current!.scrollIntoView({
+        behavior: 'smooth',
+      });
+  };
+
+  const onParticipantsAction = async () => {
+    setTabKey('participants');
+    if (tabContainnerRef)
+      tabContainnerRef.current!.scrollIntoView({
+        behavior: 'smooth',
+      });
   };
 
   // const handleJoinCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
@@ -165,7 +185,13 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           {t('Edit')}
         </Button>
       )}
-      {!post && cycle && <CycleDetailHeader cycle={cycle} />}
+      {!post && cycle && (
+        <CycleDetailHeader
+          cycle={cycle}
+          onParticipantsAction={onParticipantsAction}
+          onCarouselSeeAllAction={onCarouselSeeAllAction}
+        />
+      )}
       {/* <Row className="mb-5">
         {post == null ? (
           <>
@@ -227,12 +253,13 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       )}
       {post && <PostDetailComponent post={post} cycle={cycle} work={work} />}
       {cycle && post == null && (
-        <Row className="mb-5">
+        <Row className="mb-5" ref={tabContainnerRef}>
           <Col>
             {detailPagesState.selectedSubsectionCycle != null && (
               <TabContainer
-                defaultActiveKey={detailPagesState.selectedSubsectionCycle}
+                // defaultActiveKey={detailPagesState.selectedSubsectionCycle}
                 onSelect={handleSubsectionChange}
+                activeKey={tabKey}
                 transition={false}
               >
                 {/* language=CSS */}
