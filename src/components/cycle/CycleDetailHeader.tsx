@@ -183,6 +183,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         <h2>{cycle.title}</h2>
         {cycle.topics && <TagsInput tags={cycle.topics} readOnly />}
         <Rating
+          readonly
           initialRating={getRatingAvg()}
           // onChange={handlerChangeRating}
           className={styles.rating}
