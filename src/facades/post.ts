@@ -40,7 +40,7 @@ export const findAll = async (): Promise<PostMosaicItem[]> => {
 };
 
 export const search = async (query: { [key: string]: string | string[] }): Promise<Post[]> => {
-  const { q, where /*, include */ } = query;
+  const { q, where /* , include */ } = query;
   if (where == null && q == null) {
     throw new Error("[412] Invalid invocation! Either 'q' or 'where' query parameter must be provided");
   }
@@ -49,14 +49,14 @@ export const search = async (query: { [key: string]: string | string[] }): Promi
     return prisma.post.findMany({
       where: { title: { contains: q } },
       // ...(typeof include === 'string' && { include: JSON.parse(include) }),
-      include: { creator: true, localImages: true, works: true, favs: true },
+      include: { creator: true, localImages: true, works: true, cycles: true, favs: true, likes: true },
     });
   }
 
   return prisma.post.findMany({
     ...(typeof where === 'string' && { where: JSON.parse(where) }),
     // ...(typeof include === 'string' && { include: JSON.parse(include) }),
-    include: { creator: true, localImages: true, works: true, favs: true },
+    include: { creator: true, localImages: true, works: true, cycles: true, favs: true, likes: true },
   });
 };
 

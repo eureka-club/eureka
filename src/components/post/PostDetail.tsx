@@ -77,7 +77,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, cycle, work }) => {
                   </td>
                 </tr>
               )}
-              {post.cycles.length > 0 && (
+              {post.cycles && post.cycles.length > 0 && (
                 <tr>
                   <td className={styles.parentBadges}>
                     <Link href={`/cycle/${post.cycles[0].id}`}>
