@@ -172,7 +172,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         res += r.qty;
       });
       res /= cycle.ratings.length;
-      return res.toFixed(1);
+      return +res.toFixed(1);
     }
     return 0;
   };
