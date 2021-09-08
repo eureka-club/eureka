@@ -4,7 +4,7 @@ import { FunctionComponent, /* MouseEvent, */ useEffect, useState, ChangeEvent, 
 import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/client';
 
-import { Container, InputGroup, Form /* , Row, Col, Card, Popover, Button, */, Spinner } from 'react-bootstrap';
+import { Container, InputGroup, Form, Button /* , Row, Col, Card, Popover, */, Spinner } from 'react-bootstrap';
 
 import { Cycle, Work, Post, Comment } from '@prisma/client';
 // import { MdReply, MdCancel } from 'react-icons/md';
@@ -55,6 +55,9 @@ const CommentsList: FunctionComponent<Props> = ({
   const [session] = useSession() as [Session | null | undefined, boolean];
   const [newCommentInput, setNewCommentInput] = useState<string>();
   const [idSession, setIdSession] = useState<string>('');
+  const commentsPerPage = 2;
+  const [commentsShowCount, setCommentsShowCount] = useState<number>(commentsPerPage);
+  const [filterdComments, setFilterdComments] = useState<Comment[]>();
   const { /* isLoading, isError, error, */ data: user } = useUsers({ id: idSession });
 
   const queryClient = useQueryClient();
@@ -136,26 +139,45 @@ const CommentsList: FunctionComponent<Props> = ({
     createComment(payload);
   };
 
-  const entityOwnsComment = () => {
-    if (isCycle(entity)) {
-      return entity.comments.filter((c) => !c.workId && !c.postId && !c.commentId);
+  useEffect(() => {
+    if (entity) {
+      if (isCycle(entity)) {
+        setFilterdComments(() => entity.comments.filter((c) => !c.workId && !c.postId && !c.commentId));
+      } else if (isWork(entity)) {
+        setFilterdComments(() => entity.comments.filter((c) => c.workId && !c.postId && !c.commentId));
+      } else if (isPost(entity)) {
+        setFilterdComments(() => entity.comments.filter((c) => c.postId && !c.commentId));
+      } else {
+        setFilterdComments(() => entity.comments.filter((c) => c.commentId));
+      }
     }
-    if (isWork(entity)) {
-      return entity.comments.filter((c) => c.workId && !c.postId && !c.commentId);
-    }
-    if (isPost(entity)) {
-      return entity.comments.filter((c) => c.postId && !c.commentId);
-    }
-
-    return entity.comments.filter((c) => c.commentId);
-  };
+  }, [entity]);
 
   const renderComment = () => {
-    return entityOwnsComment()
-      .sort((p, c) => (p.id > c.id && -1) || 1)
-      .map((c) => {
-        return <CommentCmp key={c.id} comment={c as CommentMosaicItem} cacheKey={cacheKey} />;
-      });
+    if (filterdComments)
+      return filterdComments
+        .sort((p, c) => (p.id > c.id && -1) || 1)
+        .slice(0, commentsShowCount)
+        .map((c) => {
+          return <CommentCmp key={c.id} comment={c as CommentMosaicItem} cacheKey={cacheKey} />;
+        });
+    return null;
+  };
+
+  const viewMoreComments = () => {
+    if (filterdComments && filterdComments.length) {
+      const diff = filterdComments.length - commentsShowCount;
+      if (diff > commentsPerPage) setCommentsShowCount((res) => res + commentsPerPage);
+      else setCommentsShowCount(() => filterdComments.length);
+    }
+  };
+
+  const viewLessComments = () => {
+    if (filterdComments && filterdComments.length) {
+      const diff = commentsShowCount - commentsPerPage;
+      if (diff > 0) setCommentsShowCount((res) => res - commentsPerPage);
+      else setCommentsShowCount(() => commentsPerPage);
+    }
   };
 
   return (
@@ -174,7 +196,24 @@ const CommentsList: FunctionComponent<Props> = ({
           </InputGroup>
         </Form>
       )}
-      <div className="ml-5">{renderComment()}</div>
+      <div className="ml-5">
+        {renderComment()}
+        {(filterdComments && filterdComments.length && (
+          <div>
+            {commentsShowCount < filterdComments?.length && (
+              <Button variant="default" className="text-info" onClick={viewMoreComments}>
+                {t('vmcomments')}
+              </Button>
+            )}
+            {commentsShowCount > commentsPerPage && (
+              <Button variant="default" className="text-info" onClick={viewLessComments}>
+                {t('vlcomments')}
+              </Button>
+            )}
+          </div>
+        )) ||
+          ''}
+      </div>
       {isLoading && <Spinner animation="grow" variant="secondary" size="sm" />}
     </Container>
   );
