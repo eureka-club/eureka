@@ -33,5 +33,8 @@
   "addWrkTypeaheadPlaceholder": "Busca una obra...",
   "addWrkAddBtnLabel": "Agregar obra al ciclo",
   "Edit Cycle": "Editar Ciclo",
-  "countryFieldLabel": "Country or region of focus (if applicable)"
+  "countryFieldLabel": "Country or region of focus (if applicable)",
+  "Cycle guidelines": "Cycle guidelines",
+  "Title": "Title",
+  "Description": "Description"
 }

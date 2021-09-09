@@ -364,7 +364,14 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                         <p />
                       </TabPane>
                       <TabPane eventKey="guidelines">
-                        <h2 className="mb-3">{t('Guidelines')}</h2>
+                        {cycle.guidelines.map((g) => {
+                          return (
+                            <>
+                              <h5>{g.title}</h5>
+                              <p>{g.contentText}</p>
+                            </>
+                          );
+                        })}
                         <p />
                       </TabPane>
                       <TabPane eventKey="participants">

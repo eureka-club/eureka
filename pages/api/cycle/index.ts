@@ -44,12 +44,12 @@ export default getApiHandler()
             complementaryMaterialsUploadData[cmIndexName] = await storeUpload(cmFile[0]);
           },
         );
-
         const cycle = await createFromServerFields(
           session.user,
           fields,
           coverImageUploadData,
           complementaryMaterialsUploadData,
+          JSON.parse(fields.guidelines),
         );
 
         res.status(201).json(cycle);

@@ -11,6 +11,12 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
       creator: true,
       localImages: true,
       complementaryMaterials: true,
+      guidelines: {
+        select: {
+          title: true,
+          contentText: true,
+        },
+      },
       participants: true,
       ratings: { include: { cycle: true } },
       favs: true,
@@ -173,6 +179,7 @@ export const createFromServerFields = async (
   fields: CreateCycleServerFields,
   coverImageUpload: StoredFileUpload,
   complementaryMaterialsUploadData: Record<string, StoredFileUpload>,
+  guidelines: Prisma.GuidelineCreateWithoutCycleInput[],
 ): Promise<Cycle> => {
   const payload = Object.entries(fields)
     .filter(([fieldName]) => !fieldName.match(/CM\d_/))
@@ -240,6 +247,9 @@ export const createFromServerFields = async (
           where: { id: existingLocalImage != null ? existingLocalImage.id : 0 },
           create: { ...coverImageUpload },
         },
+      },
+      guidelines: {
+        create: guidelines,
       },
     },
   });

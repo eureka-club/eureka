@@ -4,23 +4,11 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import Trans from 'next-translate/Trans';
 import { ChangeEvent, FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import FormCheck from 'react-bootstrap/FormCheck';
-import FormControl from 'react-bootstrap/FormControl';
-import FormFile from 'react-bootstrap/FormFile';
-import FormGroup from 'react-bootstrap/FormGroup';
-import FormLabel from 'react-bootstrap/FormLabel';
-import Modal from 'react-bootstrap/Modal';
-import ModalBody from 'react-bootstrap/ModalBody';
-import ModalHeader from 'react-bootstrap/ModalHeader';
-import ModalTitle from 'react-bootstrap/ModalTitle';
-import Row from 'react-bootstrap/Row';
-import Spinner from 'react-bootstrap/Spinner';
+import { Button, Col, Form, FormCheck, FormFile, Modal, Row, Spinner } from 'react-bootstrap';
 import { useMutation } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BiTrash } from 'react-icons/bi';
+import { Prisma } from '@prisma/client';
 import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
@@ -64,6 +52,10 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const [complementaryMaterialFile, setComplementaryMaterialFile] = useState<File | null>(null);
   const [complementaryMaterialFileOversizeError, setComplementaryMaterialFileOversizeError] = useState(false);
   const [complementaryMaterials, setComplementaryMaterials] = useState<ComplementaryMaterial[]>([]);
+  const [guidelines, setGuidelines] = useState<Prisma.GuidelineCreateWithoutCycleInput[]>([]);
+  const [guidelineTitle, setGuidelineTitle] = useState<string>();
+  const [guidelineContentText, setGuidelineContentText] = useState<string>();
+
   const [tags, setTags] = useState<string>('');
   const [items, setItems] = useState<string[]>([]);
 
@@ -93,6 +85,9 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 }
               });
             });
+            break;
+          case 'guidelines':
+            formData.append(key, JSON.stringify(value));
             break;
           default:
             formData.append(key, value);
@@ -262,6 +257,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
       countryOfOrigin: countryOrigin,
       contentText: form.description.value,
       complementaryMaterials,
+      guidelines,
       topics: items.join(','),
     };
 
@@ -294,6 +290,26 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
       // setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
       // setAddWorkModalOpened(false);
     }
+  };
+
+  const addGuideline = () => {
+    if (guidelineTitle && guidelineContentText) {
+      setGuidelines((res) => [
+        ...res,
+        {
+          title: guidelineTitle,
+          contentText: guidelineContentText,
+        },
+      ]);
+      setGuidelineTitle('');
+      setGuidelineContentText('');
+    }
+  };
+
+  const removeGuideline = (idx: number) => {
+    const res = [...guidelines];
+    res.splice(idx, 1);
+    setGuidelines(() => res);
   };
 
   return (
@@ -404,27 +420,27 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
             </Row>
           </Col>
           <Col md={{ span: 4 }}>
-            <FormGroup controlId="cycleTitle">
-              <FormLabel>*{t('newCycleTitleLabel')}</FormLabel>
-              <FormControl type="text" maxLength={80} required />
-            </FormGroup>
-            <FormGroup controlId="languages">
-              <FormLabel>*{t('newCycleLanguageLabel')}</FormLabel>
+            <Form.Group controlId="cycleTitle">
+              <Form.Label>*{t('newCycleTitleLabel')}</Form.Label>
+              <Form.Control type="text" maxLength={80} required />
+            </Form.Group>
+            <Form.Group controlId="languages">
+              <Form.Label>*{t('newCycleLanguageLabel')}</Form.Label>
               <LanguageSelect />
-            </FormGroup>
-            <FormGroup controlId="topics">
+            </Form.Group>
+            <Form.Group controlId="topics">
               <TagsInput tags={tags} setTags={setTags} label={t('newCycleTopicsLabel')} />
-            </FormGroup>
-            <FormGroup controlId="startDate">
-              <FormLabel>*{t('newCycleStartDateLabel')}</FormLabel>
-              <FormControl type="date" required defaultValue={dayjs(new Date()).format(DATE_FORMAT_PROPS)} />
-            </FormGroup>
-            <FormGroup controlId="endDate">
-              <FormLabel>*{t('newCycleEndDateLabel')}</FormLabel>
-              <FormControl type="date" required min={dayjs(new Date()).format(DATE_FORMAT_PROPS)} />
-            </FormGroup>
-            <FormGroup>
-              <FormLabel>{t('countryFieldLabel')}</FormLabel>
+            </Form.Group>
+            <Form.Group controlId="startDate">
+              <Form.Label>*{t('newCycleStartDateLabel')}</Form.Label>
+              <Form.Control type="date" required defaultValue={dayjs(new Date()).format(DATE_FORMAT_PROPS)} />
+            </Form.Group>
+            <Form.Group controlId="endDate">
+              <Form.Label>*{t('newCycleEndDateLabel')}</Form.Label>
+              <Form.Control type="date" required min={dayjs(new Date()).format(DATE_FORMAT_PROPS)} />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>{t('countryFieldLabel')}</Form.Label>
               <AsyncTypeahead
                 id="create-work--search-country"
                 // Bypass client-side filtering. Results are already filtered by the search endpoint
@@ -440,10 +456,10 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 onChange={handleSearchCountrySelect}
                 // renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work} />}
               />
-            </FormGroup>
+            </Form.Group>
 
-            <FormGroup controlId="topics">
-              <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel>
+            <Form.Group controlId="topics">
+              <Form.Label>{t('createWorkForm:topicsLabel')}</Form.Label>
               <TagsInputTypeAhead
                 data={topics}
                 items={items}
@@ -451,15 +467,46 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 labelKey={(res) => t(`topics:${res.code}`)}
                 max={3}
               />
-            </FormGroup>
+            </Form.Group>
 
-            <FormGroup controlId="description">
-              <FormLabel>*{t('newCyclePitchLabel')}</FormLabel>
-              <FormControl as="textarea" rows={5} required />
-            </FormGroup>
+            <Form.Group controlId="description">
+              <Form.Label>*{t('newCyclePitchLabel')}</Form.Label>
+              <Form.Control as="textarea" rows={5} required />
+            </Form.Group>
           </Col>
         </Row>
-
+        <Row>
+          <Col md={6} xs={12}>
+            <h5>{t('Cycle guidelines')}</h5>
+            <Form.Group>
+              <Form.Label>{t('Title')}</Form.Label>
+              <Form.Control type="text" value={guidelineTitle} onChange={(e) => setGuidelineTitle(e.target.value)} />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>{t('Description')}</Form.Label>
+              <Form.Control
+                as="textarea"
+                value={guidelineContentText}
+                onChange={(e) => setGuidelineContentText(e.target.value)}
+                rows={3}
+              />
+            </Form.Group>
+            <Button onClick={addGuideline}>+</Button>
+            {(guidelines.length && (
+              <ol>
+                {guidelines.map((g, idx) => (
+                  <li key={`${g.title}${idx + 1}`}>
+                    <h5>
+                      {g.title} <Button onClick={() => removeGuideline(idx)}>X</Button>
+                    </h5>
+                    <p>{g.contentText}</p>
+                  </li>
+                ))}
+              </ol>
+            )) ||
+              ''}
+          </Col>
+        </Row>
         <Row>
           <Col>
             <FormCheck type="checkbox" defaultChecked inline id="isPublic" label={t('isPublicLabel')} />
@@ -492,14 +539,14 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
       </Form>
 
       <Modal show={addWorkModalOpened} onHide={handleAddWorkModalClose} animation={false}>
-        <ModalHeader closeButton>
-          <ModalTitle>{t('addWrkPopupTitle')}</ModalTitle>
-        </ModalHeader>
-        <ModalBody>
+        <Modal.Header closeButton>
+          <Modal.Title>{t('addWrkPopupTitle')}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
           <Row className="mb-5">
             <Col sm={{ span: 7 }}>
-              <FormGroup controlId="cycle">
-                <FormLabel>{t('addWrkTypeaheadLabel')}:</FormLabel>
+              <Form.Group controlId="cycle">
+                <Form.Label>{t('addWrkTypeaheadLabel')}:</Form.Label>
 
                 {/* language=CSS */}
                 <style jsx global>{`
@@ -525,7 +572,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 >
                   {handleSearchWorkHighlightChange}
                 </AsyncTypeahead>
-              </FormGroup>
+              </Form.Group>
             </Col>
             <Col sm={{ span: 5 }}>
               <Button
@@ -539,7 +586,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
               </Button>
             </Col>
           </Row>
-        </ModalBody>
+        </Modal.Body>
       </Modal>
 
       <Modal
@@ -548,44 +595,44 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
         animation={false}
         size="lg"
       >
-        <ModalHeader closeButton>
-          <ModalTitle>{t('addComplementaryMaterialPopupTitle')}</ModalTitle>
-        </ModalHeader>
-        <ModalBody>
+        <Modal.Header closeButton>
+          <Modal.Title>{t('addComplementaryMaterialPopupTitle')}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
           <Form onSubmit={handleAddComplementaryMaterialFormSubmit}>
             <Row>
-              <FormGroup as={Col} controlId="complementaryMaterialTitle">
-                <FormLabel>*{t('complementaryMaterialTitleFieldLabel')}</FormLabel>
-                <FormControl type="text" required />
-              </FormGroup>
+              <Form.Group as={Col} controlId="complementaryMaterialTitle">
+                <Form.Label>*{t('complementaryMaterialTitleFieldLabel')}</Form.Label>
+                <Form.Control type="text" required />
+              </Form.Group>
             </Row>
             <Row>
-              <FormGroup as={Col} controlId="complementaryMaterialAuthor">
-                <FormLabel>*{t('complementaryMaterialAuthorFieldLabel')}</FormLabel>
-                <FormControl type="text" required />
-              </FormGroup>
+              <Form.Group as={Col} controlId="complementaryMaterialAuthor">
+                <Form.Label>*{t('complementaryMaterialAuthorFieldLabel')}</Form.Label>
+                <Form.Control type="text" required />
+              </Form.Group>
             </Row>
             <Row>
-              <FormGroup as={Col} controlId="complementaryMaterialPublicationDate">
-                <FormLabel>*{t('complementaryMaterialPublicationDateFieldLabel')}</FormLabel>
-                <FormControl type="month" required />
-              </FormGroup>
+              <Form.Group as={Col} controlId="complementaryMaterialPublicationDate">
+                <Form.Label>*{t('complementaryMaterialPublicationDateFieldLabel')}</Form.Label>
+                <Form.Control type="month" required />
+              </Form.Group>
             </Row>
             <Row>
-              <FormGroup as={Col} controlId="complementaryMaterialLink">
-                <FormLabel>
+              <Form.Group as={Col} controlId="complementaryMaterialLink">
+                <Form.Label>
                   {complementaryMaterialFile == null && '*'}
                   {t('complementaryMaterialLinkFieldLabel')}
-                </FormLabel>
-                <FormControl type="text" placeholder="https://..." required={complementaryMaterialFile == null} />
-              </FormGroup>
+                </Form.Label>
+                <Form.Control type="text" placeholder="https://..." required={complementaryMaterialFile == null} />
+              </Form.Group>
               <Col sm={{ span: 1 }}>
                 <p className={styles.complementaryMaterialAlternativeText}>
                   <Trans i18nKey="createCycleForm:complementaryMaterialAlternativeText" components={[<br key="1" />]} />
                 </p>
               </Col>
-              <FormGroup as={Col} controlId="complementaryMaterialFile">
-                <FormLabel>{t('complementaryMaterialFileFieldLabel')}</FormLabel>
+              <Form.Group as={Col} controlId="complementaryMaterialFile">
+                <Form.Label>{t('complementaryMaterialFileFieldLabel')}</Form.Label>
                 <FormFile
                   custom
                   onChange={handleComplementaryMaterialFileInputChange}
@@ -602,15 +649,16 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                   isInvalid={complementaryMaterialFileOversizeError}
                   feedback={t('complementaryMaterialFileOversizeError')}
                 />
-              </FormGroup>
+              </Form.Group>
             </Row>
+
             <Row>
               <Col className="d-flex flex-row-reverse">
                 <Button type="submit">{t('complementaryMaterialSubmitBtnLabel')}</Button>
               </Col>
             </Row>
           </Form>
-        </ModalBody>
+        </Modal.Body>
       </Modal>
     </>
   );

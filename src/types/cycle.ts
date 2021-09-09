@@ -29,6 +29,9 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
     comments: {
       include: { comments: true };
     };
+    guidelines: {
+      select: { title: true; contentText: true };
+    };
   };
 }> & { type?: 'cycle' };
 
@@ -56,6 +59,7 @@ export interface CreateCycleClientPayload {
   endDate: string;
   contentText: string;
   complementaryMaterials: ComplementaryMaterial[];
+  guidelines: Prisma.GuidelineCreateManyCycleInput[];
   topics?: string;
 }
 

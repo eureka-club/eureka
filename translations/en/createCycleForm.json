@@ -33,5 +33,8 @@
   "addWrkTypeaheadPlaceholder": "Search for existing work...",
   "addWrkAddBtnLabel": "Add work to cycle",
   "Edit Cycle": "Edit Cycle",
-  "countryFieldLabel": "Country or region of focus (if applicable)"
+  "countryFieldLabel": "Country or region of focus (if applicable)",
+  "Cycle guidelines": "Cycle guidelines",
+  "Title": "Title",
+  "Description": "Description"
 }
