@@ -46,6 +46,11 @@
   top: 0.35rem;
 }
 
+.cycleGuidelineInfo {
+  background-size: 52px;
+  color: var(--color-primary);
+  font-size: 0.75rem;
+}
 .cycleCoverPrompt {
   background: url('/img/ico-painting.png') 50% 2rem no-repeat;
   background-size: 52px;
@@ -134,4 +139,10 @@
   height: 16px;
   width: 16px;
   margin-left: 0.5rem;
+}
+.cycleAccesForGroup > div{
+  margin-bottom: .5em;
+}
+.cycleAccesForGroup small{
+  font-size: .8em;
 }

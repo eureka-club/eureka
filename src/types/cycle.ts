@@ -61,6 +61,7 @@ export interface CreateCycleClientPayload {
   complementaryMaterials: ComplementaryMaterial[];
   guidelines: Prisma.GuidelineCreateManyCycleInput[];
   topics?: string;
+  access: number;
 }
 
 export interface EditCycleClientPayload {

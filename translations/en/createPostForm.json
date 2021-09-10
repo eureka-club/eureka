@@ -14,5 +14,12 @@
   "isPublicInfotip": "Public posts are accessible by all. Uncheck to make post private (only you can see).",
   "submitButtonLabel": "Create post",
   "titleEdit": "Edit a post",
-  "edit": "Edit"
+  "edit": "Edit",
+  "Public": "Public",
+  "Private": "Private",
+  "Secret": "Secret",
+  "Privacy settings": "Privacy settings",
+  "cycleAccesPublicInfo": "Anyone can join this cycle. Cycle appears in searches",
+  "cycleAccesPrivateInfo": "Users need request participation, which is approved by the cycle creator and/or moderator(s). Cycle appears in searches",
+  "cycleAccesSecretInfo": "Only users invited through a link can see. Cycle does not appear in searches"
 }

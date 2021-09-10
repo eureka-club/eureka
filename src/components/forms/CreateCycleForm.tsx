@@ -7,7 +7,7 @@ import { ChangeEvent, FormEvent, FunctionComponent, MouseEvent, RefObject, useEf
 import { Button, Col, Form, FormCheck, FormFile, Modal, Row, Spinner } from 'react-bootstrap';
 import { useMutation } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import { BiTrash } from 'react-icons/bi';
+import { BiTrash, BiPlus } from 'react-icons/bi';
 import { Prisma } from '@prisma/client';
 import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
@@ -58,6 +58,29 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
   const [tags, setTags] = useState<string>('');
   const [items, setItems] = useState<string[]>([]);
+
+  const [access, setAccess] = useState<number | undefined>(1);
+  const [cycleAccessChecked, setCycleAccessChecked] = useState<{
+    public: boolean;
+    private: boolean;
+    secret: boolean;
+  }>({
+    private: false,
+    public: false,
+    secret: false,
+  });
+
+  const handlerCycleAccessCheckedChange = (val: string) => {
+    setCycleAccessChecked(() => ({
+      private: false,
+      public: false,
+      secret: false,
+    }));
+    setAccess(() => {
+      return { public: 1, private: 2, secret: 3 }[`${val}`];
+    });
+    setCycleAccessChecked((res) => ({ ...res, [`${val}`]: true }));
+  };
 
   const { data: topics } = useTopics();
 
@@ -259,6 +282,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
       complementaryMaterials,
       guidelines,
       topics: items.join(','),
+      access: access || 1,
     };
 
     await execCreateCycle(payload);
@@ -478,6 +502,13 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
         <Row>
           <Col md={6} xs={12}>
             <h5>{t('Cycle guidelines')}</h5>
+            <p className={`py-1 ${styles.cycleGuidelineInfo}`}>
+              We consider that rules should be contextual. Thematic cycles are diverse: in terms of topic, context and
+              community. To ensure that rules are relevant and culturally sensitive, each cycle has the ability to
+              define its own guidelines, including what it means by ‘safe space’ and what classifies as harmful content.
+              Of course, these must be generally aligned with our Manifesto.
+            </p>
+            <p className={`py-1 ${styles.cycleGuidelineInfo}`}>Please write below the guidelines for this cycle.</p>
             <Form.Group>
               <Form.Label>{t('Title')}</Form.Label>
               <Form.Control type="text" value={guidelineTitle} onChange={(e) => setGuidelineTitle(e.target.value)} />
@@ -491,13 +522,18 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 rows={3}
               />
             </Form.Group>
-            <Button onClick={addGuideline}>+</Button>
+            <Button size="sm" onClick={addGuideline}>
+              <BiPlus />
+            </Button>
             {(guidelines.length && (
               <ol>
                 {guidelines.map((g, idx) => (
                   <li key={`${g.title}${idx + 1}`}>
                     <h5>
-                      {g.title} <Button onClick={() => removeGuideline(idx)}>X</Button>
+                      {g.title}{' '}
+                      <Button size="sm" variant="warning" onClick={() => removeGuideline(idx)}>
+                        <BiTrash />
+                      </Button>
                     </h5>
                     <p>{g.contentText}</p>
                   </li>
@@ -506,10 +542,36 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
             )) ||
               ''}
           </Col>
+          <Col>
+            <Form.Group className={`${styles.cycleAccesForGroup}`}>
+              <Form.Label className="h5">{t('Privacy settings')}</Form.Label>
+              <Form.Check
+                label={t('Public')}
+                type="radio"
+                onChange={() => handlerCycleAccessCheckedChange('public')}
+                checked={cycleAccessChecked.public}
+              />
+              <small className="ml-3 text-muted">{t('cycleAccesPublicInfo')}.</small>
+              <Form.Check
+                label={t('Private')}
+                type="radio"
+                onChange={() => handlerCycleAccessCheckedChange('private')}
+                checked={cycleAccessChecked.private}
+              />
+              <small className="ml-3 text-muted">{t('cycleAccesPrivateInfo')}.</small>
+              <Form.Check
+                label={t('Secret')}
+                type="radio"
+                onChange={() => handlerCycleAccessCheckedChange('secret')}
+                checked={cycleAccessChecked.secret}
+              />
+              <small className="ml-3 text-muted">{t('cycleAccesSecretInfo')}.</small>
+            </Form.Group>
+          </Col>
         </Row>
         <Row>
           <Col>
-            <FormCheck type="checkbox" defaultChecked inline id="isPublic" label={t('isPublicLabel')} />
+            {/* <FormCheck type="checkbox" defaultChecked inline id="isPublic" label={t('isPublicLabel')} /> */}
           </Col>
           <Col>
             <Button

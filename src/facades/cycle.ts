@@ -196,6 +196,8 @@ export const createFromServerFields = async (
         case 'startDate':
         case 'endDate':
           return { ...memo, [fieldName]: new Date(fieldValues[0]) };
+        case 'access':
+          return { ...memo, [fieldName]: parseInt(fieldValues[0], 10) };
 
         default:
           return { ...memo, [fieldName]: fieldValues[0] };
