@@ -479,7 +479,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
             <Col>
               <FormCheck
                 type="checkbox"
-                defaultChecked={cycle.isPublic}
+                defaultChecked={cycle.access === 1}
                 inline
                 id="isPublic"
                 label={t('isPublicLabel')}

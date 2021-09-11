@@ -45,7 +45,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
     image: null,
     language: cycle.languages,
     contentText: '',
-    isPublic: cycle.isPublic,
+    isPublic: cycle.access === 1,
     topics: eurekaTopics,
   });
 

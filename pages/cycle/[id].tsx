@@ -50,7 +50,7 @@ const CycleDetailPage: NextPage = () => {
       if (c) {
         setCycle(c);
         if (c) {
-          if (!c.isPublic) {
+          if (c.access !== 1) {
             if (!session) {
               router.push('/');
             } else if (c.participants && session.user) {

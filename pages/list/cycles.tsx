@@ -59,7 +59,7 @@ const ListCyclesPage: NextPage<Props> = ({ cycles }) => {
         <thead>
           <tr>
             <th>&nbsp;</th>
-            <th>is public?</th>
+            <th>access</th>
             <th>title</th>
             <th>languages</th>
             <th>start date</th>
@@ -77,7 +77,7 @@ const ListCyclesPage: NextPage<Props> = ({ cycles }) => {
                   style={{ height: '96px', marginRight: '1rem' }}
                 />
               </td>
-              <td>{JSON.stringify(cycle.isPublic)}</td>
+              <td>{cycle.access}</td>
               <td>{cycle.title}</td>
               <td>{cycle.languages}</td>
               <td>{advancedDayjs(dayjs(cycle.startDate).format()).utc().format(DATE_FORMAT_HUMANIC_ADVANCED)}</td>

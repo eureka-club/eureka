@@ -120,7 +120,7 @@ const EditPostForm: FunctionComponent = () => {
     if (searchResult != null) {
       if (isCycleMosaicItem(searchResult)) {
         setSelectedCycle(searchResult);
-        if (formRef.current) formRef.current.isPublic.checked = searchResult.isPublic;
+        if (formRef.current) formRef.current.isPublic.checked = searchResult.access === 1;
       }
       if (isWorkMosaicItem(searchResult)) {
         setSelectedWork(searchResult);

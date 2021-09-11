@@ -176,7 +176,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         res += r.qty;
       });
       res /= cycle.ratings.length;
-      return +res.toFixed(1);
+      return +res.toFixed(1) || 0;
     }
     return 0;
   };
@@ -200,9 +200,9 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         {getRatingQty()} {t('ratings')}
         <h3>Content calendar ({cycle.works && cycle.works.length})</h3>
         <CycleSummary cycle={cycle} />
-        <Button className={`${styles.seeParticipantsBtn}`} onClick={onParticipantsAction}>
+        {/* <Button className={`${styles.seeParticipantsBtn}`} onClick={onParticipantsAction}>
           {cycle.participants.length} participants
-        </Button>
+        </Button> */}
         <div className={styles.customCarouselStaticContainer}>
           <CarouselStatic
             showSocialInteraction={false}

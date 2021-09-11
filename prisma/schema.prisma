@@ -184,7 +184,7 @@ model Cycle {
   id                      Int       @default(autoincrement()) @id
   creator                 User      @relation(name:"CreatedBy", fields: [creatorId], references: [id])
   creatorId               Int       @map(name: "creator_id")
-  isPublic                Boolean   @map(name: "is_public")
+  // isPublic                Boolean   @map(name: "is_public")
   title                   String
   languages               String
   contentText             String?   @db.VarChar(4000)  @map(name: "content_text")
