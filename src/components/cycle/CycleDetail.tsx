@@ -313,7 +313,11 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                         <h2 className="mb-3">{t('Why does this cycle matter')}?</h2>
                         {cycle.contentText != null && (
                           <div className="mb-5">
-                            <UnclampText text={cycle.contentText} clampHeight="7rem" />
+                            <div
+                              className={styles.dangerouslySetInnerHTML}
+                              dangerouslySetInnerHTML={{ __html: cycle.contentText }}
+                            />
+                            {/* <UnclampText text={cycle.contentText} clampHeight="7rem" /> */}
                           </div>
                         )}
                         {cycle.works && (

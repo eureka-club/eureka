@@ -11,6 +11,7 @@ import { BiTrash, BiPlus, BiEdit } from 'react-icons/bi';
 import { GiCancel } from 'react-icons/gi';
 
 import { Prisma } from '@prisma/client';
+import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import Skeleton from '../Skeleton';
 
@@ -60,6 +61,8 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const [guidelineTitle, setGuidelineTitle] = useState<string>();
   const [guidelineContentText, setGuidelineContentText] = useState<string>();
   const [guidelineEditIdx, setGuidelineEditIdx] = useState<number>();
+
+  const editorRef = useRef<any>(null);
 
   const [tags, setTags] = useState<string>('');
   const [items, setItems] = useState<string[]>([]);
@@ -253,7 +256,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
     setSelectedWorksForCycle([]);
     setCycleCoverImageFile(null);
-
+    editorRef.current.setContent('');
     if (formRef.current != null) {
       const form = formRef.current;
 
@@ -277,13 +280,12 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     const payload: CreateCycleClientPayload = {
       includedWorksIds: selectedWorksForCycle.map((work) => work.id),
       coverImage: cycleCoverImageFile,
-      isPublic: form.isPublic.checked,
       title: form.cycleTitle.value,
       languages: form.languages.value,
       startDate: form.startDate.value,
       endDate: form.endDate.value,
       countryOfOrigin: countryOrigin,
-      contentText: form.description.value,
+      contentText: editorRef.current.getContent(), // ;form.description.value,
       complementaryMaterials,
       guidelines,
       topics: items.join(','),
@@ -531,13 +533,39 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
           </Col>
         </Row>
         <Row>
-          <Col>
-            <Form.Group controlId="description">
+          <Col xs={12} md={8}>
+            {/* <Form.Group controlId="description">
               <Form.Label>*{t('newCyclePitchLabel')}</Form.Label>
               <Form.Control as="textarea" rows={5} required />
+            </Form.Group> */}
+            <Form.Group controlId="description">
+              <Form.Label>*{t('newCyclePitchLabel')}</Form.Label>
+              <EditorCmp
+                onInit={(_: any, editor) => {
+                  editorRef.current = editor;
+                }}
+                // initialValue={newEureka.contentText}
+                init={{
+                  height: 300,
+                  menubar: false,
+                  plugins: [
+                    'advlist autolink lists link image charmap print preview anchor',
+                    'searchreplace visualblocks code fullscreen',
+                    'insertdatetime media table paste code help wordcount',
+                  ],
+                  relative_urls: false,
+                  toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
+                  // toolbar:
+                  //   'undo redo | formatselect | ' +
+                  //   'bold italic backcolor | alignleft aligncenter ' +
+                  //   'alignright alignjustify | bullist numlist outdent indent | ' +
+                  //   'removeformat | help',
+                  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                }}
+              />
             </Form.Group>
           </Col>
-          <Col>
+          <Col xs={12} md={4}>
             <Form.Group className={`${styles.cycleAccesForGroup}`}>
               <Form.Label className="h5">{t('Privacy settings')}</Form.Label>
               <Form.Check
@@ -564,7 +592,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
             </Form.Group>
           </Col>
         </Row>
-        <Row className={`p-2 mb-3 ${styles.guidelinesContainer}`}>
+        <Row className={`mb-3 ${styles.guidelinesContainer}`}>
           <Col md={6} xs={12}>
             <h5>{t('Cycle guidelines')}</h5>
             <p className={`py-1 ${styles.cycleGuidelineInfo}`}>

@@ -22,6 +22,7 @@
   "isPublicLabel": "This cycle is public",
   "newCycleTitleLabel": "Title of your cycle (80 characters max)",
   "newCycleLanguageLabel": "Main language of the cycle",
+  "newCycleMainTopicsLabel": "Main topics of the cycle (3 max, select most relevant from list)",
   "newCycleTopicsLabel": "Additional topics of the cycle (2 max, input freely)",
   "newCycleStartDateLabel": "Start date of the cycle",
   "newCycleEndDateLabel": "End date of the cycle",

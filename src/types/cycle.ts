@@ -51,7 +51,6 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
 export interface CreateCycleClientPayload {
   includedWorksIds: number[];
   coverImage: File;
-  isPublic: boolean;
   title: string;
   languages: string;
   startDate: string;
