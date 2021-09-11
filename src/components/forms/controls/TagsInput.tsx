@@ -8,10 +8,11 @@ export type TagsInputProp = {
   setTags?: (value: string) => void;
   label?: string;
   readOnly?: boolean | null;
+  max?: number;
 };
 const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
   const { t } = useTranslation('createWorkForm');
-  const { tags, setTags, label = '', readOnly = false } = props;
+  const { tags, setTags, label = '', readOnly = false, max = 2 } = props;
 
   const [tagInput, setTagInput] = useState<string>('');
   const [items, setItems] = useState<string[]>([]);
@@ -28,9 +29,11 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
     if (['Enter', 'Comma'].includes(e.code)) {
       e.preventDefault();
       if (tagInput) {
-        items.push(tagInput);
-        setItems([...items]);
-        if (setTags) setTags(items.join());
+        if (max > items.length) {
+          items.push(tagInput);
+          setItems([...items]);
+          if (setTags) setTags(items.join());
+        }
       }
       (e.currentTarget as HTMLInputElement).value = '';
     }
@@ -48,10 +51,10 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
         {items.map((v, idx) => {
           return (
             <span key={`${idx + 1}${t}`}>
-              <Badge pill variant="secondary">
+              <Badge pill variant="primary">
                 {v}{' '}
                 {!readOnly && (
-                  <Badge style={{ cursor: 'pointer' }} onClick={() => deleteTag(idx)} pill variant="secondary">
+                  <Badge style={{ cursor: 'pointer' }} onClick={() => deleteTag(idx)} pill variant="default">
                     X
                   </Badge>
                 )}
@@ -59,7 +62,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
             </span>
           );
         })}
-        {!readOnly && items.length < 5 && (
+        {!readOnly && items.length < max && (
           <Form.Control
             type="text"
             placeholder={t('tagsInputPlaceholder')}

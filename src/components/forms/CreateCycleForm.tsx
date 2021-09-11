@@ -485,12 +485,18 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
               <Form.Label>*{t('newCycleTitleLabel')}</Form.Label>
               <Form.Control type="text" maxLength={80} required />
             </Form.Group>
-            <Form.Group controlId="languages">
-              <Form.Label>*{t('newCycleLanguageLabel')}</Form.Label>
-              <LanguageSelect />
+            <Form.Group controlId="topics">
+              <Form.Label>{t('newCycleMainTopicsLabel')}</Form.Label>
+              <TagsInputTypeAhead
+                data={topics}
+                items={items}
+                setItems={setItems}
+                labelKey={(res) => t(`topics:${res.code}`)}
+                max={3}
+              />
             </Form.Group>
             <Form.Group controlId="topics">
-              <TagsInput tags={tags} setTags={setTags} label={t('newCycleTopicsLabel')} />
+              <TagsInput tags={tags} setTags={setTags} label={t('newCycleTopicsLabel')} max={2} />
             </Form.Group>
             <Form.Group controlId="startDate">
               <Form.Label>*{t('newCycleStartDateLabel')}</Form.Label>
@@ -518,16 +524,9 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 // renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work} />}
               />
             </Form.Group>
-
-            <Form.Group controlId="topics">
-              <Form.Label>{t('createWorkForm:topicsLabel')}</Form.Label>
-              <TagsInputTypeAhead
-                data={topics}
-                items={items}
-                setItems={setItems}
-                labelKey={(res) => t(`topics:${res.code}`)}
-                max={3}
-              />
+            <Form.Group controlId="languages">
+              <Form.Label>*{t('newCycleLanguageLabel')}</Form.Label>
+              <LanguageSelect />
             </Form.Group>
           </Col>
         </Row>

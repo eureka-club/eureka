@@ -116,11 +116,11 @@ const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputPr
       <div>
         {items.map((v, idx) => {
           return (
-            <span key={`${idx + 1}${t}`}>
-              <Badge variant="info">
+            <span key={`${idx + 1}$q{t}`}>
+              <Badge pill variant="primary">
                 {v}{' '}
                 {!readOnly && (
-                  <Badge style={{ cursor: 'pointer' }} onClick={() => deleteTag(idx)} pill variant="secondary">
+                  <Badge style={{ cursor: 'pointer' }} onClick={() => deleteTag(idx)} pill variant="default">
                     X
                   </Badge>
                 )}
