@@ -141,8 +141,13 @@
   margin-left: 0.5rem;
 }
 .cycleAccesForGroup > div{
-  margin-bottom: .5em;
+  margin-top: .5em;
 }
 .cycleAccesForGroup small{
   font-size: .8em;
 }
+.guidelinesContainer{
+  border: 2px dotted var(--color-primary);
+  border-radius: .5rem;
+}
+

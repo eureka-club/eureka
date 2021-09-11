@@ -4,12 +4,16 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import Trans from 'next-translate/Trans';
 import { ChangeEvent, FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
-import { Button, Col, Form, FormCheck, FormFile, Modal, Row, Spinner } from 'react-bootstrap';
+import { Button, Col, Form, ButtonGroup, ListGroup, FormFile, Modal, Row, Spinner } from 'react-bootstrap';
 import { useMutation } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import { BiTrash, BiPlus } from 'react-icons/bi';
+import { BiTrash, BiPlus, BiEdit } from 'react-icons/bi';
+import { GiCancel } from 'react-icons/gi';
+
 import { Prisma } from '@prisma/client';
 import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
+import Skeleton from '../Skeleton';
+
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { DATE_FORMAT_PROPS, DATE_FORMAT_SHORT_MONTH_YEAR } from '../../constants';
@@ -55,6 +59,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const [guidelines, setGuidelines] = useState<Prisma.GuidelineCreateWithoutCycleInput[]>([]);
   const [guidelineTitle, setGuidelineTitle] = useState<string>();
   const [guidelineContentText, setGuidelineContentText] = useState<string>();
+  const [guidelineEditIdx, setGuidelineEditIdx] = useState<number>();
 
   const [tags, setTags] = useState<string>('');
   const [items, setItems] = useState<string[]>([]);
@@ -316,19 +321,51 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     }
   };
 
+  const cancelEditGuideline = () => {
+    setGuidelineTitle('');
+    setGuidelineContentText('');
+    setGuidelineEditIdx(undefined);
+  };
+
   const addGuideline = () => {
     if (guidelineTitle && guidelineContentText) {
-      setGuidelines((res) => [
-        ...res,
-        {
-          title: guidelineTitle,
-          contentText: guidelineContentText,
-        },
-      ]);
+      const gl = {
+        title: guidelineTitle,
+        contentText: guidelineContentText,
+      };
+      if (guidelineEditIdx === undefined) setGuidelines((res) => [...res, gl]);
+      else guidelines.splice(guidelineEditIdx, 1, gl);
+
       setGuidelineTitle('');
       setGuidelineContentText('');
+      setGuidelineEditIdx(undefined);
     }
   };
+
+  const editGuidelineHandler = (idx: number) => {
+    setGuidelineTitle(() => guidelines[idx].title);
+    setGuidelineContentText(() => guidelines[idx].contentText!);
+    setGuidelineEditIdx(idx);
+  };
+
+  // const editGuideline = () => {
+  //   debugger;
+  //   if (guidelineEditIdx !== undefined) {
+  //     // const gl = [...guidelines];
+  //     // gl[guidelineEditIdx] =
+  //     setGuidelineTitle(() => guidelines[guidelineEditIdx].title);
+  //     setGuidelineContentText(() => guidelines[guidelineEditIdx].contentText!);
+
+  //     guidelines.splice(guidelineEditIdx, 1, {
+  //       title: guidelineTitle,
+  //       contentText: guidelineContentText,
+  //     });
+  //     setGuidelines(() => guidelines);
+  //     setGuidelineTitle('');
+  //     setGuidelineContentText('');
+  //     setGuidelineEditIdx(undefined);
+  //   }
+  // };
 
   const removeGuideline = (idx: number) => {
     const res = [...guidelines];
@@ -492,55 +529,14 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 max={3}
               />
             </Form.Group>
-
+          </Col>
+        </Row>
+        <Row>
+          <Col>
             <Form.Group controlId="description">
               <Form.Label>*{t('newCyclePitchLabel')}</Form.Label>
               <Form.Control as="textarea" rows={5} required />
             </Form.Group>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={6} xs={12}>
-            <h5>{t('Cycle guidelines')}</h5>
-            <p className={`py-1 ${styles.cycleGuidelineInfo}`}>
-              We consider that rules should be contextual. Thematic cycles are diverse: in terms of topic, context and
-              community. To ensure that rules are relevant and culturally sensitive, each cycle has the ability to
-              define its own guidelines, including what it means by ‘safe space’ and what classifies as harmful content.
-              Of course, these must be generally aligned with our Manifesto.
-            </p>
-            <p className={`py-1 ${styles.cycleGuidelineInfo}`}>Please write below the guidelines for this cycle.</p>
-            <Form.Group>
-              <Form.Label>{t('Title')}</Form.Label>
-              <Form.Control type="text" value={guidelineTitle} onChange={(e) => setGuidelineTitle(e.target.value)} />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>{t('Description')}</Form.Label>
-              <Form.Control
-                as="textarea"
-                value={guidelineContentText}
-                onChange={(e) => setGuidelineContentText(e.target.value)}
-                rows={3}
-              />
-            </Form.Group>
-            <Button size="sm" onClick={addGuideline}>
-              <BiPlus />
-            </Button>
-            {(guidelines.length && (
-              <ol>
-                {guidelines.map((g, idx) => (
-                  <li key={`${g.title}${idx + 1}`}>
-                    <h5>
-                      {g.title}{' '}
-                      <Button size="sm" variant="warning" onClick={() => removeGuideline(idx)}>
-                        <BiTrash />
-                      </Button>
-                    </h5>
-                    <p>{g.contentText}</p>
-                  </li>
-                ))}
-              </ol>
-            )) ||
-              ''}
           </Col>
           <Col>
             <Form.Group className={`${styles.cycleAccesForGroup}`}>
@@ -567,6 +563,61 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
               />
               <small className="ml-3 text-muted">{t('cycleAccesSecretInfo')}.</small>
             </Form.Group>
+          </Col>
+        </Row>
+        <Row className={`p-2 mb-3 ${styles.guidelinesContainer}`}>
+          <Col md={6} xs={12}>
+            <h5>{t('Cycle guidelines')}</h5>
+            <p className={`py-1 ${styles.cycleGuidelineInfo}`}>
+              We consider that rules should be contextual. Thematic cycles are diverse: in terms of topic, context and
+              community. To ensure that rules are relevant and culturally sensitive, each cycle has the ability to
+              define its own guidelines, including what it means by ‘safe space’ and what classifies as harmful content.
+              Of course, these must be generally aligned with our Manifesto.
+            </p>
+            <p className={`py-1 ${styles.cycleGuidelineInfo}`}>Please write below the guidelines for this cycle.</p>
+            <Form.Group>
+              <Form.Label>{t('Title')}</Form.Label>
+              <Form.Control type="text" value={guidelineTitle} onChange={(e) => setGuidelineTitle(e.target.value)} />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>{t('Description')}</Form.Label>
+              <Form.Control
+                as="textarea"
+                value={guidelineContentText}
+                onChange={(e) => setGuidelineContentText(e.target.value)}
+                rows={3}
+              />
+            </Form.Group>
+            <ButtonGroup size="sm">
+              <Button size="sm" onClick={addGuideline}>
+                {guidelineEditIdx !== undefined ? <BiEdit /> : <BiPlus />}
+              </Button>
+              {guidelineEditIdx !== undefined && (
+                <Button variant="secondary" size="sm" onClick={cancelEditGuideline}>
+                  <GiCancel />
+                </Button>
+              )}
+            </ButtonGroup>
+          </Col>
+          <Col md={6} xs={12} className="d-flex align-items-center">
+            {(guidelines.length && (
+              <ListGroup variant="flush">
+                {guidelines.map((g, idx) => (
+                  <ListGroup.Item key={`${g.title}${idx + 1}`}>
+                    <h5>{g.title} </h5>
+                    <p>{g.contentText}</p>
+                    <ButtonGroup size="sm">
+                      <Button variant="primary" onClick={() => editGuidelineHandler(idx)}>
+                        <BiEdit />
+                      </Button>
+                      <Button size="sm" variant="warning" onClick={() => removeGuideline(idx)}>
+                        <BiTrash />
+                      </Button>
+                    </ButtonGroup>
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+            )) || <Skeleton type="list" lines={5} className="pt-3" />}
           </Col>
         </Row>
         <Row>
