@@ -81,16 +81,19 @@ const Mediatheque: NextPage = () => {
       const s = session as unknown as Session;
       const ifbm = s ? user.followedBy.findIndex((i: User) => i.id === s.user.id) !== -1 : false;
       setIsFollowedByMe(() => ifbm);
-      // if (user.id !== s.user.id) {
-      //   if (user.dashboardType === 3) {
-      //     router.push('/');
-      //     return;
-      //   }
-      //   if (user.dashboardType === 2 && !ifbm) {
-      //     router.push('/');
-      //     return;
-      //   }
-      // }
+      if (user.dashboardType !== 1) {
+        if (user.id !== s.user.id) {
+          if (user.dashboardType === 3) {
+            router.push('/');
+            return;
+          }
+          if (user.dashboardType === 2 && !ifbm) {
+            router.push('/');
+            return;
+          }
+        }
+      }
+      
       let C: ItemCycle[] = [];
       const JC: ItemCycle[] = [];
       let P: ItemPost[] = [];
