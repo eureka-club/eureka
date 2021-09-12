@@ -80,4 +80,4 @@ export const isWorkMosaicItem = (obj: MosaicItem | SearchResult): obj is WorkMos
   ['book', 'fiction-book', 'movie', 'documentary'].includes((obj as WorkMosaicItem).type);
 
 export const isUserMosaicItem = (obj: MosaicItem | SearchResult): obj is UserMosaicItem =>
-  typeof (obj as UserMosaicItem).name === 'string' && 'countryOfOrigin' in obj && 'image' in obj;
+  'email' in obj && 'countryOfOrigin' in obj && 'image' in obj;

@@ -218,7 +218,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
       </Col>
       <Col md={3}>
         <UserAvatar user={cycle.creator} />
-        <MosaicItem cycle={cycle} detailed showTrash />
+        <MosaicItem cycle={cycle} showTrash />
       </Col>
     </Row>
   );

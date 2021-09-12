@@ -32,7 +32,7 @@ const UserAvatar: FunctionComponent<Props> = ({ user, size = 'md', showName = tr
                 alt="creator avatar"
                 className={`${styles.cycleCreatorAvatar} mr-2`}
               />
-              {showName && user.name}
+              {showName ? user.name || 'unknown' : ''}
             </a>
           </Link>
         </span>

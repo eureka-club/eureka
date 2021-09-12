@@ -154,22 +154,22 @@ const MosaicItem: FunctionComponent<Props> = ({
             {sd.format(DATE_FORMAT_SHORT)}
             &mdash; {ed.format(DATE_FORMAT_SHORT)}
           </div>
-
-          <div className={styles.joinButtonContainer}>
-            {(isJoinCycleLoading || isLeaveCycleLoading) && <Spinner animation="border" size="sm" />}
-            {!(isJoinCycleLoading || isLeaveCycleLoading) && isCurrentUserJoinedToCycle && user ? (
-              <Button onClick={handleLeaveCycleClick} variant="link">
-                {t('leaveCycleLabel')}
-              </Button>
-            ) : (
-              !(isJoinCycleLoading || isLeaveCycleLoading) &&
-              !isCurrentUserJoinedToCycle && <Button onClick={handleJoinCycleClick}>{t('joinCycleLabel')}</Button>
-            )}
-          </div>
-
-          <div className={styles.participantsInfo}>{`${participants} ${t('participants')}`}</div>
         </div>
       )}
+      <div className={styles.joinButtonContainer}>
+        {(isJoinCycleLoading || isLeaveCycleLoading) && <Spinner animation="border" size="sm" />}
+        {!(isJoinCycleLoading || isLeaveCycleLoading) && isCurrentUserJoinedToCycle && user ? (
+          <Button onClick={handleLeaveCycleClick} variant="link">
+            {t('leaveCycleLabel')}
+          </Button>
+        ) : (
+          !(isJoinCycleLoading || isLeaveCycleLoading) &&
+          !isCurrentUserJoinedToCycle &&
+          user.id !== cycle.creatorId && <Button onClick={handleJoinCycleClick}>{t('joinCycleLabel')}</Button>
+        )}
+      </div>
+
+      <div className={styles.participantsInfo}>{`${participants} ${t('participants')}`}</div>
       {showSocialInteraction && (
         <Card.Footer className={styles.footer}>
           {cycle && (

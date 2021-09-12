@@ -381,7 +381,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                       <TabPane eventKey="participants">
                         {/* {cycle.participants && cycle.participants.map((p) => <UserAvatar className="mb-3 mr-3" user={p} key={p.id} />)} */}
                         {cycle.participants && (
-                          <Mosaic showButtonLabels={false} stack={cycle.participants as UserMosaicItem[]} />
+                          <Mosaic
+                            showButtonLabels={false}
+                            stack={[...cycle.participants, cycle.creator] as UserMosaicItem[]}
+                          />
                         )}
                         <p />
                       </TabPane>

@@ -93,7 +93,7 @@ const Mediatheque: NextPage = () => {
           }
         }
       }
-      
+
       let C: ItemCycle[] = [];
       const JC: ItemCycle[] = [];
       let P: ItemPost[] = [];

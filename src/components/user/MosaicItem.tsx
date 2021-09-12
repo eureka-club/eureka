@@ -38,7 +38,7 @@ const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = fa
           {/* <img src={image || '/assets/avatar.png'} alt="User Avatar" /> */}
         </Col>
         <Col xs={12} md={9}>
-          <h6>{name}</h6>
+          <h6>{name || 'unknown'}</h6>
           {countryOfOrigin && (
             <em>
               <AiOutlineEnvironment /> {t(`countries:${countryOfOrigin}`)}
