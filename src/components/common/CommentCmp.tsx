@@ -169,7 +169,11 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
                         <Avatar user={c.creator} size="xs" showName={false} />
                       </Col>
                       <Col md={11} className="pl-0">
-                        <div className={styles.dangerouslySetInnerHTML}>{c.contentText}</div>
+                        <div
+                          className={styles.dangerouslySetInnerHTML}
+                          dangerouslySetInnerHTML={{ __html: c.contentText }}
+                        />
+                        {/* <div className={styles.dangerouslySetInnerHTML}>{c.contentText}</div> */}
                       </Col>
                     </Row>
                   ))}

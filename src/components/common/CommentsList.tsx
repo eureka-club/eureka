@@ -181,7 +181,7 @@ const CommentsList: FunctionComponent<Props> = ({
   };
 
   return (
-    <Container className={styles.container}>
+    <section className={`${styles.container}`}>
       {user && (
         <Form onSubmit={handleFormSubmit}>
           <InputGroup className="mt-2">
@@ -215,7 +215,7 @@ const CommentsList: FunctionComponent<Props> = ({
           ''}
       </div>
       {isLoading && <Spinner animation="grow" variant="secondary" size="sm" />}
-    </Container>
+    </section>
   );
 };
 

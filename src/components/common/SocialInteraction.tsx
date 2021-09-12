@@ -51,6 +51,7 @@ interface Props {
   cacheKey?: string[];
   showTrash?: boolean;
   showRating?: boolean;
+  className?: string;
 }
 
 const SocialInteraction: FunctionComponent<Props> = ({
@@ -62,6 +63,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   cacheKey = '',
   showTrash = false,
   showRating = true,
+  className,
 }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
@@ -448,10 +450,12 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
   return (
     // (session && user && (
-    <Container className={styles.container}>
-      <Row>
+    <section className={`${className}`}>
+      {/* <Row> */}
+      <div className="d-flex">
         {showRating && (
-          <Col xs={10}>
+          // <Col xs={10}>
+          <div className="pl-1">
             {showRating && getRatingLabelInfo()}
             {` `}
             {showRating && (
@@ -473,9 +477,10 @@ const SocialInteraction: FunctionComponent<Props> = ({
             {loadingSocialInteraction && (
               <Spinner className={styles.ratingSpinner} size="sm" animation="grow" variant="secondary" />
             )}
-          </Col>
+          </div>
         )}
-        <Col xs={showRating ? 2 : 12}>
+        {/* <Col xs={showRating ? 2 : 12}> */}
+        <div className="ml-auto">
           {!loadingSocialInteraction && (
             <button className={styles.socialBtn} title={t('Save for later')} onClick={handleFavClick} type="button">
               {optimistFav ? <BsBookmarkFill className={styles.active} /> : <BsBookmark />}
@@ -487,9 +492,10 @@ const SocialInteraction: FunctionComponent<Props> = ({
               )}
             </button>
           )}
-        </Col>
-      </Row>
-
+        </div>
+        {/* </Col> */}
+        {/* </Row> */}
+      </div>
       {/* {isWork(entity) && (
           <button
             className={styles.socialBtn}
@@ -526,7 +532,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
           </Button>
         </OverlayTrigger>
       )}
-    </Container>
+    </section>
     // )) ||
     // null
   );

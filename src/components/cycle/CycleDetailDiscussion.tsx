@@ -39,9 +39,10 @@ import CycleDetailDiscussionCreateCommentForm from './CycleDetailDiscussionCreat
 
 interface Props {
   cycle: CycleMosaicItem;
+  className?: string;
 }
 
-const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle }) => {
+const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) => {
   // const [items, setItems] = useState<Item[]>();
   // const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
   // const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -101,7 +102,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle }) => {
   return (
     <>
       {cycle && (
-        <div className={styles.container}>
+        <div className={`${styles.container} ${className}`}>
           {' '}
           <Row className={styles.discussionContainer}>
             <Col xs={12} md={1}>

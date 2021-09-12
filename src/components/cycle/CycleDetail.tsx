@@ -351,14 +351,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                         )}
                       </TabPane>
                       <TabPane eventKey="cycle-discussion">
-                        <CycleDetailDiscussion cycle={cycle} />
+                        <CycleDetailDiscussion cycle={cycle} className="mb-5" />
                         {(cycle.posts && cycle.posts.length && (
-                          <PostsMosaic
-                            display="horizontally"
-                            cycle={cycle}
-                            showComments
-                            cacheKey={['CYCLES', `${cycle.id}`]}
-                          />
+                          <PostsMosaic display="h" cycle={cycle} showComments cacheKey={['CYCLES', `${cycle.id}`]} />
                         )) ||
                           null}
                         {renderCycleOwnComments()}

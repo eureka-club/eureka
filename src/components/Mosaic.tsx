@@ -16,7 +16,7 @@ interface Props {
   postsLinksTo?: CycleMosaicItem | WorkMosaicItem;
   stack: MosaicItem[];
   showButtonLabels?: boolean;
-  display?: 'horizontally' | 'vertically';
+  display?: 'h' | 'v';
   showComments?: boolean;
   cacheKey?: string[];
 }
@@ -25,7 +25,7 @@ const renderMosaicItem = (
   item: MosaicItem,
   postsParent: CycleMosaicItem | WorkMosaicItem | undefined,
   showButtonLabels: boolean,
-  display: 'horizontally' | 'vertically',
+  display: 'h' | 'v',
   showComments: boolean,
   cacheKey?: string[],
 ) => {
@@ -60,16 +60,16 @@ const Mosaic: FunctionComponent<Props> = ({
   postsLinksTo,
   stack,
   showButtonLabels = true,
-  display = 'vertically',
+  display = 'v',
   showComments = false,
   cacheKey,
 }) => {
   return (
     <Masonry
       breakpointCols={{
-        default: display === 'vertically' ? 4 : 1,
-        1199: display === 'vertically' ? 3 : 1,
-        768: display === 'vertically' ? 2 : 1,
+        default: display === 'v' ? 4 : 1,
+        1199: display === 'v' ? 3 : 1,
+        768: display === 'v' ? 2 : 1,
         576: 1,
       }}
       className={classNames('d-flex', styles.masonry)}

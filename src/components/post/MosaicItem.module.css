@@ -1,17 +1,15 @@
 .post {
-  margin-bottom: 2rem;
-  /* cursor: pointer; */
-  /* height:24em; */
+  
 }
 .postHorizontally{
-  margin-top: 2rem;
   border: 1px solid var(--eureka-grey-dark);
 }
-
+.postTitle{
+  text-decoration: underline;
+}
 .imageContainer {
   /* border-radius: 0.5rem; */
   box-shadow: 1px 0 7px -2px rgba(0, 0, 0, 0.25);
-  margin-bottom: 0.5rem;
   overflow: hidden;
   position: relative;
 }
@@ -54,17 +52,7 @@
 
 .postHorizontally .type{
   background-color: var(--purple);
-  position: inherit;
-  color:white;
-  /* border-radius: 1rem;
-  color: var(--text-color-primary);
-  bottom: 2%;
-  font-size: 0.85rem;
-  left: 0.85rem;
-  line-height: 1;
-  padding: 0.25rem 0.75rem;
-  position: absolute;
-  text-transform: capitalize; */
+  color:white;  
 }
 .type {
   background-color: var(--purple);

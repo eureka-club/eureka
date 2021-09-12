@@ -9,7 +9,7 @@ import Mosaic from '../Mosaic';
 
 interface Props {
   cycle: CycleMosaicItem;
-  display?: 'horizontally' | 'vertically';
+  display?: 'h' | 'v';
   showComments?: boolean;
   cacheKey: [string, string];
 }
