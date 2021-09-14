@@ -436,7 +436,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
     else if (isCycle(entity)) count = (entity as CycleMosaicItem).ratings.length;
 
     // if (!session || (user && mySocialInfo && !mySocialInfo.ratingByMe))
-    return <span className={styles.ratingsCount}>{`(${count})`}</span>;
+    return <span className={styles.ratingsCount}>{`${count}`}</span>;
     // return <Badge variant="secondary">{`${entity.ratings.length}`}</Badge>;
     // return <Badge variant="info">{`${entity.ratings.length}`}</Badge>;
   };

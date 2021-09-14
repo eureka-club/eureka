@@ -83,8 +83,9 @@
   "leaveCycleLabel": "Quitter le cycle",
   "participants": "participant-es",
   "Rate it": "Évaluez:",
-  "Write a replay": "Write a replay",
-  "Reply": "Reply",
-  "vmcomments": "View more comments",
-  "vlcomments": "View less comments"
+  "Write a replay": "Écrire une réponse",
+  "Reply": "Répondre",
+  "Replies": "réponses",
+  "vmcomments": "Voir plus de réponses",
+  "vlcomments": "Voir moins de réponses"
 }

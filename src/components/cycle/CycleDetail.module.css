@@ -1,5 +1,5 @@
 .imgWrapper img {
-  border: 3px solid var(--eureka-purple);
+  border: 3px solid var(--eureka-green);
   border-radius: 0.75rem;
   overflow: hidden;
   width: 100%;
@@ -9,6 +9,7 @@
   font-size: 1.1rem;
   margin-bottom: 1rem;
 }
+
 .cycleCreatorAvatar {
   border-radius: 50%;
   display: inline-block;

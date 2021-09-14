@@ -132,7 +132,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         {showSocialInteraction && post && (
           <Card.Footer className={`d-flex ${styles.footer}`}>
             <div className={` ${styles.commentsInfo}`}>
-              <FaRegComments className="ml-1" /> <span className="ml-1">{post.comments.length} Comments</span>
+              <FaRegComments className="ml-1" /> <span className="ml-1">{post.comments.length} {`${t('Replies')}`}</span>
             </div>
 
             <SocialInteraction

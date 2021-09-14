@@ -12,8 +12,7 @@
 .dangerouslySetInnerHTML{
   display: inline-block;
     border: solid 1px #e7dfdf;
-    padding: .5em;
-    margin-bottom: .5em;
+    padding: .4em;
     border-radius: 10em;
     background: #f5f5f5;
 }

@@ -51,7 +51,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
         {items.map((v, idx) => {
           return (
             <span key={`${idx + 1}${t}`}>
-              <Badge pill variant="primary">
+              <Badge pill variant="secondary">
                 {v}{' '}
                 {!readOnly && (
                   <Badge style={{ cursor: 'pointer' }} onClick={() => deleteTag(idx)} pill variant="default">

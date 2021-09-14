@@ -149,5 +149,7 @@
 .guidelinesContainer{
   border: 2px dotted var(--color-primary);
   border-radius: .5rem;
+  padding: 1em 1em 1em 1em;
+  margin-top: 1em;
 }
 
