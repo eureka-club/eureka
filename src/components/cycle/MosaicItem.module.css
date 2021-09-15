@@ -92,20 +92,8 @@
 .author {
   color: #333;
 }
-.detailedInfo{
-    /* position: absolute;
-    bottom: 0px;
-    display: block;
-    width: 100%; */
-    /* background: #663399a3; */
-    /* color: white; */
-    padding: .2em;
-    min-height: 8em;
-    text-align: center;
-    text-align: -moz-center;
-    text-align: -webkit-center;
-}
-.detailedInfo .title {
+
+.title {
   /* color: var(--text-color-light); */
   font-size: 1em;
   font-weight: 300;
@@ -113,21 +101,21 @@
   text-decoration: underline;
   /* text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8); */
 }
-.detailedInfo .date {
+ .date {
   display: block;
   font-size: 0.8rem;
   font-weight: 200;
 }
 .joinButtonContainer{
-  margin: 1em 0 0 0;
-  text-align: center;
+  /* margin: 1em 0 0 0; */
+  /* text-align: center;
     text-align: -moz-center;
-    text-align: -webkit-center;
+    text-align: -webkit-center; */
   
 }
 .joinButtonContainer button {
-  display: block;
-  width: 90%;
+  /* display: block;
+  width: 90%; */
 }
 .participantsInfo{
   color:gray;

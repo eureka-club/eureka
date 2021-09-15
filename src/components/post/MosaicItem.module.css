@@ -212,7 +212,8 @@
   color: #333;
   display: block;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 1em;
+  text-decoration: underline;
 }
 
 .author {
@@ -233,10 +234,9 @@
   font-weight: 200;
 }
 .joinButtonContainer{
-  margin: 1em 0 0 0;
   text-align: center;
-    text-align: -moz-center;
-    text-align: -webkit-center;
+  text-align: -moz-center;
+  text-align: -webkit-center;
   
 }
 .joinButtonContainer button {
@@ -256,7 +256,7 @@
   width: 100%; */
   /* background: #663399a3; */
   /* color: white; */
-  padding: .2em;
+  /* padding: .2em; */
   min-height: 6em;
   /* text-align: center;
   text-align: -moz-center;

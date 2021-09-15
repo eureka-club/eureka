@@ -95,21 +95,6 @@ const MosaicItem: FunctionComponent<Props> = ({
         </Card.Footer>
       )}
     </Card>
-    // <article className={styles.post}>
-    //   <div className={styles.imageContainer}>
-    //     <Link href={`/work/${id}`}>
-    //       <a className="d-inline-block">
-    //         <LocalImageComponent filePath={localImages[0].storedFile} alt={title} />
-    //       </a>
-    //     </Link>
-    //     <span className={styles.type}>{t(type)}</span>
-    //     {work && <SocialInteraction entity={work} />}
-    //   </div>
-    //   <Link href={`/work/${id}`}>
-    //     <a className={styles.title}>{title}</a>
-    //   </Link>
-    //   <span className={styles.author}>{author}</span>
-    // </article>
   );
 };
 

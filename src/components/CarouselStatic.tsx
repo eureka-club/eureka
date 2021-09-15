@@ -85,7 +85,7 @@ const renderMosaicItem = (
   return '';
 };
 
-const Carousel: FunctionComponent<Props> = ({
+const CarouselStatic: FunctionComponent<Props> = ({
   title,
   data,
   iconBefore,
@@ -207,4 +207,4 @@ const Carousel: FunctionComponent<Props> = ({
   );
 };
 
-export default Carousel;
+export default CarouselStatic;

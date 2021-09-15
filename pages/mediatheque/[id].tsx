@@ -52,8 +52,8 @@ const Mediatheque: NextPage = () => {
   const router = useRouter();
   const [cycles, setCycles] = useState<ItemCycle[]>([]);
   const [posts, setPosts] = useState<ItemPost[]>([]);
-  const [savedForLater, setSavedForLater] = useState<Item[]>([]);
-  const [readOrWatched, setReadOrWatched] = useState<Item[]>([]);
+  // const [savedForLater, setSavedForLater] = useState<Item[]>([]);
+  // const [readOrWatched, setReadOrWatched] = useState<Item[]>([]);
   const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>();
   const queryClient = useQueryClient();
   const { t } = useTranslation('mediatheque');
@@ -136,14 +136,14 @@ const Mediatheque: NextPage = () => {
     }
     setCycles(() => [...C, ...JC]);
     setPosts(() => [...P]);
-    setSavedForLater(() => [...FC, ...FP, ...FW]);
-    setReadOrWatched(() => [...RW]);
+    // setSavedForLater(() => [...FC, ...FP, ...FW]);
+    // setReadOrWatched(() => [...RW]);
     setPreparingData(false);
   };
 
-  useEffect(() => {
-    if (isAccessAllowed()) prepareData();
-  }, [isAccessAllowed]);
+  // useEffect(() => {
+  //   if (isAccessAllowed()) prepareData();
+  // }, [isAccessAllowed]);
 
   // useEffect(() => {
   //   if (dataUserSession) {
@@ -212,6 +212,107 @@ const Mediatheque: NextPage = () => {
     }
   };
 
+  const postsCreated = () => {
+    if (user && user.posts && user.posts.length) {
+      const P = user.posts.map((p: PostMosaicItem) => ({ ...p, type: 'post' }));
+      return (
+        <CarouselStatic
+          onSeeAll={async () => seeAll(P, t('Eurekas I created'))}
+          title={t('Eurekas I created')}
+          data={P}
+          iconBefore={<></>}
+          // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+        />
+      );
+    }
+    return '';
+  };
+
+  const cyclesJoined = () => {
+    const C: ItemCycle[] = [];
+    if (user && user.cycles && user.cycles.length) {
+      C.push(...user.cycles.map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' })));
+    }
+    if (user && user.joinedCycles && user.joinedCycles.length) {
+      const JC: ItemCycle[] = [];
+      user.joinedCycles.reduce((p: ItemCycle[], c: Item) => {
+        if (c.creatorId !== parseInt(id, 10)) {
+          // otherwise will be already on C
+          p.push({ ...c, type: 'cycle' } as ItemCycle);
+        }
+        return p;
+      }, JC);
+      C.push(...JC);
+    }
+    return C.length ? (
+      <CarouselStatic
+        onSeeAll={async () => seeAll(C, t('Cycles I created or joined'))}
+        title={t('Cycles I created or joined')}
+        data={C}
+        iconBefore={<></>}
+        // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+      />
+    ) : (
+      ``
+    );
+  };
+
+  const readOrWatched = () => {
+    if (user && user.ratingWorks && user.ratingWorks.length) {
+      const RW = user.ratingWorks.map((w: RatingOnWork & { work: WorkMosaicItem }) => w.work!);
+      return (
+        <CarouselStatic
+          onSeeAll={async () => seeAll(RW, t(`Movies/books i've watched/read`))}
+          title={t(`Movies/books i've watched/read`)}
+          data={RW}
+          iconBefore={<BsEye />}
+
+          // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+        />
+      );
+    }
+    return '';
+  };
+
+  const savedForLater = () => {
+    const SFL: ItemCycle[] = [];
+    if (user && user.favWorks && user.favWorks.length) {
+      SFL.push(...user.favWorks);
+    }
+    if (user && user.favCycles && user.favCycles.length) {
+      SFL.push(...user.favCycles.map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' })));
+    }
+    if (user && user.favPosts && user.favPosts.length) {
+      SFL.push(...user.favPosts.map((p: PostMosaicItem) => ({ ...p, type: 'post' })));
+    }
+    if (SFL.length)
+      return (
+        <CarouselStatic
+          onSeeAll={async () => seeAll(SFL, t('Saved for later of forever'))}
+          title={t('Saved for later of forever')}
+          data={SFL}
+          iconBefore={<BsBookmark />}
+          // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+        />
+      );
+    return '';
+  };
+
+  const usersFollowed = () => {
+    if (user && user.following && user.following.length) {
+      return (
+        <CarouselStatic
+          onSeeAll={async () => seeAll(user!.following as UserMosaicItem[], t('Users I follow'), false)}
+          title={`${t('Users I follow')}  `}
+          data={user!.following as UserMosaicItem[]}
+          iconBefore={<HiOutlineUserGroup />}
+          // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+        />
+      );
+    }
+    return '';
+  };
+
   return (
     <SimpleLayout title={t('Mediatheque')}>
       <>
@@ -250,47 +351,15 @@ const Mediatheque: NextPage = () => {
             </Card>
             <h1 className={styles.title}>{t('Mediatheque')}</h1>
             <FilterEngine fictionOrNotFilter={false} geographyFilter={false} />
+            {postsCreated()}
 
-            <CarouselStatic
-              onSeeAll={async () => seeAll(posts, t('Eurekas I created'))}
-              title={t('Eurekas I created')}
-              data={posts}
-              iconBefore={<></>}
-              // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-            />
+            {cyclesJoined()}
 
-            <CarouselStatic
-              onSeeAll={async () => seeAll(cycles, t('Cycles I created or joined'))}
-              title={t('Cycles I created or joined')}
-              data={cycles}
-              iconBefore={<></>}
-              // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-            />
+            {readOrWatched()}
 
-            <CarouselStatic
-              onSeeAll={async () => seeAll(readOrWatched, t(`Movies/books i've watched/read`))}
-              title={t(`Movies/books i've watched/read`)}
-              data={readOrWatched}
-              iconBefore={<BsEye />}
+            {savedForLater()}
 
-              // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-            />
-
-            <CarouselStatic
-              onSeeAll={async () => seeAll(savedForLater, t('Saved for later of forever'))}
-              title={t('Saved for later of forever')}
-              data={savedForLater}
-              iconBefore={<BsBookmark />}
-              // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-            />
-
-            <CarouselStatic
-              onSeeAll={async () => seeAll(user!.following as UserMosaicItem[], t('Users I follow'), false)}
-              title={`${t('Users I follow')}  `}
-              data={user!.following as UserMosaicItem[]}
-              iconBefore={<HiOutlineUserGroup />}
-              // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-            />
+            {usersFollowed()}
           </section>
         )}
         {(isLoadingUser || isLoadingSession || preparingData) && <Spinner animation="grow" variant="secondary" />}

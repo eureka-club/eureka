@@ -149,24 +149,28 @@ const MosaicItem: FunctionComponent<Props> = ({
         <span className={styles.type}>{t('cycle')}</span>
       </div>
       {detailed && (
-        <div className={styles.detailedInfo}>
-          <h3 className={styles.title}>{title}</h3>
+        <div className="text-center p-1">
+          <h3 className={`${styles.title}`}>{title}</h3>
           <div className={styles.date}>
             {sd.format(DATE_FORMAT_SHORT)}
             &mdash; {ed.format(DATE_FORMAT_SHORT)}
           </div>
         </div>
       )}
-      <div className={styles.joinButtonContainer}>
+      <div className={`text-center ${styles.joinButtonContainer}`}>
         {(isJoinCycleLoading || isLeaveCycleLoading) && <Spinner animation="border" size="sm" />}
         {!(isJoinCycleLoading || isLeaveCycleLoading) && isCurrentUserJoinedToCycle && user ? (
-          <Button onClick={handleLeaveCycleClick} variant="link">
+          <Button onClick={handleLeaveCycleClick} variant="link" className="w-75">
             {t('leaveCycleLabel')}
           </Button>
         ) : (
           !(isJoinCycleLoading || isLeaveCycleLoading) &&
           !isCurrentUserJoinedToCycle &&
-          user.id !== cycle.creatorId && <Button onClick={handleJoinCycleClick}>{t('joinCycleLabel')}</Button>
+          user.id !== cycle.creatorId && (
+            <Button onClick={handleJoinCycleClick} className="w-75">
+              {t('joinCycleLabel')}
+            </Button>
+          )
         )}
       </div>
 

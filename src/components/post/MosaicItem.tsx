@@ -108,7 +108,7 @@ const MosaicItem: FunctionComponent<Props> = ({
               <div className={styles.gradient} />
             </>
           )}
-          <div className={styles.postDetail}>
+          <div className={`w-100 text-left ${styles.postDetail}`}>
             {post && (
               <>
                 <Avatar user={post.creator} size="xs" />
@@ -120,13 +120,11 @@ const MosaicItem: FunctionComponent<Props> = ({
           <span className={styles.type}>{t(type || 'post')}</span>
         </div>
         {showDetailedInfo && (
-          <div className={styles.detailedInfo}>
-            <h5>{post.title}</h5>(
-            <div className="mb-5">
-              <div className={styles.dangerouslySetInnerHTML} dangerouslySetInnerHTML={{ __html: post.contentText }} />
-              {/* <UnclampText text={post.contentText} clampHeight="5rem" showButtomMore={false} /> */}
-            </div>
-            )
+          <div className={`d-flex align-items-center justify-content-center ${styles.detailedInfo}`}>
+            <h3 className={`text-center ${styles.title}`}>{post.title}</h3>
+            {/* <div className="mb-5">
+              <UnclampText isHTML text={post.contentText} clampHeight="5rem" showButtomMore={false} />
+            </div> */}
           </div>
         )}
         {showSocialInteraction && post && (

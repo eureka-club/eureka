@@ -10,9 +10,10 @@ interface Props {
   clampHeight: string;
   text: string;
   showButtomMore?: boolean;
+  isHTML?: boolean;
 }
 
-const UnclampText: FunctionComponent<Props> = ({ clampHeight, text, showButtomMore = true }) => {
+const UnclampText: FunctionComponent<Props> = ({ clampHeight, text, showButtomMore = true, isHTML = true }) => {
   const textRows = text.split('\n').filter((row) => row.length);
 
   const outerRef = useRef<HTMLDivElement>(null);
@@ -30,14 +31,15 @@ const UnclampText: FunctionComponent<Props> = ({ clampHeight, text, showButtomMo
   };
 
   useEffect(() => {
-    if (innerRef?.current != null && innerRef.current.innerText && innerRef.current.innerText.length > 100) {
-      setUnclampButtonVisible(true);
+    if (isHTML) {
+      if (innerRef?.current != null && innerRef.current.innerText && innerRef.current.innerText.length > 100) {
+        setUnclampButtonVisible(true);
+      }
+    } else if (innerRef?.current?.offsetHeight != null && outerRef?.current?.offsetHeight != null) {
+      if (innerRef.current.offsetHeight > outerRef.current.offsetHeight) {
+        setUnclampButtonVisible(true);
+      }
     }
-    // if (innerRef?.current?.offsetHeight != null && outerRef?.current?.offsetHeight != null) {
-    //   if (innerRef.current.offsetHeight > outerRef.current.offsetHeight) {
-    //     setUnclampButtonVisible(true);
-    //   }
-    // }
   }, [outerRef, innerRef]);
 
   return (
@@ -47,11 +49,12 @@ const UnclampText: FunctionComponent<Props> = ({ clampHeight, text, showButtomMo
         className={classNames(styles.outer, { [styles.contentTextUnclamped]: textIsUnclamped })}
         style={{ height: textIsUnclamped ? 'auto' : clampHeight }}
       >
-        <div ref={innerRef}>
+        {/* <div ref={innerRef}>
           {textRows.map((row, idx) => (
             <p key={`${idx + 1}${row[0]}${row[1]}-${row.length}`}>{row}</p>
           ))}
-        </div>
+        </div> */}
+        <div ref={innerRef} className={styles.dangerouslySetInnerHTML} dangerouslySetInnerHTML={{ __html: text }} />
       </div>
 
       {showButtomMore && unclampButtonVisible && (
