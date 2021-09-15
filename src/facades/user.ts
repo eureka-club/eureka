@@ -34,10 +34,30 @@ export const find = async (props: findProps): Promise<User | null> => {
             cycles: true,
             likes: true,
             favs: true,
+            comments: {
+              include: {
+                creator: { select: { id: true, name: true, image: true } },
+                comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+              },
+            },
           },
         },
         likedPosts: { include: { localImages: true } },
-        favPosts: { include: { creator: true, favs: true, cycles: true, works: true, localImages: true } },
+        favPosts: {
+          include: {
+            creator: true,
+            favs: true,
+            cycles: true,
+            works: true,
+            localImages: true,
+            comments: {
+              include: {
+                creator: { select: { id: true, name: true, image: true } },
+                comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+              },
+            },
+          },
+        },
         likedWorks: {
           include: { localImages: true, ratings: true, favs: true },
         },

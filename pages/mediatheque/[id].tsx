@@ -11,7 +11,7 @@ import { useQueryClient, useMutation } from 'react-query';
 import { useState, useEffect /* , ReactElement */ } from 'react';
 
 // import { loadGetInitialProps } from 'next/dist/next-server/lib/utils';
-import { /* Spinner, */ Card, Row, Col, Button } from 'react-bootstrap';
+import { Spinner, Card, Row, Col, Button, Alert } from 'react-bootstrap';
 import { AiOutlineEnvironment } from 'react-icons/ai';
 import { /* BsCircleFill, */ BsBookmark, BsEye } from 'react-icons/bs';
 import { HiOutlineUserGroup } from 'react-icons/hi';
@@ -46,7 +46,7 @@ type ItemPost = PostMosaicItem & { type: string };
 // | WorkMosaicItem | ;
 
 const Mediatheque: NextPage = () => {
-  const [session] = useSession();
+  const [session, isLoadingSession] = useSession();
   const [id, setId] = useState<string>('');
   const [idSession, setIdSession] = useState<string>('');
   const router = useRouter();
@@ -70,88 +70,89 @@ const Mediatheque: NextPage = () => {
     if (session) setIdSession((session as unknown as Session).user.id.toString());
   }, [session, router]);
 
-  const { /* isLoading, isError, error, */ data: user } = useUsers({ id });
-  const { /* isLoading, isError, error, */ data: dataUserSession } = useUsers({ id: idSession });
-  const [userSession, setUserSession] = useState();
-  const [preparingData, setPreparingData] = useState<boolean>(true);
+  const { /* isError, error, */ data: user, isLoading: isLoadingUser } = useUsers({ id });
+  // const { /* isLoading, isError, error, */ data: dataUserSession } = useUsers({ id: idSession });
+  const [/* userSession, */ setUserSession] = useState();
+  const [preparingData, setPreparingData] = useState<boolean>(false);
+  // const [isAccessAllowed, setIsAccessAllowed] = useState<boolean>(false);
+
+  const isAccessAllowed = () => {
+    if (!isLoadingUser && user) {
+      if (user.dashboardType === 1) return true;
+      if (!isLoadingSession) {
+        if (!session) return false;
+        const s = session as unknown as Session;
+        if (user.id === s.user.id) return true;
+        if (user.dashboardType === 3) return false;
+
+        const ifbm = s ? user.followedBy.findIndex((i: User) => i.id === s.user.id) !== -1 : false;
+        setIsFollowedByMe(() => ifbm);
+        if (user.dashboardType === 2 && ifbm) return true;
+      }
+    }
+    return false;
+  };
 
   const prepareData = (): void => {
     setPreparingData(true);
-    if (user && id) {
-      const s = session as unknown as Session;
-      const ifbm = s ? user.followedBy.findIndex((i: User) => i.id === s.user.id) !== -1 : false;
-      setIsFollowedByMe(() => ifbm);
-      if (user.dashboardType !== 1) {
-        if (user.id !== s.user.id) {
-          if (user.dashboardType === 3) {
-            router.push('/');
-            return;
-          }
-          if (user.dashboardType === 2 && !ifbm) {
-            router.push('/');
-            return;
-          }
-        }
-      }
 
-      let C: ItemCycle[] = [];
-      const JC: ItemCycle[] = [];
-      let P: ItemPost[] = [];
-      let FW: Item[] = [];
-      let FC: Item[] = [];
-      let FP: Item[] = [];
-      let RW: Item[] = [];
-      if (user.cycles && user.cycles.length) {
-        C = user.cycles.map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' }));
-      }
-      if (user.joinedCycles && user.joinedCycles.length) {
-        user.joinedCycles.reduce((p: ItemCycle[], c: Item) => {
-          if (c.creatorId !== parseInt(id, 10)) {
-            // otherwise will be already on C
-            p.push({ ...c, type: 'cycle' } as ItemCycle);
-          }
-          return p;
-        }, JC);
-        // .filter((c: CycleMosaicItem) => c.creatorId !== parseInt(id, 10))
-        // .map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' }));
-      }
-      if (user.posts && user.posts.length) {
-        P = user.posts.map((p: PostMosaicItem) => ({ ...p, type: 'post' }));
-      }
-
-      if (user.favWorks && user.favWorks.length) {
-        FW = user.favWorks;
-      }
-      if (user.favCycles && user.favCycles.length) {
-        FC = user.favCycles.map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' }));
-      }
-      if (user.favPosts && user.favPosts.length) {
-        FP = user.favPosts.map((p: PostMosaicItem) => ({ ...p, type: 'post' }));
-      }
-
-      if (user.ratingWorks && user.ratingWorks.length) {
-        RW = user.ratingWorks.map((w: RatingOnWork & { work: WorkMosaicItem }) => w.work!);
-      }
-      setCycles(() => [...C, ...JC]);
-      setPosts(() => [...P]);
-      setSavedForLater(() => [...FC, ...FP, ...FW]);
-      setReadOrWatched(() => [...RW]);
+    let C: ItemCycle[] = [];
+    const JC: ItemCycle[] = [];
+    let P: ItemPost[] = [];
+    let FW: Item[] = [];
+    let FC: Item[] = [];
+    let FP: Item[] = [];
+    let RW: Item[] = [];
+    if (user.cycles && user.cycles.length) {
+      C = user.cycles.map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' }));
     }
+    if (user.joinedCycles && user.joinedCycles.length) {
+      user.joinedCycles.reduce((p: ItemCycle[], c: Item) => {
+        if (c.creatorId !== parseInt(id, 10)) {
+          // otherwise will be already on C
+          p.push({ ...c, type: 'cycle' } as ItemCycle);
+        }
+        return p;
+      }, JC);
+      // .filter((c: CycleMosaicItem) => c.creatorId !== parseInt(id, 10))
+      // .map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' }));
+    }
+    if (user.posts && user.posts.length) {
+      P = user.posts.map((p: PostMosaicItem) => ({ ...p, type: 'post' }));
+    }
+
+    if (user.favWorks && user.favWorks.length) {
+      FW = user.favWorks;
+    }
+    if (user.favCycles && user.favCycles.length) {
+      FC = user.favCycles.map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' }));
+    }
+    if (user.favPosts && user.favPosts.length) {
+      FP = user.favPosts.map((p: PostMosaicItem) => ({ ...p, type: 'post' }));
+    }
+
+    if (user.ratingWorks && user.ratingWorks.length) {
+      RW = user.ratingWorks.map((w: RatingOnWork & { work: WorkMosaicItem }) => w.work!);
+    }
+    setCycles(() => [...C, ...JC]);
+    setPosts(() => [...P]);
+    setSavedForLater(() => [...FC, ...FP, ...FW]);
+    setReadOrWatched(() => [...RW]);
     setPreparingData(false);
   };
 
   useEffect(() => {
-    prepareData();
-  }, [user, id, session]);
+    if (isAccessAllowed()) prepareData();
+  }, [isAccessAllowed]);
 
-  useEffect(() => {
-    if (dataUserSession) {
-      dataUserSession.following = dataUserSession.following.map((f: UserMosaicItem) => ({ ...f, type: 'user' }));
-      dataUserSession.followedBy = dataUserSession.followedBy.map((f: UserMosaicItem) => ({ ...f, type: 'user' }));
+  // useEffect(() => {
+  //   if (dataUserSession) {
+  //     dataUserSession.following = dataUserSession.following.map((f: UserMosaicItem) => ({ ...f, type: 'user' }));
+  //     dataUserSession.followedBy = dataUserSession.followedBy.map((f: UserMosaicItem) => ({ ...f, type: 'user' }));
 
-      setUserSession(dataUserSession);
-    }
-  }, [dataUserSession]);
+  //     setUserSession(dataUserSession);
+  //   }
+  // }, [dataUserSession]);
 
   const { mutate: mutateFollowing } = useMutation<User>(
     async () => {
@@ -213,84 +214,90 @@ const Mediatheque: NextPage = () => {
 
   return (
     <SimpleLayout title={t('Mediatheque')}>
-      {!preparingData && user && (
-        <Card className={styles.userHeader}>
-          <Card.Body>
-            <Row>
-              <Col>
-                <img className={styles.avatar} src={user.image || '/assets/avatar.png'} alt={user.email} />
-                <br />
-                {/* <em>{user.name}</em> */}
-              </Col>
-              <Col xs={8}>
-                <h2>{user.name}</h2>
-                <em>
-                  <AiOutlineEnvironment /> {t(`countries:${user.countryOfOrigin}`)}
-                </em>
-                <p className={styles.description}>{user.aboutMe}</p>
-                <TagsInput tags={user.tags} readOnly label="" />
-              </Col>
-              <Col>
-                {session && (session as unknown as Session).user!.id !== user.id && !isFollowedByMe && (
-                  <Button onClick={followHandler}>{t('Follow')}</Button>
-                )}
+      <>
+        {!(isLoadingUser || isLoadingSession || preparingData) && isAccessAllowed() && (
+          <section>
+            <Card className={styles.userHeader}>
+              <Card.Body>
+                <Row>
+                  <Col>
+                    <img className={styles.avatar} src={user.image || '/assets/avatar.png'} alt={user.email} />
+                    <br />
+                    {/* <em>{user.name}</em> */}
+                  </Col>
+                  <Col xs={8}>
+                    <h2>{user.name}</h2>
+                    <em>
+                      <AiOutlineEnvironment /> {t(`countries:${user.countryOfOrigin}`)}
+                    </em>
+                    <p className={styles.description}>{user.aboutMe}</p>
+                    <TagsInput tags={user.tags} readOnly label="" />
+                  </Col>
+                  <Col>
+                    {session && (session as unknown as Session).user!.id !== user.id && !isFollowedByMe && (
+                      <Button onClick={followHandler}>{t('Follow')}</Button>
+                    )}
 
-                {session && (session as unknown as Session).user!.id !== user.id && isFollowedByMe && (
-                  <Button className={styles.unFollowBtn} onClick={followHandler}>
-                    {t('Unfollow')}
-                  </Button>
-                )}
-              </Col>
-            </Row>
-            {/* <BsCircleFill className={styles.infoCircle} /> */}
-          </Card.Body>
-        </Card>
-      )}
-      <h1 className={styles.title}>{t('Mediatheque')}</h1>
-      <FilterEngine fictionOrNotFilter={false} geographyFilter={false} />
+                    {session && (session as unknown as Session).user!.id !== user.id && isFollowedByMe && (
+                      <Button className={styles.unFollowBtn} onClick={followHandler}>
+                        {t('Unfollow')}
+                      </Button>
+                    )}
+                  </Col>
+                </Row>
+                {/* <BsCircleFill className={styles.infoCircle} /> */}
+              </Card.Body>
+            </Card>
+            <h1 className={styles.title}>{t('Mediatheque')}</h1>
+            <FilterEngine fictionOrNotFilter={false} geographyFilter={false} />
 
-      <CarouselStatic
-        onSeeAll={async () => seeAll(posts, t('Eurekas I created'))}
-        title={t('Eurekas I created')}
-        data={posts}
-        iconBefore={<></>}
-        // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-      />
+            <CarouselStatic
+              onSeeAll={async () => seeAll(posts, t('Eurekas I created'))}
+              title={t('Eurekas I created')}
+              data={posts}
+              iconBefore={<></>}
+              // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+            />
 
-      <CarouselStatic
-        onSeeAll={async () => seeAll(cycles, t('Cycles I created or joined'))}
-        title={t('Cycles I created or joined')}
-        data={cycles}
-        iconBefore={<></>}
-        // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-      />
+            <CarouselStatic
+              onSeeAll={async () => seeAll(cycles, t('Cycles I created or joined'))}
+              title={t('Cycles I created or joined')}
+              data={cycles}
+              iconBefore={<></>}
+              // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+            />
 
-      <CarouselStatic
-        onSeeAll={async () => seeAll(readOrWatched, t(`Movies/books i've watched/read`))}
-        title={t(`Movies/books i've watched/read`)}
-        data={readOrWatched}
-        iconBefore={<BsEye />}
+            <CarouselStatic
+              onSeeAll={async () => seeAll(readOrWatched, t(`Movies/books i've watched/read`))}
+              title={t(`Movies/books i've watched/read`)}
+              data={readOrWatched}
+              iconBefore={<BsEye />}
 
-        // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-      />
+              // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+            />
 
-      <CarouselStatic
-        onSeeAll={async () => seeAll(savedForLater, t('Saved for later of forever'))}
-        title={t('Saved for later of forever')}
-        data={savedForLater}
-        iconBefore={<BsBookmark />}
-        // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-      />
+            <CarouselStatic
+              onSeeAll={async () => seeAll(savedForLater, t('Saved for later of forever'))}
+              title={t('Saved for later of forever')}
+              data={savedForLater}
+              iconBefore={<BsBookmark />}
+              // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+            />
 
-      {user && (
-        <CarouselStatic
-          onSeeAll={async () => seeAll(user!.following as UserMosaicItem[], t('Users I follow'), false)}
-          title={`${t('Users I follow')}  `}
-          data={user!.following as UserMosaicItem[]}
-          iconBefore={<HiOutlineUserGroup />}
-          // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-        />
-      )}
+            <CarouselStatic
+              onSeeAll={async () => seeAll(user!.following as UserMosaicItem[], t('Users I follow'), false)}
+              title={`${t('Users I follow')}  `}
+              data={user!.following as UserMosaicItem[]}
+              iconBefore={<HiOutlineUserGroup />}
+              // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+            />
+          </section>
+        )}
+        {(isLoadingUser || isLoadingSession || preparingData) && <Spinner animation="grow" variant="secondary" />}
+        {!(isLoadingUser || isLoadingSession || preparingData) && !isAccessAllowed() && (
+          <Alert variant="warning">Not authorized</Alert>
+        )}
+      </>
     </SimpleLayout>
   );
 };
