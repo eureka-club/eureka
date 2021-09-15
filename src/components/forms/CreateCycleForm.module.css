@@ -150,4 +150,7 @@
   border: 2px dotted var(--color-primary);
   border-radius: .5rem;
 }
+.worksDisscussionsDates label, .worksDisscussionsDates input{
+  font-size: .8em;
+}
 

@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["microsoftSqlServer"]
+  previewFeatures = ["microsoftSqlServer","nativeTypes"]
 }
 
 datasource db {
@@ -139,6 +139,7 @@ model Work {
 
   localImages       LocalImage[]
   cycles            Cycle[]
+  cyclesWorkDates   CycleWork[]
   posts             Post[]
   likes             User[]    @relation("WorkToLikes")
   favs              User[]    @relation("WorkToFavs")
@@ -180,6 +181,16 @@ model CycleComplementaryMaterial {
   @@map(name: "cycle_complementary_materials")
 }
 
+model CycleWork {
+  id        Int   @id @default(autoincrement())
+  cycle     Cycle? @relation(fields: [cycleId], references: [id])
+  work      Work?  @relation(fields: [workId], references: [id])
+  cycleId   Int?
+  workId    Int?
+  startDate DateTime?  @map(name: "start_date")
+  endDate   DateTime?  @map(name: "end_date")
+}
+
 model Cycle {
   id                      Int       @default(autoincrement()) @id
   creator                 User      @relation(name:"CreatedBy", fields: [creatorId], references: [id])
@@ -205,6 +216,8 @@ model Cycle {
   favs                    User[]  @relation("CycleToFavs")
   posts                   Post[]
   works                   Work[]  
+  cycleWorksDates         CycleWork[]
+  
   tags                    String?
 
   terms                   Term[]    @relation("TaxonomyTermCycle")
@@ -281,7 +294,7 @@ model Comment {
   createdAt    DateTime    @default(now()) @map(name: "created_at")
   updatedAt    DateTime    @updatedAt @map(name: "updated_at")
 
-  @@index([creatorId], name: "posts_creator_id_index")
+  @@index([creatorId], name: "comment_creator_id_index")
 
   @@map(name: "comments")
 }
@@ -299,7 +312,7 @@ model Taxonomy {
 
   terms        Term[]
   
-  @@index([code], name: "code_index")
+  @@index([code], name: "taxonomy_code_index")
 
   @@map(name: "taxonomies")
 }
@@ -328,7 +341,7 @@ model Term {
   cycles       Cycle[]   @relation("TaxonomyTermCycle")
   posts        Post[]    @relation("TaxonomyTermPost")
 
-  @@index([code], name: "code_index")
+  @@index([code], name: "term_code_index")
 
   @@map(name: "terms")
 }

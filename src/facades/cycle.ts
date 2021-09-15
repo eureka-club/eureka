@@ -33,6 +33,7 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
           },
         },
       },
+      cycleWorksDates: true,
       posts: {
         include: {
           creator: true,
@@ -78,14 +79,14 @@ export const findParticipant = async (user: User, cycle: Cycle): Promise<User | 
   });
 };
 
-export const countParticipants = async (
-  cycle: Cycle,
-): Promise<Prisma.GetUserAggregateType<{ count: true; where: { cycles: { some: { id: number } } } }>> => {
-  return prisma.user.aggregate({
-    count: true,
-    where: { joinedCycles: { some: { id: cycle.id } } },
-  });
-};
+// export const countParticipants = async (
+//   cycle: Cycle,
+// ): Promise<Prisma.GetUserAggregateType<{ count: true; where: { cycles: { some: { id: number } } } }>> => {
+//   return prisma.user.aggregate({
+//     count: true,
+//     where: { joinedCycles: { some: { id: cycle.id } } },
+//   });
+// };
 
 export const countPosts = async (
   cycle: Cycle,
@@ -180,6 +181,7 @@ export const createFromServerFields = async (
   coverImageUpload: StoredFileUpload,
   complementaryMaterialsUploadData: Record<string, StoredFileUpload>,
   guidelines: Prisma.GuidelineCreateWithoutCycleInput[],
+  cycleWorksDates: Prisma.CycleWorkCreateManyCycleInput[],
 ): Promise<Cycle> => {
   const payload = Object.entries(fields)
     .filter(([fieldName]) => !fieldName.match(/CM\d_/))
@@ -252,6 +254,17 @@ export const createFromServerFields = async (
       },
       guidelines: {
         create: guidelines,
+      },
+      cycleWorksDates: {
+        create: cycleWorksDates.map((cw) => ({
+          startDate: cw.startDate,
+          endDate: cw.endDate,
+          work: {
+            connect: {
+              id: cw.workId,
+            },
+          },
+        })),
       },
     },
   });

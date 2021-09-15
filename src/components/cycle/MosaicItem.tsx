@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import classNames from 'classnames';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useEffect, useState, MouseEvent } from 'react';
@@ -35,6 +34,7 @@ interface Props {
   cacheKey?: string[];
   showSocialInteraction?: boolean;
   showTrash?: boolean;
+  className?: string;
 }
 const MosaicItem: FunctionComponent<Props> = ({
   cycle,
@@ -44,6 +44,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   showSocialInteraction = true,
   cacheKey = undefined,
   showTrash = false,
+  className,
 }) => {
   const { id, title, localImages, startDate, endDate } = cycle;
   const { t } = useTranslation('common');
@@ -136,7 +137,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   };
 
   return (
-    <Card className={classNames(styles.container, isActive ? 'isActive' : '')} border={isActive ? 'success' : ''}>
+    <Card className={`${styles.container} ${isActive ? styles.isActive : ''} ${className}`}>
       <div className={`${styles.imageContainer} ${detailed && styles.detailedImageContainer}`}>
         <Link href={`/cycle/${id}`}>
           <a>

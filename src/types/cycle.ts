@@ -20,6 +20,7 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
     participants: true;
     favs: true;
     works: true;
+    cycleWorksDates: true;
     ratings: true;
     posts: {
       include: {
@@ -61,6 +62,9 @@ export interface CreateCycleClientPayload {
   guidelines: Prisma.GuidelineCreateManyCycleInput[];
   topics?: string;
   access: number;
+  cycleWorksDates?: {
+    [workId: string]: { startDate?: string; endDate?: string };
+  };
 }
 
 export interface EditCycleClientPayload {

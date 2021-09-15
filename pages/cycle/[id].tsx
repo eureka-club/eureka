@@ -21,7 +21,7 @@ import CycleDetailComponent from '../../src/components/cycle/CycleDetail';
 // } from '../../src/facades/cycle';
 // import useCycles, { getRecords } from '../../src/useCycles';
 import useCycles from '../../src/useCycles';
-
+import { CycleContext } from '../../src/useCycleContext';
 // interface Props {
 //   // cycle: CycleDetail;
 //   isCurrentUserJoinedToCycle: boolean;
@@ -69,14 +69,16 @@ const CycleDetailPage: NextPage = () => {
     <SimpleLayout title={cycle ? cycle.title : ''}>
       <>
         {cycle && (
-          <CycleDetailComponent
-            cycle={cycle}
-            // isCurrentUserJoinedToCycle={isCurrentUserJoinedToCycle}
-            // participantsCount={participantsCount}
-            // postsCount={postsCount}
-            // worksCount={worksCount}
-            // mySocialInfo={mySocialInfo}
-          />
+          <CycleContext.Provider value={{ cycle }}>
+            <CycleDetailComponent
+              cycle={cycle}
+              // isCurrentUserJoinedToCycle={isCurrentUserJoinedToCycle}
+              // participantsCount={participantsCount}
+              // postsCount={postsCount}
+              // worksCount={worksCount}
+              // mySocialInfo={mySocialInfo}
+            />
+          </CycleContext.Provider>
         )}
         {(isFetching || !isSuccess) && <Spinner animation="grow" variant="secondary" />}
         {isError && !cycle && (
