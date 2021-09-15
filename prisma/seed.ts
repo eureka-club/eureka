@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import axios from 'axios';
 import dayjs from 'dayjs';
 
@@ -11,10 +11,10 @@ const prisma = new PrismaClient();
 const cleanTables = async () => {
   const transactions = [
     // prisma.$queryRaw('use eureka_db;'),
-    prisma.$queryRaw(`delete terms where id > 0`),
-    prisma.$queryRaw(`DBCC CHECKIDENT (terms, RESEED, 0)`),
-    prisma.$queryRaw(`delete taxonomies where id > 0`),
-    prisma.$queryRaw(`DBCC CHECKIDENT (taxonomies, RESEED, 0)`),
+    prisma.$queryRaw(Prisma.sql`delete terms where id > 0`),
+    prisma.$queryRaw(Prisma.sql`DBCC CHECKIDENT (terms, RESEED, 0)`),
+    prisma.$queryRaw(Prisma.sql`delete taxonomies where id > 0`),
+    prisma.$queryRaw(Prisma.sql`DBCC CHECKIDENT (taxonomies, RESEED, 0)`),
   ];
   try {
     await prisma.$transaction(transactions);

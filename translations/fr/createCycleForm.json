@@ -44,5 +44,8 @@
   "Secret": "Secret",
   "cycleAccesPublicInfo": "Tout le monde peut rejoindre ce cycle. Le cycle apparaît dans les recherches",
   "cycleAccesPrivateInfo": "La participation doit être demandée et est approuvée par les créateur-trices du cycle. Le cycle apparaît dans les recherches",
-  "cycleAccesSecretInfo": "Seules les personnes ayant reçu une invitation via un lien peuvent voir et participer au cycle. Le cycle n'apparaît pas dans les recherches"
+  "cycleAccesSecretInfo": "Seules les personnes ayant reçu une invitation via un lien peuvent voir et participer au cycle. Le cycle n'apparaît pas dans les recherches",
+  "Start date of work": "Start date of work",
+  "End date of work": "End date of work",
+  "addDatesForWork": "Add dates individual for each work"
 }

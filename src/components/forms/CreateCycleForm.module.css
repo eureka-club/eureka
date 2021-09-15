@@ -152,4 +152,7 @@
   padding: 1em 1em 1em 1em;
   margin-top: 1em;
 }
+.worksDisscussionsDates label, .worksDisscussionsDates input{
+  font-size: .8em;
+}
 

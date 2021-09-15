@@ -44,12 +44,21 @@ export default getApiHandler()
             complementaryMaterialsUploadData[cmIndexName] = await storeUpload(cmFile[0]);
           },
         );
+        const cycleWorksDates = JSON.parse(fields.cycleWorksDates).map(
+          (cw: { workId: string; startDate: string | number | Date; endDate: string | number | Date }) => ({
+            workId: parseInt(cw.workId, 10),
+            startDate: new Date(cw.startDate),
+            endDate: new Date(cw.endDate),
+          }),
+        );
+
         const cycle = await createFromServerFields(
           session.user,
           fields,
           coverImageUploadData,
           complementaryMaterialsUploadData,
           JSON.parse(fields.guidelines),
+          cycleWorksDates,
         );
 
         res.status(201).json(cycle);

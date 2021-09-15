@@ -44,5 +44,8 @@
   "Privacy settings": "Privacy settings",
   "cycleAccesPublicInfo": "Anyone can join this cycle. Cycle appears in searches",
   "cycleAccesPrivateInfo": "Users need to request participation, which is approved by the cycle creator and/or moderator(s). Cycle appears in searches",
-  "cycleAccesSecretInfo": "Only users invited through a link can see. Cycle does not appear in searches"
+  "cycleAccesSecretInfo": "Only users invited through a link can see. Cycle does not appear in searches",
+  "Start date of work": "Start date of work",
+  "End date of work": "End date of work",
+  "addDatesForWork": "Add dates individual for each work"
 }

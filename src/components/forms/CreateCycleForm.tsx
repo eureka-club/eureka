@@ -46,6 +46,11 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const [workSearchResults, setWorkSearchResults] = useState<WorkMosaicItem[]>([]);
   const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkMosaicItem | null>(null);
   const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkMosaicItem[]>([]);
+  const [enableWorksDisscussionsDates, setEnableWorksDisscussionsDates] = useState<boolean>(true);
+  const [selectedWorksForCycleDates, setSelectedWorksForCycleDates] = useState<{
+    [key: string]: { startDate?: string; endDate?: string };
+  }>({});
+
   const typeaheadRef = useRef<AsyncTypeahead<WorkMosaicItem>>(null);
   const typeaheadRefOC = useRef<AsyncTypeahead<{ id: number; code: string; label: string }>>(null);
   const [countryOrigin, setCountryOrigin] = useState<string>();
@@ -119,6 +124,16 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
             break;
           case 'guidelines':
             formData.append(key, JSON.stringify(value));
+            break;
+          case 'cycleWorksDates':
+            formData.append(
+              key,
+              JSON.stringify(
+                Object.entries<{ [key: string]: { startDate?: string; endDate?: string } }>(value).map((v) => {
+                  return { workId: v[0], startDate: v[1].startDate, endDate: v[1].endDate };
+                }),
+              ),
+            );
             break;
           default:
             formData.append(key, value);
@@ -230,6 +245,13 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const handleSearchWorkSelect = (selected: WorkMosaicItem[]): void => {
     if (selected[0] != null) {
       setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
+      // setSelectedWorksForCycleDates((res) => ({
+      //   ...res,
+      //   [`${selected[0].id}`]: {
+      //     startDate: undefined,
+      //     endDate: undefined,
+      //   },
+      // }));
       setAddWorkModalOpened(false);
     }
   };
@@ -290,6 +312,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
       guidelines,
       topics: items.join(','),
       access: access || 1,
+      cycleWorksDates: selectedWorksForCycleDates,
     };
 
     await execCreateCycle(payload);
@@ -394,9 +417,21 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 </button>
               </Col>
             </Row>
+            {/* <Row> */}
+            <Form.Check
+              checked={enableWorksDisscussionsDates}
+              name="terms"
+              label={t('addDatesForWork')}
+              onChange={(e) => {
+                setEnableWorksDisscussionsDates(e.currentTarget.checked);
+              }}
+              feedbackTooltip
+            />
+
+            {/* </Row> */}
             <Row className="mb-4">
               {chosenWorksBoxes.map((boxId) => (
-                <Col key={boxId}>
+                <Col md={3} key={boxId}>
                   <div className={classNames(styles.outlinedBlock, styles.chosenWorksBox)}>
                     {selectedWorksForCycle[boxId] && (
                       <>
@@ -414,6 +449,39 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                       </>
                     )}
                   </div>
+                  {enableWorksDisscussionsDates && selectedWorksForCycle[boxId] && (
+                    <aside className={styles.worksDisscussionsDates}>
+                      <Form.Group className="">
+                        <Form.Label>{`${t('Start date of work')}`}</Form.Label>
+                        <Form.Control
+                          type="date"
+                          // value={selectedWorksForCycleDates[selectedWorksForCycle[boxId].id].startDate}
+                          onChange={(e) =>
+                            setSelectedWorksForCycleDates((res) => {
+                              const work = selectedWorksForCycle[boxId];
+                              const o = { ...res[work.id], startDate: e.currentTarget.value };
+                              res[work.id] = o;
+                              return res;
+                            })
+                          }
+                        />
+                      </Form.Group>
+                      <Form.Group className="">
+                        <Form.Label>{t('End date of work')}</Form.Label>
+                        <Form.Control
+                          type="date"
+                          onChange={(e) =>
+                            setSelectedWorksForCycleDates((res) => {
+                              const work = selectedWorksForCycle[boxId];
+                              const o = { ...res[work.id], endDate: e.currentTarget.value };
+                              res[work.id] = o;
+                              return res;
+                            })
+                          }
+                        />
+                      </Form.Group>
+                    </aside>
+                  )}
                 </Col>
               ))}
             </Row>

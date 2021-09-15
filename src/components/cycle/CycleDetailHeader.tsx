@@ -21,6 +21,7 @@ import { Col, Row, Button } from 'react-bootstrap';
 // import { Work } from '@prisma/client';
 import Rating from 'react-rating';
 import { GiBrain } from 'react-icons/gi';
+
 // import globalModalsAtom from '../../atoms/globalModals';
 
 // import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
@@ -218,7 +219,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
       </Col>
       <Col md={3}>
         <UserAvatar user={cycle.creator} />
-        <MosaicItem cycle={cycle} showTrash />
+        <MosaicItem cycle={cycle} showTrash className="mt-2" />
       </Col>
     </Row>
   );

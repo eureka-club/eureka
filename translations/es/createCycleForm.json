@@ -44,5 +44,8 @@
   "Privacy settings": "Configuraciones de privacidad",
   "cycleAccesPublicInfo": "Cualquiera puede unirse a este ciclo. El ciclo aparece en las búsquedas",
   "cycleAccesPrivateInfo": "Se debe solicitar la participación, que es aprobada por quiénes han creado ciclo. El ciclo aparece en las búsquedas",
-  "cycleAccesSecretInfo": "Sólo quiénes han recibido una invitación a través de un enlace pueden ver y participar del ciclo. El ciclo no aparece en las búsquedas"
+  "cycleAccesSecretInfo": "Sólo quiénes han recibido una invitación a través de un enlace pueden ver y participar del ciclo. El ciclo no aparece en las búsquedas",
+  "Start date of work": "Start date of work",
+  "End date of work": "End date of work",
+  "addDatesForWork": "Add dates individual for each work"
 }

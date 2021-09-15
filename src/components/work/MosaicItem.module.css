@@ -71,3 +71,17 @@
   color: #333;
 }
 
+.isActive{
+  box-shadow: 0 0 3px 1px green !important;
+}
+.isActiveCircle{
+  color: var(--green);
+  position: absolute;
+    top: 10px;
+    font-size: 1.5em;
+    display: inherit;
+    top: 1%;
+    right: 1%;
+}
+
+
