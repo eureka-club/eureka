@@ -16,7 +16,7 @@ import { AiOutlineEnvironment } from 'react-icons/ai';
 import { /* BsCircleFill, */ BsBookmark, BsEye } from 'react-icons/bs';
 import { HiOutlineUserGroup } from 'react-icons/hi';
 
-import { RatingOnCycle, RatingOnWork, User } from '@prisma/client';
+import { /* RatingOnCycle, */ RatingOnWork, User } from '@prisma/client';
 import styles from './index.module.css';
 import { useUsers } from '../../src/useUsers';
 
@@ -41,7 +41,7 @@ import { UserMosaicItem /* , UserDetail, WorkWithImages */ } from '../../src/typ
 type Item = (CycleMosaicItem & { type: string }) | WorkMosaicItem | (PostMosaicItem & { type: string });
 
 type ItemCycle = CycleMosaicItem & { type: string };
-type ItemPost = PostMosaicItem & { type: string };
+// type ItemPost = PostMosaicItem & { type: string };
 
 // | WorkMosaicItem | ;
 
@@ -50,8 +50,8 @@ const Mediatheque: NextPage = () => {
   const [id, setId] = useState<string>('');
   const [idSession, setIdSession] = useState<string>('');
   const router = useRouter();
-  const [cycles, setCycles] = useState<ItemCycle[]>([]);
-  const [posts, setPosts] = useState<ItemPost[]>([]);
+  // const [cycles, setCycles] = useState<ItemCycle[]>([]);
+  // const [posts, setPosts] = useState<ItemPost[]>([]);
   // const [savedForLater, setSavedForLater] = useState<Item[]>([]);
   // const [readOrWatched, setReadOrWatched] = useState<Item[]>([]);
   const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>();
@@ -72,73 +72,30 @@ const Mediatheque: NextPage = () => {
 
   const { /* isError, error, */ data: user, isLoading: isLoadingUser } = useUsers({ id });
   // const { /* isLoading, isError, error, */ data: dataUserSession } = useUsers({ id: idSession });
-  const [/* userSession, */ setUserSession] = useState();
-  const [preparingData, setPreparingData] = useState<boolean>(false);
+  // const [/* userSession, */ setUserSession] = useState();
+  // const [preparingData, setPreparingData] = useState<boolean>(false);
   // const [isAccessAllowed, setIsAccessAllowed] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (user && session) {
+      const s = session as unknown as Session;
+      const ifbm = s ? user.followedBy.findIndex((i: User) => i.id === s.user.id) !== -1 : false;
+      setIsFollowedByMe(() => ifbm);
+    }
+  }, [user, session]);
 
   const isAccessAllowed = () => {
     if (!isLoadingUser && user) {
-      if (user.dashboardType === 1) return true;
+      if (!user.dashboardType || user.dashboardType === 1) return true;
       if (!isLoadingSession) {
         if (!session) return false;
         const s = session as unknown as Session;
         if (user.id === s.user.id) return true;
         if (user.dashboardType === 3) return false;
-
-        const ifbm = s ? user.followedBy.findIndex((i: User) => i.id === s.user.id) !== -1 : false;
-        setIsFollowedByMe(() => ifbm);
-        if (user.dashboardType === 2 && ifbm) return true;
+        if (user.dashboardType === 2 && isFollowedByMe) return true;
       }
     }
     return false;
-  };
-
-  const prepareData = (): void => {
-    setPreparingData(true);
-
-    let C: ItemCycle[] = [];
-    const JC: ItemCycle[] = [];
-    let P: ItemPost[] = [];
-    let FW: Item[] = [];
-    let FC: Item[] = [];
-    let FP: Item[] = [];
-    let RW: Item[] = [];
-    if (user.cycles && user.cycles.length) {
-      C = user.cycles.map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' }));
-    }
-    if (user.joinedCycles && user.joinedCycles.length) {
-      user.joinedCycles.reduce((p: ItemCycle[], c: Item) => {
-        if (c.creatorId !== parseInt(id, 10)) {
-          // otherwise will be already on C
-          p.push({ ...c, type: 'cycle' } as ItemCycle);
-        }
-        return p;
-      }, JC);
-      // .filter((c: CycleMosaicItem) => c.creatorId !== parseInt(id, 10))
-      // .map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' }));
-    }
-    if (user.posts && user.posts.length) {
-      P = user.posts.map((p: PostMosaicItem) => ({ ...p, type: 'post' }));
-    }
-
-    if (user.favWorks && user.favWorks.length) {
-      FW = user.favWorks;
-    }
-    if (user.favCycles && user.favCycles.length) {
-      FC = user.favCycles.map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' }));
-    }
-    if (user.favPosts && user.favPosts.length) {
-      FP = user.favPosts.map((p: PostMosaicItem) => ({ ...p, type: 'post' }));
-    }
-
-    if (user.ratingWorks && user.ratingWorks.length) {
-      RW = user.ratingWorks.map((w: RatingOnWork & { work: WorkMosaicItem }) => w.work!);
-    }
-    setCycles(() => [...C, ...JC]);
-    setPosts(() => [...P]);
-    // setSavedForLater(() => [...FC, ...FP, ...FW]);
-    // setReadOrWatched(() => [...RW]);
-    setPreparingData(false);
   };
 
   // useEffect(() => {
@@ -316,7 +273,7 @@ const Mediatheque: NextPage = () => {
   return (
     <SimpleLayout title={t('Mediatheque')}>
       <>
-        {!(isLoadingUser || isLoadingSession || preparingData) && isAccessAllowed() && (
+        {!(isLoadingUser || isLoadingSession) && isAccessAllowed() && (
           <section>
             <Card className={styles.userHeader}>
               <Card.Body>
@@ -362,9 +319,9 @@ const Mediatheque: NextPage = () => {
             {usersFollowed()}
           </section>
         )}
-        {(isLoadingUser || isLoadingSession || preparingData) && <Spinner animation="grow" variant="secondary" />}
-        {!(isLoadingUser || isLoadingSession || preparingData) && !isAccessAllowed() && (
-          <Alert variant="warning">Not authorized</Alert>
+        {(isLoadingUser || isLoadingSession) && <Spinner animation="grow" variant="secondary" />}
+        {!(isLoadingUser || isLoadingSession) && !isAccessAllowed() && (
+          <Alert variant="warning">{t('notAuthorized')}</Alert>
         )}
       </>
     </SimpleLayout>

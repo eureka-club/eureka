@@ -1,10 +1,11 @@
 {
     "Mediatheque": "Mediateca",
-    "Follow":"Seguir",
+    "Follow": "Seguir",
     "Unfollow": "Dejar de seguir",
     "Cycles I created or joined": "Ciclos que creé o me uní",
     "Eurekas I created": "Mis Eurekas",
-    "Saved for later of forever":"Guardado para luego o para siempre",
-    "Movies/books i've watched/read":"Películas y libros que he visto o leído",
-    "Users I follow":"Siguiendo"
+    "Saved for later of forever": "Guardado para luego o para siempre",
+    "Movies/books i've watched/read": "Películas y libros que he visto o leído",
+    "Users I follow": "Siguiendo",
+    "notAuthorized": "No autorizado"
 }
