@@ -21,12 +21,12 @@ import {
   WhatsappIcon,
 } from 'react-share';
 import { Cycle, User, Work, Post } from '@prisma/client';
+import { useMosaicContext, ContextType } from '../../useMosaicContext';
 import globalSearchEngineAtom from '../../atoms/searchEngine';
 
 import { useUsers } from '../../useUsers';
 import globalModalsAtom from '../../atoms/globalModals';
 // import Notification from '../ui/Notification';
-
 import { WEBAPP_URL } from '../../constants';
 import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
@@ -46,7 +46,7 @@ interface Props {
   parent?: Cycle | Work | null;
   // mySocialInfo: MySocialInfo;
   showCounts?: boolean;
-  showShare?: boolean;
+  // showShare?: boolean;
   showButtonLabels?: boolean;
   cacheKey?: string[];
   showTrash?: boolean;
@@ -57,7 +57,7 @@ interface Props {
 const SocialInteraction: FunctionComponent<Props> = ({
   entity,
   parent /* ,  mySocialInfo */,
-  showShare = false,
+  // showShare = false,
   showCounts = false,
   showButtonLabels = true,
   cacheKey = '',
@@ -87,6 +87,13 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const [idSession, setIdSession] = useState<string>('');
   const { /* isLoading, isError, error, */ data: user } = useUsers({ id: idSession });
   // const [user, setuser] = useState<UserDetail>();
+  const [showShare, setShowShare] = useState<boolean>(true);
+  const mosaicContext = useMosaicContext();
+  useEffect(() => {
+    if (mosaicContext) {
+      setShowShare(mosaicContext.showShare);
+    }
+  }, [mosaicContext]);
 
   const calculateQty = () => {
     if (entity && (isWork(entity) || isCycle(entity))) {
@@ -464,7 +471,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
                 onChange={handlerChangeRating}
                 className={styles.rating}
                 stop={5}
-                emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
+                emptySymbol={<GiBrain className="text-success" />}
                 fullSymbol={getFullSymbol()}
               />
             )}{' '}
@@ -479,10 +486,26 @@ const SocialInteraction: FunctionComponent<Props> = ({
             )}
           </div>
         )}
+        {showShare && (
+          <div className="ml-auto">
+            <OverlayTrigger trigger="click" placement="right" overlay={popoverShares}>
+              <Button variant="link" className={`${styles.buttonSI} pt-0 pr-0 text-success`}>
+                <FiShare2 />
+                <br />
+                {showButtonLabels && <span className={classnames(styles.info, styles.active)}>{t('Share')}</span>}
+              </Button>
+            </OverlayTrigger>
+          </div>
+        )}
         {/* <Col xs={showRating ? 2 : 12}> */}
         <div className="ml-auto">
           {!loadingSocialInteraction && (
-            <button className={styles.socialBtn} title={t('Save for later')} onClick={handleFavClick} type="button">
+            <Button
+              variant="link"
+              className={`${styles.buttonSI} pt-0 pr-0 text-success`}
+              title={t('Save for later')}
+              onClick={handleFavClick}
+            >
               {optimistFav ? <BsBookmarkFill className={styles.active} /> : <BsBookmark />}
               <br />
               {showButtonLabels && (
@@ -490,7 +513,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
                   {t('Save for later')}
                 </span>
               )}
-            </button>
+            </Button>
           )}
         </div>
         {/* </Col> */}
@@ -522,16 +545,6 @@ const SocialInteraction: FunctionComponent<Props> = ({
           )}
         </button>
             */}
-
-      {showShare && (
-        <OverlayTrigger trigger="click" placement="right" overlay={popoverShares}>
-          <Button variant="link" className={styles.socialBtn}>
-            <FiShare2 className={styles.active} />
-            <br />
-            {showButtonLabels && <span className={classnames(styles.info, styles.active)}>{t('Share')}</span>}
-          </Button>
-        </OverlayTrigger>
-      )}
     </section>
     // )) ||
     // null

@@ -10,7 +10,8 @@ import { Hydrate } from 'react-query/hydration';
 import i18nConfig from '../i18n';
 import detailPagesAtom from '../src/atoms/detailPages';
 import globalModalsAtom from '../src/atoms/globalModals';
-import './_app.css';
+// import './_app.css';
+import './scss/custom.scss';
 
 // const queryClient = new QueryClient();
 

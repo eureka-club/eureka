@@ -141,7 +141,6 @@ const MosaicItem: FunctionComponent<Props> = ({
               cacheKey={cacheKey || undefined}
               showButtonLabels={false}
               showCounts={false}
-              showShare={false}
               entity={post}
               parent={postParent}
               showRating={false}

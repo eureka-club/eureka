@@ -7,6 +7,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent, useState, useRef, useEffect } from 'react';
 import { TabPane, TabContent, TabContainer, Row, Col, Button, Nav, NavItem, NavLink, Spinner } from 'react-bootstrap';
 import { BiArrowBack } from 'react-icons/bi';
+import { MosaicContext } from '../../useMosaicContext';
 import UserAvatar from '../common/UserAvatar';
 import Mosaic from '../Mosaic';
 // import globalModalsAtom from '../../atoms/globalModals';
@@ -297,7 +298,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                       <TabPane eventKey="cycle-discussion">
                         <CycleDetailDiscussion cycle={cycle} className="mb-5" />
                         {(cycle.posts && cycle.posts.length && (
-                          <PostsMosaic display="h" cycle={cycle} showComments cacheKey={['CYCLES', `${cycle.id}`]} />
+                          <MosaicContext.Provider value={{ showShare: true }}>
+                            <PostsMosaic display="h" cycle={cycle} showComments cacheKey={['CYCLES', `${cycle.id}`]} />
+                          </MosaicContext.Provider>
                         )) ||
                           null}
                         {renderCycleOwnComments()}

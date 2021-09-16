@@ -1,5 +1,9 @@
+$theme-colors: (
+  "success":#68cfb4,
+  "primary":#493788,
+);
 
-@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~bootstrap/scss/bootstrap.scss';
 
 @font-face {
   font-family: 'Ahpuch.Apollyon-Light';

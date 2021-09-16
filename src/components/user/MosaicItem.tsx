@@ -50,7 +50,7 @@ const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = fa
 
       {session && showSocialInteraction && (
         <Card.Footer className="text-muted">
-          {user && <SocialInteraction showButtonLabels={false} showCounts={false} showShare={false} entity={user} />}
+          {user && <SocialInteraction showButtonLabels={false} showCounts={false} entity={user} />}
         </Card.Footer>
       )}
     </Card>

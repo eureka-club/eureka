@@ -88,7 +88,6 @@ const MosaicItem: FunctionComponent<Props> = ({
             cacheKey={cacheKey || undefined}
             showButtonLabels={showButtonLabels}
             showCounts
-            showShare={showShare}
             entity={work}
             showTrash={showTrash}
           />

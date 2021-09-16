@@ -13,14 +13,10 @@
     "sourceMap": true,
     "strict": true,
     "target": "ESNext",
-    "module": "commonjs",
+    "module": "esnext",
     "baseUrl": ".",
     "paths": {
-      "@/src/*": ["src/*"],
-      "@/lib/*": ["src/lib/*"],
       "@/components/*": ["src/components/*"],
-      "@/types/*":["src/types/*"],
-      "@/atoms/*":["src/atoms/*"],
     },
     "types":[
       "tinymce",

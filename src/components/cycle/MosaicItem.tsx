@@ -182,7 +182,6 @@ const MosaicItem: FunctionComponent<Props> = ({
               cacheKey={cacheKey}
               showButtonLabels={showButtonLabels}
               showCounts
-              showShare={showShare}
               entity={cycle}
               showTrash={showTrash}
             />

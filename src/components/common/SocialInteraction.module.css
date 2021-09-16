@@ -1,9 +1,12 @@
-.socialBtn {
+.buttonSI svg {
+  font-size: 1.5em;
+}
+/* .socialBtn {
   background: none;
   border: none;
   color: var(--eureka-green);
   cursor: pointer;
-  /* display: flex; */
+  
   align-items: center;
   font-size: 1em;
   transition: transform 0.15s;
@@ -20,12 +23,10 @@
   color: var(--eureka-green);
   font-size: 1.5em;
 }
-.socialBtn .active{
-  color: var(--eureka-green);
-}
+
 .socialBtn:hover {
   transform: scale(1.15);
-}
+} */
 
 .action-like path,
 .action-like span {

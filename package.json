@@ -59,6 +59,7 @@
     "react-rating": "^2.0.5",
     "react-share": "^4.4.0",
     "remove-accents": "^0.4.2",
+    "sass": "^1.41.0",
     "superjson": "~1.6.1",
     "tinymce": "^5",
     "ts-node": "^9.0.0"
