@@ -6,7 +6,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, MouseEvent } from 'react';
+import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 
 import { DATE_FORMAT_SHORT } from '../../constants';
@@ -21,10 +21,11 @@ import SocialInteraction from '../common/SocialInteraction';
 import UnclampText from '../UnclampText';
 import styles from './PostDetail.module.css';
 import Avatar from '../common/UserAvatar';
+import { useCycleContext } from '../../useCycleContext';
 
 interface Props {
   post: PostMosaicItem;
-  cycle?: CycleMosaicItem;
+  // cycle?: CycleMosaicItem;
   work?: WorkMosaicItem;
   // mySocialInfo?: MySocialInfo;
 }
@@ -32,7 +33,12 @@ interface Props {
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const PostDetail: FunctionComponent<Props> = ({ post, cycle, work }) => {
+const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
+  const cycleContext = useCycleContext();
+  const [cycle, setCycle] = useState<CycleMosaicItem | null>();
+  useEffect(() => {
+    if (cycleContext) setCycle(cycleContext.cycle);
+  }, [cycleContext]);
   const currentWork = work;
   const { t } = useTranslation('createPostForm');
   const hyvorId = `post-${post.id}`;

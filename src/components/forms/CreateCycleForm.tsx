@@ -459,7 +459,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                           onChange={(e) =>
                             setSelectedWorksForCycleDates((res) => {
                               const work = selectedWorksForCycle[boxId];
-                              const o = { ...res[work.id], startDate: e.currentTarget.value };
+                              const o = { ...res[work.id], startDate: e.target.value };
                               res[work.id] = o;
                               return res;
                             })

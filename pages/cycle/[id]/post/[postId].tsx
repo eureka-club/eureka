@@ -18,6 +18,7 @@ import {
 // import { isFavoritedByUser /* isLikedByUser, search as searchPost */ } from '../../../../src/facades/post';
 import { WorkMosaicItem } from '../../../../src/types/work';
 import useCycles from '../../../../src/useCycles';
+import { CycleContext } from '../../../../src/useCycleContext';
 import { Post } from '.prisma/client';
 // interface Props {
 //   cycle: CycleMosaicItem;
@@ -55,12 +56,13 @@ const PostDetailInCyclePage = () => {
     <SimpleLayout title={`${post ? post.title : ''} · ${cycle ? cycle.title : ''}`}>
       <>
         {isLoading && <Spinner animation="grow" variant="secondary" />}
-        {!isLoading && post && (
-          <CycleDetailComponent
-            cycle={cycle as CycleMosaicItem}
-            post={post}
-            work={post.works.length ? (post.works[0] as WorkMosaicItem) : undefined}
-          />
+        {!isLoading && post && cycle && (
+          <CycleContext.Provider value={{ cycle }}>
+            <CycleDetailComponent
+              post={post}
+              work={post.works.length ? (post.works[0] as WorkMosaicItem) : undefined}
+            />
+          </CycleContext.Provider>
         )}
       </>
     </SimpleLayout>

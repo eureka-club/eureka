@@ -42,6 +42,7 @@ const renderMosaicItem = (
         postParent={postsParent}
         display={display}
         cacheKey={cacheKey}
+        className="mb-2"
       />
     );
   }

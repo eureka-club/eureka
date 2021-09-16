@@ -5,17 +5,8 @@ import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent, useState, useRef, useEffect } from 'react';
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Nav from 'react-bootstrap/Nav';
-import NavItem from 'react-bootstrap/NavItem';
-import NavLink from 'react-bootstrap/NavLink';
-import Row from 'react-bootstrap/Row';
+import { TabPane, TabContent, TabContainer, Row, Col, Button, Nav, NavItem, NavLink, Spinner } from 'react-bootstrap';
 import { BiArrowBack } from 'react-icons/bi';
-
-import TabContainer from 'react-bootstrap/TabContainer';
-import TabContent from 'react-bootstrap/TabContent';
-import TabPane from 'react-bootstrap/TabPane';
 import UserAvatar from '../common/UserAvatar';
 import Mosaic from '../Mosaic';
 // import globalModalsAtom from '../../atoms/globalModals';
@@ -39,13 +30,14 @@ import CommnetMosaic from '../comment/MosaicItem';
 import UnclampText from '../UnclampText';
 import detailPagesAtom from '../../atoms/detailPages';
 import styles from './CycleDetail.module.css';
+import { useCycleContext } from '../../useCycleContext';
 import CycleDetailHeader from './CycleDetailHeader';
 import CycleDetailDiscussion from './CycleDetailDiscussion';
 
 // import useCycles from '../../useCycles';
 
 interface Props {
-  cycle: CycleMosaicItem;
+  // cycle: CycleMosaicItem;
   post?: PostMosaicItem;
   work?: WorkMosaicItem;
   // isCurrentUserJoinedToCycle: boolean;
@@ -54,7 +46,7 @@ interface Props {
 }
 
 const CycleDetailComponent: FunctionComponent<Props> = ({
-  cycle,
+  // cycle,
   post,
   work,
   // isCurrentUserJoinedToCycle,
@@ -62,6 +54,11 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   // mySocialInfo,
 }) => {
   // const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
+  const cycleContext = useCycleContext();
+  const [cycle, setCycle] = useState<CycleMosaicItem | null>();
+  useEffect(() => {
+    if (cycleContext) setCycle(cycleContext.cycle);
+  }, [cycleContext]);
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const router = useRouter();
   const [session] = useSession() as [Session | null | undefined, boolean];
@@ -159,7 +156,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   };
 
   const renderCycleOwnComments = () => {
-    if (cycle.comments)
+    if (cycle && cycle.comments)
       return cycle.comments
         .filter((c) => !c.workId && !c.postId && !c.commentId)
         .sort((p, c) => (p.id > c.id && -1) || 1)
@@ -192,66 +189,13 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           onCarouselSeeAllAction={onCarouselSeeAllAction}
         />
       )}
-      {/* <Row className="mb-5">
-        {post == null ? (
-          <>
-            <Col md={{ span: 3 }}>
-              <div className={classNames(styles.imgWrapper, 'mb-3')}>
-                <LocalImageComponent filePath={cycle.localImages[0].storedFile} alt={cycle.title} />
-              </div>
-            </Col>
-            <Col md={{ span: 9 }}>
-              <div className="pt-2 pl-2">
-                <div className={styles.cycleCreator}>
-                  <Link href={`/mediatheque/${cycle.creator.id}`}>
-                    <a>
-                      <img
-                        src={cycle.creator.image || '/img/default-avatar.png'}
-                        alt="creator avatar"
-                        className={classNames(styles.cycleCreatorAvatar, 'mr-2')}
-                      />
-                      {cycle.creator.name}
-                    </a>
-                  </Link>
-                </div>
-                <h1>{cycle.title}</h1>
-                <CycleSummary cycle={cycle} />
 
-                <section className={classNames('d-flex justify-content-between', styles.socialInfo)}>
-                  <SocialInteraction entity={cycle} showCounts />
-                  <div>
-                    <small className={styles.participantsCount}>
-                      {t('participantsCount', { count: participantsCount })}
-                    </small>
-
-                    <>
-                      <div className="d-inline-block mx-3" />
-                      {(isJoinCycleLoading || isLeaveCycleLoading) && <Spinner animation="border" size="sm" />}
-                      {isCurrentUserJoinedToCycle && session != null ? (
-                        <Button onClick={handleLeaveCycleClick} variant="link">
-                          {t('leaveCycleLabel')}
-                        </Button>
-                      ) : (
-                        !isCurrentUserJoinedToCycle && (
-                          <Button onClick={handleJoinCycleClick}>{t('joinCycleLabel')}</Button>
-                        )
-                      )}
-                    </>
-                  </div>
-                </section>
-              </div>
-            </Col>
-          </>
-        ) : (
-          <PostDetailComponent post={post} cycle={cycle} work={work} mySocialInfo={mySocialInfo} />
-        )}
-      </Row> */}
-      {post && (
+      {post && cycle && (
         <Button variant="info" onClick={() => router.push(`/cycle/${cycle.id}`)} size="sm">
           <BiArrowBack />
         </Button>
       )}
-      {post && <PostDetailComponent post={post} cycle={cycle} work={work} />}
+      {post && cycle && <PostDetailComponent post={post} work={work} />}
       {cycle && post == null && (
         <Row className="mb-5" ref={tabContainnerRef}>
           <Col>
@@ -363,14 +307,15 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                         <p />
                       </TabPane>
                       <TabPane eventKey="guidelines">
-                        {cycle.guidelines.map((g) => {
-                          return (
-                            <>
-                              <h5>{g.title}</h5>
-                              <p>{g.contentText}</p>
-                            </>
-                          );
-                        })}
+                        {cycle.guidelines &&
+                          cycle.guidelines.map((g) => {
+                            return (
+                              <>
+                                <h5>{g.title}</h5>
+                                <p>{g.contentText}</p>
+                              </>
+                            );
+                          })}
                         <p />
                       </TabPane>
                       <TabPane eventKey="participants">

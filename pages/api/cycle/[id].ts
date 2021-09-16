@@ -69,7 +69,7 @@ export default getApiHandler()
       const cycle = await find(idNum);
       if (cycle == null) {
         // res.status(404).end();
-        res.status(200).json({ ok: true, post: null });
+        res.status(200).json({ ok: true, cycle: null });
         return;
       }
 

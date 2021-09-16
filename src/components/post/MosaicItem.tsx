@@ -29,6 +29,7 @@ interface Props {
   cacheKey?: string[];
   showTrash?: boolean;
   showComments?: boolean;
+  className?: string;
 }
 
 const MosaicItem: FunctionComponent<Props> = ({
@@ -38,7 +39,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   showSocialInteraction = true,
   cacheKey,
   showComments = false,
-
+  className,
   // showButtonLabels,
   // showShare,
   // style,
@@ -70,7 +71,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const renderVerticalMosaic = (props: { showDetailedInfo: boolean }) => {
     const { showDetailedInfo } = props;
     return (
-      <Card className={classNames(styles.container)}>
+      <Card className={`${styles.container} ${className}`}>
         {postParent && (
           <h2 className={styles.postParentTitle}>
             {postLinkHref != null ? (
@@ -155,7 +156,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   if (display === 'h') {
     return (
-      <section className={`p-2 ${styles.postHorizontally}`}>
+      <section className={`p-2 ${styles.postHorizontally} ${className}`}>
         <Row>
           <Col xs={12} md={4}>
             {renderVerticalMosaic({ showDetailedInfo: false })}
