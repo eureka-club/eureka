@@ -8,4 +8,10 @@ export default atom({
   editCycleModalOpened: false,
   editUserModalOpened: false,
   signInModalOpened: false,
+  showToast: {
+    type: 'info',
+    title: '',
+    message: '',
+    show: false,
+  },  
 });

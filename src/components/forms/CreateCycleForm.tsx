@@ -4,7 +4,18 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import Trans from 'next-translate/Trans';
 import { ChangeEvent, FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
-import { Button, Col, Form, ButtonGroup, ListGroup, FormFile, Modal, Row, Spinner } from 'react-bootstrap';
+import {
+  Button,
+  Col,
+  Form,
+  FormControlProps,
+  ButtonGroup,
+  ListGroup,
+  FormFile,
+  Modal,
+  Row,
+  Spinner,
+} from 'react-bootstrap';
 import { useMutation } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BiTrash, BiPlus, BiEdit } from 'react-icons/bi';
@@ -12,11 +23,12 @@ import { GiCancel } from 'react-icons/gi';
 
 import { Prisma } from '@prisma/client';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
+import { useAtom } from 'jotai';
 import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import Skeleton from '../Skeleton';
 
+import globalModals from '../../atoms/globalModals';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
-
 import { DATE_FORMAT_PROPS, DATE_FORMAT_SHORT_MONTH_YEAR } from '../../constants';
 import { ComplementaryMaterial, CreateCycleClientPayload } from '../../types/cycle';
 import { WorkMosaicItem } from '../../types/work';
@@ -40,6 +52,7 @@ const COMPLEMENTARY_MATERIAL_MAX_SINGLE_FILE_SIZE = 1024 * 1024 * 10;
  */
 const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
+  const [globalModalsState, setGlobalModalsState] = useAtom(globalModals);
 
   const [addWorkModalOpened, setAddWorkModalOpened] = useState(false);
   const [isWorkSearchLoading, setIsWorkSearchLoading] = useState(false);
@@ -48,7 +61,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkMosaicItem[]>([]);
   const [enableWorksDisscussionsDates, setEnableWorksDisscussionsDates] = useState<boolean>(true);
   const [selectedWorksForCycleDates, setSelectedWorksForCycleDates] = useState<{
-    [key: string]: { startDate?: string; endDate?: string };
+    [key: number]: { startDate?: string; endDate?: string; isInvalidStartDate?: boolean; isInvalidEndDate?: boolean };
   }>({});
 
   const typeaheadRef = useRef<AsyncTypeahead<WorkMosaicItem>>(null);
@@ -291,6 +304,91 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     }
   };
 
+  const validateWorkDates = (workId: number, startDate?: string, endDate?: string) => {
+    const showToast = {
+      type: 'warning',
+      title: t('invalidInput'),
+      message: t('cycleStartAndEndRequired'),
+      show: true,
+    };
+
+    const setIsInvalidField = (fieldName: string) => {
+      const obj = { ...selectedWorksForCycleDates[workId], isInvalidStartDate: false, isInvalidEndDate: false };
+      if (fieldName === 'isInvalidStartDate') obj.isInvalidStartDate = true;
+      else obj.isInvalidEndDate = true;
+
+      setSelectedWorksForCycleDates((res) => ({
+        ...res,
+        [`${workId}`]: obj,
+      }));
+    };
+
+    const form = formRef.current;
+    if (form) {
+      if (!form.startDate.value) {
+        setGlobalModalsState({
+          ...globalModalsState,
+          showToast,
+        });
+        return false;
+      }
+      if (!form.endDate.value) {
+        setGlobalModalsState({
+          ...globalModalsState,
+          showToast,
+        });
+        return false;
+      }
+
+      const cycleStartDate = dayjs(form.startDate.value);
+      const cycleEndDate = dayjs(form.endDate.value);
+
+      if (startDate) {
+        if (cycleStartDate.isAfter(dayjs(startDate))) {
+          showToast.message = 'Date Range Error';
+          setGlobalModalsState({
+            ...globalModalsState,
+            showToast,
+          });
+          setIsInvalidField('isInvalidStartDate');
+          return false;
+        }
+        if (cycleEndDate.isBefore(dayjs(startDate))) {
+          showToast.message = 'Date Range Error';
+          setGlobalModalsState({
+            ...globalModalsState,
+            showToast,
+          });
+          return false;
+        }
+      }
+      if (endDate) {
+        if (cycleStartDate.isAfter(dayjs(endDate))) {
+          showToast.message = 'Date Range Error';
+          setGlobalModalsState({
+            ...globalModalsState,
+            showToast,
+          });
+          setIsInvalidField('isInvalidEndDate');
+          return false;
+        }
+        if (cycleEndDate.isBefore(dayjs(endDate))) {
+          showToast.message = 'Date Range Error';
+          setGlobalModalsState({
+            ...globalModalsState,
+            showToast,
+          });
+          setIsInvalidField('isInvalidEndDate');
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+
+  // const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
+  const worksDisscussionsDates = useRef<HTMLDivElement>() as RefObject<HTMLDivElement>;
+
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
@@ -314,6 +412,17 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
       access: access || 1,
       cycleWorksDates: selectedWorksForCycleDates,
     };
+
+    let hasInvalidDates = false;
+    Object.keys(selectedWorksForCycleDates).forEach((key: string) => {
+      const workId = parseInt(key, 10);
+      const i: { startDate?: string; endDate?: string } = selectedWorksForCycleDates[workId];
+      if (!validateWorkDates(workId, i.startDate, i.endDate)) {
+        hasInvalidDates = true;
+        worksDisscussionsDates.current!.scrollIntoView();
+      }
+    });
+    if (hasInvalidDates) return;
 
     await execCreateCycle(payload);
   };
@@ -398,6 +507,22 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     setGuidelines(() => res);
   };
 
+  const handlerSelectedWorksForCycleStartDate = (e: ChangeEvent<HTMLInputElement>, workId: number) => {
+    setSelectedWorksForCycleDates((res) => {
+      const o = { ...res[workId], startDate: e.target.value };
+      res[workId] = o;
+      return res;
+    });
+  };
+
+  const handlerSelectedWorksForCycleEndDate = (e: ChangeEvent<HTMLInputElement>, workId: number) => {
+    setSelectedWorksForCycleDates((res) => {
+      const o = { ...res[workId], endDate: e.target.value };
+      res[workId] = o;
+      return res;
+    });
+  };
+
   return (
     <>
       <Form onSubmit={handleSubmit} ref={formRef} className={className}>
@@ -450,37 +575,36 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                     )}
                   </div>
                   {enableWorksDisscussionsDates && selectedWorksForCycle[boxId] && (
-                    <aside className={styles.worksDisscussionsDates}>
-                      <Form.Group className="">
+                    <div className={styles.worksDisscussionsDates} ref={worksDisscussionsDates}>
+                      <Form.Group className="" controlId={`work${boxId}StartDate`}>
                         <Form.Label>{`${t('Start date of work')}`}</Form.Label>
                         <Form.Control
                           type="date"
-                          // value={selectedWorksForCycleDates[selectedWorksForCycle[boxId].id].startDate}
-                          onChange={(e) =>
-                            setSelectedWorksForCycleDates((res) => {
-                              const work = selectedWorksForCycle[boxId];
-                              const o = { ...res[work.id], startDate: e.target.value };
-                              res[work.id] = o;
-                              return res;
-                            })
+                          isInvalid={
+                            selectedWorksForCycleDates[selectedWorksForCycle[boxId].id]
+                              ? selectedWorksForCycleDates[selectedWorksForCycle[boxId].id].isInvalidStartDate
+                              : false
+                          }
+                          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                            handlerSelectedWorksForCycleStartDate(e, selectedWorksForCycle[boxId].id)
                           }
                         />
                       </Form.Group>
-                      <Form.Group className="">
+                      <Form.Group className="" controlId={`work${boxId}EndDate`}>
                         <Form.Label>{t('End date of work')}</Form.Label>
                         <Form.Control
                           type="date"
-                          onChange={(e) =>
-                            setSelectedWorksForCycleDates((res) => {
-                              const work = selectedWorksForCycle[boxId];
-                              const o = { ...res[work.id], endDate: e.currentTarget.value };
-                              res[work.id] = o;
-                              return res;
-                            })
+                          isInvalid={
+                            selectedWorksForCycleDates[selectedWorksForCycle[boxId].id]
+                              ? selectedWorksForCycleDates[selectedWorksForCycle[boxId].id].isInvalidEndDate
+                              : false
+                          }
+                          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                            handlerSelectedWorksForCycleEndDate(e, selectedWorksForCycle[boxId].id)
                           }
                         />
                       </Form.Group>
-                    </aside>
+                    </div>
                   )}
                 </Col>
               ))}

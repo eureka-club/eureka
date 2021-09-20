@@ -47,5 +47,7 @@
   "cycleAccesSecretInfo": "Seules les personnes ayant reçu une invitation via un lien peuvent voir et participer au cycle. Le cycle n'apparaît pas dans les recherches",
   "Start date of work": "Start date of work",
   "End date of work": "End date of work",
-  "addDatesForWork": "Add dates individual for each work"
+  "addDatesForWork": "Add dates individual for each work",
+  "invalidInput": "Invalid Input",
+  "cycleStartAndEndRequired": "Cycle Start and End Dates are required"
 }

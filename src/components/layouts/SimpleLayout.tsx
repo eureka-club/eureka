@@ -12,6 +12,7 @@ import EditUserForm from '../forms/EditUserForm';
 import SignInForm from '../forms/SignInForm';
 import globalModalsAtom from '../../atoms/globalModals';
 import withTitle from '../../HOCs/withTitle';
+import Toast from '../common/Toast';
 
 type Props = {
   children: JSX.Element | JSX.Element[];
@@ -45,9 +46,14 @@ const SimpleLayout: FunctionComponent<Props> = ({ children }) => {
     setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: false } });
   };
 
+  const handleToastClose = () => {
+    setGlobalModalsState({ ...globalModalsState, showToast: { ...globalModalsState.showToast, show: false } });
+  };
+
   return (
     <>
       <Navbar />
+      <Toast show={globalModalsState.showToast.show} setShow={handleToastClose} />
 
       <Container className="mt-5">{children}</Container>
 

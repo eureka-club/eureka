@@ -47,5 +47,7 @@
   "cycleAccesSecretInfo": "Somente quem recebeu um convite através de um link pode ver e participar do ciclo. O ciclo não aparece nas buscas",
   "Start date of work": "Start date of work",
   "End date of work": "End date of work",
-  "addDatesForWork": "Add dates individual for each work"
+  "addDatesForWork": "Add dates individual for each work",
+  "invalidInput": "Invalid Input",
+  "cycleStartAndEndRequired": "Cycle Start and End Dates are required"
 }
