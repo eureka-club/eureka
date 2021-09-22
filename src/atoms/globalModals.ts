@@ -13,5 +13,6 @@ export default atom({
     title: '',
     message: '',
     show: false,
-  },  
+    autohide: true,
+  },
 });

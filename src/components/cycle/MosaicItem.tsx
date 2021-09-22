@@ -77,10 +77,25 @@ const MosaicItem: FunctionComponent<Props> = ({
   const {
     mutate: execJoinCycle,
     isLoading: isJoinCycleLoading,
+    data: mutationResponse,
     // isSuccess: isJoinCycleSuccess,
   } = useMutation(
     async () => {
-      await fetch(`/api/cycle/${cycle.id}/join`, { method: 'POST' });
+      
+      const res = await fetch(`/api/cycle/${cycle.id}/join`, { method: 'POST' });
+      const json = await res.json(); debugger;
+      if ('data' in json) {
+        setGlobalModalsState({
+          ...globalModalsState,
+          showToast: {
+            autohide: false,
+            show: true,
+            type: 'success',
+            title: 'Join Cycle request notification',
+            message: json.data,
+          },
+        });
+      }
     },
     {
       onMutate: () => {
@@ -104,7 +119,9 @@ const MosaicItem: FunctionComponent<Props> = ({
     // isSuccess: isLeaveCycleSuccess,
   } = useMutation(
     async () => {
-      await fetch(`/api/cycle/${cycle.id}/join`, { method: 'DELETE' });
+      
+        await fetch(`/api/cycle/${cycle.id}/join`, { method: 'DELETE' });
+      
     },
     {
       onMutate: () => {
@@ -124,6 +141,32 @@ const MosaicItem: FunctionComponent<Props> = ({
       },
     },
   );
+
+  useEffect(() => {debugger;
+    if (mutationResponse) {
+      debugger;
+      setGlobalModalsState({
+        ...globalModalsState,
+        showToast: {
+          autohide: false,
+          show: true,
+          type: 'success',
+          title: 'Join Cycle request notification',
+          message: mutationResponse,
+        },
+      });
+    }
+  }, [mutationResponse]);
+
+  const showJoinButtonCycle = () => {
+    const isLoading = isJoinCycleLoading || isLeaveCycleLoading;
+    if (isLoading) return false;
+    if (user) {
+      if (isJoinCycleLoading) return false;
+      if (user.id === cycle.creatorId) return false;
+    }
+    return true;
+  };
 
   const handleJoinCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
@@ -157,16 +200,14 @@ const MosaicItem: FunctionComponent<Props> = ({
           </div>
         </div>
       )}
-      <div className={`text-center ${styles.joinButtonContainer}`}>
+      <div className={`pt-1 text-center ${styles.joinButtonContainer}`}>
         {(isJoinCycleLoading || isLeaveCycleLoading) && <Spinner animation="border" size="sm" />}
         {!(isJoinCycleLoading || isLeaveCycleLoading) && isCurrentUserJoinedToCycle && user ? (
           <Button onClick={handleLeaveCycleClick} variant="link" className="w-75">
             {t('leaveCycleLabel')}
           </Button>
         ) : (
-          !(isJoinCycleLoading || isLeaveCycleLoading) &&
-          !isCurrentUserJoinedToCycle &&
-          user.id !== cycle.creatorId && (
+          showJoinButtonCycle() && (
             <Button onClick={handleJoinCycleClick} className="w-75">
               {t('joinCycleLabel')}
             </Button>

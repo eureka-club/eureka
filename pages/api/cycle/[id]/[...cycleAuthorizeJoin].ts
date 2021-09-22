@@ -1,0 +1,87 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+import { getSession } from 'next-auth/client';
+
+import getT from 'next-translate/getT';
+import { Session } from '../../../../src/types';
+import getApiHandler from '../../../../src/lib/getApiHandler';
+import { addParticipant, find } from '../../../../src/facades/cycle';
+import prisma from '../../../../src/lib/prisma';
+import { sendMailRequestJoinCycleResponse } from '../../../../src/facades/mail';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const bcrypt = require('bcryptjs');
+
+export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+  const session = (await getSession({ req })) as unknown as Session;
+  debugger;
+  const { id: cycleId } = req.query;
+  const [userId, base64Hash, authorized] = req.query.cycleAuthorizeJoin;
+  if (typeof cycleId !== 'string') {
+    res.status(404).end();
+    return;
+  }
+
+  const idNum = parseInt(cycleId, 10);
+  if (!Number.isInteger(idNum)) {
+    res.status(404).end();
+    return;
+  }
+  const hash = Buffer.from(base64Hash, 'base64').toString('binary');
+  if (!bcrypt.compareSync(`${cycleId}!|!${userId}`, hash)) {
+    res.status(404).end();
+    return;
+  }
+
+  try {
+    const cycle = await find(idNum);
+    if (cycle == null) {
+      res.status(404).end();
+      return;
+    }
+    const user = await prisma.user.findFirst({ where: { id: parseInt(userId, 10) } });
+    if (authorized === '1') {
+      await addParticipant(cycle, session.user);
+      res.redirect('/cycle/cycleJoinedSuccefully');
+    }
+    if (user && user.email) {
+      const locale = req.cookies.NEXT_LOCALE;
+      const t = await getT(locale, 'singInMail');
+      const title = t('title');
+      const subtitle = `Request to join cycle ${cycle.title}`;
+      const ignoreEmailInf = t('ignoreEmailInf');
+      const aboutEureka = t('aboutEureka');
+      const emailReason = t('emailReason');
+      const { email } = user;
+      if (email) {
+        const opt = {
+          to: [
+            {
+              email,
+            },
+          ],
+          from: {
+            email: process.env.EMAILING_FROM!,
+            name: 'EUREKA-CLUB',
+          },
+          subject: `User join to cycle request: ${new Date().toUTCString()}`,
+          html: '',
+        };
+        const mailSent = await sendMailRequestJoinCycleResponse(opt, {
+          to: email,
+          title,
+          subtitle,
+          response: `Request to join Cycle: "${cycle.title}". Status: ${authorized === '1' ? 'Approved' : 'Denied'}`,
+          ignoreEmailInf,
+          aboutEureka,
+          emailReason,
+        });
+        res.redirect(`/cycle/${cycleId}`);
+      }
+    }
+  } catch (exc) {
+    console.error(exc); // eslint-disable-line no-console
+    res.status(500).json({ status: 'server error' });
+  } finally {
+    prisma.$disconnect();
+  }
+});

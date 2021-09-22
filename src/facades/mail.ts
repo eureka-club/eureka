@@ -19,11 +19,22 @@ type EmailSingInSpecs = {
 };
 
 type EmailRequestJoinCycleSpecs = {
-  url: string;
+  applicantMediathequeURL: string;
   to: string;
   title: string;
   subtitle: string;
-  singIngConfirmationUrl: string;
+  authorizeURL: string;
+  deniedURL: string;
+  ignoreEmailInf: string;
+  aboutEureka: string;
+  emailReason: string;
+};
+
+type EmailRequestJoinCycleResponseSpecs = {
+  to: string;
+  title: string;
+  subtitle: string;
+  response: string;
   ignoreEmailInf: string;
   aboutEureka: string;
   emailReason: string;
@@ -88,6 +99,26 @@ export const sendMailRequestJoinCycle = async (
     }
   } else {
     opts.templateId = 'request_join_cycle';
+    opts.dynamicTemplateData = { url: ' ' }; // TODO
+  }
+  const res = await sendMail(opts);
+  return res;
+};
+
+export const sendMailRequestJoinCycleResponse = async (
+  opt: MailDataRequired,
+  specs: EmailRequestJoinCycleResponseSpecs,
+): Promise<boolean> => {
+  const opts = { ...opt };
+  if (process.env.TEMPLATE_ORIGIN === 'local') {
+    const templatePath = path.join(process.cwd(), 'public', 'templates', 'mail', 'request_join_cycle_response.html');
+    const res = await readFile(templatePath);
+    if (res) {
+      const template = Handlebars.compile(res);
+      opts.html = template(specs);
+    }
+  } else {
+    opts.templateId = 'request_join_cycle_response';
     opts.dynamicTemplateData = { url: ' ' }; // TODO
   }
   const res = await sendMail(opts);
