@@ -53,7 +53,7 @@ const SimpleLayout: FunctionComponent<Props> = ({ children }) => {
   return (
     <>
       <Navbar />
-      <Toast show={globalModalsState.showToast.show} setShow={handleToastClose} />
+      <Toast />
 
       <Container className="mt-5">{children}</Container>
 

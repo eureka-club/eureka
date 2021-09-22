@@ -1,6 +1,22 @@
 import { atom } from 'jotai';
 
-export default atom({
+interface GlobalModalType {
+  createPostModalOpened?: boolean;
+  createWorkModalOpened?: boolean;
+  editWorkModalOpened?: boolean;
+  editPostModalOpened?: boolean;
+  editCycleModalOpened?: boolean;
+  editUserModalOpened?: boolean;
+  signInModalOpened?: boolean;
+  showToast: {
+    type?: string;
+    title: string;
+    message: string;
+    show: boolean;
+    autohide?: boolean;
+  };
+}
+const o: GlobalModalType = {
   createPostModalOpened: false,
   createWorkModalOpened: false,
   editWorkModalOpened: false,
@@ -15,4 +31,5 @@ export default atom({
     show: false,
     autohide: true,
   },
-});
+};
+export default atom(o);

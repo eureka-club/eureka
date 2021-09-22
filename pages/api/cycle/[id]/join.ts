@@ -36,7 +36,7 @@ export default getApiHandler()
         res.status(404).end();
         return;
       }
-      
+
       if (cycle.access === 2) {
         // url to approve: join
         const params = `${cycle.id}!|!${session.user.id}`;
@@ -79,7 +79,7 @@ export default getApiHandler()
             emailReason,
           });
           const msg = mailSent ? 'Request sent successfully' : 'Failed to send the request';
-          
+
           res.status(200).json({
             status: 'OK',
             // data: 'Your request has been sent successfully, you will recive a response by email',

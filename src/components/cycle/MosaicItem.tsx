@@ -81,9 +81,8 @@ const MosaicItem: FunctionComponent<Props> = ({
     // isSuccess: isJoinCycleSuccess,
   } = useMutation(
     async () => {
-      
       const res = await fetch(`/api/cycle/${cycle.id}/join`, { method: 'POST' });
-      const json = await res.json(); debugger;
+      const json = await res.json();
       if ('data' in json) {
         setGlobalModalsState({
           ...globalModalsState,
@@ -119,9 +118,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     // isSuccess: isLeaveCycleSuccess,
   } = useMutation(
     async () => {
-      
-        await fetch(`/api/cycle/${cycle.id}/join`, { method: 'DELETE' });
-      
+      await fetch(`/api/cycle/${cycle.id}/join`, { method: 'DELETE' });
     },
     {
       onMutate: () => {
@@ -142,9 +139,8 @@ const MosaicItem: FunctionComponent<Props> = ({
     },
   );
 
-  useEffect(() => {debugger;
+  useEffect(() => {
     if (mutationResponse) {
-      debugger;
       setGlobalModalsState({
         ...globalModalsState,
         showToast: {

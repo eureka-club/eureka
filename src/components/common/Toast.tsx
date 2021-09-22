@@ -14,7 +14,12 @@ const Toast: FunctionComponent<Props> = ({ className = '' }) => {
     <>
       {globalModalsState.showToast.show ? (
         <div aria-live="polite" aria-atomic="true" className="sticky-top d-flex justify-content-center">
-          <T delay={5000} autohide={globalModalsState.showToast.autohide} className={`${className}`}>
+          <T
+            delay={5000}
+            show={globalModalsState.showToast.show}
+            autohide={globalModalsState.showToast.autohide}
+            className={`${className}`}
+          >
             <T.Header className={`bg-${globalModalsState.showToast.type} text-white`}>
               {globalModalsState.showToast.title && (
                 <>

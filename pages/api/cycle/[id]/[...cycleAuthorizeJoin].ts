@@ -13,7 +13,7 @@ const bcrypt = require('bcryptjs');
 
 export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
   const session = (await getSession({ req })) as unknown as Session;
-  debugger;
+
   const { id: cycleId } = req.query;
   const [userId, base64Hash, authorized] = req.query.cycleAuthorizeJoin;
   if (typeof cycleId !== 'string') {
