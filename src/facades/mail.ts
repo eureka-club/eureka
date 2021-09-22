@@ -22,22 +22,29 @@ type EmailRequestJoinCycleSpecs = {
   applicantMediathequeURL: string;
   to: string;
   title: string;
-  subtitle: string;
+  emailReason: string;
+
+  authorizeText: string;
+  denyText: string;
   authorizeURL: string;
-  deniedURL: string;
+  denyURL: string;
+  thanks: string;
+  eurekaTeamThanks: string;
   ignoreEmailInf: string;
   aboutEureka: string;
-  emailReason: string;
 };
 
 type EmailRequestJoinCycleResponseSpecs = {
   to: string;
   title: string;
-  subtitle: string;
-  response: string;
+  emailReason: string;
+
   ignoreEmailInf: string;
   aboutEureka: string;
-  emailReason: string;
+  thanks: string;
+  eurekaTeamThanks: string;
+  visitCycleInfo?: string;
+  cycleURL?: string;
 };
 
 export const sendMail = async (opt: MailDataRequired): Promise<boolean> => {
@@ -60,10 +67,6 @@ export const sendMail = async (opt: MailDataRequired): Promise<boolean> => {
     /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
     console.error(error);
 
-    if (error.response) {
-      /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
-      console.error(error.response.body);
-    }
     return false;
   }
 };

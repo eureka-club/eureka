@@ -87,7 +87,6 @@ const MosaicItem: FunctionComponent<Props> = ({
         setGlobalModalsState({
           ...globalModalsState,
           showToast: {
-            autohide: false,
             show: true,
             type: 'success',
             title: 'Join Cycle request notification',
@@ -144,7 +143,6 @@ const MosaicItem: FunctionComponent<Props> = ({
       setGlobalModalsState({
         ...globalModalsState,
         showToast: {
-          autohide: false,
           show: true,
           type: 'success',
           title: 'Join Cycle request notification',

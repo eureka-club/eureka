@@ -38,20 +38,26 @@ export default getApiHandler()
       }
 
       if (cycle.access === 2) {
-        // url to approve: join
         const params = `${cycle.id}!|!${session.user.id}`;
         const hash = bcrypt.hashSync(params, 8);
         const base64Hash = Buffer.from(hash, 'binary').toString('base64');
         const authorizeURL = `${req.headers.origin}/api/cycle/${cycle.id}/${session.user.id}/${base64Hash}/1`;
-        const deniedURL = `${req.headers.origin}/api/cycle/${cycle.id}/${session.user.id}/${base64Hash}/0`;
+        const denyURL = `${req.headers.origin}/api/cycle/${cycle.id}/${session.user.id}/${base64Hash}/0`;
         const applicantMediathequeURL = `${req.headers.origin}/mediatheque/${session.user.id}`;
         const locale = req.cookies.NEXT_LOCALE;
-        const t = await getT(locale, 'singInMail');
-        const title = t('title');
-        const subtitle = t('subtitle');
+        const t = await getT(locale, 'cycleJoin');
+
+        const title = `${t('Hello')} ${cycle.creator.name}!`;
+        const emailReason = `${session.user.name} ${t('has asked to Join your cycle')} "${cycle.title}". ${t(
+          'userMediathequeInfo',
+        )}`;
+        const authorizeText = t('authorizeText');
+        const denyText = t('denyText');
+        // const subtitle = `${t('Hello')} ${cycle.creator.name}[cycle creator’s name] !`
         const ignoreEmailInf = t('ignoreEmailInf');
         const aboutEureka = t('aboutEureka');
-        const emailReason = t('emailReason');
+        const thanks = t('thanks');
+        const eurekaTeamThanks = t('eurekaTeamThanks');
         const { email } = cycle.creator;
         if (email) {
           const opt = {
@@ -64,16 +70,19 @@ export default getApiHandler()
               email: process.env.EMAILING_FROM!,
               name: 'EUREKA-CLUB',
             },
-            subject: `User join to cycle request: ${new Date().toUTCString()}`,
+            subject: `${emailReason.slice(0, 50)}...`,
             html: '',
           };
           const mailSent = await sendMailRequestJoinCycle(opt, {
             to: email,
             applicantMediathequeURL,
             title,
-            subtitle,
+            authorizeText,
+            denyText,
+            thanks,
+            eurekaTeamThanks,
             authorizeURL,
-            deniedURL,
+            denyURL,
             ignoreEmailInf,
             aboutEureka,
             emailReason,

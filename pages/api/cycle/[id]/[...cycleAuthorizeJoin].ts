@@ -41,16 +41,30 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     const user = await prisma.user.findFirst({ where: { id: parseInt(userId, 10) } });
     if (authorized === '1') {
       await addParticipant(cycle, session.user);
-      res.redirect('/cycle/cycleJoinedSuccefully');
+      // res.redirect('/cycle/cycleJoinedSuccefully');
     }
     if (user && user.email) {
       const locale = req.cookies.NEXT_LOCALE;
-      const t = await getT(locale, 'singInMail');
-      const title = t('title');
-      const subtitle = `Request to join cycle ${cycle.title}`;
+      const baseUrl = req.cookies['next-auth.callback-url'];
+      const t = await getT(locale, 'cycleJoin');
+      const title = `${t('Hello')} ${cycle.creator.name}!`;
+      /// Your request to Join the cycle [name of the cycle] has been approved.
+      const emailReason = `${t('Your request to Join the cycle')} "${cycle.title}" ${t('has been')} ${
+        authorized === '1' ? t('approved') : t('denied')
+      }`;
+      const cycleURL = `${baseUrl}cycle/${cycle.id}`;
+      const visitCycleInfo = t('visitCycleInfo');
+      const thanks = t('thanks');
+      const eurekaTeamThanks = t('eurekaTeamThanks');
       const ignoreEmailInf = t('ignoreEmailInf');
       const aboutEureka = t('aboutEureka');
-      const emailReason = t('emailReason');
+      const gotToCycle = {
+        ...(authorized === '1' && {
+          cycleURL,
+          visitCycleInfo,
+        }),
+      };
+
       const { email } = user;
       if (email) {
         const opt = {
@@ -63,17 +77,18 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
             email: process.env.EMAILING_FROM!,
             name: 'EUREKA-CLUB',
           },
-          subject: `User join to cycle request: ${new Date().toUTCString()}`,
+          subject: `${emailReason.slice(0, 50)}`,
           html: '',
         };
-        const mailSent = await sendMailRequestJoinCycleResponse(opt, {
+        await sendMailRequestJoinCycleResponse(opt, {
           to: email,
           title,
-          subtitle,
-          response: `Request to join Cycle: "${cycle.title}". Status: ${authorized === '1' ? 'Approved' : 'Denied'}`,
+          emailReason,
           ignoreEmailInf,
           aboutEureka,
-          emailReason,
+          thanks,
+          eurekaTeamThanks,
+          ...gotToCycle,
         });
         res.redirect(`/cycle/${cycleId}`);
       }

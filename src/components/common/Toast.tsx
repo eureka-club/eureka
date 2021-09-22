@@ -9,7 +9,18 @@ interface Props {
 
 const Toast: FunctionComponent<Props> = ({ className = '' }) => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
+  const setShow = () => {
+    setGlobalModalsState((res) => {
+      return {
+        ...globalModalsState,
 
+        showToast: {
+          ...res.showToast,
+          show: false,
+        },
+      };
+    });
+  };
   return (
     <>
       {globalModalsState.showToast.show ? (
@@ -17,7 +28,8 @@ const Toast: FunctionComponent<Props> = ({ className = '' }) => {
           <T
             delay={5000}
             show={globalModalsState.showToast.show}
-            autohide={globalModalsState.showToast.autohide}
+            onClose={setShow}
+            autohide={globalModalsState.showToast.autohide || true}
             className={`${className}`}
           >
             <T.Header className={`bg-${globalModalsState.showToast.type} text-white`}>

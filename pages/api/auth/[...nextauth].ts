@@ -90,7 +90,7 @@ export default (req: NextApiRequest, res: NextApiResponse): void | Promise<void>
       session: async (session, user: User) => {
         (session as unknown as Session).user.id = user.id; // eslint-disable-line no-param-reassign
         (session as unknown as Session).user.roles = user.roles; // eslint-disable-line no-param-reassign
-
+        (session as unknown as Session).user.name = user.name; // eslint-disable-line no-param-reassign
         return Promise.resolve(session);
       },
     },

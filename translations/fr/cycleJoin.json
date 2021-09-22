@@ -1,9 +1,19 @@
 {
-  "ignoreEmailInf": "If you did not request this email you can safely ignore it.",
   "title": "From Eureka",
   "subtitle": "User Join Cycle Request!",
-  "authorizeURL": "Authorize",
-  "deniedURL": "Denied",
+  "authorizeText": "Click here to approve request",
+  "denyText": "Click here to deny request",
+  "thanks": "Thanks for contributing to our community",
+  "Hello": "Hello",
+  "has asked to Join your cycle": "has asked to Join your cycle",
+  "userMediathequeInfo": "You can visit the user’s Mediatheque here",
   "aboutEureka": "Eureka is a non-for-profit social network designed for anyone looking for meaningful content and conversations online. We believe that books and movies can help better understand societies and the world around us.",
-  "emailReason": "You’ve received this email because you registered for Eureka."
+  "emailInfo": "You’ve received this email because you registered for Eureka.",
+  "ignoreEmailInf": "If you’re not this cycle’s creator or moderator, you can safely ignore this email.",
+  "Your request to Join the cycle": "Your request to Join the cycle",
+  "has been": "has been",
+  "approved": "approved",
+  "denied": "denied",
+  "visitCycleInfo": "Visit the cycle now!",
+  "eurekaTeamThanks": "Sincerely, The Eureka Team"
 }
