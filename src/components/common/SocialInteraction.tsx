@@ -196,10 +196,10 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const shareUrl = `${WEBAPP_URL}${router.asPath}`;
   const shareTextDynamicPart = (() => {
     if (parent != null && isCycle(parent)) {
-      return t('postCycleShare');
+      return `${t('postCycleShare')} "${parent.title}"`;
     }
     if (parent != null && isWork(parent)) {
-      return t('postWorkShare');
+      return `${t('postWorkShare')} "${parent.title}"`;
     }
     if (isCycle(entity)) {
       return t('cycleShare');
@@ -214,11 +214,14 @@ const SocialInteraction: FunctionComponent<Props> = ({
     throw new Error('Invalid entity or parent');
   })();
   const title = () => {
+    if (parent != null) {
+      if (isWork(parent) || isCycle(parent)) return '';
+    }
     if ('title' in entity) return entity.title;
     return entity.name; // an user;
   };
-
-  const shareText = `${shareTextDynamicPart} "${title()}" ${t('complementShare')}`;
+  const titleStr = title();
+  const shareText = `${shareTextDynamicPart} ${titleStr ? `"${titleStr}"` : ''} ${t('complementShare')}`;
 
   const {
     mutate: execSocialInteraction,
