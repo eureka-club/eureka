@@ -9,7 +9,9 @@ interface fetchProps {
 }
 const fetchUsers = async (props: fetchProps) => {
   const { id, select, include } = props;
-  if (!id) return null;
+  if (!id) {
+    return null;
+  }
   const s = encodeURIComponent(JSON.stringify({ select }));
 
   const res = await fetch(`/api/user/${id}?select=${s}&include=${include}`);

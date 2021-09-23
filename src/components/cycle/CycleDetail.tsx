@@ -5,12 +5,12 @@ import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent, useState, useRef, useEffect } from 'react';
-import { TabPane, TabContent, TabContainer, Row, Col, Button, Nav, NavItem, NavLink, Spinner } from 'react-bootstrap';
+import { TabPane, TabContent, TabContainer, Row, Col, Button, Nav, NavItem, NavLink } from 'react-bootstrap';
 import { BiArrowBack } from 'react-icons/bi';
 import { MosaicContext } from '../../useMosaicContext';
-import UserAvatar from '../common/UserAvatar';
+// import UserAvatar from '../common/UserAvatar';
 import Mosaic from '../Mosaic';
-// import globalModalsAtom from '../../atoms/globalModals';
+// import globalModals from '../../atoms/globalModals';
 
 import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR /* , HYVOR_WEBSITE_ID, WEBAPP_URL */ } from '../../constants';
 import { Session } from '../../types';
@@ -28,7 +28,7 @@ import PostDetailComponent from '../post/PostDetail';
 import PostsMosaic from './PostsMosaic';
 import WorksMosaic from './WorksMosaic';
 import CommnetMosaic from '../comment/MosaicItem';
-import UnclampText from '../UnclampText';
+// import UnclampText from '../UnclampText';
 import detailPagesAtom from '../../atoms/detailPages';
 import styles from './CycleDetail.module.css';
 import { useCycleContext } from '../../useCycleContext';
@@ -54,7 +54,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   // mySocialInfo,
 }) => {
-  // const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
+  // const [globalModalsState, setGlobalModalsState] = useAtom(globalModals);
   const cycleContext = useCycleContext();
   const [cycle, setCycle] = useState<CycleMosaicItem | null>();
   useEffect(() => {
@@ -175,6 +175,18 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         });
     return null;
   };
+
+  if (!session || !session.user) {
+    if (cycle && cycle.access === 2) {
+      return (
+        <CycleDetailHeader
+          cycle={cycle}
+          onParticipantsAction={onParticipantsAction}
+          onCarouselSeeAllAction={onCarouselSeeAllAction}
+        />
+      );
+    }
+  }
 
   return (
     <>

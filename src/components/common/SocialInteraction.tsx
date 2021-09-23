@@ -109,12 +109,13 @@ const SocialInteraction: FunctionComponent<Props> = ({
   useEffect(() => {
     const s = session as unknown as Session;
     if (s) setIdSession(s.user.id.toString());
-    // if (datauser) setuser(() => datauser);
+  }, [session]);
 
+  useEffect(() => {
     calculateQty();
 
     let ratingByMe = false;
-    if (user && entity) {
+    if (session && user && entity) {
       if (isWork(entity)) {
         // if (entity.id === 125) debugger;
         // let idx = user.readOrWatchedWorks.findIndex((i: Work) => i.id === entity.id);
@@ -141,12 +142,14 @@ const SocialInteraction: FunctionComponent<Props> = ({
         // setOptimistLike(likedByMe);
         // setOptimistLikeCount(entity.likes.length);
 
-        let idx = user.favCycles.findIndex((i: Cycle) => i.id === entity.id);
+        let idx = user.favCycles ? user.favCycles.findIndex((i: Cycle) => i.id === entity.id) : -1;
         const favoritedByMe = idx !== -1;
         setOptimistFav(favoritedByMe);
         setOptimistFavCount(entity.favs.length);
 
-        idx = user.ratingCycles.findIndex((i: { cycleId: number; qty: number }) => i.cycleId === entity.id);
+        idx = user.ratingCycles
+          ? user.ratingCycles.findIndex((i: { cycleId: number; qty: number }) => i.cycleId === entity.id)
+          : -1;
         if (idx !== -1) {
           ratingByMe = true;
         }
@@ -155,7 +158,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
       } else if (isPost(entity)) {
         // setOptimistReadOrWatchedCount(0);
 
-        const idx = user.favPosts.findIndex((i: Post) => i.id === entity.id);
+        const idx = user.favPosts ? user.favPosts.findIndex((i: Post) => i.id === entity.id) : -1;
         const favoritedByMe = idx !== -1;
         setOptimistFav(favoritedByMe);
         setOptimistFavCount(entity.favs.length);
@@ -236,7 +239,6 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
         throw new Error('Unknown entity');
       })();
-
       if (session) {
         const res = await fetch(`/api/${entityEndpoint}/${entity.id}/${socialInteraction}`, {
           method: doCreate ? 'POST' : 'DELETE',
@@ -296,7 +298,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
         //   queryClient.setQueryData(['USERS', `${idSession}`], { ...user, readOrWatchedWorks });
         //   return { optimistreadOrWatched: ol, optimistreadOrWatchedCount: olc };
         // }
-        if (payload.socialInteraction === 'fav') {
+        if (session && payload.socialInteraction === 'fav') {
           const opfc = optimistFavCount;
           const opf = optimistFav;
           setOptimistFav(!optimistFav);

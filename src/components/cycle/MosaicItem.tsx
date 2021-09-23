@@ -62,7 +62,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     if (cycle) {
       setParticipants(cycle.participants.length);
     }
-    if (user) {
+    if (session && user) {
       if (!user.joinedCycles.length) setIsCurrentUserJoinedToCycle(false);
       else {
         const icujtc = user.joinedCycles.findIndex((c: CycleMosaicItem) => c.id === cycle.id) !== -1;

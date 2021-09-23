@@ -1,5 +1,5 @@
 // import HyvorTalk from 'hyvor-talk-react';
-// import { useAtom } from 'jotai';
+import { useAtom } from 'jotai';
 import { useSession } from 'next-auth/client';
 // import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
@@ -24,7 +24,7 @@ import { CycleMosaicItem } from '../../types/cycle';
 
 // import HyvorComments from '../common/HyvorComments';
 import UserAvatar from '../common/UserAvatar';
-
+import globalModals from '../../atoms/globalModals';
 // import useTopics from '../../useTopics';
 
 // import detailPagesAtom from '../../atoms/detailPages';
@@ -66,20 +66,35 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
   const [isCreateComment, setIsCreateComment] = useState<boolean>(false);
   const [isSuggestRelatedWork, setIsSuggestRelatedWork] = useState<boolean>(false);
   const [discussionItem, setDiscussionItem] = useState<string>('-1'); // by default Cycle itself
+  const [globalModalsAtom, setGlobalsModalsAtom] = useAtom(globalModals);
 
   const handleCreateEurekaClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    setIsSuggestRelatedWork(false);
-    setIsCreateComment(false);
-    setIsCreateEureka(true);
-    // setGlobalModalsState({ ...globalModalsState, ...{ createPostModalOpened: true } });
+    if (!session) {
+      setGlobalsModalsAtom({
+        ...globalModalsAtom,
+        signInModalOpened: true,
+      });
+    } else {
+      setIsSuggestRelatedWork(false);
+      setIsCreateComment(false);
+      setIsCreateEureka(true);
+      // setGlobalModalsState({ ...globalModalsState, ...{ createPostModalOpened: true } });
+    }
   };
   const handleCreateCommentClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    setIsSuggestRelatedWork(false);
-    setIsCreateComment(true);
-    setIsCreateEureka(false);
-    // setGlobalModalsState({ ...globalModalsState, ...{ createPostModalOpened: true } });
+    if (!session) {
+      setGlobalsModalsAtom({
+        ...globalModalsAtom,
+        signInModalOpened: true,
+      });
+    } else {
+      setIsSuggestRelatedWork(false);
+      setIsCreateComment(true);
+      setIsCreateEureka(false);
+      // setGlobalModalsState({ ...globalModalsState, ...{ createPostModalOpened: true } });
+    }
   };
   const handleCreateRelatedWorkClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
