@@ -30,6 +30,7 @@ import globalModalsAtom from '../../atoms/globalModals';
 import styles from './WorkDetail.module.css';
 import TagsInput from '../forms/controls/TagsInput';
 import MosaicItem from './MosaicItem';
+import { MosaicContext } from '../../useMosaicContext';
 
 interface Props {
   work: WorkMosaicItem;
@@ -63,7 +64,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
   };
 
   return (
-    <>
+    <MosaicContext.Provider value={{ showShare: true }}>
       {!router.query.postId && canEditWork() && (
         <Button variant="warning" onClick={handleEditClick} size="sm">
           {t('edit')}
@@ -74,6 +75,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
           <>
             <Col md={{ span: 3 }}>
               <MosaicItem work={work} showTrash />
+
               {/* <div className={classNames(styles.imgWrapper, 'mb-3')}>
                 <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
               </div>
@@ -137,6 +139,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
                       </TabPane>
                       <TabPane eventKey="posts">
                         <p className={styles.explanatoryText}>{t('explanatoryTextPosts')}</p>
+
                         {postsCount > 0 && <PostsMosaic work={work} />}
                       </TabPane>
                       <TabPane eventKey="cycles">{cyclesCount > 0 && <CyclesMosaic work={work} />}</TabPane>
@@ -148,7 +151,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
           </Col>
         </Row>
       )}
-    </>
+    </MosaicContext.Provider>
   );
 };
 

@@ -45,6 +45,7 @@ import TagsInput from '../forms/controls/TagsInput';
 import UserAvatar from '../common/UserAvatar';
 import CarouselStatic from '../CarouselStatic';
 import globalSearchEngineAtom from '../../atoms/searchEngine';
+import { MosaicContext } from '../../useMosaicContext';
 
 interface Props {
   cycle: CycleMosaicItem;
@@ -219,7 +220,9 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
       </Col>
       <Col md={3}>
         <UserAvatar user={cycle.creator} />
-        <MosaicItem cycle={cycle} showTrash className="mt-2" />
+        <MosaicContext.Provider value={{ showShare: true }}>
+          <MosaicItem cycle={cycle} showTrash className="mt-2" />
+        </MosaicContext.Provider>
       </Col>
     </Row>
   );

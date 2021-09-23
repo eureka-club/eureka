@@ -10,7 +10,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/client';
 import { useAtom } from 'jotai';
 import Rating from 'react-rating';
-import { Container, Row, Col, OverlayTrigger, Popover, Button, Spinner } from 'react-bootstrap';
+import { OverlayTrigger, Popover, Button, Spinner } from 'react-bootstrap';
 
 import {
   FacebookIcon,
@@ -20,8 +20,8 @@ import {
   WhatsappShareButton,
   WhatsappIcon,
 } from 'react-share';
-import { Cycle, User, Work, Post } from '@prisma/client';
-import { useMosaicContext, ContextType } from '../../useMosaicContext';
+import { Cycle, Work, Post } from '@prisma/client';
+import { useMosaicContext } from '../../useMosaicContext';
 import globalSearchEngineAtom from '../../atoms/searchEngine';
 
 import { useUsers } from '../../useUsers';
@@ -87,7 +87,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const [idSession, setIdSession] = useState<string>('');
   const { /* isLoading, isError, error, */ data: user } = useUsers({ id: idSession });
   // const [user, setuser] = useState<UserDetail>();
-  const [showShare, setShowShare] = useState<boolean>(true);
+  const [showShare, setShowShare] = useState<boolean>(false);
   const mosaicContext = useMosaicContext();
   useEffect(() => {
     if (mosaicContext) {

@@ -280,7 +280,11 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                         {cycle.works && (
                           <h2 className="mb-5">{t('worksCountHeader', { count: cycle.works.length })}</h2>
                         )}
-                        {cycle.works && cycle.works.length > 0 && <WorksMosaic cycle={cycle} />}
+                        {cycle.works && cycle.works.length > 0 && (
+                          <MosaicContext.Provider value={{ showShare: true }}>
+                            <WorksMosaic cycle={cycle} />
+                          </MosaicContext.Provider>
+                        )}
 
                         {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (
                           <Row className="mt-4 mb-5">

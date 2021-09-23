@@ -5,7 +5,7 @@ export type ContextType = {
 };
 
 export const MosaicContext = createContext<ContextType>({
-  showShare: true,
+  showShare: false,
 });
 
 export const useMosaicContext = (): ContextType => useContext(MosaicContext);
