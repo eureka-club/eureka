@@ -433,10 +433,11 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const getFullSymbol = () => {
     if (session) {
       if (user && mySocialInfo) {
-        if (mySocialInfo.ratingByMe) return <GiBrain style={{ color: 'var(--eureka-blue)' }} />;
+        if (mySocialInfo.ratingByMe)
+          return <GiBrain className="text-primary" /*  style={{ color: 'var(--eureka-blue)' }} */ />;
       }
     }
-    return <GiBrain style={{ color: 'var(--eureka-green)' }} />;
+    return <GiBrain className="text-success" /* style={{ color: 'var(--eureka-green)' }} */ />;
   };
 
   const getRatingsCount = () => {
@@ -473,7 +474,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
                 onChange={handlerChangeRating}
                 className={styles.rating}
                 stop={5}
-                emptySymbol={<GiBrain className="text-success" />}
+                emptySymbol={<GiBrain className="text-secondary" />}
                 fullSymbol={getFullSymbol()}
               />
             )}{' '}
