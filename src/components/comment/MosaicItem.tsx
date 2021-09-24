@@ -139,7 +139,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         </Col>
         <Col xs={10} md={11} className="pl-1">
           <div className={styles.dangerouslySetInnerHTML} dangerouslySetInnerHTML={{ __html: contentText }} />
-          <Button variant="default" onClick={() => console.log(comment)} className={styles.replyButton}>
+          <Button variant="default" className={styles.replyButton}>
             <MdReply />
           </Button>
         </Col>
