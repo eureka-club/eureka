@@ -1,25 +1,20 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { useEffect, useState } from 'react';
-// import { getSession } from 'next-auth/client';
+import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { Spinner } from 'react-bootstrap';
+import { EILSEQ } from 'constants';
+import { Session } from '../../../../src/types';
 // import { MySocialInfo, Session } from '../../../../src/types';
 import { CycleMosaicItem } from '../../../../src/types/cycle';
 import { PostMosaicItem } from '../../../../src/types/post';
 import SimpleLayout from '../../../../src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '../../../../src/components/cycle/CycleDetail';
-import {
-  // countParticipants,
-  // countPosts,
-  // countWorks,
-  find as findCycle,
-  // findParticipant,
-} from '../../../../src/facades/cycle';
 // import { isFavoritedByUser /* isLikedByUser, search as searchPost */ } from '../../../../src/facades/post';
 import { WorkMosaicItem } from '../../../../src/types/work';
 import useCycles from '../../../../src/useCycles';
 import { CycleContext } from '../../../../src/useCycleContext';
-import { Post } from '.prisma/client';
+// import { Post } from '.prisma/client';
 // interface Props {
 //   cycle: CycleMosaicItem;
 //   post: PostMosaicItem;
@@ -30,12 +25,25 @@ import { Post } from '.prisma/client';
 //   // mySocialInfo: MySocialInfo;
 // }
 
-const PostDetailInCyclePage = () => {
+const PostDetailInCyclePage: NextPage = () => {
+  const [session, isLoadingSession] = useSession();
   const router = useRouter();
   const [cycleId, setCycleId] = useState<string>();
   const { data, isLoading } = useCycles(cycleId);
   const [cycle, setCycle] = useState<CycleMosaicItem>();
   const [post, setPost] = useState<PostMosaicItem>();
+  const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!session) {
+      setCurrentUserIsParticipant(() => false);
+    } else if (session && cycle && session.user) {
+      const s = session as unknown as Session;
+      if (cycle.creatorId === s.user.id) setCurrentUserIsParticipant(() => true);
+      const isParticipant = cycle.participants.findIndex((p) => p.id === s.user.id) > -1;
+      setCurrentUserIsParticipant(() => isParticipant);
+    }
+  }, [session, cycle]);
 
   useEffect(() => {
     if (router.query.id) setCycleId(router.query.id as string);
@@ -50,14 +58,14 @@ const PostDetailInCyclePage = () => {
         setPost(po as PostMosaicItem);
       }
     }
-  }, [data]);
+  }, [data, router.query.postId]);
 
   return (
     <SimpleLayout title={`${post ? post.title : ''} · ${cycle ? cycle.title : ''}`}>
       <>
-        {isLoading && <Spinner animation="grow" variant="secondary" />}
-        {!isLoading && post && cycle && (
-          <CycleContext.Provider value={{ cycle }}>
+        {(isLoadingSession || isLoading) && <Spinner animation="grow" variant="secondary" />}
+        {!(isLoadingSession || isLoading) && post && cycle && (
+          <CycleContext.Provider value={{ cycle, currentUserIsParticipant }}>
             <CycleDetailComponent
               post={post}
               work={post.works.length ? (post.works[0] as WorkMosaicItem) : undefined}

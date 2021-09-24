@@ -4,10 +4,12 @@ import { CycleMosaicItem } from './types/cycle';
 export type ContextType = {
   cycle: CycleMosaicItem | null;
   showShare?: boolean;
+  currentUserIsParticipant?: boolean;
 };
 
 export const CycleContext = createContext<ContextType>({
   cycle: null,
+  currentUserIsParticipant: false,
   showShare: true,
 });
 

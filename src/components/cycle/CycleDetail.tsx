@@ -119,15 +119,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       });
   };
 
-  const isParcipant = () => {
-    if (!session) return false;
-    if (session && cycle && session.user) {
-      if (cycle.creatorId === session.user.id) return true;
-      return cycle.participants.findIndex((p) => p.id === session.user.id) > -1;
-    }
-    return false;
-  };
-
   // const handleJoinCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
   //   ev.preventDefault();
   //   if (!session) openSignInModal();
@@ -254,7 +245,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       );
       if (cycle.access === 3) return '';
       if (cycle.access === 1) return res;
-      if (cycle.access === 2 && isParcipant()) return res;
+      if (cycle.access === 2 && cycleContext.currentUserIsParticipant) return res;
     }
     return '';
   };
@@ -285,7 +276,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       );
       if (cycle.access === 3) return '';
       if (cycle.access === 1) return res;
-      if (cycle.access === 2 && isParcipant()) return res;
+      if (cycle.access === 2 && cycleContext.currentUserIsParticipant) return res;
     }
     return '';
   };
@@ -304,7 +295,11 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           <BiArrowBack />
         </Button>
       )}
-      {post && cycle && <PostDetailComponent post={post} work={work} />}
+      {post && cycle && (
+        <MosaicContext.Provider value={{ showShare: true }}>
+          <PostDetailComponent post={post} work={work} />
+        </MosaicContext.Provider>
+      )}
       {cycle && post == null && (
         <Row className="mb-5" ref={tabContainnerRef}>
           <Col>

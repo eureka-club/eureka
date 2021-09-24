@@ -9,6 +9,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 
+import { useRouter } from 'next/router';
 import { DATE_FORMAT_SHORT } from '../../constants';
 import { Session } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
@@ -34,11 +35,19 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
+  const router = useRouter();
   const cycleContext = useCycleContext();
   const [cycle, setCycle] = useState<CycleMosaicItem | null>();
+  const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
   useEffect(() => {
-    if (cycleContext) setCycle(cycleContext.cycle);
-  }, [cycleContext]);
+    if (cycleContext) {
+      if (cycleContext.cycle) {
+        if (!cycleContext.currentUserIsParticipant) router.push(`/cycle/${cycleContext.cycle.id}`);
+        setCycle(cycleContext.cycle);
+        setCurrentUserIsParticipant(cycleContext.currentUserIsParticipant || false);
+      }
+    }
+  }, [cycleContext, router]);
   const currentWork = work;
   const { t } = useTranslation('createPostForm');
   const hyvorId = `post-${post.id}`;
@@ -53,6 +62,9 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
     if (session && session.user.id === post.creatorId) return true;
     return false;
   };
+
+  if (cycle && !currentUserIsParticipant) return null;
+
   return (
     <>
       {/* {work ||

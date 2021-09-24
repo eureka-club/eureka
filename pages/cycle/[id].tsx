@@ -15,12 +15,26 @@ import useCycles from '../../src/useCycles';
 import { CycleContext } from '../../src/useCycleContext';
 
 const CycleDetailPage: NextPage = () => {
-  const session = useSession as unknown as Session;
+  const [session, isLoadingSession] = useSession();
   const router = useRouter();
   const [id, setId] = useState<string>();
   const { data, isSuccess, isLoading, isFetching, isError, error } = useCycles(id);
   const [cycle, setCycle] = useState<CycleMosaicItem | undefined>(undefined);
   const { t } = useTranslation('common');
+
+  const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!session) {
+      setCurrentUserIsParticipant(() => false);
+    } else if (session && cycle && session.user) {
+      const s = session as unknown as Session;
+      if (cycle.creatorId === s.user.id) setCurrentUserIsParticipant(() => true);
+      const isParticipant = cycle.participants.findIndex((p) => p.id === s.user.id) > -1;
+      setCurrentUserIsParticipant(() => isParticipant);
+    }
+  }, [session, cycle]);
+
   useEffect(() => {
     if (router && router.query) setId(() => router.query.id as string);
   }, [router]);
@@ -30,44 +44,51 @@ const CycleDetailPage: NextPage = () => {
       const c = data as CycleMosaicItem;
       if (c) {
         setCycle(c);
-        if (c) {
-          if (c.access !== 1) {
-            if (!session) {
-              router.push('/');
-            } else if (c.participants && session.user) {
-              const participantIdx = c.participants.findIndex((i) => i.id === session.user.id);
-              if (c.creatorId !== session.user.id && participantIdx === -1 && !session.user.roles.includes('admin')) {
-                router.push('/');
-              }
-            }
-          }
-        }
+        // if (c) {
+        //   if (c.access !== 1) {
+        //     if (!session) {
+        //       router.push('/');
+        //     } else if (c.participants && session.user) {
+        //       const participantIdx = c.participants.findIndex((i) => i.id === session.user.id);
+        //       if (c.creatorId !== session.user.id && participantIdx === -1 && !session.user.roles.includes('admin')) {
+        //         router.push('/');
+        //       }
+        //     }
+        //   }
+        // }
       }
     }
   }, [data, session, router]);
 
-  return (
-    <SimpleLayout title={cycle ? cycle.title : ''}>
-      <>
-        {cycle && (
-          <CycleContext.Provider value={{ cycle }}>
-            <CycleDetailComponent />
-          </CycleContext.Provider>
-        )}
-        {(isFetching || !isSuccess) && <Spinner animation="grow" variant="secondary" />}
-        {isError && !cycle && (
-          <Alert variant="warning">
-            <>{error}</>
-          </Alert>
-        )}
-        {!(isFetching || isLoading) && !cycle && (
-          <Alert variant="warning">
-            <>{t('notFound')}</>
-          </Alert>
-        )}
-      </>
-    </SimpleLayout>
-  );
+  const renderCycleDetailComponent = () => {
+    if (isLoadingSession || isFetching || isLoading) return <Spinner animation="grow" variant="secondary" />;
+
+    if (cycle) {
+      const res = (
+        <CycleContext.Provider value={{ cycle, currentUserIsParticipant }}>
+          <CycleDetailComponent />
+        </CycleContext.Provider>
+      );
+      if (cycle.access === 1) return res;
+      if (cycle.access === 2) return res;
+      if (cycle.access === 3 && !currentUserIsParticipant) return <Alert>Not authorized</Alert>;
+    }
+
+    if (isError)
+      return (
+        <Alert variant="warning">
+          <>{error}</>
+        </Alert>
+      );
+
+    return (
+      <Alert variant="warning">
+        <>{t('notFound')}</>
+      </Alert>
+    );
+  };
+
+  return <SimpleLayout title={cycle ? cycle.title : ''}>{renderCycleDetailComponent()}</SimpleLayout>;
 };
 
 export default CycleDetailPage;
