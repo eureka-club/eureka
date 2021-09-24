@@ -119,6 +119,15 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       });
   };
 
+  const isParcipant = () => {
+    if (!session) return false;
+    if (session && cycle && session.user) {
+      if (cycle.creatorId === session.user.id) return true;
+      return cycle.participants.findIndex((p) => p.id === session.user.id) > -1;
+    }
+    return false;
+  };
+
   // const handleJoinCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
   //   ev.preventDefault();
   //   if (!session) openSignInModal();
@@ -176,17 +185,110 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     return null;
   };
 
-  if (!session || !session.user) {
-    if (cycle && cycle.access === 2) {
-      return (
+  // if (!session || !session.user) {
+  //   if (cycle && cycle.access === 2) {
+  //     return (
+  //       <CycleDetailHeader
+  //         cycle={cycle}
+  //         onParticipantsAction={onParticipantsAction}
+  //         onCarouselSeeAllAction={onCarouselSeeAllAction}
+  //       />
+  //     );
+  //   }
+  // }
+
+  const renderCycleDetailHeader = () => {
+    if (cycle) {
+      const res = (
         <CycleDetailHeader
           cycle={cycle}
           onParticipantsAction={onParticipantsAction}
           onCarouselSeeAllAction={onCarouselSeeAllAction}
         />
       );
+      if (cycle.access === 3) return '';
+      if (cycle.access === 1) return res;
+      if (cycle.access === 2) return res;
     }
-  }
+    return '';
+  };
+
+  const renderRestrictTabs = () => {
+    if (cycle) {
+      const res = (
+        <>
+          <TabPane eventKey="cycle-discussion">
+            <CycleDetailDiscussion cycle={cycle} className="mb-5" />
+            {(cycle.posts && cycle.posts.length && (
+              <MosaicContext.Provider value={{ showShare: true }}>
+                <PostsMosaic display="h" cycle={cycle} showComments cacheKey={['CYCLES', `${cycle.id}`]} />
+              </MosaicContext.Provider>
+            )) ||
+              null}
+            {renderCycleOwnComments()}
+          </TabPane>
+          <TabPane eventKey="my_milestone">
+            <h2 className="mb-3">{t('My milestones')}</h2>
+            <p />
+          </TabPane>
+          <TabPane eventKey="guidelines">
+            {cycle.guidelines &&
+              cycle.guidelines.map((g) => {
+                return (
+                  <>
+                    <h5>{g.title}</h5>
+                    <p>{g.contentText}</p>
+                  </>
+                );
+              })}
+            <p />
+          </TabPane>
+          <TabPane eventKey="participants">
+            {/* {cycle.participants && cycle.participants.map((p) => <UserAvatar className="mb-3 mr-3" user={p} key={p.id} />)} */}
+            {cycle.participants && (
+              <Mosaic showButtonLabels={false} stack={[...cycle.participants, cycle.creator] as UserMosaicItem[]} />
+            )}
+            <p />
+          </TabPane>
+        </>
+      );
+      if (cycle.access === 3) return '';
+      if (cycle.access === 1) return res;
+      if (cycle.access === 2 && isParcipant()) return res;
+    }
+    return '';
+  };
+
+  const renderRestrictTabsHeaders = () => {
+    if (cycle) {
+      const res = (
+        <>
+          <NavItem className={styles.tabBtn}>
+            <NavLink eventKey="cycle-discussion">{t('Discussion')}</NavLink>
+          </NavItem>
+          <NavItem className={styles.tabBtn}>
+            <NavLink eventKey="my_milestone">{t('My milestones')}</NavLink>
+          </NavItem>
+          <NavItem className={styles.tabBtn}>
+            <NavLink eventKey="guidelines">{t('Guidelines')}</NavLink>
+          </NavItem>
+
+          <NavItem className={styles.tabBtn}>
+            <NavLink eventKey="participants">
+              {t('Participants')}{' '}
+              {/* (
+           <HyvorTalk.CommentCount websiteId={Number(HYVOR_WEBSITE_ID!)} id={hyvorId} />
+          ) */}
+            </NavLink>
+          </NavItem>
+        </>
+      );
+      if (cycle.access === 3) return '';
+      if (cycle.access === 1) return res;
+      if (cycle.access === 2 && isParcipant()) return res;
+    }
+    return '';
+  };
 
   return (
     <>
@@ -195,13 +297,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           {t('Edit')}
         </Button>
       )}
-      {!post && cycle && (
-        <CycleDetailHeader
-          cycle={cycle}
-          onParticipantsAction={onParticipantsAction}
-          onCarouselSeeAllAction={onCarouselSeeAllAction}
-        />
-      )}
+      {!post && renderCycleDetailHeader()}
 
       {post && cycle && (
         <Button variant="info" onClick={() => router.push(`/cycle/${cycle.id}`)} size="sm">
@@ -242,24 +338,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                           {t('About')} ({cycle.works && cycle.works.length})
                         </NavLink>
                       </NavItem>
-                      <NavItem className={styles.tabBtn}>
-                        <NavLink eventKey="cycle-discussion">{t('Discussion')}</NavLink>
-                      </NavItem>
-                      <NavItem className={styles.tabBtn}>
-                        <NavLink eventKey="my_milestone">{t('My milestones')}</NavLink>
-                      </NavItem>
-                      <NavItem className={styles.tabBtn}>
-                        <NavLink eventKey="guidelines">{t('Guidelines')}</NavLink>
-                      </NavItem>
-
-                      <NavItem className={styles.tabBtn}>
-                        <NavLink eventKey="participants">
-                          {t('Participants')}{' '}
-                          {/* (
-                           <HyvorTalk.CommentCount websiteId={Number(HYVOR_WEBSITE_ID!)} id={hyvorId} />
-                          ) */}
-                        </NavLink>
-                      </NavItem>
+                      {renderRestrictTabsHeaders()}
                     </Nav>
                   </Col>
                 </Row>
@@ -311,42 +390,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                           </Row>
                         )}
                       </TabPane>
-                      <TabPane eventKey="cycle-discussion">
-                        <CycleDetailDiscussion cycle={cycle} className="mb-5" />
-                        {(cycle.posts && cycle.posts.length && (
-                          <MosaicContext.Provider value={{ showShare: true }}>
-                            <PostsMosaic display="h" cycle={cycle} showComments cacheKey={['CYCLES', `${cycle.id}`]} />
-                          </MosaicContext.Provider>
-                        )) ||
-                          null}
-                        {renderCycleOwnComments()}
-                      </TabPane>
-                      <TabPane eventKey="my_milestone">
-                        <h2 className="mb-3">{t('My milestones')}</h2>
-                        <p />
-                      </TabPane>
-                      <TabPane eventKey="guidelines">
-                        {cycle.guidelines &&
-                          cycle.guidelines.map((g) => {
-                            return (
-                              <>
-                                <h5>{g.title}</h5>
-                                <p>{g.contentText}</p>
-                              </>
-                            );
-                          })}
-                        <p />
-                      </TabPane>
-                      <TabPane eventKey="participants">
-                        {/* {cycle.participants && cycle.participants.map((p) => <UserAvatar className="mb-3 mr-3" user={p} key={p.id} />)} */}
-                        {cycle.participants && (
-                          <Mosaic
-                            showButtonLabels={false}
-                            stack={[...cycle.participants, cycle.creator] as UserMosaicItem[]}
-                          />
-                        )}
-                        <p />
-                      </TabPane>
+                      {renderRestrictTabs()}
                     </TabContent>
                   </Col>
                 </Row>
