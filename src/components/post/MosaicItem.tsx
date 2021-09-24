@@ -1,5 +1,5 @@
 import { Cycle, Work } from '@prisma/client';
-import classNames from 'classnames';
+// import classNames from 'classnames';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
@@ -15,7 +15,7 @@ import { isCycle, isWork } from '../../types';
 // import { WorkMosaicItem } from '../../types/work';
 import CommentsList from '../common/CommentsList';
 import Avatar from '../common/UserAvatar';
-import UnclampText from '../UnclampText';
+// import UnclampText from '../UnclampText';
 
 interface Props {
   post: PostMosaicItem;
@@ -63,10 +63,10 @@ const MosaicItem: FunctionComponent<Props> = ({
   // const [newCommentInput, setNewCommentInput] = useState<string>();
   const { t } = useTranslation('common');
 
-  const getDirectParent = () => {
-    if (post.works && post.works.length) return post.works[0];
-    return postParent;
-  };
+  // const getDirectParent = () => {
+  //   if (post.works && post.works.length) return post.works[0];
+  //   return postParent;
+  // };
 
   const renderVerticalMosaic = (props: { showDetailedInfo: boolean }) => {
     const { showDetailedInfo } = props;

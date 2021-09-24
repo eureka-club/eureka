@@ -1,7 +1,7 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/client';
 
-import { useQueryClient } from 'react-query';
+// import { useQueryClient } from 'react-query';
 import { Session, MySocialInfo } from '../../src/types';
 import { WorkMosaicItem } from '../../src/types/work';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
@@ -12,8 +12,8 @@ import {
   countPosts,
   find,
   isFavoritedByUser,
-  isLikedByUser,
-  isReadOrWatchedByUser,
+  // isLikedByUser,
+  // isReadOrWatchedByUser,
 } from '../../src/facades/work';
 
 interface Props {
@@ -24,8 +24,8 @@ interface Props {
 }
 
 const WorkDetailPage: NextPage<Props> = ({ work, cyclesCount, postsCount, mySocialInfo }) => {
-  const queryClient = useQueryClient();
-  queryClient.setQueryData(['WORKS', `${work.id}`], work);
+  // const queryClient = useQueryClient();
+  // queryClient.setQueryData(['WORKS', `${work.id}`], work);
   return (
     <SimpleLayout title={work.title}>
       <WorkDetailComponent work={work} cyclesCount={cyclesCount} postsCount={postsCount} mySocialInfo={mySocialInfo} />

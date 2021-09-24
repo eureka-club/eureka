@@ -1,4 +1,4 @@
-import { Cycle, Work } from '@prisma/client';
+// import { Cycle, Work } from '@prisma/client';
 import classNames from 'classnames';
 import { FunctionComponent } from 'react';
 import Masonry from 'react-masonry-css';

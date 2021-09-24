@@ -10,6 +10,7 @@ export const find = async (id: number): Promise<WorkMosaicItem | null> => {
       localImages: true,
       favs: true,
       ratings: true,
+      posts: { include: { localImages: true, comments: true } },
       comments: { include: { comments: true } },
     },
   });
@@ -25,6 +26,7 @@ export const findAll = async (): Promise<WorkMosaicItem[]> => {
       comments: {
         include: { comments: true },
       },
+      posts: { include: { localImages: true, comments: true } },
     },
   });
 };

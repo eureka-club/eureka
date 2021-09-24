@@ -49,14 +49,40 @@ export const search = async (query: { [key: string]: string | string[] }): Promi
     return prisma.post.findMany({
       where: { title: { contains: q } },
       // ...(typeof include === 'string' && { include: JSON.parse(include) }),
-      include: { creator: true, localImages: true, works: true, cycles: true, favs: true, likes: true },
+      include: {
+        creator: true,
+        localImages: true,
+        works: true,
+        cycles: true,
+        favs: true,
+        likes: true,
+        comments: {
+          include: {
+            creator: { select: { id: true, name: true, image: true } },
+            comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+          },
+        },
+      },
     });
   }
 
   return prisma.post.findMany({
     ...(typeof where === 'string' && { where: JSON.parse(where) }),
     // ...(typeof include === 'string' && { include: JSON.parse(include) }),
-    include: { creator: true, localImages: true, works: true, cycles: true, favs: true, likes: true },
+    include: {
+      creator: true,
+      localImages: true,
+      works: true,
+      cycles: true,
+      favs: true,
+      likes: true,
+      comments: {
+        include: {
+          creator: { select: { id: true, name: true, image: true } },
+          comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+        },
+      },
+    },
   });
 };
 

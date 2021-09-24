@@ -128,7 +128,18 @@ export const search = async (query: { [key: string]: string | string[] }): Promi
             localImages: true,
             favs: true,
             ratings: { include: { work: true } },
-            comments: true,
+            comments: {
+              include: {
+                creator: { select: { id: true, name: true, image: true } },
+                comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+              },
+            },
+          },
+        },
+        comments: {
+          include: {
+            creator: { select: { id: true, name: true, image: true } },
+            comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
           },
         },
       },
@@ -150,9 +161,20 @@ export const search = async (query: { [key: string]: string | string[] }): Promi
           localImages: true,
           favs: true,
           ratings: { include: { work: true } },
+          comments: {
+            include: {
+              creator: { select: { id: true, name: true, image: true } },
+              comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+            },
+          },
         },
       },
-      comments: { include: { creator: true, comments: true } },
+      comments: {
+        include: {
+          creator: { select: { id: true, name: true, image: true } },
+          comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+        },
+      },
     },
   });
 };

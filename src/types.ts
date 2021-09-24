@@ -65,19 +65,21 @@ export const isCycleMosaicItem = (obj: MosaicItem | SearchResult): obj is CycleM
   typeof (obj as CycleMosaicItem).title === 'string' &&
   (obj as CycleMosaicItem).startDate !== undefined &&
   (obj as CycleMosaicItem).endDate !== undefined;
-export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMosaicItem => {
-  return (
-    typeof (obj as PostMosaicItem).title === 'string' &&
-    typeof (obj as PostMosaicItem).creatorId === 'number' &&
-    typeof (obj as PostMosaicItem).works === 'object' &&
-    typeof (obj as PostMosaicItem).language === 'string'
-  );
-};
 export const isWorkMosaicItem = (obj: MosaicItem | SearchResult): obj is WorkMosaicItem =>
   typeof (obj as WorkMosaicItem).title === 'string' &&
   // typeof (obj as WorkMosaicItem).author === 'string' &&
   typeof (obj as WorkMosaicItem).type === 'string' &&
   ['book', 'fiction-book', 'movie', 'documentary'].includes((obj as WorkMosaicItem).type);
+
+export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMosaicItem => {
+  return 'title' in obj && !isCycleMosaicItem(obj) && !isWorkMosaicItem(obj);
+  // return (
+  //   typeof (obj as PostMosaicItem).title === 'string' &&
+  //   typeof (obj as PostMosaicItem).creatorId === 'number' &&
+  //   typeof (obj as PostMosaicItem).works === 'object' &&
+  //   typeof (obj as PostMosaicItem).language === 'string'
+  // );
+};
 
 export const isUserMosaicItem = (obj: MosaicItem | SearchResult): obj is UserMosaicItem =>
   'email' in obj && 'countryOfOrigin' in obj && 'image' in obj;

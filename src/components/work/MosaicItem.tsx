@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent /*  useEffect, useState */, useEffect, useState, useContext } from 'react';
+import { FunctionComponent /*  useEffect, useState */, useEffect, useState } from 'react';
 import { Card /* Button */ } from 'react-bootstrap';
 // import { MySocialInfo } from '@/src/types';
 // import { PostDetail } from '../../types/post';
 // import { useQuery } from 'react-query';
-import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/client';
+// import { useRouter } from 'next/router';
+// import { useSession } from 'next-auth/client';
 import { CgMediaLive } from 'react-icons/cg';
 import dayjs from 'dayjs';
 import { CycleMosaicItem } from '../../types/cycle';
@@ -14,7 +14,7 @@ import { /* WorkWithImages, */ WorkMosaicItem } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import SocialInteraction from '../common/SocialInteraction';
-import { Session } from '../../types';
+// import { Session } from '../../types';
 import { useCycleContext } from '../../useCycleContext';
 
 interface Props {
@@ -31,7 +31,7 @@ interface Props {
 const MosaicItem: FunctionComponent<Props> = ({
   work,
   showButtonLabels = false,
-  showShare = false,
+  // showShare = false,
   showSocialInteraction = true,
   style = undefined,
   cacheKey = undefined,
@@ -59,8 +59,8 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   const { t } = useTranslation('common');
   const { id, /* author, */ title, localImages, type } = work;
-  const [session] = useSession() as [Session | null | undefined, boolean];
-  const router = useRouter();
+  // const [session] = useSession() as [Session | null | undefined, boolean];
+  // const router = useRouter();
 
   // const [work, setWork] = useState<WorkDetail>();
   // const s
