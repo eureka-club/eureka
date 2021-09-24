@@ -118,8 +118,6 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
   );
 
   useEffect(() => {
-    // debugger;
-    // console.log(data);
     if (data) {
       setGlobalSearchEngineState({
         ...globalSearchEngineState,
