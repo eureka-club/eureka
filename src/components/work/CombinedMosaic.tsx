@@ -1,4 +1,4 @@
-import { Work } from '@prisma/client';
+// import { Work } from '@prisma/client';
 import { flatten, zip } from 'lodash';
 import { FunctionComponent, useEffect, useState } from 'react';
 import Spinner from 'react-bootstrap/Spinner';

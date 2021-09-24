@@ -46,9 +46,9 @@ const SimpleLayout: FunctionComponent<Props> = ({ children }) => {
     setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: false } });
   };
 
-  const handleToastClose = () => {
-    setGlobalModalsState({ ...globalModalsState, showToast: { ...globalModalsState.showToast, show: false } });
-  };
+  // const handleToastClose = () => {
+  //   setGlobalModalsState({ ...globalModalsState, showToast: { ...globalModalsState.showToast, show: false } });
+  // };
 
   return (
     <>
