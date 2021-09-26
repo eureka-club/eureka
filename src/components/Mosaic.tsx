@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { FunctionComponent } from 'react';
 import Masonry from 'react-masonry-css';
 
+import { PostMosaicItem } from '../types/post';
 import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem } from '../types';
 import MosaicItemCycle from './cycle/MosaicItem';
 import MosaicItemPost from './post/MosaicItem';
@@ -34,12 +35,17 @@ const renderMosaicItem = (
     return <MosaicItemCycle key={`cycle-${item.id}`} cycle={item} detailed />;
   }
   if (isPostMosaicItem(item)) {
+    let pp;
+    const it: PostMosaicItem = item as PostMosaicItem;
+    if (it.works && it.works.length > 0) [pp] = it.works;
+    else if (it.cycles && it.cycles.length > 0) [pp] = it.cycles;
+
     return (
       <MosaicItemPost
         key={`post-${item.id}`}
         showComments={showComments}
         post={item}
-        postParent={postsParent}
+        postParent={pp}
         display={display}
         cacheKey={cacheKey}
         className="mb-2"

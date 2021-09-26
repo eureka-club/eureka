@@ -64,6 +64,7 @@ const renderMosaicItem = (
     const it: PostMosaicItem = item as PostMosaicItem;
     if (it.works && it.works.length > 0) [pp] = it.works;
     else if (it.cycles && it.cycles.length > 0) [pp] = it.cycles;
+
     return <MosaicItemPost key={`post-${item.id}`} post={item as PostMosaicItem} postParent={pp} />;
   }
   if (isWorkMosaicItem(item)) {
