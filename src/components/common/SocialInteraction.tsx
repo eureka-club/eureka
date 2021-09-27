@@ -161,7 +161,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
         const idx = user.favPosts ? user.favPosts.findIndex((i: Post) => i.id === entity.id) : -1;
         const favoritedByMe = idx !== -1;
         setOptimistFav(favoritedByMe);
-        setOptimistFavCount(entity.favs.length);
+        if (!entity.favs) console.error('missing favs in ', entity);
+        else setOptimistFavCount(entity.favs.length);
 
         setMySocialInfo({ favoritedByMe });
       }

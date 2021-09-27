@@ -16,6 +16,7 @@ import styles from './MosaicItem.module.css';
 import SocialInteraction from '../common/SocialInteraction';
 // import { Session } from '../../types';
 import { useCycleContext } from '../../useCycleContext';
+import { DATE_FORMAT_SHORT } from '../../constants';
 
 interface Props {
   // workWithImages: WorkWithImages;
@@ -38,6 +39,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   showTrash = false,
   // isOnDiscussion = false,
 }) => {
+  const { t } = useTranslation('common');
   const cycleContext = useCycleContext();
   const [cycle, setCycle] = useState<CycleMosaicItem | null>();
   useEffect(() => {
@@ -57,7 +59,27 @@ const MosaicItem: FunctionComponent<Props> = ({
     return false;
   };
 
-  const { t } = useTranslation('common');
+  const renderOngoinOrUpcomingDate = () => {
+    if (cycle) {
+      if (cycle.cycleWorksDates.length) {
+        const idx = cycle.cycleWorksDates.findIndex((cw) => cw.workId === work.id);
+        if (idx > -1) {
+          const cw = cycle.cycleWorksDates[idx];
+          if (cw.endDate) {
+            const d = dayjs(cw.endDate).format(DATE_FORMAT_SHORT);
+            const isPast = dayjs(cw.endDate).isBefore(new Date());
+            return (
+              <span className="pl-2 text-secondary position-absolute" style={{ top: '100%' }}>
+                {isActive() ? `${t('Ongoing')}: ${d}` : isPast ? `${t('Upcoming')}: ${d}` : `${t('Past')}: ${d}`}
+              </span>
+            );
+          }
+        }
+      }
+    }
+    return null;
+  };
+
   const { id, /* author, */ title, localImages, type } = work;
   // const [session] = useSession() as [Session | null | undefined, boolean];
   // const router = useRouter();
@@ -82,6 +104,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         {isActive() && <CgMediaLive className={styles.isActiveCircle} />}
         <span className={styles.type}>{t(type)}</span>
       </div>
+      {renderOngoinOrUpcomingDate()}
       {showSocialInteraction && work && (
         <Card.Footer className={styles.footer}>
           <SocialInteraction

@@ -88,5 +88,8 @@
   "Replies": "réponses",
   "vmcomments": "Voir plus de réponses",
   "vlcomments": "Voir moins de réponses",
-  "notFound": "Not found"
+  "notFound": "Not found",
+  "Ongoing": "Ongoing",
+  "Upcoming": "Upcoming",
+  "Past": "Past"
 }
