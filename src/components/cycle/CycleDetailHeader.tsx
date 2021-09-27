@@ -5,7 +5,7 @@ import { useAtom } from 'jotai';
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useCallback } from 'react';
 // import Button from 'react-bootstrap/Button';
 
 // import Nav from 'react-bootstrap/Nav';
@@ -21,10 +21,12 @@ import { Col, Row, Button } from 'react-bootstrap';
 // import { Work } from '@prisma/client';
 import Rating from 'react-rating';
 import { GiBrain } from 'react-icons/gi';
+// import { useCycleContext, CycleContext } from '../../useCycleContext';
 
 // import globalModalsAtom from '../../atoms/globalModals';
 
 // import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
+import dayjs from 'dayjs';
 import { MySocialInfo, Session } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
@@ -183,6 +185,29 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
     return 0;
   };
 
+  const sortWorks = useCallback(() => {
+    const worksActive: Record<number, boolean> = {};
+    cycle.cycleWorksDates.forEach((cw) => {
+      if (cw) {
+        worksActive[cw.workId!] = false;
+        if (cw.endDate) {
+          worksActive[cw.workId!] = dayjs().isBefore(new Date(cw.endDate));
+        }
+      }
+    });
+
+    const res = cycle.works.sort((i, j) => {
+      if (worksActive[j.id]) {
+        if (worksActive[i.id]) return 0;
+        return 1;
+      }
+      if (j.id > i.id) return 1;
+      return -1;
+    });
+
+    return res;
+  }, [cycle]);
+
   return (
     <Row className="mb-5">
       <Col md={9}>
@@ -211,18 +236,20 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         {/* <Button className={`${styles.seeParticipantsBtn}`} onClick={onParticipantsAction}>
           {cycle.participants.length} participants
         </Button> */}
+        {/* <CycleContext.Provider value={{ cycle }}> */}
         <div className={styles.customCarouselStaticContainer}>
           <CarouselStatic
             showSocialInteraction={false}
             // onSeeAll={async () => seeAll(cycle.works as WorkMosaicItem[], t('Eurekas I created'))}
             onSeeAll={onCarouselSeeAllAction}
             title=""
-            data={cycle.works as WorkMosaicItem[]}
+            data={sortWorks() as WorkMosaicItem[]}
             iconBefore={<></>}
             customMosaicStyle={{ height: '16em' }}
             // iconAfter={<BsCircleFill className={styles.infoCircle} />}
           />
         </div>
+        {/* </CycleContext.Provider> */}
       </Col>
       <Col md={3}>
         <UserAvatar user={cycle.creator} />
