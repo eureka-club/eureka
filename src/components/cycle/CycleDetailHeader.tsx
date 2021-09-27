@@ -1,17 +1,17 @@
 // import classNames from 'classnames';
 // import dayjs from 'dayjs';
 // import HyvorTalk from 'hyvor-talk-react';
-import { useAtom } from 'jotai';
+// import { useAtom } from 'jotai';
 import { useSession } from 'next-auth/client';
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, useCallback } from 'react';
+import { FunctionComponent } from 'react';
 // import Button from 'react-bootstrap/Button';
 
 // import Nav from 'react-bootstrap/Nav';
 // import NavItem from 'react-bootstrap/NavItem';
 // import NavLink from 'react-bootstrap/NavLink';
-import { Col, Row, Button } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 // import Spinner from 'react-bootstrap/Spinner';
 // import TabContainer from 'react-bootstrap/TabContainer';
 // import TabContent from 'react-bootstrap/TabContent';
@@ -46,7 +46,7 @@ import MosaicItem from './MosaicItem';
 import TagsInput from '../forms/controls/TagsInput';
 import UserAvatar from '../common/UserAvatar';
 import CarouselStatic from '../CarouselStatic';
-import globalSearchEngineAtom from '../../atoms/searchEngine';
+// import globalSearchEngineAtom from '../../atoms/searchEngine';
 import { MosaicContext } from '../../useMosaicContext';
 
 interface Props {
@@ -65,7 +65,7 @@ interface Props {
 const CycleDetailHeader: FunctionComponent<Props> = ({
   cycle,
   onCarouselSeeAllAction,
-  onParticipantsAction,
+  // onParticipantsAction,
   // post,
   // work,
   // isCurrentUserJoinedToCycle,
@@ -74,10 +74,10 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   // worksCount,
   // mySocialInfo,
 }) => {
-  const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
+  // const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
   // const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   // const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
-  const router = useRouter();
+  // const router = useRouter();
   const [session] = useSession() as [Session | null | undefined, boolean];
   const { t } = useTranslation('cycleDetail');
   // const hyvorId = `${WEBAPP_URL}cycle/${cycle.id}`;
@@ -144,17 +144,17 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   //   return false;
   // };
 
-  type Item = WorkMosaicItem | PostMosaicItem;
-  const seeAll = async (data: Item[], q: string, showFilterEngine = true): Promise<void> => {
-    setGlobalSearchEngineState({
-      ...globalSearchEngineState,
-      itemsFound: data as WorkMosaicItem[],
-      q: `${t('Works on Cycle')} ${cycle.id}`,
-      show: showFilterEngine,
-    });
+  // type Item = WorkMosaicItem | PostMosaicItem;
+  // const seeAll = async (data: Item[], q: string, showFilterEngine = true): Promise<void> => {
+  //   setGlobalSearchEngineState({
+  //     ...globalSearchEngineState,
+  //     itemsFound: data as WorkMosaicItem[],
+  //     q: `${t('Works on Cycle')} ${cycle.id}`,
+  //     show: showFilterEngine,
+  //   });
 
-    router.push('/search');
-  };
+  //   router.push('/search');
+  // };
 
   const getFullSymbol = () => {
     if (cycle && session) {
@@ -185,7 +185,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
     return 0;
   };
 
-  const sortWorks = useCallback(() => {
+  const sortWorks = () => {
     const worksActive: Record<number, boolean> = {};
     cycle.cycleWorksDates.forEach((cw) => {
       if (cw) {
@@ -206,7 +206,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
     });
 
     return res;
-  }, [cycle]);
+  };
 
   return (
     <Row className="mb-5">

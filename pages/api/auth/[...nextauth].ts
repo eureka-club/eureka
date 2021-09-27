@@ -83,7 +83,7 @@ import { sendMailSingIn } from '../../../src/facades/mail';
 }; */
 
 export default (req: NextApiRequest, res: NextApiResponse): void | Promise<void> => {
-  const locale = req.cookies.NEXT_LOCALE;
+  const locale = req.cookies.NEXT_LOCALE || 'es';
   return NextAuth(req, res, {
     adapter: Adapters.Prisma.Adapter({ prisma }),
     callbacks: {
@@ -119,7 +119,6 @@ export default (req: NextApiRequest, res: NextApiResponse): void | Promise<void>
           const ignoreEmailInf = t('ignoreEmailInf');
           const aboutEureka = t('aboutEureka');
           const emailReason = t('emailReason');
-
           const opt = {
             to: [
               {

@@ -62,7 +62,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   }, [cycleContext]);
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const router = useRouter();
-  const [session] = useSession() as [Session | null | undefined, boolean];
+  const [session, isLoadingSession] = useSession() as [Session | null | undefined, boolean];
   const { t } = useTranslation('cycleDetail');
   const [tabKey, setTabKey] = useState<string>();
   const tabContainnerRef = useRef<HTMLDivElement>(null);

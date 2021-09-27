@@ -25,15 +25,20 @@ const CycleDetailPage: NextPage = () => {
   const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!session) {
-      setCurrentUserIsParticipant(() => false);
-    } else if (session && cycle && session.user) {
-      const s = session as unknown as Session;
-      if (cycle.creatorId === s.user.id) setCurrentUserIsParticipant(() => true);
-      const isParticipant = cycle.participants.findIndex((p) => p.id === s.user.id) > -1;
-      setCurrentUserIsParticipant(() => isParticipant);
-    }
-  }, [session, cycle]);
+    if (!isLoadingSession) {
+      if (!session) {
+        setCurrentUserIsParticipant(() => false);
+      } else if (session && cycle && session.user) {
+        const s = session as unknown as Session;
+        if (cycle.creatorId === s.user.id) {
+          setCurrentUserIsParticipant(() => true);
+          return;
+        }
+        const isParticipant = cycle.participants.findIndex((p) => p.id === s.user.id) > -1;
+        setCurrentUserIsParticipant(() => isParticipant);
+      }
+    } else setCurrentUserIsParticipant(() => false);
+  }, [session, cycle, isLoadingSession]);
 
   useEffect(() => {
     if (router && router.query) setId(() => router.query.id as string);
