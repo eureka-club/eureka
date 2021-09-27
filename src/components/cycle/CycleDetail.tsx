@@ -218,10 +218,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
               null}
             {renderCycleOwnComments()}
           </TabPane>
-          <TabPane eventKey="my_milestone">
+          {/* <TabPane eventKey="my_milestone">
             <h2 className="mb-3">{t('My milestones')}</h2>
             <p />
-          </TabPane>
+          </TabPane> */}
           <TabPane eventKey="guidelines">
             {cycle.guidelines &&
               cycle.guidelines.map((g) => {
@@ -257,9 +257,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           <NavItem className={styles.tabBtn}>
             <NavLink eventKey="cycle-discussion">{t('Discussion')}</NavLink>
           </NavItem>
-          <NavItem className={styles.tabBtn}>
+          {/* <NavItem className={styles.tabBtn}>
             <NavLink eventKey="my_milestone">{t('My milestones')}</NavLink>
-          </NavItem>
+          </NavItem> */}
           <NavItem className={styles.tabBtn}>
             <NavLink eventKey="guidelines">{t('Guidelines')}</NavLink>
           </NavItem>
