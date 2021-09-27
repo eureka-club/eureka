@@ -187,7 +187,13 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
     <Row className="mb-5">
       <Col md={9}>
         <h2>{cycle.title}</h2>
-        {cycle.topics && <TagsInput tags={cycle.topics} readOnly />}
+        {cycle.topics && (
+          <>
+            <TagsInput className="d-inline-block" tags={cycle.topics} readOnly />
+            <TagsInput className="ml-1 d-inline-block" tags={cycle.tags!} readOnly label="" />
+          </>
+        )}
+        <br />
         <Rating
           readonly
           initialRating={getRatingAvg()}

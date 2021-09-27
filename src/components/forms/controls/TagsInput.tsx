@@ -9,10 +9,11 @@ export type TagsInputProp = {
   label?: string;
   readOnly?: boolean | null;
   max?: number;
+  className?: string;
 };
 const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
   const { t } = useTranslation('createWorkForm');
-  const { tags, setTags, label = '', readOnly = false, max = 2 } = props;
+  const { tags, setTags, label = '', readOnly = false, max = 2, className } = props;
 
   const [tagInput, setTagInput] = useState<string>('');
   const [items, setItems] = useState<string[]>([]);
@@ -45,7 +46,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
   };
 
   return (
-    <Form.Group controlId="tags">
+    <Form.Group controlId="tags" className={`${className}`}>
       {label && <Form.Label>{label}</Form.Label>}
       <div>
         {items.map((v, idx) => {

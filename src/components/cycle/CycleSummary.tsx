@@ -9,7 +9,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { DATE_FORMAT_SHORT } from '../../constants';
 import { advancedDayjs } from '../../lib/utils';
 import styles from './CycleSummary.module.css';
-import TagsInput from '../forms/controls/TagsInput';
+// import TagsInput from '../forms/controls/TagsInput';
 
 interface Props {
   cycle: Cycle;
@@ -18,15 +18,15 @@ interface Props {
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const WorkSummary: FunctionComponent<Props> = ({ cycle }) => {
+const CycleSummary: FunctionComponent<Props> = ({ cycle }) => {
   const now = new Date();
   const { t } = useTranslation('common');
   const startDate = dayjs(cycle.startDate).utc();
   const endDate = dayjs(cycle.endDate).utc();
-  const [tags, setTags] = useState<string>('');
-  useEffect(() => {
-    setTags(cycle.tags!);
-  }, [cycle]);
+  // const [tags, setTags] = useState<string>('');
+  // useEffect(() => {
+  //   setTags(cycle.tags!);
+  // }, [cycle]);
   return (
     <section className={styles.workSummary}>
       {[
@@ -39,9 +39,9 @@ const WorkSummary: FunctionComponent<Props> = ({ cycle }) => {
       ]
         .filter((i) => i)
         .join(', ')}
-      <TagsInput tags={tags} readOnly label="" />
+      {/* <TagsInput tags={tags} readOnly label="" /> */}
     </section>
   );
 };
 
-export default WorkSummary;
+export default CycleSummary;
