@@ -5,7 +5,8 @@ import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 import { Row, Col, Card } from 'react-bootstrap';
 import { FaRegComments, FaRegCompass } from 'react-icons/fa';
-
+import dayjs from 'dayjs';
+import { DATE_FORMAT_SHORT } from '../../constants';
 import SocialInteraction from '../common/SocialInteraction';
 import { PostMosaicItem } from '../../types/post';
 import LocalImageComponent from '../LocalImage';
@@ -114,7 +115,7 @@ const MosaicItem: FunctionComponent<Props> = ({
               <>
                 <Avatar user={post.creator} size="xs" />
                 {` `}
-                {new Date(post.createdAt).toLocaleDateString()}
+                {dayjs(post.createdAt).format(DATE_FORMAT_SHORT)}
               </>
             )}
           </div>
