@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
-
 import getT from 'next-translate/getT';
+import { WEBAPP_URL } from '../../../../src/constants';
 import { Session } from '../../../../src/types';
 import getApiHandler from '../../../../src/lib/getApiHandler';
 import { addParticipant, find } from '../../../../src/facades/cycle';
@@ -13,7 +13,6 @@ const bcrypt = require('bcryptjs');
 
 export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
   const session = (await getSession({ req })) as unknown as Session;
-
   const { id: cycleId } = req.query;
   const [userId, base64Hash, authorized] = req.query.cycleAuthorizeJoin;
   if (typeof cycleId !== 'string') {
@@ -45,14 +44,13 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     }
     if (user && user.email) {
       const locale = req.cookies.NEXT_LOCALE;
-      const baseUrl = req.cookies['next-auth.callback-url'];
       const t = await getT(locale, 'cycleJoin');
       const title = `${t('Hello')} ${cycle.creator.name}!`;
       /// Your request to Join the cycle [name of the cycle] has been approved.
       const emailReason = `${t('Your request to Join the cycle')} "${cycle.title}" ${t('has been')} ${
         authorized === '1' ? t('approved') : t('denied')
       }`;
-      const cycleURL = `${baseUrl}cycle/${cycle.id}`;
+      const cycleURL = `${WEBAPP_URL}/cycle/${cycle.id}`;
       const visitCycleInfo = t('visitCycleInfo');
       const thanks = t('thanks');
       const eurekaTeamThanks = t('eurekaTeamThanks');

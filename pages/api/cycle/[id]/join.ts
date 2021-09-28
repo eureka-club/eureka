@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
-
 import getT from 'next-translate/getT';
+import { WEBAPP_URL } from '../../../../src/constants';
 import { Session } from '../../../../src/types';
 import getApiHandler from '../../../../src/lib/getApiHandler';
 import { addParticipant, find, removeParticipant } from '../../../../src/facades/cycle';
@@ -41,9 +41,9 @@ export default getApiHandler()
         const params = `${cycle.id}!|!${session.user.id}`;
         const hash = bcrypt.hashSync(params, 8);
         const base64Hash = Buffer.from(hash, 'binary').toString('base64');
-        const authorizeURL = `${req.headers.origin}/api/cycle/${cycle.id}/${session.user.id}/${base64Hash}/1`;
-        const denyURL = `${req.headers.origin}/api/cycle/${cycle.id}/${session.user.id}/${base64Hash}/0`;
-        const applicantMediathequeURL = `${req.headers.origin}/mediatheque/${session.user.id}`;
+        const authorizeURL = `${WEBAPP_URL}/api/cycle/${cycle.id}/${session.user.id}/${base64Hash}/1`;
+        const denyURL = `${WEBAPP_URL}/api/cycle/${cycle.id}/${session.user.id}/${base64Hash}/0`;
+        const applicantMediathequeURL = `${WEBAPP_URL}/mediatheque/${session.user.id}`;
         const locale = req.cookies.NEXT_LOCALE;
         const t = await getT(locale, 'cycleJoin');
 
