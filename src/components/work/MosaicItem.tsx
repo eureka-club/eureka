@@ -9,6 +9,8 @@ import { Card /* Button */ } from 'react-bootstrap';
 // import { useSession } from 'next-auth/client';
 import { CgMediaLive } from 'react-icons/cg';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import isBetween from 'dayjs/plugin/isBetween';
 import { CycleMosaicItem } from '../../types/cycle';
 import { /* WorkWithImages, */ WorkMosaicItem } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
@@ -18,6 +20,8 @@ import SocialInteraction from '../common/SocialInteraction';
 import { useCycleContext } from '../../useCycleContext';
 import { DATE_FORMAT_SHORT } from '../../constants';
 
+dayjs.extend(isBetween);
+dayjs.extend(utc);
 interface Props {
   // workWithImages: WorkWithImages;
   work: WorkMosaicItem;
@@ -52,7 +56,8 @@ const MosaicItem: FunctionComponent<Props> = ({
         const idx = cycle.cycleWorksDates.findIndex((cw) => cw.workId === work.id);
         if (idx > -1) {
           const cw = cycle.cycleWorksDates[idx];
-          if (cw.endDate) return dayjs().isBefore(new Date(cw.endDate));
+          if (cw.startDate && cw.endDate) return dayjs().isBetween(cw.startDate, cw.endDate);
+          if (cw.endDate) return dayjs().isBefore(cw.endDate);
         }
       }
     }
@@ -66,11 +71,11 @@ const MosaicItem: FunctionComponent<Props> = ({
         if (idx > -1) {
           const cw = cycle.cycleWorksDates[idx];
           if (cw.endDate) {
-            const d = dayjs(cw.endDate).format(DATE_FORMAT_SHORT);
-            const isPast = dayjs(cw.endDate).isBefore(new Date());
+            const d = dayjs(cw.endDate).utc().format(DATE_FORMAT_SHORT);
+            const isPast = dayjs().isAfter(cw.endDate);
             return (
               <span className="pl-2 text-secondary position-absolute" style={{ top: '100%' }}>
-                {isActive() ? `${t('Ongoing')}: ${d}` : isPast ? `${t('Upcoming')}: ${d}` : `${t('Past')}: ${d}`}
+                {isActive() ? `${t('Ongoing')}: ${d}` : !isPast ? `${t('Upcoming')}: ${d}` : `${t('Past')}: ${d}`}
               </span>
             );
           }
