@@ -25,6 +25,19 @@ const CycleDetailPage: NextPage = () => {
   const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
 
   useEffect(() => {
+    if (router && router.query) setId(() => router.query.id as string);
+  }, [router]);
+
+  useEffect(() => {
+    if (data) {
+      const c = data as CycleMosaicItem;
+      if (c) {
+        setCycle(c);
+      }
+    }
+  }, [data]);
+
+  useEffect(() => {
     if (!isLoadingSession) {
       if (!session) {
         setCurrentUserIsParticipant(() => false);
@@ -40,34 +53,8 @@ const CycleDetailPage: NextPage = () => {
     } else setCurrentUserIsParticipant(() => false);
   }, [session, cycle, isLoadingSession]);
 
-  useEffect(() => {
-    if (router && router.query) setId(() => router.query.id as string);
-  }, [router]);
-
-  useEffect(() => {
-    if (session && data && router) {
-      const c = data as CycleMosaicItem;
-      if (c) {
-        setCycle(c);
-        // if (c) {
-        //   if (c.access !== 1) {
-        //     if (!session) {
-        //       router.push('/');
-        //     } else if (c.participants && session.user) {
-        //       const participantIdx = c.participants.findIndex((i) => i.id === session.user.id);
-        //       if (c.creatorId !== session.user.id && participantIdx === -1 && !session.user.roles.includes('admin')) {
-        //         router.push('/');
-        //       }
-        //     }
-        //   }
-        // }
-      }
-    }
-  }, [data, session, router]);
-
   const renderCycleDetailComponent = () => {
     if (isLoadingSession || isFetching || isLoading) return <Spinner animation="grow" variant="secondary" />;
-
     if (cycle) {
       const res = (
         <CycleContext.Provider value={{ cycle, currentUserIsParticipant }}>
