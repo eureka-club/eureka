@@ -60,7 +60,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   useEffect(() => {
     if (cycle) {
-      setParticipants(cycle.participants.length);
+      setParticipants(cycle.participants.length); //+1 creator count as well
     }
     if (session && user) {
       if (!user.joinedCycles.length) setIsCurrentUserJoinedToCycle(false);
@@ -209,7 +209,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         )}
       </div>
 
-      <div className={styles.participantsInfo}>{`${participants} ${t('participants')}`}</div>
+      <div className={styles.participantsInfo}>{`${participants + 1} ${t('participants')}`}</div>
       {showSocialInteraction && (
         <Card.Footer className={styles.footer}>
           {cycle && (

@@ -71,12 +71,43 @@ const MosaicItem: FunctionComponent<Props> = ({
         if (idx > -1) {
           const cw = cycle.cycleWorksDates[idx];
           if (cw.endDate) {
-            const d = dayjs(cw.endDate).utc().format(DATE_FORMAT_SHORT);
+            const sd = dayjs(cw.endDate).utc().format(DATE_FORMAT_SHORT);
+
+            const ed = cw.startDate ? dayjs(cw.startDate).utc().format(DATE_FORMAT_SHORT) : '-';
             const isPast = dayjs().isAfter(cw.endDate);
+
+            const res = () => {
+              const dateOut = (
+                <span>
+                  <em style={{ fontSize: '.8em' }}>{`${sd} - ${ed}`}</em>
+                </span>
+              );
+              const labelOut = (label: string) => <span className="d-block">{`${t(label)}`}</span>;
+              if (isActive())
+                return (
+                  <>
+                    {labelOut('Ongoing')}
+                    {dateOut}
+                  </>
+                );
+              if (!isPast)
+                return (
+                  <>
+                    {labelOut('Upcoming')}
+                    {dateOut}
+                  </>
+                );
+              return (
+                <>
+                  {labelOut('Past')}
+                  {dateOut}
+                </>
+              );
+            };
             return (
-              <span className="pl-2 text-secondary position-absolute" style={{ top: '100%' }}>
-                {isActive() ? `${t('Ongoing')}: ${d}` : !isPast ? `${t('Upcoming')}: ${d}` : `${t('Past')}: ${d}`}
-              </span>
+              <h6 className="d-block w-100 text-center mt-1 text-secondary position-absolute" style={{ top: '100%' }}>
+                {res()}
+              </h6>
             );
           }
         }
