@@ -1,6 +1,6 @@
 import { Cycle, CycleComplementaryMaterial, LocalImage, Prisma, User, RatingOnCycle } from '@prisma/client';
 
-import { StoredFileUpload, Session } from '../types';
+import { StoredFileUpload } from '../types';
 import { CreateCycleServerFields, CreateCycleServerPayload, CycleMosaicItem } from '../types/cycle';
 import prisma from '../lib/prisma';
 

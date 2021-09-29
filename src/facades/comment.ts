@@ -1,11 +1,6 @@
 import { Cycle, Comment, User, Work, Post } from '@prisma/client';
 
-import {
-  CreateCommentServerFields,
-  CreateCommentServerPayload,
-  CommentWithCycleWorkComment,
-  CommentMosaicItem,
-} from '../types/comment';
+import { CreateCommentServerFields, CreateCommentServerPayload, CommentMosaicItem } from '../types/comment';
 import prisma from '../lib/prisma';
 
 export const find = async (id: number): Promise<CommentMosaicItem | null> => {

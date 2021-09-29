@@ -39,7 +39,7 @@ interface Props {
 const MosaicItem: FunctionComponent<Props> = ({
   cycle,
   showButtonLabels = false,
-  showShare,
+  // showShare,
   detailed = false,
   showSocialInteraction = true,
   cacheKey = undefined,
@@ -60,7 +60,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   useEffect(() => {
     if (cycle) {
-      setParticipants(cycle.participants.length); //+1 creator count as well
+      setParticipants(cycle.participants.length);
     }
     if (session && user) {
       if (!user.joinedCycles.length) setIsCurrentUserJoinedToCycle(false);
