@@ -42,7 +42,8 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
   useEffect(() => {
     if (cycleContext) {
       if (cycleContext.cycle) {
-        if (!cycleContext.currentUserIsParticipant) router.push(`/cycle/${cycleContext.cycle.id}`);
+        if (!cycleContext.currentUserIsParticipant && cycleContext.cycle.access !== 1)
+          router.push(`/cycle/${cycleContext.cycle.id}`);
         setCycle(cycleContext.cycle);
         setCurrentUserIsParticipant(cycleContext.currentUserIsParticipant || false);
       }
@@ -63,7 +64,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
     return false;
   };
 
-  if (cycle && !currentUserIsParticipant) return null;
+  if (cycle && cycle.access !== 1 && !currentUserIsParticipant) return null;
 
   return (
     <>
@@ -79,7 +80,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
           <div className={classNames(styles.imgWrapper, 'mb-3')}>
             <LocalImageComponent filePath={post.localImages[0].storedFile} alt={post.title} />
           </div>
-          <SocialInteraction entity={post} parent={cycle || work || null} showCounts />
+          <SocialInteraction entity={post} parent={cycle || work || null} showCounts showButtonLabels={false} />
           <table className={styles.parentContent}>
             <tbody>
               {currentWork != null && (
