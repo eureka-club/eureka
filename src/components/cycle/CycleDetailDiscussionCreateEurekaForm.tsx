@@ -170,7 +170,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
           type="text"
           maxLength={80}
           required
-          placeholder="Title"
+          placeholder={t('Title')}
           value={newEureka.title}
           onChange={onChangeFieldEurekaForm}
         />

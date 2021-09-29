@@ -89,8 +89,8 @@ const MosaicItem: FunctionComponent<Props> = ({
           showToast: {
             show: true,
             type: 'success',
-            title: 'Join Cycle request notification',
-            message: json.data,
+            title: t('Join Cycle request notification'),
+            message: t(json.data),
           },
         });
       }
@@ -145,7 +145,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         showToast: {
           show: true,
           type: 'success',
-          title: 'Join Cycle request notification',
+          title: t('Join Cycle request notification'),
           message: mutationResponse,
         },
       });

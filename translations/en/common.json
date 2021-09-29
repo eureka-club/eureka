@@ -91,5 +91,9 @@
   "notFound": "Not found",
   "Ongoing": "Ongoing",
   "Upcoming": "Upcoming",
-  "Past": "Past"
+  "Past": "Past",
+  "Join Cycle request notification": "Join Cycle request notification",
+  "Request sent successfully": "Request sent successfully",
+  "Failed to send the request": "Failed to send the request",
+  "Clear rating": "Clear rating"
 }

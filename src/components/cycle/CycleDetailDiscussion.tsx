@@ -157,7 +157,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
                   md={canCreateWork() ? 4 : 6}
                   className={`${styles.optButton} ${styles.commentBtn} ${isCreateComment && styles.optButtonActive}`}
                 >
-                  <MdShortText className={styles.optButtonIcon} /> Add a quick comment
+                  <MdShortText className={styles.optButtonIcon} /> {t('Add a quick comment')}
                 </Button>
                 {canCreateWork() && (
                   <Button

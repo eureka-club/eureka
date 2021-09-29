@@ -334,7 +334,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
       if (startDate) {
         if (cycleStartDate.isAfter(dayjs(startDate))) {
-          showToast.message = 'Date Range Error';
+          showToast.message = t('Date Range Error');
           setGlobalModalsState({
             ...globalModalsState,
             showToast,
@@ -343,7 +343,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
           return false;
         }
         if (cycleEndDate.isBefore(dayjs(startDate))) {
-          showToast.message = 'Date Range Error';
+          showToast.message = t('Date Range Error');
           setGlobalModalsState({
             ...globalModalsState,
             showToast,
@@ -353,7 +353,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
       }
       if (endDate) {
         if (cycleStartDate.isAfter(dayjs(endDate))) {
-          showToast.message = 'Date Range Error';
+          showToast.message = t('Date Range Error');
           setGlobalModalsState({
             ...globalModalsState,
             showToast,
@@ -362,7 +362,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
           return false;
         }
         if (cycleEndDate.isBefore(dayjs(endDate))) {
-          showToast.message = 'Date Range Error';
+          showToast.message = t('Date Range Error');
           setGlobalModalsState({
             ...globalModalsState,
             showToast,

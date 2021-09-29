@@ -484,7 +484,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
             )}{' '}
             {showRating && !loadingSocialInteraction && getRatingsCount()}{' '}
             {showTrash && (
-              <button type="button" title="Clear rating" className={styles.clearRating} onClick={clearRating}>
+              <button type="button" title={t('Clear rating')} className={styles.clearRating} onClick={clearRating}>
                 <FiTrash2 />
               </button>
             )}

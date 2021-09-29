@@ -22,6 +22,7 @@
   "Cycle itself": "Cycle itself",
   "About": "About",
   "Discussion": "Discussion",
+  "Title": "Title",
   "Image": "Image",
   "Type to add tag": "Type to add tag",
   "Select work": "Select work",
@@ -31,5 +32,6 @@
   "Why does this cycle matter": "Why does this cycle matter",
   "Participants": "Participants",
   "Guidelines": "Guidelines",
-  "My milestones": "My milestones"
+  "My milestones": "My milestones",
+  "Add a quick comment": "Add a quick comment"
 }

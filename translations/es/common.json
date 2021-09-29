@@ -89,7 +89,11 @@
   "vmcomments": "Ver más respuestas",
   "vlcomments": "Ver menos respuestas",
   "notFound": "Not found",
-  "Ongoing": "Ongoing",
-  "Upcoming": "Upcoming",
-  "Past": "Past"
+  "Ongoing": "En curso",
+  "Upcoming": "Próximo",
+  "Past": "Pasado",
+  "Join Cycle request notification": "Notificación de solicitud de ingreso al Ciclo",
+  "Request sent successfully": "Solicitud enviada con éxito",
+  "Failed to send the request": "No se pudo enviar la solicitud",
+  "Clear rating": "Eliminar puntaje"
 }
