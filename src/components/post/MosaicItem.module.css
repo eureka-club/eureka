@@ -290,9 +290,7 @@
 .postParentTitle a{
   color: var(--eureka-grey) !important;
 }
-.postParentTitle span{
-  border-bottom: solid 1px var(--eureka-grey);
-}
+
 .newCommentInput{
   background-color: #F5F5F5;
   border: solid 1px #e7e2e2 !important;

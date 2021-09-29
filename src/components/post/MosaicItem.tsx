@@ -46,19 +46,29 @@ const MosaicItem: FunctionComponent<Props> = ({
   // style,
   // showTrash,
 }) => {
-  const postLinkHref = ((): string | null => {
-    if (postParent == null) {
-      return `/post/${post.id}`;
+  const postParentLinkHref = ((): string | null => {
+    if (postParent) {
+      if (isCycle(postParent)) {
+        return `/cycle/${postParent.id}`;
+      }
+      if (isWork(postParent)) {
+        return `/work/${postParent.id}`;
+      }
     }
-    if (isCycle(postParent)) {
-      return `/cycle/${postParent.id}/post/${post.id}`;
-    }
-    if (isWork(postParent)) {
-      return `/work/${postParent.id}/post/${post.id}`;
-    }
-
     return null;
   })();
+  const postLinkHref = ((): string => {
+    if (postParent) {
+      if (isCycle(postParent)) {
+        return `/cycle/${postParent.id}/post/${post.id}`;
+      }
+      if (isWork(postParent)) {
+        return `/work/${postParent.id}/post/${post.id}`;
+      }
+    }
+    return `/post/${post.id}`;
+  })();
+
   // const [creator] = useState(post.creator as User);
   const { /* title, localImages, id, */ type } = post;
   // const [newCommentInput, setNewCommentInput] = useState<string>();
@@ -75,8 +85,8 @@ const MosaicItem: FunctionComponent<Props> = ({
       <Card className={`${styles.container} ${className}`}>
         {postParent && (
           <h2 className={styles.postParentTitle}>
-            {postLinkHref != null ? (
-              <Link href={postLinkHref}>
+            {postParentLinkHref != null ? (
+              <Link href={postParentLinkHref}>
                 <a>
                   <FaRegCompass /> <span>{postParent.title}</span>
                 </a>
@@ -89,7 +99,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           </h2>
         )}
         <div className={`${styles.imageContainer} ${styles.detailedImageContainer}`}>
-          {postLinkHref != null ? (
+          {postParentLinkHref != null ? (
             <Link href={postLinkHref}>
               <a>
                 <LocalImageComponent
@@ -163,7 +173,11 @@ const MosaicItem: FunctionComponent<Props> = ({
           </Col>
           <Col xs={12} md={8}>
             <div className={styles.detailedInfo}>
-              <h5 className={styles.postTitle}>{post.title}</h5>
+              <h5 className={styles.postTitle}>
+                <Link href={postLinkHref}>
+                  <a>{post.title}</a>
+                </Link>
+              </h5>
               <div className="mb-5">
                 <div
                   className={styles.dangerouslySetInnerHTML}
@@ -190,8 +204,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   //         <Col>
   //           {postParent && (
   //             <h2 className={styles.postParentTitle}>
-  //               {postLinkHref != null ? (
-  //                 <Link href={postLinkHref}>
+  //               {postParentLinkHref != null ? (
+  //                 <Link href={postParentLinkHref}>
   //                   <a>
   //                     <FaRegCompass /> <span>{getDirectParent()!.title}</span>
   //                   </a>
@@ -213,8 +227,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   //       <Row>
   //         <Col md={5} xs={5}>
   //           <div className={styles.imageContainerHorizontally}>
-  //             {postLinkHref != null ? (
-  //               <Link href={postLinkHref}>
+  //             {postParentLinkHref != null ? (
+  //               <Link href={postParentLinkHref}>
   //                 <a>
   //                   <LocalImageComponent
   //                     className={styles.postImage}
