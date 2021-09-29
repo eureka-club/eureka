@@ -317,13 +317,29 @@ const CreateWorkForm: FunctionComponent = () => {
           </Row>
           <Row>
             <Col>
+              <FormGroup controlId="topics">
+                <FormLabel>{t('topicsLabel')}</FormLabel>
+                <TagsInputTypeAhead
+                  data={topics}
+                  items={items}
+                  setItems={setItems}
+                  labelKey={(res) => t(`topics:${res.code}`)}
+                  max={3}
+                />
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <TagsInput tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
               <FormGroup controlId="link">
                 <FormLabel>{t('linkFieldLabel')}</FormLabel>
                 <FormControl type="text" placeholder="http://" />
               </FormGroup>
-            </Col>
-            <Col>
-              <TagsInput tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
             </Col>
           </Row>
           <Row>
@@ -348,21 +364,6 @@ const CreateWorkForm: FunctionComponent = () => {
                   <option value="white">{t('authorEthnicityIsWhite')}</option>
                   <option value="non-white">{t('authorEthnicityIsNotWhite')}</option>
                 </FormControl>
-              </FormGroup>
-            </Col>
-          </Row>
-
-          <Row>
-            <Col>
-              <FormGroup controlId="topics">
-                <FormLabel>{t('topicsLabel')}</FormLabel>
-                <TagsInputTypeAhead
-                  data={topics}
-                  items={items}
-                  setItems={setItems}
-                  labelKey={(res) => t(`topics:${res.code}`)}
-                  max={3}
-                />
               </FormGroup>
             </Col>
           </Row>

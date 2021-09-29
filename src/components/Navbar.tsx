@@ -97,7 +97,7 @@ const NavBar: FunctionComponent = () => {
               <Col className={styles.brandContainer}>
                 <img src="/img/logo.png" className="d-inline-block align-middle mr-2" width={52} alt="Project logo" />
               </Col>
-              <Col>
+              <Col className="pr-0">
                 {/* <h1 className={styles.brandText}> */}
                 <div className={styles.siteName}>{siteName}</div>
 

@@ -6,7 +6,6 @@
   "linkFieldLabel": "Enlace a la obra",
   "titleFieldLabel": "Título",
   "authorFieldLabel": "Autoría",
-  "topicsFieldLabel": "Temas principales (5 máx)",
   "imageCoverFieldLabel": "Portada",
   "imageCoverFieldPlaceholder": "seleccionar archivo...",
   "releaseYearFieldLabel": "Año de producción",
@@ -32,5 +31,7 @@
   "Add a second origin country": "Agregar 2o país",
   "Remove the second origin country": "Eliminar 2o país",
   "Topics": "Topics",
-  "topicsLabel": "Ayúdanos a organizar nuestra biblioteca indicando a qué categoría(s) pertenece esta obra. (3 máx.)"
+  "topicsLabel": "Temas principales de la obra (3 máx, selecciona en la lista)",
+  "topicsFieldLabel": "Temas adicionales de la obra (2 máx, libre)",
+  "topicsPostLabel": "Temas principales de la publicación (3 máx, selecciona en la lista)"
 }

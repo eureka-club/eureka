@@ -367,7 +367,7 @@ const CreatePostForm: FunctionComponent = () => {
           </Row>
           <Row>
             <FormGroup controlId="topics">
-              <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel>
+              <FormLabel>{t('createWorkForm:topicsPostLabel')}</FormLabel>
               <TagsInputTypeAhead
                 data={topics}
                 items={items}
