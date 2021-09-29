@@ -46,6 +46,8 @@ const SearchEngine: FunctionComponent<Props> = ({
   const [filtersChecked, setFiltersChecked] = useState<Record<string, boolean>>({
     movie: false,
     documentary: false,
+    book: false,
+    'fiction-book': false,
   });
   // const [onlyByCountries] = useState<string[]>([]);
   // const [countryQuery, setCountryQuery] = useState<string[] | undefined>([]);
@@ -57,6 +59,33 @@ const SearchEngine: FunctionComponent<Props> = ({
       ...{ onlyByCountries },
     });
   }, [tags]);
+
+  useEffect(() => {
+    if (globalSearchEngineState.only.length) {
+      const o: Record<string, boolean> = {};
+
+      const idxbook = globalSearchEngineState.only.findIndex((i) => i === 'book');
+      if (idxbook > -1) o.book = true;
+      else o.book = false;
+
+      const idxfictionBook = globalSearchEngineState.only.findIndex((i) => i === 'fiction-book');
+      if (idxfictionBook > -1) o['fiction-book'] = true;
+      else o['fiction-book'] = false;
+
+      const idxmovie = globalSearchEngineState.only.findIndex((i) => i === 'movie');
+      if (idxmovie > -1) o.movie = true;
+      else o.movie = false;
+
+      const idxdocumentary = globalSearchEngineState.only.findIndex((i) => i === 'documentary');
+      if (idxdocumentary > -1) o.documentary = true;
+      else o.documentary = false;
+
+      setFiltersChecked((res) => ({
+        ...res,
+        ...o,
+      }));
+    }
+  }, [globalSearchEngineState]);
 
   const fetchCountries = async () => {
     const res = await fetch(`/api/taxonomy/countries?q=all`);
