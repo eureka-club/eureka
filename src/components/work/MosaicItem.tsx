@@ -71,9 +71,9 @@ const MosaicItem: FunctionComponent<Props> = ({
         if (idx > -1) {
           const cw = cycle.cycleWorksDates[idx];
           if (cw.endDate) {
-            const sd = dayjs(cw.endDate).utc().format(DATE_FORMAT_SHORT);
+            const ed = dayjs(cw.endDate).utc().format(DATE_FORMAT_SHORT);
 
-            const ed = cw.startDate ? dayjs(cw.startDate).utc().format(DATE_FORMAT_SHORT) : '-';
+            const sd = cw.startDate ? dayjs(cw.startDate).utc().format(DATE_FORMAT_SHORT) : '-';
             const isPast = dayjs().isAfter(cw.endDate);
 
             const res = () => {

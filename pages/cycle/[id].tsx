@@ -73,11 +73,7 @@ const CycleDetailPage: NextPage = () => {
         </Alert>
       );
 
-    return (
-      <Alert variant="warning">
-        <>{t('notFound')}</>
-      </Alert>
-    );
+    return <></>;
   };
 
   return <SimpleLayout title={cycle ? cycle.title : ''}>{renderCycleDetailComponent()}</SimpleLayout>;
