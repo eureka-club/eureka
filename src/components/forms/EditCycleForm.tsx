@@ -7,7 +7,6 @@ import { FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef,
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
-import FormCheck from 'react-bootstrap/FormCheck';
 import FormControl from 'react-bootstrap/FormControl';
 // import FormFile from 'react-bootstrap/FormFile';
 import FormGroup from 'react-bootstrap/FormGroup';
@@ -16,6 +15,7 @@ import FormLabel from 'react-bootstrap/FormLabel';
 // import ModalBody from 'react-bootstrap/ModalBody';
 // import ModalHeader from 'react-bootstrap/ModalHeader';
 // import ModalTitle from 'react-bootstrap/ModalTitle';
+import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 import { useMutation } from 'react-query';
@@ -51,6 +51,7 @@ interface Props {
 // const COMPLEMENTARY_MATERIAL_MAX_SINGLE_FILE_SIZE = 1024 * 1024 * 10;
 
 const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
+  const editorRef = useRef<any>(null);
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
   const { locale } = useRouter();
 
@@ -76,6 +77,25 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
   const [namespace, setNamespace] = useState<Record<string, string>>();
   const { data: topics } = useTopics();
   const [items, setItems] = useState<string[]>([]);
+  const [access, setAccess] = useState<number | undefined>(1);
+  const [cycleAccessChecked, setCycleAccessChecked] = useState<{
+    public: boolean;
+    private: boolean;
+    secret: boolean;
+  }>({
+    private: false,
+    public: false,
+    secret: false,
+  });
+
+  useEffect(() => {
+    if (cycle) {
+      const pc = cycle.access === 1;
+      const pr = cycle.access === 2;
+      const secret = cycle.access === 3;
+      setCycleAccessChecked(() => ({ public: pc, private: pr, secret }));
+    }
+  }, [cycle]);
 
   useEffect(() => {
     setTags(cycle.tags!);
@@ -219,6 +239,18 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
     );
   };
   */
+  const handlerCycleAccessCheckedChange = (val: string) => {
+    setCycleAccessChecked(() => ({
+      private: false,
+      public: false,
+      secret: false,
+    }));
+    setAccess(() => {
+      return { public: 1, private: 2, secret: 3 }[`${val}`];
+    });
+    setCycleAccessChecked((res) => ({ ...res, [`${val}`]: true }));
+  };
+
   const handleFormClear = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
 
@@ -235,6 +267,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
       form.startDate.value = '';
       form.endDate.value = '';
       form.description.value = '';
+      editorRef.current.setContent('');
     }
   };
 
@@ -250,13 +283,14 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
       id: cycle.id,
       // includedWorksIds: selectedWorksForCycle.map((work) => work.id),
       // coverImage: cycleCoverImageFile,
-      isPublic: form.isPublic.checked,
+      access: access || 1,
       title: form.cycleTitle.value,
       languages: form.languages.value,
       startDate: form.startDate.value,
       endDate: form.endDate.value,
       countryOfOrigin: countryOrigin,
-      contentText: form.description.value,
+      // contentText: form.description.value,
+      contentText: editorRef.current.getContent(), // ;form.description.value,
       // complementaryMaterials,
       tags,
       topics: items.join(','),
@@ -418,6 +452,16 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
                 <FormLabel>*{t('newCycleLanguageLabel')}</FormLabel>
                 <LanguageSelect defaultValue={cycle.languages} />
               </FormGroup>
+              <FormGroup controlId="topics">
+                <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel>
+                <TagsInputTypeAhead
+                  data={topics}
+                  items={items}
+                  setItems={setItems}
+                  labelKey={(res) => t(`topics:${res.code}`)}
+                  max={3}
+                />
+              </FormGroup>
               <TagsInput tags={tags} setTags={setTags} label={t('newCycleTopicsLabel')} />
               {/* <FormGroup controlId="topics">
                 <FormLabel>{t('newCycleTopicsLabel')}</FormLabel>
@@ -458,33 +502,66 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
                   placeholder={namespace && cycle.countryOfOrigin ? namespace[cycle.countryOfOrigin] : ''}
                 />
               </FormGroup>
-              <FormGroup controlId="topics">
-                <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel>
-                <TagsInputTypeAhead
-                  data={topics}
-                  items={items}
-                  setItems={setItems}
-                  labelKey={(res) => t(`topics:${res.code}`)}
-                  max={3}
-                />
-              </FormGroup>
-              <FormGroup controlId="description">
-                <FormLabel>*{t('newCyclePitchLabel')}</FormLabel>
-                <FormControl defaultValue={cycle.contentText as string} as="textarea" rows={5} required />
-              </FormGroup>
             </Col>
           </Row>
-
           <Row>
-            <Col>
-              <FormCheck
-                type="checkbox"
-                defaultChecked={cycle.access === 1}
-                inline
-                id="isPublic"
-                label={t('isPublicLabel')}
-              />
+            <Col xs={12} md={8}>
+              <FormGroup controlId="description">
+                <FormLabel>*{t('newCyclePitchLabel')}</FormLabel>
+                {/* <FormControl defaultValue={cycle.contentText as string} as="textarea" rows={5} required /> */}
+                <EditorCmp
+                  onInit={(_: any, editor) => {
+                    editorRef.current = editor;
+                  }}
+                  initialValue={cycle.contentText!}
+                  init={{
+                    height: 300,
+                    menubar: false,
+                    plugins: [
+                      'advlist autolink lists link image charmap print preview anchor',
+                      'searchreplace visualblocks code fullscreen',
+                      'insertdatetime media table paste code help wordcount',
+                    ],
+                    relative_urls: false,
+                    toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
+                    // toolbar:
+                    //   'undo redo | formatselect | ' +
+                    //   'bold italic backcolor | alignleft aligncenter ' +
+                    //   'alignright alignjustify | bullist numlist outdent indent | ' +
+                    //   'removeformat | help',
+                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                  }}
+                />
+              </FormGroup>
             </Col>
+            <Col xs={12} md={4}>
+              <Form.Group className={`${styles.cycleAccesForGroup}`}>
+                <Form.Label className="h5">{t('Privacy settings')}</Form.Label>
+                <Form.Check
+                  label={t('Public')}
+                  type="radio"
+                  onChange={() => handlerCycleAccessCheckedChange('public')}
+                  checked={cycleAccessChecked.public}
+                />
+                <small className="ml-3 text-muted">{t('cycleAccesPublicInfo')}.</small>
+                <Form.Check
+                  label={t('Private')}
+                  type="radio"
+                  onChange={() => handlerCycleAccessCheckedChange('private')}
+                  checked={cycleAccessChecked.private}
+                />
+                <small className="ml-3 text-muted">{t('cycleAccesPrivateInfo')}.</small>
+                <Form.Check
+                  label={t('Secret')}
+                  type="radio"
+                  onChange={() => handlerCycleAccessCheckedChange('secret')}
+                  checked={cycleAccessChecked.secret}
+                />
+                <small className="ml-3 text-muted">{t('cycleAccesSecretInfo')}.</small>
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row>
             <Col>
               <Button
                 // disabled={!selectedWorksForCycle.length || !cycleCoverImageFile}

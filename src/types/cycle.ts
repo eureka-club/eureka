@@ -71,7 +71,7 @@ export interface EditCycleClientPayload {
   id: number;
   includedWorksIds?: number[];
   coverImage?: File;
-  isPublic?: boolean;
+  access: number;
   title?: string;
   languages?: string;
   startDate?: string;
