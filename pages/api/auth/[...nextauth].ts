@@ -84,7 +84,7 @@ import { sendMailSingIn } from '../../../src/facades/mail';
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   const locale = req.cookies.NEXT_LOCALE || 'es';
-  const response = await NextAuth(req, res, {
+  return NextAuth(req, res, {
     adapter: Adapters.Prisma.Adapter({ prisma }),
     callbacks: {
       session: async (session, user: User) => {
@@ -151,6 +151,4 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
       verifyRequest: `/${locale}/auth/emailVerify`, // (used for check email message)
     },
   });
-  console.log(response);
-  return response;
 };
