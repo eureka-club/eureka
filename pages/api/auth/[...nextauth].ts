@@ -82,9 +82,9 @@ import { sendMailSingIn } from '../../../src/facades/mail';
   return options;
 }; */
 
-export default (req: NextApiRequest, res: NextApiResponse): void | Promise<void> => {
+export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   const locale = req.cookies.NEXT_LOCALE || 'es';
-  return NextAuth(req, res, {
+  const response = await NextAuth(req, res, {
     adapter: Adapters.Prisma.Adapter({ prisma }),
     callbacks: {
       session: async (session, user: User) => {
@@ -151,4 +151,6 @@ export default (req: NextApiRequest, res: NextApiResponse): void | Promise<void>
       verifyRequest: `/${locale}/auth/emailVerify`, // (used for check email message)
     },
   });
+  console.log(response);
+  return response;
 };

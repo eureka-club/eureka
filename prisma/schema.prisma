@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["microsoftSqlServer","nativeTypes"]
+  previewFeatures = ["microsoftSqlServer"]
 }
 
 datasource db {
@@ -364,7 +364,7 @@ model RatingOnWork {
 
 model RatingOnCycle {
   ratingOnCycleId     Int       @default(autoincrement()) @id @map("id")
-  user                User?     @relation(fields: [userId], references: [id])
+  user                User?     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   userId              Int?      
   cycle               Cycle?    @relation(fields: [cycleId], references: [id])
   cycleId             Int?      
