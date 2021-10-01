@@ -82,7 +82,7 @@ import { sendMailSingIn } from '../../../src/facades/mail';
   return options;
 }; */
 
-export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
+export default (req: NextApiRequest, res: NextApiResponse): void | Promise<void> => {
   const locale = req.cookies.NEXT_LOCALE || 'es';
   return NextAuth(req, res, {
     adapter: Adapters.Prisma.Adapter({ prisma }),
