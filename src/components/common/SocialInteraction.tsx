@@ -496,7 +496,12 @@ const SocialInteraction: FunctionComponent<Props> = ({
         {showShare && (
           <div className="ml-auto">
             <OverlayTrigger trigger="click" placement="right" overlay={popoverShares}>
-              <Button title={t('Share')} variant="link" className={`${styles.buttonSI} pt-0 pr-0 text-success`}>
+              <Button
+                style={{ fontSize: '.9em' }}
+                title={t('Share')}
+                variant="link"
+                className={`${styles.buttonSI} pt-0 pr-0 text-success`}
+              >
                 <FiShare2 />
                 <br />
                 {showButtonLabels && <span className={classnames(styles.info, styles.active)}>{t('Share')}</span>}
