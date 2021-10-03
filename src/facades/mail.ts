@@ -39,9 +39,17 @@ const sendEmailWebhook = async (opt: MailDataRequired) => {
     console.dir(body);
     return false;
   } catch (error) {
-    console.error(error);
-    // eslint-disable-next-line no-console
-    console.dir(error);
+    const e = error as unknown as { response: { body: any } };
+    if (error) {
+      // eslint-disable-next-line no-console
+      // console.dir(error.response.body.errors);
+      // // eslint-disable-next-line no-console
+      // console.dir(error.response.body.errors[0]);
+      // eslint-disable-next-line no-console
+      console.error(e.response.body.errors[0].message);
+      // eslint-disable-next-line no-console
+      console.log(JSON.stringify(e.response.body));
+    }
     return false;
   }
   // return false;
