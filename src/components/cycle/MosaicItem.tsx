@@ -84,6 +84,7 @@ const MosaicItem: FunctionComponent<Props> = ({
       const res = await fetch(`/api/cycle/${cycle.id}/join`, { method: 'POST' });
       const json = await res.json();
       if ('data' in json) {
+        console.log(json.error);
         setGlobalModalsState({
           ...globalModalsState,
           showToast: {

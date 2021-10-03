@@ -78,7 +78,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
           subject: `${emailReason.slice(0, 50)}`,
           html: '',
         };
-        await sendMailRequestJoinCycleResponse(opt, {
+        const mailRes = await sendMailRequestJoinCycleResponse(opt, {
           to: email,
           title,
           emailReason,
@@ -88,7 +88,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
           eurekaTeamThanks,
           ...gotToCycle,
         });
-        res.redirect(`/cycle/${cycleId}`);
+        res.redirect(mailRes ? 307 : 404, `/cycle/${cycleId}`);
       }
     }
   } catch (exc) {

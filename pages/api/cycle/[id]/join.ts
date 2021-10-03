@@ -73,27 +73,32 @@ export default getApiHandler()
             subject: `${emailReason.slice(0, 50)}...`,
             html: '',
           };
-          const mailSent = await sendMailRequestJoinCycle(opt, {
-            to: email,
-            applicantMediathequeURL,
-            title,
-            authorizeText,
-            denyText,
-            thanks,
-            eurekaTeamThanks,
-            authorizeURL,
-            denyURL,
-            ignoreEmailInf,
-            aboutEureka,
-            emailReason,
-          });
-          const msg = mailSent ? 'Request sent successfully' : 'Failed to send the request';
+          try {
+            const mailSent = await sendMailRequestJoinCycle(opt, {
+              to: email,
+              applicantMediathequeURL,
+              title,
+              authorizeText,
+              denyText,
+              thanks,
+              eurekaTeamThanks,
+              authorizeURL,
+              denyURL,
+              ignoreEmailInf,
+              aboutEureka,
+              emailReason,
+            });
+            const msg = mailSent ? 'Request sent successfully' : 'Failed to send the request';
 
-          res.status(200).json({
-            status: 'OK',
-            // data: 'Your request has been sent successfully, you will recive a response by email',
-            data: msg,
-          });
+            res.status(200).json({
+              status: 'OK',
+              // data: 'Your request has been sent successfully, you will recive a response by email',
+              data: msg,
+              error: mailSent,
+            });
+          } catch (e) {
+            res.status(200).json({ ok: false, error: JSON.stringify(e) });
+          }
         }
         return;
       }
