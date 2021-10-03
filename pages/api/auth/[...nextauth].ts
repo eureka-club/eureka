@@ -130,7 +130,10 @@ export default (req: NextApiRequest, res: NextApiResponse): void | Promise<void>
               name: 'EUREKA-CLUB',
             },
             subject: `Sign in to ${site} on: ${new Date().toUTCString()}`,
-            html: `Sign in to ${site} on: ${new Date().toUTCString()}`,
+            html: `<a href="{{url}}" target="_blank"
+            style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: #000000; text-decoration: none; text-decoration: none;border-radius: 5px; padding: 10px 20px; border: 1px solid green; display: inline-block;">
+            Click here to finalize your login to Eureka
+          </a>`,
           };
           try {
             const emailRes = await sendMailSingIn(opt, {
@@ -145,9 +148,8 @@ export default (req: NextApiRequest, res: NextApiResponse): void | Promise<void>
             });
             // if (!emailRes) res.redirect(404, '/');
           } catch (e) {
-            console.error(JSON.stringify(e));
+            // eslint-disable-next-line no-console
             console.log(JSON.stringify(e));
-            console.dir(e);
           }
         },
       }),

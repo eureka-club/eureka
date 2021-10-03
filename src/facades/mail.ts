@@ -29,22 +29,15 @@ const sendEmailWebhook = async (opt: MailDataRequired) => {
       content: [{ type: 'text/html', value: html }],
     },
     method: 'POST',
-    // baseUrl: process.env.NEXT_PUBLIC_WEBAPP_URL,
   };
 
   try {
-    const [res, body] = await client.request(request);
+    const [res] = await client.request(request);
     if (res.statusCode === 202) return true;
-    // eslint-disable-next-line no-console
-    console.dir(body);
     return false;
   } catch (error) {
     const e = error as unknown as { response: { body: any } };
     if (error) {
-      // eslint-disable-next-line no-console
-      // console.dir(error.response.body.errors);
-      // // eslint-disable-next-line no-console
-      // console.dir(error.response.body.errors[0]);
       // eslint-disable-next-line no-console
       console.error(e.response.body.errors[0].message);
       // eslint-disable-next-line no-console
