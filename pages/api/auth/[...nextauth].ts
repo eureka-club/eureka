@@ -130,7 +130,7 @@ export default (req: NextApiRequest, res: NextApiResponse): void | Promise<void>
               name: 'EUREKA-CLUB',
             },
             subject: `Sign in to ${site} on: ${new Date().toUTCString()}`,
-            html: '',
+            html: `Sign in to ${site} on: ${new Date().toUTCString()}`,
           };
           try {
             const emailRes = await sendMailSingIn(opt, {

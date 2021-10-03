@@ -52,13 +52,6 @@ const sendEmailWebhook = async (opt: MailDataRequired) => {
     }
     return false;
   }
-  // return false;
-  // debugger;
-  // client.request(request).then(([response, body]) => {
-  //   debugger;
-  //   console.log(response.statusCode);
-  //   console.log(body);
-  // });
 };
 sgMail.setApiKey(process.env.EMAIL_SERVER_PASS!);
 
