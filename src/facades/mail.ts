@@ -33,11 +33,15 @@ const sendEmailWebhook = async (opt: MailDataRequired) => {
   };
 
   try {
-    const [res] = await client.request(request);
+    const [res, body] = await client.request(request);
     if (res.statusCode === 202) return true;
+    // eslint-disable-next-line no-console
+    console.dir(body);
     return false;
   } catch (error) {
     console.error(error);
+    // eslint-disable-next-line no-console
+    console.dir(error);
     return false;
   }
   // return false;

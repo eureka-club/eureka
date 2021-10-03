@@ -143,7 +143,7 @@ export default (req: NextApiRequest, res: NextApiResponse): void | Promise<void>
               aboutEureka,
               emailReason,
             });
-            if (!emailRes) res.redirect(404, '/');
+            // if (!emailRes) res.redirect(404, '/');
           } catch (e) {
             console.error(JSON.stringify(e));
             console.log(JSON.stringify(e));
