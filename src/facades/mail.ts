@@ -2,9 +2,52 @@ import sgMail from '@sendgrid/mail';
 import { MailDataRequired } from '@sendgrid/helpers/classes/mail';
 import path from 'path';
 import Handlebars from 'handlebars';
+
 import readFile from './readFile';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const client = require('@sendgrid/client');
 
 // const Handlebars = require('handlebars');
+const sendEmailWebhook = async (opt: MailDataRequired) => {
+  const { to, from, subject, html = '', templateId = null, dynamicTemplateData = null } = opt;
+  // const data = {
+  //   to,
+  //   from,
+  //   subject,
+  //   ...(html && { html }),
+  //   ...(templateId && { templateId }),
+  //   ...(dynamicTemplateData && { dynamicTemplateData }),
+  // };
+  client.setApiKey(process.env.EMAIL_SERVER_PASS!);
+
+  const request = {
+    url: '/v3/mail/send',
+    body: {
+      from,
+      subject,
+      personalizations: [{ to }],
+      content: [{ type: 'text/html', value: html }],
+    },
+    method: 'POST',
+    // baseUrl: process.env.NEXT_PUBLIC_WEBAPP_URL,
+  };
+
+  try {
+    const [res] = await client.request(request);
+    if (res.statusCode === 202) return true;
+    return false;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+  // return false;
+  // debugger;
+  // client.request(request).then(([response, body]) => {
+  //   debugger;
+  //   console.log(response.statusCode);
+  //   console.log(body);
+  // });
+};
 sgMail.setApiKey(process.env.EMAIL_SERVER_PASS!);
 
 type EmailSingInSpecs = {
@@ -84,7 +127,9 @@ export const sendMailSingIn = async (opt: MailDataRequired, specs: EmailSingInSp
     opts.templateId = 'eureka_singin';
     opts.dynamicTemplateData = { url: ' ' }; // TODO
   }
-  const res = await sendMail(opts);
+  // const res = await sendMail(opts);
+
+  const res = await sendEmailWebhook(opts);
   return res;
 };
 
@@ -104,7 +149,8 @@ export const sendMailRequestJoinCycle = async (
     opts.templateId = 'request_join_cycle';
     opts.dynamicTemplateData = { url: ' ' }; // TODO
   }
-  const res = await sendMail(opts);
+  // const res = await sendMail(opts);
+  const res = await sendEmailWebhook(opts);
   return res;
 };
 
@@ -124,6 +170,7 @@ export const sendMailRequestJoinCycleResponse = async (
     opts.templateId = 'request_join_cycle_response';
     opts.dynamicTemplateData = { url: ' ' }; // TODO
   }
-  const res = await sendMail(opts);
+  // const res = await sendMail(opts);
+  const res = await sendEmailWebhook(opts);
   return res;
 };

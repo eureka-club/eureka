@@ -110,48 +110,46 @@ export default (req: NextApiRequest, res: NextApiResponse): void | Promise<void>
           },
         },
         from: process.env.EMAILING_FROM,
-        // sendVerificationRequest: async ({ identifier: email, url, baseUrl }): Promise<void> => {
-        //   const site = baseUrl.replace(/^https?:\/\//, '');
-        //   const t = await getT(locale, 'singInMail');
-        //   const title = t('title');
-        //   const subtitle = t('subtitle');
-        //   const singIngConfirmationUrl = t('singIngConfirmationUrl');
-        //   const ignoreEmailInf = t('ignoreEmailInf');
-        //   const aboutEureka = t('aboutEureka');
-        //   const emailReason = t('emailReason');
-        //   const opt = {
-        //     to: [
-        //       {
-        //         email,
-        //       },
-        //     ],
-        //     from: {
-        //       email: process.env.EMAILING_FROM!,
-        //       name: 'EUREKA-CLUB',
-        //     },
-        //     subject: `Sign in to ${site} on: ${new Date().toUTCString()}`,
-        //     html: '',
-        //   };
-        //   try {
-        //     const emailRes = await sendMailSingIn(opt, {
-        //       to: email,
-        //       url,
-        //       title,
-        //       subtitle,
-        //       singIngConfirmationUrl,
-        //       ignoreEmailInf,
-        //       aboutEureka,
-        //       emailReason,
-        //     });
-        //     if (!emailRes)
-
-        //   }
-        //   catch (e) {
-        //     console.error(JSON.stringify(e));
-        //     console.log(JSON.stringify(e));
-        //     console.dir(e)
-        //   }
-        // },
+        sendVerificationRequest: async ({ identifier: email, url, baseUrl }): Promise<void> => {
+          const site = baseUrl.replace(/^https?:\/\//, '');
+          const t = await getT(locale, 'singInMail');
+          const title = t('title');
+          const subtitle = t('subtitle');
+          const singIngConfirmationUrl = t('singIngConfirmationUrl');
+          const ignoreEmailInf = t('ignoreEmailInf');
+          const aboutEureka = t('aboutEureka');
+          const emailReason = t('emailReason');
+          const opt = {
+            to: [
+              {
+                email,
+              },
+            ],
+            from: {
+              email: process.env.EMAILING_FROM!,
+              name: 'EUREKA-CLUB',
+            },
+            subject: `Sign in to ${site} on: ${new Date().toUTCString()}`,
+            html: '',
+          };
+          try {
+            const emailRes = await sendMailSingIn(opt, {
+              to: email,
+              url,
+              title,
+              subtitle,
+              singIngConfirmationUrl,
+              ignoreEmailInf,
+              aboutEureka,
+              emailReason,
+            });
+            if (!emailRes) res.redirect(404, '/');
+          } catch (e) {
+            console.error(JSON.stringify(e));
+            console.log(JSON.stringify(e));
+            console.dir(e);
+          }
+        },
       }),
     ],
     secret: process.env.SECRET,
