@@ -103,7 +103,7 @@ export default getApiHandler()
         return;
       }
 
-      await addParticipant(cycle, session.user);
+      await addParticipant(cycle, session.user.id);
 
       res.status(200).json({ status: 'OK' });
     } catch (exc) {

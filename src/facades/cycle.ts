@@ -294,10 +294,10 @@ export const createFromServerFields = async (
   });
 };
 
-export const addParticipant = async (cycle: Cycle, user: User): Promise<Cycle> => {
+export const addParticipant = async (cycle: Cycle, userId: number): Promise<Cycle> => {
   return prisma.cycle.update({
     where: { id: cycle.id },
-    data: { participants: { connect: { id: user.id } } },
+    data: { participants: { connect: { id: userId } } },
   });
 };
 

@@ -39,7 +39,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     }
     const user = await prisma.user.findFirst({ where: { id: parseInt(userId, 10) } });
     if (authorized === '1') {
-      await addParticipant(cycle, session.user);
+      await addParticipant(cycle, +userId);
       // res.redirect('/cycle/cycleJoinedSuccefully');
     }
     if (user && user.email) {
