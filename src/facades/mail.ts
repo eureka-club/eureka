@@ -123,6 +123,8 @@ export const sendMailSingIn = async (opt: MailDataRequired, specs: EmailSingInSp
   const opts = { ...opt };
   if (process.env.TEMPLATE_ORIGIN === 'local') {
     const templatePath = path.join(process.cwd(), 'public', 'templates', 'mail', 'eureka_singin.html');
+    // eslint-disable-next-line no-console
+    console.log('templatePath ', templatePath);
     const res = await readFile(templatePath);
     if (res) {
       const template = Handlebars.compile(res);
