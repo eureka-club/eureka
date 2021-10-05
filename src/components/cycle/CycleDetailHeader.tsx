@@ -231,7 +231,9 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         {getRatingAvg()}
         {' - '}
         {getRatingQty()} {t('ratings')}
-        <h3>Content calendar ({cycle.works && cycle.works.length})</h3>
+        <h3>
+          {t('Content calendar')} ({cycle.works && cycle.works.length})
+        </h3>
         <CycleSummary cycle={cycle} />
         {/* <Button className={`${styles.seeParticipantsBtn}`} onClick={onParticipantsAction}>
           {cycle.participants.length} participants
