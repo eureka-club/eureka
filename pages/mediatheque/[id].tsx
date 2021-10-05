@@ -273,7 +273,7 @@ const Mediatheque: NextPage = () => {
   return (
     <SimpleLayout title={t('Mediatheque')}>
       <>
-        {!(isLoadingUser || isLoadingSession) && isAccessAllowed() && (
+        {!(isLoadingUser || isLoadingSession) && (
           <section>
             <Card className={styles.userHeader}>
               <Card.Body>
@@ -306,23 +306,27 @@ const Mediatheque: NextPage = () => {
                 {/* <BsCircleFill className={styles.infoCircle} /> */}
               </Card.Body>
             </Card>
-            <h1 className={styles.title}>{t('Mediatheque')}</h1>
-            <FilterEngine fictionOrNotFilter={false} geographyFilter={false} />
-            {postsCreated()}
+            {isAccessAllowed() && (
+              <>
+                <h1 className={styles.title}>{t('Mediatheque')}</h1>
+                <FilterEngine fictionOrNotFilter={false} geographyFilter={false} />
+                {postsCreated()}
 
-            {cyclesJoined()}
+                {cyclesJoined()}
 
-            {readOrWatched()}
+                {readOrWatched()}
 
-            {savedForLater()}
+                {savedForLater()}
 
-            {usersFollowed()}
+                {usersFollowed()}
+              </>
+            )}
           </section>
         )}
         {(isLoadingUser || isLoadingSession) && <Spinner animation="grow" variant="secondary" />}
-        {!(isLoadingUser || isLoadingSession) && !isAccessAllowed() && (
+        {/* {!(isLoadingUser || isLoadingSession) && !isAccessAllowed() && (
           <Alert variant="warning">{t('notAuthorized')}</Alert>
-        )}
+        )} */}
       </>
     </SimpleLayout>
   );
