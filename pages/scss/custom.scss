@@ -39,7 +39,12 @@ body {
   font-family: 'Open Sans', sans-serif;
   color: var(--text-color-primary);
 }
-
+.fw-bold{
+  font-weight: 500!important;
+}
+.fs-6{
+  font-size: 0.875rem;
+}
 h1 {
   font-size: 1.9rem;
 }

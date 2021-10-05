@@ -15,7 +15,7 @@
   "submitButtonLabel": "Créer la Eureka",
   "titleEdit": "Modifier Eureka",
   "edit": "Modifier",
-
   "topicsPostLabel": "Principaux thèmes de l'Eureka (3 max, choisir les plus pertinents dans la liste)",
-  "topicsPostFreeLabel": "Thèmes supplémentaires de l'Eureka (2 max, entrée libre)"
+  "topicsPostFreeLabel": "Thèmes supplémentaires de l'Eureka (2 max, entrée libre)",
+  "topicsFieldLabel": "Additional topics of the post (2 max, input freely)"
 }

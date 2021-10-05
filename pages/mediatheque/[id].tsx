@@ -286,7 +286,7 @@ const Mediatheque: NextPage = () => {
   return (
     <SimpleLayout title={t('Mediatheque')}>
       <>
-        {!(isLoadingUser || isLoadingSession) && (
+        {!(isLoadingUser || isLoadingSession) && user && (
           <section>
             <Card className={styles.userHeader}>
               <Card.Body>
@@ -329,7 +329,7 @@ const Mediatheque: NextPage = () => {
             </Card>
             {isAccessAllowed() && (
               <>
-                <h1 className={styles.title}>{t('Mediatheque')}</h1>
+                <h1 className="text-success">{t('Mediatheque')}</h1>
                 <FilterEngine fictionOrNotFilter={false} geographyFilter={false} />
                 {postsCreated()}
 
@@ -345,9 +345,10 @@ const Mediatheque: NextPage = () => {
           </section>
         )}
         {(isLoadingUser || isLoadingSession) && <Spinner animation="grow" variant="secondary" />}
-        {!(isLoadingUser || isLoadingSession) && !isAccessAllowed() && (
+        {!(isLoadingUser || isLoadingSession) && user && !isAccessAllowed() && (
           <Alert variant="warning">{t('notAuthorized')}</Alert>
         )}
+        {!(isLoadingUser || isLoadingSession) && !user && <Alert variant="warning">{t('notFound')}</Alert>}
       </>
     </SimpleLayout>
   );

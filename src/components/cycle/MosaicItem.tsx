@@ -210,7 +210,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         )}
       </div>
 
-      <div className={styles.participantsInfo}>{`${participants + 1} ${t('participants')}`}</div>
+      <p className="fs-6 text-center text-gray my-2 fw-bold">{`${participants + 1} ${t('participants')}`}</p>
       {showSocialInteraction && (
         <Card.Footer className={styles.footer}>
           {cycle && (

@@ -265,6 +265,7 @@ model Post {
 
   terms        Term[]    @relation("TaxonomyTermPost")
   topics       String?  
+  tags         String?
   comments                Comment[]
 
   @@index([creatorId], name: "posts_creator_id_index")

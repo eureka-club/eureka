@@ -255,21 +255,22 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       const res = (
         <>
           <NavItem className={styles.tabBtn}>
-            <NavLink eventKey="cycle-discussion">{t('Discussion')}</NavLink>
+            <NavLink eventKey="cycle-discussion">
+              <h3 className="h5 mb-3 fw-bold text-primary">{t('Discussion')}</h3>
+            </NavLink>
           </NavItem>
           {/* <NavItem className={styles.tabBtn}>
             <NavLink eventKey="my_milestone">{t('My milestones')}</NavLink>
           </NavItem> */}
           <NavItem className={styles.tabBtn}>
-            <NavLink eventKey="guidelines">{t('Guidelines')}</NavLink>
+            <NavLink eventKey="guidelines">
+              <h3 className="h5 mb-3 fw-bold text-primary">{t('Guidelines')}</h3>
+            </NavLink>
           </NavItem>
 
           <NavItem className={styles.tabBtn}>
             <NavLink eventKey="participants">
-              {t('Participants')}{' '}
-              {/* (
-           <HyvorTalk.CommentCount websiteId={Number(HYVOR_WEBSITE_ID!)} id={hyvorId} />
-          ) */}
+              <h3 className="h5 mb-3 fw-bold text-primary">{t('Participants')}</h3>
             </NavLink>
           </NavItem>
         </>
@@ -284,7 +285,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   return (
     <>
       {!router.query.postId && canEditCycle() && (
-        <Button variant="warning" onClick={handleEditClick} size="sm">
+        <Button className="mb-1 px-1 py-1" variant="warning" onClick={handleEditClick} size="sm">
           {t('Edit')}
         </Button>
       )}
@@ -330,7 +331,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                     <Nav variant="tabs" fill>
                       <NavItem className={styles.tabBtn}>
                         <NavLink eventKey="cycle-about">
-                          {t('About')} ({cycle.works && cycle.works.length})
+                          <h3 className="h5 mb-3 fw-bold text-primary">
+                            {t('About')} ({cycle.works && cycle.works.length})
+                          </h3>
                         </NavLink>
                       </NavItem>
                       {renderRestrictTabsHeaders()}
@@ -341,9 +344,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                   <Col>
                     <TabContent>
                       <TabPane eventKey="cycle-about">
-                        <h2 className="mb-3">{t('Why does this cycle matter')}?</h2>
+                        <h5 className="mt-4 mb-3 fw-bold text-primary">{t('Why does this cycle matter')}?</h5>
                         {cycle.contentText != null && (
-                          <div className="mb-5">
+                          <div className="">
                             <div
                               className={styles.dangerouslySetInnerHTML}
                               dangerouslySetInnerHTML={{ __html: cycle.contentText }}
@@ -352,7 +355,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                           </div>
                         )}
                         {cycle.works && (
-                          <h2 className="mb-5">{t('worksCountHeader', { count: cycle.works.length })}</h2>
+                          <h5 className="mt-4 mb-3 fw-bold text-primary">
+                            {t('worksCountHeader', { count: cycle.works.length })}
+                          </h5>
                         )}
                         {cycle.works && cycle.works.length > 0 && (
                           <MosaicContext.Provider value={{ showShare: true }}>
@@ -363,7 +368,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                         {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (
                           <Row className="mt-4 mb-5">
                             <Col>
-                              <h4 className="mb-4">{t('complementaryMaterialsTitle')}</h4>
+                              <h5 className="mt-4 mb-3 fw-bold text-primary">{t('complementaryMaterialsTitle')}</h5>
                               <ul className={styles.complementaryMaterials}>
                                 {cycle.complementaryMaterials.map((cm) => (
                                   <li key={cm.id}>

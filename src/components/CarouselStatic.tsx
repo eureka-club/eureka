@@ -32,7 +32,7 @@ import { UserMosaicItem } from '../types/user';
 
 type Item = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | UserMosaicItem;
 type Props = {
-  title: string;
+  title: string | JSX.Element;
   iconBefore?: JSX.Element;
   iconAfter?: JSX.Element;
   onSeeAll?: () => Promise<void>;
@@ -154,11 +154,11 @@ const CarouselStatic: FunctionComponent<Props> = ({
           <div className={styles.mainContainer}>
             <Row>
               <Col>
-                <h5 className={styles.carouselTitle}>
+                <h4 className="text-secondary fw-bold">
                   {iconBefore ? <span className={styles.iconBefore}>{iconBefore}</span> : ''}
                   {` `} {title} {/* {`(${dataFiltered.length})`} */}
                   {iconAfter ? <span className={styles.iconAfter}>{iconAfter}</span> : ''}
-                </h5>
+                </h4>
               </Col>
               <Col className={styles.right}>
                 {dataFiltered.length && (

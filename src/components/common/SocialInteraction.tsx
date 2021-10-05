@@ -478,7 +478,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
                 onChange={handlerChangeRating}
                 className={styles.rating}
                 stop={5}
-                emptySymbol={<GiBrain className="text-secondary" />}
+                emptySymbol={<GiBrain className="fs-6 text-secondary" />}
                 fullSymbol={getFullSymbol()}
               />
             )}{' '}

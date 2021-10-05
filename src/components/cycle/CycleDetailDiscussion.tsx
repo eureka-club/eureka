@@ -148,7 +148,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
                   className={`${styles.optButton} ${styles.eurekaBtn} ${isCreateEureka && styles.optButtonActive}`}
                 >
                   <GiBrain className={styles.optButtonIcon} />
-                  Create an Eureka
+                  {t('Create an Eureka')}
                 </Button>
                 <Button
                   onClick={handleCreateCommentClick}
@@ -169,7 +169,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
                       isSuggestRelatedWork && styles.optButtonActive
                     }`}
                   >
-                    <BiBookHeart className={styles.optButtonIcon} /> Suggest a related work
+                    <BiBookHeart className={styles.optButtonIcon} /> {t('Suggest a related work')}
                   </Button>
                 )}
               </ButtonGroup>

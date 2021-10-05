@@ -15,15 +15,14 @@
   "submitButtonLabel": "Create Eureka",
   "titleEdit": "Edit Eureka",
   "edit": "Edit",
-
   "topicsPostLabel": "Main topics of Eureka (3 max, select most relevant from list)",
   "topicsPostFreeLabel": "Additional topics of Eureka (2 max, input freely)",
-
   "Public": "Public",
   "Private": "Private",
   "Secret": "Secret",
   "Privacy settings": "Privacy settings",
   "cycleAccesPublicInfo": "Anyone can join this cycle. Cycle appears in searches",
   "cycleAccesPrivateInfo": "Users need request participation, which is approved by the cycle creator and/or moderator(s). Cycle appears in searches",
-  "cycleAccesSecretInfo": "Only users invited through a link can see. Cycle does not appear in searches"
+  "cycleAccesSecretInfo": "Only users invited through a link can see. Cycle does not appear in searches",
+  "topicsFieldLabel": "Additional topics of the post (2 max, input freely)"
 }
