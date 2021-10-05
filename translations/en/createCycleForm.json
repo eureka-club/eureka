@@ -48,7 +48,7 @@
   "Start date of work": "Start date of work",
   "End date of work": "End date of work",
   "addDatesForWork": "Add dates individual for each work",
-  "invalidInput": "Invalid Input",
+  "invalidInput": "Invalid input",
   "cycleStartAndEndRequired": "Cycle Start and End Dates are required",
   "Date Range Error": "Date Range Error"
 }

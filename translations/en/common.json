@@ -8,6 +8,7 @@
   "movie": "Fiction movie",
   "cycle": "Cycle",
   "post": "Eureka",
+
   "browserTitleAbout": "About",
   "aboutPageHeading": "Our mission is to induce as many Eureka moments as possible.",
   "aboutHeading": "About",
@@ -31,6 +32,7 @@
   "ethicsText4": "Content or individuals that violate the above will be promptly and thoroughly addressed and removed if deemed necessary.",
   "eurekaSupport": "Eureka is supported by:",
   "contact": "Contact:",
+
   "mosaicHeaderMyCycles": "Favorite cyles, works and posts",
   "publicationYearLabel": "Publication year",
   "releaseYearLabel": "Release year",
@@ -45,13 +47,14 @@
   "unclampTextMore": "view more",
   "wayShare": "",
   "cycleShare": "¡Check the cycle",
-  "postCycleShare": "Check this post about the cycle",
-  "postWorkShare": "Check this post about",
+  "postCycleShare": "Check this Eureka about the cycle",
+  "postWorkShare": "Check this Eureka about",
   "workShare": "Check this content about",
   "complementShare": "and join us on Eureka for further discussion!",
   "whatsappComplement": "Join us here:",
   "twitterComplement": "",
   "facebookComplement": "",
+
   "goToHomepage": "Go to Homepage",
   "Loading": "Loading",
   "Trending topics": "Trending topics",
@@ -70,6 +73,7 @@
   "Rating Eureka": "Rating Eureka",
   "Save for later": "Save for later",
   "Privacy settings": "Privacy settings",
+
   "mediathequeInfo": "Your Mediatheque contains your activity on Eureka. It gathers items you’ve watched / read / participated in, items saved for later as well as cycles and Eurekas you’ve created and/or participated in",
   "My Mediatheque is public": "My Mediatheque is public",
   "Anyone can see my Mediatheque": "Anyone can see my Mediatheque",
@@ -88,12 +92,14 @@
   "Replies": "replies",
   "vmcomments": "View more replies",
   "vlcomments": "View less replies",
+
   "notFound": "Not found",
   "Ongoing": "Ongoing",
   "Upcoming": "Upcoming",
   "Past": "Past",
-  "Join Cycle request notification": "Join Cycle request notification",
+
+  "Join Cycle request notification": "Request to join cycle notification",
   "Request sent successfully": "Request sent successfully",
-  "Failed to send the request": "Failed to send the request",
+  "Failed to send the request": "Failed to send request",
   "Clear rating": "Clear rating"
 }

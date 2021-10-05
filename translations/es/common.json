@@ -8,6 +8,7 @@
   "documentary": "Documental",
   "movie": "Película ficción",
   "post": "Eureka",
+
   "browserTitleAbout": "Sobre",
   "aboutPageHeading": "Nuestra misión es inducir tantos momentos Eureka como sea posible.",
   "aboutHeading": "Sobre",
@@ -31,6 +32,7 @@
   "ethicsText4": "El contenido o las personas que violen lo anterior se someterán a una revisión inmediata y exhaustiva y, en caso de ser necesario, se eliminarán de la plataforma.",
   "eurekaSupport": "Eureka tiene el apoyo de:",
   "contact": "Contacto:",
+
   "mosaicHeaderMyCycles": "Ciclos, obras y publicaciones favoritas",
   "publicationYearLabel": "Año de publicación",
   "releaseYearLabel": "Año de producción",
@@ -45,17 +47,18 @@
   "unclampTextMore": "ver más",
   "wayShare": "Vía",
   "cycleShare": "¡Checa el ciclo",
-  "postCycleShare": "¡Checa esta reflexión sobre el ciclo",
-  "postWorkShare": "¡Checa esta reflexión sobre la obra",
+  "postCycleShare": "¡Checa esta Eureka sobre el ciclo",
+  "postWorkShare": "¡Checa esta Eureka sobre la obra",
   "workShare": "¡Checa este contenido sobre la obra",
   "complementShare": "y anímate a participar en la plataforma Eureka!",
   "whatsappComplement": "Participa aquí: ",
   "twitterComplement": "",
   "facebookComplement": "",
+
   "goToHomepage": "Ir al inicio",
   "Loading": "Cargando",
   "Trending topics": "Temas populares",
-  "uncategorized": "Sin categorizar",
+  "uncategorized": "Sin categoria",
   "See all": "Ver todo",
   "Name": "Nombre",
   "Email": "Correo electronico",
@@ -70,6 +73,7 @@
   "Rating Eureka": "Rating Eureka",
   "Save for later": "Guardar para luego",
   "Privacy settings": "Configuración de privacidad",
+
   "mediathequeInfo": "Tu Mediateca contiene tu actividad en Eureka. Reúne elementos que has visto / leído / participado, elementos guardados para luego, así como ciclos y Eurekas que ha creados y / o participado",
   "My Mediatheque is public": "Mi Mediateca es publica",
   "Anyone can see my Mediatheque": "Cualquiera puede ver mi Mediateca",
@@ -88,12 +92,14 @@
   "Replies": "respuestas",
   "vmcomments": "Ver más respuestas",
   "vlcomments": "Ver menos respuestas",
-  "notFound": "Not found",
+
+  "notFound": "No encontrado",
   "Ongoing": "En curso",
-  "Upcoming": "Próximo",
-  "Past": "Pasado",
+  "Upcoming": "Siguiente",
+  "Past": "Leído/visto",
+
   "Join Cycle request notification": "Notificación de solicitud de ingreso al Ciclo",
   "Request sent successfully": "Solicitud enviada con éxito",
   "Failed to send the request": "No se pudo enviar la solicitud",
-  "Clear rating": "Eliminar puntaje"
+  "Clear rating": "Eliminar calificación"
 }

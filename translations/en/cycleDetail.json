@@ -19,19 +19,24 @@
   "Edit": "Edit",
   "ratings": "ratings",
   "Works on Cycle": "Works on Cycle",
-  "Cycle itself": "Cycle itself",
-  "About": "About",
-  "Discussion": "Discussion",
+  "Cycle itself": "Cycle (your contribution is about the topic of the cycle, it does not focus only on one of the works)",
   "Title": "Title",
   "Image": "Image",
-  "Type to add tag": "Type to add tag",
+  "Type to add tag": "Topic of your Eureka (3 max, select most relevant from list)",
   "Select work": "Select work",
   "Suggest work": "Suggest work",
-  "Create work": "Create work",
+  "Create work": "Add work to library",
   "Didn't find the work you were looking for? You can add it to our library!": "Didn't find the work you were looking for? You can add it to our library!",
   "Why does this cycle matter": "Why does this cycle matter",
   "Participants": "Participants",
-  "Guidelines": "Guidelines",
+  
+  "About": "About",
+  "Discussion": "Discussion",
+  "Guidelines": "Moderation principles",
   "My milestones": "My milestones",
-  "Add a quick comment": "Add a quick comment"
+
+  "Add a quick comment": "Add a quick comment",
+  "Create an Eureka":"Create an Eureka",
+  "Suggest a related work":"Add work to cycle",
+  "Content calendar":"Content calendar"
 }

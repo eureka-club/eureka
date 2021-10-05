@@ -45,10 +45,11 @@
   "cycleAccesPublicInfo": "Cualquiera puede unirse a este ciclo. El ciclo aparece en las búsquedas",
   "cycleAccesPrivateInfo": "Se debe solicitar la participación, que es aprobada por quiénes han creado ciclo. El ciclo aparece en las búsquedas",
   "cycleAccesSecretInfo": "Sólo quiénes han recibido una invitación a través de un enlace pueden ver y participar del ciclo. El ciclo no aparece en las búsquedas",
-  "Start date of work": "Start date of work",
-  "End date of work": "End date of work",
-  "addDatesForWork": "Add dates individual for each work",
-  "invalidInput": "Invalid Input",
-  "cycleStartAndEndRequired": "Cycle Start and End Dates are required",
+  
+  "Start date of work": "Fecha de inicio de la obra",
+  "End date of work": "Fecha de fin de la obra",
+  "addDatesForWork": "Agregar fechas individuales para cada obra",
+  "invalidInput": "Entrada inválida",
+  "cycleStartAndEndRequired": "Se requieren fechas de inicio y fin del ciclo",
   "Date Range Error": "Error en el rango de fecha"
 }

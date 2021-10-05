@@ -8,6 +8,7 @@
   "documentary": "Documentário",
   "movie": "Filme ficção",
   "post": "Eureka",
+
   "browserTitleAbout": "Sobre",
   "aboutPageHeading": "Nossa missão é induzir o maior número possível de momentos Eureka.",
   "aboutHeading": "Sobre",
@@ -31,6 +32,7 @@
   "ethicsText4": "Conteúdos ou indivíduos que violem o acima serão imediata e exaustivamente abordados e removidos, se necessário.",
   "eurekaSupport": "Eureka é apoiada por:",
   "contact": "Contato:",
+
   "mosaicHeaderMyCycles": "Ciclos, obras e publicações favoritas",
   "publicationYearLabel": "Ano de publicação",
   "releaseYearLabel": "Ano de lançamento",
@@ -45,17 +47,18 @@
   "unclampTextMore": "ver mais",
   "wayShare": "",
   "cycleShare": "Dá uma olhada no ciclo",
-  "postCycleShare": "Se inspire nesta reflexão sobre o ciclo",
-  "postWorkShare": "Se inspire nesta reflexão sobre a obra",
+  "postCycleShare": "Se inspire nesta Eureka sobre o ciclo",
+  "postWorkShare": "Se inspire nesta Eureka sobre a obra",
   "workShare": "Dá uma olhada neste conteúdo sobre a obra",
   "complementShare": "e participe da plataforma Eureka!",
   "whatsappComplement": "Junte-se à nos aqui: ",
   "twitterComplement": "",
   "facebookComplement": "",
+
   "goToHomepage": "Voltar à página inicial",
   "Loading": "Carregando",
   "Trending topics": "Temas populares",
-  "uncategorized": "Uncategorized",
+  "uncategorized": "Sin categoria",
   "See all": "Ver tudo",
   "Name": "Nome",
   "Email": "Email",
@@ -70,6 +73,7 @@
   "Rating Eureka": "Rating Eureka",
   "Save for later": "Salvar para depois",
   "Privacy settings": "Configurações de privacidade",
+
   "mediathequeInfo": "Sua Mediateca contém sua atividade na Eureka. Reúne elementos que você viu / leu / participou, elementos salvos para depois, bem como ciclos e Eurekas que você criou e / ou participou ",
   "My Mediatheque is public": "Minha Mediateca é pública",
   "Anyone can see my Mediatheque": "Qualquer pessoa pode ver minha Mediateca",
@@ -88,12 +92,14 @@
   "Replies": "respostas",
   "vmcomments": "Ver mais comentários",
   "vlcomments": "Ver menos comentários",
-  "notFound": "Not found",
-  "Ongoing": "Ongoing",
-  "Upcoming": "Upcoming",
-  "Past": "Past",
-  "Join Cycle request notification": "Join Cycle request notification",
-  "Request sent successfully": "Request sent successfully",
-  "Failed to send the request": "Failed to send the request",
-  "Clear rating": "Clear rating"
+
+  "notFound": "Não encontrado",
+  "Ongoing": "Em curso",
+  "Upcoming": "Próximo",
+  "Past": "Lido/visto",
+
+  "Join Cycle request notification": "Notificação de solicitação de participação ao ciclo",
+  "Request sent successfully": "Solicitação enviada com sucesso",
+  "Failed to send the request": "Falha ao enviar a solicitação",
+  "Clear rating": "Apagar avaliação"
 }
