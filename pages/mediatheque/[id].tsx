@@ -111,7 +111,7 @@ const Mediatheque: NextPage = () => {
   //   }
   // }, [dataUserSession]);
 
-  const { mutate: mutateFollowing } = useMutation<User>(
+  const { mutate: mutateFollowing, isLoading: isLoadingMutateFollowing } = useMutation<User>(
     async () => {
       const action = isFollowedByMe ? 'disconnect' : 'connect';
       const res = await fetch(`/api/user/${id}`, {
@@ -131,7 +131,10 @@ const Mediatheque: NextPage = () => {
       return json;
     },
     {
-      onMutate: () => {
+      onMutate: async () => {
+        await queryClient.cancelQueries(['USERS', id]);
+        await queryClient.cancelQueries(['USERS', idSession]);
+
         type UserFollow = User & { followedBy: User[]; following: User[] };
         const followingUser = queryClient.getQueryData<UserFollow>(['USERS', id]);
         const followedByUser = queryClient.getQueryData<UserFollow>(['USERS', idSession]);
@@ -147,6 +150,16 @@ const Mediatheque: NextPage = () => {
           }
         queryClient.setQueryData(['USERS', id], { ...followingUser, followedBy });
         queryClient.setQueryData(['USERS', idSession], { ...followedByUser, following });
+        return { followingUser, followedByUser };
+      },
+      onError: (err, data, context: any) => {
+        queryClient.setQueryData(['USERS', id], context.followingUser);
+        queryClient.setQueryData(['USERS', idSession], context.followedByUser);
+      },
+
+      onSettled: () => {
+        queryClient.invalidateQueries(['USERS', id]);
+        queryClient.invalidateQueries(['USERS', idSession]);
       },
     },
   );
@@ -293,12 +306,20 @@ const Mediatheque: NextPage = () => {
                   </Col>
                   <Col>
                     {session && (session as unknown as Session).user!.id !== user.id && !isFollowedByMe && (
-                      <Button onClick={followHandler}>{t('Follow')}</Button>
+                      <Button onClick={followHandler} disabled={isLoadingMutateFollowing}>
+                        {t('Follow')}
+                        {isLoadingMutateFollowing && <Spinner animation="grow" variant="secondary" size="sm" />}
+                      </Button>
                     )}
 
                     {session && (session as unknown as Session).user!.id !== user.id && isFollowedByMe && (
-                      <Button className={styles.unFollowBtn} onClick={followHandler}>
+                      <Button
+                        className={styles.unFollowBtn}
+                        onClick={followHandler}
+                        disabled={isLoadingMutateFollowing}
+                      >
                         {t('Unfollow')}
+                        {isLoadingMutateFollowing && <Spinner animation="grow" variant="secondary" size="sm" />}
                       </Button>
                     )}
                   </Col>
@@ -324,9 +345,9 @@ const Mediatheque: NextPage = () => {
           </section>
         )}
         {(isLoadingUser || isLoadingSession) && <Spinner animation="grow" variant="secondary" />}
-        {/* {!(isLoadingUser || isLoadingSession) && !isAccessAllowed() && (
+        {!(isLoadingUser || isLoadingSession) && !isAccessAllowed() && (
           <Alert variant="warning">{t('notAuthorized')}</Alert>
-        )} */}
+        )}
       </>
     </SimpleLayout>
   );
