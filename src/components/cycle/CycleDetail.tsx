@@ -285,7 +285,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   return (
     <>
       {!router.query.postId && canEditCycle() && (
-        <Button variant="warning" onClick={handleEditClick} size="sm">
+        <Button className="mb-1 px-1 py-1" variant="warning" onClick={handleEditClick} size="sm">
           {t('Edit')}
         </Button>
       )}

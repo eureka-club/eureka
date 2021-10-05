@@ -211,7 +211,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   return (
     <Row className="mb-5">
       <Col md={9}>
-        <h1 className="text-success">{cycle.title}</h1>
+        <h1 className="mb-1 text-success">{cycle.title}</h1>
         {cycle.topics && (
           <>
             <TagsInput className="d-inline-block" tags={cycle.topics} readOnly />
