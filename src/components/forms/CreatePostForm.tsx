@@ -20,7 +20,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BsFillXCircleFill } from 'react-icons/bs';
 import { useMutation, useQueryClient } from 'react-query';
-
+import TagsInput from './controls/TagsInput';
 import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
@@ -71,6 +71,7 @@ const CreatePostForm: FunctionComponent = () => {
   const { t } = useTranslation('createPostForm');
 
   const { data: topics } = useTopics();
+  const [tags, setTags] = useState<string>('');
   const [postId, setPostId] = useState<number | undefined>();
   const {
     mutate: execCreatePost,
@@ -182,6 +183,7 @@ const CreatePostForm: FunctionComponent = () => {
         contentText: form.description.value.length ? form.description.value : null,
         isPublic: form.isPublic.checked,
         topics: items.join(','),
+        tags,
       };
       await execCreatePost(payload);
     } else if (selectedCycle != null) {
@@ -194,6 +196,7 @@ const CreatePostForm: FunctionComponent = () => {
         contentText: form.description.value.length ? form.description.value : null,
         isPublic: form.isPublic.checked,
         topics: items.join(','),
+        tags,
       };
       await execCreatePost(payload);
     }
@@ -312,6 +315,8 @@ const CreatePostForm: FunctionComponent = () => {
                 )}
               </ImageFileSelect>
             </Col>
+          </Row>
+          <Row>
             <Col>
               <FormGroup controlId="language">
                 <FormLabel>*{t('languageFieldLabel')}</FormLabel>
@@ -376,6 +381,9 @@ const CreatePostForm: FunctionComponent = () => {
                 max={3}
               />
             </FormGroup>
+          </Row>
+          <Row>
+            <TagsInput tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
           </Row>
           <Row>
             <FormGroup controlId="description" as={Col}>

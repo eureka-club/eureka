@@ -14,5 +14,6 @@
   "isPublicInfotip": "As publicações públicas são acessíveis por todxs. Desmarque a caixa para tornar a publicação privada (somente você pode vê-la).",
   "submitButtonLabel": "Criar publicação",
   "titleEdit": "Edit a post",
-  "edit": "Edit"
+  "edit": "Edit",
+  "topicsFieldLabel": "Additional topics of the post (2 max, input freely)"
 }

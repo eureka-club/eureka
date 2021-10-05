@@ -43,6 +43,7 @@ interface CreatePostClientPayloadBase {
   contentText: string;
   isPublic: boolean;
   topics?: string;
+  tags?: string;
 }
 export interface CreatePostAboutCycleClientPayload extends CreatePostClientPayloadBase {
   selectedCycleId: number;
@@ -59,6 +60,7 @@ export interface EditPostAboutCycleClientPayload {
   selectedCycleId?: number;
   selectedWorkId?: null;
   topics?: string;
+  tags?: string;
 }
 export interface CreatePostAboutWorkClientPayload extends CreatePostClientPayloadBase {
   selectedCycleId: number | null;
@@ -75,6 +77,7 @@ export interface EditPostAboutWorkClientPayload {
   selectedCycleId?: number | null;
   selectedWorkId?: number;
   topics?: string;
+  tags?: string;
 }
 
 export interface CreatePostServerFields {
@@ -85,6 +88,7 @@ export interface CreatePostServerFields {
   contentText: string[];
   isPublic: boolean[];
   topics?: string;
+  tags?: string;
 }
 
 export interface EditPostServerFields {
@@ -96,6 +100,7 @@ export interface EditPostServerFields {
   contentText?: string[];
   isPublic?: boolean[];
   topics?: string;
+  tags?: string;
 }
 
 export interface CreatePostServerPayload {
@@ -106,6 +111,7 @@ export interface CreatePostServerPayload {
   contentText: string;
   isPublic: boolean;
   topics?: string;
+  tags?: string;
 }
 
 export interface EditPostServerPayload {
@@ -117,4 +123,5 @@ export interface EditPostServerPayload {
   contentText?: string;
   isPublic?: boolean;
   topics?: string;
+  tags?: string;
 }
