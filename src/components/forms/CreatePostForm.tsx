@@ -371,19 +371,23 @@ const CreatePostForm: FunctionComponent = () => {
             </Col>
           </Row>
           <Row>
-            <FormGroup controlId="topics">
-              <FormLabel>{t('createWorkForm:topicsPostLabel')}</FormLabel>
-              <TagsInputTypeAhead
-                data={topics}
-                items={items}
-                setItems={setItems}
-                labelKey={(res) => t(`topics:${res.code}`)}
-                max={3}
-              />
-            </FormGroup>
+            <Col>
+              <FormGroup controlId="topics">
+                <FormLabel>{t('topicsPostLabel')}</FormLabel>
+                <TagsInputTypeAhead
+                  data={topics}
+                  items={items}
+                  setItems={setItems}
+                  labelKey={(res) => t(`topics:${res.code}`)}
+                  max={3}
+                />
+              </FormGroup>
+            </Col>
           </Row>
           <Row>
-            <TagsInput tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
+            <Col>
+              <TagsInput tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
+            </Col>
           </Row>
           <Row>
             <FormGroup controlId="description" as={Col}>
