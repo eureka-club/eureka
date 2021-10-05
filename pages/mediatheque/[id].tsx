@@ -329,7 +329,7 @@ const Mediatheque: NextPage = () => {
             </Card>
             {isAccessAllowed() && (
               <>
-                <h1 className={styles.title}>{t('Mediatheque')}</h1>
+                <h1 className="text-success">{t('Mediatheque')}</h1>
                 <FilterEngine fictionOrNotFilter={false} geographyFilter={false} />
                 {postsCreated()}
 

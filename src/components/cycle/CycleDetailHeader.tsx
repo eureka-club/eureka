@@ -211,7 +211,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   return (
     <Row className="mb-5">
       <Col md={9}>
-        <h2>{cycle.title}</h2>
+        <h1 className="text-success">{cycle.title}</h1>
         {cycle.topics && (
           <>
             <TagsInput className="d-inline-block" tags={cycle.topics} readOnly />
@@ -234,17 +234,17 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         <h3>
           {t('Content calendar')} ({cycle.works && cycle.works.length})
         </h3>
-        <CycleSummary cycle={cycle} />
+        {/* <CycleSummary cycle={cycle} /> */}
         {/* <Button className={`${styles.seeParticipantsBtn}`} onClick={onParticipantsAction}>
           {cycle.participants.length} participants
         </Button> */}
         {/* <CycleContext.Provider value={{ cycle }}> */}
-        <div className={styles.customCarouselStaticContainer}>
+        <div className="mt-5 mr-5" /* className={styles.customCarouselStaticContainer} */>
           <CarouselStatic
             showSocialInteraction={false}
             // onSeeAll={async () => seeAll(cycle.works as WorkMosaicItem[], t('Eurekas I created'))}
             onSeeAll={onCarouselSeeAllAction}
-            title=""
+            title={<CycleSummary cycle={cycle} />}
             data={sortWorks() as WorkMosaicItem[]}
             iconBefore={<></>}
             customMosaicStyle={{ height: '16em' }}

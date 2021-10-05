@@ -255,21 +255,22 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       const res = (
         <>
           <NavItem className={styles.tabBtn}>
-            <NavLink eventKey="cycle-discussion">{t('Discussion')}</NavLink>
+            <NavLink eventKey="cycle-discussion">
+              <h3 className="h5 mb-3 fw-bold text-primary">{t('Discussion')}</h3>
+            </NavLink>
           </NavItem>
           {/* <NavItem className={styles.tabBtn}>
             <NavLink eventKey="my_milestone">{t('My milestones')}</NavLink>
           </NavItem> */}
           <NavItem className={styles.tabBtn}>
-            <NavLink eventKey="guidelines">{t('Guidelines')}</NavLink>
+            <NavLink eventKey="guidelines">
+              <h3 className="h5 mb-3 fw-bold text-primary">{t('Guidelines')}</h3>
+            </NavLink>
           </NavItem>
 
           <NavItem className={styles.tabBtn}>
             <NavLink eventKey="participants">
-              {t('Participants')}{' '}
-              {/* (
-           <HyvorTalk.CommentCount websiteId={Number(HYVOR_WEBSITE_ID!)} id={hyvorId} />
-          ) */}
+              <h3 className="h5 mb-3 fw-bold text-primary">{t('Participants')}</h3>
             </NavLink>
           </NavItem>
         </>
@@ -330,7 +331,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                     <Nav variant="tabs" fill>
                       <NavItem className={styles.tabBtn}>
                         <NavLink eventKey="cycle-about">
-                          {t('About')} ({cycle.works && cycle.works.length})
+                          <h3 className="h5 mb-3 fw-bold text-primary">
+                            {t('About')} ({cycle.works && cycle.works.length})
+                          </h3>
                         </NavLink>
                       </NavItem>
                       {renderRestrictTabsHeaders()}

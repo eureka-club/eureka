@@ -28,7 +28,7 @@ const CycleSummary: FunctionComponent<Props> = ({ cycle }) => {
   //   setTags(cycle.tags!);
   // }, [cycle]);
   return (
-    <section className={styles.workSummary}>
+    <section className="fs-6 text-gray">
       {[
         `${
           advancedDayjs(now).isBetween(dayjs(cycle.startDate), dayjs(cycle.endDate), 'day', '[]')
