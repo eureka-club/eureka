@@ -344,9 +344,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                   <Col>
                     <TabContent>
                       <TabPane eventKey="cycle-about">
-                        <h2 className="mb-3">{t('Why does this cycle matter')}?</h2>
+                        <h5 className="mt-4 mb-3 fw-bold text-primary">{t('Why does this cycle matter')}?</h5>
                         {cycle.contentText != null && (
-                          <div className="mb-5">
+                          <div className="">
                             <div
                               className={styles.dangerouslySetInnerHTML}
                               dangerouslySetInnerHTML={{ __html: cycle.contentText }}
@@ -355,7 +355,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                           </div>
                         )}
                         {cycle.works && (
-                          <h2 className="mb-5">{t('worksCountHeader', { count: cycle.works.length })}</h2>
+                          <h5 className="mt-4 mb-3 fw-bold text-primary">
+                            {t('worksCountHeader', { count: cycle.works.length })}
+                          </h5>
                         )}
                         {cycle.works && cycle.works.length > 0 && (
                           <MosaicContext.Provider value={{ showShare: true }}>
@@ -366,7 +368,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                         {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (
                           <Row className="mt-4 mb-5">
                             <Col>
-                              <h4 className="mb-4">{t('complementaryMaterialsTitle')}</h4>
+                              <h5 className="mt-4 mb-3 fw-bold text-primary">{t('complementaryMaterialsTitle')}</h5>
                               <ul className={styles.complementaryMaterials}>
                                 {cycle.complementaryMaterials.map((cm) => (
                                   <li key={cm.id}>
