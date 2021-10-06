@@ -27,7 +27,7 @@ import PostDetailComponent from '../post/PostDetail';
 // import SocialInteraction from '../common/SocialInteraction';
 import PostsMosaic from './PostsMosaic';
 import WorksMosaic from './WorksMosaic';
-import CommnetMosaic from '../comment/MosaicItem';
+import ComentMosaic from '../comment/MosaicItem';
 // import UnclampText from '../UnclampText';
 import detailPagesAtom from '../../atoms/detailPages';
 import styles from './CycleDetail.module.css';
@@ -163,7 +163,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         .sort((p, c) => (p.id > c.id && -1) || 1)
         .map((c) => {
           return (
-            <CommnetMosaic
+            <ComentMosaic
               key={c.id}
               comment={c as CommentMosaicItem}
               detailed
