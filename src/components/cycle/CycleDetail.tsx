@@ -355,7 +355,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                           </div>
                         )}
                         {cycle.works && (
-                          <h5 className="mt-4 mb-3 fw-bold text-primary">
+                          <h5 className="mt-5 mb-3 fw-bold text-primary">
                             {t('worksCountHeader', { count: cycle.works.length })}
                           </h5>
                         )}
@@ -364,9 +364,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                             <WorksMosaic cycle={cycle} />
                           </MosaicContext.Provider>
                         )}
-
                         {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (
-                          <Row className="mt-4 mb-5">
+                          <Row className="mt-2 mb-5">
                             <Col>
                               <h5 className="mt-4 mb-3 fw-bold text-primary">{t('complementaryMaterialsTitle')}</h5>
                               <ul className={styles.complementaryMaterials}>

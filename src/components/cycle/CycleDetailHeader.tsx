@@ -211,14 +211,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   return (
     <Row className="mb-5">
       <Col md={9}>
-        <h1 className="mb-1 text-success">{cycle.title}</h1>
-        {cycle.topics && (
-          <>
-            <TagsInput className="d-inline-block" tags={cycle.topics} readOnly />
-            <TagsInput className="ml-1 d-inline-block" tags={cycle.tags!} readOnly label="" />
-          </>
-        )}
-        <br />
+        <h1 className="mb-1 text-success">{cycle.title}</h1>       
         <Rating
           readonly
           initialRating={getRatingAvg()}
@@ -230,16 +223,22 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         />{' '}
         {getRatingAvg()}
         {' - '}
-        {getRatingQty()} {t('ratings')}
-        <h3>
+        {getRatingQty()} {t('ratings')} 
+        {cycle.topics && (
+          <>
+            <TagsInput className="d-inline-block" tags={cycle.topics} readOnly />
+            <TagsInput className="ml-1 d-inline-block" tags={cycle.tags!} readOnly label="" />
+          </>
+        )}        
+        <h4 className="mt-4 mb-1 text-dark">
           {t('Content calendar')} ({cycle.works && cycle.works.length})
-        </h3>
+        </h4>
         {/* <CycleSummary cycle={cycle} /> */}
         {/* <Button className={`${styles.seeParticipantsBtn}`} onClick={onParticipantsAction}>
           {cycle.participants.length} participants
         </Button> */}
         {/* <CycleContext.Provider value={{ cycle }}> */}
-        <div className="mt-5 mr-5" /* className={styles.customCarouselStaticContainer} */>
+        <div className="mr-5" /* className={styles.customCarouselStaticContainer} */>
           <CarouselStatic
             showSocialInteraction={false}
             // onSeeAll={async () => seeAll(cycle.works as WorkMosaicItem[], t('Eurekas I created'))}
@@ -254,7 +253,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         {/* </CycleContext.Provider> */}
       </Col>
       <Col md={3}>
-        <UserAvatar user={cycle.creator} />
+        <UserAvatar user={cycle.creator}/>
         <MosaicContext.Provider value={{ showShare: true }}>
           <MosaicItem cycle={cycle} showTrash className="mt-2" />
         </MosaicContext.Provider>
