@@ -8,5 +8,6 @@
     "Movies/books i've watched/read": "Films et livres que j'ai regardés ou lus",
     "Users I follow": "Abonnements",
     "notAuthorized": "Cette Médiathèque est privée. Pour y avoir accès, cliquez sur Suivre!",
-    "notFound": "Not found"
+    "notFound": "Not found",
+    "secretMediathequeNotification": "This mediatheque is secrect"
 }

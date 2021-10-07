@@ -256,7 +256,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         <>
           <NavItem className={styles.tabBtn}>
             <NavLink eventKey="cycle-discussion">
-              <h3 className="h5 mb-3 fw-bold text-primary">{t('Discussion')}</h3>
+              <span className="mb-3 fw-bold text-primary">{t('Discussion')}</span>
             </NavLink>
           </NavItem>
           {/* <NavItem className={styles.tabBtn}>
@@ -264,13 +264,13 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           </NavItem> */}
           <NavItem className={styles.tabBtn}>
             <NavLink eventKey="guidelines">
-              <h3 className="h5 mb-3 fw-bold text-primary">{t('Guidelines')}</h3>
+              <span className="mb-3 fw-bold text-primary">{t('Guidelines')}</span>
             </NavLink>
           </NavItem>
 
           <NavItem className={styles.tabBtn}>
             <NavLink eventKey="participants">
-              <h3 className="h5 mb-3 fw-bold text-primary">{t('Participants')}</h3>
+              <span className="mb-3 fw-bold text-primary">{t('Participants')}</span>
             </NavLink>
           </NavItem>
         </>
@@ -331,9 +331,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                     <Nav variant="tabs" fill>
                       <NavItem className={styles.tabBtn}>
                         <NavLink eventKey="cycle-about">
-                          <h3 className="h5 mb-3 fw-bold text-primary">
+                          <span className="mb-3 fw-bold text-primary">
                             {t('About')} ({cycle.works && cycle.works.length})
-                          </h3>
+                          </span>
                         </NavLink>
                       </NavItem>
                       {renderRestrictTabsHeaders()}

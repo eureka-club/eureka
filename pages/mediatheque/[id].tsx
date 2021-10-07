@@ -88,11 +88,13 @@ const Mediatheque: NextPage = () => {
     if (!isLoadingUser && user) {
       if (!user.dashboardType || user.dashboardType === 1) return true;
       if (!isLoadingSession) {
-        if (!session) return false;
-        const s = session as unknown as Session;
-        if (user.id === s.user.id) return true;
-        if (user.dashboardType === 3) return false;
-        if (user.dashboardType === 2 && isFollowedByMe) return true;
+        // if (!session) return false;
+        if (session) {
+          const s = session as unknown as Session;
+          if (user.id === s.user.id) return true;
+          if (user.dashboardType === 2 && isFollowedByMe) return true;
+          if (user.dashboardType === 3 && user.id === s.user.id) return true;
+        }
       }
     }
     return false;
@@ -283,6 +285,16 @@ const Mediatheque: NextPage = () => {
     return '';
   };
 
+  const renderAccessInfo = () => {
+    if (!(isLoadingUser || isLoadingSession)) {
+      if (user) {
+        if (user.dashboardType === 3) return <Alert variant="warning">{t('secretMediathequeNotification')}</Alert>;
+        if (!isAccessAllowed()) return <Alert variant="warning">{t('notAuthorized')}</Alert>;
+      }
+    }
+    return '';
+  };
+
   return (
     <SimpleLayout title={t('Mediatheque')}>
       <>
@@ -344,10 +356,8 @@ const Mediatheque: NextPage = () => {
             )}
           </section>
         )}
+        {renderAccessInfo()}
         {(isLoadingUser || isLoadingSession) && <Spinner animation="grow" variant="secondary" />}
-        {!(isLoadingUser || isLoadingSession) && user && !isAccessAllowed() && (
-          <Alert variant="warning">{t('notAuthorized')}</Alert>
-        )}
         {!(isLoadingUser || isLoadingSession) && !user && <Alert variant="warning">{t('notFound')}</Alert>}
       </>
     </SimpleLayout>
