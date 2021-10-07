@@ -484,9 +484,15 @@ const SocialInteraction: FunctionComponent<Props> = ({
             )}{' '}
             {showRating && !loadingSocialInteraction && getRatingsCount()}{' '}
             {showTrash && (
-              <button type="button" title={t('Clear rating')} className={styles.clearRating} onClick={clearRating}>
+              <Button
+                type="button"
+                title={t('Clear rating')}
+                className="text-success p-0"
+                onClick={clearRating}
+                variant="link"
+              >
                 <FiTrash2 />
-              </button>
+              </Button>
             )}
             {loadingSocialInteraction && (
               <Spinner className={styles.ratingSpinner} size="sm" animation="grow" variant="secondary" />
@@ -497,10 +503,10 @@ const SocialInteraction: FunctionComponent<Props> = ({
           <div className="ml-auto">
             <OverlayTrigger trigger="click" placement="right" overlay={popoverShares}>
               <Button
-                style={{ fontSize: '.9em' }}
+                // style={{ fontSize: '.9em' }}
                 title={t('Share')}
                 variant="link"
-                className={`${styles.buttonSI} pt-0 pr-0 text-success`}
+                className={`${styles.buttonSI} fs-6 p-0 text-success`}
               >
                 <FiShare2 />
                 <br />
@@ -510,11 +516,11 @@ const SocialInteraction: FunctionComponent<Props> = ({
           </div>
         )}
         {/* <Col xs={showRating ? 2 : 12}> */}
-        <div className="ml-auto">
+        <div className="ml-1">
           {!loadingSocialInteraction && (
             <Button
               variant="link"
-              className={`${styles.buttonSI} pt-0 pr-0 text-success`}
+              className={`${styles.buttonSI} p-0 text-success`}
               title={t('Save for later')}
               onClick={handleFavClick}
             >

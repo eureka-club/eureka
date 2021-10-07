@@ -84,16 +84,18 @@ const MosaicItem: FunctionComponent<Props> = ({
     return (
       <Card className={`${styles.container} ${className}`}>
         {postParent && (
-          <h2 className={styles.postParentTitle}>
+          <h2 className="m-0 p-1 fs-6 text-secondary">
+            <FaRegCompass className="text-primary" />
+            {` `}
             {postParentLinkHref != null ? (
               <Link href={postParentLinkHref}>
                 <a>
-                  <FaRegCompass /> <span>{postParent.title}</span>
+                  <span>{postParent.title}</span>
                 </a>
               </Link>
             ) : (
-              <h2 className={styles.postParentTitle}>
-                <FaRegCompass /> <span>{postParent.title}</span>
+              <h2 className="m-0 p-1 fs-6 text-secondary">
+                <span>{postParent.title}</span>
               </h2>
             )}
           </h2>
@@ -124,7 +126,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             {post && (
               <>
                 <Avatar user={post.creator} size="xs" />
-                {` `}
+                {` - `}
                 {dayjs(post.createdAt).format(DATE_FORMAT_SHORT)}
               </>
             )}
@@ -133,7 +135,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         </div>
         {showDetailedInfo && (
           <div className={`d-flex align-items-center justify-content-center ${styles.detailedInfo}`}>
-            <h3 className={`text-center ${styles.title}`}>{post.title}</h3>
+            <h3 className="text-center">{post.title}</h3>
             {/* <div className="mb-5">
               <UnclampText isHTML text={post.contentText} clampHeight="5rem" showButtomMore={false} />
             </div> */}
@@ -173,7 +175,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           </Col>
           <Col xs={12} md={8}>
             <div className={styles.detailedInfo}>
-              <h5 className={styles.postTitle}>
+              <h5 className="">
                 <Link href={postLinkHref}>
                   <a>{post.title}</a>
                 </Link>

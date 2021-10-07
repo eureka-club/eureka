@@ -147,8 +147,8 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
                   md={canCreateWork() ? 4 : 6}
                   className={`${styles.optButton} ${styles.eurekaBtn} ${isCreateEureka && styles.optButtonActive}`}
                 >
-                  <GiBrain className={styles.optButtonIcon} />
-                  {t('Create an Eureka')}
+                  <GiBrain className="mr-1" />
+                  <span className="fs-6">{t('Create an Eureka')}</span>
                 </Button>
                 <Button
                   onClick={handleCreateCommentClick}
@@ -157,7 +157,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
                   md={canCreateWork() ? 4 : 6}
                   className={`${styles.optButton} ${styles.commentBtn} ${isCreateComment && styles.optButtonActive}`}
                 >
-                  <MdShortText className={styles.optButtonIcon} /> {t('Add a quick comment')}
+                  <MdShortText className="mr-1" /> <span className="fs-6">{t('Add a quick comment')}</span>
                 </Button>
                 {canCreateWork() && (
                   <Button
@@ -169,7 +169,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
                       isSuggestRelatedWork && styles.optButtonActive
                     }`}
                   >
-                    <BiBookHeart className={styles.optButtonIcon} /> {t('Suggest a related work')}
+                    <BiBookHeart className="mr-1" /> <span className="fs-6">{t('Suggest a related work')}</span>
                   </Button>
                 )}
               </ButtonGroup>

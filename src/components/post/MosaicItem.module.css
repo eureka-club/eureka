@@ -1,14 +1,7 @@
-.post {
-  
-}
 .postHorizontally{
   border: 1px solid var(--eureka-grey-dark);
 }
-.postTitle{
-  text-decoration: underline;
-}
 .imageContainer {
-  /* border-radius: 0.5rem; */
   box-shadow: 1px 0 7px -2px rgba(0, 0, 0, 0.25);
   overflow: hidden;
   position: relative;
@@ -16,6 +9,7 @@
 
 .imageContainer .postImage {
   width: 100%;
+  height: 176px;
 }
 
 .imageContainerHorizontally{
@@ -90,19 +84,6 @@
   color: #e3506d;
 }
 
-.title {
-  color: var(--text-color-primary);
-  display: block;
-  font-size: 1rem;
-  font-weight: 300;
-  margin-bottom: 0.5rem;
-}
-.title a {
-  color: var(--text-color-primary);
-}
-.title a:hover {
-  color: #0056b3;
-}
 
 .mosaicTitle {
   color: #333;
@@ -146,9 +127,7 @@
 .footer{
   padding:.2em;
 }
-.detailedImageContainer {
-  height: 16em;
-}
+
 .imageContainer {
    /* border-radius: 0.5rem 0; */
   box-shadow: 1px 0 7px -2px rgba(0, 0, 0, 0.25);
@@ -162,7 +141,7 @@
 
 .detailedImageContainer img {
    width: 100%;
-   height: 16em;
+   /* height: 16em; */
 }
 .imageContainer img {
   width: 100%;
@@ -283,13 +262,13 @@
 .postDetail a{
   color: white !important;
 }
-.postParentTitle{
+/* .postParentTitle{
   font-size:.8em;
   padding: .2em;
 }
 .postParentTitle a{
   color: var(--eureka-grey) !important;
-}
+} */
 
 .newCommentInput{
   background-color: #F5F5F5;

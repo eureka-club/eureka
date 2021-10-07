@@ -90,16 +90,19 @@ const MosaicItem: FunctionComponent<Props> = ({
       <Card className={`${styles.post} ${styles.commentHorizontally}`}>
         <Card.Header className={styles.cardHeader}>
           {commentParent && (
-            <h2 className={styles.commentParentTitle}>
+            <h2 className="fs-6">
               {comentLinkHref != null ? (
-                <Link href={comentLinkHref}>
-                  <a>
-                    <BsJustifyLeft /> <span>{getTitle()}</span>
-                  </a>
-                </Link>
+                <>
+                  <BsJustifyLeft className="text-primary" />{' '}
+                  <Link href={comentLinkHref}>
+                    <a>
+                      <span>{getTitle()}</span>
+                    </a>
+                  </Link>
+                </>
               ) : (
-                <h2 className={styles.commentParentTitle}>
-                  <BsJustifyLeft /> <span>{getTitle()}</span>
+                <h2 className="fs-6">
+                  <BsJustifyLeft className="text-primary" /> <span>{getTitle()}</span>
                 </h2>
               )}
             </h2>
