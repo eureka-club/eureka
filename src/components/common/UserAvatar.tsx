@@ -23,9 +23,9 @@ const UserAvatar: FunctionComponent<Props> = ({ user, size = 'md', showName = tr
     <>
       {/* {isLoading && <Spinner size="sm" animation="grow" variant="secondary" />} */}
       {user && (
-        <span className={`${className} ${styles.cycleCreator} ${styles[size]}`}>
+        <span className={`fs-6 ${className} ${styles.cycleCreator} ${styles[size]}`}>
           <Link href={`/mediatheque/${user.id}`}>
-            <a>
+            <a className="text-secondary">
               <img
                 onError={onLoadImgError}
                 src={user.image || '/img/default-avatar.png'}

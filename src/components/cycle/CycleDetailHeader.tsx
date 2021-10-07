@@ -211,7 +211,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   return (
     <Row className="mb-5">
       <Col md={9}>
-        <h1 className="mb-1 text-success">{cycle.title}</h1>       
+        <h1 className="mb-1 text-success">{cycle.title}</h1>
         <Rating
           readonly
           initialRating={getRatingAvg()}
@@ -223,13 +223,13 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         />{' '}
         {getRatingAvg()}
         {' - '}
-        {getRatingQty()} {t('ratings')} 
+        {getRatingQty()} <span className="fs-6 text-gray">{t('ratings')}</span>
         {cycle.topics && (
-          <>
+          <aside className="d-inline-block ml-5">
             <TagsInput className="d-inline-block" tags={cycle.topics} readOnly />
             <TagsInput className="ml-1 d-inline-block" tags={cycle.tags!} readOnly label="" />
-          </>
-        )}        
+          </aside>
+        )}
         <h4 className="mt-4 mb-1 text-dark">
           {t('Content calendar')} ({cycle.works && cycle.works.length})
         </h4>
@@ -253,7 +253,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         {/* </CycleContext.Provider> */}
       </Col>
       <Col md={3}>
-        <UserAvatar user={cycle.creator}/>
+        <UserAvatar user={cycle.creator} />
         <MosaicContext.Provider value={{ showShare: true }}>
           <MosaicItem cycle={cycle} showTrash className="mt-2" />
         </MosaicContext.Provider>
