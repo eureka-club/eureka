@@ -10,7 +10,21 @@ export const find = async (id: number): Promise<WorkMosaicItem | null> => {
       localImages: true,
       favs: true,
       ratings: true,
-      posts: { include: { localImages: true, comments: true, favs: true } },
+      posts: {
+        include: {
+          creator: true,
+          localImages: true,
+          works: true,
+          favs: true,
+          comments: {
+            include: {
+              creator: { select: { id: true, name: true, image: true } },
+              comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+            },
+          },
+          cycles: true,
+        },
+      },
       comments: { include: { comments: true } },
     },
   });

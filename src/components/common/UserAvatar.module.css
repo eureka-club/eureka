@@ -21,3 +21,4 @@
     display: inline-block;
     
   }
+  a.link:hover {color: inherit !important;}

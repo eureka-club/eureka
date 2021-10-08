@@ -12,6 +12,7 @@ import TabContent from 'react-bootstrap/TabContent';
 import TabPane from 'react-bootstrap/TabPane';
 import { Button } from 'react-bootstrap';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
+import { BiArrowBack } from 'react-icons/bi';
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { MySocialInfo, Session } from '../../types';
@@ -97,7 +98,14 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
             </Col>
           </>
         ) : (
-          <PostDetailComponent post={post} work={work} />
+          <>
+            {post && work && (
+              <Button variant="info" onClick={() => router.push(`/work/${work.id}`)} size="sm">
+                <BiArrowBack />
+              </Button>
+            )}
+            <PostDetailComponent post={post} work={work} />
+          </>
         )}
       </Row>
 

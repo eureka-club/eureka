@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import { FunctionComponent } from 'react';
 import Masonry from 'react-masonry-css';
 
-import { PostMosaicItem } from '../types/post';
 import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem } from '../types';
 import MosaicItemCycle from './cycle/MosaicItem';
 import MosaicItemPost from './post/MosaicItem';
@@ -12,6 +11,7 @@ import MosaicItemUser from './user/MosaicItem';
 import styles from './Mosaic.module.css';
 import { CycleMosaicItem } from '../types/cycle';
 import { WorkMosaicItem } from '../types/work';
+import { PostMosaicItem } from '../types/post';
 
 interface Props {
   postsLinksTo?: CycleMosaicItem | WorkMosaicItem;
@@ -35,10 +35,12 @@ const renderMosaicItem = (
     return <MosaicItemCycle key={`cycle-${item.id}`} cycle={item} detailed />;
   }
   if (isPostMosaicItem(item)) {
-    let pp;
-    const it: PostMosaicItem = item as PostMosaicItem;
-    if (it.works && it.works.length > 0) [pp] = it.works;
-    else if (it.cycles && it.cycles.length > 0) [pp] = it.cycles;
+    const pp = postsParent;
+    // if (!pp) {
+    //   const it: PostMosaicItem = item as PostMosaicItem;
+    //   if (it.works && it.works.length > 0) [pp] = it.works;
+    //   else if (it.cycles && it.cycles.length > 0) [pp] = it.cycles;
+    // }
 
     return (
       <MosaicItemPost

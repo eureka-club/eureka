@@ -26,7 +26,7 @@ import Carousel from '../src/components/Carousel';
 
 const IndexPage: NextPage = () => {
   const { t } = useTranslation('common');
-  const [show, setShow] = useState<string[]>(['gender-feminisms', 'environment', 'technology']);
+  const [show, setShow] = useState<string[]>(['gender-feminisms', 'technology', 'environment']);
   const [hide /* , setHide */] = useState<string[]>([
     'racism-discrimination',
     'wellness-sports',

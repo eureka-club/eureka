@@ -181,14 +181,13 @@ const MosaicItem: FunctionComponent<Props> = ({
             <div className={styles.detailedInfo}>
               <h6 className="">
                 <Link href={postLinkHref}>
-                  <a className="text-secondary text-decoration-underline">{post.title}</a>
+                  <a style={{ cursor: 'pointer' }} className="text-secondary text-decoration-underline">
+                    {post.title}
+                  </a>
                 </Link>
               </h6>
               <div className="mb-5">
-                <div
-                  className={styles.dangerouslySetInnerHTML}
-                  dangerouslySetInnerHTML={{ __html: post.contentText }}
-                />
+                <div className="fs-6" dangerouslySetInnerHTML={{ __html: post.contentText }} />
                 {/* <UnclampText text={post.contentText} clampHeight="5rem" showButtomMore={false} /> */}
               </div>
             </div>
