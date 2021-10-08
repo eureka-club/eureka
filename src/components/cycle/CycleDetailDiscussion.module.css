@@ -43,10 +43,7 @@
 /* .optButtons > div:hover{
   background-color:white;
 } */
-.optButtonIcon{
-  
-  margin-right: 1em;
-}
+
 .optButtonActive{
   background-color: var(--eureka-green)!important;
   color: white !important;;

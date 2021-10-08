@@ -135,7 +135,11 @@ const MosaicItem: FunctionComponent<Props> = ({
         </div>
         {showDetailedInfo && (
           <div className={`d-flex align-items-center justify-content-center ${styles.detailedInfo}`}>
-            <h3 className="text-center">{post.title}</h3>
+            <h6 className="text-center">
+              <Link href={postLinkHref}>
+                <a className="text-secondary text-decoration-underline">{post.title}</a>
+              </Link>
+            </h6>
             {/* <div className="mb-5">
               <UnclampText isHTML text={post.contentText} clampHeight="5rem" showButtomMore={false} />
             </div> */}
@@ -175,11 +179,11 @@ const MosaicItem: FunctionComponent<Props> = ({
           </Col>
           <Col xs={12} md={8}>
             <div className={styles.detailedInfo}>
-              <h5 className="">
+              <h6 className="">
                 <Link href={postLinkHref}>
-                  <a>{post.title}</a>
+                  <a className="text-secondary text-decoration-underline">{post.title}</a>
                 </Link>
-              </h5>
+              </h6>
               <div className="mb-5">
                 <div
                   className={styles.dangerouslySetInnerHTML}
