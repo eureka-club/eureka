@@ -43,7 +43,7 @@ const EditUserForm: FunctionComponent = () => {
   const [user, setUser] = useState<User | undefined>();
   const [id, setId] = useState<string>('');
   const [currentImg, setCurrentImg] = useState<string | undefined>();
-
+  const [userName, setUserName] = useState<string>();
   const [privacySettings, setPrivacySettings] = useState<number>();
   const [dashboardTypeChecked, setDashboardTypeChecked] = useState<{
     public: boolean;
@@ -65,6 +65,7 @@ const EditUserForm: FunctionComponent = () => {
   useEffect(() => {
     if (data) {
       setUser(data);
+      setUserName(data.name);
       setTags(() => data.tags);
       setDashboardTypeChecked((res) => {
         let v = 'private';
@@ -96,6 +97,7 @@ const EditUserForm: FunctionComponent = () => {
 
   const [countrySearchResults, setCountrySearchResults] = useState<{ id: number; code: string; label: string }[]>([]);
   const [countryOrigin, setCountryOrigin] = useState<string>();
+
   // const [countryOrigin2, setCountryOrigin2] = useState<string | null>();
   // const [hasCountryOrigin2, sethasCountryOrigin2] = useState<boolean>();
   // const { data: topics } = useTopics();
@@ -205,7 +207,7 @@ const EditUserForm: FunctionComponent = () => {
 
     const form = ev.currentTarget;
     const payload: EditUserClientPayload = {
-      name: form.userName.value,
+      name: userName,
       email: form.email.value,
       image: form.image.value,
       countryOfOrigin: countryOrigin,
@@ -292,6 +294,10 @@ const EditUserForm: FunctionComponent = () => {
     setDashboardTypeChecked((res) => ({ ...res, [`${val}`]: true }));
   };
 
+  const onChangeUserName = (e: ChangeEvent<HTMLInputElement>) => {
+    setUserName(e.currentTarget.value.slice(0, 30));
+  };
+
   return (
     <>
       {user && (
@@ -308,7 +314,13 @@ const EditUserForm: FunctionComponent = () => {
                 <Col>
                   <FormGroup controlId="userName">
                     <FormLabel>*{t('Name')}</FormLabel>
-                    <FormControl type="text" required defaultValue={user.name || undefined} />
+                    <FormControl
+                      type="text"
+                      onChange={onChangeUserName}
+                      required
+                      value={userName}
+                      // defaultValue={userName || undefined}
+                    />
                   </FormGroup>
                 </Col>
                 <Col>
