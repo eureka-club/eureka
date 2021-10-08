@@ -145,7 +145,9 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
                   as={Col}
                   xs={12}
                   md={canCreateWork() ? 4 : 6}
-                  className={`${styles.optButton} ${styles.eurekaBtn} ${isCreateEureka && styles.optButtonActive}`}
+                  className={`d-flex align-items-center  justify-content-center ${styles.optButton} ${
+                    styles.eurekaBtn
+                  } ${isCreateEureka && styles.optButtonActive}`}
                 >
                   <GiBrain className="mr-1" />
                   <span className="fs-6">{t('Create an Eureka')}</span>
@@ -155,7 +157,9 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
                   as={Col}
                   xs={12}
                   md={canCreateWork() ? 4 : 6}
-                  className={`${styles.optButton} ${styles.commentBtn} ${isCreateComment && styles.optButtonActive}`}
+                  className={`d-flex align-items-center  justify-content-center ${styles.optButton} ${
+                    styles.commentBtn
+                  } ${isCreateComment && styles.optButtonActive}`}
                 >
                   <MdShortText className="mr-1" /> <span className="fs-6">{t('Add a quick comment')}</span>
                 </Button>
@@ -165,9 +169,9 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
                     as={Col}
                     xs={12}
                     md={4}
-                    className={`${styles.optButton} ${styles.relatedWorkBtn} ${
-                      isSuggestRelatedWork && styles.optButtonActive
-                    }`}
+                    className={`d-flex align-items-center  justify-content-center ${styles.optButton} ${
+                      styles.relatedWorkBtn
+                    } ${isSuggestRelatedWork && styles.optButtonActive}`}
                   >
                     <BiBookHeart className="mr-1" /> <span className="fs-6">{t('Suggest a related work')}</span>
                   </Button>
