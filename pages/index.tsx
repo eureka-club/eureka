@@ -49,7 +49,7 @@ const IndexPage: NextPage = () => {
 
   return (
     <SimpleLayout title={t('browserTitleWelcome')}>
-      <h1 className="text-success">{t('Trending topics')}</h1>
+      <h1 className="text-success mb-5">{t('Trending topics')}</h1>
 
       <>{show && show.map((item) => <Carousel key={item} topic={item} />)}</>
       <Button className={styles.carouselDowmButton} onClick={showTopic} disabled={hide.length === 0}>

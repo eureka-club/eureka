@@ -173,7 +173,7 @@ const SearchPage: NextPage = () => {
   if (qLabel.match(':')) qLabel = globalSearchEngineState.q as string;
   return (
     <SimpleLayout title={t('browserTitleWelcome')}>
-      <h1 className="text-success">
+      <h1 className="text-success mb-5">
         {t('Results about')}: {`"${qLabel}"`}
       </h1>
       <FilterEngine />
