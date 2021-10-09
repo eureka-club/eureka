@@ -119,8 +119,8 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
       {cycle && (
         <div className={`${styles.container} ${className}`}>
           {' '}
-          <Row className={styles.discussionContainer}>
-            <Col xs={12} md={1}>
+          <Row className={`d-flex justify-content-center ${styles.discussionContainer}`}>
+            <Col xs={12} md={1} className="text-center mb-1">
               {cycle.creator && <UserAvatar user={cycle.creator} showName={false} />}
             </Col>
             <Col xs={12} md={11}>

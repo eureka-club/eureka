@@ -84,71 +84,82 @@ const MosaicItem: FunctionComponent<Props> = ({
   })();
 
   // const [session] = useSession() as [Session | null | undefined, boolean];
-
+  const renderCardDetailed = () => {
+    return (
+      <>
+        <Card className={`${styles.post} ${styles.commentHorizontally}`}>
+          <Card.Header className={styles.cardHeader}>
+            {commentParent && (
+              <h2 className="fs-6">
+                {comentLinkHref != null ? (
+                  <>
+                    <BsJustifyLeft className="text-primary" />{' '}
+                    <Link href={comentLinkHref}>
+                      <a>
+                        <span>{getTitle()}</span>
+                      </a>
+                    </Link>
+                  </>
+                ) : (
+                  <h2 className="fs-6">
+                    <BsJustifyLeft className="text-primary" /> <span>{getTitle()}</span>
+                  </h2>
+                )}
+              </h2>
+            )}
+          </Card.Header>
+          <Card.Body>
+            <Row>
+              <Col md={5} xs={12}>
+                <div className={styles.dangerouslySetInnerHTML} dangerouslySetInnerHTML={{ __html: contentText }} />
+              </Col>
+            </Row>
+            <Row className={styles.bottomRight}>
+              <Col md={4}>
+                <Avatar user={comment.creator} />
+              </Col>
+              <Col md={8} className={styles.commentsInfoContainer}>
+                <div className={styles.commentsInfo}>
+                  <FaRegComments /> <span>{comment.comments.length} Comments</span>
+                </div>
+              </Col>
+            </Row>
+            {showComments && <CommentsList entity={comment} parent={commentParent} cacheKey={cacheKey} />}
+          </Card.Body>
+          <Card.Footer className={styles.footer}>
+            {showComments && <Button variant="default">View more comments</Button>}
+          </Card.Footer>
+        </Card>
+      </>
+    );
+  };
   if (detailed)
     return (
-      <Card className={`${styles.post} ${styles.commentHorizontally}`}>
-        <Card.Header className={styles.cardHeader}>
-          {commentParent && (
-            <h2 className="fs-6">
-              {comentLinkHref != null ? (
-                <>
-                  <BsJustifyLeft className="text-primary" />{' '}
-                  <Link href={comentLinkHref}>
-                    <a>
-                      <span>{getTitle()}</span>
-                    </a>
-                  </Link>
-                </>
-              ) : (
-                <h2 className="fs-6">
-                  <BsJustifyLeft className="text-primary" /> <span>{getTitle()}</span>
-                </h2>
-              )}
-            </h2>
-          )}
-        </Card.Header>
-        <Card.Body>
-          <Row>
-            <Col md={5} xs={5}>
-              <div className={styles.dangerouslySetInnerHTML} dangerouslySetInnerHTML={{ __html: contentText }} />
-            </Col>
-          </Row>
-          <Row className={styles.bottomRight}>
-            <Col md={4}>
-              <Avatar user={comment.creator} />
-            </Col>
-            <Col md={8} className={styles.commentsInfoContainer}>
-              <div className={styles.commentsInfo}>
-                <FaRegComments /> <span>{comment.comments.length} Comments</span>
-              </div>
-            </Col>
-          </Row>
-          {showComments && <CommentsList entity={comment} parent={commentParent} cacheKey={cacheKey} />}
-        </Card.Body>
-        <Card.Footer className={styles.footer}>
-          {showComments && <Button variant="default">View more comments</Button>}
-        </Card.Footer>
-      </Card>
+      <div className="d-flex justify-content-center">
+        <section className="w-75 d-none d-md-block">{renderCardDetailed()}</section>
+        <section className="d-sm-block d-md-none">{renderCardDetailed()}</section>
+      </div>
     );
 
-  return (
-    <Card className={`mt-3 ${styles.container}`}>
-      {/* <Card.Header>Created by: {creator.name}</Card.Header> */}
+  const renderCard = () => {
+    return (
+      <Card className={`mt-3 ${styles.container}`}>
+        <Row>
+          <Col xs={2} md={1} className="pr-1">
+            <Avatar user={comment.creator} showName={false} />
+          </Col>
+          <Col xs={10} md={11} className="pl-1">
+            <div className={styles.dangerouslySetInnerHTML} dangerouslySetInnerHTML={{ __html: contentText }} />
+            <Button variant="default" className={styles.replyButton}>
+              <MdReply />
+            </Button>
+          </Col>
+        </Row>
+      </Card>
+    );
+  };
 
-      <Row>
-        <Col xs={2} md={1} className="pr-1">
-          <Avatar user={comment.creator} showName={false} />
-        </Col>
-        <Col xs={10} md={11} className="pl-1">
-          <div className={styles.dangerouslySetInnerHTML} dangerouslySetInnerHTML={{ __html: contentText }} />
-          <Button variant="default" className={styles.replyButton}>
-            <MdReply />
-          </Button>
-        </Col>
-      </Row>
-    </Card>
-  );
+  return <>{renderCard()}</>;
 };
 
 export default MosaicItem;

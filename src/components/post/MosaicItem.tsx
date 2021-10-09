@@ -170,14 +170,15 @@ const MosaicItem: FunctionComponent<Props> = ({
     );
   };
 
-  if (display === 'h') {
+  const renderHorizontalMosaic = (props: number[] = [3, 9]) => {
+    const [mdl = 3, mdr] = props;
     return (
-      <section className={`p-2 ${styles.postHorizontally} ${className}`}>
+      <>
         <Row>
-          <Col xs={12} md={4}>
+          <Col xs={12} md={mdl}>
             {renderVerticalMosaic({ showDetailedInfo: false })}
           </Col>
-          <Col xs={12} md={8}>
+          <Col xs={12} md={mdr}>
             <div className={styles.detailedInfo}>
               <h6 className="">
                 <Link href={postLinkHref}>
@@ -198,7 +199,20 @@ const MosaicItem: FunctionComponent<Props> = ({
             {showComments && <CommentsList entity={post} parent={postParent} cacheKey={cacheKey} />}
           </Col>
         </Row>
-      </section>
+      </>
+    );
+  };
+
+  if (display === 'h') {
+    return (
+      <div className="d-flex justify-content-center">
+        <section className={`w-75 d-none d-md-block p-2 ${styles.postHorizontally} ${className}`}>
+          {renderHorizontalMosaic([4, 8])}
+        </section>
+        <section className={`p-2 d-sm-block d-md-none ${styles.postHorizontally} ${className}`}>
+          {renderHorizontalMosaic([3, 9])}
+        </section>
+      </div>
     );
   }
 
