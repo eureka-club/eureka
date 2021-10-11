@@ -13,15 +13,6 @@ import { CycleMosaicItem } from '../types/cycle';
 import { WorkMosaicItem } from '../types/work';
 import { PostMosaicItem } from '../types/post';
 
-interface Props {
-  postsLinksTo?: CycleMosaicItem | WorkMosaicItem;
-  stack: MosaicItem[];
-  showButtonLabels?: boolean;
-  display?: 'h' | 'v';
-  showComments?: boolean;
-  cacheKey?: string[];
-}
-
 const renderMosaicItem = (
   item: MosaicItem,
   postsParent: CycleMosaicItem | WorkMosaicItem | undefined,
@@ -64,6 +55,15 @@ const renderMosaicItem = (
 
   return '';
 };
+interface Props {
+  postsLinksTo?: CycleMosaicItem | WorkMosaicItem;
+  stack: MosaicItem[];
+  showButtonLabels?: boolean;
+  display?: 'h' | 'v';
+  showComments?: boolean;
+  cacheKey?: string[];
+  className?: string;
+}
 
 const Mosaic: FunctionComponent<Props> = ({
   postsLinksTo,
@@ -72,6 +72,7 @@ const Mosaic: FunctionComponent<Props> = ({
   display = 'v',
   showComments = false,
   cacheKey,
+  className,
 }) => {
   return (
     <Masonry
@@ -81,11 +82,11 @@ const Mosaic: FunctionComponent<Props> = ({
         768: display === 'v' ? 2 : 1,
         576: 1,
       }}
-      className={classNames('d-flex', styles.masonry)}
+      className={`d-flex ${styles.masonry}`}
       columnClassName={styles.masonryColumn}
     >
       {stack.map((item: MosaicItem) => (
-        <aside className="ml-3" key={`item-${item.id}`}>
+        <aside className={`${className}`} key={`item-${item.id}`}>
           {renderMosaicItem(item, postsLinksTo, showButtonLabels, display, showComments, cacheKey)}
         </aside>
       ))}

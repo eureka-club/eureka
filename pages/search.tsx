@@ -177,7 +177,7 @@ const SearchPage: NextPage = () => {
         {t('Results about')}: {`"${qLabel}"`}
       </h1>
       <FilterEngine />
-      <Mosaic showButtonLabels={false} stack={homepageMosaicDataFiltered} />
+      <Mosaic className="ml-3" showButtonLabels={false} stack={homepageMosaicDataFiltered} />
       {genLoadingCmp()}
     </SimpleLayout>
   );
