@@ -84,9 +84,11 @@ const Mosaic: FunctionComponent<Props> = ({
       className={classNames('d-flex', styles.masonry)}
       columnClassName={styles.masonryColumn}
     >
-      {stack.map((item: MosaicItem) =>
-        renderMosaicItem(item, postsLinksTo, showButtonLabels, display, showComments, cacheKey),
-      )}
+      {stack.map((item: MosaicItem) => (
+        <aside className="ml-3" key={`item-${item.id}`}>
+          {renderMosaicItem(item, postsLinksTo, showButtonLabels, display, showComments, cacheKey)}
+        </aside>
+      ))}
     </Masonry>
   );
 };
