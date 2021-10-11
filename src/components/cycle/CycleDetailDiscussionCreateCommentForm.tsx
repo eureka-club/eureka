@@ -176,7 +176,7 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({ cycl
         }}
         initialValue={newComment.contentText}
         init={{
-          height: 300,
+          height: 150,
           menubar: false,
           plugins: [
             'advlist autolink lists link image charmap print preview anchor',

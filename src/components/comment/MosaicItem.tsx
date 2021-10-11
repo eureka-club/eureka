@@ -31,6 +31,7 @@ interface Props {
   cacheKey?: string[];
   showTrash?: boolean;
   showComments?: boolean;
+  className?: string;
 }
 
 const MosaicItem: FunctionComponent<Props> = ({
@@ -39,6 +40,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   detailed = false,
   cacheKey,
   showComments = true,
+  className,
   // showButtonLabels,
   // showShare,
   // showSocialInteraction = true,
@@ -110,7 +112,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           </Card.Header>
           <Card.Body>
             <Row>
-              <Col md={5} xs={12}>
+              <Col>
                 <div className={styles.dangerouslySetInnerHTML} dangerouslySetInnerHTML={{ __html: contentText }} />
               </Col>
             </Row>
@@ -135,7 +137,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   };
   if (detailed)
     return (
-      <div className="d-flex justify-content-center">
+      <div className={`d-flex justify-content-center ${className}`}>
         <section className="w-75 d-none d-md-block">{renderCardDetailed()}</section>
         <section className="d-sm-block d-md-none">{renderCardDetailed()}</section>
       </div>
@@ -143,7 +145,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   const renderCard = () => {
     return (
-      <Card className={`mt-3 ${styles.container}`}>
+      <Card className={`mt-3 ${styles.container} ${className}`}>
         <Row>
           <Col xs={2} md={1} className="pr-1">
             <Avatar user={comment.creator} showName={false} />

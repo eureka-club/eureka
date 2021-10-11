@@ -126,7 +126,7 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
               </Col>
               <Col xs={10} md={11} className="pl-1">
                 <div
-                  className={styles.dangerouslySetInnerHTML}
+                  className="p-2 bg-light border rounded"
                   dangerouslySetInnerHTML={{ __html: comment.contentText }}
                 />
                 <br />
@@ -170,7 +170,7 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
                       </Col>
                       <Col md={11} className="pl-0">
                         <div
-                          className={styles.dangerouslySetInnerHTML}
+                          className="p-2 bg-light border rounded"
                           dangerouslySetInnerHTML={{ __html: c.contentText }}
                         />
                         {/* <div className={styles.dangerouslySetInnerHTML}>{c.contentText}</div> */}

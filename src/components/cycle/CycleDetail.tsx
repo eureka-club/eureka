@@ -170,6 +170,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
               showComments
               commentParent={cycle}
               cacheKey={['CYCLES', `${cycle.id}`]}
+              className="mb-4"
             />
           );
         });
