@@ -16,7 +16,7 @@ import { isCycle, isWork } from '../../types';
 // import { WorkMosaicItem } from '../../types/work';
 import CommentsList from '../common/CommentsList';
 import Avatar from '../common/UserAvatar';
-// import UnclampText from '../UnclampText';
+import UnclampText from '../UnclampText';
 
 interface Props {
   post: PostMosaicItem;
@@ -188,8 +188,8 @@ const MosaicItem: FunctionComponent<Props> = ({
                 </Link>
               </h6>
               <div className="mb-5">
-                <div className="fs-6" dangerouslySetInnerHTML={{ __html: post.contentText }} />
-                {/* <UnclampText text={post.contentText} clampHeight="5rem" showButtomMore={false} /> */}
+                {/* <div className="fs-6" dangerouslySetInnerHTML={{ __html: post.contentText }} /> */}
+                <UnclampText isHTML showButtomMore text={post.contentText} clampHeight="5rem" />
               </div>
             </div>
           </Col>

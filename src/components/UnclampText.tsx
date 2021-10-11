@@ -14,7 +14,7 @@ interface Props {
 }
 
 const UnclampText: FunctionComponent<Props> = ({ clampHeight, text, showButtomMore = true, isHTML = true }) => {
-  const textRows = text.split('\n').filter((row) => row.length);
+  // const textRows = text.split('\n').filter((row) => row.length);
 
   const outerRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
