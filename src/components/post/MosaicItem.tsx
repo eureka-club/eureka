@@ -189,7 +189,7 @@ const MosaicItem: FunctionComponent<Props> = ({
               </h6>
               <div className="mb-5">
                 {/* <div className="fs-6" dangerouslySetInnerHTML={{ __html: post.contentText }} /> */}
-                <UnclampText isHTML showButtomMore text={post.contentText} clampHeight="5rem" />
+                <UnclampText isHTML showButtomMore text={post.contentText} clampHeight="10rem" />
               </div>
             </div>
           </Col>
