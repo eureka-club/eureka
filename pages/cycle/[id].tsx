@@ -11,14 +11,14 @@ import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '../../src/components/cycle/CycleDetail';
 
-import useCycles from '../../src/useCycles';
+import useCycle from '../../src/useCycle';
 import { CycleContext } from '../../src/useCycleContext';
 
 const CycleDetailPage: NextPage = () => {
   const [session, isLoadingSession] = useSession();
   const router = useRouter();
-  const [id, setId] = useState<string>();
-  const { data, isSuccess, isLoading, isFetching, isError, error } = useCycles(id);
+  const [id, setId] = useState<string>('');
+  const { data, isSuccess, isLoading, isFetching, isError, error } = useCycle(+id);
   const [cycle, setCycle] = useState<CycleMosaicItem | undefined>(undefined);
   const { t } = useTranslation('common');
 
@@ -47,13 +47,14 @@ const CycleDetailPage: NextPage = () => {
           setCurrentUserIsParticipant(() => true);
           return;
         }
-        if (cycle.participants) {
-          const isParticipant = cycle.participants.findIndex((p) => p.id === s.user.id) > -1;
+        const { participants } = cycle;
+        if (participants) {
+          const isParticipant = participants.findIndex((p) => p.id === s.user.id) > -1;
           setCurrentUserIsParticipant(() => isParticipant);
         }
       }
     } else setCurrentUserIsParticipant(() => false);
-  }, [session, cycle, isLoadingSession]);
+  }, [session, cycle, isSuccess, isLoadingSession]);
 
   const renderCycleDetailComponent = () => {
     if (isLoadingSession || isFetching || isLoading) return <Spinner animation="grow" variant="secondary" />;

@@ -288,8 +288,10 @@ const Mediatheque: NextPage = () => {
   const renderAccessInfo = () => {
     if (!(isLoadingUser || isLoadingSession)) {
       if (user) {
-        if (user.dashboardType === 3) return <Alert variant="warning">{t('secretMediathequeNotification')}</Alert>;
-        if (!isAccessAllowed()) return <Alert variant="warning">{t('notAuthorized')}</Alert>;
+        const aa = isAccessAllowed();
+        if (user.dashboardType === 3 && !aa)
+          return <Alert variant="warning">{t('secretMediathequeNotification')}</Alert>;
+        if (!aa) return <Alert variant="warning">{t('notAuthorized')}</Alert>;
       }
     }
     return '';

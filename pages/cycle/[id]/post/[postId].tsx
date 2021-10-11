@@ -12,7 +12,7 @@ import SimpleLayout from '../../../../src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '../../../../src/components/cycle/CycleDetail';
 // import { isFavoritedByUser /* isLikedByUser, search as searchPost */ } from '../../../../src/facades/post';
 import { WorkMosaicItem } from '../../../../src/types/work';
-import useCycles from '../../../../src/useCycles';
+import useCycle from '../../../../src/useCycle';
 import { CycleContext } from '../../../../src/useCycleContext';
 // import { Post } from '.prisma/client';
 // interface Props {
@@ -28,8 +28,8 @@ import { CycleContext } from '../../../../src/useCycleContext';
 const PostDetailInCyclePage: NextPage = () => {
   const [session, isLoadingSession] = useSession();
   const router = useRouter();
-  const [cycleId, setCycleId] = useState<string>();
-  const { data, isLoading } = useCycles(cycleId);
+  const [cycleId, setCycleId] = useState<string>('');
+  const { data, isLoading } = useCycle(+cycleId);
   const [cycle, setCycle] = useState<CycleMosaicItem>();
   const [post, setPost] = useState<PostMosaicItem>();
   const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);

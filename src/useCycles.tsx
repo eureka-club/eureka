@@ -16,7 +16,6 @@ export const getRecords = async (
   const res = await fetch(url);
   if (!res.ok) return undefined;
   const result = await res.json();
-
   if (where) {
     const cycles: CycleMosaicItem[] = [];
     result.data.forEach((i: CycleMosaicItem) => {
@@ -27,14 +26,24 @@ export const getRecords = async (
   return result.cycle ? { ...result.cycle, type: 'cycle' } : undefined;
 };
 
-const useCycles = (id?: string) => {
+interface Options {
+  staleTime?: number;
+  enabled?: boolean;
+}
+
+const useCycles = (id?: string, options?: Options) => {
+  const { staleTime, enabled } = options || {
+    staleTime: 1000 * 60 * 60,
+    enabled: true,
+  };
   const [globalSearchEngineState] = useAtom(globalSearchEngineAtom);
   const { where, cacheKey, q } = globalSearchEngineState;
   let ck = ['CYCLES', q];
   if (id) ck = ['CYCLES', `${id}`];
 
   return useQuery<CycleMosaicItem[] | CycleMosaicItem | undefined>(cacheKey || ck, () => getRecords(where, id), {
-    staleTime: 1000 * 60 * 60,
+    staleTime,
+    enabled,
   });
 };
 
