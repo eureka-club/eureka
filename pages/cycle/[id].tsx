@@ -47,8 +47,10 @@ const CycleDetailPage: NextPage = () => {
           setCurrentUserIsParticipant(() => true);
           return;
         }
-        const isParticipant = cycle.participants.findIndex((p) => p.id === s.user.id) > -1;
-        setCurrentUserIsParticipant(() => isParticipant);
+        if (cycle.participants) {
+          const isParticipant = cycle.participants.findIndex((p) => p.id === s.user.id) > -1;
+          setCurrentUserIsParticipant(() => isParticipant);
+        }
       }
     } else setCurrentUserIsParticipant(() => false);
   }, [session, cycle, isLoadingSession]);
