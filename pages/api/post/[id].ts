@@ -85,7 +85,6 @@ export default getApiHandler()
       res.status(401).json({ status: 'Unauthorized' });
       return;
     }
-
     let data = JSON.parse(req.body);
     // data.publicationYear = dayjs(`${data.publicationYear}`, 'YYYY').utc().format();
     const { id } = data;
@@ -101,6 +100,9 @@ export default getApiHandler()
     }
 
     try {
+      const post = await find(+data.id);
+      if (!post) res.status(412).json({ status: 'notFound' });
+      if (post?.creatorId !== session.user.id) res.status(401).json({ status: 'Unauthorized' });
       delete data.id;
       let existingCycle: Cycle | null = null;
       if (data.selectedCycleId != null) {
@@ -108,7 +110,6 @@ export default getApiHandler()
         if (existingCycle == null) {
           throw new Error('[412] Invalid Cycle ID provided');
         }
-        if (existingCycle.creatorId !== session.user.id) res.status(401).json({ status: 'Unauthorized' });
       }
 
       let existingWork: Work | null = null;

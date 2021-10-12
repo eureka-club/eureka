@@ -1,4 +1,4 @@
-import { Post } from '@prisma/client';
+import { Cycle, Post, Work } from '@prisma/client';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
@@ -25,8 +25,8 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
 import { EditPostAboutCycleClientPayload, EditPostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
-import { CycleMosaicItem } from '../../types/cycle';
-import { WorkMosaicItem } from '../../types/work';
+import { CycleWithImages, CycleMosaicItem } from '../../types/cycle';
+import { WorkWithImages } from '../../types/work';
 // import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
 import CycleTypeaheadSearchItem from '../cycle/TypeaheadSearchItem';
@@ -34,6 +34,7 @@ import WorkTypeaheadSearchItem from '../work/TypeaheadSearchItem';
 import globalModalsAtom from '../../atoms/globalModals';
 import styles from './CreatePostForm.module.css';
 import useTopics from '../../useTopics';
+import usePost from '../../usePost';
 
 const EditPostForm: FunctionComponent = () => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -41,11 +42,12 @@ const EditPostForm: FunctionComponent = () => {
   const [isSearchCycleLoading, setIsSearchCycleLoading] = useState(false);
   const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
   const [searchCycleResults, setSearchCycleResults] = useState<CycleMosaicItem[]>([]);
-  const [selectedCycle, setSelectedCycle] = useState<CycleMosaicItem | null>(null);
-  const [selectedWork, setSelectedWork] = useState<WorkMosaicItem | null>(null);
-  const [post, setPost] = useState<PostMosaicItem | null>(null);
+  const [selectedCycle, setSelectedCycle] = useState<CycleWithImages | null>(null);
+  const [selectedWork, setSelectedWork] = useState<WorkWithImages | null>(null);
+  // const [post, setPost] = useState<PostMosaicItem | null>(null);
   // const [imageFile, setImageFile] = useState<File | null>(null);
   const { data: topics } = useTopics();
+
   const [items, setItems] = useState<string[]>([]);
 
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
@@ -53,22 +55,32 @@ const EditPostForm: FunctionComponent = () => {
   const router = useRouter();
   const { t } = useTranslation('createPostForm');
 
-  useEffect(() => {
-    const fetchPost = async () => {
-      const res: Response = await fetch(`/api/post/${router.query.postId}`);
-      const { status, post: p = null } = await res.json();
-
-      if (status === 'OK') {
-        setPost(p);
-        if (p.works.length) setSelectedWork(p.works[0]);
-        if (p.cycles.length) setSelectedCycle(p.cycles[0]);
-      }
-    };
-    fetchPost();
-  }, [router.query.postId]);
+  const [postId, setPostId] = useState<string>('');
+  const { data: post, isLoading, isFetching, isSuccess } = usePost(+postId);
 
   useEffect(() => {
-    if (post && post.topics) items.push(...post.topics.split(','));
+    // const fetchPost = async () => {
+    //   const res: Response = await fetch(`/api/post/${router.query.postId}`);
+    //   const { status, post: p = null } = await res.json();
+
+    //   if (status === 'OK') {
+    //     setPost(p);
+    //     if (p.works.length) setSelectedWork(p.works[0]);
+    //     if (p.cycles.length) setSelectedCycle(p.cycles[0]);
+    //   }
+    // };
+    // fetchPost();
+    if (router.query) {
+      setPostId(router.query.postId as string);
+    }
+  }, [router.query]);
+
+  useEffect(() => {
+    if (post) {
+      if (post.topics) items.push(...post.topics.split(','));
+      if (post.works.length) setSelectedWork(post.works[0]);
+      if (post.cycles.length) setSelectedCycle(post.cycles[0]);
+    }
   }, [post]);
 
   const {
@@ -78,13 +90,33 @@ const EditPostForm: FunctionComponent = () => {
     isError: isEditPostError,
     isLoading: isEditPostLoading,
     isSuccess: isEditPostSuccess,
-  } = useMutation(async (payload: EditPostAboutCycleClientPayload | EditPostAboutWorkClientPayload): Promise<Post> => {
-    const res = await fetch(`/api/post/${router.query.postId}`, {
-      method: 'PATCH',
-      body: JSON.stringify(payload),
-    });
-    return res.json();
-  });
+  } = useMutation(
+    async (payload: EditPostAboutCycleClientPayload | EditPostAboutWorkClientPayload): Promise<Post> => {
+      const res = await fetch(`/api/post/${router.query.postId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(payload),
+      });
+      return res.json();
+    },
+    {
+      onMutate: async (variables) => {
+        if (post) {
+          const ck = [`POST`, `${post.id}`];
+          const snapshot = queryClient.getQueryData<PostMosaicItem>(ck);
+          queryClient.setQueryData(ck, { ...snapshot, ...variables });
+          return { snapshot, ck };
+        }
+        return { snapshot: null, ck: '' };
+      },
+      onSettled: (_post, error, _variables, context) => {
+        const ctx = context as { snapshot: PostMosaicItem; ck: string[] };
+        if (context) {
+          if (error) queryClient.setQueryData(ctx.ck, ctx.snapshot);
+          queryClient.invalidateQueries(ctx.ck);
+        }
+      },
+    },
+  );
 
   const handleSearchWorkOrCycle = async (query: string) => {
     setIsSearchWorkOrCycleLoading(true);
@@ -204,7 +236,7 @@ const EditPostForm: FunctionComponent = () => {
     if (post && ev.currentTarget.id in post) {
       const p: PostMosaicItem & { [key: string]: unknown } = post;
       p[ev.currentTarget.id] = ev.currentTarget.value;
-      setPost(p);
+      // setPost(p);
     }
   };
   const labelKeyFn = (res: SearchResult) => {
@@ -212,6 +244,8 @@ const EditPostForm: FunctionComponent = () => {
     return `${res.title}`;
     // return `${res.name}`;
   };
+
+  if (isLoading || isFetching || !post) return <Spinner animation="grow" variant="secondary" size="sm" />;
 
   return (
     post && (

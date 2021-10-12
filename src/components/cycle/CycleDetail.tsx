@@ -5,7 +5,18 @@ import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent, useState, useRef, useEffect } from 'react';
-import { TabPane, TabContent, TabContainer, Row, Col, Button, Nav, NavItem, NavLink } from 'react-bootstrap';
+import {
+  TabPane,
+  TabContent,
+  TabContainer,
+  Row,
+  Col,
+  ButtonGroup,
+  Button,
+  Nav,
+  NavItem,
+  NavLink,
+} from 'react-bootstrap';
 import { BiArrowBack } from 'react-icons/bi';
 import { MosaicContext } from '../../useMosaicContext';
 // import UserAvatar from '../common/UserAvatar';
@@ -30,6 +41,8 @@ import WorksMosaic from './WorksMosaic';
 import ComentMosaic from '../comment/MosaicItem';
 // import UnclampText from '../UnclampText';
 import detailPagesAtom from '../../atoms/detailPages';
+import globalModalsAtom from '../../atoms/globalModals';
+
 import styles from './CycleDetail.module.css';
 import { useCycleContext } from '../../useCycleContext';
 import CycleDetailHeader from './CycleDetailHeader';
@@ -61,6 +74,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     if (cycleContext) setCycle(cycleContext.cycle);
   }, [cycleContext]);
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
+  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const router = useRouter();
   const [session, isLoadingSession] = useSession() as [Session | null | undefined, boolean];
   const { t } = useTranslation('cycleDetail');
@@ -147,6 +161,11 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
     router.push(`/cycle/${router.query.id}/edit`);
+  };
+
+  const canEditPost = (): boolean => {
+    if (session && post && session.user.id === post.creatorId) return true;
+    return false;
   };
 
   const canEditCycle = (): boolean => {
@@ -283,6 +302,11 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     return '';
   };
 
+  const handleEditPostClick = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: true } });
+  };
+
   return (
     <>
       {!router.query.postId && canEditCycle() && (
@@ -293,9 +317,16 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       {!post && renderCycleDetailHeader()}
 
       {post && cycle && (
-        <Button variant="info" onClick={() => router.push(`/cycle/${cycle.id}`)} size="sm">
-          <BiArrowBack />
-        </Button>
+        <ButtonGroup className="mb-1">
+          <Button variant="info" onClick={() => router.push(`/cycle/${cycle.id}`)} size="sm">
+            <BiArrowBack />
+          </Button>
+          {canEditPost() && (
+            <Button variant="warning" onClick={handleEditPostClick} size="sm">
+              {t('Edit')}
+            </Button>
+          )}
+        </ButtonGroup>
       )}
       {post && cycle && (
         <MosaicContext.Provider value={{ showShare: true }}>

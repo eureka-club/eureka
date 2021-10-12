@@ -1,4 +1,4 @@
-import { /* Cycle, LocalImage */ Prisma } from '@prisma/client';
+import { Cycle, LocalImage, Prisma } from '@prisma/client';
 
 export interface ComplementaryMaterial {
   author: string;
@@ -8,9 +8,11 @@ export interface ComplementaryMaterial {
   file: File | null;
 }
 
-// export interface CycleWithImages extends Cycle {
-//   localImages: LocalImage[];
-// }
+export type CycleWithImages = Prisma.CycleGetPayload<{
+  include: {
+    localImages: true;
+  };
+}>;
 
 export type CycleMosaicItem = Prisma.CycleGetPayload<{
   include: {

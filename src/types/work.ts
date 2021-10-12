@@ -8,11 +8,11 @@ import { Prisma } from '@prisma/client';
 //   };
 // }>;
 
-// export type WorkWithImages = Prisma.WorkGetPayload<{
-//   include: {
-//     localImages: true;
-//   };
-// }>;
+export type WorkWithImages = Prisma.WorkGetPayload<{
+  include: {
+    localImages: true;
+  };
+}>;
 
 export type WorkMosaicItem = Prisma.WorkGetPayload<{
   include: {

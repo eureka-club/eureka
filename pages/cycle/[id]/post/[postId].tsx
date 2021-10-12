@@ -13,6 +13,7 @@ import CycleDetailComponent from '../../../../src/components/cycle/CycleDetail';
 // import { isFavoritedByUser /* isLikedByUser, search as searchPost */ } from '../../../../src/facades/post';
 import { WorkMosaicItem } from '../../../../src/types/work';
 import useCycle from '../../../../src/useCycle';
+import usePost from '../../../../src/usePost';
 import { CycleContext } from '../../../../src/useCycleContext';
 // import { Post } from '.prisma/client';
 // interface Props {
@@ -31,8 +32,11 @@ const PostDetailInCyclePage: NextPage = () => {
   const [cycleId, setCycleId] = useState<string>('');
   const { data, isLoading } = useCycle(+cycleId);
   const [cycle, setCycle] = useState<CycleMosaicItem>();
-  const [post, setPost] = useState<PostMosaicItem>();
+  // const [post, setPost] = useState<PostMosaicItem>();
   const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
+
+  const [postId, setPostId] = useState<string>('');
+  const { data: post, isLoading: isLoadingPost, isFetching: isFetchingPost } = usePost(+postId);
 
   useEffect(() => {
     if (!session) {
@@ -46,25 +50,31 @@ const PostDetailInCyclePage: NextPage = () => {
   }, [session, cycle]);
 
   useEffect(() => {
-    if (router.query.id) setCycleId(router.query.id as string);
+    if (router.query.id) {
+      setPostId(router.query.postId as string);
+      setCycleId(router.query.id as string);
+    }
   }, [router]);
 
   useEffect(() => {
     if (data) {
       const c = data as CycleMosaicItem;
       setCycle(() => c);
-      if (c) {
-        const po = c.posts.find((p) => p.id === parseInt(router.query.postId as string, 10));
-        setPost(po as PostMosaicItem);
-      }
+      // if (c) {
+      //   const po = c.posts.find((p) => p.id === parseInt(router.query.postId as string, 10));
+      //   setPost(po as PostMosaicItem);
+      // }
     }
   }, [data, router.query.postId]);
 
+  const isLoadingOrFetching = () => {
+    return isLoadingSession || isLoading || isLoadingPost || isFetchingPost;
+  };
   return (
     <SimpleLayout title={`${post ? post.title : ''} · ${cycle ? cycle.title : ''}`}>
       <>
-        {(isLoadingSession || isLoading) && <Spinner animation="grow" variant="secondary" />}
-        {!(isLoadingSession || isLoading) && post && cycle && (
+        {isLoadingOrFetching() && <Spinner animation="grow" variant="secondary" />}
+        {!isLoadingOrFetching() && post && cycle && (
           <CycleContext.Provider value={{ cycle, currentUserIsParticipant }}>
             <CycleDetailComponent
               post={post}
