@@ -7,7 +7,16 @@ export type CommentMosaicItem = Prisma.CommentGetPayload<{
     };
     // work: true;
     // cycle: true;
-    comments: { include: { creator: { select: { id: true; name: true; image: true } } } };
+    comments: {
+      include: {
+        creator: { select: { id: true; name: true; image: true } };
+        comments: {
+          include: {
+            creator: { select: { id: true; name: true; image: true } };
+          };
+        };
+      };
+    };
     // { include: { creator: true; comments: true } };
   };
 }> & { type?: 'comment' };

@@ -130,36 +130,40 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
                   dangerouslySetInnerHTML={{ __html: comment.contentText }}
                 />
                 <br />
-                {!isLoading && (
-                  <Button
-                    variant="default"
-                    onClick={() => setShowComment(() => true)}
-                    className={`pl-0 ${styles.replyButton}`}
-                  >
-                    <MdReply className="text-info" />
-                    <span className="text-info">{t('Reply')}</span>
-                  </Button>
-                )}
-                {!isLoading && showComment && (
-                  <Button
-                    variant="default"
-                    onClick={() => setShowComment(() => false)}
-                    className={`pl-0 ${styles.replyButton}`}
-                  >
-                    <MdCancel className="text-secondary" />
-                  </Button>
-                )}
+                {idSession && (
+                  <aside className="mb-3">
+                    {!comment.commentId && !isLoading && (
+                      <Button
+                        variant="default"
+                        onClick={() => setShowComment(() => true)}
+                        className={`pl-0 ${styles.replyButton}`}
+                      >
+                        <MdReply className="text-info" />
+                        <span className="text-info">{t('Reply')}</span>
+                      </Button>
+                    )}
+                    {!isLoading && showComment && (
+                      <Button
+                        variant="default"
+                        onClick={() => setShowComment(() => false)}
+                        className={`pl-0 ${styles.replyButton}`}
+                      >
+                        <MdCancel className="text-secondary" />
+                      </Button>
+                    )}
 
-                {!isLoading && showComment && (
-                  <Form onSubmit={handleFormSubmit}>
-                    <Form.Control
-                      value={newCommentInput}
-                      onChange={(e: ChangeEvent<HTMLInputElement>) => setNewCommentInput(e.target.value)}
-                      className={styles.newCommentInput}
-                      type="text"
-                      placeholder={`${t('Write a replay')}...`}
-                    />
-                  </Form>
+                    {!isLoading && showComment && (
+                      <Form onSubmit={handleFormSubmit}>
+                        <Form.Control
+                          value={newCommentInput}
+                          onChange={(e: ChangeEvent<HTMLInputElement>) => setNewCommentInput(e.target.value)}
+                          className="border fs-6 rounded-pill bg-light"
+                          type="text"
+                          placeholder={`${t('Write a replay')}...`}
+                        />
+                      </Form>
+                    )}
+                  </aside>
                 )}
                 {comment &&
                   comment.comments &&

@@ -189,7 +189,7 @@ const CommentsList: FunctionComponent<Props> = ({
             <Form.Control
               value={newCommentInput}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setNewCommentInput(e.target.value)}
-              className={styles.newCommentInput}
+              className="border fs-6 rounded-pill bg-light"
               type="text"
               placeholder={`${t('Write a replay')}...`}
             />
@@ -201,12 +201,12 @@ const CommentsList: FunctionComponent<Props> = ({
         {(filterdComments && filterdComments.length && (
           <div>
             {commentsShowCount < filterdComments?.length && (
-              <Button variant="default" className="text-info" onClick={viewMoreComments}>
+              <Button variant="default" className="fs-6 text-info" onClick={viewMoreComments}>
                 {t('vmcomments')}
               </Button>
             )}
             {commentsShowCount > commentsPerPage && (
-              <Button variant="default" className="text-info" onClick={viewLessComments}>
+              <Button variant="default" className="fs-6 text-info" onClick={viewLessComments}>
                 {t('vlcomments')}
               </Button>
             )}

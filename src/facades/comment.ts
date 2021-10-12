@@ -13,7 +13,12 @@ export const find = async (id: number): Promise<CommentMosaicItem | null> => {
       comments: {
         include: {
           creator: { select: { id: true, name: true, image: true } },
-          comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+          comments: {
+            include: {
+              creator: { select: { id: true, name: true, image: true } },
+              comments: true,
+            },
+          },
         },
       },
     },

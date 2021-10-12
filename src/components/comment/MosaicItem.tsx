@@ -6,7 +6,9 @@ import { Row, Col, Card, Button } from 'react-bootstrap';
 import { FaRegComments } from 'react-icons/fa';
 import { BsJustifyLeft } from 'react-icons/bs';
 import { MdReply } from 'react-icons/md';
+import dayjs from 'dayjs';
 
+import { DATE_FORMAT_SHORT } from '../../constants';
 // import { useSession } from 'next-auth/client';
 // import SocialInteraction from '../common/SocialInteraction';
 import { CommentMosaicItem } from '../../types/comment';
@@ -84,31 +86,42 @@ const MosaicItem: FunctionComponent<Props> = ({
     }
     return null;
   })();
-
   // const [session] = useSession() as [Session | null | undefined, boolean];
   const renderCardDetailed = () => {
     return (
       <>
         <Card className={`${styles.post} ${styles.commentHorizontally}`}>
-          <Card.Header className={styles.cardHeader}>
-            {commentParent && (
-              <h2 className="fs-6">
-                {comentLinkHref != null ? (
-                  <>
-                    <BsJustifyLeft className="text-primary" />{' '}
-                    <Link href={comentLinkHref}>
-                      <a>
-                        <span>{getTitle()}</span>
-                      </a>
-                    </Link>
-                  </>
-                ) : (
-                  <h2 className="fs-6">
-                    <BsJustifyLeft className="text-primary" /> <span>{getTitle()}</span>
-                  </h2>
-                )}
-              </h2>
-            )}
+          <Card.Header as={Row} className={styles.cardHeader}>
+            <Col xs={12} md={6}>
+              {commentParent && (
+                <h2 className="fs-6">
+                  {comentLinkHref != null ? (
+                    <>
+                      <BsJustifyLeft className="text-primary" />{' '}
+                      <Link href={comentLinkHref}>
+                        <a>
+                          <span>{getTitle()}</span>
+                        </a>
+                      </Link>
+                    </>
+                  ) : (
+                    <h2 className="fs-6">
+                      <BsJustifyLeft className="text-primary" /> <span>{getTitle()}</span>
+                    </h2>
+                  )}
+                </h2>
+              )}
+            </Col>
+            <Col xs={12} md={6}>
+              <div className="text-right">
+                <Avatar user={comment.creator} size="sm" />
+                {` - `}
+                <span className="fs-6">{dayjs(comment.createdAt).format(DATE_FORMAT_SHORT)}</span>
+              </div>
+              <div className="text-right fs-6">
+                <FaRegComments className="text-info" /> <span>{comment.comments.length} Comments</span>
+              </div>
+            </Col>
           </Card.Header>
           <Card.Body>
             <Row>
@@ -116,7 +129,7 @@ const MosaicItem: FunctionComponent<Props> = ({
                 <div className={styles.dangerouslySetInnerHTML} dangerouslySetInnerHTML={{ __html: contentText }} />
               </Col>
             </Row>
-            <Row className={styles.bottomRight}>
+            {/* <Row className={styles.bottomRight}>
               <Col md={4}>
                 <Avatar user={comment.creator} />
               </Col>
@@ -125,12 +138,12 @@ const MosaicItem: FunctionComponent<Props> = ({
                   <FaRegComments /> <span>{comment.comments.length} Comments</span>
                 </div>
               </Col>
-            </Row>
+            </Row> */}
             {showComments && <CommentsList entity={comment} parent={commentParent} cacheKey={cacheKey} />}
           </Card.Body>
-          <Card.Footer className={styles.footer}>
-            {showComments && <Button variant="default">View more comments</Button>}
-          </Card.Footer>
+          {/* <Card.Footer>
+            {showComments && <Button className="fs-6" variant="default">View more comments</Button>}
+          </Card.Footer> */}
         </Card>
       </>
     );

@@ -188,7 +188,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
               detailed
               showComments
               commentParent={cycle}
-              cacheKey={['CYCLES', `${cycle.id}`]}
+              cacheKey={['CYCLE', `${cycle.id}`]}
               className="mb-4"
             />
           );
@@ -232,7 +232,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
             <CycleDetailDiscussion cycle={cycle} className="mb-5" />
             {(cycle.posts && cycle.posts.length && (
               <MosaicContext.Provider value={{ showShare: true }}>
-                <PostsMosaic display="h" cycle={cycle} showComments cacheKey={['CYCLES', `${cycle.id}`]} />
+                <PostsMosaic display="h" cycle={cycle} showComments cacheKey={['CYCLE', `${cycle.id}`]} />
               </MosaicContext.Provider>
             )) ||
               null}

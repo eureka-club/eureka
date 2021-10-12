@@ -85,8 +85,8 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({ cycl
     },
     {
       onMutate: async () => {
-        const cacheKey = ['CYCLES', `${cycle.id}`];
-        // await queryClient.cancelQueries(cacheKey);
+        const cacheKey = ['CYCLE', `${cycle.id}`];
+        await queryClient.cancelQueries(cacheKey);
         const previewsItems = queryClient.getQueryData<CycleMosaicItem[]>(cacheKey);
         // const eureka: Pick<Post, 'title' | 'language' | 'contentText' | 'isPublic'> = newComment;
 
