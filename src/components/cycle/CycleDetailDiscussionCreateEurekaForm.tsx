@@ -210,22 +210,23 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
           onChange={onChangeFieldEurekaForm}
         />
       </Form.Group> */}
-
-      <ImageFileSelect acceptedFileTypes="image/*" file={newEurekaImageFile} setFile={setNewEurekaImageFile} required>
-        {(imagePreview) => (
-          <Form.Group>
-            {/* <Form.Label>*{t('imageFieldLabel')}</Form.Label> */}
-            <div className={stylesImageFileSelect.imageControl}>
-              {newEurekaImageFile != null && imagePreview ? (
-                <span className={stylesImageFileSelect.imageName}>{newEurekaImageFile?.name}</span>
-              ) : (
-                t('Image')
-              )}
-              {imagePreview && <img src={imagePreview} className="float-right" alt="Work cover" />}
-            </div>
-          </Form.Group>
-        )}
-      </ImageFileSelect>
+      <Form.Group className="mt-3" controlId="eureka-image">
+        <ImageFileSelect acceptedFileTypes="image/*" file={newEurekaImageFile} setFile={setNewEurekaImageFile} required>
+          {(imagePreview) => (
+            <Form.Group>
+              {/* <Form.Label>*{t('imageFieldLabel')}</Form.Label> */}
+              <div className={`${stylesImageFileSelect.imageControl} border-success`}>
+                {newEurekaImageFile != null && imagePreview ? (
+                  <span className={stylesImageFileSelect.imageName}>{newEurekaImageFile?.name}</span>
+                ) : (
+                  t('Image')
+                )}
+                {imagePreview && <img src={imagePreview} className="float-right" alt="Work cover" />}
+              </div>
+            </Form.Group>
+          )}
+        </ImageFileSelect>
+      </Form.Group>
       <Row>
         <Col xs={12} md={8}>
           <Form.Group controlId="topics">
@@ -241,17 +242,20 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
             />
           </Form.Group>
         </Col>
-        <Col xs={12} md={4}>
-          <ButtonGroup size="sm">
-            <Button variant="secondary" onClick={clearCreateEurekaForm}>
-              <ImCancelCircle />
-            </Button>
-            <Button type="submit">
-              <BsCheck />
-            </Button>
-          </ButtonGroup>
-        </Col>
       </Row>
+
+      <aside className="d-flex justify-content-end">
+        <ButtonGroup size="sm">
+          <Button variant="secondary" onClick={clearCreateEurekaForm}>
+            <ImCancelCircle />
+          </Button>
+          <Button type="submit">
+            <span>
+              <BsCheck /> {t('Create')}
+            </span>
+          </Button>
+        </ButtonGroup>
+      </aside>
     </Form>
   );
 };

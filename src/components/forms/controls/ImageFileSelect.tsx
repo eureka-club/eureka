@@ -9,9 +9,17 @@ interface Props {
   file: File | null;
   setFile: (file: File | null) => void;
   required: boolean;
+  className?: string;
 }
 
-const ImageFileSelect: FunctionComponent<Props> = ({ acceptedFileTypes, children, file, setFile, required }) => {
+const ImageFileSelect: FunctionComponent<Props> = ({
+  acceptedFileTypes,
+  children,
+  file,
+  setFile,
+  required,
+  className,
+}) => {
   const coverInputRef = useRef<HTMLInputElement>() as RefObject<HTMLInputElement>;
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -47,19 +55,19 @@ const ImageFileSelect: FunctionComponent<Props> = ({ acceptedFileTypes, children
   }, [file, setFile]);
 
   return (
-    <>
+    <aside className={`${className}`}>
       <FormFile
         accept={acceptedFileTypes}
-        className={styles.fileControl}
         onChange={handleFileInputChange}
         ref={coverInputRef}
         required={required}
+        className={`${styles.fileControl} ${className}`}
       />
 
       <button className={styles.trigger} type="button" onClick={handleTriggerClick}>
         {children(imagePreview)}
       </button>
-    </>
+    </aside>
   );
 };
 

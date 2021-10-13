@@ -17,6 +17,7 @@
   "explanatoryTextComments": "Use este fórum para comentários e perguntas curtas. Para escrever mais e contribuir com o ciclo, crie uma publicação!",
   "explanatoryTextPosts": "Uma publicação é uma reflexão pessoal sobre uma obra ou ciclo, composta por uma foto e um texto. É possivelmente a materialização de um momento Eureka! Participe do ciclo criando sua própria publicação!",
   "Edit": "Editar",
+  "Create": "Create",
   "ratings": "avaliações",
   "Works on Cycle": "Obras no ciclo",
   "Cycle itself": "Ciclo (sua contribuição é sobre o tema do ciclo, não foca apenas em uma das obras)",
@@ -29,15 +30,12 @@
   "Didn't find the work you were looking for? You can add it to our library!": "Não encontrou a obra que procurava? Você pode adicioná-la à nossa biblioteca!",
   "Why does this cycle matter": "Por que este ciclo é importante",
   "Participants": "Participantes",
-  
   "About": "Sobre",
   "Discussion": "Discussão",
   "Guidelines": "Princípios de moderação",
   "My milestones": "Meus marcos",
-  
   "Add a quick comment": "Adicionar um comentário curto",
-  "Create an Eureka":"Criar uma Eureka",
-  "Suggest a related work":"Adicionar obra ao ciclo",
-  "Content calendar":"Calendário de conteúdo"
-
+  "Create an Eureka": "Criar uma Eureka",
+  "Suggest a related work": "Adicionar obra ao ciclo",
+  "Content calendar": "Calendário de conteúdo"
 }
