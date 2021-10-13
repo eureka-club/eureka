@@ -121,32 +121,31 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
         /* !isLoading &&  */ comment && (
           <Card key={comment.id} className={`mt-3 ${styles.container}`}>
             <Row>
-              <Col xs={2} md={1} className="pr-1">
-                <Avatar user={comment.creator} size="sm" showName={false} />
+              <Col xs={2} md={1} className="pr-0">
+                <Avatar user={comment.creator} size="xs" showName={false} />
               </Col>
-              <Col xs={10} md={11} className="pl-1">
+              <Col xs={10} md={11} className="pl-0">
                 <div
-                  className="p-2 bg-light border rounded"
+                  className="p-1 bg-light border rounded"
                   dangerouslySetInnerHTML={{ __html: comment.contentText }}
                 />
-                <br />
                 {idSession && (
-                  <aside className="mb-3">
+                  <aside className="mb-2">
                     {!comment.commentId && !isLoading && (
                       <Button
                         variant="default"
                         onClick={() => setShowComment(() => true)}
-                        className={`pl-0 ${styles.replyButton}`}
+                        className={`p-0 border-top-0 ${styles.replyButton}`}
                       >
-                        <MdReply className="text-info" />
-                        <span className="text-info">{t('Reply')}</span>
+                        <MdReply className="fs-6 text-info" />
+                        <span className="fs-6 text-info">{t('Reply')}</span>
                       </Button>
                     )}
                     {!isLoading && showComment && (
                       <Button
                         variant="default"
                         onClick={() => setShowComment(() => false)}
-                        className={`pl-0 ${styles.replyButton}`}
+                        className={`p-0 ${styles.replyButton}`}
                       >
                         <MdCancel className="text-secondary" />
                       </Button>
@@ -168,13 +167,13 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
                 {comment &&
                   comment.comments &&
                   comment.comments.map((c) => (
-                    <Row key={c.id} className="mb-3">
+                    <Row key={c.id} className="mb-1">
                       <Col md={1} className="pr-0">
                         <Avatar user={c.creator} size="xs" showName={false} />
                       </Col>
                       <Col md={11} className="pl-0">
                         <div
-                          className="p-2 bg-light border rounded"
+                          className="p-1 bg-light border rounded"
                           dangerouslySetInnerHTML={{ __html: c.contentText }}
                         />
                         {/* <div className={styles.dangerouslySetInnerHTML}>{c.contentText}</div> */}
