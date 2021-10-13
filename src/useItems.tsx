@@ -39,16 +39,24 @@ const getRecordsCycles = async (where?: string): Promise<CycleMosaicItem[]> => {
 
 const getRecords = async (where?: string): Promise<Item[] | undefined> => {
   if (!where) return undefined;
-  const cycles = await getRecordsCycles(where);
-  const works = await getRecordsWorks(where);
-
-  const result = [...cycles, ...works].sort((f, s) => {
+  let cycles = await getRecordsCycles(where);
+  cycles = cycles.sort((f, s) => {
     const fCD = dayjs(f.createdAt);
     const sCD = dayjs(s.createdAt);
     if (fCD.isAfter(sCD)) return -1;
     if (fCD.isSame(sCD)) return 0;
     return 1;
   });
+  let works = await getRecordsWorks(where);
+  works = works.sort((f, s) => {
+    const fCD = dayjs(f.createdAt);
+    const sCD = dayjs(s.createdAt);
+    if (fCD.isAfter(sCD)) return -1;
+    if (fCD.isSame(sCD)) return 0;
+    return 1;
+  });
+
+  const result = [...cycles, ...works];
   return result;
 };
 
