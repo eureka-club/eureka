@@ -119,14 +119,14 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
     <>
       {
         /* !isLoading &&  */ comment && (
-          <Card key={comment.id} className={`mt-3 ${styles.container}`}>
+          <Card key={comment.id} className="mt-1 bg-white border-0">
             <Row>
-              <Col xs={2} md={1} className="pr-1">
+              <Col xs={2} md={1} className="pr-0 text-right">
                 <Avatar user={comment.creator} size="sm" showName={false} />
               </Col>
-              <Col xs={10} md={11} className="pl-1">
+              <Col xs={10} md={11} className="pl-0">
                 <div
-                  className="p-2 bg-light border rounded"
+                  className="p-2 bg-light border rounded d-inline-block"
                   dangerouslySetInnerHTML={{ __html: comment.contentText }}
                 />
                 <br />
@@ -169,12 +169,12 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
                   comment.comments &&
                   comment.comments.map((c) => (
                     <Row key={c.id} className="mb-3">
-                      <Col md={1} className="pr-0">
+                      <Col md={1} className="pr-0 text-right">
                         <Avatar user={c.creator} size="xs" showName={false} />
                       </Col>
                       <Col md={11} className="pl-0">
                         <div
-                          className="p-2 bg-light border rounded"
+                          className="p-2 bg-light border rounded d-inline-block"
                           dangerouslySetInnerHTML={{ __html: c.contentText }}
                         />
                         {/* <div className={styles.dangerouslySetInnerHTML}>{c.contentText}</div> */}

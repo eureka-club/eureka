@@ -3,8 +3,8 @@ import Link from 'next/link';
 // import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
-import { FaRegComments } from 'react-icons/fa';
-import { BsJustifyLeft } from 'react-icons/bs';
+import { FaRegComments, FaRegCompass } from 'react-icons/fa';
+
 import { MdReply } from 'react-icons/md';
 import dayjs from 'dayjs';
 
@@ -97,7 +97,7 @@ const MosaicItem: FunctionComponent<Props> = ({
                 <h2 className="fs-6">
                   {comentLinkHref != null ? (
                     <>
-                      <BsJustifyLeft className="text-primary" />{' '}
+                      <FaRegCompass className="text-primary" />{' '}
                       <Link href={comentLinkHref}>
                         <a>
                           <span>{getTitle()}</span>
@@ -106,7 +106,7 @@ const MosaicItem: FunctionComponent<Props> = ({
                     </>
                   ) : (
                     <h2 className="fs-6">
-                      <BsJustifyLeft className="text-primary" /> <span>{getTitle()}</span>
+                      <FaRegCompass className="text-primary" /> <span>{getTitle()}</span>
                     </h2>
                   )}
                 </h2>
@@ -114,7 +114,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             </Col>
             <Col xs={12} md={6}>
               <div className="text-right">
-                <Avatar user={comment.creator} size="sm" />
+                <Avatar user={comment.creator} size="xs" />
                 {` - `}
                 <span className="fs-6">{dayjs(comment.createdAt).format(DATE_FORMAT_SHORT)}</span>
               </div>
@@ -123,7 +123,7 @@ const MosaicItem: FunctionComponent<Props> = ({
               </div>
             </Col>
           </Card.Header>
-          <Card.Body>
+          <Card.Body className="pt-0">
             <Row>
               <Col>
                 <div className={styles.dangerouslySetInnerHTML} dangerouslySetInnerHTML={{ __html: contentText }} />

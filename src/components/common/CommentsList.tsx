@@ -181,7 +181,7 @@ const CommentsList: FunctionComponent<Props> = ({
   };
 
   return (
-    <section className={`${styles.container}`}>
+    <section className="bg-white border-0">
       {user && (
         <Form onSubmit={handleFormSubmit}>
           <InputGroup className="mt-2">
