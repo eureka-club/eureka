@@ -841,7 +841,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
             >
               {t('submitBtnLabel')}
               {isCreateCycleReqLoading ? (
-                <Spinner animation="grow" variant="secondary" className={styles.loadIndicator} />
+                <Spinner animation="grow" variant="info" className={styles.loadIndicator} />
               ) : (
                 <span className={styles.loadIndicator} />
               )}

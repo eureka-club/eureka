@@ -188,7 +188,7 @@ const MosaicItem: FunctionComponent<Props> = ({
       </div>
       {detailed && (
         <div className="text-center p-1">
-          <h3 className={`${styles.title}`}>{title}</h3>
+          <h6 className={`${styles.title}`}>{title} </h6>
           <div className={styles.date}>
             {sd.format(DATE_FORMAT_SHORT)}
             &mdash; {ed.format(DATE_FORMAT_SHORT)}

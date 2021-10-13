@@ -245,7 +245,7 @@ const EditPostForm: FunctionComponent = () => {
     // return `${res.name}`;
   };
 
-  if (isLoading || isFetching || !post) return <Spinner animation="grow" variant="secondary" size="sm" />;
+  if (isLoading || isFetching || !post) return <Spinner animation="grow" variant="info" size="sm" />;
 
   return (
     post && (

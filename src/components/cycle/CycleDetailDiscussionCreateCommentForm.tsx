@@ -213,7 +213,7 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({ cycl
         </Col> */}
           <Col xs={12} md={4}>
             <ButtonGroup size="sm">
-              <Button variant="secondary" onClick={clearCreateEurekaForm}>
+              <Button variant="warning" onClick={clearCreateEurekaForm}>
                 <ImCancelCircle />
               </Button>
               <Button type="submit">

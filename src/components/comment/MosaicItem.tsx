@@ -97,9 +97,9 @@ const MosaicItem: FunctionComponent<Props> = ({
                 <h2 className="fs-6">
                   {comentLinkHref != null ? (
                     <>
-                      <BsJustifyLeft className="text-primary" />{' '}
+                      <BsJustifyLeft className="text-info" />{' '}
                       <Link href={comentLinkHref}>
-                        <a>
+                        <a className="text-info">
                           <span>{getTitle()}</span>
                         </a>
                       </Link>
@@ -114,12 +114,12 @@ const MosaicItem: FunctionComponent<Props> = ({
             </Col>
             <Col xs={12} md={6}>
               <div className="text-right">
-                <Avatar user={comment.creator} size="sm" />
+                <Avatar user={comment.creator} size="xs" />
                 {` - `}
                 <span className="fs-6">{dayjs(comment.createdAt).format(DATE_FORMAT_SHORT)}</span>
               </div>
               <div className="text-right fs-6">
-                <FaRegComments className="text-info" /> <span>{comment.comments.length} Comments</span>
+                <FaRegComments className="text-primary" /> <span>{comment.comments.length} Replies </span>
               </div>
             </Col>
           </Card.Header>

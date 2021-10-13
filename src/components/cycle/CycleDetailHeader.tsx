@@ -211,7 +211,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   return (
     <Row className="mb-5">
       <Col md={9}>
-        <h1 className="mb-1 text-success">{cycle.title}</h1>
+        <h1 className="mb-1 text-dark">{cycle.title}</h1>
         <Rating
           readonly
           initialRating={getRatingAvg()}

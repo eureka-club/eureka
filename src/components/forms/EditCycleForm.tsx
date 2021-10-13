@@ -571,7 +571,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
               >
                 {t('Edit Cycle')}
                 {isEditCycleReqLoading ? (
-                  <Spinner animation="grow" variant="secondary" className={styles.loadIndicator} />
+                  <Spinner animation="grow" variant="info" className={styles.loadIndicator} />
                 ) : (
                   <span className={styles.loadIndicator} />
                 )}

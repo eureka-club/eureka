@@ -137,8 +137,8 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
                         onClick={() => setShowComment(() => true)}
                         className={`p-0 border-top-0 ${styles.replyButton}`}
                       >
-                        <MdReply className="fs-6 text-info" />
-                        <span className="fs-6 text-info">{t('Reply')}</span>
+                        <MdReply className="fs-6 text-primary" />
+                        <span className="fs-6 text-primary">{t('Reply')}</span>
                       </Button>
                     )}
                     {!isLoading && showComment && (
@@ -180,7 +180,7 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
                       </Col>
                     </Row>
                   ))}
-                {isLoading && <Spinner animation="grow" variant="secondary" size="sm" />}
+                {isLoading && <Spinner animation="grow" variant="info" size="sm" />}
               </Col>
             </Row>
           </Card>

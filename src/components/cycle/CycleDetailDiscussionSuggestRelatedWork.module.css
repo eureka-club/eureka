@@ -1,14 +1,14 @@
 .suggestButton{
-    background-color: var(--color-emphasis-raised);
-    border-color: var(--color-emphasis-raised);
+    background-color: #FFAFAF;
+    border-color: #FFAFAF;
     color:white;
 }
 .addButton{
     background-color: transparent;
-    border-color: var(--color-emphasis-raised);
-    color:var(--color-emphasis-raised);
+    border-color: #FFAFAF;
+    color:#FFAFAF;
 }
 .addWorkInfo{
-    color:var(--color-emphasis-raised);
+    color:#FFAFAF;
     font-size: .9em;
 }

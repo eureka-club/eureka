@@ -438,10 +438,10 @@ const SocialInteraction: FunctionComponent<Props> = ({
     if (session) {
       if (user && mySocialInfo) {
         if (mySocialInfo.ratingByMe)
-          return <GiBrain className="text-primary" /*  style={{ color: 'var(--eureka-blue)' }} */ />;
+          return <GiBrain className="text-secondary" /*  style={{ color: 'var(--eureka-blue)' }} */ />;
       }
     }
-    return <GiBrain className="text-success" /* style={{ color: 'var(--eureka-green)' }} */ />;
+    return <GiBrain className="text-primary" /* style={{ color: 'var(--eureka-green)' }} */ />;
   };
 
   const getRatingsCount = () => {
@@ -478,7 +478,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
                 onChange={handlerChangeRating}
                 className={styles.rating}
                 stop={5}
-                emptySymbol={<GiBrain className="fs-6 text-secondary" />}
+                emptySymbol={<GiBrain className="fs-6 text-info" />}
                 fullSymbol={getFullSymbol()}
               />
             )}{' '}
@@ -487,7 +487,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
               <Button
                 type="button"
                 title={t('Clear rating')}
-                className="text-success p-0"
+                className="text-warning p-0"
                 onClick={clearRating}
                 variant="link"
               >
@@ -495,7 +495,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
               </Button>
             )}
             {loadingSocialInteraction && (
-              <Spinner className={styles.ratingSpinner} size="sm" animation="grow" variant="secondary" />
+              <Spinner className={styles.ratingSpinner} size="sm" animation="grow" variant="info" />
             )}
           </div>
         )}
@@ -506,7 +506,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
                 // style={{ fontSize: '.9em' }}
                 title={t('Share')}
                 variant="link"
-                className={`${styles.buttonSI} fs-6 p-0 text-success`}
+                className={`${styles.buttonSI} fs-6 p-0 text-primary`}
               >
                 <FiShare2 />
                 <br />
@@ -520,7 +520,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
           {!loadingSocialInteraction && (
             <Button
               variant="link"
-              className={`${styles.buttonSI} p-0 text-success`}
+              className={`${styles.buttonSI} p-0 text-primary`}
               title={t('Save for later')}
               onClick={handleFavClick}
             >

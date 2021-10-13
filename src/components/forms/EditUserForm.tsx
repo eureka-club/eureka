@@ -471,7 +471,7 @@ const EditUserForm: FunctionComponent = () => {
               <Button variant="primary" type="submit" className="pl-5 pr-4 float-right">
                 {t('Edit')}
                 {isLoadingUser ? (
-                  <Spinner animation="grow" variant="secondary" className={styles.loadIndicator} />
+                  <Spinner animation="grow" variant="info" className={styles.loadIndicator} />
                 ) : (
                   <span className={styles.placeholder} />
                 )}

@@ -201,12 +201,12 @@ const CommentsList: FunctionComponent<Props> = ({
         {(filterdComments && filterdComments.length && (
           <div>
             {commentsShowCount < filterdComments?.length && (
-              <Button variant="default" className="fs-6 text-info" onClick={viewMoreComments}>
+              <Button variant="default" className="fs-6 text-primary" onClick={viewMoreComments}>
                 {t('vmcomments')}
               </Button>
             )}
             {commentsShowCount > commentsPerPage && (
-              <Button variant="default" className="fs-6 text-info" onClick={viewLessComments}>
+              <Button variant="default" className="fs-6 text-primary" onClick={viewLessComments}>
                 {t('vlcomments')}
               </Button>
             )}
@@ -214,7 +214,7 @@ const CommentsList: FunctionComponent<Props> = ({
         )) ||
           ''}
       </div>
-      {isLoading && <Spinner animation="grow" variant="secondary" size="sm" />}
+      {isLoading && <Spinner animation="grow" variant="info" size="sm" />}
     </section>
   );
 };

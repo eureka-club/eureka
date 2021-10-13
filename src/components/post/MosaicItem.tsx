@@ -84,13 +84,13 @@ const MosaicItem: FunctionComponent<Props> = ({
     return (
       <Card className={`${styles.container} ${className}`}>
         {postParent && (
-          <h2 className="m-0 p-1 fs-6 text-secondary">
-            <FaRegCompass className="text-primary" />
+          <h2 className="m-0 p-1 fs-6 text-info">
+            <FaRegCompass className="text-info mb-1" />
             {` `}
             {postParentLinkHref != null ? (
               <Link href={postParentLinkHref}>
-                <a>
-                  <span>{postParent.title}</span>
+                <a className="text-info">
+                  <span>{postParent.title} </span>
                 </a>
               </Link>
             ) : (
@@ -135,9 +135,9 @@ const MosaicItem: FunctionComponent<Props> = ({
         </div>
         {showDetailedInfo && (
           <div className={`d-flex align-items-center justify-content-center ${styles.detailedInfo}`}>
-            <h6 className="text-center">
+            <h6 className="text-center mb-0">
               <Link href={postLinkHref}>
-                <a className="text-secondary text-decoration-underline">{post.title}</a>
+                <a className="text-gray-dark">{post.title}</a>
               </Link>
             </h6>
             {/* <div className="mb-5">
