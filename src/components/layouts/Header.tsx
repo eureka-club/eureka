@@ -54,7 +54,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
             <Row className="text-white mb-5">
               <Col xs={12} md={4} className="d-flex flex-column">
                 <h1 className="h1 ml-auto">Eureka.</h1>
-                <em className="fs-6 ml-auto">Shape your mind, shape the world</em>
+                <em className="fs-6 ml-auto">{t('underEurekaLabel')}</em>
               </Col>
               <Col xs={12} md={8} className="text-left">
                 <p className="pl-4 border-left border-white">{t('eurekaReasonLabel')}</p>
@@ -68,10 +68,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
                 className="p-3 text-white rounded d-flex flex-column align-items-center ml-5 bg-primary"
               >
                 <aside className={`${styles.bgHeaderLeft}`} />
-                <p className="p-0 m-0">
-                  ¿Hace cuánto sientes que pierdes el tiempo en redes sociales? En Eureka, dedica tu tiempo de pantalla
-                  para senti-pensar, sobre temas y contenidos con significado.
-                </p>
+                <p className="p-0 m-0">{t('headerLeftBoxText')}</p>
               </Col>
               <Col
                 xs={12}
@@ -79,10 +76,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
                 className="p-3 text-white rounded d-flex flex-column align-items-center ml-5 bg-primary"
               >
                 <aside className={`${styles.bgHeaderCenter}`} />
-                <p className="p-0 m-0">
-                  Únete a un ciclo: recorridos de conocimiento para que personas interesadas y expertas, puedan
-                  profundizar en cualquier tipo de tema.
-                </p>
+                <p className="p-0 m-0">{t('headerCenterBoxText')}</p>
               </Col>
               <Col
                 xs={12}
@@ -90,9 +84,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
                 className="p-3 text-white rounded d-flex flex-column align-items-center ml-5 bg-primary"
               >
                 <aside className={`${styles.bgHeaderRight}`} />
-                <p className="p-0 m-0">
-                  Crea y comparte momentos Eureka: revelaciones individuales que transforman el colectivo.
-                </p>
+                <p className="p-0 m-0">{t('headerRightBoxText')}</p>
               </Col>
             </Row>
           </Container>
