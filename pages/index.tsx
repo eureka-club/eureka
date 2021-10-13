@@ -17,6 +17,7 @@ import { Button } from 'react-bootstrap';
 // import { PostMosaicItem } from '../src/types/post';
 import styles from './index.module.css';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
+import Header from '../src/components/layouts/Header';
 // import { findAll as findAllCycles } from '../src/facades/cycle';
 // import { findAll as findAllWorks } from '../src/facades/work';
 // import Mosaic from '../src/components/Mosaic';
@@ -48,7 +49,7 @@ const IndexPage: NextPage = () => {
   };
 
   return (
-    <SimpleLayout title={t('browserTitleWelcome')}>
+    <SimpleLayout showHeader title={t('browserTitleWelcome')}>
       <h1 className="text-success mb-5">{t('Trending topics')}</h1>
 
       <>{show && show.map((item) => <Carousel key={item} topic={item} />)}</>
