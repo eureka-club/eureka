@@ -516,7 +516,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
           </div>
         )}
         {/* <Col xs={showRating ? 2 : 12}> */}
-        <div className="ml-1">
+        <div className={`${showShare ? 'ml-1' : 'ml-auto'}`}>
           {!loadingSocialInteraction && (
             <Button
               variant="link"
