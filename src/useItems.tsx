@@ -1,5 +1,6 @@
 import { useQuery } from 'react-query';
 import { useAtom } from 'jotai';
+import dayjs from 'dayjs';
 import { WorkMosaicItem } from './types/work';
 import { CycleMosaicItem } from './types/cycle';
 import globalSearchEngineAtom from './atoms/searchEngine';
@@ -41,7 +42,13 @@ const getRecords = async (where?: string): Promise<Item[] | undefined> => {
   const cycles = await getRecordsCycles(where);
   const works = await getRecordsWorks(where);
 
-  const result = [...cycles, ...works];
+  const result = [...cycles, ...works].sort((f, s) => {
+    const fCD = dayjs(f.createdAt);
+    const sCD = dayjs(s.createdAt);
+    if (fCD.isAfter(sCD)) return -1;
+    if (fCD.isSame(sCD)) return 0;
+    return 1;
+  });
   return result;
 };
 
