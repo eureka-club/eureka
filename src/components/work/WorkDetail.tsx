@@ -2,15 +2,19 @@
 import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent } from 'react';
-import Col from 'react-bootstrap/Col';
-import Nav from 'react-bootstrap/Nav';
-import NavItem from 'react-bootstrap/NavItem';
-import NavLink from 'react-bootstrap/NavLink';
-import Row from 'react-bootstrap/Row';
-import TabContainer from 'react-bootstrap/TabContainer';
-import TabContent from 'react-bootstrap/TabContent';
-import TabPane from 'react-bootstrap/TabPane';
-import { Button } from 'react-bootstrap';
+
+import {
+  Nav,
+  NavItem,
+  TabPane,
+  TabContent,
+  TabContainer,
+  Row,
+  Col,
+  NavLink,
+  Button,
+  ButtonGroup,
+} from 'react-bootstrap';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
 import { BiArrowBack } from 'react-icons/bi';
 import { useSession } from 'next-auth/client';
@@ -64,13 +68,38 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
     return false;
   };
 
+  const canEditPost = (): boolean => {
+    if (session && post && session.user.id === post.creatorId) return true;
+    return false;
+  };
+
+  const handleEditPostClick = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: true } });
+  };
+
   return (
     <MosaicContext.Provider value={{ showShare: true }}>
       {!router.query.postId && canEditWork() && (
-        <Button variant="warning" onClick={handleEditClick} size="sm">
+        <Button variant="warning" className="mb-1" onClick={handleEditClick} size="sm">
           {t('edit')}
         </Button>
       )}
+      {post && work && (
+        <div>
+          <ButtonGroup className="mb-1">
+            <Button variant="info" onClick={() => router.push(`/work/${work.id}`)} size="sm">
+              <BiArrowBack />
+            </Button>
+            {canEditPost() && (
+              <Button variant="warning" onClick={handleEditPostClick} size="sm">
+                {t('edit')}
+              </Button>
+            )}
+          </ButtonGroup>
+        </div>
+      )}
+
       <Row className="mb-5">
         {post == null ? (
           <>
@@ -98,14 +127,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
             </Col>
           </>
         ) : (
-          <>
-            {post && work && (
-              <Button variant="info" onClick={() => router.push(`/work/${work.id}`)} size="sm">
-                <BiArrowBack />
-              </Button>
-            )}
-            <PostDetailComponent post={post} work={work} />
-          </>
+          <>{post && work && <PostDetailComponent post={post} work={work} />}</>
         )}
       </Row>
 
