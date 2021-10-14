@@ -189,6 +189,7 @@ const Mediatheque: NextPage = () => {
       const P = user.posts.map((p: PostMosaicItem) => ({ ...p, type: 'post' }));
       return (
         <CarouselStatic
+          className="mb-5"
           onSeeAll={async () => seeAll(P, t('Eurekas I created'))}
           title={t('Eurekas I created')}
           data={P}

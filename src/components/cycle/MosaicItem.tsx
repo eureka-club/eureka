@@ -175,7 +175,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   };
 
   return (
-    <Card className={`${styles.container} ${isActive ? 'isActive' : ''} ${className}`}>
+    <Card className={`${isActive ? 'isActive' : ''} ${className}`}>
       <div className={`${styles.imageContainer} ${detailed && styles.detailedImageContainer}`}>
         <Link href={`/cycle/${id}`}>
           <a>
@@ -188,7 +188,11 @@ const MosaicItem: FunctionComponent<Props> = ({
       </div>
       {detailed && (
         <div className="text-center p-1">
-          <h6 className={`${styles.title}`}>{title} </h6>
+          <h6 className={`cursor-pointer ${styles.title}`}>
+            <Link href={`/cycle/${id}`}>
+              <a>{title}</a>
+            </Link>{' '}
+          </h6>
           <div className={styles.date}>
             {sd.format(DATE_FORMAT_SHORT)}
             &mdash; {ed.format(DATE_FORMAT_SHORT)}

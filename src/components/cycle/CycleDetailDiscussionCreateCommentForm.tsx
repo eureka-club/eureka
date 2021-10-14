@@ -206,14 +206,16 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({ cycl
           /> */}
         </Form.Group>
         <section className="text-right">
-        <ButtonGroup size="sm">
-              <Button variant="warning" onClick={clearCreateEurekaForm}>
-                <ImCancelCircle />
-              </Button>
-              <Button type="submit">
-              <span><BsCheck /> { t('Add')}</span>
-              </Button>
-            </ButtonGroup>
+          <ButtonGroup size="sm">
+            <Button variant="warning" onClick={clearCreateEurekaForm}>
+              <ImCancelCircle />
+            </Button>
+            <Button type="submit">
+              <span>
+                <BsCheck /> {t('Add')}
+              </span>
+            </Button>
+          </ButtonGroup>
         </section>
       </Form>
     </>

@@ -39,6 +39,7 @@ type Props = {
   data: Item[]; // ((CycleMosaicItem & { type: string }) | WorkMosaicItem)[];
   showSocialInteraction?: boolean;
   customMosaicStyle?: { [key: string]: string };
+  className?: string;
 };
 
 const renderMosaicItem = (
@@ -94,6 +95,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
   onSeeAll,
   showSocialInteraction = true,
   customMosaicStyle = undefined,
+  className,
 }) => {
   const { t } = useTranslation('topics');
   const [current, setCurrent] = useState<Item[]>([]);
@@ -151,7 +153,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
     (
       <>
         {(dataFiltered && dataFiltered.length && (
-          <div className={styles.mainContainer}>
+          <div className={`mb-5 ${styles.mainContainer}`}>
             <Row>
               <Col>
                 <h5 className="text-gray-dark mb-2">

@@ -33,6 +33,7 @@ type Props = {
   // items: (WorkWithImages | CycleWithImages)[];
   topic: string;
   topicLabel?: string;
+  className?: string;
 };
 
 const renderMosaicItem = (
@@ -84,7 +85,7 @@ interface ItemType {
   delay?: number;
 }
 
-const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
+const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) => {
   const { t } = useTranslation('topics');
   const [page, setPage] = useState(0);
   const [items, setItems] = useState<ItemType>();
@@ -203,7 +204,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
 
   return (
     (!isLoading && items && items.data && items.data.length && (
-      <>
+      <section className={`${className}`}>
         {items && items.data && items.data.length && (
           <div className={styles.mainContainer}>
             <Row>
@@ -256,7 +257,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel }) => {
             </div>
           </div>
         )}
-      </>
+      </section>
     )) ||
     null
   );
