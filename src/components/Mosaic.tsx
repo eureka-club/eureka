@@ -1,5 +1,4 @@
-// import { Cycle, Work } from '@prisma/client';
-import classNames from 'classnames';
+import { Cycle, Work } from '@prisma/client';
 import { FunctionComponent } from 'react';
 import Masonry from 'react-masonry-css';
 
@@ -15,7 +14,7 @@ import { PostMosaicItem } from '../types/post';
 
 const renderMosaicItem = (
   item: MosaicItem,
-  postsParent: CycleMosaicItem | WorkMosaicItem | undefined,
+  postsParent: Cycle | Work | undefined,
   showButtonLabels: boolean,
   display: 'h' | 'v',
   showComments: boolean,
@@ -26,12 +25,12 @@ const renderMosaicItem = (
     return <MosaicItemCycle key={`cycle-${item.id}`} cycle={item} detailed />;
   }
   if (isPostMosaicItem(item)) {
-    const pp = postsParent;
-    // if (!pp) {
-    //   const it: PostMosaicItem = item as PostMosaicItem;
-    //   if (it.works && it.works.length > 0) [pp] = it.works;
-    //   else if (it.cycles && it.cycles.length > 0) [pp] = it.cycles;
-    // }
+    let pp = postsParent;
+    if (!pp) {
+      const it: PostMosaicItem = item as PostMosaicItem;
+      if (it.works && it.works.length > 0) [pp] = it.works;
+      else if (it.cycles && it.cycles.length > 0) [pp] = it.cycles;
+    }
 
     return (
       <MosaicItemPost
