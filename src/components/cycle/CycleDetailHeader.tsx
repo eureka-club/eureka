@@ -16,7 +16,7 @@ import { Col, Row } from 'react-bootstrap';
 // import TabContainer from 'react-bootstrap/TabContainer';
 // import TabContent from 'react-bootstrap/TabContent';
 // import TabPane from 'react-bootstrap/TabPane';
-// import Link from 'next/link';
+import Link from 'next/link';
 // import { useMutation } from 'react-query';
 // import { Work } from '@prisma/client';
 import Rating from 'react-rating';
@@ -211,7 +211,11 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   return (
     <Row className="mb-5">
       <Col md={9}>
-        <h1 className="mb-1 text-dark">{cycle.title}</h1>
+        <h1 className="mb-1 text-dark">
+          <Link href={`/cycle/${cycle.id}`}>
+            <a>{cycle.title}</a>
+          </Link>
+        </h1>
         <Rating
           readonly
           initialRating={getRatingAvg()}
