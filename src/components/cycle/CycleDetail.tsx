@@ -376,7 +376,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                   <Col>
                     <TabContent>
                       <TabPane eventKey="cycle-about">
-                        <h5 className="mt-4 mb-3 fw-bold text-primary">{t('Why does this cycle matter')}?</h5>
+                        <h5 className="mt-4 mb-3 fw-bold text-gray-dark">{t('Why does this cycle matter')}?</h5>
                         {cycle.contentText != null && (
                           <div className="">
                             <div
@@ -387,7 +387,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                           </div>
                         )}
                         {cycle.works && (
-                          <h5 className="mt-5 mb-3 fw-bold text-primary">
+                          <h5 className="mt-5 mb-3 fw-bold text-gray-dark">
                             {t('worksCountHeader', { count: cycle.works.length })}
                           </h5>
                         )}
@@ -399,7 +399,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                         {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (
                           <Row className="mt-2 mb-5">
                             <Col>
-                              <h5 className="mt-4 mb-3 fw-bold text-primary">{t('complementaryMaterialsTitle')}</h5>
+                              <h5 className="mt-5 mb-3 fw-bold text-gray-dark">{t('complementaryMaterialsTitle')}</h5>
                               <ul className={styles.complementaryMaterials}>
                                 {cycle.complementaryMaterials.map((cm) => (
                                   <li key={cm.id}>

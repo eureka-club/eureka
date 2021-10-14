@@ -28,13 +28,13 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
 
   return (
     <>
-      <section className="bg-info p-3" style={{ backgroundImage: "url('/img/bg-header.svg')" }}>
+      <section className="bg-primary p-3" style={{ backgroundImage: "url('/img/bg-header.svg')" }}>
         <aside className="d-flex justify-content-end">
           {show && (
             <Button
               variant="info"
               onClick={() => setShow(false)}
-              className="py-1 px-3 border-white text-white rounded-pill"
+              className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
             >
               {t('Close')} <AiOutlineClose />
             </Button>
@@ -43,7 +43,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
             <Button
               variant="info"
               onClick={() => setShow(true)}
-              className="py-1 px-3 border-white text-white rounded-pill"
+              className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
             >
               {t('openHeaderLabel')} <AiOutlineDown />
             </Button>
@@ -65,7 +65,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
               <Col
                 xs={12}
                 md={3}
-                className="p-3 text-white rounded d-flex flex-column align-items-center ml-5 bg-primary"
+                className="p-3 text-white rounded d-flex flex-column align-items-center ml-0 bg-secondary"
               >
                 <aside className={`${styles.bgHeaderLeft}`} />
                 <p className="p-0 m-0">{t('headerLeftBoxText')}</p>
@@ -73,7 +73,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
               <Col
                 xs={12}
                 md={3}
-                className="p-3 text-white rounded d-flex flex-column align-items-center ml-5 bg-primary"
+                className="p-3 text-white rounded d-flex flex-column align-items-center ml-5 bg-secondary"
               >
                 <aside className={`${styles.bgHeaderCenter}`} />
                 <p className="p-0 m-0">{t('headerCenterBoxText')}</p>
@@ -81,7 +81,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
               <Col
                 xs={12}
                 md={3}
-                className="p-3 text-white rounded d-flex flex-column align-items-center ml-5 bg-primary"
+                className="p-3 text-white rounded d-flex flex-column align-items-center ml-5 bg-secondary"
               >
                 <aside className={`${styles.bgHeaderRight}`} />
                 <p className="p-0 m-0">{t('headerRightBoxText')}</p>
@@ -93,7 +93,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
       {show && (
         <div className="d-flex justify-content-center align-items-center mt-5 pt-5">
           {!isLoadingSession && !session && (
-            <Button onClick={openSignInModal} className="rounded-pill" variant="info">
+            <Button onClick={openSignInModal} className="button" variant="primary">
               {t('headerSessionBtnLabel')}
             </Button>
           )}

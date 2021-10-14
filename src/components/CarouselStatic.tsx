@@ -154,15 +154,15 @@ const CarouselStatic: FunctionComponent<Props> = ({
           <div className={styles.mainContainer}>
             <Row>
               <Col>
-                <h4 className="text-secondary fw-bold">
+                <h5 className="text-gray-dark mb-2">
                   {iconBefore ? <span className={styles.iconBefore}>{iconBefore}</span> : ''}
                   {` `} {title} {/* {`(${dataFiltered.length})`} */}
                   {iconAfter ? <span className={styles.iconAfter}>{iconAfter}</span> : ''}
-                </h4>
+                </h5>
               </Col>
               <Col className={styles.right}>
                 {dataFiltered.length && (
-                  <Button className={`mb-3 ${styles.seeAllButton}`} onClick={onSeeAll}>
+                  <Button className={`${styles.seeAllButton}`} onClick={onSeeAll}>
                     {t('common:See all')}
                   </Button>
                 )}

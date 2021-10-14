@@ -215,7 +215,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
           {(imagePreview) => (
             <Form.Group>
               {/* <Form.Label>*{t('imageFieldLabel')}</Form.Label> */}
-              <div className={`${stylesImageFileSelect.imageControl} border-success`}>
+              <div className={`${stylesImageFileSelect.imageControl} border-primary`}>
                 {newEurekaImageFile != null && imagePreview ? (
                   <span className={stylesImageFileSelect.imageName}>{newEurekaImageFile?.name}</span>
                 ) : (
@@ -246,7 +246,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
 
       <aside className="d-flex justify-content-end">
         <ButtonGroup size="sm">
-          <Button variant="secondary" onClick={clearCreateEurekaForm}>
+          <Button variant="warning" onClick={clearCreateEurekaForm}>
             <ImCancelCircle />
           </Button>
           <Button type="submit">

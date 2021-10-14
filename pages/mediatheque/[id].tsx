@@ -322,7 +322,7 @@ const Mediatheque: NextPage = () => {
                     {session && (session as unknown as Session).user!.id !== user.id && !isFollowedByMe && (
                       <Button onClick={followHandler} disabled={isLoadingMutateFollowing}>
                         {t('Follow')}
-                        {isLoadingMutateFollowing && <Spinner animation="grow" variant="secondary" size="sm" />}
+                        {isLoadingMutateFollowing && <Spinner animation="grow" variant="info" size="sm" />}
                       </Button>
                     )}
 
@@ -333,7 +333,7 @@ const Mediatheque: NextPage = () => {
                         disabled={isLoadingMutateFollowing}
                       >
                         {t('Unfollow')}
-                        {isLoadingMutateFollowing && <Spinner animation="grow" variant="secondary" size="sm" />}
+                        {isLoadingMutateFollowing && <Spinner animation="grow" variant="info" size="sm" />}
                       </Button>
                     )}
                   </Col>
@@ -343,7 +343,7 @@ const Mediatheque: NextPage = () => {
             </Card>
             {isAccessAllowed() && (
               <>
-                <h1 className="text-success mb-5">{t('Mediatheque')}</h1>
+                <h1 className="text-dark mb-2">{t('Mediatheque')}</h1>
                 <FilterEngine fictionOrNotFilter={false} geographyFilter={false} />
                 {postsCreated()}
 

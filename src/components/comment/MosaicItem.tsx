@@ -99,7 +99,7 @@ const MosaicItem: FunctionComponent<Props> = ({
                     <>
                       <FaRegCompass className="text-primary" />{' '}
                       <Link href={comentLinkHref}>
-                        <a>
+                        <a className="text-info">
                           <span>{getTitle()}</span>
                         </a>
                       </Link>
@@ -119,7 +119,7 @@ const MosaicItem: FunctionComponent<Props> = ({
                 <span className="fs-6">{dayjs(comment.createdAt).format(DATE_FORMAT_SHORT)}</span>
               </div>
               <div className="text-right fs-6">
-                <FaRegComments className="text-info" /> <span>{comment.comments.length} Comments</span>
+                <FaRegComments className="text-primary" /> <span>{comment.comments.length} Replies </span>
               </div>
             </Col>
           </Card.Header>

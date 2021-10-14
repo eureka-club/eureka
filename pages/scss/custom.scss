@@ -1,7 +1,17 @@
 $theme-colors: (
-  "success":#68cfb4,
-  "info":#13B4BC,
-  "primary":#6548c7,
+  "primary":#13B4BC,
+  "secondary":#3D2984,
+  "success":#933CA0,
+  "info":#c1c6d2,
+  "warning":#FFAFAF,
+  "danger":#E3506D,
+  "light":#f7f7f7,
+  "dark":#343A40,
+  "orange":#F5A623,
+  "yellow":#FCEFE5,
+  "white":#ffffff,
+  "gray-dark":#333,
+  "gray":#555,
 );
 
 @import '~bootstrap/scss/bootstrap.scss';
@@ -16,16 +26,16 @@ $theme-colors: (
 :root {
   --eureka-blue: #6548c7;
   --eureka-blue-light: #6f52d1;
-  --eureka-blue-dark: #6043c2;
-  --eureka-green: #68cfb4;
+  --eureka-blue-dark: #3D2984;
+  --eureka-green: #13B4BC;
   --eureka-green-dark: #63caaf;
   --eureka-grey: #c1c6d2;
   --eureka-grey-dark: #bcc1cd;
-  --eureka-purple: #493788;
+  --eureka-purple: #3D2984;
   --eureka-purple-dark: #443283;
 
   --color-primary: var(--eureka-green);
-  --color-primary-raised: #63cab0;
+  --color-primary-raised: #13B4BC;
   --color-secondary: var(--eureka-purple);
   --color-secondary-raised: var(--eureka-purple-dark);
   --color-emphasis: #f5a623;

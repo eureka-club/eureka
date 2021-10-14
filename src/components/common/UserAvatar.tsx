@@ -21,7 +21,7 @@ const UserAvatar: FunctionComponent<Props> = ({ user, size = 'md', showName = tr
 
   return (
     <>
-      {/* {isLoading && <Spinner size="sm" animation="grow" variant="secondary" />} */}
+      {/* {isLoading && <Spinner size="sm" animation="grow" variant="info" />} */}
       {user && (
         <span className={`fs-6 ${className} ${styles.cycleCreator} ${styles[size]}`}>
           <Link href={`/mediatheque/${user.id}`}>

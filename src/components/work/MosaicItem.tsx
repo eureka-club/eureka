@@ -105,7 +105,7 @@ const MosaicItem: FunctionComponent<Props> = ({
               );
             };
             return (
-              <h6 className="d-block w-100 text-center mt-1 text-secondary position-absolute" style={{ top: '100%' }}>
+              <h6 className="d-block w-100 text-center mt-2 text-gray-dark position-absolute" style={{ top: '100%' }}>
                 {res()}
               </h6>
             );
