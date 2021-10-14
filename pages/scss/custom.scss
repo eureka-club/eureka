@@ -51,10 +51,13 @@ body {
   color: var(--text-color-primary);
 }
 .fw-bold{
-  font-weight: 500!important;
+  font-weight: 700!important;
 }
 .fs-6{
   font-size: 0.875rem;
+}
+.fst-italic {
+  font-style: italic!important;
 }
 .text-decoration-underline{
   text-decoration: underline;

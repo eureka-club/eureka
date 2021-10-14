@@ -68,7 +68,8 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
                 className="p-3 text-white rounded d-flex flex-column align-items-center ml-0 bg-secondary"
               >
                 <aside className={`${styles.bgHeaderLeft}`} />
-                <p className="p-0 m-0">{t('headerLeftBoxText')}</p>
+                <h2 className="h6 fw-bold fst-italic">{t('headerLeftBoxTitle')}</h2>
+                <p className="p-0 m-0 text-wrap">{t('headerLeftBoxText')}</p>
               </Col>
               <Col
                 xs={12}
@@ -76,7 +77,8 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
                 className="p-3 text-white rounded d-flex flex-column align-items-center ml-5 bg-secondary"
               >
                 <aside className={`${styles.bgHeaderCenter}`} />
-                <p className="p-0 m-0">{t('headerCenterBoxText')}</p>
+                <h2 className="h6 fw-bold fst-italic">{t('headerCenterBoxTitle')}</h2>
+                <p className="p-0 m-0 text-wrap">{t('headerCenterBoxText')}</p>
               </Col>
               <Col
                 xs={12}
@@ -84,7 +86,8 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
                 className="p-3 text-white rounded d-flex flex-column align-items-center ml-5 bg-secondary"
               >
                 <aside className={`${styles.bgHeaderRight}`} />
-                <p className="p-0 m-0">{t('headerRightBoxText')}</p>
+                <h2 className="h6 fw-bold fst-italic">{t('headerRightBoxTitle')}</h2>
+                <p className="p-0 m-0 text-wrap">{t('headerRightBoxText')}</p>
               </Col>
             </Row>
           </Container>

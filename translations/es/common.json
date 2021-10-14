@@ -101,7 +101,10 @@
   "openHeaderLabel": "Conozca más sobre Eureka",
   "eurekaReasonLabel": "Somos un espacio en linea en el cual se genera y consume contenido de una manera radicalmente distinta. Nuestro objectivo es formentar conocimiento, empatía y comunidad, para generar 'momentos Eureka': revelaciones individuales que transformen el colectivo",
   "headerSessionBtnLabel": "¡Inicia sessión para tener momentos Eureka!",
-  "headerLeftBoxText": "¿Hace cuánto sientes que pierdes el tiempo en redes sociales? En Eureka, dedica tu tiempo de pantalla para senti-pensar, sobre temas y contenidos con significado.",
-  "headerCenterBoxText": "Únete a un ciclo: recorridos de conocimiento para que personas interesadas y expertas, puedan profundizar en cualquier tipo de tema.",
-  "headerRightBoxText": "Crea y comparte momentos Eureka: revelaciones individuales que transforman el colectivo."
+  "headerLeftBoxTitle": "¿Hace cuánto sientes que pierdes el tiempo en redes sociales?",
+  "headerLeftBoxText": "En Eureka, dedica tu tiempo de pantalla para senti-pensar, sobre temas y contenidos con significado.",
+  "headerCenterBoxTitle": "Únete a un ciclo:",
+  "headerCenterBoxText": "recorridos de conocimiento para que personas interesadas y expertas, puedan profundizar en cualquier tipo de tema.",
+  "headerRightBoxTitle": "Crea y comparte momentos Eureka:",
+  "headerRightBoxText": "revelaciones individuales que transforman el colectivo."
 }
