@@ -56,7 +56,7 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false }
     <>
       <Navbar />
       <Toast />
-      <Header show={showHeader} />
+      {showHeader && <Header show={showHeader} />}
       <Container className="mt-5">{children}</Container>
 
       <Modal
