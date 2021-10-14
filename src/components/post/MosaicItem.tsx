@@ -85,7 +85,7 @@ const MosaicItem: FunctionComponent<Props> = ({
       <Card className={`${styles.container} ${className}`}>
         {postParent && (
           <h2 className="m-0 p-1 fs-6 text-info">
-            <FaRegCompass className="text-info mb-1" />
+            <FaRegCompass className="text-info" />
             {` `}
             {postParentLinkHref != null ? (
               <Link href={postParentLinkHref}>

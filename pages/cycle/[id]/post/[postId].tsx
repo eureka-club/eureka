@@ -73,7 +73,7 @@ const PostDetailInCyclePage: NextPage = () => {
   return (
     <SimpleLayout title={`${post ? post.title : ''} · ${cycle ? cycle.title : ''}`}>
       <>
-        {isLoadingOrFetching() && <Spinner animation="grow" variant="secondary" />}
+        {isLoadingOrFetching() && <Spinner animation="grow" variant="info" />}
         {!isLoadingOrFetching() && post && cycle && (
           <CycleContext.Provider value={{ cycle, currentUserIsParticipant }}>
             <CycleDetailComponent

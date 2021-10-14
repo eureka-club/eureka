@@ -97,7 +97,7 @@ const MosaicItem: FunctionComponent<Props> = ({
                 <h2 className="fs-6">
                   {comentLinkHref != null ? (
                     <>
-                      <FaRegCompass className="text-primary" />{' '}
+                      <FaRegCompass className="text-info" />{' '}
                       <Link href={comentLinkHref}>
                         <a className="text-info">
                           <span>{getTitle()}</span>

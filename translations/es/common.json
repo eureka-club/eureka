@@ -97,14 +97,14 @@
   "Failed to send the request": "No se pudo enviar la solicitud",
   "Clear rating": "Eliminar calificación",
   "Close": "Cerrar",
-  "underEurekaLabel": "Shape your mind, shape the world",
-  "openHeaderLabel": "Conozca más sobre Eureka",
-  "eurekaReasonLabel": "Somos un espacio en linea en el cual se genera y consume contenido de una manera radicalmente distinta. Nuestro objectivo es formentar conocimiento, empatía y comunidad, para generar 'momentos Eureka': revelaciones individuales que transformen el colectivo",
+  "underEurekaLabel": "Transforma tu mente, transforma al mundo",
+  "openHeaderLabel": "Conoce más sobre Eureka",
+  "eurekaReasonLabel": "Somos la primera red social creada para encontrar libros y películas sobre temas de interés y discutirlos con una comunidad. Nuestro objetivo: fomentar el activismo para transformar el colectivo.",
   "headerSessionBtnLabel": "¡Inicia sessión para tener momentos Eureka!",
-  "headerLeftBoxTitle": "¿Hace cuánto sientes que pierdes el tiempo en redes sociales?",
-  "headerLeftBoxText": "En Eureka, dedica tu tiempo de pantalla para senti-pensar, sobre temas y contenidos con significado.",
+  "headerLeftBoxTitle": "¿Te cansaste de las interacciones sin sentido en las redes sociales?",
+  "headerLeftBoxText": "Nutre tu mente con tu próximo libro o película, y senti-pensar sobre un tema que importa.",
   "headerCenterBoxTitle": "Únete a un ciclo:",
-  "headerCenterBoxText": "recorridos de conocimiento para que personas interesadas y expertas, puedan profundizar en cualquier tipo de tema.",
+  "headerCenterBoxText": "recorridos de conocimiento para que personas interesadas y expertas, puedan profundizar en cualquier tipo de tema, junto a una comunidad.",
   "headerRightBoxTitle": "Crea y comparte momentos Eureka:",
-  "headerRightBoxText": "revelaciones individuales que transforman el colectivo."
+  "headerRightBoxText": "tus revelaciones individuales que pueden transformar el colectivo."
 }

@@ -68,8 +68,8 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
                 className="p-3 text-white rounded d-flex flex-column align-items-center ml-0 bg-secondary"
               >
                 <aside className={`${styles.bgHeaderLeft}`} />
-                <h2 className="h6 fw-bold fst-italic">{t('headerLeftBoxTitle')}</h2>
-                <p className="p-0 m-0 text-wrap">{t('headerLeftBoxText')}</p>
+                <h2 className="h6 text-center">{t('headerLeftBoxTitle')}</h2>
+                <p className="p-0 m-0 text-wrap text-center fs-6 fst-italic">{t('headerLeftBoxText')}</p>
               </Col>
               <Col
                 xs={12}
@@ -77,8 +77,8 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
                 className="p-3 text-white rounded d-flex flex-column align-items-center ml-5 bg-secondary"
               >
                 <aside className={`${styles.bgHeaderCenter}`} />
-                <h2 className="h6 fw-bold fst-italic">{t('headerCenterBoxTitle')}</h2>
-                <p className="p-0 m-0 text-wrap">{t('headerCenterBoxText')}</p>
+                <h2 className="h6 text-center">{t('headerCenterBoxTitle')}</h2>
+                <p className="p-0 m-0 text-wrap text-center fs-6 fst-italic">{t('headerCenterBoxText')}</p>
               </Col>
               <Col
                 xs={12}
@@ -86,8 +86,8 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
                 className="p-3 text-white rounded d-flex flex-column align-items-center ml-5 bg-secondary"
               >
                 <aside className={`${styles.bgHeaderRight}`} />
-                <h2 className="h6 fw-bold fst-italic">{t('headerRightBoxTitle')}</h2>
-                <p className="p-0 m-0 text-wrap">{t('headerRightBoxText')}</p>
+                <h2 className="h6 text-center">{t('headerRightBoxTitle')}</h2>
+                <p className="p-0 m-0 text-wrap text-center fs-6 fst-italic">{t('headerRightBoxText')}</p>
               </Col>
             </Row>
           </Container>

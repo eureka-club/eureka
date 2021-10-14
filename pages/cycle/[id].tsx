@@ -57,7 +57,7 @@ const CycleDetailPage: NextPage = () => {
   }, [session, cycle, isSuccess, isLoadingSession]);
 
   const renderCycleDetailComponent = () => {
-    if (isLoadingSession || isFetching || isLoading) return <Spinner animation="grow" variant="secondary" />;
+    if (isLoadingSession || isFetching || isLoading) return <Spinner animation="grow" variant="info" />;
     if (cycle) {
       const res = (
         <CycleContext.Provider value={{ cycle, currentUserIsParticipant }}>

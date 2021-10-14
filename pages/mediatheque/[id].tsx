@@ -359,7 +359,7 @@ const Mediatheque: NextPage = () => {
           </section>
         )}
         {renderAccessInfo()}
-        {(isLoadingUser || isLoadingSession) && <Spinner animation="grow" variant="secondary" />}
+        {(isLoadingUser || isLoadingSession) && <Spinner animation="grow" variant="info" />}
         {!(isLoadingUser || isLoadingSession) && !user && <Alert variant="warning">{t('notFound')}</Alert>}
       </>
     </SimpleLayout>

@@ -276,7 +276,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         <>
           <NavItem className={styles.tabBtn}>
             <NavLink eventKey="cycle-discussion">
-              <span className="mb-3 fw-bold text-primary">{t('Discussion')}</span>
+              <span className="mb-3 text-primary">{t('Discussion')}</span>
             </NavLink>
           </NavItem>
           {/* <NavItem className={styles.tabBtn}>
@@ -284,13 +284,13 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           </NavItem> */}
           <NavItem className={styles.tabBtn}>
             <NavLink eventKey="guidelines">
-              <span className="mb-3 fw-bold text-primary">{t('Guidelines')}</span>
+              <span className="mb-3 text-primary">{t('Guidelines')}</span>
             </NavLink>
           </NavItem>
 
           <NavItem className={styles.tabBtn}>
             <NavLink eventKey="participants">
-              <span className="mb-3 fw-bold text-primary">{t('Participants')}</span>
+              <span className="mb-3 text-primary">{t('Participants')}</span>
             </NavLink>
           </NavItem>
         </>
@@ -363,7 +363,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                     <Nav variant="tabs" fill>
                       <NavItem className={styles.tabBtn}>
                         <NavLink eventKey="cycle-about">
-                          <span className="mb-3 fw-bold text-primary">
+                          <span className="mb-3 text-primary">
                             {t('About')} ({cycle.works && cycle.works.length})
                           </span>
                         </NavLink>
