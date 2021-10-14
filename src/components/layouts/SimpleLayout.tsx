@@ -4,6 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Modal from 'react-bootstrap/Modal';
 
 import Navbar from '../Navbar';
+import Header from './Header';
 import CreatePostForm from '../forms/CreatePostForm';
 import CreateWorkForm from '../forms/CreateWorkForm';
 import EditWorkForm from '../forms/EditWorkForm';
@@ -17,9 +18,10 @@ import Toast from '../common/Toast';
 type Props = {
   children: JSX.Element | JSX.Element[];
   title?: string;
+  showHeader?: boolean;
 };
 
-const SimpleLayout: FunctionComponent<Props> = ({ children }) => {
+const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false }) => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
 
   const handleCreatePostModalClose = () => {
@@ -54,7 +56,7 @@ const SimpleLayout: FunctionComponent<Props> = ({ children }) => {
     <>
       <Navbar />
       <Toast />
-
+      <Header show={showHeader} />
       <Container className="mt-5">{children}</Container>
 
       <Modal

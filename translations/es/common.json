@@ -8,7 +8,6 @@
   "documentary": "Documental",
   "movie": "Película ficción",
   "post": "Eureka",
-
   "browserTitleAbout": "Sobre",
   "aboutPageHeading": "Nuestra misión es inducir tantos momentos Eureka como sea posible.",
   "aboutHeading": "Sobre",
@@ -32,7 +31,6 @@
   "ethicsText4": "El contenido o las personas que violen lo anterior se someterán a una revisión inmediata y exhaustiva y, en caso de ser necesario, se eliminarán de la plataforma.",
   "eurekaSupport": "Eureka tiene el apoyo de:",
   "contact": "Contacto:",
-
   "mosaicHeaderMyCycles": "Ciclos, obras y publicaciones favoritas",
   "publicationYearLabel": "Año de publicación",
   "releaseYearLabel": "Año de producción",
@@ -54,7 +52,6 @@
   "whatsappComplement": "Participa aquí: ",
   "twitterComplement": "",
   "facebookComplement": "",
-
   "goToHomepage": "Ir al inicio",
   "Loading": "Cargando",
   "Trending topics": "Temas populares",
@@ -73,7 +70,6 @@
   "Rating Eureka": "Rating Eureka",
   "Save for later": "Guardar para luego",
   "Privacy settings": "Configuración de privacidad",
-
   "mediathequeInfo": "Tu Mediateca contiene tu actividad en Eureka. Reúne elementos que has visto / leído / participado, elementos guardados para luego, así como ciclos y Eurekas que ha creados y / o participado",
   "My Mediatheque is public": "Mi Mediateca es publica",
   "Anyone can see my Mediatheque": "Cualquiera puede ver mi Mediateca",
@@ -92,14 +88,20 @@
   "Replies": "respuestas",
   "vmcomments": "Ver más respuestas",
   "vlcomments": "Ver menos respuestas",
-
   "notFound": "No encontrado",
   "Ongoing": "En curso",
   "Upcoming": "Siguiente",
   "Past": "Leído/visto",
-
   "Join Cycle request notification": "Notificación de solicitud de ingreso al Ciclo",
   "Request sent successfully": "Solicitud enviada con éxito",
   "Failed to send the request": "No se pudo enviar la solicitud",
-  "Clear rating": "Eliminar calificación"
+  "Clear rating": "Eliminar calificación",
+  "Close": "Cerrar",
+  "underEurekaLabel": "Shape your mind, shape the world",
+  "openHeaderLabel": "Conozca más sobre Eureka",
+  "eurekaReasonLabel": "Somos un espacio en linea en el cual se genera y consume contenido de una manera radicalmente distinta. Nuestro objectivo es formentar conocimiento, empatía y comunidad, para generar 'momentos Eureka': revelaciones individuales que transformen el colectivo",
+  "headerSessionBtnLabel": "¡Inicia sessión para tener momentos Eureka!",
+  "headerLeftBoxText": "¿Hace cuánto sientes que pierdes el tiempo en redes sociales? En Eureka, dedica tu tiempo de pantalla para senti-pensar, sobre temas y contenidos con significado.",
+  "headerCenterBoxText": "Únete a un ciclo: recorridos de conocimiento para que personas interesadas y expertas, puedan profundizar en cualquier tipo de tema.",
+  "headerRightBoxText": "Crea y comparte momentos Eureka: revelaciones individuales que transforman el colectivo."
 }
