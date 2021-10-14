@@ -205,23 +205,16 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({ cycl
             onChange={onChangeFieldCommentForm}
           /> */}
         </Form.Group>
-        <Row>
-          {/* <Col xs={12} md={8}>
-          <Form.Group controlId="topics">
-            <Form.Control />
-          </Form.Group>
-        </Col> */}
-          <Col xs={12} md={4}>
-            <ButtonGroup size="sm">
+        <section className="text-right">
+        <ButtonGroup size="sm">
               <Button variant="warning" onClick={clearCreateEurekaForm}>
                 <ImCancelCircle />
               </Button>
               <Button type="submit">
-                <BsCheck />
+              <span><BsCheck /> { t('Add')}</span>
               </Button>
             </ButtonGroup>
-          </Col>
-        </Row>
+        </section>
       </Form>
     </>
   );
