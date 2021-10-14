@@ -1,6 +1,6 @@
 import { Cycle, Work, Comment, Post } from '@prisma/client';
 import Link from 'next/link';
-// import useTranslation from 'next-translate/useTranslation';
+import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
 import { FaRegComments, FaRegCompass } from 'react-icons/fa';
@@ -65,7 +65,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   // const { data: creator } = useUsers(comment.creatorId.toString());
   const { contentText } = comment;
-  // const { t } = useTranslation('common');
+  const { t } = useTranslation('common');
   const getTitle = (): string => {
     if (isWork(commentParent)) return (commentParent as Work).title;
     if (isCycle(commentParent)) return (commentParent as Cycle).title;
@@ -119,7 +119,10 @@ const MosaicItem: FunctionComponent<Props> = ({
                 <span className="fs-6">{dayjs(comment.createdAt).format(DATE_FORMAT_SHORT)}</span>
               </div>
               <div className="text-right fs-6">
-                <FaRegComments className="text-primary" /> <span>{comment.comments.length} Replies </span>
+                <FaRegComments className="text-primary" />{' '}
+                <span>
+                  {comment.comments.length} {t('Replies')}{' '}
+                </span>
               </div>
             </Col>
           </Card.Header>
