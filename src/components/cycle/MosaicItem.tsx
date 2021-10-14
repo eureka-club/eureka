@@ -175,7 +175,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   };
 
   return (
-    <Card className={`${styles.container} ${isActive ? styles.isActive : ''} ${className}`}>
+    <Card className={`${styles.container} ${isActive ? 'isActive' : ''} ${className}`}>
       <div className={`${styles.imageContainer} ${detailed && styles.detailedImageContainer}`}>
         <Link href={`/cycle/${id}`}>
           <a>
@@ -183,7 +183,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           </a>
         </Link>
 
-        {isActive && <CgMediaLive className={styles.isActiveCircle} />}
+        {isActive && <CgMediaLive className={`text-primary ${styles.isActiveCircle}`} />}
         <span className={styles.type}>{t('cycle')}</span>
       </div>
       {detailed && (

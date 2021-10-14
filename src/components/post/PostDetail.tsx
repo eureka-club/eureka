@@ -55,14 +55,14 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
   const [session] = useSession() as [Session | null | undefined, boolean];
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
 
-  const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-    setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: true } });
-  };
-  const canEditPost = (): boolean => {
-    if (session && session.user.id === post.creatorId) return true;
-    return false;
-  };
+  // const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
+  //   ev.preventDefault();
+  //   setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: true } });
+  // };
+  // const canEditPost = (): boolean => {
+  //   if (session && session.user.id === post.creatorId) return true;
+  //   return false;
+  // };
 
   if (cycle && cycle.access !== 1 && !currentUserIsParticipant) return null;
 

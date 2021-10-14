@@ -3,12 +3,9 @@
   margin-bottom: 2rem;
 
 }
-.isActive{
-  box-shadow: 0 0 3px 1px green !important;
-}
+
 .isActiveCircle{
-  color: var(--green);
-  position: absolute;
+    position: absolute;
     top: 10px;
     font-size: 1.5em;
     display: inherit;

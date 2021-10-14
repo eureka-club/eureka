@@ -24,6 +24,13 @@ $theme-colors: (
 }
 
 :root {
+  --primary: #{theme-color("primary")};
+  --secondary: #{theme-color("secondary")};
+  --info: #{theme-color("info")};
+  
+
+  //TODO review use of each case in the code 
+
   --eureka-blue: #6548c7;
   --eureka-blue-light: #6f52d1;
   --eureka-blue-dark: #3D2984;
@@ -64,6 +71,9 @@ body {
 }
 h1 {
   font-size: 1.9rem;
+}
+.isActive{
+  box-shadow: 0 0 3px 1px theme-color("primary") !important;
 }
 
 h2 {

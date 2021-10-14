@@ -130,14 +130,14 @@ const MosaicItem: FunctionComponent<Props> = ({
   // }, [workData]);
 
   return (
-    <Card className={`${styles.container} ${isActive() ? styles.isActive : ''}`}>
+    <Card className={`${styles.container} ${isActive() ? 'isActive' : ''}`}>
       <div className={styles.imageContainer} style={style}>
         <Link href={`/work/${id}`}>
           <a>
             <LocalImageComponent filePath={localImages[0].storedFile} alt={title} />
           </a>
         </Link>
-        {isActive() && <CgMediaLive className={styles.isActiveCircle} />}
+        {isActive() && <CgMediaLive className={`${styles.isActiveCircle}`} />}
         <span className={styles.type}>{t(type)}</span>
       </div>
       {renderOngoinOrUpcomingDate()}
