@@ -175,7 +175,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   };
 
   return (
-    <Card className={`${styles.container} ${isActive ? 'isActive' : ''} ${className}`}>
+    <Card className={`${isActive ? 'isActive' : ''} ${className}`}>
       <div className={`${styles.imageContainer} ${detailed && styles.detailedImageContainer}`}>
         <Link href={`/cycle/${id}`}>
           <a>

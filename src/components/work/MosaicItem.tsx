@@ -130,7 +130,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   // }, [workData]);
 
   return (
-    <Card className={`${styles.container} ${isActive() ? 'isActive' : ''}`}>
+    <Card className={` ${isActive() ? 'isActive' : ''}`}>
       <div className={styles.imageContainer} style={style}>
         <Link href={`/work/${id}`}>
           <a>
