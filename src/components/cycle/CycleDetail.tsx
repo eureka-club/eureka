@@ -17,6 +17,7 @@ import {
   NavItem,
   NavLink,
 } from 'react-bootstrap';
+import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
 import { BiArrowBack } from 'react-icons/bi';
 import { MosaicContext } from '../../useMosaicContext';
 // import UserAvatar from '../common/UserAvatar';
@@ -224,6 +225,54 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     return '';
   };
 
+  const [gldView, setgldView] = useState<Record<string, boolean>>({});
+  const toggleGuidelineDesc = (key: string) => {
+    if (key in gldView) {
+      setgldView((res) => {
+        return { ...res, [`${key}`]: !res[key] };
+      });
+    } else setgldView((res) => ({ ...res, [`${key}`]: true }));
+  };
+  const renderGuidelines = () => {
+    if (cycle) {
+      const glc = Math.ceil(cycle.guidelines.length / 2);
+      const gll = cycle.guidelines.slice(0, glc);
+      const glr = cycle.guidelines.slice(glc);
+
+      const renderLI = (g: { title: string; contentText: string | null }, idx: number, gl: string) => {
+        const key = `${gl}!${g.title}${idx + 1}`;
+        return (
+          <aside key={key}>
+            <h5 className="mb-0 pl-3 py-1 d-flex text-secondary">
+              <span className="fw-bold">{`${idx + 1}`}</span>
+              <span className="fw-bold">{`. ${g.title}`}</span>
+              <Button className="ml-auto" size="sm" onClick={() => toggleGuidelineDesc(key)}>
+                {gldView[key] ? <RiArrowDownSLine /> : <RiArrowUpSLine />}
+              </Button>
+            </h5>
+            {gldView[key] && <p className="px-3 pt-0 pb-3">{g.contentText}</p>}
+          </aside>
+        );
+      };
+
+      return (
+        <Row>
+          {gll.length && (
+            <Col>
+              <section className="bg-light">{gll.map((g, idx) => renderLI(g, idx, 'gll'))}</section>
+            </Col>
+          )}
+          {glr.length && (
+            <Col>
+              <section className="bg-light">{glr.map((g, idx) => renderLI(g, idx, 'glr'))}</section>
+            </Col>
+          )}
+        </Row>
+      );
+    }
+    return '';
+  };
+
   const renderRestrictTabs = () => {
     if (cycle) {
       const res = (
@@ -243,15 +292,11 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
             <p />
           </TabPane> */}
           <TabPane eventKey="guidelines">
-            {cycle.guidelines &&
-              cycle.guidelines.map((g) => {
-                return (
-                  <>
-                    <h5>{g.title}</h5>
-                    <p>{g.contentText}</p>
-                  </>
-                );
-              })}
+            <section className="text-primary">
+              <h4 className="fw-bold">{t('guidelinesMP')}</h4>
+              <p className="fst-italic fs-6">({t('guidelinesByInfo')})</p>
+            </section>
+            <section className="border-top border-secondary pt-3">{cycle.guidelines && renderGuidelines()}</section>
             <p />
           </TabPane>
           <TabPane eventKey="participants">
