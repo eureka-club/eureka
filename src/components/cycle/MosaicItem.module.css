@@ -21,7 +21,7 @@
   overflow: hidden; 
   /* display: inline-block;  */
   position: relative;
-    background-color: #f9f8f87a;
+  background-color: #f9f8f87a;
 }
 .imageContainer img{
   height: 16em;

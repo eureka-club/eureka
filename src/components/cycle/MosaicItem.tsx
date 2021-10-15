@@ -46,7 +46,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   showTrash = false,
   className,
 }) => {
-  const { cycle, linkToCycle } = useCycleContext();
+  const { cycle, linkToCycle = true } = useCycleContext();
   const { id, title, localImages, startDate, endDate } = cycle!;
   const { t } = useTranslation('common');
   const sd = dayjs(startDate).add(1, 'day').tz(dayjs.tz.guess());
