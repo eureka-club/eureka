@@ -1,6 +1,6 @@
 // import { flatten, zip } from 'lodash';
 import { useAtom } from 'jotai';
-
+import dayjs from 'dayjs';
 // import { GetServerSideProps, GetStaticProps, NextPage } from 'next';
 import { /* GetStaticProps, */ NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
@@ -216,7 +216,15 @@ const Mediatheque: NextPage = () => {
         return p;
       }, JC);
       C.push(...JC);
+      C.sort((f: CycleMosaicItem, s: CycleMosaicItem) => {
+        const fCD = dayjs(f.createdAt);
+        const sCD = dayjs(s.createdAt);
+        if (fCD.isAfter(sCD)) return -1;
+        if (fCD.isSame(sCD)) return 0;
+        return 1;
+      });
     }
+
     return C.length ? (
       <CarouselStatic
         onSeeAll={async () => seeAll(C, t('Cycles I created or joined'))}
@@ -233,6 +241,7 @@ const Mediatheque: NextPage = () => {
   const readOrWatched = () => {
     if (user && user.ratingWorks && user.ratingWorks.length) {
       const RW = user.ratingWorks.map((w: RatingOnWork & { work: WorkMosaicItem }) => w.work!);
+
       return (
         <CarouselStatic
           onSeeAll={async () => seeAll(RW, t(`Movies/books i've watched/read`))}
@@ -258,6 +267,13 @@ const Mediatheque: NextPage = () => {
     if (user && user.favPosts && user.favPosts.length) {
       SFL.push(...user.favPosts.map((p: PostMosaicItem) => ({ ...p, type: 'post' })));
     }
+    SFL.sort((f: CycleMosaicItem, s: CycleMosaicItem) => {
+      const fCD = dayjs(f.createdAt);
+      const sCD = dayjs(s.createdAt);
+      if (fCD.isAfter(sCD)) return -1;
+      if (fCD.isSame(sCD)) return 0;
+      return 1;
+    });
     if (SFL.length)
       return (
         <CarouselStatic

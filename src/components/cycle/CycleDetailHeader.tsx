@@ -214,8 +214,8 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   return (
     <Row className="mb-5">
       <Col md={9}>
-        <h1 className="mb-1 text-dark">          
-            <a>{cycle.title}</a>
+        <h1 className="mb-1 text-dark">
+          <a>{cycle.title}</a>
         </h1>
         <Rating
           readonly

@@ -24,7 +24,7 @@ const renderMosaicItem = (
   if (isCycleMosaicItem(item)) {
     return (
       <CycleContext.Provider value={{ cycle: item as CycleMosaicItem }}>
-        <MosaicItemCycle key={`cycle-${item.id}`} detailed />;
+        <MosaicItemCycle key={`cycle-${item.id}`} detailed />
       </CycleContext.Provider>
     );
   }

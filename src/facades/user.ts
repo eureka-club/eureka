@@ -16,15 +16,24 @@ export const find = async (props: findProps): Promise<User | null> => {
       include: {
         cycles: {
           include: { ratings: true, favs: true, works: true, localImages: true, participants: true },
+          orderBy: {
+            createdAt: 'desc',
+          },
         },
         joinedCycles: {
           include: { ratings: true, favs: true, works: true, localImages: true, participants: true },
+          orderBy: {
+            createdAt: 'desc',
+          },
         },
         // likedCycles: {
         //   include: { localImages: true },
         // },
         favCycles: {
           include: { ratings: true, favs: true, works: true, localImages: true, participants: true },
+          orderBy: {
+            createdAt: 'desc',
+          },
         },
         posts: {
           include: {
@@ -40,6 +49,9 @@ export const find = async (props: findProps): Promise<User | null> => {
                 comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
               },
             },
+          },
+          orderBy: {
+            createdAt: 'desc',
           },
         },
         likedPosts: { include: { localImages: true } },
@@ -57,12 +69,21 @@ export const find = async (props: findProps): Promise<User | null> => {
               },
             },
           },
+          orderBy: {
+            createdAt: 'desc',
+          },
         },
         likedWorks: {
           include: { localImages: true, ratings: true, favs: true },
+          orderBy: {
+            createdAt: 'desc',
+          },
         },
         favWorks: {
           include: { localImages: true, ratings: true, favs: true },
+          orderBy: {
+            createdAt: 'desc',
+          },
         },
         // readOrWatchedWorks: {
         //   include: { localImages: true, likes: true, favs: true, readOrWatcheds: true },
@@ -72,11 +93,15 @@ export const find = async (props: findProps): Promise<User | null> => {
 
         ratingWorks: {
           select: {
+            createdAt: true,
             qty: true,
             ratingOnWorkId: true,
             userId: true,
             work: { include: { localImages: true, ratings: true, favs: true } },
             workId: true,
+          },
+          orderBy: {
+            createdAt: 'desc',
           },
         },
         ratingCycles: {
@@ -86,6 +111,9 @@ export const find = async (props: findProps): Promise<User | null> => {
             userId: true,
             cycle: { include: { ratings: true, favs: true, works: true, localImages: true, participants: true } },
             cycleId: true,
+          },
+          orderBy: {
+            createdAt: 'desc',
           },
         },
       },
