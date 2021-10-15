@@ -20,6 +20,7 @@ import {
 import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
 import { BiArrowBack } from 'react-icons/bi';
 import { MosaicContext } from '../../useMosaicContext';
+
 // import UserAvatar from '../common/UserAvatar';
 import Mosaic from '../Mosaic';
 // import globalModals from '../../atoms/globalModals';
@@ -45,7 +46,7 @@ import detailPagesAtom from '../../atoms/detailPages';
 import globalModalsAtom from '../../atoms/globalModals';
 
 import styles from './CycleDetail.module.css';
-import { useCycleContext } from '../../useCycleContext';
+import { useCycleContext, CycleContext } from '../../useCycleContext';
 import CycleDetailHeader from './CycleDetailHeader';
 import CycleDetailDiscussion from './CycleDetailDiscussion';
 
@@ -212,11 +213,13 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const renderCycleDetailHeader = () => {
     if (cycle) {
       const res = (
-        <CycleDetailHeader
-          cycle={cycle}
-          onParticipantsAction={onParticipantsAction}
-          onCarouselSeeAllAction={onCarouselSeeAllAction}
-        />
+        <CycleContext.Provider value={{ cycle, linkToCycle: false }}>
+          <CycleDetailHeader
+            cycle={cycle}
+            onParticipantsAction={onParticipantsAction}
+            onCarouselSeeAllAction={onCarouselSeeAllAction}
+          />
+        </CycleContext.Provider>
       );
       if (cycle.access === 3) return '';
       if (cycle.access === 1) return res;

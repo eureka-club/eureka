@@ -22,12 +22,13 @@ import globalModalsAtom from '../../atoms/globalModals';
 import { useUsers } from '../../useUsers';
 import { Session } from '../../types';
 import SocialInteraction from '../common/SocialInteraction';
+import { useCycleContext } from '../../useCycleContext';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 interface Props {
   // workWithImages: WorkWithImages;
-  cycle: CycleMosaicItem;
+  // cycle: CycleMosaicItem;
   showButtonLabels?: boolean;
   showShare?: boolean;
   detailed?: boolean;
@@ -37,7 +38,6 @@ interface Props {
   className?: string;
 }
 const MosaicItem: FunctionComponent<Props> = ({
-  cycle,
   showButtonLabels = false,
   // showShare,
   detailed = false,
@@ -46,7 +46,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   showTrash = false,
   className,
 }) => {
-  const { id, title, localImages, startDate, endDate } = cycle;
+  const { cycle, linkToCycle } = useCycleContext();
+  const { id, title, localImages, startDate, endDate } = cycle!;
   const { t } = useTranslation('common');
   const sd = dayjs(startDate).add(1, 'day').tz(dayjs.tz.guess());
   const ed = dayjs(endDate).add(1, 'day').tz(dayjs.tz.guess());
@@ -65,7 +66,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     if (session && user && user.joinedCycles) {
       if (!user.joinedCycles.length) setIsCurrentUserJoinedToCycle(false);
       else {
-        const icujtc = user.joinedCycles.findIndex((c: CycleMosaicItem) => c.id === cycle.id) !== -1;
+        const icujtc = user.joinedCycles.findIndex((c: CycleMosaicItem) => c.id === cycle!.id) !== -1;
         setIsCurrentUserJoinedToCycle(icujtc);
       }
     }
@@ -81,7 +82,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     // isSuccess: isJoinCycleSuccess,
   } = useMutation(
     async () => {
-      const res = await fetch(`/api/cycle/${cycle.id}/join`, { method: 'POST' });
+      const res = await fetch(`/api/cycle/${cycle!.id}/join`, { method: 'POST' });
       const json = await res.json();
       if ('data' in json) {
         console.log(json.error);
@@ -118,7 +119,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     // isSuccess: isLeaveCycleSuccess,
   } = useMutation(
     async () => {
-      await fetch(`/api/cycle/${cycle.id}/join`, { method: 'DELETE' });
+      await fetch(`/api/cycle/${cycle!.id}/join`, { method: 'DELETE' });
     },
     {
       onMutate: () => {
@@ -158,7 +159,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     if (isLoading) return false;
     if (user) {
       if (isJoinCycleLoading) return false;
-      if (user.id === cycle.creatorId) return false;
+      if (user.id === cycle!.creatorId) return false;
     }
     return true;
   };
@@ -176,12 +177,20 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   return (
     <Card className={`${isActive ? 'isActive' : ''} ${className}`}>
-      <div className={`${styles.imageContainer} ${detailed && styles.detailedImageContainer}`}>
-        <Link href={`/cycle/${id}`}>
-          <a>
-            <LocalImageComponent filePath={localImages[0].storedFile} alt={title} />
-          </a>
-        </Link>
+      <div
+        className={`${linkToCycle ? 'cursor-pointer' : ''} ${styles.imageContainer} ${
+          detailed && styles.detailedImageContainer
+        }`}
+      >
+        {linkToCycle ? (
+          <Link href={`/cycle/${id}`}>
+            <a>
+              <LocalImageComponent filePath={localImages[0].storedFile} alt={title} />
+            </a>
+          </Link>
+        ) : (
+          <LocalImageComponent filePath={localImages[0].storedFile} alt={title} />
+        )}
 
         {isActive && <CgMediaLive className={`text-primary ${styles.isActiveCircle}`} />}
         <span className={styles.type}>{t('cycle')}</span>
@@ -189,9 +198,13 @@ const MosaicItem: FunctionComponent<Props> = ({
       {detailed && (
         <div className="text-center p-1">
           <h6 className={`cursor-pointer ${styles.title}`}>
-            <Link href={`/cycle/${id}`}>
-              <a>{title}</a>
-            </Link>{' '}
+            {linkToCycle ? (
+              <Link href={`/cycle/${id}`}>
+                <a>{title}</a>
+              </Link>
+            ) : (
+              title
+            )}{' '}
           </h6>
           <div className={styles.date}>
             {sd.format(DATE_FORMAT_SHORT)}
