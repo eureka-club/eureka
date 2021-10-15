@@ -238,16 +238,17 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       const glc = Math.ceil(cycle.guidelines.length / 2);
       const gll = cycle.guidelines.slice(0, glc);
       const glr = cycle.guidelines.slice(glc);
-
+      let IDX = 0;
       const renderLI = (g: { title: string; contentText: string | null }, idx: number, gl: string) => {
         const key = `${gl}!${g.title}${idx + 1}`;
+        IDX += 1;
         return (
-          <aside key={key}>
-            <h5 className="mb-0 pl-3 py-1 d-flex text-secondary">
-              <span className="fw-bold">{`${idx + 1}`}</span>
-              <span className="fw-bold">{`. ${g.title}`}</span>
+          <aside key={key} className="mb-3 bg-light">
+            <h5 className="h6 fw-bold mb-0 pl-3 py-1 d-flex text-secondary">
+              <span className="py-1 fw-bold">{`${IDX}. `}</span>
+              <span className="py-1 fw-bold h6 mb-0 pl-3 d-flex">{`${g.title}`}</span>
               <Button className="ml-auto" size="sm" onClick={() => toggleGuidelineDesc(key)}>
-                {gldView[key] ? <RiArrowDownSLine /> : <RiArrowUpSLine />}
+                {!gldView[key] ? <RiArrowDownSLine /> : <RiArrowUpSLine />}
               </Button>
             </h5>
             {gldView[key] && <p className="px-3 pt-0 pb-3">{g.contentText}</p>}
@@ -259,12 +260,12 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         <Row>
           {gll.length && (
             <Col>
-              <section className="bg-light">{gll.map((g, idx) => renderLI(g, idx, 'gll'))}</section>
+              <section className="">{gll.map((g, idx) => renderLI(g, idx, 'gll'))}</section>
             </Col>
           )}
           {glr.length && (
             <Col>
-              <section className="bg-light">{glr.map((g, idx) => renderLI(g, idx, 'glr'))}</section>
+              <section className="">{glr.map((g, idx) => renderLI(g, idx, 'glr'))}</section>
             </Col>
           )}
         </Row>
@@ -293,8 +294,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           </TabPane> */}
           <TabPane eventKey="guidelines">
             <section className="text-primary">
-              <h4 className="fw-bold">{t('guidelinesMP')}</h4>
-              <p className="fst-italic fs-6">({t('guidelinesByInfo')})</p>
+              <h4 className="h5 mt-4 mb-3 fw-bold text-gray-dark">{t('guidelinesMP')}</h4>
+              {/* <p className="fst-italic fs-6">({t('guidelinesByInfo')})</p> */}
             </section>
             <section className="border-top border-secondary pt-3">{cycle.guidelines && renderGuidelines()}</section>
             <p />
