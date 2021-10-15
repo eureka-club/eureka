@@ -297,7 +297,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
               <h4 className="h5 mt-4 mb-3 fw-bold text-gray-dark">{t('guidelinesMP')}</h4>
               {/* <p className="fst-italic fs-6">({t('guidelinesByInfo')})</p> */}
             </section>
-            <section className="border-top border-secondary pt-3">{cycle.guidelines && renderGuidelines()}</section>
+            <section className=" pt-3">{cycle.guidelines && renderGuidelines()}</section>
             <p />
           </TabPane>
           <TabPane eventKey="participants">
@@ -443,7 +443,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                           </MosaicContext.Provider>
                         )}
                         {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (
-                          <Row className="mt-2 mb-5">
+                          <Row className="mt-5 mb-5">
                             <Col>
                               <h5 className="mt-5 mb-3 fw-bold text-gray-dark">{t('complementaryMaterialsTitle')}</h5>
                               <ul className={styles.complementaryMaterials}>

@@ -1,9 +1,9 @@
 {
-  "title": "Ajouter une nouvelle oeuvre à la bibliothèque",
-  "titleEdit": "Modifier la oeuvre",
-  "typeFieldLabel": "Type d'oeuvre",
+  "title": "Ajouter une nouvelle œuvre à la bibliothèque",
+  "titleEdit": "Modifier la œuvre",
+  "typeFieldLabel": "Type d'œuvre",
   "typeFieldPlaceholder": "sélectioner...",
-  "linkFieldLabel": "Lien vers l'oeuvre",
+  "linkFieldLabel": "Lien vers l'œuvre",
   "titleFieldLabel": "Titre",
   "authorFieldLabel": "Auteur-e",
   "imageCoverFieldLabel": "Couverture",
@@ -25,12 +25,12 @@
   "authorEthnicityFieldPlaceholder": "sélectioner...",
   "authorEthnicityIsWhite": "Blanc-he",
   "authorEthnicityIsNotWhite": "Non blanc-he",
-  "workSummaryFieldLabel": "Résumé officiel de l'oeuvre",
-  "submitButtonLabel": "Ajouter l'oeuvre",
+  "workSummaryFieldLabel": "Résumé officiel de l'œuvre",
+  "submitButtonLabel": "Ajouter l'œuvre",
   "tagsInputPlaceholder": "Écrivez une étiquette et appuyez sur Entrée ou Virgule",
   "Add a second origin country": "Ajouter un 2ème pays",
   "Remove the second origin country": "Supprimer le 2ème pays",
   "Topics": "Thèmes",
-  "topicsLabel": "Principaux thèmes de l'oeuvre (3 max, choisir les plus pertinents dans la liste)",
-  "topicsFieldLabel": "Thèmes supplémentaires de l'oeuvre (2 max, entrée libre)"
+  "topicsLabel": "Principaux thèmes de l'œuvre (3 max, choisir les plus pertinents dans la liste)",
+  "topicsFieldLabel": "Thèmes supplémentaires de l'œuvre (2 max, entrée libre)"
 }

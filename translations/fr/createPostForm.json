@@ -1,7 +1,7 @@
 {
   "title": "Créer une Eureka",
-  "searchCycleOrWorkFieldLabel": "À quelle oeuvre ou cycle cette Eureka fait-elle référence?",
-  "searchCycleOrWorkFieldPlaceholder": "Cherchez l'oeuvre ou le cycle dans notre bibliothèque...",
+  "searchCycleOrWorkFieldLabel": "À quelle œuvre ou cycle cette Eureka fait-elle référence?",
+  "searchCycleOrWorkFieldPlaceholder": "Cherchez l'œuvre ou le cycle dans notre bibliothèque...",
   "titleFieldLabel": "Titre de votre Eureka (80 caractères max)",
   "imageFieldLabel": "Ajoutez une image à votre Eureka",
   "imageFieldPlaceholder": "sélectionnez le fichier...",
@@ -9,7 +9,7 @@
   "searchCycleFieldLabel": "Ajouter cette Eureka à un cycle (optionnel)",
   "searchCycleFieldPlaceholder": "Cherchez le cycle auquel sera ajoutée cette Eureka...",
   "searchCycleInfotip": "En ajoutant votre Eureka à un cycle, vous deviendrez automatiquement un-e participant-e du cycle (si vous ne l'êtes pas déjà).",
-  "descriptionFieldLabel": "Écrivez ce que vous avez pensé et / ou appris de cette oeuvre ou cycle. Pourquoi avez-vous trouvé cela intéressant?",
+  "descriptionFieldLabel": "Écrivez ce que vous avez pensé et / ou appris de cette œuvre ou cycle. Pourquoi avez-vous trouvé cela intéressant?",
   "isPublicFieldLabel": "Cette Eureka est publique",
   "isPublicInfotip": "Les Eurekas publiques sont accessibles à tous. Décochez la case pour la rendre privée (uniquement vous pouvez la voir).",
   "submitButtonLabel": "Créer la Eureka",
