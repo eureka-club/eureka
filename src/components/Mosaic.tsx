@@ -11,6 +11,7 @@ import styles from './Mosaic.module.css';
 import { CycleMosaicItem } from '../types/cycle';
 import { WorkMosaicItem } from '../types/work';
 import { PostMosaicItem } from '../types/post';
+import { CycleContext } from '../useCycleContext';
 
 const renderMosaicItem = (
   item: MosaicItem,
@@ -21,8 +22,11 @@ const renderMosaicItem = (
   cacheKey?: string[],
 ) => {
   if (isCycleMosaicItem(item)) {
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    return <MosaicItemCycle key={`cycle-${item.id}`} cycle={item} detailed />;
+    return (
+      <CycleContext.Provider value={{ cycle: item as CycleMosaicItem }}>
+        <MosaicItemCycle key={`cycle-${item.id}`} detailed />;
+      </CycleContext.Provider>
+    );
   }
   if (isPostMosaicItem(item)) {
     let pp = postsParent;

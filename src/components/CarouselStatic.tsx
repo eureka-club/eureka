@@ -29,6 +29,7 @@ import { WorkMosaicItem /* , WorkWithImages */ } from '../types/work';
 import { CycleMosaicItem /* , CycleWithImages */ } from '../types/cycle';
 import { PostMosaicItem } from '../types/post';
 import { UserMosaicItem } from '../types/user';
+import { CycleContext } from '../useCycleContext';
 
 type Item = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | UserMosaicItem;
 type Props = {
@@ -51,13 +52,14 @@ const renderMosaicItem = (
   if (isCycleMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
     return (
-      <MosaicItemCycle
-        detailed
-        showSocialInteraction={showSocialInteraction}
-        showButtonLabels={false}
-        key={`cycle-${item.id}`}
-        cycle={item}
-      />
+      <CycleContext.Provider value={{ cycle: item as CycleMosaicItem }}>
+        <MosaicItemCycle
+          detailed
+          showSocialInteraction={showSocialInteraction}
+          showButtonLabels={false}
+          key={`cycle-${item.id}`}
+        />
+      </CycleContext.Provider>
     );
   }
   if (isPostMosaicItem(item) || item.type === 'post') {

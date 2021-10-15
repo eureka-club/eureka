@@ -185,7 +185,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         {linkToCycle ? (
           <Link href={`/cycle/${id}`}>
             <a>
-              <LocalImageComponent filePath={localImages[0].storedFile} alt={title} />
+              <LocalImageComponent className="cursor-pointer" filePath={localImages[0].storedFile} alt={title} />
             </a>
           </Link>
         ) : (

@@ -213,13 +213,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const renderCycleDetailHeader = () => {
     if (cycle) {
       const res = (
-        <CycleContext.Provider value={{ cycle, linkToCycle: false }}>
-          <CycleDetailHeader
-            cycle={cycle}
-            onParticipantsAction={onParticipantsAction}
-            onCarouselSeeAllAction={onCarouselSeeAllAction}
-          />
-        </CycleContext.Provider>
+        <CycleDetailHeader
+          onParticipantsAction={onParticipantsAction}
+          onCarouselSeeAllAction={onCarouselSeeAllAction}
+        />
       );
       if (cycle.access === 3) return '';
       if (cycle.access === 1) return res;

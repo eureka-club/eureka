@@ -5,7 +5,7 @@
 import { useSession } from 'next-auth/client';
 // import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useState } from 'react';
 // import Button from 'react-bootstrap/Button';
 
 // import Nav from 'react-bootstrap/Nav';
@@ -48,9 +48,10 @@ import UserAvatar from '../common/UserAvatar';
 import CarouselStatic from '../CarouselStatic';
 // import globalSearchEngineAtom from '../../atoms/searchEngine';
 import { MosaicContext } from '../../useMosaicContext';
+import { useCycleContext } from '../../useCycleContext';
 
 interface Props {
-  cycle: CycleMosaicItem;
+  // cycle: CycleMosaicItem;
   post?: PostMosaicItem;
   work?: WorkMosaicItem;
   isCurrentUserJoinedToCycle?: boolean;
@@ -63,7 +64,7 @@ interface Props {
 }
 
 const CycleDetailHeader: FunctionComponent<Props> = ({
-  cycle,
+  // cycle,
   onCarouselSeeAllAction,
   // onParticipantsAction,
   // post,
@@ -78,6 +79,8 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   // const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   // const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   // const router = useRouter();
+  const { cycle: c } = useCycleContext();
+  const [cycle] = useState<CycleMosaicItem>(c!);
   const [session] = useSession() as [Session | null | undefined, boolean];
   const { t } = useTranslation('cycleDetail');
   // const hyvorId = `${WEBAPP_URL}cycle/${cycle.id}`;
@@ -259,7 +262,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
       <Col md={3}>
         <UserAvatar user={cycle.creator} />
         <MosaicContext.Provider value={{ showShare: true }}>
-          <MosaicItem cycle={cycle} showTrash className="mt-2" />
+          <MosaicItem showTrash className="mt-2" />
         </MosaicContext.Provider>
       </Col>
     </Row>

@@ -26,6 +26,7 @@ import styles from './Carousel.module.css';
 import { WorkMosaicItem /* , WorkWithImages */ } from '../types/work';
 import { CycleMosaicItem /* , CycleWithImages */ } from '../types/cycle';
 import { PostMosaicItem /* , CycleWithImages */ } from '../types/post';
+import { CycleContext } from '../useCycleContext';
 
 type Props = {
   // page: number;
@@ -46,15 +47,16 @@ const renderMosaicItem = (
   if (isCycleMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
     return (
-      <MosaicItemCycle
-        detailed
-        showShare={false}
-        showButtonLabels={false}
-        key={`cycle-${item.id}`}
-        cycle={item as CycleMosaicItem}
-        cacheKey={topic && page ? ['ITEMS', `${topic}${page}`] : undefined}
-        showSocialInteraction={showSocialInteraction}
-      />
+      <CycleContext.Provider value={{ cycle: item as CycleMosaicItem }}>
+        <MosaicItemCycle
+          detailed
+          showShare={false}
+          showButtonLabels={false}
+          key={`cycle-${item.id}`}
+          cacheKey={topic && page ? ['ITEMS', `${topic}${page}`] : undefined}
+          showSocialInteraction={showSocialInteraction}
+        />
+      </CycleContext.Provider>
     );
   }
   if (isPostMosaicItem(item) || item.type === 'post') {
