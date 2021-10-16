@@ -1,4 +1,4 @@
-import { FunctionComponent, SyntheticEvent } from 'react';
+import { FunctionComponent, SyntheticEvent, useState } from 'react';
 
 import Link from 'next/link';
 import { Spinner } from 'react-bootstrap';
@@ -18,7 +18,7 @@ const UserAvatar: FunctionComponent<Props> = ({ user, size = 'md', showName = tr
   const onLoadImgError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = '/img/default-avatar.png';
   };
-
+  const [truncateName] = useState(user.name?.slice(0, 16));
   return (
     <>
       {/* {isLoading && <Spinner size="sm" animation="grow" variant="info" />} */}
@@ -32,7 +32,11 @@ const UserAvatar: FunctionComponent<Props> = ({ user, size = 'md', showName = tr
                 alt="creator avatar"
                 className={`${styles.cycleCreatorAvatar} mr-2`}
               />
-              {showName ? `${user.name!.slice(0, 16)} ...` || 'unknown' : ''}
+              {showName
+                ? truncateName!.length < user.name!.length
+                  ? `${user.name!.slice(0, 16)} ...` || 'unknown'
+                  : truncateName
+                : ''}
             </a>
           </Link>
         </span>
