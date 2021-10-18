@@ -2,7 +2,7 @@ import { useSession } from 'next-auth/client';
 import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, FormEvent, FunctionComponent, useEffect, useState, useRef } from 'react';
 
-import { Button, Col, Row, ButtonGroup, Form } from 'react-bootstrap';
+import { Button, Spinner, ButtonGroup, Form } from 'react-bootstrap';
 
 import { Comment } from '@prisma/client';
 
@@ -63,7 +63,7 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({ cycl
     }));
   };
 
-  const { mutate: execCreateComment } = useMutation(
+  const { mutate: execCreateComment, isLoading } = useMutation(
     async (
       payload:
         | CreateCommentAboutCycleClientPayload
@@ -171,6 +171,7 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({ cycl
   return (
     <>
       <EditorCmp
+        apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
         onInit={(_: any, editor) => {
           editorRef.current = editor;
         }}
@@ -207,13 +208,14 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({ cycl
         </Form.Group>
         <section className="text-right">
           <ButtonGroup size="sm">
-            <Button variant="warning" onClick={clearCreateEurekaForm}>
+            <Button variant="warning" onClick={clearCreateEurekaForm} disabled={isLoading}>
               <ImCancelCircle />
             </Button>
-            <Button type="submit">
+            <Button type="submit" disabled={isLoading}>
               <span>
                 <BsCheck /> {t('Add')}
               </span>
+              {isLoading && <Spinner size="sm" animation="grow" variant="info" />}
             </Button>
           </ButtonGroup>
         </section>

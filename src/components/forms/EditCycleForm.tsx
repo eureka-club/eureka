@@ -510,6 +510,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
                 <FormLabel>*{t('newCyclePitchLabel')}</FormLabel>
                 {/* <FormControl defaultValue={cycle.contentText as string} as="textarea" rows={5} required /> */}
                 <EditorCmp
+                  apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
                   onInit={(_: any, editor) => {
                     editorRef.current = editor;
                   }}

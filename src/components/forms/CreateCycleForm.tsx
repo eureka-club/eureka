@@ -722,6 +722,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
             <Form.Group controlId="description">
               <Form.Label>*{t('newCyclePitchLabel')}</Form.Label>
               <EditorCmp
+                apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
                 onInit={(_: any, editor) => {
                   editorRef.current = editor;
                 }}
