@@ -5,7 +5,7 @@ import { useAtom } from 'jotai';
 import { GetStaticProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useState, useEffect, ReactElement } from 'react';
-
+import { useRouter } from 'next/router';
 import { QueryClient } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
 // import { loadGetInitialProps } from 'next/dist/next-server/lib/utils';
@@ -62,8 +62,12 @@ type Item = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | UserMosaicItem;
 
 const SearchPage: NextPage = () => {
   const { t } = useTranslation('common');
+  const router = useRouter();
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
-
+  useEffect(() => {
+    if (globalSearchEngineState && router)
+      if (!globalSearchEngineState.q || !globalSearchEngineState.where) router.push('/');
+  }, [globalSearchEngineState, router]);
   // let where = encodeURIComponent(JSON.stringify({ title: { contains: globalSearchEngineState.q } }));
   // const { isLoading, data: works } = useWorks(where);
 
