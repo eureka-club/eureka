@@ -1,4 +1,5 @@
 // import { Cycle } from '@prisma/client';
+import dayjs from 'dayjs';
 import { FunctionComponent } from 'react';
 // import Spinner from 'react-bootstrap/Spinner';
 // import { useQuery } from 'react-query';
@@ -6,13 +7,15 @@ import { FunctionComponent } from 'react';
 import { WorkMosaicItem } from '../../types/work';
 import Mosaic from '../Mosaic';
 import { CycleMosaicItem } from '../../types/cycle';
+import { Work } from '.prisma/client';
 // import { MosaicItem } from '../types/work';
 
 interface Props {
   cycle: CycleMosaicItem;
+  className?: string;
 }
 
-const WorksMosaic: FunctionComponent<Props> = ({ cycle }) => {
+const WorksMosaic: FunctionComponent<Props> = ({ cycle, className }) => {
   // const { isLoading, isSuccess, data } = useQuery<WorkMosaicItem[]>(
   //   ['works.mosaic.cycle', cycle.id],
   //   async ({ queryKey: [, cycleId] }) => {
@@ -23,7 +26,23 @@ const WorksMosaic: FunctionComponent<Props> = ({ cycle }) => {
   //     return res.json();
   //   },
   // );
+  const getWorksSorted = () => {
+    const res: Work[] = [];
+    cycle.cycleWorksDates
+      .sort((f, s) => {
+        const fCD = dayjs(f.startDate!);
+        const sCD = dayjs(s.startDate!);
+        if (fCD.isAfter(sCD)) return 1;
+        if (fCD.isSame(sCD)) return 0;
+        return -1;
+      })
+      .forEach((cw) => {
+        const idx = cycle.works.findIndex((w) => w.id === cw.workId);
+        res.push(cycle.works[idx]);
+      });
 
+    return res;
+  };
   return (
     <>
       {/* {isLoading && (
@@ -33,7 +52,7 @@ const WorksMosaic: FunctionComponent<Props> = ({ cycle }) => {
       )} */}
       {
         /* isSuccess && */ cycle.works != null && (
-          <Mosaic showButtonLabels={false} stack={cycle.works as WorkMosaicItem[]} />
+          <Mosaic className={className} showButtonLabels={false} stack={getWorksSorted() as WorkMosaicItem[]} />
         )
       }
     </>

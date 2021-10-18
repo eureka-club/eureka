@@ -440,7 +440,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                         )}
                         {cycle.works && cycle.works.length > 0 && (
                           <MosaicContext.Provider value={{ showShare: true }}>
-                            <WorksMosaic cycle={cycle} />
+                            <WorksMosaic cycle={cycle} className="mb-5" />
                           </MosaicContext.Provider>
                         )}
                         {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (
