@@ -32,8 +32,8 @@ const UserAvatar: FunctionComponent<Props> = ({
     if (showName) {
       if (showFullName) {
         res = user.name!;
-      } else if (truncateName!.length < user.name!.length) {
-        res = `${truncateName} ...`;
+      } else if (truncateName!.length < user.name!.length - 3) {
+        res = `${truncateName}...`;
       } else res = `${truncateName}`;
     }
     return <span>{res}</span>;

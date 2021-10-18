@@ -2,7 +2,7 @@ import { Cycle, Work } from '@prisma/client';
 // import classNames from 'classnames';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useState } from 'react';
 import { Row, Col, Card } from 'react-bootstrap';
 import { FaRegComments, FaRegCompass } from 'react-icons/fa';
 import dayjs from 'dayjs';
@@ -81,6 +81,16 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   const renderVerticalMosaic = (props: { showDetailedInfo: boolean }) => {
     const { showDetailedInfo } = props;
+
+    const renderParentTitle = () => {
+      let res = '';
+      if (postParent) {
+        const pptt = postParent.title.slice(0, 33);
+        if (pptt.length < postParent.title.length - 3) res = `${pptt}...`;
+        else res = pptt;
+      }
+      return <span>{res}</span>;
+    };
     return (
       <Card className={`${styles.container} ${className}`}>
         {postParent && (
@@ -90,13 +100,11 @@ const MosaicItem: FunctionComponent<Props> = ({
             {postParentLinkHref != null ? (
               <Link href={postParentLinkHref}>
                 <a className="text-info">
-                  <span>{postParent.title} </span>
+                  <span>{renderParentTitle()} </span>
                 </a>
               </Link>
             ) : (
-              <h2 className="m-0 p-1 fs-6 text-secondary">
-                <span>{postParent.title}</span>
-              </h2>
+              <h2 className="m-0 p-1 fs-6 text-secondary">{renderParentTitle()}</h2>
             )}
           </h2>
         )}

@@ -9,7 +9,8 @@
 
 .imageContainer .postImage {
   width: 100%;
-  height: 176px;
+  /* height: 176px; */
+  height: 16em;
 }
 
 .imageContainerHorizontally{
