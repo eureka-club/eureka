@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import isBetween from 'dayjs/plugin/isBetween';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import Link from 'next/link';
@@ -26,6 +27,7 @@ import { useCycleContext } from '../../useCycleContext';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
+dayjs.extend(isBetween);
 interface Props {
   // workWithImages: WorkWithImages;
   // cycle: CycleMosaicItem;
@@ -51,7 +53,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const { t } = useTranslation('common');
   const sd = dayjs(startDate).add(1, 'day').tz(dayjs.tz.guess());
   const ed = dayjs(endDate).add(1, 'day').tz(dayjs.tz.guess());
-  const isActive = dayjs().isBefore(ed);
+  const isActive = dayjs().isBetween(startDate, endDate, null, '[]');
   const [session] = useSession() as [Session | null | undefined, boolean];
   const { data: user } = useUsers({ id: (session && (session as unknown as Session).user.id)?.toString() || '' });
   const [isCurrentUserJoinedToCycle, setIsCurrentUserJoinedToCycle] = useState<boolean>(true);
