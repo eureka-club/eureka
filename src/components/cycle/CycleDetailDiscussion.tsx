@@ -121,7 +121,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
           {' '}
           <Row className={`d-flex justify-content-center ${styles.discussionContainer}`}>
             <Col xs={12} md={1} className="text-center mb-1">
-              {cycle.creator && <UserAvatar user={cycle.creator} showName={false} />}
+              {session && session.user && <UserAvatar user={session.user} showName={false} />}
             </Col>
             <Col xs={12} md={11}>
               {(isCreateEureka || isCreateComment) && (
