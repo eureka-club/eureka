@@ -258,7 +258,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         {/* </CycleContext.Provider> */}
       </Col>
       <Col md={3}>
-        <UserAvatar user={cycle.creator} />
+        <UserAvatar user={cycle.creator} showFullName />
         <MosaicContext.Provider value={{ showShare: true }}>
           <MosaicItem showTrash className="mt-2" />
         </MosaicContext.Provider>
