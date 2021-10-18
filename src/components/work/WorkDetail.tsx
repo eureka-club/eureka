@@ -88,7 +88,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
       {post && work && (
         <div>
           <ButtonGroup className="mb-1">
-            <Button variant="primary" onClick={() => router.push(`/work/${work.id}`)} size="sm">
+            <Button variant="primary" onClick={() => router.back()} size="sm">
               <BiArrowBack />
             </Button>
             {canEditPost() && (

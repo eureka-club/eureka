@@ -78,6 +78,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const router = useRouter();
+
   const [session, isLoadingSession] = useSession() as [Session | null | undefined, boolean];
   const { t } = useTranslation('cycleDetail');
   const [tabKey, setTabKey] = useState<string>();
@@ -364,7 +365,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
       {post && cycle && (
         <ButtonGroup className="mb-1">
-          <Button variant="info" onClick={() => router.push(`/cycle/${cycle.id}`)} size="sm">
+          <Button variant="info" onClick={() => router.back()} size="sm">
             <BiArrowBack />
           </Button>
           {canEditPost() && (
