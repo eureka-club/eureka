@@ -18,7 +18,7 @@ import globalModalsAtom from '../../atoms/globalModals';
 import { WorkMosaicItem } from '../../types/work';
 import HyvorComments from '../common/HyvorComments';
 import LocalImageComponent from '../LocalImage';
-import SocialInteraction from '../common/SocialInteraction';
+// import SocialInteraction from '../common/SocialInteraction';
 import UnclampText from '../UnclampText';
 import styles from './PostDetail.module.css';
 import Avatar from '../common/UserAvatar';
@@ -80,7 +80,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
           <div className={classNames(styles.imgWrapper, 'mb-3')}>
             <LocalImageComponent filePath={post.localImages[0].storedFile} alt={post.title} />
           </div>
-          <SocialInteraction entity={post} parent={cycle || work || null} showCounts showButtonLabels={false} />
+          {/* <SocialInteraction entity={post} parent={cycle || work || null} showCounts showButtonLabels={false} /> */}
           <table className={styles.parentContent}>
             <tbody>
               {currentWork != null && (
