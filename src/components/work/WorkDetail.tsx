@@ -81,9 +81,14 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
   return (
     <MosaicContext.Provider value={{ showShare: true }}>
       {!router.query.postId && canEditWork() && (
-        <Button variant="warning" className="mb-1" onClick={handleEditClick} size="sm">
-          {t('edit')}
-        </Button>
+        <ButtonGroup className="mb-1">
+          <Button variant="primary" onClick={() => router.back()} size="sm">
+            <BiArrowBack />
+          </Button>
+          <Button variant="warning" onClick={handleEditClick} size="sm">
+            {t('edit')}
+          </Button>
+        </ButtonGroup>
       )}
       {post && work && (
         <div>

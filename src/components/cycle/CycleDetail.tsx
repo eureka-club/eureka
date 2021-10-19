@@ -357,9 +357,14 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   return (
     <>
       {!router.query.postId && canEditCycle() && (
-        <Button className="mb-1 px-1 py-1" variant="warning" onClick={handleEditClick} size="sm">
-          {t('Edit')}
-        </Button>
+        <ButtonGroup className="mb-1">
+          <Button variant="primary" onClick={() => router.back()} size="sm">
+            <BiArrowBack />
+          </Button>
+          <Button variant="warning" onClick={handleEditClick} size="sm">
+            {t('Edit')}
+          </Button>
+        </ButtonGroup>
       )}
       {!post && renderCycleDetailHeader()}
 
