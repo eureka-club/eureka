@@ -67,7 +67,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
 }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
-  const [session] = useSession() as [Session | null | undefined, boolean];
+  // const [session] = useSession() as [Session | null | undefined, boolean];
+  const [session, isLoadingSession] = useSession();
   const [qty, setQty] = useState<number>(0);
 
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -85,7 +86,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const queryClient = useQueryClient();
 
   const [idSession, setIdSession] = useState<string>('');
-  const { /* isLoading, isError, error, */ data: user } = useUsers({ id: idSession });
+  const { isLoading: isLoadingUser, isError, /* error, */ data: user } = useUsers({ id: idSession });
   // const [user, setuser] = useState<UserDetail>();
   const [showShare, setShowShare] = useState<boolean>(false);
   const mosaicContext = useMosaicContext();
@@ -108,7 +109,9 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
   useEffect(() => {
     const s = session as unknown as Session;
-    if (s) setIdSession(s.user.id.toString());
+    if (s) {
+      setIdSession(s.user.id.toString());
+    }
   }, [session]);
 
   useEffect(() => {
@@ -122,7 +125,6 @@ const SocialInteraction: FunctionComponent<Props> = ({
         // const readOrWatchedByMe = idx !== -1;
         // setOptimistReadOrWatched(readOrWatchedByMe);
         // setOptimistReadOrWatchedCount(entity.readOrWatcheds.length);
-
         let idx = user.favWorks.findIndex((i: Work) => i.id === entity.id);
         const favoritedByMe = idx !== -1;
         setOptimistFav(favoritedByMe);
@@ -170,6 +172,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   }, [user, entity, session]);
 
   const openSignInModal = () => {
+    setQty(0);
     setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
   };
 
@@ -461,7 +464,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
     }
     return undefined;
   };
-
+  if (isLoadingSession || isLoadingUser) return <Spinner animation="grow" variant="info" size="sm" />;
   return (
     // (session && user && (
     <section className={`${className}`}>

@@ -70,7 +70,11 @@ const Mediatheque: NextPage = () => {
     if (session) setIdSession((session as unknown as Session).user.id.toString());
   }, [session, router]);
 
-  const { /* isError, error, */ data: user, isLoading: isLoadingUser } = useUsers({ id });
+  const {
+    /* isError, error, */ data: user,
+    isLoading: isLoadingUser,
+    isSuccess: isSuccessLoadedUser,
+  } = useUsers({ id });
   // const { /* isLoading, isError, error, */ data: dataUserSession } = useUsers({ id: idSession });
   // const [/* userSession, */ setUserSession] = useState();
   // const [preparingData, setPreparingData] = useState<boolean>(false);
@@ -377,7 +381,9 @@ const Mediatheque: NextPage = () => {
         )}
         {renderAccessInfo()}
         {(isLoadingUser || isLoadingSession) && <Spinner animation="grow" variant="info" />}
-        {!(isLoadingUser || isLoadingSession) && !user && <Alert variant="warning">{t('notFound')}</Alert>}
+        {!(isLoadingUser || isLoadingSession) && isSuccessLoadedUser && !user && (
+          <Alert variant="warning">{t('notFound')}</Alert>
+        )}
       </>
     </SimpleLayout>
   );
