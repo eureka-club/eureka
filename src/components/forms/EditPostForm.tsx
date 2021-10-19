@@ -20,6 +20,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BsFillXCircleFill } from 'react-icons/bs';
 import { useMutation, useQueryClient } from 'react-query';
+import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
@@ -56,7 +57,8 @@ const EditPostForm: FunctionComponent = () => {
   const { t } = useTranslation('createPostForm');
 
   const [postId, setPostId] = useState<string>('');
-  const { data: post, isLoading, isFetching, isSuccess } = usePost(+postId);
+  const { data: post, isLoading, isFetching } = usePost(+postId);
+  const editorRef = useRef<any>(null);
 
   useEffect(() => {
     // const fetchPost = async () => {
@@ -195,7 +197,7 @@ const EditPostForm: FunctionComponent = () => {
         title: form.postTitle.value,
         // image: imageFile,
         language: form.language.value,
-        contentText: form.description.value.length ? form.description.value : null,
+        contentText: editorRef.current.getContent(), // form.description.value.length ? form.description.value : null,
         isPublic: form.isPublic.checked,
         topics: items.join(','),
       };
@@ -208,7 +210,7 @@ const EditPostForm: FunctionComponent = () => {
         title: form.postTitle.value,
         // image: imageFile,
         language: form.language.value,
-        contentText: form.description.value.length ? form.description.value : null,
+        contentText: editorRef.current.getContent(), // form.description.value.length ? form.description.value : null,
         isPublic: form.isPublic.checked,
         topics: items.join(','),
       };
@@ -407,13 +409,37 @@ const EditPostForm: FunctionComponent = () => {
             <Row>
               <FormGroup controlId="description" as={Col}>
                 <FormLabel>*{t('descriptionFieldLabel')}</FormLabel>
-                <FormControl
+                {/* <FormControl
                   as="textarea"
                   rows={6}
                   maxLength={4000}
                   required
                   defaultValue={post.contentText}
                   onChange={handlerchange}
+                /> */}
+                <EditorCmp
+                  apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
+                  onInit={(_: any, editor) => {
+                    editorRef.current = editor;
+                  }}
+                  initialValue={post.contentText}
+                  init={{
+                    height: 300,
+                    menubar: false,
+                    plugins: [
+                      'advlist autolink lists link image charmap print preview anchor',
+                      'searchreplace visualblocks code fullscreen',
+                      'insertdatetime media table paste code help wordcount',
+                    ],
+                    relative_urls: false,
+                    toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
+                    // toolbar:
+                    //   'undo redo | formatselect | ' +
+                    //   'bold italic backcolor | alignleft aligncenter ' +
+                    //   'alignright alignjustify | bullist numlist outdent indent | ' +
+                    //   'removeformat | help',
+                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                  }}
                 />
               </FormGroup>
             </Row>
@@ -437,10 +463,10 @@ const EditPostForm: FunctionComponent = () => {
                 </small>
               </Col>
               <Col style={{ borderLeft: '1px solid lightgrey' }}>
-                <Button variant="primary" type="submit" className="pl-5 pr-4 float-right">
+                <Button variant="primary" disabled={isEditPostLoading} type="submit" className="pl-5 pr-4 float-right">
                   {t('titleEdit')}
                   {isEditPostLoading ? (
-                    <Spinner animation="grow" variant="secondary" className={styles.loadIndicator} />
+                    <Spinner size="sm" animation="grow" variant="secondary" className={styles.loadIndicator} />
                   ) : (
                     <span className={styles.placeholder} />
                   )}
