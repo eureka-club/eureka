@@ -25,16 +25,17 @@ const UserAvatar: FunctionComponent<Props> = ({
   const onLoadImgError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = '/img/default-avatar.png';
   };
-  const [truncateName] = useState(user.name?.slice(0, 16));
+  // const [truncateName] = useState(user.name?.slice(0, 16));
 
   const renderUserName = () => {
     let res = '';
     if (showName) {
+      const truncateName = user.name?.slice(0, 16);
       if (showFullName) {
         res = user.name!;
-      } else if (truncateName!.length < user.name!.length - 3) {
+      } else if (truncateName!.length + 3 < user.name!.length) {
         res = `${truncateName}...`;
-      } else res = `${truncateName}`;
+      } else res = `${user.name}`;
     }
     return <span>{res}</span>;
   };
