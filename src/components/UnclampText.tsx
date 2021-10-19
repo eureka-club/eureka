@@ -7,7 +7,7 @@ import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
 import styles from './UnclampText.module.css';
 
 interface Props {
-  clampHeight: string;
+  clampHeight?: string;
   text: string;
   showButtomMore?: boolean;
   isHTML?: boolean;
