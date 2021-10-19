@@ -85,9 +85,9 @@ const MosaicItem: FunctionComponent<Props> = ({
     const renderParentTitle = () => {
       let res = '';
       if (postParent) {
-        const pptt = postParent.title.slice(0, 33);
-        if (pptt.length < postParent.title.length - 3) res = `${pptt}...`;
-        else res = pptt;
+        const pptt = postParent.title.slice(0, 31);
+        if (pptt.length + 3 < postParent.title.length) res = `${pptt}...`;
+        else res = postParent.title;
       }
       return <span>{res}</span>;
     };
