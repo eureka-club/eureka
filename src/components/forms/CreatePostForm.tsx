@@ -19,6 +19,7 @@ import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BsFillXCircleFill } from 'react-icons/bs';
+import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import { useMutation, useQueryClient } from 'react-query';
 import TagsInput from './controls/TagsInput';
 import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
@@ -49,6 +50,7 @@ const CreatePostForm: FunctionComponent = () => {
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
   const queryClient = useQueryClient();
   const router = useRouter();
+  const editorRef = useRef<any>(null);
 
   // const [workId, setWorkId] = useState<string | undefined>();
   const { data: work } = useWorks(router.query.id as string);
@@ -180,7 +182,7 @@ const CreatePostForm: FunctionComponent = () => {
         title: form.postTitle.value,
         image: imageFile,
         language: form.language.value,
-        contentText: form.description.value.length ? form.description.value : null,
+        contentText: editorRef.current.getContent(), // form.description.value.length ? form.description.value : null,
         isPublic: form.isPublic.checked,
         topics: items.join(','),
         tags,
@@ -193,7 +195,7 @@ const CreatePostForm: FunctionComponent = () => {
         title: form.postTitle.value,
         image: imageFile,
         language: form.language.value,
-        contentText: form.description.value.length ? form.description.value : null,
+        contentText: editorRef.current.getContent(), // form.description.value.length ? form.description.value : null,
         isPublic: form.isPublic.checked,
         topics: items.join(','),
         tags,
@@ -392,7 +394,30 @@ const CreatePostForm: FunctionComponent = () => {
           <Row>
             <FormGroup controlId="description" as={Col}>
               <FormLabel>*{t('descriptionFieldLabel')}</FormLabel>
-              <FormControl as="textarea" rows={6} maxLength={4000} required />
+              <EditorCmp
+                apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
+                onInit={(_: any, editor) => {
+                  editorRef.current = editor;
+                }}
+                // initialValue={newEureka.contentText}
+                init={{
+                  height: 300,
+                  menubar: false,
+                  plugins: [
+                    'advlist autolink lists link image charmap print preview anchor',
+                    'searchreplace visualblocks code fullscreen',
+                    'insertdatetime media table paste code help wordcount',
+                  ],
+                  relative_urls: false,
+                  toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
+                  // toolbar:
+                  //   'undo redo | formatselect | ' +
+                  //   'bold italic backcolor | alignleft aligncenter ' +
+                  //   'alignright alignjustify | bullist numlist outdent indent | ' +
+                  //   'removeformat | help',
+                  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                }}
+              />
             </FormGroup>
           </Row>
         </Container>
