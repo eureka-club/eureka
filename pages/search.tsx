@@ -65,8 +65,10 @@ const SearchPage: NextPage = () => {
   const router = useRouter();
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
   useEffect(() => {
-    if (globalSearchEngineState && router)
-      if (!globalSearchEngineState.q || !globalSearchEngineState.where) router.push('/');
+    if (globalSearchEngineState && router) {
+      if (!globalSearchEngineState.q && !globalSearchEngineState.where && !globalSearchEngineState.itemsFound?.length)
+        router.push('/');
+    }
   }, [globalSearchEngineState, router]);
   // let where = encodeURIComponent(JSON.stringify({ title: { contains: globalSearchEngineState.q } }));
   // const { isLoading, data: works } = useWorks(where);
