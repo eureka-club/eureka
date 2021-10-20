@@ -133,7 +133,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
               </small>
             </div>
             <h1>{post.title}</h1>
-            {post.contentText != null && <UnclampText text={post.contentText} clampHeight="20rem" />}
+            {post.contentText != null && <UnclampText text={post.contentText} />}
           </div>
           <HyvorComments id={hyvorId} />
         </Col>
