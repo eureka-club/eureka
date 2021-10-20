@@ -86,7 +86,13 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const queryClient = useQueryClient();
 
   const [idSession, setIdSession] = useState<string>('');
-  const { isLoading: isLoadingUser, isError, /* error, */ data: user } = useUsers({ id: idSession });
+  const {
+    isFetching: isFetchingUser,
+    isLoading: isLoadingUser,
+    isSuccess: isSuccessUser,
+    isError,
+    /* error, */ data: user,
+  } = useUsers({ id: idSession });
   // const [user, setuser] = useState<UserDetail>();
   const [showShare, setShowShare] = useState<boolean>(false);
   const mosaicContext = useMosaicContext();
@@ -115,10 +121,16 @@ const SocialInteraction: FunctionComponent<Props> = ({
   }, [session]);
 
   useEffect(() => {
+    if (isSuccessUser && idSession && !user) {
+      queryClient.invalidateQueries(['USERS', `${idSession}`]);
+    }
+  }, [user, idSession, isSuccessUser]);
+
+  useEffect(() => {
     calculateQty();
 
     let ratingByMe = false;
-    if (session && user && entity) {
+    if (session && user && user.id && entity) {
       if (isWork(entity)) {
         // if (entity.id === 125) debugger;
         // let idx = user.readOrWatchedWorks.findIndex((i: Work) => i.id === entity.id);
@@ -243,7 +255,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
   const {
     mutate: execSocialInteraction,
-    isSuccess: isSocialInteractionSuccess,
+    isSuccess,
     isLoading: loadingSocialInteraction,
   } = useMutation(
     async ({ socialInteraction, doCreate, ratingQty }: SocialInteractionClientPayload) => {
@@ -275,7 +287,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
       return null;
     },
     {
-      onMutate: (payload) => {
+      onMutate: async (payload) => {
+        await queryClient.cancelQueries(cacheKey);
         // if (payload.socialInteraction === 'like') {
         //   const ol = optimistLike;
         //   setOptimistLike(!optimistLike);
@@ -361,9 +374,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
         const ck = globalSearchEngineState ? globalSearchEngineState.cacheKey : cacheKey;
         queryClient.invalidateQueries(['USERS', `${idSession}`]);
         if (!ck) router.replace(router.asPath);
-        // else if (queryClient.getQueryData(ck))
         queryClient.invalidateQueries(ck);
-        // else router.replace(router.asPath);
       },
     },
   );
@@ -497,16 +508,18 @@ const SocialInteraction: FunctionComponent<Props> = ({
                 stop={5}
                 emptySymbol={<GiBrain className="fs-6 text-info" />}
                 fullSymbol={getFullSymbol()}
+                readonly={loadingSocialInteraction}
               />
             )}{' '}
             {showRating && !loadingSocialInteraction && getRatingsCount()}{' '}
-            {showTrash && (
+            {showTrash && mySocialInfo && mySocialInfo.ratingByMe && (
               <Button
                 type="button"
                 title={t('Clear rating')}
                 className="text-warning p-0"
                 onClick={clearRating}
                 variant="link"
+                disabled={!loadingSocialInteraction}
               >
                 <FiTrash2 />
               </Button>

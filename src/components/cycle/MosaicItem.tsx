@@ -24,6 +24,8 @@ import { useUsers } from '../../useUsers';
 import { Session } from '../../types';
 import SocialInteraction from '../common/SocialInteraction';
 import { useCycleContext } from '../../useCycleContext';
+import { useMosaicContext } from '../../useMosaicContext';
+
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -49,6 +51,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   className,
 }) => {
   const { cycle, linkToCycle = true } = useCycleContext();
+
   const { id, title, localImages, startDate, endDate } = cycle!;
   const { t } = useTranslation('common');
   const sd = dayjs(startDate).add(1, 'day').tz(dayjs.tz.guess());

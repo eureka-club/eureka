@@ -70,18 +70,21 @@ const Mediatheque: NextPage = () => {
     if (session) setIdSession((session as unknown as Session).user.id.toString());
   }, [session, router]);
 
-  const {
-    /* isError, error, */ data: user,
-    isLoading: isLoadingUser,
-    isSuccess: isSuccessLoadedUser,
-  } = useUsers({ id });
+  const { /* isError, error, */ data: user, isLoading: isLoadingUser, isSuccess: isSuccessUser } = useUsers({ id });
+
+  useEffect(() => {
+    if (isSuccessUser && id && !user) {
+      queryClient.invalidateQueries(['USERS', `${id}`]);
+    }
+  }, [user, id, isSuccessUser]);
+
   // const { /* isLoading, isError, error, */ data: dataUserSession } = useUsers({ id: idSession });
   // const [/* userSession, */ setUserSession] = useState();
   // const [preparingData, setPreparingData] = useState<boolean>(false);
   // const [isAccessAllowed, setIsAccessAllowed] = useState<boolean>(false);
 
   useEffect(() => {
-    if (user && session) {
+    if (user && user.id && session) {
       const s = session as unknown as Session;
       const ifbm = s ? user.followedBy.findIndex((i: User) => i.id === s.user.id) !== -1 : false;
       setIsFollowedByMe(() => ifbm);
@@ -89,7 +92,7 @@ const Mediatheque: NextPage = () => {
   }, [user, session]);
 
   const isAccessAllowed = () => {
-    if (!isLoadingUser && user) {
+    if (!isLoadingUser && user && user.id) {
       if (!user.dashboardType || user.dashboardType === 1) return true;
       if (!isLoadingSession) {
         // if (!session) return false;
@@ -381,9 +384,7 @@ const Mediatheque: NextPage = () => {
         )}
         {renderAccessInfo()}
         {(isLoadingUser || isLoadingSession) && <Spinner animation="grow" variant="info" />}
-        {!(isLoadingUser || isLoadingSession) && isSuccessLoadedUser && !user && (
-          <Alert variant="warning">{t('notFound')}</Alert>
-        )}
+        {isSuccessUser && id && !user && <Spinner animation="grow" variant="info" />}
       </>
     </SimpleLayout>
   );
