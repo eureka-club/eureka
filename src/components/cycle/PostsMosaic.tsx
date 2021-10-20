@@ -1,4 +1,5 @@
 // import { Cycle } from '@prisma/client';
+import { Post } from '@prisma/client';
 import { FunctionComponent } from 'react';
 // import Spinner from 'react-bootstrap/Spinner';
 // import { useQuery } from 'react-query';
@@ -25,7 +26,36 @@ const PostsMosaic: FunctionComponent<Props> = ({ cycle, display, showComments, c
   //     return res.json();
   //   },
   // );
-
+  const render = () => {
+    const res: Post[] = [];
+    const worksPost = cycle.posts.reduce((p, c) => {
+      if (c.works.length) {
+        const work = c.works[0];
+        const idx = cycle.works.findIndex((w) => w.id === work.id);
+        if (idx > -1) p.push(c);
+      }
+      return p;
+    }, res);
+    const cyclePosts = cycle.posts.filter((p) => !p.works.length);
+    return (
+      <>
+        <Mosaic
+          display={display}
+          stack={cyclePosts.sort((p, c) => (p.id > c.id && -1) || 1) as PostMosaicItem[]}
+          postsLinksTo={cycle}
+          showComments={showComments}
+          cacheKey={cacheKey}
+        />
+        <Mosaic
+          display={display}
+          stack={worksPost.sort((p, c) => (p.id > c.id && -1) || 1) as PostMosaicItem[]}
+          // postsLinksTo={cycle}
+          showComments={showComments}
+          cacheKey={cacheKey}
+        />
+      </>
+    );
+  };
   return (
     <>
       {/* {isLoading && (
@@ -33,16 +63,7 @@ const PostsMosaic: FunctionComponent<Props> = ({ cycle, display, showComments, c
           <span className="sr-only">Loading...</span>
         </Spinner>
       )} */}
-      {(cycle.posts && (
-        <Mosaic
-          display={display}
-          stack={cycle.posts.sort((p, c) => (p.id > c.id && -1) || 1) as PostMosaicItem[]}
-          postsLinksTo={cycle}
-          showComments={showComments}
-          cacheKey={cacheKey}
-        />
-      )) ||
-        null}
+      {render() || null}
     </>
   );
 };

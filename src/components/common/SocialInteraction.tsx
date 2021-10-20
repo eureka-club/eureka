@@ -196,15 +196,26 @@ const SocialInteraction: FunctionComponent<Props> = ({
   //   }
   //   return optimistReadOrWatchedCount ? -1 : 0;
   // };
+  const shareUrl = (() => {
+    if (isPost(entity)) {
+      const post = entity as PostMosaicItem;
+      const parentIsWork = post.works.length;
+      const parentIsCycle = !post.works.length && post.cycles.length;
+      if (parentIsWork) return `${WEBAPP_URL}/work/${post.works[0].id}/post/${post.id}`;
+      if (parentIsCycle) return `${WEBAPP_URL}/cycle/${post.cycles[0].id}/post/${post.id}`;
+    }
+    if (isWork(entity)) return `${WEBAPP_URL}/work/${entity.id}`;
+    if (isCycle(entity)) return `${WEBAPP_URL}/cycle/${entity.id}`;
+    return `${WEBAPP_URL}${router.asPath}`;
+  })();
 
-  const shareUrl = `${WEBAPP_URL}${router.asPath}`;
   const shareTextDynamicPart = (() => {
     if (parent != null && isCycle(parent)) {
       return `${t('postCycleShare')} "${parent.title}"`;
     }
-    if (parent != null && isWork(parent)) {
-      return `${t('postWorkShare')} "${parent.title}"`;
-    }
+    // if (parent != null && isWork(parent)) {
+    //   return `${t('postWorkShare')} "${parent.title}"`;
+    // }
     if (isCycle(entity)) {
       return t('cycleShare');
     }
@@ -212,7 +223,10 @@ const SocialInteraction: FunctionComponent<Props> = ({
       return t('workShare');
     }
     if (isPost(entity)) {
-      return t('postWorkShare');
+      const post = entity as PostMosaicItem;
+      const p = post.works[0] || post.cycles[0] || null;
+      const about = post.works[0] ? 'postWorkShare' : 'postCycleShare';
+      return `EUREKA: "${post.title}". \n ${t(about)} "${p ? p.title : ''}"`;
     }
 
     throw new Error('Invalid entity or parent');
