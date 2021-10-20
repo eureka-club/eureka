@@ -4,6 +4,7 @@
 // import { useAtom } from 'jotai';
 import { useSession } from 'next-auth/client';
 // import { useRouter } from 'next/router';
+import { CycleWork, Work } from '@prisma/client';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useState } from 'react';
 // import Button from 'react-bootstrap/Button';
@@ -27,6 +28,7 @@ import { GiBrain } from 'react-icons/gi';
 
 // import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
 import dayjs from 'dayjs';
+import isBetween from 'dayjs/plugin/isBetween';
 import { MySocialInfo, Session } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
@@ -62,7 +64,7 @@ interface Props {
   onCarouselSeeAllAction?: () => Promise<void>;
   onParticipantsAction?: () => Promise<void>;
 }
-
+dayjs.extend(isBetween);
 const CycleDetailHeader: FunctionComponent<Props> = ({
   // cycle,
   onCarouselSeeAllAction,
@@ -188,25 +190,28 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
     return 0;
   };
 
-  const sortWorks = () => {
-    const worksActive: Record<number, boolean> = {};
-    cycle.cycleWorksDates.forEach((cw) => {
-      if (cw) {
-        worksActive[cw.workId!] = false;
-        if (cw.endDate) {
-          worksActive[cw.workId!] = dayjs().isBefore(new Date(cw.endDate));
-        }
-      }
-    });
+  const getWorksSorted = () => {
+    const res: Work[] = [];
+    cycle.cycleWorksDates
+      .sort((f, s) => {
+        const fCD = dayjs(f.startDate!);
+        const sCD = dayjs(s.startDate!);
+        const isActive = (w: CycleWork) => {
+          if (w.startDate && w.endDate) return dayjs().isBetween(w.startDate!, w.endDate);
+          if (w.startDate && !w.endDate) return dayjs().isAfter(w.startDate);
+          return false;
+        };
 
-    const res = cycle.works.sort((i, j) => {
-      if (worksActive[j.id]) {
-        if (worksActive[i.id]) return 0;
-        return 1;
-      }
-      if (j.id > i.id) return 1;
-      return -1;
-    });
+        if (isActive(f) && !isActive(s)) return -1;
+        if (!isActive(f) && isActive(s)) return 1;
+        if (fCD.isAfter(sCD)) return 1;
+        if (fCD.isSame(sCD)) return 0;
+        return -1;
+      })
+      .forEach((cw) => {
+        const idx = cycle.works.findIndex((w) => w.id === cw.workId);
+        res.push(cycle.works[idx]);
+      });
 
     return res;
   };
@@ -249,7 +254,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
             // onSeeAll={async () => seeAll(cycle.works as WorkMosaicItem[], t('Eurekas I created'))}
             onSeeAll={onCarouselSeeAllAction}
             title={<CycleSummary cycle={cycle} />}
-            data={sortWorks() as WorkMosaicItem[]}
+            data={getWorksSorted() as WorkMosaicItem[]}
             iconBefore={<></>}
             customMosaicStyle={{ height: '16em' }}
             // iconAfter={<BsCircleFill className={styles.infoCircle} />}

@@ -1,5 +1,6 @@
-// import { Cycle } from '@prisma/client';
+import { CycleWork } from '@prisma/client';
 import dayjs from 'dayjs';
+import isBetween from 'dayjs/plugin/isBetween';
 import { FunctionComponent } from 'react';
 // import Spinner from 'react-bootstrap/Spinner';
 // import { useQuery } from 'react-query';
@@ -14,7 +15,7 @@ interface Props {
   cycle: CycleMosaicItem;
   className?: string;
 }
-
+dayjs.extend(isBetween);
 const WorksMosaic: FunctionComponent<Props> = ({ cycle, className }) => {
   // const { isLoading, isSuccess, data } = useQuery<WorkMosaicItem[]>(
   //   ['works.mosaic.cycle', cycle.id],
@@ -32,6 +33,14 @@ const WorksMosaic: FunctionComponent<Props> = ({ cycle, className }) => {
       .sort((f, s) => {
         const fCD = dayjs(f.startDate!);
         const sCD = dayjs(s.startDate!);
+        const isActive = (w: CycleWork) => {
+          if (w.startDate && w.endDate) return dayjs().isBetween(w.startDate!, w.endDate);
+          if (w.startDate && !w.endDate) return dayjs().isAfter(w.startDate);
+          return false;
+        };
+
+        if (isActive(f) && !isActive(s)) return -1;
+        if (!isActive(f) && isActive(s)) return 1;
         if (fCD.isAfter(sCD)) return 1;
         if (fCD.isSame(sCD)) return 0;
         return -1;
