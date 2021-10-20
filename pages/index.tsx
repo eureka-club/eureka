@@ -53,8 +53,10 @@ const IndexPage: NextPage = () => {
       <h1 className="text-dark mb-5">{t('Trending topics')}</h1>
 
       <>{show && show.map((item) => <Carousel className="mt-5" key={item} topic={item} />)}</>
-      <Button className={styles.carouselDowmButton} onClick={showTopic} disabled={hide.length === 0}>
-        <RiArrowDownSLine />
+      <Button className="my-3 rounded-pill" onClick={showTopic} disabled={hide.length === 0}>
+        <span>
+          <RiArrowDownSLine /> {t('loadMoreTopics')}
+        </span>
       </Button>
     </SimpleLayout>
   );
