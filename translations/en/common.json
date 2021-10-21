@@ -96,7 +96,6 @@
   "Request sent successfully": "Request sent successfully",
   "Failed to send the request": "Failed to send request",
   "Clear rating": "Clear rating",
-  
   "Close": "Close",
   "underEurekaLabel": "Shape your mind, shape the world",
   "openHeaderLabel": "Learn more about Eureka",
@@ -107,5 +106,6 @@
   "headerCenterBoxTitle": "Join a cycle:",
   "headerCenterBoxText": "Spaces created for the curious and the experts to dive into a topic, together with a community.",
   "headerRightBoxTitle": "Create and share Eureka moments!",
-  "headerRightBoxText": "Your individual revelations that can transform the collective."
+  "headerRightBoxText": "Your individual revelations that can transform the collective.",
+  "loadMoreTopics": "Load more topics"
 }
