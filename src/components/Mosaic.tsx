@@ -11,7 +11,9 @@ import styles from './Mosaic.module.css';
 import { CycleMosaicItem } from '../types/cycle';
 import { WorkMosaicItem } from '../types/work';
 import { PostMosaicItem } from '../types/post';
+
 import { CycleContext } from '../useCycleContext';
+import { WorkContext } from '../useWorkContext';
 
 const renderMosaicItem = (
   item: MosaicItem,
@@ -50,7 +52,11 @@ const renderMosaicItem = (
   }
   if (isWorkMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
-    return <MosaicItemWork showShare={false} showButtonLabels={showButtonLabels} key={`work-${item.id}`} work={item} />;
+    return (
+      <WorkContext.Provider value={{ work: item, linkToWork: true }}>
+        <MosaicItemWork showShare={false} showButtonLabels={showButtonLabels} key={`work-${item.id}`} />;
+      </WorkContext.Provider>
+    );
   }
   if (isUserMosaicItem(item)) {
     return <MosaicItemUser key={`user-${item.id}`} user={item} />;

@@ -36,6 +36,7 @@ import styles from './WorkDetail.module.css';
 import TagsInput from '../forms/controls/TagsInput';
 import MosaicItem from './MosaicItem';
 import { MosaicContext } from '../../useMosaicContext';
+import { WorkContext } from '../../useWorkContext';
 
 interface Props {
   work: WorkMosaicItem;
@@ -79,114 +80,116 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
   };
 
   return (
-    <MosaicContext.Provider value={{ showShare: true }}>
-      {!router.query.postId && canEditWork() && (
-        <ButtonGroup className="mb-1">
-          <Button variant="primary" onClick={() => router.back()} size="sm">
-            <BiArrowBack />
-          </Button>
-          <Button variant="warning" onClick={handleEditClick} size="sm">
-            {t('edit')}
-          </Button>
-        </ButtonGroup>
-      )}
-      {post && work && (
-        <div>
+    <WorkContext.Provider value={{ work, linkToWork: false }}>
+      <MosaicContext.Provider value={{ showShare: true }}>
+        {!router.query.postId && canEditWork() && (
           <ButtonGroup className="mb-1">
             <Button variant="primary" onClick={() => router.back()} size="sm">
               <BiArrowBack />
             </Button>
-            {canEditPost() && (
-              <Button variant="warning" onClick={handleEditPostClick} size="sm">
-                {t('edit')}
-              </Button>
-            )}
+            <Button variant="warning" onClick={handleEditClick} size="sm">
+              {t('edit')}
+            </Button>
           </ButtonGroup>
-        </div>
-      )}
+        )}
+        {post && work && (
+          <div>
+            <ButtonGroup className="mb-1">
+              <Button variant="primary" onClick={() => router.back()} size="sm">
+                <BiArrowBack />
+              </Button>
+              {canEditPost() && (
+                <Button variant="warning" onClick={handleEditPostClick} size="sm">
+                  {t('edit')}
+                </Button>
+              )}
+            </ButtonGroup>
+          </div>
+        )}
 
-      <Row className="mb-5">
-        {post == null ? (
-          <>
-            <Col md={{ span: 3 }}>
-              <MosaicItem work={work} showTrash />
+        <Row className="mb-5">
+          {post == null ? (
+            <>
+              <Col md={{ span: 3 }}>
+                <MosaicItem showTrash />
 
-              {/* <div className={classNames(styles.imgWrapper, 'mb-3')}>
+                {/* <div className={classNames(styles.imgWrapper, 'mb-3')}>
                 <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
               </div>
               <SocialInteraction cacheKey={['WORKS', `${work.id}`]} entity={work} showCounts showShare showTrash /> */}
-            </Col>
-            <Col md={{ span: 9 }}>
-              <section className="mb-4">
-                <h1 className="fw-bold text-secondary">{work.title}</h1>
-                <h2 className={styles.author}>{work.author}</h2>
-                <WorkSummary work={work} />
-                {work.tags && <TagsInput tags={work.tags} readOnly label="" />}
-                {work.link != null && (
-                  <a href={work.link} className={styles.workLink} target="_blank" rel="noreferrer">
-                    {t('workLinkLabel')} <BsBoxArrowUpRight />
-                  </a>
-                )}
-              </section>
-              {work.contentText != null && <UnclampText text={work.contentText} />}
-            </Col>
-          </>
-        ) : (
-          <>{post && work && <PostDetailComponent post={post} work={work} />}</>
-        )}
-      </Row>
-
-      {post == null && (
-        <Row className="mb-5">
-          <Col>
-            {detailPagesState.selectedSubsectionWork != null && (
-              <TabContainer
-                defaultActiveKey={detailPagesState.selectedSubsectionWork}
-                onSelect={handleSubsectionChange}
-                transition={false}
-              >
-                <Row className="mb-4">
-                  <Col>
-                    <Nav variant="tabs" fill>
-                      <NavItem>
-                        <NavLink eventKey="all">
-                          {t('tabHeaderAll')} ({cyclesCount + postsCount})
-                        </NavLink>
-                      </NavItem>
-                      <NavItem>
-                        <NavLink eventKey="posts">
-                          {t('tabHeaderPosts')} ({postsCount})
-                        </NavLink>
-                      </NavItem>
-                      <NavItem>
-                        <NavLink eventKey="cycles">
-                          {t('tabHeaderCycles')} ({cyclesCount})
-                        </NavLink>
-                      </NavItem>
-                    </Nav>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <TabContent>
-                      <TabPane eventKey="all">
-                        {(cyclesCount > 0 || postsCount > 0) && <CombinedMosaic work={work} />}
-                      </TabPane>
-                      <TabPane eventKey="posts">
-                        <p className={styles.explanatoryText}>{t('explanatoryTextPosts')}</p>
-
-                        {postsCount > 0 && <PostsMosaic work={work} />}
-                      </TabPane>
-                      <TabPane eventKey="cycles">{cyclesCount > 0 && <CyclesMosaic work={work} />}</TabPane>
-                    </TabContent>
-                  </Col>
-                </Row>
-              </TabContainer>
-            )}
-          </Col>
+              </Col>
+              <Col md={{ span: 9 }}>
+                <section className="mb-4">
+                  <h1 className="fw-bold text-secondary">{work.title}</h1>
+                  <h2 className={styles.author}>{work.author}</h2>
+                  <WorkSummary work={work} />
+                  {work.tags && <TagsInput tags={work.tags} readOnly label="" />}
+                  {work.link != null && (
+                    <a href={work.link} className={styles.workLink} target="_blank" rel="noreferrer">
+                      {t('workLinkLabel')} <BsBoxArrowUpRight />
+                    </a>
+                  )}
+                </section>
+                {work.contentText != null && <UnclampText text={work.contentText} />}
+              </Col>
+            </>
+          ) : (
+            <>{post && work && <PostDetailComponent post={post} work={work} />}</>
+          )}
         </Row>
-      )}
-    </MosaicContext.Provider>
+
+        {post == null && (
+          <Row className="mb-5">
+            <Col>
+              {detailPagesState.selectedSubsectionWork != null && (
+                <TabContainer
+                  defaultActiveKey={detailPagesState.selectedSubsectionWork}
+                  onSelect={handleSubsectionChange}
+                  transition={false}
+                >
+                  <Row className="mb-4">
+                    <Col>
+                      <Nav variant="tabs" fill>
+                        <NavItem>
+                          <NavLink eventKey="all">
+                            {t('tabHeaderAll')} ({cyclesCount + postsCount})
+                          </NavLink>
+                        </NavItem>
+                        <NavItem>
+                          <NavLink eventKey="posts">
+                            {t('tabHeaderPosts')} ({postsCount})
+                          </NavLink>
+                        </NavItem>
+                        <NavItem>
+                          <NavLink eventKey="cycles">
+                            {t('tabHeaderCycles')} ({cyclesCount})
+                          </NavLink>
+                        </NavItem>
+                      </Nav>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <TabContent>
+                        <TabPane eventKey="all">
+                          {(cyclesCount > 0 || postsCount > 0) && <CombinedMosaic work={work} />}
+                        </TabPane>
+                        <TabPane eventKey="posts">
+                          <p className={styles.explanatoryText}>{t('explanatoryTextPosts')}</p>
+
+                          {postsCount > 0 && <PostsMosaic work={work} />}
+                        </TabPane>
+                        <TabPane eventKey="cycles">{cyclesCount > 0 && <CyclesMosaic work={work} />}</TabPane>
+                      </TabContent>
+                    </Col>
+                  </Row>
+                </TabContainer>
+              )}
+            </Col>
+          </Row>
+        )}
+      </MosaicContext.Provider>
+    </WorkContext.Provider>
   );
 };
 

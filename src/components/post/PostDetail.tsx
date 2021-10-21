@@ -86,13 +86,15 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
               {currentWork != null && (
                 <tr>
                   <td className={styles.parentBadges}>
-                      <a className={styles.workInfoType}>{t(`common:${currentWork.type}`)}</a>
+                    <a className={styles.workInfoType}>{t(`common:${currentWork.type}`)}</a>
                   </td>
                   <td className="pb-2">
                     <h4>
-                    <Link href={`/work/${currentWork.id}`}>
-                    <a className={styles.workInfoTitle}>{currentWork.title}</a>
-                    </Link>
+                      <Link href={`/work/${currentWork.id}`}>
+                        <p className="text-break">
+                          <a className={`${styles.workInfoTitle}`}>{currentWork.title}</a>
+                        </p>
+                      </Link>
                     </h4>
                     <h5 className={styles.workInfoAuthor}>{currentWork.author}</h5>
                   </td>
@@ -100,14 +102,16 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
               )}
               {post.cycles && post.cycles.length > 0 && (
                 <tr>
-                  <td className={styles.parentBadges}>                  
-                      <a className={styles.cycleInfoType}>{t('common:cycle')}</a>                    
+                  <td className={styles.parentBadges}>
+                    <a className={styles.cycleInfoType}>{t('common:cycle')}</a>
                   </td>
                   <td>
                     <h4>
-                    <Link href={`/cycle/${post.cycles[0].id}`}>
-                    <a className={styles.workInfoTitle}>{post.cycles[0].title}</a>
-                    </Link>
+                      <Link href={`/cycle/${post.cycles[0].id}`}>
+                        <p className="text-break">
+                          <a className={styles.workInfoTitle}>{post.cycles[0].title}</a>
+                        </p>
+                      </Link>
                     </h4>
                   </td>
                 </tr>
