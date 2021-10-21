@@ -323,7 +323,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         <>
           <NavItem className={`${styles.tabBtn}`}>
             <NavLink eventKey="cycle-discussion">
-              <span className="mb-3 text-primary">{t('Discussion')}</span>
+              <span className="mb-3">{t('Discussion')}</span>
             </NavLink>
           </NavItem>
           {/* <NavItem className={`${styles.tabBtn}`}>
@@ -331,13 +331,13 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           </NavItem> */}
           <NavItem className={`${styles.tabBtn}`}>
             <NavLink eventKey="guidelines">
-              <span className="mb-3 text-primary">{t('Guidelines')}</span>
+              <span className="mb-3">{t('Guidelines')}</span>
             </NavLink>
           </NavItem>
 
           <NavItem className={`${styles.tabBtn}`}>
             <NavLink eventKey="participants">
-              <span className="mb-3 text-primary">{t('Participants')}</span>
+              <span className="mb-3">{t('Participants')}</span>
             </NavLink>
           </NavItem>
         </>
@@ -408,10 +408,12 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 <style jsx global>
                   {`
                     .nav-tabs .nav-item.show .nav-link,
-                    .nav-tabs .nav-link.active {
-                      background-color: none;
+                    .nav-tabs .nav-link.active,
+                    .nav-tabs .nav-link:hover {
+                      background-color: var(--primary);
+                      color: white;
                       border: none !important;
-                      border-bottom: solid 6px var(--eureka-green) !important;
+                      border-bottom: solid 2px var(--primary) !important;
                     }
                     .nav-tabs {
                       border: none !important;
@@ -423,7 +425,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                     <Nav variant="tabs" fill>
                       <NavItem className={styles.tabBtn}>
                         <NavLink eventKey="cycle-about">
-                          <span className="mb-3 text-primary">
+                          <span className="mb-3">
                             {t('About')} ({cycle.works && cycle.works.length})
                           </span>
                         </NavLink>

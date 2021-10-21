@@ -59,6 +59,11 @@
 
 .tabBtn a{
   border: none;
-  border-bottom: solid 2px var(--eureka-green)!important;
+  border-bottom: solid 1px var(--eureka-green)!important;
+  
+}
+
+.tabBtn a:hover{
+  background-color: var(--eureka-)
   
 }
