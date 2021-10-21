@@ -6,6 +6,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Spinner, Alert } from 'react-bootstrap';
+import { useQueryClient } from 'react-query';
 import { CycleMosaicItem } from '../../src/types/cycle';
 import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
@@ -21,6 +22,7 @@ const CycleDetailPage: NextPage = () => {
   const { data, isSuccess, isLoading, isFetching, isError, error } = useCycle(+id);
   const [cycle, setCycle] = useState<CycleMosaicItem | undefined>(undefined);
   const { t } = useTranslation('common');
+  const queryClient = useQueryClient();
 
   const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
 
@@ -29,13 +31,16 @@ const CycleDetailPage: NextPage = () => {
   }, [router]);
 
   useEffect(() => {
+    if (+id && isSuccess && (!data || !data.id)) {
+      queryClient.invalidateQueries(['CYCLE', `${+id}`]);
+    }
     if (data) {
       const c = data as CycleMosaicItem;
       if (c) {
         setCycle(c);
       }
     }
-  }, [data]);
+  }, [data, isSuccess, id]);
 
   useEffect(() => {
     if (!isLoadingSession) {
