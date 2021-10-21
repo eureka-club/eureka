@@ -519,7 +519,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
                 className="text-warning p-0"
                 onClick={clearRating}
                 variant="link"
-                disabled={!loadingSocialInteraction}
+                disabled={loadingSocialInteraction}
               >
                 <FiTrash2 />
               </Button>
