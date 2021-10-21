@@ -8,7 +8,6 @@
   "documentary": "Documentário",
   "movie": "Filme ficção",
   "post": "Eureka",
-
   "browserTitleAbout": "Perguntas frequentes",
   "aboutPageHeading": "Somos o primeiro clube digital de livros e filmes para a mudança social.",
   "aboutHeading": "O que é uma Eureka?",
@@ -19,21 +18,17 @@
   "whatisPostText": "É a sua biblioteca pessoal de mídia mista. Reúne suas Eurekas, os ciclos que você criou e dos quais participou, assim como os livros e filmes que você leu/assistiu (se o você avaliou, você leu/viu). Qualquer item que você 'Salvar' também irá diretamente para sua Mediateca. Por último, mas não menos importante: é também onde você compartilha (o quanto quiser) sobre você e mantém uma lista das pessoas que você segue.",
   "ethicsHeading": "Qual é a nossa carta de moderação e uso de dados?",
   "ethicsText1": "Confira nosso Manifesto para saber mais sobre nossos Princípios, incluindo moderação, para construir nossa comunidade.",
-
   "hereLinkENG": "inglês",
   "hereLinkSPA": "espanhol",
   "hereLinkPORT": "português",
   "hereLinkFR": "francês",
-
   "ethicsText2": "Ao entrar na Eureka, você concorda em compartilhar informações pessoais conosco. Pode ficar tranquilx: não compartilharemos seus dados com terceiros (nem os venderemos).",
   "ethicsText3": "Você pode receber emails nossos. Para não receber emails, envie uma mensagem para hola@eureka.club, com o assunto ‘Opt-out’.",
-
   "violence": "Violência, ameaças ou incitamento à violência",
   "attacks": "Ataques pessoais",
   "language": "Linguagem depreciativa",
   "harassment": "Qualquer tipo de assédio",
   "ethicsText4": "Conteúdos ou indivíduos que violem o acima serão imediata e exaustivamente abordados e removidos, se necessário.",
-  
   "eurekaSupport": "Eureka é apoiada por:",
   "contact": "Contato:",
   "mosaicHeaderMyCycles": "Ciclos, obras e publicações favoritas",
@@ -48,7 +43,6 @@
   "workLengthAsMinutesLabel": "minutos",
   "unclampTextLess": "ver menos",
   "unclampTextMore": "ver mais",
-
   "wayShare": "",
   "cycleShare": "Dá uma olhada no ciclo",
   "postCycleShare": "Se inspire nesta Eureka sobre o ciclo",
@@ -58,7 +52,6 @@
   "whatsappComplement": "Participe aqui: ",
   "twitterComplement": "",
   "facebookComplement": "",
-
   "goToHomepage": "Voltar à página inicial",
   "Loading": "Carregando",
   "Trending topics": "Temas populares",
@@ -104,10 +97,10 @@
   "Failed to send the request": "Falha ao enviar a solicitação",
   "Clear rating": "Apagar avaliação",
   "Close": "Fechar",
-
   "underEurekaLabel": "Ative sua mente, transforme o mundo",
   "openHeaderLabel": "Saber mais sobre a Eureka",
-  "eurekaReasonLabel": "Somos o primeiro clube digital de livros e filmes para a mudança social. Nosso objetivo: ativar mentes para transformar o mundo.",
+  "eurekaReasonLabel": "Somos o primeiro clube digital de livros e filmes para a mudança social.",
+  "eurekaReasonLabel2": "Nosso objetivo: ativar mentes para transformar o mundo.",
   "headerSessionBtnLabel": "Entre para ter momentos Eureka!",
   "headerLeftBoxTitle": "Cansou das interações sem sentido nas redes sociais?",
   "headerLeftBoxText": "Ative sua mente com seu próximo livro ou filme, e senti-pensar sobre um tema que importa.",

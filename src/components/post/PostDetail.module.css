@@ -21,17 +21,6 @@
   white-space: nowrap;
 }
 
-.workInfoType,
-.cycleInfoType {
-  border-radius: 1rem;
-  color: var(--eureka-purple);
-  display: inline-block;
-  font-size: 0.85rem;
-  line-height: 1;
-  padding: 0.2rem 0.75rem;
-  text-align: center;
-  /* text-transform: capitalize; */
-}
 .workInfoType {
   background-color: var(--color-emphasis);
 }
@@ -43,11 +32,6 @@
 }
 .cycleInfoType:hover {
   color: var(--text-color-extralight);
-}
-
-.workInfoTitle {
-  font-size: 1rem;
-  font-weight: 300;
 }
 .workInfoAuthor {
   font-size: 0.9rem;

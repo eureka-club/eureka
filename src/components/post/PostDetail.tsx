@@ -1,20 +1,20 @@
 import classNames from 'classnames';
-import { useAtom } from 'jotai';
-import { useSession } from 'next-auth/client';
+// import { useAtom } from 'jotai';
+// import { useSession } from 'next-auth/client';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import { FunctionComponent, useEffect, useState } from 'react';
+import { Row, Col, Badge } from 'react-bootstrap';
 
 import { useRouter } from 'next/router';
 import { DATE_FORMAT_SHORT } from '../../constants';
-import { Session } from '../../types';
+// import { Session } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
-import globalModalsAtom from '../../atoms/globalModals';
+// import globalModalsAtom from '../../atoms/globalModals';
 import { WorkMosaicItem } from '../../types/work';
 import HyvorComments from '../common/HyvorComments';
 import LocalImageComponent from '../LocalImage';
@@ -49,11 +49,10 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
       }
     }
   }, [cycleContext, router]);
-  const currentWork = work;
   const { t } = useTranslation('createPostForm');
   const hyvorId = `post-${post.id}`;
-  const [session] = useSession() as [Session | null | undefined, boolean];
-  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
+  // const [session] = useSession() as [Session | null | undefined, boolean];
+  // const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
 
   // const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
   //   ev.preventDefault();
@@ -83,33 +82,35 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
           <SocialInteraction entity={post} parent={cycle || work || null} showRating={false} showButtonLabels={false} />
           <table className={styles.parentContent}>
             <tbody>
-              {currentWork != null && (
+              {work != null && (
                 <tr>
                   <td className={styles.parentBadges}>
-                    <a className={styles.workInfoType}>{t(`common:${currentWork.type}`)}</a>
+                    <Badge variant="orange rounded-pill" className="text-white">
+                      {t(`common:${work.type}`)}
+                    </Badge>
                   </td>
                   <td className="pb-2">
                     <h4>
-                      <Link href={`/work/${currentWork.id}`}>
+                      <Link href={`/work/${work.id}`}>
                         <p className="text-break">
-                          <a className={`${styles.workInfoTitle}`}>{currentWork.title}</a>
+                          <a className="cursor-pointer">{work.title}</a>
                         </p>
                       </Link>
                     </h4>
-                    <h5 className={styles.workInfoAuthor}>{currentWork.author}</h5>
+                    <h5 className={styles.workInfoAuthor}>{work.author}</h5>
                   </td>
                 </tr>
               )}
               {post.cycles && post.cycles.length > 0 && (
                 <tr>
                   <td className={styles.parentBadges}>
-                    <a className={styles.cycleInfoType}>{t('common:cycle')}</a>
+                    <Badge variant="primary rounded-pill">{t('common:cycle')}</Badge>
                   </td>
                   <td>
                     <h4>
                       <Link href={`/cycle/${post.cycles[0].id}`}>
                         <p className="text-break">
-                          <a className={styles.workInfoTitle}>{post.cycles[0].title}</a>
+                          <a className="cursor-pointer">{post.cycles[0].title}</a>
                         </p>
                       </Link>
                     </h4>
