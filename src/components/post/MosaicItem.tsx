@@ -145,7 +145,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           <div className={`d-flex align-items-center justify-content-center ${styles.detailedInfo}`}>
             <h6 className="text-center mb-0">
               <Link href={postLinkHref}>
-                <a className="text-gray-dark">{post.title}</a>
+                <a className="text-primary">{post.title}</a>
               </Link>
             </h6>
             {/* <div className="mb-5">

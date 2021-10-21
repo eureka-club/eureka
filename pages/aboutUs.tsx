@@ -22,7 +22,7 @@ const AboutPage: NextPage = () => {
   return (
     <SimpleLayout title={t('browserTitle')}>
       <div style={{ textAlign: 'center' }}>
-        <h1 className={styles.title}>{t('title')}</h1>
+        <h1 className="text-secondary fw-bold">{t('title')}</h1>
       </div>
       <br />
       <br />

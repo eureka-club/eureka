@@ -220,7 +220,7 @@ const MosaicItem: FunctionComponent<Props> = ({
       <div className={`pt-1 text-center ${styles.joinButtonContainer}`}>
         {(isJoinCycleLoading || isLeaveCycleLoading) && <Spinner animation="border" size="sm" />}
         {!(isJoinCycleLoading || isLeaveCycleLoading) && isCurrentUserJoinedToCycle && user ? (
-          <Button onClick={handleLeaveCycleClick} variant="link" className="w-75">
+          <Button onClick={handleLeaveCycleClick} variant="button border-primary text-primary fs-6" className="w-75">
             {t('leaveCycleLabel')}
           </Button>
         ) : (

@@ -97,14 +97,15 @@
   "Failed to send the request": "Échec de l'envoi de la demande",
   "Clear rating": "Effacer note",
   "Close": "Fermer",
-  "underEurekaLabel": "Façonnez votre esprit, façonnez le monde",
+
+  "underEurekaLabel": "Nourrir l'esprit, transformer le monde",
   "openHeaderLabel": "En savoir plus sur Eureka",
-  "eurekaReasonLabel": "Nous sommes le premier réseau social créé pour trouver des livres et des films sur des sujets d'intérêt et en discuter avec une communauté. Notre objectif : promouvoir l’activisme pour transformer le collectif.",
+  "eurekaReasonLabel": "Nous sommes le premier club en ligne de livres-films pour le changement social. Notre objectif: nourrir l'esprit pour transformer le monde.",
   "headerSessionBtnLabel": "Connectez-vous pour avoir des moments Eureka!",
   "headerLeftBoxTitle": "Marre des interactions insensées sur les réseaux sociaux?",
   "headerLeftBoxText": "Nourrissez-vous de votre prochain livre ou film, et de senti-penser sur un sujet qui compte.",
   "headerCenterBoxTitle": "Rejoignez un cycle:",
-  "headerCenterBoxText": "Des espaces où personnes intéressées et expertes peuvent approfondir tout type de sujet, aux côtés d’une communauté.",
+  "headerCenterBoxText": "Des espaces où personnes curieuses et expertes peuvent approfondir tout type de sujet, aux côtés d’une communauté.",
   "headerRightBoxTitle": "Créez et partagez des moments Eureka!",
   "headerRightBoxText": "Vos révélations individuelles qui peuvent transformer le collectif.",
   "loadMoreTopics": "Load more topics"

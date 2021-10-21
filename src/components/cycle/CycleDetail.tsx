@@ -400,8 +400,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                   {`
                     .nav-tabs .nav-item.show .nav-link,
                     .nav-tabs .nav-link.active {
-                      color: #495057;
-                      background-color: #fff;
+                      background-color: none;
                       border: none !important;
                       border-bottom: solid 6px var(--eureka-green) !important;
                     }

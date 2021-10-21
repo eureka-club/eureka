@@ -219,7 +219,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   return (
     <Row className="mb-5">
       <Col md={9}>
-        <h1 className="mb-1 text-dark">
+        <h1 className="mb-1 fw-bold text-secondary">
           <a>{cycle.title}</a>
         </h1>
         <Rating

@@ -21,15 +21,15 @@
 }
 
 .workLink {
-  background-color: var(--eureka-grey-dark);
+  background-color: none;
   border-radius: 6px;
-  color: var(--text-color-light);
-  padding: 0 0.5rem;
+  color: var(--eureka-green);
+  padding: 0 
 }
 .workLink:hover {
-  background-color: var(--eureka-green);
-  color: var(--text-color-extralight);
-  text-decoration: none;
+  background-color: none;
+  color: var(--color-primary-raised);
+  text-decoration: underline;
 }
 
 .explanatoryText {

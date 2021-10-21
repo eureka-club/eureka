@@ -118,7 +118,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
             </Col>
             <Col md={{ span: 9 }}>
               <section className="mb-4">
-                <h1>{work.title}</h1>
+                <h1 className="fw-bold text-secondary">{work.title}</h1>
                 <h2 className={styles.author}>{work.author}</h2>
                 <WorkSummary work={work} />
                 {work.tags && <TagsInput tags={work.tags} readOnly label="" />}

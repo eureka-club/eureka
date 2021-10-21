@@ -24,7 +24,7 @@
 .workInfoType,
 .cycleInfoType {
   border-radius: 1rem;
-  color: var(--text-color-primary);
+  color: var(--eureka-purple);
   display: inline-block;
   font-size: 0.85rem;
   line-height: 1;
@@ -35,8 +35,10 @@
 .workInfoType {
   background-color: var(--color-emphasis);
 }
+
+
 .cycleInfoType {
-  background-color: var(--eureka-blue);
+  background-color: var(--eureka-green);
   color: var(--text-color-light);
 }
 .cycleInfoType:hover {

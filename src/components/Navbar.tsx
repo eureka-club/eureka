@@ -102,7 +102,7 @@ const NavBar: FunctionComponent = () => {
                 <div className={styles.siteName}>{siteName}</div>
 
                 {/* </h1> */}
-                <div className={styles.brandInfo}>{t('Social media to foster awareness')}</div>
+                <div className={styles.brandInfo}>{t('tagline')}</div>
               </Col>
             </Container>
           </Navbar.Brand>

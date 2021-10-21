@@ -46,11 +46,11 @@
 }
 
 .postHorizontally .type{
-  background-color: var(--purple);
+  background-color: #933CA0;
   color:white;  
 }
 .type {
-  background-color: var(--purple);
+  background-color: #933CA0;
   border-radius: 1rem;
   color: var(--text-color-primary);
   font-size: 0.85rem;

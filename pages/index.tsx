@@ -50,10 +50,9 @@ const IndexPage: NextPage = () => {
 
   return (
     <SimpleLayout showHeader title={t('browserTitleWelcome')}>
-      <h1 className="text-dark mb-5">{t('Trending topics')}</h1>
-
+      <h1 className="text-secondary fw-bold mb-5">{t('Trending topics')}</h1>
       <>{show && show.map((item) => <Carousel className="mt-5" key={item} topic={item} />)}</>
-      <Button className="my-3 rounded-pill" onClick={showTopic} disabled={hide.length === 0}>
+      <Button className="my-3 pr-3 rounded-pill" onClick={showTopic} disabled={hide.length === 0}>
         <span>
           <RiArrowDownSLine /> {t('loadMoreTopics')}
         </span>

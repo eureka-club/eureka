@@ -86,25 +86,29 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
               {currentWork != null && (
                 <tr>
                   <td className={styles.parentBadges}>
-                    <Link href={`/work/${currentWork.id}`}>
                       <a className={styles.workInfoType}>{t(`common:${currentWork.type}`)}</a>
-                    </Link>
                   </td>
                   <td className="pb-2">
-                    <h4 className={styles.workInfoTitle}>{currentWork.title}</h4>
+                    <h4>
+                    <Link href={`/work/${currentWork.id}`}>
+                    <a className={styles.workInfoTitle}>{currentWork.title}</a>
+                    </Link>
+                    </h4>
                     <h5 className={styles.workInfoAuthor}>{currentWork.author}</h5>
                   </td>
                 </tr>
               )}
               {post.cycles && post.cycles.length > 0 && (
                 <tr>
-                  <td className={styles.parentBadges}>
-                    <Link href={`/cycle/${post.cycles[0].id}`}>
-                      <a className={styles.cycleInfoType}>{t('common:cycle')}</a>
-                    </Link>
+                  <td className={styles.parentBadges}>                  
+                      <a className={styles.cycleInfoType}>{t('common:cycle')}</a>                    
                   </td>
                   <td>
-                    <h4 className={styles.workInfoTitle}>{post.cycles[0].title}</h4>
+                    <h4>
+                    <Link href={`/cycle/${post.cycles[0].id}`}>
+                    <a className={styles.workInfoTitle}>{post.cycles[0].title}</a>
+                    </Link>
+                    </h4>
                   </td>
                 </tr>
               )}
@@ -132,7 +136,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
                 }
               </small>
             </div>
-            <h1>{post.title}</h1>
+            <h1 className="text-secondary fw-bold mb-2"> {post.title} </h1>
             {post.contentText != null && <UnclampText text={post.contentText} />}
           </div>
           <HyvorComments id={hyvorId} />
