@@ -21,7 +21,7 @@
   "complementaryMaterialSubmitBtnLabel": "Adicionar ao ciclo",
   "isPublicLabel": "Este ciclo é público",
   "newCycleTitleLabel": "Título (80 caracteres máx)",
-  "newCycleLanguageLabel": "Idioma(s) principal(is) do ciclo (2 máx)",
+  "newCycleLanguageLabel": "Idioma principal do ciclo",
   "newCycleMainTopicsLabel": "Principais temas do ciclo (3 máx, selecione os mais relevantes da lista)",
   "newCycleTopicsLabel": "Temas adicionais do ciclo (2 máx, livre)",
   "newCycleStartDateLabel": "Data de início",

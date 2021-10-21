@@ -3,7 +3,7 @@
   "searchCycleOrWorkFieldLabel": "¿De qué obra o ciclo trata esta Eureka?",
   "searchCycleOrWorkFieldPlaceholder": "Busca la obra o el ciclo en nuestra biblioteca...",
   "titleFieldLabel": "Título para tu Eureka (80 caracteres máx)",
-  "imageFieldLabel": "Agrega una imagen a tu Eureka",
+  "imageFieldLabel": "Agrega una imagen a tu Eureka (cuadrada, ideal 250x250px)",
   "imageFieldPlaceholder": "seleccionar archivo...",
   "languageFieldLabel": "Idioma de la Eureka",
   "searchCycleFieldLabel": "Agregar esta Eureka a un ciclo (opcional)",

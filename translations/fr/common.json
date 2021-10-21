@@ -8,29 +8,35 @@
   "documentary": "Documentaire",
   "movie": "Film fiction",
   "post": "Eureka",
-  "browserTitleAbout": "À propos",
-  "aboutPageHeading": "Notre mission est d'induire autant de moments Eureka que possible.",
-  "aboutHeading": "À propos",
-  "aboutText": "Eureka est un réseau social à but non lucratif conçu pour ceux et celles à la recherche de contenu et conversations en ligne plein de sens. Nous avons la conviction que livres, films et communautés peuvent nous aider à mieux comprendre les sociétés et le monde qui nous entoure.",
+
+  "browserTitleAbout": "FAQ",
+  "aboutPageHeading": "Nous sommes le premier club en ligne de livres et films pour le changement social.",
+  "aboutHeading": "Qu'est-ce qu'une Eureka?",
+  "aboutText": "Une Eureka est une révélation individuelle qui peut transformer le collectif. Sur la plateforme, elle prend la forme d'une réflexion écrite sur une œuvre ou un cycle, accompagnée d'une photo/image carrée de votre choix. En partageant votre Eureka avec la communauté, vous pouvez inspirer le changement!",
   "whatisCycleHeading": "Qu'est-ce qu'un cycle?",
-  "whatisCycleText": "Un cycle est une collection d'œuvres (livres, films et / ou documentaires) organisée par les utilisateurs sur un sujet d'intérêt. Les cycles sont l'occasion de découvrir un nouveau sujet ou d'approfondir sur des sujets qui vous passionnent, ainsi que de rencontrer et d'échanger avec d'autres personnes intéressées par les mêmes sujets que vous.",
-  "whatisPostHeading": "Qu'est-ce qu'une Eureka?",
-  "whatisPostText": "Une Eureka est une réflexion personnelle sur une œuvre ou un cycle, composée d'une photo et d'un texte. C'est l'occasion de consolider et de partager vos réflexions après avoir lu un livre ou regarder un film. Ça peut être la matérialisation d'un moment Eureka!",
-  "ethicsHeading": "Charte d’éthique et de modération",
-  "ethicsText1": "Eureka développe des principes actuels et féministes pour la modération de contenu. En attendant, veuillez noter qu'il s'agit d'un espace qui fonctionne selon les 'Directives relatives à la participation communautaire de Mozilla' (disponibles en ",
+  "whatisCycleText": "Un cycle est un espace où personnes curieuses et expertes peuvent approfondir tout type de sujet, aux côtés d’une communauté. Il s'agit d'une sélection de 2 à 5 livres et/ou films sur un sujet donné. Les cycles sont « actifs » durant une certaine période, vous pouvez donc lire/voir les œuvres et en discuter avec la communauté de manière continue. Une fois le cycle terminé, le contenu et la discussion restent disponibles. Note: les cycles peuvent être publics (accessible par tous), privés (n’importe qui peut demander à participer mais doit être approuvé) ou secrets (par invitation uniquement).",
+  "whatisPostHeading": "Qu’est-ce que votre Médiathèque?",
+  "whatisPostText": "C'est votre bibliothèque multimédia personnelle. Elle rassemble vos Eurekas, les cycles que vous avez créés et auxquels vous avez participé, ainsi que les livres et films que vous avez lus/regardés (si vous l'avez noté, vous l'avez lu/vu). De même, tous les éléments que vous ‘Enregistrez’ seront disponibles dans votre Médiathèque. Enfin, c'est aussi là que vous en dites plus (autant que vous le souhaitez) sur vous-même et maintenez une liste des personnes que vous suivez.",
+  "ethicsHeading": "Quelle est notre Charte de modération et d'utilisation des données?",
+  "ethicsText1": "Consultez notre Manifeste pour en savoir plus sur nos principes, y compris de modération, pour construire notre communauté.",
+
   "hereLinkENG": "anglais",
   "hereLinkSPA": "espagnol",
   "hereLinkPORT": "portugais",
   "hereLinkFR": "français",
-  "ethicsText2": "Nous accueillons toutes les contributions d'individus qui partagent nos objectifs et souhaitent contribuer de manière saine et constructive au sein de notre communauté. De même, nous exigeons qu'une attitude RESPECTUEUSE et INCLUSIVE soit adoptée, cherchant toujours à comprendre les différentes perspectives, contribuant ainsi à créer une expérience communautaire sûre et positive.",
-  "ethicsText3": "Les comportements suivants sont considérés comme inacceptables et ne seront pas tolérés:",
+
+  "ethicsText2": "Veuillez noter qu'en rejoignant Eureka, vous acceptez de partager des informations personnelles avec nous. Soyez tranquilles: nous ne partagerons pas vos données avec des tiers (et ne les vendrons pas non plus).",
+  "ethicsText3": "Vous pouvez recevoir des e-mails de notre part. Afin de ne pas recevoir d'e-mails, envoyez-nous un message à hola@eureka.club, avec le sujet ‘Opt-out’.",
+  
   "violence": "Violence, menaces ou incitation à la violence",
   "attacks": "Attaques personnelles",
   "language": "Langage péjoratif",
   "harassment": "Tout type de harcèlement",
   "ethicsText4": "Le contenu ou les personnes en violation de ce qui précède seront rapidement et intégralement adressés et supprimés si cela est jugé nécessaire.",
+
   "eurekaSupport": "Eureka a le soutien de:",
   "contact": "Contact:",
+
   "mosaicHeaderMyCycles": "Cycles, œuvres et publications favorites",
   "publicationYearLabel": "Année de publication",
   "releaseYearLabel": "Année de sortie",
@@ -43,15 +49,17 @@
   "workLengthAsMinutesLabel": "minutes",
   "unclampTextLess": "voir moins",
   "unclampTextMore": "voir plus",
+
   "wayShare": "",
   "cycleShare": "Jetez un oeil au cycle",
   "postCycleShare": "Inspirez-vous de cette Eureka sur le cycle",
   "postWorkShare": "Inspirez-vous de cette Eureka sur l'œuvre",
   "workShare": "Jetez un oeil à ce contenu à propos de",
-  "complementShare": "et participez de la plateforme Eureka!",
+  "complementShare": "et rejoignez-moi sur la plateforme Eureka!",
   "whatsappComplement": "Pour participer, cliquez ici: ",
   "twitterComplement": "",
   "facebookComplement": "",
+
   "goToHomepage": "Retour à la page d'accueil",
   "Loading": "Chargement",
   "Trending topics": "Thèmes populaires",
@@ -100,7 +108,7 @@
 
   "underEurekaLabel": "Nourrir l'esprit, transformer le monde",
   "openHeaderLabel": "En savoir plus sur Eureka",
-  "eurekaReasonLabel": "Nous sommes le premier club en ligne de livres-films pour le changement social. Notre objectif: nourrir l'esprit pour transformer le monde.",
+  "eurekaReasonLabel": "Nous sommes le premier club en ligne de livres et films pour le changement social. Notre objectif: nourrir l'esprit pour transformer le monde.",
   "headerSessionBtnLabel": "Connectez-vous pour avoir des moments Eureka!",
   "headerLeftBoxTitle": "Marre des interactions insensées sur les réseaux sociaux?",
   "headerLeftBoxText": "Nourrissez-vous de votre prochain livre ou film, et de senti-penser sur un sujet qui compte.",
@@ -108,5 +116,5 @@
   "headerCenterBoxText": "Des espaces où personnes curieuses et expertes peuvent approfondir tout type de sujet, aux côtés d’une communauté.",
   "headerRightBoxTitle": "Créez et partagez des moments Eureka!",
   "headerRightBoxText": "Vos révélations individuelles qui peuvent transformer le collectif.",
-  "loadMoreTopics": "Load more topics"
+  "loadMoreTopics": "Charger d'autres thèmes"
 }
