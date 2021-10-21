@@ -1,15 +1,15 @@
 // import { flatten, zip } from 'lodash';
 import { useAtom } from 'jotai';
-
+import { BiArrowBack } from 'react-icons/bi';
 // import { GetServerSideProps, GetStaticProps, NextPage } from 'next';
-import { GetStaticProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useState, useEffect, ReactElement } from 'react';
 import { useRouter } from 'next/router';
-import { QueryClient } from 'react-query';
-import { dehydrate } from 'react-query/hydration';
+// import { QueryClient } from 'react-query';
+// import { dehydrate } from 'react-query/hydration';
 // import { loadGetInitialProps } from 'next/dist/next-server/lib/utils';
-import { Spinner } from 'react-bootstrap';
+import { Spinner, ButtonGroup, Button } from 'react-bootstrap';
 import globalSearchEngineAtom from '../src/atoms/searchEngine';
 
 import { CycleMosaicItem } from '../src/types/cycle';
@@ -17,15 +17,13 @@ import { WorkMosaicItem } from '../src/types/work';
 import { PostMosaicItem } from '../src/types/post';
 import { UserMosaicItem } from '../src/types/user';
 
-import styles from './index.module.css';
+// import styles from './index.module.css';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 // import { findAll as findAllCycles } from '../src/facades/cycle';
 // import { findAll as findAllWorks } from '../src/facades/work';
 import Mosaic from '../src/components/Mosaic';
 // import SearchEngine from '../src/components/SearchEngine';
 import FilterEngine from '../src/components/FilterEngine';
-import useWorks from '../src/useWorks';
-import useCycles from '../src/useCycles';
 import useItems from '../src/useItems';
 import useCountries from '../src/useCountries';
 
@@ -179,6 +177,11 @@ const SearchPage: NextPage = () => {
   if (qLabel.match(':')) qLabel = globalSearchEngineState.q as string;
   return (
     <SimpleLayout title={t('browserTitleWelcome')}>
+      <ButtonGroup className="mb-1">
+        <Button variant="primary" onClick={() => router.back()} size="sm">
+          <BiArrowBack />
+        </Button>
+      </ButtonGroup>
       <h1 className="text-secondary fw-bold mb-2">
         {t('Results about')}: {`"${qLabel}"`}
       </h1>

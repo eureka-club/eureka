@@ -51,10 +51,9 @@ const renderMosaicItem = (
     );
   }
   if (isWorkMosaicItem(item)) {
-    // eslint-disable-next-line react/jsx-props-no-spreading
     return (
       <WorkContext.Provider value={{ work: item, linkToWork: true }}>
-        <MosaicItemWork showShare={false} showButtonLabels={showButtonLabels} key={`work-${item.id}`} />;
+        <MosaicItemWork showShare={false} showButtonLabels={showButtonLabels} key={`work-${item.id}`} />
       </WorkContext.Provider>
     );
   }
