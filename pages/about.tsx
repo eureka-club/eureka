@@ -68,39 +68,38 @@ const AboutPage: NextPage = () => {
       `}</style>
 
       <div style={{ textAlign: 'center' }}>
-        <h1>{t('aboutPageHeading')}</h1>
+        <h1 className="text-secondary fw-bold">{t('aboutPageHeading')}</h1>
       </div>
       <br />
-      <br />
+      <hr />
 
       <div className="middle-container">
-        <h1>{t('aboutHeading')}</h1>
+        <h1 className="text-secondary">{t('aboutHeading')}</h1>
         <p className="summary">{t('aboutText')}</p>
-        <hr />
 
         <div className="what-is2">
-          <h1>{t('whatisCycleHeading')}</h1>
+          <h1 className="text-secondary">{t('whatisCycleHeading')}</h1>
           <p className="summary">{t('whatisCycleText')}</p>
         </div>
 
         <div className="what-is1">
-          <h1>{t('whatisPostHeading')}</h1>
+          <h1 className="text-secondary">{t('whatisPostHeading')}</h1>
           <p className="summary">{t('whatisPostText')}</p>
         </div>
         <hr />
         <br />
 
-        <h1>{t('ethicsHeading')}</h1>
+        <h1 className="text-secondary">{t('ethicsHeading')}</h1>
         <p className="summary">
           {t('ethicsText1')}{' '}
-          <a href="https://www.mozilla.org/en-US/about/governance/policies/participation/"> {t('hereLinkENG')}</a>,{' '}
+          {/* <a href="https://www.mozilla.org/en-US/about/governance/policies/participation/"> {t('hereLinkENG')}</a>,{' '}
           <a href="https://www.mozilla.org/es-ES/about/governance/policies/participation/"> {t('hereLinkSPA')}</a>,{' '}
           <a href="https://www.mozilla.org/pt-BR/about/governance/policies/participation/"> {t('hereLinkPORT')}</a>,{' '}
-          <a href="https://www.mozilla.org/fr/about/governance/policies/participation/"> {t('hereLinkFR')}</a>).
+          <a href="https://www.mozilla.org/fr/about/governance/policies/participation/"> {t('hereLinkFR')}</a>).*/}
         </p>
         <p className="summary">{t('ethicsText2')}</p>
         <p>{t('ethicsText3')}</p>
-        <ul style={{ textAlign: 'left' }}>
+        {/*<ul style={{ textAlign: 'left' }}>
           <li>{t('violence')}</li>
           <li>{t('attacks')}</li>
           <li>{t('language')}</li>
@@ -108,7 +107,7 @@ const AboutPage: NextPage = () => {
         </ul>
         <p>
           <em>{t('ethicsText4')}</em>
-        </p>
+        </p>*/}
         <hr />
 
         <div className="contact-me" />
