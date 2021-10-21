@@ -321,21 +321,21 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     if (cycle) {
       const res = (
         <>
-          <NavItem className={styles.tabBtn}>
+          <NavItem className={`${styles.tabBtn}`}>
             <NavLink eventKey="cycle-discussion">
               <span className="mb-3 text-primary">{t('Discussion')}</span>
             </NavLink>
           </NavItem>
-          {/* <NavItem className={styles.tabBtn}>
+          {/* <NavItem className={`${styles.tabBtn}`}>
             <NavLink eventKey="my_milestone">{t('My milestones')}</NavLink>
           </NavItem> */}
-          <NavItem className={styles.tabBtn}>
+          <NavItem className={`${styles.tabBtn}`}>
             <NavLink eventKey="guidelines">
               <span className="mb-3 text-primary">{t('Guidelines')}</span>
             </NavLink>
           </NavItem>
 
-          <NavItem className={styles.tabBtn}>
+          <NavItem className={`${styles.tabBtn}`}>
             <NavLink eventKey="participants">
               <span className="mb-3 text-primary">{t('Participants')}</span>
             </NavLink>
@@ -354,6 +354,15 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: true } });
   };
 
+  const getDefaultActiveKey = () => {
+    if (cycle) {
+      if (cycle.access === 1) return 'cycle-discussion';
+      if (cycle.access === 2 && cycleContext.currentUserIsParticipant) return 'cycle-discussion';
+      if (cycle.access === 3 && cycleContext.currentUserIsParticipant) return 'cycle-discussion';
+    }
+    return 'cycle-about';
+  };
+
   return (
     <>
       {!router.query.postId && canEditCycle() && (
@@ -370,7 +379,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
       {post && cycle && (
         <ButtonGroup className="mb-1">
-          <Button variant="info" onClick={() => router.back()} size="sm">
+          <Button variant="primary" onClick={() => router.back()} size="sm">
             <BiArrowBack />
           </Button>
           {canEditPost() && (
@@ -390,9 +399,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           <Col>
             {detailPagesState.selectedSubsectionCycle != null && (
               <TabContainer
-                // defaultActiveKey={detailPagesState.selectedSubsectionCycle}
+                defaultActiveKey={getDefaultActiveKey()}
                 onSelect={handleSubsectionChange}
-                activeKey={tabKey}
+                // activeKey={tabKey}
                 transition={false}
               >
                 {/* language=CSS */}
