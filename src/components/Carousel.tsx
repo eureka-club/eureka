@@ -47,12 +47,11 @@ const renderMosaicItem = (
   if (isCycleMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
     return (
-      <CycleContext.Provider value={{ cycle: item as CycleMosaicItem }}>
+      <CycleContext.Provider key={`cycle-${item.id}`} value={{ cycle: item as CycleMosaicItem }}>
         <MosaicItemCycle
           detailed
           showShare={false}
           showButtonLabels={false}
-          key={`cycle-${item.id}`}
           cacheKey={topic && page ? ['ITEMS', `${topic}${page}`] : undefined}
           showSocialInteraction={showSocialInteraction}
         />

@@ -111,7 +111,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
           {post == null ? (
             <>
               <Col md={{ span: 3 }}>
-                <MosaicItem showTrash />
+                <MosaicItem work={work} showTrash />
 
                 {/* <div className={classNames(styles.imgWrapper, 'mb-3')}>
                 <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />

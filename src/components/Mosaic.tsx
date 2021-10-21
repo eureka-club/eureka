@@ -13,7 +13,7 @@ import { WorkMosaicItem } from '../types/work';
 import { PostMosaicItem } from '../types/post';
 
 import { CycleContext } from '../useCycleContext';
-import { WorkContext } from '../useWorkContext';
+// import { WorkContext } from '../useWorkContext';
 
 const renderMosaicItem = (
   item: MosaicItem,
@@ -52,9 +52,15 @@ const renderMosaicItem = (
   }
   if (isWorkMosaicItem(item)) {
     return (
-      <WorkContext.Provider value={{ work: item, linkToWork: true }}>
-        <MosaicItemWork showShare={false} showButtonLabels={showButtonLabels} key={`work-${item.id}`} />
-      </WorkContext.Provider>
+      // <WorkContext.Provider value={{ linkToWork: true }}>
+      <MosaicItemWork
+        linkToWork
+        showShare={false}
+        showButtonLabels={showButtonLabels}
+        key={`work-${item.id}`}
+        work={item}
+      />
+      // </WorkContext.Provider>
     );
   }
   if (isUserMosaicItem(item)) {
