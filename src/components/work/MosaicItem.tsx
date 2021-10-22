@@ -18,20 +18,21 @@ import styles from './MosaicItem.module.css';
 import SocialInteraction from '../common/SocialInteraction';
 // import { Session } from '../../types';
 import { useCycleContext } from '../../useCycleContext';
-import { useWorkContext } from '../../useWorkContext';
+// import { useWorkContext } from '../../useWorkContext';
 import { DATE_FORMAT_SHORT } from '../../constants';
 
 dayjs.extend(isBetween);
 dayjs.extend(utc);
 interface Props {
   // workWithImages: WorkWithImages;
-  work?: WorkMosaicItem;
+  work: WorkMosaicItem;
   showButtonLabels?: boolean;
   showShare?: boolean;
   showSocialInteraction?: boolean;
   style?: { [k: string]: string };
   cacheKey?: string[];
   showTrash?: boolean;
+  linkToWork?: boolean;
   // isOnDiscussion?: boolean;
 }
 const MosaicItem: FunctionComponent<Props> = ({
@@ -42,6 +43,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   style = undefined,
   cacheKey = undefined,
   showTrash = false,
+  linkToWork = true,
   // isOnDiscussion = false,
 }) => {
   const { t } = useTranslation('common');
@@ -51,13 +53,13 @@ const MosaicItem: FunctionComponent<Props> = ({
     if (cycleContext) setCycle(cycleContext.cycle);
   }, [cycleContext]);
 
-  const { linkToWork = true, work: workFromContext } = useWorkContext();
-  const [WORK] = useState<WorkMosaicItem>(workFromContext! || work!);
+  // const { linkToWork = true, work: workFromContext } = useWorkContext();
+  // const [WORK] = useState<WorkMosaicItem>(work!);
 
   const isActive = () => {
     if (cycle) {
       if (cycle.cycleWorksDates.length) {
-        const idx = cycle.cycleWorksDates.findIndex((cw) => cw.workId === WORK.id);
+        const idx = cycle.cycleWorksDates.findIndex((cw) => cw.workId === work.id);
         if (idx > -1) {
           const cw = cycle.cycleWorksDates[idx];
           if (cw.startDate && cw.endDate) return dayjs().isBetween(cw.startDate, cw.endDate);
@@ -71,7 +73,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const renderOngoinOrUpcomingDate = () => {
     if (cycle) {
       if (cycle.cycleWorksDates.length) {
-        const idx = cycle.cycleWorksDates.findIndex((cw) => cw.workId === WORK.id);
+        const idx = cycle.cycleWorksDates.findIndex((cw) => cw.workId === work.id);
         if (idx > -1) {
           const cw = cycle.cycleWorksDates[idx];
           if (cw.endDate) {
@@ -120,7 +122,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     return null;
   };
 
-  const { id, /* author, */ title, localImages, type } = WORK;
+  const { id, /* author, */ title, localImages, type } = work;
   // const [session] = useSession() as [Session | null | undefined, boolean];
   // const router = useRouter();
 
