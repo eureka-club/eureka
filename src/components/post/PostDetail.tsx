@@ -104,7 +104,9 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
               {post.cycles && post.cycles.length > 0 && (
                 <tr>
                   <td className={styles.parentBadges}>
-                    <Badge variant="primary rounded-pill py-1 px-2" className="text-dark fs-6 font-weight-normal">{t('common:cycle')}</Badge>
+                    <Badge variant="primary rounded-pill py-1 px-2" className="text-dark fs-6 font-weight-normal">
+                      {t('common:cycle')}
+                    </Badge>
                   </td>
                   <td>
                     <h6>
