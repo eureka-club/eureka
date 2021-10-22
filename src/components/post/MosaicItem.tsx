@@ -2,7 +2,7 @@ import { Cycle, Work } from '@prisma/client';
 // import classNames from 'classnames';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, useState } from 'react';
+import { FunctionComponent } from 'react';
 import { Row, Col, Card } from 'react-bootstrap';
 import { FaRegComments, FaRegCompass } from 'react-icons/fa';
 import dayjs from 'dayjs';
