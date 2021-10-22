@@ -62,7 +62,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
     }));
   };
 
-  const { mutate: execCreateEureka } = useMutation(
+  const { mutate: execCreateEureka, isLoading } = useMutation(
     async (payload: CreatePostAboutCycleClientPayload | CreatePostAboutWorkClientPayload): Promise<Post | null> => {
       const formData = new FormData();
       Object.entries(payload).forEach(([key, value]) => {
@@ -247,10 +247,10 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
 
       <aside className="d-flex justify-content-end">
         <ButtonGroup size="sm">
-          <Button variant="warning" onClick={clearCreateEurekaForm}>
+          <Button variant="warning" onClick={clearCreateEurekaForm} disabled={isLoading}>
             <ImCancelCircle />
           </Button>
-          <Button type="submit">
+          <Button type="submit" disabled={isLoading}>
             <span>
               <BsCheck /> {t('Create')}
             </span>

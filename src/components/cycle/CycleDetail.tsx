@@ -365,30 +365,24 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   return (
     <>
-      {!router.query.postId && canEditCycle() && (
-        <ButtonGroup className="mb-1">
-          <Button variant="primary" onClick={() => router.back()} size="sm">
-            <BiArrowBack />
-          </Button>
+      <ButtonGroup className="mb-1">
+        <Button variant="primary" onClick={() => router.back()} size="sm">
+          <BiArrowBack />
+        </Button>
+        {!router.query.postId && canEditCycle() && (
           <Button variant="warning" onClick={handleEditClick} size="sm">
             {t('Edit')}
           </Button>
-        </ButtonGroup>
-      )}
-      {!post && renderCycleDetailHeader()}
+        )}
 
-      {post && cycle && (
-        <ButtonGroup className="mb-1">
-          <Button variant="primary" onClick={() => router.back()} size="sm">
-            <BiArrowBack />
+        {post && cycle && canEditPost() && (
+          <Button variant="warning" onClick={handleEditPostClick} size="sm">
+            {t('Edit')}
           </Button>
-          {canEditPost() && (
-            <Button variant="warning" onClick={handleEditPostClick} size="sm">
-              {t('Edit')}
-            </Button>
-          )}
-        </ButtonGroup>
-      )}
+        )}
+      </ButtonGroup>
+
+      {!post && renderCycleDetailHeader()}
       {post && cycle && (
         <MosaicContext.Provider value={{ showShare: true }}>
           <PostDetailComponent post={post} work={work} />
