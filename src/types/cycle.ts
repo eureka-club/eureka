@@ -1,4 +1,4 @@
-import { Cycle, LocalImage, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
 export interface ComplementaryMaterial {
   author: string;
