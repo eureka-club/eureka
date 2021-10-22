@@ -135,7 +135,7 @@ const MosaicItem: FunctionComponent<Props> = ({
               <>
                 <Avatar user={post.creator} size="xs" />
                 {` - `}
-                <span className="fs-6 fw-bold">{dayjs(post.createdAt).format(DATE_FORMAT_SHORT)}</span>
+                <span className="fs-6">{dayjs(post.createdAt).format(DATE_FORMAT_SHORT)}</span>
               </>
             )}
           </div>

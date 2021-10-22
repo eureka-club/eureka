@@ -274,7 +274,7 @@ const AboutPage: NextPage = () => {
             </h4>
             <p>
               Roland Trompette, Giovana Salazar, Maïssa Hubert Chakour, Amy Shapiro Raikar, Jessie Keating, Jacques
-              Ricard, Ricardo Sanginés, Rafael Millán, Daniel C. Zorrilla
+              Ricard, Ricardo Sanginés, Rafael Millán
             </p>
           </div>
 

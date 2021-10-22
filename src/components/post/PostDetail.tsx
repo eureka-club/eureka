@@ -85,18 +85,18 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
               {work != null && (
                 <tr>
                   <td className={styles.parentBadges}>
-                    <Badge variant="orange rounded-pill" className="text-white">
+                    <Badge variant="orange rounded-pill py-1 px-2" className="text-dark fs-6 font-weight-normal">
                       {t(`common:${work.type}`)}
                     </Badge>
                   </td>
                   <td className="pb-2">
-                    <h4>
+                    <h6>
                       <Link href={`/work/${work.id}`}>
-                        <p className="text-break">
+                        <p className="text-break mb-0">
                           <a className="cursor-pointer">{work.title}</a>
                         </p>
                       </Link>
-                    </h4>
+                    </h6>
                     <h5 className={styles.workInfoAuthor}>{work.author}</h5>
                   </td>
                 </tr>
@@ -104,16 +104,16 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
               {post.cycles && post.cycles.length > 0 && (
                 <tr>
                   <td className={styles.parentBadges}>
-                    <Badge variant="primary rounded-pill">{t('common:cycle')}</Badge>
+                    <Badge variant="primary rounded-pill py-1 px-2" className="text-dark fs-6 font-weight-normal">{t('common:cycle')}</Badge>
                   </td>
                   <td>
-                    <h4>
+                    <h6>
                       <Link href={`/cycle/${post.cycles[0].id}`}>
-                        <p className="text-break">
+                        <p className="text-break mb-0">
                           <a className="cursor-pointer">{post.cycles[0].title}</a>
                         </p>
                       </Link>
-                    </h4>
+                    </h6>
                   </td>
                 </tr>
               )}
