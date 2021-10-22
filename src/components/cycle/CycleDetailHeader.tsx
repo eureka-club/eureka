@@ -83,6 +83,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   // const router = useRouter();
   const { cycle: c } = useCycleContext();
   const [cycle] = useState<CycleMosaicItem>(c!);
+  console.log(cycle);
   const [session] = useSession() as [Session | null | undefined, boolean];
   const { t } = useTranslation('cycleDetail');
   // const hyvorId = `${WEBAPP_URL}cycle/${cycle.id}`;
@@ -212,8 +213,8 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         const idx = cycle.works.findIndex((w) => w.id === cw.workId);
         res.push(cycle.works[idx]);
       });
-
-    return res;
+    if (cycle.cycleWorksDates.length) return res;
+    return cycle.works;
   };
 
   return (
