@@ -503,7 +503,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
             {showRating && (
               <Rating
                 initialRating={qty}
-                onChange={handlerChangeRating}
+                onClick={handlerChangeRating}
                 className={styles.rating}
                 stop={5}
                 emptySymbol={<GiBrain className="fs-6 text-info" />}
