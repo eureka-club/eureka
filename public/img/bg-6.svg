@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="47.078" height="50.878" viewBox="0 0 47.078 50.878">
+  <g id="Grupo_27" data-name="Grupo 27" transform="translate(-679.487 -437.267)">
+    <g id="Trazado_21" data-name="Trazado 21" transform="translate(-17.17 -60.365)" fill="none" stroke-linecap="round">
+      <path d="M701.646,522.437,720.79,548.51l17.682-26.035-5.02-9.1-25.339-.03Z" stroke="none"/>
+      <path d="M 709.1429443359375 515.349365234375 L 704.1132202148438 522.4185791015625 L 720.7260131835938 545.04443359375 L 736.1276245117188 522.367431640625 L 732.2702026367188 515.377197265625 L 709.1429443359375 515.349365234375 M 708.1122436523438 513.34814453125 L 733.45166015625 513.3786010742188 L 738.4716796875 522.4757690429688 L 720.7896728515625 548.5104370117188 L 701.6455688476562 522.43701171875 L 708.1122436523438 513.34814453125 Z" stroke="none" fill="#392d7f"/>
+    </g>
+    <g id="Elipse_16" data-name="Elipse 16" transform="translate(691.289 453.927)" fill="none" stroke="#392d7f" stroke-width="2">
+      <circle cx="11.687" cy="11.687" r="11.687" stroke="none"/>
+      <circle cx="11.687" cy="11.687" r="10.687" fill="none"/>
+    </g>
+    <path id="Trazado_22" data-name="Trazado 22" d="M769.842,571.55l-7.22-11.2-7.74,11.782" transform="translate(-59.41 -96.078)" fill="none" stroke="#392d7f" stroke-width="2"/>
+    <line id="Línea_8" data-name="Línea 8" x1="6.707" y1="4.505" transform="translate(680.005 448.877)" fill="none" stroke="#392d7f" stroke-width="1.86"/>
+    <line id="Línea_9" data-name="Línea 9" x1="3.778" y1="7.095" transform="translate(690.212 441.026)" fill="none" stroke="#392d7f" stroke-width="1.86"/>
+    <line id="Línea_10" data-name="Línea 10" y1="10.283" transform="translate(703.573 437.267)" fill="none" stroke="#392d7f" stroke-width="1.86"/>
+    <line id="Línea_11" data-name="Línea 11" y1="7.581" x2="4.896" transform="translate(711.877 440.589)" fill="none" stroke="#392d7f" stroke-width="1.86"/>
+    <line id="Línea_12" data-name="Línea 12" y1="4.891" x2="6.5" transform="translate(719.505 448.123)" fill="none" stroke="#392d7f" stroke-width="1.86"/>
+    <line id="Línea_13" data-name="Línea 13" x2="32.786" transform="translate(686.153 462.072)" fill="none" stroke="#392d7f" stroke-width="2"/>
+  </g>
+</svg>

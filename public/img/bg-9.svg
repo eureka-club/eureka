@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48.942" height="55.505" viewBox="0 0 48.942 55.505">
+  <g id="Grupo_66" data-name="Grupo 66" transform="translate(-384.227 -1247.635)">
+    <path id="Rectángulo_45" data-name="Rectángulo 45" d="M2.535,0h0A2.535,2.535,0,0,1,5.069,2.535v47.58a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V2.535A2.535,2.535,0,0,1,2.535,0Z" transform="translate(406.325 1248.135)" fill="#3d2984" stroke="#392d7f" stroke-width="1"/>
+    <rect id="Rectángulo_46" data-name="Rectángulo 46" width="31.754" height="4.391" transform="translate(392.919 1298.249)" fill="#3d2984" stroke="#392d7f" stroke-width="1"/>
+    <rect id="Rectángulo_47" data-name="Rectángulo 47" width="35.411" height="1.659" transform="translate(391.385 1253.447)" fill="#3d2984"/>
+    <path id="Trazado_62" data-name="Trazado 62" d="M395.31,1275.884" transform="translate(-7.925 -20.778)" fill="#3d2984" stroke="#392d7f" stroke-width="1"/>
+    <path id="Rectángulo_48" data-name="Rectángulo 48" d="M0,0H15.266a0,0,0,0,1,0,0V0a6.4,6.4,0,0,1-6.4,6.4H6.4A6.4,6.4,0,0,1,0,0V0A0,0,0,0,1,0,0Z" transform="translate(384.727 1278.045)" fill="#3d2984" stroke="#392d7f" stroke-width="1"/>
+    <path id="Rectángulo_49" data-name="Rectángulo 49" d="M0,0H15.266a0,0,0,0,1,0,0V0a6.4,6.4,0,0,1-6.4,6.4H6.4A6.4,6.4,0,0,1,0,0V0A0,0,0,0,1,0,0Z" transform="translate(417.404 1278.045)" fill="#3d2984" stroke="#392d7f" stroke-width="1"/>
+    <g id="Trazado_63" data-name="Trazado 63" transform="translate(0 -20.779)" fill="none">
+      <path d="M392.161,1275.885l-7.435,22.726h15.266Z" stroke="none"/>
+      <path d="M 392.1858215332031 1279.025390625 L 386.1059265136719 1297.610107421875 L 398.5899047851562 1297.610107421875 L 392.1858215332031 1279.025390625 M 392.1611938476562 1275.884521484375 L 399.9921875 1298.610107421875 L 384.7266235351562 1298.610107421875 L 392.1611938476562 1275.884521484375 Z" stroke="none" fill="#392d7f"/>
+    </g>
+    <g id="Trazado_64" data-name="Trazado 64" transform="translate(-97.401 -20.779)" fill="none">
+      <path d="M522.239,1275.885,514.8,1298.61H530.07Z" stroke="none"/>
+      <path d="M 522.2637329101562 1279.025390625 L 516.1838989257812 1297.610107421875 L 528.6679077148438 1297.610107421875 L 522.2637329101562 1279.025390625 M 522.2391357421875 1275.884521484375 L 530.0701904296875 1298.610107421875 L 514.8046264648438 1298.610107421875 L 522.2391357421875 1275.884521484375 Z" stroke="none" fill="#392d7f"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,47 @@
+.box{
+  width: 75px;
+  height: 75px;
+  background-repeat: no-repeat;
+  background-position: left center;
+}
+.bgRow1Box1{
+  background-image: url('/img/bg-header-right.svg'); 
+  
+}
+.bgRow1Box2{
+  background-image: url('/img/bg-1.svg');  
+  
+}
+.bgRow1Box3{
+  background-image: url('/img/bg-header-center.svg');  
+}
+
+.bgRow2Box1{
+  background-image: url('/img/bg-2.svg');  
+}
+.bgRow2Box2{
+  background-image: url('/img/bg-3.svg');  
+}
+.bgRow2Box3{
+  background-image: url('/img/bg-4.svg');  
+}
+
+.bgRow3Box1{
+  background-image: url('/img/bg-5.svg');  
+}
+.bgRow3Box2{
+  background-image: url('/img/bg-6.svg');  
+}
+.bgRow3Box3{
+  background-image: url('/img/bg-7.svg');  
+}
+
+.bgRow4Box1{
+  background-image: url('/img/bg-8.svg');  
+}
+.bgRow4Box2{
+  background-image: url('/img/bg-9.svg');  
+}
+
+
+
