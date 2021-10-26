@@ -6,12 +6,13 @@
   "post": "Eureka",
   "work": "Work",
   "myListLabel": "My list",
+  "Manifest": "Manifest",
   "About": "About",
   "About Eureka": "FAQ",
   "About Us": "People",
   "My Mediatheque": "My Mediatheque",
   "Profile": "Profile",
-  "tagline":"Activate your mind, transform the world",
-  "Language":"Language",
-  "Account":"Account"
+  "tagline": "Activate your mind, transform the world",
+  "Language": "Language",
+  "Account": "Account"
 }

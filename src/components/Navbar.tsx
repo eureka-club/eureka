@@ -157,6 +157,11 @@ const NavBar: FunctionComponent = () => {
               </Dropdown.Toggle>
               <span className={styles.menuBottomInfo}>{t('About')}</span>
               <Dropdown.Menu>
+                <Dropdown.Item onClick={() => router.push('/manifest')}>
+                  {/* <Link href="/aboutUs"> */}
+                  {t('Manifest')}
+                  {/* </Link> */}
+                </Dropdown.Item>
                 <Dropdown.Item onClick={() => router.push('/about')}>
                   {/* <Link href="/about"> */}
                   {t('About Eureka')}

@@ -1,15 +1,17 @@
 import { NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useState /* , useEffect, ReactElement, Children */ } from 'react';
-import { Col, Container, Row, Button } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 import { BsCircleFill } from 'react-icons/bs';
 import { RiAlertLine } from 'react-icons/ri';
-import Masonry from 'react-masonry-css';
+import { CgArrowLongRight } from 'react-icons/cg';
+
+// import Masonry from 'react-masonry-css';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import styles from './manifest.module.css';
 
 const ManifestPage: NextPage = () => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation('manifest');
 
   const [show, setShow] = useState<Record<string, boolean>>({});
 
@@ -44,7 +46,7 @@ const ManifestPage: NextPage = () => {
             </Col>
           </Row>
         </section>
-        <Masonry
+        {/* <Masonry
           breakpointCols={{
             default: 3,
             1199: 3,
@@ -52,167 +54,289 @@ const ManifestPage: NextPage = () => {
             576: 1,
           }}
           className="d-flex mt-5"
-        >
-          <article className="cursor-pointer p-3 rounded d-flex justify-content-center align-items-center ml-0">
+        > */}
+        <Row>
+          <Col xs={12} md={4} className=" p-3 ml-0">
             {!isVisible(1, 1) && (
-              <section className="p-3 bg-secondary text-white" onClick={() => toggleBox(1, 1)} role="presentation">
+              <section
+                style={{ height: '250px' }}
+                className="pl-5 p-3 rounded bg-secondary text-white"
+                onClick={() => toggleBox(1, 1)}
+                role="presentation"
+              >
                 <aside className={`${styles.box} ${styles.bgRow1Box1}`} />
                 <h2 className="h3 text-left">{t('manifestRow1Box1Title')}</h2>
+                <h5 className="cursor-pointer fs-6">
+                  {t('learnMore')} <CgArrowLongRight />
+                </h5>
               </section>
             )}
 
             {isVisible(1, 1) && (
-              <aside className="bg-white text-darkgray" onClick={() => toggleBox(1, 1)} role="presentation">
+              <aside
+                className="cursor-pointer bg-white text-darkgray"
+                onClick={() => toggleBox(1, 1)}
+                role="presentation"
+              >
                 <h2 className="fs-6 fw-bolder">{t('manifestRow1Box1Title')}</h2>
                 <p className="p-0 m-0 text-wrap text-left fs-6">{t('manifestRow1Box1Desc')}</p>
               </aside>
             )}
-          </article>
+          </Col>
 
-          <article className="cursor-pointer p-3 rounded d-flex justify-content-center align-items-center ml-0">
+          <Col xs={12} md={4} className=" p-3 ml-0">
             {!isVisible(1, 2) && (
-              <section className="p-3 bg-warning text-secondary" onClick={() => toggleBox(1, 2)} role="presentation">
+              <section
+                style={{ height: '250px' }}
+                className="pl-5 p-3 rounded bg-yellow text-secondary"
+                onClick={() => toggleBox(1, 2)}
+                role="presentation"
+              >
                 <aside className={`${styles.box} ${styles.bgRow1Box2}`} />
                 <h2 className="h3 text-left">{t('manifestRow1Box2Title')}</h2>
+                <h5 className="cursor-pointer fs-6">
+                  {t('learnMore')} <CgArrowLongRight />
+                </h5>
               </section>
             )}
 
             {isVisible(1, 2) && (
-              <aside className="bg-white text-darkgray" onClick={() => toggleBox(1, 2)} role="presentation">
+              <aside
+                className="cursor-pointer bg-white text-darkgray"
+                onClick={() => toggleBox(1, 2)}
+                role="presentation"
+              >
                 <h2 className="fs-6 fw-bolder">{t('manifestRow2Box1Title')}</h2>
                 <p className="p-0 m-0 text-wrap text-left fs-6">{t('manifestRow1Box2Desc')}</p>
               </aside>
             )}
-          </article>
+          </Col>
 
-          <article className="cursor-pointer p-3 rounded d-flex justify-content-center align-items-center ml-0">
+          <Col xs={12} md={4} className=" p-3 ml-0">
             {!isVisible(1, 3) && (
-              <section className="p-3 bg-secondary text-white" onClick={() => toggleBox(1, 3)} role="presentation">
+              <section
+                style={{ height: '250px' }}
+                className="pl-5 p-3 rounded bg-secondary text-white"
+                onClick={() => toggleBox(1, 3)}
+                role="presentation"
+              >
                 <aside className={`${styles.box} ${styles.bgRow1Box3}`} />
                 <h2 className="h3 text-left">{t('manifestRow1Box3Title')}</h2>
+                <h5 className="cursor-pointer fs-6">
+                  {t('learnMore')} <CgArrowLongRight />
+                </h5>
               </section>
             )}
 
             {isVisible(1, 3) && (
-              <aside className="bg-white text-darkgray" onClick={() => toggleBox(1, 3)} role="presentation">
+              <aside
+                className="cursor-pointer bg-white text-darkgray"
+                onClick={() => toggleBox(1, 3)}
+                role="presentation"
+              >
                 <h2 className="fs-6 fw-bolder">{t('manifestRow3Box1Title')}</h2>
                 <p className="p-0 m-0 text-wrap text-left fs-6">{t('manifestRow1Box3Desc')}</p>
               </aside>
             )}
-          </article>
-
-          {/* row 2     */}
-
-          <article className="cursor-pointer p-3 rounded d-flex justify-content-center align-items-center ml-0">
+          </Col>
+        </Row>
+        {/* row 2     */}
+        <Row>
+          <Col xs={12} md={4} className=" p-3 ml-0">
             {!isVisible(2, 1) && (
-              <section className="p-3 bg-warning text-secondary" onClick={() => toggleBox(2, 1)} role="presentation">
+              <section
+                style={{ height: '250px' }}
+                className="pl-5 p-3 rounded bg-yellow text-secondary"
+                onClick={() => toggleBox(2, 1)}
+                role="presentation"
+              >
                 <aside className={`${styles.box} ${styles.bgRow2Box1}`} />
                 <h2 className="h3 text-left">{t('manifestRow2Box1Title')}</h2>
+                <h5 className="cursor-pointer fs-6">
+                  {t('learnMore')} <CgArrowLongRight />
+                </h5>
               </section>
             )}
 
             {isVisible(2, 1) && (
-              <aside className="bg-white text-darkgray" onClick={() => toggleBox(2, 1)} role="presentation">
+              <aside
+                className="cursor-pointer bg-white text-darkgray"
+                onClick={() => toggleBox(2, 1)}
+                role="presentation"
+              >
                 <h2 className="fs-6 fw-bolder">{t('manifestRow2Box1Title')}</h2>
                 <p className="p-0 m-0 text-wrap text-left fs-6">{t('manifestRow2Box1Desc')}</p>
               </aside>
             )}
-          </article>
+          </Col>
 
-          <article className="cursor-pointer p-3 rounded d-flex justify-content-center align-items-center ml-0">
+          <Col xs={12} md={4} className=" p-3 ml-0">
             {!isVisible(2, 2) && (
-              <section className="p-3 bg-secondary text-white" onClick={() => toggleBox(2, 2)} role="presentation">
+              <section
+                style={{ height: '250px' }}
+                className="pl-5 p-3 rounded bg-secondary text-white"
+                onClick={() => toggleBox(2, 2)}
+                role="presentation"
+              >
                 <aside className={`${styles.box} ${styles.bgRow2Box2}`} />
                 <h2 className="h3 text-left">{t('manifestRow2Box2Title')}</h2>
+                <h5 className="cursor-pointer fs-6">
+                  {t('learnMore')} <CgArrowLongRight />
+                </h5>
               </section>
             )}
 
             {isVisible(2, 2) && (
-              <aside className="bg-white text-darkgray" onClick={() => toggleBox(2, 2)} role="presentation">
+              <aside
+                className="cursor-pointer bg-white text-darkgray"
+                onClick={() => toggleBox(2, 2)}
+                role="presentation"
+              >
                 <h2 className="fs-6 fw-bolder">{t('manifestRow2Box2Title')}</h2>
                 <p className="p-0 m-0 text-wrap text-left fs-6">{t('manifestRow2Box2Desc')}</p>
               </aside>
             )}
-          </article>
+          </Col>
 
-          <article className="cursor-pointer p-3 rounded d-flex justify-content-center align-items-center ml-0">
+          <Col xs={12} md={4} className=" p-3 ml-0">
             {!isVisible(2, 3) && (
-              <section className="p-3 bg-warning text-secondary" onClick={() => toggleBox(2, 3)} role="presentation">
+              <section
+                style={{ height: '250px' }}
+                className="pl-5 p-3 rounded bg-yellow text-secondary"
+                onClick={() => toggleBox(2, 3)}
+                role="presentation"
+              >
                 <aside className={`${styles.box} ${styles.bgRow2Box3}`} />
                 <h2 className="h3 text-left">{t('manifestRow2Box3Title')}</h2>
+                <h5 className="cursor-pointer fs-6">
+                  {t('learnMore')} <CgArrowLongRight />
+                </h5>
               </section>
             )}
 
             {isVisible(2, 3) && (
-              <aside className="bg-white text-darkgray" onClick={() => toggleBox(2, 3)} role="presentation">
+              <aside
+                className="cursor-pointer bg-white text-darkgray"
+                onClick={() => toggleBox(2, 3)}
+                role="presentation"
+              >
                 <h2 className="fs-6 fw-bolder">{t('manifestRow2Box3Title')}</h2>
                 <p className="p-0 m-0 text-wrap text-left fs-6">{t('manifestRow2Box3Desc')}</p>
               </aside>
             )}
-          </article>
-
-          {/* row 3     */}
-
-          <article className="cursor-pointer p-3 rounded d-flex justify-content-center align-items-center ml-0">
+          </Col>
+        </Row>
+        {/* row 3     */}
+        <Row>
+          <Col xs={12} md={4} className=" p-3 ml-0">
             {!isVisible(3, 1) && (
-              <section className="p-3 bg-secondary text-white" onClick={() => toggleBox(3, 1)} role="presentation">
+              <section
+                style={{ height: '250px' }}
+                className="pl-5 p-3 rounded bg-secondary text-white"
+                onClick={() => toggleBox(3, 1)}
+                role="presentation"
+              >
                 <aside className={`${styles.box} ${styles.bgRow3Box1}`} />
                 <h2 className="h3 text-left">{t('manifestRow3Box1Title')}</h2>
+                <h5 className="cursor-pointer fs-6">
+                  {t('learnMore')} <CgArrowLongRight />
+                </h5>
               </section>
             )}
 
             {isVisible(3, 1) && (
-              <aside className="bg-white text-darkgray" onClick={() => toggleBox(3, 1)} role="presentation">
+              <aside
+                className="cursor-pointer bg-white text-darkgray"
+                onClick={() => toggleBox(3, 1)}
+                role="presentation"
+              >
                 <h2 className="fs-6 fw-bolder">{t('manifestRow3Box1Title')}</h2>
                 <p className="p-0 m-0 text-wrap text-left fs-6">{t('manifestRow3Box1Desc')}</p>
               </aside>
             )}
-          </article>
+          </Col>
 
-          <article className="cursor-pointer p-3 rounded d-flex justify-content-center align-items-center ml-0">
+          <Col xs={12} md={4} className=" p-3 ml-0">
             {!isVisible(3, 2) && (
-              <section className="p-3 bg-warning text-secondary" onClick={() => toggleBox(3, 2)} role="presentation">
+              <section
+                style={{ height: '250px' }}
+                className="pl-5 p-3 rounded bg-yellow text-secondary"
+                onClick={() => toggleBox(3, 2)}
+                role="presentation"
+              >
                 <aside className={`${styles.box} ${styles.bgRow3Box2}`} />
                 <h2 className="h3 text-left">{t('manifestRow3Box2Title')}</h2>
+                <h5 className="cursor-pointer fs-6">
+                  {t('learnMore')} <CgArrowLongRight />
+                </h5>
               </section>
             )}
 
             {isVisible(3, 2) && (
-              <aside className="bg-white text-darkgray" onClick={() => toggleBox(3, 2)} role="presentation">
+              <aside
+                className="cursor-pointer bg-white text-darkgray"
+                onClick={() => toggleBox(3, 2)}
+                role="presentation"
+              >
                 <h2 className="fs-6 fw-bolder">{t('manifestRow3Box2Title')}</h2>
                 <p className="p-0 m-0 text-wrap text-left fs-6">{t('manifestRow3Box2Desc')}</p>
               </aside>
             )}
-          </article>
+          </Col>
 
-          <article className="cursor-pointer p-3 rounded d-flex justify-content-center align-items-center ml-0">
+          <Col xs={12} md={4} className=" p-3 ml-0">
             {!isVisible(3, 3) && (
-              <section className="p-3 bg-secondary text-white" onClick={() => toggleBox(3, 3)} role="presentation">
+              <section
+                style={{ height: '250px' }}
+                className="pl-5 p-3 rounded bg-secondary text-white"
+                onClick={() => toggleBox(3, 3)}
+                role="presentation"
+              >
                 <aside className={`${styles.box} ${styles.bgRow3Box3}`} />
                 <h2 className="h3 text-left">
                   {t('manifestRow3Box3Title')} <span className="text-secondary">{t('manifestRow3Box3Title')}</span>
                 </h2>
+                <h5 className="cursor-pointer fs-6">
+                  {t('learnMore')} <CgArrowLongRight />
+                </h5>
               </section>
             )}
 
             {isVisible(3, 3) && (
-              <aside className="bg-white text-darkgray" onClick={() => toggleBox(3, 3)} role="presentation">
+              <aside
+                className="cursor-pointer bg-white text-darkgray"
+                onClick={() => toggleBox(3, 3)}
+                role="presentation"
+              >
                 <h2 className="fs-6 fw-bolder">{t('manifestRow3Box3Title')}</h2>
                 <p className="p-0 m-0 text-wrap text-left fs-6">{t('manifestRow3Box3Desc')}</p>
               </aside>
             )}
-          </article>
-
-          <article className="cursor-pointer p-3 rounded d-flex justify-content-center align-items-center ml-0">
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12} md={6} className=" p-3 ml-0">
             {!isVisible(4, 1) && (
-              <section className="p-3 bg-secondary text-white" onClick={() => toggleBox(4, 1)} role="presentation">
+              <section
+                style={{ height: '250px' }}
+                className="pl-5 p-3 rounded bg-secondary text-white"
+                onClick={() => toggleBox(4, 1)}
+                role="presentation"
+              >
                 <aside className={`${styles.box} ${styles.bgRow4Box1}`} />
                 <h2 className="h3 text-left">{t('manifestRow4Box1Title')}</h2>
+                <h5 className="cursor-pointer fs-6">
+                  {t('learnMore')} <CgArrowLongRight />
+                </h5>
               </section>
             )}
 
             {isVisible(4, 1) && (
-              <aside className="bg-white text-darkgray" onClick={() => toggleBox(4, 1)} role="presentation">
+              <aside
+                className="cursor-pointer bg-white text-darkgray"
+                onClick={() => toggleBox(4, 1)}
+                role="presentation"
+              >
                 <h2 className="fs-6 fw-bolder">{t('manifestRow4Box1Title')}</h2>
                 <p className="p-0 m-0 text-wrap text-left fs-6">{t('manifestRow4Box1Desc')}</p>
                 <ul>
@@ -224,26 +348,39 @@ const ManifestPage: NextPage = () => {
                 </ul>
               </aside>
             )}
-          </article>
+          </Col>
 
-          <article className="cursor-pointer p-3 rounded d-flex justify-content-center align-items-center ml-0">
+          <Col xs={12} md={6} className=" p-3 ml-0">
             {!isVisible(4, 2) && (
-              <section className="p-3 bg-warning text-secondary" onClick={() => toggleBox(4, 2)} role="presentation">
+              <section
+                style={{ height: '250px' }}
+                className="pl-5 p-3 rounded bg-yellow text-secondary"
+                onClick={() => toggleBox(4, 2)}
+                role="presentation"
+              >
                 <aside className={`${styles.box} ${styles.bgRow4Box2}`} />
                 <h2 className="h3 text-left">
-                  {t('manifestRow4Box2Title')} <span className="text-warning">{t('manifestRow4Box2Title')}</span>
+                  {t('manifestRow4Box2Title')} <span className="text-yellow">{t('manifestRow4Box2Title')}</span>
                 </h2>
+                <h5 className="cursor-pointer fs-6">
+                  {t('learnMore')} <CgArrowLongRight />
+                </h5>
               </section>
             )}
 
             {isVisible(4, 2) && (
-              <aside className="bg-white text-darkgray" onClick={() => toggleBox(4, 2)} role="presentation">
+              <aside
+                className="cursor-pointer bg-white text-darkgray"
+                onClick={() => toggleBox(4, 2)}
+                role="presentation"
+              >
                 <h2 className="fs-6 fw-bolder">{t('manifestRow4Box2Title')}</h2>
                 <p className="p-0 m-0 text-wrap text-left fs-6">{t('manifestRow4Box2Desc')}</p>
               </aside>
             )}
-          </article>
-        </Masonry>
+          </Col>
+        </Row>
+        {/* </Masonry> */}
 
         <hr />
 
@@ -251,10 +388,12 @@ const ManifestPage: NextPage = () => {
           <Row>
             <Col xs={12} md={4} className="pr-0 mr-0 d-flex align-items-center justify-content-center">
               <RiAlertLine
-                className="text-warning"
+                className="text-yellow"
                 style={{ opacity: '.5', fontSize: '8em', margin: '-.3em -.5em 0 0' }}
               />
-              <h1 className="h1 text-secondary">{t('enforcement')}</h1>
+              <h1 className="h1 text-secondary" style={{ zIndex: 9999 }}>
+                {t('enforcement')}
+              </h1>
             </Col>
             <Col xs={12} md={8} className="ml-0" style={{ borderLeft: 'solid 2px var(--info)' }}>
               <h2 className="h5">{t('enforcementHeadLbl')}</h2>
