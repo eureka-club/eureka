@@ -171,7 +171,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
                       value={discussionItem}
                       onChange={onChangeDiscussionItem}
                     >
-                      <option value={undefined}>{t('emptyDiscussionItemLbl')}</option>
+                      <option value="">{t('emptyDiscussionItemLbl')}</option>
                       <option value={-1}>{t('Cycle itself')}</option>
                       {getWorksOpt()}
                     </Form.Control>
