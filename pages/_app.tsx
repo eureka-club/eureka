@@ -23,6 +23,7 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
         defaultOptions: {
           queries: {
             refetchOnWindowFocus: false,
+            notifyOnChangeProps: 'tracked',
           },
         },
       }),

@@ -19,8 +19,8 @@ const CycleDetailPage: NextPage = () => {
   const [session, isLoadingSession] = useSession();
   const router = useRouter();
   const [id, setId] = useState<string>('');
-  const { data, isSuccess, isLoading, isFetching, isError, error } = useCycle(+id);
-  const [cycle, setCycle] = useState<CycleMosaicItem | undefined>(undefined);
+  const { data: cycle, isSuccess, isLoading, isFetching, isError, error } = useCycle(+id);
+  // const [cycle, setCycle] = useState<CycleMosaicItem | undefined>(undefined);
   const { t } = useTranslation('common');
   const queryClient = useQueryClient();
 
@@ -31,16 +31,16 @@ const CycleDetailPage: NextPage = () => {
   }, [router]);
 
   useEffect(() => {
-    if (+id && isSuccess && (!data || !data.id)) {
+    if (+id && isSuccess && (!cycle || !cycle.id)) {
       queryClient.invalidateQueries(['CYCLE', `${+id}`]);
     }
-    if (data) {
-      const c = data as CycleMosaicItem;
-      if (c) {
-        setCycle(c);
-      }
-    }
-  }, [data, isSuccess, id]);
+    // if (cycle) {
+    //   const c = cycle as CycleMosaicItem;
+    //   if (c) {
+    //     setCycle(c);
+    //   }
+    // }
+  }, [cycle, isSuccess, id]);
 
   useEffect(() => {
     if (!isLoadingSession) {
@@ -62,7 +62,6 @@ const CycleDetailPage: NextPage = () => {
   }, [session, cycle, isSuccess, isLoadingSession]);
 
   const renderCycleDetailComponent = () => {
-    if (isLoadingSession || isFetching || isLoading) return <Spinner animation="grow" variant="info" />;
     if (cycle) {
       const res = (
         <CycleContext.Provider value={{ cycle, currentUserIsParticipant, linkToCycle: false }}>
@@ -72,6 +71,10 @@ const CycleDetailPage: NextPage = () => {
       if (cycle.access === 1) return res;
       if (cycle.access === 2) return res;
       if (cycle.access === 3 && !currentUserIsParticipant) return <Alert>Not authorized</Alert>;
+    }
+
+    if (isLoadingSession || isFetching || isLoading) {
+      return <Spinner animation="grow" variant="info" />;
     }
 
     if (isError)
