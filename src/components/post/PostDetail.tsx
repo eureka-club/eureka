@@ -143,7 +143,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
                 }
               </small>
             </div>
-            <h1 className="text-secondary fw-bold mb-2"> {post.title} </h1>
+            <h1 className="text-secondary fw-bold mb-3"> {post.title} </h1>
             {post.contentText != null && <UnclampText text={post.contentText} />}
           </div>
           <HyvorComments id={hyvorId} />

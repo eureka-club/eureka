@@ -37,11 +37,11 @@ const ManifestPage: NextPage = () => {
                 {t('manifestLbl')} <br />
                 Eureka <BsCircleFill style={{ fontSize: '.2em' }} />{' '}
               </h1>
-              <em className="d-block">{t('eurekaPrinciple')}</em>
+              <em className="d-block text-gray">{t('eurekaPrinciple')}</em>
             </Col>
             <Col xs={12} md={8} className="ml-0" style={{ borderLeft: 'solid 2px var(--info)' }}>
-              <p>
-                <span>{t('welcomeEureka')}</span> {t('manifestDesc')}
+              <p >
+                <span className="text-secondary fw-bold">{t('welcomeEureka')}</span> {t('manifestDesc')}
               </p>
             </Col>
           </Row>
@@ -74,12 +74,12 @@ const ManifestPage: NextPage = () => {
 
             {isVisible(1, 1) && (
               <aside
-                className="cursor-pointer bg-white text-darkgray"
+                className="cursor-pointer bg-very-light-secondary text-darkgray"
                 onClick={() => toggleBox(1, 1)}
                 role="presentation"
               >
-                <h2 className="fs-6 fw-bolder">{t('manifestRow1Box1Title')}</h2>
-                <p className="p-0 m-0 text-wrap text-left fs-6">{t('manifestRow1Box1Desc')}</p>
+                <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow1Box1Title')}</h2>
+                <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow1Box1Desc')}</p>
               </aside>
             )}
           </Col>
@@ -102,12 +102,12 @@ const ManifestPage: NextPage = () => {
 
             {isVisible(1, 2) && (
               <aside
-                className="cursor-pointer bg-white text-darkgray"
+                className="cursor-pointer bg-very-light-yellow text-darkgray"
                 onClick={() => toggleBox(1, 2)}
                 role="presentation"
               >
-                <h2 className="fs-6 fw-bolder">{t('manifestRow2Box1Title')}</h2>
-                <p className="p-0 m-0 text-wrap text-left fs-6">{t('manifestRow1Box2Desc')}</p>
+                <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow2Box1Title')}</h2>
+                <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow1Box2Desc')}</p>
               </aside>
             )}
           </Col>
@@ -130,12 +130,12 @@ const ManifestPage: NextPage = () => {
 
             {isVisible(1, 3) && (
               <aside
-                className="cursor-pointer bg-white text-darkgray"
+                className="cursor-pointer bg-very-light-secondary text-darkgray"
                 onClick={() => toggleBox(1, 3)}
                 role="presentation"
               >
-                <h2 className="fs-6 fw-bolder">{t('manifestRow3Box1Title')}</h2>
-                <p className="p-0 m-0 text-wrap text-left fs-6">{t('manifestRow1Box3Desc')}</p>
+                <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow3Box1Title')}</h2>
+                <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow1Box3Desc')}</p>
               </aside>
             )}
           </Col>
@@ -160,12 +160,12 @@ const ManifestPage: NextPage = () => {
 
             {isVisible(2, 1) && (
               <aside
-                className="cursor-pointer bg-white text-darkgray"
+                className="cursor-pointer bg-very-light-yellow text-darkgray"
                 onClick={() => toggleBox(2, 1)}
                 role="presentation"
               >
-                <h2 className="fs-6 fw-bolder">{t('manifestRow2Box1Title')}</h2>
-                <p className="p-0 m-0 text-wrap text-left fs-6">{t('manifestRow2Box1Desc')}</p>
+                <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow2Box1Title')}</h2>
+                <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow2Box1Desc')}</p>
               </aside>
             )}
           </Col>
@@ -188,12 +188,12 @@ const ManifestPage: NextPage = () => {
 
             {isVisible(2, 2) && (
               <aside
-                className="cursor-pointer bg-white text-darkgray"
+                className="cursor-pointer bg-very-light-secondary text-darkgray"
                 onClick={() => toggleBox(2, 2)}
                 role="presentation"
               >
-                <h2 className="fs-6 fw-bolder">{t('manifestRow2Box2Title')}</h2>
-                <p className="p-0 m-0 text-wrap text-left fs-6">{t('manifestRow2Box2Desc')}</p>
+                <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow2Box2Title')}</h2>
+                <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow2Box2Desc')}</p>
               </aside>
             )}
           </Col>
@@ -216,12 +216,12 @@ const ManifestPage: NextPage = () => {
 
             {isVisible(2, 3) && (
               <aside
-                className="cursor-pointer bg-white text-darkgray"
+                className="cursor-pointer bg-very-light-yellow text-darkgray"
                 onClick={() => toggleBox(2, 3)}
                 role="presentation"
               >
-                <h2 className="fs-6 fw-bolder">{t('manifestRow2Box3Title')}</h2>
-                <p className="p-0 m-0 text-wrap text-left fs-6">{t('manifestRow2Box3Desc')}</p>
+                <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow2Box3Title')}</h2>
+                <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow2Box3Desc')}</p>
               </aside>
             )}
           </Col>
@@ -246,12 +246,12 @@ const ManifestPage: NextPage = () => {
 
             {isVisible(3, 1) && (
               <aside
-                className="cursor-pointer bg-white text-darkgray"
+                className="cursor-pointer bg-very-light-secondary text-darkgray"
                 onClick={() => toggleBox(3, 1)}
                 role="presentation"
               >
-                <h2 className="fs-6 fw-bolder">{t('manifestRow3Box1Title')}</h2>
-                <p className="p-0 m-0 text-wrap text-left fs-6">{t('manifestRow3Box1Desc')}</p>
+                <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow3Box1Title')}</h2>
+                <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow3Box1Desc')}</p>
               </aside>
             )}
           </Col>
@@ -274,12 +274,12 @@ const ManifestPage: NextPage = () => {
 
             {isVisible(3, 2) && (
               <aside
-                className="cursor-pointer bg-white text-darkgray"
+                className="cursor-pointer bg-very-light-yellow text-darkgray"
                 onClick={() => toggleBox(3, 2)}
                 role="presentation"
               >
-                <h2 className="fs-6 fw-bolder">{t('manifestRow3Box2Title')}</h2>
-                <p className="p-0 m-0 text-wrap text-left fs-6">{t('manifestRow3Box2Desc')}</p>
+                <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow3Box2Title')}</h2>
+                <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow3Box2Desc')}</p>
               </aside>
             )}
           </Col>
@@ -304,12 +304,12 @@ const ManifestPage: NextPage = () => {
 
             {isVisible(3, 3) && (
               <aside
-                className="cursor-pointer bg-white text-darkgray"
+                className="cursor-pointer bg-very-light-secondary text-darkgray"
                 onClick={() => toggleBox(3, 3)}
                 role="presentation"
               >
-                <h2 className="fs-6 fw-bolder">{t('manifestRow3Box3Title')}</h2>
-                <p className="p-0 m-0 text-wrap text-left fs-6">{t('manifestRow3Box3Desc')}</p>
+                <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow3Box3Title')}</h2>
+                <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow3Box3Desc')}</p>
               </aside>
             )}
           </Col>
@@ -333,18 +333,18 @@ const ManifestPage: NextPage = () => {
 
             {isVisible(4, 1) && (
               <aside
-                className="cursor-pointer bg-white text-darkgray"
+                className="cursor-pointer bg-very-light-secondary text-darkgray"
                 onClick={() => toggleBox(4, 1)}
                 role="presentation"
               >
-                <h2 className="fs-6 fw-bolder">{t('manifestRow4Box1Title')}</h2>
-                <p className="p-0 m-0 text-wrap text-left fs-6">{t('manifestRow4Box1Desc')}</p>
+                <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow4Box1Title')}</h2>
+                <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow4Box1Desc')}</p>
                 <ul>
-                  <li>{t('manifestRow4Box1Desc1')}</li>
-                  <li>{t('manifestRow4Box1Desc2')}</li>
-                  <li>{t('manifestRow4Box1Desc3')}</li>
-                  <li>{t('manifestRow4Box1Desc4')}</li>
-                  <li>{t('manifestRow4Box1Desc5')}</li>
+                  <li className="fs-6">{t('manifestRow4Box1Desc1')}</li>
+                  <li className="fs-6">{t('manifestRow4Box1Desc2')}</li>
+                  <li className="fs-6">{t('manifestRow4Box1Desc3')}</li>
+                  <li className="fs-6">{t('manifestRow4Box1Desc4')}</li>
+                  <li className="fs-6">{t('manifestRow4Box1Desc5')}</li>
                 </ul>
               </aside>
             )}
@@ -370,33 +370,35 @@ const ManifestPage: NextPage = () => {
 
             {isVisible(4, 2) && (
               <aside
-                className="cursor-pointer bg-white text-darkgray"
+                className="cursor-pointer bg-very-light-yellow text-darkgray"
                 onClick={() => toggleBox(4, 2)}
                 role="presentation"
               >
-                <h2 className="fs-6 fw-bolder">{t('manifestRow4Box2Title')}</h2>
-                <p className="p-0 m-0 text-wrap text-left fs-6">{t('manifestRow4Box2Desc')}</p>
+                <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow4Box2Title')}</h2>
+                <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow4Box2Desc')}</p>
               </aside>
             )}
           </Col>
         </Row>
         {/* </Masonry> */}
 
-        <hr />
+        <br/>
+        <hr/>
+        <br/>
 
         <section className="mb-5">
           <Row>
-            <Col xs={12} md={4} className="pr-0 mr-0 d-flex align-items-center justify-content-center">
+            <Col xs={12} md={4} className="pr-2 mr-0 d-flex align-items-center justify-content-center">
               <RiAlertLine
                 className="text-yellow"
-                style={{ opacity: '.5', fontSize: '8em', margin: '-.3em -.5em 0 0' }}
+                style={{ opacity: '.7', fontSize: '15em', margin: '-.3em -.5em 0 -.3em' }}
               />
-              <h1 className="h1 text-secondary" style={{ zIndex: 9999 }}>
+              <h1 className="h1 fw-bolder text-secondary mb-5 mr-4" style={{ zIndex: 9999 }}>
                 {t('enforcement')}
               </h1>
             </Col>
             <Col xs={12} md={8} className="ml-0" style={{ borderLeft: 'solid 2px var(--info)' }}>
-              <h2 className="h5">{t('enforcementHeadLbl')}</h2>
+              <h2 className="h6 fw-bolder">{t('enforcementHeadLbl')}</h2>
               <ol>
                 <li>{t('manifestEnforcement1')}</li>
                 <li>{t('manifestEnforcement2')}</li>

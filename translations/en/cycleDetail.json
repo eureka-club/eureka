@@ -40,7 +40,7 @@
   "Suggest a related work": "Add work to cycle",
   "Content calendar": "Content calendar",
   "guidelinesMP": "Cycle Content Moderation Principles",
-  "emptyDiscussionItemLbl": "Picke a discussion item",
+  "emptyDiscussionItemLbl": "Indicate if your contribution is about one of the works or the cycle itself",
   "Warning": "Warning",
-  "requiredDiscussionItemError": "Required discussion item"
+  "requiredDiscussionItemError": "You have to select what your contribution is about "
 }

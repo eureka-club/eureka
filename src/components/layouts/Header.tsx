@@ -53,7 +53,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
           <Container className={`${styles.grid}`}>
             <Row className="text-white mb-5">
               <Col xs={12} md={4} className="d-flex flex-column">
-                <h1 className="h1 ml-auto">Eureka.</h1>
+                <h1 className="h1 ml-auto">{t('underEurekaLabel')}</h1>
                 {/*<em className="fs-6 ml-auto">{t('underEurekaLabel')}</em>*/}
               </Col>
               <Col xs={12} md={8} className="text-left">

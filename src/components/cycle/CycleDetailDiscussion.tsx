@@ -163,7 +163,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
                 )}
               </ButtonGroup>
               {(isCreateEureka || isCreateComment) && (
-                <Form className="mt-3">
+                <Form className="mt-3 font-weight-light">
                   <Form.Group controlId="discussionItem">
                     <Form.Control
                       as="select"
