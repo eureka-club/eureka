@@ -65,7 +65,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
   const [isCreateEureka, setIsCreateEureka] = useState<boolean>(false);
   const [isCreateComment, setIsCreateComment] = useState<boolean>(false);
   const [isSuggestRelatedWork, setIsSuggestRelatedWork] = useState<boolean>(false);
-  const [discussionItem, setDiscussionItem] = useState<string>('-1'); // by default Cycle itself
+  const [discussionItem, setDiscussionItem] = useState<string | undefined>(undefined); // by default empty but required
   const [globalModalsAtom, setGlobalsModalsAtom] = useAtom(globalModals);
 
   const handleCreateEurekaClick = (ev: MouseEvent<HTMLButtonElement>) => {
@@ -124,21 +124,6 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
               {session && session.user && <UserAvatar user={session.user} showName={false} />}
             </Col>
             <Col xs={12} md={11}>
-              {(isCreateEureka || isCreateComment) && (
-                <Form>
-                  <Form.Group controlId="discussionItem">
-                    <Form.Control
-                      as="select"
-                      className={styles.discussionItem}
-                      value={discussionItem}
-                      onChange={onChangeDiscussionItem}
-                    >
-                      <option value={-1}>{t('Cycle itself')}</option>
-                      {getWorksOpt()}
-                    </Form.Control>
-                  </Form.Group>
-                </Form>
-              )}
               <ButtonGroup as={Row} className={styles.optButtons} size="lg">
                 <Button
                   onClick={handleCreateEurekaClick}
@@ -177,6 +162,22 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
                   </Button>
                 )}
               </ButtonGroup>
+              {(isCreateEureka || isCreateComment) && (
+                <Form className="mt-3">
+                  <Form.Group controlId="discussionItem">
+                    <Form.Control
+                      as="select"
+                      className={styles.discussionItem}
+                      value={discussionItem}
+                      onChange={onChangeDiscussionItem}
+                    >
+                      <option value={undefined}>{t('emptyDiscussionItemLbl')}</option>
+                      <option value={-1}>{t('Cycle itself')}</option>
+                      {getWorksOpt()}
+                    </Form.Control>
+                  </Form.Group>
+                </Form>
+              )}
               {isCreateEureka && (
                 <div className="mt-3">
                   <CycleDetailDiscussionCreateEurekaForm cycle={cycle} discussionItem={discussionItem} />

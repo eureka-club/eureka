@@ -39,5 +39,8 @@
   "Create an Eureka": "Crear una Eureka",
   "Suggest a related work": "Agregar obra al ciclo",
   "Content calendar": "Calendario de contenido",
-  "guidelinesMP": "Principios de moderación del ciclo"
+  "guidelinesMP": "Principios de moderación del ciclo",
+  "emptyDiscussionItemLbl": "Seleccione un elemento de discusión",
+  "Warning": "Aviso",
+  "requiredDiscussionItemError": "Se require elemento de discusión"
 }

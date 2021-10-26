@@ -1,7 +1,7 @@
 import { useSession } from 'next-auth/client';
 import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, FormEvent, FunctionComponent, useEffect, useState, useRef } from 'react';
-
+import { useAtom } from 'jotai';
 import { Button, Spinner, ButtonGroup, Form } from 'react-bootstrap';
 
 import { Comment } from '@prisma/client';
@@ -13,6 +13,7 @@ import { ImCancelCircle } from 'react-icons/im';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 
 import { useMutation, useQueryClient } from 'react-query';
+import globalModalsAtom from '../../atoms/globalModals';
 
 import { Session } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
@@ -24,12 +25,12 @@ import {
 
 interface Props {
   cycle: CycleMosaicItem;
-  discussionItem: string;
+  discussionItem?: string;
 }
 
 const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({ cycle, discussionItem }) => {
   const queryClient = useQueryClient();
-
+  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [session] = useSession() as [Session | null | undefined, boolean];
   const { t } = useTranslation('cycleDetail');
   const editorRef = useRef<any>(null);
@@ -107,7 +108,18 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({ cycl
 
   const handlerSubmitCreateComment = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-
+    if (!discussionItem) {
+      setGlobalModalsState({
+        ...globalModalsState,
+        showToast: {
+          show: true,
+          type: 'warning',
+          title: t('Warning'),
+          message: t('requiredDiscussionItemError'),
+        },
+      });
+      return;
+    }
     if (newComment.selectedWorkId) {
       const payload: CreateCommentAboutWorkClientPayload = {
         selectedCycleId: newComment.selectedCycleId ? newComment.selectedCycleId : undefined,

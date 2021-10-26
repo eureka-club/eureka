@@ -3,7 +3,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, FormEvent, FunctionComponent, useEffect, useRef, useState } from 'react';
 
 import { Button, Col, Row, ButtonGroup, Form } from 'react-bootstrap';
-
+import { useAtom } from 'jotai';
 import { Post } from '@prisma/client';
 
 import { BsCheck } from 'react-icons/bs';
@@ -12,6 +12,7 @@ import { ImCancelCircle } from 'react-icons/im';
 import { useMutation, useQueryClient } from 'react-query';
 
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
+import globalModalsAtom from '../../atoms/globalModals';
 import { Session } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
 import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload } from '../../types/post';
@@ -25,7 +26,7 @@ import useTopics from '../../useTopics';
 
 interface Props {
   cycle: CycleMosaicItem;
-  discussionItem: string;
+  discussionItem?: string;
 }
 
 const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle, discussionItem }) => {
@@ -33,7 +34,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
 
   const [session] = useSession() as [Session | null | undefined, boolean];
   const { t } = useTranslation('cycleDetail');
-
+  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [newEurekaImageFile, setNewEurekaImageFile] = useState<File | null>(null);
   const { data: topics } = useTopics();
   const [eurekaTopics, setEurekaTopics] = useState<string[]>([]);
@@ -106,7 +107,18 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
 
   const handlerSubmitCreateEureka = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-
+    if (!discussionItem) {
+      setGlobalModalsState({
+        ...globalModalsState,
+        showToast: {
+          show: true,
+          type: 'warning',
+          title: t('Warning'),
+          message: t('requiredDiscussionItemError'),
+        },
+      });
+      return;
+    }
     if (!newEurekaImageFile) return;
 
     if (newEureka.selectedWorkId) {
@@ -137,6 +149,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
   };
 
   useEffect(() => {
+    if (!discussionItem) return;
     if (discussionItem === '-1') {
       setNewEureka((res) => ({
         ...res,
