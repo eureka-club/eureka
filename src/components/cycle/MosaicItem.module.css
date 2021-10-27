@@ -1,13 +1,21 @@
 
+@keyframes ActiveCircle {
+  from {color: var(--primary);}
+  to {color: var(--info);}
+}
 
 .isActiveCircle{
-    position: absolute;
+  position: absolute;
     top: 10px;
     font-size: 1.5em;
     display: inherit;
     top: 1%;
     right: 1%;
+    animation-name: ActiveCircle;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
 }
+
 .footer{
   padding:.2em;
 }

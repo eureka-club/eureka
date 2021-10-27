@@ -205,7 +205,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           <LocalImageComponent filePath={localImages[0].storedFile} alt={title} />
         )}
 
-        {isActive && <CgMediaLive className={`text-primary ${styles.isActiveCircle}`} />}
+        {isActive && <CgMediaLive className={`${styles.isActiveCircle}`} />}
         <Badge variant="primary" className={`fw-normal fs-6 text-dark rounded-pill ${styles.type}`}>
           {t('cycle')} {getCycleAccesLbl()}
         </Badge>
