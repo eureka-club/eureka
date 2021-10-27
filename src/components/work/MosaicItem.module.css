@@ -19,16 +19,10 @@
   height: 100%;
 }
 
-.type {
-  background-color: var(--color-emphasis);
-  border-radius: 1rem;
-  top: 2%;
-  font-size: 0.85rem;
-  left: 0.85rem;
-  line-height: 1;
-  padding: 0.25rem 0.75rem;
-  position: absolute;
-  /* text-transform: capitalize; */
+.type {  
+  top: 2%;  
+  left: 0.85rem;  
+  position: absolute;  
 }
 
 .actions {

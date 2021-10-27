@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent /*  useEffect, useState */, useEffect, useState } from 'react';
-import { Card /* Button */ } from 'react-bootstrap';
+import { Card, Badge } from 'react-bootstrap';
 // import { MySocialInfo } from '@/src/types';
 // import { PostDetail } from '../../types/post';
 // import { useQuery } from 'react-query';
@@ -150,7 +150,9 @@ const MosaicItem: FunctionComponent<Props> = ({
       <div className={styles.imageContainer} style={style}>
         {renderLocalImageComponent()}
         {isActive() && <CgMediaLive className={`${styles.isActiveCircle}`} />}
-        <span className={styles.type}>{t(type)}</span>
+        <Badge variant="orange" className={`fw-normal fs-6 text-dark rounded-pill ${styles.type}`}>
+          {t(type)}
+        </Badge>
       </div>
       {renderOngoinOrUpcomingDate()}
       {showSocialInteraction && work && (

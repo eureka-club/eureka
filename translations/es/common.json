@@ -108,5 +108,8 @@
   "headerCenterBoxText": "Recorridos de conocimiento para que personas curiosas y expertas, puedan profundizar en cualquier tipo de tema, junto a una comunidad.",
   "headerRightBoxTitle": "¡Crea y comparte momentos Eureka!",
   "headerRightBoxText": "Tus revelaciones individuales que pueden transformar el colectivo.",
-  "loadMoreTopics": "Cargar más temas"
+  "loadMoreTopics": "Cargar más temas",
+  "public": "público",
+  "private": "privado",
+  "secret": "secreto"
 }

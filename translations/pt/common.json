@@ -108,5 +108,8 @@
   "headerCenterBoxText": "Espaços para que pessoas curiosas e especialistas se aprofundem em qualquer assunto, em conjunto com uma comunidade.",
   "headerRightBoxTitle": "Crie e compartilhe momentos Eureka!",
   "headerRightBoxText": "Suas revelações individuais que podem transformar o coletivo.",
-  "loadMoreTopics": "Carregar mais temas"
+  "loadMoreTopics": "Carregar mais temas",
+  "public": "public",
+  "private": "private",
+  "secret": "secret"
 }

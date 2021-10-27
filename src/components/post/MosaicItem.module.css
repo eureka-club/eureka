@@ -44,21 +44,9 @@
   height: 24px;
   width: 24px;
 }
-
-.postHorizontally .type{
-  background-color: #933CA0;
-  color:white;  
-}
 .type {
-  background-color: #933CA0;
-  border-radius: 1rem;
-  color: var(--text-color-primary);
-  font-size: 0.85rem;
   left: 0.85rem;
-  line-height: 1;
-  padding: 0.25rem 0.75rem;
   position: absolute;
-  text-transform: capitalize;
 }
 
 .actions {

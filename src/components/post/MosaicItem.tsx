@@ -3,7 +3,7 @@ import { Cycle, Work } from '@prisma/client';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
-import { Row, Col, Card } from 'react-bootstrap';
+import { Row, Col, Card, Badge } from 'react-bootstrap';
 import { FaRegComments, FaRegCompass } from 'react-icons/fa';
 import dayjs from 'dayjs';
 import { DATE_FORMAT_SHORT } from '../../constants';
@@ -139,7 +139,9 @@ const MosaicItem: FunctionComponent<Props> = ({
               </>
             )}
           </div>
-          <span className={styles.type}>{t(type || 'post')}</span>
+          <Badge variant="success" className={`fw-normal fs-6 text-white rounded-pill ${styles.type}`}>
+            {t(type || 'post')}
+          </Badge>
         </div>
         {showDetailedInfo && (
           <div className={`d-flex align-items-center justify-content-center ${styles.detailedInfo}`}>

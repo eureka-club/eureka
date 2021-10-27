@@ -7,7 +7,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useEffect, useState, MouseEvent } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 
-import { Card, Button, Spinner } from 'react-bootstrap';
+import { Card, Button, Spinner, Badge } from 'react-bootstrap';
 import { useSession } from 'next-auth/client';
 import { CgMediaLive } from 'react-icons/cg';
 
@@ -179,6 +179,15 @@ const MosaicItem: FunctionComponent<Props> = ({
     execLeaveCycle();
   };
 
+  const getCycleAccesLbl = () => {
+    if (cycle) {
+      if (cycle.access === 1) return t('public');
+      if (cycle.access === 2) return t('private');
+      if (cycle.access === 3) return t('secret');
+    }
+    return '';
+  };
+
   return (
     <Card className={`${isActive ? 'isActive' : ''} ${className}`}>
       <div
@@ -197,7 +206,9 @@ const MosaicItem: FunctionComponent<Props> = ({
         )}
 
         {isActive && <CgMediaLive className={`text-primary ${styles.isActiveCircle}`} />}
-        <span className={styles.type}>{t('cycle')}</span>
+        <Badge variant="primary" className={`fw-normal fs-6 text-dark rounded-pill ${styles.type}`}>
+          {t('cycle')} {getCycleAccesLbl()}
+        </Badge>
       </div>
       {detailed && (
         <div className="text-center p-1">

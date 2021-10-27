@@ -38,20 +38,9 @@
 }
 
 .type {
-  background-color: var(--eureka-green);
-  border-radius: 1rem;
-  
-  font-size: 0.85rem;
   left: 0.85rem;
-  line-height: 1;
-  padding: 0.25rem 0.75rem;
   top:3%;
-  position: absolute;
-  left: 0.85rem;
-  color:black;
-  /* bottom: 1rem;
-   */
-  /* text-transform: capitalize; */
+  position: absolute; 
 }
 
 .actions {

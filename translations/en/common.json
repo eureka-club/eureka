@@ -108,5 +108,8 @@
   "headerCenterBoxText": "Spaces created for the curious and the experts to dive into a topic, together with a community.",
   "headerRightBoxTitle": "Create and share Eureka moments!",
   "headerRightBoxText": "Your individual revelations that can transform the collective.",
-  "loadMoreTopics": "Load more topics"
+  "loadMoreTopics": "Load more topics",
+  "public": "public",
+  "private": "private",
+  "secret": "secret"
 }
