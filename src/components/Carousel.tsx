@@ -219,11 +219,15 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
               </Col>
               <Col className={styles.right}>
                 {/* {data.hasMore && ( */}
-                <Link href="/search">
-                  <Button className={styles.seeAllButton} onClick={onItemsFound}>
-                    {t('common:See all')}
-                  </Button>
-                </Link>
+
+                <span
+                  className={`cursor-pointer text-primary ${styles.seeAllButton}`}
+                  role="presentation"
+                  onClick={onItemsFound}
+                >
+                  {t('common:See all')}
+                </span>
+
                 {/* )} */}
               </Col>
             </Row>

@@ -52,13 +52,8 @@ const renderMosaicItem = (
   if (isCycleMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
     return (
-      <CycleContext.Provider value={{ cycle: item as CycleMosaicItem }}>
-        <MosaicItemCycle
-          detailed
-          showSocialInteraction={showSocialInteraction}
-          showButtonLabels={false}
-          key={`cycle-${item.id}`}
-        />
+      <CycleContext.Provider key={`cycle-${item.id}`} value={{ cycle: item as CycleMosaicItem }}>
+        <MosaicItemCycle detailed showSocialInteraction={showSocialInteraction} showButtonLabels={false} />
       </CycleContext.Provider>
     );
   }
@@ -166,9 +161,16 @@ const CarouselStatic: FunctionComponent<Props> = ({
               </Col>
               <Col className={styles.right}>
                 {dataFiltered.length && (
-                  <Button className={`${styles.seeAllButton}`} onClick={onSeeAll}>
+                  // <Button className={`${styles.seeAllButton}`} onClick={onSeeAll}>
+                  //   {t('common:See all')}
+                  // </Button>
+                  <span
+                    className={`cursor-pointer text-primary ${styles.seeAllButton}`}
+                    role="presentation"
+                    onClick={onSeeAll}
+                  >
                     {t('common:See all')}
-                  </Button>
+                  </span>
                 )}
               </Col>
             </Row>
