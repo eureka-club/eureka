@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useAtom } from 'jotai';
-import { FunctionComponent, MouseEvent, useState } from 'react';
+import { FunctionComponent, MouseEvent, useState, useEffect } from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
 import useTranslation from 'next-translate/useTranslation';
@@ -21,6 +21,10 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
   const [show, setShow] = useState<boolean>(s);
   const [session, isLoadingSession] = useSession() as [Session | null | undefined, boolean];
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
+
+  useEffect(() => {
+    if (session) setShow(false);
+  }, [session]);
 
   const openSignInModal = () => {
     setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
@@ -54,7 +58,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
             <Row className="text-white mb-5">
               <Col xs={12} md={4} className="d-flex flex-column">
                 <h1 className="h1 ml-auto">{t('underEurekaLabel')}</h1>
-                {/*<em className="fs-6 ml-auto">{t('underEurekaLabel')}</em>*/}
+                {/* <em className="fs-6 ml-auto">{t('underEurekaLabel')}</em> */}
               </Col>
               <Col xs={12} md={8} className="text-left">
                 <p className="pl-4 border-left border-white">
