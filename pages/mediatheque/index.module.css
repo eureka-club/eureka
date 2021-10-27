@@ -22,5 +22,5 @@
       background: transparent;
       color: var(--eureka-green);
       text-decoration: underline;
-      border: none;
+      border-color: var(--eureka-green);
   }

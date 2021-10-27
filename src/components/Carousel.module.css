@@ -58,10 +58,18 @@
 }
 .seeAllButton{
   color: var(--eureka-green);
-  text-decoration: underline;
   background-color: transparent;
   border: none;
 }
+
+.seeAllButton:hover {
+  background-color: transparent;
+  color: var(--color-primary-raised);
+  text-decoration: underline;
+  border: 1px;
+  border-color: var(--eureka-green);
+}
+
 
 .iconAfter{
   size:1.5em;
