@@ -13,10 +13,11 @@ export type TagsInputProp = {
   readOnly?: boolean | null;
   max?: number;
   className?: string;
+  formatValue?: (v: string) => string;
 };
 const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
   const { t } = useTranslation('createWorkForm');
-  const { tags, setTags, label = '', readOnly = false, max = 2, className } = props;
+  const { tags, setTags, label = '', readOnly = false, max = 2, className, formatValue = undefined } = props;
 
   const [tagInput, setTagInput] = useState<string>('');
   const [items, setItems] = useState<string[]>([]);
@@ -66,7 +67,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
           return (
             <span key={`${idx + 1}${t}`}>
               <Badge className="cursor-pointer" pill variant="secondary" onClick={() => handlerBadgeClick(v)}>
-                {v}{' '}
+                {formatValue ? formatValue(v) : v}{' '}
                 {!readOnly && (
                   <Badge style={{ cursor: 'pointer' }} onClick={() => deleteTag(idx)} pill variant="default">
                     X

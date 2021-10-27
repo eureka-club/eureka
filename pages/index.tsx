@@ -41,7 +41,7 @@ const IndexPage: NextPage = () => {
     'history',
   ]);
   const getTopicsBadgedLinks = () => {
-    return <TagsInput tags={[...show, ...hide].join()} readOnly />;
+    return <TagsInput formatValue={(v: string) => t(`topics:${v}`)} tags={[...show, ...hide].join()} readOnly />;
   };
   const showTopic = () => {
     if (hide.length) {
