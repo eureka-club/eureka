@@ -210,7 +210,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
           <div className={styles.mainContainer}>
             <Row>
               <Col>
-                <h5 className="cursor-pointer" onClick={onItemsFound}>
+                <h5 className="cursor-pointer" onClick={onItemsFound} role="presentation">
                   <span className={styles.iconBefore}>
                     <BsHash />
                   </span>

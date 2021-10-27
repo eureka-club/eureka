@@ -352,7 +352,7 @@ const Mediatheque: NextPage = () => {
 
                     {session && (session as unknown as Session).user!.id !== user.id && isFollowedByMe && (
                       <Button
-                        variant="button border-primary text-primary fs-6" 
+                        variant="button border-primary text-primary fs-6"
                         className="w-80"
                         onClick={followHandler}
                         disabled={isLoadingMutateFollowing}

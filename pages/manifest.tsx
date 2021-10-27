@@ -40,7 +40,7 @@ const ManifestPage: NextPage = () => {
               <em className="d-block text-gray">{t('eurekaPrinciple')}</em>
             </Col>
             <Col xs={12} md={8} className="ml-0" style={{ borderLeft: 'solid 2px var(--info)' }}>
-              <p >
+              <p>
                 <span className="text-secondary fw-bold">{t('welcomeEureka')}</span> {t('manifestDesc')}
               </p>
             </Col>
@@ -382,9 +382,9 @@ const ManifestPage: NextPage = () => {
         </Row>
         {/* </Masonry> */}
 
-        <br/>
-        <hr/>
-        <br/>
+        <br />
+        <hr />
+        <br />
 
         <section className="mb-5">
           <Row>
