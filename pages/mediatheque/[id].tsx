@@ -11,9 +11,11 @@ import { useQueryClient, useMutation } from 'react-query';
 import { useState, useEffect /* , ReactElement */ } from 'react';
 
 // import { loadGetInitialProps } from 'next/dist/next-server/lib/utils';
-import { Spinner, Card, Row, Col, Button, Alert } from 'react-bootstrap';
+import { Spinner, Card, Row, Col, ButtonGroup, Button, Alert } from 'react-bootstrap';
 import { AiOutlineEnvironment } from 'react-icons/ai';
 import { /* BsCircleFill, */ BsBookmark, BsEye } from 'react-icons/bs';
+import { BiArrowBack } from 'react-icons/bi';
+
 import { HiOutlineUserGroup } from 'react-icons/hi';
 
 import { /* RatingOnCycle, */ RatingOnWork, User } from '@prisma/client';
@@ -324,6 +326,12 @@ const Mediatheque: NextPage = () => {
   return (
     <SimpleLayout title={t('Mediatheque')}>
       <>
+        <ButtonGroup className="mb-1">
+          <Button variant="primary" onClick={() => router.back()} size="sm">
+            <BiArrowBack />
+          </Button>
+        </ButtonGroup>
+
         {!(isLoadingUser || isLoadingSession) && user && (
           <section>
             <Card className={styles.userHeader}>
@@ -383,9 +391,11 @@ const Mediatheque: NextPage = () => {
             )}
           </section>
         )}
-        {renderAccessInfo()}
-        {(isLoadingUser || isLoadingSession) && <Spinner animation="grow" variant="info" />}
-        {isSuccessUser && id && !user && <Spinner animation="grow" variant="info" />}
+        <aside>
+          {renderAccessInfo()}
+          {(isLoadingUser || isLoadingSession) && <Spinner animation="grow" variant="info" />}
+          {isSuccessUser && id && !user && <Spinner animation="grow" variant="info" />}
+        </aside>
       </>
     </SimpleLayout>
   );
