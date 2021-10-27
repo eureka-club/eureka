@@ -6,11 +6,11 @@ import { GetStaticProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useState /* , useEffect, ReactElement, Children */ } from 'react';
 import { RiArrowDownSLine /* , RiArrowUpSLine */ } from 'react-icons/ri';
-
 import { QueryClient } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
 // import { loadGetInitialProps } from 'next/dist/next-server/lib/utils';
 import { Button } from 'react-bootstrap';
+import TagsInput from '../src/components/forms/controls/TagsInput';
 
 // import { CycleMosaicItem } from '../src/types/cycle';
 // import { WorkMosaicItem } from '../src/types/work';
@@ -40,7 +40,9 @@ const IndexPage: NextPage = () => {
     'arts-culture',
     'history',
   ]);
-
+  const getTopicsBadgedLinks = () => {
+    return <TagsInput tags={[...show, ...hide].join()} readOnly />;
+  };
   const showTopic = () => {
     if (hide.length) {
       const topic = hide.splice(0, 3);
@@ -50,7 +52,8 @@ const IndexPage: NextPage = () => {
 
   return (
     <SimpleLayout showHeader title={t('browserTitleWelcome')}>
-      <h1 className="text-secondary fw-bold mb-5">{t('Trending topics')}</h1>
+      <h1 className="text-secondary fw-bold">{t('Trending topics')}</h1>
+      <aside className="mb-5">{getTopicsBadgedLinks()}</aside>
       <>{show && show.map((item) => <Carousel className="mt-5" key={item} topic={item} />)}</>
       <Button className="my-3 pr-3 rounded-pill" onClick={showTopic} disabled={hide.length === 0}>
         <span>

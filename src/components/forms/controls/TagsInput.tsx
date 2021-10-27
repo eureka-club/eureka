@@ -2,6 +2,9 @@ import { FunctionComponent, useState, useEffect, ChangeEvent, KeyboardEvent } fr
 // import FormControl from 'react-bootstrap/FormControl';
 import { Form, Badge } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
+import { useAtom } from 'jotai';
+import { useRouter } from 'next/router';
+import searchEngine from '../../../atoms/searchEngine';
 
 export type TagsInputProp = {
   tags: string;
@@ -17,6 +20,8 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
 
   const [tagInput, setTagInput] = useState<string>('');
   const [items, setItems] = useState<string[]>([]);
+  const router = useRouter();
+  const [, setSearchEngineState] = useAtom(searchEngine);
 
   useEffect(() => {
     if (tags) setItems(tags.split(','));
@@ -44,7 +49,15 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
     items.splice(idx, 1);
     if (setTags) setTags(items.join());
   };
-
+  const handlerBadgeClick = (v: string) => {
+    const where = encodeURIComponent(
+      JSON.stringify({
+        OR: [{ tags: { contains: v } }, { topics: { contains: v } }],
+      }),
+    );
+    setSearchEngineState((res) => ({ ...res, where, q: v }));
+    router.push('/search');
+  };
   return (
     <Form.Group controlId="tags" className={`${className}`}>
       {label && <Form.Label>{label}</Form.Label>}
@@ -52,7 +65,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
         {items.map((v, idx) => {
           return (
             <span key={`${idx + 1}${t}`}>
-              <Badge pill variant="secondary">
+              <Badge className="cursor-pointer" pill variant="secondary" onClick={() => handlerBadgeClick(v)}>
                 {v}{' '}
                 {!readOnly && (
                   <Badge style={{ cursor: 'pointer' }} onClick={() => deleteTag(idx)} pill variant="default">

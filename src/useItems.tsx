@@ -17,7 +17,13 @@ const getRecordsWorks = async (where?: string): Promise<WorkMosaicItem[]> => {
   if (!res.ok) return [];
   const result = await res.json();
 
-  return result.data as WorkMosaicItem[];
+  return result.data.sort((f: WorkMosaicItem, s: WorkMosaicItem) => {
+    const fCD = dayjs(f.createdAt);
+    const sCD = dayjs(s.createdAt);
+    if (fCD.isAfter(sCD)) return -1;
+    if (fCD.isSame(sCD)) return 0;
+    return 1;
+  }) as WorkMosaicItem[];
 };
 
 const getRecordsCycles = async (where?: string): Promise<CycleMosaicItem[]> => {
@@ -34,30 +40,28 @@ const getRecordsCycles = async (where?: string): Promise<CycleMosaicItem[]> => {
   result.data.forEach((i: CycleMosaicItem) => {
     cycles.push({ ...i, type: 'cycle' });
   });
-  return cycles;
+  return cycles.sort((f, s) => {
+    const fCD = dayjs(f.createdAt);
+    const sCD = dayjs(s.createdAt);
+    if (fCD.isAfter(sCD)) return -1;
+    if (fCD.isSame(sCD)) return 0;
+    return 1;
+  });
 };
 
 const getRecords = async (where?: string): Promise<Item[] | undefined> => {
   if (!where) return undefined;
-  let cycles = await getRecordsCycles(where);
-  cycles = cycles.sort((f, s) => {
-    const fCD = dayjs(f.createdAt);
-    const sCD = dayjs(s.createdAt);
-    if (fCD.isAfter(sCD)) return -1;
-    if (fCD.isSame(sCD)) return 0;
-    return 1;
-  });
-  let works = await getRecordsWorks(where);
-  works = works.sort((f, s) => {
-    const fCD = dayjs(f.createdAt);
-    const sCD = dayjs(s.createdAt);
-    if (fCD.isAfter(sCD)) return -1;
-    if (fCD.isSame(sCD)) return 0;
-    return 1;
-  });
+  const cycles = await getRecordsCycles(where);
+  const works = await getRecordsWorks(where);
 
   const result = [...cycles, ...works];
-  return result;
+  return result.sort((f, s) => {
+    const fCD = dayjs(f.createdAt);
+    const sCD = dayjs(s.createdAt);
+    if (fCD.isAfter(sCD)) return -1;
+    if (fCD.isSame(sCD)) return 0;
+    return 1;
+  });
 };
 
 const useItems = () => {
