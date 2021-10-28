@@ -93,18 +93,25 @@ const NavBar: FunctionComponent = () => {
         {/* <Container> */}
         <Link href="/">
           <Navbar.Brand className={styles.brandLink}>
-            <Container>
-              <Col className={styles.brandContainer}>
+            <aside className="d-flex justify-content-around">
+              <img src="/img/logo.png" className="d-inline-block align-middle mr-2" width={52} alt="Project logo" />
+              <section>
+                <div className={styles.siteName}>{siteName}</div>
+                <div className={styles.brandInfo}>{t('tagline')}</div>
+              </section>
+            </aside>
+            {/* <Container>
+              <Col xs={4} className={styles.brandContainer}>
                 <img src="/img/logo.png" className="d-inline-block align-middle mr-2" width={52} alt="Project logo" />
               </Col>
-              <Col className="pr-0">
-                {/* <h1 className={styles.brandText}> */}
+              <Col xs={7} className="pr-0">
+                
                 <div className={styles.siteName}>{siteName}</div>
 
-                {/* </h1> */}
+                
                 <div className={styles.brandInfo}>{t('tagline')}</div>
               </Col>
-            </Container>
+            </Container> */}
           </Navbar.Brand>
         </Link>
 

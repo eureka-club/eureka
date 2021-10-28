@@ -69,11 +69,11 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
               </Col>
             </Row>
 
-            <Row className="d-flex justify-content-center" style={{ marginBottom: '-5em' }}>
+            <Row className="d-flex justify-content-around" style={{ marginBottom: '-5em' }}>
               <Col
                 xs={12}
                 md={3}
-                className="p-3 text-white rounded d-flex flex-column align-items-center ml-0 bg-secondary"
+                className="p-3 text-white rounded d-flex flex-column align-items-center mb-1 bg-secondary"
               >
                 <aside className={`${styles.bgHeaderLeft}`} />
                 <h2 className="h6 text-center">{t('headerLeftBoxTitle')}</h2>
@@ -82,7 +82,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
               <Col
                 xs={12}
                 md={3}
-                className="p-3 text-white rounded d-flex flex-column align-items-center ml-5 bg-secondary"
+                className="p-3 text-white rounded d-flex flex-column align-items-center mb-1 bg-secondary"
               >
                 <aside className={`${styles.bgHeaderCenter}`} />
                 <h2 className="h6 text-center">{t('headerCenterBoxTitle')}</h2>
@@ -91,7 +91,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
               <Col
                 xs={12}
                 md={3}
-                className="p-3 text-white rounded d-flex flex-column align-items-center ml-5 bg-secondary"
+                className="p-3 text-white rounded d-flex flex-column align-items-center mb-1 bg-secondary"
               >
                 <aside className={`${styles.bgHeaderRight}`} />
                 <h2 className="h6 text-center">{t('headerRightBoxTitle')}</h2>

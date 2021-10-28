@@ -260,7 +260,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       return (
         <Row>
           {gll.length && (
-            <Col>
+            <Col xs={12} md={6}>
               <section className="">{gll.map((g, idx) => renderLI(g, idx, 'gll'))}</section>
             </Col>
           )}
