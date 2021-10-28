@@ -62,7 +62,8 @@ const MosaicItem: FunctionComponent<Props> = ({
         const idx = cycle.cycleWorksDates.findIndex((cw) => cw.workId === work.id);
         if (idx > -1) {
           const cw = cycle.cycleWorksDates[idx];
-          if (cw.startDate && cw.endDate) return dayjs().isBetween(cw.startDate, cw.endDate);
+          if (cw.startDate && cw.endDate)
+            return dayjs().utc().isBetween(dayjs(cw.startDate), dayjs(cw.endDate), 'day', '[]');
           if (cw.endDate) return dayjs().isBefore(cw.endDate);
         }
       }
