@@ -144,7 +144,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
               </small>
             </div>
             <h1 className="text-secondary fw-bold mb-3"> {post.title} </h1>
-            {post.contentText != null && <UnclampText text={post.contentText} />}
+            {post.contentText != null && <UnclampText text={post.contentText} clampHeight="8rem" />}
           </div>
           <HyvorComments id={hyvorId} />
         </Col>

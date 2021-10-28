@@ -121,7 +121,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
                     </a>
                   )}
                 </section>
-                {work.contentText != null && <UnclampText text={work.contentText} />}
+                {work.contentText != null && <UnclampText text={work.contentText} clampHeight="8rem" />}
               </Col>
             </>
           ) : (
