@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+// import classNames from 'classnames';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
@@ -46,15 +46,16 @@ const UnclampText: FunctionComponent<Props> = ({ clampHeight, text, showButtomMo
     <>
       <div
         ref={outerRef}
-        className={classNames(styles.outer, { [styles.contentTextUnclamped]: textIsUnclamped })}
-        style={{ height: textIsUnclamped ? 'auto' : clampHeight }}
+        // className={classNames(styles.outer, { [styles.contentTextUnclamped]: textIsUnclamped })}
+        className={`${unclampButtonVisible ? styles.outer : ''} ${textIsUnclamped ? styles.contentTextUnclamped : ''}`}
+        style={{ height: textIsUnclamped || !unclampButtonVisible ? 'auto' : clampHeight }}
       >
         {/* <div ref={innerRef}>
           {textRows.map((row, idx) => (
             <p key={`${idx + 1}${row[0]}${row[1]}-${row.length}`}>{row}</p>
           ))}
         </div> */}
-        <div ref={innerRef} className={styles.dangerouslySetInnerHTML} dangerouslySetInnerHTML={{ __html: text }} />
+        <div ref={innerRef} className="" dangerouslySetInnerHTML={{ __html: text }} />
       </div>
 
       {showButtomMore && unclampButtonVisible && (
