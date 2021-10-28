@@ -80,47 +80,39 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
             <LocalImageComponent filePath={post.localImages[0].storedFile} alt={post.title} />
           </div>
           <SocialInteraction entity={post} parent={cycle || work || null} showRating={false} showButtonLabels={false} />
-          <table className={styles.parentContent}>
-            <tbody>
-              {work != null && (
-                <tr>
-                  <td className={styles.parentBadges}>
-                    <Badge variant="orange rounded-pill py-1 px-2" className="text-dark fs-6 font-weight-normal">
-                      {t(`common:${work.type}`)}
-                    </Badge>
-                  </td>
-                  <td className="pb-2">
-                    <h6>
-                      <Link href={`/work/${work.id}`}>
-                        <p className="text-break mb-0">
-                          <a className="cursor-pointer">{work.title}</a>
-                        </p>
-                      </Link>
-                    </h6>
-                    <h5 className={styles.workInfoAuthor}>{work.author}</h5>
-                  </td>
-                </tr>
-              )}
-              {post.cycles && post.cycles.length > 0 && (
-                <tr>
-                  <td className={styles.parentBadges}>
-                    <Badge variant="primary rounded-pill py-1 px-2" className="text-dark fs-6 font-weight-normal">
-                      {t('common:cycle')}
-                    </Badge>
-                  </td>
-                  <td>
-                    <h6>
-                      <Link href={`/cycle/${post.cycles[0].id}`}>
-                        <p className="text-break mb-0">
-                          <a className="cursor-pointer">{post.cycles[0].title}</a>
-                        </p>
-                      </Link>
-                    </h6>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+          {work != null && (
+            <aside className="">
+              <Badge variant="orange rounded-pill py-1 px-2" className="text-dark fs-6 font-weight-normal">
+                {t(`common:${work.type}`)}
+              </Badge>
+              <section className="my-1">
+                <h6>
+                  <Link href={`/work/${work.id}`}>
+                    <p className="text-break mb-0">
+                      <a className="cursor-pointer">{work.title}</a>
+                    </p>
+                  </Link>
+                </h6>
+                <h5 className={styles.workInfoAuthor}>{work.author}</h5>
+              </section>
+            </aside>
+          )}
+          {post.cycles && post.cycles.length > 0 && (
+            <aside className="">
+              <Badge variant="primary rounded-pill py-1 px-2" className="text-dark fs-6 font-weight-normal">
+                {t('common:cycle')}
+              </Badge>
+              <section className="my-1">
+                <h6>
+                  <Link href={`/cycle/${post.cycles[0].id}`}>
+                    <p className="text-break mb-0">
+                      <a className="cursor-pointer">{post.cycles[0].title}</a>
+                    </p>
+                  </Link>
+                </h6>
+              </section>
+            </aside>
+          )}
         </Col>
         <Col md={{ span: 8 }}>
           <div className="pt-3 px-4">

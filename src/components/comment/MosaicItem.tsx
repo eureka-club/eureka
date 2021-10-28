@@ -14,6 +14,7 @@ import { DATE_FORMAT_SHORT } from '../../constants';
 import { CommentMosaicItem } from '../../types/comment';
 // import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
+import UnclampText from '../UnclampText';
 import { isCycle, isWork, isPost, isComment /* , Session */ } from '../../types';
 // import { CycleMosaicItem } from '../../types/cycle';
 // import { WorkMosaicItem } from '../../types/work';
@@ -129,7 +130,9 @@ const MosaicItem: FunctionComponent<Props> = ({
           <Card.Body className="pt-0">
             <Row>
               <Col>
-                <div className={styles.dangerouslySetInnerHTML} dangerouslySetInnerHTML={{ __html: contentText }} />
+                <aside className="pt-3 mb-3">
+                  <UnclampText isHTML text={contentText} clampHeight="10rem" />
+                </aside>
               </Col>
             </Row>
             {/* <Row className={styles.bottomRight}>
