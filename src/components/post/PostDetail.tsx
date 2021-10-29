@@ -90,11 +90,11 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
                 <h6 className="mb-0">
                   <Link href={`/work/${work.id}`}>
                     <p className="text-break mb-0">
-                      <a className="cursor-pointer">{work.title}</a>
+                      <a className="cursor-pointer">{work.title}</a>,{' '}
+                      <span className={styles.workInfoAuthor}>{work.author}</span>
                     </p>
                   </Link>
                 </h6>
-                <h5 className={styles.workInfoAuthor}>{work.author}</h5>
               </section>
             </aside>
           )}

@@ -98,9 +98,9 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
           )}
         </ButtonGroup>
 
-        <Row className="mb-5">
+        <>
           {post == null ? (
-            <>
+            <Row className="mb-5">
               <Col md={{ span: 3 }}>
                 <MosaicItem work={work} showTrash />
 
@@ -123,11 +123,11 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
                 </section>
                 {work.contentText != null && <UnclampText text={work.contentText} clampHeight="8rem" />}
               </Col>
-            </>
+            </Row>
           ) : (
             <>{post && work && <PostDetailComponent post={post} work={work} />}</>
           )}
-        </Row>
+        </>
 
         {post == null && (
           <Row className="mb-5">
@@ -147,6 +147,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
                         background-color: var(--primary);
                         color: white;
                         border: none !important;
+                        border-bottom: solid 2px var(--primary) !important;
                       }
                       .nav-tabs {
                         border-bottom: solid 1px var(--primary) !important;

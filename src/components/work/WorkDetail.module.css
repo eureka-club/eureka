@@ -36,3 +36,14 @@
   color: var(--eureka-grey-dark);
   margin-bottom: 3rem;
 }
+
+.tabBtn a{
+  
+  border-bottom: solid 1px var(--primary)!important;
+  
+}
+
+.tabBtn a:hover{
+  background-color: var(--primary)
+  
+}
