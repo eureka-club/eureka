@@ -94,10 +94,10 @@ const NavBar: FunctionComponent = () => {
         <Link href="/">
           <Navbar.Brand className={styles.brandLink}>
             <aside className="d-flex justify-content-around align-items-center">
-              <img src="/logo.svg" className="d-inline-block align-middle mr-2" width={52} alt="Project logo" />
+              <img src="/logo.svg" className="d-inline-block align-middle mr-3" width={45} alt="Project logo" />
               <section>
-                <div className="text-secondary">EUREKA</div>
-                <div className={`text-primary fs-6 fw-bold ${styles.brandInfo}`}>{t('tagline')}</div>
+                <div className="text-secondary">Eureka</div>
+                <div className={`text-primary fs-6 ${styles.brandInfo}`}>{t('tagline')}</div>
               </section>
             </aside>
             {/* <Container>
