@@ -116,7 +116,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
           )}
         </Col>
         <Col md={{ span: 8 }}>
-          <div className="pt-3 px-4">
+          <div className="px-4">
             <div className={classNames('d-flex', styles.postInfo)}>
               <Link href={`/mediatheque/${post.creator.id}`}>
                 {/* <a>
