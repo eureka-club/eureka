@@ -91,14 +91,17 @@ const AboutPage: NextPage = () => {
 
         <h1 className="text-secondary">{t('ethicsHeading')}</h1>
         <p className="summary">
-          {t('ethicsText1')}{' '}
+          {}{' '}
+          <a href="https://www.eureka.club/manifest"> {t('ethicsText1')}</a>
           {/* <a href="https://www.mozilla.org/en-US/about/governance/policies/participation/"> {t('hereLinkENG')}</a>,{' '}
           <a href="https://www.mozilla.org/es-ES/about/governance/policies/participation/"> {t('hereLinkSPA')}</a>,{' '}
           <a href="https://www.mozilla.org/pt-BR/about/governance/policies/participation/"> {t('hereLinkPORT')}</a>,{' '}
           <a href="https://www.mozilla.org/fr/about/governance/policies/participation/"> {t('hereLinkFR')}</a>).*/}
         </p>
         <p className="summary">{t('ethicsText2')}</p>
-        <p>{t('ethicsText3')}</p>
+        <p>{t('ethicsText3')}
+        <a href="mailto:hola@eureka.club">{'hola@eureka.club'}</a>
+        </p>
         {/*<ul style={{ textAlign: 'left' }}>
           <li>{t('violence')}</li>
           <li>{t('attacks')}</li>
@@ -108,7 +111,7 @@ const AboutPage: NextPage = () => {
         <p>
           <em>{t('ethicsText4')}</em>
         </p>*/}
-        <hr />
+        <hr className="my-5"/>
 
         <div className="contact-me" />
       </div>

@@ -9,12 +9,13 @@ $theme-colors: (
   "dark":#343A40,
   "orange":#F5A623,
   "yellow":#FCEFE5,
-  "white":#ffffff,
   "gray-dark":#333,
   "gray":#555,
   "gray-light":#E6E6E6,
   "very-light-secondary":#FCFCFF,
   "very-light-yellow":#FFFDFC,
+  "black":#000000,
+  "white":#ffffff,
 );
 
 @import '~bootstrap/scss/bootstrap.scss';

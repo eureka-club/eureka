@@ -76,17 +76,17 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
               {t('edit')}
             </Button>
           )} */}
-          <div className={classNames(styles.imgWrapper, 'mb-3')}>
+          <div className={classNames(styles.imgWrapper, 'mb-2')}>
             <LocalImageComponent filePath={post.localImages[0].storedFile} alt={post.title} />
           </div>
           <SocialInteraction entity={post} parent={cycle || work || null} showRating={false} showButtonLabels={false} />
           {work != null && (
             <aside className="">
-              <Badge variant="orange rounded-pill py-1 px-2" className="text-dark fs-6 font-weight-normal">
+              <Badge variant="orange rounded-pill py-1 px-2 mt-3" className="text-black fs-6 font-weight-normal">
                 {t(`common:${work.type}`)}
               </Badge>
               <section className="my-1">
-                <h6>
+                <h6 className="mb-0">
                   <Link href={`/work/${work.id}`}>
                     <p className="text-break mb-0">
                       <a className="cursor-pointer">{work.title}</a>
@@ -99,7 +99,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
           )}
           {post.cycles && post.cycles.length > 0 && (
             <aside className="">
-              <Badge variant="primary rounded-pill py-1 px-2" className="text-dark fs-6 font-weight-normal">
+              <Badge variant="primary rounded-pill py-1 px-2 mt-3" className="text-dark fs-6 font-weight-normal">
                 {t('common:cycle')}
               </Badge>
               <section className="my-1">

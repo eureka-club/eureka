@@ -23,7 +23,7 @@
   "hereLinkPORT": "Portuguese",
   "hereLinkFR": "French",
   "ethicsText2": "Please note that by joining Eureka you are agreeing to share some of your personal information with us. Rest assured that we will not share your data with third parties (neither sell it).",
-  "ethicsText3": "You may receive emails from us. To opt out, send us a message at hola@eureka.club - with a subject stating “Opt-out”.",
+  "ethicsText3": "You may receive emails from us. To opt out, send a message with a subject line stating 'Opt-out' to: ",
   "violence": "Violence, threats of or incitement to violence",
   "attacks": "Personal Attacks",
   "language": "Derogatory Language",
@@ -103,13 +103,13 @@
   "eurekaReasonLabel2": "We have a social impact goal: activate minds to transform the world.",
   "headerSessionBtnLabel": "Login to have Eureka moments!",
   "headerLeftBoxTitle": "Tired of meaningless interactions on social media?",
-  "headerLeftBoxText": "Activate your mind with your next book or movie, to think and feel about a topic that matters.",
+  "headerLeftBoxText": "Activate your mind with your next book or movie, to think and feel about a topic that matters",
   "headerCenterBoxTitle": "Join a cycle:",
-  "headerCenterBoxText": "Spaces created for the curious and the experts to dive into a topic, together with a community.",
+  "headerCenterBoxText": "Spaces created for the curious and the experts to dive into a topic, together with a community",
   "headerRightBoxTitle": "Create and share Eureka moments!",
-  "headerRightBoxText": "Your individual revelations that can transform the collective.",
+  "headerRightBoxText": "Your individual revelations that can transform the collective",
   "loadMoreTopics": "Load more topics",
-  "public": "public",
-  "private": "private",
-  "secret": "secret"
+  "public": "Public cycle",
+  "private": "Private cycle",
+  "secret": "Secret cycle"
 }
