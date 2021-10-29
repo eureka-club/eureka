@@ -66,7 +66,12 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
         {items.map((v, idx) => {
           return (
             <span key={`${idx + 1}${t}`}>
-              <Badge className="cursor-pointer" pill variant="secondary" onClick={() => handlerBadgeClick(v)}>
+              <Badge
+                className="fw-normal fs-6 cursor-pointer"
+                pill
+                variant="secondary"
+                onClick={() => handlerBadgeClick(v)}
+              >
                 {formatValue ? formatValue(v) : v}{' '}
                 {!readOnly && (
                   <Badge style={{ cursor: 'pointer' }} onClick={() => deleteTag(idx)} pill variant="default">

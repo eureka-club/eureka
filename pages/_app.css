@@ -2,10 +2,10 @@
 @import '~bootstrap/dist/css/bootstrap.min.css';
 
 @font-face {
-  font-family: 'Ahpuch.Apollyon-Light';
+  font-family: 'Calibri Light';
   font-weight: normal;
   font-style: normal;
-  src: url('/font/ahpuch-apollyon/light.woff2') format('woff2');
+  src: url('/font/calibri-light/Calibri Light.woff2') format('woff2');
 }
 
 :root {
