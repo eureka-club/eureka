@@ -31,12 +31,12 @@
 }
 
 .dropdownMenu {
-  background-color: var(--color-primary);
+  background-color: var(--primary);
   min-width: 7rem;
 }
 .dropdownMenuItem {
   color: #fff;
-  font-weight: bold;
+  
 }
 
 .navbarIconNav {
@@ -79,22 +79,23 @@
   padding-right: 1.25rem;
 }
 .langSwitch :global(.dropdown-item.active) {
-  background-color: var(--eureka-green);
+  background-color: var(--primary);
 }
 .brandLink{
   cursor:pointer;
 }
-.siteName{
+/* .siteName{
   text-transform: uppercase;
   margin-left: 0;
     padding-left: 0;
     letter-spacing: .4em;
     font-family: 'Ahpuch.Apollyon-Light';
-    /* display: inline-block; */
-}
+    
+} 
+*/
 .brandInfo{
   font-size:.5em;
-  /* display:block; */
+  
 }
 .brandContainer{
   margin-right: 0;
