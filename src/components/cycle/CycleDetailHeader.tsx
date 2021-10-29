@@ -237,7 +237,12 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         {getRatingQty()} <span className="fs-6 text-gray">{t('ratings')}</span>
         {cycle.topics && (
           <aside className="d-inline-block ml-5">
-            <TagsInput className="d-inline-block" tags={cycle.topics} readOnly />
+            <TagsInput
+              formatValue={(v: string) => t(`topics:${v}`)}
+              className="d-inline-block"
+              tags={cycle.topics}
+              readOnly
+            />
             <TagsInput className="ml-1 d-inline-block" tags={cycle.tags!} readOnly label="" />
           </aside>
         )}
