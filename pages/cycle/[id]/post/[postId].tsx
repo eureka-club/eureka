@@ -1,13 +1,12 @@
-import { GetServerSideProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { Spinner } from 'react-bootstrap';
-import { EILSEQ } from 'constants';
 import { Session } from '../../../../src/types';
 // import { MySocialInfo, Session } from '../../../../src/types';
 import { CycleMosaicItem } from '../../../../src/types/cycle';
-import { PostMosaicItem } from '../../../../src/types/post';
+// import { PostMosaicItem } from '../../../../src/types/post';
 import SimpleLayout from '../../../../src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '../../../../src/components/cycle/CycleDetail';
 // import { isFavoritedByUser /* isLikedByUser, search as searchPost */ } from '../../../../src/facades/post';
@@ -68,7 +67,7 @@ const PostDetailInCyclePage: NextPage = () => {
   }, [data, router.query.postId]);
 
   const isLoadingOrFetching = () => {
-    return isLoadingSession || isLoading || isLoadingPost || isFetchingPost;
+    return !post && (isLoadingSession || isLoading || isLoadingPost || isFetchingPost);
   };
   return (
     <SimpleLayout title={`${post ? post.title : ''} · ${cycle ? cycle.title : ''}`}>
