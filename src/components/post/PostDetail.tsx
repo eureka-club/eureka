@@ -16,7 +16,8 @@ import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
 // import globalModalsAtom from '../../atoms/globalModals';
 import { WorkMosaicItem } from '../../types/work';
-import HyvorComments from '../common/HyvorComments';
+
+import CommentsList from '../common/CommentsList';
 import LocalImageComponent from '../LocalImage';
 import SocialInteraction from '../common/SocialInteraction';
 import UnclampText from '../UnclampText';
@@ -50,7 +51,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
     }
   }, [cycleContext, router]);
   const { t } = useTranslation('createPostForm');
-  const hyvorId = `post-${post.id}`;
+
   // const [session] = useSession() as [Session | null | undefined, boolean];
   // const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
 
@@ -138,7 +139,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
             <h1 className="text-secondary fw-bold mb-3"> {post.title} </h1>
             {post.contentText != null && <UnclampText text={post.contentText} clampHeight="8rem" />}
           </div>
-          <HyvorComments id={hyvorId} />
+          <CommentsList entity={post} parent={cycle || work} cacheKey={['POST', `${post.id}`]} />
         </Col>
       </Row>
       {/* )) || <Alert variant="warning">Not found</Alert>} */}

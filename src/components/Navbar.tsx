@@ -93,11 +93,11 @@ const NavBar: FunctionComponent = () => {
         {/* <Container> */}
         <Link href="/">
           <Navbar.Brand className={styles.brandLink}>
-            <aside className="d-flex justify-content-around">
-              <img src="/img/logo.png" className="d-inline-block align-middle mr-2" width={52} alt="Project logo" />
+            <aside className="d-flex justify-content-around align-items-center">
+              <img src="/logo.svg" className="d-inline-block align-middle mr-2" width={52} alt="Project logo" />
               <section>
-                <div className={styles.siteName}>{siteName}</div>
-                <div className={styles.brandInfo}>{t('tagline')}</div>
+                <div className="text-secondary">EUREKA</div>
+                <div className={`text-primary fs-6 fw-bold ${styles.brandInfo}`}>{t('tagline')}</div>
               </section>
             </aside>
             {/* <Container>
@@ -164,17 +164,23 @@ const NavBar: FunctionComponent = () => {
               </Dropdown.Toggle>
               <span className={styles.menuBottomInfo}>{t('About')}</span>
               <Dropdown.Menu>
-                <Dropdown.Item onClick={() => router.push('/manifest')}>
+                <Dropdown.Item
+                  active={router.asPath.search(/manifest$/g) !== -1}
+                  onClick={() => router.push('/manifest')}
+                >
                   {/* <Link href="/aboutUs"> */}
                   {t('Manifest')}
                   {/* </Link> */}
                 </Dropdown.Item>
-                <Dropdown.Item onClick={() => router.push('/about')}>
+                <Dropdown.Item active={router.asPath.search(/about$/g) !== -1} onClick={() => router.push('/about')}>
                   {/* <Link href="/about"> */}
                   {t('About Eureka')}
                   {/* </Link> */}
                 </Dropdown.Item>
-                <Dropdown.Item onClick={() => router.push('/aboutUs')}>
+                <Dropdown.Item
+                  active={router.asPath.search(/aboutUs$/g) !== -1}
+                  onClick={() => router.push('/aboutUs')}
+                >
                   {/* <Link href="/aboutUs"> */}
                   {t('About Us')}
                   {/* </Link> */}
