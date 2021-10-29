@@ -6,10 +6,10 @@
 }
 
 .brand {
-  font-family: 'Ahpuch.Apollyon-Light', 'Open Sans', sans-serif;
-  line-height: 72px;
+  font-family: 'Calibri Light';
+  /* line-height: 72px;
   text-transform: uppercase;
-  letter-spacing: 0.5rem;
+  letter-spacing: 0.5rem; */
   cursor: pointer;
 }
 .brandText {
