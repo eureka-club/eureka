@@ -1,6 +1,10 @@
 import { GetServerSideProps, NextPage } from 'next';
+import { Post } from '@prisma/client';
 import { getSession } from 'next-auth/client';
-
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+// import { workerData } from 'worker_threads';
+import { Spinner } from 'react-bootstrap';
 import { MySocialInfo, Session } from '../../../../src/types';
 import { PostMosaicItem } from '../../../../src/types/post';
 import { WorkMosaicItem } from '../../../../src/types/work';
@@ -8,6 +12,8 @@ import SimpleLayout from '../../../../src/components/layouts/SimpleLayout';
 import WorkDetailComponent from '../../../../src/components/work/WorkDetail';
 import { search as searchPost, isFavoritedByUser } from '../../../../src/facades/post';
 import { countCycles, countPosts, find as findWork } from '../../../../src/facades/work';
+import useWork from '../../../../src/useWork';
+import usePost from '../../../../src/usePost';
 
 interface Props {
   post: PostMosaicItem;
@@ -17,18 +23,53 @@ interface Props {
   mySocialInfo: MySocialInfo;
 }
 
-const PostDetailInWorkPage: NextPage<Props> = ({ post, work, cyclesCount, postsCount, mySocialInfo }) => {
-  return (
-    <SimpleLayout title={`${post.title} · ${work.title}`}>
-      <WorkDetailComponent
-        work={work}
-        post={post}
-        cyclesCount={cyclesCount}
-        postsCount={postsCount}
-        mySocialInfo={mySocialInfo}
-      />
-    </SimpleLayout>
+const PostDetailInWorkPage: NextPage<Props> = () => {
+  const router = useRouter();
+  const [id, setId] = useState<string>('');
+  const [postId, setPostId] = useState<string>('');
+  // const [work, setWork] = useState<WorkMosaicItem>();
+  // const [post, setPost] = useState<PostMosaicItem>();
+
+  useEffect(() => {
+    if (router.query.id) {
+      setId(router.query.id as string);
+    }
+    if (router.query.id) {
+      setPostId(router.query.postId as string);
+    }
+  }, [router.query]);
+
+  const { data: work, isLoading: loadingWork } = useWork(+id, { enabled: !!id });
+  const { data: post, isLoading: loadingPost } = usePost(+postId, { enabled: !!postId });
+  const isLoadingData = () => {
+    if (loadingWork) return true;
+    if (loadingPost) return true;
+    return false;
+  };
+
+  const getLayout = (children: JSX.Element, title = '') => {
+    return <SimpleLayout title={title}>{children}</SimpleLayout>;
+  };
+
+  if (!post || !work || isLoadingData()) return getLayout(<Spinner animation="grow" variant="info" />);
+  return getLayout(
+    <WorkDetailComponent work={work!} post={post} cyclesCount={1} postsCount={1} mySocialInfo={{}} />,
+    `${post!.title} · ${work!.title}`,
   );
+
+  // return (
+  //   <SimpleLayout title={`${post.title} · ${work.title}`}>
+  //     {!isLoadingData() && (
+  //       <WorkDetailComponent
+  //         work={work}
+  //         post={post}
+  //         cyclesCount={cyclesCount}
+  //         postsCount={postsCount}
+  //         mySocialInfo={mySocialInfo}
+  //       />
+  //     )}
+  //   </SimpleLayout>
+  // );
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
