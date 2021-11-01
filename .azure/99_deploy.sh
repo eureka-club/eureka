@@ -93,6 +93,7 @@ function configure_app_service {
 			AZURE_STORAGE_ACCOUNT_ACCESS_KEY=$(eval echo "\$$(join_by '_' "AZURE_STORAGE_ACCOUNT_ACCESS_KEY" ${3^^})") \
 			AZURE_STORAGE_ACCOUNT_NAME=$(eval echo "\$$(join_by '_' "AZURE_STORAGE_ACCOUNT_NAME" ${3^^})") \
 			DATABASE_URL=$(eval echo "\$$(join_by '_' "DATABASE_URL" ${3^^})") \
+			UPSTASH_REDIS_REST_URL=$(eval echo "\$$(join_by '_' "UPSTASH_REDIS_REST_URL" ${3^^})") \
 			EMAILING_FROM=${EMAILING_FROM} \
 			EMAIL_SERVER_HOST=${EMAIL_SERVER_HOST} \
 			EMAIL_SERVER_PORT=${EMAIL_SERVER_PORT} \
