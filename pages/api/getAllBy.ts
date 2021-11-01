@@ -5,6 +5,7 @@ import { Work, Cycle } from '@prisma/client';
 import getApiHandler from '../../src/lib/getApiHandler';
 import prisma from '../../src/lib/prisma';
 // import { WorkWithImages } from '../../../src/types/work';
+import redis from '../../src/lib/redis';
 
 export const config = {
   api: {
@@ -17,12 +18,18 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     const data: (Work | (Cycle & { type: string }))[] = [];
     // const result: { [index: string]: (Work | (Cycle & { type: string }))[] } = {};
     const { cursor, topic, extraCyclesRequired = 0, extraWorksRequired = 0 } = req.query;
+    const c = parseInt(cursor as string, 10);
+    const redisKey = `getAllBy-topic-${topic}-cursor-${c}`;
+    const cachedResult = await redis.get(redisKey);
+    if (cachedResult) {
+      const obj = JSON.parse(cachedResult);
+      return res.status(200).json(obj);
+    }
 
     let { totalWorks = -1, totalCycles = -1 } = req.query;
     totalWorks = parseInt(totalWorks as string, 10);
     totalCycles = parseInt(totalCycles as string, 10);
 
-    const c = parseInt(cursor as string, 10);
     const countItemsPerPage = 2;
     const toShow = ['work', 'cycle'];
     // const topicsRes = await prisma.term.findMany({
@@ -152,7 +159,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     //   });
     // });
 
-    res.status(200).json({
+    const result = {
       status: 'OK',
       data,
       extraCyclesRequired: cyclesPlus,
@@ -162,10 +169,14 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
       totalCycles,
       prevCursor: c,
       nextCursor: c + 1,
-    });
+    };
+    const seconds = 60 * 60 * 8; //8 hours
+    redis.set(redisKey, JSON.stringify(result), 'EX', seconds);
+
+    return res.status(200).json(result);
   } catch (exc) {
     console.error(exc); // eslint-disable-line no-console
-    res.status(500).json({ status: 'server error' });
+    return res.status(500).json({ status: 'server error' });
   } finally {
     prisma.$disconnect();
   }
