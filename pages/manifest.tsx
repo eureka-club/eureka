@@ -106,7 +106,7 @@ const ManifestPage: NextPage = () => {
                 onClick={() => toggleBox(1, 2)}
                 role="presentation"
               >
-                <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow2Box1Title')}</h2>
+                <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow1Box2Title')}</h2>
                 <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow1Box2Desc')}</p>
               </aside>
             )}
@@ -134,7 +134,7 @@ const ManifestPage: NextPage = () => {
                 onClick={() => toggleBox(1, 3)}
                 role="presentation"
               >
-                <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow3Box1Title')}</h2>
+                <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow1Box3Title')}</h2>
                 <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow1Box3Desc')}</p>
               </aside>
             )}
@@ -294,7 +294,7 @@ const ManifestPage: NextPage = () => {
               >
                 <aside className={`${styles.box} ${styles.bgRow3Box3}`} />
                 <h2 className="h3 text-left">
-                  {t('manifestRow3Box3Title')} <span className="text-secondary">{t('manifestRow3Box3Title')}</span>
+                  {t('manifestRow3Box3Title')} 
                 </h2>
                 <h5 className="cursor-pointer fs-6">
                   {t('learnMore')} <CgArrowLongRight />
@@ -408,7 +408,9 @@ const ManifestPage: NextPage = () => {
                 <li>{t('manifestEnforcement6')}</li>
                 <li>{t('manifestEnforcement7')}</li>
               </ol>
-              <p>{t('enforcementFooterLbl')}</p>
+              <p>{t('enforcementFooterLbl')}
+              <a href="mailto:hola@eureka.club">hola@eureka.club</a>
+              </p>
             </Col>
           </Row>
         </section>

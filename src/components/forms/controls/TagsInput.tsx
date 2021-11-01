@@ -67,9 +67,9 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
           return (
             <span key={`${idx + 1}${t}`}>
               <Badge
-                className="fw-normal fs-6 cursor-pointer"
+                className="fw-light fs-6 cursor-pointer"
                 pill
-                variant="secondary"
+                variant="secondary px-2 py-1 mb-1 mr-1"
                 onClick={() => handlerBadgeClick(v)}
               >
                 {formatValue ? formatValue(v) : v}{' '}
