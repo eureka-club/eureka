@@ -293,9 +293,7 @@ const ManifestPage: NextPage = () => {
                 role="presentation"
               >
                 <aside className={`${styles.box} ${styles.bgRow3Box3}`} />
-                <h2 className="h3 text-left">
-                  {t('manifestRow3Box3Title')} 
-                </h2>
+                <h2 className="h3 text-left">{t('manifestRow3Box3Title')}</h2>
                 <h5 className="cursor-pointer fs-6">
                   {t('learnMore')} <CgArrowLongRight />
                 </h5>
@@ -408,8 +406,9 @@ const ManifestPage: NextPage = () => {
                 <li>{t('manifestEnforcement6')}</li>
                 <li>{t('manifestEnforcement7')}</li>
               </ol>
-              <p>{t('enforcementFooterLbl')}
-              <a href="mailto:hola@eureka.club">hola@eureka.club</a>
+              <p>
+                {t('enforcementFooterLbl')}
+                <a href="mailto:hola@eureka.club">hola@eureka.club</a>
               </p>
             </Col>
           </Row>
