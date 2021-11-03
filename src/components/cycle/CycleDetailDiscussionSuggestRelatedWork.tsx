@@ -202,7 +202,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
     addWorkToCycle();
   };
 
-  const handleCreateWorkClick = (ev: MouseEvent<DropdownItemProps>) => {
+  const handleCreateWorkClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
 
     setGlobalModalsState({ ...globalModalsState, ...{ createWorkModalOpened: true } });

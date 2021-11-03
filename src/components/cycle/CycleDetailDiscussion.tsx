@@ -124,12 +124,9 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
               {session && session.user && <UserAvatar user={session.user} showName={false} />}
             </Col>
             <Col xs={12} md={11}>
-              <ButtonGroup as={Row} className={styles.optButtons} size="lg">
+              <ButtonGroup className={`d-flex justify-content-between ${styles.optButtons}`} size="lg">
                 <Button
                   onClick={handleCreateEurekaClick}
-                  as={Col}
-                  xs={12}
-                  md={canCreateWork() ? 4 : 6}
                   className={`d-flex align-items-center  justify-content-center ${styles.optButton} ${
                     styles.eurekaBtn
                   } ${isCreateEureka && styles.optButtonActive}`}
@@ -139,9 +136,6 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
                 </Button>
                 <Button
                   onClick={handleCreateCommentClick}
-                  as={Col}
-                  xs={12}
-                  md={canCreateWork() ? 4 : 6}
                   className={`d-flex align-items-center  justify-content-center ${styles.optButton} ${
                     styles.commentBtn
                   } ${isCreateComment && styles.optButtonActive}`}
@@ -151,9 +145,6 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
                 {canCreateWork() && (
                   <Button
                     onClick={handleCreateRelatedWorkClick}
-                    as={Col}
-                    xs={12}
-                    md={4}
                     className={`d-flex align-items-center  justify-content-center ${styles.optButton} ${
                       styles.relatedWorkBtn
                     } ${isSuggestRelatedWork && styles.optButtonActive}`}

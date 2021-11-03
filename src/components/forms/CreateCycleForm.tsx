@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import Trans from 'next-translate/Trans';
 import { ChangeEvent, FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
-import { Button, Col, Form, ButtonGroup, ListGroup, FormFile, Modal, Row, Spinner } from 'react-bootstrap';
+import { Button, Col, Form, ButtonGroup, ListGroup, Modal, Row, Spinner } from 'react-bootstrap';
 import { useMutation } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BiTrash, BiPlus, BiEdit } from 'react-icons/bi';
@@ -900,7 +900,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
               <Button
                 onClick={handleWorkSearchAppend}
                 variant="primary"
-                block
+                size="lg"
                 type="button"
                 className={styles.addWorkModalButton}
               >
@@ -955,22 +955,24 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
               </Col>
               <Form.Group as={Col} controlId="complementaryMaterialFile">
                 <Form.Label>{t('complementaryMaterialFileFieldLabel')}</Form.Label>
-                <FormFile
-                  custom
+                <Form.Label>
+                  {complementaryMaterialFile != null ? (
+                    <>
+                      <small>[{Math.round((complementaryMaterialFile.size / 1024 / 1024) * 10) / 10}MB]</small>{' '}
+                      {complementaryMaterialFile.name}
+                    </>
+                  ) : (
+                    ''
+                  )}
+                </Form.Label>
+                <Form.Control
+                  type="file"
                   onChange={handleComplementaryMaterialFileInputChange}
-                  label={
-                    complementaryMaterialFile != null ? (
-                      <>
-                        <small>[{Math.round((complementaryMaterialFile.size / 1024 / 1024) * 10) / 10}MB]</small>{' '}
-                        {complementaryMaterialFile.name}
-                      </>
-                    ) : (
-                      ''
-                    )
-                  }
                   isInvalid={complementaryMaterialFileOversizeError}
-                  feedback={t('complementaryMaterialFileOversizeError')}
                 />
+                <Form.Control.Feedback type="invalid">
+                  {t('complementaryMaterialFileOversizeError')}
+                </Form.Control.Feedback>
               </Form.Group>
             </Row>
 

@@ -180,13 +180,9 @@ const SearchEngine: FunctionComponent = () => {
               </Menu>
             )}
           />
-          <InputGroup.Append className={styles.searchButton}>
-            {/* <Button
-              onClick={() => { }}
-                variant="outline-secondary"> */}
+          <InputGroup.Text className="text-white  cursor-pointer bg-primary">
             <AiOutlineSearch onClick={onItemsFound} />
-            {/* </Button> */}
-          </InputGroup.Append>
+          </InputGroup.Text>
         </InputGroup>
       </Form.Group>
 

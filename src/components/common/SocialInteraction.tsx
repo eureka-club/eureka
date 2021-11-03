@@ -425,7 +425,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   // }, [isSocialInteractionSuccess]);
   const popoverShares = (
     <Popover id="popover-basic">
-      <Popover.Content>
+      <Popover.Body>
         <TwitterShareButton url={shareUrl} title={shareText} via="eleurekaclub">
           <TwitterIcon size={32} round />
           {` ${t('wayShare')} Twitter`}
@@ -440,7 +440,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
           <WhatsappIcon size={32} round />
           {` ${t('wayShare')} Whatsapp`}
         </WhatsappShareButton>
-      </Popover.Content>
+      </Popover.Body>
     </Popover>
   );
 

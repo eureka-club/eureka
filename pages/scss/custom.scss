@@ -17,6 +17,9 @@ $theme-colors: (
   "black":#000000,
   "white":#ffffff,
 );
+$font-sizes: (
+  6: 0.875rem,
+);
 
 @import '~bootstrap/scss/bootstrap.scss';
 
@@ -79,9 +82,7 @@ body {
 .fw-bolder{
   font-weight: bold!important;
 }
-.fs-6{
-  font-size: 0.875rem;
-}
+
 .fst-italic {
   font-style: italic!important;
 }

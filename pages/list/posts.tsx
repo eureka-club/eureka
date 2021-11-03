@@ -5,7 +5,6 @@ import { useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
-import PopoverContent from 'react-bootstrap/PopoverContent';
 import Table from 'react-bootstrap/Table';
 import { useMutation } from 'react-query';
 
@@ -75,11 +74,11 @@ const ListPostsPage: NextPage<Props> = ({ posts }) => {
                   transition={false}
                   overlay={
                     <Popover id="confirmDelete">
-                      <PopoverContent>
+                      <Popover.Body>
                         <Button variant="danger" onClick={() => handleDeleteClick(post)}>
                           confirm delete!!!
                         </Button>
-                      </PopoverContent>
+                      </Popover.Body>
                     </Popover>
                   }
                 >

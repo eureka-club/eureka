@@ -243,13 +243,13 @@ const EditWorkForm: FunctionComponent = () => {
               <Col>
                 <FormGroup controlId="type">
                   <FormLabel>*{t('typeFieldLabel')}</FormLabel>
-                  <FormControl as="select" required onChange={handleWorkTypeChange} defaultValue={work.type}>
+                  <Form.Select as="select" required onChange={handleWorkTypeChange} defaultValue={work.type}>
                     <option value="">{t('typeFieldPlaceholder')}</option>
                     <option value="book">{t('common:book')}</option>
                     <option value="fiction-book">{t('common:fiction-book')}</option>
                     <option value="documentary">{t('common:documentary')}</option>
                     <option value="movie">{t('common:movie')}</option>
-                  </FormControl>
+                  </Form.Select>
                 </FormGroup>
               </Col>
               <Col>

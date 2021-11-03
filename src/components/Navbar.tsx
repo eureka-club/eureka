@@ -46,19 +46,19 @@ const NavBar: FunctionComponent = () => {
     setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
   };
 
-  const handleCreatePostClick = (ev: MouseEvent<DropdownItemProps>) => {
+  const handleCreatePostClick = (ev: MouseEvent<HTMLElement>) => {
     ev.preventDefault();
 
     setGlobalModalsState({ ...globalModalsState, ...{ createPostModalOpened: true } });
   };
 
-  const handleCreateWorkClick = (ev: MouseEvent<DropdownItemProps>) => {
+  const handleCreateWorkClick = (ev: MouseEvent<HTMLElement>) => {
     ev.preventDefault();
 
     setGlobalModalsState({ ...globalModalsState, ...{ createWorkModalOpened: true } });
   };
 
-  const handlerEditUserClick = (ev: MouseEvent<DropdownItemProps>) => {
+  const handlerEditUserClick = (ev: MouseEvent<HTMLElement>) => {
     ev.preventDefault();
     setGlobalModalsState({ ...globalModalsState, ...{ editUserModalOpened: true } });
   };
@@ -88,16 +88,16 @@ const NavBar: FunctionComponent = () => {
   };
 
   return (
-    <Container className={styles.container}>
+    <Container>
       <Navbar collapseOnSelect expand="lg" variant="light">
         {/* <Container> */}
         <Link href="/">
-          <Navbar.Brand className={styles.brandLink}>
+          <Navbar.Brand className="cursor-pointer">
             <aside className="d-flex justify-content-around align-items-center">
-              <img src="/logo.svg" className="d-inline-block align-middle mr-3" width={45} alt="Project logo" />
+              <img src="/logo.svg" width={45} alt="Project logo" />
               <section>
-                <div className={`text-secondary h4 mb-0 ${styles.brand}`}>Eureka</div>
-                <div className={`text-secondary font-weight-light fs-6 ${styles.brandInfo}`}>{t('tagline')}</div>
+                <div className={`text-secondary ms-3 h4 mb-0 ${styles.brand}`}>Eureka</div>
+                <div className="text-secondary ms-3 font-weight-light fs-6">{t('tagline')}</div>
               </section>
             </aside>
             {/* <Container>
@@ -120,7 +120,13 @@ const NavBar: FunctionComponent = () => {
           <Nav className={styles.navbarNav}>
             <SearchEngine />
           </Nav>
-          <Nav className={styles.navbarNav}>{!session && <Button onClick={openSignInModal}>{t('login')}</Button>}</Nav>
+          <Nav className={styles.navbarNav}>
+            {!session && (
+              <Button className="text-white" onClick={openSignInModal}>
+                {t('login')}
+              </Button>
+            )}
+          </Nav>
           <Nav className={styles.navbarNav}>
             {session && session.user && (
               <Dropdown className="mr-4">
@@ -158,7 +164,7 @@ const NavBar: FunctionComponent = () => {
             </Nav>
           )}
           <Nav className={styles.navbarNav}>
-            <Dropdown alignRight className={styles.langSwitch}>
+            <Dropdown align="end" className={styles.langSwitch}>
               <Dropdown.Toggle as={ChevronToggle}>
                 <AiOutlineInfoCircle className={styles.navbarIconNav} />
               </Dropdown.Toggle>
@@ -190,7 +196,7 @@ const NavBar: FunctionComponent = () => {
           </Nav>
           <Nav className={styles.navbarNav}>
             {router.locales?.length && (
-              <Dropdown alignRight className={styles.langSwitch} onSelect={handleLanguageSelect}>
+              <Dropdown align="end" className={styles.langSwitch} onSelect={handleLanguageSelect}>
                 <Dropdown.Toggle as={ChevronToggle} id="langSwitch">
                   <img
                     className={styles.navbarIconNav}
@@ -213,7 +219,7 @@ const NavBar: FunctionComponent = () => {
           </Nav>
           {session && session.user && (
             <Nav className={styles.navbarNav}>
-              <Dropdown alignRight className={styles.langSwitch}>
+              <Dropdown align="end" className={styles.langSwitch}>
                 <Dropdown.Toggle as={ChevronToggle}>{getAvatar()}</Dropdown.Toggle>
                 <span className={styles.menuBottomInfo}>{t('Account')}</span>
                 <Dropdown.Menu>

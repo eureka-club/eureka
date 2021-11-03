@@ -5,6 +5,7 @@ import { Session } from '../../../../src/types';
 import getApiHandler from '../../../../src/lib/getApiHandler';
 import { find, saveSocialInteraction } from '../../../../src/facades/work';
 import prisma from '../../../../src/lib/prisma';
+import redis from '../../../../src/lib/redis';
 
 const validateReq = async (
   session: Session,
@@ -31,7 +32,6 @@ const validateReq = async (
     res.status(404).end();
     return false;
   }
-
   return true;
 };
 
@@ -55,7 +55,7 @@ export default getApiHandler()
 
       // @ts-ignore arguments checked in validateReq()
       await saveSocialInteraction(work, session.user, socialInteraction, true, qty);
-
+      await redis.flushall();
       res.status(200).json({ status: 'OK' });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
@@ -81,7 +81,7 @@ export default getApiHandler()
 
       // @ts-ignore arguments checked in validateReq()
       await saveSocialInteraction(work, session.user, socialInteraction, false);
-
+      await redis.flushall();
       res.status(200).json({ status: 'OK' });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

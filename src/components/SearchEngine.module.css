@@ -1,9 +1,8 @@
 .container{
   padding-bottom: 0;
   margin-bottom: 0;
-  width:20em;
+  /* width:20em; */
   
-  margin-top: 1em;
   /* border-bottom: solid 1px rgb(240, 238, 238); */
 }
 .formGroup{
@@ -15,18 +14,6 @@
   border: solid 1px #e0dede;
   border-radius: 1em;
   background: #f3f1f1;
-}
-.searchButton{
-  color: white;
-    border: solid 1px #13B4BC;
-    background: #13B4BC;
-    border-radius: 50%;
-    width: 2em;
-    padding: .4em;
-    margin: 3px 0 0 -40px;
-    position: relative;
-    height: 2em;
-    cursor: pointer;
 }
 .rbt-input{
   background: gray!important;

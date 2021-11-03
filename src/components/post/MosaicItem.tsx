@@ -139,7 +139,7 @@ const MosaicItem: FunctionComponent<Props> = ({
               </>
             )}
           </div>
-          <Badge variant="success" className={`fw-normal fs-6 text-white px-2 rounded-pill ${styles.type}`}>
+          <Badge bg="success" className={`fw-normal fs-6 text-white px-2 rounded-pill ${styles.type}`}>
             {t(type || 'post')}
           </Badge>
         </div>

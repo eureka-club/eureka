@@ -1,9 +1,9 @@
-.container {
+/* .container {
   box-shadow: 0 15px 20px -30px rgba(0, 0, 0, 0.5);
   max-width: 1440px;
   padding-left: 4rem;
   padding-right: 4rem;
-}
+} */
 
 .brand {
   font-family: 'Calibri Light';
@@ -81,9 +81,7 @@
 .langSwitch :global(.dropdown-item.active) {
   background-color: var(--primary);
 }
-.brandLink{
-  cursor:pointer;
-}
+
 /* .siteName{
   text-transform: uppercase;
   margin-left: 0;
@@ -93,14 +91,7 @@
     
 } 
 */
-.brandInfo{
-  font-size:.5em;
-  
-}
-.brandContainer{
-  margin-right: 0;
-  padding-right: 0;
-}
+
 .navbarNav{
   margin-right:2em;
 }
