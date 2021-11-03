@@ -9,7 +9,7 @@ export const getRecords = async (id: number): Promise<WorkMosaicItem | undefined
   if (!res.ok) return undefined;
   const result = await res.json();
 
-  return { ...result.work, type: 'work' };
+  return { ...result.work };
 };
 
 interface Options {

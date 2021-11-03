@@ -1,5 +1,6 @@
 import { ChangeEvent, FunctionComponent, MouseEvent, ReactNode, RefObject, useEffect, useRef, useState } from 'react';
-import FormFile from 'react-bootstrap/FormFile';
+import { Form } from 'react-bootstrap';
+// import FormFile from 'react-bootstrap/FormFile';
 
 import styles from './ImageFileSelect.module.css';
 
@@ -56,12 +57,13 @@ const ImageFileSelect: FunctionComponent<Props> = ({
 
   return (
     <aside className={`${className}`}>
-      <FormFile
+      <Form.Control
+        type="file"
         accept={acceptedFileTypes}
         onChange={handleFileInputChange}
         ref={coverInputRef}
         required={required}
-        className={`${styles.fileControl} ${className}`}
+        className={`d-none ${styles.fileControl} ${className}`}
       />
 
       <button className={styles.trigger} type="button" onClick={handleTriggerClick}>
