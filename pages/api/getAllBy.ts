@@ -19,12 +19,12 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     // const result: { [index: string]: (Work | (Cycle & { type: string }))[] } = {};
     const { cursor, topic, extraCyclesRequired = 0, extraWorksRequired = 0 } = req.query;
     const c = parseInt(cursor as string, 10);
-    const redisKey = `getAllBy-topic-${topic}-cursor-${c}`;
-    const cachedResult = await redis.get(redisKey);
-    if (cachedResult) {
-      const obj = JSON.parse(cachedResult);
-      return res.status(200).json(obj);
-    }
+    // const redisKey = `getAllBy-topic-${topic}-cursor-${c}`;
+    // const cachedResult = await redis.get(redisKey);
+    // if (cachedResult) {
+    //   const obj = JSON.parse(cachedResult);
+    //   return res.status(200).json(obj);
+    // }
 
     let { totalWorks = -1, totalCycles = -1 } = req.query;
     totalWorks = parseInt(totalWorks as string, 10);
@@ -170,8 +170,8 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
       prevCursor: c,
       nextCursor: c + 1,
     };
-    const seconds = 60 * 60 * 8; //8 hours
-    redis.set(redisKey, JSON.stringify(result), 'EX', seconds);
+    // const seconds = 60 * 60 * 8; //8 hours
+    // redis.set(redisKey, JSON.stringify(result), 'EX', seconds);
 
     return res.status(200).json(result);
   } catch (exc) {
