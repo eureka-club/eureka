@@ -7,6 +7,7 @@ import getApiHandler from '../../../src/lib/getApiHandler';
 import { storeUpload } from '../../../src/facades/fileUpload';
 import { createFromServerFields /* , findAll */ } from '../../../src/facades/cycle';
 import prisma from '../../../src/lib/prisma';
+import redis from '../../../src/lib/redis';
 import { asyncForEach } from '../../../src/lib/utils';
 
 export const config = {
@@ -60,7 +61,7 @@ export default getApiHandler()
           JSON.parse(fields.guidelines),
           cycleWorksDates,
         );
-
+        await redis.flushall();
         res.status(201).json(cycle);
       } catch (exc) {
         console.error(exc); // eslint-disable-line no-console

@@ -8,6 +8,7 @@ import { Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { find, remove } from '../../../src/facades/cycle';
 import prisma from '../../../src/lib/prisma';
+import redis from '../../../src/lib/redis';
 
 dayjs.extend(utc);
 export default getApiHandler()
@@ -38,7 +39,7 @@ export default getApiHandler()
       }
 
       await remove(cycle);
-
+      await redis.flushall();
       res.status(200).json({ status: 'OK' });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
@@ -90,26 +91,27 @@ export default getApiHandler()
     let data = req.body;
 
     const { id, includedWorksIds } = data;
-    let r: Cycle;
-    if (includedWorksIds) {
-      r = await prisma.cycle.update({
-        where: { id },
-        data: {
-          updatedAt: dayjs().utc().format(),
-          works: { connect: includedWorksIds.map((workId: number) => ({ id: workId })) },
-        },
-      });
-    } else {
-      data.startDate = dayjs(`${data.startDate}`, 'YYYY').utc().format();
-      data.endDate = dayjs(`${data.endDate}`, 'YYYY').utc().format();
-      delete data.id;
-      data = {
-        ...data,
-      };
-      r = await prisma.cycle.update({ where: { id }, data });
-    }
 
     try {
+      let r: Cycle;
+      if (includedWorksIds) {
+        r = await prisma.cycle.update({
+          where: { id },
+          data: {
+            updatedAt: dayjs().utc().format(),
+            works: { connect: includedWorksIds.map((workId: number) => ({ id: workId })) },
+          },
+        });
+      } else {
+        data.startDate = dayjs(`${data.startDate}`, 'YYYY').utc().format();
+        data.endDate = dayjs(`${data.endDate}`, 'YYYY').utc().format();
+        delete data.id;
+        data = {
+          ...data,
+        };
+        r = await prisma.cycle.update({ where: { id }, data });
+      }
+      await redis.flushall();
       res.status(200).json({ ...r });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
