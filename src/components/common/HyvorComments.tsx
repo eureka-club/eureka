@@ -1,16 +1,17 @@
-import crypto from 'crypto-js';
-import HyvorTalk from 'hyvor-talk-react';
-import { FunctionComponent } from 'react';
-import { useSession } from 'next-auth/client';
+// import crypto from 'crypto-js';
+// import HyvorTalk from 'hyvor-talk-react';
+// import { FunctionComponent } from 'react';
+// import { useSession } from 'next-auth/client';
 
-import { HYVOR_SSO_KEY, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
-import { Session } from '../../types';
+// import { HYVOR_SSO_KEY, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
+// import { Session } from '../../types';
 
-interface Props {
-  id: string;
-}
+// interface Props {
+//   id: string;
+// }
+export {};
 
-const HyvorComments: FunctionComponent<Props> = ({ id }) => {
+/* const HyvorComments: FunctionComponent<Props> = ({ id }) => {
   const [session, isSessionLoading] = useSession() as [Session | null | undefined, boolean];
   let hyvorSso = {};
 
@@ -40,3 +41,4 @@ const HyvorComments: FunctionComponent<Props> = ({ id }) => {
 };
 
 export default HyvorComments;
+ */

@@ -463,7 +463,7 @@ const EditPostForm: FunctionComponent = () => {
                 </small>
               </Col>
               <Col style={{ borderLeft: '1px solid lightgrey' }}>
-                <Button variant="primary" disabled={isEditPostLoading} type="submit" className="pl-5 pr-4 float-right">
+                <Button variant="primary" disabled={isEditPostLoading} type="submit" className="ps-5 pe-4 float-right">
                   {t('titleEdit')}
                   {isEditPostLoading ? (
                     <Spinner size="sm" animation="grow" variant="secondary" className={styles.loadIndicator} />

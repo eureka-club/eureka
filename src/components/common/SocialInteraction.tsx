@@ -497,7 +497,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
       <div className="d-flex">
         {showRating && (
           // <Col xs={10}>
-          <div className="pl-1">
+          <div className="ps-1">
             {showRating && getRatingLabelInfo()}
             {` `}
             {showRating && (
@@ -530,7 +530,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
           </div>
         )}
         {showShare && (
-          <div className="ml-auto">
+          <div className="ms-auto">
             <OverlayTrigger trigger="click" placement="right" overlay={popoverShares}>
               <Button
                 // style={{ fontSize: '.9em' }}
@@ -546,7 +546,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
           </div>
         )}
         {/* <Col xs={showRating ? 2 : 12}> */}
-        <div className={`${showShare ? 'ml-1' : 'ml-auto'}`}>
+        <div className={`${showShare ? 'ms-1' : 'ms-auto'}`}>
           {!loadingSocialInteraction && (
             <Button
               variant="link"

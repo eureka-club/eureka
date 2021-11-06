@@ -21,7 +21,6 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     const c = parseInt(cursor as string, 10);
     const redisKey = `getAllBy-topic-${topic}-cursor-${c}`;
     const cachedResult = await redis.get(redisKey);
-    debugger;
     if (cachedResult) {
       const obj = JSON.parse(cachedResult);
       return res.status(200).json(obj);

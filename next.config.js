@@ -6,4 +6,8 @@ module.exports = {
     sassOptions: {
         includePaths: [path.join(__dirname, 'scss')],
     },
+    env: {
+        NEXT_PUBLIC_SITE_NAME:"Eureka",
+        NEXT_PUBLIC_LOCAL_ASSETS_BASE_URL:"/assets"
+    }
 };

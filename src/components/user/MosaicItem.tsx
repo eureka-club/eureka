@@ -5,7 +5,7 @@ import { Card, Row, Col } from 'react-bootstrap';
 import { AiOutlineEnvironment } from 'react-icons/ai';
 // import { useQuery } from 'react-query';
 import { useSession } from 'next-auth/client';
-import { User } from '@prisma/client';
+// import { User } from '@prisma/client';
 import router from 'next/router';
 import styles from './MosaicItem.module.css';
 import SocialInteraction from '../common/SocialInteraction';
@@ -27,7 +27,7 @@ const openUserMediatheque = (id: number) => {
 
 const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = false }) => {
   const { t } = useTranslation('common');
-  const { id, name, countryOfOrigin, image /* , tags */ } = user;
+  const { id, name, countryOfOrigin /* image  , tags */ } = user;
   const [session] = useSession() as [Session | null | undefined, boolean];
 
   return (

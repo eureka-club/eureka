@@ -166,10 +166,10 @@ const MosaicItem: FunctionComponent<Props> = ({
     return (
       <Card className={`mt-3 ${styles.container} ${className}`}>
         <Row>
-          <Col xs={2} md={1} className="pr-1">
+          <Col xs={2} md={1} className="pe-1">
             <Avatar user={comment.creator} showName={false} />
           </Col>
-          <Col xs={10} md={11} className="pl-1">
+          <Col xs={10} md={11} className="ps-1">
             <div className={styles.dangerouslySetInnerHTML} dangerouslySetInnerHTML={{ __html: contentText }} />
             <Button variant="default" className={styles.replyButton}>
               <MdReply />

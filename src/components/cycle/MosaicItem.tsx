@@ -235,7 +235,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           </Button>
         ) : (
           showJoinButtonCycle() && (
-            <Button onClick={handleJoinCycleClick} className="w-75">
+            <Button onClick={handleJoinCycleClick} className="w-75 text-white">
               {t('joinCycleLabel')}
             </Button>
           )

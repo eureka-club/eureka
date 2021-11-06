@@ -196,7 +196,7 @@ const CommentsList: FunctionComponent<Props> = ({
           </InputGroup>
         </Form>
       )}
-      <div className="ml-5">
+      <div className="ms-5">
         {renderComment()}
         {(filterdComments && filterdComments.length && (
           <div>

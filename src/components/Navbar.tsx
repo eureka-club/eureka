@@ -34,7 +34,7 @@ import ChevronToggle from './ui/dropdown/ChevronToggle';
 import globalModalsAtom from '../atoms/globalModals';
 import styles from './Navbar.module.css';
 
-const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
+// const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
 
 const NavBar: FunctionComponent = () => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -88,7 +88,7 @@ const NavBar: FunctionComponent = () => {
   };
 
   return (
-    <Container>
+    <Container className={styles.container}>
       <Navbar collapseOnSelect expand="lg" variant="light">
         {/* <Container> */}
         <Link href="/">
@@ -102,9 +102,9 @@ const NavBar: FunctionComponent = () => {
             </aside>
             {/* <Container>
               <Col xs={4} className={styles.brandContainer}>
-                <img src="/img/logo.png" className="d-inline-block align-middle mr-2" width={52} alt="Project logo" />
+                <img src="/img/logo.png" className="d-inline-block align-middle me-2" width={52} alt="Project logo" />
               </Col>
-              <Col xs={7} className="pr-0">
+              <Col xs={7} className="pe-0">
                 
                 <div className={styles.siteName}>{siteName}</div>
 
@@ -129,7 +129,7 @@ const NavBar: FunctionComponent = () => {
           </Nav>
           <Nav className={styles.navbarNav}>
             {session && session.user && (
-              <Dropdown className="mr-4">
+              <Dropdown className="me-4">
                 <Dropdown.Toggle as={ChevronToggle} id="create">
                   {t('create')}
                 </Dropdown.Toggle>

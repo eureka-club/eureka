@@ -158,8 +158,8 @@ const MosaicItem: FunctionComponent<Props> = ({
         {showSocialInteraction && post && (
           <Card.Footer className={`d-flex ${styles.footer}`}>
             <div className={` ${styles.commentsInfo}`}>
-              <FaRegComments className="ml-1" />{' '}
-              <span className="ml-1">
+              <FaRegComments className="ms-1" />{' '}
+              <span className="ms-1">
                 {post.comments.length} {`${t('Replies')}`}
               </span>
             </div>
@@ -172,7 +172,7 @@ const MosaicItem: FunctionComponent<Props> = ({
               parent={postParent}
               showRating={false}
               showTrash={false}
-              className="ml-auto"
+              className="ms-auto"
             />
           </Card.Footer>
         )}

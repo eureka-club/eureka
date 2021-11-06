@@ -35,7 +35,7 @@ const Toast: FunctionComponent<Props> = ({ className = '' }) => {
             <T.Header className={`bg-${globalModalsState.showToast.type} text-white`}>
               {globalModalsState.showToast.title && (
                 <>
-                  <strong className="mr-auto">{globalModalsState.showToast.title}</strong>
+                  <strong className="me-auto">{globalModalsState.showToast.title}</strong>
                   {/* <small>{new Date().toLocaleString()}</small> */}
                 </>
               )}

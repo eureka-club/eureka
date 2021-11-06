@@ -50,7 +50,7 @@ const UserAvatar: FunctionComponent<Props> = ({
                 onError={onLoadImgError}
                 src={user.image || '/img/default-avatar.png'}
                 alt="creator avatar"
-                className={`${styles.cycleCreatorAvatar} mr-2`}
+                className={`${styles.cycleCreatorAvatar} me-2`}
               />
               {renderUserName()}
             </a>

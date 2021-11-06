@@ -433,7 +433,7 @@ const CreatePostForm: FunctionComponent = () => {
               </small>
             </Col>
             <Col style={{ borderLeft: '1px solid lightgrey' }}>
-              <Button variant="primary" type="submit" className="pl-5 pr-4 float-right">
+              <Button variant="primary" type="submit" className="ps-5 pe-4 float-right">
                 {t('submitButtonLabel')}
                 {isCreatePostLoading ? (
                   <Spinner animation="grow" variant="info" className={styles.loadIndicator} />

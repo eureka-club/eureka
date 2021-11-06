@@ -245,10 +245,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         IDX += 1;
         return (
           <aside key={key} className="mb-3 bg-light">
-            <h5 className="h6 fw-bold mb-0 pl-3 py-1 d-flex text-secondary">
+            <h5 className="h6 fw-bold mb-0 ps-3 py-1 d-flex text-secondary">
               <span className="py-1 fw-bold">{`${IDX}. `}</span>
-              <span className="py-1 fw-bold h6 mb-0 pl-3 d-flex">{`${g.title}`}</span>
-              <Button className="ml-auto" size="sm" onClick={() => toggleGuidelineDesc(key)}>
+              <span className="py-1 fw-bold h6 mb-0 ps-3 d-flex">{`${g.title}`}</span>
+              <Button className="ms-auto" size="sm" onClick={() => toggleGuidelineDesc(key)}>
                 {!gldView[key] ? <RiArrowDownSLine /> : <RiArrowUpSLine />}
               </Button>
             </h5>
@@ -302,7 +302,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
             <p />
           </TabPane>
           <TabPane eventKey="participants">
-            {/* {cycle.participants && cycle.participants.map((p) => <UserAvatar className="mb-3 mr-3" user={p} key={p.id} />)} */}
+            {/* {cycle.participants && cycle.participants.map((p) => <UserAvatar className="mb-3 me-3" user={p} key={p.id} />)} */}
             {cycle.participants && (
               <Mosaic showButtonLabels={false} stack={[...cycle.participants, cycle.creator] as UserMosaicItem[]} />
             )}

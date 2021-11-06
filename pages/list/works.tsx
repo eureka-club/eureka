@@ -94,7 +94,7 @@ const ListWorksPage: NextPage<Props> = ({ works }) => {
                     </Popover>
                   }
                 >
-                  <Button variant="link" className="ml-2">
+                  <Button variant="link" className="ms-2">
                     delete?
                   </Button>
                 </OverlayTrigger>

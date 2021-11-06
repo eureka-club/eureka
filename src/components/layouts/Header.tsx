@@ -57,11 +57,11 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
           <Container className={`${styles.grid}`}>
             <Row className="text-white mb-5">
               <Col xs={12} md={4} className="d-flex flex-column">
-                <h1 className="h1 ml-auto">{t('underEurekaLabel')}</h1>
-                {/* <em className="fs-6 ml-auto">{t('underEurekaLabel')}</em> */}
+                <h1 className="h1 ms-auto">{t('underEurekaLabel')}</h1>
+                {/* <em className="fs-6 ms-auto">{t('underEurekaLabel')}</em> */}
               </Col>
               <Col xs={12} md={8} className="text-left">
-                <p className="pl-4 border-left border-white">
+                <p className="ps-4 border-start border-white">
                   {t('eurekaReasonLabel')}
                   <br />
                   {t('eurekaReasonLabel2')}
@@ -104,7 +104,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
       {show && (
         <div className="d-flex justify-content-center align-items-center mt-5 pt-5">
           {!isLoadingSession && !session && (
-            <Button onClick={openSignInModal} className="button" variant="primary">
+            <Button onClick={openSignInModal} className="button text-white" variant="primary">
               {t('headerSessionBtnLabel')}
             </Button>
           )}

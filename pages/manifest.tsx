@@ -32,14 +32,14 @@ const ManifestPage: NextPage = () => {
       <Container>
         <section className="mb-5">
           <Row>
-            <Col xs={12} md={4} className="pr-0 mr-0 d-flex flex-column">
+            <Col xs={12} md={4} className="pe-0 me-0 d-flex flex-column">
               <h1 className="h1 text-primary">
                 {t('manifestLbl')} <br />
                 Eureka <BsCircleFill style={{ fontSize: '.2em' }} />{' '}
               </h1>
               <em className="d-block text-gray">{t('eurekaPrinciple')}</em>
             </Col>
-            <Col xs={12} md={8} className="ml-0" style={{ borderLeft: 'solid 2px var(--info)' }}>
+            <Col xs={12} md={8} className="ms-0 border-start border-info border-2">
               <p>
                 <span className="text-secondary fw-bold">{t('welcomeEureka')}</span> {t('manifestDesc')}
               </p>
@@ -56,11 +56,11 @@ const ManifestPage: NextPage = () => {
           className="d-flex mt-5"
         > */}
         <Row>
-          <Col xs={12} md={4} className=" p-3 ml-0">
+          <Col xs={12} md={4} className=" p-3 ms-0">
             {!isVisible(1, 1) && (
               <section
                 style={{ height: '250px' }}
-                className="pl-5 p-3 rounded bg-secondary text-white"
+                className="ps-5 p-3 rounded bg-secondary text-white"
                 onClick={() => toggleBox(1, 1)}
                 role="presentation"
               >
@@ -84,11 +84,11 @@ const ManifestPage: NextPage = () => {
             )}
           </Col>
 
-          <Col xs={12} md={4} className=" p-3 ml-0">
+          <Col xs={12} md={4} className=" p-3 ms-0">
             {!isVisible(1, 2) && (
               <section
                 style={{ height: '250px' }}
-                className="pl-5 p-3 rounded bg-yellow text-secondary"
+                className="ps-5 p-3 rounded bg-yellow text-secondary"
                 onClick={() => toggleBox(1, 2)}
                 role="presentation"
               >
@@ -112,11 +112,11 @@ const ManifestPage: NextPage = () => {
             )}
           </Col>
 
-          <Col xs={12} md={4} className=" p-3 ml-0">
+          <Col xs={12} md={4} className=" p-3 ms-0">
             {!isVisible(1, 3) && (
               <section
                 style={{ height: '250px' }}
-                className="pl-5 p-3 rounded bg-secondary text-white"
+                className="ps-5 p-3 rounded bg-secondary text-white"
                 onClick={() => toggleBox(1, 3)}
                 role="presentation"
               >
@@ -142,11 +142,11 @@ const ManifestPage: NextPage = () => {
         </Row>
         {/* row 2     */}
         <Row>
-          <Col xs={12} md={4} className=" p-3 ml-0">
+          <Col xs={12} md={4} className=" p-3 ms-0">
             {!isVisible(2, 1) && (
               <section
                 style={{ height: '250px' }}
-                className="pl-5 p-3 rounded bg-yellow text-secondary"
+                className="ps-5 p-3 rounded bg-yellow text-secondary"
                 onClick={() => toggleBox(2, 1)}
                 role="presentation"
               >
@@ -170,11 +170,11 @@ const ManifestPage: NextPage = () => {
             )}
           </Col>
 
-          <Col xs={12} md={4} className=" p-3 ml-0">
+          <Col xs={12} md={4} className=" p-3 ms-0">
             {!isVisible(2, 2) && (
               <section
                 style={{ height: '250px' }}
-                className="pl-5 p-3 rounded bg-secondary text-white"
+                className="ps-5 p-3 rounded bg-secondary text-white"
                 onClick={() => toggleBox(2, 2)}
                 role="presentation"
               >
@@ -198,11 +198,11 @@ const ManifestPage: NextPage = () => {
             )}
           </Col>
 
-          <Col xs={12} md={4} className=" p-3 ml-0">
+          <Col xs={12} md={4} className=" p-3 ms-0">
             {!isVisible(2, 3) && (
               <section
                 style={{ height: '250px' }}
-                className="pl-5 p-3 rounded bg-yellow text-secondary"
+                className="ps-5 p-3 rounded bg-yellow text-secondary"
                 onClick={() => toggleBox(2, 3)}
                 role="presentation"
               >
@@ -228,11 +228,11 @@ const ManifestPage: NextPage = () => {
         </Row>
         {/* row 3     */}
         <Row>
-          <Col xs={12} md={4} className=" p-3 ml-0">
+          <Col xs={12} md={4} className=" p-3 ms-0">
             {!isVisible(3, 1) && (
               <section
                 style={{ height: '250px' }}
-                className="pl-5 p-3 rounded bg-secondary text-white"
+                className="ps-5 p-3 rounded bg-secondary text-white"
                 onClick={() => toggleBox(3, 1)}
                 role="presentation"
               >
@@ -256,11 +256,11 @@ const ManifestPage: NextPage = () => {
             )}
           </Col>
 
-          <Col xs={12} md={4} className=" p-3 ml-0">
+          <Col xs={12} md={4} className=" p-3 ms-0">
             {!isVisible(3, 2) && (
               <section
                 style={{ height: '250px' }}
-                className="pl-5 p-3 rounded bg-yellow text-secondary"
+                className="ps-5 p-3 rounded bg-yellow text-secondary"
                 onClick={() => toggleBox(3, 2)}
                 role="presentation"
               >
@@ -284,11 +284,11 @@ const ManifestPage: NextPage = () => {
             )}
           </Col>
 
-          <Col xs={12} md={4} className=" p-3 ml-0">
+          <Col xs={12} md={4} className=" p-3 ms-0">
             {!isVisible(3, 3) && (
               <section
                 style={{ height: '250px' }}
-                className="pl-5 p-3 rounded bg-secondary text-white"
+                className="ps-5 p-3 rounded bg-secondary text-white"
                 onClick={() => toggleBox(3, 3)}
                 role="presentation"
               >
@@ -313,11 +313,11 @@ const ManifestPage: NextPage = () => {
           </Col>
         </Row>
         <Row>
-          <Col xs={12} md={6} className=" p-3 ml-0">
+          <Col xs={12} md={6} className=" p-3 ms-0">
             {!isVisible(4, 1) && (
               <section
                 style={{ height: '250px' }}
-                className="pl-5 p-3 rounded bg-secondary text-white"
+                className="ps-5 p-3 rounded bg-secondary text-white"
                 onClick={() => toggleBox(4, 1)}
                 role="presentation"
               >
@@ -348,11 +348,11 @@ const ManifestPage: NextPage = () => {
             )}
           </Col>
 
-          <Col xs={12} md={6} className=" p-3 ml-0">
+          <Col xs={12} md={6} className=" p-3 ms-0">
             {!isVisible(4, 2) && (
               <section
                 style={{ height: '250px' }}
-                className="pl-5 p-3 rounded bg-yellow text-secondary"
+                className="ps-5 p-3 rounded bg-yellow text-secondary"
                 onClick={() => toggleBox(4, 2)}
                 role="presentation"
               >
@@ -386,16 +386,16 @@ const ManifestPage: NextPage = () => {
 
         <section className="mb-5">
           <Row>
-            <Col xs={12} md={4} className="pr-2 mr-0 d-flex align-items-center justify-content-center">
+            <Col xs={12} md={4} className="pe-2 me-0 d-flex align-items-center justify-content-center">
               <RiAlertLine
                 className="text-yellow"
                 style={{ opacity: '.7', fontSize: '15em', margin: '-.3em -.5em 0 -.3em' }}
               />
-              <h1 className="h1 fw-bolder text-secondary mb-5 mr-4" style={{ zIndex: 9999 }}>
+              <h1 className="h1 fw-bolder text-secondary mb-5 me-4" style={{ zIndex: 9999 }}>
                 {t('enforcement')}
               </h1>
             </Col>
-            <Col xs={12} md={8} className="ml-0" style={{ borderLeft: 'solid 2px var(--info)' }}>
+            <Col xs={12} md={8} className="ms-0 border-start border-info border-2">
               <h2 className="h6 fw-bolder">{t('enforcementHeadLbl')}</h2>
               <ol>
                 <li>{t('manifestEnforcement1')}</li>

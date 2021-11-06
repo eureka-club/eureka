@@ -236,14 +236,14 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         {' - '}
         {getRatingQty()} <span className="fs-6 text-gray">{t('ratings')}</span>
         {cycle.topics && (
-          <aside className="d-inline-block ml-5">
+          <aside className="d-inline-block ms-5">
             <TagsInput
               formatValue={(v: string) => t(`topics:${v}`)}
               className="d-inline-block"
               tags={cycle.topics}
               readOnly
             />
-            <TagsInput className="ml-1 d-inline-block" tags={cycle.tags!} readOnly label="" />
+            <TagsInput className="ms-1 d-inline-block" tags={cycle.tags!} readOnly label="" />
           </aside>
         )}
         <h4 className="mt-4 mb-1 text-dark">
@@ -254,7 +254,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           {cycle.participants.length} participants
         </Button> */}
         {/* <CycleContext.Provider value={{ cycle }}> */}
-        <div className="mr-5" /* className={styles.customCarouselStaticContainer} */>
+        <div className="me-5" /* className={styles.customCarouselStaticContainer} */>
           <CarouselStatic
             showSocialInteraction={false}
             // onSeeAll={async () => seeAll(cycle.works as WorkMosaicItem[], t('Eurekas I created'))}

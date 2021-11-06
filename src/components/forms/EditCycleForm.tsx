@@ -544,21 +544,21 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
                   onChange={() => handlerCycleAccessCheckedChange('public')}
                   checked={cycleAccessChecked.public}
                 />
-                <small className="ml-3 text-muted">{t('cycleAccesPublicInfo')}.</small>
+                <small className="ms-3 text-muted">{t('cycleAccesPublicInfo')}.</small>
                 <Form.Check
                   label={t('Private')}
                   type="radio"
                   onChange={() => handlerCycleAccessCheckedChange('private')}
                   checked={cycleAccessChecked.private}
                 />
-                <small className="ml-3 text-muted">{t('cycleAccesPrivateInfo')}.</small>
+                <small className="ms-3 text-muted">{t('cycleAccesPrivateInfo')}.</small>
                 <Form.Check
                   label={t('Secret')}
                   type="radio"
                   onChange={() => handlerCycleAccessCheckedChange('secret')}
                   checked={cycleAccessChecked.secret}
                 />
-                <small className="ml-3 text-muted">{t('cycleAccesSecretInfo')}.</small>
+                <small className="ms-3 text-muted">{t('cycleAccesSecretInfo')}.</small>
               </Form.Group>
             </Col>
           </Row>
@@ -568,7 +568,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
                 // disabled={!selectedWorksForCycle.length || !cycleCoverImageFile}
                 variant="primary"
                 type="submit"
-                className="float-right pl-5 pr-4"
+                className="float-right ps-5 pe-4"
               >
                 {t('Edit Cycle')}
                 {isEditCycleReqLoading ? (
@@ -582,7 +582,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
                 variant="outline-secondary"
                 type="button"
                 onClick={handleFormClear}
-                className="float-right mr-4 px-3"
+                className="float-right me-4 px-3"
               >
                 {t('resetBtnLabel')}
               </Button>
