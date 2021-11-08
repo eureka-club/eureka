@@ -17,9 +17,10 @@ $theme-colors: (
   "black":#000000,
   "white":#ffffff,
 );
-$font-sizes: (
-  6: 0.875rem,
-);
+$font-size-base: 0.875rem;
+.fs-xs{
+  font-size: 0.6em;
+}
 
 @import '~bootstrap/scss/bootstrap.scss';
 
@@ -37,9 +38,9 @@ $font-sizes: (
 }
 
 :root {
-  --primary: #{theme-color("primary")};
-  --secondary: #{theme-color("secondary")};
-  --info: #{theme-color("info")};
+  // --primary: #{theme-color("primary")};
+  // --secondary: #{theme-color("secondary")};
+  // --info: #{theme-color("info")};
   
 
   //TODO review use of each case in the code 

@@ -33,8 +33,10 @@ import { PostMosaicItem } from '../types/post';
 import { WorkMosaicItem } from '../types/work';
 
 // const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
-
-const SearchEngine: FunctionComponent = () => {
+interface Props {
+  className?: string;
+}
+const SearchEngine: FunctionComponent<Props> = ({ className = '' }) => {
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
   // const [session] = useSession() as [Session | null | undefined, boolean];
   const router = useRouter();
@@ -120,7 +122,7 @@ const SearchEngine: FunctionComponent = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${className}`}>
       <Form.Group>
         <InputGroup>
           {/* language=CSS */}

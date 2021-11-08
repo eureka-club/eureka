@@ -32,7 +32,7 @@ import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '../constants';
 import { Session } from '../types';
 import ChevronToggle from './ui/dropdown/ChevronToggle';
 import globalModalsAtom from '../atoms/globalModals';
-import styles from './Navbar.module.css';
+import styles from './NavbarMovile.module.css';
 
 // const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
 
@@ -88,16 +88,16 @@ const NavBar: FunctionComponent = () => {
   };
 
   return (
-    <Container className={styles.container}>
-      <Navbar collapseOnSelect expand="lg" variant="light">
+    <Container fluid className={styles.container}>
+      <Navbar collapseOnSelect expand="lg" variant="light" className="position-relative">
         {/* <Container> */}
         <Link href="/">
           <Navbar.Brand className="cursor-pointer">
-            <aside className="d-flex justify-content-around align-items-center">
+            <aside className="d-flex justify-content-between align-items-center">
               <img src="/logo.svg" width={45} alt="Project logo" />
-              <section>
+              <section className="me-1">
                 <div className={`text-secondary ms-3 h4 mb-0 ${styles.brand}`}>Eureka</div>
-                <p className="text-secondary my-0 ms-3 font-weight-light fs-6">{t('tagline')}</p>
+                <p className="my-0 text-secondary ms-3 font-weight-light fs-xs">{t('tagline')}</p>
               </section>
             </aside>
             {/* <Container>
@@ -114,57 +114,64 @@ const NavBar: FunctionComponent = () => {
             </Container> */}
           </Navbar.Brand>
         </Link>
-
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse className={`${styles['responsive-navbar-nav']}`}>
-          <Nav className="w-50 mr-2">
-            <SearchEngine className="w-100" />
+        <Navbar.Collapse
+          className={`position-absolute top-100 end-0 bg-white border border-info px-2 p-1 ${styles['responsive-navbar-nav']}`}
+        >
+          <Nav className="mx-2 mb-1">
+            <SearchEngine />
           </Nav>
-          <Nav className={styles.navbarNav}>
+          <Nav className="mx-2">
             {!session && (
               <Button className="text-white" onClick={openSignInModal}>
                 {t('login')}
               </Button>
             )}
           </Nav>
-          <Nav className="me-3">
+          <Nav className="mx-2">
             {session && session.user && (
-              <Dropdown className={`rounded-1 ${styles.actionBtn}`}>
+              <Dropdown className={`rounded-1 me-4 ${styles.actionBtn}`}>
                 <Dropdown.Toggle as={ChevronToggle} id="create">
                   <span className="text-white">{t('create')}</span>
                 </Dropdown.Toggle>
-                <Dropdown.Menu>
+                <Dropdown.Menu className={styles.dropdownMenu}>
                   {session?.user.roles.includes('admin') && (
                     <Link href="/cycle/create">
                       <a className="dropdown-item">{t('cycle')}</a>
                     </Link>
                   )}
-                  <Dropdown.Item onClick={handleCreatePostClick}>{t('post')}</Dropdown.Item>
+                  <Dropdown.Item className="" onClick={handleCreatePostClick}>
+                    {t('post')}
+                  </Dropdown.Item>
                   {session?.user.roles.includes('admin') && (
-                    <Dropdown.Item onClick={handleCreateWorkClick}>{t('work')}</Dropdown.Item>
+                    <Dropdown.Item className="" onClick={handleCreateWorkClick}>
+                      {t('work')}
+                    </Dropdown.Item>
                   )}
                 </Dropdown.Menu>
               </Dropdown>
             )}
           </Nav>
           {session && session.user && (
-            <Nav className={styles.navbarNav}>
+            <Nav className="mx-2">
               <Nav.Item>
                 <Link href={`/mediatheque/${session.user.id}`}>
                   <a className={styles.navLink}>
                     <RiDashboardLine className={styles.navbarIconNav} />
+                    {` `}
                     <span className={styles.menuBottomInfo}>{t('My Mediatheque')}</span>
                   </a>
                 </Link>
               </Nav.Item>
             </Nav>
           )}
-          <Nav className={styles.navbarNav}>
+          <Nav className={`mx-2 ${styles.navbarNav}`}>
             <Dropdown align="end" className={styles.langSwitch}>
               <Dropdown.Toggle as={ChevronToggle}>
                 <AiOutlineInfoCircle className={styles.navbarIconNav} />
+                {` `}
+                <span className={styles.menuBottomInfo}>{t('About')}</span>
               </Dropdown.Toggle>
-              <span className={styles.menuBottomInfo}>{t('About')}</span>
               <Dropdown.Menu>
                 <Dropdown.Item
                   active={router.asPath.search(/manifest$/g) !== -1}
@@ -190,7 +197,7 @@ const NavBar: FunctionComponent = () => {
               </Dropdown.Menu>
             </Dropdown>
           </Nav>
-          <Nav className={styles.navbarNav}>
+          <Nav className="mx-2">
             {router.locales?.length && (
               <Dropdown align="end" className={styles.langSwitch} onSelect={handleLanguageSelect}>
                 <Dropdown.Toggle as={ChevronToggle} id="langSwitch">
@@ -199,8 +206,9 @@ const NavBar: FunctionComponent = () => {
                     src={`/img/lang-flags/${router.locale}.png`}
                     alt={`Language flag '${router.locale}'`}
                   />
+                  {` `}
+                  <span className={styles.menuBottomInfo}>{t('Language')}</span>
                 </Dropdown.Toggle>
-                <span className={styles.menuBottomInfo}>{t('Language')}</span>
                 <Dropdown.Menu>
                   {router.locales.map((locale) => (
                     <Dropdown.Item key={locale} eventKey={locale} active={locale === router.locale}>
@@ -214,10 +222,13 @@ const NavBar: FunctionComponent = () => {
             )}
           </Nav>
           {session && session.user && (
-            <Nav className={styles.navbarNav}>
+            <Nav className="mx-2">
               <Dropdown align="end" className={styles.langSwitch}>
-                <Dropdown.Toggle as={ChevronToggle}>{getAvatar()}</Dropdown.Toggle>
-                <span className={styles.menuBottomInfo}>{t('Account')}</span>
+                <Dropdown.Toggle as={ChevronToggle}>
+                  {getAvatar()}
+                  {` `}
+                  <span className={styles.menuBottomInfo}>{t('Account')}</span>
+                </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item onClick={handlerEditUserClick}>
                     {/* <Button > */}
@@ -234,6 +245,7 @@ const NavBar: FunctionComponent = () => {
             </Nav>
           )}
         </Navbar.Collapse>
+
         {/* </Container> */}
       </Navbar>
     </Container>

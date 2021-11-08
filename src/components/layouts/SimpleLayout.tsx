@@ -4,6 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Modal from 'react-bootstrap/Modal';
 
 import Navbar from '../Navbar';
+import NavbarMovile from '../NavbarMovile';
 import Header from './Header';
 import CreatePostForm from '../forms/CreatePostForm';
 import CreateWorkForm from '../forms/CreateWorkForm';
@@ -54,7 +55,12 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false }
 
   return (
     <>
-      <Navbar />
+      <div className="d-none d-md-block">
+        <Navbar />
+      </div>
+      <div className="d-sm-block d-md-none">
+        <NavbarMovile />
+      </div>
       <Toast />
       {showHeader && <Header show={showHeader} />}
       <Container className="mt-5">{children}</Container>

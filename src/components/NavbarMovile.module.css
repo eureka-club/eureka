@@ -1,8 +1,7 @@
  .container {
   box-shadow: 0 15px 20px -30px rgba(0, 0, 0, 0.5);
   max-width: 1440px;
-  padding-left: 4rem;
-  padding-right: 4rem;
+  
 } 
 
 .brand {
@@ -28,6 +27,15 @@
   border-radius: 3rem;
   padding-left: 2rem;
   padding-right: 2rem;
+}
+
+.dropdownMenu {
+  background-color: var(--primary);
+  min-width: 7rem;
+}
+.dropdownMenuItem {
+  /* color: #fff; */
+  
 }
 
 .navbarIconNav {
@@ -83,33 +91,29 @@
 } 
 */
 
-
+.navbarNav{
+  margin-right:2em;
+  margin-left: 2rem;
+}
+.navbarNav :global(.dropdown-item.active) {
+  background-color: var(--bs-primary);
+}
 .menuBottomInfo{
   color:var(--eureka-secondary)!important;
-  display: block;
+  /* display: block; */
   font-size: .7em;
 }
 .navLink{
   color:var(--eureka-secondary)!important;
   padding-top: 6px;
+  text-decoration: none;
   display: block;
-  text-decoration: none !important;
 }
 .navLink .menuBottomInfo{
   margin-top:6px
 }
 .toRight{
   margin-left: auto;
-}
-.responsive-navbar-nav{
-  justify-content: flex-end;
-}
-
-.navbarNav{
-  margin-right:2em;
-}
-.navbarNav :global(.dropdown-item.active) {
-  background-color: var(--bs-primary);
 }
 .actionBtn :global(.btn){
   color: var(--bs-white);
