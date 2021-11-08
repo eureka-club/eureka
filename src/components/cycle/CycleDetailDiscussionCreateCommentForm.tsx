@@ -25,10 +25,15 @@ import {
 
 interface Props {
   cycle: CycleMosaicItem;
-  discussionItem?: string;
+  discussionItem: string | undefined;
+  setDiscussionItem: (val: string | undefined) => void;
 }
 
-const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({ cycle, discussionItem }) => {
+const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
+  cycle,
+  discussionItem,
+  setDiscussionItem,
+}) => {
   const queryClient = useQueryClient();
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [session] = useSession() as [Session | null | undefined, boolean];
@@ -55,6 +60,7 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({ cycl
 
   const clearCreateEurekaForm = () => {
     editorRef.current.setContent(newComment.contentText);
+    setDiscussionItem('');
     setNewComment((res) => ({
       ...res,
       contentText: '',
@@ -147,8 +153,8 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({ cycl
         creatorId: cycle.creatorId,
       };
       await execCreateComment(payload);
-      clearCreateEurekaForm();
     }
+    clearCreateEurekaForm();
   };
 
   useEffect(() => {

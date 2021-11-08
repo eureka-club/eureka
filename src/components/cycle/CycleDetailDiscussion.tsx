@@ -177,7 +177,11 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
               {isCreateComment && (
                 <>
                   <div className="mt-3">
-                    <CycleDetailDiscussionCreateCommentForm cycle={cycle} discussionItem={discussionItem} />
+                    <CycleDetailDiscussionCreateCommentForm
+                      cycle={cycle}
+                      discussionItem={discussionItem}
+                      setDiscussionItem={setDiscussionItem}
+                    />
                   </div>
                 </>
               )}
