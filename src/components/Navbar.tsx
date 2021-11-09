@@ -97,7 +97,7 @@ const NavBar: FunctionComponent = () => {
               <img src="/logo.svg" width={45} alt="Project logo" />
               <section>
                 <div className={`text-secondary ms-3 h4 mb-0 ${styles.brand}`}>Eureka</div>
-                <p className="text-secondary my-0 ms-3 font-weight-light fs-6">{t('tagline')}</p>
+                <p className="text-secondary my-0 ms-3 font-weight-light fs-xs">{t('tagline')}</p>
               </section>
             </aside>
             {/* <Container>
@@ -117,7 +117,7 @@ const NavBar: FunctionComponent = () => {
 
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse className={`${styles['responsive-navbar-nav']}`}>
-          <Nav className="w-50 mr-2">
+          <Nav className="w-50 me-2">
             <SearchEngine className="w-100" />
           </Nav>
           <Nav className={styles.navbarNav}>

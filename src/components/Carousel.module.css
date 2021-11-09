@@ -29,25 +29,25 @@
   margin-left: -.2em;
 }
 .rightButton{
-  position: absolute;
+  /* position: absolute;
   top:35%;
   right:-3em;
-  border-radius: 50%;
+  border-radius: 50%; */
   width: 2em;
     height: 2em;
     
-    padding: 0;
+    /* padding: 0; */
 }
 
 .leftButton{
-  position: absolute;
+  /* position: absolute;
   top:35%;
   left:-3em;
-  border-radius: 50%;
+  border-radius: 50%; */
   width: 2em;
     height: 2em;
     
-    padding: 0;
+    /* padding: 0; */
 }
 
 .right{text-align: right!important;}

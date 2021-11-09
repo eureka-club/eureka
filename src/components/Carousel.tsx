@@ -235,7 +235,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
               {buildMosaics()}
               {page !== 0 && (
                 <Button
-                  className={styles.leftButton}
+                  className={`p-0 text-white rounded-circle position-absolute top-50 start-0 translate-middle ${styles.leftButton}`}
                   onClick={() => {
                     setPage((old) => Math.max(old - 1, 0));
                     setExtraCyclesRequired(0);
@@ -248,7 +248,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
               )}
               {data.hasMore && (
                 <Button
-                  className={styles.rightButton}
+                  className={`p-0 text-center text-white rounded-circle position-absolute top-50 start-100 translate-middle ${styles.rightButton}`}
                   onClick={() => {
                     if (!isPreviousData && data.hasMore) {
                       setPage((old) => old + 1);
