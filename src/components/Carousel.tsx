@@ -11,7 +11,7 @@ import { Cycle, Work } from '@prisma/client';
 import useTranslation from 'next-translate/useTranslation';
 import { /* useInfiniteQuery, */ useQuery } from 'react-query';
 import { FunctionComponent /* , ChangeEvent */, useState, useEffect } from 'react';
-import { Button, Row, Col } from 'react-bootstrap';
+import { Button, Row, Col, Stack } from 'react-bootstrap';
 import router from 'next/router';
 import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
 import { BsHash } from 'react-icons/bs';
@@ -138,24 +138,27 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
     if (items) {
       // debugger;
       // data.pages.forEach((page, idx) => {
-      const mosaics = items.data.map((i: CycleMosaicItem | WorkMosaicItem) =>
-        renderMosaicItem(i, undefined, topic, page.toString()),
-      );
+      const mosaics = items.data.map((i: CycleMosaicItem | WorkMosaicItem) => (
+        <div key={`${i.type}-${i.id}`} className="me-1" style={{ width: '260px' }}>
+          {renderMosaicItem(i, undefined, topic, page.toString())}
+        </div>
+      ));
       const res = (
-        <Masonry
-          // key={`${topic}${item.id}`}
-          key={`${topic}${page}`}
-          breakpointCols={{
-            default: 4,
-            1199: 3,
-            768: 2,
-            576: 1,
-          }}
-          className={classNames('d-flex', styles.masonry)}
-          columnClassName={styles.masonryColumn}
-        >
-          {mosaics}
-        </Masonry>
+        // <Masonry
+        //   // key={`${topic}${item.id}`}
+        //   key={`${topic}${page}`}
+        //   breakpointCols={{
+        //     default: 4,
+        //     1199: 3,
+        //     768: 2,
+        //     576: 1,
+        //   }}
+        //   className={classNames('d-flex', styles.masonry)}
+        //   columnClassName={styles.masonryColumn}
+        // >
+        // <> {mosaics}</>
+        <div className="d-flex flex-nowrap">{mosaics}</div>
+        // </Masonry>
       );
       result.push(res);
       // });
@@ -231,7 +234,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
                 {/* )} */}
               </Col>
             </Row>
-            <div>
+            <div className="d-flex overflow-auto justify-content-left">
               {buildMosaics()}
               {page !== 0 && (
                 <Button
