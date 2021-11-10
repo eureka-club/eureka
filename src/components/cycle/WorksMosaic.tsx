@@ -50,7 +50,8 @@ const WorksMosaic: FunctionComponent<Props> = ({ cycle, className }) => {
         res.push(cycle.works[idx]);
       });
 
-    return res;
+    if (cycle.cycleWorksDates.length) return res;
+    return cycle.works;
   };
   return (
     <>
