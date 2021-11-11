@@ -1,7 +1,7 @@
 /* eslint-disable react/no-danger */
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 
-import { CLARITY_TRACKING_ID } from '../src/constants';
+// import { CLARITY_TRACKING_ID } from '../src/constants';
 
 class MyDocument extends Document {
   render(): JSX.Element {
@@ -40,8 +40,20 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;1,400;1,600&display=swap"
           />
 
+          {/* Google Tag Manager */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-W4VFV99');`,
+            }}
+          />
+          {/* End Google Tag Manager */}
+
           {/* MS Clarity analytics */}
-          {CLARITY_TRACKING_ID != null && (
+          {/* {CLARITY_TRACKING_ID != null && (
             <>
               <script
                 dangerouslySetInnerHTML={{
@@ -50,7 +62,7 @@ class MyDocument extends Document {
               />
               <script async src={`https://www.clarity.ms/tag/${CLARITY_TRACKING_ID}`} />
             </>
-          )}
+          )} */}
         </Head>
         <body>
           <Main />
