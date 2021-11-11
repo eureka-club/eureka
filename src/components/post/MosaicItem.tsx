@@ -92,7 +92,7 @@ const MosaicItem: FunctionComponent<Props> = ({
       return <span>{res}</span>;
     };
     return (
-      <Card className={`${styles.container} ${className}`}>
+      <Card className={`mosaic ${styles.container} ${className}`}>
         {postParent && (
           <h2 className="m-0 p-1 fs-6 text-info">
             <FaRegCompass className="text-info" />

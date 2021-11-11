@@ -163,7 +163,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     return <div className={`position-relative ${styles.imageContainer}`}>{img}</div>;
   };
   return (
-    <Card className={` ${isActive() ? 'isActive' : ''}`}>
+    <Card className={`mosaic ${isActive() ? 'isActive' : ''}`}>
       <div className={styles.imageContainer} style={style}>
         {renderLocalImageComponent()}
         {isActive() && <CgMediaLive className={`${styles.isActiveCircle}`} />}
