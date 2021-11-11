@@ -263,6 +263,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
             data={getWorksSorted() as WorkMosaicItem[]}
             iconBefore={<></>}
             customMosaicStyle={{ height: '16em' }}
+            tiny
             // iconAfter={<BsCircleFill className={styles.infoCircle} />}
           />
         </div>

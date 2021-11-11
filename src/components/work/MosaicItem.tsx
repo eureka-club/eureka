@@ -33,6 +33,7 @@ interface Props {
   cacheKey?: string[];
   showTrash?: boolean;
   linkToWork?: boolean;
+  tiny?: boolean;
   // isOnDiscussion?: boolean;
 }
 const MosaicItem: FunctionComponent<Props> = ({
@@ -44,6 +45,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   cacheKey = undefined,
   showTrash = false,
   linkToWork = true,
+  tiny = false,
   // isOnDiscussion = false,
 }) => {
   const { t } = useTranslation('common');
@@ -150,6 +152,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           className={`position-relative ${styles.imageContainer} ${!loading ? 'cursor-pointer' : ''}`}
           onClick={onImgClick}
           role="presentation"
+          style={style}
         >
           {/* <Link href={`/work/${id}`}> */}
           {/* <a className={`cursor-pointer ${!loading ? 'pe-auto' : ''}`} aria-disabled="true"> */}
@@ -160,11 +163,15 @@ const MosaicItem: FunctionComponent<Props> = ({
         </div>
       );
     }
-    return <div className={`position-relative ${styles.imageContainer}`}>{img}</div>;
+    return (
+      <div className={`position-relative `} style={style}>
+        {img}
+      </div>
+    );
   };
   return (
-    <Card className={`mosaic ${isActive() ? 'isActive' : ''}`}>
-      <div className={styles.imageContainer} style={style}>
+    <Card className={`${tiny ? 'mosaic-tiny' : 'mosaic'} ${isActive() ? 'isActive' : ''}`}>
+      <div className={styles.imageContainer}>
         {renderLocalImageComponent()}
         {isActive() && <CgMediaLive className={`${styles.isActiveCircle}`} />}
         <Badge bg="orange" className={`fw-normal fs-6 text-black px-2 rounded-pill ${styles.type}`}>
