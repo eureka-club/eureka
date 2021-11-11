@@ -164,7 +164,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   };
   return (
     <Card className={` ${isActive() ? 'isActive' : ''}`}>
-      <div /* className={styles.imageContainer} */ style={style}>
+      <div className={styles.imageContainer} style={style}>
         {renderLocalImageComponent()}
         {isActive() && <CgMediaLive className={`${styles.isActiveCircle}`} />}
         <Badge variant="orange" className={`fw-normal fs-6 text-black px-2 rounded-pill ${styles.type}`}>
