@@ -48,7 +48,6 @@ interface Props {
 
 const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCount }) => {
   const router = useRouter();
-
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const { t } = useTranslation('workDetail');
@@ -102,7 +101,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
           {post == null ? (
             <Row className="mb-5">
               <Col md={{ span: 3 }}>
-                <MosaicItem work={work} showTrash />
+                <MosaicItem work={work} showTrash linkToWork={false} />
 
                 {/* <div className={classNames(styles.imgWrapper, 'mb-3')}>
                 <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />

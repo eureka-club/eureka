@@ -184,3 +184,13 @@ hr {
   background-color: var(--color-primary-raised);
   border-color: var(--color-primary-raised);
 }
+
+.top-50{
+  top: 50%!important;
+}
+.start-50{
+  left: 50%!important;
+}
+.card.mosaic{
+  width: 256.75px !important;
+}

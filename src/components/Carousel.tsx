@@ -2,7 +2,7 @@
 // import { useAtom } from 'jotai';
 // import { useQuery } from 'react-query';
 // import { useSession } from 'next-auth/client';
-import Link from 'next/link';
+// import Link from 'next/link';
 // import { useRouter } from 'next/router';
 import { useAtom } from 'jotai';
 import Masonry from 'react-masonry-css';
@@ -139,7 +139,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
       // debugger;
       // data.pages.forEach((page, idx) => {
       const mosaics = items.data.map((i: CycleMosaicItem | WorkMosaicItem) => (
-        <div key={`${i.type}-${i.id}`} className="me-1" style={{ width: '260px' }}>
+        <div key={`${i.type}-${i.id}`} className="me-1">
           {renderMosaicItem(i, undefined, topic, page.toString())}
         </div>
       ));

@@ -53,7 +53,12 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
   const handlerBadgeClick = (v: string) => {
     const where = encodeURIComponent(
       JSON.stringify({
-        OR: [{ tags: { contains: v } }, { topics: { contains: v } }],
+        OR: [
+          { tags: { contains: v } },
+          { topics: { contains: v } },
+          { contentText: { contains: v } },
+          { title: { contains: v } },
+        ],
       }),
     );
     setSearchEngineState((res) => ({ ...res, where, q: v }));

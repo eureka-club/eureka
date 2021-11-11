@@ -165,12 +165,7 @@ const SearchPage: NextPage = () => {
   // }, [globalSearchEngineState]);
 
   const genLoadingCmp = (): ReactElement => {
-    if (isLoading)
-      return (
-        <Spinner animation="border" role="status">
-          <span className="sr-only">{t('Loading')}</span>
-        </Spinner>
-      );
+    if (isLoading) return <Spinner animation="grow" role="status" />;
     return <span>{`${''}`}</span>;
   };
   let qLabel = t(`topics:${globalSearchEngineState.q as string}`);

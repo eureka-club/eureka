@@ -1,11 +1,11 @@
-import Link from 'next/link';
+// import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent /*  useEffect, useState */, useEffect, useState } from 'react';
-import { Card, Badge } from 'react-bootstrap';
+import { Card, Badge, Spinner } from 'react-bootstrap';
 // import { MySocialInfo } from '@/src/types';
 // import { PostDetail } from '../../types/post';
 // import { useQuery } from 'react-query';
-// import { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 // import { useSession } from 'next-auth/client';
 import { CgMediaLive } from 'react-icons/cg';
 import dayjs from 'dayjs';
@@ -52,7 +52,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   useEffect(() => {
     if (cycleContext) setCycle(cycleContext.cycle);
   }, [cycleContext]);
-
+  const [loading, setLoading] = useState<boolean>(false);
   // const { linkToWork = true, work: workFromContext } = useWorkContext();
   // const [WORK] = useState<WorkMosaicItem>(work!);
 
@@ -125,7 +125,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   const { id, /* author, */ title, localImages, type } = work;
   // const [session] = useSession() as [Session | null | undefined, boolean];
-  // const router = useRouter();
+  const router = useRouter();
 
   // const [work, setWork] = useState<WorkDetail>();
   // const s
@@ -135,19 +135,35 @@ const MosaicItem: FunctionComponent<Props> = ({
   //     setWork(workData as WorkDetail);
   //   }
   // }, [workData]);
+  const canNavigate = () => {
+    return !loading;
+  };
+  const onImgClick = () => {
+    if (canNavigate()) router.push(`/work/${id}`);
+    setLoading(true);
+  };
   const renderLocalImageComponent = () => {
     const img = <LocalImageComponent filePath={localImages[0].storedFile} alt={title} />;
     if (linkToWork) {
       return (
-        <Link href={`/work/${id}`}>
-          <a className="cursor-pointer">{img}</a>
-        </Link>
+        <div
+          className={`position-relative ${styles.imageContainer} ${!loading ? 'cursor-pointer' : ''}`}
+          onClick={onImgClick}
+          role="presentation"
+        >
+          {/* <Link href={`/work/${id}`}> */}
+          {/* <a className={`cursor-pointer ${!loading ? 'pe-auto' : ''}`} aria-disabled="true"> */}
+          {!canNavigate() && <Spinner className="position-absolute top-50 start-50" animation="grow" variant="info" />}
+          {img}
+          {/* </a> */}
+          {/* </Link> */}
+        </div>
       );
     }
-    return img;
+    return <div className={`position-relative ${styles.imageContainer}`}>{img}</div>;
   };
   return (
-    <Card className={` ${isActive() ? 'isActive' : ''}`}>
+    <Card className={`mosaic ${isActive() ? 'isActive' : ''}`}>
       <div className={styles.imageContainer} style={style}>
         {renderLocalImageComponent()}
         {isActive() && <CgMediaLive className={`${styles.isActiveCircle}`} />}

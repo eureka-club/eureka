@@ -99,11 +99,12 @@ const Mosaic: FunctionComponent<Props> = ({
       className={`d-flex ${styles.masonry}`}
       columnClassName={styles.masonryColumn}
     >
-      {stack.map((item: MosaicItem) => (
-        <aside className={`${className}`} key={`item-${item.id}`}>
-          {renderMosaicItem(item, postsLinksTo, showButtonLabels, display, showComments, cacheKey)}
-        </aside>
-      ))}
+      {stack &&
+        stack.map((item: MosaicItem) => (
+          <aside className={`${className}`} key={`item-${item.id}`}>
+            {renderMosaicItem(item, postsLinksTo, showButtonLabels, display, showComments, cacheKey)}
+          </aside>
+        ))}
     </Masonry>
   );
 };
