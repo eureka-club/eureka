@@ -41,6 +41,7 @@ type Props = {
   showSocialInteraction?: boolean;
   customMosaicStyle?: { [key: string]: string };
   className?: string;
+  tiny?: boolean;
 };
 
 const renderMosaicItem = (
@@ -48,6 +49,7 @@ const renderMosaicItem = (
   postsParent: CycleMosaicItem | WorkMosaicItem | undefined,
   showSocialInteraction = true,
   customMosaicStyle?: { [key: string]: string },
+  tiny?: boolean,
 ) => {
   if (isCycleMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -74,6 +76,7 @@ const renderMosaicItem = (
         key={`work-${item.id}`}
         work={item}
         style={customMosaicStyle}
+        tiny={tiny}
       />
     );
   }
@@ -93,6 +96,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
   showSocialInteraction = true,
   customMosaicStyle = undefined,
   className,
+  tiny = false,
 }) => {
   const { t } = useTranslation('topics');
   const [current, setCurrent] = useState<Item[]>([]);
@@ -123,7 +127,9 @@ const CarouselStatic: FunctionComponent<Props> = ({
   const buildMosaics = () => {
     const result: JSX.Element[] = [];
     if (current) {
-      const mosaics = current.map((i) => renderMosaicItem(i, undefined, showSocialInteraction, customMosaicStyle));
+      const mosaics = current.map((i) =>
+        renderMosaicItem(i, undefined, showSocialInteraction, customMosaicStyle, tiny),
+      );
       const res = (
         <Masonry
           // key={`${topic}${item.id}`}
