@@ -69,6 +69,7 @@ const PostDetailInCyclePage: NextPage = () => {
   const isLoadingOrFetching = () => {
     return !post && (isLoadingSession || isLoading || isLoadingPost || isFetchingPost);
   };
+
   return (
     <SimpleLayout title={`${post ? post.title : ''} · ${cycle ? cycle.title : ''}`}>
       <>

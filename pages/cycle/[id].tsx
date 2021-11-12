@@ -1,19 +1,21 @@
 import { NextPage } from 'next';
 import { useSession } from 'next-auth/client';
+import { useAtom } from 'jotai';
 // import { QueryClient, useQuery } from 'react-query';
 // import { dehydrate } from 'react-query/hydration';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { Spinner, Alert } from 'react-bootstrap';
+import { Spinner, Alert, Button } from 'react-bootstrap';
 import { useQueryClient } from 'react-query';
 import { CycleMosaicItem } from '../../src/types/cycle';
 import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '../../src/components/cycle/CycleDetail';
-
+import Banner from '../../src/components/Banner';
 import useCycle from '../../src/useCycle';
-import { CycleContext } from '../../src/useCycleContext';
+import { CycleContext, useCycleContext } from '../../src/useCycleContext';
+import globalModalsAtom from '../../src/atoms/globalModals';
 
 const CycleDetailPage: NextPage = () => {
   const [session, isLoadingSession] = useSession();
@@ -23,8 +25,11 @@ const CycleDetailPage: NextPage = () => {
   // const [cycle, setCycle] = useState<CycleMosaicItem | undefined>(undefined);
   const { t } = useTranslation('common');
   const queryClient = useQueryClient();
-
+  const cycleContext = useCycleContext();
+  const { requestJoinCycle: execJoinCycle } = cycleContext;
   const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
+  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
+  const [isRequestingJoinCycle, setIsRequestingJoinCycle] = useState<boolean>(false);
 
   useEffect(() => {
     if (router && router.query) setId(() => router.query.id as string);
@@ -63,11 +68,7 @@ const CycleDetailPage: NextPage = () => {
 
   const renderCycleDetailComponent = () => {
     if (cycle) {
-      const res = (
-        <CycleContext.Provider value={{ cycle, currentUserIsParticipant, linkToCycle: false }}>
-          <CycleDetailComponent />
-        </CycleContext.Provider>
-      );
+      const res = <CycleDetailComponent />;
       if (cycle.access === 1) return res;
       if (cycle.access === 2) return res;
       if (cycle.access === 3 && !currentUserIsParticipant) return <Alert>Not authorized</Alert>;
@@ -87,7 +88,78 @@ const CycleDetailPage: NextPage = () => {
     return <></>;
   };
 
-  return <SimpleLayout title={cycle ? cycle.title : ''}>{renderCycleDetailComponent()}</SimpleLayout>;
+  const requestJoinCycle = async () => {
+    if (execJoinCycle && cycle) {
+      setIsRequestingJoinCycle(true);
+      const res = await execJoinCycle(cycle);
+      if (res)
+        setGlobalModalsState({
+          ...globalModalsState,
+          showToast: {
+            show: true,
+            type: 'info',
+            title: t('Join Cycle request notification'),
+            message: t(res),
+          },
+        });
+      if (res === 'OK') queryClient.invalidateQueries(['CYCLE', `${cycle.id}`]);
+      setIsRequestingJoinCycle(false);
+    }
+  };
+
+  const getBanner = () => {
+    if (router && cycle) {
+      if (router.asPath === '/cycle/16')
+        return (
+          <Banner
+            className="bg-danger"
+            style={{}}
+            show
+            content={
+              <aside className="text-center text-white">
+                <h2 className="h2">
+                  Únete al ciclo para participar de la discusión sobre los impactos del capitalismo de las redes
+                  sociales
+                </h2>
+                <p>15 de noviembre - 12 de diciembre</p>
+
+                {!currentUserIsParticipant && (
+                  <div className="d-grid gap-2">
+                    <Button
+                      disabled={isRequestingJoinCycle}
+                      className="pt-2 pb-1 px-5"
+                      variant="primary"
+                      size="lg"
+                      onClick={requestJoinCycle}
+                    >
+                      <h4 className="text-white fw-bold">
+                        ¡Unirse ya! {isRequestingJoinCycle && <Spinner size="sm" animation="grow" variant="info" />}
+                      </h4>
+                    </Button>
+                  </div>
+                )}
+              </aside>
+            }
+          />
+        );
+    }
+    return <></>;
+  };
+
+  if (cycle)
+    return (
+      <CycleContext.Provider value={{ cycle, currentUserIsParticipant, linkToCycle: false }}>
+        <SimpleLayout banner={getBanner()} title={cycle ? cycle.title : ''}>
+          {renderCycleDetailComponent()}
+        </SimpleLayout>
+      </CycleContext.Provider>
+    );
+
+  return (
+    <SimpleLayout banner={getBanner()} title="Loading...">
+      <Spinner animation="grow" variant="info" />
+    </SimpleLayout>
+  );
 };
 
 export default CycleDetailPage;

@@ -1,10 +1,12 @@
 import { useAtom } from 'jotai';
 import { FunctionComponent } from 'react';
-import Container from 'react-bootstrap/Container';
+import { Container, Button } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
+import { useRouter } from 'next/router';
 
 import Navbar from '../Navbar';
 import Header from './Header';
+
 import CreatePostForm from '../forms/CreatePostForm';
 import CreateWorkForm from '../forms/CreateWorkForm';
 import EditWorkForm from '../forms/EditWorkForm';
@@ -19,11 +21,11 @@ type Props = {
   children: JSX.Element | JSX.Element[];
   title?: string;
   showHeader?: boolean;
+  banner?: JSX.Element | JSX.Element[];
 };
 
-const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false }) => {
+const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, banner }) => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-
   const handleCreatePostModalClose = () => {
     setGlobalModalsState({ ...globalModalsState, ...{ createPostModalOpened: false } });
   };
@@ -52,11 +54,17 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false }
   //   setGlobalModalsState({ ...globalModalsState, showToast: { ...globalModalsState.showToast, show: false } });
   // };
 
+  const renderBanner = () => {
+    if (banner) return <>{banner}</>;
+    return ``;
+  };
+
   return (
     <>
       <Navbar />
-      <Toast />
       {showHeader && <Header show={showHeader} />}
+      {renderBanner()}
+      <Toast />
       <Container className="mt-5">{children}</Container>
 
       <Modal

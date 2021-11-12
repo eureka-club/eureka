@@ -49,7 +49,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   showTrash = false,
   className,
 }) => {
-  const { cycle, linkToCycle = true } = useCycleContext();
+  const { cycle, linkToCycle = true, currentUserIsParticipant } = useCycleContext();
 
   const { id, title, localImages, startDate, endDate } = cycle!;
   const { t } = useTranslation('common');
@@ -58,7 +58,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const isActive = dayjs().isBetween(startDate, endDate, null, '[]');
   const [session] = useSession() as [Session | null | undefined, boolean];
   const { data: user } = useUsers({ id: (session && (session as unknown as Session).user.id)?.toString() || '' });
-  const [isCurrentUserJoinedToCycle, setIsCurrentUserJoinedToCycle] = useState<boolean>(true);
+  // const [isCurrentUserJoinedToCycle, setIsCurrentUserJoinedToCycle] = useState<boolean>(true);
   const [participants, setParticipants] = useState<number>(0);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const queryClient = useQueryClient();
@@ -67,13 +67,13 @@ const MosaicItem: FunctionComponent<Props> = ({
     if (cycle) {
       setParticipants(cycle.participants.length);
     }
-    if (session && user && user.joinedCycles) {
-      if (!user.joinedCycles.length) setIsCurrentUserJoinedToCycle(false);
-      else {
-        const icujtc = user.joinedCycles.findIndex((c: CycleMosaicItem) => c.id === cycle!.id) !== -1;
-        setIsCurrentUserJoinedToCycle(icujtc);
-      }
-    }
+    // if (session && user && user.joinedCycles) {
+    //   if (!user.joinedCycles.length) setIsCurrentUserJoinedToCycle(false);
+    //   else {
+    //     const icujtc = user.joinedCycles.findIndex((c: CycleMosaicItem) => c.id === cycle!.id) !== -1;
+    //     setIsCurrentUserJoinedToCycle(icujtc);
+    //   }
+    // }
   }, [user, cycle]);
 
   const openSignInModal = () => {
@@ -88,15 +88,15 @@ const MosaicItem: FunctionComponent<Props> = ({
     async () => {
       const res = await fetch(`/api/cycle/${cycle!.id}/join`, { method: 'POST' });
       const json = await res.json();
-      if ('data' in json) {
-        console.log(json.error);
+      if ('status' in json) {
+        // console.log(json.error);
         setGlobalModalsState({
           ...globalModalsState,
           showToast: {
             show: true,
-            type: 'success',
+            type: 'info',
             title: t('Join Cycle request notification'),
-            message: t(json.data),
+            message: t(json.status),
           },
         });
       }
@@ -228,8 +228,8 @@ const MosaicItem: FunctionComponent<Props> = ({
         </div>
       )}
       <div className={`pt-1 text-center ${styles.joinButtonContainer}`}>
-        {(isJoinCycleLoading || isLeaveCycleLoading) && <Spinner animation="border" size="sm" />}
-        {!(isJoinCycleLoading || isLeaveCycleLoading) && isCurrentUserJoinedToCycle && user ? (
+        {(isJoinCycleLoading || isLeaveCycleLoading) && <Spinner animation="grow" size="sm" />}
+        {!(isJoinCycleLoading || isLeaveCycleLoading) && currentUserIsParticipant && user ? (
           <Button onClick={handleLeaveCycleClick} variant="button border-primary text-primary fs-6" className="w-75">
             {t('leaveCycleLabel')}
           </Button>
