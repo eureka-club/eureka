@@ -13,6 +13,9 @@
   height: 24em;
   background-color: #f9f8f87a;
 }
+.imageContainerTiny{
+  height: auto;
+}
 
 .imageContainer img {
   width: 100%;

@@ -1,0 +1,18 @@
+.bgHeaderLeft{
+  background-image: url('/img/bg-header-left.svg');
+  background-repeat: no-repeat;
+  width: 75px;
+  height: 75px;
+}
+.bgHeaderCenter{
+  background-image: url('/img/bg-header-center.svg');
+  background-repeat: no-repeat;
+  width: 75px;
+  height: 75px;
+}
+.bgHeaderRight{
+  background-image: url('/img/bg-header-right.svg');
+  background-repeat: no-repeat;
+  width: 75px;
+  height: 75px;
+}

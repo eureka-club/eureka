@@ -49,7 +49,6 @@ import styles from './CycleDetail.module.css';
 import { useCycleContext, CycleContext } from '../../useCycleContext';
 import CycleDetailHeader from './CycleDetailHeader';
 import CycleDetailDiscussion from './CycleDetailDiscussion';
-
 // import useCycles from '../../useCycles';
 
 interface Props {
