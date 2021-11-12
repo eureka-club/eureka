@@ -632,7 +632,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 <button
                   className={classNames(styles.outlinedBlock, styles.complementaryContentPrompt)}
                   type="button"
-                  disabled={complementaryMaterials.length >= 3}
+                  disabled={complementaryMaterials.length >= 5}
                   onClick={handleAddComplementaryContentClick}
                 >
                   <h4>{t('addComplementaryContentTitle')}</h4>

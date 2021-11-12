@@ -58,7 +58,7 @@ const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputPr
       //   ...{ onlyByCountries },
       // });
       // if (setTags) setTags(items.join(','));
-      ref.current!.clear();
+      if (ref.current) ref.current.clear();
       if (onTagCreated) onTagCreated(e[0]);
     }
   };

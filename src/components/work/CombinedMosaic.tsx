@@ -48,11 +48,7 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
 
   return (
     <>
-      {(isCyclesLoading || isPostsLoading) && (
-        <Spinner animation="border" role="status">
-          <span className="sr-only">Loading...</span>
-        </Spinner>
-      )}
+      {(isCyclesLoading || isPostsLoading) && <Spinner animation="grow" role="status" />}
       {mosaicData.length > 0 && <Mosaic stack={mosaicData} postsLinksTo={work} />}
     </>
   );

@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 // import { QueryClient } from 'react-query';
 // import { dehydrate } from 'react-query/hydration';
 // import { loadGetInitialProps } from 'next/dist/next-server/lib/utils';
-import { Spinner, ButtonGroup, Button } from 'react-bootstrap';
+import { Spinner, ButtonGroup, Button, Alert } from 'react-bootstrap';
 import globalSearchEngineAtom from '../src/atoms/searchEngine';
 
 import { CycleMosaicItem } from '../src/types/cycle';
@@ -62,12 +62,8 @@ const SearchPage: NextPage = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
-  useEffect(() => {
-    if (globalSearchEngineState && router) {
-      if (!globalSearchEngineState.q && !globalSearchEngineState.where && !globalSearchEngineState.itemsFound?.length)
-        router.push('/');
-    }
-  }, [globalSearchEngineState, router]);
+  const [error, setError] = useState<string>();
+
   // let where = encodeURIComponent(JSON.stringify({ title: { contains: globalSearchEngineState.q } }));
   // const { isLoading, data: works } = useWorks(where);
 
@@ -80,6 +76,17 @@ const SearchPage: NextPage = () => {
   // const { isLoading, /* isError, error, */ data: works } = useWorks();
   // const { isLoading: isLoadingCycles, /* isError: isErrorCycles, error: errorCycles, */ data: cycles } = useCycles();
   const { data: onlyByCountriesAux } = useCountries();
+
+  useEffect(() => {
+    if (globalSearchEngineState) {
+      if (
+        (!globalSearchEngineState.q && !globalSearchEngineState.where && !globalSearchEngineState.itemsFound?.length) ||
+        !items ||
+        !items?.length
+      )
+        setError(t('notFound'));
+    }
+  }, [globalSearchEngineState, items]);
 
   const [homepageMosaicData, setHomepageMosaicData] = useState<Item[]>([]);
 
@@ -170,6 +177,16 @@ const SearchPage: NextPage = () => {
   };
   let qLabel = t(`topics:${globalSearchEngineState.q as string}`);
   if (qLabel.match(':')) qLabel = globalSearchEngineState.q as string;
+
+  const renderErrorMessage = () => {
+    if (!isLoading && error)
+      return (
+        <Alert variant="warning">
+          <p>{error}</p>
+        </Alert>
+      );
+    return <></>;
+  };
   return (
     <SimpleLayout title={t('browserTitleWelcome')}>
       <ButtonGroup className="mb-1">
@@ -183,6 +200,7 @@ const SearchPage: NextPage = () => {
       <FilterEngine />
       <Mosaic className="mb-5" showButtonLabels={false} stack={homepageMosaicDataFiltered} />
       {genLoadingCmp()}
+      {renderErrorMessage()}
     </SimpleLayout>
   );
 };

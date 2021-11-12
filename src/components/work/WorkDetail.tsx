@@ -138,7 +138,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
                   transition={false}
                 >
                   {/* language=CSS */}
-                  <style jsx global>
+                  {/* <style jsx global>
                     {`
                       .nav-tabs .nav-item.show .nav-link,
                       .nav-tabs .nav-link.active,
@@ -152,7 +152,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
                         border-bottom: solid 1px var(--primary) !important;
                       }
                     `}
-                  </style>
+                  </style> */}
                   <Row className="mb-4">
                     <Col>
                       <Nav variant="tabs" fill>

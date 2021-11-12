@@ -3,13 +3,17 @@ import { WorkMosaicItem } from './types/work';
 
 export const getRecords = async (id: number): Promise<WorkMosaicItem | undefined> => {
   if (!id) return undefined;
+  // { error: 'not work id provided' };
   const url = `/api/work/${id}`;
 
   const res = await fetch(url);
   if (!res.ok) return undefined;
-  const result = await res.json();
+  // { error: 'server error' };
+  const { error, work } = await res.json();
+  if (work) return { ...work };
 
-  return { ...result.work };
+  return undefined;
+  // { error };
 };
 
 interface Options {
