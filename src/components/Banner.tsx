@@ -5,6 +5,7 @@ import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
 import useTranslation from 'next-translate/useTranslation';
 // import { useSession } from 'next-auth/client';
 // import withTitle from '../../HOCs/withTitle';
+import { useQueryClient } from 'react-query';
 import styles from './Banner.module.css';
 // import { Session } from '../types';
 // import globalModalsAtom from '../atoms/globalModals';
@@ -15,11 +16,21 @@ type Props = {
   show?: boolean;
   className?: string;
   style?: Record<string, string>;
+  cacheKey: [string, string];
 };
 
-const Banner: FunctionComponent<Props> = ({ show: s = false, content, expandBannerLabel, className, style }) => {
+const Banner: FunctionComponent<Props> = ({
+  show: s = false,
+  content,
+  expandBannerLabel,
+  className,
+  style,
+  cacheKey,
+}) => {
   const { t } = useTranslation('common');
-  const [show, setShow] = useState<boolean>(s);
+  const queryClient = useQueryClient();
+  const ss = typeof queryClient.getQueryData(cacheKey) === 'boolean' ? queryClient.getQueryData(cacheKey) : s;
+  const [show, setShow] = useState<boolean>(ss as boolean);
   // const [session, isLoadingSession] = useSession() as [Session | null | undefined, boolean];
   // const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
 
@@ -30,7 +41,14 @@ const Banner: FunctionComponent<Props> = ({ show: s = false, content, expandBann
   // const openSignInModal = () => {
   //   setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
   // };
-
+  const close = () => {
+    setShow(false);
+    queryClient.setQueryData(cacheKey, false);
+  };
+  const open = () => {
+    setShow(true);
+    queryClient.setQueryData(cacheKey, true);
+  };
   return (
     <>
       <section className={`p-3 ${className}`} style={style || {}}>
@@ -38,7 +56,7 @@ const Banner: FunctionComponent<Props> = ({ show: s = false, content, expandBann
           {show && (
             <Button
               variant="info"
-              onClick={() => setShow(false)}
+              onClick={close}
               className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
             >
               {t('Close')} <AiOutlineClose />
@@ -47,7 +65,7 @@ const Banner: FunctionComponent<Props> = ({ show: s = false, content, expandBann
           {!show && (
             <Button
               variant="info"
-              onClick={() => setShow(true)}
+              onClick={open}
               className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
             >
               {expandBannerLabel || t('Expand')} <AiOutlineDown />

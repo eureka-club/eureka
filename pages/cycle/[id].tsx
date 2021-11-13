@@ -88,8 +88,13 @@ const CycleDetailPage: NextPage = () => {
     return <></>;
   };
 
+  const openSignInModal = () => {
+    setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
+  };
+
   const requestJoinCycle = async () => {
-    if (execJoinCycle && cycle) {
+    if (!session) openSignInModal();
+    else if (execJoinCycle && cycle) {
       setIsRequestingJoinCycle(true);
       const res = await execJoinCycle(cycle);
       if (res)
@@ -108,10 +113,11 @@ const CycleDetailPage: NextPage = () => {
   };
 
   const getBanner = () => {
-    if (router && cycle) {
-      if (router.asPath === '/cycle/16')
+    if (!currentUserIsParticipant && router && cycle) {
+      if (router.asPath.search(/\/cycle\/16/g) > -1)
         return (
           <Banner
+            cacheKey={['BANNER-CYCLE', `${cycle.id}`]}
             className="bg-danger"
             style={{}}
             show
@@ -123,21 +129,19 @@ const CycleDetailPage: NextPage = () => {
                 </h2>
                 <p>15 de noviembre - 12 de diciembre</p>
 
-                {!currentUserIsParticipant && (
-                  <div className="d-grid gap-2">
-                    <Button
-                      disabled={isRequestingJoinCycle}
-                      className="pt-2 pb-1 px-5"
-                      variant="primary"
-                      size="lg"
-                      onClick={requestJoinCycle}
-                    >
-                      <h4 className="text-white fw-bold">
-                        ¡Unirse ya! {isRequestingJoinCycle && <Spinner size="sm" animation="grow" variant="info" />}
-                      </h4>
-                    </Button>
-                  </div>
-                )}
+                <div className="d-grid gap-2">
+                  <Button
+                    disabled={isRequestingJoinCycle}
+                    className="pt-2 pb-1 px-5"
+                    variant="primary"
+                    size="lg"
+                    onClick={requestJoinCycle}
+                  >
+                    <h4 className="text-white fw-bold">
+                      ¡Unirse ya! {isRequestingJoinCycle && <Spinner size="sm" animation="grow" variant="info" />}
+                    </h4>
+                  </Button>
+                </div>
               </aside>
             }
           />
