@@ -124,10 +124,9 @@ const CycleDetailPage: NextPage = () => {
             content={
               <aside className="text-center text-white">
                 <h2 className="h2">
-                  Únete al ciclo para participar de la discusión sobre los impactos del capitalismo de las redes
-                  sociales
+                  Participa en la conversación sobre adicción, desinformación y violencia en redes sociales
                 </h2>
-                <p>15 de noviembre - 12 de diciembre</p>
+                <p>16 de noviembre - 12 de diciembre</p>
 
                 <div className="d-grid gap-2">
                   <Button
