@@ -50,7 +50,6 @@ const MosaicItem: FunctionComponent<Props> = ({
   className,
 }) => {
   const { cycle, linkToCycle = true, currentUserIsParticipant } = useCycleContext();
-
   const { id, title, localImages, startDate, endDate } = cycle!;
   const { t } = useTranslation('common');
   const sd = dayjs(startDate).add(1, 'day').tz(dayjs.tz.guess());
@@ -58,7 +57,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const isActive = dayjs().isBetween(startDate, endDate, null, '[]');
   const [session] = useSession() as [Session | null | undefined, boolean];
   const { data: user } = useUsers({ id: (session && (session as unknown as Session).user.id)?.toString() || '' });
-  // const [isCurrentUserJoinedToCycle, setIsCurrentUserJoinedToCycle] = useState<boolean>(true);
+  const [isCurrentUserJoinedToCycle, setIsCurrentUserJoinedToCycle] = useState<boolean>(true);
   const [participants, setParticipants] = useState<number>(0);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const queryClient = useQueryClient();
@@ -66,14 +65,16 @@ const MosaicItem: FunctionComponent<Props> = ({
   useEffect(() => {
     if (cycle) {
       setParticipants(cycle.participants.length);
+      if (currentUserIsParticipant === undefined) {
+        if (session && user && user.joinedCycles) {
+          if (!user.joinedCycles.length) setIsCurrentUserJoinedToCycle(false);
+          else {
+            const icujtc = user.joinedCycles.findIndex((c: CycleMosaicItem) => c.id === cycle!.id) !== -1;
+            setIsCurrentUserJoinedToCycle(icujtc);
+          }
+        }
+      } else setIsCurrentUserJoinedToCycle(!!currentUserIsParticipant);
     }
-    // if (session && user && user.joinedCycles) {
-    //   if (!user.joinedCycles.length) setIsCurrentUserJoinedToCycle(false);
-    //   else {
-    //     const icujtc = user.joinedCycles.findIndex((c: CycleMosaicItem) => c.id === cycle!.id) !== -1;
-    //     setIsCurrentUserJoinedToCycle(icujtc);
-    //   }
-    // }
   }, [user, cycle]);
 
   const openSignInModal = () => {
@@ -171,7 +172,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const handleJoinCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
     if (!session) openSignInModal();
-    execJoinCycle();
+    else execJoinCycle();
   };
 
   const handleLeaveCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
@@ -229,7 +230,7 @@ const MosaicItem: FunctionComponent<Props> = ({
       )}
       <div className={`pt-1 text-center ${styles.joinButtonContainer}`}>
         {(isJoinCycleLoading || isLeaveCycleLoading) && <Spinner animation="grow" size="sm" />}
-        {!(isJoinCycleLoading || isLeaveCycleLoading) && currentUserIsParticipant && user ? (
+        {!(isJoinCycleLoading || isLeaveCycleLoading) && isCurrentUserJoinedToCycle && user ? (
           <Button onClick={handleLeaveCycleClick} variant="button border-primary text-primary fs-6" className="w-75">
             {t('leaveCycleLabel')}
           </Button>

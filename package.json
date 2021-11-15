@@ -14,7 +14,7 @@
     "tsc": "tsc --noEmit"
   },
   "engines": {
-    "node": "^14 || ^12",
+    "node": "^16 || ^14",
     "yarn": "^1"
   },
   "dependencies": {
