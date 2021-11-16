@@ -2,7 +2,7 @@ import { useAtom } from 'jotai';
 import { FunctionComponent } from 'react';
 import { Container, Button } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 
 import Navbar from '../Navbar';
 import NavbarMovile from '../NavbarMovile';
@@ -62,14 +62,14 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
 
   return (
     <>
-      <div className="d-none d-md-block">
+      <div className="d-none d-lg-block">
         <Navbar />
       </div>
-      <div className="d-sm-block d-md-none">
+      <div className="d-lg-none">
         <NavbarMovile />
       </div>
       <Toast />
-      <Navbar />
+      {/* <Navbar /> */}
       {showHeader && <Header show={showHeader} />}
       {renderBanner()}
       <Toast />

@@ -1,7 +1,7 @@
 /* eslint-disable react/no-danger */
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 
-// import { CLARITY_TRACKING_ID } from '../src/constants';
+import { CLARITY_TRACKING_ID } from '../src/constants';
 
 class MyDocument extends Document {
   render(): JSX.Element {
