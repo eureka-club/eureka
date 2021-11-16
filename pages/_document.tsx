@@ -72,7 +72,7 @@ class MyDocument extends Document {
                   t.src=v;s=b.getElementsByTagName(e)[0];
                   s.parentNode.insertBefore(t,s)}(window, document,'script',
                   'https://connect.facebook.net/en_US/fbevents.js');
-                  fbq('init', '599663694569948');
+                  fbq('init', '1592068824487464');
                   fbq('track', 'PageView');
                   `,
               }}
