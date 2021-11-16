@@ -62,9 +62,8 @@ class MyDocument extends Document {
           )}
           {/* <!-- Facebook Pixel Code --> */}
           <>
-            <script>
-              dangerouslySetInnerHTML=
-              {{
+            <script
+              dangerouslySetInnerHTML={{
                 __html: `!function(f,b,e,v,n,t,s)
                   {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
                   n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -77,7 +76,7 @@ class MyDocument extends Document {
                   fbq('track', 'PageView');
                   `,
               }}
-            </script>
+            />
           </>
           {/* <!-- End Facebook Pixel Code --> */}
         </Head>
