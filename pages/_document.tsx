@@ -51,7 +51,6 @@ class MyDocument extends Document {
             }}
           />
           {/* End Google Tag Manager */}
-
           {/* MS Clarity analytics */}
           {/* {CLARITY_TRACKING_ID != null && (
             <>
