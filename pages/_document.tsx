@@ -16,11 +16,9 @@ class MyDocument extends Document {
           <link rel="mask-icon" href="/logo.svg" color="#3cd1b3" />
           <meta name="msapplication-TileColor" content="#2d89ef" />
           <meta name="theme-color" content="#ffffff" />
-
           {/* webfont(s) */}
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
           <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
-
           <link
             rel="preload"
             href="https://fonts.gstatic.com/s/opensans/v18/mem8YaGs126MiZpBA-UFVZ0bf8pkAg.woff2"
@@ -39,9 +37,8 @@ class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;1,400;1,600&display=swap"
           />
-
           {/* Google Tag Manager */}
-          <script
+          {/* <script
             dangerouslySetInnerHTML={{
               __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -50,9 +47,10 @@ class MyDocument extends Document {
             })(window,document,'script','dataLayer','GTM-W4VFV99');`,
             }}
           />
+ */}{' '}
           {/* End Google Tag Manager */}
           {/* MS Clarity analytics */}
-          {/* {CLARITY_TRACKING_ID != null && (
+          {CLARITY_TRACKING_ID != null && (
             <>
               <script
                 dangerouslySetInnerHTML={{
@@ -61,7 +59,7 @@ class MyDocument extends Document {
               />
               <script async src={`https://www.clarity.ms/tag/${CLARITY_TRACKING_ID}`} />
             </>
-          )} */}
+          )}
           {/* <!-- Facebook Pixel Code --> */}
           <script>
             dangerouslySetInnerHTML=
