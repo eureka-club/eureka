@@ -47,7 +47,7 @@ class MyDocument extends Document {
             })(window,document,'script','dataLayer','GTM-W4VFV99');`,
             }}
           />
- */}{' '}
+ */}
           {/* End Google Tag Manager */}
           {/* MS Clarity analytics */}
           {CLARITY_TRACKING_ID != null && (
@@ -61,10 +61,11 @@ class MyDocument extends Document {
             </>
           )}
           {/* <!-- Facebook Pixel Code --> */}
-          <script>
-            dangerouslySetInnerHTML=
-            {{
-              __html: `!function(f,b,e,v,n,t,s)
+          <>
+            <script>
+              dangerouslySetInnerHTML=
+              {{
+                __html: `!function(f,b,e,v,n,t,s)
                   {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
                   n.callMethod.apply(n,arguments):n.queue.push(arguments)};
                   if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
@@ -75,18 +76,9 @@ class MyDocument extends Document {
                   fbq('init', '599663694569948');
                   fbq('track', 'PageView');
                   `,
-            }}
-          </script>
-          <noscript>
-            {/* // eslint-disable-next-line jsx-a11y/alt-text */}
-            <img
-              alt="eureka-pixel"
-              height="1"
-              width="1"
-              style={{ display: 'none' }}
-              src="https://www.facebook.com/tr?id=599663694569948&ev=PageView&noscript=1"
-            />
-          </noscript>
+              }}
+            </script>
+          </>
           {/* <!-- End Facebook Pixel Code --> */}
         </Head>
         <body>
