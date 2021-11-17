@@ -51,7 +51,8 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
       },
       comments: {
         include: {
-          creator: { select: { id: true, name: true, image: true } },
+          creator: true,
+          work: true,
           comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
         },
       },

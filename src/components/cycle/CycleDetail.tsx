@@ -177,6 +177,27 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     return false;
   };
 
+  const renderCycleWorksComments = () => {
+    if (cycle && cycle.comments)
+      return cycle.comments
+        .filter((c) => c.workId && !c.postId && !c.commentId)
+        .sort((p, c) => (p.id > c.id && -1) || 1)
+        .map((c) => {
+          return (
+            <ComentMosaic
+              key={c.id}
+              comment={c as unknown as CommentMosaicItem}
+              detailed
+              showComments
+              commentParent={c.work!}
+              cacheKey={['CYCLE', `${cycle.id}`]}
+              className="mb-4"
+            />
+          );
+        });
+    return null;
+  };
+
   const renderCycleOwnComments = () => {
     if (cycle && cycle.comments)
       return cycle.comments
@@ -186,7 +207,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           return (
             <ComentMosaic
               key={c.id}
-              comment={c as CommentMosaicItem}
+              comment={c as unknown as CommentMosaicItem}
               detailed
               showComments
               commentParent={cycle}
@@ -286,6 +307,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
               </MosaicContext.Provider>
             )) ||
               null}
+            {renderCycleWorksComments()}
             {renderCycleOwnComments()}
           </TabPane>
           {/* <TabPane eventKey="my_milestone">
