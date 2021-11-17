@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Spinner, Alert, Button } from 'react-bootstrap';
 import { useQueryClient } from 'react-query';
-import { CycleMosaicItem } from '../../src/types/cycle';
+// import { CycleMosaicItem } from '../../src/types/cycle';
 import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '../../src/components/cycle/CycleDetail';
@@ -149,23 +149,20 @@ const CycleDetailPage: NextPage = () => {
     return <></>;
   };
 
-  // if (cycle)
-
-  return (
-    <>
-      <CycleContext.Provider value={{ cycle: cycle || null, currentUserIsParticipant, linkToCycle: false }}>
+  if (cycle)
+    return (
+      <CycleContext.Provider value={{ cycle, currentUserIsParticipant, linkToCycle: false }}>
         <SimpleLayout banner={getBanner()} title={cycle ? cycle.title : ''}>
           {renderCycleDetailComponent()}
         </SimpleLayout>
       </CycleContext.Provider>
-    </>
-  );
+    );
 
-  // return (
-  //   <SimpleLayout banner={getBanner()} title="Loading...">
-  //     <Spinner animation="grow" variant="info" />
-  //   </SimpleLayout>
-  // );
+  return (
+    <SimpleLayout banner={getBanner()} title="Loading...">
+      <Spinner animation="grow" variant="info" />
+    </SimpleLayout>
+  );
 };
 
 export default CycleDetailPage;
