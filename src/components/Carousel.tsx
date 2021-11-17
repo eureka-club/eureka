@@ -4,14 +4,15 @@
 // import { useSession } from 'next-auth/client';
 // import Link from 'next/link';
 // import { useRouter } from 'next/router';
+import { v4 } from 'uuid';
 import { useAtom } from 'jotai';
-import Masonry from 'react-masonry-css';
-import classNames from 'classnames';
+// import Masonry from 'react-masonry-css';
+// import classNames from 'classnames';
 import { Cycle, Work } from '@prisma/client';
 import useTranslation from 'next-translate/useTranslation';
 import { /* useInfiniteQuery, */ useQuery } from 'react-query';
 import { FunctionComponent /* , ChangeEvent */, useState, useEffect } from 'react';
-import { Button, Row, Col, Stack } from 'react-bootstrap';
+import { Button, Row, Col } from 'react-bootstrap';
 import router from 'next/router';
 import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
 import { BsHash } from 'react-icons/bs';
@@ -139,7 +140,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
       // debugger;
       // data.pages.forEach((page, idx) => {
       const mosaics = items.data.map((i: CycleMosaicItem | WorkMosaicItem) => (
-        <div key={`${i.type}-${i.id}`} className="me-1">
+        <div key={`${v4()}`} className="mx-2">
           {renderMosaicItem(i, undefined, topic, page.toString())}
         </div>
       ));
@@ -234,7 +235,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
                 {/* )} */}
               </Col>
             </Row>
-            <div className="d-flex overflow-auto justify-content-left">
+            <div className="d-flex overflow-auto justify-content-center">
               {buildMosaics()}
               {page !== 0 && (
                 <Button

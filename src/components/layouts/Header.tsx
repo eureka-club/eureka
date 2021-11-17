@@ -1,6 +1,6 @@
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 import { useAtom } from 'jotai';
-import { FunctionComponent, MouseEvent, useState, useEffect } from 'react';
+import { FunctionComponent, useState, useEffect } from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
 import useTranslation from 'next-translate/useTranslation';

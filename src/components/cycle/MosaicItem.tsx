@@ -114,8 +114,8 @@ const MosaicItem: FunctionComponent<Props> = ({
         //   }
       },
       onSuccess: () => {
-        // queryClient.invalidateQueries(['USERS', user.id.toString()]);
-        // queryClient.invalidateQueries(cacheKey);
+        queryClient.invalidateQueries(['USERS', user.id.toString()]);
+        queryClient.invalidateQueries(cacheKey);
       },
     },
   );
@@ -152,8 +152,8 @@ const MosaicItem: FunctionComponent<Props> = ({
         // }
       },
       onSuccess: () => {
-        // queryClient.invalidateQueries(['USERS', user.id.toString()]);
-        // queryClient.invalidateQueries(cacheKey);
+        queryClient.invalidateQueries(['USERS', user.id.toString()]);
+        queryClient.invalidateQueries(cacheKey);
       },
     },
   );

@@ -253,7 +253,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           {cycle.participants.length} participants
         </Button> */}
         {/* <CycleContext.Provider value={{ cycle }}> */}
-        <div className="me-5" /* className={styles.customCarouselStaticContainer} */>
+        <div className="" /* className={styles.customCarouselStaticContainer} */>
           <CarouselStatic
             showSocialInteraction={false}
             // onSeeAll={async () => seeAll(cycle.works as WorkMosaicItem[], t('Eurekas I created'))}

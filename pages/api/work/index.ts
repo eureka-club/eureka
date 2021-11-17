@@ -7,7 +7,7 @@ import getApiHandler from '../../../src/lib/getApiHandler';
 import { storeUpload } from '../../../src/facades/fileUpload';
 import { createFromServerFields } from '../../../src/facades/work';
 import prisma from '../../../src/lib/prisma';
-import redis from '../../../src/lib/redis';
+// import redis from '../../../src/lib/redis';
 // import { WorkWithImages } from '../../../src/types/work';
 
 export const config = {
@@ -40,7 +40,7 @@ export default getApiHandler()
         const uploadData = await storeUpload(coverImage);
         const fieldsA = { ...fields, creatorId: [session.user.id] };
         const work = await createFromServerFields(fieldsA, uploadData);
-        await redis.flushall();
+        // await redis.flushall();
         res.status(201).json(work);
       } catch (exc) {
         console.error(exc); // eslint-disable-line no-console

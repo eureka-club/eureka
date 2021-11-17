@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import { FunctionComponent } from 'react';
-import { Container, Button } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 // import { useRouter } from 'next/router';
 

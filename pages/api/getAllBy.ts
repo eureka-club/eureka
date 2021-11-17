@@ -5,7 +5,7 @@ import { Work, Cycle } from '@prisma/client';
 import getApiHandler from '../../src/lib/getApiHandler';
 import prisma from '../../src/lib/prisma';
 // import { WorkWithImages } from '../../../src/types/work';
-import redis from '../../src/lib/redis';
+// import redis from '../../src/lib/redis';
 
 export const config = {
   api: {

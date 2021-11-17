@@ -128,7 +128,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
     const result: JSX.Element[] = [];
     if (current) {
       const mosaics = current.map((i, idx: number) => (
-        <div key={`${idx * 1}${v4()}`} className="me-4">
+        <div key={`${idx * 1}${v4()}`} className="mx-2">
           {renderMosaicItem(i, undefined, showSocialInteraction, customMosaicStyle, tiny)}
         </div>
       ));
@@ -185,7 +185,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
                 )}
               </Col>
             </Row>
-            <div className="d-flex overflow-auto justify-content-left">
+            <div className="d-flex overflow-auto justify-content-center">
               {buildMosaics()}
               {/* {hide.length && ( */}
               <Button
