@@ -28,6 +28,7 @@
     "@types/ioredis": "^4.27.7",
     "@types/node": "^16.11.4",
     "@types/tinymce": "^4.6.4",
+    "@types/uuid": "^8.3.1",
     "axios": "^0.21.1",
     "babel-plugin-superjson-next": "^0.2.1",
     "bcryptjs": "^2.4.3",
@@ -66,7 +67,8 @@
     "sass": "^1.41.0",
     "superjson": "~1.6.1",
     "tinymce": "^5",
-    "ts-node": "^9.0.0"
+    "ts-node": "^9.0.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.10",

@@ -14,13 +14,13 @@ export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     const session = (await getSession({ req })) as unknown as Session;
     if (session == null) {
-      res.status(401).json({ status: 'Unauthorized' });
+      res.status(200).json({ status: 'error', message: 'Unauthorized' });
       return;
     }
 
     const { id } = req.query;
     if (typeof id !== 'string') {
-      res.status(404).end();
+      res.status(200).json({ status: 'error', message: 'id is required' });
       return;
     }
 
@@ -91,13 +91,13 @@ export default getApiHandler()
             const msg = mailSent ? 'Request sent successfully' : 'Failed to send the request';
 
             res.status(200).json({
-              status: 'OK',
+              status: 'success',
+              message: msg,
               // data: 'Your request has been sent successfully, you will recive a response by email',
-              data: msg,
               error: mailSent,
             });
           } catch (e) {
-            res.status(200).json({ ok: false, error: JSON.stringify(e) });
+            res.status(200).json({ status: 'error', message: JSON.stringify(e) });
           }
         }
         return;
@@ -105,10 +105,10 @@ export default getApiHandler()
 
       await addParticipant(cycle, session.user.id);
 
-      res.status(200).json({ status: 'OK' });
+      res.status(200).json({ status: 'success' });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
-      res.status(500).json({ status: 'server error' });
+      res.status(200).json({ status: 'error', message: 'server error' });
     } finally {
       prisma.$disconnect();
     }
@@ -116,35 +116,35 @@ export default getApiHandler()
   .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     const session = (await getSession({ req })) as unknown as Session;
     if (session == null) {
-      res.status(401).json({ status: 'Unauthorized' });
+      res.status(200).json({ status: 'error', message: 'Unauthorized' });
       return;
     }
 
     const { id } = req.query;
     if (typeof id !== 'string') {
-      res.status(404).end();
+      res.status(200).json({ status: 'error', message: 'id is required' });
       return;
     }
 
     const idNum = parseInt(id, 10);
     if (!Number.isInteger(idNum)) {
-      res.status(404).end();
+      res.status(200).json({ status: 'error', message: 'id should be a number' });
       return;
     }
 
     try {
       const cycle = await find(idNum);
       if (cycle == null) {
-        res.status(404).end();
+        res.status(200).json({ status: 'error', message: 'cycle not found' });
         return;
       }
 
       await removeParticipant(cycle, session.user);
 
-      res.status(200).json({ status: 'OK' });
+      res.status(200).json({ status: 'success', data: cycle });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
-      res.status(500).json({ status: 'server error' });
+      res.status(500).json({ status: 'error', message: 'server error' });
     } finally {
       prisma.$disconnect();
     }

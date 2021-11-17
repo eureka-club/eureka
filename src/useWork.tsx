@@ -9,7 +9,7 @@ export const getRecords = async (id: number): Promise<WorkMosaicItem | undefined
   const res = await fetch(url);
   if (!res.ok) return undefined;
   // { error: 'server error' };
-  const { error, work } = await res.json();
+  const { work } = await res.json();
   if (work) return { ...work };
 
   return undefined;

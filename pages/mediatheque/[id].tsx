@@ -338,7 +338,7 @@ const Mediatheque: NextPage = () => {
               <Card.Body>
                 <Row>
                   <Col>
-                    <img className={styles.avatar} src={user.image || '/assets/avatar.png'} alt={user.email} />
+                    <img className={styles.avatar} src={user.image || '/assets/avatar.png'} alt={user.name} />
                     <br />
                     {/* <em>{user.name}</em> */}
                   </Col>

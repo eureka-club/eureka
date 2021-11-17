@@ -15,6 +15,7 @@ import { Button, Row, Col } from 'react-bootstrap';
 // import router from 'next/router';
 import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
 // import { BsHash } from 'react-icons/bs';
+import { v4 } from 'uuid';
 import globalSearchEngineAtom from '../atoms/searchEngine';
 import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem } from '../types';
 import MosaicItemCycle from './cycle/MosaicItem';
@@ -54,7 +55,7 @@ const renderMosaicItem = (
   if (isCycleMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
     return (
-      <CycleContext.Provider key={`cycle-${item.id}`} value={{ cycle: item as CycleMosaicItem }}>
+      <CycleContext.Provider key={`cycle-${v4()}`} value={{ cycle: item as CycleMosaicItem }}>
         <MosaicItemCycle detailed showSocialInteraction={showSocialInteraction} showButtonLabels={false} />
       </CycleContext.Provider>
     );
@@ -65,7 +66,7 @@ const renderMosaicItem = (
     if (it.works && it.works.length > 0) [pp] = it.works;
     else if (it.cycles && it.cycles.length > 0) [pp] = it.cycles;
 
-    return <MosaicItemPost key={`post-${item.id}`} post={item as PostMosaicItem} postParent={pp} />;
+    return <MosaicItemPost key={`post-${v4()}`} post={item as PostMosaicItem} postParent={pp} />;
   }
   if (isWorkMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -73,7 +74,6 @@ const renderMosaicItem = (
       <MosaicItemWork
         showSocialInteraction={showSocialInteraction}
         showButtonLabels={false}
-        key={`work-${item.id}`}
         work={item}
         style={customMosaicStyle}
         tiny={tiny}
@@ -81,7 +81,7 @@ const renderMosaicItem = (
     );
   }
   if (isUserMosaicItem(item)) {
-    return <MosaicUserItem user={item} key={`user-${item.id}`} showSocialInteraction={false} />;
+    return <MosaicUserItem user={item} key={`user-${v4()}`} showSocialInteraction={false} />;
   }
 
   return '';
@@ -127,24 +127,29 @@ const CarouselStatic: FunctionComponent<Props> = ({
   const buildMosaics = () => {
     const result: JSX.Element[] = [];
     if (current) {
-      const mosaics = current.map((i) =>
-        renderMosaicItem(i, undefined, showSocialInteraction, customMosaicStyle, tiny),
-      );
+      const mosaics = current.map((i, idx: number) => (
+        <div key={`${idx * 1}${v4()}`} className="me-4">
+          {renderMosaicItem(i, undefined, showSocialInteraction, customMosaicStyle, tiny)}
+        </div>
+      ));
       const res = (
-        <Masonry
-          // key={`${topic}${item.id}`}
-          key={`${title}`}
-          breakpointCols={{
-            default: 4,
-            1199: 3,
-            768: 2,
-            576: 1,
-          }}
-          className={classNames('d-flex', styles.masonry)}
-          columnClassName={styles.masonryColumn}
-        >
+        // <Masonry
+        //   // key={`${topic}${item.id}`}
+        //   key={`${title}`}
+        //   breakpointCols={{
+        //     default: 4,
+        //     1199: 3,
+        //     768: 2,
+        //     576: 1,
+        //   }}
+        //   className={classNames('d-flex', styles.masonry)}
+        //   columnClassName={styles.masonryColumn}
+        // >
+        //   {mosaics}
+        // </Masonry>
+        <div key={v4()} className="d-flex flex-nowrap">
           {mosaics}
-        </Masonry>
+        </div>
       );
       result.push(res);
       // });
@@ -180,11 +185,11 @@ const CarouselStatic: FunctionComponent<Props> = ({
                 )}
               </Col>
             </Row>
-            <div>
+            <div className="d-flex overflow-auto justify-content-left">
               {buildMosaics()}
               {/* {hide.length && ( */}
               <Button
-                className={styles.leftButton}
+                className={`p-0 text-white rounded-circle position-absolute top-50 start-0 translate-middle ${styles.leftButton}`}
                 onClick={() => {
                   const s = current.slice(0, 4);
                   setShow((p) => [...s, ...p]);
@@ -199,7 +204,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
               {/* )} */}
               {/* {dataFiltered.length && ( */}
               <Button
-                className={styles.rightButton}
+                className={`p-0 text-center text-white rounded-circle position-absolute top-50 start-100 translate-middle ${styles.rightButton}`}
                 onClick={() => {
                   const c = current.splice(0, 4);
                   setHide((p) => [...p, ...c]);

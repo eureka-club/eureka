@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/client';
+// import { getSession } from 'next-auth/client';
 import getT from 'next-translate/getT';
 import { WEBAPP_URL } from '../../../../src/constants';
-import { Session } from '../../../../src/types';
+// import { Session } from '../../../../src/types';
 import getApiHandler from '../../../../src/lib/getApiHandler';
 import { addParticipant, find } from '../../../../src/facades/cycle';
 import prisma from '../../../../src/lib/prisma';
@@ -12,7 +12,7 @@ import { sendMailRequestJoinCycleResponse } from '../../../../src/facades/mail';
 const bcrypt = require('bcryptjs');
 
 export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-  const session = (await getSession({ req })) as unknown as Session;
+  // const session = (await getSession({ req })) as unknown as Session;
   const { id: cycleId } = req.query;
   const [userId, base64Hash, authorized] = req.query.cycleAuthorizeJoin;
   if (typeof cycleId !== 'string') {

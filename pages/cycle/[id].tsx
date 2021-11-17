@@ -149,20 +149,23 @@ const CycleDetailPage: NextPage = () => {
     return <></>;
   };
 
-  if (cycle)
-    return (
-      <CycleContext.Provider value={{ cycle, currentUserIsParticipant, linkToCycle: false }}>
+  // if (cycle)
+
+  return (
+    <>
+      <CycleContext.Provider value={{ cycle: cycle || null, currentUserIsParticipant, linkToCycle: false }}>
         <SimpleLayout banner={getBanner()} title={cycle ? cycle.title : ''}>
           {renderCycleDetailComponent()}
         </SimpleLayout>
       </CycleContext.Provider>
-    );
-
-  return (
-    <SimpleLayout banner={getBanner()} title="Loading...">
-      <Spinner animation="grow" variant="info" />
-    </SimpleLayout>
+    </>
   );
+
+  // return (
+  //   <SimpleLayout banner={getBanner()} title="Loading...">
+  //     <Spinner animation="grow" variant="info" />
+  //   </SimpleLayout>
+  // );
 };
 
 export default CycleDetailPage;

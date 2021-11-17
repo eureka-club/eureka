@@ -75,7 +75,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         }
       } else setIsCurrentUserJoinedToCycle(!!currentUserIsParticipant);
     }
-  }, [user, cycle]);
+  }, [user, cycle, currentUserIsParticipant, session]);
 
   const openSignInModal = () => {
     setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
@@ -88,8 +88,9 @@ const MosaicItem: FunctionComponent<Props> = ({
   } = useMutation(
     async () => {
       const res = await fetch(`/api/cycle/${cycle!.id}/join`, { method: 'POST' });
-      const json = await res.json();
-      if ('status' in json) {
+      const { status, message } = await res.json();
+
+      if (status === 'error') {
         // console.log(json.error);
         setGlobalModalsState({
           ...globalModalsState,
@@ -97,7 +98,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             show: true,
             type: 'info',
             title: t('Join Cycle request notification'),
-            message: t(json.status),
+            message: t(message),
           },
         });
       }
@@ -113,8 +114,8 @@ const MosaicItem: FunctionComponent<Props> = ({
         //   }
       },
       onSuccess: () => {
-        queryClient.invalidateQueries(['USERS', user.id.toString()]);
-        queryClient.invalidateQueries(cacheKey);
+        // queryClient.invalidateQueries(['USERS', user.id.toString()]);
+        // queryClient.invalidateQueries(cacheKey);
       },
     },
   );
@@ -124,7 +125,19 @@ const MosaicItem: FunctionComponent<Props> = ({
     // isSuccess: isLeaveCycleSuccess,
   } = useMutation(
     async () => {
-      await fetch(`/api/cycle/${cycle!.id}/join`, { method: 'DELETE' });
+      const res = await fetch(`/api/cycle/${cycle!.id}/join`, { method: 'DELETE' });
+      const { status, message } = await res.json();
+      if (status === 'error') {
+        setGlobalModalsState({
+          ...globalModalsState,
+          showToast: {
+            show: true,
+            type: 'info',
+            title: t('Join Cycle request notification'),
+            message: t(message),
+          },
+        });
+      }
     },
     {
       onMutate: () => {
@@ -139,8 +152,8 @@ const MosaicItem: FunctionComponent<Props> = ({
         // }
       },
       onSuccess: () => {
-        queryClient.invalidateQueries(['USERS', user.id.toString()]);
-        queryClient.invalidateQueries(cacheKey);
+        // queryClient.invalidateQueries(['USERS', user.id.toString()]);
+        // queryClient.invalidateQueries(cacheKey);
       },
     },
   );

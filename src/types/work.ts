@@ -21,6 +21,7 @@ export type WorkMosaicItem = Prisma.WorkGetPayload<{
     ratings: true;
     comments: true;
     posts: true;
+    cycles: true;
   };
 }>;
 

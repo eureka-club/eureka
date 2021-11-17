@@ -83,7 +83,6 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   // const router = useRouter();
   const { cycle: c } = useCycleContext();
   const [cycle] = useState<CycleMosaicItem>(c!);
-  console.log(cycle);
   const [session] = useSession() as [Session | null | undefined, boolean];
   const { t } = useTranslation('cycleDetail');
   // const hyvorId = `${WEBAPP_URL}cycle/${cycle.id}`;
@@ -218,8 +217,8 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   };
 
   return (
-    <Row className="mb-5">
-      <Col md={9}>
+    <Row className="mb-5 justify-content-center">
+      <Col xs={{ span: 12, order: 2 }} md={{ span: 7, order: 1 }} lg={{ span: 8 }}>
         <h1 className="mb-1 fw-bold text-secondary">
           <a>{cycle.title}</a>
         </h1>
@@ -269,7 +268,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         </div>
         {/* </CycleContext.Provider> */}
       </Col>
-      <Col md={3}>
+      <Col xs={{ span: 12, order: 1 }} md={{ span: 5, order: 2 }} lg={{ span: 4 }}>
         <UserAvatar user={cycle.creator} showFullName />
         <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
           <MosaicItem showTrash className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />

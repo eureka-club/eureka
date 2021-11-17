@@ -468,10 +468,10 @@ const EditUserForm: FunctionComponent = () => {
 
           <ModalFooter>
             <Container className="py-3">
-              <Button variant="primary" type="submit" className="ps-5 pe-4 float-right">
+              <Button variant="primary" type="submit" className="">
                 {t('Edit')}
                 {isLoadingUser ? (
-                  <Spinner animation="grow" variant="info" className={styles.loadIndicator} />
+                  <Spinner animation="grow" variant="info" size="sm" className="ms-1" />
                 ) : (
                   <span className={styles.placeholder} />
                 )}

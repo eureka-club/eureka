@@ -70,6 +70,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 }) => {
   // const [globalModalsState, setGlobalModalsState] = useAtom(globalModals);
   const cycleContext = useCycleContext();
+  const { currentUserIsParticipant } = cycleContext;
   const [cycle, setCycle] = useState<CycleMosaicItem | null>();
   useEffect(() => {
     if (cycleContext) setCycle(cycleContext.cycle);
@@ -320,22 +321,22 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     if (cycle) {
       const res = (
         <>
-          <NavItem className={`${styles.tabBtn}`}>
-            <NavLink eventKey="cycle-discussion">
+          <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
+            <NavLink eventKey="cycle-discussion" className="text-primary">
               <span className="mb-3">{t('Discussion')}</span>
             </NavLink>
           </NavItem>
-          {/* <NavItem className={`${styles.tabBtn}`}>
+          {/* <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
             <NavLink eventKey="my_milestone">{t('My milestones')}</NavLink>
           </NavItem> */}
-          <NavItem className={`${styles.tabBtn}`}>
-            <NavLink eventKey="guidelines">
+          <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
+            <NavLink eventKey="guidelines" className="text-primary">
               <span className="mb-3">{t('Guidelines')}</span>
             </NavLink>
           </NavItem>
 
-          <NavItem className={`${styles.tabBtn}`}>
-            <NavLink eventKey="participants">
+          <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
+            <NavLink eventKey="participants" className="text-primary">
               <span className="mb-3">{t('Participants')}</span>
             </NavLink>
           </NavItem>
@@ -355,7 +356,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   const getDefaultActiveKey = () => {
     if (cycle) {
-      if (cycle.access === 1) return 'cycle-discussion';
+      if (cycle.access === 1) {
+        if (currentUserIsParticipant) return 'cycle-discussion';
+        return 'cycle-about';
+      }
       if (cycle.access === 2 && cycleContext.currentUserIsParticipant) return 'cycle-discussion';
       if (cycle.access === 3 && cycleContext.currentUserIsParticipant) return 'cycle-discussion';
     }
@@ -403,10 +407,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                     .nav-tabs .nav-item.show .nav-link,
                     .nav-tabs .nav-link.active,
                     .nav-tabs .nav-link:hover {
-                      background-color: var(--primary);
-                      color: white;
+                      background-color: var(--bs-primary);
+                      color: white !important;
                       border: none !important;
-                      border-bottom: solid 2px var(--primary) !important;
+                      border-bottom: solid 2px var(--bs-primary) !important;
                     }
                     .nav-tabs {
                       border: none !important;
@@ -415,9 +419,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 </style>
                 <Row className="mb-4">
                   <Col>
-                    <Nav variant="tabs" fill>
-                      <NavItem className={styles.tabBtn}>
-                        <NavLink eventKey="cycle-about">
+                    <Nav variant="tabs" fill className={`${styles['tab-header']}`}>
+                      <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
+                        <NavLink eventKey="cycle-about" className="text-primary">
                           <span className="mb-3">
                             {t('About')} ({cycle.works && cycle.works.length})
                           </span>

@@ -2,6 +2,7 @@ import { Cycle, Work } from '@prisma/client';
 import { FunctionComponent } from 'react';
 import Masonry from 'react-masonry-css';
 
+import { v4 } from 'uuid';
 import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem } from '../types';
 import MosaicItemCycle from './cycle/MosaicItem';
 import MosaicItemPost from './post/MosaicItem';
@@ -11,7 +12,6 @@ import styles from './Mosaic.module.css';
 import { CycleMosaicItem } from '../types/cycle';
 import { WorkMosaicItem } from '../types/work';
 import { PostMosaicItem } from '../types/post';
-
 import { CycleContext } from '../useCycleContext';
 // import { WorkContext } from '../useWorkContext';
 
@@ -26,7 +26,7 @@ const renderMosaicItem = (
   if (isCycleMosaicItem(item)) {
     return (
       <CycleContext.Provider value={{ cycle: item as CycleMosaicItem }}>
-        <MosaicItemCycle key={`cycle-${item.id}`} detailed />
+        <MosaicItemCycle key={`${v4()}`} detailed />
       </CycleContext.Provider>
     );
   }
@@ -40,7 +40,7 @@ const renderMosaicItem = (
 
     return (
       <MosaicItemPost
-        key={`post-${item.id}`}
+        key={`${v4()}`}
         showComments={showComments}
         post={item}
         postParent={pp}
@@ -53,18 +53,12 @@ const renderMosaicItem = (
   if (isWorkMosaicItem(item)) {
     return (
       // <WorkContext.Provider value={{ linkToWork: true }}>
-      <MosaicItemWork
-        linkToWork
-        showShare={false}
-        showButtonLabels={showButtonLabels}
-        key={`work-${item.id}`}
-        work={item}
-      />
+      <MosaicItemWork linkToWork showShare={false} showButtonLabels={showButtonLabels} key={`${v4()}`} work={item} />
       // </WorkContext.Provider>
     );
   }
   if (isUserMosaicItem(item)) {
-    return <MosaicItemUser key={`user-${item.id}`} user={item} />;
+    return <MosaicItemUser key={`${v4()}`} user={item} />;
   }
 
   return '';
@@ -101,7 +95,7 @@ const Mosaic: FunctionComponent<Props> = ({
     >
       {stack &&
         stack.map((item: MosaicItem) => (
-          <aside className={`${className}`} key={`item-${item.id}`}>
+          <aside className={`${className}`} key={`${v4()}`}>
             {renderMosaicItem(item, postsLinksTo, showButtonLabels, display, showComments, cacheKey)}
           </aside>
         ))}
