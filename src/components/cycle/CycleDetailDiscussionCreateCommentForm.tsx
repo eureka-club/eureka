@@ -172,6 +172,12 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
           selectedWorktId: null,
           selectedCommentId: parseInt(id, 10),
         }));
+      else if (entity === 'work')
+        setNewComment((res) => ({
+          ...res,
+          selectedWorkId: parseInt(id, 10),
+          selectedCommentId: 0,
+        }));
     }
   }, [discussionItem, cycle.id]);
 

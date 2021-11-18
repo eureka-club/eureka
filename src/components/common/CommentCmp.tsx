@@ -94,8 +94,7 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
     },
   );
 
-  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const submitForm = () => {
     if (comment) {
       const selectedCycleId = comment.cycleId || 0;
       const selectedPostId = comment.postId || 0;
@@ -112,6 +111,18 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
       };
       createComment(payload);
       setNewCommentInput(() => '');
+    }
+  };
+
+  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    submitForm();
+  };
+
+  const onKeyPressForm = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      submitForm();
+      e.preventDefault();
     }
   };
 
@@ -156,8 +167,10 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
                         <Form.Control
                           value={newCommentInput}
                           onChange={(e: ChangeEvent<HTMLInputElement>) => setNewCommentInput(e.target.value)}
+                          onKeyPress={onKeyPressForm}
                           className="border fs-6 rounded-pill bg-light"
-                          type="text"
+                          as="textarea"
+                          rows={3}
                           placeholder={`${t('Write a replay')}...`}
                         />
                       </Form>

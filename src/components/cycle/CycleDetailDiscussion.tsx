@@ -171,7 +171,11 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
               )}
               {isCreateEureka && (
                 <div className="mt-3">
-                  <CycleDetailDiscussionCreateEurekaForm cycle={cycle} discussionItem={discussionItem} />
+                  <CycleDetailDiscussionCreateEurekaForm
+                    cycle={cycle}
+                    discussionItem={discussionItem}
+                    setDiscussionItem={setDiscussionItem}
+                  />
                 </div>
               )}
               {isCreateComment && (

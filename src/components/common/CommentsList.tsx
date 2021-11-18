@@ -1,6 +1,6 @@
 // import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, /* MouseEvent, */ useEffect, useState, ChangeEvent, FormEvent } from 'react';
+import { FunctionComponent, /* MouseEvent, */ useEffect, useState, ChangeEvent, FormEvent, KeyboardEvent } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/client';
 
@@ -106,8 +106,7 @@ const CommentsList: FunctionComponent<Props> = ({
     },
   );
 
-  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const submitForm = () => {
     let selectedCycleId = 0;
     let selectedPostId = 0;
     let selectedCommentId = 0;
@@ -137,6 +136,11 @@ const CommentsList: FunctionComponent<Props> = ({
     };
     setNewCommentInput(() => '');
     createComment(payload);
+  };
+
+  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    submitForm();
   };
 
   useEffect(() => {
@@ -180,6 +184,13 @@ const CommentsList: FunctionComponent<Props> = ({
     }
   };
 
+  const onKeyPressForm = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      submitForm();
+      e.preventDefault();
+    }
+  };
+
   return (
     <section className="bg-white border-0">
       {user && (
@@ -189,8 +200,10 @@ const CommentsList: FunctionComponent<Props> = ({
             <Form.Control
               value={newCommentInput}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setNewCommentInput(e.target.value)}
+              onKeyPress={onKeyPressForm}
               className="border fs-6 rounded-pill bg-light"
-              type="text"
+              as="textarea"
+              rows={3}
               placeholder={`${t('Write a replay')}...`}
             />
           </InputGroup>

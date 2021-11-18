@@ -27,9 +27,14 @@ import useTopics from '../../useTopics';
 interface Props {
   cycle: CycleMosaicItem;
   discussionItem?: string;
+  setDiscussionItem: (val: string | undefined) => void;
 }
 
-const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle, discussionItem }) => {
+const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
+  cycle,
+  discussionItem,
+  setDiscussionItem,
+}) => {
   const queryClient = useQueryClient();
 
   const [session] = useSession() as [Session | null | undefined, boolean];
@@ -52,6 +57,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
 
   const clearCreateEurekaForm = () => {
     editorRef.current.setContent('');
+    setDiscussionItem('');
     setEurekaTopics(() => []);
     setNewEurekaImageFile(null);
     setNewEureka((res) => ({
