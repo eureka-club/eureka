@@ -203,7 +203,7 @@ const CommentsList: FunctionComponent<Props> = ({
               onKeyPress={onKeyPressForm}
               className="border fs-6 rounded-pill bg-light"
               as="textarea"
-              rows={3}
+              rows={1}
               placeholder={`${t('Write a replay')}...`}
             />
           </InputGroup>
