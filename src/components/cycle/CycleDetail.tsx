@@ -19,6 +19,7 @@ import {
 } from 'react-bootstrap';
 import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
 import { BiArrowBack } from 'react-icons/bi';
+import { Work, Comment, Cycle } from '@prisma/client';
 import { MosaicContext } from '../../useMosaicContext';
 
 // import UserAvatar from '../common/UserAvatar';
@@ -178,7 +179,31 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     return false;
   };
 
-  const renderCycleWorksComments = () => {
+  const renderComments = () => {
+    const getParent = (c: Comment): Work | Cycle => {
+      if ((c as CommentMosaicItem).work) return (c as CommentMosaicItem).work!;
+      return cycle as Cycle;
+    };
+    if (cycle && cycle.comments)
+      return cycle.comments
+        .sort((p, c) => (p.id > c.id && -1) || 1)
+        .map((c) => {
+          return (
+            <ComentMosaic
+              key={c.id}
+              comment={c as unknown as CommentMosaicItem}
+              detailed
+              showComments
+              commentParent={getParent(c)}
+              cacheKey={['CYCLE', `${cycle.id}`]}
+              className="mb-4"
+            />
+          );
+        });
+    return null;
+  };
+
+  /* const renderCycleWorksComments = () => {
     if (cycle && cycle.comments)
       return cycle.comments
         .filter((c) => c.workId && !c.postId && !c.commentId)
@@ -218,7 +243,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           );
         });
     return null;
-  };
+  }; */
 
   // if (!session || !session.user) {
   //   if (cycle && cycle.access === 2) {
@@ -308,8 +333,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
               </MosaicContext.Provider>
             )) ||
               null}
-            {renderCycleWorksComments()}
-            {renderCycleOwnComments()}
+            {/* {renderCycleWorksComments()} */}
+            {/* {renderCycleOwnComments()} */}
+            {renderComments()}
           </TabPane>
           {/* <TabPane eventKey="my_milestone">
             <h2 className="mb-3">{t('My milestones')}</h2>
