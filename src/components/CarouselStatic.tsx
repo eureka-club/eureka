@@ -147,7 +147,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
         // >
         //   {mosaics}
         // </Masonry>
-        <div key={v4()} className="d-flex flex-nowrap w-100 justify-content-lg-center justify-content-xs-between">
+        <div key={v4()} className="d-flex flex-nowrap w-100 justify-content-xl-center">
           {mosaics}
         </div>
       );
