@@ -4,7 +4,7 @@ import { FunctionComponent, /* MouseEvent, */ useEffect, useState, ChangeEvent, 
 import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/client';
 
-import { Container, InputGroup, Form, Button /* , Row, Col, Card, Popover, */, Spinner } from 'react-bootstrap';
+import { InputGroup, Form, Button /* , Row, Col, Card, Popover, */, Spinner } from 'react-bootstrap';
 
 import { Cycle, Work, Post, Comment } from '@prisma/client';
 // import { MdReply, MdCancel } from 'react-icons/md';
@@ -26,7 +26,7 @@ import CommentCmp from './CommentCmp';
 
 // import { WEBAPP_URL } from '../../constants';
 
-import styles from './CommentsList.module.css';
+// import styles from './CommentsList.module.css';
 import Avatar from './UserAvatar';
 
 interface Props {
