@@ -1,4 +1,4 @@
-import { Cycle, Post, Work } from '@prisma/client';
+import { Post } from '@prisma/client';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
