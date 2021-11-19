@@ -158,7 +158,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
         //   columnClassName={styles.masonryColumn}
         // >
         // <> {mosaics}</>
-        <div className="d-flex flex-nowrap">{mosaics}</div>
+        <div className="d-flex flex-nowrap w-100 justify-content-lg-center justify-content-xs-between">{mosaics}</div>
         // </Masonry>
       );
       result.push(res);
@@ -211,7 +211,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
     (!isLoading && items && items.data && items.data.length && (
       <section className={`${className}`}>
         {items && items.data && items.data.length && (
-          <div className={styles.mainContainer}>
+          <div className="position-relative">
             <Row>
               <Col>
                 <h5 className="cursor-pointer" onClick={onItemsFound} role="presentation">

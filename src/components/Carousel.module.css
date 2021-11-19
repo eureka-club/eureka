@@ -7,19 +7,6 @@
   border-left-style: solid;
   border-left-width: 25px; /* gutter size */
 }
-
-.mainContainer {
-  position: relative;
-  /* margin-bottom: 4em; */
-  /* height: 375px; */
-  /* margin-bottom: 1em; */
-}
-
-.carouselTitle{
-  /* color: #4c4a72;
-  font-weight: bold;
-  font-size: 1.3em; */
-}
 .rightButton svg {
   margin-top: -.2em;
   margin-right: -.2em;

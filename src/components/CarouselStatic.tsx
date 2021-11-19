@@ -128,7 +128,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
     const result: JSX.Element[] = [];
     if (current) {
       const mosaics = current.map((i, idx: number) => (
-        <div key={`${idx * 1}${v4()}`} className="mx-2">
+        <div key={`${idx * 1}${v4()}`} className="pb-5 mx-2">
           {renderMosaicItem(i, undefined, showSocialInteraction, customMosaicStyle, tiny)}
         </div>
       ));
@@ -147,7 +147,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
         // >
         //   {mosaics}
         // </Masonry>
-        <div key={v4()} className="d-flex flex-nowrap">
+        <div key={v4()} className="d-flex flex-nowrap w-100 justify-content-lg-center justify-content-xs-between">
           {mosaics}
         </div>
       );
@@ -161,7 +161,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
     (
       <>
         {(dataFiltered && dataFiltered.length && (
-          <div className={`mb-5 ${styles.mainContainer}`}>
+          <div className="mb-5 position-relative">
             <Row>
               <Col>
                 <h5 className="text-gray-dark mb-2">

@@ -119,7 +119,7 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
     submitForm();
   };
 
-  const onKeyPressForm = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const onKeyPressForm = (e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       submitForm();
       e.preventDefault();

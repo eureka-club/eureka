@@ -184,7 +184,7 @@ const CommentsList: FunctionComponent<Props> = ({
     }
   };
 
-  const onKeyPressForm = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+  const onKeyPressForm = (e: KeyboardEvent<HTMLElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       submitForm();
       e.preventDefault();
