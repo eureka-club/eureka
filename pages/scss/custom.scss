@@ -94,7 +94,7 @@ h1 {
   font-size: 1.9rem;
 }
 .isActive{
-  box-shadow: 0 0 3px 1px theme-color("primary") !important;
+  box-shadow: 0 0 3px 1px var(--bs-primary) !important;
 }
 .cursor-pointer{
   cursor:  pointer !important;
