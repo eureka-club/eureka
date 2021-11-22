@@ -55,20 +55,13 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
         </aside>
         {show && (
           <>
-            <Container className={`${styles.grid}`}>
-              <Row className="text-white mb-5">
-                <Col xs={12} md={4} className="d-flex flex-column">
-                  <h1 className="h1 ms-auto">{t('underEurekaLabel')}</h1>
-                  {/* <em className="fs-6 ms-auto">{t('underEurekaLabel')}</em> */}
-                </Col>
-                <Col xs={12} md={8} className="text-left">
-                  <p className="ps-4 border-start border-white">
-                    {t('eurekaReasonLabel')}
-                    <br />
-                    {t('eurekaReasonLabel2')}
-                  </p>
-                </Col>
-              </Row>
+            <Container className={`${styles.grid} text-white text-center`}>
+              <h1 className="h1 ms-auto mt-3">{t('underEurekaLabel')}</h1>
+              <p className="border-bottom border-white">
+                {t('eurekaReasonLabel')}
+                <br />
+                {t('eurekaReasonLabel2')}
+              </p>
             </Container>
             <Carousel style={{ marginBottom: '-5em' }} nextIcon={<em />} prevIcon={<em />}>
               <Carousel.Item className="p-3 text-white mb-1 bg-secondary" style={{ height: '16rem' }}>
