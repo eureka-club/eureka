@@ -71,7 +71,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 }) => {
   // const [globalModalsState, setGlobalModalsState] = useAtom(globalModals);
   const cycleContext = useCycleContext();
-  const { currentUserIsParticipant } = cycleContext;
   const [cycle, setCycle] = useState<CycleMosaicItem | null>();
   useEffect(() => {
     if (cycleContext) setCycle(cycleContext.cycle);
@@ -291,9 +290,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         IDX += 1;
         return (
           <aside key={key} className="mb-3 bg-light">
-            <h5 className="h6 fw-bold mb-0 ps-3 py-1 d-flex text-secondary">
+            <h5 className="h6 fw-bold mb-0 pl-3 py-1 d-flex text-secondary">
               <span className="py-1 fw-bold">{`${IDX}. `}</span>
-              <span className="py-1 fw-bold h6 mb-0 ps-3 d-flex">{`${g.title}`}</span>
+              <span className="py-1 fw-bold h6 mb-0 pl-3 d-flex">{`${g.title}`}</span>
               <Button className="ms-auto" size="sm" onClick={() => toggleGuidelineDesc(key)}>
                 {!gldView[key] ? <RiArrowDownSLine /> : <RiArrowUpSLine />}
               </Button>
@@ -350,7 +349,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
             <p />
           </TabPane>
           <TabPane eventKey="participants">
-            {/* {cycle.participants && cycle.participants.map((p) => <UserAvatar className="mb-3 me-3" user={p} key={p.id} />)} */}
+            {/* {cycle.participants && cycle.participants.map((p) => <UserAvatar className="mb-3 mr-3" user={p} key={p.id} />)} */}
             {cycle.participants && (
               <Mosaic showButtonLabels={false} stack={[...cycle.participants, cycle.creator] as UserMosaicItem[]} />
             )}
@@ -369,22 +368,22 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     if (cycle) {
       const res = (
         <>
-          <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
-            <NavLink eventKey="cycle-discussion" className="text-primary">
+          <NavItem className={`${styles.tabBtn}`}>
+            <NavLink eventKey="cycle-discussion">
               <span className="mb-3">{t('Discussion')}</span>
             </NavLink>
           </NavItem>
-          {/* <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
+          {/* <NavItem className={`${styles.tabBtn}`}>
             <NavLink eventKey="my_milestone">{t('My milestones')}</NavLink>
           </NavItem> */}
-          <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
-            <NavLink eventKey="guidelines" className="text-primary">
+          <NavItem className={`${styles.tabBtn}`}>
+            <NavLink eventKey="guidelines">
               <span className="mb-3">{t('Guidelines')}</span>
             </NavLink>
           </NavItem>
 
-          <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
-            <NavLink eventKey="participants" className="text-primary">
+          <NavItem className={`${styles.tabBtn}`}>
+            <NavLink eventKey="participants">
               <span className="mb-3">{t('Participants')}</span>
             </NavLink>
           </NavItem>
@@ -405,7 +404,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const getDefaultActiveKey = () => {
     if (cycle) {
       if (cycle.access === 1) {
-        if (currentUserIsParticipant) return 'cycle-discussion';
+        if (cycleContext.currentUserIsParticipant) return 'cycle-discussion';
         return 'cycle-about';
       }
       if (cycle.access === 2 && cycleContext.currentUserIsParticipant) return 'cycle-discussion';
@@ -455,10 +454,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                     .nav-tabs .nav-item.show .nav-link,
                     .nav-tabs .nav-link.active,
                     .nav-tabs .nav-link:hover {
-                      background-color: var(--bs-primary);
-                      color: white !important;
+                      background-color: var(--primary);
+                      color: white;
                       border: none !important;
-                      border-bottom: solid 2px var(--bs-primary) !important;
+                      border-bottom: solid 2px var(--primary) !important;
                     }
                     .nav-tabs {
                       border: none !important;
@@ -467,9 +466,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 </style>
                 <Row className="mb-4">
                   <Col>
-                    <Nav variant="tabs" fill className={`${styles['tab-header']}`}>
-                      <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
-                        <NavLink eventKey="cycle-about" className="text-primary">
+                    <Nav variant="tabs" fill>
+                      <NavItem className={styles.tabBtn}>
+                        <NavLink eventKey="cycle-about">
                           <span className="mb-3">
                             {t('About')} ({cycle.works && cycle.works.length})
                           </span>
