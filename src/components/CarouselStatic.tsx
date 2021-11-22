@@ -147,8 +147,35 @@ const CarouselStatic: FunctionComponent<Props> = ({
         // >
         //   {mosaics}
         // </Masonry>
-        <div key={v4()} className="d-flex flex-nowrap w-100 justify-content-xl-center">
+        <div key={v4()} className="d-flex flex-nowrap w-100 justify-content-xl-left">
+          <Button
+            className={`p-0 text-white rounded-circle align-self-center ${styles.leftButton}`}
+            onClick={() => {
+              const s = current.slice(0, 4);
+              setShow((p) => [...s, ...p]);
+              const h = hide.slice(-4);
+              setCurrent(h);
+              setHide(hide.slice(0, -4));
+            }}
+            disabled={!hide.length}
+          >
+            <RiArrowLeftSLine />
+          </Button>
           {mosaics}
+          {/* )} */}
+          {/* {dataFiltered.length && ( */}
+          <Button
+            className={`p-0 text-center text-white rounded-circle align-self-center ${styles.rightButton}`}
+            onClick={() => {
+              const c = current.splice(0, 4);
+              setHide((p) => [...p, ...c]);
+              setCurrent(show.splice(0, 4));
+              setShow(() => show);
+            }}
+            disabled={!show.length}
+          >
+            <RiArrowRightSLine />
+          </Button>
         </div>
       );
       result.push(res);
@@ -185,38 +212,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
                 )}
               </Col>
             </Row>
-            <div className="d-flex overflow-auto justify-content-center">
-              {buildMosaics()}
-              {/* {hide.length && ( */}
-              <Button
-                className={`p-0 text-white rounded-circle position-absolute top-50 start-0 translate-middle ${styles.leftButton}`}
-                onClick={() => {
-                  const s = current.slice(0, 4);
-                  setShow((p) => [...s, ...p]);
-                  const h = hide.slice(-4);
-                  setCurrent(h);
-                  setHide(hide.slice(0, -4));
-                }}
-                disabled={!hide.length}
-              >
-                <RiArrowLeftSLine />
-              </Button>
-              {/* )} */}
-              {/* {dataFiltered.length && ( */}
-              <Button
-                className={`p-0 text-center text-white rounded-circle position-absolute top-50 start-100 translate-middle ${styles.rightButton}`}
-                onClick={() => {
-                  const c = current.splice(0, 4);
-                  setHide((p) => [...p, ...c]);
-                  setCurrent(show.splice(0, 4));
-                  setShow(() => show);
-                }}
-                disabled={!show.length}
-              >
-                <RiArrowRightSLine />
-              </Button>
-              {/* )} */}
-            </div>
+            <div className="d-flex overflow-auto justify-content-center">{buildMosaics()}</div>
           </div>
         )) ||
           ''}

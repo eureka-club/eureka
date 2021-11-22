@@ -158,7 +158,35 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
         //   columnClassName={styles.masonryColumn}
         // >
         // <> {mosaics}</>
-        <div className="d-flex flex-nowrap w-100 justify-content-xl-center">{mosaics}</div>
+        <div className="d-flex flex-nowrap w-100 justify-content-xl-left">
+          {mosaics}
+          {page !== 0 && (
+            <Button
+              className={`p-0 text-white rounded-circle align-self-center ${styles.leftButton}`}
+              onClick={() => {
+                setPage((old) => Math.max(old - 1, 0));
+                setExtraCyclesRequired(0);
+                setExtraWorksRequired(0);
+              }}
+              disabled={page === 0}
+            >
+              <RiArrowLeftSLine />
+            </Button>
+          )}
+          {data.hasMore && (
+            <Button
+              className={`p-0 text-center text-white rounded-circle align-self-center ${styles.rightButton}`}
+              onClick={() => {
+                if (!isPreviousData && data.hasMore) {
+                  setPage((old) => old + 1);
+                }
+              }}
+              disabled={isPreviousData || !data?.hasMore}
+            >
+              <RiArrowRightSLine />
+            </Button>
+          )}
+        </div>
         // </Masonry>
       );
       result.push(res);
@@ -221,7 +249,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
                   {` `} {topicLabel || t(`${topic}`)}
                 </h5>
               </Col>
-              <Col className={styles.right}>
+              <Col className="text-center">
                 {/* {data.hasMore && ( */}
 
                 <span
@@ -235,35 +263,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
                 {/* )} */}
               </Col>
             </Row>
-            <div className="d-flex overflow-auto justify-content-center">
-              {buildMosaics()}
-              {page !== 0 && (
-                <Button
-                  className={`p-0 text-white rounded-circle position-absolute top-50 start-0 translate-middle ${styles.leftButton}`}
-                  onClick={() => {
-                    setPage((old) => Math.max(old - 1, 0));
-                    setExtraCyclesRequired(0);
-                    setExtraWorksRequired(0);
-                  }}
-                  disabled={page === 0}
-                >
-                  <RiArrowLeftSLine />
-                </Button>
-              )}
-              {data.hasMore && (
-                <Button
-                  className={`p-0 text-center text-white rounded-circle position-absolute top-50 start-100 translate-middle ${styles.rightButton}`}
-                  onClick={() => {
-                    if (!isPreviousData && data.hasMore) {
-                      setPage((old) => old + 1);
-                    }
-                  }}
-                  disabled={isPreviousData || !data?.hasMore}
-                >
-                  <RiArrowRightSLine />
-                </Button>
-              )}
-            </div>
+            <div className="d-flex overflow-auto justify-content-center">{buildMosaics()}</div>
           </div>
         )}
       </section>
