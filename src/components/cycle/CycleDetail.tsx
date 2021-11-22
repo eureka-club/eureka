@@ -403,7 +403,12 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   const getDefaultActiveKey = () => {
     if (cycle) {
-      if (cycle.access === 1) return 'cycle-discussion';
+      if (cycle.access === 1){
+        if(cycleContext.currentUserIsParticipant)
+        return 'cycle-discussion';
+        return 'cycle-about';
+
+      } 
       if (cycle.access === 2 && cycleContext.currentUserIsParticipant) return 'cycle-discussion';
       if (cycle.access === 3 && cycleContext.currentUserIsParticipant) return 'cycle-discussion';
     }
