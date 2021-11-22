@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/client';
 import { useQueryClient, useMutation } from 'react-query';
 // import { dehydrate } from 'react-query/hydration';
-import { useState, useEffect /* , ReactElement */ } from 'react';
+import { useState, useEffect, SyntheticEvent } from 'react';
 
 // import { loadGetInitialProps } from 'next/dist/next-server/lib/utils';
 import { Spinner, Card, Row, Col, ButtonGroup, Button, Alert } from 'react-bootstrap';
@@ -323,6 +323,20 @@ const Mediatheque: NextPage = () => {
     return '';
   };
 
+  const renderCountry = () => {
+    if (user.countryOfOrigin)
+      return (
+        <em>
+          <AiOutlineEnvironment /> {`${t(`countries:${user.countryOfOrigin}`)}`}
+        </em>
+      );
+    return '';
+  };
+
+  const avatarError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.src = '/img/default-avatar.png';
+  };
+
   return (
     <SimpleLayout title={t('Mediatheque')}>
       <>
@@ -338,15 +352,18 @@ const Mediatheque: NextPage = () => {
               <Card.Body>
                 <Row>
                   <Col>
-                    <img className={styles.avatar} src={user.image || '/assets/avatar.png'} alt={user.name} />
+                    <img
+                      onError={avatarError}
+                      className={styles.avatar}
+                      src={user.image || '/img/default-avatar.png'}
+                      alt={user.name}
+                    />
                     <br />
                     {/* <em>{user.name}</em> */}
                   </Col>
                   <Col xs={8}>
                     <h2>{user.name}</h2>
-                    <em>
-                      <AiOutlineEnvironment /> {t(`countries:${user.countryOfOrigin}`)}
-                    </em>
+                    {renderCountry()}
                     <p className={styles.description}>{user.aboutMe}</p>
                     <TagsInput tags={user.tags} readOnly label="" />
                   </Col>
