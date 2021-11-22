@@ -32,7 +32,7 @@ import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '../constants';
 import { Session } from '../types';
 import ChevronToggle from './ui/dropdown/ChevronToggle';
 import globalModalsAtom from '../atoms/globalModals';
-import styles from './NavbarMovile.module.css';
+import styles from './NavbarMobile.module.css';
 
 // const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
 

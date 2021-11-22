@@ -104,7 +104,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
       {show && (
         <div className="d-flex justify-content-center align-items-center mt-5 pt-5">
           {!isLoadingSession && !session && (
-            <Button onClick={openSignInModal} className="button text-white" variant="primary">
+            <Button onClick={openSignInModal} className="button text-white rounded-pill" variant="primary">
               {t('headerSessionBtnLabel')}
             </Button>
           )}
