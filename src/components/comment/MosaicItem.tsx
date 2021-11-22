@@ -114,12 +114,12 @@ const MosaicItem: FunctionComponent<Props> = ({
               )}
             </Col>
             <Col xs={12} md={6}>
-              <div className="text-right">
+              <div className="text-end">
                 <Avatar user={comment.creator} size="xs" />
                 {` - `}
                 <span className="fs-6">{dayjs(comment.createdAt).format(DATE_FORMAT_SHORT)}</span>
               </div>
-              <div className="text-right fs-6">
+              <div className="text-end fs-6">
                 <FaRegComments className="text-primary" />{' '}
                 <span>
                   {comment.comments.length} {t('Replies')}{' '}
