@@ -8,13 +8,12 @@ import { addParticipant, find } from '../../../../src/facades/cycle';
 import prisma from '../../../../src/lib/prisma';
 import { sendMailRequestJoinCycleResponse } from '../../../../src/facades/mail';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require('bcryptjs');
 
 export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
   // const session = (await getSession({ req })) as unknown as Session;
   const { id: cycleId } = req.query;
-  const [userId, base64Hash, authorized] = req.query.cycleAuthorizeJoin;
+  const [userId, base64Hash, authorized] = req.query.cycleAuthorizeJoin as string[];
   if (typeof cycleId !== 'string') {
     res.status(404).end();
     return;

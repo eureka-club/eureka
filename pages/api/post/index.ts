@@ -41,12 +41,12 @@ export default getApiHandler()
         res.status(201).json({ ok: true, post });
       });
     } catch (excp) {
-      const excpMessageTokens = excp.message.match(/\[(\d{3})\] (.*)/);
+      /* const excpMessageTokens = excp.message.match(/\[(\d{3})\] (.*)/);
       if (excpMessageTokens != null) {
         res.status(excpMessageTokens[1]).json({ status: 'client error', error: excpMessageTokens[2] });
         return;
       }
-
+ */
       console.error(excp); // eslint-disable-line no-console
       res.status(500).json({ ok: false, status: 'server error' });
     } finally {

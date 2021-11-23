@@ -4,7 +4,7 @@ import path from 'path';
 import Handlebars from 'handlebars';
 
 import readFile from './readFile';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+
 const client = require('@sendgrid/client');
 
 // const Handlebars = require('handlebars');

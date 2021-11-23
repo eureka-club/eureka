@@ -7,7 +7,7 @@ import getApiHandler from '../../../../src/lib/getApiHandler';
 import { addParticipant, find, removeParticipant } from '../../../../src/facades/cycle';
 import prisma from '../../../../src/lib/prisma';
 import { sendMailRequestJoinCycle } from '../../../../src/facades/mail';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+
 const bcrypt = require('bcryptjs');
 
 export default getApiHandler()

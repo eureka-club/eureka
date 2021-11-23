@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import nc from 'next-connect';
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default () =>
+const res =  () =>
   nc<NextApiRequest, NextApiResponse>({
     onError(err, req, res) {
       const matches = err.message.match(/^\[(\d+)]\s(.*)/);
@@ -20,3 +19,4 @@ export default () =>
       res.status(405).end();
     },
   });
+  export default res;

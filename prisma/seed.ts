@@ -19,7 +19,7 @@ const cleanTables = async () => {
   try {
     await prisma.$transaction(transactions);
   } catch (error) {
-    throw new Error(error);
+    console.error(error);
   } finally {
     prisma.$disconnect();
   }

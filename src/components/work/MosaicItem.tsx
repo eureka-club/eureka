@@ -170,7 +170,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     );
   };
   return (
-    <Card className={`${tiny ? 'mosaic-tiny' : 'mosaic'} ${isActive() ? 'isActive' : ''}`}>
+    <Card className={`${tiny ? 'mosaic-tiny' : 'mosaic'} ${isActive() ? 'mt-1 isActive' : ''}`}>
       <div className={`${styles.imageContainer} ${tiny ? styles.imageContainerTiny : ''}`}>
         {renderLocalImageComponent()}
         {isActive() && <CgMediaLive className={`${styles.isActiveCircle}`} />}
