@@ -368,7 +368,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     if (cycle) {
       const res = (
         <>
-          <NavItem className={`${styles.tabBtn}`}>
+          <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
             <NavLink eventKey="cycle-discussion">
               <span className="mb-3">{t('Discussion')}</span>
             </NavLink>
@@ -376,13 +376,13 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           {/* <NavItem className={`${styles.tabBtn}`}>
             <NavLink eventKey="my_milestone">{t('My milestones')}</NavLink>
           </NavItem> */}
-          <NavItem className={`${styles.tabBtn}`}>
+          <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
             <NavLink eventKey="guidelines">
               <span className="mb-3">{t('Guidelines')}</span>
             </NavLink>
           </NavItem>
 
-          <NavItem className={`${styles.tabBtn}`}>
+          <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
             <NavLink eventKey="participants">
               <span className="mb-3">{t('Participants')}</span>
             </NavLink>
@@ -454,10 +454,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                     .nav-tabs .nav-item.show .nav-link,
                     .nav-tabs .nav-link.active,
                     .nav-tabs .nav-link:hover {
-                      background-color: var(--primary);
-                      color: white;
+                      background-color: var(--bs-primary);
+                      color: white !important;
                       border: none !important;
-                      border-bottom: solid 2px var(--primary) !important;
+                      border-bottom: solid 2px var(--bs-primary) !important;
                     }
                     .nav-tabs {
                       border: none !important;
@@ -467,7 +467,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 <Row className="mb-4">
                   <Col>
                     <Nav variant="tabs" fill>
-                      <NavItem className={styles.tabBtn}>
+                      <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
                         <NavLink eventKey="cycle-about">
                           <span className="mb-3">
                             {t('About')} ({cycle.works && cycle.works.length})
