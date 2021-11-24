@@ -30,7 +30,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     totalWorks = parseInt(totalWorks as string, 10);
     totalCycles = parseInt(totalCycles as string, 10);
 
-    const countItemsPerPage = 2;
+    const countItemsPerPage = 3;
     const toShow = ['work', 'cycle'];
     // const topicsRes = await prisma.term.findMany({
     //   where: { taxonomy: { code: 'topic' } },

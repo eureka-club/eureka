@@ -159,10 +159,9 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
         // >
         // <> {mosaics}</>
         <div className="d-flex flex-nowrap w-100 justify-content-xl-left">
-          {mosaics}
           {page !== 0 && (
             <Button
-              className={`p-0 text-white rounded-circle align-self-center ${styles.leftButton}`}
+              className={` text-white rounded-circle align-self-center ${styles.leftButton}`}
               onClick={() => {
                 setPage((old) => Math.max(old - 1, 0));
                 setExtraCyclesRequired(0);
@@ -173,9 +172,12 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
               <RiArrowLeftSLine />
             </Button>
           )}
+
+          {mosaics}
+          
           {data.hasMore && (
             <Button
-              className={`p-0 text-center text-white rounded-circle align-self-center ${styles.rightButton}`}
+              className={` text-center text-white rounded-circle align-self-center ${styles.rightButton}`}
               onClick={() => {
                 if (!isPreviousData && data.hasMore) {
                   setPage((old) => old + 1);

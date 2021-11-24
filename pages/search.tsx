@@ -62,8 +62,7 @@ const SearchPage: NextPage = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
-  const [error, setError] = useState<string>();
-
+  
   // let where = encodeURIComponent(JSON.stringify({ title: { contains: globalSearchEngineState.q } }));
   // const { isLoading, data: works } = useWorks(where);
 
@@ -72,22 +71,12 @@ const SearchPage: NextPage = () => {
 
   // const [where, setWhere] = useState('');
   // const [tempWhere, setTempWhere] = useState('');
-  const { isLoading, data: items } = useItems();
+  const { isLoading, data: items, error } = useItems();
   // const { isLoading, /* isError, error, */ data: works } = useWorks();
   // const { isLoading: isLoadingCycles, /* isError: isErrorCycles, error: errorCycles, */ data: cycles } = useCycles();
   const { data: onlyByCountriesAux } = useCountries();
 
-  useEffect(() => {
-    if (globalSearchEngineState) {
-      if (
-        (!globalSearchEngineState.q && !globalSearchEngineState.where && !globalSearchEngineState.itemsFound?.length) ||
-        !items ||
-        !items?.length
-      )
-        setError(t('notFound'));
-    }
-  }, [globalSearchEngineState, items]);
-
+  
   const [homepageMosaicData, setHomepageMosaicData] = useState<Item[]>([]);
 
   useEffect(() => {
@@ -178,13 +167,19 @@ const SearchPage: NextPage = () => {
   let qLabel = t(`topics:${globalSearchEngineState.q as string}`);
   if (qLabel.match(':')) qLabel = globalSearchEngineState.q as string;
 
-  const renderErrorMessage = () => {
-    if (!isLoading && error)
-      return (
-        <Alert variant="warning">
-          <p>{error}</p>
-        </Alert>
-      );
+  const renderErrorMessage = () => {debugger;
+    let e = "";
+    if (!isLoading){
+      if(error) e = error?.message;
+      else if(!globalSearchEngineState.itemsFound?.length && (!items || !items?.length))
+        e = t('notFound');
+    } 
+    if(e)     
+    return (
+      <Alert variant="warning">
+        <p>{e}</p>
+      </Alert>
+    );
     return <></>;
   };
   return (

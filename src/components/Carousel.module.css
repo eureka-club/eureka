@@ -15,27 +15,8 @@
   margin-top: -.2em;
   margin-left: -.2em;
 }
-.rightButton{
-  /* position: absolute;
-  top:35%;
-  right:-3em;
-  border-radius: 50%; */
-  width: 2em;
-    height: 2em;
-    
-    /* padding: 0; */
-}
 
-.leftButton{
-  /* position: absolute;
-  top:35%;
-  left:-3em;
-  border-radius: 50%; */
-  width: 2em;
-    height: 2em;
-    
-    /* padding: 0; */
-}
+
 
 
 .iconBefore svg{

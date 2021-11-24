@@ -203,7 +203,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   };
 
   return (
-    <Card className={`mosaic ${isActive ? 'mt-1 isActive' : ''} ${className}`}>
+    <Card className={`mosaic ${isActive ? 'my-1 isActive' : ''} ${className}`}>
       <div
         className={`${linkToCycle ? 'cursor-pointer' : ''} ${styles.imageContainer} ${
           detailed && styles.detailedImageContainer

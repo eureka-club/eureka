@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery, UseQueryResult } from 'react-query';
 import { useAtom } from 'jotai';
 import dayjs from 'dayjs';
 import { WorkMosaicItem } from './types/work';
@@ -64,12 +64,12 @@ const getRecords = async (where?: string): Promise<Item[] | undefined> => {
   });
 };
 
-const useItems = () => {
+const useItems = (): UseQueryResult<Item[] | undefined, Error> => {
   const [globalSearchEngineState] = useAtom(globalSearchEngineAtom);
   const { where, q, cacheKey } = globalSearchEngineState;
   const ck = ['ITEMS', q];
 
-  return useQuery<Item[] | undefined>(cacheKey || ck, () => getRecords(where), {
+  return useQuery<Item[] | undefined, Error>(cacheKey || ck, () => getRecords(where), {
     staleTime: 1000 * 60 * 60,
   });
 };
