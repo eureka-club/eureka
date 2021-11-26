@@ -25,10 +25,11 @@ export type TagsInputProp = {
   onTagDeleted?: (code: string) => void;
   placeholder?: string;
   style?: { [key: string]: string };
+  className?: string;
 };
 
 const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
-  const { data, max = 5, onTagCreated, onTagDeleted, labelKey, placeholder, style } = props;
+  const { data, max = 5, onTagCreated, onTagDeleted, labelKey, placeholder, style, className } = props;
   const { t } = useTranslation('createWorkForm');
   // const { tags, setTags, label = '', readOnly = false } = props;
   const { items, setItems, label = '', readOnly = false } = props;
@@ -111,7 +112,7 @@ const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputPr
   // };
 
   return (
-    <Form.Group controlId="tags">
+    <Form.Group controlId="tags" className={`${className}`}>
       {label && <Form.Label>{label}</Form.Label>}
       <div>
         {items.map((v, idx) => {

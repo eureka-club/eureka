@@ -230,7 +230,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
           onChange={onChangeFieldEurekaForm}
         />
       </Form.Group> */}
-      <Form.Group className="mt-3" controlId="eureka-image" className="mt-3 mb-3">
+      <Form.Group className="my-3" controlId="eureka-image">
         <ImageFileSelect acceptedFileTypes="image/*" file={newEurekaImageFile} setFile={setNewEurekaImageFile} required>
           {(imagePreview) => (
             <Form.Group>
@@ -259,7 +259,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
               labelKey={(res: { code: string }) => t(`topics:${res.code}`)}
               max={3}
               placeholder={`${t('Type to add tag')}...`}
-              className="pt-3"
+              className="mt-3"
             />
           </Form.Group>
         </Col>
