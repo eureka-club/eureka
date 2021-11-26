@@ -66,7 +66,7 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
                   <FormLabel>{t('emailFieldLabel')}</FormLabel>
                   <FormControl type="email" required />
                 </FormGroup>
-                <Button type="submit" variant="primary" className={styles.submitButton}>
+                <Button type="submit" variant="primary text-white" className={styles.submitButton}>
                   {t('login')}
                 </Button>
               </Form>

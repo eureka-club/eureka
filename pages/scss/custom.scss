@@ -17,6 +17,7 @@ $theme-colors: (
   "black":#000000,
   "white":#ffffff,
 );
+
 $font-size-base: 1rem;
 .fs-xs{
   font-size: 0.5em;
@@ -99,16 +100,17 @@ h1 {
 .cursor-pointer{
   cursor:  pointer !important;
 }
+
 h2 {
   font-size: 1.5rem;
 }
+
 h3 {
   font-weight: 600;
 }
 
 h4 {
-  font-size: 1.25rem;
-  color: var(--color-primary);
+  font-size: 1.4rem;
 }
 
 hr {
@@ -192,10 +194,10 @@ hr {
   left: 50%!important;
 }
 .card.mosaic{
-  width: 256.75px !important;
+  width: 258.75px !important;
 }
 .card.mosaic-tiny{
-  width: 175px !important;
+  width: 175.5px !important;
 }
 .fs-6 {
   font-size: .875rem !important;

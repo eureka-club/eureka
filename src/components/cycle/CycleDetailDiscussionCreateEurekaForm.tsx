@@ -184,7 +184,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
 
   return (
     <Form onSubmit={handlerSubmitCreateEureka}>
-      <Form.Group controlId="eureka-title">
+      <Form.Group controlId="eureka-title" className="mb-3">
         <Form.Control
           type="text"
           maxLength={80}
@@ -230,7 +230,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
           onChange={onChangeFieldEurekaForm}
         />
       </Form.Group> */}
-      <Form.Group className="mt-3" controlId="eureka-image">
+      <Form.Group className="mt-3" controlId="eureka-image" className="mt-3 mb-3">
         <ImageFileSelect acceptedFileTypes="image/*" file={newEurekaImageFile} setFile={setNewEurekaImageFile} required>
           {(imagePreview) => (
             <Form.Group>
@@ -259,17 +259,18 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
               labelKey={(res: { code: string }) => t(`topics:${res.code}`)}
               max={3}
               placeholder={`${t('Type to add tag')}...`}
+              className="pt-3"
             />
           </Form.Group>
         </Col>
       </Row>
 
       <aside className="d-flex justify-content-end">
-        <ButtonGroup size="sm">
+        <ButtonGroup size="sm" className="pt-3">
           <Button variant="warning" onClick={clearCreateEurekaForm} disabled={isLoading}>
             <ImCancelCircle />
           </Button>
-          <Button type="submit" disabled={isLoading}>
+          <Button type="submit" className="text-white" disabled={isLoading}>
             <span>
               <BsCheck /> {t('Create')}
             </span>

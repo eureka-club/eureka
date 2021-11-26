@@ -240,7 +240,7 @@ const CreatePostForm: FunctionComponent = () => {
         <Container>
           <Row>
             <Col>
-              <FormGroup controlId="workOrCycle">
+              <FormGroup controlId="workOrCycle" className="mb-3">
                 <FormLabel>*{t('searchCycleOrWorkFieldLabel')}</FormLabel>
                 {selectedWork != null ? (
                   <div className={styles.searchResult}>
@@ -293,7 +293,7 @@ const CreatePostForm: FunctionComponent = () => {
               </FormGroup>
             </Col>
             <Col>
-              <FormGroup controlId="postTitle">
+              <FormGroup controlId="postTitle" className="mb-3">
                 <FormLabel>*{t('titleFieldLabel')}</FormLabel>
                 <FormControl type="text" maxLength={80} required />
               </FormGroup>
@@ -303,7 +303,7 @@ const CreatePostForm: FunctionComponent = () => {
             <Col>
               <ImageFileSelect acceptedFileTypes="image/*" file={imageFile} setFile={setImageFile} required>
                 {(imagePreview) => (
-                  <FormGroup>
+                  <FormGroup className="mb-3">
                     <FormLabel>*{t('imageFieldLabel')}</FormLabel>
                     <div className={styles.imageControl}>
                       {(imageFile != null && imagePreview) != null ? (
@@ -320,7 +320,7 @@ const CreatePostForm: FunctionComponent = () => {
           </Row>
           <Row>
             <Col>
-              <FormGroup controlId="language">
+              <FormGroup controlId="language" className="mb-3">
                 <FormLabel>*{t('languageFieldLabel')}</FormLabel>
                 <LanguageSelect />
               </FormGroup>
@@ -328,7 +328,7 @@ const CreatePostForm: FunctionComponent = () => {
           </Row>
           <Row>
             <Col sm={{ span: 6 }}>
-              <FormGroup controlId="workOrCycle">
+              <FormGroup controlId="workOrCycle" className="mb-3">
                 <FormLabel>{t('searchCycleFieldLabel')}</FormLabel>
                 {!selectedCycle ? (
                   <>
@@ -374,7 +374,7 @@ const CreatePostForm: FunctionComponent = () => {
           </Row>
           <Row>
             <Col>
-              <FormGroup controlId="topics">
+              <FormGroup controlId="topics" className="mb-3">
                 <FormLabel>{t('topicsPostLabel')}</FormLabel>
                 <TagsInputTypeAhead
                   data={topics}
@@ -388,7 +388,7 @@ const CreatePostForm: FunctionComponent = () => {
           </Row>
           <Row>
             <Col>
-              <TagsInput tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
+              <TagsInput tags={tags} setTags={setTags} label={t('topicsFieldLabel')} className="mb-3"/>
             </Col>
           </Row>
           <Row>
@@ -433,7 +433,7 @@ const CreatePostForm: FunctionComponent = () => {
               </small>
             </Col>
             <Col style={{ borderLeft: '1px solid lightgrey' }}>
-              <Button variant="primary" type="submit" className="ps-5 pe-4 float-right">
+              <Button variant="primary" type="submit" className="ps-5 pe-4 float-right text-white">
                 {t('submitButtonLabel')}
                 {isCreatePostLoading ? (
                   <Spinner animation="grow" variant="info" className={styles.loadIndicator} />

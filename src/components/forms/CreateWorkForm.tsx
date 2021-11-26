@@ -200,7 +200,7 @@ const CreateWorkForm: FunctionComponent = () => {
         <Container>
           <Row>
             <Col>
-              <FormGroup controlId="type">
+              <FormGroup controlId="type" className="mb-3">
                 <FormLabel>*{t('typeFieldLabel')}</FormLabel>
                 <Form.Select as="select" required onChange={handleWorkTypeChange}>
                   <option value="">{t('typeFieldPlaceholder')}</option>
@@ -212,7 +212,7 @@ const CreateWorkForm: FunctionComponent = () => {
               </FormGroup>
             </Col>
             <Col>
-              <FormGroup controlId="workTitle">
+              <FormGroup controlId="workTitle" className="mb-3">
                 <FormLabel>*{t('titleFieldLabel')}</FormLabel>
                 <FormControl type="text" required />
               </FormGroup>
@@ -220,7 +220,7 @@ const CreateWorkForm: FunctionComponent = () => {
           </Row>
           <Row>
             <Col>
-              <FormGroup controlId="author">
+              <FormGroup controlId="author" className="mb-3">
                 <FormLabel>*{t('authorFieldLabel')}</FormLabel>
                 <FormControl type="text" required />
               </FormGroup>
@@ -247,7 +247,7 @@ const CreateWorkForm: FunctionComponent = () => {
           </Row>
           <Row>
             <Col>
-              <FormGroup controlId="publicationYear">
+              <FormGroup controlId="publicationYear" className="mb-3">
                 <FormLabel>{publicationYearLabel}</FormLabel>
                 <FormControl type="number" min="-5000" max="2200" />
               </FormGroup>
@@ -259,7 +259,7 @@ const CreateWorkForm: FunctionComponent = () => {
               </FormGroup>
             </Col> */}
             <Col>
-              <FormGroup controlId="countryOfOrigin1">
+              <FormGroup controlId="countryOfOrigin1" className="mb-3">
                 <FormLabel>{t('countryFieldLabel')}</FormLabel>
                 <AsyncTypeahead
                   id="create-work--search-country"
@@ -285,7 +285,7 @@ const CreateWorkForm: FunctionComponent = () => {
             </Col>
             {hasCountryOrigin2 && (
               <Col>
-                <FormGroup controlId="countryOfOrigin2">
+                <FormGroup controlId="countryOfOrigin2" className="mb-3">
                   <FormLabel>{t('countryFieldLabel')} 2</FormLabel>
                   <AsyncTypeahead
                     id="create-work--search-country2"
@@ -309,7 +309,7 @@ const CreateWorkForm: FunctionComponent = () => {
               </Col>
             )}
             <Col>
-              <FormGroup controlId="workLength">
+              <FormGroup controlId="workLength" className="mb-3">
                 <FormLabel>{publicationLengthLabel}</FormLabel>
                 <FormControl type="number" min="0" max="999999" />
               </FormGroup>
@@ -317,7 +317,7 @@ const CreateWorkForm: FunctionComponent = () => {
           </Row>
           <Row>
             <Col>
-              <FormGroup controlId="topics">
+              <FormGroup controlId="topics" className="mb-3">
                 <FormLabel>{t('topicsLabel')}</FormLabel>
                 <TagsInputTypeAhead
                   data={topics}
@@ -331,12 +331,12 @@ const CreateWorkForm: FunctionComponent = () => {
           </Row>
           <Row>
             <Col>
-              <TagsInput tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
+              <TagsInput tags={tags} setTags={setTags} label={t('topicsFieldLabel')} className="mb-3"/>
             </Col>
           </Row>
           <Row>
             <Col>
-              <FormGroup controlId="link">
+              <FormGroup controlId="link" className="mb-3">
                 <FormLabel>{t('linkFieldLabel')}</FormLabel>
                 <FormControl type="text" placeholder="http://" />
               </FormGroup>
@@ -344,7 +344,7 @@ const CreateWorkForm: FunctionComponent = () => {
           </Row>
           <Row>
             <Col>
-              <FormGroup controlId="authorGender">
+              <FormGroup controlId="authorGender" className="mb-3">
                 <FormLabel>{t('authorGenderFieldLabel')}</FormLabel>
                 <FormControl as="select">
                   <option value="">{t('authorGenderFieldPlaceholder')}</option>
@@ -357,7 +357,7 @@ const CreateWorkForm: FunctionComponent = () => {
               </FormGroup>
             </Col>
             <Col>
-              <FormGroup controlId="authorRace">
+              <FormGroup controlId="authorRace" className="mb-3">
                 <FormLabel>{t('authorEthnicityFieldLabel')}</FormLabel>
                 <FormControl as="select">
                   <option value="">{t('authorEthnicityFieldPlaceholder')}</option>
@@ -378,8 +378,8 @@ const CreateWorkForm: FunctionComponent = () => {
       </ModalBody>
 
       <ModalFooter>
-        <Container className="py-3">
-          <Button variant="primary" type="submit" className="ps-5 pe-4 float-right">
+        <Container className="py-1">
+          <Button variant="primary" type="submit" className="ps-5 pe-4 float-right text-white">
             {t('submitButtonLabel')}
             {isLoading ? (
               <Spinner animation="grow" variant="info" className={styles.loadIndicator} />

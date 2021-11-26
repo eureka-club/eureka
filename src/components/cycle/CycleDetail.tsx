@@ -290,10 +290,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         IDX += 1;
         return (
           <aside key={key} className="mb-3 bg-light">
-            <h5 className="h6 fw-bold mb-0 pl-3 py-1 d-flex text-secondary">
+            <h5 className="h6 fw-bold mb-0 ps-3 py-1 d-flex text-secondary">
               <span className="py-1 fw-bold">{`${IDX}. `}</span>
-              <span className="py-1 fw-bold h6 mb-0 pl-3 d-flex">{`${g.title}`}</span>
-              <Button className="ms-auto" size="sm" onClick={() => toggleGuidelineDesc(key)}>
+              <span className="py-1 fw-bold h6 mb-0 ps-3 d-flex">{`${g.title}`}</span>
+              <Button className="ms-auto text-white" size="sm" onClick={() => toggleGuidelineDesc(key)}>
                 {!gldView[key] ? <RiArrowDownSLine /> : <RiArrowUpSLine />}
               </Button>
             </h5>
@@ -416,7 +416,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   return (
     <>
       <ButtonGroup className="mb-1">
-        <Button variant="primary" onClick={() => router.back()} size="sm">
+        <Button variant="primary text-white" onClick={() => router.back()} size="sm">
           <BiArrowBack />
         </Button>
         {!router.query.postId && canEditCycle() && (

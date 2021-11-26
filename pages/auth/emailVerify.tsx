@@ -13,7 +13,7 @@ export default function EmailVerify(/* props: Props */) {
     <SimpleLayout title={t('title')}>
       <p>{t('text')}</p>
       <Link href="/">
-      <a className="btn btn-primary">
+      <a className="btn btn-primary text-white">
         {t('common:goToHomepage')}
       </a>
       </Link>

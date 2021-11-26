@@ -220,7 +220,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
     <Row className="mb-5 justify-content-center">
       <Col xs={{ span: 12, order: 2 }} md={{ span: 7, order: 1 }} lg={{ span: 8 }}>
         <h1 className="mb-1 fw-bold text-secondary">
-          <a>{cycle.title}</a>
+          {cycle.title}
         </h1>
         <Rating
           readonly

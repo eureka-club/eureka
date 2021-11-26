@@ -55,7 +55,7 @@ const IndexPage: NextPage = () => {
       <h1 className="text-secondary fw-bold">{t('Trending topics')}</h1>
       <aside className="mb-5">{getTopicsBadgedLinks()}</aside>
       <>{show && show.map((item) => <Carousel className="mt-5" key={item} topic={item} />)}</>
-      <Button className="my-3 pe-3 rounded-pill" onClick={showTopic} disabled={hide.length === 0}>
+      <Button className="my-3 pe-3 rounded-pill text-white" onClick={showTopic} disabled={hide.length === 0}>
         <span>
           <RiArrowDownSLine /> {t('loadMoreTopics')}
         </span>

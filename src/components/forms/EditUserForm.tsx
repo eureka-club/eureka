@@ -312,7 +312,7 @@ const EditUserForm: FunctionComponent = () => {
             <Container>
               <Row>
                 <Col>
-                  <FormGroup controlId="userName">
+                  <FormGroup controlId="userName" className="mb-3">
                     <FormLabel>*{t('Name')}</FormLabel>
                     <FormControl
                       type="text"
@@ -324,7 +324,7 @@ const EditUserForm: FunctionComponent = () => {
                   </FormGroup>
                 </Col>
                 <Col>
-                  <FormGroup controlId="email">
+                  <FormGroup controlId="email" className="mb-3">
                     <FormLabel>*{t('Email')}</FormLabel>
                     <FormControl type="email" required defaultValue={user.email || undefined} />
                   </FormGroup>
@@ -332,7 +332,7 @@ const EditUserForm: FunctionComponent = () => {
               </Row>
               <Row>
                 <Col>
-                  <FormGroup controlId="image">
+                  <FormGroup controlId="image" className="mb-3">
                     <FormLabel>
                       *{t('Image')}
                       {` (URL)`}
@@ -356,7 +356,7 @@ const EditUserForm: FunctionComponent = () => {
               </Row>
               <Row>
                 <Col>
-                  <FormGroup controlId="countryOfOrigin1">
+                  <FormGroup controlId="countryOfOrigin1" className="mb-3">
                     <FormLabel>{t('countryFieldLabel')}</FormLabel>
                     <AsyncTypeahead
                       id="create-work--search-country"
@@ -410,7 +410,7 @@ const EditUserForm: FunctionComponent = () => {
               </Row>
               <Row>
                 <Col xs={12}>
-                  <Form.Group controlId="aboutMe">
+                  <Form.Group controlId="aboutMe" className="mb-3">
                     <Form.Label>{t('About me')}</Form.Label>
                     <Form.Control as="textarea" rows={3} defaultValue={user.aboutMe || undefined} />
                   </Form.Group>
@@ -418,13 +418,13 @@ const EditUserForm: FunctionComponent = () => {
               </Row>
               <Row>
                 <Col>
-                  <TagsInput tags={tags} setTags={setTags} label={t('Topics')} />
+                  <TagsInput tags={tags} setTags={setTags} label={t('Topics')} className="mb-3"/>
                 </Col>
               </Row>
               <Row>
                 <Col>
                   <Form.Group controlId="privacySettings" className={styles.privacySettings}>
-                    <Form.Label>{t('Privacy settings')}</Form.Label>
+                    <Form.Label className="d-flex flex-column">{t('Privacy settings')}</Form.Label>
                     <Form.Text>{t('mediathequeInfo')}.</Form.Text>
                     <Form.Check type="radio" id="dashboardTypePublic" className={styles.checkPublic}>
                       <Form.Check.Input
@@ -433,8 +433,8 @@ const EditUserForm: FunctionComponent = () => {
                         onChange={() => handlerDashboardTypeRadioChange('public')}
                         checked={dashboardTypeChecked.public}
                       />
-                      <Form.Check.Label>{t('My Mediatheque is public')}</Form.Check.Label>
-                      <Form.Control.Feedback type="valid">{t('Anyone can see my Mediatheque')}</Form.Control.Feedback>
+                      <Form.Check.Label className="ms-2">{t('My Mediatheque is public')}</Form.Check.Label>
+                      <Form.Control.Feedback type="valid" className="ms-4">{t('Anyone can see my Mediatheque')}</Form.Control.Feedback>
                     </Form.Check>
 
                     <Form.Check className={styles.checkProtected} type="radio" id="dashboardTypeProtected">
@@ -444,8 +444,8 @@ const EditUserForm: FunctionComponent = () => {
                         onChange={() => handlerDashboardTypeRadioChange('protected')}
                         checked={dashboardTypeChecked.protected}
                       />
-                      <Form.Check.Label>{t('Fallowers can see my Dashboard')}</Form.Check.Label>
-                      <Form.Control.Feedback type="valid">
+                      <Form.Check.Label className="ms-2">{t('Fallowers can see my Dashboard')}</Form.Check.Label>
+                      <Form.Control.Feedback type="valid" className="ms-4">
                         {t('Users I fallow or that follow me can see my Dashboard')}
                       </Form.Control.Feedback>
                     </Form.Check>
@@ -457,8 +457,8 @@ const EditUserForm: FunctionComponent = () => {
                         onChange={() => handlerDashboardTypeRadioChange('private')}
                         checked={dashboardTypeChecked.private}
                       />
-                      <Form.Check.Label>{t('My Dashboard is secret')}</Form.Check.Label>
-                      <Form.Control.Feedback type="valid">{t('Only I can see my Dashboard')}</Form.Control.Feedback>
+                      <Form.Check.Label className="ms-2">{t('My Dashboard is secret')}</Form.Check.Label>
+                      <Form.Control.Feedback type="valid" className="ms-4">{t('Only I can see my Dashboard')}</Form.Control.Feedback>
                     </Form.Check>
                   </Form.Group>
                 </Col>
@@ -468,7 +468,7 @@ const EditUserForm: FunctionComponent = () => {
 
           <ModalFooter>
             <Container className="py-3">
-              <Button variant="primary" type="submit" className="">
+              <Button variant="primary" type="submit" className="text-white">
                 {t('Edit')}
                 {isLoadingUser ? (
                   <Spinner animation="grow" variant="info" size="sm" className="ms-1" />

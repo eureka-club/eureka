@@ -230,12 +230,12 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
             onChange={onChangeFieldCommentForm}
           /> */}
         </Form.Group>
-        <section className="text-right">
+        <section className="d-flex justify-content-end mt-3">
           <ButtonGroup size="sm">
             <Button variant="warning" onClick={clearCreateEurekaForm} disabled={isLoading}>
               <ImCancelCircle />
             </Button>
-            <Button type="submit" disabled={isLoading}>
+            <Button type="submit" className="text-white" disabled={isLoading}>
               <span>
                 <BsCheck /> {t('Add')}
               </span>
