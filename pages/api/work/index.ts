@@ -51,7 +51,7 @@ export default getApiHandler()
     });
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-    try {debugger;
+    try {
       const { q = null, where = null, id = null } = req.query;
       let data = null;
       if (typeof q === 'string') {
