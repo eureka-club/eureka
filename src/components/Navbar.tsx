@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import Image from 'next/image'
 import { useAtom } from 'jotai';
 import { useSession, signOut } from 'next-auth/client';
 import Link from 'next/link';
@@ -91,10 +91,12 @@ const NavBar: FunctionComponent = () => {
     <Container className={styles.container}>
       <Navbar collapseOnSelect expand="lg" variant="light">
         {/* <Container> */}
-        <Link href="/">
+        <Link href="/" replace>
+          <a>
           <Navbar.Brand className="cursor-pointer">
             <aside className="d-flex justify-content-around align-items-center">
-              <img src="/logo.svg" width={45} alt="Project logo" />
+              <Image src="/logo.svg" width={45} height={52} alt="Project logo" />
+              {/* <img src="/logo.svg" width={45} alt="Project logo" /> */}
               <section>
                 <div className={`text-secondary ms-3 h4 mb-0 ${styles.brand}`}>Eureka</div>
                 <p className="text-secondary my-0 ms-3 font-weight-light fs-xs">{t('tagline')}</p>
@@ -113,6 +115,7 @@ const NavBar: FunctionComponent = () => {
               </Col>
             </Container> */}
           </Navbar.Brand>
+          </a>
         </Link>
 
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />

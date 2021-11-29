@@ -49,8 +49,8 @@ const getRecordsCycles = async (where?: string): Promise<CycleMosaicItem[]> => {
   });
 };
 
-const getRecords = async (where?: string): Promise<Item[] | undefined> => {
-  if (!where) return undefined;
+export const getRecords = async (where?: string): Promise<Item[]> => {
+  if (!where) throw new Error('notFound');
   const cycles = await getRecordsCycles(where);
   const works = await getRecordsWorks(where);
 
@@ -63,15 +63,20 @@ const getRecords = async (where?: string): Promise<Item[] | undefined> => {
     return 1;
   });
 };
+interface Props {
+  staleTime?: number;
+  enabled?: boolean;
+};
 
-const useItems = (): UseQueryResult<Item[] | undefined, Error> => {
-  const [globalSearchEngineState] = useAtom(globalSearchEngineAtom);
-  const { where, q, cacheKey } = globalSearchEngineState;
-  const ck = ['ITEMS', q];
+const useItems = (where?: string, cacheKey?: string | string [], props?: Props): UseQueryResult<Item[], Error> => {
+  let opt: Props = {staleTime : 1000 * 60 * 60, enabled : true};
+  if(props)
+    opt = {...opt, ...props};
+  // const [globalSearchEngineState] = useAtom(globalSearchEngineAtom);
+  // const { q, cacheKey } = globalSearchEngineState;
+  const ck = ['ITEMS', ''];
 
-  return useQuery<Item[] | undefined, Error>(cacheKey || ck, () => getRecords(where), {
-    staleTime: 1000 * 60 * 60,
-  });
+  return useQuery<Item[], Error>(cacheKey || ck, () => getRecords(where), opt);
 };
 
 export default useItems;

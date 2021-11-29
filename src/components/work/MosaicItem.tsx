@@ -149,7 +149,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     if (linkToWork) {
       return (
         <div
-          className={`position-relative ${styles.imageContainer} ${!loading ? 'cursor-pointer' : ''}`}
+          className={`${styles.imageContainer} ${!loading ? 'cursor-pointer' : ''}`}
           onClick={onImgClick}
           role="presentation"
           style={style}
@@ -163,11 +163,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         </div>
       );
     }
-    return (
-      <div className={`position-relative `} style={style}>
-        {img}
-      </div>
-    );
+    return img;
   };
   return (
     <Card className={`${tiny ? 'mosaic-tiny' : 'mosaic'} ${isActive() ? 'my-1 isActive' : ''}`}>

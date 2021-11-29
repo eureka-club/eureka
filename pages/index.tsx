@@ -64,7 +64,7 @@ const IndexPage: NextPage = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
+/* export const getStaticProps: GetStaticProps = async () => {
   const queryClient = new QueryClient();
   // await queryClient.prefetchQuery('WORKS', getWorks);
 
@@ -74,7 +74,7 @@ export const getStaticProps: GetStaticProps = async () => {
     },
   };
 };
-
+ */
 // export const getServerSideProps: GetServerSideProps = async () => {
 //   const cycles = await findAllCycles();
 //   const works = await findAllWorks();

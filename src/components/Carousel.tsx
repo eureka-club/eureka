@@ -2,7 +2,7 @@
 // import { useAtom } from 'jotai';
 // import { useQuery } from 'react-query';
 // import { useSession } from 'next-auth/client';
-// import Link from 'next/link';
+import Link from 'next/link';
 // import { useRouter } from 'next/router';
 import { v4 } from 'uuid';
 import { useAtom } from 'jotai';
@@ -216,8 +216,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
   //   },
   //   // {initialData:projects}
   // );
-
-  const onItemsFound = async () => {
+  const getWhere = () => {
     const where = encodeURIComponent(
       JSON.stringify({
         ...(topic !== 'uncategorized' && { topics: { contains: topic } }),
@@ -226,6 +225,11 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
         }),
       }),
     );
+    return where;
+  };
+
+  const onItemsFound = async () => {
+    const where = getWhere();
     setGlobalSearchEngineState({
       ...globalSearchEngineState,
       where,
@@ -244,25 +248,31 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
           <div className="position-relative">
             <Row>
               <Col>
-                <h5 className="cursor-pointer" onClick={onItemsFound} role="presentation">
+                <h5>
+                <Link href={`/search?q=${topic}&fields=topics`}>
+                  <a className="text-dark cursor-pointer">
                   <span className={styles.iconBefore}>
                     <BsHash />
                   </span>
-                  {` `} {topicLabel || t(`${topic}`)}
+                  {topicLabel || t(`${topic}`)}
+          </a>
+                </Link>
                 </h5>
               </Col>
-              <Col className="text-center">
+              <Col className="d-flex justify-content-end">
                 {/* {data.hasMore && ( */}
+                <Link href={`/search?q=${topic}&fields=topics`}>
+                  <a className="cursor-pointer">
+                    <span
+                      className={`cursor-pointer text-primary ${styles.seeAllButton}`}
+                    >
+                      {t('common:See all')}
+                    </span>
 
-                <span
-                  className={`cursor-pointer text-primary ${styles.seeAllButton}`}
-                  role="presentation"
-                  onClick={onItemsFound}
-                >
-                  {t('common:See all')}
-                </span>
+                  </a>
+                </Link>  
 
-                {/* )} */}
+                
               </Col>
             </Row>
             <div className="d-flex overflow-auto justify-content-center">{buildMosaics()}</div>

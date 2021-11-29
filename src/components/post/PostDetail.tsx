@@ -88,7 +88,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
               </Badge>
               <section className="my-1">
                 <h6 className="mb-0">
-                  <Link href={`/work/${work.id}`}>
+                  <Link href={`/work/${work.id}`} passHref>
                     <p className="text-break mb-0">
                       <a className="cursor-pointer">{work.title}</a>,{' '}
                       <span className={styles.workInfoAuthor}>{work.author}</span>
@@ -105,7 +105,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
               </Badge>
               <section className="my-1">
                 <h6>
-                  <Link href={`/cycle/${post.cycles[0].id}`}>
+                  <Link href={`/cycle/${post.cycles[0].id}`} passHref>
                     <p className="text-break mb-0">
                       <a className="cursor-pointer">{post.cycles[0].title}</a>
                     </p>
@@ -118,7 +118,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
         <Col md={{ span: 8 }}>
           <div className="px-4">
             <div className={classNames('d-flex', styles.postInfo)}>
-              <Link href={`/mediatheque/${post.creator.id}`}>
+              <Link href={`/mediatheque/${post.creator.id}`} passHref>
                 {/* <a>
                   <img
                     src={post.creator.image || '/img/default-avatar.png'}

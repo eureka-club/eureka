@@ -1,7 +1,6 @@
 // import { flatten, zip } from 'lodash';
 import { useAtom } from 'jotai';
 import { BiArrowBack } from 'react-icons/bi';
-// import { GetServerSideProps, GetStaticProps, NextPage } from 'next';
 import { NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useState, useEffect, ReactElement } from 'react';
@@ -63,6 +62,39 @@ const SearchPage: NextPage = () => {
   const router = useRouter();
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
   
+  const [where, setWhere] = useState<string>();
+
+  useEffect(()=>{
+    if(router.query.q){
+      let w = "";
+      if(router.query.fields){
+        const fields = (router.query.fields as string).split(',');
+        w = encodeURIComponent(
+          JSON.stringify({
+            OR: fields.map((f:string) => ({ [`${f}`]: { contains: router.query.q}})),          
+          })
+        );
+      }
+      else {
+        w = encodeURIComponent(
+        JSON.stringify({
+            OR: [
+              { topics: { contains: router.query.q } },
+              { title: { contains: router.query.q } }, 
+              { contentText: { contains: router.query.q } },
+              { author: { contains: router.query.q } },
+            ],
+          }),
+        );
+      }
+      setWhere(w);
+    }
+      
+
+  },[router]);
+
+  
+
   // let where = encodeURIComponent(JSON.stringify({ title: { contains: globalSearchEngineState.q } }));
   // const { isLoading, data: works } = useWorks(where);
 
@@ -71,7 +103,7 @@ const SearchPage: NextPage = () => {
 
   // const [where, setWhere] = useState('');
   // const [tempWhere, setTempWhere] = useState('');
-  const { isLoading, data: items, error } = useItems();
+  const { isLoading, data: items, error } = useItems(where, ["ITEMS", router.query.q as string], {enabled: !!where && !!router.query.q});
   // const { isLoading, /* isError, error, */ data: works } = useWorks();
   // const { isLoading: isLoadingCycles, /* isError: isErrorCycles, error: errorCycles, */ data: cycles } = useCycles();
   const { data: onlyByCountriesAux } = useCountries();
@@ -114,10 +146,10 @@ const SearchPage: NextPage = () => {
   const [homepageMosaicDataFiltered, setHomepageMosaicDataFiltered] = useState<Item[]>([]);
 
   useEffect(() => {
-    setGlobalSearchEngineState({
-      ...globalSearchEngineState,
-      ...{ onlyByCountries: onlyByCountriesAux },
-    });
+    setGlobalSearchEngineState((res) => ({
+      ...res,
+      onlyByCountries: onlyByCountriesAux,
+    }));
   }, [onlyByCountriesAux]);
 
   useEffect(() => {
@@ -164,13 +196,13 @@ const SearchPage: NextPage = () => {
     if (isLoading) return <Spinner animation="grow" role="status" />;
     return <span>{`${''}`}</span>;
   };
-  let qLabel = t(`topics:${globalSearchEngineState.q as string}`);
-  if (qLabel.match(':')) qLabel = globalSearchEngineState.q as string;
+  let qLabel = t(`topics:${router.query.q as string}`);
+  if (qLabel.match(':')) qLabel = router.query.q as string;
 
-  const renderErrorMessage = () => {debugger;
+  const renderErrorMessage = () => {
     let e = "";
     if (!isLoading){
-      if(error) e = error?.message;
+      if(error) e = t(error?.message, null, {fallback:"common:Error"});
       else if(!globalSearchEngineState.itemsFound?.length && (!items || !items?.length))
         e = t('notFound');
     } 
@@ -200,18 +232,19 @@ const SearchPage: NextPage = () => {
   );
 };
 
-// export const getStaticProps: GetStaticProps = async () => {
-//   const queryClient = new QueryClient();
-//   // await queryClient.prefetchQuery('WORKS', getWorks);
+/* export const getStaticProps: GetStaticProps = async () => {
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery(['ITEMS', 'gender-feminisms0'], () => getRecords());
 
-//   return {
-//     props: {
-//       dehydratedState: dehydrate(queryClient),
-//     },
-//   };
-// };
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+    revalidate: 60 //revalidate every 1 min
+  };
+};
 
-// export const getServerSideProps: GetServerSideProps = async () => {
+ */// export const getServerSideProps: GetServerSideProps = async () => {
 //   const cycles = await findAllCycles();
 //   const works = await findAllWorks();
 //   const interleavedResults = flatten(zip(cycles, works)).filter((workOrCycle) => workOrCycle != null);

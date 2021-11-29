@@ -87,11 +87,12 @@ const SearchEngine: FunctionComponent<Props> = ({ className = '' }) => {
       if ('type' in searchResult && searchResult.type) router.push(`/${map[searchResult.type]}/${searchResult.id}`);
     }
   };
-  const onItemsFound = async () => {
-    setGlobalSearchEngineState((res) => ({ ...res, show: true, itemsFound: [] }));
+  const onItemsFound = async () => {debugger;
+    let where= '';
+    setGlobalSearchEngineState((res) => ({ ...res, show: true, where: '', itemsFound: [] }));
     if (!router.route.match('search')) {
       if (globalSearchEngineState.q) {
-        const where = encodeURIComponent(
+        where = encodeURIComponent(
           JSON.stringify({
             OR: [
               { title: { contains: globalSearchEngineState.q } },
@@ -103,7 +104,7 @@ const SearchEngine: FunctionComponent<Props> = ({ className = '' }) => {
       }
       router.push('/search');
     } else if (globalSearchEngineState.q) {
-      const where = encodeURIComponent(
+      where = encodeURIComponent(
         JSON.stringify({
           OR: [
             { title: { contains: globalSearchEngineState.q } },
@@ -111,7 +112,11 @@ const SearchEngine: FunctionComponent<Props> = ({ className = '' }) => {
           ],
         }),
       );
-      setGlobalSearchEngineState((res) => ({ ...res, where }));
+      setGlobalSearchEngineState((res) => {
+        debugger;
+        const r = { ...res, where };
+        return r;
+      });
     }
   };
 

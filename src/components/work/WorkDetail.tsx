@@ -137,22 +137,22 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
                   onSelect={handleSubsectionChange}
                   transition={false}
                 >
-                  {/* language=CSS */}
-                  {/* <style jsx global>
+                
+                  <style jsx global>
                     {`
                       .nav-tabs .nav-item.show .nav-link,
                       .nav-tabs .nav-link.active,
-                      .nav-tabs .nav-link:hover {
-                        background-color: var(--primary);
-                        color: white;
+                      .nav-tabs .nav-link:hover {cursor:pointer;
+                        background-color: var(--bs-primary);
+                        color: white!important;
                         border: none !important;
-                        border-bottom: solid 2px var(--primary) !important;
+                        border-bottom: solid 2px var(--bs-primary) !important;
                       }
                       .nav-tabs {
-                        border-bottom: solid 1px var(--primary) !important;
+                        border-bottom: solid 1px var(--bs-primary) !important;
                       }
                     `}
-                  </style> */}
+                  </style> 
                   <Row className="mb-4">
                     <Col>
                       <Nav variant="tabs" fill>
