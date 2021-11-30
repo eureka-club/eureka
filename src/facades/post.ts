@@ -47,7 +47,7 @@ export const search = async (query: { [key: string]: string | string[] }): Promi
     throw new Error("[412] Invalid invocation! Either 'q' or 'where' query parameter must be provided");
   }
 
-  if (typeof q === 'string') {
+  if (q && typeof q === 'string') {
     return prisma.post.findMany({
       where: { title: { contains: q } },
       // ...(typeof include === 'string' && { include: JSON.parse(include) }),

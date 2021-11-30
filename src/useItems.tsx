@@ -3,9 +3,11 @@ import { useAtom } from 'jotai';
 import dayjs from 'dayjs';
 import { WorkMosaicItem } from './types/work';
 import { CycleMosaicItem } from './types/cycle';
+import { PostMosaicItem } from './types/post';
 import globalSearchEngineAtom from './atoms/searchEngine';
+import {SearchResult} from "@/src/types"
 
-type Item = WorkMosaicItem | CycleMosaicItem;
+// type Item = WorkMosaicItem | CycleMosaicItem
 
 const getRecordsWorks = async (where?: string): Promise<WorkMosaicItem[]> => {
   let url = '/api/work';
@@ -49,12 +51,36 @@ const getRecordsCycles = async (where?: string): Promise<CycleMosaicItem[]> => {
   });
 };
 
-export const getRecords = async (where?: string): Promise<Item[]> => {
+const getRecordsPosts = async (where?: string): Promise<PostMosaicItem[]> => {
+  let url = '/api/post';
+  if (where) {
+    url = `/api/post${where ? `?where=${where}` : ''}`;
+  }
+
+  const res = await fetch(url);
+  if (!res.ok) return [];
+  const result = await res.json();
+
+  const posts: PostMosaicItem[] = [];
+  result.data.forEach((i: PostMosaicItem) => {
+    posts.push({ ...i, type: 'post' });
+  });
+  return posts.sort((f, s) => {
+    const fCD = dayjs(f.createdAt);
+    const sCD = dayjs(s.createdAt);
+    if (fCD.isAfter(sCD)) return -1;
+    if (fCD.isSame(sCD)) return 0;
+    return 1;
+  });
+};
+
+export const getRecords = async (where?: string): Promise<SearchResult[]> => {
   if (!where) throw new Error('notFound');
   const cycles = await getRecordsCycles(where);
   const works = await getRecordsWorks(where);
+  const posts = await getRecordsPosts(where);
 
-  const result = [...cycles, ...works];
+  const result = [...cycles, ...works, ...posts];
   return result.sort((f, s) => {
     const fCD = dayjs(f.createdAt);
     const sCD = dayjs(s.createdAt);
@@ -68,7 +94,7 @@ interface Props {
   enabled?: boolean;
 };
 
-const useItems = (where?: string, cacheKey?: string | string [], props?: Props): UseQueryResult<Item[], Error> => {
+const useItems = (where?: string, cacheKey?: string | string [], props?: Props): UseQueryResult<SearchResult[], Error> => {
   let opt: Props = {staleTime : 1000 * 60 * 60, enabled : true};
   if(props)
     opt = {...opt, ...props};
@@ -76,7 +102,7 @@ const useItems = (where?: string, cacheKey?: string | string [], props?: Props):
   // const { q, cacheKey } = globalSearchEngineState;
   const ck = ['ITEMS', ''];
 
-  return useQuery<Item[], Error>(cacheKey || ck, () => getRecords(where), opt);
+  return useQuery<SearchResult[], Error>(cacheKey || ck, () => getRecords(where), opt);
 };
 
 export default useItems;

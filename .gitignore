@@ -6,6 +6,7 @@
 *.code-workspace
 *.pem
 my_resources
+tsconfig.tsbuildinfo
 
 # debug
 npm-debug.log*

@@ -25,8 +25,7 @@ import Mosaic from '../src/components/Mosaic';
 import FilterEngine from '../src/components/FilterEngine';
 import useItems from '../src/useItems';
 import useCountries from '../src/useCountries';
-
-type Item = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | UserMosaicItem;
+import { SearchResult } from '@/src/types';
 
 // interface Props {
 //   homepageMosaicData: (CycleMosaicItem | WorkMosaicItem)[];
@@ -61,17 +60,23 @@ const SearchPage: NextPage = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
-  
+  const [q, setQ] = useState<string>();
   const [where, setWhere] = useState<string>();
-
+  
   useEffect(()=>{
     if(router.query.q){
+      setQ(router.query.q as string);      
+    }
+  },[router]);
+
+  useEffect(()=>{
+    if(q){
       let w = "";
       if(router.query.fields){
         const fields = (router.query.fields as string).split(',');
         w = encodeURIComponent(
           JSON.stringify({
-            OR: fields.map((f:string) => ({ [`${f}`]: { contains: router.query.q}})),          
+            OR: fields.map((f:string) => ({ [`${f}`]: { contains: q}})),          
           })
         );
       }
@@ -79,10 +84,9 @@ const SearchPage: NextPage = () => {
         w = encodeURIComponent(
         JSON.stringify({
             OR: [
-              { topics: { contains: router.query.q } },
-              { title: { contains: router.query.q } }, 
-              { contentText: { contains: router.query.q } },
-              { author: { contains: router.query.q } },
+              { topics: { contains: q } },
+              { title: { contains: q } }, 
+              { contentText: { contains: q } },              
             ],
           }),
         );
@@ -91,7 +95,7 @@ const SearchPage: NextPage = () => {
     }
       
 
-  },[router]);
+  },[q, router.query.fields]);
 
   
 
@@ -103,13 +107,15 @@ const SearchPage: NextPage = () => {
 
   // const [where, setWhere] = useState('');
   // const [tempWhere, setTempWhere] = useState('');
-  const { isLoading, data: items, error } = useItems(where, ["ITEMS", router.query.q as string], {enabled: !!where && !!router.query.q});
+  const { isLoading, data: items, error } = useItems(where, ["ITEMS", q!], {
+    enabled: !!where && !!q && !globalSearchEngineState.itemsFound?.length
+  });
   // const { isLoading, /* isError, error, */ data: works } = useWorks();
   // const { isLoading: isLoadingCycles, /* isError: isErrorCycles, error: errorCycles, */ data: cycles } = useCycles();
   const { data: onlyByCountriesAux } = useCountries();
 
   
-  const [homepageMosaicData, setHomepageMosaicData] = useState<Item[]>([]);
+  const [homepageMosaicData, setHomepageMosaicData] = useState<SearchResult[]>([]);
 
   useEffect(() => {
     if (globalSearchEngineState.itemsFound && globalSearchEngineState.itemsFound.length) {
@@ -143,7 +149,7 @@ const SearchPage: NextPage = () => {
     work?: FilterWhere;
   }; */
 
-  const [homepageMosaicDataFiltered, setHomepageMosaicDataFiltered] = useState<Item[]>([]);
+  const [homepageMosaicDataFiltered, setHomepageMosaicDataFiltered] = useState<SearchResult[]>([]);
 
   useEffect(() => {
     setGlobalSearchEngineState((res) => ({

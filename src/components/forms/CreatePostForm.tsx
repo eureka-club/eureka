@@ -223,9 +223,9 @@ const CreatePostForm: FunctionComponent = () => {
   }, [createdPost, isCreatePostSuccess]);
 
   const labelKeyFn = (res: SearchResult) => {
-    // if ('title' in res)
-    return `${res.title}`;
-    // return `${res.name}`;
+    if ('title' in res)
+      return `${res.title}`;
+    return `${res.name}`;
   };
 
   return (

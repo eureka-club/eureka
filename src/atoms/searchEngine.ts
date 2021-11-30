@@ -4,17 +4,18 @@ import { CycleMosaicItem } from '../types/cycle';
 import { PostMosaicItem } from '../types/post';
 import { WorkMosaicItem } from '../types/work';
 import { UserMosaicItem } from '../types/user';
-
+import {SearchResult} from "@/src/types"
+/* 
 type Item =
   | (CycleMosaicItem & { type: string })
   | WorkMosaicItem
   | (PostMosaicItem & { type: string })
-  | UserMosaicItem;
+  | UserMosaicItem; */
 type Filter = {
   only: string[];
   countryQuery?: string[];
   onlyByCountries: string[];
-  itemsFound?: Item[];
+  itemsFound?: SearchResult[];
   q?: string;
   where?: string;
   show?: boolean;

@@ -242,9 +242,9 @@ const EditPostForm: FunctionComponent = () => {
     }
   };
   const labelKeyFn = (res: SearchResult) => {
-    // if ('title' in res)
-    return `${res.title}`;
-    // return `${res.name}`;
+    if ('title' in res)
+      return `${res.title}`;
+    return `${res.name}`;
   };
 
   if (isLoading || isFetching || !post) return <Spinner animation="grow" variant="info" size="sm" />;

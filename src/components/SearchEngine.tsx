@@ -1,6 +1,7 @@
 // import classNames from 'classnames';
+import dayjs from 'dayjs';
 import { useAtom } from 'jotai';
-// import Link from 'next/link';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 // import { setCookie } from 'nookies';
@@ -10,7 +11,7 @@ import { AsyncTypeahead, Menu, MenuItem } from 'react-bootstrap-typeahead';
 
 import { AiOutlineSearch } from 'react-icons/ai';
 // import Fuse from 'fuse.js';
-// import { useQuery } from 'react-query';
+import { useQueryClient } from 'react-query';
 import { LocalImage, Work } from '@prisma/client';
 import CycleTypeaheadSearchItem from './cycle/TypeaheadSearchItem';
 import WorkTypeaheadSearchItem from './work/TypeaheadSearchItem';
@@ -32,13 +33,16 @@ import { CycleMosaicItem } from '../types/cycle';
 import { PostMosaicItem } from '../types/post';
 import { WorkMosaicItem } from '../types/work';
 
+
 // const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
 interface Props {
   className?: string;
 }
-const SearchEngine: FunctionComponent<Props> = ({ className = '' }) => {
+const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
+  const [q, setQ] = useState<string>('');
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
   // const [session] = useSession() as [Session | null | undefined, boolean];
+  const queryClient = useQueryClient();
   const router = useRouter();
   const { t } = useTranslation('searchEngine');
 
@@ -49,13 +53,11 @@ const SearchEngine: FunctionComponent<Props> = ({ className = '' }) => {
     setSearchWorkOrCycleResults([]);
 
     setIsSearchWorkOrCycleLoading(true);
-
-    setGlobalSearchEngineState({ ...globalSearchEngineState, q: query });
-
+    
+    setQ(query);
     const responseWork = await (await fetch(`/api/work/?q=${query}`)).json();
     const responseCycle = await (await fetch(`/api/cycle/?q=${query}`)).json();
     const responsePost = await (await fetch(`/api/post/?q=${query}`)).json();
-
     const items: SearchResult[] = [
       ...((responseWork && responseWork.data) || []),
       ...((responseCycle && responseCycle.data) || []).map((i: CycleMosaicItem) => ({
@@ -64,13 +66,20 @@ const SearchEngine: FunctionComponent<Props> = ({ className = '' }) => {
       })),
       ...((responsePost && responsePost.data) || []).map((i: PostMosaicItem) => ({
         ...i,
-        type: 'cycle',
+        type: 'post',
       })),
-    ];
+    ].sort((f, s) => {
+      const fCD = dayjs(f.createdAt);
+      const sCD = dayjs(s.createdAt);
+      if (fCD.isAfter(sCD)) return -1;
+      if (fCD.isSame(sCD)) return 0;
+      return 1;
+    });;
 
     setSearchWorkOrCycleResults(items);
     setIsSearchWorkOrCycleLoading(false);
-    // setGlobalSearchEngineState({ ...globalSearchEngineState, q: '' });
+    setGlobalSearchEngineState({ ...globalSearchEngineState, q: ''});
+    
   };
 
   const handleSelectItem = (selected: SearchResult[]): void => {
@@ -87,28 +96,34 @@ const SearchEngine: FunctionComponent<Props> = ({ className = '' }) => {
       if ('type' in searchResult && searchResult.type) router.push(`/${map[searchResult.type]}/${searchResult.id}`);
     }
   };
+  
   const onItemsFound = async () => {debugger;
-    let where= '';
+    queryClient.setQueryData(["ITEMS", q], searchWorkOrCycleResults);
+    if(globalSearchEngineState.itemsFound){
+      router.push(`/search?q=${q}`);
+    }
+    /* let where= '';
     setGlobalSearchEngineState((res) => ({ ...res, show: true, where: '', itemsFound: [] }));
+    
     if (!router.route.match('search')) {
-      if (globalSearchEngineState.q) {
+      if (q) {
         where = encodeURIComponent(
           JSON.stringify({
             OR: [
-              { title: { contains: globalSearchEngineState.q } },
-              { contentText: { contains: globalSearchEngineState.q } },
+              { title: { contains: q } },
+              { contentText: { contains: q } },
             ],
           }),
         );
         setGlobalSearchEngineState((res) => ({ ...res, where }));
       }
       router.push('/search');
-    } else if (globalSearchEngineState.q) {
+    } else if (q) {
       where = encodeURIComponent(
         JSON.stringify({
           OR: [
-            { title: { contains: globalSearchEngineState.q } },
-            { contentText: { contains: globalSearchEngineState.q } },
+            { title: { contains: q } },
+            { contentText: { contains: q } },
           ],
         }),
       );
@@ -117,13 +132,13 @@ const SearchEngine: FunctionComponent<Props> = ({ className = '' }) => {
         const r = { ...res, where };
         return r;
       });
-    }
+    } */
   };
 
   const labelKeyFn = (res: SearchResult) => {
-    // if ('title' in res)
-    return `${res.title}`;
-    // return `${res.name}`;
+     if ('title' in res)
+      return `${res.title}`;
+    return `${res.name}`;
   };
 
   return (
@@ -179,16 +194,28 @@ const SearchEngine: FunctionComponent<Props> = ({ className = '' }) => {
                   </MenuItem>
                 ))}
                 {(results.length && (
-                  <Button variant="light" className={styles.seeAllResults} onClick={onItemsFound}>
-                    {t('See all results')}
-                  </Button>
+                  // <Link href={`/search?q=${q}`} passHref>
+                  //   <Button variant="light" className={styles.seeAllResults}>
+                  //   <a>
+                  //   {t('See all results')}
+                  //   </a>
+                  //   </Button>
+                  // </Link>
+                  // <MenuItem position={results.length} option={t('See all results')}>
+                    <a onClick={onItemsFound} className="cursor-pointer text-center d-block bg-light p-2" role="presentation">{t('See all results')}</a>
+                  // </MenuItem>
                 )) ||
                   t('Not found')}
               </Menu>
             )}
           />
           <InputGroup.Text className="text-white  cursor-pointer bg-primary">
-            <AiOutlineSearch onClick={onItemsFound} />
+            <Link href={`/search?q=${q}`}>
+              <a className="text-white" onClick={onItemsFound} role="presentation">
+                <AiOutlineSearch />
+              </a>
+            </Link>
+            
           </InputGroup.Text>
         </InputGroup>
       </Form.Group>

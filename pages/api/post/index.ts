@@ -54,8 +54,47 @@ export default getApiHandler()
     }
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+    const include =  {
+      creator: true,
+      localImages: true,
+      works: true,
+      cycles: true,
+      favs: true,
+      likes: true,
+      comments: {
+        include: {
+          creator: { select: { id: true, name: true, image: true } },
+          comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+        },
+      },
+    };
+
     try {
-      const data = await findAll();
+      const { q = null, where = null, id = null } = req.query;
+      let data = null;
+      if (typeof q === 'string') {
+        data = await prisma.post.findMany({
+          where: {
+            OR: [{ title: { contains: q } }, { contentText: { contains: q } }, { creator: { name:{contains: q} } }],
+          },
+          include,
+        });
+      } else if (where) {
+        data = await prisma.post.findMany({
+          ...(typeof where === 'string' && { where: JSON.parse(where) }),
+          include,
+        });
+      } else if (id) {
+        data = await prisma.post.findMany({
+          where: { id: parseInt(id as string, 10) },
+          include,
+        });
+      } else {
+        data = await prisma.post.findMany({
+          include,
+        });
+      }
+
       res.status(200).json({ status: 'OK', data });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
