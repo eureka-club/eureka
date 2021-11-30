@@ -92,7 +92,7 @@ const NavBar: FunctionComponent = () => {
       <Navbar collapseOnSelect expand="lg" variant="light">
         {/* <Container> */}
         <Link href="/" replace>
-          <a>
+          <a className="d-flex align-items-center">
           <Navbar.Brand className="cursor-pointer">
             <aside className="d-flex justify-content-around align-items-center">
               <Image src="/logo.svg" width={45} height={52} alt="Project logo" />

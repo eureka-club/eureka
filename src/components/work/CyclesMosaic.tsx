@@ -25,9 +25,7 @@ const CyclesMosaic: FunctionComponent<Props> = ({ work }) => {
   return (
     <>
       {isLoading && (
-        <Spinner animation="border" role="status">
-          <span className="sr-only">Loading...</span>
-        </Spinner>
+        <Spinner animation="grow" role="status"/>        
       )}
       {isSuccess && data != null && <Mosaic stack={data} />}
     </>
