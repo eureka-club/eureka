@@ -181,14 +181,14 @@ const MosaicItem: FunctionComponent<Props> = ({
   };
 
   const renderHorizontalMosaic = (props: number[] = [3, 9]) => {
-    const [mdl = 3, mdr] = props;
+    // const [mdl = 3, mdr] = props;
     return (
       <>
         <Row>
-          <Col xs={12} md={mdl}>
+          <Col xs={12} md={12} xl={4}>
             {renderVerticalMosaic({ showDetailedInfo: false })}
           </Col>
-          <Col xs={12} md={mdr}>
+          <Col xs={12} md={12} xl={8}>
             <div className={styles.detailedInfo}>
               <h6 className="">
                 <Link href={postLinkHref}>
