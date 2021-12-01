@@ -192,7 +192,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             <div className={styles.detailedInfo}>
               <h6 className="">
                 <Link href={postLinkHref}>
-                  <a style={{ cursor: 'pointer' }} className="text-secondary text-decoration-underline">
+                  <a className="cursor-pointer text-secondary">
                     {post.title}
                   </a>
                 </Link>

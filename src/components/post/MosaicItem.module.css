@@ -272,4 +272,6 @@
 .bottomRight div:last-child{
   text-align: right;
 }
-
+.detailedInfo a:hover{
+  text-decoration: underline!important;
+}
