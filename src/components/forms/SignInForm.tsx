@@ -39,14 +39,16 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
   return (
     <>
-      <ModalHeader className={styles.modalHeader} closeButton={!noModal}>
+      <ModalHeader className={`position-relative ${styles.modalHeader}`} closeButton={!noModal}>
         <Container>
           <ModalTitle>{t('login')}</ModalTitle>
-          <p>{t('loginGreeting')}</p>
+          
         </Container>
       </ModalHeader>
       <ModalBody className="pt-0 pb-5">
+      
         <Container>
+        <p className="text-center">{t('loginGreeting')}</p>
           <Row>
             <Col>
               <button type="button" onClick={handleSignInGoogle} className={styles.buttonGoogle}>

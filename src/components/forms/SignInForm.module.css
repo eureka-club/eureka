@@ -4,11 +4,11 @@
 }
 .modalHeader :global(.modal-title) {
   font-size: 2rem;
-  margin-bottom: 1rem;
+
+  
 }
-.modalHeader button:global(.close) {
-  color: var(--eureka-green);
-  font-size: 3rem;
+.modalHeader button:global(.btn-close) {
+  font-size: 1.2rem;
   font-weight: 100;
   line-height: 1;
   opacity: 1;
