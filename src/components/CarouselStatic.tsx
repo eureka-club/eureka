@@ -148,8 +148,8 @@ const CarouselStatic: FunctionComponent<Props> = ({
         //   {mosaics}
         // </Masonry>
         <div key={v4()} className="d-flex flex-nowrap w-100 justify-content-xl-left">
-          <Button
-            className={`p-0 text-white rounded-circle align-self-center ${styles.leftButton}`}
+          {hide.length && <Button
+            className={`text-white rounded-circle align-self-center ${styles.leftButton}`}
             onClick={() => {
               const s = current.slice(0, 6);
               setShow((p) => [...s, ...p]);
@@ -160,12 +160,12 @@ const CarouselStatic: FunctionComponent<Props> = ({
             disabled={!hide.length}
           >
             <RiArrowLeftSLine />
-          </Button>
+          </Button> || ''}
           {mosaics}
           {/* )} */}
           {/* {dataFiltered.length && ( */}
-          <Button
-            className={`p-0 text-center text-white rounded-circle align-self-center ${styles.rightButton}`}
+          {show.length && <Button
+            className={`text-center text-white rounded-circle align-self-center ${styles.rightButton}`}
             onClick={() => {
               const c = current.splice(0, 6);
               setHide((p) => [...p, ...c]);
@@ -175,7 +175,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
             disabled={!show.length}
           >
             <RiArrowRightSLine />
-          </Button>
+          </Button> || ''}
         </div>
       );
       result.push(res);
