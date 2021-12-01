@@ -426,14 +426,14 @@ const CreatePostForm: FunctionComponent = () => {
       <ModalFooter>
         <Container className="py-3">
           <Row>
-            <Col>
+            <Col className="border-end border-info">
               <FormCheck type="checkbox" defaultChecked inline id="isPublic" label={t('isPublicFieldLabel')} />
               <small style={{ color: 'lightgrey', display: 'block', margin: '0.25rem 0 0 1.25rem' }}>
                 {t('isPublicInfotip')}
               </small>
             </Col>
-            <Col style={{ borderLeft: '1px solid lightgrey' }}>
-              <Button variant="primary" type="submit" className="ps-5 pe-4 float-right text-white">
+            <Col>
+              <Button variant="primary" type="submit" className="ps-5 pe-4 float-end text-white">
                 {t('submitButtonLabel')}
                 {isCreatePostLoading ? (
                   <Spinner animation="grow" variant="info" className={styles.loadIndicator} />
