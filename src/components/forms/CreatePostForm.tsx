@@ -423,7 +423,7 @@ const CreatePostForm: FunctionComponent = () => {
         </Container>
       </ModalBody>
 
-      <ModalFooter>
+      <ModalFooter className="mt-3">
         <Container className="py-3">
           <Row>
             <Col className="border-end border-info">

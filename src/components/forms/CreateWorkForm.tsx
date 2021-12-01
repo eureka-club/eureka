@@ -377,9 +377,9 @@ const CreateWorkForm: FunctionComponent = () => {
         </Container>
       </ModalBody>
 
-      <ModalFooter>
+      <ModalFooter className="mt-3">
         <Container className="py-1">
-          <Button variant="primary" type="submit" className="ps-5 pe-4 float-right text-white">
+          <Button variant="primary" type="submit" className="ps-5 pe-4 float-end text-white">
             {t('submitButtonLabel')}
             {isLoading ? (
               <Spinner animation="grow" variant="info" className={styles.loadIndicator} />
