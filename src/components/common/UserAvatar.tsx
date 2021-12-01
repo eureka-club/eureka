@@ -1,5 +1,5 @@
 import { FunctionComponent, SyntheticEvent, useState } from 'react';
-
+import Image from 'next/image'
 import Link from 'next/link';
 import { Spinner } from 'react-bootstrap';
 import { User } from '@prisma/client';
