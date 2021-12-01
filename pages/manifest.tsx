@@ -65,7 +65,7 @@ const ManifestPage: NextPage = () => {
                 role="presentation"
               >
                 <aside className={`${styles.box} ${styles.bgRow1Box1}`} />
-                <h2 className="h3 text-left">{t('manifestRow1Box1Title')}</h2>
+                <h2 className="h3 text-start">{t('manifestRow1Box1Title')}</h2>
                 <h5 className="cursor-pointer fs-6">
                   {t('learnMore')} <CgArrowLongRight />
                 </h5>
@@ -79,7 +79,7 @@ const ManifestPage: NextPage = () => {
                 role="presentation"
               >
                 <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow1Box1Title')}</h2>
-                <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow1Box1Desc')}</p>
+                <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow1Box1Desc')}</p>
               </aside>
             )}
           </Col>
@@ -93,7 +93,7 @@ const ManifestPage: NextPage = () => {
                 role="presentation"
               >
                 <aside className={`${styles.box} ${styles.bgRow1Box2}`} />
-                <h2 className="h3 text-left">{t('manifestRow1Box2Title')}</h2>
+                <h2 className="h3 text-start">{t('manifestRow1Box2Title')}</h2>
                 <h5 className="cursor-pointer fs-6">
                   {t('learnMore')} <CgArrowLongRight />
                 </h5>
@@ -107,7 +107,7 @@ const ManifestPage: NextPage = () => {
                 role="presentation"
               >
                 <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow1Box2Title')}</h2>
-                <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow1Box2Desc')}</p>
+                <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow1Box2Desc')}</p>
               </aside>
             )}
           </Col>
@@ -121,7 +121,7 @@ const ManifestPage: NextPage = () => {
                 role="presentation"
               >
                 <aside className={`${styles.box} ${styles.bgRow1Box3}`} />
-                <h2 className="h3 text-left">{t('manifestRow1Box3Title')}</h2>
+                <h2 className="h3 text-start">{t('manifestRow1Box3Title')}</h2>
                 <h5 className="cursor-pointer fs-6">
                   {t('learnMore')} <CgArrowLongRight />
                 </h5>
@@ -135,7 +135,7 @@ const ManifestPage: NextPage = () => {
                 role="presentation"
               >
                 <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow1Box3Title')}</h2>
-                <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow1Box3Desc')}</p>
+                <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow1Box3Desc')}</p>
               </aside>
             )}
           </Col>
@@ -151,7 +151,7 @@ const ManifestPage: NextPage = () => {
                 role="presentation"
               >
                 <aside className={`${styles.box} ${styles.bgRow2Box1}`} />
-                <h2 className="h3 text-left">{t('manifestRow2Box1Title')}</h2>
+                <h2 className="h3 text-start">{t('manifestRow2Box1Title')}</h2>
                 <h5 className="cursor-pointer fs-6">
                   {t('learnMore')} <CgArrowLongRight />
                 </h5>
@@ -165,7 +165,7 @@ const ManifestPage: NextPage = () => {
                 role="presentation"
               >
                 <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow2Box1Title')}</h2>
-                <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow2Box1Desc')}</p>
+                <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow2Box1Desc')}</p>
               </aside>
             )}
           </Col>
@@ -179,7 +179,7 @@ const ManifestPage: NextPage = () => {
                 role="presentation"
               >
                 <aside className={`${styles.box} ${styles.bgRow2Box2}`} />
-                <h2 className="h3 text-left">{t('manifestRow2Box2Title')}</h2>
+                <h2 className="h3 text-start">{t('manifestRow2Box2Title')}</h2>
                 <h5 className="cursor-pointer fs-6">
                   {t('learnMore')} <CgArrowLongRight />
                 </h5>
@@ -193,7 +193,7 @@ const ManifestPage: NextPage = () => {
                 role="presentation"
               >
                 <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow2Box2Title')}</h2>
-                <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow2Box2Desc')}</p>
+                <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow2Box2Desc')}</p>
               </aside>
             )}
           </Col>
@@ -207,7 +207,7 @@ const ManifestPage: NextPage = () => {
                 role="presentation"
               >
                 <aside className={`${styles.box} ${styles.bgRow2Box3}`} />
-                <h2 className="h3 text-left">{t('manifestRow2Box3Title')}</h2>
+                <h2 className="h3 text-start">{t('manifestRow2Box3Title')}</h2>
                 <h5 className="cursor-pointer fs-6">
                   {t('learnMore')} <CgArrowLongRight />
                 </h5>
@@ -221,7 +221,7 @@ const ManifestPage: NextPage = () => {
                 role="presentation"
               >
                 <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow2Box3Title')}</h2>
-                <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow2Box3Desc')}</p>
+                <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow2Box3Desc')}</p>
               </aside>
             )}
           </Col>
@@ -237,7 +237,7 @@ const ManifestPage: NextPage = () => {
                 role="presentation"
               >
                 <aside className={`${styles.box} ${styles.bgRow3Box1}`} />
-                <h2 className="h3 text-left">{t('manifestRow3Box1Title')}</h2>
+                <h2 className="h3 text-start">{t('manifestRow3Box1Title')}</h2>
                 <h5 className="cursor-pointer fs-6">
                   {t('learnMore')} <CgArrowLongRight />
                 </h5>
@@ -251,7 +251,7 @@ const ManifestPage: NextPage = () => {
                 role="presentation"
               >
                 <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow3Box1Title')}</h2>
-                <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow3Box1Desc')}</p>
+                <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow3Box1Desc')}</p>
               </aside>
             )}
           </Col>
@@ -265,7 +265,7 @@ const ManifestPage: NextPage = () => {
                 role="presentation"
               >
                 <aside className={`${styles.box} ${styles.bgRow3Box2}`} />
-                <h2 className="h3 text-left">{t('manifestRow3Box2Title')}</h2>
+                <h2 className="h3 text-start">{t('manifestRow3Box2Title')}</h2>
                 <h5 className="cursor-pointer fs-6">
                   {t('learnMore')} <CgArrowLongRight />
                 </h5>
@@ -279,7 +279,7 @@ const ManifestPage: NextPage = () => {
                 role="presentation"
               >
                 <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow3Box2Title')}</h2>
-                <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow3Box2Desc')}</p>
+                <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow3Box2Desc')}</p>
               </aside>
             )}
           </Col>
@@ -293,7 +293,7 @@ const ManifestPage: NextPage = () => {
                 role="presentation"
               >
                 <aside className={`${styles.box} ${styles.bgRow3Box3}`} />
-                <h2 className="h3 text-left">{t('manifestRow3Box3Title')}</h2>
+                <h2 className="h3 text-start">{t('manifestRow3Box3Title')}</h2>
                 <h5 className="cursor-pointer fs-6">
                   {t('learnMore')} <CgArrowLongRight />
                 </h5>
@@ -307,7 +307,7 @@ const ManifestPage: NextPage = () => {
                 role="presentation"
               >
                 <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow3Box3Title')}</h2>
-                <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow3Box3Desc')}</p>
+                <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow3Box3Desc')}</p>
               </aside>
             )}
           </Col>
@@ -322,7 +322,7 @@ const ManifestPage: NextPage = () => {
                 role="presentation"
               >
                 <aside className={`${styles.box} ${styles.bgRow4Box1}`} />
-                <h2 className="h3 text-left">{t('manifestRow4Box1Title')}</h2>
+                <h2 className="h3 text-start">{t('manifestRow4Box1Title')}</h2>
                 <h5 className="cursor-pointer fs-6">
                   {t('learnMore')} <CgArrowLongRight />
                 </h5>
@@ -336,7 +336,7 @@ const ManifestPage: NextPage = () => {
                 role="presentation"
               >
                 <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow4Box1Title')}</h2>
-                <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow4Box1Desc')}</p>
+                <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow4Box1Desc')}</p>
                 <ul>
                   <li className="fs-6">{t('manifestRow4Box1Desc1')}</li>
                   <li className="fs-6">{t('manifestRow4Box1Desc2')}</li>
@@ -357,7 +357,7 @@ const ManifestPage: NextPage = () => {
                 role="presentation"
               >
                 <aside className={`${styles.box} ${styles.bgRow4Box2}`} />
-                <h2 className="h3 text-left">
+                <h2 className="h3 text-start">
                   {t('manifestRow4Box2Title')} <span className="text-yellow">{t('manifestRow4Box2Title')}</span>
                 </h2>
                 <h5 className="cursor-pointer fs-6">
@@ -373,7 +373,7 @@ const ManifestPage: NextPage = () => {
                 role="presentation"
               >
                 <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow4Box2Title')}</h2>
-                <p className="p-2 m-0 text-wrap text-left fs-6">{t('manifestRow4Box2Desc')}</p>
+                <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow4Box2Desc')}</p>
               </aside>
             )}
           </Col>

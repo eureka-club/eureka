@@ -130,7 +130,7 @@ const MosaicItem: FunctionComponent<Props> = ({
               <div className={styles.gradient} />
             </>
           )}
-          <div className={`w-100 text-left ${styles.postDetail}`}>
+          <div className={`w-100 text-start ${styles.postDetail}`}>
             {post && (
               <>
                 <Avatar user={post.creator} size="xs" />

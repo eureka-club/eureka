@@ -60,7 +60,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
                 <h1 className="h1 ms-auto">{t('underEurekaLabel')}</h1>
                 {/* <em className="fs-6 ms-auto">{t('underEurekaLabel')}</em> */}
               </Col>
-              <Col xs={12} md={8} className="text-left">
+              <Col xs={12} md={8} className="text-start">
                 <p className="ps-4 border-start border-white">
                   {t('eurekaReasonLabel')}
                   <br />
