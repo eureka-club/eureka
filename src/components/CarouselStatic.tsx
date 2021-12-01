@@ -113,9 +113,9 @@ const CarouselStatic: FunctionComponent<Props> = ({
           d = data.filter((i) => globalSEState.only.includes(i.type || ''));
         }
         setDataFiltered(() => d);
-        const s = d.slice(0, 4);
+        const s = d.slice(0, 6);
         setCurrent(() => [...s]);
-        setShow(() => [...d.slice(4, d.length)]);
+        setShow(() => [...d.slice(6, d.length)]);
       } else {
         setDataFiltered(() => []);
         setCurrent(() => []);
@@ -151,11 +151,11 @@ const CarouselStatic: FunctionComponent<Props> = ({
           <Button
             className={`p-0 text-white rounded-circle align-self-center ${styles.leftButton}`}
             onClick={() => {
-              const s = current.slice(0, 4);
+              const s = current.slice(0, 6);
               setShow((p) => [...s, ...p]);
-              const h = hide.slice(-4);
+              const h = hide.slice(-6);
               setCurrent(h);
-              setHide(hide.slice(0, -4));
+              setHide(hide.slice(0, -6));
             }}
             disabled={!hide.length}
           >
@@ -167,9 +167,9 @@ const CarouselStatic: FunctionComponent<Props> = ({
           <Button
             className={`p-0 text-center text-white rounded-circle align-self-center ${styles.rightButton}`}
             onClick={() => {
-              const c = current.splice(0, 4);
+              const c = current.splice(0, 6);
               setHide((p) => [...p, ...c]);
-              setCurrent(show.splice(0, 4));
+              setCurrent(show.splice(0, 6));
               setShow(() => show);
             }}
             disabled={!show.length}
