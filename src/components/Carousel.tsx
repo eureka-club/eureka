@@ -252,7 +252,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
                 <Link href={`/search?q=${topic}&fields=topics`}>
                   <a className="text-dark cursor-pointer">
                   <span className={styles.iconBefore}>
-                    <BsHash />
+                    <BsHash className="rounded-circle border border-2 border-dark" />
                   </span>
                   {topicLabel || t(`${topic}`)}
           </a>
