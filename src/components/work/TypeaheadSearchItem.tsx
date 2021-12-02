@@ -1,6 +1,6 @@
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
-
+import { Badge } from 'react-bootstrap'
 import { WorkWithImages } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
 import WorkSummary from './WorkSummary';
@@ -19,7 +19,9 @@ const TypeaheadSearchItem: FunctionComponent<Props> = ({ work }) => {
         {work.localImages != null && work.localImages[0] != null && (
           <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
         )}
-        <span>{t(work.type)}</span>
+        <Badge bg="orange" className={`fw-normal fs-6 text-black px-2 rounded-pill ${styles.type}`}>
+          {t(work.type)}
+        </Badge>
       </div>
       <div>
         <h3>{work.title}</h3>
