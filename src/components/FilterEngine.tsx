@@ -162,7 +162,7 @@ const SearchEngine: FunctionComponent<Props> = ({
                 onChange={(e) => handlerComboxesChangeType(e, 'cycle')}
               />
             </Form.Group>
-            {/* <Form.Group className={styles.formGroup}>
+            <Form.Group className={styles.formGroup}>
               <Form.Check
                 className={styles.filter}
                 inline
@@ -170,7 +170,7 @@ const SearchEngine: FunctionComponent<Props> = ({
                 label={t('Eurekas')}
                 onChange={(e) => handlerComboxesChangeType(e, 'post')}
               />
-            </Form.Group> */}
+            </Form.Group>
             <Form.Group className={styles.formGroup}>
               <Form.Check
                 className={styles.filter}
