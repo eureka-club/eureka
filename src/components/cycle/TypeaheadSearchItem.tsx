@@ -16,7 +16,7 @@ const TypeaheadSearchItem: FunctionComponent<Props> = ({ cycle }) => {
         <LocalImageComponent filePath={cycle.localImages[0].storedFile} alt={cycle.title} />
       </div>
       <div>
-        <h3>{cycle.title}</h3>
+        <h3 className="text-wrap">{cycle.title}</h3>
         <hr />
         <CycleSummary cycle={cycle} />
       </div>

@@ -17,7 +17,7 @@ const WorkSummary: FunctionComponent<Props> = ({ work }) => {
   const { t } = useTranslation('common');
 
   return (
-    <section className={styles.workSummary}>
+    <p className={`text-wrap ${styles.workSummary}`}>
       {[
         work.publicationYear &&
           `${
@@ -33,7 +33,7 @@ const WorkSummary: FunctionComponent<Props> = ({ work }) => {
       ]
         .filter((val) => val != null)
         .join(', ')}
-    </section>
+    </p>
   );
 };
 

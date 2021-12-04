@@ -3,9 +3,6 @@
   /* margin-bottom: 1rem; */
 }
 
-.imageWrapper {
-  position: relative;
-}
 .imageWrapper span {
   background-color: rgb(193, 198, 210);
   border-radius: 1rem;
