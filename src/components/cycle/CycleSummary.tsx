@@ -13,7 +13,7 @@ import styles from './CycleSummary.module.css';
 
 interface Props {
   cycle: Cycle;
-}
+} 
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
