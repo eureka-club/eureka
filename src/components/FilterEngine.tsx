@@ -193,7 +193,7 @@ const SearchEngine: FunctionComponent<Props> = ({
               />
             </Form.Group>
           </Col>
-          <Col md={4} className={styles.lastCol}>
+          <Col md={4} className="pe-0 d-flex justify-content-start">
             {fictionOrNotFilter && (
               <PopoverContainer title={t('Fiction/nonfiction')} className={styles.popover}>
                 <Form.Label>
