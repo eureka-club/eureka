@@ -51,5 +51,6 @@
   "addDatesForWork": "Ajouter des dates individuelles pour chaque œuvre",
   "invalidInput": "Entrée invalide",
   "cycleStartAndEndRequired": "Les dates de début et de fin de cycle sont obligatoires",
-  "Date Range Error": "Erreur dates"
+  "Date Range Error": "Erreur dates",
+  "cycleGuidelineInfo":"We consider that rules should be contextual. Thematic cycles are diverse: in terms of topic, context and community. To ensure that rules are relevant and culturally sensitive, each cycle has the ability to define its own guidelines, including what it means by ‘safe space’ and what classifies as harmful content. Of course, these must be generally aligned with our Manifesto."
 }

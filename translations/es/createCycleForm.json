@@ -51,5 +51,6 @@
   "addDatesForWork": "Agregar fechas individuales para cada obra",
   "invalidInput": "Entrada inválida",
   "cycleStartAndEndRequired": "Se requieren fechas de inicio y fin del ciclo",
-  "Date Range Error": "Error en el rango de fecha"
+  "Date Range Error": "Error en el rango de fecha",
+  "cycleGuidelineInfo": "Consideramos que las reglas deben ser contextuales. Los ciclos temáticos son diversos: en términos de tema, contexto y comunidad. Para garantizar que las reglas sean relevantes y culturalmente sensibles, cada ciclo tiene la capacidad de definir sus propias pautas, incluido lo que significa 'espacio seguro' y lo que se clasifica como contenido nocivo. Por supuesto, estos deben estar generalmente alineados con nuestro Manifiesto."
 }

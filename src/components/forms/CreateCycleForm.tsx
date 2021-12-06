@@ -28,6 +28,7 @@ import WorkTypeaheadSearchItem from '../work/TypeaheadSearchItem';
 import styles from './CreateCycleForm.module.css';
 import TagsInput from './controls/TagsInput';
 import useTopics from '../../useTopics';
+import { isWeakMap } from 'util/types';
 
 interface Props {
   className?: string;
@@ -269,7 +270,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
   const handleRemoveSelectedPost = (boxId: number) => {
     setSelectedWorksForCycle(
-      selectedWorksForCycle.filter((post, idx) => {
+      selectedWorksForCycle.filter((wm, idx) => {
         return idx !== boxId;
       }),
     );
@@ -544,17 +545,17 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
             {/* </Row> */}
             <Row className="mb-4">
-              {chosenWorksBoxes.map((boxId) => (
-                <Col md={3} key={boxId}>
+              {selectedWorksForCycle.map((wm, idx) => (
+                <Col xs={6} md={3} key={wm.id} className="mt-2">
                   <div className={classNames(styles.outlinedBlock, styles.chosenWorksBox)}>
-                    {selectedWorksForCycle[boxId] && (
+                    {wm && (
                       <>
                         <LocalImageComponent
-                          filePath={selectedWorksForCycle[boxId].localImages[0].storedFile}
-                          alt={selectedWorksForCycle[boxId].title}
+                          filePath={wm.localImages[0].storedFile}
+                          alt={wm.title}
                         />
                         <button
-                          onClick={() => handleRemoveSelectedPost(boxId)}
+                          onClick={() => handleRemoveSelectedPost(idx)}
                           type="button"
                           className={styles.chosenWorksBoxRemove}
                         >
@@ -563,33 +564,33 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                       </>
                     )}
                   </div>
-                  {enableWorksDisscussionsDates && selectedWorksForCycle[boxId] && (
+                  {enableWorksDisscussionsDates && wm && (
                     <div className={styles.worksDisscussionsDates} ref={worksDisscussionsDates}>
-                      <Form.Group className="" controlId={`work${boxId}StartDate`}>
+                      <Form.Group className="" controlId={`work${idx}StartDate`}>
                         <Form.Label>{`${t('Start date of work')}`}</Form.Label>
                         <Form.Control
                           type="date"
                           isInvalid={
-                            selectedWorksForCycleDates[selectedWorksForCycle[boxId].id]
-                              ? selectedWorksForCycleDates[selectedWorksForCycle[boxId].id].isInvalidStartDate
+                            selectedWorksForCycleDates[idx]
+                              ? selectedWorksForCycleDates[idx].isInvalidStartDate
                               : false
                           }
                           onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                            handlerSelectedWorksForCycleStartDate(e, selectedWorksForCycle[boxId].id)
+                            handlerSelectedWorksForCycleStartDate(e, idx)
                           }
                         />
                       </Form.Group>
-                      <Form.Group className="" controlId={`work${boxId}EndDate`}>
+                      <Form.Group className="" controlId={`work${wm.id}EndDate`}>
                         <Form.Label>{t('End date of work')}</Form.Label>
                         <Form.Control
                           type="date"
                           isInvalid={
-                            selectedWorksForCycleDates[selectedWorksForCycle[boxId].id]
-                              ? selectedWorksForCycleDates[selectedWorksForCycle[boxId].id].isInvalidEndDate
+                            selectedWorksForCycleDates[idx]
+                              ? selectedWorksForCycleDates[idx].isInvalidEndDate
                               : false
                           }
                           onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                            handlerSelectedWorksForCycleEndDate(e, selectedWorksForCycle[boxId].id)
+                            handlerSelectedWorksForCycleEndDate(e, idx)
                           }
                         />
                       </Form.Group>
@@ -599,7 +600,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
               ))}
             </Row>
             <Row>
-              <Col>
+              <Col xs={12} md={6}>
                 <ImageFileSelect
                   acceptedFileTypes="image/*"
                   file={cycleCoverImageFile}
@@ -628,7 +629,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                   )}
                 </ImageFileSelect>
               </Col>
-              <Col>
+              <Col xs={12} md={6} className="mt-2">
                 <button
                   className={classNames(styles.outlinedBlock, styles.complementaryContentPrompt)}
                   type="button"
@@ -778,10 +779,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
           <Col md={6} xs={12}>
             <h5>{t('Cycle guidelines')}</h5>
             <p className={`py-1 ${styles.cycleGuidelineInfo}`}>
-              We consider that rules should be contextual. Thematic cycles are diverse: in terms of topic, context and
-              community. To ensure that rules are relevant and culturally sensitive, each cycle has the ability to
-              define its own guidelines, including what it means by ‘safe space’ and what classifies as harmful content.
-              Of course, these must be generally aligned with our Manifesto.
+              {t('cycleGuidelineInfo')}
             </p>
             <p className={`py-1 ${styles.cycleGuidelineInfo}`}>Please write below the guidelines for this cycle.</p>
             <Form.Group>
@@ -797,7 +795,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 rows={3}
               />
             </Form.Group>
-            <ButtonGroup size="sm">
+            <ButtonGroup size="sm" className="mt-3">
               <Button size="sm" onClick={addGuideline}>
                 {guidelineEditIdx !== undefined ? <BiEdit /> : <BiPlus />}
               </Button>
@@ -829,36 +827,37 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
             )) || <Skeleton type="list" lines={5} className="pt-3" />}
           </Col>
         </Row>
-        <Row>
+        {/* <Row>
           <Col>
-            {/* <FormCheck type="checkbox" defaultChecked inline id="isPublic" label={t('isPublicLabel')} /> */}
+            <FormCheck type="checkbox" defaultChecked inline id="isPublic" label={t('isPublicLabel')} />
           </Col>
-          <Col>
-            <Button
-              disabled={!selectedWorksForCycle.length || !cycleCoverImageFile}
-              variant="primary"
-              type="submit"
-              className="float-right ps-5 pe-4"
-            >
-              {t('submitBtnLabel')}
-              {isCreateCycleReqLoading ? (
-                <Spinner animation="grow" variant="info" className={styles.loadIndicator} />
-              ) : (
-                <span className={styles.loadIndicator} />
-              )}
-              {isCreateCycleReqError && createCycleReqError}
-            </Button>
+          
+        </Row>
+ */}      
+    <section className="d-flex justify-content-end">
+            
             <Button
               variant="outline-secondary"
               type="button"
               onClick={handleFormClear}
-              className="float-right me-4 px-3"
+              className="me-4 p-2"
             >
               {t('resetBtnLabel')}
             </Button>
-          </Col>
-        </Row>
-      </Form>
+            <Button
+              disabled={!selectedWorksForCycle.length || !cycleCoverImageFile}
+              variant="primary"
+              type="submit"
+              className="p-2 text-white"
+            >
+              {t('submitBtnLabel')}
+              {isCreateCycleReqLoading && (
+                <Spinner animation="grow" variant="info" size="sm" />
+              )}
+              {isCreateCycleReqError && createCycleReqError}
+            </Button>
+          </section>
+ </Form>
 
       <Modal show={addWorkModalOpened} onHide={handleAddWorkModalClose} animation={false}>
         <Modal.Header closeButton>
