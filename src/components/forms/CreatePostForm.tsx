@@ -104,6 +104,25 @@ const CreatePostForm: FunctionComponent = () => {
       }
       return null;
     },
+    {
+      onMutate: async () => {debugger;
+        if (selectedCycle) {
+          const cacheKey = ['CYCLE', `${selectedCycle.id}`]
+          const snapshot = queryClient.getQueryData(cacheKey);
+          return { cacheKey, snapshot };
+        }
+        return { cacheKey: undefined, snapshot: null };
+      },
+      onSettled: (_comment, error, _variables, context) => {debugger;
+        if (context) {
+          const { cacheKey: ck, snapshot } = context;
+          if (error && ck) {
+            queryClient.setQueryData(ck, snapshot);
+          }
+          if (context) queryClient.invalidateQueries(ck);
+        }
+      },
+    },
   );
 
   const handleSearchWorkOrCycle = async (query: string) => {
@@ -167,15 +186,15 @@ const CreatePostForm: FunctionComponent = () => {
     if (formRef.current) formRef.current.isPublic.checked = true;
   };
 
-  const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
 
     if (imageFile == null) {
       return;
     }
 
-    const form = ev.currentTarget;
-    if (selectedWork != null) {
+    const form = formRef.current;
+    if (form && selectedWork != null) {
       const payload: CreatePostAboutWorkClientPayload = {
         selectedCycleId: selectedCycle != null ? selectedCycle.id : null,
         selectedWorkId: selectedWork.id,
@@ -188,7 +207,7 @@ const CreatePostForm: FunctionComponent = () => {
         tags,
       };
       await execCreatePost(payload);
-    } else if (selectedCycle != null) {
+    } else if (form && selectedCycle != null) {
       const payload: CreatePostAboutCycleClientPayload = {
         selectedCycleId: selectedCycle.id,
         selectedWorkId: null,
@@ -229,7 +248,7 @@ const CreatePostForm: FunctionComponent = () => {
   };
 
   return (
-    <Form onSubmit={handleSubmit} ref={formRef}>
+    <Form ref={formRef}>
       <ModalHeader closeButton>
         <Container>
           <ModalTitle>{t('title')}</ModalTitle>
@@ -433,7 +452,7 @@ const CreatePostForm: FunctionComponent = () => {
               </small>
             </Col>
             <Col>
-              <Button variant="primary" disabled={isCreatePostLoading} type="submit" className="ps-5 pe-4 float-end text-white">
+              <Button variant="primary" disabled={isCreatePostLoading} onClick={(e)=>{handleSubmit(e)}} className="ps-5 pe-4 float-end text-white">
                 {t('submitButtonLabel')}
                 {isCreatePostLoading ? (
                   <Spinner animation="grow" variant="info" size="sm" />
