@@ -95,7 +95,7 @@ const Mosaic: FunctionComponent<Props> = ({
     >
       {stack &&
         stack.map((item: MosaicItem) => (
-          <aside className={`pt-5 ${className}`} key={`${v4()}`}>
+          <aside className={` ${className}`} key={`${v4()}`}>
             {renderMosaicItem(item, postsLinksTo, showButtonLabels, display, showComments, cacheKey)}
           </aside>
         ))}
