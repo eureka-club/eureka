@@ -44,7 +44,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     if (user && user.email) {
       const locale = req.cookies.NEXT_LOCALE;
       const t = await getT(locale, 'cycleJoin');
-      const title = `${t('Hello')} ${cycle.creator.name}!`;
+      const title = `${t('Hello')} ${user.name}!`;
       /// Your request to Join the cycle [name of the cycle] has been approved.
       const emailReason = `${t('Your request to Join the cycle')} "${cycle.title}" ${t('has been')} ${
         authorized === '1' ? t('approved') : t('denied')
