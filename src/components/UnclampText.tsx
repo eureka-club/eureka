@@ -30,7 +30,7 @@ const UnclampText: FunctionComponent<Props> = ({ clampHeight, text, showButtomMo
     }
   };
 
-  useEffect(() => {
+  useEffect(() => {debugger;
     if (isHTML) {
       if (innerRef?.current != null && innerRef.current.innerText && innerRef.current.innerText.length > 100) {
         setUnclampButtonVisible(true);
@@ -40,7 +40,7 @@ const UnclampText: FunctionComponent<Props> = ({ clampHeight, text, showButtomMo
         setUnclampButtonVisible(true);
       }
     }
-  }, [outerRef, innerRef]);
+  }, [outerRef.current?.offsetHeight, innerRef?.current?.offsetHeight, isHTML]);
 
   return (
     <>
@@ -48,7 +48,7 @@ const UnclampText: FunctionComponent<Props> = ({ clampHeight, text, showButtomMo
         ref={outerRef}
         // className={classNames(styles.outer, { [styles.contentTextUnclamped]: textIsUnclamped })}
         className={`${unclampButtonVisible ? styles.outer : ''} ${textIsUnclamped ? styles.contentTextUnclamped : ''}`}
-        style={{ height: textIsUnclamped || !unclampButtonVisible ? 'auto' : clampHeight }}
+        style={{ height: textIsUnclamped ? 'auto' : clampHeight }}
       >
         {/* <div ref={innerRef}>
           {textRows.map((row, idx) => (
