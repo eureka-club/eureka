@@ -85,10 +85,11 @@ const Mosaic: FunctionComponent<Props> = ({
   return (
     <Masonry
       breakpointCols={{
-        default: display === 'v' ? 4 : 1,
-        1199: display === 'v' ? 3 : 1,
-        768: display === 'v' ? 2 : 1,
-        576: 1,
+        default: display === 'v' ? 5 : 1,
+        1199: display === 'v' ? 4 : 1,
+        768: display === 'v' ? 3 : 1,
+        540: 2,
+        360: 1,
       }}
       className={`d-flex ${styles.masonry}`}
       columnClassName={styles.masonryColumn}
