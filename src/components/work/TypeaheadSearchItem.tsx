@@ -38,12 +38,12 @@ const TypeaheadSearchItem: FunctionComponent<Props> = ({ work }) => {
         )}
       </div>
       <div>
-        <Badge bg="orange" className={`fw-normal fs-6 text-black px-2 rounded-pill ${styles.type}`}>
+        <Badge bg="orange" className={`fw-normal fs-xs text-black px-2 rounded-pill ${styles.type}`}>
           {t(work.type)}
         </Badge>
-        <h3 className="text-wrap">{work.title}</h3>
-        <h4 className="text-wrap">{work.author}</h4>
-        <hr />
+        <h3 className="text-wrap text-dark">{work.title}</h3>
+        <h4 className="text-wrap text-dark">{work.author}</h4>
+        
         <WorkSummary work={work} />
       </div>
     </div>
