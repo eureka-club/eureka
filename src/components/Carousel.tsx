@@ -229,7 +229,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
   };
 
   const onItemsFound = async () => {
-    const where = getWhere();
+    /* const where = getWhere();
     setGlobalSearchEngineState({
       ...globalSearchEngineState,
       where,
@@ -238,7 +238,9 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
       itemsFound: [],
       cacheKey: ['ITEMS', `${topic}`],
     });
-    router.push('/search');
+    router.push('/search'); */
+    setGlobalSearchEngineState((res) => ({...res, itemsFound:[]}));
+    router.push(`/search?q=${topic}&fields=topics`);
   };
 
   return (
@@ -261,7 +263,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
               </Col>
               <Col xs={3} className="d-flex justify-content-end">
                 {/* {data.hasMore && ( */}
-                <Link href={`/search?q=${topic}&fields=topics`}>
+                {/* <Link href={`/search?q=${topic}&fields=topics`}>
                   <a className="cursor-pointer">
                     <span
                       className={`cursor-pointer text-primary ${styles.seeAllButton}`}
@@ -271,7 +273,14 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
 
                   </a>
                 </Link>  
+ */}<Button variant="link" className="text-decoration-none" onClick={onItemsFound}>
+   <span
+                      className={`cursor-pointer text-primary ${styles.seeAllButton}`}
+                    >
+                      {t('common:See all')}
+                    </span>
 
+ </Button>
                 
               </Col>
             </Row>

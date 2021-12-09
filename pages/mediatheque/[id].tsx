@@ -183,7 +183,7 @@ const Mediatheque: NextPage = () => {
       show: showFilterEngine,
     });
 
-    router.push('/search');
+    router.push(`/search?q=${q}`);
   };
 
   const followHandler = async () => {
