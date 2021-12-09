@@ -85,6 +85,14 @@ const SearchEngine: FunctionComponent<Props> = ({
         ...o,
       }));
     }
+    else{
+      setFiltersChecked((res) => ({
+        movie: false,
+        documentary: false,
+        book: false,
+        'fiction-book': false,
+      }));
+    }
   }, [globalSearchEngineState]);
 
   const fetchCountries = async () => {
@@ -120,8 +128,7 @@ const SearchEngine: FunctionComponent<Props> = ({
     setGlobalSearchEngineState({
       ...globalSearchEngineState,
       ...{ only },
-    });
-    console.log(filtersChecked);
+    });    
   };
 
   const handlerComboxesChangeRegion = (e: ChangeEvent<HTMLInputElement>, q: string) => {

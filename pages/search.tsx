@@ -63,6 +63,10 @@ const SearchPage: NextPage = () => {
   const [q, setQ] = useState<string>();
   const [where, setWhere] = useState<string>();
   
+  useEffect(() => {
+    setGlobalSearchEngineState((res) => ({...res, only:[]}));
+  }, []);
+
   useEffect(()=>{
     if(router.query.q){
       setQ(router.query.q as string);      
