@@ -14,7 +14,7 @@ interface Props {
 }
 
 const WorkSummary: FunctionComponent<Props> = ({ work }) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation('common'); 
 
   return (
     <p className={`text-wrap ${styles.workSummary} text-dark`}>
