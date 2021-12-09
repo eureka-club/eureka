@@ -268,11 +268,13 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         </div>
         {/* </CycleContext.Provider> */}
       </Col>
-      <Col xs={{ span: 12, order: 1 }} md={{ span: 5, order: 2 }} lg={{ span: 4 }}>
-        <UserAvatar user={cycle.creator} showFullName />
+      <Col className="d-flex justify-content-end" xs={{ span: 12, order: 1 }} md={{ span: 5, order: 2 }} lg={{ span: 4 }}>
+        <aside>
+          <UserAvatar user={cycle.creator} showFullName />
         <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
           <MosaicItem showTrash className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
         </MosaicContext.Provider>
+        </aside>
       </Col>
     </Row>
   );
