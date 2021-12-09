@@ -3,7 +3,7 @@ import { Post } from '@prisma/client';
 import { FunctionComponent } from 'react';
 // import Spinner from 'react-bootstrap/Spinner';
 // import { useQuery } from 'react-query';
-
+import dayjs from 'dayjs'
 import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
 import Mosaic from '../Mosaic';
@@ -27,32 +27,39 @@ const PostsMosaic: FunctionComponent<Props> = ({ cycle, display, showComments, c
   //   },
   // );
   const render = () => {
-    const res: Post[] = [];
-    const worksPost = cycle.posts.reduce((p, c) => {
-      if (c.works.length) {
-        const work = c.works[0];
-        const idx = cycle.works.findIndex((w) => w.id === work.id);
-        if (idx > -1) p.push(c);
-      }
-      return p;
-    }, res);
-    const cyclePosts = cycle.posts.filter((p) => !p.works.length);
+    // const res: Post[] = [];
+    // const worksPost = cycle.posts.reduce((p, c) => {
+    //   if (c.works.length) {
+    //     const work = c.works[0];
+    //     const idx = cycle.works.findIndex((w) => w.id === work.id);
+    //     if (idx > -1) p.push(c);
+    //   }
+    //   return p;
+    // }, res);
+    // const cyclePosts = cycle.posts.filter((p) => !p.works.length);
+    const orderedPosts = cycle.posts.sort((f, s) => {
+      const fCD = dayjs(f.createdAt);
+      const sCD = dayjs(s.createdAt);
+      if (fCD.isAfter(sCD)) return -1;
+      if (fCD.isSame(sCD)) return 0;
+      return 1;
+    });
     return (
       <>
         <Mosaic
           display={display}
-          stack={cyclePosts.sort((p, c) => (p.id > c.id && -1) || 1) as PostMosaicItem[]}
+          stack={orderedPosts as PostMosaicItem[]}
           postsLinksTo={cycle}
           showComments={showComments}
           cacheKey={cacheKey}
         />
-        <Mosaic
+        {/* <Mosaic
           display={display}
           stack={worksPost.sort((p, c) => (p.id > c.id && -1) || 1) as PostMosaicItem[]}
           // postsLinksTo={cycle}
           showComments={showComments}
           cacheKey={cacheKey}
-        />
+        /> */}
       </>
     );
   };
