@@ -98,10 +98,10 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
   };
   
   const onItemsFound = async () => {debugger;
+    if(isSearchWorkOrCycleLoading || !searchWorkOrCycleResults?.length)return;
     queryClient.setQueryData(["ITEMS", q], searchWorkOrCycleResults);
-    if(globalSearchEngineState.itemsFound){
-      router.push(`/search?q=${q}`);
-    }
+    router.push(`/search?q=${q}`);
+    
     /* let where= '';
     setGlobalSearchEngineState((res) => ({ ...res, show: true, where: '', itemsFound: [] }));
     
@@ -210,11 +210,16 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
             )}
           />
           <InputGroup.Text className="text-white  cursor-pointer bg-primary">
-            <Link href={`/search?q=${q}`}>
-              <a className="text-white" onClick={onItemsFound} role="presentation">
+            <Button 
+            size="sm" 
+            variant="link" 
+            className="p-0 text-white text-decoration-none"
+            onClick={onItemsFound}
+            disabled={isSearchWorkOrCycleLoading || !searchWorkOrCycleResults?.length}
+            >
+              
                 <AiOutlineSearch />
-              </a>
-            </Link>
+              </Button>
             
           </InputGroup.Text>
         </InputGroup>
