@@ -3,6 +3,7 @@ import { FunctionComponent } from 'react';
 import Masonry from 'react-masonry-css';
 
 import { v4 } from 'uuid';
+import {Row, Col, Container} from 'react-bootstrap';
 import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem } from '../types';
 import MosaicItemCycle from './cycle/MosaicItem';
 import MosaicItemPost from './post/MosaicItem';
@@ -82,26 +83,47 @@ const Mosaic: FunctionComponent<Props> = ({
   cacheKey,
   className,
 }) => {
-  return (
-    <Masonry
-      breakpointCols={{
-        default: display === 'v' ? 5 : 1,
-        1199: display === 'v' ? 4 : 1,
-        768: display === 'v' ? 3 : 1,
-        540: 2,
-        360: 1,
-      }}
-      className={`d-flex ${styles.masonry}`}
-      columnClassName={styles.masonryColumn}
-    >
-      {stack &&
-        stack.map((item: MosaicItem) => (
-          <aside className={` ${className}`} key={`${v4()}`}>
-            {renderMosaicItem(item, postsLinksTo, showButtonLabels, display, showComments, cacheKey)}
-          </aside>
-        ))}
-    </Masonry>
-  );
+  const renderMosaic = () => {
+    /* return (
+      <Row>
+        {stack.map((item: MosaicItem) => (
+            <Col className={` ${className}`} key={`${v4()}`}>
+              {renderMosaicItem(item, postsLinksTo, showButtonLabels, display, showComments, cacheKey)}
+            </Col>
+          ))}
+      </Row>
+      
+    ); */
+    return <Masonry
+    breakpointCols={{
+      default: display === 'v' ? 4 : 1,
+      1199: display === 'v' ? 3 : 1,
+      926: display === 'v' ? 2: 1,
+      812: display === 'v' ? 2: 1,
+      768: display === 'v' ? 2: 1,
+      640: 1,
+      428: 1,
+    }}
+    className={`d-flex ${styles.masonry}`}
+    columnClassName={styles.masonryColumn}
+  >
+    {stack &&
+      stack.map((item: MosaicItem) => (
+        <aside className={` ${className}`} key={`${v4()}`}>
+          {renderMosaicItem(item, postsLinksTo, showButtonLabels, display, showComments, cacheKey)}
+        </aside>
+      ))}
+  </Masonry>
+  }
+  return <>
+    <Container className="d-none d-lg-block">
+        {renderMosaic()}
+    </Container>
+    <div className="d-lg-none">
+      {renderMosaic()}
+     </div>
+    </>
 };
+
 
 export default Mosaic;
