@@ -97,7 +97,7 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
     }
   };
   
-  const onItemsFound = async () => {debugger;
+  const onItemsFound = async () => {
     if(isSearchWorkOrCycleLoading || !searchWorkOrCycleResults?.length)return;
     queryClient.setQueryData(["ITEMS", q], searchWorkOrCycleResults);
     router.push(`/search?q=${q}`);

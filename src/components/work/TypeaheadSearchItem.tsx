@@ -1,8 +1,8 @@
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 import { Badge } from 'react-bootstrap'
-import { WorkWithImages } from '../../types/work';
-import LocalImageComponent from '../LocalImage';
+import { WorkWithImages } from '@/types/work';
+import LocalImageComponent from '@/components/LocalImage';
 import WorkSummary from './WorkSummary';
 import styles from './TypeaheadSearchItem.module.css';
 

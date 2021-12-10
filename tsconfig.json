@@ -21,10 +21,9 @@
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "@/components/*": [
-        "src/components/*"
-      ],
-      "@/src/*":["src/*"]
+      "@/src/*":["src/*"],
+      "@/types/*":["src/types/*"],
+      "@/components/*": ["src/components/*"],
     },
     "types": [
       "tinymce"
