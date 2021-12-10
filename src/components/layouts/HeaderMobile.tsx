@@ -57,7 +57,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
           <>
             <Container className={`${styles.grid} text-white text-center`}>
               <h1 className="h1 ms-auto mt-3">{t('underEurekaLabel')}</h1>
-              <p className="border-bottom border-white">
+              <p className="">
                 {t('eurekaReasonLabel')}
                 <br />
                 {t('eurekaReasonLabel2')}
