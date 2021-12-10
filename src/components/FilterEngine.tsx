@@ -158,8 +158,8 @@ const SearchEngine: FunctionComponent<Props> = ({
     (globalSearchEngineState.show && (
       <Container className={styles.container}>
         <Row>
-          <Col md={8}>
-            <Form.Group className={styles.formGroup}>
+          <Col xs={12} sm={8} md={6} lg={6} xl={5} as={Row}>
+            <Form.Group as={Col} xs={6} lg={3} className={styles.formGroup}>
               <Form.Check
                 className={styles.filter}
                 inline
@@ -169,7 +169,7 @@ const SearchEngine: FunctionComponent<Props> = ({
                 onChange={(e) => handlerComboxesChangeType(e, 'cycle')}
               />
             </Form.Group>
-            <Form.Group className={styles.formGroup}>
+            <Form.Group as={Col} xs={6} lg={3} className={styles.formGroup}>
               <Form.Check
                 className={styles.filter}
                 inline
@@ -178,7 +178,7 @@ const SearchEngine: FunctionComponent<Props> = ({
                 onChange={(e) => handlerComboxesChangeType(e, 'post')}
               />
             </Form.Group>
-            <Form.Group className={styles.formGroup}>
+            <Form.Group as={Col} xs={6} lg={3} className={styles.formGroup}>
               <Form.Check
                 className={styles.filter}
                 inline
@@ -188,8 +188,7 @@ const SearchEngine: FunctionComponent<Props> = ({
                 onChange={(e) => handlerComboxesChangeType(e, 'movie|documentary')}
               />
             </Form.Group>
-
-            <Form.Group className={styles.formGroup}>
+            <Form.Group as={Col} xs={6} lg={3} className={styles.formGroup}>
               <Form.Check
                 className={styles.filter}
                 inline
@@ -200,9 +199,12 @@ const SearchEngine: FunctionComponent<Props> = ({
               />
             </Form.Group>
           </Col>
-          <Col md={4} className="pe-0 d-flex justify-content-start">
+          <Col xs={12} sm={4} md={6} lg={6} xl={7} as={Row} className="pe-0">
+            <aside className="d-flex justify-content-start justify-content-md-end">
+
             {fictionOrNotFilter && (
-              <PopoverContainer title={t('Fiction/nonfiction')} className={styles.popover}>
+              // <Col className="mb-1 d-flex justify-content-start justify-content-md-end">
+                <PopoverContainer title={t('Fiction/nonfiction')} className={`${styles.popover}`}>
                 <Form.Label>
                   <strong>{t('Books')}</strong>
                 </Form.Label>
@@ -246,111 +248,115 @@ const SearchEngine: FunctionComponent<Props> = ({
                     onChange={(e) => handlerComboxesChangeType(e, 'documentary')}
                   />
                 </Form.Group>
-              </PopoverContainer>
+                </PopoverContainer>
+              // </Col>
             )}
 
             {geographyFilter && (
-              <PopoverContainer title={`${t('Geography')}`} className={styles.popover}>
-                <Form.Label>
-                  <strong>{t('Regions')}</strong>
-                </Form.Label>
-                <Form.Group className={styles.formGroup}>
-                  <Form.Check
-                    className={styles.filter}
-                    type="checkbox"
-                    label={`${t('countries:Asia')} `}
-                    checked={filtersChecked.Asia}
-                    onChange={(e) => handlerComboxesChangeRegion(e, 'Asia')}
+              // <Col className="mb-1 d-flex justify-content-start justify-content-md-end">
+                <PopoverContainer title={`${t('Geography')}`} className={`${styles.popover}`}>
+                  <Form.Label>
+                    <strong>{t('Regions')}</strong>
+                  </Form.Label>
+                  <Form.Group className={styles.formGroup}>
+                    <Form.Check
+                      className={styles.filter}
+                      type="checkbox"
+                      label={`${t('countries:Asia')} `}
+                      checked={filtersChecked.Asia}
+                      onChange={(e) => handlerComboxesChangeRegion(e, 'Asia')}
+                    />
+                  </Form.Group>
+                  <Form.Group className={styles.formGroup}>
+                    <Form.Check
+                      className={styles.filter}
+                      type="checkbox"
+                      label={`${t('countries:Europe')} `}
+                      checked={filtersChecked.Europe}
+                      onChange={(e) => handlerComboxesChangeRegion(e, 'Europe')}
+                    />
+                  </Form.Group>
+                  <Form.Group className={styles.formGroup}>
+                    <Form.Check
+                      className={styles.filter}
+                      type="checkbox"
+                      label={`${t('countries:Latin America and the Caribbean')} `}
+                      checked={filtersChecked['Latin America and the Caribbean']}
+                      onChange={(e) => handlerComboxesChangeRegion(e, 'Latin America and the Caribbean')}
+                    />
+                  </Form.Group>
+                  <Form.Group className={styles.formGroup}>
+                    <Form.Check
+                      className={styles.filter}
+                      type="checkbox"
+                      label={`${t('countries:Middle East and North Africa')} `}
+                      checked={filtersChecked['Middle East and North Africa']}
+                      onChange={(e) => handlerComboxesChangeRegion(e, 'Middle East and North Africa')}
+                    />
+                  </Form.Group>
+                  <Form.Group className={styles.formGroup}>
+                    <Form.Check
+                      className={styles.filter}
+                      type="checkbox"
+                      label={`${t('countries:Northern America')} `}
+                      checked={filtersChecked['Northern America']}
+                      onChange={(e) => handlerComboxesChangeRegion(e, 'Northern America')}
+                    />
+                  </Form.Group>
+                  <Form.Group className={styles.formGroup}>
+                    <Form.Check
+                      className={styles.filter}
+                      type="checkbox"
+                      label={`${t('countries:Oceania')}`}
+                      checked={filtersChecked.Oceania}
+                      onChange={(e) => handlerComboxesChangeRegion(e, 'Oceania')}
+                    />
+                  </Form.Group>
+                  <Form.Group className={styles.formGroup}>
+                    <Form.Check
+                      className={styles.filter}
+                      type="checkbox"
+                      label={`${t('countries:Sub-Saharan Africa')}`}
+                      checked={filtersChecked['Sub-Saharan Africa']}
+                      onChange={(e) => handlerComboxesChangeRegion(e, 'Sub-Saharan Africa')}
+                    />
+                  </Form.Group>
+                  <br />
+                  <Form.Label>
+                    <strong>{t('Countries')}</strong>
+                  </Form.Label>
+                  {/* <TagsInputTypeAhead data={countries} items={items} tags={tags} setTags={setTags} /> */}
+                  <TagsInputTypeAhead
+                    data={countries}
+                    items={items}
+                    setItems={setItems}
+                    max={5}
+                    labelKey={(res) => `${t(`countries:${res.code}`)}`}
+                    onTagCreated={() => {
+                      const onlyByCountries = [
+                        ...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items]),
+                      ];
+                      setGlobalSearchEngineState({
+                        ...globalSearchEngineState,
+                        ...{ onlyByCountries },
+                      });
+                    }}
+                    onTagDeleted={(code) => {
+                      const onlyByCountries = [
+                        ...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items]),
+                      ];
+                      const idxOBC = onlyByCountries.findIndex((i: string) => i === code);
+                      onlyByCountries.splice(idxOBC, 1);
+                      setGlobalSearchEngineState({
+                        ...globalSearchEngineState,
+                        ...{ onlyByCountries },
+                      });
+                    }}
                   />
-                </Form.Group>
-                <Form.Group className={styles.formGroup}>
-                  <Form.Check
-                    className={styles.filter}
-                    type="checkbox"
-                    label={`${t('countries:Europe')} `}
-                    checked={filtersChecked.Europe}
-                    onChange={(e) => handlerComboxesChangeRegion(e, 'Europe')}
-                  />
-                </Form.Group>
-                <Form.Group className={styles.formGroup}>
-                  <Form.Check
-                    className={styles.filter}
-                    type="checkbox"
-                    label={`${t('countries:Latin America and the Caribbean')} `}
-                    checked={filtersChecked['Latin America and the Caribbean']}
-                    onChange={(e) => handlerComboxesChangeRegion(e, 'Latin America and the Caribbean')}
-                  />
-                </Form.Group>
-                <Form.Group className={styles.formGroup}>
-                  <Form.Check
-                    className={styles.filter}
-                    type="checkbox"
-                    label={`${t('countries:Middle East and North Africa')} `}
-                    checked={filtersChecked['Middle East and North Africa']}
-                    onChange={(e) => handlerComboxesChangeRegion(e, 'Middle East and North Africa')}
-                  />
-                </Form.Group>
-                <Form.Group className={styles.formGroup}>
-                  <Form.Check
-                    className={styles.filter}
-                    type="checkbox"
-                    label={`${t('countries:Northern America')} `}
-                    checked={filtersChecked['Northern America']}
-                    onChange={(e) => handlerComboxesChangeRegion(e, 'Northern America')}
-                  />
-                </Form.Group>
-                <Form.Group className={styles.formGroup}>
-                  <Form.Check
-                    className={styles.filter}
-                    type="checkbox"
-                    label={`${t('countries:Oceania')}`}
-                    checked={filtersChecked.Oceania}
-                    onChange={(e) => handlerComboxesChangeRegion(e, 'Oceania')}
-                  />
-                </Form.Group>
-                <Form.Group className={styles.formGroup}>
-                  <Form.Check
-                    className={styles.filter}
-                    type="checkbox"
-                    label={`${t('countries:Sub-Saharan Africa')}`}
-                    checked={filtersChecked['Sub-Saharan Africa']}
-                    onChange={(e) => handlerComboxesChangeRegion(e, 'Sub-Saharan Africa')}
-                  />
-                </Form.Group>
-                <br />
-                <Form.Label>
-                  <strong>{t('Countries')}</strong>
-                </Form.Label>
-                {/* <TagsInputTypeAhead data={countries} items={items} tags={tags} setTags={setTags} /> */}
-                <TagsInputTypeAhead
-                  data={countries}
-                  items={items}
-                  setItems={setItems}
-                  max={5}
-                  labelKey={(res) => `${t(`countries:${res.code}`)}`}
-                  onTagCreated={() => {
-                    const onlyByCountries = [
-                      ...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items]),
-                    ];
-                    setGlobalSearchEngineState({
-                      ...globalSearchEngineState,
-                      ...{ onlyByCountries },
-                    });
-                  }}
-                  onTagDeleted={(code) => {
-                    const onlyByCountries = [
-                      ...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items]),
-                    ];
-                    const idxOBC = onlyByCountries.findIndex((i: string) => i === code);
-                    onlyByCountries.splice(idxOBC, 1);
-                    setGlobalSearchEngineState({
-                      ...globalSearchEngineState,
-                      ...{ onlyByCountries },
-                    });
-                  }}
-                />
-              </PopoverContainer>
+                </PopoverContainer>
+              // </Col>
             )}
+            </aside>
           </Col>
         </Row>
       </Container>
