@@ -42,5 +42,6 @@
   "guidelinesMP": "Princípios de moderação de conteúdo do ciclo",
   "emptyDiscussionItemLbl": "Indique se a sua contribuição é sobre uma das obras ou sobre o próprio ciclo",
   "Warning": "Aviso",
-  "requiredDiscussionItemError": "Você tem que indicar sobre o que é sua contribuição"
+  "requiredDiscussionItemError": "Você tem que indicar sobre o que é sua contribuição",
+  "requiredEurekaImageError": "You have to select an image for the eureka"
 }

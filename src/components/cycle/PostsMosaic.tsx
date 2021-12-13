@@ -49,7 +49,6 @@ const PostsMosaic: FunctionComponent<Props> = ({ cycle, display, showComments, c
         <Mosaic
           display={display}
           stack={orderedPosts as PostMosaicItem[]}
-          postsLinksTo={cycle}
           showComments={showComments}
           cacheKey={cacheKey}
         />

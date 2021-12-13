@@ -105,7 +105,7 @@ const CreatePostForm: FunctionComponent = () => {
       return null;
     },
     {
-      onMutate: async () => {debugger;
+      onMutate: async () => {
         if (selectedCycle) {
           const cacheKey = ['CYCLE', `${selectedCycle.id}`]
           const snapshot = queryClient.getQueryData(cacheKey);
@@ -113,7 +113,7 @@ const CreatePostForm: FunctionComponent = () => {
         }
         return { cacheKey: undefined, snapshot: null };
       },
-      onSettled: (_comment, error, _variables, context) => {debugger;
+      onSettled: (_comment, error, _variables, context) => {
         if (context) {
           const { cacheKey: ck, snapshot } = context;
           if (error && ck) {

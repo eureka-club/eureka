@@ -30,7 +30,7 @@ const UnclampText: FunctionComponent<Props> = ({ clampHeight, text, showButtomMo
     }
   };
 
-  useEffect(() => {debugger;
+  useEffect(() => {
     if (isHTML) {
       if (innerRef?.current != null && innerRef.current.innerText && innerRef.current.innerText.length > 100) {
         setUnclampButtonVisible(true);

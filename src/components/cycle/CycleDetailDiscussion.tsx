@@ -124,7 +124,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
               {session && session.user && <UserAvatar user={session.user} showName={false} />}
             </Col>
             <Col xs={12} md={11}>
-              <ButtonGroup className={`d-flex justify-content-between ${styles.optButtons}`} size="lg">
+              <ButtonGroup className={`d-flex flex-column flex-md-row justify-content-between ${styles.optButtons}`} size="lg">
                 <Button
                   onClick={handleCreateEurekaClick}
                   className={`d-flex align-items-center  justify-content-center ${styles.optButton} ${

@@ -1,8 +1,8 @@
 import { useSession } from 'next-auth/client';
 import useTranslation from 'next-translate/useTranslation';
-import { ChangeEvent, FormEvent, FunctionComponent, useEffect, useRef, useState } from 'react';
-
-import { Button, Col, Row, ButtonGroup, Form } from 'react-bootstrap';
+import { ChangeEvent, MouseEvent, FunctionComponent, useEffect, useRef, useState } from 'react';
+import Image from 'next/image'
+import { Button, Col, Row, ButtonGroup, Form, Spinner } from 'react-bootstrap';
 import { useAtom } from 'jotai';
 import { Post } from '@prisma/client';
 
@@ -44,6 +44,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   const { data: topics } = useTopics();
   const [eurekaTopics, setEurekaTopics] = useState<string[]>([]);
   const editorRef = useRef<any>(null);
+  const formRef = useRef<any>(null);
   const [newEureka, setNewEureka] = useState({
     selectedCycleId: cycle.id,
     selectedWorkId: 0,
@@ -55,7 +56,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
     topics: eurekaTopics,
   });
 
-  const clearCreateEurekaForm = () => {
+  const clearPayload = () => {
     editorRef.current.setContent('');
     setDiscussionItem('');
     setEurekaTopics(() => []);
@@ -67,6 +68,65 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
       contentText: '',
       topics: eurekaTopics,
     }));
+  };
+  const clearCreateEurekaForm = () => {
+    clearPayload();
+  };
+  
+  const handlerSubmitCreateEureka = async (e: MouseEvent<HTMLButtonElement>): Promise<void> => {
+    e.preventDefault();
+    if (!discussionItem) {
+      setGlobalModalsState({
+        ...globalModalsState,
+        showToast: {
+          show: true,
+          type: 'warning',
+          title: t('Warning'),
+          message: t('requiredDiscussionItemError'),
+        },
+      });
+      return;
+    }
+    if (!newEurekaImageFile) {
+      setGlobalModalsState({
+        ...globalModalsState,
+        showToast: {
+          show: true,
+          type: 'warning',
+          title: t('Warning'),
+          message: t('requiredEurekaImageError'),
+        },
+      });
+      return;
+
+    }
+
+    if (newEureka.selectedWorkId) {
+      const payload: CreatePostAboutWorkClientPayload = {
+        selectedCycleId: newEureka.selectedCycleId ? newEureka.selectedCycleId : null,
+        selectedWorkId: newEureka.selectedWorkId,
+        title: newEureka.title,
+        image: newEurekaImageFile,
+        language: newEureka.language,
+        contentText: editorRef.current.getContent(),
+        isPublic: newEureka.isPublic,
+        topics: eurekaTopics.join(','),
+      };
+      await execCreateEureka(payload);
+    } else if (newEureka.selectedCycleId) {
+      const payload: CreatePostAboutCycleClientPayload = {
+        selectedCycleId: newEureka.selectedCycleId,
+        selectedWorkId: null,
+        title: newEureka.title,
+        image: newEurekaImageFile,
+        language: newEureka.language,
+        contentText: editorRef.current.getContent(),
+        isPublic: newEureka.isPublic,
+        topics: eurekaTopics.join(','),
+      };
+      await execCreateEureka(payload);
+    }
+    clearPayload();
   };
 
   const { mutate: execCreateEureka, isLoading } = useMutation(
@@ -106,53 +166,13 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
           }
           // console.error(error);
         }
-        if (context) queryClient.invalidateQueries(context.cacheKey);
+        if (context){
+          queryClient.invalidateQueries(context.cacheKey);
+        } 
       },
     },
   );
 
-  const handlerSubmitCreateEureka = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
-    e.preventDefault();
-    if (!discussionItem) {
-      setGlobalModalsState({
-        ...globalModalsState,
-        showToast: {
-          show: true,
-          type: 'warning',
-          title: t('Warning'),
-          message: t('requiredDiscussionItemError'),
-        },
-      });
-      return;
-    }
-    if (!newEurekaImageFile) return;
-
-    if (newEureka.selectedWorkId) {
-      const payload: CreatePostAboutWorkClientPayload = {
-        selectedCycleId: newEureka.selectedCycleId ? newEureka.selectedCycleId : null,
-        selectedWorkId: newEureka.selectedWorkId,
-        title: newEureka.title,
-        image: newEurekaImageFile,
-        language: newEureka.language,
-        contentText: editorRef.current.getContent(),
-        isPublic: newEureka.isPublic,
-        topics: eurekaTopics.join(','),
-      };
-      await execCreateEureka(payload);
-    } else if (newEureka.selectedCycleId) {
-      const payload: CreatePostAboutCycleClientPayload = {
-        selectedCycleId: newEureka.selectedCycleId,
-        selectedWorkId: null,
-        title: newEureka.title,
-        image: newEurekaImageFile,
-        language: newEureka.language,
-        contentText: editorRef.current.getContent(),
-        isPublic: newEureka.isPublic,
-        topics: eurekaTopics.join(','),
-      };
-      await execCreateEureka(payload);
-    }
-  };
 
   useEffect(() => {
     if (!discussionItem) return;
@@ -182,8 +202,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
     // console.log(newEureka);
   };
 
-  return (
-    <Form onSubmit={handlerSubmitCreateEureka}>
+  return <Form ref={formRef}>
       <Form.Group controlId="eureka-title" className="mb-3">
         <Form.Control
           type="text"
@@ -235,14 +254,19 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
           {(imagePreview) => (
             <Form.Group>
               {/* <Form.Label>*{t('imageFieldLabel')}</Form.Label> */}
-              <div className={`${stylesImageFileSelect.imageControl} border-primary`}>
-                {newEurekaImageFile != null && imagePreview ? (
-                  <span className={stylesImageFileSelect.imageName}>{newEurekaImageFile?.name}</span>
+              <Row className="rounded border border-primary bg-white p-0">
+                <Col>{newEurekaImageFile != null && imagePreview ? (
+                  <span className={`pt-1 ${stylesImageFileSelect.imageName}`}>{newEurekaImageFile?.name}</span>
                 ) : (
                   t('Image')
                 )}
-                {imagePreview && <img src={imagePreview} className="float-right" alt="Work cover" />}
-              </div>
+                </Col>
+                <Col className="d-flex justify-content-start justify-content-sm-end align-items-center">
+
+                {imagePreview && <Image layout="fixed" width="57px" height="32px" src={imagePreview} className="float-right" alt="Work cover" />}
+                </Col>
+                {/* {imagePreview && <img src={imagePreview} className="float-right" alt="Work cover" />} */}
+              </Row>
             </Form.Group>
           )}
         </ImageFileSelect>
@@ -270,15 +294,16 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
           <Button variant="warning" onClick={clearCreateEurekaForm} disabled={isLoading}>
             <ImCancelCircle />
           </Button>
-          <Button type="submit" className="text-white" disabled={isLoading}>
+          <Button onClick={handlerSubmitCreateEureka} className="text-white" disabled={isLoading}>
             <span>
               <BsCheck /> {t('Create')}
             </span>
+            {isLoading && <Spinner size="sm" animation="grow" />}
           </Button>
         </ButtonGroup>
       </aside>
-    </Form>
-  );
+    </Form>;
+  
 };
 
 export default CycleDetailDiscussionCreateEurekaForm;
