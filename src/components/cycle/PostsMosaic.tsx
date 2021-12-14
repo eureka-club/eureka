@@ -9,13 +9,14 @@ import { PostMosaicItem } from '../../types/post';
 import Mosaic from '../Mosaic';
 
 interface Props {
-  cycle: CycleMosaicItem;
+  // cycle: CycleMosaicItem;
+  posts: PostMosaicItem[];
   display?: 'h' | 'v';
   showComments?: boolean;
   cacheKey: [string, string];
 }
 
-const PostsMosaic: FunctionComponent<Props> = ({ cycle, display, showComments, cacheKey }) => {
+const PostsMosaic: FunctionComponent<Props> = ({ posts, display, showComments, cacheKey }) => {
   // const { isLoading, isSuccess, data } = useQuery<PostMosaicItem[]>(
   //   ['posts.mosaic.cycle', cycle.id],
   //   async ({ queryKey: [, cycleId] }) => {
@@ -37,7 +38,7 @@ const PostsMosaic: FunctionComponent<Props> = ({ cycle, display, showComments, c
     //   return p;
     // }, res);
     // const cyclePosts = cycle.posts.filter((p) => !p.works.length);
-    const orderedPosts = cycle.posts.sort((f, s) => {
+    const orderedPosts = posts.sort((f, s) => {
       const fCD = dayjs(f.createdAt);
       const sCD = dayjs(s.createdAt);
       if (fCD.isAfter(sCD)) return -1;

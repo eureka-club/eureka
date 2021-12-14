@@ -4,7 +4,7 @@ import { useAtom } from 'jotai';
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, MouseEvent, useState, useRef, useEffect } from 'react';
+import { FunctionComponent, MouseEvent, useState, useRef, useEffect, ChangeEvent } from 'react';
 import {
   TabPane,
   TabContent,
@@ -16,11 +16,13 @@ import {
   Nav,
   NavItem,
   NavLink,
+  Form
 } from 'react-bootstrap';
 import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
 import { BiArrowBack } from 'react-icons/bi';
-import { Work, Comment, Cycle } from '@prisma/client';
+import { Work, Comment, Cycle, User } from '@prisma/client';
 import { MosaicContext } from '../../useMosaicContext';
+import { Typeahead } from 'react-bootstrap-typeahead';
 
 // import UserAvatar from '../common/UserAvatar';
 import Mosaic from '../Mosaic';
@@ -72,8 +74,15 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   // const [globalModalsState, setGlobalModalsState] = useAtom(globalModals);
   const cycleContext = useCycleContext();
   const [cycle, setCycle] = useState<CycleMosaicItem | null>();
+  const [filteredPosts,setFilteredPosts] = useState<PostMosaicItem[]>([]);
+  const [filteredComments,setFilteredComments] = useState<Comment[]>([]);
+
   useEffect(() => {
-    if (cycleContext) setCycle(cycleContext.cycle);
+    if (cycleContext && cycleContext.cycle){
+      setCycle(cycleContext.cycle);
+      setFilteredPosts(cycleContext.cycle?.posts as PostMosaicItem[]);
+      setFilteredComments(cycleContext?.cycle.comments);
+    } 
   }, [cycleContext]);
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -83,7 +92,17 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const { t } = useTranslation('cycleDetail');
   const [tabKey, setTabKey] = useState<string>();
   const tabContainnerRef = useRef<HTMLDivElement>(null);
-  // const hyvorId = `${WEBAPP_URL}cycle/${router.query.id}`;
+  const refParticipants = useRef<Typeahead<User>>(null);
+  const [filtersParticipant,setFiltersParticipant] = useState<number[]>();
+  const [filtersChecked, setFiltersChecked] = useState<Record<string, boolean>>({
+    post: true,
+    comment: true,
+    movie: false,
+    documentary: false,
+    book: false,
+    'fiction-book': false,
+  });
+    // const hyvorId = `${WEBAPP_URL}cycle/${router.query.id}`;
 
   // const { data } = useCycles(1);
   // const [cycle, setCycle] = useState<CycleDetail>();
@@ -183,8 +202,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       if ((c as CommentMosaicItem).work) return (c as CommentMosaicItem).work!;
       return cycle as Cycle;
     };
-    if (cycle && cycle.comments)
-      return cycle.comments
+    if (cycle && filteredComments)
+      return filteredComments
         .sort((p, c) => (p.id > c.id && -1) || 1)
         .map((c) => {
           return (
@@ -325,10 +344,44 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       const res = (
         <>
           <TabPane eventKey="cycle-discussion">
+            <Form as={Row} className="bg-white mt-0 mb-3">
+              <Form.Group as={Col} xs={12} md={6}>
+                  <Form.Label>{t('Filter by Participan')}</Form.Label>
+                  <Typeahead
+                    ref={refParticipants}
+                    id="refParticipants"
+                    filterBy={['label']}
+                    labelKey={(u: User) => {
+                      if(u?.name) return u.name;
+                      return u?.email || `${u.id}`;
+                    }}
+                    onChange={onChangeParticipantFilter}                  
+                    options={[...cycle.participants, cycle.creator]}
+                    className="bg-light border border-info rounded"                  
+                  />
+              </Form.Group>
+              <Form.Group as={Col} xs={12} md={6}>
+                  <Row>
+                    <Form.Label>{t('Filter by type of element')}</Form.Label>
+                    <Col>
+                      <Form.Check label={t('common:post')} 
+                        checked={filtersChecked['post']}
+                        onChange={(e) => handlerComboxesChangeRegion(e, 'post')}
+                      />
+                    </Col>
+                    <Col>
+                      <Form.Check label={t('common:comment')} 
+                        checked={filtersChecked['comment']}
+                        onChange={(e) => handlerComboxesChangeRegion(e, 'comment')}
+                      />
+                    </Col>
+                  </Row>
+              </Form.Group>
+            </Form>
             <CycleDetailDiscussion cycle={cycle} className="mb-5" />
             {(cycle.posts && cycle.posts.length && (
               <MosaicContext.Provider value={{ showShare: true }}>
-                <PostsMosaic display="h" cycle={cycle} showComments cacheKey={['CYCLE', `${cycle.id}`]} />
+                <PostsMosaic display="h" posts={filteredPosts} showComments cacheKey={['CYCLE', `${cycle.id}`]} />
               </MosaicContext.Provider>
             )) ||
               null}
@@ -412,6 +465,51 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     }
     return 'cycle-about';
   };
+
+  const onChangeParticipantFilter = (p: User[]) => {
+    if(p.length){
+      const {id} = p[0];
+      setFiltersParticipant([id]);
+      setFiltersChecked((res) => ({ ...res, ...{post:true, comment:true} }));
+      const posts = cycle?.posts.filter((p) => p.creatorId === id);
+      setFilteredPosts(posts as PostMosaicItem[]);
+      const comments = cycle?.comments.filter((c) => c.creatorId === id);
+      setFilteredComments(comments || []);
+    }
+    else {
+      setFiltersParticipant([]);
+      setFilteredPosts(cycle?.posts as PostMosaicItem[]);
+      setFilteredComments(cycle?.comments || []);
+    }
+  };
+
+  const handlerComboxesChangeRegion = (e: ChangeEvent<HTMLInputElement>, q: string) => {debugger;
+    setFiltersChecked((res) => ({ ...res, [`${q}`]: e.target.checked }));
+    
+    switch(q){
+      case 'post':
+        if(e.target.checked){
+          let posts = cycle?.posts;
+          if(filtersParticipant?.length){
+            posts = cycle?.posts.filter((p) => filtersParticipant.findIndex(i => i  === p.creatorId) !== -1);            
+          }
+          setFilteredPosts(posts as PostMosaicItem[]);
+        }
+        else setFilteredPosts([]);  
+        break;
+      case 'comment':
+        if(e.target.checked){
+          let comments = cycle?.comments;
+          if(filtersParticipant?.length){
+            comments = cycle?.comments.filter((c) => filtersParticipant.findIndex(i => i  === c.creatorId) !== -1);
+          }
+          setFilteredComments(comments || []);
+        }        
+        else setFilteredComments([]);  
+        break;
+    }
+  };
+  
 
   return (
     <>

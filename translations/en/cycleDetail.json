@@ -43,5 +43,7 @@
   "emptyDiscussionItemLbl": "Indicate if your contribution is about one of the works or the cycle itself",
   "Warning": "Warning",
   "requiredDiscussionItemError": "You have to select what your contribution is about",
-  "requiredEurekaImageError": "You have to select an image for the eureka"
+  "requiredEurekaImageError": "You have to select an image for the eureka",
+  "Filter by Participan":"Filter by Participan",
+  "Filter by type of element":"Filter by type of element"
 }
