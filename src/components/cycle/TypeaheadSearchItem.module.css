@@ -6,7 +6,7 @@
 .imageWrapper {
   position: relative;
 }
-.imageWrapper::after {
+/* .imageWrapper::after {
   background-color: #6c4dd5;
   border-radius: 1rem;
   border: 1px solid #603dd1;
@@ -20,7 +20,7 @@
   padding: 0.2rem 0.5rem;
   position: absolute;
 }
-
+ */
 .workSearchTypeaheadItem img {
   margin-right: 0.5rem;
   width: 76px;
