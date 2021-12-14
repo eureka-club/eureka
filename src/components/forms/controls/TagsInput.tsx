@@ -1,6 +1,6 @@
 import { FunctionComponent, useState, useEffect, ChangeEvent, KeyboardEvent } from 'react';
 // import FormControl from 'react-bootstrap/FormControl';
-import { Form, Badge } from 'react-bootstrap';
+import { Form, Badge, Spinner } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
@@ -18,7 +18,7 @@ export type TagsInputProp = {
 const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
   const { t } = useTranslation('createWorkForm');
   const { tags, setTags, label = '', readOnly = false, max = 2, className, formatValue = undefined } = props;
-
+  const [loading, setLoading] = useState<Record<string,boolean>>({});
   const [tagInput, setTagInput] = useState<string>('');
   const [items, setItems] = useState<string[]>([]);
   const router = useRouter();
@@ -51,18 +51,19 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
     if (setTags) setTags(items.join());
   };
   const handlerBadgeClick = (v: string) => {
-    const where = encodeURIComponent(
-      JSON.stringify({
-        OR: [
-          { tags: { contains: v } },
-          { topics: { contains: v } },
-          { contentText: { contains: v } },
-          { title: { contains: v } },
-        ],
-      }),
-    );
-    setSearchEngineState((res) => ({ ...res, where, q: v }));
-    router.push('/search');
+    // const where = encodeURIComponent(
+    //   JSON.stringify({
+    //     OR: [
+    //       { tags: { contains: v } },
+    //       { topics: { contains: v } },
+    //       { contentText: { contains: v } },
+    //       { title: { contains: v } },
+    //     ],
+    //   }),
+    // );
+    // setSearchEngineState((res) => ({ ...res, where, q: v }));
+    setLoading((res) => ({[`${v}`]: true}));
+    router.push(`/search?q=${v}`);    
   };
   return (
     <Form.Group controlId="tags" className={`${className}`}>
@@ -82,7 +83,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
                   <Badge style={{ cursor: 'pointer' }} onClick={() => deleteTag(idx)} pill bg="default">
                     X
                   </Badge>
-                )}
+                )}{` `}{loading[v] && <Spinner size="sm" animation="grow"/>}
               </Badge>{' '}
             </span>
           );

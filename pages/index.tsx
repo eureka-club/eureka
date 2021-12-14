@@ -24,6 +24,7 @@ import Header from '../src/components/layouts/Header';
 // import SearchEngine from '../src/components/SearchEngine';
 // import FilterEngine from '../src/components/FilterEngine';
 import Carousel from '../src/components/Carousel';
+import { v4 } from 'uuid';
 
 const IndexPage: NextPage = () => {
   const { t } = useTranslation('common');
@@ -54,7 +55,7 @@ const IndexPage: NextPage = () => {
     <SimpleLayout showHeader title={t('browserTitleWelcome')}>
       <h1 className="text-secondary fw-bold">{t('Trending topics')}</h1>
       <aside className="mb-5">{getTopicsBadgedLinks()}</aside>
-      <>{show && show.map((item) => <Carousel className="mt-5" key={item} topic={item} />)}</>
+      <>{show && show.map((item) => <Carousel className="mt-5" key={v4()} topic={item} />)}</>
       <Button className="my-3 pe-3 rounded-pill text-white" onClick={showTopic} disabled={hide.length === 0}>
         <span>
           <RiArrowDownSLine /> {t('loadMoreTopics')}

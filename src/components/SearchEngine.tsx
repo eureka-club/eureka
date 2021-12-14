@@ -128,7 +128,7 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
         }),
       );
       setGlobalSearchEngineState((res) => {
-        debugger;
+        
         const r = { ...res, where };
         return r;
       });

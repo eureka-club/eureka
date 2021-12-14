@@ -48,7 +48,7 @@ const renderMosaicItem = (
   if (isCycleMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
     return (
-      <CycleContext.Provider key={`cycle-${item.id}`} value={{ cycle: item as CycleMosaicItem }}>
+      <CycleContext.Provider key={`cycle-${v4()}`} value={{ cycle: item as CycleMosaicItem }}>
         <MosaicItemCycle
           detailed
           showShare={false}
@@ -60,7 +60,7 @@ const renderMosaicItem = (
     );
   }
   if (isPostMosaicItem(item) || item.type === 'post') {
-    return <MosaicItemPost key={`post-${item.id}`} post={item as PostMosaicItem} postParent={postsParent} />;
+    return <MosaicItemPost key={`post-${v4()}`} post={item as PostMosaicItem} postParent={postsParent} />;
   }
   if (isWorkMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -69,7 +69,7 @@ const renderMosaicItem = (
         showSocialInteraction
         showShare={false}
         showButtonLabels={false}
-        key={`work-${item.id}`}
+        key={`work-${v4()}`}
         work={item}
         cacheKey={topic && page ? ['ITEMS', `${topic}${page}`] : undefined}
       />
@@ -158,7 +158,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
         //   columnClassName={styles.masonryColumn}
         // >
         // <> {mosaics}</>
-        <div className="d-flex flex-nowrap w-100 justify-content-xl-left">
+        <div key={v4()} className="d-flex flex-nowrap w-100 justify-content-xl-left">
           {page !== 0 && (
             <Button
               className={` text-white rounded-circle align-self-center ${styles.leftButton}`}
