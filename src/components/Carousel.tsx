@@ -249,7 +249,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
         {items && items.data && items.data.length && (
           <div className="position-relative">
             <Row>
-              <Col xs={9}>
+              <Col xs={8} md={9}>
                 <h5>
                 <Link href={`/search?q=${topic}&fields=topics`}>
                   <a className="text-dark cursor-pointer">
@@ -261,7 +261,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
                 </Link>
                 </h5>
               </Col>
-              <Col xs={3} className="d-flex justify-content-end">
+              <Col xs={4} md={3} className="d-flex justify-content-end">
                 {/* {data.hasMore && ( */}
                 {/* <Link href={`/search?q=${topic}&fields=topics`}>
                   <a className="cursor-pointer">
