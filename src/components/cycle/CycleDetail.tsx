@@ -443,9 +443,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           <Col>
             {detailPagesState.selectedSubsectionCycle != null && (
               <TabContainer
-                defaultActiveKey={getDefaultActiveKey()}
+                //defaultActiveKey={}
                 onSelect={handleSubsectionChange}
-                // activeKey={tabKey}
+                activeKey={tabKey || getDefaultActiveKey()}
                 transition={false}
               >
                 {/* language=CSS */}
