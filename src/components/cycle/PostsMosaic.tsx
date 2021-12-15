@@ -45,6 +45,7 @@ const PostsMosaic: FunctionComponent<Props> = ({ posts, display, showComments, c
       if (fCD.isSame(sCD)) return 0;
       return 1;
     });
+    if(orderedPosts.length)
     return (
       <>
         <Mosaic
@@ -62,6 +63,7 @@ const PostsMosaic: FunctionComponent<Props> = ({ posts, display, showComments, c
         /> */}
       </>
     );
+    return '';
   };
   return (
     <>
@@ -70,7 +72,7 @@ const PostsMosaic: FunctionComponent<Props> = ({ posts, display, showComments, c
           <span className="sr-only">Loading...</span>
         </Spinner>
       )} */}
-      {render() || null}
+      {render() || ''}
     </>
   );
 };

@@ -218,7 +218,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
             />
           );
         });
-    return null;
+    return '';
   };
 
   /* const renderCycleWorksComments = () => {
@@ -344,50 +344,59 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       const res = (
         <>
           <TabPane eventKey="cycle-discussion">
-            <Form as={Row} className="bg-white mt-0 mb-3">
-              <Form.Group as={Col} xs={12} md={6}>
-                  <Form.Label>{t('Filter by Participan')}</Form.Label>
-                  <Typeahead
-                    ref={refParticipants}
-                    id="refParticipants"
-                    filterBy={['label']}
-                    labelKey={(u: User) => {
-                      if(u?.name) return u.name;
-                      return u?.email || `${u.id}`;
-                    }}
-                    onChange={onChangeParticipantFilter}                  
-                    options={[...cycle.participants, cycle.creator]}
-                    className="bg-light border border-info rounded"                  
-                  />
-              </Form.Group>
-              <Form.Group as={Col} xs={12} md={6}>
-                  <Row>
-                    <Form.Label>{t('Filter by type of element')}</Form.Label>
-                    <Col>
-                      <Form.Check label={t('common:post')} 
-                        checked={filtersChecked['post']}
-                        onChange={(e) => handlerComboxesChangeRegion(e, 'post')}
-                      />
-                    </Col>
-                    <Col>
-                      <Form.Check label={t('common:comment')} 
-                        checked={filtersChecked['comment']}
-                        onChange={(e) => handlerComboxesChangeRegion(e, 'comment')}
-                      />
-                    </Col>
-                  </Row>
-              </Form.Group>
-            </Form>
+            
             <CycleDetailDiscussion cycle={cycle} className="mb-5" />
-            {(cycle.posts && cycle.posts.length && (
-              <MosaicContext.Provider value={{ showShare: true }}>
-                <PostsMosaic display="h" posts={filteredPosts} showComments cacheKey={['CYCLE', `${cycle.id}`]} />
-              </MosaicContext.Provider>
-            )) ||
-              null}
-            {/* {renderCycleWorksComments()} */}
-            {/* {renderCycleOwnComments()} */}
-            {renderComments()}
+            <Row>
+              <Col xs={{span:12, order:'last'}} md={{span:9,order:'first'}}>
+                {(cycle.posts && cycle.posts.length && (
+                  <MosaicContext.Provider value={{ showShare: true }}>
+                    <PostsMosaic display="h" posts={filteredPosts} showComments cacheKey={['CYCLE', `${cycle.id}`]} />
+                  </MosaicContext.Provider>
+                )) ||
+                  null}
+                {/* {renderCycleWorksComments()} */}
+                {/* {renderCycleOwnComments()} */}
+                {renderComments()}
+              </Col>
+              <Col xs={{span:12, order:'first'}} md={{span:3,order:'last'}}>
+                <Form as={Row} className="bg-white mt-0 mb-3">
+                  <Form.Group as={Col} xs={12}>
+                      <Row>
+                        <Form.Label className="text-primary">{t('Filter by type of element')}</Form.Label>
+                        <Col xs={5}>
+                          <Form.Check label={t('common:post')} 
+                            checked={filtersChecked['post']}
+                            onChange={(e) => handlerComboxesChangeRegion(e, 'post')}
+                          />
+                        </Col>
+                        <Col xs={7}>
+                          <Form.Check label={t('common:comment')} 
+                            checked={filtersChecked['comment']}
+                            onChange={(e) => handlerComboxesChangeRegion(e, 'comment')}
+                          />
+                        </Col>
+                      </Row>
+                  </Form.Group>
+                  <Form.Group className="mt-3" as={Col} xs={12}>
+                      <Form.Label className="text-primary">{t('Filter by Participan')}</Form.Label>
+                      <Typeahead
+                        ref={refParticipants}
+                        id="refParticipants"
+                        filterBy={['label']}
+                        labelKey={(u: User) => {
+                          if(u?.name) return u.name;
+                          return u?.email || `${u.id}`;
+                        }}
+                        onChange={onChangeParticipantFilter}                  
+                        options={[...cycle.participants, cycle.creator]}
+                        className="bg-light border border-info rounded"                  
+                      />
+                  </Form.Group>
+                </Form>
+              </Col>
+              
+            </Row>
+            
           </TabPane>
           {/* <TabPane eventKey="my_milestone">
             <h2 className="mb-3">{t('My milestones')}</h2>
@@ -483,7 +492,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     }
   };
 
-  const handlerComboxesChangeRegion = (e: ChangeEvent<HTMLInputElement>, q: string) => {debugger;
+  const handlerComboxesChangeRegion = (e: ChangeEvent<HTMLInputElement>, q: string) => {
     setFiltersChecked((res) => ({ ...res, [`${q}`]: e.target.checked }));
     
     switch(q){
