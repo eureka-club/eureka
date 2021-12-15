@@ -73,29 +73,35 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
               <Col
                 xs={12}
                 md={3}
-                className="p-3 text-white rounded d-flex flex-column align-items-center mb-1 bg-secondary"
+                className=""
               >
-                <aside className={`${styles.bgHeaderLeft}`} />
-                <h2 className="h6 text-center">{t('headerLeftBoxTitle')}</h2>
-                <p className="p-0 m-0 text-wrap text-center fs-6 fst-italic">{t('headerLeftBoxText')}</p>
+                <div className="p-3 text-white rounded d-flex flex-column align-items-center mb-1 bg-secondary" style={{width:'280px',height:'213px'}}>
+                  <aside className={`${styles.bgHeaderLeft}`} />
+                  <h2 className="h6 text-center">{t('headerLeftBoxTitle')}</h2>
+                  <p className="p-0 m-0 text-wrap text-center fs-6 fst-italic">{t('headerLeftBoxText')}</p>
+                </div>
               </Col>
               <Col
                 xs={12}
                 md={3}
-                className="p-3 text-white rounded d-flex flex-column align-items-center mb-1 bg-secondary"
+                className=""
               >
-                <aside className={`${styles.bgHeaderCenter}`} />
-                <h2 className="h6 text-center">{t('headerCenterBoxTitle')}</h2>
-                <p className="p-0 m-0 text-wrap text-center fs-6 fst-italic">{t('headerCenterBoxText')}</p>
+                <div className="p-3 text-white rounded d-flex flex-column align-items-center mb-1 bg-secondary" style={{width:'280px',height:'213px'}}>
+                  <aside className={`${styles.bgHeaderCenter}`} />
+                  <h2 className="h6 text-center">{t('headerCenterBoxTitle')}</h2>
+                  <p className="p-0 m-0 text-wrap text-center fs-6 fst-italic">{t('headerCenterBoxText')}</p>
+                </div>
               </Col>
               <Col
                 xs={12}
                 md={3}
-                className="p-3 text-white rounded d-flex flex-column align-items-center mb-1 bg-secondary"
+                className=""
               >
-                <aside className={`${styles.bgHeaderRight}`} />
-                <h2 className="h6 text-center">{t('headerRightBoxTitle')}</h2>
-                <p className="p-0 m-0 text-wrap text-center fs-6 fst-italic">{t('headerRightBoxText')}</p>
+                <div className="p-3 text-white rounded d-flex flex-column align-items-center mb-1 bg-secondary" style={{width:'280px',height:'213px'}}>
+                  <aside className={`${styles.bgHeaderRight}`} />
+                  <h2 className="h6 text-center">{t('headerRightBoxTitle')}</h2>
+                  <p className="p-0 m-0 text-wrap text-center fs-6 fst-italic">{t('headerRightBoxText')}</p>
+                </div>
               </Col>
             </Row>
           </Container>
