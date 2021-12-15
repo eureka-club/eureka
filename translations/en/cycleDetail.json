@@ -23,7 +23,7 @@
   "Works on Cycle": "Works on Cycle",
   "Cycle itself": "Cycle (your contribution is about the topic of the cycle, it does not focus only on one of the works)",
   "Title": "Title",
-  "Image": "Add an image to your Eureka (square, ideal 250x250px)",
+  "Image": "Add an image to your Eureka (square, ideally 250x250px)",
   "Type to add tag": "Topic of your Eureka (3 max, select most relevant from list)",
   "Select work": "Select work",
   "Suggest work": "Suggest work",
@@ -43,7 +43,7 @@
   "emptyDiscussionItemLbl": "Indicate if your contribution is about one of the works or the cycle itself",
   "Warning": "Warning",
   "requiredDiscussionItemError": "You have to select what your contribution is about",
-  "requiredEurekaImageError": "You have to select an image for the eureka",
-  "Filter by Participan":"Filter by Participan",
-  "Filter by type of element":"Filter by type of element"
+  "requiredEurekaImageError": "You have to add an image to your Eureka (square, ideally 250x250px)",
+  "Filter by Participan":"Filter by Participant",
+  "Filter by type of element":"Filter by type of content"
 }

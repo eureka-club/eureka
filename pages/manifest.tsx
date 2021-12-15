@@ -33,7 +33,7 @@ const ManifestPage: NextPage = () => {
         <section className="mb-5">
           <Row>
             <Col xs={12} md={4} className="pe-0 me-0 d-flex flex-column">
-              <h1 className="h1 text-primary">
+              <h1 className="text-primary" style={{ fontSize: '2.5em' }}>
                 {t('manifestLbl')} <br />
                 Eureka <BsCircleFill style={{ fontSize: '.2em' }} />{' '}
               </h1>

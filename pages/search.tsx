@@ -235,7 +235,7 @@ const SearchPage: NextPage = () => {
         {t('Results about')}: {`"${qLabel}"`}
       </h1>
       <FilterEngine />
-      <Mosaic className="d-flex justify-content-center mb-3" showButtonLabels={false} stack={homepageMosaicDataFiltered} />
+      <Mosaic className="d-flex justify-content-center mb-4" showButtonLabels={false} stack={homepageMosaicDataFiltered} />
       {genLoadingCmp()}
       {renderErrorMessage()}
     </SimpleLayout>

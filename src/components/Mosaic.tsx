@@ -27,7 +27,7 @@ const renderMosaicItem = (
   if (isCycleMosaicItem(item)) {
     return (
       <CycleContext.Provider value={{ cycle: item as CycleMosaicItem }}>
-        <MosaicItemCycle key={`${v4()}`} detailed />
+        <MosaicItemCycle key={`${v4()}`} detailed className="mb-2"/>
       </CycleContext.Provider>
     );
   }
@@ -54,12 +54,13 @@ const renderMosaicItem = (
   if (isWorkMosaicItem(item)) {
     return (
       // <WorkContext.Provider value={{ linkToWork: true }}>
-      <MosaicItemWork linkToWork showShare={false} showButtonLabels={showButtonLabels} key={`${v4()}`} work={item} />
+      <MosaicItemWork 
+      linkToWork showShare={false} showButtonLabels={showButtonLabels} key={`${v4()}`} work={item} className="mb-2"/>
       // </WorkContext.Provider>
     );
   }
   if (isUserMosaicItem(item)) {
-    return <MosaicItemUser key={`${v4()}`} user={item} />;
+    return <MosaicItemUser key={`${v4()}`} user={item} className="mb-2" />;
   }
 
   return '';

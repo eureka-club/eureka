@@ -83,7 +83,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
           <SocialInteraction entity={post} parent={cycle || work || null} showRating={false} showButtonLabels={false} />
           {work != null && (
             <aside className="">
-              <Badge bg="orange" className=" rounded-pill py-1 px-2 mt-3 text-black fs-6 font-weight-normal">
+              <Badge bg="orange" className=" rounded-pill py-1 px-2 mt-3 text-black fs-6">
                 {t(`common:${work.type}`)}
               </Badge>
               <section className="my-1">
@@ -100,7 +100,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
           )}
           {post.cycles && post.cycles.length > 0 && (
             <aside className="">
-              <Badge bg="primary" className="rounded-pill py-1 px-2 mt-3 text-dark fs-6 font-weight-normal">
+              <Badge bg="primary" className="rounded-pill py-1 px-2 mt-3 text-dark fs-6">
                 {t('common:cycle')}
               </Badge>
               <section className="my-1">
