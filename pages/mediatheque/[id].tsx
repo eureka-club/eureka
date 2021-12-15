@@ -203,6 +203,7 @@ const Mediatheque: NextPage = () => {
           title={t('Eurekas I created')}
           data={P}
           iconBefore={<></>}
+          mosaicBoxClassName="pb-1"
           // iconAfter={<BsCircleFill className={styles.infoCircle} />}
         />
       );

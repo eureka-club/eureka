@@ -42,6 +42,7 @@ type Props = {
   showSocialInteraction?: boolean;
   customMosaicStyle?: { [key: string]: string };
   className?: string;
+  mosaicBoxClassName?:string;
   tiny?: boolean;
 };
 
@@ -51,6 +52,7 @@ const renderMosaicItem = (
   showSocialInteraction = true,
   customMosaicStyle?: { [key: string]: string },
   tiny?: boolean,
+  className?:string,
 ) => {
   if (isCycleMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -96,6 +98,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
   showSocialInteraction = true,
   customMosaicStyle = undefined,
   className,
+  mosaicBoxClassName,
   tiny = false,
 }) => {
   const { t } = useTranslation('topics');
@@ -128,7 +131,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
     const result: JSX.Element[] = [];
     if (current) {
       const mosaics = current.map((i, idx: number) => (
-        <div key={`${idx * 1}${v4()}`} className="pb-5 mx-2">
+        <div key={`${idx * 1}${v4()}`} className={`${mosaicBoxClassName} mx-2`}/*className="pb-5 mx-2"*/>
           {renderMosaicItem(i, undefined, showSocialInteraction, customMosaicStyle, tiny)}
         </div>
       ));
@@ -188,7 +191,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
     (
       <>
         {(dataFiltered && dataFiltered.length && (
-          <div className="mb-5 position-relative">
+          <div className={`mb-5 position-relative ${className}`}>
             <Row>
               <Col xs={9}>
                 <h5 className="text-gray-dark mb-2">

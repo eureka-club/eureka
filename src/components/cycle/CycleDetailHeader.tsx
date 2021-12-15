@@ -263,6 +263,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
             iconBefore={<></>}
             customMosaicStyle={{ height: '16em' }}
             tiny
+            mosaicBoxClassName="pb-5"
             // iconAfter={<BsCircleFill className={styles.infoCircle} />}
           />
         </div>
