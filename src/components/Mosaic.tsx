@@ -108,7 +108,7 @@ const Mosaic: FunctionComponent<Props> = ({
     className={`d-flex ${styles.masonry}`}
     columnClassName={styles.masonryColumn}
   >
-    {stack &&
+    {stack && stack.length &&
       stack.map((item: MosaicItem) => (
         <aside className={` ${className}`} key={`${v4()}`}>
           {renderMosaicItem(item, postsLinksTo, showButtonLabels, display, showComments, cacheKey)}

@@ -56,11 +56,11 @@ const ManifestPage: NextPage = () => {
           className="d-flex mt-5"
         > */}
         <Row>
-          <Col xs={12} md={4} className=" p-3 ms-0">
+          <Col xs={12} md={6} lg={4} className=" p-3 ms-0">
             {!isVisible(1, 1) && (
               <section
                 style={{ height: '250px' }}
-                className="ps-5 p-3 rounded bg-secondary text-white"
+                className="ps-5 p-3 rounded overflow-auto bg-secondary text-white"
                 onClick={() => toggleBox(1, 1)}
                 role="presentation"
               >
@@ -84,11 +84,11 @@ const ManifestPage: NextPage = () => {
             )}
           </Col>
 
-          <Col xs={12} md={4} className=" p-3 ms-0">
+          <Col xs={12} md={6} lg={4} className=" p-3 ms-0">
             {!isVisible(1, 2) && (
               <section
                 style={{ height: '250px' }}
-                className="ps-5 p-3 rounded bg-yellow text-secondary"
+                className="ps-5 p-3 rounded overflow-auto bg-yellow text-secondary"
                 onClick={() => toggleBox(1, 2)}
                 role="presentation"
               >
@@ -112,11 +112,11 @@ const ManifestPage: NextPage = () => {
             )}
           </Col>
 
-          <Col xs={12} md={4} className=" p-3 ms-0">
+          <Col xs={12} md={6} lg={4} className=" p-3 ms-0">
             {!isVisible(1, 3) && (
               <section
                 style={{ height: '250px' }}
-                className="ps-5 p-3 rounded bg-secondary text-white"
+                className="ps-5 p-3 rounded overflow-auto bg-secondary text-white"
                 onClick={() => toggleBox(1, 3)}
                 role="presentation"
               >
@@ -142,11 +142,11 @@ const ManifestPage: NextPage = () => {
         </Row>
         {/* row 2     */}
         <Row>
-          <Col xs={12} md={4} className=" p-3 ms-0">
+          <Col xs={12} md={6} lg={4} className=" p-3 ms-0">
             {!isVisible(2, 1) && (
               <section
                 style={{ height: '250px' }}
-                className="ps-5 p-3 rounded bg-yellow text-secondary"
+                className="ps-5 p-3 rounded overflow-auto bg-yellow text-secondary"
                 onClick={() => toggleBox(2, 1)}
                 role="presentation"
               >
@@ -170,11 +170,11 @@ const ManifestPage: NextPage = () => {
             )}
           </Col>
 
-          <Col xs={12} md={4} className=" p-3 ms-0">
+          <Col xs={12} md={6} lg={4} className=" p-3 ms-0">
             {!isVisible(2, 2) && (
               <section
                 style={{ height: '250px' }}
-                className="ps-5 p-3 rounded bg-secondary text-white"
+                className="ps-5 p-3 rounded overflow-auto bg-secondary text-white"
                 onClick={() => toggleBox(2, 2)}
                 role="presentation"
               >
@@ -198,11 +198,11 @@ const ManifestPage: NextPage = () => {
             )}
           </Col>
 
-          <Col xs={12} md={4} className=" p-3 ms-0">
+          <Col xs={12} md={6} lg={4} className=" p-3 ms-0">
             {!isVisible(2, 3) && (
               <section
                 style={{ height: '250px' }}
-                className="ps-5 p-3 rounded bg-yellow text-secondary"
+                className="ps-5 p-3 rounded overflow-auto bg-yellow text-secondary"
                 onClick={() => toggleBox(2, 3)}
                 role="presentation"
               >
@@ -228,11 +228,11 @@ const ManifestPage: NextPage = () => {
         </Row>
         {/* row 3     */}
         <Row>
-          <Col xs={12} md={4} className=" p-3 ms-0">
+          <Col xs={12} md={6} lg={4} className=" p-3 ms-0">
             {!isVisible(3, 1) && (
               <section
                 style={{ height: '250px' }}
-                className="ps-5 p-3 rounded bg-secondary text-white"
+                className="ps-5 p-3 rounded overflow-auto bg-secondary text-white"
                 onClick={() => toggleBox(3, 1)}
                 role="presentation"
               >
@@ -256,11 +256,11 @@ const ManifestPage: NextPage = () => {
             )}
           </Col>
 
-          <Col xs={12} md={4} className=" p-3 ms-0">
+          <Col xs={12} md={6} lg={4} className=" p-3 ms-0">
             {!isVisible(3, 2) && (
               <section
                 style={{ height: '250px' }}
-                className="ps-5 p-3 rounded bg-yellow text-secondary"
+                className="ps-5 p-3 rounded overflow-auto bg-yellow text-secondary"
                 onClick={() => toggleBox(3, 2)}
                 role="presentation"
               >
@@ -284,11 +284,11 @@ const ManifestPage: NextPage = () => {
             )}
           </Col>
 
-          <Col xs={12} md={4} className=" p-3 ms-0">
+          <Col xs={12} md={6} lg={4} className=" p-3 ms-0">
             {!isVisible(3, 3) && (
               <section
                 style={{ height: '250px' }}
-                className="ps-5 p-3 rounded bg-secondary text-white"
+                className="ps-5 p-3 rounded overflow-auto bg-secondary text-white"
                 onClick={() => toggleBox(3, 3)}
                 role="presentation"
               >
@@ -317,7 +317,7 @@ const ManifestPage: NextPage = () => {
             {!isVisible(4, 1) && (
               <section
                 style={{ height: '250px' }}
-                className="ps-5 p-3 rounded bg-secondary text-white"
+                className="ps-5 p-3 rounded overflow-auto bg-secondary text-white"
                 onClick={() => toggleBox(4, 1)}
                 role="presentation"
               >
@@ -352,7 +352,7 @@ const ManifestPage: NextPage = () => {
             {!isVisible(4, 2) && (
               <section
                 style={{ height: '250px' }}
-                className="ps-5 p-3 rounded bg-yellow text-secondary"
+                className="ps-5 p-3 rounded overflow-auto bg-yellow text-secondary"
                 onClick={() => toggleBox(4, 2)}
                 role="presentation"
               >
