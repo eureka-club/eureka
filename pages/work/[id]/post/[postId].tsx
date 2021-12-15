@@ -71,7 +71,7 @@ const PostDetailInWorkPage: NextPage<Props> = () => {
   //   </SimpleLayout>
   // );
 };
-
+/* 
 export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
   if (
     params == null ||
@@ -133,6 +133,6 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
       mySocialInfo,
     },
   };
-};
+}; */
 
 export default PostDetailInWorkPage;
