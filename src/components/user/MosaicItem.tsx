@@ -18,6 +18,7 @@ import { UserMosaicItem } from '../../types/user';
 interface Props {
   user: UserMosaicItem;
   showSocialInteraction?: boolean;
+  className?:string;
   // showButtonLabels?: boolean;
   // showShare?: boolean;
 }
@@ -25,13 +26,13 @@ const openUserMediatheque = (id: number) => {
   router.push(`/mediatheque/${id}`).then(() => window.scrollTo(0, 0));
 };
 
-const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = false }) => {
+const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = false, className = '' }) => {
   const { t } = useTranslation('common');
   const { id, name, countryOfOrigin /* image  , tags */ } = user;
   const [session] = useSession() as [Session | null | undefined, boolean];
 
   return (
-    <Card className={styles.container} onClick={() => openUserMediatheque(id)}>
+    <Card className={`${styles.container} ${className}`} onClick={() => openUserMediatheque(id)}>
       <Row>
         <Col xs={12} md={3}>
           <UserAvatar user={user} showName={false} />

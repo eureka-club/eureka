@@ -34,6 +34,7 @@ interface Props {
   showTrash?: boolean;
   linkToWork?: boolean;
   tiny?: boolean;
+  className?:string;
   // isOnDiscussion?: boolean;
 }
 const MosaicItem: FunctionComponent<Props> = ({
@@ -46,6 +47,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   showTrash = false,
   linkToWork = true,
   tiny = false,
+  className = '',
   // isOnDiscussion = false,
 }) => {
   const { t } = useTranslation('common');
@@ -166,7 +168,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     return img;
   };
   return (
-    <Card className={`${tiny ? 'mosaic-tiny' : 'mosaic'} ${isActive() ? 'my-1 isActive' : ''}`}>
+    <Card className={`${tiny ? 'mosaic-tiny' : 'mosaic'} ${isActive() ? 'my-1 isActive' : ''} ${className}`}>
       <div className={`${styles.imageContainer} ${tiny ? styles.imageContainerTiny : ''}`}>
         {renderLocalImageComponent()}
         {isActive() && <CgMediaLive className={`${styles.isActiveCircle}`} />}
