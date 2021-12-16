@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 // import HyvorTalk from 'hyvor-talk-react';
 import { useAtom } from 'jotai';
+import {v4} from 'uuid';
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
@@ -52,6 +53,7 @@ import styles from './CycleDetail.module.css';
 import { useCycleContext, CycleContext } from '../../useCycleContext';
 import CycleDetailHeader from './CycleDetailHeader';
 import CycleDetailDiscussion from './CycleDetailDiscussion';
+import { constants } from 'buffer';
 // import useCycles from '../../useCycles';
 
 interface Props {
@@ -102,6 +104,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     book: false,
     'fiction-book': false,
   });
+  const [filtersWork, setFiltersWork] = useState<number[]>([]);
     // const hyvorId = `${WEBAPP_URL}cycle/${router.query.id}`;
 
   // const { data } = useCycles(1);
@@ -338,6 +341,20 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     }
     return '';
   };
+  
+  const renderCycleWorksFilters = () => {
+    if(cycle && cycle.works){
+      return cycle.works.map((w) => {
+        return <Col key={v4()} xs={12}>
+        <Form.Check label={w.title} 
+          checked={filtersChecked[`work-${w.id}`]}
+          onChange={(e) => handlerComboxesChange(e, 'work', w.id)}
+        />
+      </Col>;
+      });
+    }
+    return '';
+  };
 
   const renderRestrictTabs = () => {
     if (cycle) {
@@ -361,36 +378,42 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
               <Col xs={{span:12, order:'first'}} md={{span:3,order:'last'}}>
                 <Form as={Row} className="bg-white mt-0 mb-3">
                   <Form.Group as={Col} xs={12}>
-                      <Row>
-                        <Form.Label className="text-primary">{t('Filter by type of element')}</Form.Label>
-                        <Col xs={5}>
-                          <Form.Check label={t('common:post')} 
-                            checked={filtersChecked['post']}
-                            onChange={(e) => handlerComboxesChangeRegion(e, 'post')}
-                          />
-                        </Col>
-                        <Col xs={7}>
-                          <Form.Check label={t('common:comment')} 
-                            checked={filtersChecked['comment']}
-                            onChange={(e) => handlerComboxesChangeRegion(e, 'comment')}
-                          />
-                        </Col>
-                      </Row>
+                        <Row>
+                          <Form.Label className="text-primary">{t('Filter by work')}</Form.Label>
+                          {renderCycleWorksFilters()}
+                        </Row>
                   </Form.Group>
                   <Form.Group className="mt-3" as={Col} xs={12}>
-                      <Form.Label className="text-primary">{t('Filter by Participan')}</Form.Label>
-                      <Typeahead
-                        ref={refParticipants}
-                        id="refParticipants"
-                        filterBy={['label']}
-                        labelKey={(u: User) => {
-                          if(u?.name) return u.name;
-                          return u?.email || `${u.id}`;
-                        }}
-                        onChange={onChangeParticipantFilter}                  
-                        options={[...cycle.participants, cycle.creator]}
-                        className="bg-light border border-info rounded"                  
-                      />
+                        <Row>
+                          <Form.Label className="text-primary">{t('Filter by type of element')}</Form.Label>
+                          <Col xs={5}>
+                            <Form.Check label={t('common:post')} 
+                              checked={filtersChecked['post']}
+                              onChange={(e) => handlerComboxesChange(e, 'post')}
+                            />
+                          </Col>
+                          <Col xs={7}>
+                            <Form.Check label={t('common:comment')} 
+                              checked={filtersChecked['comment']}
+                              onChange={(e) => handlerComboxesChange(e, 'comment')}
+                            />
+                          </Col>
+                        </Row>
+                  </Form.Group>
+                  <Form.Group className="mt-3" as={Col} xs={12}>
+                        <Form.Label className="text-primary">{t('Filter by Participan')}</Form.Label>
+                        <Typeahead
+                          ref={refParticipants}
+                          id="refParticipants"
+                          filterBy={['label']}
+                          labelKey={(u: User) => {
+                            if(u?.name) return u.name;
+                            return u?.email || `${u.id}`;
+                          }}
+                          onChange={onChangeParticipantFilter}                  
+                          options={[...cycle.participants, cycle.creator]}
+                          className="bg-light border border-info rounded"                  
+                        />
                   </Form.Group>
                 </Form>
               </Col>
@@ -492,15 +515,18 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     }
   };
 
-  const handlerComboxesChangeRegion = (e: ChangeEvent<HTMLInputElement>, q: string) => {
-    setFiltersChecked((res) => ({ ...res, [`${q}`]: e.target.checked }));
-    
+  const handlerComboxesChange = (e: ChangeEvent<HTMLInputElement>, q: string, workId?: number) => {
+    setFiltersChecked((res) => ({ ...res, [`${q}${workId ? `-${workId}`: ''}`]: e.target.checked }));
+    debugger;
     switch(q){
       case 'post':
         if(e.target.checked){
           let posts = cycle?.posts;
           if(filtersParticipant?.length){
-            posts = cycle?.posts.filter((p) => filtersParticipant.findIndex(i => i  === p.creatorId) !== -1);            
+            posts = posts?.filter((p) => filtersParticipant.findIndex(i => i  === p.creatorId) !== -1);            
+          }
+          if(filtersWork.length){
+            posts = posts?.filter((p) => p.works.findIndex((w) => filtersWork.includes(w.id)) !== -1);            
           }
           setFilteredPosts(posts as PostMosaicItem[]);
         }
@@ -510,12 +536,41 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         if(e.target.checked){
           let comments = cycle?.comments;
           if(filtersParticipant?.length){
-            comments = cycle?.comments.filter((c) => filtersParticipant.findIndex(i => i  === c.creatorId) !== -1);
+            comments = comments?.filter((c) => filtersParticipant.findIndex(i => i  === c.creatorId) !== -1);
+          }
+          if(filtersWork.length){
+            comments = comments?.filter((c) => c.workId && filtersWork.includes(c.workId));
           }
           setFilteredComments(comments || []);
         }        
         else setFilteredComments([]);  
-        break;
+        break;    
+      case 'work':
+        if(e.target.checked){
+          if(workId){
+            filtersWork.push(workId);
+            setFiltersWork([...filtersWork]);            
+          }
+        }
+        else {
+          const idx = filtersWork.findIndex((id) => id === workId);
+          if(idx > -1)
+            filtersWork.splice(idx, 1);
+          setFiltersWork(filtersWork);
+        }
+        let posts = cycle?.posts;
+        let comments = cycle?.comments;
+        if(filtersWork.length){
+          posts = posts?.filter((p) => p.works.findIndex((w) => filtersWork.includes(w.id)) !== -1);
+          comments = comments?.filter((c) => c.workId && filtersWork.includes(c.workId));
+        }
+        if(filtersParticipant?.length){
+          posts = posts?.filter((p) => filtersParticipant.findIndex(i => i  === p.creatorId) !== -1);            
+          comments = comments?.filter((c) => filtersParticipant.findIndex(i => i  === c.creatorId) !== -1);
+        }
+        setFilteredPosts(posts as PostMosaicItem[]);
+        setFilteredComments(comments || []);
+        break;      
     }
   };
   

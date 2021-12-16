@@ -45,5 +45,6 @@
   "requiredDiscussionItemError": "Vous devez indiquer sur quoi porte votre contribution",
   "requiredEurekaImageError": "Vous devez ajouter une image à votre Eureka",
   "Filter by Participan":"Filtrer par participant-e",
-  "Filter by type of element":"Filtrer par type de contenu"
+  "Filter by type of element":"Filtrer par type de contenu",
+  "Filter by work":"Filter by work"
 }
