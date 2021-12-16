@@ -89,7 +89,7 @@ const NavBar: FunctionComponent = () => {
 
   return (
     <Container fluid className={styles.container}>
-      <Navbar collapseOnSelect expand="lg" variant="light" className="position-relative">
+      <Navbar collapseOnSelect expand="lg" variant="light" className="position-relative" style={{zIndex:9999}}>
         {/* <Container> */}
         <Link href="/">
           <Navbar.Brand className="cursor-pointer">
