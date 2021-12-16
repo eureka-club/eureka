@@ -91,7 +91,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const renderCardDetailed = () => {
     return (
       <>
-        <Card className={`${styles.post} ${styles.commentHorizontally}`}>
+        <Card className={` ${styles.commentHorizontally}`}>
           <Card.Header as={Row} className={styles.cardHeader}>
             <Col xs={12} md={6}>
               {commentParent && (
@@ -156,8 +156,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   };
   if (detailed)
     return (
-      <div className={`d-flex justify-content-center ${className}`}>
-        <section className="w-75 d-none d-md-block">{renderCardDetailed()}</section>
+      <div className={` ${className}`}>
+        <section className=" d-none d-md-block">{renderCardDetailed()}</section>
         <section className="d-sm-block d-md-none">{renderCardDetailed()}</section>
       </div>
     );

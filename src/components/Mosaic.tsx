@@ -117,9 +117,9 @@ const Mosaic: FunctionComponent<Props> = ({
   </Masonry>
   }
   return <>
-    <Container className="d-none d-lg-block">
+    <div className="d-none d-lg-block">
         {renderMosaic()}
-    </Container>
+    </div>
     <div className="d-lg-none">
       {renderMosaic()}
      </div>
