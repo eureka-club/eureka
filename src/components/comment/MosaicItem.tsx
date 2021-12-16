@@ -131,7 +131,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             <Row>
               <Col>
                 <aside className="pt-3 mb-0">
-                  <UnclampText isHTML text={contentText} clampHeight="5rem" />
+                  <UnclampText isHTML text={contentText} clampHeight="4rem" />
                 </aside>
               </Col>
             </Row>
