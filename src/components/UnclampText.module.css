@@ -22,4 +22,5 @@
 .unclampButton {
   color: var(--color-primary-raised);
   padding: 0;
+  font-size: 0.875rem;
 }

@@ -83,7 +83,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
           <SocialInteraction entity={post} parent={cycle || work || null} showRating={false} showButtonLabels={false} />
           {work != null && (
             <aside className="">
-              <Badge bg="orange" className=" rounded-pill py-1 px-2 mt-3 text-black fs-6">
+              <Badge bg="orange" className="rounded-pill py-1 px-2 mt-3 text-black fs-6">
                 {t(`common:${work.type}`)}
               </Badge>
               <section className="my-1">

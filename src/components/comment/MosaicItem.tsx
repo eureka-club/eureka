@@ -127,11 +127,11 @@ const MosaicItem: FunctionComponent<Props> = ({
               </div>
             </Col>
           </Card.Header>
-          <Card.Body className="pt-0">
+          <Card.Body className="pt-0 pb-2">
             <Row>
               <Col>
-                <aside className="pt-3 mb-3">
-                  <UnclampText isHTML text={contentText} clampHeight="10rem" />
+                <aside className="pt-3 mb-0">
+                  <UnclampText isHTML text={contentText} clampHeight="5rem" />
                 </aside>
               </Col>
             </Row>

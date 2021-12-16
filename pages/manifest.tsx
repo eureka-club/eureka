@@ -358,7 +358,7 @@ const ManifestPage: NextPage = () => {
               >
                 <aside className={`${styles.box} ${styles.bgRow4Box2}`} />
                 <h2 className="h3 text-start">
-                  {t('manifestRow4Box2Title')} <span className="text-yellow">{t('manifestRow4Box2Title')}</span>
+                  {t('manifestRow4Box2Title')} 
                 </h2>
                 <h5 className="cursor-pointer fs-6">
                   {t('learnMore')} <CgArrowLongRight />

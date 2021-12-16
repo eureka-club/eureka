@@ -249,12 +249,12 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
           onChange={onChangeFieldEurekaForm}
         />
       </Form.Group> */}
-      <Form.Group className="my-3" controlId="eureka-image">
+      <Form.Group className="mt-3" controlId="eureka-image">
         <ImageFileSelect acceptedFileTypes="image/*" file={newEurekaImageFile} setFile={setNewEurekaImageFile} required>
           {(imagePreview) => (
             <Form.Group>
               {/* <Form.Label>*{t('imageFieldLabel')}</Form.Label> */}
-              <Row className="rounded border border-primary bg-white p-0">
+              <Row className="rounded border border-primary bg-white p-1 m-0">
                 <Col>{newEurekaImageFile != null && imagePreview ? (
                   <span className={`pt-1 ${stylesImageFileSelect.imageName}`}>{newEurekaImageFile?.name}</span>
                 ) : (
