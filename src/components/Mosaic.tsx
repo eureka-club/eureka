@@ -23,7 +23,7 @@ const renderMosaicItem = (
   display: 'h' | 'v',
   showComments: boolean,
   cacheKey?: string[],
-) => {
+) => {debugger;
   if (isCycleMosaicItem(item)) {
     return (
       <CycleContext.Provider value={{ cycle: item as CycleMosaicItem }}>
@@ -63,7 +63,7 @@ const renderMosaicItem = (
     return <MosaicItemUser key={`${v4()}`} user={item} className="mb-2" />;
   }
 
-  return '';
+  return <></>;
 };
 interface Props {
   postsLinksTo?: CycleMosaicItem | WorkMosaicItem;

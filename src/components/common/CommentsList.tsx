@@ -165,7 +165,7 @@ const CommentsList: FunctionComponent<Props> = ({
         .map((c) => {
           return <CommentCmp key={c.id} comment={c as CommentMosaicItem} cacheKey={cacheKey} />;
         });
-    return null;
+    return <></>;
   };
 
   const viewMoreComments = () => {

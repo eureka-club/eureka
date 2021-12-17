@@ -20,6 +20,7 @@ import {
   Form
 } from 'react-bootstrap';
 import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
+import {ImCancelCircle} from 'react-icons/im';
 import { BiArrowBack } from 'react-icons/bi';
 import { Work, Comment, Cycle, User } from '@prisma/client';
 import { MosaicContext } from '../../useMosaicContext';
@@ -53,8 +54,6 @@ import styles from './CycleDetail.module.css';
 import { useCycleContext, CycleContext } from '../../useCycleContext';
 import CycleDetailHeader from './CycleDetailHeader';
 import CycleDetailDiscussion from './CycleDetailDiscussion';
-import { constants } from 'buffer';
-// import useCycles from '../../useCycles';
 
 interface Props {
   // cycle: CycleMosaicItem;
@@ -95,16 +94,17 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const [tabKey, setTabKey] = useState<string>();
   const tabContainnerRef = useRef<HTMLDivElement>(null);
   const refParticipants = useRef<Typeahead<User>>(null);
-  const [filtersParticipant,setFiltersParticipant] = useState<number[]>();
-  const [filtersChecked, setFiltersChecked] = useState<Record<string, boolean>>({
-    post: true,
-    comment: true,
-    movie: false,
+  const [filtersWork, setFiltersWork] = useState<number[]>([]);
+  const [filtersParticipant,setFiltersParticipant] = useState<number[]>([]);
+  const [filtersContentType,setFiltersContentType] = useState<string[]>([]);
+  const [comboboxChecked, setComboboxChecked] = useState<Record<string, boolean>>({
+    post: false,
+    comment: false,
+    /*movie: false,
     documentary: false,
     book: false,
-    'fiction-book': false,
+    'fiction-book': false, */
   });
-  const [filtersWork, setFiltersWork] = useState<number[]>([]);
     // const hyvorId = `${WEBAPP_URL}cycle/${router.query.id}`;
 
   // const { data } = useCycles(1);
@@ -347,7 +347,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       return cycle.works.map((w) => {
         return <Col key={v4()} xs={12}>
         <Form.Check label={w.title} 
-          checked={filtersChecked[`work-${w.id}`]}
+          checked={comboboxChecked[`work-${w.id}`]}
           onChange={(e) => handlerComboxesChange(e, 'work', w.id)}
         />
       </Col>;
@@ -388,13 +388,13 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                           <Form.Label className="text-primary">{t('Filter by type of element')}</Form.Label>
                           <Col xs={5}>
                             <Form.Check label={t('common:post')} 
-                              checked={filtersChecked['post']}
+                              checked={comboboxChecked['post']}
                               onChange={(e) => handlerComboxesChange(e, 'post')}
                             />
                           </Col>
                           <Col xs={7}>
                             <Form.Check label={t('common:comment')} 
-                              checked={filtersChecked['comment']}
+                              checked={comboboxChecked['comment']}
                               onChange={(e) => handlerComboxesChange(e, 'comment')}
                             />
                           </Col>
@@ -403,6 +403,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                   <Form.Group className="mt-3" as={Col} xs={12}>
                         <Form.Label className="text-primary">{t('Filter by Participan')}</Form.Label>
                         <Typeahead
+                        clearButton={true}
                           ref={refParticipants}
                           id="refParticipants"
                           filterBy={['label']}
@@ -410,10 +411,13 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                             if(u?.name) return u.name;
                             return u?.email || `${u.id}`;
                           }}
-                          onChange={onChangeParticipantFilter}                  
+                          onChange={onChangeParticipantFilters}                  
                           options={[...cycle.participants, cycle.creator]}
                           className="bg-light border border-info rounded"                  
                         />
+                  </Form.Group>
+                  <Form.Group className="mt-3" as={Col} xs={12}>
+                    <Button className="mt-3" variant="warning" size="sm" onClick={resetFilters}><ImCancelCircle/></Button>
                   </Form.Group>
                 </Form>
               </Col>
@@ -498,29 +502,93 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     return 'cycle-about';
   };
 
-  const onChangeParticipantFilter = (p: User[]) => {
+  const resetComboboxFilters = () => {
+    Object.keys(comboboxChecked).forEach(k => {
+      comboboxChecked[k] = false;
+    });
+    setComboboxChecked(comboboxChecked);
+  };
+
+  const resetFilters = () => {
+    refParticipants.current?.clear();
+    resetComboboxFilters();
+    setFiltersContentType([]);
+    setFiltersParticipant([]);
+    setFiltersWork([]);
+  };
+
+  const onChangeParticipantFilters = (p: User[]) => {
     if(p.length){
       const {id} = p[0];
       setFiltersParticipant([id]);
-      setFiltersChecked((res) => ({ ...res, ...{post:true, comment:true} }));
-      const posts = cycle?.posts.filter((p) => p.creatorId === id);
-      setFilteredPosts(posts as PostMosaicItem[]);
-      const comments = cycle?.comments.filter((c) => c.creatorId === id);
-      setFilteredComments(comments || []);
     }
     else {
       setFiltersParticipant([]);
-      setFilteredPosts(cycle?.posts as PostMosaicItem[]);
-      setFilteredComments(cycle?.comments || []);
     }
   };
 
+  const onChangeContentTypeFilters = (type: string, checked: boolean) => {debugger;
+    if(type){
+      if(checked)
+        filtersContentType.push(type);
+      else {
+        const idx = filtersContentType.indexOf(type);
+        if(idx !== -1){
+          filtersContentType.splice(idx,1);
+        }        
+      }
+      setFiltersContentType([...filtersContentType]);
+    }    
+  };
+
+  const onChangeWorkFilters = (id: number, checked: boolean) => {debugger;
+    if(checked)
+      filtersWork.push(id);
+    else {
+      const idx = filtersWork.indexOf(id);
+      if(idx !== -1){
+        filtersWork.splice(idx,1);
+      }        
+    }        
+    setFiltersWork([...filtersWork]);
+  };
+
+  useEffect(() => {
+    if(cycle && cycle.posts && cycle.comments){
+      let posts = cycle?.posts;
+      let comments = cycle?.comments;
+  
+      if(filtersWork && filtersWork.length){
+        posts = posts?.filter((p) => p.works.findIndex((w) => filtersWork.includes(w.id)) !== -1);
+        comments = comments?.filter((c) => c.workId && filtersWork.includes(c.workId));
+      }
+      if(filtersParticipant && filtersParticipant.length){
+        posts = posts?.filter((p) => filtersParticipant.findIndex(i => i  === p.creatorId) !== -1);            
+        comments = comments?.filter((c) => filtersParticipant.findIndex(i => i  === c.creatorId) !== -1);
+      }
+      if(filtersContentType && filtersContentType.length){
+        if(!filtersContentType.includes('post'))
+          posts = [];
+        if(!filtersContentType.includes('comment'))
+          comments = [];  
+      }
+      setFilteredPosts(posts as PostMosaicItem[]);
+      setFilteredComments(comments || []);
+    }
+    else {
+      setFilteredPosts([]);
+      setFilteredComments([]);
+    }
+  },[filtersWork,filtersParticipant,filtersContentType,cycle]);
+
+
   const handlerComboxesChange = (e: ChangeEvent<HTMLInputElement>, q: string, workId?: number) => {
-    setFiltersChecked((res) => ({ ...res, [`${q}${workId ? `-${workId}`: ''}`]: e.target.checked }));
-    debugger;
+    setComboboxChecked((res) => ({ ...res, [`${q}${workId ? `-${workId}`: ''}`]: e.target.checked }));
+    
     switch(q){
       case 'post':
-        if(e.target.checked){
+        onChangeContentTypeFilters('post', e.target.checked)
+        /* if(e.target.checked){
           let posts = cycle?.posts;
           if(filtersParticipant?.length){
             posts = posts?.filter((p) => filtersParticipant.findIndex(i => i  === p.creatorId) !== -1);            
@@ -530,10 +598,11 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           }
           setFilteredPosts(posts as PostMosaicItem[]);
         }
-        else setFilteredPosts([]);  
+        else setFilteredPosts([]);   */
         break;
       case 'comment':
-        if(e.target.checked){
+        onChangeContentTypeFilters('comment', e.target.checked)
+        /* if(e.target.checked){
           let comments = cycle?.comments;
           if(filtersParticipant?.length){
             comments = comments?.filter((c) => filtersParticipant.findIndex(i => i  === c.creatorId) !== -1);
@@ -543,10 +612,12 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           }
           setFilteredComments(comments || []);
         }        
-        else setFilteredComments([]);  
+        else setFilteredComments([]); */  
         break;    
       case 'work':
-        if(e.target.checked){
+        if(workId)
+          onChangeWorkFilters(workId,e.target.checked);
+        /* if(e.target.checked){
           if(workId){
             filtersWork.push(workId);
             setFiltersWork([...filtersWork]);            
@@ -569,7 +640,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           comments = comments?.filter((c) => filtersParticipant.findIndex(i => i  === c.creatorId) !== -1);
         }
         setFilteredPosts(posts as PostMosaicItem[]);
-        setFilteredComments(comments || []);
+        setFilteredComments(comments || []); */
         break;      
     }
   };

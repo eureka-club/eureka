@@ -224,6 +224,7 @@ const SearchPage: NextPage = () => {
     );
     return <></>;
   };
+  
   return (
     <SimpleLayout title={t('browserTitleWelcome')}>
       <ButtonGroup className="mb-1">
@@ -235,7 +236,7 @@ const SearchPage: NextPage = () => {
         {t('Results about')}: {`"${qLabel}"`}
       </h1>
       <FilterEngine />
-      <Mosaic className="d-flex justify-content-center mb-4" showButtonLabels={false} stack={homepageMosaicDataFiltered} />
+      {(!isLoading && <Mosaic className="d-flex justify-content-center mb-4" showButtonLabels={false} stack={homepageMosaicDataFiltered} />) || <></>}
       {genLoadingCmp()}
       {renderErrorMessage()}
     </SimpleLayout>

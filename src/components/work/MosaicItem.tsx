@@ -124,7 +124,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         }
       }
     }
-    return null;
+    return <></>;
   };
 
   const { id, /* author, */ title, localImages, type } = work;
