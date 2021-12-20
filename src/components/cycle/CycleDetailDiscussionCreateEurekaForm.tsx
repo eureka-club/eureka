@@ -255,13 +255,13 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
             <Form.Group>
               {/* <Form.Label>*{t('imageFieldLabel')}</Form.Label> */}
               <Row className="rounded border border-primary bg-white p-1 m-0">
-                <Col>{newEurekaImageFile != null && imagePreview ? (
-                  <span className={`pt-1 ${stylesImageFileSelect.imageName}`}>{newEurekaImageFile?.name}</span>
+                <Col xs={12} md={10}>{newEurekaImageFile != null && imagePreview ? (
+                  <span className={`pt-1`}>{newEurekaImageFile?.name}</span>
                 ) : (
                   t('Image')
                 )}
                 </Col>
-                <Col className="d-flex justify-content-start justify-content-sm-end align-items-center">
+                <Col xs={12} md={2} className="d-flex justify-content-start justify-content-sm-end align-items-center">
 
                 {imagePreview && <Image layout="fixed" width="57px" height="32px" src={imagePreview} className="float-right" alt="Work cover" />}
                 </Col>
