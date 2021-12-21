@@ -23,7 +23,7 @@ const renderMosaicItem = (
   display: 'h' | 'v',
   showComments: boolean,
   cacheKey?: string[],
-) => {debugger;
+) => {
   if (isCycleMosaicItem(item)) {
     return (
       <CycleContext.Provider value={{ cycle: item as CycleMosaicItem }}>

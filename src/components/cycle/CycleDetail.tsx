@@ -95,6 +95,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const tabContainnerRef = useRef<HTMLDivElement>(null);
   const refParticipants = useRef<Typeahead<User>>(null);
   const [filtersWork, setFiltersWork] = useState<number[]>([]);
+  const [filterCycleItSelf, setFilterCycleItSelf] = useState<boolean>(false);  
   const [filtersParticipant,setFiltersParticipant] = useState<number[]>([]);
   const [filtersContentType,setFiltersContentType] = useState<string[]>([]);
   const [comboboxChecked, setComboboxChecked] = useState<Record<string, boolean>>({
@@ -342,9 +343,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     return '';
   };
   
-  const renderCycleWorksFilters = () => {
+  const renderCycleWorksOrCycleFilters = () => {
     if(cycle && cycle.works){
-      return cycle.works.map((w) => {
+      const res = cycle.works.map((w) => {
         return <Col key={v4()} xs={12}>
         <Form.Check label={w.title} 
           checked={comboboxChecked[`work-${w.id}`]}
@@ -352,6 +353,13 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         />
       </Col>;
       });
+      res.unshift(<Col key={v4()} xs={12}>
+      <Form.Check label={t('common:cycle')} 
+        checked={comboboxChecked[`cycle`]}
+        onChange={(e) => handlerComboxesChange(e, 'cycle')}
+      />
+    </Col>);
+      return res;
     }
     return '';
   };
@@ -380,7 +388,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                   <Form.Group as={Col} xs={12}>
                         <Row>
                           <Form.Label className="text-primary">{t('Filter by work')}</Form.Label>
-                          {renderCycleWorksFilters()}
+                          {renderCycleWorksOrCycleFilters()}
                         </Row>
                   </Form.Group>
                   <Form.Group className="mt-3" as={Col} xs={12}>
@@ -515,6 +523,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     setFiltersContentType([]);
     setFiltersParticipant([]);
     setFiltersWork([]);
+    setFilterCycleItSelf(false);
   };
 
   const onChangeParticipantFilters = (p: User[]) => {
@@ -527,7 +536,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     }
   };
 
-  const onChangeContentTypeFilters = (type: string, checked: boolean) => {debugger;
+  const onChangeContentTypeFilters = (type: string, checked: boolean) => {
     if(type){
       if(checked)
         filtersContentType.push(type);
@@ -541,7 +550,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     }    
   };
 
-  const onChangeWorkFilters = (id: number, checked: boolean) => {debugger;
+  const onChangeWorkFilters = (id: number, checked: boolean) => {
     if(checked)
       filtersWork.push(id);
     else {
@@ -553,11 +562,19 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     setFiltersWork([...filtersWork]);
   };
 
+  const onChangeCycleFilters = (checked: boolean) => {
+    setFilterCycleItSelf(checked);
+  };
+
   useEffect(() => {
     if(cycle && cycle.posts && cycle.comments){
       let posts = cycle?.posts;
       let comments = cycle?.comments;
-  
+
+      if(filterCycleItSelf){
+        posts = posts?.filter((p) => !p.works.length);
+        comments = comments?.filter((c) => !c.workId && !c.commentId);  
+      }
       if(filtersWork && filtersWork.length){
         posts = posts?.filter((p) => p.works.findIndex((w) => filtersWork.includes(w.id)) !== -1);
         comments = comments?.filter((c) => c.workId && filtersWork.includes(c.workId));
@@ -579,7 +596,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       setFilteredPosts([]);
       setFilteredComments([]);
     }
-  },[filtersWork,filtersParticipant,filtersContentType,cycle]);
+  },[filtersWork,filtersParticipant,filtersContentType,filterCycleItSelf,cycle]);
 
 
   const handlerComboxesChange = (e: ChangeEvent<HTMLInputElement>, q: string, workId?: number) => {
@@ -615,8 +632,11 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         else setFilteredComments([]); */  
         break;    
       case 'work':
-        if(workId)
+        if(workId){
+          setFilterCycleItSelf(false);
+          setComboboxChecked((res)=>({...res,'cycle':false}));
           onChangeWorkFilters(workId,e.target.checked);
+        }
         /* if(e.target.checked){
           if(workId){
             filtersWork.push(workId);
@@ -642,6 +662,19 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         setFilteredPosts(posts as PostMosaicItem[]);
         setFilteredComments(comments || []); */
         break;      
+        case 'cycle':
+          if(e.target.checked){
+            setComboboxChecked((res)=>{
+              Object.keys(res).forEach((k) => {
+                if(k.startsWith('work-'))
+                  res[k] = false;
+              });
+              return {...res};
+            });
+            setFiltersWork([]);
+          }
+          onChangeCycleFilters(e.target.checked);
+          break;
     }
   };
   
