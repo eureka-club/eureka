@@ -113,7 +113,7 @@ const Mosaic: FunctionComponent<Props> = ({
         <aside className={` ${className}`} key={`${v4()}`}>
           {renderMosaicItem(item, postsLinksTo, showButtonLabels, display, showComments, cacheKey)}
         </aside>
-      ))}
+      )) || ''}
   </Masonry>
   }
   return <>

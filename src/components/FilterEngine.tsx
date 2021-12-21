@@ -7,7 +7,7 @@ import { useQuery } from 'react-query';
 import useTranslation from 'next-translate/useTranslation';
 // import { setCookie } from 'nookies';
 import { FunctionComponent, ChangeEvent, useState, useEffect } from 'react';
-import { Container, Row, Col, Form } from 'react-bootstrap';
+import { Container, Row, Col, Form, OverlayTrigger, Popover, Button } from 'react-bootstrap';
 // import { AsyncTypeahead, Typeahead } from 'react-bootstrap-typeahead';
 
 // import { AiOutlineSearch } from 'react-icons/ai';
@@ -32,7 +32,7 @@ interface Props {
   geographyFilter?: boolean;
   // sortBy?: false;
 }
-const SearchEngine: FunctionComponent<Props> = ({
+const FilterEngine: FunctionComponent<Props> = ({
   fictionOrNotFilter = true,
   geographyFilter = true,
   // sortBy = false,
@@ -154,58 +154,11 @@ const SearchEngine: FunctionComponent<Props> = ({
   //   });
   // }, [onlyByCountries]);
 
-  return (
-    (globalSearchEngineState.show && (
-      <Container className={styles.container}>
-        <Row>
-          <Col xs={12} sm={8} md={6} lg={6} xl={5} as={Row}>
-            <Form.Group as={Col} xs={6} lg={3} className={styles.formGroup}>
-              <Form.Check
-                className={styles.filter}
-                inline
-                type="checkbox"
-                label={t('Cycles')}
-                checked={filtersChecked.cycle}
-                onChange={(e) => handlerComboxesChangeType(e, 'cycle')}
-              />
-            </Form.Group>
-            <Form.Group as={Col} xs={6} lg={3} className={styles.formGroup}>
-              <Form.Check
-                className={styles.filter}
-                inline
-                type="checkbox"
-                label={t('Eurekas')}
-                onChange={(e) => handlerComboxesChangeType(e, 'post')}
-              />
-            </Form.Group>
-            <Form.Group as={Col} xs={6} lg={3} className={styles.formGroup}>
-              <Form.Check
-                className={styles.filter}
-                inline
-                type="checkbox"
-                label={t('Films')}
-                checked={filtersChecked.movie && filtersChecked.documentary}
-                onChange={(e) => handlerComboxesChangeType(e, 'movie|documentary')}
-              />
-            </Form.Group>
-            <Form.Group as={Col} xs={6} lg={3} className={styles.formGroup}>
-              <Form.Check
-                className={styles.filter}
-                inline
-                type="checkbox"
-                label={t('Books')}
-                checked={filtersChecked.book && filtersChecked['fiction-book']}
-                onChange={(e) => handlerComboxesChangeType(e, 'book|fiction-book')}
-              />
-            </Form.Group>
-          </Col>
-          <Col xs={12} sm={4} md={6} lg={6} xl={7} as={Row} className="pe-0">
-            <aside className="d-flex justify-content-start justify-content-md-end">
-
-            {fictionOrNotFilter && (
-              // <Col className="mb-1 d-flex justify-content-start justify-content-md-end">
-                <PopoverContainer title={t('Fiction/nonfiction')} className={`${styles.popover}`}>
-                <Form.Label>
+  const getPopoverBooks = () => {
+    return <Popover id='popover-books'>
+      {/* <Popover.Header as="h3">{`Popover books`}</Popover.Header> */}
+      <Popover.Body>
+      <Form.Label>
                   <strong>{t('Books')}</strong>
                 </Form.Label>
                 <Form.Group className={styles.formGroup}>
@@ -248,14 +201,14 @@ const SearchEngine: FunctionComponent<Props> = ({
                     onChange={(e) => handlerComboxesChangeType(e, 'documentary')}
                   />
                 </Form.Group>
-                </PopoverContainer>
-              // </Col>
-            )}
-
-            {geographyFilter && (
-              // <Col className="mb-1 d-flex justify-content-start justify-content-md-end">
-                <PopoverContainer title={`${t('Geography')}`} className={`${styles.popover}`}>
-                  <Form.Label>
+      </Popover.Body>
+    </Popover>
+  };
+              
+  const getPopoverGeography = () => {
+    return <Popover id='popover-geography'>
+      <Popover.Body>
+      <Form.Label>
                     <strong>{t('Regions')}</strong>
                   </Form.Label>
                   <Form.Group className={styles.formGroup}>
@@ -353,8 +306,72 @@ const SearchEngine: FunctionComponent<Props> = ({
                       });
                     }}
                   />
-                </PopoverContainer>
-              // </Col>
+      </Popover.Body>
+    </Popover>
+  };
+
+  return (
+    (globalSearchEngineState.show && (
+      <Container className={styles.container}>
+        <Row>
+          <Col xs={12} sm={8} md={6} lg={6} xl={5} as={Row}>
+            <Form.Group as={Col} xs={6} lg={3} className={styles.formGroup}>
+              <Form.Check
+                className={styles.filter}
+                inline
+                type="checkbox"
+                label={t('Cycles')}
+                checked={filtersChecked.cycle}
+                onChange={(e) => handlerComboxesChangeType(e, 'cycle')}
+              />
+            </Form.Group>
+            <Form.Group as={Col} xs={6} lg={3} className={styles.formGroup}>
+              <Form.Check
+                className={styles.filter}
+                inline
+                type="checkbox"
+                label={t('Eurekas')}
+                onChange={(e) => handlerComboxesChangeType(e, 'post')}
+              />
+            </Form.Group>
+            <Form.Group as={Col} xs={6} lg={3} className={styles.formGroup}>
+              <Form.Check
+                className={styles.filter}
+                inline
+                type="checkbox"
+                label={t('Films')}
+                checked={filtersChecked.movie && filtersChecked.documentary}
+                onChange={(e) => handlerComboxesChangeType(e, 'movie|documentary')}
+              />
+            </Form.Group>
+            <Form.Group as={Col} xs={6} lg={3} className={styles.formGroup}>
+              <Form.Check
+                className={styles.filter}
+                inline
+                type="checkbox"
+                label={t('Books')}
+                checked={filtersChecked.book && filtersChecked['fiction-book']}
+                onChange={(e) => handlerComboxesChangeType(e, 'book|fiction-book')}
+              />
+            </Form.Group>
+          </Col>
+          <Col xs={12} sm={4} md={6} lg={6} xl={7} as={Row} className="pe-0">
+            <aside className="d-flex justify-content-start justify-content-md-end me-0 pe-0">
+
+            {fictionOrNotFilter && (
+              <OverlayTrigger rootClose placement="bottom" trigger="click" overlay={getPopoverBooks()}>
+                <span className="d-inline-block">
+                  <Button variant="light">{t('Fiction/nonfiction')}</Button>
+                </span>
+              </OverlayTrigger>
+            )}
+
+            {geographyFilter && (
+              <OverlayTrigger rootClose placement="bottom" trigger="click" overlay={getPopoverGeography()}>
+              <span className="d-inline-block">
+                <Button className="ms-3" variant="light">{t('Geography')}</Button>
+              </span>
+            </OverlayTrigger>
             )}
             </aside>
           </Col>
@@ -365,4 +382,4 @@ const SearchEngine: FunctionComponent<Props> = ({
   );
 };
 
-export default SearchEngine;
+export default FilterEngine;
