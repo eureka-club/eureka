@@ -1,7 +1,7 @@
 import fs from 'fs';
 import util from 'util';
 
-export default async (filePath: string, encoding: BufferEncoding = 'utf8'): Promise<string | null> => {
+const res = async (filePath: string, encoding: BufferEncoding = 'utf8'): Promise<string | null> => {
   try {
     const rf = util.promisify(fs.readFile);
     const buf = await rf(filePath);
@@ -13,3 +13,4 @@ export default async (filePath: string, encoding: BufferEncoding = 'utf8'): Prom
     return null;
   }
 };
+export default res;
