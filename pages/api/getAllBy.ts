@@ -89,7 +89,6 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     // topics.forEach(async (topic) => {
     if (totalWorks === -1) totalWorks = await prisma.work.count({ where });
     if (totalCycles === -1) totalCycles = await prisma.cycle.count({ where });
-
     // let rw = parseInt(remainingWorks, 10) - 2;
 
     const ewr = parseInt(extraWorksRequired as string, 10);
@@ -112,7 +111,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     });
 
     let worksPlus = 0;
-    if (cycles.length < 2 && works.length === 2) {
+    if (cycles.length !== countItemsPerPage && works.length === countItemsPerPage) {
       worksPlus = countItemsPerPage - cycles.length;
       const extraWorks = await prisma.work.findMany({
         ...getOpt(worksPlus, ewr + 2, { isWork: true }),
