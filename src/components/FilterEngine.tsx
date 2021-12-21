@@ -85,14 +85,14 @@ const FilterEngine: FunctionComponent<Props> = ({
         ...o,
       }));
     }
-    else{
-      setFiltersChecked((res) => ({
-        movie: false,
-        documentary: false,
-        book: false,
-        'fiction-book': false,
-      }));
-    }
+    // else{
+    //   setFiltersChecked((res) => ({
+    //     movie: false,
+    //     documentary: false,
+    //     book: false,
+    //     'fiction-book': false,
+    //   }));
+    // }
   }, [globalSearchEngineState]);
 
   const fetchCountries = async () => {
@@ -131,8 +131,9 @@ const FilterEngine: FunctionComponent<Props> = ({
     });    
   };
 
-  const handlerComboxesChangeRegion = (e: ChangeEvent<HTMLInputElement>, q: string) => {
-    setFiltersChecked((res) => ({ ...res, [`${q}`]: e.target.checked }));
+  const handlerComboxesChangeRegion = (e: ChangeEvent<HTMLInputElement>, q: string) => {debugger;
+    const fc = {...filtersChecked, [`${q}`]: e.target.checked};
+    setFiltersChecked(fc);
     if (globalSearchEngineState.countryQuery!.includes(q))
       setGlobalSearchEngineState({
         ...globalSearchEngineState,
