@@ -46,5 +46,5 @@
   "requiredEurekaImageError": "You have to add an image to your Eureka (square, ideally 250x250px)",
   "Filter by Participan":"Filter by Participant",
   "Filter by type of element":"Filter by type of content",
-  "Filter by work":"Filter by work"
+  "Filter by work":"Filter by work or cycle"
 }
