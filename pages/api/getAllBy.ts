@@ -114,7 +114,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     if (cycles.length !== countItemsPerPage && works.length === countItemsPerPage) {
       worksPlus = countItemsPerPage - cycles.length;
       const extraWorks = await prisma.work.findMany({
-        ...getOpt(worksPlus, ewr + 2, { isWork: true }),
+        ...getOpt(worksPlus, ewr + countItemsPerPage, { isWork: true }),
         orderBy: {
           id: 'desc',
         },

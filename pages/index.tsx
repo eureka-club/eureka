@@ -1,28 +1,14 @@
-// import { flatten, zip } from 'lodash';
-// import { useAtom } from 'jotai';
-
-// import { GetServerSideProps, GetStaticProps, NextPage } from 'next';
 import { GetStaticProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
-import { useState /* , useEffect, ReactElement, Children */ } from 'react';
-import { RiArrowDownSLine /* , RiArrowUpSLine */ } from 'react-icons/ri';
-import { QueryClient } from 'react-query';
-import { dehydrate } from 'react-query/hydration';
-// import { loadGetInitialProps } from 'next/dist/next-server/lib/utils';
+import { useState,MouseEvent, } from 'react';
+import { RiArrowDownSLine } from 'react-icons/ri';
+
 import { Button } from 'react-bootstrap';
 import TagsInput from '../src/components/forms/controls/TagsInput';
 
-// import { CycleMosaicItem } from '../src/types/cycle';
-// import { WorkMosaicItem } from '../src/types/work';
-// import { PostMosaicItem } from '../src/types/post';
 import styles from './index.module.css';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import Header from '../src/components/layouts/Header';
-// import { findAll as findAllCycles } from '../src/facades/cycle';
-// import { findAll as findAllWorks } from '../src/facades/work';
-// import Mosaic from '../src/components/Mosaic';
-// import SearchEngine from '../src/components/SearchEngine';
-// import FilterEngine from '../src/components/FilterEngine';
 import Carousel from '../src/components/Carousel';
 import { v4 } from 'uuid';
 
@@ -44,7 +30,8 @@ const IndexPage: NextPage = () => {
   const getTopicsBadgedLinks = () => {
     return <TagsInput formatValue={(v: string) => t(`topics:${v}`)} tags={[...show, ...hide].join()} readOnly />;
   };
-  const showTopic = () => {
+  const showTopic = (e:MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (hide.length) {
       const topic = hide.splice(0, 3);
       setShow([...show, ...topic]);
@@ -55,8 +42,8 @@ const IndexPage: NextPage = () => {
     <SimpleLayout showHeader title={t('browserTitleWelcome')}>
       <h1 className="text-secondary fw-bold">{t('Trending topics')}</h1>
       <aside className="mb-5">{getTopicsBadgedLinks()}</aside>
-      <>{show && show.map((item) => <Carousel className="mt-5" key={v4()} topic={item} />)}</>
-      <Button className="my-3 pe-3 rounded-pill text-white" onClick={showTopic} disabled={hide.length === 0}>
+      <>{show && show.map((item, idx) => <Carousel className="mt-5" key={`carousel-${idx}`} topic={item} />)}</>
+      <Button className="my-3 pe-3 rounded-pill text-white" onClick={e=>showTopic(e)} disabled={hide.length === 0}>
         <span>
           <RiArrowDownSLine /> {t('loadMoreTopics')}
         </span>
