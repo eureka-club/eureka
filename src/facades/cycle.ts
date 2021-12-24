@@ -92,8 +92,7 @@ export const findParticipant = async (user: User, cycle: Cycle): Promise<User | 
 export const countPosts = async (
   cycle: Cycle,
 ): Promise<Prisma.GetPostAggregateType<{ count: true; where: { cycles: { some: { id: number } } } }>> => {
-  return prisma.post.aggregate({
-    count: true,
+  return prisma.post.count({
     where: { cycles: { some: { id: cycle.id } } },
   });
 };
@@ -101,8 +100,7 @@ export const countPosts = async (
 export const countWorks = async (
   cycle: Cycle,
 ): Promise<Prisma.GetWorkAggregateType<{ count: true; where: { cycles: { some: { id: number } } } }>> => {
-  return prisma.work.aggregate({
-    count: true,
+  return prisma.work.count({
     where: { cycles: { some: { id: cycle.id } } },
   });
 };

@@ -48,4 +48,36 @@ export default getApiHandler()
     } finally {
       prisma.$disconnect();
     }
+  })
+  .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+    const session = (await getSession({ req })) as unknown as Session;
+    if (session == null) {
+      res.status(401).json({ status: 'Unauthorized' });
+      return;
+    }
+    try {
+      const payload = req.body;
+      const post = await createFromServerFields(payload, session.user);
+
+      res.status(201).json({ ok: true, post });
+      // new Form().parse(req, async (err, fields, files) => {
+      //   if (err != null) {
+      //     console.error(err); // eslint-disable-line no-console
+      //     res.status(500).json({ ok: false, error: 'Server error' });
+      //     return;
+      //   }
+
+      // });
+    } catch (excp) {
+      /* const excpMessageTokens = excp.message.match(/\[(\d{3})\] (.*)/);
+      if (excpMessageTokens != null) {
+        res.status(excpMessageTokens[1]).json({ status: 'client error', error: excpMessageTokens[2] });
+        return;
+      } */
+
+      console.error(excp); // eslint-disable-line no-console
+      res.status(500).json({ ok: false, status: 'server error' });
+    } finally {
+      prisma.$disconnect();
+    }
   });
