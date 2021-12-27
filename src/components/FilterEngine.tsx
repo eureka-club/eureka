@@ -1,32 +1,12 @@
-// import classNames from 'classnames';
 import { useAtom } from 'jotai';
 import { useQuery } from 'react-query';
-// import { useSession } from 'next-auth/client';
-// import Link from 'next/link';
-// import { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-// import { setCookie } from 'nookies';
 import { FunctionComponent, ChangeEvent, useState, useEffect } from 'react';
 import { Container, Row, Col, Form, OverlayTrigger, Popover, Button } from 'react-bootstrap';
-// import { AsyncTypeahead, Typeahead } from 'react-bootstrap-typeahead';
-
-// import { AiOutlineSearch } from 'react-icons/ai';
-// import Fuse from 'fuse.js';
-// import TagsInput from './forms/controls/TagsInput';
 import TagsInputTypeAhead from './forms/controls/TagsInputTypeAhead';
-
-// import CycleTypeaheadSearchItem from './cycle/TypeaheadSearchItem';
-// import WorkTypeaheadSearchItem from './work/TypeaheadSearchItem';
-import PopoverContainer from './PopoverContainer';
-// import useCountries from '../useCountries';
-
-// import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '../constants';
-// import { Session, SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../types';
-
 import globalSearchEngineAtom from '../atoms/searchEngine';
 import styles from './FilterEngine.module.css';
-
-// const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
 interface Props {
   fictionOrNotFilter?: boolean;
   geographyFilter?: boolean;
@@ -39,7 +19,7 @@ const FilterEngine: FunctionComponent<Props> = ({
 }) => {
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
   // const [session] = useSession() as [Session | null | undefined, boolean];
-  // const router = useRouter();
+  const router = useRouter();
   const { t } = useTranslation('searchEngine');
   const [tags /* , setTags */] = useState<string>('');
   const [items, setItems] = useState<string[]>([]);
@@ -49,10 +29,13 @@ const FilterEngine: FunctionComponent<Props> = ({
     book: false,
     'fiction-book': false,
   });
-  // const [onlyByCountries] = useState<string[]>([]);
-  // const [countryQuery, setCountryQuery] = useState<string[] | undefined>([]);
   useEffect(() => {
-    // debugger;
+    globalSearchEngineState.only = []
+    globalSearchEngineState.onlyByCountries = [];
+    setGlobalSearchEngineState({...globalSearchEngineState});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[]);
+  useEffect(() => {
     const onlyByCountries = [...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items])];
     setGlobalSearchEngineState({
       ...globalSearchEngineState,
@@ -131,7 +114,7 @@ const FilterEngine: FunctionComponent<Props> = ({
     });    
   };
 
-  const handlerComboxesChangeRegion = (e: ChangeEvent<HTMLInputElement>, q: string) => {debugger;
+  const handlerComboxesChangeRegion = (e: ChangeEvent<HTMLInputElement>, q: string) => {
     const fc = {...filtersChecked, [`${q}`]: e.target.checked};
     setFiltersChecked(fc);
     if (globalSearchEngineState.countryQuery!.includes(q))
