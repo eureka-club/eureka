@@ -5,14 +5,14 @@
   "scripts": {
     "build": "next build",
     "dev1": "NODE_OPTIONS='--inspect' NODE_ENV=development TS_NODE_COMPILER_OPTIONS='{ \"module\":\"commonjs\" }' ts-node server.ts",
-    "dev": "next dev",
+    "dev": "NODE_OPTIONS='--inspect' NODE_ENV=development next dev",
     "knex": "TS_NODE_COMPILER_OPTIONS='{ \"module\":\"commonjs\" }' knex",
     "lint": "eslint '**/*.{ts,tsx}'",
     "lt": "yarn lint && yarn tsc",
     "prisma": "prisma",
     "prisma-pf": "prisma --preview-feature",
     "start1": "NODE_ENV=production TS_NODE_COMPILER_OPTIONS='{ \"module\":\"commonjs\" }' ts-node server.ts",
-    "start": "next start",
+    "start": "NODE_ENV=production next start",
     "tsc": "tsc --noEmit"
   },
   "engines": {

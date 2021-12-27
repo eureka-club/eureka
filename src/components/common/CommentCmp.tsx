@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/client';
 import { Form, Row, Col, Card, Button, Spinner } from 'react-bootstrap';
 
 import { Comment } from '@prisma/client';
-import { MdReply, MdCancel } from 'react-icons/md';
+import { MdReply, MdEdit, MdCancel } from 'react-icons/md';
 // import { useComment } from '../../useComment';
 import {
   CreateCommentAboutCycleClientPayload as CCACCP,
@@ -25,7 +25,6 @@ import { Session } from '../../types';
 
 // import { WEBAPP_URL } from '../../constants';
 
-import styles from './CommentsList.module.css';
 import Avatar from './UserAvatar';
 
 interface Props {
@@ -44,7 +43,13 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
   // const router = useRouter();
   const [session] = useSession() as [Session | null | undefined, boolean];
   const [newCommentInput, setNewCommentInput] = useState<string>();
-  const [showComment, setShowComment] = useState<boolean>();
+  const [editCommentInput, setEditCommentInput] = useState<string>();
+  const [showCreateComment, setShowCreateComment] = useState<Record<string,boolean>>({
+    [`${comment.id}`]:false,
+  });
+  const [showEditComment, setShowEditComment] = useState<Record<string,boolean>>({
+    [`${comment.id}`]:false,
+  });
   const [idSession, setIdSession] = useState<string>('');
   // const { data: comment, isLoading } = useComment(`${commentId}`);
 
@@ -67,7 +72,7 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
         body: JSON.stringify(payload),
       });
 
-      const json = await res.json();
+      const json = await res.json();debugger;
       if (json.ok) {
         return json.comment;
       }
@@ -94,7 +99,47 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
     },
   );
 
-  const submitForm = () => {
+  const {
+    isLoading:isEditLoading,
+    // isError,
+    mutate: editComment,
+  } = useMutation(
+    async (payload: {commentId:number, contentText:string}) => {
+      const res = await fetch('/api/comment', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+debugger;
+      const json = await res.json();debugger;
+      if (json.ok) {
+        return json.comment;
+      }
+
+      return null;
+    },
+    {
+      onMutate: async () => {
+        if (cacheKey) {
+          const snapshot = queryClient.getQueryData(cacheKey);
+          return { cacheKey, snapshot };
+        }
+        return { cacheKey: undefined, snapshot: null };
+      },
+      onSettled: (_comment, error, _variables, context) => {
+        if (context) {
+          const { cacheKey: ck, snapshot } = context;
+          if (error && ck) {
+            queryClient.setQueryData(ck, snapshot);
+          }
+          if (context) queryClient.invalidateQueries(ck);
+        }
+      },
+    },
+  );
+
+
+  const submitCreateForm = () => {
     if (comment) {
       const selectedCycleId = comment.cycleId || 0;
       const selectedPostId = comment.postId || 0;
@@ -114,17 +159,148 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
     }
   };
 
-  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const submitEditForm = () => {
+    if (comment) {debugger;
+
+      const payload = {
+        commentId:comment.id,
+        contentText: editCommentInput || '',
+      };
+      editComment(payload);
+      setEditCommentInput(() => '');
+    }
+  };
+
+  const handlerCreateFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    submitForm();
+    submitCreateForm();
+  };
+
+  const handleEditFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    submitEditForm();
   };
 
   const onKeyPressForm = (e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
-      submitForm();
+      submitCreateForm();
       e.preventDefault();
     }
   };
+
+  const onKeyPressEditForm = (e: React.KeyboardEvent<HTMLElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      submitEditForm();
+      e.preventDefault();
+    }
+  };
+
+  const handlerEditBtn = (commentChild?:Comment) => {
+    setEditCommentInput(comment.contentText);
+    if(commentChild)
+      setEditCommentInput(commentChild.contentText);
+    setShowEditComment((res) => ({...res,[`${(commentChild||comment).id}`]: true}));    
+    setShowCreateComment((res) => ({...res,[`${(comment || commentChild).id}`]: false}));
+  }
+
+  const handlerCreateBtn = () => {
+    setShowCreateComment((res) => ({...res,[`${comment.id}`]: true}));
+    setShowEditComment((res) => ({...res,[`${comment.id}`]: false})); 
+  }
+
+  const handlerCancelBtn = (commentChild?:Comment) => {
+    setShowCreateComment((res) => ({...res,[`${comment.id}`]: false}));
+    setShowEditComment((res) => ({...res,[`${(commentChild||comment).id}`]: false}));    
+  }
+
+  const getIsLoading = () => {
+    return isLoading || isEditLoading;
+  }
+
+  const canEditComment = (commentChild?: Comment) => {return true;
+    if(commentChild){
+      if(session?.user.id !== commentChild.creatorId)
+        return false;
+      return true;
+    }
+    if(comment){
+      if(session?.user.id !== comment.creatorId)
+        return false;
+      if(comment.comments && comment.comments.length)
+        return false;
+      return true;
+    }
+    return false;
+  }
+
+  const renderCommentActions = (commentChild?: Comment) => {
+    const c = commentChild || comment;
+    /* if(commentChild)
+      setEditCommentInput(commentChild.contentText);
+    else
+      setEditCommentInput(comment.contentText); */
+    if(idSession){
+      return <aside className="mb-2">
+        {!c.commentId && !getIsLoading() && (
+          <Button
+            variant="default"
+            onClick={handlerCreateBtn}
+            className={`p-0 border-top-0`}
+          >
+            <MdReply className="fs-6 text-primary" />
+            <span className="fs-6 text-primary">{t('Reply')}</span>
+          </Button>
+        )}
+        {canEditComment(commentChild) && !getIsLoading() && (
+          <Button
+            variant="default"
+            onClick={()=>handlerEditBtn(commentChild)}
+            className={`p-0 border-top-0 ms-2`}
+          >
+            <MdEdit className="fs-6 text-warning" />
+            <span className="fs-6 text-warning">{t('Edit')}</span>
+          </Button>
+        )}
+        {!getIsLoading() && (showCreateComment[comment.id] || showEditComment[(commentChild||comment).id]) && (
+          <Button
+            variant="default"
+            onClick={()=>handlerCancelBtn(commentChild)}
+            className={`p-0 ms-2`}
+          >
+            <MdCancel className="text-secondary" />
+          </Button>
+        )}
+
+        {!getIsLoading() && showCreateComment[comment.id] && (
+          <Form onSubmit={handlerCreateFormSubmit}>
+            <Form.Control
+              value={newCommentInput}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setNewCommentInput(e.target.value)}
+              onKeyPress={onKeyPressForm}
+              className="border fs-6 rounded-pill bg-light"
+              as="textarea"
+              rows={1}
+              placeholder={`${t('Write a replay')}...`}
+            />
+          </Form>
+        )}
+        {canEditComment(commentChild) && !getIsLoading() && showEditComment[(commentChild||comment).id] && (
+          <Form onSubmit={handleEditFormSubmit}>
+            <Form.Control
+              value={editCommentInput}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setEditCommentInput(e.target.value)}
+              onKeyPress={onKeyPressEditForm}
+              className="border fs-6 rounded-pill bg-light"
+              as="textarea"
+              rows={1}
+              placeholder={`${t('Edit the replay')}...`}
+            />
+          </Form>
+        )}
+      </aside>
+    }
+    return '';
+  }
 
   return (
     <>
@@ -140,60 +316,24 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
                   className="p-1 bg-light border rounded d-inline-block"
                   dangerouslySetInnerHTML={{ __html: comment.contentText }}
                 />
-                {idSession && (
-                  <aside className="mb-2">
-                    {!comment.commentId && !isLoading && (
-                      <Button
-                        variant="default"
-                        onClick={() => setShowComment(() => true)}
-                        className={`p-0 border-top-0 ${styles.replyButton}`}
-                      >
-                        <MdReply className="fs-6 text-primary" />
-                        <span className="fs-6 text-primary">{t('Reply')}</span>
-                      </Button>
-                    )}
-                    {!isLoading && showComment && (
-                      <Button
-                        variant="default"
-                        onClick={() => setShowComment(() => false)}
-                        className={`p-0 ${styles.replyButton}`}
-                      >
-                        <MdCancel className="text-secondary" />
-                      </Button>
-                    )}
-
-                    {!isLoading && showComment && (
-                      <Form onSubmit={handleFormSubmit}>
-                        <Form.Control
-                          value={newCommentInput}
-                          onChange={(e: ChangeEvent<HTMLInputElement>) => setNewCommentInput(e.target.value)}
-                          onKeyPress={onKeyPressForm}
-                          className="border fs-6 rounded-pill bg-light"
-                          as="textarea"
-                          rows={1}
-                          placeholder={`${t('Write a replay')}...`}
-                        />
-                      </Form>
-                    )}
-                  </aside>
-                )}
+                {renderCommentActions()}
                 {comment &&
                   comment.comments &&
-                  comment.comments.map((c) => (
-                    <Row key={c.id} className="mb-1">
+                  comment.comments.map((commentChild) => (
+                    <Row key={commentChild.id} className="mb-1">
                       <Col md={1} xs={2} className="pe-0">
-                        <Avatar user={c.creator} size="xs" showName={false} />
+                        <Avatar user={commentChild.creator} size="xs" showName={false} />
                       </Col>
                       <Col md={11} xs={10} className="ps-0">
                         <div
                           className="p-1 bg-light border rounded d-inline-block"
-                          dangerouslySetInnerHTML={{ __html: c.contentText }}
-                        />
-                        {/* <div className={styles.dangerouslySetInnerHTML}>{c.contentText}</div> */}
+                          dangerouslySetInnerHTML={{ __html: commentChild.contentText }}
+                        />    
+                        {renderCommentActions(commentChild)}                    
                       </Col>
                     </Row>
                   ))}
-                {isLoading && <Spinner animation="grow" variant="info" size="sm" />}
+                {getIsLoading() && <Spinner animation="grow" variant="info" size="sm" />}
               </Col>
             </Row>
           </Card>

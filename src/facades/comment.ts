@@ -2,6 +2,7 @@ import { Cycle, Comment, User, Work, Post } from '@prisma/client';
 
 import { CreateCommentServerFields, CreateCommentServerPayload, CommentMosaicItem } from '../types/comment';
 import prisma from '../lib/prisma';
+import { Exception } from 'handlebars';
 
 export const find = async (id: number): Promise<CommentMosaicItem | null> => {
   return prisma.comment.findUnique({
@@ -151,3 +152,26 @@ export const remove = async (comment: CommentMosaicItem): Promise<Comment> => {
     where: { id: comment.id },
   });
 };
+
+export const update = async (commentId: number, contentText: string): Promise<Comment|null> => {
+  if (commentId) {
+    if(!contentText){
+      const comment = await find(commentId);
+      if(comment){
+        if(comment.comments && comment.comments.length){
+          throw new Exception('Comment can not be deletede because has comments related');
+        }
+        const res = await remove(comment);
+        return res ? comment : null;
+      }
+    }
+    return prisma.comment.update({
+      where: { id: commentId },
+      data: {
+        contentText,
+      },
+    });
+  }
+  return null;
+};
+

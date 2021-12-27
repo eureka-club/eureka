@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
 import { Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
-import { createFromServerFields, findAll } from '../../../src/facades/comment';
+import { createFromServerFields, findAll, update } from '../../../src/facades/comment';
 import prisma from '../../../src/lib/prisma';
 
 export default getApiHandler()
@@ -56,10 +56,11 @@ export default getApiHandler()
       return;
     }
     try {
-      const payload = req.body;
-      const post = await createFromServerFields(payload, session.user);
+      const {commentId, contentText} = req.body;
+      debugger;
+      const comment = await update(commentId, contentText);
 
-      res.status(201).json({ ok: true, post });
+      res.status(200).json({ ok: true, comment });
       // new Form().parse(req, async (err, fields, files) => {
       //   if (err != null) {
       //     console.error(err); // eslint-disable-line no-console
