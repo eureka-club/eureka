@@ -235,7 +235,7 @@ const SearchPage: NextPage = () => {
       <h1 className="text-secondary fw-bold mb-2">
         {t('Results about')}: {`"${qLabel}"`}
       </h1>
-      <FilterEngine />
+      <FilterEngine key={router.asPath} />
       {(!isLoading && <Mosaic className="d-flex justify-content-center mb-4" showButtonLabels={false} stack={homepageMosaicDataFiltered} />) || <></>}
       {genLoadingCmp()}
       {renderErrorMessage()}
