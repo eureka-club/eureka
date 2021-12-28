@@ -21,7 +21,8 @@ import { Session } from '../../types';
 // import { PostMosaicItem } from '../../types/post';
 // import { WorkMosaicItem } from '../../types/work';
 // import { useUsers } from '../../useUsers';
-// import globalModalsAtom from '../../atoms/globalModals';
+import { useAtom } from 'jotai';
+import globalModalsAtom from '../../atoms/globalModals';
 
 // import { WEBAPP_URL } from '../../constants';
 
@@ -54,6 +55,7 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
   // const { data: comment, isLoading } = useComment(`${commentId}`);
 
   const queryClient = useQueryClient();
+  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
 
   useEffect(() => {
     const s = session as unknown as Session;
@@ -114,6 +116,17 @@ debugger;
       const json = await res.json();debugger;
       if (json.ok) {
         return json.comment;
+      }
+      else{
+        setGlobalModalsState({
+          ...globalModalsState,
+          showToast: {
+            show: true,
+            type: 'warning',
+            title: t('Warning'),
+            message: t('requiredDiscussionItemError'),
+          },
+        });
       }
 
       return null;
