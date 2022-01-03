@@ -1,13 +1,15 @@
 // import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useEffect, useState, ChangeEvent, FormEvent } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient, useIsFetching } from 'react-query';
 import { useSession } from 'next-auth/client';
 
 import { Form, Row, Col, Card, Button, Spinner } from 'react-bootstrap';
 
 import { Comment } from '@prisma/client';
-import { MdReply, MdEdit, MdCancel } from 'react-icons/md';
+import CommentTextBox from './CommentTextBox'
+import { MdReply, MdCancel } from 'react-icons/md';
+import { BiTrash, BiEdit } from 'react-icons/bi';
 // import { useComment } from '../../useComment';
 import {
   CreateCommentAboutCycleClientPayload as CCACCP,
@@ -43,8 +45,10 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
   const { t } = useTranslation('common');
   // const router = useRouter();
   const [session] = useSession() as [Session | null | undefined, boolean];
+  // const [session, isLoadingSession] = useSession() as [Session | null | undefined, boolean];
   const [newCommentInput, setNewCommentInput] = useState<string>();
   const [editCommentInput, setEditCommentInput] = useState<string>();
+  const [commentId, setCommentId] = useState<number>(comment.id);
   const [showCreateComment, setShowCreateComment] = useState<Record<string,boolean>>({
     [`${comment.id}`]:false,
   });
@@ -55,8 +59,10 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
   // const { data: comment, isLoading } = useComment(`${commentId}`);
 
   const queryClient = useQueryClient();
+  const isFetching = useIsFetching(cacheKey);
+  
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-
+  
   useEffect(() => {
     const s = session as unknown as Session;
     if (s) setIdSession(s.user.id.toString());
@@ -74,11 +80,10 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
         body: JSON.stringify(payload),
       });
 
-      const json = await res.json();debugger;
+      const json = await res.json();
       if (json.ok) {
         return json.comment;
       }
-
       return null;
     },
     {
@@ -112,23 +117,23 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-debugger;
-      const json = await res.json();debugger;
-      if (json.ok) {
-        return json.comment;
-      }
-      else{
+
+      const json = await res.json(); 
+      if(!res.ok){
         setGlobalModalsState({
           ...globalModalsState,
           showToast: {
             show: true,
             type: 'warning',
-            title: t('Warning'),
-            message: t('requiredDiscussionItemError'),
+            title: t(`common:${res.statusText}`),
+            message: json.error,
           },
         });
+        return;
       }
-
+      if (json.comment) {
+        return json.comment;
+      }
       return null;
     },
     {
@@ -173,10 +178,10 @@ debugger;
   };
 
   const submitEditForm = () => {
-    if (comment) {debugger;
+    if (comment) {
 
       const payload = {
-        commentId:comment.id,
+        commentId,
         contentText: editCommentInput || '',
       };
       editComment(payload);
@@ -208,12 +213,27 @@ debugger;
     }
   };
 
-  const handlerEditBtn = (commentChild?:Comment) => {
+  const handlerEditBtn = (commentChild?: Comment) => {
+    setCommentId((commentChild || comment).id);
+    
     setEditCommentInput(comment.contentText);
-    if(commentChild)
+    if (commentChild)
       setEditCommentInput(commentChild.contentText);
-    setShowEditComment((res) => ({...res,[`${(commentChild||comment).id}`]: true}));    
+    
+    setShowEditComment((res) => ({[`${(commentChild||comment).id}`]: true}));    
     setShowCreateComment((res) => ({...res,[`${(comment || commentChild).id}`]: false}));
+  }
+
+  const handlerDeleteBtn = (commentChild?: Comment) => {
+    debugger;
+    setShowEditComment((res) => ({...res,[`${(commentChild||comment).id}`]: false}));    
+    setShowCreateComment((res) => ({ ...res, [`${(comment || commentChild).id}`]: false }));
+    
+    const payload = {
+      commentId: (commentChild || comment).id,
+      contentText: '',
+    };
+    editComment(payload);
   }
 
   const handlerCreateBtn = () => {
@@ -227,10 +247,10 @@ debugger;
   }
 
   const getIsLoading = () => {
-    return isLoading || isEditLoading;
+    return isLoading || isEditLoading || isFetching;
   }
 
-  const canEditComment = (commentChild?: Comment) => {return true;
+  const canEditComment = (commentChild?: Comment) => {
     if(commentChild){
       if(session?.user.id !== commentChild.creatorId)
         return false;
@@ -247,6 +267,10 @@ debugger;
   }
 
   const renderCommentActions = (commentChild?: Comment) => {
+    
+    if (comment.id == 139) {
+      debugger;
+    }
     const c = commentChild || comment;
     /* if(commentChild)
       setEditCommentInput(commentChild.contentText);
@@ -270,8 +294,18 @@ debugger;
             onClick={()=>handlerEditBtn(commentChild)}
             className={`p-0 border-top-0 ms-2`}
           >
-            <MdEdit className="fs-6 text-warning" />
-            <span className="fs-6 text-warning">{t('Edit')}</span>
+            <BiEdit className="fs-6 text-warning" />
+            {/* <span className="fs-6 text-warning">{t('Edit')}</span> */}
+          </Button>
+        )}
+        {canEditComment(commentChild) && !getIsLoading() && (
+          <Button
+            variant="default"
+            onClick={()=>handlerDeleteBtn(commentChild)}
+            className={`p-0 border-top-0 ms-2`}
+          >
+            <BiTrash className="fs-6 text-warning" />
+            {/* <span className="fs-6 text-warning">{t('Edit')}</span> */}
           </Button>
         )}
         {!getIsLoading() && (showCreateComment[comment.id] || showEditComment[(commentChild||comment).id]) && (
@@ -325,10 +359,7 @@ debugger;
                 <Avatar user={comment.creator} size="xs" showName={false} />
               </Col>
               <Col xs={10} md={11} className="ps-0">
-                <div
-                  className="p-1 bg-light border rounded d-inline-block"
-                  dangerouslySetInnerHTML={{ __html: comment.contentText }}
-                />
+                <CommentTextBox comment={ comment} />
                 {renderCommentActions()}
                 {comment &&
                   comment.comments &&
@@ -338,15 +369,12 @@ debugger;
                         <Avatar user={commentChild.creator} size="xs" showName={false} />
                       </Col>
                       <Col md={11} xs={10} className="ps-0">
-                        <div
-                          className="p-1 bg-light border rounded d-inline-block"
-                          dangerouslySetInnerHTML={{ __html: commentChild.contentText }}
-                        />    
+                      <CommentTextBox comment={ commentChild} />    
                         {renderCommentActions(commentChild)}                    
                       </Col>
                     </Row>
                   ))}
-                {getIsLoading() && <Spinner animation="grow" variant="info" size="sm" />}
+                {getIsLoading() ? <Spinner animation="grow" variant="info" size="sm" /> : ''}
               </Col>
             </Row>
           </Card>

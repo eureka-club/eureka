@@ -4,8 +4,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlserver"
-  url      = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL_MYSQL")
 }
 
 
@@ -120,46 +120,6 @@ model LocalImage {
   @@map(name: "local_images")
 }
 
-model Cycle {
-  id                      Int       @default(autoincrement()) @id
-  creator                 User      @relation(name:"CreatedBy", fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  creatorId               Int       @map(name: "creator_id")
-  // isPublic                Boolean   @map(name: "is_public")
-  title                   String
-  languages               String
-  contentText             String?   @db.VarChar(4000)  @map(name: "content_text")
-  startDate               DateTime  @map(name: "start_date")
-  endDate                 DateTime  @map(name: "end_date")
-  countryOfOrigin         String?   @map(name: "country_of_origin")
-  createdAt               DateTime  @default(now()) @map(name: "created_at")
-  updatedAt               DateTime  @updatedAt @map(name: "updated_at")
-  
-  // 1 -> public, 2 -> private, 3 -> secret
-  access                  Int       @default(1)            
-
-  localImages             LocalImage[]
-  complementaryMaterials  CycleComplementaryMaterial[]
-  guidelines              Guideline[]
-  participants            User[]  @relation("CycleToParticipant")
-  likes                   User[]  @relation("CycleToLikes")
-  favs                    User[]  @relation("CycleToFavs")
-  posts                   Post[]
-  works                   Work[]  
-  cycleWorksDates         CycleWork[]
-  
-  tags                    String?
-
-  terms                   Term[]    @relation("TaxonomyTermCycle")
-  topics                  String?
-  ratings                 RatingOnCycle[]
-  comments                Comment[]
-
-  @@index([creatorId], name: "cycles_creator_id_index")
-  @@index([title], name: "cycles_title_index")
-
-  @@map(name: "cycles")
-}
-
 model Work {
   id               Int       @default(autoincrement()) @id
   creatorId        Int       @map(name: "creator_id") @default(1)
@@ -231,7 +191,45 @@ model CycleWork {
   endDate   DateTime?  @map(name: "end_date")
 }
 
+model Cycle {
+  id                      Int       @default(autoincrement()) @id
+  creator                 User      @relation(name:"CreatedBy", fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  creatorId               Int       @map(name: "creator_id")
+  // isPublic                Boolean   @map(name: "is_public")
+  title                   String
+  languages               String
+  contentText             String?   @db.VarChar(4000)  @map(name: "content_text")
+  startDate               DateTime  @map(name: "start_date")
+  endDate                 DateTime  @map(name: "end_date")
+  countryOfOrigin         String?   @map(name: "country_of_origin")
+  createdAt               DateTime  @default(now()) @map(name: "created_at")
+  updatedAt               DateTime  @updatedAt @map(name: "updated_at")
+  
+  // 1 -> public, 2 -> private, 3 -> secret
+  access                  Int       @default(1)            
 
+  localImages             LocalImage[]
+  complementaryMaterials  CycleComplementaryMaterial[]
+  guidelines              Guideline[]
+  participants            User[]  @relation("CycleToParticipant")
+  likes                   User[]  @relation("CycleToLikes")
+  favs                    User[]  @relation("CycleToFavs")
+  posts                   Post[]
+  works                   Work[]  
+  cycleWorksDates         CycleWork[]
+  
+  tags                    String?
+
+  terms                   Term[]    @relation("TaxonomyTermCycle")
+  topics                  String?
+  ratings                 RatingOnCycle[]
+  comments                Comment[]
+
+  @@index([creatorId], name: "cycles_creator_id_index")
+  @@index([title], name: "cycles_title_index")
+
+  @@map(name: "cycles")
+}
 
 model Guideline {
   id                Int       @default(autoincrement()) @id
@@ -297,8 +295,8 @@ model Comment {
   createdAt    DateTime    @default(now()) @map(name: "created_at")
   updatedAt    DateTime    @updatedAt @map(name: "updated_at")
 
-  // 0||null-new 1-edited
-  status       Int? @default(0) 
+  // 1-new 2-edited
+  status       Int? @default(1) 
 
   @@index([creatorId], name: "comment_creator_id_index")
 

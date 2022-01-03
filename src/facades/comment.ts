@@ -3,6 +3,7 @@ import { Cycle, Comment, User, Work, Post } from '@prisma/client';
 import { CreateCommentServerFields, CreateCommentServerPayload, CommentMosaicItem } from '../types/comment';
 import prisma from '../lib/prisma';
 import { Exception } from 'handlebars';
+import comment from 'pages/api/comment';
 
 export const find = async (id: number): Promise<CommentMosaicItem | null> => {
   return prisma.comment.findUnique({
@@ -90,7 +91,7 @@ export const createFromServerFields = async (fields: CreateCommentServerFields, 
   if (payload.selectedCommentId) {
     existingComment = await prisma.comment.findUnique({ where: { id: payload.selectedCommentId } });
     if (existingComment == null) {
-      throw new Error('[412] Invalid Work ID provided');
+      throw new Error('[412] Invalid Comment ID provided');
     }
   }
 
@@ -98,7 +99,7 @@ export const createFromServerFields = async (fields: CreateCommentServerFields, 
   if (payload.selectedPostId) {
     existingPost = await prisma.post.findUnique({ where: { id: payload.selectedPostId } });
     if (existingPost == null) {
-      throw new Error('[412] Invalid Work ID provided');
+      throw new Error('[412] Invalid Post ID provided');
     }
   }
 
@@ -156,19 +157,21 @@ export const remove = async (comment: CommentMosaicItem): Promise<Comment> => {
 export const update = async (commentId: number, contentText: string): Promise<Comment|null> => {
   if (commentId) {
     if(!contentText){
-      const comment = await find(commentId);
+      /* const comment = await find(commentId);
       if(comment){
         if(comment.comments && comment.comments.length){
           throw new Exception('Comment can not be deletede because has comments related');
         }
         const res = await remove(comment);
         return res ? comment : null;
-      }
+      } */
+      return prisma.comment.delete({where:{ id: commentId }});
     }
     return prisma.comment.update({
       where: { id: commentId },
       data: {
         contentText,
+        status: 1,
       },
     });
   }
