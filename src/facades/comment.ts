@@ -154,24 +154,24 @@ export const remove = async (comment: CommentMosaicItem): Promise<Comment> => {
   });
 };
 
-export const update = async (commentId: number, contentText: string): Promise<Comment|null> => {
+export const update = async (commentId: number, contentText: string, status: number): Promise<Comment|null> => {
   if (commentId) {
     if(!contentText){
-      /* const comment = await find(commentId);
+      const comment = await find(commentId);
       if(comment){
         if(comment.comments && comment.comments.length){
           throw new Exception('Comment can not be deletede because has comments related');
         }
         const res = await remove(comment);
         return res ? comment : null;
-      } */
-      return prisma.comment.delete({where:{ id: commentId }});
+      }
+      // return prisma.comment.delete({where:{ id: commentId }});
     }
     return prisma.comment.update({
       where: { id: commentId },
       data: {
         contentText,
-        status: 1,
+        status,
       },
     });
   }

@@ -40,20 +40,20 @@ export interface CreateCommentAboutCycleClientPayload extends CreateCommentClien
   selectedPostId?: number;
 }
 export interface CreateCommentAboutWorkClientPayload extends CreateCommentClientPayloadBase {
+  selectedCycleId: number;
   selectedWorkId: number;
-  selectedCycleId?: number;
   selectedCommentId?: number;
   selectedPostId?: number;
 }
 export interface CreateCommentAboutCommentClientPayload extends CreateCommentClientPayloadBase {
+  selectedCycleId: number;
   selectedCommentId: number;
   selectedPostId?: number;
-  selectedCycleId?: number;
   selectedWorkId?: number;
 }
 export interface CreateCommentAboutPostClientPayload extends CreateCommentClientPayloadBase {
+  selectedCycleId: number;
   selectedPostId: number;
-  selectedCycleId?: number;
   selectedWorkId?: number;
   selectedCommentId?: number;
 }

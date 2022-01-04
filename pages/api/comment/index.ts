@@ -57,13 +57,13 @@ export default getApiHandler()
       return;
     }
     try {
-      const {commentId, contentText} = req.body;
+      const {commentId, contentText, status} = req.body;
       // const c = await find(commentId);
       // if (c) {
       //   if (c.creatorId !== session.user.id)
       //     return res.status(403).json({ error: 'Comments can only be edited by creators' });
       // }
-      const comment = await update(commentId, contentText);
+      const comment = await update(commentId, contentText, status);
 
       res.status(200).json({ comment });      
     } catch (excp) {

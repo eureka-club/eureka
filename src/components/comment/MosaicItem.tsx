@@ -12,6 +12,7 @@ import { DATE_FORMAT_SHORT } from '../../constants';
 // import { useSession } from 'next-auth/client';
 // import SocialInteraction from '../common/SocialInteraction';
 import { CommentMosaicItem } from '../../types/comment';
+import CommentActionsBar from '../common/CommentActionsBar';
 // import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import UnclampText from '../UnclampText';
@@ -131,6 +132,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             <Row>
               <Col>
                 <aside className="pt-3 mb-0">
+                  <CommentActionsBar comment={comment} showReplyBtn={false} cacheKey={cacheKey} />
                   <UnclampText isHTML text={contentText} clampHeight="4rem" />
                 </aside>
               </Col>
