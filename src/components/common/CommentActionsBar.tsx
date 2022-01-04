@@ -45,8 +45,8 @@ const CommentActionsBar: FunctionComponent<Props> = ({
 
   const canEditComment = () => {
     if(comment){
-      if(comment.comments && comment.comments.length)
-        return false;
+      // if(comment.comments && comment.comments.length)
+      //   return false;
       if(session?.user.id !== comment.creatorId)
         return false;
       return true;
@@ -137,6 +137,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
           if (error && ck) {
             queryClient.setQueryData(ck, snapshot);
           }
+          setShowEditComment(false);
           if (context) queryClient.invalidateQueries(ck);
         }
       },
