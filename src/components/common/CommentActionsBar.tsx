@@ -202,8 +202,6 @@ const CommentActionsBar: FunctionComponent<Props> = ({
   };
 
   const handlerEditBtn = () => {
-    debugger;
-    // setCommentId((commentChild || comment).id);
     
     setEditCommentInput(comment.contentText);
     setShowEditComment(true);    
@@ -234,10 +232,6 @@ const CommentActionsBar: FunctionComponent<Props> = ({
 
 
   const renderCommentActions = () => {
-    
-    if (comment.id == 139) {
-      debugger;
-    }
     const c = comment;
     if(session?.user.id){
       return <aside className="mb-2">
