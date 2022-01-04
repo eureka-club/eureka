@@ -15,8 +15,9 @@ import { CommentMosaicItem } from '../../types/comment';
 import CommentActionsBar from '../common/CommentActionsBar';
 // import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
-import UnclampText from '../UnclampText';
-import { isCycle, isWork, isPost, isComment /* , Session */ } from '../../types';
+import CommentTextBox from '@/src/components/common/CommentTextBox';
+// import UnclampText from '../UnclampText';
+import { isCycle, isWork, /*isPost, isComment  , Session */ } from '../../types';
 // import { CycleMosaicItem } from '../../types/cycle';
 // import { WorkMosaicItem } from '../../types/work';
 // import { useUsers } from '../../useUsers';
@@ -133,7 +134,8 @@ const MosaicItem: FunctionComponent<Props> = ({
               <Col>
                 <aside className="pt-3 mb-0">
                   <CommentActionsBar comment={comment} showReplyBtn={false} cacheKey={cacheKey} />
-                  <UnclampText isHTML text={contentText} clampHeight="4rem" />
+                  {/* <UnclampText isHTML text={contentText} clampHeight="4rem" /> */}
+                  <CommentTextBox comment={ comment} />
                 </aside>
               </Col>
             </Row>
