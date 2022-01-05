@@ -28,6 +28,7 @@ import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import FilterEngine from '../../src/components/FilterEngine';
 import TagsInput from '../../src/components/forms/controls/TagsInput';
 import CarouselStatic from '../../src/components/CarouselStatic';
+import Notification from '@/src/components/common/Notification'
 // import useWorks from '../src/useWorks';
 // import useCycles from '../src/useCycles';
 // import useCountries from '../src/useCountries';
@@ -338,9 +339,30 @@ const Mediatheque: NextPage = () => {
     e.currentTarget.src = '/img/default-avatar.png';
   };
 
+  const sendNotification = async () => {debugger;
+    if(session){
+      const s = session as unknown as Session;
+      const res = await fetch('/api/notification',{
+        method:'post',
+        headers:{
+          'Content-type':'application/json',
+        },
+        body:JSON.stringify({idSession: id})
+      })
+      const json = await res;
+      console.log(json)
+    }
+  };
+
   return (
     <SimpleLayout title={t('Mediatheque')}>
       <>
+      {session && <Notification session={session as unknown as Session} callback={(data)=>{
+        console.log('from mediatheque', data)
+      }}/>}
+      <div>
+        <Button onClick={sendNotification}>send Notification</Button>
+      </div>
         <ButtonGroup className="mb-1">
           <Button variant="primary text-white" onClick={() => router.back()} size="sm">
             <BiArrowBack />
