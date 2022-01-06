@@ -21,7 +21,7 @@ export default class SocketIO {
     this.callback = callback;
     if(fromUser)
       this.fromUser = fromUser;
-    this.socket = io("http://localhost:4000/",{
+    this.socket = io("https://eurekaclubeureka-notification.azurewebsites.net/",{
       // withCredentials: true,
       extraHeaders: {
       //"session-id": session?session.user.id.toString():''

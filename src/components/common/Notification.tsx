@@ -25,11 +25,7 @@ const Notification: FunctionComponent<Props> = ({
       console.log(data);
     });
 
-    // socket.emit(`notify`,{
-    //   fromUser: session.user.id,
-    //   toUser: 2,
-    //   message: 'hello to'
-    // });
+    
 
     // socket.on(`notify-${session.user.id}`, (data) => {
     //   alert(JSON.stringify(data));
