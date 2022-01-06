@@ -28,7 +28,6 @@ export default class SocketIO {
       }
     });
 
-
     this.socket.on('connection',(res: any)=>{
       console.log(res);
     });
