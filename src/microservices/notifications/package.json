@@ -9,8 +9,5 @@
     "dev": "NODE_ENV=development node index.js",
     "start": "NODE_ENV=production node index.js",
     "tsc": "tsc --noEmit"
-  },
-  "dependencies": {
-    "socket.io": "^4.4.0"
   }
 }
