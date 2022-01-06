@@ -75,7 +75,7 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
       <div className="d-lg-none">{showHeader && <HeaderMobile show={showHeader} />}</div>
 
       {renderBanner()}
-      <Toast />
+      {/* <Toast /> */}
       <Container className="mt-5">{children}</Container>
 
       <Modal

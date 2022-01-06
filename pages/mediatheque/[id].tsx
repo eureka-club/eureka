@@ -23,10 +23,12 @@ import styles from './index.module.css';
 import { useUsers } from '../../src/useUsers';
 
 import globalSearchEngineAtom from '../../src/atoms/searchEngine';
+import globalModalsAtom from '@/src/atoms/globalModals'
 
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import FilterEngine from '../../src/components/FilterEngine';
 import TagsInput from '../../src/components/forms/controls/TagsInput';
+import Notification from '@/src/components/common/Notification';
 import CarouselStatic from '../../src/components/CarouselStatic';
 // import useWorks from '../src/useWorks';
 // import useCycles from '../src/useCycles';
@@ -39,7 +41,7 @@ import { UserMosaicItem /* , UserDetail, WorkWithImages */ } from '../../src/typ
 // import MosaicItemCycle from '../../src/components/cycle/MosaicItem';
 // import MosaicItemPost from '../../src/components/post/MosaicItem';
 // import MosaicItemWork from '../../src/components/work/MosaicItem';
-
+import SocketIO from '@/src/lib/notification'
 type Item = (CycleMosaicItem & { type: string }) | WorkMosaicItem | (PostMosaicItem & { type: string });
 
 type ItemCycle = CycleMosaicItem & { type: string };
@@ -59,11 +61,29 @@ const Mediatheque: NextPage = () => {
   const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>();
   const queryClient = useQueryClient();
   const { t } = useTranslation('mediatheque');
+  const [socketIO,setSocketIO] = useState<SocketIO>();
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
+  const [globalModals, setGlobalModals] = useAtom(globalModalsAtom);
   // if (!s?.user) {
   //   router?.push('/');
   //   window.location.href = '/';
   // }
+
+  useEffect(()=>{
+    setSocketIO(new SocketIO([+id],(data)=>{
+      console.log('ver',data.message);
+      // alert(data.message)
+      setGlobalModals((res)=>({
+        ...res,
+        showToast: {
+          show: true,
+          type: 'info',
+          title: t(`common:Notification`),
+          message: data.message,
+        }
+      }))
+    }))
+  },[id]);
 
   useEffect(() => {
     // const s = session as unknown as Session;
@@ -89,7 +109,7 @@ const Mediatheque: NextPage = () => {
     if (user && user.id && session) {
       const s = session as unknown as Session;
       const ifbm = s ? user.followedBy.findIndex((i: User) => i.id === s.user.id) !== -1 : false;
-      setIsFollowedByMe(() => ifbm);
+      setIsFollowedByMe(() => ifbm);      
     }
   }, [user, session]);
 
@@ -338,9 +358,20 @@ const Mediatheque: NextPage = () => {
     e.currentTarget.src = '/img/default-avatar.png';
   };
 
+  const sendNotify = () => {
+    const s = session as unknown as Session;
+    if(socketIO){
+      socketIO.notify({
+        message: 'hello to',
+      });
+    }
+  };
+
   return (
     <SimpleLayout title={t('Mediatheque')}>
       <>
+      <Button onClick={sendNotify}>enviar notification</Button>
+      
         <ButtonGroup className="mb-1">
           <Button variant="primary text-white" onClick={() => router.back()} size="sm">
             <BiArrowBack />

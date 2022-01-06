@@ -5,14 +5,14 @@
   "scripts": {
     "build": "next build",
     "dev1": "NODE_OPTIONS='--inspect' NODE_ENV=development TS_NODE_COMPILER_OPTIONS='{ \"module\":\"commonjs\" }' ts-node server.ts",
-    "dev": "NODE_OPTIONS='--inspect' NODE_ENV=development next dev",
+    "dev": "NODE_OPTIONS='--inspect' NODE_ENV=development next dev & cd src/microservices/notifications && yarn dev",
     "knex": "TS_NODE_COMPILER_OPTIONS='{ \"module\":\"commonjs\" }' knex",
     "lint": "eslint '**/*.{ts,tsx}'",
     "lt": "yarn lint && yarn tsc",
     "prisma": "prisma",
     "prisma-pf": "prisma --preview-feature",
     "start1": "NODE_ENV=production TS_NODE_COMPILER_OPTIONS='{ \"module\":\"commonjs\" }' ts-node server.ts",
-    "start": "NODE_ENV=production next start",
+    "start": "NODE_ENV=production next start & cd src/microservices/notifications && yarn dev",
     "tsc": "tsc --noEmit"
   },
   "engines": {
@@ -68,6 +68,7 @@
     "react-share": "^4.4.0",
     "remove-accents": "^0.4.2",
     "sass": "^1.41.0",
+    "socket.io-client": "^4.4.0",
     "superjson": "~1.6.1",
     "tinymce": "^5",
     "ts-node": "^9.0.0",
