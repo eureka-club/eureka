@@ -1,6 +1,6 @@
 import {Session} from '@/src/types'
 import {io, Socket} from 'socket.io-client'
-import {WEBAPP_URL} from '@/src/constants'
+//import {WEBAPP_URL} from '@/src/constants'
 
 /* interface SocketIOResponse{
   fromUser: string;
