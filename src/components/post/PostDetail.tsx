@@ -71,7 +71,18 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
       {/* {work ||
         (cycle && ( */}
       <Row className="mb-5">
-        <Col md={{ span: 4 }}>
+        <div className={classNames('d-flex d-sm-block d-lg-none mt-3', styles.postInfo)}>
+              <Link href={`/mediatheque/${post.creator.id}`} passHref>
+                <Avatar user={post.creator} showFullName />
+              </Link>
+              <small className={styles.postDate}>
+                {
+                  dayjs(post.createdAt).tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)
+                }
+              </small>
+            </div>
+            <h1 className="text-secondary fw-bold mb-3  d-sm-block d-lg-none"> {post.title} </h1> 
+        <Col className='col-sm-6 col-lg-4'>
           {/* {canEditPost() && (
             <Button variant="warning" onClick={handleEditClick} size="sm">
               {t('edit')}
@@ -115,9 +126,9 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
             </aside>
           )}
         </Col>
-        <Col md={{ span: 8 }}>
+        <Col className='col-sm-6 col-lg-8'>
           <div className="px-4">
-            <div className={classNames('d-flex', styles.postInfo)}>
+            <div className={classNames('d-flex d-none d-lg-block', styles.postInfo)}>
               <Link href={`/mediatheque/${post.creator.id}`} passHref>
                 {/* <a>
                   <img
@@ -136,11 +147,16 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
                 }
               </small>
             </div>
-            <h1 className="text-secondary fw-bold mb-3"> {post.title} </h1>
+            <h1 className="text-secondary fw-bold mb-3  d-none d-lg-block"> {post.title} </h1> {/*titulo y abajo texto eureka*/}
             {post.contentText != null && <UnclampText text={post.contentText} clampHeight="8rem" />}
           </div>
-          <CommentsList entity={post} parent={cycle || work} cacheKey={['POST', `${post.id}`]} />
+          <div className='container d-none d-lg-block'>
+            <CommentsList entity={post} parent={cycle || work} cacheKey={['POST', `${post.id}`]} />
+          </div>
         </Col>
+        <div className='container d-sm-block d-lg-none mt-3'>
+            <CommentsList entity={post} parent={cycle || work} cacheKey={['POST', `${post.id}`]} />
+          </div>
       </Row>
       {/* )) || <Alert variant="warning">Not found</Alert>} */}
     </>

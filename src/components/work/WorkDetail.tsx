@@ -99,8 +99,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
 
         <>
           {post == null ? (
-            <Row className="mb-5">
-              <Col md={{ span: 3 }}>
+            <Row className="mb-5 d-flex flex-column flex-md-row">
+              <Col className='col-md-6 col-lg-3 d-none d-md-block'>
                 <MosaicItem work={work} showTrash linkToWork={false} />
 
                 {/* <div className={classNames(styles.imgWrapper, 'mb-3')}>
@@ -108,8 +108,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
               </div>
               <SocialInteraction cacheKey={['WORKS', `${work.id}`]} entity={work} showCounts showShare showTrash /> */}
               </Col>
-              <Col md={{ span: 9 }}>
-                <section className="mb-4">
+              <Col className='col-md-6 col-lg-9'>
+                <section className="mb-4 mx-md-4">
                   <h1 className="fw-bold text-secondary">{work.title}</h1>
                   <h2 className={styles.author}>{work.author}</h2>
                   <WorkSummary work={work} />
@@ -119,8 +119,12 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
                       {t('workLinkLabel')} <BsBoxArrowUpRight />
                     </a>
                   )}
-                </section>
+                
+                <div className='container d-sm-block d-md-none mb-4 position-relative'>
+                   <MosaicItem className='postition-absolute start-50 translate-middle-x'  work={work} showTrash linkToWork={false} />
+                </div>
                 {work.contentText != null && <UnclampText isHTML={false} text={work.contentText} clampHeight="8rem" />}
+                </section>
               </Col>
             </Row>
           ) : (
@@ -155,7 +159,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
                   </style> 
                   <Row className="mb-4">
                     <Col>
-                      <Nav variant="tabs" fill>
+                      <Nav justify variant="tabs" fill>
                         <NavItem>
                           <NavLink eventKey="all">
                             {t('tabHeaderAll')} ({cyclesCount + postsCount})
