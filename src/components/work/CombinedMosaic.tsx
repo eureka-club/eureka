@@ -49,7 +49,7 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
   return (
     <>
       {(isCyclesLoading || isPostsLoading) && <Spinner animation="grow" role="status" />}
-      {mosaicData.length > 0 && <Mosaic stack={mosaicData} postsLinksTo={work} />}
+      {mosaicData.length > 0 && <Mosaic className='d-flex justify-content-center justify-content-md-start' stack={mosaicData} postsLinksTo={work} />}
     </>
   );
 };
