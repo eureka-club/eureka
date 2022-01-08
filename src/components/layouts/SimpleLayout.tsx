@@ -63,20 +63,26 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
 
   return (
     <>
-      <div className="d-none d-lg-block">
-        <Navbar />
-      </div>
-      <div className="d-lg-none">
-        <NavbarMobile />
-      </div>
-      <Toast />
-      {/* <Navbar /> */}
-      <div className="d-none d-lg-block">{showHeader && <Header show={showHeader} />}</div>
-      <div className="d-lg-none">{showHeader && <HeaderMobile show={showHeader} />}</div>
+      <section>
+        <div className="d-none d-lg-block">
+          <Navbar />
+        </div>
+        <div className="d-lg-none">
+          <NavbarMobile />
+        </div>
 
-      {renderBanner()}
-      {/* <Toast /> */}
-      <Container className="mt-5">{children}</Container>
+      </section>
+      <section style={{marginTop:'75px'}}>
+        <Toast />
+        {/* <Navbar /> */}
+        <div className="d-none d-lg-block">{showHeader && <Header show={showHeader} />}</div>
+        <div className="d-lg-none">{showHeader && <HeaderMobile show={showHeader} />}</div>
+
+        {renderBanner()}
+        {/* <Toast /> */}
+        <Container className="mt-5">{children}</Container>
+
+      </section>
 
       <Modal
         animation={false}
