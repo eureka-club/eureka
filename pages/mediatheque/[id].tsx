@@ -36,6 +36,8 @@ import { CycleMosaicItem /* , CycleWithImages */ } from '../../src/types/cycle';
 import { PostMosaicItem /* , PostWithImages */ } from '../../src/types/post';
 import { WorkMosaicItem /* , WorkWithImages */ } from '../../src/types/work';
 import { UserMosaicItem /* , UserDetail, WorkWithImages */ } from '../../src/types/user';
+import UnclampText from '../../src/components/UnclampText';
+
 // import MosaicItemCycle from '../../src/components/cycle/MosaicItem';
 // import MosaicItemPost from '../../src/components/post/MosaicItem';
 // import MosaicItemWork from '../../src/components/work/MosaicItem';
@@ -351,26 +353,38 @@ const Mediatheque: NextPage = () => {
           <section>
             <Card className={styles.userHeader}>
               <Card.Body>
-                <Row>
-                  <Col>
+                <Row className='d-flex flex-column flex-md-row' >
+                  <Col className='d-flex flex-sm-wrap align-items-start'>
                     <img
                       onError={avatarError}
                       className={styles.avatar}
                       src={user.image || '/img/default-avatar.png'}
                       alt={user.name}
                     />
-                    <br />
+                    <div className='col ms-3 d-sm-block d-md-none'>
+                      <h2>{user.name}</h2>
+                      {renderCountry()}
+                      <TagsInput tags={user.tags} readOnly label="" />
+                    </div>
+                    <br/>
                     {/* <em>{user.name}</em> */}
                   </Col>
-                  <Col xs={8}>
-                    <h2>{user.name}</h2>
-                    {renderCountry()}
-                    <p className={styles.description}>{user.aboutMe}</p>
-                    <TagsInput tags={user.tags} readOnly label="" />
+                  <Col className='col col-sm-12 col-md-8'>
+                    <div className='d-none d-md-block'>
+                      <h2>{user.name}</h2>
+                      {renderCountry()}
+                    </div>
+                    <div className='d-none d-md-block'>
+                       <p className={styles.description}>{user.aboutMe}</p>
+                    </div>
+                    <div className='mt-3 d-sm-block d-md-none'>
+                       <UnclampText isHTML={false} text={user.aboutMe} clampHeight="6rem" />
+                    </div>
+                    <TagsInput className='d-none d-md-block' tags={user.tags} readOnly label="" />
                   </Col>
-                  <Col>
+                  <Col className='mt-2 d-grid gap-2 d-md-flex justify-content-md-end d-lg-block'>
                     {session && (session as unknown as Session).user!.id !== user.id && !isFollowedByMe && (
-                      <Button onClick={followHandler} disabled={isLoadingMutateFollowing}>
+                      <Button className='text-white rounded-pill' onClick={followHandler} disabled={isLoadingMutateFollowing}>
                         {t('Follow')}
                         {isLoadingMutateFollowing && <Spinner animation="grow" variant="info" size="sm" />}
                       </Button>
@@ -379,7 +393,7 @@ const Mediatheque: NextPage = () => {
                     {session && (session as unknown as Session).user!.id !== user.id && isFollowedByMe && (
                       <Button
                         variant="button border-primary text-primary fs-6"
-                        className="w-80"
+                        className="w-80 rounded-pill"
                         onClick={followHandler}
                         disabled={isLoadingMutateFollowing}
                       >
@@ -394,7 +408,7 @@ const Mediatheque: NextPage = () => {
             </Card>
             {isAccessAllowed() && (
               <>
-                <h1 className="text-secondary fw-bold mb-2">{t('Mediatheque')}</h1>
+                <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('Mediatheque')}</h1>
                 <FilterEngine fictionOrNotFilter={false} geographyFilter={false} />
                 {postsCreated()}
 

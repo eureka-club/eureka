@@ -142,6 +142,7 @@ const FilterEngine: FunctionComponent<Props> = ({
     return <Popover id='popover-books'>
       {/* <Popover.Header as="h3">{`Popover books`}</Popover.Header> */}
       <Popover.Body>
+      <div>
       <Form.Label>
                   <strong>{t('Books')}</strong>
                 </Form.Label>
@@ -185,6 +186,7 @@ const FilterEngine: FunctionComponent<Props> = ({
                     onChange={(e) => handlerComboxesChangeType(e, 'documentary')}
                   />
                 </Form.Group>
+                </div>
       </Popover.Body>
     </Popover>
   };
@@ -297,9 +299,9 @@ const FilterEngine: FunctionComponent<Props> = ({
   return (
     (globalSearchEngineState.show && (
       <Container className={styles.container}>
-        <Row>
-          <Col xs={12} sm={8} md={6} lg={6} xl={5} as={Row}>
-            <Form.Group as={Col} xs={6} lg={3} className={styles.formGroup}>
+        <Row className='ms-1'>
+          <Col className='d-flex flex-row'>
+            <Form.Group className={styles.formGroup}>
               <Form.Check
                 className={styles.filter}
                 inline
@@ -309,7 +311,7 @@ const FilterEngine: FunctionComponent<Props> = ({
                 onChange={(e) => handlerComboxesChangeType(e, 'cycle')}
               />
             </Form.Group>
-            <Form.Group as={Col} xs={6} lg={3} className={styles.formGroup}>
+            <Form.Group className={styles.formGroup}>
               <Form.Check
                 className={styles.filter}
                 inline
@@ -318,7 +320,7 @@ const FilterEngine: FunctionComponent<Props> = ({
                 onChange={(e) => handlerComboxesChangeType(e, 'post')}
               />
             </Form.Group>
-            <Form.Group as={Col} xs={6} lg={3} className={styles.formGroup}>
+            <Form.Group className={styles.formGroup}>
               <Form.Check
                 className={styles.filter}
                 inline
@@ -328,7 +330,7 @@ const FilterEngine: FunctionComponent<Props> = ({
                 onChange={(e) => handlerComboxesChangeType(e, 'movie|documentary')}
               />
             </Form.Group>
-            <Form.Group as={Col} xs={6} lg={3} className={styles.formGroup}>
+            <Form.Group className={styles.formGroup}>
               <Form.Check
                 className={styles.filter}
                 inline
@@ -339,7 +341,7 @@ const FilterEngine: FunctionComponent<Props> = ({
               />
             </Form.Group>
           </Col>
-          <Col xs={12} sm={4} md={6} lg={6} xl={7} as={Row} className="pe-0">
+          <Col  as={Row} className="pe-0">
             <aside className="d-flex justify-content-start justify-content-md-end me-0 pe-0">
 
             {fictionOrNotFilter && (
