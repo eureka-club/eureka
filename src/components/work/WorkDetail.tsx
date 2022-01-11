@@ -100,7 +100,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
         <>
           {post == null ? (
             <Row className="mb-5 d-flex flex-column flex-md-row">
-              <Col className='col-md-6 col-lg-3 d-none d-md-block'>
+              <Col className='col-md-5 col-lg-4 col-xl-3   d-none d-md-block'>
                 <MosaicItem work={work} showTrash linkToWork={false} />
 
                 {/* <div className={classNames(styles.imgWrapper, 'mb-3')}>
@@ -108,7 +108,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
               </div>
               <SocialInteraction cacheKey={['WORKS', `${work.id}`]} entity={work} showCounts showShare showTrash /> */}
               </Col>
-              <Col className='col-md-6 col-lg-9'>
+              <Col className='col-md-7 col-lg-8 col-xl-9'>
                 <section className="mb-4 mx-md-4">
                   <h1 className="fw-bold text-secondary">{work.title}</h1>
                   <h2 className={styles.author}>{work.author}</h2>
@@ -159,7 +159,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
                   </style> 
                   <Row className="mb-4">
                     <Col>
-                      <Nav justify variant="tabs" fill>
+                     <div className=''>
+                      <Nav variant="tabs" className={styles.scroll} fill>
                         <NavItem>
                           <NavLink eventKey="all">
                             {t('tabHeaderAll')} ({cyclesCount + postsCount})
@@ -176,6 +177,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
                           </NavLink>
                         </NavItem>
                       </Nav>
+                      </div>
                     </Col>
                   </Row>
                   <Row>
