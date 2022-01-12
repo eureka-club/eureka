@@ -26,6 +26,7 @@ interface Props {
   showButtonLabels?: boolean;
   showShare?: boolean;
   showSocialInteraction?: boolean;
+  showdetail?: boolean;
   style?: { [k: string]: string };
   cacheKey?: string[];
   showTrash?: boolean;
@@ -38,6 +39,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   postParent,
   display = 'v',
   showSocialInteraction = true,
+  showdetail = true,
   cacheKey,
   showComments = false,
   className,
@@ -131,7 +133,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             </>
           )}
           <div className={`w-100 text-start ${styles.postDetail}`}>
-            {post && (
+            {post && showdetail && (
               <>
                 <Avatar user={post.creator} size="xs" />
                 {` - `}
