@@ -160,7 +160,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
                   <Row className="mb-4">
                     <Col>
                      <div className=''>
-                      <Nav variant="tabs" className={styles.scroll} fill>
+                      <Nav variant="tabs" className='scrollNav' fill>
                         <NavItem>
                           <NavLink eventKey="all">
                             {t('tabHeaderAll')} ({cyclesCount + postsCount})

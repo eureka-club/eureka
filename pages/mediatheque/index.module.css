@@ -2,19 +2,12 @@
     color: var(--eureka-green);
     margin-bottom: 1.5em;
   }
-  .avatar{
-    border-radius: 50%;
-    width: 10em;
-    margin: 0 0 1em 1em; 
-  }
+
   .infoCircle{
       color: orange;
       
   }
-  .userHeader{
-      margin: 0 0 4em 0;
-      border:0;
-  }
+  
   .description{
       margin: 1em 0 1em 0;
       padding:0;
@@ -24,15 +17,4 @@
       color: var(--eureka-green);
       text-decoration: underline;
       border-color: var(--eureka-green);
-  }
-
-
-  @media screen and (max-width: 700px) {
-    .avatar {
-            width: 4em;
-    }
-     .userHeader {
-       margin: 0 0 1em 0;
-       border: 0;
-     }
   }

@@ -351,13 +351,13 @@ const Mediatheque: NextPage = () => {
 
         {!(isLoadingUser || isLoadingSession) && user && (
           <section>
-            <Card className={styles.userHeader}>
+            <Card className='userHeader'>
               <Card.Body>
                 <Row className='d-flex flex-column flex-md-row' >
                   <Col className='d-flex flex-sm-wrap align-items-start'>
                     <img
                       onError={avatarError}
-                      className={styles.avatar}
+                      className='avatar'
                       src={user.image || '/img/default-avatar.png'}
                       alt={user.name}
                     />

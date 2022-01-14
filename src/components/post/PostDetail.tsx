@@ -98,17 +98,17 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
                  </div>
             </div>
            
-            <h1 className="text-secondary fw-bold mb-3 d-sm-block d-md-none"> {post.title} </h1> {/*titulo y abajo texto eureka*/}
+            <h1 className="text-secondary fw-bold mb-2 d-sm-block d-md-none"> {post.title} </h1> {/*titulo y abajo texto eureka*/}
            <div className='d-flex d-md-none flex-row flex-wrap'>
                 {work != null && (
-                <aside className='p-2' >
-                  <Badge bg="orange" className="rounded-pill fw-light text-black fs-6">
+                <aside className='me-3' >
+                  <Badge bg="orange" className="rounded-pill fw-light text-black tagText">
                     {t(`common:${work.type}`)}
                   </Badge>
                   <section className="my-1">
                     <h6 className="mb-0">
                       <Link href={`/work/${work.id}`} passHref>
-                        <p className="text-break mb-0">
+                        <p className="text-break mb-0 tagText">
                           <a className="cursor-pointer">{work.title}</a>,{' '}
                           <span className={styles.workInfoAuthor}>{work.author}</span>
                         </p>
@@ -118,14 +118,14 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
                 </aside>
               )}
               {post.cycles && post.cycles.length > 0 && (
-                <aside className='p-2'>
-                  <Badge bg="primary" className="rounded-pill fw-light text-dark fs-6">
+                <aside className=''>
+                  <Badge bg="primary" className="rounded-pill fw-light text-dark tagText">
                     {t('common:cycle')}
                   </Badge>
                   <section className="my-1">
                     <h6>
                       <Link href={`/cycle/${post.cycles[0].id}`} passHref>
-                        <p className="text-break mb-0">
+                        <p className="text-break mb-0 tagText">
                           <a className="cursor-pointer">{post.cycles[0].title}</a>
                         </p>
                       </Link>
@@ -143,10 +143,10 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
               {t('edit')}
             </Button>
           )} */}
-          <div className='mb-2  d-none d-md-block'>
+          <div className='mb-2 d-none d-md-block'>
             <MosaicItem className='' post={post} showdetail={false}/>
           </div>
-          <div className='container d-sm-block d-md-none mb-4 position-relative'>
+          <div className='container d-sm-block d-md-none mb-2 mt-2 position-relative'>
              <MosaicItem className='postition-absolute start-50 translate-middle-x'  post={post} showdetail={false}/>
           </div>
          </Col>
@@ -175,17 +175,17 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
               </small>
               </div>
             </div>
-            <h1 className="text-secondary fw-bold mb-3  d-none d-md-block"> {post.title} </h1> {/*titulo y abajo texto eureka*/}
+            <h1 className="text-secondary fw-bold mb-2  d-none d-md-block"> {post.title} </h1> {/*titulo y abajo texto eureka*/}
            <div className='d-none d-md-flex flex-row flex-wrap'>
                 {work != null && (
-                <aside className="p-2">
-                  <Badge bg="orange" className="rounded-pill py-1 px-2 fw-light text-black fs-6">
+                <aside className="me-3">
+                  <Badge bg="orange" className="rounded-pill py-1 px-2 fw-light text-black tagText">
                     {t(`common:${work.type}`)}
                   </Badge>
                   <section className="my-1">
                     <h6 className="mb-0">
                       <Link href={`/work/${work.id}`} passHref>
-                        <p className="text-break mb-0">
+                        <p className="text-break mb-0 tagText">
                           <a className="cursor-pointer">{work.title}</a>,{' '}
                           <span className={styles.workInfoAuthor}>{work.author}</span>
                         </p>
@@ -195,14 +195,14 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
                 </aside>
               )}
               {post.cycles && post.cycles.length > 0 && (
-                <aside className="p-2">
-                  <Badge bg="primary" className="rounded-pill py-1 px-2 fw-light text-dark fs-6">
+                <aside className="">
+                  <Badge bg="primary" className="rounded-pill py-1 px-2 fw-light text-dark tagText">
                     {t('common:cycle')}
                   </Badge>
                   <section className="my-1">
                     <h6>
                       <Link href={`/cycle/${post.cycles[0].id}`} passHref>
-                        <p className="text-break mb-0">
+                        <p className="text-break mb-0 tagText">
                           <a className="cursor-pointer">{post.cycles[0].title}</a>
                         </p>
                       </Link>
