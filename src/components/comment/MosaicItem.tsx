@@ -20,7 +20,6 @@ import CommentTextBox from '@/src/components/common/CommentTextBox';
 import { isCycle, isWork, /*isPost, isComment  , Session */ } from '../../types';
 // import { CycleMosaicItem } from '../../types/cycle';
 // import { WorkMosaicItem } from '../../types/work';
-// import { useUsers } from '../../useUsers';
 
 import Avatar from '../common/UserAvatar';
 import CommentsList from '../common/CommentsList';
@@ -66,7 +65,6 @@ const MosaicItem: FunctionComponent<Props> = ({
   //   return null;
   // })();
 
-  // const { data: creator } = useUsers(comment.creatorId.toString());
   const { contentText } = comment;
   const { t } = useTranslation('common');
   const getTitle = (): string => {

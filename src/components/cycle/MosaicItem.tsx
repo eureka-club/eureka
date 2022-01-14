@@ -20,7 +20,7 @@ import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import globalModalsAtom from '../../atoms/globalModals';
 
-import { useUsers } from '../../useUsers';
+import useUser from '@/src/useUser';
 import { Session } from '../../types';
 import SocialInteraction from '../common/SocialInteraction';
 import { useCycleContext } from '../../useCycleContext';
@@ -56,11 +56,20 @@ const MosaicItem: FunctionComponent<Props> = ({
   const ed = dayjs(endDate).add(1, 'day').tz(dayjs.tz.guess());
   const isActive = dayjs().isBetween(startDate, endDate, null, '[]');
   const [session] = useSession() as [Session | null | undefined, boolean];
-  const { data: user } = useUsers({ id: (session && (session as unknown as Session).user.id)?.toString() || '' });
+  const [idSession,setIdSession] = useState<string>('')
+  const { data: user } = useUser(+idSession,{ enabled: !!+idSession });
   const [isCurrentUserJoinedToCycle, setIsCurrentUserJoinedToCycle] = useState<boolean>(true);
   const [participants, setParticipants] = useState<number>(0);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const s = session as unknown as Session;
+    if (s) {
+      setIdSession(s.user.id.toString());
+    }
+  }, [session]);
+
 
   useEffect(() => {
     if (cycle) {
@@ -69,7 +78,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         if (session && user && user.joinedCycles) {
           if (!user.joinedCycles.length) setIsCurrentUserJoinedToCycle(false);
           else {
-            const icujtc = user.joinedCycles.findIndex((c: CycleMosaicItem) => c.id === cycle!.id) !== -1;
+            const icujtc = user.joinedCycles.findIndex((c) => c.id === cycle!.id) !== -1;
             setIsCurrentUserJoinedToCycle(icujtc);
           }
         }
@@ -108,14 +117,17 @@ const MosaicItem: FunctionComponent<Props> = ({
         //   if (user) {
         //     // debugger;
         //     user.joinedCycles.push(cycle);
-        //     queryClient.setQueryData(['USERS', user.id.toString()], () => user);
+        //     queryClient.setQueryData(['USER', user.id.toString()], () => user);
         // setIsCurrentUserJoinedToCycle(true);
         // setParticipants(cycle.participants.length + 1);
         //   }
       },
       onSuccess: () => {
-        queryClient.invalidateQueries(['USERS', user.id.toString()]);
-        queryClient.invalidateQueries(cacheKey);
+        if(user){
+          queryClient.invalidateQueries(['USER', user.id.toString()]);
+          queryClient.invalidateQueries(cacheKey);
+
+        }
       },
     },
   );
@@ -145,15 +157,17 @@ const MosaicItem: FunctionComponent<Props> = ({
         //   const idx = user.joinedCycles.findIndex((c: Cycle) => c.id === cycle.id);
         //   if (idx > -1) {
         //     user.joinedCycles.splice(idx, 1);
-        //     queryClient.setQueryData(['USERS', user.id.toString()], () => user);
+        //     queryClient.setQueryData(['USER', user.id.toString()], () => user);
         // setIsCurrentUserJoinedToCycle(false);
         // setParticipants(cycle.participants.length - 1);
         //   }
         // }
       },
       onSuccess: () => {
-        queryClient.invalidateQueries(['USERS', user.id.toString()]);
-        queryClient.invalidateQueries(cacheKey);
+        if(user){
+          queryClient.invalidateQueries(['USER', user.id.toString()]);
+          queryClient.invalidateQueries(cacheKey);
+        }
       },
     },
   );
