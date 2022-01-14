@@ -29,7 +29,7 @@ import {v4} from 'uuid';
 // import globalModalsAtom from '../../atoms/globalModals';
 
 // import { WEBAPP_URL } from '../../constants';
-
+import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import Avatar from './UserAvatar';
 
 interface Props {

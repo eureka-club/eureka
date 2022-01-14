@@ -1,9 +1,10 @@
 // import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, /* MouseEvent, */ useEffect, useState, ChangeEvent, FormEvent, KeyboardEvent } from 'react';
+import { FunctionComponent, /* MouseEvent, */ useRef,useEffect, useState, ChangeEvent, FormEvent, KeyboardEvent } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/client';
-
+import { EditorEvent } from 'tinymce';
+import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import { InputGroup, Form, Button /* , Row, Col, Card, Popover, */, Spinner } from 'react-bootstrap';
 
 import { Cycle, Work, Post, Comment } from '@prisma/client';
@@ -59,7 +60,7 @@ const CommentsList: FunctionComponent<Props> = ({
   const [commentsShowCount, setCommentsShowCount] = useState<number>(commentsPerPage);
   const [filterdComments, setFilterdComments] = useState<Comment[]>();
   const { /* isLoading, isError, error, */ data: user } = useUsers({ id: idSession });
-
+  const editorRef = useRef<any>(null);
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -125,17 +126,21 @@ const CommentsList: FunctionComponent<Props> = ({
       selectedWorkId = entity.id;
       if (parent && isCycle(parent)) selectedCycleId = parent.id;
     }
+    const nc = editorRef.current.getContent();
+    if(nc){
+      const payload = {
+        selectedCycleId,
+        selectedPostId,
+        selectedCommentId,
+        selectedWorkId,
+        creatorId: +idSession,
+        contentText: nc,
+      };
+      editorRef.current.setContent('')
+      setNewCommentInput(() => '');
+      createComment(payload);
 
-    const payload = {
-      selectedCycleId,
-      selectedPostId,
-      selectedCommentId,
-      selectedWorkId,
-      creatorId: +idSession,
-      contentText: newCommentInput || '',
-    };
-    setNewCommentInput(() => '');
-    createComment(payload);
+    }
   };
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -191,9 +196,55 @@ const CommentsList: FunctionComponent<Props> = ({
     }
   };
 
+
+  const renderEditorWYSWYG = (
+    initialValue?:string,
+    )=>{
+    return <>
+    <EditorCmp
+          apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
+          onInit={(_: any, editor) => {
+            editor.editorContainer.classList.add(...[
+              "rounded-pill",
+            ])
+            editorRef.current = editor;
+          }}
+          onKeyUp={(e)=>{
+            if (e.key === 'Enter' && !e.shiftKey) {
+              submitForm();
+              e.preventDefault();
+            }
+          }
+        }
+          
+          initialValue={initialValue}
+          init={{
+            max_height: 70,
+            menubar: false,
+            plugins: [
+              'advlist autolink lists link image charmap print preview anchor',
+              'searchreplace visualblocks code fullscreen',
+              'insertdatetime media table paste code help',
+            ],
+            relative_urls: false,
+            // toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
+            toolbar:false,
+            branding:false,
+            statusbar:false,
+            content_style: `body { 
+              font-family:Helvetica,Arial,sans-serif; 
+              font-size:14px; 
+              background:#f7f7f7;
+            }`,
+            
+          }}
+        />
+    </>
+  }
+
   return (
     <section className="bg-white border-0">
-      {user && (
+      {/* {user && (
         <Form onSubmit={handleFormSubmit}>
           <InputGroup className="mt-2">
             <Avatar user={user} size="sm" showName={false} />
@@ -207,8 +258,11 @@ const CommentsList: FunctionComponent<Props> = ({
               placeholder={`${t('Write a replay')}...`}
             />
           </InputGroup>
-        </Form>
-      )}
+        </Form> 
+        
+      
+      )} */}
+      {user && renderEditorWYSWYG()}
       <div className="ms-5">
         {renderComment()}
         {(filterdComments && filterdComments.length && (
