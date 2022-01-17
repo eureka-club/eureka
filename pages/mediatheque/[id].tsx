@@ -189,7 +189,6 @@ const Mediatheque: NextPage = () => {
       q,
       show: showFilterEngine,
     });
-
     router.push(`/search?q=${q}`);
   };
   
