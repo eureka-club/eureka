@@ -125,3 +125,32 @@ export const storeUploadUserPhoto = async (file: FileUpload): Promise<StoredFile
       throw new Error('Unknown PUBLIC_ASSETS_STORAGE_MECHANISM');
   }
 };
+
+export const storeDeleteFile = async (storedFile: string, subPath:string = ''): Promise<boolean> => {
+  const [containerFolder,fileName] = storedFile.split('/');//  /??? :|
+  switch (NEXT_PUBLIC_PUBLIC_ASSETS_STORAGE_MECHANISM) {
+    case STORAGE_MECHANISM_AZURE: {
+      const blobServiceClient = new BlobServiceClient(
+        `https://${AZURE_STORAGE_ACCOUNT_NAME}.blob.core.windows.net`,
+        newPipeline(new StorageSharedKeyCredential(AZURE_STORAGE_ACCOUNT_NAME!, AZURE_STORAGE_ACCOUNT_ACCESS_KEY!)),
+      );
+      const containerPath = path.join(NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME!,subPath,containerFolder);
+      const containerClient = blobServiceClient.getContainerClient(containerPath);
+      const blockBlobClient = containerClient.getBlockBlobClient(fileName);
+      const res = await blockBlobClient.deleteIfExists(); 
+      if(!res.succeeded)
+        return false;
+      return true;
+    }
+
+    // TODO remove locally
+    // case STORAGE_MECHANISM_LOCAL_FILES: {
+    //   await moveLocalUpload(file, fileHash);
+
+    //   return true;
+    // }
+
+    default:
+      throw new Error('Unknown PUBLIC_ASSETS_STORAGE_MECHANISM');
+  }
+};

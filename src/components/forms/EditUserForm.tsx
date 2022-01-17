@@ -166,10 +166,7 @@ const EditUserForm: FunctionComponent = () => {
   // }, [work]);
 
   // (data: TData, variables: TVariables, context: TContext | undefined)
-  const onMutateSuccess = async (d: { r: any }) => {
-    await queryClient.setQueryData(['USER', id], { ...user, ...d.r });
-    //setUser((u) => ({ ...u, ...d.r }));
-  };
+  
   const {
     mutate: execEditUser,
     error: editUserError,
@@ -188,9 +185,36 @@ const EditUserForm: FunctionComponent = () => {
         // headers: { 'Content-Type': 'application/json' },
         body: fd,
       });
+      if(!res.ok){
+        setGlobalModalsState((r)=>({
+          ...r,
+          showToast: {
+            show: true,
+            type: 'warning',
+            title: t('Warning'),
+            message: res.statusText,
+          },
+        }));
+        return null;
+      }
       return res.json();
     },
-    { onSuccess: onMutateSuccess },
+    {
+      onMutate: async () => {
+        const cacheKey = ['USER',id];
+        const snapshot = queryClient.getQueryData(cacheKey);
+        return { cacheKey, snapshot };        
+      },
+      onSettled: (_user, error, _variables, context) => {
+        if (context) {
+          const { cacheKey, snapshot } = context;
+          if (error && cacheKey) {
+            queryClient.setQueryData(cacheKey, snapshot);
+          }
+          if (context) queryClient.invalidateQueries(cacheKey);
+        }
+      },
+    },
   );
 
   // const handleWorkTypeChange = (ev: ChangeEvent<HTMLSelectElement>) => {
@@ -348,7 +372,7 @@ const EditUserForm: FunctionComponent = () => {
                   </FormGroup>
                 </Col>
               </Row>
-              <Row>
+              {/* <Row>
                 <Col>
                   <FormGroup controlId="image" className="mb-3">
                     <FormLabel>
@@ -357,41 +381,7 @@ const EditUserForm: FunctionComponent = () => {
                     </FormLabel>
                     <Row>
                       <Col xs={12} md={2}>
-                        {/* <img style={{ width: '5em' }} src={currentImg} alt={user.email || undefined} /> */}
-                         {/* <CropImageFileSelect src={user.image||''}/> */}
-                         {/* {user && user.photos && <LocalImageComponent
-                          filePath={user.photos[0].storedFile}
-                          alt={user.name!}
-                        />} */}
-                      {/*   <ImageFileSelect
-                  acceptedFileTypes="image/*"
-                  file={userPhotoFile}
-                  setFile={setUserPhotoFile}
-                  required
-                >
-                  {(imagePreview) => (
-                    <div className="">
-                      {imagePreview == null ? (
-                        <div className={styles.cycleCoverPrompt}>
-                          <h4>*{t('addCoverBtnTitle')}</h4>
-                          <p>{t('addCoverTipLeadLine')}:</p>
-                          <ul>
-                            <li>{t('addCoverTipLine1')}</li>
-                            <li>{t('addCoverTipLine2')}</li>
-                            <li>{t('addCoverTipLine3')}</li>
-                          </ul>
-                        </div>
-                      ) : (
-                        <div
-                          className={styles.cycleCoverPreview}
-                          style={{ backgroundImage: `url('${imagePreview}')` }}
-                        />
-                      )}
-                    </div>
-                  )}
-
-                </ImageFileSelect>
-                       */}   
+                           
                       </Col>
                       <Col xs={12} md={10}>
                         <FormControl
@@ -405,12 +395,14 @@ const EditUserForm: FunctionComponent = () => {
                     </Row>
                   </FormGroup>
                 </Col>
-              </Row>
-              <div>
+              </Row> */}
+              <Row>
+                <Col>
                 
                   <CropImageFileSelect onGenerateCrop={onGenerateCrop} src={''}/>
+                </Col>
               
-              </div>
+              </Row>
               <Row>
                 <Col>
                   <FormGroup controlId="countryOfOrigin1" className="mb-3">
@@ -525,7 +517,7 @@ const EditUserForm: FunctionComponent = () => {
 
           <ModalFooter>
             <Container className="py-3">
-              <Button variant="primary" type="submit" className="text-white">
+              <Button variant="primary" disabled={isLoadingUser} type="submit" className="text-white">
                 {t('Edit')}
                 {isLoadingUser ? (
                   <Spinner animation="grow" variant="info" size="sm" className="ms-1" />

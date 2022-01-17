@@ -1,4 +1,4 @@
-import { Cycle, Post, User, Work, Comment } from '@prisma/client';
+import { Cycle, Post, User, Work, Comment, Prisma } from '@prisma/client';
 
 import { CycleMosaicItem } from './types/cycle';
 import { PostMosaicItem } from './types/post';
@@ -17,7 +17,7 @@ export interface FileUpload {
 export interface Session {
   accessToken?: string;
   expires: string;
-  user: User;
+  user: Prisma.UserGetPayload<{include:{photos:true}}>;
 }
 
 export interface StoredFileUpload {
@@ -43,15 +43,15 @@ export type MosaicItem = CycleMosaicItem | PostMosaicItem | WorkMosaicItem | Use
 export type SearchResult = CycleMosaicItem | PostMosaicItem | WorkMosaicItem | UserMosaicItem;
 
 export const isCycle = (obj: BasicEntity): obj is Cycle =>
-  typeof (obj as Cycle).title === 'string' &&
+  obj && typeof (obj as Cycle).title === 'string' &&
   (obj as CycleMosaicItem).startDate !== undefined &&
   (obj as CycleMosaicItem).endDate !== undefined;
 export const isPost = (obj: BasicEntity): obj is Post =>
-  typeof (obj as Post).title === 'string' &&
+  obj && typeof (obj as Post).title === 'string' &&
   typeof (obj as Post).creatorId === 'number' &&
   typeof (obj as Post).language === 'string';
 export const isWork = (obj: BasicEntity): obj is Work =>
-  typeof (obj as Work).title === 'string' &&
+  obj && typeof (obj as Work).title === 'string' &&
   typeof (obj as Work).author === 'string' &&
   typeof (obj as Work).type === 'string';
 
@@ -61,18 +61,20 @@ export const isUser = (obj: BasicEntity): obj is User =>
 export const isComment = (obj: BasicEntity): obj is Comment => 'commentId' in (obj as Comment);
 
 // TODO separate type-guards for MosaicItem and SearchResult
-export const isCycleMosaicItem = (obj: MosaicItem | SearchResult): obj is CycleMosaicItem =>
-  typeof (obj as CycleMosaicItem).title === 'string' &&
+export const isCycleMosaicItem = (obj: MosaicItem | SearchResult): obj is CycleMosaicItem => {
+  return obj && typeof (obj as CycleMosaicItem).title === 'string' &&
   (obj as CycleMosaicItem).startDate !== undefined &&
   (obj as CycleMosaicItem).endDate !== undefined;
+}
+  
 export const isWorkMosaicItem = (obj: MosaicItem | SearchResult): obj is WorkMosaicItem =>
-  typeof (obj as WorkMosaicItem).title === 'string' &&
+  obj && typeof (obj as WorkMosaicItem).title === 'string' &&
   // typeof (obj as WorkMosaicItem).author === 'string' &&
   typeof (obj as WorkMosaicItem).type === 'string' &&
   ['book', 'fiction-book', 'movie', 'documentary'].includes((obj as WorkMosaicItem).type);
 
 export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMosaicItem => {
-  return 'title' in obj && !isCycleMosaicItem(obj) && !isWorkMosaicItem(obj);
+  return obj && 'title' in obj && !isCycleMosaicItem(obj) && !isWorkMosaicItem(obj);
   // return (
   //   typeof (obj as PostMosaicItem).title === 'string' &&
   //   typeof (obj as PostMosaicItem).creatorId === 'number' &&
@@ -82,4 +84,4 @@ export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMos
 };
 
 export const isUserMosaicItem = (obj: MosaicItem | SearchResult): obj is UserMosaicItem =>
-  'email' in obj && 'countryOfOrigin' in obj && 'image' in obj;
+  obj && 'email' in obj && 'countryOfOrigin' in obj && 'image' in obj;

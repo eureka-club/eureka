@@ -1,9 +1,9 @@
-import { User } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextAuth /* , { InitOptions } */ from 'next-auth';
 import Adapters from 'next-auth/adapters';
 import Providers from 'next-auth/providers';
-
+import {find} from '@/src/facades/user'
 import getT from 'next-translate/getT';
 import prisma from '../../../src/lib/prisma';
 import { Session } from '../../../src/types';
@@ -81,16 +81,17 @@ import { sendMailSingIn } from '../../../src/facades/mail';
   };
   return options;
 }; */
-
-export default (req: NextApiRequest, res: NextApiResponse): void | Promise<void> => {
+const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> => {
   const locale = req.cookies.NEXT_LOCALE || 'es';
   return NextAuth(req, res, {
     adapter: Adapters.Prisma.Adapter({ prisma }),
     callbacks: {
-      session: async (session, user: User) => {
+      session: async (session, user: Prisma.UserGetPayload<{include:{photos:true}}>) => {
+        const u = await find({id:user.id});
         (session as unknown as Session).user.id = user.id; // eslint-disable-line no-param-reassign
         (session as unknown as Session).user.roles = user.roles; // eslint-disable-line no-param-reassign
         (session as unknown as Session).user.name = user.name; // eslint-disable-line no-param-reassign
+        (session as unknown as Session).user.photos = u && ('photos' in u) ? u.photos : [];
         return Promise.resolve(session);
       },
     },
@@ -160,3 +161,5 @@ export default (req: NextApiRequest, res: NextApiResponse): void | Promise<void>
     },
   });
 };
+
+export default res;

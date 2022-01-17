@@ -3,12 +3,13 @@ import {Form} from 'multiparty';
 import { getSession } from 'next-auth/client';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { find } from '../../../src/facades/user';
+import { find, update } from '../../../src/facades/user';
 
 import { Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import prisma from '../../../src/lib/prisma';
-import {storeUploadUserPhoto} from '@/src/facades/fileUpload'
+import {storeDeleteFile, storeUploadUserPhoto} from '@/src/facades/fileUpload'
+import { UserMosaicItem } from '@/src/types/user';
 
 export const config = {
   api: {
@@ -61,7 +62,28 @@ export default getApiHandler()
         prev = {...prev, [`${k}`]: val};
         return prev;
       },{});
+      
       if(files.photo && files.photo[0]){
+        const user = await find({id:idNum});
+        if(!user){
+          res.statusMessage = 'User not found';
+          return res.status(405).end();
+        }
+        if((user as UserMosaicItem).photos.length){
+          const storedFile = (user as UserMosaicItem).photos[0].storedFile;
+          const resImageRemoving = await storeDeleteFile(storedFile,'users-photos');
+          if(!resImageRemoving){
+            res.statusMessage = 'Removing image has failed';
+            return res.status(500).end();
+          }
+          const resPhotoRemoving = await update(idNum,{
+            photos:{deleteMany:{}}
+          });
+          if(!resPhotoRemoving){
+            res.statusMessage = 'Removing user photo has failed';
+            return res.status(500).end();
+          }
+        }
         const coverImageUploadData = await storeUploadUserPhoto(files.photo[0]);
         const existingLocalImage = await prisma.localImage.findFirst({
           where: { contentHash: coverImageUploadData.contentHash },
@@ -76,8 +98,7 @@ export default getApiHandler()
           }
         }
       }
-      debugger;
-      const r = await prisma.user.update({ where: { id: idNum }, data });
+      const r = await update(idNum, data);
       res.status(200).json({ status: 'OK', r });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

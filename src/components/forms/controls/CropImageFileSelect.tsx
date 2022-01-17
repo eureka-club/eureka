@@ -47,10 +47,10 @@ const CropImageFileSelect: React.FC<Props> = ({onGenerateCrop,src='',x=0,y=0,wid
       
       
 
-      // canvas.toBlob((blob) => {debugger;
+      // canvas.toBlob((blob) => {
       //   if(blob){
       //     const s = URL.createObjectURL(blob);
-      //     imageRef.current?.addEventListener('load',()=>{debugger;
+      //     imageRef.current?.addEventListener('load',()=>{
       //       URL.revokeObjectURL(s);
       //     })
       //     setBlobSRC(()=>s);

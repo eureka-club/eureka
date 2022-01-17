@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { setCookie } from 'nookies';
 import { FunctionComponent, MouseEvent } from 'react';
+import LocalImageComponent from '@/components/LocalImage'
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -82,8 +83,13 @@ const NavBar: FunctionComponent = () => {
   // };
 
   const getAvatar = () => {
-    if (session && session.user.image)
-      return <img src={session.user.image} className={styles.navbarIconNav} alt="user" />;
+    if (session){
+      const u = (session as unknown as Session).user;
+      if(u.photos && u.photos.length)
+        return <LocalImageComponent filePath={`users-photos/${u.photos[0].storedFile}` } alt={u.name||''} />;
+      if(u.image)
+        return <img src={u.image} className={styles.navbarIconNav} alt="user" />;
+    }
     return <BiUser className={styles.navbarIconNav} />;
   };
 

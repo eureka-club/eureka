@@ -1,4 +1,4 @@
-import { User } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { UserMosaicItem } from '@/types/user';
 // import { UserDetail } from '../types/user';
 import prisma from '../lib/prisma';
@@ -159,5 +159,12 @@ export const findAll = async (): Promise<User[]> => {
 export const remove = async (id: number): Promise<User> => {
   return prisma.user.delete({
     where: { id },
+  });
+};
+
+export const update = async (id: number, data: Prisma.UserUpdateInput)=>{
+  return prisma.user.update({
+    data,
+    where:{id}
   });
 };
