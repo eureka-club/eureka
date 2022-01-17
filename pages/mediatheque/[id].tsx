@@ -15,12 +15,12 @@ import { Spinner, Card, Row, Col, ButtonGroup, Button, Alert } from 'react-boots
 import { AiOutlineEnvironment } from 'react-icons/ai';
 import { /* BsCircleFill, */ BsBookmark, BsEye } from 'react-icons/bs';
 import { BiArrowBack } from 'react-icons/bi';
-
+import LocalImageComponent from '@/src/components/LocalImage'
 import { HiOutlineUserGroup } from 'react-icons/hi';
 
 import { /* RatingOnCycle, */ RatingOnWork, User } from '@prisma/client';
 import styles from './index.module.css';
-import { useUsers } from '../../src/useUsers';
+import useUser from '@/src/useUser';
 
 import globalSearchEngineAtom from '../../src/atoms/searchEngine';
 import globalModalsAtom from '@/src/atoms/globalModals'
@@ -38,6 +38,8 @@ import { CycleMosaicItem /* , CycleWithImages */ } from '../../src/types/cycle';
 import { PostMosaicItem /* , PostWithImages */ } from '../../src/types/post';
 import { WorkMosaicItem /* , WorkWithImages */ } from '../../src/types/work';
 import { UserMosaicItem /* , UserDetail, WorkWithImages */ } from '../../src/types/user';
+import UnclampText from '../../src/components/UnclampText';
+
 // import MosaicItemCycle from '../../src/components/cycle/MosaicItem';
 // import MosaicItemPost from '../../src/components/post/MosaicItem';
 // import MosaicItemWork from '../../src/components/work/MosaicItem';
@@ -92,18 +94,16 @@ const Mediatheque: NextPage = () => {
     if (session) setIdSession((session as unknown as Session).user.id.toString());
   }, [session, router]);
 
-  const { /* isError, error, */ data: user, isLoading: isLoadingUser, isSuccess: isSuccessUser } = useUsers({ id });
+  const { /* isError, error, */ data: user, isLoading: isLoadingUser, isSuccess: isSuccessUser } = useUser(+id,{
+    enabled:!!+id
+  });
 
   useEffect(() => {
     if (isSuccessUser && id && !user) {
-      queryClient.invalidateQueries(['USERS', `${id}`]);
+      queryClient.invalidateQueries(['USER', `${id}`]);
     }
   }, [user, id, isSuccessUser]);
 
-  // const { /* isLoading, isError, error, */ data: dataUserSession } = useUsers({ id: idSession });
-  // const [/* userSession, */ setUserSession] = useState();
-  // const [preparingData, setPreparingData] = useState<boolean>(false);
-  // const [isAccessAllowed, setIsAccessAllowed] = useState<boolean>(false);
 
   useEffect(() => {
     if (user && user.id && session) {
@@ -163,12 +163,12 @@ const Mediatheque: NextPage = () => {
     },
     {
       onMutate: async () => {
-        await queryClient.cancelQueries(['USERS', id]);
-        await queryClient.cancelQueries(['USERS', idSession]);
+        await queryClient.cancelQueries(['USER', id]);
+        await queryClient.cancelQueries(['USER', idSession]);
 
         type UserFollow = User & { followedBy: User[]; following: User[] };
-        const followingUser = queryClient.getQueryData<UserFollow>(['USERS', id]);
-        const followedByUser = queryClient.getQueryData<UserFollow>(['USERS', idSession]);
+        const followingUser = queryClient.getQueryData<UserFollow>(['USER', id]);
+        const followedByUser = queryClient.getQueryData<UserFollow>(['USER', idSession]);
         let followedBy: User[] = [];
         let following: User[] = [];
         if (followingUser && followedByUser)
@@ -179,32 +179,21 @@ const Mediatheque: NextPage = () => {
             followedBy = [...followingUser.followedBy, followedByUser];
             following = [...followedByUser.following, followingUser];
           }
-        queryClient.setQueryData(['USERS', id], { ...followingUser, followedBy });
-        queryClient.setQueryData(['USERS', idSession], { ...followedByUser, following });
+        queryClient.setQueryData(['USER', id], { ...followingUser, followedBy });
+        queryClient.setQueryData(['USER', idSession], { ...followedByUser, following });
         return { followingUser, followedByUser };
       },
       onError: (err, data, context: any) => {
-        queryClient.setQueryData(['USERS', id], context.followingUser);
-        queryClient.setQueryData(['USERS', idSession], context.followedByUser);
+        queryClient.setQueryData(['USER', id], context.followingUser);
+        queryClient.setQueryData(['USER', idSession], context.followedByUser);
       },
 
       onSettled: () => {
-        queryClient.invalidateQueries(['USERS', id]);
-        queryClient.invalidateQueries(['USERS', idSession]);
+        queryClient.invalidateQueries(['USER', id]);
+        queryClient.invalidateQueries(['USER', idSession]);
       },
     },
   );
-
-  const seeAll = async (data: (Item | UserMosaicItem)[], q: string, showFilterEngine = true): Promise<void> => {
-    setGlobalSearchEngineState({
-      ...globalSearchEngineState,
-      itemsFound: data,
-      q,
-      show: showFilterEngine,
-    });
-
-    router.push(`/search?q=${q}`);
-  };
 
   const followHandler = async () => {
     const s = session;
@@ -213,15 +202,26 @@ const Mediatheque: NextPage = () => {
     }
   };
 
+  const seeAll = async (data: (Item | UserMosaicItem)[], q: string, showFilterEngine = true): Promise<void> => {
+    setGlobalSearchEngineState({
+      ...globalSearchEngineState,
+      itemsFound: data,
+      q,
+      show: showFilterEngine,
+    });
+    router.push(`/search?q=${q}`);
+  };
+  
+
   const postsCreated = () => {
     if (user && user.posts && user.posts.length) {
-      const P = user.posts.map((p: PostMosaicItem) => ({ ...p, type: 'post' }));
+      const P = user.posts.map((p) => ({ ...p , type: 'post' }));
       return (
         <CarouselStatic
           className="mb-5"
-          onSeeAll={async () => seeAll(P, t('Eurekas I created'))}
+          onSeeAll={async () => seeAll(P as Item[], t('Eurekas I created'))}
           title={t('Eurekas I created')}
-          data={P}
+          data={P as Item[]}
           iconBefore={<></>}
           mosaicBoxClassName="pb-1"
           // iconAfter={<BsCircleFill className={styles.infoCircle} />}
@@ -234,11 +234,12 @@ const Mediatheque: NextPage = () => {
   const cyclesJoined = () => {
     const C: ItemCycle[] = [];
     if (user && user.cycles && user.cycles.length) {
-      C.push(...user.cycles.map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' })));
+      const c1 = user.cycles.map((c) => ({ ...c, type: 'cycle' }));
+      C.push(...(c1 as ItemCycle[]));
     }
     if (user && user.joinedCycles && user.joinedCycles.length) {
       const JC: ItemCycle[] = [];
-      user.joinedCycles.reduce((p: ItemCycle[], c: Item) => {
+      user.joinedCycles.reduce((p: ItemCycle[], c) => {
         if (c.creatorId !== parseInt(id, 10)) {
           // otherwise will be already on C
           p.push({ ...c, type: 'cycle' } as ItemCycle);
@@ -270,7 +271,7 @@ const Mediatheque: NextPage = () => {
 
   const readOrWatched = () => {
     if (user && user.ratingWorks && user.ratingWorks.length) {
-      const RW = user.ratingWorks.map((w: RatingOnWork & { work: WorkMosaicItem }) => w.work!);
+      const RW = user.ratingWorks.map((w) => (w as RatingOnWork & { work: WorkMosaicItem }).work!);
 
       return (
         <CarouselStatic
@@ -287,17 +288,20 @@ const Mediatheque: NextPage = () => {
   };
 
   const savedForLater = () => {
-    const SFL: ItemCycle[] = [];
+    const SFL: Item[] = [];
     if (user && user.favWorks && user.favWorks.length) {
-      SFL.push(...user.favWorks);
+      const w1 = user.favWorks as Item[];
+      SFL.push(...w1);
     }
     if (user && user.favCycles && user.favCycles.length) {
-      SFL.push(...user.favCycles.map((c: CycleMosaicItem) => ({ ...c, type: 'cycle' })));
+      const c1 = user.favCycles.map((c) => ({ ...c, type: 'cycle' })) as Item[];
+      SFL.push(...c1);
     }
     if (user && user.favPosts && user.favPosts.length) {
-      SFL.push(...user.favPosts.map((p: PostMosaicItem) => ({ ...p, type: 'post' })));
+      const p1 = user.favPosts.map((p) => ({ ...p, type: 'post' })) as Item[];
+      SFL.push(...p1);
     }
-    SFL.sort((f: CycleMosaicItem, s: CycleMosaicItem) => {
+    SFL.sort((f: Item, s: Item) => {
       const fCD = dayjs(f.createdAt);
       const sCD = dayjs(s.createdAt);
       if (fCD.isAfter(sCD)) return -1;
@@ -345,7 +349,7 @@ const Mediatheque: NextPage = () => {
   };
 
   const renderCountry = () => {
-    if (user.countryOfOrigin)
+    if (user && user.countryOfOrigin)
       return (
         <em>
           <AiOutlineEnvironment /> {`${t(`countries:${user.countryOfOrigin}`)}`}
@@ -365,6 +369,20 @@ const Mediatheque: NextPage = () => {
         message: 'hello to',
       });
     }
+  }
+
+  const renderAvatar = ()=>{
+    if(user){
+      if(!user?.photos.length)
+        return <img
+        onError={avatarError}
+        className={styles.avatar}
+        src={user.image || '/img/default-avatar.png'}
+        alt={user.name||''}
+      />;
+      return <LocalImageComponent filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />
+    }
+    return '';
   };
 
   return (
@@ -380,28 +398,22 @@ const Mediatheque: NextPage = () => {
 
         {!(isLoadingUser || isLoadingSession) && user && (
           <section>
-            <Card className={styles.userHeader}>
+            <Card className='userHeader'>
               <Card.Body>
                 <Row>
                   <Col>
-                    <img
-                      onError={avatarError}
-                      className={styles.avatar}
-                      src={user.image || '/img/default-avatar.png'}
-                      alt={user.name}
-                    />
-                    <br />
-                    {/* <em>{user.name}</em> */}
+                     {renderAvatar()}
+                    
                   </Col>
                   <Col xs={8}>
                     <h2>{user.name}</h2>
                     {renderCountry()}
                     <p className={styles.description}>{user.aboutMe}</p>
-                    <TagsInput tags={user.tags} readOnly label="" />
+                    {user && <TagsInput tags={user.tags||''} readOnly label="" />}
                   </Col>
-                  <Col>
+                  <Col className='mt-2 d-grid gap-2 d-md-flex justify-content-md-end d-lg-block'>
                     {session && (session as unknown as Session).user!.id !== user.id && !isFollowedByMe && (
-                      <Button onClick={followHandler} disabled={isLoadingMutateFollowing}>
+                      <Button className='text-white rounded-pill' onClick={followHandler} disabled={isLoadingMutateFollowing}>
                         {t('Follow')}
                         {isLoadingMutateFollowing && <Spinner animation="grow" variant="info" size="sm" />}
                       </Button>
@@ -410,7 +422,7 @@ const Mediatheque: NextPage = () => {
                     {session && (session as unknown as Session).user!.id !== user.id && isFollowedByMe && (
                       <Button
                         variant="button border-primary text-primary fs-6"
-                        className="w-80"
+                        className="w-80 rounded-pill"
                         onClick={followHandler}
                         disabled={isLoadingMutateFollowing}
                       >
@@ -425,7 +437,7 @@ const Mediatheque: NextPage = () => {
             </Card>
             {isAccessAllowed() && (
               <>
-                <h1 className="text-secondary fw-bold mb-2">{t('Mediatheque')}</h1>
+                <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('Mediatheque')}</h1>
                 <FilterEngine fictionOrNotFilter={false} geographyFilter={false} />
                 {postsCreated()}
 

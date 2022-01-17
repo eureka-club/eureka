@@ -83,3 +83,74 @@ export const storeUpload = async (file: FileUpload): Promise<StoredFileUpload> =
       throw new Error('Unknown PUBLIC_ASSETS_STORAGE_MECHANISM');
   }
 };
+
+export const storeUploadUserPhoto = async (file: FileUpload): Promise<StoredFileUpload> => {
+  const fileHash = getFileHash(file.path);
+  const fileStorePath = getFileStorePath(file, fileHash);
+
+  switch (NEXT_PUBLIC_PUBLIC_ASSETS_STORAGE_MECHANISM) {
+    case STORAGE_MECHANISM_AZURE: {
+      const blobServiceClient = new BlobServiceClient(
+        `https://${AZURE_STORAGE_ACCOUNT_NAME}.blob.core.windows.net`,
+        newPipeline(new StorageSharedKeyCredential(AZURE_STORAGE_ACCOUNT_NAME!, AZURE_STORAGE_ACCOUNT_ACCESS_KEY!)),
+      );
+      const containerPath = path.join(NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME!,'users-photos');
+      const containerClient = blobServiceClient.getContainerClient(containerPath);
+      const blockBlobClient = containerClient.getBlockBlobClient(fileStorePath);
+
+      await blockBlobClient.uploadFile(file.path, {
+        blobHTTPHeaders: { blobContentType: file.headers['content-type'] },
+      });
+
+      return {
+        contentHash: fileHash,
+        originalFilename: file.originalFilename,
+        storedFile: fileStorePath,
+        mimeType: file.headers['content-type'],
+      };
+    }
+
+    case STORAGE_MECHANISM_LOCAL_FILES: {
+      await moveLocalUpload(file, fileHash);
+
+      return {
+        contentHash: fileHash,
+        originalFilename: file.originalFilename,
+        storedFile: fileStorePath,
+        mimeType: file.headers['content-type'],
+      };
+    }
+
+    default:
+      throw new Error('Unknown PUBLIC_ASSETS_STORAGE_MECHANISM');
+  }
+};
+
+export const storeDeleteFile = async (storedFile: string, subPath:string = ''): Promise<boolean> => {
+  const [containerFolder,fileName] = storedFile.split('/');//  /??? :|
+  switch (NEXT_PUBLIC_PUBLIC_ASSETS_STORAGE_MECHANISM) {
+    case STORAGE_MECHANISM_AZURE: {
+      const blobServiceClient = new BlobServiceClient(
+        `https://${AZURE_STORAGE_ACCOUNT_NAME}.blob.core.windows.net`,
+        newPipeline(new StorageSharedKeyCredential(AZURE_STORAGE_ACCOUNT_NAME!, AZURE_STORAGE_ACCOUNT_ACCESS_KEY!)),
+      );
+      const containerPath = path.join(NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME!,subPath,containerFolder);
+      const containerClient = blobServiceClient.getContainerClient(containerPath);
+      const blockBlobClient = containerClient.getBlockBlobClient(fileName);
+      const res = await blockBlobClient.deleteIfExists(); 
+      if(!res.succeeded)
+        return false;
+      return true;
+    }
+
+    // TODO remove locally
+    // case STORAGE_MECHANISM_LOCAL_FILES: {
+    //   await moveLocalUpload(file, fileHash);
+
+    //   return true;
+    // }
+
+    default:
+      throw new Error('Unknown PUBLIC_ASSETS_STORAGE_MECHANISM');
+  }
+};

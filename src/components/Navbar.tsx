@@ -7,6 +7,10 @@ import useTranslation from 'next-translate/useTranslation';
 import { setCookie } from 'nookies';
 import { FunctionComponent, MouseEvent } from 'react';
 import { v4 } from 'uuid';
+import LocalImageComponent from '@/components/LocalImage'
+
+// import NavItem from 'react-bootstrap/NavItem';
+
 import {
   // BootstrapNavbar,
   Container,
@@ -88,8 +92,13 @@ const NavBar: FunctionComponent = () => {
   // };
 
   const getAvatar = () => {
-    if (session && session.user.image)
-      return <img src={session.user.image} className={styles.navbarIconNav} alt="user" />;
+    if (session){
+      const u = (session as unknown as Session).user;
+      if(u.photos && u.photos.length)
+        return <LocalImageComponent filePath={`users-photos/${u.photos[0].storedFile}` } alt={u.name||''} />;
+      if(u.image)
+        return <img src={u.image} className={styles.navbarIconNav} alt="user" />;
+    }
     return <BiUser className={styles.navbarIconNav} />;
   };
 

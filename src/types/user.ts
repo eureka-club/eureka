@@ -8,6 +8,7 @@ export interface EditUserClientPayload {
   aboutMe?: string;
   dashboardType: number;
   tags?: string;
+  photo?:File;
 }
 
 type UserFoolow = {
@@ -16,12 +17,16 @@ type UserFoolow = {
     joinedCycles: true;
     likedCycles: true;
     favCycles: true;
+    favPosts:true;
     posts: true;
     likedWorks: true;
     favWorks: true;
+    ratingWorks:true;
+    ratingCycles:true;
     readOrWatchedWorks: true;
     following: true;
     followedBy: true;
+    photos:true;
   };
 };
 

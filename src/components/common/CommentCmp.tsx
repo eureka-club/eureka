@@ -24,7 +24,6 @@ import {v4} from 'uuid';
 // import { CycleMosaicItem } from '../../types/cycle';
 // import { PostMosaicItem } from '../../types/post';
 // import { WorkMosaicItem } from '../../types/work';
-// import { useUsers } from '../../useUsers';
 // import { useAtom } from 'jotai';
 // import globalModalsAtom from '../../atoms/globalModals';
 
