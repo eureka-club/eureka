@@ -149,8 +149,20 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
       method: 'POST',
       body: formData,
     });
-
-    return res.json();
+    const json = await res.json();
+    if(!res.ok){
+      setGlobalModalsState({
+        ...globalModalsState,
+        showToast: {
+          show: true,
+          type: 'warning',
+          title: t(`common:${res.statusText}`),
+          message: json.error,
+        },
+      });
+      return null;
+    }
+    return json;
   });
 
   const router = useRouter();
@@ -576,7 +588,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                               : false
                           }
                           onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                            handlerSelectedWorksForCycleStartDate(e, idx)
+                            handlerSelectedWorksForCycleStartDate(e, wm.id)
                           }
                         />
                       </Form.Group>
@@ -590,7 +602,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                               : false
                           }
                           onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                            handlerSelectedWorksForCycleEndDate(e, idx)
+                            handlerSelectedWorksForCycleEndDate(e, wm.id)
                           }
                         />
                       </Form.Group>
