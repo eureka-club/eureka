@@ -74,11 +74,11 @@ export const image64toCanvasRef = (
        
        canvas.toBlob((blob) => {
         if(blob){
-          let file = new File([blob], `${v4()}.png`, { type: "image/png" })
+          let file = new File([blob], `${v4()}.webp`, { type: "image/webp" })
           resolve(file);
         }
      
-      }, 'image/jpeg');
+      }, 'image/webp');
     }
 
   })
