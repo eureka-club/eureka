@@ -209,6 +209,7 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
             'insertdatetime media table paste code help wordcount',
           ],
           relative_urls: false,
+          forced_root_block : "p,a",
           toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
           // toolbar:
           //   'undo redo | formatselect | ' +
