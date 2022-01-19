@@ -237,7 +237,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
 
   const onKeyUpEditorEdit = (e: EditorEvent<KeyboardEvent>)=>{
     if (e.key === 'Enter' && !e.shiftKey) {
-      debugger;
+      //debugger;
       setEditCommentInput(()=>editorRef.current.getContent())
       submitEditForm();
       e.preventDefault();
@@ -277,10 +277,12 @@ const CommentActionsBar: FunctionComponent<Props> = ({
               'insertdatetime media table paste code help',
             ],
             relative_urls: false,
+            forced_root_block : "p,a",
             // toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
             toolbar:false,
             branding:false,
             statusbar:false,
+
             content_style: `body { 
               font-family:Helvetica,Arial,sans-serif; 
               font-size:14px; 
