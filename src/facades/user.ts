@@ -1,4 +1,5 @@
-import { User } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
+import { UserMosaicItem } from '@/types/user';
 // import { UserDetail } from '../types/user';
 import prisma from '../lib/prisma';
 
@@ -7,11 +8,11 @@ export interface findProps {
   select?: Record<string, boolean>;
   include?: boolean;
 }
-export const find = async (props: findProps): Promise<User | null> => {
+export const find = async (props: findProps): Promise<User | UserMosaicItem | null> => {
   const { id, select = undefined, include = true } = props;
   return prisma.user.findUnique({
     where: { id },
-    ...(select && { select }),
+    // ...(select && { select }),
     ...(include && {
       include: {
         cycles: {
@@ -39,8 +40,10 @@ export const find = async (props: findProps): Promise<User | null> => {
           include: {
             creator: true,
             localImages: true,
-            works: true,
-            cycles: true,
+            works: {
+              include: { localImages: true, ratings: true, favs: true },
+            },
+            cycles: {include:{localImages:true}},
             likes: true,
             favs: true,
             comments: {
@@ -100,6 +103,9 @@ export const find = async (props: findProps): Promise<User | null> => {
             work: { include: { localImages: true, ratings: true, favs: true } },
             workId: true,
           },
+          // include:{
+          //   work: { include: { localImages: true, ratings: true, favs: true } },
+          // },
           orderBy: {
             createdAt: 'desc',
           },
@@ -115,6 +121,12 @@ export const find = async (props: findProps): Promise<User | null> => {
           orderBy: {
             createdAt: 'desc',
           },
+        },
+        photos:{
+          select:{
+            originalFilename:true,
+            storedFile:true,
+          }
         },
       },
     }),
@@ -147,5 +159,12 @@ export const findAll = async (): Promise<User[]> => {
 export const remove = async (id: number): Promise<User> => {
   return prisma.user.delete({
     where: { id },
+  });
+};
+
+export const update = async (id: number, data: Prisma.UserUpdateInput)=>{
+  return prisma.user.update({
+    data,
+    where:{id}
   });
 };

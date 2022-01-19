@@ -20,7 +20,7 @@ import { isCycle, isWork, isComment, Session, isPost } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
 import { WorkMosaicItem } from '../../types/work';
-import { useUsers } from '../../useUsers';
+import useUser from '@/src/useUser';
 import CommentCmp from './CommentCmp';
 
 // import globalModalsAtom from '../../atoms/globalModals';
@@ -59,8 +59,13 @@ const CommentsList: FunctionComponent<Props> = ({
   const commentsPerPage = 2;
   const [commentsShowCount, setCommentsShowCount] = useState<number>(commentsPerPage);
   const [filterdComments, setFilterdComments] = useState<Comment[]>();
+<<<<<<< HEAD
   const { /* isLoading, isError, error, */ data: user } = useUsers({ id: idSession });
   const editorRef = useRef<any>(null);
+=======
+  const { /* isLoading, isError, error, */ data: user } = useUser(+idSession,{enabled:!!+idSession});
+
+>>>>>>> develop
   const queryClient = useQueryClient();
 
   useEffect(() => {

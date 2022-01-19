@@ -1,4 +1,4 @@
-// import classNames from 'classnames';
+import classNames from 'classnames';
 import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent } from 'react';
@@ -81,7 +81,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
   return (
     <WorkContext.Provider value={{ work, linkToWork: false }}>
       <MosaicContext.Provider value={{ showShare: true }}>
-        <ButtonGroup className="mb-1">
+        <ButtonGroup className="mt-3 mt-sm-0 mb-1">
           <Button variant="primary text-white" onClick={() => router.back()} size="sm">
             <BiArrowBack />
           </Button>
@@ -99,8 +99,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
 
         <>
           {post == null ? (
-            <Row className="mb-5">
-              <Col md={{ span: 3 }}>
+            <Row className="mb-5 d-flex flex-column flex-md-row">
+              <Col className='col-md-5 col-lg-4 col-xl-3   d-none d-md-block'>
                 <MosaicItem work={work} showTrash linkToWork={false} />
 
                 {/* <div className={classNames(styles.imgWrapper, 'mb-3')}>
@@ -108,19 +108,23 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
               </div>
               <SocialInteraction cacheKey={['WORKS', `${work.id}`]} entity={work} showCounts showShare showTrash /> */}
               </Col>
-              <Col md={{ span: 9 }}>
-                <section className="mb-4">
+              <Col className='col-md-7 col-lg-8 col-xl-9'>
+                <section className="mx-md-4">
                   <h1 className="fw-bold text-secondary">{work.title}</h1>
                   <h2 className={styles.author}>{work.author}</h2>
                   <WorkSummary work={work} />
                   {work.tags && <TagsInput tags={work.tags} readOnly label="" />}
                   {work.link != null && (
-                    <a href={work.link} className={styles.workLink} target="_blank" rel="noreferrer">
+                    <a href={work.link} className={classNames(styles.workLink,'mb-5')} target="_blank" rel="noreferrer">
                       {t('workLinkLabel')} <BsBoxArrowUpRight />
                     </a>
                   )}
-                </section>
+                
+                <div className='container d-sm-block d-md-none mt-4 mb-4 position-relative'>
+                   <MosaicItem className='postition-absolute start-50 translate-middle-x'  work={work} showTrash linkToWork={false} />
+                </div>
                 {work.contentText != null && <UnclampText isHTML={false} text={work.contentText} clampHeight="8rem" />}
+                </section>
               </Col>
             </Row>
           ) : (
@@ -155,7 +159,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
                   </style> 
                   <Row className="mb-4">
                     <Col>
-                      <Nav variant="tabs" fill>
+                     <div className=''>
+                      <Nav variant="tabs" className='scrollNav' fill>
                         <NavItem>
                           <NavLink eventKey="all">
                             {t('tabHeaderAll')} ({cyclesCount + postsCount})
@@ -172,6 +177,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
                           </NavLink>
                         </NavItem>
                       </Nav>
+                      </div>
                     </Col>
                   </Row>
                   <Row>

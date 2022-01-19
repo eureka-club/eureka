@@ -221,3 +221,75 @@ a{
   border-radius: 100px;
   border: 3px solid var(--bs-light);;
 }
+
+.tagText{
+    font-size: 0.775rem !important;
+}
+
+.scrollNav {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+  width: auto;
+}
+
+.scrollNav::-webkit-scrollbar {
+  width: 10px;
+  height: 8px;
+}
+
+.scrollNav::-webkit-scrollbar-thumb {
+  background: var(--color-primary-raised) !important;
+}
+
+.avatar {
+  border-radius: 50%;
+  width: 10em;
+  margin: 0 0 1em 1em;
+}
+ .userHeader {
+   margin: 0 0 4em 0;
+   border: 0;
+ }
+
+ @media screen and (max-width: 768px) {
+   .avatar {
+     width: 4em;
+   }
+   .userHeader {
+     margin: 0 0 1em 0;
+     border: 0;
+   }
+ }
+
+
+/*Tablet*/
+/*Portrait*/
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .scrollNav {
+    overflow: hidden;
+    white-space: none;
+  }
+}
+
+/*landscape*/
+@media screen and (min-width: 1024px) and (max-width: 768px) {
+  .scrollNav {
+    overflow: hidden;
+    white-space: none;
+  }
+}
+
+/*fin tablet*/
+
+/*Escritorio*/
+@media screen and (min-width: 1024px) {
+  .scrollNav {
+    overflow: hidden;
+    white-space: none;
+  }
+}
+
+/*Fin Escritorio*/

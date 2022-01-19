@@ -678,6 +678,30 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     }
   };
   
+  const removeCycle = async (e:MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    if(cycle){
+      const res = await fetch(`/api/cycle/${cycle.id}`,{
+        method:'delete',
+      });
+      if(res.ok){
+        const json = await res.json();
+        return json;
+      }
+      else{
+        setGlobalModalsState({
+          ...globalModalsState,
+          showToast: {
+            show: true,
+            type: 'warning',
+            title: t(`common:${res.statusText}`),
+            message: res.statusText,
+          },
+        });
+      }
+    }
+    return null;
+  };
 
   return (
     <>
@@ -690,6 +714,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
             {t('Edit')}
           </Button>
         )}
+       
+        {/* <Button className="" variant="danger" onClick={e=>{removeCycle(e)}}>Remove Cycle</Button> */}
 
         {post && cycle && canEditPost() && (
           <Button variant="warning" onClick={handleEditPostClick} size="sm">

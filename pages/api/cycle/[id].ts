@@ -8,6 +8,7 @@ import { Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { find, remove } from '../../../src/facades/cycle';
 import prisma from '../../../src/lib/prisma';
+import {storeDeleteFile} from '@/src/facades/fileUpload'
 // import redis from '../../../src/lib/redis';
 
 dayjs.extend(utc);
@@ -37,7 +38,13 @@ export default getApiHandler()
         res.status(404).end();
         return;
       }
-
+      if(cycle.localImages.length){
+        const rmf = await storeDeleteFile(cycle.localImages[0].storedFile);
+        if(!rmf){
+          res.statusMessage = 'Removing image has failed';
+          return res.status(500).end();
+        }
+      }
       await remove(cycle);
       // await redis.flushall();
       res.status(200).json({ status: 'OK' });

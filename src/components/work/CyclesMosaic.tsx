@@ -27,7 +27,7 @@ const CyclesMosaic: FunctionComponent<Props> = ({ work }) => {
       {isLoading && (
         <Spinner animation="grow" role="status"/>        
       )}
-      {isSuccess && data != null && <Mosaic stack={data} />}
+      {isSuccess && data != null && <Mosaic className='d-flex justify-content-center justify-content-md-start' stack={data} />}
     </>
   );
 };

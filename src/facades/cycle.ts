@@ -430,9 +430,12 @@ export const saveSocialInteraction = async (
 };
 
 export const remove = async (cycle: Cycle): Promise<Cycle> => {
+
   await prisma.cycle.update({
     where: { id: cycle.id },
     data: {
+      localImages: {deleteMany: {}},
+      guidelines: {deleteMany: {cycleId: cycle.id}},
       complementaryMaterials: { deleteMany: { cycleId: cycle.id } },
       participants: { set: [] },
       posts: { set: [] },

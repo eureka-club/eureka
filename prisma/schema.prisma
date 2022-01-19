@@ -47,6 +47,7 @@ model User {
   ratingWorks         RatingOnWork[]
   ratingCycles        RatingOnCycle[]
   comments            Comment[]
+  photos              LocalImage[]
   
 
   @@map(name: "users")
@@ -114,6 +115,7 @@ model LocalImage {
   cycles  Cycle[]
   posts   Post[]
   works   Work[]
+  users   User[]
 
   @@index([contentHash], name: "local_images_content_hash_index")
 

@@ -17,6 +17,8 @@ import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
+import LocalImageComponent from '@/components/LocalImage'
+import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
 import { useMutation, useQueryClient } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { useSession } from 'next-auth/client';
@@ -25,7 +27,7 @@ import { User } from '@prisma/client';
 import TagsInput from './controls/TagsInput';
 import { Session } from '../../types';
 import { EditUserClientPayload } from '../../types/user';
-import { useUsers } from '../../useUsers';
+import useUser from '@/src/useUser';
 // import ImageFileSelect from './controls/ImageFileSelect';
 import globalModalsAtom from '../../atoms/globalModals';
 import styles from './EditUserForm.module.css';
@@ -40,7 +42,8 @@ const EditUserForm: FunctionComponent = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const [tags, setTags] = useState<string>('');
-  const [user, setUser] = useState<User | undefined>();
+  const [photo, setPhoto] = useState<File>();
+  // const [user, setUser] = useState<User | undefined>();
   const [id, setId] = useState<string>('');
   const [currentImg, setCurrentImg] = useState<string | undefined>();
   const [userName, setUserName] = useState<string>();
@@ -61,15 +64,18 @@ const EditUserForm: FunctionComponent = () => {
     else setId(s.user.id.toString());
   }, []);
 
-  const { /* isLoading,  isError, error, */ data } = useUsers({ id });
+  const { /* isLoading,  isError, error, */ data:user } = useUser(+id,{
+    enabled: !!+id,
+    staleTime:1
+  });
   useEffect(() => {
-    if (data) {
-      setUser(data);
-      setUserName(data.name);
-      setTags(() => data.tags);
+    if (user) {
+      // setUser(data);
+      setUserName(user.name!);
+      setTags(() => user.tags!);
       setDashboardTypeChecked((res) => {
         let v = 'private';
-        switch (data.dashboardType) {
+        switch (user.dashboardType) {
           case 2:
             v = 'protected';
             break;
@@ -84,9 +90,11 @@ const EditUserForm: FunctionComponent = () => {
           [`${v}`]: true,
         };
       });
-      setCurrentImg(() => data.image);
+      setCurrentImg(() => user.image!);
+      // if(user.photos.length)
+      //   setUserPhotoFile(()=>user.photos[0])
     }
-  }, [data]);
+  }, [user]);
 
   const handlerCurrentImgChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCurrentImg(() => e.target.value);
@@ -105,7 +113,7 @@ const EditUserForm: FunctionComponent = () => {
 
   const { locale } = useRouter();
   const [namespace, setNamespace] = useState<Record<string, string>>();
-
+  
   useEffect(() => {
     const fn = async () => {
       const r = await i18nConfig.loadLocaleFrom(locale, 'countries');
@@ -158,10 +166,7 @@ const EditUserForm: FunctionComponent = () => {
   // }, [work]);
 
   // (data: TData, variables: TVariables, context: TContext | undefined)
-  const onMutateSuccess = async (d: { r: any }) => {
-    await queryClient.setQueryData(['USERS', id], { ...user, ...d.r });
-    setUser((u) => ({ ...u, ...d.r }));
-  };
+  
   const {
     mutate: execEditUser,
     error: editUserError,
@@ -170,14 +175,46 @@ const EditUserForm: FunctionComponent = () => {
     isSuccess,
   } = useMutation(
     async (payload: EditUserClientPayload) => {
+      const fd = new FormData();
+      Object.entries(payload).forEach(([key,value])=>{
+        if(value)
+          fd.append(key,value);
+      });
       const res = await fetch(`/api/user/${id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        // headers: { 'Content-Type': 'application/json' },
+        body: fd,
       });
+      if(!res.ok){
+        setGlobalModalsState((r)=>({
+          ...r,
+          showToast: {
+            show: true,
+            type: 'warning',
+            title: t('Warning'),
+            message: res.statusText,
+          },
+        }));
+        return null;
+      }
       return res.json();
     },
-    { onSuccess: onMutateSuccess },
+    {
+      onMutate: async () => {
+        const cacheKey = ['USER',id];
+        const snapshot = queryClient.getQueryData(cacheKey);
+        return { cacheKey, snapshot };        
+      },
+      onSettled: (_user, error, _variables, context) => {
+        if (context) {
+          const { cacheKey, snapshot } = context;
+          if (error && cacheKey) {
+            queryClient.setQueryData(cacheKey, snapshot);
+          }
+          if (context) queryClient.invalidateQueries(cacheKey);
+        }
+      },
+    },
   );
 
   // const handleWorkTypeChange = (ev: ChangeEvent<HTMLSelectElement>) => {
@@ -214,6 +251,7 @@ const EditUserForm: FunctionComponent = () => {
       aboutMe: form.aboutMe.value,
       dashboardType: privacySettings || 3,
       tags,
+      ... (photo && {photo}),
     };
 
     await execEditUser(payload);
@@ -298,6 +336,10 @@ const EditUserForm: FunctionComponent = () => {
     setUserName(e.currentTarget.value.slice(0, 30));
   };
 
+  const onGenerateCrop = (photo: File) => {
+    setPhoto(()=>photo);
+  };
+
   return (
     <>
       {user && (
@@ -330,7 +372,7 @@ const EditUserForm: FunctionComponent = () => {
                   </FormGroup>
                 </Col>
               </Row>
-              <Row>
+              {/* <Row>
                 <Col>
                   <FormGroup controlId="image" className="mb-3">
                     <FormLabel>
@@ -339,7 +381,7 @@ const EditUserForm: FunctionComponent = () => {
                     </FormLabel>
                     <Row>
                       <Col xs={12} md={2}>
-                        <img style={{ width: '5em' }} src={currentImg} alt={user.email || undefined} />
+                           
                       </Col>
                       <Col xs={12} md={10}>
                         <FormControl
@@ -353,6 +395,13 @@ const EditUserForm: FunctionComponent = () => {
                     </Row>
                   </FormGroup>
                 </Col>
+              </Row> */}
+              <Row>
+                <Col>
+                
+                  <CropImageFileSelect onGenerateCrop={onGenerateCrop} src={''}/>
+                </Col>
+              
               </Row>
               <Row>
                 <Col>
@@ -468,7 +517,7 @@ const EditUserForm: FunctionComponent = () => {
 
           <ModalFooter>
             <Container className="py-3">
-              <Button variant="primary" type="submit" className="text-white">
+              <Button variant="primary" disabled={isLoadingUser} type="submit" className="text-white">
                 {t('Edit')}
                 {isLoadingUser ? (
                   <Spinner animation="grow" variant="info" size="sm" className="ms-1" />

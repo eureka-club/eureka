@@ -62,7 +62,7 @@ const renderMosaicItem = (
       </CycleContext.Provider>
     );
   }
-  if (isPostMosaicItem(item) || item.type === 'post') {
+  if (isPostMosaicItem(item) || (item && item.type === 'post')) {
     let pp;
     const it: PostMosaicItem = item as PostMosaicItem;
     if (it.works && it.works.length > 0) [pp] = it.works;
