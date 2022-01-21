@@ -3,7 +3,7 @@ import { FunctionComponent, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 // import { useRouter } from 'next/router';
-
+import useTranslation from 'next-translate/useTranslation';
 import Navbar from '../Navbar';
 import NavbarMobile from '../NavbarMobile';
 import Header from './Header';
@@ -19,6 +19,8 @@ import globalModalsAtom from '../../atoms/globalModals';
 import withTitle from '../../HOCs/withTitle';
 import Toast from '../common/Toast';
 
+import {getNotificationMessage} from '@/src/lib/utils'
+
 type Props = {
   children: JSX.Element | JSX.Element[];
   title?: string;
@@ -27,6 +29,8 @@ type Props = {
 };
 
 const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, banner }) => {
+  const {t} = useTranslation('notification');
+  
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const handleCreatePostModalClose = () => {
     setGlobalModalsState({ ...globalModalsState, ...{ createPostModalOpened: false } });
@@ -56,6 +60,9 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
   //   setGlobalModalsState({ ...globalModalsState, showToast: { ...globalModalsState.showToast, show: false } });
   // };
 
+  const formatMessage = (message:string) => {
+    return getNotificationMessage(message, (key,payload) => t(key,payload));
+  }
 
   useEffect(()=>{
     globalThis.addEventListener('notify',(e)=>{
@@ -64,7 +71,7 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
         ...res, 
         showToast: {
           title:"Notification",
-          message: (e as CustomEvent).detail, 
+          message: formatMessage((e as CustomEvent).detail), 
           show: true,
         } 
       }));

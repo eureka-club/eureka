@@ -47,7 +47,7 @@ export const update = async (
   // fromUser:number,
   // toUsers:number[]
   )=>{
-    try{debugger;
+    try{
       if('viewed' in data){
         const {viewed} = data;        
         const nou = await prisma.notificationsOnUsers.update({
@@ -95,3 +95,5 @@ export const create = async (
     updatedAt: dayjs.utc().format()
   }});
 };
+
+
