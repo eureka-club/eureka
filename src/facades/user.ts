@@ -11,10 +11,18 @@ export interface findProps {
 export const find = async (props: findProps): Promise<User | UserMosaicItem | null> => {
   const { id, select = undefined, include = true } = props;
   return prisma.user.findUnique({
-    where: { id },
+    where: { 
+      id,
+    },
     // ...(select && { select }),
     ...(include && {
       include: {
+        notifications:{
+          include:{
+            notification:true
+          },
+          where:{viewed: false}
+        },
         cycles: {
           include: { ratings: true, favs: true, works: true, localImages: true, participants: true },
           orderBy: {

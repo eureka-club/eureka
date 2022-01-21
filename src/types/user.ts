@@ -27,6 +27,9 @@ type UserFoolow = {
     following: true;
     followedBy: true;
     photos:true;
+    notifications:{
+      include:{notification:true};
+    }
   };
 };
 

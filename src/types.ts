@@ -17,7 +17,12 @@ export interface FileUpload {
 export interface Session {
   accessToken?: string;
   expires: string;
-  user: Prisma.UserGetPayload<{include:{photos:true}}>;
+  user: Prisma.UserGetPayload<{
+    include:{
+      photos:true, 
+      notifications:{include:{notification:true}}
+    }
+  }>;
 }
 
 export interface StoredFileUpload {
@@ -85,3 +90,11 @@ export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMos
 
 export const isUserMosaicItem = (obj: MosaicItem | SearchResult): obj is UserMosaicItem =>
   obj && 'email' in obj && 'countryOfOrigin' in obj && 'image' in obj;
+
+export interface NotifierResponse{
+    data: Record<string,any>;
+  } 
+export  interface NotifierRequest {
+    toUsers: number[];
+    data: Record<string,any>;
+  }

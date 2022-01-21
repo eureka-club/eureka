@@ -2,11 +2,12 @@ import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
 
-import { FileUpload, Session } from '../../../src/types';
-import getApiHandler from '../../../src/lib/getApiHandler';
-import { storeUpload } from '../../../src/facades/fileUpload';
-import { createFromServerFields, findAll } from '../../../src/facades/post';
-import prisma from '../../../src/lib/prisma';
+import { FileUpload, Session } from '@/src/types';
+import getApiHandler from '@/src/lib/getApiHandler';
+import { storeUpload } from '@/src/facades/fileUpload';
+import { createFromServerFields, findAll } from '@/src/facades/post';
+import { create } from '@/src/facades/notification';
+import prisma from '@/src/lib/prisma';
 
 export const config = {
   api: {
@@ -36,9 +37,14 @@ export default getApiHandler()
         const image: FileUpload = files.image[0];
 
         const uploadData = await storeUpload(image);
-        const post = await createFromServerFields(fields, uploadData, session.user);
-
-        res.status(201).json({ ok: true, post });
+        const post = await createFromServerFields(fields, uploadData, session.user);debugger;
+        const notification = await create(
+          fields.notificationMessage[0],
+          fields.notificationContextURL[0],
+          session.user.id,
+          fields.notificationToUsers[0].split(',').map((i:string) => +i),
+        );
+        res.status(201).json({ post, notification });
       });
     } catch (excp) {
       /* const excpMessageTokens = excp.message.match(/\[(\d{3})\] (.*)/);
@@ -48,7 +54,8 @@ export default getApiHandler()
       }
  */
       console.error(excp); // eslint-disable-line no-console
-      res.status(500).json({ ok: false, status: 'server error' });
+      res.statusMessage = 'server error';
+      res.status(500).end();
     } finally {
       prisma.$disconnect();
     }

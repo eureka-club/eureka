@@ -48,6 +48,8 @@ model User {
   ratingCycles        RatingOnCycle[]
   comments            Comment[]
   photos              LocalImage[]
+  notify              Notification[]
+  notifications       NotificationsOnUsers[]
   
 
   @@map(name: "users")
@@ -385,4 +387,31 @@ model RatingOnCycle {
 
   @@map("ratingOnCycleId")
   
+}
+
+model Notification {
+  id               Int                     @default(autoincrement()) @id
+  contextURL       String  
+  
+  //translationKey!|!JSON.stringify(variable1:value;variable2:value)
+  message          String
+  
+  fromUser         User                   @relation(fields: [fromUserId], references: [id])
+  fromUserId       Int
+  
+  createdAt        DateTime                @default(now()) @map(name: "created_at")
+  updatedAt        DateTime                @updatedAt @map(name: "updated_at")
+  toUsers          NotificationsOnUsers[]
+}
+
+model NotificationsOnUsers {
+  user                User                 @relation(fields: [userId], references: [id], onUpdate: NoAction)
+  userId              Int 
+
+  notification        Notification         @relation(fields: [notificationId], references: [id], onUpdate: NoAction)
+  notificationId      Int
+
+  viewed              Boolean              @default(false)
+
+  @@id([userId, notificationId])
 }

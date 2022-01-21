@@ -2,7 +2,7 @@ import { Provider } from 'jotai';
 import { AppProps } from 'next/app';
 import { Provider as NextAuthProvider } from 'next-auth/client';
 import appWithI18n from 'next-translate/appWithI18n';
-import { StrictMode, FunctionComponent, useState } from 'react';
+import { StrictMode, FunctionComponent, useState, useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { Hydrate } from 'react-query/hydration';
@@ -14,9 +14,14 @@ import globalModalsAtom from '../src/atoms/globalModals';
 import './scss/custom.scss';
 
 // const queryClient = new QueryClient();
+// import { GlobalEventsContext, useGlobalEventsContext } from '@/src/useGlobalEventsContext';
+import { NotificationProvider } from '@/src/useNotificationProvider';
+
 
 const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
+  
   const { initialState } = pageProps;
+  // const gec = useGlobalEventsContext();
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -31,15 +36,19 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   return (
     <StrictMode>
       <NextAuthProvider session={pageProps.session}>
-        <Provider initialValues={initialState && [[detailPagesAtom, globalModalsAtom, initialState]]}>
-          <QueryClientProvider client={queryClient}>
-            <Hydrate state={pageProps.dehydratedState}>
-              {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-              <Component {...pageProps} />
-            </Hydrate>
-            <ReactQueryDevtools />
-          </QueryClientProvider>
-        </Provider>
+        {/* <GlobalEventsContext.Provider value={{...gec}}> */}
+          <NotificationProvider>
+            <Provider initialValues={initialState && [[detailPagesAtom, globalModalsAtom, initialState]]}>
+              <QueryClientProvider client={queryClient}>
+                <Hydrate state={pageProps.dehydratedState}>
+                  {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+                  <Component {...pageProps} />
+                </Hydrate>
+                <ReactQueryDevtools />
+              </QueryClientProvider>
+            </Provider>
+          </NotificationProvider>
+        {/* </GlobalEventsContext.Provider> */}
       </NextAuthProvider>
     </StrictMode>
   );

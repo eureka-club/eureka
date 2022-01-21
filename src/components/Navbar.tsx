@@ -6,8 +6,8 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { setCookie } from 'nookies';
 import { FunctionComponent, MouseEvent } from 'react';
-import { v4 } from 'uuid';
 import LocalImageComponent from '@/components/LocalImage'
+
 
 // import NavItem from 'react-bootstrap/NavItem';
 
@@ -18,21 +18,12 @@ import {
   Nav,
   Navbar,
   Dropdown,
-  // Brand,
-  // Toggle,
-  // Collapse
-  Col,
-  OverlayTrigger,
-  Popover,
-  Badge,
-  ListGroup,
   // DropdownItemProps
 } from 'react-bootstrap';
 // import NavDropdown from 'react-bootstrap/NavDropdown';
 
 import { BiUser } from 'react-icons/bi';
-import {IoNotificationsCircleOutline} from 'react-icons/io5'
-import {BsFillCircleFill} from 'react-icons/bs'
+import NotificationsList from './NotificationsList';
 // import { BsBookmark } from 'react-icons/bs';
 import { RiDashboardLine } from 'react-icons/ri';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
@@ -102,81 +93,7 @@ const NavBar: FunctionComponent = () => {
     return <BiUser className={styles.navbarIconNav} />;
   };
 
-  const renderNotificationsList = ()=> {
-    const data = [
-      {
-        fromUser: 'Geordanis B. Vega',
-        context:`Cycle: Ciclo publico`,
-        action:'Joined',
-        createdAt:new Date()
-      },
-      {
-        fromUser: 'Julie Ricard',
-        context:`Work: El Tunel`,
-        action:'Save for latter',
-        createdAt:new Date()
-      },
-      {
-        fromUser: 'Jose Manuel',
-        context:`Post from Work: El Tunel`,
-        action:'Commented',
-        createdAt:new Date()
-      }
-    ];
-    return <ListGroup as="ol" numbered>{data.map((d)=>{
-      return <ListGroup.Item
-      key={v4()}
-      as="li"
-      className="d-flex justify-content-between align-items-start cursor-pointer"
-    >
-      <aside>
-        <p>{`${d.fromUser} has ${d.action}: ${d.context}`}</p>
-        <em>on {d.createdAt.toLocaleString()}</em>
-      </aside>
-      <aside>
-
-      <BsFillCircleFill className="text-primary" />
-      </aside>
-    </ListGroup.Item>;
-    })}
-    {/* <ListGroup.Item
-      as="li"
-      className="d-flex justify-content-between align-items-start"
-    >
-      <div className="ms-2 me-auto">
-        <div className="fw-bold">Subheading</div>
-        2 days ago
-      </div>
-      <Badge bg="primary" pill>
-        14
-      </Badge>
-    </ListGroup.Item>
-    <ListGroup.Item
-      as="li"
-      className="d-flex justify-content-between align-items-start"
-    >
-      <div className="ms-2 me-auto">
-        <div className="fw-bold">Subheading</div>
-        2 days ago
-      </div>
-      <Badge bg="primary" pill>
-        14
-      </Badge>
-    </ListGroup.Item>
-    <ListGroup.Item
-      as="li"
-      className="d-flex justify-content-between align-items-start"
-    >
-      <div className="ms-2 me-auto">
-        <div className="fw-bold">Subheading</div>
-        2 days ago
-      </div>
-      <Badge bg="primary" pill>
-        14
-      </Badge>
-    </ListGroup.Item> */}
-  </ListGroup>
-  }
+  
 
   return (
     <Container className={styles.container}>
@@ -328,25 +245,7 @@ const NavBar: FunctionComponent = () => {
             </Nav>
           )}
           <Nav.Item>
-          <OverlayTrigger
-      trigger="click"
-      placement="bottom"
-      rootClose
-      overlay={
-        <Popover id={`popover-positioned-bottom`} className="bg-primary">
-          <Popover.Header as="h3">{`Popover ${t('Notifications')}`}</Popover.Header>
-          {/* <Popover.Body> */}
-            {renderNotificationsList()}
-          {/* </Popover.Body> */}
-        </Popover>
-      }
-    >
-      <Button variant="outline-light" className="text-dark border-0">
-              <IoNotificationsCircleOutline className={styles.navbarIconNav}/>
-              <span className={styles.menuBottomInfo} style={{marginTop:'6px'}}>{t('Notifications')}</span>
-            </Button>
-    </OverlayTrigger>
-            
+            <NotificationsList />  
           </Nav.Item>
         </Navbar.Collapse>
         </Container>

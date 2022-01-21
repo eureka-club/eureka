@@ -27,6 +27,7 @@ const CycleDetailPage: NextPage = () => {
   const queryClient = useQueryClient();
   const cycleContext = useCycleContext();
   const { requestJoinCycle: execJoinCycle } = cycleContext;
+    
   const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [isRequestingJoinCycle, setIsRequestingJoinCycle] = useState<boolean>(false);
@@ -153,8 +154,8 @@ const CycleDetailPage: NextPage = () => {
     return (
       <CycleContext.Provider value={{ cycle, currentUserIsParticipant, linkToCycle: false }}>
         <SimpleLayout banner={getBanner()} title={cycle ? cycle.title : ''}>
-          {renderCycleDetailComponent()}
-        </SimpleLayout>
+            {renderCycleDetailComponent()}
+          </SimpleLayout>
       </CycleContext.Provider>
     );
 

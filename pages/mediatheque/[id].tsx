@@ -28,7 +28,7 @@ import globalModalsAtom from '@/src/atoms/globalModals'
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import FilterEngine from '../../src/components/FilterEngine';
 import TagsInput from '../../src/components/forms/controls/TagsInput';
-import Notification from '@/src/components/common/Notification';
+
 import CarouselStatic from '../../src/components/CarouselStatic';
 // import useWorks from '../src/useWorks';
 // import useCycles from '../src/useCycles';
@@ -43,7 +43,7 @@ import UnclampText from '../../src/components/UnclampText';
 // import MosaicItemCycle from '../../src/components/cycle/MosaicItem';
 // import MosaicItemPost from '../../src/components/post/MosaicItem';
 // import MosaicItemWork from '../../src/components/work/MosaicItem';
-import SocketIO from '@/src/lib/notification'
+import SocketIO from '@/src/lib/Notifier'
 type Item = (CycleMosaicItem & { type: string }) | WorkMosaicItem | (PostMosaicItem & { type: string });
 
 type ItemCycle = CycleMosaicItem & { type: string };
@@ -71,7 +71,7 @@ const Mediatheque: NextPage = () => {
   //   window.location.href = '/';
   // }
 
-  useEffect(()=>{
+  /* useEffect(()=>{
     setSocketIO(new SocketIO([+id],(data)=>{
       console.log('ver',data.message);
       // alert(data.message)
@@ -86,7 +86,7 @@ const Mediatheque: NextPage = () => {
       }))
     }))
   },[id]);
-
+ */
   useEffect(() => {
     // const s = session as unknown as Session;
     // if (s && s.user) setId(s.user.id.toString());
@@ -362,15 +362,6 @@ const Mediatheque: NextPage = () => {
     e.currentTarget.src = '/img/default-avatar.png';
   };
 
-  const sendNotify = () => {
-    const s = session as unknown as Session;
-    if(socketIO){
-      socketIO.notify({
-        message: 'hello to',
-      });
-    }
-  }
-
   const renderAvatar = ()=>{
     if(user){
       if(!user?.photos.length)
@@ -388,8 +379,6 @@ const Mediatheque: NextPage = () => {
   return (
     <SimpleLayout title={t('Mediatheque')}>
       <>
-      <Button onClick={sendNotify}>enviar notification</Button>
-      
         <ButtonGroup className="mb-1">
           <Button variant="primary text-white" onClick={() => router.back()} size="sm">
             <BiArrowBack />

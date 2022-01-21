@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 // import { useRouter } from 'next/router';
@@ -55,6 +55,22 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
   // const handleToastClose = () => {
   //   setGlobalModalsState({ ...globalModalsState, showToast: { ...globalModalsState.showToast, show: false } });
   // };
+
+
+  useEffect(()=>{
+    globalThis.addEventListener('notify',(e)=>{
+      // e.preventDefault();
+      setGlobalModalsState((res)=>({ 
+        ...res, 
+        showToast: {
+          title:"Notification",
+          message: (e as CustomEvent).detail, 
+          show: true,
+        } 
+      }));
+      console.log('notify from SimpleLayout',e);
+    });
+  },[]);
 
   const renderBanner = () => {
     if (banner) return <>{banner}</>;

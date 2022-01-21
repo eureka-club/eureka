@@ -24,12 +24,13 @@ const Toast: FunctionComponent<Props> = ({ className = '' }) => {
   return (
     <>
       {globalModalsState.showToast.show ? (
-        <div aria-live="polite" aria-atomic="true" className="sticky-top d-flex justify-content-center">
+        <div aria-live="polite" aria-atomic="true" className="position-fixed w-100 top-10 d-flex justify-content-center" style={{zIndex:999}}>
           <T
             delay={5000}
             show={globalModalsState.showToast.show}
             onClose={setShow}
-            autohide={globalModalsState.showToast.autohide || true}
+            autohide={false}
+            // autohide={globalModalsState.showToast.autohide || true}
             className={`${className}`}
           >
             <T.Header className={`bg-${globalModalsState.showToast.type} text-white`}>
