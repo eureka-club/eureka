@@ -131,9 +131,9 @@ const MosaicItem: FunctionComponent<Props> = ({
             <Row>
               <Col>
                 <aside className="pt-3 mb-0">
-                  <CommentActionsBar comment={comment} showReplyBtn={false} cacheKey={cacheKey} />
                   {/* <UnclampText isHTML text={contentText} clampHeight="4rem" /> */}
                   <CommentTextBox comment={ comment} />
+                  <CommentActionsBar comment={comment} showReplyBtn={false} cacheKey={cacheKey} />
                 </aside>
               </Col>
             </Row>

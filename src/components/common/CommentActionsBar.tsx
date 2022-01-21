@@ -1,7 +1,8 @@
-import { FunctionComponent, useState, ChangeEvent, FormEvent } from 'react';
+import { FunctionComponent, useState, useRef, ChangeEvent, FormEvent, useEffect } from 'react';
 import { Button, Form, Spinner } from 'react-bootstrap';
 import { MdReply, MdCancel } from 'react-icons/md';
 import { BiTrash, BiEdit } from 'react-icons/bi';
+import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import {useMutation, useQueryClient, useIsFetching} from 'react-query';
 import {useAtom} from 'jotai'
 import { Comment } from '@prisma/client'
@@ -16,6 +17,7 @@ import {
 import globalModalsAtom from '@/src/atoms/globalModals';
 import { Session } from '@/src/types';
 import {useSession} from 'next-auth/client'
+import { EditorEvent } from 'tinymce';
 
 type CommentWithComments = Comment & {comments?: Comment[];}
 interface Props {
@@ -38,6 +40,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
   const [editCommentInput, setEditCommentInput] = useState<string>();
   const [showCreateComment, setShowCreateComment] = useState<boolean>(false);
   const [showEditComment, setShowEditComment] = useState<boolean>(false);
+  const editorRef = useRef<any>(null);
 
   const getIsLoading = () => {
     return isLoading || isEditLoading || isFetching;
@@ -146,7 +149,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
 
 
   const submitCreateForm = () => {
-    if (comment) {
+    if (comment && editorRef.current.getContent()) {
       const selectedCycleId = comment.cycleId || 0;
       const selectedPostId = comment.postId || 0;
       const selectedWorkId = comment.workId || 0;
@@ -158,9 +161,10 @@ const CommentActionsBar: FunctionComponent<Props> = ({
         selectedCommentId,
         selectedWorkId,
         creatorId: +session!.user.id,
-        contentText: newCommentInput || '',
+        contentText: editorRef.current.getContent(),
       };
       createComment(payload);
+      editorRef.current.setContent('');
       setNewCommentInput(() => '');
     }
   };
@@ -170,7 +174,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
 
       const payload = {
         commentId: comment.id,
-        contentText: editCommentInput || '',
+        contentText: editorRef.current.getContent() || '',
         status:1,
       };
       editComment(payload);
@@ -178,29 +182,29 @@ const CommentActionsBar: FunctionComponent<Props> = ({
     }
   };
 
-  const handlerCreateFormSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    submitCreateForm();
-  };
+  // const handlerCreateFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   submitCreateForm();
+  // };
 
-  const handleEditFormSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    submitEditForm();
-  };
+  // const handleEditFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   submitEditForm();
+  // };
 
-  const onKeyPressForm = (e: React.KeyboardEvent<HTMLElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      submitCreateForm();
-      e.preventDefault();
-    }
-  };
+  // const onKeyPressForm = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (e.key === 'Enter' && !e.shiftKey) {
+  //     submitCreateForm();
+  //     e.preventDefault();
+  //   }
+  // };
 
-  const onKeyPressEditForm = (e: React.KeyboardEvent<HTMLElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      submitEditForm();
-      e.preventDefault();
-    }
-  };
+  // const onKeyPressEditForm = (e: KeyboardEvent) => {
+  //   if (e.key === 'Enter' && !e.shiftKey) {
+  //     submitEditForm();
+  //     e.preventDefault();
+  //   }
+  // };
 
   const handlerEditBtn = () => {
     
@@ -229,6 +233,65 @@ const CommentActionsBar: FunctionComponent<Props> = ({
   const handlerCancelBtn = () => {
     setShowCreateComment(false);
     setShowEditComment(false);    
+  }
+
+  const onKeyUpEditorEdit = (e: EditorEvent<KeyboardEvent>)=>{
+    if (e.key === 'Enter' && !e.shiftKey) {
+      //debugger;
+      setEditCommentInput(()=>editorRef.current.getContent())
+      submitEditForm();
+      e.preventDefault();
+    }
+  }
+
+  const onKeyUpEditorCreate = (e: EditorEvent<KeyboardEvent>)=>{
+    if (e.key === 'Enter' && !e.shiftKey) {
+      submitCreateForm();
+      e.preventDefault();
+    }
+  }
+
+
+  const renderEditorWYSWYG = (
+    onKeyUp:(e: EditorEvent<KeyboardEvent>) => void,
+    initialValue?:string,
+    )=>{
+    return <>
+    <EditorCmp
+          apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
+          onInit={(_: any, editor) => {
+            editor.editorContainer.classList.add(...[
+              "rounded-pill",
+            ])
+            editorRef.current = editor;
+          }}
+          onKeyUp={onKeyUp}
+          
+          initialValue={initialValue}
+          init={{
+            max_height: 70,
+            menubar: false,
+            plugins: [
+              'advlist autolink lists link image charmap print preview anchor',
+              'searchreplace visualblocks code fullscreen',
+              'insertdatetime media table paste code help',
+            ],
+            relative_urls: false,
+            forced_root_block : "p,a",
+            // toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
+            toolbar:false,
+            branding:false,
+            statusbar:false,
+
+            content_style: `body { 
+              font-family:Helvetica,Arial,sans-serif; 
+              font-size:14px; 
+              background:#f7f7f7;
+            }`,
+            
+          }}
+        />
+    </>
   }
 
 
@@ -277,7 +340,8 @@ const CommentActionsBar: FunctionComponent<Props> = ({
         )}
 
         {!getIsLoading() && showCreateComment && (
-          <Form onSubmit={handlerCreateFormSubmit}>
+        <>
+          {/* <Form onSubmit={handlerCreateFormSubmit}>
             <Form.Control
               value={newCommentInput}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setNewCommentInput(e.target.value)}
@@ -287,10 +351,15 @@ const CommentActionsBar: FunctionComponent<Props> = ({
               rows={1}
               placeholder={`${t('Write a replay')}...`}
             />
-          </Form>
+          </Form> */}
+          {renderEditorWYSWYG(onKeyUpEditorCreate)}
+        
+        </>
+  
         )}
         {canEditComment() && !getIsLoading() && showEditComment && (
-          <Form onSubmit={handleEditFormSubmit}>
+          <>
+          {/* <Form onSubmit={handleEditFormSubmit}>
             <Form.Control
               value={editCommentInput}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setEditCommentInput(e.target.value)}
@@ -300,7 +369,9 @@ const CommentActionsBar: FunctionComponent<Props> = ({
               rows={1}
               placeholder={`${t('Edit the replay')}...`}
             />
-          </Form>
+          </Form> */}
+          {renderEditorWYSWYG(onKeyUpEditorEdit, editCommentInput)}
+          </>
         )}
         {getIsLoading() ? <Spinner animation="grow" variant="info" size="sm" /> : ''}
       </aside>
