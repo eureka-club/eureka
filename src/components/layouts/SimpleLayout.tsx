@@ -88,7 +88,7 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
         </div>
 
       </section>
-      <section style={{marginTop:'75px'}}>
+      <section className='mainSection'>
         <Toast />
         {/* <Navbar /> */}
         <div className="d-none d-lg-block">{showHeader && <Header show={showHeader} />}</div>
@@ -96,7 +96,7 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
 
         {renderBanner()}
         {/* <Toast /> */}
-        <Container className="mt-5">{children}</Container>
+        <Container className="">{children}</Container>
 
       </section>
 

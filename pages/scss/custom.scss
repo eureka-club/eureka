@@ -254,6 +254,8 @@ a{
    border: 0;
  }
 
+ 
+
  @media screen and (max-width: 768px) {
    .avatar {
      width: 4em;
@@ -262,24 +264,35 @@ a{
      margin: 0 0 1em 0;
      border: 0;
    }
+   .mainSection {
+     margin-top: 20px;
+   }
  }
 
 
 /*Tablet*/
 /*Portrait*/
-@media screen and (min-width: 768px) and (max-width: 1024px) {
+@media screen and (min-width: 768px) and (max-width: 990px) {
   .scrollNav {
     overflow: hidden;
     white-space: none;
   }
+   .mainSection {
+     margin-top: 40px;
+   }
+  
 }
 
 /*landscape*/
-@media screen and (min-width: 1024px) and (max-width: 768px) {
+@media screen and (min-width: 990px) and (max-width: 1024px) {
   .scrollNav {
     overflow: hidden;
     white-space: none;
   }
+  .mainSection {
+    margin-top: 120px;
+  }
+  
 }
 
 /*fin tablet*/
@@ -289,6 +302,9 @@ a{
   .scrollNav {
     overflow: hidden;
     white-space: none;
+  }
+  .mainSection {
+    margin-top: 120px;
   }
 }
 
