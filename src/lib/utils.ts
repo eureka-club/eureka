@@ -83,3 +83,8 @@ export const image64toCanvasRef = (
 
   })
 }
+
+export const getNotificationMessage = (message:string,callback:(key:string,payload:Record<string,string>)=>string) => {
+  const [key,jsonStr] = message.split('!|!');
+  return callback(key,JSON.parse(jsonStr));
+}

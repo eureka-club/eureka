@@ -33,7 +33,7 @@ const Toast: FunctionComponent<Props> = ({ className = '' }) => {
             // autohide={globalModalsState.showToast.autohide || true}
             className={`${className}`}
           >
-            <T.Header className={`bg-${globalModalsState.showToast.type} text-white`}>
+            <T.Header className={`bg-${globalModalsState.showToast.type || 'info'} text-white`}>
               {globalModalsState.showToast.title && (
                 <>
                   <strong className="me-auto">{globalModalsState.showToast.title}</strong>

@@ -13,7 +13,7 @@ import {EditNotificationClientPayload} from '@/src/types/notification'
 import {useAtom} from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
 import styles from './Navbar.module.css';
-
+import {getNotificationMessage} from '@/src/lib/utils'
 interface Props {
     className?: string;
 }
@@ -102,8 +102,7 @@ const NotificationsList: React.FC<Props> = ({className}) => {
     }  
 
     const formatMessage = (message:string) => {
-      const [key,jsonStr] = message.split('!|!');
-      return t(key,JSON.parse(jsonStr));
+      return getNotificationMessage(message, (key,payload) => t(key,payload));
     }
 
     const renderNotificationsList = ()=> {
