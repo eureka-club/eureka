@@ -217,11 +217,13 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   };
 
   return (
-    <Row className="mb-5 justify-content-center">
-      <Col xs={{ span: 12, order: 2 }} md={{ span: 7, order: 1 }} lg={{ span: 8 }}>
-        <h1 className="mb-1 fw-bold text-secondary">
+    <Row className="d-flex flex-column-reverse flex-lg-row mb-5">
+      {/* xs={{ span: 12, order: 2 }} md={{ span: 7, order: 1 }} lg={{ span: 8 }}*/}
+      <Col className='mt-3 mt-lg-0 col-12 col-lg-8 d-flex flex-column justify-content-center justify-content-lg-start'>
+        <h1 className="d-none d-lg-block mb-1 fw-bold text-secondary">
           {cycle.title}
         </h1>
+        <div className='d-flex flex-row justify-content-center justify-content-lg-start'>
         <Rating
           readonly
           initialRating={getRatingAvg()}
@@ -231,20 +233,26 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
           fullSymbol={getFullSymbol()}
         />{' '}
+        <div className='ms-1'>
         {getRatingAvg()}
         {' - '}
-        {getRatingQty()} <span className="fs-6 text-gray">{t('ratings')}</span>
+        {getRatingQty()}
+        </div>
+         <span className="fs-6 text-gray">{t('ratings')}</span>
+        
         {cycle.topics && (
           <aside className="d-inline-block ms-5">
             <TagsInput
               formatValue={(v: string) => t(`topics:${v}`)}
-              className="d-inline-block"
+              className="d-none d-lg-inline-block"
               tags={cycle.topics}
               readOnly
             />
             <TagsInput className="ms-1 d-inline-block" tags={cycle.tags!} readOnly label="" />
           </aside>
         )}
+        </div>
+        <div className="">
         <h4 className="mt-4 mb-1 text-dark">
           {t('Content calendar')} ({cycle.works && cycle.works.length})
         </h4>
@@ -253,7 +261,6 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           {cycle.participants.length} participants
         </Button> */}
         {/* <CycleContext.Provider value={{ cycle }}> */}
-        <div className="" /* className={styles.customCarouselStaticContainer} */>
           <CarouselStatic
             showSocialInteraction={false}
             // onSeeAll={async () => seeAll(cycle.works as WorkMosaicItem[], t('Eurekas I created'))}
@@ -269,14 +276,35 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         </div>
         {/* </CycleContext.Provider> */}
       </Col>
-      <Col className="d-flex justify-content-end" xs={{ span: 12, order: 1 }} md={{ span: 5, order: 2 }} lg={{ span: 4 }}>
-        <aside>
-          <UserAvatar user={cycle.creator} showFullName />
+      {/*xs={{ span: 12, order: 1 }} md={{ span: 5, order: 2 }} lg={{ span: 4 }}*/}
+      <Col className="d-flex col-12 col-lg-4 justify-content-center justify-content-lg-end">
+        <aside className='d-flex flex-column'>
+          <UserAvatar className='d-none d-lg-block' user={cycle.creator}  showFullName />
         <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
           <MosaicItem showTrash className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
         </MosaicContext.Provider>
         </aside>
       </Col>
+      <Col className='col-12 d-lg-none'>
+         <UserAvatar user={cycle.creator}  showFullName />
+      </Col>
+      <Col className='col-12 d-lg-none'>
+        <h1 className=" mb-1 fw-bold text-secondary">
+            {cycle.title}
+          </h1>
+           {cycle.topics && (
+          <aside className="d-inline-block mb-4">
+            <TagsInput
+              formatValue={(v: string) => t(`topics:${v}`)}
+              className="d-inline-block"
+              tags={cycle.topics}
+              readOnly
+            />
+            <TagsInput className="ms-1 d-inline-block" tags={cycle.tags!} readOnly label="" />
+          </aside>
+        )}
+      </Col>
+
     </Row>
   );
 };
