@@ -16,9 +16,6 @@
   margin-left: -.2em;
 }
 
-
-
-
 .iconBefore svg{
   font-size: 1.4em;
   margin-right: .2em;
@@ -30,10 +27,7 @@
 }*/
 
 .seeAllButton:hover {
-  
-  
   text-decoration: underline;
-  
 } 
 
 
