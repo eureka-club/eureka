@@ -38,7 +38,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
             <Button
               variant="info"
               onClick={() => setShow(false)}
-              className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
+              className="mt-2 py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
             >
               {t('Close')} <AiOutlineClose />
             </Button>
@@ -47,7 +47,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
             <Button
               variant="info"
               onClick={() => setShow(true)}
-              className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
+              className="mt-2 py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
             >
               {t('openHeaderLabel')} <AiOutlineDown />
             </Button>

@@ -271,9 +271,6 @@ a{
      margin: 0 0 1em 0;
      border: 0;
    }
-   .mainSection {
-     margin-top: 20px;
-   }
  }
 
 /*Tablet*/
@@ -283,10 +280,6 @@ a{
     overflow: hidden;
     white-space: none;
   }
-   .mainSection {
-     margin-top: 40px;
-   }
-  
 }
 
 /*landscape*/
@@ -296,9 +289,8 @@ a{
     white-space: none;
   }
   .mainSection {
-    margin-top: 120px;
+    margin-top: 75px;
   }
-  
 }
 
 /*fin tablet*/
@@ -310,7 +302,7 @@ a{
     white-space: none;
   }
   .mainSection {
-    margin-top: 120px;
+    margin-top: 75px;
   }
 }
 

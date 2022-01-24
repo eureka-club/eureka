@@ -103,8 +103,7 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
 
         {renderBanner()}
         {/* <Toast /> */}
-        <Container className="">{children}</Container>
-
+        <Container>{children}</Container>
       </section>
 
       <Modal
