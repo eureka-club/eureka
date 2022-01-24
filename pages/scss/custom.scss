@@ -254,8 +254,15 @@ a{
    border: 0;
  }
 
- 
-
+  .eurekaLogo {
+    width: 45px;
+    height: 52px;
+  }
+@media screen and (max-width: 388px) {
+ .fs-xs {
+   display: none;
+   }
+}
  @media screen and (max-width: 768px) {
    .avatar {
      width: 4em;
@@ -268,7 +275,6 @@ a{
      margin-top: 20px;
    }
  }
-
 
 /*Tablet*/
 /*Portrait*/

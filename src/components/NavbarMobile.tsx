@@ -10,6 +10,8 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Nav from 'react-bootstrap/Nav';
+import NotificationsList from './NotificationsList';
+
 // import NavItem from 'react-bootstrap/NavItem';
 
 import {
@@ -94,10 +96,10 @@ const NavBar: FunctionComponent = () => {
         <Link href="/">
           <Navbar.Brand className="cursor-pointer">
             <aside className="d-flex justify-content-between align-items-center">
-              <img src="/logo.svg" width={45} alt="Project logo" />
+              <img className='eurekaLogo' src="/logo.svg" alt="Project logo" />
               <section className="me-1">
                 <div className={`text-secondary ms-3 h4 mb-0 ${styles.brand}`}>Eureka</div>
-                <p className="my-0 text-secondary ms-3 font-weight-light fs-xs">{t('tagline')}</p>
+                <p className=" my-0 text-secondary ms-3 font-weight-light fs-xs">{t('tagline')}</p>
               </section>
             </aside>
             {/* <Container>
@@ -114,6 +116,8 @@ const NavBar: FunctionComponent = () => {
             </Container> */}
           </Navbar.Brand>
         </Link>
+       <div className='d-flex'>
+        <NotificationsList />  
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse
           className={`position-absolute top-100 end-0 bg-white border border-info px-2 p-1 ${styles['responsive-navbar-nav']}`}
@@ -245,8 +249,8 @@ const NavBar: FunctionComponent = () => {
             </Nav>
           )}
         </Navbar.Collapse>
-
-        {/* </Container> */}
+        </div>
+                {/* </Container> */}
       </Navbar>
     </Container>
   );

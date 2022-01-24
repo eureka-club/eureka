@@ -148,7 +148,7 @@ const NotificationsList: React.FC<Props> = ({className}) => {
     >
       <Button variant="outline-light" className="text-dark border-0" disabled={!user || !user.notifications.length}>
               <IoNotificationsCircleOutline className={styles.navbarIconNav} />
-              <span className={styles.menuBottomInfo} style={{marginTop:'6px'}}>{t('navbar:Notifications')}</span>
+              <span className={`d-none d-lg-block ${styles.menuBottomInfo}`} style={{marginTop:'6px'}}>{t('navbar:Notifications')}</span>
             </Button>
     </OverlayTrigger>}
           
