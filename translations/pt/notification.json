@@ -1,4 +1,5 @@
 {
   "aboutWorkInCycle":"{{userName}} has created an Eureka about {{workTitle}} in the cycle {{cycleTitle}}!",
-  "aboutCycle":"{{userName}} has created an Eureka about {{cycleTitle}}!"
+  "aboutCycle":"{{userName}} has created an Eureka about {{cycleTitle}}!",
+  "viewAllNotifications":"View all notifications"
 }

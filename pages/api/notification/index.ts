@@ -16,13 +16,13 @@ import prisma from '../../../src/lib/prisma';
 export default getApiHandler()
 .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
   try {
-    const { id } = req.query;
-    const {userId} = req.body;
-    if (!id) {
-      const notification = await find(parseInt(id));
+    const { id,userId } = req.query;
+    // const {userId} = req.body;
+    if (id && !userId) {
+      const notification = await find(parseInt(id.toString()));
       res.status(200).json({ notification });
     } else if(userId) {
-      const notifications = await findAll(userId);
+      const notifications = await findAll(parseInt(userId.toString()));
       res.status(200).json({ notifications });
     }
   } catch (exc) {
@@ -54,7 +54,7 @@ export default getApiHandler()
   }
 })
 .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-  try {debugger;
+  try {
     const session = (await getSession({ req })) as unknown as Session;
     if (session == null) {
       res.statusMessage = 'Unauthorized';

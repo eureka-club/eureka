@@ -1,7 +1,7 @@
 import {Session} from '@/src/types'
 import React, {useState, useEffect} from 'react'
 import {ListGroup, Spinner, Button, OverlayTrigger, Popover} from 'react-bootstrap'
-import {BsFillCircleFill} from 'react-icons/bs'
+
 import {IoNotificationsCircleOutline} from 'react-icons/io5'
 import {v4} from 'uuid'
 import {useSession} from 'next-auth/client'
@@ -14,6 +14,7 @@ import {useAtom} from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
 import styles from './Navbar.module.css';
 import {getNotificationMessage} from '@/src/lib/utils'
+import NotificationMosaicItem from '@/src/components/notification/MosaicItem'
 interface Props {
     className?: string;
 }
@@ -105,11 +106,16 @@ const NotificationsList: React.FC<Props> = ({className}) => {
       return getNotificationMessage(message, (key,payload) => t(key,payload));
     }
 
+    const viewAllNotificationsHandler = () => {
+      if(user)
+        router.push(`/notification`);
+    };
+
     const renderNotificationsList = ()=> {
         if(user){
           
           if(user.notifications.length){
-            return <ListGroup as="ol" numbered>{user.notifications.map((n)=>{
+            return <ListGroup as="ul">{user.notifications.slice(0,5).map((n)=>{
               return <ListGroup.Item
               key={v4()}
               as="li"
@@ -117,15 +123,16 @@ const NotificationsList: React.FC<Props> = ({className}) => {
               onClick={(e)=>notificationOnClick(e,n.userId,n.notificationId,n.notification.contextURL)}
             >
               <aside>
-                <p>{`${formatMessage(n.notification.message)}`}</p>
-                <em>on {n.notification.createdAt.toLocaleString()}</em>
+                <NotificationMosaicItem notification={n}/>
               </aside>
-              <aside>
-    
-              <BsFillCircleFill className="text-primary" />
-              </aside>
+              
             </ListGroup.Item>;
             })}
+            <ListGroup.Item>
+              <Button variant="link" className="text-primary" onClick={viewAllNotificationsHandler}>
+              {t('viewAllNotifications')}
+              </Button>
+            </ListGroup.Item>
               </ListGroup>;
           }    
         }

@@ -12,14 +12,11 @@ export interface EditNotificationClientPayload {
 
 type NotificationIncludes = {
   include: {
-    toUsers:{
-      include:{
-        user:true;
-      }
-    }
+    notification:true;
+    user?:true;
   };
 };
 
-export type NotificationMosaicItem = Prisma.NotificationGetPayload<NotificationIncludes> & {
+export type NotificationMosaicItem = Prisma.NotificationsOnUsersGetPayload<NotificationIncludes> & {
   type?: 'notification';
 };

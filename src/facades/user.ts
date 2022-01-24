@@ -19,9 +19,15 @@ export const find = async (props: findProps): Promise<User | UserMosaicItem | nu
       include: {
         notifications:{
           include:{
-            notification:true
+            notification:true,
+            // notification:{
+            //   include:{
+            //     toUsers:true
+            //   }
+            // },
           },
-          where:{viewed: false}
+          where:{viewed: false},
+          orderBy:{notificationId:"desc"}
         },
         cycles: {
           include: { ratings: true, favs: true, works: true, localImages: true, participants: true },

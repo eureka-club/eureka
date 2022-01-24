@@ -64,20 +64,20 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
     return getNotificationMessage(message, (key,payload) => t(key,payload));
   }
 
-  useEffect(()=>{
-    globalThis.addEventListener('notify',(e)=>{
-      // e.preventDefault();
-      setGlobalModalsState((res)=>({ 
-        ...res, 
-        showToast: {
-          title:"Notification",
-          message: formatMessage((e as CustomEvent).detail), 
-          show: true,
-        } 
-      }));
-      console.log('notify from SimpleLayout',e);
-    });
-  },[]);
+  // useEffect(()=>{
+  //   globalThis.addEventListener('notify',(e)=>{
+  //     // e.preventDefault();
+  //     setGlobalModalsState((res)=>({ 
+  //       ...res, 
+  //       showToast: {
+  //         title:"Notification",
+  //         message: formatMessage((e as CustomEvent).detail), 
+  //         show: true,
+  //       } 
+  //     }));
+  //     console.log('notify from SimpleLayout',e);
+  //   });
+  // },[]);
 
   const renderBanner = () => {
     if (banner) return <>{banner}</>;
