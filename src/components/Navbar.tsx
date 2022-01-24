@@ -1,4 +1,4 @@
-import Image from 'next/image'
+//import Image from 'next/image'
 import { useAtom } from 'jotai';
 import { useSession, signOut } from 'next-auth/client';
 import Link from 'next/link';
@@ -103,8 +103,8 @@ const NavBar: FunctionComponent = () => {
           <a className="d-flex align-items-center">
           <Navbar.Brand className="cursor-pointer">
             <aside className="d-flex justify-content-around align-items-center">
-              <Image src="/logo.svg" width={45} height={52} alt="Project logo" />
-              {/* <img src="/logo.svg" width={45} alt="Project logo" /> */}
+              {/*<Image src="/logo.svg" width={45} height={52} alt="Project logo" />*/}
+               <img  className='eurekaLogo' src="/logo.svg" alt="Project logo" /> 
               <section>
                 <div className={`text-secondary ms-3 h4 mb-0 ${styles.brand}`}>Eureka</div>
                 <p className="text-secondary my-0 ms-3 font-weight-light fs-xs">{t('tagline')}</p>

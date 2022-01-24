@@ -12,7 +12,7 @@ import { FunctionComponent, useState } from 'react';
 // import Nav from 'react-bootstrap/Nav';
 // import NavItem from 'react-bootstrap/NavItem';
 // import NavLink from 'react-bootstrap/NavLink';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row,Button } from 'react-bootstrap';
 // import Spinner from 'react-bootstrap/Spinner';
 // import TabContainer from 'react-bootstrap/TabContainer';
 // import TabContent from 'react-bootstrap/TabContent';
@@ -22,6 +22,7 @@ import Link from 'next/link';
 // import { Work } from '@prisma/client';
 import Rating from 'react-rating';
 import { GiBrain } from 'react-icons/gi';
+import {BsChevronUp, BsX} from 'react-icons/bs';
 // import { useCycleContext, CycleContext } from '../../useCycleContext';
 
 // import globalModalsAtom from '../../atoms/globalModals';
@@ -61,6 +62,7 @@ interface Props {
   postsCount?: number;
   worksCount?: number;
   mySocialInfo?: MySocialInfo;
+  show?: boolean;
   onCarouselSeeAllAction?: () => Promise<void>;
   onParticipantsAction?: () => Promise<void>;
 }
@@ -68,6 +70,7 @@ dayjs.extend(isBetween);
 const CycleDetailHeader: FunctionComponent<Props> = ({
   // cycle,
   onCarouselSeeAllAction,
+  show: s = true
   // onParticipantsAction,
   // post,
   // work,
@@ -83,6 +86,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   // const router = useRouter();
   const { cycle: c } = useCycleContext();
   const [cycle] = useState<CycleMosaicItem>(c!);
+  const [show, setShow] = useState<boolean>(s);
   const [session] = useSession() as [Session | null | undefined, boolean];
   const { t } = useTranslation('cycleDetail');
   // const hyvorId = `${WEBAPP_URL}cycle/${cycle.id}`;
@@ -217,11 +221,13 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   };
 
   return (
-    <Row className="mb-5 justify-content-center">
-      <Col xs={{ span: 12, order: 2 }} md={{ span: 7, order: 1 }} lg={{ span: 8 }}>
-        <h1 className="mb-1 fw-bold text-secondary">
+    <Row className="d-flex flex-column-reverse flex-lg-row mb-1 mb-lg-5">
+      {/* xs={{ span: 12, order: 2 }} md={{ span: 7, order: 1 }} lg={{ span: 8 }}*/}
+      <Col className='mt-3 mt-lg-0 col-12 col-lg-8 d-none d-lg-flex flex-column justify-content-center justify-content-lg-start'>
+        <h1 className="d-none d-lg-block mb-1 fw-bold text-secondary">
           {cycle.title}
         </h1>
+        <div className='d-flex flex-row justify-content-start'>
         <Rating
           readonly
           initialRating={getRatingAvg()}
@@ -231,20 +237,26 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
           fullSymbol={getFullSymbol()}
         />{' '}
+        <div className='ms-1'>
         {getRatingAvg()}
         {' - '}
-        {getRatingQty()} <span className="fs-6 text-gray">{t('ratings')}</span>
+        {getRatingQty()}
+        </div>
+         <span className="fs-6 text-gray">{t('ratings')}</span>
+        
         {cycle.topics && (
-          <aside className="d-inline-block ms-5">
+          <aside className=" d-flex ms-5">
             <TagsInput
               formatValue={(v: string) => t(`topics:${v}`)}
-              className="d-inline-block"
+              className=""
               tags={cycle.topics}
               readOnly
             />
             <TagsInput className="ms-1 d-inline-block" tags={cycle.tags!} readOnly label="" />
           </aside>
         )}
+        </div>
+        <div className="">
         <h4 className="mt-4 mb-1 text-dark">
           {t('Content calendar')} ({cycle.works && cycle.works.length})
         </h4>
@@ -253,7 +265,6 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           {cycle.participants.length} participants
         </Button> */}
         {/* <CycleContext.Provider value={{ cycle }}> */}
-        <div className="" /* className={styles.customCarouselStaticContainer} */>
           <CarouselStatic
             showSocialInteraction={false}
             // onSeeAll={async () => seeAll(cycle.works as WorkMosaicItem[], t('Eurekas I created'))}
@@ -269,14 +280,95 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         </div>
         {/* </CycleContext.Provider> */}
       </Col>
-      <Col className="d-flex justify-content-end" xs={{ span: 12, order: 1 }} md={{ span: 5, order: 2 }} lg={{ span: 4 }}>
-        <aside>
-          <UserAvatar user={cycle.creator} showFullName />
+      {/*xs={{ span: 12, order: 1 }} md={{ span: 5, order: 2 }} lg={{ span: 4 }}*/}
+    
+      {show && (
+     <Col className='mt-3 col-12  d-flex flex-column justify-content-center d-lg-none'>
+        <div className='d-flex flex-row justify-content-center'>
+        <Rating
+          readonly
+          initialRating={getRatingAvg()}
+          // onChange={handlerChangeRating}
+          className={styles.rating}
+          stop={5}
+          emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
+          fullSymbol={getFullSymbol()}
+        />{' '}
+        <div className='ms-1'>
+        {getRatingAvg()}
+        {' - '}
+        {getRatingQty()}
+        </div>
+         <span className="fs-6 text-gray">{t('ratings')}</span>
+        </div>
+        <div className="">
+        <h4 className="mt-4 mb-1 text-dark">
+          {t('Content calendar')} ({cycle.works && cycle.works.length})
+        </h4>
+          <CarouselStatic
+            showSocialInteraction={false}
+            onSeeAll={onCarouselSeeAllAction}
+            title={<CycleSummary cycle={cycle} />}
+            data={getWorksSorted() as WorkMosaicItem[]}
+            iconBefore={<></>}
+            customMosaicStyle={{ height: '16em' }}
+            tiny
+            mosaicBoxClassName="pb-5"
+            // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+          />
+        </div>
+        {/* </CycleContext.Provider> */}
+      </Col>
+      )}
+      <Col className="d-none d-lg-flex col-12 col-lg-4 justify-content-center justify-content-lg-end">
+        <aside className='d-flex flex-column'>
+          <UserAvatar  user={cycle.creator}  showFullName />
         <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
           <MosaicItem showTrash className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
         </MosaicContext.Provider>
         </aside>
       </Col>
+      {show && (
+      <Col className='col-12 d-flex justify-content-center d-lg-none' >
+          <aside className='d-flex flex-column'>
+            <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
+              <MosaicItem showTrash className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
+            </MosaicContext.Provider>
+          </aside>
+      </Col>
+      )}
+      <Col className='col-12 d-flex justify-content-between align-items-baseline d-lg-none' >
+        <Row>
+         <UserAvatar user={cycle.creator}  showFullName />
+         </Row>
+          <Row>
+            {show && (
+             <span className={`cursor-pointer text-primary me-1 ${styles.closeButton}`}
+                    role="presentation" onClick={() => setShow(false)}> {t('Close')} <BsX style={{ color: 'var(--eureka-green)' }} /> </span> 
+            )}
+            {!show && (
+             <span className={`cursor-pointer text-primary me-1 ${styles.closeButton}`}
+                    role="presentation" onClick={() => setShow(true)}> {t('Details')} <BsChevronUp style={{ color: 'var(--eureka-green)' }} /> </span> 
+            )}
+          </Row>
+      </Col>
+      <Col className='col-12 d-lg-none'>
+        <h1 className=" mb-1 fw-bold text-secondary">
+            {cycle.title}
+          </h1>
+           {cycle.topics && (
+          <aside className="d-inline-block mb-4">
+            <TagsInput
+              formatValue={(v: string) => t(`topics:${v}`)}
+              className="d-inline-block"
+              tags={cycle.topics}
+              readOnly
+            />
+            <TagsInput className="ms-1 d-inline-block" tags={cycle.tags!} readOnly label="" />
+          </aside>
+        )}
+      </Col>
+
     </Row>
   );
 };

@@ -254,6 +254,15 @@ a{
    border: 0;
  }
 
+  .eurekaLogo {
+    width: 45px;
+    height: 52px;
+  }
+@media screen and (max-width: 388px) {
+ .fs-xs {
+   display: none;
+   }
+}
  @media screen and (max-width: 768px) {
    .avatar {
      width: 4em;
@@ -264,10 +273,9 @@ a{
    }
  }
 
-
 /*Tablet*/
 /*Portrait*/
-@media screen and (min-width: 768px) and (max-width: 1024px) {
+@media screen and (min-width: 768px) and (max-width: 990px) {
   .scrollNav {
     overflow: hidden;
     white-space: none;
@@ -275,10 +283,13 @@ a{
 }
 
 /*landscape*/
-@media screen and (min-width: 1024px) and (max-width: 768px) {
+@media screen and (min-width: 990px) and (max-width: 1024px) {
   .scrollNav {
     overflow: hidden;
     white-space: none;
+  }
+  .mainSection {
+    margin-top: 75px;
   }
 }
 
@@ -289,6 +300,9 @@ a{
   .scrollNav {
     overflow: hidden;
     white-space: none;
+  }
+  .mainSection {
+    margin-top: 75px;
   }
 }
 

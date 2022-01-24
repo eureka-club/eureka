@@ -705,7 +705,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   return (
     <>
-      <ButtonGroup className="mb-1">
+      <ButtonGroup className="mt-1 mt-md-4 mb-1">
         <Button variant="primary text-white" onClick={() => router.back()} size="sm">
           <BiArrowBack />
         </Button>
@@ -758,7 +758,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 </style>
                 <Row className="mb-4">
                   <Col>
-                    <Nav variant="tabs" fill>
+                    <Nav variant="tabs" className='scrollNav' fill>
                       <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
                         <NavLink eventKey="cycle-about">
                           <span className="mb-3">
@@ -791,7 +791,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                         )}
                         {cycle.works && cycle.works.length > 0 && (
                           <MosaicContext.Provider value={{ showShare: true }}>
-                            <WorksMosaic cycle={cycle} className="mb-5" />
+                            <WorksMosaic cycle={cycle} className="d-flex mb-5 justify-content-center" />
                           </MosaicContext.Provider>
                         )}
                         {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (

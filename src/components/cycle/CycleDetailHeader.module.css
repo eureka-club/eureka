@@ -22,4 +22,17 @@
   background-color: transparent;
   border: none;
   }
+
+  .closeButton {
+    background-color: none;
+    border-radius: 6px;
+    color: var(--eureka-green);
+    padding: 0
+  }
+
+  .closeButton:hover {
+    background-color: none;
+    color: var(--color-primary-raised);
+    text-decoration: underline;
+  }
   

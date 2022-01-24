@@ -379,7 +379,7 @@ const Mediatheque: NextPage = () => {
   return (
     <SimpleLayout title={t('Mediatheque')}>
       <>
-        <ButtonGroup className="mb-1">
+        <ButtonGroup className="mt-1 mt-md-4 mb-1">
           <Button variant="primary text-white" onClick={() => router.back()} size="sm">
             <BiArrowBack />
           </Button>
