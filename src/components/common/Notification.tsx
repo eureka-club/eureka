@@ -12,7 +12,6 @@ const Notification: FunctionComponent<Props> = ({
   callback
 }) => {
   useEffect(()=>{
-    debugger;
     // console.log(WEBAPP_URL)
     const socket = io("http://localhost:4000/",{
       // withCredentials: true,

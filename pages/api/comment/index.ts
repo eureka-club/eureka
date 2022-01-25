@@ -4,7 +4,7 @@ import { Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { createFromServerFields, findAll, update, find } from '../../../src/facades/comment';
 import prisma from '../../../src/lib/prisma';
-
+import { create } from '@/src/facades/notification';
 
 export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
@@ -16,8 +16,13 @@ export default getApiHandler()
     try {
       const payload = req.body;
       const post = await createFromServerFields(payload, session.user);
-
-      res.status(201).json({ ok: true, post });
+      const notification = await create(
+        payload.notificationMessage,
+        payload.notificationContextURL,
+        session.user.id,
+        payload.notificationToUsers,
+      );
+      res.status(201).json({ ok: true, post,notification });
       // new Form().parse(req, async (err, fields, files) => {
       //   if (err != null) {
       //     console.error(err); // eslint-disable-line no-console

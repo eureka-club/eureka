@@ -1,4 +1,4 @@
-// import { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, /* MouseEvent, */ useRef,useEffect, useState, ChangeEvent, FormEvent, KeyboardEvent } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
@@ -52,7 +52,7 @@ const CommentsList: FunctionComponent<Props> = ({
   // showRating = true,
 }) => {
   const { t } = useTranslation('common');
-  // const router = useRouter();
+  const router = useRouter();
   const [session] = useSession() as [Session | null | undefined, boolean];
   const [newCommentInput, setNewCommentInput] = useState<string>();
   const [idSession, setIdSession] = useState<string>('');
@@ -113,35 +113,62 @@ const CommentsList: FunctionComponent<Props> = ({
     let selectedPostId = 0;
     let selectedCommentId = 0;
     let selectedWorkId = 0;
+    let notificationMessage = '';
+    let notificationToUsers:number[] = [];
+    const notificationContextURL = router.asPath;
+    if(user){
+      if (isCycle(entity)){
+        const cycle = (entity as CycleMosaicItem);
+        notificationToUsers = cycle.participants.filter(p=>p.id!==user.id).map(p=>p.id);
+        notificationMessage = `commentCreatedAboutCycle!|!${JSON.stringify({
+          userName: user?.name,
+          cycleTitle: cycle.title,
+        })}`
+        selectedCycleId = cycle.id;
+      }
+      else if (isPost(entity)) {
+        selectedPostId = entity.id;
+        if (parent && isCycle(parent)) selectedCycleId = parent.id;
+        if (parent && isWork(parent)) selectedWorkId = parent.id;
+      } else if (isComment(entity)) {
+        selectedCommentId = entity.id;
+        if (parent && isCycle(parent)) selectedCycleId = parent.id;
+        if (parent && isWork(parent)) selectedWorkId = parent.id;
+      } else if (isWork(entity)) {
+        const work = (entity as WorkMosaicItem)
+        selectedWorkId = work.id;
+        if (parent && isCycle(parent)) {
+          const cycle = (parent as CycleMosaicItem)
+          notificationMessage = `commentCreatedAboutWorkInCycle!|!${JSON.stringify({
+            userName: user?.name,
+            cycleTitle: cycle.title,
+            workTitle: work.title
+          })}`
 
-    if (isCycle(entity)) selectedCycleId = entity.id;
-    else if (isPost(entity)) {
-      selectedPostId = entity.id;
-      if (parent && isCycle(parent)) selectedCycleId = parent.id;
-      if (parent && isWork(parent)) selectedWorkId = parent.id;
-    } else if (isComment(entity)) {
-      selectedCommentId = entity.id;
-      if (parent && isCycle(parent)) selectedCycleId = parent.id;
-      if (parent && isWork(parent)) selectedWorkId = parent.id;
-    } else if (isWork(entity)) {
-      selectedWorkId = entity.id;
-      if (parent && isCycle(parent)) selectedCycleId = parent.id;
-    }
-    const nc = editorRef.current.getContent();
-    if(nc){
-      const payload = {
-        selectedCycleId,
-        selectedPostId,
-        selectedCommentId,
-        selectedWorkId,
-        creatorId: +idSession,
-        contentText: nc,
-      };
-      editorRef.current.setContent('')
-      setNewCommentInput(() => '');
-      createComment(payload);
+          selectedCycleId = parent.id;
+        }
+      }
+      const nc = editorRef.current.getContent();
+      if(nc){
+        const payload = {
+          selectedCycleId,
+          selectedPostId,
+          selectedCommentId,
+          selectedWorkId,
+          creatorId: +idSession,
+          contentText: nc,
+          notificationMessage,
+          notificationToUsers,
+          notificationContextURL
+        };
+        editorRef.current.setContent('')
+        setNewCommentInput(() => '');
+        createComment(payload);
+  
+      }
 
     }
+
   };
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {

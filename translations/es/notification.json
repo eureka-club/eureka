@@ -1,5 +1,8 @@
 {
-  "aboutWorkInCycle":"{{userName}} ha creado una Eureka sobre {{workTitle}} en el ciclo {{cycleTitle}}!",
-  "aboutCycle":"{{userName}} ha creado una Eureka sobre el ciclo {{cycleTitle}}!",
-  "viewAllNotifications":"Ver todas las notificationes"
+  "eurekaCreatedAboutWorkInCycle":"{{userName}} ha creado una Eureka sobre {{workTitle}} en el ciclo {{cycleTitle}}!",
+  "eurekaCreatedAboutCycle":"{{userName}} ha creado una Eureka sobre el ciclo {{cycleTitle}}!",
+  "viewAllNotifications":"Ver todas las notificationes",
+  "commentCreatedAboutWorkInCycle":"{{userName}} ha creado un Comentario Rápido sobre {{workTitle}} en el ciclo {{cycleTitle}}! ",
+  "commentCreatedAboutCycle":"{{userName}} ha creado un Comentario Rápido sobre {{cycleTitle}}!"
+
 }

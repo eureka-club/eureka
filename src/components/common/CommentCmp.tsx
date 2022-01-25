@@ -30,10 +30,12 @@ import {v4} from 'uuid';
 // import { WEBAPP_URL } from '../../constants';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import Avatar from './UserAvatar';
+import { WorkMosaicItem } from '@/src/types/work';
+import { CycleMosaicItem } from '@/src/types/cycle';
+import { PostMosaicItem } from '@/src/types/post';
 
 interface Props {
   comment: CommentMosaicItem;
-
   showCounts?: boolean;
   showShare?: boolean;
   showButtonLabels?: boolean;

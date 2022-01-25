@@ -36,19 +36,22 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   return (
     <StrictMode>
       <NextAuthProvider session={pageProps.session}>
+          
         {/* <GlobalEventsContext.Provider value={{...gec}}> */}
-          <NotificationProvider>
             <Provider initialValues={initialState && [[detailPagesAtom, globalModalsAtom, initialState]]}>
               <QueryClientProvider client={queryClient}>
+
                 <Hydrate state={pageProps.dehydratedState}>
                   {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                  <Component {...pageProps} />
+                  <NotificationProvider>
+                    <Component {...pageProps} />
+                  </NotificationProvider>
                 </Hydrate>
                 <ReactQueryDevtools />
               </QueryClientProvider>
             </Provider>
-          </NotificationProvider>
         {/* </GlobalEventsContext.Provider> */}
+        
       </NextAuthProvider>
     </StrictMode>
   );

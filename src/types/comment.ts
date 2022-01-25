@@ -32,6 +32,9 @@ export type CommentWithCycleWorkComment = Prisma.CommentGetPayload<{
 interface CreateCommentClientPayloadBase {
   contentText: string;
   creatorId: number;
+  notificationMessage?:string;
+  notificationContextURL?:string;
+  notificationToUsers?:number[];
 }
 export interface CreateCommentAboutCycleClientPayload extends CreateCommentClientPayloadBase {
   selectedCycleId: number;

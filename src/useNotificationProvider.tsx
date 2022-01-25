@@ -1,6 +1,6 @@
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 import Notifier from '@/src/lib/Notifier'
-
+import { useQueryClient } from 'react-query';
 import {User} from '@prisma/client';
 import { Session } from '@/src/types';
 import { NotifierRequest } from '@/src/types';
@@ -26,23 +26,9 @@ import { useSession } from 'next-auth/client';
 export type ContextType = {
   notifier?: Notifier;
   
-  // setCallback: Dispatch<SetStateAction<((res: NotifierResponse) => void) | undefined>>;
 };
 
-
-/* const getSocketIO = (callback: (res: NotifierResponse ) => void): void => {
-  // const si = new SocketIO()
-  // return new SocketIO(toUsers,(data)=>{
-  //   console.log('ver',data.message);
-  //   callback(data);
-  // },fromUser);
-  console.log('showing -> fromUser', fromUser);
-}
- */
 const NotificationContext = createContext<ContextType>({
-  // setCallback: (res => {
-  //   return ()=>{console.log('dummy notifier callback -> ',res)};
-  // }),
   notifier: undefined
 });
 
@@ -53,28 +39,33 @@ interface Props {
 }
 
 const NotificationProvider: React.FC<Props> = ({children}) => {
+  const queryClient = useQueryClient()
   const [session] = useSession();
-  const [user, setUser] = useState<User>();
   const [notifier, setNotifier] = useState<Notifier>();
-  const [callback, setCallback] = useState<(res: NotifierResponse) => void>();
-  // const gec = useGlobalEventsContext()
-  
+
   useEffect(()=>{
     if(session && !notifier){
       const user = (session as unknown as Session).user;
-      // setUser(res => (session as unknown as Session).user);
       setNotifier((res) => {
         if(user){
           
           return new Notifier(user.id);
         }
         return undefined;
-      })
+      });
+
+      globalThis.addEventListener('notify',()=>{
+        console.log('dispatched notify, updating user session');
+        if(session){
+          queryClient.invalidateQueries(['USER', user.id.toString()]);
+        }
+      });
+
     }
-  },[session, notifier]);
+
+  },[session, notifier, queryClient]);
 
   return <NotificationContext.Provider value={{
-    // setCallback,
     notifier
   }}>{children}</NotificationContext.Provider>
 };

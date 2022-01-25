@@ -143,7 +143,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
       if(payload.selectedWorkId){
         const work = cycle.works.find(w=>w.id === payload.selectedWorkId);
         if(work){
-          message = `aboutWorkInCycle!|!${JSON.stringify({
+          message = `eurekaCreatedAboutWorkInCycle!|!${JSON.stringify({
             userName:u.name||'',
             workTitle:work.title,
             cycleTitle:cycle.title
@@ -151,7 +151,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         }
       }
       else if(payload.selectedCycleId){
-        message = `aboutCycle!|!${JSON.stringify({
+        message = `eurekaCreatedAboutCycle!|!${JSON.stringify({
           userName:u.name||'',
           cycleTitle:cycle.title
         })}`;         

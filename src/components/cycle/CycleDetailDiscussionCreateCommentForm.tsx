@@ -23,6 +23,9 @@ import {
   CreateCommentAboutCommentClientPayload,
 } from '../../types/comment';
 
+import { useNotificationContext } from '@/src/useNotificationProvider';
+import {useRouter} from 'next/router';
+
 interface Props {
   cycle: CycleMosaicItem;
   discussionItem: string | undefined;
@@ -57,6 +60,9 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
 
   //   });
   // },[tinymce]);
+  const router = useRouter();
+  const {notifier} = useNotificationContext();
+  const [notifyMessage,setNotifyMessage] = useState<string>('');
 
   const clearCreateEurekaForm = () => {
     editorRef.current.setContent(newComment.contentText);
@@ -75,7 +81,7 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
       payload:
         | CreateCommentAboutCycleClientPayload
         | CreateCommentAboutWorkClientPayload
-        | CreateCommentAboutCommentClientPayload,
+        // | CreateCommentAboutCommentClientPayload,
     ): Promise<Comment | null> => {
       const res = await fetch('/api/comment', {
         method: 'POST',
@@ -83,8 +89,29 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
         body: JSON.stringify(payload),
       });
 
+      if(!res.ok){
+        setGlobalModalsState({
+          ...globalModalsState,
+          showToast:{
+            show:true,
+            title:t('Warning'),
+            type:'warning',
+            message: res.statusText
+          }
+        });
+        return null;
+      }
+
       const json = await res.json();
       if (json.ok) {
+        if(notifier){
+          const u = (session as Session).user;
+          const toUsers = cycle.participants.filter(p=>p.id!==u.id).map(p=>p.id);
+          notifier.notify({
+            toUsers,
+            data:{message:notifyMessage}
+          });
+      }
         return json.comment;
       }
 
@@ -126,25 +153,46 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
       });
       return;
     }
+    const u = (session as Session).user;
+    const toUsers = cycle.participants.filter(p=>p.id!==u.id).map(p=>p.id);
+
     if (newComment.selectedWorkId) {
+      const work = cycle.works.find(w=>w.id === newComment.selectedWorkId)
+      const msg = `commentCreatedAboutWorkInCycle!|!${JSON.stringify({
+        userName: u.name,
+        workTitle: work?.title,
+        cycleTitle: cycle.title,
+      })}`;
+      setNotifyMessage(msg);
       const payload: CreateCommentAboutWorkClientPayload = {
         selectedCycleId: cycle.id,
         selectedWorkId: newComment.selectedWorkId,
         selectedCommentId: undefined,
         contentText: editorRef.current.getContent(),
         creatorId: cycle.creatorId,
+        notificationMessage:msg,
+        notificationContextURL:router.asPath,
+        notificationToUsers:toUsers
       };
       await execCreateComment(payload);
     } else if (newComment.selectedCycleId) {
+      const msg = `commentCreatedAboutCycle!|!${JSON.stringify({
+        userName: u.name,
+        cycleTitle: cycle.title,
+      })}`;
+      setNotifyMessage(msg);
       const payload: CreateCommentAboutCycleClientPayload = {
         selectedCycleId: newComment.selectedCycleId,
         selectedWorkId: undefined,
         selectedCommentId: undefined,
         contentText: editorRef.current.getContent(),
         creatorId: cycle.creatorId,
+        notificationMessage:msg,
+        notificationContextURL:router.asPath,
+        notificationToUsers:toUsers
       };
       await execCreateComment(payload);
-    } else if (newComment.selectedCommentId) {
+    } /* else if (newComment.selectedCommentId) {
       const payload: CreateCommentAboutCommentClientPayload = {
         selectedCycleId: cycle.id,
         selectedCommentId: newComment.selectedCommentId,
@@ -153,7 +201,7 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
         creatorId: cycle.creatorId,
       };
       await execCreateComment(payload);
-    }
+    } */
     clearCreateEurekaForm();
   };
 
