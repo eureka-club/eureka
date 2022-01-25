@@ -237,15 +237,15 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
           fullSymbol={getFullSymbol()}
         />{' '}
-        <div className='ms-1'>
+        <div className='ms-2'>
         {getRatingAvg()}
         {' - '}
         {getRatingQty()}
         </div>
-         <span className="fs-6 text-gray">{t('ratings')}</span>
+         <span className="ms-1 text-gray">{t('ratings')}</span>
         
         {cycle.topics && (
-          <aside className=" d-flex ms-5">
+          <aside className=" d-flex ms-3">
             <TagsInput
               formatValue={(v: string) => t(`topics:${v}`)}
               className=""
@@ -294,12 +294,12 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
           fullSymbol={getFullSymbol()}
         />{' '}
-        <div className='ms-1'>
+        <div className='ms-2'>
         {getRatingAvg()}
         {' - '}
         {getRatingQty()}
         </div>
-         <span className="fs-6 text-gray">{t('ratings')}</span>
+         <span className="ms-1 text-gray">{t('ratings')}</span>
         </div>
         <div className="">
         <h4 className="mt-4 mb-1 text-dark">

@@ -187,7 +187,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     return (
       <>
         <Row>
-          <Col xs={12} md={12} xl={4}>
+          <Col className='d-flex justify-content-center justify-content-lg-start' xs={12} md={12} xl={4}>
             {renderVerticalMosaic({ showDetailedInfo: false })}
           </Col>
           <Col xs={12} md={12} xl={8}>

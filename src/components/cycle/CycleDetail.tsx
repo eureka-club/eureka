@@ -369,7 +369,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       const res = (
         <>
           <TabPane eventKey="cycle-discussion">
-            
             <CycleDetailDiscussion cycle={cycle} className="mb-5" />
             <Row>
               <Col xs={{span:12, order:'last'}} md={{span:9,order:'first'}}>

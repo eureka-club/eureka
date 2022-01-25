@@ -39,6 +39,15 @@
   /* margin: 0 1em 0 0; */
 }
 
+.navbarIconNavMobile {
+  color: var(--eureka-purple-dark);
+  transform: scale(1.2);
+  /* width: 1.5em;*/
+  font-size: 1.6em;
+  border-radius: 50%;
+  /* margin: 0 1em 0 0; */
+}
+
 .infoIco img {
   width: 26px;
   height: 26px;
