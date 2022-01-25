@@ -217,7 +217,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   if (display === 'h') {
     return (
-      <div className="d-flex mb-3">
+      <div className="mb-3">
         <section className={`d-none d-md-block p-2 border-gray-light ${styles.postHorizontally} ${className}`}>
           {renderHorizontalMosaic([4, 8])}
         </section>
