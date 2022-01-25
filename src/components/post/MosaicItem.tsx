@@ -187,7 +187,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     return (
       <>
         <Row>
-          <Col xs={12} md={12} xl={4}>
+          <Col className='d-flex justify-content-center justify-content-lg-start' xs={12} md={12} xl={4}>
             {renderVerticalMosaic({ showDetailedInfo: false })}
           </Col>
           <Col xs={12} md={12} xl={8}>
@@ -217,7 +217,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   if (display === 'h') {
     return (
-      <div className="mb-3">
+      <div className="d-flex mb-3">
         <section className={`d-none d-md-block p-2 border-gray-light ${styles.postHorizontally} ${className}`}>
           {renderHorizontalMosaic([4, 8])}
         </section>
