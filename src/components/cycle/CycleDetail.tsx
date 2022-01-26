@@ -202,26 +202,30 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   };
 
   const renderComments = () => {
-    const getParent = (c: Comment): Work | Cycle => {
-      if ((c as CommentMosaicItem).work) return (c as CommentMosaicItem).work!;
-      return cycle as Cycle;
+    const getParent = (c: Comment): Work | Cycle |  undefined  => {
+      const cmi = (c as CommentMosaicItem);
+      if(!cmi.commentId && !cmi.postId){
+        if(cmi.workId) return cmi.work!;
+        if(cmi.cycleId) return (cycle as Cycle);
+      }
+      return undefined;
     };
-    if (cycle && filteredComments)
-      return filteredComments
-        .sort((p, c) => (p.id > c.id && -1) || 1)
-        .map((c) => {
-          return (
-            <ComentMosaic
-              key={c.id}
-              comment={c as unknown as CommentMosaicItem}
-              detailed
-              showComments
-              commentParent={getParent(c)}
-              cacheKey={['CYCLE', `${cycle.id}`]}
-              className="mb-4"
-            />
-          );
-        });
+    if (cycle && filteredComments){
+      const fcf = filteredComments.filter((c) => getParent(c));
+      const fcfs = fcf.sort((p, c) => (p.id > c.id && -1) || 1)
+      return fcfs
+        .map(c=>
+          <ComentMosaic
+            key={c.id}
+            comment={c as unknown as CommentMosaicItem}
+            detailed
+            showComments
+            commentParent={getParent(c)}
+            cacheKey={['CYCLE', `${cycle.id}`]}
+            className="mb-4"
+          />
+        );
+    }
     return '';
   };
 

@@ -26,7 +26,7 @@ import CommentsList from '../common/CommentsList';
 
 interface Props {
   comment: CommentMosaicItem;
-  commentParent: Cycle | Work;
+  commentParent: Cycle | Work | undefined;
   detailed?: boolean;
   showButtonLabels?: boolean;
   showShare?: boolean;
@@ -68,8 +68,10 @@ const MosaicItem: FunctionComponent<Props> = ({
   const { contentText } = comment;
   const { t } = useTranslation('common');
   const getTitle = (): string => {
-    if (isWork(commentParent)) return (commentParent as Work).title;
-    if (isCycle(commentParent)) return (commentParent as Cycle).title;
+    if(commentParent){
+      if (isCycle(commentParent)) return (commentParent as Cycle).title;
+      if (isWork(commentParent)) return (commentParent as Work).title;
+    }
     // if (isComment(commentParent)) return `Comment: ${commentParent.id}`;
     return '';
   };
