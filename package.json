@@ -13,7 +13,8 @@
     "prisma-pf": "prisma --preview-feature",
     "start1": "NODE_ENV=production TS_NODE_COMPILER_OPTIONS='{ \"module\":\"commonjs\" }' ts-node server.ts",
     "start": "NODE_ENV=production next start",
-    "tsc": "tsc --noEmit"
+    "tsc": "tsc --noEmit",
+    "test": "jest --watch"
   },
   "engines": {
     "node": "^16 || ^14",
@@ -27,6 +28,8 @@
     "@sendgrid/client": "^7.4.3",
     "@sendgrid/helpers": "^7.4.3",
     "@sendgrid/mail": "^7.4.4",
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
     "@tinymce/tinymce-react": "^3.12.6",
     "@types/ioredis": "^4.27.7",
     "@types/node": "^16.11.9",
@@ -46,6 +49,7 @@
     "hyvor-talk-react": "^1.0.3",
     "install": "^0.13.0",
     "ioredis": "^4.28.0",
+    "jest": "^27.4.7",
     "jotai": "^0.14.1",
     "lodash": "^4.17.20",
     "move-file": "^2.0.0",
