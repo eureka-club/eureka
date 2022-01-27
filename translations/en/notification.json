@@ -1,7 +1,18 @@
 {
-  "eurekaCreatedAboutWorkInCycle":"{{userName}} has created an Eureka about {{workTitle}} in the cycle {{cycleTitle}}!",
-  "eurekaCreatedAboutCycle":"{{userName}} has created an Eureka about {{cycleTitle}}!",
   "viewAllNotifications":"View all notifications",
-  "commentCreatedAboutWorkInCycle":"{{userName}} has added a Quick Comment about {{workTitle}} in the cycle {{cycleTitle}}! ",
-  "commentCreatedAboutCycle":"{{userName}} has added a Quick Comment about {{cycleTitle}}!"
+  
+  "eurekaCreatedAboutWorkInCycle":"{{userName}} has created an Eureka about {{workTitle}} in the Cycle {{cycleTitle}}!",
+  "eurekaCreatedAboutCycle":"{{userName}} has created an Eureka about {{cycleTitle}}!",
+  
+  "commentCreatedAboutWorkInCycle":"{{userName}} has added a Quick Comment about {{workTitle}} in the Cycle {{cycleTitle}}! ",
+  "commentCreatedAboutCycle":"{{userName}} has added a Quick Comment about {{cycleTitle}}!",
+
+  "commentRepliedAboutPostWorkInCycle":"{{userName}} has replied to your Eureka {{eurekaTitle}} about the Work {{workTitle}} in the Cycle {{cycleTitle}}!",
+  "commentRepliedAboutPostInCycle":"{{userName}} has replied to your Eureka {{eurekaTitle}} about the Cycle {{cycleTitle}}!",
+
+  "commentRepliedAboutCommentPostInCycle":"{{userName}} has replied to your Comment about the Eureka {{eurekaTitle}} in the Cycle {{cycleTitle}}!",
+  "commentRepliedAboutCommentWorkInCycle":"{{userName}} has replied to your Comment about the Work {{workTitle}} in the Cycle {{cycleTitle}}!",
+  "commentRepliedAboutCommentCycle":"{{userName}} has replied to your Comment  about the Cycle {{cycleTitle}}!"
+  
+        
 }

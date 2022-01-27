@@ -1,4 +1,4 @@
-import { FunctionComponent, useState, useRef, ChangeEvent, FormEvent, useEffect } from 'react';
+import { FunctionComponent, useState, useRef } from 'react';
 import { Button, Form, Spinner } from 'react-bootstrap';
 import { MdReply, MdCancel } from 'react-icons/md';
 import { BiTrash, BiEdit } from 'react-icons/bi';
@@ -8,16 +8,18 @@ import {useAtom} from 'jotai'
 import { Comment } from '@prisma/client'
 import useTranslation from 'next-translate/useTranslation';
 import {
-  CreateCommentAboutCycleClientPayload as CCACCP,
-  CreateCommentAboutWorkClientPayload as CCAWCP,
-  CreateCommentAboutCommentClientPayload as CCACOCP,
-  CreateCommentAboutPostClientPayload as CCAPCP,
+  CreateCommentClientPayload as CCCP,
   CommentMosaicItem,
 } from '@/src/types/comment';
 import globalModalsAtom from '@/src/atoms/globalModals';
 import { Session } from '@/src/types';
 import {useSession} from 'next-auth/client'
 import { EditorEvent } from 'tinymce';
+import { useRouter } from 'next/router';
+import useCycle from '@/src/useCycle'
+import useWork from '@/src/useWork'
+import usePost from '@/src/usePost'
+import { useComment } from '@/src/useComment';
 
 type CommentWithComments = Comment & {comments?: Comment[];}
 interface Props {
@@ -33,6 +35,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
   const [session] = useSession() as [Session | null | undefined, boolean];
   const queryClient = useQueryClient();
   const isFetching = useIsFetching(cacheKey);
+  const router = useRouter();
   
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   
@@ -58,12 +61,28 @@ const CommentActionsBar: FunctionComponent<Props> = ({
     return false;
   }
 
+  const {data:cycle,isLoading:isLoadingCycle} = useCycle(comment.cycleId || 0,{
+    enabled:!!comment.cycleId
+  })
+
+  const {data:post,isLoading:isLoadingPost} = usePost(comment.postId || 0,{
+    enabled:!!comment.postId
+  })
+
+  const {data:work,isLoading:isLoadingWork} = useWork(comment.workId || 0,{
+    enabled:!!comment.workId
+  })
+
+  const {data:aboutComment,isLoading:isLoadingAboutComment} = useComment(comment.commentId || 0,{
+    enabled:!!comment.commentId
+  })
+
   const {
     isLoading,
     // isError,
     mutate: createComment,
   } = useMutation(
-    async (payload: CCACCP | CCAWCP | CCACOCP | CCAPCP): Promise<Comment | null> => {
+    async (payload: CCCP): Promise<Comment | null> => {
       const res = await fetch('/api/comment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -155,6 +174,53 @@ const CommentActionsBar: FunctionComponent<Props> = ({
       const selectedWorkId = comment.workId || 0;
       const selectedCommentId = comment.id;
 
+      let notificationMessage = '';
+      const notificationContextURL = router.asPath;
+      let notificationToUsers = [comment.creatorId];
+      /*
+  "commentRepliedAboutCommentPostInCycle":"{{userName}} has replied to your Comment about the Eureka {{eurekaTitle}} in the Cycle {{cycleTitle}}!",
+  "commentRepliedAboutCommentWorkInCycle":"{{userName}} has replied to your Comment about the Work {{workTitle}} in the Cycle {{cycleTitle}}!",
+  "commentRepliedAboutCommentCycle":"{{userName}} has replied to your Comment  about the Cycle {{cycleTitle}}!"
+  */
+      if(aboutComment){
+        let args:Record<string,string> = {
+          userName:aboutComment.creator.name||'',
+        };
+        if(cycle){//in cycle context
+          args = {...args, cycleTitle:cycle.title};
+          notificationToUsers.push(cycle.creatorId);
+          if(post){
+            args = {...args, eurekaTitle:post.title};
+            notificationMessage = `commentRepliedAboutCommentPostInCycle!|!${JSON.stringify(args)}`;           
+          }
+          else if(work){
+            args = {...args, workTitle:work.title};
+            notificationMessage = `commentRepliedAboutCommentWorkInCycle!|!${JSON.stringify(args)}`;           
+          }
+          else {
+            notificationMessage = `commentRepliedAboutCommentCycle!|!${JSON.stringify(args)}`;           
+          }
+        }
+      }
+      else if(post){
+        let args:Record<string,string> = {
+          userName:post.creator.name||'',
+          eurekaTitle:post.title
+        };
+        if(cycle){//in cycle context
+          args = {...args, cycleTitle: cycle.title}; 
+          notificationToUsers.push(cycle.creatorId);
+          if(work){
+            args = {...args, workTitle:work.title}
+            notificationMessage = `commentRepliedAboutPostWorkInCycle!|!${JSON.stringify(args)}`;           
+          }
+          else{
+            notificationMessage = `commentRepliedAboutPostInCycle!|!${JSON.stringify(args)}`; 
+          }
+        }
+
+      }
+
       const payload = {
         selectedCycleId,
         selectedPostId,
@@ -162,6 +228,9 @@ const CommentActionsBar: FunctionComponent<Props> = ({
         selectedWorkId,
         creatorId: +session!.user.id,
         contentText: editorRef.current.getContent(),
+        notificationMessage,
+        notificationContextURL,
+        notificationToUsers,
       };
       createComment(payload);
       editorRef.current.setContent('');

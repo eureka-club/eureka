@@ -18,9 +18,8 @@ import globalModalsAtom from '../../atoms/globalModals';
 import { Session } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
 import {
-  CreateCommentAboutCycleClientPayload,
-  CreateCommentAboutWorkClientPayload,
-  CreateCommentAboutCommentClientPayload,
+  CreateCommentClientPayload,
+  
 } from '../../types/comment';
 
 import { useNotificationContext } from '@/src/useNotificationProvider';
@@ -79,9 +78,8 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
   const { mutate: execCreateComment, isLoading } = useMutation(
     async (
       payload:
-        | CreateCommentAboutCycleClientPayload
-        | CreateCommentAboutWorkClientPayload
-        // | CreateCommentAboutCommentClientPayload,
+        CreateCommentClientPayload
+        
     ): Promise<Comment | null> => {
       const res = await fetch('/api/comment', {
         method: 'POST',
@@ -164,7 +162,7 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
         cycleTitle: cycle.title,
       })}`;
       setNotifyMessage(msg);
-      const payload: CreateCommentAboutWorkClientPayload = {
+      const payload: CreateCommentClientPayload = {
         selectedCycleId: cycle.id,
         selectedWorkId: newComment.selectedWorkId,
         selectedCommentId: undefined,
@@ -181,7 +179,7 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
         cycleTitle: cycle.title,
       })}`;
       setNotifyMessage(msg);
-      const payload: CreateCommentAboutCycleClientPayload = {
+      const payload: CreateCommentClientPayload = {
         selectedCycleId: newComment.selectedCycleId,
         selectedWorkId: undefined,
         selectedCommentId: undefined,

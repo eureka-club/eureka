@@ -29,39 +29,23 @@ export type CommentWithCycleWorkComment = Prisma.CommentGetPayload<{
   };
 }>;
 
-interface CreateCommentClientPayloadBase {
+interface CreateNotificationClientPayload{
+  notificationMessage:string;
+  notificationContextURL:string;
+  notificationToUsers:number[];
+}
+interface CreateCommentClientPayloadBase extends CreateNotificationClientPayload{
   contentText: string;
   creatorId: number;
-  notificationMessage?:string;
-  notificationContextURL?:string;
-  notificationToUsers?:number[];
 }
-export interface CreateCommentAboutCycleClientPayload extends CreateCommentClientPayloadBase {
-  selectedCycleId: number;
+export interface CreateCommentClientPayload extends CreateCommentClientPayloadBase {
+  selectedCycleId?: number;
   selectedWorkId?: number;
   selectedCommentId?: number;
   selectedPostId?: number;
-}
-export interface CreateCommentAboutWorkClientPayload extends CreateCommentClientPayloadBase {
-  selectedCycleId: number;
-  selectedWorkId: number;
-  selectedCommentId?: number;
-  selectedPostId?: number;
-}
-export interface CreateCommentAboutCommentClientPayload extends CreateCommentClientPayloadBase {
-  selectedCycleId: number;
-  selectedCommentId: number;
-  selectedPostId?: number;
-  selectedWorkId?: number;
-}
-export interface CreateCommentAboutPostClientPayload extends CreateCommentClientPayloadBase {
-  selectedCycleId: number;
-  selectedPostId: number;
-  selectedWorkId?: number;
-  selectedCommentId?: number;
 }
 
-export interface EditCommentAboutCycleClientPayload {
+export interface EditCommentClientPayload {
   id: string;
   contentText?: string;
   selectedCycleId?: number;
@@ -70,44 +54,7 @@ export interface EditCommentAboutCycleClientPayload {
   creatorId?: number;
 }
 
-export interface EditCommentAboutWorkClientPayload {
-  id: string;
-  contentText?: string;
-  selectedCycleId?: number | null;
-  selectedWorkId?: number;
-  selectedCommentId?: null;
-  creatorId?: number;
-}
-
-export interface EditCommentAboutCommentClientPayload {
-  id: string;
-  contentText?: string;
-  selectedCycleId?: number | null;
-  selectedWorkId?: null;
-  selectedCommentId?: number;
-  creatorId?: number;
-}
-
-export interface CreateCommentServerFields {
-  selectedCycleId?: string;
-  selectedWorkId?: string;
-  selectedCommentId?: string;
-  selectedPostId?: string;
-  contentText: string;
-  creatorId: number;
-}
-
-export interface EditCommentServerFields {
-  id: string;
-  selectedCycleId?: string;
-  selectedWorkId?: string;
-  selectedCommentId?: string;
-  selectedPostId?: string;
-  contentText?: string[];
-  creatorId?: number;
-}
-
-export interface CreateCommentServerPayload {
+export interface CreateCommentServerPayload  extends CreateNotificationClientPayload {
   selectedCycleId?: number;
   selectedWorkId?: number;
   selectedCommentId?: number;

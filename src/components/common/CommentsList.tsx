@@ -10,10 +10,7 @@ import { InputGroup, Form, Button /* , Row, Col, Card, Popover, */, Spinner } fr
 import { Cycle, Work, Post, Comment } from '@prisma/client';
 // import { MdReply, MdCancel } from 'react-icons/md';
 import {
-  CreateCommentAboutCycleClientPayload as CCACCP,
-  CreateCommentAboutWorkClientPayload as CCAWCP,
-  CreateCommentAboutCommentClientPayload as CCACOCP,
-  CreateCommentAboutPostClientPayload as CCAPCP,
+  CreateCommentClientPayload as CCCP,
   CommentMosaicItem,
 } from '../../types/comment';
 import { isCycle, isWork, isComment, Session, isPost } from '../../types';
@@ -74,7 +71,7 @@ const CommentsList: FunctionComponent<Props> = ({
     // isError,
     mutate: createComment,
   } = useMutation(
-    async (payload: CCACCP | CCAWCP | CCACOCP | CCAPCP): Promise<Comment | null> => {
+    async (payload: CCCP ): Promise<Comment | null> => {
       const res = await fetch('/api/comment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

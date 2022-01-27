@@ -1,6 +1,6 @@
 import { Cycle, Comment, User, Work, Post } from '@prisma/client';
 
-import { CreateCommentServerFields, CreateCommentServerPayload, CommentMosaicItem } from '../types/comment';
+import { CreateCommentServerPayload, CommentMosaicItem } from '../types/comment';
 import prisma from '../lib/prisma';
 import { Exception } from 'handlebars';
 import comment from 'pages/api/comment';
@@ -59,7 +59,7 @@ export const search = async (query: { [key: string]: string | string[] }): Promi
   });
 };
 
-export const createFromServerFields = async (fields: CreateCommentServerFields, creator: User): Promise<Comment> => {
+export const createFromServerFields = async (fields: CreateCommentServerPayload, creator: User): Promise<Comment> => {
   const payload = Object.entries(fields).reduce((memo, [fieldName, fieldValue]) => {
     switch (fieldName) {
       case 'selectedCycleId':

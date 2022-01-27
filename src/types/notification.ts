@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client';
 
+
 export interface EditNotificationClientPayload {
   notificationId: number; 
   userId: number;
