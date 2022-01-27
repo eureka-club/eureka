@@ -208,6 +208,7 @@ a{
 }
 ::-webkit-scrollbar {
   width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
@@ -217,7 +218,7 @@ a{
 
 ::-webkit-scrollbar-thumb {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color:var(--bs-info);
+  background: var(--color-primary);
   border-radius: 100px;
   border: 3px solid var(--bs-light);;
 }
@@ -234,15 +235,15 @@ a{
   white-space: nowrap;
   width: auto;
 }
-
+/*
 .scrollNav::-webkit-scrollbar {
   width: 10px;
   height: 8px;
 }
 
 .scrollNav::-webkit-scrollbar-thumb {
-  background: var(--color-primary-raised) !important;
-}
+  background: var(--color-primary) !important;
+}*/
 
 .avatar {
   border-radius: 50%;
@@ -271,6 +272,9 @@ a{
      margin: 0 0 1em 0;
      border: 0;
    }
+   .mainContainer {
+     margin-top: 1em;
+   }
  }
 
 /*Tablet*/
@@ -279,6 +283,9 @@ a{
   .scrollNav {
     overflow: hidden;
     white-space: none;
+  }
+  .mainContainer {
+    margin-top: 1em;
   }
 }
 
@@ -291,6 +298,9 @@ a{
   .mainSection {
     margin-top: 75px;
   }
+   .mainContainer {
+     margin-top: 6em;
+   }
 }
 
 /*fin tablet*/
@@ -303,6 +313,9 @@ a{
   }
   .mainSection {
     margin-top: 75px;
+  }
+  .mainContainer {
+    margin-top: 6em;
   }
 }
 
