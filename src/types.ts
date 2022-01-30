@@ -64,6 +64,8 @@ export const isUser = (obj: BasicEntity): obj is User =>
   typeof (obj as User).roles === 'string' && typeof (obj as User).email === 'string';
 
 export const isComment = (obj: BasicEntity): obj is Comment => 'commentId' in (obj as Comment);
+export const isCommentMosaicItem = (obj: MosaicItem): obj is CommentMosaicItem => obj && 'commentId' in (obj as Comment) && 'comments' in (obj as CommentMosaicItem);
+
 
 // TODO separate type-guards for MosaicItem and SearchResult
 export const isCycleMosaicItem = (obj: MosaicItem | SearchResult): obj is CycleMosaicItem => {

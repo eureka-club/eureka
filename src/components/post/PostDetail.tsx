@@ -216,11 +216,11 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
             </div>
           </div>
           <div className='container d-none d-lg-block'>
-            <CommentsList entity={post} parent={cycle || work} cacheKey={['POST', `${post.id}`]} />
+            <CommentsList entity={post} parent={cycle! || work!} cacheKey={['POST', `${post.id}`]} />
           </div>
         </Col>
         <div className='container d-sm-block d-lg-none mt-3'>
-            <CommentsList entity={post} parent={cycle || work} cacheKey={['POST', `${post.id}`]} />
+            <CommentsList entity={post} parent={cycle! || work!} cacheKey={['POST', `${post.id}`]} />
           </div>
       </Row>
      </MosaicContext.Provider>

@@ -30,7 +30,7 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
       };
     };
     comments: {
-      include: { comments: true; work: true; creator: true };
+      include: { comments: true; work: true; post?:true;comment?:true; creator: true };
     };
     guidelines: {
       select: { title: true; contentText: true };

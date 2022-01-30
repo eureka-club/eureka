@@ -89,7 +89,7 @@ export default getApiHandler()
       prisma.$disconnect();
     }
   })
-  .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+  .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {//TODO not update with prisma, /faced/cycle -> update must be used !!!
     const session = (await getSession({ req })) as unknown as Session;
     if (session == null || !session.user.roles.includes('admin')) {
       res.status(401).json({ status: 'Unauthorized' });

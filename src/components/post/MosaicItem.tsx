@@ -17,10 +17,12 @@ import { isCycle, isWork } from '../../types';
 import CommentsList from '../common/CommentsList';
 import Avatar from '../common/UserAvatar';
 import UnclampText from '../UnclampText';
+import { CycleMosaicItem } from '@/src/types/cycle';
+import { WorkMosaicItem } from '@/src/types/work';
 
 interface Props {
   post: PostMosaicItem;
-  postParent?: Cycle | Work;
+  postParent?: CycleMosaicItem | WorkMosaicItem;
   display?: 'v' | 'h';
 
   showButtonLabels?: boolean;
@@ -208,7 +210,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         </Row>
         <Row>
           <Col md={12} xs={12}>
-            {showComments && <CommentsList entity={post} parent={postParent} cacheKey={cacheKey} />}
+            {showComments && <CommentsList entity={post} parent={postParent!} cacheKey={cacheKey} />}
           </Col>
         </Row>
       </>

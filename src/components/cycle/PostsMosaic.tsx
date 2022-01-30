@@ -1,22 +1,19 @@
-// import { Cycle } from '@prisma/client';
-import { Post } from '@prisma/client';
 import { FunctionComponent } from 'react';
 // import Spinner from 'react-bootstrap/Spinner';
-// import { useQuery } from 'react-query';
 import dayjs from 'dayjs'
-import { CycleMosaicItem } from '../../types/cycle';
-import { PostMosaicItem } from '../../types/post';
+import { CycleMosaicItem } from '@/types/cycle';
+import { PostMosaicItem } from '@/types/post';
 import Mosaic from '../Mosaic';
-
+import { WorkMosaicItem } from '@/src/types/work';
 interface Props {
-  // cycle: CycleMosaicItem;
+  parent: CycleMosaicItem;
   posts: PostMosaicItem[];
   display?: 'h' | 'v';
   showComments?: boolean;
   cacheKey: [string, string];
 }
 
-const PostsMosaic: FunctionComponent<Props> = ({ posts, display, showComments, cacheKey }) => {
+const PostsMosaic: FunctionComponent<Props> = ({ posts,parent, display, showComments, cacheKey }) => {
   // const { isLoading, isSuccess, data } = useQuery<PostMosaicItem[]>(
   //   ['posts.mosaic.cycle', cycle.id],
   //   async ({ queryKey: [, cycleId] }) => {
@@ -53,6 +50,7 @@ const PostsMosaic: FunctionComponent<Props> = ({ posts, display, showComments, c
           stack={orderedPosts as PostMosaicItem[]}
           showComments={showComments}
           cacheKey={cacheKey}
+          parent={parent}
         />
         {/* <Mosaic
           display={display}

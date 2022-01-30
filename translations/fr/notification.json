@@ -1,7 +1,19 @@
 {
-  "eurekaCreatedAboutWorkInCycle":"{{userName}} has created an Eureka about {{workTitle}} in the cycle {{cycleTitle}}!",
-  "eurekaCreatedAboutCycle":"{{userName}} has created an Eureka about {{cycleTitle}}!",
   "viewAllNotifications":"View all notifications",
-  "commentCreatedAboutWorkInCycle":"{{userName}} has added a Quick Comment about {{workTitle}} in the cycle {{cycleTitle}}! ",
-  "commentCreatedAboutCycle":"{{userName}} has added a Quick Comment about {{cycleTitle}}!"
+  
+  "eurekaCreatedAboutCycle":"{{userName}} has created an Eureka about {{cycleTitle}}!",
+  "eurekaCreatedAboutWorkInCycle":"{{userName}} has created an Eureka about {{workTitle}} in the Cycle {{cycleTitle}}!",
+  
+  "commentCreatedAboutComment":"{{userName}} has replied to your Comment  {{commentTitle}}!",
+  "commentCreatedAboutCommentInCycle":"{{userName}} has replied to your Comment in the Cycle {{cycleTitle}}! ",
+  
+  "commentCreatedAboutCycle":"{{userName}} has added a Comment about {{cycleTitle}}!",
+  
+  "commentCreatedAboutPost":"{{userName}} has added a Comment about Post {{postTitle}}!",
+  "commentCreatedAboutPostInCycle":"{{userName}} has added a Comment about Post {{postTitle}} in the Cycle {{cycleTitle}}! ",
+  "commentCreatedAboutPostInWork":"{{userName}} has added a Comment about Post {{postTitle}} in the Work {{workTitle}}!",
+  
+  "commentCreatedAboutWorkInCycle":"{{userName}} has added a Comment about {{workTitle}} in the Cycle {{cycleTitle}}! ",
+  "commentCreatedAboutWork":"{{userName}} has added a Comment about {{workTitle}}!"
+        
 }

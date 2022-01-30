@@ -5,8 +5,8 @@ export type CommentMosaicItem = Prisma.CommentGetPayload<{
     creator: {
       select: { id: true; name: true; image: true };
     };
-    work: true;
-    // cycle: true;
+    work: {include:{cycles:true}};
+    cycle: true;
     comments: {
       include: {
         creator: { select: { id: true; name: true; image: true } };
@@ -15,6 +15,8 @@ export type CommentMosaicItem = Prisma.CommentGetPayload<{
             creator: { select: { id: true; name: true; image: true } };
           };
         };
+        work: {include:{cycles:true}};
+        cycle:true,
       };
     };
     // { include: { creator: true; comments: true } };

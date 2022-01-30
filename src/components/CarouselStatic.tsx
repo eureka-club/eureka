@@ -31,6 +31,7 @@ import { CycleMosaicItem /* , CycleWithImages */ } from '../types/cycle';
 import { PostMosaicItem } from '../types/post';
 import { UserMosaicItem } from '../types/user';
 import { CycleContext } from '../useCycleContext';
+import { Cycle } from '@prisma/client';
 
 type Item = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | UserMosaicItem;
 type Props = {
@@ -63,10 +64,10 @@ const renderMosaicItem = (
     );
   }
   if (isPostMosaicItem(item) || (item && item.type === 'post')) {
-    let pp;
+    let pp:WorkMosaicItem | CycleMosaicItem | undefined = undefined;
     const it: PostMosaicItem = item as PostMosaicItem;
-    if (it.works && it.works.length > 0) [pp] = it.works;
-    else if (it.cycles && it.cycles.length > 0) [pp] = it.cycles;
+    if (it.works && it.works.length > 0) pp = it.works[0] as WorkMosaicItem;
+    else if (it.cycles && it.cycles.length > 0) pp = it.cycles[0] as CycleMosaicItem;
 
     return <MosaicItemPost key={`post-${v4()}`} post={item as PostMosaicItem} postParent={pp} />;
   }

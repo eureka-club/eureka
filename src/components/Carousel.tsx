@@ -40,7 +40,7 @@ type Props = {
 
 const renderMosaicItem = (
   item: MosaicItem,
-  postsParent: Cycle | Work | undefined,
+  postsParent?: CycleMosaicItem | WorkMosaicItem,
   topic = '',
   page = '',
   showSocialInteraction = true,

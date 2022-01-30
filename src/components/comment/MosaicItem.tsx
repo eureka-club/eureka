@@ -23,10 +23,13 @@ import { isCycle, isWork, /*isPost, isComment  , Session */ } from '../../types'
 
 import Avatar from '../common/UserAvatar';
 import CommentsList from '../common/CommentsList';
+import { CycleMosaicItem } from '@/src/types/cycle';
+import { WorkMosaicItem } from '@/src/types/work';
+import { PostMosaicItem } from '@/src/types/post';
 
 interface Props {
   comment: CommentMosaicItem;
-  commentParent: Cycle | Work | undefined;
+  commentParent: CycleMosaicItem | WorkMosaicItem | PostMosaicItem | CommentMosaicItem;
   detailed?: boolean;
   showButtonLabels?: boolean;
   showShare?: boolean;
@@ -133,27 +136,12 @@ const MosaicItem: FunctionComponent<Props> = ({
             <Row>
               <Col>
                 <aside className="pt-3 mb-0">
-                  {/* <UnclampText isHTML text={contentText} clampHeight="4rem" /> */}
                   <CommentTextBox comment={ comment} />
-                  <CommentActionsBar comment={comment} showReplyBtn={false} cacheKey={cacheKey} />
                 </aside>
               </Col>
             </Row>
-            {/* <Row className={styles.bottomRight}>
-              <Col md={4}>
-                <Avatar user={comment.creator} />
-              </Col>
-              <Col md={8} className={styles.commentsInfoContainer}>
-                <div className={styles.commentsInfo}>
-                  <FaRegComments /> <span>{comment.comments.length} Comments</span>
-                </div>
-              </Col>
-            </Row> */}
             {showComments && <CommentsList entity={comment} parent={commentParent} cacheKey={cacheKey} />}
-          </Card.Body>
-          {/* <Card.Footer>
-            {showComments && <Button className="fs-6" variant="default">View more comments</Button>}
-          </Card.Footer> */}
+          </Card.Body>          
         </Card>
       </>
     );

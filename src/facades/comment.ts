@@ -1,21 +1,22 @@
 import { Cycle, Comment, User, Work, Post } from '@prisma/client';
 
-import { CreateCommentServerPayload, CommentMosaicItem } from '../types/comment';
+import {CreateCommentServerPayload, CommentMosaicItem } from '../types/comment';
 import prisma from '../lib/prisma';
 import { Exception } from 'handlebars';
-import comment from 'pages/api/comment';
 
 export const find = async (id: number): Promise<CommentMosaicItem | null> => {
   return prisma.comment.findUnique({
     where: { id },
     include: {
       creator: { select: { id: true, name: true, image: true } },
-      work: true,
+      work: {include:{cycles:true}},
       cycle: true,
       comments: {
         include: {
           creator: { select: { id: true, name: true, image: true } },
           comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+          work: {include:{cycles:true}},
+          cycle:true,
         },
       },
     },
@@ -27,12 +28,14 @@ export const findAll = async (): Promise<CommentMosaicItem[]> => {
     orderBy: { createdAt: 'desc' },
     include: {
       creator: { select: { id: true, name: true, image: true } },
-      work: true,
+      work: {include:{cycles:true}},
       cycle: true,
       comments: {
         include: {
           creator: { select: { id: true, name: true, image: true } },
           comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+          work: {include:{cycles:true}},
+          cycle:true,
         },
       },
     },

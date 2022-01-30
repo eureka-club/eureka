@@ -17,9 +17,13 @@ import {v4} from 'uuid';
 
 // import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import Avatar from './UserAvatar';
+import { CycleMosaicItem } from '@/src/types/cycle';
+import { WorkMosaicItem } from '@/src/types/work';
+import { PostMosaicItem } from '@/src/types/post';
 
 interface Props {
   comment: CommentMosaicItem;
+  parent: CycleMosaicItem | WorkMosaicItem | PostMosaicItem | CommentMosaicItem;
   showCounts?: boolean;
   showShare?: boolean;
   showButtonLabels?: boolean;
@@ -28,7 +32,7 @@ interface Props {
   showRating?: boolean;
 }
 
-const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
+const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey, parent }) => {
   const { t } = useTranslation('common');
   // const router = useRouter();
   const [session] = useSession() as [Session | null | undefined, boolean];
@@ -44,7 +48,7 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
               </Col>
               <Col xs={10} md={11} className="ps-0">
                 <CommentTextBox comment={ comment} />
-                {/* {renderCommentActions()} */}<CommentActionsBar key={ v4()} comment={ comment} cacheKey={cacheKey}/>
+                {/* {renderCommentActions()} */}<CommentActionsBar key={ v4()} entity={ comment} parent={parent} cacheKey={cacheKey}/>
                 {comment &&
                   comment.comments &&
                   comment.comments.map((commentChild) => (
@@ -55,7 +59,7 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey }) => {
                       <Col md={11} xs={10} className="ps-0">
                       <CommentTextBox comment={ commentChild} />    
                         {/* {renderCommentActions(commentChild)}                     */}
-                        <CommentActionsBar key={ v4()} comment={commentChild} cacheKey={cacheKey}/>
+                        <CommentActionsBar key={ v4()} entity={commentChild as CommentMosaicItem} parent={parent} cacheKey={cacheKey}/>
                       </Col>
                     </Row>
                   ))}

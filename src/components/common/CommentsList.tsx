@@ -19,7 +19,7 @@ import { PostMosaicItem } from '../../types/post';
 import { WorkMosaicItem } from '../../types/work';
 import useUser from '@/src/useUser';
 import CommentCmp from './CommentCmp';
-
+import CommentActionsBar from './CommentActionsBar';
 // import globalModalsAtom from '../../atoms/globalModals';
 
 // import { WEBAPP_URL } from '../../constants';
@@ -29,7 +29,7 @@ import Avatar from './UserAvatar';
 
 interface Props {
   entity: CycleMosaicItem | CommentMosaicItem | WorkMosaicItem | PostMosaicItem;
-  parent?: Cycle | Work | Post | Comment;
+  parent: CycleMosaicItem | CommentMosaicItem | WorkMosaicItem | PostMosaicItem | undefined;
   showCounts?: boolean;
   showShare?: boolean;
   showButtonLabels?: boolean;
@@ -57,7 +57,7 @@ const CommentsList: FunctionComponent<Props> = ({
   const [commentsShowCount, setCommentsShowCount] = useState<number>(commentsPerPage);
   const [filterdComments, setFilterdComments] = useState<Comment[]>();
   const { /* isLoading, isError, error, */ data: user } = useUser(+idSession,{enabled:!!+idSession});
-  const editorRef = useRef<any>(null);
+  // const editorRef = useRef<any>(null);
 
   const queryClient = useQueryClient();
 
@@ -115,12 +115,14 @@ const CommentsList: FunctionComponent<Props> = ({
     const notificationContextURL = router.asPath;
     if(user){
       if (isCycle(entity)){
+        //start -esto no creo q tenga sentido :|, this should be done on quick comment
         const cycle = (entity as CycleMosaicItem);
         notificationToUsers = cycle.participants.filter(p=>p.id!==user.id).map(p=>p.id);
         notificationMessage = `commentCreatedAboutCycle!|!${JSON.stringify({
           userName: user?.name,
           cycleTitle: cycle.title,
         })}`
+        //end
         selectedCycleId = cycle.id;
       }
       else if (isPost(entity)) {
@@ -145,8 +147,8 @@ const CommentsList: FunctionComponent<Props> = ({
           selectedCycleId = parent.id;
         }
       }
-      const nc = editorRef.current.getContent();
-      if(nc){
+      //const nc = editorRef.current.getContent();
+      /* if(nc){
         const payload = {
           selectedCycleId,
           selectedPostId,
@@ -158,11 +160,11 @@ const CommentsList: FunctionComponent<Props> = ({
           notificationToUsers,
           notificationContextURL
         };
-        editorRef.current.setContent('')
+        //editorRef.current.setContent('')
         setNewCommentInput(() => '');
         createComment(payload);
   
-      }
+      } */
 
     }
 
@@ -193,7 +195,7 @@ const CommentsList: FunctionComponent<Props> = ({
         .sort((p, c) => (p.id > c.id && -1) || 1)
         .slice(0, commentsShowCount)
         .map((c) => {
-          return <CommentCmp key={c.id} comment={c as CommentMosaicItem} cacheKey={cacheKey} />;
+          return <CommentCmp key={c.id} comment={c as CommentMosaicItem} parent={entity} cacheKey={cacheKey} />;
         });
     return <></>;
   };
@@ -222,7 +224,7 @@ const CommentsList: FunctionComponent<Props> = ({
   };
 
 
-  const renderEditorWYSWYG = (
+ /*  const renderEditorWYSWYG = (
     initialValue?:string,
     )=>{
     return <>
@@ -266,7 +268,7 @@ const CommentsList: FunctionComponent<Props> = ({
           }}
         />
     </>
-  }
+  } */
 
   return (
     <section className="bg-white border-0">
@@ -288,7 +290,8 @@ const CommentsList: FunctionComponent<Props> = ({
         
       
       )} */}
-      {user && renderEditorWYSWYG()}
+      {/* {user && renderEditorWYSWYG()} */}
+      <CommentActionsBar entity={entity} parent={parent}/>
       <div className="ms-5">
         {renderComment()}
         {(filterdComments && filterdComments.length && (

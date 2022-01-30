@@ -6,6 +6,7 @@ import { Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { findAll, find, create, update } from '../../../src/facades/notification';
 import prisma from '../../../src/lib/prisma';
+import { isArray } from 'lodash';
 
 /* export const config = {
   api: {
@@ -42,9 +43,12 @@ export default getApiHandler()
     }
 
     const {message, contextURL, toUsers} = req.body;
-    const notification = await create(message,contextURL,session.user.id,toUsers);
+    if(toUsers && isArray(toUsers) && toUsers.length){
+      const notification = await create(message,contextURL,session.user.id,toUsers);
+      return res.status(201).json({ notification }); 
+    }
+    else return res.status(200).json({notification:null});
 
-    res.status(200).json({ notification });    
   } catch (exc) {
     console.error(exc);
     res.statusMessage = 'server error';

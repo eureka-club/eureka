@@ -16,21 +16,29 @@ import { Session } from '@/src/types';
 import {useSession} from 'next-auth/client'
 import { EditorEvent } from 'tinymce';
 import { useRouter } from 'next/router';
-import useCycle from '@/src/useCycle'
-import useWork from '@/src/useWork'
-import usePost from '@/src/usePost'
-import { useComment } from '@/src/useComment';
+
+import { useNotificationContext } from '@/src/useNotificationProvider';
+
+import { CycleMosaicItem } from '@/src/types/cycle';
+import { WorkMosaicItem } from '@/src/types/work';
+import { PostMosaicItem } from '@/src/types/post';
+import {isCycleMosaicItem,isWorkMosaicItem, isPostMosaicItem, isCommentMosaicItem, isComment} from '@/src/types' 
+import {CreateCommentClientPayload} from '@/src/types/comment'
 
 type CommentWithComments = Comment & {comments?: Comment[];}
+type EntityWithComments = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | CommentMosaicItem
+type ContextWithComments = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | CommentMosaicItem
 interface Props {
   cacheKey?: string[];
   className?: string;
-  comment: CommentWithComments;
+  entity: EntityWithComments;
+  context?: ContextWithComments; //if not provide -parent will be used, should be the mosaic used to render the page :|
+  parent?: EntityWithComments;
   showReplyBtn?: boolean;
 }
 
 const CommentActionsBar: FunctionComponent<Props> = ({
-  comment, className = '', cacheKey, showReplyBtn = true }) => {
+  entity, parent, context, className = '', cacheKey, showReplyBtn = true }) => {
   const { t } = useTranslation('common');
   const [session] = useSession() as [Session | null | undefined, boolean];
   const queryClient = useQueryClient();
@@ -45,37 +53,27 @@ const CommentActionsBar: FunctionComponent<Props> = ({
   const [showEditComment, setShowEditComment] = useState<boolean>(false);
   const editorRef = useRef<any>(null);
 
+  const {notifier} = useNotificationContext();
+
   const getIsLoading = () => {
     return isLoading || isEditLoading || isFetching;
   }
 
   const canEditComment = () => {
-    if(comment){
-      // if(comment.comments && comment.comments.length)
-      //   return false;
-      if(session?.user.id !== comment.creatorId)
-        return false;
-      return true;
+    if(!session?.user.id) return false;
+    if(isComment(entity) || isCommentMosaicItem(entity)){
+      const comment = (entity as Comment);
+      if(comment){
+        // if(comment.comments && comment.comments.length)
+        //   return false;
+        if(session?.user.id !== comment.creatorId)
+          return false;
+        return true;
+      }
     }
    
     return false;
   }
-
-  const {data:cycle,isLoading:isLoadingCycle} = useCycle(comment.cycleId || 0,{
-    enabled:!!comment.cycleId
-  })
-
-  const {data:post,isLoading:isLoadingPost} = usePost(comment.postId || 0,{
-    enabled:!!comment.postId
-  })
-
-  const {data:work,isLoading:isLoadingWork} = useWork(comment.workId || 0,{
-    enabled:!!comment.workId
-  })
-
-  const {data:aboutComment,isLoading:isLoadingAboutComment} = useComment(comment.commentId || 0,{
-    enabled:!!comment.commentId
-  })
 
   const {
     isLoading,
@@ -91,6 +89,13 @@ const CommentActionsBar: FunctionComponent<Props> = ({
 
       const json = await res.json();
       if (json.ok) {
+        if(notifier){
+          const toUsers = payload.notificationToUsers;
+          notifier.notify({
+            toUsers,
+            data:{message:payload.notificationMessage}
+          });
+        }
         return json.comment;
       }
       return null;
@@ -140,7 +145,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
         });
         return;
       }
-      if (json.comment) {
+      if (json.comment) {        
         return json.comment;
       }
       return null;
@@ -166,81 +171,204 @@ const CommentActionsBar: FunctionComponent<Props> = ({
     },
   );
 
-
   const submitCreateForm = () => {
-    if (comment && editorRef.current.getContent()) {
-      const selectedCycleId = comment.cycleId || 0;
-      const selectedPostId = comment.postId || 0;
-      const selectedWorkId = comment.workId || 0;
-      const selectedCommentId = comment.id;
+    if (entity && editorRef.current.getContent()) {
+      const user = (session as Session).user;
+      let notificationMessage = '';      
+      let notificationToUsers:number[] = [];
 
-      let notificationMessage = '';
-      const notificationContextURL = router.asPath;
-      let notificationToUsers = [comment.creatorId];
-      /*
-  "commentRepliedAboutCommentPostInCycle":"{{userName}} has replied to your Comment about the Eureka {{eurekaTitle}} in the Cycle {{cycleTitle}}!",
-  "commentRepliedAboutCommentWorkInCycle":"{{userName}} has replied to your Comment about the Work {{workTitle}} in the Cycle {{cycleTitle}}!",
-  "commentRepliedAboutCommentCycle":"{{userName}} has replied to your Comment  about the Cycle {{cycleTitle}}!"
-  */
-      if(aboutComment){
-        let args:Record<string,string> = {
-          userName:aboutComment.creator.name||'',
-        };
-        if(cycle){//in cycle context
-          args = {...args, cycleTitle:cycle.title};
+      let payload:Partial<CreateCommentClientPayload>={
+        notificationContextURL: router.asPath,
+        notificationToUsers
+      };
+
+      if(isCycleMosaicItem(entity)){
+        const cycle = (entity as CycleMosaicItem);
+        notificationToUsers.push(cycle.creatorId);
+        notificationMessage = `commentCreatedAboutCycle!|!${JSON.stringify({
+          userName: user.name,
+          cicleTitle: cycle.title,
+        })}`;
+        payload  = {...payload,selectedCycleId: cycle.id,notificationMessage};
+      }
+      else if(isWorkMosaicItem(entity)){
+        const work = (entity as WorkMosaicItem);
+        if(user.id !== work.creatorId)
+          notificationToUsers.push(work.creatorId);
+        payload = {...payload, selectedWorkId: work.id}
+        if(parent && isCycleMosaicItem(parent)){//in cycle context
+          const cycle = (parent as CycleMosaicItem);
           notificationToUsers.push(cycle.creatorId);
-          if(post){
-            args = {...args, eurekaTitle:post.title};
-            notificationMessage = `commentRepliedAboutCommentPostInCycle!|!${JSON.stringify(args)}`;           
-          }
-          else if(work){
-            args = {...args, workTitle:work.title};
-            notificationMessage = `commentRepliedAboutCommentWorkInCycle!|!${JSON.stringify(args)}`;           
-          }
-          else {
-            notificationMessage = `commentRepliedAboutCommentCycle!|!${JSON.stringify(args)}`;           
-          }
+          notificationMessage = `commentCreatedAboutWorkInCycle!|!${JSON.stringify({
+            userName: user.name,
+            workTitle: work.title,
+            cicleTitle: cycle.title,
+          })}`;
+          payload = {...payload, selectedCycleId: cycle.id,notificationMessage}
+        }
+        else{
+          notificationMessage = `commentCreatedAboutWork!|!${JSON.stringify({
+            userName: user.name,
+            workTitle: work.title,
+          })}`;
+          payload = {...payload,notificationMessage}
         }
       }
-      else if(post){
-        let args:Record<string,string> = {
-          userName:post.creator.name||'',
-          eurekaTitle:post.title
-        };
-        if(cycle){//in cycle context
-          args = {...args, cycleTitle: cycle.title}; 
-          notificationToUsers.push(cycle.creatorId);
-          if(work){
-            args = {...args, workTitle:work.title}
-            notificationMessage = `commentRepliedAboutPostWorkInCycle!|!${JSON.stringify(args)}`;           
+      else if(isPostMosaicItem(entity)){
+        const post = (entity as PostMosaicItem);
+        payload = {...payload, selectedPostId: post.id}
+        if(user.id !== post.creatorId)
+          notificationToUsers.push(post.creatorId);
+        if(parent && isCycleMosaicItem(parent)){//in cycle context
+          const cycle = (parent as CycleMosaicItem);
+          if(user.id !== cycle.creatorId)
+            notificationToUsers.push(cycle.creatorId);
+          notificationMessage = `commentCreatedAboutPostInCycle!|!${JSON.stringify({
+            userName: user.name,
+            postTitle: post.title,
+            cicleTitle: cycle.title,
+          })}`;
+          payload = {...payload, selectedCycleId: cycle.id,notificationMessage}
+        }
+        else if(parent && isWorkMosaicItem(parent)){//in work context
+          const work = (parent as WorkMosaicItem);
+          if(user.id !== work.creatorId)
+            notificationToUsers.push(work.creatorId);
+          notificationMessage = `commentCreatedAboutPostInWork!|!${JSON.stringify({
+            userName: user.name,
+            postTitle: post.title,
+            workTitle: work.title,
+          })}`;
+          payload = {...payload, selectedWorkId: work.id,notificationMessage}
+        }
+        else{
+          notificationToUsers.push(post.creatorId);
+          notificationMessage = `commentCreatedAboutPost!|!${JSON.stringify({
+            userName: user.name,
+            postTitle: post.title,
+          })}`;
+          payload = {...payload,notificationMessage}
+        }
+      }
+      else if(isCommentMosaicItem(entity)){//the context here it is not need, because coment parent has unique context
+        const comment = (entity as CommentMosaicItem);
+        if(user.id !== comment.creatorId)
+          notificationToUsers.push(comment.creatorId);
+        payload = {...payload, selectedCommentId: comment.id}
+        
+        if(parent && isPostMosaicItem(parent)){
+          const post = (parent as PostMosaicItem);
+          if(user.id !== post.creatorId)
+            notificationToUsers.push(post.creatorId); 
+          payload = {...payload, selectedPostId: post.id};
+
+          let cycle: CycleMosaicItem | undefined = undefined;
+          if(comment.cycleId){
+            cycle = queryClient.getQueryData<CycleMosaicItem>(['CYCLE',comment.cycleId.toString()]);
+          }
+          if(cycle){//in cycle context
+            if(user.id !== cycle.creatorId)
+              notificationToUsers.push(cycle.creatorId);  
+            notificationMessage = `commentCreatedAboutPostInCycle!|!${JSON.stringify({
+              userName: user.name,
+              postTitle: post.title,
+              cicleTitle: cycle.title,
+            })}`;
+            payload = {...payload,selectedCycleId: cycle.id,notificationMessage}
+          }
+          else{   
+            notificationMessage = `commentCreatedAboutPost!|!${JSON.stringify({
+              userName: user.name,
+              postTitle: post.title,
+            })}`;
+            payload = {...payload,notificationMessage};
+          }
+        }
+        else if(parent && isCycleMosaicItem(parent)){//in the cycle it self
+          const cycle = (parent as CycleMosaicItem);
+          notificationToUsers.push(...[cycle.creatorId,comment.creatorId]);  
+          notificationMessage = `commentCreatedAboutCommentInCycle!|!${JSON.stringify({
+            userName: user.name,
+            cicleTitle: cycle.title,
+          })}`;
+          payload = {...payload, selectedCycleId: cycle.id,notificationMessage}
+        }
+        else if(parent && isWorkMosaicItem(parent)){
+          const work = (parent as WorkMosaicItem);
+          if(work.creatorId !== user.id)
+            notificationToUsers.push(work.creatorId);
+          payload = {...payload, selectedWorkId: work.id};
+          
+          let cycle: CycleMosaicItem | undefined = undefined;
+          if(comment.cycleId){
+            cycle = queryClient.getQueryData<CycleMosaicItem>(['CYCLE',comment.cycleId.toString()]);
+          }
+          if(cycle){
+            if(cycle.creatorId !== user.id)
+              notificationToUsers.push(cycle.creatorId);  
+            notificationMessage = `commentCreatedAboutWorkInCycle!|!${JSON.stringify({
+              userName: user.name,
+              workTitle: work.title,
+              cicleTitle: cycle.title,
+            })}`;
+            payload = {...payload,selectedCycleId: cycle.id,notificationMessage}
+          }
+          else{   
+            notificationMessage = `commentCreatedAboutWork!|!${JSON.stringify({
+              userName: user.name,
+              workTitle: work.title,
+            })}`;
+            payload = {...payload,notificationMessage};
+          }          
+        }
+        else if(parent && isCommentMosaicItem(parent)){
+          const comment = (parent as CommentMosaicItem);
+          if(user.id !== comment.creatorId)
+            notificationToUsers.push(comment.creatorId);
+          payload = {...payload, selectedCommentId: comment.id};  
+
+          let cycle: CycleMosaicItem | undefined = undefined;
+          if(comment.cycleId){
+            cycle = queryClient.getQueryData<CycleMosaicItem>(['CYCLE',comment.cycleId.toString()]);
+          }
+          if(cycle){
+            if(cycle.creatorId !== user.id){
+              notificationToUsers.push(cycle.creatorId);
+            }
+            notificationMessage = `commentCreatedAboutCommentInCycle!|!${JSON.stringify({
+              userName: user.name,
+              commentTitle: `${comment.contentText.slice(0,50)}...`, 
+              cycleTitle: cycle?.title,             
+            })}`;
+            payload = {...payload, selectedCommentId: comment.id,notificationMessage};
           }
           else{
-            notificationMessage = `commentRepliedAboutPostInCycle!|!${JSON.stringify(args)}`; 
+            notificationMessage = `commentCreatedAboutComment!|!${JSON.stringify({
+              userName: user.name,
+              commentTitle: `${comment.contentText.slice(0,50)}...`,              
+            })}`;
+            notificationToUsers.push(comment.creatorId);
+            payload = {...payload,notificationMessage}; 
           }
         }
-
+        
       }
 
-      const payload = {
-        selectedCycleId,
-        selectedPostId,
-        selectedCommentId,
-        selectedWorkId,
+      
+      
+      payload = {...payload,
         creatorId: +session!.user.id,
         contentText: editorRef.current.getContent(),
-        notificationMessage,
-        notificationContextURL,
-        notificationToUsers,
       };
-      createComment(payload);
+      createComment(payload as CreateCommentClientPayload);
       editorRef.current.setContent('');
       setNewCommentInput(() => '');
     }
   };
 
-  const submitEditForm = () => {
-    if (comment) {
-
+  const submitEditForm = () => {    
+    if (isComment(entity)||isCommentMosaicItem(entity)) {
+      const comment = (entity as Comment);
       const payload = {
         commentId: comment.id,
         contentText: editorRef.current.getContent() || '',
@@ -276,22 +404,27 @@ const CommentActionsBar: FunctionComponent<Props> = ({
   // };
 
   const handlerEditBtn = () => {
-    
-    setEditCommentInput(comment.contentText);
-    setShowEditComment(true);    
-    setShowCreateComment(false);
+    if (isComment(entity) || isCommentMosaicItem(entity)) {
+      const comment = (entity as Comment);
+      setEditCommentInput(comment.contentText);
+      setShowEditComment(true);    
+      setShowCreateComment(false);
+    }
   }
 
   const handlerDeleteBtn = () => {
-    setShowEditComment(false);    
-    setShowCreateComment(false);
-    
-    const payload = {
-      commentId: comment.id,
-      contentText: '',
-      status: 1,
-    };
-    editComment(payload);
+    if (isComment(entity) || isCommentMosaicItem(entity)) {
+      const comment = (entity as Comment);
+      setShowEditComment(false);    
+      setShowCreateComment(false);
+      
+      const payload = {
+        commentId: comment.id,
+        contentText: '',
+        status: 1,
+      };
+      editComment(payload);
+    }
   }
 
   const handlerCreateBtn = () => {
@@ -306,7 +439,6 @@ const CommentActionsBar: FunctionComponent<Props> = ({
 
   const onKeyUpEditorEdit = (e: EditorEvent<KeyboardEvent>)=>{
     if (e.key === 'Enter' && !e.shiftKey) {
-      //debugger;
       setEditCommentInput(()=>editorRef.current.getContent())
       submitEditForm();
       e.preventDefault();
@@ -319,7 +451,6 @@ const CommentActionsBar: FunctionComponent<Props> = ({
       e.preventDefault();
     }
   }
-
 
   const renderEditorWYSWYG = (
     onKeyUp:(e: EditorEvent<KeyboardEvent>) => void,
@@ -363,93 +494,162 @@ const CommentActionsBar: FunctionComponent<Props> = ({
     </>
   }
 
-
-  const renderCommentActions = () => {
-    const c = comment;
-    if(session?.user.id){
-      return <aside className="mb-2">
-        {showReplyBtn && !c.commentId && !getIsLoading() && (
-          <Button
-            variant="default"
-            onClick={handlerCreateBtn}
-            className={`p-0 border-top-0`}
-          >
-            <MdReply className="fs-6 text-primary" />
-            <span className="fs-6 text-primary">{t('Reply')}</span>
-          </Button>
-        )}
-        {canEditComment() && !getIsLoading() && (
-          <Button
-            variant="default"
-            onClick={handlerEditBtn}
-            className={`p-0 border-top-0 ms-2`}
-          >
-            <BiEdit className="fs-6 text-warning" />
-            {/* <span className="fs-6 text-warning">{t('Edit')}</span> */}
-          </Button>
-        )}
-        {canEditComment() && !getIsLoading() && (
-          <Button
-            variant="default"
-            onClick={handlerDeleteBtn}
-            className={`p-0 border-top-0 ms-2`}
-          >
-            <BiTrash className="fs-6 text-warning" />
-            {/* <span className="fs-6 text-warning">{t('Edit')}</span> */}
-          </Button>
-        )}
-        {!getIsLoading() && (showCreateComment || showEditComment) && (
-          <Button
-            variant="default"
-          onClick={handlerCancelBtn}
-            className={`p-0 ms-2`}
-          >
-            <MdCancel className="text-secondary" />
-          </Button>
-        )}
-
-        {!getIsLoading() && showCreateComment && (
-        <>
-          {/* <Form onSubmit={handlerCreateFormSubmit}>
-            <Form.Control
-              value={newCommentInput}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setNewCommentInput(e.target.value)}
-              onKeyPress={onKeyPressForm}
-              className="border fs-6 rounded-pill bg-light"
-              as="textarea"
-              rows={1}
-              placeholder={`${t('Write a replay')}...`}
-            />
-          </Form> */}
-          {renderEditorWYSWYG(onKeyUpEditorCreate)}
+  if(!session?.user.id) return <></>;
+  if(isCommentMosaicItem(entity)){
+    const c = (entity as CommentMosaicItem);
+    return <section>
+              {c && !(c.commentId) && !getIsLoading() && (
+                <Button
+                  variant="default"
+                  onClick={handlerCreateBtn}
+                  className={`p-0 border-top-0`}
+                >
+                  <MdReply className="fs-6 text-primary" />
+                  <span className="fs-6 text-primary">{t('Reply')}</span>
+                </Button>
+              )}
+              
+              {canEditComment() && !getIsLoading() && <>
+                <Button
+                  variant="default"
+                  onClick={handlerEditBtn}
+                  className={`p-0 border-top-0 ms-2`}
+                >
+                  <BiEdit className="fs-6 text-warning" />
+                </Button>
+                <Button
+                  variant="default"
+                  onClick={handlerDeleteBtn}
+                  className={`p-0 border-top-0 ms-2`}
+                >
+                  <BiTrash className="fs-6 text-warning" />
+                </Button>
+              </>}
+              {!getIsLoading() && (showCreateComment || showEditComment) && (
+                <Button
+                  variant="default"
+                onClick={handlerCancelBtn}
+                  className={`p-0 ms-2`}
+                >
+                  <MdCancel className="text-secondary" />
+                </Button>
+              )}
+      
+              {!getIsLoading() && showCreateComment && (
+              <>
+                {/* <Form onSubmit={handlerCreateFormSubmit}>
+                  <Form.Control
+                    value={newCommentInput}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setNewCommentInput(e.target.value)}
+                    onKeyPress={onKeyPressForm}
+                    className="border fs-6 rounded-pill bg-light"
+                    as="textarea"
+                    rows={1}
+                    placeholder={`${t('Write a replay')}...`}
+                  />
+                </Form> */}
+                {renderEditorWYSWYG(onKeyUpEditorCreate)}
+              
+              </>
         
-        </>
-  
-        )}
-        {canEditComment() && !getIsLoading() && showEditComment && (
-          <>
-          {/* <Form onSubmit={handleEditFormSubmit}>
-            <Form.Control
-              value={editCommentInput}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setEditCommentInput(e.target.value)}
-              onKeyPress={onKeyPressEditForm}
-              className="border fs-6 rounded-pill bg-light"
-              as="textarea"
-              rows={1}
-              placeholder={`${t('Edit the replay')}...`}
-            />
-          </Form> */}
-          {renderEditorWYSWYG(onKeyUpEditorEdit, editCommentInput)}
-          </>
-        )}
-        {getIsLoading() ? <Spinner animation="grow" variant="info" size="sm" /> : ''}
-      </aside>
-    }
-    return '';
+              )}
+              {canEditComment() && !getIsLoading() && showEditComment && (
+                <>
+                {/* <Form onSubmit={handleEditFormSubmit}>
+                  <Form.Control
+                    value={editCommentInput}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setEditCommentInput(e.target.value)}
+                    onKeyPress={onKeyPressEditForm}
+                    className="border fs-6 rounded-pill bg-light"
+                    as="textarea"
+                    rows={1}
+                    placeholder={`${t('Edit the replay')}...`}
+                  />
+                </Form> */}
+                {renderEditorWYSWYG(onKeyUpEditorEdit, editCommentInput)}
+                </>
+              )}
+              {getIsLoading() ? <Spinner animation="grow" variant="info" size="sm" /> : ''}
+            
+          </section>;
+        
   }
+  if(isComment(entity)){
+    const c = (entity as Comment);
+    return <section>              
+              {canEditComment() && !getIsLoading() && <>
+                <Button
+                  variant="default"
+                  onClick={handlerEditBtn}
+                  className={`p-0 border-top-0 ms-2`}
+                >
+                  <BiEdit className="fs-6 text-warning" />
+                </Button>
+                <Button
+                  variant="default"
+                  onClick={handlerDeleteBtn}
+                  className={`p-0 border-top-0 ms-2`}
+                >
+                  <BiTrash className="fs-6 text-warning" />
+                </Button>
+              </>}
+              {!getIsLoading() && (showCreateComment || showEditComment) && (
+                <Button
+                  variant="default"
+                onClick={handlerCancelBtn}
+                  className={`p-0 ms-2`}
+                >
+                  <MdCancel className="text-secondary" />
+                </Button>
+              )}
+      
+              {!getIsLoading() && showCreateComment && (
+              <>
+                {/* <Form onSubmit={handlerCreateFormSubmit}>
+                  <Form.Control
+                    value={newCommentInput}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setNewCommentInput(e.target.value)}
+                    onKeyPress={onKeyPressForm}
+                    className="border fs-6 rounded-pill bg-light"
+                    as="textarea"
+                    rows={1}
+                    placeholder={`${t('Write a replay')}...`}
+                  />
+                </Form> */}
+                {renderEditorWYSWYG(onKeyUpEditorCreate)}
+              
+              </>
+        
+              )}
+              {canEditComment() && !getIsLoading() && showEditComment && (
+                <>
+                {/* <Form onSubmit={handleEditFormSubmit}>
+                  <Form.Control
+                    value={editCommentInput}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setEditCommentInput(e.target.value)}
+                    onKeyPress={onKeyPressEditForm}
+                    className="border fs-6 rounded-pill bg-light"
+                    as="textarea"
+                    rows={1}
+                    placeholder={`${t('Edit the replay')}...`}
+                  />
+                </Form> */}
+                {renderEditorWYSWYG(onKeyUpEditorEdit, editCommentInput)}
+                </>
+              )}
+              {getIsLoading() ? <Spinner animation="grow" variant="info" size="sm" /> : ''}
+            
+          </section>;
+        
+  }
+  else return <section>{!getIsLoading() && (
+      <>
+        {renderEditorWYSWYG(onKeyUpEditorCreate)}    
+      </>
 
-  return <aside className={className}>
-  {renderCommentActions()}</aside>
-};
+      )}
+    </section>
+  
+  };
 
 export default CommentActionsBar;

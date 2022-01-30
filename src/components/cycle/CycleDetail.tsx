@@ -202,16 +202,17 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   };
 
   const renderComments = () => {
-    const getParent = (c: Comment): Work | Cycle |  undefined  => {
+    const getParent = (c: Comment): WorkMosaicItem | CycleMosaicItem |  CommentMosaicItem  => {
       const cmi = (c as CommentMosaicItem);
       if(!cmi.commentId && !cmi.postId){
-        if(cmi.workId) return cmi.work!;
-        if(cmi.cycleId) return (cycle as Cycle);
+        
+        if(cmi.workId) return (cmi.work as WorkMosaicItem);
+        if(cmi.cycleId) return (cycle as CycleMosaicItem);
       }
-      return undefined;
+      return cmi;
     };
     if (cycle && filteredComments){
-      const fcf = filteredComments.filter((c) => getParent(c));
+      const fcf = filteredComments.filter((c) => !c.postId);
       const fcfs = fcf.sort((p, c) => (p.id > c.id && -1) || 1)
       return fcfs
         .map(c=>
@@ -378,7 +379,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
               <Col xs={{span:12, order:'last'}} md={{span:9,order:'first'}}>
                 {(cycle.posts && cycle.posts.length && (
                   <MosaicContext.Provider value={{ showShare: true }}>
-                    <PostsMosaic display="h" posts={filteredPosts} showComments cacheKey={['CYCLE', `${cycle.id}`]} />
+                    <PostsMosaic display="h" posts={filteredPosts} parent={cycle} showComments cacheKey={['CYCLE', `${cycle.id}`]} />
                   </MosaicContext.Provider>
                 )) ||
                   null}

@@ -18,7 +18,7 @@ import { CycleContext } from '../useCycleContext';
 
 const renderMosaicItem = (
   item: MosaicItem,
-  postsParent: Cycle | Work | undefined,
+  parent: CycleMosaicItem | WorkMosaicItem | undefined,
   showButtonLabels: boolean,
   display: 'h' | 'v',
   showComments: boolean,
@@ -32,11 +32,11 @@ const renderMosaicItem = (
     );
   }
   if (isPostMosaicItem(item)) {
-    let pp = postsParent;
+    let pp = parent;
     if (!pp) {
       const it: PostMosaicItem = item as PostMosaicItem;
-      if (it.works && it.works.length > 0) [pp] = it.works;
-      else if (it.cycles && it.cycles.length > 0) [pp] = it.cycles;
+      if (it.works && it.works.length > 0) pp = it.works[0] as WorkMosaicItem;
+      else if (it.cycles && it.cycles.length > 0) pp = it.cycles[0] as CycleMosaicItem;
     }
 
     return (
@@ -66,23 +66,23 @@ const renderMosaicItem = (
   return <></>;
 };
 interface Props {
-  postsLinksTo?: CycleMosaicItem | WorkMosaicItem;
   stack: MosaicItem[];
   showButtonLabels?: boolean;
   display?: 'h' | 'v';
   showComments?: boolean;
   cacheKey?: string[];
   className?: string;
+  parent?: CycleMosaicItem | WorkMosaicItem;
 }
 
 const Mosaic: FunctionComponent<Props> = ({
-  postsLinksTo,
   stack,
   showButtonLabels = true,
   display = 'v',
   showComments = false,
   cacheKey,
   className,
+  parent,
 }) => {
   const renderMosaic = () => {
     /* return (
@@ -111,7 +111,7 @@ const Mosaic: FunctionComponent<Props> = ({
     {stack && stack.length &&
       stack.map((item: MosaicItem) => (
         <aside className={` ${className}`} key={`${v4()}`}>
-          {renderMosaicItem(item, postsLinksTo, showButtonLabels, display, showComments, cacheKey)}
+          {renderMosaicItem(item, parent, showButtonLabels, display, showComments, cacheKey)}
         </aside>
       )) || ''}
   </Masonry>

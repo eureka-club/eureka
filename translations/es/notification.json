@@ -1,8 +1,19 @@
 {
-  "eurekaCreatedAboutWorkInCycle":"{{userName}} ha creado una Eureka sobre {{workTitle}} en el ciclo {{cycleTitle}}!",
-  "eurekaCreatedAboutCycle":"{{userName}} ha creado una Eureka sobre el ciclo {{cycleTitle}}!",
-  "viewAllNotifications":"Ver todas las notificationes",
-  "commentCreatedAboutWorkInCycle":"{{userName}} ha creado un Comentario Rápido sobre {{workTitle}} en el ciclo {{cycleTitle}}! ",
-  "commentCreatedAboutCycle":"{{userName}} ha creado un Comentario Rápido sobre {{cycleTitle}}!"
-
+  "viewAllNotifications":"Ver todas las notificaciones",
+  
+  "eurekaCreatedAboutCycle":"{{userName}} ha creado una Eureka sobre el Ciclo {{cycleTitle}}!",
+  "eurekaCreatedAboutWorkInCycle":"{{userName}} ha creado una Eureka sobre la Obra {{workTitle}} en el Ciclo {{cycleTitle}}!",
+  
+  "commentCreatedAboutComment":"{{userName}} ha respondido su comentario Comentario  {{commentTitle}}!",
+  "commentCreatedAboutCommentInCycle":"{{userName}} ha respondido su Comentario {{commentTitle}} en el Ciclo {{cycleTitle}}! ",
+  
+  "commentCreatedAboutCycle":"{{userName}} ha creado un Comentario sobre el Ciclo {{cycleTitle}}!",
+  
+  "commentCreatedAboutPost":"{{userName}} ha creado Comentario sobre la Eureka {{postTitle}}!",
+  "commentCreatedAboutPostInCycle":"{{userName}} ha creado un Comentario sobre la Eureka {{postTitle}} en el Ciclo {{cycleTitle}}! ",
+  "commentCreatedAboutPostInWork":"{{userName}} ha creado un Comentario sobre la Eureka {{postTitle}} en la Obra {{workTitle}}!",
+  
+  "commentCreatedAboutWorkInCycle":"{{userName}} ha creado un Comentario sobre la Obra {{workTitle}} en el Ciclo {{cycleTitle}}! ",
+  "commentCreatedAboutWork":"{{userName}} ha creado un Comentario sobre la Obra {{workTitle}}!"
+        
 }
