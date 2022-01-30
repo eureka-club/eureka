@@ -12,7 +12,7 @@ const CommentTextBox: FunctionComponent<Props> = ({ comment, className = '' }) =
   const { t } = useTranslation('common');
   return <aside className={className}>
     <div
-                  className="p-1 bg-light border rounded d-inline-block"
+                  className="p-1 bg-light border rounded d-block d-sm-inline-block"
                   dangerouslySetInnerHTML={{ __html: comment.contentText }}
     />{(comment.comments && comment.comments.length) && comment.status ? <span className="ms-2 fs-6 text-muted">({t('edited')})</span>:''}
   </aside>

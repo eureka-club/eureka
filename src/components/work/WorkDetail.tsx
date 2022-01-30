@@ -82,7 +82,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
   return (
     <WorkContext.Provider value={{ work, linkToWork: false }}>
       <MosaicContext.Provider value={{ showShare: true }}>
-        <ButtonGroup className="mt-1 mt-md-4 mb-1">
+        <ButtonGroup className="mt-1 mt-md-3 mb-1">
           <Button variant="primary text-white" onClick={() => router.back()} size="sm">
             <BiArrowBack />
           </Button>

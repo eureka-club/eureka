@@ -709,7 +709,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   return (
     <>
-      <ButtonGroup className="mt-1 mt-md-4 mb-1">
+      <ButtonGroup className="mt-1 mt-md-3 mb-1">
         <Button variant="primary text-white" onClick={() => router.back()} size="sm">
           <BiArrowBack />
         </Button>
@@ -763,7 +763,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 <Row className="mb-4">
                   <Col>
                     <Nav variant="tabs" className='scrollNav' fill>
-                      <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
+                      <NavItem className={`border-primary border-bottom bcursor-pointer ${styles.tabBtn}`}>
                         <NavLink eventKey="cycle-about">
                           <span className="mb-3">
                             {t('About')} ({cycle.works && cycle.works.length})
