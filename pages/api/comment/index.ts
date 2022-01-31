@@ -20,7 +20,7 @@ export default getApiHandler()
         payload.notificationMessage,
         payload.notificationContextURL,
         session.user.id,
-        payload.notificationToUsers,
+        [...new Set(payload.notificationToUsers as number[])],
       );
       res.status(201).json({ ok: true, post,notification });
       // new Form().parse(req, async (err, fields, files) => {

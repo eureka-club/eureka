@@ -14,6 +14,8 @@
   "commentCreatedAboutPostInWork":"{{userName}} has added a Comment about Post {{postTitle}} in the Work {{workTitle}}!",
   
   "commentCreatedAboutWorkInCycle":"{{userName}} has added a Comment about {{workTitle}} in the Cycle {{cycleTitle}}! ",
-  "commentCreatedAboutWork":"{{userName}} has added a Comment about {{workTitle}}!"
-        
+  "commentCreatedAboutWork":"{{userName}} has added a Comment about {{workTitle}}!",
+  
+  "userStartFollowing":"{{userName}} has started following you. Take a look at his/her Mediatheque too!"
+          
 }

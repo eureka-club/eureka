@@ -4,6 +4,7 @@ import { getSession } from 'next-auth/client';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { find, update } from '../../../src/facades/user';
+import { create } from '@/src/facades/notification';
 
 import { Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
@@ -38,24 +39,31 @@ export default getApiHandler()
 
     const session = (await getSession({ req })) as unknown as Session;
 
-    const actionAllowed = () => {
+    const actionAllowed = (fields:Record<string,any[]>) => {
       if (('following' in fields && fields.following) || ('followedBy' in fields && fields.followedBy)) return true;
       return session.user.roles.includes('admin') || session.user.id === idNum;
     };
-    if (session == null || !actionAllowed()) {
+    if (session == null || !actionAllowed(fields)) {
       res.status(401).json({ status: 'Unauthorized' });
       return;
     }
 
     try {
       // delete data.id;
-      
-      let data = Object.entries(fields).reduce((prev, curr)=>{
+      let notificationData:Record<string,any> = {}; 
+      if(fields.notificationData){
+        notificationData = JSON.parse(fields.notificationData[0]);
+        delete fields.notificationData;
+      }
+      let data:Record<string,any> = Object.entries(fields).reduce((prev, curr)=>{
         const [k,v] = curr;
         let val = v[0];
         switch(k){
           case 'dashboardType':
             val = parseInt(v[0])
+            break;
+          case 'followedBy':
+            val = JSON.parse(v[0])
             break;
 
         }
@@ -98,7 +106,21 @@ export default getApiHandler()
           }
         }
       }
-      const r = await update(idNum, data);
+      const r = await update(idNum, data);debugger;
+      if(r){
+        if(data.followedBy.connect){
+          if(Object.keys(notificationData).length){
+            const notification = await create(
+              notificationData.notificationMessage,
+              notificationData.notificationContextURL,
+              session.user.id,
+              notificationData.notificationToUsers.map((i:string|number) => +i),
+            );
+
+          }
+
+        }
+      }
       res.status(200).json({ status: 'OK', r });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

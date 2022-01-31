@@ -14,6 +14,8 @@
   "commentCreatedAboutPostInWork":"{{userName}} ha creado un Comentario sobre la Eureka {{postTitle}} en la Obra {{workTitle}}!",
   
   "commentCreatedAboutWorkInCycle":"{{userName}} ha creado un Comentario sobre la Obra {{workTitle}} en el Ciclo {{cycleTitle}}! ",
-  "commentCreatedAboutWork":"{{userName}} ha creado un Comentario sobre la Obra {{workTitle}}!"
-        
+  "commentCreatedAboutWork":"{{userName}} ha creado un Comentario sobre la Obra {{workTitle}}!",
+     
+  "userStartFollowing":"{{userName}} te está siguiendo. ¡Échale un ojo a su Mediateca también!"
+  
 }

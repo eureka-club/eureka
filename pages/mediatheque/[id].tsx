@@ -39,11 +39,13 @@ import { PostMosaicItem /* , PostWithImages */ } from '../../src/types/post';
 import { WorkMosaicItem /* , WorkWithImages */ } from '../../src/types/work';
 import { UserMosaicItem /* , UserDetail, WorkWithImages */ } from '../../src/types/user';
 import UnclampText from '../../src/components/UnclampText';
+import { useNotificationContext } from '@/src/useNotificationProvider';
 
 // import MosaicItemCycle from '../../src/components/cycle/MosaicItem';
 // import MosaicItemPost from '../../src/components/post/MosaicItem';
 // import MosaicItemWork from '../../src/components/work/MosaicItem';
 import SocketIO from '@/src/lib/Notifier'
+import { route } from 'next/dist/server/router';
 type Item = (CycleMosaicItem & { type: string }) | WorkMosaicItem | (PostMosaicItem & { type: string });
 
 type ItemCycle = CycleMosaicItem & { type: string };
@@ -56,6 +58,7 @@ const Mediatheque: NextPage = () => {
   const [id, setId] = useState<string>('');
   const [idSession, setIdSession] = useState<string>('');
   const router = useRouter();
+  const {notifier} = useNotificationContext();
   // const [cycles, setCycles] = useState<ItemCycle[]>([]);
   // const [posts, setPosts] = useState<ItemPost[]>([]);
   // const [savedForLater, setSavedForLater] = useState<Item[]>([]);
@@ -144,22 +147,48 @@ const Mediatheque: NextPage = () => {
 
   const { mutate: mutateFollowing, isLoading: isLoadingMutateFollowing } = useMutation<User>(
     async () => {
+      const user = (session as unknown as Session).user;
       const action = isFollowedByMe ? 'disconnect' : 'connect';
+
+      const notificationMessage = `userStartFollowing!|!${JSON.stringify({
+        userName:user.name,
+      })}`
+      const form = new FormData()
+      form.append('followedBy',JSON.stringify({
+          [`${action}`]: [{ id: user.id }],
+      }))
+      form.append('notificationData',JSON.stringify({
+        notificationMessage,
+        notificationContextURL:router.asPath,
+        notificationToUsers:[id]
+      }))
+      
       const res = await fetch(`/api/user/${id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          followedBy: {
-            [`${action}`]: [{ id: (session as unknown as Session).user.id }],
-          },
-        }),
+        // headers: { 'Content-Type': 'application/json' },
+        body:form,
+        // body: JSON.stringify({
+        //   followedBy: {
+        //     [`${action}`]: [{ id: user.id }],
+        //   },
+        //   ///notificationMessage,
+        //   ///notificationContextURL: router.asPath,
+        //   //notificationToUsers:[id],
+        // }),
+        //"userStartFollowing":"{{userName}} has started following you. Take a look at his/her Mediatheque too!""
       });
-      const json = await res.json();
-
-      // if (json.status === 'OK') {
-      //   setIsFollowedByMe(!isFollowedByMe);
-      // }
-      return json;
+      if(res.ok){
+        const json = await res.json();
+        if(notifier)
+          notifier.notify({
+            toUsers:[+id],
+            data:{message:notificationMessage}
+          });
+        return json;
+      }
+      else{
+        return null;
+      }
     },
     {
       onMutate: async () => {

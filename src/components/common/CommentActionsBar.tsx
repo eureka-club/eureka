@@ -171,38 +171,37 @@ const CommentActionsBar: FunctionComponent<Props> = ({
     },
   );
 
-  const submitCreateForm = () => {
+  const submitCreateForm = () => {debugger;
     if (entity && editorRef.current.getContent()) {
       const user = (session as Session).user;
       let notificationMessage = '';      
-      let notificationToUsers:number[] = [];
+      let notificationToUsers = new Set<number>([]);
 
       let payload:Partial<CreateCommentClientPayload>={
         notificationContextURL: router.asPath,
-        notificationToUsers
       };
 
       if(isCycleMosaicItem(entity)){
         const cycle = (entity as CycleMosaicItem);
-        notificationToUsers.push(cycle.creatorId);
+        notificationToUsers.add(cycle.creatorId);
         notificationMessage = `commentCreatedAboutCycle!|!${JSON.stringify({
           userName: user.name,
-          cicleTitle: cycle.title,
+          cycleTitle: cycle.title,
         })}`;
         payload  = {...payload,selectedCycleId: cycle.id,notificationMessage};
       }
       else if(isWorkMosaicItem(entity)){
         const work = (entity as WorkMosaicItem);
         if(user.id !== work.creatorId)
-          notificationToUsers.push(work.creatorId);
+          notificationToUsers.add(work.creatorId);
         payload = {...payload, selectedWorkId: work.id}
         if(parent && isCycleMosaicItem(parent)){//in cycle context
           const cycle = (parent as CycleMosaicItem);
-          notificationToUsers.push(cycle.creatorId);
+          notificationToUsers.add(cycle.creatorId);
           notificationMessage = `commentCreatedAboutWorkInCycle!|!${JSON.stringify({
             userName: user.name,
             workTitle: work.title,
-            cicleTitle: cycle.title,
+            cycleTitle: cycle.title,
           })}`;
           payload = {...payload, selectedCycleId: cycle.id,notificationMessage}
         }
@@ -218,22 +217,22 @@ const CommentActionsBar: FunctionComponent<Props> = ({
         const post = (entity as PostMosaicItem);
         payload = {...payload, selectedPostId: post.id}
         if(user.id !== post.creatorId)
-          notificationToUsers.push(post.creatorId);
+          notificationToUsers.add(post.creatorId);
         if(parent && isCycleMosaicItem(parent)){//in cycle context
           const cycle = (parent as CycleMosaicItem);
           if(user.id !== cycle.creatorId)
-            notificationToUsers.push(cycle.creatorId);
+            notificationToUsers.add(cycle.creatorId);
           notificationMessage = `commentCreatedAboutPostInCycle!|!${JSON.stringify({
             userName: user.name,
             postTitle: post.title,
-            cicleTitle: cycle.title,
+            cycleTitle: cycle.title,
           })}`;
           payload = {...payload, selectedCycleId: cycle.id,notificationMessage}
         }
         else if(parent && isWorkMosaicItem(parent)){//in work context
           const work = (parent as WorkMosaicItem);
           if(user.id !== work.creatorId)
-            notificationToUsers.push(work.creatorId);
+            notificationToUsers.add(work.creatorId);
           notificationMessage = `commentCreatedAboutPostInWork!|!${JSON.stringify({
             userName: user.name,
             postTitle: post.title,
@@ -242,7 +241,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
           payload = {...payload, selectedWorkId: work.id,notificationMessage}
         }
         else{
-          notificationToUsers.push(post.creatorId);
+          notificationToUsers.add(post.creatorId);
           notificationMessage = `commentCreatedAboutPost!|!${JSON.stringify({
             userName: user.name,
             postTitle: post.title,
@@ -253,13 +252,13 @@ const CommentActionsBar: FunctionComponent<Props> = ({
       else if(isCommentMosaicItem(entity)){//the context here it is not need, because coment parent has unique context
         const comment = (entity as CommentMosaicItem);
         if(user.id !== comment.creatorId)
-          notificationToUsers.push(comment.creatorId);
+          notificationToUsers.add(comment.creatorId);
         payload = {...payload, selectedCommentId: comment.id}
         
         if(parent && isPostMosaicItem(parent)){
           const post = (parent as PostMosaicItem);
           if(user.id !== post.creatorId)
-            notificationToUsers.push(post.creatorId); 
+            notificationToUsers.add(post.creatorId); 
           payload = {...payload, selectedPostId: post.id};
 
           let cycle: CycleMosaicItem | undefined = undefined;
@@ -268,11 +267,11 @@ const CommentActionsBar: FunctionComponent<Props> = ({
           }
           if(cycle){//in cycle context
             if(user.id !== cycle.creatorId)
-              notificationToUsers.push(cycle.creatorId);  
+              notificationToUsers.add(cycle.creatorId);  
             notificationMessage = `commentCreatedAboutPostInCycle!|!${JSON.stringify({
               userName: user.name,
               postTitle: post.title,
-              cicleTitle: cycle.title,
+              cycleTitle: cycle.title,
             })}`;
             payload = {...payload,selectedCycleId: cycle.id,notificationMessage}
           }
@@ -286,17 +285,18 @@ const CommentActionsBar: FunctionComponent<Props> = ({
         }
         else if(parent && isCycleMosaicItem(parent)){//in the cycle it self
           const cycle = (parent as CycleMosaicItem);
-          notificationToUsers.push(...[cycle.creatorId,comment.creatorId]);  
+          if(user.id !== cycle.creatorId)
+            notificationToUsers.add(cycle.creatorId);  
           notificationMessage = `commentCreatedAboutCommentInCycle!|!${JSON.stringify({
             userName: user.name,
-            cicleTitle: cycle.title,
+            cycleTitle: cycle.title,
           })}`;
           payload = {...payload, selectedCycleId: cycle.id,notificationMessage}
         }
         else if(parent && isWorkMosaicItem(parent)){
           const work = (parent as WorkMosaicItem);
           if(work.creatorId !== user.id)
-            notificationToUsers.push(work.creatorId);
+            notificationToUsers.add(work.creatorId);
           payload = {...payload, selectedWorkId: work.id};
           
           let cycle: CycleMosaicItem | undefined = undefined;
@@ -305,11 +305,11 @@ const CommentActionsBar: FunctionComponent<Props> = ({
           }
           if(cycle){
             if(cycle.creatorId !== user.id)
-              notificationToUsers.push(cycle.creatorId);  
+              notificationToUsers.add(cycle.creatorId);  
             notificationMessage = `commentCreatedAboutWorkInCycle!|!${JSON.stringify({
               userName: user.name,
               workTitle: work.title,
-              cicleTitle: cycle.title,
+              cycleTitle: cycle.title,
             })}`;
             payload = {...payload,selectedCycleId: cycle.id,notificationMessage}
           }
@@ -322,32 +322,27 @@ const CommentActionsBar: FunctionComponent<Props> = ({
           }          
         }
         else if(parent && isCommentMosaicItem(parent)){
-          const comment = (parent as CommentMosaicItem);
-          if(user.id !== comment.creatorId)
-            notificationToUsers.push(comment.creatorId);
-          payload = {...payload, selectedCommentId: comment.id};  
-
           let cycle: CycleMosaicItem | undefined = undefined;
           if(comment.cycleId){
             cycle = queryClient.getQueryData<CycleMosaicItem>(['CYCLE',comment.cycleId.toString()]);
           }
           if(cycle){
             if(cycle.creatorId !== user.id){
-              notificationToUsers.push(cycle.creatorId);
+              notificationToUsers.add(cycle.creatorId);
             }
             notificationMessage = `commentCreatedAboutCommentInCycle!|!${JSON.stringify({
               userName: user.name,
               commentTitle: `${comment.contentText.slice(0,50)}...`, 
               cycleTitle: cycle?.title,             
             })}`;
-            payload = {...payload, selectedCommentId: comment.id,notificationMessage};
+            payload = {...payload, selectedCycleId: comment.id,notificationMessage};
           }
           else{
             notificationMessage = `commentCreatedAboutComment!|!${JSON.stringify({
               userName: user.name,
               commentTitle: `${comment.contentText.slice(0,50)}...`,              
             })}`;
-            notificationToUsers.push(comment.creatorId);
+            notificationToUsers.add(comment.creatorId);
             payload = {...payload,notificationMessage}; 
           }
         }
@@ -359,6 +354,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
       payload = {...payload,
         creatorId: +session!.user.id,
         contentText: editorRef.current.getContent(),
+        notificationToUsers: [...notificationToUsers],
       };
       createComment(payload as CreateCommentClientPayload);
       editorRef.current.setContent('');
