@@ -292,7 +292,7 @@ const CommentsList: FunctionComponent<Props> = ({
       )} */}
       {/* {user && renderEditorWYSWYG()} */}
       <CommentActionsBar entity={entity} parent={parent}/>
-      <div className="ms-5">
+      <div className="ms-1">
         {renderComment()}
         {(filterdComments && filterdComments.length && (
           <div>

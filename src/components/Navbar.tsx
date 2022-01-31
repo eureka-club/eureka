@@ -133,7 +133,7 @@ const NavBar: FunctionComponent = () => {
           </Nav>
           <Nav className={styles.navbarNav}>
             {!session && (
-              <Button className="text-white" onClick={openSignInModal}>
+              <Button className="ms-4 text-white" onClick={openSignInModal}>
                 {t('login')}
               </Button>
             )}
