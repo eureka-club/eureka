@@ -43,7 +43,7 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey, parent }) => 
         /* !isLoading &&  */ comment && (
           <Card key={comment.id} className="mt-1 bg-white border-0">
             <Row className='d-flex justify-content-center' >
-              <Col xs={2} md={1} className="d-flex justify-content-center justify-content-md-end p-1">
+              <Col xs={2} md={1} className="d-flex justify-content-end p-1">
                 <Avatar user={comment.creator} size="xs" showName={false} />
               </Col>
               <Col xs={10} md={11} className="d-flex flex-column">
@@ -53,7 +53,7 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey, parent }) => 
                   comment.comments &&
                   comment.comments.map((commentChild) => (
                     <Row key={v4()} className="mb-2">
-                      <Col md={1} xs={2} className="d-flex justify-content-center justify-content-md-end p-1">
+                      <Col md={1} xs={2} className="d-flex justify-content-end p-1">
                         <Avatar user={commentChild.creator} size="xs" showName={false} />
                       </Col>
                       <Col md={11} xs={10} className="d-flex flex-column">
