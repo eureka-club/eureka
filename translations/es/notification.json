@@ -2,6 +2,7 @@
   "viewAllNotifications":"Ver todas las notificaciones",
   
   "eurekaCreatedAboutCycle":"{{userName}} ha creado una Eureka sobre el Ciclo {{cycleTitle}}!",
+  "eurekaCreatedAboutWork":"{{userName}} ha creado una Eureka sobre la Obra {{workTitle}}!",
   "eurekaCreatedAboutWorkInCycle":"{{userName}} ha creado una Eureka sobre la Obra {{workTitle}} en el Ciclo {{cycleTitle}}!",
   
   "commentCreatedAboutComment":"{{userName}} ha respondido su comentario Comentario  {{commentTitle}}!",

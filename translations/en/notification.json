@@ -2,6 +2,7 @@
   "viewAllNotifications":"View all notifications",
   
   "eurekaCreatedAboutCycle":"{{userName}} has created an Eureka about {{cycleTitle}}!",
+  "eurekaCreatedAboutWork":"{{userName}} has created an Eureka about {{workTitle}}!",
   "eurekaCreatedAboutWorkInCycle":"{{userName}} has created an Eureka about {{workTitle}} in the Cycle {{cycleTitle}}!",
   
   "commentCreatedAboutComment":"{{userName}} has replied to your Comment  {{commentTitle}}!",

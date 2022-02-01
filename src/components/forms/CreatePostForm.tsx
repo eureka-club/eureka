@@ -36,6 +36,10 @@ import globalModalsAtom from '../../atoms/globalModals';
 import styles from './CreatePostForm.module.css';
 import useTopics from '../../useTopics';
 import useWorks from '../../useWorks';
+import { Session } from '@/src/types';
+import { useSession } from 'next-auth/client';
+import useUser from '@/src/useUser';
+import { useNotificationContext } from '@/src/useNotificationProvider';
 
 const CreatePostForm: FunctionComponent = () => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -51,10 +55,20 @@ const CreatePostForm: FunctionComponent = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const editorRef = useRef<any>(null);
-
+  const [session] = useSession();
+  const [userId, setUserId] = useState<number>();
   // const [workId, setWorkId] = useState<string | undefined>();
   const { data: work } = useWorks(router.query.id as string);
-
+  const {data:user} = useUser(userId!,{
+    enabled:!!userId
+  });
+  const {notifier} = useNotificationContext();
+  useEffect(()=>{
+    if(session){
+      const user = (session as unknown as Session).user;
+      setUserId(user.id);
+    }
+  },[session]);
   // useEffect(() => {
   //   if (router) {
   //     const routeValues = router.route.split('/').filter((i) => i);
@@ -92,16 +106,52 @@ const CreatePostForm: FunctionComponent = () => {
         }
       });
 
+      let message = "";
+      if(user && notifier){
+        if(selectedWork)  {
+          if(selectedCycle){
+            message = `eurekaCreatedAboutWorkInCycle!|!${JSON.stringify({
+              userName:user.name||'',
+              workTitle:selectedWork.title,
+              cycleTitle:selectedCycle.title
+            })}`;
+  
+          }
+          else{
+            message = `eurekaCreatedAboutWork!|!${JSON.stringify({
+              userName:user.name||'',
+              workTitle:selectedWork.title
+            })}`;
+          }
+        }
+        else if(selectedCycle)
+          message = `eurekaCreatedAboutCycle!|!${JSON.stringify({
+            userName:user.name||'',
+            cycleTitle:selectedCycle.title
+          })}`;
+  
+        formData.append('notificationMessage', message);
+        formData.append('notificationContextURL', router.asPath);
+        formData.append('notificationToUsers', user.followedBy.map(u=>u.id).join(','));
+
+      }
+
       const res = await fetch('/api/post', {
         method: 'POST',
         body: formData,
       });
 
-      const json = await res.json();
-      if (json.ok) {
+      if (res.ok) {
+        const json = await res.json();
         setPostId(json.id);
+        if(notifier && user)
+          notifier.notify({
+            data:{message},
+            toUsers: user?.followedBy.map(u=>u.id)
+          })
         return json.post;
       }
+      //TODO toast with error to the user
       return null;
     },
     {

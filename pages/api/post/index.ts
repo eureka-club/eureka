@@ -37,7 +37,7 @@ export default getApiHandler()
         const image: FileUpload = files.image[0];
 
         const uploadData = await storeUpload(image);
-        const post = await createFromServerFields(fields, uploadData, session.user);
+        const post = await createFromServerFields(fields, uploadData, session.user);debugger;
         const notification = await create(
           fields.notificationMessage[0],
           fields.notificationContextURL[0],

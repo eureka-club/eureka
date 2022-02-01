@@ -171,7 +171,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
     },
   );
 
-  const submitCreateForm = () => {debugger;
+  const submitCreateForm = () => {
     if (entity && editorRef.current.getContent()) {
       const user = (session as Session).user;
       let notificationMessage = '';      

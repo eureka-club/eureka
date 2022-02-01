@@ -16,7 +16,7 @@ export default class Notifier {
     // this.toUsers = toUsers;
     // this.callback = callback;
     this.fromUser = fromUser;
-    const socketIOServervice = process.env.NODE_ENV == 'development'
+    const socketIOServervice = process.env.NODE_ENV === 'development'
       ? 'http://localhost:4000/'
       : "https://eurekaclubeureka-notification.azurewebsites.net/";
     this.socket = io(socketIOServervice,{
@@ -31,7 +31,7 @@ export default class Notifier {
       
     });
 
-    this.socket.on(['notify',fromUser],(res: NotifierResponse) => {debugger;
+    this.socket.on(['notify',fromUser],(res: NotifierResponse) => {
         globalThis.dispatchEvent(new CustomEvent('notify',{detail:res}));
     });
 
