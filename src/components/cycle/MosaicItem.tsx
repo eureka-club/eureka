@@ -6,7 +6,7 @@ import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useEffect, useState, MouseEvent } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
-
+import { useRouter } from 'next/router';
 import { Card, Button, Spinner, Badge } from 'react-bootstrap';
 import { useSession } from 'next-auth/client';
 import { CgMediaLive } from 'react-icons/cg';
@@ -24,6 +24,7 @@ import useUser from '@/src/useUser';
 import { Session } from '../../types';
 import SocialInteraction from '../common/SocialInteraction';
 import { useCycleContext } from '../../useCycleContext';
+import {useNotificationContext} from '@/src/useNotificationProvider'
 // import { useMosaicContext } from '../../useMosaicContext';
 
 dayjs.extend(utc);
@@ -49,6 +50,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   showTrash = false,
   className,
 }) => {
+  const {notifier} = useNotificationContext();
   const { cycle, linkToCycle = true, currentUserIsParticipant } = useCycleContext();
   const { id, title, localImages, startDate, endDate } = cycle!;
   const { t } = useTranslation('common');
@@ -62,6 +64,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [participants, setParticipants] = useState<number>(0);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   useEffect(() => {
     const s = session as unknown as Session;
@@ -95,22 +98,44 @@ const MosaicItem: FunctionComponent<Props> = ({
     data: mutationResponse,
     // isSuccess: isJoinCycleSuccess,
   } = useMutation(
-    async () => {
-      const res = await fetch(`/api/cycle/${cycle!.id}/join`, { method: 'POST' });
-      const { status, message } = await res.json();
+    async () => {      
+      let notificationMessage = `userJoinedCycle!|!${JSON.stringify({
+        userName: user?.name,
+        cycleTitle: cycle?.title,
+      })}`;
+      const notificationToUsers = (cycle?.participants || []).map(p=>p.id);
+      if(cycle?.creatorId) notificationToUsers.push(cycle?.creatorId);
 
-      if (status === 'error') {
-        // console.log(json.error);
+      const res = await fetch(`/api/cycle/${cycle!.id}/join`, { 
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          notificationMessage,
+          notificationContextURL: router.asPath,
+          notificationToUsers,
+        }),
+      });
+      if (!res.ok) {
         setGlobalModalsState({
           ...globalModalsState,
           showToast: {
             show: true,
             type: 'info',
             title: t('Join Cycle request notification'),
-            message: t(message),
+            message: t(res.statusText),
           },
         });
       }
+      else if(res.ok){
+        const json = await res.json();
+        if(notifier){
+          notifier.notify({
+            toUsers:notificationToUsers,
+            data:{message:notificationMessage}
+          });
+        }
+      }
+
     },
     {
       onMutate: () => {
@@ -137,19 +162,43 @@ const MosaicItem: FunctionComponent<Props> = ({
     // isSuccess: isLeaveCycleSuccess,
   } = useMutation(
     async () => {
-      const res = await fetch(`/api/cycle/${cycle!.id}/join`, { method: 'DELETE' });
-      const { status, message } = await res.json();
-      if (status === 'error') {
+      let notificationMessage = `userLeftCycle!|!${JSON.stringify({
+        userName: user?.name,
+        cycleTitle: cycle?.title,
+      })}`;
+      const notificationToUsers = (cycle?.participants || []).map(p=>p.id);
+      if(cycle?.creatorId) notificationToUsers.push(cycle?.creatorId);
+
+      const res = await fetch(`/api/cycle/${cycle!.id}/join`, { 
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          notificationMessage,
+          notificationContextURL: router.asPath,
+          notificationToUsers,
+        })
+      });
+      if(!res.ok){
         setGlobalModalsState({
           ...globalModalsState,
           showToast: {
             show: true,
             type: 'info',
             title: t('Join Cycle request notification'),
-            message: t(message),
+            message: t(res.statusText),
           },
-        });
+        });        
       }
+      else{
+        const json = await res.json();
+        if(notifier){
+          notifier.notify({
+            toUsers:notificationToUsers,
+            data:{message:notificationMessage}
+          });
+        }
+      }
+      
     },
     {
       onMutate: () => {
