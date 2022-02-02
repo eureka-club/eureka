@@ -166,7 +166,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         userName: user?.name,
         cycleTitle: cycle?.title,
       })}`;
-      const notificationToUsers = (cycle?.participants || []).map(p=>p.id);
+      const notificationToUsers = (cycle?.participants || []).filter(p=>p.id!==user?.id).map(p=>p.id);
       if(cycle?.creatorId) notificationToUsers.push(cycle?.creatorId);
 
       const res = await fetch(`/api/cycle/${cycle!.id}/join`, { 
