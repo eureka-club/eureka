@@ -17,6 +17,9 @@
   "commentCreatedAboutWorkInCycle":"{{userName}} ha creado un Comentario sobre la Obra {{workTitle}} en el Ciclo {{cycleTitle}}! ",
   "commentCreatedAboutWork":"{{userName}} ha creado un Comentario sobre la Obra {{workTitle}}!",
      
-  "userStartFollowing":"{{userName}} te está siguiendo. ¡Échale un ojo a su Mediateca también!"
+  "userStartFollowing":"{{userName}} te está siguiendo. ¡Échale un ojo a su Mediateca también!",
+
+  "userJoinedCycle":"{{userName}} se ha unido al Ciclo {{cycleTitle}}!",
+  "userLeftCycle":"{{userName}} ha abandonado el Ciclo {{cycleTitle}}!"
   
 }

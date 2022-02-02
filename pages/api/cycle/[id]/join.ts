@@ -7,21 +7,22 @@ import getApiHandler from '../../../../src/lib/getApiHandler';
 import { addParticipant, find, removeParticipant } from '../../../../src/facades/cycle';
 import prisma from '../../../../src/lib/prisma';
 import { sendMailRequestJoinCycle } from '../../../../src/facades/mail';
-
+import {create} from '@/src/facades/notification'
 const bcrypt = require('bcryptjs');
 
 export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     const session = (await getSession({ req })) as unknown as Session;
     if (session == null) {
-      res.status(200).json({ status: 'error', message: 'Unauthorized' });
-      return;
+      res.statusMessage = 'unauthorized';
+      return res.status(400).end();      
     }
 
     const { id } = req.query;
+    const {notificationMessage,notificationContextURL,notificationToUsers} = req.body;
     if (typeof id !== 'string') {
-      res.status(200).json({ status: 'error', message: 'id is required' });
-      return;
+      res.statusMessage = 'id is required';
+      return res.status(400).end();
     }
 
     const idNum = parseInt(id, 10);
@@ -104,11 +105,18 @@ export default getApiHandler()
       }
 
       await addParticipant(cycle, session.user.id);
+      const notification = await create(
+        notificationMessage,
+        notificationContextURL,
+        session.user.id,
+        notificationToUsers
+      );
 
-      res.status(200).json({ status: 'success' });
+      res.status(200).json({notification});
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
-      res.status(200).json({ status: 'error', message: 'server error' });
+      res.statusMessage = 'server error';
+      res.status(500).end();
     } finally {
       prisma.$disconnect();
     }
@@ -116,35 +124,44 @@ export default getApiHandler()
   .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     const session = (await getSession({ req })) as unknown as Session;
     if (session == null) {
-      res.status(200).json({ status: 'error', message: 'Unauthorized' });
-      return;
+      res.statusMessage = 'unauthorized';
+      return res.status(300).end();
+    ;
     }
 
     const { id } = req.query;
+    const {notificationMessage,notificationContextURL,notificationToUsers} = req.body;
     if (typeof id !== 'string') {
-      res.status(200).json({ status: 'error', message: 'id is required' });
-      return;
+      res.statusMessage = 'id is required';
+      return res.status(400).end();      
     }
 
     const idNum = parseInt(id, 10);
     if (!Number.isInteger(idNum)) {
-      res.status(200).json({ status: 'error', message: 'id should be a number' });
-      return;
+      res.statusMessage = 'id should be a number';
+      return res.status(400).end();
     }
 
     try {
       const cycle = await find(idNum);
       if (cycle == null) {
-        res.status(200).json({ status: 'error', message: 'cycle not found' });
-        return;
+        res.statusMessage = 'cycle not found';
+        return res.status(400).end();
       }
 
       await removeParticipant(cycle, session.user);
+      const notification = await create(
+        notificationMessage,
+        notificationContextURL,
+        session.user.id,
+        notificationToUsers
+      );
 
-      res.status(200).json({ status: 'success', data: cycle });
+      res.status(200).json({ data: cycle });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
-      res.status(500).json({ status: 'error', message: 'server error' });
+      res.statusMessage = 'server error';
+      res.status(500).end();
     } finally {
       prisma.$disconnect();
     }
