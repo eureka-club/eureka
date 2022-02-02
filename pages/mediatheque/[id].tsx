@@ -419,15 +419,15 @@ const Mediatheque: NextPage = () => {
             <Card className='userHeader'>
               <Card.Body>
                 <Row className='d-flex flex-column flex-md-row' >
-                  <Col className='d-flex flex-sm-wrap align-items-start'>{/*  renderAvatar()  */}
-                    {renderAvatar()}
-                    <div className='col ms-3 d-sm-block d-md-none'>
-                      <h2>{user.name}</h2>
-                      {renderCountry()}
-                      <TagsInput tags={user.tags || ''} readOnly label="" />
-                    </div>
-                    <br/>
-                    {/* <em>{user.name}</em> */}
+                  <Col className='d-flex flex-column flex-sm-wrap align-items-start'>
+                    <div className="d-flex flex-nowrap">
+                       {renderAvatar()}
+                        <div className='ms-3 d-sm-block d-md-none'>
+                         <h2>{user.name}</h2>
+                         {renderCountry()}
+                         </div>
+                      </div>
+                    <TagsInput className='d-sm-block d-md-none' tags={user.tags || ''} readOnly label="" />
                   </Col>
                   <Col className='col col-sm-12 col-md-8'>
                     <div className='d-none d-md-block'>

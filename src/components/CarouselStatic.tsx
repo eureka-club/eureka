@@ -192,7 +192,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
     (
       <>
         {(dataFiltered && dataFiltered.length && (
-          <div className={`mb-2 mb-lg-5 position-relative ${className}`}>
+          <div className={`mb-5 position-relative ${className}`}>
             <Row>
               <Col xs={9}>
                 <h5 className="text-gray-dark mb-2">
