@@ -2,6 +2,7 @@
   "viewAllNotifications":"Ver todas las notificaciones",
   
   "eurekaCreatedAboutCycle":"{{userName}} ha creado una Eureka sobre el Ciclo {{cycleTitle}}!",
+  "eurekaCreatedAboutWork":"{{userName}} ha creado una Eureka sobre la Obra {{workTitle}}!",
   "eurekaCreatedAboutWorkInCycle":"{{userName}} ha creado una Eureka sobre la Obra {{workTitle}} en el Ciclo {{cycleTitle}}!",
   
   "commentCreatedAboutComment":"{{userName}} ha respondido su comentario Comentario  {{commentTitle}}!",
@@ -14,6 +15,11 @@
   "commentCreatedAboutPostInWork":"{{userName}} ha creado un Comentario sobre la Eureka {{postTitle}} en la Obra {{workTitle}}!",
   
   "commentCreatedAboutWorkInCycle":"{{userName}} ha creado un Comentario sobre la Obra {{workTitle}} en el Ciclo {{cycleTitle}}! ",
-  "commentCreatedAboutWork":"{{userName}} ha creado un Comentario sobre la Obra {{workTitle}}!"
-        
+  "commentCreatedAboutWork":"{{userName}} ha creado un Comentario sobre la Obra {{workTitle}}!",
+     
+  "userStartFollowing":"{{userName}} te está siguiendo. ¡Échale un ojo a su Mediateca también!",
+
+  "userJoinedCycle":"{{userName}} se ha unido al Ciclo {{cycleTitle}}!",
+  "userLeftCycle":"{{userName}} ha abandonado el Ciclo {{cycleTitle}}!"
+  
 }

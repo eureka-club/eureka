@@ -54,6 +54,7 @@ import styles from './CycleDetail.module.css';
 import { useCycleContext, CycleContext } from '../../useCycleContext';
 import CycleDetailHeader from './CycleDetailHeader';
 import CycleDetailDiscussion from './CycleDetailDiscussion';
+import { upperFirst } from 'lodash';
 
 interface Props {
   // cycle: CycleMosaicItem;
@@ -204,15 +205,14 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const renderComments = () => {
     const getParent = (c: Comment): WorkMosaicItem | CycleMosaicItem |  CommentMosaicItem  => {
       const cmi = (c as CommentMosaicItem);
-      if(!cmi.commentId && !cmi.postId){
-        
+      if(!cmi.commentId && !cmi.postId){        
         if(cmi.workId) return (cmi.work as WorkMosaicItem);
         if(cmi.cycleId) return (cycle as CycleMosaicItem);
       }
       return cmi;
     };
     if (cycle && filteredComments){
-      const fcf = filteredComments.filter((c) => !c.postId);
+      const fcf = filteredComments.filter((c) => !c.postId && !c.commentId);
       const fcfs = fcf.sort((p, c) => (p.id > c.id && -1) || 1)
       return fcfs
         .map(c=>
