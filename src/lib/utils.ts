@@ -127,12 +127,12 @@ interface Props {
 imageSrc:string;
 pixelCrop:Area;
 }
-export async function getCroppedImg(
+export const getCroppedImg = async (
   imageSrc:string,
   pixelCrop:Area,
   rotation = 0,
   flip = { horizontal: false, vertical: false }
-) {
+): Promise<File | null> => {
   const image = <ImageBitmap> await createImage(imageSrc)
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')

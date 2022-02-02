@@ -19,7 +19,8 @@ const CropImageFileSelect: React.FC<Props> = ({onGenerateCrop}) => {
   const onCropComplete = async (croppedArea: Area, croppedAreaPixels: Area) => {
          setCroppedAreaPixels(croppedAreaPixels);
          const  file = await getCroppedImg(imageSrc,croppedAreaPixels)
-         onGenerateCrop(file);
+         if(file)
+          onGenerateCrop(file);
     }
 
 
