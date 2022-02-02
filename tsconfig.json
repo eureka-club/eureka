@@ -34,7 +34,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "cypress/integration/fistTest.spec.js", "src/Test.spec.js"  ],
   "exclude": [
     "node_modules"
   ]
