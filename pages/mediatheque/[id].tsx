@@ -44,8 +44,7 @@ import { useNotificationContext } from '@/src/useNotificationProvider';
 // import MosaicItemCycle from '../../src/components/cycle/MosaicItem';
 // import MosaicItemPost from '../../src/components/post/MosaicItem';
 // import MosaicItemWork from '../../src/components/work/MosaicItem';
-import SocketIO from '@/src/lib/Notifier'
-import { route } from 'next/dist/server/router';
+
 type Item = (CycleMosaicItem & { type: string }) | WorkMosaicItem | (PostMosaicItem & { type: string });
 
 type ItemCycle = CycleMosaicItem & { type: string };
@@ -66,7 +65,6 @@ const Mediatheque: NextPage = () => {
   const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>();
   const queryClient = useQueryClient();
   const { t } = useTranslation('mediatheque');
-  const [socketIO,setSocketIO] = useState<SocketIO>();
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
   const [globalModals, setGlobalModals] = useAtom(globalModalsAtom);
   // if (!s?.user) {

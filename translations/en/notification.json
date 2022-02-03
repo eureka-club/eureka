@@ -20,6 +20,8 @@
   "userStartFollowing":"{{userName}} has started following you. Take a look at his/her Mediatheque too!",
 
   "userJoinedCycle":"{{userName}} has joined the cycle {{cycleTitle}}!",
-  "userLeftCycle":"{{userName}} has left the cycle {{cycleTitle}}!"
+  "userLeftCycle":"{{userName}} has left the cycle {{cycleTitle}}!",
   
+  "userHasSaveForLater":"{{userName}} has saved the {{entity}} {{entityTitle}} for later. Check it out.",
+  "userHasRating":"{{userName}} has rated the {{entity}} {{entityTitle}}. Check it out too!"
 }

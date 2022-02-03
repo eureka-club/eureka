@@ -6,6 +6,7 @@ import getApiHandler from '../../../../src/lib/getApiHandler';
 import { find, saveSocialInteraction } from '../../../../src/facades/cycle';
 import prisma from '../../../../src/lib/prisma';
 // import redis from '../../../../src/lib/redis';
+import {create} from '@/src/facades/notification'
 
 const validateReq = async (
   session: Session,
@@ -39,7 +40,7 @@ export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     const session = (await getSession({ req })) as unknown as Session;
     const { id, socialInteraction } = req.query;
-    const { qty } = req.body;
+    const { qty, notificationMessage,notificationContextURL,notificationToUsers } = req.body;
 
     if (!(await validateReq(session, id, socialInteraction, res))) {
       return;
@@ -53,7 +54,15 @@ export default getApiHandler()
       }
 
       // @ts-ignore arguments checked in validateReq()
-      await saveSocialInteraction(cycle, session.user, socialInteraction, true, qty);
+      await saveSocialInteraction(cycle, session.user, socialInteraction, true, qty);debugger;
+      const notification = await create(
+        notificationMessage,
+        notificationContextURL,
+        session.user.id,
+        notificationToUsers
+      );
+
+      
       // await redis.flushall();
       res.status(200).json({ status: 'OK' });
     } catch (exc) {

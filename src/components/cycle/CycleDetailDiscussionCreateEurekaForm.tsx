@@ -139,6 +139,8 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
     async (payload: CreatePostAboutCycleClientPayload | CreatePostAboutWorkClientPayload): Promise<Post | null> => {
       const u = (session as Session).user;
       const toUsers = cycle.participants.filter(p=>p.id!==u.id).map(p=>p.id);
+      if(u.id !== cycle.creatorId)
+        toUsers.push(cycle.creatorId);
       let message = '';
       if(payload.selectedWorkId){
         const work = cycle.works.find(w=>w.id === payload.selectedWorkId);

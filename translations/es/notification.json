@@ -20,6 +20,9 @@
   "userStartFollowing":"{{userName}} te está siguiendo. ¡Échale un ojo a su Mediateca también!",
 
   "userJoinedCycle":"{{userName}} se ha unido al Ciclo {{cycleTitle}}!",
-  "userLeftCycle":"{{userName}} ha abandonado el Ciclo {{cycleTitle}}!"
+  "userLeftCycle":"{{userName}} ha abandonado el Ciclo {{cycleTitle}}!",
+
+  "userHasSaveForLater":"{{userName}} ha salvado para luego: {{entity}} {{entityTitle}}. Echale un vistazo.",
+  "userHasRating":"{{userName}} ha valorado: {{entity}} {{entityTitle}}. Echale un vistazo también!"
   
 }

@@ -153,7 +153,8 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
     }
     const u = (session as Session).user;
     const toUsers = cycle.participants.filter(p=>p.id!==u.id).map(p=>p.id);
-
+    if(u.id !== cycle.creatorId)
+      toUsers.push(cycle.creatorId);
     if (newComment.selectedWorkId) {
       const work = cycle.works.find(w=>w.id === newComment.selectedWorkId)
       const msg = `commentCreatedAboutWorkInCycle!|!${JSON.stringify({
