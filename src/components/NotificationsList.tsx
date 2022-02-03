@@ -156,17 +156,17 @@ const NotificationsList: React.FC<Props> = ({className}) => {
       <Button variant="outline-light" className="text-dark border-0 " disabled={!user || !user.notifications.length}>
               <aside className="position-relative d-none d-md-inline-block">
                 <IoNotificationsCircleOutline className={`${styles.navbarIconNav}`} />
-                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {user.notifications.length && <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                   {user.notifications.length}
                   <span className="visually-hidden">unread messages</span>
-                </span>
+                </span> || ''}
               </aside>
               <aside className="d-md-none position-relative">
                 <IoNotificationsCircleOutline className={`${styles.navbarIconNav}`} />
-                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {user.notifications.length && <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                   {user.notifications.length}
                   <span className="visually-hidden">unread messages</span>
-                </span>
+                </span>||''}
               </aside>
               <span className={`d-none d-lg-block ${styles.menuBottomInfo}`} style={{marginTop:'6px'}}>{t('navbar:Notifications')}</span>
     
