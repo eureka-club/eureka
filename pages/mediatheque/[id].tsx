@@ -157,7 +157,7 @@ const Mediatheque: NextPage = () => {
       }))
       form.append('notificationData',JSON.stringify({
         notificationMessage,
-        notificationContextURL:router.asPath,
+        notificationContextURL:`/mediatheque/${idSession}`,
         notificationToUsers:[id]
       }))
       
