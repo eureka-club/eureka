@@ -34,7 +34,7 @@ import { WorkMosaicItem } from '../../types/work';
 import { UserMosaicItem } from '../../types/user';
 import { MySocialInfo, isCycle, isWork, Session, isPost } from '../../types';
 import styles from './SocialInteraction.module.css';
-
+import {useNotificationContext} from '@/src/useNotificationProvider';
 interface SocialInteractionClientPayload {
   socialInteraction: 'fav' | 'rating';
   doCreate: boolean;
@@ -42,7 +42,7 @@ interface SocialInteractionClientPayload {
 }
 
 interface Props {
-  entity: CycleMosaicItem | PostMosaicItem | WorkMosaicItem | UserMosaicItem;
+  entity: CycleMosaicItem | PostMosaicItem | WorkMosaicItem /* | UserMosaicItem */;
   parent?: Cycle | Work | null;
   // mySocialInfo: MySocialInfo;
   showCounts?: boolean;
@@ -96,6 +96,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   // const [user, setuser] = useState<UserDetail>();
   const [showShare, setShowShare] = useState<boolean>(false);
   const mosaicContext = useMosaicContext();
+  const {notifier} = useNotificationContext();
   useEffect(() => {
     if (mosaicContext) {
       setShowShare(mosaicContext.showShare);
@@ -248,7 +249,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
       if (isWork(parent) || isCycle(parent)) return '';
     }
     if ('title' in entity) return entity.title;
-    return entity.name; // an user;
+    //return entity.name; // an user;
   };
   const titleStr = title();
   const shareText = `${shareTextDynamicPart} ${titleStr ? `"${titleStr}"` : ''} ${t('complementShare')}`;
@@ -273,13 +274,38 @@ const SocialInteraction: FunctionComponent<Props> = ({
         throw new Error('Unknown entity');
       })();
       if (session) {
+        const notificationContextURL = router.asPath;
+        //[user that does action] has saved the [title of book/movie/documentary/cycle] for later. Check it out.
+        
+        let translationKey = socialInteraction === 'fav' 
+        ? 'userHasSaveForLater'
+        : 'userHasRating';
+
+        const notificationMessage = `${translationKey}!|!${JSON.stringify({
+          userName: user?.name,
+          entity: entityEndpoint.replace(/\w/,c=>c.toUpperCase()),
+          entityTitle: entity.title,
+        })}`;
+        
+        const notificationToUsers = user?.followedBy.map(f=>f.id);
+
         const res = await fetch(`/api/${entityEndpoint}/${entity.id}/${socialInteraction}`, {
           method: doCreate ? 'POST' : 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             qty: ratingQty,
+            ... doCreate && {
+              notificationMessage,
+              notificationContextURL,
+              notificationToUsers
+            },
           }),
         });
+        if(notifier && notificationToUsers)
+          notifier.notify({
+            toUsers:notificationToUsers,
+            data:{message:notificationMessage}
+          });
         return res.json();
       }
       // calculateQty();

@@ -398,8 +398,7 @@ const EditUserForm: FunctionComponent = () => {
               </Row> */}
               <Row>
                 <Col>
-                
-                  <CropImageFileSelect onGenerateCrop={onGenerateCrop} src={''}/>
+                  <CropImageFileSelect onGenerateCrop={onGenerateCrop} />
                 </Col>
               
               </Row>

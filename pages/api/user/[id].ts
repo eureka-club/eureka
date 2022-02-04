@@ -106,9 +106,9 @@ export default getApiHandler()
           }
         }
       }
-      const r = await update(idNum, data);
+      const r = await update(idNum, data);debugger;
       if(r){
-        if(data.followedBy.connect){
+        if(data.followedBy && data.followedBy.connect){
           if(Object.keys(notificationData).length){
             const notification = await create(
               notificationData.notificationMessage,

@@ -49,11 +49,11 @@ const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = fa
         </Col>
       </Row>
 
-      {session && showSocialInteraction && (
+      {/* {session && showSocialInteraction && (
         <Card.Footer className="text-muted">
           {user && <SocialInteraction showButtonLabels={false} showCounts={false} entity={user} />}
         </Card.Footer>
-      )}
+      )} */}
     </Card>
   );
 };
