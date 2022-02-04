@@ -1,12 +1,12 @@
-import { FunctionComponent, SyntheticEvent, useState } from 'react';
+import { FunctionComponent, SyntheticEvent, useEffect } from 'react';
 import Image from 'next/image'
 import Link from 'next/link';
 import { Spinner } from 'react-bootstrap';
 import { User } from '@prisma/client';
 // import { Session } from '../../types';
 import styles from './UserAvatar.module.css';
-import { useUsers } from '../../useUsers';
-
+import useUser from '@/src/useUser';
+import LocalImageComponent from '@/src/components/LocalImage'
 interface Props {
   user: { id: number | null; name: string | null; image: string | null };
   showName?: boolean;
@@ -22,6 +22,16 @@ const UserAvatar: FunctionComponent<Props> = ({
   className = '',
   showFullName = false,
 }) => {
+
+  const { data: u, isLoading: isLoadingUser, isSuccess: isSuccessUser } = useUser(+user?.id!,{
+    enabled:!!+user?.id!
+  });
+
+useEffect(() => {
+   console.log(user,'user')
+  }, [user]);
+
+
   const onLoadImgError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = '/img/default-avatar.png';
   };
@@ -42,16 +52,18 @@ const UserAvatar: FunctionComponent<Props> = ({
   return (
     <>
       {/* {isLoading && <Spinner size="sm" animation="grow" variant="info" />} */}
-      {user && (
+      {u && (
         <span className={`fs-6 ${className} ${styles.cycleCreator} ${styles[size]}`}>
-          <Link href={`/mediatheque/${user.id}`}>
+          <Link href={`/mediatheque/${u.id}`}>
             <a className={`text-secondary ${styles.link}`}>
-              <img
-                onError={onLoadImgError}
-                src={user.image || '/img/default-avatar.png'}
-                alt="creator avatar"
-                className={`${styles.cycleCreatorAvatar} me-2`}
-              />
+
+                {(!u?.photos.length) ?
+         <img
+        onError={onLoadImgError}
+        className={`${styles.cycleCreatorAvatar} me-2`}
+        src={u.image || '/img/default-avatar.png'}
+        alt={u.name||''}
+      /> : <LocalImageComponent className={`${styles.cycleCreatorAvatar} me-2`} filePath={`users-photos/${u.photos[0].storedFile}` } alt={user.name||''} />}
               {renderUserName()}
             </a>
           </Link>
