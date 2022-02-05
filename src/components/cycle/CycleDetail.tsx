@@ -379,7 +379,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
               <Col xs={{span:12, order:'last'}} md={{span:9,order:'first'}}>
                 {(cycle.posts && cycle.posts.length && (
                   <MosaicContext.Provider value={{ showShare: true }}>
-                    <PostsMosaic display="h" posts={filteredPosts} parent={cycle} showComments cacheKey={['CYCLE', `${cycle.id}`]} />
+                    <PostsMosaic display="h" posts={filteredPosts} showComments cacheKey={['CYCLE', `${cycle.id}`]} />
                   </MosaicContext.Provider>
                 )) ||
                   null}

@@ -6,7 +6,7 @@ import { PostMosaicItem } from '@/types/post';
 import Mosaic from '../Mosaic';
 import { WorkMosaicItem } from '@/src/types/work';
 interface Props {
-  parent: CycleMosaicItem;
+  parent?: CycleMosaicItem | WorkMosaicItem;
   posts: PostMosaicItem[];
   display?: 'h' | 'v';
   showComments?: boolean;
