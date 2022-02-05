@@ -126,8 +126,13 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
                 </div>
                 {work.contentText != null && <UnclampText isHTML={false} text={work.contentText} clampHeight="8rem" />}
                 </section>
+              <div className='container d-none d-lg-block mt-5'>
                 <CommentsList entity={work} parent={undefined}/>
-              </Col>
+          </div>
+        </Col>
+        <div className='container d-sm-block d-lg-none mt-3'>
+                <CommentsList entity={work} parent={undefined}/>
+          </div>
             </Row>
           ) : (
             <>{post && work && <PostDetailComponent post={post} work={work} />}</>

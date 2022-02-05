@@ -1,4 +1,4 @@
-import { FunctionComponent, SyntheticEvent, useEffect } from 'react';
+import { FunctionComponent, SyntheticEvent} from 'react';
 import Image from 'next/image'
 import Link from 'next/link';
 import { Spinner } from 'react-bootstrap';
@@ -27,15 +27,9 @@ const UserAvatar: FunctionComponent<Props> = ({
     enabled:!!+user?.id!
   });
 
-useEffect(() => {
-   console.log(user,'user')
-  }, [user]);
-
-
   const onLoadImgError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = '/img/default-avatar.png';
   };
-  // const [truncateName] = useState(user.name?.slice(0, 16));
 
   const renderUserName = () => {
     let res = '';
@@ -51,7 +45,6 @@ useEffect(() => {
   };
   return (
     <>
-      {/* {isLoading && <Spinner size="sm" animation="grow" variant="info" />} */}
       {u && (
         <span className={`fs-6 ${className} ${styles.cycleCreator} ${styles[size]}`}>
           <Link href={`/mediatheque/${u.id}`}>
