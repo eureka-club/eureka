@@ -8,6 +8,7 @@ import { storeUpload } from '@/src/facades/fileUpload';
 import { createFromServerFields, findAll } from '@/src/facades/post';
 import { create } from '@/src/facades/notification';
 import prisma from '@/src/lib/prisma';
+import { take } from 'lodash';
 
 export const config = {
   api: {
@@ -61,45 +62,38 @@ export default getApiHandler()
     }
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-    const include =  {
-      creator: true,
-      localImages: true,
-      works: true,
-      cycles: true,
-      favs: true,
-      likes: true,
-      comments: {
-        include: {
-          creator: { select: { id: true, name: true, image: true } },
-          comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
-        },
-      },
-    };
+    // const include =  {
+    //   creator: true,
+    //   localImages: true,
+    //   works: true,
+    //   cycles: true,
+    //   favs: true,
+    //   likes: true,
+    //   comments: {
+    //     include: {
+    //       creator: { select: { id: true, name: true, image: true } },
+    //       comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+    //     },
+    //   },
+    // };
 
-    try {
-      const { q = null, where = null, id = null } = req.query;
+    try {debugger;
+      const { q = null, where:w = undefined, id = null, take:t=undefined } = req.query;
+      
       let data = null;
+      const where = w ? JSON.parse(w.toString()) : undefined;
+      const take = t ? parseInt(t?.toString()) : undefined;
+      
       if (typeof q === 'string') {
-        data = await prisma.post.findMany({
-          where: {
-            OR: [{ title: { contains: q } }, { contentText: { contains: q } }, { creator: { name:{contains: q} } }],
-          },
-          include,
-        });
+        data = await findAll({take,where:{
+          OR: [{ title: { contains: q } }, { contentText: { contains: q } }, { creator: { name:{contains: q} } }],
+        }});
       } else if (where) {
-        data = await prisma.post.findMany({
-          ...(typeof where === 'string' && { where: JSON.parse(where) }),
-          include,
-        });
+        data = await findAll({take,where});
       } else if (id) {
-        data = await prisma.post.findMany({
-          where: { id: parseInt(id as string, 10) },
-          include,
-        });
+        data = await findAll({take,where:{id: parseInt(id as string, 10)}});
       } else {
-        data = await prisma.post.findMany({
-          include,
-        });
+        data = await prisma.post.findMany({take});
       }
 
       res.status(200).json({ status: 'OK', data });

@@ -96,9 +96,9 @@ const MosaicItem: FunctionComponent<Props> = ({
       return <span>{res}</span>;
     };
     return (
-      <Card className={`mosaic ${styles.container} ${className}`}>
+      <Card className={`mosaic ${styles.container} ${className}`} data-cy={`mosaic-item-post-${post.id}`}>
         {postParent && (
-          <h2 className="m-0 p-1 fs-6 text-info">
+          <h2 className="m-0 p-1 fs-6 text-info" data-cy="parent-title">
             <FaRegCompass className="text-info" />
             {` `}
             {postParentLinkHref != null ? (
@@ -149,7 +149,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         </div>
         {showDetailedInfo && (
           <div className={`d-flex align-items-center justify-content-center ${styles.detailedInfo}`}>
-            <h6 className="text-center mb-0">
+            <h6 className="text-center mb-0" data-cy="post-title">
               <Link href={postLinkHref}>
                 <a className="text-primary">{post.title}</a>
               </Link>
@@ -194,7 +194,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           </Col>
           <Col xs={12} md={12} xl={8}>
             <div className={styles.detailedInfo}>
-              <h6 className="">
+              <h6 className="" data-cy="post-title">
                 <Link href={postLinkHref}>
                   <a className="cursor-pointer text-secondary">
                     {post.title}
