@@ -1,4 +1,4 @@
-import { Cycle, Post, User, Work } from '@prisma/client';
+import { Cycle, Post, Prisma, User, Work } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
 import { CreatePostServerFields, CreatePostServerPayload, PostWithCyclesWorks, PostMosaicItem } from '../types/post';
@@ -24,20 +24,29 @@ export const find = async (id: number): Promise<PostWithCyclesWorks | null> => {
   });
 };
 
-export const findAll = async (): Promise<PostMosaicItem[]> => {
+
+export const findAll = async ({include,where,take}:Prisma.PostFindManyArgs): Promise<Post[]|PostMosaicItem[]> => {
   return prisma.post.findMany({
+    take,
     orderBy: { createdAt: 'desc' },
-    include: {
-      creator: true,
-      localImages: true,
-      cycles: { include: { localImages: true } },
-      works: { include: { localImages: true } },
-      likes: true,
-      favs: true,
-      comments: {
-        include: { comments: true },
-      },
+    ... include ? {include} : {
+      include:{
+        creator: true,
+        localImages: true,
+        cycles: { include: { localImages: true } },
+        works: { include: { localImages: true } },
+        likes: true,
+        favs: true,
+        comments: {
+          include: {
+            creator: { select: { id: true, name: true, image: true } },
+            comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+          },
+        },
+      }
+      
     },
+    ... where && {where},
   });
 };
 

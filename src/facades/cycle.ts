@@ -62,12 +62,13 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
   });
 };
 
-export const findAll = async (): Promise<
+export const findAll = async (where?:Prisma.CycleWhereInput): Promise<
   (Cycle & {
     localImages: LocalImage[];
-  })[]
+  })[] | undefined
 > => {
   return prisma.cycle.findMany({
+    ... where && {where},
     orderBy: { createdAt: 'desc' },
     include: { localImages: true, ratings: true },
   });
