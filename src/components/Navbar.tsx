@@ -34,6 +34,8 @@ import { Session } from '../types';
 import ChevronToggle from './ui/dropdown/ChevronToggle';
 import globalModalsAtom from '../atoms/globalModals';
 import styles from './Navbar.module.css';
+import useUser from '@/src/useUser';
+
 
 // const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
 
@@ -42,6 +44,11 @@ const NavBar: FunctionComponent = () => {
   const [session] = useSession() as [Session | null | undefined, boolean];
   const router = useRouter();
   const { t } = useTranslation('navbar');
+
+   const { data:user } = useUser(+(session as Session)?.user.id,{
+    enabled: !!+(session as Session)?.user.id,
+    staleTime:1
+  });
 
   const openSignInModal = () => {
     setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
@@ -83,12 +90,14 @@ const NavBar: FunctionComponent = () => {
   // };
 
   const getAvatar = () => {
-    if (session){
-      const u = (session as unknown as Session).user;
-      if(u.photos && u.photos.length)
-        return <LocalImageComponent filePath={`users-photos/${u.photos[0].storedFile}` } alt={u.name||''} />;
-      if(u.image)
-        return <img src={u.image} className={styles.navbarIconNav} alt="user" />;
+      if(user){
+      if(!user?.photos.length)
+        return <img
+        className={styles.navbarIconNav}    
+        src={user.image || '/img/default-avatar.png'}
+        alt={user.name||''}
+      />;
+      return <LocalImageComponent className={styles.navbarIconNav} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />
     }
     return <BiUser className={styles.navbarIconNav} />;
   };
