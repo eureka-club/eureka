@@ -215,16 +215,16 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       const fcf = filteredComments.filter((c) => !c.postId && !c.commentId);
       const fcfs = fcf.sort((p, c) => (p.id > c.id && -1) || 1)
       return fcfs
-        .map(c=>
-          <ComentMosaic
-            key={c.id}
-            comment={c as unknown as CommentMosaicItem}
-            detailed
-            showComments
-            commentParent={getParent(c)}
-            cacheKey={['CYCLE', `${cycle.id}`]}
-            className="mb-4"
-          />
+        .map(c => <ComentMosaic
+              key={v4()}
+              comment={c as unknown as CommentMosaicItem}
+              detailed
+              showComments
+              commentParent={getParent(c)}
+              cacheKey={['CYCLE', `${cycle.id}`]}
+              className="mb-4"
+            />
+        
         );
     }
     return '';

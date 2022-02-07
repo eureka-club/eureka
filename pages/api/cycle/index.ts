@@ -5,7 +5,7 @@ import { getSession } from 'next-auth/client';
 import { FileUpload, Session, StoredFileUpload } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { storeUpload } from '../../../src/facades/fileUpload';
-import { createFromServerFields /* , findAll */ } from '../../../src/facades/cycle';
+import { createFromServerFields, findAll } from '../../../src/facades/cycle';
 import prisma from '../../../src/lib/prisma';
 // import redis from '../../../src/lib/redis';
 import { asyncForEach } from '../../../src/lib/utils';
@@ -73,25 +73,20 @@ export default getApiHandler()
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
-      const { q = null, where = null } = req.query;
+      const { q = null, where:w = null,take:t } = req.query;
+      let where = w ? JSON.parse(w.toString()) : undefined;
+      const take = t ? parseInt(t.toString()) : undefined;
+
       let data = null;
       if (typeof q === 'string') {
-        data = await prisma.cycle.findMany({
-          where: {
-            OR: [{ title: { contains: q } }, { contentText: { contains: q } }, { tags: { contains: q } }],
-          },
-
-          include: { participants: true, localImages: true, ratings: true, favs: true },
-        });
+        where = {
+          OR: [{ title: { contains: q } }, { contentText: { contains: q } }, { tags: { contains: q } }],
+        };
+        data = await findAll({take,where});
       } else if (where) {
-        data = await prisma.cycle.findMany({
-          ...(typeof where === 'string' && { where: JSON.parse(where) }),
-          include: { participants: true, localImages: true, ratings: true, favs: true, comments: true },
-        });
+        data = await findAll({take,where});
       } else {
-        data = await prisma.cycle.findMany({
-          include: { participants: true, localImages: true, ratings: true, favs: true, comments: true },
-        });
+        data = await findAll({take});
       }
 
       res.status(200).json({ status: 'OK', data });
