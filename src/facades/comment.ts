@@ -10,6 +10,7 @@ export const find = async (id: number): Promise<CommentMosaicItem | null> => {
     include: {
       creator: { select: { id: true, name: true, image: true } },
       work: {include:{cycles:true}},
+      post: {include:{cycles:true}},
       cycle: true,
       comments: {
         include: {
@@ -17,6 +18,7 @@ export const find = async (id: number): Promise<CommentMosaicItem | null> => {
           comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
           work: {include:{cycles:true}},
           cycle:true,
+          post: {include:{cycles:true}},
         },
       },
     },
@@ -29,6 +31,7 @@ export const findAll = async (): Promise<CommentMosaicItem[]> => {
     include: {
       creator: { select: { id: true, name: true, image: true } },
       work: {include:{cycles:true}},
+      post: {include:{cycles:true}},
       cycle: true,
       comments: {
         include: {
@@ -36,6 +39,7 @@ export const findAll = async (): Promise<CommentMosaicItem[]> => {
           comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
           work: {include:{cycles:true}},
           cycle:true,
+          post: {include:{cycles:true}},
         },
       },
     },

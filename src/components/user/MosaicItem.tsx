@@ -32,7 +32,7 @@ const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = fa
   const [session] = useSession() as [Session | null | undefined, boolean];
 
   return (
-    <Card className={`${styles.container} ${className}`} onClick={() => openUserMediatheque(id)}>
+    <Card className={`${styles.container} ${className}`} onClick={() => openUserMediatheque(id)} data-cy={`mosaic-item-user-${user.id}`}>
       <Row>
         <Col xs={12} md={3}>
           <UserAvatar user={user} showName={false} />

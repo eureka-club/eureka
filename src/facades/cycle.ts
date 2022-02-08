@@ -55,6 +55,8 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
         include: {
           creator: true,
           work: true,
+          cycle:true,
+          post:true,
           comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
         },
       },
@@ -70,7 +72,7 @@ export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<Cycle[] 
     orderBy: { createdAt: 'desc' },
     ... include 
       ? {include} 
-      : {include: { participants: true, localImages: true, ratings: true, favs: true, comments: true }},
+      : {include: { participants: true, localImages: true, ratings: true, favs: true, comments: true, posts: true }},
   });
 };
 

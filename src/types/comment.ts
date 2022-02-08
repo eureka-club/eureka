@@ -7,6 +7,7 @@ export type CommentMosaicItem = Prisma.CommentGetPayload<{
     };
     work: {include:{cycles:true}};
     cycle: true;
+    post: {include:{cycles:true}};
     comments: {
       include: {
         creator: { select: { id: true; name: true; image: true } };
