@@ -31,7 +31,7 @@
 }
 
 .navbarIconNav {
-  
+  color: var(--eureka-green);
   transform: scale(1.2);
   /* width: 1.5em;*/
   font-size: 1.6em; 

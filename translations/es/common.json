@@ -123,5 +123,8 @@
   "loadMoreTopics": "Cargar más temas",
   "public": "Ciclo público",
   "private": "Ciclo privado",
-  "secret": "Ciclo secreto"
+  "Change Photo": "Cambiar Foto",
+  "secret": "Ciclo secreto",
+  "select": "Seleccionar",
+  "Profile":"Perfil"
 }

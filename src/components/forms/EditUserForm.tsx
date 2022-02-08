@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import useTranslation from 'next-translate/useTranslation';
-import { ChangeEvent, FormEvent, useEffect, useState, FunctionComponent, useRef } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState, FunctionComponent, useRef,SyntheticEvent } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -43,9 +43,11 @@ const EditUserForm: FunctionComponent = () => {
   const router = useRouter();
   const [tags, setTags] = useState<string>('');
   const [photo, setPhoto] = useState<File>();
+  const [showCrop, setShowCrop] = useState<boolean>(false);
   // const [user, setUser] = useState<User | undefined>();
   const [id, setId] = useState<string>('');
   const [currentImg, setCurrentImg] = useState<string | undefined>();
+  const [changingPhoto, setChangingPhoto] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>();
   const [privacySettings, setPrivacySettings] = useState<number>();
   const [dashboardTypeChecked, setDashboardTypeChecked] = useState<{
@@ -68,6 +70,7 @@ const EditUserForm: FunctionComponent = () => {
     enabled: !!+id,
     staleTime:1
   });
+
   useEffect(() => {
     if (user) {
       // setUser(data);
@@ -90,15 +93,19 @@ const EditUserForm: FunctionComponent = () => {
           [`${v}`]: true,
         };
       });
-      setCurrentImg(() => user.image!);
+
+
       // if(user.photos.length)
-      //   setUserPhotoFile(()=>user.photos[0])
+      //  setCurrentImg(`users-photos/${user.photos[0].storedFile}`);
+      //      else
+      // setCurrentImg(user.image!);
+
     }
   }, [user]);
 
-  const handlerCurrentImgChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setCurrentImg(() => e.target.value);
-  };
+  //const handlerCurrentImgChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //  setCurrentImg(() => e.target.value);
+  //};
 
   const typeaheadRef = useRef<AsyncTypeahead<{ id: number; code: string; label: string }>>(null);
   const [isCountriesSearchLoading, setIsCountriesSearchLoading] = useState(false);
@@ -122,50 +129,6 @@ const EditUserForm: FunctionComponent = () => {
     fn();
   }, [locale]);
 
-  // const labelsChange = (fieldName: string) => {
-  //   switch (fieldName) {
-  //     case 'fiction-book':
-  //     case 'book':
-  //       setPublicationLengthLabel(t('Length pages'));
-  //       setPublicationYearLabel(t('Publication year'));
-  //       break;
-  //     case 'movie':
-  //     case 'documentary':
-  //       setPublicationYearLabel(t('releaseYearFieldLabel'));
-  //       setPublicationLengthLabel(`${t('Duration')} (${t('minutes')})`);
-  //       break;
-
-  //     default:
-  //       setPublicationYearLabel('...');
-  //       setPublicationLengthLabel('...');
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const fetchWork = async () => {
-  //     const res: Response = await fetch(`/api/work/${router.query.id}`);
-  //     const { status, work: w = null } = await res.json();
-  //     if (status === 'OK') {
-  //       setWork(w);
-  //       setTags(() => {
-  //         const ts = w.tags;
-  //         return ts;
-  //       });
-  //       labelsChange(w.type);
-  //     }
-  //   };
-  //   fetchWork();
-  // }, [router.query.id]);
-
-  // useEffect(() => {
-  //   if (work) {
-  //     if (work.countryOfOrigin2) setCountryOrigin2(work.countryOfOrigin2);
-  //     // setTopicsTags(work.topics || '');
-  //     if (work.topics) items.push(...work.topics.split(','));
-  //   }
-  // }, [work]);
-
-  // (data: TData, variables: TVariables, context: TContext | undefined)
   
   const {
     mutate: execEditUser,
@@ -246,7 +209,7 @@ const EditUserForm: FunctionComponent = () => {
     const payload: EditUserClientPayload = {
       name: userName,
       email: form.email.value,
-      image: form.image.value,
+     // image: form.image.value,
       countryOfOrigin: countryOrigin,
       aboutMe: form.aboutMe.value,
       dashboardType: privacySettings || 3,
@@ -254,17 +217,9 @@ const EditUserForm: FunctionComponent = () => {
       ... (photo && {photo}),
     };
 
+    setChangingPhoto(false);
     await execEditUser(payload);
   };
-
-  // const handlerchange = (ev: ChangeEvent<HTMLInputElement>) => {
-  //   if (work && ev.currentTarget.id in work) {
-  //     let w: WorkDetail & { [key: string]: unknown } = work;
-  //     w = work;
-  //     w[ev.currentTarget.id] = ev.currentTarget.value;
-  //     setWork(w);
-  //   }
-  // };
 
   useEffect(() => {
     if (isSuccess === true) {
@@ -292,34 +247,6 @@ const EditUserForm: FunctionComponent = () => {
     }
   };
 
-  // const toogleCountryOrigin2Handler = (countryOpt?: number) => {
-  //   if (countryOpt === 2) {
-  //     sethasCountryOrigin2(false);
-  //     setCountryOrigin2(null);
-  //   } else {
-  //     sethasCountryOrigin2(true);
-  //     setCountryOrigin2(null);
-  //   }
-  // };
-
-  // const handleSearchCountry2Select = (selected: { id: number; code: string; label: string }[]): void => {
-  //   if (selected[0] != null) {
-  //     // if (hasCountryOrigin2)
-  //     setCountryOrigin2(selected[0].code);
-  //   }
-  // };
-
-  // const handleSearchCountry2 = async (query: string) => {
-  //   setIsCountriesSearchLoading2(true);
-  //   const response = await fetch(`/api/taxonomy/countries?q=${query}`);
-  //   const itemsSC2: { id: number; code: string; label: string }[] = (await response.json()).result;
-  //   itemsSC2.forEach((i, idx: number) => {
-  //     itemsSC2[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
-  //   });
-  //   setCountrySearchResults(itemsSC2);
-  //   setIsCountriesSearchLoading2(false);
-  // };
-
   const handlerDashboardTypeRadioChange = (val: string) => {
     setDashboardTypeChecked(() => ({
       private: false,
@@ -337,42 +264,62 @@ const EditUserForm: FunctionComponent = () => {
   };
 
   const onGenerateCrop = (photo: File) => {
+    //console.log(URL.createObjectURL(photo),'photo src') 
     setPhoto(()=>photo);
+    setCurrentImg(URL.createObjectURL(photo));
+    setChangingPhoto(true);
+    setShowCrop(false);
+  };
+
+  const avatarError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
+    console.log("AVATAR ERROR")
+    e.currentTarget.src = '/img/default-avatar.png';
+  };
+
+  const renderAvatar = ()=>{
+   
+   if(changingPhoto)
+    return <img
+        onError={avatarError}
+        className='avatar'
+        src={currentImg}
+        alt=''
+      />;
+      else{
+   if(user){
+      if(!user?.photos.length)
+        return <img
+        onError={avatarError}
+        className='avatar'
+        src={user.image||''}
+        alt={user.name||''}
+      />;
+     return <LocalImageComponent className='avatar' filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />
+    }
+      }
   };
 
   return (
     <>
       {user && (
         <Form onSubmit={handleSubmit}>
-          <ModalHeader closeButton>
-            <Container>
-              <ModalTitle>{t('Edit Profile')}</ModalTitle>
-            </Container>
-          </ModalHeader>
-
-          <ModalBody>
-            <Container>
-              <Row>
-                <Col>
-                  <FormGroup controlId="userName" className="mb-3">
-                    <FormLabel>*{t('Name')}</FormLabel>
-                    <FormControl
-                      type="text"
-                      onChange={onChangeUserName}
-                      required
-                      value={userName}
-                      // defaultValue={userName || undefined}
-                    />
-                  </FormGroup>
+           <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('Edit Profile')}</h1>
+              <Row className='d-flex flex-column'>
+                <Col className='ms-3 d-flex flex-row justify-content-center align-items-center' >
+                  {renderAvatar()}
+                 {!showCrop && <Button variant="primary" className="ms-3 text-white" onClick={() => setShowCrop(true)}>
+                {t('Change Photo')}
+               </Button>}
                 </Col>
-                <Col>
-                  <FormGroup controlId="email" className="mb-3">
-                    <FormLabel>*{t('Email')}</FormLabel>
-                    <FormControl type="email" required defaultValue={user.email || undefined} />
-                  </FormGroup>
+                { showCrop && (
+                <Col className='d-flex justify-content-center'>
+                  <div className='w-50'>  
+                  <CropImageFileSelect onGenerateCrop={onGenerateCrop} />
+                  </div>
                 </Col>
+                )}
               </Row>
-              {/* <Row>
+ {/* <Row>
                 <Col>
                   <FormGroup controlId="image" className="mb-3">
                     <FormLabel>
@@ -396,11 +343,25 @@ const EditUserForm: FunctionComponent = () => {
                   </FormGroup>
                 </Col>
               </Row> */}
-              <Row>
+            <Row className="mt-4">
                 <Col>
-                  <CropImageFileSelect onGenerateCrop={onGenerateCrop} />
+                  <FormGroup controlId="userName" className="mb-3">
+                    <FormLabel>*{t('Name')}</FormLabel>
+                    <FormControl
+                      type="text"
+                      onChange={onChangeUserName}
+                      required
+                      value={userName}
+                      // defaultValue={userName || undefined}
+                    />
+                  </FormGroup>
                 </Col>
-              
+                <Col>
+                  <FormGroup controlId="email" className="mb-3">
+                    <FormLabel>*{t('Email')}</FormLabel>
+                    <FormControl type="email" required defaultValue={user.email || undefined} />
+                  </FormGroup>
+                </Col>
               </Row>
               <Row>
                 <Col>
@@ -511,11 +472,8 @@ const EditUserForm: FunctionComponent = () => {
                   </Form.Group>
                 </Col>
               </Row>
-            </Container>
-          </ModalBody>
 
-          <ModalFooter>
-            <Container className="py-3">
+            <Container className="mt-3 py-3">
               <Button variant="primary" disabled={isLoadingUser} type="submit" className="text-white">
                 {t('Edit')}
                 {isLoadingUser ? (
@@ -526,7 +484,6 @@ const EditUserForm: FunctionComponent = () => {
                 {isError && editUserError}
               </Button>
             </Container>
-          </ModalFooter>
         </Form>
       )}
     </>

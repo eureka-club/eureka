@@ -66,6 +66,8 @@ const NavBar: FunctionComponent = () => {
     setGlobalModalsState({ ...globalModalsState, ...{ createWorkModalOpened: true } });
   };
 
+
+//QUITAR ESTO CUANDO ESTE LA PAGINA DE PERFIL
   const handlerEditUserClick = (ev: MouseEvent<HTMLElement>) => {
     ev.preventDefault();
     setGlobalModalsState({ ...globalModalsState, ...{ editUserModalOpened: true } });
@@ -239,10 +241,10 @@ const NavBar: FunctionComponent = () => {
                 <Dropdown.Toggle as={ChevronToggle}>{getAvatar()}</Dropdown.Toggle>
                 <span className={styles.menuBottomInfo}>{t('Account')}</span>
                 <Dropdown.Menu>
-                  <Dropdown.Item onClick={handlerEditUserClick}>
-                    {/* <Button > */}
+                  <Dropdown.Item
+                   active={router.asPath.search(/profile$/g) !== -1}
+                  onClick={() => router.push('/profile')} >
                     {t('Profile')}
-                    {/* </Button> */}
                   </Dropdown.Item>
                   <Dropdown.Item onClick={handlerLogout}>
                     {/* <Button > */}
