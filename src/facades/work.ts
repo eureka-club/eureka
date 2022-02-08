@@ -36,6 +36,7 @@ export const find = async (id: number): Promise<WorkMosaicItem | null> => {
   });
 };
 
+
 export const findAll = async (): Promise<WorkMosaicItem[]> => {
   return prisma.work.findMany({
     orderBy: { createdAt: 'desc' },

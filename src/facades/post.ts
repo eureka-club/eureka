@@ -25,7 +25,8 @@ export const find = async (id: number): Promise<PostWithCyclesWorks | null> => {
 };
 
 
-export const findAll = async ({include,where,take}:Prisma.PostFindManyArgs): Promise<Post[]|PostMosaicItem[]> => {
+export const findAll = async (props?:Prisma.PostFindManyArgs): Promise<Post[]|PostMosaicItem[]> => {
+  const {include,where,take} = props || {};
   return prisma.post.findMany({
     take,
     orderBy: { createdAt: 'desc' },

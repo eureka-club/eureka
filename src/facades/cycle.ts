@@ -55,6 +55,8 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
         include: {
           creator: true,
           work: true,
+          cycle:true,
+          post:true,
           comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
         },
       },
@@ -62,15 +64,15 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
   });
 };
 
-export const findAll = async (where?:Prisma.CycleWhereInput): Promise<
-  (Cycle & {
-    localImages: LocalImage[];
-  })[] | undefined
-> => {
+export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<Cycle[] | CycleMosaicItem[]> => {
+  const {include,where,take} = props || {};
   return prisma.cycle.findMany({
+    take,
     ... where && {where},
     orderBy: { createdAt: 'desc' },
-    include: { localImages: true, ratings: true },
+    ... include 
+      ? {include} 
+      : {include: { participants: true, localImages: true, ratings: true, favs: true, comments: true, posts: true }},
   });
 };
 

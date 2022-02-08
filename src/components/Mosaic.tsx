@@ -4,16 +4,19 @@ import Masonry from 'react-masonry-css';
 
 import { v4 } from 'uuid';
 import {Row, Col, Container} from 'react-bootstrap';
-import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem } from '../types';
+import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem, isCommentMosaicItem } from '../types';
 import MosaicItemCycle from './cycle/MosaicItem';
 import MosaicItemPost from './post/MosaicItem';
 import MosaicItemWork from './work/MosaicItem';
 import MosaicItemUser from './user/MosaicItem';
+import MosaicItemComment from './comment/MosaicItem';
 import styles from './Mosaic.module.css';
 import { CycleMosaicItem } from '../types/cycle';
 import { WorkMosaicItem } from '../types/work';
 import { PostMosaicItem } from '../types/post';
 import { CycleContext } from '../useCycleContext';
+import { CommentMosaicItem } from '../types/comment';
+import { PageBlobStartCopyIncrementalOptions } from '@azure/storage-blob';
 // import { WorkContext } from '../useWorkContext';
 
 const renderMosaicItem = (
@@ -31,7 +34,7 @@ const renderMosaicItem = (
       </CycleContext.Provider>
     );
   }
-  if (isPostMosaicItem(item)) {
+  else if (isPostMosaicItem(item)) {
     let pp = parent;
     if (!pp) {
       const it: PostMosaicItem = item as PostMosaicItem;
@@ -51,7 +54,7 @@ const renderMosaicItem = (
       />
     );
   }
-  if (isWorkMosaicItem(item)) {
+  else if (isWorkMosaicItem(item)) {
     return (
       // <WorkContext.Provider value={{ linkToWork: true }}>
       <MosaicItemWork 
@@ -59,8 +62,24 @@ const renderMosaicItem = (
       // </WorkContext.Provider>
     );
   }
-  if (isUserMosaicItem(item)) {
+  else if (isUserMosaicItem(item)) {
     return <MosaicItemUser key={`${v4()}`} user={item} className="mb-2" />;
+  }
+  else if(isCommentMosaicItem(item)){
+    const it: CommentMosaicItem = item as CommentMosaicItem;
+    let pp: CycleMosaicItem|WorkMosaicItem|PostMosaicItem|undefined = undefined;
+    if(it.workId)
+      pp = it.work as WorkMosaicItem;
+    else if(it.cycleId){
+
+      pp = it.cycle as CycleMosaicItem;
+    }
+    else if(it.postId)
+      pp = it.post as PostMosaicItem;
+
+      if(pp){
+        return <MosaicItemComment detailed comment={it} commentParent={pp} />;
+      }
   }
 
   return <></>;

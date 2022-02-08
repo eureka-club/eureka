@@ -96,11 +96,11 @@ const MosaicItem: FunctionComponent<Props> = ({
   const renderCardDetailed = () => {
     return (
       <>
-        <Card className={` ${styles.commentHorizontally}`}>
+        <Card className={` ${styles.commentHorizontally}`} data-cy={`mosaic-item-comment-${comment.id}`}>
           <Card.Header as={Row} className={styles.cardHeader}>
             <Col xs={12} md={6}>
               {commentParent && (
-                <h2 className="fs-6">
+                <h2 className="fs-6" data-cy="parent-title">
                   {comentLinkHref != null ? (
                     <>
                       <FaRegCompass className="text-info" />{' '}
@@ -111,7 +111,7 @@ const MosaicItem: FunctionComponent<Props> = ({
                       </Link>
                     </>
                   ) : (
-                    <h2 className="fs-6">
+                    <h2 className="fs-6" data-cy="parent-title">
                       <FaRegCompass className="text-primary" /> <span>{getTitle()}</span>
                     </h2>
                   )}
@@ -149,14 +149,14 @@ const MosaicItem: FunctionComponent<Props> = ({
   if (detailed)
     return (
       <div className={` ${className}`}>
-        <section className=" d-none d-md-block">{renderCardDetailed()}</section>
+        <section className="d-none d-md-block">{renderCardDetailed()}</section>
         <section className="d-sm-block d-md-none">{renderCardDetailed()}</section>
       </div>
     );
 
   const renderCard = () => {
     return (
-      <Card className={`mt-3 ${styles.container} ${className}`}>
+      <Card className={`mt-3 ${styles.container} ${className}`} data-cy={`mosaic-item-comment-${comment.id}`}>
         <Row>
           <Col xs={2} md={1} className="pe-1">
             <Avatar user={comment.creator} showName={false} />

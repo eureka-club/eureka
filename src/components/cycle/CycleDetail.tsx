@@ -31,7 +31,7 @@ import Mosaic from '../Mosaic';
 // import globalModals from '../../atoms/globalModals';
 
 import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR /* , HYVOR_WEBSITE_ID, WEBAPP_URL */ } from '../../constants';
-import { Session } from '../../types';
+import { Session, MosaicItem } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
 import { WorkMosaicItem } from '../../types/work';
@@ -202,7 +202,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     return false;
   };
 
-  const renderComments = () => {
+  const getComments = () => {
     const getParent = (c: Comment): WorkMosaicItem | CycleMosaicItem |  CommentMosaicItem  => {
       const cmi = (c as CommentMosaicItem);
       if(!cmi.commentId && !cmi.postId){        
@@ -211,24 +211,51 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       }
       return cmi;
     };
-    if (cycle && filteredComments){
+    if (cycle && filteredComments.length){
+      
       const fcf = filteredComments.filter((c) => !c.postId && !c.commentId);
       const fcfs = fcf.sort((p, c) => (p.id > c.id && -1) || 1)
       return fcfs
-        .map(c=>
-          <ComentMosaic
-            key={c.id}
-            comment={c as unknown as CommentMosaicItem}
-            detailed
-            showComments
-            commentParent={getParent(c)}
-            cacheKey={['CYCLE', `${cycle.id}`]}
-            className="mb-4"
-          />
-        );
+        // .map(c => <ComentMosaic
+        //       key={v4()}
+        //       comment={c as unknown as CommentMosaicItem}
+        //       detailed
+        //       showComments
+        //       commentParent={getParent(c)}
+        //       cacheKey={['CYCLE', `${cycle.id}`]}
+        //       className="mb-4"
+        //     />
+        
+        // );
     }
-    return '';
+    return [];
   };
+
+  const getPosts = () => {
+    if(cycle && filteredPosts)
+      return filteredPosts.sort((a,b)=>a.createdAt >= b.createdAt ? -1 : 1);
+    return [];
+  };
+
+  const renderItems = () => {
+    if(cycle){
+      const items = [
+        ... getComments() as CommentMosaicItem[],
+        ... getPosts()
+      ]
+      .sort((a,b)=>a.createdAt >= b.createdAt ? -1 : 1);
+      return <section data-cy="comments-and-posts">
+        <Mosaic
+              display="h"
+              stack={items}
+              showComments={true}
+              cacheKey={['CYCLE', `${cycle.id}`]}
+            />
+      </section>
+    }
+    return <></>
+  }
+
 
   /* const renderCycleWorksComments = () => {
     if (cycle && cycle.comments)
@@ -369,6 +396,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     return '';
   };
 
+  
+
   const renderRestrictTabs = () => {
     if (cycle) {
       const res = (
@@ -377,15 +406,16 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
             <CycleDetailDiscussion cycle={cycle} className="mb-5" />
             <Row>
               <Col xs={{span:12, order:'last'}} md={{span:9,order:'first'}}>
-                {(cycle.posts && cycle.posts.length && (
-                  <MosaicContext.Provider value={{ showShare: true }}>
+                <MosaicContext.Provider value={{ showShare: true }}>
+                  {renderItems()}
+                </MosaicContext.Provider>
+                {/* {(cycle.posts && cycle.posts.length && (
                     <PostsMosaic display="h" posts={filteredPosts} showComments cacheKey={['CYCLE', `${cycle.id}`]} />
-                  </MosaicContext.Provider>
                 )) ||
-                  null}
+                null}
+                {renderComments()} */}
                 {/* {renderCycleWorksComments()} */}
                 {/* {renderCycleOwnComments()} */}
-                {renderComments()}
               </Col>
               <Col xs={{span:12, order:'first'}} md={{span:3,order:'last'}}>
                 <Form as={Row} className="bg-white mt-0 mb-3">

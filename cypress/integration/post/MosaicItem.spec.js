@@ -31,19 +31,22 @@ describe('MosaicPostItem suit',()=>{
       .then(data=>{
         const post = data[0];
         const parent = post.cycles[0];
-        cy.visit(`/cycle/${parent.id}`);
-        cy.get('[data-rr-ui-event-key="cycle-discussion"]').click({force:true});
-        cy.get([`data-cy=mosaic-item-post-${post.id}`]).then(card=>{
-          let parentUrl = `/cycle/${parent.id}`;
-          let postUrl = `/cycle/${parent.id}/post/${post.id}`;
-          cy.wrap(card)
-          .get('[data-cy="parent-title"]')
-            .find(`[href="${parentUrl}"]`)
-            .contains(parent.title)
-          .get('[data-cy="post-title"]')
-            .find(`[href="/cycle/${parent.id}/post/${post.id}"]`)
-            .contains(post.title)
-        })
+        if(parent.acces ===1){//or implement loging and check if the user is participant
+          cy.visit(`/cycle/${parent.id}`);
+          cy.get('[data-rr-ui-event-key="cycle-discussion"]').click({force:true});
+          cy.get([`data-cy=mosaic-item-post-${post.id}`]).then(card=>{
+            let parentUrl = `/cycle/${parent.id}`;
+            let postUrl = `/cycle/${parent.id}/post/${post.id}`;
+            cy.wrap(card)
+            .get('[data-cy="parent-title"]')
+              .find(`[href="${parentUrl}"]`)
+              .contains(parent.title)
+            .get('[data-cy="post-title"]')
+              .find(`[href="/cycle/${parent.id}/post/${post.id}"]`)
+              .contains(post.title)
+          })
+
+        }
 
       })
 
@@ -72,19 +75,21 @@ describe('MosaicPostItem suit',()=>{
         const post = data[0]
         const parent = post.works[0]
         const cycle = post.cycles[0];
-        cy.visit(`/cycle/${cycle.id}`);
-        cy.get('[data-rr-ui-event-key="cycle-discussion"]').click({force:true});
-        cy.get([`data-cy=mosaic-item-post-${post.id}`]).then(card=>{
-          let parentUrl = `/work/${parent.id}`;
-          let postUrl = `/work/${parent.id}/post/${post.id}`;
-          cy.wrap(card)
-          .get('[data-cy="parent-title"]')
-            .find(`[href="${parentUrl}"]`)
-            .contains(parent.title)
-          .get('[data-cy="post-title"]')
-            .find(`[href="/work/${parent.id}/post/${post.id}"]`)
-            .contains(post.title)
-        })
+        if(cycle.acces ===1){//or implement loging and check if the user is participant
+          cy.visit(`/cycle/${cycle.id}`);
+          cy.get('[data-rr-ui-event-key="cycle-discussion"]').click({force:true});
+          cy.get([`data-cy=mosaic-item-post-${post.id}`]).then(card=>{
+            let parentUrl = `/work/${parent.id}`;
+            let postUrl = `/work/${parent.id}/post/${post.id}`;
+            cy.wrap(card)
+            .get('[data-cy="parent-title"]')
+              .find(`[href="${parentUrl}"]`)
+              .contains(parent.title)
+            .get('[data-cy="post-title"]')
+              .find(`[href="/work/${parent.id}/post/${post.id}"]`)
+              .contains(post.title)
+          })
+        }
       })
     })
 
