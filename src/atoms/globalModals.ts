@@ -5,6 +5,7 @@ interface GlobalModalType {
   createWorkModalOpened?: boolean;
   editWorkModalOpened?: boolean;
   editPostModalOpened?: boolean;
+  editPostId?:number;
   editCycleModalOpened?: boolean;
   editUserModalOpened?: boolean;
   signInModalOpened?: boolean;

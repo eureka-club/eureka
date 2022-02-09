@@ -36,6 +36,7 @@ import globalModalsAtom from '../../atoms/globalModals';
 import styles from './CreatePostForm.module.css';
 import useTopics from '../../useTopics';
 import usePost from '../../usePost';
+import { setDefaultResultOrder } from 'dns';
 
 const EditPostForm: FunctionComponent = () => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -57,8 +58,9 @@ const EditPostForm: FunctionComponent = () => {
   const { t } = useTranslation('createPostForm');
 
   const [postId, setPostId] = useState<string>('');
-  const { data: post, isLoading, isFetching } = usePost(+postId);
+  const { data: post, isLoading, isFetching } = usePost(globalModalsState.editPostId || +postId);
   const editorRef = useRef<any>(null);
+  const [remove,setRemove] = useState(false);
 
   useEffect(() => {
     // const fetchPost = async () => {
@@ -72,10 +74,12 @@ const EditPostForm: FunctionComponent = () => {
     //   }
     // };
     // fetchPost();
-    if (router.query) {
+    if(globalModalsState.editPostId)
+      setPostId(router.query.postId as string);
+    else if (router.query) {
       setPostId(router.query.postId as string);
     }
-  }, [router.query]);
+  }, [globalModalsState,router.query]);
 
   useEffect(() => {
     if (post) {
@@ -94,8 +98,8 @@ const EditPostForm: FunctionComponent = () => {
     isSuccess: isEditPostSuccess,
   } = useMutation(
     async (payload: EditPostAboutCycleClientPayload | EditPostAboutWorkClientPayload): Promise<Post> => {
-      const res = await fetch(`/api/post/${router.query.postId}`, {
-        method: 'PATCH',
+      const res = await fetch(`/api/post/${globalModalsState.editPostId || router.query.postId}`, {
+        method: remove?'DELETE':'PATCH',
         body: JSON.stringify(payload),
       });
       return res.json();
@@ -103,7 +107,7 @@ const EditPostForm: FunctionComponent = () => {
     {
       onMutate: async (variables) => {
         if (post) {
-          const ck = [`POST`, `${post.id}`];
+          const ck = [`POST`, `${globalModalsState.editPostId || post.id}`];
           const snapshot = queryClient.getQueryData<PostMosaicItem>(ck);
           queryClient.setQueryData(ck, { ...snapshot, ...variables });
           return { snapshot, ck };
@@ -115,6 +119,11 @@ const EditPostForm: FunctionComponent = () => {
         if (context) {
           if (error) queryClient.setQueryData(ctx.ck, ctx.snapshot);
           queryClient.invalidateQueries(ctx.ck);
+          if(ctx.snapshot.cycles){
+            const cycle = ctx.snapshot.cycles[0];
+            queryClient.invalidateQueries(['CYCLE',`${cycle.id}`]);
+          }
+
         }
       },
     },
@@ -191,7 +200,7 @@ const EditPostForm: FunctionComponent = () => {
     const form = ev.currentTarget;
     if (selectedWork != null) {
       const payload: EditPostAboutWorkClientPayload = {
-        id: router.query.postId as string,
+        id: globalModalsState.editPostId ? globalModalsState.editPostId.toString() : router.query.postId as string,
         selectedCycleId: selectedCycle != null ? selectedCycle.id : null,
         selectedWorkId: selectedWork.id,
         title: form.postTitle.value,
@@ -204,7 +213,7 @@ const EditPostForm: FunctionComponent = () => {
       await execEditPost(payload);
     } else if (selectedCycle != null) {
       const payload: EditPostAboutCycleClientPayload = {
-        id: router.query.postId as string,
+        id: globalModalsState.editPostId ? globalModalsState.editPostId.toString() : router.query.postId as string,
         selectedCycleId: selectedCycle.id,
         selectedWorkId: null,
         title: form.postTitle.value,
@@ -220,16 +229,16 @@ const EditPostForm: FunctionComponent = () => {
 
   useEffect(() => {
     if (isEditPostSuccess === true && editPost != null) {
-      setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: false } });
-      queryClient.invalidateQueries('posts.mosaic');
+      setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: false, editPostId:undefined } });
+      // queryClient.invalidateQueries(['POST',`${globalModalsState.editPostId || router.query.postId}`]);
 
-      if (selectedWork != null) {
+      /* if (selectedWork != null) {
         router.push(`/work/${selectedWork.id}/post/${router.query.postId}`);
         return;
       }
       if (selectedCycle != null) {
         router.push(`/cycle/${selectedCycle.id}/post/${router.query.postId}`);
-      }
+      } */
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editPost, isEditPostSuccess]);
@@ -462,6 +471,14 @@ const EditPostForm: FunctionComponent = () => {
                 <small style={{ color: 'lightgrey', display: 'block', margin: '0.25rem 0 0 1.25rem' }}>
                   {t('isPublicInfotip')}
                 </small>
+                <FormCheck
+                      type="checkbox"
+                      defaultChecked={remove}
+                      onChange={()=>setRemove(!remove)}
+                      className="text-danger"
+                      id="removePost"
+                      label={t('common:Remove')}
+                    />
               </Col>
               <Col style={{ borderLeft: '1px solid lightgrey' }}>
                 <Button variant="primary" disabled={isEditPostLoading} type="submit" className="ps-5 pe-4 float-right">

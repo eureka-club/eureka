@@ -2,7 +2,12 @@
 import {isComment, isPost} from '../../../src/types'
 
 describe('CycleDetail suit',()=>{
-    
+
+  let user = {}
+  beforeEach(()=>{
+    cy.login(user);
+  });
+
     it('render comments under the cycle with the correct parent',()=>{
       
       const whereForACycleWithComments = encodeURIComponent(
@@ -19,7 +24,11 @@ describe('CycleDetail suit',()=>{
               }
             }
           },
-                   
+          participants:{
+            some:{
+              id:user.id
+            }
+          }         
         })
       );
       cy.request(`/api/cycle?where=${whereForACycleWithComments}&take=1`)
@@ -62,13 +71,18 @@ describe('CycleDetail suit',()=>{
               }
             }
           },
-            posts:{
-              some:{
-                id:{
-                  gt:0
-                }
+          posts:{
+            some:{
+              id:{
+                gt:0
               }
-            }       
+            }
+          },
+          participants:{
+            some:{
+              id:user.id
+            }
+          }       
         })
       );
       cy.request(`/api/cycle?where=${whereForACycleWithCommentsAndPosts}&take=1`)

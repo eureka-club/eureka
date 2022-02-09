@@ -13,15 +13,16 @@ export default getApiHandler()
     if (session == null || !session.user.roles.includes('admin')) {
       res.status(401).json({ status: 'Unauthorized' });
       return;
-    }
+    }debugger;
 
-    const { id } = req.query;
+    let { id } = req.query;
     if (typeof id !== 'string') {
-      res.status(404).end();
-      return;
+      id = req.body;
+      if(!id)
+        return res.status(404).end();
     }
 
-    const idNum = parseInt(id, 10);
+    const idNum = parseInt(id.toString(), 10);
     if (!Number.isInteger(idNum)) {
       res.status(404).end();
       return;
@@ -80,7 +81,7 @@ export default getApiHandler()
     }
   })
   .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-    const session = (await getSession({ req })) as unknown as Session;
+    const session = (await getSession({ req })) as unknown as Session;debugger;
     if (session == null) {
       res.status(401).json({ status: 'Unauthorized' });
       return;
@@ -88,10 +89,10 @@ export default getApiHandler()
     let data = JSON.parse(req.body);
     // data.publicationYear = dayjs(`${data.publicationYear}`, 'YYYY').utc().format();
     const { id } = data;
-    if (typeof id !== 'string') {
+    /* if (typeof id !== 'string') {
       res.status(404).end();
       return;
-    }
+    } */
 
     const idNum = parseInt(id, 10);
     if (!Number.isInteger(idNum)) {
