@@ -58,7 +58,7 @@ const onFileChange = async  (e:React.ChangeEvent<HTMLInputElement>)  => {
           onZoomChange={setZoom}
         />
       </div>
-      <div className="crop-controls mt-3 d-flex justify-content-center">
+      <div className="crop-controls mt-3 d-flex justify-content-center align-items-start">
         <>
           <Form.Label>Zoom</Form.Label>
           <Form.Range id='zoom-range' className="ms-3" value={zoom} min={1} max={3} step={0.1}  onChange={(e) => setZoom(e.target.valueAsNumber)}/>

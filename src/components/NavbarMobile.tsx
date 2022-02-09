@@ -67,10 +67,6 @@ const NavBar: FunctionComponent = () => {
     setGlobalModalsState({ ...globalModalsState, ...{ createWorkModalOpened: true } });
   };
 
-  const handlerEditUserClick = (ev: MouseEvent<HTMLElement>) => {
-    ev.preventDefault();
-    setGlobalModalsState({ ...globalModalsState, ...{ editUserModalOpened: true } });
-  };
 
   const handleLanguageSelect = (locale: string | null) => {
     if (locale != null) {
@@ -248,10 +244,10 @@ const NavBar: FunctionComponent = () => {
                   <span className={styles.menuBottomInfo}>{t('Account')}</span>
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item onClick={handlerEditUserClick}>
-                    {/* <Button > */}
+                   <Dropdown.Item
+                   active={router.asPath.search(/profile$/g) !== -1}
+                  onClick={() => router.push('/profile')} >
                     {t('Profile')}
-                    {/* </Button> */}
                   </Dropdown.Item>
                   <Dropdown.Item onClick={handlerLogout}>
                     {/* <Button > */}

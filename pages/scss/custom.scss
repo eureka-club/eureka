@@ -235,21 +235,18 @@ a{
   white-space: nowrap;
   width: auto;
 }
-/*
-.scrollNav::-webkit-scrollbar {
-  width: 10px;
-  height: 8px;
-}
-
-.scrollNav::-webkit-scrollbar-thumb {
-  background: var(--color-primary) !important;
-}*/
 
 .avatar {
   border-radius: 50%;
   width: 10em;
   margin: 0 0 1em 1em;
 }
+
+.avatarProfile {
+  border-radius: 50%;
+  width: 10em;
+}
+
  .userHeader {
    margin: 0 0 4em 0;
    border: 0;
@@ -259,6 +256,22 @@ a{
     width: 45px;
     height: 52px;
   }
+
+.crop-container {
+  position: relative;
+  height: 300px;
+  width: 100%;
+}
+
+.crop-controls {
+  height: 50px;
+  width: 100%;
+}
+
+.profile-crop {
+  width: 100%;
+}
+
 @media screen and (max-width: 388px) {
  .fs-xs {
    display: none;
@@ -269,7 +282,11 @@ a{
      width: 4em;
      margin: 0 0 1em 0;
    }
-   .userHeader {
+  .avatarProfile {
+    width: 8em;
+  }
+
+ .userHeader {
      margin: 0 0 1em 0;
      border: 0;
    }
@@ -288,6 +305,8 @@ a{
   .mainContainer {
     margin-top: 0.8em;
   }
+
+ 
 }
 
 /*landscape*/
@@ -302,6 +321,11 @@ a{
    .mainContainer {
      margin-top: 6em;
    }
+
+    .profile-crop {
+      width: 50%;
+    }
+   
 }
 
 /*fin tablet*/
@@ -318,17 +342,12 @@ a{
   .mainContainer {
     margin-top: 6em;
   }
+
+  .profile-crop {
+    width: 50%;
+  }
 }
 
 /*Fin Escritorio*/
 
-.crop-container {
- position: relative;
- height: 300px;
- width: 100%;
-}
 
-crop-controls{
-   height: 100px;
-   width: 100%;
-}

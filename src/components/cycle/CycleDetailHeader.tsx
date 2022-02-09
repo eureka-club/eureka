@@ -284,38 +284,21 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
     
       {show && (
      <Col className='mt-3 col-12  d-flex flex-column justify-content-center d-lg-none'>
-        <div className='d-flex flex-row justify-content-center'>
-        <Rating
-          readonly
-          initialRating={getRatingAvg()}
-          // onChange={handlerChangeRating}
-          className={styles.rating}
-          stop={5}
-          emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
-          fullSymbol={getFullSymbol()}
-        />{' '}
-        <div className='ms-2'>
-        {getRatingAvg()}
-        {' - '}
-        {getRatingQty()}
-        </div>
-         <span className="ms-1 text-gray">{t('ratings')}</span>
-        </div>
-        <div className="">
-        <h4 className="mt-4 mb-1 text-dark">
-          {t('Content calendar')} ({cycle.works && cycle.works.length})
-        </h4>
-          <CarouselStatic
-            showSocialInteraction={false}
-            onSeeAll={onCarouselSeeAllAction}
-            title={<CycleSummary cycle={cycle} />}
-            data={getWorksSorted() as WorkMosaicItem[]}
-            iconBefore={<></>}
-            customMosaicStyle={{ height: '16em' }}
-            tiny
-            mosaicBoxClassName="pb-5"
-            // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-          />
+          <div className="">
+            <h4 className="mt-3 mb-1 text-dark">
+              {t('Content calendar')} ({cycle.works && cycle.works.length})
+            </h4>
+              <CarouselStatic
+                showSocialInteraction={false}
+                onSeeAll={onCarouselSeeAllAction}
+                title={<CycleSummary cycle={cycle} />}
+                data={getWorksSorted() as WorkMosaicItem[]}
+                iconBefore={<></>}
+                customMosaicStyle={{ height: '16em' }}
+                tiny
+                mosaicBoxClassName="pb-5"
+                // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+              />
         </div>
         {/* </CycleContext.Provider> */}
       </Col>
@@ -365,6 +348,23 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
               readOnly
             />
             <TagsInput className="ms-1 d-inline-block" tags={cycle.tags!} readOnly label="" />
+             <div className='mt-1 d-flex flex-row justify-content-center'>
+                  <Rating
+                    readonly
+                    initialRating={getRatingAvg()}
+                    // onChange={handlerChangeRating}
+                    className={styles.rating}
+                    stop={5}
+                    emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
+                    fullSymbol={getFullSymbol()}
+                  />{' '}
+                  <div className='ms-2'>
+                  {getRatingAvg()}
+                  {' - '}
+                  {getRatingQty()}
+                  </div>
+                  <span className="ms-1 text-gray">{t('ratings')}</span>
+                  </div>
           </aside>
         )}
       </Col>
