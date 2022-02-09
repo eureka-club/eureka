@@ -142,7 +142,7 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
   };
 
   return (
-    <div className={`${styles.container} ${className}`}>
+    <div className={`${styles.container} ${className}`} data-cy="search-engine">
       <Form.Group>
         <InputGroup>
           {/* language=CSS */}
@@ -159,7 +159,7 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
             id="create-post--search-work-or-cycle"
             // Bypass client-side filtering. Results are already filtered by the search endpoint
             filterBy={() => true}
-            maxResults={2}
+            
             inputProps={{ required: true }}
             placeholder={t('Search')}
             isLoading={isSearchWorkOrCycleLoading}

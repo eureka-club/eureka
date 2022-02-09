@@ -90,11 +90,14 @@ const NavBar: FunctionComponent = () => {
   //   if (eventKey === 'aboutEureka') router.push('/about');
   //   else if (eventKey === 'aboutUs') router.push('/aboutUs');
   // };
+  const avatarError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.src = '/img/default-avatar.png';
+  };
 
   const getAvatar = () => {
       if(user){
       if(!user?.photos.length)
-        return <img
+        return <img onError={avatarError}
         className={styles.navbarIconNav}    
         src={user.image || '/img/default-avatar.png'}
         alt={user.name||''}

@@ -65,7 +65,7 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
 };
 
 export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<Cycle[] | CycleMosaicItem[]> => {
-  const {include,where,take} = props || {};
+  const {include,where,take} = props || {};debugger;
   return prisma.cycle.findMany({
     take,
     ... where && {where},
@@ -114,7 +114,7 @@ export const search = async (query: { [key: string]: string | string[] }): Promi
   const { q, where /* , include */ } = query;
   if (where == null && q == null) {
     throw new Error("[412] Invalid invocation! Either 'q' or 'where' query parameter must be provided");
-  }
+  }debugger;
 
   if (typeof q === 'string') {
     return prisma.cycle.findMany({
