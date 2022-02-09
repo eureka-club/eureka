@@ -218,6 +218,7 @@ const EditUserForm: FunctionComponent = () => {
     };
 
     setChangingPhoto(false);
+    setShowCrop(false)
     await execEditUser(payload);
   };
 
@@ -281,7 +282,7 @@ const EditUserForm: FunctionComponent = () => {
    if(changingPhoto)
     return <img
         onError={avatarError}
-        className='avatar'
+        className='avatarProfile'
         src={currentImg}
         alt=''
       />;
@@ -290,11 +291,11 @@ const EditUserForm: FunctionComponent = () => {
       if(!user?.photos.length)
         return <img
         onError={avatarError}
-        className='avatar'
+        className='avatarProfile'
         src={user.image||''}
         alt={user.name||''}
       />;
-     return <LocalImageComponent className='avatar' filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />
+     return <LocalImageComponent className='avatarProfile' filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />
     }
       }
   };
@@ -305,21 +306,21 @@ const EditUserForm: FunctionComponent = () => {
         <Form onSubmit={handleSubmit}>
            <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('Edit Profile')}</h1>
               <Row className='d-flex flex-column'>
-                <Col className='ms-3 d-flex flex-row justify-content-center align-items-center' >
+                <Col className='d-flex flex-column flex-md-row justify-content-center align-items-center' >
                   {renderAvatar()}
-                 {!showCrop && <Button variant="primary" className="ms-3 text-white" onClick={() => setShowCrop(true)}>
+                 {!showCrop && <Button variant="primary" className="mt-3 ms-0 mt-md-0 ms-md-3 text-white" onClick={() => setShowCrop(true)}>
                 {t('Change Photo')}
                </Button>}
                 </Col>
                 { showCrop && (
                 <Col className='d-flex justify-content-center'>
-                  <div className='w-50'>  
+                  <div className='profile-crop'>  
                   <CropImageFileSelect onGenerateCrop={onGenerateCrop} />
                   </div>
                 </Col>
                 )}
               </Row>
- {/* <Row>
+                { /* <Row>
                 <Col>
                   <FormGroup controlId="image" className="mb-3">
                     <FormLabel>
@@ -343,7 +344,7 @@ const EditUserForm: FunctionComponent = () => {
                   </FormGroup>
                 </Col>
               </Row> */}
-            <Row className="mt-4">
+            <Row className="mt-4 d-flex flex-column flex-md-row">
                 <Col>
                   <FormGroup controlId="userName" className="mb-3">
                     <FormLabel>*{t('Name')}</FormLabel>
