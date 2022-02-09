@@ -12,7 +12,7 @@ const CropImageFileSelect: React.FC<Props> = ({onGenerateCrop}) => {
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [imageSrc, setImageSrc] = useState<string>('');
   const [file, setFile] = useState<File>();
-  const [zoom, setZoom] = useState(3);
+  const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>();
   const [croppedImage, setCroppedImage] = useState<Area>();
   const { t } = useTranslation('common');
@@ -34,7 +34,6 @@ const onFileChange = async  (e:React.ChangeEvent<HTMLInputElement>)  => {
       setImageSrc(()=>URL.createObjectURL(file));
     }
   }
-
 
   return (
     <>
@@ -59,7 +58,12 @@ const onFileChange = async  (e:React.ChangeEvent<HTMLInputElement>)  => {
           onZoomChange={setZoom}
         />
       </div>
-      <div className="crop-controls d-flex justify-content-center">
+      <div className="crop-controls mt-3 d-flex justify-content-center">
+        <>
+          <Form.Label>Zoom</Form.Label>
+          <Form.Range id='zoom-range' className="ms-3" value={zoom} min={1} max={3} step={0.1}  onChange={(e) => setZoom(e.target.valueAsNumber)}/>
+        </>
+        
         <Button variant="primary" className="ms-3 text-white" onClick={() =>  onGenerateCrop(file!)} >
                 {t('select')}
                </Button>
