@@ -1,6 +1,11 @@
 /// <reference types="cypress"/>
+
 describe('MosaicPostItem suit',()=>{
-    
+    let user = {}
+    beforeEach(()=>{
+      cy.login(user);
+    });
+
     it('post in cycle with the same cycle as parent',()=>{
       
       const whereForPostInCycleWithCycleAsParent = encodeURIComponent(
@@ -91,6 +96,43 @@ describe('MosaicPostItem suit',()=>{
           })
         }
       })
+    })
+
+    it('check actions bar is displayed correctly',()=>{
+      const whereQuery = encodeURIComponent(
+        JSON.stringify({
+          posts:{
+            some:{
+              creatorId:user.id
+            }
+          },    
+          comments:{
+            some:{
+              creatorId:user.id
+            }
+          },  
+        })
+      );
+      cy.request(`/api/cycle?where=${whereQuery}&take=1`)
+      .its('body')
+      .should('have.property','data')
+      .and((data)=>{
+        expect(data).to.be.length.gte(1)              
+        expect(data[0].posts).have.length.gte(1)
+        expect(data[0].comments).have.length.gte(1)
+      })
+      .then(data=>{
+        const cycle = data[0];
+        const postsCreatedByUser = cycle.posts.filter(p=>p.creatorId === user.id).map(p=>p.id);
+      
+        cy.visit(`/cycle/${cycle.id}`);
+        cy.get('[data-rr-ui-event-key="cycle-discussion"]').click({force:true});
+
+        cy.get(`[data-cy^="mosaic-item-post-"]:visible`)
+          .get('[data-cy="actions-bar"]:visible').should('have.length',postsCreatedByUser.length)
+        
+      })
+        
     })
 
     // it.only('intercepting useCycle',()=>{//not working always because react-query cache -that avoid new requests

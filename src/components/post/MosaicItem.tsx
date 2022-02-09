@@ -2,7 +2,7 @@ import { Cycle, Work } from '@prisma/client';
 // import classNames from 'classnames';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 import { Row, Col, Card, Badge } from 'react-bootstrap';
 import { FaRegComments, FaRegCompass } from 'react-icons/fa';
 import dayjs from 'dayjs';
@@ -19,7 +19,9 @@ import Avatar from '../common/UserAvatar';
 import UnclampText from '../UnclampText';
 import { CycleMosaicItem } from '@/src/types/cycle';
 import { WorkMosaicItem } from '@/src/types/work';
-
+import ActionsBar from '@/src/components/common/ActionsBar'
+import {useAtom} from 'jotai'
+import globalModals from '@/src/atoms/globalModals'
 interface Props {
   post: PostMosaicItem;
   postParent?: CycleMosaicItem | WorkMosaicItem;
@@ -50,6 +52,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   // style,
   // showTrash,
 }) => {
+  const [gmAtom,setGmAtom] = useAtom(globalModals);
+
   const postParentLinkHref = ((): string | null => {
     if (postParent) {
       if (isCycle(postParent)) {
@@ -82,9 +86,11 @@ const MosaicItem: FunctionComponent<Props> = ({
   //   if (post.works && post.works.length) return post.works[0];
   //   return postParent;
   // };
-
-  const renderVerticalMosaic = (props: { showDetailedInfo: boolean }) => {
-    const { showDetailedInfo } = props;
+  const onEditPost = async (e:React.MouseEvent<HTMLButtonElement>) => {debugger;
+    setGmAtom(res=>({...res,editPostModalOpened:true, editPostId:post.id}))
+  }
+  const renderVerticalMosaic = (props: { showDetailedInfo: boolean,specifyDataCy?:boolean }) => {
+    const { showDetailedInfo, specifyDataCy=true } = props;
 
     const renderParentTitle = () => {
       let res = '';
@@ -96,7 +102,7 @@ const MosaicItem: FunctionComponent<Props> = ({
       return <span>{res}</span>;
     };
     return (
-      <Card className={`mosaic ${styles.container} ${className}`} data-cy={`mosaic-item-post-${post.id}`}>
+      <Card className={`mosaic ${styles.container} ${className}`} data-cy={specifyDataCy ? `mosaic-item-post-${post.id}`:''}>
         {postParent && (
           <h2 className="m-0 p-1 fs-6 text-info" data-cy="parent-title">
             <FaRegCompass className="text-info" />
@@ -149,10 +155,10 @@ const MosaicItem: FunctionComponent<Props> = ({
         </div>
         {showDetailedInfo && (
           <div className={`d-flex align-items-center justify-content-center ${styles.detailedInfo}`}>
-            <h6 className="text-center mb-0" data-cy="post-title">
+            <h6 className="text-center mb-0 d-flex" data-cy="post-title">
               <Link href={postLinkHref}>
                 <a className="text-primary">{post.title}</a>
-              </Link>
+              </Link>              
             </h6>
             {/* <div className="mb-5">
               <UnclampText isHTML text={post.contentText} clampHeight="5rem" showButtomMore={false} />
@@ -187,19 +193,24 @@ const MosaicItem: FunctionComponent<Props> = ({
   const renderHorizontalMosaic = (props: number[] = [3, 9]) => {
     // const [mdl = 3, mdr] = props;
     return (
-      <>
+      <section data-cy={`mosaic-item-post-${post.id}`}>
         <Row>
           <Col className='d-flex justify-content-center d-lg-block' xs={12} md={12} xl={4}>
-            {renderVerticalMosaic({ showDetailedInfo: false })}
+            {renderVerticalMosaic({ showDetailedInfo: false, specifyDataCy:false })}
           </Col>
           <Col xs={12} md={12} xl={8}>
             <div className={styles.detailedInfo}>
-              <h6 className="" data-cy="post-title">
+              <h6 className="d-flex" data-cy="post-title">
                 <Link href={postLinkHref}>
                   <a className="cursor-pointer text-secondary">
                     {post.title}
                   </a>
                 </Link>
+                <ActionsBar creatorId={post.creatorId} actions={{
+                    edit:onEditPost,
+                    // remove:async (e:React.MouseEvent<HTMLButtonElement>)=>{console.log(e);}
+                  }}
+                />
               </h6>
               <div className="mb-5">
                 {/* <div className="fs-6" dangerouslySetInnerHTML={{ __html: post.contentText }} /> */}
@@ -213,7 +224,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             {showComments && <CommentsList entity={post} parent={postParent!} cacheKey={cacheKey} />}
           </Col>
         </Row>
-      </>
+      </section>
     );
   };
 
