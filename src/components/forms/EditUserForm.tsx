@@ -1,3 +1,4 @@
+
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
@@ -272,6 +273,10 @@ const EditUserForm: FunctionComponent = () => {
     setShowCrop(false);
   };
 
+  const closeCrop = () => {
+    setShowCrop(false);
+  };
+
   const avatarError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
     console.log("AVATAR ERROR")
     e.currentTarget.src = '/img/default-avatar.png';
@@ -313,9 +318,9 @@ const EditUserForm: FunctionComponent = () => {
                </Button>}
                 </Col>
                 { showCrop && (
-                <Col className='d-flex justify-content-center'>
-                  <div className='profile-crop'>  
-                  <CropImageFileSelect onGenerateCrop={onGenerateCrop} />
+                <Col className='d-flex justify-content-center mt-3'>
+                  <div className='profile-crop border p-3'>  
+                  <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={closeCrop} />
                   </div>
                 </Col>
                 )}

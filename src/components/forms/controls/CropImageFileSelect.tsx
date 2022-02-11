@@ -4,11 +4,13 @@ import { Point, Area } from "react-easy-crop/types";
 import { Container, Form, Button } from 'react-bootstrap';
 import {image64toCanvasRef,getCroppedImg} from '@/src/lib/utils'
 import useTranslation from 'next-translate/useTranslation';
+import { BsX} from 'react-icons/bs';
 
 interface Props{
   onGenerateCrop: (file:File) => void;
+  onClose: () => void
 }
-const CropImageFileSelect: React.FC<Props> = ({onGenerateCrop}) => {
+const CropImageFileSelect: React.FC<Props> = ({onGenerateCrop,onClose}) => {
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [imageSrc, setImageSrc] = useState<string>('');
   const [file, setFile] = useState<File>();
@@ -25,7 +27,6 @@ const CropImageFileSelect: React.FC<Props> = ({onGenerateCrop}) => {
           onGenerateCrop(file);*/
     }
 
-
 const onFileChange = async  (e:React.ChangeEvent<HTMLInputElement>)  => {
   const files = e.currentTarget.files;
     if(files?.length){
@@ -37,7 +38,10 @@ const onFileChange = async  (e:React.ChangeEvent<HTMLInputElement>)  => {
 
   return (
     <>
-     <Form.Group className="mb-3" controlId="image">
+    <div className='d-flex justify-content-end'> <Button variant="primary text-white" onClick={onClose}  size="sm">
+            <BsX fontSize='1.5em' />
+          </Button></div>
+         <Form.Group className="mb-3" controlId="image">
       <Form.Label>Image</Form.Label>
       <Form.Control type="file" placeholder="Load an image" onChange={onFileChange} />
       <Form.Text className="text-muted">
