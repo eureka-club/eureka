@@ -22,7 +22,7 @@ const ActionsBar:React.FC<Props> = ({actions,creatorId}) =>{
     },[session])
     if(user && user.id == creatorId)
         return <aside data-cy="actions-bar" className="ms-auto">
-                <Button className="m-0 p-0 text-danger" size="sm" variant="link" onClick={actions.edit}>
+                <Button className="m-0 p-0 text-warning" size="sm" variant="link" onClick={actions.edit}>
                     <BiEdit />
                 </Button>
                 {/* <Button className="m-0 p-0 text-danger" variant="link" onClick={actions.remove}>

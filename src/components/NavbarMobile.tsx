@@ -137,7 +137,7 @@ const NavBar: FunctionComponent = () => {
           </Nav>
           <Nav className="mx-2">
             {!session && (
-              <Button className="text-white" onClick={openSignInModal}>
+              <Button className="text-white" onClick={() => router.push('/login')}>
                 {t('login')}
               </Button>
             )}

@@ -351,7 +351,7 @@ const EditUserForm: FunctionComponent = () => {
               </Row> */}
             <Row className="mt-4 d-flex flex-column flex-md-row">
                 <Col>
-                  <FormGroup controlId="userName" className="mb-3">
+                  <FormGroup controlId="userName" className="mb-4">
                     <FormLabel>*{t('Name')}</FormLabel>
                     <FormControl
                       type="text"
@@ -363,7 +363,7 @@ const EditUserForm: FunctionComponent = () => {
                   </FormGroup>
                 </Col>
                 <Col>
-                  <FormGroup controlId="email" className="mb-3">
+                  <FormGroup controlId="email" className="mb-4">
                     <FormLabel>*{t('Email')}</FormLabel>
                     <FormControl type="email" required defaultValue={user.email || undefined} />
                   </FormGroup>
@@ -371,7 +371,7 @@ const EditUserForm: FunctionComponent = () => {
               </Row>
               <Row>
                 <Col>
-                  <FormGroup controlId="countryOfOrigin1" className="mb-3">
+                  <FormGroup controlId="countryOfOrigin1" className="mb-4">
                     <FormLabel>{t('countryFieldLabel')}</FormLabel>
                     <AsyncTypeahead
                       id="create-work--search-country"
@@ -425,7 +425,7 @@ const EditUserForm: FunctionComponent = () => {
               </Row>
               <Row>
                 <Col xs={12}>
-                  <Form.Group controlId="aboutMe" className="mb-3">
+                  <Form.Group controlId="aboutMe" className="mb-5">
                     <Form.Label>{t('About me')}</Form.Label>
                     <Form.Control as="textarea" rows={3} defaultValue={user.aboutMe || undefined} />
                   </Form.Group>
@@ -433,7 +433,7 @@ const EditUserForm: FunctionComponent = () => {
               </Row>
               <Row>
                 <Col>
-                  <TagsInput tags={tags} setTags={setTags} label={t('Topics')} className="mb-3"/>
+                  <TagsInput tags={tags} setTags={setTags} label={t('Topics')} className="mb-5"/>
                 </Col>
               </Row>
               <Row>
@@ -479,7 +479,7 @@ const EditUserForm: FunctionComponent = () => {
                 </Col>
               </Row>
 
-            <Container className="mt-3 py-3">
+            <Container className="mt-4 py-3">
               <Button variant="primary" disabled={isLoadingUser} type="submit" className="text-white">
                 {t('Edit')}
                 {isLoadingUser ? (
