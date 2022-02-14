@@ -1,4 +1,4 @@
-// import { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { useAtom } from 'jotai';
 import { FunctionComponent, useState, useEffect } from 'react';
 import { Button, Col, Container, Row, Carousel } from 'react-bootstrap';
@@ -8,7 +8,7 @@ import { useSession } from 'next-auth/client';
 import withTitle from '../../HOCs/withTitle';
 import styles from './Header.module.css';
 import { Session } from '../../types';
-import globalModalsAtom from '../../atoms/globalModals';
+//import globalModalsAtom from '../../atoms/globalModals';
 
 type Props = {
   // children: string | JSX.Element | JSX.Element[];
@@ -20,15 +20,13 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
   const { t } = useTranslation('common');
   const [show, setShow] = useState<boolean>(s);
   const [session, isLoadingSession] = useSession() as [Session | null | undefined, boolean];
-  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
+  const router = useRouter();
+  //const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
 
   useEffect(() => {
     if (session) setShow(false);
   }, [session]);
 
-  const openSignInModal = () => {
-    setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
-  };
 
   return (
     <>
@@ -98,7 +96,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
       {show && (
         <div className="d-flex justify-content-center align-items-center mt-5 pt-5">
           {!isLoadingSession && !session && (
-            <Button onClick={openSignInModal} className="button text-white rounded-pill" variant="primary">
+            <Button onClick={() => router.push('/login')} className="button text-white rounded-pill" variant="primary">
               {t('headerSessionBtnLabel')}
             </Button>
           )}

@@ -41,7 +41,7 @@ import useUser from '@/src/useUser';
 
 const NavBar: FunctionComponent = () => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-  const [session] = useSession() as [Session | null | undefined, boolean];
+  const [session,isLoadingSession] = useSession() as [Session | null | undefined, boolean];
   const router = useRouter();
   const { t } = useTranslation('navbar');
 
@@ -143,10 +143,12 @@ const NavBar: FunctionComponent = () => {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse className={`${styles['responsive-navbar-nav']}`}>
           <Nav className="">
+             {!isLoadingSession &&(
             <SearchEngine className="" />
+             )}
           </Nav>
           <Nav className={styles.navbarNav}>
-            {!session && (
+            {!session && !isLoadingSession &&(
               <Button className="ms-4 text-white" data-cy="login-btn" onClick={openSignInModal}>
                 {t('login')}
               </Button>
@@ -184,6 +186,7 @@ const NavBar: FunctionComponent = () => {
               </Nav.Item>
             </Nav>
           )}
+          {!isLoadingSession  && (<>
           <Nav className={styles.navbarNav}>
             <Dropdown align="end" className={styles.langSwitch}>
               <Dropdown.Toggle as={ChevronToggle}>
@@ -238,6 +241,7 @@ const NavBar: FunctionComponent = () => {
               </Dropdown>
             )}
           </Nav>
+          </>)}
           {session && session.user && (
             <Nav className={styles.navbarNav}>
               <Dropdown align="end" className={styles.langSwitch}>
