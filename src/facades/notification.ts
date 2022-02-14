@@ -93,7 +93,7 @@ export const create = async (
     contextURL,
     fromUser:{connect:{id:fromUser}},
     toUsers:{createMany:{
-      data: toUsers.map((id:number)=>({userId:id}))
+      data: [...new Set(toUsers)].map((id:number)=>({userId:id}))
     }},
     createdAt: dayjs.utc().format(),
     updatedAt: dayjs.utc().format()
