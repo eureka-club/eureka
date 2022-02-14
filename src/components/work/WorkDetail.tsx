@@ -37,7 +37,7 @@ import TagsInput from '../forms/controls/TagsInput';
 import MosaicItem from './MosaicItem';
 import { MosaicContext } from '../../useMosaicContext';
 import { WorkContext } from '../../useWorkContext';
-import CommentsList from '../common/CommentsList';
+// import CommentsList from '../common/CommentsList';
 
 interface Props {
   work: WorkMosaicItem;
@@ -126,13 +126,13 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
                 </div>
                 {work.contentText != null && <UnclampText isHTML={false} text={work.contentText} clampHeight="8rem" />}
                 </section>
-              <div className='container d-none d-lg-block mt-5'>
+              {/* <div className='container d-none d-lg-block mt-5'>
                 <CommentsList entity={work} parent={undefined}/>
-          </div>
+              </div> */}
         </Col>
-        <div className='container d-sm-block d-lg-none mt-3'>
+          {/* <div className='container d-sm-block d-lg-none mt-3'>
                 <CommentsList entity={work} parent={undefined}/>
-          </div>
+          </div> */}
             </Row>
           ) : (
             <>{post && work && <PostDetailComponent post={post} work={work} />}</>
