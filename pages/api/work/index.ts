@@ -5,7 +5,7 @@ import { getSession } from 'next-auth/client';
 import { FileUpload, Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { storeUpload } from '../../../src/facades/fileUpload';
-import { createFromServerFields } from '../../../src/facades/work';
+import { createFromServerFields, findAll } from '../../../src/facades/work';
 import prisma from '../../../src/lib/prisma';
 // import redis from '../../../src/lib/redis';
 // import { WorkWithImages } from '../../../src/types/work';
@@ -52,29 +52,28 @@ export default getApiHandler()
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
-      const { q = null, where = null, id = null } = req.query;
-      let data = null;
+      const { q = null, where = null, id = null,take:t } = req.query;
+      const take = +t.toString();
+      let data = null;debugger;
       if (typeof q === 'string') {
         data = await prisma.work.findMany({
+          take,
           where: {
             OR: [{ title: { contains: q } }, { contentText: { contains: q } }, { author: { contains: q } }],
-          },
-          include: { localImages: true, ratings: true, favs: true, readOrWatcheds: true },
+          }
         });
       } else if (where) {
-        data = await prisma.work.findMany({
+        data = await findAll({
+          take,
           ...(typeof where === 'string' && { where: JSON.parse(where) }),
-          include: { localImages: true, ratings: true, favs: true, readOrWatcheds: true },
         });
       } else if (id) {
-        data = await prisma.work.findMany({
-          where: { id: parseInt(id as string, 10) },
-          include: { localImages: true, ratings: true, favs: true, readOrWatcheds: true },
+        data = await findAll({
+          take,
+          where: { id: parseInt(id as string, 10) }
         });
       } else {
-        data = await prisma.work.findMany({
-          include: { localImages: true, ratings: true, favs: true, readOrWatcheds: true },
-        });
+        data = await findAll({});
       }
 
       res.status(200).json({ status: 'OK', data });

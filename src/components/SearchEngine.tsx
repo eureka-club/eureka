@@ -15,13 +15,14 @@ import { useQueryClient } from 'react-query';
 import { LocalImage, Work } from '@prisma/client';
 import CycleTypeaheadSearchItem from './cycle/TypeaheadSearchItem';
 import WorkTypeaheadSearchItem from './work/TypeaheadSearchItem';
-
+import PostTypeaheadSearchItem from './post/TypeaheadSearchItem';
 // import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '../constants';
 import {
   // Session,
   SearchResult,
   isCycleMosaicItem,
   isWorkMosaicItem,
+  isPostMosaicItem
 } from '../types';
 
 import globalSearchEngineAtom from '../atoms/searchEngine';
@@ -46,39 +47,47 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
   const router = useRouter();
   const { t } = useTranslation('searchEngine');
 
-  const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
-  const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
+  const [isSearchResultsLoading, setIsSearchResultsLoading] = useState(false);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 
   const handleSearchWorkOrCycle = async (query: string) => {
-    setSearchWorkOrCycleResults([]);
+    setSearchResults([]);
 
-    setIsSearchWorkOrCycleLoading(true);
+    setIsSearchResultsLoading(true);
     
     setQ(query);
-    const responseWork = await (await fetch(`/api/work/?q=${query}`)).json();
-    const responseCycle = await (await fetch(`/api/cycle/?q=${query}`)).json();
-    const responsePost = await (await fetch(`/api/post/?q=${query}`)).json();
-    const items: SearchResult[] = [
-      ...((responseWork && responseWork.data) || []),
-      ...((responseCycle && responseCycle.data) || []).map((i: CycleMosaicItem) => ({
-        ...i,
-        type: 'cycle',
-      })),
-      ...((responsePost && responsePost.data) || []).map((i: PostMosaicItem) => ({
-        ...i,
-        type: 'post',
-      })),
-    ].sort((f, s) => {
-      const fCD = dayjs(f.createdAt);
-      const sCD = dayjs(s.createdAt);
-      if (fCD.isAfter(sCD)) return -1;
-      if (fCD.isSame(sCD)) return 0;
-      return 1;
-    });;
+    const res = await fetch(`/api/searchEngine?q=${query}`);
+    if(res.ok){
+      const {data} = await res.json();
+      setSearchResults(data);
+      setIsSearchResultsLoading(false);
+      setGlobalSearchEngineState({ ...globalSearchEngineState, q: ''});
+    }
 
-    setSearchWorkOrCycleResults(items);
-    setIsSearchWorkOrCycleLoading(false);
-    setGlobalSearchEngineState({ ...globalSearchEngineState, q: ''});
+    // const responseWork = await (await fetch(`/api/work/?q=${query}`)).json();
+    // const responseCycle = await (await fetch(`/api/cycle/?q=${query}`)).json();
+    // const responsePost = await (await fetch(`/api/post/?q=${query}`)).json();
+    // const items: SearchResult[] = [
+    //   ...((responseWork && responseWork.data) || []),
+    //   ...((responseCycle && responseCycle.data) || []).map((i: CycleMosaicItem) => ({
+    //     ...i,
+    //     type: 'cycle',
+    //   })),
+    //   ...((responsePost && responsePost.data) || []).map((i: PostMosaicItem) => ({
+    //     ...i,
+    //     type: 'post',
+    //   })),
+    // ].sort((f, s) => {
+    //   const fCD = dayjs(f.createdAt);
+    //   const sCD = dayjs(s.createdAt);
+    //   if (fCD.isAfter(sCD)) return -1;
+    //   if (fCD.isSame(sCD)) return 0;
+    //   return 1;
+    // });;
+
+    // setSearchResults(items);
+
+    
     
   };
 
@@ -98,8 +107,8 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
   };
   
   const onItemsFound = async () => {
-    if(isSearchWorkOrCycleLoading || !searchWorkOrCycleResults?.length)return;
-    queryClient.setQueryData(["ITEMS", q], searchWorkOrCycleResults);
+    if(isSearchResultsLoading || !searchResults?.length)return;
+    queryClient.setQueryData(["ITEMS", q], searchResults);
     router.push(`/search?q=${q}`);
     
     /* let where= '';
@@ -162,11 +171,11 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
             
             inputProps={{ required: true }}
             placeholder={t('Search')}
-            isLoading={isSearchWorkOrCycleLoading}
+            isLoading={isSearchResultsLoading}
             labelKey={labelKeyFn}
             minLength={5}
             onSearch={handleSearchWorkOrCycle}
-            options={searchWorkOrCycleResults}
+            options={searchResults}
             onChange={handleSelectItem}
             ignoreDiacritics
             // renderMenuItemChildren={(searchResult) => {
@@ -182,7 +191,7 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
             renderMenu={(results, menuProps) => (
               // eslint-disable-next-line react/jsx-props-no-spreading
               <Menu {...menuProps}>
-                {results.map((item, index) => (
+                {results.filter(item=>!isPostMosaicItem(item)).map((item, index) => (
                   <MenuItem key={`${item.id}`} option={item} position={index}>
                     {/* <Highlighter search={props.text}>{item}</Highlighter> */}
                     {(isCycleMosaicItem(results[index]) && (
@@ -190,7 +199,11 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
                     )) ||
                       (isWorkMosaicItem(results[index]) && (
                         <WorkTypeaheadSearchItem work={results[index] as WorkMosaicItem} />
-                      ))}
+                      )) /* ||
+                      (isPostMosaicItem(results[index]) && (
+                        <PostTypeaheadSearchItem post={results[index] as PostMosaicItem} />
+                      )) */
+                    }
                   </MenuItem>
                 ))}
                 {(results.length && (
@@ -215,7 +228,7 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
             variant="link" 
             className="p-0 text-white text-decoration-none"
             onClick={onItemsFound}
-            disabled={isSearchWorkOrCycleLoading || !searchWorkOrCycleResults?.length}
+            disabled={isSearchResultsLoading || !searchResults?.length}
             >
               
                 <AiOutlineSearch />

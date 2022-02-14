@@ -37,19 +37,22 @@ export const find = async (id: number): Promise<WorkMosaicItem | null> => {
 };
 
 
-export const findAll = async (): Promise<WorkMosaicItem[]> => {
+export const findAll = async (props?:Prisma.WorkFindManyArgs): Promise<Work[]|WorkMosaicItem[]> => {
+  const {where,include=null,take} = props || {};
   return prisma.work.findMany({
+    take,
     orderBy: { createdAt: 'desc' },
-    include: {
+    ... include ? {include} : {include: {
       localImages: true,
-      ratings: true,
       favs: true,
+      ratings: true,
       comments: {
         include: { comments: true },
       },
       posts: { include: { localImages: true, comments: true, favs: true } },
       cycles: true,
-    },
+    }},
+    where,
   });
 };
 

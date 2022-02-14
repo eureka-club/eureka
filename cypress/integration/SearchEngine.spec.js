@@ -10,8 +10,11 @@ describe('SearchEngine suite',()=>{
         cy.visit('/about')//because load faster :)
             .get('[data-cy="search-engine"]')
             .get('[type="text"]:visible')
-            .type('feminismo')//if there is not data will not work correctly
+            .type('feminis')//if there is not data will not work correctly
             .wait('@items')//wait for the filters requests to cycle,post and work
+            .then(interception=>{
+                console.log(interception.response)
+            })
             .get('[aria-label="menu-options"]:visible')
             .get('[class^="TypeaheadSearchItem_"]')
                 .each(i=>{

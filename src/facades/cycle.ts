@@ -65,7 +65,7 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
 };
 
 export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<Cycle[] | CycleMosaicItem[]> => {
-  const {include,where,take} = props || {};debugger;
+  const {include,where,take} = props || {};
   return prisma.cycle.findMany({
     take,
     ... where && {where},

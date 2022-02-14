@@ -46,7 +46,9 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
     }
   };
 
-  const deleteTag = (idx: number): void => {
+  const deleteTag = (e:React.MouseEvent<HTMLElement>,idx: number): void => {
+    e.preventDefault()
+    e.stopPropagation()
     items.splice(idx, 1);
     if (setTags) setTags(items.join());
   };
@@ -71,7 +73,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
       <div>
         {items.map((v, idx) => {
           return (
-            <span key={`${idx + 1}${t}`}>
+            <span key={`${idx + 1}${t}`} data-cy="tag">
               <Badge
                 className="fw-light fs-6 cursor-pointer"
                 pill
@@ -80,10 +82,10 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
               >
                 {formatValue ? formatValue(v) : v}{' '}
                 {!readOnly && (
-                  <Badge style={{ cursor: 'pointer' }} onClick={() => deleteTag(idx)} pill bg="default">
+                  !loading[v] && <Badge className="bg-warning text-withe rounded-pill ms-2" style={{ cursor: 'pointer' }} onClick={(e) => deleteTag(e,idx)} pill bg="default">
                     X
-                  </Badge>
-                )}{` `}{loading[v] && <Spinner size="sm" animation="grow"/>}
+                  </Badge> || <Spinner size="sm" animation="grow"/>
+                )}
               </Badge>{' '}
             </span>
           );

@@ -6,11 +6,11 @@ describe('WorkDetail suit',()=>{
 
   beforeEach(()=>{
     cy.login();
-
+    
     const whereForWork = encodeURIComponent(
       JSON.stringify({
         cycles:{
-          some:{              
+          some:{
             id:{
               gt:0
             }
@@ -33,7 +33,7 @@ describe('WorkDetail suit',()=>{
     cy.request(`/api/work?where=${whereForWork}&take=1`).as('work')
         .its('body')
         .should('have.property','data')
-        .and((data)=>{
+        .and((data)=>{debugger;
           expect(data).to.be.length.gte(1)              
           expect(data[0].posts).have.length.gte(1)
           expect(data[0].cycles).have.length.gte(1)
@@ -41,10 +41,8 @@ describe('WorkDetail suit',()=>{
   });
     it('has the mosaic card',()=>{
       cy.get('@work')
-      .its('body')
-      .should('have.property','data')
-      .then(data=>{
-        const work = data[0];
+      .then(({body})=>{
+        const work = body.data[0];
         cy.get(`[data-cy="mosaic-item-work-${work.id}"]`).should('not.be.empty')
 
       })
@@ -52,10 +50,8 @@ describe('WorkDetail suit',()=>{
     it('render only comments that belongs to this context',()=>{
       cy.visit('/about')
       .get('@work')
-      .its('body')
-      .should('have.property','data')
-      .then(data=>{
-        const work = data[0];
+      .then(({body})=>{
+        const work = body.data[0];
         const workComments = work.comments.filter(c=>!c.cycleId && !c.postId)//directly comments only
         cy.visit(`/work/${work.id}`)
         console.log(workComments,'workComments')
@@ -76,10 +72,8 @@ describe('WorkDetail suit',()=>{
     it('render parent cycle and child post mosaics on All tab',()=>{
       cy.visit('/about')
       .get('@work')
-      .its('body')
-      .should('have.property','data')
-      .then(data=>{
-        const work = data[0];
+      .then(({body})=>{
+        const work = body.data[0];
         cy.visit(`/work/${work.id}`)
         .get('[data-rr-ui-event-key="all"]').click({force:true})
         .get('[data-cy^="mosaic-item-cycle-"]')

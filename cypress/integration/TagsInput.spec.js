@@ -14,20 +14,27 @@ describe('TagsInput suite',()=>{
             cy.request(`/api/user/${session.user.id}`)
             .then(res=>{
                 const user = res.body;
-                cy.get('[data-cy="tag"]').then(tags=>{
-
-                    expect(tags).to.be.length(user.tags.split(',').length)
-                    cy.get('[data-cy="max"]')
-                    .then(maxContainer=>{
-                        expect(maxContainer).to.be.not.empty;
-                        if(+maxContainer.first()[0].innerText > tags.length){
-                            cy.get('[data-cy="new-tag"]').then(input=>{
-                                expect(input.is('button'))
-                            })
-                        }
+                const tags = user.tags ? user.tags.split(","): [];
+                if(tags.length){
+                    cy.get('[data-cy="tag"]').then(tags=>{
+                        
+                        debugger;
+                        expect(tags).to.be.length(user.tags.split(',').length)
+                        cy.get('[data-cy="max"]')
+                        .then(maxContainer=>{
+                            expect(maxContainer).to.be.not.empty;
+                            if(+maxContainer.first()[0].innerText > tags.length){
+                                cy.get('[data-cy="new-tag"]').then(input=>{
+                                    expect(input.is('button'))
+                                })
+                            }
+                        })
+    
                     })
-
-                })
+                }
+                else{
+                    cy.get('[data-cy="tag"]').should('not.exist')
+                }
             })
 
         })

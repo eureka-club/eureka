@@ -435,7 +435,7 @@ const EditUserForm: FunctionComponent = () => {
               </Row>
               <Row>
                 <Col>
-                  <TagsInput tags={tags} setTags={setTags} label={t('Topics')} className="mb-5"/>
+                  <TagsInput tags={tags} max={5} setTags={setTags} label={t('Topics')} className="mb-5"/>
                 </Col>
               </Row>
               <Row>
