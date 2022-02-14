@@ -63,8 +63,10 @@ const EditUserForm: FunctionComponent = () => {
 
   useEffect(() => {
     const s = session as unknown as Session;
-    if (!s || !s.user) router?.push('/');
-    else setId(s.user.id.toString());
+    // if (!s || !s.user) router?.push('/');
+    // else setId(s.user.id.toString());
+    if(s)
+      setId(s.user.id.toString());
   }, []);
 
   const { /* isLoading,  isError, error, */ data:user } = useUser(+id,{
@@ -213,7 +215,7 @@ const EditUserForm: FunctionComponent = () => {
      // image: form.image.value,
       countryOfOrigin: countryOrigin,
       aboutMe: form.aboutMe.value,
-      dashboardType: privacySettings || 3,
+      ... privacySettings && {dashboardType: privacySettings},
       tags,
       ... (photo && {photo}),
     };

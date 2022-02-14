@@ -6,7 +6,7 @@ export interface EditUserClientPayload {
   image?: string;
   countryOfOrigin?: string | null;
   aboutMe?: string;
-  dashboardType: number;
+  dashboardType?: number;
   tags?: string;
   photo?:File;
 }
