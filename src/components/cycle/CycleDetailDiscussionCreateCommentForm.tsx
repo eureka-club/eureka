@@ -1,4 +1,4 @@
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, FormEvent, FunctionComponent, useEffect, useState, useRef } from 'react';
 import { useAtom } from 'jotai';
@@ -38,7 +38,14 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
 }) => {
   const queryClient = useQueryClient();
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-  const [session] = useSession() as [Session | null | undefined, boolean];
+  
+  const {data:sd,status} = useSession();
+  const [session, setSession] = useState<Session>(sd as Session);
+  useEffect(()=>{
+    if(sd)
+      setSession(sd as Session)
+  },[sd])
+
   const { t } = useTranslation('cycleDetail');
   const editorRef = useRef<any>(null);
   const [newComment, setNewComment] = useState({
@@ -102,8 +109,8 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
 
       const json = await res.json();
       if (json.ok) {
-        if(notifier){
-          const u = (session as Session).user;
+        if(notifier && session){
+          const u = session?.user;
           const toUsers = cycle.participants.filter(p=>p.id!==u.id).map(p=>p.id);
           notifier.notify({
             toUsers,
@@ -151,7 +158,7 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
       });
       return;
     }
-    const u = (session as Session).user;
+    const u = session?.user;
     const toUsers = cycle.participants.filter(p=>p.id!==u.id).map(p=>p.id);
     if(u.id !== cycle.creatorId)
       toUsers.push(cycle.creatorId);

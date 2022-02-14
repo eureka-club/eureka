@@ -37,7 +37,7 @@ import styles from './CreatePostForm.module.css';
 import useTopics from '../../useTopics';
 import useWorks from '../../useWorks';
 import { Session } from '@/src/types';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import useUser from '@/src/useUser';
 import { useNotificationContext } from '@/src/useNotificationProvider';
 
@@ -55,20 +55,22 @@ const CreatePostForm: FunctionComponent = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const editorRef = useRef<any>(null);
-  const [session] = useSession();
-  const [userId, setUserId] = useState<number>();
+  
+  const {data:sd,status} = useSession();
+  const [session, setSession] = useState<Session>(sd as Session);
+  useEffect(()=>{
+    if(sd)
+      setSession(sd as Session)
+  },[sd])
+
+  
   // const [workId, setWorkId] = useState<string | undefined>();
   const { data: work } = useWorks(router.query.id as string);
-  const {data:user} = useUser(userId!,{
-    enabled:!!userId
+  const {data:user} = useUser(session.user.id!,{
+    enabled:!!session.user.id
   });
   const {notifier} = useNotificationContext();
-  useEffect(()=>{
-    if(session){
-      const user = (session as unknown as Session).user;
-      setUserId(user.id);
-    }
-  },[session]);
+  
   // useEffect(() => {
   //   if (router) {
   //     const routeValues = router.route.split('/').filter((i) => i);
@@ -96,7 +98,7 @@ const CreatePostForm: FunctionComponent = () => {
     isError: isCreatePostError,
     isLoading: isCreatePostLoading,
     isSuccess: isCreatePostSuccess,
-    status,
+    status:mutationState
   } = useMutation(
     async (payload: CreatePostAboutCycleClientPayload | CreatePostAboutWorkClientPayload): Promise<Post | null> => {
       const formData = new FormData();
@@ -132,7 +134,7 @@ const CreatePostForm: FunctionComponent = () => {
   
         formData.append('notificationMessage', message);
         formData.append('notificationContextURL', router.asPath);
-        formData.append('notificationToUsers', user.followedBy.map(u=>u.id).join(','));
+        formData.append('notificationToUsers', user.followedBy.map(u=>u.followerId).join(','));
 
       }
 
@@ -147,7 +149,7 @@ const CreatePostForm: FunctionComponent = () => {
         if(notifier && user)
           notifier.notify({
             data:{message},
-            toUsers: user?.followedBy.map(u=>u.id)
+            toUsers: user?.followedBy.map(u=>u.followerId)
           })
         return json.post;
       }
@@ -285,7 +287,7 @@ const CreatePostForm: FunctionComponent = () => {
       if (selectedCycle != null) {
         router.push(`/cycle/${selectedCycle.id}/post/${createdPost.id || postId}`);
       }
-    } else if (status === 'error') {
+    } else if (mutationState === 'error') {
       alert('Error creating the post');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

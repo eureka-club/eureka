@@ -7,7 +7,7 @@ import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 import classnames from 'classnames';
 import { FiShare2, FiTrash2 } from 'react-icons/fi';
 import { useMutation, useQueryClient } from 'react-query';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import { useAtom } from 'jotai';
 import Rating from 'react-rating';
 import { OverlayTrigger, Popover, Button, Spinner } from 'react-bootstrap';
@@ -68,7 +68,14 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const { t } = useTranslation('common');
   const router = useRouter();
   // const [session] = useSession() as [Session | null | undefined, boolean];
-  const [session, isLoadingSession] = useSession();
+  
+  const {data:sd,status} = useSession();
+    const [session, setSession] = useState<Session>(sd as Session);
+    useEffect(()=>{
+        if(sd)
+        setSession(sd as Session)
+    },[sd])
+
   const [qty, setQty] = useState<number>(0);
 
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -85,14 +92,13 @@ const SocialInteraction: FunctionComponent<Props> = ({
   // const [optimistReadOrWatchedCount, setOptimistReadOrWatchedCount] = useState<number>(0);
   const queryClient = useQueryClient();
 
-  const [idSession, setIdSession] = useState<string>('');
   const {
     isFetching: isFetchingUser,
     isLoading: isLoadingUser,
     isSuccess: isSuccessUser,
     isError,
     /* error, */ data: user,
-  } = useUser(+idSession,{ enabled: !!+idSession });
+  } = useUser(session?.user.id,{ enabled: !!session?.user.id });
   // const [user, setuser] = useState<UserDetail>();
   const [showShare, setShowShare] = useState<boolean>(false);
   const mosaicContext = useMosaicContext();
@@ -115,17 +121,10 @@ const SocialInteraction: FunctionComponent<Props> = ({
   };
 
   useEffect(() => {
-    const s = session as unknown as Session;
-    if (s) {
-      setIdSession(s.user.id.toString());
+    if (isSuccessUser && session.user.id && !user) {
+      queryClient.invalidateQueries(['USER', `${session.user.id}`]);
     }
-  }, [session]);
-
-  useEffect(() => {
-    if (isSuccessUser && idSession && !user) {
-      queryClient.invalidateQueries(['USER', `${idSession}`]);
-    }
-  }, [user, idSession, isSuccessUser]);
+  }, [user,session, isSuccessUser]);
 
   useEffect(() => {
     calculateQty();
@@ -133,7 +132,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
     let ratingByMe = false;
     if (session && user && user.id && entity) {
       if (isWork(entity)) {
-        // if (entity.id === 125) debugger;
+        // if (entity.id === 125) 
         // let idx = user.readOrWatchedWorks.findIndex((i: Work) => i.id === entity.id);
         // const readOrWatchedByMe = idx !== -1;
         // setOptimistReadOrWatched(readOrWatchedByMe);
@@ -234,14 +233,13 @@ const SocialInteraction: FunctionComponent<Props> = ({
     }
     if (isWork(entity)) {
       return t('workShare');
-    }
+    }    
     if (isPost(entity)) {
       const post = entity as PostMosaicItem;
       const p = post.works[0] || post.cycles[0] || null;
       const about = post.works[0] ? 'postWorkShare' : 'postCycleShare';
       return `EUREKA: "${post.title}". \n ${t(about)} "${p ? p.title : ''}"`;
     }
-
     throw new Error('Invalid entity or parent');
   })();
   const title = () => {
@@ -287,7 +285,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
           entityTitle: entity.title,
         })}`;
         
-        const notificationToUsers = user?.followedBy.map(f=>f.id);
+        const notificationToUsers = user?.followedBy.map(f=>f.followerId);
 
         const res = await fetch(`/api/${entityEndpoint}/${entity.id}/${socialInteraction}`, {
           method: doCreate ? 'POST' : 'DELETE',
@@ -370,7 +368,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
               user?.favWorks.push(entity);
               favWorks = user?.favWorks;
             }
-            queryClient.setQueryData(['USER', `${idSession}`], { ...user, favWorks });
+            queryClient.setQueryData(['USER', `${session.user.id}`], { ...user, favWorks });
           } else if (isCycle(entity)) {
             let favCycles;
             if (opf) favCycles = user?.favCycles.filter((i: Cycle) => i.id !== entity.id);
@@ -378,7 +376,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
               user?.favCycles.push(entity);
               favCycles = user?.favCycles;
             }
-            queryClient.setQueryData(['USER', `${idSession}`], { ...user, favCycles });
+            queryClient.setQueryData(['USER', `${session.user.id}`], { ...user, favCycles });
           } else if (isPost(entity)) {
             let favPosts;
             if (opf) favPosts = user?.favPosts.filter((i) => i.id !== entity.id);
@@ -386,7 +384,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
               user?.favPosts.push(entity);
               favPosts = user?.favPosts;
             }
-            queryClient.setQueryData(['USER', `${idSession}`], { ...user, favPosts });
+            queryClient.setQueryData(['USER', `${session.user.id}`], { ...user, favPosts });
           }
           return { optimistFav: opf, optimistFavCount: opfc };
         }
@@ -398,7 +396,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
       },
       onSuccess: () => {
         const ck = globalSearchEngineState ? globalSearchEngineState.cacheKey : cacheKey;
-        queryClient.invalidateQueries(['USER', `${idSession}`]);
+        queryClient.invalidateQueries(['USER', `${session.user.id}`]);
         if (!ck) router.replace(router.asPath);
         queryClient.invalidateQueries(ck);
       },
@@ -515,7 +513,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
     }
     return undefined;
   };
-  if (isLoadingSession || isLoadingUser) return <Spinner animation="grow" variant="info" size="sm" />;
+  if ((status=='loading') || isLoadingUser) return <Spinner animation="grow" variant="info" size="sm" />;
   return (
     // (session && user && (
     <section className={`${className}`}>

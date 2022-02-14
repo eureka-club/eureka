@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 import { NotificationMosaicItem } from '@/types/notification';
 
-export const getRecord = async (userId: number): Promise<NotificationMosaicItem[]> => {
+export const getRecord = async (userId: string): Promise<NotificationMosaicItem[]> => {
   
   const url = `/api/notification?userId=${userId}`;
   const res = await fetch(url);
@@ -17,7 +17,7 @@ interface Options {
   enabled?: boolean;
 }
 
-const useNotifications = (id: number, options?: Options) => {
+const useNotifications = (id: string, options?: Options) => {
   const { staleTime, enabled } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,

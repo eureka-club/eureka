@@ -1,18 +1,16 @@
 import { NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/client';
-import { useState, useEffect, SyntheticEvent } from 'react';
+import { useSession } from 'next-auth/react';
+import { useState } from 'react';
 
-import { Spinner, Card, Row, Col, ButtonGroup, Button, Alert } from 'react-bootstrap';
+import { ButtonGroup, Button } from 'react-bootstrap';
 import { BiArrowBack } from 'react-icons/bi';
-import SimpleLayout from '../src/components/layouts/SimpleLayout';
+import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import EditUserForm from '@/components/forms/EditUserForm';
 
 const Profile: NextPage = () => {
-  const [session, isLoadingSession] = useSession();
-  const [id, setId] = useState<string>('');
-  const [idSession, setIdSession] = useState<string>('');
+  
   const router = useRouter();
   
   const { t } = useTranslation('common');

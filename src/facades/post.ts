@@ -119,7 +119,7 @@ export const isLikedByUser = async (post: Post, user: User): Promise<number> => 
 export const createFromServerFields = async (
   fields: CreatePostServerFields,
   coverImageUpload: StoredFileUpload,
-  creator: User,
+  creatorId: string,
 ): Promise<Post> => {
   const payload = Object.entries(fields).reduce((memo, [fieldName, fieldValues]) => {
     switch (fieldName) {
@@ -161,7 +161,7 @@ export const createFromServerFields = async (
       isPublic: payload.isPublic,
       topics: payload.topics,
       tags: payload.tags,
-      creator: { connect: { id: creator.id } },
+      creator: { connect: { id: creatorId } },
       localImages: {
         connectOrCreate: {
           where: { id: existingLocalImage != null ? existingLocalImage.id : 0 },

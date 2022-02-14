@@ -4,7 +4,7 @@ import {ListGroup, Spinner, Button, OverlayTrigger, Popover} from 'react-bootstr
 
 import {IoNotificationsCircleOutline} from 'react-icons/io5'
 import {v4} from 'uuid'
-import {useSession} from 'next-auth/client'
+import {useSession} from 'next-auth/react'
 import {useRouter} from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import useUser from '@/src/useUser'
@@ -20,22 +20,22 @@ interface Props {
 }
 
 const NotificationsList: React.FC<Props> = ({className}) => {
-    
-    const [session] = useSession() as [Session | null | undefined, boolean];
+  
+    const {data:sd,status} = useSession();
+    const [session, setSession] = useState<Session>(sd as Session);
+    useEffect(()=>{
+        if(sd)
+        setSession(sd as Session)
+    },[sd])
+
     const router = useRouter();
     const { t } = useTranslation('notification');
     const [globalModalsState,setGlobalModalsState] = useAtom(globalModals)
     const queryClient = useQueryClient();
 
-    const [userId,setUserId] = useState<number>();
-    const {data:user,isLoading} = useUser(userId || 0,{
-    enabled:!!userId
+    const {data:user,isLoading} = useUser(session?.user.id,{
+      enabled:!!session?.user.id
     });
-
-    useEffect(()=>{
-    if(session)
-        setUserId(session.user.id);
-    },[session])
 
     const {
         mutate: execEditNotification,
@@ -87,7 +87,7 @@ const NotificationsList: React.FC<Props> = ({className}) => {
       );
     
 
-    const notificationOnClick = (e: React.MouseEvent<Element>,userId:number, notificationId:number, contextURL:string) => {
+    const notificationOnClick = (e: React.MouseEvent<Element>,userId:string, notificationId:number, contextURL:string) => {
         e.preventDefault();
         if(user){
             const payload = {

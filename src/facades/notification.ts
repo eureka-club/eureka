@@ -20,7 +20,7 @@ export const find = async (notificationId: number): Promise<NotificationMosaicIt
   });
 };
 
-export const findAll = async (userId: number): Promise<NotificationMosaicItem[] | null> => {
+export const findAll = async (userId: string): Promise<NotificationMosaicItem[] | null> => {
   return prisma.notificationsOnUsers.findMany({
     orderBy: { notificationId: 'desc' },
     include:{
@@ -41,7 +41,7 @@ export const remove = async (id: number): Promise<Notification> => {
 
 export const update = async (
   notificationId: number, 
-  userId: number,
+  userId: string,
   data:{
     message?:string,
     contextURL?:string,
@@ -85,15 +85,15 @@ export const update = async (
 export const create = async (
   message:string,
   contextURL:string,
-  fromUser:number,
-  toUsers:number[]
+  fromUser:string,
+  toUsers:string[]
 ): Promise<Notification> => {
   return prisma.notification.create({data:{
     message,
     contextURL,
     fromUser:{connect:{id:fromUser}},
     toUsers:{createMany:{
-      data: toUsers.map((id:number)=>({userId:id}))
+      data: toUsers.map((id:string)=>({userId:id}))
     }},
     createdAt: dayjs.utc().format(),
     updatedAt: dayjs.utc().format()

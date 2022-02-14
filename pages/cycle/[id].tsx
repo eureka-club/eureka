@@ -1,5 +1,5 @@
 import { NextPage } from 'next';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import { useAtom } from 'jotai';
 // import { QueryClient, useQuery } from 'react-query';
 // import { dehydrate } from 'react-query/hydration';
@@ -18,7 +18,12 @@ import { CycleContext, useCycleContext } from '../../src/useCycleContext';
 import globalModalsAtom from '../../src/atoms/globalModals';
 
 const CycleDetailPage: NextPage = () => {
-  const [session, isLoadingSession] = useSession();
+  const {data:sd,status} = useSession();
+  const [session, setSession] = useState<Session>(sd as Session);
+  useEffect(()=>{
+    if(sd)
+      setSession(sd as Session)
+  },[sd])
   const router = useRouter();
   const [id, setId] = useState<string>('');
   const { data: cycle, isSuccess, isLoading, isFetching, isError, error } = useCycle(+id);
@@ -49,23 +54,23 @@ const CycleDetailPage: NextPage = () => {
   }, [cycle, isSuccess, id]);
 
   useEffect(() => {
-    if (!isLoadingSession) {
+    if (!(status=='loading')) {
       if (!session) {
         setCurrentUserIsParticipant(() => false);
-      } else if (session && cycle && session.user) {
-        const s = session as unknown as Session;
-        if (cycle.creatorId === s.user.id) {
+      } 
+      else if (cycle && session.user) {
+        if (cycle.creatorId === session?.user.id) {
           setCurrentUserIsParticipant(() => true);
           return;
         }
         const { participants } = cycle;
         if (participants) {
-          const isParticipant = participants.findIndex((p) => p.id === s.user.id) > -1;
+          const isParticipant = participants.findIndex((p) => p.id === session.user.id) > -1;
           setCurrentUserIsParticipant(() => isParticipant);
         }
       }
     } else setCurrentUserIsParticipant(() => false);
-  }, [session, cycle, isSuccess, isLoadingSession]);
+  }, [session, cycle, isSuccess, status]);
 
   const renderCycleDetailComponent = () => {
     if (cycle) {
@@ -75,7 +80,7 @@ const CycleDetailPage: NextPage = () => {
       if (cycle.access === 3 && !currentUserIsParticipant) return <Alert>Not authorized</Alert>;
     }
 
-    if (isLoadingSession || isFetching || isLoading) {
+    if (status==='loading' || isFetching || isLoading) {
       return <Spinner animation="grow" variant="info" />;
     }
 

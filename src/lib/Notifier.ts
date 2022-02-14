@@ -9,10 +9,10 @@ export default class Notifier {
   private socket: any;
   // private toUsers: number[];
   // private callback: (res:NotifierResponse) => void;
-  private fromUser: number;
+  private fromUser: string;
   
 
-  public constructor(fromUser:number) {
+  public constructor(fromUser:string) {
     // this.toUsers = toUsers;
     // this.callback = callback;
     this.fromUser = fromUser;

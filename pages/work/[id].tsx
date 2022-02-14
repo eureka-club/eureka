@@ -1,11 +1,11 @@
 import { NextPage } from 'next';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import { useState, useEffect, ReactElement } from 'react';
 // import { useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import { Spinner, Alert } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
-// import { Session, MySocialInfo } from '../../src/types';
+import { Session } from '../../src/types';
 // import { WorkMosaicItem } from '../../src/types/work';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import WorkDetailComponent from '../../src/components/work/WorkDetail';
@@ -33,7 +33,12 @@ const WorkDetailPage: NextPage = () => {
   // queryClient.setQueryData(['WORKS', `${work.id}`], work);
   const router = useRouter();
   const { t } = useTranslation('common');
-  const [session, isLoadingSession] = useSession();
+  const {data:sd,status} = useSession();
+  const [session, setSession] = useState<Session>(sd as Session);
+  useEffect(()=>{
+    if(sd)
+      setSession(sd as Session)
+  },[sd])
   const [id, setId] = useState<string>('');
   const [mySocialInfo, setMySocialInfo] = useState<Record<string, boolean>>({
     favoritedByMe: false,
@@ -48,10 +53,10 @@ const WorkDetailPage: NextPage = () => {
   const { data: work, isLoading: isLoadingWork, error } = useWork(+id, { enabled: !!id });
 
   useEffect(() => {
-    if (!isLoadingSession && session && work) {
-      setMySocialInfo((res) => ({ ...res, favoritedByMe: work.favs.findIndex((u: User) => u.id === +id) > -1 }));
+    if (!(status=='loading') && session && work) {
+      setMySocialInfo((res) => ({ ...res, favoritedByMe: work.favs.findIndex((u: User) => u.id === session?.user.id) > -1 }));
     }
-  }, [isLoadingSession, session, work, id]);
+  }, [status, session, work, id]);
 
   const rendetLayout = (title: string, children: ReactElement) => {
     return <SimpleLayout title={title}>{children}</SimpleLayout>;

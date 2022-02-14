@@ -1,5 +1,5 @@
 import { GetServerSideProps, NextPage } from 'next';
-import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { BiArrowBack } from 'react-icons/bi';
 import { Alert, ButtonGroup, Button } from 'react-bootstrap';

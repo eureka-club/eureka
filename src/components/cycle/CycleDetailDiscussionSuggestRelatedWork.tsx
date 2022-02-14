@@ -1,6 +1,6 @@
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import { MouseEvent, FunctionComponent, useState, useRef } from 'react';
+import { MouseEvent, FunctionComponent, useState, useRef, useEffect } from 'react';
 
 import { Button, Col, Row, Form } from 'react-bootstrap';
 import { DropdownItemProps } from 'react-bootstrap/DropdownItem';
@@ -38,7 +38,14 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
   const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkMosaicItem | null>(null);
   // const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkMosaicItem[]>([]);
   const [includedWorksIds, setIncludedWorksIds] = useState<number[]>();
-  const [session] = useSession() as [Session | null | undefined, boolean];
+ 
+  const {data:sd2,status} = useSession();
+  const [session, setSession] = useState<Session>(sd2 as Session);
+  useEffect(()=>{
+    if(sd2)
+      setSession(sd2 as Session)
+  },[sd2])
+
   const { t } = useTranslation('cycleDetail');
 
   // const [newEurekaImageFile, setNewEurekaImageFile] = useState<File | null>(null);

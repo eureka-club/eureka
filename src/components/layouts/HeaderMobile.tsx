@@ -4,7 +4,7 @@ import { FunctionComponent, useState, useEffect } from 'react';
 import { Button, Col, Container, Row, Carousel } from 'react-bootstrap';
 import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
 import useTranslation from 'next-translate/useTranslation';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import withTitle from '../../HOCs/withTitle';
 import styles from './Header.module.css';
 import { Session } from '../../types';
@@ -19,7 +19,14 @@ type Props = {
 const Header: FunctionComponent<Props> = ({ show: s = false }) => {
   const { t } = useTranslation('common');
   const [show, setShow] = useState<boolean>(s);
-  const [session, isLoadingSession] = useSession() as [Session | null | undefined, boolean];
+  
+  const {data:sd,status} = useSession();
+  const [session, setSession] = useState<Session>(sd as Session);
+  useEffect(()=>{
+    if(sd)
+      setSession(sd as Session)
+  },[sd])
+
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
 
   useEffect(() => {
@@ -97,7 +104,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
       </section>
       {show && (
         <div className="d-flex justify-content-center align-items-center mt-5 pt-5">
-          {!isLoadingSession && !session && (
+          {!(status=='loading') && !session && (
             <Button onClick={openSignInModal} className="button text-white rounded-pill" variant="primary">
               {t('headerSessionBtnLabel')}
             </Button>

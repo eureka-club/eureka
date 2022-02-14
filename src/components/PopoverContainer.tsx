@@ -1,6 +1,6 @@
 // import classNames from 'classnames';
 // import { useAtom } from 'jotai';
-// import { useSession } from 'next-auth/client';
+// import { useSession } from 'next-auth/react';
 // import Link from 'next/link';
 // import { useRouter } from 'next/router';
 // import useTranslation from 'next-translate/useTranslation';

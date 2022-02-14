@@ -9,7 +9,7 @@ import { MdReply } from 'react-icons/md';
 import dayjs from 'dayjs';
 
 import { DATE_FORMAT_SHORT } from '../../constants';
-// import { useSession } from 'next-auth/client';
+// import { useSession } from 'next-auth/react';
 // import SocialInteraction from '../common/SocialInteraction';
 import { CommentMosaicItem } from '../../types/comment';
 import CommentActionsBar from '../common/CommentActionsBar';
@@ -120,7 +120,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             </Col>
             <Col xs={12} md={6}>
               <div className="text-end">
-                <Avatar user={comment.creator} size="xs" />
+                <Avatar id={comment.creator.id} size="xs" />
                 {` - `}
                 <span className="fs-6">{dayjs(comment.createdAt).format(DATE_FORMAT_SHORT)}</span>
               </div>
@@ -159,7 +159,7 @@ const MosaicItem: FunctionComponent<Props> = ({
       <Card className={`mt-3 ${styles.container} ${className}`} data-cy={`mosaic-item-comment-${comment.id}`}>
         <Row>
           <Col xs={2} md={1} className="pe-1">
-            <Avatar user={comment.creator} showName={false} />
+            <Avatar id={comment.creator.id} showName={false} />
           </Col>
           <Col xs={10} md={11} className="ps-1">
             <div className={styles.dangerouslySetInnerHTML} dangerouslySetInnerHTML={{ __html: contentText }} />

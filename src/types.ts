@@ -1,5 +1,5 @@
-import { Cycle, Post, User, Work, Comment, Prisma } from '@prisma/client';
-
+import { Cycle, Post, User, Work, Comment, Prisma,LocalImage } from '@prisma/client';
+import {Session as NextAuthSession, DefaultSession} from 'next-auth'
 import { CycleMosaicItem } from './types/cycle';
 import { PostMosaicItem } from './types/post';
 import { WorkMosaicItem } from './types/work';
@@ -14,16 +14,21 @@ export interface FileUpload {
   size: number;
 }
 
-export interface Session {
-  accessToken?: string;
-  expires: string;
-  user: Prisma.UserGetPayload<{
-    include:{
-      photos:true, 
-      notifications:{include:{notification:true}}
-    }
-  }>;
+export interface Session extends NextAuthSession {
+  user: {
+    photos:LocalImage[];
+    notifications:Notification[];
+    id:string;
+    roles:string;
+  } & DefaultSession["user"];
+  
 }
+// export interface Session {
+//   photos:LocalImage[];
+//   notifications:Notification[];
+//   id:string;
+//   roles:string;
+// }
 
 export interface StoredFileUpload {
   contentHash: string;
@@ -53,7 +58,7 @@ export const isCycle = (obj: BasicEntity): obj is Cycle =>
   (obj as CycleMosaicItem).endDate !== undefined;
 export const isPost = (obj: BasicEntity): obj is Post =>
   obj && typeof (obj as Post).title === 'string' &&
-  typeof (obj as Post).creatorId === 'number' &&
+  typeof (obj as Post).creatorId === 'string' &&
   typeof (obj as Post).language === 'string';
 export const isWork = (obj: BasicEntity): obj is Work =>
   obj && typeof (obj as Work).title === 'string' &&
@@ -97,6 +102,6 @@ export interface NotifierResponse{
     data: Record<string,any>;
   } 
 export  interface NotifierRequest {
-    toUsers: number[];
+    toUsers: string[];
     data: Record<string,any>;
   }

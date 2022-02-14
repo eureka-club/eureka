@@ -1,6 +1,6 @@
 // import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/react';
 
 import { Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
@@ -23,7 +23,7 @@ export default getApiHandler()
       const notification = await find(parseInt(id.toString()));
       res.status(200).json({ notification });
     } else if(userId) {
-      const notifications = await findAll(parseInt(userId.toString()));
+      const notifications = await findAll(userId.toString());
       res.status(200).json({ notifications });
     }
   } catch (exc) {

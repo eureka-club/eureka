@@ -1,6 +1,6 @@
 import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/react';
 
 import { FileUpload, Session } from '@/src/types';
 import getApiHandler from '@/src/lib/getApiHandler';
@@ -38,7 +38,7 @@ export default getApiHandler()
         const image: FileUpload = files.image[0];
 
         const uploadData = await storeUpload(image);
-        const post = await createFromServerFields(fields, uploadData, session.user);debugger;
+        const post = await createFromServerFields(fields, uploadData, session.user.id);debugger;
         const notification = await create(
           fields.notificationMessage[0],
           fields.notificationContextURL[0],

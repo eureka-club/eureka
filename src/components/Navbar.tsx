@@ -1,11 +1,11 @@
 //import Image from 'next/image'
 import { useAtom } from 'jotai';
-import { useSession, signOut } from 'next-auth/client';
+import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { setCookie } from 'nookies';
-import { FunctionComponent, MouseEvent } from 'react';
+import { FunctionComponent, MouseEvent, useState, useEffect } from 'react';
 import LocalImageComponent from '@/components/LocalImage'
 
 
@@ -41,13 +41,19 @@ import useUser from '@/src/useUser';
 
 const NavBar: FunctionComponent = () => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-  const [session] = useSession() as [Session | null | undefined, boolean];
+  
+  const {data:sd,status} = useSession();
+  const [session, setSession] = useState<Session>(sd as Session);
+  useEffect(()=>{
+      if(sd)
+      setSession(sd as Session)
+  },[sd])
+
   const router = useRouter();
   const { t } = useTranslation('navbar');
 
-   const { data:user } = useUser(+(session as Session)?.user.id,{
-    enabled: !!+(session as Session)?.user.id,
-    staleTime:1
+   const { data:user } = useUser(session?.user.id,{
+    enabled: !!session?.user.id
   });
 
   const openSignInModal = () => {

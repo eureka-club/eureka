@@ -1,6 +1,6 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { Post } from '@prisma/client';
-import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 // import { workerData } from 'worker_threads';

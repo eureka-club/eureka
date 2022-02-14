@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/react';
 import getT from 'next-translate/getT';
 import { WEBAPP_URL } from '../../../../src/constants';
 import { Session } from '../../../../src/types';
@@ -149,7 +149,7 @@ export default getApiHandler()
         return res.status(400).end();
       }
 
-      await removeParticipant(cycle, session.user);
+      await removeParticipant(cycle, session.user.id);
       const notification = await create(
         notificationMessage,
         notificationContextURL,

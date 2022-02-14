@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/react';
 import { Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { createFromServerFields, findAll, update, find } from '../../../src/facades/comment';
@@ -15,12 +15,12 @@ export default getApiHandler()
     }
     try {
       const payload = req.body;
-      const post = await createFromServerFields(payload, session.user);
+      const post = await createFromServerFields(payload, session.user.id);
       const notification = await create(
         payload.notificationMessage,
         payload.notificationContextURL,
         session.user.id,
-        [...new Set(payload.notificationToUsers as number[])],
+        [...new Set(payload.notificationToUsers as string[])],
       );
       res.status(201).json({ ok: true, post,notification });
       // new Form().parse(req, async (err, fields, files) => {

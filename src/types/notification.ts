@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client';
 
 export interface EditNotificationClientPayload {
   notificationId: number; 
-  userId: number;
+  userId: string;
   data:{
     message?:string;
     contextURL?:string;

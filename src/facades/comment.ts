@@ -66,7 +66,7 @@ export const search = async (query: { [key: string]: string | string[] }): Promi
   });
 };
 
-export const createFromServerFields = async (fields: CreateCommentServerPayload, creator: User): Promise<Comment> => {
+export const createFromServerFields = async (fields: CreateCommentServerPayload, creatorId: string): Promise<Comment> => {
   const payload = Object.entries(fields).reduce((memo, [fieldName, fieldValue]) => {
     switch (fieldName) {
       case 'selectedCycleId':
@@ -113,7 +113,7 @@ export const createFromServerFields = async (fields: CreateCommentServerPayload,
   return prisma.comment.create({
     data: {
       contentText: payload.contentText,
-      creator: { connect: { id: creator.id } },
+      creator: { connect: { id: creatorId } },
       ...(existingCycle && { cycle: { connect: { id: existingCycle.id } } }),
       ...(existingWork && { work: { connect: { id: existingWork.id } } }),
       ...(existingComment && { comment: { connect: { id: existingComment.id } } }),

@@ -4,7 +4,7 @@ import { FunctionComponent } from 'react';
 import { Card, Row, Col } from 'react-bootstrap';
 import { AiOutlineEnvironment } from 'react-icons/ai';
 // import { useQuery } from 'react-query';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 // import { User } from '@prisma/client';
 import router from 'next/router';
 import styles from './MosaicItem.module.css';
@@ -22,20 +22,19 @@ interface Props {
   // showButtonLabels?: boolean;
   // showShare?: boolean;
 }
-const openUserMediatheque = (id: number) => {
+const openUserMediatheque = (id: string) => {
   router.push(`/mediatheque/${id}`).then(() => window.scrollTo(0, 0));
 };
 
 const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = false, className = '' }) => {
   const { t } = useTranslation('common');
   const { id, name, countryOfOrigin /* image  , tags */ } = user;
-  const [session] = useSession() as [Session | null | undefined, boolean];
-
+  
   return (
     <Card className={`${styles.container} ${className}`} onClick={() => openUserMediatheque(id)} data-cy={`mosaic-item-user-${user.id}`}>
       <Row>
         <Col xs={12} md={3}>
-          <UserAvatar user={user} showName={false} />
+          <UserAvatar id={id} showName={false} />
           {/* <img src={image || '/assets/avatar.png'} alt="User Avatar" /> */}
         </Col>
         <Col xs={12} md={9}>

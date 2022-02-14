@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, /* MouseEvent, */ useRef,useEffect, useState, ChangeEvent, FormEvent, KeyboardEvent } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import { EditorEvent } from 'tinymce';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import { InputGroup, Form, Button /* , Row, Col, Card, Popover, */, Spinner } from 'react-bootstrap';
@@ -50,21 +50,23 @@ const CommentsList: FunctionComponent<Props> = ({
 }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
-  const [session] = useSession() as [Session | null | undefined, boolean];
+  
+  const {data:sd,status} = useSession();
+    const [session, setSession] = useState<Session>(sd as Session);
+    useEffect(()=>{
+        if(sd)
+        setSession(sd as Session)
+    },[sd])
+
   const [newCommentInput, setNewCommentInput] = useState<string>();
-  const [idSession, setIdSession] = useState<string>('');
+  
   const commentsPerPage = 2;
   const [commentsShowCount, setCommentsShowCount] = useState<number>(commentsPerPage);
   const [filterdComments, setFilterdComments] = useState<Comment[]>();
-  const { /* isLoading, isError, error, */ data: user } = useUser(+idSession,{enabled:!!+idSession});
+  const { /* isLoading, isError, error, */ data: user } = useUser(session?.user.id,{enabled:!!session?.user.id});
   // const editorRef = useRef<any>(null);
 
   const queryClient = useQueryClient();
-
-  useEffect(() => {
-    const s = session as unknown as Session;
-    if (s) setIdSession(s.user.id.toString());
-  }, [session]);
 
   const {
     isLoading,
@@ -111,7 +113,7 @@ const CommentsList: FunctionComponent<Props> = ({
     let selectedCommentId = 0;
     let selectedWorkId = 0;
     let notificationMessage = '';
-    let notificationToUsers:number[] = [];
+    let notificationToUsers:string[] = [];
     const notificationContextURL = router.asPath;
     if(user){
       if (isCycle(entity)){
@@ -176,11 +178,11 @@ const CommentsList: FunctionComponent<Props> = ({
   };
 
   useEffect(() => {
-    if (entity) {
+    if (entity) {debugger;
       if (isCycle(entity)) {
-        setFilterdComments(() => entity.comments.filter((c) => !c.workId && !c.postId && !c.commentId));
+        setFilterdComments(() => entity.comments.filter((c) => c.cycleId && !c.workId && !c.postId && !c.commentId));
       } else if (isWork(entity)) {
-        setFilterdComments(() => entity.comments.filter((c) => c.workId && !c.postId && !c.commentId));
+        setFilterdComments(() => entity.comments.filter((c) => c.workId && !c.cycleId && !c.postId && !c.commentId));
       } else if (isPost(entity)) {
         setFilterdComments(() => entity.comments.filter((c) => c.postId && !c.commentId));
       } else {
@@ -292,7 +294,7 @@ const CommentsList: FunctionComponent<Props> = ({
       )} */}
       {/* {user && renderEditorWYSWYG()} */}
       <CommentActionsBar entity={entity} parent={parent}/>
-      <div className="ms-1">
+      <div className="ms-1" data-cy="comments-container">
         {renderComment()}
         {(filterdComments && filterdComments.length && (
           <div>

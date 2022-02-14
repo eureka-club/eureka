@@ -1,11 +1,11 @@
 import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/react';
 
 import { FileUpload, Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { storeUpload } from '../../../src/facades/fileUpload';
-import { createFromServerFields } from '../../../src/facades/work';
+import { createFromServerFields, findAll } from '../../../src/facades/work';
 import prisma from '../../../src/lib/prisma';
 // import redis from '../../../src/lib/redis';
 // import { WorkWithImages } from '../../../src/types/work';
@@ -55,26 +55,21 @@ export default getApiHandler()
       const { q = null, where = null, id = null } = req.query;
       let data = null;
       if (typeof q === 'string') {
-        data = await prisma.work.findMany({
+        data = await findAll({
           where: {
             OR: [{ title: { contains: q } }, { contentText: { contains: q } }, { author: { contains: q } }],
-          },
-          include: { localImages: true, ratings: true, favs: true, readOrWatcheds: true },
+          }
         });
       } else if (where) {
-        data = await prisma.work.findMany({
-          ...(typeof where === 'string' && { where: JSON.parse(where) }),
-          include: { localImages: true, ratings: true, favs: true, readOrWatcheds: true },
+        data = await findAll({
+          ...(typeof where === 'string' && { where: JSON.parse(where) })
         });
       } else if (id) {
-        data = await prisma.work.findMany({
-          where: { id: parseInt(id as string, 10) },
-          include: { localImages: true, ratings: true, favs: true, readOrWatcheds: true },
+        data = await findAll({
+          where: { id: parseInt(id as string, 10) }
         });
       } else {
-        data = await prisma.work.findMany({
-          include: { localImages: true, ratings: true, favs: true, readOrWatcheds: true },
-        });
+        data = await prisma.work.findMany();
       }
 
       res.status(200).json({ status: 'OK', data });

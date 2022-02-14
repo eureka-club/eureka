@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-// import { getSession } from 'next-auth/client';
+// import { getSession } from 'next-auth/react';
 import getT from 'next-translate/getT';
 import { WEBAPP_URL } from '../../../../src/constants';
 // import { Session } from '../../../../src/types';
@@ -36,9 +36,9 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
       res.status(404).end();
       return;
     }
-    const user = await prisma.user.findFirst({ where: { id: parseInt(userId, 10) } });
+    const user = await prisma.user.findFirst({ where: { id: userId.toString() } });
     if (authorized === '1') {
-      await addParticipant(cycle, +userId);
+      await addParticipant(cycle, userId);
       // res.redirect('/cycle/cycleJoinedSuccefully');
     }
     if (user && user.email) {

@@ -21,7 +21,7 @@ import LocalImageComponent from '@/components/LocalImage'
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
 import { useMutation, useQueryClient } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 // import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import { User } from '@prisma/client';
 import TagsInput from './controls/TagsInput';
@@ -36,7 +36,12 @@ import i18nConfig from '../../../i18n';
 
 dayjs.extend(utc);
 const EditUserForm: FunctionComponent = () => {
-  const [session] = useSession();
+  const {data:sd,status} = useSession();
+  const [session, setSession] = useState<Session>(sd as Session);
+  useEffect(()=>{
+    if(sd)
+      setSession(sd as Session)
+  },[sd])
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const queryClient = useQueryClient();
   const { t } = useTranslation('common');
@@ -44,8 +49,7 @@ const EditUserForm: FunctionComponent = () => {
   const [tags, setTags] = useState<string>('');
   const [photo, setPhoto] = useState<File>();
   const [showCrop, setShowCrop] = useState<boolean>(false);
-  // const [user, setUser] = useState<User | undefined>();
-  const [id, setId] = useState<string>('');
+  
   const [currentImg, setCurrentImg] = useState<string | undefined>();
   const [changingPhoto, setChangingPhoto] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>();
@@ -60,15 +64,9 @@ const EditUserForm: FunctionComponent = () => {
     public: false,
   });
 
-  useEffect(() => {
-    const s = session as unknown as Session;
-    if (!s || !s.user) router?.push('/');
-    else setId(s.user.id.toString());
-  }, []);
 
-  const { /* isLoading,  isError, error, */ data:user } = useUser(+id,{
-    enabled: !!+id,
-    staleTime:1
+  const { /* isLoading,  isError, error, */ data:user } = useUser(session?.user.id,{
+    enabled: !!session?.user.id,
   });
 
   useEffect(() => {
@@ -143,7 +141,7 @@ const EditUserForm: FunctionComponent = () => {
         if(value)
           fd.append(key,value);
       });
-      const res = await fetch(`/api/user/${id}`, {
+      const res = await fetch(`/api/user/${session?.user.id}`, {
         method: 'PATCH',
         // headers: { 'Content-Type': 'application/json' },
         body: fd,
@@ -164,7 +162,7 @@ const EditUserForm: FunctionComponent = () => {
     },
     {
       onMutate: async () => {
-        const cacheKey = ['USER',id];
+        const cacheKey = ['USER',session?.user.id];
         const snapshot = queryClient.getQueryData(cacheKey);
         return { cacheKey, snapshot };        
       },
@@ -212,7 +210,7 @@ const EditUserForm: FunctionComponent = () => {
      // image: form.image.value,
       countryOfOrigin: countryOrigin,
       aboutMe: form.aboutMe.value,
-      dashboardType: privacySettings || 3,
+      ... privacySettings && {dashboardType: privacySettings},
       tags,
       ... (photo && {photo}),
     };
@@ -225,7 +223,7 @@ const EditUserForm: FunctionComponent = () => {
   useEffect(() => {
     if (isSuccess === true) {
       setGlobalModalsState({ ...globalModalsState, ...{ editUserModalOpened: false } });
-      queryClient.invalidateQueries(['user', id]);
+      queryClient.invalidateQueries(['user', session?.user.id]);
       router.replace(router.asPath);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -428,7 +426,7 @@ const EditUserForm: FunctionComponent = () => {
               </Row>
               <Row>
                 <Col>
-                  <TagsInput tags={tags} setTags={setTags} label={t('Topics')} className="mb-3"/>
+                  <TagsInput tags={tags} setTags={setTags} max={5} label={t('Topics')} className="mb-3"/>
                 </Col>
               </Row>
               <Row>

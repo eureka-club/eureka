@@ -1,7 +1,7 @@
 // import crypto from 'crypto-js';
 // import HyvorTalk from 'hyvor-talk-react';
 // import { FunctionComponent } from 'react';
-// import { useSession } from 'next-auth/client';
+// import { useSession } from 'next-auth/react';
 
 // import { HYVOR_SSO_KEY, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
 // import { Session } from '../../types';

@@ -1,4 +1,4 @@
-import { FunctionComponent, useState, useRef } from 'react';
+import { FunctionComponent, useState, useRef, useEffect } from 'react';
 import { Button, Form, Spinner } from 'react-bootstrap';
 import { MdReply, MdCancel } from 'react-icons/md';
 import { BiTrash, BiEdit } from 'react-icons/bi';
@@ -13,7 +13,7 @@ import {
 } from '@/src/types/comment';
 import globalModalsAtom from '@/src/atoms/globalModals';
 import { Session } from '@/src/types';
-import {useSession} from 'next-auth/client'
+import {useSession} from 'next-auth/react'
 import { EditorEvent } from 'tinymce';
 import { useRouter } from 'next/router';
 
@@ -40,7 +40,14 @@ interface Props {
 const CommentActionsBar: FunctionComponent<Props> = ({
   entity, parent, context, className = '', cacheKey, showReplyBtn = true }) => {
   const { t } = useTranslation('common');
-  const [session] = useSession() as [Session | null | undefined, boolean];
+  
+  const {data:sd,status} = useSession();
+  const [session, setSession] = useState<Session>(sd as Session);
+  useEffect(()=>{
+      if(sd)
+      setSession(sd as Session)
+  },[sd])
+
   const queryClient = useQueryClient();
   const isFetching = useIsFetching(cacheKey);
   const router = useRouter();
@@ -175,7 +182,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
     if (entity && editorRef.current.getContent()) {
       const user = (session as Session).user;
       let notificationMessage = '';      
-      let notificationToUsers = new Set<number>([]);
+      let notificationToUsers = new Set<string>([]);
 
       let payload:Partial<CreateCommentClientPayload>={
         notificationContextURL: router.asPath,
@@ -349,10 +356,8 @@ const CommentActionsBar: FunctionComponent<Props> = ({
         
       }
 
-      
-      
       payload = {...payload,
-        creatorId: +session!.user.id,
+        creatorId: session!.user.id,
         contentText: editorRef.current.getContent(),
         notificationToUsers: [...notificationToUsers],
       };
@@ -490,7 +495,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
     </>
   }
 
-  if(!session?.user.id) return <></>;
+  if(!session) return <></>;
   if(isCommentMosaicItem(entity)){
     const c = (entity as CommentMosaicItem);
     return <section>

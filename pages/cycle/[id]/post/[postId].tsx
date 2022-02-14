@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { Spinner } from 'react-bootstrap';
 import { Session } from '../../../../src/types';
@@ -26,7 +26,12 @@ import { CycleContext } from '../../../../src/useCycleContext';
 // }
 
 const PostDetailInCyclePage: NextPage = () => {
-  const [session, isLoadingSession] = useSession();
+  const {data:sd,status} = useSession();
+  const [session, setSession] = useState<Session>(sd as Session);
+  useEffect(()=>{
+    if(sd)
+      setSession(sd as Session)
+  },[sd])
   const router = useRouter();
   const [cycleId, setCycleId] = useState<string>('');
   const { data, isLoading } = useCycle(+cycleId);
@@ -40,10 +45,10 @@ const PostDetailInCyclePage: NextPage = () => {
   useEffect(() => {
     if (!session) {
       setCurrentUserIsParticipant(() => false);
-    } else if (session && cycle && session.user) {
-      const s = session as unknown as Session;
+    } 
+    else if (cycle && session.user) {
       if (cycle.creatorId === s.user.id) setCurrentUserIsParticipant(() => true);
-      const isParticipant = cycle.participants.findIndex((p) => p.id === s.user.id) > -1;
+      const isParticipant = cycle.participants.findIndex((p) => p.id === session?.user.id) > -1;
       setCurrentUserIsParticipant(() => isParticipant);
     }
   }, [session, cycle]);
@@ -67,7 +72,7 @@ const PostDetailInCyclePage: NextPage = () => {
   }, [data, router.query.postId]);
 
   const isLoadingOrFetching = () => {
-    return !post && (isLoadingSession || isLoading || isLoadingPost || isFetchingPost);
+    return !post && (status=='loading' || isLoading || isLoadingPost || isFetchingPost);
   };
 
   return (

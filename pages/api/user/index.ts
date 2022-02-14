@@ -1,6 +1,6 @@
 // import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/react';
 
 import { Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
@@ -20,7 +20,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
       const data = await findAll();
       res.status(200).json({ data });
     } else {
-      const user = await find({ id: parseInt(id as string, 10),include:true });//UserMosaicItem
+      const user = await find({ id: id.toString(),include:true });//UserMosaicItem
       res.status(200).json({ user });
     }
   } catch (exc) {

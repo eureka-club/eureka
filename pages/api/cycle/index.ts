@@ -1,11 +1,12 @@
 import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/react';
 
 import { FileUpload, Session, StoredFileUpload } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { storeUpload } from '../../../src/facades/fileUpload';
 import { createFromServerFields, findAll } from '../../../src/facades/cycle';
+import {find as findUser} from '@/src/facades/user'
 import prisma from '../../../src/lib/prisma';
 // import redis from '../../../src/lib/redis';
 import { asyncForEach } from '../../../src/lib/utils';
@@ -52,17 +53,22 @@ export default getApiHandler()
             endDate: new Date(cw.endDate),
           }),
         );
+          const user = await findUser({id:session.user.id})
+          if(user){
+            const cycle = await createFromServerFields(
+              user,
+              fields,
+              coverImageUploadData,
+              complementaryMaterialsUploadData,
+              JSON.parse(fields.guidelines),
+              cycleWorksDates,
+            );
+            // await redis.flushall();
+            return res.status(201).json(cycle);
 
-        const cycle = await createFromServerFields(
-          session.user,
-          fields,
-          coverImageUploadData,
-          complementaryMaterialsUploadData,
-          JSON.parse(fields.guidelines),
-          cycleWorksDates,
-        );
-        // await redis.flushall();
-        res.status(201).json(cycle);
+          }
+          res.statusMessage = 'user not found';
+          res.status(400).end();
       } catch (exc) {
         console.error(exc); // eslint-disable-line no-console
         res.status(500).json({ error: 'server error' });

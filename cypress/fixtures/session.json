@@ -1,8 +1,11 @@
-{"user":{
+{
+  "user":{
     "name": "Geordanis Baño Vega Rodriguez Cruz",
     "email": "gbanoaol@gmail.com",
     "image": "/logo.svg",
-    "id": 127,
+    "id": "127",
     "roles": "admin",
     "photos": [ ]
-  }}
+  },
+  "expires": "2050-03-12T19:45:50.896Z"
+}

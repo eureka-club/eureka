@@ -11,85 +11,9 @@ datasource db {
 
 // Next-auth models (https://next-auth.js.org/schemas/adapters#prisma-schema)
 
-model User {
-  id                Int        @id @default(autoincrement())
-  name              String?
-  email             String?    @unique
-  emailVerified     DateTime?  @map(name: "email_verified")
-  image             String?
-  roles             String     @default("member")
-  createdAt         DateTime   @default(now()) @map(name: "created_at")
-  updatedAt         DateTime   @updatedAt @map(name: "updated_at")
-  countryOfOrigin   String?    @map(name: "country_of_origin")
-  aboutMe           String?    @map(name: "about_me")
-  
-  // 1 public, 2 protected, 3 private
-  dashboardType     Int?       @map(name: "dashboard_type") @default(1)
- 
-  accounts       Account[]
-  sessions       Session[]
 
-  cycles              Cycle[]    @relation("CreatedBy")
-  joinedCycles        Cycle[]    @relation("CycleToParticipant")
-  likedCycles         Cycle[]    @relation("CycleToLikes")
-  favCycles           Cycle[]    @relation("CycleToFavs")
-  likedWorks          Work[]     @relation("WorkToLikes")
-  favWorks            Work[]     @relation("WorkToFavs")
-  readOrWatchedWorks  Work[]     @relation("WorkReadOrWatched")
-  likedPosts          Post[]     @relation("PostToLikes")
-  favPosts            Post[]     @relation("PostToFavs")
-  posts               Post[]  
-  taxonomies          Taxonomy[]  
-  terms               Term[]  
-  tags                String?
-  followedBy          User[]   @relation("_UserFollows", references: [id])
-  following           User[]   @relation("_UserFollows", references: [id])
-  ratingWorks         RatingOnWork[]
-  ratingCycles        RatingOnCycle[]
-  comments            Comment[]
-  photos              LocalImage[]
-  notify              Notification[]
-  notifications       NotificationsOnUsers[]
-  
 
-  @@map(name: "users")
-}
 
-model Account {
-  id                  Int        @id @default(autoincrement())
-  user                User       @relation(fields: [userId], references: [id])
-  userId              Int        @map(name: "user_id")
-  compoundId          String     @unique @map(name: "compound_id")
-  providerType        String     @map(name: "provider_type")
-  providerId          String     @map(name: "provider_id")
-  providerAccountId   String     @map(name: "provider_account_id")
-  refreshToken        String?    @map(name: "refresh_token")
-  accessToken         String?    @map(name: "access_token")
-  accessTokenExpires  DateTime?  @map(name: "access_token_expires")
-  createdAt           DateTime   @default(now()) @map(name: "created_at")
-  updatedAt           DateTime   @updatedAt @map(name: "updated_at")
-
-  @@index([userId], name: "accounts_user_id_index")
-  @@index([providerId], name: "accounts_provider_id_index")
-  @@index([providerAccountId], name: "accounts_provider_account_id_index")
-
-  @@map(name: "accounts")
-}
-
-model Session {
-  id            Int       @id @default(autoincrement())
-  user          User      @relation(fields: [userId], references: [id])
-  userId        Int       @map(name: "user_id")
-  expires       DateTime
-  sessionToken  String    @unique @map(name: "session_token")
-  accessToken   String    @unique @map(name: "access_token")
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
-
-  @@index([userId], name: "sessions_user_id_index")
-
-  @@map(name: "sessions")
-}
 
 model VerificationRequest {
   id          Int       @id @default(autoincrement())
@@ -127,7 +51,7 @@ model LocalImage {
 model Cycle {
   id                      Int       @default(autoincrement()) @id
   creator                 User      @relation(name:"CreatedBy", fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  creatorId               Int       @map(name: "creator_id")
+  creatorId               String       @map(name: "creator_id")
   // isPublic                Boolean   @map(name: "is_public")
   title                   String
   languages               String
@@ -166,7 +90,7 @@ model Cycle {
 
 model Work {
   id               Int       @default(autoincrement()) @id
-  creatorId        Int       @map(name: "creator_id") @default(1)
+  creatorId        String    @map(name: "creator_id")
   type             String
   title            String
   contentText      String?    @db.VarChar(4000) @map(name: "content_text")
@@ -255,7 +179,7 @@ model Guideline {
 model Post {
   id           Int       @default(autoincrement()) @id
   creator      User      @relation(fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  creatorId    Int       @map(name: "creator_id")
+  creatorId    String       @map(name: "creator_id")
   title        String
   language     String
   contentText  String    @db.Text @map(name: "content_text")
@@ -282,7 +206,7 @@ model Post {
 model Comment {
   id           Int         @default(autoincrement()) @id
   creator      User        @relation(fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  creatorId    Int         @map(name: "creator_id")
+  creatorId    String         @map(name: "creator_id")
   contentText  String      @db.VarChar(4000) @map(name: "content_text")
 
   cycle        Cycle?      @relation(fields: [cycleId], references: [id])
@@ -312,7 +236,7 @@ model Comment {
 model Taxonomy {
   id           Int       @default(autoincrement()) @id
   creator      User?     @relation(fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  creatorId    Int?      @map(name: "creator_id")
+  creatorId    String?      @map(name: "creator_id")
   label        String
   code         String    @unique
   description  String    @db.VarChar(4000) @map(name: "content_text")
@@ -337,7 +261,7 @@ model Term {
   child        Term[]    @relation("TermHierarchy")
 
   creator      User?     @relation(fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  creatorId    Int?      @map(name: "creator_id")
+  creatorId    String?      @map(name: "creator_id")
   
   label        String
   code         String    
@@ -359,7 +283,7 @@ model Term {
 model RatingOnWork {
   ratingOnWorkId      Int       @default(autoincrement()) @id @map("id")
   user                User?     @relation(fields: [userId], references: [id])
-  userId              Int?      
+  userId              String?      
   work                Work?     @relation(fields: [workId], references: [id])
   workId              Int?      
   
@@ -375,7 +299,7 @@ model RatingOnWork {
 model RatingOnCycle {
   ratingOnCycleId     Int       @default(autoincrement()) @id @map("id")
   user                User?     @relation(fields: [userId], references: [id])
-  userId              Int?      
+  userId              String?      
   cycle               Cycle?    @relation(fields: [cycleId], references: [id])
   cycleId             Int?      
   
@@ -397,7 +321,7 @@ model Notification {
   message          String
   
   fromUser         User                   @relation(fields: [fromUserId], references: [id])
-  fromUserId       Int
+  fromUserId       String
   
   createdAt        DateTime                @default(now()) @map(name: "created_at")
   updatedAt        DateTime                @updatedAt @map(name: "updated_at")
@@ -406,7 +330,7 @@ model Notification {
 
 model NotificationsOnUsers {
   user                User                 @relation(fields: [userId], references: [id], onUpdate: NoAction)
-  userId              Int 
+  userId              String 
 
   notification        Notification         @relation(fields: [notificationId], references: [id], onUpdate: NoAction)
   notificationId      Int
@@ -414,4 +338,96 @@ model NotificationsOnUsers {
   viewed              Boolean              @default(false)
 
   @@id([userId, notificationId])
+}
+
+model User {
+  id                String     @id @default(cuid())
+  name              String?
+  email             String?    @unique
+  emailVerified     DateTime?  @map(name: "email_verified")
+  image             String?
+  roles             String     @default("member")
+  createdAt         DateTime   @default(now()) @map(name: "created_at")
+  updatedAt         DateTime   @updatedAt @map(name: "updated_at")
+  countryOfOrigin   String?    @map(name: "country_of_origin")
+  aboutMe           String?    @map(name: "about_me")
+  
+  // 1 public, 2 protected, 3 private
+  dashboardType     Int?       @map(name: "dashboard_type") @default(1)
+ 
+  cycles              Cycle[]    @relation("CreatedBy")
+  joinedCycles        Cycle[]    @relation("CycleToParticipant")
+  likedCycles         Cycle[]    @relation("CycleToLikes")
+  favCycles           Cycle[]    @relation("CycleToFavs")
+  likedWorks          Work[]     @relation("WorkToLikes")
+  favWorks            Work[]     @relation("WorkToFavs")
+  readOrWatchedWorks  Work[]     @relation("WorkReadOrWatched")
+  likedPosts          Post[]     @relation("PostToLikes")
+  favPosts            Post[]     @relation("PostToFavs")
+  posts               Post[]  
+  taxonomies          Taxonomy[]  
+  terms               Term[]  
+  tags                String?
+  followedBy          Follows[] @relation("follower")
+  following           Follows[] @relation("following")
+  ratingWorks         RatingOnWork[]
+  ratingCycles        RatingOnCycle[]
+  comments            Comment[]
+  photos              LocalImage[]
+  notify              Notification[]
+  notifications       NotificationsOnUsers[]
+
+  accounts      Account[]
+  sessions      Session[]
+  
+
+  @@map(name: "users")
+}
+
+model Follows {
+  follower    User @relation("follower", fields: [followerId], references: [id],onDelete:NoAction,onUpdate:NoAction)
+  followerId  String
+  following   User @relation("following", fields: [followingId], references: [id])
+  followingId String
+
+  @@id([followerId, followingId])
+}
+
+model Account {
+  id                 Int        @id @default(autoincrement())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.Text
+  access_token       String?  @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.Text
+  session_state      String?
+  oauth_token_secret String?
+  oauth_token        String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           Int                     @default(autoincrement()) @id
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }

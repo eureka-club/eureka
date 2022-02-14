@@ -5,14 +5,13 @@ import { PostMosaicItem } from './types/post';
 // import { User } from '@prisma/client';
 
 
-export const getRecord = async (id: number): Promise<UserMosaicItem|null> => {
-  if (!id) return null;
+export const getRecord = async (id: string): Promise<UserMosaicItem|undefined> => {
+  if (!id) return undefined;
   else{
     const url = `/api/user/${id}`;
     const res = await fetch(url);
-    if (!res.ok) return null;
-    const result = await res.json();
-    return result.user;
+    if (!res.ok) return undefined;
+    return res.json();
    }
 };
 
@@ -22,12 +21,12 @@ interface Options {
   enabled?: boolean;
 }
 
-const useUser = (id: number, options?: Options) => {
+const useUser = (id: string, options?: Options) => {
   const { staleTime, enabled } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  return useQuery<UserMosaicItem|null>(['USER', `${id}`], () => getRecord(id), {
+  return useQuery<UserMosaicItem|undefined>(['USER', `${id}`], () => getRecord(id), {
     staleTime,
     enabled,
   });

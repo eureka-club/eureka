@@ -298,17 +298,17 @@ export const createFromServerFields = async (
   });
 };
 
-export const addParticipant = async (cycle: Cycle, userId: number): Promise<Cycle> => {
+export const addParticipant = async (cycle: Cycle, userId: string): Promise<Cycle> => {
   return prisma.cycle.update({
     where: { id: cycle.id },
     data: { participants: { connect: { id: userId } } },
   });
 };
 
-export const removeParticipant = async (cycle: Cycle, user: User): Promise<Cycle> => {
+export const removeParticipant = async (cycle: Cycle, userId: string): Promise<Cycle> => {
   return prisma.cycle.update({
     where: { id: cycle.id },
-    data: { participants: { disconnect: { id: user.id } } },
+    data: { participants: { disconnect: { id: userId } } },
   });
 };
 

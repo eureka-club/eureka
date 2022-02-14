@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import { /* GetStaticProps, */ NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import { useQueryClient, useMutation } from 'react-query';
 // import { dehydrate } from 'react-query/hydration';
 import { useState, useEffect, SyntheticEvent } from 'react';
@@ -18,7 +18,7 @@ import { BiArrowBack } from 'react-icons/bi';
 import LocalImageComponent from '@/src/components/LocalImage'
 import { HiOutlineUserGroup } from 'react-icons/hi';
 
-import { /* RatingOnCycle, */ RatingOnWork, User } from '@prisma/client';
+import { /* RatingOnCycle, */ Follows, Prisma, RatingOnWork, User } from '@prisma/client';
 import styles from './index.module.css';
 import useUser from '@/src/useUser';
 
@@ -40,6 +40,7 @@ import { WorkMosaicItem /* , WorkWithImages */ } from '../../src/types/work';
 import { UserMosaicItem /* , UserDetail, WorkWithImages */ } from '../../src/types/user';
 import UnclampText from '../../src/components/UnclampText';
 import { useNotificationContext } from '@/src/useNotificationProvider';
+import { Following } from '@/src/types/follows';
 
 // import MosaicItemCycle from '../../src/components/cycle/MosaicItem';
 // import MosaicItemPost from '../../src/components/post/MosaicItem';
@@ -53,9 +54,15 @@ type ItemCycle = CycleMosaicItem & { type: string };
 // | WorkMosaicItem | ;
 
 const Mediatheque: NextPage = () => {
-  const [session, isLoadingSession] = useSession();
+  
+  const {data:sd,status} = useSession();
+  const [session, setSession] = useState<Session>(sd as Session);
+  useEffect(()=>{
+    if(sd)
+      setSession(sd as Session)
+  },[sd])
+  
   const [id, setId] = useState<string>('');
-  const [idSession, setIdSession] = useState<string>('');
   const router = useRouter();
   const {notifier} = useNotificationContext();
   // const [cycles, setCycles] = useState<ItemCycle[]>([]);
@@ -91,12 +98,13 @@ const Mediatheque: NextPage = () => {
   useEffect(() => {
     // const s = session as unknown as Session;
     // if (s && s.user) setId(s.user.id.toString());
-    setId(router.query.id as string);
-    if (session) setIdSession((session as unknown as Session).user.id.toString());
-  }, [session, router]);
+    if(router)
+      setId(router.query.id?.toString() || '');
+    
+  }, [router]);
 
-  const { /* isError, error, */ data: user, isLoading: isLoadingUser, isSuccess: isSuccessUser } = useUser(+id,{
-    enabled:!!+id
+  const { /* isError, error, */ data: user, isLoading: isLoadingUser, isSuccess: isSuccessUser } = useUser(id,{
+    enabled:!!id
   });
 
   useEffect(() => {
@@ -107,17 +115,17 @@ const Mediatheque: NextPage = () => {
 
 
   useEffect(() => {
-    if (user && user.id && session) {
-      const s = session as unknown as Session;
-      const ifbm = s ? user.followedBy.findIndex((i: User) => i.id === s.user.id) !== -1 : false;
+    if (user && user.id) {
+      
+      const ifbm = session ? user.followedBy.findIndex((i: Follows) => i.followerId === session.user.id) !== -1 : false;
       setIsFollowedByMe(() => ifbm);      
     }
-  }, [user, session]);
+  }, [user, sd]);
 
   const isAccessAllowed = () => {
     if (!isLoadingUser && user && user.id) {
       if (!user.dashboardType || user.dashboardType === 1) return true;
-      if (!isLoadingSession) {
+      if (!(status=='loading')) {
         // if (!session) return false;
         if (session) {
           const s = session as unknown as Session;
@@ -145,19 +153,19 @@ const Mediatheque: NextPage = () => {
 
   const { mutate: mutateFollowing, isLoading: isLoadingMutateFollowing } = useMutation<User>(
     async () => {
-      const user = (session as unknown as Session).user;
+      // const user = (session as unknown as Session).user;
       const action = isFollowedByMe ? 'disconnect' : 'connect';
 
       const notificationMessage = `userStartFollowing!|!${JSON.stringify({
-        userName:user.name,
+        userName:session.name,
       })}`
       const form = new FormData()
       form.append('followedBy',JSON.stringify({
-          [`${action}`]: [{ id: user.id }],
+          [`${action}`]: [{ id: session.id }],
       }))
       form.append('notificationData',JSON.stringify({
         notificationMessage,
-        notificationContextURL:`/mediatheque/${idSession}`,
+        notificationContextURL:`/mediatheque/${session.id}`,
         notificationToUsers:[id]
       }))
       
@@ -179,7 +187,7 @@ const Mediatheque: NextPage = () => {
         const json = await res.json();
         if(notifier)
           notifier.notify({
-            toUsers:[+id],
+            toUsers:[id],
             data:{message:notificationMessage}
           });
         return json;
@@ -191,33 +199,33 @@ const Mediatheque: NextPage = () => {
     {
       onMutate: async () => {
         await queryClient.cancelQueries(['USER', id]);
-        await queryClient.cancelQueries(['USER', idSession]);
+        await queryClient.cancelQueries(['USER', session.id]);
 
         type UserFollow = User & { followedBy: User[]; following: User[] };
         const followingUser = queryClient.getQueryData<UserFollow>(['USER', id]);
-        const followedByUser = queryClient.getQueryData<UserFollow>(['USER', idSession]);
+        const followedByUser = queryClient.getQueryData<UserFollow>(['USER', session.id]);
         let followedBy: User[] = [];
         let following: User[] = [];
         if (followingUser && followedByUser)
           if (isFollowedByMe) {
-            followedBy = followingUser.followedBy.filter((i: User) => i.id !== +idSession);
-            following = followedByUser.following.filter((i: User) => i.id !== +id);
+            followedBy = followingUser.followedBy.filter((i: User) => i.id !== session.id);
+            following = followedByUser.following.filter((i: User) => i.id !== id);
           } else {
             followedBy = [...followingUser.followedBy, followedByUser];
             following = [...followedByUser.following, followingUser];
           }
         queryClient.setQueryData(['USER', id], { ...followingUser, followedBy });
-        queryClient.setQueryData(['USER', idSession], { ...followedByUser, following });
+        queryClient.setQueryData(['USER', session.id], { ...followedByUser, following });
         return { followingUser, followedByUser };
       },
       onError: (err, data, context: any) => {
         queryClient.setQueryData(['USER', id], context.followingUser);
-        queryClient.setQueryData(['USER', idSession], context.followedByUser);
+        queryClient.setQueryData(['USER', session.id], context.followedByUser);
       },
 
       onSettled: () => {
         queryClient.invalidateQueries(['USER', id]);
-        queryClient.invalidateQueries(['USER', idSession]);
+        queryClient.invalidateQueries(['USER', session.id]);
       },
     },
   );
@@ -225,7 +233,7 @@ const Mediatheque: NextPage = () => {
   const followHandler = async () => {
     const s = session;
     if (user && s!.user) {
-      if (parseInt(id, 10) !== (s as unknown as Session).user.id) mutateFollowing();
+      if (parseInt(id, 10) !== session.id) mutateFollowing();
     }
   };
 
@@ -267,7 +275,7 @@ const Mediatheque: NextPage = () => {
     if (user && user.joinedCycles && user.joinedCycles.length) {
       const JC: ItemCycle[] = [];
       user.joinedCycles.reduce((p: ItemCycle[], c) => {
-        if (c.creatorId !== parseInt(id, 10)) {
+        if (c.creatorId !== id) {
           // otherwise will be already on C
           p.push({ ...c, type: 'cycle' } as ItemCycle);
         }
@@ -350,11 +358,12 @@ const Mediatheque: NextPage = () => {
 
   const usersFollowed = () => {
     if (user && user.following && user.following.length) {
+      const following = (user.following as Following[]).map(f=>f.following as UserMosaicItem);
       return (
         <CarouselStatic
-          onSeeAll={async () => seeAll(user!.following as UserMosaicItem[], t('Users I follow'), false)}
+          onSeeAll={async () => seeAll(following, t('Users I follow'), false)}
           title={`${t('Users I follow')}  `}
-          data={user!.following as UserMosaicItem[]}
+          data={following}
           iconBefore={<HiOutlineUserGroup />}
           // iconAfter={<BsCircleFill className={styles.infoCircle} />}
         />
@@ -364,7 +373,7 @@ const Mediatheque: NextPage = () => {
   };
 
   const renderAccessInfo = () => {
-    if (!(isLoadingUser || isLoadingSession)) {
+    if (!(isLoadingUser || (status=='loading'))) {
       if (user) {
         const aa = isAccessAllowed();
         if (user.dashboardType === 3 && !aa)
@@ -403,16 +412,19 @@ const Mediatheque: NextPage = () => {
     return '';
   };
 
-  return (
-    <SimpleLayout title={t('Mediatheque')}>
-      <>
+  if(isLoadingUser || status === 'loading')
+    return <SimpleLayout title={t('Mediatheque')}>
+      <Spinner animation="grow" variant="info" />
+      </SimpleLayout>;
+
+  else if(user)
+    return <SimpleLayout title={t('Mediatheque')}>
+      <>      
         <ButtonGroup className="mt-1 mt-md-3 mb-1">
           <Button variant="primary text-white" onClick={() => router.back()} size="sm">
             <BiArrowBack />
           </Button>
         </ButtonGroup>
-
-        {!(isLoadingUser || isLoadingSession) && user && (
           <section>
             <Card className='userHeader'>
               <Card.Body>
@@ -425,7 +437,7 @@ const Mediatheque: NextPage = () => {
                          {renderCountry()}
                          </div>
                       </div>
-                    <TagsInput className='d-sm-block d-md-none' tags={user.tags || ''} readOnly label="" />
+                    <TagsInput max={undefined} className='d-sm-block d-md-none' tags={user.tags || ''} readOnly label="" />
                   </Col>
                   <Col className='col col-sm-12 col-md-8'>
                     <div className='d-none d-md-block'>
@@ -438,17 +450,17 @@ const Mediatheque: NextPage = () => {
                     <div className='mt-3 d-sm-block d-md-none'>
                        <UnclampText isHTML={false} text={user.aboutMe || ''} clampHeight="6rem" />
                     </div>
-                    <TagsInput className='d-none d-md-block' tags={user.tags || ''} readOnly label="" />
+                    <TagsInput max={undefined} className='d-none d-md-block' tags={user.tags || ''} readOnly label="" />
                   </Col>
                   <Col className='mt-2 d-grid gap-2 d-md-flex align-items-start  justify-content-md-end d-lg-block'>
-                    {session && (session as unknown as Session).user!.id !== user.id && !isFollowedByMe && (
+                    {session && session.id !== user.id && !isFollowedByMe && (
                       <Button className='text-white rounded-pill' onClick={followHandler} disabled={isLoadingMutateFollowing}>
                         {t('Follow')}
                         {isLoadingMutateFollowing && <Spinner animation="grow" variant="info" size="sm" />}
                       </Button>
                     )}
 
-                    {session && (session as unknown as Session).user!.id !== user.id && isFollowedByMe && (
+                    {session && session.id !== user.id && isFollowedByMe && (
                       <Button
                         variant="button border-primary text-primary fs-6"
                         className="w-80 rounded-pill"
@@ -480,15 +492,16 @@ const Mediatheque: NextPage = () => {
               </>
             )}
           </section>
-        )}
         <aside>
           {renderAccessInfo()}
-          {(isLoadingUser || isLoadingSession) && <Spinner animation="grow" variant="info" />}
-          {isSuccessUser && id && !user && <Spinner animation="grow" variant="info" />}
         </aside>
       </>
-    </SimpleLayout>
-  );
+      </SimpleLayout>
+      
+  return <SimpleLayout title={t('Mediatheque')}>
+      <p>{t('notFound')}</p>
+      </SimpleLayout>;
+  
 };
 
 // export const getStaticProps: GetStaticProps = async () => {

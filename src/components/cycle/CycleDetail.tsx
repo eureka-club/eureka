@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 // import HyvorTalk from 'hyvor-talk-react';
 import { useAtom } from 'jotai';
 import {v4} from 'uuid';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent, useState, useRef, useEffect, ChangeEvent } from 'react';
@@ -90,14 +90,20 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const router = useRouter();
 
-  const [session, isLoadingSession] = useSession() as [Session | null | undefined, boolean];
+  const {data:sd,status} = useSession();
+    const [session, setSession] = useState<Session>(sd as Session);
+    useEffect(()=>{
+        if(sd)
+        setSession(sd as Session)
+    },[sd])
+  
   const { t } = useTranslation('cycleDetail');
   const [tabKey, setTabKey] = useState<string>();
   const tabContainnerRef = useRef<HTMLDivElement>(null);
   const refParticipants = useRef<Typeahead<User>>(null);
   const [filtersWork, setFiltersWork] = useState<number[]>([]);
   const [filterCycleItSelf, setFilterCycleItSelf] = useState<boolean>(false);  
-  const [filtersParticipant,setFiltersParticipant] = useState<number[]>([]);
+  const [filtersParticipant,setFiltersParticipant] = useState<string[]>([]);
   const [filtersContentType,setFiltersContentType] = useState<string[]>([]);
   const [comboboxChecked, setComboboxChecked] = useState<Record<string, boolean>>({
     post: false,

@@ -1,6 +1,7 @@
 {
     "ignoreTestFiles":["**/examples/**/*.spec.js"],
     "baseUrl":"http://localhost:3000",
+    "video":false,
     "component": {
         "componentFolder": "src",
         "testFiles": "**/*.spec.{js,jsx,ts,tsx}",

@@ -1,9 +1,9 @@
 // import HyvorTalk from 'hyvor-talk-react';
 import { useAtom } from 'jotai';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 // import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { ChangeEvent, FunctionComponent, MouseEvent, useState } from 'react';
+import { ChangeEvent, FunctionComponent, MouseEvent, useState, useEffect } from 'react';
 
 import { Button, Col, Row, ButtonGroup, Form } from 'react-bootstrap';
 
@@ -17,7 +17,7 @@ import { BiBookHeart } from 'react-icons/bi';
 // import { useMutation, useQueryClient, useQuery } from 'react-query';
 // import globalModalsAtom from '../../atoms/globalModals';
 
-import { Session } from '../../types';
+import { Session } from '@/src/types';
 // import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
 import { CycleMosaicItem } from '../../types/cycle';
 // import { WorkMosaicItem } from '../../types/work';
@@ -48,7 +48,14 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
   // const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
 
   // const router = useRouter();
-  const [session, isSessionLoading] = useSession() as [Session | null | undefined, boolean];
+  
+  const {data:sd,status} = useSession();
+    const [session, setSession] = useState<Session>(sd as Session);
+    useEffect(()=>{
+        if(sd)
+        setSession(sd as Session)
+    },[sd])
+  
   const { t } = useTranslation('cycleDetail');
   // const hyvorId = `${WEBAPP_URL}cycle/${cycle.id}`;
 
@@ -98,7 +105,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
   };
   const handleCreateRelatedWorkClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    if (!isSessionLoading && session && session.user.roles === 'admin') {
+    if (!(status=='loading') && session && session.user.roles === 'admin') {
       setIsSuggestRelatedWork(true);
       setIsCreateComment(false);
       setIsCreateEureka(false);
@@ -111,7 +118,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
   };
 
   const canCreateWork = () => {
-    return !isSessionLoading && session && session.user.roles === 'admin';
+    return !(status=='loading') && session && session.user.roles === 'admin';
   };
 
   return (
@@ -121,7 +128,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
           {' '}
           <Row className={`d-flex justify-content-center ${styles.discussionContainer}`}>
             <Col xs={12} md={1} className="text-center mb-1">
-              {session && session.user && <UserAvatar user={session.user} showName={false} />}
+              {session && session.user && <UserAvatar id={session.user.id} showName={false} />}
             </Col>
             <Col xs={12} md={11}>
               <ButtonGroup className={`d-flex flex-column flex-md-row justify-content-between ${styles.optButtons}`} size="lg">

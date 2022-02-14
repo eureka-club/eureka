@@ -4,7 +4,7 @@ import { UserMosaicItem } from '@/types/user';
 import prisma from '../lib/prisma';
 
 export interface findProps {
-  id: number;
+  id: string;
   select?: Record<string, boolean>;
   include?: boolean;
 }
@@ -105,8 +105,56 @@ export const find = async (props: findProps): Promise<User | UserMosaicItem | nu
         // readOrWatchedWorks: {
         //   include: { localImages: true, likes: true, favs: true, readOrWatcheds: true },
         // },
-        following: true,
-        followedBy: true,
+        following: {
+          include:{following:{include: {
+            cycles: true,
+            joinedCycles: true,
+            likedCycles: true,
+            favCycles: true,
+            favPosts:true,
+            posts: true,
+            likedWorks: true,
+            favWorks: true,
+            ratingWorks:true,
+            ratingCycles:true,
+            readOrWatchedWorks: true,
+            following: true,
+            followedBy: true,
+            photos:true,
+            notifications:{
+              include:{notification:{
+                include:{
+                  toUsers:true,
+                }
+              }},
+            }
+          },}}
+        },
+        followedBy: {
+          include:{follower:{include: {
+            cycles: true,
+            joinedCycles: true,
+            likedCycles: true,
+            favCycles: true,
+            favPosts:true,
+            posts: true,
+            likedWorks: true,
+            favWorks: true,
+            ratingWorks:true,
+            ratingCycles:true,
+            readOrWatchedWorks: true,
+            following: true,
+            followedBy: true,
+            photos:true,
+            notifications:{
+              include:{notification:{
+                include:{
+                  toUsers:true,
+                }
+              }},
+            }
+          },}}
+        },
 
         ratingWorks: {
           select: {
@@ -170,15 +218,21 @@ export const findAll = async (): Promise<User[]> => {
   });
 };
 
-export const remove = async (id: number): Promise<User> => {
+export const remove = async (id: string): Promise<User> => {
   return prisma.user.delete({
     where: { id },
   });
 };
 
-export const update = async (id: number, data: Prisma.UserUpdateInput)=>{
+export const update = async (id: string, data: Prisma.UserUpdateInput)=>{
   return prisma.user.update({
     data,
     where:{id}
+  });
+};
+
+export const create = async (id: string, data: Prisma.UserCreateInput)=>{
+  return prisma.user.create({
+    data
   });
 };

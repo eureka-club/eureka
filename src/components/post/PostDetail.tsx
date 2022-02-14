@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 // import { useAtom } from 'jotai';
-// import { useSession } from 'next-auth/client';
+// import { useSession } from 'next-auth/react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -85,7 +85,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
                         />
                         {post.creator.name}
                       </a> */}
-                      <Avatar user={post.creator} showFullName />
+                      <Avatar id={post.creator.id} showFullName />
                     </Link>
                </div>
                <div>
@@ -163,7 +163,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
                   />
                   {post.creator.name}
                 </a> */}
-                <Avatar user={post.creator} showFullName />
+                <Avatar id={post.creator.id} showFullName />
               </Link>
               </div>
               <div>

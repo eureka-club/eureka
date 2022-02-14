@@ -8,7 +8,7 @@ import styles from './UserAvatar.module.css';
 import useUser from '@/src/useUser';
 import LocalImageComponent from '@/src/components/LocalImage'
 interface Props {
-  user: { id: number | null; name: string | null; image: string | null };
+  id: string;
   showName?: boolean;
   showFullName?: boolean;
   size?: 'md' | 'sm' | 'xs';
@@ -16,15 +16,15 @@ interface Props {
 }
 
 const UserAvatar: FunctionComponent<Props> = ({
-  user,
+  id,
   size = 'md',
   showName = true,
   className = '',
   showFullName = false,
 }) => {
 
-  const { data: u, isLoading: isLoadingUser, isSuccess: isSuccessUser } = useUser(+user?.id!,{
-    enabled:!!+user?.id!
+  const { data: user, isLoading: isLoadingUser, isSuccess: isSuccessUser } = useUser(id,{
+    enabled:!!id
   });
 
   const onLoadImgError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
@@ -33,30 +33,32 @@ const UserAvatar: FunctionComponent<Props> = ({
 
   const renderUserName = () => {
     let res = '';
-    if (showName) {
-      const truncateName = user.name?.slice(0, 16);
-      if (showFullName) {
-        res = user.name!;
-      } else if (truncateName!.length + 3 < user.name!.length) {
-        res = `${truncateName}...`;
-      } else res = `${user.name}`;
+    if(user){
+      if (showName) {
+        const truncateName = user.name?.slice(0, 16);
+        if (showFullName) {
+          res = user.name!;
+        } else if (truncateName!.length + 3 < user.name!.length) {
+          res = `${truncateName}...`;
+        } else res = `${user.name}`;
+      }      
     }
     return <span>{res}</span>;
   };
   return (
     <>
-      {u && (
+      {user && (
         <span className={`fs-6 ${className} ${styles.cycleCreator} ${styles[size]}`}>
-          <Link href={`/mediatheque/${u.id}`}>
+          <Link href={`/mediatheque/${user.id}`}>
             <a className={`text-secondary ${styles.link}`}>
 
-                {(!u?.photos.length) ?
+                {(!user?.photos.length) ?
          <img
         onError={onLoadImgError}
         className={`${styles.cycleCreatorAvatar} me-2`}
-        src={u.image || '/img/default-avatar.png'}
-        alt={u.name||''}
-      /> : <LocalImageComponent className={`${styles.cycleCreatorAvatar} me-2`} filePath={`users-photos/${u.photos[0].storedFile}` } alt={user.name||''} />}
+        src={user.image || '/img/default-avatar.png'}
+        alt={user.name||''}
+      /> : <LocalImageComponent className={`${styles.cycleCreatorAvatar} me-2`} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />}
               {renderUserName()}
             </a>
           </Link>

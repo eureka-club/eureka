@@ -1,7 +1,7 @@
 // import classNames from 'classnames';
 // import { useAtom } from 'jotai';
 // import { useQuery } from 'react-query';
-// import { useSession } from 'next-auth/client';
+// import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 // import { useRouter } from 'next/router';
 import { v4 } from 'uuid';

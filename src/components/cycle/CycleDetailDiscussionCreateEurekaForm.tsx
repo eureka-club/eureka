@@ -1,4 +1,4 @@
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, MouseEvent, FunctionComponent, useEffect, useRef, useState } from 'react';
 import Image from 'next/image'
@@ -40,7 +40,14 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
 }) => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const [session] = useSession() as [Session | null | undefined, boolean];
+  
+  const {data:sd,status} = useSession();
+  const [session, setSession] = useState<Session>(sd as Session);
+  useEffect(()=>{
+    if(sd)
+      setSession(sd as Session)
+  },[sd])
+
   const { t } = useTranslation('cycleDetail');
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [newEurekaImageFile, setNewEurekaImageFile] = useState<File | null>(null);
@@ -137,7 +144,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
 
   const { mutate: execCreateEureka, isLoading } = useMutation(
     async (payload: CreatePostAboutCycleClientPayload | CreatePostAboutWorkClientPayload): Promise<Post | null> => {
-      const u = (session as Session).user;
+      const u = session?.user;
       const toUsers = cycle.participants.filter(p=>p.id!==u.id).map(p=>p.id);
       if(u.id !== cycle.creatorId)
         toUsers.push(cycle.creatorId);
@@ -212,7 +219,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         }
         if (context){
           queryClient.invalidateQueries(context.cacheKey);
-          queryClient.invalidateQueries(['USER',(session as Session).user.id.toString()]);//to get the new notification
+          queryClient.invalidateQueries(['USER',session?.user.id.toString()]);//to get the new notification
         } 
       },
     },

@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import {Form} from 'multiparty';
-import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { find, update } from '../../../src/facades/user';
@@ -21,27 +21,27 @@ export const config = {
 dayjs.extend(utc);
 export default getApiHandler()
   .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+    debugger;
     new Form().parse(req, async function(err, fields:Record<string,any[]>, files) {
       
-      
         const { id } = req.query;
-    if (typeof id !== 'string') {
-      res.status(404).end();
-      return;
-    }
+    // if (typeof id !== 'string') {
+    //   res.status(404).end();
+    //   return;
+    // }
 
-    const idNum = parseInt(id, 10);
-    if (!Number.isInteger(idNum)) {
-      // res.status(404).end();
-      res.status(200).json({ status: 'OK', user: null });
-      return;
-    }
+    // const idNum = parseInt(id, 10);
+    // if (!Number.isInteger(idNum)) {
+    //   // res.status(404).end();
+    //   res.status(200).json({ status: 'OK', user: null });
+    //   return;
+    // }
 
     const session = (await getSession({ req })) as unknown as Session;
 
     const actionAllowed = (fields:Record<string,any[]>) => {
       if (('following' in fields && fields.following) || ('followedBy' in fields && fields.followedBy)) return true;
-      return session.user.roles.includes('admin') || session.user.id === idNum;
+      return session.user.roles.includes('admin') || session.user.id === id;
     };
     if (session == null || !actionAllowed(fields)) {
       res.status(401).json({ status: 'Unauthorized' });
@@ -72,7 +72,7 @@ export default getApiHandler()
       },{});
       
       if(files.photo && files.photo[0]){
-        const user = await find({id:idNum});
+        const user = await find({id:id.toString()});
         if(!user){
           res.statusMessage = 'User not found';
           return res.status(405).end();
@@ -84,7 +84,7 @@ export default getApiHandler()
             res.statusMessage = 'Removing image has failed';
             return res.status(500).end();
           }
-          const resPhotoRemoving = await update(idNum,{
+          const resPhotoRemoving = await update(id.toString(),{
             photos:{deleteMany:{}}
           });
           if(!resPhotoRemoving){
@@ -106,7 +106,7 @@ export default getApiHandler()
           }
         }
       }
-      const r = await update(idNum, data);debugger;
+      const r = await update(id.toString(), data);debugger;
       if(r){
         if(data.followedBy && data.followedBy.connect){
           if(Object.keys(notificationData).length){
@@ -138,9 +138,9 @@ export default getApiHandler()
       if(s){
         select = JSON.parse(s as string);
       }
-      const include = i !== 'false';
-      const user = await find({ id: parseInt(id as string, 10), select, include });
-      res.status(200).json({ user });
+      const include = i !== 'false';debugger;
+      const user = await find({ id:id.toString(), select, include });
+      res.status(200).json(user);
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
       res.status(500).json({ error: 'server error' });

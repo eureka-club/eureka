@@ -8,7 +8,7 @@ import { FunctionComponent, useEffect, useState, MouseEvent } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import { Card, Button, Spinner, Badge } from 'react-bootstrap';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import { CgMediaLive } from 'react-icons/cg';
 
 import { useAtom } from 'jotai';
@@ -21,7 +21,7 @@ import styles from './MosaicItem.module.css';
 import globalModalsAtom from '../../atoms/globalModals';
 
 import useUser from '@/src/useUser';
-import { Session } from '../../types';
+import { Session } from '@/src/types';
 import SocialInteraction from '../common/SocialInteraction';
 import { useCycleContext } from '../../useCycleContext';
 import {useNotificationContext} from '@/src/useNotificationProvider'
@@ -57,21 +57,21 @@ const MosaicItem: FunctionComponent<Props> = ({
   const sd = dayjs(startDate).add(1, 'day').tz(dayjs.tz.guess());
   const ed = dayjs(endDate).add(1, 'day').tz(dayjs.tz.guess());
   const isActive = dayjs().isBetween(startDate, endDate, null, '[]');
-  const [session] = useSession() as [Session | null | undefined, boolean];
-  const [idSession,setIdSession] = useState<string>('')
-  const { data: user } = useUser(+idSession,{ enabled: !!+idSession });
+  
+  const {data:sd2,status} = useSession();
+  const [session, setSession] = useState<Session>(sd2 as Session);
+  useEffect(()=>{
+    if(sd2)
+      setSession(sd2 as Session)
+  },[sd2])
+
+  
+  const { data: user } = useUser(session?.user.id,{ enabled: !!session?.user.id });
   const [isCurrentUserJoinedToCycle, setIsCurrentUserJoinedToCycle] = useState<boolean>(true);
   const [participants, setParticipants] = useState<number>(0);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const queryClient = useQueryClient();
   const router = useRouter();
-
-  useEffect(() => {
-    const s = session as unknown as Session;
-    if (s) {
-      setIdSession(s.user.id.toString());
-    }
-  }, [session]);
 
 
   useEffect(() => {

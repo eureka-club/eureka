@@ -2,11 +2,11 @@
 // import dayjs from 'dayjs';
 // import HyvorTalk from 'hyvor-talk-react';
 // import { useAtom } from 'jotai';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 // import { useRouter } from 'next/router';
 import { CycleWork, Work } from '@prisma/client';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, useState } from 'react';
+import { FunctionComponent, useState, useEffect } from 'react';
 // import Button from 'react-bootstrap/Button';
 
 // import Nav from 'react-bootstrap/Nav';
@@ -87,7 +87,14 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   const { cycle: c } = useCycleContext();
   const [cycle] = useState<CycleMosaicItem>(c!);
   const [show, setShow] = useState<boolean>(s);
-  const [session] = useSession() as [Session | null | undefined, boolean];
+  
+  const {data:sd,status} = useSession();
+  const [session, setSession] = useState<Session>(sd as Session);
+  useEffect(()=>{
+    if(sd)
+      setSession(sd as Session)
+  },[sd])
+
   const { t } = useTranslation('cycleDetail');
   // const hyvorId = `${WEBAPP_URL}cycle/${cycle.id}`;
 
@@ -167,8 +174,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
 
   const getFullSymbol = () => {
     if (cycle && session) {
-      const s = session as unknown as Session;
-      const ratingByMe = cycle.ratings.findIndex((r) => r.userId === s.user.id);
+      const ratingByMe = cycle.ratings.findIndex((r) => r.userId === session?.user.id);
       if (ratingByMe) return <GiBrain style={{ color: 'var(--eureka-blue)' }} />;
     }
 
@@ -305,7 +311,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
       )}
       <Col className="d-none d-lg-flex col-12 col-lg-4 justify-content-center justify-content-lg-end">
         <aside className='d-flex flex-column'>
-          <UserAvatar  user={cycle.creator}  showFullName />
+          <UserAvatar  id={cycle.creator.id}  showFullName />
         <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
           <MosaicItem showTrash className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
         </MosaicContext.Provider>
@@ -322,7 +328,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
       )}
       <Col className='col-12 d-flex justify-content-between align-items-baseline d-lg-none' >
         <Row>
-         <UserAvatar user={cycle.creator}  showFullName />
+         <UserAvatar id={cycle.creator.id}  showFullName />
          </Row>
           <Row>
             {show && (

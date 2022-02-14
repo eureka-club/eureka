@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, MouseEvent } from 'react';
-
+import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
+import { User } from '@prisma/client';
 import {
   Nav,
   NavItem,
@@ -17,9 +17,9 @@ import {
 } from 'react-bootstrap';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
 import { BiArrowBack } from 'react-icons/bi';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { MySocialInfo, Session } from '../../types';
+import { MySocialInfo, Session } from '@/src/types';
 import { PostMosaicItem } from '../../types/post';
 import { WorkMosaicItem } from '../../types/work';
 // import LocalImageComponent from '../LocalImage';
@@ -39,6 +39,7 @@ import { MosaicContext } from '../../useMosaicContext';
 import { WorkContext } from '../../useWorkContext';
 import CommentsList from '../common/CommentsList';
 
+
 interface Props {
   work: WorkMosaicItem;
   post?: PostMosaicItem;
@@ -52,7 +53,15 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const { t } = useTranslation('workDetail');
-  const [session] = useSession() as [Session | null | undefined, boolean];
+  
+  const {data:sd,status} = useSession();
+  const [session, setSession] = useState<Session>(sd as Session);
+  useEffect(()=>{
+    if(sd)
+      setSession(sd as Session)
+  },[sd])
+  
+
   const handleSubsectionChange = (key: string | null) => {
     if (key != null) {
       setDetailPagesState({ ...detailPagesState, selectedSubsectionWork: key });
@@ -65,7 +74,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
   };
 
   const canEditWork = (): boolean => {
-    if (session && session.user.roles === 'admin') return true;
+    if (session && session.user?.roles === 'admin') return true;
     return false;
   };
 
@@ -126,13 +135,13 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
                 </div>
                 {work.contentText != null && <UnclampText isHTML={false} text={work.contentText} clampHeight="8rem" />}
                 </section>
-              <div className='container d-none d-lg-block mt-5'>
+              {/* <div className='container d-none d-lg-block mt-5'>
                 <CommentsList entity={work} parent={undefined}/>
-          </div>
+              </div> */}
         </Col>
-        <div className='container d-sm-block d-lg-none mt-3'>
-                <CommentsList entity={work} parent={undefined}/>
-          </div>
+              {/* <div className='container d-sm-block d-lg-none mt-3'>
+                      <CommentsList entity={work} parent={undefined}/>
+              </div> */}
             </Row>
           ) : (
             <>{post && work && <PostDetailComponent post={post} work={work} />}</>

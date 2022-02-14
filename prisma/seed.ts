@@ -31,41 +31,41 @@ async function main() {
   users.forEach((user) => {
     transactions.push(
       prismaLocal.$queryRaw(Prisma.sql`
-      SET IDENTITY_INSERT dbo.users ON;
+      
       INSERT INTO dbo.users(id,name,email,email_verified,image,roles,
         created_at,updated_at,tags,country_of_origin,about_me,dashboard_type) 
       VALUES(${user.id},${user.name},${user.email},${user.emailVerified || ''},${user.image},${user.roles},
         ${user.createdAt},${user.updatedAt},${user.tags},${user.countryOfOrigin},${user.aboutMe},${user.dashboardType});
-      SET IDENTITY_INSERT dbo.users OFF;`)); 
+      `)); 
   });
 
   /***Account***/
-  const accounts = await prismaRemote.account.findMany();
-  accounts.forEach((a) => {
-    transactions.push(
-      prismaLocal.$queryRaw(Prisma.sql`
-      SET IDENTITY_INSERT dbo.accounts ON;
-      INSERT INTO dbo.accounts(id,user_id,compound_id,provider_type,provider_id,
-        provider_account_id,refresh_token,access_token,access_token_expires,
-        created_at,updated_at) 
-      VALUES(${a.id},${a.userId},${a.compoundId},${a.providerType},${a.providerId},
-        ${a.providerAccountId},${a.refreshToken},${a.accessToken},${a.accessTokenExpires || ''},
-        ${a.createdAt},${a.updatedAt});
-      SET IDENTITY_INSERT dbo.accounts OFF;`)); 
-  });
+  // const accounts = await prismaRemote.account.findMany();
+  // accounts.forEach((a) => {
+  //   transactions.push(
+  //     prismaLocal.$queryRaw(Prisma.sql`
+  //     SET IDENTITY_INSERT dbo.accounts ON;
+  //     INSERT INTO dbo.accounts(id,user_id,compound_id,provider_type,provider_id,
+  //       provider_account_id,refresh_token,access_token,access_token_expires,
+  //       created_at,updated_at) 
+  //     VALUES(${a.id},${a.userId},${a.compoundId},${a.providerType},${a.providerId},
+  //       ${a.providerAccountId},${a.refreshToken},${a.accessToken},${a.accessTokenExpires || ''},
+  //       ${a.createdAt},${a.updatedAt});
+  //     SET IDENTITY_INSERT dbo.accounts OFF;`)); 
+  // });
 
   /***Session***/
-  const sessions = await prismaRemote.session.findMany();
-  sessions.forEach((s) => {
-    transactions.push(
-      prismaLocal.$queryRaw(Prisma.sql`
-      SET IDENTITY_INSERT dbo.sessions ON;
-      INSERT INTO dbo.sessions(id,user_id,expires,session_token,access_token,
-        created_at,updated_at) 
-      VALUES(${s.id},${s.userId},${s.expires || ''},${s.sessionToken},${s.accessToken},
-        ${s.createdAt},${s.updatedAt});
-      SET IDENTITY_INSERT dbo.sessions OFF;`)); 
-  });
+  // const sessions = await prismaRemote.session.findMany();
+  // sessions.forEach((s) => {
+  //   transactions.push(
+  //     prismaLocal.$queryRaw(Prisma.sql`
+  //     SET IDENTITY_INSERT dbo.sessions ON;
+  //     INSERT INTO dbo.sessions(id,user_id,expires,session_token,access_token,
+  //       created_at,updated_at) 
+  //     VALUES(${s.id},${s.userId},${s.expires || ''},${s.sessionToken},${s.accessToken},
+  //       ${s.createdAt},${s.updatedAt});
+  //     SET IDENTITY_INSERT dbo.sessions OFF;`)); 
+  // });
 
   /***VerificationRequest***/
   const verification_requests = await prismaRemote.verificationRequest.findMany();
@@ -252,6 +252,19 @@ async function main() {
       VALUES(${c.id},${c.creatorId},${c.contentText},${c.cycleId},${c.workId},${c.commentId},${c.postId},${c.status},
   ${c.createdAt},${c.updatedAt});
       SET IDENTITY_INSERT dbo.comments OFF;
+    `));      
+    
+  });
+
+  /***Notification***/
+  const notifications = await prismaRemote.notification.findMany();  
+  notifications.forEach((c) => {
+    transactions.push(
+      prismaLocal.$queryRaw(Prisma.sql`
+      SET IDENTITY_INSERT dbo.notification ON;
+      INSERT INTO dbo.notification(id,fromUserId,contextURL,message,created_at,updated_at) 
+      VALUES(${c.id},${c.fromUserId},${c.contextURL},${c.message},${c.createdAt},${c.updatedAt});
+      SET IDENTITY_INSERT dbo.notification OFF;
     `));      
     
   });
@@ -566,23 +579,23 @@ async function main() {
   });
 
   /***__UserFollows***/
-  const __UserFollows = await prismaRemote.user.findMany({
-    select: {
-      id:true,
-      followedBy: {
-        select: { id: true },
-      },
-    }
-  });  
-  __UserFollows.forEach((u) => {
-    for (let f of u.followedBy) {
-      transactions.push(
-        prismaLocal.$queryRaw(Prisma.sql`
-        INSERT INTO dbo.__UserFollows(A,B) 
-        VALUES(${u.id},${f.id});
-        `));       
-    }
-  });
+  // const __UserFollows = await prismaRemote.user.findMany({
+  //   select: {
+  //     id:true,
+  //     followedBy: {
+  //       select: { id: true },
+  //     },
+  //   }
+  // });  
+  // __UserFollows.forEach((u) => {
+  //   for (let f of u.followedBy) {
+  //     transactions.push(
+  //       prismaLocal.$queryRaw(Prisma.sql`
+  //       INSERT INTO dbo.__UserFollows(A,B) 
+  //       VALUES(${u.id},${f.id});
+  //       `));       
+  //   }
+  // });
 
 //_prisma_migrations
 

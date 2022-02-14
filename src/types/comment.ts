@@ -35,11 +35,11 @@ export type CommentWithCycleWorkComment = Prisma.CommentGetPayload<{
 interface CreateNotificationClientPayload{
   notificationMessage:string;
   notificationContextURL:string;
-  notificationToUsers:number[];
+  notificationToUsers:string[];
 }
 interface CreateCommentClientPayloadBase extends CreateNotificationClientPayload{
   contentText: string;
-  creatorId: number;
+  creatorId: string;
 }
 export interface CreateCommentClientPayload extends CreateCommentClientPayloadBase {
   selectedCycleId?: number;
@@ -54,7 +54,7 @@ export interface EditCommentClientPayload {
   selectedCycleId?: number;
   selectedWorkId?: null;
   selectedCommentId?: null;
-  creatorId?: number;
+  creatorId?: string;
 }
 
 export interface CreateCommentServerPayload  extends CreateNotificationClientPayload {
@@ -63,7 +63,7 @@ export interface CreateCommentServerPayload  extends CreateNotificationClientPay
   selectedCommentId?: number;
   selectedPostId?: number;
   contentText: string;
-  creatorId: number;
+  creatorId: string;
 }
 
 export interface EditCommentServerPayload {
@@ -73,5 +73,5 @@ export interface EditCommentServerPayload {
   selectedCommentId?: number;
   selectedPostId?: number;
   contentText?: string;
-  creatorId?: number;
+  creatorId?: string;
 }
