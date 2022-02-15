@@ -18,16 +18,20 @@ const Profile: NextPage = () => {
   const { t } = useTranslation('common');
 
 
+
   return (
     <SimpleLayout title={t('Profile')}>
+     {(isLoadingSession) ?
+        <Spinner animation="grow" variant="info" />
+  :
       <>
         <ButtonGroup className="mt-1 mt-md-3 mb-1">
           <Button variant="primary text-white" onClick={() => router.back()} size="sm">
             <BiArrowBack />
           </Button>
         </ButtonGroup>
-      </>
-      <EditUserForm />
+      <EditUserForm />  
+          </>}
     </SimpleLayout>
   );
 };

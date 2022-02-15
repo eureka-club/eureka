@@ -18,6 +18,7 @@ import {
   Nav,
   Navbar,
   Dropdown,
+  Spinner
   // DropdownItemProps
 } from 'react-bootstrap';
 // import NavDropdown from 'react-bootstrap/NavDropdown';
@@ -139,7 +140,8 @@ const NavBar: FunctionComponent = () => {
           </Navbar.Brand>
           </a>
         </Link>
-
+       {(isLoadingSession) ? <Spinner animation="grow" variant="info" /> :
+        <>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse className={`${styles['responsive-navbar-nav']}`}>
           <Nav className="">
@@ -266,6 +268,7 @@ const NavBar: FunctionComponent = () => {
             <NotificationsList />  
           </Nav.Item>
         </Navbar.Collapse>
+        </>}
         </Container>
       </Navbar>
     </Container>

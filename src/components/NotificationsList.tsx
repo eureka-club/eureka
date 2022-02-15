@@ -143,7 +143,7 @@ const NotificationsList: React.FC<Props> = ({className}) => {
         return <></>;
     }
     return <section data-cy="notifications" className={`${className}`}>
-        {isLoading && <Spinner animation="grow" variant="info" />}
+        {/*isLoading && <Spinner animation="grow" variant="info" />*/}
         {!isLoading && user && <OverlayTrigger
       trigger="click"
       placement="bottom"

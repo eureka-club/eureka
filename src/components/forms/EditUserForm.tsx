@@ -37,7 +37,7 @@ import i18nConfig from '../../../i18n';
 
 dayjs.extend(utc);
 const EditUserForm: FunctionComponent = () => {
-  const [session] = useSession();
+  const [session,isLoadingSession] = useSession() as [Session | null | undefined, boolean];
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const queryClient = useQueryClient();
   const { t } = useTranslation('common');
@@ -62,14 +62,11 @@ const EditUserForm: FunctionComponent = () => {
   });
 
   useEffect(() => {
-    const s = session as unknown as Session;
-    // if (!s || !s.user) router?.push('/');
-    // else setId(s.user.id.toString());
-    if(s)
-      setId(s.user.id.toString());
-  }, []);
+    if(session)
+      setId(session.user.id.toString());
+  }, [session]);
 
-  const { /* isLoading,  isError, error, */ data:user } = useUser(+id,{
+  const {data:user } = useUser(+id,{
     enabled: !!+id,
     staleTime:1
   });
@@ -307,7 +304,7 @@ const EditUserForm: FunctionComponent = () => {
       }
   };
 
-  return (
+     return (
     <>
       {user && (
         <Form onSubmit={handleSubmit}>
