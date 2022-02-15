@@ -45,7 +45,7 @@ export interface MySocialInfo {
 
 export type BasicEntity = Cycle | Post | Work | User | Comment;
 export type MosaicItem = CycleMosaicItem | PostMosaicItem | WorkMosaicItem | UserMosaicItem | CommentMosaicItem;
-export type SearchResult = Cycle|CycleMosaicItem | Post|PostMosaicItem | Work|WorkMosaicItem | User|UserMosaicItem;
+export type SearchResult = CycleMosaicItem | PostMosaicItem | WorkMosaicItem | UserMosaicItem;
 
 export const isCycle = (obj: BasicEntity): obj is Cycle =>
   obj && typeof (obj as Cycle).title === 'string' &&

@@ -17,11 +17,11 @@ export default getApiHandler()
     const query = q.toString()
     const responseWork =  await faw({where: {
       OR: [{ title: { contains: query } }, { contentText: { contains: query } }, { author: { contains: query } }],
-    }}) 
+    }}) as WorkMosaicItem[];
     const responseCycle = await fac({where: {
       AND:[{ access:{not:3}}],
       OR: [{title: { contains: query } }, { contentText: { contains: query } }, { tags: { contains: query } }],
-    }});
+    }}) as CycleMosaicItem[];
     const responsePost = await fap({where: {
       AND:[{
         cycles:{
@@ -31,7 +31,7 @@ export default getApiHandler()
         }
       }],
       OR: [{ title: { contains: query } }, { contentText: { contains: query } }, { creator: { name:{contains: query} } }],
-    }});
+    }}) as PostMosaicItem[];
     const data: SearchResult[] = [
       ...responseCycle,
       ...responseWork,
