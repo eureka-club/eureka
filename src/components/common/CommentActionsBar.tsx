@@ -32,13 +32,13 @@ interface Props {
   cacheKey?: string[];
   className?: string;
   entity: EntityWithComments;
-  context?: ContextWithComments; //if not provide -parent will be used, should be the mosaic used to render the page :|
+  // context?: ContextWithComments; //if not provide -parent will be used, should be the mosaic used to render the page :|
   parent?: EntityWithComments;
   showReplyBtn?: boolean;
 }
 
 const CommentActionsBar: FunctionComponent<Props> = ({
-  entity, parent, context, className = '', cacheKey, showReplyBtn = true }) => {
+  entity, parent, /* context, */ className = '', cacheKey, showReplyBtn = true }) => {
   const { t } = useTranslation('common');
   const [session] = useSession() as [Session | null | undefined, boolean];
   const queryClient = useQueryClient();
@@ -171,7 +171,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
     },
   );
 
-  const submitCreateForm = () => {
+  const submitCreateForm = () => {debugger;
     if (entity && editorRef.current.getContent()) {
       const user = (session as Session).user;
       let notificationMessage = '';      
@@ -231,13 +231,29 @@ const CommentActionsBar: FunctionComponent<Props> = ({
         }
         else if(parent && isWorkMosaicItem(parent)){//in work context
           const work = (parent as WorkMosaicItem);
-          if(user.id !== work.creatorId)
-            notificationToUsers.add(work.creatorId);
           notificationMessage = `commentCreatedAboutPostInWork!|!${JSON.stringify({
             userName: user.name,
             postTitle: post.title,
             workTitle: work.title,
           })}`;
+          let withinCycleId = null;
+          let aux = payload.notificationContextURL!.split('/cycle/');
+          if(aux && aux.length === 2){
+              withinCycleId = aux[1]
+          }
+          if(withinCycleId){
+            const c = queryClient.getQueryData<CycleMosaicItem>(['CYCLE',withinCycleId]);
+            if(c){
+              notificationMessage = `commentCreatedAboutPostInCycle!|!${JSON.stringify({
+                userName: user.name,
+                postTitle: post.title,
+                cycleTitle: c.title,
+              })}`;
+              payload = {...payload, selectedCycleId: +withinCycleId}
+            }
+          }
+          if(user.id !== work.creatorId)
+            notificationToUsers.add(work.creatorId);          
           payload = {...payload, selectedWorkId: work.id,notificationMessage}
         }
         else{
