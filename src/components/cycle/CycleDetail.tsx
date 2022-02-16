@@ -49,6 +49,8 @@ import ComentMosaic from '../comment/MosaicItem';
 // import UnclampText from '../UnclampText';
 import detailPagesAtom from '../../atoms/detailPages';
 import globalModalsAtom from '../../atoms/globalModals';
+import editOnSmallerScreens from '../../atoms/editOnSmallerScreens';
+import EditPostForm from '../forms/EditPostForm';
 
 import styles from './CycleDetail.module.css';
 import { useCycleContext, CycleContext } from '../../useCycleContext';
@@ -88,6 +90,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   }, [cycleContext]);
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
+  const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
   const router = useRouter();
 
   const [session, isLoadingSession] = useSession() as [Session | null | undefined, boolean];
@@ -188,6 +191,11 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
     router.push(`/cycle/${router.query.id}/edit`);
+  };
+
+   const handleEditPostOnSmallerScreen = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+        setEditPostOnSmallerScreen({ ...editOnSmallerScreens, ...{ value: !editPostOnSmallerScreen.value } });
   };
 
   const canEditPost = (): boolean => {
@@ -739,10 +747,12 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   return (
     <>
+    {(!editPostOnSmallerScreen.value) ? 
       <ButtonGroup className="mt-1 mt-md-3 mb-1">
         <Button variant="primary text-white" onClick={() => router.back()} size="sm">
           <BiArrowBack />
         </Button>
+        
         {!router.query.postId && canEditCycle() && (
           <Button variant="warning" onClick={handleEditClick} size="sm">
             {t('Edit')}
@@ -751,13 +761,24 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
        
         {/* <Button className="" variant="danger" onClick={e=>{removeCycle(e)}}>Remove Cycle</Button> */}
 
-        {post && cycle && canEditPost() && (
-          <Button variant="warning" onClick={handleEditPostClick} size="sm">
+        {post && cycle && canEditPost() && (<>
+          <Button className='d-none d-md-block' variant="warning" onClick={handleEditPostClick} size="sm">
             {t('Edit')}
           </Button>
+            <Button className='d-block d-md-none' variant="warning" onClick={handleEditPostOnSmallerScreen} size="sm">
+            {t('Edit')}
+          </Button></>
         )}
+      </ButtonGroup> : 
+    
+      <ButtonGroup className="mt-1 mt-md-3 mb-1">
+        <Button variant="primary text-white" onClick={handleEditPostOnSmallerScreen} size="sm">
+          <BiArrowBack />
+        </Button>
       </ButtonGroup>
+     }
 
+{(!editPostOnSmallerScreen.value) ? <>
       {!post && renderCycleDetailHeader()}
       {post && cycle && (
         <MosaicContext.Provider value={{ showShare: true }}>
@@ -861,7 +882,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
             )}
           </Col>
         </Row>
-      )}
+      )}</> : <EditPostForm noModal />}
     </>
   );
 };

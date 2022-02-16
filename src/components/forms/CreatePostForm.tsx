@@ -41,7 +41,11 @@ import { useSession } from 'next-auth/client';
 import useUser from '@/src/useUser';
 import { useNotificationContext } from '@/src/useNotificationProvider';
 
-const CreatePostForm: FunctionComponent = () => {
+interface Props {
+  noModal?: boolean;
+}
+
+const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
   const [isSearchCycleLoading, setIsSearchCycleLoading] = useState(false);
@@ -299,17 +303,14 @@ const CreatePostForm: FunctionComponent = () => {
 
   return (
     <Form ref={formRef}>
-      <ModalHeader closeButton>
-        <Container>
-          <ModalTitle>{t('title')}</ModalTitle>
-        </Container>
+      <ModalHeader closeButton={!noModal}>
+         <ModalTitle> <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('title')}</h1></ModalTitle>
       </ModalHeader>
 
       <ModalBody>
-        <Container>
-          <Row>
-            <Col>
-              <FormGroup controlId="workOrCycle" className="mb-3">
+          <Row className='d-flex flex-column flex-lg-row'>
+            <Col className='mb-4'>
+              <FormGroup controlId="workOrCycle">
                 <FormLabel>*{t('searchCycleOrWorkFieldLabel')}</FormLabel>
                 {selectedWork != null ? (
                   <div className={styles.searchResult}>
@@ -361,18 +362,18 @@ const CreatePostForm: FunctionComponent = () => {
                 )}
               </FormGroup>
             </Col>
-            <Col>
-              <FormGroup controlId="postTitle" className="mb-3">
+              <Col className='mb-4'>
+              <FormGroup controlId="postTitle" >
                 <FormLabel>*{t('titleFieldLabel')}</FormLabel>
                 <FormControl type="text" maxLength={80} required />
               </FormGroup>
             </Col>
           </Row>
           <Row>
-            <Col>
+              <Col className='mb-4'>
               <ImageFileSelect acceptedFileTypes="image/*" file={imageFile} setFile={setImageFile} required>
                 {(imagePreview) => (
-                  <FormGroup className="mb-3">
+                  <FormGroup>
                     <FormLabel>*{t('imageFieldLabel')}</FormLabel>
                     <div className={styles.imageControl}>
                       {(imageFile != null && imagePreview) != null ? (
@@ -388,16 +389,16 @@ const CreatePostForm: FunctionComponent = () => {
             </Col>
           </Row>
           <Row>
-            <Col>
-              <FormGroup controlId="language" className="mb-3">
+            <Col className="mb-4">
+              <FormGroup controlId="language" >
                 <FormLabel>*{t('languageFieldLabel')}</FormLabel>
                 <LanguageSelect />
               </FormGroup>
             </Col>
           </Row>
           <Row>
-            <Col sm={{ span: 6 }}>
-              <FormGroup controlId="workOrCycle" className="mb-3">
+            <Col sm={{ span: 6 }} className="mb-4">
+              <FormGroup controlId="workOrCycle">
                 <FormLabel>{t('searchCycleFieldLabel')}</FormLabel>
                 {!selectedCycle ? (
                   <>
@@ -435,15 +436,15 @@ const CreatePostForm: FunctionComponent = () => {
             </Col>
           </Row>
           <Row>
-            <Col>
+            <Col  className="mb-4">
               <small style={{ color: 'lightgrey', position: 'relative', top: '-0.75rem' }}>
                 {t('searchCycleInfotip')}
               </small>
             </Col>
           </Row>
           <Row>
-            <Col>
-              <FormGroup controlId="topics" className="mb-3">
+            <Col  className="mb-4">
+              <FormGroup controlId="topics">
                 <FormLabel>{t('topicsPostLabel')}</FormLabel>
                 <TagsInputTypeAhead
                   data={topics}
@@ -456,12 +457,12 @@ const CreatePostForm: FunctionComponent = () => {
             </Col>
           </Row>
           <Row>
-            <Col>
-              <TagsInput tags={tags} setTags={setTags} label={t('topicsFieldLabel')} className="mb-3"/>
+            <Col className="mb-4">
+              <TagsInput tags={tags} setTags={setTags} label={t('topicsFieldLabel')}/>
             </Col>
           </Row>
           <Row>
-            <FormGroup controlId="description" as={Col}>
+            <FormGroup controlId="description" as={Col}  className="mb-4">
               <FormLabel>*{t('descriptionFieldLabel')}</FormLabel>
               <EditorCmp
                 apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
@@ -490,20 +491,19 @@ const CreatePostForm: FunctionComponent = () => {
               />
             </FormGroup>
           </Row>
-        </Container>
       </ModalBody>
 
-      <ModalFooter className="mt-3">
+      <ModalFooter>
         <Container className="py-3">
-          <Row>
-            <Col className="border-end border-info">
+            <Row className='d-flex flex-column flex-lg-row'>
+            <Col className="border-end border-info mb-4">
               <FormCheck type="checkbox" defaultChecked inline id="isPublic" label={t('isPublicFieldLabel')} />
               <small style={{ color: 'lightgrey', display: 'block', margin: '0.25rem 0 0 1.25rem' }}>
                 {t('isPublicInfotip')}
               </small>
             </Col>
-            <Col>
-              <Button variant="primary" disabled={isCreatePostLoading} onClick={(e)=>{handleSubmit(e)}} className="ps-5 pe-4 float-end text-white">
+            <Col className="mb-4">
+              <Button variant="primary" disabled={isCreatePostLoading} onClick={(e)=>{handleSubmit(e)}} className="w-100 text-white">
                 {t('submitButtonLabel')}
                 {isCreatePostLoading ? (
                   <Spinner animation="grow" variant="info" size="sm" />

@@ -37,8 +37,14 @@ import styles from './CreatePostForm.module.css';
 import useTopics from '../../useTopics';
 import usePost from '../../usePost';
 import { setDefaultResultOrder } from 'dns';
+import editOnSmallerScreens from '../../atoms/editOnSmallerScreens';
 
-const EditPostForm: FunctionComponent = () => {
+
+interface Props {
+  noModal?: boolean;
+}
+
+const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
   const [isSearchCycleLoading, setIsSearchCycleLoading] = useState(false);
@@ -61,6 +67,8 @@ const EditPostForm: FunctionComponent = () => {
   const { data: post, isLoading, isFetching } = usePost(globalModalsState.editPostId || +postId);
   const editorRef = useRef<any>(null);
   const [remove,setRemove] = useState(false);
+  const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
+
 
   useEffect(() => {
     // const fetchPost = async () => {
@@ -102,6 +110,7 @@ const EditPostForm: FunctionComponent = () => {
         method: remove?'DELETE':'PATCH',
         body: JSON.stringify(payload),
       });
+      handleEditPostOnSmallerScreenClose();
       return res.json();
     },
     {
@@ -110,6 +119,7 @@ const EditPostForm: FunctionComponent = () => {
           const ck = [`POST`, `${globalModalsState.editPostId || post.id}`];
           const snapshot = queryClient.getQueryData<PostMosaicItem>(ck);
           queryClient.setQueryData(ck, { ...snapshot, ...variables });
+          handleEditPostOnSmallerScreenClose();
           return { snapshot, ck };
         }
         return { snapshot: null, ck: '' };
@@ -125,9 +135,14 @@ const EditPostForm: FunctionComponent = () => {
           }
 
         }
+          handleEditPostOnSmallerScreenClose();
       },
     },
   );
+
+  const handleEditPostOnSmallerScreenClose = () => {
+        setEditPostOnSmallerScreen({ ...editOnSmallerScreens, ...{ value: false } });
+  };
 
   const handleSearchWorkOrCycle = async (query: string) => {
     setIsSearchWorkOrCycleLoading(true);
@@ -261,16 +276,16 @@ const EditPostForm: FunctionComponent = () => {
   return (
     post && (
       <Form onSubmit={handleSubmit} ref={formRef}>
-        <ModalHeader closeButton>
+        <ModalHeader closeButton={!noModal}>
           <Container>
-            <ModalTitle>{t('titleEdit')}</ModalTitle>
+            <ModalTitle> <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('titleEdit')}</h1></ModalTitle>
           </Container>
         </ModalHeader>
 
         <ModalBody>
           <Container>
-            <Row>
-              <Col>
+            <Row className='d-flex flex-column flex-lg-row'>
+              <Col className='mb-4'>
                 <FormGroup controlId="workOrCycle">
                   <FormLabel>*{t('searchCycleOrWorkFieldLabel')}</FormLabel>
                   {selectedWork != null ? (
@@ -323,7 +338,7 @@ const EditPostForm: FunctionComponent = () => {
                   )}
                 </FormGroup>
               </Col>
-              <Col>
+              <Col className='mb-4'>
                 <FormGroup controlId="postTitle">
                   <FormLabel>*{t('titleFieldLabel')}</FormLabel>
                   <FormControl type="text" maxLength={80} required onChange={handlerchange} defaultValue={post.title} />
@@ -348,7 +363,7 @@ const EditPostForm: FunctionComponent = () => {
                 )}
               </ImageFileSelect>
             </Col> */}
-              <Col>
+              <Col className='mb-4'>
                 <FormGroup controlId="language">
                   <FormLabel>*{t('languageFieldLabel')}</FormLabel>
                   <LanguageSelect defaultValue={post.language} />
@@ -356,7 +371,7 @@ const EditPostForm: FunctionComponent = () => {
               </Col>
             </Row>
             <Row>
-              <Col sm={{ span: 6 }}>
+              <Col sm={{ span: 6 }} className='mb-4'>
                 <FormGroup controlId="workOrCycle">
                   <FormLabel>{t('searchCycleFieldLabel')}</FormLabel>
                   {!selectedCycle ? (
@@ -395,14 +410,14 @@ const EditPostForm: FunctionComponent = () => {
               </Col>
             </Row>
             <Row>
-              <Col>
+              <Col className='mb-4'>
                 <small style={{ color: 'lightgrey', position: 'relative', top: '-0.75rem' }}>
                   {t('searchCycleInfotip')}
                 </small>
               </Col>
             </Row>
             <Row>
-              <Col>
+              <Col className='mb-4'>
                 <FormGroup controlId="topics">
                   <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel>
                   <TagsInputTypeAhead
@@ -458,8 +473,8 @@ const EditPostForm: FunctionComponent = () => {
 
         <ModalFooter>
           <Container className="py-3">
-            <Row>
-              <Col>
+            <Row className='d-flex flex-column flex-lg-row'>
+              <Col className='mb-4'>
                 <FormCheck
                   type="checkbox"
                   defaultChecked={post.isPublic}
@@ -480,8 +495,8 @@ const EditPostForm: FunctionComponent = () => {
                       label={t('common:Remove')}
                     />
               </Col>
-              <Col style={{ borderLeft: '1px solid lightgrey' }}>
-                <Button variant="primary" disabled={isEditPostLoading} type="submit" className="ps-5 pe-4 float-right">
+              <Col className='mb-4' style={{ borderLeft: '1px solid lightgrey' }}>
+                <Button variant="primary" disabled={isEditPostLoading} type="submit" className="ps-5 pe-4 w-100">
                   {t('titleEdit')}
                   {isEditPostLoading ? (
                     <Spinner size="sm" animation="grow" variant="secondary" className={styles.loadIndicator} />

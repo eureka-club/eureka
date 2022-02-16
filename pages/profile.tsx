@@ -1,15 +1,20 @@
-import { NextPage } from 'next';
+import { GetServerSideProps,NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/client';
+import {getSession, useSession } from 'next-auth/client';
 import { useState, useEffect, SyntheticEvent } from 'react';
-
 import { Spinner, Card, Row, Col, ButtonGroup, Button, Alert } from 'react-bootstrap';
 import { BiArrowBack } from 'react-icons/bi';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import EditUserForm from '@/components/forms/EditUserForm';
+import { Session } from '../src/types';
 
-const Profile: NextPage = () => {
+
+interface Props {
+  notFound?: boolean;
+}
+
+const Profile: NextPage<Props> = ({notFound}) => {
   const [session, isLoadingSession] = useSession();
   const [id, setId] = useState<string>('');
   const [idSession, setIdSession] = useState<string>('');
@@ -17,8 +22,13 @@ const Profile: NextPage = () => {
   
   const { t } = useTranslation('common');
 
+useEffect(() => {
+            if (notFound) 
+                router.push('/login');
+            
+    }, [notFound]);
 
-
+if (!notFound) 
   return (
     <SimpleLayout title={t('Profile')}>
      {(isLoadingSession) ?
@@ -34,6 +44,25 @@ const Profile: NextPage = () => {
           </>}
     </SimpleLayout>
   );
+  else
+   return  (
+    <SimpleLayout title={t('createCycle')}>
+        <Spinner animation="grow" variant="info" />
+    </SimpleLayout>
+  );
 };
+
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = (await getSession(ctx)) as unknown as Session;
+  if (session == null || !session.user.roles.includes('admin')) {
+    return { props: { notFound: true } };
+  }
+
+  return {
+    props: {},
+  };
+};
+
 
 export default Profile;

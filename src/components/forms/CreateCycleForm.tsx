@@ -528,7 +528,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   return (
     <>
       <Form onSubmit={handleSubmit} ref={formRef} className={className}>
-        <h4 className="mt-2 mb-4">{t('createCycle')}</h4>
+       <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('createCycle')}</h1> 
 
         <Row className="mb-5">
           <Col md={{ span: 8 }}>
