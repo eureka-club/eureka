@@ -523,7 +523,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
           <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
             <NavLink eventKey="participants">
-              <span className="mb-3">{t('Participants')}</span>
+              <span className="mb-3">{t('Participants')} ({[...cycle.participants, cycle.creator].length})</span>
             </NavLink>
           </NavItem>
         </>
