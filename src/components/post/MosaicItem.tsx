@@ -22,6 +22,8 @@ import { WorkMosaicItem } from '@/src/types/work';
 import ActionsBar from '@/src/components/common/ActionsBar'
 import {useAtom} from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
+import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
+
 interface Props {
   post: PostMosaicItem;
   postParent?: CycleMosaicItem | WorkMosaicItem;
@@ -53,6 +55,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   // showTrash,
 }) => {
   const [gmAtom,setGmAtom] = useAtom(globalModals);
+   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
+
 
   const postParentLinkHref = ((): string | null => {
     if (postParent) {
@@ -86,9 +90,16 @@ const MosaicItem: FunctionComponent<Props> = ({
   //   if (post.works && post.works.length) return post.works[0];
   //   return postParent;
   // };
-  const onEditPost = async (e:React.MouseEvent<HTMLButtonElement>) => {debugger;
+  const onEditPost = async (e:React.MouseEvent<HTMLButtonElement>) => {
     setGmAtom(res=>({...res,editPostModalOpened:true, editPostId:post.id}))
   }
+
+   const onEditSmallScreen = async (e:React.MouseEvent<HTMLButtonElement>) => {
+        setGmAtom(res=>({...res, editPostId:post.id}))
+        setEditPostOnSmallerScreen({ ...editOnSmallerScreens, ...{ value: true } });
+  }
+
+
   const renderVerticalMosaic = (props: { showDetailedInfo: boolean,specifyDataCy?:boolean }) => {
     const { showDetailedInfo, specifyDataCy=true } = props;
 
@@ -208,7 +219,7 @@ const MosaicItem: FunctionComponent<Props> = ({
                 </Link>
                 <ActionsBar creatorId={post.creatorId} actions={{
                     edit:onEditPost,
-                    // remove:async (e:React.MouseEvent<HTMLButtonElement>)=>{console.log(e);}
+                    editOnSmallScreen:onEditSmallScreen,
                   }}
                 />
               </h6>

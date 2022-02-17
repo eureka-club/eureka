@@ -25,8 +25,11 @@ import { CreateWorkClientPayload } from '../../types/work';
 import ImageFileSelect from './controls/ImageFileSelect';
 import globalModalsAtom from '../../atoms/globalModals';
 import styles from './CreateWorkForm.module.css';
+interface Props {
+  noModal?: boolean;
+}
 
-const CreateWorkForm: FunctionComponent = () => {
+const CreateWorkForm: FunctionComponent<Props> = ({noModal = false})=> {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [publicationYearLabel, setPublicationYearLabel] = useState('...');
 
@@ -190,17 +193,14 @@ const CreateWorkForm: FunctionComponent = () => {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <ModalHeader closeButton>
-        <Container>
-          <ModalTitle>{t('title')}</ModalTitle>
-        </Container>
+      <ModalHeader closeButton={!noModal}>
+         <ModalTitle> <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('title')}</h1></ModalTitle>
       </ModalHeader>
 
       <ModalBody>
-        <Container>
-          <Row>
-            <Col>
-              <FormGroup controlId="type" className="mb-3">
+            <Row className='d-flex flex-column flex-lg-row'>
+            <Col className="mb-4">
+              <FormGroup controlId="type">
                 <FormLabel>*{t('typeFieldLabel')}</FormLabel>
                 <Form.Select as="select" required onChange={handleWorkTypeChange}>
                   <option value="">{t('typeFieldPlaceholder')}</option>
@@ -211,21 +211,21 @@ const CreateWorkForm: FunctionComponent = () => {
                 </Form.Select>
               </FormGroup>
             </Col>
-            <Col>
-              <FormGroup controlId="workTitle" className="mb-3">
+            <Col className="mb-4">
+              <FormGroup controlId="workTitle">
                 <FormLabel>*{t('titleFieldLabel')}</FormLabel>
                 <FormControl type="text" required />
               </FormGroup>
             </Col>
           </Row>
-          <Row>
-            <Col>
-              <FormGroup controlId="author" className="mb-3">
+            <Row className='d-flex flex-column flex-lg-row'>
+            <Col className="mb-4">
+              <FormGroup controlId="author">
                 <FormLabel>*{t('authorFieldLabel')}</FormLabel>
                 <FormControl type="text" required />
               </FormGroup>
             </Col>
-            <Col>
+            <Col className="mb-4">
               <ImageFileSelect acceptedFileTypes="image/*" file={coverFile} setFile={setCoverFile} required>
                 {(imagePreview) => (
                   <FormGroup>
@@ -245,9 +245,9 @@ const CreateWorkForm: FunctionComponent = () => {
               </ImageFileSelect>
             </Col>
           </Row>
-          <Row>
-            <Col>
-              <FormGroup controlId="publicationYear" className="mb-3">
+            <Row className='d-flex flex-column flex-lg-row'>
+            <Col className="mb-4">
+              <FormGroup controlId="publicationYear">
                 <FormLabel>{publicationYearLabel}</FormLabel>
                 <FormControl type="number" min="-5000" max="2200" />
               </FormGroup>
@@ -258,8 +258,8 @@ const CreateWorkForm: FunctionComponent = () => {
                 <FormControl type="text" />
               </FormGroup>
             </Col> */}
-            <Col>
-              <FormGroup controlId="countryOfOrigin1" className="mb-3">
+            <Col className="mb-4">
+              <FormGroup controlId="countryOfOrigin1">
                 <FormLabel>{t('countryFieldLabel')}</FormLabel>
                 <AsyncTypeahead
                   id="create-work--search-country"
@@ -284,8 +284,8 @@ const CreateWorkForm: FunctionComponent = () => {
               </FormGroup>
             </Col>
             {hasCountryOrigin2 && (
-              <Col>
-                <FormGroup controlId="countryOfOrigin2" className="mb-3">
+            <Col className="mb-4">
+                <FormGroup controlId="countryOfOrigin2">
                   <FormLabel>{t('countryFieldLabel')} 2</FormLabel>
                   <AsyncTypeahead
                     id="create-work--search-country2"
@@ -308,16 +308,16 @@ const CreateWorkForm: FunctionComponent = () => {
                 </FormGroup>
               </Col>
             )}
-            <Col>
-              <FormGroup controlId="workLength" className="mb-3">
+            <Col className="mb-4">
+              <FormGroup controlId="workLength">
                 <FormLabel>{publicationLengthLabel}</FormLabel>
                 <FormControl type="number" min="0" max="999999" />
               </FormGroup>
             </Col>
           </Row>
           <Row>
-            <Col>
-              <FormGroup controlId="topics" className="mb-3">
+            <Col className="mb-4">
+              <FormGroup controlId="topics">
                 <FormLabel>{t('topicsLabel')}</FormLabel>
                 <TagsInputTypeAhead
                   data={topics}
@@ -330,21 +330,21 @@ const CreateWorkForm: FunctionComponent = () => {
             </Col>
           </Row>
           <Row>
-            <Col>
-              <TagsInput tags={tags} setTags={setTags} label={t('topicsFieldLabel')} className="mb-3"/>
+            <Col className="mb-4">
+              <TagsInput tags={tags} setTags={setTags} label={t('topicsFieldLabel')}/>
             </Col>
           </Row>
           <Row>
-            <Col>
-              <FormGroup controlId="link" className="mb-3">
+            <Col className="mb-4">
+              <FormGroup controlId="link">
                 <FormLabel>{t('linkFieldLabel')}</FormLabel>
                 <FormControl type="text" placeholder="http://" />
               </FormGroup>
             </Col>
           </Row>
-          <Row>
-            <Col>
-              <FormGroup controlId="authorGender" className="mb-3">
+            <Row className='d-flex flex-column flex-lg-row'>
+            <Col className="mb-4">
+              <FormGroup controlId="authorGender">
                 <FormLabel>{t('authorGenderFieldLabel')}</FormLabel>
                 <FormControl as="select">
                   <option value="">{t('authorGenderFieldPlaceholder')}</option>
@@ -356,8 +356,8 @@ const CreateWorkForm: FunctionComponent = () => {
                 </FormControl>
               </FormGroup>
             </Col>
-            <Col>
-              <FormGroup controlId="authorRace" className="mb-3">
+            <Col className="mb-4">
+              <FormGroup controlId="authorRace">
                 <FormLabel>{t('authorEthnicityFieldLabel')}</FormLabel>
                 <FormControl as="select">
                   <option value="">{t('authorEthnicityFieldPlaceholder')}</option>
@@ -369,17 +369,25 @@ const CreateWorkForm: FunctionComponent = () => {
           </Row>
 
           <Row>
-            <FormGroup controlId="description" as={Col}>
+            <FormGroup controlId="description" as={Col}  className="mb-4" >
               <FormLabel>{t('workSummaryFieldLabel')}</FormLabel>
               <FormControl as="textarea" rows={6} maxLength={4000} />
             </FormGroup>
           </Row>
-        </Container>
       </ModalBody>
 
-      <ModalFooter className="mt-3">
+      <ModalFooter>
         <Container className="py-1">
-          <Button variant="primary" type="submit" className="ps-5 pe-4 float-end text-white">
+          <Button variant="primary" type="submit" className="d-none d-lg-block float-end text-white">
+            {t('submitButtonLabel')}
+            {isLoading ? (
+              <Spinner animation="grow" variant="info" className={styles.loadIndicator} />
+            ) : (
+              <span className={styles.placeholder} />
+            )}
+            {isError && createWorkError}
+          </Button>
+          <Button variant="primary" type="submit" className="d-block d-lg-none w-100 text-white">
             {t('submitButtonLabel')}
             {isLoading ? (
               <Spinner animation="grow" variant="info" className={styles.loadIndicator} />

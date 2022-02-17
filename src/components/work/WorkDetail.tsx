@@ -32,13 +32,14 @@ import UnclampText from '../UnclampText';
 import WorkSummary from './WorkSummary';
 import detailPagesAtom from '../../atoms/detailPages';
 import globalModalsAtom from '../../atoms/globalModals';
+import editOnSmallerScreens from '../../atoms/editOnSmallerScreens';
 import styles from './WorkDetail.module.css';
 import TagsInput from '../forms/controls/TagsInput';
 import MosaicItem from './MosaicItem';
 import { MosaicContext } from '../../useMosaicContext';
 import { WorkContext } from '../../useWorkContext';
+import EditPostForm from '../forms/EditPostForm';
 // import CommentsList from '../common/CommentsList';
-
 interface Props {
   work: WorkMosaicItem;
   post?: PostMosaicItem;
@@ -52,6 +53,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const { t } = useTranslation('workDetail');
+  const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
   const [session] = useSession() as [Session | null | undefined, boolean];
   const handleSubsectionChange = (key: string | null) => {
     if (key != null) {
@@ -79,9 +81,16 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
     setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: true } });
   };
 
+  const handleEditPostOnSmallerScreen = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+        setEditPostOnSmallerScreen({ ...editOnSmallerScreens, ...{ value: !editPostOnSmallerScreen.value } });
+  };
+
   return (
     <WorkContext.Provider value={{ work, linkToWork: false }}>
       <MosaicContext.Provider value={{ showShare: true }}>
+       
+       {(!editPostOnSmallerScreen.value) ? 
         <ButtonGroup className="mt-1 mt-md-3 mb-1">
           <Button variant="primary text-white" onClick={() => router.back()} size="sm">
             <BiArrowBack />
@@ -91,14 +100,25 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
               {t('edit')}
             </Button>
           )}
-          {post && work && canEditPost() && (
-            <Button variant="warning" onClick={handleEditPostClick} size="sm">
-              {t('edit')}
-            </Button>
+          {post && work && canEditPost() && (<>
+          <Button className='d-none d-md-block' variant="warning" onClick={handleEditPostClick} size="sm">
+            {t('edit')}
+          </Button>
+            <Button className='d-block d-md-none' variant="warning" onClick={handleEditPostOnSmallerScreen} size="sm">
+            {t('edit')}
+          </Button></>
           )}
-        </ButtonGroup>
+        </ButtonGroup> :
+        
+        <ButtonGroup className="mt-1 mt-md-3 mb-1">
+        <Button variant="primary text-white" onClick={handleEditPostOnSmallerScreen} size="sm">
+          <BiArrowBack />
+        </Button>
+      </ButtonGroup>
+      }
 
-        <>
+     {(!editPostOnSmallerScreen.value) ? 
+        <><>
           {post == null ? (
             <Row className="mb-5 d-flex flex-column flex-md-row">
               <Col className='col-md-5 col-lg-4 col-xl-3   d-none d-md-block'>
@@ -206,7 +226,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
               )}
             </Col>
           </Row>
-        )}
+        )} </> : <EditPostForm noModal />}
       </MosaicContext.Provider>
     </WorkContext.Provider>
   );

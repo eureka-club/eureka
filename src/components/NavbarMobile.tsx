@@ -154,14 +154,20 @@ const NavBar: FunctionComponent = () => {
                       <a className="dropdown-item">{t('cycle')}</a>
                     </Link>
                   )}
-                  <Dropdown.Item className="" onClick={handleCreatePostClick}>
+                  <Link href="/post/create">
+                      <a className="dropdown-item">{t('post')}</a>
+                    </Link>
+                  {/*<Dropdown.Item className="" onClick={handleCreatePostClick}>
                     {t('post')}
-                  </Dropdown.Item>
+                  </Dropdown.Item>*/}
                   {session?.user.roles.includes('admin') && (
-                    <Dropdown.Item className="" onClick={handleCreateWorkClick}>
-                      {t('work')}
-                    </Dropdown.Item>
+                      <Link href="/work/create">
+                      <a className="dropdown-item">{t('work')}</a>
+                    </Link>   
                   )}
+                  {/*<Dropdown.Item className="" onClick={handleCreateWorkClick}>
+                      {t('work')}
+                    </Dropdown.Item>*/}
                 </Dropdown.Menu>
               </Dropdown>
             )}

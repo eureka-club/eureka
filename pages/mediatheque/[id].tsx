@@ -441,6 +441,11 @@ const Mediatheque: NextPage = () => {
                     <TagsInput className='d-none d-md-block' tags={user.tags || ''} readOnly label="" />
                   </Col>
                   <Col className='mt-2 d-grid gap-2 d-md-flex align-items-start  justify-content-md-end d-lg-block'>
+                      {session && (session as unknown as Session).user!.id == user.id && (
+                      <Button className='text-white rounded-pill' onClick={()=>router.push('/profile')}>
+                        {t('editProfile')}
+                      </Button>
+                    )}
                     {session && (session as unknown as Session).user!.id !== user.id && !isFollowedByMe && (
                       <Button className='text-white rounded-pill' onClick={followHandler} disabled={isLoadingMutateFollowing}>
                         {t('Follow')}

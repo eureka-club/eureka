@@ -9,7 +9,7 @@ interface Props{
     creatorId:number;
     actions:{
         edit: (e:MouseEvent<HTMLButtonElement>) => Promise<void>;
-        // remove: (e:MouseEvent<HTMLButtonElement>) => Promise<void>;
+        editOnSmallScreen: (e:MouseEvent<HTMLButtonElement>) => Promise<void>;
     }
 }
 const ActionsBar:React.FC<Props> = ({actions,creatorId}) =>{
@@ -22,12 +22,12 @@ const ActionsBar:React.FC<Props> = ({actions,creatorId}) =>{
     },[session])
     if(user && user.id == creatorId)
         return <aside data-cy="actions-bar" className="ms-auto">
-                <Button className="m-0 p-0 text-warning" size="sm" variant="link" onClick={actions.edit}>
+                <Button className="d-none d-md-block m-0 p-0 text-warning" size="sm" variant="link" onClick={actions.edit}>
                     <BiEdit />
                 </Button>
-                {/* <Button className="m-0 p-0 text-danger" variant="link" onClick={actions.remove}>
-                    <BiTrash />
-                </Button> */}
+                <Button className="d-block d-md-none m-0 p-0 text-warning" variant="link" onClick={actions.editOnSmallScreen}>
+                    <BiEdit />
+                </Button>
             </aside>
     if(isLoading)
         return <Spinner animation='grow' size='sm' />

@@ -71,7 +71,6 @@
   "Image": "Foto de perfil",
   "Country of origin": "País de origen",
   "Topics": "Mi temas de interés (max 5)",
-  "Edit Profile": "Editar mi perfil",
   "countryFieldLabel": "País",
   "Edit": "Editar",
   "Remove":"Eliminar",
@@ -80,13 +79,10 @@
   "I learned": "¡Aprendí",
   "Rating Eureka": "Rating Eureka",
   "Save for later": "Guardar para luego",
-  "Privacy settings": "Configuración de privacidad",
   "mediathequeInfo": "Tu Mediateca contiene tu actividad en Eureka. Reúne elementos que has visto / leído / participado, elementos guardados para luego, así como ciclos y Eurekas que ha creados y / o participado",
-  "My Mediatheque is public": "Mi Mediateca es pública",
   "Anyone can see my Mediatheque": "Cualquiera puede ver mi Mediateca",
   "Fallowers can see my Dashboard": "Seguidoras pueden ver mi Mediateca",
   "Users I fallow or that follow me can see my Dashboard": "Las usuarias que yo sigo o que me siguen pueden ver mi Mediateca",
-  "My Dashboard is secret": "Mi Mediateca es secreta",
   "Only I can see my Dashboard": "Solo yo puedo ver mi Mediateca",
   "About me": "Acerca de mi",
   "Share": "Compartir",
@@ -124,8 +120,6 @@
   "loadMoreTopics": "Cargar más temas",
   "public": "Ciclo público",
   "private": "Ciclo privado",
-  "Change Photo": "Cambiar Foto",
   "secret": "Ciclo secreto",
-  "select": "Seleccionar",
-  "Profile":"Perfil"
+  "select": "Seleccionar"
 }

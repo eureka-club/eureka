@@ -1,57 +1,54 @@
-import { GetServerSideProps,NextPage } from 'next';
-import useTranslation from 'next-translate/useTranslation';
+import { GetServerSideProps, NextPage} from 'next';
+import { useEffect } from 'react';
+import { getSession,useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
-import {getSession, useSession } from 'next-auth/client';
-import { useState, useEffect, SyntheticEvent } from 'react';
+import useTranslation from 'next-translate/useTranslation';
+import { Session } from '../../src/types';
+import SimpleLayout from '../../src/components/layouts/SimpleLayout';
+import CreatePostForm from '../../src/components/forms/CreatePostForm';
 import { Spinner, Card, Row, Col, ButtonGroup, Button, Alert } from 'react-bootstrap';
 import { BiArrowBack } from 'react-icons/bi';
-import SimpleLayout from '../src/components/layouts/SimpleLayout';
-import EditUserForm from '@/components/forms/EditUserForm';
-import { Session } from '../src/types';
-
+import { stubFalse } from 'lodash';
 
 interface Props {
   notFound?: boolean;
 }
-
-const Profile: NextPage<Props> = ({notFound}) => {
+const CreatePostPage: NextPage<Props> = ({notFound}) => {
+  const { t } = useTranslation('createPostForm');
   const [session, isLoadingSession] = useSession();
-  const [id, setId] = useState<string>('');
-  const [idSession, setIdSession] = useState<string>('');
   const router = useRouter();
-  
-  const { t } = useTranslation('profile');
 
-useEffect(() => {
+
+
+    useEffect(() => {
             if (notFound) 
                 router.push('/login');
             
     }, [notFound]);
 
-if (!notFound) 
-  return (
-    <SimpleLayout title={t('Profile')}>
-     {(isLoadingSession) ?
-        <Spinner animation="grow" variant="info" />
-  :
-      <>
+
+ if (!notFound) 
+  return  (
+    <SimpleLayout title={t('title')}>
+         {(isLoadingSession) ?
+        <Spinner animation="grow" variant="info" />:<>
         <ButtonGroup className="mt-1 mt-md-3 mb-1">
           <Button variant="primary text-white" onClick={() => router.back()} size="sm">
             <BiArrowBack />
           </Button>
         </ButtonGroup>
-      <EditUserForm />  
-          </>}
+      <CreatePostForm noModal/></>}
     </SimpleLayout>
   );
   else
    return  (
-    <SimpleLayout title={t('createCycle')}>
+    <SimpleLayout title={t('title')}>
         <Spinner animation="grow" variant="info" />
     </SimpleLayout>
   );
-};
 
+ 
+};
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = (await getSession(ctx)) as unknown as Session;
@@ -64,5 +61,4 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   };
 };
 
-
-export default Profile;
+export default CreatePostPage;
