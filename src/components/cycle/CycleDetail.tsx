@@ -25,13 +25,13 @@ import { BiArrowBack } from 'react-icons/bi';
 import { Work, Comment, Cycle, User } from '@prisma/client';
 import { MosaicContext } from '../../useMosaicContext';
 import { Typeahead } from 'react-bootstrap-typeahead';
-
+import { useQueryClient } from 'react-query';
 // import UserAvatar from '../common/UserAvatar';
 import Mosaic from '../Mosaic';
 // import globalModals from '../../atoms/globalModals';
 
 import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR /* , HYVOR_WEBSITE_ID, WEBAPP_URL */ } from '../../constants';
-import { Session, MosaicItem } from '../../types';
+import { Session, MosaicItem, isCommentMosaicItem, isPostMosaicItem } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
 import { WorkMosaicItem } from '../../types/work';
@@ -45,7 +45,9 @@ import PostDetailComponent from '../post/PostDetail';
 // import SocialInteraction from '../common/SocialInteraction';
 import PostsMosaic from './PostsMosaic';
 import WorksMosaic from './WorksMosaic';
-import ComentMosaic from '../comment/MosaicItem';
+
+import CommentMosaic from '@/src/components/comment/MosaicItem';
+import PostMosaic from '@/src/components/post/MosaicItem';
 // import UnclampText from '../UnclampText';
 import detailPagesAtom from '../../atoms/detailPages';
 import globalModalsAtom from '../../atoms/globalModals';
@@ -54,7 +56,7 @@ import styles from './CycleDetail.module.css';
 import { useCycleContext, CycleContext } from '../../useCycleContext';
 import CycleDetailHeader from './CycleDetailHeader';
 import CycleDetailDiscussion from './CycleDetailDiscussion';
-import { upperFirst } from 'lodash';
+
 
 interface Props {
   // cycle: CycleMosaicItem;
@@ -107,6 +109,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     book: false,
     'fiction-book': false, */
   });
+  const queryClient = useQueryClient()
     // const hyvorId = `${WEBAPP_URL}cycle/${router.query.id}`;
 
   // const { data } = useCycles(1);
@@ -238,19 +241,47 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   };
 
   const renderItems = () => {
+    const res = []
     if(cycle){
       const items = [
         ... getComments() as CommentMosaicItem[],
         ... getPosts()
       ]
       .sort((a,b)=>a.createdAt >= b.createdAt ? -1 : 1);
+      for(let i of items){
+        if(isPostMosaicItem(i)){
+          const ck = ['POST',i.id.toString()];
+          queryClient.setQueryData(ck,i)
+          const post = queryClient.getQueryData<PostMosaicItem>(ck)
+          let pp=null;
+          const it = i as PostMosaicItem;
+          if (it.works && it.works.length > 0) pp = it.works[0] as WorkMosaicItem;
+          else pp = cycle as CycleMosaicItem;
+
+          res.push(
+            <PostMosaic postParent={pp} post={it} display="h" cacheKey={ck} showComments className="mb-2" />
+          )
+        }
+        else if(isCommentMosaicItem(i)){
+          const ck = ['COMMENT',i.id.toString()];
+          queryClient.setQueryData(ck,i)
+          const comment = queryClient.getQueryData(ck)
+          res.push(
+            <CommentMosaic detailed comment={i as CommentMosaicItem} 
+            commentParent={i.post as PostMosaicItem || i.work as WorkMosaicItem || i.cycle as CycleMosaicItem}
+            cacheKey={ck} className="mb-2" />
+          )
+        }
+        
+      }
       return <section data-cy="comments-and-posts">
-        <Mosaic
+        {res}
+        {/* <Mosaic
               display="h"
               stack={items}
               showComments={true}
               cacheKey={['CYCLE', `${cycle.id}`]}
-            />
+            /> */}
       </section>
     }
     return <></>

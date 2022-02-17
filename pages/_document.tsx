@@ -77,8 +77,10 @@ class MyDocument extends Document {
                   `,
               }}
             />
+            
           </>
           {/* <!-- End Facebook Pixel Code --> */}
+          {/* <script async src="/tinymce/tinymce.min.js"></script> */}
         </Head>
         <body>
           <Main />

@@ -16,18 +16,31 @@ export type CycleWithImages = Prisma.CycleGetPayload<{
 
 export type CycleMosaicItem = Prisma.CycleGetPayload<{
   include: {
-    creator: true;
+    creator: {include:{photos:true}};
     localImages: true;
     complementaryMaterials: true;
-    participants: true;
+    participants: {include:{photos:true}};
     favs: true;
-    works: true;
     cycleWorksDates: true;
     ratings: true;
     posts: {
+      creator:{photos:true};
       include: {
         works: true;
       };
+    };
+    works:{
+      include: {
+        localImages: true;
+        favs: true;
+        ratings: { include: { work: true } };
+        comments: {
+          include: {
+            creator: {include:{photos:true}};
+            comments: { include: { creator: {include:{photos:true}} } };
+          };
+        };
+      }
     };
     comments: {
       include: { comments: true; work: true; post?:true;comment?:true; creator: true };

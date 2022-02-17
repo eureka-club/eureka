@@ -8,7 +8,7 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
   return prisma.cycle.findUnique({
     where: { id },
     include: {
-      creator: true,
+      creator: {include:{photos:true}},
       localImages: true,
       complementaryMaterials: true,
       guidelines: {
@@ -17,7 +17,7 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
           contentText: true,
         },
       },
-      participants: true,
+      participants: {include:{photos:true}},
       ratings: { include: { cycle: true } },
       favs: true,
       works: {
@@ -27,8 +27,8 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
           ratings: { include: { work: true } },
           comments: {
             include: {
-              creator: { select: { id: true, name: true, image: true } },
-              comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+              creator: {include:{photos:true}},
+              comments: { include: { creator: {include:{photos:true}} } },
             },
             where:{cycleId:id},
           },
@@ -37,14 +37,14 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
       cycleWorksDates: true,
       posts: {
         include: {
-          creator: true,
+          creator: {include:{photos:true}},
           localImages: true,
           works: true,
           favs: true,
           comments: {
             include: {
-              creator: { select: { id: true, name: true, image: true } },
-              comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+              creator: {include:{photos:true}},
+              comments: { include: { creator: {include:{photos:true}} } },
             },
             where:{cycleId:{equals:id}}
           },
@@ -53,11 +53,11 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
       },
       comments: {
         include: {
-          creator: true,
+          creator: {include:{photos:true}},
           work: true,
           cycle:true,
           post:true,
-          comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+          comments: { include: { creator: { include: { photos: true } } } },
         },
       },
     },

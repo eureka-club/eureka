@@ -2,13 +2,12 @@ import { FunctionComponent, SyntheticEvent} from 'react';
 import Image from 'next/image'
 import Link from 'next/link';
 import { Spinner } from 'react-bootstrap';
-import { User } from '@prisma/client';
-// import { Session } from '../../types';
+import { UserWhitPhoto } from '@/src/types/user';
+
 import styles from './UserAvatar.module.css';
-import useUser from '@/src/useUser';
 import LocalImageComponent from '@/src/components/LocalImage'
 interface Props {
-  user: { id: number | null; name: string | null; image: string | null };
+  user: UserWhitPhoto;
   showName?: boolean;
   showFullName?: boolean;
   size?: 'md' | 'sm' | 'xs';
@@ -22,10 +21,6 @@ const UserAvatar: FunctionComponent<Props> = ({
   className = '',
   showFullName = false,
 }) => {
-
-  const { data: u, isLoading: isLoadingUser, isSuccess: isSuccessUser } = useUser(+user?.id!,{
-    enabled:!!+user?.id!
-  });
 
   const onLoadImgError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = '/img/default-avatar.png';
@@ -45,18 +40,18 @@ const UserAvatar: FunctionComponent<Props> = ({
   };
   return (
     <>
-      {u && (
+      {user && (
         <span className={`fs-6 ${className} ${styles.cycleCreator} ${styles[size]}`}>
-          <Link href={`/mediatheque/${u.id}`}>
+          <Link href={`/mediatheque/${user.id}`}>
             <a className={`text-secondary ${styles.link}`}>
 
-                {(!u?.photos.length) ?
+                {(!user?.photos.length) ?
          <img
         onError={onLoadImgError}
         className={`${styles.cycleCreatorAvatar} me-2`}
-        src={u.image || '/img/default-avatar.png'}
-        alt={u.name||''}
-      /> : <LocalImageComponent className={`${styles.cycleCreatorAvatar} me-2`} filePath={`users-photos/${u.photos[0].storedFile}` } alt={user.name||''} />}
+        src={user.image || '/img/default-avatar.png'}
+        alt={user.name||''}
+      /> : <LocalImageComponent className={`${styles.cycleCreatorAvatar} me-2`} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />}
               {renderUserName()}
             </a>
           </Link>

@@ -7,7 +7,7 @@ import { Prisma } from '@prisma/client';
 
 export type PostMosaicItem = Prisma.PostGetPayload<{
   include: {
-    creator: true;
+    creator: {include:{photos:true}};
     localImages: true;
     works: {
       include: {

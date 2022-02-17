@@ -20,7 +20,23 @@ export type WorkMosaicItem = Prisma.WorkGetPayload<{
     favs: true;
     ratings: true;
     comments: true;
-    posts: true;
+    posts: {include: {
+      creator: {include:{photos:true}};
+      localImages: true;
+      works: {
+        include: {
+          localImages: true;
+        };
+      };
+      cycles: {
+        include: {
+          localImages: true;
+        };
+      };
+      likes: true;
+      favs: true;
+      comments: true;
+    }};
     cycles: true;
   };
 }>;

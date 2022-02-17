@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Prisma,User } from '@prisma/client';
 
 export interface EditUserClientPayload {
   name?: string;
@@ -40,6 +40,10 @@ type UserFoolow = {
 export type UserMosaicItem = Prisma.UserGetPayload<UserFoolow> & {
   type?: 'user';
 };
+
+export type UserWhitPhoto = Prisma.UserGetPayload<{
+  include:{photos:true}
+}>;
 
 // export type UserDetail = Prisma.UserGetPayload<{
 //   include: {

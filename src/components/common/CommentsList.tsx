@@ -25,7 +25,6 @@ import CommentActionsBar from './CommentActionsBar';
 // import { WEBAPP_URL } from '../../constants';
 
 // import styles from './CommentsList.module.css';
-import Avatar from './UserAvatar';
 
 interface Props {
   entity: CycleMosaicItem | CommentMosaicItem | WorkMosaicItem | PostMosaicItem;

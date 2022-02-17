@@ -26,29 +26,30 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
 
     return res.json();
   });
-  const {
-    isLoading: isPostsLoading,
-    isSuccess: isPostsSuccess,
-    data: postsData,
-  } = useQuery<PostMosaicItem[]>(['posts.mosaic.work', work.id], async ({ queryKey: [, workId] }) => {
-    const whereQP = encodeURIComponent(JSON.stringify({ works: { some: { id: workId } } }));
-    const includeQP = encodeURIComponent(JSON.stringify({ creator: true, localImages: true, works: true }));
-    const res = await fetch(`/api/search/posts?where=${whereQP}&include=${includeQP}`);
 
-    return res.json();
-  });
+  // const {
+  //   isLoading: isPostsLoading,
+  //   isSuccess: isPostsSuccess,
+  //   data: postsData,
+  // } = useQuery<PostMosaicItem[]>(['posts.mosaic.work', work.id], async ({ queryKey: [, workId] }) => {
+  //   const whereQP = encodeURIComponent(JSON.stringify({ works: { some: { id: workId } } }));
+  //   const includeQP = encodeURIComponent(JSON.stringify({ creator: {photos:true}, localImages: true, works: true }));
+  //   const res = await fetch(`/api/search/posts?where=${whereQP}&include=${includeQP}`);
+
+  //   return res.json();
+  // });
   const [mosaicData, setMosaicData] = useState<MosaicItem[]>([]);
 
   useEffect(() => {
-    if (isCyclesSuccess && cyclesData != null && isPostsSuccess && postsData != null) {
-      const interleavedMosaicItems = flatten(zip(cyclesData, postsData)).filter((i) => i != null) as MosaicItem[];
+    if (isCyclesSuccess && cyclesData != null && work.posts != null) {
+      const interleavedMosaicItems = flatten(zip(cyclesData, work.posts)).filter((i) => i != null) as MosaicItem[];
       setMosaicData(interleavedMosaicItems);
     }
-  }, [isCyclesSuccess, cyclesData, isPostsSuccess, postsData]);
+  }, [isCyclesSuccess, cyclesData, work.posts]);
 
   return (
     <>
-      {(isCyclesLoading || isPostsLoading) && <Spinner animation="grow" role="status" />}
+      {(isCyclesLoading) && <Spinner animation="grow" role="status" />}
       {mosaicData.length > 0 && <Mosaic className='d-flex justify-content-center justify-content-md-start' stack={mosaicData} parent={work} />}
     </>
   );

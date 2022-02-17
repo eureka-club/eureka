@@ -32,7 +32,7 @@ export const findAll = async (props?:Prisma.PostFindManyArgs): Promise<Post[]|Po
     orderBy: { createdAt: 'desc' },
     ... include ? {include} : {
       include:{
-        creator: true,
+        creator: {include:{photos:true}},
         localImages: true,
         cycles: { include: { localImages: true } },
         works: { include: { localImages: true } },
@@ -40,8 +40,8 @@ export const findAll = async (props?:Prisma.PostFindManyArgs): Promise<Post[]|Po
         favs: true,
         comments: {
           include: {
-            creator: { select: { id: true, name: true, image: true } },
-            comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+            creator: {include:{photos:true}},
+            comments: { include: { creator: {include:{photos:true}} } },
           },
         },
       }

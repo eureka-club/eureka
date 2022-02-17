@@ -12,23 +12,27 @@ export const find = async (id: number): Promise<WorkMosaicItem | null> => {
       ratings: true,
       posts: {
         include: {
-          creator: true,
+          creator: {include:{photos:true}},
           localImages: true,
-          works: true,
-          favs: true,
-          comments: {
+          works: {
             include: {
-              creator: { select: { id: true, name: true, image: true } },
-              comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+              localImages: true,
             },
           },
-          cycles: true,
-        },
+          cycles: {
+            include: {
+              localImages: true,
+            },
+          },
+          likes: true,
+          favs: true,
+          comments: { include: { creator: { include: { photos: true } } } },
+        }
       },
      comments: {
             include: {
-              creator: { select: { id: true, name: true, image: true } },
-              comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+              creator: { include: { photos: true } },
+              comments: { include: { creator: { include: { photos: true } } } },
             },
           },
       cycles: true,

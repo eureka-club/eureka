@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { Hydrate } from 'react-query/hydration';
 
+
 import i18nConfig from '../i18n';
 import detailPagesAtom from '../src/atoms/detailPages';
 import globalModalsAtom from '../src/atoms/globalModals';

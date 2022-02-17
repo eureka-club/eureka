@@ -32,7 +32,7 @@ const PostsMosaic: FunctionComponent<Props> = ({ work }) => {
           <span className="sr-only">Loading...</span>
         </Spinner>
       )} */}
-      {work && work.posts != null && <Mosaic className='d-flex justify-content-center justify-content-md-start' stack={work.posts as PostMosaicItem[]} parent={work} />}
+      {work && work.posts != null && <Mosaic className='d-flex justify-content-center justify-content-md-start' stack={work.posts} parent={work} />}
     </>
   );
 };

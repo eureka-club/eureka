@@ -8,14 +8,14 @@ export const find = async (id: number): Promise<CommentMosaicItem | null> => {
   return prisma.comment.findUnique({
     where: { id },
     include: {
-      creator: { select: { id: true, name: true, image: true } },
+      creator: { include: { photos:true } },
       work: {include:{cycles:true}},
       post: {include:{cycles:true}},
       cycle: true,
       comments: {
         include: {
-          creator: { select: { id: true, name: true, image: true } },
-          comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+          creator: { include: { photos:true } },
+          comments: { include: { creator: { include: { photos:true } } } },
           work: {include:{cycles:true}},
           cycle:true,
           post: {include:{cycles:true}},
@@ -29,14 +29,14 @@ export const findAll = async (): Promise<CommentMosaicItem[]> => {
   return prisma.comment.findMany({
     orderBy: { createdAt: 'desc' },
     include: {
-      creator: { select: { id: true, name: true, image: true } },
+      creator: { include: { photos:true } },
       work: {include:{cycles:true}},
       post: {include:{cycles:true}},
       cycle: true,
       comments: {
         include: {
-          creator: { select: { id: true, name: true, image: true } },
-          comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+          creator: { include: { photos:true } },
+          comments: { include: { creator: { include: { photos:true } } } },
           work: {include:{cycles:true}},
           cycle:true,
           post: {include:{cycles:true}},

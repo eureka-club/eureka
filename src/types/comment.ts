@@ -1,19 +1,20 @@
 import { Prisma } from '@prisma/client';
 
+
 export type CommentMosaicItem = Prisma.CommentGetPayload<{
   include: {
     creator: {
-      select: { id: true; name: true; image: true };
+      include: { photos:true };
     };
     work: {include:{cycles:true}};
     cycle: true;
     post: {include:{cycles:true}};
     comments: {
       include: {
-        creator: { select: { id: true; name: true; image: true } };
+        creator: { include: { photos:true } };
         comments: {
           include: {
-            creator: { select: { id: true; name: true; image: true } };
+            creator: { include: { photos:true } };
           };
         };
         work: {include:{cycles:true}};
@@ -24,6 +25,7 @@ export type CommentMosaicItem = Prisma.CommentGetPayload<{
   };
 }> & { type?: 'comment' };
 
+
 export type CommentWithCycleWorkComment = Prisma.CommentGetPayload<{
   include: {
     cycle: true;
@@ -31,6 +33,8 @@ export type CommentWithCycleWorkComment = Prisma.CommentGetPayload<{
     comment: true;
   };
 }>;
+
+
 
 interface CreateNotificationClientPayload{
   notificationMessage:string;
