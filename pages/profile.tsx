@@ -20,7 +20,7 @@ const Profile: NextPage<Props> = ({notFound}) => {
   const [idSession, setIdSession] = useState<string>('');
   const router = useRouter();
   
-  const { t } = useTranslation('common');
+  const { t } = useTranslation('profile');
 
 useEffect(() => {
             if (notFound) 

@@ -40,7 +40,7 @@ const EditUserForm: FunctionComponent = () => {
   const [session,isLoadingSession] = useSession() as [Session | null | undefined, boolean];
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const queryClient = useQueryClient();
-  const { t } = useTranslation('common');
+  const { t } = useTranslation('profile');
   const router = useRouter();
   const [tags, setTags] = useState<string>('');
   const [photo, setPhoto] = useState<File>();
