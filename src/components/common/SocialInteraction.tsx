@@ -48,7 +48,7 @@ interface Props {
   showCounts?: boolean;
   // showShare?: boolean;
   showButtonLabels?: boolean;
-  cacheKey?: string[];
+  cacheKey: string[];
   showTrash?: boolean;
   showRating?: boolean;
   className?: string;
@@ -397,10 +397,10 @@ const SocialInteraction: FunctionComponent<Props> = ({
         return {};
       },
       onSuccess: () => {
-        const ck = globalSearchEngineState ? globalSearchEngineState.cacheKey : cacheKey;
+        //const ck = globalSearchEngineState ? globalSearchEngineState.cacheKey : cacheKey;
         queryClient.invalidateQueries(['USER', `${idSession}`]);
-        if (!ck) router.replace(router.asPath);
-        queryClient.invalidateQueries(ck);
+        //if (!ck) router.replace(router.asPath);
+        queryClient.invalidateQueries(cacheKey);
       },
     },
   );
