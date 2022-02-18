@@ -6,9 +6,74 @@ export type CommentMosaicItem = Prisma.CommentGetPayload<{
     creator: {
       include: { photos:true };
     };
-    work: {include:{cycles:true}};
+    work:{
+      include: {
+        localImages: true;
+        favs: true;
+        ratings: true;
+        comments: true;
+        posts: {include: {
+          creator: {include:{photos:true}};
+          localImages: true;
+          works: {
+            include: {
+              localImages: true;
+            };
+          };
+          cycles: {
+            include: {
+              localImages: true;
+            };
+          };
+          likes: true;
+          favs: true;
+          comments: {
+            include: {
+              creator: { include: { photos:true } };
+              comments: {
+                include: {
+                  creator: { include: { photos:true } };
+                };
+              };
+              work: {include:{cycles:true}};
+              cycle:true,
+            };
+          };
+        }};
+        cycles: true;
+      };
+    };
     cycle: true;
-    post: {include:{cycles:true}};
+    post:{
+      include: {
+        creator: {include:{photos:true}};
+        localImages: true;
+        works: {
+          include: {
+            localImages: true;
+          };
+        };
+        cycles: {
+          include: {
+            localImages: true;
+          };
+        };
+        likes: true;
+        favs: true;
+        comments: {
+          include: {
+            creator: { include: { photos:true } };
+            comments: {
+              include: {
+                creator: { include: { photos:true } };
+              };
+            };
+            work: {include:{cycles:true}};
+            cycle:true,
+          };
+        };
+      }
+    };
     comments: {
       include: {
         creator: { include: { photos:true } };
@@ -21,7 +86,6 @@ export type CommentMosaicItem = Prisma.CommentGetPayload<{
         cycle:true,
       };
     };
-    // { include: { creator: true; comments: true } };
   };
 }> & { type?: 'comment' };
 

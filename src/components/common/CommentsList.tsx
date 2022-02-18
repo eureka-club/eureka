@@ -32,7 +32,7 @@ interface Props {
   showCounts?: boolean;
   showShare?: boolean;
   showButtonLabels?: boolean;
-  cacheKey?: string[];
+  cacheKey: string[];
   showTrash?: boolean;
   showRating?: boolean;
 }
@@ -290,7 +290,7 @@ const CommentsList: FunctionComponent<Props> = ({
       
       )} */}
       {/* {user && renderEditorWYSWYG()} */}
-      <CommentActionsBar entity={entity} parent={parent}/>
+      <CommentActionsBar entity={entity} parent={parent} cacheKey={cacheKey} />
       <div className="ms-1">
         {renderComment()}
         {(filterdComments && filterdComments.length && (

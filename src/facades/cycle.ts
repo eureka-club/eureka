@@ -4,6 +4,7 @@ import { StoredFileUpload } from '../types';
 import { CreateCycleServerFields, CreateCycleServerPayload, CycleMosaicItem } from '../types/cycle';
 import prisma from '../lib/prisma';
 
+
 export const find = async (id: number): Promise<CycleMosaicItem | null> => {
   return prisma.cycle.findUnique({
     where: { id },
@@ -20,44 +21,84 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
       participants: {include:{photos:true}},
       ratings: { include: { cycle: true } },
       favs: true,
-      works: {
-        include: {
-          localImages: true,
-          favs: true,
-          ratings: { include: { work: true } },
-          comments: {
-            include: {
-              creator: {include:{photos:true}},
-              comments: { include: { creator: {include:{photos:true}} } },
-            },
-            where:{cycleId:id},
-          },
-        },
-      },
       cycleWorksDates: true,
       posts: {
         include: {
           creator: {include:{photos:true}},
           localImages: true,
-          works: true,
+          works: {
+            include: {
+              localImages: true,
+            },
+          },
+          cycles: {
+            include: {
+              localImages: true,
+            },
+          },
+          likes: true,
           favs: true,
           comments: {
             include: {
-              creator: {include:{photos:true}},
-              comments: { include: { creator: {include:{photos:true}} } },
+              creator: { include: { photos:true } },
+              comments: {
+                include: {
+                  creator: { include: { photos:true } },
+                },
+              },
+              work: {include:{cycles:true}},
+              cycle:true,
             },
-            where:{cycleId:{equals:id}}
           },
+        }
+      },
+      works:{
+        include: {
+          localImages: true,
+          favs: true,
+          ratings: true,
+          comments: true,
+          posts: {include: {
+            creator: {include:{photos:true}},
+            localImages: true,
+            works: {
+              include: {
+                localImages: true,
+              },
+            },
+            cycles: {
+              include: {
+                localImages: true,
+              },
+            },
+            likes: true,
+            favs: true,
+            comments: {
+              include: {
+                creator: { include: { photos:true } },
+                comments: {
+                  include: {
+                    creator: { include: { photos:true } },
+                  },
+                },
+                work: {include:{cycles:true}},
+                cycle:true,
+              },
+            },
+          }},
           cycles: true,
         },
       },
       comments: {
         include: {
-          creator: {include:{photos:true}},
-          work: true,
+          creator: { include: { photos:true } },
+          comments: {
+            include: {
+              creator: { include: { photos:true } },
+            },
+          },
+          work: {include:{cycles:true}},
           cycle:true,
-          post:true,
-          comments: { include: { creator: { include: { photos: true } } } },
         },
       },
     },

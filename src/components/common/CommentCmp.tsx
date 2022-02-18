@@ -48,7 +48,7 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey, parent }) => 
               </Col>
               <Col xs={10} md={11} className="d-flex flex-column">
                 <CommentTextBox comment={ comment} />
-                {/* {renderCommentActions()} */}<CommentActionsBar key={ v4()} entity={ comment} parent={parent} cacheKey={cacheKey}/>
+                {/* {renderCommentActions()} */}<CommentActionsBar key={ v4()} entity={ comment} parent={parent} cacheKey={cacheKey||['COMMENT',`${comment.id}`]}/>
                 {comment &&
                   comment.comments &&
                   comment.comments.map((commentChild) => (
@@ -59,7 +59,7 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey, parent }) => 
                       <Col md={11} xs={10} className="d-flex flex-column">
                       <CommentTextBox comment={ commentChild} />    
                         {/* {renderCommentActions(commentChild)}                     */}
-                        <CommentActionsBar key={ v4()} entity={commentChild as CommentMosaicItem} parent={parent} cacheKey={cacheKey}/>
+                        <CommentActionsBar key={ v4()} entity={commentChild as CommentMosaicItem} parent={parent} cacheKey={cacheKey||['COMMENT',`${comment.id}`]}/>
                       </Col>
                     </Row>
                   ))}

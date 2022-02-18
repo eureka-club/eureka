@@ -1,5 +1,4 @@
 import { Prisma } from '@prisma/client';
-
 export interface ComplementaryMaterial {
   author: string;
   title: string;
@@ -24,26 +23,83 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
     cycleWorksDates: true;
     ratings: true;
     posts: {
-      creator:{photos:true};
       include: {
-        works: true;
-      };
+        creator: {include:{photos:true}};
+        localImages: true;
+        works: {
+          include: {
+            localImages: true;
+          };
+        };
+        cycles: {
+          include: {
+            localImages: true;
+          };
+        };
+        likes: true;
+        favs: true;
+        comments: {
+          include: {
+            creator: { include: { photos:true } };
+            comments: {
+              include: {
+                creator: { include: { photos:true } };
+              };
+            };
+            work: {include:{cycles:true}};
+            cycle:true,
+          };
+        };
+      }
     };
     works:{
       include: {
         localImages: true;
         favs: true;
-        ratings: { include: { work: true } };
-        comments: {
-          include: {
-            creator: {include:{photos:true}};
-            comments: { include: { creator: {include:{photos:true}} } };
+        ratings: true;
+        comments: true;
+        posts: {include: {
+          creator: {include:{photos:true}};
+          localImages: true;
+          works: {
+            include: {
+              localImages: true;
+            };
           };
-        };
-      }
+          cycles: {
+            include: {
+              localImages: true;
+            };
+          };
+          likes: true;
+          favs: true;
+          comments: {
+            include: {
+              creator: { include: { photos:true } };
+              comments: {
+                include: {
+                  creator: { include: { photos:true } };
+                };
+              };
+              work: {include:{cycles:true}};
+              cycle:true,
+            };
+          };
+        }};
+        cycles: true;
+      };
     };
     comments: {
-      include: { comments: true; work: true; post?:true;comment?:true; creator: true };
+      include: {
+        creator: { include: { photos:true } };
+        comments: {
+          include: {
+            creator: { include: { photos:true } };
+          };
+        };
+        work: {include:{cycles:true}};
+        cycle:true,
+      };
     };
     guidelines: {
       select: { title: true; contentText: true };

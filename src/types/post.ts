@@ -21,7 +21,18 @@ export type PostMosaicItem = Prisma.PostGetPayload<{
     };
     likes: true;
     favs: true;
-    comments: true;
+    comments: {
+      include: {
+        creator: { include: { photos:true } };
+        comments: {
+          include: {
+            creator: { include: { photos:true } };
+          };
+        };
+        work: {include:{cycles:true}};
+        cycle:true,
+      };
+    };
   };
 }> & { type?: 'post' };
 

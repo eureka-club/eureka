@@ -52,7 +52,7 @@ export const find = async (props: findProps): Promise<User | UserMosaicItem | nu
         },
         posts: {
           include: {
-            creator: true,
+            creator: {include:{photos:true}},
             localImages: true,
             works: {
               include: { localImages: true, ratings: true, favs: true },
@@ -74,15 +74,15 @@ export const find = async (props: findProps): Promise<User | UserMosaicItem | nu
         likedPosts: { include: { localImages: true } },
         favPosts: {
           include: {
-            creator: true,
+            creator:{include:{photos:true}},
             favs: true,
             cycles: true,
             works: true,
             localImages: true,
             comments: {
               include: {
-                creator: { select: { id: true, name: true, image: true } },
-                comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+                creator:{include:{photos:true}},
+                comments: { include: { creator:{include:{photos:true}} } },
               },
             },
           },
@@ -105,8 +105,8 @@ export const find = async (props: findProps): Promise<User | UserMosaicItem | nu
         // readOrWatchedWorks: {
         //   include: { localImages: true, likes: true, favs: true, readOrWatcheds: true },
         // },
-        following: true,
-        followedBy: true,
+        following: {include:{photos:true}},
+        followedBy: {include:{photos:true}},
 
         ratingWorks: {
           select: {

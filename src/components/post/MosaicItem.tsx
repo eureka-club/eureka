@@ -232,7 +232,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         </Row>
         <Row>
           <Col md={12} xs={12}>
-            {showComments && <CommentsList entity={post} parent={postParent!} cacheKey={cacheKey} />}
+            {showComments && <CommentsList entity={post} parent={postParent!} cacheKey={cacheKey || ['POST',`${post.id}`]} />}
           </Col>
         </Row>
       </section>

@@ -8,16 +8,30 @@ export const find = async (id: number): Promise<PostWithCyclesWorks | null> => {
   return prisma.post.findUnique({
     where: { id },
     include: {
-      creator: true,
-      cycles: { include: { localImages: true } },
-      works: { include: { localImages: true } },
+      creator: {include:{photos:true}},
       localImages: true,
+      works: {
+        include: {
+          localImages: true,
+        },
+      },
+      cycles: {
+        include: {
+          localImages: true,
+        },
+      },
       likes: true,
       favs: true,
       comments: {
         include: {
-          creator: { select: { id: true, name: true, image: true } },
-          comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+          creator: { include: { photos:true } },
+          comments: {
+            include: {
+              creator: { include: { photos:true } },
+            },
+          },
+          work: {include:{cycles:true}},
+          cycle:true,
         },
       },
     },
@@ -40,8 +54,14 @@ export const findAll = async (props?:Prisma.PostFindManyArgs): Promise<Post[]|Po
         favs: true,
         comments: {
           include: {
-            creator: {include:{photos:true}},
-            comments: { include: { creator: {include:{photos:true}} } },
+            creator: { include: { photos:true } },
+            comments: {
+              include: {
+                creator: { include: { photos:true } },
+              },
+            },
+            work: {include:{cycles:true}},
+            cycle:true,
           },
         },
       }

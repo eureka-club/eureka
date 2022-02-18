@@ -58,6 +58,7 @@ import styles from './CycleDetail.module.css';
 import { useCycleContext, CycleContext } from '../../useCycleContext';
 import CycleDetailHeader from './CycleDetailHeader';
 import CycleDetailDiscussion from './CycleDetailDiscussion';
+import useCycle from '@/src/useCycle';
 
 
 interface Props {
@@ -79,22 +80,27 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 }) => {
   // const [globalModalsState, setGlobalModalsState] = useAtom(globalModals);
   const cycleContext = useCycleContext();
-  const [cycle, setCycle] = useState<CycleMosaicItem | null>();
+  // const [cycle, setCycle] = useState<CycleMosaicItem | null>();
+  const router = useRouter();
+  
   const [filteredPosts,setFilteredPosts] = useState<PostMosaicItem[]>([]);
   const [filteredComments,setFilteredComments] = useState<Comment[]>([]);
+  
+  const {data:cycle,isLoading} = useCycle(+(router?.query.id ? router?.query.id.toString():''),{
+    enabled:!!router?.query.id
+  });
 
   useEffect(() => {
-    if (cycleContext && cycleContext.cycle){
-      setCycle(cycleContext.cycle);
-      setFilteredPosts(cycleContext.cycle?.posts as PostMosaicItem[]);
-      setFilteredComments(cycleContext?.cycle.comments);
+    if (cycle/* cycleContext && cycleContext.cycle */){
+      // setCycle(cycle);
+      setFilteredPosts(cycle?.posts);
+      setFilteredComments(cycle.comments);
     } 
-  }, [cycleContext]);
+  }, [cycle/* cycleContext */]);
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
-  const router = useRouter();
-
+  
   const [session, isLoadingSession] = useSession() as [Session | null | undefined, boolean];
   const { t } = useTranslation('cycleDetail');
   const [tabKey, setTabKey] = useState<string>();
@@ -256,40 +262,40 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         ... getPosts()
       ]
       .sort((a,b)=>a.createdAt >= b.createdAt ? -1 : 1);
-      for(let i of items){
-        if(isPostMosaicItem(i)){
-          const ck = ['POST',i.id.toString()];
-          queryClient.setQueryData(ck,i)
-          const post = queryClient.getQueryData<PostMosaicItem>(ck)
-          let pp=null;
-          const it = i as PostMosaicItem;
-          if (it.works && it.works.length > 0) pp = it.works[0] as WorkMosaicItem;
-          else pp = cycle as CycleMosaicItem;
+      // for(let i of items){
+      //   if(isPostMosaicItem(i)){
+      //     const ck = ['POST',i.id.toString()];
+      //     queryClient.setQueryData(ck,i)
+      //     const post = queryClient.getQueryData<PostMosaicItem>(ck)
+      //     let pp=null;
+      //     const it = i as PostMosaicItem;
+      //     if (it.works && it.works.length > 0) pp = it.works[0] as WorkMosaicItem;
+      //     else pp = cycle as CycleMosaicItem;
 
-          res.push(
-            <PostMosaic postParent={pp} post={it} display="h" cacheKey={ck} showComments className="mb-2" />
-          )
-        }
-        else if(isCommentMosaicItem(i)){
-          const ck = ['COMMENT',i.id.toString()];
-          queryClient.setQueryData(ck,i)
-          const comment = queryClient.getQueryData(ck)
-          res.push(
-            <CommentMosaic detailed comment={i as CommentMosaicItem} 
-            commentParent={i.post as PostMosaicItem || i.work as WorkMosaicItem || i.cycle as CycleMosaicItem}
-            cacheKey={ck} className="mb-2" />
-          )
-        }
+      //     res.push(
+      //       <PostMosaic postParent={pp} post={it} display="h" cacheKey={ck} showComments className="mb-2" />
+      //     )
+      //   }
+      //   else if(isCommentMosaicItem(i)){
+      //     const ck = ['COMMENT',i.id.toString()];
+      //     queryClient.setQueryData(ck,i)
+      //     const comment = queryClient.getQueryData(ck)
+      //     res.push(
+      //       <CommentMosaic detailed comment={i as CommentMosaicItem} 
+      //       commentParent={i.post as PostMosaicItem || i.work as WorkMosaicItem || i.cycle as CycleMosaicItem}
+      //       cacheKey={ck} className="mb-2" />
+      //     )
+      //   }
         
-      }
+      // }
       return <section data-cy="comments-and-posts">
-        {res}
-        {/* <Mosaic
+        
+         <Mosaic
               display="h"
               stack={items}
               showComments={true}
               cacheKey={['CYCLE', `${cycle.id}`]}
-            /> */}
+            /> 
       </section>
     }
     return <></>
