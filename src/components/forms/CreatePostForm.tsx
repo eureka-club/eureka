@@ -40,6 +40,7 @@ import { Session } from '@/src/types';
 import { useSession } from 'next-auth/client';
 import useUser from '@/src/useUser';
 import { useNotificationContext } from '@/src/useNotificationProvider';
+import { useToasts } from 'react-toast-notifications'
 
 interface Props {
   noModal?: boolean;
@@ -61,6 +62,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
   const editorRef = useRef<any>(null);
   const [session] = useSession();
   const [userId, setUserId] = useState<number>();
+  const { addToast } = useToasts();
   // const [workId, setWorkId] = useState<string | undefined>();
   const { data: work } = useWorks(router.query.id as string);
   const {data:user} = useUser(userId!,{
@@ -153,6 +155,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
             data:{message},
             toUsers: user?.followedBy.map(u=>u.id)
           })
+         addToast( t('postCreated'), {appearance: 'success', autoDismiss: true,})
         return json.post;
       }
       //TODO toast with error to the user

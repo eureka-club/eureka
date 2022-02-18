@@ -16,5 +16,7 @@
   "titleEdit": "Edit Eureka",
   "edit": "Edit",
   "topicsPostLabel": "Main topics of Eureka (3 max, select most relevant from list)",
-  "topicsFieldLabel": "Additional topics of Eureka (2 max, input freely)"
+  "topicsFieldLabel": "Additional topics of Eureka (2 max, input freely)",
+  "postCreated":"Your Eureka has been published."
+
 }
