@@ -24,6 +24,8 @@ import useTopics from '../../useTopics';
 
 import { useNotificationContext } from '@/src/useNotificationProvider';
 import { useRouter} from 'next/router'
+import { useToasts } from 'react-toast-notifications'
+
 // import {useGlobalEventsContext} from '@/src/useGlobalEventsContext'
 // import styles from './CycleDetailDiscussionCreateEurekaForm.module.css';
 
@@ -48,6 +50,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   const [eurekaTopics, setEurekaTopics] = useState<string[]>([]);
   const editorRef = useRef<any>(null);
   const formRef = useRef<any>(null);
+  const { addToast } = useToasts()
   const [newEureka, setNewEureka] = useState({
     selectedCycleId: cycle.id,
     selectedWorkId: 0,
@@ -187,7 +190,10 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
               toUsers,
               data:{message}
             });
+            
         } 
+        addToast( t('postCreated'), {appearance: 'success', autoDismiss: true,})
+
         return json.post;
       }
 

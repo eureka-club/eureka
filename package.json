@@ -71,6 +71,7 @@
     "react-query": "~3.34.7",
     "react-rating": "^2.0.5",
     "react-share": "^4.4.0",
+    "react-toast-notifications": "^2.5.1",
     "remove-accents": "^0.4.2",
     "sass": "^1.41.0",
     "socket.io-client": "^4.4.0",

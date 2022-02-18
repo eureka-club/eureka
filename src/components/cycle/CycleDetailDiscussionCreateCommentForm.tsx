@@ -24,7 +24,7 @@ import {
 
 import { useNotificationContext } from '@/src/useNotificationProvider';
 import {useRouter} from 'next/router';
-
+import { useToasts } from 'react-toast-notifications'
 interface Props {
   cycle: CycleMosaicItem;
   discussionItem: string | undefined;
@@ -41,6 +41,7 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
   const [session] = useSession() as [Session | null | undefined, boolean];
   const { t } = useTranslation('cycleDetail');
   const editorRef = useRef<any>(null);
+  const { addToast } = useToasts()
   const [newComment, setNewComment] = useState({
     selectedCycleId: cycle.id,
     selectedWorkId: 0,
@@ -110,7 +111,8 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
             data:{message:notifyMessage}
           });
       }
-        return json.comment;
+       addToast( t('commentCreated'), {appearance: 'success', autoDismiss: true,})
+       return json.comment;
       }
 
       return null;

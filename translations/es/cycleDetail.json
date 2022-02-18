@@ -48,5 +48,8 @@
   "requiredEurekaImageError": "Tienes que agregar una imagén a la Eureka (cuadrada, ideal 250x250px)",
   "Filter by Participan":"Filtrar por participante",
   "Filter by type of element":"Filtrar por tipo de contenido",
-  "Filter by work":"Filtrar por obra o ciclo"
+  "Filter by work":"Filtrar por obra o ciclo",
+  "commentCreated":"Su comentario ha sido creado.",
+  "postCreated":"Su Eureka ha sido publicada."
+
 }

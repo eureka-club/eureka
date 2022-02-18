@@ -6,6 +6,8 @@ import { StrictMode, FunctionComponent, useState, useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { Hydrate } from 'react-query/hydration';
+import { ToastProvider} from 'react-toast-notifications';
+import ToastNew from '../src/components/common/ToastNew';
 
 
 import i18nConfig from '../i18n';
@@ -36,6 +38,7 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   );
   return (
     <StrictMode>
+      <ToastProvider placement='top-right' components={{ Toast: ToastNew }} autoDismissTimeout={3500}>
       <NextAuthProvider session={pageProps.session}>
           
         {/* <GlobalEventsContext.Provider value={{...gec}}> */}
@@ -54,6 +57,7 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
         {/* </GlobalEventsContext.Provider> */}
         
       </NextAuthProvider>
+    </ToastProvider>
     </StrictMode>
   );
 };
