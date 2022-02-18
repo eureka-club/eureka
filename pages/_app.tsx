@@ -38,7 +38,7 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   );
   return (
     <StrictMode>
-      <ToastProvider placement='top-right' components={{ Toast: ToastNew }} autoDismissTimeout={3500}>
+      <ToastProvider placement='top-center' components={{ Toast: ToastNew }} autoDismissTimeout={3500}>
       <NextAuthProvider session={pageProps.session}>
           
         {/* <GlobalEventsContext.Provider value={{...gec}}> */}
