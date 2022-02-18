@@ -2,7 +2,7 @@
 
 describe('Mediatheque suite',()=>{
     beforeEach(()=>{
-        cy.login();
+        cy.login(); 
     })
     it('displayed without crash',()=>{
         cy.visit('/about')
