@@ -140,7 +140,7 @@ const MosaicItem: FunctionComponent<Props> = ({
                 </aside>
               </Col>
             </Row>
-            {showComments && <CommentsList entity={comment} parent={commentParent} cacheKey={cacheKey} />}
+            {showComments && <CommentsList entity={comment} parent={commentParent} cacheKey={cacheKey || ['COMMENT',`${comment.id}`]} />}
           </Card.Body>          
         </Card>
         </div>

@@ -25,11 +25,14 @@ import { PostMosaicItem } from '@/src/types/post';
 import {isCycleMosaicItem,isWorkMosaicItem, isPostMosaicItem, isCommentMosaicItem, isComment} from '@/src/types' 
 import {CreateCommentClientPayload} from '@/src/types/comment'
 
+import Editor from '@/src/components/Editor'
+import dayjs from 'dayjs';
+
 type CommentWithComments = Comment & {comments?: Comment[];}
 type EntityWithComments = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | CommentMosaicItem
 type ContextWithComments = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | CommentMosaicItem
 interface Props {
-  cacheKey?: string[];
+  cacheKey: string[];
   className?: string;
   entity: EntityWithComments;
   // context?: ContextWithComments; //if not provide -parent will be used, should be the mosaic used to render the page :|
@@ -47,11 +50,11 @@ const CommentActionsBar: FunctionComponent<Props> = ({
   
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   
-  const [newCommentInput, setNewCommentInput] = useState<string>();
-  const [editCommentInput, setEditCommentInput] = useState<string>();
+  const [newCommentInput, setNewCommentInput] = useState<string>('');
+  const [editCommentInput, setEditCommentInput] = useState<string>('');
   const [showCreateComment, setShowCreateComment] = useState<boolean>(false);
   const [showEditComment, setShowEditComment] = useState<boolean>(false);
-  const editorRef = useRef<any>(null);
+  // const editorRef = useRef<any>(null);
 
   const {notifier} = useNotificationContext();
 
@@ -74,7 +77,28 @@ const CommentActionsBar: FunctionComponent<Props> = ({
    
     return false;
   }
-
+  const createDummyComment = (payload:CreateCommentClientPayload)=>{
+    
+    return {
+      id:Math.random()*100,
+      creatorId:payload.creatorId,
+      creator:session?.user!,
+      contentText:payload.contentText,
+      cycleId:payload.selectedCycleId || null,
+      cycle: isCycleMosaicItem(entity) ? entity : null,
+      workId:payload.selectedWorkId || null,
+      work: isWorkMosaicItem(entity) ? entity : null,
+      postId:payload.selectedPostId || null,
+      post: isPostMosaicItem(entity) ? entity : null,
+      commentId:payload.selectedCommentId || null,
+      comment: isCommentMosaicItem(entity) ? entity : null,
+      comments:[],
+      createdAt:new Date(),
+      updatedAt:new Date(),
+      status:0
+    }
+    
+  }
   const {
     isLoading,
     // isError,
@@ -101,16 +125,45 @@ const CommentActionsBar: FunctionComponent<Props> = ({
       return null;
     },
     {
-      onMutate: async () => {
+      onMutate: async (payload) => {
         if (cacheKey) {
+          
+          await queryClient.cancelQueries(cacheKey)
+          const newComment = createDummyComment(payload);
           const snapshot = queryClient.getQueryData(cacheKey);
+          debugger;
+          if(isCycleMosaicItem(snapshot as CycleMosaicItem)){
+            let sc = queryClient.getQueryData<CycleMosaicItem>(cacheKey);
+            if(sc){
+              if(newComment.postId){
+                  const post = sc.posts.find(p=>p.id==newComment.postId)
+                  if(post){
+                    post.comments.push(newComment);
+                    newComment.post = post;
+                  }
+              }
+              if(newComment.workId){
+                const work = sc.works.find(p=>p.id==newComment.postId)
+                  if(work){
+                    work.comments.push(newComment);
+                    newComment.work = work;
+                  }
+              }
+              if(newComment.cycleId){
+                sc.comments.push(newComment);
+                newComment.cycle = sc;
+              }
+              queryClient.setQueryData(cacheKey, {...sc});
+            }           
+          }
           return { cacheKey, snapshot };
         }
         return { cacheKey: undefined, snapshot: null };
       },
       onSettled: (_comment, error, _variables, context) => {
+        type ctx = {cacheKey:[string,string],snapshot:CommentMosaicItem};
         if (context) {
-          const { cacheKey: ck, snapshot } = context;
+          const { cacheKey: ck, snapshot } = context as ctx;
           if (error && ck) {
             queryClient.setQueryData(ck, snapshot);
           }
@@ -164,15 +217,16 @@ const CommentActionsBar: FunctionComponent<Props> = ({
           if (error && ck) {
             queryClient.setQueryData(ck, snapshot);
           }
-          setShowEditComment(false);
+          // setShowEditComment(false);
           if (context) queryClient.invalidateQueries(ck);
         }
       },
     },
   );
 
-  const submitCreateForm = () => {debugger;
-    if (entity && editorRef.current.getContent()) {
+  
+  const submitCreateForm = (text:string) => {debugger;
+    if (entity && text) {
       const user = (session as Session).user;
       let notificationMessage = '';      
       let notificationToUsers = new Set<number>([]);
@@ -369,25 +423,22 @@ const CommentActionsBar: FunctionComponent<Props> = ({
       
       payload = {...payload,
         creatorId: +session!.user.id,
-        contentText: editorRef.current.getContent(),
+        contentText: text,
         notificationToUsers: [...notificationToUsers],
       };
       createComment(payload as CreateCommentClientPayload);
-      editorRef.current.setContent('');
-      setNewCommentInput(() => '');
     }
   };
 
-  const submitEditForm = () => {    
+  const submitEditForm = (text:string) => {
     if (isComment(entity)||isCommentMosaicItem(entity)) {
       const comment = (entity as Comment);
       const payload = {
         commentId: comment.id,
-        contentText: editorRef.current.getContent() || '',
+        contentText: text,
         status:1,
       };
       editComment(payload);
-      setEditCommentInput(() => '');
     }
   };
 
@@ -401,14 +452,14 @@ const CommentActionsBar: FunctionComponent<Props> = ({
   //   submitEditForm();
   // };
 
-  // const onKeyPressForm = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  // const onKeyPressForm = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
   //   if (e.key === 'Enter' && !e.shiftKey) {
   //     submitCreateForm();
   //     e.preventDefault();
   //   }
   // };
 
-  // const onKeyPressEditForm = (e: KeyboardEvent) => {
+  // const onKeyPressEditForm = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {debugger;
   //   if (e.key === 'Enter' && !e.shiftKey) {
   //     submitEditForm();
   //     e.preventDefault();
@@ -449,62 +500,63 @@ const CommentActionsBar: FunctionComponent<Props> = ({
     setShowEditComment(false);    
   }
 
-  const onKeyUpEditorEdit = (e: EditorEvent<KeyboardEvent>)=>{
-    if (e.key === 'Enter' && !e.shiftKey) {
-      setEditCommentInput(()=>editorRef.current.getContent())
-      submitEditForm();
-      e.preventDefault();
-    }
-  }
+  // const onKeyUpEditorEdit = (e: EditorEvent<KeyboardEvent>)=>{
+  //   if (e.key === 'Enter' && !e.shiftKey) {
+  //     setEditCommentInput(()=>editorRef.current.getContent())
+  //     submitEditForm();
+  //     e.preventDefault();
+  //   }
+  // }
 
-  const onKeyUpEditorCreate = (e: EditorEvent<KeyboardEvent>)=>{
-    if (e.key === 'Enter' && !e.shiftKey) {
-      submitCreateForm();
-      e.preventDefault();
-    }
-  }
+  // const onKeyUpEditorCreate = (e: EditorEvent<KeyboardEvent>)=>{
+  //   if (e.key === 'Enter' && !e.shiftKey) {
+  //     submitCreateForm();
+  //     e.preventDefault();
+  //   }
+  // }
 
-  const renderEditorWYSWYG = (
-    onKeyUp:(e: EditorEvent<KeyboardEvent>) => void,
-    initialValue?:string,
-    )=>{
-    return <>
-    <EditorCmp
-          apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
-          onInit={(_: any, editor) => {
-            editor.editorContainer.classList.add(...[
-              "rounded-pill",
-            ])
-            editorRef.current = editor;
-          }}
-          onKeyUp={onKeyUp}
+  // const renderEditorWYSWYG = (
+  //   onKeyUp:(e: EditorEvent<KeyboardEvent>) => void,
+  //   initialValue?:string,
+  //   )=>{
+  //   return <>
+  //   <Editor/>
+  //   {/* <EditorCmp
+  //         apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
+  //         onInit={(_: any, editor) => {
+  //           editor.editorContainer.classList.add(...[
+  //             "rounded-pill",
+  //           ])
+  //           editorRef.current = editor;
+  //         }}
+  //         onKeyUp={onKeyUp}
           
-          initialValue={initialValue}
-          init={{
-            max_height: 70,
-            menubar: false,
-            plugins: [
-              'advlist autolink lists link image charmap print preview anchor',
-              'searchreplace visualblocks code fullscreen',
-              'insertdatetime media table paste code help',
-            ],
-            relative_urls: false,
-            forced_root_block : "p,a",
-            // toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
-            toolbar:false,
-            branding:false,
-            statusbar:false,
+  //         initialValue={initialValue}
+  //         init={{
+  //           max_height: 70,
+  //           menubar: false,
+  //           plugins: [
+  //             'advlist autolink lists link image charmap print preview anchor',
+  //             'searchreplace visualblocks code fullscreen',
+  //             'insertdatetime media table paste code help',
+  //           ],
+  //           relative_urls: false,
+  //           forced_root_block : "p,a",
+  //           // toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
+  //           toolbar:false,
+  //           branding:false,
+  //           statusbar:false,
 
-            content_style: `body { 
-              font-family:Helvetica,Arial,sans-serif; 
-              font-size:14px; 
-              background:#f7f7f7;
-            }`,
+  //           content_style: `body { 
+  //             font-family:Helvetica,Arial,sans-serif; 
+  //             font-size:14px; 
+  //             background:#f7f7f7;
+  //           }`,
             
-          }}
-        />
-    </>
-  }
+  //         }}
+  //       /> */}
+  //   </>
+  // }
 
   if(!session?.user.id) return <></>;
   if(isCommentMosaicItem(entity)){
@@ -560,8 +612,11 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                     placeholder={`${t('Write a replay')}...`}
                   />
                 </Form> */}
-                {renderEditorWYSWYG(onKeyUpEditorCreate)}
-              
+                {/* {renderEditorWYSWYG(onKeyUpEditorCreate)} */}
+                <Editor onSave={(text)=>{
+                  submitCreateForm(text);          
+                  }}
+                />
               </>
         
               )}
@@ -578,7 +633,11 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                     placeholder={`${t('Edit the replay')}...`}
                   />
                 </Form> */}
-                {renderEditorWYSWYG(onKeyUpEditorEdit, editCommentInput)}
+                {/* {renderEditorWYSWYG(onKeyUpEditorEdit, editCommentInput)} */}
+                  <Editor onSave={(text)=>{
+                    submitEditForm(text);          
+                    }}
+                  />
                 </>
               )}
               {getIsLoading() ? <Spinner animation="grow" variant="info" size="sm" /> : ''}
@@ -628,8 +687,11 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                     placeholder={`${t('Write a replay')}...`}
                   />
                 </Form> */}
-                {renderEditorWYSWYG(onKeyUpEditorCreate)}
-              
+                {/* {renderEditorWYSWYG(onKeyUpEditorCreate)} */}
+                  <Editor onSave={(text)=>{
+                    submitCreateForm(text);          
+                    }}
+                  />
               </>
         
               )}
@@ -646,7 +708,11 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                     placeholder={`${t('Edit the replay')}...`}
                   />
                 </Form> */}
-                {renderEditorWYSWYG(onKeyUpEditorEdit, editCommentInput)}
+                {/* {renderEditorWYSWYG(onKeyUpEditorEdit, editCommentInput)} */}
+                  <Editor onSave={(text)=>{
+                    submitEditForm(text);          
+                    }}
+                  />
                 </>
               )}
               {getIsLoading() ? <Spinner animation="grow" variant="info" size="sm" /> : ''}
@@ -656,7 +722,11 @@ const CommentActionsBar: FunctionComponent<Props> = ({
   }
   else return <section>{!getIsLoading() && (
       <>
-        {renderEditorWYSWYG(onKeyUpEditorCreate)}    
+        {/* {renderEditorWYSWYG(onKeyUpEditorCreate)}     */}
+        <Editor onSave={(text)=>{
+          submitCreateForm(text);          
+          }}
+        />
       </>
 
       )}

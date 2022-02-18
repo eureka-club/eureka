@@ -1,24 +1,77 @@
 import React,{useEffect,useState} from 'react'
-import Script from 'next/script'
-
-declare global {
-    interface Window {
-        tinymce:any;
-    }
+import {Form} from 'react-bootstrap'
+// import Script from 'next/script'
+import useTranslation from 'next-translate/useTranslation';
+// declare global {
+//     interface Window {
+//         tinymce:any;
+//     }
+// }
+interface Props {
+    onSave:(text:string)=>void;
+    value?:string;
 }
+const Editor: React.FC<Props> = ({onSave,value})=>{
+    const [text,setText] = useState<string>('')
+    const {t} = useTranslation('common')
+    return <Form.Control 
+        defaultValue={value}
+        value={value} 
+        type="text" 
+        className="border fs-6 rounded-pill bg-light"
+        as="textarea"
+        rows={2}
+        placeholder={`${t('Write a replay')}...`}        
+        onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{
+            setText(e.target.value)
+        }} 
+        onKeyPress={(e:React.KeyboardEvent<HTMLInputElement>)=>{
+            if (e.key === 'Enter' && !e.shiftKey){                            
+                e.preventDefault()
+                onSave(text)                
+            }
+        }} />
 
-const Editor: React.FC = ()=>{
-
-    useEffect(()=>{
-            
-    })
-    return <section>
+    /* return <section>
         <Script src="/tinymce/tinymce.min.js" onLoad={()=>{
             window.tinymce.init({
-                selector: '#mytextarea'
+                selector: '.t',
+                init_instance_callback: function(editor: { on: (arg0: string, arg1: (e: any) => void) => void }) {
+                    editor.on('input', function(e) {
+                        onSave(e.target.innerHTML)
+
+                    });
+                    editor.on('keydown', function(e) {                        
+                        if(e.key == 'Enter'){                            
+                            onSave(e.currentTarget.innerHTML)
+                        }
+                    });
+                },
+                
+                max_height: 70,
+                menubar: false,
+                plugins: [
+                'advlist autolink lists link image charmap print preview anchor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table paste code help',
+                ],
+                relative_urls: false,
+                forced_root_block : "p,a",
+                // toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
+                toolbar:false,
+                branding:false,
+                statusbar:false,
+
+                content_style: `body { 
+                font-family:Helvetica,Arial,sans-serif; 
+                font-size:14px; 
+                background:#f7f7f7;
+                }`,
             });
         }}/>
-        <textarea id="mytextarea">Hello, World!</textarea>
+        <textarea 
+            className="t"
+        >{value}</textarea>
     </section>
-}
+ */}
 export default Editor;

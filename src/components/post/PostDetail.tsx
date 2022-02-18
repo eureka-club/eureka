@@ -69,11 +69,11 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
   if (cycle && cycle.access !== 1 && !currentUserIsParticipant) return null;
 
   return (
-    <>
+    <article data-cy="post-detail">
       {/* {work ||
         (cycle && ( */}
      <MosaicContext.Provider value={{ showShare: true }}>
-      <div className={classNames('d-flex d-md-none flex-row justify-content-between mt-3', styles.postInfo)}>
+      <div  className={classNames('d-flex d-md-none flex-row justify-content-between mt-3', styles.postInfo)}>
 
              <div>
                     <Link href={`/mediatheque/${post.creator.id}`} passHref>
@@ -226,7 +226,7 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
      </MosaicContext.Provider>
 
       {/* )) || <Alert variant="warning">Not found</Alert>} */}
-    </>
+    </article>
   );
 };
 

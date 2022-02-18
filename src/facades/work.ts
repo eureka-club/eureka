@@ -26,7 +26,18 @@ export const find = async (id: number): Promise<WorkMosaicItem | null> => {
           },
           likes: true,
           favs: true,
-          comments: { include: { creator: { include: { photos: true } } } },
+          comments: {
+            include: {
+              creator: { include: { photos:true } },
+              comments: {
+                include: {
+                  creator: { include: { photos:true } },
+                },
+              },
+              work: {include:{cycles:true}},
+              cycle:true,
+            },
+          },
         }
       },
      comments: {

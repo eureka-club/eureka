@@ -8,20 +8,90 @@ export const find = async (id: number): Promise<CommentMosaicItem | null> => {
   return prisma.comment.findUnique({
     where: { id },
     include: {
-      creator: { include: { photos:true } },
-      work: {include:{cycles:true}},
-      post: {include:{cycles:true}},
+      creator: {
+        include: { photos:true },
+      },
+      work:{
+        include: {
+          localImages: true,
+          favs: true,
+          ratings: true,
+          comments: true,
+          posts: {include: {
+            creator: {include:{photos:true}},
+            localImages: true,
+            works: {
+              include: {
+                localImages: true,
+              },
+            },
+            cycles: {
+              include: {
+                localImages: true,
+              },
+            },
+            likes: true,
+            favs: true,
+            comments: {
+              include: {
+                creator: { include: { photos:true } },
+                comments: {
+                  include: {
+                    creator: { include: { photos:true } },
+                  },
+                },
+                work: {include:{cycles:true}},
+                cycle:true,
+              },
+            },
+          }},
+          cycles: true,
+        },
+      },
       cycle: true,
+      post:{
+        include: {
+          creator: {include:{photos:true}},
+          localImages: true,
+          works: {
+            include: {
+              localImages: true,
+            },
+          },
+          cycles: {
+            include: {
+              localImages: true,
+            },
+          },
+          likes: true,
+          favs: true,
+          comments: {
+            include: {
+              creator: { include: { photos:true } },
+              comments: {
+                include: {
+                  creator: { include: { photos:true } },
+                },
+              },
+              work: {include:{cycles:true}},
+              cycle:true,
+            },
+          },
+        }
+      },
       comments: {
         include: {
           creator: { include: { photos:true } },
-          comments: { include: { creator: { include: { photos:true } } } },
+          comments: {
+            include: {
+              creator: { include: { photos:true } },
+            },
+          },
           work: {include:{cycles:true}},
           cycle:true,
-          post: {include:{cycles:true}},
         },
       },
-    },
+    }
   });
 };
 
@@ -29,20 +99,90 @@ export const findAll = async (): Promise<CommentMosaicItem[]> => {
   return prisma.comment.findMany({
     orderBy: { createdAt: 'desc' },
     include: {
-      creator: { include: { photos:true } },
-      work: {include:{cycles:true}},
-      post: {include:{cycles:true}},
+      creator: {
+        include: { photos:true },
+      },
+      work:{
+        include: {
+          localImages: true,
+          favs: true,
+          ratings: true,
+          comments: true,
+          posts: {include: {
+            creator: {include:{photos:true}},
+            localImages: true,
+            works: {
+              include: {
+                localImages: true,
+              },
+            },
+            cycles: {
+              include: {
+                localImages: true,
+              },
+            },
+            likes: true,
+            favs: true,
+            comments: {
+              include: {
+                creator: { include: { photos:true } },
+                comments: {
+                  include: {
+                    creator: { include: { photos:true } },
+                  },
+                },
+                work: {include:{cycles:true}},
+                cycle:true,
+              },
+            },
+          }},
+          cycles: true,
+        },
+      },
       cycle: true,
+      post:{
+        include: {
+          creator: {include:{photos:true}},
+          localImages: true,
+          works: {
+            include: {
+              localImages: true,
+            },
+          },
+          cycles: {
+            include: {
+              localImages: true,
+            },
+          },
+          likes: true,
+          favs: true,
+          comments: {
+            include: {
+              creator: { include: { photos:true } },
+              comments: {
+                include: {
+                  creator: { include: { photos:true } },
+                },
+              },
+              work: {include:{cycles:true}},
+              cycle:true,
+            },
+          },
+        }
+      },
       comments: {
         include: {
           creator: { include: { photos:true } },
-          comments: { include: { creator: { include: { photos:true } } } },
+          comments: {
+            include: {
+              creator: { include: { photos:true } },
+            },
+          },
           work: {include:{cycles:true}},
           cycle:true,
-          post: {include:{cycles:true}},
         },
       },
-    },
+    }
   });
 };
 

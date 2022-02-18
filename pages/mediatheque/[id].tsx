@@ -405,7 +405,7 @@ const Mediatheque: NextPage = () => {
 
   return (
     <SimpleLayout title={t('Mediatheque')}>
-      <>
+      <article data-cy="mediatheque">
         <ButtonGroup className="mt-1 mt-md-3 mb-1">
           <Button variant="primary text-white" onClick={() => router.back()} size="sm">
             <BiArrowBack />
@@ -473,13 +473,13 @@ const Mediatheque: NextPage = () => {
               <>
                 <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('Mediatheque')}</h1>
                 <FilterEngine fictionOrNotFilter={false} geographyFilter={false} />
-                {postsCreated()}
+                 {postsCreated()}
 
-                {cyclesJoined()}
+                 {cyclesJoined()}
 
                 {readOrWatched()}
 
-                {savedForLater()}
+                 {savedForLater()}
 
                 {usersFollowed()}
               </>
@@ -491,7 +491,7 @@ const Mediatheque: NextPage = () => {
           {(isLoadingUser || isLoadingSession) && <Spinner animation="grow" variant="info" />}
           {isSuccessUser && id && !user && <Spinner animation="grow" variant="info" />}
         </aside>
-      </>
+      </article>
     </SimpleLayout>
   );
 };
