@@ -9,10 +9,10 @@ import useTranslation from 'next-translate/useTranslation';
 // }
 interface Props {
     onSave:(text:string)=>void;
-    value?:string;
+    value:string;
+    onChange:(value:string)=>void;
 }
-const Editor: React.FC<Props> = ({onSave,value})=>{
-    const [text,setText] = useState<string>('')
+const Editor: React.FC<Props> = ({onSave,value,onChange})=>{
     const {t} = useTranslation('common')
     return <Form.Control 
         defaultValue={value}
@@ -23,12 +23,12 @@ const Editor: React.FC<Props> = ({onSave,value})=>{
         rows={2}
         placeholder={`${t('Write a replay')}...`}        
         onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{
-            setText(e.target.value)
+            onChange(e.target.value);
         }} 
         onKeyPress={(e:React.KeyboardEvent<HTMLInputElement>)=>{
             if (e.key === 'Enter' && !e.shiftKey){                            
                 e.preventDefault()
-                onSave(text)                
+                onSave(value);                
             }
         }} />
 

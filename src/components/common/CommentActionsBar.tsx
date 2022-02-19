@@ -27,6 +27,8 @@ import {CreateCommentClientPayload} from '@/src/types/comment'
 
 import Editor from '@/src/components/Editor'
 import dayjs from 'dayjs';
+import UserAvatar from './UserAvatar';
+import useUser from '@/src/useUser';
 
 type CommentWithComments = Comment & {comments?: Comment[];}
 type EntityWithComments = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | CommentMosaicItem
@@ -47,6 +49,9 @@ const CommentActionsBar: FunctionComponent<Props> = ({
   const queryClient = useQueryClient();
   const isFetching = useIsFetching(cacheKey);
   const router = useRouter();
+  const {data:user,isLoading:isLoadingUser} = useUser(+(router?.query.id?.toString() || ''),{
+    enabled:!!router?.query.id
+  })
   
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   
@@ -613,10 +618,13 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                   />
                 </Form> */}
                 {/* {renderEditorWYSWYG(onKeyUpEditorCreate)} */}
-                <Editor onSave={(text)=>{
-                  submitCreateForm(text);          
-                  }}
-                />
+                <aside className="d-flex align-items-center">
+                  {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
+                  <Editor value={newCommentInput} onChange={setNewCommentInput} onSave={(text)=>{
+                    submitCreateForm(text);          
+                    }}
+                  />
+                </aside>
               </>
         
               )}
@@ -634,11 +642,14 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                   />
                 </Form> */}
                 {/* {renderEditorWYSWYG(onKeyUpEditorEdit, editCommentInput)} */}
-                  <Editor onSave={(text)=>{
-                    submitEditForm(text);          
-                    }}
-                  />
-                </>
+                <aside className="d-flex align-items-center">
+                  {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
+                    <Editor value={editCommentInput} onChange={setEditCommentInput} onSave={(text)=>{
+                      submitEditForm(text);          
+                      }}
+                    />
+                </aside>
+              </>
               )}
               {getIsLoading() ? <Spinner animation="grow" variant="info" size="sm" /> : ''}
             
@@ -688,10 +699,13 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                   />
                 </Form> */}
                 {/* {renderEditorWYSWYG(onKeyUpEditorCreate)} */}
-                  <Editor onSave={(text)=>{
-                    submitCreateForm(text);          
-                    }}
-                  />
+                <aside className="d-flex align-items-center">
+                  {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
+                    <Editor value={newCommentInput} onChange={setNewCommentInput} onSave={(text)=>{
+                      submitCreateForm(text);          
+                      }}
+                    />
+                </aside>
               </>
         
               )}
@@ -709,10 +723,13 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                   />
                 </Form> */}
                 {/* {renderEditorWYSWYG(onKeyUpEditorEdit, editCommentInput)} */}
-                  <Editor onSave={(text)=>{
-                    submitEditForm(text);          
-                    }}
-                  />
+                <aside className="d-flex align-items-center">
+                  {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
+                    <Editor value={editCommentInput} onChange={setEditCommentInput} onSave={(text)=>{
+                      submitEditForm(text);          
+                      }}
+                    />
+                </aside>
                 </>
               )}
               {getIsLoading() ? <Spinner animation="grow" variant="info" size="sm" /> : ''}
@@ -723,10 +740,13 @@ const CommentActionsBar: FunctionComponent<Props> = ({
   else return <section>{!getIsLoading() && (
       <>
         {/* {renderEditorWYSWYG(onKeyUpEditorCreate)}     */}
-        <Editor onSave={(text)=>{
-          submitCreateForm(text);          
-          }}
-        />
+        <aside className="d-flex align-items-center">
+          {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
+          <Editor value={newCommentInput} onChange={setNewCommentInput} onSave={(text)=>{
+            submitCreateForm(text);          
+            }}
+          />
+        </aside>
       </>
 
       )}
