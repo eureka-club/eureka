@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/client';
 import { EditorEvent } from 'tinymce';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import { InputGroup, Form, Button /* , Row, Col, Card, Popover, */, Spinner } from 'react-bootstrap';
-
+import { v4 } from 'uuid';
 import { Cycle, Work, Post, Comment } from '@prisma/client';
 // import { MdReply, MdCancel } from 'react-icons/md';
 import {
@@ -194,7 +194,7 @@ const CommentsList: FunctionComponent<Props> = ({
         .sort((p, c) => (p.id > c.id && -1) || 1)
         .slice(0, commentsShowCount)
         .map((c) => {
-          return <CommentCmp key={c.id} comment={c as CommentMosaicItem} parent={entity} cacheKey={cacheKey} />;
+          return <CommentCmp key={v4()} comment={c as CommentMosaicItem} parent={entity} cacheKey={cacheKey} />;
         });
     return <></>;
   };
