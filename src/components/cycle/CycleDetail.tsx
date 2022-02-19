@@ -59,6 +59,8 @@ import { useCycleContext, CycleContext } from '../../useCycleContext';
 import CycleDetailHeader from './CycleDetailHeader';
 import CycleDetailDiscussion from './CycleDetailDiscussion';
 import useCycle from '@/src/useCycle';
+import usePosts from '@/src/usePosts';
+
 
 
 interface Props {
@@ -83,20 +85,28 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   // const [cycle, setCycle] = useState<CycleMosaicItem | null>();
   const router = useRouter();
   
+  const [posts,setPosts] = useState<PostMosaicItem[]>([]);
   const [filteredPosts,setFilteredPosts] = useState<PostMosaicItem[]>([]);
   const [filteredComments,setFilteredComments] = useState<Comment[]>([]);
   
-  const {data:cycle,isLoading} = useCycle(+(router?.query.id ? router?.query.id.toString():''),{
+  const {data:cycle} = useCycle(+(router?.query.id ? router?.query.id.toString():''),{
     enabled:!!router?.query.id
   });
 
+  const {data:postsData} = usePosts(cycle?.id,undefined,{enabled:!!cycle?.id});
+
+  useEffect(()=>{
+    if(postsData)
+      setFilteredPosts(postsData);
+  },[postsData])
+
   useEffect(() => {
-    if (cycle/* cycleContext && cycleContext.cycle */){
-      // setCycle(cycle);
-      setFilteredPosts(cycle?.posts);
+    if (cycle){
       setFilteredComments(cycle.comments);
+      // setFilteredPosts(posts);
     } 
-  }, [cycle/* cycleContext */]);
+  }, [cycle])
+
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
@@ -646,25 +656,24 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   };
 
   useEffect(() => {
-    if(cycle && cycle.posts && cycle.comments){
-      let posts = cycle?.posts;
+    if(cycle && posts && cycle.comments){
       let comments = cycle?.comments;
-
+      let posts_ = posts;
       if(filterCycleItSelf){
-        posts = posts?.filter((p) => !p.works.length);
+        posts_ = posts?.filter((p) => !p.works.length);
         comments = comments?.filter((c) => !c.workId && !c.commentId);  
       }
       if(filtersWork && filtersWork.length){
-        posts = posts?.filter((p) => p.works.findIndex((w) => filtersWork.includes(w.id)) !== -1);
+        posts_ = posts?.filter((p) => p.works.findIndex((w) => filtersWork.includes(w.id)) !== -1);
         comments = comments?.filter((c) => c.workId && filtersWork.includes(c.workId));
       }
       if(filtersParticipant && filtersParticipant.length){
-        posts = posts?.filter((p) => filtersParticipant.findIndex(i => i  === p.creatorId) !== -1);            
+        posts_ = posts?.filter((p) => filtersParticipant.findIndex(i => i  === p.creatorId) !== -1);            
         comments = comments?.filter((c) => filtersParticipant.findIndex(i => i  === c.creatorId) !== -1);
       }
       if(filtersContentType && filtersContentType.length){
         if(!filtersContentType.includes('post'))
-          posts = [];
+          posts_ = [];
         if(!filtersContentType.includes('comment'))
           comments = [];  
       }
@@ -675,7 +684,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       setFilteredPosts([]);
       setFilteredComments([]);
     }
-  },[filtersWork,filtersParticipant,filtersContentType,filterCycleItSelf,cycle]);
+  },[filtersWork,filtersParticipant,filtersContentType,filterCycleItSelf,cycle,posts]);
 
 
   const handlerComboxesChange = (e: ChangeEvent<HTMLInputElement>, q: string, workId?: number) => {

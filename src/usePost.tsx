@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 import { PostMosaicItem } from './types/post';
 
 export const getRecord = async (id: number): Promise<PostMosaicItem | undefined> => {
-  if (!id) return undefined;
+  if (!id) return undefined;debugger;
   const url = `/api/post/${id}`;
 
   const res = await fetch(url);

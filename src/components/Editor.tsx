@@ -28,7 +28,8 @@ const Editor: React.FC<Props> = ({onSave,value,onChange})=>{
         onKeyPress={(e:React.KeyboardEvent<HTMLInputElement>)=>{
             if (e.key === 'Enter' && !e.shiftKey){                            
                 e.preventDefault()
-                onSave(value);                
+                onSave(value);  
+                onChange('')              
             }
         }} />
 

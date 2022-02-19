@@ -22,36 +22,36 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
     favs: true;
     cycleWorksDates: true;
     ratings: true;
-    posts: {
-      include: {
-        creator: {include:{photos:true}};
-        localImages: true;
-        works: {
-          include: {
-            localImages: true;
-          };
-        };
-        cycles: {
-          include: {
-            localImages: true;
-          };
-        };
-        likes: true;
-        favs: true;
-        comments: {
-          include: {
-            creator: { include: { photos:true } };
-            comments: {
-              include: {
-                creator: { include: { photos:true } };
-              };
-            };
-            work: {include:{cycles:true}};
-            cycle:true,
-          };
-        };
-      }
-    };
+    // posts: {
+    //   include: {
+    //     creator: {include:{photos:true}};
+    //     localImages: true;
+    //     works: {
+    //       include: {
+    //         localImages: true;
+    //       };
+    //     };
+    //     cycles: {
+    //       include: {
+    //         localImages: true;
+    //       };
+    //     };
+    //     likes: true;
+    //     favs: true;
+    //     comments: {
+    //       include: {
+    //         creator: { include: { photos:true } };
+    //         comments: {
+    //           include: {
+    //             creator: { include: { photos:true } };
+    //           };
+    //         };
+    //         work: {include:{cycles:true}};
+    //         cycle:true,
+    //       };
+    //     };
+    //   }
+    // };
     works:{
       include: {
         localImages: true;

@@ -133,34 +133,35 @@ const CommentActionsBar: FunctionComponent<Props> = ({
       onMutate: async (payload) => {
         if (cacheKey) {
           
-          await queryClient.cancelQueries(cacheKey)
+          await queryClient.cancelQueries(['POSTS','cycle-13'])
+          const snapshot = queryClient.getQueryData(['POSTS','cycle-13']);
           const newComment = createDummyComment(payload);
-          const snapshot = queryClient.getQueryData(cacheKey);
-          debugger;
-          if(isCycleMosaicItem(snapshot as CycleMosaicItem)){
-            let sc = queryClient.getQueryData<CycleMosaicItem>(cacheKey);
-            if(sc){
+          
+          // if(isCycleMosaicItem(snapshot as CycleMosaicItem)){
+            let posts = queryClient.getQueryData<PostMosaicItem[]>(['POSTS','cycle-13']);
+            
+            if(posts){
               if(newComment.postId){
-                  const post = sc.posts.find(p=>p.id==newComment.postId)
+                  const post = posts.find(p=>p.id==newComment.postId)
                   if(post){
                     post.comments.push(newComment);
                     newComment.post = post;
                   }
               }
-              if(newComment.workId){
-                const work = sc.works.find(p=>p.id==newComment.postId)
-                  if(work){
-                    work.comments.push(newComment);
-                    newComment.work = work;
-                  }
-              }
-              if(newComment.cycleId){
-                sc.comments.push(newComment);
-                newComment.cycle = sc;
-              }
-              queryClient.setQueryData(cacheKey, {...sc});
+              // if(newComment.workId){
+              //   const work = sc.works.find(p=>p.id==newComment.postId)
+              //     if(work){
+              //       work.comments.push(newComment);
+              //       newComment.work = work;
+              //     }
+              // }
+              // if(newComment.cycleId){
+              //   sc.comments.push(newComment);
+              //   newComment.cycle = sc;
+              // }
+              queryClient.setQueryData(['POSTS','cycle-13'], [...posts]);
             }           
-          }
+          // }
           return { cacheKey, snapshot };
         }
         return { cacheKey: undefined, snapshot: null };
@@ -230,7 +231,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
   );
 
   
-  const submitCreateForm = (text:string) => {debugger;
+  const submitCreateForm = (text:string) => {
     if (entity && text) {
       const user = (session as Session).user;
       let notificationMessage = '';      
@@ -464,7 +465,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
   //   }
   // };
 
-  // const onKeyPressEditForm = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {debugger;
+  // const onKeyPressEditForm = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
   //   if (e.key === 'Enter' && !e.shiftKey) {
   //     submitEditForm();
   //     e.preventDefault();

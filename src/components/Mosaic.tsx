@@ -4,7 +4,7 @@ import Masonry from 'react-masonry-css';
 
 import { v4 } from 'uuid';
 import {Row, Col, Container} from 'react-bootstrap';
-import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem, isCommentMosaicItem } from '../types';
+import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem, isCommentMosaicItem, isCycle,isWork } from '../types';
 import MosaicItemCycle from './cycle/MosaicItem';
 import MosaicItemPost from './post/MosaicItem';
 import MosaicItemWork from './work/MosaicItem';
@@ -35,18 +35,31 @@ const renderMosaicItem = (
     );
   }
   else if (isPostMosaicItem(item)) {
+    let cycleId,workId;
     let pp = parent;
     if (!pp) {
       const it: PostMosaicItem = item as PostMosaicItem;
-      if (it.works && it.works.length > 0) pp = it.works[0] as WorkMosaicItem;
-      else if (it.cycles && it.cycles.length > 0) pp = it.cycles[0] as CycleMosaicItem;
+      if (it.works && it.works.length > 0){
+        const work = it.works[0]
+        pp = work as WorkMosaicItem;
+      }
+      else if (it.cycles && it.cycles.length > 0){
+        const cycle = it.cycles[0];
+        pp = cycle as CycleMosaicItem;
+      } 
+    }
+    else{
+      cycleId=isCycle(pp) ? pp.id : undefined;
+      workId=isWork(pp) ? pp.id : undefined;
     }
 
     return (
       <MosaicItemPost
         key={`${v4()}`}
         showComments={showComments}
-        post={item}
+        postId={item.id}
+        cycleId={cycleId}
+        workId={workId}
         postParent={pp}
         display={display}
         cacheKey={cacheKey}
