@@ -1,4 +1,4 @@
-import { FunctionComponent, useState, useRef } from 'react';
+import { FunctionComponent, useState, useRef, useEffect } from 'react';
 import { Button, Form, Spinner } from 'react-bootstrap';
 import { MdReply, MdCancel } from 'react-icons/md';
 import { BiTrash, BiEdit } from 'react-icons/bi';
@@ -45,14 +45,13 @@ interface Props {
 const CommentActionsBar: FunctionComponent<Props> = ({
   entity, parent, /* context, */ className = '', cacheKey, showReplyBtn = true }) => {
   const { t } = useTranslation('common');
-  const [session] = useSession() as [Session | null | undefined, boolean];
+  const [session] = useSession() as [Session|null, boolean];
   const queryClient = useQueryClient();
   const isFetching = useIsFetching(cacheKey);
   const router = useRouter();
-  const {data:user,isLoading:isLoadingUser} = useUser(+(router?.query.id?.toString() || ''),{
-    enabled:!!router?.query.id
+  const {data:user,isLoading:isLoadingUser} = useUser(+(session?.user.id?.toString() || ''),{
+    enabled:!!session?.user.id
   })
-  
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   
   const [newCommentInput, setNewCommentInput] = useState<string>('');
@@ -230,7 +229,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
   );
 
   
-  const submitCreateForm = (text:string) => {debugger;
+  const submitCreateForm = (text:string) => {
     if (entity && text) {
       const user = (session as Session).user;
       let notificationMessage = '';      

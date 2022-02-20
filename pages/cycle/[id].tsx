@@ -36,7 +36,7 @@ const CycleDetailPage: NextPage = () => {
     if (router && router.query) setId(() => router.query.id as string);
   }, [router]);
 
-  useEffect(() => {debugger;
+  useEffect(() => {
     if (+id && isSuccess && (!cycle || !cycle.id)) {
       queryClient.invalidateQueries(['CYCLE', `${+id}`]);
     }
