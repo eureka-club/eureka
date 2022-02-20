@@ -245,6 +245,7 @@ const Mediatheque: NextPage = () => {
       const P = user.posts.map((p) => ({ ...p , type: 'post' }));
       return (
         <CarouselStatic
+          cacheKey={['MEDIATHEQUE-POST',`USER-${user.id}`]}
           className="mb-5"
           onSeeAll={async () => seeAll(P as Item[], t('Eurekas I created'))}
           title={t('Eurekas I created')}
@@ -285,6 +286,7 @@ const Mediatheque: NextPage = () => {
 
     return C.length ? (
       <CarouselStatic
+        cacheKey={['MEDIATHEQUE-CYCLE-JOINED',`USER-${user!.id}`]}
         onSeeAll={async () => seeAll(C, t('Cycles I created or joined'))}
         title={t('Cycles I created or joined')}
         data={C}
@@ -302,6 +304,7 @@ const Mediatheque: NextPage = () => {
 
       return (
         <CarouselStatic
+          cacheKey={['MEDIATHEQUE-WATCHED',`USER-${user.id}`]}
           onSeeAll={async () => seeAll(RW, t(`Movies/books i've watched/read`))}
           title={t(`Movies/books i've watched/read`)}
           data={RW}
@@ -338,6 +341,7 @@ const Mediatheque: NextPage = () => {
     if (SFL.length)
       return (
         <CarouselStatic
+          cacheKey={['MEDIATHEQUE-SAVED',`USER-${user!.id}`]}
           onSeeAll={async () => seeAll(SFL, t('Saved for later of forever'))}
           title={t('Saved for later of forever')}
           data={SFL}
@@ -352,6 +356,7 @@ const Mediatheque: NextPage = () => {
     if (user && user.following && user.following.length) {
       return (
         <CarouselStatic
+          cacheKey={['MEDIATHEQUE-FOLLOWING',`USER-${user.id}`]}
           onSeeAll={async () => seeAll(user!.following as UserMosaicItem[], t('Users I follow'), false)}
           title={`${t('Users I follow')}  `}
           data={user!.following as UserMosaicItem[]}

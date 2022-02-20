@@ -36,10 +36,12 @@ type Props = {
   topic: string;
   topicLabel?: string;
   className?: string;
+  
 };
 
 const renderMosaicItem = (
   item: MosaicItem,
+  
   postsParent?: CycleMosaicItem | WorkMosaicItem,
   topic = '',
   page = '',
@@ -60,7 +62,7 @@ const renderMosaicItem = (
     );
   }
   if (isPostMosaicItem(item) || item.type === 'post') {
-    return <MosaicItemPost key={`post-${v4()}`} post={item as PostMosaicItem} postParent={postsParent} />;
+    return <MosaicItemPost cacheKey={['ITEMS', `${topic}${page}`]} key={`post-${v4()}`} postId={item.id} />;
   }
   if (isWorkMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -141,7 +143,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
       // data.pages.forEach((page, idx) => {
       const mosaics = items.data.map((i: CycleMosaicItem | WorkMosaicItem) => (
         <div key={`${v4()}`} className="mx-2">
-          {renderMosaicItem(i, undefined, topic, page.toString())}
+          {renderMosaicItem(i,undefined, topic, page.toString())}
         </div>
       ));
       const res = (

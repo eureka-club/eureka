@@ -266,6 +266,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         </Button> */}
         {/* <CycleContext.Provider value={{ cycle }}> */}
           <CarouselStatic
+          cacheKey={['CYCLE',cycle.id.toString()]}
             showSocialInteraction={false}
             // onSeeAll={async () => seeAll(cycle.works as WorkMosaicItem[], t('Eurekas I created'))}
             onSeeAll={onCarouselSeeAllAction}
@@ -289,6 +290,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
               {t('Content calendar')} ({cycle.works && cycle.works.length})
             </h4>
               <CarouselStatic
+                cacheKey={['CYCLE',cycle.id.toString()]}
                 showSocialInteraction={false}
                 onSeeAll={onCarouselSeeAllAction}
                 title={<CycleSummary cycle={cycle} />}

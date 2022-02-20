@@ -32,7 +32,7 @@ interface Props {
   showCounts?: boolean;
   showShare?: boolean;
   showButtonLabels?: boolean;
-  cacheKey: string[];
+  cacheKey: [string,string];
   showTrash?: boolean;
   showRating?: boolean;
 }
@@ -65,114 +65,6 @@ const CommentsList: FunctionComponent<Props> = ({
     if (s) setIdSession(s.user.id.toString());
   }, [session]);
 
-  const {
-    isLoading,
-    // isError,
-    mutate: createComment,
-  } = useMutation(
-    async (payload: CCCP ): Promise<Comment | null> => {
-      const res = await fetch('/api/comment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      const json = await res.json();
-      if (json.ok) {
-        return json.comment;
-      }
-
-      return null;
-    },
-    {
-      onMutate: async () => {
-        if (cacheKey) {
-          const snapshot = queryClient.getQueryData(cacheKey);
-          return { cacheKey, snapshot };
-        }
-        return { cacheKey: undefined, snapshot: null };
-      },
-      onSettled: (_comment, error, _variables, context) => {
-        if (context) {
-          const { cacheKey: ck, snapshot } = context;
-          if (error && ck) {
-            queryClient.setQueryData(ck, snapshot);
-          }
-          if (context) queryClient.invalidateQueries(ck);
-        }
-      },
-    },
-  );
-
-  const submitForm = () => {
-    let selectedCycleId = 0;
-    let selectedPostId = 0;
-    let selectedCommentId = 0;
-    let selectedWorkId = 0;
-    let notificationMessage = '';
-    let notificationToUsers:number[] = [];
-    const notificationContextURL = router.asPath;
-    if(user){
-      if (isCycle(entity)){
-        //start -esto no creo q tenga sentido :|, this should be done on quick comment
-        const cycle = (entity as CycleMosaicItem);
-        notificationToUsers = cycle.participants.filter(p=>p.id!==user.id).map(p=>p.id);
-        notificationMessage = `commentCreatedAboutCycle!|!${JSON.stringify({
-          userName: user?.name,
-          cycleTitle: cycle.title,
-        })}`
-        //end
-        selectedCycleId = cycle.id;
-      }
-      else if (isPost(entity)) {
-        selectedPostId = entity.id;
-        if (parent && isCycle(parent)) selectedCycleId = parent.id;
-        if (parent && isWork(parent)) selectedWorkId = parent.id;
-      } else if (isComment(entity)) {
-        selectedCommentId = entity.id;
-        if (parent && isCycle(parent)) selectedCycleId = parent.id;
-        if (parent && isWork(parent)) selectedWorkId = parent.id;
-      } else if (isWork(entity)) {
-        const work = (entity as WorkMosaicItem)
-        selectedWorkId = work.id;
-        if (parent && isCycle(parent)) {
-          const cycle = (parent as CycleMosaicItem)
-          notificationMessage = `commentCreatedAboutWorkInCycle!|!${JSON.stringify({
-            userName: user?.name,
-            cycleTitle: cycle.title,
-            workTitle: work.title
-          })}`
-
-          selectedCycleId = parent.id;
-        }
-      }
-      //const nc = editorRef.current.getContent();
-      /* if(nc){
-        const payload = {
-          selectedCycleId,
-          selectedPostId,
-          selectedCommentId,
-          selectedWorkId,
-          creatorId: +idSession,
-          contentText: nc,
-          notificationMessage,
-          notificationToUsers,
-          notificationContextURL
-        };
-        //editorRef.current.setContent('')
-        setNewCommentInput(() => '');
-        createComment(payload);
-  
-      } */
-
-    }
-
-  };
-
-  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    submitForm();
-  };
 
   useEffect(() => {
     if (entity) {
@@ -215,12 +107,6 @@ const CommentsList: FunctionComponent<Props> = ({
     }
   };
 
-  const onKeyPressForm = (e: KeyboardEvent<HTMLElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      submitForm();
-      e.preventDefault();
-    }
-  };
 
 
  /*  const renderEditorWYSWYG = (
@@ -309,7 +195,7 @@ const CommentsList: FunctionComponent<Props> = ({
         )) ||
           ''}
       </div>
-      {isLoading && <Spinner animation="grow" variant="info" size="sm" />}
+      {/* {isLoading && <Spinner animation="grow" variant="info" size="sm" />} */}
     </section>
   );
 };

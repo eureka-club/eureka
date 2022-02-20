@@ -2,7 +2,7 @@ import { Cycle, Work } from '@prisma/client';
 // import classNames from 'classnames';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import { Row, Col, Card, Badge } from 'react-bootstrap';
 import { FaRegComments, FaRegCompass } from 'react-icons/fa';
 import dayjs from 'dayjs';
@@ -23,26 +23,26 @@ import ActionsBar from '@/src/components/common/ActionsBar'
 import {useAtom} from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
 import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
+import useCycle from '@/src/useCycle';
+import useWork from '@/src/useWork';
+import {useQueryClient} from 'react-query'
 
 interface Props {
-  post: PostMosaicItem;
-  postParent?: CycleMosaicItem | WorkMosaicItem;
+  postId: number|string;
   display?: 'v' | 'h';
-
   showButtonLabels?: boolean;
   showShare?: boolean;
   showSocialInteraction?: boolean;
   showdetail?: boolean;
   style?: { [k: string]: string };
-  cacheKey?: string[];
+  cacheKey: [string,string];
   showTrash?: boolean;
   showComments?: boolean;
   className?: string;
 }
 
 const MosaicItem: FunctionComponent<Props> = ({
-  post,
-  postParent,
+  postId,
   display = 'v',
   showSocialInteraction = true,
   showdetail = true,
@@ -55,8 +55,25 @@ const MosaicItem: FunctionComponent<Props> = ({
   // showTrash,
 }) => {
   const [gmAtom,setGmAtom] = useAtom(globalModals);
+  const { t } = useTranslation('common');
+  const queryClient = useQueryClient()
    const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
+   const [k,setK] = useState<[string,string]>();
+   const [post,setPost] = useState<PostMosaicItem>();
+   const [postParent,setPostParent] = useState<CycleMosaicItem|WorkMosaicItem>();
 
+
+   useEffect(()=>{
+      const pp = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(cacheKey);
+      if(pp){
+        setPostParent(pp)
+        const p = pp.posts.find(p=>p.id===postId);
+        setPost(p)
+      }
+   },[cacheKey,postId,queryClient])
+
+
+   if(!post)return <></>
 
   const postParentLinkHref = ((): string | null => {
     if (postParent) {
@@ -84,14 +101,14 @@ const MosaicItem: FunctionComponent<Props> = ({
   // const [creator] = useState(post.creator as User);
   const { /* title, localImages, id, */ type } = post;
   // const [newCommentInput, setNewCommentInput] = useState<string>();
-  const { t } = useTranslation('common');
+  
 
   // const getDirectParent = () => {
   //   if (post.works && post.works.length) return post.works[0];
   //   return postParent;
   // };
   const onEditPost = async (e:React.MouseEvent<HTMLButtonElement>) => {
-    setGmAtom(res=>({...res,editPostModalOpened:true, editPostId:post.id}))
+    setGmAtom(res=>({...res,editPostModalOpened:true, editPostId:post.id, cacheKey}))
   }
 
    const onEditSmallScreen = async (e:React.MouseEvent<HTMLButtonElement>) => {
@@ -186,7 +203,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             </div>
 
             <SocialInteraction
-              cacheKey={cacheKey || undefined}
+              cacheKey={cacheKey || ['POST',post.id.toString()]}
               showButtonLabels={false}
               showCounts={false}
               entity={post}

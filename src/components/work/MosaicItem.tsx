@@ -30,7 +30,7 @@ interface Props {
   showShare?: boolean;
   showSocialInteraction?: boolean;
   style?: { [k: string]: string };
-  cacheKey?: string[];
+  cacheKey?: [string,string];
   showTrash?: boolean;
   linkToWork?: boolean;
   tiny?: boolean;
@@ -180,7 +180,7 @@ const MosaicItem: FunctionComponent<Props> = ({
       {showSocialInteraction && work && (
         <Card.Footer className={styles.footer}>
           <SocialInteraction
-            cacheKey={cacheKey || undefined}
+            cacheKey={cacheKey || ['WORK',work.id.toString()]}
             showButtonLabels={showButtonLabels}
             showCounts
             entity={work}

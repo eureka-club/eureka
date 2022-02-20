@@ -172,7 +172,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
           if (error && ck) {
             queryClient.setQueryData(ck, snapshot);
           }
-          if (context) queryClient.invalidateQueries(ck);
+          // if (context) queryClient.invalidateQueries(ck);
         }
       },
     },

@@ -62,7 +62,7 @@ const WorksMosaic: FunctionComponent<Props> = ({ cycle, className }) => {
       )} */}
       {
         /* isSuccess && */ cycle.works != null && (
-          <Mosaic className={className} showButtonLabels={false} stack={getWorksSorted() as WorkMosaicItem[]} />
+          <Mosaic cacheKey={['CYCLE',cycle.id.toString()]} className={className} showButtonLabels={false} stack={getWorksSorted() as WorkMosaicItem[]} />
         )
       }
     </>
