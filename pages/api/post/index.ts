@@ -77,7 +77,7 @@ export default getApiHandler()
     //   },
     // };
 
-    try {debugger;
+    try {
       const { q = null, where:w = undefined, id = null, take:t=undefined } = req.query;
       
       let data = null;

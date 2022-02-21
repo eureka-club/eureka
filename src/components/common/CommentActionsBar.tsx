@@ -135,7 +135,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
           await queryClient.cancelQueries(cacheKey)
           const newComment = createDummyComment(payload);
           const snapshot = queryClient.getQueryData(cacheKey);
-          debugger;
+          
           if(isCycleMosaicItem(snapshot as CycleMosaicItem)){
             let sc = queryClient.getQueryData<CycleMosaicItem>(cacheKey);
             if(sc){

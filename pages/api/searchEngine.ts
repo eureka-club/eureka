@@ -12,7 +12,7 @@ import { findAll as faw } from '@/src/facades/work';
 
 export default getApiHandler()
 .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-  try {debugger;
+  try {
     const {q} = req.query;
     const query = q.toString()
     const responseWork =  await faw({where: {

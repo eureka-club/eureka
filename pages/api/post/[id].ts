@@ -13,7 +13,7 @@ export default getApiHandler()
     if (session == null || !session.user.roles.includes('admin')) {
       res.status(401).json({ status: 'Unauthorized' });
       return;
-    }debugger;
+    }
 
     let { id } = req.query;
     if (typeof id !== 'string') {
