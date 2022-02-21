@@ -71,7 +71,7 @@ const renderMosaicItem = (
     if (it.works && it.works.length > 0) pp = it.works[0] as WorkMosaicItem;
     else if (it.cycles && it.cycles.length > 0) pp = it.cycles[0] as CycleMosaicItem;
 
-    return <MosaicItemPost cacheKey={cacheKey} key={`post-${v4()}`} postId={item.id} />;
+    return <MosaicItemPost cacheKey={cacheKey} key={`post-${v4()}`} post={it} />;
   }
   if (isWorkMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading

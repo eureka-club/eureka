@@ -62,7 +62,7 @@ const renderMosaicItem = (
     );
   }
   if (isPostMosaicItem(item) || item.type === 'post') {
-    return <MosaicItemPost cacheKey={['ITEMS', `${topic}${page}`]} key={`post-${v4()}`} postId={item.id} />;
+    return <MosaicItemPost cacheKey={['ITEMS', `${topic}${page}`]} key={`post-${v4()}`} post={item as PostMosaicItem} />;
   }
   if (isWorkMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading

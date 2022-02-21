@@ -47,7 +47,8 @@ const renderMosaicItem = (
       <MosaicItemPost
         key={`${v4()}`}
         showComments={showComments}
-        postId={item.id}
+        post={item}
+        parent={pp}
         display={display}
         cacheKey={cacheKey}
         className="mb-2"
@@ -78,7 +79,7 @@ const renderMosaicItem = (
       pp = it.post as PostMosaicItem;
 
       if(pp){
-        return <MosaicItemComment detailed comment={it} commentParent={pp} />;
+        return <MosaicItemComment detailed comment={it} cacheKey={cacheKey} commentParent={pp} />;
       }
   }
 
