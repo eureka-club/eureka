@@ -1,12 +1,12 @@
 {
  "Profile":"Perfil",
- "Change Photo": "Mudar Foto",
+ "Change Photo": "Mudar a foto",
   "Name": "Nome",
   "Email": "Email",
   "countryFieldLabel": "País",
   "About me": "Sobre mim",
   "Topics": "Meus temas de interesse (max 5)",
-  "Edit": "Editar",
+  "Edit": "Salvar",
   "Privacy settings": "Configurações de privacidade",
   "mediathequeInfo": "Sua Mediateca contém sua atividade na Eureka. Reúne elementos que você viu / leu / participou, elementos salvos para depois, bem como ciclos e Eurekas que você criou e / ou participou",
   "My Mediatheque is public": "Minha Mediateca é pública",
@@ -15,6 +15,6 @@
   "Users I fallow or that follow me can see my Dashboard": "Usuárias que eu sigo ou que me seguem podem ver minha Mediateca",
   "My Dashboard is secret": "Minha Mediateca é secreta",
   "Only I can see my Dashboard": "Somente eu posso ver minha Mediateca",
- "Edit Profile": "Editar Perfil"
+ "Edit Profile": "Editar meu perfil"
 
 }

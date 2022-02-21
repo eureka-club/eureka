@@ -171,7 +171,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
           if (error && ck) {
             queryClient.setQueryData(ck, snapshot);
           }
-          // if (context) queryClient.invalidateQueries(ck);
+          queryClient.invalidateQueries(ck);
         }
       },
     },
@@ -222,15 +222,16 @@ const CommentActionsBar: FunctionComponent<Props> = ({
             queryClient.setQueryData(ck, snapshot);
           }
           // setShowEditComment(false);
-          if (context) queryClient.invalidateQueries(ck);
+          //if (context) 
+          queryClient.invalidateQueries(ck);
         }
       },
     },
   );
 
   
-  const submitCreateForm = (text:string) => {
-    if (entity && text) {
+  const submitCreateForm = () => {
+    if (entity && newCommentInput) {
       const user = (session as Session).user;
       let notificationMessage = '';      
       let notificationToUsers = new Set<number>([]);
@@ -427,22 +428,23 @@ const CommentActionsBar: FunctionComponent<Props> = ({
       
       payload = {...payload,
         creatorId: +session!.user.id,
-        contentText: text,
+        contentText: newCommentInput,
         notificationToUsers: [...notificationToUsers],
       };
       createComment(payload as CreateCommentClientPayload);
     }
   };
 
-  const submitEditForm = (text:string) => {
+  const submitEditForm = () => {
     if (isComment(entity)||isCommentMosaicItem(entity)) {
       const comment = (entity as Comment);
       const payload = {
         commentId: comment.id,
-        contentText: text,
+        contentText: editCommentInput,
         status:1,
       };
       editComment(payload);
+      setEditCommentInput('')
     }
   };
 
@@ -620,7 +622,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                 <aside className="d-flex align-items-center">
                   {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
                   <Editor value={newCommentInput} onChange={setNewCommentInput} onSave={(text)=>{
-                    submitCreateForm(text);          
+                    submitCreateForm();          
                     }}
                   />
                 </aside>
@@ -644,7 +646,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                 <aside className="d-flex align-items-center">
                   {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
                     <Editor value={editCommentInput} onChange={setEditCommentInput} onSave={(text)=>{
-                      submitEditForm(text);          
+                      submitEditForm();          
                       }}
                     />
                 </aside>
@@ -701,7 +703,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                 <aside className="d-flex align-items-center">
                   {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
                     <Editor value={newCommentInput} onChange={setNewCommentInput} onSave={(text)=>{
-                      submitCreateForm(text);          
+                      submitCreateForm();          
                       }}
                     />
                 </aside>
@@ -725,7 +727,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                 <aside className="d-flex align-items-center">
                   {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
                     <Editor value={editCommentInput} onChange={setEditCommentInput} onSave={(text)=>{
-                      submitEditForm(text);          
+                      submitEditForm();          
                       }}
                     />
                 </aside>
@@ -742,7 +744,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
         <aside className="d-flex align-items-center">
           {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
           <Editor value={newCommentInput} onChange={setNewCommentInput} onSave={(text)=>{
-            submitCreateForm(text);          
+            submitCreateForm();          
             }}
           />
         </aside>

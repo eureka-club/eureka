@@ -18,7 +18,7 @@
   "explanatoryTextPosts": "An Eureka is a personal reflection about a work or a cycle, composed of a photo and a text. It is possibly the materialization of an Eureka moment! We encourage you to participate in the cycle by creating your own Eureka.",
   "Details": "Details",
   "Edit": "Edit",
-  "Close": "Cerrar",
+  "Close": "Close",
   "Create": "Create",
   "Add": "Add",
   "ratings": "ratings",
@@ -37,8 +37,8 @@
   "Discussion": "Discussion",
   "Guidelines": "Moderation principles",
   "My milestones": "My milestones",
-  "Add a quick comment": "Add a quick comment",
-  "Create an Eureka": "Create an Eureka",
+  "Add a quick comment": "Share a reaction or question",
+  "Create an Eureka": "Share your Eureka moment!",
   "Suggest a related work": "Add work to cycle",
   "Content calendar": "Content calendar",
   "guidelinesMP": "Cycle Content Moderation Principles",
@@ -49,7 +49,7 @@
   "Filter by Participan":"Filter by Participant",
   "Filter by type of element":"Filter by type of content",
   "Filter by work":"Filter by work or cycle",
-  "commentCreated":"Your comment has been created.",
-  "postCreated":"Your Eureka has been published."
+  "commentCreated":"Your Quick Comment was successfully created.",
+  "postCreated":"Your Eureka was successfully created."
 
 }
