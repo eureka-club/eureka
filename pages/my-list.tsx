@@ -50,7 +50,7 @@ const MyListPage: NextPage<Props> = ({ myListMosaicData }) => {
   return (
     <SimpleLayout title={t('browserTitleMyList')}>
       <h4 className="mt-4 mb-5">{t('mosaicHeaderMyCycles')}</h4>
-      <Mosaic stack={myListMosaicData} />
+      <Mosaic cacheKey={['my-list','']} stack={myListMosaicData} />
     </SimpleLayout>
   );
 };

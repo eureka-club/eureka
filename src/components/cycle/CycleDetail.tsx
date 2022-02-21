@@ -93,8 +93,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   useEffect(() => {
     if (cycle/* cycleContext && cycleContext.cycle */){
       // setCycle(cycle);
-      setFilteredPosts(cycle?.posts);
-      setFilteredComments(cycle.comments);
+      setFilteredPosts(()=>cycle?.posts);
+      setFilteredComments(()=>cycle.comments);
     } 
   }, [cycle/* cycleContext */]);
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
@@ -249,7 +249,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   };
 
   const getPosts = () => {
-    if(cycle && filteredPosts)
+    if(cycle && filteredPosts.length)
       return filteredPosts.sort((a,b)=>a.createdAt >= b.createdAt ? -1 : 1);
     return [];
   };
@@ -527,7 +527,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           <TabPane eventKey="participants">
             {/* {cycle.participants && cycle.participants.map((p) => <UserAvatar className="mb-3 mr-3" user={p} key={p.id} />)} */}
             {cycle.participants && (
-              <Mosaic showButtonLabels={false} stack={[...cycle.participants, cycle.creator] as UserMosaicItem[]} />
+              <Mosaic cacheKey={['CYCLE',cycle.id.toString()]} showButtonLabels={false} stack={[...cycle.participants, cycle.creator] as UserMosaicItem[]} />
             )}
             <p />
           </TabPane>
@@ -574,7 +574,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   const handleEditPostClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: true } });
+    setGlobalModalsState({ ...globalModalsState, ...{ 
+      editPostModalOpened: true } });
   };
 
   const getDefaultActiveKey = () => {
@@ -819,7 +820,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       {!post && renderCycleDetailHeader()}
       {post && cycle && (
         <MosaicContext.Provider value={{ showShare: true }}>
-          <PostDetailComponent post={post} work={work} />
+          <PostDetailComponent cacheKey={['CYCLE',cycle.id.toString()]} post={post} work={work} />
         </MosaicContext.Provider>
       )}
       {cycle && post == null && (

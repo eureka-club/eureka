@@ -41,7 +41,7 @@ const UserAvatar: FunctionComponent<Props> = ({
   return (
     <>
       {user && (
-        <span className={`fs-6 ${className} ${styles.cycleCreator} ${styles[size]}`}>
+        <span className={`fs-6 ${styles.cycleCreator} ${className} ${styles[size]}`}>
           <Link href={`/mediatheque/${user.id}`}>
             <a className={`text-secondary ${styles.link}`}>
 

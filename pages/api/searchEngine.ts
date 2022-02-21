@@ -12,7 +12,7 @@ import { findAll as faw } from '@/src/facades/work';
 
 export default getApiHandler()
 .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-  try {debugger;
+  try {
     const {q} = req.query;
     const query = q.toString()
     const responseWork =  await faw({where: {
@@ -32,10 +32,12 @@ export default getApiHandler()
       }],
       OR: [{ title: { contains: query } }, { contentText: { contains: query } }, { creator: { name:{contains: query} } }],
     }}) as PostMosaicItem[];
+    responseCycle.forEach(c=>{c.type="cycle"})
+    responsePost.forEach(p=>{p.type="post"})
     const data: SearchResult[] = [
-      ...responseCycle,
+      ...responseCycle,//.map(r=>({...r,type:'cycle'})),
       ...responseWork,
-      ...responsePost,
+      ...responsePost,//.map(r=>({...r,type:'post'})),
 
     ].sort((f, s) => {
       const fCD = dayjs(f.createdAt);
@@ -43,7 +45,7 @@ export default getApiHandler()
       if (fCD.isAfter(sCD)) return -1;
       if (fCD.isSame(sCD)) return 0;
       return 1;
-    });;
+    });
 
     return res.status(200).json({data});
   } catch (exc) {

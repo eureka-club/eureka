@@ -155,7 +155,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
           </div> */}
             </Row>
           ) : (
-            <>{post && work && <PostDetailComponent post={post} work={work} />}</>
+            <>{post && work && <PostDetailComponent post={post} work={work} cacheKey={['WORK',work.id.toString()]} />}</>
           )}
         </>
 

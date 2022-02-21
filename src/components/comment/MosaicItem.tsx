@@ -35,7 +35,7 @@ interface Props {
   showShare?: boolean;
   showSocialInteraction?: boolean;
   style?: { [k: string]: string };
-  cacheKey?: string[];
+  cacheKey?: [string,string];
   showTrash?: boolean;
   showComments?: boolean;
   className?: string;

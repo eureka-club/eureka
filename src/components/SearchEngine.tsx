@@ -7,7 +7,7 @@ import useTranslation from 'next-translate/useTranslation';
 // import { setCookie } from 'nookies';
 import { FunctionComponent, useState } from 'react';
 import { InputGroup, Form, Button } from 'react-bootstrap';
-import { AsyncTypeahead, Menu, MenuItem } from 'react-bootstrap-typeahead';
+import { AsyncTypeahead, Menu, MenuItem, TypeaheadResult } from 'react-bootstrap-typeahead';
 
 import { AiOutlineSearch } from 'react-icons/ai';
 // import Fuse from 'fuse.js';
@@ -150,6 +150,26 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
     return `${res.name}`;
   };
 
+  const renderMenuItems = (results:TypeaheadResult<SearchResult>[])=>{
+    const resultsWithOutPosts = results.filter(item=>item.type!=='post')
+    
+    return resultsWithOutPosts.map((item, index) => (
+      <MenuItem key={`${item.id}`} option={item} position={index}>
+        {/* <Highlighter search={props.text}>{item}</Highlighter> */}
+        {(isCycleMosaicItem(item) && (
+          <CycleTypeaheadSearchItem cycle={item as CycleMosaicItem} />
+        )) ||
+          (isWorkMosaicItem(item) && (
+            <WorkTypeaheadSearchItem work={item as WorkMosaicItem} />
+          )) ||
+          (isPostMosaicItem(item) && (
+            <PostTypeaheadSearchItem post={item as PostMosaicItem} />
+          ))
+        }
+      </MenuItem>
+    ))
+  }
+
   return (
     <div className={`${styles.container} ${className}`} data-cy="search-engine">
       <Form.Group>
@@ -191,21 +211,7 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
             renderMenu={(results, menuProps) => (
               // eslint-disable-next-line react/jsx-props-no-spreading
               <Menu {...menuProps}>
-                {results.filter(item=>!isPostMosaicItem(item)).map((item, index) => (
-                  <MenuItem key={`${item.id}`} option={item} position={index}>
-                    {/* <Highlighter search={props.text}>{item}</Highlighter> */}
-                    {(isCycleMosaicItem(results[index]) && (
-                      <CycleTypeaheadSearchItem cycle={results[index] as CycleMosaicItem} />
-                    )) ||
-                      (isWorkMosaicItem(results[index]) && (
-                        <WorkTypeaheadSearchItem work={results[index] as WorkMosaicItem} />
-                      )) /* ||
-                      (isPostMosaicItem(results[index]) && (
-                        <PostTypeaheadSearchItem post={results[index] as PostMosaicItem} />
-                      )) */
-                    }
-                  </MenuItem>
-                ))}
+                {renderMenuItems(results)}
                 {(results.length && (
                   // <Link href={`/search?q=${q}`} passHref>
                   //   <Button variant="light" className={styles.seeAllResults}>

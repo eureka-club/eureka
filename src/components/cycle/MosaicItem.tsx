@@ -36,7 +36,7 @@ interface Props {
   showButtonLabels?: boolean;
   showShare?: boolean;
   detailed?: boolean;
-  cacheKey?: string[];
+  cacheKey?: [string,string];
   showSocialInteraction?: boolean;
   showTrash?: boolean;
   className?: string;
@@ -324,7 +324,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         <Card.Footer className={styles.footer}>
           {cycle && (
             <SocialInteraction
-              cacheKey={cacheKey}
+              cacheKey={cacheKey||['CYCLE',cycle.id.toString()]}
               showButtonLabels={showButtonLabels}
               showCounts
               entity={cycle}

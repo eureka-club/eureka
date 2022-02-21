@@ -54,7 +54,7 @@ export default getApiHandler()
     try {
       const { q = null, where = null, id = null,take:t } = req.query;
       const take = +t.toString();
-      let data = null;debugger;
+      let data = null;
       if (typeof q === 'string') {
         data = await prisma.work.findMany({
           take,

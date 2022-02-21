@@ -32,12 +32,13 @@ interface Props {
   // cycle?: CycleMosaicItem;
   work?: WorkMosaicItem;
   // mySocialInfo?: MySocialInfo;
+  cacheKey:[string,string];
 }
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
+const PostDetail: FunctionComponent<Props> = ({ post, work,cacheKey }) => {
   const router = useRouter();
   const cycleContext = useCycleContext();
   const [cycle, setCycle] = useState<CycleMosaicItem | null>();
@@ -144,10 +145,10 @@ const PostDetail: FunctionComponent<Props> = ({ post, work }) => {
             </Button>
           )} */}
           <div className='mb-2 d-none d-md-block'>
-            <MosaicItem className='' post={post} showdetail={false}/>
+            <MosaicItem cacheKey={cacheKey} className='' postId={post.id} showdetail={false}/>
           </div>
           <div className='container d-sm-block d-md-none mb-2 mt-2 position-relative'>
-             <MosaicItem className='postition-absolute start-50 translate-middle-x'  post={post} showdetail={false}/>
+             <MosaicItem cacheKey={cacheKey} className='postition-absolute start-50 translate-middle-x' postId={post.id} showdetail={false}/>
           </div>
          </Col>
         <Col className='col-md-7 col-lg-8 col-xl-9'>

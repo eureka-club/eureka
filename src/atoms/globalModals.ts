@@ -6,6 +6,7 @@ interface GlobalModalType {
   editWorkModalOpened?: boolean;
   editPostModalOpened?: boolean;
   editPostId?:number;
+  cacheKey?:[string,string];
   editCycleModalOpened?: boolean;
   editUserModalOpened?: boolean;
   signInModalOpened?: boolean;
@@ -25,6 +26,7 @@ const o: GlobalModalType = {
   editCycleModalOpened: false,
   editUserModalOpened: false,
   signInModalOpened: false,
+  cacheKey:undefined,
   showToast: {
     type: 'info',
     title: '',

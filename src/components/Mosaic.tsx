@@ -16,7 +16,6 @@ import { WorkMosaicItem } from '../types/work';
 import { PostMosaicItem } from '../types/post';
 import { CycleContext } from '../useCycleContext';
 import { CommentMosaicItem } from '../types/comment';
-import { PageBlobStartCopyIncrementalOptions } from '@azure/storage-blob';
 // import { WorkContext } from '../useWorkContext';
 
 const renderMosaicItem = (
@@ -25,7 +24,7 @@ const renderMosaicItem = (
   showButtonLabels: boolean,
   display: 'h' | 'v',
   showComments: boolean,
-  cacheKey?: string[],
+  cacheKey: [string,string],
 ) => {
   if (isCycleMosaicItem(item)) {
     return (
@@ -41,13 +40,14 @@ const renderMosaicItem = (
       if (it.works && it.works.length > 0) pp = it.works[0] as WorkMosaicItem;
       else if (it.cycles && it.cycles.length > 0) pp = it.cycles[0] as CycleMosaicItem;
     }
+    const cycleId = isCycleMosaicItem(pp!) ? pp.id : undefined;
+    const workId = isWorkMosaicItem(pp!) ? pp.id : undefined;
 
     return (
       <MosaicItemPost
         key={`${v4()}`}
         showComments={showComments}
-        post={item}
-        postParent={pp}
+        postId={item.id}
         display={display}
         cacheKey={cacheKey}
         className="mb-2"
@@ -89,7 +89,7 @@ interface Props {
   showButtonLabels?: boolean;
   display?: 'h' | 'v';
   showComments?: boolean;
-  cacheKey?: string[];
+  cacheKey: [string,string];
   className?: string;
   parent?: CycleMosaicItem | WorkMosaicItem;
 }

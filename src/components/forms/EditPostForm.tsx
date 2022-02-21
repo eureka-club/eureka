@@ -27,7 +27,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
 import { EditPostAboutCycleClientPayload, EditPostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
 import { CycleWithImages, CycleMosaicItem } from '../../types/cycle';
-import { WorkWithImages } from '../../types/work';
+import { WorkMosaicItem, WorkWithImages } from '../../types/work';
 // import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
 import CycleTypeaheadSearchItem from '../cycle/TypeaheadSearchItem';
@@ -64,6 +64,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
   const { t } = useTranslation('createPostForm');
 
   const [postId, setPostId] = useState<string>('');
+  const [ck,setCK] = useState<[string,string]>();
   const { data: post, isLoading, isFetching } = usePost(globalModalsState.editPostId || +postId);
   const editorRef = useRef<any>(null);
   const [remove,setRemove] = useState(false);
@@ -82,9 +83,14 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
     //   }
     // };
     // fetchPost();
-    if(globalModalsState.editPostId)
-      setPostId(router.query.postId as string);
-    else if (router.query) {
+    debugger;
+    if(globalModalsState){
+      setCK(globalModalsState.cacheKey);
+      if(globalModalsState.editPostId)
+        setPostId(globalModalsState.editPostId.toString());
+
+    }
+    if (router.query && router.query.postId) {
       setPostId(router.query.postId as string);
     }
   }, [globalModalsState,router.query]);
@@ -114,28 +120,43 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
       return res.json();
     },
     {
-      onMutate: async (variables) => {
-        if (post) {
-          const ck = [`POST`, `${globalModalsState.editPostId || post.id}`];
-          const snapshot = queryClient.getQueryData<PostMosaicItem>(ck);
-          queryClient.setQueryData(ck, { ...snapshot, ...variables });
+      onMutate: async (variables) => {debugger;
+        if (post && ck) {
+          
+            const snapshot = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(ck)
+            if(snapshot){
+              const parent = {...snapshot};
+              const idx = parent.posts?.findIndex(p=>p.id == +postId)
+              if(idx >- 1){
+                const oldPost = parent.posts[idx];
+                const {title,contentText} = variables;
+                const newPost = {
+                  ...oldPost,
+                  contentText: contentText??oldPost.contentText,
+                  title: title??oldPost.title,
+                }
+                parent.posts.splice(idx,1,newPost);
+                queryClient.setQueryData(ck, { ...parent });
+                queryClient.setQueryData(['POST',postId.toString()],newPost);
+              }
+              return { snapshot, ck };
+            }
+            // const ck = [`POST`, `${globalModalsState.editPostId || post.id}`];
+          }
           handleEditPostOnSmallerScreenClose();
-          return { snapshot, ck };
-        }
+          setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: false, editPostId:undefined } });
+        
         return { snapshot: null, ck: '' };
       },
       onSettled: (_post, error, _variables, context) => {
-        const ctx = context as { snapshot: PostMosaicItem; ck: string[] };
-        if (context) {
-          if (error) queryClient.setQueryData(ctx.ck, ctx.snapshot);
-          queryClient.invalidateQueries(ctx.ck);
-          if(ctx.snapshot.cycles){
-            const cycle = ctx.snapshot.cycles[0];
-            queryClient.invalidateQueries(['CYCLE',`${cycle.id}`]);
-          }
-
+        if (error){
+          queryClient.invalidateQueries(ck);
+          queryClient.invalidateQueries(['POST',postId]);
         }
-          handleEditPostOnSmallerScreenClose();
+        // this make the page to do a refresh
+        // queryClient.invalidateQueries(ck);
+        // queryClient.invalidateQueries(['POST',postId]);
+        
       },
     },
   );

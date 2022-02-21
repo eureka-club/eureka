@@ -18,7 +18,7 @@ describe('TagsInput suite',()=>{
                 if(tags.length){
                     cy.get('[data-cy="tag"]').then(tags=>{
                         
-                        debugger;
+                        
                         expect(tags).to.be.length(user.tags.split(',').length)
                         cy.get('[data-cy="max"]')
                         .then(maxContainer=>{
