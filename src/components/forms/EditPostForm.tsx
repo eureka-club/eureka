@@ -137,7 +137,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
                 }
                 parent.posts.splice(idx,1,newPost);
                 queryClient.setQueryData(ck, { ...parent });
-                queryClient.setQueryData(['POST',postId],newPost);
+                queryClient.setQueryData(['POST',postId.toString()],newPost);
               }
               return { snapshot, ck };
             }

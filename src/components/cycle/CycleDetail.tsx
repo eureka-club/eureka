@@ -93,8 +93,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   useEffect(() => {
     if (cycle/* cycleContext && cycleContext.cycle */){
       // setCycle(cycle);
-      setFilteredPosts(cycle?.posts);
-      setFilteredComments(cycle.comments);
+      setFilteredPosts(()=>cycle?.posts);
+      setFilteredComments(()=>cycle.comments);
     } 
   }, [cycle/* cycleContext */]);
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
@@ -249,7 +249,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   };
 
   const getPosts = () => {
-    if(cycle && filteredPosts)
+    if(cycle && filteredPosts.length)
       return filteredPosts.sort((a,b)=>a.createdAt >= b.createdAt ? -1 : 1);
     return [];
   };

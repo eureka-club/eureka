@@ -23,8 +23,7 @@ import ActionsBar from '@/src/components/common/ActionsBar'
 import {useAtom} from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
 import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
-import useCycle from '@/src/useCycle';
-import useWork from '@/src/useWork';
+
 import {useQueryClient} from 'react-query'
 
 interface Props {
@@ -57,20 +56,24 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [gmAtom,setGmAtom] = useAtom(globalModals);
   const { t } = useTranslation('common');
   const queryClient = useQueryClient()
-   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
-   const [k,setK] = useState<[string,string]>();
-   const [post,setPost] = useState<PostMosaicItem>();
-   const [postParent,setPostParent] = useState<CycleMosaicItem|WorkMosaicItem>();
+  const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
+  const [k,setK] = useState<[string,string]>();
+  const [post,setPost] = useState<PostMosaicItem>();
+  const [postParent,setPostParent] = useState<CycleMosaicItem|WorkMosaicItem>();
 
+  // const postFromCache = queryClient.getQueryData(['POST',postId.toString()]);
+  // const {data:postFromServer} = usePost(+postId,{
+  //   enabled:!postFromCache
+  // })
 
    useEffect(()=>{
-      const pp = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(cacheKey);
-      if(pp){
-        setPostParent(pp)
-        const p = pp.posts.find(p=>p.id===postId);
-        setPost(p)
-      }
-   },[cacheKey,postId,queryClient])
+    const pp = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(cacheKey);
+    if(pp){
+      setPostParent(pp)
+      const p = pp.posts.find(p=>p.id===postId);
+      setPost(p)
+    }
+   },[postId,queryClient,cacheKey])
 
 
    if(!post)return <></>

@@ -16,7 +16,6 @@ import { WorkMosaicItem } from '../types/work';
 import { PostMosaicItem } from '../types/post';
 import { CycleContext } from '../useCycleContext';
 import { CommentMosaicItem } from '../types/comment';
-import { PageBlobStartCopyIncrementalOptions } from '@azure/storage-blob';
 // import { WorkContext } from '../useWorkContext';
 
 const renderMosaicItem = (
