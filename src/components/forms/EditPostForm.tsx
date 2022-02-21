@@ -120,7 +120,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
       return res.json();
     },
     {
-      onMutate: async (variables) => {debugger;
+      onMutate: async (variables) => {
         if (post && ck) {
           
             const snapshot = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(ck)

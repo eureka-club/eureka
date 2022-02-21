@@ -66,7 +66,7 @@ const CommentsList: FunctionComponent<Props> = ({
   }, [session]);
 
 
-  useEffect(() => {
+  useEffect(() => {debugger;
     if (entity) {
       if (isCycle(entity)) {
         setFilterdComments(() => entity.comments.filter((c) => !c.workId && !c.postId && !c.commentId));
@@ -80,10 +80,22 @@ const CommentsList: FunctionComponent<Props> = ({
     }
   }, [entity]);
 
-  const renderComment = () => {
+  const renderComment = () => {debugger;
+    // let fc = entity.comments.filter((c) => c.commentId);
+    // if (entity) {
+    //   if (isCycle(entity)) {
+    //     fc = entity.comments.filter((c) => !c.workId && !c.postId && !c.commentId);
+    //   } else if (isWork(entity)) {
+    //     fc = entity.comments.filter((c) => c.workId && !c.postId && !c.commentId);
+    //   } else if (isPost(entity)) {
+    //     fc = entity.comments.filter((c) => c.postId && !c.commentId);
+    //   } else {
+    //     fc = entity.comments.filter((c) => c.commentId);
+    //   }
+    // }
     if (filterdComments)
       return filterdComments
-        .sort((p, c) => (p.id > c.id && -1) || 1)
+        .sort((p, c) => (p.createdAt > c.createdAt && -1) || 1)
         .slice(0, commentsShowCount)
         .map((c) => {
           return <CommentCmp key={v4()} comment={c as CommentMosaicItem} parent={entity} cacheKey={cacheKey} />;

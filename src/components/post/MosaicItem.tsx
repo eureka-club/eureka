@@ -3,7 +3,7 @@ import { Cycle, Work } from '@prisma/client';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import React, { FunctionComponent, useEffect, useState } from 'react';
-import { Row, Col, Card, Badge } from 'react-bootstrap';
+import { Row, Col, Card, Badge,Button } from 'react-bootstrap';
 import { FaRegComments, FaRegCompass } from 'react-icons/fa';
 import dayjs from 'dayjs';
 import { DATE_FORMAT_SHORT } from '../../constants';
@@ -66,14 +66,14 @@ const MosaicItem: FunctionComponent<Props> = ({
   //   enabled:!postFromCache
   // })
 
+  const pp = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(cacheKey);
    useEffect(()=>{
-    const pp = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(cacheKey);
     if(pp){
       setPostParent(pp)
       const p = pp.posts.find(p=>p.id===postId);
       setPost(p)
     }
-   },[postId,queryClient,cacheKey])
+   },[postId,queryClient,pp])
 
 
    if(!post)return <></>
@@ -252,6 +252,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         </Row>
         <Row>
           <Col md={12} xs={12}>
+          <Button onClick={()=>{setPost({...post})}}>Refresh</Button>
             {showComments && <CommentsList entity={post} parent={postParent!} cacheKey={cacheKey || ['POST',`${post.id}`]} />}
           </Col>
         </Row>

@@ -34,7 +34,7 @@ type CommentWithComments = Comment & {comments?: Comment[];}
 type EntityWithComments = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | CommentMosaicItem
 type ContextWithComments = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | CommentMosaicItem
 interface Props {
-  cacheKey: string[];
+  cacheKey: [string,string];
   className?: string;
   entity: EntityWithComments;
   // context?: ContextWithComments; //if not provide -parent will be used, should be the mosaic used to render the page :|
@@ -139,11 +139,12 @@ const CommentActionsBar: FunctionComponent<Props> = ({
           if(isCycleMosaicItem(snapshot as CycleMosaicItem)){
             let sc = queryClient.getQueryData<CycleMosaicItem>(cacheKey);
             if(sc){
-              if(newComment.postId){
+              if(newComment.postId){debugger;
                   const post = sc.posts.find(p=>p.id==newComment.postId)
                   if(post){
-                    post.comments.push(newComment);
                     newComment.post = post;
+                    post.comments.unshift(newComment);
+                    queryClient.setQueryData(['POST',post.id.toString()],{...post});
                   }
               }
               if(newComment.workId){
@@ -157,7 +158,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                 sc.comments.push(newComment);
                 newComment.cycle = sc;
               }
-              queryClient.setQueryData(cacheKey, {...sc});
+              queryClient.setQueryData(cacheKey,{...sc});
             }           
           }
           return { cacheKey, snapshot };
@@ -171,7 +172,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
           if (error && ck) {
             queryClient.setQueryData(ck, snapshot);
           }
-          // if (context) queryClient.invalidateQueries(ck);
+          queryClient.invalidateQueries(ck);
         }
       },
     },
@@ -229,8 +230,8 @@ const CommentActionsBar: FunctionComponent<Props> = ({
   );
 
   
-  const submitCreateForm = (text:string) => {
-    if (entity && text) {
+  const submitCreateForm = () => {
+    if (entity && newCommentInput) {
       const user = (session as Session).user;
       let notificationMessage = '';      
       let notificationToUsers = new Set<number>([]);
@@ -427,10 +428,12 @@ const CommentActionsBar: FunctionComponent<Props> = ({
       
       payload = {...payload,
         creatorId: +session!.user.id,
-        contentText: text,
+        contentText: newCommentInput,
         notificationToUsers: [...notificationToUsers],
       };
       createComment(payload as CreateCommentClientPayload);
+
+      setNewCommentInput('')
     }
   };
 
@@ -620,7 +623,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                 <aside className="d-flex align-items-center">
                   {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
                   <Editor value={newCommentInput} onChange={setNewCommentInput} onSave={(text)=>{
-                    submitCreateForm(text);          
+                    submitCreateForm();          
                     }}
                   />
                 </aside>
@@ -701,7 +704,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                 <aside className="d-flex align-items-center">
                   {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
                     <Editor value={newCommentInput} onChange={setNewCommentInput} onSave={(text)=>{
-                      submitCreateForm(text);          
+                      submitCreateForm();          
                       }}
                     />
                 </aside>
@@ -742,7 +745,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
         <aside className="d-flex align-items-center">
           {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
           <Editor value={newCommentInput} onChange={setNewCommentInput} onSave={(text)=>{
-            submitCreateForm(text);          
+            submitCreateForm();          
             }}
           />
         </aside>
