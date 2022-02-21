@@ -14,6 +14,8 @@ import { WorkMosaicItem } from '../../../../src/types/work';
 import useCycle from '../../../../src/useCycle';
 import usePost from '../../../../src/usePost';
 import { CycleContext } from '../../../../src/useCycleContext';
+import HelmetMetaData from '../../../../src/components/HelmetMetaData'
+import { WEBAPP_URL } from '../../../../src/constants';
 // import { Post } from '.prisma/client';
 // interface Props {
 //   cycle: CycleMosaicItem;
@@ -71,6 +73,14 @@ const PostDetailInCyclePage: NextPage = () => {
   };
 
   return (
+    <>
+    <HelmetMetaData title={`${post ? post.title : ''} · ${cycle ? cycle.title : ''}`}
+           
+        url={`${WEBAPP_URL}/cycle/${post?.cycles[0].id}/post/${post?.id}`}
+        image={post?.localImages[0].storedFile}
+     
+        ></HelmetMetaData>
+    
     <SimpleLayout title={`${post ? post.title : ''} · ${cycle ? cycle.title : ''}`}>
       <>
         {isLoadingOrFetching() && <Spinner animation="grow" variant="info" />}
@@ -84,6 +94,7 @@ const PostDetailInCyclePage: NextPage = () => {
         )}
       </>
     </SimpleLayout>
+    </>
   );
 };
 

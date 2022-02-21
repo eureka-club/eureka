@@ -10,6 +10,8 @@ import useTranslation from 'next-translate/useTranslation';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import WorkDetailComponent from '../../src/components/work/WorkDetail';
 import useWork from '../../src/useWork';
+import HelmetMetaData from '../../src/components/HelmetMetaData'
+import { WEBAPP_URL } from '../../src/constants';
 
 // import {
 //   countCycles,
@@ -54,7 +56,13 @@ const WorkDetailPage: NextPage = () => {
   }, [isLoadingSession, session, work, id]);
 
   const rendetLayout = (title: string, children: ReactElement) => {
-    return <SimpleLayout title={title}>{children}</SimpleLayout>;
+    return <>
+     <HelmetMetaData title={work?.title}
+        url={`${WEBAPP_URL}/work/${work?.id}`}
+        image={work?.localImages[0].storedFile}
+        ></HelmetMetaData>
+     <SimpleLayout title={title}>{children}</SimpleLayout>;
+     </>
   };
 
   if (work) {

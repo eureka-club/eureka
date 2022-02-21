@@ -8,6 +8,7 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { Hydrate } from 'react-query/hydration';
 import { ToastProvider} from 'react-toast-notifications';
 import ToastNew from '../src/components/common/ToastNew';
+import HelmetMetaData from '../src/components/HelmetMetaData'
 
 
 import i18nConfig from '../i18n';
@@ -38,7 +39,8 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   );
   return (
     <StrictMode>
-      <ToastProvider placement='top-center' components={{ Toast: ToastNew }} autoDismissTimeout={5000}>
+     <HelmetMetaData/>
+     <ToastProvider placement='top-center' components={{ Toast: ToastNew }} autoDismissTimeout={5000}>
       <NextAuthProvider session={pageProps.session}>
           
         {/* <GlobalEventsContext.Provider value={{...gec}}> */}

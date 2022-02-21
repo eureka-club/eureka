@@ -14,7 +14,8 @@ import { search as searchPost, isFavoritedByUser } from '../../../../src/facades
 import { countCycles, countPosts, find as findWork } from '../../../../src/facades/work';
 import useWork from '../../../../src/useWork';
 import usePost from '../../../../src/usePost';
-
+import HelmetMetaData from '../../../../src/components/HelmetMetaData'
+import { WEBAPP_URL } from '../../../../src/constants';
 interface Props {
   post: PostMosaicItem;
   work: WorkMosaicItem;
@@ -48,7 +49,13 @@ const PostDetailInWorkPage: NextPage<Props> = () => {
   };
 
   const getLayout = (children: JSX.Element, title = '') => {
-    return <SimpleLayout title={title}>{children}</SimpleLayout>;
+    return <>
+      <HelmetMetaData title={`${post ? post.title : ''} · ${work ? work.title : ''}`}
+        url={`${WEBAPP_URL}/cycle/${post?.works[0].id}/post/${post?.id}`}
+        image={post?.localImages[0].storedFile}
+        ></HelmetMetaData>
+     <SimpleLayout title={title}>{children}</SimpleLayout>;
+     </>
   };
 
   if (!post || !work || isLoadingData()) return getLayout(<Spinner animation="grow" variant="info" />);

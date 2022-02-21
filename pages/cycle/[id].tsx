@@ -16,6 +16,9 @@ import Banner from '../../src/components/Banner';
 import useCycle from '../../src/useCycle';
 import { CycleContext, useCycleContext } from '../../src/useCycleContext';
 import globalModalsAtom from '../../src/atoms/globalModals';
+import HelmetMetaData from '../../src/components/HelmetMetaData'
+import { WEBAPP_URL } from '../../src/constants';
+
 
 const CycleDetailPage: NextPage = () => {
   const [session, isLoadingSession] = useSession();
@@ -153,6 +156,11 @@ const CycleDetailPage: NextPage = () => {
   if (cycle)
     return (
       <CycleContext.Provider value={{ cycle, currentUserIsParticipant, linkToCycle: false }}>
+        <HelmetMetaData title={cycle.title}
+        url={`${WEBAPP_URL}/cycle/${cycle.id}`}
+        image={cycle.localImages[0].storedFile}
+        ></HelmetMetaData>
+
         <SimpleLayout banner={getBanner()} title={cycle ? cycle.title : ''}>
             {renderCycleDetailComponent()}
           </SimpleLayout>
