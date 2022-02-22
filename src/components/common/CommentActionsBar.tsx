@@ -184,7 +184,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
   const {
     isLoading:isEditLoading,
     // isError,
-    mutate: editComment,
+    mutate: editComment, 
   } = useMutation(
     async (payload: {commentId:number, contentText:string, status:number}) => {
       const res = await fetch('/api/comment', {
