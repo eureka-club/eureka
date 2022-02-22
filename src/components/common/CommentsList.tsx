@@ -66,7 +66,7 @@ const CommentsList: FunctionComponent<Props> = ({
   }, [session]);
 
 
-  useEffect(() => {debugger;
+  useEffect(() => {
     if (entity) {
       if (isCycle(entity)) {
         setFilterdComments(() => entity.comments.filter((c) => !c.workId && !c.postId && !c.commentId));
@@ -80,7 +80,7 @@ const CommentsList: FunctionComponent<Props> = ({
     }
   }, [entity]);
 
-  const renderComment = () => {debugger;
+  const renderComment = () => {
     // let fc = entity.comments.filter((c) => c.commentId);
     // if (entity) {
     //   if (isCycle(entity)) {

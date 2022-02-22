@@ -29,6 +29,7 @@ import Editor from '@/src/components/Editor'
 import dayjs from 'dayjs';
 import UserAvatar from './UserAvatar';
 import useUser from '@/src/useUser';
+import { uniqueId } from 'lodash';
 
 type CommentWithComments = Comment & {comments?: Comment[];}
 type EntityWithComments = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | CommentMosaicItem
@@ -137,28 +138,30 @@ const CommentActionsBar: FunctionComponent<Props> = ({
           const snapshot = queryClient.getQueryData(cacheKey);
           
           if(isCycleMosaicItem(snapshot as CycleMosaicItem)){
-            let sc = queryClient.getQueryData<CycleMosaicItem>(cacheKey);
+            let sc = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem|PostMosaicItem>(cacheKey);
             if(sc){
-              if(newComment.postId){debugger;
-                  const post = sc.posts.find(p=>p.id==newComment.postId)
+              if(newComment.postId){
+                  const post = sc as PostMosaicItem//sc.posts.find(p=>p.id==newComment.postId)
                   if(post){
                     newComment.post = post;
                     post.comments.unshift(newComment);
-                    queryClient.setQueryData(['POST',post.id.toString()],{...post});
+                    queryClient.setQueryData(cacheKey,{...post});
                   }
               }
               if(newComment.workId){
-                const work = sc.works.find(p=>p.id==newComment.postId)
+                const work = sc as WorkMosaicItem//sc.works.find(p=>p.id==newComment.postId)
                   if(work){
                     work.comments.push(newComment);
                     newComment.work = work;
                   }
               }
               if(newComment.cycleId){
-                sc.comments.push(newComment);
-                newComment.cycle = sc;
+                const cycle = sc as CycleMosaicItem
+                cycle.comments.push(newComment);
+                newComment.cycle = cycle;
               }
-              queryClient.setQueryData(cacheKey,{...sc});
+              queryClient.setQueryData(cacheKey,{...sc});             
+              
             }           
           }
           return { cacheKey, snapshot };
@@ -209,16 +212,23 @@ const CommentActionsBar: FunctionComponent<Props> = ({
       return null;
     },
     {
-      onMutate: async () => {
+      onMutate: async (payload) => {
         if (cacheKey) {
-          const snapshot = queryClient.getQueryData(cacheKey);
+
+          await queryClient.cancelQueries(cacheKey)
+          const snapshot = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem|PostMosaicItem>(cacheKey);
+          const sc = {...snapshot};
+          if(sc){
+            queryClient.setQueryData(cacheKey,{...sc,...payload});
+          }
           return { cacheKey, snapshot };
         }
         return { cacheKey: undefined, snapshot: null };
       },
       onSettled: (_comment, error, _variables, context) => {
         if (context) {
-          const { cacheKey: ck, snapshot } = context;
+          type ctx = {cacheKey:[string,string],snapshot:CommentMosaicItem};
+          const { cacheKey: ck, snapshot } = context as ctx;
           if (error && ck) {
             queryClient.setQueryData(ck, snapshot);
           }

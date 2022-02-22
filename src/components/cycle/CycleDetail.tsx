@@ -676,6 +676,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       setFilteredPosts([]);
       setFilteredComments([]);
     }
+    filteredPosts.forEach(p=>{queryClient.setQueryData(['POST',`${p.id}`],p)})
   },[filtersWork,filtersParticipant,filtersContentType,filterCycleItSelf,cycle]);
 
 

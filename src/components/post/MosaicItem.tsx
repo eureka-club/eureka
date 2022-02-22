@@ -23,7 +23,7 @@ import ActionsBar from '@/src/components/common/ActionsBar'
 import {useAtom} from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
 import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
-
+import {usePost} from '@/src/usePost'
 import {useQueryClient} from 'react-query'
 
 interface Props {
@@ -58,22 +58,21 @@ const MosaicItem: FunctionComponent<Props> = ({
   const queryClient = useQueryClient()
   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
   const [k,setK] = useState<[string,string]>();
-  const [post,setPost] = useState<PostMosaicItem>();
+  // const [post,setPost] = useState<PostMosaicItem>();
   const [postParent,setPostParent] = useState<CycleMosaicItem|WorkMosaicItem>();
 
-  // const postFromCache = queryClient.getQueryData(['POST',postId.toString()]);
-  // const {data:postFromServer} = usePost(+postId,{
-  //   enabled:!postFromCache
-  // })
+  //const postFromCache = queryClient.getQueryData<PostMosaicItem>(['POST',postId.toString()]);
+  const {data:post} = usePost(+postId,{
+    enabled:true
+  })
 
-  const pp = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(cacheKey);
+  // const pp = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(cacheKey);
    useEffect(()=>{
-    if(pp){
-      setPostParent(pp)
-      const p = pp.posts.find(p=>p.id===postId);
-      setPost(p)
-    }
-   },[postId,queryClient,pp])
+     if(post){
+      if (post.works && post.works.length > 0) setPostParent(post.works[0] as WorkMosaicItem);
+      else if (post.cycles && post.cycles.length > 0) setPostParent(post.cycles[0] as CycleMosaicItem);
+     }
+   },[post])
 
 
    if(!post)return <></>
@@ -252,8 +251,8 @@ const MosaicItem: FunctionComponent<Props> = ({
         </Row>
         <Row>
           <Col md={12} xs={12}>
-          <Button onClick={()=>{setPost({...post})}}>Refresh</Button>
-            {showComments && <CommentsList entity={post} parent={postParent!} cacheKey={cacheKey || ['POST',`${post.id}`]} />}
+          {/* <Button onClick={()=>{setPostParent({...postParent})}}>Refresh</Button> */}
+            {showComments && <CommentsList entity={post} parent={postParent!} cacheKey={['POST',`${post.id}`]} />}
           </Col>
         </Row>
       </section>
