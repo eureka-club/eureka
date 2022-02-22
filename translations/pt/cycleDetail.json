@@ -17,6 +17,8 @@
   "explanatoryTextComments": "Use este fórum para comentários e perguntas curtas. Para escrever mais e contribuir com o ciclo, crie uma publicação!",
   "explanatoryTextPosts": "Uma Eureka é uma reflexão pessoal sobre uma obra ou ciclo, composta por uma foto e um texto. É possivelmente a materialização de um momento Eureka! Participe do ciclo criando sua própria Eureka!",
   "Edit": "Editar",
+  "Details": "Detalhes",
+  "Close": "Fechar",
   "Create": "Create",
   "Add": "Add",
   "ratings": "avaliações",
@@ -35,8 +37,8 @@
   "Discussion": "Discussão",
   "Guidelines": "Princípios de moderação",
   "My milestones": "Meus marcos",
-  "Add a quick comment": "Adicionar um comentário curto",
-  "Create an Eureka": "Criar uma Eureka",
+  "Add a quick comment": "Compartilhar uma reação ou pergunta",
+  "Create an Eureka": "Compartilhar seu momento Eureka!",
   "Suggest a related work": "Adicionar obra ao ciclo",
   "Content calendar": "Calendário de conteúdo",
   "guidelinesMP": "Princípios de moderação de conteúdo do ciclo",
@@ -47,6 +49,7 @@
   "Filter by Participan":"Filtrar por participante",
   "Filter by type of element":"Filtrar por tipo de conteúdo",
   "Filter by work":"Filtrar por obra ou ciclo",
-  "commentCreated":"Seu comentário foi criado.",
-  "postCreated":"Seu Eureka foi publicado"
+  "Clean filters":"Clean filters",
+  "commentCreated":"Seu Eureka foi criado com sucesso.",
+  "postCreated":"Sua Eureka foi criada com sucesso."
 }

@@ -19,6 +19,8 @@
   "Edit": "Éditer",
   "Create": "Create",
   "Add": "Add",
+  "Details": "Détails",
+  "Close": "Fermer",
   "ratings": "notes",
   "Works on Cycle": "Œuvres dans ce cycle",
   "Cycle itself": "Cycle (votre contribution est sur le thème du cycle, elle ne se concentre pas uniquement sur une des œuvres)",
@@ -35,8 +37,8 @@
   "Discussion": "Discussion",
   "Guidelines": "Principes de modération",
   "My milestones": "Mes progrès",
-  "Add a quick comment": "Ajouter un court commentaire",
-  "Create an Eureka": "Créer une Eureka",
+  "Add a quick comment": "Partager une réaction ou question",
+  "Create an Eureka": "Partager votre moment Eureka!",
   "Suggest a related work": "Ajouter une œuvre au cycle",
   "Content calendar": "Calendrier des contenus",
   "guidelinesMP": "Principes de modération des contenus du cycle",
@@ -47,6 +49,7 @@
   "Filter by Participan":"Filtrer par participant-e",
   "Filter by type of element":"Filtrer par type de contenu",
   "Filter by work":"Filtrer par œuvre ou cycle",
-  "commentCreated":"Votre commentaire a été créé.",
-  "postCreated":"Votre Eurêka a été publié"
+  "Clean filters":"Clean filters",
+  "commentCreated":"Votre Commentaire a été créé avec succès.",
+  "postCreated":"Votre Eureka a été créée avec succès."
 }

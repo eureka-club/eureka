@@ -233,7 +233,8 @@ const CommentActionsBar: FunctionComponent<Props> = ({
             queryClient.setQueryData(ck, snapshot);
           }
           // setShowEditComment(false);
-          if (context) queryClient.invalidateQueries(ck);
+          //if (context) 
+          queryClient.invalidateQueries(ck);
         }
       },
     },
@@ -447,15 +448,16 @@ const CommentActionsBar: FunctionComponent<Props> = ({
     }
   };
 
-  const submitEditForm = (text:string) => {
+  const submitEditForm = () => {
     if (isComment(entity)||isCommentMosaicItem(entity)) {
       const comment = (entity as Comment);
       const payload = {
         commentId: comment.id,
-        contentText: text,
+        contentText: editCommentInput,
         status:1,
       };
       editComment(payload);
+      setEditCommentInput('')
     }
   };
 
@@ -657,7 +659,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                 <aside className="d-flex align-items-center">
                   {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
                     <Editor value={editCommentInput} onChange={setEditCommentInput} onSave={(text)=>{
-                      submitEditForm(text);          
+                      submitEditForm();          
                       }}
                     />
                 </aside>
@@ -738,7 +740,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                 <aside className="d-flex align-items-center">
                   {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
                     <Editor value={editCommentInput} onChange={setEditCommentInput} onSave={(text)=>{
-                      submitEditForm(text);          
+                      submitEditForm();          
                       }}
                     />
                 </aside>

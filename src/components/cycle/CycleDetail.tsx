@@ -504,7 +504,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                         />
                   </Form.Group>
                   <Form.Group className="mt-3" as={Col} xs={12}>
-                    <Button className="mt-3" variant="warning" size="sm" onClick={resetFilters}><ImCancelCircle/></Button>
+                    <Button title={t('Clean filters')} className="mt-3" variant="warning" size="sm" onClick={resetFilters}><ImCancelCircle/></Button>
                   </Form.Group>
                 </Form>
               </Col>
