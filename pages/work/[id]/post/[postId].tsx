@@ -13,7 +13,7 @@ import WorkDetailComponent from '../../../../src/components/work/WorkDetail';
 import { search as searchPost, isFavoritedByUser } from '../../../../src/facades/post';
 import { countCycles, countPosts, find as findWork } from '../../../../src/facades/work';
 import useWork from '../../../../src/useWork';
-import {usePost} from '@/src/usePost';
+import usePost from '@/src/usePost';
 
 interface Props {
   post: PostMosaicItem;

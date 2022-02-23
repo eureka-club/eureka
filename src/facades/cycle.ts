@@ -4,6 +4,9 @@ import { StoredFileUpload } from '../types';
 import { CreateCycleServerFields, CreateCycleServerPayload, CycleMosaicItem } from '../types/cycle';
 import prisma from '../lib/prisma';
 
+export const POST_COUNT = +(process.env.NEXT_PUBLIC_POST_COUNT || 3);
+export const WORK_COUNT = +(process.env.NEXT_PUBLIC_WORK_COUNT || 3);;
+export const COMMENT_COUNT = +(process.env.NEXT_PUBLIC_COMMENT_COUNT || 2);
 
 export const find = async (id: number): Promise<CycleMosaicItem | null> => {
   return prisma.cycle.findUnique({
@@ -23,6 +26,8 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
       favs: true,
       cycleWorksDates: true,
       posts: {
+        take:POST_COUNT,
+        orderBy:{id:'desc'},
         include: {
           creator: {include:{photos:true}},
           localImages: true,
@@ -53,6 +58,8 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
         }
       },
       works:{
+        take:WORK_COUNT,
+        orderBy:{id:'desc'},
         include: {
           localImages: true,
           favs: true,
@@ -90,6 +97,8 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
         },
       },
       comments: {
+        take:COMMENT_COUNT,
+        orderBy:{id:'desc'},
         include: {
           creator: { include: { photos:true } },
           comments: {
@@ -113,7 +122,15 @@ export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<Cycle[] 
     orderBy: { createdAt: 'desc' },
     ... include 
       ? {include} 
-      : {include: { participants: true, localImages: true, ratings: true, favs: true, comments: true, posts: true }},
+      : {include: { 
+        participants: true, 
+        localImages: true, 
+        ratings: true, 
+        favs: true, 
+        comments: true, 
+        posts: true 
+      }
+      },
   });
 };
 
@@ -155,7 +172,7 @@ export const search = async (query: { [key: string]: string | string[] }): Promi
   const { q, where /* , include */ } = query;
   if (where == null && q == null) {
     throw new Error("[412] Invalid invocation! Either 'q' or 'where' query parameter must be provided");
-  }debugger;
+  }
 
   if (typeof q === 'string') {
     return prisma.cycle.findMany({

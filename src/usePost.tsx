@@ -2,7 +2,7 @@ import { useQuery,QueryClient } from 'react-query';
 import { MosaicItem } from './types';
 import { PostMosaicItem } from './types/post';
 
-export const getRecord = async (id: number): Promise<PostMosaicItem | undefined> => {debugger;
+export const getRecord = async (id: number): Promise<PostMosaicItem | undefined> => {
   if (!id) return undefined;
   const url = `/api/post/${id}`;
 
@@ -22,7 +22,7 @@ interface Options {
   enabled?: boolean;
 }
 
-export const usePost = (id: number, options?: Options) => {
+const usePost = (id: number, options?: Options) => {
   const { staleTime, enabled } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
@@ -32,4 +32,6 @@ export const usePost = (id: number, options?: Options) => {
     enabled,
   });
 };
+
+export default usePost;
 

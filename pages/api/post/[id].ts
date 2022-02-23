@@ -81,7 +81,7 @@ export default getApiHandler()
     }
   })
   .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-    const session = (await getSession({ req })) as unknown as Session;debugger;
+    const session = (await getSession({ req })) as unknown as Session;
     if (session == null) {
       res.status(401).json({ status: 'Unauthorized' });
       return;
