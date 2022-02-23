@@ -10,6 +10,7 @@ import { create } from '@/src/facades/notification';
 import prisma from '@/src/lib/prisma';
 import { take } from 'lodash';
 import { count } from 'console';
+import { RiTruckLine } from 'react-icons/ri';
 
 export const config = {
   api: {
@@ -100,12 +101,22 @@ export default getApiHandler()
       } else {
         data = await findAll({take},page);
       }
-      
-      const total = await prisma.post.count(where)
+      debugger;
+      const posts_ = await prisma.post.findMany({
+        select:{
+          _count:{
+            select:{cycles:true}
+          }
+
+        },
+        
+        where
+      })
+
       res.status(200).json({ 
         status: 'OK', 
         data, 
-        ... take && {hasNextPage: total > take * (page+1)}
+        ... take && {hasNextPage: posts_.length > take * (page+1)}
       });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

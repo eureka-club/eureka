@@ -116,5 +116,7 @@
   "public": "Ciclo público",
   "private": "Ciclo privado",
   "secret": "Ciclo secreto",
-  "Notifications":"Notifications"
+  "Notifications":"Notifications",
+  "next":"next",
+  "previous":"previous"
 }

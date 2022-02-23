@@ -115,5 +115,7 @@
   "public": "Ciclo público",
   "private": "Ciclo privado",
   "secret": "Ciclo secreto",
-  "select": "Seleccionar"
+  "select": "Seleccionar",
+  "next":"Siguientes",
+  "previous":"Previos"
 }
