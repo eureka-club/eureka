@@ -3,7 +3,7 @@ import { Cycle, Work } from '@prisma/client';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import React, { FunctionComponent, useEffect, useState } from 'react';
-import { Row, Col, Card, Badge } from 'react-bootstrap';
+import { Row, Col, Card, Badge,Button } from 'react-bootstrap';
 import { FaRegComments, FaRegCompass } from 'react-icons/fa';
 import dayjs from 'dayjs';
 import { DATE_FORMAT_SHORT } from '../../constants';
@@ -23,7 +23,7 @@ import ActionsBar from '@/src/components/common/ActionsBar'
 import {useAtom} from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
 import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
-
+import usePost from '@/src/usePost'
 import {useQueryClient} from 'react-query'
 
 interface Props {
@@ -55,30 +55,28 @@ const MosaicItem: FunctionComponent<Props> = ({
 }) => {
   const [gmAtom,setGmAtom] = useAtom(globalModals);
   const { t } = useTranslation('common');
-  const queryClient = useQueryClient()
   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
   const [k,setK] = useState<[string,string]>();
-  const [post,setPost] = useState<PostMosaicItem>();
+  // const [post,setPost] = useState<PostMosaicItem>();
   const [postParent,setPostParent] = useState<CycleMosaicItem|WorkMosaicItem>();
 
-  // const postFromCache = queryClient.getQueryData(['POST',postId.toString()]);
-  // const {data:postFromServer} = usePost(+postId,{
-  //   enabled:!postFromCache
-  // })
+  //const postFromCache = queryClient.getQueryData<PostMosaicItem>(['POST',postId.toString()]);
+  const {data:post} = usePost(+postId,{
+    enabled:true
+  })
 
+  // const pp = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(cacheKey);
    useEffect(()=>{
-    const pp = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(cacheKey);
-    if(pp){
-      setPostParent(pp)
-      const p = pp.posts.find(p=>p.id===postId);
-      setPost(p)
-    }
-   },[postId,queryClient,cacheKey])
+     if(post){
+      if (post.works && post.works.length > 0) setPostParent(post.works[0] as WorkMosaicItem);
+      else if (post.cycles && post.cycles.length > 0) setPostParent(post.cycles[0] as CycleMosaicItem);
+     }
+   },[post])
 
 
    if(!post)return <></>
 
-  const postParentLinkHref = ((): string | null => {
+  const parentLinkHref = ((): string | null => {
     if (postParent) {
       if (isCycle(postParent)) {
         return `/cycle/${postParent.id}`;
@@ -108,7 +106,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   // const getDirectParent = () => {
   //   if (post.works && post.works.length) return post.works[0];
-  //   return postParent;
+  //   return parent;
   // };
   const onEditPost = async (e:React.MouseEvent<HTMLButtonElement>) => {
     setGmAtom(res=>({...res,editPostModalOpened:true, editPostId:post.id, cacheKey}))
@@ -138,8 +136,8 @@ const MosaicItem: FunctionComponent<Props> = ({
           <h2 className="m-0 p-1 fs-6 text-info" data-cy="parent-title">
             <FaRegCompass className="text-info" />
             {` `}
-            {postParentLinkHref != null ? (
-              <Link href={postParentLinkHref}>
+            {parentLinkHref != null ? (
+              <Link href={parentLinkHref}>
                 <a className="text-info">
                   <span>{renderParentTitle()} </span>
                 </a>
@@ -150,7 +148,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           </h2>
         )}
         <div className={`${styles.imageContainer} ${styles.detailedImageContainer}`}>
-          {postParentLinkHref != null ? (
+          {parentLinkHref != null ? (
             <Link href={postLinkHref}>
               <a>
                 <LocalImageComponent
@@ -252,7 +250,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         </Row>
         <Row>
           <Col md={12} xs={12}>
-            {showComments && <CommentsList entity={post} parent={postParent!} cacheKey={cacheKey || ['POST',`${post.id}`]} />}
+            {showComments && <CommentsList entity={post} parent={postParent!} cacheKey={['POST',`${post.id}`]} />}
           </Col>
         </Row>
       </section>
@@ -277,16 +275,16 @@ const MosaicItem: FunctionComponent<Props> = ({
   //     <Card className={`${styles.post} ${styles.postHorizontally}`}>
   //       <Row style={{ paddingTop: '1em' }}>
   //         <Col>
-  //           {postParent && (
-  //             <h2 className={styles.postParentTitle}>
-  //               {postParentLinkHref != null ? (
-  //                 <Link href={postParentLinkHref}>
+  //           {parent && (
+  //             <h2 className={styles.parentTitle}>
+  //               {parentLinkHref != null ? (
+  //                 <Link href={parentLinkHref}>
   //                   <a>
   //                     <FaRegCompass /> <span>{getDirectParent()!.title}</span>
   //                   </a>
   //                 </Link>
   //               ) : (
-  //                 <h2 className={styles.postParentTitle}>
+  //                 <h2 className={styles.parentTitle}>
   //                   <FaRegCompass /> <span>{getDirectParent()!.title}</span>
   //                 </h2>
   //               )}
@@ -302,8 +300,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   //       <Row>
   //         <Col md={5} xs={5}>
   //           <div className={styles.imageContainerHorizontally}>
-  //             {postParentLinkHref != null ? (
-  //               <Link href={postParentLinkHref}>
+  //             {parentLinkHref != null ? (
+  //               <Link href={parentLinkHref}>
   //                 <a>
   //                   <LocalImageComponent
   //                     className={styles.postImage}
@@ -359,7 +357,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   //                 showCounts={false}
   //                 showShare={false}
   //                 entity={post}
-  //                 parent={postParent}
+  //                 parent={parent}
   //                 showRating={false}
   //                 showTrash={false}
   //               />
@@ -369,7 +367,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   //       </Row>
   //       <Card.Footer className={styles.footer}>
 
-  //         {showComments && <CommentsList entity={post} parent={postParent} cacheKey={cacheKey} />}
+  //         {showComments && <CommentsList entity={post} parent={parent} cacheKey={cacheKey} />}
 
   //       </Card.Footer>
   //     </Card>

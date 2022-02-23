@@ -13,9 +13,14 @@ import WorkDetailComponent from '../../../../src/components/work/WorkDetail';
 import { search as searchPost, isFavoritedByUser } from '../../../../src/facades/post';
 import { countCycles, countPosts, find as findWork } from '../../../../src/facades/work';
 import useWork from '../../../../src/useWork';
+<<<<<<< HEAD
 import usePost from '../../../../src/usePost';
 import HelmetMetaData from '../../../../src/components/HelmetMetaData'
 import { WEBAPP_URL } from '../../../../src/constants';
+=======
+import usePost from '@/src/usePost';
+
+>>>>>>> develop
 interface Props {
   post: PostMosaicItem;
   work: WorkMosaicItem;

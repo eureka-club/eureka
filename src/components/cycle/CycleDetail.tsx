@@ -59,7 +59,7 @@ import { useCycleContext, CycleContext } from '../../useCycleContext';
 import CycleDetailHeader from './CycleDetailHeader';
 import CycleDetailDiscussion from './CycleDetailDiscussion';
 import useCycle from '@/src/useCycle';
-
+import usePostsPaginated from '@/src/usePostsPaginated'
 
 interface Props {
   // cycle: CycleMosaicItem;
@@ -85,18 +85,45 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   
   const [filteredPosts,setFilteredPosts] = useState<PostMosaicItem[]>([]);
   const [filteredComments,setFilteredComments] = useState<Comment[]>([]);
+  const queryClient = useQueryClient()
   
   const {data:cycle,isLoading} = useCycle(+(router?.query.id ? router?.query.id.toString():''),{
     enabled:!!router?.query.id
   });
 
+  const [page,setPage] = useState<number>(0);
+
   useEffect(() => {
     if (cycle/* cycleContext && cycleContext.cycle */){
       // setCycle(cycle);
-      setFilteredPosts(()=>cycle?.posts);
+     // setFilteredPosts(()=>cycle?.posts);
       setFilteredComments(()=>cycle.comments);
+
     } 
   }, [cycle/* cycleContext */]);
+
+  const {data} = usePostsPaginated(cycle?.id!,page,{
+    enabled:!!cycle
+  })
+
+  useEffect(()=>{
+    if(data){
+      setFilteredPosts((res)=>[...res,...data.posts])
+    }
+  },[data])
+
+  // useEffect(()=>{
+  //   if(cycle && posts){
+  //     setFilteredPosts((res)=>[...res,...posts])
+      
+  //     queryClient.setQueryData(['POSTS', `CYCLE-${cycle.id}`],{...cycle,...{
+  //       posts:filteredPosts
+  //     }})
+  //     setLastPostId(()=>filteredPosts.slice(-1)[0].id)
+  //   }
+  // },[cycle,data,queryClient])
+  
+
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
@@ -118,7 +145,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     book: false,
     'fiction-book': false, */
   });
-  const queryClient = useQueryClient()
     // const hyvorId = `${WEBAPP_URL}cycle/${router.query.id}`;
 
   // const { data } = useCycles(1);
@@ -441,7 +467,12 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     return '';
   };
 
-  
+  // const loadMorePosts = (e:MouseEvent<HTMLButtonElement>)=>{
+  //   e.preventDefault()
+  //   if(cycle?.posts.length){
+  //     setLastPostId(cycle.posts.slice(-1)[0].id)
+  //   }
+  // }
 
   const renderRestrictTabs = () => {
     if (cycle) {
@@ -454,6 +485,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 <MosaicContext.Provider value={{ showShare: true }}>
                   {renderItems()}
                 </MosaicContext.Provider>
+                 <Button 
+                  onClick={() => setPage(()=>page+1)}
+                  disabled={!data?.hasNextPage}
+                >Load more content</Button>
                 {/* {(cycle.posts && cycle.posts.length && (
                     <PostsMosaic display="h" posts={filteredPosts} showComments cacheKey={['CYCLE', `${cycle.id}`]} />
                 )) ||
@@ -504,7 +539,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                         />
                   </Form.Group>
                   <Form.Group className="mt-3" as={Col} xs={12}>
-                    <Button className="mt-3" variant="warning" size="sm" onClick={resetFilters}><ImCancelCircle/></Button>
+                    <Button title={t('Clean filters')} className="mt-3" variant="warning" size="sm" onClick={resetFilters}><ImCancelCircle/></Button>
                   </Form.Group>
                 </Form>
               </Col>
@@ -676,6 +711,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       setFilteredPosts([]);
       setFilteredComments([]);
     }
+    filteredPosts.forEach(p=>{queryClient.setQueryData(['POST',`${p.id}`],p)})
   },[filtersWork,filtersParticipant,filtersContentType,filterCycleItSelf,cycle]);
 
 

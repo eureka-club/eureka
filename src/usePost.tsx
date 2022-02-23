@@ -1,4 +1,5 @@
-import { useQuery } from 'react-query';
+import { useQuery,QueryClient } from 'react-query';
+import { MosaicItem } from './types';
 import { PostMosaicItem } from './types/post';
 
 export const getRecord = async (id: number): Promise<PostMosaicItem | undefined> => {
@@ -11,6 +12,10 @@ export const getRecord = async (id: number): Promise<PostMosaicItem | undefined>
 
   return result.post ? { ...result.post, type: 'post' } : undefined;
 };
+
+export const prefetchPost = async (id:number,queryClient:QueryClient):Promise<void> => {
+  return queryClient.prefetchQuery(['POST',`${id}`], async ()=> getRecord(id))
+}
 
 interface Options {
   staleTime?: number;
@@ -29,3 +34,4 @@ const usePost = (id: number, options?: Options) => {
 };
 
 export default usePost;
+

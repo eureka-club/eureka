@@ -52,8 +52,8 @@ export default getApiHandler()
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
-      const { q = null, where = null, id = null,take:t } = req.query;
-      const take = +t.toString();
+      const { q = null, where = null, id = null,take:t=undefined } = req.query;
+      const take = t ? parseInt(t?.toString()) : undefined;
       let data = null;
       if (typeof q === 'string') {
         data = await prisma.work.findMany({

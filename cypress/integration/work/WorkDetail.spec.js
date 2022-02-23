@@ -33,7 +33,7 @@ describe('WorkDetail suit',()=>{
     cy.request(`/api/work?where=${whereForWork}&take=1`).as('work')
         .its('body')
         .should('have.property','data')
-        .and((data)=>{debugger;
+        .and((data)=>{
           expect(data).to.be.length.gte(1)              
           expect(data[0].posts).have.length.gte(1)
           expect(data[0].cycles).have.length.gte(1)

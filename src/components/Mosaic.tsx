@@ -78,7 +78,7 @@ const renderMosaicItem = (
       pp = it.post as PostMosaicItem;
 
       if(pp){
-        return <MosaicItemComment detailed comment={it} commentParent={pp} />;
+        return <MosaicItemComment detailed comment={it} cacheKey={cacheKey} commentParent={pp} />;
       }
   }
 

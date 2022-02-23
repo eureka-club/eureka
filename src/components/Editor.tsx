@@ -23,6 +23,7 @@ const Editor: React.FC<Props> = ({onSave,value,onChange})=>{
         rows={2}
         placeholder={`${t('Write a replay')}...`}        
         onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{
+            e.preventDefault()
             onChange(e.target.value);
         }} 
         onKeyPress={(e:React.KeyboardEvent<HTMLInputElement>)=>{

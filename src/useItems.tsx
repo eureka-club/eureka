@@ -18,7 +18,7 @@ const getRecordsWorks = async (where?: string): Promise<WorkMosaicItem[]> => {
   const res = await fetch(url);
   if (!res.ok) return [];
   const result = await res.json();
-
+debugger;
   return result.data.sort((f: WorkMosaicItem, s: WorkMosaicItem) => {
     const fCD = dayjs(f.createdAt);
     const sCD = dayjs(s.createdAt);
@@ -60,7 +60,7 @@ const getRecordsPosts = async (where?: string): Promise<PostMosaicItem[]> => {
   const res = await fetch(url);
   if (!res.ok) return [];
   const result = await res.json();
-
+  
   const posts: PostMosaicItem[] = [];
   result.data.forEach((i: PostMosaicItem) => {
     posts.push({ ...i, type: 'post' });
