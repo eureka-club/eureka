@@ -23,7 +23,7 @@ import ActionsBar from '@/src/components/common/ActionsBar'
 import {useAtom} from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
 import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
-import {usePost} from '@/src/usePost'
+import usePost from '@/src/usePost'
 import {useQueryClient} from 'react-query'
 
 interface Props {

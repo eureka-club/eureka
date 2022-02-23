@@ -12,7 +12,7 @@ import CycleDetailComponent from '../../../../src/components/cycle/CycleDetail';
 // import { isFavoritedByUser /* isLikedByUser, search as searchPost */ } from '../../../../src/facades/post';
 import { WorkMosaicItem } from '../../../../src/types/work';
 import useCycle from '../../../../src/useCycle';
-import {usePost} from '../../../../src/usePost';
+import usePost from '../../../../src/usePost';
 import { CycleContext } from '../../../../src/useCycleContext';
 // import { Post } from '.prisma/client';
 // interface Props {

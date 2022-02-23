@@ -35,7 +35,7 @@ import WorkTypeaheadSearchItem from '../work/TypeaheadSearchItem';
 import globalModalsAtom from '../../atoms/globalModals';
 import styles from './CreatePostForm.module.css';
 import useTopics from '../../useTopics';
-import {usePost} from '../../usePost';
+import usePost from '../../usePost';
 import { setDefaultResultOrder } from 'dns';
 import editOnSmallerScreens from '../../atoms/editOnSmallerScreens';
 

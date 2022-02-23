@@ -9,12 +9,15 @@ import { createFromServerFields, findAll } from '@/src/facades/post';
 import { create } from '@/src/facades/notification';
 import prisma from '@/src/lib/prisma';
 import { take } from 'lodash';
+import { count } from 'console';
 
 export const config = {
   api: {
     bodyParser: false,
   },
 };
+
+
 
 export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
@@ -78,25 +81,32 @@ export default getApiHandler()
     // };
 
     try {
-      const { q = null, where:w = undefined, id = null, take:t=undefined } = req.query;
+      
+      const { q = null, where:w = undefined, id = null, take:t=undefined, page:c=1 } = req.query;
       
       let data = null;
       const where = w ? JSON.parse(w.toString()) : undefined;
       const take = t ? parseInt(t?.toString()) : undefined;
+      const page = +c;
       
       if (typeof q === 'string') {
         data = await findAll({take,where:{
           OR: [{ title: { contains: q } }, { contentText: { contains: q } }, { creator: { name:{contains: q} } }],
-        }});
+        }},page);
       } else if (where) {
-        data = await findAll({take,where});
+        data = await findAll({take,where},page);
       } else if (id) {
-        data = await findAll({take,where:{id: parseInt(id as string, 10)}});
+        data = await findAll({take,where:{id: parseInt(id as string, 10)}},page);
       } else {
-        data = await prisma.post.findMany({take});
+        data = await findAll({take},page);
       }
-
-      res.status(200).json({ status: 'OK', data });
+      
+      const total = await prisma.post.count(where)
+      res.status(200).json({ 
+        status: 'OK', 
+        data, 
+        ... take && {hasNextPage: total > take * (page+1)}
+      });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
       res.status(500).json({ status: 'server error' });
