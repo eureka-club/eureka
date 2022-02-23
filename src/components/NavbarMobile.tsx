@@ -233,7 +233,7 @@ const NavBar: FunctionComponent = () => {
                   {router.locales.map((locale) => (
                     <Dropdown.Item key={locale} eventKey={locale} active={locale === router.locale}>
                       <Link href={router.asPath} locale={locale}>
-                        <img src={`/img/lang-flags/${locale}.png`} alt={`Language flag '${locale}'`} />
+                        <img  className={styles.navbarIconNav} src={`/img/lang-flags/${locale}.png`} alt={`Language flag '${locale}'`} />
                       </Link>
                     </Dropdown.Item>
                   ))}
