@@ -11,6 +11,8 @@ import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import Header from '../src/components/layouts/Header';
 import Carousel from '../src/components/Carousel';
 import { v4 } from 'uuid';
+import HelmetMetaData from '../src/components/HelmetMetaData'
+import { WEBAPP_URL } from '../src/constants';
 
 const IndexPage: NextPage = () => {
   const { t } = useTranslation('common');
@@ -39,6 +41,11 @@ const IndexPage: NextPage = () => {
   };
 
   return (
+    <>
+     <HelmetMetaData title='Eureka'
+        url={`${WEBAPP_URL}`}
+        image={`${WEBAPP_URL}/logo.svg`}
+        ></HelmetMetaData>
     <SimpleLayout showHeader title={t('browserTitleWelcome')}>
       <h1 className="text-secondary fw-bold">{t('Trending topics')}</h1>
       <aside className="mb-5">{getTopicsBadgedLinks()}</aside>
@@ -49,6 +56,7 @@ const IndexPage: NextPage = () => {
         </span>
       </Button>
     </SimpleLayout>
+    </>
   );
 };
 
