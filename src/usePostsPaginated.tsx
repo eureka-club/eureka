@@ -2,9 +2,7 @@ import { useQuery } from 'react-query';
 import { PostMosaicItem } from './types/post';
 
 
-export const POST_COUNT = +(process.env.NEXT_PUBLIC_POST_COUNT || 3);
-// export const WORK_COUNT = +(process.env.NEXT_PUBLIC_WORK_COUNT || 3);;
-// export const COMMENT_COUNT = +(process.env.NEXT_PUBLIC_COMMENT_COUNT || 2);
+export const POST_COUNT = +(process.env.NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT || 10);
 
 export const getRecords = async (cycleId:number,page: number): Promise<{posts:PostMosaicItem[],hasNextPage:boolean}|undefined> => {
   if (!cycleId) return undefined;
@@ -34,7 +32,7 @@ const usePostsPaginated = (cycleId:number,page: number, options?: Options) => {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  return useQuery<{posts:PostMosaicItem[],hasNextPage:boolean}|undefined>(['POSTS', `CYCLE-${cycleId}-PAGE-${page}`], ()=> getRecords(cycleId,page),{ keepPreviousData : true });
+  return useQuery<{posts:PostMosaicItem[],hasNextPage:boolean}|undefined>(['POSTS', {cycleId,page}], ()=> getRecords(cycleId,page),{ keepPreviousData : true });
 };
 
 export default usePostsPaginated

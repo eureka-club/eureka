@@ -115,5 +115,7 @@
   "loadMoreTopics": "Charger d'autres thèmes",
   "public": "Cycle public",
   "private": "Cycle privé",
-  "secret": "Cycle secret"
+  "secret": "Cycle secret",
+  "next":"next",
+  "previous":"previous"
 }

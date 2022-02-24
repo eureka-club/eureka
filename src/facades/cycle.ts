@@ -4,9 +4,7 @@ import { StoredFileUpload } from '../types';
 import { CreateCycleServerFields, CreateCycleServerPayload, CycleMosaicItem } from '../types/cycle';
 import prisma from '../lib/prisma';
 
-export const POST_COUNT = +(process.env.NEXT_PUBLIC_POST_COUNT || 3);
-export const WORK_COUNT = +(process.env.NEXT_PUBLIC_WORK_COUNT || 3);;
-export const COMMENT_COUNT = +(process.env.NEXT_PUBLIC_COMMENT_COUNT || 2);
+export const NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT = +(process.env.NEXT_PUBLIC_NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT || 10);
 
 export const find = async (id: number): Promise<CycleMosaicItem | null> => {
   return prisma.cycle.findUnique({
@@ -25,40 +23,40 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
       ratings: { include: { cycle: true } },
       favs: true,
       cycleWorksDates: true,
-      posts: {
-        take:POST_COUNT,
-        orderBy:{id:'desc'},
-        include: {
-          creator: {include:{photos:true}},
-          localImages: true,
-          works: {
-            include: {
-              localImages: true,
-            },
-          },
-          cycles: {
-            include: {
-              localImages: true,
-            },
-          },
-          likes: true,
-          favs: true,
-          comments: {
-            include: {
-              creator: { include: { photos:true } },
-              comments: {
-                include: {
-                  creator: { include: { photos:true } },
-                },
-              },
-              work: {include:{cycles:true}},
-              cycle:true,
-            },
-          },
-        }
-      },
+      // posts: {
+      //   take:NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT,
+      //   orderBy:{id:'desc'},
+      //   include: {
+      //     creator: {include:{photos:true}},
+      //     localImages: true,
+      //     works: {
+      //       include: {
+      //         localImages: true,
+      //       },
+      //     },
+      //     cycles: {
+      //       include: {
+      //         localImages: true,
+      //       },
+      //     },
+      //     likes: true,
+      //     favs: true,
+      //     comments: {
+      //       include: {
+      //         creator: { include: { photos:true } },
+      //         comments: {
+      //           include: {
+      //             creator: { include: { photos:true } },
+      //           },
+      //         },
+      //         work: {include:{cycles:true}},
+      //         cycle:true,
+      //       },
+      //     },
+      //   }
+      // },
       works:{
-        take:WORK_COUNT,
+        // take:NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT,
         orderBy:{id:'desc'},
         include: {
           localImages: true,
@@ -97,7 +95,7 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
         },
       },
       comments: {
-        take:COMMENT_COUNT,
+        // take:NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT,
         orderBy:{id:'desc'},
         include: {
           creator: { include: { photos:true } },

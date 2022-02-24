@@ -86,9 +86,14 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const [filteredPosts,setFilteredPosts] = useState<PostMosaicItem[]>([]);
   const [filteredComments,setFilteredComments] = useState<Comment[]>([]);
   const queryClient = useQueryClient()
-  
-  const {data:cycle,isLoading} = useCycle(+(router?.query.id ? router?.query.id.toString():''),{
-    enabled:!!router?.query.id
+
+  const [cycleId,setCycleId] = useState<string>('')
+  useEffect(()=>{
+    if(router?.query && router.query.id)setCycleId(router.query.id?.toString())
+  },[router])
+
+  const {data:cycle,isLoading} = useCycle(+cycleId,{
+    enabled:!!cycleId
   });
 
   const [page,setPage] = useState<number>(0);
@@ -102,13 +107,13 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     } 
   }, [cycle/* cycleContext */]);
 
-  const {data} = usePostsPaginated(cycle?.id!,page,{
-    enabled:!!cycle
+  const {data} = usePostsPaginated(+cycleId,page,{
+    enabled:!!cycleId
   })
 
   useEffect(()=>{
     if(data){
-      setFilteredPosts((res)=>[...res,...data.posts])
+      setFilteredPosts((res)=>data.posts)
     }
   },[data])
 
@@ -485,10 +490,22 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 <MosaicContext.Provider value={{ showShare: true }}>
                   {renderItems()}
                 </MosaicContext.Provider>
-                 <Button 
-                  onClick={() => setPage(()=>page+1)}
-                  disabled={!data?.hasNextPage}
-                >Load more content</Button>
+                {page >0 && <Button 
+                className="my-3 pe-3 rounded-pill text-white" 
+                onClick={() => setPage(()=>page-1)} 
+                >
+                  <span>
+                    <RiArrowDownSLine /> {t('common:previous')}
+                  </span>
+                </Button>}
+                {data?.hasNextPage && <Button 
+                className="my-3 pe-3 rounded-pill text-white" 
+                onClick={() => setPage(()=>page+1)} 
+                >
+                  <span>
+                    <RiArrowDownSLine /> {t('common:next')}
+                  </span>
+                </Button>}
                 {/* {(cycle.posts && cycle.posts.length && (
                     <PostsMosaic display="h" posts={filteredPosts} showComments cacheKey={['CYCLE', `${cycle.id}`]} />
                 )) ||
@@ -683,7 +700,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   useEffect(() => {
     if(cycle && cycle.posts && cycle.comments){
-      let posts = cycle?.posts;
+      let posts = [...filteredPosts];
       let comments = cycle?.comments;
 
       if(filterCycleItSelf){
