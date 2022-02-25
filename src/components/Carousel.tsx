@@ -72,7 +72,7 @@ const renderMosaicItem = (
         showShare={false}
         showButtonLabels={false}
         key={`work-${v4()}`}
-        work={item}
+        workId={item.id}
         cacheKey={topic && page ? ['ITEMS', `${topic}${page}`] : undefined}
       />
     );

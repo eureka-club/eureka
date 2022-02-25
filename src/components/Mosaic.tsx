@@ -58,7 +58,7 @@ const renderMosaicItem = (
     return (
       // <WorkContext.Provider value={{ linkToWork: true }}>
       <MosaicItemWork 
-      linkToWork showShare={false} showButtonLabels={showButtonLabels} key={`${v4()}`} work={item} className="mb-2"/>
+      linkToWork showShare={false} showButtonLabels={showButtonLabels} key={`${v4()}`} workId={item.id} className="mb-2"/>
       // </WorkContext.Provider>
     );
   }
@@ -78,7 +78,7 @@ const renderMosaicItem = (
       pp = it.post as PostMosaicItem;
 
       if(pp){
-        return <MosaicItemComment detailed comment={it} cacheKey={cacheKey} commentParent={pp} />;
+        return <MosaicItemComment detailed commentId={it.id} cacheKey={cacheKey} commentParent={pp} />;
       }
   }
 

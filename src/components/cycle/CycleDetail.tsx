@@ -44,8 +44,8 @@ import PostDetailComponent from '../post/PostDetail';
 // import HyvorComments from '../common/HyvorComments';
 // import SocialInteraction from '../common/SocialInteraction';
 import PostsMosaic from './PostsMosaic';
-import WorksMosaic from './WorksMosaic';
-
+// import WorksMosaic from './WorksMosaic';
+import WorkMosaic from '@/src/components/work/MosaicItem'
 import CommentMosaic from '@/src/components/comment/MosaicItem';
 import PostMosaic from '@/src/components/post/MosaicItem';
 // import UnclampText from '../UnclampText';
@@ -288,40 +288,33 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       //   ... getPosts()
       // ]
       // .sort((a,b)=>a.createdAt >= b.createdAt ? -1 : 1);
-      // for(let i of items){
-      //   if(isPostMosaicItem(i)){
-      //     const ck = ['POST',i.id.toString()];
-      //     queryClient.setQueryData(ck,i)
-      //     const post = queryClient.getQueryData<PostMosaicItem>(ck)
-      //     let pp=null;
-      //     const it = i as PostMosaicItem;
-      //     if (it.works && it.works.length > 0) pp = it.works[0] as WorkMosaicItem;
-      //     else pp = cycle as CycleMosaicItem;
-
-      //     res.push(
-      //       <PostMosaic postParent={pp} post={it} display="h" cacheKey={ck} showComments className="mb-2" />
-      //     )
-      //   }
-      //   else if(isCommentMosaicItem(i)){
-      //     const ck = ['COMMENT',i.id.toString()];
-      //     queryClient.setQueryData(ck,i)
-      //     const comment = queryClient.getQueryData(ck)
-      //     res.push(
-      //       <CommentMosaic detailed comment={i as CommentMosaicItem} 
-      //       commentParent={i.post as PostMosaicItem || i.work as WorkMosaicItem || i.cycle as CycleMosaicItem}
-      //       cacheKey={ck} className="mb-2" />
-      //     )
-      //   }
+      for(let i of items){
+        if(isPostMosaicItem(i)){
+          const ck = ['POST',i.id.toString()];
+          queryClient.setQueryData(ck,i)
+          res.push(
+            <PostMosaic postId={i.id} display="h" cacheKey={ck} showComments className="mb-2" />
+          )
+        }
+        else if(isCommentMosaicItem(i)){
+          const ck = ['COMMENT',i.id.toString()];
+          queryClient.setQueryData(ck,i)
+          res.push(
+            <CommentMosaic detailed commentId={i.id} 
+            commentParent={i.post as PostMosaicItem || i.work as WorkMosaicItem || i.cycle as CycleMosaicItem}
+            cacheKey={ck} className="mb-2" />
+          )
+        }
         
-      // }
+      }
       return <section data-cy="comments-and-posts">
-        
-         <Mosaic
+        {res}
+         {/* <Mosaic
               display="h"
               stack={items}
               showComments={true}
-              cacheKey={['CYCLE', `${cycle.id}`]}
-            /> 
+              cacheKey={['ITEMS', `CYCLE-${cycle.id}-PAGE-${page}`]}
+            />  */}
       </section>
     }
     return <></>
@@ -449,6 +442,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const renderCycleWorksOrCycleFilters = () => {
     if(cycle && cycle.works){
       const res = cycle.works.map((w) => {
+        queryClient.setQueryData(['WORK',`${w.id}`],w)
         return <Col key={v4()} xs={12}>
         <Form.Check label={w.title} 
           checked={comboboxChecked[`work-${w.id}`]}
@@ -509,7 +503,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 {/* {renderCycleWorksComments()} */}
                 {/* {renderCycleOwnComments()} */}
               </Col>
-              <Col xs={{span:12, order:'first'}} md={{span:3,order:'last'}}>
+              {/* <Col xs={{span:12, order:'first'}} md={{span:3,order:'last'}}>
                 <Form as={Row} className="bg-white mt-0 mb-3">
                   <Form.Group as={Col} xs={12}>
                         <Row>
@@ -554,7 +548,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                     <Button title={t('Clean filters')} className="mt-3" variant="warning" size="sm" onClick={resetFilters}><ImCancelCircle/></Button>
                   </Form.Group>
                 </Form>
-              </Col>
+              </Col> */}
               
             </Row>
             
@@ -833,6 +827,23 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     return null;
   };
 
+  const renderWorks = ()=>{
+    if(cycle && cycle.works && cycle.works.length){
+      
+      // <WorksMosaic cycle={cycle} className="d-flex mb-5 justify-content-center" />
+      return <section className="d-flex">
+          <MosaicContext.Provider value={{ showShare: true }}>        
+            {cycle?.works.map(w=>{
+              queryClient.setQueryData(['WORK',`${w.id}`],w)
+              return <WorkMosaic key={v4()} workId={w.id} className="me-3" />
+            })}
+          </MosaicContext.Provider>
+
+      </section> 
+    }
+    return <></>
+  }
+
   return (
     <>
     {(!editPostOnSmallerScreen.value) ? 
@@ -932,11 +943,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                             {t('worksCountHeader', { count: cycle.works.length })}
                           </h5>
                         )}
-                        {cycle.works && cycle.works.length > 0 && (
-                          <MosaicContext.Provider value={{ showShare: true }}>
-                            <WorksMosaic cycle={cycle} className="d-flex mb-5 justify-content-center" />
-                          </MosaicContext.Provider>
-                        )}
+                        {renderWorks()}
                         {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (
                           <Row className="mt-5 mb-5">
                             <Col>

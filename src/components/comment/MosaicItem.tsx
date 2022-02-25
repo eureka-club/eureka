@@ -26,9 +26,9 @@ import CommentsList from '../common/CommentsList';
 import { CycleMosaicItem } from '@/src/types/cycle';
 import { WorkMosaicItem } from '@/src/types/work';
 import { PostMosaicItem } from '@/src/types/post';
-
+import useComment from '@/src/useComment'
 interface Props {
-  comment: CommentMosaicItem;
+  commentId: number;
   commentParent: CycleMosaicItem | WorkMosaicItem | PostMosaicItem | CommentMosaicItem;
   detailed?: boolean;
   showButtonLabels?: boolean;
@@ -42,7 +42,7 @@ interface Props {
 }
 
 const MosaicItem: FunctionComponent<Props> = ({
-  comment,
+  commentId,
   commentParent,
   detailed = false,
   cacheKey,
@@ -67,9 +67,16 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   //   return null;
   // })();
-
-  const { contentText } = comment;
   const { t } = useTranslation('common');
+
+  const {data:comment} = useComment(commentId,{
+    enabled:!!commentId
+  })
+
+  if(!comment)
+    return <></>
+
+ 
   const getTitle = (): string => {
     if(commentParent){
       if (isCycle(commentParent)) return (commentParent as Cycle).title;
@@ -163,7 +170,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             <Avatar user={comment.creator} showName={false} />
           </Col>
           <Col xs={10} md={11} className="ps-1">
-            <div className={styles.dangerouslySetInnerHTML} dangerouslySetInnerHTML={{ __html: contentText }} />
+            <div className={styles.dangerouslySetInnerHTML} dangerouslySetInnerHTML={{ __html: comment.contentText }} />
             <Button variant="default" className={styles.replyButton}>
               <MdReply />
             </Button>

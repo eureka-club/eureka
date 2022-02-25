@@ -22,7 +22,7 @@ interface Options {
 }
 
 const useWork = (id: number, options?: Options): UseQueryResult<WorkMosaicItem,Error> => {
-  const ck = ['WORK', id];
+  const ck = ['WORK', `${id}`];
   const { staleTime, enabled } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,

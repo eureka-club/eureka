@@ -396,7 +396,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
         // setOptimistFavCount(optimistFavCount + favInc());
         return {};
       },
-      onSuccess: () => {
+      onSuccess: () => {debugger;
         //const ck = globalSearchEngineState ? globalSearchEngineState.cacheKey : cacheKey;
         queryClient.invalidateQueries(['USER', `${idSession}`]);
         //if (!ck) router.replace(router.asPath);

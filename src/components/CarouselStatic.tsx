@@ -79,7 +79,7 @@ const renderMosaicItem = (
       <MosaicItemWork
         showSocialInteraction={showSocialInteraction}
         showButtonLabels={false}
-        work={item}
+        workId={item.id}
         style={customMosaicStyle}
         tiny={tiny}
       />

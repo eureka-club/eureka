@@ -122,7 +122,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
           {post == null ? (
             <Row className="mb-5 d-flex flex-column flex-md-row">
               <Col className='col-md-5 col-lg-4 col-xl-3   d-none d-md-block'>
-                <MosaicItem work={work} showTrash linkToWork={false} />
+                <MosaicItem workId={work.id} showTrash linkToWork={false} />
 
                 {/* <div className={classNames(styles.imgWrapper, 'mb-3')}>
                 <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
@@ -142,7 +142,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
                   )}
                 
                 <div className='container d-sm-block d-md-none mt-4 mb-4 position-relative'>
-                   <MosaicItem className='postition-absolute start-50 translate-middle-x'  work={work} showTrash linkToWork={false} />
+                   <MosaicItem className='postition-absolute start-50 translate-middle-x'  workId={work.id} showTrash linkToWork={false} />
                 </div>
                 {work.contentText != null && <UnclampText isHTML={false} text={work.contentText} clampHeight="8rem" />}
                 </section>

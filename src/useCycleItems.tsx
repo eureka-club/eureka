@@ -33,7 +33,7 @@ const useCycleItem = (cycleId:number,page: number,where?:WhereT, options?: Optio
   };
   const w = JSON.stringify(where)
   return useQuery<{items:CycleItem[],hasNextPage:boolean,total:number}|undefined>(
-    ['ITEMS', `CYCLE-${cycleId}-PAGE-${page}-${w}`],
+    ['ITEMS', `CYCLE-${cycleId}-PAGE-${page}`],
     ()=> getRecords(cycleId,page,where),{ keepPreviousData : true,staleTime,enabled }
   );
 };

@@ -216,7 +216,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
         if (cacheKey) {
 
           await queryClient.cancelQueries(cacheKey)
-          const snapshot = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem|PostMosaicItem>(cacheKey);
+          const snapshot = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem|PostMosaicItem|CommentMosaicItem>(cacheKey);
           const sc = {...snapshot};
           if(sc){
             queryClient.setQueryData(cacheKey,{...sc,...payload});

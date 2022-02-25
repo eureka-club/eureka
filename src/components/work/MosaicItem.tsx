@@ -20,12 +20,13 @@ import SocialInteraction from '../common/SocialInteraction';
 import { useCycleContext } from '../../useCycleContext';
 // import { useWorkContext } from '../../useWorkContext';
 import { DATE_FORMAT_SHORT } from '../../constants';
+import useWork from '@/src/useWork'
 
 dayjs.extend(isBetween);
 dayjs.extend(utc);
 interface Props {
   // workWithImages: WorkWithImages;
-  work: WorkMosaicItem;
+  workId: number;
   showButtonLabels?: boolean;
   showShare?: boolean;
   showSocialInteraction?: boolean;
@@ -38,7 +39,7 @@ interface Props {
   // isOnDiscussion?: boolean;
 }
 const MosaicItem: FunctionComponent<Props> = ({
-  work,
+  workId,
   showButtonLabels = false,
   // showShare = false,
   showSocialInteraction = true,
@@ -59,6 +60,16 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [loading, setLoading] = useState<boolean>(false);
   // const { linkToWork = true, work: workFromContext } = useWorkContext();
   // const [WORK] = useState<WorkMosaicItem>(work!);
+  const {data:work} = useWork(workId,{
+    enabled:!!workId
+  })
+
+  const router = useRouter();
+  
+  
+  if(!work)return <></>
+  
+  const { id, /* author, */ title, localImages, type } = work;
 
   const isActive = () => {
     if (cycle) {
@@ -127,9 +138,6 @@ const MosaicItem: FunctionComponent<Props> = ({
     return <></>;
   };
 
-  const { id, /* author, */ title, localImages, type } = work;
-  // const [session] = useSession() as [Session | null | undefined, boolean];
-  const router = useRouter();
 
   // const [work, setWork] = useState<WorkDetail>();
   // const s
