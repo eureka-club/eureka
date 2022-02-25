@@ -44,7 +44,7 @@ const IndexPage: NextPage = () => {
     <>
      <HelmetMetaData title='Eureka'
         url={`${WEBAPP_URL}`}
-        image={`${WEBAPP_URL}/logo.svg`}
+        image={`${WEBAPP_URL}logo.svg`}
         ></HelmetMetaData>
     <SimpleLayout showHeader title={t('browserTitleWelcome')}>
       <h1 className="text-secondary fw-bold">{t('Trending topics')}</h1>

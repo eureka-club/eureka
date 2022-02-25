@@ -159,7 +159,7 @@ const CycleDetailPage: NextPage = () => {
     return (
       <CycleContext.Provider value={{ cycle, currentUserIsParticipant, linkToCycle: false }}>
         <HelmetMetaData title={cycle.title}
-        url={`${WEBAPP_URL}/cycle/${cycle.id}`}
+        url={`${WEBAPP_URL}cycle/${cycle.id}`}
         image={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${cycle.localImages[0].storedFile}`}
         ></HelmetMetaData>
 
