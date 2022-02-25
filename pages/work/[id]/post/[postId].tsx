@@ -13,14 +13,10 @@ import WorkDetailComponent from '../../../../src/components/work/WorkDetail';
 import { search as searchPost, isFavoritedByUser } from '../../../../src/facades/post';
 import { countCycles, countPosts, find as findWork } from '../../../../src/facades/work';
 import useWork from '../../../../src/useWork';
-<<<<<<< HEAD
 import usePost from '../../../../src/usePost';
 import HelmetMetaData from '../../../../src/components/HelmetMetaData'
 import { WEBAPP_URL } from '../../../../src/constants';
-=======
-import usePost from '@/src/usePost';
 
->>>>>>> develop
 interface Props {
   post: PostMosaicItem;
   work: WorkMosaicItem;
@@ -33,6 +29,9 @@ const PostDetailInWorkPage: NextPage<Props> = () => {
   const router = useRouter();
   const [id, setId] = useState<string>('');
   const [postId, setPostId] = useState<string>('');
+  const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
+  const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
+
   // const [work, setWork] = useState<WorkMosaicItem>();
   // const [post, setPost] = useState<PostMosaicItem>();
 
@@ -57,7 +56,7 @@ const PostDetailInWorkPage: NextPage<Props> = () => {
     return <>
       <HelmetMetaData title={`${post ? post.title : ''} · ${work ? work.title : ''}`}
         url={`${WEBAPP_URL}/cycle/${post?.works[0].id}/post/${post?.id}`}
-        image={post?.localImages[0].storedFile}
+        image={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${post?.localImages[0].storedFile}`}
         ></HelmetMetaData>
      <SimpleLayout title={title}>{children}</SimpleLayout>;
      </>

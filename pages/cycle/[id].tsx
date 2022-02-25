@@ -34,6 +34,8 @@ const CycleDetailPage: NextPage = () => {
   const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [isRequestingJoinCycle, setIsRequestingJoinCycle] = useState<boolean>(false);
+  const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
+  const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
   useEffect(() => {
     if (router && router.query) setId(() => router.query.id as string);
@@ -158,7 +160,7 @@ const CycleDetailPage: NextPage = () => {
       <CycleContext.Provider value={{ cycle, currentUserIsParticipant, linkToCycle: false }}>
         <HelmetMetaData title={cycle.title}
         url={`${WEBAPP_URL}/cycle/${cycle.id}`}
-        image={cycle.localImages[0].storedFile}
+        image={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${cycle.localImages[0].storedFile}`}
         ></HelmetMetaData>
 
         <SimpleLayout banner={getBanner()} title={cycle ? cycle.title : ''}>
