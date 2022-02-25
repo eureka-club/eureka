@@ -121,32 +121,32 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
     },
     {
       onMutate: async (variables) => {
-        if (post && ck) {
+        // if (post && ck) {
           
-            const snapshot = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(ck)
-            if(snapshot){
-              const parent = {...snapshot};
-              const idx = parent.posts?.findIndex(p=>p.id == +postId)
-              if(idx >- 1){
-                const oldPost = parent.posts[idx];
-                const {title,contentText} = variables;
-                const newPost = {
-                  ...oldPost,
-                  contentText: contentText??oldPost.contentText,
-                  title: title??oldPost.title,
-                }
-                parent.posts.splice(idx,1,newPost);
-                queryClient.setQueryData(ck, { ...parent });
-                queryClient.setQueryData(['POST',postId.toString()],newPost);
-              }
-              return { snapshot, ck };
-            }
-            // const ck = [`POST`, `${globalModalsState.editPostId || post.id}`];
-          }
-          handleEditPostOnSmallerScreenClose();
-          setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: false, editPostId:undefined } });
+        //     const snapshot = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(ck)
+        //     if(snapshot){
+        //       const parent = {...snapshot};
+        //       const idx = parent.posts?.findIndex(p=>p.id == +postId)
+        //       if(idx >- 1){
+        //         const oldPost = parent.posts[idx];
+        //         const {title,contentText} = variables;
+        //         const newPost = {
+        //           ...oldPost,
+        //           contentText: contentText??oldPost.contentText,
+        //           title: title??oldPost.title,
+        //         }
+        //         parent.posts.splice(idx,1,newPost);
+        //         queryClient.setQueryData(ck, { ...parent });
+        //         queryClient.setQueryData(['POST',postId.toString()],newPost);
+        //       }
+        //       return { snapshot, ck };
+        //     }
+        //     // const ck = [`POST`, `${globalModalsState.editPostId || post.id}`];
+        //   }
+        //   handleEditPostOnSmallerScreenClose();
+        //   setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: false, editPostId:undefined } });
         
-        return { snapshot: null, ck: '' };
+        // return { snapshot: null, ck: '' };
       },
       onSettled: (_post, error, _variables, context) => {
         if (error){
