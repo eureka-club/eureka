@@ -40,6 +40,8 @@ const WorkDetailPage: NextPage = () => {
   const [mySocialInfo, setMySocialInfo] = useState<Record<string, boolean>>({
     favoritedByMe: false,
   });
+  const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
+  const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
   useEffect(() => {
     if (router) {
@@ -59,7 +61,7 @@ const WorkDetailPage: NextPage = () => {
     return <>
      <HelmetMetaData title={work?.title}
         url={`${WEBAPP_URL}/work/${work?.id}`}
-        image={work?.localImages[0].storedFile}
+        image={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${work?.localImages[0].storedFile}`}
         ></HelmetMetaData>
      <SimpleLayout title={title}>{children}</SimpleLayout>;
      </>

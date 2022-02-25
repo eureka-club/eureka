@@ -121,7 +121,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
     },
     {
       onMutate: async (variables) => {
-        if (post && ck) {
+         if (post && ck) {
           
             const snapshot = queryClient.getQueryData<PostMosaicItem[]|WorkMosaicItem>(ck)
             if(snapshot){
@@ -151,7 +151,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
           handleEditPostOnSmallerScreenClose();
           setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: false, editPostId:undefined } });
         
-        return { snapshot: null, ck: '' };
+        // return { snapshot: null, ck: '' };
       },
       onSettled: (_post, error, _variables, context) => {
         if (error){

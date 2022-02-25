@@ -697,7 +697,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   // useEffect(() => {
   //   if(cycle && cycle.posts && cycle.comments){
-  //     let posts = [...items];
+  //     let posts = [...filteredPosts];
   //     let comments = cycle?.comments;
 
   //     if(filterCycleItSelf){
@@ -718,14 +718,14 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   //       if(!filtersContentType.includes('comment'))
   //         comments = [];  
   //     }
-  //     setItems(posts as PostMosaicItem[]);
+  //     setFilteredPosts(posts as PostMosaicItem[]);
   //     setFilteredComments(comments || []);
   //   }
   //   else {
-  //     setItems([]);
+  //     setFilteredPosts([]);
   //     setFilteredComments([]);
   //   }
-  //   items.forEach(p=>{queryClient.setQueryData(['POST',`${p.id}`],p)})
+  //   filteredPosts.forEach(p=>{queryClient.setQueryData(['POST',`${p.id}`],p)})
   // },[filtersWork,filtersParticipant,filtersContentType,filterCycleItSelf,cycle]);
 
 

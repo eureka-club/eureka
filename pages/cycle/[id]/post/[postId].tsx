@@ -38,6 +38,8 @@ const PostDetailInCyclePage: NextPage = () => {
 
   const [postId, setPostId] = useState<string>('');
   const { data: post, isLoading: isLoadingPost, isFetching: isFetchingPost } = usePost(+postId);
+  const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
+  const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
   useEffect(() => {
     if (!session) {
@@ -75,10 +77,8 @@ const PostDetailInCyclePage: NextPage = () => {
   return (
     <>
     <HelmetMetaData title={`${post ? post.title : ''} · ${cycle ? cycle.title : ''}`}
-           
         url={`${WEBAPP_URL}/cycle/${post?.cycles[0].id}/post/${post?.id}`}
-        image={post?.localImages[0].storedFile}
-     
+        image={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${post?.localImages[0].storedFile}`}
         ></HelmetMetaData>
     
     <SimpleLayout title={`${post ? post.title : ''} · ${cycle ? cycle.title : ''}`}>
