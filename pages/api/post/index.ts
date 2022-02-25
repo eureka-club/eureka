@@ -89,7 +89,7 @@ export default getApiHandler()
       const where = w ? JSON.parse(w.toString()) : undefined;
       const take = t ? parseInt(t?.toString()) : undefined;
       const page = +c;
-      
+      debugger;
       if (typeof q === 'string') {
         data = await findAll({take,where:{
           OR: [{ title: { contains: q } }, { contentText: { contains: q } }, { creator: { name:{contains: q} } }],

@@ -1,5 +1,5 @@
 import { Cycle, Comment, User, Work, Post } from '@prisma/client';
-
+import {Prisma} from '@prisma/client'
 import {CreateCommentServerPayload, CommentMosaicItem } from '../types/comment';
 import prisma from '../lib/prisma';
 import { Exception } from 'handlebars';
@@ -95,9 +95,13 @@ export const find = async (id: number): Promise<CommentMosaicItem | null> => {
   });
 };
 
-export const findAll = async (): Promise<CommentMosaicItem[]> => {
+export const findAll = async (props?:Prisma.CommentFindManyArgs,page?:number): Promise<CommentMosaicItem[]> => {
+  const {include,where,take,skip,cursor} = props || {};
   return prisma.comment.findMany({
-    orderBy: { createdAt: 'desc' },
+    take:take?take:undefined,
+    skip: cursor ? 1 : page ? (take ? page * take : undefined) : undefined,
+    cursor,
+    orderBy: { id: 'desc' },
     include: {
       creator: {
         include: { photos:true },

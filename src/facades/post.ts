@@ -39,11 +39,11 @@ export const find = async (id: number): Promise<PostWithCyclesWorks | null> => {
 };
 
 
-export const findAll = async (props?:Prisma.PostFindManyArgs,page:number=1): Promise<Post[]|PostMosaicItem[]> => {
-  const {include,where,take=3,cursor} = props || {};
+export const findAll = async (props?:Prisma.PostFindManyArgs,page?:number): Promise<Post[]|PostMosaicItem[]> => {
+  const {include,where,take,skip,cursor} = props || {};
   return prisma.post.findMany({
-    take,
-    skip: page * take,
+    take:take?take:undefined,
+    skip: cursor ? 1 : page ? (take ? page * take : undefined) : undefined,
     cursor,
     orderBy: { id: 'desc' },
     ... include ? {include} : {

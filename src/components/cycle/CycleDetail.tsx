@@ -698,38 +698,38 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     setFilterCycleItSelf(checked);
   };
 
-  useEffect(() => {
-    if(cycle && cycle.posts && cycle.comments){
-      let posts = [...filteredPosts];
-      let comments = cycle?.comments;
+  // useEffect(() => {
+  //   if(cycle && cycle.posts && cycle.comments){
+  //     let posts = [...filteredPosts];
+  //     let comments = cycle?.comments;
 
-      if(filterCycleItSelf){
-        posts = posts?.filter((p) => !p.works.length);
-        comments = comments?.filter((c) => !c.workId && !c.commentId);  
-      }
-      if(filtersWork && filtersWork.length){
-        posts = posts?.filter((p) => p.works.findIndex((w) => filtersWork.includes(w.id)) !== -1);
-        comments = comments?.filter((c) => c.workId && filtersWork.includes(c.workId));
-      }
-      if(filtersParticipant && filtersParticipant.length){
-        posts = posts?.filter((p) => filtersParticipant.findIndex(i => i  === p.creatorId) !== -1);            
-        comments = comments?.filter((c) => filtersParticipant.findIndex(i => i  === c.creatorId) !== -1);
-      }
-      if(filtersContentType && filtersContentType.length){
-        if(!filtersContentType.includes('post'))
-          posts = [];
-        if(!filtersContentType.includes('comment'))
-          comments = [];  
-      }
-      setFilteredPosts(posts as PostMosaicItem[]);
-      setFilteredComments(comments || []);
-    }
-    else {
-      setFilteredPosts([]);
-      setFilteredComments([]);
-    }
-    filteredPosts.forEach(p=>{queryClient.setQueryData(['POST',`${p.id}`],p)})
-  },[filtersWork,filtersParticipant,filtersContentType,filterCycleItSelf,cycle]);
+  //     if(filterCycleItSelf){
+  //       posts = posts?.filter((p) => !p.works.length);
+  //       comments = comments?.filter((c) => !c.workId && !c.commentId);  
+  //     }
+  //     if(filtersWork && filtersWork.length){
+  //       posts = posts?.filter((p) => p.works.findIndex((w) => filtersWork.includes(w.id)) !== -1);
+  //       comments = comments?.filter((c) => c.workId && filtersWork.includes(c.workId));
+  //     }
+  //     if(filtersParticipant && filtersParticipant.length){
+  //       posts = posts?.filter((p) => filtersParticipant.findIndex(i => i  === p.creatorId) !== -1);            
+  //       comments = comments?.filter((c) => filtersParticipant.findIndex(i => i  === c.creatorId) !== -1);
+  //     }
+  //     if(filtersContentType && filtersContentType.length){
+  //       if(!filtersContentType.includes('post'))
+  //         posts = [];
+  //       if(!filtersContentType.includes('comment'))
+  //         comments = [];  
+  //     }
+  //     setFilteredPosts(posts as PostMosaicItem[]);
+  //     setFilteredComments(comments || []);
+  //   }
+  //   else {
+  //     setFilteredPosts([]);
+  //     setFilteredComments([]);
+  //   }
+  //   filteredPosts.forEach(p=>{queryClient.setQueryData(['POST',`${p.id}`],p)})
+  // },[filtersWork,filtersParticipant,filtersContentType,filterCycleItSelf,cycle]);
 
 
   const handlerComboxesChange = (e: ChangeEvent<HTMLInputElement>, q: string, workId?: number) => {

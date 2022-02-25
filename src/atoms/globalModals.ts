@@ -6,7 +6,7 @@ interface GlobalModalType {
   editWorkModalOpened?: boolean;
   editPostModalOpened?: boolean;
   editPostId?:number;
-  cacheKey?:[string,string];
+  cacheKey?:string[];
   editCycleModalOpened?: boolean;
   editUserModalOpened?: boolean;
   signInModalOpened?: boolean;

@@ -48,7 +48,7 @@ interface Props {
   showCounts?: boolean;
   // showShare?: boolean;
   showButtonLabels?: boolean;
-  cacheKey: [string,string];
+  cacheKey: string[];
   showTrash?: boolean;
   showRating?: boolean;
   className?: string;

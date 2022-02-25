@@ -35,7 +35,7 @@ type CommentWithComments = Comment & {comments?: Comment[];}
 type EntityWithComments = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | CommentMosaicItem
 type ContextWithComments = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | CommentMosaicItem
 interface Props {
-  cacheKey: [string,string];
+  cacheKey: string[];
   className?: string;
   entity: EntityWithComments;
   // context?: ContextWithComments; //if not provide -parent will be used, should be the mosaic used to render the page :|

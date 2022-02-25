@@ -64,7 +64,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
   const { t } = useTranslation('createPostForm');
 
   const [postId, setPostId] = useState<string>('');
-  const [ck,setCK] = useState<[string,string]>();
+  const [ck,setCK] = useState<string[]>();
   const { data: post, isLoading, isFetching } = usePost(globalModalsState.editPostId || +postId);
   const editorRef = useRef<any>(null);
   const [remove,setRemove] = useState(false);
@@ -123,19 +123,24 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
       onMutate: async (variables) => {
         if (post && ck) {
           
-            const snapshot = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(ck)
+            const snapshot = queryClient.getQueryData<PostMosaicItem[]|WorkMosaicItem>(ck)
             if(snapshot){
-              const parent = {...snapshot};
-              const idx = parent.posts?.findIndex(p=>p.id == +postId)
+              let posts = [];
+              if(!('length' in snapshot)){
+                const parent = {...(snapshot as WorkMosaicItem)};
+                posts = parent.posts;
+              }
+              else posts = snapshot as PostMosaicItem[];  
+              const idx = posts.findIndex(p=>p.id == +postId)
               if(idx >- 1){
-                const oldPost = parent.posts[idx];
+                const oldPost = posts[idx];
                 const {title,contentText} = variables;
                 const newPost = {
                   ...oldPost,
                   contentText: contentText??oldPost.contentText,
                   title: title??oldPost.title,
                 }
-                parent.posts.splice(idx,1,newPost);
+                posts.splice(idx,1,newPost);
                 queryClient.setQueryData(ck, { ...parent });
                 queryClient.setQueryData(['POST',postId.toString()],newPost);
               }
