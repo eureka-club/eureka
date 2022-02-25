@@ -1,23 +1,22 @@
 import { useQuery } from 'react-query';
 import { PostMosaicItem } from './types/post';
 import { CommentMosaicItem } from './types/comment';
+import { Prisma } from '@prisma/client';
 
 export type CycleItem = PostMosaicItem | CommentMosaicItem;
+export type WhereT = {filtersWork:number[]}
 
-export const COUNT = +(process.env.NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT || 10);
-
-export const getRecords = async (cycleId:number,page: number): Promise<{items:CycleItem[],hasNextPage:boolean}|undefined> => {
+export const getRecords = async (cycleId:number,page: number,where?:WhereT): Promise<{items:CycleItem[],hasNextPage:boolean,total:number}|undefined> => {
   if (!cycleId) return undefined;
-  const where = encodeURIComponent(JSON.stringify({
-    cycles:{some:{id:cycleId}}
-  }))
-  const url = `/api/cycle/${cycleId}/items?take=${COUNT}&where=${where}`;
+  let w=''
+  if(where)w=encodeURIComponent(JSON.stringify(where))
+  const url = `/api/cycle/${cycleId}/items?page=${page}&where=${w}`;
 
   const res = await fetch(url);
   if (!res.ok) return undefined;
-  const {items,hasNextPage} = await res.json();
+  const {items,hasNextPage,total} = await res.json();
   
-  return {items,hasNextPage};
+  return {items,hasNextPage,total};
 };
 
 interface Options {
@@ -27,14 +26,15 @@ interface Options {
 
 
 
-const useCycleItem = (cycleId:number,page: number, options?: Options) => {
+const useCycleItem = (cycleId:number,page: number,where?:WhereT, options?: Options) => {
   const { staleTime, enabled } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  return useQuery<{items:CycleItem[],hasNextPage:boolean}|undefined>(
-    ['ITEMS', `CYCLE-${cycleId}-PAGE-${page}`],
-    ()=> getRecords(cycleId,page),{ keepPreviousData : true }
+  const w = JSON.stringify(where)
+  return useQuery<{items:CycleItem[],hasNextPage:boolean,total:number}|undefined>(
+    ['ITEMS', `CYCLE-${cycleId}-PAGE-${page}-${w}`],
+    ()=> getRecords(cycleId,page,where),{ keepPreviousData : true,staleTime,enabled }
   );
 };
 

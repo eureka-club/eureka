@@ -59,7 +59,7 @@ import { useCycleContext, CycleContext } from '../../useCycleContext';
 import CycleDetailHeader from './CycleDetailHeader';
 import CycleDetailDiscussion from './CycleDetailDiscussion';
 import useCycle from '@/src/useCycle';
-import usePostsPaginated from '@/src/usePostsPaginated'
+import useCycleItem from '@/src/useCycleItems';
 
 interface Props {
   // cycle: CycleMosaicItem;
@@ -83,8 +83,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   // const [cycle, setCycle] = useState<CycleMosaicItem | null>();
   const router = useRouter();
   
-  const [filteredPosts,setFilteredPosts] = useState<PostMosaicItem[]>([]);
-  const [filteredComments,setFilteredComments] = useState<Comment[]>([]);
   const queryClient = useQueryClient()
 
   const [cycleId,setCycleId] = useState<string>('')
@@ -96,35 +94,32 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     enabled:!!cycleId
   });
 
-  const [page,setPage] = useState<number>(0);
-
-  useEffect(() => {
-    if (cycle/* cycleContext && cycleContext.cycle */){
-      // setCycle(cycle);
-     // setFilteredPosts(()=>cycle?.posts);
-      setFilteredComments(()=>cycle.comments);
-
-    } 
-  }, [cycle/* cycleContext */]);
-
-  const {data} = usePostsPaginated(+cycleId,page,{
+  const [page,setPage] = useState<number>(1);
+  const [where,setWhere] = useState<{filtersWork:number[]}>()
+  
+  const {data} = useCycleItem(+cycleId,page,where,{
     enabled:!!cycleId
   })
 
+  const [items,setItems] = useState<(CommentMosaicItem|PostMosaicItem)[]>();
+  const [hasNextPage,setHasNextPage] = useState<boolean>();
+
   useEffect(()=>{
     if(data){
-      setFilteredPosts((res)=>data.posts)
+      setItems(data.items);
+      setHasNextPage(data.hasNextPage);
     }
   },[data])
 
+
   // useEffect(()=>{
   //   if(cycle && posts){
-  //     setFilteredPosts((res)=>[...res,...posts])
+  //     setItems((res)=>[...res,...posts])
       
   //     queryClient.setQueryData(['POSTS', `CYCLE-${cycle.id}`],{...cycle,...{
-  //       posts:filteredPosts
+  //       posts:items
   //     }})
-  //     setLastPostId(()=>filteredPosts.slice(-1)[0].id)
+  //     setLastPostId(()=>items.slice(-1)[0].id)
   //   }
   // },[cycle,data,queryClient])
   
@@ -250,49 +245,49 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     return false;
   };
 
-  const getComments = () => {
-    const getParent = (c: Comment): WorkMosaicItem | CycleMosaicItem |  CommentMosaicItem  => {
-      const cmi = (c as CommentMosaicItem);
-      if(!cmi.commentId && !cmi.postId){        
-        if(cmi.workId) return (cmi.work as WorkMosaicItem);
-        if(cmi.cycleId) return (cycle as CycleMosaicItem);
-      }
-      return cmi;
-    };
-    if (cycle && filteredComments.length){
+  // const getComments = () => {
+  //   const getParent = (c: Comment): WorkMosaicItem | CycleMosaicItem |  CommentMosaicItem  => {
+  //     const cmi = (c as CommentMosaicItem);
+  //     if(!cmi.commentId && !cmi.postId){        
+  //       if(cmi.workId) return (cmi.work as WorkMosaicItem);
+  //       if(cmi.cycleId) return (cycle as CycleMosaicItem);
+  //     }
+  //     return cmi;
+  //   };
+  //   if (cycle && items.length){
       
-      const fcf = filteredComments.filter((c) => !c.postId && !c.commentId);
-      const fcfs = fcf.sort((p, c) => (p.id > c.id && -1) || 1)
-      return fcfs
-        // .map(c => <ComentMosaic
-        //       key={v4()}
-        //       comment={c as unknown as CommentMosaicItem}
-        //       detailed
-        //       showComments
-        //       commentParent={getParent(c)}
-        //       cacheKey={['CYCLE', `${cycle.id}`]}
-        //       className="mb-4"
-        //     />
+  //     const fcf = items.filter((c) => !c.postId && !c.commentId);
+  //     const fcfs = fcf.sort((p, c) => (p.id > c.id && -1) || 1)
+  //     return fcfs
+  //       // .map(c => <ComentMosaic
+  //       //       key={v4()}
+  //       //       comment={c as unknown as CommentMosaicItem}
+  //       //       detailed
+  //       //       showComments
+  //       //       commentParent={getParent(c)}
+  //       //       cacheKey={['CYCLE', `${cycle.id}`]}
+  //       //       className="mb-4"
+  //       //     />
         
-        // );
-    }
-    return [];
-  };
+  //       // );
+  //   }
+  //   return [];
+  // };
 
-  const getPosts = () => {
-    if(cycle && filteredPosts.length)
-      return filteredPosts.sort((a,b)=>a.createdAt >= b.createdAt ? -1 : 1);
-    return [];
-  };
+  // const getPosts = () => {
+  //   if(cycle && items.length)
+  //     return items.sort((a,b)=>a.createdAt >= b.createdAt ? -1 : 1);
+  //   return [];
+  // };
 
   const renderItems = () => {
     const res = []
-    if(cycle){
-      const items = [
-        ... getComments() as CommentMosaicItem[],
-        ... getPosts()
-      ]
-      .sort((a,b)=>a.createdAt >= b.createdAt ? -1 : 1);
+    if(cycle && items){
+      // const items = [
+      //   ... getComments() as CommentMosaicItem[],
+      //   ... getPosts()
+      // ]
+      // .sort((a,b)=>a.createdAt >= b.createdAt ? -1 : 1);
       // for(let i of items){
       //   if(isPostMosaicItem(i)){
       //     const ck = ['POST',i.id.toString()];
@@ -490,7 +485,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 <MosaicContext.Provider value={{ showShare: true }}>
                   {renderItems()}
                 </MosaicContext.Provider>
-                {page >0 && <Button 
+                {page >1 && <Button 
                 className="my-3 pe-3 rounded-pill text-white" 
                 onClick={() => setPage(()=>page-1)} 
                 >
@@ -498,7 +493,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                     <RiArrowDownSLine /> {t('common:previous')}
                   </span>
                 </Button>}
-                {data?.hasNextPage && <Button 
+                {hasNextPage && <Button 
                 className="my-3 pe-3 rounded-pill text-white" 
                 onClick={() => setPage(()=>page+1)} 
                 >
@@ -507,7 +502,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                   </span>
                 </Button>}
                 {/* {(cycle.posts && cycle.posts.length && (
-                    <PostsMosaic display="h" posts={filteredPosts} showComments cacheKey={['CYCLE', `${cycle.id}`]} />
+                    <PostsMosaic display="h" posts={items} showComments cacheKey={['CYCLE', `${cycle.id}`]} />
                 )) ||
                 null}
                 {renderComments()} */}
@@ -692,6 +687,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       }        
     }        
     setFiltersWork([...filtersWork]);
+    setWhere((w)=>({...w,filtersWork}))
+    console.log(filtersWork,'filtersWork')
   };
 
   const onChangeCycleFilters = (checked: boolean) => {
@@ -700,7 +697,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   // useEffect(() => {
   //   if(cycle && cycle.posts && cycle.comments){
-  //     let posts = [...filteredPosts];
+  //     let posts = [...items];
   //     let comments = cycle?.comments;
 
   //     if(filterCycleItSelf){
@@ -721,14 +718,14 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   //       if(!filtersContentType.includes('comment'))
   //         comments = [];  
   //     }
-  //     setFilteredPosts(posts as PostMosaicItem[]);
+  //     setItems(posts as PostMosaicItem[]);
   //     setFilteredComments(comments || []);
   //   }
   //   else {
-  //     setFilteredPosts([]);
+  //     setItems([]);
   //     setFilteredComments([]);
   //   }
-  //   filteredPosts.forEach(p=>{queryClient.setQueryData(['POST',`${p.id}`],p)})
+  //   items.forEach(p=>{queryClient.setQueryData(['POST',`${p.id}`],p)})
   // },[filtersWork,filtersParticipant,filtersContentType,filterCycleItSelf,cycle]);
 
 
@@ -746,9 +743,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           if(filtersWork.length){
             posts = posts?.filter((p) => p.works.findIndex((w) => filtersWork.includes(w.id)) !== -1);            
           }
-          setFilteredPosts(posts as PostMosaicItem[]);
+          setItems(posts as PostMosaicItem[]);
         }
-        else setFilteredPosts([]);   */
+        else setItems([]);   */
         break;
       case 'comment':
         onChangeContentTypeFilters('comment', e.target.checked)
@@ -792,7 +789,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           posts = posts?.filter((p) => filtersParticipant.findIndex(i => i  === p.creatorId) !== -1);            
           comments = comments?.filter((c) => filtersParticipant.findIndex(i => i  === c.creatorId) !== -1);
         }
-        setFilteredPosts(posts as PostMosaicItem[]);
+        setItems(posts as PostMosaicItem[]);
         setFilteredComments(comments || []); */
         break;      
         case 'cycle':

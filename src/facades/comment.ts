@@ -98,9 +98,9 @@ export const find = async (id: number): Promise<CommentMosaicItem | null> => {
 export const findAll = async (props?:Prisma.CommentFindManyArgs,page?:number): Promise<CommentMosaicItem[]> => {
   const {include,where,take,skip,cursor} = props || {};
   return prisma.comment.findMany({
-    take:take?take:undefined,
-    skip: cursor ? 1 : page ? (take ? page * take : undefined) : undefined,
-    cursor,
+    take,
+    skip,
+    where,
     orderBy: { id: 'desc' },
     include: {
       creator: {

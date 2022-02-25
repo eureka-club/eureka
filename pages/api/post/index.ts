@@ -83,12 +83,13 @@ export default getApiHandler()
 
     try {
       
-      const { q = null, where:w = undefined, id = null, take:t=undefined, page:c=1 } = req.query;
+      const { q = null, where:w = undefined, id = null, take:t=undefined, page:c } = req.query;
       
       let data = null;
       const where = w ? JSON.parse(w.toString()) : undefined;
       const take = t ? parseInt(t?.toString()) : undefined;
-      const page = +c;
+      const page = c ? +c : undefined;
+
       debugger;
       if (typeof q === 'string') {
         data = await findAll({take,where:{
@@ -116,7 +117,7 @@ export default getApiHandler()
       res.status(200).json({ 
         status: 'OK', 
         data, 
-        ... take && {hasNextPage: posts_.length > take * (page+1)}
+        ... (take&&page) && {hasNextPage: posts_.length > take * (page+1)}
       });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
