@@ -49,7 +49,7 @@ export default getApiHandler()
       where = {...where,
         commentId:null,
           postId:null,
-          workId:null,
+          //workId:null,
         AND:[
         {cycleId:id},
       ]}
