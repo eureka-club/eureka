@@ -40,9 +40,10 @@ import CycleDetailDiscussionCreateCommentForm from './CycleDetailDiscussionCreat
 interface Props {
   cycle: CycleMosaicItem;
   className?: string;
+  cacheKey:string[];
 }
 
-const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) => {
+const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cacheKey }) => {
   // const [items, setItems] = useState<Item[]>();
   // const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
   // const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -172,6 +173,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
               {isCreateEureka && (
                 <div className="mt-3">
                   <CycleDetailDiscussionCreateEurekaForm
+                    cacheKey={cacheKey}
                     cycle={cycle}
                     discussionItem={discussionItem}
                     setDiscussionItem={setDiscussionItem}
@@ -182,6 +184,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
                 <>
                   <div className="mt-3">
                     <CycleDetailDiscussionCreateCommentForm
+                      cacheKey={cacheKey}
                       cycle={cycle}
                       discussionItem={discussionItem}
                       setDiscussionItem={setDiscussionItem}

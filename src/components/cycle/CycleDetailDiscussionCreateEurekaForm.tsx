@@ -15,7 +15,7 @@ import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import globalModalsAtom from '../../atoms/globalModals';
 import { Session } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
-import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload } from '../../types/post';
+import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
 
 import ImageFileSelect from '../forms/controls/ImageFileSelect';
 import TagsInputTypeAhead from '../forms/controls/TagsInputTypeAhead';
@@ -30,12 +30,14 @@ import { useToasts } from 'react-toast-notifications'
 // import styles from './CycleDetailDiscussionCreateEurekaForm.module.css';
 
 interface Props {
+  cacheKey:string[];
   cycle: CycleMosaicItem;
   discussionItem?: string;
   setDiscussionItem: (val: string | undefined) => void;
 }
 
 const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
+  cacheKey,
   cycle,
   discussionItem,
   setDiscussionItem,
@@ -201,12 +203,8 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
     },
     {
       onMutate: async () => {
-        const cacheKey = ['CYCLE', `${cycle.id}`];
         // await queryClient.cancelQueries(cacheKey);
-        const previewsItems = queryClient.getQueryData<CycleMosaicItem[]>(cacheKey);
-        // const eureka: Pick<Post, 'title' | 'language' | 'contentText' | 'isPublic'> = newEureka;
-
-        // queryClient.setQueryData<Item[]>(cacheKey, (prev) => prev!.concat(eureka));
+        const previewsItems = queryClient.getQueryData<PostMosaicItem[]>(cacheKey);
         return { previewsItems, cacheKey };
       },
       onSettled: (_eureka, error, _variables, context) => {

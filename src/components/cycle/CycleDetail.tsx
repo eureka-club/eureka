@@ -473,7 +473,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       const res = (
         <>
           <TabPane eventKey="cycle-discussion">
-            <CycleDetailDiscussion cycle={cycle} className="mb-5" />
+            <CycleDetailDiscussion cycle={cycle} className="mb-5" cacheKey={['ITEMS',`CYCLE-${cycle.id}-PAGE-${page}`]} />
             <Row>
               <Col xs={{span:12, order:'last'}} md={{span:9,order:'first'}}>
                 <MosaicContext.Provider value={{ showShare: true }}>

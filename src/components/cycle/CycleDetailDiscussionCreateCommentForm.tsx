@@ -18,6 +18,7 @@ import globalModalsAtom from '../../atoms/globalModals';
 import { Session } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
 import {
+  CommentMosaicItem,
   CreateCommentClientPayload,
   
 } from '../../types/comment';
@@ -26,12 +27,14 @@ import { useNotificationContext } from '@/src/useNotificationProvider';
 import {useRouter} from 'next/router';
 import { useToasts } from 'react-toast-notifications'
 interface Props {
+  cacheKey:string[];
   cycle: CycleMosaicItem;
   discussionItem: string | undefined;
   setDiscussionItem: (val: string | undefined) => void;
 }
 
 const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
+  cacheKey,
   cycle,
   discussionItem,
   setDiscussionItem,
@@ -119,12 +122,8 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
     },
     {
       onMutate: async () => {
-        const cacheKey = ['CYCLE', `${cycle.id}`];
         await queryClient.cancelQueries(cacheKey);
-        const previewsItems = queryClient.getQueryData<CycleMosaicItem[]>(cacheKey);
-        // const eureka: Pick<Post, 'title' | 'language' | 'contentText' | 'isPublic'> = newComment;
-
-        // queryClient.setQueryData<Item[]>(cacheKey, (prev) => prev!.concat(eureka));
+        const previewsItems = queryClient.getQueryData<CommentMosaicItem[]>(cacheKey);
         return { previewsItems, cacheKey };
       },
       onSettled: (_comment, error, _variables, context) => {
