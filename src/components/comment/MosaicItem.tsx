@@ -77,7 +77,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     return <></>
 
  
-  const getTitle = (): string => {debugger;
+  const getTitle = (): string => {
     if(commentParent){
       if (isCycle(commentParent)) return (commentParent as Cycle).title;
       else if (isWork(commentParent)) return (commentParent as Work).title;
