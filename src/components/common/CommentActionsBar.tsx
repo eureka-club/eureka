@@ -258,7 +258,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
           userName: user.name,
           cycleTitle: cycle.title,
         })}`;
-        payload  = {...payload,selectedCycleId: cycle.id,notificationMessage};
+        payload  = {...payload,selectedCycleId: cycle.id,notificationMessage,notificationContextURL:`/cycle/${cycle.id}`};
       }
       else if(isWorkMosaicItem(entity)){
         const work = (entity as WorkMosaicItem);
@@ -273,14 +273,14 @@ const CommentActionsBar: FunctionComponent<Props> = ({
             workTitle: work.title,
             cycleTitle: cycle.title,
           })}`;
-          payload = {...payload, selectedCycleId: cycle.id,notificationMessage}
+          payload = {...payload, selectedCycleId: cycle.id,notificationMessage,notificationContextURL:`/cycle/${cycle.id}`}
         }
         else{
           notificationMessage = `commentCreatedAboutWork!|!${JSON.stringify({
             userName: user.name,
             workTitle: work.title,
           })}`;
-          payload = {...payload,notificationMessage}
+          payload = {...payload,notificationMessage,notificationContextURL:`/work/${work.id}`}
         }
       }
       else if(isPostMosaicItem(entity)){
@@ -297,7 +297,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
             postTitle: post.title,
             cycleTitle: cycle.title,
           })}`;
-          payload = {...payload, selectedCycleId: cycle.id,notificationMessage}
+          payload = {...payload, selectedCycleId: cycle.id,notificationMessage,notificationContextURL:`/cycle/${cycle.id}`}
         }
         else if(parent && isWorkMosaicItem(parent)){//in work context
           const work = (parent as WorkMosaicItem);
@@ -319,12 +319,12 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                 postTitle: post.title,
                 cycleTitle: c.title,
               })}`;
-              payload = {...payload, selectedCycleId: +withinCycleId}
+              payload = {...payload, selectedCycleId: +withinCycleId,notificationContextURL:`/cycle/${withinCycleId}`}
             }
           }
           if(user.id !== work.creatorId)
             notificationToUsers.add(work.creatorId);          
-          payload = {...payload, selectedWorkId: work.id,notificationMessage}
+          payload = {...payload, selectedWorkId: work.id,notificationMessage,notificationContextURL:`/work/${work.id}`}
         }
         else{
           notificationToUsers.add(post.creatorId);
@@ -332,7 +332,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
             userName: user.name,
             postTitle: post.title,
           })}`;
-          payload = {...payload,notificationMessage}
+          payload = {...payload,notificationMessage,notificationContextURL:router.asPath}
         }
       }
       else if(isCommentMosaicItem(entity)){//the context here it is not need, because coment parent has unique context
@@ -345,7 +345,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
           const post = (parent as PostMosaicItem);
           if(user.id !== post.creatorId)
             notificationToUsers.add(post.creatorId); 
-          payload = {...payload, selectedPostId: post.id};
+          payload = {...payload, selectedPostId: post.id,notificationContextURL:router.asPath};
 
           let cycle: CycleMosaicItem | undefined = undefined;
           if(comment.cycleId){
@@ -359,7 +359,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
               postTitle: post.title,
               cycleTitle: cycle.title,
             })}`;
-            payload = {...payload,selectedCycleId: cycle.id,notificationMessage}
+            payload = {...payload,selectedCycleId: cycle.id,notificationMessage,notificationContextURL:`/cycle/${cycle.id}`}
           }
           else{   
             notificationMessage = `commentCreatedAboutPost!|!${JSON.stringify({
@@ -383,7 +383,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
           const work = (parent as WorkMosaicItem);
           if(work.creatorId !== user.id)
             notificationToUsers.add(work.creatorId);
-          payload = {...payload, selectedWorkId: work.id};
+          payload = {...payload, selectedWorkId: work.id,notificationContextURL:`/work/${work.id}`};
           
           let cycle: CycleMosaicItem | undefined = undefined;
           if(comment.cycleId){
@@ -397,7 +397,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
               workTitle: work.title,
               cycleTitle: cycle.title,
             })}`;
-            payload = {...payload,selectedCycleId: cycle.id,notificationMessage}
+            payload = {...payload,selectedCycleId: cycle.id,notificationMessage,notificationContextURL:`/cycle/${cycle.id}`}
           }
           else{   
             notificationMessage = `commentCreatedAboutWork!|!${JSON.stringify({
@@ -421,7 +421,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
               commentTitle: `${comment.contentText.slice(0,50)}...`, 
               cycleTitle: cycle?.title,             
             })}`;
-            payload = {...payload, selectedCycleId: comment.id,notificationMessage};
+            payload = {...payload, selectedCycleId: comment.id,notificationMessage,notificationContextURL:`/cycle/${cycle.id}`};
           }
           else{
             notificationMessage = `commentCreatedAboutComment!|!${JSON.stringify({
@@ -429,7 +429,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
               commentTitle: `${comment.contentText.slice(0,50)}...`,              
             })}`;
             notificationToUsers.add(comment.creatorId);
-            payload = {...payload,notificationMessage}; 
+            payload = {...payload,notificationMessage,notificationContextURL:router.asPath}; 
           }
         }
         
@@ -441,6 +441,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
         creatorId: +session!.user.id,
         contentText: newCommentInput,
         notificationToUsers: [...notificationToUsers],
+        notificationContextURL:payload.notificationContextURL||router.asPath
       };
       createComment(payload as CreateCommentClientPayload);
 
