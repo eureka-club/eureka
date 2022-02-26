@@ -89,13 +89,12 @@ export default getApiHandler()
               aboutEureka,
               emailReason,
             });
-            const msg = mailSent ? 'Request sent successfully' : 'Failed to send the request';
+            const msg = mailSent ? 'Request sent successfully' : 'Failed to send the mail';
 
             res.status(200).json({
-              status: 'success',
+              success: mailSent,
               message: msg,
-              // data: 'Your request has been sent successfully, you will recive a response by email',
-              error: mailSent,
+              error: !mailSent,
             });
           } catch (e) {
             res.status(200).json({ status: 'error', message: JSON.stringify(e) });

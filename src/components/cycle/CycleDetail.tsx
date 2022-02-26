@@ -22,7 +22,7 @@ import {
 import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
 import {ImCancelCircle} from 'react-icons/im';
 import { BiArrowBack } from 'react-icons/bi';
-import { Work, Comment, Cycle, User } from '@prisma/client';
+import { Work, Comment, Cycle, User, CycleWork } from '@prisma/client';
 import { MosaicContext } from '../../useMosaicContext';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { useQueryClient } from 'react-query';
@@ -827,16 +827,46 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     return null;
   };
 
+  const getWorksSorted = () => {
+    const res: Work[] = [];
+    cycle!.cycleWorksDates
+      .sort((f, s) => {
+        const fCD = dayjs(f.startDate!);
+        const sCD = dayjs(s.startDate!);
+        const isActive = (w: CycleWork) => {
+          if (w.startDate && w.endDate) return dayjs().isBetween(w.startDate!, w.endDate);
+          if (w.startDate && !w.endDate) return dayjs().isAfter(w.startDate);
+          return false;
+        };
+
+        if (isActive(f) && !isActive(s)) return -1;
+        if (!isActive(f) && isActive(s)) return 1;
+        if (fCD.isAfter(sCD)) return 1;
+        if (fCD.isSame(sCD)) return 0;
+        return -1;
+      })
+      .forEach((cw) => {
+        const idx = cycle!.works.findIndex((w) => w.id === cw.workId);
+        res.push(cycle!.works[idx]);
+      });
+    if (cycle!.cycleWorksDates.length) return res;
+    return cycle!.works;
+  };
+
   const renderWorks = ()=>{
     if(cycle && cycle.works && cycle.works.length){
       
       // <WorksMosaic cycle={cycle} className="d-flex mb-5 justify-content-center" />
       return <section className="d-flex">
-          <MosaicContext.Provider value={{ showShare: true }}>        
-            {cycle?.works.map(w=>{
+          <MosaicContext.Provider value={{ showShare: true }}>  
+          <div className='container d-flex flex-wrap flex-column flex-lg-row justify-content-center justify-content-lg-start '>      
+            {getWorksSorted().map(w=>{
               queryClient.setQueryData(['WORK',`${w.id}`],w)
-              return <WorkMosaic key={v4()} workId={w.id} className="me-3" />
+              return <div className='p-4' key={v4()}>
+                             <WorkMosaic  workId={w.id} />
+                        </div>
             })}
+            </div>
           </MosaicContext.Provider>
 
       </section> 

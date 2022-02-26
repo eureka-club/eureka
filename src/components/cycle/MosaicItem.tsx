@@ -25,6 +25,8 @@ import { Session } from '../../types';
 import SocialInteraction from '../common/SocialInteraction';
 import { useCycleContext } from '../../useCycleContext';
 import {useNotificationContext} from '@/src/useNotificationProvider'
+import { useToasts } from 'react-toast-notifications'
+
 // import { useMosaicContext } from '../../useMosaicContext';
 
 dayjs.extend(utc);
@@ -65,6 +67,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const queryClient = useQueryClient();
   const router = useRouter();
+  const { addToast } = useToasts()
+
 
   useEffect(() => {
     const s = session as unknown as Session;
@@ -134,6 +138,8 @@ const MosaicItem: FunctionComponent<Props> = ({
             data:{message:notificationMessage}
           });
         }
+        if(cycle?.access == 2)
+               addToast( t(json.message), {appearance: 'success', autoDismiss: true,})
       }
 
     },
