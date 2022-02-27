@@ -486,6 +486,18 @@ const CommentActionsBar: FunctionComponent<Props> = ({
   //   }
   // };
 
+  const canCreateComment = ()=>{//now comments creation is allowed only within a cycle detail
+    if(!session)return false;
+    if(router.route === '/cycle/[id]' && router.query.id){//within a cycle detail
+      const cycle = queryClient.getQueryData<CycleMosaicItem>(['CYCLE',`${router.query.id}`])
+      if(cycle){
+        const idx = cycle.participants.findIndex(p=>p.id==session.user.id)
+        if(idx>-1)return true;
+      }
+    }
+    return false;
+  }
+
   const handlerEditBtn = () => {
     if (isComment(entity) || isCommentMosaicItem(entity)) {
       const comment = (entity as Comment);
@@ -584,6 +596,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
     return <section>
               {c && !(c.commentId) && !getIsLoading() && (
                 <Button
+                  disabled={!canCreateComment()}
                   variant="default"
                   onClick={handlerCreateBtn}
                   className={`p-0 border-top-0`}
@@ -635,10 +648,10 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                 {/* {renderEditorWYSWYG(onKeyUpEditorCreate)} */}
                 <aside className="d-flex align-items-center">
                   {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
-                  <Editor value={newCommentInput} onChange={setNewCommentInput} onSave={(text)=>{
+                  {<Editor value={newCommentInput} disabled={!canCreateComment()} onChange={setNewCommentInput} onSave={(text)=>{
                     submitCreateForm();          
                     }}
-                  />
+                  />}
                 </aside>
               </>
         
@@ -716,7 +729,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                 {/* {renderEditorWYSWYG(onKeyUpEditorCreate)} */}
                 <aside className="d-flex align-items-center">
                   {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
-                    <Editor value={newCommentInput} onChange={setNewCommentInput} onSave={(text)=>{
+                    <Editor value={newCommentInput} onChange={setNewCommentInput} disabled={!canCreateComment()} onSave={(text)=>{
                       submitCreateForm();          
                       }}
                     />
@@ -744,7 +757,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                       submitEditForm();          
                       }}
                     />
-                </aside>
+                </aside>Editor
                 </>
               )}
               {getIsLoading() ? <Spinner animation="grow" variant="info" size="sm" /> : ''}
@@ -757,7 +770,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
         {/* {renderEditorWYSWYG(onKeyUpEditorCreate)}     */}
         <aside className="d-flex align-items-center">
           {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
-          <Editor value={newCommentInput} onChange={setNewCommentInput} onSave={(text)=>{
+          <Editor value={newCommentInput} onChange={setNewCommentInput} disabled={!canCreateComment()} onSave={(text)=>{
             submitCreateForm();          
             }}
           />

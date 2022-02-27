@@ -111,6 +111,15 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
     setDiscussionItem(() => e.target.value);
   };
 
+  const isParticipant = ()=>{
+    if(!session)return false;
+    if(session && cycle){
+      const idx = cycle.participants.findIndex(p=>p.id==session.user.id)
+      if(idx>-1)return true;
+    }
+    return false;
+  }
+
   const canCreateWork = () => {
     return !isSessionLoading && session && session.user.roles === 'admin';
   };
@@ -127,6 +136,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
             <Col xs={12} md={11}>
               <ButtonGroup className={`d-flex flex-column flex-md-row justify-content-between ${styles.optButtons}`} size="lg">
                 <Button
+                  disabled={!isParticipant()}
                   onClick={handleCreateEurekaClick}
                   className={`d-flex align-items-center  justify-content-center ${styles.optButton} ${
                     styles.eurekaBtn
@@ -136,6 +146,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
                   <span className="fs-6">{t('Create an Eureka')}</span>
                 </Button>
                 <Button
+                  disabled={!isParticipant()}
                   onClick={handleCreateCommentClick}
                   className={`d-flex align-items-center  justify-content-center ${styles.optButton} ${
                     styles.commentBtn

@@ -67,6 +67,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const router = useRouter();
   
   
+  
   if(!work)return <></>
   
   const { id, /* author, */ title, localImages, type } = work;

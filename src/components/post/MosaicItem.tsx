@@ -62,7 +62,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   //const postFromCache = queryClient.getQueryData<PostMosaicItem>(['POST',postId.toString()]);
   const {data:post} = usePost(+postId,{
-    enabled:true
+    enabled:!!postId
   })
 
   // const pp = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(cacheKey);

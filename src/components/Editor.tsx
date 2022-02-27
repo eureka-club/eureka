@@ -11,10 +11,12 @@ interface Props {
     onSave:(text:string)=>void;
     value:string;
     onChange:(value:string)=>void;
+    disabled?:boolean;
 }
-const Editor: React.FC<Props> = ({onSave,value,onChange})=>{
+const Editor: React.FC<Props> = ({onSave,value,onChange,disabled=false})=>{
     const {t} = useTranslation('common')
     return <Form.Control 
+        disabled={disabled}
         defaultValue={value}
         value={value} 
         type="text" 
