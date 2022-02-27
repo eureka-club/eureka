@@ -38,7 +38,8 @@ export const find = async (id: number): Promise<WorkMosaicItem | null> => {
               cycle:true,
             },
           },
-        }
+        },
+        orderBy:{id:'desc'}
       },
      comments: {
             include: {
@@ -46,7 +47,9 @@ export const find = async (id: number): Promise<WorkMosaicItem | null> => {
               comments: { include: { creator: { include: { photos: true } } } },
             },
           },
-      cycles: true,
+      cycles: {
+        orderBy:{id:'desc'}
+      },
     },
   });
 };

@@ -277,7 +277,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     return '';
   };
 
-  if(!cycle)return <>not found cycle</>
+  if(!cycle)return <></>
 
   return (
     <Card className={`mosaic ${isActive() ? 'my-1 isActive' : ''} ${className}`} data-cy={`mosaic-item-cycle-${cycle.id}`} >

@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, MouseEvent } from 'react';
+import { FunctionComponent, MouseEvent, useEffect } from 'react';
 
 import {
   Nav,
@@ -39,22 +39,41 @@ import MosaicItem from './MosaicItem';
 import { MosaicContext } from '../../useMosaicContext';
 import { WorkContext } from '../../useWorkContext';
 import EditPostForm from '../forms/EditPostForm';
+import {useQueryClient} from 'react-query'
+import useWork from '@/src/useWork'
 // import CommentsList from '../common/CommentsList';
 interface Props {
-  work: WorkMosaicItem;
+  workId: number;
   post?: PostMosaicItem;
   cyclesCount: number;
   postsCount: number;
   mySocialInfo: MySocialInfo;
 }
 
-const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount, postsCount }) => {
+const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, cyclesCount, postsCount }) => {
   const router = useRouter();
+  const queryClient = useQueryClient()
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const { t } = useTranslation('workDetail');
   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
   const [session] = useSession() as [Session | null | undefined, boolean];
+
+  const {data:work} = useWork(workId,{
+    enabled:!!workId
+  })
+  
+  useEffect(()=>{
+    if(work && work.posts){
+      work.posts.forEach(p => {
+        queryClient.setQueryData(['POST',`${p.id}`],p)
+      });
+    }
+  },[work,queryClient])
+
+  if(!work)return <>not found</>
+  
+
   const handleSubsectionChange = (key: string | null) => {
     if (key != null) {
       setDetailPagesState({ ...detailPagesState, selectedSubsectionWork: key });
@@ -155,7 +174,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ work, post, cyclesCount
           </div> */}
             </Row>
           ) : (
-            <>{post && work && <PostDetailComponent post={post} work={work} cacheKey={['WORK',work.id.toString()]} />}</>
+            <>{post && work && <PostDetailComponent postId={post.id} work={work} cacheKey={['WORK',work.id.toString()]} />}</>
           )}
         </>
 

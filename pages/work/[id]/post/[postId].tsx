@@ -63,7 +63,7 @@ const PostDetailInWorkPage: NextPage<Props> = () => {
 
   if (!post || !work || isLoadingData()) return getLayout(<Spinner animation="grow" variant="info" />);
   return getLayout(
-    <WorkDetailComponent work={work!} post={post} cyclesCount={1} postsCount={1} mySocialInfo={{}} />,
+    <WorkDetailComponent workId={work.id!} post={post} cyclesCount={1} postsCount={1} mySocialInfo={{}} />,
     `${post!.title} · ${work!.title}`,
   );
 
