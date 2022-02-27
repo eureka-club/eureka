@@ -96,7 +96,7 @@
   "Upcoming": "Upcoming",
   "Past": "Past",
   "Join Cycle request notification": "Request to join cycle notification",
-  "Request sent successfully": "Request sent successfully",
+  "Request sent successfully": "Request to join cycle sent successfully. Please wait for approval.",
   "Failed to send the request": "Failed to send request",
   "Clear rating": "Clear rating",
   "Close": "Close",
@@ -116,6 +116,7 @@
   "public": "Public cycle",
   "private": "Private cycle",
   "secret": "Secret cycle",
+  "select": "Select",
   "next":"next",
   "previous":"previous"
 }
