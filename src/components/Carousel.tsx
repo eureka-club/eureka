@@ -10,7 +10,7 @@ import { useAtom } from 'jotai';
 // import classNames from 'classnames';
 import { Cycle, Work } from '@prisma/client';
 import useTranslation from 'next-translate/useTranslation';
-import { /* useInfiniteQuery, */ useQuery } from 'react-query';
+import { /* useInfiniteQuery, */ useQuery, useQueryClient } from 'react-query';
 import { FunctionComponent /* , ChangeEvent */, useState, useEffect } from 'react';
 import { Button, Row, Col } from 'react-bootstrap';
 import router from 'next/router';
@@ -105,6 +105,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
   const [extraCyclesRequired, setExtraCyclesRequired] = useState(0);
   const [extraWorksRequired, setExtraWorksRequired] = useState(0);
   const [totalWorks, setTotalWorks] = useState(-1);
+  const queryClient = useQueryClient()
 
   const fetchItems = async (pageParam: number) => {
     const url = `/api/getAllBy?topic=${topic}&cursor=${pageParam}
@@ -129,7 +130,12 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
         ...globalSearchEngineState,
         cacheKey: undefined,
       });
-
+      data.data.forEach((i:(CycleMosaicItem|WorkMosaicItem))=>{
+        if(isCycleMosaicItem(i))
+          queryClient.setQueryData(['CYCLE',`${i.id}`],i as CycleMosaicItem)
+        else if(isWorkMosaicItem(i))
+          queryClient.setQueryData(['WORK',`${i.id}`],i as WorkMosaicItem)
+      })
       setItems(data);
       if (data.extraCyclesRequired) setExtraCyclesRequired(data.extraCyclesRequired);
       if (data.extraWorksRequired) setExtraWorksRequired(data.extraWorksRequired);
