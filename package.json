@@ -13,8 +13,8 @@
     "prisma-pf": "prisma --preview-feature",
     "start1": "NODE_ENV=production TS_NODE_COMPILER_OPTIONS='{ \"module\":\"commonjs\" }' ts-node server.ts",
     "start": "NODE_ENV=production next start",
-    "tsc": "tsc --noEmit",
-    "test": "cypress run"
+    "tsc": "tsc --noEmit"
+    
   },
   "engines": {
     "node": "^16 || ^14",
