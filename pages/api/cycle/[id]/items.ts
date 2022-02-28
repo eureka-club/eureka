@@ -17,7 +17,7 @@ export const config = {
 
 export default getApiHandler()  
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-    try {debugger;
+    try {
       const { q = null, where:w = null,take:t,page:p} = req.query;
       if(!p)
         res.status(400).end()

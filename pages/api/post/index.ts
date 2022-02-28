@@ -21,7 +21,7 @@ export const config = {
 
 
 export default getApiHandler()
-  .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+  .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = (await getSession({ req })) as unknown as Session;
     if (session == null) {
       res.status(401).json({ status: 'Unauthorized' });

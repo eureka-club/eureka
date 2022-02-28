@@ -55,7 +55,7 @@ export default getApiHandler()
       prisma.$disconnect();
     }
   })
-  .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+  .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = (await getSession({ req })) as unknown as Session; 
     if (session == null) {
       res.status(401).json({ error: 'Unauthorized' });

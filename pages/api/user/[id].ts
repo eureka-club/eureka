@@ -20,7 +20,7 @@ export const config = {
 
 dayjs.extend(utc);
 export default getApiHandler()
-  .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+  .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     new Form().parse(req, async function(err, fields:Record<string,any[]>, files) {
       
       
@@ -131,7 +131,8 @@ export default getApiHandler()
   
 
 
-  }).get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+  })
+  .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
       const { id, select: s, include: i } = req.query;
       let select = null;

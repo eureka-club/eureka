@@ -10,7 +10,8 @@ import { sendMailRequestJoinCycleResponse } from '../../../../src/facades/mail';
 
 const bcrypt = require('bcryptjs');
 
-export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+export default getApiHandler()
+.get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
   // const session = (await getSession({ req })) as unknown as Session;
   const { id: cycleId } = req.query;
   const [userId, base64Hash, authorized] = req.query.cycleAuthorizeJoin as string[];

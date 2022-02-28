@@ -37,7 +37,7 @@ const validateReq = async (
 };
 
 export default getApiHandler()
-  .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+  .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = (await getSession({ req })) as unknown as Session;
 
     const { id, socialInteraction } = req.query;
@@ -72,7 +72,7 @@ export default getApiHandler()
       prisma.$disconnect();
     }
   })
-  .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+  .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = (await getSession({ req })) as unknown as Session;
     const { id, socialInteraction } = req.query;
 

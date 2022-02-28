@@ -17,7 +17,7 @@ export const config = {
 };
 
 export default getApiHandler()
-  .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+  .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = (await getSession({ req })) as unknown as Session;
     if (session == null || !session.user.roles.includes('admin')) {
       res.status(401).json({ status: 'Unauthorized' });
@@ -71,7 +71,7 @@ export default getApiHandler()
       }
     });
   })
-  .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+  .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     try {
       const { q = null, where:w = null,take:t } = req.query;
       let where = w ? JSON.parse(w.toString()) : undefined;

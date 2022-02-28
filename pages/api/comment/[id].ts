@@ -8,7 +8,7 @@ import { find, remove } from '../../../src/facades/comment';
 import prisma from '../../../src/lib/prisma';
 
 export default getApiHandler()
-  .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+  .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = (await getSession({ req })) as unknown as Session;
     if (session == null || !session.user.roles.includes('admin')) {
       res.status(401).json({ status: 'Unauthorized' });
@@ -44,7 +44,7 @@ export default getApiHandler()
       prisma.$disconnect();
     }
   })
-  .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+  .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     // const session = (await getSession({ req })) as unknown as Session;
     // if (session == null || !session.user.roles.includes('admin')) {
     //   res.status(401).json({ status: 'Unauthorized' });

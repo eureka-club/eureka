@@ -172,10 +172,10 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     // const seconds = 60 * 60 * 8; //8 hours
     // redis.set(redisKey, JSON.stringify(result), 'EX', seconds);
 
-    return res.status(200).json(result);
+    res.status(200).json(result);
   } catch (exc) {
     console.error(exc); // eslint-disable-line no-console
-    return res.status(500).json({ status: 'server error' });
+    res.status(500).json({ status: 'server error' });
   } finally {
     prisma.$disconnect();
   }
