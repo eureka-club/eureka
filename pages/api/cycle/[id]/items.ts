@@ -20,7 +20,7 @@ export default getApiHandler()
     try {debugger;
       const { q = null, where:w = null,take:t,page:p} = req.query;
       if(!p)
-        return res.status(400).end()
+        res.status(400).end()
       const id = +req.query.id.toString()  
       let page = parseInt(p.toString())-1;
       const take = +(process.env.NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT||10)
