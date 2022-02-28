@@ -16,20 +16,17 @@ export default getApiHandler()
   .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     const session = (await getSession({ req })) as unknown as Session;
     if (session == null || !session.user.roles.includes('admin')) {
-      res.status(401).json({ status: 'Unauthorized' });
-      return;
+      res.status(401).end({ status: 'Unauthorized' });
     }
 
     const { id } = req.query;
     if (typeof id !== 'string') {
       res.status(404).end();
-      return;
     }
 
-    const idNum = parseInt(id, 10);
+    const idNum = parseInt(id.toString(), 10);
     if (!Number.isInteger(idNum)) {
       res.status(404).end();
-      return;
     }
 
     try {
