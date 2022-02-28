@@ -6,7 +6,7 @@ import { CLARITY_TRACKING_ID } from '../src/constants';
 class MyDocument extends Document {
   render(): JSX.Element {
     return (
-      <Html>
+      <Html prefix="og: http://ogp.me/ns#">
         <Head>
           {/* favicon */}
           <link rel="apple-touch-icon" sizes="180x180" href="/logo.svg" />
