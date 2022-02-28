@@ -67,8 +67,40 @@ export const findAll = async (props?:Prisma.WorkFindManyArgs): Promise<Work[]|Wo
       comments: {
         include: { comments: true },
       },
-      posts: { include: { localImages: true, comments: true, favs: true } },
-      cycles: true,
+      posts: {
+        include: {
+          creator: {include:{photos:true}},
+          localImages: true,
+          works: {
+            include: {
+              localImages: true,
+            },
+          },
+          cycles: {
+            include: {
+              localImages: true,
+            },
+          },
+          likes: true,
+          favs: true,
+          comments: {
+            include: {
+              creator: { include: { photos:true } },
+              comments: {
+                include: {
+                  creator: { include: { photos:true } },
+                },
+              },
+              work: {include:{cycles:true}},
+              cycle:true,
+            },
+          },
+        },
+        orderBy:{id:'desc'}
+      },
+      cycles: {
+        orderBy:{id:'desc'}
+      },
     }},
     where,
   });

@@ -136,7 +136,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const [filtersWork, setFiltersWork] = useState<number[]>([]);
   const [filterCycleItSelf, setFilterCycleItSelf] = useState<boolean>(false);  
   const [filtersParticipant,setFiltersParticipant] = useState<number[]>([]);
-  const [filtersContentType,setFiltersContentType] = useState<string[]>([]);
+  const [filtersContentType, setFiltersContentType] = useState<string[]>([]);
+  const [gldView, setgldView] = useState<Record<string, boolean>>({});
   const [comboboxChecked, setComboboxChecked] = useState<Record<string, boolean>>({
     post: false,
     comment: false,
@@ -173,6 +174,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   // } = useMutation(async () => {
   //   await fetch(`/api/cycle/${cycle.id}/join`, { method: 'DELETE' });
   // });
+
+  if(!cycle)return <></>
 
   const handleSubsectionChange = (key: string | null) => {
     if (key != null) {
@@ -390,7 +393,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     return '';
   };
 
-  const [gldView, setgldView] = useState<Record<string, boolean>>({});
+  
   const toggleGuidelineDesc = (key: string) => {
     if (key in gldView) {
       setgldView((res) => {

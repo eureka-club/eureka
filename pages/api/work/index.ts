@@ -56,7 +56,7 @@ export default getApiHandler()
       const take = t ? parseInt(t?.toString()) : undefined;
       let data = null;
       if (typeof q === 'string') {
-        data = await prisma.work.findMany({
+        data = await findAll({
           take,
           where: {
             OR: [{ title: { contains: q } }, { contentText: { contains: q } }, { author: { contains: q } }],

@@ -211,6 +211,10 @@ const SocialInteraction: FunctionComponent<Props> = ({
   // };
   const shareUrl = (() => {
     if (isPost(entity)) {
+      if (!entity.works) {
+        
+        debugger;
+      }
       const post = entity as PostMosaicItem;
       const parentIsWork = post.works.length;
       const parentIsCycle = !post.works.length && post.cycles.length;

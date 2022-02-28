@@ -45,8 +45,8 @@ export const findAll = async (props?:Prisma.PostFindManyArgs,page?:number): Prom
     take,
     skip,
     orderBy: { id: 'desc' },
-    ... include ? {include} : {
-      include:{
+    include:{
+      
         creator: {include:{photos:true}},
         localImages: true,
         cycles: { include: { localImages: true } },
@@ -65,7 +65,7 @@ export const findAll = async (props?:Prisma.PostFindManyArgs,page?:number): Prom
             cycle:true,
           },
         },
-      }
+      
       
     },
     where,
