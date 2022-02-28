@@ -43,6 +43,7 @@ const IndexPage: NextPage = () => {
   return (
     <>
      <HelmetMetaData title='Eureka'
+        type='website'
         url={`${WEBAPP_URL}`}
         image={`${WEBAPP_URL}logo.svg`}
         ></HelmetMetaData>
