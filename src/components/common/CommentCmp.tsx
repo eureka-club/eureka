@@ -49,7 +49,7 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey, parent }) => 
               <Col xs={10} md={11} className="d-flex flex-column">
                 <CommentTextBox comment={ comment} />
                 {/* {renderCommentActions()} */}<CommentActionsBar key={ v4()} entity={ comment} parent={parent} cacheKey={cacheKey||['COMMENT',`${comment.id}`]}/>
-                {comment &&
+                {comment &&   
                   comment.comments &&
                   comment.comments.map((commentChild) => (
                     <Row key={v4()} className="mb-2">
