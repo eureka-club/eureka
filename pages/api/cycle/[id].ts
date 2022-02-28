@@ -42,7 +42,7 @@ export default getApiHandler()
         const rmf = await storeDeleteFile(cycle.localImages[0].storedFile);
         if(!rmf){
           res.statusMessage = 'Removing image has failed';
-          return res.status(500).end();
+          res.status(500).end();
         }
       }
       await remove(cycle);
