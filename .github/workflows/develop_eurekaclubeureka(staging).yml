@@ -49,7 +49,7 @@ jobs:
           name: project
           path: .
       - name: Unarchive project
-        run: tar -xvf project.tar
+        run: tar -xvf project.tar && rm project.tar
 
 
       - name: 'Deploy to Azure Web App'
