@@ -214,11 +214,11 @@ const SocialInteraction: FunctionComponent<Props> = ({
       const post = entity as PostMosaicItem;
       const parentIsWork = post.works.length;
       const parentIsCycle = !post.works.length && post.cycles.length;
-      if (parentIsWork) return `${WEBAPP_URL}work/${post.works[0].id}/post/${post.id}`;
-      if (parentIsCycle) return `${WEBAPP_URL}cycle/${post.cycles[0].id}/post/${post.id}`;
+      if (parentIsWork) return `${WEBAPP_URL}/work/${post.works[0].id}/post/${post.id}`;
+      if (parentIsCycle) return `${WEBAPP_URL}/cycle/${post.cycles[0].id}/post/${post.id}`;
     }
-    if (isWork(entity)) return `${WEBAPP_URL}work/${entity.id}`;
-    if (isCycle(entity)) return `${WEBAPP_URL}cycle/${entity.id}`;
+    if (isWork(entity)) return `${WEBAPP_URL}/work/${entity.id}`;
+    if (isCycle(entity)) return `${WEBAPP_URL}/cycle/${entity.id}`;
     return `${WEBAPP_URL}${router.asPath}`;
   })();
 
