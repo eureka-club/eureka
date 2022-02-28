@@ -60,7 +60,7 @@ const WorkDetailPage: NextPage = () => {
   const rendetLayout = (title: string, children: ReactElement) => {
     return <>
      <HelmetMetaData title={work?.title}
-        url={`${WEBAPP_URL}work/${work?.id}`}
+        url={`${WEBAPP_URL}/work/${work?.id}`}
         image={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${work?.localImages[0].storedFile}`}
         ></HelmetMetaData>
      <SimpleLayout title={title}>{children}</SimpleLayout>;
