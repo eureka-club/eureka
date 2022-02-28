@@ -54,7 +54,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
         setCycle(cycleContext.cycle);
         setCurrentUserIsParticipant(cycleContext.currentUserIsParticipant || false);
       }
-    } 
+    }
   }, [cycleContext, router]);
 
   const {data:post} = usePost(+postId,{
