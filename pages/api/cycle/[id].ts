@@ -16,36 +16,33 @@ export default getApiHandler()
   .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     const session = (await getSession({ req })) as unknown as Session;
     if (session == null || !session.user.roles.includes('admin')) {
-      res.status(401).json({ status: 'Unauthorized' });
-      return;
+      res.status(401).end({ status: 'Unauthorized' });
     }
 
     const { id } = req.query;
     if (typeof id !== 'string') {
       res.status(404).end();
-      return;
     }
 
-    const idNum = parseInt(id, 10);
+    const idNum = parseInt(id.toString(), 10);
     if (!Number.isInteger(idNum)) {
       res.status(404).end();
-      return;
     }
 
     try {
       const cycle = await find(idNum);
       if (cycle == null) {
-        res.status(404).end();
-        return;
+        res.status(404).end();        
       }
-      if(cycle.localImages.length){
+      if(cycle && cycle.localImages.length){
         const rmf = await storeDeleteFile(cycle.localImages[0].storedFile);
         if(!rmf){
           res.statusMessage = 'Removing image has failed';
-          return res.status(500).end();
+          res.status(500).end();
         }
       }
-      await remove(cycle);
+      if(cycle)
+        await remove(cycle);
       // await redis.flushall();
       res.status(200).json({ status: 'OK' });
     } catch (exc) {
@@ -64,13 +61,13 @@ export default getApiHandler()
     const { id } = req.query;
     if (typeof id !== 'string') {
       res.status(404).end();
-      return;
+      
     }
 
-    const idNum = parseInt(id, 10);
+    const idNum = parseInt(id.toString(), 10);
     if (!Number.isInteger(idNum)) {
       res.status(404).end();
-      return;
+      
     }
 
     try {
@@ -78,7 +75,7 @@ export default getApiHandler()
       if (cycle == null) {
         // res.status(404).end();
         res.status(200).json({ ok: true, cycle: null });
-        return;
+        
       }
 
       res.status(200).json({ ok: true, cycle });
@@ -92,8 +89,8 @@ export default getApiHandler()
   .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {//TODO not update with prisma, /faced/cycle -> update must be used !!!
     const session = (await getSession({ req })) as unknown as Session;
     if (session == null || !session.user.roles.includes('admin')) {
-      res.status(401).json({ status: 'Unauthorized' });
-      return;
+      res.status(401).end({ status: 'Unauthorized' });
+      
     }
     let data = req.body;
 

@@ -54,7 +54,11 @@ const PostDetailInWorkPage: NextPage<Props> = () => {
   const getLayout = (children: JSX.Element, title = '') => {
     return <>
       <HelmetMetaData title={`${post ? post.title : ''} · ${work ? work.title : ''}`}
+<<<<<<< HEAD
         url={`${WEBAPP_URL}/work/${post?.works[0].id}/post/${post?.id}`}
+=======
+        url={`${WEBAPP_URL}/cycle/${post?.works[0].id}/post/${post?.id}`}
+>>>>>>> ca8c8b8c701a422fea531dca87db4091e573ad2b
         image={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${post?.localImages[0].storedFile}`}
         ></HelmetMetaData>
      <SimpleLayout title={title}>{children}</SimpleLayout>;

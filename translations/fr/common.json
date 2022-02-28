@@ -96,7 +96,7 @@
   "Upcoming": "Prochain",
   "Past": "Lu/vu",
   "Join Cycle request notification": "Notification de demande d'adhésion au cycle",
-  "Request sent successfully": "Demande envoyée avec succès",
+  "Request sent successfully": "Demande de participation au cycle envoyée avec succès. Merci d'attendre l'approbation.",
   "Failed to send the request": "Échec de l'envoi de la demande",
   "Clear rating": "Effacer note",
   "Close": "Fermer",
@@ -116,6 +116,7 @@
   "public": "Cycle public",
   "private": "Cycle privé",
   "secret": "Cycle secret",
+  "select": "Sélectionner",
   "next":"next",
   "previous":"previous"
 }

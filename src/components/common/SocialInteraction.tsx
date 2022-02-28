@@ -219,7 +219,11 @@ const SocialInteraction: FunctionComponent<Props> = ({
     }
     if (isWork(entity)) return `${WEBAPP_URL}/work/${entity.id}`;
     if (isCycle(entity)) return `${WEBAPP_URL}/cycle/${entity.id}`;
+<<<<<<< HEAD
     return `${WEBAPP_URL}${router.asPath}`;
+=======
+    return `${WEBAPP_URL}/${router.asPath}`;
+>>>>>>> ca8c8b8c701a422fea531dca87db4091e573ad2b
   })();
 
   const shareTextDynamicPart = (() => {

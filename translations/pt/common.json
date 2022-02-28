@@ -96,7 +96,7 @@
   "Upcoming": "Próximo",
   "Past": "Lido/visto",
   "Join Cycle request notification": "Notificação de solicitação de participação ao ciclo",
-  "Request sent successfully": "Solicitação enviada com sucesso",
+  "Request sent successfully": "Solicitação de participação ao ciclo enviada com sucesso. Por favor, aguarde a aprovação.",
   "Failed to send the request": "Falha ao enviar a solicitação",
   "Clear rating": "Apagar avaliação",
   "Close": "Fechar",
@@ -117,6 +117,7 @@
   "private": "Ciclo privado",
   "secret": "Ciclo secreto",
   "Notifications":"Notifications",
+  "select": "Selecionar",
   "next":"next",
   "previous":"previous"
 }

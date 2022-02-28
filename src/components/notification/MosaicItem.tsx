@@ -18,8 +18,8 @@ interface Props {
 const MosaicItem: FunctionComponent<Props> = ({ notification, className = '' }) => {
   const { t } = useTranslation('notification');
 
-  const notificationOnClick = () => {
-    router.push(notification.notification.contextURL).then(() => window.scrollTo(0, 0));
+  const notificationOnClick = () => { 
+    //router.push(notification.notification.contextURL).then(() => window.scrollTo(0, 0));
   };
 
   const formatMessage = (message:string) => {
