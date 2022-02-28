@@ -350,7 +350,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
               readOnly
             />
             <TagsInput className="ms-1 d-inline-block" tags={cycle.tags!} readOnly label="" />
-             <div className='mt-1 d-flex flex-row justify-content-center'>
+             <div className='mt-2 d-flex flex-row justify-content-start'>
                   <Rating
                     readonly
                     initialRating={getRatingAvg()}
