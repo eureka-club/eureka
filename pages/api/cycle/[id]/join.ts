@@ -120,7 +120,7 @@ export default getApiHandler()
       prisma.$disconnect();
     }
   })
-  .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+  .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = (await getSession({ req })) as unknown as Session;
     if (session == null) {
       res.statusMessage = 'unauthorized';
