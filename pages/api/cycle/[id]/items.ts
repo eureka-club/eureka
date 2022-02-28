@@ -46,7 +46,11 @@ export default getApiHandler()
       }
 
       let comments = null;
-      where = {...where,AND:[
+      where = {...where,
+        commentId:null,
+          postId:null,
+          //workId:null,
+        AND:[
         {cycleId:id},
       ]}
       if (typeof q === 'string') {

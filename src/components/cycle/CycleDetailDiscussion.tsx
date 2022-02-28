@@ -40,9 +40,10 @@ import CycleDetailDiscussionCreateCommentForm from './CycleDetailDiscussionCreat
 interface Props {
   cycle: CycleMosaicItem;
   className?: string;
+  cacheKey:string[];
 }
 
-const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) => {
+const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cacheKey }) => {
   // const [items, setItems] = useState<Item[]>();
   // const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
   // const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -110,6 +111,15 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
     setDiscussionItem(() => e.target.value);
   };
 
+  const isParticipant = ()=>{
+    if(!session)return false;
+    if(session && cycle){
+      const idx = cycle.participants.findIndex(p=>p.id==session.user.id)
+      if(idx>-1)return true;
+    }
+    return false;
+  }
+
   const canCreateWork = () => {
     return !isSessionLoading && session && session.user.roles === 'admin';
   };
@@ -126,6 +136,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
             <Col xs={12} md={11}>
               <ButtonGroup className={`d-flex flex-column flex-md-row justify-content-between ${styles.optButtons}`} size="lg">
                 <Button
+                  disabled={!isParticipant()}
                   onClick={handleCreateEurekaClick}
                   className={`d-flex align-items-center  justify-content-center ${styles.optButton} ${
                     styles.eurekaBtn
@@ -135,6 +146,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
                   <span className="fs-6">{t('Create an Eureka')}</span>
                 </Button>
                 <Button
+                  disabled={!isParticipant()}
                   onClick={handleCreateCommentClick}
                   className={`d-flex align-items-center  justify-content-center ${styles.optButton} ${
                     styles.commentBtn
@@ -172,6 +184,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
               {isCreateEureka && (
                 <div className="mt-3">
                   <CycleDetailDiscussionCreateEurekaForm
+                    cacheKey={cacheKey}
                     cycle={cycle}
                     discussionItem={discussionItem}
                     setDiscussionItem={setDiscussionItem}
@@ -182,6 +195,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className }) =
                 <>
                   <div className="mt-3">
                     <CycleDetailDiscussionCreateCommentForm
+                      cacheKey={cacheKey}
                       cycle={cycle}
                       discussionItem={discussionItem}
                       setDiscussionItem={setDiscussionItem}

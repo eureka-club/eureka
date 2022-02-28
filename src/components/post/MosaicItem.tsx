@@ -61,11 +61,12 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [postParent,setPostParent] = useState<CycleMosaicItem|WorkMosaicItem>();
 
   //const postFromCache = queryClient.getQueryData<PostMosaicItem>(['POST',postId.toString()]);
+  // const pp = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(cacheKey);
+  
   const {data:post} = usePost(+postId,{
-    enabled:true
+    enabled:!!postId
   })
 
-  // const pp = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(cacheKey);
    useEffect(()=>{
      if(post){
       if (post.works && post.works.length > 0) setPostParent(post.works[0] as WorkMosaicItem);

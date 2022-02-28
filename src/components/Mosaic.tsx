@@ -1,9 +1,9 @@
 import { Cycle, Work } from '@prisma/client';
-import { FunctionComponent } from 'react';
+import { FunctionComponent,useState } from 'react';
 import Masonry from 'react-masonry-css';
 
 import { v4 } from 'uuid';
-import {Row, Col, Container} from 'react-bootstrap';
+import {Row, Col, Container,Button} from 'react-bootstrap';
 import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem, isCommentMosaicItem } from '../types';
 import MosaicItemCycle from './cycle/MosaicItem';
 import MosaicItemPost from './post/MosaicItem';
@@ -16,6 +16,7 @@ import { WorkMosaicItem } from '../types/work';
 import { PostMosaicItem } from '../types/post';
 import { CycleContext } from '../useCycleContext';
 import { CommentMosaicItem } from '../types/comment';
+import {BiChevronRight,BiChevronLeft} from 'react-icons/bi'
 // import { WorkContext } from '../useWorkContext';
 
 const renderMosaicItem = (
@@ -29,7 +30,7 @@ const renderMosaicItem = (
   if (isCycleMosaicItem(item)) {
     return (
       <CycleContext.Provider value={{ cycle: item as CycleMosaicItem }}>
-        <MosaicItemCycle key={`${v4()}`} detailed className="mb-2"/>
+        <MosaicItemCycle key={`${v4()}`} cycleId={item.id} detailed className="mb-2"/>
       </CycleContext.Provider>
     );
   }
@@ -103,6 +104,14 @@ const Mosaic: FunctionComponent<Props> = ({
   className,
   parent,
 }) => {
+  const count = +(process.env.NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT||10)
+  const [page,setPage] =useState<number>(0)
+  // const next = ()=>{
+  //   setPage(p=>p+1)
+  // }
+  // const previous = ()=>{
+  //   setPage(p=>p-1)
+  // }
   const renderMosaic = () => {
     /* return (
       <Row>
@@ -114,7 +123,7 @@ const Mosaic: FunctionComponent<Props> = ({
       </Row>
       
     ); */
-    return <Masonry
+    /*return <Masonry
     breakpointCols={{
       default: display === 'v' ? 4 : 1,
       1199: display === 'v' ? 3 : 1,
@@ -133,7 +142,25 @@ const Mosaic: FunctionComponent<Props> = ({
           {renderMosaicItem(item, parent, showButtonLabels, display, showComments, cacheKey)}
         </aside>
       )) || ''}
-  </Masonry>
+  </Masonry>*/
+  return <section className="container d-flex flex-wrap flex-column flex-lg-row justify-content-center justify-content-lg-start">
+    {stack.slice(page*count,count*(page+1)).map((item: MosaicItem) => (
+        <aside className={` ${className} p-4`} key={`${v4()}`}>
+          {renderMosaicItem(item, parent, showButtonLabels, display, showComments, cacheKey)}
+        </aside>
+      ))}
+  </section>
+
+
+  }
+  const renderPagesLinks = ()=>{
+    const pages = stack.length / count
+    const res = []
+    for(let i=0;i<pages;i++)
+      res.push(<Button className={`rounded-circle me-1 shadow ${page===i ? 'text-white bg-secondary':''}`} size="sm" onClick={()=>setPage(i)}>{i+1}</Button>)
+    return <>
+    {res}
+    </>
   }
   return <>
     <div className="d-none d-lg-block">
@@ -142,6 +169,12 @@ const Mosaic: FunctionComponent<Props> = ({
     <div className="d-lg-none">
       {renderMosaic()}
      </div>
+     <aside className="d-flex justify-content-center">
+       {renderPagesLinks()}
+     {/* <Button disabled={page==0} onClick={previous}><BiChevronLeft/></Button>
+     <Button disabled={(page+1)*count == stack.length} onClick={next}><BiChevronRight/></Button> */}
+
+     </aside>
     </>
 };
 

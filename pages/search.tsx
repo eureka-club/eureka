@@ -25,7 +25,8 @@ import Mosaic from '../src/components/Mosaic';
 import FilterEngine from '../src/components/FilterEngine';
 import useItems from '../src/useItems';
 import useCountries from '../src/useCountries';
-import { SearchResult } from '@/src/types';
+import { isPostMosaicItem,isCycleMosaicItem, isWorkMosaicItem, SearchResult } from '@/src/types';
+import { useQueryClient } from 'react-query';
 
 // interface Props {
 //   homepageMosaicData: (CycleMosaicItem | WorkMosaicItem)[];
@@ -62,6 +63,7 @@ const SearchPage: NextPage = () => {
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
   const [q, setQ] = useState<string>();
   const [where, setWhere] = useState<string>();
+  const queryClient = useQueryClient()
   
   useEffect(() => {
     setGlobalSearchEngineState((res) => ({...res, only:[]}));
@@ -122,6 +124,17 @@ const SearchPage: NextPage = () => {
   const [homepageMosaicData, setHomepageMosaicData] = useState<SearchResult[]>([]);
 
   useEffect(() => {
+    if(items){
+      items.forEach((i)=>{
+        if(isCycleMosaicItem(i))
+          queryClient.setQueryData(['CYCLE',`${i.id}`],i as CycleMosaicItem)
+        else if(isWorkMosaicItem(i))
+          queryClient.setQueryData(['WORK',`${i.id}`],i as WorkMosaicItem)
+        else if(isPostMosaicItem(i))
+          queryClient.setQueryData(['POST',`${i.id}`],i as PostMosaicItem)
+      })
+
+    }
     if (globalSearchEngineState.itemsFound && globalSearchEngineState.itemsFound.length) {
       setHomepageMosaicData(globalSearchEngineState.itemsFound);
     }

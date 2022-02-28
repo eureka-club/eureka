@@ -4,7 +4,7 @@ import { FunctionComponent /*  useEffect, useState */, useEffect, useState } fro
 import { Card, Badge, Spinner } from 'react-bootstrap';
 // import { MySocialInfo } from '@/src/types';
 // import { PostDetail } from '../../types/post';
-// import { useQuery } from 'react-query';
+import { useQuery,useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 // import { useSession } from 'next-auth/client';
 import { CgMediaLive } from 'react-icons/cg';
@@ -52,6 +52,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   // isOnDiscussion = false,
 }) => {
   const { t } = useTranslation('common');
+  const queryClient = useQueryClient()
   const cycleContext = useCycleContext();
   const [cycle, setCycle] = useState<CycleMosaicItem | null>();
   useEffect(() => {
@@ -60,11 +61,19 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [loading, setLoading] = useState<boolean>(false);
   // const { linkToWork = true, work: workFromContext } = useWorkContext();
   // const [WORK] = useState<WorkMosaicItem>(work!);
+  const router = useRouter();
+  
   const {data:work} = useWork(workId,{
     enabled:!!workId
   })
-
-  const router = useRouter();
+  
+  useEffect(()=>{
+    if(work && work.posts){
+      work.posts.forEach(p => {
+        queryClient.setQueryData(['POST',`${p.id}`],p)
+      });
+    }
+  },[work,queryClient])
   
   
   if(!work)return <></>

@@ -17,7 +17,7 @@ import CommentActionsBar from '../common/CommentActionsBar';
 import styles from './MosaicItem.module.css';
 import CommentTextBox from '@/src/components/common/CommentTextBox';
 // import UnclampText from '../UnclampText';
-import { isCycle, isWork, /*isPost, isComment  , Session */ } from '../../types';
+import { isCycle, isPost, isWork, /*isPost, isComment  , Session */ } from '../../types';
 // import { CycleMosaicItem } from '../../types/cycle';
 // import { WorkMosaicItem } from '../../types/work';
 
@@ -80,7 +80,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   const getTitle = (): string => {
     if(commentParent){
       if (isCycle(commentParent)) return (commentParent as Cycle).title;
-      if (isWork(commentParent)) return (commentParent as Work).title;
+      else if (isWork(commentParent)) return (commentParent as Work).title;
+      else if (isPost(commentParent)) return (commentParent as Post).title;
     }
     // if (isComment(commentParent)) return `Comment: ${commentParent.id}`;
     return '';

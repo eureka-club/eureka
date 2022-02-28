@@ -73,7 +73,7 @@ const WorkDetailPage: NextPage = () => {
     return rendetLayout(
       work.title,
       <WorkDetailComponent
-        work={work}
+        workId={work.id}
         cyclesCount={cyclesCount}
         postsCount={work.posts.length}
         mySocialInfo={mySocialInfo}

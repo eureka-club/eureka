@@ -26,7 +26,7 @@ import SocialInteraction from '../common/SocialInteraction';
 import { useCycleContext } from '../../useCycleContext';
 import {useNotificationContext} from '@/src/useNotificationProvider'
 import { useToasts } from 'react-toast-notifications'
-
+import useCycle from '@/src/useCycle'
 // import { useMosaicContext } from '../../useMosaicContext';
 
 dayjs.extend(utc);
@@ -35,6 +35,7 @@ dayjs.extend(isBetween);
 interface Props {
   // workWithImages: WorkWithImages;
   // cycle: CycleMosaicItem;
+  cycleId:number;
   showButtonLabels?: boolean;
   showShare?: boolean;
   detailed?: boolean;
@@ -51,14 +52,10 @@ const MosaicItem: FunctionComponent<Props> = ({
   cacheKey = undefined,
   showTrash = false,
   className,
+  cycleId
 }) => {
   const {notifier} = useNotificationContext();
-  const { cycle, linkToCycle = true, currentUserIsParticipant } = useCycleContext();
-  const { id, title, localImages, startDate, endDate } = cycle!;
-  const { t } = useTranslation('common');
-  const sd = dayjs(startDate).add(1, 'day').tz(dayjs.tz.guess());
-  const ed = dayjs(endDate).add(1, 'day').tz(dayjs.tz.guess());
-  const isActive = dayjs().isBetween(startDate, endDate, null, '[]');
+  const { linkToCycle = true, currentUserIsParticipant } = useCycleContext();
   const [session] = useSession() as [Session | null | undefined, boolean];
   const [idSession,setIdSession] = useState<string>('')
   const { data: user } = useUser(+idSession,{ enabled: !!+idSession });
@@ -68,7 +65,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const queryClient = useQueryClient();
   const router = useRouter();
   const { addToast } = useToasts()
-
+  const {data:cycle} = useCycle(cycleId,{enabled:!!cycleId})
 
   useEffect(() => {
     const s = session as unknown as Session;
@@ -78,6 +75,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   }, [session]);
 
 
+
+
   useEffect(() => {
     if (cycle) {
       setParticipants(cycle.participants.length);
@@ -85,13 +84,20 @@ const MosaicItem: FunctionComponent<Props> = ({
         if (session && user && user.joinedCycles) {
           if (!user.joinedCycles.length) setIsCurrentUserJoinedToCycle(false);
           else {
-            const icujtc = user.joinedCycles.findIndex((c) => c.id === cycle!.id) !== -1;
+            const icujtc = user.joinedCycles.findIndex((c) => cycle.id === c!.id) !== -1;
             setIsCurrentUserJoinedToCycle(icujtc);
           }
         }
       } else setIsCurrentUserJoinedToCycle(!!currentUserIsParticipant);
     }
   }, [user, cycle, currentUserIsParticipant, session]);
+
+  
+  // const { id, title, localImages,} = cycle!;
+  const { t } = useTranslation('common');
+  
+  const isActive = () => cycle ? dayjs().isBetween(cycle.startDate, cycle.endDate, null, '[]') : false;
+
 
   const openSignInModal = () => {
     setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
@@ -271,24 +277,26 @@ const MosaicItem: FunctionComponent<Props> = ({
     return '';
   };
 
+  if(!cycle)return <></>
+
   return (
-    <Card className={`mosaic ${isActive ? 'my-1 isActive' : ''} ${className}`} data-cy={`mosaic-item-cycle-${id}`} >
+    <Card className={`mosaic ${isActive() ? 'my-1 isActive' : ''} ${className}`} data-cy={`mosaic-item-cycle-${cycle.id}`} >
       <div
         className={`${linkToCycle ? 'cursor-pointer' : ''} ${styles.imageContainer} ${
           detailed && styles.detailedImageContainer
         }`}
       >
         {linkToCycle ? (
-          <Link href={`/cycle/${id}`}>
+          <Link href={`/cycle/${cycle.id}`}>
             <a>
-              <LocalImageComponent className="cursor-pointer" filePath={localImages[0].storedFile} alt={title} />
+              <LocalImageComponent className="cursor-pointer" filePath={cycle.localImages[0].storedFile} alt={cycle.title} />
             </a>
           </Link>
         ) : (
-          <LocalImageComponent filePath={localImages[0].storedFile} alt={title} />
+          <LocalImageComponent filePath={cycle.localImages[0].storedFile} alt={cycle.title} />
         )}
 
-        {isActive && <CgMediaLive className={`${styles.isActiveCircle}`} />}
+        {isActive() && <CgMediaLive className={`${styles.isActiveCircle}`} />}
         <Badge bg="primary" className={`fw-normal fs-6 text-black rounded-pill px-2 ${styles.type}`}>
           {getCycleAccesLbl()}
         </Badge>
@@ -297,16 +305,16 @@ const MosaicItem: FunctionComponent<Props> = ({
         <div className="text-center p-1">
           <h6 className={`cursor-pointer ${styles.title}`}>
             {linkToCycle ? (
-              <Link href={`/cycle/${id}`}>
-                <a>{title}</a>
+              <Link href={`/cycle/${cycle.id}`}>
+                <a>{cycle.title}</a>
               </Link>
             ) : (
-              title
+              cycle.title
             )}{' '}
           </h6>
           <div className={styles.date}>
-            {sd.format(DATE_FORMAT_SHORT)}
-            &mdash; {ed.format(DATE_FORMAT_SHORT)}
+            {dayjs(cycle.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
+            &mdash; {dayjs(cycle.endDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
           </div>
         </div>
       )}

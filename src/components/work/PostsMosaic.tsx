@@ -3,7 +3,6 @@ import { FunctionComponent } from 'react';
 // import Spinner from 'react-bootstrap/Spinner';
 // import { useQuery } from 'react-query';
 import { PostMosaicItem } from '../../types/post';
-
 import { WorkMosaicItem } from '../../types/work';
 import Mosaic from '../Mosaic';
 

@@ -26,9 +26,10 @@ import UnclampText from '../UnclampText';
 import styles from './PostDetail.module.css';
 import Avatar from '../common/UserAvatar';
 import { useCycleContext } from '../../useCycleContext';
-
+import usePost from '@/src/usePost'
+import {useQueryClient} from 'react-query'
 interface Props {
-  post: PostMosaicItem;
+  postId: number;
   // cycle?: CycleMosaicItem;
   work?: WorkMosaicItem;
   // mySocialInfo?: MySocialInfo;
@@ -38,8 +39,10 @@ interface Props {
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const PostDetail: FunctionComponent<Props> = ({ post, work,cacheKey }) => {
+const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
+  const { t } = useTranslation('createPostForm');
   const router = useRouter();
+  const queryClient = useQueryClient()
   const cycleContext = useCycleContext();
   const [cycle, setCycle] = useState<CycleMosaicItem | null>();
   const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
@@ -53,7 +56,13 @@ const PostDetail: FunctionComponent<Props> = ({ post, work,cacheKey }) => {
       }
     }
   }, [cycleContext, router]);
-  const { t } = useTranslation('createPostForm');
+
+  const {data:post} = usePost(+postId,{
+    enabled:!!postId
+  })
+
+  if(!post)return <></>
+
 
   // const [session] = useSession() as [Session | null | undefined, boolean];
   // const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
