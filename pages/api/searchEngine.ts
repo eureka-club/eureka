@@ -11,7 +11,7 @@ import { findAll as fac } from '@/src/facades/cycle';
 import { findAll as faw } from '@/src/facades/work';
 
 export default getApiHandler()
-.get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+.get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
   try {
     const {q} = req.query;
     const query = q.toString()
