@@ -557,7 +557,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
         )}
         {showShare && (
           <div className="ms-auto">
-            <OverlayTrigger trigger="focus"  placement="right" overlay={popoverShares}>
+            <OverlayTrigger trigger="focus" placement="right" overlay={popoverShares}>
               <Button
                 // style={{ fontSize: '.9em' }}
                 title={t('Share')}

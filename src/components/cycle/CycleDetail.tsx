@@ -976,7 +976,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                         {renderWorks()}
                         {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (
                           <Row className="mt-5 mb-5">
-                            <Col>
+                            <Col className='col-12'>
                               <h5 className="mt-5 mb-3 fw-bold text-gray-dark">{t('complementaryMaterialsTitle')}</h5>
                               <ul className={styles.complementaryMaterials}>
                                 {cycle.complementaryMaterials.map((cm) => (
