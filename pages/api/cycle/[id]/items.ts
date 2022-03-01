@@ -17,14 +17,14 @@ export const config = {
 
 export default getApiHandler()  
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-    try {
+    try {debugger;
       const { q = null, where:w = null,take:t,page:p} = req.query;
-      if(!p)
-        res.status(400).end()
+      // if(!p)
+      //   res.status(400).end()
       const id = +req.query.id.toString()  
-      let page = parseInt(p.toString())-1;
-      const take = +(process.env.NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT||10)
-      const skip = page * take;
+      // let page = parseInt(p.toString())-1;
+      // const take = +(process.env.NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT||10)
+      // const skip = page * take;
       let where = w ? JSON.parse(w.toString()) : undefined;
       
       let posts = null;
@@ -72,12 +72,13 @@ export default getApiHandler()
         ...posts.map(p=>{(p as PostMosaicItem).type='post';return p;})
       ]
 
-      let items = it.sort((x,y)=>x.createdAt > y.createdAt ? -1 : 1).splice(skip,take)
+      let items = it.sort((x,y)=>x.createdAt > y.createdAt ? -1 : 1)
+      // .splice(skip,take)
 
       res.status(200).json({ 
          items,
          total:(comments.length+posts.length),
-         hasNextPage: (comments.length+posts.length) > take * (page+1)
+        //  hasNextPage: (comments.length+posts.length) > take * (page+1)
        });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

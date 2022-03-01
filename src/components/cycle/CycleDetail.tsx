@@ -37,7 +37,7 @@ import { PostMosaicItem } from '../../types/post';
 import { WorkMosaicItem } from '../../types/work';
 import { CommentMosaicItem } from '../../types/comment';
 import { UserMosaicItem } from '../../types/user';
-
+import ListWindow from '@/src/components/ListWindow'
 // import LocalImageComponent from '../LocalImage';
 import PostDetailComponent from '../post/PostDetail';
 // import CycleSummary from './CycleSummary';
@@ -94,10 +94,11 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     enabled:!!cycleId
   });
 
-  const [page,setPage] = useState<number>(1);
+  const [page,setPage] = useState<number>(0);
+  const [total,setTotal] = useState<number>(0);
   const [where,setWhere] = useState<{filtersWork:number[]}>()
   
-  const {data} = useCycleItem(+cycleId,page,where,{
+  const {data} = useCycleItem(+cycleId/* ,page */,where,{
     enabled:!!cycleId
   })
 
@@ -107,6 +108,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   useEffect(()=>{
     if(data){
       setItems(data.items);
+      setTotal(data.total)
       setHasNextPage(data.hasNextPage);
     }
   },[data])
@@ -282,13 +284,13 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   const renderItems = () => {
     const res = []
-    if(cycle && items){
+    if(cycle && filteredItems){
       // const items = [
       //   ... getComments() as CommentMosaicItem[],
       //   ... getPosts()
       // ]
       // .sort((a,b)=>a.createdAt >= b.createdAt ? -1 : 1);
-      for(let i of items){
+      for(let i of filteredItems.slice(page*count,count*(page+1))){
         if(isPostMosaicItem(i)){
           const ck = ['POST',i.id.toString()];
           queryClient.setQueryData(ck,i)
@@ -467,19 +469,36 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   //     setLastPostId(cycle.posts.slice(-1)[0].id)
   //   }
   // }
+  const count = +(process.env.NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT||10)
+  const renderPagesLinks = ()=>{
+    if(items){
+      const pages = total / count
+      const res = []
+      for(let i=0;i<pages;i++)
+        res.push(<Button className={`rounded-circle me-1 shadow ${page===i ? 'text-white bg-secondary':''}`} size="sm" onClick={()=>setPage(i)}>{i+1}</Button>)
+      return <>
+      {res}
+      </>
+
+    }
+    return <></>
+  }
 
   const renderRestrictTabs = () => {
     if (cycle) {
       const res = (
         <>
           <TabPane eventKey="cycle-discussion">
-            <CycleDetailDiscussion cycle={cycle} className="mb-5" cacheKey={['ITEMS',`CYCLE-${cycle.id}-PAGE-${page}`]} />
+            <CycleDetailDiscussion cycle={cycle} className="mb-5" cacheKey={['ITEMS',`CYCLE-${cycle.id}`]} />
             <Row>
               <Col xs={{span:12, order:'last'}} md={{span:9,order:'first'}}>
                 <MosaicContext.Provider value={{ showShare: true }}>
                   {renderItems()}
+                  {/* {items && <ListWindow items={items} parent={cycle} cacheKey={['ITEMS',`CYCLE-${cycle.id}`]} />} */}
                 </MosaicContext.Provider>
-                {page >1 && <Button 
+                {renderPagesLinks()}
+
+                {/* {page >1 && <Button 
                 className="my-3 pe-3 rounded-pill text-white" 
                 onClick={() => setPage(()=>page-1)} 
                 >
@@ -494,7 +513,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                   <span>
                     <RiArrowDownSLine /> {t('common:next')}
                   </span>
-                </Button>}
+                </Button>} */}
                 {/* {(cycle.posts && cycle.posts.length && (
                     <PostsMosaic display="h" posts={items} showComments cacheKey={['CYCLE', `${cycle.id}`]} />
                 )) ||
@@ -503,7 +522,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 {/* {renderCycleWorksComments()} */}
                 {/* {renderCycleOwnComments()} */}
               </Col>
-              {/* <Col xs={{span:12, order:'first'}} md={{span:3,order:'last'}}>
+              <Col xs={{span:12, order:'first'}} md={{span:3,order:'last'}}>
                 <Form as={Row} className="bg-white mt-0 mb-3">
                   <Form.Group as={Col} xs={12}>
                         <Row>
@@ -548,7 +567,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                     <Button title={t('Clean filters')} className="mt-3" variant="warning" size="sm" onClick={resetFilters}><ImCancelCircle/></Button>
                   </Form.Group>
                 </Form>
-              </Col> */}
+              </Col>
               
             </Row>
             
@@ -721,11 +740,72 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   //   }
   //   filteredPosts.forEach(p=>{queryClient.setQueryData(['POST',`${p.id}`],p)})
   // },[filtersWork,filtersParticipant,filtersContentType,filterCycleItSelf,cycle]);
+  const [filteredItems,setFilteredItems] = useState<MosaicItem[]>()
+  useEffect(() => {
+    if(cycle && items){debugger;
+      setFilteredItems(()=>items)
+      if(!filteredItems)return;
+      if(filterCycleItSelf){ 
+        setFilteredItems(filteredItems.filter(i=>{
+          if(isPostMosaicItem(i)){
+            const p = i as PostMosaicItem;
+            return !p.works.length;
+          }
+          else if(isCommentMosaicItem(i)){
+            const c = i as CommentMosaicItem;
+            return !c.workId && !c.commentId; 
+          }
+          return false;
+        }))
+      }
+      if(filtersWork && filtersWork.length){
+        setFilteredItems(filteredItems.filter(i=>{
+          if(isPostMosaicItem(i)){
+            const p = i as PostMosaicItem;
+            return p.works.findIndex((w) => filtersWork.includes(w.id)) !== -1;
+          }
+          else if(isCommentMosaicItem(i)){
+            const c = i as CommentMosaicItem;
+            return c.workId && filtersWork.includes(c.workId); 
+          }
+          return false;
+        }))
+      }
+      if(filtersParticipant && filtersParticipant.length){
+        setFilteredItems(filteredItems.filter(i=>{
+          if(isPostMosaicItem(i)){
+            const p = i as PostMosaicItem;
+            return filtersParticipant.findIndex(i => i  === p.creatorId) !== -1;
+          }
+          else if(isCommentMosaicItem(i)){
+            const c = i as CommentMosaicItem;
+            return filtersParticipant.findIndex(i => i  === c.creatorId) !== -1; 
+          }
+          return false;
+        }))
+      }
+      if(filtersContentType && filtersContentType.length){
+          setFilteredItems(filteredItems.filter(i=>{
+            if(filtersContentType.includes('post'))return isPostMosaicItem(i);
+            else if(filtersContentType.includes('comment'))return isCommentMosaicItem(i);
+            
+            return false;
+          }))
+      }
+      setFilteredItems(()=>items||[])
+    }
+    else {
+      setFilteredItems(()=>items||[])
+    }
+    // filteredPosts.forEach(p=>{queryClient.setQueryData(['POST',`${p.id}`],p)})
+  },[filtersWork,filtersParticipant,filtersContentType,filterCycleItSelf,cycle,items]);
+
+
 
 
   const handlerComboxesChange = (e: ChangeEvent<HTMLInputElement>, q: string, workId?: number) => {
     setComboboxChecked((res) => ({ ...res, [`${q}${workId ? `-${workId}`: ''}`]: e.target.checked }));
-    
+    debugger;
     switch(q){
       case 'post':
         onChangeContentTypeFilters('post', e.target.checked)

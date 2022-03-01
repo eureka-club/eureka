@@ -71,7 +71,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, cyclesCou
     }
   },[work,queryClient])
 
-  if(!work)return <>not found</>
+  if(!work)return <></>
   
 
   const handleSubsectionChange = (key: string | null) => {
