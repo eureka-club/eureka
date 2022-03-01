@@ -23,38 +23,37 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
       ratings: { include: { cycle: true } },
       favs: true,
       cycleWorksDates: true,
-      // posts: {
-      //   take:NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT,
-      //   orderBy:{id:'desc'},
-      //   include: {
-      //     creator: {include:{photos:true}},
-      //     localImages: true,
-      //     works: {
-      //       include: {
-      //         localImages: true,
-      //       },
-      //     },
-      //     cycles: {
-      //       include: {
-      //         localImages: true,
-      //       },
-      //     },
-      //     likes: true,
-      //     favs: true,
-      //     comments: {
-      //       include: {
-      //         creator: { include: { photos:true } },
-      //         comments: {
-      //           include: {
-      //             creator: { include: { photos:true } },
-      //           },
-      //         },
-      //         work: {include:{cycles:true}},
-      //         cycle:true,
-      //       },
-      //     },
-      //   }
-      // },
+      posts: {
+        orderBy:{id:'desc'},
+        include: {
+          creator: {include:{photos:true}},
+          localImages: true,
+          works: {
+            include: {
+              localImages: true,
+            },
+          },
+          cycles: {
+            include: {
+              localImages: true,
+            },
+          },
+          likes: true,
+          favs: true,
+          comments: {
+            include: {
+              creator: { include: { photos:true } },
+              comments: {
+                include: {
+                  creator: { include: { photos:true } },
+                },
+              },
+              work: {include:{cycles:true}},
+              cycle:true,
+            },
+          },
+        }
+      },
       works:{
         // take:NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT,
         orderBy:{id:'desc'},
@@ -118,16 +117,95 @@ export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<Cycle[] 
     take,
     ... where && {where},
     orderBy: { createdAt: 'desc' },
-    ... include 
-      ? {include} 
-      : {include: { 
+    include :{ 
         participants: true, 
         localImages: true, 
         ratings: true, 
         favs: true, 
-        comments: true, 
-        posts: true 
-      }
+        posts: {
+          orderBy:{id:'desc'},
+          include: {
+            creator: {include:{photos:true}},
+            localImages: true,
+            works: {
+              include: {
+                localImages: true,
+              },
+            },
+            cycles: {
+              include: {
+                localImages: true,
+              },
+            },
+            likes: true,
+            favs: true,
+            comments: {
+              include: {
+                creator: { include: { photos:true } },
+                comments: {
+                  include: {
+                    creator: { include: { photos:true } },
+                  },
+                },
+                work: {include:{cycles:true}},
+                cycle:true,
+              },
+            },
+          }
+        },
+        works:{
+          // take:NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT,
+          orderBy:{id:'desc'},
+          include: {
+            localImages: true,
+            favs: true,
+            ratings: true,
+            comments: true,
+            posts: {include: {
+              creator: {include:{photos:true}},
+              localImages: true,
+              works: {
+                include: {
+                  localImages: true,
+                },
+              },
+              cycles: {
+                include: {
+                  localImages: true,
+                },
+              },
+              likes: true,
+              favs: true,
+              comments: {
+                include: {
+                  creator: { include: { photos:true } },
+                  comments: {
+                    include: {
+                      creator: { include: { photos:true } },
+                    },
+                  },
+                  work: {include:{cycles:true}},
+                  cycle:true,
+                },
+              },
+            }},
+            cycles: true,
+          },
+        },
+        comments: {
+          // take:NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT,
+          orderBy:{id:'desc'},
+          include: {
+            creator: { include: { photos:true } },
+            comments: {
+              include: {
+                creator: { include: { photos:true } },
+              },
+            },
+            work: {include:{cycles:true}},
+            cycle:true,
+          },
+        }
       },
   });
 };

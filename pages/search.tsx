@@ -78,7 +78,7 @@ const SearchPage: NextPage = () => {
   useEffect(()=>{
     if(q){
       let w = "";
-      if(router.query.fields){
+      if (router.query.fields) {
         const fields = (router.query.fields as string).split(',');
         w = encodeURIComponent(
           JSON.stringify({

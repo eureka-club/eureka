@@ -113,7 +113,8 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
 
   const isParticipant = ()=>{
     if(!session)return false;
-    if(session && cycle){
+    if (session && cycle) {
+      if (session.user.id === cycle.creatorId) return true; 
       const idx = cycle.participants.findIndex(p=>p.id==session.user.id)
       if(idx>-1)return true;
     }
