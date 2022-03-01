@@ -832,6 +832,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   const getWorksSorted = () => {
     const res: Work[] = [];
+    if(cycle && !cycle.cycleWorksDates)return cycle!.works;
     cycle!.cycleWorksDates
       .sort((f, s) => {
         const fCD = dayjs(f.startDate!);

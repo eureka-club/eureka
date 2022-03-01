@@ -45,7 +45,7 @@ const UserAvatar: FunctionComponent<Props> = ({
           <Link href={`/mediatheque/${user.id}`}>
             <a className={`text-secondary ${styles.link}`}>
 
-                {(!user?.photos.length) ?
+                {(!user?.photos || !user?.photos.length) ?
          <img
         onError={onLoadImgError}
         className={`${styles.cycleCreatorAvatar} me-2`}

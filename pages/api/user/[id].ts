@@ -72,12 +72,12 @@ export default getApiHandler()
       },{});
       
       if(files.photo && files.photo[0]){
-        const user = await find({id:idNum});
+        const user = await find({id:idNum}) as UserMosaicItem;
         if(!user){
           res.statusMessage = 'User not found';
           return res.status(405).end();
         }
-        if((user as UserMosaicItem).photos.length){
+        if(user.photos && user.photos.length){
           const storedFile = (user as UserMosaicItem).photos[0].storedFile;
           const resImageRemoving = await storeDeleteFile(storedFile,'users-photos');
           if(!resImageRemoving){

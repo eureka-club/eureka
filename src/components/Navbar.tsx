@@ -96,7 +96,7 @@ const NavBar: FunctionComponent = () => {
   };
 
   const getAvatar = () => {
-      if(user){
+      if(user && user?.photos){
       if(!user?.photos.length)
         return <img onError={avatarError}
         className={styles.navbarIconNav}    
