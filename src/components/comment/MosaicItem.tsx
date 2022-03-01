@@ -30,7 +30,7 @@ import useComment from '@/src/useComment'
 interface Props {
   commentId: number;
   commentParent: CycleMosaicItem | WorkMosaicItem | PostMosaicItem | CommentMosaicItem;
-  detailed?: boolean;
+  detailed?: boolean; 
   showButtonLabels?: boolean;
   showShare?: boolean;
   showSocialInteraction?: boolean;
@@ -126,7 +126,7 @@ const MosaicItem: FunctionComponent<Props> = ({
                 </h2>
               )}
             </Col>
-            <Col xs={12} md={6}>
+            <Col xs={12} md={6}> 
               <div className="text-end">
                 <Avatar user={comment.creator} size="xs" />
                 {` - `}
