@@ -140,6 +140,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const [filtersParticipant,setFiltersParticipant] = useState<number[]>([]);
   const [filtersContentType, setFiltersContentType] = useState<string[]>([]);
   const [gldView, setgldView] = useState<Record<string, boolean>>({});
+  const [filteredItems,setFilteredItems] = useState<MosaicItem[]>()
   const [comboboxChecked, setComboboxChecked] = useState<Record<string, boolean>>({
     post: false,
     comment: false,
@@ -176,6 +177,67 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   // } = useMutation(async () => {
   //   await fetch(`/api/cycle/${cycle.id}/join`, { method: 'DELETE' });
   // });
+
+  useEffect(() => {
+    if(cycle && items){debugger;
+      setFilteredItems(()=>items)
+      if(!filteredItems)return;
+      if(filterCycleItSelf){ 
+        setFilteredItems(filteredItems.filter(i=>{
+          if(isPostMosaicItem(i)){
+            const p = i as PostMosaicItem;
+            return !p.works.length;
+          }
+          else if(isCommentMosaicItem(i)){
+            const c = i as CommentMosaicItem;
+            return !c.workId && !c.commentId; 
+          }
+          return false;
+        }))
+      }
+      if(filtersWork && filtersWork.length){
+        setFilteredItems(filteredItems.filter(i=>{
+          if(isPostMosaicItem(i)){
+            const p = i as PostMosaicItem;
+            return p.works.findIndex((w) => filtersWork.includes(w.id)) !== -1;
+          }
+          else if(isCommentMosaicItem(i)){
+            const c = i as CommentMosaicItem;
+            return c.workId && filtersWork.includes(c.workId); 
+          }
+          return false;
+        }))
+      }
+      if(filtersParticipant && filtersParticipant.length){
+        setFilteredItems(filteredItems.filter(i=>{
+          if(isPostMosaicItem(i)){
+            const p = i as PostMosaicItem;
+            return filtersParticipant.findIndex(i => i  === p.creatorId) !== -1;
+          }
+          else if(isCommentMosaicItem(i)){
+            const c = i as CommentMosaicItem;
+            return filtersParticipant.findIndex(i => i  === c.creatorId) !== -1; 
+          }
+          return false;
+        }))
+      }
+      if(filtersContentType && filtersContentType.length){
+          setFilteredItems(filteredItems.filter(i=>{
+            if(filtersContentType.includes('post'))return isPostMosaicItem(i);
+            else if(filtersContentType.includes('comment'))return isCommentMosaicItem(i);
+            
+            return false;
+          }))
+      }
+      setFilteredItems(()=>items||[])
+    }
+    else {
+      setFilteredItems(()=>items||[])
+    }
+    // filteredPosts.forEach(p=>{queryClient.setQueryData(['POST',`${p.id}`],p)})
+  },[filtersWork,filtersParticipant,filtersContentType,filterCycleItSelf,cycle,items]);
+
+
 
   if(!cycle)return <></>
 
@@ -286,26 +348,26 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   // };
 
   const renderItems = () => {
-    const res = []
     if(cycle && filteredItems){
       // const items = [
       //   ... getComments() as CommentMosaicItem[],
       //   ... getPosts()
       // ]
       // .sort((a,b)=>a.createdAt >= b.createdAt ? -1 : 1);
+      const res = []
       for(let i of filteredItems.slice(page*count,count*(page+1))){
         if(isPostMosaicItem(i)){
           const ck = ['POST',i.id.toString()];
           queryClient.setQueryData(ck,i)
           res.push(
-            <PostMosaic postId={i.id} display="h" cacheKey={ck} showComments className="mb-2" />
+            <PostMosaic key={v4()} postId={i.id} display="h" cacheKey={ck} showComments className="mb-2" />
           )
         }
         else if(isCommentMosaicItem(i)){
           const ck = ['COMMENT',i.id.toString()];
           queryClient.setQueryData(ck,i)
           res.push(
-            <CommentMosaic detailed commentId={i.id} 
+            <CommentMosaic key={v4()} detailed commentId={i.id} 
             commentParent={i.post as PostMosaicItem || i.work as WorkMosaicItem || i.cycle as CycleMosaicItem}
             cacheKey={ck} className="mb-2" />
           )
@@ -743,66 +805,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   //   }
   //   filteredPosts.forEach(p=>{queryClient.setQueryData(['POST',`${p.id}`],p)})
   // },[filtersWork,filtersParticipant,filtersContentType,filterCycleItSelf,cycle]);
-  const [filteredItems,setFilteredItems] = useState<MosaicItem[]>()
-  useEffect(() => {
-    if(cycle && items){debugger;
-      setFilteredItems(()=>items)
-      if(!filteredItems)return;
-      if(filterCycleItSelf){ 
-        setFilteredItems(filteredItems.filter(i=>{
-          if(isPostMosaicItem(i)){
-            const p = i as PostMosaicItem;
-            return !p.works.length;
-          }
-          else if(isCommentMosaicItem(i)){
-            const c = i as CommentMosaicItem;
-            return !c.workId && !c.commentId; 
-          }
-          return false;
-        }))
-      }
-      if(filtersWork && filtersWork.length){
-        setFilteredItems(filteredItems.filter(i=>{
-          if(isPostMosaicItem(i)){
-            const p = i as PostMosaicItem;
-            return p.works.findIndex((w) => filtersWork.includes(w.id)) !== -1;
-          }
-          else if(isCommentMosaicItem(i)){
-            const c = i as CommentMosaicItem;
-            return c.workId && filtersWork.includes(c.workId); 
-          }
-          return false;
-        }))
-      }
-      if(filtersParticipant && filtersParticipant.length){
-        setFilteredItems(filteredItems.filter(i=>{
-          if(isPostMosaicItem(i)){
-            const p = i as PostMosaicItem;
-            return filtersParticipant.findIndex(i => i  === p.creatorId) !== -1;
-          }
-          else if(isCommentMosaicItem(i)){
-            const c = i as CommentMosaicItem;
-            return filtersParticipant.findIndex(i => i  === c.creatorId) !== -1; 
-          }
-          return false;
-        }))
-      }
-      if(filtersContentType && filtersContentType.length){
-          setFilteredItems(filteredItems.filter(i=>{
-            if(filtersContentType.includes('post'))return isPostMosaicItem(i);
-            else if(filtersContentType.includes('comment'))return isCommentMosaicItem(i);
-            
-            return false;
-          }))
-      }
-      setFilteredItems(()=>items||[])
-    }
-    else {
-      setFilteredItems(()=>items||[])
-    }
-    // filteredPosts.forEach(p=>{queryClient.setQueryData(['POST',`${p.id}`],p)})
-  },[filtersWork,filtersParticipant,filtersContentType,filterCycleItSelf,cycle,items]);
-
+  
 
 
 
