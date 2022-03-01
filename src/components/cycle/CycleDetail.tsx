@@ -310,7 +310,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         }
         
       }
-      return <section data-cy="comments-and-posts">
+      return <section data-cy="mosaic-items">
         {res}
          {/* <Mosaic
               display="h"

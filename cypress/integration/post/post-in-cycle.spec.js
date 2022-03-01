@@ -9,7 +9,7 @@ describe('Mediatheque suite',()=>{
         cy.wait('@session')
         .then(interception=>{
             const session = interception.response.body;
-            cy.visit(`/cycle/13/post/273`)
+            cy.visit(`/work/245/post/228`)
             .get('[data-cy="post-detail"]')
         })
     })

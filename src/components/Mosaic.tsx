@@ -143,7 +143,7 @@ const Mosaic: FunctionComponent<Props> = ({
         </aside>
       )) || ''}
   </Masonry>*/
-  return <section className="container d-flex flex-wrap flex-column flex-lg-row justify-content-center justify-content-lg-start">
+  return <section data-cy="mosaic-items" className="container d-flex flex-wrap flex-column flex-lg-row justify-content-center justify-content-lg-start">
     {stack.slice(page*count,count*(page+1)).map((item: MosaicItem) => (
         <aside className={` ${className} p-4`} key={`${v4()}`}>
           {renderMosaicItem(item, parent, showButtonLabels, display, showComments, cacheKey)}
