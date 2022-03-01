@@ -35,7 +35,7 @@ import WorkTypeaheadSearchItem from '../work/TypeaheadSearchItem';
 import globalModalsAtom from '../../atoms/globalModals';
 import styles from './CreatePostForm.module.css';
 import useTopics from '../../useTopics';
-import useWorks from '../../useWorks';
+import useWork from '../../useWork';
 import { Session } from '@/src/types';
 import { useSession } from 'next-auth/client';
 import useUser from '@/src/useUser';
@@ -63,8 +63,17 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
   const [session] = useSession();
   const [userId, setUserId] = useState<number>();
   const { addToast } = useToasts();
-  // const [workId, setWorkId] = useState<string | undefined>();
-  const { data: work } = useWorks(router.query.id as string);
+  const [workId, setWorkId] = useState<string>('');
+
+  useEffect(() => {
+    if (router && router.query?.id) {
+      setWorkId(router.query.id.toString());
+    }
+  },[router])
+  const { data: work } = useWork(+workId, {
+    enabled:!!workId
+  });
+
   const {data:user} = useUser(userId!,{
     enabled:!!userId
   });

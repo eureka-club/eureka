@@ -60,7 +60,7 @@ import CycleDetailHeader from './CycleDetailHeader';
 import CycleDetailDiscussion from './CycleDetailDiscussion';
 import useCycle from '@/src/useCycle';
 import useCycleItem from '@/src/useCycleItems';
-
+import useWorks from '@/src/useWorks'
 interface Props {
   // cycle: CycleMosaicItem;
   post?: PostMosaicItem;
@@ -93,6 +93,25 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const {data:cycle,isLoading} = useCycle(+cycleId,{
     enabled:!!cycleId
   });
+
+  const { data: works } = useWorks({ cycles: { some: { id: cycle?.id } } }, {
+    enabled:!!cycle?.id
+  })
+
+  useEffect(() => {
+    if (cycle) {
+      if (cycle.cycleWorksDates) { 
+        cycle.cycleWorksDates.forEach(w => {
+          queryClient.setQueryData(['WORK',`${w.id}`],w)
+        })        
+      }
+      if (works) { 
+        works.forEach(w => {
+          queryClient.setQueryData(['WORK',`${w.id}`],w)
+        })        
+      }
+    }
+  },[cycle,queryClient,works])
 
   const [page,setPage] = useState<number>(1);
   const [where,setWhere] = useState<{filtersWork:number[]}>()
@@ -296,14 +315,14 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           const ck = ['POST',i.id.toString()];
           queryClient.setQueryData(ck,i)
           res.push(
-            <PostMosaic postId={i.id} display="h" cacheKey={ck} showComments className="mb-2" />
+            <PostMosaic key={v4()} postId={i.id} display="h" cacheKey={ck} showComments className="mb-2" />
           )
         }
         else if(isCommentMosaicItem(i)){
           const ck = ['COMMENT',i.id.toString()];
           queryClient.setQueryData(ck,i)
           res.push(
-            <CommentMosaic detailed commentId={i.id} 
+            <CommentMosaic key={v4()} detailed commentId={i.id} 
             commentParent={i.post as PostMosaicItem || i.work as WorkMosaicItem || i.cycle as CycleMosaicItem}
             cacheKey={ck} className="mb-2" />
           )
@@ -443,8 +462,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   };
   
   const renderCycleWorksOrCycleFilters = () => {
-    if(cycle && cycle.works){
-      const res = cycle.works.map((w) => {
+    if(cycle && works){
+      const res = works.map((w) => {
         queryClient.setQueryData(['WORK',`${w.id}`],w)
         return <Col key={v4()} xs={12}>
         <Form.Check label={w.title} 
@@ -832,7 +851,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   const getWorksSorted = () => {
     const res: Work[] = [];
-    if(cycle && !cycle.cycleWorksDates)return cycle!.works;
+    if(cycle && !cycle.cycleWorksDates)return works||[];
     cycle!.cycleWorksDates
       .sort((f, s) => {
         const fCD = dayjs(f.startDate!);
@@ -850,15 +869,17 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         return -1;
       })
       .forEach((cw) => {
-        const idx = cycle!.works.findIndex((w) => w.id === cw.workId);
-        res.push(cycle!.works[idx]);
+        if (works) {
+          const idx = works.findIndex((w) => w.id === cw.workId);
+          res.push(works[idx]);          
+        }
       });
     if (cycle!.cycleWorksDates.length) return res;
-    return cycle!.works;
+    return works||[];
   };
 
   const renderWorks = ()=>{
-    if(cycle && cycle.works && cycle.works.length){
+    if(cycle && works){
       
       // <WorksMosaic cycle={cycle} className="d-flex mb-5 justify-content-center" />
       return <section className="d-flex">
@@ -950,7 +971,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                       <NavItem className={`border-primary border-bottom bcursor-pointer ${styles.tabBtn}`}>
                         <NavLink eventKey="cycle-about">
                           <span className="mb-3">
-                            {t('About')} ({cycle.works && cycle.works.length})
+                            {t('About')} ({works && works.length})
                           </span>
                         </NavLink>
                       </NavItem>
@@ -972,9 +993,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                             {/* <UnclampText text={cycle.contentText} clampHeight="7rem" /> */}
                           </div>
                         )}
-                        {cycle.works && (
+                        {works && (
                           <h5 className="mt-5 mb-3 fw-bold text-gray-dark">
-                            {t('worksCountHeader', { count: cycle.works.length })}
+                            {t('worksCountHeader', { count: works.length })}
                           </h5>
                         )}
                         {renderWorks()}
