@@ -17,6 +17,7 @@ export type PostMosaicItem = Prisma.PostGetPayload<{
     cycles: {
       include: {
         localImages: true;
+        participants:true;
       };
     };
     likes: true;

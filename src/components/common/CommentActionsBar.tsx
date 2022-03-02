@@ -488,11 +488,18 @@ const CommentActionsBar: FunctionComponent<Props> = ({
 
   const canCreateComment = ()=>{//now comments creation is allowed only within a cycle detail
     if(!session)return false;
-    if(router.route === '/cycle/[id]' && router.query.id){//within a cycle detail
-      const cycle = queryClient.getQueryData<CycleMosaicItem>(['CYCLE',`${router.query.id}`])
-      if(cycle){
-        const idx = cycle.participants.findIndex(p=>p.id==session.user.id)
-        if(idx>-1)return true;
+
+    if(isPostMosaicItem(entity)){//within a cycle detail
+      const post = entity as PostMosaicItem;
+      if(post.cycles){
+        //const cycle = queryClient.getQueryData<CycleMosaicItem>(['CYCLE',`${post.cycles[0].id}`])
+        const cycle = post.cycles[0] as CycleMosaicItem
+        if(cycle){
+          if(cycle.creatorId===session.user.id)return true;
+          return cycle.participants ? cycle.participants.findIndex(p=>p.id==session.user.id)>-1:false;
+          
+        }
+
       }
     }
     return false;

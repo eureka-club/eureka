@@ -23,7 +23,7 @@ export default getApiHandler()
         res.status(400).end()
       const id = +req.query.id.toString()  
       let page = parseInt(p.toString())-1;
-      const take = +(process.env.NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT||10)
+      const take = +(process.env.NEXT_PUBLIC_MOSAIC_ITEMS_COUNT||10)
       const skip = page * take;
       let where = w ? JSON.parse(w.toString()) : undefined;
       

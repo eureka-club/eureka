@@ -4,7 +4,7 @@ import { StoredFileUpload } from '../types';
 import { CreateCycleServerFields, CreateCycleServerPayload, CycleMosaicItem } from '../types/cycle';
 import prisma from '../lib/prisma';
 
-export const NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT = +(process.env.NEXT_PUBLIC_NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT || 10);
+export const NEXT_PUBLIC_MOSAIC_ITEMS_COUNT = +(process.env.NEXT_PUBLIC_NEXT_PUBLIC_MOSAIC_ITEMS_COUNT || 10);
 
 export const find = async (id: number): Promise<CycleMosaicItem | null> => {
   return prisma.cycle.findUnique({
@@ -55,7 +55,7 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
       //   }
       // },
       // works:{
-      //   // take:NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT,
+      //   // take:NEXT_PUBLIC_MOSAIC_ITEMS_COUNT,
       //   orderBy:{id:'desc'},
       //   include: {
       //     localImages: true,
@@ -94,7 +94,7 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
       //   },
       // },
       comments: {
-        // take:NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT,
+        // take:NEXT_PUBLIC_MOSAIC_ITEMS_COUNT,
         orderBy:{id:'desc'},
         include: {
           creator: { include: { photos:true } },
@@ -154,7 +154,7 @@ export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<Cycle[] 
         //   }
         // },
         // works:{
-        //   // take:NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT,
+        //   // take:NEXT_PUBLIC_MOSAIC_ITEMS_COUNT,
         //   orderBy:{id:'desc'},
         //   include: {
         //     localImages: true,
@@ -193,7 +193,7 @@ export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<Cycle[] 
         //   },
         // },
         comments: {
-          // take:NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT,
+          // take:NEXT_PUBLIC_MOSAIC_ITEMS_COUNT,
           orderBy:{id:'desc'},
           include: {
             creator: { include: { photos:true } },

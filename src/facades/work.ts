@@ -21,7 +21,8 @@ export const find = async (id: number): Promise<WorkMosaicItem | null> => {
           },
           cycles: {
             include: {
-              localImages: true,
+              localImages: true,    
+              participants:true,          
             },
           },
           likes: true,
