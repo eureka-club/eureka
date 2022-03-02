@@ -26,6 +26,7 @@ import {
 import { useNotificationContext } from '@/src/useNotificationProvider';
 import {useRouter} from 'next/router';
 import { useToasts } from 'react-toast-notifications'
+import useWorks from '@/src/useWorks'
 interface Props {
   cacheKey:string[];
   cycle: CycleMosaicItem;
@@ -65,7 +66,11 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
   // },[tinymce]);
   const router = useRouter();
   const {notifier} = useNotificationContext();
-  const [notifyMessage,setNotifyMessage] = useState<string>('');
+  const [notifyMessage, setNotifyMessage] = useState<string>('');
+  
+  const { data: works } = useWorks({ cycles: { some: { id: cycle?.id } } }, {
+    enabled:!!cycle?.id
+  })
 
   const clearCreateEurekaForm = () => {
     editorRef.current.setContent(newComment.contentText);
@@ -157,24 +162,26 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
     if(u.id !== cycle.creatorId)
       toUsers.push(cycle.creatorId);
     if (newComment.selectedWorkId) {
-      const work = cycle.works.find(w=>w.id === newComment.selectedWorkId)
-      const msg = `commentCreatedAboutWorkInCycle!|!${JSON.stringify({
-        userName: u.name,
-        workTitle: work?.title,
-        cycleTitle: cycle.title,
-      })}`;
-      setNotifyMessage(msg);
-      const payload: CreateCommentClientPayload = {
-        selectedCycleId: cycle.id,
-        selectedWorkId: newComment.selectedWorkId,
-        selectedCommentId: undefined,
-        contentText: editorRef.current.getContent(),
-        creatorId: cycle.creatorId,
-        notificationMessage:msg,
-        notificationContextURL:router.asPath,
-        notificationToUsers:toUsers
-      };
-      await execCreateComment(payload);
+      if (works) {
+        const work = works.find(w=>w.id === newComment.selectedWorkId)
+        const msg = `commentCreatedAboutWorkInCycle!|!${JSON.stringify({
+          userName: u.name,
+          workTitle: work?.title,
+          cycleTitle: cycle.title,
+        })}`;
+        setNotifyMessage(msg);        
+        const payload: CreateCommentClientPayload = {
+          selectedCycleId: cycle.id,
+          selectedWorkId: newComment.selectedWorkId,
+          selectedCommentId: undefined,
+          contentText: editorRef.current.getContent(),
+          creatorId: cycle.creatorId,
+          notificationMessage:msg,
+          notificationContextURL:router.asPath,
+          notificationToUsers:toUsers
+        };
+        await execCreateComment(payload);
+      }
     } else if (newComment.selectedCycleId) {
       const msg = `commentCreatedAboutCycle!|!${JSON.stringify({
         userName: u.name,

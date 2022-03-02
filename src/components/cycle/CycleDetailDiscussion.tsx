@@ -25,7 +25,7 @@ import { CycleMosaicItem } from '../../types/cycle';
 // import HyvorComments from '../common/HyvorComments';
 import UserAvatar from '../common/UserAvatar';
 import globalModals from '../../atoms/globalModals';
-// import useTopics from '../../useTopics';
+import useWorks from '@/src/useWorks';
 
 // import detailPagesAtom from '../../atoms/detailPages';
 
@@ -53,8 +53,13 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
   const { t } = useTranslation('cycleDetail');
   // const hyvorId = `${WEBAPP_URL}cycle/${cycle.id}`;
 
+  const { data: works } = useWorks({ cycles: { some: { id: cycle?.id } } }, {
+    enabled:!!cycle?.id
+  })
+
   const getWorksOpt = () => {
-    return cycle.works.map((w) => {
+    if (!works) return [];
+    return works.map((w) => {
       return (
         <option key={w.id} value={`work-${w.id}`}>
           {w.title}

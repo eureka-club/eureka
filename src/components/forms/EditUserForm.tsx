@@ -291,7 +291,7 @@ const EditUserForm: FunctionComponent = () => {
         alt=''
       />;
       else{
-   if(user){
+   if(user && user?.photos){
       if(!user?.photos.length)
         return <img
         onError={avatarError}

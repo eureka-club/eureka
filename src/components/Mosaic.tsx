@@ -30,7 +30,7 @@ const renderMosaicItem = (
   if (isCycleMosaicItem(item)) {
     return (
       <CycleContext.Provider value={{ cycle: item as CycleMosaicItem }}>
-        <MosaicItemCycle key={`${v4()}`} cycleId={item.id} detailed className="mb-2"/>
+        <MosaicItemCycle cycleId={item.id} detailed className="mb-2"/>
       </CycleContext.Provider>
     );
   }
@@ -46,7 +46,6 @@ const renderMosaicItem = (
 
     return (
       <MosaicItemPost
-        key={`${v4()}`}
         showComments={showComments}
         postId={item.id}
         display={display}
@@ -59,12 +58,12 @@ const renderMosaicItem = (
     return (
       // <WorkContext.Provider value={{ linkToWork: true }}>
       <MosaicItemWork 
-      linkToWork showShare={false} showButtonLabels={showButtonLabels} key={`${v4()}`} workId={item.id} className="mb-2"/>
+      linkToWork showShare={false} showButtonLabels={showButtonLabels} workId={item.id} className="mb-2"/>
       // </WorkContext.Provider>
     );
   }
   else if (isUserMosaicItem(item)) {
-    return <MosaicItemUser key={`${v4()}`} user={item} className="mb-2" />;
+    return <MosaicItemUser  user={item} className="mb-2" />;
   }
   else if(isCommentMosaicItem(item)){
     const it: CommentMosaicItem = item as CommentMosaicItem;
@@ -143,9 +142,9 @@ const Mosaic: FunctionComponent<Props> = ({
         </aside>
       )) || ''}
   </Masonry>*/
-  return <section className="container d-flex flex-wrap flex-column flex-lg-row justify-content-center justify-content-lg-start">
+  return <section data-cy="mosaic-items" className="container d-flex flex-wrap flex-column flex-lg-row justify-content-center justify-content-lg-start">
     {stack.slice(page*count,count*(page+1)).map((item: MosaicItem) => (
-        <aside className={` ${className} p-4`} key={`${v4()}`}>
+        <aside className={` ${className} p-4`} key={v4()}>
           {renderMosaicItem(item, parent, showButtonLabels, display, showComments, cacheKey)}
         </aside>
       ))}
@@ -157,7 +156,7 @@ const Mosaic: FunctionComponent<Props> = ({
     const pages = stack.length / count
     const res = []
     for(let i=0;i<pages;i++)
-      res.push(<Button className={`rounded-circle me-1 shadow ${page===i ? 'text-white bg-secondary':''}`} size="sm" onClick={()=>setPage(i)}>{i+1}</Button>)
+      res.push(<Button key={v4()} className={`rounded-circle me-1 shadow ${page===i ? 'text-white bg-secondary':''}`} size="sm" onClick={()=>setPage(i)}>{i+1}</Button>)
     return <>
     {res}
     </>
