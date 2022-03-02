@@ -27,11 +27,11 @@ export type PostMosaicItem = Prisma.PostGetPayload<{
         creator: { include: { photos:true } };
         comments: {
           include: {
-            creator: { include: { photos:true } };
+            creator: { include: { photos:true } };           
           };
         };
         work: {include:{cycles:true}};
-        cycle:true,
+        cycle:{include:{participants:true}},
       };
     };
   };

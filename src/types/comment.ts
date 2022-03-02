@@ -43,7 +43,7 @@ export type CommentMosaicItem = Prisma.CommentGetPayload<{
         cycles: true;
       };
     };
-    cycle: true;
+    cycle: {include:{participants:true}};
     post:{
       include: {
         creator: {include:{photos:true}};
