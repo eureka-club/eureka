@@ -21,7 +21,7 @@ import {BiChevronRight,BiChevronLeft} from 'react-icons/bi'
 
 const renderMosaicItem = (
   item: MosaicItem,
-  parent: CycleMosaicItem | WorkMosaicItem | undefined,
+  parent: CycleMosaicItem | WorkMosaicItem | PostMosaicItem| undefined,
   showButtonLabels: boolean,
   display: 'h' | 'v',
   showComments: boolean,
@@ -103,7 +103,7 @@ const Mosaic: FunctionComponent<Props> = ({
   className,
   parent,
 }) => {
-  const count = +(process.env.NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT||10)
+  const count = +(process.env.NEXT_PUBLIC_MOSAIC_ITEMS_COUNT||10)
   const [page,setPage] =useState<number>(0)
   // const next = ()=>{
   //   setPage(p=>p+1)

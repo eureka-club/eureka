@@ -18,6 +18,7 @@ export const find = async (id: number): Promise<PostWithCyclesWorks | null> => {
       cycles: {
         include: {
           localImages: true,
+          participants:true
         },
       },
       likes: true,
@@ -49,7 +50,7 @@ export const findAll = async (props?:Prisma.PostFindManyArgs,page?:number): Prom
       
         creator: {include:{photos:true}},
         localImages: true,
-        cycles: { include: { localImages: true } },
+        cycles: { include: { localImages: true, participants:true } },
         works: { include: { localImages: true } },
         likes: true,
         favs: true,

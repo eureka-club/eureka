@@ -25,12 +25,13 @@ export type WorkMosaicItem = Prisma.WorkGetPayload<{
       localImages: true;
       works: {
         include: {
-          localImages: true;
+          localImages: true;          
         };
       };
       cycles: {
         include: {
           localImages: true;
+          participants:true;
         };
       };
       likes: true;
