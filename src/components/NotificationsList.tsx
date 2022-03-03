@@ -32,6 +32,7 @@ const NotificationsList: React.FC<Props> = ({className}) => {
     enabled:!!userId
     });
 
+    
     useEffect(()=>{
     if(session)
         setUserId(session.user.id);
@@ -86,7 +87,8 @@ const NotificationsList: React.FC<Props> = ({className}) => {
         },
       );
     
-
+    if(!user || !user.notifications)
+      return <></>    
     const notificationOnClick = (e: React.MouseEvent<Element>,userId:number, notificationId:number, contextURL:string) => {
         e.preventDefault();
         if(user){

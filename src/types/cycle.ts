@@ -15,10 +15,10 @@ export type CycleWithImages = Prisma.CycleGetPayload<{
 
 export type CycleMosaicItem = Prisma.CycleGetPayload<{
   include: {
-    creator: {include:{photos:true}};
+    creator: true;
     localImages: true;
     complementaryMaterials: true;
-    participants: {include:{photos:true}};
+    participants: true;
     favs: true;
     cycleWorksDates: true;
     ratings: true;

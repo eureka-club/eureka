@@ -7,8 +7,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Spinner, Alert, Button } from 'react-bootstrap';
-
-import { dehydrate, QueryClient, useQuery,useQueryClient } from 'react-query';
+import { useQueryClient } from 'react-query';
 // import { CycleMosaicItem } from '../../src/types/cycle';
 import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
@@ -19,19 +18,12 @@ import { CycleContext, useCycleContext } from '../../src/useCycleContext';
 import globalModalsAtom from '../../src/atoms/globalModals';
 import HelmetMetaData from '../../src/components/HelmetMetaData'
 import { WEBAPP_URL } from '../../src/constants';
-import {CycleMosaicItem} from '@/src/types/cycle'
-interface Props{
-  cycle:CycleMosaicItem
-}
-const getCycle = async (id:string)=>{
-  const res = await fetch(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle/${id}`)
-  return res.json();
-  }
-const CycleDetailPage: NextPage<Props> = () => {
+
+
+const CycleDetailPage: NextPage = () => {
   const [session, isLoadingSession] = useSession();
   const router = useRouter();
   const [id, setId] = useState<string>('');
-  
   const { data: cycle, isSuccess, isLoading, isFetching, isError, error } = useCycle(+id);
   // const [cycle, setCycle] = useState<CycleMosaicItem | undefined>(undefined);
   const { t } = useTranslation('common');
@@ -50,7 +42,7 @@ const CycleDetailPage: NextPage<Props> = () => {
   }, [router]);
 
   useEffect(() => {
-    if (+id /* && isSuccess */ && (!cycle || !cycle.id)) {
+    if (+id && isSuccess && (!cycle || !cycle.id)) {
       queryClient.invalidateQueries(['CYCLE', `${+id}`]);
     }
     // if (cycle) {
@@ -59,7 +51,7 @@ const CycleDetailPage: NextPage<Props> = () => {
     //     setCycle(c);
     //   }
     // }
-  }, [cycle, /* isSuccess, */ id]);
+  }, [cycle, isSuccess, id]);
 
   useEffect(() => {
     if (!isLoadingSession) {
@@ -88,7 +80,7 @@ const CycleDetailPage: NextPage<Props> = () => {
       if (cycle.access === 3 && !currentUserIsParticipant) return <Alert>Not authorized</Alert>;
     }
 
-    if (isLoadingSession || isFetching || isLoading ) {
+    if (isLoadingSession || isFetching || isLoading) {
       return <Spinner animation="grow" variant="info" />;
     }
 
@@ -100,7 +92,7 @@ const CycleDetailPage: NextPage<Props> = () => {
       );
 
     return <></>;
-  }; 
+  };
 
   const openSignInModal = () => {
     setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
@@ -170,7 +162,7 @@ const CycleDetailPage: NextPage<Props> = () => {
         <HelmetMetaData title={cycle.title}
         type='article'
         url={`${WEBAPP_URL}/cycle/${cycle.id}`}
-        image={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${cycle.localImages ? cycle.localImages[0].storedFile:undefined}`}
+        image={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${cycle.localImages[0].storedFile}`}
         ></HelmetMetaData>
 
         <SimpleLayout banner={getBanner()} title={cycle ? cycle.title : ''}>
@@ -185,47 +177,5 @@ const CycleDetailPage: NextPage<Props> = () => {
     </SimpleLayout>
   );
 };
-
-export async function getServerSideProps(context:{query:{id:string}}) {
-  const {id} = context.query;
-  
-
-  const queryClient = new QueryClient()
- 
-   await queryClient.prefetchQuery('cycle', ()=>getCycle(id))
-
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-  }
-}
-
-/* export async function getStaticProps(props:{id:string}) {
-  const {id} = props
-  const res = await fetch(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle/${id}`)
-  const cycle = await res.json();
-debugger;
-  return {
-    props: {
-      cycle,
-    },
-    revalidate: 10, // In seconds
-  }
-} */
-
-/* export async function getStaticPaths() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle`)
-  const {data:cycles} = await res.json();debugger;
-
-  const paths = cycles.map((cycle:CycleMosaicItem) => ({
-    params: { id: cycle.id.toString() },
-  }))
-
-  // We'll pre-render only these paths at build time.
-  // { fallback: blocking } will server-render pages
-  // on-demand if the path doesn't exist.
-  return { paths, fallback: 'blocking' }
-} */
 
 export default CycleDetailPage;

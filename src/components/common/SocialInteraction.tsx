@@ -131,7 +131,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
     calculateQty();
 
     let ratingByMe = false;
-    if (session && user && user.id && entity) {
+    if (session && user && user.id && entity) {debugger;
       if (isWork(entity)) {
         // if (entity.id === 125) debugger;
         // let idx = user.readOrWatchedWorks.findIndex((i: Work) => i.id === entity.id);

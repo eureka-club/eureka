@@ -50,7 +50,11 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
   return (
     <>
       {(isCyclesLoading) && <Spinner animation="grow" role="status" />}
-      {mosaicData.length > 0 && <Mosaic cacheKey={['WORK',work.id.toString()]} className='d-flex justify-content-center justify-content-md-start' stack={mosaicData} parent={work} />}
+      {mosaicData.length > 0 && <Mosaic
+        cacheKey={['WORK',work.id.toString()]} 
+        // className='d-flex justify-content-center justify-content-md-start' 
+        stack={mosaicData} 
+        parent={work} />}
     </>
   );
 };
