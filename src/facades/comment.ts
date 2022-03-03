@@ -48,7 +48,7 @@ export const find = async (id: number): Promise<CommentMosaicItem | null> => {
           cycles: true,
         },
       },
-      cycle: true,
+      cycle: {include:{participants:true}},
       post:{
         include: {
           creator: {include:{photos:true}},
@@ -143,7 +143,7 @@ export const findAll = async (props?:Prisma.CommentFindManyArgs,page?:number): P
           cycles: true,
         },
       },
-      cycle: true,
+      cycle: {include:{participants:true}},
       post:{
         include: {
           creator: {include:{photos:true}},
@@ -169,7 +169,7 @@ export const findAll = async (props?:Prisma.CommentFindManyArgs,page?:number): P
                 },
               },
               work: {include:{cycles:true}},
-              cycle:true,
+              cycle: {include:{participants:{select:{id:true}}}},
             },
           },
         }
@@ -183,7 +183,7 @@ export const findAll = async (props?:Prisma.CommentFindManyArgs,page?:number): P
             },
           },
           work: {include:{cycles:true}},
-          cycle:true,
+          cycle: {include:{participants:{select:{id:true}}}},
         },
       },
     }

@@ -288,8 +288,9 @@ const CommentActionsBar: FunctionComponent<Props> = ({
         payload = {...payload, selectedPostId: post.id}
         if(user.id !== post.creatorId)
           notificationToUsers.add(post.creatorId);
-        if(parent && isCycleMosaicItem(parent)){//in cycle context
-          const cycle = (parent as CycleMosaicItem);
+        const ppc = post.cycles ? post.cycles[0] : null;  //post belongs to a cycle context
+        const cycle = (parent&&isCycleMosaicItem(parent)) ? parent : ppc;
+        if(cycle){//in cycle context
           if(user.id !== cycle.creatorId)
             notificationToUsers.add(cycle.creatorId);
           notificationMessage = `commentCreatedAboutPostInCycle!|!${JSON.stringify({
@@ -479,7 +480,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
   //   }
   // };
 
-  // const onKeyPressEditForm = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {debugger;
+  // const onKeyPressEditForm = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
   //   if (e.key === 'Enter' && !e.shiftKey) {
   //     submitEditForm();
   //     e.preventDefault();
@@ -489,6 +490,21 @@ const CommentActionsBar: FunctionComponent<Props> = ({
   const canCreateComment = ()=>{//now comments creation is allowed only within a cycle detail
     if(!session)return false;
 
+    if(isComment(entity)){
+      const comment = entity as CommentMosaicItem;
+      if(comment.cycle){
+        //const cycle = queryClient.getQueryData<CycleMosaicItem>(['CYCLE',`${post.cycles[0].id}`])
+        const cycle = comment.cycle as CycleMosaicItem
+        if(cycle){
+          if(cycle.creatorId===session.user.id)return true;
+          const idx = cycle.participants 
+            ? cycle.participants.findIndex(p=>p.id==session.user.id) 
+            : -1
+            return idx >= 0;
+        }
+
+      }
+    }
     if(isPostMosaicItem(entity)){//within a cycle detail
       const post = entity as PostMosaicItem;
       if(post.cycles){
@@ -496,8 +512,25 @@ const CommentActionsBar: FunctionComponent<Props> = ({
         const cycle = post.cycles[0] as CycleMosaicItem
         if(cycle){
           if(cycle.creatorId===session.user.id)return true;
-          return cycle.participants ? cycle.participants.findIndex(p=>p.id==session.user.id)>-1:false;
-          
+          const idx = cycle.participants 
+            ? cycle.participants.findIndex(p=>p.id==session.user.id) 
+            : -1
+            return idx >= 0;
+        }
+
+      }
+    }
+    if(isWorkMosaicItem(entity)){//within a cycle detail
+      const work = entity as WorkMosaicItem;
+      if(work.cycles){
+        //const cycle = queryClient.getQueryData<CycleMosaicItem>(['CYCLE',`${post.cycles[0].id}`])
+        const cycle = work.cycles[0] as CycleMosaicItem
+        if(cycle){
+          if(cycle.creatorId===session.user.id)return true;
+          const idx = cycle.participants 
+            ? cycle.participants.findIndex(p=>p.id==session.user.id) 
+            : -1
+            return idx >= 0;
         }
 
       }

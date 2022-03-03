@@ -32,7 +32,7 @@ export const find = async (id: number): Promise<PostWithCyclesWorks | null> => {
             },
           },
           work: {include:{cycles:true}},
-          cycle:true,
+          cycle: {include:{participants:{select:{id:true}}}}
         },
       },
     },

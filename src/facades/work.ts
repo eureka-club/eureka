@@ -21,8 +21,8 @@ export const find = async (id: number): Promise<WorkMosaicItem | null> => {
           },
           cycles: {
             include: {
-              localImages: true,    
-              participants:true,          
+              localImages: true,
+              participants:true
             },
           },
           likes: true,
@@ -36,7 +36,7 @@ export const find = async (id: number): Promise<WorkMosaicItem | null> => {
                 },
               },
               work: {include:{cycles:true}},
-              cycle:true,
+              cycle:{include:{participants:true}},
             },
           },
         },
@@ -46,6 +46,7 @@ export const find = async (id: number): Promise<WorkMosaicItem | null> => {
             include: {
               creator: { include: { photos: true } },
               comments: { include: { creator: { include: { photos: true } } } },
+              cycle:{include:{participants:true}}
             },
           },
       cycles: {
@@ -56,18 +57,15 @@ export const find = async (id: number): Promise<WorkMosaicItem | null> => {
 };
 
 
-export const findAll = async (props?:Prisma.WorkFindManyArgs): Promise<Work[]|WorkMosaicItem[]> => {
+export const findAll = async (props?:Prisma.WorkFindManyArgs): Promise<WorkMosaicItem[]> => {
   const {where,include=null,take} = props || {};
   return prisma.work.findMany({
     take,
     orderBy: { createdAt: 'desc' },
-    ... include ? {include} : {include: {
+    include: {
       localImages: true,
       favs: true,
       ratings: true,
-      comments: {
-        include: { comments: true },
-      },
       posts: {
         include: {
           creator: {include:{photos:true}},
@@ -80,6 +78,7 @@ export const findAll = async (props?:Prisma.WorkFindManyArgs): Promise<Work[]|Wo
           cycles: {
             include: {
               localImages: true,
+              participants:true
             },
           },
           likes: true,
@@ -93,16 +92,23 @@ export const findAll = async (props?:Prisma.WorkFindManyArgs): Promise<Work[]|Wo
                 },
               },
               work: {include:{cycles:true}},
-              cycle:true,
+              cycle:{include:{participants:true}},
             },
           },
         },
         orderBy:{id:'desc'}
       },
+     comments: {
+            include: {
+              creator: { include: { photos: true } },
+              comments: { include: { creator: { include: { photos: true } } } },
+              cycle:{include:{participants:true}}
+            },
+          },
       cycles: {
         orderBy:{id:'desc'}
       },
-    }},
+    },
     where,
   });
 };
