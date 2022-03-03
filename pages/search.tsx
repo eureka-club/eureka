@@ -250,7 +250,7 @@ const SearchPage: NextPage = () => {
       </h1>
       <FilterEngine key={router.asPath} />
       <div className='d-flex flex-column justify-content-center'>
-        {(!isLoading && <Mosaic cacheKey={["ITEMS", q!]} className="mb-4" showButtonLabels={false} stack={homepageMosaicDataFiltered} />) || <></>}
+      {(!isLoading && <Mosaic cacheKey={["ITEMS", q!]} enabledPagination={false}  showButtonLabels={false} stack={homepageMosaicDataFiltered} />) || <></>}
       </div>
       {genLoadingCmp()}
       {renderErrorMessage()}

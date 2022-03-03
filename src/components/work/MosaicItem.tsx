@@ -164,7 +164,9 @@ const MosaicItem: FunctionComponent<Props> = ({
     setLoading(true);
   };
   const renderLocalImageComponent = () => {
-    const img = <LocalImageComponent filePath={localImages[0].storedFile} alt={title} />;
+    const img = localImages 
+      ? <LocalImageComponent filePath={localImages[0].storedFile} alt={title} />
+      : undefined;
     if (linkToWork) {
       return (
         <div

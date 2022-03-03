@@ -105,30 +105,50 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           queryClient.setQueryData(['WORK',`${w.id}`],w)
         })        
       }
+      if(cycle.participants){
+        cycle.participants.forEach(u => {
+          queryClient.setQueryData(['USER',`${u.id}`],u)
+        })
+      }
+    }
+  },[cycle,queryClient])
+
+  useEffect(() => {
+    if (works) {      
       if (works) { 
         works.forEach(w => {
           queryClient.setQueryData(['WORK',`${w.id}`],w)
         })        
       }
     }
-  },[cycle,queryClient,works])
+  },[queryClient,works])
 
   const [page,setPage] = useState<number>(1);
   const [where,setWhere] = useState<{filtersWork:number[]}>()
   
-  const {data} = useCycleItem(+cycleId,page,where,{
+  const {data} = useCycleItem(+cycleId,-1,where,{
     enabled:!!cycleId
   })
 
   const [items,setItems] = useState<(CommentMosaicItem|PostMosaicItem)[]>();
-  const [hasNextPage,setHasNextPage] = useState<boolean>();
+  //const [hasNextPage,setHasNextPage] = useState<boolean>();
 
   useEffect(()=>{
     if(data){
       setItems(data.items);
-      setHasNextPage(data.hasNextPage);
+      //setHasNextPage(data.hasNextPage);
+
+      for(let i of data.items){
+        if(isPostMosaicItem(i)){
+          queryClient.setQueryData(['POST',i.id.toString()],i)          
+        }
+        else if(isCommentMosaicItem(i)){
+          queryClient.setQueryData(['COMMENT',i.id.toString()],i)          
+        }
+        
+      }
     }
-  },[data])
+  },[data,queryClient])
 
 
   // useEffect(()=>{
@@ -313,14 +333,18 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       for(let i of items){
         if(isPostMosaicItem(i)){
           const ck = ['POST',i.id.toString()];
-          queryClient.setQueryData(ck,i)
           res.push(
-            <PostMosaic key={v4()} postId={i.id} display="h" cacheKey={ck} showComments className="mb-2" />
+            <PostMosaic 
+            showComments 
+            postId={i.id} 
+            display="h" 
+            key={v4()} 
+            cacheKey={ck} 
+            className="mb-2" />
           )
         }
         else if(isCommentMosaicItem(i)){
           const ck = ['COMMENT',i.id.toString()];
-          queryClient.setQueryData(ck,i)
           res.push(
             <CommentMosaic key={v4()} detailed commentId={i.id} 
             commentParent={i.post as PostMosaicItem || i.work as WorkMosaicItem || i.cycle as CycleMosaicItem}
@@ -330,13 +354,14 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         
       }
       return <section data-cy="mosaic-items">
-        {res}
-         {/* <Mosaic
+         {/* {res}  */}        
+         <Mosaic 
               display="h"
               stack={items}
               showComments={true}
+              enabledPagination={true}
               cacheKey={['ITEMS', `CYCLE-${cycle.id}-PAGE-${page}`]}
-            />  */}
+            /> 
       </section>
     }
     return <></>
@@ -501,7 +526,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 <MosaicContext.Provider value={{ showShare: true }}>
                   {renderItems()}
                 </MosaicContext.Provider>
-                {page >1 && <Button 
+                {/* {page >1 && <Button 
                 className="my-3 pe-3 rounded-pill text-white" 
                 onClick={() => setPage(()=>page-1)} 
                 >
@@ -516,7 +541,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                   <span>
                     <RiArrowDownSLine /> {t('common:next')}
                   </span>
-                </Button>}
+                </Button>} */}
                 {/* {(cycle.posts && cycle.posts.length && (
                     <PostsMosaic display="h" posts={items} showComments cacheKey={['CYCLE', `${cycle.id}`]} />
                 )) ||
@@ -590,7 +615,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           <TabPane eventKey="participants">
             {/* {cycle.participants && cycle.participants.map((p) => <UserAvatar className="mb-3 mr-3" user={p} key={p.id} />)} */}
             {cycle.participants && (
-              <Mosaic cacheKey={['CYCLE',cycle.id.toString()]} showButtonLabels={false} stack={[...cycle.participants, cycle.creator] as UserMosaicItem[]} />
+              <Mosaic cacheKey={['CYCLE',cycle.id.toString()]} showButtonLabels={false} enabledPagination={false} stack={[...cycle.participants, cycle.creator] as UserMosaicItem[]} />
             )}
             <p />
           </TabPane>

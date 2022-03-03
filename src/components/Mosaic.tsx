@@ -25,7 +25,7 @@ const renderMosaicItem = (
   showButtonLabels: boolean,
   display: 'h' | 'v',
   showComments: boolean,
-  cacheKey: [string,string],
+  cacheKey: [string,string],  
 ) => {
   if (isCycleMosaicItem(item)) {
     return (
@@ -92,6 +92,7 @@ interface Props {
   cacheKey: [string,string];
   className?: string;
   parent?: CycleMosaicItem | WorkMosaicItem;
+  enabledPagination?:boolean;
 }
 
 const Mosaic: FunctionComponent<Props> = ({
@@ -102,6 +103,7 @@ const Mosaic: FunctionComponent<Props> = ({
   cacheKey,
   className,
   parent,
+  enabledPagination = true,
 }) => {
   const count = +(process.env.NEXT_PUBLIC_MOSAIC_ITEMS_COUNT||10)
   const [page,setPage] =useState<number>(0)
@@ -142,8 +144,14 @@ const Mosaic: FunctionComponent<Props> = ({
         </aside>
       )) || ''}
   </Masonry>*/
-  return <section data-cy="mosaic-items" className="container d-flex flex-wrap flex-column flex-lg-row justify-content-center justify-content-lg-start">
-    {stack.slice(page*count,count*(page+1)).map((item: MosaicItem) => (
+  const items = enabledPagination
+    ? stack.slice(page*count,count*(page+1))
+    : stack;
+  return <section 
+  data-cy="mosaic-items" 
+  className={`container d-flex ${display=='h' ? 'flex-column' : 'flex-row'} flex-wrap justify-content-start`}>
+    {items
+    .map((item: MosaicItem) => (
         <aside className={` ${className} p-4`} key={v4()}>
           {renderMosaicItem(item, parent, showButtonLabels, display, showComments, cacheKey)}
         </aside>
@@ -169,7 +177,7 @@ const Mosaic: FunctionComponent<Props> = ({
       {renderMosaic()}
      </div>
      <aside className="d-flex justify-content-center">
-       {renderPagesLinks()}
+       {enabledPagination && renderPagesLinks()}
      {/* <Button disabled={page==0} onClick={previous}><BiChevronLeft/></Button>
      <Button disabled={(page+1)*count == stack.length} onClick={next}><BiChevronRight/></Button> */}
 
