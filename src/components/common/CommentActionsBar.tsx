@@ -654,7 +654,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                 </Form> */}
                 {/* {renderEditorWYSWYG(onKeyUpEditorCreate)} */}
                 <aside className="d-flex align-items-center">
-                  {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
+                  {(!isLoadingUser && user) ? <UserAvatar userId={user.id} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
                   {<Editor value={newCommentInput} disabled={!canCreateComment()} onChange={setNewCommentInput} onSave={(text)=>{
                     submitCreateForm();          
                     }}
@@ -678,7 +678,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                 </Form> */}
                 {/* {renderEditorWYSWYG(onKeyUpEditorEdit, editCommentInput)} */}
                 <aside className="d-flex align-items-center">
-                  {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
+                  {(!isLoadingUser && user) ? <UserAvatar userId={user.id} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
                     <Editor value={editCommentInput} onChange={setEditCommentInput} onSave={(text)=>{
                       submitEditForm();          
                       }}
@@ -735,7 +735,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                 </Form> */}
                 {/* {renderEditorWYSWYG(onKeyUpEditorCreate)} */}
                 <aside className="d-flex align-items-center">
-                  {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
+                  {(!isLoadingUser && user) ? <UserAvatar userId={user.id} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
                     <Editor value={newCommentInput} onChange={setNewCommentInput} disabled={!canCreateComment()} onSave={(text)=>{
                       submitCreateForm();          
                       }}
@@ -759,7 +759,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                 </Form> */}
                 {/* {renderEditorWYSWYG(onKeyUpEditorEdit, editCommentInput)} */}
                 <aside className="d-flex align-items-center">
-                  {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
+                  {(!isLoadingUser && user) ? <UserAvatar userId={user.id} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
                     <Editor value={editCommentInput} onChange={setEditCommentInput} onSave={(text)=>{
                       submitEditForm();          
                       }}
@@ -776,7 +776,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
       <>
         {/* {renderEditorWYSWYG(onKeyUpEditorCreate)}     */}
         <aside className="d-flex align-items-center">
-          {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
+          {(!isLoadingUser && user) ? <UserAvatar userId={user.id} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
           <Editor value={newCommentInput} onChange={setNewCommentInput} disabled={!canCreateComment()} onSave={(text)=>{
             submitCreateForm();          
             }}

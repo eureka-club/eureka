@@ -95,7 +95,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
                         />
                         {post.creator.name}
                       </a> */}
-                      <Avatar user={post.creator} showFullName />
+                      <Avatar userId={post.creator.id} showFullName />
                     </Link>
                </div>
                <div>
@@ -173,7 +173,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
                   />
                   {post.creator.name}
                 </a> */}
-                <Avatar user={post.creator} showFullName />
+                <Avatar userId={post.creator.id} showFullName />
               </Link>
               </div>
               <div>

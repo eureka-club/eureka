@@ -137,7 +137,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
           {' '}
           <Row className={`d-flex justify-content-center ${styles.discussionContainer}`}>
             <Col xs={12} md={1} className="text-center mb-1">
-              {session && session.user && <UserAvatar user={session.user} showName={false} />}
+              {session && session.user && <UserAvatar userId={session.user.id} showName={false} />}
             </Col>
             <Col xs={12} md={11}>
               <ButtonGroup className={`d-flex flex-column flex-md-row justify-content-between ${styles.optButtons}`} size="lg">

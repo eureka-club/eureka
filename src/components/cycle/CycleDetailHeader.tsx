@@ -314,7 +314,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
       )}
       <Col className="d-none d-lg-flex col-12 col-lg-4 justify-content-center justify-content-lg-end">
         <aside className='d-flex flex-column'>
-          <UserAvatar  user={cycle.creator}  showFullName />
+          <UserAvatar  userId={cycle.creator.id}  showFullName />
         <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
           <MosaicItem cycleId={cycle.id} showTrash className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
         </MosaicContext.Provider>
@@ -331,7 +331,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
       )}
       <Col className='col-12 d-flex justify-content-between align-items-baseline d-lg-none' >
         <Row>
-         <UserAvatar user={cycle.creator}  showFullName />
+         <UserAvatar userId={cycle.creator.id}  showFullName />
          </Row>
           <Row>
             {show && (
