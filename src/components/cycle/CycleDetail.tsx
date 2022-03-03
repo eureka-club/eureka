@@ -882,9 +882,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     if(cycle && works){
       
       // <WorksMosaic cycle={cycle} className="d-flex mb-5 justify-content-center" />
-      return <section className="d-flex">
+      return <section className="d-flex justify-content-center">
           <MosaicContext.Provider value={{ showShare: true }}>  
-          <div className='container d-flex flex-wrap flex-column flex-lg-row justify-content-center justify-content-lg-start '>      
+          <div className='d-flex flex-wrap flex-column flex-lg-row'>      
             {getWorksSorted().map(w=>{
               queryClient.setQueryData(['WORK',`${w.id}`],w)
               return <div className='p-4' key={v4()}>
