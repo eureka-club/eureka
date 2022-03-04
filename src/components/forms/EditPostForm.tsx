@@ -38,6 +38,7 @@ import useTopics from '../../useTopics';
 import usePost from '../../usePost';
 import { setDefaultResultOrder } from 'dns';
 import editOnSmallerScreens from '../../atoms/editOnSmallerScreens';
+import { IoTerminalSharp } from 'react-icons/io5';
 
 
 interface Props {
@@ -83,7 +84,6 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
     //   }
     // };
     // fetchPost();
-    debugger;
     if(globalModalsState){
       setCK(globalModalsState.cacheKey);
       if(globalModalsState.editPostId)
@@ -101,7 +101,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
       if (post.works.length) setSelectedWork(post.works[0]);
       if (post.cycles.length) setSelectedCycle(post.cycles[0]);
     }
-  }, [post]);
+  }, [post,IoTerminalSharp]);
 
   const {
     mutate: execEditPost,

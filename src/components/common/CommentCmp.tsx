@@ -57,7 +57,7 @@ const CommentCmp: FunctionComponent<Props> = ({ comment, cacheKey, parent }) => 
                         <Avatar userId={commentChild.creator.id} size="xs" showName={false} />
                       </Col>
                       <Col md={11} xs={10} className="d-flex flex-column">
-                      <CommentTextBox comment={ commentChild} />    
+                      <CommentTextBox comment={ commentChild as CommentMosaicItem} />    
                         {/* {renderCommentActions(commentChild)}                     */}
                         <CommentActionsBar key={ v4()} entity={commentChild as CommentMosaicItem} parent={parent} cacheKey={cacheKey||['COMMENT',`${comment.id}`]}/>
                       </Col>

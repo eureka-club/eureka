@@ -16,13 +16,8 @@ export const find = async (props: findProps): Promise<User | UserMosaicItem | nu
     },
     include: {
       notifications:{
-        include:{
-          notification:true,
-          // notification:{
-          //   include:{
-          //     toUsers:true
-          //   }
-          // },
+        select:{
+          notification:{select:{message:true,createdAt:true}},
         },
         where:{viewed: false},
         orderBy:{notificationId:"desc"}

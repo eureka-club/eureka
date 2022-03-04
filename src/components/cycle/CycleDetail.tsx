@@ -346,8 +346,11 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         else if(isCommentMosaicItem(i)){
           const ck = ['COMMENT',i.id.toString()];
           res.push(
-            <CommentMosaic key={v4()} detailed commentId={i.id} 
-            commentParent={i.post as PostMosaicItem || i.work as WorkMosaicItem || i.cycle as CycleMosaicItem}
+            <CommentMosaic 
+            key={v4()} 
+            detailed 
+            commentId={i.id} 
+            // commentParent={i.post as PostMosaicItem || i.work as WorkMosaicItem || i.cycle as CycleMosaicItem}
             cacheKey={ck} className="mb-2" />
           )
         }
@@ -630,6 +633,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   const renderRestrictTabsHeaders = () => {
     if (cycle) {
+      const participants = cycle.participants;
       const res = (
         <>
           <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
@@ -648,7 +652,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
           <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
             <NavLink eventKey="participants">
-              <span className="mb-3">{t('Participants')} ({[...cycle.participants, cycle.creator].length})</span>
+              <span className="mb-3">{t('Participants')} ({participants.length+1})</span>
             </NavLink>
           </NavItem>
         </>
@@ -881,7 +885,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       .sort((f, s) => {
         const fCD = dayjs(f.startDate!);
         const sCD = dayjs(s.startDate!);
-        const isActive = (w: CycleWork) => {
+        const isActive = (w: {startDate:Date|null,endDate:Date|null}) => {
           if (w.startDate && w.endDate) return dayjs().isBetween(w.startDate!, w.endDate);
           if (w.startDate && !w.endDate) return dayjs().isAfter(w.startDate);
           return false;

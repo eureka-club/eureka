@@ -134,36 +134,36 @@ const CommentActionsBar: FunctionComponent<Props> = ({
         if (cacheKey) {
           
           await queryClient.cancelQueries(cacheKey)
-          const newComment = createDummyComment(payload);
+          // const newComment = createDummyComment(payload);
           const snapshot = queryClient.getQueryData(cacheKey);
           
-          if(isCycleMosaicItem(snapshot as CycleMosaicItem)){
-            let sc = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem|PostMosaicItem>(cacheKey);
-            if(sc){
-              if(newComment.postId){
-                  const post = sc as PostMosaicItem//sc.posts.find(p=>p.id==newComment.postId)
-                  if(post){
-                    newComment.post = post;
-                    post.comments.unshift(newComment);
-                    queryClient.setQueryData(cacheKey,{...post});
-                  }
-              }
-              if(newComment.workId){
-                const work = sc as WorkMosaicItem//sc.works.find(p=>p.id==newComment.postId)
-                  if(work){
-                    work.comments.push(newComment);
-                    newComment.work = work;
-                  }
-              }
-              if(newComment.cycleId){
-                const cycle = sc as CycleMosaicItem
-                cycle.comments.push(newComment);
-                newComment.cycle = cycle;
-              }
-              queryClient.setQueryData(cacheKey,{...sc});             
+          // if(isCycleMosaicItem(snapshot as CycleMosaicItem)){
+          //   let sc = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem|PostMosaicItem>(cacheKey);
+          //   if(sc){
+          //     if(newComment.postId){
+          //         const post = sc as PostMosaicItem//sc.posts.find(p=>p.id==newComment.postId)
+          //         if(post){
+          //           newComment.post = post;
+          //           post.comments.unshift(newComment);
+          //           queryClient.setQueryData(cacheKey,{...post});
+          //         }
+          //     }
+          //     if(newComment.workId){
+          //       const work = sc as WorkMosaicItem//sc.works.find(p=>p.id==newComment.postId)
+          //         if(work){
+          //           work.comments.push(newComment);
+          //           newComment.work = work;
+          //         }
+          //     }
+          //     if(newComment.cycleId){
+          //       const cycle = sc as CycleMosaicItem
+          //       cycle.comments.push(newComment);
+          //       newComment.cycle = cycle;
+          //     }
+          //     queryClient.setQueryData(cacheKey,{...sc});             
               
-            }           
-          }
+          //   }           
+          // }
           return { cacheKey, snapshot };
         }
         return { cacheKey: undefined, snapshot: null };
@@ -494,7 +494,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
       const comment = entity as CommentMosaicItem;
       if(comment.cycle){
         //const cycle = queryClient.getQueryData<CycleMosaicItem>(['CYCLE',`${post.cycles[0].id}`])
-        const cycle = comment.cycle as CycleMosaicItem
+        const cycle = comment.cycle
         if(cycle){
           if(cycle.creatorId===session.user.id)return true;
           const idx = cycle.participants 
@@ -509,7 +509,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
       const post = entity as PostMosaicItem;
       if(post.cycles){
         //const cycle = queryClient.getQueryData<CycleMosaicItem>(['CYCLE',`${post.cycles[0].id}`])
-        const cycle = post.cycles[0] as CycleMosaicItem
+        const cycle = post.cycles[0]
         if(cycle){
           if(cycle.creatorId===session.user.id)return true;
           const idx = cycle.participants 

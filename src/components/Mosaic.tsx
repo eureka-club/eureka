@@ -35,14 +35,14 @@ const renderMosaicItem = (
     );
   }
   else if (isPostMosaicItem(item)) {
-    let pp = parent;
-    if (!pp) {
-      const it: PostMosaicItem = item as PostMosaicItem;
-      if (it.works && it.works.length > 0) pp = it.works[0] as WorkMosaicItem;
-      else if (it.cycles && it.cycles.length > 0) pp = it.cycles[0] as CycleMosaicItem;
-    }
-    const cycleId = isCycleMosaicItem(pp!) ? pp.id : undefined;
-    const workId = isWorkMosaicItem(pp!) ? pp.id : undefined;
+    // let pp = parent;
+    // if (!pp) {
+    //   const it: PostMosaicItem = item as PostMosaicItem;
+    //   if (it.works && it.works.length > 0) pp = it.works[0] as WorkMosaicItem;
+    //   else if (it.cycles && it.cycles.length > 0) pp = it.cycles[0] as CycleMosaicItem;
+    // }
+    // const cycleId = isCycleMosaicItem(pp!) ? pp.id : undefined;
+    // const workId = isWorkMosaicItem(pp!) ? pp.id : undefined;
 
     return (
       <MosaicItemPost
@@ -67,19 +67,7 @@ const renderMosaicItem = (
   }
   else if(isCommentMosaicItem(item)){
     const it: CommentMosaicItem = item as CommentMosaicItem;
-    let pp: CycleMosaicItem|WorkMosaicItem|PostMosaicItem|undefined = undefined;
-    if(it.workId)
-      pp = it.work as WorkMosaicItem;
-    else if(it.cycleId){
-
-      pp = it.cycle as CycleMosaicItem;
-    }
-    else if(it.postId)
-      pp = it.post as PostMosaicItem;
-
-      if(pp){
-        return <MosaicItemComment detailed commentId={it.id} cacheKey={cacheKey} commentParent={pp} />;
-      }
+    return <MosaicItemComment detailed commentId={it.id} cacheKey={cacheKey} />;      
   }
 
   return <></>;
