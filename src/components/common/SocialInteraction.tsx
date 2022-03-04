@@ -222,7 +222,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
       if (parentIsCycle) return `${WEBAPP_URL}/cycle/${post.cycles[0].id}/post/${post.id}`;
     }
     if (isWork(entity)) return `${WEBAPP_URL}/work/${entity.id}`;
-    if (isCycle(entity)) return `${WEBAPP_URL}/cycle/${entity.id}/1`;
+    if (isCycle(entity)) return `${WEBAPP_URL}/cycle/${entity.id}`;
     return `${WEBAPP_URL}/${router.asPath}`;
   })();
 

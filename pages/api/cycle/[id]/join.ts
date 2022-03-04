@@ -42,8 +42,8 @@ export default getApiHandler()
         const params = `${cycle.id}!|!${session.user.id}`;
         const hash = bcrypt.hashSync(params, 8);
         const base64Hash = Buffer.from(hash, 'binary').toString('base64');
-        const authorizeURL = `${WEBAPP_URL}/api/cycle/${cycle.id}/1/${session.user.id}/${base64Hash}/1`;
-        const denyURL = `${WEBAPP_URL}/api/cycle/${cycle.id}/1/${session.user.id}/${base64Hash}/0`;
+        const authorizeURL = `${WEBAPP_URL}/api/cycle/${cycle.id}/${session.user.id}/${base64Hash}`;
+        const denyURL = `${WEBAPP_URL}/api/cycle/${cycle.id}/${session.user.id}/${base64Hash}/0`;
         const applicantMediathequeURL = `${WEBAPP_URL}/mediatheque/${session.user.id}`;
         const locale = req.cookies.NEXT_LOCALE;
         const t = await getT(locale, 'cycleJoin');

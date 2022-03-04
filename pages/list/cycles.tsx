@@ -82,7 +82,7 @@ const ListCyclesPage: NextPage<Props> = ({ cycles }) => {
               <td>{advancedDayjs(dayjs(cycle.startDate).format()).utc().format(DATE_FORMAT_HUMANIC_ADVANCED)}</td>
               <td>{advancedDayjs(dayjs(cycle.endDate).format()).utc().format(DATE_FORMAT_HUMANIC_ADVANCED)}</td>
               <td>
-                <Link href={`/cycle/${cycle.id}/1`}>
+                <Link href={`/cycle/${cycle.id}`}>
                   <a>detail</a>
                 </Link>
 

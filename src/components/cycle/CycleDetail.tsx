@@ -86,14 +86,14 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const queryClient = useQueryClient()
 
   const [cycleId,setCycleId] = useState<string>('')
-  const [page,setPage] = useState<string>("1");
+  
   useEffect(()=>{
-    if(router?.query && router.query.id && router.query.page){
+    if(router?.query && router.query.id){
       setCycleId(router.query.id?.toString())
-      setPage(router.query.page?.toString())
+      
     }
   },[router])
-
+debugger;
   const {data:cycle,isLoading} = useCycle(cycleId,{
     enabled:!!cycleId
   });
@@ -130,7 +130,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   
   const [where,setWhere] = useState<{filtersWork:number[]}>()
   
-  const {data} = useCycleItem(cycleId,page,where,{
+  const {data} = useCycleItem(cycleId,undefined,where,{
     enabled:!!cycleId
   })
 
@@ -328,20 +328,20 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   //     return items.sort((a,b)=>a.createdAt >= b.createdAt ? -1 : 1);
   //   return [];
   // };
-  const renderPagesLinks = ()=>{debugger; 
-    const count = +(process.env.NEXT_PUBLIC_MOSAIC_ITEMS_COUNT||20)
-    if(items){
-      const pages = total / count
-      const res = []
-      for(let i=1;i<=pages;i++)
-        res.push(<Button key={v4()} className={`rounded-circle me-1 shadow ${page==`${i}` ? 'text-white bg-secondary':''}`} size="sm" 
-        onClick={()=>router.replace(`/cycle/${cycle.id}/${i}`)}>{i}</Button>)
-      return <>
-      {res}
-      </>
-    }
-    return <></>
-  }
+  // const renderPagesLinks = ()=>{debugger; 
+  //   const count = +(process.env.NEXT_PUBLIC_MOSAIC_ITEMS_COUNT||20)
+  //   if(items){
+  //     const pages = total / count
+  //     const res = []
+  //     for(let i=1;i<=pages;i++)
+  //       res.push(<Button key={v4()} className={`rounded-circle me-1 shadow ${page==`${i}` ? 'text-white bg-secondary':''}`} size="sm" 
+  //       onClick={()=>router.replace(`/cycle/${cycle.id}/${i}`)}>{i}</Button>)
+  //     return <>
+  //     {res}
+  //     </>
+  //   }
+  //   return <></>
+  // }
   const renderItems = () => {
     const res = []
     if(cycle && items){
@@ -383,11 +383,11 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
               stack={items}
               showComments={true}
 
-              cacheKey={['ITEMS', `CYCLE-${cycle.id}-PAGE-${page}`]}
+              cacheKey={['ITEMS', `CYCLE-${cycle.id}`]}
             /> 
             <aside className="d-flex justify-content-center">
 
-  {renderPagesLinks()}
+  {/* {renderPagesLinks()} */}
             </aside>
       </section>
     }
@@ -547,7 +547,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       const res = (
         <>
           <TabPane eventKey="cycle-discussion">
-            <CycleDetailDiscussion cycle={cycle} className="mb-5" cacheKey={['ITEMS',`CYCLE-${cycle.id}-PAGE-${page}`]} />
+            <CycleDetailDiscussion cycle={cycle} className="mb-5" cacheKey={['ITEMS',`CYCLE-${cycle.id}`]} />
             <Row>
               <Col xs={{span:12, order:'last'}} md={{span:9,order:'first'}}>
                 <MosaicContext.Provider value={{ showShare: true }}>

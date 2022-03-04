@@ -121,7 +121,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           notificationMessage,
-          notificationContextURL: `/cycle/${cycle!.id}/1`,
+          notificationContextURL: `/cycle/${cycle!.id}`,
           notificationToUsers,
         }),
       });
@@ -287,7 +287,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         }`}
       >
         {linkToCycle ? (
-          <Link href={`/cycle/${cycle.id}/1`}>
+          <Link href={`/cycle/${cycle.id}`}>
             <a>
               <LocalImageComponent className="cursor-pointer" filePath={cycle.localImages[0].storedFile} alt={cycle.title} />
             </a>

@@ -258,7 +258,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
           userName: user.name,
           cycleTitle: cycle.title,
         })}`;
-        payload  = {...payload,selectedCycleId: cycle.id,notificationMessage,notificationContextURL:`/cycle/${cycle.id}/1`};
+        payload  = {...payload,selectedCycleId: cycle.id,notificationMessage,notificationContextURL:`/cycle/${cycle.id}`};
       }
       else if(isWorkMosaicItem(entity)){
         const work = (entity as WorkMosaicItem);
@@ -273,7 +273,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
             workTitle: work.title,
             cycleTitle: cycle.title,
           })}`;
-          payload = {...payload, selectedCycleId: cycle.id,notificationMessage,notificationContextURL:`/cycle/${cycle.id}/1`}
+          payload = {...payload, selectedCycleId: cycle.id,notificationMessage,notificationContextURL:`/cycle/${cycle.id}`}
         }
         else{
           notificationMessage = `commentCreatedAboutWork!|!${JSON.stringify({
@@ -298,7 +298,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
             postTitle: post.title,
             cycleTitle: cycle.title,
           })}`;
-          payload = {...payload, selectedCycleId: cycle.id,notificationMessage,notificationContextURL:`/cycle/${cycle.id}/1`}
+          payload = {...payload, selectedCycleId: cycle.id,notificationMessage,notificationContextURL:`/cycle/${cycle.id}`}
         }
         else if(parent && isWorkMosaicItem(parent)){//in work context
           const work = (parent as WorkMosaicItem);
@@ -320,7 +320,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                 postTitle: post.title,
                 cycleTitle: c.title,
               })}`;
-              payload = {...payload, selectedCycleId: +withinCycleId,notificationContextURL:`/cycle/${withinCycleId}/1`}
+              payload = {...payload, selectedCycleId: +withinCycleId,notificationContextURL:`/cycle/${withinCycleId}`}
             }
           }
           if(user.id !== work.creatorId)
@@ -360,7 +360,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
               postTitle: post.title,
               cycleTitle: cycle.title,
             })}`;
-            payload = {...payload,selectedCycleId: cycle.id,notificationMessage,notificationContextURL:`/cycle/${cycle.id}/1`}
+            payload = {...payload,selectedCycleId: cycle.id,notificationMessage,notificationContextURL:`/cycle/${cycle.id}`}
           }
           else{   
             notificationMessage = `commentCreatedAboutPost!|!${JSON.stringify({
@@ -398,7 +398,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
               workTitle: work.title,
               cycleTitle: cycle.title,
             })}`;
-            payload = {...payload,selectedCycleId: cycle.id,notificationMessage,notificationContextURL:`/cycle/${cycle.id}/1`}
+            payload = {...payload,selectedCycleId: cycle.id,notificationMessage,notificationContextURL:`/cycle/${cycle.id}`}
           }
           else{   
             notificationMessage = `commentCreatedAboutWork!|!${JSON.stringify({
@@ -422,7 +422,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
               commentTitle: `${comment.contentText.slice(0,50)}...`, 
               cycleTitle: cycle?.title,             
             })}`;
-            payload = {...payload, selectedCycleId: comment.id,notificationMessage,notificationContextURL:`/cycle/${cycle.id}/1`};
+            payload = {...payload, selectedCycleId: comment.id,notificationMessage,notificationContextURL:`/cycle/${cycle.id}`};
           }
           else{
             notificationMessage = `commentCreatedAboutComment!|!${JSON.stringify({

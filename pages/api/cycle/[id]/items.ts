@@ -18,20 +18,17 @@ export const config = {
 export default getApiHandler()  
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
-      const { q = null, where:w = null,take:t} = req.query;
-      const p = +req.query.page;
-      if(!p){debugger;
-        res.status(200).json({ 
-          items:[],
-          total:0,
-        });
-      }
-        
+      const { q = null, where:w = null,take:t, page:p} = req.query;
+      
       const id = +req.query.id.toString() 
        
-      let page = parseInt(p.toString())-1;
-      const take = page >-1 ? +(process.env.NEXT_PUBLIC_MOSAIC_ITEMS_COUNT||10):undefined
-      const skip = page >-1 ? page * take!:undefined;
+      let page = p ? parseInt(p.toString())-1 : undefined;
+      const take = page 
+        ? +(process.env.NEXT_PUBLIC_MOSAIC_ITEMS_COUNT||10)
+        : undefined
+      const skip = page 
+        ? page * take!
+        :undefined
       let where = w ? JSON.parse(w.toString()) : undefined;
       
       let posts = null;
@@ -79,7 +76,7 @@ export default getApiHandler()
         ...posts.map(p=>{(p as PostMosaicItem).type='post';return p;})
       ]
 
-      let items = page>-1 
+      let items = page
         ? it.sort((x,y)=>x.createdAt > y.createdAt ? -1 : 1).splice(skip!,take)
         : it.sort((x,y)=>x.createdAt > y.createdAt ? -1 : 1);
 

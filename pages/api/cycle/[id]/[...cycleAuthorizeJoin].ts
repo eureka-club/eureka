@@ -50,7 +50,7 @@ export default getApiHandler()
       const emailReason = `${t('Your request to Join the cycle')} "${cycle.title}" ${t('has been')} ${
         authorized === '1' ? t('approved') : t('denied')
       }`;
-      const cycleURL = `${WEBAPP_URL}/cycle/${cycle.id}/1`;
+      const cycleURL = `${WEBAPP_URL}/cycle/${cycle.id}`;
       const visitCycleInfo = t('visitCycleInfo');
       const thanks = t('thanks');
       const eurekaTeamThanks = t('eurekaTeamThanks');

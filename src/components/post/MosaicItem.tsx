@@ -94,7 +94,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const parentLinkHref = ((): string | null => {
     if (postParent) {
       if (isCycle(postParent)) {
-        return `/cycle/${postParent.id}/1`;
+        return `/cycle/${postParent.id}`;
       }
       if (isWork(postParent)) {
         return `/work/${postParent.id}`;
