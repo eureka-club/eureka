@@ -112,7 +112,6 @@ const MosaicItem: FunctionComponent<Props> = ({
   // const [session] = useSession() as [Session | null | undefined, boolean];
   const renderCardDetailed = () => {
     return (
-      <><div className='mb-3'>
         <Card className={` ${styles.commentHorizontally}`} data-cy={`mosaic-item-comment-${comment.id}`}>
           <Card.Header as={Row} className={styles.cardHeader}>
             <Col xs={12} md={6}>
@@ -160,15 +159,13 @@ const MosaicItem: FunctionComponent<Props> = ({
             {showComments && <CommentsList entity={comment} parent={parent} cacheKey={cacheKey || ['COMMENT',`${comment.id}`]} />}
           </Card.Body>          
         </Card>
-        </div>
-      </>
     );
   };
   if (detailed)
     return (
       <div className={` ${className}`}>
         <section className="d-none d-md-block">{renderCardDetailed()}</section>
-        <section className="d-sm-block d-md-none">{renderCardDetailed()}</section>
+        <section className="d-sm-block d-md-none mb-3">{renderCardDetailed()}</section>
       </div>
     );
 
