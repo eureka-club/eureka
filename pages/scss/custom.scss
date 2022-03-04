@@ -195,10 +195,13 @@ hr {
   left: 50%!important;
 }
 .card.mosaic{
-  width: 258.75px !important;
+  width: 260px !important;
+  height: 400px !important;
+  max-height: 400px !important;
 }
 .card.mosaic-tiny{
   width: 175.5px !important;
+  height: 280 !important;
 }
 .fs-6 {
   font-size: .875rem !important;

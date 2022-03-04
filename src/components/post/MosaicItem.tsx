@@ -143,10 +143,10 @@ const MosaicItem: FunctionComponent<Props> = ({
         if (pptt.length + 3 < postParent.title.length) res = `${pptt}...`;
         else res = postParent.title;
       }
-      return <span>{res}</span>;
+      return res;
     };
     return (
-      <Card className={`mosaic ${styles.container} ${className}`} data-cy={specifyDataCy ? `mosaic-item-post-${post.id}`:''}>
+      <Card className={`mosaic ${className}`} data-cy={specifyDataCy ? `mosaic-item-post-${post.id}`:''}>
         {postParent && (
           <h2 className="m-0 p-1 fs-6 text-info" data-cy="parent-title">
             <FaRegCompass className="text-info" />
@@ -217,7 +217,6 @@ const MosaicItem: FunctionComponent<Props> = ({
                 {post.comments.length} {`${t('Replies')}`}
               </span>
             </div>
-
             <SocialInteraction
               cacheKey={cacheKey || ['POST',post.id.toString()]}
               showButtonLabels={false}

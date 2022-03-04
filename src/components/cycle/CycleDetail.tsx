@@ -911,7 +911,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     if(cycle && works){
       
       // <WorksMosaic cycle={cycle} className="d-flex mb-5 justify-content-center" />
-      return <section className="d-flex justify-content-center">
+      return <section className="d-flex justify-content-center justify-content-lg-start">
           <MosaicContext.Provider value={{ showShare: true }}>  
           <div className='d-flex flex-wrap flex-column flex-lg-row'>      
             {getWorksSorted().map(w=>{
