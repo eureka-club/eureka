@@ -911,9 +911,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     if(cycle && works){
       
       // <WorksMosaic cycle={cycle} className="d-flex mb-5 justify-content-center" />
-      return <section className="d-flex">
+      return <section className="d-flex justify-content-center justify-content-lg-start">
           <MosaicContext.Provider value={{ showShare: true }}>  
-          <div className='container d-flex flex-wrap flex-column flex-lg-row justify-content-center justify-content-lg-start '>      
+          <div className='d-flex flex-wrap flex-column flex-lg-row'>      
             {getWorksSorted().map(w=>{
               queryClient.setQueryData(['WORK',`${w.id}`],w)
               return <div className='p-4' key={v4()}>
@@ -1030,7 +1030,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                         {renderWorks()}
                         {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (
                           <Row className="mt-5 mb-5">
-                            <Col>
+                            <Col className='col-12'>
                               <h5 className="mt-5 mb-3 fw-bold text-gray-dark">{t('complementaryMaterialsTitle')}</h5>
                               <ul className={styles.complementaryMaterials}>
                                 {cycle.complementaryMaterials.map((cm) => (

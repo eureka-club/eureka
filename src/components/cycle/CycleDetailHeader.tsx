@@ -316,15 +316,15 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         <aside className='d-flex flex-column'>
           <UserAvatar  userId={cycle.creator.id}  showFullName />
         <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
-          <MosaicItem cycleId={cycle.id} showTrash className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
+          <MosaicItem cycleId={cycle.id} showTrash showParticipants={true} className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
         </MosaicContext.Provider>
         </aside>
       </Col>
       {show && (
       <Col className='col-12 d-flex justify-content-center d-lg-none' >
           <aside className='d-flex flex-column'>
-            <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
-              <MosaicItem cycleId={cycle.id} showTrash className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
+            <MosaicContext.Provider value={{ showShare: true,cacheKey: ['CYCLE', `${cycle.id}`] }}>
+              <MosaicItem cycleId={cycle.id} showTrash showParticipants={true} className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
             </MosaicContext.Provider>
           </aside>
       </Col>
@@ -357,7 +357,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
               readOnly
             />
             <TagsInput className="ms-1 d-inline-block" tags={cycle.tags!} readOnly label="" />
-             <div className='mt-1 d-flex flex-row justify-content-center'>
+             <div className='mt-2 d-flex flex-row justify-content-start'>
                   <Rating
                     readonly
                     initialRating={getRatingAvg()}

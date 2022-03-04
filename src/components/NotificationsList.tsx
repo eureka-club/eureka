@@ -121,7 +121,7 @@ const NotificationsList: React.FC<Props> = ({className}) => {
         if(user){
           
           if(user.notifications.length){
-            return <ListGroup as="ul">{user.notifications.slice(0,5).map((n)=>{
+            return <ListGroup className='NotificationsList' as="ul">{user.notifications.slice(0,5).map((n)=>{
               return <ListGroup.Item
               key={v4()}
               as="li"

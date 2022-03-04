@@ -41,7 +41,6 @@ type Props = {
 
 const renderMosaicItem = (
   item: MosaicItem,
-  
   postsParent?: CycleMosaicItem | WorkMosaicItem,
   topic = '',
   page = '',
