@@ -87,7 +87,7 @@ const NotificationsList: React.FC<Props> = ({className}) => {
         },
       );
     
-    if(!user || !user.notifications)
+    if(!user)
       return <></>    
     const notificationOnClick = (e: React.MouseEvent<Element>,userId:number, notificationId:number, contextURL:string) => {
         e.preventDefault();

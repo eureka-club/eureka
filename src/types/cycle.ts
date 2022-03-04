@@ -9,102 +9,63 @@ export interface ComplementaryMaterial {
 
 export type CycleWithImages = Prisma.CycleGetPayload<{
   include: {
-    localImages: true;
+    localImages: {select:{
+      storedFile:true
+    }};
   };
 }>;
 
 export type CycleMosaicItem = Prisma.CycleGetPayload<{
   include: {
-    creator: true;
-    localImages: true;
-    complementaryMaterials: true;
-    participants: true;
-    favs: true;
-    cycleWorksDates: true;
-    ratings: true;
-    // posts: {
-    //   include: {
-    //     creator: {include:{photos:true}};
-    //     localImages: true;
-    //     works: {
-    //       include: {
-    //         localImages: true;
-    //       };
-    //     };
-    //     cycles: {
-    //       include: {
-    //         localImages: true;
-    //       };
-    //     };
-    //     likes: true;
-    //     favs: true;
-    //     comments: {
-    //       include: {
-    //         creator: { include: { photos:true } };
-    //         comments: {
-    //           include: {
-    //             creator: { include: { photos:true } };
-    //           };
-    //         };
-    //         work: {include:{cycles:true}};
-    //         cycle:true,
-    //       };
-    //     };
-    //   }
-    // };
-    // works:{
-    //   include: {
-    //     localImages: true;
-    //     favs: true;
-    //     ratings: true;
-    //     comments: true;
-    //     posts: {include: {
-    //       creator: {include:{photos:true}};
-    //       localImages: true;
-    //       works: {
-    //         include: {
-    //           localImages: true;
-    //         };
-    //       };
-    //       cycles: {
-    //         include: {
-    //           localImages: true;
-    //         };
-    //       };
-    //       likes: true;
-    //       favs: true;
-    //       comments: {
-    //         include: {
-    //           creator: { include: { photos:true } };
-    //           comments: {
-    //             include: {
-    //               creator: { include: { photos:true } };
-    //             };
-    //           };
-    //           work: {include:{cycles:true}};
-    //           cycle:true,
-    //         };
-    //       };
-    //     }};
-    //     cycles: true;
-    //   };
-    // };
-    comments: {
-      include: {
-        creator: { include: { photos:true } };
-        comments: {
-          include: {
-            creator: { include: { photos:true } };
-          };
-        };
-        work: {include:{cycles:true}};
-        cycle:true,
+    creator:{
+      select:{id:true;name:true;email:true}
+    };
+    localImages: {select:{
+      storedFile:true
+    }};
+    //complementaryMaterials: true;
+    guidelines: {
+      select: {
+        title: true;
+        contentText: true;
       };
     };
-    guidelines: {
-      select: { title: true; contentText: true };
+    participants:{
+      select:{
+        id:true;
+        name:true;
+        countryOfOrigin:true;
+        favWorks:{select:{id:true}};
+        ratingWorks:{select:{workId:true}};
+        photos:{select:{storedFile:true}};
+        notifications:{
+          select:{
+            viewed:true;
+            notification:{select:{message:true;createdAt:true}}}
+          }
+      }
+    };     
+    ratings: { 
+      select: { 
+        qty:true;
+        userId:true;
+      } 
     };
-  };
+    favs: {
+      select:{id:true}
+    };
+    cycleWorksDates: {
+      select:{
+        id:true;
+        startDate:true;
+        endDate:true;
+        workId:true;
+      }
+    };
+    comments:true;
+    complementaryMaterials:true;
+    
+  }
 }> & { type?: 'cycle' };
 
 // export type CycleDetail = Prisma.CycleGetPayload<{

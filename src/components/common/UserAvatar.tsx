@@ -34,15 +34,20 @@ const UserAvatar: FunctionComponent<Props> = ({
   const renderUserName = () => {
     let res = '';
     if (showName) {
-      const truncateName = user?.name?.slice(0, 16);
-      if (showFullName) {
-        res = user?.name!;
-      } else if (truncateName!.length + 3 < user?.name?.length!) {
-        res = `${truncateName}...`;
-      } else res = `${user?.name}`;
+      if(user){
+        const truncateName = user?.name?.slice(0, 16);
+        if (showFullName) {
+          res = user?.name!;
+        } else if (truncateName && truncateName!.length + 3 < user?.name?.length!) {
+          res = `${truncateName}...`;
+        } else res = `${user?.name}`;
+
+      }
+      else {debugger;}
     }
     return <span>{res}</span>;
   };
+  
   return (
     <>
       {user && (

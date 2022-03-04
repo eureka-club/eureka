@@ -1,7 +1,7 @@
 import { Cycle, Work, Comment, Post } from '@prisma/client';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent } from 'react';
+import { FunctionComponent,useEffect,useState } from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
 import { FaRegComments, FaRegCompass } from 'react-icons/fa';
 
@@ -27,9 +27,10 @@ import { CycleMosaicItem } from '@/src/types/cycle';
 import { WorkMosaicItem } from '@/src/types/work';
 import { PostMosaicItem } from '@/src/types/post';
 import useComment from '@/src/useComment'
+import CyclesMosaic from '../work/CyclesMosaic';
 interface Props {
   commentId: number;
-  commentParent: CycleMosaicItem | WorkMosaicItem | PostMosaicItem | CommentMosaicItem;
+  // parent: CycleMosaicItem | WorkMosaicItem | PostMosaicItem | CommentMosaicItem;
   detailed?: boolean; 
   showButtonLabels?: boolean;
   showShare?: boolean;
@@ -43,7 +44,7 @@ interface Props {
 
 const MosaicItem: FunctionComponent<Props> = ({
   commentId,
-  commentParent,
+  // parent,
   detailed = false,
   cacheKey,
   showComments = true,
@@ -55,48 +56,56 @@ const MosaicItem: FunctionComponent<Props> = ({
   // showTrash,
 }) => {
   // const commentLinkHref = ((): string | null => {
-  //   if (isCycle(commentParent)) {
-  //     return `/comment/${commentParent.id}`;
+  //   if (isCycle(parent)) {
+  //     return `/comment/${parent.id}`;
   //   }
-  //   if (isCycle(commentParent)) {
-  //     return `/cycle/${commentParent.id}/post/${post.id}`;
+  //   if (isCycle(parent)) {
+  //     return `/cycle/${parent.id}/post/${post.id}`;
   //   }
-  //   if (isWork(commentParent)) {
-  //     return `/work/${commentParent.id}/post/${post.id}`;
+  //   if (isWork(parent)) {
+  //     return `/work/${parent.id}/post/${post.id}`;
   //   }
 
   //   return null;
   // })();
   const { t } = useTranslation('common');
-
+  const [parent,setParent] = useState<CycleMosaicItem|WorkMosaicItem|PostMosaicItem|CommentMosaicItem>()
   const {data:comment} = useComment(commentId,{
     enabled:!!commentId
   })
-
+  useEffect(()=>{
+    if(comment){
+      // if(comment.commentId)setParent(comment.comment)
+      if(comment.post)setParent(comment.post as unknown as PostMosaicItem)
+      else if(comment.work)setParent(comment.work as unknown as WorkMosaicItem)
+      else if(comment.cycle)setParent(comment.cycle as unknown as CycleMosaicItem)
+    }
+  },[comment])
   if(!comment)
     return <></>
 
  
   const getTitle = (): string => {
-    if(commentParent){
-      if (isCycle(commentParent)) return (commentParent as Cycle).title;
-      else if (isWork(commentParent)) return (commentParent as Work).title;
-      else if (isPost(commentParent)) return (commentParent as Post).title;
+    if(parent){
+      if (isCycle(parent)) return (parent as Cycle).title;
+      else if (isWork(parent)) return (parent as Work).title;
+      else if (isPost(parent)) return (parent as Post).title;
+
     }
-    // if (isComment(commentParent)) return `Comment: ${commentParent.id}`;
+    // if (isComment(parent)) return `Comment: ${parent.id}`;
     return '';
   };
 
   const comentLinkHref = ((): string | null => {
-    if (!commentParent) return null;
-    // if (isPost(commentParent)) {
-    //   // return `/post/${commentParent.id}`;
-    // }
-    if (isCycle(commentParent)) {
-      return `/cycle/${commentParent.id}`;
+    if (!parent) return null;
+    // if (isPost(parent)) {
+    //   // return `/post/${parent.id}`;
+    if (comment.work) {
+      return `/work/${parent.id}`;
     }
-    if (isWork(commentParent)) {
-      return `/work/${commentParent.id}`;
+    // }
+    else if (comment.cycle) {
+      return `/cycle/${parent.id}`;
     }
     return null;
   })();
@@ -107,7 +116,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         <Card className={` ${styles.commentHorizontally}`} data-cy={`mosaic-item-comment-${comment.id}`}>
           <Card.Header as={Row} className={styles.cardHeader}>
             <Col xs={12} md={6}>
-              {commentParent && (
+              {parent && (
                 <h2 className="fs-6" data-cy="parent-title">
                   {comentLinkHref != null ? (
                     <>
@@ -148,7 +157,7 @@ const MosaicItem: FunctionComponent<Props> = ({
                 </aside>
               </Col>
             </Row>
-            {showComments && <CommentsList entity={comment} parent={commentParent} cacheKey={cacheKey || ['COMMENT',`${comment.id}`]} />}
+            {showComments && <CommentsList entity={comment} parent={parent} cacheKey={cacheKey || ['COMMENT',`${comment.id}`]} />}
           </Card.Body>          
         </Card>
         </div>

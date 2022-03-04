@@ -205,7 +205,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
       .sort((f, s) => {
         const fCD = dayjs(f.startDate!);
         const sCD = dayjs(s.startDate!);
-        const isActive = (w: CycleWork) => {
+        const isActive = (w: {startDate:Date|null;endDate:Date|null}) => {
           if (w.startDate && w.endDate) return dayjs().isBetween(w.startDate!, w.endDate);
           if (w.startDate && !w.endDate) return dayjs().isAfter(w.startDate);
           return false;

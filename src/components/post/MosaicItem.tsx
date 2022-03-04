@@ -25,6 +25,7 @@ import globalModals from '@/src/atoms/globalModals'
 import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
 import usePost from '@/src/usePost'
 import {useQueryClient} from 'react-query'
+import useCycle from '@/src/useCycle';
 
 interface Props {
   postId: number|string;
@@ -67,6 +68,9 @@ const MosaicItem: FunctionComponent<Props> = ({
     enabled:!!postId
   })
 
+  const [cycleId,setCycleId] = useState<number>(0)
+  const [workId,setWorkId] = useState<number>(0)
+
    useEffect(()=>{
      if(post){
       if (post.works && post.works.length > 0) setPostParent(post.works[0] as WorkMosaicItem);
@@ -74,7 +78,17 @@ const MosaicItem: FunctionComponent<Props> = ({
      }
    },[post])
 
-
+  //  const {data:workParent} = useCycle(workId,{enabled:!!workId})
+  //  const {data:cycleParent} = useCycle(cycleId,{enabled:!!cycleId})
+  //  useEffect(()=>{
+  //   if(workParent)//if not null -direct parent
+  //     setPostParent(workParent)
+  //   if(cycleParent){
+  //     if(!postParent)//workPatent could be not null
+  //       setPostParent(cycleParent)//direct parent
+  //   }
+  //  },[workParent,cycleParent])
+   
    if(!post)return <></>
 
   const parentLinkHref = ((): string | null => {

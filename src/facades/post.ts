@@ -4,21 +4,21 @@ import { StoredFileUpload } from '../types';
 import { CreatePostServerFields, CreatePostServerPayload, PostWithCyclesWorks, PostMosaicItem } from '../types/post';
 import prisma from '../lib/prisma';
 
-export const find = async (id: number): Promise<PostWithCyclesWorks | null> => {
+export const find = async (id: number): Promise<PostMosaicItem | null> => {
   return prisma.post.findUnique({
     where: { id },
     include: {
-      creator: {include:{photos:true}},
-      localImages: true,
+      creator: {select:{id:true,name:true,photos:true}},
+      localImages: {select:{storedFile:true}},
       works: {
         include: {
           localImages: true,
         },
       },
       cycles: {
-        include: {
-          localImages: true,
-          participants:true
+        include: {        
+          localImages: {select:{storedFile:true}},
+          participants:{select:{id:true}}
         },
       },
       likes: true,
@@ -35,7 +35,7 @@ export const find = async (id: number): Promise<PostWithCyclesWorks | null> => {
           cycle: {include:{participants:{select:{id:true}}}}
         },
       },
-    },
+    }
   });
 };
 
@@ -46,28 +46,34 @@ export const findAll = async (props?:Prisma.PostFindManyArgs,page?:number): Prom
     take,
     skip,
     orderBy: { id: 'desc' },
-    include:{
-      
-        creator: {include:{photos:true}},
-        localImages: true,
-        cycles: { include: { localImages: true, participants:true } },
-        works: { include: { localImages: true } },
-        likes: true,
-        favs: true,
-        comments: {
-          include: {
-            creator: { include: { photos:true } },
-            comments: {
-              include: {
-                creator: { include: { photos:true } },
-              },
-            },
-            work: {include:{cycles:true}},
-            cycle:true,
-          },
+    include: {
+      creator: {select:{id:true,name:true,photos:true}},
+      localImages: {select:{storedFile:true}},
+      works: {
+        include: {
+          localImages: true,
         },
-      
-      
+      },
+      cycles: {
+        include: {        
+          localImages: {select:{storedFile:true}},
+          participants:{select:{id:true}}
+        },
+      },
+      likes: true,
+      favs: true,
+      comments: {
+        include: {
+          creator: { include: { photos:true } },
+          comments: {
+            include: {
+              creator: { include: { photos:true } },
+            },
+          },
+          work: {include:{cycles:true}},
+          cycle: {include:{participants:{select:{id:true}}}}
+        },
+      },
     },
     where,
   });
@@ -208,7 +214,7 @@ export const saveSocialInteraction = async (
   });
 };
 
-export const remove = async (post: PostWithCyclesWorks): Promise<Post> => {
+export const remove = async (post: PostMosaicItem): Promise<Post> => {
   if (post.cycles.length) {
     await prisma.post.update({
       where: { id: post.id },

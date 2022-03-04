@@ -66,10 +66,10 @@ const renderMosaicItem = (
     );
   }
   if (isPostMosaicItem(item) || (item && item.type === 'post')) {
-    let pp:WorkMosaicItem | CycleMosaicItem | undefined = undefined;
     const it: PostMosaicItem = item as PostMosaicItem;
-    if (it.works && it.works.length > 0) pp = it.works[0] as WorkMosaicItem;
-    else if (it.cycles && it.cycles.length > 0) pp = it.cycles[0] as CycleMosaicItem;
+    // let pp:WorkMosaicItem | CycleMosaicItem | undefined = undefined;
+    // if (it.works && it.works.length > 0) pp = it.works[0] as WorkMosaicItem;
+    // else if (it.cycles && it.cycles.length > 0) pp = it.cycles[0] as CycleMosaicItem;
 
     return <MosaicItemPost cacheKey={cacheKey} key={`post-${v4()}`} postId={it.id} />;
   }
