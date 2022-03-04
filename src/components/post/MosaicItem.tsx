@@ -3,7 +3,8 @@ import { Cycle, Work } from '@prisma/client';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import React, { FunctionComponent, useEffect, useState } from 'react';
-import { Row, Col, Card, Badge,Button } from 'react-bootstrap';
+import { useRouter } from 'next/router';
+import { Row, Col, Card, Badge,Button,Spinner } from 'react-bootstrap';
 import { FaRegComments, FaRegCompass } from 'react-icons/fa';
 import dayjs from 'dayjs';
 import { DATE_FORMAT_SHORT } from '../../constants';
@@ -38,6 +39,8 @@ interface Props {
   cacheKey: string[];
   showTrash?: boolean;
   showComments?: boolean;
+  linkToPost?: boolean;
+
   className?: string;
 }
 
@@ -48,6 +51,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   showdetail = true,
   cacheKey,
   showComments = false,
+  linkToPost = true,
   className,
   // showButtonLabels,
   // showShare,
@@ -58,6 +62,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   const { t } = useTranslation('common');
   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
   const [k,setK] = useState<[string,string]>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
   // const [post,setPost] = useState<PostMosaicItem>();
   const [postParent,setPostParent] = useState<CycleMosaicItem|WorkMosaicItem>();
 
@@ -133,8 +139,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   }
 
 
-  const renderVerticalMosaic = (props: { showDetailedInfo: boolean,specifyDataCy?:boolean }) => {
-    const { showDetailedInfo, specifyDataCy=true } = props;
+  const renderVerticalMosaic = (props: { showDetailedInfo: boolean,specifyDataCy?:boolean,commentSection?:boolean }) => {
+    const { showDetailedInfo, specifyDataCy=true,commentSection=false } = props;
 
     const renderParentTitle = () => {
       let res = '';
@@ -145,8 +151,43 @@ const MosaicItem: FunctionComponent<Props> = ({
       }
       return res;
     };
+
+  const canNavigate = () => {
+    return !loading;
+  };
+  const onImgClick = () => {
+    if (canNavigate()) router.push(postLinkHref);
+    setLoading(true);
+  };  
+
+ const renderLocalImageComponent = () => {
+    const img = post?.localImages 
+      ? <><LocalImageComponent className={styles.postImage} filePath={post?.localImages[0].storedFile} alt={post?.title} />
+           <div className={styles.gradient} /></>
+      : undefined;
+    if (linkToPost) {
+      return (
+        <div
+          className={`${!loading ? 'cursor-pointer' : ''}`}
+          onClick={onImgClick}
+          role="presentation"
+        >
+          <LocalImageComponent
+                className={styles.postImage}
+                filePath={post.localImages[0]?.storedFile}
+                alt={post.title}
+              />
+              <div className={styles.gradient} />
+          {!canNavigate() && <Spinner className="position-absolute top-50 start-50" animation="grow" variant="info" />}
+          {img}
+        </div>
+      );
+    }
+    return img;
+  };
+
     return (
-      <Card className={`mosaic ${className}`} data-cy={specifyDataCy ? `mosaic-item-post-${post.id}`:''}>
+      <Card className={`${commentSection ? 'mosaic-post-comments' : 'mosaic'}  ${className}`} data-cy={specifyDataCy ? `mosaic-item-post-${post.id}`:''}>
         {postParent && (
           <h2 className="m-0 p-1 fs-6 text-info" data-cy="parent-title">
             <FaRegCompass className="text-info" />
@@ -162,44 +203,25 @@ const MosaicItem: FunctionComponent<Props> = ({
             )}
           </h2>
         )}
-        <div className={`${styles.imageContainer} ${styles.detailedImageContainer}`}>
-          {parentLinkHref != null ? (
-            <Link href={postLinkHref}>
-              <a>
-                <LocalImageComponent
-                  className={styles.postImage}
-                  filePath={post.localImages[0]?.storedFile}
-                  alt={post.title}
-                />
-                <div className={styles.gradient} />
-              </a>
-            </Link>
-          ) : (
-            <>
-              <LocalImageComponent
-                className={styles.postImage}
-                filePath={post.localImages[0]?.storedFile}
-                alt={post.title}
-              />
-              <div className={styles.gradient} />
-            </>
-          )}
+        <div className={`${styles.imageContainer}`}>
+          {renderLocalImageComponent()}
+         
+          {post && showdetail && (
           <div className={`w-100 text-start ${styles.postDetail}`}>
-            {post && showdetail && (
-              <>
                 <Avatar userId={post.creator.id} size="xs" />
                 {` - `}
                 <span className="fs-6">{dayjs(post.createdAt).format(DATE_FORMAT_SHORT)}</span>
-              </>
+                </div>
             )}
-          </div>
+
+
           <Badge bg="success" className={`fw-normal fs-6 text-white px-2 rounded-pill ${styles.type}`}>
             {t(type || 'post')}
           </Badge>
         </div>
         {showDetailedInfo && (
-          <div className={`d-flex align-items-center justify-content-center ${styles.detailedInfo}`}>
-            <h6 className="text-center mb-0 d-flex" data-cy="post-title">
+          <div className={` pt-2 mb-2 d-flex align-items-center justify-content-center ${styles.detailedInfo}`}>
+            <h6 className="text-center d-flex" data-cy="post-title">
               <Link href={postLinkHref}>
                 <a className="text-primary">{post.title}</a>
               </Link>              
@@ -239,7 +261,7 @@ const MosaicItem: FunctionComponent<Props> = ({
       <section data-cy={`mosaic-item-post-${post.id}`}>
         <Row>
           <Col className='d-flex justify-content-center d-lg-block' xs={12} md={12} xl={4}>
-            {renderVerticalMosaic({ showDetailedInfo: false, specifyDataCy:false })}
+            {renderVerticalMosaic({ showDetailedInfo: false, specifyDataCy:false, commentSection:true })}
           </Col>
           <Col xs={12} md={12} xl={8}>
             <div className={styles.detailedInfo}>
