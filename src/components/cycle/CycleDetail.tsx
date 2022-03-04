@@ -361,7 +361,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
          <Mosaic 
               display="h"
               stack={items}
-              showComments={true}
+              showComments={false}
               enabledPagination={true}
               cacheKey={['ITEMS', `CYCLE-${cycle.id}-PAGE-${page}`]}
             /> 
