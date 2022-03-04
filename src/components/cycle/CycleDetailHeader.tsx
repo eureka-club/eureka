@@ -52,7 +52,7 @@ import CarouselStatic from '../CarouselStatic';
 // import globalSearchEngineAtom from '../../atoms/searchEngine';
 import { MosaicContext } from '../../useMosaicContext';
 import { useCycleContext } from '../../useCycleContext';
-
+import useWorks from '@/src/useWorks'
 interface Props {
   // cycle: CycleMosaicItem;
   post?: PostMosaicItem;
@@ -89,6 +89,10 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   const [show, setShow] = useState<boolean>(s);
   const [session] = useSession() as [Session | null | undefined, boolean];
   const { t } = useTranslation('cycleDetail');
+
+  const { data: works } = useWorks({ cycles: { some: { id: cycle?.id } } }, {
+    enabled:!!cycle?.id
+  })
   // const hyvorId = `${WEBAPP_URL}cycle/${cycle.id}`;
 
   // const openSignInModal = () => {
@@ -196,11 +200,12 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
 
   const getWorksSorted = () => {
     const res: Work[] = [];
+    if(cycle && !cycle.cycleWorksDates)return works||[];
     cycle.cycleWorksDates
       .sort((f, s) => {
         const fCD = dayjs(f.startDate!);
         const sCD = dayjs(s.startDate!);
-        const isActive = (w: CycleWork) => {
+        const isActive = (w: {startDate:Date|null;endDate:Date|null}) => {
           if (w.startDate && w.endDate) return dayjs().isBetween(w.startDate!, w.endDate);
           if (w.startDate && !w.endDate) return dayjs().isAfter(w.startDate);
           return false;
@@ -213,11 +218,13 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         return -1;
       })
       .forEach((cw) => {
-        const idx = cycle.works.findIndex((w) => w.id === cw.workId);
-        res.push(cycle.works[idx]);
+        if (works) {
+          const idx = works.findIndex((w) => w.id === cw.workId);
+          res.push(works[idx]);          
+        }
       });
     if (cycle.cycleWorksDates.length) return res;
-    return cycle.works;
+    return works;
   };
 
   return (
@@ -258,7 +265,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         </div>
         <div className="">
         <h4 className="mt-4 mb-1 text-dark">
-          {t('Content calendar')} ({cycle.works && cycle.works.length})
+          {t('Content calendar')} ({works && works.length})
         </h4>
         {/* <CycleSummary cycle={cycle} /> */}
         {/* <Button className={`${styles.seeParticipantsBtn}`} onClick={onParticipantsAction}>
@@ -268,7 +275,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           <CarouselStatic
            cacheKey={['CYCLE',cycle.id.toString()]}
             showSocialInteraction={false}
-            // onSeeAll={async () => seeAll(cycle.works as WorkMosaicItem[], t('Eurekas I created'))}
+            // onSeeAll={async () => seeAll(works as WorkMosaicItem[], t('Eurekas I created'))}
             onSeeAll={onCarouselSeeAllAction}
             title={<CycleSummary cycle={cycle} />}
             data={getWorksSorted() as WorkMosaicItem[]}
@@ -287,7 +294,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
      <Col className='mt-3 col-12  d-flex flex-column justify-content-center d-lg-none'>
           <div className="">
             <h4 className="mt-3 mb-1 text-dark">
-              {t('Content calendar')} ({cycle.works && cycle.works.length})
+              {t('Content calendar')} ({works && works.length})
             </h4>
               <CarouselStatic
                 cacheKey={['CYCLE',cycle.id.toString()]}
@@ -307,24 +314,24 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
       )}
       <Col className="d-none d-lg-flex col-12 col-lg-4 justify-content-center justify-content-lg-end">
         <aside className='d-flex flex-column'>
-          <UserAvatar  user={cycle.creator}  showFullName />
+          <UserAvatar  userId={cycle.creator.id}  showFullName />
         <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
-          <MosaicItem cycleId={cycle.id} showTrash className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
+          <MosaicItem cycleId={cycle.id} showTrash showParticipants={true} className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
         </MosaicContext.Provider>
         </aside>
       </Col>
       {show && (
       <Col className='col-12 d-flex justify-content-center d-lg-none' >
           <aside className='d-flex flex-column'>
-            <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
-              <MosaicItem cycleId={cycle.id} showTrash className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
+            <MosaicContext.Provider value={{ showShare: true,cacheKey: ['CYCLE', `${cycle.id}`] }}>
+              <MosaicItem cycleId={cycle.id} showTrash showParticipants={true} className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
             </MosaicContext.Provider>
           </aside>
       </Col>
       )}
       <Col className='col-12 d-flex justify-content-between align-items-baseline d-lg-none' >
         <Row>
-         <UserAvatar user={cycle.creator}  showFullName />
+         <UserAvatar userId={cycle.creator.id}  showFullName />
          </Row>
           <Row>
             {show && (
@@ -350,7 +357,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
               readOnly
             />
             <TagsInput className="ms-1 d-inline-block" tags={cycle.tags!} readOnly label="" />
-             <div className='mt-1 d-flex flex-row justify-content-center'>
+             <div className='mt-2 d-flex flex-row justify-content-start'>
                   <Rating
                     readonly
                     initialRating={getRatingAvg()}

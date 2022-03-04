@@ -7,16 +7,17 @@ import { Prisma } from '@prisma/client';
 
 export type PostMosaicItem = Prisma.PostGetPayload<{
   include: {
-    creator: {include:{photos:true}};
-    localImages: true;
+    creator: {select:{id:true;name:true;photos:true}};
+    localImages: {select:{storedFile:true}};
     works: {
       include: {
         localImages: true;
       };
     };
     cycles: {
-      include: {
-        localImages: true;
+      include: {        
+        localImages: {select:{storedFile:true}};
+        participants:{select:{id:true}}
       };
     };
     likes: true;
@@ -30,10 +31,10 @@ export type PostMosaicItem = Prisma.PostGetPayload<{
           };
         };
         work: {include:{cycles:true}};
-        cycle:true,
+        cycle: {include:{participants:{select:{id:true}}}}
       };
     };
-  };
+  }
 }> & { type?: 'post' };
 
 // export type PostDetail = Prisma.PostGetPayload<{

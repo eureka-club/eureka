@@ -409,7 +409,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
     },
   );
 
-  const handleFavClick = (ev: MouseEvent<HTMLButtonElement>) => {
+  const handleFavClick = (ev: MouseEvent<HTMLButtonElement>) => { 
     ev.preventDefault();
     execSocialInteraction({ socialInteraction: 'fav', doCreate: mySocialInfo ? !mySocialInfo!.favoritedByMe : true });
   };
@@ -554,19 +554,23 @@ const SocialInteraction: FunctionComponent<Props> = ({
                 <FiTrash2 />
               </Button>
             )}
-            {loadingSocialInteraction && (
-              <Spinner className={styles.ratingSpinner} size="sm" animation="grow" variant="info" />
-            )}
+            
           </div>
         )}
+
+        {loadingSocialInteraction && (
+             <div className='mt-1 ms-1 me-2'> <Spinner className={styles.ratingSpinner} size="sm" animation="grow" variant="info" /></div>
+            )}
+            
         {showShare && (
           <div className="ms-auto">
-            <OverlayTrigger trigger="click" placement="right" overlay={popoverShares}>
+            <OverlayTrigger trigger="focus" placement="right" overlay={popoverShares}>
               <Button
                 // style={{ fontSize: '.9em' }}
                 title={t('Share')}
                 variant="link"
                 className={`${styles.buttonSI} fs-6 p-0 text-primary`}
+                disabled={loadingSocialInteraction}
               >
                 <FiShare2 />
                 <br />
@@ -575,14 +579,15 @@ const SocialInteraction: FunctionComponent<Props> = ({
             </OverlayTrigger>
           </div>
         )}
+
         {/* <Col xs={showRating ? 2 : 12}> */}
         <div className={`${showShare ? 'ms-1' : 'ms-auto'}`}>
-          {!loadingSocialInteraction && (
             <Button
               variant="link"
               className={`${styles.buttonSI} p-0 text-primary`}
               title={t('Save for later')}
               onClick={handleFavClick}
+                disabled={loadingSocialInteraction}
             >
               {optimistFav ? <BsBookmarkFill className={styles.active} /> : <BsBookmark />}
               <br />
@@ -592,10 +597,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
                 </span>
               )}
             </Button>
-          )}
+         
         </div>
-        {/* </Col> */}
-        {/* </Row> */}
       </div>
       {/* {isWork(entity) && (
           <button

@@ -224,7 +224,7 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
                     <a onClick={onItemsFound} className="cursor-pointer text-center d-block bg-light p-2" role="presentation">{t('See all results')}</a>
                   // </MenuItem>
                 )) ||
-                  t('Not found')}
+                  ''}
               </Menu>
             )}
           />

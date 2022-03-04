@@ -32,7 +32,7 @@
   background-color: #f9f8f87a;
 }
 .imageContainer img{
-  height: 16em;
+  height: 18em;
 
 }
 
@@ -102,6 +102,8 @@
   font-weight: 200;
 }
 .joinButtonContainer{
+  height: 40px;
+
   /* margin: 1em 0 0 0; */
   /* text-align: center;
     text-align: -moz-center;

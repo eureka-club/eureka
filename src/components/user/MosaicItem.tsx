@@ -35,7 +35,7 @@ const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = fa
     <Card className={`${styles.container} ${className}`} onClick={() => openUserMediatheque(id)} data-cy={`mosaic-item-user-${user.id}`}>
       <Row>
         <Col xs={12} md={3}>
-          <UserAvatar user={user} showName={false} />
+          <UserAvatar userId={user.id} showName={false} />
           {/* <img src={image || '/assets/avatar.png'} alt="User Avatar" /> */}
         </Col>
         <Col xs={12} md={9}>

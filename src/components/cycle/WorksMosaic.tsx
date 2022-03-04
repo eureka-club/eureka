@@ -10,13 +10,18 @@ import Mosaic from '../Mosaic';
 import { CycleMosaicItem } from '../../types/cycle';
 import { Work } from '.prisma/client';
 // import { MosaicItem } from '../types/work';
-
+import useWorks from '@/src/useWorks'
 interface Props {
   cycle: CycleMosaicItem;
   className?: string;
 }
 dayjs.extend(isBetween);
 const WorksMosaic: FunctionComponent<Props> = ({ cycle, className }) => {
+
+  const { data: works } = useWorks({ cycles: { some: { id: cycle?.id } } }, {
+    enabled:!!cycle?.id
+  })
+
   // const { isLoading, isSuccess, data } = useQuery<WorkMosaicItem[]>(
   //   ['works.mosaic.cycle', cycle.id],
   //   async ({ queryKey: [, cycleId] }) => {
@@ -29,11 +34,12 @@ const WorksMosaic: FunctionComponent<Props> = ({ cycle, className }) => {
   // );
   const getWorksSorted = () => {
     const res: Work[] = [];
+    if(cycle && !cycle.cycleWorksDates)return works||[];
     cycle.cycleWorksDates
       .sort((f, s) => {
         const fCD = dayjs(f.startDate!);
         const sCD = dayjs(s.startDate!);
-        const isActive = (w: CycleWork) => {
+        const isActive = (w: {startDate:Date|null,endDate:Date|null}) => {
           if (w.startDate && w.endDate) return dayjs().isBetween(w.startDate!, w.endDate);
           if (w.startDate && !w.endDate) return dayjs().isAfter(w.startDate);
           return false;
@@ -46,12 +52,15 @@ const WorksMosaic: FunctionComponent<Props> = ({ cycle, className }) => {
         return -1;
       })
       .forEach((cw) => {
-        const idx = cycle.works.findIndex((w) => w.id === cw.workId);
-        res.push(cycle.works[idx]);
+        if (works) {
+          const idx = works.findIndex((w) => w.id === cw.workId);
+          res.push(works[idx]);
+          
+        }
       });
 
     if (cycle.cycleWorksDates.length) return res;
-    return cycle.works;
+    return works||[];
   };
   return (
     <>
@@ -61,7 +70,7 @@ const WorksMosaic: FunctionComponent<Props> = ({ cycle, className }) => {
         </Spinner>
       )} */}
       {
-        /* isSuccess && */ cycle.works != null && (
+        /* isSuccess && */ works != null && (
           <Mosaic cacheKey={['CYCLE',cycle.id.toString()]} className={className} showButtonLabels={false} stack={getWorksSorted() as WorkMosaicItem[]} />
         )
       }

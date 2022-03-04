@@ -27,6 +27,7 @@ import globalModalsAtom from '../../atoms/globalModals';
 import styles from './CreateWorkForm.module.css';
 import i18nConfig from '../../../i18n';
 import useTopics from '../../useTopics';
+import useWork from '@/src/useWork'
 
 dayjs.extend(utc);
 const EditWorkForm: FunctionComponent = () => {
@@ -37,7 +38,7 @@ const EditWorkForm: FunctionComponent = () => {
   const { t } = useTranslation('createWorkForm');
   const router = useRouter();
   const [tags, setTags] = useState<string>('');
-  const [work, setWork] = useState<WorkMosaicItem | null>(null);
+  //const [work, setWork] = useState<WorkMosaicItem | null>(null);
   const [publicationLengthLabel, setPublicationLengthLabel] = useState('...');
   const typeaheadRef = useRef<AsyncTypeahead<{ id: number; code: string; label: string }>>(null);
   const [isCountriesSearchLoading, setIsCountriesSearchLoading] = useState(false);
@@ -78,30 +79,18 @@ const EditWorkForm: FunctionComponent = () => {
         setPublicationLengthLabel('...');
     }
   };
+  const [id,setId] = useState<string>('')
+  const {data:work} = useWork(+(router.query?.id?.toString()!),{enabled:!!router.query?.id})
 
   useEffect(() => {
-    const fetchWork = async () => {
-      const res: Response = await fetch(`/api/work/${router.query.id}`);
-      const { status, work: w = null } = await res.json();
-      if (status === 'OK') {
-        setWork(w);
-        setTags(() => {
-          const ts = w.tags;
-          return ts;
-        });
-        labelsChange(w.type);
-      }
-    };
-    fetchWork();
-  }, [router.query.id]);
-
-  useEffect(() => {
-    if (work) {
-      if (work.countryOfOrigin2) setCountryOrigin2(work.countryOfOrigin2);
-      // setTopicsTags(work.topics || '');
-      if (work.topics) items.push(...work.topics.split(','));
+    if(work){
+        setTags(work.tags||'');
+        labelsChange(work.type);
+        if (work.topics) items.push(...work.topics.split(','));
+        if (work.countryOfOrigin2) setCountryOrigin2(work.countryOfOrigin2);
     }
   }, [work]);
+
 
   const {
     mutate: execEditWork,
@@ -116,6 +105,22 @@ const EditWorkForm: FunctionComponent = () => {
       body: JSON.stringify(payload),
     });
     return res.json();
+  },{
+    onMutate(vars){
+      const ck = ['WORK',`${work!.id}`]
+      queryClient.cancelQueries(ck)
+      const snapshot = queryClient.getQueryData<WorkMosaicItem>(ck)
+      queryClient.setQueryData(ck,{...work,...vars})
+      return {snapshot,ck}
+    },
+    onSettled(data,error,vars,context){
+      type ctx = {snapshot:WorkMosaicItem,ck:string[]}
+      const {snapshot,ck} = context as ctx;
+      if(error){
+        queryClient.setQueryData(ck,snapshot)
+      }
+      queryClient.invalidateQueries(ck)  
+    }
   });
 
   const handleWorkTypeChange = (ev: ChangeEvent<HTMLSelectElement>) => {
@@ -170,7 +175,7 @@ const EditWorkForm: FunctionComponent = () => {
       let w: WorkMosaicItem & { [key: string]: unknown } = work;
       w = work;
       w[ev.currentTarget.id] = ev.currentTarget.value;
-      setWork(w);
+      // setWork(w);
     }
   };
 
@@ -227,7 +232,7 @@ const EditWorkForm: FunctionComponent = () => {
     setCountrySearchResults(itemsSC2);
     setIsCountriesSearchLoading2(false);
   };
-
+  if(!work)return <></>
   return (
     work && (
       <Form onSubmit={handleSubmit}>

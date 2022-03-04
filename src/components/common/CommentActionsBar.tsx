@@ -134,36 +134,36 @@ const CommentActionsBar: FunctionComponent<Props> = ({
         if (cacheKey) {
           
           await queryClient.cancelQueries(cacheKey)
-          const newComment = createDummyComment(payload);
+          // const newComment = createDummyComment(payload);
           const snapshot = queryClient.getQueryData(cacheKey);
           
-          if(isCycleMosaicItem(snapshot as CycleMosaicItem)){
-            let sc = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem|PostMosaicItem>(cacheKey);
-            if(sc){
-              if(newComment.postId){
-                  const post = sc as PostMosaicItem//sc.posts.find(p=>p.id==newComment.postId)
-                  if(post){
-                    newComment.post = post;
-                    post.comments.unshift(newComment);
-                    queryClient.setQueryData(cacheKey,{...post});
-                  }
-              }
-              if(newComment.workId){
-                const work = sc as WorkMosaicItem//sc.works.find(p=>p.id==newComment.postId)
-                  if(work){
-                    work.comments.push(newComment);
-                    newComment.work = work;
-                  }
-              }
-              if(newComment.cycleId){
-                const cycle = sc as CycleMosaicItem
-                cycle.comments.push(newComment);
-                newComment.cycle = cycle;
-              }
-              queryClient.setQueryData(cacheKey,{...sc});             
+          // if(isCycleMosaicItem(snapshot as CycleMosaicItem)){
+          //   let sc = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem|PostMosaicItem>(cacheKey);
+          //   if(sc){
+          //     if(newComment.postId){
+          //         const post = sc as PostMosaicItem//sc.posts.find(p=>p.id==newComment.postId)
+          //         if(post){
+          //           newComment.post = post;
+          //           post.comments.unshift(newComment);
+          //           queryClient.setQueryData(cacheKey,{...post});
+          //         }
+          //     }
+          //     if(newComment.workId){
+          //       const work = sc as WorkMosaicItem//sc.works.find(p=>p.id==newComment.postId)
+          //         if(work){
+          //           work.comments.push(newComment);
+          //           newComment.work = work;
+          //         }
+          //     }
+          //     if(newComment.cycleId){
+          //       const cycle = sc as CycleMosaicItem
+          //       cycle.comments.push(newComment);
+          //       newComment.cycle = cycle;
+          //     }
+          //     queryClient.setQueryData(cacheKey,{...sc});             
               
-            }           
-          }
+          //   }           
+          // }
           return { cacheKey, snapshot };
         }
         return { cacheKey: undefined, snapshot: null };
@@ -288,8 +288,9 @@ const CommentActionsBar: FunctionComponent<Props> = ({
         payload = {...payload, selectedPostId: post.id}
         if(user.id !== post.creatorId)
           notificationToUsers.add(post.creatorId);
-        if(parent && isCycleMosaicItem(parent)){//in cycle context
-          const cycle = (parent as CycleMosaicItem);
+        const ppc = post.cycles ? post.cycles[0] : null;  //post belongs to a cycle context
+        const cycle = (parent&&isCycleMosaicItem(parent)) ? parent : ppc;
+        if(cycle){//in cycle context
           if(user.id !== cycle.creatorId)
             notificationToUsers.add(cycle.creatorId);
           notificationMessage = `commentCreatedAboutPostInCycle!|!${JSON.stringify({
@@ -479,7 +480,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
   //   }
   // };
 
-  // const onKeyPressEditForm = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {debugger;
+  // const onKeyPressEditForm = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
   //   if (e.key === 'Enter' && !e.shiftKey) {
   //     submitEditForm();
   //     e.preventDefault();
@@ -488,11 +489,50 @@ const CommentActionsBar: FunctionComponent<Props> = ({
 
   const canCreateComment = ()=>{//now comments creation is allowed only within a cycle detail
     if(!session)return false;
-    if(router.route === '/cycle/[id]' && router.query.id){//within a cycle detail
-      const cycle = queryClient.getQueryData<CycleMosaicItem>(['CYCLE',`${router.query.id}`])
-      if(cycle){
-        const idx = cycle.participants.findIndex(p=>p.id==session.user.id)
-        if(idx>-1)return true;
+
+    if(isComment(entity)){
+      const comment = entity as CommentMosaicItem;
+      if(comment.cycle){
+        //const cycle = queryClient.getQueryData<CycleMosaicItem>(['CYCLE',`${post.cycles[0].id}`])
+        const cycle = comment.cycle
+        if(cycle){
+          if(cycle.creatorId===session.user.id)return true;
+          const idx = cycle.participants 
+            ? cycle.participants.findIndex(p=>p.id==session.user.id) 
+            : -1
+            return idx >= 0;
+        }
+
+      }
+    }
+    if(isPostMosaicItem(entity)){//within a cycle detail
+      const post = entity as PostMosaicItem;
+      if(post.cycles){
+        //const cycle = queryClient.getQueryData<CycleMosaicItem>(['CYCLE',`${post.cycles[0].id}`])
+        const cycle = post.cycles[0]
+        if(cycle){
+          if(cycle.creatorId===session.user.id)return true;
+          const idx = cycle.participants 
+            ? cycle.participants.findIndex(p=>p.id==session.user.id) 
+            : -1
+            return idx >= 0;
+        }
+
+      }
+    }
+    if(isWorkMosaicItem(entity)){//within a cycle detail
+      const work = entity as WorkMosaicItem;
+      if(work.cycles){
+        //const cycle = queryClient.getQueryData<CycleMosaicItem>(['CYCLE',`${post.cycles[0].id}`])
+        const cycle = work.cycles[0] as CycleMosaicItem
+        if(cycle){
+          if(cycle.creatorId===session.user.id)return true;
+          const idx = cycle.participants 
+            ? cycle.participants.findIndex(p=>p.id==session.user.id) 
+            : -1
+            return idx >= 0;
+        }
+
       }
     }
     return false;
@@ -647,7 +687,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                 </Form> */}
                 {/* {renderEditorWYSWYG(onKeyUpEditorCreate)} */}
                 <aside className="d-flex align-items-center">
-                  {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
+                  {(!isLoadingUser && user) ? <UserAvatar userId={user.id} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
                   {<Editor value={newCommentInput} disabled={!canCreateComment()} onChange={setNewCommentInput} onSave={(text)=>{
                     submitCreateForm();          
                     }}
@@ -671,7 +711,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                 </Form> */}
                 {/* {renderEditorWYSWYG(onKeyUpEditorEdit, editCommentInput)} */}
                 <aside className="d-flex align-items-center">
-                  {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
+                  {(!isLoadingUser && user) ? <UserAvatar userId={user.id} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
                     <Editor value={editCommentInput} onChange={setEditCommentInput} onSave={(text)=>{
                       submitEditForm();          
                       }}
@@ -728,7 +768,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                 </Form> */}
                 {/* {renderEditorWYSWYG(onKeyUpEditorCreate)} */}
                 <aside className="d-flex align-items-center">
-                  {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
+                  {(!isLoadingUser && user) ? <UserAvatar userId={user.id} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
                     <Editor value={newCommentInput} onChange={setNewCommentInput} disabled={!canCreateComment()} onSave={(text)=>{
                       submitCreateForm();          
                       }}
@@ -752,7 +792,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
                 </Form> */}
                 {/* {renderEditorWYSWYG(onKeyUpEditorEdit, editCommentInput)} */}
                 <aside className="d-flex align-items-center">
-                  {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
+                  {(!isLoadingUser && user) ? <UserAvatar userId={user.id} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
                     <Editor value={editCommentInput} onChange={setEditCommentInput} onSave={(text)=>{
                       submitEditForm();          
                       }}
@@ -769,7 +809,7 @@ const CommentActionsBar: FunctionComponent<Props> = ({
       <>
         {/* {renderEditorWYSWYG(onKeyUpEditorCreate)}     */}
         <aside className="d-flex align-items-center">
-          {(!isLoadingUser && user) ? <UserAvatar user={user} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
+          {(!isLoadingUser && user) ? <UserAvatar userId={user.id} className="mb-0" showName={false} /> : <Spinner animation="grow"/>}
           <Editor value={newCommentInput} onChange={setNewCommentInput} disabled={!canCreateComment()} onSave={(text)=>{
             submitCreateForm();          
             }}

@@ -68,19 +68,8 @@ const ListWindow:React.FC<Props> = ({items,parent,cacheKey})=>{
                 }
                 else if(isCommentMosaicItem(item)){
                   const it: CommentMosaicItem = item as CommentMosaicItem;
-                  let pp: CycleMosaicItem|WorkMosaicItem|PostMosaicItem|undefined = undefined;
-                  if(it.workId)
-                    pp = it.work as WorkMosaicItem;
-                  else if(it.cycleId){
-              
-                    pp = it.cycle as CycleMosaicItem;
-                  }
-                  else if(it.postId)
-                    pp = it.post as PostMosaicItem;
-              
-                    if(pp){
-                      mosaics.push(<MosaicItemComment detailed commentId={it.id} cacheKey={cacheKey} commentParent={pp} />);
-                    }
+                  mosaics.push(<MosaicItemComment detailed commentId={it.id} cacheKey={cacheKey} />);
+                    
                 }
                 
   

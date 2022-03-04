@@ -396,7 +396,7 @@ const Mediatheque: NextPage = () => {
 
   const renderAvatar = ()=>{
     if(user){
-      if(!user?.photos.length)
+      if(!user?.photos || !user?.photos.length)
         return <img
         onError={avatarError}
         className='avatar'

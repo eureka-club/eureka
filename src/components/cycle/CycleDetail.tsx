@@ -60,7 +60,7 @@ import CycleDetailHeader from './CycleDetailHeader';
 import CycleDetailDiscussion from './CycleDetailDiscussion';
 import useCycle from '@/src/useCycle';
 import useCycleItem from '@/src/useCycleItems';
-
+import useWorks from '@/src/useWorks'
 interface Props {
   // cycle: CycleMosaicItem;
   post?: PostMosaicItem;
@@ -94,24 +94,61 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     enabled:!!cycleId
   });
 
-  const [page,setPage] = useState<number>(0);
-  const [total,setTotal] = useState<number>(0);
+  const { data: works } = useWorks({ cycles: { some: { id: cycle?.id } } }, {
+    enabled:!!cycle?.id
+  })
+
+  useEffect(() => {
+    if (cycle) {
+      if (cycle.cycleWorksDates) { 
+        cycle.cycleWorksDates.forEach(w => {
+          queryClient.setQueryData(['WORK',`${w.id}`],w)
+        })        
+      }
+      if(cycle.participants){
+        cycle.participants.forEach(u => {
+          queryClient.setQueryData(['USER',`${u.id}`],u)
+        })
+      }
+    }
+  },[cycle,queryClient])
+
+  useEffect(() => {
+    if (works) {      
+      if (works) { 
+        works.forEach(w => {
+          queryClient.setQueryData(['WORK',`${w.id}`],w)
+        })        
+      }
+    }
+  },[queryClient,works])
+
+  const [page,setPage] = useState<number>(1);
   const [where,setWhere] = useState<{filtersWork:number[]}>()
   
-  const {data} = useCycleItem(+cycleId/* ,page */,where,{
+  const {data} = useCycleItem(+cycleId,-1,where,{
     enabled:!!cycleId
   })
 
   const [items,setItems] = useState<(CommentMosaicItem|PostMosaicItem)[]>();
-  const [hasNextPage,setHasNextPage] = useState<boolean>();
+  //const [hasNextPage,setHasNextPage] = useState<boolean>();
 
   useEffect(()=>{
     if(data){
       setItems(data.items);
-      setTotal(data.total)
-      setHasNextPage(data.hasNextPage);
+      //setHasNextPage(data.hasNextPage);
+
+      for(let i of data.items){
+        if(isPostMosaicItem(i)){
+          queryClient.setQueryData(['POST',i.id.toString()],i)          
+        }
+        else if(isCommentMosaicItem(i)){
+          queryClient.setQueryData(['COMMENT',i.id.toString()],i)          
+        }
+        
+      }
     }
-  },[data])
+  },[data,queryClient])
 
 
   // useEffect(()=>{
@@ -358,30 +395,38 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       for(let i of filteredItems.slice(page*count,count*(page+1))){
         if(isPostMosaicItem(i)){
           const ck = ['POST',i.id.toString()];
-          queryClient.setQueryData(ck,i)
           res.push(
-            <PostMosaic key={v4()} postId={i.id} display="h" cacheKey={ck} showComments className="mb-2" />
+            <PostMosaic 
+            showComments 
+            postId={i.id} 
+            display="h" 
+            key={v4()} 
+            cacheKey={ck} 
+            className="mb-2" />
           )
         }
         else if(isCommentMosaicItem(i)){
           const ck = ['COMMENT',i.id.toString()];
-          queryClient.setQueryData(ck,i)
           res.push(
-            <CommentMosaic key={v4()} detailed commentId={i.id} 
-            commentParent={i.post as PostMosaicItem || i.work as WorkMosaicItem || i.cycle as CycleMosaicItem}
+            <CommentMosaic 
+            key={v4()} 
+            detailed 
+            commentId={i.id} 
+            // commentParent={i.post as PostMosaicItem || i.work as WorkMosaicItem || i.cycle as CycleMosaicItem}
             cacheKey={ck} className="mb-2" />
           )
         }
         
       }
-      return <section data-cy="comments-and-posts">
-        {res}
-         {/* <Mosaic
+      return <section data-cy="mosaic-items">
+         {/* {res}  */}        
+         <Mosaic 
               display="h"
               stack={items}
-              showComments={true}
+              showComments={false}
+              enabledPagination={true}
               cacheKey={['ITEMS', `CYCLE-${cycle.id}-PAGE-${page}`]}
-            />  */}
+            /> 
       </section>
     }
     return <></>
@@ -507,8 +552,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   };
   
   const renderCycleWorksOrCycleFilters = () => {
-    if(cycle && cycle.works){
-      const res = cycle.works.map((w) => {
+    if(cycle && works){
+      const res = works.map((w) => {
         queryClient.setQueryData(['WORK',`${w.id}`],w)
         return <Col key={v4()} xs={12}>
         <Form.Check label={w.title} 
@@ -535,19 +580,19 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   //   }
   // }
   const count = +(process.env.NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT||10)
-  const renderPagesLinks = ()=>{
-    if(items){
-      const pages = total / count
-      const res = []
-      for(let i=0;i<pages;i++)
-        res.push(<Button className={`rounded-circle me-1 shadow ${page===i ? 'text-white bg-secondary':''}`} size="sm" onClick={()=>setPage(i)}>{i+1}</Button>)
-      return <>
-      {res}
-      </>
+  // const renderPagesLinks = ()=>{
+  //   if(items){
+  //     const pages = total / count
+  //     const res = []
+  //     for(let i=0;i<pages;i++)
+  //       res.push(<Button className={`rounded-circle me-1 shadow ${page===i ? 'text-white bg-secondary':''}`} size="sm" onClick={()=>setPage(i)}>{i+1}</Button>)
+  //     return <>
+  //     {res}
+  //     </>
 
-    }
-    return <></>
-  }
+  //   }
+  //   return <></>
+  // }
 
   const renderRestrictTabs = () => {
     if (cycle) {
@@ -561,8 +606,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                   {renderItems()}
                   {/* {items && <ListWindow items={items} parent={cycle} cacheKey={['ITEMS',`CYCLE-${cycle.id}`]} />} */}
                 </MosaicContext.Provider>
-                {renderPagesLinks()}
-
                 {/* {page >1 && <Button 
                 className="my-3 pe-3 rounded-pill text-white" 
                 onClick={() => setPage(()=>page-1)} 
@@ -652,7 +695,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           <TabPane eventKey="participants">
             {/* {cycle.participants && cycle.participants.map((p) => <UserAvatar className="mb-3 mr-3" user={p} key={p.id} />)} */}
             {cycle.participants && (
-              <Mosaic cacheKey={['CYCLE',cycle.id.toString()]} showButtonLabels={false} stack={[...cycle.participants, cycle.creator] as UserMosaicItem[]} />
+              <Mosaic cacheKey={['CYCLE',cycle.id.toString()]} showButtonLabels={false} enabledPagination={false} stack={[...cycle.participants, cycle.creator] as UserMosaicItem[]} />
             )}
             <p />
           </TabPane>
@@ -667,6 +710,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   const renderRestrictTabsHeaders = () => {
     if (cycle) {
+      const participants = cycle.participants;
       const res = (
         <>
           <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
@@ -685,7 +729,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
           <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
             <NavLink eventKey="participants">
-              <span className="mb-3">{t('Participants')} ({[...cycle.participants, cycle.creator].length})</span>
+              <span className="mb-3">{t('Participants')} ({participants.length+1})</span>
             </NavLink>
           </NavItem>
         </>
@@ -915,11 +959,12 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   const getWorksSorted = () => {
     const res: Work[] = [];
+    if(cycle && !cycle.cycleWorksDates)return works||[];
     cycle!.cycleWorksDates
       .sort((f, s) => {
         const fCD = dayjs(f.startDate!);
         const sCD = dayjs(s.startDate!);
-        const isActive = (w: CycleWork) => {
+        const isActive = (w: {startDate:Date|null,endDate:Date|null}) => {
           if (w.startDate && w.endDate) return dayjs().isBetween(w.startDate!, w.endDate);
           if (w.startDate && !w.endDate) return dayjs().isAfter(w.startDate);
           return false;
@@ -932,20 +977,22 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         return -1;
       })
       .forEach((cw) => {
-        const idx = cycle!.works.findIndex((w) => w.id === cw.workId);
-        res.push(cycle!.works[idx]);
+        if (works) {
+          const idx = works.findIndex((w) => w.id === cw.workId);
+          res.push(works[idx]);          
+        }
       });
     if (cycle!.cycleWorksDates.length) return res;
-    return cycle!.works;
+    return works||[];
   };
 
   const renderWorks = ()=>{
-    if(cycle && cycle.works && cycle.works.length){
+    if(cycle && works){
       
       // <WorksMosaic cycle={cycle} className="d-flex mb-5 justify-content-center" />
-      return <section className="d-flex">
+      return <section className="d-flex justify-content-center justify-content-lg-start">
           <MosaicContext.Provider value={{ showShare: true }}>  
-          <div className='container d-flex flex-wrap flex-column flex-lg-row justify-content-center justify-content-lg-start '>      
+          <div className='d-flex flex-wrap flex-column flex-lg-row'>      
             {getWorksSorted().map(w=>{
               queryClient.setQueryData(['WORK',`${w.id}`],w)
               return <div className='p-4' key={v4()}>
@@ -1032,7 +1079,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                       <NavItem className={`border-primary border-bottom bcursor-pointer ${styles.tabBtn}`}>
                         <NavLink eventKey="cycle-about">
                           <span className="mb-3">
-                            {t('About')} ({cycle.works && cycle.works.length})
+                            {t('About')} ({works && works.length})
                           </span>
                         </NavLink>
                       </NavItem>
@@ -1054,15 +1101,15 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                             {/* <UnclampText text={cycle.contentText} clampHeight="7rem" /> */}
                           </div>
                         )}
-                        {cycle.works && (
+                        {works && (
                           <h5 className="mt-5 mb-3 fw-bold text-gray-dark">
-                            {t('worksCountHeader', { count: cycle.works.length })}
+                            {t('worksCountHeader', { count: works.length })}
                           </h5>
                         )}
                         {renderWorks()}
                         {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (
                           <Row className="mt-5 mb-5">
-                            <Col>
+                            <Col className='col-12'>
                               <h5 className="mt-5 mb-3 fw-bold text-gray-dark">{t('complementaryMaterialsTitle')}</h5>
                               <ul className={styles.complementaryMaterials}>
                                 {cycle.complementaryMaterials.map((cm) => (

@@ -69,7 +69,7 @@ describe('WorkDetail suit',()=>{
           
       })
     })
-    it('render parent cycle and child post mosaics on All tab',()=>{
+    /* it.only('render parent cycle and child post mosaics on All tab',()=>{
       cy.visit('/about')
       .get('@work')
       .then(({body})=>{
@@ -93,6 +93,6 @@ describe('WorkDetail suit',()=>{
       })
 
     });
-
+ */
     
 });

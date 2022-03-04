@@ -95,7 +95,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
                         />
                         {post.creator.name}
                       </a> */}
-                      <Avatar user={post.creator} showFullName />
+                      <Avatar userId={post.creator.id} showFullName />
                     </Link>
                </div>
                <div>
@@ -154,10 +154,10 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
             </Button>
           )} */}
           <div className='mb-2 d-none d-md-block'>
-            <MosaicItem cacheKey={cacheKey} className='' postId={post.id} showdetail={false}/>
+            <MosaicItem cacheKey={cacheKey} className='' postId={post.id} showdetail={false} linkToPost={false}/>
           </div>
           <div className='container d-sm-block d-md-none mb-2 mt-2 position-relative'>
-             <MosaicItem cacheKey={cacheKey} className='postition-absolute start-50 translate-middle-x' postId={post.id} showdetail={false}/>
+             <MosaicItem cacheKey={cacheKey} className='postition-absolute start-50 translate-middle-x' postId={post.id} showdetail={false} linkToPost={false}/>
           </div>
          </Col>
         <Col className='col-md-7 col-lg-8 col-xl-9'>
@@ -173,7 +173,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
                   />
                   {post.creator.name}
                 </a> */}
-                <Avatar user={post.creator} showFullName />
+                <Avatar userId={post.creator.id} showFullName />
               </Link>
               </div>
               <div>
@@ -225,13 +225,13 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
             {post.contentText != null && <UnclampText text={post.contentText} clampHeight="8rem" />}
             </div>
           </div>
-          {/* <div className='container d-none d-lg-block'>
+          <div className='container d-none d-lg-block'>
             <CommentsList entity={post} parent={cycle! || work!} cacheKey={['POST', `${post.id}`]} />
-          </div> */}
+          </div>
         </Col>
-        {/* <div className='container d-sm-block d-lg-none mt-3'>
+        <div className='container d-sm-block d-lg-none mt-3'>
             <CommentsList entity={post} parent={cycle! || work!} cacheKey={['POST', `${post.id}`]} />
-          </div> */}
+          </div>
       </Row>
      </MosaicContext.Provider>
 

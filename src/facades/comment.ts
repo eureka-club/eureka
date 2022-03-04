@@ -11,84 +11,63 @@ export const find = async (id: number): Promise<CommentMosaicItem | null> => {
       creator: {
         include: { photos:true },
       },
-      work:{
-        include: {
-          localImages: true,
-          favs: true,
-          ratings: true,
-          comments: true,
-          posts: {include: {
-            creator: {include:{photos:true}},
-            localImages: true,
-            works: {
-              include: {
-                localImages: true,
-              },
-            },
-            cycles: {
-              include: {
-                localImages: true,
-              },
-            },
-            likes: true,
-            favs: true,
-            comments: {
-              include: {
-                creator: { include: { photos:true } },
-                comments: {
-                  include: {
-                    creator: { include: { photos:true } },
-                  },
-                },
-                work: {include:{cycles:true}},
-                cycle:true,
-              },
-            },
-          }},
-          cycles: true,
-        },
-      },
-      cycle: true,
-      post:{
-        include: {
-          creator: {include:{photos:true}},
-          localImages: true,
-          works: {
-            include: {
-              localImages: true,
-            },
-          },
-          cycles: {
-            include: {
-              localImages: true,
-            },
-          },
-          likes: true,
-          favs: true,
+      cycle: {
+        select:{
+          id:true,
+          title:true,
+          creatorId:true,
+          participants:{select:{id:true}},
           comments: {
-            include: {
-              creator: { include: { photos:true } },
-              comments: {
-                include: {
-                  creator: { include: { photos:true } },
-                },
-              },
-              work: {include:{cycles:true}},
-              cycle:true,
+            select: {
+              creator: { select: { photos:true } },
+            },
+          }
+        }
+      },
+      work:{
+        select:{
+          id:true,
+          title:true,
+          comments: {
+            select: {
+              creator: { select: { photos:true } },
+            },
+        }}
+      },
+      post:{
+        select:{
+          id:true,
+          title:true,
+          comments: {
+            select: {
+              creator: { select: { id:true,photos:true } },
+            },
+          }
+      },
+      },
+      comment:{
+        select: {
+          id:true,
+          creator: { select: { id:true,photos:true } },
+          comments: {
+            select: {
+              creator: { select: { id:true,photos:true } },
             },
           },
+          work: {include:{cycles:true}},
+          cycle:{select:{participants:{select:{id:true}}}},
         }
       },
       comments: {
         include: {
-          creator: { include: { photos:true } },
+          creator: { select: { id:true,photos:true } },
           comments: {
-            include: {
-              creator: { include: { photos:true } },
+            select: {
+              creator: { select: { id:true,photos:true } },
             },
           },
           work: {include:{cycles:true}},
-          cycle:true,
+          cycle:{select:{participants:{select:{id:true}}}},
         },
       },
     }
@@ -106,84 +85,63 @@ export const findAll = async (props?:Prisma.CommentFindManyArgs,page?:number): P
       creator: {
         include: { photos:true },
       },
-      work:{
-        include: {
-          localImages: true,
-          favs: true,
-          ratings: true,
-          comments: true,
-          posts: {include: {
-            creator: {include:{photos:true}},
-            localImages: true,
-            works: {
-              include: {
-                localImages: true,
-              },
-            },
-            cycles: {
-              include: {
-                localImages: true,
-              },
-            },
-            likes: true,
-            favs: true,
-            comments: {
-              include: {
-                creator: { include: { photos:true } },
-                comments: {
-                  include: {
-                    creator: { include: { photos:true } },
-                  },
-                },
-                work: {include:{cycles:true}},
-                cycle:true,
-              },
-            },
-          }},
-          cycles: true,
-        },
-      },
-      cycle: true,
-      post:{
-        include: {
-          creator: {include:{photos:true}},
-          localImages: true,
-          works: {
-            include: {
-              localImages: true,
-            },
-          },
-          cycles: {
-            include: {
-              localImages: true,
-            },
-          },
-          likes: true,
-          favs: true,
+      cycle: {
+        select:{
+          id:true,
+          title:true,
+          creatorId:true,
+          participants:{select:{id:true}},
           comments: {
-            include: {
-              creator: { include: { photos:true } },
-              comments: {
-                include: {
-                  creator: { include: { photos:true } },
-                },
-              },
-              work: {include:{cycles:true}},
-              cycle:true,
+            select: {
+              creator: { select: { photos:true } },
+            },
+          }
+        }
+      },
+      work:{
+        select:{
+          id:true,
+          title:true,
+          comments: {
+            select: {
+              creator: { select: { photos:true } },
+            },
+        }}
+      },
+      post:{
+        select:{
+          id:true,
+          title:true,
+          comments: {
+            select: {
+              creator: { select: { id:true,photos:true } },
+            },
+          }
+      },
+      },
+      comment:{
+        select: {
+          id:true,
+          creator: { select: { id:true,photos:true } },
+          comments: {
+            select: {
+              creator: { select: { id:true,photos:true } },
             },
           },
+          work: {include:{cycles:true}},
+          cycle:{select:{participants:{select:{id:true}}}},
         }
       },
       comments: {
         include: {
-          creator: { include: { photos:true } },
+          creator: { select: { id:true,photos:true } },
           comments: {
-            include: {
-              creator: { include: { photos:true } },
+            select: {
+              creator: { select: { id:true,photos:true } },
             },
           },
           work: {include:{cycles:true}},
-          cycle:true,
+          cycle:{select:{participants:{select:{id:true}}}},
         },
       },
     }

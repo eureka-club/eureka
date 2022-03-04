@@ -38,6 +38,7 @@ interface Props {
   cycleId:number;
   showButtonLabels?: boolean;
   showShare?: boolean;
+  showParticipants?: boolean;
   detailed?: boolean;
   cacheKey?: [string,string];
   showSocialInteraction?: boolean;
@@ -49,6 +50,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   // showShare,
   detailed = false,
   showSocialInteraction = true,
+  showParticipants = false,
   cacheKey = undefined,
   showTrash = false,
   className,
@@ -61,6 +63,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const { data: user } = useUser(+idSession,{ enabled: !!+idSession });
   const [isCurrentUserJoinedToCycle, setIsCurrentUserJoinedToCycle] = useState<boolean>(true);
   const [participants, setParticipants] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -277,6 +280,33 @@ const MosaicItem: FunctionComponent<Props> = ({
     return '';
   };
 
+  const canNavigate = () => {
+    return !loading;
+  };
+  const onImgClick = () => {
+    if (canNavigate()) router.push(`/cycle/${cycle?.id}`);
+    setLoading(true);
+  };  
+
+  const renderLocalImageComponent = () => {
+    const img = cycle?.localImages 
+      ? <LocalImageComponent filePath={cycle?.localImages[0].storedFile} alt={cycle?.title} />
+      : undefined;
+    if (linkToCycle) {
+      return (
+        <div
+          className={`${styles.imageContainer} ${!loading ? 'cursor-pointer' : ''}`}
+          onClick={onImgClick}
+          role="presentation"
+        >
+          {!canNavigate() && <Spinner className="position-absolute top-50 start-50" animation="grow" variant="info" />}
+          {img}
+        </div>
+      );
+    }
+    return img;
+  };
+  
   if(!cycle)return <></>
 
   return (
@@ -286,16 +316,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           detailed && styles.detailedImageContainer
         }`}
       >
-        {linkToCycle ? (
-          <Link href={`/cycle/${cycle.id}`}>
-            <a>
-              <LocalImageComponent className="cursor-pointer" filePath={cycle.localImages[0].storedFile} alt={cycle.title} />
-            </a>
-          </Link>
-        ) : (
-          <LocalImageComponent filePath={cycle.localImages[0].storedFile} alt={cycle.title} />
-        )}
-
+        {renderLocalImageComponent()}
         {isActive() && <CgMediaLive className={`${styles.isActiveCircle}`} />}
         <Badge bg="primary" className={`fw-normal fs-6 text-black rounded-pill px-2 ${styles.type}`}>
           {getCycleAccesLbl()}
@@ -318,9 +339,12 @@ const MosaicItem: FunctionComponent<Props> = ({
           </div>
         </div>
       )}
-      <div className={`pt-1 text-center ${styles.joinButtonContainer}`}>
+      {showParticipants && (<p className="fs-6 text-center text-gray my-2">{`${t('participants')}: ${participants + 1}`}</p>)}
+
+     
+      <div className={`mt-1 mb-2 text-center ${styles.joinButtonContainer}`}>
         {(isJoinCycleLoading || isLeaveCycleLoading) && <Spinner animation="grow" size="sm" />}
-        {!(isJoinCycleLoading || isLeaveCycleLoading) && isCurrentUserJoinedToCycle && user ? (
+        {!(isJoinCycleLoading || isLeaveCycleLoading) && isCurrentUserJoinedToCycle && user && (user.id !== cycle!.creatorId) ? (
           <Button onClick={handleLeaveCycleClick} variant="button border-primary text-primary fs-6" className="w-75">
             {t('leaveCycleLabel')}
           </Button>
@@ -331,9 +355,11 @@ const MosaicItem: FunctionComponent<Props> = ({
             </Button>
           )
         )}
+        {(user?.id === cycle!.creatorId) && (<Button  variant="button border-warning text-warning fs-6 disabled" className="w-75">
+            {t('MyCycle')}
+          </Button>) }
       </div>
-
-      <p className="fs-6 text-center text-gray my-2">{`${participants + 1} ${t('participants')}`}</p>
+      
       {showSocialInteraction && (
         <Card.Footer className={styles.footer}>
           {cycle && (

@@ -92,8 +92,9 @@ export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMos
   // );
 };
 
-export const isUserMosaicItem = (obj: MosaicItem | SearchResult): obj is UserMosaicItem =>
-  obj && 'email' in obj && 'countryOfOrigin' in obj && 'image' in obj;
+export const isUserMosaicItem = (obj: MosaicItem | SearchResult): obj is UserMosaicItem =>{
+  return obj && 'countryOfOrigin' in obj && ('image' in obj || 'photos' in obj);
+}
 
 export interface NotifierResponse{
     data: Record<string,any>;

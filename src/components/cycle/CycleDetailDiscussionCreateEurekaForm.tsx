@@ -25,7 +25,7 @@ import useTopics from '../../useTopics';
 import { useNotificationContext } from '@/src/useNotificationProvider';
 import { useRouter} from 'next/router'
 import { useToasts } from 'react-toast-notifications'
-
+import useWorks from '@/src//useWorks'
 // import {useGlobalEventsContext} from '@/src/useGlobalEventsContext'
 // import styles from './CycleDetailDiscussionCreateEurekaForm.module.css';
 
@@ -66,6 +66,10 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
 
   const {notifier} = useNotificationContext();
   // const gec = useGlobalEventsContext();
+
+  const { data: works } = useWorks({ cycles: { some: { id: cycle?.id } } }, {
+    enabled:!!cycle?.id
+  })
 
   const clearPayload = () => {
     editorRef.current.setContent('');
@@ -147,14 +151,16 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
       if(u.id !== cycle.creatorId)
         toUsers.push(cycle.creatorId);
       let message = '';
-      if(payload.selectedWorkId){
-        const work = cycle.works.find(w=>w.id === payload.selectedWorkId);
-        if(work){
-          message = `eurekaCreatedAboutWorkInCycle!|!${JSON.stringify({
-            userName:u.name||'',
-            workTitle:work.title,
-            cycleTitle:cycle.title
-          })}`;          
+      if (payload.selectedWorkId) {
+        if (works) {
+          const work = works.find(w=>w.id === payload.selectedWorkId);
+          if(work){
+            message = `eurekaCreatedAboutWorkInCycle!|!${JSON.stringify({
+              userName:u.name||'',
+              workTitle:work.title,
+              cycleTitle:cycle.title
+            })}`;          
+          }          
         }
       }
       else if(payload.selectedCycleId){

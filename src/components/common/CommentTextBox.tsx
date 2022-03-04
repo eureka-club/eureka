@@ -5,7 +5,7 @@ import {CommentMosaicItem,} from '@/types/comment';
 
 interface Props {
   className?: string;
-  comment: Comment & {comments: Comment[];}
+  comment: CommentMosaicItem
 }
 
 const CommentTextBox: FunctionComponent<Props> = ({ comment, className = '' }) => {

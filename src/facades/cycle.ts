@@ -4,109 +4,59 @@ import { StoredFileUpload } from '../types';
 import { CreateCycleServerFields, CreateCycleServerPayload, CycleMosaicItem } from '../types/cycle';
 import prisma from '../lib/prisma';
 
-export const NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT = +(process.env.NEXT_PUBLIC_NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT || 10);
+export const NEXT_PUBLIC_MOSAIC_ITEMS_COUNT = +(process.env.NEXT_PUBLIC_NEXT_PUBLIC_MOSAIC_ITEMS_COUNT || 10);
 
 export const find = async (id: number): Promise<CycleMosaicItem | null> => {
   return prisma.cycle.findUnique({
     where: { id },
     include: {
-      creator: {include:{photos:true}},
-      localImages: true,
-      complementaryMaterials: true,
+      creator:{
+        select:{id:true,name:true,email:true}
+      },
+      localImages: {select:{
+        storedFile:true
+      }},
+      //complementaryMaterials: true,
       guidelines: {
         select: {
           title: true,
           contentText: true,
         },
       },
-      participants: {include:{photos:true}},
-      ratings: { include: { cycle: true } },
-      favs: true,
-      cycleWorksDates: true,
-      posts: {
-        orderBy:{id:'desc'},
-        include: {
-          creator: {include:{photos:true}},
-          localImages: true,
-          works: {
-            include: {
-              localImages: true,
-            },
-          },
-          cycles: {
-            include: {
-              localImages: true,
-            },
-          },
-          likes: true,
-          favs: true,
-          comments: {
-            include: {
-              creator: { include: { photos:true } },
-              comments: {
-                include: {
-                  creator: { include: { photos:true } },
-                },
-              },
-              work: {include:{cycles:true}},
-              cycle:true,
-            },
-          },
+      participants:{
+        select:{
+          id:true,
+          name:true,
+          countryOfOrigin:true,
+          favWorks:{select:{id:true}},
+          ratingWorks:{select:{workId:true}},
+          photos:{select:{storedFile:true}},
+          notifications:{
+            select:{
+              viewed:true,
+              notification:{select:{message:true,createdAt:true}}}
+            }
+        }
+      },     
+      ratings: { 
+        select: { 
+          qty:true,
+          userId:true,
+        } 
+      },
+      favs: {
+        select:{id:true}
+      },
+      cycleWorksDates: {
+        select:{
+          id:true,
+          startDate:true,
+          endDate:true,
+          workId:true,
         }
       },
-      works:{
-        // take:NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT,
-        orderBy:{id:'desc'},
-        include: {
-          localImages: true,
-          favs: true,
-          ratings: true,
-          comments: true,
-          posts: {include: {
-            creator: {include:{photos:true}},
-            localImages: true,
-            works: {
-              include: {
-                localImages: true,
-              },
-            },
-            cycles: {
-              include: {
-                localImages: true,
-              },
-            },
-            likes: true,
-            favs: true,
-            comments: {
-              include: {
-                creator: { include: { photos:true } },
-                comments: {
-                  include: {
-                    creator: { include: { photos:true } },
-                  },
-                },
-                work: {include:{cycles:true}},
-                cycle:true,
-              },
-            },
-          }},
-          cycles: true,
-        },
-      },
-      comments: {
-        // take:NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT,
-        orderBy:{id:'desc'},
-        include: {
-          creator: { include: { photos:true } },
-          comments: {
-            include: {
-              creator: { include: { photos:true } },
-            },
-          },
-          work: {include:{cycles:true}},
-          cycle:true,
-        },
-      },
+      comments:true,
+      complementaryMaterials:true
     },
   });
 };
@@ -117,96 +67,55 @@ export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<Cycle[] 
     take,
     ... where && {where},
     orderBy: { createdAt: 'desc' },
-    include :{ 
-        participants: true, 
-        localImages: true, 
-        ratings: true, 
-        favs: true, 
-        posts: {
-          orderBy:{id:'desc'},
-          include: {
-            creator: {include:{photos:true}},
-            localImages: true,
-            works: {
-              include: {
-                localImages: true,
-              },
-            },
-            cycles: {
-              include: {
-                localImages: true,
-              },
-            },
-            likes: true,
-            favs: true,
-            comments: {
-              include: {
-                creator: { include: { photos:true } },
-                comments: {
-                  include: {
-                    creator: { include: { photos:true } },
-                  },
-                },
-                work: {include:{cycles:true}},
-                cycle:true,
-              },
-            },
-          }
+    include: {
+      creator:{
+        select:{id:true,name:true,email:true}
+      },
+      localImages: {select:{
+        storedFile:true
+      }},
+      //complementaryMaterials: true,
+      guidelines: {
+        select: {
+          title: true,
+          contentText: true,
         },
-        works:{
-          // take:NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT,
-          orderBy:{id:'desc'},
-          include: {
-            localImages: true,
-            favs: true,
-            ratings: true,
-            comments: true,
-            posts: {include: {
-              creator: {include:{photos:true}},
-              localImages: true,
-              works: {
-                include: {
-                  localImages: true,
-                },
-              },
-              cycles: {
-                include: {
-                  localImages: true,
-                },
-              },
-              likes: true,
-              favs: true,
-              comments: {
-                include: {
-                  creator: { include: { photos:true } },
-                  comments: {
-                    include: {
-                      creator: { include: { photos:true } },
-                    },
-                  },
-                  work: {include:{cycles:true}},
-                  cycle:true,
-                },
-              },
-            }},
-            cycles: true,
-          },
-        },
-        comments: {
-          // take:NEXT_PUBLIC_CYCLE_DETAIL_ITEMS_COUNT,
-          orderBy:{id:'desc'},
-          include: {
-            creator: { include: { photos:true } },
-            comments: {
-              include: {
-                creator: { include: { photos:true } },
-              },
-            },
-            work: {include:{cycles:true}},
-            cycle:true,
-          },
+      },
+      participants:{
+        select:{
+          id:true,
+          name:true,
+          countryOfOrigin:true,
+          favWorks:{select:{id:true}},
+          ratingWorks:{select:{workId:true}},
+          photos:{select:{storedFile:true}},
+          notifications:{
+            select:{
+              viewed:true,
+              notification:{select:{message:true,createdAt:true}}}
+            }
+        }
+      },     
+      ratings: { 
+        select: { 
+          qty:true,
+          userId:true,
+        } 
+      },
+      favs: {
+        select:{id:true}
+      },
+      cycleWorksDates: {
+        select:{
+          id:true,
+          startDate:true,
+          endDate:true,
+          workId:true,
         }
       },
+      comments:true,
+      complementaryMaterials:true
+    }
   });
 };
 

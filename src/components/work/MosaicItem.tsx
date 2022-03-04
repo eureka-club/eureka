@@ -81,7 +81,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const { id, /* author, */ title, localImages, type } = work;
 
   const isActive = () => {
-    if (cycle) {
+    if (cycle && cycle.cycleWorksDates) {
       if (cycle.cycleWorksDates.length) {
         const idx = cycle.cycleWorksDates.findIndex((cw) => cw.workId === work.id);
         if (idx > -1) {
@@ -96,7 +96,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   };
 
   const renderOngoinOrUpcomingDate = () => {
-    if (cycle) {
+    if (cycle && cycle.cycleWorksDates) {
       if (cycle.cycleWorksDates.length) {
         const idx = cycle.cycleWorksDates.findIndex((cw) => cw.workId === work.id);
         if (idx > -1) {
@@ -164,7 +164,9 @@ const MosaicItem: FunctionComponent<Props> = ({
     setLoading(true);
   };
   const renderLocalImageComponent = () => {
-    const img = <LocalImageComponent filePath={localImages[0].storedFile} alt={title} />;
+    const img = localImages 
+      ? <LocalImageComponent filePath={localImages[0].storedFile} alt={title} />
+      : undefined;
     if (linkToWork) {
       return (
         <div

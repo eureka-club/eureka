@@ -32,6 +32,7 @@ const NotificationsList: React.FC<Props> = ({className}) => {
     enabled:!!userId
     });
 
+    
     useEffect(()=>{
     if(session)
         setUserId(session.user.id);
@@ -86,7 +87,8 @@ const NotificationsList: React.FC<Props> = ({className}) => {
         },
       );
     
-
+    if(!user)
+      return <></>    
     const notificationOnClick = (e: React.MouseEvent<Element>,userId:number, notificationId:number, contextURL:string) => {
         e.preventDefault();
         if(user){
@@ -119,7 +121,7 @@ const NotificationsList: React.FC<Props> = ({className}) => {
         if(user){
           
           if(user.notifications.length){
-            return <ListGroup as="ul">{user.notifications.slice(0,5).map((n)=>{
+            return <ListGroup className='NotificationsList' as="ul">{user.notifications.slice(0,5).map((n)=>{
               return <ListGroup.Item
               key={v4()}
               as="li"
