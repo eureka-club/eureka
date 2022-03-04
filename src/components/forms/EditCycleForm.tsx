@@ -303,7 +303,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
 
   useEffect(() => {
     if (!isEditCycleReqError && isEditCycleReqSuccess && editedCycleData != null) {
-      router.push(`/cycle/${router.query.id}`);
+      router.push(`/cycle/${router.query.id}/1`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEditCycleReqError, isEditCycleReqSuccess, editedCycleData]);

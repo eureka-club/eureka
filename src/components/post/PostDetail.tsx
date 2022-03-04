@@ -50,7 +50,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
     if (cycleContext) {
       if (cycleContext.cycle) {
         if (!cycleContext.currentUserIsParticipant && cycleContext.cycle.access !== 1)
-          router.push(`/cycle/${cycleContext.cycle.id}`);
+          router.push(`/cycle/${cycleContext.cycle.id}/1`);
         setCycle(cycleContext.cycle);
         setCurrentUserIsParticipant(cycleContext.currentUserIsParticipant || false);
       }
@@ -134,7 +134,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
                   </Badge>
                   <section className="my-1">
                     <h6>
-                      <Link href={`/cycle/${post.cycles[0].id}`} passHref>
+                      <Link href={`/cycle/${post.cycles[0].id}/1`} passHref>
                         <p className="text-break mb-0 tagText">
                           <a className="cursor-pointer">{post.cycles[0].title}</a>
                         </p>
@@ -211,7 +211,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
                   </Badge>
                   <section className="my-1">
                     <h6>
-                      <Link href={`/cycle/${post.cycles[0].id}`} passHref>
+                      <Link href={`/cycle/${post.cycles[0].id}/1`} passHref>
                         <p className="text-break mb-0 tagText">
                           <a className="cursor-pointer">{post.cycles[0].title}</a>
                         </p>

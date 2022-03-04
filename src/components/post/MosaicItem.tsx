@@ -25,7 +25,7 @@ import globalModals from '@/src/atoms/globalModals'
 import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
 import usePost from '@/src/usePost'
 import {useQueryClient} from 'react-query'
-import useCycle from '@/src/useCycle';
+// import {useCycle} from '@/src/useCycle';
 
 interface Props {
   postId: number|string;
@@ -94,7 +94,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const parentLinkHref = ((): string | null => {
     if (postParent) {
       if (isCycle(postParent)) {
-        return `/cycle/${postParent.id}`;
+        return `/cycle/${postParent.id}/1`;
       }
       if (isWork(postParent)) {
         return `/work/${postParent.id}`;

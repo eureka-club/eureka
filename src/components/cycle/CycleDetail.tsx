@@ -58,8 +58,8 @@ import styles from './CycleDetail.module.css';
 import { useCycleContext, CycleContext } from '../../useCycleContext';
 import CycleDetailHeader from './CycleDetailHeader';
 import CycleDetailDiscussion from './CycleDetailDiscussion';
-import useCycle from '@/src/useCycle';
-import useCycleItem from '@/src/useCycleItems';
+import {useCycle} from '@/src/useCycle';
+import {useCycleItem} from '@/src/useCycleItems';
 import useWorks from '@/src/useWorks'
 interface Props {
   // cycle: CycleMosaicItem;
@@ -86,11 +86,15 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const queryClient = useQueryClient()
 
   const [cycleId,setCycleId] = useState<string>('')
+  const [page,setPage] = useState<string>("1");
   useEffect(()=>{
-    if(router?.query && router.query.id)setCycleId(router.query.id?.toString())
+    if(router?.query && router.query.id && router.query.page){
+      setCycleId(router.query.id?.toString())
+      setPage(router.query.page?.toString())
+    }
   },[router])
 
-  const {data:cycle,isLoading} = useCycle(+cycleId,{
+  const {data:cycle,isLoading} = useCycle(cycleId,{
     enabled:!!cycleId
   });
 
@@ -123,19 +127,22 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     }
   },[queryClient,works])
 
-  const [page,setPage] = useState<number>(1);
+  
   const [where,setWhere] = useState<{filtersWork:number[]}>()
   
-  const {data} = useCycleItem(+cycleId,-1,where,{
+  const {data} = useCycleItem(cycleId,page,where,{
     enabled:!!cycleId
   })
 
   const [items,setItems] = useState<(CommentMosaicItem|PostMosaicItem)[]>();
+
+  const [total,setTotal] = useState<number>(0);
   //const [hasNextPage,setHasNextPage] = useState<boolean>();
 
   useEffect(()=>{
-    if(data){
+    if(data){debugger;
       setItems(data.items);
+      setTotal(data.total)
       //setHasNextPage(data.hasNextPage);
 
       for(let i of data.items){
@@ -321,7 +328,20 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   //     return items.sort((a,b)=>a.createdAt >= b.createdAt ? -1 : 1);
   //   return [];
   // };
-
+  const renderPagesLinks = ()=>{debugger; 
+    const count = +(process.env.NEXT_PUBLIC_MOSAIC_ITEMS_COUNT||20)
+    if(items){
+      const pages = total / count
+      const res = []
+      for(let i=1;i<=pages;i++)
+        res.push(<Button key={v4()} className={`rounded-circle me-1 shadow ${page==`${i}` ? 'text-white bg-secondary':''}`} size="sm" 
+        onClick={()=>router.replace(`/cycle/${cycle.id}/${i}`)}>{i}</Button>)
+      return <>
+      {res}
+      </>
+    }
+    return <></>
+  }
   const renderItems = () => {
     const res = []
     if(cycle && items){
@@ -362,9 +382,13 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
               display="h"
               stack={items}
               showComments={true}
-              enabledPagination={true}
+
               cacheKey={['ITEMS', `CYCLE-${cycle.id}-PAGE-${page}`]}
             /> 
+            <aside className="d-flex justify-content-center">
+
+  {renderPagesLinks()}
+            </aside>
       </section>
     }
     return <></>

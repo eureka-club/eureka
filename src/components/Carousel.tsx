@@ -52,7 +52,7 @@ const renderMosaicItem = (
     return (
       <CycleContext.Provider key={`cycle-${v4()}`} value={{ cycle: item as CycleMosaicItem }}>
         <MosaicItemCycle
-        cycleId={item.id}
+          cycleId={item.id.toString()}
           detailed
           showShare={false}
           showButtonLabels={false}

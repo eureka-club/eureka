@@ -26,7 +26,7 @@ import SocialInteraction from '../common/SocialInteraction';
 import { useCycleContext } from '../../useCycleContext';
 import {useNotificationContext} from '@/src/useNotificationProvider'
 import { useToasts } from 'react-toast-notifications'
-import useCycle from '@/src/useCycle'
+import {useCycle} from '@/src/useCycle'
 // import { useMosaicContext } from '../../useMosaicContext';
 
 dayjs.extend(utc);
@@ -35,7 +35,7 @@ dayjs.extend(isBetween);
 interface Props {
   // workWithImages: WorkWithImages;
   // cycle: CycleMosaicItem;
-  cycleId:number;
+  cycleId:string;
   showButtonLabels?: boolean;
   showShare?: boolean;
   detailed?: boolean;
@@ -121,7 +121,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           notificationMessage,
-          notificationContextURL: `/cycle/${cycle!.id}`,
+          notificationContextURL: `/cycle/${cycle!.id}/1`,
           notificationToUsers,
         }),
       });
@@ -287,7 +287,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         }`}
       >
         {linkToCycle ? (
-          <Link href={`/cycle/${cycle.id}`}>
+          <Link href={`/cycle/${cycle.id}/1`}>
             <a>
               <LocalImageComponent className="cursor-pointer" filePath={cycle.localImages[0].storedFile} alt={cycle.title} />
             </a>

@@ -6,17 +6,15 @@ import { Prisma } from '@prisma/client';
 export type CycleItem = PostMosaicItem | CommentMosaicItem;
 export type WhereT = {filtersWork:number[]}
 
-export const getRecords = async (cycleId:number,page: number,where?:WhereT): Promise<{items:CycleItem[],total:number}|undefined> => {
+const getCycleItems = async (cycleId:string,page: string,where?:WhereT): Promise<{items:CycleItem[],total:number}|undefined> => {
   if (!cycleId) return undefined;
-  let w=''
+  let w='';
   if(where)w=encodeURIComponent(JSON.stringify(where))
-  const url = `/api/cycle/${cycleId}/items?page=${page}&where=${w}`;
+  const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle/${cycleId}/page/${page}?where=${w}`;
 
   const res = await fetch(url);
   if (!res.ok) return undefined;
-  const {items,total} = await res.json();
-  
-  return {items,total};
+  return res.json();
 };
 
 interface Options {
@@ -26,7 +24,7 @@ interface Options {
 
 
 
-const useCycleItem = (cycleId:number,page: number,where?:WhereT, options?: Options) => {
+const useCycleItem = (cycleId:string,page: string,where?:WhereT, options?: Options) => {
   const { staleTime, enabled } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
@@ -34,9 +32,9 @@ const useCycleItem = (cycleId:number,page: number,where?:WhereT, options?: Optio
   const w = JSON.stringify(where)
   return useQuery<{items:CycleItem[],total:number}|undefined>(
     ['ITEMS', `CYCLE-${cycleId}-PAGE-${page}`],
-    ()=> getRecords(cycleId,page,where),{ keepPreviousData : true,staleTime,enabled }
+    ()=> getCycleItems(cycleId,page,where),{ keepPreviousData : true,staleTime,enabled }
   );
 };
 
-export default useCycleItem
+export {getCycleItems,useCycleItem}
 

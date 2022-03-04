@@ -30,7 +30,7 @@ const renderMosaicItem = (
   if (isCycleMosaicItem(item)) {
     return (
       <CycleContext.Provider value={{ cycle: item as CycleMosaicItem }}>
-        <MosaicItemCycle cycleId={item.id} detailed className="mb-2"/>
+        <MosaicItemCycle cycleId={item.id.toString()} detailed className="mb-2"/>
       </CycleContext.Provider>
     );
   }
@@ -93,7 +93,7 @@ const Mosaic: FunctionComponent<Props> = ({
   parent,
   enabledPagination = true,
 }) => {
-  const count = +(process.env.NEXT_PUBLIC_MOSAIC_ITEMS_COUNT||10)
+  
   const [page,setPage] =useState<number>(0)
   // const next = ()=>{
   //   setPage(p=>p+1)
@@ -132,13 +132,13 @@ const Mosaic: FunctionComponent<Props> = ({
         </aside>
       )) || ''}
   </Masonry>*/
-  const items = enabledPagination
-    ? stack.slice(page*count,count*(page+1))
-    : stack;
+  // const items = enabledPagination
+  //   ? stack.slice(page*count,count*(page+1))
+  //   : stack;
   return <section 
   data-cy="mosaic-items" 
   className={`container d-flex ${display=='h' ? 'flex-column' : 'flex-row'} flex-wrap justify-content-start`}>
-    {items
+    {stack
     .map((item: MosaicItem) => (
         <aside className={` ${className} p-4`} key={v4()}>
           {renderMosaicItem(item, parent, showButtonLabels, display, showComments, cacheKey)}
@@ -148,15 +148,7 @@ const Mosaic: FunctionComponent<Props> = ({
 
 
   }
-  const renderPagesLinks = ()=>{
-    const pages = stack.length / count
-    const res = []
-    for(let i=0;i<pages;i++)
-      res.push(<Button key={v4()} className={`rounded-circle me-1 shadow ${page===i ? 'text-white bg-secondary':''}`} size="sm" onClick={()=>setPage(i)}>{i+1}</Button>)
-    return <>
-    {res}
-    </>
-  }
+  
   return <>
     <div className="d-none d-lg-block">
         {renderMosaic()}
@@ -165,7 +157,7 @@ const Mosaic: FunctionComponent<Props> = ({
       {renderMosaic()}
      </div>
      <aside className="d-flex justify-content-center">
-       {enabledPagination && renderPagesLinks()}
+       
      {/* <Button disabled={page==0} onClick={previous}><BiChevronLeft/></Button>
      <Button disabled={(page+1)*count == stack.length} onClick={next}><BiChevronRight/></Button> */}
 

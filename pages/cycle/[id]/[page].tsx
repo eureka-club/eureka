@@ -1,4 +1,4 @@
-import { NextPage } from 'next';
+import { NextPage, GetStaticProps } from 'next';
 import { useSession } from 'next-auth/client';
 import { useAtom } from 'jotai';
 // import { QueryClient, useQuery } from 'react-query';
@@ -10,45 +10,78 @@ import { Spinner, Alert, Button } from 'react-bootstrap';
 
 import { dehydrate, QueryClient, useQuery,useQueryClient } from 'react-query';
 // import { CycleMosaicItem } from '../../src/types/cycle';
-import { Session } from '../../src/types';
-import SimpleLayout from '../../src/components/layouts/SimpleLayout';
-import CycleDetailComponent from '../../src/components/cycle/CycleDetail';
-import Banner from '../../src/components/Banner';
-import useCycle from '../../src/useCycle';
-import { CycleContext, useCycleContext } from '../../src/useCycleContext';
-import globalModalsAtom from '../../src/atoms/globalModals';
-import HelmetMetaData from '../../src/components/HelmetMetaData'
-import { WEBAPP_URL } from '../../src/constants';
+import { Session } from '@/src/types';
+import SimpleLayout from '@/src/components/layouts/SimpleLayout';
+import CycleDetailComponent from '@/src/components/cycle/CycleDetail';
+import Banner from '@/src/components/Banner';
+import {useCycle} from '@/src/useCycle';
+import { CycleContext, useCycleContext } from '@/src/useCycleContext';
+import globalModalsAtom from '@/src/atoms/globalModals';
+import HelmetMetaData from '@/src/components/HelmetMetaData'
+import { WEBAPP_URL } from '@/src/constants';
 import {CycleMosaicItem} from '@/src/types/cycle'
+
+import {useCycleItem,WhereT,CycleItem} from '@/src/useCycleItems'
 interface Props{
-  cycle:CycleMosaicItem
+  cycle:CycleMosaicItem;
+  page:string
 }
-const getCycle = async (id:string)=>{
-  const res = await fetch(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle/${id}`)
+const getCycle = async (id: string): Promise<CycleMosaicItem | undefined> => {
+  if (!id) return undefined;
+  const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle/${id}`;
+
+  const res = await fetch(url);
+  if (!res.ok) return undefined;
+  const result = await res.json();
+
+  return result.cycle ? { ...result.cycle, type: 'cycle' } : undefined;
+};
+const getCycleItems = async (cycleId:string,page: string,where?:WhereT): Promise<{items:CycleItem[],total:number}|undefined> => {
+  if (!cycleId) return undefined;
+  let w='';
+  if(where)w=encodeURIComponent(JSON.stringify(where))
+  const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle/${cycleId}/page/${page}?where=${w}`;
+
+  const res = await fetch(url);
+  if (!res.ok) return undefined;
   return res.json();
-  }
-const CycleDetailPage: NextPage<Props> = () => {
+};
+
+const CycleDetailPage: NextPage = () => {
   const [session, isLoadingSession] = useSession();
   const router = useRouter();
   const [id, setId] = useState<string>('');
   
-  const { data: cycle, isSuccess, isLoading, isFetching, isError, error } = useCycle(+id);
   // const [cycle, setCycle] = useState<CycleMosaicItem | undefined>(undefined);
   const { t } = useTranslation('common');
   const queryClient = useQueryClient();
   const cycleContext = useCycleContext();
   const { requestJoinCycle: execJoinCycle } = cycleContext;
-    
+  
   const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [isRequestingJoinCycle, setIsRequestingJoinCycle] = useState<boolean>(false);
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
   const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
-
+  const [page,setPage] = useState<string>("1")
+  
   useEffect(() => {
-    if (router && router.query) setId(() => router.query.id as string);
+    if (router && router.query) {
+      setId(() => router.query.id as string);
+      setPage(()=>router.query.page as string)
+    }
+    
   }, [router]);
+  
+  const { data: cycle, isSuccess, isLoading, isFetching, isError, error } = useCycle(id);
+  const {data:items} = useCycleItem(id,page,undefined,{//loaded and will be available on CycleDetail form query-cache
+    enabled:!!id
+  })
 
+  useEffect(()=>{
+    if(items){debugger;}
+  },[items])
+  
   useEffect(() => {
     if (+id /* && isSuccess */ && (!cycle || !cycle.id)) {
       queryClient.invalidateQueries(['CYCLE', `${+id}`]);
@@ -169,7 +202,7 @@ const CycleDetailPage: NextPage<Props> = () => {
        
         <HelmetMetaData title={cycle.title}
         type='article'
-        url={`${WEBAPP_URL}/cycle/${cycle.id}`}
+        url={`${WEBAPP_URL}/cycle/${cycle.id}/1`}
         image={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${cycle.localImages ? cycle.localImages[0].storedFile:undefined}`}
         ></HelmetMetaData>
 
@@ -186,46 +219,66 @@ const CycleDetailPage: NextPage<Props> = () => {
   );
 };
 
-export async function getServerSideProps(context:{query:{id:string}}) {
-  const {id} = context.query;
+// export async function getServerSideProps(context:{query:{id:string}}) {
+//   const {id} = context.query;
   
 
-  const queryClient = new QueryClient()
+//   const queryClient = new QueryClient()
  
-   await queryClient.prefetchQuery('cycle', ()=>getCycle(id))
+//    await queryClient.prefetchQuery('cycle', ()=>getCycle(id))
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
+//   return {
+//     props: {
+//       dehydratedState: dehydrate(queryClient),
+//     },
+//   }
+// }
+
+export const getStaticProps:GetStaticProps = async function getStaticProps(context) {
+  if(context.params?.id && context.params.page){
+    const {page,id} = context.params
+    const queryClient = new QueryClient()
+   
+     await queryClient.prefetchQuery(['CYCLE',id.toString()], ()=>getCycle(id.toString()!))
+     await queryClient.prefetchQuery(['ITEMS', `CYCLE-${id}-PAGE-${page}`],()=>getCycleItems(id.toString(),page.toString()))
+  
+    return {
+      props: {
+        dehydratedState: dehydrate(queryClient),
+      },
+      revalidate: 10, // In seconds
+    }
+
   }
-}
+  return {props:{}}
+} 
 
-/* export async function getStaticProps(props:{id:string}) {
-  const {id} = props
-  const res = await fetch(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle/${id}`)
-  const cycle = await res.json();
-debugger;
-  return {
-    props: {
-      cycle,
-    },
-    revalidate: 10, // In seconds
-  }
-} */
-
-/* export async function getStaticPaths() {
+export async function getStaticPaths() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle`)
-  const {data:cycles} = await res.json();debugger;
+  const {data:cycles} = await res.json();
+  
+  const paths:{params:{id:number;page:number}}[] = [];
+  const ipp = +process.env.NEXT_PUBLIC_MOSAIC_ITEMS_COUNT! || 20;
+  await cycles.forEach(async (cycle:CycleMosaicItem)=>{
+    //const res = await getCycleItems(cycle.id.toString(),"1")
+    const res = await fetch(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle/${cycle.id}/page/1`)
+    if(!res.ok){debugger;}
+    const {data} = await res.json();
+    if(res){
+        const pages = [...Array(data?.total!/ipp).keys()];
+        pages.forEach((page)=>{
+          paths.push({
+            params:{id:cycle.id,page:page+1}
+          })
+        })
+    }
 
-  const paths = cycles.map((cycle:CycleMosaicItem) => ({
-    params: { id: cycle.id.toString() },
-  }))
+  })
 
   // We'll pre-render only these paths at build time.
   // { fallback: blocking } will server-render pages
   // on-demand if the path doesn't exist.
-  return { paths, fallback: 'blocking' }
-} */
+  return { paths,fallback: 'blocking' }
+}
 
 export default CycleDetailPage;

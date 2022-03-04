@@ -11,7 +11,7 @@ import SimpleLayout from '../../../../src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '../../../../src/components/cycle/CycleDetail';
 // import { isFavoritedByUser /* isLikedByUser, search as searchPost */ } from '../../../../src/facades/post';
 import { WorkMosaicItem } from '../../../../src/types/work';
-import useCycle from '../../../../src/useCycle';
+import {useCycle} from '../../../../src/useCycle';
 import usePost from '../../../../src/usePost';
 import { CycleContext } from '../../../../src/useCycleContext';
 import HelmetMetaData from '../../../../src/components/HelmetMetaData'
@@ -31,7 +31,7 @@ const PostDetailInCyclePage: NextPage = () => {
   const [session, isLoadingSession] = useSession();
   const router = useRouter();
   const [cycleId, setCycleId] = useState<string>('');
-  const { data, isLoading } = useCycle(+cycleId);
+  const { data, isLoading } = useCycle(cycleId);
   const [cycle, setCycle] = useState<CycleMosaicItem>();
   // const [post, setPost] = useState<PostMosaicItem>();
   const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);

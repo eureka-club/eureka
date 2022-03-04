@@ -105,7 +105,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     }
     // }
     else if (comment.cycle) {
-      return `/cycle/${parent.id}`;
+      return `/cycle/${parent.id}/1`;
     }
     return null;
   })();
