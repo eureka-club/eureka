@@ -81,15 +81,16 @@ export default getApiHandler()
           const storedFile = (user as UserMosaicItem).photos[0].storedFile;
           const resImageRemoving = await storeDeleteFile(storedFile,'users-photos');
           if(!resImageRemoving){
-            res.statusMessage = 'Removing image has failed';
-            return res.status(500).end();
+            console.error('Removing image has failed')
           }
-          const resPhotoRemoving = await update(idNum,{
-            photos:{deleteMany:{}}
-          });
-          if(!resPhotoRemoving){
-            res.statusMessage = 'Removing user photo has failed';
-            return res.status(500).end();
+          else{
+            const resPhotoRemoving = await update(idNum,{
+              photos:{deleteMany:{}}
+            });
+            if(!resPhotoRemoving){
+              console.error('Removing user photo has failed')
+            }
+
           }
         }
         const coverImageUploadData = await storeUploadUserPhoto(files.photo[0]);

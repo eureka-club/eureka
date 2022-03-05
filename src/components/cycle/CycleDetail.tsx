@@ -28,6 +28,7 @@ import { Typeahead } from 'react-bootstrap-typeahead';
 import { useQueryClient } from 'react-query';
 // import UserAvatar from '../common/UserAvatar';
 import Mosaic from '../Mosaic';
+import ListWindow from '@/components/ListWindow'
 // import globalModals from '../../atoms/globalModals';
 
 import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR /* , HYVOR_WEBSITE_ID, WEBAPP_URL */ } from '../../constants';
@@ -358,13 +359,14 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       }
       return <section data-cy="mosaic-items">
          {/* {res}  */}        
-         <Mosaic 
+         {/* <Mosaic 
               display="h"
               stack={items}
               showComments={false}
               enabledPagination={true}
               cacheKey={['ITEMS', `CYCLE-${cycle.id}-PAGE-${page}`]}
-            /> 
+            />  */}
+            <ListWindow items={items} cacheKey={['ITEMS', `CYCLE-${cycle.id}-${page}`]} />
       </section>
     }
     return <></>
