@@ -480,12 +480,12 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
             <Col xs={12} md={6}>
               <section className="">{gll.map((g, idx) => renderLI(g, idx, 'gll'))}</section>
             </Col>
-          )}
+          )||''}
           {glr.length && (
             <Col>
               <section className="">{glr.map((g, idx) => renderLI(g, idx, 'glr'))}</section>
             </Col>
-          )}
+          )||''}
         </Row>
       );
     }
