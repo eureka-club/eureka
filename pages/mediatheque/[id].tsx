@@ -109,7 +109,7 @@ const Mediatheque: NextPage = () => {
   useEffect(() => {
     if (user && user.id && session) {
       const s = session as unknown as Session;
-      const ifbm = s ? user.followedBy.findIndex((i: User) => i.id === s.user.id) !== -1 : false;
+      const ifbm = s ? user.followedBy.findIndex((i) => i.id === s.user.id) !== -1 : false;
       setIsFollowedByMe(() => ifbm);      
     }
   }, [user, session]);
@@ -300,7 +300,7 @@ const Mediatheque: NextPage = () => {
 
   const readOrWatched = () => {
     if (user && user.ratingWorks && user.ratingWorks.length) {
-      const RW = user.ratingWorks.map((w) => (w as RatingOnWork & { work: WorkMosaicItem }).work!);
+      const RW = user.ratingWorks.map((w) => w.work as WorkMosaicItem);
 
       return (
         <CarouselStatic

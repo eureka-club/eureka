@@ -12,29 +12,54 @@ export interface EditUserClientPayload {
 }
 
 type UserFoolow = {
-  include: {
-    cycles: true;
-    joinedCycles: true;
-    likedCycles: true;
-    favCycles: true;
-    favPosts:true;
-    posts: true;
-    likedWorks: true;
-    favWorks: true;
-    ratingWorks:true;
-    ratingCycles:true;
-    readOrWatchedWorks: true;
-    following: true;
-    followedBy: true;
-    photos:true;
+  include:{
+    followedBy:{select:{id:true}},
+    following:{select:{id:true,name:true,image:true,photos:{select:{storedFile:true}}}},
+    ratingWorks:{
+      select:{
+        workId:true,
+        work:{select:{id:true,title:true,type:true,localImages:{select:{storedFile:true}}}}
+      }
+    },
+    favWorks:{select:{id:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
+    favCycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
+    favPosts:{select:{id:true}},
+    posts:{select:{id:true}},
+    cycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
+    joinedCycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
+    ratingCycles:{select:{cycleId:true}},
+    photos:{select:{storedFile:true}},
     notifications:{
-      include:{notification:{
-        include:{
-          toUsers:true;
-        }
-      }};
+      select:{
+        userId:true,
+        notificationId:true,
+        notification:{select:{contextURL:true}}
+      }
     }
-  };
+  }
+  // include: {
+  //   cycles: true;
+  //   joinedCycles: true;
+  //   likedCycles: true;
+  //   favCycles: true;
+  //   favPosts:true;
+  //   posts: true;
+  //   likedWorks: true;
+  //   favWorks: true;
+  //   ratingWorks:true;
+  //   ratingCycles:true;
+  //   readOrWatchedWorks: true;
+  //   following: true;
+  //   followedBy: true;
+  //   photos:{select:{storedFile:true}};
+  //   notifications:{
+  //     include:{notification:{
+  //       include:{
+  //         toUsers:true;
+  //       }
+  //     }};
+  //   }
+  // };
 };
 
 export type UserMosaicItem = Prisma.UserGetPayload<UserFoolow> & {

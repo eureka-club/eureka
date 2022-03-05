@@ -27,7 +27,7 @@ import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
 import usePost from '@/src/usePost'
 import {useQueryClient} from 'react-query'
 import useCycle from '@/src/useCycle';
-
+import useWork from '@/src/useWork'
 interface Props {
   postId: number|string;
   display?: 'v' | 'h';
@@ -69,54 +69,48 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   //const postFromCache = queryClient.getQueryData<PostMosaicItem>(['POST',postId.toString()]);
   // const pp = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(cacheKey);
+  const [cycleId,setCycleId] = useState<number>(0)
+  const [workId,setWorkId] = useState<number>(0)
   
   const {data:post} = usePost(+postId,{
     enabled:!!postId
   })
 
-  const [cycleId,setCycleId] = useState<number>(0)
-  const [workId,setWorkId] = useState<number>(0)
-
+  useEffect(()=>{
+    if(post){
+      if(post.works.length)setWorkId(post.works[0].id)
+      if(post.cycles.length)setCycleId(post.cycles[0].id)
+    }
+  },[post])
+   const {data:workParent} = useWork(workId,{enabled:!!workId})
+   const {data:cycleParent} = useCycle(cycleId,{enabled:!!cycleId})
    useEffect(()=>{
-     if(post){
-      if (post.works && post.works.length > 0) setPostParent(post.works[0] as WorkMosaicItem);
-      else if (post.cycles && post.cycles.length > 0) setPostParent(post.cycles[0] as CycleMosaicItem);
-     }
-   },[post])
-
-  //  const {data:workParent} = useCycle(workId,{enabled:!!workId})
-  //  const {data:cycleParent} = useCycle(cycleId,{enabled:!!cycleId})
-  //  useEffect(()=>{
-  //   if(workParent)//if not null -direct parent
-  //     setPostParent(workParent)
-  //   if(cycleParent){
-  //     if(!postParent)//workPatent could be not null
-  //       setPostParent(cycleParent)//direct parent
-  //   }
-  //  },[workParent,cycleParent])
+    if(workParent)//if not null -direct parent
+      setPostParent(workParent)
+    if(cycleParent){
+      if(!postParent)//workPatent could be not null
+        setPostParent(cycleParent)//direct parent
+    }
+   },[workParent,cycleParent])
    
    if(!post)return <></>
 
   const parentLinkHref = ((): string | null => {
-    if (postParent) {
-      if (isCycle(postParent)) {
-        return `/cycle/${postParent.id}`;
-      }
-      if (isWork(postParent)) {
-        return `/work/${postParent.id}`;
-      }
+    if (workParent) {
+      return `/work/${workParent.id}`;
+    }
+    else if (cycleParent) {
+      return `/cycle/${cycleParent.id}`;
     }
     return null;
   })();
   const postLinkHref = ((): string => {
-    if (postParent) {
-      if (isCycle(postParent)) {
-        return `/cycle/${postParent.id}/post/${post.id}`;
-      }
-      if (isWork(postParent)) {
-        return `/work/${postParent.id}/post/${post.id}`;
-      }
+    if (workParent) {
+      return `/work/${workParent.id}/post/${post.id}`;
     }
+    else if (cycleParent) {
+      return `/cycle/${cycleParent.id}/post/${post.id}`;
+    }    
     return `/post/${post.id}`;
   })();
 
@@ -233,12 +227,12 @@ const MosaicItem: FunctionComponent<Props> = ({
         )}
         {showSocialInteraction && post && (
           <Card.Footer className={`d-flex ${styles.footer}`}>
-            <div className={` ${styles.commentsInfo}`}>
+            {/* <div className={` ${styles.commentsInfo}`}>
               <FaRegComments className="ms-1" />{' '}
               <span className="ms-1">
                 {post.comments.length} {`${t('Replies')}`}
               </span>
-            </div>
+            </div> */}
             <SocialInteraction
               cacheKey={cacheKey || ['POST',post.id.toString()]}
               showButtonLabels={false}

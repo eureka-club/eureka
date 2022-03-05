@@ -1,4 +1,4 @@
-import { Post } from '@prisma/client';
+import { Post, Work,Cycle } from '@prisma/client';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
@@ -51,8 +51,8 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
   const [isSearchCycleLoading, setIsSearchCycleLoading] = useState(false);
   const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
   const [searchCycleResults, setSearchCycleResults] = useState<CycleMosaicItem[]>([]);
-  const [selectedCycle, setSelectedCycle] = useState<CycleWithImages | null>(null);
-  const [selectedWork, setSelectedWork] = useState<WorkWithImages | null>(null);
+  const [selectedCycle, setSelectedCycle] = useState<CycleMosaicItem | null>(null);
+  const [selectedWork, setSelectedWork] = useState<WorkMosaicItem | null>(null);
   // const [post, setPost] = useState<PostMosaicItem | null>(null);
   // const [imageFile, setImageFile] = useState<File | null>(null);
   const { data: topics } = useTopics();
@@ -98,8 +98,8 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
   useEffect(() => {
     if (post) {
       if (post.topics) items.push(...post.topics.split(','));
-      if (post.works.length) setSelectedWork(post.works[0]);
-      if (post.cycles.length) setSelectedCycle(post.cycles[0]);
+      if (post.works.length) setSelectedWork(post.works[0] as WorkMosaicItem);
+      if (post.cycles.length) setSelectedCycle(post.cycles[0] as CycleMosaicItem);
     }
   }, [post,IoTerminalSharp]);
 

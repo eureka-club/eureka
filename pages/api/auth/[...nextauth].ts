@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { LocalImage, Prisma } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextAuth /* , { InitOptions } */ from 'next-auth';
 import Adapters from 'next-auth/adapters';
@@ -91,7 +91,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
         (session as unknown as Session).user.id = user.id; // eslint-disable-line no-param-reassign
         (session as unknown as Session).user.roles = user.roles; // eslint-disable-line no-param-reassign
         (session as unknown as Session).user.name = user.name; // eslint-disable-line no-param-reassign
-        (session as unknown as Session).user.photos = u && ('photos' in u) ? u.photos : [];
+        (session as unknown as Session).user.photos = u && ('photos' in u) ? u.photos as LocalImage[]: [];
         return Promise.resolve(session);
       },
     },

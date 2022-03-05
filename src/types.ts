@@ -81,9 +81,10 @@ export const isWorkMosaicItem = (obj: MosaicItem | SearchResult): obj is WorkMos
   ['book', 'fiction-book', 'movie', 'documentary'].includes((obj as WorkMosaicItem).type);
 
 export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMosaicItem => {
-  return isPost(obj) 
-    && obj && 'creator' in obj 
-    && 'localImages' in obj;
+  return obj 
+    && 'works' in obj 
+    && 'cycles' in obj
+    && 'contentText' in obj;
   // return (
   //   typeof (obj as PostMosaicItem).title === 'string' &&
   //   typeof (obj as PostMosaicItem).creatorId === 'number' &&
@@ -93,7 +94,7 @@ export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMos
 };
 
 export const isUserMosaicItem = (obj: MosaicItem | SearchResult): obj is UserMosaicItem =>{
-  return obj && 'countryOfOrigin' in obj && ('image' in obj || 'photos' in obj);
+  return obj && 'name' in obj && ('image' in obj || 'photos' in obj);
 }
 
 export interface NotifierResponse{

@@ -106,7 +106,7 @@ const EditWorkForm: FunctionComponent = () => {
     });
     return res.json();
   },{
-    onMutate(vars){
+    onMutate(vars){debugger;
       const ck = ['WORK',`${work!.id}`]
       queryClient.cancelQueries(ck)
       const snapshot = queryClient.getQueryData<WorkMosaicItem>(ck)
@@ -119,7 +119,7 @@ const EditWorkForm: FunctionComponent = () => {
       if(error){
         queryClient.setQueryData(ck,snapshot)
       }
-      queryClient.invalidateQueries(ck)  
+      //queryClient.invalidateQueries(ck)  
     }
   });
 

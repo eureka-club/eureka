@@ -7,35 +7,42 @@ import prisma from '../lib/prisma';
 export const find = async (id: number): Promise<PostMosaicItem | null> => {
   return prisma.post.findUnique({
     where: { id },
-    include: {
+    include:{
+      works:{select:{id:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
+      cycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
+      favs:{select:{id:true,}},
       creator: {select:{id:true,name:true,photos:true}},
       localImages: {select:{storedFile:true}},
-      works: {
-        include: {
-          localImages: true,
-        },
-      },
-      cycles: {
-        include: {        
-          localImages: {select:{storedFile:true}},
-          participants:{select:{id:true}}
-        },
-      },
-      likes: true,
-      favs: true,
-      comments: {
-        include: {
-          creator: { include: { photos:true } },
-          comments: {
-            include: {
-              creator: { include: { photos:true } },
-            },
-          },
-          work: {include:{cycles:true}},
-          cycle: {include:{participants:{select:{id:true}}}}
-        },
-      },
     }
+    // include: {
+    //   creator: {select:{id:true,name:true,photos:true}},
+    //   localImages: {select:{storedFile:true}},
+    //   works: {
+    //     include: {
+    //       localImages: true,
+    //     },
+    //   },
+    //   cycles: {
+    //     include: {        
+    //       localImages: {select:{storedFile:true}},
+    //       participants:{select:{id:true}}
+    //     },
+    //   },
+    //   likes: true,
+    //   favs: true,
+    //   comments: {
+    //     include: {
+    //       creator: { include: { photos:true } },
+    //       comments: {
+    //         include: {
+    //           creator: { include: { photos:true } },
+    //         },
+    //       },
+    //       work: {include:{cycles:true}},
+    //       cycle: {include:{participants:{select:{id:true}}}}
+    //     },
+    //   },
+    // }
   });
 };
 
@@ -46,34 +53,12 @@ export const findAll = async (props?:Prisma.PostFindManyArgs,page?:number): Prom
     take,
     skip,
     orderBy: { id: 'desc' },
-    include: {
+    include:{
+      works:{select:{id:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
+      cycles:{select:{id:true,title:true}},
+      favs:{select:{id:true,}},
       creator: {select:{id:true,name:true,photos:true}},
       localImages: {select:{storedFile:true}},
-      works: {
-        include: {
-          localImages: true,
-        },
-      },
-      cycles: {
-        include: {        
-          localImages: {select:{storedFile:true}},
-          participants:{select:{id:true}}
-        },
-      },
-      likes: true,
-      favs: true,
-      comments: {
-        include: {
-          creator: { include: { photos:true } },
-          comments: {
-            include: {
-              creator: { include: { photos:true } },
-            },
-          },
-          work: {include:{cycles:true}},
-          cycle: {include:{participants:{select:{id:true}}}}
-        },
-      },
     },
     where,
   });

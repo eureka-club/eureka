@@ -156,7 +156,7 @@ const MosaicItem: FunctionComponent<Props> = ({
                 </aside>
               </Col>
             </Row>
-            {showComments && <CommentsList entity={comment} parent={parent} cacheKey={cacheKey || ['COMMENT',`${comment.id}`]} />}
+            {/* {showComments && <CommentsList entity={comment} parent={parent} cacheKey={cacheKey || ['COMMENT',`${comment.id}`]} />} */}
           </Card.Body>          
         </Card>
     );

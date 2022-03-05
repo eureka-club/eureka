@@ -15,17 +15,17 @@ interface Props {
 }
 
 const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
-  const {
-    isLoading: isCyclesLoading,
-    isSuccess: isCyclesSuccess,
-    data: cyclesData,
-  } = useQuery<CycleMosaicItem[]>(['work.mosaic.cycles', work.id], async ({ queryKey: [, workId] }) => {
-    const whereQP = encodeURIComponent(JSON.stringify({ works: { some: { id: workId } } }));
-    const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
-    const res = await fetch(`/api/search/cycles?where=${whereQP}&include=${includeQP}`);
+  // const {
+  //   isLoading: isCyclesLoading,
+  //   isSuccess: isCyclesSuccess,
+  //   data: cyclesData,
+  // } = useQuery<CycleMosaicItem[]>(['work.mosaic.cycles', work.id], async ({ queryKey: [, workId] }) => {
+  //   const whereQP = encodeURIComponent(JSON.stringify({ works: { some: { id: workId } } }));
+  //   const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
+  //   const res = await fetch(`/api/search/cycles?where=${whereQP}&include=${includeQP}`);
 
-    return res.json();
-  });
+  //   return res.json();
+  // });
 
   // const {
   //   isLoading: isPostsLoading,
@@ -41,15 +41,15 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
   const [mosaicData, setMosaicData] = useState<MosaicItem[]>([]);
 
   useEffect(() => {
-    if (isCyclesSuccess && cyclesData != null && work.posts != null) {
-      const interleavedMosaicItems = flatten(zip(cyclesData, work.posts)).filter((i) => i != null) as MosaicItem[];
+    if (work.cycles != null && work.posts != null) {
+      const interleavedMosaicItems = flatten(zip(work.cycles, work.posts)).filter((i) => i != null) as MosaicItem[];
       setMosaicData(interleavedMosaicItems);
     }
-  }, [isCyclesSuccess, cyclesData, work.posts]);
+  }, [work]);
 
   return (
     <>
-      {(isCyclesLoading) && <Spinner animation="grow" role="status" />}
+      {/* {(isCyclesLoading) && <Spinner animation="grow" role="status" />} */}
       {mosaicData.length > 0 && <Mosaic
         cacheKey={['WORK',work.id.toString()]} 
         // className='d-flex justify-content-center justify-content-md-start' 

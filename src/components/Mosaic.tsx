@@ -132,7 +132,8 @@ const Mosaic: FunctionComponent<Props> = ({
         </aside>
       )) || ''}
   </Masonry>*/
-  const items = enabledPagination
+  console.log(stack)
+  const items = enabledPagination && stack
     ? stack.slice(page*count,count*(page+1))
     : stack;
   return <section 

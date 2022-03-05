@@ -64,7 +64,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, cyclesCou
   })
   
   useEffect(()=>{
-    if(work && work.posts){
+    if(work && work.posts.length){
       work.posts.forEach(p => {
         queryClient.setQueryData(['POST',`${p.id}`],p)
       });

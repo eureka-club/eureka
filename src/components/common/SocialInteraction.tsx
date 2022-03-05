@@ -32,7 +32,7 @@ import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
 import { WorkMosaicItem } from '../../types/work';
 import { UserMosaicItem } from '../../types/user';
-import { MySocialInfo, isCycle, isWork, Session, isPost } from '../../types';
+import { MySocialInfo, isCycle, isWork, Session, isPost, isPostMosaicItem, isWorkMosaicItem } from '../../types';
 import styles from './SocialInteraction.module.css';
 import {useNotificationContext} from '@/src/useNotificationProvider';
 interface SocialInteractionClientPayload {
@@ -138,9 +138,9 @@ const SocialInteraction: FunctionComponent<Props> = ({
         // const readOrWatchedByMe = idx !== -1;
         // setOptimistReadOrWatched(readOrWatchedByMe);
         // setOptimistReadOrWatchedCount(entity.readOrWatcheds.length);
-        let idx = user.favWorks.findIndex((i: Work) => i.id === entity.id);
+        let idx = user.favWorks.findIndex((i) => i.id === entity.id);
         const favoritedByMe = idx !== -1;
-        setOptimistFav(favoritedByMe);
+        setOptimistFav(favoritedByMe);if(!entity.favs){debugger;}
         setOptimistFavCount(entity.favs.length);
 
         idx = user.ratingWorks.findIndex((i) => i.workId === entity.id);
@@ -157,7 +157,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
         // setOptimistLike(likedByMe);
         // setOptimistLikeCount(entity.likes.length);
 
-        let idx = user.favCycles ? user.favCycles.findIndex((i: Cycle) => i.id === entity.id) : -1;
+        let idx = user.favCycles ? user.favCycles.findIndex((i) => i.id === entity.id) : -1;
         const favoritedByMe = idx !== -1;
         setOptimistFav(favoritedByMe);
         setOptimistFavCount(entity.favs.length);
@@ -170,10 +170,10 @@ const SocialInteraction: FunctionComponent<Props> = ({
         }
 
         setMySocialInfo({ favoritedByMe, ratingByMe });
-      } else if (isPost(entity)) {
+      } else if (isPostMosaicItem(entity)) {
         // setOptimistReadOrWatchedCount(0);
 
-        const idx = user.favPosts ? user.favPosts.findIndex((i: Post) => i.id === entity.id) : -1;
+        const idx = user.favPosts ? user.favPosts.findIndex((i) => i.id === entity.id) : -1;
         const favoritedByMe = idx !== -1;
         setOptimistFav(favoritedByMe);
         if (!entity.favs) console.error('missing favs in ', entity);
@@ -239,7 +239,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
     if (isWork(entity)) {
       return t('workShare');
     }
-    if (isPost(entity)) {
+    if (isPostMosaicItem(entity)) {
       const post = entity as PostMosaicItem;
       const p = post.works[0] || post.cycles[0] || null;
       const about = post.works[0] ? 'postWorkShare' : 'postCycleShare';
@@ -377,7 +377,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
             queryClient.setQueryData(['USER', `${idSession}`], { ...user, favWorks });
           } else if (isCycle(entity)) {
             let favCycles;
-            if (opf) favCycles = user?.favCycles.filter((i: Cycle) => i.id !== entity.id);
+            if (opf) favCycles = user?.favCycles.filter((i) => i.id !== entity.id);
             else {
               user?.favCycles.push(entity);
               favCycles = user?.favCycles;
@@ -504,7 +504,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
   const getRatingsCount = () => {
     let count = 0;
-    if (isWork(entity)) count = (entity as WorkMosaicItem).ratings.length;
+    if (isWorkMosaicItem(entity)) count = (entity as WorkMosaicItem).ratings.length;
     else if (isCycle(entity)) count = (entity as CycleMosaicItem).ratings.length;
 
     // if (!session || (user && mySocialInfo && !mySocialInfo.ratingByMe))

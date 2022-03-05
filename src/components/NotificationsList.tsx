@@ -9,12 +9,12 @@ import {useRouter} from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import useUser from '@/src/useUser'
 import {useMutation, useQueryClient} from 'react-query'
-import {EditNotificationClientPayload} from '@/src/types/notification'
+import {EditNotificationClientPayload, NotificationMosaicItem} from '@/src/types/notification'
 import {useAtom} from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
 import styles from './Navbar.module.css';
 import {getNotificationMessage} from '@/src/lib/utils'
-import NotificationMosaicItem from '@/src/components/notification/MosaicItem'
+import MosaicItem from '@/src/components/notification/MosaicItem'
 interface Props {
     className?: string;
 }
@@ -129,7 +129,7 @@ const NotificationsList: React.FC<Props> = ({className}) => {
               onClick={(e)=>notificationOnClick(e,n.userId,n.notificationId,n.notification.contextURL)}
             >
               <aside>
-                <NotificationMosaicItem notification={n} />                
+                <MosaicItem notification={n as NotificationMosaicItem} />                
               </aside>
               
             </ListGroup.Item>;

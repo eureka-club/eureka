@@ -6,34 +6,12 @@ import { Prisma } from '@prisma/client';
 // }
 
 export type PostMosaicItem = Prisma.PostGetPayload<{
-  include: {
-    creator: {select:{id:true;name:true;photos:true}};
-    localImages: {select:{storedFile:true}};
-    works: {
-      include: {
-        localImages: true;
-      };
-    };
-    cycles: {
-      include: {        
-        localImages: {select:{storedFile:true}};
-        participants:{select:{id:true}}
-      };
-    };
-    likes: true;
-    favs: true;
-    comments: {
-      include: {
-        creator: { include: { photos:true } };
-        comments: {
-          include: {
-            creator: { include: { photos:true } };
-          };
-        };
-        work: {include:{cycles:true}};
-        cycle: {include:{participants:{select:{id:true}}}}
-      };
-    };
+  include:{
+    works:{select:{id:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
+    cycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
+    favs:{select:{id:true,}},
+    creator: {select:{id:true,name:true,photos:true}},
+    localImages: {select:{storedFile:true}},
   }
 }> & { type?: 'post' };
 

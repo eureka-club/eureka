@@ -53,7 +53,7 @@ const WorkDetailPage: NextPage = () => {
 
   useEffect(() => {
     if (!isLoadingSession && session && work) {
-      setMySocialInfo((res) => ({ ...res, favoritedByMe: work.favs.findIndex((u: User) => u.id === +id) > -1 }));
+      setMySocialInfo((res) => ({ ...res, favoritedByMe: work.favs.findIndex((u) => u.id === +id) > -1 }));
     }
   }, [isLoadingSession, session, work, id]);
 
@@ -69,7 +69,7 @@ const WorkDetailPage: NextPage = () => {
 
   if (work) {
     let cyclesCount = 0;
-    if (work.cycles) cyclesCount = work.cycles.length;
+    cyclesCount = work.cycles.length;
     return rendetLayout(
       work.title,
       <WorkDetailComponent

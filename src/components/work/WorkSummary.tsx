@@ -1,4 +1,4 @@
-import { LocalImage, Work } from '@prisma/client';
+import { WorkMosaicItem } from '@/src/types/work';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
@@ -10,7 +10,7 @@ import styles from './WorkSummary.module.css';
 
 dayjs.extend(utc);
 interface Props {
-  work: Work & { localImages: LocalImage[] };
+  work: WorkMosaicItem
 }
 
 const WorkSummary: FunctionComponent<Props> = ({ work }) => {
