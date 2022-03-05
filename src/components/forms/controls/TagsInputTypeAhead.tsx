@@ -64,7 +64,9 @@ const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputPr
     }
   };
 
-  const deleteTag = (idx: number): void => {
+  const deleteTag = (e:React.MouseEvent<HTMLElement>,idx: number): void => {
+    e.preventDefault()
+    e.stopPropagation()
     const code = items.splice(idx, 1)[0];
     setItems([...new Set(items)]);
     // const onlyByCountries = [...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items])];
@@ -118,10 +120,14 @@ const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputPr
         {items.map((v, idx) => {
           return (
             <span key={`${idx + 1}$q{t}`}>
-              <Badge pill bg="secondary">
+              <Badge 
+              className="fw-light fs-6 cursor-pointer"
+              pill
+              bg="secondary px-2 py-1 mb-1 me-1"
+              >
                 {v}{' '}
                 {!readOnly && (
-                  <Badge style={{ cursor: 'pointer' }} onClick={() => deleteTag(idx)} pill bg="default">
+                  <Badge className="bg-warning text-withe rounded-pill ms-2" style={{ cursor: 'pointer' }} onClick={(e) => deleteTag(e,idx)} pill bg="default">
                     X
                   </Badge>
                 )}

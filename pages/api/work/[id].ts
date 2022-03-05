@@ -105,9 +105,9 @@ export default getApiHandler()
 
     try {
       delete data.id;
-      const r = await prisma.work.update({ where: { id: idNum }, data });
+      const work = await prisma.work.update({ where: { id: idNum }, data });
       // await redis.flushall();
-      res.status(200).json({ status: 'OK', r });
+      res.status(200).json({ work });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
       res.status(500).json({ status: 'server error' });
