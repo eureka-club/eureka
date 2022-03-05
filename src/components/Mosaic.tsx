@@ -140,7 +140,7 @@ const Mosaic: FunctionComponent<Props> = ({
   className={`d-flex ${display=='h' ? 'flex-column' : 'flex-row'} flex-wrap justify-content-start`}>
     {items
     .map((item: MosaicItem) => (
-        <aside className={` ${className}`} key={v4()}>
+        <aside className={`${className} p-4`} key={v4()}>
           {renderMosaicItem(item, parent, showButtonLabels, display, showComments, cacheKey)}
         </aside>
       ))}
