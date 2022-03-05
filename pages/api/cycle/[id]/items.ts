@@ -68,7 +68,7 @@ export default getApiHandler()
       }
 
       const it = [        
-        ...comments.map(p=>{(p as CommentMosaicItem).type='comment';return p;}),
+        // ...comments.map(p=>{(p as CommentMosaicItem).type='comment';return p;}),
         ...posts.map(p=>{(p as PostMosaicItem).type='post';return p;})
       ]
 
