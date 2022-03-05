@@ -19,7 +19,7 @@ import { WorkMosaicItem } from '../../types/work';
 import MosaicItem from './MosaicItem';
 import { MosaicContext } from '../../useMosaicContext';
 
-import CommentsList from '../common/CommentsList';
+// import CommentsList from '../common/CommentsList';
 import LocalImageComponent from '../LocalImage';
 import SocialInteraction from '../common/SocialInteraction';
 import UnclampText from '../UnclampText';

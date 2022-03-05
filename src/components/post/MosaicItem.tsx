@@ -15,12 +15,12 @@ import styles from './MosaicItem.module.css';
 import { isCycle, isWork } from '../../types';
 // import { CycleMosaicItem } from '../../types/cycle';
 // import { WorkMosaicItem } from '../../types/work';
-import CommentsList from '../common/CommentsList';
+// import CommentsList from '../common/CommentsList';
 import Avatar from '../common/UserAvatar';
 import UnclampText from '../UnclampText';
 import { CycleMosaicItem } from '@/src/types/cycle';
 import { WorkMosaicItem } from '@/src/types/work';
-import ActionsBar from '@/src/components/common/ActionsBar'
+// import ActionsBar from '@/src/components/common/ActionsBar'
 import {useAtom} from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
 import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
@@ -271,32 +271,36 @@ const MosaicItem: FunctionComponent<Props> = ({
                     {post.title}
                   </a>
                 </Link>
-                <ActionsBar creatorId={post.creatorId} actions={{
+                {/* <ActionsBar creatorId={post.creatorId} actions={{
                     edit:onEditPost,
                     editOnSmallScreen:onEditSmallScreen,
                   }}
-                />
+                /> */}
               </h6>
               <div className="d-none d-md-block mb-3">
                 {(post.contentText.length < 500) ?
-                <p>{post.contentText}</p> :                 
-                <UnclampText isHTML showButtomMore text={post.contentText} clampHeight="15rem" />
-                }
+                // <p>{post.contentText}</p> :
+                  <div dangerouslySetInnerHTML={{ __html: post.contentText }} />   :   
+                  <div dangerouslySetInnerHTML={{ __html: post.contentText.slice(0,495)+' ...' }} />
+                //  <UnclampText isHTML showButtomMore text={post.contentText} clampHeight="15rem" />
+                } 
               </div>
               <div className="d-block d-md-none mb-3">
                 {(post.contentText.length < 250) ?
-                <p>{post.contentText}</p> :                 
-                <UnclampText isHTML showButtomMore text={post.contentText} clampHeight="8rem" />
-                }
+                // <p>{post.contentText}</p> :
+                <div dangerouslySetInnerHTML={{ __html: post.contentText }} />  :  
+                <div dangerouslySetInnerHTML={{ __html: post.contentText.slice(0,245)+' ...' }} />            
+                //  <UnclampText isHTML showButtomMore text={post.contentText} clampHeight="8rem" />
+                } 
               </div>
             </div>
           </Col>
         </Row>
-        <Row>
+        {/* <Row>
           <Col md={12} xs={12}>
             {showComments && <CommentsList entity={post} parent={postParent!} cacheKey={['POST',`${post.id}`]} />}
           </Col>
-        </Row>
+        </Row> */}
       </section>
     );
   };
