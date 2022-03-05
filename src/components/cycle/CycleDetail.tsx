@@ -26,6 +26,7 @@ import { Work, Comment, Cycle, User, CycleWork } from '@prisma/client';
 import { MosaicContext } from '../../useMosaicContext';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { useQueryClient } from 'react-query';
+
 // import UserAvatar from '../common/UserAvatar';
 import Mosaic from '../Mosaic';
 // import globalModals from '../../atoms/globalModals';
@@ -41,7 +42,7 @@ import { UserMosaicItem } from '../../types/user';
 // import LocalImageComponent from '../LocalImage';
 import PostDetailComponent from '../post/PostDetail';
 // import CycleSummary from './CycleSummary';
-// import HyvorComments from '../common/HyvorComments';
+import HyvorComments from '@/src/components/common/HyvorComments';
 // import SocialInteraction from '../common/SocialInteraction';
 import PostsMosaic from './PostsMosaic';
 // import WorksMosaic from './WorksMosaic';
@@ -522,7 +523,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     if (cycle) {
       const res = (
         <>
-          <TabPane eventKey="cycle-discussion">
+        <TabPane eventKey="cycle-discussion">
+             <HyvorComments entity='cycle' id={`${cycle.id}`}  />
+        </TabPane>
+          {/*<TabPane eventKey="cycle-discussion">
             <CycleDetailDiscussion cycle={cycle} className="mb-5" cacheKey={['ITEMS',`CYCLE-${cycle.id}-PAGE-${page}`]} />
             <Row>
               <Col xs={{span:12, order:'last'}} md={{span:9,order:'first'}}>
@@ -552,8 +556,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 {renderComments()} */}
                 {/* {renderCycleWorksComments()} */}
                 {/* {renderCycleOwnComments()} */}
-              </Col>
-              {/* <Col xs={{span:12, order:'first'}} md={{span:3,order:'last'}}>
+               {/*</Col>
+              <Col xs={{span:12, order:'first'}} md={{span:3,order:'last'}}>
                 <Form as={Row} className="bg-white mt-0 mb-3">
                   <Form.Group as={Col} xs={12}>
                         <Row>
@@ -598,11 +602,11 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                     <Button title={t('Clean filters')} className="mt-3" variant="warning" size="sm" onClick={resetFilters}><ImCancelCircle/></Button>
                   </Form.Group>
                 </Form>
-              </Col> */}
+              </Col>
               
-            </Row>
+            </Row> 
             
-          </TabPane>
+          </TabPane>*/}
           {/* <TabPane eventKey="my_milestone">
             <h2 className="mb-3">{t('My milestones')}</h2>
             <p />

@@ -28,6 +28,7 @@ import Avatar from '../common/UserAvatar';
 import { useCycleContext } from '../../useCycleContext';
 import usePost from '@/src/usePost'
 import {useQueryClient} from 'react-query'
+import HyvorComments from '@/src/components/common/HyvorComments';
 interface Props {
   postId: number;
   // cycle?: CycleMosaicItem;
@@ -225,13 +226,15 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
             {post.contentText != null && <UnclampText text={post.contentText} clampHeight="8rem" />}
             </div>
           </div>
-          <div className='container d-none d-lg-block'>
+          {/*<div className='container d-none d-lg-block'>
             <CommentsList entity={post} parent={cycle! || work!} cacheKey={['POST', `${post.id}`]} />
-          </div>
+          </div>*/}
         </Col>
-        <div className='container d-sm-block d-lg-none mt-3'>
+         <HyvorComments entity='post' id={`${post.id}`}  />
+
+        {/*<div className='container d-sm-block d-lg-none mt-3'>
             <CommentsList entity={post} parent={cycle! || work!} cacheKey={['POST', `${post.id}`]} />
-          </div>
+          </div>*/}
       </Row>
      </MosaicContext.Provider>
 
