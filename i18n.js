@@ -8,6 +8,7 @@ module.exports = {
     '/': ['countries'],
     '/auth/emailVerify': ['common', 'emailVerify'],
     '/work/\\[id]\\': ['common', 'createWorkForm', 'editWorkForm'],
+    '/work/create': ['createWorkForm', 'countries'],
     '/cycle/create': ['createCycleForm', 'countries'],
     'rgx:^/cycle/\\[id\\]/edit': ['createCycleForm', 'countries'],
     '/aboutUs': ['aboutUs'],

@@ -359,15 +359,15 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         
       }
       return <section data-cy="mosaic-items">
-         {/* {res}  */}        
-         {/* <Mosaic 
+          {/*res*/}      
+        {/*  <Mosaic 
               display="h"
               stack={items}
               showComments={false}
               enabledPagination={true}
               cacheKey={['ITEMS', `CYCLE-${cycle.id}-PAGE-${page}`]}
-            />  */}
-            <ListWindow items={items} cacheKey={['ITEMS', `CYCLE-${cycle.id}-${page}`]} />
+            /> */}    
+           <ListWindow items={items} cacheKey={['ITEMS', `CYCLE-${cycle.id}-${page}`]} />
       </section>
     }
     return <></>
@@ -528,8 +528,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         <TabPane eventKey="cycle-discussion">
              <HyvorComments entity='cycle' id={`${cycle.id}`}  />
         </TabPane>
-          {/*<TabPane eventKey="cycle-discussion">
-            <CycleDetailDiscussion cycle={cycle} className="mb-5" cacheKey={['ITEMS',`CYCLE-${cycle.id}-PAGE-${page}`]} />
+         <TabPane eventKey="eurekas">
+            { /*<CycleDetailDiscussion cycle={cycle} className="mb-5" cacheKey={['ITEMS',`CYCLE-${cycle.id}-PAGE-${page}`]} /> */}
             <Row>
               <Col xs={{span:12, order:'last'}} md={{span:9,order:'first'}}>
                 <MosaicContext.Provider value={{ showShare: true }}>
@@ -603,12 +603,12 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                   <Form.Group className="mt-3" as={Col} xs={12}>
                     <Button title={t('Clean filters')} className="mt-3" variant="warning" size="sm" onClick={resetFilters}><ImCancelCircle/></Button>
                   </Form.Group>
-                </Form>
+                </Form>*/}
               </Col>
               
             </Row> 
             
-          </TabPane>*/}
+          </TabPane>
           {/* <TabPane eventKey="my_milestone">
             <h2 className="mb-3">{t('My milestones')}</h2>
             <p />
@@ -645,6 +645,11 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
             <NavLink eventKey="cycle-discussion">
               <span className="mb-3">{t('Discussion')}</span>
+            </NavLink>
+          </NavItem>
+          <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
+            <NavLink eventKey="Eurekas">
+              <span className="mb-3">{t('EurekaMoments')}</span>
             </NavLink>
           </NavItem>
           {/* <NavItem className={`${styles.tabBtn}`}>
