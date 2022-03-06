@@ -84,15 +84,42 @@ export default getApiHandler()
     try {
       
       const { q = null, where:w = undefined, id = null, take:t=undefined, page:c } = req.query;
-      
+      const session = (await getSession({ req })) as unknown as Session;
+    
       let data = null;
-      const where = w ? JSON.parse(w.toString()) : undefined;
+      let where = w ? JSON.parse(w.toString()) : undefined;
       const take = t ? parseInt(t?.toString()) : undefined;
       const page = c ? +c : undefined;
-
+      if(session){
+        where = {
+          ...where,
+          cycles:{
+            some:{
+              OR:[
+                {access:1},
+                {participants:{some:{id:session?.user.id}}}  
+              ]
+            }
+          }
+        }
+      }
+      else{
+        where = {
+          ...where,
+          cycles:{
+            some:{
+              access:1,              
+            }
+          }
+        }
+      }
+      
       if (typeof q === 'string') {
         data = await findAll({take,where:{
-          OR: [{ title: { contains: q } }, { contentText: { contains: q } }, { creator: { name:{contains: q} } }],
+          ...where,
+          AND:{
+            OR: [{ title: { contains: q } }, { contentText: { contains: q } }, { creator: { name:{contains: q} } }],
+          }
         }},page);
       } else if (where) {
         data = await findAll({take,where},page);
@@ -101,7 +128,6 @@ export default getApiHandler()
       } else {
         data = await findAll({take},page);
       }
-      debugger;
       const posts_ = await prisma.post.findMany({
         select:{
           _count:{

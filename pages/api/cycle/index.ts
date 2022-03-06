@@ -73,22 +73,28 @@ export default getApiHandler()
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     try {
+      const session = (await getSession({ req })) as unknown as Session;
       const { q = null, where:w = null,take:t } = req.query;
       let where = w ? JSON.parse(w.toString()) : undefined;
       const take = t ? parseInt(t.toString()) : undefined;
-
+      where = {
+        ...where,
+        access:1,
+        ... session && {participants:{some:{id:session?.user.id}}}        
+      }
       let data = null;
       if (typeof q === 'string') {
         where = {
-          OR: [{ title: { contains: q } }, { contentText: { contains: q } }, { tags: { contains: q } }],
+          ...where,
+          AND:{
+            OR: [{ title: { contains: q } }, { contentText: { contains: q } }, { tags: { contains: q } }],
+          }
         };
         data = await findAll({take,where});
-      } else if (where) {
+      } 
+      else{
         data = await findAll({take,where});
-      } else {
-        data = await findAll({take});
-      }
-
+      } 
       res.status(200).json({ status: 'OK', data });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

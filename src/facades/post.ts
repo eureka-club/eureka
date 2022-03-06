@@ -55,7 +55,7 @@ export const findAll = async (props?:Prisma.PostFindManyArgs,page?:number): Prom
     orderBy: { id: 'desc' },
     include:{
       works:{select:{id:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
-      cycles:{select:{id:true,title:true}},
+      cycles:{select:{id:true,title:true,access:true}},
       favs:{select:{id:true,}},
       creator: {select:{id:true,name:true,photos:true}},
       localImages: {select:{storedFile:true}},

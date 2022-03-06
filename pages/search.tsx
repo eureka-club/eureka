@@ -82,18 +82,24 @@ const SearchPage: NextPage = () => {
         const fields = (router.query.fields as string).split(',');
         w = encodeURIComponent(
           JSON.stringify({
-            OR: fields.map((f:string) => ({ [`${f}`]: { contains: q}})),          
+            AND:{
+              OR: fields.map((f:string) => ({ [`${f}`]: { contains: q}})),          
+
+            }
           })
         );
       }
       else {
         w = encodeURIComponent(
         JSON.stringify({
+          AND:{
             OR: [
               { topics: { contains: q } },
               { title: { contains: q } }, 
               { contentText: { contains: q } },              
             ],
+
+          }
           }),
         );
       }
