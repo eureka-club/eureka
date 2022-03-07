@@ -32,8 +32,9 @@
   background-color: #f9f8f87a;
 }
 .imageContainer img{
-  height: 18em;
-
+  height: 16em;
+  min-height: 16em;
+  max-height: 16em;
 }
 
 .detailedImageContainer img {
@@ -77,9 +78,11 @@
 
 .title {
   color: #333;
-  display: block;
+  /*display: block;*/
   font-weight: 600;
   font-size: 1rem;
+  height: 2.5rem;
+
 }
 .title a:hover{
   text-decoration: underline!important;
@@ -95,11 +98,28 @@
   margin-bottom: 0.2rem;
   /* text-decoration: underline; */
   /* text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8); */
+
 }
+.details{
+  min-height: 6.8rem;
+  height: 6.8rem;
+  max-height: 6.8rem;
+}
+
  .date {
-  display: block;
+     position: absolute;
+     bottom: 0px;
+     background: linear-gradient(200deg, #f0dadad7, #05050561 5rem);
+     color: white !important;
+     text-align:left;
+     padding:.2em;
+     text-align: center;
+     width: 100%;
+     margin-bottom: 0.2rem;
+
+  /*display: block;
   font-size: 0.8rem;
-  font-weight: 200;
+  font-weight: 200;*/
 }
 .joinButtonContainer{
   height: 40px;

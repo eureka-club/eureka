@@ -290,12 +290,18 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   const renderLocalImageComponent = () => {
     const img = cycle?.localImages 
-      ? <LocalImageComponent filePath={cycle?.localImages[0].storedFile} alt={cycle?.title} />
+      ? <> 
+      <LocalImageComponent filePath={cycle?.localImages[0].storedFile} alt={cycle?.title} />
+      {detailed && (<div className={styles.date}>
+            {dayjs(cycle?.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
+            &mdash; {dayjs(cycle?.endDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
+          </div>)}
+      </>
       : undefined;
     if (linkToCycle) {
       return (
         <div
-          className={`${styles.imageContainer} ${!loading ? 'cursor-pointer' : ''}`}
+          className={`${styles.imageContainer} ${!loading ? 'cursor-pointer' : ''} mb-2`}
           onClick={onImgClick}
           role="presentation"
         >
@@ -322,27 +328,24 @@ const MosaicItem: FunctionComponent<Props> = ({
           {getCycleAccesLbl()}
         </Badge>
       </div>
-      {detailed && (
-        <div className="text-center p-1">
+
+      <div className={`${styles.details}`}>
+        {detailed && (
+        <div className={`container text-center p-1 mt-1`}>
           <h6 className={`cursor-pointer ${styles.title}`}>
             {linkToCycle ? (
               <Link href={`/cycle/${cycle.id}`}>
-                <a>{cycle.title}</a>
+                <a>{(cycle.title.length > 60) ? `${cycle.title.slice(0,60)}...` : cycle.title }</a>
               </Link>
             ) : (
               cycle.title
             )}{' '}
           </h6>
-          <div className={styles.date}>
-            {dayjs(cycle.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
-            &mdash; {dayjs(cycle.endDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
-          </div>
+          {/**/}
         </div>
       )}
-      {showParticipants && (<p className="fs-6 text-center text-gray my-2">{`${t('participants')}: ${participants + 1}`}</p>)}
-
-     
-      <div className={`mt-1 mb-2 text-center ${styles.joinButtonContainer}`}>
+      {showParticipants && (<p className={`${styles.title} fs-6 text-center text-gray my-2`}>{`${t('participants')}: ${participants + 1}`}</p>)}
+      <div className={`mt-2 mb-2 text-center ${styles.joinButtonContainer}`}>
         {(isJoinCycleLoading || isLeaveCycleLoading) && <Spinner animation="grow" size="sm" />}
         {!(isJoinCycleLoading || isLeaveCycleLoading) && isCurrentUserJoinedToCycle && user && (user.id !== cycle!.creatorId) ? (
           <Button onClick={handleLeaveCycleClick} variant="button border-primary text-primary fs-6" className="w-75">
@@ -359,7 +362,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             {t('MyCycle')}
           </Button>) }
       </div>
-      
+      </div>
       {showSocialInteraction && (
         <Card.Footer className={styles.footer}>
           {cycle && (
