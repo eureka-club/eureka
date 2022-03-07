@@ -189,7 +189,10 @@ export const search = async (query: { [key: string]: string | string[] }): Promi
             comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
           },
         },
-        posts: { include: { favs: true } },
+        posts: { 
+          include: { 
+            favs: true } 
+        },
       },
     });
   }

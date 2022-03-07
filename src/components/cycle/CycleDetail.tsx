@@ -325,39 +325,39 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   // };
 
   const renderItems = () => {
-    const res = []
+    const res = [];
     if(cycle && items){
       // const items = [
       //   ... getComments() as CommentMosaicItem[],
       //   ... getPosts()
       // ]
       // .sort((a,b)=>a.createdAt >= b.createdAt ? -1 : 1);
-      for(let i of items){
-        if(isPostMosaicItem(i)){
-          const ck = ['POST',i.id.toString()];
-          res.push(
-            <PostMosaic 
-            showComments 
-            postId={i.id} 
-            display="h" 
-            key={v4()} 
-            cacheKey={ck} 
-            className="mb-2" />
-          )
-        }
-        else if(isCommentMosaicItem(i)){
-          const ck = ['COMMENT',i.id.toString()];
-          res.push(
-            <CommentMosaic 
-            key={v4()} 
-            detailed 
-            commentId={i.id} 
-            // commentParent={i.post as PostMosaicItem || i.work as WorkMosaicItem || i.cycle as CycleMosaicItem}
-            cacheKey={ck} className="mb-2" />
-          )
-        }
+      // for(let i of items){
+      //   if(isPostMosaicItem(i)){
+      //     const ck = ['POST',i.id.toString()];
+      //     res.push(
+      //       <PostMosaic 
+      //       showComments 
+      //       postId={i.id} 
+      //       display="h" 
+      //       key={v4()} 
+      //       cacheKey={ck} 
+      //       className="mb-2" />
+      //     )
+      //   }
+      //   else if(isCommentMosaicItem(i)){
+      //     const ck = ['COMMENT',i.id.toString()];
+      //     res.push(
+      //       <CommentMosaic 
+      //       key={v4()} 
+      //       detailed 
+      //       commentId={i.id} 
+      //       // commentParent={i.post as PostMosaicItem || i.work as WorkMosaicItem || i.cycle as CycleMosaicItem}
+      //       cacheKey={ck} className="mb-2" />
+      //     )
+      //   }
         
-      }
+      // }
       return <section data-cy="mosaic-items">
           {/*res*/}      
         {/*  <Mosaic 
@@ -367,7 +367,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
               enabledPagination={true}
               cacheKey={['ITEMS', `CYCLE-${cycle.id}-PAGE-${page}`]}
             /> */}    
-           <ListWindow items={items} cacheKey={['ITEMS', `CYCLE-${cycle.id}-${page}`]} />
+           <ListWindow items={items} cacheKey={['ITEMS', `CYCLE-${cycle.id}`]} />
       </section>
     }
     return <></>
@@ -531,7 +531,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
          <TabPane eventKey="eurekas">
             { /*<CycleDetailDiscussion cycle={cycle} className="mb-5" cacheKey={['ITEMS',`CYCLE-${cycle.id}-PAGE-${page}`]} /> */}
             <Row>
-              <Col xs={{span:12, order:'last'}} md={{span:9,order:'first'}}>
+              <Col /* xs={{span:12, order:'last'}} md={{span:9,order:'first'}} */>
                 <MosaicContext.Provider value={{ showShare: true }}>
                   {renderItems()}
                 </MosaicContext.Provider>
@@ -648,7 +648,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
             </NavLink>
           </NavItem>
           <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
-            <NavLink eventKey="Eurekas">
+            <NavLink eventKey="eurekas">
               <span className="mb-3">{t('EurekaMoments')}</span>
             </NavLink>
           </NavItem>

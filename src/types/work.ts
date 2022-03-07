@@ -27,7 +27,7 @@ export type WorkMosaicItem = Prisma.WorkGetPayload<{
         title:true;
         contentText:true;
         createdAt:true;
-        works:{select:{id:true}};
+        works:{select:{id:true;title:true}};
         cycles:{select:{id:true}};
         favs:{select:{id:true}};
         creator: {select:{id:true;name:true;photos:true}};

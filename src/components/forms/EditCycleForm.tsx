@@ -18,7 +18,7 @@ import FormLabel from 'react-bootstrap/FormLabel';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 // import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 // import { BiTrash } from 'react-icons/bi';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
@@ -33,6 +33,7 @@ import {
   // DATE_FORMAT_SHORT_MONTH_YEAR
 } from '../../constants';
 import {
+  CycleMosaicItem,
   // ComplementaryMaterial,
   EditCycleClientPayload,
 } from '../../types/cycle';
@@ -87,6 +88,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
     public: false,
     secret: false,
   });
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     if (cycle) {
@@ -121,6 +123,22 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
       body: JSON.stringify(payload),
     });
     return res.json();
+  },{
+    onMutate(vars){
+      const ck = ['CYCLE',`${router.query.id}`];
+      queryClient.cancelQueries(ck)
+      const ss = queryClient.getQueryData<CycleMosaicItem>(ck)
+      queryClient.setQueryData(ck,{...ss,...vars})
+      return {ss,ck}
+    },
+    onSettled(data,error,vars,context){
+      type ctx = {ck:string[],ss:CycleMosaicItem}
+      const {ss,ck} = context as ctx;
+      if(error){
+        queryClient.setQueryData(ck,ss)
+      }
+      queryClient.invalidateQueries(['CYCLE',`${router.query.id}`])
+    }
   });
 
   const { t } = useTranslation('createCycleForm');

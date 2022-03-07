@@ -23,10 +23,10 @@ import {CycleMosaicItem} from '@/src/types/cycle'
 interface Props{
   cycle:CycleMosaicItem
 }
-const getCycle = async (id:string)=>{
-  const res = await fetch(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle/${id}`)
-  return res.json();
-  }
+// const getCycle = async (id:string)=>{
+//   const res = await fetch(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle/${id}`)
+//   return res.json();
+//   }
 const CycleDetailPage: NextPage<Props> = () => {
   const [session, isLoadingSession] = useSession();
   const router = useRouter();
@@ -186,7 +186,7 @@ const CycleDetailPage: NextPage<Props> = () => {
   );
 };
 
-export async function getServerSideProps(context:{query:{id:string}}) {
+/* export async function getServerSideProps(context:{query:{id:string}}) {
   const {id} = context.query;
   
 
@@ -200,7 +200,7 @@ export async function getServerSideProps(context:{query:{id:string}}) {
     },
   }
 }
-
+ */
 /* export async function getStaticProps(props:{id:string}) {
   const {id} = props
   const res = await fetch(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle/${id}`)

@@ -69,47 +69,38 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   //const postFromCache = queryClient.getQueryData<PostMosaicItem>(['POST',postId.toString()]);
   // const pp = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(cacheKey);
-  const [cycleId,setCycleId] = useState<number>(0)
-  const [workId,setWorkId] = useState<number>(0)
-  
+
   const {data:post} = usePost(+postId,{
     enabled:!!postId
   })
 
   useEffect(()=>{
     if(post){
-      if(post.works.length)setWorkId(post.works[0].id)
-      if(post.cycles.length)setCycleId(post.cycles[0].id)
+      if(post.works.length)setPostParent(post.works[0] as WorkMosaicItem)
+      if(post.cycles.length)setPostParent(post.cycles[0] as CycleMosaicItem)
     }
   },[post])
-   const {data:workParent} = useWork(workId,{enabled:!!workId})
-   const {data:cycleParent} = useCycle(cycleId,{enabled:!!cycleId})
-   useEffect(()=>{
-    if(workParent)//if not null -direct parent
-      setPostParent(workParent)
-    if(cycleParent){
-      if(!postParent)//workPatent could be not null
-        setPostParent(cycleParent)//direct parent
-    }
-   },[workParent,cycleParent])
+  //  const {data:workParent} = useWork(workId,{enabled:!!workId})
+  //  const {data:cycleParent} = useCycle(cycleId,{enabled:!!cycleId})
+  
    
    if(!post)return <></>
 
   const parentLinkHref = ((): string | null => {
-    if (workParent) {
-      return `/work/${workParent.id}`;
+    if (post.works.length) {
+      return `/work/${post.works[0].id}`;
     }
-    else if (cycleParent) {
-      return `/cycle/${cycleParent.id}`;
+    else if (post.cycles[0]) {
+      return `/cycle/${post.cycles[0].id}`;
     }
     return null;
   })();
   const postLinkHref = ((): string => {
-    if (workParent) {
-      return `/work/${workParent.id}/post/${post.id}`;
+    if (post.works.length) {
+      return `/work/${post.works[0].id}/post/${post.id}`;
     }
-    else if (cycleParent) {
-      return `/cycle/${cycleParent.id}/post/${post.id}`;
+    else if (post.cycles.length) {
+      return `/cycle/${post.cycles[0].id}/post/${post.id}`;
     }    
     return `/post/${post.id}`;
   })();
@@ -138,11 +129,17 @@ const MosaicItem: FunctionComponent<Props> = ({
 
     const renderParentTitle = () => {
       let res = '';
-      if (postParent) {
-        const pptt = postParent.title.slice(0, 26);
-        if (pptt.length + 3 < postParent.title.length) res = `${pptt}...`;
-        else res = postParent.title;
+      let full =''
+      if (post.works.length) {
+        full = post.works[0].title
+        res = full.slice(0, 26);
       }
+      else if(post.cycles.length){
+        full = post.cycles[0].title
+        res = full.slice(0, 26);
+      }
+      if (res.length + 3 < full.length) res = `${res}...`;
+      else res = full;
       return res;
     };
 

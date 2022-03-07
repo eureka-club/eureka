@@ -32,14 +32,14 @@ const ListWindow:React.FC<Props> = ({items,parent,cacheKey})=>{
                     </CycleContext.Provider>)
                 }
                 else if (isPostMosaicItem(item)) {
-                  let pp = parent;
-                  if (!pp) {
-                    const it: PostMosaicItem = item as PostMosaicItem;
-                    if (it.works && it.works.length > 0) pp = it.works[0] as WorkMosaicItem;
-                    else if (it.cycles && it.cycles.length > 0) pp = it.cycles[0] as CycleMosaicItem;
-                  }
-                  const cycleId = isCycleMosaicItem(pp!) ? pp.id : undefined;
-                  const workId = isWorkMosaicItem(pp!) ? pp.id : undefined;
+                  // let pp = parent;
+                  // if (!pp) {
+                  //   const it: PostMosaicItem = item as PostMosaicItem;
+                  //   if (it.works && it.works.length) pp = it.works[0] as WorkMosaicItem;
+                  //   else if (it.cycles && it.cycles.length > 0) pp = it.cycles[0] as CycleMosaicItem;
+                  // }
+                  // const cycleId = isCycleMosaicItem(pp!) ? pp.id : undefined;
+                  // const workId = isWorkMosaicItem(pp!) ? pp.id : undefined;
               
                   mosaics.push(<MosaicItemPost
                       key={`${v4()}`}
@@ -69,7 +69,7 @@ const ListWindow:React.FC<Props> = ({items,parent,cacheKey})=>{
                 }
                 
   
-            }
+            }debugger;
             setMosaics(()=>[...mosaics]);
           }
       },[items])
