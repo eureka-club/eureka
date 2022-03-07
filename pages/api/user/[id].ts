@@ -71,7 +71,7 @@ export default getApiHandler()
         return prev;
       },{});
       
-      if(files.photo && files.photo[0]){
+      if(files.photo && files.photo[0]){debugger;
         const user = await find({id:idNum}) as UserMosaicItem;
         if(!user){
           res.statusMessage = 'User not found';
@@ -83,14 +83,11 @@ export default getApiHandler()
           if(!resImageRemoving){
             console.error('Removing image has failed')
           }
-          else{
-            const resPhotoRemoving = await update(idNum,{
-              photos:{deleteMany:{}}
-            });
-            if(!resPhotoRemoving){
-              console.error('Removing user photo has failed')
-            }
-
+          const resPhotoRemoving = await update(idNum,{
+            photos:{deleteMany:{}}
+          });
+          if(!resPhotoRemoving){
+            console.error('Removing user photo has failed')
           }
         }
         const coverImageUploadData = await storeUploadUserPhoto(files.photo[0]);

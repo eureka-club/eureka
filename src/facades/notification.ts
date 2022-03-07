@@ -27,7 +27,7 @@ export const findAll = async (userId: number): Promise<NotificationMosaicItem[] 
       notification:true
     },
     where:{
-      userId
+      userId      
     }
   });
 };
