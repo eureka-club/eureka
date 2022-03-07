@@ -10,6 +10,7 @@ import useTranslation from 'next-translate/useTranslation';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import WorkDetailComponent from '../../src/components/work/WorkDetail';
 import useWork from '../../src/useWork';
+import useCycles from '@/src/useCycles'
 import HelmetMetaData from '../../src/components/HelmetMetaData'
 import { WEBAPP_URL } from '../../src/constants';
 
@@ -49,7 +50,15 @@ const WorkDetailPage: NextPage = () => {
     }
   }, [router]);
 
-  const { data: work, isLoading: isLoadingWork, error } = useWork(+id, { enabled: !!id });
+  const { data: work, isLoading: isLoadingWork } = useWork(+id, { enabled: !!id });
+
+  const {data:cycles,isLoading:isLoadingCycles} = useCycles({
+    works:{
+      some:{
+        id:+id
+      }
+    }
+  },{enabled:!!id})
 
   useEffect(() => {
     if (!isLoadingSession && session && work) {
@@ -66,10 +75,11 @@ const WorkDetailPage: NextPage = () => {
      <SimpleLayout title={title}>{children}</SimpleLayout>;
      </>
   };
-
+  
+  if (isLoadingWork || isLoadingCycles) return rendetLayout('Loading...', <Spinner animation="grow" />);
+  
   if (work) {
-    let cyclesCount = 0;
-    cyclesCount = work.cycles.length;
+    let cyclesCount = cycles ? cycles.length : 0;
     return rendetLayout(
       work.title,
       <WorkDetailComponent
@@ -80,7 +90,7 @@ const WorkDetailPage: NextPage = () => {
       />,
     );
   }
-  if (isLoadingWork) return rendetLayout('Loading... work', <Spinner animation="grow" />);
+  
   return rendetLayout('Work not found', <Alert variant="warning">{t('notFound')}</Alert>);
   // return (
   //   <SimpleLayout title={work.title}>

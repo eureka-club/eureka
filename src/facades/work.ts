@@ -26,15 +26,15 @@ export const find = async (id: number): Promise<WorkMosaicItem | null> => {
         },
         orderBy:{id:'desc'}
       },
-      cycles:{
-        select:{
-          id:true,
-          title:true,
-          startDate:true,
-          endDate:true,
-          ratings:{select:{qty:true}}
-        }
-      },
+      // cycles:{
+      //   select:{
+      //     id:true,
+      //     title:true,
+      //     startDate:true,
+      //     endDate:true,
+      //     ratings:{select:{qty:true}}
+      //   }
+      // },
     }
     // include: {
     //   localImages: true,
@@ -120,15 +120,15 @@ export const findAll = async (props?:Prisma.WorkFindManyArgs): Promise<WorkMosai
         },
         orderBy:{id:'desc'}
       },
-      cycles:{
-        select:{
-          id:true,
-          title:true,
-          startDate:true,
-          endDate:true,
-          ratings:{select:{qty:true}}
-        }
-      },
+      // cycles:{
+      //   select:{
+      //     id:true,
+      //     title:true,
+      //     startDate:true,
+      //     endDate:true,
+      //     ratings:{select:{qty:true}}
+      //   }
+      // },
     },
     where,
   });

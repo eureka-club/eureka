@@ -75,12 +75,18 @@ export default getApiHandler()
     try {
       const session = (await getSession({ req })) as unknown as Session;
       const { q = null, where:w = null,take:t } = req.query;
-      let where = w ? JSON.parse(w.toString()) : undefined;
+      let where = w ? JSON.parse(w.toString()) : undefined;debugger;
       const take = t ? parseInt(t.toString()) : undefined;
       where = {
         ...where,
-        access:1,
-        ... session && {participants:{some:{id:session?.user.id}}}        
+        AND:{
+          OR:!session 
+          ? [{access:1}]
+          : [
+            {access:1},
+            {participants:{some:{id:session?.user.id}}}        
+          ],
+        }
       }
       let data = null;
       if (typeof q === 'string') {

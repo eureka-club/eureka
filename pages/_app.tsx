@@ -16,7 +16,7 @@ import detailPagesAtom from '../src/atoms/detailPages';
 import globalModalsAtom from '../src/atoms/globalModals';
 // import './_app.css';
 import './scss/custom.scss';
-
+import { ErrorBoundary } from '@/src/ErrorBounddary';
 // const queryClient = new QueryClient();
 // import { GlobalEventsContext, useGlobalEventsContext } from '@/src/useGlobalEventsContext';
 import { NotificationProvider } from '@/src/useNotificationProvider';
@@ -50,7 +50,9 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
                 <Hydrate state={pageProps.dehydratedState}>
                   {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                   <NotificationProvider>
-                    <Component {...pageProps} />
+                    <ErrorBoundary>
+                      <Component {...pageProps} />
+                    </ErrorBoundary>
                   </NotificationProvider>
                 </Hydrate>
                 <ReactQueryDevtools />

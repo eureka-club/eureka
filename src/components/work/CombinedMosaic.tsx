@@ -3,7 +3,7 @@ import { flatten, zip } from 'lodash';
 import { FunctionComponent, useEffect, useState } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import { useQuery } from 'react-query';
-
+import useCycles from '@/src/useCycles'
 import Mosaic from '../Mosaic';
 import { MosaicItem } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
@@ -39,13 +39,20 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
   //   return res.json();
   // });
   const [mosaicData, setMosaicData] = useState<MosaicItem[]>([]);
+  const {data:cycles,isLoading:isLoadingCycles} = useCycles({
+    works:{
+      some:{
+        id:work.id
+      }
+    }
+  },{enabled:!!work.id})
 
   useEffect(() => {
-    if (work.cycles != null && work.posts != null) {
-      const interleavedMosaicItems = flatten(zip(work.cycles, work.posts)).filter((i) => i != null) as MosaicItem[];
+    if (cycles && work.posts) {
+      const interleavedMosaicItems = flatten(zip(cycles, work.posts)).filter((i) => i != null) as MosaicItem[];
       setMosaicData(interleavedMosaicItems);
     }
-  }, [work]);
+  }, [work,cycles]);
 
   return (
     <>

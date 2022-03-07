@@ -12,7 +12,7 @@ import { FunctionComponent, useState } from 'react';
 // import Nav from 'react-bootstrap/Nav';
 // import NavItem from 'react-bootstrap/NavItem';
 // import NavLink from 'react-bootstrap/NavLink';
-import { Col, Row,Button } from 'react-bootstrap';
+import { Col, Row,Spinner } from 'react-bootstrap';
 // import Spinner from 'react-bootstrap/Spinner';
 // import TabContainer from 'react-bootstrap/TabContainer';
 // import TabContent from 'react-bootstrap/TabContent';
@@ -53,8 +53,10 @@ import CarouselStatic from '../CarouselStatic';
 import { MosaicContext } from '../../useMosaicContext';
 import { useCycleContext } from '../../useCycleContext';
 import useWorks from '@/src/useWorks'
+import useCycle from '@/src/useCycle'
 interface Props {
   // cycle: CycleMosaicItem;
+  cycleId:number;
   post?: PostMosaicItem;
   work?: WorkMosaicItem;
   isCurrentUserJoinedToCycle?: boolean;
@@ -68,7 +70,7 @@ interface Props {
 }
 dayjs.extend(isBetween);
 const CycleDetailHeader: FunctionComponent<Props> = ({
-  // cycle,
+  cycleId,
   onCarouselSeeAllAction,
   show: s = true
   // onParticipantsAction,
@@ -84,14 +86,14 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   // const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   // const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   // const router = useRouter();
-  const { cycle: c } = useCycleContext();
-  const [cycle] = useState<CycleMosaicItem>(c!);
   const [show, setShow] = useState<boolean>(s);
   const [session] = useSession() as [Session | null | undefined, boolean];
   const { t } = useTranslation('cycleDetail');
 
-  const { data: works } = useWorks({ cycles: { some: { id: cycle?.id } } }, {
-    enabled:!!cycle?.id
+  const {data:cycle,isLoading:isLoadingCycle} = useCycle(cycleId,{enabled:!!cycleId})
+
+  const { data: works } = useWorks({ cycles: { some: { id: cycleId} } }, {
+    enabled:!!cycleId
   })
   // const hyvorId = `${WEBAPP_URL}cycle/${cycle.id}`;
 
@@ -169,6 +171,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   //   router.push('/search');
   // };
 
+  
   const getFullSymbol = () => {
     if (cycle && session) {
       const s = session as unknown as Session;
@@ -200,7 +203,8 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
 
   const getWorksSorted = () => {
     const res: Work[] = [];
-    if(cycle && !cycle.cycleWorksDates)return works||[];
+    if(!cycle)return []
+    if(!cycle.cycleWorksDates)return works||[];
     cycle.cycleWorksDates
       .sort((f, s) => {
         const fCD = dayjs(f.startDate!);
@@ -227,159 +231,163 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
     return works;
   };
 
+  if(isLoadingCycle) return <Spinner animation='grow'/>
+  
+  if(!cycle)return <></>
+
   return (
-    <Row className="d-flex flex-column-reverse flex-lg-row mb-1 mb-lg-5">
-      {/* xs={{ span: 12, order: 2 }} md={{ span: 7, order: 1 }} lg={{ span: 8 }}*/}
-      <Col className='mt-3 mt-lg-0 col-12 col-lg-8 d-none d-lg-flex flex-column justify-content-center justify-content-lg-start'>
-        <h1 className="d-none d-lg-block mb-1 fw-bold text-secondary">
-          {cycle.title}
-        </h1>
-        <div className='d-flex flex-row justify-content-start'>
-        <Rating
-          readonly
-          initialRating={getRatingAvg()}
-          // onChange={handlerChangeRating}
-          className={styles.rating}
-          stop={5}
-          emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
-          fullSymbol={getFullSymbol()}
-        />{' '}
-        <div className='ms-2'>
-        {getRatingAvg()}
-        {' - '}
-        {getRatingQty()}
-        </div>
-         <span className="ms-1 text-gray">{t('ratings')}</span>
-        
-        {cycle.topics && (
-          <aside className=" d-flex ms-3">
-            <TagsInput
-              formatValue={(v: string) => t(`topics:${v}`)}
-              className=""
-              tags={cycle.topics}
-              readOnly
-            />
-            <TagsInput className="ms-1 d-inline-block" tags={cycle.tags!} readOnly label="" />
-          </aside>
-        )}
-        </div>
-        <div className="">
-        <h4 className="mt-4 mb-1 text-dark">
-          {t('Content calendar')} ({works && works.length})
-        </h4>
-        {/* <CycleSummary cycle={cycle} /> */}
-        {/* <Button className={`${styles.seeParticipantsBtn}`} onClick={onParticipantsAction}>
-          {cycle.participants.length} participants
-        </Button> */}
-        {/* <CycleContext.Provider value={{ cycle }}> */}
-          <CarouselStatic
-           cacheKey={['CYCLE',cycle.id.toString()]}
-            showSocialInteraction={false}
-            // onSeeAll={async () => seeAll(works as WorkMosaicItem[], t('Eurekas I created'))}
-            onSeeAll={onCarouselSeeAllAction}
-            title={<CycleSummary cycle={cycle} />}
-            data={getWorksSorted() as WorkMosaicItem[]}
-            iconBefore={<></>}
-            customMosaicStyle={{ height: '16em' }}
-            tiny
-            mosaicBoxClassName="pb-5"
-            // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-          />
-        </div>
-        {/* </CycleContext.Provider> */}
-      </Col>
-      {/*xs={{ span: 12, order: 1 }} md={{ span: 5, order: 2 }} lg={{ span: 4 }}*/}
-    
-      {show && (
-     <Col className='mt-3 col-12  d-flex flex-column justify-content-center d-lg-none'>
-          <div className="">
-            <h4 className="mt-3 mb-1 text-dark">
-              {t('Content calendar')} ({works && works.length})
-            </h4>
-              <CarouselStatic
-                cacheKey={['CYCLE',cycle.id.toString()]}
-                showSocialInteraction={false}
-                onSeeAll={onCarouselSeeAllAction}
-                title={<CycleSummary cycle={cycle} />}
-                data={getWorksSorted() as WorkMosaicItem[]}
-                iconBefore={<></>}
-                customMosaicStyle={{ height: '16em' }}
-                tiny
-                mosaicBoxClassName="pb-5"
-                // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-              />
-        </div>
-        {/* </CycleContext.Provider> */}
-      </Col>
-      )}
-      <Col className="d-none d-lg-flex col-12 col-lg-4 justify-content-center justify-content-lg-end">
-        <aside className='d-flex flex-column'>
-          <UserAvatar  userId={cycle.creator.id}  showFullName />
-        <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
-          <MosaicItem cycleId={cycle.id} showTrash showParticipants={true} className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
-        </MosaicContext.Provider>
-        </aside>
-      </Col>
-      {show && (
-      <Col className='col-12 d-flex justify-content-center d-lg-none' >
-          <aside className='d-flex flex-column'>
-            <MosaicContext.Provider value={{ showShare: true,cacheKey: ['CYCLE', `${cycle.id}`] }}>
-              <MosaicItem cycleId={cycle.id} showTrash showParticipants={true} className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
-            </MosaicContext.Provider>
-          </aside>
-      </Col>
-      )}
-      <Col className='col-12 d-flex justify-content-between align-items-baseline d-lg-none' >
-        <Row>
-         <UserAvatar userId={cycle.creator.id}  showFullName />
-         </Row>
-          <Row>
-            {show && (
-             <span className={`cursor-pointer text-primary me-1 ${styles.closeButton}`}
-                    role="presentation" onClick={() => setShow(false)}> {t('Close')} <BsX style={{ color: 'var(--eureka-green)' }} /> </span> 
-            )}
-            {!show && (
-             <span className={`cursor-pointer text-primary me-1 ${styles.closeButton}`}
-                    role="presentation" onClick={() => setShow(true)}> {t('Details')} <BsChevronUp style={{ color: 'var(--eureka-green)' }} /> </span> 
-            )}
-          </Row>
-      </Col>
-      <Col className='col-12 d-lg-none'>
-        <h1 className=" mb-1 fw-bold text-secondary">
+      cycle && <Row className="d-flex flex-column-reverse flex-lg-row mb-1 mb-lg-5">
+        {/* xs={{ span: 12, order: 2 }} md={{ span: 7, order: 1 }} lg={{ span: 8 }}*/}
+        <Col className='mt-3 mt-lg-0 col-12 col-lg-8 d-none d-lg-flex flex-column justify-content-center justify-content-lg-start'>
+          <h1 className="d-none d-lg-block mb-1 fw-bold text-secondary">
             {cycle.title}
           </h1>
-           {cycle.topics && (
-          <aside className="d-inline-block mb-4">
-            <TagsInput
-              formatValue={(v: string) => t(`topics:${v}`)}
-              className="d-inline-block"
-              tags={cycle.topics}
-              readOnly
+          <div className='d-flex flex-row justify-content-start'>
+          <Rating
+            readonly
+            initialRating={getRatingAvg()}
+            // onChange={handlerChangeRating}
+            className={styles.rating}
+            stop={5}
+            emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
+            fullSymbol={getFullSymbol()}
+          />{' '}
+          <div className='ms-2'>
+          {getRatingAvg()}
+          {' - '}
+          {getRatingQty()}
+          </div>
+          <span className="ms-1 text-gray">{t('ratings')}</span>
+          
+          {cycle.topics && (
+            <aside className=" d-flex ms-3">
+              <TagsInput
+                formatValue={(v: string) => t(`topics:${v}`)}
+                className=""
+                tags={cycle.topics}
+                readOnly
+              />
+              <TagsInput className="ms-1 d-inline-block" tags={cycle.tags!} readOnly label="" />
+            </aside>
+          )}
+          </div>
+          <div className="">
+          <h4 className="mt-4 mb-1 text-dark">
+            {t('Content calendar')} ({works && works.length})
+          </h4>
+          {/* <CycleSummary cycle={cycle} /> */}
+          {/* <Button className={`${styles.seeParticipantsBtn}`} onClick={onParticipantsAction}>
+            {cycle.participants.length} participants
+          </Button> */}
+          {/* <CycleContext.Provider value={{ cycle }}> */}
+            <CarouselStatic
+            cacheKey={['CYCLE',cycle.id.toString()]}
+              showSocialInteraction={false}
+              // onSeeAll={async () => seeAll(works as WorkMosaicItem[], t('Eurekas I created'))}
+              onSeeAll={onCarouselSeeAllAction}
+              title={<CycleSummary cycle={cycle} />}
+              data={getWorksSorted() as WorkMosaicItem[]}
+              iconBefore={<></>}
+              customMosaicStyle={{ height: '16em' }}
+              tiny
+              mosaicBoxClassName="pb-5"
+              // iconAfter={<BsCircleFill className={styles.infoCircle} />}
             />
-            <TagsInput className="ms-1 d-inline-block" tags={cycle.tags!} readOnly label="" />
-             <div className='mt-2 d-flex flex-row justify-content-start'>
-                  <Rating
-                    readonly
-                    initialRating={getRatingAvg()}
-                    // onChange={handlerChangeRating}
-                    className={styles.rating}
-                    stop={5}
-                    emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
-                    fullSymbol={getFullSymbol()}
-                  />{' '}
-                  <div className='ms-2'>
-                  {getRatingAvg()}
-                  {' - '}
-                  {getRatingQty()}
-                  </div>
-                  <span className="ms-1 text-gray">{t('ratings')}</span>
-                  </div>
-          </aside>
+          </div>
+          {/* </CycleContext.Provider> */}
+        </Col>
+        {/*xs={{ span: 12, order: 1 }} md={{ span: 5, order: 2 }} lg={{ span: 4 }}*/}
+      
+        {show && (
+      <Col className='mt-3 col-12  d-flex flex-column justify-content-center d-lg-none'>
+            <div className="">
+              <h4 className="mt-3 mb-1 text-dark">
+                {t('Content calendar')} ({works && works.length})
+              </h4>
+                <CarouselStatic
+                  cacheKey={['CYCLE',cycle.id.toString()]}
+                  showSocialInteraction={false}
+                  onSeeAll={onCarouselSeeAllAction}
+                  title={<CycleSummary cycle={cycle} />}
+                  data={getWorksSorted() as WorkMosaicItem[]}
+                  iconBefore={<></>}
+                  customMosaicStyle={{ height: '16em' }}
+                  tiny
+                  mosaicBoxClassName="pb-5"
+                  // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+                />
+          </div>
+          {/* </CycleContext.Provider> */}
+        </Col>
         )}
-      </Col>
+        <Col className="d-none d-lg-flex col-12 col-lg-4 justify-content-center justify-content-lg-end">
+          <aside className='d-flex flex-column'>
+            <UserAvatar  userId={cycle.creator.id}  showFullName />
+          <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
+            <MosaicItem cycleId={cycle.id} showTrash showParticipants={true} className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
+          </MosaicContext.Provider>
+          </aside>
+        </Col>
+        {show && (
+        <Col className='col-12 d-flex justify-content-center d-lg-none' >
+            <aside className='d-flex flex-column'>
+              <MosaicContext.Provider value={{ showShare: true,cacheKey: ['CYCLE', `${cycle.id}`] }}>
+                <MosaicItem cycleId={cycle.id} showTrash showParticipants={true} className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
+              </MosaicContext.Provider>
+            </aside>
+        </Col>
+        )}
+        <Col className='col-12 d-flex justify-content-between align-items-baseline d-lg-none' >
+          <Row>
+          <UserAvatar userId={cycle.creator.id}  showFullName />
+          </Row>
+            <Row>
+              {show && (
+              <span className={`cursor-pointer text-primary me-1 ${styles.closeButton}`}
+                      role="presentation" onClick={() => setShow(false)}> {t('Close')} <BsX style={{ color: 'var(--eureka-green)' }} /> </span> 
+              )}
+              {!show && (
+              <span className={`cursor-pointer text-primary me-1 ${styles.closeButton}`}
+                      role="presentation" onClick={() => setShow(true)}> {t('Details')} <BsChevronUp style={{ color: 'var(--eureka-green)' }} /> </span> 
+              )}
+            </Row>
+        </Col>
+        <Col className='col-12 d-lg-none'>
+          <h1 className=" mb-1 fw-bold text-secondary">
+              {cycle.title}
+            </h1>
+            {cycle.topics && (
+            <aside className="d-inline-block mb-4">
+              <TagsInput
+                formatValue={(v: string) => t(`topics:${v}`)}
+                className="d-inline-block"
+                tags={cycle.topics}
+                readOnly
+              />
+              <TagsInput className="ms-1 d-inline-block" tags={cycle.tags!} readOnly label="" />
+              <div className='mt-2 d-flex flex-row justify-content-start'>
+                    <Rating
+                      readonly
+                      initialRating={getRatingAvg()}
+                      // onChange={handlerChangeRating}
+                      className={styles.rating}
+                      stop={5}
+                      emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
+                      fullSymbol={getFullSymbol()}
+                    />{' '}
+                    <div className='ms-2'>
+                    {getRatingAvg()}
+                    {' - '}
+                    {getRatingQty()}
+                    </div>
+                    <span className="ms-1 text-gray">{t('ratings')}</span>
+                    </div>
+            </aside>
+          )}
+        </Col>
 
-    </Row>
-  );
+      </Row>
+    );
 };
 
 export default CycleDetailHeader;

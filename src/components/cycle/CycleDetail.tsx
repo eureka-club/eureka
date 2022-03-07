@@ -432,6 +432,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     if (cycle) {
       const res = (
         <CycleDetailHeader
+          cycleId={cycle.id}
           onParticipantsAction={onParticipantsAction}
           onCarouselSeeAllAction={onCarouselSeeAllAction}
         />

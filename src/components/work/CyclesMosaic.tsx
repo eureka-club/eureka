@@ -2,7 +2,7 @@ import {WorkMosaicItem} from '@/src/types/work'
 import { FunctionComponent } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import { useQuery } from 'react-query';
-
+import useCycles from '@/src/useCycles';
 import { CycleMosaicItem } from '../../types/cycle';
 import Mosaic from '../Mosaic';
 
@@ -21,13 +21,21 @@ const CyclesMosaic: FunctionComponent<Props> = ({ work }) => {
   //     return res.json();
   //   },
   // );
+  const {data:cycles,isLoading:isLoadingCycles} = useCycles({
+    works:{
+      some:{
+        id:work.id
+      }
+    }
+  },{enabled:!!work.id})
+
   
   return (
     <>
       {/* {isLoading && (
         <Spinner animation="grow" role="status"/>        
       )} */}
-      {work != null && <Mosaic cacheKey={['WORK',work.id.toString()]} className='d-flex justify-content-center justify-content-md-start' stack={work.cycles as CycleMosaicItem[]} />}
+      {work && cycles && <Mosaic cacheKey={['WORK',work.id.toString()]} className='d-flex justify-content-center justify-content-md-start' stack={cycles as CycleMosaicItem[]} />}
     </>
   );
 };

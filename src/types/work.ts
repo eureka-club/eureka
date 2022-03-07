@@ -35,16 +35,16 @@ export type WorkMosaicItem = Prisma.WorkGetPayload<{
       };
       orderBy:{id:'desc'}
     };
-    cycles:{
-      select:{
-        id:true;
-        title:true;
-        startDate:true;
-        endDate:true;
+    // cycles:{
+    //   select:{
+    //     id:true;
+    //     title:true;
+    //     startDate:true;
+    //     endDate:true;
         
-        ratings:{select:{qty:true}}
-      }
-    },
+    //     ratings:{select:{qty:true}}
+    //   }
+    // },
   }
   // include: {
   //   localImages: true;

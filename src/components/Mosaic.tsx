@@ -102,6 +102,7 @@ const Mosaic: FunctionComponent<Props> = ({
   //   setPage(p=>p-1)
   // }
   const renderMosaic = () => {
+    if(!stack)return <></>
     /* return (
       <Row>
         {stack.map((item: MosaicItem) => (
@@ -150,6 +151,7 @@ const Mosaic: FunctionComponent<Props> = ({
 
   }
   const renderPagesLinks = ()=>{
+    if(!stack)return <></>
     const pages = stack.length / count
     const res = []
     for(let i=0;i<pages;i++)
