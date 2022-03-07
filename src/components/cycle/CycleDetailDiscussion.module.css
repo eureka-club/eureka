@@ -48,3 +48,8 @@
   background-color: var(--eureka-green)!important;
   color: white !important;;
 }
+
+.initialText {
+  color: var(--eureka-green);
+  font-size: 0.8rem;
+}

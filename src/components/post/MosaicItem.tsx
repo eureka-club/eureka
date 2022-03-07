@@ -269,18 +269,18 @@ const MosaicItem: FunctionComponent<Props> = ({
                 /> */}
               </h6>
               <div className="d-none d-md-block mb-3">
-                {(post.contentText.length < 500) ?
+                {(post.contentText.length < 800) ?
                 // <p>{post.contentText}</p> :
                   <div dangerouslySetInnerHTML={{ __html: post.contentText }} />   :   
-                  <div dangerouslySetInnerHTML={{ __html: post.contentText.slice(0,495)+' ...' }} />
+                  <div dangerouslySetInnerHTML={{ __html: post.contentText.slice(0,755)+' ...' }} />
                 //  <UnclampText isHTML showButtomMore text={post.contentText} clampHeight="15rem" />
                 } 
               </div>
               <div className="d-block d-md-none mb-3">
-                {(post.contentText.length < 250) ?
+                {(post.contentText.length < 150) ?
                 // <p>{post.contentText}</p> :
                 <div dangerouslySetInnerHTML={{ __html: post.contentText }} />  :  
-                <div dangerouslySetInnerHTML={{ __html: post.contentText.slice(0,245)+' ...' }} />            
+                <div dangerouslySetInnerHTML={{ __html: post.contentText.slice(0,145)+' ...' }} />            
                 //  <UnclampText isHTML showButtomMore text={post.contentText} clampHeight="8rem" />
                 } 
               </div>

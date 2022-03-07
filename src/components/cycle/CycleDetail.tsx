@@ -358,7 +358,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       //   }
         
       // }
-      return <section data-cy="mosaic-items">
+      return <>  
+      <section className='d-none d-lg-flex' data-cy="mosaic-items">
           {/*res*/}      
         {/*  <Mosaic 
               display="h"
@@ -367,8 +368,12 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
               enabledPagination={true}
               cacheKey={['ITEMS', `CYCLE-${cycle.id}-PAGE-${page}`]}
             /> */}    
-           <ListWindow items={items} cacheKey={['ITEMS', `CYCLE-${cycle.id}`]} />
+           <ListWindow items={items} cacheKey={['ITEMS', `CYCLE-${cycle.id}`]} height={360} width={'80%'}/>
       </section>
+         <section className='d-block d-lg-none' data-cy="mosaic-items">
+           <ListWindow items={items} cacheKey={['ITEMS', `CYCLE-${cycle.id}`]} height={460} width={'100%'}/>
+      </section>
+       </>
     }
     return <></>
   }
@@ -530,7 +535,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
              <HyvorComments entity='cycle' id={`${cycle.id}`}  />
         </TabPane>
          <TabPane eventKey="eurekas">
-            { /*<CycleDetailDiscussion cycle={cycle} className="mb-5" cacheKey={['ITEMS',`CYCLE-${cycle.id}-PAGE-${page}`]} /> */}
+            <CycleDetailDiscussion cycle={cycle} className="mb-5" cacheKey={['ITEMS',`CYCLE-${cycle.id}`]} />
             <Row>
               <Col /* xs={{span:12, order:'last'}} md={{span:9,order:'first'}} */>
                 <MosaicContext.Provider value={{ showShare: true }}>

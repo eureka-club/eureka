@@ -18,8 +18,10 @@ interface Props{
     items:MosaicItem[];
     cacheKey: string[];
     parent?: CycleMosaicItem | WorkMosaicItem;
+    height:number
+    width:string
 }
-const ListWindow:React.FC<Props> = ({items,parent,cacheKey})=>{
+const ListWindow:React.FC<Props> = ({items,parent,cacheKey,height,width})=>{
     const [mosaics,setMosaics] = useState<JSX.Element[]>([])
 
       useEffect(()=>{
@@ -78,7 +80,7 @@ const ListWindow:React.FC<Props> = ({items,parent,cacheKey})=>{
         console.log(items)
         const {index,style} = props;
        return  <section
-        className="container " style={style}
+        className="" style={style}
         >
         <aside className={`p-4`} key={`${v4()}`}>
              {mosaics[index]}
@@ -95,9 +97,9 @@ const ListWindow:React.FC<Props> = ({items,parent,cacheKey})=>{
           className="d-flex flex-column"
           height={globalThis.window.innerHeight}
           itemCount={items.length}
-          itemSize={344}
+          itemSize={height}
           layout="vertical"
-          width={"100%"}
+          width={width}
         >
           {renderItem}
         </List>
