@@ -134,7 +134,9 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
     <>
       {cycle && (
         <div className={`${styles.container} ${className}`}>
-          {' '}
+          <div className='container text-center'>
+          <p className={`${styles.initialText}`}>{t('EurekaMomentsExplain')}</p>
+          </div>
           <Row className={`d-flex justify-content-center ${styles.discussionContainer}`}>
             <Col xs={12} md={1} className="text-center mb-1">
               {session && session.user && <UserAvatar userId={session.user.id} showName={false} />}
@@ -151,7 +153,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
                   <GiBrain className="mr-1" />
                   <span className="fs-6">{t('Create an Eureka')}</span>
                 </Button>
-                <Button
+                {/*<Button
                   disabled={!isParticipant()}
                   onClick={handleCreateCommentClick}
                   className={`d-flex align-items-center  justify-content-center ${styles.optButton} ${
@@ -159,7 +161,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
                   } ${isCreateComment && styles.optButtonActive}`}
                 >
                   <MdShortText className="mr-1" /> <span className="fs-6">{t('Add a quick comment')}</span>
-                </Button>
+                </Button>*/}
                 {canCreateWork() && (
                   <Button
                     onClick={handleCreateRelatedWorkClick}
