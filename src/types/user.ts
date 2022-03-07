@@ -29,13 +29,13 @@ type UserFoolow = {
     joinedCycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
     ratingCycles:{select:{cycleId:true}},
     photos:{select:{storedFile:true}},
-    notifications:{
-      select:{
-        userId:true,
-        notificationId:true,
-        notification:{select:{contextURL:true}}
-      }
-    }
+    // notifications:{
+    //   select:{
+    //     userId:true,
+    //     notificationId:true,
+    //     notification:{select:{contextURL:true}}
+    //   }
+    // }
   }
   // include: {
   //   cycles: true;

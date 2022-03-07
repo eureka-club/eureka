@@ -53,7 +53,7 @@ export default getApiHandler()
     //   res.status(200).json({ error: 'Unauthorized', work: null });
     //   return;
     // }
-debugger;
+
     const { id } = req.query;
     if (typeof id !== 'string') {
       res.status(404).end();
