@@ -11,7 +11,7 @@ export const getRecords = async (
   const res = await fetch(`/api/work${where ? `?where=${w}` : ''}`);
   if (!res.ok) return [];
   let url = ''; 
-  const json = await res.json();debugger;
+  const json = await res.json();
   return json.data
 };
 

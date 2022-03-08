@@ -26,67 +26,72 @@ const ListWindow:React.FC<Props> = ({items,parent,cacheKey,height,width})=>{
 
       useEffect(()=>{
           if(items){
-            for(let item of items){
-                let mosaic = <></>
-                if (isCycleMosaicItem(item)) {
-                  mosaics.push(<CycleContext.Provider value={{ cycle: item as CycleMosaicItem }}>
-                      <MosaicItemCycle key={`${v4()}`} cycleId={item.id} detailed className="mb-2"/>
-                    </CycleContext.Provider>)
-                }
-                else if (isPostMosaicItem(item)) {
-                  // let pp = parent;
-                  // if (!pp) {
-                  //   const it: PostMosaicItem = item as PostMosaicItem;
-                  //   if (it.works && it.works.length) pp = it.works[0] as WorkMosaicItem;
-                  //   else if (it.cycles && it.cycles.length > 0) pp = it.cycles[0] as CycleMosaicItem;
-                  // }
-                  // const cycleId = isCycleMosaicItem(pp!) ? pp.id : undefined;
-                  // const workId = isWorkMosaicItem(pp!) ? pp.id : undefined;
-              
-                  mosaics.push(<MosaicItemPost
-                      key={`${v4()}`}
-                      showComments={true}
-                      postId={item.id}
-                      display={'h'}
-                      cacheKey={cacheKey}
-                      className="mb-2"
-                    />)
-                  
-                }
-                else if (isWorkMosaicItem(item)) {
-                  
-                    // <WorkContext.Provider value={{ linkToWork: true }}>
-                    mosaic = <MosaicItemWork 
-                    linkToWork showShare={false} showButtonLabels={true} key={`${v4()}`} workId={item.id} className="mb-2"/>
-                    // </WorkContext.Provider>
-                  
-                }
-                else if (isUserMosaicItem(item)) {
-                  mosaics.push(<MosaicItemUser key={`${v4()}`} user={item} className="mb-2" />);
-                }
-                else if(isCommentMosaicItem(item)){
-                  const it: CommentMosaicItem = item as CommentMosaicItem;
-                  mosaics.push(<MosaicItemComment detailed commentId={it.id} cacheKey={cacheKey} />);
-                    
-                }
+            while(items.length){
+              const a = items.splice(0,4)
+              const rows = []
+              for(let item of a){
+                  let mosaic = <></>
+                  if (isCycleMosaicItem(item)) {
+                    rows.push(<CycleContext.Provider value={{ cycle: item as CycleMosaicItem }}>
+                        <MosaicItemCycle key={`${v4()}`} cycleId={item.id} detailed className="mb-2"/>
+                      </CycleContext.Provider>)
+                  }
+                  else if (isPostMosaicItem(item)) {
+                    // let pp = parent;
+                    // if (!pp) {
+                    //   const it: PostMosaicItem = item as PostMosaicItem;
+                    //   if (it.works && it.works.length) pp = it.works[0] as WorkMosaicItem;
+                    //   else if (it.cycles && it.cycles.length > 0) pp = it.cycles[0] as CycleMosaicItem;
+                    // }
+                    // const cycleId = isCycleMosaicItem(pp!) ? pp.id : undefined;
+                    // const workId = isWorkMosaicItem(pp!) ? pp.id : undefined;
                 
-  
-            }debugger;
+                    rows.push(<MosaicItemPost
+                        key={`${v4()}`}
+                        showComments={true}
+                        postId={item.id}
+                        display={'v'}
+                        cacheKey={cacheKey}
+                        className="me-3 my-6"
+                      />)
+                    
+                  }
+                  else if (isWorkMosaicItem(item)) {
+                    
+                      // <WorkContext.Provider value={{ linkToWork: true }}>
+                      rows.push(<MosaicItemWork 
+                        linkToWork showShare={false} showButtonLabels={true} key={`${v4()}`} workId={item.id} className="mb-2"/>)
+                      // </WorkContext.Provider>
+                    
+                  }
+                  else if (isUserMosaicItem(item)) {
+                    rows.push(<MosaicItemUser key={`${v4()}`} user={item} className="mb-2 my-6" />);
+                  }
+                  else if(isCommentMosaicItem(item)){
+                    const it: CommentMosaicItem = item as CommentMosaicItem;
+                    rows.push(<MosaicItemComment detailed commentId={it.id} cacheKey={cacheKey} />);                      
+                  }
+                }
+                mosaics.push(
+                  <section className="d-flex flex-column flex-md-row justify-content-center">{rows.map(
+                    r=><section className="my-2" key={v4()}>{r}</section>
+                    )}</section>
+                )
+            }            
             setMosaics(()=>[...mosaics]);
           }
       },[items])
 
     const renderItem = (props:{ index:number, style:Record<string,any> }) => {
-        console.log(items)
-        const {index,style} = props;
-       return  <section
-        className="" style={style}
-        >
-        <aside className={`p-4`} key={`${v4()}`}>
-             {mosaics[index]}
+      const {index,style} = props;
+      return  <section className="" style={style}>
+        <aside className={`p-4 mb-3`} key={`${v4()}`}>
+              {mosaics[index]}
         </aside>
-     </section>
-      };
+      </section>
+    };
+
+
       const getSize = (index:number) => {
           if(isPostMosaicItem(items[index]))
             return 355;
@@ -94,12 +99,11 @@ const ListWindow:React.FC<Props> = ({items,parent,cacheKey,height,width})=>{
       };
       
         return <List
-          className="d-flex flex-column"
           height={globalThis.window.innerHeight}
-          itemCount={items.length}
-          itemSize={height}
-          layout="vertical"
-          width={width}
+          itemCount={mosaics.length}
+          itemSize={height+16}//+16 because->post mosaic: my-6(12px) and row section: my-2(4px)
+          //layout="vertical"
+          width={'100%'}
         >
           {renderItem}
         </List>

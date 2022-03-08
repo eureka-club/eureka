@@ -359,7 +359,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         
       // }
       return <>  
-      <section className='d-none d-lg-flex' data-cy="mosaic-items">
           {/*res*/}      
         {/*  <Mosaic 
               display="h"
@@ -368,11 +367,13 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
               enabledPagination={true}
               cacheKey={['ITEMS', `CYCLE-${cycle.id}-PAGE-${page}`]}
             /> */}    
+      {/* <section className='d-none d-lg-flex' data-cy="mosaic-items">
            <ListWindow items={items} cacheKey={['ITEMS', `CYCLE-${cycle.id}`]} height={360} width={'80%'}/>
       </section>
          <section className='d-block d-lg-none' data-cy="mosaic-items">
            <ListWindow items={items} cacheKey={['ITEMS', `CYCLE-${cycle.id}`]} height={460} width={'100%'}/>
-      </section>
+      </section> */}
+       <ListWindow items={items} cacheKey={['ITEMS', `CYCLE-${cycle.id}`]} height={400} width={'100%'}/>
        </>
     }
     return <></>

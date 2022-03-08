@@ -179,7 +179,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 
     return (
       <Card className={`${commentSection ? 'mosaic-post-comments' : 'mosaic'}  ${className}`} data-cy={specifyDataCy ? `mosaic-item-post-${post.id}`:''}>
-        {postParent && (
+        {(
           <h2 className="m-0 p-1 fs-6 text-info" data-cy="parent-title">
             <FaRegCompass className="text-info" />
             {` `}
