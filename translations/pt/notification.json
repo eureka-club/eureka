@@ -1,9 +1,9 @@
 {
-  "viewAllNotifications":"View all notifications",
+  "viewAllNotifications":"Ver todas as notificações",
   
-  "eurekaCreatedAboutCycle":"{{userName}} has created an Eureka about {{cycleTitle}}!",
-  "eurekaCreatedAboutWork":"{{userName}} has created an Eureka about {{workTitle}}!",
-  "eurekaCreatedAboutWorkInCycle":"{{userName}} has created an Eureka about {{workTitle}} in the Cycle {{cycleTitle}}!",
+  "eurekaCreatedAboutCycle":"{{userName}} teve um Momento Eureka inspirado pelo ciclo {{cycleTitle}}!",
+  "eurekaCreatedAboutWork":"{{userName}} teve um Momento Eureka inspirado pela obra {{workTitle}}!",
+  "eurekaCreatedAboutWorkInCycle":"{{userName}} teve um Momento Eureka sobre {{workTitle}} no ciclo {{cycleTitle}}!",
   
   "commentCreatedAboutComment":"{{userName}} has replied to your Comment  {{commentTitle}}!",
   "commentCreatedAboutCommentInCycle":"{{userName}} has replied to your Comment in the Cycle {{cycleTitle}}! ",
@@ -17,12 +17,12 @@
   "commentCreatedAboutWorkInCycle":"{{userName}} has added a Comment about {{workTitle}} in the Cycle {{cycleTitle}}! ",
   "commentCreatedAboutWork":"{{userName}} has added a Comment about {{workTitle}}!",
 
-  "userStartFollowing":"{{userName}} has started following you. Take a look at his/her Mediatheque too!",
+  "userStartFollowing":"{{userName}} começou a te seguir. Dê uma olhada na sua Mediateca também!",
 
-  "userJoinedCycle":"{{userName}} has joined the cycle {{cycleTitle}}!",
-  "userLeftCycle":"{{userName}} has left the cycle {{cycleTitle}}!",
+  "userJoinedCycle":"{{userName}} se uniu ao ciclo {{cycleTitle}}!",
+  "userLeftCycle":"{{userName}} saiu do ciclo {{cycleTitle}}!",
 
-  "userHasSaveForLater":"{{userName}} has saved the {{entity}} {{entityTitle}} for later. Check it out.",
-  "userHasRating":"{{userName}} has rated the {{entity}} {{entityTitle}}. Check it out too!"
+  "userHasSaveForLater":"{{userName}} salvou {{entity}} {{entityTitle}}. Dê uma olhada também!",
+  "userHasRating":"{{userName}} avaliou {{entity}} {{entityTitle}}. Dê uma olhada também!"
         
 }
