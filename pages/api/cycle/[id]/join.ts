@@ -117,7 +117,7 @@ export default getApiHandler()
       res.statusMessage = 'server error';
       res.status(500).end();
     } finally {
-      prisma.$disconnect();
+      // //prisma.$disconnect();
     }
   })
   .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
@@ -162,6 +162,6 @@ export default getApiHandler()
       res.statusMessage = 'server error';
       res.status(500).end();
     } finally {
-      prisma.$disconnect();
+      // //prisma.$disconnect();
     }
   });

@@ -49,7 +49,7 @@ export default getApiHandler()
       console.error(exc); // eslint-disable-line no-console
       res.status(500).json({ status: 'server error' });
     } finally {
-      prisma.$disconnect();
+      ////prisma.$disconnect();
     }
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
@@ -83,7 +83,7 @@ export default getApiHandler()
       console.error(exc); // eslint-disable-line no-console
       res.status(500).json({ ok: false, error: 'server error' });
     } finally {
-      prisma.$disconnect();
+      ////prisma.$disconnect();
     }
   })
   .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {//TODO not update with prisma, /faced/cycle -> update must be used !!!
@@ -121,6 +121,6 @@ export default getApiHandler()
       console.error(exc); // eslint-disable-line no-console
       res.status(500).json({ status: 'server error' });
     } finally {
-      prisma.$disconnect();
+      ////prisma.$disconnect();
     }
   });

@@ -41,7 +41,7 @@ export default getApiHandler()
       console.error(excp); // eslint-disable-line no-console
       res.status(500).json({ ok: false, status: 'server error' });
     } finally {
-      prisma.$disconnect();
+      //prisma.$disconnect();
     }
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
@@ -52,7 +52,7 @@ export default getApiHandler()
       console.error(exc); // eslint-disable-line no-console
       res.status(500).json({ status: 'server error' });
     } finally {
-      prisma.$disconnect();
+      //prisma.$disconnect();
     }
   })
   .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
@@ -78,6 +78,6 @@ export default getApiHandler()
         message = (excp as Error).message;
       res.status(500).json({ error: message });
     } finally {
-      prisma.$disconnect();
+      //prisma.$disconnect();
     }
   });

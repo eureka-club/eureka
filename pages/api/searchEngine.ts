@@ -53,6 +53,6 @@ export default getApiHandler()
     res.statusMessage = 'server error'
     return res.status(500).end();
   } finally {
-    prisma.$disconnect();
+    //prisma.$disconnect();
   }
 });
