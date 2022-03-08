@@ -138,12 +138,12 @@ const SocialInteraction: FunctionComponent<Props> = ({
         // const readOrWatchedByMe = idx !== -1;
         // setOptimistReadOrWatched(readOrWatchedByMe);
         // setOptimistReadOrWatchedCount(entity.readOrWatcheds.length);
-        let idx = user.favWorks.findIndex((i) => i.id === entity.id);
+        let idx = user.favWorks ? user.favWorks.findIndex((i) => i.id === entity.id) : -1;
         const favoritedByMe = idx !== -1;
-        setOptimistFav(favoritedByMe);if(!entity.favs){debugger;}
-        setOptimistFavCount(entity.favs.length);
+        setOptimistFav(favoritedByMe);
+        setOptimistFavCount(entity.favs ? entity.favs.length : 0);
 
-        idx = user.ratingWorks.findIndex((i) => i.workId === entity.id);
+        idx = user.ratingWorks ? user.ratingWorks.findIndex((i) => i.workId === entity.id) : -1;
         if (idx !== -1) {
           ratingByMe = true;
         }
@@ -216,8 +216,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
         debugger;
       }
       const post = entity as PostMosaicItem;
-      const parentIsWork = post.works.length;
-      const parentIsCycle = !post.works.length && post.cycles.length;
+      const parentIsWork = post.works ? post.works.length > 0 : false;
+      const parentIsCycle = !parentIsWork && (post.cycles && post.cycles.length);
       if (parentIsWork) return `${WEBAPP_URL}/work/${post.works[0].id}/post/${post.id}`;
       if (parentIsCycle) return `${WEBAPP_URL}/cycle/${post.cycles[0].id}/post/${post.id}`;
     }
@@ -241,7 +241,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
     }
     if (isPostMosaicItem(entity)) {
       const post = entity as PostMosaicItem;
-      const p = post.works[0] || post.cycles[0] || null;
+      const p = post.works ? post.works[0] : null || post.cycles ? post.cycles[0] : null;
       const about = post.works[0] ? 'postWorkShare' : 'postCycleShare';
       return `EUREKA: "${post.title}". \n ${t(about)} "${p ? p.title : ''}"`;
     }
