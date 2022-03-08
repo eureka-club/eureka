@@ -1,12 +1,12 @@
 {
   "viewAllNotifications":"Ver todas las notificaciones",
   
-  "eurekaCreatedAboutCycle":"{{userName}} ha creado una Eureka sobre el Ciclo {{cycleTitle}}!",
-  "eurekaCreatedAboutWork":"{{userName}} ha creado una Eureka sobre la Obra {{workTitle}}!",
-  "eurekaCreatedAboutWorkInCycle":"{{userName}} ha creado una Eureka sobre la Obra {{workTitle}} en el Ciclo {{cycleTitle}}!",
+  "eurekaCreatedAboutCycle":"{{userName}} tuvo un Momento Eureka inspirado por el ciclo {{cycleTitle}}!",
+  "eurekaCreatedAboutWork":"{{userName}} tuvo un Momento Eureka inspirado por la obra {{workTitle}}!",
+  "eurekaCreatedAboutWorkInCycle":"{{userName}} tuvo un Momento Eureka inspirado por la obra {{workTitle}} en el ciclo {{cycleTitle}}!",
   
-  "commentCreatedAboutComment":"{{userName}} ha respondido su comentario Comentario  {{commentTitle}}!",
-  "commentCreatedAboutCommentInCycle":"{{userName}} ha respondido su Comentario {{commentTitle}} en el Ciclo {{cycleTitle}}! ",
+  "commentCreatedAboutComment":"{{userName}} ha respondido tu comentario Comentario  {{commentTitle}}!",
+  "commentCreatedAboutCommentInCycle":"{{userName}} ha respondido tu Comentario {{commentTitle}} en el Ciclo {{cycleTitle}}! ",
   
   "commentCreatedAboutCycle":"{{userName}} ha creado un Comentario sobre el Ciclo {{cycleTitle}}!",
   

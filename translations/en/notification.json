@@ -1,9 +1,9 @@
 {
   "viewAllNotifications":"View all notifications",
   
-  "eurekaCreatedAboutCycle":"{{userName}} has created an Eureka about {{cycleTitle}}!",
-  "eurekaCreatedAboutWork":"{{userName}} has created an Eureka about {{workTitle}}!",
-  "eurekaCreatedAboutWorkInCycle":"{{userName}} has created an Eureka about {{workTitle}} in the Cycle {{cycleTitle}}!",
+  "eurekaCreatedAboutCycle":"{{userName}} had an Eureka Moment inspired by {{cycleTitle}}!",
+  "eurekaCreatedAboutWork":"{{userName}} had an Eureka Moment inspired by {{workTitle}}!",
+  "eurekaCreatedAboutWorkInCycle":"{{userName}} has an Eureka Moment about {{workTitle}} in the Cycle {{cycleTitle}}!",
   
   "commentCreatedAboutComment":"{{userName}} has replied to your Comment  {{commentTitle}}!",
   "commentCreatedAboutCommentInCycle":"{{userName}} has replied to your Comment in the Cycle {{cycleTitle}}! ",
@@ -17,7 +17,7 @@
   "commentCreatedAboutWorkInCycle":"{{userName}} has added a Comment about {{workTitle}} in the Cycle {{cycleTitle}}! ",
   "commentCreatedAboutWork":"{{userName}} has added a Comment about {{workTitle}}!",
 
-  "userStartFollowing":"{{userName}} has started following you. Take a look at his/her Mediatheque too!",
+  "userStartFollowing":"{{userName}} has started following you. Take a look at her/his Mediatheque too!",
 
   "userJoinedCycle":"{{userName}} has joined the cycle {{cycleTitle}}!",
   "userLeftCycle":"{{userName}} has left the cycle {{cycleTitle}}!",
