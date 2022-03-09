@@ -27,6 +27,7 @@ import { useCycleContext } from '../../useCycleContext';
 import {useNotificationContext} from '@/src/useNotificationProvider'
 import { useToasts } from 'react-toast-notifications'
 import useCycle from '@/src/useCycle'
+import Avatar from '../common/UserAvatar';
 // import { useMosaicContext } from '../../useMosaicContext';
 
 dayjs.extend(utc);
@@ -291,11 +292,14 @@ const MosaicItem: FunctionComponent<Props> = ({
   const renderLocalImageComponent = () => {
     const img = cycle?.localImages 
       ? <> 
-      <LocalImageComponent filePath={cycle?.localImages[0].storedFile} alt={cycle?.title} />
-      {detailed && (<div className={styles.date}>
-            {dayjs(cycle?.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
-            &mdash; {dayjs(cycle?.endDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
-          </div>)}
+      <LocalImageComponent  className='cycleImage' filePath={cycle?.localImages[0].storedFile} alt={cycle?.title} />
+      {detailed && (cycle && cycle.creator && cycle.startDate && cycle.endDate ) && (<div className={`d-flex flex-row align-items-baseline ${styles.date}`}>
+                         <Avatar userId={cycle.creator.id} showName={false} size="xs" />
+                          <div className='fs-6 ms-2 mt-1' >
+                          {dayjs(cycle?.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
+                          &mdash; {dayjs(cycle?.endDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
+                        </div>
+                        </div>)}
       </>
       : undefined;
     if (linkToCycle) {
@@ -331,21 +335,21 @@ const MosaicItem: FunctionComponent<Props> = ({
 
       <div className={`${styles.details}`}>
         {detailed && (
-        <div className={`container text-center p-1 mt-1`}>
-          <h6 className={`cursor-pointer ${styles.title}`}>
+        <div className={`d-flex flex-column align-items-center justify-content-center ${styles.detailedInfo}`}>
+          <h6 className={`d-flex align-items-center text-center cursor-pointer ${styles.title}`}>
             {linkToCycle ? (
               <Link href={`/cycle/${cycle.id}`}>
-                <a>{(cycle.title.length > 60) ? `${cycle.title.slice(0,60)}...` : cycle.title }</a>
+                <a>{cycle.title}</a>
               </Link>
             ) : (
-              cycle.title
+              <span>{cycle.title}</span>
             )}{' '}
           </h6>
           {/**/}
         </div>
       )}
       {showParticipants && (<p className={`${styles.title} fs-6 text-center text-gray my-2`}>{`${t('participants')}: ${participants + 1}`}</p>)}
-      <div className={`mt-2 mb-2 text-center ${styles.joinButtonContainer}`}>
+      <div className={`text-center ${styles.joinButtonContainer}`}>
         {(isJoinCycleLoading || isLeaveCycleLoading) && <Spinner animation="grow" size="sm" />}
         {!(isJoinCycleLoading || isLeaveCycleLoading) && isCurrentUserJoinedToCycle && user && (user.id !== cycle!.creatorId) ? (
           <Button onClick={handleLeaveCycleClick} variant="button border-primary text-primary fs-6" className="w-75">
