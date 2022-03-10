@@ -1,9 +1,9 @@
 import { Prisma, Work, User, RatingOnWork } from '@prisma/client';
 import { StoredFileUpload } from '../types';
-import { CreateWorkServerFields, CreateWorkServerPayload, WorkMosaicItem } from '../types/work';
+import { CreateWorkServerFields, CreateWorkServerPayload, WorkMosaicItem, WorkDetail } from '../types/work';
 import prisma from '../lib/prisma';
 
-export const find = async (id: number): Promise<WorkMosaicItem | null> => {
+export const find = async (id: number): Promise<WorkDetail | null> => {
   return prisma.work.findUnique({
     where: { id },
     include:{
@@ -12,20 +12,23 @@ export const find = async (id: number): Promise<WorkMosaicItem | null> => {
       ratings: {
         select:{qty:true}
       },
-      posts: {
-        select:{
-          id:true,
-          title:true,
-          contentText:true,
-          createdAt:true,
-          works:{select:{id:true,title:true}},
-          cycles:{select:{id:true}},
-          favs:{select:{id:true}},
-          creator: {select:{id:true,name:true,photos:true}},
-          localImages: {select:{storedFile:true}},
-        },
-        orderBy:{id:'desc'}
-      },
+      // posts: {
+      //   select:{
+      //     id:true,
+      //     title:true,
+      //     contentText:true,
+      //     createdAt:true,
+      //     works:{select:{id:true,title:true}},
+      //     cycles:{select:{id:true}},
+      //     favs:{select:{id:true}},
+      //     creator: {select:{id:true,name:true,photos:true}},
+      //     localImages: {select:{storedFile:true}},
+      //   },
+      //   where:{
+      //     cycles:{none:{}}
+      //   },
+      //   orderBy:{id:'desc'}
+      // },
       // cycles:{
       //   select:{
       //     id:true,
@@ -100,35 +103,19 @@ export const findAll = async (props?:Prisma.WorkFindManyArgs): Promise<WorkMosai
   return prisma.work.findMany({
     take,
     orderBy: { createdAt: 'desc' },
-    include:{
-      localImages: {select:{storedFile:true}},
-      favs: {select:{id:true}},
+    select:{
+      id:true,
+      title:true,
+      author:true,
+      type:true,
+      localImages:{select:{storedFile:true}},
+      createdAt:true,
       ratings: {
         select:{qty:true}
       },
-      posts: {
-        select:{
-          id:true,
-          title:true,
-          contentText:true,
-          createdAt:true,
-          works:{select:{id:true,title:true}},
-          cycles:{select:{id:true}},
-          favs:{select:{id:true}},
-          creator: {select:{id:true,name:true,photos:true}},
-          localImages: {select:{storedFile:true}},
-        },
-        orderBy:{id:'desc'}
-      },
-      // cycles:{
-      //   select:{
-      //     id:true,
-      //     title:true,
-      //     startDate:true,
-      //     endDate:true,
-      //     ratings:{select:{qty:true}}
-      //   }
-      // },
+      favs:{select:{id:true}},
+      countryOfOrigin:true,
+      countryOfOrigin2:true,
     },
     where,
   });

@@ -113,7 +113,7 @@ export default getApiHandler()
           }
         }
       }
-      
+      debugger;
       if (typeof q === 'string') {
         data = await findAll({take,where:{
           ...where,

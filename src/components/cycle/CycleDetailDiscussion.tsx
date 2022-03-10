@@ -19,26 +19,26 @@ import { BiBookHeart } from 'react-icons/bi';
 
 import { Session } from '../../types';
 // import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
-import { CycleMosaicItem } from '../../types/cycle';
-// import { WorkMosaicItem } from '../../types/work';
+import { CycleDetail } from '@/src/types/cycle';
+// import { WorkMosaicItem } from '@/src/types/work';
 
 // import HyvorComments from '../common/HyvorComments';
 import UserAvatar from '../common/UserAvatar';
-import globalModals from '../../atoms/globalModals';
+import globalModals from '@/src/atoms/globalModals';
 import useWorks from '@/src/useWorks';
 
-// import detailPagesAtom from '../../atoms/detailPages';
+// import detailPagesAtom from '@/src/atoms/detailPages';
 
 import styles from './CycleDetailDiscussion.module.css';
 
-// import globalSearchEngineAtom from '../../atoms/searchEngine';
+// import globalSearchEngineAtom from '@/src/atoms/searchEngine';
 import CycleDetailDiscussionCreateEurekaForm from './CycleDetailDiscussionCreateEurekaForm';
 import CycleDetailDiscussionSuggestRelatedWork from './CycleDetailDiscussionSuggestRelatedWork';
 import CycleDetailDiscussionCreateCommentForm from './CycleDetailDiscussionCreateCommentForm';
 // import CommentsList from '../common/CommentsList';
 
 interface Props {
-  cycle: CycleMosaicItem;
+  cycle: CycleDetail;
   className?: string;
   cacheKey:string[];
 }

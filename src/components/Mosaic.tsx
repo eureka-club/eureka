@@ -11,7 +11,7 @@ import MosaicItemWork from './work/MosaicItem';
 import MosaicItemUser from './user/MosaicItem';
 import MosaicItemComment from './comment/MosaicItem';
 import styles from './Mosaic.module.css';
-import { CycleMosaicItem } from '../types/cycle';
+import { CycleDetail, CycleMosaicItem } from '../types/cycle';
 import { WorkMosaicItem } from '../types/work';
 import { PostMosaicItem } from '../types/post';
 import { CycleContext } from '../useCycleContext';
@@ -29,9 +29,9 @@ const renderMosaicItem = (
 ) => {
   if (isCycleMosaicItem(item)) {
     return (
-      <CycleContext.Provider value={{ cycle: item as CycleMosaicItem }}>
+      // <CycleContext.Provider value={{ cycle: item as CycleDetail }}>
         <MosaicItemCycle cycleId={item.id} detailed className="mb-2"/>
-      </CycleContext.Provider>
+      // </CycleContext.Provider>
     );
   }
   else if (isPostMosaicItem(item)) {

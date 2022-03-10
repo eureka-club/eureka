@@ -131,14 +131,14 @@ const SearchPage: NextPage = () => {
 
   useEffect(() => {
     if(items){
-      items.forEach((i)=>{
-        if(isCycleMosaicItem(i))
-          queryClient.setQueryData(['CYCLE',`${i.id}`],i as CycleMosaicItem)
-        else if(isWorkMosaicItem(i))
-          queryClient.setQueryData(['WORK',`${i.id}`],i as WorkMosaicItem)
-        else if(isPostMosaicItem(i))
-          queryClient.setQueryData(['POST',`${i.id}`],i as PostMosaicItem)
-      })
+      // items.forEach((i)=>{
+      //   if(isCycleMosaicItem(i))
+      //     queryClient.setQueryData(['CYCLE',`${i.id}`],i as CycleMosaicItem)
+      //   else if(isWorkMosaicItem(i))
+      //     queryClient.setQueryData(['WORK',`${i.id}`],i as WorkMosaicItem)
+      //   else if(isPostMosaicItem(i))
+      //     queryClient.setQueryData(['POST',`${i.id}`],i as PostMosaicItem)
+      // })
 
     }
     if (globalSearchEngineState.itemsFound && globalSearchEngineState.itemsFound.length) {

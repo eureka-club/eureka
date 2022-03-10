@@ -9,7 +9,7 @@ import { MosaicItem } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
 import { WorkMosaicItem } from '../../types/work';
-
+import ListWindow from '@/components/ListWindow'
 interface Props {
   work: WorkMosaicItem;
 }
@@ -48,20 +48,22 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
   },{enabled:!!work.id})
 
   useEffect(() => {
-    if (cycles && work.posts) {
-      const interleavedMosaicItems = flatten(zip(cycles, work.posts)).filter((i) => i != null) as MosaicItem[];
-      setMosaicData(interleavedMosaicItems);
-    }
+    // if (cycles && work.posts) {
+    //   const interleavedMosaicItems = flatten(zip(cycles, work.posts)).filter((i) => i != null) as MosaicItem[];
+    //   setMosaicData(interleavedMosaicItems);
+    // }
   }, [work,cycles]);
 
   return (
     <>
       {/* {(isCyclesLoading) && <Spinner animation="grow" role="status" />} */}
-      {mosaicData.length > 0 && <Mosaic
-        cacheKey={['WORK',work.id.toString()]} 
-        // className='d-flex justify-content-center justify-content-md-start' 
-        stack={mosaicData} 
-        parent={work} />}
+      {mosaicData.length > 0 
+      && <ListWindow items={mosaicData as unknown as (WorkMosaicItem|CycleMosaicItem)[]} cacheKey={['WORK', `${work.id}`]} height={400} width={'100%'}/>
+      // && <Mosaic
+      //   cacheKey={['WORK',work.id.toString()]} 
+      //   stack={mosaicData} 
+      //   parent={work} />
+      }
     </>
   );
 };

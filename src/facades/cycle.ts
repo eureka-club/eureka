@@ -1,12 +1,12 @@
 import { Cycle, CycleComplementaryMaterial, LocalImage, Prisma, User, RatingOnCycle } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
-import { CreateCycleServerFields, CreateCycleServerPayload, CycleMosaicItem } from '../types/cycle';
+import { CreateCycleServerFields, CreateCycleServerPayload, CycleDetail, CycleMosaicItem } from '../types/cycle';
 import prisma from '../lib/prisma';
 
 export const NEXT_PUBLIC_MOSAIC_ITEMS_COUNT = +(process.env.NEXT_PUBLIC_NEXT_PUBLIC_MOSAIC_ITEMS_COUNT || 10);
 
-export const find = async (id: number): Promise<CycleMosaicItem | null> => {
+export const find = async (id: number): Promise<CycleDetail | null> => {
   return prisma.cycle.findUnique({
     where: { id },
     include: {
@@ -61,62 +61,31 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
   });
 };
 
-export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<Cycle[] | CycleMosaicItem[]> => {
+export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<CycleMosaicItem[]> => {
   const {include,where,take} = props || {};
-  return prisma.cycle.findMany({
+  const res = await prisma.cycle.findMany({
     take,
     ... where && {where},
     orderBy: { createdAt: 'desc' },
-    include: {
-      creator:{
-        select:{id:true,name:true,email:true}
+    select:{
+      id:true,
+      creatorId:true,
+      startDate:true,
+      endDate:true,
+      title:true,
+      access:true,
+      localImages:{
+        select:{storedFile:true}
       },
-      localImages: {select:{
-        storedFile:true
-      }},
-      //complementaryMaterials: true,
-      guidelines: {
-        select: {
-          title: true,
-          contentText: true,
-        },
+      createdAt:true,
+      ratings: {
+        select:{qty:true}
       },
-      participants:{
-        select:{
-          id:true,
-          name:true,
-          countryOfOrigin:true,
-          favWorks:{select:{id:true}},
-          ratingWorks:{select:{workId:true}},
-          photos:{select:{storedFile:true}},
-          notifications:{
-            select:{
-              viewed:true,
-              notification:{select:{message:true,createdAt:true}}}
-            }
-        }
-      },     
-      ratings: { 
-        select: { 
-          qty:true,
-          userId:true,
-        } 
-      },
-      favs: {
-        select:{id:true}
-      },
-      cycleWorksDates: {
-        select:{
-          id:true,
-          startDate:true,
-          endDate:true,
-          workId:true,
-        }
-      },
-      comments:true,
-      complementaryMaterials:true
+      favs:{select:{id:true}},
+      countryOfOrigin:true,
     }
   });
+  return res.map(c=>({...c,type:'cycle'}));
 };
 
 export const findParticipant = async (user: User, cycle: Cycle): Promise<User | null> => {
@@ -480,14 +449,14 @@ export const saveSocialInteraction = async (
   return null;
 };
 
-export const remove = async (cycle: Cycle): Promise<Cycle> => {
+export const remove = async (id: number): Promise<Cycle> => {
 
   await prisma.cycle.update({
-    where: { id: cycle.id },
+    where: { id },
     data: {
       localImages: {deleteMany: {}},
-      guidelines: {deleteMany: {cycleId: cycle.id}},
-      complementaryMaterials: { deleteMany: { cycleId: cycle.id } },
+      guidelines: {deleteMany: {cycleId: id}},
+      complementaryMaterials: { deleteMany: { cycleId: id } },
       participants: { set: [] },
       posts: { set: [] },
       works: { set: [] },
@@ -501,6 +470,6 @@ export const remove = async (cycle: Cycle): Promise<Cycle> => {
   });
 
   return prisma.cycle.delete({
-    where: { id: cycle.id },
+    where: { id },
   });
 };

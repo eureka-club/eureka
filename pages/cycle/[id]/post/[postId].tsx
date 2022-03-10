@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { Spinner } from 'react-bootstrap';
 import { Session } from '../../../../src/types';
 // import { MySocialInfo, Session } from '../../../../src/types';
-import { CycleMosaicItem } from '../../../../src/types/cycle';
+import { CycleDetail } from '../../../../src/types/cycle';
 // import { PostMosaicItem } from '../../../../src/types/post';
 import SimpleLayout from '../../../../src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '../../../../src/components/cycle/CycleDetail';
@@ -16,6 +16,7 @@ import usePost from '../../../../src/usePost';
 import { CycleContext } from '../../../../src/useCycleContext';
 import HelmetMetaData from '../../../../src/components/HelmetMetaData'
 import { WEBAPP_URL } from '../../../../src/constants';
+import useWork from '@/src/useWork';
 // import { Post } from '.prisma/client';
 // interface Props {
 //   cycle: CycleMosaicItem;
@@ -31,8 +32,8 @@ const PostDetailInCyclePage: NextPage = () => {
   const [session, isLoadingSession] = useSession();
   const router = useRouter();
   const [cycleId, setCycleId] = useState<string>('');
-  const { data, isLoading } = useCycle(+cycleId);
-  const [cycle, setCycle] = useState<CycleMosaicItem>();
+  const { data, isLoading } = useCycle(+cycleId,{enabled:!!cycleId});
+  const [cycle, setCycle] = useState<CycleDetail>();
   // const [post, setPost] = useState<PostMosaicItem>();
   const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
 
@@ -59,9 +60,17 @@ const PostDetailInCyclePage: NextPage = () => {
     }
   }, [router]);
 
+  const [workId,setWorkId] = useState<number>(0)
+  useEffect(()=>{
+    if(post){
+      if(post.works && post.works.length)setWorkId(post.works[0].id)
+    }
+  },[post])
+  const {data:parentWork} = useWork(workId,{enabled:!!workId})
+
   useEffect(() => {
     if (data) {
-      const c = data as CycleMosaicItem;
+      const c = data as CycleDetail;
       setCycle(() => c);
       // if (c) {
       //   const po = c.posts.find((p) => p.id === parseInt(router.query.postId as string, 10));
@@ -85,10 +94,10 @@ const PostDetailInCyclePage: NextPage = () => {
       <>
         {isLoadingOrFetching() && <Spinner animation="grow" variant="info" />}
         {!isLoadingOrFetching() && post && cycle && (
-          <CycleContext.Provider value={{ cycle, currentUserIsParticipant }}>
+          <CycleContext.Provider value={{ currentUserIsParticipant }}>
             <CycleDetailComponent
               post={post}
-              work={post.works.length ? (post.works[0] as WorkMosaicItem) : undefined}
+              work={parentWork}
             />
           </CycleContext.Provider>
         )}

@@ -49,12 +49,14 @@ export type SearchResult = CycleMosaicItem | PostMosaicItem | WorkMosaicItem | U
 
 export const isCycle = (obj: BasicEntity): obj is Cycle =>
   obj && typeof (obj as Cycle).title === 'string' &&
-  (obj as CycleMosaicItem).startDate !== undefined &&
-  (obj as CycleMosaicItem).endDate !== undefined;
+  'startDate' in obj &&
+  'endDate' in obj;
+
 export const isPost = (obj: BasicEntity): obj is Post =>
   obj && typeof (obj as Post).title === 'string' &&
   typeof (obj as Post).creatorId === 'number' &&
   typeof (obj as Post).language === 'string';
+  
 export const isWork = (obj: BasicEntity): obj is Work =>
   obj && typeof (obj as Work).title === 'string' &&
   typeof (obj as Work).author === 'string' &&

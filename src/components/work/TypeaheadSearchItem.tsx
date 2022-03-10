@@ -44,7 +44,7 @@ const TypeaheadSearchItem: FunctionComponent<Props> = ({ work }) => {
         <h3 className="text-wrap text-dark">{work.title}</h3>
         <h4 className="text-wrap text-dark">{work.author}</h4>
         
-        <WorkSummary work={work} />
+        <WorkSummary workId={work.id} />
       </div>
     </div>
   );

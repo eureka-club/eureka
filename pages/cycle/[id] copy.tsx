@@ -157,7 +157,7 @@ const CycleDetailPage: NextPage = () => {
 
   if (cycle)
     return (
-      <CycleContext.Provider value={{ cycle, currentUserIsParticipant, linkToCycle: false }}>
+      <CycleContext.Provider value={{ currentUserIsParticipant, linkToCycle: false }}>
        
         <HelmetMetaData title={cycle.title}
         type='article'

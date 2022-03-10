@@ -8,7 +8,7 @@ export interface ComplementaryMaterial {
 }
 
 export type CycleWithImages = Prisma.CycleGetPayload<{
-  include: {
+  select: {
     localImages: {select:{
       storedFile:true
     }};
@@ -16,6 +16,27 @@ export type CycleWithImages = Prisma.CycleGetPayload<{
 }>;
 
 export type CycleMosaicItem = Prisma.CycleGetPayload<{
+  select:{
+    id:true,
+    creatorId:true,
+    startDate:true,
+    endDate:true,
+    title:true,
+    access:true,
+    localImages:{
+      select:{storedFile:true}
+    };
+    createdAt:true;
+    ratings: {
+      select:{qty:true}
+    };
+    favs:{select:{id:true}};
+    countryOfOrigin:true;
+  }
+}> & { type?: 'cycle' };
+
+
+export type CycleDetail = Prisma.CycleGetPayload<{
   include: {
     creator:{
       select:{id:true;name:true;email:true}
@@ -66,7 +87,7 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
     complementaryMaterials:true;
     
   }
-}> & { type?: 'cycle' };
+}>;
 
 // export type CycleDetail = Prisma.CycleGetPayload<{
 //   include: {

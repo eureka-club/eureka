@@ -14,7 +14,7 @@ export const getCycles = async (
    
   const res = await fetch(url);
   if (!res.ok) return [];
-  const result = await res.json();debugger;
+  const result = await res.json();
   const cycles: CycleMosaicItem[] = [];
   result.data.forEach((i: CycleMosaicItem) => {
     cycles.push({ ...i, type: 'cycle' });

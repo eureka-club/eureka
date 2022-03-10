@@ -49,7 +49,7 @@ const renderMosaicItem = (
   if (isCycleMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
     return (
-      <CycleContext.Provider key={`cycle-${v4()}`} value={{ cycle: item as CycleMosaicItem }}>
+      // <CycleContext.Provider key={`cycle-${v4()}`} value={{  }}>
         <MosaicItemCycle
         cycleId={item.id}
           detailed
@@ -58,7 +58,7 @@ const renderMosaicItem = (
           cacheKey={topic && page ? ['ITEMS', `${topic}${page}`] : undefined}
           showSocialInteraction={showSocialInteraction}
         />
-      </CycleContext.Provider>
+      // </CycleContext.Provider>
     );
   }
   if (isPostMosaicItem(item) || item.type === 'post') {
@@ -132,8 +132,8 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
       data.data.forEach((i:(CycleMosaicItem|WorkMosaicItem))=>{
         if(isCycleMosaicItem(i))
           queryClient.setQueryData(['CYCLE',`${i.id}`],i as CycleMosaicItem)
-        else if(isWorkMosaicItem(i))
-          queryClient.setQueryData(['WORK',`${i.id}`],i as WorkMosaicItem)
+        // else if(isWorkMosaicItem(i))
+          // queryClient.setQueryData(['WORK',`${i.id}`],i as WorkMosaicItem)
       })
       setItems(data);
       if (data.extraCyclesRequired) setExtraCyclesRequired(data.extraCyclesRequired);

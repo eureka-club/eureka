@@ -1,55 +1,35 @@
 import { Cycle, Post, Prisma, User, Work } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
-import { CreatePostServerFields, CreatePostServerPayload, PostWithCyclesWorks, PostMosaicItem } from '../types/post';
+import { CreatePostServerFields, CreatePostServerPayload, PostWithCyclesWorks, PostMosaicItem, PostDetail } from '../types/post';
 import prisma from '../lib/prisma';
 
-export const find = async (id: number): Promise<PostMosaicItem | null> => {
+export const find = async (id: number): Promise<PostDetail | null> => {
   return prisma.post.findUnique({
     where: { id },
     include:{
       works:{select:{id:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
-      cycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
+      cycles:{select:{
+        id:true,
+        creatorId:true,
+        startDate:true,
+        endDate:true,
+        title:true,
+        localImages:{
+          select:{storedFile:true}
+        }
+      }},
       favs:{select:{id:true,}},
       creator: {select:{id:true,name:true,photos:true}},
       localImages: {select:{storedFile:true}},
-    }
-    // include: {
-    //   creator: {select:{id:true,name:true,photos:true}},
-    //   localImages: {select:{storedFile:true}},
-    //   works: {
-    //     include: {
-    //       localImages: true,
-    //     },
-    //   },
-    //   cycles: {
-    //     include: {        
-    //       localImages: {select:{storedFile:true}},
-    //       participants:{select:{id:true}}
-    //     },
-    //   },
-    //   likes: true,
-    //   favs: true,
-    //   comments: {
-    //     include: {
-    //       creator: { include: { photos:true } },
-    //       comments: {
-    //         include: {
-    //           creator: { include: { photos:true } },
-    //         },
-    //       },
-    //       work: {include:{cycles:true}},
-    //       cycle: {include:{participants:{select:{id:true}}}}
-    //     },
-    //   },
-    // }
+    }    
   });
 };
 
 
-export const findAll = async (props?:Prisma.PostFindManyArgs,page?:number): Promise<Post[]|PostMosaicItem[]> => {
+export const findAll = async (props?:Prisma.PostFindManyArgs,page?:number): Promise<PostMosaicItem[]> => {
   const {include,where,take,skip} = props || {};
-  return prisma.post.findMany({
+  const res = await prisma.post.findMany({
     take,
     skip,
     orderBy: { id: 'desc' },
@@ -62,6 +42,7 @@ export const findAll = async (props?:Prisma.PostFindManyArgs,page?:number): Prom
     },
     where,
   });
+  return res.map(p=>({...p,type:'post'}))
 };
 
 export const search = async (query: { [key: string]: string | string[] }): Promise<Post[]> => {

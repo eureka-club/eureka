@@ -187,7 +187,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
   const handleSearchWorkSelect = (selected: WorkMosaicItem[]): void => {
     if (selected[0] != null) {
       // setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
-      setIncludedWorksIds(() => [(selected[0] as Work).id]);
+      setIncludedWorksIds(() => [(selected[0]).id]);
       // setAddWorkModalOpened(false);
     }
   };

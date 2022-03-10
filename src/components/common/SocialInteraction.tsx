@@ -32,7 +32,7 @@ import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
 import { WorkMosaicItem } from '../../types/work';
 import { UserMosaicItem } from '../../types/user';
-import { MySocialInfo, isCycle, isWork, Session, isPost, isPostMosaicItem, isWorkMosaicItem } from '../../types';
+import { MySocialInfo, isCycle, isWork, Session, isPost, isPostMosaicItem, isWorkMosaicItem, isCycleMosaicItem } from '../../types';
 import styles from './SocialInteraction.module.css';
 import {useNotificationContext} from '@/src/useNotificationProvider';
 interface SocialInteractionClientPayload {
@@ -104,7 +104,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   }, [mosaicContext]);
 
   const calculateQty = () => {
-    if (entity && (isWork(entity) || isCycle(entity))) {
+    if (entity && (isWorkMosaicItem(entity) || isCycleMosaicItem(entity))) {
       let qtySum = 0;
       entity.ratings.forEach((rating) => {
         qtySum += rating.qty;
@@ -132,7 +132,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
     let ratingByMe = false;
     if (session && user && user.id && entity) {
-      if (isWork(entity)) {
+      if (isWorkMosaicItem(entity)) {
         // if (entity.id === 125) debugger;
         // let idx = user.readOrWatchedWorks.findIndex((i: Work) => i.id === entity.id);
         // const readOrWatchedByMe = idx !== -1;
@@ -149,7 +149,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
         }
 
         setMySocialInfo({ favoritedByMe, ratingByMe });
-      } else if (isCycle(entity)) {
+      } else if (isCycleMosaicItem(entity)) {
         // setOptimistReadOrWatchedCount(0);
 
         // let idx = user.likedCycles.findIndex((i: Cycle) => i.id === entity.id);
@@ -210,7 +210,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   //   return optimistReadOrWatchedCount ? -1 : 0;
   // };
   const shareUrl = (() => {
-    if (isPost(entity)) {
+    if (isPostMosaicItem(entity)) {
       if (!entity.works) {
         
         debugger;
@@ -221,8 +221,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
       if (parentIsWork) return `${WEBAPP_URL}/work/${post.works[0].id}/post/${post.id}`;
       if (parentIsCycle) return `${WEBAPP_URL}/cycle/${post.cycles[0].id}/post/${post.id}`;
     }
-    if (isWork(entity)) return `${WEBAPP_URL}/work/${entity.id}`;
-    if (isCycle(entity)) return `${WEBAPP_URL}/cycle/${entity.id}`;
+    if (isWorkMosaicItem(entity)) return `${WEBAPP_URL}/work/${entity.id}`;
+    if (isCycleMosaicItem(entity)) return `${WEBAPP_URL}/cycle/${entity.id}`;
     return `${WEBAPP_URL}/${router.asPath}`;
   })();
 
@@ -233,19 +233,20 @@ const SocialInteraction: FunctionComponent<Props> = ({
     // if (parent != null && isWork(parent)) {
     //   return `${t('postWorkShare')} "${parent.title}"`;
     // }
-    if (isCycle(entity)) {
+    if (isCycleMosaicItem(entity)) {
       return t('cycleShare');
     }
-    if (isWork(entity)) {
+    if (isWorkMosaicItem(entity)) {
       return t('workShare');
     }
     if (isPostMosaicItem(entity)) {
       const post = entity as PostMosaicItem;
       const p = post.works ? post.works[0] : null || post.cycles ? post.cycles[0] : null;
-      const about = post.works[0] ? 'postWorkShare' : 'postCycleShare';
-      return `EUREKA: "${post.title}". \n ${t(about)} "${p ? p.title : ''}"`;
+      
+      const about = parent&&isWork(parent) ? 'postWorkShare' : 'postCycleShare';
+      return `EUREKA: "${post.title}". \n ${t(about)} "${parent ? parent.title : ''}"`;
     }
-
+debugger;
     throw new Error('Invalid entity or parent');
   })();
   const title = () => {
@@ -268,10 +269,10 @@ const SocialInteraction: FunctionComponent<Props> = ({
         if (parent != null) {
           return 'post';
         }
-        if (isCycle(entity)) {
+        if (isCycleMosaicItem(entity)) {
           return 'cycle';
         }
-        if (isWork(entity)) {
+        if (isWorkMosaicItem(entity)) {
           return 'work';
         }
 
@@ -368,14 +369,14 @@ const SocialInteraction: FunctionComponent<Props> = ({
           setOptimistFav(!optimistFav);
           setOptimistFavCount(optimistFavCount + favInc());
           let favWorks;
-          if (isWork(entity)) {
+          if (isWorkMosaicItem(entity)) {
             if (opf) favWorks = user?.favWorks.filter((i) => i.id !== entity.id);
             else {
               user?.favWorks.push(entity);
               favWorks = user?.favWorks;
             }
             queryClient.setQueryData(['USER', `${idSession}`], { ...user, favWorks });
-          } else if (isCycle(entity)) {
+          } else if (isCycleMosaicItem(entity)) {
             let favCycles;
             if (opf) favCycles = user?.favCycles.filter((i) => i.id !== entity.id);
             else {
@@ -383,7 +384,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
               favCycles = user?.favCycles;
             }
             queryClient.setQueryData(['USER', `${idSession}`], { ...user, favCycles });
-          } else if (isPost(entity)) {
+          } else if (isPostMosaicItem(entity)) {
             let favPosts;
             if (opf) favPosts = user?.favPosts.filter((i) => i.id !== entity.id);
             else {
@@ -505,7 +506,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const getRatingsCount = () => {
     let count = 0;
     if (isWorkMosaicItem(entity)) count = (entity as WorkMosaicItem).ratings.length;
-    else if (isCycle(entity)) count = (entity as CycleMosaicItem).ratings.length;
+    else if (isCycleMosaicItem(entity)) count = (entity as CycleMosaicItem).ratings.length;
 
     // if (!session || (user && mySocialInfo && !mySocialInfo.ratingByMe))
     return <span className={styles.ratingsCount}>{`${count}`}</span>;

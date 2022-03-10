@@ -35,8 +35,8 @@ import ListWindow from '@/components/ListWindow'
 import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR /* , HYVOR_WEBSITE_ID, WEBAPP_URL */ } from '../../constants';
 import { Session, MosaicItem, isCommentMosaicItem, isPostMosaicItem } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
-import { PostMosaicItem } from '../../types/post';
-import { WorkMosaicItem } from '../../types/work';
+import { PostDetail, PostMosaicItem } from '../../types/post';
+import { WorkDetail, WorkMosaicItem } from '../../types/work';
 import { CommentMosaicItem } from '../../types/comment';
 import { UserMosaicItem } from '../../types/user';
 
@@ -65,8 +65,8 @@ import useCycleItem from '@/src/useCycleItems';
 import useWorks from '@/src/useWorks'
 interface Props {
   // cycle: CycleMosaicItem;
-  post?: PostMosaicItem;
-  work?: WorkMosaicItem;
+  post?: PostDetail;
+  work?: WorkDetail;
   // isCurrentUserJoinedToCycle: boolean;
 
   // mySocialInfo: MySocialInfo;
@@ -104,7 +104,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     if (cycle) {
       if (cycle.cycleWorksDates) { 
         cycle.cycleWorksDates.forEach(w => {
-          queryClient.setQueryData(['WORK',`${w.id}`],w)
+          // queryClient.setQueryData(['WORK',`${w.id}`],w)
         })        
       }
       if(cycle.participants){
@@ -119,7 +119,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     if (works) {      
       if (works) { 
         works.forEach(w => {
-          queryClient.setQueryData(['WORK',`${w.id}`],w)
+          // queryClient.setQueryData(['WORK',`${w.id}`],w)
         })        
       }
     }
@@ -502,7 +502,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const renderCycleWorksOrCycleFilters = () => {
     if(cycle && works){
       const res = works.map((w) => {
-        queryClient.setQueryData(['WORK',`${w.id}`],w)
+        // queryClient.setQueryData(['WORK',`${w.id}`],w)
         return <Col key={v4()} xs={12}>
         <Form.Check label={w.title} 
           checked={comboboxChecked[`work-${w.id}`]}
@@ -897,7 +897,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   };
 
   const getWorksSorted = () => {
-    const res: Work[] = [];
+    const res: WorkMosaicItem[] = [];
     if(cycle && !cycle.cycleWorksDates)return works||[];
     cycle!.cycleWorksDates
       .sort((f, s) => {
@@ -933,7 +933,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           <MosaicContext.Provider value={{ showShare: true }}>  
           <div className='d-flex flex-wrap flex-column flex-lg-row'>      
             {getWorksSorted().map(w=>{
-              queryClient.setQueryData(['WORK',`${w.id}`],w)
+              // queryClient.setQueryData(['WORK',`${w.id}`],w)
               return <div className='p-4' key={v4()}>
                              <WorkMosaic  workId={w.id} />
                         </div>
@@ -981,9 +981,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
 {(!editPostOnSmallerScreen.value) ? <>
       {!post && renderCycleDetailHeader()}
-      {post && cycle && (
+      {post && cycle && work && (
         <MosaicContext.Provider value={{ showShare: true }}>
-          <PostDetailComponent cacheKey={['CYCLE',cycle.id.toString()]} postId={post.id} work={work} />
+          <PostDetailComponent cacheKey={['CYCLE',cycle.id.toString()]} postId={post.id} work={work!} />
         </MosaicContext.Provider>
       )}
       {cycle && post == null && (

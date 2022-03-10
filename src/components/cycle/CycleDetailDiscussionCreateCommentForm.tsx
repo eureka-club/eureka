@@ -16,7 +16,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import globalModalsAtom from '../../atoms/globalModals';
 
 import { Session } from '../../types';
-import { CycleMosaicItem } from '../../types/cycle';
+import { CycleDetail } from '../../types/cycle';
 import {
   CommentMosaicItem,
   CreateCommentClientPayload,
@@ -29,7 +29,7 @@ import { useToasts } from 'react-toast-notifications'
 import useWorks from '@/src/useWorks'
 interface Props {
   cacheKey:string[];
-  cycle: CycleMosaicItem;
+  cycle: CycleDetail;
   discussionItem: string | undefined;
   setDiscussionItem: (val: string | undefined) => void;
 }

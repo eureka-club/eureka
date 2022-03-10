@@ -1,15 +1,14 @@
 import { createContext, useContext } from 'react';
-import { CycleMosaicItem } from './types/cycle';
+import { CycleDetail } from './types/cycle';
 
 export type ContextType = {
-  cycle: CycleMosaicItem | null;
   showShare?: boolean;
   currentUserIsParticipant?: boolean;
   linkToCycle?: boolean;
-  requestJoinCycle?: (cycle: CycleMosaicItem) => Promise<string>;
+  requestJoinCycle?: (cycle: CycleDetail) => Promise<string>;
 };
 
-const requestJoinCycle = async (cycle: CycleMosaicItem) => {
+const requestJoinCycle = async (cycle: CycleDetail) => {
   const res = await fetch(`/api/cycle/${cycle!.id}/join`, { method: 'POST' });
   const json = await res.json();
   if ('status' in json) return json.status;
@@ -17,7 +16,6 @@ const requestJoinCycle = async (cycle: CycleMosaicItem) => {
 };
 
 export const CycleContext = createContext<ContextType>({
-  cycle: null,
   currentUserIsParticipant: false,
   showShare: true,
   linkToCycle: true,

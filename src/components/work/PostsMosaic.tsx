@@ -5,7 +5,8 @@ import { FunctionComponent } from 'react';
 import { PostMosaicItem } from '../../types/post';
 import { WorkMosaicItem } from '../../types/work';
 import Mosaic from '../Mosaic';
-
+import usePosts from '@/src/usePosts';
+import ListWindow from '@/src/components/ListWindow'
 interface Props {
   work: WorkMosaicItem;
 }
@@ -24,6 +25,12 @@ const PostsMosaic: FunctionComponent<Props> = ({ work }) => {
   //   },
   // );
 
+  const { data: posts, isLoading: isLoadingPosts } = usePosts(
+    work ? {works:{some:{id:work.id}}}:undefined,
+    undefined,
+    { enabled: !!(work && work.id) }
+  )
+
   return (
     <>
       {/* {isLoading && (
@@ -31,7 +38,11 @@ const PostsMosaic: FunctionComponent<Props> = ({ work }) => {
           <span className="sr-only">Loading...</span>
         </Spinner>
       )} */}
-      {work && work.posts != null && <Mosaic cacheKey={['WORK',work.id.toString()]}className='d-flex justify-content-center justify-content-md-start' stack={work.posts as PostMosaicItem[]} parent={work} />}
+      {
+      work && posts != null 
+      && <ListWindow items={posts as unknown as WorkMosaicItem[]} cacheKey={['WORK', `${work.id}`]} height={400} width={'100%'}/>
+      //&& <Mosaic cacheKey={['WORK',work.id.toString()]}className='d-flex justify-content-center justify-content-md-start' stack={work.posts as PostMosaicItem[]} parent={work} />}
+      }
     </>
   );
 };

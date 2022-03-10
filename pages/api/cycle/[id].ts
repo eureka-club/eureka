@@ -42,7 +42,7 @@ export default getApiHandler()
         }
       }
       if(cycle)
-        await remove(cycle);
+        await remove(cycle.id);
       // await redis.flushall();
       res.status(200).json({ status: 'OK' });
     } catch (exc) {

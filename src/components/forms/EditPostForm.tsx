@@ -124,7 +124,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
          if (post && ck) {
           
             const snapshot = queryClient.getQueryData<PostMosaicItem[]|WorkMosaicItem>(ck)
-            if(snapshot){
+            /*if(snapshot){
               let posts = [];
               if(!('length' in snapshot)){
                 const parent = {...(snapshot as WorkMosaicItem)};
@@ -145,7 +145,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
                 queryClient.setQueryData(['POST',postId.toString()],newPost);
               }
               return { snapshot, ck };
-            }
+            }*/
             // const ck = [`POST`, `${globalModalsState.editPostId || post.id}`];
           }
           handleEditPostOnSmallerScreenClose();

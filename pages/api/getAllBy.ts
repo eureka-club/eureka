@@ -4,7 +4,10 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { Work, Cycle } from '@prisma/client';
 import getApiHandler from '../../src/lib/getApiHandler';
 import prisma from '../../src/lib/prisma';
-// import { WorkWithImages } from '../../../src/types/work';
+import {findAll as fac} from '@/src/facades/cycle'
+import { findAll as faw } from '@/src/facades/work';
+import { WorkMosaicItem } from '@/src/types/work';
+import { CycleMosaicItem } from '@/src/types/cycle';
 // import redis from '../../src/lib/redis';
 
 export const config = {
@@ -15,7 +18,7 @@ export const config = {
 
 export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
   try {
-    const data: (Work | (Cycle & { type: string }))[] = [];
+    const data: (WorkMosaicItem | CycleMosaicItem)[] = [];
     // const result: { [index: string]: (Work | (Cycle & { type: string }))[] } = {};
     const { cursor, topic, extraCyclesRequired = 0, extraWorksRequired = 0 } = req.query;
     const c = parseInt(cursor as string, 10);
@@ -92,7 +95,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     // let rw = parseInt(remainingWorks, 10) - 2;
 
     const ewr = parseInt(extraWorksRequired as string, 10);
-    const works = await prisma.work.findMany({
+    const works = await faw({
       ...getOpt(0, ewr, { isWork: true }),
       orderBy: {
         id: 'desc',
@@ -103,7 +106,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     if (works.length !== countItemsPerPage) cyclesPlus = countItemsPerPage - works.length;
     // promisesWorks.push(works);
     const ecr = parseInt(extraCyclesRequired as string, 10);
-    const cycles = await prisma.cycle.findMany({
+    const cycles = await fac({
       ...getOpt(countItemsPerPage + cyclesPlus, ecr, { isCycle: true }),
       orderBy: {
         id: 'desc',
@@ -113,7 +116,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     let worksPlus = 0;
     if (cycles.length !== countItemsPerPage && works.length === countItemsPerPage) {
       worksPlus = countItemsPerPage - cycles.length;
-      const extraWorks = await prisma.work.findMany({
+      const extraWorks = await faw({
         ...getOpt(worksPlus, ewr + countItemsPerPage, { isWork: true }),
         orderBy: {
           id: 'desc',
@@ -136,7 +139,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     //   return [...p, ...current];
     // }, []);
 
-    data.push(...cycles.map((c1) => ({ ...c1, type: 'cycle' })));
+    data.push(...cycles);
 
     data.push(...works);
 

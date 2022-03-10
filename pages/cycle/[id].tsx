@@ -19,9 +19,9 @@ import { CycleContext, useCycleContext } from '../../src/useCycleContext';
 import globalModalsAtom from '../../src/atoms/globalModals';
 import HelmetMetaData from '../../src/components/HelmetMetaData'
 import { WEBAPP_URL } from '../../src/constants';
-import {CycleMosaicItem} from '@/src/types/cycle'
+import {CycleDetail, CycleMosaicItem} from '@/src/types/cycle'
 interface Props{
-  cycle:CycleMosaicItem
+  cycle:CycleDetail
 }
 // const getCycle = async (id:string)=>{
 //   const res = await fetch(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle/${id}`)
@@ -165,7 +165,7 @@ const CycleDetailPage: NextPage<Props> = () => {
 
   if (cycle)
     return (
-      <CycleContext.Provider value={{ cycle, currentUserIsParticipant, linkToCycle: false }}>
+      <CycleContext.Provider value={{ currentUserIsParticipant, linkToCycle: false }}>
        
         <HelmetMetaData title={cycle.title}
         type='article'

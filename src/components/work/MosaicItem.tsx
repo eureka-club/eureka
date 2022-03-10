@@ -11,17 +11,17 @@ import { CgMediaLive } from 'react-icons/cg';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import isBetween from 'dayjs/plugin/isBetween';
-import { CycleMosaicItem } from '../../types/cycle';
+import { CycleMosaicItem,CycleDetail } from '../../types/cycle';
 import { /* WorkWithImages, */ WorkMosaicItem } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import SocialInteraction from '../common/SocialInteraction';
 // import { Session } from '../../types';
-import { useCycleContext } from '../../useCycleContext';
+// import { useCycleContext } from '../../useCycleContext';
 // import { useWorkContext } from '../../useWorkContext';
 import { DATE_FORMAT_SHORT } from '../../constants';
 import useWork from '@/src/useWork'
-
+import usePosts from '@/src/usePosts'
 dayjs.extend(isBetween);
 dayjs.extend(utc);
 interface Props {
@@ -53,11 +53,11 @@ const MosaicItem: FunctionComponent<Props> = ({
 }) => {
   const { t } = useTranslation('common');
   const queryClient = useQueryClient()
-  const cycleContext = useCycleContext();
-  const [cycle, setCycle] = useState<CycleMosaicItem | null>();
-  useEffect(() => {
-    if (cycleContext) setCycle(cycleContext.cycle);
-  }, [cycleContext]);
+  // const cycleContext = useCycleContext();
+  const [cycle, setCycle] = useState<CycleDetail | null>();
+  // useEffect(() => {
+  //   if (cycleContext) setCycle(cycleContext.cycle);
+  // }, [cycleContext]);
   const [loading, setLoading] = useState<boolean>(false);
   // const { linkToWork = true, work: workFromContext } = useWorkContext();
   // const [WORK] = useState<WorkMosaicItem>(work!);
@@ -66,10 +66,16 @@ const MosaicItem: FunctionComponent<Props> = ({
   const {data:work} = useWork(workId,{
     enabled:!!workId
   })
+
+  const { data: posts, isLoading: isLoadingPosts } = usePosts(
+    work ? {works:{some:{id:work.id}}}:undefined,
+    undefined,
+    { enabled: !!(work && work.id) }
+  )
   
   useEffect(()=>{
-    if(work && work.posts){
-      work.posts.forEach(p => {
+    if(work && posts){
+      posts.forEach(p => {
         queryClient.setQueryData(['POST',`${p.id}`],p)
       });
     }

@@ -60,9 +60,9 @@ const renderMosaicItem = (
   if (isCycleMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
     return (
-      <CycleContext.Provider key={`cycle-${v4()}`} value={{ cycle: item as CycleMosaicItem }}>
+      // <CycleContext.Provider key={`cycle-${v4()}`} value={{ cycle: item as CycleMosaicItem }}>
         <MosaicItemCycle detailed cycleId={item.id} showSocialInteraction={showSocialInteraction} showButtonLabels={false} />
-      </CycleContext.Provider>
+      // </CycleContext.Provider>
     );
   }
   if (isPostMosaicItem(item) || (item && item.type === 'post')) {

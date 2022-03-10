@@ -1,4 +1,4 @@
-import { WorkMosaicItem } from '@/src/types/work';
+import { WorkDetail } from '@/src/types/work';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
@@ -7,15 +7,17 @@ import { FunctionComponent } from 'react';
 
 import { DATE_FORMAT_ONLY_YEAR } from '../../constants';
 import styles from './WorkSummary.module.css';
-
+import useWork from '@/src/useWork'
 dayjs.extend(utc);
 interface Props {
-  work: WorkMosaicItem
+  workId: number
 }
 
-const WorkSummary: FunctionComponent<Props> = ({ work }) => {
+const WorkSummary: FunctionComponent<Props> = ({ workId }) => {
   const { t } = useTranslation('common'); 
-
+  const {data:work} = useWork(workId,{enabled:!!workId})
+  if(!work)return <></>
+  
   return (
     <p className={`mb-1 mb-sm-2 text-wrap ${styles.workSummary} text-dark`}>
       {[

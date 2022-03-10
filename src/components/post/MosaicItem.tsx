@@ -28,6 +28,7 @@ import usePost from '@/src/usePost'
 import {useQueryClient} from 'react-query'
 import useCycle from '@/src/useCycle';
 import useWork from '@/src/useWork'
+import cycle from 'pages/api/cycle';
 interface Props {
   postId: number|string;
   display?: 'v' | 'h';
@@ -65,7 +66,6 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   // const [post,setPost] = useState<PostMosaicItem>();
-  const [postParent,setPostParent] = useState<CycleMosaicItem|WorkMosaicItem>();
 
   //const postFromCache = queryClient.getQueryData<PostMosaicItem>(['POST',postId.toString()]);
   // const pp = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(cacheKey);
@@ -74,12 +74,30 @@ const MosaicItem: FunctionComponent<Props> = ({
     enabled:!!postId
   })
 
+  const [cycleId,setCycleId] = useState<number>(0)
+  const [workId,setWorkId] = useState<number>(0)
+
   useEffect(()=>{
     if(post){
-      if(post.works.length)setPostParent(post.works[0] as WorkMosaicItem)
-      if(post.cycles.length)setPostParent(post.cycles[0] as CycleMosaicItem)
+      if(post.works && post.works.length){
+        setWorkId(post.works[0].id)
+      }
+      else if(post.cycles && post.cycles.length){
+        setCycleId(post.cycles[0].id)
+      }
+
     }
   },[post])
+
+  const {data:parentWork} = useWork(workId,{enabled:!!workId})
+  const {data:parentCycle} = useCycle(cycleId,{enabled:!!(cycleId&&!workId)})
+
+  // useEffect(()=>{
+  //   if(post){
+  //     if(post.works.length)setPostParent(post.works[0])
+  //     if(post.cycles.length)setPostParent(post.cycles[0])
+  //   }
+  // },[post])
   //  const {data:workParent} = useWork(workId,{enabled:!!workId})
   //  const {data:cycleParent} = useCycle(cycleId,{enabled:!!cycleId})
   
@@ -87,26 +105,26 @@ const MosaicItem: FunctionComponent<Props> = ({
    if(!post)return <></>
 
   const parentLinkHref = ((): string | null => {
-    if (post.works.length) {
-      return `/work/${post.works[0].id}`;
+    if (parentWork) {
+      return `/work/${parentWork.id}`;
     }
-    else if (post.cycles[0]) {
-      return `/cycle/${post.cycles[0].id}`;
+    else if (parentCycle) {
+      return `/cycle/${parentCycle.id}`;
     }
     return null;
   })();
   const postLinkHref = ((): string => {
-    if (post.works.length) {
-      return `/work/${post.works[0].id}/post/${post.id}`;
+    if (parentWork) {
+      return `/work/${parentWork.id}/post/${post.id}`;
     }
-    else if (post.cycles.length) {
-      return `/cycle/${post.cycles[0].id}/post/${post.id}`;
+    else if (parentCycle) {
+      return `/cycle/${parentCycle.id}/post/${post.id}`;
     }    
     return `/post/${post.id}`;
   })();
 
   // const [creator] = useState(post.creator as User);
-  const { /* title, localImages, id, */ type } = post;
+  // const { /* title, localImages, id, */ type } = post;
   // const [newCommentInput, setNewCommentInput] = useState<string>();
   
 
@@ -130,12 +148,12 @@ const MosaicItem: FunctionComponent<Props> = ({
     const renderParentTitle = () => {
       let res = '';
       let full =''
-      if (post.works.length) {
-        full = post.works[0].title
+      if (parentWork) {
+        full = parentWork.title
         res = full.slice(0, 26);
       }
-      else if(post.cycles.length){
-        full = post.cycles[0].title
+      else if(parentCycle){
+        full = parentCycle.title
         res = full.slice(0, 26);
       }
       if (res.length + 3 < full.length) res = `${res}...`;
@@ -207,7 +225,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 
 
           <Badge bg="success" className={`fw-normal fs-6 text-white px-2 rounded-pill ${styles.type}`}>
-            {t(type || 'post')}
+            {t('post')}
           </Badge>
         </div>
         {showDetailedInfo && (
@@ -235,7 +253,7 @@ const MosaicItem: FunctionComponent<Props> = ({
               showButtonLabels={false}
               showCounts={false}
               entity={post}
-              parent={postParent}
+              parent={parentWork||parentCycle}
               showRating={false}
               showTrash={false}
               className="ms-auto"

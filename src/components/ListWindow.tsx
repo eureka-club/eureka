@@ -13,6 +13,7 @@ import { WorkMosaicItem } from '../types/work';
 import { PostMosaicItem } from '../types/post';
 import { CycleContext } from '../useCycleContext';
 import { CommentMosaicItem } from '../types/comment';
+import res from '../lib/getApiHandler';
 
 interface Props{
     items:MosaicItem[];
@@ -21,20 +22,29 @@ interface Props{
     height:number
     width:string
 }
-const ListWindow:React.FC<Props> = ({items,parent,cacheKey,height,width})=>{
+const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,height,width})=>{
     const [mosaics,setMosaics] = useState<JSX.Element[]>([])
+    const [innerHeight,setinnerHeight]=useState<number>(300)
 
-      useEffect(()=>{
-          if(items){
-            while(items.length){
-              const a = items.splice(0,4)
+
+    useEffect(()=>{
+      setinnerHeight(globalThis.window.innerHeight)
+    },[])
+
+      const items = React.useMemo<JSX.Element[]>(()=>{
+        const res:JSX.Element[] = []
+        if(it){
+            let aux = [...it]
+            while(aux.length){
+              const a = aux.splice(0,4)
               const rows = []
               for(let item of a){
-                  let mosaic = <></>
                   if (isCycleMosaicItem(item)) {
-                    rows.push(<CycleContext.Provider value={{ cycle: item as CycleMosaicItem }}>
-                        <MosaicItemCycle key={`${v4()}`} cycleId={item.id} detailed className="mb-2"/>
-                      </CycleContext.Provider>)
+                    rows.push(
+                    // <CycleContext.Provider value={{ cycle: item as CycleMosaicItem }}>
+                        <MosaicItemCycle key={`${v4()}`} cycleId={item.id} detailed className="me-3 my-6"/>
+                      // </CycleContext.Provider>
+                      )
                   }
                   else if (isPostMosaicItem(item)) {
                     // let pp = parent;
@@ -60,47 +70,43 @@ const ListWindow:React.FC<Props> = ({items,parent,cacheKey,height,width})=>{
                     
                       // <WorkContext.Provider value={{ linkToWork: true }}>
                       rows.push(<MosaicItemWork 
-                        linkToWork showShare={false} showButtonLabels={true} key={`${v4()}`} workId={item.id} className="mb-2"/>)
+                        linkToWork showShare={false} showButtonLabels={true} key={`${v4()}`} workId={item.id} className="me-3 my-6"/>)
                       // </WorkContext.Provider>
                     
                   }
                   else if (isUserMosaicItem(item)) {
-                    rows.push(<MosaicItemUser key={`${v4()}`} user={item} className="mb-2 my-6" />);
+                    rows.push(<MosaicItemUser key={`${v4()}`} user={item} className="me-3 my-6" />);
                   }
                   else if(isCommentMosaicItem(item)){
                     const it: CommentMosaicItem = item as CommentMosaicItem;
                     rows.push(<MosaicItemComment detailed commentId={it.id} cacheKey={cacheKey} />);                      
                   }
                 }
-                mosaics.push(
+                res.push(
                   <section className="d-flex flex-column flex-md-row justify-content-center">{rows.map(
                     r=><section className="my-2" key={v4()}>{r}</section>
                     )}</section>
                 )
             }            
-            setMosaics(()=>[...mosaics]);
-          }
-      },[items])
+        }
+        return res;
+      },[it,cacheKey])
+
 
     const renderItem = (props:{ index:number, style:Record<string,any> }) => {
       const {index,style} = props;
       return  <section className="" style={style}>
         <aside className={`p-4 mb-3`} key={`${v4()}`}>
-              {mosaics[index]}
+              {items[index]}
         </aside>
       </section>
     };
 
 
-      const getSize = (index:number) => {
-          if(isPostMosaicItem(items[index]))
-            return 355;
-          else return 200  
-      };
       
         return <List
-          height={globalThis.window.innerHeight}
-          itemCount={mosaics.length}
+          height={innerHeight}
+          itemCount={items.length}
           itemSize={height+16}//+16 because->post mosaic: my-6(12px) and row section: my-2(4px)
           //layout="vertical"
           width={'100%'}

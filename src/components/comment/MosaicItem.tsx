@@ -69,7 +69,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   //   return null;
   // })();
   const { t } = useTranslation('common');
-  const [parent,setParent] = useState<CycleMosaicItem|WorkMosaicItem|PostMosaicItem|CommentMosaicItem>()
+  const [parent,setParent] = useState<CycleMosaicItem|WorkMosaicItem|PostMosaicItem/* |CommentMosaicItem */>()
   const {data:comment} = useComment(commentId,{
     enabled:!!commentId
   })
@@ -87,10 +87,7 @@ const MosaicItem: FunctionComponent<Props> = ({
  
   const getTitle = (): string => {
     if(parent){
-      if (isCycle(parent)) return (parent as Cycle).title;
-      else if (isWork(parent)) return (parent as Work).title;
-      else if (isPost(parent)) return (parent as Post).title;
-
+      parent.title;
     }
     // if (isComment(parent)) return `Comment: ${parent.id}`;
     return '';

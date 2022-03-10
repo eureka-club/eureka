@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
-import { CycleMosaicItem } from './types/cycle';
+import { CycleDetail } from './types/cycle';
 
-export const getRecord = async (id: number): Promise<CycleMosaicItem | undefined> => {
+export const getRecord = async (id: number): Promise<CycleDetail | undefined> => {
   if (!id) return undefined;
   const url = `/api/cycle/${id}`;
 
@@ -22,7 +22,7 @@ const useCycle = (id: number, options?: Options) => {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  return useQuery<CycleMosaicItem | undefined>(['CYCLE', `${id}`], () => getRecord(id), {
+  return useQuery<CycleDetail | undefined>(['CYCLE', `${id}`], () => getRecord(id), {
     staleTime,
     enabled,
   });

@@ -20,8 +20,9 @@ import { BiArrowBack } from 'react-icons/bi';
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { MySocialInfo, Session } from '../../types';
-import { PostMosaicItem } from '../../types/post';
-import { WorkMosaicItem } from '../../types/work';
+import { PostDetail,PostMosaicItem } from '../../types/post';
+import { WorkDetail } from '../../types/work';
+import {CycleMosaicItem} from '@/src/types/cycle'
 // import LocalImageComponent from '../LocalImage';
 import CombinedMosaic from './CombinedMosaic';
 import CyclesMosaic from './CyclesMosaic';
@@ -41,16 +42,17 @@ import { WorkContext } from '../../useWorkContext';
 import EditPostForm from '../forms/EditPostForm';
 import {useQueryClient} from 'react-query'
 import useWork from '@/src/useWork'
+import usePosts from '@/src/usePosts'
+import useCycles from '@/src/useCycles'
+import ListWindow from '@/src/components/ListWindow'
 // import CommentsList from '../common/CommentsList';
 interface Props {
   workId: number;
-  post?: PostMosaicItem;
-  cyclesCount: number;
-  postsCount: number;
-  mySocialInfo: MySocialInfo;
+  post?: PostDetail;
+  
 }
 
-const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, cyclesCount, postsCount }) => {
+const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
   const router = useRouter();
   const queryClient = useQueryClient()
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
@@ -58,54 +60,64 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, cyclesCou
   const { t } = useTranslation('workDetail');
   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
   const [session] = useSession() as [Session | null | undefined, boolean];
-
+  
   const {data:work} = useWork(workId,{
-    enabled:!!workId
+      enabled:!!workId
   })
+  const { data: posts, isLoading: isLoadingPosts } = usePosts(
+    work ? {works:{some:{id:work.id}}}:undefined,
+    undefined,
+    { enabled: !!(work && work.id) }
+  )
+  const {data:cycles,isLoading:isLoadingCycles} = useCycles(
+    work ? {works:{some:{id:work.id}}}:undefined,
+    { enabled: !!(work && work.id) }
+  )
+    
   
-  useEffect(()=>{
-    if(work && work.posts.length){
-      work.posts.forEach(p => {
-        queryClient.setQueryData(['POST',`${p.id}`],p)
-      });
-    }
-  },[work,queryClient])
-
-  if(!work)return <></>
-  
-
-  const handleSubsectionChange = (key: string | null) => {
-    if (key != null) {
-      setDetailPagesState({ ...detailPagesState, selectedSubsectionWork: key });
-    }
-  };
-
-  const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-    setGlobalModalsState({ ...globalModalsState, ...{ editWorkModalOpened: true } });
-  };
-
-  const canEditWork = (): boolean => {
-    if (session && session.user.roles === 'admin') return true;
-    return false;
-  };
-
-  const canEditPost = (): boolean => {
-    if (session && post && session.user.id === post.creatorId) return true;
-    return false;
-  };
-
-  const handleEditPostClick = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-    setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: true } });
-  };
-
-  const handleEditPostOnSmallerScreen = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
+  // useEffect(()=>{debugger;
+  //   if(work && posts){
+    //     posts.forEach(p => {
+      //       queryClient.setQueryData(['POST',`${p.id}`],p)
+      //     });
+      //   }
+      // },[work,posts,queryClient])
+      
+      if(!work)return <></>
+      
+      
+      const handleSubsectionChange = (key: string | null) => {
+        if (key != null) {
+          setDetailPagesState({ ...detailPagesState, selectedSubsectionWork: key });
+        }
+      };
+      
+      const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
+        ev.preventDefault();
+        setGlobalModalsState({ ...globalModalsState, ...{ editWorkModalOpened: true } });
+      };
+      
+      const canEditWork = (): boolean => {
+        if (session && session.user.roles === 'admin') return true;
+        return false;
+      };
+      
+      const canEditPost = (): boolean => {
+        if (session && post && session.user.id === post.creatorId) return true;
+        return false;
+      };
+      
+      const handleEditPostClick = (ev: MouseEvent<HTMLButtonElement>) => {
+        ev.preventDefault();
+        setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: true } });
+      };
+      
+      const handleEditPostOnSmallerScreen = (ev: MouseEvent<HTMLButtonElement>) => {
+        ev.preventDefault();
         setEditPostOnSmallerScreen({ ...editOnSmallerScreens, ...{ value: !editPostOnSmallerScreen.value } });
-  };
-
-  return (
+      };
+      
+      return <>
     <WorkContext.Provider value={{ work, linkToWork: false }}>
       <MosaicContext.Provider value={{ showShare: true }}>
        
@@ -152,7 +164,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, cyclesCou
                 <section className="mx-md-4">
                   <h1 className="fw-bold text-secondary">{work.title}</h1>
                   <h2 className={styles.author}>{work.author}</h2>
-                  <WorkSummary work={work} />
+                  <WorkSummary workId={work.id} />
                   {work.tags && <TagsInput tags={work.tags} readOnly label="" />}
                   {work.link != null && (
                     <a href={work.link} className={classNames(styles.workLink,'mb-5')} target="_blank" rel="noreferrer">
@@ -209,17 +221,17 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, cyclesCou
                       <Nav variant="tabs" className='scrollNav' fill>
                         <NavItem>
                           <NavLink eventKey="all">
-                            {t('tabHeaderAll')} ({cyclesCount + postsCount})
+                            {t('tabHeaderAll')} ({(cycles ? cycles.length : 0) + ( posts ? posts.length : 0)})
                           </NavLink>
                         </NavItem>
                         <NavItem>
                           <NavLink eventKey="posts">
-                            {t('tabHeaderPosts')} ({postsCount})
+                            {t('tabHeaderPosts')} ({posts ? posts.length : 0})
                           </NavLink>
                         </NavItem>
                         <NavItem>
                           <NavLink eventKey="cycles">
-                            {t('tabHeaderCycles')} ({cyclesCount})
+                            {t('tabHeaderCycles')} ({cycles ? cycles.length : 0})
                           </NavLink>
                         </NavItem>
                       </Nav>
@@ -230,14 +242,19 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, cyclesCou
                     <Col>
                       <TabContent>
                         <TabPane eventKey="all">
-                          {(cyclesCount > 0 || postsCount > 0) && <CombinedMosaic work={work} />}
+                          {(cycles || posts)
+                            && <ListWindow items={[...(cycles||[]),...(posts||[])] as unknown as (CycleMosaicItem|PostMosaicItem)[]} cacheKey={['WORK', `${work.id}`]} height={400} width={'100%'}/> 
+                          //&& <CombinedMosaic work={work} />
+                          }
                         </TabPane>
                         <TabPane eventKey="posts">
                           <p className={styles.explanatoryText}>{t('explanatoryTextPosts')}</p>
-
-                          {postsCount > 0 && <PostsMosaic work={work} />}
+                          {posts && <ListWindow items={posts} cacheKey={['WORK', `${work.id}`]} height={400} width={'100%'}/>}
+                          {/* {posts && posts.length > 0 && <PostsMosaic work={work} />} */}
                         </TabPane>
-                        <TabPane eventKey="cycles">{cyclesCount > 0 && <CyclesMosaic work={work} />}</TabPane>
+                        <TabPane eventKey="cycles">{
+                          cycles && <ListWindow items={cycles} cacheKey={['WORK', `${work.id}`]} height={400} width={'100%'}/>
+                        }</TabPane>
                       </TabContent>
                     </Col>
                   </Row>
@@ -248,7 +265,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, cyclesCou
         )} </> : <EditPostForm noModal />}
       </MosaicContext.Provider>
     </WorkContext.Provider>
-  );
+  </>
+  ;
 };
 
 export default WorkDetailComponent;

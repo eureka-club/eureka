@@ -5,20 +5,20 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 // import { workerData } from 'worker_threads';
 import { Spinner } from 'react-bootstrap';
-import { MySocialInfo, Session } from '../../../../src/types';
-import { PostMosaicItem } from '../../../../src/types/post';
-import { WorkMosaicItem } from '../../../../src/types/work';
-import SimpleLayout from '../../../../src/components/layouts/SimpleLayout';
-import WorkDetailComponent from '../../../../src/components/work/WorkDetail';
-import { search as searchPost, isFavoritedByUser } from '../../../../src/facades/post';
-import { countCycles, countPosts, find as findWork } from '../../../../src/facades/work';
-import useWork from '../../../../src/useWork';
+import { MySocialInfo, Session } from '@/src/types';
+import { PostDetail } from '@/src/types/post';
+import { WorkDetail } from '@/src/types/work';
+import SimpleLayout from '@/components/layouts/SimpleLayout';
+import WorkDetailComponent from '@/components/work/WorkDetail';
+import { search as searchPost, isFavoritedByUser } from '@/src/facades/post';
+import { countCycles, countPosts, find as findWork } from '@/src/facades/work';
+import useWork from '@/src/useWork';
 import usePost from '@/src/usePost';
-import HelmetMetaData from '../../../../src/components/HelmetMetaData'
-import { WEBAPP_URL } from '../../../../src/constants';
+import HelmetMetaData from '@/components/HelmetMetaData'
+import { WEBAPP_URL } from '@/src/constants';
 interface Props {
-  post: PostMosaicItem;
-  work: WorkMosaicItem;
+  post: PostDetail;
+  work: WorkDetail;
   cyclesCount: number;
   postsCount: number;
   mySocialInfo: MySocialInfo;
@@ -63,7 +63,7 @@ const PostDetailInWorkPage: NextPage<Props> = () => {
 
   if (!post || !work || isLoadingData()) return getLayout(<Spinner animation="grow" variant="info" />);
   return getLayout(
-    <WorkDetailComponent workId={work.id!} post={post} cyclesCount={1} postsCount={1} mySocialInfo={{}} />,
+    <WorkDetailComponent workId={work.id!} post={post} />,
     `${post!.title} · ${work!.title}`,
   );
 

@@ -7,12 +7,12 @@ import { FunctionComponent } from 'react';
 
 import { WorkMosaicItem } from '../../types/work';
 import Mosaic from '../Mosaic';
-import { CycleMosaicItem } from '../../types/cycle';
+import { CycleDetail, CycleMosaicItem } from '../../types/cycle';
 import { Work } from '.prisma/client';
 // import { MosaicItem } from '../types/work';
 import useWorks from '@/src/useWorks'
 interface Props {
-  cycle: CycleMosaicItem;
+  cycle: CycleDetail;
   className?: string;
 }
 dayjs.extend(isBetween);
@@ -33,7 +33,7 @@ const WorksMosaic: FunctionComponent<Props> = ({ cycle, className }) => {
   //   },
   // );
   const getWorksSorted = () => {
-    const res: Work[] = [];
+    const res: WorkMosaicItem[] = [];
     if(cycle && !cycle.cycleWorksDates)return works||[];
     cycle.cycleWorksDates
       .sort((f, s) => {

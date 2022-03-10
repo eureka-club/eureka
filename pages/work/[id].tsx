@@ -1,4 +1,4 @@
-import { NextPage } from 'next';
+import { NextPage,GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/client';
 import { useState, useEffect, ReactElement } from 'react';
 // import { useQueryClient } from 'react-query';
@@ -6,11 +6,11 @@ import { useRouter } from 'next/router';
 import { Spinner, Alert } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
 // import { Session, MySocialInfo } from '../../src/types';
-// import { WorkMosaicItem } from '../../src/types/work';
+import { WorkMosaicItem, WorkDetail } from '../../src/types/work';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import WorkDetailComponent from '../../src/components/work/WorkDetail';
 import useWork from '../../src/useWork';
-import useCycles from '@/src/useCycles'
+
 import HelmetMetaData from '../../src/components/HelmetMetaData'
 import { WEBAPP_URL } from '../../src/constants';
 
@@ -23,17 +23,18 @@ import { WEBAPP_URL } from '../../src/constants';
 //   // isReadOrWatchedByUser,
 // } from '../../src/facades/work';
 import { User } from '.prisma/client';
+import { CycleMosaicItem } from '@/src/types/cycle';
+import { PostMosaicItem } from '@/src/types/post';
+import prisma from '@/src/lib/prisma';
 
-// interface Props {
-//   // work: WorkMosaicItem;
-//   cyclesCount: number;
-//   postsCount: number;
-//   mySocialInfo: MySocialInfo;
-// }
+interface Props {
+  work: string;
+}
 
-const WorkDetailPage: NextPage = () => {
+const WorkDetailPage: NextPage<Props> = () => {
   // const queryClient = useQueryClient();
   // queryClient.setQueryData(['WORKS', `${work.id}`], work);
+  
   const router = useRouter();
   const { t } = useTranslation('common');
   const [session, isLoadingSession] = useSession();
@@ -51,17 +52,18 @@ const WorkDetailPage: NextPage = () => {
   }, [router]);
 
   const { data: work, isLoading: isLoadingWork } = useWork(+id, { enabled: !!id });
+  
 
-  const {data:cycles,isLoading:isLoadingCycles} = useCycles({
-    works:{
-      some:{
-        id:+id
-      }
-    }
-  },{enabled:!!id})
+  // const {data:cycles,isLoading:isLoadingCycles} = useCycles({
+  //   works:{
+  //     some:{
+  //       id:+id
+  //     }
+  //   }
+  // },{enabled:!!id})
 
   useEffect(() => {
-    if (!isLoadingSession && session && work) {
+    if (!isLoadingSession && session && work && work.favs) {
       setMySocialInfo((res) => ({ ...res, favoritedByMe: work.favs.findIndex((u) => u.id === +id) > -1 }));
     }
   }, [isLoadingSession, session, work, id]);
@@ -76,17 +78,13 @@ const WorkDetailPage: NextPage = () => {
      </>
   };
   
-  if (isLoadingWork || isLoadingCycles) return rendetLayout('Loading...', <Spinner animation="grow" />);
+  // if (isLoadingWork) return rendetLayout('Loading...', <Spinner animation="grow" />);
   
   if (work) {
-    let cyclesCount = cycles ? cycles.length : 0;
     return rendetLayout(
       work.title,
       <WorkDetailComponent
         workId={work.id}
-        cyclesCount={cyclesCount}
-        postsCount={work.posts.length}
-        mySocialInfo={mySocialInfo}
       />,
     );
   }
@@ -109,32 +107,32 @@ const WorkDetailPage: NextPage = () => {
 //     return { notFound: true };
 //   }
 
-//   const work = await find(id);
+//   const work = await prisma.work.findUnique({
+//     where:{id},
+//     include:{localImages:{select:{storedFile:true}}}
+//   });
 //   if (work == null) {
 //     return { notFound: true };
 //   }
+//   const cycles = await prisma.cycle.findMany({
+//     where:{
+//       works:{some:{id:work.id}}
+//     },
+//     include:{localImages:{select:{storedFile:true}}}
+//   })
+//   const posts = await prisma.post.findMany({
+//     where:{
+//       works:{some:{id:work.id}}
+//     },
+//     include:{localImages:{select:{storedFile:true}}}
+//   })
 
-//   const cyclesCount = await countCycles(work);
-//   const postsCount = await countPosts(work);
-
-//   const session = (await getSession({ req })) as unknown as Session;
-//   const mySocialInfo: MySocialInfo = {
-//     favoritedByMe: undefined,
-//     // likedByMe: undefined,
-//     // readOrWatchedByMe: undefined,
-//   };
-//   if (session != null) {
-//     mySocialInfo.favoritedByMe = !!(await isFavoritedByUser(work, session.user));
-//     // mySocialInfo.likedByMe = !!(await isLikedByUser(work, session.user));
-//     // mySocialInfo.readOrWatchedByMe = !!(await isReadOrWatchedByUser(work, session.user));
-//   }
 
 //   return {
 //     props: {
-//       work,
-//       cyclesCount: cyclesCount.count,
-//       postsCount: postsCount.count,
-//       mySocialInfo,
+//       work:JSON.stringify(work),
+//       cycles:JSON.stringify(cycles),
+//       posts:JSON.stringify(posts)
 //     },
 //   };
 // };

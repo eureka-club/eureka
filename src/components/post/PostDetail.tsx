@@ -12,10 +12,10 @@ import { Row, Col, Badge } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import { DATE_FORMAT_SHORT } from '../../constants';
 // import { Session } from '../../types';
-import { CycleMosaicItem } from '../../types/cycle';
+import { CycleDetail, CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
 // import globalModalsAtom from '../../atoms/globalModals';
-import { WorkMosaicItem } from '../../types/work';
+import { WorkDetail, WorkMosaicItem } from '../../types/work';
 import MosaicItem from './MosaicItem';
 import { MosaicContext } from '../../useMosaicContext';
 
@@ -29,10 +29,11 @@ import { useCycleContext } from '../../useCycleContext';
 import usePost from '@/src/usePost'
 import {useQueryClient} from 'react-query'
 import HyvorComments from '@/src/components/common/HyvorComments';
+import useCycle from '@/src/useCycle'
 interface Props {
   postId: number;
   // cycle?: CycleMosaicItem;
-  work?: WorkMosaicItem;
+  work?: WorkDetail;
   // mySocialInfo?: MySocialInfo;
   cacheKey:[string,string];
 }
@@ -45,22 +46,26 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
   const router = useRouter();
   const queryClient = useQueryClient()
   const cycleContext = useCycleContext();
-  const [cycle, setCycle] = useState<CycleMosaicItem | null>();
   const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
-  useEffect(() => {
-    if (cycleContext) {
-      if (cycleContext.cycle) {
-        if (!cycleContext.currentUserIsParticipant && cycleContext.cycle.access !== 1)
-          router.push(`/cycle/${cycleContext.cycle.id}`);
-        setCycle(cycleContext.cycle);
-        setCurrentUserIsParticipant(cycleContext.currentUserIsParticipant || false);
-      }
-    }
-  }, [cycleContext, router]);
-
+  
   const {data:post} = usePost(+postId,{
     enabled:!!postId
   })
+
+  const [cycleId,setCycleId] = useState<number>(0)
+  useEffect(()=>{
+    if(post?.cycles && post.cycles.length)
+      setCycleId(post.cycles[0].id)
+  },[post])
+  const {data:cycle} = useCycle(cycleId,{enabled:!!cycleId})
+
+  if(post){
+    if(cycle){
+      if (!cycleContext.currentUserIsParticipant && cycle.access !== 1)
+          router.push(`/cycle/${cycle.id}`);
+        setCurrentUserIsParticipant(cycleContext.currentUserIsParticipant || false);
+    }
+  }
 
   if(!post)return <></>
 

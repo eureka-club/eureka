@@ -8,19 +8,19 @@ import Popover from 'react-bootstrap/Popover';
 import Table from 'react-bootstrap/Table';
 import { useMutation } from 'react-query';
 
-import { PostMosaicItem } from '../../src/types/post';
-import { Session } from '../../src/types';
-import SimpleLayout from '../../src/components/layouts/SimpleLayout';
-import LocalImageComponent from '../../src/components/LocalImage';
-import { findAll } from '../../src/facades/post';
+import { PostDetail, PostMosaicItem } from '@/src/types/post';
+import { Session } from '@/src/types';
+import SimpleLayout from '@/src/components/layouts/SimpleLayout';
+import LocalImageComponent from '@/src/components/LocalImage';
+import { findAll } from '@/src/facades/post';
 
 interface Props {
-  posts: PostMosaicItem[];
+  posts: PostDetail[];
 }
 
 const ListPostsPage: NextPage<Props> = ({ posts }) => {
   const router = useRouter();
-  const { mutate: execDeletePost, isSuccess: isDeletePostSuccess } = useMutation(async (post: PostMosaicItem) => {
+  const { mutate: execDeletePost, isSuccess: isDeletePostSuccess } = useMutation(async (post: PostDetail) => {
     const res = await fetch(`/api/post/${post.id}`, {
       method: 'delete',
     });
@@ -29,7 +29,7 @@ const ListPostsPage: NextPage<Props> = ({ posts }) => {
     return data;
   });
 
-  const handleDeleteClick = (post: PostMosaicItem) => {
+  const handleDeleteClick = (post: PostDetail) => {
     execDeletePost(post);
   };
 

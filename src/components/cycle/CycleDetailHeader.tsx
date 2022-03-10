@@ -33,7 +33,7 @@ import isBetween from 'dayjs/plugin/isBetween';
 import { MySocialInfo, Session } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
-import { WorkMosaicItem } from '../../types/work';
+import { WorkDetail, WorkMosaicItem } from '../../types/work';
 
 // import LocalImageComponent from '../LocalImage';
 // import PostDetailComponent from '../post/PostDetail';
@@ -58,7 +58,7 @@ interface Props {
   // cycle: CycleMosaicItem;
   cycleId:number;
   post?: PostMosaicItem;
-  work?: WorkMosaicItem;
+  work?: WorkDetail;
   isCurrentUserJoinedToCycle?: boolean;
   participantsCount?: number;
   postsCount?: number;
@@ -202,7 +202,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   };
 
   const getWorksSorted = () => {
-    const res: Work[] = [];
+    const res: WorkMosaicItem[] = [];
     if(!cycle)return []
     if(!cycle.cycleWorksDates)return works||[];
     cycle.cycleWorksDates

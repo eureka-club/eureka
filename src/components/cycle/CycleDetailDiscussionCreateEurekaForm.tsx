@@ -14,7 +14,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import globalModalsAtom from '../../atoms/globalModals';
 import { Session } from '../../types';
-import { CycleMosaicItem } from '../../types/cycle';
+import { CycleDetail, CycleMosaicItem } from '../../types/cycle';
 import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
 
 import ImageFileSelect from '../forms/controls/ImageFileSelect';
@@ -31,7 +31,7 @@ import useWorks from '@/src//useWorks'
 
 interface Props {
   cacheKey:string[];
-  cycle: CycleMosaicItem;
+  cycle: CycleDetail;
   discussionItem?: string;
   setDiscussionItem: (val: string | undefined) => void;
 }
