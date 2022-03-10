@@ -16,5 +16,7 @@
   "titleEdit": "Editar Eureka",
   "edit": "Editar",
   "topicsPostLabel": "Principais temas da Eureka (3 máx, selecione os mais relevantes da lista)",
-  "topicsFieldLabel": "Temas adicionais da Eureka (2 máx, livre)"
+  "topicsFieldLabel": "Temas adicionais da Eureka (2 máx, livre)",
+  "PostEdited":"Seu Eureka foi editado."
+
 }
