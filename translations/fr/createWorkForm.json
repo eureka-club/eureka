@@ -32,5 +32,6 @@
   "Remove the second origin country": "Supprimer le 2ème pays",
   "Topics": "Thèmes",
   "topicsLabel": "Principaux thèmes de l'œuvre (3 max, choisir les plus pertinents dans la liste)",
-  "topicsFieldLabel": "Thèmes supplémentaires de l'œuvre (2 max, entrée libre)"
+  "topicsFieldLabel": "Thèmes supplémentaires de l'œuvre (2 max, entrée libre)",
+  "WorkSaved":"Ouvrage ajouté à notre bibliothèque"
 }
