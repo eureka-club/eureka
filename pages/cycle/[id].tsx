@@ -128,7 +128,7 @@ const CycleDetailPage: NextPage<Props> = () => {
 
   const getBanner = () => {
     if (!currentUserIsParticipant && router && cycle) {
-      if (router.asPath.search(/\/cycle\/16/g) > -1)
+      if (router.asPath.search(/\/cycle\/20/g) > -1)
         return (
           <Banner
             cacheKey={['BANNER-CYCLE', `${cycle.id}`]}
@@ -138,9 +138,9 @@ const CycleDetailPage: NextPage<Props> = () => {
             content={
               <aside className="text-center text-white">
                 <h2 className="h2">
-                  Participa en la conversación sobre adicción, desinformación y violencia en redes sociales
+                  Participa en nuestra conversación inédita sobre la relación que como humanes tenemos con el agua
                 </h2>
-                <p>16 de noviembre - 12 de diciembre</p>
+                <p>18 de marzo - 18 de agosto</p>
 
                 <div className="d-grid gap-2">
                   <Button
