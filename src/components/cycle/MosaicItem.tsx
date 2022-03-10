@@ -348,8 +348,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           {/**/}
         </div>
       )}
-      {showParticipants && (<p className={`${styles.title} fs-6 text-center text-gray my-2`}>{`${t('participants')}: ${participants + 1}`}</p>)}
-      <div className={`text-center ${styles.joinButtonContainer}`}>
+      <div className={`text-center ${showParticipants ? 'mt-3' : ''} ${styles.joinButtonContainer}`}>
         {(isJoinCycleLoading || isLeaveCycleLoading) && <Spinner animation="grow" size="sm" />}
         {!(isJoinCycleLoading || isLeaveCycleLoading) && isCurrentUserJoinedToCycle && user && (user.id !== cycle!.creatorId) ? (
           <Button onClick={handleLeaveCycleClick} variant="button border-primary text-primary fs-6" className="w-75">
@@ -366,6 +365,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             {t('MyCycle')}
           </Button>) }
       </div>
+      {showParticipants && (<p className={`${styles.title} mt-3 fs-6 text-center text-gray my-2`}>{`${t('Participants')}: ${participants + 1}`}</p>)} 
       </div>
       {showSocialInteraction && (
         <Card.Footer className={styles.footer}>

@@ -17,6 +17,7 @@
   "edit": "Modifier",
   "topicsPostLabel": "Principaux thèmes de l'Eureka (3 max, choisir les plus pertinents dans la liste)",
   "topicsFieldLabel": "Thèmes supplémentaires de l'Eureka (2 max, entrée libre)",
-  "postCreated":"Votre Eurêka a été publié"
+  "postCreated":"Votre Eurêka a été publié",
+  "PostEdited":"Votre Eureka a été modifié."
 
 }

@@ -39,8 +39,7 @@ import usePost from '../../usePost';
 import { setDefaultResultOrder } from 'dns';
 import editOnSmallerScreens from '../../atoms/editOnSmallerScreens';
 import { IoTerminalSharp } from 'react-icons/io5';
-
-
+import { useToasts } from 'react-toast-notifications'
 interface Props {
   noModal?: boolean;
 }
@@ -70,7 +69,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
   const editorRef = useRef<any>(null);
   const [remove,setRemove] = useState(false);
   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
-
+  const { addToast } = useToasts()
 
   useEffect(() => {
     // const fetchPost = async () => {
@@ -116,7 +115,10 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
         method: remove?'DELETE':'PATCH',
         body: JSON.stringify(payload),
       });
-      handleEditPostOnSmallerScreenClose();
+      if(res.ok){
+        handleEditPostOnSmallerScreenClose();
+        addToast( t('PostEdited'), {appearance: 'success', autoDismiss: true,})
+      }
       return res.json();
     },
     {

@@ -32,6 +32,7 @@ import useUser from '@/src/useUser';
 // import ImageFileSelect from './controls/ImageFileSelect';
 import globalModalsAtom from '../../atoms/globalModals';
 import styles from './EditUserForm.module.css';
+import { useToasts } from 'react-toast-notifications'
 import i18nConfig from '../../../i18n';
 // import useTopics from '../../useTopics';
 
@@ -51,6 +52,7 @@ const EditUserForm: FunctionComponent = () => {
   const [changingPhoto, setChangingPhoto] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>();
   const [privacySettings, setPrivacySettings] = useState<number>();
+  const { addToast } = useToasts()
   const [dashboardTypeChecked, setDashboardTypeChecked] = useState<{
     public: boolean;
     protected: boolean;
@@ -148,7 +150,13 @@ const EditUserForm: FunctionComponent = () => {
         // headers: { 'Content-Type': 'application/json' },
         body: fd,
       });
-      if(!res.ok){
+      if(res.ok){
+          addToast( t('ProfileSaved'), {appearance: 'success', autoDismiss: true,})
+          router.push(`/mediatheque/${id}`);
+         // return res.json();
+      }    
+      else
+      {
         setGlobalModalsState((r)=>({
           ...r,
           showToast: {
@@ -160,7 +168,7 @@ const EditUserForm: FunctionComponent = () => {
         }));
         return null;
       }
-      return res.json();
+   
     },
     {
       onMutate: async () => {
@@ -226,7 +234,7 @@ const EditUserForm: FunctionComponent = () => {
     if (isSuccess === true) {
       setGlobalModalsState({ ...globalModalsState, ...{ editUserModalOpened: false } });
       queryClient.invalidateQueries(['user', id]);
-      router.replace(router.asPath);
+      //router.replace(router.asPath);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);

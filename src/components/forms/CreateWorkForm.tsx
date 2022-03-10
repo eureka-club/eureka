@@ -25,6 +25,8 @@ import { CreateWorkClientPayload } from '../../types/work';
 import ImageFileSelect from './controls/ImageFileSelect';
 import globalModalsAtom from '../../atoms/globalModals';
 import styles from './CreateWorkForm.module.css';
+import { useToasts } from 'react-toast-notifications'
+
 interface Props {
   noModal?: boolean;
 }
@@ -48,8 +50,8 @@ const CreateWorkForm: FunctionComponent<Props> = ({noModal = false})=> {
   const [countryOrigin, setCountryOrigin] = useState<string>();
   const [hasCountryOrigin2, setHasCountryOrigin2] = useState<boolean>();
   const [countryOrigin2, setCountryOrigin2] = useState<string>();
+  const { addToast } = useToasts()
   const { data: topics } = useTopics();
-
   const {
     mutate: execCreateWork,
     error: createWorkError,
@@ -70,6 +72,8 @@ const CreateWorkForm: FunctionComponent<Props> = ({noModal = false})=> {
         method: 'POST',
         body: formData,
       });
+      if(res.ok)
+          addToast( t('WorkSaved'), {appearance: 'success', autoDismiss: true,})
 
       return res.json();
     },

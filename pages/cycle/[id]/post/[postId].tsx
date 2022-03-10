@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import Head from "next/head";
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
@@ -14,7 +15,6 @@ import { WorkMosaicItem } from '../../../../src/types/work';
 import useCycle from '../../../../src/useCycle';
 import usePost from '../../../../src/usePost';
 import { CycleContext } from '../../../../src/useCycleContext';
-import HelmetMetaData from '../../../../src/components/HelmetMetaData'
 import { WEBAPP_URL } from '../../../../src/constants';
 import useWork from '@/src/useWork';
 // import { Post } from '.prisma/client';
@@ -85,11 +85,12 @@ const PostDetailInCyclePage: NextPage = () => {
 
   return (
     <>
-    <HelmetMetaData title={`${post ? post.title : ''} · ${cycle ? cycle.title : ''}`}
-        url={`${WEBAPP_URL}/cycle/${post?.cycles[0].id}/post/${post?.id}`}
-        image={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${post?.localImages[0].storedFile}`}
-        ></HelmetMetaData>
-    
+     <Head>
+        <meta property="og:title" content={`${post ? post.title : ''} · ${cycle ? cycle.title : ''}`}/>
+        <meta property="og:url" content={`${WEBAPP_URL}/cycle/${post?.cycles[0].id}/post/${post?.id}`} />
+        <meta property="og:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${post?.localImages[0].storedFile}`}/>
+        <meta property="og:type" content='website' />
+    </Head>
     <SimpleLayout title={`${post ? post.title : ''} · ${cycle ? cycle.title : ''}`}>
       <>
         {isLoadingOrFetching() && <Spinner animation="grow" variant="info" />}

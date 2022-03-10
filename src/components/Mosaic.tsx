@@ -139,7 +139,7 @@ const Mosaic: FunctionComponent<Props> = ({
     : stack;
   return <section 
   data-cy="mosaic-items" 
-  className={`d-flex ${display=='h' ? 'flex-column' : 'flex-row'} flex-wrap justify-content-start`}>
+  className={`d-flex justify-content-center ${display=='h' ? 'flex-column' : 'flex-row'} flex-wrap justify-content-start`}>
     {items
     .map((item: MosaicItem) => (
         <aside className={`${className} p-4`} key={v4()}>

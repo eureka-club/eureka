@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import Head from "next/head";
 import { useSession } from 'next-auth/client';
 import { useAtom } from 'jotai';
 // import { QueryClient, useQuery } from 'react-query';
@@ -17,7 +18,6 @@ import Banner from '../../src/components/Banner';
 import useCycle from '../../src/useCycle';
 import { CycleContext, useCycleContext } from '../../src/useCycleContext';
 import globalModalsAtom from '../../src/atoms/globalModals';
-import HelmetMetaData from '../../src/components/HelmetMetaData'
 import { WEBAPP_URL } from '../../src/constants';
 import {CycleDetail, CycleMosaicItem} from '@/src/types/cycle'
 interface Props{
@@ -167,12 +167,12 @@ const CycleDetailPage: NextPage<Props> = () => {
     return (
       <CycleContext.Provider value={{ currentUserIsParticipant, linkToCycle: false }}>
        
-        <HelmetMetaData title={cycle.title}
-        type='article'
-        url={`${WEBAPP_URL}/cycle/${cycle.id}`}
-        image={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${cycle.localImages ? cycle.localImages[0].storedFile:undefined}`}
-        ></HelmetMetaData>
-
+      <Head>
+        <meta property="og:title" content={cycle.title}/>
+        <meta property="og:url" content={`${WEBAPP_URL}/cycle/${cycle.id}`} />
+        <meta property="og:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${cycle.localImages[0].storedFile}`}/>
+        <meta property="og:type" content='website' />
+      </Head>  
         <SimpleLayout banner={getBanner()} title={cycle ? cycle.title : ''}>
             {renderCycleDetailComponent()}
           </SimpleLayout>
