@@ -1,4 +1,5 @@
 import { GetStaticProps, NextPage } from 'next';
+import Head from "next/head";
 import useTranslation from 'next-translate/useTranslation';
 import { useState,MouseEvent, } from 'react';
 import { RiArrowDownSLine } from 'react-icons/ri';
@@ -11,7 +12,6 @@ import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import Header from '../src/components/layouts/Header';
 import Carousel from '../src/components/Carousel';
 import { v4 } from 'uuid';
-import HelmetMetaData from '../src/components/HelmetMetaData'
 import { WEBAPP_URL } from '../src/constants';
 
 const IndexPage: NextPage = () => {
@@ -40,13 +40,14 @@ const IndexPage: NextPage = () => {
     }
   };
 
-  return (
-    <>
-     <HelmetMetaData title='Eureka'
-        type='website'
-        url={`${WEBAPP_URL}`}
-        image={`${WEBAPP_URL}/logo.svg`}
-        ></HelmetMetaData>
+  return (<>
+    <Head>
+        <meta property="og:title" content='Eureka'/>
+        <meta property="og:description" content="Activa tu mente, transforma el mundo"/>
+        <meta property="og:url" content={`${WEBAPP_URL}`} />
+        <meta property="og:image" content={`${WEBAPP_URL}/logo.svg`} />
+        <meta property="og:type" content='website' />
+    </Head>
     <SimpleLayout showHeader title={t('browserTitleWelcome')}>
       <h1 className="text-secondary fw-bold">{t('Trending topics')}</h1>
       <aside className="mb-5">{getTopicsBadgedLinks()}</aside>
