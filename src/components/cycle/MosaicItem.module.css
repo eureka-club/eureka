@@ -30,8 +30,6 @@
   /* display: inline-block;  */
   position: relative;
   background-color: #f9f8f87a;
-}
-.imageContainer img{
   height: 16em;
   min-height: 16em;
   max-height: 16em;
@@ -39,11 +37,11 @@
 
 .detailedImageContainer img {
    width: 100%;
-   /* height: 16em; */
+   height: 100% 
 }
 .imageContainer img {
   width: 100%;
-  /* height: 24em; */
+   height: 100%
 }
 
 .type {
@@ -105,17 +103,19 @@
   height: 6.8rem;
   max-height: 6.8rem;
 }
+.detailedInfo {
+  min-height: 4em;
+}
 
  .date {
      position: absolute;
-     bottom: 0px;
+     bottom: -15px;
      background: linear-gradient(200deg, #f0dadad7, #05050561 5rem);
      color: white !important;
      text-align:left;
-     padding:.2em;
+     padding:.25em;
      text-align: center;
      width: 100%;
-     margin-bottom: 0.2rem;
 
   /*display: block;
   font-size: 0.8rem;
@@ -140,4 +140,5 @@
   font-size: .875rem;
   margin: .4em 0 0 0;
 } */
+
 
