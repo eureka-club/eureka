@@ -124,7 +124,7 @@ export default getApiHandler()
       console.error(exc); // eslint-disable-line no-console
       res.status(500).json({ status: 'server error' });
     } finally {
-      prisma.$disconnect();
+      //prisma.$disconnect();
     }})
   
 
@@ -144,6 +144,6 @@ export default getApiHandler()
       console.error(exc); // eslint-disable-line no-console
       res.status(500).json({ error: 'server error' });
     } finally {
-      prisma.$disconnect();
+      //prisma.$disconnect();
     }
   });

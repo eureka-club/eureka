@@ -62,7 +62,7 @@ export default getApiHandler()
       res.statusMessage = 'server error';
       res.status(500).end();
     } finally {
-      prisma.$disconnect();
+      //prisma.$disconnect();
     }
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
@@ -148,6 +148,6 @@ export default getApiHandler()
       console.error(exc); // eslint-disable-line no-console
       res.status(500).json({ status: 'server error' });
     } finally {
-      prisma.$disconnect();
+      //prisma.$disconnect();
     }
   });

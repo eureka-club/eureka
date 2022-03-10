@@ -95,6 +95,6 @@ export default getApiHandler()
     console.error(exc); // eslint-disable-line no-console
     res.status(500).json({ status: 'server error' });
   } finally {
-    prisma.$disconnect();
+    //prisma.$disconnect();
   }
 });

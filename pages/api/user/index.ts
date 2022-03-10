@@ -27,6 +27,6 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     console.error(exc); // eslint-disable-line no-console
     res.status(500).json({ error: 'server error' });
   } finally {
-    prisma.$disconnect();
+    //prisma.$disconnect();
   }
 });
