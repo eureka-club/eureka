@@ -31,6 +31,7 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
       select:{qty:true}
     };
     favs:{select:{id:true}};
+    participants:{select:{id:true}};
     countryOfOrigin:true;
   }
 }> & { type?: 'cycle' };

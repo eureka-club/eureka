@@ -82,6 +82,7 @@ export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<CycleMos
         select:{qty:true}
       },
       favs:{select:{id:true}},
+      participants:{select:{id:true}},
       countryOfOrigin:true,
     }
   });
