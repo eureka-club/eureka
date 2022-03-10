@@ -365,7 +365,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             {t('MyCycle')}
           </Button>) }
       </div>
-      {showParticipants && (<p className={`${styles.title} mt-3 fs-6 text-center text-gray my-2`}>{`${t('participants')}: ${participants + 1}`.toUpperCase()}</p>)} 
+      {showParticipants && (<p className={`${styles.title} mt-3 fs-6 text-center text-gray my-2`}>{`${t('Participants')}: ${participants + 1}`}</p>)} 
       </div>
       {showSocialInteraction && (
         <Card.Footer className={styles.footer}>
