@@ -60,7 +60,7 @@ const getRecordsPosts = async (where?: string): Promise<PostMosaicItem[]> => {
   const res = await fetch(url);
   if (!res.ok) return [];
   const result = await res.json();
-  
+  debugger;
   const posts: PostMosaicItem[] = [];
   result.data.forEach((i: PostMosaicItem) => {
     posts.push({ ...i, type: 'post' });

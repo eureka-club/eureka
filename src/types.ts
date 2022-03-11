@@ -81,10 +81,7 @@ export const isWorkMosaicItem = (obj: MosaicItem | SearchResult): obj is WorkMos
   ['book', 'fiction-book', 'movie', 'documentary'].includes((obj as WorkMosaicItem).type);
 
 export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMosaicItem => {
-  return obj 
-    && 'works' in obj 
-    && 'cycles' in obj
-    && 'contentText' in obj;
+  return obj && ('type' in obj && obj.type=='post');
   // return (
   //   typeof (obj as PostMosaicItem).title === 'string' &&
   //   typeof (obj as PostMosaicItem).creatorId === 'number' &&

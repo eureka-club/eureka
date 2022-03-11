@@ -11,6 +11,7 @@ import prisma from '@/src/lib/prisma';
 import { take } from 'lodash';
 import { count } from 'console';
 import { RiTruckLine } from 'react-icons/ri';
+import { GiWhirlwind } from 'react-icons/gi';
 
 export const config = {
   api: {
@@ -90,25 +91,28 @@ export default getApiHandler()
       let where = w ? JSON.parse(w.toString()) : undefined;
       const take = t ? parseInt(t?.toString()) : undefined;
       const page = c ? +c : undefined;
-      if(session){
-        where = {
-          ...where,
-          cycles:{
-            some:{
-              OR:[
-                {access:1},
-                {participants:{some:{id:session?.user.id}}}  
-              ]
-            }
+      if(where && !('creatorId' in where)){
+        if(session){
+          where = {
+            ...where,
+            cycles:{
+              some:{
+                OR:[
+                  {access:1},
+                  {creatorId:session?.user.id},
+                  {participants:{some:{id:session?.user.id}}}  
+                ]
+              }
+            }          
           }
         }
-      }
-      else{
-        where = {
-          ...where,
-          cycles:{
-            some:{
-              access:1,              
+        else{
+          where = {
+            ...where,
+            cycles:{
+              some:{
+                access:1,              
+              }
             }
           }
         }
@@ -128,6 +132,8 @@ export default getApiHandler()
       } else {
         data = await findAll({take},page);
       }
+      data.forEach(d=>{d.type='post'})
+
       const posts_ = await prisma.post.findMany({
         select:{
           _count:{

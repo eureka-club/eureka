@@ -5,6 +5,7 @@ import { FunctionComponent } from 'react';
 import { PostMosaicItem } from '../../types/post';
 import { WorkMosaicItem } from '../../types/work';
 import Mosaic from '../Mosaic';
+import usePosts from '@/src/usePosts'
 
 interface Props {
   work: WorkMosaicItem;
@@ -24,6 +25,16 @@ const PostsMosaic: FunctionComponent<Props> = ({ work }) => {
   //   },
   // );
 
+  const workPostsWhere = {
+      works:{
+        some:{
+          id:work.id
+        }
+      }
+    };
+    const {data:posts} = usePosts(workPostsWhere,{enabled:!!work.id})
+  
+
   return (
     <>
       {/* {isLoading && (
@@ -31,7 +42,7 @@ const PostsMosaic: FunctionComponent<Props> = ({ work }) => {
           <span className="sr-only">Loading...</span>
         </Spinner>
       )} */}
-      {work && work.posts != null && <Mosaic cacheKey={['WORK',work.id.toString()]}className='d-flex justify-content-center justify-content-md-start' stack={work.posts as PostMosaicItem[]} parent={work} />}
+      {work && posts != null && <Mosaic cacheKey={['WORK',work.id.toString()]}className='d-flex justify-content-center justify-content-md-start' stack={posts} parent={work} />}
     </>
   );
 };
