@@ -42,9 +42,10 @@ import { IoTerminalSharp } from 'react-icons/io5';
 import { useToasts } from 'react-toast-notifications'
 interface Props {
   noModal?: boolean;
+  cacheKey?:string[]
 }
 
-const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
+const EditPostForm: FunctionComponent<Props> = ({noModal = false,cacheKey}) => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
   const [isSearchCycleLoading, setIsSearchCycleLoading] = useState(false);
@@ -65,42 +66,31 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
 
   const [postId, setPostId] = useState<string>('');
   const [ck,setCK] = useState<string[]>();
-  const { data: post, isLoading, isFetching } = usePost(globalModalsState.editPostId || +postId);
   const editorRef = useRef<any>(null);
   const [remove,setRemove] = useState(false);
   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
   const { addToast } = useToasts()
 
   useEffect(() => {
-    // const fetchPost = async () => {
-    //   const res: Response = await fetch(`/api/post/${router.query.postId}`);
-    //   const { status, post: p = null } = await res.json();
-
-    //   if (status === 'OK') {
-    //     setPost(p);
-    //     if (p.works.length) setSelectedWork(p.works[0]);
-    //     if (p.cycles.length) setSelectedCycle(p.cycles[0]);
-    //   }
-    // };
-    // fetchPost();
     if(globalModalsState){
       setCK(globalModalsState.cacheKey);
       if(globalModalsState.editPostId)
-        setPostId(globalModalsState.editPostId.toString());
-
+      setPostId(globalModalsState.editPostId.toString());      
     }
     if (router.query && router.query.postId) {
-      setPostId(router.query.postId as string);
+      setPostId(()=>router.query.postId as string);
     }
-  }, [globalModalsState,router.query]);
-
-  useEffect(() => {
-    if (post) {
-      if (post.topics) items.push(...post.topics.split(','));
-      if (post.works.length) setSelectedWork(post.works[0] as WorkMosaicItem);
-      if (post.cycles.length) setSelectedCycle(post.cycles[0] as CycleMosaicItem);
-    }
-  }, [post,IoTerminalSharp]);
+  }, [globalModalsState,router,ck,postId]);
+  
+  const { data: post, isLoading, isFetching } = usePost(globalModalsState.editPostId || +postId);
+  
+  useEffect(()=>{
+    if (post && post.topics) items.push(...post.topics.split(','));
+    if (post && post.works.length) setSelectedWork(post.works[0] as WorkMosaicItem);
+    if (post && post.cycles.length) setSelectedCycle(post.cycles[0] as CycleMosaicItem);
+    console.log(post)
+  },[post])
+    
 
   const {
     mutate: execEditPost,
@@ -122,31 +112,31 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
       return res.json();
     },
     {
-      onMutate: async (variables) => {
-         if (post && ck) {
-          
-            const snapshot = queryClient.getQueryData<PostMosaicItem[]|WorkMosaicItem>(ck)
+      onMutate: async (variables) => {debugger;
+         if (post) {
+            const ck_ = ck||['POST',`${post.id}`];
+            const snapshot = queryClient.getQueryData<PostMosaicItem[]|PostMosaicItem>(ck_)
+            const {title,contentText} = variables;
             if(snapshot){
               let posts = [];
-              if(!('length' in snapshot)){
-                const parent = {...(snapshot as WorkMosaicItem)};
-                posts = parent.posts;
-              }
-              else posts = snapshot as PostMosaicItem[];  
-              const idx = posts.findIndex(p=>p.id == +postId)
-              if(idx >- 1){
-                const oldPost = posts[idx];
-                const {title,contentText} = variables;
-                const newPost = {
-                  ...oldPost,
-                  contentText: contentText??oldPost.contentText,
-                  title: title??oldPost.title,
+              if(('length' in snapshot)){
+                posts = snapshot as PostMosaicItem[];                  
+                const idx = posts.findIndex(p=>p.id == +postId)
+                if(idx >- 1){
+                  const oldPost = posts[idx];
+                  const newPost = {
+                    ...oldPost,
+                    contentText: contentText??oldPost.contentText,
+                    title: title??oldPost.title,
+                  }
+                  posts.splice(idx,1,newPost);
+                  queryClient.setQueryData(ck_, [...posts]);
                 }
-                posts.splice(idx,1,newPost);
-                queryClient.setQueryData(ck, { ...parent });
-                queryClient.setQueryData(['POST',postId.toString()],newPost);
               }
-              return { snapshot, ck };
+              else 
+                queryClient.setQueryData(ck_,{...snapshot,title,contentText});
+              
+              return { snapshot, ck:ck_ };
             }
             // const ck = [`POST`, `${globalModalsState.editPostId || post.id}`];
           }

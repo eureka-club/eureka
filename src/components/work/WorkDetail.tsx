@@ -19,9 +19,9 @@ import { BsBoxArrowUpRight } from 'react-icons/bs';
 import { BiArrowBack } from 'react-icons/bi';
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
-import { MySocialInfo, Session } from '../../types';
+import { Session } from '../../types';
 import { PostMosaicItem } from '../../types/post';
-import { WorkMosaicItem } from '../../types/work';
+// import { WorkMosaicItem } from '../../types/work';
 // import LocalImageComponent from '../LocalImage';
 import CombinedMosaic from './CombinedMosaic';
 import CyclesMosaic from './CyclesMosaic';
@@ -41,16 +41,15 @@ import { WorkContext } from '../../useWorkContext';
 import EditPostForm from '../forms/EditPostForm';
 import {useQueryClient} from 'react-query'
 import useWork from '@/src/useWork'
+import useCycles from '@/src/useCycles'
+import usePosts from '@/src/usePosts'
 // import CommentsList from '../common/CommentsList';
 interface Props {
   workId: number;
   post?: PostMosaicItem;
-  cyclesCount: number;
-  postsCount: number;
-  mySocialInfo: MySocialInfo;
 }
 
-const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, cyclesCount, postsCount }) => {
+const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
   const router = useRouter();
   const queryClient = useQueryClient()
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
@@ -62,14 +61,36 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, cyclesCou
   const {data:work} = useWork(workId,{
     enabled:!!workId
   })
-  
-  useEffect(()=>{
-    if(work && work.posts.length){
-      work.posts.forEach(p => {
-        queryClient.setQueryData(['POST',`${p.id}`],p)
-      });
+
+  const {data:cycles} = useCycles({
+    works:{
+      some:{
+        id:workId
+      }
     }
-  },[work,queryClient])
+  },{enabled:!!workId})
+
+  const workPostsWhere = {
+    works:{
+      some:{
+        id:workId
+      }
+    }
+  };
+  const {data:posts} = usePosts(workPostsWhere,{enabled:!!workId})
+
+  let cyclesCount = 0;
+  let postsCount = 0;
+  if(posts)postsCount = posts.length
+  if(cycles)cyclesCount = cycles.length
+  
+  // useEffect(()=>{
+  //   if(work && posts.length){
+  //     work.posts.forEach(p => {
+  //       queryClient.setQueryData(['POST',`${p.id}`],p)
+  //     });
+  //   }
+  // },[work,queryClient])
 
   if(!work)return <></>
   
@@ -174,7 +195,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, cyclesCou
           </div> */}
             </Row>
           ) : (
-            <>{post && work && <PostDetailComponent postId={post.id} work={work} cacheKey={['WORK',work.id.toString()]} />}</>
+            <>{post && work && <PostDetailComponent postId={post.id} work={work} cacheKey={['POSTS',JSON.stringify(workPostsWhere)]} />}</>
           )}
         </>
 
@@ -245,7 +266,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, cyclesCou
               )}
             </Col>
           </Row>
-        )} </> : <EditPostForm noModal />}
+        )} </> : <EditPostForm noModal cacheKey={['POSTS',JSON.stringify(workPostsWhere)]} />}
       </MosaicContext.Provider>
     </WorkContext.Provider>
   );

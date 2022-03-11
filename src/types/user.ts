@@ -24,7 +24,7 @@ type UserFoolow = {
     favWorks:{select:{id:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
     favCycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
     favPosts:{select:{id:true}},
-    posts:{select:{id:true}},
+    // posts:{select:{id:true}},
     cycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
     joinedCycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
     ratingCycles:{select:{cycleId:true}},
