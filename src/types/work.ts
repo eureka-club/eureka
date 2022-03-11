@@ -21,20 +21,21 @@ export type WorkMosaicItem = Prisma.WorkGetPayload<{
     ratings: {
       select:{qty:true}
     };
-    posts: {
-      select:{
-        id:true;
-        title:true;
-        contentText:true;
-        createdAt:true;
-        works:{select:{id:true;title:true}};
-        cycles:{select:{id:true}};
-        favs:{select:{id:true}};
-        creator: {select:{id:true;name:true;photos:true}};
-        localImages: {select:{storedFile:true}};
-      };
-      orderBy:{id:'desc'}
-    };
+    // posts: {
+    //   select:{
+    //     id:true;
+    //     title:true;
+    //     contentText:true;
+    //     createdAt:true;
+    //     works:{select:{id:true;title:true}};
+    //     cycles:{select:{id:true}};
+    //     favs:{select:{id:true}};
+    //     creator: {select:{id:true;name:true;photos:true}};
+    //     localImages: {select:{storedFile:true}};
+    //     type:'post';
+    //   };
+    //   orderBy:{id:'desc'}
+    // };
     // cycles:{
     //   select:{
     //     id:true;

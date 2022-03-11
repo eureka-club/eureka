@@ -12,6 +12,8 @@ import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import WorkDetailComponent from '../../src/components/work/WorkDetail';
 import useWork from '../../src/useWork';
 import useCycles from '@/src/useCycles'
+
+import HelmetMetaData from '../../src/components/HelmetMetaData'
 import { WEBAPP_URL } from '../../src/constants';
 
 // import {
@@ -52,14 +54,6 @@ const WorkDetailPage: NextPage = () => {
 
   const { data: work, isLoading: isLoadingWork } = useWork(+id, { enabled: !!id });
 
-  const {data:cycles,isLoading:isLoadingCycles} = useCycles({
-    works:{
-      some:{
-        id:+id
-      }
-    }
-  },{enabled:!!id})
-
   useEffect(() => {
     if (!isLoadingSession && session && work) {
       setMySocialInfo((res) => ({ ...res, favoritedByMe: work.favs.findIndex((u) => u.id === +id) > -1 }));
@@ -79,17 +73,13 @@ const WorkDetailPage: NextPage = () => {
      </>
   };
   
-  if (isLoadingWork || isLoadingCycles) return rendetLayout('Loading...', <Spinner animation="grow" />);
+  if (isLoadingWork) return rendetLayout('Loading...', <Spinner animation="grow" />);
   
   if (work) {
-    let cyclesCount = cycles ? cycles.length : 0;
     return rendetLayout(
       work.title,
       <WorkDetailComponent
         workId={work.id}
-        cyclesCount={cyclesCount}
-        postsCount={work.posts.length}
-        mySocialInfo={mySocialInfo}
       />,
     );
   }

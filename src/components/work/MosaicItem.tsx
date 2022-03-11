@@ -21,6 +21,7 @@ import { useCycleContext } from '../../useCycleContext';
 // import { useWorkContext } from '../../useWorkContext';
 import { DATE_FORMAT_SHORT } from '../../constants';
 import useWork from '@/src/useWork'
+// import usePosts from '@/src/usePosts'
 
 dayjs.extend(isBetween);
 dayjs.extend(utc);
@@ -66,14 +67,24 @@ const MosaicItem: FunctionComponent<Props> = ({
   const {data:work} = useWork(workId,{
     enabled:!!workId
   })
+
+  // const workPostsWhere = {
+  //   works:{
+  //     some:{
+  //       id:workId
+  //     }
+  //   }
+  // };
+  // const {data:posts} = usePosts(workPostsWhere,{enabled:!!workId})
+
   
-  useEffect(()=>{
-    if(work && work.posts){
-      work.posts.forEach(p => {
-        queryClient.setQueryData(['POST',`${p.id}`],p)
-      });
-    }
-  },[work,queryClient])
+  // useEffect(()=>{
+  //   if(work && work.posts){
+  //     work.posts.forEach(p => {
+  //       queryClient.setQueryData(['POST',`${p.id}`],p)
+  //     });
+  //   }
+  // },[work,queryClient])
   
   
   if(!work)return <></>

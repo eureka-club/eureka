@@ -120,7 +120,7 @@ const SearchPage: NextPage = () => {
   // const [where, setWhere] = useState('');
   // const [tempWhere, setTempWhere] = useState('');
   const { isLoading, data: items, error } = useItems(where, ["ITEMS", q!], {
-    enabled: !!where && !!q && !globalSearchEngineState.itemsFound?.length
+    enabled: !!where && !globalSearchEngineState.itemsFound?.length
   });
   // const { isLoading, /* isError, error, */ data: works } = useWorks();
   // const { isLoading: isLoadingCycles, /* isError: isErrorCycles, error: errorCycles, */ data: cycles } = useCycles();
@@ -129,17 +129,16 @@ const SearchPage: NextPage = () => {
   
   const [homepageMosaicData, setHomepageMosaicData] = useState<SearchResult[]>([]);
 
-  useEffect(() => {
+  useEffect(() => {debugger;
     if(items){
-      items.forEach((i)=>{
-        if(isCycleMosaicItem(i))
-          queryClient.setQueryData(['CYCLE',`${i.id}`],i as CycleMosaicItem)
-        else if(isWorkMosaicItem(i))
-          queryClient.setQueryData(['WORK',`${i.id}`],i as WorkMosaicItem)
-        else if(isPostMosaicItem(i))
-          queryClient.setQueryData(['POST',`${i.id}`],i as PostMosaicItem)
-      })
-
+      // items.forEach((i)=>{
+      //   if(isCycleMosaicItem(i))
+      //     queryClient.setQueryData(['CYCLE',`${i.id}`],i as CycleMosaicItem)
+      //   else if(isWorkMosaicItem(i))
+      //     queryClient.setQueryData(['WORK',`${i.id}`],i as WorkMosaicItem)
+      //   else if(isPostMosaicItem(i))
+      //     queryClient.setQueryData(['POST',`${i.id}`],i as PostMosaicItem)
+      // })
     }
     if (globalSearchEngineState.itemsFound && globalSearchEngineState.itemsFound.length) {
       setHomepageMosaicData(globalSearchEngineState.itemsFound);
