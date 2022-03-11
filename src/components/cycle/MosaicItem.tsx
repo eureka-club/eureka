@@ -292,7 +292,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const renderLocalImageComponent = () => {
     const img = cycle?.localImages 
       ? <> 
-      <LocalImageComponent  className='cycleImage' filePath={cycle?.localImages[0].storedFile} alt={cycle?.title} />
+      <LocalImageComponent className='cycleImage' filePath={cycle?.localImages[0].storedFile} alt={cycle?.title} />
       {detailed && (cycle && cycle.creator && cycle.startDate && cycle.endDate ) && (<div className={`d-flex flex-row align-items-baseline ${styles.date}`}>
                          <Avatar userId={cycle.creator.id} showName={false} size="xs" />
                           <div className='fs-6 ms-2 mt-1' >

@@ -153,7 +153,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 
  const renderLocalImageComponent = () => {
     const img = post?.localImages 
-      ? <><LocalImageComponent className={styles.postImage} filePath={post?.localImages[0].storedFile} alt={post?.title} />
+      ? <><LocalImageComponent width={258} height={256} className={styles.postImage} filePath={post?.localImages[0].storedFile} alt={post?.title} />
            <div className={styles.gradient} /></>
       : undefined;
     if (linkToPost) {
@@ -164,6 +164,8 @@ const MosaicItem: FunctionComponent<Props> = ({
           role="presentation"
         >
           <LocalImageComponent
+          width={258}
+          height={250}
                 className={styles.postImage}
                 filePath={post.localImages[0]?.storedFile}
                 alt={post.title}

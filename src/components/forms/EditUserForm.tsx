@@ -307,7 +307,7 @@ const EditUserForm: FunctionComponent = () => {
         src={user.image||''}
         alt={user.name||''}
       />;
-     return <LocalImageComponent className='avatarProfile' filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />
+     return <LocalImageComponent width={160} height={160} className='avatarProfile' filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />
     }
       }
   };

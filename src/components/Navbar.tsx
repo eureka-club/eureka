@@ -103,7 +103,7 @@ const NavBar: FunctionComponent = () => {
         src={user.image || '/img/default-avatar.png'}
         alt={user.name||''}
       />;
-      return <LocalImageComponent className={styles.navbarIconNav} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />
+      return <LocalImageComponent notNextImage className={styles.navbarIconNav} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />
     }
     return <BiUser className={styles.navbarIconNav} />;
   };
