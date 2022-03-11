@@ -78,7 +78,7 @@
   padding-right: 1.25rem;
 }
 .langSwitch :global(.dropdown-item.active) {
-  background-color: var(--bs-primary);
+  background-color: var(--eureka-grey);
   color: white !important;
   }
 

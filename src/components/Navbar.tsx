@@ -226,13 +226,13 @@ const NavBar: FunctionComponent = () => {
               </Dropdown.Menu>
             </Dropdown>
           </Nav>
-          <Nav className={styles.navbarNav}>
+          <Nav className='me-4'>
             {router.locales?.length && (
               <Dropdown align="end" className={styles.langSwitch} onSelect={handleLanguageSelect}>
                 <Dropdown.Toggle as={ChevronToggle} id="langSwitch">
                   <img
                     className={styles.navbarIconNav}
-                    src={`/img/lang-flags/${router.locale}.webp`}
+                    src={`/img/lang-flags/${router.locale}.png`}
                     alt={`Language flag '${router.locale}'`}
                   />
                 </Dropdown.Toggle>
@@ -241,7 +241,7 @@ const NavBar: FunctionComponent = () => {
                   {router.locales.map((locale) => (
                     <Dropdown.Item key={locale} eventKey={locale} active={locale === router.locale}>
                       <Link href={router.asPath} locale={locale}>
-                        <img className={`m-1 ${styles.navbarIconNav}`} src={`/img/lang-flags/${locale}.webp`} alt={`Language flag '${locale}'`} />
+                        <img className={`m-1 ${styles.navbarIconNav}`} src={`/img/lang-flags/${locale}.png`} alt={`Language flag '${locale}'`} />
                       </Link>
                     </Dropdown.Item>
                   ))}
