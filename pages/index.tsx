@@ -45,7 +45,7 @@ const IndexPage: NextPage = () => {
         <meta property="og:title" content='Eureka'/>
         <meta property="og:description" content="Activa tu mente, transforma el mundo"/>
         <meta property="og:url" content={`${WEBAPP_URL}`} />
-        <meta property="og:image" content={`${WEBAPP_URL}/logo.svg`} />
+        <meta property="og:image" content={`${WEBAPP_URL}/logo.jpg`} />
         <meta property="og:type" content='website' />
     </Head>
     <SimpleLayout showHeader title={t('browserTitleWelcome')}>
