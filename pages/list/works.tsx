@@ -67,6 +67,8 @@ const ListWorksPage: NextPage<Props> = ({ works }) => {
               <td>
                 <LocalImageComponent
                   alt="work cover"
+                  width={258}
+                  height={384}
                   filePath={work.localImages[0].storedFile}
                   style={{ height: '96px', marginRight: '1rem' }}
                 />

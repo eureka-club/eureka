@@ -563,6 +563,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                     {wm && (
                       <>
                         <LocalImageComponent
+                        
                           filePath={wm.localImages[0].storedFile}
                           alt={wm.title}
                         />

@@ -71,28 +71,19 @@ export const isCommentMosaicItem = (obj: MosaicItem): obj is CommentMosaicItem =
 
 // TODO separate type-guards for MosaicItem and SearchResult
 export const isCycleMosaicItem = (obj: MosaicItem | SearchResult): obj is CycleMosaicItem => {
-  return obj && typeof (obj as CycleMosaicItem).title === 'string' &&
-  (obj as CycleMosaicItem).startDate !== undefined &&
-  (obj as CycleMosaicItem).endDate !== undefined;
+  if(!obj.type)throw new Error(`MosaicItem ${obj.id} required field type`)
+  return obj && obj.type == 'cycle';
 }
   
-export const isWorkMosaicItem = (obj: MosaicItem | SearchResult): obj is WorkMosaicItem =>
-  obj && typeof (obj as WorkMosaicItem).title === 'string' &&
-  // typeof (obj as WorkMosaicItem).author === 'string' &&
-  typeof (obj as WorkMosaicItem).type === 'string' &&
+export const isWorkMosaicItem = (obj: MosaicItem | SearchResult): obj is WorkMosaicItem =>{
+  if(!obj.type)throw new Error(`MosaicItem ${obj.id} required field type`)
+  return typeof (obj as WorkMosaicItem).type === 'string' &&
   ['book', 'fiction-book', 'movie', 'documentary'].includes((obj as WorkMosaicItem).type);
+}
 
 export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMosaicItem => {
-  return obj 
-    && 'works' in obj 
-    && 'cycles' in obj
-    && 'contentText' in obj;
-  // return (
-  //   typeof (obj as PostMosaicItem).title === 'string' &&
-  //   typeof (obj as PostMosaicItem).creatorId === 'number' &&
-  //   typeof (obj as PostMosaicItem).works === 'object' &&
-  //   typeof (obj as PostMosaicItem).language === 'string'
-  // );
+  if(!obj.type)throw new Error(`MosaicItem ${obj.id} required field type`)
+  return obj && obj.type == 'post';
 };
 
 export const isUserMosaicItem = (obj: MosaicItem | SearchResult): obj is UserMosaicItem =>{
