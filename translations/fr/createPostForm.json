@@ -3,7 +3,7 @@
   "searchCycleOrWorkFieldLabel": "À quelle œuvre ou cycle cette Eureka fait-elle référence?",
   "searchCycleOrWorkFieldPlaceholder": "Cherchez l'œuvre ou le cycle dans notre bibliothèque...",
   "titleFieldLabel": "Titre de votre Eureka (80 caractères max)",
-  "imageFieldLabel": "Ajoutez une image à votre Eureka (carrée, idéal 250x250px)",
+  "imageFieldLabel": "Ajouter une image à votre Eureka (carrée, idéal 250x250px)",
   "imageFieldPlaceholder": "sélectionnez le fichier...",
   "languageFieldLabel": "Langue de la Eureka",
   "searchCycleFieldLabel": "Ajouter cette Eureka à un cycle (optionnel)",
@@ -17,7 +17,7 @@
   "edit": "Modifier",
   "topicsPostLabel": "Principaux thèmes de l'Eureka (3 max, choisir les plus pertinents dans la liste)",
   "topicsFieldLabel": "Thèmes supplémentaires de l'Eureka (2 max, entrée libre)",
-  "postCreated":"Votre Eurêka a été publié",
-  "PostEdited":"Votre Eureka a été modifié."
+  "postCreated":"Votre Eureka a été publiée",
+  "PostEdited":"Votre Eureka a été modifiée."
 
 }
