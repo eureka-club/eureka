@@ -43,7 +43,7 @@ interface SocialInteractionClientPayload {
 
 interface Props {
   entity: CycleMosaicItem | PostMosaicItem | WorkMosaicItem /* | UserMosaicItem */;
-  parent?: Cycle | Work | null;
+  parent?: CycleMosaicItem | WorkMosaicItem | null;
   // mySocialInfo: MySocialInfo;
   showCounts?: boolean;
   // showShare?: boolean;
@@ -227,7 +227,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   })();
 
   const shareTextDynamicPart = (() => {
-    if (parent != null && isCycle(parent)) {
+    if (parent != null && isCycleMosaicItem(parent)) {
       return `${t('postCycleShare')} "${parent.title}"`;
     }
     // if (parent != null && isWork(parent)) {
@@ -243,7 +243,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
       const post = entity as PostMosaicItem;
       const p = post.works ? post.works[0] : null || post.cycles ? post.cycles[0] : null;
       
-      const about = parent&&isWork(parent) ? 'postWorkShare' : 'postCycleShare';
+      const about = parent&&isWorkMosaicItem(parent) ? 'postWorkShare' : 'postCycleShare';
       return `EUREKA: "${post.title}". \n ${t(about)} "${parent ? parent.title : ''}"`;
     }
 debugger;
@@ -251,7 +251,7 @@ debugger;
   })();
   const title = () => {
     if (parent != null) {
-      if (isWork(parent) || isCycle(parent)) return '';
+      if (isWorkMosaicItem(parent) || isCycleMosaicItem(parent)) return '';
     }
     if ('title' in entity) return entity.title;
     //return entity.name; // an user;

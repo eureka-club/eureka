@@ -323,17 +323,17 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         <Col className="d-none d-lg-flex col-12 col-lg-4 justify-content-center justify-content-lg-end">
           <aside className='d-flex flex-column'>
             <UserAvatar  userId={cycle.creatorId}  showFullName />
-          <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
-            <MosaicItem cycleId={cycle.id} showTrash showParticipants={true} className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
-          </MosaicContext.Provider>
+          {/* <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}> */}
+            <MosaicItem cycleId={cycle.id} showShare showTrash showParticipants={true} className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
+          {/* </MosaicContext.Provider> */}
           </aside>
         </Col>
         {show && (
         <Col className='col-12 d-flex justify-content-center d-lg-none' >
             <aside className='d-flex flex-column'>
-              <MosaicContext.Provider value={{ showShare: true,cacheKey: ['CYCLE', `${cycle.id}`] }}>
-                <MosaicItem cycleId={cycle.id} showTrash showParticipants={true} className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
-              </MosaicContext.Provider>
+              {/* <MosaicContext.Provider value={{ showShare: true,cacheKey: ['CYCLE', `${cycle.id}`] }}> */}
+                <MosaicItem cycleId={cycle.id} showShare showTrash showParticipants={true} className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
+              {/* </MosaicContext.Provider> */}
             </aside>
         </Col>
         )}

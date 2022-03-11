@@ -29,6 +29,8 @@ import {useQueryClient} from 'react-query'
 import useCycle from '@/src/useCycle';
 import useWork from '@/src/useWork'
 import cycle from 'pages/api/cycle';
+import useCycles from '@/src/useCycles';
+import useWorks from '@/src/useWorks';
 interface Props {
   postId: number|string;
   display?: 'v' | 'h';
@@ -73,24 +75,15 @@ const MosaicItem: FunctionComponent<Props> = ({
   const {data:post} = usePost(+postId,{
     enabled:!!postId
   })
+  
+  const {data:works} = useWorks({posts:{some:{id:+postId}}},{
+    enabled:!!postId
+  })
 
-  const [cycleId,setCycleId] = useState<number>(0)
-  const [workId,setWorkId] = useState<number>(0)
+  const {data:cycles} = useCycles({posts:{some:{id:+postId}}},{
+    enabled:!!postId
+  })
 
-  useEffect(()=>{
-    if(post){
-      if(post.works && post.works.length){
-        setWorkId(post.works[0].id)
-      }
-      else if(post.cycles && post.cycles.length){
-        setCycleId(post.cycles[0].id)
-      }
-
-    }
-  },[post])
-
-  const {data:parentWork} = useWork(workId,{enabled:!!workId})
-  const {data:parentCycle} = useCycle(cycleId,{enabled:!!(cycleId&&!workId)})
 
   // useEffect(()=>{
   //   if(post){
@@ -105,20 +98,20 @@ const MosaicItem: FunctionComponent<Props> = ({
    if(!post)return <></>
 
   const parentLinkHref = ((): string | null => {
-    if (parentWork) {
-      return `/work/${parentWork.id}`;
+    if (works && works.length) {
+      return `/work/${works[0].id}`;
     }
-    else if (parentCycle) {
-      return `/cycle/${parentCycle.id}`;
+    else if (cycles && cycles.length) {
+      return `/cycle/${cycles[0].id}`;
     }
     return null;
   })();
   const postLinkHref = ((): string => {
-    if (parentWork) {
-      return `/work/${parentWork.id}/post/${post.id}`;
+    if (works && works.length) {
+      return `/work/${works[0].id}/post/${post.id}`;
     }
-    else if (parentCycle) {
-      return `/cycle/${parentCycle.id}/post/${post.id}`;
+    else if (cycles && cycles.length) {
+      return `/cycle/${cycles[0].id}/post/${post.id}`;
     }    
     return `/post/${post.id}`;
   })();
@@ -148,12 +141,12 @@ const MosaicItem: FunctionComponent<Props> = ({
     const renderParentTitle = () => {
       let res = '';
       let full =''
-      if (parentWork) {
-        full = parentWork.title
+      if (works && works.length) {
+        full = works[0].title
         res = full.slice(0, 26);
       }
-      else if(parentCycle){
-        full = parentCycle.title
+      else if(cycles && cycles.length){
+        full = cycles[0].title
         res = full.slice(0, 26);
       }
       if (res.length + 3 < full.length) res = `${res}...`;
@@ -226,7 +219,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             )}
 
 
-          <Badge bg="success" className={`fw-normal fs-6 text-white px-2 rounded-pill ${styles.type}`}>
+          <Badge bg="success" className={`fw-normal fs-6 text-dark px-2 rounded-pill ${styles.type}`}>
             {t('post')}
           </Badge>
         </div>
@@ -255,7 +248,11 @@ const MosaicItem: FunctionComponent<Props> = ({
               showButtonLabels={false}
               showCounts={false}
               entity={post}
-              parent={parentWork||parentCycle}
+              parent={
+                works && works.length 
+                  ? works[0] 
+                  : cycles && cycles.length ? cycles[0]:undefined
+              }
               showRating={false}
               showTrash={false}
               className="ms-auto"

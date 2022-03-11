@@ -328,7 +328,7 @@ const MosaicItem: FunctionComponent<Props> = ({
       >
         {renderLocalImageComponent()}
         {isActive() && <CgMediaLive className={`${styles.isActiveCircle}`} />}
-        <Badge bg="primary" className={`fw-normal fs-6 text-black rounded-pill px-2 ${styles.type}`}>
+        <Badge bg="primary" className={`fw-normal fs-6 text-dark rounded-pill px-2 ${styles.type}`}>
           {getCycleAccesLbl()}
         </Badge>
       </div>

@@ -17,7 +17,7 @@ interface Props {
 }
 
 const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, alt,width,height,notNextImage }) => {
-  const fallbakImgURL = '/img/image-not-found.png'
+  const fallbakImgURL = '/img/ico-painting.png'
   const [imgError,setImgError] = useState<boolean>(false)
   const onLoadImgError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     setImgError(true)
@@ -27,7 +27,7 @@ const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, alt,
     case STORAGE_MECHANISM_AZURE:
       return (
         !notNextImage ? <Image
-          blurDataURL='/img/image-not-found.png'
+          blurDataURL={fallbakImgURL}
           placeholder='blur'
           src={imgError ? fallbakImgURL :`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${filePath}`}
           alt={alt}
@@ -39,6 +39,7 @@ const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, alt,
           objectFit="cover"
           objectPosition={'50% 50%'}
           layout={!(width && height) ? "fill" : undefined}
+          //layout="fill"
         />
         // eslint-disable-next-line @next/next/no-img-element
         : <img

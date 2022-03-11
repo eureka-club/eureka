@@ -19,7 +19,7 @@ import useCycle from '../../src/useCycle';
 import { CycleContext, useCycleContext } from '../../src/useCycleContext';
 import globalModalsAtom from '../../src/atoms/globalModals';
 import { WEBAPP_URL } from '../../src/constants';
-import {CycleDetail, CycleMosaicItem} from '@/src/types/cycle'
+import {CycleDetail} from '@/src/types/cycle'
 interface Props{
   cycle:CycleDetail
 }

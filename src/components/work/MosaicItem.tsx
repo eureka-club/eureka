@@ -67,19 +67,19 @@ const MosaicItem: FunctionComponent<Props> = ({
     enabled:!!workId
   })
 
-  const { data: posts, isLoading: isLoadingPosts } = usePosts(
-    work ? {works:{some:{id:work.id}}}:undefined,
-    undefined,
-    { enabled: !!(work && work.id) }
-  )
+  // const { data: posts, isLoading: isLoadingPosts } = usePosts(
+  //   work ? {works:{some:{id:work.id}}}:undefined,
+  //   undefined,
+  //   { enabled: !!(work && work.id) }
+  // )
   
-  useEffect(()=>{
-    if(work && posts){
-      posts.forEach(p => {
-        queryClient.setQueryData(['POST',`${p.id}`],p)
-      });
-    }
-  },[work,queryClient])
+  // useEffect(()=>{
+  //   if(work && posts){
+  //     posts.forEach(p => {
+  //       queryClient.setQueryData(['POST',`${p.id}`],p)
+  //     });
+  //   }
+  // },[work,queryClient])
   
   
   if(!work)return <></>
@@ -197,7 +197,7 @@ const MosaicItem: FunctionComponent<Props> = ({
       <div className={`${styles.imageContainer} ${tiny ? styles.imageContainerTiny : ''}`}>
         {renderLocalImageComponent()}
         {isActive() && <CgMediaLive className={`${styles.isActiveCircle}`} />}
-        <Badge bg="orange" className={`fw-normal fs-6 text-black px-2 rounded-pill ${styles.type}`}>
+        <Badge bg="orange" className={`fw-normal fs-6 text-dark px-2 rounded-pill ${styles.type}`}>
           {t(type)}
         </Badge>
       </div>

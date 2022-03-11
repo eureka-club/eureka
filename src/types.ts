@@ -71,18 +71,15 @@ export const isCommentMosaicItem = (obj: MosaicItem): obj is CommentMosaicItem =
 
 // TODO separate type-guards for MosaicItem and SearchResult
 export const isCycleMosaicItem = (obj: MosaicItem | SearchResult): obj is CycleMosaicItem => {
-  if(!obj.type)throw new Error(`MosaicItem ${obj.id} required field type`)
   return obj && obj.type == 'cycle';
 }
   
 export const isWorkMosaicItem = (obj: MosaicItem | SearchResult): obj is WorkMosaicItem =>{
-  if(!obj.type)throw new Error(`MosaicItem ${obj.id} required field type`)
   return typeof (obj as WorkMosaicItem).type === 'string' &&
   ['book', 'fiction-book', 'movie', 'documentary'].includes((obj as WorkMosaicItem).type);
 }
 
 export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMosaicItem => {
-  if(!obj.type)throw new Error(`MosaicItem ${obj.id} required field type`)
   return obj && obj.type == 'post';
 };
 

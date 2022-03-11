@@ -7,7 +7,7 @@ import prisma from '../lib/prisma';
 export const NEXT_PUBLIC_MOSAIC_ITEMS_COUNT = +(process.env.NEXT_PUBLIC_NEXT_PUBLIC_MOSAIC_ITEMS_COUNT || 10);
 
 export const find = async (id: number): Promise<CycleDetail | null> => {
-  return prisma.cycle.findUnique({
+  const res = await  prisma.cycle.findUnique({
     where: { id },
     include: {
       creator:{
@@ -16,7 +16,6 @@ export const find = async (id: number): Promise<CycleDetail | null> => {
       localImages: {select:{
         storedFile:true
       }},
-      //complementaryMaterials: true,
       guidelines: {
         select: {
           title: true,
@@ -56,9 +55,10 @@ export const find = async (id: number): Promise<CycleDetail | null> => {
         }
       },
       comments:true,
-      complementaryMaterials:true
+      complementaryMaterials:true,      
     },
   });
+  return {...res,type:'cycle'} as CycleDetail;
 };
 
 export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<CycleMosaicItem[]> => {

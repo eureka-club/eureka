@@ -45,7 +45,6 @@ export type CycleDetail = Prisma.CycleGetPayload<{
     localImages: {select:{
       storedFile:true
     }};
-    //complementaryMaterials: true;
     guidelines: {
       select: {
         title: true;
@@ -88,7 +87,7 @@ export type CycleDetail = Prisma.CycleGetPayload<{
     complementaryMaterials:true;
     
   }
-}>;
+}> & {type:'cycle'};
 
 // export type CycleDetail = Prisma.CycleGetPayload<{
 //   include: {
