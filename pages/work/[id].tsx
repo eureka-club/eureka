@@ -73,7 +73,7 @@ const WorkDetailPage: NextPage = () => {
         <meta property="og:title" content={work?.title}/>
         <meta property="og:url" content={`${WEBAPP_URL}/work/${work?.id}`} />
         <meta property="og:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${work?.localImages[0].storedFile}`}/>
-        <meta property="og:type" content='website' />
+        {/*<meta property="og:type" content='website' />*/}
     </Head>
      <SimpleLayout title={title}>{children}</SimpleLayout>;
      </>
