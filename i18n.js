@@ -3,7 +3,7 @@ module.exports = {
   loadLocaleFrom: async (locale, namespace) => import(`./translations/${locale}/${namespace}`).then((m) => m.default),
   locales: ['es', 'en', 'fr', 'pt'],
   defaultLocale: 'es',
-  pages: {
+  pages: { 
     '*': ['common', 'createWorkForm', 'createPostForm', 'navbar', 'signInForm', 'singInMail', 'searchEngine', 'topics','notification'],
     '/': ['countries'],
     '/auth/emailVerify': ['common', 'emailVerify'],
