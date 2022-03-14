@@ -43,7 +43,7 @@ export default getApiHandler()
         const image: FileUpload = files.image[0];
 
         const uploadData = await storeUpload(image);
-        const post = await createFromServerFields(fields, uploadData, session.user);debugger;
+        const post = await createFromServerFields(fields, uploadData, session.user);
         const notification = await create(
           fields.notificationMessage[0],
           fields.notificationContextURL[0],
@@ -94,25 +94,45 @@ export default getApiHandler()
       if(where && !('creatorId' in where)){
         if(session){
           where = {
-            ...where,
-            cycles:{
-              some:{
-                OR:[
-                  {access:1},
-                  {creatorId:session?.user.id},
-                  {participants:{some:{id:session?.user.id}}}  
-                ]
-              }
-            }          
+            AND:{
+              ...where,
+              OR:[
+                {
+                  cycles:{
+                    some:{
+                      OR:[
+                        {access:1},
+                        {creatorId:session?.user.id},
+                        {participants:{some:{id:session?.user.id}}}  
+                      ]
+                    }
+                  }
+                  
+                },
+                {
+                  cycles:{none :{}}  
+                }
+              ]
+            }
           }
         }
         else{
           where = {
-            ...where,
-            cycles:{
-              some:{
-                access:1,              
-              }
+            AND:{
+              ...where,
+              OR:[
+                {
+                  cycles:{
+                    some:{
+                      access:1,              
+                    }
+                  },
+                  
+                },
+                {
+                  cycles:{none:{}}
+                }
+              ]
             }
           }
         }
