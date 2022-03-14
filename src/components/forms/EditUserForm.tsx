@@ -327,7 +327,7 @@ const EditUserForm: FunctionComponent = () => {
                 { showCrop && (
                 <Col className='d-flex justify-content-center mt-3'>
                   <div className='profile-crop border p-3'>  
-                  <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={closeCrop} />
+                  <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={closeCrop} cropShape='round' />
                   </div>
                 </Col>
                 )}

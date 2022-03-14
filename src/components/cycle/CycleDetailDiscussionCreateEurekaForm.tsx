@@ -25,9 +25,12 @@ import useTopics from '../../useTopics';
 import { useNotificationContext } from '@/src/useNotificationProvider';
 import { useRouter} from 'next/router'
 import { useToasts } from 'react-toast-notifications'
+import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
 import useWorks from '@/src//useWorks'
 // import {useGlobalEventsContext} from '@/src/useGlobalEventsContext'
-// import styles from './CycleDetailDiscussionCreateEurekaForm.module.css';
+import styles from './CycleDetailDiscussionCreateEureka.module.css';
+import { devNull } from 'os';
+import { isNullOrUndefined } from 'util';
 
 interface Props {
   cacheKey:string[];
@@ -53,6 +56,8 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   const editorRef = useRef<any>(null);
   const formRef = useRef<any>(null);
   const { addToast } = useToasts()
+  const [currentImg, setCurrentImg] = useState<string | null>(null);
+  const [showCrop, setShowCrop] = useState<boolean>(false);
   const [newEureka, setNewEureka] = useState({
     selectedCycleId: cycle.id,
     selectedWorkId: 0,
@@ -76,6 +81,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
     setDiscussionItem('');
     setEurekaTopics(() => []);
     setNewEurekaImageFile(null);
+    setCurrentImg(null);
     setNewEureka((res) => ({
       ...res,
       title: '',
@@ -257,6 +263,26 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
     // console.log(newEureka);
   };
 
+    const onGenerateCrop = (photo: File) => {
+    setNewEurekaImageFile(()=>photo);
+    setCurrentImg(URL.createObjectURL(photo));
+    //setChangingPhoto(true);
+    setShowCrop(false);
+  };
+
+    const closeCrop = () => {
+    setShowCrop(false);
+  };
+
+  const renderPhoto = ()=>{
+   if(currentImg)
+    return <img
+        className={styles.postImage}
+        src={currentImg}
+        alt=''
+      />;
+  };
+
   return <Form ref={formRef}>
       <Form.Group controlId="eureka-title" className="mb-3">
         <Form.Control
@@ -306,10 +332,27 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         />
       </Form.Group> */}
       <Form.Group className="mt-3" controlId="eureka-image">
-        <ImageFileSelect acceptedFileTypes="image/*" file={newEurekaImageFile} setFile={setNewEurekaImageFile} required>
+         <Row className="d-flex justify-content-center flex-column flex-column-reverse flex-lg-row flex-lg-row-reverse">
+            <Col className='mb-4 d-flex justify-content-center justify-content-lg-start'>
+              {<div className={styles.imageContainer}>{renderPhoto()}</div>}
+              </Col>
+            <Col className='mb-4'>
+                {!showCrop && (<Button variant="primary" className="w-100 text-white" onClick={() => setShowCrop(true)}>
+                  {t('Image')}
+                </Button>
+                )}        
+                { showCrop && (
+                <Col className='d-flex'>
+                  <div className='w-100 border p-3'>  
+                  <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={closeCrop} cropShape='rect' />
+                  </div>  
+                </Col>
+               )}      
+            </Col>  
+            </Row>
+        {/*<ImageFileSelect acceptedFileTypes="image/*" file={newEurekaImageFile} setFile={setNewEurekaImageFile} required>
           {(imagePreview) => (
             <Form.Group>
-              {/* <Form.Label>*{t('imageFieldLabel')}</Form.Label> */}
               <Row className="rounded border border-primary bg-white p-1 m-0">
                 <Col xs={12} md={10}>{newEurekaImageFile != null && imagePreview ? (
                   <span className={`pt-1`}>{newEurekaImageFile?.name}</span>
@@ -321,11 +364,10 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
 
                 {imagePreview && <Image layout="fixed" width="57px" height="32px" src={imagePreview} className="float-right" alt="Work cover" />}
                 </Col>
-                {/* {imagePreview && <img src={imagePreview} className="float-right" alt="Work cover" />} */}
               </Row>
             </Form.Group>
           )}
-        </ImageFileSelect>
+        </ImageFileSelect>*/}
       </Form.Group>
       <Row>
         <Col xs={12} md={8}>

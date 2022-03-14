@@ -28,7 +28,7 @@ import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
 import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload } from '../../types/post';
 import { CycleMosaicItem } from '../../types/cycle';
 import { WorkMosaicItem } from '../../types/work';
-import ImageFileSelect from './controls/ImageFileSelect';
+//import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
 import CycleTypeaheadSearchItem from '../cycle/TypeaheadSearchItem';
 import WorkTypeaheadSearchItem from '../work/TypeaheadSearchItem';
@@ -40,6 +40,7 @@ import { Session } from '@/src/types';
 import { useSession } from 'next-auth/client';
 import useUser from '@/src/useUser';
 import { useNotificationContext } from '@/src/useNotificationProvider';
+import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
 import { useToasts } from 'react-toast-notifications'
 
 interface Props {
@@ -57,6 +58,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [items, setItems] = useState<string[]>([]);
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
+  const [showCrop, setShowCrop] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const router = useRouter();
   const editorRef = useRef<any>(null);
@@ -64,6 +66,8 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
   const [userId, setUserId] = useState<number>();
   const { addToast } = useToasts();
   const [workId, setWorkId] = useState<string>('');
+  //const [photo, setPhoto] = useState<File>();
+  const [currentImg, setCurrentImg] = useState<string | undefined>();
 
   useEffect(() => {
     if (router && router.query?.id) {
@@ -313,6 +317,26 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
     return `${res.name}`;
   };
 
+    const onGenerateCrop = (photo: File) => {
+    setImageFile(()=>photo);
+    setCurrentImg(URL.createObjectURL(photo));
+    //setChangingPhoto(true);
+    setShowCrop(false);
+  };
+
+    const closeCrop = () => {
+    setShowCrop(false);
+  };
+
+  const renderPhoto = ()=>{
+   if(currentImg)
+    return <img
+        className={styles.postImage}
+        src={currentImg}
+        alt=''
+      />;
+  };
+
   return (
     <Form ref={formRef}>
       <ModalHeader closeButton={!noModal}>
@@ -382,8 +406,26 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
             </Col>
           </Row>
           <Row>
-              <Col className='mb-4'>
-              <ImageFileSelect acceptedFileTypes="image/*" file={imageFile} setFile={setImageFile} required>
+             <Row className="d-flex justify-content-center flex-column flex-column-reverse flex-lg-row flex-lg-row-reverse">
+            <Col className='mb-4 d-flex justify-content-center justify-content-lg-start'>
+              {<div className={styles.imageContainer}>{renderPhoto()}</div>}
+              </Col>
+            <Col className='mb-4'>
+                {!showCrop && (<Button variant="primary" className="w-100 text-white" onClick={() => setShowCrop(true)}>
+                  {t('imageFieldLabel')}
+                </Button>
+                )}        
+                { showCrop && (
+                <Col className='d-flex'>
+                  <div className='w-100 border p-3'>  
+                  <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={closeCrop} cropShape='rect' />
+                  </div>  
+                </Col>
+               )}      
+            </Col>  
+            </Row>
+              
+             {/*<ImageFileSelect acceptedFileTypes="image/*" file={imageFile} setFile={setImageFile} required>
                 {(imagePreview) => (
                   <FormGroup>
                     <FormLabel>*{t('imageFieldLabel')}</FormLabel>
@@ -397,9 +439,8 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
                     </div>
                   </FormGroup>
                 )}
-              </ImageFileSelect>
-            </Col>
-          </Row>
+              </ImageFileSelect>*/}
+           </Row>
           <Row>
             <Col className="mb-4">
               <FormGroup controlId="language" >
