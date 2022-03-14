@@ -89,7 +89,7 @@ const PostDetailInCyclePage: NextPage = () => {
         <meta property="og:title" content={`${post ? post.title : ''} · ${cycle ? cycle.title : ''}`}/>
         <meta property="og:url" content={`${WEBAPP_URL}/cycle/${post?.cycles[0].id}/post/${post?.id}`} />
         <meta property="og:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${post?.localImages[0].storedFile}`}/>
-        <meta property="og:type" content='website' />
+        {/*<meta property="og:type" content='website' />*/}
     </Head>
     <SimpleLayout title={`${post ? post.title : ''} · ${cycle ? cycle.title : ''}`}>
       <>

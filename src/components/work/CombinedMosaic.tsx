@@ -4,6 +4,7 @@ import { FunctionComponent, useEffect, useState } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import { useQuery } from 'react-query';
 import useCycles from '@/src/useCycles'
+import usePosts from '@/src/usePosts'
 import Mosaic from '../Mosaic';
 import { MosaicItem } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
@@ -47,12 +48,26 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
     }
   },{enabled:!!work.id})
 
+
+  const {data:posts} = usePosts({
+    works:{
+      some:{
+        id:work.id
+      }
+    }
+  },undefined,{enabled:!!work.id})
+
+
+  let cyclesCount = 0;
+  let postsCount = 0;
+  if(posts)postsCount = posts.length
+  if(cycles)cyclesCount = cycles.length
+  
+
   useEffect(() => {
-    // if (cycles && work.posts) {
-    //   const interleavedMosaicItems = flatten(zip(cycles, work.posts)).filter((i) => i != null) as MosaicItem[];
-    //   setMosaicData(interleavedMosaicItems);
-    // }
-  }, [work,cycles]);
+      const interleavedMosaicItems = flatten(zip((cycles||[]), (posts||[]))).filter((i) => i != null) as MosaicItem[];
+      setMosaicData(interleavedMosaicItems);    
+  }, [posts,cycles]);
 
   return (
     <>

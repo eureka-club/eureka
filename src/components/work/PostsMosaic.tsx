@@ -25,11 +25,9 @@ const PostsMosaic: FunctionComponent<Props> = ({ work }) => {
   //   },
   // );
 
-  const { data: posts, isLoading: isLoadingPosts } = usePosts(
-    work ? {works:{some:{id:work.id}}}:undefined,
-    undefined,
-    { enabled: !!(work && work.id) }
-  )
+  const workPostsWhere = work ? {works:{some:{id:work.id}}}:undefined;
+    const {data:posts} = usePosts(workPostsWhere,undefined,{ enabled: !!(work && work.id) })
+  
 
   return (
     <>
@@ -40,7 +38,7 @@ const PostsMosaic: FunctionComponent<Props> = ({ work }) => {
       )} */}
       {
       work && posts != null 
-      && <ListWindow items={posts as unknown as WorkMosaicItem[]} cacheKey={['WORK', `${work.id}`]} height={400} width={'100%'}/>
+      && <ListWindow items={posts as unknown as WorkMosaicItem[]} cacheKey={['POSTS', `${JSON.stringify(workPostsWhere)}`]} height={400} width={'100%'}/>
       //&& <Mosaic cacheKey={['WORK',work.id.toString()]}className='d-flex justify-content-center justify-content-md-start' stack={work.posts as PostMosaicItem[]} parent={work} />}
       }
     </>

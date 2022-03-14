@@ -12,6 +12,8 @@ import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import WorkDetailComponent from '../../src/components/work/WorkDetail';
 import useWork from '../../src/useWork';
 import useCycles from '@/src/useCycles'
+
+import HelmetMetaData from '../../src/components/HelmetMetaData'
 import { WEBAPP_URL } from '../../src/constants';
 
 // import {
@@ -75,13 +77,13 @@ const WorkDetailPage: NextPage<Props> = () => {
         <meta property="og:title" content={work?.title}/>
         <meta property="og:url" content={`${WEBAPP_URL}/work/${work?.id}`} />
         <meta property="og:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${work?.localImages[0].storedFile}`}/>
-        <meta property="og:type" content='website' />
+        {/*<meta property="og:type" content='website' />*/}
     </Head>
      <SimpleLayout title={title}>{children}</SimpleLayout>;
      </>
   };
   
-  // if (isLoadingWork) return rendetLayout('Loading...', <Spinner animation="grow" />);
+  if (isLoadingWork) return rendetLayout('Loading...', <Spinner animation="grow" />);
   
   if (work) {
     return rendetLayout(

@@ -40,12 +40,13 @@ import { WorkMosaicItem /* , WorkWithImages */ } from '../../src/types/work';
 import { UserMosaicItem /* , UserDetail, WorkWithImages */ } from '../../src/types/user';
 import UnclampText from '../../src/components/UnclampText';
 import { useNotificationContext } from '@/src/useNotificationProvider';
-
+import usePosts from '@/src/usePosts';
+import useCycles from '@/src/useCycles';
 // import MosaicItemCycle from '../../src/components/cycle/MosaicItem';
 // import MosaicItemPost from '../../src/components/post/MosaicItem';
 // import MosaicItemWork from '../../src/components/work/MosaicItem';
 
-type Item = (CycleMosaicItem & { type: string }) | WorkMosaicItem | (PostMosaicItem & { type: string });
+type Item = CycleMosaicItem | WorkMosaicItem | (PostMosaicItem & { type: string });
 
 type ItemCycle = CycleMosaicItem & { type: string };
 // type ItemPost = PostMosaicItem & { type: string };
@@ -98,6 +99,22 @@ const Mediatheque: NextPage = () => {
   const { /* isError, error, */ data: user, isLoading: isLoadingUser, isSuccess: isSuccessUser } = useUser(+id,{
     enabled:!!+id
   });
+
+  const {data:posts} = usePosts({creatorId:+id},{enabled:!!id})
+
+  const cyclesCreatedOrJoinedWhere = {
+    OR:[
+      {
+        participants:{some:{id:+id}},
+      },
+      {
+        creatorId:+id
+      }
+    ]
+  } 
+  const {data:cycles} = useCycles(cyclesCreatedOrJoinedWhere,
+    {enabled:!!id}
+  )
 
   useEffect(() => {
     if (isSuccessUser && id && !user) {
@@ -241,15 +258,15 @@ const Mediatheque: NextPage = () => {
   
 
   const postsCreated = () => {
-    if (user && user.posts && user.posts.length) {
-      const P = user.posts.map((p) => ({ ...p , type: 'post' }));
+    if (user && posts && posts.length) {
+      // const P = posts.map((p) => ({ ...p , type: 'post' }));
       return (
         <CarouselStatic
-          cacheKey={['MEDIATHEQUE-POST',`USER-${user.id}`]}
+          cacheKey={['POSTS',`${JSON.stringify({creatorId:id})}`]}
           className="mb-5"
-          onSeeAll={async () => seeAll(P as Item[], t('Eurekas I created'))}
+          onSeeAll={async () => seeAll(posts as Item[], t('Eurekas I created'))}
           title={t('Eurekas I created')}
-          data={P as Item[]}
+          data={posts}
           iconBefore={<></>}
           mosaicBoxClassName="pb-1"
           // iconAfter={<BsCircleFill className={styles.infoCircle} />}
@@ -260,42 +277,40 @@ const Mediatheque: NextPage = () => {
   };
 
   const cyclesJoined = () => {
-    const C: ItemCycle[] = [];
-    if (user && user.cycles && user.cycles.length) {
-      const c1 = user.cycles.map((c) => ({ ...c, type: 'cycle' }));
-      C.push(...(c1 as ItemCycle[]));
-    }
-    if (user && user.joinedCycles && user.joinedCycles.length) {
-      const JC: ItemCycle[] = [];
-      user.joinedCycles.reduce((p: ItemCycle[], c) => {
-        if (c.creatorId !== parseInt(id, 10)) {
-          // otherwise will be already on C
-          p.push({ ...c, type: 'cycle' } as ItemCycle);
-        }
-        return p;
-      }, JC);
-      C.push(...JC);
-      C.sort((f: CycleMosaicItem, s: CycleMosaicItem) => {
-        const fCD = dayjs(f.createdAt);
-        const sCD = dayjs(s.createdAt);
-        if (fCD.isAfter(sCD)) return -1;
-        if (fCD.isSame(sCD)) return 0;
-        return 1;
-      });
-    }
+    // const C: ItemCycle[] = [];
+    // if (user && cycles && cycles.length) {
+    //   const c1 = cycles.map((c) => ({ ...c, type: 'cycle' }));
+    //   C.push(...(c1 as ItemCycle[]));
+    // }
+    // if (user && user.joinedCycles && user.joinedCycles.length) {
+    //   const JC: ItemCycle[] = [];
+    //   user.joinedCycles.reduce((p: ItemCycle[], c) => {
+    //     if (c.creatorId !== parseInt(id, 10)) {
+    //       // otherwise will be already on C
+    //       p.push({ ...c, type: 'cycle' } as ItemCycle);
+    //     }
+    //     return p;
+    //   }, JC);
+    //   C.push(...JC);
+    //   C.sort((f: CycleMosaicItem, s: CycleMosaicItem) => {
+    //     const fCD = dayjs(f.createdAt);
+    //     const sCD = dayjs(s.createdAt);
+    //     if (fCD.isAfter(sCD)) return -1;
+    //     if (fCD.isSame(sCD)) return 0;
+    //     return 1;
+    //   });
+    // }
 
-    return C.length ? (
-      <CarouselStatic
-        cacheKey={['MEDIATHEQUE-CYCLE-JOINED',`USER-${user!.id}`]}
-        onSeeAll={async () => seeAll(C, t('Cycles I created or joined'))}
+    return (cycles && cycles.length) 
+    ? <CarouselStatic
+        cacheKey={['CYCLES',JSON.stringify(cyclesCreatedOrJoinedWhere)]}
+        onSeeAll={async () => seeAll(cycles, t('Cycles I created or joined'))}
         title={t('Cycles I created or joined')}
-        data={C}
+        data={cycles}
         iconBefore={<></>}
         // iconAfter={<BsCircleFill className={styles.infoCircle} />}
       />
-    ) : (
-      ``
-    );
+    : <></>;
   };
 
   const readOrWatched = () => {
@@ -480,13 +495,13 @@ const Mediatheque: NextPage = () => {
                 <FilterEngine fictionOrNotFilter={false} geographyFilter={false} />
                  {postsCreated()}
 
-                 {cyclesJoined()}
+                  {cyclesJoined()}
 
                 {readOrWatched()}
 
-                 {savedForLater()}
+                {/* {savedForLater()}
 
-                {usersFollowed()}
+                {usersFollowed()} */}
               </>
             )}
           </section>

@@ -23,11 +23,12 @@ import { MySocialInfo, Session } from '../../types';
 import { PostDetail,PostMosaicItem } from '../../types/post';
 import { WorkDetail } from '../../types/work';
 import {CycleMosaicItem} from '@/src/types/cycle'
-// import LocalImageComponent from '../LocalImage';
-import CombinedMosaic from './CombinedMosaic';
-import CyclesMosaic from './CyclesMosaic';
 import PostDetailComponent from '../post/PostDetail';
-import PostsMosaic from './PostsMosaic';
+import ListWindow from '../ListWindow';
+// import LocalImageComponent from '../LocalImage';
+// import CombinedMosaic from './CombinedMosaic';
+// import CyclesMosaic from './CyclesMosaic';
+// import PostsMosaic from './PostsMosaic';
 // import SocialInteraction from '../common/SocialInteraction';
 import UnclampText from '../UnclampText';
 import WorkSummary from './WorkSummary';
@@ -42,14 +43,12 @@ import { WorkContext } from '../../useWorkContext';
 import EditPostForm from '../forms/EditPostForm';
 import {useQueryClient} from 'react-query'
 import useWork from '@/src/useWork'
-import usePosts from '@/src/usePosts'
 import useCycles from '@/src/useCycles'
-import ListWindow from '@/src/components/ListWindow'
+import usePosts from '@/src/usePosts'
 // import CommentsList from '../common/CommentsList';
 interface Props {
   workId: number;
-  post?: PostDetail;
-  
+  post?: PostMosaicItem;
 }
 
 const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
@@ -64,56 +63,68 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
   const {data:work} = useWork(workId,{
       enabled:!!workId
   })
-  const { data: posts, isLoading: isLoadingPosts } = usePosts(
-    work ? {works:{some:{id:work.id}}}:undefined,
-    undefined,
-    { enabled: !!(work && work.id) }
-  )
-  const {data:cycles,isLoading:isLoadingCycles} = useCycles(
-    work ? {works:{some:{id:work.id}}}:undefined,
-    { enabled: !!(work && work.id) }
-  )
-    
+
+  const {data:cycles} = useCycles({
+    works:{
+      some:{
+        id:workId
+      }
+    }
+  },{enabled:!!workId})
+
+  const workPostsWhere = {
+    works:{
+      some:{
+        id:workId
+      }
+    }
+  };
+  const {data:posts} = usePosts(workPostsWhere,undefined,{enabled:!!workId})
+
+  let cyclesCount = 0;
+  let postsCount = 0;
+  if(posts)postsCount = posts.length
+  if(cycles)cyclesCount = cycles.length
   
-  // useEffect(()=>{debugger;
-  //   if(work && posts){
-    //     posts.forEach(p => {
-      //       queryClient.setQueryData(['POST',`${p.id}`],p)
-      //     });
-      //   }
-      // },[work,posts,queryClient])
-      
-      if(!work)return <></>
-      
-      
-      const handleSubsectionChange = (key: string | null) => {
-        if (key != null) {
-          setDetailPagesState({ ...detailPagesState, selectedSubsectionWork: key });
-        }
-      };
-      
-      const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
-        ev.preventDefault();
-        setGlobalModalsState({ ...globalModalsState, ...{ editWorkModalOpened: true } });
-      };
-      
-      const canEditWork = (): boolean => {
-        if (session && session.user.roles === 'admin') return true;
-        return false;
-      };
-      
-      const canEditPost = (): boolean => {
-        if (session && post && session.user.id === post.creatorId) return true;
-        return false;
-      };
-      
-      const handleEditPostClick = (ev: MouseEvent<HTMLButtonElement>) => {
-        ev.preventDefault();
-        setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: true } });
-      };
-      
-      const handleEditPostOnSmallerScreen = (ev: MouseEvent<HTMLButtonElement>) => {
-        ev.preventDefault();
+  // useEffect(()=>{
+  //   if(work && posts.length){
+  //     work.posts.forEach(p => {
+  //       queryClient.setQueryData(['POST',`${p.id}`],p)
+  //     });
+  //   }
+  // },[work,queryClient])
+
+  if(!work)return <></>
+  
+
+  const handleSubsectionChange = (key: string | null) => {
+    if (key != null) {
+      setDetailPagesState({ ...detailPagesState, selectedSubsectionWork: key });
+    }
+  };
+
+  const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    setGlobalModalsState({ ...globalModalsState, ...{ editWorkModalOpened: true } });
+  };
+
+  const canEditWork = (): boolean => {
+    if (session && session.user.roles === 'admin') return true;
+    return false;
+  };
+
+  const canEditPost = (): boolean => {
+    if (session && post && session.user.id === post.creatorId) return true;
+    return false;
+  };
+
+  const handleEditPostClick = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: true } });
+  };
+
+  const handleEditPostOnSmallerScreen = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
         setEditPostOnSmallerScreen({ ...editOnSmallerScreens, ...{ value: !editPostOnSmallerScreen.value } });
       };
       
@@ -186,7 +197,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
           </div> */}
             </Row>
           ) : (
-            <>{post && work && <PostDetailComponent postId={post.id} work={work} cacheKey={['WORK',work.id.toString()]} />}</>
+            <>{post && work && <PostDetailComponent postId={post.id} work={work} cacheKey={['POSTS',JSON.stringify(workPostsWhere)]} />}</>
           )}
         </>
 
@@ -262,7 +273,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
               )}
             </Col>
           </Row>
-        )} </> : <EditPostForm noModal />}
+        )} </> : <EditPostForm noModal cacheKey={['POSTS',JSON.stringify(workPostsWhere)]} />}
       </MosaicContext.Provider>
     </WorkContext.Provider>
   </>

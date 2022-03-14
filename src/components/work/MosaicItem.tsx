@@ -67,15 +67,19 @@ const MosaicItem: FunctionComponent<Props> = ({
     enabled:!!workId
   })
 
-  // const { data: posts, isLoading: isLoadingPosts } = usePosts(
-  //   work ? {works:{some:{id:work.id}}}:undefined,
-  //   undefined,
-  //   { enabled: !!(work && work.id) }
-  // )
+  // const workPostsWhere = {
+  //   works:{
+  //     some:{
+  //       id:workId
+  //     }
+  //   }
+  // };
+  // const {data:posts} = usePosts(workPostsWhere,{enabled:!!workId})
+
   
   // useEffect(()=>{
-  //   if(work && posts){
-  //     posts.forEach(p => {
+  //   if(work && work.posts){
+  //     work.posts.forEach(p => {
   //       queryClient.setQueryData(['POST',`${p.id}`],p)
   //     });
   //   }

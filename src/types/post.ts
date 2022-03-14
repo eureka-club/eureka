@@ -11,6 +11,7 @@ export type PostMosaicItem = Prisma.PostGetPayload<{
     title:true,
     contentText:true,
     createdAt:true,
+    creatorId:true,
     works:{select:{id:true,title:true}},
     cycles:{select:{id:true}},
     favs:{select:{id:true}},

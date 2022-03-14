@@ -24,9 +24,6 @@ export const find = async (id: number): Promise<WorkDetail | null> => {
       //     creator: {select:{id:true,name:true,photos:true}},
       //     localImages: {select:{storedFile:true}},
       //   },
-      //   where:{
-      //     cycles:{none:{}}
-      //   },
       //   orderBy:{id:'desc'}
       // },
       // cycles:{
@@ -116,6 +113,29 @@ export const findAll = async (props?:Prisma.WorkFindManyArgs): Promise<WorkMosai
       favs:{select:{id:true}},
       countryOfOrigin:true,
       countryOfOrigin2:true,
+      // posts: {
+      //   select:{
+      //     id:true,
+      //     title:true,
+      //     contentText:true,
+      //     createdAt:true,
+      //     works:{select:{id:true,title:true}},
+      //     cycles:{select:{id:true}},
+      //     favs:{select:{id:true}},
+      //     creator: {select:{id:true,name:true,photos:true}},
+      //     localImages: {select:{storedFile:true}},
+      //   },
+      //   orderBy:{id:'desc'}
+      // },
+      // cycles:{
+      //   select:{
+      //     id:true,
+      //     title:true,
+      //     startDate:true,
+      //     endDate:true,
+      //     ratings:{select:{qty:true}}
+      //   }
+      // },
     },
     where,
   });

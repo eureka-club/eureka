@@ -80,7 +80,13 @@ export const isWorkMosaicItem = (obj: MosaicItem | SearchResult): obj is WorkMos
 }
 
 export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMosaicItem => {
-  return obj && obj.type == 'post';
+  return obj && ('type' in obj && obj.type=='post');
+  // return (
+  //   typeof (obj as PostMosaicItem).title === 'string' &&
+  //   typeof (obj as PostMosaicItem).creatorId === 'number' &&
+  //   typeof (obj as PostMosaicItem).works === 'object' &&
+  //   typeof (obj as PostMosaicItem).language === 'string'
+  // );
 };
 
 export const isUserMosaicItem = (obj: MosaicItem | SearchResult): obj is UserMosaicItem =>{

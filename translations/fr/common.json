@@ -118,5 +118,6 @@
   "secret": "Cycle secret",
   "select": "Sélectionner",
   "next":"next",
-  "previous":"previous"
+  "previous":"previous",
+  "MyCycle": "Mon cycle"
 }

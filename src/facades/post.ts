@@ -9,16 +9,7 @@ export const find = async (id: number): Promise<PostDetail | null> => {
     where: { id },
     include:{
       works:{select:{id:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
-      cycles:{select:{
-        id:true,
-        creatorId:true,
-        startDate:true,
-        endDate:true,
-        title:true,
-        localImages:{
-          select:{storedFile:true}
-        }
-      }},
+      cycles:{select:{id:true,localImages:{select:{storedFile:true}},creatorId:true,startDate:true,endDate:true,title:true}},
       favs:{select:{id:true,}},
       creator: {select:{id:true,name:true,photos:true}},
       localImages: {select:{storedFile:true}},
@@ -35,11 +26,11 @@ export const findAll = async (props?:Prisma.PostFindManyArgs,page?:number): Prom
     orderBy: { id: 'desc' },
     include:{
       works:{select:{id:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
-      cycles:{select:{id:true,title:true,access:true}},
+      cycles:{select:{id:true,localImages:{select:{storedFile:true}},creatorId:true,startDate:true,endDate:true,title:true}},
       favs:{select:{id:true,}},
       creator: {select:{id:true,name:true,photos:true}},
       localImages: {select:{storedFile:true}},
-    },
+    },    
     where,
   });
   return res.map(p=>({...p,type:'post'}))
