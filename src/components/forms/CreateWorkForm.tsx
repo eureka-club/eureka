@@ -51,6 +51,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({noModal = false})=> {
   const [hasCountryOrigin2, setHasCountryOrigin2] = useState<boolean>();
   const [countryOrigin2, setCountryOrigin2] = useState<string>();
   const { addToast } = useToasts()
+  const [workId, setWorkId] = useState<number | undefined>();
   const { data: topics } = useTopics();
   const {
     mutate: execCreateWork,
@@ -72,10 +73,14 @@ const CreateWorkForm: FunctionComponent<Props> = ({noModal = false})=> {
         method: 'POST',
         body: formData,
       });
-      if(res.ok)
-          addToast( t('WorkSaved'), {appearance: 'success', autoDismiss: true,})
 
-      return res.json();
+      if(res.ok){
+         const json = await res.json();
+         setWorkId(json.id);
+         addToast( t('WorkSaved'), {appearance: 'success', autoDismiss: true,})
+         return json.work;
+      }
+      return null;
     },
     {
       onSuccess: () => {
@@ -180,7 +185,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({noModal = false})=> {
     if (isSuccess === true) {
       setGlobalModalsState({ ...globalModalsState, ...{ createWorkModalOpened: false } });
       queryClient.invalidateQueries('works.mosaic');
-      router.replace(router.asPath);
+      router.push(`/work/${workId}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
@@ -385,7 +390,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({noModal = false})=> {
           <Button variant="primary" type="submit" className="d-none d-lg-block float-end text-white">
             {t('submitButtonLabel')}
             {isLoading ? (
-              <Spinner animation="grow" variant="info" className={styles.loadIndicator} />
+              <Spinner animation="grow" variant="info" className={`ms-2 ${styles.loadIndicator}`} size="sm"  />
             ) : (
               <span className={styles.placeholder} />
             )}
@@ -394,7 +399,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({noModal = false})=> {
           <Button variant="primary" type="submit" className="d-block d-lg-none w-100 text-white">
             {t('submitButtonLabel')}
             {isLoading ? (
-              <Spinner animation="grow" variant="info" className={styles.loadIndicator} />
+              <Spinner animation="grow" variant="info" className={`ms-2 ${styles.loadIndicator}`} size="sm"  />
             ) : (
               <span className={styles.placeholder} />
             )}

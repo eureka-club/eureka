@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import Cropper from "react-easy-crop";
+import Cropper, { CropperProps } from "react-easy-crop";
 import { Point, Area } from "react-easy-crop/types";
 import { Container, Form, Button } from 'react-bootstrap';
 import {image64toCanvasRef,getCroppedImg} from '@/src/lib/utils'
@@ -8,12 +8,14 @@ import { BsX} from 'react-icons/bs';
 
 interface Props{
   onGenerateCrop: (file:File) => void;
-  onClose: () => void
+  onClose: () => void;
+  cropShape?: 'rect' | 'round' | undefined
 }
-const CropImageFileSelect: React.FC<Props> = ({onGenerateCrop,onClose}) => {
+const CropImageFileSelect: React.FC<Props> = ({onGenerateCrop,onClose,cropShape}) => {
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [imageSrc, setImageSrc] = useState<string>('');
   const [file, setFile] = useState<File>();
+  const [selectedPhoto, setSelectedPhoto] = useState<boolean>(false);
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>();
   const [croppedImage, setCroppedImage] = useState<Area>();
@@ -33,21 +35,23 @@ const onFileChange = async  (e:React.ChangeEvent<HTMLInputElement>)  => {
       const file = files[0];
       const fileReader = new FileReader()
       setImageSrc(()=>URL.createObjectURL(file));
+      setSelectedPhoto(true);
     }
   }
 
   return (
     <>
-    <div className='d-flex justify-content-end'> <Button variant="primary text-white" onClick={onClose}  size="sm">
+    <div className='d-flex justify-content-end mb-2'> <Button variant="primary text-white" onClick={onClose}  size="sm">
             <BsX fontSize='1.5em' />
           </Button></div>
-         <Form.Group className="mb-3" controlId="image">
+    {!selectedPhoto && (<Form.Group className="mb-3" controlId="image">
       <Form.Label>Image</Form.Label>
       <Form.Control type="file" placeholder="Load an image" onChange={onFileChange} />
       <Form.Text className="text-muted">
        From your computer
       </Form.Text>
-    </Form.Group>
+    </Form.Group>)}
+
  {imageSrc.length ? <>
     <div className="crop-container mb-2">
         <Cropper
@@ -56,7 +60,7 @@ const onFileChange = async  (e:React.ChangeEvent<HTMLInputElement>)  => {
           zoom={zoom}
           //cropSize={{ width: 100, height: 100 }}
           aspect={2 / 2}
-          cropShape	='round'
+          cropShape	={cropShape}
           onCropChange={setCrop}
           onCropComplete={onCropComplete}
           onZoomChange={setZoom}
