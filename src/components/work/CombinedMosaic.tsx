@@ -55,7 +55,7 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
         id:work.id
       }
     }
-  },undefined,{enabled:!!work.id})
+  },{enabled:!!work.id})
 
 
   let cyclesCount = 0;

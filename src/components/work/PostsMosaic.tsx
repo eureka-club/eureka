@@ -26,7 +26,7 @@ const PostsMosaic: FunctionComponent<Props> = ({ work }) => {
   // );
 
   const workPostsWhere = work ? {works:{some:{id:work.id}}}:undefined;
-    const {data:posts} = usePosts(workPostsWhere,undefined,{ enabled: !!(work && work.id) })
+    const {data:posts} = usePosts(workPostsWhere,{ enabled: !!(work && work.id) })
   
 
   return (

@@ -79,7 +79,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
       }
     }
   };
-  const {data:posts} = usePosts(workPostsWhere,undefined,{enabled:!!workId})
+  const {data:posts} = usePosts(workPostsWhere,{enabled:!!workId})
 
   let cyclesCount = 0;
   let postsCount = 0;
