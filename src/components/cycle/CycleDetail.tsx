@@ -373,7 +373,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
          <section className='d-block d-lg-none' data-cy="mosaic-items">
            <ListWindow items={items} cacheKey={['ITEMS', `CYCLE-${cycle.id}`]} height={460} width={'100%'}/>
       </section> */}
-       <ListWindow items={items} cacheKey={['ITEMS', `CYCLE-${cycle.id}`]} height={400} width={'100%'}/>
+       <ListWindow items={items} cacheKey={['ITEMS', `CYCLE-${cycle.id}`]} />
        </>
     }
     return <></>

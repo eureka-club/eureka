@@ -45,7 +45,6 @@ import {useQueryClient} from 'react-query'
 import useWork from '@/src/useWork'
 import useCycles from '@/src/useCycles'
 import usePosts from '@/src/usePosts'
-// import CommentsList from '../common/CommentsList';
 interface Props {
   workId: number;
   post?: PostMosaicItem;
@@ -64,13 +63,14 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
       enabled:!!workId
   })
 
-  const {data:cycles} = useCycles({
+  const workCyclesWhere = {
     works:{
       some:{
         id:workId
       }
     }
-  },{enabled:!!workId})
+  }
+  const {data:cycles} = useCycles(workCyclesWhere,{enabled:!!workId})
 
   const workPostsWhere = {
     works:{
@@ -232,17 +232,17 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
                       <Nav variant="tabs" className='scrollNav' fill>
                         <NavItem>
                           <NavLink eventKey="all">
-                            {t('tabHeaderAll')} ({(cycles ? cycles.length : 0) + ( posts ? posts.length : 0)})
+                            {t('tabHeaderAll')} ({(cycles?cycles.length:0) + (posts?posts.length:0)})
                           </NavLink>
                         </NavItem>
                         <NavItem>
                           <NavLink eventKey="posts">
-                            {t('tabHeaderPosts')} ({posts ? posts.length : 0})
+                            {t('tabHeaderPosts')} ({posts?posts.length:0})
                           </NavLink>
                         </NavItem>
                         <NavItem>
                           <NavLink eventKey="cycles">
-                            {t('tabHeaderCycles')} ({cycles ? cycles.length : 0})
+                            {t('tabHeaderCycles')} ({cycles?cycles.length:0})
                           </NavLink>
                         </NavItem>
                       </Nav>
@@ -253,19 +253,19 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
                     <Col>
                       <TabContent>
                         <TabPane eventKey="all">
-                          {(cycles || posts)
-                            && <ListWindow items={[...(cycles||[]),...(posts||[])] as unknown as (CycleMosaicItem|PostMosaicItem)[]} cacheKey={['WORK', `${work.id}`]} height={400} width={'100%'}/> 
-                          //&& <CombinedMosaic work={work} />
-                          }
+                          {/* {(cyclesCount > 0 || postsCount > 0) && <CombinedMosaic work={work} />} */}
+                          {cycles && posts && <ListWindow items={[...posts,...cycles]} cacheKey={['WORK',`${work.id}-ITEMS`]} />}{/* TODO both cycles and posts are in separated cache */}
                         </TabPane>
                         <TabPane eventKey="posts">
                           <p className={styles.explanatoryText}>{t('explanatoryTextPosts')}</p>
-                          {posts && <ListWindow items={posts} cacheKey={['WORK', `${work.id}`]} height={400} width={'100%'}/>}
-                          {/* {posts && posts.length > 0 && <PostsMosaic work={work} />} */}
+
+                          {/* {postsCount > 0 && <PostsMosaic work={work} />} */}
+                          {posts && <ListWindow items={posts} cacheKey={['POSTS',JSON.stringify(workPostsWhere)]} />}
                         </TabPane>
-                        <TabPane eventKey="cycles">{
-                          cycles && <ListWindow items={cycles} cacheKey={['WORK', `${work.id}`]} height={400} width={'100%'}/>
-                        }</TabPane>
+                        <TabPane eventKey="cycles">
+                          {/* {cyclesCount > 0 && <CyclesMosaic work={work} />} */}
+                          {cycles && <ListWindow items={cycles} cacheKey={['CYCLES',JSON.stringify(workCyclesWhere)]} />}
+                        </TabPane>
                       </TabContent>
                     </Col>
                   </Row>

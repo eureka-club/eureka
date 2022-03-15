@@ -37,6 +37,8 @@ interface Props {
   cycle: CycleDetail;
   discussionItem?: string;
   setDiscussionItem: (val: string | undefined) => void;
+  close: () => void;
+
 }
 
 const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
@@ -44,6 +46,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   cycle,
   discussionItem,
   setDiscussionItem,
+  close
 }) => {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -89,6 +92,8 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
       contentText: '',
       topics: eurekaTopics,
     }));
+
+    close();
   };
   const clearCreateEurekaForm = () => {
     clearPayload();
@@ -147,7 +152,6 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
       };
       await execCreateEureka(payload);
     }
-    clearPayload();
   };
 
   const { mutate: execCreateEureka, isLoading } = useMutation(
@@ -207,7 +211,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
             
         } 
         addToast( t('postCreated'), {appearance: 'success', autoDismiss: true,})
-
+        clearPayload();
         return json.post;
       }
 

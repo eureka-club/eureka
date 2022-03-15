@@ -19,10 +19,10 @@ interface Props{
     items:MosaicItem[];
     cacheKey: string[];
     parent?: CycleMosaicItem | WorkMosaicItem;
-    height:number
-    width:string
+    itemSize?:number
+    width?:string
 }
-const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,height,width})=>{
+const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,itemSize=400,width="100%"})=>{
     const [mosaics,setMosaics] = useState<JSX.Element[]>([])
     const [innerHeight,setinnerHeight]=useState<number>(300)
 
@@ -105,11 +105,11 @@ const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,height,width})=>{
 
       
         return <List
-          height={innerHeight}
-          itemCount={items.length}
-          itemSize={height+16}//+16 because->post mosaic: my-6(12px) and row section: my-2(4px)
+          height={globalThis.window.innerHeight}
+          itemCount={mosaics.length}
+          itemSize={itemSize+16}//+16 because->post mosaic: my-6(12px) and row section: my-2(4px)
           //layout="vertical"
-          width={'100%'}
+          width={width}
         >
           {renderItem}
         </List>

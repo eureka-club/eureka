@@ -130,6 +130,11 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
     return !isSessionLoading && session && session.user.roles === 'admin';
   };
 
+
+    const onClose = () => {
+    setIsCreateEureka(false);
+  };
+
   return (
     <>
       {cycle && (
@@ -196,6 +201,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
                     cycle={cycle}
                     discussionItem={discussionItem}
                     setDiscussionItem={setDiscussionItem}
+                    close={onClose}
                   />
                 </div>
               )}

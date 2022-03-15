@@ -58,8 +58,8 @@ const onFileChange = async  (e:React.ChangeEvent<HTMLInputElement>)  => {
           image={imageSrc}
           crop={crop}
           zoom={zoom}
-          //cropSize={{ width: 100, height: 100 }}
-          aspect={2 / 2}
+          cropSize={{ width: 256, height: 256 }}
+          //aspect={2 / 2}
           cropShape	={cropShape}
           onCropChange={setCrop}
           onCropComplete={onCropComplete}

@@ -73,7 +73,7 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
     <>
       {/* {(isCyclesLoading) && <Spinner animation="grow" role="status" />} */}
       {mosaicData.length > 0 
-      && <ListWindow items={mosaicData as unknown as (WorkMosaicItem|CycleMosaicItem)[]} cacheKey={['WORK', `${work.id}`]} height={400} width={'100%'}/>
+      && <ListWindow items={mosaicData as unknown as (WorkMosaicItem|CycleMosaicItem)[]} cacheKey={['WORK', `${work.id}`]} />
       // && <Mosaic
       //   cacheKey={['WORK',work.id.toString()]} 
       //   stack={mosaicData} 
