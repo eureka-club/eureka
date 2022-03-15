@@ -37,6 +37,8 @@ interface Props {
   cycle: CycleMosaicItem;
   discussionItem?: string;
   setDiscussionItem: (val: string | undefined) => void;
+  close: () => void;
+
 }
 
 const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
@@ -44,6 +46,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   cycle,
   discussionItem,
   setDiscussionItem,
+  close
 }) => {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -89,6 +92,8 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
       contentText: '',
       topics: eurekaTopics,
     }));
+
+    close();
   };
   const clearCreateEurekaForm = () => {
     clearPayload();
