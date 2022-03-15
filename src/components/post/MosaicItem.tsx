@@ -211,7 +211,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           </Badge>
         </div>
         {showDetailedInfo && (
-          <div className={` pt-2 mb-2 d-flex align-items-center justify-content-center ${styles.detailedInfo}`}>
+          <div className={`d-flex align-items-center justify-content-center ${styles.detailedInfo}`}>
             <h6 className="text-center d-flex" data-cy="post-title">
               <Link href={postLinkHref}>
                 <a className="text-primary">{post.title}</a>

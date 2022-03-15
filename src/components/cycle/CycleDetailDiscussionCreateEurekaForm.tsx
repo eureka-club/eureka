@@ -152,7 +152,6 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
       };
       await execCreateEureka(payload);
     }
-    clearPayload();
   };
 
   const { mutate: execCreateEureka, isLoading } = useMutation(
@@ -212,7 +211,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
             
         } 
         addToast( t('postCreated'), {appearance: 'success', autoDismiss: true,})
-
+        clearPayload();
         return json.post;
       }
 
