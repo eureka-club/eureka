@@ -96,23 +96,26 @@ export default getApiHandler()
           where = {
             AND:{
               ...where,
-              OR:[
-                {
-                  cycles:{
-                    some:{
-                      OR:[
-                        {access:1},
-                        {creatorId:session?.user.id},
-                        {participants:{some:{id:session?.user.id}}}  
-                      ]
+              AND:{
+                OR:[
+                  {
+                    cycles:{
+                      some:{
+                        OR:[
+                          {access:1},
+                          {creatorId:session?.user.id},
+                          {participants:{some:{id:session?.user.id}}}  
+                        ]
+                      }
                     }
+                    
+                  },
+                  {
+                    cycles:{none :{}}  
                   }
-                  
-                },
-                {
-                  cycles:{none :{}}  
-                }
-              ]
+                ]
+
+              }
             }
           }
         }
@@ -120,19 +123,21 @@ export default getApiHandler()
           where = {
             AND:{
               ...where,
-              OR:[
-                {
-                  cycles:{
-                    some:{
-                      access:1,              
-                    }
+              AMD:{
+                OR:[
+                  {
+                    cycles:{
+                      some:{
+                        access:1,              
+                      }
+                    },
+                    
                   },
-                  
-                },
-                {
-                  cycles:{none:{}}
-                }
-              ]
+                  {
+                    cycles:{none:{}}
+                  }
+                ]
+              }
             }
           }
         }
