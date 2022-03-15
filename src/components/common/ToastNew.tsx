@@ -7,7 +7,7 @@ const ToastNew: FunctionComponent<ToastProps> = ({ appearance, children }) => {
 
   return (
       <section className='Toast'>
-        <Toast  show={show} className='bg-secondary' delay={1500} autohide>
+        <Toast  show={show} className={appearance === 'success' ? 'bg-secondary': 'bg-danger'} delay={1500} autohide>
           <Toast.Body className='text-white'>
             <div className='d-flex flex-row align-items-baseline'>
               {children} 
@@ -18,5 +18,4 @@ const ToastNew: FunctionComponent<ToastProps> = ({ appearance, children }) => {
         </section>
   );
 };
-
 export default ToastNew;

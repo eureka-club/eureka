@@ -53,5 +53,7 @@
   "Filter by work":"Filtrar por obra ou ciclo",
   "Clean filters":"Limpar filtros",
   "commentCreated":"Sua reação ou pergunta foi compartilhada com sucesso.",
-  "postCreated":"Sua Eureka foi compartilhada com sucesso."
+  "postCreated":"Sua Eureka foi compartilhada com sucesso.",
+  "canNotCreatePostJoinToCycle":"Você não pode postar eurekas, entre no ciclo primeiro."
+
 }
