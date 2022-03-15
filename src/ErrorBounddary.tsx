@@ -1,6 +1,6 @@
 import {Component, ReactNode} from 'react'
 import SimpleLayout from '@/src/components/layouts/SimpleLayout'
-import Image from 'next/image'
+import Link from 'next/link'
 
 
 interface State{
@@ -28,9 +28,20 @@ export class ErrorBoundary extends Component<Props,State>{
     }
 
     render(){
+      
+
         if(this.state.hasError)
             return <SimpleLayout>
-                <Image className="d-none d-md-inline-block" src="/img/error.webp" layout='fill' alt='Opps an error occurred!'  />
+                {/*<Image className="d-none d-md-inline-block" src="/img/error.webp" layout='fill' alt='Opps an error occurred!'  />*/}
+              <div id="notfound">
+		<div className="notfound">
+			<div className="notfound404">
+				<h1>Oops!</h1>
+				<h2>404 - The Page can not be found</h2>
+			</div>
+			<Link href='/'><a className='btn'>Go TO Homepage</a></Link>
+		</div>
+	</div>
             </SimpleLayout>
         return this.props.children
 

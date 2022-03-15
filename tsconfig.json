@@ -34,7 +34,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "src/components/common/HyvorComments.js"  ],
+, "src/components/common/HyvorComments.tsx"  ],
   "exclude": [
     "node_modules"
   ]
