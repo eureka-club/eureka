@@ -33,7 +33,7 @@ const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,itemSize=400,width
                   let mosaic = <></>
                   if (isCycleMosaicItem(item)) {
                     rows.push(<CycleContext.Provider value={{ cycle: item as CycleMosaicItem }}>
-                        <MosaicItemCycle key={`${v4()}`} cycleId={item.id} detailed className="mb-2"/>
+                        <MosaicItemCycle key={`${v4()}`} cycleId={item.id} detailed className="me-3 my-6"/>
                       </CycleContext.Provider>)
                   }
                   else if (isPostMosaicItem(item)) {
