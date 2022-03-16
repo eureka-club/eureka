@@ -21,11 +21,11 @@ interface Props{
     itemSize?:number
     width?:string
 }
-const ListWindow:React.FC<Props> = ({items,parent,cacheKey,itemSize=400,width="100%"})=>{
+const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,itemSize=400,width="100%"})=>{
     const [mosaics,setMosaics] = useState<JSX.Element[]>([])
-
-      useEffect(()=>{
-          if(items){
+    useEffect(()=>{
+         if(it){
+            const items = [...it]
             while(items.length){
               const a = items.splice(0,4)
               const rows = []
@@ -80,7 +80,7 @@ const ListWindow:React.FC<Props> = ({items,parent,cacheKey,itemSize=400,width="1
             }            
             setMosaics(()=>[...mosaics]);
           }
-      },[items])
+      },[it])
 
     const renderItem = (props:{ index:number, style:Record<string,any> }) => {
       const {index,style} = props;
@@ -93,7 +93,7 @@ const ListWindow:React.FC<Props> = ({items,parent,cacheKey,itemSize=400,width="1
 
 
       const getSize = (index:number) => {
-          if(isPostMosaicItem(items[index]))
+          if(isPostMosaicItem(it[index]))
             return 355;
           else return 200  
       };

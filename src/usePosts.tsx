@@ -10,7 +10,7 @@ export const getPosts = async (
   
   let url = '';
   const w = encodeURIComponent(JSON.stringify(where))
-  url = `/api/post${where ? `?where=${w}` : ''}`;
+  url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/post${where ? `?where=${w}` : ''}`;
    
   const res = await fetch(url);
   if (!res.ok) return [];
@@ -33,6 +33,7 @@ const usePosts = (where?: Prisma.PostWhereInput, options?: Options) => {
   return useQuery<PostMosaicItem[]>(ck, () => getPosts(where), {
     staleTime,
     enabled,
+    retry:3
   });
 };
 
