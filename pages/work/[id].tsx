@@ -1,4 +1,4 @@
-import { NextPage } from 'next';
+import { NextPage,GetServerSideProps } from 'next';
 import Head from "next/head";
 import { useSession } from 'next-auth/client';
 import { useState, useEffect, ReactElement } from 'react';
@@ -9,12 +9,13 @@ import useTranslation from 'next-translate/useTranslation';
 // import { Session, MySocialInfo } from '../../src/types';
 // import { WorkMosaicItem } from '../../src/types/work';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
-import WorkDetailComponent from '../../src/components/work/WorkDetail';
-import useWork from '../../src/useWork';
-import useCycles from '@/src/useCycles'
-
 import HelmetMetaData from '../../src/components/HelmetMetaData'
 import { WEBAPP_URL } from '../../src/constants';
+import WorkDetailComponent from '../../src/components/work/WorkDetail';
+import { dehydrate,QueryClient } from 'react-query';
+import useWork,{getWork} from '../../src/useWork';
+import useCycles,{getCycles} from '@/src/useCycles'
+import usePosts,{getPosts} from '@/src/usePosts'
 
 // import {
 //   countCycles,
@@ -92,44 +93,35 @@ const WorkDetailPage: NextPage = () => {
   // );
 };
 
-// export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
-//   if (params?.id == null || typeof params.id !== 'string') {
-//     return { notFound: true };
-//   }
+export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
+  const qc = new QueryClient()
+  if (params?.id == null || typeof params.id !== 'string') {
+    return { notFound: true };
+  }
 
-//   const id = parseInt(params.id, 10);
-//   if (!Number.isInteger(id)) {
-//     return { notFound: true };
-//   }
-
-//   const work = await find(id);
-//   if (work == null) {
-//     return { notFound: true };
-//   }
-
-//   const cyclesCount = await countCycles(work);
-//   const postsCount = await countPosts(work);
-
-//   const session = (await getSession({ req })) as unknown as Session;
-//   const mySocialInfo: MySocialInfo = {
-//     favoritedByMe: undefined,
-//     // likedByMe: undefined,
-//     // readOrWatchedByMe: undefined,
-//   };
-//   if (session != null) {
-//     mySocialInfo.favoritedByMe = !!(await isFavoritedByUser(work, session.user));
-//     // mySocialInfo.likedByMe = !!(await isLikedByUser(work, session.user));
-//     // mySocialInfo.readOrWatchedByMe = !!(await isReadOrWatchedByUser(work, session.user));
-//   }
-
-//   return {
-//     props: {
-//       work,
-//       cyclesCount: cyclesCount.count,
-//       postsCount: postsCount.count,
-//       mySocialInfo,
-//     },
-//   };
-// };
+  const id = parseInt(params.id, 10);
+  if (!Number.isInteger(id)) {
+    return { notFound: true };
+  }
+  
+  const workItemsWhere = {
+    works:{
+      some:{
+        id
+      }
+    }
+  }
+  await qc.prefetchQuery(['WORK', `${id}`],()=>getWork(id))
+  await qc.prefetchQuery(['CYCLES',JSON.stringify(workItemsWhere)],()=>getCycles(workItemsWhere) )
+  await qc.prefetchQuery(['POSTS',JSON.stringify(workItemsWhere)],()=>getPosts(workItemsWhere) )
+  
+  //const session = (await getSession({ req })) as unknown as Session;
+  
+  return {
+    props: {
+      dehydratedState: dehydrate(qc),
+    },
+  }
+};
 
 export default WorkDetailPage;
