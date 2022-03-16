@@ -71,7 +71,7 @@
     "react-image-crop": "^9.0.5",
     "react-intersection-observer": "^8.32.0",
     "react-masonry-css": "^1.0.14",
-    "react-query": "~3.34.7",
+    "react-query": "~3.34.16",
     "react-rating": "^2.0.5",
     "react-share": "^4.4.0",
     "react-toast-notifications": "^2.5.1",

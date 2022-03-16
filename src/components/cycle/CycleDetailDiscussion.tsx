@@ -30,6 +30,7 @@ import useWorks from '@/src/useWorks';
 // import detailPagesAtom from '@/src/atoms/detailPages';
 
 import styles from './CycleDetailDiscussion.module.css';
+import { useToasts } from 'react-toast-notifications'
 
 // import globalSearchEngineAtom from '@/src/atoms/searchEngine';
 import CycleDetailDiscussionCreateEurekaForm from './CycleDetailDiscussionCreateEurekaForm';
@@ -42,7 +43,6 @@ interface Props {
   className?: string;
   cacheKey:string[];
 }
-
 const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cacheKey }) => {
   // const [items, setItems] = useState<Item[]>();
   // const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
@@ -51,6 +51,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
   // const router = useRouter();
   const [session, isSessionLoading] = useSession() as [Session | null | undefined, boolean];
   const { t } = useTranslation('cycleDetail');
+  const { addToast } = useToasts()
   // const hyvorId = `${WEBAPP_URL}cycle/${cycle.id}`;
 
   const { data: works } = useWorks({ cycles: { some: { id: cycle?.id } } }, {
@@ -82,10 +83,15 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
         signInModalOpened: true,
       });
     } else {
-      setIsSuggestRelatedWork(false);
-      setIsCreateComment(false);
-      setIsCreateEureka(true);
-      // setGlobalModalsState({ ...globalModalsState, ...{ createPostModalOpened: true } });
+          if(isParticipant()){
+                setIsSuggestRelatedWork(false);
+                setIsCreateComment(false);
+                setIsCreateEureka(true);
+                // setGlobalModalsState({ ...globalModalsState, ...{ createPostModalOpened: true } });
+          }
+          else
+            addToast( t('canNotCreatePostJoinToCycle'), {appearance: 'error', autoDismiss: true,})
+
     }
   };
   const handleCreateCommentClick = (ev: MouseEvent<HTMLButtonElement>) => {
@@ -149,7 +155,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
             <Col xs={12} md={11}>
               <ButtonGroup className={`d-flex flex-column flex-md-row justify-content-between ${styles.optButtons}`} size="lg">
                 <Button
-                  disabled={!isParticipant()}
+                  //disabled={!isParticipant()}
                   onClick={handleCreateEurekaClick}
                   className={`d-flex align-items-center  justify-content-center ${styles.optButton} ${
                     styles.eurekaBtn

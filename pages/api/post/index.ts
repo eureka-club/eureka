@@ -123,7 +123,7 @@ export default getApiHandler()
           where = {
             AND:{
               ...where,
-              AMD:{
+              AND:{
                 OR:[
                   {
                     cycles:{

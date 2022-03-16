@@ -24,19 +24,11 @@ interface Props{
 }
 const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,itemSize=400,width="100%"})=>{
     const [mosaics,setMosaics] = useState<JSX.Element[]>([])
-    const [innerHeight,setinnerHeight]=useState<number>(300)
-
-
     useEffect(()=>{
-      setinnerHeight(globalThis.window.innerHeight)
-    },[])
-
-      const items = React.useMemo<JSX.Element[]>(()=>{
-        const res:JSX.Element[] = []
-        if(it){
-            let aux = [...it]
-            while(aux.length){
-              const a = aux.splice(0,4)
+         if(it){
+            const items = [...it]
+            while(items.length){
+              const a = items.splice(0,4)
               const rows = []
               for(let item of a){
                   if (isCycleMosaicItem(item)) {
@@ -82,27 +74,31 @@ const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,itemSize=400,width
                     rows.push(<MosaicItemComment detailed commentId={it.id} cacheKey={cacheKey} />);                      
                   }
                 }
-                res.push(
+                mosaics.push(
                   <section className="d-flex flex-column flex-md-row justify-content-center">{rows.map(
                     r=><section className="my-2" key={v4()}>{r}</section>
                     )}</section>
                 )
             }            
-        }
-        return res;
-      },[it,cacheKey])
-
+            setMosaics(()=>[...mosaics]);
+          }
+      },[it])
 
     const renderItem = (props:{ index:number, style:Record<string,any> }) => {
       const {index,style} = props;
       return  <section className="" style={style}>
         <aside className={`p-4 mb-3`} key={`${v4()}`}>
-              {items[index]}
+              {it[index]}
         </aside>
       </section>
     };
 
 
+      const getSize = (index:number) => {
+          if(isPostMosaicItem(it[index]))
+            return 355;
+          else return 200  
+      };
       
         return <List
           height={globalThis.window.innerHeight}

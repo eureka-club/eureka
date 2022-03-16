@@ -10,7 +10,7 @@ export const getCycles = async (
   
   let url = '';
   const w = encodeURIComponent(JSON.stringify(where))
-  url = `/api/cycle${where ? `?where=${w}` : ''}`;
+  url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle${where ? `?where=${w}` : ''}`;
    
   const res = await fetch(url);
   if (!res.ok) return [];
@@ -40,6 +40,7 @@ const useCycles = (where?: Prisma.CycleWhereInput, options?: Options) => {
   return useQuery<CycleMosaicItem[]>(ck, () => getCycles(where), {
     staleTime,
     enabled,
+    retry:3
   });
 };
 

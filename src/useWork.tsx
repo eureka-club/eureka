@@ -1,10 +1,11 @@
 import { useQuery, UseQueryResult } from 'react-query';
 import { WorkDetail } from './types/work';
 
-export const getRecord = async (id: number): Promise<WorkDetail> => {
+export const getWork = async (id: number): Promise<WorkDetail> => {
   if (!id) throw new Error('idRequired');
   // { error: 'not work id provided' };
-  const url = `/api/work/${id}`;
+  const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/work/${id}`;
+
   const res = await fetch(url);
   if (!res.ok) throw new Error('Error');
   // { error: 'server error' };
@@ -24,8 +25,8 @@ const useWork = (id: number, options?: Options): UseQueryResult<WorkDetail,Error
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  return useQuery<WorkDetail,Error>(ck, () => getRecord(id), {
-    // staleTime,
+  return useQuery<WorkDetail,Error>(ck, () => getWork(id), {
+    staleTime,
     enabled,
   });
 };
