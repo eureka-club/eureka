@@ -66,6 +66,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
   const [userId, setUserId] = useState<number>();
   const { addToast } = useToasts();
   const [workId, setWorkId] = useState<string>('');
+  const [isPublic, setIsPublic] = useState<boolean>(true);
   //const [photo, setPhoto] = useState<File>();
   const [currentImg, setCurrentImg] = useState<string | undefined>();
 
@@ -229,7 +230,6 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
     if (searchResult != null) {
       if (isCycleMosaicItem(searchResult)) {
         setSelectedCycle(searchResult);
-        if (formRef.current) formRef.current.isPublic.checked = searchResult.access === 1;
       }
       if (isWorkMosaicItem(searchResult)) {
         setSelectedWork(searchResult);
@@ -241,6 +241,8 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
     const searchResult = selected[0];
     if (searchResult != null) {
       setSelectedCycle(searchResult);
+      if(searchResult.access === 2)
+      setIsPublic(false);
     }
   };
 
@@ -253,7 +255,8 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
   const handleClearSelectedCycle = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
     setSelectedCycle(null);
-    if (formRef.current) formRef.current.isPublic.checked = true;
+    setIsPublic(true);
+    //if (formRef.current) formRef.current.isPublic.checked = true;
   };
 
   const handleSubmit = async (ev: MouseEvent<HTMLButtonElement>) => {
@@ -272,7 +275,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
         image: imageFile,
         language: form.language.value,
         contentText: editorRef.current.getContent(), // form.description.value.length ? form.description.value : null,
-        isPublic: form.isPublic.checked,
+        isPublic: isPublic,//form.isPublic.checked,
         topics: items.join(','),
         tags,
       };
@@ -285,7 +288,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
         image: imageFile,
         language: form.language.value,
         contentText: editorRef.current.getContent(), // form.description.value.length ? form.description.value : null,
-        isPublic: form.isPublic.checked,
+        isPublic: isPublic,//form.isPublic.checked,
         topics: items.join(','),
         tags,
       };
@@ -550,16 +553,16 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
         <Container className="py-3">
             <Row className='d-flex flex-column flex-lg-row'>
             <Col className="border-end border-info mb-4">
-              <FormCheck type="checkbox" defaultChecked inline id="isPublic" label={t('isPublicFieldLabel')} />
+             {/* <FormCheck type="checkbox" defaultChecked inline id="isPublic" label={t('isPublicFieldLabel')} />
               <small style={{ color: 'lightgrey', display: 'block', margin: '0.25rem 0 0 1.25rem' }}>
                 {t('isPublicInfotip')}
-              </small>
+              </small>*/}
             </Col>
             <Col className="mb-4">
               <Button variant="primary" disabled={isCreatePostLoading} onClick={(e)=>{handleSubmit(e)}} className="w-100 text-white">
                 {t('submitButtonLabel')}
                 {isCreatePostLoading ? (
-                  <Spinner animation="grow" variant="info" size="sm" />
+                  <Spinner className="ms-2" animation="grow" variant="info" size="sm" />
                 ) : (
                   <span className={styles.placeholder} />
                 )}
