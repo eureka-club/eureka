@@ -1,6 +1,7 @@
 import {Component, ReactNode} from 'react'
 import SimpleLayout from '@/src/components/layouts/SimpleLayout'
 import Link from 'next/link'
+import withTranslation from 'next-translate/withTranslation'
 
 
 interface State{
@@ -8,8 +9,9 @@ interface State{
 }
 interface Props{
     children:ReactNode
+    i18n:any
 }
-export class ErrorBoundary extends Component<Props,State>{
+class ErrorBoundary extends Component<Props,State>{
     constructor(props:any){
         super(props)
         this.state = {
@@ -23,27 +25,29 @@ export class ErrorBoundary extends Component<Props,State>{
         }
     }
 
-    componentDidCatch(error: any,errorInfo: any){debugger;
+    componentDidCatch(error: any,errorInfo: any){
         console.log(error,errorInfo)
     }
 
     render(){
-      
+      const { t, lang } = this.props.i18n;
 
         if(this.state.hasError)
             return <SimpleLayout>
-                {/*<Image className="d-none d-md-inline-block" src="/img/error.webp" layout='fill' alt='Opps an error occurred!'  />*/}
-              <div id="notfound">
-		<div className="notfound">
-			<div className="notfound404">
-				<h1>Oops!</h1>
-				<h2>404 - The Page can not be found</h2>
-			</div>
-			<Link href='/'><a className='btn'>Go TO Homepage</a></Link>
-		</div>
-	</div>
+        <div id="notfound">
+            <div className="notfound">
+                <div className="notfound404">
+                    <h1>Oops!</h1>
+                    <h2>{t('ErrorPageMessage')}</h2>
+                </div>
+                <div onClick={() => window.location.replace('/')}>
+                <a className='btn'>{t('goToHomepage')}</a>
+                </div>
+		    </div>
+	    </div>
             </SimpleLayout>
         return this.props.children
 
     }
 }
+export default withTranslation(ErrorBoundary,'common')

@@ -62,6 +62,7 @@
   "twitterComplement": "",
   "facebookComplement": "",
   "goToHomepage": "Retour à la page d'accueil",
+  "ErrorPageMessage":"404 - La page est introuvable",
   "Loading": "Chargement",
   "Trending topics": "Thèmes populaires",
   "uncategorized": "Non classé",

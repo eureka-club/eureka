@@ -62,6 +62,7 @@
   "twitterComplement": "",
   "facebookComplement": "",
   "goToHomepage": "Ir al inicio",
+  "ErrorPageMessage":"404 - Página no encontrada",
   "Loading": "Cargando",
   "Trending topics": "Temas populares",
   "uncategorized": "Sin categoria",

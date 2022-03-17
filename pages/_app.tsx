@@ -15,7 +15,7 @@ import globalModalsAtom from '../src/atoms/globalModals';
 // import './_app.css';
 import './scss/custom.scss';
 
-import { ErrorBoundary } from '@/src/ErrorBounddary';
+import  ErrorBoundary from '@/src/ErrorBounddary';
 // const queryClient = new QueryClient();
 // import { GlobalEventsContext, useGlobalEventsContext } from '@/src/useGlobalEventsContext';
 import { NotificationProvider } from '@/src/useNotificationProvider';
