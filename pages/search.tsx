@@ -82,24 +82,24 @@ const SearchPage: NextPage = () => {
         const fields = (router.query.fields as string).split(',');
         w = encodeURIComponent(
           JSON.stringify({
-            AND:{
+            
               OR: fields.map((f:string) => ({ [`${f}`]: { contains: q}})),          
 
-            }
+            
           })
         );
       }
       else {
         w = encodeURIComponent(
         JSON.stringify({
-          AND:{
+          
             OR: [
               { topics: { contains: q } },
               { title: { contains: q } }, 
               { contentText: { contains: q } },              
             ],
 
-          }
+          
           }),
         );
       }
@@ -119,7 +119,7 @@ const SearchPage: NextPage = () => {
 
   // const [where, setWhere] = useState('');
   // const [tempWhere, setTempWhere] = useState('');
-  const { isLoading, data: items, error } = useItems(where, ["ITEMS", q!], {
+  const { isLoading, data: items, error } = useItems(q, ["ITEMS", q!], {
     enabled: !!where && !globalSearchEngineState.itemsFound?.length
   });
   // const { isLoading, /* isError, error, */ data: works } = useWorks();
@@ -129,7 +129,7 @@ const SearchPage: NextPage = () => {
   
   const [homepageMosaicData, setHomepageMosaicData] = useState<SearchResult[]>([]);
 
-  useEffect(() => {debugger;
+  useEffect(() => {
     if(items){
       // items.forEach((i)=>{
       //   if(isCycleMosaicItem(i))

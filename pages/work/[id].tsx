@@ -14,8 +14,8 @@ import { WEBAPP_URL } from '../../src/constants';
 import WorkDetailComponent from '../../src/components/work/WorkDetail';
 import { dehydrate,QueryClient } from 'react-query';
 import useWork,{getWork} from '../../src/useWork';
-import useCycles,{getCycles} from '@/src/useCycles'
-import usePosts,{getPosts} from '@/src/usePosts'
+import {getCycles} from '@/src/useCycles'
+import {getPosts} from '@/src/usePosts'
 
 // import {
 //   countCycles,

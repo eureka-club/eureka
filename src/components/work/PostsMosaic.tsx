@@ -26,13 +26,15 @@ const PostsMosaic: FunctionComponent<Props> = ({ work }) => {
   // );
 
   const workPostsWhere = {
+    AND:{
       works:{
         some:{
           id:work.id
         }
       }
-    };
-    const {data:posts} = usePosts(workPostsWhere,{enabled:!!work.id})
+    }
+  };
+  const {data:posts} = usePosts(workPostsWhere,{enabled:!!work.id})
   
 
   return (

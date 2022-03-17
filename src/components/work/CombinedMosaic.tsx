@@ -50,9 +50,11 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
 
 
   const {data:posts} = usePosts({
-    works:{
-      some:{
-        id:work.id
+    AND:{
+      works:{
+        some:{
+          id:work.id
+        }
       }
     }
   },{enabled:!!work.id})

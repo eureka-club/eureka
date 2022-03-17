@@ -74,7 +74,7 @@ const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,itemSize=400,width
                 }
                 mosaics.push(
                   <section className="d-flex flex-column flex-md-row justify-content-center">{rows.map(
-                    r=><section className="my-2" key={v4()}>{r}</section>
+                    r=><section className="my-2" data-cy="items" key={v4()}>{r}</section>
                     )}</section>
                 )
             }            

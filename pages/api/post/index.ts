@@ -86,70 +86,65 @@ export default getApiHandler()
       
       const { q = null, where:w = undefined, id = null, take:t=undefined, page:c } = req.query;
       const session = (await getSession({ req })) as unknown as Session;
-    
+    debugger;
       let data = null;
       let where = w ? JSON.parse(w.toString()) : undefined;
       const take = t ? parseInt(t?.toString()) : undefined;
       const page = c ? +c : undefined;
-      if(where && !('creatorId' in where)){
-        if(session){
-          where = {
-            AND:{
-              ...where,
-              AND:{
-                OR:[
-                  {
-                    cycles:{
-                      some:{
-                        OR:[
-                          {access:1},
-                          {creatorId:session?.user.id},
-                          {participants:{some:{id:session?.user.id}}}  
-                        ]
-                      }
-                    }
-                    
-                  },
-                  {
-                    cycles:{none :{}}  
+      if(session){
+        where = {
+          AND:{
+            ... where && where.AND,
+            OR:[
+              {
+                cycles:{
+                  some:{
+                    OR:[
+                      {access:1},
+                      {creatorId:session?.user.id},
+                      {participants:{some:{id:session?.user.id}}},  
+                    ]
                   }
-                ]
-
+                }                  
+              },
+              (where && where.OR)||{},
+              {
+                cycles:{none :{}}  
               }
-            }
-          }
-        }
-        else{
-          where = {
-            AND:{
-              ...where,
-              AND:{
-                OR:[
-                  {
-                    cycles:{
-                      some:{
-                        access:1,              
-                      }
-                    },
-                    
-                  },
-                  {
-                    cycles:{none:{}}
-                  }
-                ]
-              }
-            }
-          }
+            ],
+          },          
         }
       }
+      else{
+        where = {
+          AND:{
+            ... where && where.AND,
+            OR:[
+              {
+                cycles:{
+                  some:{
+                    access:1,
+                  }
+                }                  
+              },
+              (where && where.OR)||{},
+              {
+                cycles:{none :{}}  
+              }
+            ],
+          },
+        }   
+      }
+      // if(where && !('creatorId' in where)){
+      // }
       
       if (typeof q === 'string') {
-        data = await findAll({take,where:{
+        where = {
           ...where,
-          AND:{
-            OR: [{ title: { contains: q } }, { contentText: { contains: q } }, { creator: { name:{contains: q} } }],
-          }
-        }},page);
+          OR: [{ title: { contains: q } }, { contentText: { contains: q } }, { creator: { name:{contains: q} } }],
+          
+        }
+        data = await findAll({take,where},page);
       } else if (where) {
         data = await findAll({take,where},page);
       } else if (id) {

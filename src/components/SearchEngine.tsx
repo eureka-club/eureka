@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 // import { setCookie } from 'nookies';
-import { FunctionComponent, useState } from 'react';
+import { FunctionComponent, useState, useEffect } from 'react';
 import { InputGroup, Form, Button } from 'react-bootstrap';
 import { AsyncTypeahead, Menu, MenuItem, TypeaheadResult } from 'react-bootstrap-typeahead';
 
@@ -33,7 +33,7 @@ import { CycleMosaicItem } from '../types/cycle';
 // import { CycleMosaicItem } from '../types/cycle';
 import { PostMosaicItem } from '../types/post';
 import { WorkMosaicItem } from '../types/work';
-
+import useItems from '@/src/useItems'
 
 // const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
 interface Props {
@@ -47,22 +47,17 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
   const router = useRouter();
   const { t } = useTranslation('searchEngine');
 
-  const [isSearchResultsLoading, setIsSearchResultsLoading] = useState(false);
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  // const [isSearchResultsLoading, setIsSearchResultsLoading] = useState(false);
+  //const [searchResults, setSearchResults] = useState<SearchResult[]>();
 
-  const handleSearchWorkOrCycle = async (query: string) => {
-    setSearchResults([]);
 
-    setIsSearchResultsLoading(true);
-    
-    setQ(query);
-    const res = await fetch(`/api/searchEngine?q=${query}`);
-    if(res.ok){
-      const {data} = await res.json();
-      setSearchResults(data);
-      setIsSearchResultsLoading(false);
-      setGlobalSearchEngineState({ ...globalSearchEngineState, q: ''});
-    }
+  const {data:searchResults,isLoading:isSearchResultsLoading} = useItems(q,undefined,{enabled:!!q})
+  
+  const handleSearchWorkOrCycle = async (query: string) => {debugger;
+    // setIsSearchResultsLoading(true);
+    setQ(()=>query);    
+    setGlobalSearchEngineState({ ...globalSearchEngineState, q: ''});
+    //const res = await fetch(`/api/searchEngine?q=${query}`);
 
     // const responseWork = await (await fetch(`/api/work/?q=${query}`)).json();
     // const responseCycle = await (await fetch(`/api/cycle/?q=${query}`)).json();
@@ -108,7 +103,7 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
   
   const onItemsFound = async () => {
     if(isSearchResultsLoading || !searchResults?.length)return;
-    queryClient.setQueryData(["ITEMS", q], searchResults);
+    //queryClient.setQueryData(["ITEMS", q], searchResults);
     router.push(`/search?q=${q}`);
     
     /* let where= '';
@@ -195,7 +190,7 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
             labelKey={labelKeyFn}
             minLength={5}
             onSearch={handleSearchWorkOrCycle}
-            options={searchResults}
+            options={searchResults||[]}
             onChange={handleSelectItem}
             ignoreDiacritics
             // renderMenuItemChildren={(searchResult) => {

@@ -100,7 +100,18 @@ const Mediatheque: NextPage = () => {
     enabled:!!+id
   });
 
-  const {data:posts} = usePosts({creatorId:+id},{enabled:!!id})
+  const {data:posts} = usePosts({
+    AND:{
+      creatorId:+id,
+    },
+    ... idSession && {
+      OR:{
+        creator:{
+          followedBy:{some:{id:+idSession}}
+        }
+      }
+    },
+  },{enabled:!!(id && !isLoadingSession)})
 
   const cyclesCreatedOrJoinedWhere = {
     OR:[

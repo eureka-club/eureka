@@ -71,8 +71,17 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
       }
     }
   }
+  const workPostsWhere = {
+    AND:{
+      works:{
+        some:{
+          id:workId
+        }
+      }
+    }
+  }
   const {data:cycles} = useCycles(workItemsWhere,{enabled:!!workId})
-  const {data:posts} = usePosts(workItemsWhere,{enabled:!!workId})
+  const {data:posts} = usePosts(workPostsWhere,{enabled:!!workId})
   
   const [all,setAll] = useState<(CycleMosaicItem|PostMosaicItem)[]>()
   useEffect(()=>{
@@ -229,7 +238,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
                             </NavLink>
                           </NavItem>
                           <NavItem>
-                            <NavLink eventKey="posts">
+                            <NavLink eventKey="posts" data-cy="posts">
                               {t('tabHeaderPosts')} ({postsCount})
                             </NavLink>
                           </NavItem>
@@ -253,7 +262,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
                             <p className={styles.explanatoryText}>{t('explanatoryTextPosts')}</p>
 
                             {/* {postsCount > 0 && <PostsMosaic work={work} />} */}
-                            {posts && <ListWindow items={posts} cacheKey={['POSTS',JSON.stringify(workItemsWhere)]} />}
+                            {posts && <ListWindow items={posts} cacheKey={['POSTS',JSON.stringify(workPostsWhere)]} />}
                           </TabPane>
                           <TabPane eventKey="cycles">
                             {/* {cyclesCount > 0 && <CyclesMosaic work={work} />} */}
