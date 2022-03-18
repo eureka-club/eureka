@@ -6,6 +6,7 @@ import { Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { find, remove } from '../../../src/facades/post';
 import prisma from '../../../src/lib/prisma';
+import {storeDeleteFile} from '@/src/facades/fileUpload'
 
 export default getApiHandler()
   .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
@@ -34,7 +35,10 @@ export default getApiHandler()
         res.status(404).end();
         return;
       }
-
+      
+      if(post.localImages && post.localImages.length){
+        await storeDeleteFile(post.localImages[0].storedFile)
+      }
       await remove(post);
 
       res.status(200).json({ status: 'OK' });

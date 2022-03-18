@@ -168,7 +168,7 @@ export default getApiHandler()
       res.status(200).json({ 
         status: 'OK', 
         data, 
-        ... (take&&page) && {hasNextPage: posts_.length > take * (page+1)}
+        //... (take&&page) && {hasNextPage: posts_.length > take * (page+1)}
       });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

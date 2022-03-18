@@ -1,4 +1,4 @@
-import React,{useEffect,useRef,useState} from 'react'
+import React,{useEffect,useMemo,useRef,useState} from 'react'
 import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem, isCommentMosaicItem, isPost } from '@/src/types';
 import { FixedSizeList as List } from 'react-window';
 import MosaicItemCycle from './cycle/MosaicItem';
@@ -22,65 +22,65 @@ interface Props{
     width?:string
 }
 const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,itemSize=400,width="100%"})=>{
-    const [mosaics,setMosaics] = useState<JSX.Element[]>([])
-    useEffect(()=>{
-         if(it){
-            const items = [...it]
-            while(items.length){
-              const a = items.splice(0,4)
-              const rows = []
-              for(let item of a){
-                  let mosaic = <></>
-                  if (isCycleMosaicItem(item)) {
-                    rows.push(<CycleContext.Provider value={{ cycle: item as CycleMosaicItem }}>
-                        <MosaicItemCycle key={`${v4()}`} cycleId={item.id} detailed className="me-3 my-6"/>
-                      </CycleContext.Provider>)
-                  }
-                  else if (isPostMosaicItem(item)) {
-                    // let pp = parent;
-                    // if (!pp) {
-                    //   const it: PostMosaicItem = item as PostMosaicItem;
-                    //   if (it.works && it.works.length) pp = it.works[0] as WorkMosaicItem;
-                    //   else if (it.cycles && it.cycles.length > 0) pp = it.cycles[0] as CycleMosaicItem;
-                    // }
-                    // const cycleId = isCycleMosaicItem(pp!) ? pp.id : undefined;
-                    // const workId = isWorkMosaicItem(pp!) ? pp.id : undefined;
+    
+    const mosaics = useMemo(()=>{
+      let mosaics:JSX.Element[] = []
+      if(it){
+        const items = [...it]
+        while(items.length){
+          const a = items.splice(0,4)
+          const rows = []
+          for(let item of a){
+              if (isCycleMosaicItem(item)) {
+                rows.push(<CycleContext.Provider value={{ cycle: item as CycleMosaicItem }}>
+                    <MosaicItemCycle key={`${v4()}`} cycleId={item.id} detailed className="me-3 my-6"/>
+                  </CycleContext.Provider>)
+              }
+              else if (isPostMosaicItem(item)) {
+                // let pp = parent;
+                // if (!pp) {
+                //   const it: PostMosaicItem = item as PostMosaicItem;
+                //   if (it.works && it.works.length) pp = it.works[0] as WorkMosaicItem;
+                //   else if (it.cycles && it.cycles.length > 0) pp = it.cycles[0] as CycleMosaicItem;
+                // }
+                // const cycleId = isCycleMosaicItem(pp!) ? pp.id : undefined;
+                // const workId = isWorkMosaicItem(pp!) ? pp.id : undefined;
+            
+                rows.push(<MosaicItemPost
+                    key={`${v4()}`}
+                    showComments={true}
+                    postId={item.id}
+                    display={'v'}
+                    cacheKey={cacheKey}
+                    className="me-3 my-6"
+                  />)
                 
-                    rows.push(<MosaicItemPost
-                        key={`${v4()}`}
-                        showComments={true}
-                        postId={item.id}
-                        display={'v'}
-                        cacheKey={cacheKey}
-                        className="me-3 my-6"
-                      />)
-                    
-                  }
-                  else if (isWorkMosaicItem(item)) {
-                    
-                      // <WorkContext.Provider value={{ linkToWork: true }}>
-                      rows.push(<MosaicItemWork 
-                        linkToWork showShare={false} showButtonLabels={true} key={`${v4()}`} workId={item.id} className="mb-2"/>)
-                      // </WorkContext.Provider>
-                    
-                  }
-                  else if (isUserMosaicItem(item)) {
-                    rows.push(<MosaicItemUser key={`${v4()}`} user={item} className="mb-2 my-6" />);
-                  }
-                  else if(isCommentMosaicItem(item)){
-                    const it: CommentMosaicItem = item as CommentMosaicItem;
-                    rows.push(<MosaicItemComment detailed commentId={it.id} cacheKey={cacheKey} />);                      
-                  }
-                }
-                mosaics.push(
-                  <section className="d-flex flex-column flex-md-row justify-content-center">{rows.map(
-                    r=><section className="my-2" data-cy="items" key={v4()}>{r}</section>
-                    )}</section>
-                )
-            }            
-            setMosaics(()=>[...mosaics]);
-          }
-      },[it])
+              }
+              else if (isWorkMosaicItem(item)) {
+                
+                  // <WorkContext.Provider value={{ linkToWork: true }}>
+                  rows.push(<MosaicItemWork 
+                    linkToWork showShare={false} showButtonLabels={true} key={`${v4()}`} workId={item.id} className="mb-2"/>)
+                  // </WorkContext.Provider>
+                
+              }
+              else if (isUserMosaicItem(item)) {
+                rows.push(<MosaicItemUser key={`${v4()}`} user={item} className="mb-2 my-6" />);
+              }
+              // else if(isCommentMosaicItem(item)){
+              //   const it: CommentMosaicItem = item as CommentMosaicItem;
+              //   rows.push(<MosaicItemComment detailed commentId={it.id} cacheKey={cacheKey} />);                      
+              // }
+            }
+            mosaics.push(
+              <section className="d-flex flex-column flex-md-row justify-content-center">{rows.map(
+                r=><section className="my-2" data-cy="items" key={v4()}>{r}</section>
+                )}</section>
+            )
+        }            
+      }
+      return mosaics;
+    },[it,cacheKey])
 
     const renderItem = (props:{ index:number, style:Record<string,any> }) => {
       const {index,style} = props;

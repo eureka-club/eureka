@@ -223,7 +223,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         const previewsItems = queryClient.getQueryData<PostMosaicItem[]>(cacheKey);
         return { previewsItems, cacheKey };
       },
-      onSettled: (_eureka, error, _variables, context) => {
+      onSettled: (_eureka, error, _variables, context) => {debugger;
         if (error) {
           if (context) {
             queryClient.setQueryData(context.cacheKey, context.previewsItems);

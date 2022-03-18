@@ -45,7 +45,7 @@ interface Props {
   cacheKey?:string[]
 }
 
-const EditPostForm: FunctionComponent<Props> = ({noModal = false,cacheKey}) => {
+const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
   const [isSearchCycleLoading, setIsSearchCycleLoading] = useState(false);
@@ -115,12 +115,13 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,cacheKey}) => {
       onMutate: async (variables) => {debugger;
          if (post) {
             const ck_ = ck||['POST',`${post.id}`];
+            await queryClient.cancelQueries(ck_)
             const snapshot = queryClient.getQueryData<PostMosaicItem[]|PostMosaicItem>(ck_)
             const {title,contentText} = variables;
             if(snapshot){
               let posts = [];
               if(('length' in snapshot)){
-                posts = snapshot as PostMosaicItem[];                  
+                posts = [...snapshot] as PostMosaicItem[];                  
                 const idx = posts.findIndex(p=>p.id == +postId)
                 if(idx >- 1){
                   const oldPost = posts[idx];
@@ -148,10 +149,10 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,cacheKey}) => {
       onSettled: (_post, error, _variables, context) => {
         if (error){
           queryClient.invalidateQueries(ck);
-          queryClient.invalidateQueries(['POST',postId]);
+          queryClient.invalidateQueries(['POST',`${postId}`]);
         }
         // this make the page to do a refresh
-        // queryClient.invalidateQueries(ck);
+        queryClient.invalidateQueries(ck);
         // queryClient.invalidateQueries(['POST',postId]);
         
       },
@@ -196,7 +197,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,cacheKey}) => {
     if (searchResult != null) {
       if (isCycleMosaicItem(searchResult)) {
         setSelectedCycle(searchResult);
-        if (formRef.current) formRef.current.isPublic.checked = searchResult.access === 1;
+       // if (formRef.current) formRef.current.isPublic.checked = searchResult.access === 1;
       }
       if (isWorkMosaicItem(searchResult)) {
         setSelectedWork(searchResult);
@@ -220,7 +221,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,cacheKey}) => {
   const handleClearSelectedCycle = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
     setSelectedCycle(null);
-    if (formRef.current) formRef.current.isPublic.checked = true;
+   // if (formRef.current) formRef.current.isPublic.checked = true;
   };
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
@@ -240,7 +241,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,cacheKey}) => {
         // image: imageFile,
         language: form.language.value,
         contentText: editorRef.current.getContent(), // form.description.value.length ? form.description.value : null,
-        isPublic: form.isPublic.checked,
+        isPublic: post?.isPublic,
         topics: items.join(','),
       };
       await execEditPost(payload);
@@ -253,7 +254,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,cacheKey}) => {
         // image: imageFile,
         language: form.language.value,
         contentText: editorRef.current.getContent(), // form.description.value.length ? form.description.value : null,
-        isPublic: form.isPublic.checked,
+        isPublic: post ? post.isPublic : false,
         topics: items.join(','),
       };
       await execEditPost(payload);
@@ -493,17 +494,17 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,cacheKey}) => {
           <Container className="py-3">
             <Row className='d-flex flex-column flex-lg-row'>
               <Col className='mb-4'>
-                <FormCheck
+                {/* <FormCheck
                   type="checkbox"
                   defaultChecked={post.isPublic}
                   onChange={handlerchange}
                   inline
                   id="isPublic"
                   label={t('isPublicFieldLabel')}
-                />
-                <small style={{ color: 'lightgrey', display: 'block', margin: '0.25rem 0 0 1.25rem' }}>
+                /> */}
+                {/* <small style={{ color: 'lightgrey', display: 'block', margin: '0.25rem 0 0 1.25rem' }}>
                   {t('isPublicInfotip')}
-                </small>
+                </small> */}
                 <FormCheck
                       type="checkbox"
                       defaultChecked={remove}

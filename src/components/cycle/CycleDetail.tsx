@@ -61,8 +61,9 @@ import { useCycleContext, CycleContext } from '../../useCycleContext';
 import CycleDetailHeader from './CycleDetailHeader';
 import CycleDetailDiscussion from './CycleDetailDiscussion';
 import useCycle from '@/src/useCycle';
-import useCycleItem from '@/src/useCycleItems';
+// import useCycleItem from '@/src/useCycleItems';
 import useWorks from '@/src/useWorks'
+import usePosts from '@/src/usePosts'
 interface Props {
   // cycle: CycleMosaicItem;
   post?: PostMosaicItem;
@@ -127,30 +128,33 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   const [page,setPage] = useState<number>(1);
   const [where,setWhere] = useState<{filtersWork:number[]}>()
+
+  const cyclePostsWhere = {AND:{cycles:{some:{id:+cycleId}}}}
+  const {data:posts} = usePosts(cyclePostsWhere,{enabled:!!cycleId})
   
-  const {data} = useCycleItem(+cycleId,-1,where,{
-    enabled:!!cycleId
-  })
+  // const {data} = useCycleItem(+cycleId,-1,where,{
+  //   enabled:!!cycleId
+  // })
 
   const [items,setItems] = useState<(CommentMosaicItem|PostMosaicItem)[]>();
   //const [hasNextPage,setHasNextPage] = useState<boolean>();
 
-  useEffect(()=>{
-    if(data){
-      setItems(data.items);
-      //setHasNextPage(data.hasNextPage);
+  // useEffect(()=>{
+  //   if(data){
+  //     setItems(data.items);
+  //     //setHasNextPage(data.hasNextPage);
 
-      for(let i of data.items){
-        if(isPostMosaicItem(i)){
-          queryClient.setQueryData(['POST',i.id.toString()],i)          
-        }
-        else if(isCommentMosaicItem(i)){
-          queryClient.setQueryData(['COMMENT',i.id.toString()],i)          
-        }
+  //     for(let i of data.items){
+  //       if(isPostMosaicItem(i)){
+  //         queryClient.setQueryData(['POST',i.id.toString()],i)          
+  //       }
+  //       else if(isCommentMosaicItem(i)){
+  //         queryClient.setQueryData(['COMMENT',i.id.toString()],i)          
+  //       }
         
-      }
-    }
-  },[data,queryClient])
+  //     }
+  //   }
+  // },[data,queryClient])
 
 
   // useEffect(()=>{
@@ -289,97 +293,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     return false;
   };
 
-  // const getComments = () => {
-  //   const getParent = (c: Comment): WorkMosaicItem | CycleMosaicItem |  CommentMosaicItem  => {
-  //     const cmi = (c as CommentMosaicItem);
-  //     if(!cmi.commentId && !cmi.postId){        
-  //       if(cmi.workId) return (cmi.work as WorkMosaicItem);
-  //       if(cmi.cycleId) return (cycle as CycleMosaicItem);
-  //     }
-  //     return cmi;
-  //   };
-  //   if (cycle && items.length){
-      
-  //     const fcf = items.filter((c) => !c.postId && !c.commentId);
-  //     const fcfs = fcf.sort((p, c) => (p.id > c.id && -1) || 1)
-  //     return fcfs
-  //       // .map(c => <ComentMosaic
-  //       //       key={v4()}
-  //       //       comment={c as unknown as CommentMosaicItem}
-  //       //       detailed
-  //       //       showComments
-  //       //       commentParent={getParent(c)}
-  //       //       cacheKey={['CYCLE', `${cycle.id}`]}
-  //       //       className="mb-4"
-  //       //     />
-        
-  //       // );
-  //   }
-  //   return [];
-  // };
-
-  // const getPosts = () => {
-  //   if(cycle && items.length)
-  //     return items.sort((a,b)=>a.createdAt >= b.createdAt ? -1 : 1);
-  //   return [];
-  // };
-
-  const renderItems = () => {
-    const res = [];
-    if(cycle && items){
-      // const items = [
-      //   ... getComments() as CommentMosaicItem[],
-      //   ... getPosts()
-      // ]
-      // .sort((a,b)=>a.createdAt >= b.createdAt ? -1 : 1);
-      // for(let i of items){
-      //   if(isPostMosaicItem(i)){
-      //     const ck = ['POST',i.id.toString()];
-      //     res.push(
-      //       <PostMosaic 
-      //       showComments 
-      //       postId={i.id} 
-      //       display="h" 
-      //       key={v4()} 
-      //       cacheKey={ck} 
-      //       className="mb-2" />
-      //     )
-      //   }
-      //   else if(isCommentMosaicItem(i)){
-      //     const ck = ['COMMENT',i.id.toString()];
-      //     res.push(
-      //       <CommentMosaic 
-      //       key={v4()} 
-      //       detailed 
-      //       commentId={i.id} 
-      //       // commentParent={i.post as PostMosaicItem || i.work as WorkMosaicItem || i.cycle as CycleMosaicItem}
-      //       cacheKey={ck} className="mb-2" />
-      //     )
-      //   }
-        
-      // }
-      return <>  
-          {/*res*/}      
-        {/*  <Mosaic 
-              display="h"
-              stack={items}
-              showComments={false}
-              enabledPagination={true}
-              cacheKey={['ITEMS', `CYCLE-${cycle.id}-PAGE-${page}`]}
-            /> */}    
-      {/* <section className='d-none d-lg-flex' data-cy="mosaic-items">
-           <ListWindow items={items} cacheKey={['ITEMS', `CYCLE-${cycle.id}`]} height={360} width={'80%'}/>
-      </section>
-         <section className='d-block d-lg-none' data-cy="mosaic-items">
-           <ListWindow items={items} cacheKey={['ITEMS', `CYCLE-${cycle.id}`]} height={460} width={'100%'}/>
-      </section> */}
-       <ListWindow items={items} cacheKey={['ITEMS', `CYCLE-${cycle.id}`]} />
-       </>
-    }
-    return <></>
-  }
-
-
+  
   /* const renderCycleWorksComments = () => {
     if (cycle && cycle.comments)
       return cycle.comments
@@ -536,11 +450,11 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
              <HyvorComments entity='cycle' id={`${cycle.id}`}  />
         </TabPane>
          <TabPane eventKey="eurekas">
-            <CycleDetailDiscussion cycle={cycle} className="mb-5" cacheKey={['ITEMS',`CYCLE-${cycle.id}`]} />
+            <CycleDetailDiscussion cycle={cycle} className="mb-5" cacheKey={['POSTS',JSON.stringify(cyclePostsWhere)]} />
             <Row>
               <Col /* xs={{span:12, order:'last'}} md={{span:9,order:'first'}} */>
                 <MosaicContext.Provider value={{ showShare: true }}>
-                  {renderItems()}
+                  {posts && <ListWindow items={posts} cacheKey={['POSTS', JSON.stringify(cyclePostsWhere)]} />}
                 </MosaicContext.Provider>
                 {/* {page >1 && <Button 
                 className="my-3 pe-3 rounded-pill text-white" 

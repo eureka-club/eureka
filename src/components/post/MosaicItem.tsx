@@ -12,7 +12,7 @@ import SocialInteraction from '../common/SocialInteraction';
 import { PostMosaicItem } from '../../types/post';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
-import { isCycle, isWork } from '../../types';
+import { isCycle, isWork, Session } from '../../types';
 // import { CycleMosaicItem } from '../../types/cycle';
 // import { WorkMosaicItem } from '../../types/work';
 // import CommentsList from '../common/CommentsList';
@@ -28,6 +28,8 @@ import usePost from '@/src/usePost'
 import {useQueryClient} from 'react-query'
 import useCycle from '@/src/useCycle';
 import useWork from '@/src/useWork'
+import { useSession} from 'next-auth/client';
+import { BiEdit} from 'react-icons/bi';
 interface Props {
   postId: number|string;
   display?: 'v' | 'h';
@@ -66,7 +68,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const router = useRouter();
   // const [post,setPost] = useState<PostMosaicItem>();
   const [postParent,setPostParent] = useState<CycleMosaicItem|WorkMosaicItem>();
-
+  const [session] = useSession()
   //const postFromCache = queryClient.getQueryData<PostMosaicItem>(['POST',postId.toString()]);
   // const pp = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(cacheKey);
 
@@ -114,6 +116,9 @@ const MosaicItem: FunctionComponent<Props> = ({
   //   if (post.works && post.works.length) return post.works[0];
   //   return parent;
   // };
+  const canEditPost = ()=>{
+    return post.creatorId == (session as unknown as Session).user.id 
+  }
   const onEditPost = async (e:React.MouseEvent<HTMLButtonElement>) => {
     setGmAtom(res=>({...res,editPostModalOpened:true, editPostId:post.id, cacheKey}))
   }
@@ -143,39 +148,39 @@ const MosaicItem: FunctionComponent<Props> = ({
       return res;
     };
 
-  const canNavigate = () => {
-    return !loading;
-  };
-  const onImgClick = () => {
-    if (canNavigate()) router.push(postLinkHref);
-    setLoading(true);
-  };  
+    const canNavigate = () => {
+      return !loading;
+    };
+    const onImgClick = () => {
+      if (canNavigate()) router.push(postLinkHref);
+      setLoading(true);
+    };  
 
- const renderLocalImageComponent = () => {
-    const img = post?.localImages 
-      ? <><LocalImageComponent className={styles.postImage} filePath={post?.localImages[0].storedFile} alt={post?.title} />
-           <div className={styles.gradient} /></>
-      : undefined;
-    if (linkToPost) {
-      return (
-        <div
-          className={`${!loading ? 'cursor-pointer' : ''}`}
-          onClick={onImgClick}
-          role="presentation"
-        >
-          <LocalImageComponent
-                className={styles.postImage}
-                filePath={post.localImages[0]?.storedFile}
-                alt={post.title}
-              />
-              <div className={styles.gradient} />
-          {!canNavigate() && <Spinner className="position-absolute top-50 start-50" animation="grow" variant="info" />}
-          {img}
-        </div>
-      );
-    }
-    return img;
-  };
+    const renderLocalImageComponent = () => {
+      const img = post?.localImages 
+        ? <><LocalImageComponent className={styles.postImage} filePath={post?.localImages[0].storedFile} alt={post?.title} />
+            <div className={styles.gradient} /></>
+        : undefined;
+      if (linkToPost) {
+        return (
+          <div
+            className={`${!loading ? 'cursor-pointer' : ''}`}
+            onClick={onImgClick}
+            role="presentation"
+          >
+            <LocalImageComponent
+                  className={styles.postImage}
+                  filePath={post.localImages[0]?.storedFile}
+                  alt={post.title}
+                />
+                <div className={styles.gradient} />
+            {!canNavigate() && <Spinner className="position-absolute top-50 start-50" animation="grow" variant="info" />}
+            {img}
+          </div>
+        );
+      }
+      return img;
+    };
 
     return (
       <Card className={`${commentSection ? 'mosaic-post-comments' : 'mosaic'}  ${className}`} data-cy={specifyDataCy ? `mosaic-item-post-${post.id}`:''}>
@@ -242,6 +247,9 @@ const MosaicItem: FunctionComponent<Props> = ({
             />
           </Card.Footer>
         )}
+        {canEditPost() && <section className="position-absolute top-0 end-0">
+          <Button onClick={onEditPost} className="p-0 text-danger" size='sm' variant='link'><BiEdit/></Button>
+        </section>}
       </Card>
     );
   };
