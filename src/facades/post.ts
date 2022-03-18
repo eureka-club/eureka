@@ -52,7 +52,7 @@ export const findAll = async (props?:Prisma.PostFindManyArgs,page?:number): Prom
   return prisma.post.findMany({
     take,
     skip,
-    orderBy: { id: 'desc' },
+    orderBy: { createdAt: 'desc' },
     include:{
       works:{select:{id:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
       cycles:{select:{id:true,localImages:{select:{storedFile:true}},creatorId:true,startDate:true,endDate:true,title:true}},
