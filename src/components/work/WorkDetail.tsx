@@ -85,9 +85,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
   
   const [all,setAll] = useState<(CycleMosaicItem|PostMosaicItem)[]>()
   useEffect(()=>{
-    if(cycles)setAll(prev=>prev ? [...prev,...cycles]:cycles)
+    if(cycles && posts)setAll(()=>[...posts,...cycles])
 
-    if(posts)setAll(prev=>prev ? [...prev,...posts]:posts)
   },[posts,cycles])
 
   let cyclesCount = 0;
