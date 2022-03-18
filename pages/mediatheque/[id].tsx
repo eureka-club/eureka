@@ -510,9 +510,9 @@ const Mediatheque: NextPage = () => {
 
                 {readOrWatched()}
 
-                {/* {savedForLater()}
+                 {savedForLater()}
 
-                {usersFollowed()} */}
+                {usersFollowed()}
               </>
             )}
           </section>
