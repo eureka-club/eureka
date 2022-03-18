@@ -59,7 +59,7 @@ export default getApiHandler()
         data = await findAll({
           take,
           where: {
-            OR: [{ title: { contains: q } }, { contentText: { contains: q } }, { author: { contains: q } }],
+            OR: [{ title: { contains: q } },{topics:{contains:q}},{tags:{contains:q}}, { contentText: { contains: q } }, { author: { contains: q } }],
           }
         });
       } else if (where) {

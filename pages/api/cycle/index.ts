@@ -81,7 +81,7 @@ export default getApiHandler()
       let data = null;
       if (typeof q === 'string') {
         where = {
-          OR: [{ title: { contains: q } }, { contentText: { contains: q } }, { tags: { contains: q } }],
+          OR: [{ title: { contains: q } },{topics:{contains:q}},{tags:{contains:q}}, { contentText: { contains: q } }, { tags: { contains: q } }],
         };
         data = await findAll({take,where});
       } 

@@ -86,7 +86,7 @@ export default getApiHandler()
       
       const { q = null, where:w = undefined, id = null, take:t=undefined, page:c } = req.query;
       const session = (await getSession({ req })) as unknown as Session;
-    debugger;
+    
       let data = null;
       let where = w ? JSON.parse(w.toString()) : undefined;
       const take = t ? parseInt(t?.toString()) : undefined;
@@ -141,7 +141,7 @@ export default getApiHandler()
       if (typeof q === 'string') {
         where = {
           ...where,
-          OR: [{ title: { contains: q } }, { contentText: { contains: q } }, { creator: { name:{contains: q} } }],
+          OR: [{ title: { contains: q } },{topics:{contains:q}},{tags:{contains:q}}, { contentText: { contains: q } }, { creator: { name:{contains: q} } }],
           
         }
         data = await findAll({take,where},page);
