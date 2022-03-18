@@ -518,7 +518,7 @@ const Mediatheque: NextPage = () => {
           </section>
         )}
         <aside>
-          {renderAccessInfo()}
+          {renderAccessInfo()}  
           {(isLoadingUser || isLoadingSession) && <Spinner animation="grow" variant="info" />}
           {isSuccessUser && id && !user && <Spinner animation="grow" variant="info" />}
         </aside>
