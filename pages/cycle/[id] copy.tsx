@@ -102,7 +102,7 @@ const CycleDetailPage: NextPage = () => {
     if (!session) openSignInModal();
     else if (execJoinCycle && cycle) {
       setIsRequestingJoinCycle(true);
-      const res = await execJoinCycle(cycle);
+      const res = await execJoinCycle(cycle,"TODO");
       if (res)
         setGlobalModalsState({
           ...globalModalsState,

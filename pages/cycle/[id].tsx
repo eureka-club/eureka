@@ -20,6 +20,7 @@ import { CycleContext, useCycleContext } from '../../src/useCycleContext';
 import globalModalsAtom from '../../src/atoms/globalModals';
 import { WEBAPP_URL } from '../../src/constants';
 import {CycleMosaicItem} from '@/src/types/cycle'
+import { UserMosaicItem } from '@/src/types/user';
 interface Props{
   cycle:CycleMosaicItem
 }
@@ -60,6 +61,7 @@ const CycleDetailPage: NextPage<Props> = () => {
     //   }
     // }
   }, [cycle, /* isSuccess, */ id]);
+
 
   useEffect(() => {
     if (!isLoadingSession) {
@@ -107,21 +109,36 @@ const CycleDetailPage: NextPage<Props> = () => {
   };
 
   const requestJoinCycle = async () => {
+    
     if (!session) openSignInModal();
     else if (execJoinCycle && cycle) {
+      const user = (session as unknown as Session).user;
       setIsRequestingJoinCycle(true);
-      const res = await execJoinCycle(cycle);
-      if (res)
-        setGlobalModalsState({
-          ...globalModalsState,
-          showToast: {
-            show: true,
-            type: 'info',
-            title: t('Join Cycle request notification'),
-            message: t(res),
-          },
-        });
-      if (res === 'OK') queryClient.invalidateQueries(['CYCLE', `${cycle.id}`]);
+      const res = await execJoinCycle(cycle,user.name||user.id.toString());  
+    // debugger;
+    //   if (res === 'OK'){
+    //     setGlobalModalsState({
+    //       ...globalModalsState,
+    //       showToast: {
+    //         show: true,
+    //         type: 'info',
+    //         title: t('Join Cycle request notification'),
+    //         message: t(res),
+    //       },
+    //     });
+    //   }
+    //   else{
+    //     setGlobalModalsState({
+    //       ...globalModalsState,
+    //       showToast: {
+    //         show: true,
+    //         type: 'warning',
+    //         title: t('Join Cycle request notification'),
+    //         message: t(res),
+    //       },
+    //     });  
+    //   }
+      queryClient.invalidateQueries(['CYCLE', `${cycle.id}`]);
       setIsRequestingJoinCycle(false);
     }
   };

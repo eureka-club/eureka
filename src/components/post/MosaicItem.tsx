@@ -117,7 +117,9 @@ const MosaicItem: FunctionComponent<Props> = ({
   //   return parent;
   // };
   const canEditPost = ()=>{
-    return post.creatorId == (session as unknown as Session).user.id 
+    if(session)
+      return post.creatorId == (session as unknown as Session).user.id
+    return false;
   }
   const onEditPost = async (e:React.MouseEvent<HTMLButtonElement>) => {
     setGmAtom(res=>({...res,editPostModalOpened:true, editPostId:post.id, cacheKey}))
