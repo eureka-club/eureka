@@ -121,20 +121,19 @@ export const getStaticProps: GetStaticProps = async (context) => {
   if (id == null || typeof id !== 'string') {
     return { notFound: true };
   }
-
-  const workId = parseInt(id, 10);
-  if (!Number.isInteger(workId)) {
+  
+  if (!Number.isInteger(parseInt(id, 10))) {
     return { notFound: true };
   }
   
   const workItemsWhere = {
     works:{
       some:{
-        id
+        id:+id
       }
     }
   }
-  await qc.prefetchQuery(['WORK', `${id}`],()=>getWork(workId))
+  await qc.prefetchQuery(['WORK', `${id}`],()=>getWork(parseInt(id, 10)))
   await qc.prefetchQuery(['CYCLES',JSON.stringify(workItemsWhere)],()=>getCycles(workItemsWhere) )
   await qc.prefetchQuery(['POSTS',JSON.stringify(workItemsWhere)],()=>getPosts(workItemsWhere) )
   
