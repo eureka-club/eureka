@@ -1,4 +1,5 @@
-import { NextPage,GetServerSideProps } from 'next';
+import { NextPage,GetServerSideProps,GetStaticPaths, GetStaticProps } from 'next';
+import { ParsedUrlQuery } from 'querystring'
 import Head from "next/head";
 import { useSession } from 'next-auth/client';
 import { useState, useEffect, ReactElement } from 'react';
@@ -26,6 +27,7 @@ import {getPosts} from '@/src/usePosts'
 //   // isReadOrWatchedByUser,
 // } from '../../src/facades/work';
 import { User } from '.prisma/client';
+import { WorkMosaicItem } from '@/src/types/work';
 
 // interface Props {
 //   // work: WorkMosaicItem;
@@ -93,6 +95,62 @@ const WorkDetailPage: NextPage = () => {
   // );
 };
 
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/work`)
+  const {data:works} = await res.json();debugger;
+
+  const paths = works.map((work:WorkMosaicItem) => ({
+    params: { id: work.id.toString() },
+  }))
+
+  // We'll pre-render only these paths at build time.
+  // { fallback: blocking } will server-render pages
+  // on-demand if the path doesn't exist.
+  return { paths, fallback: 'blocking' }   
+}
+
+
+interface IParams extends ParsedUrlQuery {
+    id: string
+}
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  const { id } = context.params as IParams
+   const qc = new QueryClient()
+  if (id == null || typeof id !== 'string') {
+    return { notFound: true };
+  }
+
+  const workId = parseInt(id, 10);
+  if (!Number.isInteger(workId)) {
+    return { notFound: true };
+  }
+  
+  const workItemsWhere = {
+    works:{
+      some:{
+        id
+      }
+    }
+  }
+  await qc.prefetchQuery(['WORK', `${id}`],()=>getWork(workId))
+  await qc.prefetchQuery(['CYCLES',JSON.stringify(workItemsWhere)],()=>getCycles(workItemsWhere) )
+  await qc.prefetchQuery(['POSTS',JSON.stringify(workItemsWhere)],()=>getPosts(workItemsWhere) )
+  
+  //const session = (await getSession({ req })) as unknown as Session;
+  
+  return {
+    props: {
+      dehydratedState: dehydrate(qc),
+    },
+  }
+}
+
+
+
+
+/*
 export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
   const qc = new QueryClient()
   if (params?.id == null || typeof params.id !== 'string') {
@@ -122,6 +180,6 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
       dehydratedState: dehydrate(qc),
     },
   }
-};
+};*/
 
 export default WorkDetailPage;
