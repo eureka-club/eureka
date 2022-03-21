@@ -148,8 +148,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
 }
 
 
-
-
 /*
 export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
   const qc = new QueryClient()
