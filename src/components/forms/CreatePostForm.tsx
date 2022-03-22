@@ -127,15 +127,21 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
       });
 
       let message = "";
+      let notificationContextURL = router.asPath
+      let notificationToUsers:number[];
       if(user && notifier){
+        notificationToUsers = user.followedBy.map(u=>u.id)
         if(selectedWork)  {
+          notificationContextURL = `/work/${selectedWork.id}/post`
           if(selectedCycle){
             message = `eurekaCreatedAboutWorkInCycle!|!${JSON.stringify({
               userName:user.name||'',
               workTitle:selectedWork.title,
               cycleTitle:selectedCycle.title
             })}`;
-  
+            notificationToUsers = selectedCycle.participants.filter(p=>p.id!==user.id).map(p=>p.id);
+            if(user.id !== selectedCycle.creatorId)
+              notificationToUsers.push(selectedCycle.creatorId)
           }
           else{
             message = `eurekaCreatedAboutWork!|!${JSON.stringify({
@@ -144,15 +150,20 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
             })}`;
           }
         }
-        else if(selectedCycle)
+        else if(selectedCycle){
+          notificationContextURL = `/cycle/${selectedCycle.id}/post`
           message = `eurekaCreatedAboutCycle!|!${JSON.stringify({
             userName:user.name||'',
             cycleTitle:selectedCycle.title
           })}`;
+          notificationToUsers = selectedCycle.participants.filter(p=>p.id!==user.id).map(p=>p.id);
+          if(user.id !== selectedCycle.creatorId)
+            notificationToUsers.push(selectedCycle.creatorId)
+        }
   
         formData.append('notificationMessage', message);
-        formData.append('notificationContextURL', router.asPath);
-        formData.append('notificationToUsers', user.followedBy.map(u=>u.id).join(','));
+        formData.append('notificationContextURL', notificationContextURL);
+        formData.append('notificationToUsers', notificationToUsers.join(','));
 
       }
 

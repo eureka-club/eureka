@@ -113,7 +113,7 @@ const NotificationsList: React.FC<Props> = ({className}) => {
             }
             execEditNotification(payload);
         }
-        //router.push(contextURL);
+        router.push(contextURL);
     }  
 
     const formatMessage = (message:string) => {

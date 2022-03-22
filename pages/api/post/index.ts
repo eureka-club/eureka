@@ -44,13 +44,21 @@ export default getApiHandler()
 
         const uploadData = await storeUpload(image);
         const post = await createFromServerFields(fields, uploadData, session.user);
-        const notification = await create(
-          fields.notificationMessage[0],
-          fields.notificationContextURL[0],
-          session.user.id,
-          fields.notificationToUsers[0].split(',').map((i:string) => +i),
-        );
-        res.status(201).json({ post, notification });
+        
+        const notificationToUsers = fields.notificationToUsers 
+          ? fields.notificationToUsers[0].split(',').filter((i:string)=>i!='').map((i:string) => +i)
+          : null;
+        if(notificationToUsers && notificationToUsers.length){
+          const notification = await create(
+            fields.notificationMessage[0],
+            fields.notificationContextURL[0]+`/${post.id}`,
+            session.user.id,
+            fields.notificationToUsers[0].split(',').map((i:string) => +i),
+          );
+          res.status(201).json({ post, notification });
+          return;
+        }
+        res.status(201).json({ post, notification:null });
       });
     } catch (excp) {
       /* const excpMessageTokens = excp.message.match(/\[(\d{3})\] (.*)/);
