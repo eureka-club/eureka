@@ -1,4 +1,4 @@
-import { NextPage } from 'next';
+import { NextPage,GetServerSideProps } from 'next';
 import Head from "next/head";
 import { useSession } from 'next-auth/client';
 import { useAtom } from 'jotai';
@@ -24,9 +24,10 @@ import globalModalsAtom from '../../src/atoms/globalModals';
 import { WEBAPP_URL } from '../../src/constants';
 import {CycleMosaicItem} from '@/src/types/cycle'
 import { UserMosaicItem } from '@/src/types/user';
-interface Props{
-  id:number
-}
+/*interface Props{
+  id:number,
+  metas:any
+}*/
 
 const whereCycleParticipants = (id:number)=>({
   OR:[
@@ -38,15 +39,15 @@ const whereCycleParticipants = (id:number)=>({
 const whereCycleWorks = (id:number)=> ({ cycles: { some: { id } } })
 const whereCyclePosts = (id:number)=> ({AND:{ cycles:{ some: { id }}}})
 
-const CycleDetailPage: NextPage<Props> = ({id}) => {
+const CycleDetailPage: NextPage = (props:any) => {
   const [session, isLoadingSession] = useSession();
   const router = useRouter();
   
-  const { data: cycle, isSuccess, isLoading, isFetching, isError, error } = useCycle(+id);
+  const { data: cycle, isSuccess, isLoading, isFetching, isError, error } = useCycle(+props.id);
   
-  const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants(id),
+  const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants(props.id),
     {
-      enabled:!!id
+      enabled:!!props.id
     }
   )
 
@@ -197,10 +198,18 @@ const CycleDetailPage: NextPage<Props> = ({id}) => {
       <CycleContext.Provider value={{ cycle, currentUserIsParticipant, linkToCycle: false }}>
        
       <Head>
-        <meta property="og:title" content={cycle.title}/>
-        <meta property="og:url" content={`${WEBAPP_URL}/cycle/${cycle.id}`} />
-        <meta property="og:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${cycle.localImages[0].storedFile}`}/>
-        {/*<meta property="og:type" content='website' />*/}
+        <meta property="og:title" content={props.metas.title}/>
+        <meta property="og:url" content={`${WEBAPP_URL}/cycle/${props.metas.id}`} />
+        <meta property="og:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${props.metas.storedFile}`}/>
+        <meta property="og:type" content='article'/>
+
+        <meta name="twitter:card" content="summary_large_image"></meta>
+        <meta name="twitter:site" content="@EurekaClub"></meta>
+        <meta name="twitter:title" content={props.metas.title}></meta>
+        {/* <meta name="twitter:description" content=""></meta>*/}
+        <meta name="twitter:image" content={`${WEBAPP_URL}/cycle/${props.metas.id}`}></meta>
+        <meta name="twitter:url" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${props.metas.storedFile}`}></meta>
+
       </Head>  
         <SimpleLayout banner={getBanner()} title={cycle ? cycle.title : ''}>
             {renderCycleDetailComponent()}
@@ -215,22 +224,29 @@ const CycleDetailPage: NextPage<Props> = ({id}) => {
   );
 };
 
-export async function getServerSideProps(context:{query:{id:string}}) {
-  const {id:id_} = context.query;
-  const id = parseInt(id_)
+export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
+ const queryClient = new QueryClient() 
+  if (params?.id == null || typeof params.id !== 'string') {
+    return { notFound: true };
+  }
+  //const {id:id_} = context.query;
+  const id = parseInt(params.id)
 
   const wcu = whereCycleParticipants(id)
   const wcp = whereCyclePosts(id)
   const wcw = whereCycleWorks(id)
 
-  const queryClient = new QueryClient() 
-   await queryClient.prefetchQuery(['CYCLE',`${id}`], ()=>getCycle(id))
+  let cycle = await getCycle(id);
+  let metaTags = {id:cycle?.id, title:cycle?.title, storedFile: cycle?.localImages[0].storedFile}
+
+   await queryClient.prefetchQuery(['CYCLE',`${id}`], ()=>cycle)
    await queryClient.prefetchQuery(['USERS',JSON.stringify(wcu)],()=>getUsers(wcu))
    await queryClient.prefetchQuery(['POSTS',JSON.stringify(wcp)],()=>getPosts(wcp))
    await queryClient.prefetchQuery(['WORKS',JSON.stringify(wcw)],()=>getWorks(wcw))
 
   return {
     props: {
+      metas:metaTags,
       dehydratedState: dehydrate(queryClient),
       id
     },
