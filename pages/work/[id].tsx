@@ -36,9 +36,10 @@ import { WorkMosaicItem } from '@/src/types/work';
 //   mySocialInfo: MySocialInfo;
 // }
 
-const WorkDetailPage: NextPage = () => {
+const WorkDetailPage: NextPage = (props:any) => {
   // const queryClient = useQueryClient();
   // queryClient.setQueryData(['WORKS', `${work.id}`], work);
+
   const router = useRouter();
   const { t } = useTranslation('common');
   const [session, isLoadingSession] = useSession();
@@ -67,9 +68,9 @@ const WorkDetailPage: NextPage = () => {
     return <>
 
     <Head>
-        <meta property="og:title" content={work?.title}/>
-        <meta property="og:url" content={`${WEBAPP_URL}/work/${work?.id}`} />
-        <meta property="og:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${work?.localImages[0].storedFile}`}/>
+        <meta property="og:title" content={props.metas.title}/>
+        <meta property="og:url" content={`${WEBAPP_URL}/work/${props.metas.id}`} />
+        <meta property="og:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${props.metas.storedFile}`}/>
         {/*<meta property="og:type" content='website' />*/}
     </Head>
      <SimpleLayout title={title}>{children}</SimpleLayout>;
@@ -96,58 +97,6 @@ const WorkDetailPage: NextPage = () => {
 };
 
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/work`)
-  const {data:works} = await res.json();debugger;
-
-  const paths = works.map((work:WorkMosaicItem) => ({
-    params: { id: work.id.toString() },
-  }))
-
-  // We'll pre-render only these paths at build time.
-  // { fallback: blocking } will server-render pages
-  // on-demand if the path doesn't exist.
-  return { paths, fallback: 'blocking' }   
-}
-
-
-interface IParams extends ParsedUrlQuery {
-    id: string
-}
-
-export const getStaticProps: GetStaticProps = async (context) => {
-  const { id } = context.params as IParams
-   const qc = new QueryClient()
-  if (id == null || typeof id !== 'string') {
-    return { notFound: true };
-  }
-  
-  if (!Number.isInteger(parseInt(id, 10))) {
-    return { notFound: true };
-  }
-  
-  const workItemsWhere = {
-    works:{
-      some:{
-        id:+id
-      }
-    }
-  }
-  await qc.prefetchQuery(['WORK', `${id}`],()=>getWork(parseInt(id, 10)))
-  await qc.prefetchQuery(['CYCLES',JSON.stringify(workItemsWhere)],()=>getCycles(workItemsWhere) )
-  await qc.prefetchQuery(['POSTS',JSON.stringify(workItemsWhere)],()=>getPosts(workItemsWhere) )
-  
-  //const session = (await getSession({ req })) as unknown as Session;
-  
-  return {
-    props: {
-      dehydratedState: dehydrate(qc),
-    },
-  }
-}
-
-
-/*
 export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
   const qc = new QueryClient()
   if (params?.id == null || typeof params.id !== 'string') {
@@ -166,7 +115,11 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
       }
     }
   }
-  await qc.prefetchQuery(['WORK', `${id}`],()=>getWork(id))
+  
+  let work = await getWork(id);
+  let metaTags = {id:work.id, title:work.title, storedFile: work.localImages[0].storedFile}
+
+  await qc.prefetchQuery(['WORK', `${id}`],()=>work)
   await qc.prefetchQuery(['CYCLES',JSON.stringify(workItemsWhere)],()=>getCycles(workItemsWhere) )
   await qc.prefetchQuery(['POSTS',JSON.stringify(workItemsWhere)],()=>getPosts(workItemsWhere) )
   
@@ -175,8 +128,9 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
   return {
     props: {
       dehydratedState: dehydrate(qc),
+      metas:metaTags
     },
   }
-};*/
+}
 
 export default WorkDetailPage;
