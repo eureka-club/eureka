@@ -21,6 +21,7 @@ import styles from './MosaicItem.module.css';
 import globalModalsAtom from '../../atoms/globalModals';
 
 import useUser from '@/src/useUser';
+import useUsers from '@/src/useUsers'
 import { Session } from '../../types';
 import SocialInteraction from '../common/SocialInteraction';
 import { useCycleContext } from '../../useCycleContext';
@@ -63,13 +64,25 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [idSession,setIdSession] = useState<string>('')
   const { data: user } = useUser(+idSession,{ enabled: !!+idSession });
   const [isCurrentUserJoinedToCycle, setIsCurrentUserJoinedToCycle] = useState<boolean>(true);
-  const [participants, setParticipants] = useState<number>(0);
+  
   const [loading, setLoading] = useState<boolean>(false);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const queryClient = useQueryClient();
   const router = useRouter();
   const { addToast } = useToasts()
   const {data:cycle} = useCycle(cycleId,{enabled:!!cycleId})
+  
+  const whereCycleParticipants = {
+    OR:[
+      {cycles: { some: { id: cycle?.id } }},//creator
+      {joinedCycles: { some: { id: cycle?.id } }},//participants
+    ], 
+  };
+  const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants,
+    {
+      enabled:!!cycle?.id
+    }
+  )
 
   useEffect(() => {
     const s = session as unknown as Session;
@@ -82,8 +95,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 
 
   useEffect(() => {
-    if (cycle) {
-      setParticipants(cycle.participants.length);
+    if (cycle && participants) {
       if (currentUserIsParticipant === undefined) {
         if (session && user && user.joinedCycles) {
           if (!user.joinedCycles.length) setIsCurrentUserJoinedToCycle(false);
@@ -117,7 +129,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         userName: user?.name,
         cycleTitle: cycle?.title,
       })}`;
-      const notificationToUsers = (cycle?.participants || []).map(p=>p.id);
+      const notificationToUsers = (participants || []).map(p=>p.id);
       if(cycle?.creatorId) notificationToUsers.push(cycle?.creatorId);
 
       const res = await fetch(`/api/cycle/${cycle!.id}/join`, { 
@@ -182,7 +194,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         userName: user?.name,
         cycleTitle: cycle?.title,
       })}`;
-      const notificationToUsers = (cycle?.participants || []).filter(p=>p.id!==user?.id).map(p=>p.id);
+      const notificationToUsers = (participants || []).filter(p=>p.id!==user?.id).map(p=>p.id);
       if(cycle?.creatorId) notificationToUsers.push(cycle?.creatorId);
 
       const res = await fetch(`/api/cycle/${cycle!.id}/join`, { 
@@ -365,7 +377,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             {t('MyCycle')}
           </Button>) }
       </div>
-      {showParticipants && (<p className={`${styles.title} mt-3 fs-6 text-center text-gray my-2`}>{`${t('Participants')}: ${participants + 1}`}</p>)} 
+      {showParticipants && (<p className={`${styles.title} mt-3 fs-6 text-center text-gray my-2`}>{`${t('Participants')}: ${(participants||[])?.length + 1}`}</p>)} 
       </div>
       {showSocialInteraction && (
         <Card.Footer className={styles.footer}>

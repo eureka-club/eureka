@@ -8,15 +8,15 @@ export type ContextType = {
   showShare?: boolean;
   currentUserIsParticipant?: boolean;
   linkToCycle?: boolean;
-  requestJoinCycle?: (cycle: CycleMosaicItem,userName:string) => Promise<string>;
+  requestJoinCycle?: (cycle: CycleMosaicItem,userName:string,participants:UserMosaicItem[]) => Promise<string>;
 };
 
-const requestJoinCycle = async (cycle: CycleMosaicItem,userName:string) => {
+const requestJoinCycle = async (cycle: CycleMosaicItem,userName:string,participants:UserMosaicItem[]) => {
   let notificationMessage = `userJoinedCycle!|!${JSON.stringify({
     userName,
     cycleTitle: cycle?.title,
   })}`;
-  const notificationToUsers = (cycle?.participants || []).map(p=>p.id);
+  const notificationToUsers = (participants || []).map(p=>p.id);
   if(cycle?.creatorId) notificationToUsers.push(cycle?.creatorId);
 
 

@@ -64,6 +64,7 @@ import useCycle from '@/src/useCycle';
 // import useCycleItem from '@/src/useCycleItems';
 import useWorks from '@/src/useWorks'
 import usePosts from '@/src/usePosts'
+import useUsers from '@/src/useUsers'
 interface Props {
   // cycle: CycleMosaicItem;
   post?: PostMosaicItem;
@@ -101,6 +102,18 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     enabled:!!cycle?.id
   })
 
+  const whereCycleParticipants = {
+    OR:[
+      {cycles: { some: { id: cycle?.id } }},//creator
+      {joinedCycles: { some: { id: cycle?.id } }},//participants
+    ], 
+  };
+  const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants,
+    {
+      enabled:!!cycle?.id
+    }
+  )
+
   useEffect(() => {
     if (cycle) {
       if (cycle.cycleWorksDates) { 
@@ -108,8 +121,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           queryClient.setQueryData(['WORK',`${w.id}`],w)
         })        
       }
-      if(cycle.participants){
-        cycle.participants.forEach(u => {
+      if(participants){
+        participants.forEach(u => {
           queryClient.setQueryData(['USER',`${u.id}`],u)
         })
       }
@@ -544,8 +557,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           </TabPane>
           <TabPane eventKey="participants">
             {/* {cycle.participants && cycle.participants.map((p) => <UserAvatar className="mb-3 mr-3" user={p} key={p.id} />)} */}
-            {cycle.participants && (
-              <Mosaic cacheKey={['CYCLE',cycle.id.toString()]} showButtonLabels={false} enabledPagination={false} stack={[...cycle.participants, cycle.creator] as UserMosaicItem[]} />
+            {participants && (
+              <ListWindow items={participants} itemSize={75} cacheKey={['CYCLE',JSON.stringify(whereCycleParticipants)]}/>
+              // <Mosaic cacheKey={['CYCLE',cycle.id.toString()]} showButtonLabels={false} enabledPagination={false} stack={[...participants, cycle.creator] as UserMosaicItem[]} />
             )}
             <p />
           </TabPane>
@@ -559,8 +573,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   };
 
   const renderRestrictTabsHeaders = () => {
-    if (cycle) {
-      const participants = cycle.participants;
+    if (cycle && participants) {
       const res = (
         <>
           <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
