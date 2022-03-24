@@ -334,6 +334,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({noModal = false})=> {
                   setItems={setItems}
                   labelKey={(res) => t(`topics:${res.code}`)}
                   max={3}
+                  formatValue={(v: string) => t(`topics:${v}`)} 
                 />
               </FormGroup>
             </Col>

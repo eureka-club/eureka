@@ -177,7 +177,10 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
                     <h1 className="fw-bold text-secondary">{work.title}</h1>
                     <h2 className={styles.author}>{work.author}</h2>
                     <WorkSummary work={work} />
-                    {work.tags && <TagsInput tags={work.tags} readOnly label="" />}
+                    <div className='d-flex flex-row'>
+                      {work.topics && <TagsInput formatValue={(v: string) => t(`topics:${v}`)} tags={work.topics} readOnly label="" />}
+                      {work.tags && <TagsInput tags={work.tags} readOnly label="" />}
+                    </div>
                     {work.link != null && (
                       <a href={work.link} className={classNames(styles.workLink,'mb-5')} target="_blank" rel="noreferrer">
                         {t('workLinkLabel')} <BsBoxArrowUpRight />

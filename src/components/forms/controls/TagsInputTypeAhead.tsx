@@ -26,10 +26,12 @@ export type TagsInputProp = {
   placeholder?: string;
   style?: { [key: string]: string };
   className?: string;
+  formatValue?: (v: string) => string;
+
 };
 
 const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
-  const { data, max = 5, onTagCreated, onTagDeleted, labelKey, placeholder, style, className } = props;
+  const { data, max = 5, onTagCreated, onTagDeleted, labelKey, placeholder, style, className,formatValue = undefined  } = props;
   const { t } = useTranslation('createWorkForm');
   // const { tags, setTags, label = '', readOnly = false } = props;
   const { items, setItems, label = '', readOnly = false } = props;
@@ -125,7 +127,7 @@ const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputPr
               pill
               bg="secondary px-2 py-1 mb-1 me-1"
               >
-                {v}{' '}
+                {formatValue ? formatValue(v) : v}{' '}
                 {!readOnly && (
                   <Badge className="bg-warning text-withe rounded-pill ms-2" style={{ cursor: 'pointer' }} onClick={(e) => deleteTag(e,idx)} pill bg="default">
                     X
