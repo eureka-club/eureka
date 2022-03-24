@@ -23,21 +23,21 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
           contentText: true,
         },
       },
-      participants:{
-        select:{
-          id:true,
-          name:true,
-          countryOfOrigin:true,
-          favWorks:{select:{id:true}},
-          ratingWorks:{select:{workId:true}},
-          photos:{select:{storedFile:true}},
-          notifications:{
-            select:{
-              viewed:true,
-              notification:{select:{message:true,createdAt:true}}}
-            }
-        }
-      },     
+      // participants:{
+      //   select:{
+      //     id:true,
+      //     name:true,
+      //     countryOfOrigin:true,
+      //     favWorks:{select:{id:true}},
+      //     ratingWorks:{select:{workId:true}},
+      //     photos:{select:{storedFile:true}},
+      //     notifications:{
+      //       select:{
+      //         viewed:true,
+      //         notification:{select:{message:true,createdAt:true}}}
+      //       }
+      //   }
+      // },     
       ratings: { 
         select: { 
           qty:true,
@@ -61,7 +61,7 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
   });
 };
 
-export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<Cycle[] | CycleMosaicItem[]> => {
+export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<CycleMosaicItem[]> => {
   const {include,where,take} = props || {};
   return prisma.cycle.findMany({
     take,
@@ -81,21 +81,21 @@ export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<Cycle[] 
           contentText: true,
         },
       },
-      participants:{
-        select:{
-          id:true,
-          name:true,
-          countryOfOrigin:true,
-          favWorks:{select:{id:true}},
-          ratingWorks:{select:{workId:true}},
-          photos:{select:{storedFile:true}},
-          notifications:{
-            select:{
-              viewed:true,
-              notification:{select:{message:true,createdAt:true}}}
-            }
-        }
-      },     
+      // participants:{
+      //   select:{
+      //     id:true,
+      //     name:true,
+      //     countryOfOrigin:true,
+      //     favWorks:{select:{id:true}},
+      //     ratingWorks:{select:{workId:true}},
+      //     photos:{select:{storedFile:true}},
+      //     notifications:{
+      //       select:{
+      //         viewed:true,
+      //         notification:{select:{message:true,createdAt:true}}}
+      //       }
+      //   }
+      // },     
       ratings: { 
         select: { 
           qty:true,

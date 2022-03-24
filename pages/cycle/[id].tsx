@@ -15,25 +15,48 @@ import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '../../src/components/cycle/CycleDetail';
 import Banner from '../../src/components/Banner';
-import useCycle from '../../src/useCycle';
+import useCycle,{getCycle} from '@/src/useCycle';
+import useUsers,{getUsers} from '@/src/useUsers'
+import {getPosts} from '@/src/usePosts'
+import {getWorks} from '@/src/useWorks'
 import { CycleContext, useCycleContext } from '../../src/useCycleContext';
 import globalModalsAtom from '../../src/atoms/globalModals';
 import { WEBAPP_URL } from '../../src/constants';
 import {CycleMosaicItem} from '@/src/types/cycle'
 import { UserMosaicItem } from '@/src/types/user';
 interface Props{
-  cycle:CycleMosaicItem
+  id:number
 }
-// const getCycle = async (id:string)=>{
-//   const res = await fetch(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle/${id}`)
-//   return res.json();
-//   }
-const CycleDetailPage: NextPage<Props> = () => {
+
+const whereCycleParticipants = (id:number)=>({
+  OR:[
+    {cycles: { some: { id } }},//creator
+    {joinedCycles: { some: { id } }},//participants
+  ], 
+});
+
+const whereCycleWorks = (id:number)=> ({ cycles: { some: { id } } })
+const whereCyclePosts = (id:number)=> ({AND:{ cycles:{ some: { id }}}})
+
+const CycleDetailPage: NextPage<Props> = ({id}) => {
   const [session, isLoadingSession] = useSession();
   const router = useRouter();
-  const [id, setId] = useState<string>('');
   
   const { data: cycle, isSuccess, isLoading, isFetching, isError, error } = useCycle(+id);
+  
+  const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants(id),
+    {
+      enabled:!!id
+    }
+  )
+
+  // const { data: works } = usePosts(whereCycleWorks(id), {
+  //   enabled:!!id
+  // })
+
+  //const {data:posts} = usePosts(whereCyclePosts,{enabled:!!cycle})
+  
+
   // const [cycle, setCycle] = useState<CycleMosaicItem | undefined>(undefined);
   const { t } = useTranslation('common');
   const queryClient = useQueryClient();
@@ -46,21 +69,11 @@ const CycleDetailPage: NextPage<Props> = () => {
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
   const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
-  useEffect(() => {
-    if (router && router.query) setId(() => router.query.id as string);
-  }, [router]);
-
-  useEffect(() => {
-    if (+id /* && isSuccess */ && (!cycle || !cycle.id)) {
-      queryClient.invalidateQueries(['CYCLE', `${+id}`]);
-    }
-    // if (cycle) {
-    //   const c = cycle as CycleMosaicItem;
-    //   if (c) {
-    //     setCycle(c);
-    //   }
-    // }
-  }, [cycle, /* isSuccess, */ id]);
+  // useEffect(() => {
+  //   if (+id /* && isSuccess */ && (!cycle || !cycle.id)) {
+  //     queryClient.invalidateQueries(['CYCLE', `${+id}`]);
+  //   }
+  // }, [cycle, /* isSuccess, */ id]);
 
 
   useEffect(() => {
@@ -73,7 +86,6 @@ const CycleDetailPage: NextPage<Props> = () => {
           setCurrentUserIsParticipant(() => true);
           return;
         }
-        const { participants } = cycle;
         if (participants) {
           const isParticipant = participants.findIndex((p) => p.id === s.user.id) > -1;
           setCurrentUserIsParticipant(() => isParticipant);
@@ -114,7 +126,7 @@ const CycleDetailPage: NextPage<Props> = () => {
     else if (execJoinCycle && cycle) {
       const user = (session as unknown as Session).user;
       setIsRequestingJoinCycle(true);
-      const res = await execJoinCycle(cycle,user.name||user.id.toString());  
+      const res = await execJoinCycle(cycle,user.name||user.id.toString(),participants||[]);  
     // debugger;
     //   if (res === 'OK'){
     //     setGlobalModalsState({
@@ -203,21 +215,28 @@ const CycleDetailPage: NextPage<Props> = () => {
   );
 };
 
-/* export async function getServerSideProps(context:{query:{id:string}}) {
-  const {id} = context.query;
-  
+export async function getServerSideProps(context:{query:{id:string}}) {
+  const {id:id_} = context.query;
+  const id = parseInt(id_)
 
-  const queryClient = new QueryClient()
- 
-   await queryClient.prefetchQuery('cycle', ()=>getCycle(id))
+  const wcu = whereCycleParticipants(id)
+  const wcp = whereCyclePosts(id)
+  const wcw = whereCycleWorks(id)
+
+  const queryClient = new QueryClient() 
+   await queryClient.prefetchQuery(['CYCLE',`${id}`], ()=>getCycle(id))
+   await queryClient.prefetchQuery(['USERS',JSON.stringify(wcu)],()=>getUsers(wcu))
+   await queryClient.prefetchQuery(['POSTS',JSON.stringify(wcp)],()=>getPosts(wcp))
+   await queryClient.prefetchQuery(['WORKS',JSON.stringify(wcw)],()=>getWorks(wcw))
 
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
+      id
     },
   }
 }
- */
+
 /* export async function getStaticProps(props:{id:string}) {
   const {id} = props
   const res = await fetch(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle/${id}`)

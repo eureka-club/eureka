@@ -164,8 +164,11 @@ export const find = async (props: findProps): Promise<User | UserMosaicItem | nu
   });
 };
 
-export const findAll = async (): Promise<User[]> => {
+export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<UserMosaicItem[]> => {
+  const {where,take} = props||{};
   return prisma.user.findMany({
+    take,
+    ... where && {where},
     orderBy: { createdAt: 'desc' },
     include:{
       followedBy:{select:{id:true}},

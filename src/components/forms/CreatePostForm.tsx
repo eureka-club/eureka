@@ -39,6 +39,7 @@ import useWork from '../../useWork';
 import { Session } from '@/src/types';
 import { useSession } from 'next-auth/client';
 import useUser from '@/src/useUser';
+import useUsers from '@/src/useUsers'
 import { useNotificationContext } from '@/src/useNotificationProvider';
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
 import { useToasts } from 'react-toast-notifications'
@@ -47,6 +48,12 @@ interface Props {
   noModal?: boolean;
 }
 
+const whereCycleParticipants = (id:number)=>({
+  OR:[
+    {cycles: { some: { id } }},//creator
+    {joinedCycles: { some: { id } }},//participants
+  ], 
+});
 const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
@@ -82,6 +89,13 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
   const {data:user} = useUser(userId!,{
     enabled:!!userId
   });
+
+  const { data: participants,isLoading:isLoadingParticipants } = useUsers(selectedCycle ?whereCycleParticipants(selectedCycle.id):{},
+    {
+      enabled:!!selectedCycle
+    }
+  )
+
   const {notifier} = useNotificationContext();
   useEffect(()=>{
     if(session){
@@ -139,7 +153,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
               workTitle:selectedWork.title,
               cycleTitle:selectedCycle.title
             })}`;
-            notificationToUsers = selectedCycle.participants.filter(p=>p.id!==user.id).map(p=>p.id);
+            notificationToUsers = (participants||[]).filter(p=>p.id!==user.id).map(p=>p.id);
             if(user.id !== selectedCycle.creatorId)
               notificationToUsers.push(selectedCycle.creatorId)
           }
@@ -156,7 +170,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
             userName:user.name||'',
             cycleTitle:selectedCycle.title
           })}`;
-          notificationToUsers = selectedCycle.participants.filter(p=>p.id!==user.id).map(p=>p.id);
+          notificationToUsers = (participants||[]).filter(p=>p.id!==user.id).map(p=>p.id);
           if(user.id !== selectedCycle.creatorId)
             notificationToUsers.push(selectedCycle.creatorId)
         }

@@ -13,16 +13,14 @@ export const config = {
   },
 };
 
-export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-  try {
-    const { id } = req.query;
-    if (!id) {
-      const data = await findAll();
-      res.status(200).json({ data });
-    } else {
-      const user = await find({ id: parseInt(id as string, 10),include:true });//UserMosaicItem
-      res.status(200).json({ user });
-    }
+export default getApiHandler()
+.get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+  try {debugger;
+    const { where:w = null,take:t } = req.query;
+    let where = w ? JSON.parse(w.toString()) : undefined;
+    const users = await findAll({where}); 
+    users.forEach(u=>{u.type='user'})
+    res.status(200).json(users)   
   } catch (exc) {
     console.error(exc); // eslint-disable-line no-console
     res.status(500).json({ error: 'server error' });

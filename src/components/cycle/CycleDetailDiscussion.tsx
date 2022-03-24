@@ -26,7 +26,7 @@ import { CycleMosaicItem } from '../../types/cycle';
 import UserAvatar from '../common/UserAvatar';
 import globalModals from '../../atoms/globalModals';
 import useWorks from '@/src/useWorks';
-
+import useUsers from '@/src/useUsers'
 // import detailPagesAtom from '../../atoms/detailPages';
 
 import styles from './CycleDetailDiscussion.module.css';
@@ -43,6 +43,12 @@ interface Props {
   className?: string;
   cacheKey:string[];
 }
+const whereCycleParticipants = (id:number)=>({
+  OR:[
+    {cycles: { some: { id } }},//creator
+    {joinedCycles: { some: { id } }},//participants
+  ], 
+});
 const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cacheKey }) => {
   // const [items, setItems] = useState<Item[]>();
   // const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
@@ -57,6 +63,12 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
   const { data: works } = useWorks({ cycles: { some: { id: cycle?.id } } }, {
     enabled:!!cycle?.id
   })
+
+  const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants(cycle.id),
+    {
+      enabled:!!cycle
+    }
+  )
 
   const getWorksOpt = () => {
     if (!works) return [];
@@ -124,9 +136,9 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
 
   const isParticipant = ()=>{
     if(!session)return false;
-    if (session && cycle) {
+    if (session && cycle && participants) {
       if (session.user.id === cycle.creatorId) return true; 
-      const idx = cycle.participants.findIndex(p=>p.id==session.user.id)
+      const idx = participants.findIndex(p=>p.id==session.user.id)
       if(idx>-1)return true;
     }
     return false;
@@ -156,6 +168,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
               <ButtonGroup className={`d-flex flex-column flex-md-row justify-content-between ${styles.optButtons}`} size="lg">
                 <Button
                   //disabled={!isParticipant()}
+                  data-cy="bt-create-eureka"
                   onClick={handleCreateEurekaClick}
                   className={`d-flex align-items-center  justify-content-center ${styles.optButton} ${
                     styles.eurekaBtn
