@@ -137,7 +137,7 @@ const Mediatheque: NextPage = () => {
   useEffect(() => {
     if (user && user.id && session) {
       const s = session as unknown as Session;
-      const ifbm = s ? user.followedBy.findIndex((i) => i.id === s.user.id) !== -1 : false;
+      const ifbm = s && user.followedBy ? user.followedBy.findIndex((i) => i.id === s.user.id) !== -1 : false;
       setIsFollowedByMe(() => ifbm);      
     }
   }, [user, session]);

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 // import { setCookie } from 'nookies';
-import { FunctionComponent, useState, useEffect } from 'react';
+import { FunctionComponent, useState, useMemo } from 'react';
 import { InputGroup, Form, Button } from 'react-bootstrap';
 import { AsyncTypeahead, Menu, MenuItem, TypeaheadResult } from 'react-bootstrap-typeahead';
 
@@ -34,6 +34,7 @@ import { CycleMosaicItem } from '../types/cycle';
 import { PostMosaicItem } from '../types/post';
 import { WorkMosaicItem } from '../types/work';
 import useItems from '@/src/useItems'
+import { debounce } from 'lodash';
 
 // const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
 interface Props {
@@ -41,6 +42,7 @@ interface Props {
 }
 const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
   const [q, setQ] = useState<string>('');
+  const [query, setQuery] = useState<string>('');
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
   // const [session] = useSession() as [Session | null | undefined, boolean];
   const queryClient = useQueryClient();
@@ -53,38 +55,44 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
 
   const {data:searchResults,isLoading:isSearchResultsLoading} = useItems(q,undefined,{enabled:!!q})
   
-  const handleSearchWorkOrCycle = async (query: string) => {debugger;
-    // setIsSearchResultsLoading(true);
-    setQ(()=>query);    
-    setGlobalSearchEngineState({ ...globalSearchEngineState, q: ''});
-    //const res = await fetch(`/api/searchEngine?q=${query}`);
+  const handleSearchWorkOrCycle = (t:string)=>{
+    setQ(t);
+  }
+  
+  const handleSearchWorkOrCycleDebounced = useMemo(()=>debounce(handleSearchWorkOrCycle,800),[])
 
-    // const responseWork = await (await fetch(`/api/work/?q=${query}`)).json();
-    // const responseCycle = await (await fetch(`/api/cycle/?q=${query}`)).json();
-    // const responsePost = await (await fetch(`/api/post/?q=${query}`)).json();
-    // const items: SearchResult[] = [
-    //   ...((responseWork && responseWork.data) || []),
-    //   ...((responseCycle && responseCycle.data) || []).map((i: CycleMosaicItem) => ({
-    //     ...i,
-    //     type: 'cycle',
-    //   })),
-    //   ...((responsePost && responsePost.data) || []).map((i: PostMosaicItem) => ({
-    //     ...i,
-    //     type: 'post',
-    //   })),
-    // ].sort((f, s) => {
-    //   const fCD = dayjs(f.createdAt);
-    //   const sCD = dayjs(s.createdAt);
-    //   if (fCD.isAfter(sCD)) return -1;
-    //   if (fCD.isSame(sCD)) return 0;
-    //   return 1;
-    // });;
+  // const handleSearchWorkOrCycle = async (query: string) => {
+  //   // setIsSearchResultsLoading(true);
+  //   setQ(()=>query);
+  //   setGlobalSearchEngineState({ ...globalSearchEngineState, q: ''});
+  //   //const res = await fetch(`/api/searchEngine?q=${query}`);
 
-    // setSearchResults(items);
+  //   // const responseWork = await (await fetch(`/api/work/?q=${query}`)).json();
+  //   // const responseCycle = await (await fetch(`/api/cycle/?q=${query}`)).json();
+  //   // const responsePost = await (await fetch(`/api/post/?q=${query}`)).json();
+  //   // const items: SearchResult[] = [
+  //   //   ...((responseWork && responseWork.data) || []),
+  //   //   ...((responseCycle && responseCycle.data) || []).map((i: CycleMosaicItem) => ({
+  //   //     ...i,
+  //   //     type: 'cycle',
+  //   //   })),
+  //   //   ...((responsePost && responsePost.data) || []).map((i: PostMosaicItem) => ({
+  //   //     ...i,
+  //   //     type: 'post',
+  //   //   })),
+  //   // ].sort((f, s) => {
+  //   //   const fCD = dayjs(f.createdAt);
+  //   //   const sCD = dayjs(s.createdAt);
+  //   //   if (fCD.isAfter(sCD)) return -1;
+  //   //   if (fCD.isSame(sCD)) return 0;
+  //   //   return 1;
+  //   // });;
+
+  //   // setSearchResults(items);
 
     
     
-  };
+  // };
 
   const handleSelectItem = (selected: SearchResult[]): void => {
     const searchResult = selected[0];
@@ -148,7 +156,7 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
   const renderMenuItems = (results:TypeaheadResult<SearchResult>[])=>{
     const resultsWithOutPosts = results.filter(item=>item.type!=='post')
     
-    return resultsWithOutPosts.map((item, index) => (
+    return resultsWithOutPosts.slice(0,5).map((item, index) => (
       <MenuItem key={`${item.id}`} option={item} position={index}>
         {/* <Highlighter search={props.text}>{item}</Highlighter> */}
         {(isCycleMosaicItem(item) && (
@@ -189,7 +197,7 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
             isLoading={isSearchResultsLoading}
             labelKey={labelKeyFn}
             minLength={5}
-            onSearch={handleSearchWorkOrCycle}
+            onSearch={handleSearchWorkOrCycleDebounced}
             options={searchResults||[]}
             onChange={handleSelectItem}
             ignoreDiacritics

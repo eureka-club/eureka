@@ -155,7 +155,7 @@ const CycleDetailPage: NextPage<Props> = () => {
             content={
               <aside className="text-center text-white">
                 <h2 className="h2">
-            git        Participa en nuestra conversación inédita sobre la relación que como humanidad tenemos con el agua
+                  Participa en nuestra conversación inédita sobre la relación que como humanidad tenemos con el agua.
                 </h2>
                 <p>18 de marzo - 18 de agosto</p>
 

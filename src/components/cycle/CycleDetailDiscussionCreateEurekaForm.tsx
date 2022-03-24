@@ -161,6 +161,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
       if(u.id !== cycle.creatorId)
         toUsers.push(cycle.creatorId);
       let message = '';
+      let notificationContextURL = router.asPath
       if (payload.selectedWorkId) {
         if (works) {
           const work = works.find(w=>w.id === payload.selectedWorkId);
@@ -169,7 +170,8 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
               userName:u.name||'',
               workTitle:work.title,
               cycleTitle:cycle.title
-            })}`;          
+            })}`; 
+            notificationContextURL = `/work/${work.id}/post`         
           }          
         }
       }
@@ -177,7 +179,8 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         message = `eurekaCreatedAboutCycle!|!${JSON.stringify({
           userName:u.name||'',
           cycleTitle:cycle.title
-        })}`;         
+        })}`;  
+        notificationContextURL = `/cycle/${cycle.id}/post`       
       }
       const formData = new FormData();
       Object.entries(payload).forEach(([key, value]) => {
@@ -187,7 +190,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
       });
 
       formData.append('notificationMessage', message);
-      formData.append('notificationContextURL', router.asPath);
+      formData.append('notificationContextURL', notificationContextURL);
       formData.append('notificationToUsers', toUsers.join(','));
 
       const res = await fetch('/api/post', {
