@@ -22,7 +22,7 @@ interface Props{
     width?:string
 }
 const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,itemSize=400,width="100%"})=>{
-    
+    const [mounted,setMounted] = useState<boolean>(false)
     const mosaics = useMemo(()=>{
       let mosaics:JSX.Element[] = []
       if(it){
@@ -82,6 +82,8 @@ const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,itemSize=400,width
       return mosaics;
     },[it,cacheKey])
 
+    useEffect(()=>{setMounted(true)},[])
+
     const renderItem = (props:{ index:number, style:Record<string,any> }) => {
       const {index,style} = props;
       return  <section className="" style={style}>
@@ -97,7 +99,7 @@ const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,itemSize=400,width
             return 355;
           else return 200  
       };
-      
+      if(mounted)
         return <List
           height={globalThis.window.innerHeight}
           itemCount={mosaics.length}
@@ -107,6 +109,7 @@ const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,itemSize=400,width
         >
           {renderItem}
         </List>
+      return <></>
 
 }
 export default ListWindow;
