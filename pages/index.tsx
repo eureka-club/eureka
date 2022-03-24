@@ -47,6 +47,13 @@ const IndexPage: NextPage = () => {
         <meta property="og:url" content={`${WEBAPP_URL}`} />
         <meta property="og:image" content={`${WEBAPP_URL}/logo.jpg`} />
         <meta property="og:type" content='website' />
+
+        <meta name="twitter:card" content="summary_large_image"></meta>
+        <meta name="twitter:site" content="@EurekaClub"></meta>
+        <meta name="twitter:title" content="Eureka"></meta>
+        <meta name="twitter:description" content="Activa tu mente, transforma el mundo"></meta>
+        <meta name="twitter:image" content={`${WEBAPP_URL}/logo.jpg`} ></meta>
+        <meta name="twitter:url" content={`${WEBAPP_URL}`} ></meta>
     </Head>
     <SimpleLayout showHeader title={t('browserTitleWelcome')}>
       <h1 className="text-secondary fw-bold">{t('Trending topics')}</h1>

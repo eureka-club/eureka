@@ -71,7 +71,15 @@ const WorkDetailPage: NextPage = (props:any) => {
         <meta property="og:title" content={props.metas.title}/>
         <meta property="og:url" content={`${WEBAPP_URL}/work/${props.metas.id}`} />
         <meta property="og:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${props.metas.storedFile}`}/>
-        {/*<meta property="og:type" content='website' />*/}
+        <meta property="og:type" content="article" /> 
+
+        <meta name="twitter:card" content="summary_large_image"></meta>
+        <meta name="twitter:site" content="@EurekaClub"></meta>
+        <meta name="twitter:title" content={props.metas.title}></meta>
+       {/* <meta name="twitter:description" content=""></meta>*/}
+        <meta name="twitter:image" content={`${WEBAPP_URL}/work/${props.metas.id}`}></meta>
+        <meta name="twitter:url" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${props.metas.storedFile}`}></meta>
+
     </Head>
      <SimpleLayout title={title}>{children}</SimpleLayout>;
      </>
