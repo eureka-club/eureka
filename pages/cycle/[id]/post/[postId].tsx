@@ -1,45 +1,55 @@
-import { NextPage } from 'next';
+import { NextPage,GetServerSideProps } from 'next';
 import Head from "next/head";
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { Spinner } from 'react-bootstrap';
-import { Session } from '../../../../src/types';
-// import { MySocialInfo, Session } from '../../../../src/types';
-import { CycleMosaicItem } from '../../../../src/types/cycle';
-// import { PostMosaicItem } from '../../../../src/types/post';
-import SimpleLayout from '../../../../src/components/layouts/SimpleLayout';
-import CycleDetailComponent from '../../../../src/components/cycle/CycleDetail';
-// import { isFavoritedByUser /* isLikedByUser, search as searchPost */ } from '../../../../src/facades/post';
-import { WorkMosaicItem } from '../../../../src/types/work';
-import useCycle from '../../../../src/useCycle';
-import usePost from '../../../../src/usePost';
-import { CycleContext } from '../../../../src/useCycleContext';
-import { WEBAPP_URL } from '../../../../src/constants';
+import { QueryClient,dehydrate } from 'react-query';
+import { Session } from '@/src/types';
+// import { MySocialInfo, Session } from '@/src/types';
+import { CycleMosaicItem } from '@/src/types/cycle';
+// import { PostMosaicItem } from '@/src/types/post';
+import SimpleLayout from '@/src/components/layouts/SimpleLayout';
+import CycleDetailComponent from '@/src/components/cycle/CycleDetail';
+// import { isFavoritedByUser /* isLikedByUser, search as searchPost */ } from '@/src/facades/post';
+import { WorkMosaicItem } from '@/src/types/work';
+import useCycle,{getCycle} from '@/src/useCycle';
+import usePost,{getPost} from '@/src/usePost';
+import useUsers,{getUsers} from '@/src/useUsers';
+import { CycleContext } from '@/src/useCycleContext';
+import { WEBAPP_URL } from '@/src/constants';
 // import { Post } from '.prisma/client';
-// interface Props {
-//   cycle: CycleMosaicItem;
-//   post: PostMosaicItem;
-//   isCurrentUserJoinedToCycle: boolean;
-//   participantsCount: number;
-//   postsCount: number;
-//   worksCount: number;
-//   // mySocialInfo: MySocialInfo;
-// }
+interface Props {
+  postId:number;
+  cycleId:number;
+  // mySocialInfo: MySocialInfo;
+}
 
-const PostDetailInCyclePage: NextPage = () => {
+const whereCycleParticipants = (id:number)=>({
+  OR:[
+    {cycles: { some: { id } }},//creator
+    {joinedCycles: { some: { id } }},//participants
+  ], 
+});
+
+const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId}) => {
   const [session, isLoadingSession] = useSession();
   const router = useRouter();
-  const [cycleId, setCycleId] = useState<string>('');
-  const { data, isLoading } = useCycle(+cycleId);
-  const [cycle, setCycle] = useState<CycleMosaicItem>();
   // const [post, setPost] = useState<PostMosaicItem>();
   const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
-
-  const [postId, setPostId] = useState<string>('');
-  const { data: post, isLoading: isLoadingPost, isFetching: isFetchingPost } = usePost(+postId);
+  
+  const { data:cycle, isLoading: isLoadingCycle } = useCycle(cycleId);
+  const { data: post, isLoading: isLoadingPost, isFetching: isFetchingPost } = usePost(postId);
+  
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
   const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
+
+  const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants(+cycleId),
+    {
+      enabled:!!cycleId
+    }
+  )
+
 
   useEffect(() => {
     if (!session) {
@@ -47,31 +57,14 @@ const PostDetailInCyclePage: NextPage = () => {
     } else if (session && cycle && session.user) {
       const s = session as unknown as Session;
       if (cycle.creatorId === s.user.id) setCurrentUserIsParticipant(() => true);
-      const isParticipant = cycle.participants.findIndex((p) => p.id === s.user.id) > -1;
+      const isParticipant = (participants||[]).findIndex((p) => p.id === s.user.id) > -1;
       setCurrentUserIsParticipant(() => isParticipant);
     }
-  }, [session, cycle]);
+  }, [session, cycle, participants]);
 
-  useEffect(() => {
-    if (router.query.id) {
-      setPostId(router.query.postId as string);
-      setCycleId(router.query.id as string);
-    }
-  }, [router]);
-
-  useEffect(() => {
-    if (data) {
-      const c = data as CycleMosaicItem;
-      setCycle(() => c);
-      // if (c) {
-      //   const po = c.posts.find((p) => p.id === parseInt(router.query.postId as string, 10));
-      //   setPost(po as PostMosaicItem);
-      // }
-    }
-  }, [data, router.query.postId]);
 
   const isLoadingOrFetching = () => {
-    return !post && (isLoadingSession || isLoading || isLoadingPost || isFetchingPost);
+    return !post && (isLoadingSession || isLoadingCycle || isLoadingPost || isFetchingPost);
   };
 
   return (
@@ -98,6 +91,27 @@ const PostDetailInCyclePage: NextPage = () => {
     </>
   );
 };
+
+export const getServerSideProps:GetServerSideProps = async ({query}) => {
+  const {id:cid,postId:pid} = query;
+  const cycleId = parseInt(cid ? cid.toString():'')
+  const postId = parseInt(pid ? pid.toString():'')
+
+  const wcu = whereCycleParticipants(cycleId)
+  
+  const queryClient = new QueryClient() 
+   await queryClient.prefetchQuery(['USERS',JSON.stringify(wcu)],()=>getUsers(wcu))
+   await queryClient.prefetchQuery(['CYCLE',`${cycleId}`],()=>getCycle(cycleId))
+   await queryClient.prefetchQuery(['POST',`${postId}`],()=>getPost(postId))
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+      cycleId,
+      postId,
+    },
+  }
+}
 
 // export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 //   if (

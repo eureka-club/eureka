@@ -26,11 +26,12 @@ import { useNotificationContext } from '@/src/useNotificationProvider';
 import { useRouter} from 'next/router'
 import { useToasts } from 'react-toast-notifications'
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
-import useWorks from '@/src//useWorks'
+import useWorks from '@/src/useWorks'
+import useUsers from '@/src/useUsers'
 // import {useGlobalEventsContext} from '@/src/useGlobalEventsContext'
 import styles from './CycleDetailDiscussionCreateEureka.module.css';
-import { devNull } from 'os';
-import { isNullOrUndefined } from 'util';
+// import { devNull } from 'os';
+// import { isNullOrUndefined } from 'util';
 
 interface Props {
   cacheKey:string[];
@@ -40,6 +41,13 @@ interface Props {
   close: () => void;
 
 }
+
+const whereCycleParticipants = (id:number)=>({
+  OR:[
+    {cycles: { some: { id } }},//creator
+    {joinedCycles: { some: { id } }},//participants
+  ], 
+});
 
 const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   cacheKey,
@@ -78,6 +86,12 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   const { data: works } = useWorks({ cycles: { some: { id: cycle?.id } } }, {
     enabled:!!cycle?.id
   })
+
+  const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants(cycle.id),
+    {
+      enabled:!!cycle
+    }
+  )
 
   const clearPayload = () => {
     editorRef.current.setContent('');
@@ -157,7 +171,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   const { mutate: execCreateEureka, isLoading } = useMutation(
     async (payload: CreatePostAboutCycleClientPayload | CreatePostAboutWorkClientPayload): Promise<Post | null> => {
       const u = (session as Session).user;
-      const toUsers = cycle.participants.filter(p=>p.id!==u.id).map(p=>p.id);
+      const toUsers = (participants||[]).filter(p=>p.id!==u.id).map(p=>p.id);
       if(u.id !== cycle.creatorId)
         toUsers.push(cycle.creatorId);
       let message = '';

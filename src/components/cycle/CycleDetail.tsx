@@ -102,9 +102,17 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     enabled:!!cycle?.id
   })
 
-  const { data: participants,isLoading:isLoadingParticipants } = useUsers({ cycles: { some: { id: cycle?.id } } }, {
-    enabled:!!cycle?.id
-  })
+  const whereCycleParticipants = {
+    OR:[
+      {cycles: { some: { id: cycle?.id } }},//creator
+      {joinedCycles: { some: { id: cycle?.id } }},//participants
+    ], 
+  };
+  const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants,
+    {
+      enabled:!!cycle?.id
+    }
+  )
 
   useEffect(() => {
     if (cycle) {
@@ -550,7 +558,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           <TabPane eventKey="participants">
             {/* {cycle.participants && cycle.participants.map((p) => <UserAvatar className="mb-3 mr-3" user={p} key={p.id} />)} */}
             {participants && (
-              <Mosaic cacheKey={['CYCLE',cycle.id.toString()]} showButtonLabels={false} enabledPagination={false} stack={[...participants, cycle.creator] as UserMosaicItem[]} />
+              <ListWindow items={participants} itemSize={75} cacheKey={['CYCLE',JSON.stringify(whereCycleParticipants)]}/>
+              // <Mosaic cacheKey={['CYCLE',cycle.id.toString()]} showButtonLabels={false} enabledPagination={false} stack={[...participants, cycle.creator] as UserMosaicItem[]} />
             )}
             <p />
           </TabPane>

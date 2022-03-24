@@ -27,12 +27,20 @@ import { useNotificationContext } from '@/src/useNotificationProvider';
 import {useRouter} from 'next/router';
 import { useToasts } from 'react-toast-notifications'
 import useWorks from '@/src/useWorks'
+import useUsers from '@/src/useUsers'
 interface Props {
   cacheKey:string[];
   cycle: CycleMosaicItem;
   discussionItem: string | undefined;
   setDiscussionItem: (val: string | undefined) => void;
 }
+
+const whereCycleParticipants = (id:number)=>({
+  OR:[
+    {cycles: { some: { id } }},//creator
+    {joinedCycles: { some: { id } }},//participants
+  ], 
+});
 
 const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
   cacheKey,
@@ -71,6 +79,12 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
   const { data: works } = useWorks({ cycles: { some: { id: cycle?.id } } }, {
     enabled:!!cycle?.id
   })
+
+  const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants(cycle.id),
+    {
+      enabled:!!cycle
+    }
+  )
 
   const clearCreateEurekaForm = () => {
     editorRef.current.setContent(newComment.contentText);
@@ -111,9 +125,9 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
 
       const json = await res.json();
       if (json.ok) {
-        if(notifier){
+        if(notifier && participants){
           const u = (session as Session).user;
-          const toUsers = cycle.participants.filter(p=>p.id!==u.id).map(p=>p.id);
+          const toUsers = participants.filter(p=>p.id!==u.id).map(p=>p.id);
           notifier.notify({
             toUsers,
             data:{message:notifyMessage}
@@ -158,7 +172,7 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
       return;
     }
     const u = (session as Session).user;
-    const toUsers = cycle.participants.filter(p=>p.id!==u.id).map(p=>p.id);
+    const toUsers = (participants||[]).filter(p=>p.id!==u.id).map(p=>p.id);
     if(u.id !== cycle.creatorId)
       toUsers.push(cycle.creatorId);
     if (newComment.selectedWorkId) {

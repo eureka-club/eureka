@@ -71,9 +71,18 @@ const MosaicItem: FunctionComponent<Props> = ({
   const router = useRouter();
   const { addToast } = useToasts()
   const {data:cycle} = useCycle(cycleId,{enabled:!!cycleId})
-  const { data: participants } = useUsers({ cycles: { some: { id: cycleId} } }, {
-    enabled:!!cycle
-  })
+  
+  const whereCycleParticipants = {
+    OR:[
+      {cycles: { some: { id: cycle?.id } }},//creator
+      {joinedCycles: { some: { id: cycle?.id } }},//participants
+    ], 
+  };
+  const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants,
+    {
+      enabled:!!cycle?.id
+    }
+  )
 
   useEffect(() => {
     const s = session as unknown as Session;

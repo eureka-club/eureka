@@ -15,10 +15,10 @@ export const config = {
 
 export default getApiHandler()
 .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-  try {
+  try {debugger;
     const { where:w = null,take:t } = req.query;
     let where = w ? JSON.parse(w.toString()) : undefined;
-    const users = await findAll(where); 
+    const users = await findAll({where}); 
     users.forEach(u=>{u.type='user'})
     res.status(200).json(users)   
   } catch (exc) {
