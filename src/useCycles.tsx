@@ -11,15 +11,9 @@ export const getCycles = async (
   let url = '';
   const w = encodeURIComponent(JSON.stringify(where))
   url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle${where ? `?where=${w}` : ''}`;
-   
   const res = await fetch(url);
   if (!res.ok) return [];
-  const result = await res.json();
-  const cycles: CycleMosaicItem[] = [];
-  result.data.forEach((i: CycleMosaicItem) => {
-    cycles.push({ ...i, type: 'cycle' });
-  });  
-  return cycles;
+  return res.json();
 };
 
 interface Options {

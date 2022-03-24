@@ -1,8 +1,8 @@
 import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
-
-import { FileUpload, Session, StoredFileUpload } from '../../../src/types';
+import { CycleMosaicItem } from '@/src/types/cycle';
+import { FileUpload, isCycleMosaicItem, Session, StoredFileUpload } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { storeUpload } from '../../../src/facades/fileUpload';
 import { createFromServerFields, findAll } from '../../../src/facades/cycle';
@@ -88,7 +88,10 @@ export default getApiHandler()
       else{
         data = await findAll({take,where});
       } 
-      res.status(200).json({ status: 'OK', data });
+      data.forEach((c) => {
+          c.type ='cycle';
+      }); 
+      res.status(200).json(data);
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
       res.status(500).json({ status: 'server error' });

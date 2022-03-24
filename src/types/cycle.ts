@@ -30,21 +30,21 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
         contentText: true;
       };
     };
-    participants:{
-      select:{
-        id:true;
-        name:true;
-        countryOfOrigin:true;
-        favWorks:{select:{id:true}};
-        ratingWorks:{select:{workId:true}};
-        photos:{select:{storedFile:true}};
-        notifications:{
-          select:{
-            viewed:true;
-            notification:{select:{message:true;createdAt:true}}}
-          }
-      }
-    };     
+    // participants:{
+    //   select:{
+    //     id:true;
+    //     name:true;
+    //     countryOfOrigin:true;
+    //     favWorks:{select:{id:true}};
+    //     ratingWorks:{select:{workId:true}};
+    //     photos:{select:{storedFile:true}};
+    //     notifications:{
+    //       select:{
+    //         viewed:true;
+    //         notification:{select:{message:true;createdAt:true}}}
+    //       }
+    //   }
+    // };     
     ratings: { 
       select: { 
         qty:true;

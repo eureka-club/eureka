@@ -156,6 +156,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
               <ButtonGroup className={`d-flex flex-column flex-md-row justify-content-between ${styles.optButtons}`} size="lg">
                 <Button
                   //disabled={!isParticipant()}
+                  data-cy="bt-create-eureka"
                   onClick={handleCreateEurekaClick}
                   className={`d-flex align-items-center  justify-content-center ${styles.optButton} ${
                     styles.eurekaBtn
