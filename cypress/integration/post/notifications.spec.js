@@ -21,7 +21,7 @@ describe('notifications on eurekas suit',()=>{
           access:1
         })
         const cycle = cycles[0]
-        cy.visit(`/cycle/${cycle.id}`)
+        cy.visit(`/en/cycle/${cycle.id}`)
         debugger;
         const works = await getWorks({
           cycles:{some:{id:cycle.id}}
