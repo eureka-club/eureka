@@ -86,7 +86,6 @@ const MosaicItem: FunctionComponent<Props> = ({
   //   }
   // },[work,queryClient])
   
-  
   if(!work)return <></>
   
   const { id, /* author, */ title, localImages, type } = work;

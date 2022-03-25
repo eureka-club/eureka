@@ -504,15 +504,15 @@ const Mediatheque: NextPage = () => {
               <>
                 <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('Mediatheque')}</h1>
                 <FilterEngine fictionOrNotFilter={false} geographyFilter={false} />
-                 {postsCreated()}
+                  {postsCreated()}
 
                   {cyclesJoined()}
 
-                {readOrWatched()}
+                  {readOrWatched()}
 
-                 {savedForLater()}
+                  {savedForLater()}
 
-                {usersFollowed()}
+                  {usersFollowed()}
               </>
             )}
           </section>

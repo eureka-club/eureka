@@ -7,12 +7,13 @@ export const getWork = async (id: number): Promise<WorkMosaicItem> => {
   const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/work/${id}`;
 
   const res = await fetch(url);
-  if (!res.ok) throw new Error('Error');
+  if (!res.ok) 
+    throw Error('Error');
+  
   // { error: 'server error' };
-  const { work } = await res.json();
-  if (work) return { ...work };
+  return res.json();
+  
 
-  throw new Error('notFound')
   // { error };
 };
 

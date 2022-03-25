@@ -53,6 +53,7 @@ export default getApiHandler()
     //   res.status(200).json({ error: 'Unauthorized', work: null });
     //   return;
     // }
+    
 
     const { id } = req.query;
     if (typeof id !== 'string') {
@@ -73,7 +74,7 @@ export default getApiHandler()
         return;
       }
 
-      res.status(200).json({ status: 'OK', work });
+      res.status(200).json(work);
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
       res.status(500).json({ status: 'server error' });
