@@ -27,6 +27,7 @@ import useItems from '../src/useItems';
 import useCountries from '../src/useCountries';
 import { isPostMosaicItem,isCycleMosaicItem, isWorkMosaicItem, SearchResult } from '@/src/types';
 import { useQueryClient } from 'react-query';
+import ListWindow from '@/src/components/ListWindow';
 
 // interface Props {
 //   homepageMosaicData: (CycleMosaicItem | WorkMosaicItem)[];
@@ -65,7 +66,9 @@ const SearchPage: NextPage = () => {
   const [where, setWhere] = useState<string>();
   const queryClient = useQueryClient()
   
+  const [mounted,setMounted] = useState<boolean>(false)
   useEffect(() => {
+    setMounted(true)
     setGlobalSearchEngineState((res) => ({...res, only:[]}));
   }, []);
 
@@ -242,25 +245,31 @@ const SearchPage: NextPage = () => {
     );
     return <></>;
   };
-  
-  return (
-    <SimpleLayout title={t('browserTitleWelcome')}>
-      <ButtonGroup className="mb-1">
-        <Button variant="primary text-white" onClick={() => router.back()} size="sm">
-          <BiArrowBack />
-        </Button>
-      </ButtonGroup>
-      <h1 className="text-secondary fw-bold mb-2">
-        {t('Results about')}: {`"${qLabel}"`}
-      </h1>
-      <FilterEngine key={router.asPath} />
-      <div className='d-flex flex-column justify-content-center'>
-      {(!isLoading && <Mosaic cacheKey={["ITEMS", q!]} enabledPagination={false}  showButtonLabels={false} stack={homepageMosaicDataFiltered} />) || <></>}
-      </div>
-      {genLoadingCmp()}
-      {renderErrorMessage()}
-    </SimpleLayout>
-  );
+  if(mounted)
+    return (
+      <SimpleLayout title={t('browserTitleWelcome')}>
+        <ButtonGroup className="mb-1">
+          <Button variant="primary text-white" onClick={() => router.back()} size="sm">
+            <BiArrowBack />
+          </Button>
+        </ButtonGroup>
+        <h1 className="text-secondary fw-bold mb-2">
+          {t('Results about')}: {`"${qLabel}"`}
+        </h1>
+        <FilterEngine key={router.asPath} />
+        <div className='d-flex flex-column justify-content-center'>
+        {(
+          !isLoading 
+          && <ListWindow cacheKey={["ITEMS", q!]} items={homepageMosaicDataFiltered} />
+          ) 
+          || <></>
+        }
+        </div>
+        {genLoadingCmp()}
+        {renderErrorMessage()}
+      </SimpleLayout>
+    );
+  return <></>
 };
 
 /* export const getStaticProps: GetStaticProps = async () => {
