@@ -91,7 +91,10 @@ export default getApiHandler()
       data.forEach((c) => {
           c.type ='cycle';
       }); 
-      res.status(200).json(data);
+      res.status(200).json({
+        data,
+        fetched:data.length
+      });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
       res.status(500).json({ status: 'server error' });

@@ -14,8 +14,8 @@ export const getPosts = async (
    
   const res = await fetch(url);
   if (!res.ok) return [];
-  const result = await res.json();
-  return result.data;
+  const {data} = await res.json();
+  return data;
 };
 
 interface Options {

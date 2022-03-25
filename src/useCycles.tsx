@@ -13,7 +13,8 @@ export const getCycles = async (
   url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle${where ? `?where=${w}` : ''}`;
   const res = await fetch(url);
   if (!res.ok) return [];
-  return res.json();
+  const {data} = await res.json();
+  return data;
 };
 
 interface Options {

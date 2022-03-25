@@ -8,7 +8,8 @@ export const getWorks = async (
   const w = encodeURIComponent(JSON.stringify(where))   
   const res = await fetch(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/work${where ? `?where=${w}` : ''}`);
   if (!res.ok) return [];
-  return res.json();
+  const {data} = await res.json();
+  return data;
 };
 
 interface Options {

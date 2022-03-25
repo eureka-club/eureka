@@ -12,7 +12,8 @@ export const getUsers = async (where:Prisma.UserWhereInput):Promise<UserMosaicIt
   const w = encodeURIComponent(JSON.stringify(where));
   const res = await fetch(`/api/user?where=${w}`);
   if(!res.ok)return [];
-  return res.json();
+  const {data} = await res.json();
+  return data;
 };
 
 const useUsers = (where:Prisma.UserWhereInput,options?: Options) => {

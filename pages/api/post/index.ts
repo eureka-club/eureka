@@ -162,20 +162,20 @@ export default getApiHandler()
       }
       data.forEach(d=>{d.type='post'})
 
-      const posts_ = await prisma.post.findMany({
-        select:{
-          _count:{
-            select:{cycles:true}
-          }
+      // const posts_ = await prisma.post.findMany({
+      //   select:{
+      //     _count:{
+      //       select:{cycles:true}
+      //     }
 
-        },
+      //   },
         
-        where
-      })
+      //   where
+      // })
 
       res.status(200).json({ 
-        status: 'OK', 
         data, 
+        fetched:data.length
         //... (take&&page) && {hasNextPage: posts_.length > take * (page+1)}
       });
     } catch (exc) {

@@ -75,7 +75,10 @@ export default getApiHandler()
       } else {
         data = await findAll({});
       }
-      res.status(200).json(data);
+      res.status(200).json({
+        data,
+        fetched:data.length
+      });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
       res.status(500).json({ status: 'server error' });

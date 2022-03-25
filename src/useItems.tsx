@@ -17,15 +17,8 @@ const getRecordsWorks = async (q?: string): Promise<WorkMosaicItem[]> => {
 
   const res = await fetch(url);
   if (!res.ok) return [];
-  const result = await res.json();
-
-  return result.data.sort((f: WorkMosaicItem, s: WorkMosaicItem) => {
-    const fCD = dayjs(f.createdAt);
-    const sCD = dayjs(s.createdAt);
-    if (fCD.isAfter(sCD)) return -1;
-    if (fCD.isSame(sCD)) return 0;
-    return 1;
-  }) as WorkMosaicItem[];
+  const {data} = await res.json();
+  return data;
 };
 
 const getRecordsCycles = async (q?: string): Promise<CycleMosaicItem[]> => {
@@ -36,19 +29,9 @@ const getRecordsCycles = async (q?: string): Promise<CycleMosaicItem[]> => {
 
   const res = await fetch(url);
   if (!res.ok) return [];
-  const result = await res.json();
-
-  const cycles: CycleMosaicItem[] = [];
-  result.data.forEach((i: CycleMosaicItem) => {
-    cycles.push({ ...i, type: 'cycle' });
-  });
-  return cycles.sort((f, s) => {
-    const fCD = dayjs(f.createdAt);
-    const sCD = dayjs(s.createdAt);
-    if (fCD.isAfter(sCD)) return -1;
-    if (fCD.isSame(sCD)) return 0;
-    return 1;
-  });
+  const {data} = await res.json();
+  return data;
+  
 };
 
 const getRecordsPosts = async (q?: string): Promise<PostMosaicItem[]> => {
@@ -56,22 +39,11 @@ const getRecordsPosts = async (q?: string): Promise<PostMosaicItem[]> => {
   if (q) {
     url = `/api/post${q ? `?q=${q}` : ''}`;
   }
-
+  
   const res = await fetch(url);
   if (!res.ok) return [];
-  const result = await res.json();
-  
-  const posts: PostMosaicItem[] = [];
-  result.data.forEach((i: PostMosaicItem) => {
-    posts.push({ ...i, type: 'post' });
-  });
-  return posts.sort((f, s) => {
-    const fCD = dayjs(f.createdAt);
-    const sCD = dayjs(s.createdAt);
-    if (fCD.isAfter(sCD)) return -1;
-    if (fCD.isSame(sCD)) return 0;
-    return 1;
-  });
+  const {data} = await res.json();
+  return data;
 };
 
 export const getRecords = async (q?: string): Promise<SearchResult[]> => {
