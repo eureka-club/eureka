@@ -5,7 +5,7 @@ import timezone from 'dayjs/plugin/timezone';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useEffect, useState, MouseEvent } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient,useIsFetching } from 'react-query';
 import { useRouter } from 'next/router';
 import { Card, Button, Spinner, Badge } from 'react-bootstrap';
 import { useSession } from 'next-auth/client';
@@ -65,6 +65,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [idSession,setIdSession] = useState<string>('')
   const { data: user } = useUser(+idSession,{ enabled: !!+idSession });
   const [isCurrentUserJoinedToCycle, setIsCurrentUserJoinedToCycle] = useState<boolean>(false);
+  const [countParticipants,setCountParticipants] = useState<number>()
   
   const [loading, setLoading] = useState<boolean>(false);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -85,6 +86,8 @@ const MosaicItem: FunctionComponent<Props> = ({
     }
   )
 
+  const isFetchingParticipants = useIsFetching(['USERS',JSON.stringify(whereCycleParticipants)])
+  
   useEffect(() => {
     const s = session as unknown as Session;
     if (s) {
@@ -98,6 +101,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   useEffect(() => {
     setIsCurrentUserJoinedToCycle(false)
     if (cycle && user && participants) {
+      setCountParticipants(participants.length);
       const idx = participants.findIndex(p=>p.id==user.id);
       if(idx > -1) 
         setIsCurrentUserJoinedToCycle(true)
@@ -171,11 +175,12 @@ const MosaicItem: FunctionComponent<Props> = ({
 
     },
     {
-      onMutate: async () => {debugger;
+      onMutate: async () => {
         const ck = ['USERS',JSON.stringify(whereCycleParticipants)];
         await queryClient.cancelQueries(ck);
         const ss = queryClient.getQueryData<UserMosaicItem[]>(ck)
         // setIsCurrentUserJoinedToCycle(true);
+        // setCountParticipants(res=>res?res+1:undefined)
       
         //   if (user) {
         //     // debugger;
@@ -190,7 +195,8 @@ const MosaicItem: FunctionComponent<Props> = ({
       onSettled(_data,error,_variable,context) {
         const {ck,ss} = context as {ss:UserMosaicItem[],ck:string[]}
         if(error){
-          setIsCurrentUserJoinedToCycle(false);
+          // setIsCurrentUserJoinedToCycle(false);
+          // setCountParticipants(res=>res?res-1:undefined)
           queryClient.setQueryData(ck,ss)
         }
         if(user){
@@ -246,12 +252,12 @@ const MosaicItem: FunctionComponent<Props> = ({
       
     },
     {
-      onMutate: async () => {debugger;
+      onMutate: async () => {
         const ck = ['USERS',JSON.stringify(whereCycleParticipants)];
         await queryClient.cancelQueries(ck);
         const ss = queryClient.getQueryData<UserMosaicItem[]>(ck)
         // setIsCurrentUserJoinedToCycle(false);
-      
+        // setCountParticipants(res=>res?res-1:undefined)
         //   if (user) {
         //     // debugger;
         //     user.joinedCycles.push(cycle);
@@ -265,7 +271,8 @@ const MosaicItem: FunctionComponent<Props> = ({
       onSettled(_data,error,_variable,context) {
         const {ck,ss} = context as {ss:UserMosaicItem[],ck:string[]}
         if(error){
-          setIsCurrentUserJoinedToCycle(true);
+          // setIsCurrentUserJoinedToCycle(true);
+          // setCountParticipants(res=>res?res+1:undefined)
           queryClient.setQueryData(ck,ss)
         }
         if(user){
@@ -392,25 +399,25 @@ const MosaicItem: FunctionComponent<Props> = ({
         {/* {(isJoinCycleLoading || isLeaveCycleLoading) && <Spinner animation="grow" size="sm" />} */}
         {/* !(isJoinCycleLoading || isLeaveCycleLoading) &&  */isCurrentUserJoinedToCycle && user && (user.id !== cycle!.creatorId) ? (
           <Button 
-          disabled={(isJoinCycleLoading || isLeaveCycleLoading)}
+          disabled={(isJoinCycleLoading || isLeaveCycleLoading || isFetchingParticipants!==0)}
           onClick={handleLeaveCycleClick} variant="button border-primary text-primary fs-6" className="w-75">
             {t('leaveCycleLabel')}
           </Button>
         ) : (
-          showJoinButtonCycle() && (
+          // showJoinButtonCycle() && (
             <Button 
-            disabled={(isJoinCycleLoading || isLeaveCycleLoading)}
+            disabled={(isJoinCycleLoading || isLeaveCycleLoading || isFetchingParticipants!==0)}
             onClick={handleJoinCycleClick} className="w-75 text-white">
               {t('joinCycleLabel')}
             </Button>
-          )
+          // )
         )}
         {(user?.id === cycle!.creatorId) && (<Button  variant="button border-warning text-warning fs-6 disabled" className="w-75">
             {t('MyCycle')}
           </Button>) }
       </div>
       {showParticipants && (<p className={`${styles.title} mt-3 fs-6 text-center text-gray my-2`}>
-        {!isLoadingParticipants ? `${t('Participants')}: ${(participants||[])?.length + 1}`:'...'}
+        {`${t('Participants')}: ${countParticipants||'...'}`}
         </p>)
       } 
       </div>
