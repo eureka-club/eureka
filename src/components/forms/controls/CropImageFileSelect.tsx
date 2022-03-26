@@ -72,7 +72,7 @@ const onFileChange = async  (e:React.ChangeEvent<HTMLInputElement>)  => {
           <Form.Range id='zoom-range' className="ms-3" value={zoom} min={1} max={3} step={0.1}  onChange={(e) => setZoom(e.target.valueAsNumber)}/>
         </>
         
-        <Button variant="primary" className="ms-3 text-white" onClick={() =>  onGenerateCrop(file!)} >
+        <Button variant="primary" data-cy="set-image" className="ms-3 text-white" onClick={() =>  onGenerateCrop(file!)} >
                 {t('select')}
                </Button>
       </div></>

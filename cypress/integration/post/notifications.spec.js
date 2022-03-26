@@ -22,7 +22,6 @@ describe('notifications on eurekas suit',()=>{
         })
         const cycle = cycles[0]
         cy.visit(`/en/cycle/${cycle.id}`)
-        debugger;
         const works = await getWorks({
           cycles:{some:{id:cycle.id}}
         })
@@ -31,8 +30,24 @@ describe('notifications on eurekas suit',()=>{
         .click({force:true})
         .get('[data-cy="bt-create-eureka"]')
         .click({force:true})
+        .get('[id="discussionItem"]')
+        .select(`work-${work.id}`,{force:true})
         .get('[id="eureka-title"]')
-        .type(work.title)
+        .type(work.title+' - test',{force:true})
+        .get('[data-cy="image-load"]')
+        .click({force:true})
+        .get('[type="file"]')
+        .selectFile(`public/img/ico-painting.png`,{force:true})//TODO i can not set the file because the crop :|
+        .then(res=>{
+          console.log(res[0])
+        })
+        .get('[type="range"]')
+        .invoke('val',2).trigger('change',{force:true})
+        .get('[data-cy="create-eureka-btn"]').click({force:true})
+
+        //.get('[data-cy="set-image"]')
+        // .click({force:true})
+        //.get('[type="file"]')
         
       })
 
