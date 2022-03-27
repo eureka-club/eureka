@@ -123,6 +123,35 @@ const AboutPage: NextPage = () => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
+                src="/img/aboutUs/jose-manuel-gallardo.webp"
+                alt="Picture of Software Engineer"
+                width={200}
+                height={200}
+              />
+              <h2 className={styles.peopleName}>
+                José Manuel Gallardo
+                <a href="https://www.linkedin.com/in/jose-manuel-gallardo-1a13a8100/" target="_blank" rel="noreferrer">
+                  <TiSocialLinkedinCircular className={styles.si} />
+                </a>
+              </h2>
+              <h3 className={styles.professionName}>{t('Software Engineer')}</h3>
+              <h4 className={styles.positionName}>{t('Front-end expert')}</h4>
+              <Badge pill className={className('badge-secondary', styles.interest)}>
+                {t('History')}
+              </Badge>
+              <br />
+              <Badge pill className={className('badge-secondary', styles.interest)}>
+                {t('music')}
+              </Badge>
+              <br />
+              <Badge pill className={className('badge-secondary', styles.interest)}>
+                {t('Nature')}
+              </Badge>
+            </Col>
+
+            <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
+              <Image
+                className="rounded-circle"
                 src="/img/aboutUs/igor_hlina.jpg"
                 alt="Picture of Full-stack developer (via Toptal)"
                 width={200}
