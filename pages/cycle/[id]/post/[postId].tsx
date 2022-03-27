@@ -74,7 +74,7 @@ const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId,metaTags}) => {
         <meta property="og:title" content={`${metaTags.title} · ${metaTags.cycleTitle}`}/>
         <meta property="og:url" content={`${WEBAPP_URL}/cycle/${metaTags.cycleId}/post/${metaTags.id}`} />
         <meta property="og:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${metaTags.storedFile}`}/>
- <meta property="og:type" content='article'/>
+        <meta property="og:type" content='article'/>
 
         <meta name="twitter:card" content="summary_large_image"></meta>
         <meta name="twitter:site" content="@EurekaClub"></meta>

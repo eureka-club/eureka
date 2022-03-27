@@ -13,37 +13,36 @@ import SimpleLayout from '../../../../src/components/layouts/SimpleLayout';
 import WorkDetailComponent from '../../../../src/components/work/WorkDetail';
 import { search as searchPost, isFavoritedByUser } from '../../../../src/facades/post';
 import { countCycles, countPosts, find as findWork } from '../../../../src/facades/work';
-import useWork from '../../../../src/useWork';
-import usePost from '@/src/usePost';
+import useWork,{getWork} from '../../../../src/useWork';
+import usePost,{getPost} from '@/src/usePost';
+import { QueryClient,dehydrate } from 'react-query';
 import { WEBAPP_URL } from '../../../../src/constants';
 interface Props {
-  post: PostMosaicItem;
-  work: WorkMosaicItem;
-  cyclesCount: number;
-  postsCount: number;
-  mySocialInfo: MySocialInfo;
+  postId:number;
+  workId:number;
+  metaTags:any
 }
 
-const PostDetailInWorkPage: NextPage<Props> = () => {
+const PostDetailInWorkPage: NextPage<Props> = ({postId,workId,metaTags}) => {
   const router = useRouter();
-  const [id, setId] = useState<string>('');
-  const [postId, setPostId] = useState<string>('');
+  //const [id, setId] = useState<string>('');
+  //const [postId, setPostId] = useState<string>('');
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
   const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
   // const [work, setWork] = useState<WorkMosaicItem>();
   // const [post, setPost] = useState<PostMosaicItem>();
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (router.query.id) {
       setId(router.query.id as string);
     }
     if (router.query.id) {
       setPostId(router.query.postId as string);
     }
-  }, [router.query]);
+  }, [router.query]);*/
 
-  const { data: work, isLoading: loadingWork } = useWork(+id, { enabled: !!id });
+  const { data: work, isLoading: loadingWork } = useWork(+workId, { enabled: !!workId });
   const { data: post, isLoading: loadingPost } = usePost(+postId, { enabled: !!postId });
   const isLoadingData = () => {
     if (loadingWork) return true;
@@ -54,10 +53,17 @@ const PostDetailInWorkPage: NextPage<Props> = () => {
   const getLayout = (children: JSX.Element, title = '') => {
     return <>
        <Head>
-        <meta property="og:title" content={`${post ? post.title : ''} · ${work ? work.title : ''}`}/>
-        <meta property="og:url" content={`${WEBAPP_URL}/work/${work ? work.id : '#'}/post/${post?.id}`} />
-        <meta property="og:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${post?.localImages[0].storedFile}`}/>
-        {/*<meta property="og:type" content='website' />*/}
+        <meta property="og:title" content={`${metaTags.title} · ${metaTags.workTitle}`}/>
+        <meta property="og:url" content={`${WEBAPP_URL}/work/${metaTags.workId}/post/${metaTags.id}`} />
+        <meta property="og:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${metaTags.storedFile}`}/>
+        <meta property="og:type" content='article'/>
+
+        <meta name="twitter:card" content="summary_large_image"></meta>
+        <meta name="twitter:site" content="@EurekaClub"></meta>
+        <meta name="twitter:title" content={`${metaTags.title} · ${metaTags.workTitle}`}></meta>
+        {/* <meta name="twitter:description" content=""></meta>*/}
+        <meta name="twitter:url" content={`${WEBAPP_URL}/work/${metaTags.workId}/post/${metaTags.id}`}></meta>
+        <meta name="twitter:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${metaTags.storedFile}`}></meta>
     </Head>  
      <SimpleLayout title={title}>{children}</SimpleLayout>;
      </>
@@ -69,20 +75,35 @@ const PostDetailInWorkPage: NextPage<Props> = () => {
     `${post!.title} · ${work!.title}`,
   );
 
-  // return (
-  //   <SimpleLayout title={`${post.title} · ${work.title}`}>
-  //     {!isLoadingData() && (
-  //       <WorkDetailComponent
-  //         work={work}
-  //         post={post}
-  //         cyclesCount={cyclesCount}
-  //         postsCount={postsCount}
-  //         mySocialInfo={mySocialInfo}
-  //       />
-  //     )}
-  //   </SimpleLayout>
-  // );
 };
+
+
+export const getServerSideProps:GetServerSideProps = async ({query}) => {
+  const {id:wid,postId:pid} = query;
+  const workId = parseInt(wid ? wid.toString():'')
+  const postId = parseInt(pid ? pid.toString():'')
+
+
+ let post = await getPost(postId);
+ let work = await getWork(workId);
+ let metaTags = {id:post?.id, workId:work?.id, title:post?.title,workTitle:work?.title, storedFile: post?.localImages[0].storedFile}
+
+  const queryClient = new QueryClient() 
+   //await queryClient.prefetchQuery(['USERS',JSON.stringify(wcu)],()=>getUsers(wcu))
+   await queryClient.prefetchQuery(['WORK',`${workId}`],()=>work)
+   await queryClient.prefetchQuery(['POST',`${postId}`],()=>post)
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+      workId,
+      postId,
+      metaTags:metaTags
+    },
+  }
+}
+
+
 /* 
 export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
   if (
