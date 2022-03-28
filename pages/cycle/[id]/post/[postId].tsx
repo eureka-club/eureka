@@ -22,6 +22,7 @@ import { WEBAPP_URL } from '@/src/constants';
 interface Props {
   postId:number;
   cycleId:number;
+  metaTags:any
   // mySocialInfo: MySocialInfo;
 }
 
@@ -32,7 +33,7 @@ const whereCycleParticipants = (id:number)=>({
   ], 
 });
 
-const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId}) => {
+const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId,metaTags}) => {
   const [session, isLoadingSession] = useSession();
   const router = useRouter();
   // const [post, setPost] = useState<PostMosaicItem>();
@@ -70,10 +71,18 @@ const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId}) => {
   return (
     <>
      <Head>
-        <meta property="og:title" content={`${post ? post.title : ''} · ${cycle ? cycle.title : ''}`}/>
-        <meta property="og:url" content={`${WEBAPP_URL}/cycle/${post?.cycles[0].id}/post/${post?.id}`} />
-        <meta property="og:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${post?.localImages[0].storedFile}`}/>
-        {/*<meta property="og:type" content='website' />*/}
+        <meta property="og:title" content={`${metaTags.title} · ${metaTags.cycleTitle}`}/>
+        <meta property="og:url" content={`${WEBAPP_URL}/cycle/${metaTags.cycleId}/post/${metaTags.id}`} />
+        <meta property="og:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${metaTags.storedFile}`}/>
+        <meta property="og:type" content='article'/>
+
+        <meta name="twitter:card" content="summary_large_image"></meta>
+        <meta name="twitter:site" content="@EurekaClub"></meta>
+        <meta name="twitter:title" content={`${metaTags.title} · ${metaTags.cycleTitle}`}></meta>
+        {/* <meta name="twitter:description" content=""></meta>*/}
+        <meta name="twitter:url" content={`${WEBAPP_URL}/cycle/${metaTags.cycleId}/post/${metaTags.id}`}></meta>
+        <meta name="twitter:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${metaTags.storedFile}`}></meta>
+
     </Head>
     <SimpleLayout title={`${post ? post.title : ''} · ${cycle ? cycle.title : ''}`}>
       <>
@@ -99,16 +108,22 @@ export const getServerSideProps:GetServerSideProps = async ({query}) => {
 
   const wcu = whereCycleParticipants(cycleId)
   
+
+ let post = await getPost(postId);
+ let cycle = await getCycle(cycleId);
+ let metaTags = {id:post?.id, cycleId:cycle?.id, title:post?.title,cycleTitle:cycle?.title, storedFile: post?.localImages[0].storedFile}
+
   const queryClient = new QueryClient() 
    await queryClient.prefetchQuery(['USERS',JSON.stringify(wcu)],()=>getUsers(wcu))
-   await queryClient.prefetchQuery(['CYCLE',`${cycleId}`],()=>getCycle(cycleId))
-   await queryClient.prefetchQuery(['POST',`${postId}`],()=>getPost(postId))
+   await queryClient.prefetchQuery(['CYCLE',`${cycleId}`],()=>cycle)
+   await queryClient.prefetchQuery(['POST',`${postId}`],()=>post)
 
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
       cycleId,
       postId,
+      metaTags:metaTags
     },
   }
 }
