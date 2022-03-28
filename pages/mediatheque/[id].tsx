@@ -478,7 +478,7 @@ const Mediatheque: NextPage = () => {
                       </Button>
                     )}
                     {session && (session as unknown as Session).user!.id !== user.id && !isFollowedByMe && (
-                      <Button className='text-white rounded-pill' onClick={followHandler} disabled={isLoadingMutateFollowing}>
+                      <Button data-cy="follow-btn" className='text-white rounded-pill' onClick={followHandler} disabled={isLoadingMutateFollowing}>
                         {t('Follow')}
                         {isLoadingMutateFollowing && <Spinner animation="grow" variant="info" size="sm" />}
                       </Button>
@@ -486,6 +486,7 @@ const Mediatheque: NextPage = () => {
 
                     {session && (session as unknown as Session).user!.id !== user.id && isFollowedByMe && (
                       <Button
+                        data-cy="follow-btn"
                         variant="button border-primary text-primary fs-6"
                         className="w-80 rounded-pill"
                         onClick={followHandler}
