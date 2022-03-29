@@ -119,5 +119,6 @@
   "secret": "Ciclo secreto",
   "select": "Seleccionar",
   "next":"Siguientes",
-  "previous":"Previos"
+  "previous":"Previos",
+  "canNotUploadPhoto":"No se puede subir imagenes mayores de 2 MB. Imagen usada tiene"
 }

@@ -121,5 +121,7 @@
   "select": "Selecionar",
   "next":"next",
   "previous":"previous",
-  "MyCycle": "Meu ciclo"
+  "MyCycle": "Meu ciclo",
+  "canNotUploadPhoto":"Imagens maiores que 2 MB não podem ser carregadas. A imagem usada tem"
+ 
 }

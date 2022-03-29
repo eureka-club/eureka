@@ -5,7 +5,7 @@ import { Container, Form, Button } from 'react-bootstrap';
 import {image64toCanvasRef,getCroppedImg} from '@/src/lib/utils'
 import useTranslation from 'next-translate/useTranslation';
 import { BsX} from 'react-icons/bs';
-
+import { useToasts } from 'react-toast-notifications'
 interface Props{
   onGenerateCrop: (file:File) => void;
   onClose: () => void;
@@ -20,6 +20,7 @@ const CropImageFileSelect: React.FC<Props> = ({onGenerateCrop,onClose,cropShape}
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>();
   const [croppedImage, setCroppedImage] = useState<Area>();
   const { t } = useTranslation('common');
+  const { addToast } = useToasts()
   
   const onCropComplete = async (croppedArea: Area, croppedAreaPixels: Area) => {
          setCroppedAreaPixels(croppedAreaPixels);
@@ -29,6 +30,16 @@ const CropImageFileSelect: React.FC<Props> = ({onGenerateCrop,onClose,cropShape}
           onGenerateCrop(file);*/
     }
 
+    const processSelect = async () => {
+     const size = formatBytes(file!.size);
+       if(size[1] === 'KB' && size[0] > 500 ){
+          addToast( t('selectedCropNotInvalid') +` ${size[0]}` + ` ${size[1]}`  , {appearance: 'error', autoDismiss: true,})
+          setFile(undefined);
+      }
+      else     
+        onGenerateCrop(file!)
+    }
+
     function formatBytes(bytes:number, decimals = 2) {
     if (bytes === 0) return '0 Bytes';
 
@@ -36,17 +47,24 @@ const CropImageFileSelect: React.FC<Props> = ({onGenerateCrop,onClose,cropShape}
     const dm = decimals < 0 ? 0 : decimals;
     const sizes = ['Bytes', 'KB', 'MB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    return [parseFloat((bytes / Math.pow(k, i)).toFixed(dm)),sizes[i]];
 }
 
 const onFileChange = async  (e:React.ChangeEvent<HTMLInputElement>)  => {
   const files = e.currentTarget.files;
+  console.log(e.currentTarget.value,'e.currentTarget')
     if(files?.length){
       const file = files[0];
-      console.log(formatBytes(files[0].size))
+      const size = formatBytes(files[0].size);
+      if(size[1] === 'MB' && size[0] > 2 ){
+          addToast( t('canNotUploadPhoto') +` ${size[0]}` + ` ${size[1]}`  , {appearance: 'error', autoDismiss: true,})
+          e.currentTarget.value = '';
+      }
+      else{
       const fileReader = new FileReader()
       setImageSrc(()=>URL.createObjectURL(file));
       setSelectedPhoto(true);
+      }
     }
   }
 
@@ -83,7 +101,7 @@ const onFileChange = async  (e:React.ChangeEvent<HTMLInputElement>)  => {
           <Form.Range id='zoom-range' className="ms-3" value={zoom} min={1} max={3} step={0.1}  onChange={(e) => setZoom(e.target.valueAsNumber)}/>
         </>
         
-        <Button variant="primary" data-cy="set-image" className="ms-3 text-white" onClick={() =>  onGenerateCrop(file!)} >
+        <Button variant="primary" data-cy="set-image" className="ms-3 text-white" onClick={processSelect} >
                 {t('select')}
                </Button>
       </div></>
