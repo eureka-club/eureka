@@ -88,10 +88,17 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const router = useRouter();
   
   const queryClient = useQueryClient()
+  const [tabKey, setTabKey] = useState<string>();
 
   const [cycleId,setCycleId] = useState<string>('')
   useEffect(()=>{
-    if(router?.query && router.query.id)setCycleId(router.query.id?.toString())
+    if(router?.query){
+      if(router.query.id){
+        setCycleId(router.query.id?.toString())
+  
+      }
+      if(router.query.tabKey)setTabKey(router.query.tabKey.toString())
+    }
   },[router])
 
   const {data:cycle,isLoading} = useCycle(+cycleId,{
@@ -188,7 +195,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   
   const [session, isLoadingSession] = useSession() as [Session | null | undefined, boolean];
   const { t } = useTranslation('cycleDetail');
-  const [tabKey, setTabKey] = useState<string>();
+  
   const tabContainnerRef = useRef<HTMLDivElement>(null);
   const refParticipants = useRef<Typeahead<User>>(null);
   const [filtersWork, setFiltersWork] = useState<number[]>([]);
