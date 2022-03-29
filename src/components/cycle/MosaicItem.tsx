@@ -146,7 +146,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           notificationMessage,
-          notificationContextURL: `/cycle/${cycle!.id}`,
+          notificationContextURL: `/cycle/${cycle!.id}?tabKey=participants`,
           notificationToUsers,
         }),
       });
@@ -225,7 +225,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           notificationMessage,
-          notificationContextURL: router.asPath,
+          notificationContextURL: `/cycle/${cycle!.id}?tabKey=participants`,
           notificationToUsers,
         })
       });

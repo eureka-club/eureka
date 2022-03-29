@@ -11,6 +11,7 @@ import getApiHandler from '../../../src/lib/getApiHandler';
 import prisma from '../../../src/lib/prisma';
 import {storeDeleteFile, storeUploadUserPhoto} from '@/src/facades/fileUpload'
 import { UserMosaicItem } from '@/src/types/user';
+import { Notification } from '@prisma/client';
 
 export const config = {
   api: {
@@ -23,21 +24,21 @@ export default getApiHandler()
   .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     new Form().parse(req, async function(err, fields:Record<string,any[]>, files) {
       
+      const { id } = req.query;
+      if (typeof id !== 'string') {
+        res.status(404).end();
+        return;
+      }
       
-        const { id } = req.query;
-    if (typeof id !== 'string') {
-      res.status(404).end();
-      return;
-    }
-
-    const idNum = parseInt(id, 10);
-    if (!Number.isInteger(idNum)) {
-      // res.status(404).end();
-      res.status(200).json({ status: 'OK', user: null });
-      return;
-    }
-
-    const session = (await getSession({ req })) as unknown as Session;
+      const idNum = parseInt(id, 10);
+      if (!Number.isInteger(idNum)) {
+        // res.status(404).end();
+        res.status(200).json({ status: 'OK', user: null });
+        return;
+      }
+      
+    let session = (await getSession({ req })) as unknown as Session;
+    if(!session && req.headers['cypress-session']) session = JSON.parse(req.headers['cypress-session'].toString());//cypress tests
 
     const actionAllowed = (fields:Record<string,any[]>) => {
       if (('following' in fields && fields.following) || ('followedBy' in fields && fields.followedBy)) return true;
@@ -105,10 +106,11 @@ export default getApiHandler()
         }
       }
       const r = await update(idNum, data);
+      let notification:Notification|null=null;
       if(r){
         if(data.followedBy && data.followedBy.connect){
           if(Object.keys(notificationData).length){
-            const notification = await create(
+            notification = await create(
               notificationData.notificationMessage,
               notificationData.notificationContextURL,
               session.user.id,
@@ -119,7 +121,7 @@ export default getApiHandler()
 
         }
       }
-      res.status(200).json({ status: 'OK', r });
+      res.status(200).json({ status: 'OK', r, notification });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
       res.status(500).json({ status: 'server error' });

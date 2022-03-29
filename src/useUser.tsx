@@ -5,7 +5,7 @@ import { PostMosaicItem } from './types/post';
 // import { User } from '@prisma/client';
 
 
-export const getRecord = async (id: number): Promise<UserMosaicItem|null> => {
+export const getUser = async (id: number): Promise<UserMosaicItem|null> => {
   if (!id) return null;
   else{
     const url = `/api/user/${id}`;
@@ -27,7 +27,7 @@ const useUser = (id: number, options?: Options) => {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  return useQuery<UserMosaicItem|null>(['USER', `${id}`], () => getRecord(id), {
+  return useQuery<UserMosaicItem|null>(['USER', `${id}`], () => getUser(id), {
     staleTime,
     enabled,
   });

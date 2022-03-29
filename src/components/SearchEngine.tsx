@@ -156,7 +156,7 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
   const renderMenuItems = (results:TypeaheadResult<SearchResult>[])=>{
     const resultsWithOutPosts = results.filter(item=>item.type!=='post')
     
-    return resultsWithOutPosts.slice(0,5).map((item, index) => (
+    return resultsWithOutPosts.slice(0,3).map((item, index) => (
       <MenuItem key={`${item.id}`} option={item} position={index}>
         {/* <Highlighter search={props.text}>{item}</Highlighter> */}
         {(isCycleMosaicItem(item) && (
@@ -196,7 +196,7 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
             placeholder={t('Search')}
             isLoading={isSearchResultsLoading}
             labelKey={labelKeyFn}
-            minLength={5}
+            minLength={4}
             onSearch={handleSearchWorkOrCycleDebounced}
             options={searchResults||[]}
             onChange={handleSelectItem}
@@ -213,22 +213,22 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
             // }}
             renderMenu={(results, menuProps) => (
               // eslint-disable-next-line react/jsx-props-no-spreading
-              <Menu {...menuProps}>
-                {renderMenuItems(results)}
-                {(results.length && (
-                  // <Link href={`/search?q=${q}`} passHref>
-                  //   <Button variant="light" className={styles.seeAllResults}>
-                  //   <a>
-                  //   {t('See all results')}
-                  //   </a>
-                  //   </Button>
-                  // </Link>
-                  // <MenuItem position={results.length} option={t('See all results')}>
+                <Menu {...menuProps}>
+                  {renderMenuItems(results)}
+                  {(results.length && (
+                    // <Link href={`/search?q=${q}`} passHref>
+                    //   <Button variant="light" className={styles.seeAllResults}>
+                    //   <a>
+                    //   {t('See all results')}
+                    //   </a>
+                    //   </Button>
+                    // </Link>
+                    // <MenuItem position={results.length} option={t('See all results')}>
+                    // </MenuItem>                    
                     <a onClick={onItemsFound} className="cursor-pointer text-center d-block bg-light p-2" role="presentation">{t('See all results')}</a>
-                  // </MenuItem>
-                )) ||
-                  ''}
-              </Menu>
+                    )) ||
+                    ''}
+                </Menu>
             )}
           />
           <InputGroup.Text className="text-white  cursor-pointer bg-primary">
