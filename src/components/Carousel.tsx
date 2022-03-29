@@ -292,7 +292,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
                 
               </Col>
             </Row>
-            <div className="d-flex overflow-auto justify-content-center">{buildMosaics()}</div>
+            <div className="carousel d-flex justify-content-center">{buildMosaics()}</div>
           </div>
         )}
       </section>
