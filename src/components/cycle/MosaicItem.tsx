@@ -403,7 +403,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           onClick={handleLeaveCycleClick} variant="button border-primary text-primary fs-6" className="w-75">
             {t('leaveCycleLabel')}
           </Button>
-        ) : (
+        ) : ((user?.id != cycle!.creatorId) &&
           // showJoinButtonCycle() && (
             <Button 
             disabled={(isJoinCycleLoading || isLeaveCycleLoading || isFetchingParticipants!==0)}
