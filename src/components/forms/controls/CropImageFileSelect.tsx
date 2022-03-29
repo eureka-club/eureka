@@ -29,10 +29,21 @@ const CropImageFileSelect: React.FC<Props> = ({onGenerateCrop,onClose,cropShape}
           onGenerateCrop(file);*/
     }
 
+    function formatBytes(bytes:number, decimals = 2) {
+    if (bytes === 0) return '0 Bytes';
+
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
+
 const onFileChange = async  (e:React.ChangeEvent<HTMLInputElement>)  => {
   const files = e.currentTarget.files;
     if(files?.length){
       const file = files[0];
+      console.log(formatBytes(files[0].size))
       const fileReader = new FileReader()
       setImageSrc(()=>URL.createObjectURL(file));
       setSelectedPhoto(true);
