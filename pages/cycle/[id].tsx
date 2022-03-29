@@ -204,7 +204,7 @@ const CycleDetailPage: NextPage = (props:any) => {
         <meta property="og:type" content='article'/>
 
         <meta name="twitter:card" content="summary_large_image"></meta>
-        <meta name="twitter:site" content="@EurekaClub"></meta>
+        <meta name="twitter:site" content="@eleurekaclub"></meta>
         <meta name="twitter:title" content={props.metas.title}></meta>
         {/* <meta name="twitter:description" content=""></meta>*/}
         <meta name="twitter:url" content={`${WEBAPP_URL}/cycle/${props.metas.id}`}></meta>

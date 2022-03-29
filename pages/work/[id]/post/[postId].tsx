@@ -59,7 +59,7 @@ const PostDetailInWorkPage: NextPage<Props> = ({postId,workId,metaTags}) => {
         <meta property="og:type" content='article'/>
 
         <meta name="twitter:card" content="summary_large_image"></meta>
-        <meta name="twitter:site" content="@EurekaClub"></meta>
+        <meta name="twitter:site" content="@eleurekaclub"></meta>
         <meta name="twitter:title" content={`${metaTags.title} · ${metaTags.workTitle}`}></meta>
         {/* <meta name="twitter:description" content=""></meta>*/}
         <meta name="twitter:url" content={`${WEBAPP_URL}/work/${metaTags.workId}/post/${metaTags.id}`}></meta>
