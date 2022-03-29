@@ -30,6 +30,7 @@ import { useToasts } from 'react-toast-notifications'
 import useCycle from '@/src/useCycle'
 import Avatar from '../common/UserAvatar';
 import { UserMosaicItem } from '@/src/types/user';
+import useCycleJoinRequests,{setCycleJoinRequests,removeCycleJoinRequest} from '@/src/useCycleJoinRequests'
 // import { useMosaicContext } from '../../useMosaicContext';
 
 dayjs.extend(utc);
@@ -94,9 +95,8 @@ const MosaicItem: FunctionComponent<Props> = ({
       setIdSession(s.user.id.toString());
     }
   }, [session]);
-
-
-
+  
+  const {data:cycleJoinRequests,isLoading:isLoadingCycleJoinRequests} = useCycleJoinRequests(+idSession,{enabled:!!idSession})
 
   useEffect(() => {
     setIsCurrentUserJoinedToCycle(false)
@@ -162,6 +162,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         });
       }
       else if(res.ok){
+        setCycleJoinRequests({userId:+idSession,cycleId:cycle!.id})
         const json = await res.json();
         if(notifier){
           notifier.notify({
@@ -204,6 +205,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           queryClient.invalidateQueries(cacheKey);
           queryClient.invalidateQueries(ck)
         }
+        queryClient.invalidateQueries(['USER', +idSession, 'cycles-join-requests'])
       },
     },
   );
@@ -241,6 +243,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         });        
       }
       else{
+        await removeCycleJoinRequest(+idSession,cycle!.id)
         const json = await res.json();
         if(notifier){
           notifier.notify({
@@ -280,6 +283,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           queryClient.invalidateQueries(cacheKey);
           queryClient.invalidateQueries(ck)
         }
+        queryClient.invalidateQueries(['USER', +idSession, 'cycles-join-requests'])
       },
     },
   );
@@ -364,6 +368,19 @@ const MosaicItem: FunctionComponent<Props> = ({
     return img;
   };
   
+  const requestIsPending = ()=>{
+    if(!idSession)return false;
+    if(isLoadingCycleJoinRequests)return true;
+    if(!cycleJoinRequests||!cycleJoinRequests.length)return false;
+    else if(cycleJoinRequests) return cycleJoinRequests.findIndex(i=>i.cycleId==cycle?.id) > -1;
+    if(participants){
+      if(participants.findIndex(p=>p.id==+idSession) >-1){
+        return false;
+      }
+    }
+    return false;    
+  }
+
   if(!cycle)return <></>
 
   return (
@@ -403,12 +420,12 @@ const MosaicItem: FunctionComponent<Props> = ({
           onClick={handleLeaveCycleClick} variant="button border-primary text-primary fs-6" className="w-75">
             {t('leaveCycleLabel')}
           </Button>
-        ) : (
+        ) : ((user?.id != cycle!.creatorId) &&
           // showJoinButtonCycle() && (
             <Button 
-            disabled={(isJoinCycleLoading || isLeaveCycleLoading || isFetchingParticipants!==0)}
+            disabled={(isJoinCycleLoading || isLeaveCycleLoading || isFetchingParticipants!==0) || requestIsPending()}
             onClick={handleJoinCycleClick} className="w-75 text-white">
-              {t('joinCycleLabel')}
+              {!requestIsPending() ? t('joinCycleLabel'):t('joinCyclePending')}
             </Button>
           // )
         )}
