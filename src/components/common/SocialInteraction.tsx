@@ -456,17 +456,17 @@ debugger;
   const popoverShares = (
     <Popover id="popover-basic">
       <Popover.Body>
-        <TwitterShareButton url={shareUrl} title={shareText} via="eleurekaclub">
+        <TwitterShareButton windowWidth={800} windowHeight={600} url={shareUrl} title={shareText} via="eleurekaclub">
           <TwitterIcon size={32} round />
           {` ${t('wayShare')} Twitter`}
         </TwitterShareButton>
         <br />
-        <FacebookShareButton url={shareUrl} quote={shareText}>
+        <FacebookShareButton windowWidth={800} windowHeight={600} url={shareUrl} quote={shareText}>
           <FacebookIcon size={32} round />
           {` ${t('wayShare')} Facebook`}
         </FacebookShareButton>
         <br />
-        <WhatsappShareButton url={shareUrl} title={`${shareText} ${t('whatsappComplement')}`}>
+        <WhatsappShareButton windowWidth={800} windowHeight={600} url={shareUrl} title={`${shareText} ${t('whatsappComplement')}`}>
           <WhatsappIcon size={32} round />
           {` ${t('wayShare')} Whatsapp`}
         </WhatsappShareButton>
