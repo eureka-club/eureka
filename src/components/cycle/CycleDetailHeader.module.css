@@ -4,7 +4,7 @@
     background-color: brown;
 }
 .customCarouselStaticContainer .card div > a img{
-    height: 16em!important;
+    height: 16em!important; 
  }
 .cycleCreator {
     font-size: 1.1rem;
