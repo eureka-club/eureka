@@ -298,7 +298,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
         selectedWorkId: selectedWork.id,
         title: form.postTitle.value,
         image: imageFile,
-        language: form.language.value,
+        language: '',
         contentText: editorRef.current.getContent(), // form.description.value.length ? form.description.value : null,
         isPublic: isPublic,//form.isPublic.checked,
         topics: items.join(','),
@@ -311,7 +311,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
         selectedWorkId: null,
         title: form.postTitle.value,
         image: imageFile,
-        language: form.language.value,
+        language: '',
         contentText: editorRef.current.getContent(), // form.description.value.length ? form.description.value : null,
         isPublic: isPublic,//form.isPublic.checked,
         topics: items.join(','),
@@ -469,14 +469,14 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
                 )}
               </ImageFileSelect>*/}
            </Row>
-          <Row>
+         { /*<Row>
             <Col className="mb-4">
               <FormGroup controlId="language" >
                 <FormLabel>*{t('languageFieldLabel')}</FormLabel>
                 <LanguageSelect />
               </FormGroup>
             </Col>
-          </Row>
+          </Row>*/}
           <Row>
             <Col sm={{ span: 6 }} className="mb-4">
               <FormGroup controlId="workOrCycle">
