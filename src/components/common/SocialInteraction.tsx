@@ -278,12 +278,12 @@ debugger;
         throw new Error('Unknown entity');
       })();
       if (session) {
-        const notificationContextURL = router.asPath;
         //[user that does action] has saved the [title of book/movie/documentary/cycle] for later. Check it out.
-        
-        let translationKey = socialInteraction === 'fav' 
-        ? 'userHasSaveForLater'
-        : 'userHasRating';
+        let translationKey = 'userHasRating'
+        let notificationContextURL = `/${entityEndpoint}/${entity.id}`
+        if(socialInteraction == 'fav'){
+          translationKey = 'userHasSaveForLater';
+        }
 
         const notificationMessage = `${translationKey}!|!${JSON.stringify({
           userName: user?.name,
