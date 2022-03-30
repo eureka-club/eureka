@@ -60,7 +60,7 @@ const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,itemSize=400,width
                 
                   // <WorkContext.Provider value={{ linkToWork: true }}>
                   rows.push(<MosaicItemWork 
-                    linkToWork showShare={false} showButtonLabels={true} key={`${v4()}`} workId={item.id} className="mb-2"/>)
+                    linkToWork showShare={false} showButtonLabels={false} key={`${v4()}`} workId={item.id} className="me-3 my-6"/>)
                   // </WorkContext.Provider>
                 
               }
