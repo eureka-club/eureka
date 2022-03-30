@@ -247,12 +247,12 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
             readonly
             initialRating={getRatingAvg()}
             // onChange={handlerChangeRating}
-            className={styles.rating}
+            className={`d-flex flex-nowrap ${styles.rating}`}
             stop={5}
             emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
             fullSymbol={getFullSymbol()}
           />{' '}
-          <div className='ms-2'>
+          <div className='d-flex flex-nowrap ms-2'>
           {getRatingAvg()}
           {' - '}
           {getRatingQty()}
@@ -260,7 +260,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           <span className="ms-1 text-gray">{t('ratings')}</span>
           
           {cycle.topics && (
-            <aside className=" d-flex ms-3">
+            <aside className=" d-flex flex-wrap ms-3">
               <TagsInput
                 formatValue={(v: string) => t(`topics:${v}`)}
                 className=""
