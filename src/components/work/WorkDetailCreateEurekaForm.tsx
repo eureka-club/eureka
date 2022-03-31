@@ -1,0 +1,404 @@
+import { useSession } from 'next-auth/client';
+import useTranslation from 'next-translate/useTranslation';
+import { ChangeEvent, MouseEvent, FunctionComponent, useEffect, useRef, useState } from 'react';
+import Image from 'next/image'
+import { Button, Col, Row, ButtonGroup, Form, Spinner } from 'react-bootstrap';
+import { useAtom } from 'jotai';
+import { Post } from '@prisma/client';
+
+import { BsCheck } from 'react-icons/bs';
+import { ImCancelCircle } from 'react-icons/im';
+
+import { useMutation, useQueryClient } from 'react-query';
+
+import { Editor as EditorCmp } from '@tinymce/tinymce-react';
+import globalModalsAtom from '../../atoms/globalModals';
+import { Session } from '../../types';
+import { WorkMosaicItem } from '../../types/work';
+import { CreatePostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
+
+import ImageFileSelect from '../forms/controls/ImageFileSelect';
+import TagsInputTypeAhead from '../forms/controls/TagsInputTypeAhead';
+import stylesImageFileSelect from '../forms/CreatePostForm.module.css';
+import useTopics from '../../useTopics';
+
+import { useNotificationContext } from '@/src/useNotificationProvider';
+import { useRouter} from 'next/router'
+import { useToasts } from 'react-toast-notifications'
+import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
+import useWork from '@/src/useWork'
+import useUsers from '@/src/useUsers'
+// import {useGlobalEventsContext} from '@/src/useGlobalEventsContext'
+import styles from './WorkDetailCreateEurekaForm.module.css';
+import useCycles from '@/src/useCycles'
+
+// import { devNull } from 'os';
+// import { isNullOrUndefined } from 'util';
+
+interface Props {
+  cacheKey:string[];
+  workItem: WorkMosaicItem;
+  discussionItem?: string;
+  setDiscussionItem: (val: string | undefined) => void;
+  close: () => void;
+
+}
+
+const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
+  cacheKey,
+  workItem,
+  discussionItem,
+  setDiscussionItem,
+  close
+}) => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const [session] = useSession() as [Session | null | undefined, boolean];
+  const { t } = useTranslation('cycleDetail');
+  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
+  const [newEurekaImageFile, setNewEurekaImageFile] = useState<File | null>(null);
+  const { data: topics } = useTopics();
+  const [eurekaTopics, setEurekaTopics] = useState<string[]>([]);
+  const editorRef = useRef<any>(null);
+  const formRef = useRef<any>(null);
+  const { addToast } = useToasts()
+  const [currentImg, setCurrentImg] = useState<string | null>(null);
+  const [showCrop, setShowCrop] = useState<boolean>(false);
+  const [newEureka, setNewEureka] = useState({
+    selectedCycleId: null,
+    selectedWorkId: workItem.id,
+    title: '',
+    image: null,
+    language: '',
+    contentText: '',
+    isPublic: true,
+    topics: eurekaTopics,
+  });
+
+   /*const workItemsWhere = {
+    works:{
+      some:{
+        id:workItem.id
+      }
+    }
+  }*/
+
+  //const {data:cycles} = useCycles(workItemsWhere,{enabled:!!workItem.id})
+
+
+  const {notifier} = useNotificationContext();
+  // const gec = useGlobalEventsContext();
+
+   const {data:work} = useWork(workItem.id,{
+    enabled:!!workItem.id
+  })
+
+
+  const clearPayload = () => {
+    editorRef.current.setContent('');
+    setDiscussionItem('');
+    setEurekaTopics(() => []);
+    setNewEurekaImageFile(null);
+    setCurrentImg(null);
+    setNewEureka((res) => ({
+      ...res,
+      title: '',
+      image: null,
+      contentText: '',
+      topics: eurekaTopics,
+    }));
+
+    close();
+  };
+  const clearCreateEurekaForm = () => {
+    clearPayload();
+  };
+  
+  const handlerSubmitCreateEureka = async (e: MouseEvent<HTMLButtonElement>): Promise<void> => {
+    e.preventDefault();
+    if (!discussionItem) {
+      setGlobalModalsState({
+        ...globalModalsState,
+        showToast: {
+          show: true,
+          type: 'warning',
+          title: t('Warning'),
+          message: t('requiredDiscussionItemError'),
+        },
+      });
+      return;
+    }
+    if (!newEurekaImageFile) {
+      setGlobalModalsState({
+        ...globalModalsState,
+        showToast: {
+          show: true,
+          type: 'warning',
+          title: t('Warning'),
+          message: t('requiredEurekaImageError'),
+        },
+      });
+      return;
+
+    }
+
+    if (newEureka.selectedWorkId) {
+      const payload: CreatePostAboutWorkClientPayload = {
+        selectedCycleId: null,
+        selectedWorkId: newEureka.selectedWorkId,
+        title: newEureka.title,
+        image: newEurekaImageFile,
+        language: newEureka.language,
+        contentText: editorRef.current.getContent(),
+        isPublic: newEureka.isPublic,
+        topics: eurekaTopics.join(','),
+      };
+      await execCreateEureka(payload);
+    }
+    
+  };
+
+  const { mutate: execCreateEureka, isLoading } = useMutation(
+    async (payload: CreatePostAboutWorkClientPayload): Promise<Post | null> => {
+      const u = (session as Session).user;
+      /* const toUsers = (participants||[]).filter(p=>p.id!==u.id).map(p=>p.id);
+       if(u.id !== cycle.creatorId)
+        toUsers.push(cycle.creatorId);
+      let message = '';
+      let notificationContextURL = router.asPath
+    if (payload.selectedWorkId) {
+        if (works) {
+          const work = works.find(w=>w.id === payload.selectedWorkId);
+          if(work){
+            message = `eurekaCreatedAboutWorkInCycle!|!${JSON.stringify({
+              userName:u.name||'',
+              workTitle:work.title,
+              cycleTitle:cycle.title
+            })}`; 
+            notificationContextURL = `/work/${work.id}/post`         
+          }          
+        }
+      }*/
+     
+      const formData = new FormData();
+      Object.entries(payload).forEach(([key, value]) => {
+        if (value != null) {
+          formData.append(key, value);
+        }
+      });
+
+   /*   formData.append('notificationMessage', message);
+      formData.append('notificationContextURL', notificationContextURL);
+      formData.append('notificationToUsers', toUsers.join(','));
+*/
+      const res = await fetch('/api/post', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if(!res.ok)//TODO add Toast notification to the user
+        return null;
+
+      const json = await res.json();
+
+      if (json) {
+        
+      /*  if(notifier){
+          
+            notifier.notify({
+              toUsers,
+              data:{message}
+            });
+            
+        } */
+        addToast( t('postCreated'), {appearance: 'success', autoDismiss: true,})
+        clearPayload();
+        return json.post;
+      }
+
+      return null;
+    },
+    {
+      onMutate: async () => {
+        const previewsItems = queryClient.getQueryData<PostMosaicItem[]>(cacheKey);
+        return { previewsItems, cacheKey };
+      },
+      onSettled: (_eureka, error, _variables, context) => {debugger;
+        if (error) {
+          if (context) {
+            queryClient.setQueryData(context.cacheKey, context.previewsItems);
+          }
+        }
+        if (context){
+          queryClient.invalidateQueries(context.cacheKey);
+          //queryClient.invalidateQueries(['CYCLES',JSON.stringify(workItemsWhere)])
+          queryClient.invalidateQueries(['USER',(session as Session).user.id.toString()]);//to get the new notification
+        } 
+      },
+    },
+  );
+
+
+  useEffect(() => {
+    if (!discussionItem) return;
+      const [entity, id] = discussionItem.split('-');
+      if (entity === 'work')
+        setNewEureka((res) => ({
+          ...res,
+          selectedWorkId: parseInt(id, 10),
+        }));
+  }, [discussionItem]);
+
+  const onChangeFieldEurekaForm = (e: ChangeEvent<HTMLInputElement>) => {
+    const key: string = e.target.id.split('-')[1];
+    const val: number | string = e.target.value;
+
+    setNewEureka((res) => ({
+      ...res,
+      [`${key}`]: val,
+    }));
+    // console.log(newEureka);
+  };
+
+    const onGenerateCrop = (photo: File) => {
+    setNewEurekaImageFile(()=>photo);
+    setCurrentImg(URL.createObjectURL(photo));
+    //setChangingPhoto(true);
+    setShowCrop(false);
+  };
+
+    const closeCrop = () => {
+    setShowCrop(false);
+  };
+
+  const renderPhoto = ()=>{
+   if(currentImg)
+    return <img
+        className={styles.postImage}
+        src={currentImg}
+        alt=''
+      />;
+  };
+
+  return <Form ref={formRef}>
+      <Form.Group controlId="eureka-title" className="mb-3">
+        <Form.Control
+          type="text"
+          maxLength={80}
+          required
+          placeholder={t('Title')}
+          value={newEureka.title}
+          onChange={onChangeFieldEurekaForm}
+        />
+      </Form.Group>
+
+      <EditorCmp
+        apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
+        onInit={(_: any, editor) => {
+          editorRef.current = editor;
+        }}
+        initialValue={newEureka.contentText}
+        init={{
+          height: 300,
+          menubar: false,
+          plugins: [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste code help wordcount',
+          ],
+          relative_urls: false,
+          forced_root_block : "p,a",
+          toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
+          // toolbar:
+          //   'undo redo | formatselect | ' +
+          //   'bold italic backcolor | alignleft aligncenter ' +
+          //   'alignright alignjustify | bullist numlist outdent indent | ' +
+          //   'removeformat | help',
+          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+        }}
+      />
+
+      {/* <Form.Group controlId="eureka-contentText">
+        <Form.Control
+          as="textarea"
+          rows={3}
+          required
+          placeholder="Text"
+          value={newEureka.contentText}
+          onChange={onChangeFieldEurekaForm}
+        />
+      </Form.Group> */}
+      <Form.Group className="mt-3" controlId="eureka-image">
+         <Row className="d-flex justify-content-center flex-column flex-column-reverse flex-lg-row flex-lg-row-reverse">
+            <Col className='mb-4 d-flex justify-content-center justify-content-lg-start'>
+              {<div className={styles.imageContainer}>{renderPhoto()}</div>}
+              </Col>
+            <Col className='mb-4'>
+                {!showCrop && (<Button data-cy="image-load" variant="primary" className="w-100 text-white" onClick={() => setShowCrop(true)}>
+                  {t('Image')}
+                </Button>
+                )}        
+                { showCrop && (
+                <Col className='d-flex'>
+                  <div className='w-100 border p-3'>  
+                  <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={closeCrop} cropShape='rect' />
+                  </div>  
+                </Col>
+               )}      
+            </Col>  
+            </Row>
+        {/*<ImageFileSelect acceptedFileTypes="image/*" file={newEurekaImageFile} setFile={setNewEurekaImageFile} required>
+          {(imagePreview) => (
+            <Form.Group>
+              <Row className="rounded border border-primary bg-white p-1 m-0">
+                <Col xs={12} md={10}>{newEurekaImageFile != null && imagePreview ? (
+                  <span className={`pt-1`}>{newEurekaImageFile?.name}</span>
+                ) : (
+                  t('Image')
+                )}
+                </Col>
+                <Col xs={12} md={2} className="d-flex justify-content-start justify-content-sm-end align-items-center">
+
+                {imagePreview && <Image layout="fixed" width="57px" height="32px" src={imagePreview} className="float-right" alt="Work cover" />}
+                </Col>
+              </Row>
+            </Form.Group>
+          )}
+        </ImageFileSelect>*/}
+      </Form.Group>
+      <Row>
+        <Col xs={12} md={8}>
+          <Form.Group controlId="topics">
+            {/* <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel> */}
+            <TagsInputTypeAhead
+              style={{ background: 'white' }}
+              data={topics}
+              items={eurekaTopics}
+              setItems={setEurekaTopics}
+              labelKey={(res: { code: string }) => t(`topics:${res.code}`)}
+              max={3}
+              placeholder={`${t('Type to add tag')}...`}
+              className="mt-3"
+            />
+          </Form.Group>
+        </Col>
+      </Row>
+
+      <aside className="d-flex justify-content-end">
+        <ButtonGroup size="sm" className="pt-3">
+          <Button variant="warning" onClick={clearCreateEurekaForm} disabled={isLoading}>
+            <ImCancelCircle />
+          </Button>
+          <Button data-cy="create-eureka-btn" onClick={handlerSubmitCreateEureka} className="text-white" disabled={isLoading}>
+            <span>
+              <BsCheck /> {t('Create')}
+            </span>
+            {isLoading && <Spinner size="sm" animation="grow" />}
+          </Button>
+        </ButtonGroup>
+      </aside>
+    </Form>;
+  
+};
+
+export default WorkDetailCreateEurekaForm;
