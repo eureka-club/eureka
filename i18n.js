@@ -17,6 +17,6 @@ module.exports = {
     '/manifest': ['manifest'],
     'rgx:^/mediatheque/\\[id\\]': ['mediatheque', 'countries'],
     'rgx:^/cycle/\\[id\\]': ['cycleDetail', 'countries'],
-    'rgx:^/work/\\[id\\]': ['workDetail', 'countries'],
+    'rgx:^/work/\\[id\\]': ['workDetail', 'countries','cycleDetail'],
   },
 };

@@ -46,6 +46,8 @@ import usePosts from '@/src/usePosts'
 // import CommentsList from '../common/CommentsList';
 import ListWindow from '@/components/ListWindow'
 import { CycleMosaicItem } from '@/src/types/cycle';
+import WorkDetailPost from './WorkDetailPost';
+
 interface Props {
   workId: number;
   post?: PostMosaicItem;
@@ -261,10 +263,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
                             {all && <ListWindow items={all} cacheKey={['WORK',`${work.id}-ALL`]} />}{/* TODO both cycles and posts are in separated cache */}
                           </TabPane>
                           <TabPane eventKey="posts">
-                            <p className={styles.explanatoryText}>{t('explanatoryTextPosts')}</p>
-
-                            {/* {postsCount > 0 && <PostsMosaic work={work} />} */}
-                            {posts && <ListWindow items={posts} cacheKey={['POSTS',JSON.stringify(workPostsWhere)]} />}
+                            {posts && <><WorkDetailPost workId={work.id} className='mb-2' cacheKey={['POSTS',JSON.stringify(workPostsWhere)]}></WorkDetailPost> <ListWindow items={posts} cacheKey={['POSTS',JSON.stringify(workPostsWhere)]} /></>}
                           </TabPane>
                           <TabPane eventKey="cycles">
                             {/* {cyclesCount > 0 && <CyclesMosaic work={work} />} */}

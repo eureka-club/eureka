@@ -685,7 +685,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     }        
     setFiltersWork([...filtersWork]);
     setWhere((w)=>({...w,filtersWork}))
-    console.log(filtersWork,'filtersWork')
+    //console.log(filtersWork,'filtersWork')
   };
 
   const onChangeCycleFilters = (checked: boolean) => {
