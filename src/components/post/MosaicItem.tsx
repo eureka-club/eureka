@@ -205,9 +205,9 @@ const MosaicItem: FunctionComponent<Props> = ({
           {renderLocalImageComponent()}
          
           {post && showdetail && (
-          <div className={`w-100 text-start ${styles.postDetail}`}>
+          <div className={`w-100 d-flex flex-row align-items-center ${styles.postDetail}`}>
                 <Avatar width={28} height={28} userId={post.creator.id} size="xs" />
-                {` - `}
+                {`  -  `}
                 <span className="fs-6">{dayjs(post.createdAt).format(DATE_FORMAT_SHORT)}</span>
                 </div>
             )}

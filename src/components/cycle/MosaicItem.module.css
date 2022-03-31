@@ -109,7 +109,7 @@
 
  .date {
      position: absolute;
-     bottom: -15px;
+     bottom: 0px;
      background: linear-gradient(200deg, #f0dadad7, #05050561 5rem);
      color: white !important;
      text-align:left;
