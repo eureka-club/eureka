@@ -9,5 +9,8 @@ module.exports = {
     env: {
         NEXT_PUBLIC_SITE_NAME:"Eureka",
         NEXT_PUBLIC_LOCAL_ASSETS_BASE_URL:"/assets"
+    },
+    images:{
+        domains:['eurekastagingassets.azureedge.net'],
     }
 };

@@ -43,7 +43,10 @@
   width: 26px;
   height: 26px;
 }
-
+.avatar button:global(.btn) {
+  padding-bottom: 0px;
+  padding-top: 0px;
+}
 .langSwitch button:global(.btn) {
   padding-left: 0;
   padding-right: 0;

@@ -13,6 +13,8 @@ interface Props {
   showFullName?: boolean;
   size?: 'md' | 'sm' | 'xs';
   className?: string;
+  width:number;
+  height:number;
 }
 
 const UserAvatar: FunctionComponent<Props> = ({
@@ -21,6 +23,8 @@ const UserAvatar: FunctionComponent<Props> = ({
   showName = true,
   className = '',
   showFullName = false,
+  width,
+  height,
 }) => {
 
   const onLoadImgError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
@@ -45,15 +49,15 @@ const UserAvatar: FunctionComponent<Props> = ({
       }
       else {debugger;}
     }
-    return <span>{res}</span>;
+    return <span className='ms-2'>{res}</span>;
   };
   
   return (
     <>
       {user && (
-        <span className={`fs-6 ${styles.cycleCreator} ${className} ${styles[size]}`}>
+        <section className={`fs-6 ${styles[size]}`}>
           <Link href={`/mediatheque/${user.id}`}>
-            <a className={`text-secondary ${styles.link}`}>
+            <a className={`text-secondary ${styles.link} d-flex align-items-center`}>
 
                 {(!user?.photos || !user?.photos.length) ?
          <img
@@ -61,11 +65,11 @@ const UserAvatar: FunctionComponent<Props> = ({
         className={`${styles.cycleCreatorAvatar} me-2`}
         src={user.image || '/img/default-avatar.png'}
         alt={user.name||''}
-      /> : <LocalImageComponent className={`${styles.cycleCreatorAvatar} me-2`} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />}
+      /> : <LocalImageComponent className={`rounded rounded-circle`} width={width} height={height} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />}
               {renderUserName()}
             </a>
           </Link>
-        </span>
+        </section>
       )}
     </>
   );

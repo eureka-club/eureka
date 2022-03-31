@@ -207,7 +207,7 @@ const MosaicItem: FunctionComponent<Props> = ({
       </div>
       {renderOngoinOrUpcomingDate()}
       {showSocialInteraction && work && (
-        <Card.Footer className={styles.footer}>
+        <Card.Footer className={`${styles.footer}`} style={{zIndex:3,backgroundColor:'#F7F7F7'}}>
           <SocialInteraction
             cacheKey={cacheKey || ['WORK',work.id.toString()]}
             showButtonLabels={showButtonLabels}

@@ -54,6 +54,7 @@ import { MosaicContext } from '../../useMosaicContext';
 import { useCycleContext } from '../../useCycleContext';
 import useWorks from '@/src/useWorks'
 import useCycle from '@/src/useCycle'
+import LocalImageComponent from '@/src/components/LocalImage'
 interface Props {
   // cycle: CycleMosaicItem;
   cycleId:number;
@@ -322,10 +323,10 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         )}
         <Col className="d-none d-lg-flex col-12 col-lg-4 justify-content-center justify-content-lg-end">
           <aside className='d-flex flex-column'>
-            <UserAvatar  userId={cycle.creatorId}  showFullName />
-          <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
-            <MosaicItem cycleId={cycle.id} showTrash showParticipants={true} className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
-          </MosaicContext.Provider>
+            <UserAvatar width={42} height={42} userId={cycle.creatorId}  showFullName />
+            <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
+              <MosaicItem cycleId={cycle.id} showTrash showParticipants={true} className="mt-4" cacheKey={['CYCLE', `${cycle.id}`]} />
+            </MosaicContext.Provider>
           </aside>
         </Col>
         {show && (
@@ -339,7 +340,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         )}
         <Col className='col-12 d-flex justify-content-between align-items-baseline d-lg-none' >
           <Row>
-          <UserAvatar userId={cycle.creatorId}  showFullName />
+          <UserAvatar width={42} height={42} userId={cycle.creatorId}  showFullName />
           </Row>
             <Row>
               {show && (

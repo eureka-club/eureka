@@ -345,7 +345,7 @@ const MosaicItem: FunctionComponent<Props> = ({
       ? <> 
       <LocalImageComponent  className='cycleImage' filePath={cycle?.localImages[0].storedFile} alt={cycle?.title} />
       {detailed && (cycle && cycle.creator && cycle.startDate && cycle.endDate ) && (<div className={`d-flex flex-row align-items-baseline ${styles.date}`}>
-                         <Avatar userId={cycle.creator.id} showName={false} size="xs" />
+                         <Avatar width={28} height={28} userId={cycle.creator.id} showName={false} size="xs" />
                           <div className='fs-6 ms-2 mt-1' >
                           {dayjs(cycle?.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
                           &mdash; {dayjs(cycle?.endDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}

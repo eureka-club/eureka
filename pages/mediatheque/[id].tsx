@@ -429,7 +429,7 @@ const Mediatheque: NextPage = () => {
         src={user.image || '/img/default-avatar.png'}
         alt={user.name||''}
       />;
-      return <LocalImageComponent className='avatar' filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />
+      return <LocalImageComponent className="rounded rounded-circle" /* className='avatar' */ width={160} height={160} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />
     }
     return '';
   };

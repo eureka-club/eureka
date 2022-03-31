@@ -136,7 +136,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             </Col>
             <Col xs={12} md={6}> 
               <div className="text-end">
-                <Avatar userId={comment.creator.id} size="xs" />
+                <Avatar width={28} height={28} userId={comment.creator.id} size="xs" />
                 {` - `}
                 <span className="fs-6">{dayjs(comment.createdAt).format(DATE_FORMAT_SHORT)}</span>
               </div>
@@ -174,7 +174,7 @@ const MosaicItem: FunctionComponent<Props> = ({
       <Card className={`mt-3 ${styles.container} ${className}`} data-cy={`mosaic-item-comment-${comment.id}`}>
         <Row>
           <Col xs={2} md={1} className="pe-1">
-            <Avatar userId={comment.creator.id} showName={false} />
+            <Avatar width={28} height={28} userId={comment.creator.id} showName={false} />
           </Col>
           <Col xs={10} md={11} className="ps-1">
             <div className={styles.dangerouslySetInnerHTML} dangerouslySetInnerHTML={{ __html: comment.contentText }} />

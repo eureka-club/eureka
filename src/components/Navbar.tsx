@@ -103,7 +103,7 @@ const NavBar: FunctionComponent = () => {
         src={user.image || '/img/default-avatar.png'}
         alt={user.name||''}
       />;
-      return <LocalImageComponent className={styles.navbarIconNav} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />
+      return <LocalImageComponent className={`rounded rounded-circle`} width={30} height={30} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />
     }
     return <BiUser className={styles.navbarIconNav} />;
   };
@@ -252,8 +252,8 @@ const NavBar: FunctionComponent = () => {
           </>)}
           {session && session.user && (
             <Nav className={styles.navbarNav}>
-              <Dropdown align="end" className={styles.langSwitch}>
-                <Dropdown.Toggle as={ChevronToggle}>{getAvatar()}</Dropdown.Toggle>
+              <Dropdown align="end" className={`${styles.langSwitch} ${styles.avatar}`}>
+                <Dropdown.Toggle as={ChevronToggle} >{getAvatar()}</Dropdown.Toggle>
                 <span className={styles.menuBottomInfo}>{t('Account')}</span>
                 <Dropdown.Menu>
                   <Dropdown.Item
