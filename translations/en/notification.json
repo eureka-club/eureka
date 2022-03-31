@@ -1,9 +1,9 @@
 {
   "viewAllNotifications":"View all notifications",
   
-  "eurekaCreatedAboutCycle":"{{userName}} had an Eureka Moment inspired by {{cycleTitle}}!",
-  "eurekaCreatedAboutWork":"{{userName}} had an Eureka Moment inspired by {{workTitle}}!",
-  "eurekaCreatedAboutWorkInCycle":"{{userName}} has an Eureka Moment about {{workTitle}} in the Cycle {{cycleTitle}}!",
+  "eurekaCreatedAboutCycle":"{{userName}} had an Eureka Moment inspired by '{{cycleTitle}}'!",
+  "eurekaCreatedAboutWork":"{{userName}} had an Eureka Moment inspired by '{{workTitle}}'!",
+  "eurekaCreatedAboutWorkInCycle":"{{userName}} has an Eureka Moment about '{{workTitle}}' in the Cycle '{{cycleTitle}}'!",
   
   "commentCreatedAboutComment":"{{userName}} has replied to your Comment  {{commentTitle}}!",
   "commentCreatedAboutCommentInCycle":"{{userName}} has replied to your Comment in the Cycle {{cycleTitle}}! ",
@@ -19,9 +19,9 @@
 
   "userStartFollowing":"{{userName}} has started following you. Take a look at her/his Mediatheque too!",
 
-  "userJoinedCycle":"{{userName}} has joined the cycle {{cycleTitle}}!",
-  "userLeftCycle":"{{userName}} has left the cycle {{cycleTitle}}!",
+  "userJoinedCycle":"{{userName}} has joined the cycle '{{cycleTitle}}'!",
+  "userLeftCycle":"{{userName}} has left the cycle '{{cycleTitle}}'!",
   
-  "userHasSaveForLater":"{{userName}} has saved the {{entity}} {{entityTitle}} for later. Check it out.",
-  "userHasRating":"{{userName}} has rated the {{entity}} {{entityTitle}}. Check it out too!"
+  "userHasSaveForLater":"{{userName}} has saved '{{entityTitle}}' for later. Check it out.",
+  "userHasRating":"{{userName}} has rated '{{entityTitle}}'. Check it out too!"
 }

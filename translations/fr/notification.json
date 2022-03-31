@@ -1,9 +1,9 @@
 {
   "viewAllNotifications":"Voir toutes les notifications",
   
-  "eurekaCreatedAboutCycle":"{{userName}} a eu un Moment Eureka inspiré par le cycle {{cycleTitle}}!",
-  "eurekaCreatedAboutWork":"{{userName}} a eu un Moment Eureka inspiré par {{workTitle}}!",
-  "eurekaCreatedAboutWorkInCycle":"{{userName}} a eu un Moment Eureka inspiré par {{workTitle}} dans le cycle {{cycleTitle}}!",
+  "eurekaCreatedAboutCycle":"{{userName}} a eu un Moment Eureka inspiré par le cycle '{{cycleTitle}}'!",
+  "eurekaCreatedAboutWork":"{{userName}} a eu un Moment Eureka inspiré par '{{workTitle}}'!",
+  "eurekaCreatedAboutWorkInCycle":"{{userName}} a eu un Moment Eureka inspiré par '{{workTitle}}' dans le cycle '{{cycleTitle}}'!",
   
   "commentCreatedAboutComment":"{{userName}} has replied to your Comment  {{commentTitle}}!",
   "commentCreatedAboutCommentInCycle":"{{userName}} has replied to your Comment in the Cycle {{cycleTitle}}! ",
@@ -14,15 +14,15 @@
   "commentCreatedAboutPostInCycle":"{{userName}} has added a Comment about Post {{postTitle}} in the Cycle {{cycleTitle}}! ",
   "commentCreatedAboutPostInWork":"{{userName}} has added a Comment about Post {{postTitle}} in the Work {{workTitle}}!",
   
-  "commentCreatedAboutWorkInCycle":"{{userName}} has added a Comment about {{workTitle}} in the Cycle {{cycleTitle}}! ",
-  "commentCreatedAboutWork":"{{userName}} has added a Comment about {{workTitle}}!",
+  "commentCreatedAboutWorkInCycle":"{{userName}} has added a Comment about '{{workTitle}}'' in the Cycle '{{cycleTitle}}'! ",
+  "commentCreatedAboutWork":"{{userName}} has added a Comment about '{{workTitle}}'!",
 
   "userStartFollowing":"{{userName}} a commencé à te suivre. Jette un œil aussi à sa Médiathèque!",
 
-  "userJoinedCycle":"{{userName}} a rejoin le cycle {{cycleTitle}}!",
-  "userLeftCycle":"{{userName}} a quitté le cycle {{cycleTitle}}!",
+  "userJoinedCycle":"{{userName}} a rejoin le cycle '{{cycleTitle}}'!",
+  "userLeftCycle":"{{userName}} a quitté le cycle '{{cycleTitle}}'!",
 
-  "userHasSaveForLater":"{{userName}} a sauvé {{entity}} {{entityTitle}}. Jette un œil aussi!",
-  "userHasRating":"{{userName}} a noté {{entity}} {{entityTitle}}. Jette un œil aussi!"
+  "userHasSaveForLater":"{{userName}} a sauvegardé '{{entityTitle}}'. Jette un œil aussi!",
+  "userHasRating":"{{userName}} a noté '{{entityTitle}}'. Jette un œil aussi!"
         
 }

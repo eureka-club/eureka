@@ -1,9 +1,9 @@
 {
   "viewAllNotifications":"Ver todas las notificaciones",
   
-  "eurekaCreatedAboutCycle":"{{userName}} tuvo un Momento Eureka inspirado por el ciclo {{cycleTitle}}!",
-  "eurekaCreatedAboutWork":"{{userName}} tuvo un Momento Eureka inspirado por la obra {{workTitle}}!",
-  "eurekaCreatedAboutWorkInCycle":"{{userName}} tuvo un Momento Eureka inspirado por la obra {{workTitle}} en el ciclo {{cycleTitle}}!",
+  "eurekaCreatedAboutCycle":"{{userName}} tuvo un Momento Eureka inspirado por el ciclo '{{cycleTitle}}'!",
+  "eurekaCreatedAboutWork":"{{userName}} tuvo un Momento Eureka inspirado por la obra '{{workTitle}}'!",
+  "eurekaCreatedAboutWorkInCycle":"{{userName}} tuvo un Momento Eureka inspirado por la obra '{{workTitle}}' en el ciclo '{{cycleTitle}}'!",
   
   "commentCreatedAboutComment":"{{userName}} ha respondido tu comentario Comentario  {{commentTitle}}!",
   "commentCreatedAboutCommentInCycle":"{{userName}} ha respondido tu Comentario {{commentTitle}} en el Ciclo {{cycleTitle}}! ",
@@ -19,10 +19,10 @@
      
   "userStartFollowing":"{{userName}} te está siguiendo. ¡Échale un ojo a su Mediateca también!",
 
-  "userJoinedCycle":"{{userName}} se ha unido al Ciclo {{cycleTitle}}!",
-  "userLeftCycle":"{{userName}} ha abandonado el Ciclo {{cycleTitle}}!",
+  "userJoinedCycle":"{{userName}} se ha unido al Ciclo '{{cycleTitle}}'!",
+  "userLeftCycle":"{{userName}} ha abandonado el Ciclo '{{cycleTitle}}'!",
 
-  "userHasSaveForLater":"{{userName}} ha salvado para luego: {{entity}} {{entityTitle}}. Echale un vistazo.",
-  "userHasRating":"{{userName}} ha valorado: {{entity}} {{entityTitle}}. Echale un vistazo también!"
+  "userHasSaveForLater":"{{userName}} ha salvado para luego '{{entityTitle}}'. Echale un vistazo.",
+  "userHasRating":"{{userName}} ha puntuado '{{entityTitle}}'. Echale un vistazo también!"
   
 }
