@@ -123,6 +123,7 @@
   "next":"next",
   "previous":"previous",
   "MyCycle": "Meu ciclo",
-  "canNotUploadPhoto":"Imagens maiores que 2 MB não podem ser carregadas. A imagem usada tem"
+  "canNotUploadPhoto":"Imagens maiores que 2 MB não podem ser carregadas. A imagem usada tem",
+  "by":"por"
  
 }

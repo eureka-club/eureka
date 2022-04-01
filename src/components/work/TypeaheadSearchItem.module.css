@@ -16,10 +16,13 @@
   padding: 0.2rem 0.5rem;
   position: absolute;
 }
+.workSearchTypeaheadItem{
+  width: 75px;
+  height: 100px;
 
+}
 .workSearchTypeaheadItem img {
   margin-right: 0.5rem;
-  width: 76px;
   object-fit: contain;
 }
 

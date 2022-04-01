@@ -121,5 +121,6 @@
   "select": "Seleccionar",
   "next":"Siguientes",
   "previous":"Previos",
-  "canNotUploadPhoto":"No se puede subir imagenes mayores de 2 MB. Imagen usada tiene"
+  "canNotUploadPhoto":"No se puede subir imagenes mayores de 2 MB. Imagen usada tiene",
+  "by":"por"
 }

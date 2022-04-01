@@ -122,6 +122,7 @@
   "next":"next",
   "previous":"previous",
   "MyCycle": "Mon cycle",
-  "canNotUploadPhoto":"Les images de plus de 2 Mo ne peuvent pas être téléchargées. L'image utilisée a"
+  "canNotUploadPhoto":"Les images de plus de 2 Mo ne peuvent pas être téléchargées. L'image utilisée a",
+  "by":"par"
 
 }

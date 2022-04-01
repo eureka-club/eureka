@@ -122,5 +122,6 @@
   "next":"next",
   "previous":"previous",
   "MyCycle": "My cycle",
-  "canNotUploadPhoto":"Images larger than 2 MB cannot be uploaded. Image used has"
+  "canNotUploadPhoto":"Images larger than 2 MB cannot be uploaded. Image used has",
+  "by":"by"
 }

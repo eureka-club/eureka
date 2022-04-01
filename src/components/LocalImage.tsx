@@ -36,8 +36,8 @@ const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, alt,
           // style={style}
           width={width}
           height={height}
-          objectFit="cover"
-          objectPosition={'50% 50%'}
+          // objectFit="cover"
+          // objectPosition={'50% 50%'}
           layout={!(width && height) ? "fill" : undefined}
           //layout="fill"
         />
