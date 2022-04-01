@@ -54,6 +54,8 @@
   "Clean filters":"Borrar filtros",
   "commentCreated":"Tu reacción o pregunta ha sido compartida con éxito.",
   "postCreated":"Tu Eureka ha sido compartida con éxito.",
-  "canNotCreatePostJoinToCycle":"No puedes compartir Eurekas todavía: ÚNETE al ciclo primero."
+  "canNotCreatePostJoinToCycle":"No puedes compartir Eurekas todavía: ÚNETE al ciclo primero.",
+  "NotTitle":"Debe especificar un título",
+  "NotContentText":"Su eureka esta sin contenido"
 
 }

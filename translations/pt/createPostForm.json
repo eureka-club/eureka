@@ -18,6 +18,9 @@
   "topicsPostLabel": "Principais temas da Eureka (3 máx, selecione os mais relevantes da lista)",
   "topicsFieldLabel": "Temas adicionais da Eureka (2 máx, livre)",
   "postCreated":"Sua Eureka foi publicada.",
-  "PostEdited":"Sua Eureka foi editada."
-
+  "PostEdited":"Sua Eureka foi editada.",
+  "NotTitle":"Você deve especificar um título",
+  "NotContentText":"Seu eureka está vazio",
+  "requiredDiscussionItemError": "Você tem que indicar sobre o que é sua contribuição",
+  "requiredEurekaImageError": "Você tem que adicionar uma imagem à sua Eureka"
 }

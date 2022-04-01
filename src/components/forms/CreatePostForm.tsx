@@ -284,40 +284,58 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
     //if (formRef.current) formRef.current.isPublic.checked = true;
   };
 
+   const formValidation = (payload:any) => {
+  
+   if (!payload.title.length) {
+      addToast( t('NotTitle') , {appearance: 'error', autoDismiss: true,})
+      return false;
+    }else if (!imageFile) {
+      addToast( t('requiredEurekaImageError') , {appearance: 'error', autoDismiss: true,})
+      return false;
+    }else if (!payload.contentText.length) {
+      addToast( t('NotContentText') , {appearance: 'error', autoDismiss: true,})
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
 
-    if (imageFile == null) {
-      return;
-    }
+   if (!selectedWork && !selectedCycle) {
+       addToast( t('requiredDiscussionItemError') , {appearance: 'error', autoDismiss: true,})
+       return;
+   }
 
-    const form = formRef.current;
+   const form = formRef.current;
     if (form && selectedWork != null) {
       const payload: CreatePostAboutWorkClientPayload = {
         selectedCycleId: selectedCycle != null ? selectedCycle.id : null,
         selectedWorkId: selectedWork.id,
         title: form.postTitle.value,
-        image: imageFile,
+        image: imageFile!,
         language: '',
         contentText: editorRef.current.getContent(), // form.description.value.length ? form.description.value : null,
         isPublic: isPublic,//form.isPublic.checked,
         topics: items.join(','),
         tags,
       };
-      await execCreatePost(payload);
+      if(formValidation(payload))
+          await execCreatePost(payload);
     } else if (form && selectedCycle != null) {
       const payload: CreatePostAboutCycleClientPayload = {
         selectedCycleId: selectedCycle.id,
         selectedWorkId: null,
         title: form.postTitle.value,
-        image: imageFile,
+        image: imageFile!,
         language: '',
         contentText: editorRef.current.getContent(), // form.description.value.length ? form.description.value : null,
         isPublic: isPublic,//form.isPublic.checked,
         topics: items.join(','),
         tags,
       };
-      await execCreatePost(payload);
+      if(formValidation(payload))
+          await execCreatePost(payload);
     }
   };
 

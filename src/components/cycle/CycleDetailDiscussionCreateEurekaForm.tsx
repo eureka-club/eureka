@@ -60,7 +60,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   const router = useRouter();
   const [session] = useSession() as [Session | null | undefined, boolean];
   const { t } = useTranslation('cycleDetail');
-  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
+  //const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [newEurekaImageFile, setNewEurekaImageFile] = useState<File | null>(null);
   const { data: topics } = useTopics();
   const [eurekaTopics, setEurekaTopics] = useState<string[]>([]);
@@ -112,59 +112,53 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   const clearCreateEurekaForm = () => {
     clearPayload();
   };
+
+   const formValidation = (payload:any) => {
+    if (!discussionItem) {
+          addToast( t('requiredDiscussionItemError') , {appearance: 'error', autoDismiss: true,})
+          return false;
+    }else if (!payload.title.length) {
+      addToast( t('NotTitle') , {appearance: 'error', autoDismiss: true,})
+          return false;
+    }else if (!payload.contentText.length) {
+      addToast( t('NotContentText') , {appearance: 'error', autoDismiss: true,})
+      return false;
+    }else if (!newEurekaImageFile) {
+      addToast( t('requiredEurekaImageError') , {appearance: 'error', autoDismiss: true,})
+          return false;
+    }
+    return true;
+  };
   
   const handlerSubmitCreateEureka = async (e: MouseEvent<HTMLButtonElement>): Promise<void> => {
     e.preventDefault();
-    if (!discussionItem) {
-      setGlobalModalsState({
-        ...globalModalsState,
-        showToast: {
-          show: true,
-          type: 'warning',
-          title: t('Warning'),
-          message: t('requiredDiscussionItemError'),
-        },
-      });
-      return;
-    }
-    if (!newEurekaImageFile) {
-      setGlobalModalsState({
-        ...globalModalsState,
-        showToast: {
-          show: true,
-          type: 'warning',
-          title: t('Warning'),
-          message: t('requiredEurekaImageError'),
-        },
-      });
-      return;
-
-    }
 
     if (newEureka.selectedWorkId) {
       const payload: CreatePostAboutWorkClientPayload = {
         selectedCycleId: newEureka.selectedCycleId ? newEureka.selectedCycleId : null,
         selectedWorkId: newEureka.selectedWorkId,
         title: newEureka.title,
-        image: newEurekaImageFile,
+        image: newEurekaImageFile!,
         language: newEureka.language,
         contentText: editorRef.current.getContent(),
         isPublic: newEureka.isPublic,
         topics: eurekaTopics.join(','),
       };
-      await execCreateEureka(payload);
+      if(formValidation(payload))
+        await execCreateEureka(payload);
     } else if (newEureka.selectedCycleId) {
       const payload: CreatePostAboutCycleClientPayload = {
         selectedCycleId: newEureka.selectedCycleId,
         selectedWorkId: null,
         title: newEureka.title,
-        image: newEurekaImageFile,
+        image: newEurekaImageFile!,
         language: newEureka.language,
         contentText: editorRef.current.getContent(),
         isPublic: newEureka.isPublic,
         topics: eurekaTopics.join(','),
-      };
-      await execCreateEureka(payload);
+      }; 
+      if(formValidation(payload))
+         await execCreateEureka(payload);
     }
   };
 
