@@ -19,8 +19,8 @@
   "topicsFieldLabel": "Additional topics of Eureka (2 max, input freely)",
   "postCreated":"Your Eureka has been published.",
   "PostEdited":"Your Eureka has been edited.",
-  "NotTitle":"You must specify a title",
-  "NotContentText":"Your eureka is without content",
-  "requiredDiscussionItemError": "You have to select what your contribution is about",
-  "requiredEurekaImageError": "You have to add an image to your Eureka (square, ideally 250x250px)"
+  "NotTitle":"Please specify a title",
+  "NotContentText":"Please add content",
+  "requiredDiscussionItemError": "Please select if your Eureka is about the topic of the cycle or one of the works",
+  "requiredEurekaImageError": "Please add an image to your Eureka"
 }

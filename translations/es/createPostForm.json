@@ -19,8 +19,8 @@
   "topicsFieldLabel": "Temas adicionales de la Eureka (2 máx, libre)",
   "postCreated":"Tu Eureka ha sido publicada.",
   "PostEdited":"Tu Eureka ha sido editada.",
-  "NotTitle":"Debe especificar un título",
-  "NotContentText":"Su eureka esta sin contenido",
-  "requiredDiscussionItemError": "Tienes que indicar sobre qué es tu contribución",
-  "requiredEurekaImageError": "Tienes que agregar una imagén a la Eureka (cuadrada, ideal 250x250px)"
+  "NotTitle":"Por favor agrega un título",
+  "NotContentText":"Por favor agrega contenido",
+  "requiredDiscussionItemError": "Por favor indica si tu Eureka es sobre el tema del ciclo o una de las obras",
+  "requiredEurekaImageError": "Por favor agrega una imagén a la Eureka"
 }
