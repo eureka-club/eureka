@@ -1,0 +1,20 @@
+BEGIN TRY
+
+BEGIN TRAN;
+
+-- AlterTable
+ALTER TABLE [dbo].[CycleUserJoin] DROP CONSTRAINT [CycleUserJoin_pending_df];
+ALTER TABLE [dbo].[CycleUserJoin] ADD CONSTRAINT [CycleUserJoin_pending_df] DEFAULT 0 FOR [pending];
+
+COMMIT TRAN;
+
+END TRY
+BEGIN CATCH
+
+IF @@TRANCOUNT > 0
+BEGIN
+    ROLLBACK TRAN;
+END;
+THROW
+
+END CATCH

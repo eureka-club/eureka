@@ -55,8 +55,12 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
           workId:true,
         }
       },
-      comments:true,
-      complementaryMaterials:true
+      // comments:true,
+      complementaryMaterials:true,
+      _count:{
+        select:{participants:true},
+      }
+
     },
   });
 };
@@ -113,8 +117,11 @@ export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<CycleMos
           workId:true,
         }
       },
-      comments:true,
-      complementaryMaterials:true
+      // comments:true,
+      complementaryMaterials:true,
+      _count:{
+        select:{participants:true},
+      }
     }
   });
 };

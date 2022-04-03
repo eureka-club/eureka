@@ -1,7 +1,7 @@
 // import { flatten, zip } from 'lodash';
 import { useAtom } from 'jotai';
 import { BiArrowBack } from 'react-icons/bi';
-import { NextPage } from 'next';
+import { NextPage,GetServerSideProps } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useState, useEffect, ReactElement } from 'react';
 import { useRouter } from 'next/router';
@@ -23,11 +23,12 @@ import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import Mosaic from '../src/components/Mosaic';
 // import SearchEngine from '../src/components/SearchEngine';
 import FilterEngine from '../src/components/FilterEngine';
-import useItems from '../src/useItems';
+import useItems,{getRecords} from '../src/useItems';
 import useCountries from '../src/useCountries';
 import { isPostMosaicItem,isCycleMosaicItem, isWorkMosaicItem, SearchResult } from '@/src/types';
-import { useQueryClient } from 'react-query';
+import { useQueryClient,dehydrate, QueryClient } from 'react-query';
 import ListWindow from '@/src/components/ListWindow';
+import { getRecord } from '@/src/useNotifications';
 
 // interface Props {
 //   homepageMosaicData: (CycleMosaicItem | WorkMosaicItem)[];
@@ -283,17 +284,16 @@ const SearchPage: NextPage = () => {
     revalidate: 60 //revalidate every 1 min
   };
 };
-
- */// export const getServerSideProps: GetServerSideProps = async () => {
-//   const cycles = await findAllCycles();
-//   const works = await findAllWorks();
-//   const interleavedResults = flatten(zip(cycles, works)).filter((workOrCycle) => workOrCycle != null);
-
-//   return {
-//     props: {
-//       homepageMosaicData: interleavedResults,
-//     },
-//   };
-// };
+*/
+export const getServerSideProps: GetServerSideProps = async ({query}) => {
+  const q = query.q;
+  const qc = new QueryClient()
+  await qc.prefetchQuery(["ITEMS",q],()=>getRecords(q?.toString()))
+  return {
+    props: {
+      dehydratedState:dehydrate(qc),
+    },
+  };
+};
 
 export default SearchPage;

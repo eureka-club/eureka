@@ -83,7 +83,9 @@ export type WorkMosaicItem = Prisma.WorkGetPayload<{
   //   }};
   //   cycles: true;
   // };
-}>;
+}> & {
+  currentUserIsFav?:boolean
+};
 
 export interface CreateWorkClientPayload {
   cover: File;

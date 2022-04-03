@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/client';
+import { getSession, session } from 'next-auth/client';
 
 import { Work, Cycle } from '@prisma/client';
 import { Session } from '../../../src/types';
@@ -50,7 +50,7 @@ export default getApiHandler()
     }
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
-    // const session = (await getSession({ req })) as unknown as Session;
+    const session = (await getSession({ req })) as unknown as Session;
     // if (session == null || !session.user.roles.includes('admin')) {
     //   res.status(401).json({ status: 'Unauthorized' });
     //   return;
@@ -75,7 +75,10 @@ export default getApiHandler()
         res.status(200).json({ status: 'OK', post: null });
         return;
       }
-
+      let currentUserIsFav = false;
+      if(session)
+        currentUserIsFav = post.favs.findIndex(f=>f.id==session.user.id) > -1
+      post.currentUserIsFav = currentUserIsFav;
       res.status(200).json({ status: 'OK', post });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

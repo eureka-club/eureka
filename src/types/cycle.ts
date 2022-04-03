@@ -62,11 +62,18 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
         workId:true;
       }
     };
-    comments:true;
+    // comments:true;
+    _count:{select:{participants:true}};
     complementaryMaterials:true;
     
   }
-}> & { type?: 'cycle' };
+}> & { 
+  type?: 'cycle';
+  currentUserIsCreator?:boolean;
+  currentUserIsParticipant?:boolean;
+  currentUserIsFav?:boolean; 
+  currentUserIsPending?:boolean;
+};
 
 // export type CycleDetail = Prisma.CycleGetPayload<{
 //   include: {

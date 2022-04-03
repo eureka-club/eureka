@@ -73,7 +73,10 @@ export default getApiHandler()
         res.status(404).end();
         return;
       }
-
+      let currentUserIsFav = false;
+      if(session)
+        currentUserIsFav = work.favs.findIndex(f=>f.id==session.user.id) > -1
+      work.currentUserIsFav= currentUserIsFav
       res.status(200).json(work);
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

@@ -13,10 +13,11 @@ interface Props {
   alt: string;
   width?:number;
   height?:number;
-  notNextImage?:boolean
+  notNextImage?:boolean;
+  blurDataURL?:boolean;
 }
 
-const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, alt,width,height,notNextImage }) => {
+const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, alt,width,height,blurDataURL=false,notNextImage }) => {
   const fallbakImgURL = '/img/ico-painting.png'
   const [imgError,setImgError] = useState<boolean>(false)
   const onLoadImgError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
@@ -27,8 +28,8 @@ const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, alt,
     case STORAGE_MECHANISM_AZURE:
       return (
         !notNextImage ? <Image
-          blurDataURL={fallbakImgURL}
-          placeholder='blur'
+          blurDataURL={blurDataURL ? fallbakImgURL: undefined}
+          placeholder={blurDataURL ? 'blur': undefined}
           src={imgError ? fallbakImgURL :`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${filePath}`}
           alt={alt}
           className={`${className}`}

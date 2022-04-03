@@ -31,6 +31,7 @@ model User {
 
   cycles              Cycle[]    @relation("CreatedBy")
   joinedCycles        Cycle[]    @relation("CycleToParticipant")
+  cyclesJoined        CycleUserJoin[]
   likedCycles         Cycle[]    @relation("CycleToLikes")
   favCycles           Cycle[]    @relation("CycleToFavs")
   likedWorks          Work[]     @relation("WorkToLikes")
@@ -150,6 +151,7 @@ model Cycle {
   posts                   Post[]
   works                   Work[]  
   cycleWorksDates         CycleWork[]
+  usersJoined             CycleUserJoin[]
   
   tags                    String?
 
@@ -233,6 +235,17 @@ model CycleWork {
   workId    Int?
   startDate DateTime?  @map(name: "start_date")
   endDate   DateTime?  @map(name: "end_date")
+}
+
+model CycleUserJoin {
+  cycle       Cycle @relation(fields: [cycleId], references: [id])
+  user        User  @relation(fields: [userId], references: [id])
+  cycleId     Int
+  userId      Int
+  pending     Boolean? @default(false)
+  createdAt   DateTime  @default(now()) @map(name: "created_at")
+  updatedAt   DateTime  @updatedAt @map(name: "updated_at")
+  @@id([cycleId, userId])
 }
 
 

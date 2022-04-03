@@ -211,10 +211,6 @@ const SocialInteraction: FunctionComponent<Props> = ({
   // };
   const shareUrl = (() => {
     if (isPost(entity)) {
-      if (!entity.works) {
-        
-        debugger;
-      }
       const post = entity as PostMosaicItem;
       const parentIsWork = post.works ? post.works.length > 0 : false;
       const parentIsCycle = !parentIsWork && (post.cycles && post.cycles.length);
@@ -512,7 +508,28 @@ const SocialInteraction: FunctionComponent<Props> = ({
     // return <Badge variant="secondary">{`${entity.ratings.length}`}</Badge>;
     // return <Badge variant="info">{`${entity.ratings.length}`}</Badge>;
   };
+  const renderSaveForLater = ()=>{
+    if(!entity || isLoadingSession)
+      return '...'
+    if(entity)
+      return <Button
+        variant="link"
+        className={`${styles.buttonSI} p-0 text-primary`}
+        title={t('Save for later')}
+        onClick={handleFavClick}
+          disabled={loadingSocialInteraction}
+      >
+        {/* optimistFav */ entity.currentUserIsFav ? <BsBookmarkFill className={styles.active} /> : <BsBookmark />}
+        <br />
+        {showButtonLabels && (
+          <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>
+            {t('Save for later')}
+          </span>
+        )}
+      </Button>
 
+
+  }
   const getRatingLabelInfo = () => {
     if (!session || (user && mySocialInfo && !mySocialInfo.ratingByMe)) {
       return <span className={styles.ratingLabelInfo}>{t('Rate it')}</span>;
@@ -582,22 +599,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
         {/* <Col xs={showRating ? 2 : 12}> */}
         <div className={`${showShare ? 'ms-1' : 'ms-auto'}`}>
-            <Button
-              variant="link"
-              className={`${styles.buttonSI} p-0 text-primary`}
-              title={t('Save for later')}
-              onClick={handleFavClick}
-                disabled={loadingSocialInteraction}
-            >
-              {optimistFav ? <BsBookmarkFill className={styles.active} /> : <BsBookmark />}
-              <br />
-              {showButtonLabels && (
-                <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>
-                  {t('Save for later')}
-                </span>
-              )}
-            </Button>
-         
+            {renderSaveForLater()}       
         </div>
       </div>
       {/* {isWork(entity) && (

@@ -90,6 +90,17 @@ export default getApiHandler()
               emailReason,
             });
             const msg = mailSent ? 'Request sent successfully' : 'Failed to send the mail';
+            await prisma.cycleUserJoin.upsert({
+              where:{
+                cycleId_userId:{
+                  userId:session.user.id,
+                  cycleId:cycle.id
+                }
+              },
+              create:{userId:session.user.id,cycleId:cycle.id,pending:true},
+              update:{pending:true}
+            });
+      
 
             res.status(200).json({
               success: mailSent,
@@ -104,13 +115,24 @@ export default getApiHandler()
       }
 
       await addParticipant(cycle, session.user.id);
+
+     await prisma.cycleUserJoin.upsert({
+        where:{
+          cycleId_userId:{
+            userId:session.user.id,
+            cycleId:cycle.id
+          }
+        },
+        create:{userId:session.user.id,cycleId:cycle.id,pending:false},
+        update:{pending:false}
+      });
+
       const notification = await create(
         notificationMessage,
         notificationContextURL,
         session.user.id,
         notificationToUsers
       );
-
       res.status(200).json({notification});
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

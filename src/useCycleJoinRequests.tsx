@@ -32,7 +32,7 @@ export const setCycleJoinRequests = async (payload:UserCycleJoinRequests):Promis
   const str = localStorage.getItem('UserCycleJoinRequests');
   if(str){
     const data = JSON.parse(str) as UserCycleJoinRequests[];
-    const idx = data.findIndex(d=>d.userId==userId)
+    const idx = data.findIndex(d=>d.userId==userId&&d.cycleId==cycleId)
     if(idx==-1){
       data.push({userId,cycleId,createdAt:createdAt||new Date()})
       localStorage.setItem('UserCycleJoinRequests',JSON.stringify(data))

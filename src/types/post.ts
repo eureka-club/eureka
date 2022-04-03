@@ -13,7 +13,10 @@ export type PostMosaicItem = Prisma.PostGetPayload<{
     creator: {select:{id:true,name:true,photos:true}},
     localImages: {select:{storedFile:true}},
   }
-}> & { type?: 'post' };
+}> & { 
+  type?: 'post';
+  currentUserIsFav?:boolean;
+ };
 
 // export type PostDetail = Prisma.PostGetPayload<{
 //   include: {

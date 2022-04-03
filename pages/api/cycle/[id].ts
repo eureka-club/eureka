@@ -53,7 +53,7 @@ export default getApiHandler()
     }
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-    // const session = (await getSession({ req })) as unknown as Session;
+    const session = (await getSession({ req })) as unknown as Session;
     // if (session == null || !session.user.roles.includes('admin')) {
     //   res.status(401).json({ status: 'Unauthorized' });
     //   return;
@@ -74,9 +74,33 @@ export default getApiHandler()
       const cycle = await find(idNum);
       if (cycle == null) {
         // res.status(404).end();
-        res.status(200).json({ ok: true, cycle: null });
+        return res.status(200).json({ ok: true, cycle: null });
         
       }
+
+      let currentUserIsParticipant = false;
+      let currentUserIsCreator = false;
+      let currentUserIsFav = false;
+      let currentUserIsPending = false;
+      if(session){
+        currentUserIsCreator = cycle.creatorId == session.user.id
+        const c = await prisma.cycle.findUnique({
+          where:{id:idNum},
+          select:{
+            participants:{select:{id:true}},
+            usersJoined:{select:{userId:true,cycleId:true,pending:true}}
+          }
+        })
+        if(c){
+          currentUserIsParticipant =  currentUserIsCreator || c.participants.findIndex(p=>p.id==session.user.id) > -1;
+          currentUserIsPending = c.usersJoined.findIndex(p=>p.userId==session.user.id && cycle.id==p.cycleId && p.pending) > -1;
+        }
+        currentUserIsFav = cycle.favs.findIndex(p=>p.id==session.user.id) > -1;
+      }
+      cycle.currentUserIsParticipant = currentUserIsParticipant;
+      cycle.currentUserIsCreator = currentUserIsCreator;
+      cycle.currentUserIsFav = currentUserIsFav;
+      cycle.currentUserIsPending = currentUserIsPending;
 
       res.status(200).json({ ok: true, cycle });
     } catch (exc) {

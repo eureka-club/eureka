@@ -4,7 +4,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, useEffect, useState, MouseEvent } from 'react';
+import { FunctionComponent, useEffect, useState, MouseEvent, useMemo } from 'react';
 import { useMutation, useQueryClient,useIsFetching } from 'react-query';
 import { useRouter } from 'next/router';
 import { Card, Button, Spinner, Badge } from 'react-bootstrap';
@@ -62,7 +62,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 }) => {
   const {notifier} = useNotificationContext();
   const { linkToCycle = true, currentUserIsParticipant } = useCycleContext();
-  const [session] = useSession() as [Session | null | undefined, boolean];
+  const [session,isLoadingSession] = useSession() as [Session | null | undefined, boolean];
   const [idSession,setIdSession] = useState<string>('')
   const { data: user } = useUser(+idSession,{ enabled: !!+idSession });
   const [isCurrentUserJoinedToCycle, setIsCurrentUserJoinedToCycle] = useState<boolean>(false);
@@ -202,7 +202,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         }
         if(user){
           queryClient.invalidateQueries(['USER', user.id.toString()]);
-          queryClient.invalidateQueries(cacheKey);
+          queryClient.invalidateQueries(cacheKey||['CYCLE',cycle?.id.toString()]);
           queryClient.invalidateQueries(ck)
         }
         queryClient.invalidateQueries(['USER', +idSession, 'cycles-join-requests'])
@@ -280,7 +280,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         }
         if(user){
           queryClient.invalidateQueries(['USER', user.id.toString()]);
-          queryClient.invalidateQueries(cacheKey);
+          queryClient.invalidateQueries(cacheKey||['CYCLE',cycle?.id.toString()]);
           queryClient.invalidateQueries(ck)
         }
         queryClient.invalidateQueries(['USER', +idSession, 'cycles-join-requests'])
@@ -368,17 +368,41 @@ const MosaicItem: FunctionComponent<Props> = ({
     return img;
   };
   
-  const requestIsPending = ()=>{
-    if(!idSession)return false;
-    if(isLoadingCycleJoinRequests)return true;
-    if(!cycleJoinRequests||!cycleJoinRequests.length)return false;
-    else if(cycleJoinRequests) return cycleJoinRequests.findIndex(i=>i.cycleId==cycle?.id) > -1;
-    if(participants){
-      if(participants.findIndex(p=>p.id==+idSession) >-1){
-        return false;
-      }
+  const renderJoinLeaveCycleBtn = ()=>{
+    console.log(cycle && cycle?.id,new Date())
+    if(cycle && !isLoadingSession){
+
+      if(cycle.currentUserIsCreator)
+        return <Button  variant="button border-warning text-warning fs-6 disabled" className="w-75">
+        {t('MyCycle')}
+      </Button>
+
+      if(cycle.currentUserIsParticipant)
+        return <Button 
+          disabled={(isJoinCycleLoading || isLeaveCycleLoading)}
+          onClick={handleLeaveCycleClick} variant="button border-primary text-primary fs-6" className="w-75">
+            {t('leaveCycleLabel')}
+          </Button>
+
+      if(cycle.currentUserIsPending)
+        return <Button 
+            disabled={true}
+            className="w-75 text-white">
+              {t('joinCyclePending')}
+            </Button>
+
+      return <Button 
+        disabled={(isJoinCycleLoading || isLeaveCycleLoading)}
+        onClick={handleJoinCycleClick} className="w-75 text-white">
+          {t('joinCycleLabel')}
+        </Button>
+      
     }
-    return false;    
+    return <Button 
+          disabled={true}
+          className="w-75 text-white">
+            <Spinner size='sm' animation='grow'/>
+          </Button>
   }
 
   if(!cycle)return <></>
@@ -413,28 +437,10 @@ const MosaicItem: FunctionComponent<Props> = ({
         </div>
       )}
       <div className={`text-center ${showParticipants ? 'mt-3' : ''} ${styles.joinButtonContainer}`}>
-        {/* {(isJoinCycleLoading || isLeaveCycleLoading) && <Spinner animation="grow" size="sm" />} */}
-        {/* !(isJoinCycleLoading || isLeaveCycleLoading) &&  */isCurrentUserJoinedToCycle && user && (user.id !== cycle!.creatorId) ? (
-          <Button 
-          disabled={(isJoinCycleLoading || isLeaveCycleLoading || isFetchingParticipants!==0)}
-          onClick={handleLeaveCycleClick} variant="button border-primary text-primary fs-6" className="w-75">
-            {t('leaveCycleLabel')}
-          </Button>
-        ) : ((user?.id != cycle!.creatorId) &&
-          // showJoinButtonCycle() && (
-            <Button 
-            disabled={(isJoinCycleLoading || isLeaveCycleLoading || isFetchingParticipants!==0) || requestIsPending()}
-            onClick={handleJoinCycleClick} className="w-75 text-white">
-              {!requestIsPending() ? t('joinCycleLabel'):t('joinCyclePending')}
-            </Button>
-          // )
-        )}
-        {(user?.id === cycle!.creatorId) && (<Button  variant="button border-warning text-warning fs-6 disabled" className="w-75">
-            {t('MyCycle')}
-          </Button>) }
+        {renderJoinLeaveCycleBtn()}
       </div>
       {showParticipants && (<p className={`${styles.title} mt-3 fs-6 text-center text-gray my-2`}>
-        {`${t('Participants')}: ${countParticipants||'...'}`}
+        {`${t('Participants')}: ${cycle._count.participants||'...'}`}
         </p>)
       } 
       </div>

@@ -7,6 +7,7 @@ import getApiHandler from '../../../../src/lib/getApiHandler';
 import { addParticipant, find } from '../../../../src/facades/cycle';
 import prisma from '../../../../src/lib/prisma';
 import { sendMailRequestJoinCycleResponse } from '../../../../src/facades/mail';
+import { session } from 'next-auth/client';
 
 const bcrypt = require('bcryptjs');
 
@@ -39,7 +40,17 @@ export default getApiHandler()
     }
     const user = await prisma.user.findFirst({ where: { id: parseInt(userId, 10) } });
     if (authorized === '1') {
-      await addParticipant(cycle, +userId);
+      await addParticipant(cycle, +userId);debugger;
+      
+      let cuj = await prisma.cycleUserJoin.update({
+        where:{
+          cycleId_userId:{
+            cycleId:cycle.id,
+            userId:parseInt(userId, 10)
+          }
+        },
+        data:{pending:false}
+      });
       // res.redirect('/cycle/cycleJoinedSuccefully');
     }
     if (user && user.email) {

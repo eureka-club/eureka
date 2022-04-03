@@ -39,11 +39,14 @@ const whereCycleParticipants = (id:number)=>({
 const whereCycleWorks = (id:number)=> ({ cycles: { some: { id } } })
 const whereCyclePosts = (id:number)=> ({AND:{ cycles:{ some: { id }}}})
 
+interface Props{
+  id:number;
+}
 const CycleDetailPage: NextPage = (props:any) => {
   const [session, isLoadingSession] = useSession();
   const router = useRouter();
   
-  const { data: cycle, isSuccess, isLoading, isFetching, isError, error } = useCycle(+props.id);
+  const { data: cycle, isSuccess, isLoading, isFetching, isError, error } = useCycle(+props.id,{enabled:!!isLoadingSession});
   
   const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants(props.id),
     {
