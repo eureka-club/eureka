@@ -63,7 +63,7 @@ const WorkDetailPost: FunctionComponent<Props> = ({workId,className, cacheKey })
           <p className={`${styles.initialText}`}>{t('EurekaMomentsExplain')}</p>
           </div>
           <Row className={`d-flex justify-content-center ${styles.discussionContainer}`}>
-            <Col xs={12} md={1} className="text-center mb-1">
+            <Col xs={12} md={1} className="d-flex justify-content-center mb-2">
               {session && session.user && <UserAvatar width={28} height={28} userId={session.user.id} showName={false} />}
             </Col>
             <Col xs={12} md={11}>

@@ -192,7 +192,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
 
   const getRatingAvg = () => {
     if (cycle) {
-      return cycle.ratingAVG
+      return cycle.ratingAVG;
     }
     return 0;
   };
@@ -249,7 +249,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
             fullSymbol={getFullSymbol()}
           />{' '}
           <div className='d-flex flex-nowrap ms-2'>
-          {getRatingAvg()}
+          {getRatingAvg()!.toFixed(1)}
           {' - '}
           {getRatingQty()}
           </div>

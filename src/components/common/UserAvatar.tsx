@@ -62,7 +62,7 @@ const UserAvatar: FunctionComponent<Props> = ({
                 {(!user?.photos || !user?.photos.length) ?
          <img
         onError={onLoadImgError}
-        className={`${styles.cycleCreatorAvatar} me-2`}
+        className={`${styles.cycleCreatorAvatar}`}
         src={user.image || '/img/default-avatar.png'}
         alt={user.name||''}
       /> : <LocalImageComponent className={`rounded rounded-circle`} width={width} height={height} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />}
