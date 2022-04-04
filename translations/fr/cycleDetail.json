@@ -46,15 +46,15 @@
   "guidelinesMP": "Principes de modération des contenus du cycle",
   "emptyDiscussionItemLbl": "Indiquez si votre contribution concerne l'une des œuvres ou le thème du cycle",
   "Warning": "Attention",
-  "requiredDiscussionItemError": "Vous devez indiquer sur quoi porte votre contribution",
-  "requiredEurekaImageError": "Vous devez ajouter une image à votre Eureka",
   "Filter by Participan":"Filtrer par participant-e",
   "Filter by type of element":"Filtrer par type de contenu",
   "Filter by work":"Filtrer par œuvre ou cycle",
   "Clean filters":"Effacer filtres",
-  "commentCreated":"Votre réaction ou question a été partagée avec succès.",
-  "postCreated":"Votre Eureka a été partagée avec succès.",
+  "commentCreated":"Votre réaction ou question a été partagée avec succès",
+  "postCreated":"Votre Eureka a été partagée avec succès",
   "canNotCreatePostJoinToCycle":"Vous ne pouvez pas encore partager une Eureka: REJOIGNEZ d'abord le cycle!",
-  "NotTitle":"Vous devez spécifier un titre",
-  "NotContentText":"Votre eureka est sans contenu"
+  "NotTitle":"Merci d'indiquer un titre",
+  "NotContentText":"Merci d'ajouter du contenu",
+  "requiredDiscussionItemError": "Merci d'indiquer si votre Eureka porte sur le cycle ou l'une des œuvres",
+  "requiredEurekaImageError": "Merci d'ajouter une image à votre Eureka"
 }
