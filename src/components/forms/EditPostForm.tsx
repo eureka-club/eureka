@@ -112,7 +112,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
       return res.json();
     },
     {
-      onMutate: async (variables) => {debugger;
+      onMutate: async (variables) => {
          if (post) {
             const ck_ = ck||['POST',`${post.id}`];
             await queryClient.cancelQueries(ck_)

@@ -54,7 +54,7 @@ export default getApiHandler()
       }
 
       // @ts-ignore arguments checked in validateReq()
-      await saveSocialInteraction(cycle, session.user, socialInteraction, true, qty);debugger;
+      await saveSocialInteraction(cycle, session.user, socialInteraction, true, qty);
       const notification = await create(
         notificationMessage,
         notificationContextURL,

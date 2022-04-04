@@ -44,9 +44,9 @@ const WorkDetailPage: NextPage = (props:any) => {
   const { t } = useTranslation('common');
   const [session, isLoadingSession] = useSession();
   const [id, setId] = useState<string>('');
-  const [mySocialInfo, setMySocialInfo] = useState<Record<string, boolean>>({
-    favoritedByMe: false,
-  });
+  // const [mySocialInfo, setMySocialInfo] = useState<Record<string, boolean>>({
+  //   favoritedByMe: false,
+  // });
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
   const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
@@ -58,11 +58,11 @@ const WorkDetailPage: NextPage = (props:any) => {
 
   const { data: work, isLoading: isLoadingWork } = useWork(+id, { enabled: !!id });
 
-  useEffect(() => {
-    if (!isLoadingSession && session && work) {
-      setMySocialInfo((res) => ({ ...res, favoritedByMe: work.favs.findIndex((u) => u.id === +id) > -1 }));
-    }
-  }, [isLoadingSession, session, work, id]);
+  // useEffect(() => {
+  //   if (!isLoadingSession && session && work) {
+  //     setMySocialInfo((res) => ({ ...res, favoritedByMe: work.favs.findIndex((u) => u.id === +id) > -1 }));
+  //   }
+  // }, [isLoadingSession, session, work, id]);
 
   const rendetLayout = (title: string, children: ReactElement) => {
     return <>

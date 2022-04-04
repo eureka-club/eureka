@@ -32,7 +32,7 @@ import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
 import { WorkMosaicItem } from '../../types/work';
 import { UserMosaicItem } from '../../types/user';
-import { MySocialInfo, isCycle, isWork, Session, isPost, isPostMosaicItem, isWorkMosaicItem } from '../../types';
+import { MySocialInfo, isCycle, isWork, Session, isPost, isPostMosaicItem, isWorkMosaicItem, isCycleMosaicItem } from '../../types';
 import styles from './SocialInteraction.module.css';
 import {useNotificationContext} from '@/src/useNotificationProvider';
 interface SocialInteractionClientPayload {
@@ -81,7 +81,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   // const [optimistReadOrWatched, setOptimistReadOrWatched] = useState<boolean | null>();
 
   // const [optimistLikeCount, setOptimistLikeCount] = useState<number>(0);
-  const [optimistFavCount, setOptimistFavCount] = useState<number>(0);
+  // const [optimistFavCount, setOptimistFavCount] = useState<number>(0);
   // const [optimistReadOrWatchedCount, setOptimistReadOrWatchedCount] = useState<number>(0);
   const queryClient = useQueryClient();
 
@@ -103,16 +103,16 @@ const SocialInteraction: FunctionComponent<Props> = ({
     }
   }, [mosaicContext]);
 
-  const calculateQty = () => {
-    if (entity && (isWork(entity) || isCycle(entity))) {
-      let qtySum = 0;
-      entity.ratings.forEach((rating) => {
-        qtySum += rating.qty;
-      });
-      qtySum /= entity.ratings.length;
-      setQty(() => qtySum);
-    }
-  };
+  // const calculateQty = () => {
+  //   if (entity && (isWork(entity) || isCycle(entity))) {
+  //     let qtySum = 0;
+  //     entity.ratings.forEach((rating) => {
+  //       qtySum += rating.qty;
+  //     });
+  //     qtySum /= entity.ratings.length;
+  //     setQty(() => qtySum);
+  //   }
+  // };
 
   useEffect(() => {
     const s = session as unknown as Session;
@@ -128,7 +128,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   }, [user, idSession, isSuccessUser]);
 
   useEffect(() => {
-    calculateQty();
+    // calculateQty();
 
     let ratingByMe = false;
     if (session && user && user.id && entity) {
@@ -138,16 +138,16 @@ const SocialInteraction: FunctionComponent<Props> = ({
         // const readOrWatchedByMe = idx !== -1;
         // setOptimistReadOrWatched(readOrWatchedByMe);
         // setOptimistReadOrWatchedCount(entity.readOrWatcheds.length);
-        let idx = user.favWorks ? user.favWorks.findIndex((i) => i.id === entity.id) : -1;
-        const favoritedByMe = idx !== -1;
+        // let idx = user.favWorks ? user.favWorks.findIndex((i) => i.id === entity.id) : -1;
+        // setOptimistFavCount(entity.favs ? entity.favs.length : 0);
+        
+        // idx = user.ratingWorks ? user.ratingWorks.findIndex((i) => i.workId === entity.id) : -1;
+        // if (idx !== -1) {
+          //   ratingByMe = true;
+          // }
+        const favoritedByMe = entity.currentUserIsFav;
         setOptimistFav(favoritedByMe);
-        setOptimistFavCount(entity.favs ? entity.favs.length : 0);
-
-        idx = user.ratingWorks ? user.ratingWorks.findIndex((i) => i.workId === entity.id) : -1;
-        if (idx !== -1) {
-          ratingByMe = true;
-        }
-
+        ratingByMe = !!entity.currentUserRating;
         setMySocialInfo({ favoritedByMe, ratingByMe });
       } else if (isCycle(entity)) {
         // setOptimistReadOrWatchedCount(0);
@@ -157,27 +157,27 @@ const SocialInteraction: FunctionComponent<Props> = ({
         // setOptimistLike(likedByMe);
         // setOptimistLikeCount(entity.likes.length);
 
-        let idx = user.favCycles ? user.favCycles.findIndex((i) => i.id === entity.id) : -1;
-        const favoritedByMe = idx !== -1;
+        // let idx = user.favCycles ? user.favCycles.findIndex((i) => i.id === entity.id) : -1;
+        const favoritedByMe = entity.currentUserIsFav;
         setOptimistFav(favoritedByMe);
-        setOptimistFavCount(entity.favs.length);
+        // setOptimistFavCount(entity.favs.length);
 
-        idx = user.ratingCycles
-          ? user.ratingCycles.findIndex((i) => i.cycleId === entity.id)
-          : -1;
-        if (idx !== -1) {
-          ratingByMe = true;
-        }
-
+        // idx = user.ratingCycles
+        //   ? user.ratingCycles.findIndex((i) => i.cycleId === entity.id)
+        //   : -1;
+        // if (idx !== -1) {
+        //   ratingByMe = true;
+        // }
+        ratingByMe = !!entity.currentUserRating;
         setMySocialInfo({ favoritedByMe, ratingByMe });
       } else if (isPostMosaicItem(entity)) {
         // setOptimistReadOrWatchedCount(0);
 
-        const idx = user.favPosts ? user.favPosts.findIndex((i) => i.id === entity.id) : -1;
-        const favoritedByMe = idx !== -1;
+        // const idx = user.favPosts ? user.favPosts.findIndex((i) => i.id === entity.id) : -1;
+        const favoritedByMe = entity.currentUserIsFav;
         setOptimistFav(favoritedByMe);
-        if (!entity.favs) console.error('missing favs in ', entity);
-        else setOptimistFavCount(entity.favs.length);
+        // if (!entity.favs) console.error('missing favs in ', entity);
+        // else setOptimistFavCount(entity.favs.length);
 
         setMySocialInfo({ favoritedByMe });
       }
@@ -196,12 +196,12 @@ const SocialInteraction: FunctionComponent<Props> = ({
   //   return optimistLikeCount ? -1 : 0;
   // };
 
-  const favInc = () => {
-    if (!optimistFav) {
-      return 1;
-    }
-    return optimistFavCount ? -1 : 0;
-  };
+  // const favInc = () => {
+  //   if (!optimistFav) {
+  //     return 1;
+  //   }
+  //   return optimistFavCount ? -1 : 0;
+  // };
 
   // const readOrWatchedInc = () => {
   //   if (!optimistReadOrWatched) {
@@ -359,10 +359,10 @@ const SocialInteraction: FunctionComponent<Props> = ({
         //   return { optimistreadOrWatched: ol, optimistreadOrWatchedCount: olc };
         // }
         if (session && payload.socialInteraction === 'fav') {
-          const opfc = optimistFavCount;
+          // const opfc = optimistFavCount;
           const opf = optimistFav;
           setOptimistFav(!optimistFav);
-          setOptimistFavCount(optimistFavCount + favInc());
+          // setOptimistFavCount(optimistFavCount + favInc());
           let favWorks;
           if (isWork(entity)) {
             if (opf) favWorks = user?.favWorks.filter((i) => i.id !== entity.id);
@@ -388,7 +388,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
             }
             queryClient.setQueryData(['USER', `${idSession}`], { ...user, favPosts });
           }
-          return { optimistFav: opf, optimistFavCount: opfc };
+          return { optimistFav: opf,/*  optimistFavCount: opfc */ };
         }
         // const opf = optimistFav;
         // const opfc = optimistFavCount;
@@ -396,7 +396,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
         // setOptimistFavCount(optimistFavCount + favInc());
         return {};
       },
-      onSuccess: () => {debugger;
+      onSuccess: () => {
         //const ck = globalSearchEngineState ? globalSearchEngineState.cacheKey : cacheKey;
         queryClient.invalidateQueries(['USER', `${idSession}`]);
         //if (!ck) router.replace(router.asPath);
@@ -489,19 +489,27 @@ const SocialInteraction: FunctionComponent<Props> = ({
   };
 
   const getFullSymbol = () => {
-    if (session) {
-      if (user && mySocialInfo) {
-        if (mySocialInfo.ratingByMe)
+    if(entity){
+      if(isWorkMosaicItem(entity) || isCycleMosaicItem(entity))
+        if(entity.currentUserRating)
           return <GiBrain className="text-secondary" /*  style={{ color: 'var(--eureka-blue)' }} */ />;
-      }
+
     }
+    // if (session) {
+    //   if (user && mySocialInfo) {
+    //     if (mySocialInfo.ratingByMe)
+    //       return <GiBrain className="text-secondary" /*  style={{ color: 'var(--eureka-blue)' }} */ />;
+    //   }
+    // }
     return <GiBrain className="text-primary" /* style={{ color: 'var(--eureka-green)' }} */ />;
   };
 
   const getRatingsCount = () => {
     let count = 0;
-    if (isWorkMosaicItem(entity)) count = (entity as WorkMosaicItem).ratings.length;
-    else if (isCycle(entity)) count = (entity as CycleMosaicItem).ratings.length;
+    if (isWorkMosaicItem(entity)){
+      count = entity._count.ratings;
+    } 
+    else if (isCycleMosaicItem(entity)) count = entity._count.ratings;
 
     // if (!session || (user && mySocialInfo && !mySocialInfo.ratingByMe))
     return <span className={styles.ratingsCount}>{`${count}`}</span>;
@@ -530,11 +538,23 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
 
   }
-  const getRatingLabelInfo = () => {
-    if (!session || (user && mySocialInfo && !mySocialInfo.ratingByMe)) {
-      return <span className={styles.ratingLabelInfo}>{t('Rate it')}</span>;
+  const getInitialRating = ()=>{
+    if(entity){
+      if(isCycleMosaicItem(entity) || isWorkMosaicItem(entity)){
+        return entity.ratingAVG
+      }
     }
-    return undefined;
+  }
+  const getRatingLabelInfo = () => {
+    if(entity){
+      if(isCycleMosaicItem(entity)||isWorkMosaicItem(entity))
+        return !entity.currentUserRating ? <span className={styles.ratingLabelInfo}>{t('Rate it')}</span> : '';
+    }
+    return ''
+    // if (!session || (user && mySocialInfo && !mySocialInfo.ratingByMe)) {
+    //   return <span className={styles.ratingLabelInfo}>{t('Rate it')}</span>;
+    // }
+    // return undefined;
   };
   if (isLoadingSession || isLoadingUser) return <Spinner animation="grow" variant="info" size="sm" />;
   return (
@@ -549,7 +569,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
             {` `}
             {showRating && (
               <Rating
-                initialRating={qty}
+                initialRating={getInitialRating()}
                 onClick={handlerChangeRating}
                 className={styles.rating}
                 stop={5}

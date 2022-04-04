@@ -38,12 +38,12 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
       //       }
       //   }
       // },     
-      ratings: { 
-        select: { 
-          qty:true,
-          userId:true,
-        } 
-      },
+      // ratings: { 
+      //   select: { 
+      //     qty:true,
+      //     userId:true,
+      //   } 
+      // },
       favs: {
         select:{id:true}
       },
@@ -58,7 +58,10 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
       // comments:true,
       complementaryMaterials:true,
       _count:{
-        select:{participants:true},
+        select:{
+          participants:true,
+          ratings:true
+        },
       }
 
     },
@@ -100,12 +103,12 @@ export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<CycleMos
       //       }
       //   }
       // },     
-      ratings: { 
-        select: { 
-          qty:true,
-          userId:true,
-        } 
-      },
+      // ratings: { 
+      //   select: { 
+      //     qty:true,
+      //     userId:true,
+      //   } 
+      // },
       favs: {
         select:{id:true}
       },
@@ -120,8 +123,12 @@ export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<CycleMos
       // comments:true,
       complementaryMaterials:true,
       _count:{
-        select:{participants:true},
-      }
+        select:{
+          participants:true,
+          ratings:true
+        },
+      },
+      
     }
   });
 };

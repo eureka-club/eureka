@@ -45,12 +45,12 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
     //       }
     //   }
     // };     
-    ratings: { 
-      select: { 
-        qty:true;
-        userId:true;
-      } 
-    };
+    // ratings: { 
+    //   select: { 
+    //     qty:true;
+    //     userId:true;
+    //   } 
+    // };
     favs: {
       select:{id:true}
     };
@@ -63,7 +63,12 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
       }
     };
     // comments:true;
-    _count:{select:{participants:true}};
+    _count:{
+      select:{
+        participants:true;
+        ratings:true;
+      },
+    };
     complementaryMaterials:true;
     
   }
@@ -73,6 +78,9 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
   currentUserIsParticipant?:boolean;
   currentUserIsFav?:boolean; 
   currentUserIsPending?:boolean;
+  currentUserRating?:number;
+  ratingCount?:number;
+  ratingAVG?:number;
 };
 
 // export type CycleDetail = Prisma.CycleGetPayload<{

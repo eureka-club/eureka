@@ -74,7 +74,7 @@ const NotificationsList: React.FC<Props> = ({className}) => {
         },
         {
           onMutate: async (vars) => {
-              if(notVieweds){debugger;
+              if(notVieweds){
                 const ck = ['USER', `${userId}`, 'NOTIFICATIONS'];
                 queryClient.cancelQueries(ck)
                 const ss = queryClient.getQueryData(ck);
@@ -89,7 +89,7 @@ const NotificationsList: React.FC<Props> = ({className}) => {
           onSettled: (_user, error, _variables, context) => {
             if (context) {
               interface ctx { ck:string[],ss:UserMosaicItem}
-              const { ck, ss } = context as ctx;debugger;
+              const { ck, ss } = context as ctx;
               if (error && ck) {
                 queryClient.setQueryData(ck, ss);
               }

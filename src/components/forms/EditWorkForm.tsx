@@ -106,7 +106,7 @@ const EditWorkForm: FunctionComponent = () => {
     });
     return res.json();
   },{
-    onMutate(vars){debugger;
+    onMutate(vars){
       const ck = ['WORK',`${work!.id}`]
       queryClient.cancelQueries(ck)
       const snapshot = queryClient.getQueryData<WorkMosaicItem>(ck)

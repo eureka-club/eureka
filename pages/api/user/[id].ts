@@ -72,7 +72,7 @@ export default getApiHandler()
         return prev;
       },{});
       
-      if(files.photo && files.photo[0]){debugger;
+      if(files.photo && files.photo[0]){
         const user = await find({id:idNum}) as UserMosaicItem;
         if(!user){
           res.statusMessage = 'User not found';

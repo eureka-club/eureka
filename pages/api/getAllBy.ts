@@ -67,6 +67,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
       take: takePlus || countItemsPerPage,
 
       include: {
+        _count:{select:{ratings:true}},
         localImages: true,
         likes: true,
         favs: true,

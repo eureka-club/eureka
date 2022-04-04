@@ -174,30 +174,25 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
 
   
   const getFullSymbol = () => {
-    if (cycle && session) {
-      const s = session as unknown as Session;
-      const ratingByMe = cycle.ratings.findIndex((r) => r.userId === s.user.id);
-      if (ratingByMe) return <GiBrain style={{ color: 'var(--eureka-blue)' }} />;
-    }
+    if (cycle && cycle.currentUserRating) return <GiBrain style={{ color: 'var(--eureka-blue)' }} />;
+    // if (cycle) {
+    //   // const s = session as unknown as Session;
+    //   // const ratingByMe = cycle.ratings.findIndex((r) => r.userId === s.user.id);
+    // }
 
     return <GiBrain style={{ color: 'var(--eureka-green)' }} />;
   };
 
   const getRatingQty = () => {
     if (cycle) {
-      return cycle.ratings.length;
+      return cycle._count.ratings;
     }
     return 0;
   };
 
   const getRatingAvg = () => {
     if (cycle) {
-      let res = 0;
-      cycle.ratings.forEach((r) => {
-        res += r.qty;
-      });
-      res /= cycle.ratings.length;
-      return +res.toFixed(1) || 0;
+      return cycle.ratingAVG
     }
     return 0;
   };

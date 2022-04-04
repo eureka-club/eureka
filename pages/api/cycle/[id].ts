@@ -82,25 +82,36 @@ export default getApiHandler()
       let currentUserIsCreator = false;
       let currentUserIsFav = false;
       let currentUserIsPending = false;
+      let currentUserRating = 0;
+      let ratingCount = cycle._count.ratings;
+      let ratingAVG = 0;
       if(session){
         currentUserIsCreator = cycle.creatorId == session.user.id
         const c = await prisma.cycle.findUnique({
           where:{id:idNum},
           select:{
             participants:{select:{id:true}},
-            usersJoined:{select:{userId:true,cycleId:true,pending:true}}
+            usersJoined:{select:{userId:true,cycleId:true,pending:true}},
+            ratings:true,
           }
         })
         if(c){
           currentUserIsParticipant =  currentUserIsCreator || c.participants.findIndex(p=>p.id==session.user.id) > -1;
           currentUserIsPending = c.usersJoined.findIndex(p=>p.userId==session.user.id && cycle.id==p.cycleId && p.pending) > -1;
+          ratingAVG = c.ratings.reduce((p,c)=>c.qty+p,0)/ratingCount
+          let r  = c.ratings.find(r=>r.userId==session.user.id)
+          if(r)currentUserRating = r.qty;
         }
         currentUserIsFav = cycle.favs.findIndex(p=>p.id==session.user.id) > -1;
+        
       }
       cycle.currentUserIsParticipant = currentUserIsParticipant;
       cycle.currentUserIsCreator = currentUserIsCreator;
       cycle.currentUserIsFav = currentUserIsFav;
       cycle.currentUserIsPending = currentUserIsPending;
+      cycle.currentUserRating = currentUserRating;
+      cycle.ratingCount = ratingCount;
+      cycle.ratingAVG = ratingAVG;
 
       res.status(200).json({ ok: true, cycle });
     } catch (exc) {

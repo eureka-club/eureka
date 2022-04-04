@@ -216,7 +216,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
         const previewsItems = queryClient.getQueryData<PostMosaicItem[]>(cacheKey);
         return { previewsItems, cacheKey };
       },
-      onSettled: (_eureka, error, _variables, context) => {debugger;
+      onSettled: (_eureka, error, _variables, context) => {
         if (error) {
           if (context) {
             queryClient.setQueryData(context.cacheKey, context.previewsItems);
