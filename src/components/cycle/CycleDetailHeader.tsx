@@ -339,11 +339,11 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           </Row>
             <Row>
               {show && (
-              <span className={`cursor-pointer text-primary me-1 ${styles.closeButton}`}
+              <span className={`cursor-pointer text-primary me-1 mb-2 ${styles.closeButton}`}
                       role="presentation" onClick={() => setShow(false)}> {t('Close')} <BsX style={{ color: 'var(--eureka-green)' }} /> </span> 
               )}
               {!show && (
-              <span className={`cursor-pointer text-primary me-1 ${styles.closeButton}`}
+              <span className={`cursor-pointer text-primary me-1 mb-2 ${styles.closeButton}`}
                       role="presentation" onClick={() => setShow(true)}> {t('Details')} <BsChevronUp style={{ color: 'var(--eureka-green)' }} /> </span> 
               )}
             </Row>

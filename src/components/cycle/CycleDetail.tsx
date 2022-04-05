@@ -568,8 +568,11 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           </TabPane>
           <TabPane eventKey="participants">
             {/* {cycle.participants && cycle.participants.map((p) => <UserAvatar className="mb-3 mr-3" user={p} key={p.id} />)} */}
-            {participants && (
-              <ListWindow items={participants} itemSize={75} cacheKey={['CYCLE',JSON.stringify(whereCycleParticipants)]} itemsByRow={5}/>
+            {participants && (<>
+               <div className='d-none d-md-block'><ListWindow items={participants} itemSize={80} cacheKey={['CYCLE',JSON.stringify(whereCycleParticipants)]} itemsByRow={5}/></div> 
+               <div className='d-block d-md-none'><ListWindow items={participants} itemSize={80} cacheKey={['CYCLE',JSON.stringify(whereCycleParticipants)]} itemsByRow={1}/></div> 
+
+             </>
               // <Mosaic cacheKey={['CYCLE',cycle.id.toString()]} showButtonLabels={false} enabledPagination={false} stack={[...participants, cycle.creator] as UserMosaicItem[]} />
             )}
             <p />
