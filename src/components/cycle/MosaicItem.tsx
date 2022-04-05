@@ -441,7 +441,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         {renderJoinLeaveCycleBtn()}
       </div>
       {showParticipants && (<p className={`${styles.title} mt-3 fs-6 text-center text-gray my-2`}>
-        {`${t('Participants')}: ${cycle._count.participants||'...'}`}
+        {`${t('Participants')}: ${participants!.length ||'...'}`}
         </p>)
       } 
       </div>

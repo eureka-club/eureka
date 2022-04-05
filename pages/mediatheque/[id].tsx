@@ -429,7 +429,11 @@ const Mediatheque: NextPage = () => {
         src={user.image || '/img/default-avatar.png'}
         alt={user.name||''}
       />;
-      return <LocalImageComponent className="rounded rounded-circle" /* className='avatar' */ width={160} height={160} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />
+      return <>      
+      <div className='d-flex d-md-none mb-2'><LocalImageComponent className="rounded rounded-circle" /* className='avatar' */ width={65} height={65} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} /></div>
+      <div className='d-none d-md-flex'><LocalImageComponent className="rounded rounded-circle" /* className='avatar' */ width={160} height={160} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} /></div>
+
+      </>
     }
     return '';
   };

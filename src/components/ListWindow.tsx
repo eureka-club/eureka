@@ -66,7 +66,7 @@ const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,itemSize=400,width
                 
               }
               else if (isUserMosaicItem(item)) {
-                rows.push(<MosaicItemUser key={`${v4()}`} user={item} className="mb-2 my-6" />);
+                rows.push(<MosaicItemUser key={`${v4()}`} user={item} className=" me-3 mb-2 my-6" />);
               }
               // else if(isCommentMosaicItem(item)){
               //   const it: CommentMosaicItem = item as CommentMosaicItem;
