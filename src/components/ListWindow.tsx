@@ -19,16 +19,17 @@ interface Props{
     cacheKey: string[];
     parent?: CycleMosaicItem | WorkMosaicItem;
     itemSize?:number
-    width?:string
+    width?:string,
+    itemsByRow:number
 }
-const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,itemSize=400,width="100%"})=>{
+const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,itemSize=400,width="100%",itemsByRow})=>{
     
     const mosaics = useMemo(()=>{
       let mosaics:JSX.Element[] = []
       if(it){
         const items = [...it]
         while(items.length){
-          const a = items.splice(0,4)
+          const a = items.splice(0,itemsByRow)
           const rows = []
           for(let item of a){
               if (isCycleMosaicItem(item)) {
@@ -73,8 +74,8 @@ const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,itemSize=400,width
               // }
             }
             mosaics.push(
-              <section className="d-flex flex-column flex-md-row">{rows.map(
-                r=><section className="d-flex justify-content-center my-2" data-cy="items" key={v4()}>{r}</section>
+              <section className="d-flex justify-content-center">{rows.map(
+                r=><section className="my-2" data-cy="items" key={v4()}>{r}</section>
                 )}</section>
             )
         }            
@@ -84,7 +85,10 @@ const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,itemSize=400,width
 
     const renderItem = (props:{ index:number, style:Record<string,any> }) => {
       const {index,style} = props;
-      return  <section className="" style={style}>
+      return  <section className="" style={{
+      ...style,
+      //left: `${parseFloat(style.left) + 15}px`, comento pues sale scroll eje x
+    }}>
         <aside className={`p-4 mb-3`} key={`${v4()}`}>
               {mosaics[index]}
         </aside>
@@ -99,6 +103,7 @@ const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,itemSize=400,width
       };
       
         return <List
+          className=''
           height={globalThis.window.innerHeight}
           itemCount={mosaics.length}
           itemSize={itemSize+16}//+16 because->post mosaic: my-6(12px) and row section: my-2(4px)

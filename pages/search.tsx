@@ -261,7 +261,10 @@ const SearchPage: NextPage = () => {
         <div className='d-flex flex-column justify-content-center'>
         {(
           !isLoading 
-          && <ListWindow cacheKey={["ITEMS", q!]} items={homepageMosaicDataFiltered} />
+          && <>
+          <div className='d-none d-md-block'><ListWindow cacheKey={["ITEMS", q!]} items={homepageMosaicDataFiltered} itemsByRow={4} /></div>
+          <div className='d-block d-md-none'><ListWindow cacheKey={["ITEMS", q!]} items={homepageMosaicDataFiltered} itemsByRow={1} /></div>
+          </>
           ) 
           || <></>
         }

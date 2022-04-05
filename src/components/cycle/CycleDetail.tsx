@@ -474,7 +474,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
             <Row>
               <Col /* xs={{span:12, order:'last'}} md={{span:9,order:'first'}} */>
                 <MosaicContext.Provider value={{ showShare: true }}>
-                  {posts && <ListWindow items={posts} cacheKey={['POSTS', JSON.stringify(cyclePostsWhere)]} />}
+                  {posts && <>
+                  <div className='d-none d-md-block'><ListWindow items={posts} cacheKey={['POSTS', JSON.stringify(cyclePostsWhere)]} itemsByRow={4} /></div>
+                  <div className='d-block d-md-none'><ListWindow items={posts} cacheKey={['POSTS', JSON.stringify(cyclePostsWhere)]} itemsByRow={1} /></div>
+                  </>}
                 </MosaicContext.Provider>
                 {/* {page >1 && <Button 
                 className="my-3 pe-3 rounded-pill text-white" 
@@ -565,7 +568,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           <TabPane eventKey="participants">
             {/* {cycle.participants && cycle.participants.map((p) => <UserAvatar className="mb-3 mr-3" user={p} key={p.id} />)} */}
             {participants && (
-              <ListWindow items={participants} itemSize={75} cacheKey={['CYCLE',JSON.stringify(whereCycleParticipants)]}/>
+              <ListWindow items={participants} itemSize={75} cacheKey={['CYCLE',JSON.stringify(whereCycleParticipants)]} itemsByRow={5}/>
               // <Mosaic cacheKey={['CYCLE',cycle.id.toString()]} showButtonLabels={false} enabledPagination={false} stack={[...participants, cycle.creator] as UserMosaicItem[]} />
             )}
             <p />

@@ -372,7 +372,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                       fullSymbol={getFullSymbol()}
                     />{' '}
                     <div className='ms-2'>
-                    {getRatingAvg()}
+                    {getRatingAvg()!.toFixed(1)}
                     {' - '}
                     {getRatingQty()}
                     </div>

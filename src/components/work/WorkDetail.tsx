@@ -260,14 +260,23 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
                         <TabContent>
                           <TabPane eventKey="all">
                             {/* {(cyclesCount > 0 || postsCount > 0) && <CombinedMosaic work={work} />} */}
-                            {all && <ListWindow items={all} cacheKey={['WORK',`${work.id}-ALL`]} />}{/* TODO both cycles and posts are in separated cache */}
+                            {all && <>
+                            <div className='d-none d-md-block'><ListWindow items={all} cacheKey={['WORK',`${work.id}-ALL`]} itemsByRow={4} /></div>{/* TODO both cycles and posts are in separated cache */}
+                            <div className='d-block d-md-none'><ListWindow items={all} cacheKey={['WORK',`${work.id}-ALL`]} itemsByRow={1} /></div>{/* TODO both cycles and posts are in separated cache */}
+                            </>}
                           </TabPane>
                           <TabPane eventKey="posts">
-                            {posts && <><WorkDetailPost workId={work.id} className='mb-2' cacheKey={['POSTS',JSON.stringify(workPostsWhere)]}></WorkDetailPost> <ListWindow items={posts} cacheKey={['POSTS',JSON.stringify(workPostsWhere)]} /></>}
+                            {posts && <><WorkDetailPost workId={work.id} className='mb-2' cacheKey={['POSTS',JSON.stringify(workPostsWhere)]}></WorkDetailPost> 
+                             <div className='d-none d-md-block'><ListWindow items={posts} cacheKey={['POSTS',JSON.stringify(workPostsWhere)]} itemsByRow={4} /></div>
+                             <div className='d-block d-md-none'><ListWindow items={posts} cacheKey={['POSTS',JSON.stringify(workPostsWhere)]} itemsByRow={1} /></div>
+                            </>}
                           </TabPane>
                           <TabPane eventKey="cycles">
                             {/* {cyclesCount > 0 && <CyclesMosaic work={work} />} */}
-                            {cycles && <ListWindow items={cycles} cacheKey={['CYCLES',JSON.stringify(workItemsWhere)]} />}
+                            {cycles && <>
+                                <div className='d-none d-md-block'><ListWindow items={cycles} cacheKey={['CYCLES',JSON.stringify(workItemsWhere)]} itemsByRow={4} /></div>
+                                <div className='d-block d-md-none'><ListWindow items={cycles} cacheKey={['CYCLES',JSON.stringify(workItemsWhere)]} itemsByRow={1} /></div>
+                                </> }
                           </TabPane>
                         </TabContent>
                       </Col>
