@@ -50,8 +50,9 @@ const CycleDetailPage: NextPage = (props:any) => {
   
   const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants(props.id),
     {
-      enabled:!!props.id
-    }
+      enabled:!!props.id,
+      from:'cycle/[id]'
+    },
   )
 
   // const { data: works } = usePosts(whereCycleWorks(id), {
@@ -243,10 +244,17 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
   let metaTags = {id:cycle?.id, title:cycle?.title, storedFile: cycle?.localImages[0].storedFile}
 
    await queryClient.prefetchQuery(['CYCLE',`${id}`], ()=>cycle)
-   await queryClient.prefetchQuery(['USERS',JSON.stringify(wcu)],()=>getUsers(wcu))
+
+   
+   const participants = await getUsers(wcu);
+   await queryClient.prefetchQuery(['USERS',JSON.stringify(wcu)],()=>participants)
    await queryClient.prefetchQuery(['POSTS',JSON.stringify(wcp)],()=>getPosts(wcp))
    await queryClient.prefetchQuery(['WORKS',JSON.stringify(wcw)],()=>getWorks(wcw))
 
+   participants.map(p=>{
+     queryClient.setQueryData(['USER',`${p.id}`],p)
+   })
+   
   return {
     props: {
       metas:metaTags,

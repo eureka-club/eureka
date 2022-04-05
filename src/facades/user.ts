@@ -8,7 +8,7 @@ export interface findProps {
   select?: Record<string, boolean>;
   include?: boolean;
 }
-export const find = async (props: findProps): Promise<User | UserMosaicItem | null> => {
+export const find = async (props: findProps): Promise<UserMosaicItem | null> => {
   const { id, select = undefined, include = true } = props;
   return prisma.user.findUnique({
     where: { 

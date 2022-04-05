@@ -117,7 +117,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   };
   const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants,
     {
-      enabled:!!cycle?.id
+      enabled:!!cycle?.id,
+      from:'CycleDetail'
     }
   )
 
