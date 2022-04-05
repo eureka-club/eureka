@@ -51,18 +51,18 @@ const renderMosaicItem = (
     return (
       <CycleContext.Provider key={`cycle-${v4()}`} value={{ cycle: item as CycleMosaicItem }}>
         <MosaicItemCycle
-        cycleId={item.id}
+          cycleId={item.id}
           detailed
           showShare={false}
           showButtonLabels={false}
-          cacheKey={topic && page ? ['ITEMS', `${topic}${page}`] : undefined}
+          cacheKey={['CYCLE', `${item.id}`]}
           showSocialInteraction={showSocialInteraction}
         />
       </CycleContext.Provider>
     );
   }
   if (isPostMosaicItem(item) || item.type === 'post') {
-    return <MosaicItemPost cacheKey={['ITEMS', `${topic}${page}`]} key={`post-${v4()}`} postId={item.id} />;
+    return <MosaicItemPost cacheKey={['POST', `${item.id}`]} key={`post-${v4()}`} postId={item.id} />;
   }
   if (isWorkMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -73,7 +73,7 @@ const renderMosaicItem = (
         showButtonLabels={false}
         key={`work-${v4()}`}
         workId={item.id}
-        cacheKey={topic && page ? ['ITEMS', `${topic}${page}`] : undefined}
+        cacheKey={['WORK', `${item.id}`]}
       />
     );
   }
