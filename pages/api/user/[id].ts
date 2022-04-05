@@ -141,6 +141,9 @@ export default getApiHandler()
       }
       const include = i !== 'false';
       const user = await find({ id: parseInt(id as string, 10), select, include });
+      if(user)
+        user.type = "user";
+
       res.status(200).json({ user });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

@@ -66,7 +66,8 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
 
   const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants(cycle.id),
     {
-      enabled:!!cycle
+      enabled:!!cycle,
+      from:'CycleDetailDiscussion'
     }
   )
 

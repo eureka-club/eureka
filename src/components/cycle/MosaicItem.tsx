@@ -83,7 +83,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   };
   const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants,
     {
-      enabled:!!cycle?.id
+      enabled:!!cycle?.id,
+      from:'cycle/Mosaic'
     }
   )
 
@@ -370,7 +371,6 @@ const MosaicItem: FunctionComponent<Props> = ({
   };
   
   const renderJoinLeaveCycleBtn = ()=>{
-    console.log(cycle && cycle?.id,new Date())
     if(cycle && !isLoadingSession){
 
       if(cycle.currentUserIsCreator)
