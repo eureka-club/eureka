@@ -348,7 +348,8 @@ const MosaicItem: FunctionComponent<Props> = ({
                          <Avatar width={28} height={28} userId={cycle.creator.id} showName={false} size="xs" />
                           <div className='fs-6 ms-2 mt-1' >
                           {dayjs(cycle?.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
-                          &mdash; {dayjs(cycle?.endDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
+                          <span className='ms-1 me-1'>-</span>
+                          {dayjs(cycle?.endDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
                         </div>
                         </div>)}
       </>
