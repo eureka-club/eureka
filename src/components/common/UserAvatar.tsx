@@ -39,7 +39,8 @@ const UserAvatar: FunctionComponent<Props> = ({
     let res = '';
     if (showName) {
       if(user){
-        const truncateName = user?.name?.slice(0, 16);
+        const truncateName = user?.name?.slice(0, 13);
+      
         if (showFullName) {
           res = user?.name!;
         } else if (truncateName && truncateName!.length + 3 < user?.name?.length!) {
@@ -49,7 +50,7 @@ const UserAvatar: FunctionComponent<Props> = ({
       }
       else {debugger;}
     }
-    return <span className='ms-2'>{res}</span>;
+    return <div className='d-flex flex-nowrap ms-2'><span>{res}</span></div>;
   };
   
   return (
