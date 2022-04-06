@@ -48,9 +48,7 @@ const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, alt,
           src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${filePath}`}
           alt={alt}
           className={className}
-          style={style}
-          width={width}
-          height={height}
+          style={{...style,width:`${width}px`,height:`${height}px`}}
          />
       );
 
