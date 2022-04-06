@@ -1,6 +1,10 @@
 const nextTranslate = require('next-translate');
 const path = require('path');
 
+const domain = process.env.NODE_ENV !== 'production'
+    ? process.env.CDN_ENDPOINT_NAME_STAGING
+    : process.env.CDN_ENDPOINT_NAME_PRODUCTION;
+
 module.exports = {
     ...nextTranslate(),
     sassOptions: {
@@ -11,6 +15,6 @@ module.exports = {
         NEXT_PUBLIC_LOCAL_ASSETS_BASE_URL:"/assets"
     },
     images:{
-        domains:['https://www.eureka.club'],
+        domains:[`${domain}.azureedge.net`],
     }
 };
