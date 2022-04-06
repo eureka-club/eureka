@@ -49,6 +49,8 @@ const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, alt,
           alt={alt}
           className={className}
           style={style}
+          width={width}
+          height={height}
          />
       );
 
