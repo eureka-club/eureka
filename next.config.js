@@ -11,6 +11,6 @@ module.exports = {
         NEXT_PUBLIC_LOCAL_ASSETS_BASE_URL:"/assets"
     },
     images:{
-        domains:['eurekastagingassets.azureedge.net'],
+        domains:['https://www.eureka.club'],
     }
 };
