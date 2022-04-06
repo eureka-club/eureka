@@ -27,23 +27,24 @@ const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, alt,
   switch (NEXT_PUBLIC_PUBLIC_ASSETS_STORAGE_MECHANISM) {
     case STORAGE_MECHANISM_AZURE:
       return (
-        !notNextImage ? <Image
-          blurDataURL={blurDataURL ? fallbakImgURL: undefined}
-          placeholder={blurDataURL ? 'blur': undefined}
-          src={imgError ? fallbakImgURL :`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${filePath}`}
-          alt={alt}
-          className={`${className}`}
-          onError={onLoadImgError}
-          // style={style}
-          width={width}
-          height={height}
-          // objectFit="cover"
-          // objectPosition={'50% 50%'}
-          layout={!(width && height) ? "fill" : undefined}
-          //layout="fill"
-        />
-        // eslint-disable-next-line @next/next/no-img-element
-        : <img
+        // !notNextImage ? <Image
+        //   blurDataURL={blurDataURL ? fallbakImgURL: undefined}
+        //   placeholder={blurDataURL ? 'blur': undefined}
+        //   src={imgError ? fallbakImgURL :`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${filePath}`}
+        //   alt={alt}
+        //   className={`${className}`}
+        //   onError={onLoadImgError}
+        //   // style={style}
+        //   width={width}
+        //   height={height}
+        //   // objectFit="cover"
+        //   // objectPosition={'50% 50%'}
+        //   layout={!(width && height) ? "fill" : undefined}
+        //   //layout="fill"
+        // />
+        // // eslint-disable-next-line @next/next/no-img-element
+        // : 
+        <img
           src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${filePath}`}
           alt={alt}
           className={className}
