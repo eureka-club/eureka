@@ -1,6 +1,6 @@
 import { NextPage,GetServerSideProps } from 'next';
 import Head from "next/head";
-import { useSession } from 'next-auth/client';
+import { useSession,getSession } from 'next-auth/client';
 import { useAtom } from 'jotai';
 // import { QueryClient, useQuery } from 'react-query';
 // import { dehydrate } from 'react-query/hydration';
@@ -43,10 +43,11 @@ interface Props{
   id:number;
 }
 const CycleDetailPage: NextPage = (props:any) => {
-  const [session, isLoadingSession] = useSession();
+  // const [session, isLoadingSession] = useSession();
+  const session = props.session;
   const router = useRouter();
   
-  const { data: cycle, isSuccess, isLoading, isFetching, isError, error } = useCycle(+props.id,{enabled:!!isLoadingSession});
+  const { data: cycle, isSuccess, isLoading, isFetching, isError, error } = useCycle(+props.id,{enabled:!!session});
   
   const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants(props.id),
     {
@@ -82,7 +83,7 @@ const CycleDetailPage: NextPage = (props:any) => {
 
 
   useEffect(() => {
-    if (!isLoadingSession) {
+    // if (!isLoadingSession) {
       if (!session) {
         setCurrentUserIsParticipant(() => false);
       } else if (session && cycle && session.user) {
@@ -96,8 +97,8 @@ const CycleDetailPage: NextPage = (props:any) => {
           setCurrentUserIsParticipant(() => isParticipant);
         }
       }
-    } else setCurrentUserIsParticipant(() => false);
-  }, [session, cycle, isSuccess, isLoadingSession]);
+    // } else setCurrentUserIsParticipant(() => false);
+  }, [session, cycle, isSuccess]);
 
   const renderCycleDetailComponent = () => {
     if (cycle) {
@@ -107,7 +108,7 @@ const CycleDetailPage: NextPage = (props:any) => {
       if (cycle.access === 3 && !currentUserIsParticipant) return <Alert>Not authorized</Alert>;
     }
 
-    if (isLoadingSession || isFetching || isLoading ) {
+    if (/* isLoadingSession || */ isFetching || isLoading ) {
       return <Spinner animation="grow" variant="info" />;
     }
 
@@ -228,8 +229,10 @@ const CycleDetailPage: NextPage = (props:any) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { params, req } = ctx;
  const queryClient = new QueryClient() 
+ const session = await getSession(ctx)
   if (params?.id == null || typeof params.id !== 'string') {
     return { notFound: true };
   }
@@ -259,7 +262,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
     props: {
       metas:metaTags,
       dehydratedState: dehydrate(queryClient),
-      id
+      id,
+      session,
     },
   }
 }
