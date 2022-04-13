@@ -66,9 +66,10 @@
 
 
 @keyframes ActiveCircle {
-  from {color: var(--primary);}
-  to {color: var(--info);}
+  from {color: var(--bs-primary);}
+  to {color: var(--bs-info);}
 }
+
 .isActiveCircle{
   position: absolute;
     top: 10px;

@@ -103,6 +103,8 @@
   color:var(--eureka-secondary)!important;
   /* display: block; */
   font-size: .7em;
+  margin-left: 1rem;
+
 }
 .navLink{
   color:var(--eureka-secondary)!important;
