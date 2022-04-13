@@ -242,7 +242,7 @@ const NavBar: FunctionComponent = () => {
             )}
           </Nav>
           {session && session.user && (
-            <Nav className="mx-2">
+            <Nav className="mx-1">
               <Dropdown align="end" className={styles.langSwitch}>
                 <Dropdown.Toggle as={ChevronToggle}>
                   {getAvatar()}
