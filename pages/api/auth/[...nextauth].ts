@@ -88,11 +88,20 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
     callbacks: {
       session: async (session, user: Prisma.UserGetPayload<{include:{photos:true}}>) => {
         const u = await find({id:user.id});
-        (session as unknown as Session).user.id = user.id; // eslint-disable-line no-param-reassign
-        (session as unknown as Session).user.roles = user.roles; // eslint-disable-line no-param-reassign
-        (session as unknown as Session).user.name = user.name; // eslint-disable-line no-param-reassign
-        (session as unknown as Session).user.photos = u && ('photos' in u) ? u.photos as LocalImage[]: [];
-        return Promise.resolve(session);
+        const s = session as unknown as Session;
+        s.user.id = user.id; // eslint-disable-line no-param-reassign
+        s.user.roles = user.roles; // eslint-disable-line no-param-reassign
+        s.user.name = user.name; // eslint-disable-line no-param-reassign
+        s.user.photos = u && ('photos' in u) ? u.photos as LocalImage[]: [];
+        debugger;
+        return Promise.resolve(session);        
+      },
+      async signIn(user, account, profile:{verificationRequest?:boolean}) {
+        
+        if(profile.verificationRequest){
+
+        }
+        return true
       },
     },
     debug: process.env.NODE_ENV === 'development',
@@ -108,7 +117,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
           auth: {
             user: process.env.EMAIL_SERVER_USER!,
             pass: process.env.EMAIL_SERVER_PASS!,
-          },
+          },          
         },
         from: process.env.EMAILING_FROM,
         sendVerificationRequest: async ({ identifier: email, url, baseUrl }): Promise<void> => {
