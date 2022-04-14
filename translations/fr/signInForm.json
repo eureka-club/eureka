@@ -3,5 +3,9 @@
   "loginGreeting": "Bienvenue de retour à Eureka",
   "loginViaGoogle": "Connexion avec Google",
   "alternativeText": "OU",
-  "emailFieldLabel": "Connexion avec adresse e-mail"
+  "emailFieldLabel": "Connexion avec adresse e-mail",
+  "passwordFieldLabel":"Mot de passe",
+  "forgotPassText":"Mot de passe oublié?",
+   "dontHaveAccounttext":"Vous n'avez pas encore de compte?",
+  "Join":"Rejoignez"
 }

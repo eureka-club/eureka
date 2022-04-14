@@ -12,6 +12,7 @@ import ModalBody from 'react-bootstrap/ModalBody';
 import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
+import Link from 'next/link'
 
 import styles from './SignInForm.module.css';
 
@@ -41,40 +42,44 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
     <>
       <ModalHeader className={`position-relative ${styles.modalHeader}`} closeButton={!noModal}>
         <Container>
-          <ModalTitle>{t('login')}</ModalTitle>
-          
+        <img  className={`${styles.eurekaImage}`} src="/logo.svg" alt="Eureka" /> 
+        <p className={styles.EurekaText}>EUREKA</p>
         </Container>
       </ModalHeader>
       <ModalBody className="pt-0 pb-5">
       
-        <Container>
-        <p className="text-center">{t('loginGreeting')}</p>
+        <div>
+        <p className={`${styles.loginGreeting}`}>{t('loginGreeting')}</p>
           <Row>
-            <Col>
-              <button type="button" onClick={handleSignInGoogle} className={styles.buttonGoogle}>
+              <button type="button" onClick={handleSignInGoogle} className={`d-flex justify-content-center ${styles.buttonGoogle}`}>
+                <div className='d-flex flex-row'></div>
+                <img  className={`${styles.gmailLogo} me-1 me-lg-2`} src="/img/logo-google.png" alt="gmail" /> 
                 {t('loginViaGoogle')}
               </button>
-            </Col>
           </Row>
           <Row>
-            <Col>
-              <p className={styles.alternativeLabel}>{t('alternativeText')}</p>
-            </Col>
+              <p className={`mb-2 ${styles.alternativeLabel}`}>{t('alternativeText')}</p>
           </Row>
           <Row>
-            <Col>
-              <Form onSubmit={handleEmailLoginSubmit}>
+            <div className="d-flex justify-content-center">
+              <Form className={`d-flex flex-column ${styles.loginForm}`} onSubmit={handleEmailLoginSubmit}>
                 <FormGroup controlId="email">
                   <FormLabel>{t('emailFieldLabel')}</FormLabel>
-                  <FormControl type="email" required />
+                  <FormControl className='mb-2' type="email" required />
+                  <div className='d-flex justify-content-between mb-2'><div>{t('passwordFieldLabel')}</div><div className={`d-flex align-items-end ${styles.forgotPassText}`}>{t('forgotPassText')}</div></div>
+                  <FormControl type="password" required />
                 </FormGroup>
-                <Button type="submit" variant="primary text-white" className={styles.submitButton}>
+                <div className="d-flex justify-content-center">
+                <Button type="submit" variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
                   {t('login')}
                 </Button>
+                </div>
+                 <p className={`mt-5 ${styles.dontHaveAccounttext}`}>{t('dontHaveAccounttext')} <Link href="/">
+                 <a className="">{t('Join')}</a></Link></p>
               </Form>
-            </Col>
+            </div>
           </Row>
-        </Container>
+        </div>
       </ModalBody>
     </>
   );

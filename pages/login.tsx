@@ -11,11 +11,9 @@ const LoginPage: NextPage = () => {
   const { t } = useTranslation('signInForm');
 
   return (
-    <SimpleLayout title={t('login')}>
+    <SimpleLayout title={t('login')} showNavBar={false}>
       <Row>
-        <Col md={{ offset: 2, span: 8 }}>
           <SignInForm noModal />
-        </Col>
       </Row>
     </SimpleLayout>
   );
