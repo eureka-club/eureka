@@ -52,9 +52,10 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
         <p className={`${styles.loginGreeting}`}>{t('loginGreeting')}</p>
           <Row>
               <button type="button" onClick={handleSignInGoogle} className={`d-flex justify-content-center ${styles.buttonGoogle}`}>
-                <div className='d-flex flex-row'></div>
+                <div className='d-flex justify-content-start justify-content-sm-center mt-2 flex-row'>
                 <img  className={`${styles.gmailLogo} me-1 me-lg-2`} src="/img/logo-google.png" alt="gmail" /> 
                 {t('loginViaGoogle')}
+                </div>
               </button>
           </Row>
           <Row>

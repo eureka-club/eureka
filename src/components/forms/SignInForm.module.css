@@ -29,8 +29,8 @@
   border: 1px solid var(--eureka-green);
   font-size: 0.9rem;
   margin: 0 auto;
-  padding: 0.75rem 4rem 0.75rem 5rem;
   text-align: center;
+  height: 3rem;
   width: 40%;
 }
 .gmailLogo {
@@ -78,7 +78,7 @@
 
 .dontHaveAccounttext {
   text-align: center;
-  font-size: 1.1rem;
+  font-size: 1.1git rem;
 }
 
 @media screen and (max-width: 1024px) {
