@@ -40,7 +40,7 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
   return (
     <>
-      <ModalHeader className={`position-relative ${styles.modalHeader}`} closeButton={!noModal}>
+      <ModalHeader className={`mt-5 position-relative ${styles.modalHeader}`} closeButton={!noModal}>
         <Container>
         <img  className={`${styles.eurekaImage}`} src="/logo.svg" alt="Eureka" /> 
         <p className={styles.EurekaText}>EUREKA</p>
@@ -75,7 +75,7 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
                   {t('login')}
                 </Button>
                 </div>
-                 <p className={`mt-5 ${styles.dontHaveAccounttext}`}>{t('dontHaveAccounttext')} <Link href="/">
+                 <p className={`mt-5 ${styles.dontHaveAccounttext}`}>{t('dontHaveAccounttext')} <Link href="/register">
                  <a className="">{t('Join')}</a></Link></p>
               </Form>
             </div>
