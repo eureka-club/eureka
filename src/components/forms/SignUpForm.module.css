@@ -1,0 +1,49 @@
+.welcomeSection{
+ width: 35%;
+ height:150%;
+ background-color:var(--color-primary-raised);
+ margin-left: 1.5rem;
+}
+
+.welcomeSectionText{
+margin-top: 10rem;  
+color: #fdf7f7;
+}
+.welcomeText{
+font-size: 3rem;
+margin-bottom: 8rem;  
+}
+.otherText{
+font-size: 1.3rem;
+margin-right: 1.5rem;
+}
+
+.eurekaImage {
+   width: 50%;
+   height: 100%;
+}
+
+.imageContainer{
+  margin-top: 6rem;
+  margin-bottom: 6rem;
+}
+
+.formSection{
+  right: 70%;
+  }
+
+  .buttonGoogle {
+  background: transparent ;
+  background-size: 26px;
+  border-radius: 0.5rem;
+  border: 1px solid var(--eureka-green);
+  font-size: 0.9rem;
+  margin: 0 auto;
+  text-align: center;
+  height: 3rem;
+  width: 40%;
+}
+.gmailLogo {
+   width: 1.5rem;
+  height: 1.5rem;
+}

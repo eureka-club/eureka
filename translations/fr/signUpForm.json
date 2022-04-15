@@ -1,0 +1,13 @@
+{
+ "Sign up": "Enregistrement",
+  "Welcome": "Bienvenue!",
+  "welcomeText1":"Eurêka est le premier club ciné-livre transformé en réseau social (à but non lucratif).",
+  "welcomeText2":"Nous avons un objectif d'impact social : activer les esprits pour transformer le monde.",
+  "loginViaGoogle": "Connexion avec Google",
+  "alternativeText": "OU",
+  "emailFieldLabel": "Connexion avec adresse e-mail",
+  "passwordFieldLabel":"Mot de passe",
+  "forgotPassText":"Mot de passe oublié?",
+   "dontHaveAccounttext":"Vous n'avez pas encore de compte?",
+  "Join":"Rejoignez"
+}
