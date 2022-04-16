@@ -12,9 +12,7 @@ const LoginPage: NextPage = () => {
 
   return (
     <SimpleLayout title={t('Sign up')} showNavBar={false}>
-      <Row>
           <SignUpForm noModal />
-      </Row>
     </SimpleLayout>
   );
 };

@@ -25,9 +25,9 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
 
   return (
-    <>
-    <Row>
-          <Col className={`col-5 ${styles.welcomeSection}`}>
+    <Container className='p-0 m-0'>
+    <Row className='d-flex justify-content-between'>
+          <Col className={`col-6 ${styles.welcomeSection}`}>
               <section className={`d-flex flex-column w-100 ${styles.welcomeSectionText}`}>
                     <p className={`ms-5 ${styles.welcomeText}`}>{t('Welcome')}</p>
                     <p className={`ms-5 mb-4 ${styles.otherText}`}>{t('welcomeText1')}</p>
@@ -37,86 +37,53 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                   </Container>
               </section>
           </Col>
-          <Col className={`col-7`}>
-          <Row>
+          <Col className={`col-6`}>
+            <div className={`${styles.registerFormSection}`}>
+          <Row > 
+              <span className={`ms-3 ${styles.joinEurekaText}`}>{t('JoinEureka')}</span>
+              <p className={`${styles.haveAccounttext}`}>{t('HaveAccounttext')} <Link href="/login">
+                 <a className="">{t('Login')}</a></Link></p>
               <button type="button" className={`d-flex justify-content-center ${styles.buttonGoogle}`}>
                 <div className='d-flex justify-content-start justify-content-sm-center mt-2 flex-row'>
                 <img  className={`${styles.gmailLogo} me-1 me-lg-2`} src="/img/logo-google.png" alt="gmail" /> 
-                {t('loginViaGoogle')}
+                {t('joinViaGoogle')}
                 </div>
               </button>
           </Row>
           <Row>
-              <p className={`mb-2 ${styles.alternativeLabel}`}>{t('alternativeText')}</p>
+              <p className={`mb-3 ${styles.alternativeLabel}`}>{t('alternativeText')}</p>
           </Row>
           <Row>
             <div className="d-flex justify-content-center">
-              <Form className={`d-flex flex-column ${styles.loginForm}`} >
+              <Form className={`d-flex flex-column ${styles.registerForm}`} >
+                 <FormGroup className='d-flex flex-row justify-content-between' controlId="name">
+                     <div className={`d-flex flex-column ${styles.personalData}`}>
+                       <FormLabel>{t('Name')}</FormLabel>
+                       <FormControl className='mb-2' type="text" required />
+                     </div>
+                     <div className={`d-flex flex-column ${styles.personalData}`}>
+                       <FormLabel>{t('LastName')}</FormLabel>
+                       <FormControl className='mb-2' type="text" required />  
+                     </div>
+                    </FormGroup>
                 <FormGroup controlId="email">
                   <FormLabel>{t('emailFieldLabel')}</FormLabel>
                   <FormControl className='mb-2' type="email" required />
-                  <div className='d-flex justify-content-between mb-2'><div>{t('passwordFieldLabel')}</div><div className={`d-flex align-items-end ${styles.forgotPassText}`}>{t('forgotPassText')}</div></div>
+                  <FormLabel>{t('passwordFieldLabel')}</FormLabel>
                   <FormControl type="password" required />
                 </FormGroup>
                 <div className="d-flex justify-content-center">
                 <Button type="submit" variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
-                  {t('login')}
+                  {t('Join')}
                 </Button>
                 </div>
-                 <p className={`mt-5 ${styles.dontHaveAccounttext}`}>{t('dontHaveAccounttext')} <Link href="/">
-                 <a className="">{t('Join')}</a></Link></p>
               </Form>
             </div>
           </Row>
+          </div>
           </Col>
           </Row>
-
-        
-        
-
-     {/* <ModalHeader className={`position-relative ${styles.modalHeader}`} closeButton={!noModal}>
-        <Container>
-        <img  className={`${styles.eurekaImage}`} src="/logo.svg" alt="Eureka" /> 
-        <p className={styles.EurekaText}>EUREKA</p>
-        </Container>
-      </ModalHeader>
-      <ModalBody className="pt-0 pb-5">
-      
-        <div>
-        <p className={`${styles.loginGreeting}`}>{t('loginGreeting')}</p>
-          <Row>
-              <button type="button" onClick={handleSignInGoogle} className={`d-flex justify-content-center ${styles.buttonGoogle}`}>
-                <div className='d-flex justify-content-start justify-content-sm-center mt-2 flex-row'>
-                <img  className={`${styles.gmailLogo} me-1 me-lg-2`} src="/img/logo-google.png" alt="gmail" /> 
-                {t('loginViaGoogle')}
-                </div>
-              </button>
-          </Row>
-          <Row>
-              <p className={`mb-2 ${styles.alternativeLabel}`}>{t('alternativeText')}</p>
-          </Row>
-          <Row>
-            <div className="d-flex justify-content-center">
-              <Form className={`d-flex flex-column ${styles.loginForm}`} onSubmit={handleEmailLoginSubmit}>
-                <FormGroup controlId="email">
-                  <FormLabel>{t('emailFieldLabel')}</FormLabel>
-                  <FormControl className='mb-2' type="email" required />
-                  <div className='d-flex justify-content-between mb-2'><div>{t('passwordFieldLabel')}</div><div className={`d-flex align-items-end ${styles.forgotPassText}`}>{t('forgotPassText')}</div></div>
-                  <FormControl type="password" required />
-                </FormGroup>
-                <div className="d-flex justify-content-center">
-                <Button type="submit" variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
-                  {t('login')}
-                </Button>
-                </div>
-                 <p className={`mt-5 ${styles.dontHaveAccounttext}`}>{t('dontHaveAccounttext')} <Link href="/">
-                 <a className="">{t('Join')}</a></Link></p>
-              </Form>
-            </div>
-          </Row>
-        </div>
-      </ModalBody>*/}
-    </>
+          </Container>
   );
 };
 

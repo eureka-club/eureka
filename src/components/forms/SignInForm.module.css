@@ -73,12 +73,12 @@
 
 .forgotPassText{
   font-size: 0.75rem;
-   text-decoration:underline;
+  text-decoration:underline;
 }
 
 .dontHaveAccounttext {
   text-align: center;
-  font-size: 1.1git rem;
+  font-size: 1.1rem;
 }
 
 @media screen and (max-width: 1024px) {
