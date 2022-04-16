@@ -25,9 +25,18 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
 
   return (
-    <Container className='p-0 m-0'>
+    <>
+    <section className={`${styles.welcomeMobileSection}`}>
+      <div className='d-flex d-lg-none flex-column justify-content-center'>
+      <p className={`mt-3 ${styles.welcomeText}`}>{t('Welcome')}</p>
+        <Container className={`${styles.imageContainer} d-flex justify-content-center`}>
+           <img  className={`${styles.eurekaImage}`} src="/Eureka-VT-web-white.png" alt="Eureka" /> 
+         </Container>
+     </div>
+    </section>
+    <Container className='p-lg-0 m-lg-0'>
     <Row className='d-flex justify-content-between'>
-          <Col className={`col-6 ${styles.welcomeSection}`}>
+          <Col className={`d-none d-lg-flex col-6 ${styles.welcomeSection}`}>
               <section className={`d-flex flex-column w-100 ${styles.welcomeSectionText}`}>
                     <p className={`ms-5 ${styles.welcomeText}`}>{t('Welcome')}</p>
                     <p className={`ms-5 mb-4 ${styles.otherText}`}>{t('welcomeText1')}</p>
@@ -37,7 +46,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                   </Container>
               </section>
           </Col>
-          <Col className={`col-6`}>
+          <Col className={`col-12 col-lg-6`}>
             <div className={`${styles.registerFormSection}`}>
           <Row > 
               <span className={`ms-3 ${styles.joinEurekaText}`}>{t('JoinEureka')}</span>
@@ -56,7 +65,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
           <Row>
             <div className="d-flex justify-content-center">
               <Form className={`d-flex flex-column ${styles.registerForm}`} >
-                 <FormGroup className='d-flex flex-row justify-content-between' controlId="name">
+                 <FormGroup className='d-flex flex-column flex-lg-row justify-content-between' controlId="name">
                      <div className={`d-flex flex-column ${styles.personalData}`}>
                        <FormLabel>{t('Name')}</FormLabel>
                        <FormControl className='mb-2' type="text" required />
@@ -73,7 +82,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                   <FormControl type="password" required />
                 </FormGroup>
                 <div className="d-flex justify-content-center">
-                <Button type="submit" variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
+                <Button type="submit" variant="primary text-white" className={`mb-4 d-flex justify-content-center align-items-center ${styles.submitButton}`}>
                   {t('Join')}
                 </Button>
                 </div>
@@ -84,6 +93,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
           </Col>
           </Row>
           </Container>
+          </>
   );
 };
 

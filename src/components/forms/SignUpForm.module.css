@@ -6,17 +6,23 @@
  margin-left: 2rem;
 }
 
+.welcomeMobileSection{
+ background-color:var(--color-primary-raised);
+ width: 105%;
+  height:auto;
+}
 .welcomeSectionText{
 margin-top: 8rem;  
-color: #fdf7f7;
 }
 .welcomeText{
 font-size: 3rem;
-margin-bottom: 8rem;  
+margin-bottom: 8rem; 
+color: #fdf7f7;
 }
 .otherText{
 font-size: 1.3rem;
 margin-right: 1.5rem;
+color: #fdf7f7;
 }
 
 .eurekaImage {
@@ -72,7 +78,7 @@ margin-right: 1.5rem;
 }
 
 .personalData{
-  width: 49%;
+  width: 48%;
 }
 
 .submitButton {
@@ -81,5 +87,45 @@ margin-right: 1.5rem;
   width: 70%;
   height: 3.5rem;
   font-size: 1.2rem;
+
+}
+
+@media screen and (max-width: 1024px) {
+
+.personalData{
+  width: 100%;
+}
+.registerFormSection{
+  margin-top: 1rem;
+  margin-left: 1rem; 
+  }
+
+   .buttonGoogle {
+  width: 90%;
+}
+
+   .registerForm{
+  width: 90%;
+}
+
+.welcomeText{
+  font-size: 3.5rem;
+margin-bottom: 1rem; 
+text-align: center;
+}
+
+.eurekaImage {
+   width: 40%;
+   height: 50%;
+}
+
+.imageContainer{
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.joinEurekaText{
+    font-size: 2.5rem;
+  }
 
 }
