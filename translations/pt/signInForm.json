@@ -1,7 +1,11 @@
 {
   "login": "Entrar",
-  "loginGreeting": "Bem-vinda de volta à Eureka!",
+  "loginGreeting": "Bem-vinda de volta!",
   "loginViaGoogle": "Entrar com Google",
   "alternativeText": "OU",
-  "emailFieldLabel": "Entrar com email"
+  "emailFieldLabel": "Entrar com email",
+  "passwordFieldLabel":"Senha",
+  "forgotPassText":"Esqueceu sua senha?",
+   "dontHaveAccounttext":"Não tens uma conta ainda?",
+  "Join":"Junte-se"
 }

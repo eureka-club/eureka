@@ -1,7 +1,12 @@
 {
   "login": "Login",
-  "loginGreeting": "Welcome back to Eureka",
+  "loginGreeting": "Welcome back.",
   "loginViaGoogle": "Login with Google",
   "alternativeText": "OR",
-  "emailFieldLabel": "Email address"
+  "emailFieldLabel": "Email address",
+  "passwordFieldLabel":"Password",
+  "forgotPassText":"Forgot your password?",
+  "dontHaveAccounttext":"Don't have a account yet?",
+  "Join":"Join us"
+
 }

@@ -20,15 +20,17 @@ import withTitle from '../../HOCs/withTitle';
 import Toast from '../common/Toast';
 
 import {getNotificationMessage} from '@/src/lib/utils'
+import { FaDivide } from 'react-icons/fa';
 
 type Props = {
   children: JSX.Element | JSX.Element[];
   title?: string;
   showHeader?: boolean;
   banner?: JSX.Element | JSX.Element[];
+  showNavBar?:boolean
 };
 
-const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, banner }) => {
+const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, banner,showNavBar = true }) => {
   const {t} = useTranslation('notification');
   
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -84,14 +86,14 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
     <>
       <section>
         <div className="d-none d-lg-block">
-          <Navbar />
+          {showNavBar && <Navbar />}
         </div>
         <div className="d-lg-none">
-          <NavbarMobile />
+          {showNavBar &&<NavbarMobile />}
         </div>
 
       </section>
-      <section className='mainSection'>
+      <section className={(showNavBar) ? 'mainSection':'allPageSection'}>
         <Toast />
         {/* <Navbar /> */}
         <div className="d-none d-lg-block">{showHeader && <Header show={showHeader} />}</div>
@@ -99,7 +101,8 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
 
         {renderBanner()}
         {/* <Toast /> */}
-        {(showHeader) ?  <Container className='mt-4'>{children}</Container>
+        {(!showNavBar) ? <div className=''>{children}</div>
+         : (showHeader) ?  <Container className='mt-4'>{children}</Container>
          : <Container className='mainContainer'>{children}</Container> }
        
       </section>

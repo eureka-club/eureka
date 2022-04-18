@@ -5,16 +5,14 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
-import SignInForm from '../src/components/forms/SignInForm';
+import SignUpForm from '../src/components/forms/SignUpForm';
 
 const LoginPage: NextPage = () => {
-  const { t } = useTranslation('signInForm');
+  const { t } = useTranslation('signUpForm');
 
   return (
-    <SimpleLayout title={t('login')} showNavBar={false}>
-      <Row>
-          <SignInForm noModal />
-      </Row>
+    <SimpleLayout title={t('Sign up')} showNavBar={false}>
+          <SignUpForm noModal />
     </SimpleLayout>
   );
 };

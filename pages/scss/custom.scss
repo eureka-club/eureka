@@ -295,6 +295,10 @@ a{
    padding-top: 6em; 
  }
 
+ .allPageSection{
+     margin-top: 0px;
+ }
+
 @media screen and (max-width: 388px) {
  .fs-xs {
    display: none;
@@ -316,6 +320,9 @@ a{
    .mainContainer {
      margin-top: 0.8em;
    }
+   .allPageSection{
+     margin-top: 0px;
+ }
  }
 
 /*Tablet*/
@@ -328,6 +335,9 @@ a{
   .mainContainer {
     margin-top: 0.8em;
   }
+  .allPageSection{
+     margin-top: 0px;
+ }
 
  
 }
@@ -344,6 +354,9 @@ a{
    .mainContainer {
      margin-top: 6em;
    }
+   .allPageSection{
+     margin-top: 0px;
+ }
 
     .profile-crop {
       width: 50%;
@@ -365,6 +378,9 @@ a{
   .mainContainer {
     margin-top: 6em;
   }
+  .allPageSection{
+     margin-top: 0px;
+ }
 
   .profile-crop {
     width: 50%;

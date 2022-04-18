@@ -4,9 +4,13 @@
 }
 .modalHeader :global(.modal-title) {
   font-size: 2rem;
-
-  
 }
+
+.eurekaImage {
+   width: 120px;
+    height: 120px;
+}
+
 .modalHeader button:global(.btn-close) {
   font-size: 1.2rem;
   font-weight: 100;
@@ -19,14 +23,19 @@
 }
 
 .buttonGoogle {
-  background: transparent url('/img/logo-google.png') 2.5rem 50% no-repeat;
+  background: transparent ;
   background-size: 26px;
   border-radius: 0.5rem;
   border: 1px solid var(--eureka-green);
-  display: block;
   font-size: 0.9rem;
   margin: 0 auto;
-  padding: 0.75rem 4rem 0.75rem 5rem;
+  text-align: center;
+  height: 3rem;
+  width: 40%;
+}
+.gmailLogo {
+   width: 1.5rem;
+  height: 1.5rem;
 }
 
 .alternativeLabel {
@@ -35,10 +44,53 @@
   margin-bottom: 0;
   text-align: center;
 }
+.EurekaText {
+  margin-top: 1rem;
+  margin-bottom: 0;
+  text-align: center;
+  letter-spacing: 15px;
+  font-size: 1.5rem;
+}
+
+.loginGreeting {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: 1.5rem;
+}
 
 .submitButton {
-  border-radius: 1.5rem;
   display: block;
   margin-top: 2rem;
-  width: 100%;
+  width: 60%;
+  height: 3.5rem;
+  font-size: 1.2rem;
+
+}
+.loginForm{
+  width: 40%;
+}
+
+.forgotPassText{
+  font-size: 0.75rem;
+  text-decoration:underline;
+}
+
+.dontHaveAccounttext {
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+@media screen and (max-width: 1024px) {
+  .buttonGoogle{
+  width: 85%;
+}
+  .loginForm{
+  width: 90%;
+}
+  .submitButton{
+  width: 75%;
+}
+ 
+   
 }
