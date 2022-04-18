@@ -201,20 +201,29 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
     const res: Work[] = [];
     if(!cycle)return []
     if(!cycle.cycleWorksDates)return works||[];
+    //console.log(cycle.cycleWorksDates,'cycle.cycleWorksDates')
     cycle.cycleWorksDates
       .sort((f, s) => {
         const fCD = dayjs(f.startDate!);
         const sCD = dayjs(s.startDate!);
+
         const isActive = (w: {startDate:Date|null;endDate:Date|null}) => {
           if (w.startDate && w.endDate) return dayjs().isBetween(w.startDate!, w.endDate);
           if (w.startDate && !w.endDate) return dayjs().isAfter(w.startDate);
           return false;
         };
-
+        const isPast = (w: {startDate:Date|null;endDate:Date|null})  => {
+          if (w.endDate) return dayjs().isAfter(w.endDate);
+          return false;
+        };
+        // orden en Curso, Siguientes y por ultimo visto/leido
+        if (!isPast(f) && isPast(s)) return -1;
+        if (isPast(f) && !isPast(s)) return 1;
         if (isActive(f) && !isActive(s)) return -1;
         if (!isActive(f) && isActive(s)) return 1;
         if (fCD.isAfter(sCD)) return 1;
         if (fCD.isSame(sCD)) return 0;
+       
         return -1;
       })
       .forEach((cw) => {
@@ -224,6 +233,8 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         }
       });
     if (cycle.cycleWorksDates.length) return res;
+        console.log(works,'works')
+
     return works;
   };
 
