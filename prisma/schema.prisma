@@ -57,6 +57,13 @@ model User {
   @@map(name: "users")
 }
 
+model UserCustomData {
+  id         Int      @id @default(autoincrement())
+  name       String
+  password   String
+  identifier String  @unique
+}
+
 model Account {
   id                  Int        @id @default(autoincrement())
   user                User       @relation(fields: [userId], references: [id])

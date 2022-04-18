@@ -1,4 +1,4 @@
-import { LocalImage, Prisma } from '@prisma/client';
+import { LocalImage, Prisma,User } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextAuth /* , { InitOptions } */ from 'next-auth';
 import Adapters from 'next-auth/adapters';
@@ -104,6 +104,26 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
         return true
       },
     },
+    // session:{
+    //   jwt:true
+    // },
+    events:{
+      createUser:async(message)=>{
+        console.log(message,'createUser')
+        debugger;
+        const vt = await prisma.userCustomData.findFirst({where:{identifier:message.email!}})
+        if(vt){
+          const res = await prisma.user.update({
+            where:{email:message.email!},
+            data:{
+              password:vt.password,
+              name:vt.name
+            }
+          })
+  
+        }
+      }
+    },
     debug: process.env.NODE_ENV === 'development',
     providers: [
       Providers.Google({
@@ -163,6 +183,35 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
           }
         },
       }),
+      Providers.Credentials({
+        // The name to display on the sign in form (e.g. "Sign in with...")
+        name: "Credentials",
+        // The credentials is used to generate a suitable form on the sign in page.
+        // You can specify whatever fields you are expecting to be submitted.
+        // e.g. domain, username, password, 2FA token, etc.
+        // You can pass any HTML attribute to the <input> tag through the object.
+        credentials: {
+          email: { label: "User name", type: "text", placeholder: "User name" },
+          password: {  label: "Password", type: "password", placeholder:'Password' }
+        },
+        async authorize(credentials:{email:string,password:string}, req) {
+          // Add logic here to look up the user from the credentials supplied
+          debugger;
+          const user = await prisma.user.findFirst({where:{
+            email:credentials?.email,
+            password:credentials?.password
+          }})
+          if (user) {
+            // Any object returned will be saved in `user` property of the JWT
+            return {id:user.id,email:user.email,image:user.image}
+          } else {
+            // If you return null then an error will be displayed advising the user to check their details.
+            return null
+    
+            // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
+          }
+        }
+      })
     ],
     secret: process.env.SECRET,
     pages: {

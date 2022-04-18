@@ -128,17 +128,19 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
       setGlobalSearchEngineState({
         ...globalSearchEngineState,
         cacheKey: undefined,
-      });
-      data.data.forEach((i:(CycleMosaicItem|WorkMosaicItem))=>{
-        if(isCycleMosaicItem(i))
-          queryClient.setQueryData(['CYCLE',`${i.id}`],i as CycleMosaicItem)
-        else if(isWorkMosaicItem(i))
-          queryClient.setQueryData(['WORK',`${i.id}`],i as WorkMosaicItem)
-      })
-      setItems(data);
-      if (data.extraCyclesRequired) setExtraCyclesRequired(data.extraCyclesRequired);
-      if (data.extraWorksRequired) setExtraWorksRequired(data.extraWorksRequired);
-      setTotalWorks(data.totalWorks);
+      });debugger;
+      if(data.data){
+        data.data.forEach((i:(CycleMosaicItem|WorkMosaicItem))=>{
+          if(isCycleMosaicItem(i))
+            queryClient.setQueryData(['CYCLE',`${i.id}`],i as CycleMosaicItem)
+          else if(isWorkMosaicItem(i))
+            queryClient.setQueryData(['WORK',`${i.id}`],i as WorkMosaicItem)
+        })
+        setItems(data);
+        if (data.extraCyclesRequired) setExtraCyclesRequired(data.extraCyclesRequired);
+        if (data.extraWorksRequired) setExtraWorksRequired(data.extraWorksRequired);
+        setTotalWorks(data.totalWorks);
+      }
     }
   }, [data, page]);
 
