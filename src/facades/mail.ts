@@ -4,8 +4,8 @@ import path from 'path';
 import Handlebars from 'handlebars';
 
 import readFile from './readFile';
-
-const client = require('@sendgrid/client');
+import axios from 'axios';
+// const client = require('@sendgrid/client');
 
 // const Handlebars = require('handlebars');
 const sendEmailWebhook = async (opt: MailDataRequired) => {
@@ -18,22 +18,28 @@ const sendEmailWebhook = async (opt: MailDataRequired) => {
   //   ...(templateId && { templateId }),
   //   ...(dynamicTemplateData && { dynamicTemplateData }),
   // };
-  client.setApiKey(process.env.EMAIL_SERVER_PASS!);
+  // client.setApiKey(process.env.EMAIL_SERVER_PASS!);
 
-  const request = {
-    url: '/v3/mail/send',
-    body: {
-      from,
-      subject,
-      personalizations: [{ to }],
-      content: [{ type: 'text/html', value: html }],
-    },
-    method: 'POST',
-  };
+  // const request = {
+  //   url: '/v3/mail/send',
+  //   body: {
+  //     from,
+  //     subject,
+  //     personalizations: [{ to }],
+  //     content: [{ type: 'text/html', value: html }],
+  //   },
+  //   method: 'POST',
+  // };
 
   try {
-    const [res] = await client.request(request);
-    if (res.statusCode === 202) return true;
+    // const [res] = await client.request(request);
+    const res = await axios.post(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/sendMail`,{
+      to,
+      subject,
+      html,
+    });
+    
+    if (res.status==200) return true;
     return false;
   } catch (error) {
     const e = error as unknown as { response: { body: any } };
@@ -46,7 +52,7 @@ const sendEmailWebhook = async (opt: MailDataRequired) => {
     return false;
   }
 };
-sgMail.setApiKey(process.env.EMAIL_SERVER_PASS!);
+// sgMail.setApiKey(process.env.EMAIL_SERVER_PASS!);
 
 type EmailSingInSpecs = {
   url: string;
@@ -92,7 +98,6 @@ export const sendMail = async (opt: MailDataRequired): Promise<boolean> => {
   const { to, from, subject, html = '', templateId = null, dynamicTemplateData = null } = opt;
   const msg = {
     to,
-    from,
     subject,
     ...(html && { html }),
     ...(templateId && { templateId }),
@@ -100,7 +105,9 @@ export const sendMail = async (opt: MailDataRequired): Promise<boolean> => {
   };
 
   try {
-    const res = await sgMail.send(msg as MailDataRequired);
+    // const res = await sgMail.send(msg as MailDataRequired);
+    const res = await sendEmailWebhook(msg as MailDataRequired);
+
     // console.log(res);
     if (res) return true;
     return false;
