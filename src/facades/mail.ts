@@ -38,7 +38,7 @@ const sendEmailWebhook = async (opt: MailDataRequired) => {
       subject,
       html,
     });
-    debugger;
+    
     if (res.status==200) return true;
     return false;
   } catch (error) {

@@ -153,6 +153,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
             to: [
               {
                 email,
+                name:'EUREKA'
               },
             ],
             from: process.env.EMAILING_FROM!,
