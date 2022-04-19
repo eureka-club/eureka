@@ -5,9 +5,11 @@ import Adapters from 'next-auth/adapters';
 import Providers from 'next-auth/providers';
 import {find} from '@/src/facades/user'
 import getT from 'next-translate/getT';
-import prisma from '../../../src/lib/prisma';
-import { Session } from '../../../src/types';
-import { sendMailSingIn } from '../../../src/facades/mail';
+import prisma from '@/src/lib/prisma';
+import { Session } from '@/src/types';
+import { sendMailSingIn } from '@/src/facades/mail';
+const bcrypt = require('bcryptjs');
+
 
 /* const getOptions = (req: NextApiRequest) => {
   const locale = req.cookies.NEXT_LOCALE;
@@ -113,10 +115,12 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
         debugger;
         const vt = await prisma.userCustomData.findFirst({where:{identifier:message.email!}})
         if(vt){
+        const hash = bcrypt.hashSync(vt.password, 8);
+
           const res = await prisma.user.update({
             where:{email:message.email!},
             data:{
-              password:vt.password,
+              password:hash,
               name:vt.name
             }
           })
@@ -193,19 +197,18 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
           password: {  label: "Password", type: "password", placeholder:'Password' }
         },
         async authorize(credentials:{email:string,password:string}, req) {
-          // Add logic here to look up the user from the credentials supplied
-          debugger;
           const user = await prisma.user.findFirst({where:{
-            email:credentials?.email,
-            password:credentials?.password
+            email:credentials?.email
           }})
+          
           if (user) {
+            if(bcrypt.compareSync(credentials.password, user.password))
+              return {id:user.id,email:user.email,image:user.image}
+            return null;
             // Any object returned will be saved in `user` property of the JWT
-            return {id:user.id,email:user.email,image:user.image}
           } else {
             // If you return null then an error will be displayed advising the user to check their details.
-            return null
-    
+            return null    
             // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
           }
         }

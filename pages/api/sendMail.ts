@@ -27,9 +27,10 @@ export default async function handler(
     const mailchimp = require('@mailchimp/mailchimp_transactional')(process.env.EMAIL_SERVER_PASS);
     const response = await mailchimp.messages.send({message});
     console.log(response);
-    if(response.status == "sent")
+    
+    if(response[0].status == "sent")
       return res.status(200).json({data:response})
-    res.status(500).json({data:response.reject_reason})
+    res.status(500).json({data:response[0].reject_reason})
    
   }
   if(req.method=='GET'){
