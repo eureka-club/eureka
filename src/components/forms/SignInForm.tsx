@@ -31,7 +31,7 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
   const handleEmailLoginSubmit = (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
-
+debugger;
     const form = ev.currentTarget;
     const email = form.email.value;
 
@@ -68,7 +68,10 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
                   <FormLabel>{t('emailFieldLabel')}</FormLabel>
                   <FormControl className='mb-2' type="email" required />
                   <div className='d-flex justify-content-between mb-2'><div>{t('passwordFieldLabel')}</div><div className={`d-flex align-items-end ${styles.forgotPassText}`}>{t('forgotPassText')}</div></div>
+                </FormGroup>
+                <FormGroup controlId='password'>
                   <FormControl type="password" required />
+
                 </FormGroup>
                 <div className="d-flex justify-content-center">
                 <Button type="submit" variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>

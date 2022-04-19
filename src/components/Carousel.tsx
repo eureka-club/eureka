@@ -128,7 +128,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
       setGlobalSearchEngineState({
         ...globalSearchEngineState,
         cacheKey: undefined,
-      });debugger;
+      });
       if(data.data){
         data.data.forEach((i:(CycleMosaicItem|WorkMosaicItem))=>{
           if(isCycleMosaicItem(i))

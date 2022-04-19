@@ -155,17 +155,14 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
                 email,
               },
             ],
-            from: {
-              email: process.env.EMAILING_FROM!,
-              name: 'EUREKA-CLUB',
-            },
+            from: process.env.EMAILING_FROM!,
             subject: `Sign in to ${site} on: ${new Date().toUTCString()}`,
             html: `<a href="{{url}}" target="_blank"
             style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: #000000; text-decoration: none; text-decoration: none;border-radius: 5px; padding: 10px 20px; border: 1px solid green; display: inline-block;">
             Click here to finalize your login to Eureka
           </a>`,
           };
-          try {
+          try {debugger;
             const emailRes = await sendMailSingIn(opt, {
               to: email,
               url,
