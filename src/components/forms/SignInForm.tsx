@@ -1,10 +1,10 @@
-import { signIn } from 'next-auth/client';
+import { useSession, signIn, signOut } from "next-auth/client";
+import {Form} from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
-import { FormEvent, FunctionComponent, MouseEvent } from 'react';
+import { FormEvent, FunctionComponent, MouseEvent,useRef } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
@@ -22,6 +22,7 @@ interface Props {
 
 const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
   const { t } = useTranslation('signInForm');
+  const formRef=useRef<HTMLFormElement>(null)
 
   const handleSignInGoogle = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
@@ -29,17 +30,31 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
     signIn('google');
   };
 
-  const handleEmailLoginSubmit = (ev: FormEvent<HTMLFormElement>) => {
+  /*const handleEmailLoginSubmit = (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 debugger;
     const form = ev.currentTarget;
     const email = form.email.value;
 
     signIn('email', { email });
-  };
+  };*/
+
+    const handleSubmitSignIn = (e:React.MouseEvent<HTMLButtonElement>)=>{
+        //mutate user custom data
+        const form = formRef.current
+debugger;
+        if(form){
+            // signIn()
+            signIn('credentials' ,{
+                email:form.email.value,
+                password:form.password.value
+            })
+            
+        }
+    }
 
   return (
-    <>
+    <Container>
       <ModalHeader className={`mt-5 position-relative ${styles.modalHeader}`} closeButton={!noModal}>
         <Container>
         <img  className={`${styles.eurekaImage}`} src="/logo.svg" alt="Eureka" /> 
@@ -63,18 +78,17 @@ debugger;
           </Row>
           <Row>
             <div className="d-flex justify-content-center">
-              <Form className={`d-flex flex-column ${styles.loginForm}`} onSubmit={handleEmailLoginSubmit}>
-                <FormGroup controlId="email">
-                  <FormLabel>{t('emailFieldLabel')}</FormLabel>
-                  <FormControl className='mb-2' type="email" required />
+              <Form ref={formRef} className={`d-flex flex-column ${styles.loginForm}`}>
+                <Form.Group controlId="email">
+                  <Form.Label>{t('emailFieldLabel')}</Form.Label>
+                  <Form.Control className='mb-2' type="email" required />
                   <div className='d-flex justify-content-between mb-2'><div>{t('passwordFieldLabel')}</div><div className={`d-flex align-items-end ${styles.forgotPassText}`}>{t('forgotPassText')}</div></div>
-                </FormGroup>
-                <FormGroup controlId='password'>
-                  <FormControl type="password" required />
-
-                </FormGroup>
+                </Form.Group>
+                <Form.Group controlId='password'>
+                  <Form.Control type="password" required />
+                </Form.Group>
                 <div className="d-flex justify-content-center">
-                <Button type="submit" variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
+                <Button type="submit" onClick={handleSubmitSignIn} variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
                   {t('login')}
                 </Button>
                 </div>
@@ -85,7 +99,7 @@ debugger;
           </Row>
         </div>
       </ModalBody>
-    </>
+    </Container>
   );
 };
 
