@@ -4,10 +4,10 @@ import { FunctionComponent, useState, useEffect } from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
 import useTranslation from 'next-translate/useTranslation';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import withTitle from '../../HOCs/withTitle';
 import styles from './Header.module.css';
-import { Session } from '../../types';
+// import { Session } from '../../types';
 import globalModalsAtom from '../../atoms/globalModals';
 
 type Props = {
@@ -19,7 +19,8 @@ type Props = {
 const Header: FunctionComponent<Props> = ({ show: s = false }) => {
   const { t } = useTranslation('common');
   const [show, setShow] = useState<boolean>(s);
-  const [session, isLoadingSession] = useSession() as [Session | null | undefined, boolean];
+  const {data:session, status} = useSession();
+  const isLoadingSession = status === "loading"
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
 
   useEffect(() => {

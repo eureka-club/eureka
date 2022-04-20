@@ -1,7 +1,7 @@
 import crypto from 'crypto-js';
 import HyvorTalk from 'hyvor-talk-react';
 import { FunctionComponent,useEffect } from 'react';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 
 import { HYVOR_SSO_KEY, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
 import { Session } from '../../types';
@@ -11,7 +11,8 @@ import { Session } from '../../types';
 //   id: string;
 // }
 const HyvorComments = ({ entity,id }) => {
-  const [session, isSessionLoading] = useSession() ;
+  const {data:session, status} = useSession() ;
+  const isSessionLoading = status == 'loading'
   let hyvorSso = {};
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
 const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;

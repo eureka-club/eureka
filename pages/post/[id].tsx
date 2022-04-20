@@ -1,5 +1,5 @@
 import { GetServerSideProps, NextPage } from 'next';
-// import { getSession } from 'next-auth/client';
+// import { getSession } from 'next-auth/react';
 import { Alert } from 'react-bootstrap';
 import { sendMail } from '../../src/facades/mail';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';

@@ -1,4 +1,4 @@
-import { signIn } from 'next-auth/client';
+import { signIn } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { FormEvent, FunctionComponent, MouseEvent } from 'react';
 import Button from 'react-bootstrap/Button';

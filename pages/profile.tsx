@@ -1,13 +1,12 @@
 import { GetServerSideProps,NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import {getSession, useSession } from 'next-auth/client';
+import {getSession, useSession } from 'next-auth/react';
 import { useState, useEffect, SyntheticEvent } from 'react';
 import { Spinner, Card, Row, Col, ButtonGroup, Button, Alert } from 'react-bootstrap';
 import { BiArrowBack } from 'react-icons/bi';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import EditUserForm from '@/components/forms/EditUserForm';
-import { Session } from '../src/types';
 
 
 interface Props {
@@ -15,7 +14,8 @@ interface Props {
 }
 
 const Profile: NextPage<Props> = ({notFound}) => {
-  const [session, isLoadingSession] = useSession();
+  const {data:session, status} = useSession();
+  const isLoadingSession = status === "loading";
   const [id, setId] = useState<string>('');
   const [idSession, setIdSession] = useState<string>('');
   const router = useRouter();
@@ -54,7 +54,7 @@ if (!notFound)
 
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const session = (await getSession(ctx)) as unknown as Session;
+  const session = (await getSession(ctx));
   if (session == null ) {
     return { props: { notFound: true } };
   }

@@ -1,6 +1,6 @@
 import { GetServerSideProps, NextPage} from 'next';
 import { useEffect } from 'react';
-import { getSession,useSession } from 'next-auth/client';
+import { getSession,useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { Session } from '../../src/types';
@@ -15,7 +15,8 @@ interface Props {
 }
 const CreateWorkPage: NextPage<Props> = ({notFound}) => {
   const { t } = useTranslation('createWorkForm');
-  const [session, isLoadingSession] = useSession();
+  const {data:session, status} = useSession();
+  const isLoadingSession = status == 'loading'
   const router = useRouter();
 
 

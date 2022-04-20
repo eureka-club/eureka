@@ -1,10 +1,10 @@
-import {Session} from '@/src/types'
+// import {Session} from '@/src/types'
 import React, {useState, useEffect} from 'react'
 import {ListGroup, Spinner, Button, OverlayTrigger, Popover} from 'react-bootstrap'
 
 import {IoNotificationsCircleOutline} from 'react-icons/io5'
 import {v4} from 'uuid'
-import {useSession} from 'next-auth/client'
+import {useSession} from 'next-auth/react'
 import {useRouter} from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import useUser from '@/src/useUser'
@@ -23,7 +23,7 @@ interface Props {
 
 const NotificationsList: React.FC<Props> = ({className}) => {
     
-    const [session] = useSession() as [Session | null | undefined, boolean];
+    const {data:session} = useSession();
     const router = useRouter();
     const { t } = useTranslation('notification');
     const [globalModalsState,setGlobalModalsState] = useAtom(globalModals)

@@ -1,15 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/react';
 
 import { Work, Cycle } from '@prisma/client';
-import { Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { find, remove } from '../../../src/facades/comment';
 import prisma from '../../../src/lib/prisma';
 
 export default getApiHandler()
   .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
-    const session = (await getSession({ req })) as unknown as Session;
+    const session = await getSession({ req });
     if (session == null || !session.user.roles.includes('admin')) {
       res.status(401).json({ status: 'Unauthorized' });
       return;
@@ -80,7 +79,7 @@ export default getApiHandler()
     }
   })
   .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-    const session = (await getSession({ req })) as unknown as Session;
+    const session = await getSession({ req });
     if (session == null) {
       res.status(401).json({ status: 'Unauthorized' });
       return;

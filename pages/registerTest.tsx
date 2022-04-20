@@ -1,10 +1,10 @@
 import React,{useState,useRef} from "react";import { Button } from "react-bootstrap";
-import { useSession, signIn, signOut } from "next-auth/client"
+import { useSession, signIn, signOut } from "next-auth/react"
 import { useMutation } from "react-query";
 import {Form} from 'react-bootstrap'
 
 const Index: React.FC = ()=>{
-    const [session ] = useSession()
+    const {data:session} = useSession()
     const formRef=useRef<HTMLFormElement>(null)
 
     interface MutationProps{

@@ -1,4 +1,4 @@
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { MouseEvent, FunctionComponent, useState, useRef } from 'react';
 
@@ -12,7 +12,7 @@ import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { useAtom } from 'jotai';
 import { Cycle, Work } from '@prisma/client';
 import styles from './CycleDetailDiscussionSuggestRelatedWork.module.css';
-import { Session } from '../../types';
+// import { Session } from '../../types';
 import { WorkMosaicItem } from '../../types/work';
 import { CycleMosaicItem } from '../../types/cycle';
 
@@ -38,7 +38,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
   const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkMosaicItem | null>(null);
   // const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkMosaicItem[]>([]);
   const [includedWorksIds, setIncludedWorksIds] = useState<number[]>();
-  const [session] = useSession() as [Session | null | undefined, boolean];
+  const {data:session} = useSession();
   const { t } = useTranslation('cycleDetail');
 
   // const [newEurekaImageFile, setNewEurekaImageFile] = useState<File | null>(null);

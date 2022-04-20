@@ -2,7 +2,7 @@
 // import useTranslation from 'next-translate/useTranslation';
 // import { FunctionComponent } from 'react';
 
-// import { useSession } from 'next-auth/client';
+// import { useSession } from 'next-auth/react';
 // import { Row, Col, Card} from 'react-bootstrap';
 
 // import CommentTextBox from './CommentTextBox'

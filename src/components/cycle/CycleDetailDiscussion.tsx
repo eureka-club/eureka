@@ -1,6 +1,6 @@
 // import HyvorTalk from 'hyvor-talk-react';
 import { useAtom } from 'jotai';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 // import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, FunctionComponent, MouseEvent, useState } from 'react';
@@ -17,7 +17,7 @@ import { BiBookHeart } from 'react-icons/bi';
 // import { useMutation, useQueryClient, useQuery } from 'react-query';
 // import globalModalsAtom from '../../atoms/globalModals';
 
-import { Session } from '../../types';
+// import { Session } from '../../types';
 // import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
 import { CycleMosaicItem } from '../../types/cycle';
 // import { WorkMosaicItem } from '../../types/work';
@@ -55,7 +55,9 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
   // const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
 
   // const router = useRouter();
-  const [session, isSessionLoading] = useSession() as [Session | null | undefined, boolean];
+  const {data:session, status} = useSession();
+  const isSessionLoading = status == 'loading';
+  
   const { t } = useTranslation('cycleDetail');
   const { addToast } = useToasts()
   // const hyvorId = `${WEBAPP_URL}cycle/${cycle.id}`;

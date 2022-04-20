@@ -1,10 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 import { Cycle } from '@prisma/client';
-import { Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { find, remove } from '../../../src/facades/cycle';
 import prisma from '../../../src/lib/prisma';
@@ -14,7 +13,7 @@ import {storeDeleteFile} from '@/src/facades/fileUpload'
 dayjs.extend(utc);
 export default getApiHandler()
   .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-    const session = (await getSession({ req })) as unknown as Session;
+    const session = await getSession({ req });
     if (session == null || !session.user.roles.includes('admin')) {
       res.status(401).end({ status: 'Unauthorized' });
     }
@@ -53,7 +52,7 @@ export default getApiHandler()
     }
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-    const session = (await getSession({ req })) as unknown as Session;
+    const session = await getSession({ req }) ;
     // if (session == null || !session.user.roles.includes('admin')) {
     //   res.status(401).json({ status: 'Unauthorized' });
     //   return;
@@ -122,7 +121,7 @@ export default getApiHandler()
     }
   })
   .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {//TODO not update with prisma, /faced/cycle -> update must be used !!!
-    const session = (await getSession({ req })) as unknown as Session;
+    const session = await getSession({ req });
     if (session == null || !session.user.roles.includes('admin')) {
       res.status(401).end({ status: 'Unauthorized' });
       

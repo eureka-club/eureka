@@ -1,9 +1,9 @@
 import { GetServerSideProps, NextPage} from 'next';
 import { useEffect } from 'react';
-import { getSession,useSession } from 'next-auth/client';
+import { getSession,useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { Session } from '../../src/types';
+// import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CreatePostForm from '../../src/components/forms/CreatePostForm';
 import { Spinner, Card, Row, Col, ButtonGroup, Button, Alert } from 'react-bootstrap';
@@ -15,7 +15,8 @@ interface Props {
 }
 const CreatePostPage: NextPage<Props> = ({notFound}) => {
   const { t } = useTranslation('createPostForm');
-  const [session, isLoadingSession] = useSession();
+  const {data:session, status} = useSession();
+  const isLoadingSession = status === "loading"
   const router = useRouter();
 
 
@@ -51,7 +52,7 @@ const CreatePostPage: NextPage<Props> = ({notFound}) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const session = (await getSession(ctx)) as unknown as Session;
+  const session = await getSession(ctx);
   if (session == null) {
     return { props: { notFound: true } };
   }

@@ -9,7 +9,7 @@ import { MdReply } from 'react-icons/md';
 import dayjs from 'dayjs';
 
 import { DATE_FORMAT_SHORT } from '../../constants';
-// import { useSession } from 'next-auth/client';
+// import { useSession } from 'next-auth/react';
 // import SocialInteraction from '../common/SocialInteraction';
 import { CommentMosaicItem } from '../../types/comment';
 import CommentActionsBar from '../common/CommentActionsBar';

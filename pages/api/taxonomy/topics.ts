@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-// import { getSession } from 'next-auth/client';
+// import { getSession } from 'next-auth/react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { isEmpty } from 'lodash';
@@ -10,7 +10,6 @@ import prisma from '../../../src/lib/prisma';
 
 import i18nConfig from '../../../i18n';
 
-// import { Session } from '../../../src/types';
 
 export const config = {
   api: {

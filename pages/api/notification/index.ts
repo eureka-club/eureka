@@ -1,6 +1,6 @@
 // import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/react';
 
 import { Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';

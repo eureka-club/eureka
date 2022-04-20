@@ -36,8 +36,8 @@ import globalModalsAtom from '../../atoms/globalModals';
 import styles from './CreatePostForm.module.css';
 import useTopics from '../../useTopics';
 import useWork from '../../useWork';
-import { Session } from '@/src/types';
-import { useSession } from 'next-auth/client';
+// import { Session } from '@/src/types';
+import { useSession } from 'next-auth/react';
 import useUser from '@/src/useUser';
 import useUsers from '@/src/useUsers'
 import { useNotificationContext } from '@/src/useNotificationProvider';
@@ -69,7 +69,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const editorRef = useRef<any>(null);
-  const [session] = useSession();
+  const {data:session} = useSession();
   const [userId, setUserId] = useState<number>();
   const { addToast } = useToasts();
   const [workId, setWorkId] = useState<string>('');
@@ -99,7 +99,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
   const {notifier} = useNotificationContext();
   useEffect(()=>{
     if(session){
-      const user = (session as unknown as Session).user;
+      const user = session.user;
       setUserId(user.id);
     }
   },[session]);

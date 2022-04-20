@@ -3,7 +3,7 @@ import { FunctionComponent, useState } from 'react';
 import { Button, Container } from 'react-bootstrap';
 import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
 import useTranslation from 'next-translate/useTranslation';
-// import { useSession } from 'next-auth/client';
+// import { useSession } from 'next-auth/react';
 // import withTitle from '../../HOCs/withTitle';
 import { useQueryClient } from 'react-query';
 import styles from './Banner.module.css';

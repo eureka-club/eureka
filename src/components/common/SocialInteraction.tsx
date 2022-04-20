@@ -7,7 +7,7 @@ import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 import classnames from 'classnames';
 import { FiShare2, FiTrash2 } from 'react-icons/fi';
 import { useMutation, useQueryClient } from 'react-query';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import { useAtom } from 'jotai';
 import Rating from 'react-rating';
 import { OverlayTrigger, Popover, Button, Spinner } from 'react-bootstrap';
@@ -32,7 +32,7 @@ import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
 import { WorkMosaicItem } from '../../types/work';
 import { UserMosaicItem } from '../../types/user';
-import { MySocialInfo, isCycle, isWork, Session, isPost, isPostMosaicItem, isWorkMosaicItem, isCycleMosaicItem } from '../../types';
+import { MySocialInfo, isCycle, isWork, isPost, isPostMosaicItem, isWorkMosaicItem, isCycleMosaicItem } from '../../types';
 import styles from './SocialInteraction.module.css';
 import {useNotificationContext} from '@/src/useNotificationProvider';
 interface SocialInteractionClientPayload {
@@ -68,7 +68,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const { t } = useTranslation('common');
   const router = useRouter();
   // const [session] = useSession() as [Session | null | undefined, boolean];
-  const [session, isLoadingSession] = useSession();
+  const {data:session, status} = useSession();
+  const isLoadingSession = status === "loading"
   const [qty, setQty] = useState<number>(0);
 
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -115,9 +116,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
   // };
 
   useEffect(() => {
-    const s = session as unknown as Session;
-    if (s) {
-      setIdSession(s.user.id.toString());
+    if (session) {
+      setIdSession(session.user.id.toString());
     }
   }, [session]);
 

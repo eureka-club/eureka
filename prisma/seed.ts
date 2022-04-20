@@ -60,9 +60,9 @@ async function main() {
     transactions.push(
       prismaLocal.$queryRaw(Prisma.sql`
       SET IDENTITY_INSERT dbo.sessions ON;
-      INSERT INTO dbo.sessions(id,user_id,expires,session_token,access_token,
+      INSERT INTO dbo.sessions(id,user_id,expires,session_token,
         created_at,updated_at) 
-      VALUES(${s.id},${s.userId},${s.expires || ''},${s.sessionToken},${s.accessToken},
+      VALUES(${s.id},${s.userId},${s.expires || ''},${s.sessionToken},
         ${s.createdAt},${s.updatedAt});
       SET IDENTITY_INSERT dbo.sessions OFF;`)); 
   });

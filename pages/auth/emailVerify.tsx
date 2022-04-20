@@ -1,4 +1,4 @@
-import { getCsrfToken } from 'next-auth/client';
+import { getCsrfToken } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { GetServerSideProps } from 'next';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';

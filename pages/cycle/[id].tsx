@@ -1,6 +1,6 @@
 import { NextPage,GetServerSideProps } from 'next';
 import Head from "next/head";
-import { useSession,getSession } from 'next-auth/client';
+import { useSession,getSession } from 'next-auth/react';
 import { useAtom } from 'jotai';
 // import { QueryClient, useQuery } from 'react-query';
 // import { dehydrate } from 'react-query/hydration';
@@ -11,7 +11,7 @@ import { Spinner, Alert, Button } from 'react-bootstrap';
 
 import { dehydrate, QueryClient, useQuery,useQueryClient } from 'react-query';
 // import { CycleMosaicItem } from '../../src/types/cycle';
-import { Session } from '../../src/types';
+// import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '../../src/components/cycle/CycleDetail';
 import Banner from '../../src/components/Banner';
@@ -87,7 +87,7 @@ const CycleDetailPage: NextPage = (props:any) => {
       if (!session) {
         setCurrentUserIsParticipant(() => false);
       } else if (session && cycle && session.user) {
-        const s = session as unknown as Session;
+        const s = session;
         if (cycle.creatorId === s.user.id) {
           setCurrentUserIsParticipant(() => true);
           return;
@@ -130,7 +130,7 @@ const CycleDetailPage: NextPage = (props:any) => {
     
     if (!session) openSignInModal();
     else if (execJoinCycle && cycle) {
-      const user = (session as unknown as Session).user;
+      const user = session.user;
       setIsRequestingJoinCycle(true);
       const res = await execJoinCycle(cycle,user.name||user.id.toString(),participants||[]);  
     // debugger;

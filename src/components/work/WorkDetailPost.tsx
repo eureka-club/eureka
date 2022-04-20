@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, FunctionComponent, MouseEvent, useState } from 'react';
 import { Button, Col, Row, ButtonGroup, Form } from 'react-bootstrap';
@@ -26,7 +26,9 @@ interface Props {
 
 const WorkDetailPost: FunctionComponent<Props> = ({workId,className, cacheKey }) => {
 
-  const [session, isSessionLoading] = useSession() as [Session | null | undefined, boolean];
+  const {data:session, status} = useSession();
+  const isSessionLoading = status == 'loading';
+  
   const { t } = useTranslation('cycleDetail');
   const { addToast } = useToasts()
 

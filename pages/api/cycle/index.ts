@@ -1,6 +1,6 @@
 import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/react';
 import { CycleMosaicItem } from '@/src/types/cycle';
 import { FileUpload, isCycleMosaicItem, Session, StoredFileUpload } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
@@ -54,7 +54,7 @@ export default getApiHandler()
         );
 
         const cycle = await createFromServerFields(
-          session.user,
+          session.user.id,
           fields,
           coverImageUploadData,
           complementaryMaterialsUploadData,

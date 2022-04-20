@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-// import { getSession } from 'next-auth/client';
+// import { getSession } from 'next-auth/react';
 import getT from 'next-translate/getT';
 import { WEBAPP_URL } from '../../../../src/constants';
 // import { Session } from '../../../../src/types';
@@ -7,7 +7,6 @@ import getApiHandler from '../../../../src/lib/getApiHandler';
 import { addParticipant, find } from '../../../../src/facades/cycle';
 import prisma from '../../../../src/lib/prisma';
 import { sendMailRequestJoinCycleResponse } from '../../../../src/facades/mail';
-import { session } from 'next-auth/client';
 
 const bcrypt = require('bcryptjs');
 

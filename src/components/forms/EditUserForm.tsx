@@ -22,11 +22,11 @@ import LocalImageComponent from '@/components/LocalImage'
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
 import { useMutation, useQueryClient } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 // import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import { User } from '@prisma/client';
 import TagsInput from './controls/TagsInput';
-import { Session } from '../../types';
+// import { Session } from '../../types';
 import { EditUserClientPayload } from '../../types/user';
 import useUser from '@/src/useUser';
 // import ImageFileSelect from './controls/ImageFileSelect';
@@ -38,7 +38,8 @@ import i18nConfig from '../../../i18n';
 
 dayjs.extend(utc);
 const EditUserForm: FunctionComponent = () => {
-  const [session,isLoadingSession] = useSession() as [Session | null | undefined, boolean];
+  const {data:session,status} = useSession();
+  const isLoadingSession = status == 'loading'
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const queryClient = useQueryClient();
   const { t } = useTranslation('profile');

@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import { /* GetStaticProps, */ NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import { useQueryClient, useMutation } from 'react-query';
 // import { dehydrate } from 'react-query/hydration';
 import { useState, useEffect, SyntheticEvent } from 'react';
@@ -33,7 +33,7 @@ import CarouselStatic from '../../src/components/CarouselStatic';
 // import useWorks from '../src/useWorks';
 // import useCycles from '../src/useCycles';
 // import useCountries from '../src/useCountries';
-import { Session } from '../../src/types';
+// import { Session } from '../../src/types';
 import { CycleMosaicItem /* , CycleWithImages */ } from '../../src/types/cycle';
 import { PostMosaicItem /* , PostWithImages */ } from '../../src/types/post';
 import { WorkMosaicItem /* , WorkWithImages */ } from '../../src/types/work';
@@ -54,7 +54,8 @@ type ItemCycle = CycleMosaicItem & { type: string };
 // | WorkMosaicItem | ;
 
 const Mediatheque: NextPage = () => {
-  const [session, isLoadingSession] = useSession();
+  const {data:session, status} = useSession();
+  const isLoadingSession = status === "loading"
   const [id, setId] = useState<string>('');
   const [idSession, setIdSession] = useState<string>('');
   const router = useRouter();
@@ -93,7 +94,7 @@ const Mediatheque: NextPage = () => {
     // const s = session as unknown as Session;
     // if (s && s.user) setId(s.user.id.toString());
     setId(router.query.id as string);
-    if (session) setIdSession((session as unknown as Session).user.id.toString());
+    if (session) setIdSession(session.user.id.toString());
   }, [session, router]);
 
   const { /* isError, error, */ data: user, isLoading: isLoadingUser, isSuccess: isSuccessUser } = useUser(+id,{
@@ -136,7 +137,7 @@ const Mediatheque: NextPage = () => {
 
   useEffect(() => {
     if (user && user.id && session) {
-      const s = session as unknown as Session;
+      const s = session;
       const ifbm = s && user.followedBy ? user.followedBy.findIndex((i) => i.id === s.user.id) !== -1 : false;
       setIsFollowedByMe(() => ifbm);      
     }
@@ -148,7 +149,7 @@ const Mediatheque: NextPage = () => {
       if (!isLoadingSession) {
         // if (!session) return false;
         if (session) {
-          const s = session as unknown as Session;
+          const s = session;
           if (user.id === s.user.id) return true;
           if (user.dashboardType === 2 && isFollowedByMe) return true;
           if (user.dashboardType === 3 && user.id === s.user.id) return true;
@@ -173,7 +174,7 @@ const Mediatheque: NextPage = () => {
 
   const { mutate: mutateFollowing, isLoading: isLoadingMutateFollowing } = useMutation<User>(
     async () => {
-      const user = (session as unknown as Session).user;
+      const user = session!.user;
       const action = isFollowedByMe ? 'disconnect' : 'connect';
 
       const notificationMessage = `userStartFollowing!|!${JSON.stringify({
@@ -252,8 +253,8 @@ const Mediatheque: NextPage = () => {
 
   const followHandler = async () => {
     const s = session;
-    if (user && s!.user) {
-      if (parseInt(id, 10) !== (s as unknown as Session).user.id) mutateFollowing();
+    if (user && s) {
+      if (parseInt(id, 10) !== s.user.id) mutateFollowing();
     }
   };
 
@@ -476,19 +477,19 @@ const Mediatheque: NextPage = () => {
                     <TagsInput className='d-none d-md-block' tags={user.tags || ''} readOnly label="" />
                   </Col>
                   <Col className='mt-2 d-grid gap-2 d-md-flex align-items-start  justify-content-md-end d-lg-block'>
-                      {session && (session as unknown as Session).user!.id == user.id && (
+                      {session && session.user!.id == user.id && (
                       <Button className='text-white rounded-pill' onClick={()=>router.push('/profile')}>
                         {t('editProfile')}
                       </Button>
                     )}
-                    {session && (session as unknown as Session).user!.id !== user.id && !isFollowedByMe && (
+                    {session && session.user!.id !== user.id && !isFollowedByMe && (
                       <Button data-cy="follow-btn" className='text-white rounded-pill' onClick={followHandler} disabled={isLoadingMutateFollowing}>
                         {t('Follow')}
                         {isLoadingMutateFollowing && <Spinner animation="grow" variant="info" size="sm" />}
                       </Button>
                     )}
 
-                    {session && (session as unknown as Session).user!.id !== user.id && isFollowedByMe && (
+                    {session && session.user!.id !== user.id && isFollowedByMe && (
                       <Button
                         data-cy="follow-btn"
                         variant="button border-primary text-primary fs-6"

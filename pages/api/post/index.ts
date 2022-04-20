@@ -1,6 +1,6 @@
 import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/react';
 
 import { FileUpload, Session } from '@/src/types';
 import getApiHandler from '@/src/lib/getApiHandler';
@@ -43,7 +43,7 @@ export default getApiHandler()
         const image: FileUpload = files.image[0];
 
         const uploadData = await storeUpload(image);
-        const post = await createFromServerFields(fields, uploadData, session.user);
+        const post = await createFromServerFields(fields, uploadData, session.user.id);
         
         const notificationToUsers = fields.notificationToUsers 
           ? fields.notificationToUsers[0].split(',').filter((i:string)=>i!='').map((i:string) => +i)

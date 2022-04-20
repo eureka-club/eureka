@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/client';
-import { Session } from '../../../src/types';
+import { getSession } from 'next-auth/react';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { createFromServerFields, findAll, update, find } from '../../../src/facades/comment';
 import prisma from '../../../src/lib/prisma';
@@ -8,29 +7,22 @@ import { create } from '@/src/facades/notification';
 
 export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-    const session = (await getSession({ req })) as unknown as Session;
+    const session = await getSession({ req });
     if (session == null) {
       res.status(401).json({ status: 'Unauthorized' });
       return;
     }
     try {
-      const payload = req.body;
-      const post = await createFromServerFields(payload, session.user);
-      const notification = await create(
-        payload.notificationMessage,
-        payload.notificationContextURL,
-        session.user.id,
-        [...new Set(payload.notificationToUsers as number[])],
-      );
-      res.status(201).json({ ok: true, post,notification });
-      // new Form().parse(req, async (err, fields, files) => {
-      //   if (err != null) {
-      //     console.error(err); // eslint-disable-line no-console
-      //     res.status(500).json({ ok: false, error: 'Server error' });
-      //     return;
-      //   }
-
-      // });
+      // const payload = req.body;
+      // const post = await createFromServerFields(payload, session.user);
+      // const notification = await create(
+      //   payload.notificationMessage,
+      //   payload.notificationContextURL,
+      //   session.user.id,
+      //   [...new Set(payload.notificationToUsers as number[])],
+      // );
+      // res.status(201).json({ ok: true, post,notification });
+    
     } catch (excp) {
       /* const excpMessageTokens = excp.message.match(/\[(\d{3})\] (.*)/);
       if (excpMessageTokens != null) {
@@ -56,7 +48,7 @@ export default getApiHandler()
     }
   })
   .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
-    const session = (await getSession({ req })) as unknown as Session; 
+    const session = await getSession({ req }); 
     if (session == null) {
       res.status(401).json({ error: 'Unauthorized' });
       return;

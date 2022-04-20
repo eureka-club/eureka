@@ -1,12 +1,15 @@
-import { LocalImage, Prisma,User } from '@prisma/client';
+import { LocalImage } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
-import NextAuth /* , { InitOptions } */ from 'next-auth';
-import Adapters from 'next-auth/adapters';
-import Providers from 'next-auth/providers';
+import NextAuth  from 'next-auth';
+import { PrismaAdapter } from "@next-auth/prisma-adapter"
+// import Providers from 'next-auth/providers';
+import GoogleProvider from "next-auth/providers/google"
+import EmailProvider from "next-auth/providers/email"
+import CredentialsProvider from "next-auth/providers/credentials"
+
 import {find} from '@/src/facades/user'
 import getT from 'next-translate/getT';
 import prisma from '@/src/lib/prisma';
-import { Session } from '@/src/types';
 import { sendMailSingIn } from '@/src/facades/mail';
 const bcrypt = require('bcryptjs');
 
@@ -86,55 +89,87 @@ const bcrypt = require('bcryptjs');
 const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> => {
   const locale = req.cookies.NEXT_LOCALE || 'es';
   return NextAuth(req, res, {
-    adapter: Adapters.Prisma.Adapter({ prisma }),
+    adapter: PrismaAdapter(prisma),
     callbacks: {
-      session: async (session, user: Prisma.UserGetPayload<{include:{photos:true}}>) => {
-        const u = await find({id:user.id});
-        const s = session as unknown as Session;
-        s.user.id = user.id; // eslint-disable-line no-param-reassign
-        s.user.roles = user.roles; // eslint-disable-line no-param-reassign
-        s.user.name = user.name; // eslint-disable-line no-param-reassign
-        s.user.photos = u && ('photos' in u) ? u.photos as LocalImage[]: [];
-        debugger;
+      session: async ({session}) => {debugger;
+        const u = await prisma.user.findFirst({
+          where:{email:session.user.email},
+          include:{photos:true}
+        });
+        if(u){
+          const s = session;
+          s.user.id = +u.id; // eslint-disable-line no-param-reassign
+          s.user.roles = u.roles; // eslint-disable-line no-param-reassign
+          s.user.name = u.name; // eslint-disable-line no-param-reassign
+          s.user.photos = u.photos||[];
+        }
         return Promise.resolve(session);        
       },
-      async signIn(user, account, profile:{verificationRequest?:boolean}) {
+      // async jwt({ token, user, account, profile, isNewUser }) {debugger;
+      //   if(user)
+      //   return {token,roles:user.roles}
+      //   return token
+      // }
+      // async signIn(user, account, profile:{verificationRequest?:boolean}) {
         
-        if(profile.verificationRequest){
+      //   if(profile.verificationRequest){
 
-        }
-        return true
-      },
+      //   }
+      //   return true
+      // },
     },
-    // session:{
-    //   jwt:true
-    // },
+    session:{
+      strategy:"jwt",
+    },
+    jwt:{
+      secret:process.env.SECRET,
+      maxAge: 60 * 60 * 24 * 30,
+    },
     events:{
-      createUser:async(message)=>{
-        console.log(message,'createUser')
+      updateUser:async({user})=>{
+        console.log(user,'updateUser')
         debugger;
-        const vt = await prisma.userCustomData.findFirst({where:{identifier:message.email!}})
+        const vt = await prisma.userCustomData.findFirst({where:{identifier:user.email!}})
         if(vt){
-        const hash = bcrypt.hashSync(vt.password, 8);
+        // const hash = bcrypt.hashSync(vt.password, 8);
 
           const res = await prisma.user.update({
-            where:{email:message.email!},
+            where:{email:user.email!},
             data:{
-              password:hash,
+              password:vt.password,
               name:vt.name
             }
           })
+          console.log(res)
+  
+        }
+      },
+      createUser:async({user})=>{
+        console.log(user,'createUser')
+        debugger;
+        const vt = await prisma.userCustomData.findFirst({where:{identifier:user.email!}})
+        if(vt){
+        // const hash = bcrypt.hashSync(vt.password, 8);
+
+          const res = await prisma.user.update({
+            where:{email:user.email!},
+            data:{
+              password:vt.password,
+              name:vt.name
+            }
+          })
+          console.log(res)
   
         }
       }
     },
     debug: process.env.NODE_ENV === 'development',
     providers: [
-      Providers.Google({
+      GoogleProvider({
         clientId: process.env.GOOGLE_ID!,
         clientSecret: process.env.GOOGLE_SECRET!,
       }),
-      Providers.Email({
+      EmailProvider({
         server: {
           host: process.env.EMAIL_SERVER_HOST!,
           port: Number(process.env.EMAIL_SERVER_PORT!),
@@ -144,8 +179,8 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
           },          
         },
         from: process.env.EMAILING_FROM,
-        sendVerificationRequest: async ({ identifier: email, url, baseUrl }): Promise<void> => {
-          const site = baseUrl.replace(/^https?:\/\//, '');
+        sendVerificationRequest: async ({ identifier: email, url }): Promise<void> => {
+          // const site = url.replace(/^https?:\/\//, '');
           const t = await getT(locale, 'singInMail');
           const title = t('title');
           const subtitle = t('subtitle');
@@ -161,13 +196,13 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
               },
             ],
             from: process.env.EMAILING_FROM!,
-            subject: `Sign in to ${site} on: ${new Date().toUTCString()}`,
+            subject: `Sign in to EUREKA on: ${new Date().toUTCString()}`,
             html: `<a href="{{url}}" target="_blank"
             style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: #000000; text-decoration: none; text-decoration: none;border-radius: 5px; padding: 10px 20px; border: 1px solid green; display: inline-block;">
             Click here to finalize your login to Eureka
           </a>`,
           };
-          try {debugger;
+          try {
             const emailRes = await sendMailSingIn(opt, {
               to: email,
               url,
@@ -185,7 +220,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
           }
         },
       }),
-      Providers.Credentials({
+      CredentialsProvider({
         // The name to display on the sign in form (e.g. "Sign in with...")
         name: "Credentials",
         // The credentials is used to generate a suitable form on the sign in page.
@@ -196,12 +231,12 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
           email: { label: "User name", type: "text", placeholder: "User name" },
           password: {  label: "Password", type: "password", placeholder:'Password' }
         },
-        async authorize(credentials:{email:string,password:string}, req) {
+        async authorize(credentials, req) {
           const user = await prisma.user.findFirst({where:{
             email:credentials?.email
           }})
           
-          if (user) {
+          if (user && credentials) {
             if(bcrypt.compareSync(credentials.password, user.password))
               return {id:user.id,email:user.email,image:user.image}
             return null;

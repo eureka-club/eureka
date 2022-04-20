@@ -1,11 +1,11 @@
 //import Image from 'next/image'
 import { useAtom } from 'jotai';
-import { useSession, signOut } from 'next-auth/client';
+import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { setCookie } from 'nookies';
-import { FunctionComponent, MouseEvent } from 'react';
+import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
 import LocalImageComponent from '@/components/LocalImage'
 
 
@@ -31,7 +31,7 @@ import { AiOutlineInfoCircle } from 'react-icons/ai';
 // import DropdownToggle from 'react-bootstrap/esm/DropdownToggle';
 import SearchEngine from './SearchEngine';
 import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '../constants';
-import { Session } from '../types';
+// import { Session } from '../types';
 import ChevronToggle from './ui/dropdown/ChevronToggle';
 import globalModalsAtom from '../atoms/globalModals';
 import styles from './Navbar.module.css';
@@ -42,12 +42,17 @@ import useUser from '@/src/useUser';
 
 const NavBar: FunctionComponent = () => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-  const [session,isLoadingSession] = useSession() as [Session | null | undefined, boolean];
+  const {data:session,status} = useSession();
+  const isLoadingSession = status === "loading"
   const router = useRouter();
   const { t } = useTranslation('navbar');
+  const [userId,setUserId] = useState(-1)
+  useEffect(()=>{
+    if(session)setUserId(session.user.id)
+  },[session])
 
-   const { data:user } = useUser(+(session as Session)?.user.id,{
-    enabled: !!+(session as Session)?.user.id,
+   const { data:user } = useUser(userId,{
+    enabled: userId!=-1,
     staleTime:1
   });
 
@@ -163,7 +168,7 @@ const NavBar: FunctionComponent = () => {
                   <span className="text-white">{t('create')}</span>
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  {session?.user.roles.includes('admin') && (
+                  {session?.user.roles && session?.user.roles=='admin' && (
                     <Link href="/cycle/create">
                       <a className="dropdown-item">{t('cycle')}</a>
                     </Link>
@@ -172,7 +177,7 @@ const NavBar: FunctionComponent = () => {
                       <a className="dropdown-item">{t('post')}</a>
                     </Link>
                   {/*<Dropdown.Item onClick={handleCreatePostClick}>{t('post')}</Dropdown.Item>*/}
-                  {session?.user.roles.includes('admin') && (
+                  {session?.user.roles && session?.user.roles=='admin' && (
                     <Link href="/work/create">
                       <a className="dropdown-item">{t('work')}</a>
                     </Link>                    

@@ -8,7 +8,7 @@ import { FunctionComponent, useEffect, useState, MouseEvent, useMemo } from 'rea
 import { useMutation, useQueryClient,useIsFetching } from 'react-query';
 import { useRouter } from 'next/router';
 import { Card, Button, Spinner, Badge } from 'react-bootstrap';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import { CgMediaLive } from 'react-icons/cg';
 
 import { useAtom } from 'jotai';
@@ -22,7 +22,7 @@ import globalModalsAtom from '../../atoms/globalModals';
 
 import useUser from '@/src/useUser';
 import useUsers from '@/src/useUsers'
-import { Session } from '../../types';
+// import { Session } from '../../types';
 import SocialInteraction from '../common/SocialInteraction';
 import { useCycleContext } from '../../useCycleContext';
 import {useNotificationContext} from '@/src/useNotificationProvider'
@@ -62,7 +62,8 @@ const MosaicItem: FunctionComponent<Props> = ({
 }) => {
   const {notifier} = useNotificationContext();
   const { linkToCycle = true, currentUserIsParticipant } = useCycleContext();
-  const [session,isLoadingSession] = useSession() as [Session | null | undefined, boolean];
+  const {data:session,status} = useSession();
+  const isLoadingSession = status === "loading"
   const [idSession,setIdSession] = useState<string>('')
   const { data: user } = useUser(+idSession,{ enabled: !!+idSession });
   const [isCurrentUserJoinedToCycle, setIsCurrentUserJoinedToCycle] = useState<boolean>(false);
@@ -91,7 +92,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const isFetchingParticipants = useIsFetching(['USERS',JSON.stringify(whereCycleParticipants)])
   
   useEffect(() => {
-    const s = session as unknown as Session;
+    const s = session;
     if (s) {
       setIdSession(s.user.id.toString());
     }

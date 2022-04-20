@@ -1,11 +1,11 @@
 import { NextPage,GetServerSideProps } from 'next';
 import Head from "next/head";
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { Spinner } from 'react-bootstrap';
 import { QueryClient,dehydrate } from 'react-query';
-import { Session } from '@/src/types';
+// import { Session } from '@/src/types';
 // import { MySocialInfo, Session } from '@/src/types';
 import { CycleMosaicItem } from '@/src/types/cycle';
 // import { PostMosaicItem } from '@/src/types/post';
@@ -34,7 +34,8 @@ const whereCycleParticipants = (id:number)=>({
 });
 
 const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId,metaTags}) => {
-  const [session, isLoadingSession] = useSession();
+  const {data:session, status} = useSession();
+  const isLoadingSession = status === "loading"
   const router = useRouter();
   // const [post, setPost] = useState<PostMosaicItem>();
   const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
@@ -56,7 +57,7 @@ const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId,metaTags}) => {
     if (!session) {
       setCurrentUserIsParticipant(() => false);
     } else if (session && cycle && session.user) {
-      const s = session as unknown as Session;
+      const s = session;
       if (cycle.creatorId === s.user.id) setCurrentUserIsParticipant(() => true);
       const isParticipant = (participants||[]).findIndex((p) => p.id === s.user.id) > -1;
       setCurrentUserIsParticipant(() => isParticipant);

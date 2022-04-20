@@ -3,6 +3,9 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '@/src/lib/prisma'
 import { emit } from 'process';
 import {UserCustomData} from '@prisma/client'
+const bcrypt = require('bcryptjs');
+
+
 type Data = {
   data: UserCustomData|null
 }
@@ -12,16 +15,16 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   if(req.method=='POST'){
-    debugger;
     const {identifier:i,password,fullName:name} = req.body;
     const identifier = i.toString()
-    const exist = await prisma.userCustomData.findUnique({
+    const exist = await prisma.userCustomData.findFirst({
       where:{identifier}
     })
     if(!exist){
+      const hash = await bcrypt.hash(password, 8);
       const resC = await prisma.userCustomData.create({
         data:{
-          password,
+          password:hash,
           name,
           identifier,
         }

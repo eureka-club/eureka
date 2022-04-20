@@ -86,18 +86,14 @@ model Account {
 }
 
 model Session {
-  id            Int       @id @default(autoincrement())
-  user          User      @relation(fields: [userId], references: [id])
-  userId        Int       @map(name: "user_id")
-  expires       DateTime
-  sessionToken  String    @unique @map(name: "session_token")
-  accessToken   String    @unique @map(name: "access_token")
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       Int      
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([userId], name: "sessions_user_id_index")
-
-  @@map(name: "sessions")
+  createdAt   DateTime  @default(now()) @map(name: "created_at")
+  updatedAt   DateTime  @updatedAt @map(name: "updated_at")
 }
 
 model VerificationRequest {
@@ -109,6 +105,14 @@ model VerificationRequest {
   updatedAt   DateTime  @updatedAt @map(name: "updated_at")
 
   @@map(name: "verification_requests")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }
 
 

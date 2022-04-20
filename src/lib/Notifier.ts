@@ -1,4 +1,4 @@
-import {Session} from '@/src/types'
+// import {Session} from '@/src/types'
 import {io, Socket} from 'socket.io-client'
 import { NotifierRequest } from '@/src/types';
 import { NotifierResponse } from '@/src/types';
@@ -22,7 +22,7 @@ export default class Notifier {
     this.socket = io(socketIOServervice,{
       // withCredentials: true,
       extraHeaders: {
-      "session-id": this.fromUser.toString()
+      "session-id": `${fromUser}`
       }
     });
 

@@ -1,10 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/react';
 
-import { Session } from '../../../../src/types';
-import getApiHandler from '../../../../src/lib/getApiHandler';
-import { find, saveSocialInteraction } from '../../../../src/facades/post';
-import prisma from '../../../../src/lib/prisma';
+import {Session} from '@/src/types'
+import getApiHandler from '@/src/lib/getApiHandler';
+import { find, saveSocialInteraction } from '@/src/facades/post';
 
 const validateReq = async (
   session: Session,

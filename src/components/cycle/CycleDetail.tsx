@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 // import HyvorTalk from 'hyvor-talk-react';
 import { useAtom } from 'jotai';
 import {v4} from 'uuid';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent, useState, useRef, useEffect, ChangeEvent } from 'react';
@@ -194,7 +194,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
   
-  const [session, isLoadingSession] = useSession() as [Session | null | undefined, boolean];
+  const {data:session, status} = useSession();
+  const isLoadingSession = status == 'loading'
   const { t } = useTranslation('cycleDetail');
   
   const tabContainnerRef = useRef<HTMLDivElement>(null);

@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 // import { useAtom } from 'jotai';
-// import { useSession } from 'next-auth/client';
+// import { useSession } from 'next-auth/react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';

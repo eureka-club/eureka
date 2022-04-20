@@ -1,6 +1,6 @@
 import { Provider } from 'jotai';
 import { AppProps } from 'next/app';
-import { Provider as NextAuthProvider } from 'next-auth/client';
+import { SessionProvider as NextAuthProvider } from 'next-auth/react';
 import appWithI18n from 'next-translate/appWithI18n';
 import { StrictMode, FunctionComponent, useState, useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -39,7 +39,7 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   return (
     <StrictMode>
      <ToastProvider placement='top-center' components={{ Toast: ToastNew }} autoDismissTimeout={5000}>
-      <NextAuthProvider session={pageProps.session}>
+      <NextAuthProvider session={pageProps.session} refetchInterval={5 * 60}>
           
         {/* <GlobalEventsContext.Provider value={{...gec}}> */}
             <Provider initialValues={initialState && [[detailPagesAtom, globalModalsAtom, initialState]]}>

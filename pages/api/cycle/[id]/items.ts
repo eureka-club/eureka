@@ -1,6 +1,6 @@
 import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/react';
 
 import {findAll as findAllPosts} from '@/src/facades/post'
 import {findAll as findAllComments} from '@/src/facades/comment'

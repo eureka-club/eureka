@@ -1,4 +1,4 @@
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, MouseEvent, FunctionComponent, useEffect, useRef, useState } from 'react';
 import Image from 'next/image'
@@ -13,7 +13,7 @@ import { useMutation, useQueryClient } from 'react-query';
 
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import globalModalsAtom from '../../atoms/globalModals';
-import { Session } from '../../types';
+// import { Session } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
 import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
 
@@ -58,7 +58,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
 }) => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const [session] = useSession() as [Session | null | undefined, boolean];
+  const {data:session} = useSession();
   const { t } = useTranslation('cycleDetail');
   //const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [newEurekaImageFile, setNewEurekaImageFile] = useState<File | null>(null);
@@ -164,7 +164,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
 
   const { mutate: execCreateEureka, isLoading } = useMutation(
     async (payload: CreatePostAboutCycleClientPayload | CreatePostAboutWorkClientPayload): Promise<Post | null> => {
-      const u = (session as Session).user;
+      const u = session!.user;
       const toUsers = (participants||[]).filter(p=>p.id!==u.id).map(p=>p.id);
       if(u.id !== cycle.creatorId)
         toUsers.push(cycle.creatorId);
@@ -242,9 +242,9 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
           }
           // console.error(error);
         }
-        if (context){
+        if (context && session){
           queryClient.invalidateQueries(context.cacheKey);
-          queryClient.invalidateQueries(['USER',(session as Session).user.id.toString()]);//to get the new notification
+          queryClient.invalidateQueries(['USER',session.user.id.toString()]);//to get the new notification
         } 
       },
     },

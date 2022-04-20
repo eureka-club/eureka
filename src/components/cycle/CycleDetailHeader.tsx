@@ -2,7 +2,7 @@
 // import dayjs from 'dayjs';
 // import HyvorTalk from 'hyvor-talk-react';
 // import { useAtom } from 'jotai';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 // import { useRouter } from 'next/router';
 import { CycleWork, Work } from '@prisma/client';
 import useTranslation from 'next-translate/useTranslation';
@@ -30,7 +30,7 @@ import {BsChevronUp, BsX} from 'react-icons/bs';
 // import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
-import { MySocialInfo, Session } from '../../types';
+import { MySocialInfo } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
 import { WorkMosaicItem } from '../../types/work';
@@ -88,7 +88,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   // const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   // const router = useRouter();
   const [show, setShow] = useState<boolean>(s);
-  const [session] = useSession() as [Session | null | undefined, boolean];
+  const {data:session} = useSession();
   const { t } = useTranslation('cycleDetail');
 
   const {data:cycle,isLoading:isLoadingCycle} = useCycle(cycleId,{enabled:!!cycleId})

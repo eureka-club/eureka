@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/react';
 import getT from 'next-translate/getT';
 import { WEBAPP_URL } from '../../../../src/constants';
-import { Session } from '../../../../src/types';
 import getApiHandler from '../../../../src/lib/getApiHandler';
 import { addParticipant, find, removeParticipant } from '../../../../src/facades/cycle';
 import prisma from '../../../../src/lib/prisma';
@@ -12,7 +11,7 @@ const bcrypt = require('bcryptjs');
 
 export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
-    const session = (await getSession({ req })) as unknown as Session;
+    const session = await getSession({ req });
     if (session == null) {
       res.statusMessage = 'unauthorized';
       return res.status(400).end();      
@@ -143,7 +142,7 @@ export default getApiHandler()
     }
   })
   .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
-    const session = (await getSession({ req })) as unknown as Session;
+    const session = await getSession({ req });
     if (session == null) {
       res.statusMessage = 'unauthorized';
       return res.status(300).end();
@@ -170,7 +169,7 @@ export default getApiHandler()
         return res.status(400).end();
       }
 
-      await removeParticipant(cycle, session.user);
+      await removeParticipant(cycle, session.user.id);
       const notification = await create(
         notificationMessage,
         notificationContextURL,

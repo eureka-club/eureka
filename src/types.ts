@@ -5,7 +5,7 @@ import { PostMosaicItem } from './types/post';
 import { WorkMosaicItem } from './types/work';
 import { UserMosaicItem } from '@/src/types/user';
 import { CommentMosaicItem } from './types/comment';
-
+import {Session as S} from 'next-auth'
 export interface FileUpload {
   fieldName: string;
   originalFilename: string;
@@ -14,16 +14,20 @@ export interface FileUpload {
   size: number;
 }
 
-export interface Session {
-  accessToken?: string;
-  expires: string;
-  user: Prisma.UserGetPayload<{
-    include:{
-      photos:true, 
-      notifications:{include:{notification:true}}
-    }
-  }>;
-}
+export type Session = S;
+
+// export interface Session {
+//   accessToken?: string;
+//   expires: string;
+//   user: Prisma.UserGetPayload<{
+//     include:{
+//       photos:true, 
+//       notifications:{include:{notification:true}}
+//     }
+//   }>;
+// }
+
+
 
 export interface StoredFileUpload {
   contentHash: string;

@@ -13,7 +13,7 @@
 // } from '@/src/types/comment';
 // import globalModalsAtom from '@/src/atoms/globalModals';
 // import { Session } from '@/src/types';
-// import {useSession} from 'next-auth/client'
+// import {useSession} from 'next-auth/react'
 // import { EditorEvent } from 'tinymce';
 // import { useRouter } from 'next/router';
 

@@ -1,11 +1,11 @@
 import classNames from 'classnames';
 import { useAtom } from 'jotai';
-import { useSession, signOut } from 'next-auth/client';
+import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { setCookie } from 'nookies';
-import { FunctionComponent, MouseEvent } from 'react';
+import { FunctionComponent, MouseEvent,useState,useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -31,7 +31,7 @@ import { AiOutlineInfoCircle } from 'react-icons/ai';
 // import DropdownToggle from 'react-bootstrap/esm/DropdownToggle';
 import SearchEngine from './SearchEngine';
 import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '../constants';
-import { Session } from '../types';
+// import { Session } from '../types';
 import ChevronToggle from './ui/dropdown/ChevronToggle';
 import globalModalsAtom from '../atoms/globalModals';
 import styles from './NavbarMobile.module.css';
@@ -42,12 +42,17 @@ import LocalImageComponent from '@/components/LocalImage'
 
 const NavBar: FunctionComponent = () => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-  const [session] = useSession() as [Session | null | undefined, boolean];
+  const {data:session} = useSession();
   const router = useRouter();
   const { t } = useTranslation('navbar');
+  const [userId,setUserId] = useState(-1);
 
-  const { data:user } = useUser(+(session as Session)?.user.id,{
-    enabled: !!+(session as Session)?.user.id,
+  useEffect(()=>{
+    if(session)setUserId(session.user.id)
+  },[session]);
+
+  const { data:user } = useUser(userId,{
+    enabled: userId!=-1,
     staleTime:1
   });
 
@@ -149,7 +154,7 @@ const NavBar: FunctionComponent = () => {
                   <span className="text-white">{t('create')}</span>
                 </Dropdown.Toggle>
                 <Dropdown.Menu className={styles.dropdownMenu}>
-                  {session?.user.roles.includes('admin') && (
+                  {session?.user.roles && session?.user.roles=='admin' && (
                     <Link href="/cycle/create">
                       <a className="dropdown-item">{t('cycle')}</a>
                     </Link>
@@ -160,7 +165,7 @@ const NavBar: FunctionComponent = () => {
                   {/*<Dropdown.Item className="" onClick={handleCreatePostClick}>
                     {t('post')}
                   </Dropdown.Item>*/}
-                  {session?.user.roles.includes('admin') && (
+                  {session?.user.roles && session?.user.roles=='admin' && (
                       <Link href="/work/create">
                       <a className="dropdown-item">{t('work')}</a>
                     </Link>   

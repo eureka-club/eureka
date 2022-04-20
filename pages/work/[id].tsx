@@ -1,7 +1,7 @@
 import { NextPage,GetServerSideProps,GetStaticPaths, GetStaticProps } from 'next';
 import { ParsedUrlQuery } from 'querystring'
 import Head from "next/head";
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import { useState, useEffect, ReactElement } from 'react';
 // import { useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
@@ -42,7 +42,8 @@ const WorkDetailPage: NextPage = (props:any) => {
 
   const router = useRouter();
   const { t } = useTranslation('common');
-  const [session, isLoadingSession] = useSession();
+  const {data:session, status} = useSession();
+  const isLoadingSession = status == 'loading'
   const [id, setId] = useState<string>('');
   // const [mySocialInfo, setMySocialInfo] = useState<Record<string, boolean>>({
   //   favoritedByMe: false,

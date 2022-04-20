@@ -1,4 +1,4 @@
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, FormEvent, FunctionComponent, useEffect, useState, useRef } from 'react';
 import { useAtom } from 'jotai';
@@ -15,7 +15,7 @@ import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import { useMutation, useQueryClient } from 'react-query';
 import globalModalsAtom from '../../atoms/globalModals';
 
-import { Session } from '../../types';
+// import { Session } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
 import {
   CommentMosaicItem,
@@ -50,7 +50,7 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
 }) => {
   const queryClient = useQueryClient();
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-  const [session] = useSession() as [Session | null | undefined, boolean];
+  const {data:session} = useSession();
   const { t } = useTranslation('cycleDetail');
   const editorRef = useRef<any>(null);
   const { addToast } = useToasts()
@@ -125,8 +125,8 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
 
       const json = await res.json();
       if (json.ok) {
-        if(notifier && participants){
-          const u = (session as Session).user;
+        if(notifier && participants && session){
+          const u = session.user;
           const toUsers = participants.filter(p=>p.id!==u.id).map(p=>p.id);
           notifier.notify({
             toUsers,
@@ -171,7 +171,7 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
       });
       return;
     }
-    const u = (session as Session).user;
+    const u = session!.user;
     const toUsers = (participants||[]).filter(p=>p.id!==u.id).map(p=>p.id);
     if(u.id !== cycle.creatorId)
       toUsers.push(cycle.creatorId);

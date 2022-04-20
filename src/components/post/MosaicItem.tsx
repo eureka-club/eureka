@@ -28,7 +28,7 @@ import usePost from '@/src/usePost'
 import {useQueryClient} from 'react-query'
 import useCycle from '@/src/useCycle';
 import useWork from '@/src/useWork'
-import { useSession} from 'next-auth/client';
+import { useSession} from 'next-auth/react';
 import { BiEdit} from 'react-icons/bi';
 interface Props {
   postId: number|string;
@@ -68,7 +68,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const router = useRouter();
   // const [post,setPost] = useState<PostMosaicItem>();
   const [postParent,setPostParent] = useState<CycleMosaicItem|WorkMosaicItem>();
-  const [session] = useSession()
+  const {data:session} = useSession()
   //const postFromCache = queryClient.getQueryData<PostMosaicItem>(['POST',postId.toString()]);
   // const pp = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(cacheKey);
 

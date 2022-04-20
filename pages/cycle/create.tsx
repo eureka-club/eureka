@@ -1,9 +1,9 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { useEffect } from 'react';
-import { getSession,useSession } from 'next-auth/client';
+import { getSession,useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { Session } from '../../src/types';
+// import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CreateCycleForm from '../../src/components/forms/CreateCycleForm';
 import { Spinner, Card, Row, Col, ButtonGroup, Button, Alert } from 'react-bootstrap';
@@ -15,7 +15,8 @@ interface Props {
 
 const CreateCyclePage: NextPage<Props> = ({notFound}) => {
   const { t } = useTranslation('createCycleForm');
- const [session, isLoadingSession] = useSession();
+ const {data:session,status} = useSession();
+  const isLoadingSession = status === "loading"
   const router = useRouter();
 
 useEffect(() => {
@@ -47,7 +48,7 @@ if (!notFound)
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const session = (await getSession(ctx)) as unknown as Session;
+  const session = await getSession(ctx);
   if (session == null || !session.user.roles.includes('admin')) {
     return { props: { notFound: true } };
   }

@@ -264,7 +264,7 @@ export const isLikedByUser = async (cycle: Cycle, user: User): Promise<number> =
 };
 
 export const createFromServerFields = async (
-  creator: User,
+  creatorId: number,
   fields: CreateCycleServerFields,
   coverImageUpload: StoredFileUpload,
   complementaryMaterialsUploadData: Record<string, StoredFileUpload>,
@@ -331,7 +331,7 @@ export const createFromServerFields = async (
   return prisma.cycle.create({
     data: {
       ...payload,
-      creator: { connect: { id: creator.id } },
+      creator: { connect: { id: creatorId } },
       works: { connect: fields.includedWorksIds.map((id) => ({ id: parseInt(id, 10) })) },
       complementaryMaterials: { create: complementaryMaterialsPayload },
       localImages: {
@@ -365,10 +365,10 @@ export const addParticipant = async (cycle: Cycle, userId: number): Promise<Cycl
   });
 };
 
-export const removeParticipant = async (cycle: Cycle, user: User): Promise<Cycle> => {
+export const removeParticipant = async (cycle: Cycle, id: number): Promise<Cycle> => {
   return prisma.cycle.update({
     where: { id: cycle.id },
-    data: { participants: { disconnect: { id: user.id } } },
+    data: { participants: { disconnect: { id} } },
   });
 };
 

@@ -2,10 +2,10 @@ import { createContext, Dispatch, SetStateAction, useContext, useEffect, useStat
 import Notifier from '@/src/lib/Notifier'
 import { useQueryClient } from 'react-query';
 import {User} from '@prisma/client';
-import { Session } from '@/src/types';
+// import { Session } from '@/src/types';
 import { NotifierRequest } from '@/src/types';
 import { NotifierResponse } from '@/src/types';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 // import { useGlobalEventsContext } from './useGlobalEventsContext';
 // useEffect(()=>{
 //   setSocketIO(new SocketIO([+id],(data)=>{
@@ -40,12 +40,12 @@ interface Props {
 
 const NotificationProvider: React.FC<Props> = ({children}) => {
   const queryClient = useQueryClient()
-  const [session] = useSession();
+  const {data:session} = useSession();
   const [notifier, setNotifier] = useState<Notifier>();
 
   useEffect(()=>{
     if(session && !notifier){
-      const user = (session as unknown as Session).user;
+      const user = session.user;
       setNotifier((res) => {
         if(user){
           

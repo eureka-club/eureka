@@ -1,12 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import {Form} from 'multiparty';
-import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { find, update } from '../../../src/facades/user';
 import { create } from '@/src/facades/notification';
 
-import { Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import prisma from '../../../src/lib/prisma';
 import {storeDeleteFile, storeUploadUserPhoto} from '@/src/facades/fileUpload'
@@ -37,12 +36,14 @@ export default getApiHandler()
         return;
       }
       
-    let session = (await getSession({ req })) as unknown as Session;
+    let session = await getSession({ req });
     if(!session && req.headers['cypress-session']) session = JSON.parse(req.headers['cypress-session'].toString());//cypress tests
 
     const actionAllowed = (fields:Record<string,any[]>) => {
-      if (('following' in fields && fields.following) || ('followedBy' in fields && fields.followedBy)) return true;
-      return session.user.roles.includes('admin') || session.user.id === idNum;
+      if(session){
+        if (('following' in fields && fields.following) || ('followedBy' in fields && fields.followedBy)) return true;
+        return session.user.roles.includes('admin') || session.user.id === idNum;
+      }
     };
     if (session == null || !actionAllowed(fields)) {
       res.status(401).json({ status: 'Unauthorized' });

@@ -17,7 +17,7 @@ import {
 } from 'react-bootstrap';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
 import { BiArrowBack } from 'react-icons/bi';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { Session } from '../../types';
 import { PostMosaicItem } from '../../types/post';
@@ -60,7 +60,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const { t } = useTranslation('workDetail');
   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
-  const [session] = useSession() as [Session | null | undefined, boolean];
+  const {data:session} = useSession();
 
   const {data:work} = useWork(workId,{
     enabled:!!workId

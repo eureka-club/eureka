@@ -1,11 +1,11 @@
 import { GetServerSideProps, NextPage } from 'next';
-import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { BiArrowBack } from 'react-icons/bi';
 import { Alert, ButtonGroup, Button, Spinner } from 'react-bootstrap';
 import { useRouter } from 'next/router';
-import { Session } from '../../../src/types';
-import { useSession } from 'next-auth/client';
+// import { Session } from '../../../src/types';
+import { useSession } from 'next-auth/react';
 import { CycleMosaicItem } from '../../../src/types/cycle';
 import SimpleLayout from '../../../src/components/layouts/SimpleLayout';
 import EditCycleForm from '../../../src/components/forms/EditCycleForm';
@@ -20,7 +20,8 @@ interface Props {
 }
 
 const EditCyclePage: NextPage<Props> = () => {
-  const [session, isLoadingSession] = useSession();
+  const {data:session, status} = useSession();
+  const isLoadingSession = status === "loading"
   const { t } = useTranslation('createCycleForm');
   const router = useRouter();
 
@@ -40,7 +41,7 @@ const EditCyclePage: NextPage<Props> = () => {
     {t('common:Not Found')}
   </SimpleLayout>
 
-  if (!isLoadingSession && session == null || ((session as unknown as Session).user.id !== cycle?.creatorId && !(session as unknown as Session).user.roles.includes('admin'))) {
+  if (!isLoadingSession && session == null || (session && session.user.id !== cycle?.creatorId && !(session.user.roles && session.user.roles =='admin'))) {
     return <SimpleLayout title={t('editCycle')}>
       {t('common:Unauthorized')}
     </SimpleLayout>

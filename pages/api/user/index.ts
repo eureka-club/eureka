@@ -1,11 +1,8 @@
 // import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/client';
 
-import { Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
-import { findAll, find } from '../../../src/facades/user';
-import prisma from '../../../src/lib/prisma';
+import { findAll } from '../../../src/facades/user';
 
 export const config = {
   api: {

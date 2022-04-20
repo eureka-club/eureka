@@ -4,7 +4,7 @@ import { FunctionComponent } from 'react';
 import { Card, Row, Col } from 'react-bootstrap';
 import { AiOutlineEnvironment } from 'react-icons/ai';
 // import { useQuery } from 'react-query';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 // import { User } from '@prisma/client';
 import router from 'next/router';
 import styles from './MosaicItem.module.css';
@@ -12,7 +12,7 @@ import SocialInteraction from '../common/SocialInteraction';
 import UserAvatar from '../common/UserAvatar';
 // import LocalImageComponent from '../LocalImage';
 // import TagsInput from '../forms/controls/TagsInput';
-import { Session } from '../../types';
+// import { Session } from '../../types';
 import { UserMosaicItem } from '../../types/user';
 
 interface Props {
@@ -29,7 +29,7 @@ const openUserMediatheque = (id: number) => {
 const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = false, className = '' }) => {
   const { t } = useTranslation('common');
   const { id, name, countryOfOrigin /* image  , tags */ } = user;
-  const [session] = useSession() as [Session | null | undefined, boolean];
+  const {data:session} = useSession();
 
   return (
     <Card className={`${styles.container} ${className}`} onClick={() => openUserMediatheque(id)} data-cy={`mosaic-item-user-${user.id}`}>
