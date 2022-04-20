@@ -116,7 +116,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   // };
 
   useEffect(() => {
-    if (session) {
+    if (session) {debugger;
       setIdSession(session.user.id.toString());
     }
   }, [session]);

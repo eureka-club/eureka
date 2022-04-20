@@ -13,14 +13,17 @@ import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
 import Link from 'next/link'
+import { useToasts } from 'react-toast-notifications'
 
 import styles from './SignInForm.module.css';
-
+import {useRouter} from 'next/router'
 interface Props {
   noModal?: boolean;
 }
 
 const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
+  const { addToast } = useToasts()
+  const router = useRouter()
   const { t } = useTranslation('signInForm');
   const formRef=useRef<HTMLFormElement>(null)
 
@@ -39,17 +42,26 @@ debugger;
     signIn('email', { email });
   };*/
 
-    const handleSubmitSignIn = (e:React.MouseEvent<HTMLButtonElement>)=>{
-        //mutate user custom data
+    const handleSubmitSignIn = async (e:React.MouseEvent<HTMLButtonElement>)=>{
         const form = formRef.current
-debugger;
         if(form){
-            // signIn()
-            signIn('credentials' ,{
-                email:form.email.value,
-                password:form.password.value
-            })
-            
+        signIn('credentials' ,{
+            redirect:false,
+            email:form.email.value,
+            password:form.password.value
+          })
+          .then(res=>{
+            if(res && !(res as {ok:boolean}).ok)
+              addToast('Invalid session',{
+                appearance:'warning',
+                autoDismiss:true,
+                
+              })
+              else{
+                router.push(localStorage.getItem('loginRedirect') || '/')
+              }
+              
+          })
         }
     }
 
@@ -88,7 +100,7 @@ debugger;
                   <Form.Control type="password" required />
                 </Form.Group>
                 <div className="d-flex justify-content-center">
-                <Button type="submit" onClick={handleSubmitSignIn} variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
+                <Button onClick={handleSubmitSignIn} variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
                   {t('login')}
                 </Button>
                 </div>

@@ -143,7 +143,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                     <Form.Control type="password" required />
                   </Form.Group>
                 <div className="d-flex justify-content-center">
-                <Button type="submit" onClick={handleSubmitSignUp} variant="primary text-white" className={`mb-4 d-flex justify-content-center align-items-center ${styles.submitButton}`}>
+                <Button onClick={handleSubmitSignUp} variant="primary text-white" className={`mb-4 d-flex justify-content-center align-items-center ${styles.submitButton}`}>
                   {t('Join')}
                 </Button>
                 </div>

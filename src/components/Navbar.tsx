@@ -113,7 +113,10 @@ const NavBar: FunctionComponent = () => {
     return <BiUser className={styles.navbarIconNav} />;
   };
 
-  
+  const handlerLogin = ()=>{
+    localStorage.setItem('loginRedirect',router.asPath)
+    router.push('/login')
+  }
 
   return (
     <Container className={styles.container}>
@@ -156,7 +159,7 @@ const NavBar: FunctionComponent = () => {
           </Nav>
           <Nav className={styles.navbarNav}>
             {!session && !isLoadingSession &&(
-              <Button className="ms-4 text-white" data-cy="login-btn" onClick={() => router.push('/login')} /*onClick={openSignInModal}*/>
+              <Button className="ms-4 text-white" data-cy="login-btn" onClick={handlerLogin} /*onClick={openSignInModal}*/>
                 {t('login')}
               </Button>
             )}
