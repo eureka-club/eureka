@@ -116,7 +116,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
     if (data) {
       if (data.length) {
         let d = [...data];
-        if (globalSEState.only.length) { 
+        if (globalSEState.only.length) {
           d = data.filter((i) => globalSEState.only.includes((i && i.type) || ''));
         }
         setDataFiltered(() => d);
