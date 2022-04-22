@@ -68,19 +68,25 @@ model Account {
   id                  Int        @id @default(autoincrement())
   user                User       @relation(fields: [userId], references: [id])
   userId              Int        @map(name: "user_id")
-  compoundId          String     @unique @map(name: "compound_id")
-  providerType        String     @map(name: "provider_type")
-  providerId          String     @map(name: "provider_id")
+  type                String     @map(name: "provider_type")
+  
+  provider            String     @map(name: "provider_id")
   providerAccountId   String     @map(name: "provider_account_id")
   refreshToken        String?    @map(name: "refresh_token")
   accessToken         String?    @map(name: "access_token")
-  accessTokenExpires  DateTime?  @map(name: "access_token_expires")
+  expires_at          Int?
+  token_type          String?
+  scope               String?
+  id_token            String?  @db.Text
+  session_state       String?
+
   createdAt           DateTime   @default(now()) @map(name: "created_at")
   updatedAt           DateTime   @updatedAt @map(name: "updated_at")
 
   @@index([userId], name: "accounts_user_id_index")
-  @@index([providerId], name: "accounts_provider_id_index")
+  @@index([provider], name: "accounts_provider_id_index")
   @@index([providerAccountId], name: "accounts_provider_account_id_index")
+  @@unique([provider, providerAccountId])
 
   @@map(name: "accounts")
 }
