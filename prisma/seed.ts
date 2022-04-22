@@ -45,12 +45,10 @@ async function main() {
     transactions.push(
       prismaLocal.$queryRaw(Prisma.sql`
       SET IDENTITY_INSERT dbo.accounts ON;
-      INSERT INTO dbo.accounts(id,user_id,compound_id,provider_type,provider_id,
-        provider_account_id,refresh_token,access_token,access_token_expires,
-        created_at,updated_at) 
-      VALUES(${a.id},${a.userId},${a.compoundId},${a.providerType},${a.providerId},
-        ${a.providerAccountId},${a.refreshToken},${a.accessToken},${a.accessTokenExpires || ''},
-        ${a.createdAt},${a.updatedAt});
+      INSERT INTO dbo.accounts(id,user_id,provider_type,provider_id,
+        provider_account_id,created_at,updated_at) 
+      VALUES(${a.id},${a.userId},${a.type},${a.provider},
+        ${a.providerAccountId},${a.createdAt},${a.updatedAt});
       SET IDENTITY_INSERT dbo.accounts OFF;`)); 
   });
 
@@ -837,13 +835,15 @@ async function main() {
   } else console.error('Not user admin found');
 }
 */
-
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(() => {
-    prismaRemote.$disconnect();
-    prismaLocal.$disconnect();
-  });
+if(false){
+  console.log('running main')
+  main()
+    .catch((e) => {
+      console.error(e);
+      process.exit(1);
+    })
+    .finally(() => {
+      prismaRemote.$disconnect();
+      prismaLocal.$disconnect();
+    });
+}
