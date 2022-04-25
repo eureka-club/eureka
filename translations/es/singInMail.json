@@ -1,8 +1,8 @@
 {
   "ignoreEmailInf": "Si no solicitaste este correo electrónico, puedes ignorarlo con seguridad.",
   "title": "¡Te damos la bienvenida a Eureka!",
-  "subtitle": "Iniciar sesión como",
-  "singIngConfirmationUrl": "Haz clic aquí para finalizar yu inicio de sesión en Eureka.",
+  "subtitle": "Este mensaje tiene como objetivo confirmar tu correo electrónico: ",
+  "singIngConfirmationUrl": "Haz clic aquí para confirmar tu correo electrónico y finalizar tu registro en Eureka.",
   "aboutEureka": "Eureka es el primer club digital de libros y películas para el cambio social. Nuestro objetivo: activar mentes para transformar el mundo.",
   "emailReason": "Recibiste este correo electrónico porque te has registrado en Eureka."
 }

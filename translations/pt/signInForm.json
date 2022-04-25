@@ -1,11 +1,11 @@
 {
   "login": "Entrar",
-  "loginGreeting": "Bem-vinda de volta!",
+  "loginGreeting": "Boas-vindas de volta!",
   "loginViaGoogle": "Entrar com Google",
   "alternativeText": "OU",
   "emailFieldLabel": "Entrar com email",
   "passwordFieldLabel":"Senha",
   "forgotPassText":"Esqueceu sua senha?",
-   "dontHaveAccounttext":"Não tens uma conta ainda?",
-  "Join":"Junte-se"
+   "dontHaveAccounttext":"Você ainda não tem conta?",
+  "Join":"Cadastre-se"
 }
