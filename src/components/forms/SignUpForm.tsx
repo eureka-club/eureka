@@ -92,7 +92,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
               <p className={`${styles.haveAccounttext}`}>{t('HaveAccounttext')} <Link href="/login">
                  <a className="">{t('Login')}</a></Link></p>
               <button type="button" className={`d-flex justify-content-center ${styles.buttonGoogle}`}>
-                <div className='d-flex justify-content-start justify-content-sm-center mt-2 flex-row'>
+                <div className={`d-flex justify-content-start justify-content-sm-center aling-items-center flex-row ${styles.gmailLogoAndtext}`}>
                 <img  className={`${styles.gmailLogo} me-1 me-lg-2`} src="/img/logo-google.png" alt="gmail" /> 
                 {t('joinViaGoogle')}
                 </div>

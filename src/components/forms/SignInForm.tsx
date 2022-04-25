@@ -79,14 +79,14 @@ debugger;
         <p className={`${styles.loginGreeting}`}>{t('loginGreeting')}</p>
           <Row>
               <button type="button" onClick={handleSignInGoogle} className={`d-flex justify-content-center ${styles.buttonGoogle}`}>
-                <div className='d-flex justify-content-start justify-content-sm-center mt-2 flex-row'>
+                <div className={`d-flex justify-content-start justify-content-sm-center aling-items-center flex-row ${styles.gmailLogoAndtext}`}>
                 <img  className={`${styles.gmailLogo} me-1 me-lg-2`} src="/img/logo-google.png" alt="gmail" /> 
                 {t('loginViaGoogle')}
                 </div>
               </button>
           </Row>
           <Row>
-              <p className={`mb-2 ${styles.alternativeLabel}`}>{t('alternativeText')}</p>
+              <p className={`${styles.alternativeLabel}`}>{t('alternativeText')}</p>
           </Row>
           <Row>
             <div className="d-flex justify-content-center">
