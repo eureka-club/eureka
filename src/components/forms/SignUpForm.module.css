@@ -15,18 +15,18 @@
 margin-top: 8rem;  
 }
 .welcomeText{
-font-size: 3rem;
-margin-bottom: 8rem; 
+font-size: 2.5rem;
+margin-bottom: 6rem; 
 color: #fdf7f7;
 }
 .otherText{
-font-size: 1.3rem;
+font-size: 1.1rem;
 margin-right: 1.5rem;
 color: #fdf7f7;
 }
 
 .eurekaImage {
-   width: 50%;
+   width: 30%;
    height: 100%;
 }
 
@@ -43,7 +43,7 @@ color: #fdf7f7;
 }
 
   .joinEurekaText{
-    font-size: 3rem;
+    font-size: 2.5rem;
     text-align: center;
     color:var(--color-primary-raised);
   }
@@ -113,14 +113,14 @@ color: #fdf7f7;
 }
 
 .welcomeText{
-  font-size: 3.5rem;
+font-size: 2.5rem;
 margin-bottom: 1rem; 
 text-align: center;
 }
 
 .eurekaImage {
-   width: 40%;
-   height: 50%;
+   width: 25%;
+   height: 100%;
 }
 
 .imageContainer{
