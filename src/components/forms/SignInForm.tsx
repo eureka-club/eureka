@@ -42,28 +42,56 @@ debugger;
     signIn('email', { email });
   };*/
 
-    const handleSubmitSignIn = async (e:React.MouseEvent<HTMLButtonElement>)=>{
-        const form = formRef.current
-        if(form){
-        signIn('credentials' ,{
-            redirect:false,
-            email:form.email.value,
-            password:form.password.value
-          })
-          .then(res=>{
-            if(res && !(res as {ok:boolean}).ok)
-              addToast('Invalid session',{
-                appearance:'warning',
-                autoDismiss:true,
+  const userRegistered = async (email:string)=>{
+    const res = await fetch(`/api/user/isRegistered?identifier=${email}`);
+    if(res.ok){
+      const {data} = await res.json()
+      return data;
+    }
+    return false;
+  }
+
+  const handleSubmitSignIn = async (e:React.MouseEvent<HTMLButtonElement>)=>{
+      const form = formRef.current;
+
+      if(form){
+        if(form.email.value && form.password.value){
+          const ur = await userRegistered(form.email.value)
+          if(ur){
+            signIn('credentials' ,{
+              redirect:false,
+              email:form.email.value,
+              password:form.password.value
+            })
+            .then(res=>{debugger;
+              const r = res as unknown as {error:string}
+              if(res && r.error)
+                addToast('Invalid session',{
+                  appearance:'warning',
+                  autoDismiss:true,                
+                })
+                else{
+                  router.push(localStorage.getItem('loginRedirect') || '/')
+                }
                 
-              })
-              else{
-                router.push(localStorage.getItem('loginRedirect') || '/')
-              }
-              
+            })
+          }
+          else{
+            addToast('User not registered',{
+              appearance:'warning',
+              autoDismiss:true,                
+            })
+          }
+        }
+        else{
+          addToast('Email and Password are required',{
+            appearance:'warning',
+            autoDismiss:true,                
           })
         }
-    }
+      }
+      
+  }
 
   return (
     <Container>

@@ -8,7 +8,7 @@ import { useMutation } from "react-query";
 import {Form} from 'react-bootstrap'
 import Row from 'react-bootstrap/Row';
 import Link from 'next/link'
-
+import { useToasts } from 'react-toast-notifications';
 import styles from './SignUpForm.module.css';
 
 interface Props {
@@ -18,12 +18,22 @@ interface Props {
 const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
   const { t } = useTranslation('signUpForm');
   const formRef=useRef<HTMLFormElement>(null)
-
+  const {addToast} = useToasts()
  interface MutationProps{
         identifier:string;
         password:string;
         fullName:string;
     }
+
+    const userRegistered = async (email:string)=>{
+      const res = await fetch(`/api/user/isRegistered?identifier=${email}`);
+      if(res.ok){
+        const {data} = await res.json()
+        return data;
+      }
+      return false;
+    }
+
     const {mutate,isLoading:isMutating} = useMutation(async (props:MutationProps)=>{
         const {identifier,password,fullName} = props;
         const res = await fetch('/api/userCustomData',{
@@ -43,22 +53,31 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
             // return data;
         }
         else{
-            alert(res.statusText)
+            addToast(res.statusText)
         }
         return null;
     })
 
-    const handleSubmitSignUp = (e:React.MouseEvent<HTMLButtonElement>)=>{
+    const handleSubmitSignUp = async (e:React.MouseEvent<HTMLButtonElement>)=>{
         //mutate user custom data
         const form = formRef.current
-
         if(form){
-            mutate({
-                identifier:form.email.value,
-                password:form.password.value,
-                fullName:form.Name.value + ' ' + form.lastname.value
-            })
-            
+          const email = form.email.value;
+          const password = form.password.value;
+          const fullName = form.Name.value + ' ' + form.lastname.value;
+          if(email && password && fullName){
+            const ur = await userRegistered(email)
+            if(!ur){
+              mutate({
+                  identifier:email,
+                  password:password,
+                  fullName,
+              }); 
+            }
+            else addToast('User already registered',{autoDismiss:true})
+          }
+          else
+            addToast('All data are required (Email, Password, Name and Last Name)')
         }
     }
 

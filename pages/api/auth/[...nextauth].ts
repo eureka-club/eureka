@@ -91,7 +91,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
   return NextAuth(req, res, {
     adapter: PrismaAdapter(prisma),
     callbacks: {
-      session: async ({session}) => {debugger;
+      session: async ({session}) => {
         const u = await prisma.user.findFirst({
           where:{email:session.user.email},
           include:{photos:true}
@@ -127,8 +127,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
     },
     events:{
       updateUser:async({user})=>{
-        console.log(user,'updateUser')
-        debugger;
+        
         const vt = await prisma.userCustomData.findFirst({where:{identifier:user.email!}})
         if(vt){
         // const hash = bcrypt.hashSync(vt.password, 8);
@@ -231,13 +230,14 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
           email: { label: "User name", type: "text", placeholder: "User name" },
           password: {  label: "Password", type: "password", placeholder:'Password' }
         },
-        async authorize(credentials, req) {debugger;
+        async authorize(credentials, req) {
           const user = await prisma.user.findFirst({where:{
             email:credentials?.email
           }})
           
           if (user && credentials) {
-            if(bcrypt.compareSync(credentials.password, user.password))
+            const c = await bcrypt.compare(credentials.password, user.password);
+            if(c)
               return {id:user.id,email:user.email,image:user.image}
             return null;
             // Any object returned will be saved in `user` property of the JWT

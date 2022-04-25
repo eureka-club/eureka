@@ -16,13 +16,29 @@ const RecoveryLoginPage: NextPage<Props> = () => {
   const {addToast} = useToasts();
   const [validated,setValidated] = useState<boolean>(false);
 
+  const userExist = async (email:string)=>{
+    const res = await fetch(`/api/userCustomData?identifier=${email}`);
+    const {data} = await res.json();
+    debugger;
+    return data!=null;
+  }
+
   const handlerSubmit = async (e:React.FormEvent<HTMLFormElement>)=>{
     const form = e.currentTarget;
     if (form.checkValidity() === false) {
       e.preventDefault();
       e.stopPropagation();
     }
+    const ue = await userExist(form.email.value);
     setValidated(true);
+    if(!ue){
+      e.preventDefault();
+      e.stopPropagation();
+      addToast('Invalid session',{
+        autoDismiss:true,
+        appearance:'warning'
+      })
+    }
   }
   return (
     <SimpleLayout title={t('Sign up')} showNavBar={false}>
