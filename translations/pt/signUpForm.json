@@ -1,19 +1,17 @@
 {
- "Sign up": "Registro",
-  "Welcome": "Receber!",
-  "welcomeText1":"Eureka é o primeiro clube de cinema-livro transformado em rede social (sem fins lucrativos).",
-  "welcomeText2":"Temos um objetivo de impacto social: ativar mentes para transformar o mundo.",
-  "JoinEureka":"Junte-se à Eureka",
-  "joinViaGoogle": "Junte-se usando o Google",
-  "loginViaGoogle": "Entrar com Google",
+ "Sign up": "Cadastro",
+  "Welcome": "Te damos as boas-vindas!",
+  "welcomeText1":"Eureka é o primeiro clube de livros e filmes convertido em rede social (sem fins lucrativos).",
+  "welcomeText2":"Nosso objetivo é de impacto social: ativar mentes para transformar o mundo.",
+  "JoinEureka":"Criar conta na Eureka",
+  "joinViaGoogle": "Cadastre-se usando Google",
+  "loginViaGoogle": "Cadastro com Google",
   "HaveAccounttext":"Você já tem uma conta?",
-  "Login":"Conecte-se",
+  "Login":"Entre",
   "alternativeText": "OU",
   "Name": "Nome",
   "LastName": "Sobrenome",
   "emailFieldLabel": "Email",
   "passwordFieldLabel":"Senha",
-  "forgotPassText":"Esqueceu sua senha?",
-   "dontHaveAccounttext":"Não tens uma conta ainda?",
-  "Join":"Junte-se"
+  "Join":"Cadastre-se"
 }
