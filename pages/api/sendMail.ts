@@ -27,10 +27,17 @@ export default async function handler(
     const mailchimp = require('@mailchimp/mailchimp_transactional')(process.env.EMAIL_SERVER_PASS);
     const response = await mailchimp.messages.send({message});
     console.log(response);
-    
-    if(response[0].status == "sent")
-      return res.status(200).json({data:response})
-    res.status(500).json({data:response[0].reject_reason})
+    debugger;
+    if(response.isAxiosError){
+      res.statusMessage = response.message;
+      return res.status(500).json({data:null});
+    }
+    return res.status(200).json({data:response})
+    // else if(response[0].status == "sent")
+    // else {
+    //   res.statusMessage = response[0].reject_reason;
+    //   res.status(500).json({data:null});
+    // }
    
   }
   if(req.method=='GET'){

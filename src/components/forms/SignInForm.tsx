@@ -94,7 +94,11 @@ debugger;
                 <Form.Group controlId="email">
                   <Form.Label>{t('emailFieldLabel')}</Form.Label>
                   <Form.Control className='mb-2' type="email" required />
-                  <div className='d-flex justify-content-between mb-2'><div>{t('passwordFieldLabel')}</div><div className={`d-flex align-items-end ${styles.forgotPassText}`}>{t('forgotPassText')}</div></div>
+                  <div className='d-flex justify-content-between mb-2'><div>{t('passwordFieldLabel')}</div>
+                    <Link href="/recoveryLogin" passHref>
+                      <div className={`d-flex align-items-end ${styles.forgotPassText}`}>{t('forgotPassText')}</div>
+                    </Link>
+                  </div>
                 </Form.Group>
                 <Form.Group controlId='password'>
                   <Form.Control type="password" required />

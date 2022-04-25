@@ -25,7 +25,7 @@ const useUsers = (where:Prisma.UserWhereInput,options?: Options) => {
     enabled: true,
   };
   const prev = qc.getQueryData(['USERS', JSON.stringify(where)])
-  console.log(prev,from,new Date())
+  // console.log(prev,from,new Date())
   return useQuery<UserMosaicItem[]>(['USERS', JSON.stringify(where)], () => getUsers(where), {
     staleTime,
     enabled
