@@ -95,7 +95,7 @@ debugger;
 
   return (
     <Container>
-      <ModalHeader className={`mt-5 position-relative ${styles.modalHeader}`} closeButton={!noModal}>
+      <ModalHeader className={`position-relative ${styles.modalHeader}`} closeButton={!noModal}>
         <Container>
         <img  className={`${styles.eurekaImage}`} src="/logo.svg" alt="Eureka" /> 
         <p className={styles.EurekaText}>EUREKA</p>

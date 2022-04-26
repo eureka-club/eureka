@@ -20,17 +20,10 @@
   font-size: 1.5rem;
 }
 
-.forgotPassword {
+.resetPassword {
   margin-bottom: 2.5rem;
   text-align: center;
   font-size: 1.5rem;
-}
-
-.indicationsText {
-  margin-bottom: 2.5rem;
-  text-align: center;
-  font-size: 0.9rem;
-  width: 50%;
 }
 
 .submitButton {
@@ -57,12 +50,5 @@
     margin: 1;
 
 }
-
-.indicationsText {
-  width: 100%;
-    margin: 1;
-
-}
- 
    
 }
