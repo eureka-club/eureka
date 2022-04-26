@@ -13,5 +13,7 @@
   "LastName": "Sobrenome",
   "emailFieldLabel": "Email",
   "passwordFieldLabel":"Senha",
-  "Join":"Cadastre-se"
+  "Join":"Cadastre-se",
+  "VisitEureka":"Visite Eureka"
+
 }

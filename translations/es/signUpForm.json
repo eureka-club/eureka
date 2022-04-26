@@ -15,5 +15,7 @@
   "passwordFieldLabel":"Contraseña",
   "forgotPassText":"¿Olvidaste tu contraseña?",
   "dontHaveAccounttext":"¿Aún no tienes una cuenta?",
-  "Join":"Únete"
+  "Join":"Únete",
+  "VisitEureka":"Ir a Eureka"
+
 }

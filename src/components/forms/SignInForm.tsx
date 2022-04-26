@@ -97,7 +97,9 @@ debugger;
     <Container>
       <ModalHeader className={`position-relative ${styles.modalHeader}`} closeButton={!noModal}>
         <Container>
-        <img  className={`${styles.eurekaImage}`} src="/logo.svg" alt="Eureka" /> 
+        <Link href="/" replace>  
+        <img  className={`cursor-pointer ${styles.eurekaImage}`} src="/logo.svg" alt="Eureka" /> 
+        </Link>
         <p className={styles.EurekaText}>EUREKA</p>
         </Container>
       </ModalHeader>
@@ -124,7 +126,7 @@ debugger;
                   <Form.Control className='mb-2' type="email" required />
                   <div className='d-flex justify-content-between mb-2'><div>{t('passwordFieldLabel')}</div>
                     <Link href="/recoveryLogin" passHref>
-                      <div className={`d-flex align-items-end ${styles.forgotPassText}`}>{t('forgotPassText')}</div>
+                      <div className={`d-flex align-items-end cursor-pointer ${styles.forgotPassText}`}>{t('forgotPassText')}</div>
                     </Link>
                   </div>
                 </Form.Group>

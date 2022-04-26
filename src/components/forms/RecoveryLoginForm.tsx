@@ -30,7 +30,9 @@ const RecoveryLoginForm: FunctionComponent = () => {
   return (
     <Container>
         <Container className={`${styles.headerContainer}`}>
-        <img  className={`${styles.eurekaImage}`} src="/logo.svg" alt="Eureka" /> 
+       <Link href="/" replace>  
+          <img  className={`cursor-pointer ${styles.eurekaImage}`} src="/logo.svg" alt="Eureka" /> 
+        </Link>   
         <p className={styles.EurekaText}>EUREKA</p>
         </Container>
       

@@ -14,7 +14,7 @@
 margin-top: 8rem;  
 }
 .welcomeText{
-font-size: 2.5rem;
+font-size: 2.0rem;
 margin-bottom: 6rem; 
 color: #fdf7f7;
 }
@@ -34,6 +34,10 @@ color: #fdf7f7;
   margin-bottom: 6rem;
 }
 
+.VisitEurekaText{
+  text-decoration:underline;
+}
+
 .registerFormSection{
   margin-top: 8rem;
   }
@@ -42,7 +46,7 @@ color: #fdf7f7;
 }
 
   .joinEurekaText{
-    font-size: 2.5rem;
+    font-size: 2rem;
     text-align: center;
     color:var(--color-primary-raised);
   }

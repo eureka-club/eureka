@@ -99,8 +99,14 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                     <p className={`ms-5 ${styles.welcomeText}`}>{t('Welcome')}</p>
                     <p className={`ms-5 mb-4 ${styles.otherText}`}>{t('welcomeText1')}</p>
                     <p className={`ms-5 mb-4 ${styles.otherText}`}>{t('welcomeText2')}</p>
-                  <Container className={`${styles.imageContainer} d-flex justify-content-center`}>
-                    <img  className={`${styles.eurekaImage}`} src="/Eureka-VT-web-white.png" alt="Eureka" /> 
+                  <Container className={`${styles.imageContainer} d-flex flex-column align-items-center justify-content-center`}>
+                   <Link href="/" replace>  
+                        <img  className={` cursor-pointer ${styles.eurekaImage}`} src="/Eureka-VT-web-white.png" alt="Eureka" /> 
+                    </Link>
+
+                    <Link href="/" replace>  
+                        <p  className={`mt-5 cursor-pointer text-white ${styles.VisitEurekaText}`}>{t('VisitEureka')} </p> 
+                    </Link>
                   </Container>
               </section>
           </Col>
@@ -122,22 +128,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
           </Row>
           <Row>
             <div className="d-flex justify-content-center">
-             {/*       <Form ref={formRef} >
-                    <Form.Group controlId='fullName'>
-                        <Form.Control type="text" placeholder="Name"/>
-                    </Form.Group>
-
-                    <Form.Group controlId='email'>
-                        <Form.Control type="text" placeholder="Email"/>
-                    </Form.Group>
-
-                    <Form.Group controlId='password'>
-                        <Form.Control type="text" placeholder="Password"/>
-                    </Form.Group>
-                    <Button onClick={handleSubmitSignUp}>Sign up</Button>
-                    <Button onClick={handleSubmitSignIn}>Sign in</Button>
-              </Form> */}
-             
+                       
               <Form ref={formRef} className={`d-flex flex-column ${styles.registerForm}`} >
                 <div className='d-flex flex-column flex-lg-row justify-content-between'>
                      <div className={`d-flex flex-column ${styles.personalData}`}>
