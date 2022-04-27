@@ -65,7 +65,6 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
   // const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
 
   // useEffect(() => {
-  //   debugger;
   //   if(tinymce)
   //   tinymce.init({
   //     selector: '#comment-contentText',

@@ -1,11 +1,8 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import {Form, Spinner} from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
-import { FormEvent, FunctionComponent, MouseEvent,useState,useRef } from 'react';
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
+import { FormEvent, FunctionComponent,useState,useRef } from 'react';
+import {Alert,Button,Col,Container,Row} from 'react-bootstrap'
 import Link from 'next/link'
 import { useToasts } from 'react-toast-notifications'
 
@@ -21,27 +18,51 @@ const ResetPassForm: FunctionComponent<Props> = ({userId,email}) => {
   const { t } = useTranslation('PasswordRecovery');
   const router = useRouter();
   const {addToast} = useToasts();
-  const [validated,setValidated] = useState<boolean>(false);
+  const [validated,setValidated] = useState<boolean>(true);
   const formRef = useRef<HTMLFormElement>(null);
   const [loading,setLoading] = useState<boolean>(false);
 
+  const validatePassword = (text:string)=>{
+    if(text.length<8){
+      return false;
+    }
+    if(!text.match(/[a-zA-z]/g)){
+      return false;
+    }
+    if(!text.match(/\d/g)){
+      return false;
+    }
+    return true;
+  }
+
   const handlerSubmit = async (e:React.MouseEvent<HTMLButtonElement>)=>{
-    setLoading(true)
     const form = formRef.current;    
     const url = `/api/user/${userId}/resetPass`;
-    if(!form)return;
-    if (form.checkValidity() === false) {
-      e.preventDefault();
-      return;
-    }
-    setValidated(true);
 
+    if(!form)return false;
+    
     const password = form.password.value;
     const ConfirmPassword = form.ConfirmPassword.value;
-    if(ConfirmPassword!==password){
-      addToast('Passwords are differents');
-      return;
+    
+    const validPassword = validatePassword(password)
+    if(!validPassword){
+      setValidated(false)
+      return false;
     }
+
+    const validConfirmPassword = validatePassword(ConfirmPassword)
+    if(!validConfirmPassword){
+      setValidated(false)
+      return false;
+    }
+
+    if(ConfirmPassword!==password){
+      setValidated(false)
+      return false;
+    }
+    
+    setLoading(true);
+    setValidated(true)
     const res = await fetch(url,{
       method:'PATCH',
       headers:{
@@ -91,7 +112,7 @@ const ResetPassForm: FunctionComponent<Props> = ({userId,email}) => {
           
         </div>
             <div className="mb-5 d-flex justify-content-center">
-             <Form ref={formRef} className={`d-flex flex-column ${styles.sendForm}`} validated={validated}>
+             <Form ref={formRef} className={`d-flex flex-column ${styles.sendForm}`}>
                  <Form.Group controlId="password">
                     <Form.Label>{t('NewpasswordFieldLabel')}</Form.Label>
                     <Form.Control type="password" name="password" required />
@@ -105,6 +126,7 @@ const ResetPassForm: FunctionComponent<Props> = ({userId,email}) => {
                   {t('resetPassword1')} {loading && <Spinner animation="grow" />}
                 </Button>
                 </div>
+                {!validated && <Alert variant="danger">Invalid password, at least 8 characters (requires letters and number)</Alert>}
               </Form>
             </div>
     </Container>

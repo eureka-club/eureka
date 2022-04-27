@@ -53,7 +53,7 @@ export default getApiHandler()
       const {data,status, statusText} = await axios.post(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/sendMail`,{
         to:[{email:to,name:user.name}],
         // to,
-        subject:'EUREKA recovery login',
+        subject:t('subject'),
         html
       });
       

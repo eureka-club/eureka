@@ -3,5 +3,6 @@
   "title": "Restablecer contraseña",
   "subtitle": "Haz clic aquí para cambiar tu contraseña",
   "aboutEureka": "Eureka es el primer club digital de libros y películas para el cambio social. Nuestro objetivo: activar mentes para transformar el mundo.",
-  "emailReason": "Recibiste este correo electrónico porque estás restableciendo tu contraseña para Eureka."
+  "emailReason": "Recibiste este correo electrónico porque estás restableciendo tu contraseña para Eureka.",
+  "subject":"Restablecer contraseña de Eureka"
 }

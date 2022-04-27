@@ -3,5 +3,6 @@
   "title": "Récupération de mot de passe",
   "subtitle": "Cliquez ici pour réinitialiser votre mot de passe",
   "aboutEureka": "Nous sommes le premier club en ligne de livres et films pour le changement social. Notre objectif: nourrir l'esprit pour transformer le monde.",
-  "emailReason": "Vous avez reçu cet e-mail car vous réinitialisez votre mot de passe pour Eureka."
+  "emailReason": "Vous avez reçu cet e-mail car vous réinitialisez votre mot de passe pour Eureka.",
+  "subject":"Récupération de mot de passe d'Eureka"
 }

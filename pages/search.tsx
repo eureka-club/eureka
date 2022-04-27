@@ -188,7 +188,7 @@ const SearchPage: NextPage = () => {
     if (homepageMosaicData) {
       const { only, onlyByCountries } = globalSearchEngineState;
       let filtered = null;
-      // if (q) {debugger;
+      // if (q) {
       //   const whereAux = encodeURIComponent(JSON.stringify({ title: { contains: globalSearchEngineState.q } }));
       //   setTempWhere(whereAux);
       // }

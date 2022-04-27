@@ -485,7 +485,6 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   };
 
   // const editGuideline = () => {
-  //   debugger;
   //   if (guidelineEditIdx !== undefined) {
   //     // const gl = [...guidelines];
   //     // gl[guidelineEditIdx] =
