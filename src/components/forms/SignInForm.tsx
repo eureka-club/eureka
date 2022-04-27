@@ -1,7 +1,7 @@
 import { useSession, signIn, signOut } from "next-auth/react";
-import {Form} from 'react-bootstrap';
+import {Form, Spinner} from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
-import { FormEvent, FunctionComponent, MouseEvent,useRef } from 'react';
+import { useState, FunctionComponent, MouseEvent,useRef } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -26,6 +26,7 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
   const router = useRouter()
   const { t } = useTranslation('signInForm');
   const formRef=useRef<HTMLFormElement>(null)
+  const [loading,setLoading] = useState(false)
 
   const handleSignInGoogle = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
@@ -52,7 +53,7 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
   const handleSubmitSignIn = async (e:React.MouseEvent<HTMLButtonElement>)=>{
       const form = formRef.current;
-
+      setLoading(true)
       if(form){
         if(form.email.value && form.password.value){
           const ur = await userRegistered(form.email.value)
@@ -64,14 +65,16 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
             })
             .then(res=>{
               const r = res as unknown as {error:string}
-              if(res && r.error)
+              if(res && r.error){
                 addToast('Invalid session',{
                   appearance:'warning',
                   autoDismiss:true,                
                 })
-                else{
-                  router.push(localStorage.getItem('loginRedirect') || '/')
-                }
+                setLoading(false)
+              }
+              else{
+                router.push(localStorage.getItem('loginRedirect') || '/')
+              }
                 
             })
           }
@@ -80,6 +83,8 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
               appearance:'warning',
               autoDismiss:true,                
             })
+            setLoading(false)
+
           }
         }
         else{
@@ -87,6 +92,8 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
             appearance:'warning',
             autoDismiss:true,                
           })
+          setLoading(false)
+
         }
       }
       
@@ -133,8 +140,8 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
                   <Form.Control type="password" required />
                 </Form.Group>
                 <div className="d-flex justify-content-center">
-                <Button onClick={handleSubmitSignIn} variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
-                  {t('login')}
+                <Button disabled={loading} onClick={handleSubmitSignIn} variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
+                  {t('login')} {loading && <Spinner animation="grow"/>}
                 </Button>
                 </div>
                  <p className={`mt-5 ${styles.dontHaveAccounttext}`}>{t('dontHaveAccounttext')} <Link href="/register">

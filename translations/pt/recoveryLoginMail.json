@@ -3,5 +3,6 @@
   "title": "Welcome to Eureka!",
   "subtitle": "Click here to change your password",
   "aboutEureka": "Eureka is the first online book-film club for social change. Our goal: activate minds to transform the world.",
-  "emailReason": "You’ve received this email because you registered for Eureka."
+  "emailReason": "You’ve received this email because you registered for Eureka.",
+  "subject":"EUREKA recovery login"
 }

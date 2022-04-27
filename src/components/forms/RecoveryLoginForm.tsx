@@ -1,5 +1,5 @@
 import { useSession, signIn, signOut } from "next-auth/react";
-import {Form} from 'react-bootstrap';
+import {Form, Spinner} from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
 import { FormEvent, FunctionComponent, MouseEvent,useState } from 'react';
 import Button from 'react-bootstrap/Button';
@@ -16,7 +16,7 @@ const RecoveryLoginForm: FunctionComponent = () => {
    const { t } = useTranslation('PasswordRecovery');
   const {addToast} = useToasts();
   const [validated,setValidated] = useState<boolean>(false);
-  
+  const [loading,setLoading] = useState(false);
 
   const userExist = async (email:string)=>{
     const res = await fetch(`/api/userCustomData?identifier=${email}`);
@@ -26,6 +26,7 @@ const RecoveryLoginForm: FunctionComponent = () => {
 
   const handlerSubmit = async (e:React.FormEvent<HTMLFormElement>)=>{
     const form = e.currentTarget;
+    setLoading(true)
     if (form.checkValidity() === false) {
       e.preventDefault();
       e.stopPropagation();
@@ -63,8 +64,8 @@ const RecoveryLoginForm: FunctionComponent = () => {
                   <Form.Control className='mb-2' name="email" type="email" required />
                  </Form.Group>
                  <div className="d-flex justify-content-center">
-                  <Button type='submit' variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
-                  {t('sendText')}
+                  <Button type='submit' disabled={loading} variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
+                  {t('sendText')} {loading && <Spinner animation="grow"/>}
                 </Button>
                 </div>
               </Form>

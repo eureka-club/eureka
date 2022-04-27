@@ -186,7 +186,6 @@ const MosaicItem: FunctionComponent<Props> = ({
         // setCountParticipants(res=>res?res+1:undefined)
       
         //   if (user) {
-        //     // debugger;
         //     user.joinedCycles.push(cycle);
         //     queryClient.setQueryData(['USER', user.id.toString()], () => user);
         // setIsCurrentUserJoinedToCycle(true);
@@ -264,7 +263,6 @@ const MosaicItem: FunctionComponent<Props> = ({
         // setIsCurrentUserJoinedToCycle(false);
         // setCountParticipants(res=>res?res-1:undefined)
         //   if (user) {
-        //     // debugger;
         //     user.joinedCycles.push(cycle);
         //     queryClient.setQueryData(['USER', user.id.toString()], () => user);
         // setIsCurrentUserJoinedToCycle(true);
