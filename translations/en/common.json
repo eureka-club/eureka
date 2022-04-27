@@ -54,10 +54,10 @@
   "unclampTextMore": "view more",
   "wayShare": "",
   "cycleShare": "Check the cycle",
-  "postCycleShare": "Check this Eureka about the cycle",
-  "postWorkShare": "Check this Eureka about",
-  "workShare": "Check this content about",
-  "complementShare": "and join me on Eureka to discuss it!",
+  "postCycleShare": "Eureka Moment about the cycle:",
+  "postWorkShare": "Eureka Moment about:",
+  "workShare": "I loved",
+  "complementShare": "- check it out and you too add leave comments on Eureka!",
   "whatsappComplement": "Join me here:",
   "twitterComplement": "",
   "facebookComplement": "",
@@ -122,6 +122,7 @@
   "next":"next",
   "previous":"previous",
   "MyCycle": "My cycle",
-  "canNotUploadPhoto":"Images larger than 2 MB cannot be uploaded. Image used has",
+  "canNotUploadPhoto":"Images larger than 2 MB cannot be uploaded. Image has",
+  "selectedCropNotInvalid":"Cropped images larger than 500 KB cannot be uploaded. Image has",
   "by":"by"
 }

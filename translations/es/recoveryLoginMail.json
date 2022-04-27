@@ -1,7 +1,7 @@
 {
-  "ignoreEmailInf": "If you did not request this email you can safely ignore it.",
-  "title": "Welcome to Eureka!",
-  "subtitle": "Click here to change your password",
-  "aboutEureka": "Eureka is the first online book-film club for social change. Our goal: activate minds to transform the world.",
-  "emailReason": "You’ve received this email because you registered for Eureka."
+  "ignoreEmailInf": "Si no solicitaste este correo electrónico, puedes ignorarlo con seguridad.",
+  "title": "Restablecer contraseña",
+  "subtitle": "Haz clic aquí para cambiar tu contraseña",
+  "aboutEureka": "Eureka es el primer club digital de libros y películas para el cambio social. Nuestro objetivo: activar mentes para transformar el mundo.",
+  "emailReason": "Recibiste este correo electrónico porque estás restableciendo tu contraseña para Eureka."
 }

@@ -54,10 +54,10 @@
   "unclampTextMore": "voir plus",
   "wayShare": "",
   "cycleShare": "Jetez un oeil au cycle",
-  "postCycleShare": "Inspirez-vous de cette Eureka sur le cycle",
-  "postWorkShare": "Inspirez-vous de cette Eureka sur l'œuvre",
-  "workShare": "Jetez un oeil à ce contenu à propos de",
-  "complementShare": "et rejoignez-moi sur la plateforme Eureka!",
+  "postCycleShare": "Moment Eureka sur le cycle:",
+  "postWorkShare": "Moment Eureka sur l'œuvre:",
+  "workShare": "J'ai adoré",
+  "complementShare": "- et jetez un oeil et vous aussi laissez vos commentaires sur Eureka!",
   "whatsappComplement": "Pour participer, cliquez ici: ",
   "twitterComplement": "",
   "facebookComplement": "",
@@ -122,7 +122,8 @@
   "next":"next",
   "previous":"previous",
   "MyCycle": "Mon cycle",
-  "canNotUploadPhoto":"Les images de plus de 2 Mo ne peuvent pas être utilisées. L'image utilisée a",
+  "canNotUploadPhoto":"Les images de plus de 2 Mo ne peuvent pas être utilisées. L'image a",
+  "selectedCropNotInvalid":"Les images recadrées de plus de 500 Ko ne peuvent pas être utilisées. L'image a",
   "by":"par"
 
 }
