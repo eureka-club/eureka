@@ -18,14 +18,17 @@ export default getApiHandler()
 .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
   try {
     const { id,userId } = req.query;
+    let notifications;
     // const {userId} = req.body;
     if (id && !userId) {
-      const notification = await find(parseInt(id.toString()));
-      res.status(200).json({ notification });
+      notifications = await find(parseInt(id.toString()));
     } else if(userId) {
-      const notifications = await findAll(parseInt(userId.toString()));
-      res.status(200).json({ notifications });
+      notifications = await findAll(parseInt(userId.toString()));
     }
+    else {
+      notifications = await prisma.notification.findMany();      
+    }
+    res.status(200).json({ notifications });
   } catch (exc) {
     console.error(exc); // eslint-disable-line no-console
     res.status(500).json({ error: 'server error' });

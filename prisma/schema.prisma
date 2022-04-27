@@ -58,10 +58,10 @@ model User {
 }
 
 model UserCustomData {
-  id         Int      @id @default(autoincrement())
-  name       String
-  password   String
-  identifier String  @unique
+  id                    Int      @id @default(autoincrement())
+  name                  String
+  password              String
+  identifier            String  @unique
 }
 
 model Account {

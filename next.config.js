@@ -16,5 +16,18 @@ module.exports = {
     },
     images:{
         domains:[`${domain}.azureedge.net`],
-    }
+    },
+    async headers() {
+        return [
+          {
+            source: '/resetPass',
+            headers: [
+              {
+                key: 'gmail',
+                value: 'my custom header value',
+              },
+            ],
+          },
+        ]
+      },
 };

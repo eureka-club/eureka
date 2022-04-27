@@ -2,7 +2,6 @@ import nodemailer from 'nodemailer'
 
 
 export const send = async ()=>{
-  debugger;
   const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_SERVER_HOST,
     port: 587,

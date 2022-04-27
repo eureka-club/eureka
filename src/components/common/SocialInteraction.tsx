@@ -133,7 +133,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
     let ratingByMe = false;
     if (session && user && user.id && entity) {
       if (isWork(entity)) {
-        // if (entity.id === 125) debugger;
+        // if (entity.id === 125) 
         // let idx = user.readOrWatchedWorks.findIndex((i: Work) => i.id === entity.id);
         // const readOrWatchedByMe = idx !== -1;
         // setOptimistReadOrWatched(readOrWatchedByMe);

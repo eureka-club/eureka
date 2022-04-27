@@ -48,7 +48,6 @@ const UserAvatar: FunctionComponent<Props> = ({
         } else res = `${user?.name}`;
 
       }
-      else {debugger;}
     }
     return <div className='d-flex flex-nowrap ms-2'><span>{res}</span></div>;
   };

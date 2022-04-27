@@ -16,6 +16,13 @@ const RecoveryLoginForm: FunctionComponent = () => {
    const { t } = useTranslation('PasswordRecovery');
   const {addToast} = useToasts();
   const [validated,setValidated] = useState<boolean>(false);
+  
+
+  const userExist = async (email:string)=>{
+    const res = await fetch(`/api/userCustomData?identifier=${email}`);
+    const {data} = await res.json();
+    return data!=null;
+  }
 
   const handlerSubmit = async (e:React.FormEvent<HTMLFormElement>)=>{
     const form = e.currentTarget;
@@ -24,8 +31,16 @@ const RecoveryLoginForm: FunctionComponent = () => {
       e.stopPropagation();
     }
     setValidated(true);
+    const ue = await userExist(form.email.value);
+    if(!ue){
+      e.preventDefault();
+      e.stopPropagation();
+      addToast('Invalid session',{
+        autoDismiss:true,
+        appearance:'warning'
+      })
+    }
   }
-
 
   return (
     <Container>
@@ -45,7 +60,7 @@ const RecoveryLoginForm: FunctionComponent = () => {
              <Form className={`d-flex flex-column ${styles.sendForm}`} onSubmit={handlerSubmit} action='/api/recoveryLogin' validated={validated} method='POST'>
                 <Form.Group controlId="email">
                   <Form.Label>{t('emailFieldLabel')}</Form.Label>
-                  <Form.Control className='mb-2' type="email" required />
+                  <Form.Control className='mb-2' name="email" type="email" required />
                  </Form.Group>
                  <div className="d-flex justify-content-center">
                   <Button type='submit' variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>

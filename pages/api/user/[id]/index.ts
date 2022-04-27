@@ -3,11 +3,11 @@ import {Form} from 'multiparty';
 import { getSession } from 'next-auth/react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { find, update } from '../../../src/facades/user';
+import { find, update } from '@/src/facades/user';
 import { create } from '@/src/facades/notification';
 
-import getApiHandler from '../../../src/lib/getApiHandler';
-import prisma from '../../../src/lib/prisma';
+import getApiHandler from '@/src/lib/getApiHandler';
+import prisma from '@/src/lib/prisma';
 import {storeDeleteFile, storeUploadUserPhoto} from '@/src/facades/fileUpload'
 import { UserMosaicItem } from '@/src/types/user';
 import { Notification } from '@prisma/client';

@@ -105,7 +105,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
         }
         return Promise.resolve(session);        
       },
-      // async jwt({ token, user, account, profile, isNewUser }) {debugger;
+      // async jwt({ token, user, account, profile, isNewUser }) {
       //   if(user)
       //   return {token,roles:user.roles}
       //   return token
@@ -145,7 +145,6 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
       },
       createUser:async({user})=>{
         console.log(user,'createUser')
-        debugger;
         const vt = await prisma.userCustomData.findFirst({where:{identifier:user.email!}})
         if(vt){
         // const hash = bcrypt.hashSync(vt.password, 8);

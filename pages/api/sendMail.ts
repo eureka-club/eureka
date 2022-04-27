@@ -27,7 +27,6 @@ export default async function handler(
     const mailchimp = require('@mailchimp/mailchimp_transactional')(process.env.EMAIL_SERVER_PASS);
     const response = await mailchimp.messages.send({message});
     console.log(response);
-    debugger;
     if(response.isAxiosError){
       res.statusMessage = response.message;
       return res.status(500).json({data:null});

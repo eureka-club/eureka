@@ -53,7 +53,7 @@ const Index: React.FC = ()=>{
     const handleSubmitSignIn = (e:React.MouseEvent<HTMLButtonElement>)=>{
         //mutate user custom data
         const form = formRef.current
-debugger;
+
         if(form){
             // signIn()
             signIn('credentials' ,{

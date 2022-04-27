@@ -133,7 +133,6 @@ const CycleDetailPage: NextPage = (props:any) => {
       const user = session.user;
       setIsRequestingJoinCycle(true);
       const res = await execJoinCycle(cycle,user.name||user.id.toString(),participants||[]);  
-    // debugger;
     //   if (res === 'OK'){
     //     setGlobalModalsState({
     //       ...globalModalsState,
@@ -272,7 +271,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const {id} = props
   const res = await fetch(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle/${id}`)
   const cycle = await res.json();
-debugger;
   return {
     props: {
       cycle,
@@ -283,7 +281,7 @@ debugger;
 
 /* export async function getStaticPaths() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle`)
-  const {data:cycles} = await res.json();debugger;
+  const {data:cycles} = await res.json();
 
   const paths = cycles.map((cycle:CycleMosaicItem) => ({
     params: { id: cycle.id.toString() },

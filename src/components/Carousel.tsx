@@ -112,9 +112,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
     &extraWorksRequired=${extraWorksRequired || 0}
     &totalWorks=${totalWorks}`;
     const q = await fetch(url);
-    // debugger;
     const res = await q.json();
-    // debugger;
     return res;
   };
   const { isLoading /* , isError, error, isFetching */, data, isPreviousData } = useQuery(
@@ -147,7 +145,6 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
   const buildMosaics = () => {
     const result: JSX.Element[] = [];
     if (items) {
-      // debugger;
       // data.pages.forEach((page, idx) => {
       const mosaics = items.data.map((i: CycleMosaicItem | WorkMosaicItem) => (
         <div key={`${v4()}`} className="mx-2">

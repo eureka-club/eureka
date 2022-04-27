@@ -35,7 +35,6 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
   /*const handleEmailLoginSubmit = (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
-debugger;
     const form = ev.currentTarget;
     const email = form.email.value;
 
@@ -63,7 +62,7 @@ debugger;
               email:form.email.value,
               password:form.password.value
             })
-            .then(res=>{debugger;
+            .then(res=>{
               const r = res as unknown as {error:string}
               if(res && r.error)
                 addToast('Invalid session',{

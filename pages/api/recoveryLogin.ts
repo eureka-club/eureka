@@ -14,7 +14,7 @@ import Handlebars from 'handlebars';
 
 export default getApiHandler()
 .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-  try {debugger;
+  try {
     const {email:em} = req.body;
     const locale = req.cookies.NEXT_LOCALE || 'es';
     const to = em.toString();
@@ -24,14 +24,14 @@ export default getApiHandler()
       const t = await getT(locale, 'recoveryLoginMail');
       const title = t('title');
       const subtitle = t('subtitle');
-      const recoveryLogInConfirmationUrl = t('recoveryLogInConfirmationUrl');
       const ignoreEmailInf = t('ignoreEmailInf');
       const aboutEureka = t('aboutEureka');
       const emailReason = t('emailReason');
-      const base64Hash = Buffer.from(user.email!, 'binary').toString('base64');
-  
+
+      const base64Hash = Buffer.from(`${user.email}!|!${user.password}`,'binary').toString('base64');
+
       const specs = {
-        url: `${process.env.NEXTAUTH_URL}/api/recoveryLogin?hash=${base64Hash}`,
+        url: `${process.env.NEXTAUTH_URL}/resetPass?hash=${base64Hash}`,
         to,
         title,
         subtitle,
@@ -56,11 +56,13 @@ export default getApiHandler()
         subject:'EUREKA recovery login',
         html
       });
-      debugger;
+      
       if(status == 200)
         res.redirect(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/auth/emailVerify`)
-      res.statusMessage = statusText;  
-      res.status(status).json({data:null})
+      else{
+        res.statusMessage = statusText;  
+        res.status(status).json({data:null});
+      }
 
     }
     
@@ -71,24 +73,31 @@ export default getApiHandler()
   } 
   
 })
-.get<NextApiRequest, NextApiResponse>(async (req,res):Promise<void> => {
-  debugger;
-  const {hash:h} = req.query;
-  if(!h){
-    res.statusMessage = 'invalid session';
-    res.status(400).end();
-  }
-  else{
-    const hash = h.toString()
-    const email = Buffer.from(hash, 'base64').toString('binary');
-    const user = await prisma.user.findUnique({where:{email}})
-    if(user){
-      const resUCD = await prisma.userCustomData.delete({where:{identifier:email}});
-      if(resUCD)
-        res.redirect(`${process.env.NEXTAUTH_URL}/register`)
-    }
-    res.status(400).end();
-    
-  }
+// .get<NextApiRequest, NextApiResponse>(async (req,res):Promise<void> => {
+  
+//   const {hash:h} = req.query;
+//   if(!h){
+//     res.statusMessage = 'invalid session';
+//     res.status(400).end();
+//   }
+//   else{
+//     const hash = h.toString()
+//     const base64Hash = Buffer.from(hash,'base64').toString();
+//     const [email,password] = base64Hash.split('!|!');
 
-})
+//     const resUCD = await prisma.userCustomData.update({
+//       where:{
+//         identifier:email,
+//       },
+//       data:{
+//         recoveryHash:password,
+//         expires:dayjs().add(1,'hours').toISOString()
+//       }
+//     });
+//     if(resUCD)
+//       res.redirect(`${process.env.NEXTAUTH_URL}/resetPass?hash=${hash}`)
+//     res.status(400).end();
+    
+//   }
+
+// })

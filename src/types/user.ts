@@ -12,7 +12,18 @@ export interface EditUserClientPayload {
 }
 
 type UserFoolow = {
-  include:{
+  select:{
+    id: true,
+    name: true,
+    email: true,
+    image: true,
+    roles: true,
+    createdAt: true,
+    updatedAt: true,
+    countryOfOrigin: true,
+    aboutMe: true,
+    dashboardType: true,
+    tags: true,
     followedBy:{select:{id:true}},
     following:{select:{id:true,name:true,image:true,photos:{select:{storedFile:true}}}},
     ratingWorks:{
