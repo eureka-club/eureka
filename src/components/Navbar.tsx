@@ -89,7 +89,7 @@ const NavBar: FunctionComponent = () => {
   };
 
   const handlerLogout = () => {
-    signOut();
+    signOut({callbackUrl:`${process.env.NEXT_PUBLIC_WEBAPP_URL}/`});
   };
 
   // const handleAboutSelect = (eventKey: string | null) => {

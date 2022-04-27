@@ -69,7 +69,7 @@ const Index: React.FC = ()=>{
             return (
               <>
                 Signed in as {session.user?.email} <br />
-                <button onClick={() => signOut()}>Sign out</button>
+                <button onClick={() => signOut({callbackUrl:`${process.env.NEXT_PUBLIC_WEBAPP_URL}/`})}>Sign out</button>
               </>
             )
           }
