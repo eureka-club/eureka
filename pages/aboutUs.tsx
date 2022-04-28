@@ -152,6 +152,35 @@ const AboutPage: NextPage = () => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
+                src="/img/aboutUs/aime_cruz.webp"
+                alt="Picture of Software Engineer"
+                width={200}
+                height={200}
+              />
+              <h2 className={styles.peopleName}>
+                Aimé Cruz
+                <a href="https://www.linkedin.com/in/aim%C3%A9-rub%C3%AD-cruz-ruiz-72776113b/ " target="_blank" rel="noreferrer">
+                  <TiSocialLinkedinCircular className={styles.si} />
+                </a>
+              </h2>
+              <h3 className={styles.professionName}>{t('Communications Officer')}</h3>
+              <h4 className={styles.positionName}>{t('Graphic design and social media expert')}</h4>
+              <Badge pill className={className('badge-secondary', styles.interest)}>
+                {t('Communications')}
+              </Badge>
+              <br />
+              <Badge pill className={className('badge-secondary', styles.interest)}>
+                {t('Graphic design')}
+              </Badge>
+              <br />
+              <Badge pill className={className('badge-secondary', styles.interest)}>
+                {t('Social Media')}
+              </Badge>
+            </Col>
+
+            <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
+              <Image
+                className="rounded-circle"
                 src="/img/aboutUs/igor_hlina.jpg"
                 alt="Picture of Full-stack developer (via Toptal)"
                 width={200}
