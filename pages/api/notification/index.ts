@@ -7,6 +7,7 @@ import getApiHandler from '../../../src/lib/getApiHandler';
 import { findAll, find, create, update } from '../../../src/facades/notification';
 import prisma from '../../../src/lib/prisma';
 import { isArray } from 'lodash';
+import { NotificationMosaicItem } from '@/src/types/notification';
 
 /* export const config = {
   api: {
@@ -24,7 +25,17 @@ export default getApiHandler()
       res.status(200).json({ notification });
     } else if(userId) {
       const notifications = await findAll(parseInt(userId.toString()));
-      res.status(200).json({ notifications });
+      const allreadyExist = new Set();
+      const result:NotificationMosaicItem[] | null = [];
+      notifications?.reduce((p,c)=>{debugger;
+        const key = `${c.userId}:${c.notification.contextURL}:${c.notification.message}:${c.notification.fromUserId}`;
+        if(!allreadyExist.has(key)){
+          p.push(c)
+          allreadyExist.add(key);
+        }
+        return p;
+      },result)
+      res.status(200).json({ notifications:result });
     }
   } catch (exc) {
     console.error(exc); // eslint-disable-line no-console
