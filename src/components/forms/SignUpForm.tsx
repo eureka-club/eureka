@@ -86,10 +86,10 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
     <>
     <section className={`${styles.welcomeMobileSection}`}>
       <div className='d-flex d-lg-none flex-column justify-content-center'>
-      <p className={`mt-3 ${styles.welcomeText}`}>{t('Welcome')}</p>
-        <Container className={`${styles.imageContainer} d-flex justify-content-center`}>
-           <img  className={`${styles.eurekaImage}`} src="/Eureka-VT-web-white.png" alt="Eureka" /> 
-         </Container>
+          <Container className={`${styles.imageContainer} d-flex justify-content-center`}>
+               <img  className={`${styles.eurekaImage}`} src="/Eureka-VT-web-white.png" alt="Eureka" /> 
+          </Container>
+          <p className={`mt-3 ${styles.welcomeText}`}>{t('Welcome')}</p>
      </div>
     </section>
     <Container className='p-lg-0 m-lg-0'>
@@ -103,7 +103,6 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                    <Link href="/" replace>  
                         <img  className={` cursor-pointer ${styles.eurekaImage}`} src="/Eureka-VT-web-white.png" alt="Eureka" /> 
                     </Link>
-
                     <Link href="/" replace>  
                         <p  className={`mt-5 cursor-pointer text-white ${styles.VisitEurekaText}`}>{t('VisitEureka')} </p> 
                     </Link>

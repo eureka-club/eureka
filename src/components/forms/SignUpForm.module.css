@@ -121,13 +121,13 @@ text-align: center;
 }
 
 .eurekaImage {
-   width: 25%;
+   width: 40%;
    height: 100%;
 }
 
 .imageContainer{
-  margin-top: 1rem;
-  margin-bottom: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 }
 
 .joinEurekaText{
