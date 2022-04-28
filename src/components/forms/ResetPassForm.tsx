@@ -113,7 +113,7 @@ const ResetPassForm: FunctionComponent<Props> = ({userId,email}) => {
         </div>
             <div className="mb-5 d-flex justify-content-center">
              <Form ref={formRef} className={`d-flex flex-column ${styles.sendForm}`}>
-                 <Form.Group controlId="password">
+                 <Form.Group className="mb-2" controlId="password">
                     <Form.Label>{t('NewpasswordFieldLabel')}</Form.Label>
                     <Form.Control type="password" name="password" required />
                   </Form.Group>
