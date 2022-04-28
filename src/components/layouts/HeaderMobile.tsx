@@ -28,6 +28,10 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
     if (session) setShow(false);
   }, [session]);
 
+ const handlerLogin = ()=>{
+    localStorage.setItem('loginRedirect',router.asPath)
+    router.push('/login')
+  }
 
   return (
     <>
@@ -97,7 +101,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
       {show && (
         <div className="d-flex justify-content-center align-items-center mt-5 pt-5">
           {!isLoadingSession && !session && (
-            <Button onClick={() => router.push('/login')} className="button text-white rounded-pill" variant="primary">
+            <Button onClick={handlerLogin} className="button text-white rounded-pill" variant="primary">
               {t('headerSessionBtnLabel')}
             </Button>
           )}

@@ -5,6 +5,7 @@ import { Button, Col, Container, Row } from 'react-bootstrap';
 import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
 import useTranslation from 'next-translate/useTranslation';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import withTitle from '../../HOCs/withTitle';
 import styles from './Header.module.css';
 // import { Session } from '../../types';
@@ -22,14 +23,20 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
   const {data:session, status} = useSession();
   const isLoadingSession = status === "loading"
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
+  const router = useRouter();
 
   useEffect(() => {
     if (session) setShow(false);
   }, [session]);
 
-  const openSignInModal = () => {
+  /*const openSignInModal = () => {
     setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
-  };
+  };*/
+
+  const handlerLogin = ()=>{
+    localStorage.setItem('loginRedirect',router.asPath)
+    router.push('/login')
+  }
 
   return (
     <>
@@ -111,7 +118,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
       {show && (
         <div className="d-flex justify-content-center align-items-center mt-5 pt-5">
           {!isLoadingSession && !session && (
-            <Button onClick={openSignInModal} className="button text-white rounded-pill" variant="primary">
+            <Button onClick={handlerLogin} className="button text-white rounded-pill" variant="primary">
               {t('headerSessionBtnLabel')}
             </Button>
           )}
