@@ -239,7 +239,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
       const post = entity as PostMosaicItem;
       const p = post.works ? post.works[0] : null || post.cycles ? post.cycles[0] : null;
       const about = post.works[0] ? 'postWorkShare' : 'postCycleShare';
-      return `EUREKA: "${post.title}". \n ${t(about)} "${p ? p.title : ''}"`;
+      return `${t(about)} "${p ? p.title : ''}"`;
     }
 
     throw new Error('Invalid entity or parent');
