@@ -22,7 +22,7 @@ export const find = async (notificationId: number): Promise<NotificationMosaicIt
 
 export const findAll = async (userId: number): Promise<NotificationMosaicItem[] | null> => {
   return prisma.notificationsOnUsers.findMany({
-    orderBy: { notificationId: 'desc' },
+    orderBy: { notificationId: 'desc' }, 
     include:{
       notification:true
     },
