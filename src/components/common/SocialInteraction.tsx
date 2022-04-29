@@ -69,6 +69,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const router = useRouter();
   // const [session] = useSession() as [Session | null | undefined, boolean];
   const {data:session, status} = useSession();
+  const idSession = session ? session.user.id : null;
+
   const isLoadingSession = status === "loading"
   const [qty, setQty] = useState<number>(0);
 
@@ -85,25 +87,19 @@ const SocialInteraction: FunctionComponent<Props> = ({
   // const [optimistFavCount, setOptimistFavCount] = useState<number>(0);
   // const [optimistReadOrWatchedCount, setOptimistReadOrWatchedCount] = useState<number>(0);
   const queryClient = useQueryClient();
+  
 
-  const [idSession, setIdSession] = useState<string>('');
   const {
     isFetching: isFetchingUser,
     isLoading: isLoadingUser,
     isSuccess: isSuccessUser,
     isError,
     /* error, */ data: user,
-  } = useUser(+idSession,{ enabled: !!+idSession });
+  } = useUser(idSession!,{ enabled: !!idSession! });
   // const [user, setuser] = useState<UserDetail>();
-  const [showShare, setShowShare] = useState<boolean>(false);
-  const mosaicContext = useMosaicContext();
+  const {showShare} = useMosaicContext();
   const {notifier} = useNotificationContext();
-  useEffect(() => {
-    if (mosaicContext) {
-      setShowShare(mosaicContext.showShare);
-    }
-  }, [mosaicContext]);
-
+  
   // const calculateQty = () => {
   //   if (entity && (isWork(entity) || isCycle(entity))) {
   //     let qtySum = 0;
@@ -114,12 +110,6 @@ const SocialInteraction: FunctionComponent<Props> = ({
   //     setQty(() => qtySum);
   //   }
   // };
-
-  useEffect(() => {
-    if (session) {
-      setIdSession(session.user.id.toString());
-    }
-  }, [session]);
 
   useEffect(() => {
     if (isSuccessUser && idSession && !user) {

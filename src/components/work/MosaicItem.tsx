@@ -54,11 +54,11 @@ const MosaicItem: FunctionComponent<Props> = ({
 }) => {
   const { t } = useTranslation('common');
   const queryClient = useQueryClient()
-  const cycleContext = useCycleContext();
-  const [cycle, setCycle] = useState<CycleMosaicItem | null>();
-  useEffect(() => {
-    if (cycleContext) setCycle(cycleContext.cycle);
-  }, [cycleContext]);
+  const {cycle} = useCycleContext();
+  // const [cycle, setCycle] = useState<CycleMosaicItem | null>();
+  // useEffect(() => {
+  //   if (cycleContext) setCycle(cycleContext.cycle);
+  // }, [cycleContext]);
   const [loading, setLoading] = useState<boolean>(false);
   // const { linkToWork = true, work: workFromContext } = useWorkContext();
   // const [WORK] = useState<WorkMosaicItem>(work!);

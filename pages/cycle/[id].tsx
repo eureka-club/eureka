@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Spinner, Alert, Button } from 'react-bootstrap';
 
-import { dehydrate, QueryClient, useQuery,useQueryClient } from 'react-query';
+import { dehydrate, QueryClient, useIsFetching,useQueryClient } from 'react-query';
 // import { CycleMosaicItem } from '../../src/types/cycle';
 // import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
@@ -24,6 +24,9 @@ import globalModalsAtom from '../../src/atoms/globalModals';
 import { WEBAPP_URL } from '../../src/constants';
 import {CycleMosaicItem} from '@/src/types/cycle'
 import { UserMosaicItem } from '@/src/types/user';
+import { useToasts } from 'react-toast-notifications';
+import {useJoinUserToCycleAction} from '@/src/useCycleJoinOrLeaveActions'
+
 /*interface Props{
   id:number,
   metas:any
@@ -41,12 +44,16 @@ const whereCyclePosts = (id:number)=> ({AND:{ cycles:{ some: { id }}}})
 
 interface Props{
   id:number;
+  session: any;
+  metas:{id:number; title:string; storedFile: string};
+
 }
-const CycleDetailPage: NextPage = (props:any) => {
+const CycleDetailPage: NextPage<Props> = (props) => {
   // const [session, isLoadingSession] = useSession();
+  const {addToast} = useToasts();
   const session = props.session;
   const router = useRouter();
-  
+  const isFetchingCycle = useIsFetching(['CYCLE',`${props.id}`])
   const { data: cycle, isSuccess, isLoading, isFetching, isError, error } = useCycle(+props.id,{enabled:!!session});
   
   const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants(props.id),
@@ -56,56 +63,18 @@ const CycleDetailPage: NextPage = (props:any) => {
     },
   )
 
-  // const { data: works } = usePosts(whereCycleWorks(id), {
-  //   enabled:!!id
-  // })
-
-  //const {data:posts} = usePosts(whereCyclePosts,{enabled:!!cycle})
-  
-
-  // const [cycle, setCycle] = useState<CycleMosaicItem | undefined>(undefined);
   const { t } = useTranslation('common');
-  const queryClient = useQueryClient();
-  const cycleContext = useCycleContext();
-  const { requestJoinCycle: execJoinCycle } = cycleContext;
-    
   const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-  const [isRequestingJoinCycle, setIsRequestingJoinCycle] = useState<boolean>(false);
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
   const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
-
-  // useEffect(() => {
-  //   if (+id /* && isSuccess */ && (!cycle || !cycle.id)) {
-  //     queryClient.invalidateQueries(['CYCLE', `${+id}`]);
-  //   }
-  // }, [cycle, /* isSuccess, */ id]);
-
-
-  useEffect(() => {
-    // if (!isLoadingSession) {
-      if (!session) {
-        setCurrentUserIsParticipant(() => false);
-      } else if (session && cycle && session.user) {
-        const s = session;
-        if (cycle.creatorId === s.user.id) {
-          setCurrentUserIsParticipant(() => true);
-          return;
-        }
-        if (participants) {
-          const isParticipant = participants.findIndex((p) => p.id === s.user.id) > -1;
-          setCurrentUserIsParticipant(() => isParticipant);
-        }
-      }
-    // } else setCurrentUserIsParticipant(() => false);
-  }, [session, cycle, isSuccess]);
-
+ 
   const renderCycleDetailComponent = () => {
     if (cycle) {
       const res = <CycleDetailComponent />;
       if (cycle.access === 1) return res;
       if (cycle.access === 2) return res;
-      if (cycle.access === 3 && !currentUserIsParticipant) return <Alert>Not authorized</Alert>;
+      if (cycle.access === 3 && !cycle.currentUserIsParticipant) return <Alert>Not authorized</Alert>;
     }
 
     if (/* isLoadingSession || */ isFetching || isLoading ) {
@@ -126,43 +95,27 @@ const CycleDetailPage: NextPage = (props:any) => {
     setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
   };
 
+  const {
+    mutate: execJoinCycle,
+    isLoading: isJoinCycleLoading,
+    data: mutationResponse,
+    isSuccess:isJoined,    
+  } = useJoinUserToCycleAction(session.user,cycle!,participants||[],()=>{
+        addToast(t('OK'),{appearance:'success',autoDismiss:true});
+  });
+
   const requestJoinCycle = async () => {
-    
     if (!session) openSignInModal();
-    else if (execJoinCycle && cycle) {
-      const user = session.user;
-      setIsRequestingJoinCycle(true);
-      const res = await execJoinCycle(cycle,user.name||user.id.toString(),participants||[]);  
-    //   if (res === 'OK'){
-    //     setGlobalModalsState({
-    //       ...globalModalsState,
-    //       showToast: {
-    //         show: true,
-    //         type: 'info',
-    //         title: t('Join Cycle request notification'),
-    //         message: t(res),
-    //       },
-    //     });
-    //   }
-    //   else{
-    //     setGlobalModalsState({
-    //       ...globalModalsState,
-    //       showToast: {
-    //         show: true,
-    //         type: 'warning',
-    //         title: t('Join Cycle request notification'),
-    //         message: t(res),
-    //       },
-    //     });  
-    //   }
-      queryClient.invalidateQueries(['CYCLE', `${cycle.id}`]);
-      setIsRequestingJoinCycle(false);
+    else if (cycle) {
+      execJoinCycle();      
     }
   };
 
+  const isPending = ()=> isFetchingCycle>0||isJoinCycleLoading||isLoading||isLoadingParticipants;
+
   const getBanner = () => {
-    if (!currentUserIsParticipant && router && cycle) {
-      if (router.asPath.search(/\/cycle\/20/g) > -1)
+    if (cycle && !cycle?.currentUserIsParticipant && router) {
+      if (router.asPath.search(/\/cycle\/13/g) > -1)
         return (
           <Banner
             cacheKey={['BANNER-CYCLE', `${cycle.id}`]}
@@ -178,14 +131,14 @@ const CycleDetailPage: NextPage = (props:any) => {
 
                 <div className="d-grid gap-2">
                   <Button
-                    disabled={isRequestingJoinCycle}
+                    disabled={isPending()}
                     className="pt-2 pb-1 px-5"
                     variant="primary"
                     size="lg"
                     onClick={requestJoinCycle}
                   >
                     <h4 className="text-white fw-bold">
-                      ¡Unirse ya! {isRequestingJoinCycle && <Spinner size="sm" animation="grow" variant="info" />}
+                      ¡Unirse ya! {isPending() && <Spinner size="sm" animation="grow" variant="info" />}
                     </h4>
                   </Button>
                 </div>
@@ -232,6 +185,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { params, req } = ctx;
  const queryClient = new QueryClient() 
  const session = await getSession(ctx)
+ 
   if (params?.id == null || typeof params.id !== 'string') {
     return { notFound: true };
   }

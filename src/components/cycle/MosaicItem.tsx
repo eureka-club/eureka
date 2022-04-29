@@ -31,7 +31,7 @@ import useCycle from '@/src/useCycle'
 import Avatar from '../common/UserAvatar';
 import { UserMosaicItem } from '@/src/types/user';
 import useCycleJoinRequests,{setCycleJoinRequests,removeCycleJoinRequest} from '@/src/useCycleJoinRequests'
-// import { useMosaicContext } from '../../useMosaicContext';
+import {useJoinUserToCycleAction,useLeaveUserFromCycleAction} from '@/src/useCycleJoinOrLeaveActions'
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -134,159 +134,13 @@ const MosaicItem: FunctionComponent<Props> = ({
     isLoading: isJoinCycleLoading,
     data: mutationResponse,
     // isSuccess: isJoinCycleSuccess,
-  } = useMutation(
-    async () => {      
-      let notificationMessage = `userJoinedCycle!|!${JSON.stringify({
-        userName: user?.name,
-        cycleTitle: cycle?.title,
-      })}`;
-      const notificationToUsers = (participants || []).map(p=>p.id);
-      if(cycle?.creatorId) notificationToUsers.push(cycle?.creatorId);
+  } = useJoinUserToCycleAction(user!,cycle!,participants!);
 
-      const res = await fetch(`/api/cycle/${cycle!.id}/join`, { 
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          notificationMessage,
-          notificationContextURL: `/cycle/${cycle!.id}?tabKey=participants`,
-          notificationToUsers,
-        }),
-      });
-      if (!res.ok) {
-        setGlobalModalsState({
-          ...globalModalsState,
-          showToast: {
-            show: true,
-            type: 'info',
-            title: t('Join Cycle request notification'),
-            message: t(res.statusText),
-          },
-        });
-      }
-      else if(res.ok){
-        setCycleJoinRequests({userId:+idSession,cycleId:cycle!.id})
-        const json = await res.json();
-        if(notifier){
-          notifier.notify({
-            toUsers:notificationToUsers,
-            data:{message:notificationMessage}
-          });
-        }
-        if(cycle?.access == 2)
-               addToast( t(json.message), {appearance: 'success', autoDismiss: true,})
-      }
-
-    },
-    {
-      onMutate: async () => {
-        const ck = ['USERS',JSON.stringify(whereCycleParticipants)];
-        await queryClient.cancelQueries(ck);
-        const ss = queryClient.getQueryData<UserMosaicItem[]>(ck)
-        // setIsCurrentUserJoinedToCycle(true);
-        // setCountParticipants(res=>res?res+1:undefined)
-      
-        //   if (user) {
-        //     user.joinedCycles.push(cycle);
-        //     queryClient.setQueryData(['USER', user.id.toString()], () => user);
-        // setIsCurrentUserJoinedToCycle(true);
-        // setParticipants(cycle.participants.length + 1);
-        //   }
-        return {ss,ck}
-
-      },
-      onSettled(_data,error,_variable,context) {
-        const {ck,ss} = context as {ss:UserMosaicItem[],ck:string[]}
-        if(error){
-          // setIsCurrentUserJoinedToCycle(false);
-          // setCountParticipants(res=>res?res-1:undefined)
-          queryClient.setQueryData(ck,ss)
-        }
-        if(user){
-          queryClient.invalidateQueries(['USER', user.id.toString()]);
-          queryClient.invalidateQueries(cacheKey||['CYCLE',cycle?.id.toString()]);
-          queryClient.invalidateQueries(ck)
-        }
-        queryClient.invalidateQueries(['USER', +idSession, 'cycles-join-requests'])
-      },
-    },
-  );
   const {
     mutate: execLeaveCycle,
     isLoading: isLeaveCycleLoading,
     // isSuccess: isLeaveCycleSuccess,
-  } = useMutation(
-    async () => {
-      let notificationMessage = `userLeftCycle!|!${JSON.stringify({
-        userName: user?.name,
-        cycleTitle: cycle?.title,
-      })}`;
-      const notificationToUsers = (participants || []).filter(p=>p.id!==user?.id).map(p=>p.id);
-      if(cycle?.creatorId) notificationToUsers.push(cycle?.creatorId);
-
-      const res = await fetch(`/api/cycle/${cycle!.id}/join`, { 
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          notificationMessage,
-          notificationContextURL: `/cycle/${cycle!.id}?tabKey=participants`,
-          notificationToUsers,
-        })
-      });
-      if(!res.ok){
-        setGlobalModalsState({
-          ...globalModalsState,
-          showToast: {
-            show: true,
-            type: 'info',
-            title: t('Join Cycle request notification'),
-            message: t(res.statusText),
-          },
-        });        
-      }
-      else{
-        await removeCycleJoinRequest(+idSession,cycle!.id)
-        const json = await res.json();
-        if(notifier){
-          notifier.notify({
-            toUsers:notificationToUsers,
-            data:{message:notificationMessage}
-          });
-        }
-      }
-      
-    },
-    {
-      onMutate: async () => {
-        const ck = ['USERS',JSON.stringify(whereCycleParticipants)];
-        await queryClient.cancelQueries(ck);
-        const ss = queryClient.getQueryData<UserMosaicItem[]>(ck)
-        // setIsCurrentUserJoinedToCycle(false);
-        // setCountParticipants(res=>res?res-1:undefined)
-        //   if (user) {
-        //     user.joinedCycles.push(cycle);
-        //     queryClient.setQueryData(['USER', user.id.toString()], () => user);
-        // setIsCurrentUserJoinedToCycle(true);
-        // setParticipants(cycle.participants.length + 1);
-        //   }
-        return {ss,ck}
-
-      },
-      onSettled(_data,error,_variable,context) {
-        const {ck,ss} = context as {ss:UserMosaicItem[],ck:string[]}
-        if(error){
-          // setIsCurrentUserJoinedToCycle(true);
-          // setCountParticipants(res=>res?res+1:undefined)
-          queryClient.setQueryData(ck,ss)
-        }
-        if(user){
-          queryClient.invalidateQueries(['USER', user.id.toString()]);
-          queryClient.invalidateQueries(cacheKey||['CYCLE',cycle?.id.toString()]);
-          queryClient.invalidateQueries(ck)
-        }
-        queryClient.invalidateQueries(['USER', +idSession, 'cycles-join-requests'])
-      },
-    },
-  );
+  } = useLeaveUserFromCycleAction(user!,cycle!,participants!);
 
   useEffect(() => {
     if (mutationResponse) {
