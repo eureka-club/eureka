@@ -1,0 +1,58 @@
+
+.menuSection{
+ width: 30%;
+ height:auto;
+ background-color:var(--color-primary-raised);
+}
+
+.welcomeMobileSection{
+ background-color:var(--color-primary-raised);
+ width: 105%;
+  height:auto;
+}
+.menuSectionText{
+margin-top: 3rem;  
+}
+
+
+.otherText{
+font-size: 1.6rem;
+text-align: center;
+color: #fdf7f7;
+}
+
+.otherTextSelected{
+    text-decoration:underline;
+}
+
+.eurekaImage {
+   width: 30%;
+   height: 100%;
+}
+
+.imageContainer{
+  margin-top: 5rem;
+  margin-bottom: 3rem;
+}
+
+.contentText{
+  margin-top: 9rem;
+  text-align: justify;
+  margin-left: 3rem;
+  margin-bottom: 5rem;
+}
+
+
+@media screen and (max-width: 1024px) {
+
+.eurekaImage {
+   width: 40%;
+   height: 100%;
+}
+
+.imageContainer{
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+}

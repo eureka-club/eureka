@@ -1,23 +1,26 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
-import SignUpForm from '../src/components/forms/SignUpForm';
+import TermsAndPolicy from '@/src/components/TermsAndPolicy';
+import { useRouter } from 'next/router';
 
-const RegisterPage: NextPage = () => {
-  const { t } = useTranslation('signUpForm');
+
+const TermsPage: NextPage = () => {
+  const { t } = useTranslation('termsAndPolicy');
+  const router = useRouter();
+  const {show} = router.query ;
+
 
   return (
-    <SimpleLayout title={t('Sign up')} showNavBar={false}>
-          <SignUpForm noModal />
+    <SimpleLayout title={t('termsAndPolicy')} showNavBar={false}>
+          <TermsAndPolicy show={show as string}/>
     </SimpleLayout>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
+
   const session = await getSession(ctx);
   if (session != null) {
     return { redirect: { destination: '/', permanent: false } };
@@ -26,4 +29,4 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return { props: {} };
 };
 
-export default RegisterPage;
+export default TermsPage;

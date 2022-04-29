@@ -14,6 +14,10 @@
   "emailFieldLabel": "Email",
   "passwordFieldLabel":"Senha",
   "Join":"Cadastre-se",
-  "VisitEureka":"Visite Eureka"
+  "VisitEureka":"Visite Eureka",
+   "joinedTerms":"Ao aderir, você concorda com nossos",
+  "termsText":"Termos e manifesto",
+  "and":"e",
+  "policyText":"Política de privacidade"
 
 }

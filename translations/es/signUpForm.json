@@ -16,6 +16,9 @@
   "forgotPassText":"¿Olvidaste tu contraseña?",
   "dontHaveAccounttext":"¿Aún no tienes una cuenta?",
   "Join":"Únete",
-  "VisitEureka":"Ir a Eureka"
-
+  "VisitEureka":"Ir a Eureka",
+  "joinedTerms":"Al unirte, aceptas nuestros",
+  "termsText":"Términos y Manifiesto",
+  "and":"y",
+  "policyText":"Política de privacidad"
 }
