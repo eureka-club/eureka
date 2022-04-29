@@ -31,7 +31,7 @@ export default getApiHandler()
       const base64Hash = Buffer.from(`${user.email}!|!${user.password}`,'binary').toString('base64');
 
       const specs = {
-        url: `${process.env.NEXTAUTH_URL}/resetPass?hash=${base64Hash}`,
+        url: `${process.env.NEXTAUTH_URL}/${locale||'es'}/resetPass?hash=${base64Hash}`,
         to,
         title,
         subtitle,
@@ -58,7 +58,7 @@ export default getApiHandler()
       });
       
       if(status == 200)
-        res.redirect(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/auth/emailVerify`)
+        res.redirect(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/${locale||'es'}/auth/emailVerify`)
       else{
         res.statusMessage = statusText;  
         res.status(status).json({data:null});
