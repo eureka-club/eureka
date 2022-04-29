@@ -156,11 +156,11 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                   {t('Join')}
                 </Button>
                  <p className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-5 ${styles.joinedTermsText}`}>{t('joinedTerms')}
-                    <Link href="/terms" passHref>
+                    <Link href="/terms?show=manifesto" passHref>
                       <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`}>{t('termsText')}</span>
                     </Link>
                     {t('and')}
-                      <Link href="/terms" passHref>
+                      <Link href="/terms?show=policy" passHref>
                       <span className={`d-flex cursor-pointer ms-1 ${styles.linkText}`}>{t('policyText')}</span>
                     </Link>
                   </p>

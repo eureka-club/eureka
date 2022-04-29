@@ -16,6 +16,10 @@
   "forgotPassText":"Mot de passe oublié?",
    "dontHaveAccounttext":"Vous n'avez pas encore de compte?",
   "Join":"Rejoindre",
-  "VisitEureka":"Visitez Eurêka"
+  "VisitEureka":"Visitez Eurêka",
+  "joinedTerms":"En adhérant, vous acceptez les",
+  "termsText":"Terminos et Manifeste",
+  "and":"y",
+  "policyText":"Politique de confidentialité"
 
 }

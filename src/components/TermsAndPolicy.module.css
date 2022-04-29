@@ -1,6 +1,6 @@
 
-.welcomeSection{
- width: 40%;
+.menuSection{
+ width: 30%;
  height:auto;
  background-color:var(--color-primary-raised);
 }
@@ -10,18 +10,19 @@
  width: 105%;
   height:auto;
 }
-.welcomeSectionText{
-margin-top: 8rem;  
+.menuSectionText{
+margin-top: 3rem;  
 }
-.welcomeText{
-font-size: 2.0rem;
-margin-bottom: 6rem; 
-color: #fdf7f7;
-}
+
+
 .otherText{
-font-size: 1.1rem;
-margin-right: 1.5rem;
+font-size: 1.6rem;
+text-align: center;
 color: #fdf7f7;
+}
+
+.otherTextSelected{
+    text-decoration:underline;
 }
 
 .eurekaImage {
@@ -30,103 +31,19 @@ color: #fdf7f7;
 }
 
 .imageContainer{
-  margin-top: 3rem;
-  margin-bottom: 6rem;
+  margin-top: 5rem;
+  margin-bottom: 3rem;
 }
 
-.VisitEurekaText{
-  text-decoration:underline;
+.contentText{
+  margin-top: 9rem;
+  text-align: justify;
+  margin-left: 3rem;
+  margin-bottom: 5rem;
 }
 
-.registerFormSection{
-  margin-top: 8rem;
-  }
-  .registerForm{
-  width: 80%;
-}
-
-  .joinEurekaText{
-    font-size: 2rem;
-    text-align: center;
-    color:var(--color-primary-raised);
-  }
-  .haveAccounttext {
-  text-align: center;
-  font-size: 1.1rem;
-  margin-left: 1rem;
-    margin-bottom: 3rem;
-
-}
-
-.alternativeLabel {
-  color: var(--eureka-green);
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-  .buttonGoogle {
-  background: transparent ;
-  background-size: 26px;
-  border-radius: 0.5rem;
-  border: 1px solid var(--eureka-green);
-  font-size: 0.9rem;
-  margin: 0 auto;
-  text-align: center;
-  height: 3rem;
-  width: 80%;
-}
-.gmailLogo {
-   width: 1.5rem;
-  height: 1.5rem;
-}
-.gmailLogoAndtext{
-  margin-top: 11px;  
-}
-
-.personalData{
-  width: 48%;
-}
-
-.submitButton {
-  display: block;
-  margin-top: 4rem;
-  width: 70%;
-  font-size: 1.2rem;
-
-}
-.joinedTermsText{
-  font-size: 1rem;
-  width: 110%;
-}
-
-.linkText{
-  text-decoration:underline;
-}
 
 @media screen and (max-width: 1024px) {
-
-.personalData{
-  width: 100%;
-}
-.registerFormSection{
-  margin-top: 1rem;
-  margin-left: 1rem; 
-  }
-
-   .buttonGoogle {
-  width: 90%;
-}
-
-   .registerForm{
-  width: 90%;
-}
-
-.welcomeText{
-font-size: 2.5rem;
-margin-bottom: 1rem; 
-text-align: center;
-}
 
 .eurekaImage {
    width: 40%;
@@ -137,9 +54,5 @@ text-align: center;
   margin-top: 2rem;
   margin-bottom: 1rem;
 }
-
-.joinEurekaText{
-    font-size: 2.5rem;
-  }
 
 }
