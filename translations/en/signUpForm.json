@@ -20,5 +20,5 @@
   "termsText":" Terms and Manifesto",
   "and":"and",
   "policyText":" Privacy Policy",
-  "passRequirements":"8 characters, at least 1 letter, at least 1 number"
+  "passRequirements":"Must be at least 8 characters long, 1 letter min., 1 number min."
 }
