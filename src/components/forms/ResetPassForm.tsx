@@ -45,19 +45,16 @@ const ResetPassForm: FunctionComponent<Props> = ({userId,email}) => {
     const ConfirmPassword = form.ConfirmPassword.value;
     
     const validPassword = validatePassword(password)
-    if(!validPassword){
-      setValidated(false)
-      return false;
-    }
-
     const validConfirmPassword = validatePassword(ConfirmPassword)
-    if(!validConfirmPassword){
+    if(!validPassword || !validConfirmPassword){
       setValidated(false)
+       addToast( 'Invalid password, at least 8 characters (requires letters and number)' , {appearance: 'error', autoDismiss: true,})
       return false;
     }
 
     if(ConfirmPassword!==password){
       setValidated(false)
+      addToast( 'Passwords do not match' , {appearance: 'error', autoDismiss: true,})
       return false;
     }
     
@@ -83,10 +80,7 @@ const ResetPassForm: FunctionComponent<Props> = ({userId,email}) => {
         .then(res=>{
           const r = res as unknown as {error:string}
           if(res && r.error)
-            addToast('Invalid session',{
-              appearance:'warning',
-              autoDismiss:true,                
-          })
+            addToast( t('Invalid session') , {appearance: 'error', autoDismiss: true,})
           else{
             router.push(localStorage.getItem('loginRedirect') || '/')
           }
@@ -126,7 +120,7 @@ const ResetPassForm: FunctionComponent<Props> = ({userId,email}) => {
                   {t('resetPassword1')} {loading && <Spinner animation="grow" />}
                 </Button>
                 </div>
-                {!validated && <Alert variant="danger">Invalid password, at least 8 characters (requires letters and number)</Alert>}
+                {/*!validated && <Alert variant="danger">Invalid password, at least 8 characters (requires letters and number)</Alert>*/}
               </Form>
             </div>
     </Container>
