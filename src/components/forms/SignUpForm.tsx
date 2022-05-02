@@ -148,7 +148,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                     <Form.Control className='mb-2' type="email" required />
                   </Form.Group>
                   <Form.Group controlId="password">
-                    <Form.Label>{t('passwordFieldLabel')}</Form.Label>
+                    <Form.Label>{t('passwordFieldLabel')} <span className={styles.passRequirement}>{` (${t('passRequirements')})`}</span></Form.Label>
                     <Form.Control type="password" required />
                   </Form.Group>
                 <div className="d-flex flex-column align-items-center justify-content-center">

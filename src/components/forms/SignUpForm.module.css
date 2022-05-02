@@ -104,6 +104,11 @@ color: #fdf7f7;
   text-decoration:underline;
 }
 
+.passRequirement{
+  color: rgb(182, 177, 177);
+  font-size: 0.75rem;
+}
+
 @media screen and (max-width: 1024px) {
 
 .personalData{

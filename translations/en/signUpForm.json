@@ -19,5 +19,6 @@
   "joinedTerms":"By joining, you agree to the",
   "termsText":" Terms and Manifesto",
   "and":"and",
-  "policyText":" Privacy Policy"
+  "policyText":" Privacy Policy",
+  "passRequirements":"8 characters, at least 1 letter, at least 1 number"
 }

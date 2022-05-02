@@ -48,13 +48,13 @@ const ResetPassForm: FunctionComponent<Props> = ({userId,email}) => {
     const validConfirmPassword = validatePassword(ConfirmPassword)
     if(!validPassword || !validConfirmPassword){
       setValidated(false)
-       addToast( 'Invalid password, at least 8 characters (requires letters and number)' , {appearance: 'error', autoDismiss: true,})
+       addToast( t('InvalidPassword') , {appearance: 'error', autoDismiss: true,})
       return false;
     }
 
     if(ConfirmPassword!==password){
       setValidated(false)
-      addToast( 'Passwords do not match' , {appearance: 'error', autoDismiss: true,})
+      addToast( t('PasswordsDontMatch') , {appearance: 'error', autoDismiss: true,})
       return false;
     }
     
@@ -108,7 +108,7 @@ const ResetPassForm: FunctionComponent<Props> = ({userId,email}) => {
             <div className="mb-5 d-flex justify-content-center">
              <Form ref={formRef} className={`d-flex flex-column ${styles.sendForm}`}>
                  <Form.Group className="mb-2" controlId="password">
-                    <Form.Label>{t('NewpasswordFieldLabel')}</Form.Label>
+                    <Form.Label>{t('NewpasswordFieldLabel')} <span className={styles.passRequirement}>{` (${t('signUpForm:passRequirements')})`}</span></Form.Label>
                     <Form.Control type="password" name="password" required />
                   </Form.Group>
                   <Form.Group controlId="ConfirmPassword">

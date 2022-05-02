@@ -37,6 +37,11 @@
   width: 40%;
 }
 
+.passRequirement{
+  color: rgb(182, 177, 177);
+  font-size: 0.75rem;
+}
+
 
 @media screen and (max-width: 1024px) {
  

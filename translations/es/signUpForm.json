@@ -20,5 +20,7 @@
   "joinedTerms":"Al unirte, aceptas nuestros",
   "termsText":"Términos y Manifiesto",
   "and":"y",
-  "policyText":"Política de privacidad"
+  "policyText":"Política de privacidad",
+  "passRequirements":"8 caracteres, al menos 1 letra, al menos 1 numero"
+
 }
