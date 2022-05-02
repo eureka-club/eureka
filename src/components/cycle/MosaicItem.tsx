@@ -31,7 +31,7 @@ import useCycle from '@/src/useCycle'
 import Avatar from '../common/UserAvatar';
 import { UserMosaicItem } from '@/src/types/user';
 import useCycleJoinRequests,{setCycleJoinRequests,removeCycleJoinRequest} from '@/src/useCycleJoinRequests'
-import {useJoinUserToCycleAction,useLeaveUserFromCycleAction} from '@/src/useCycleJoinOrLeaveActions'
+import {useJoinUserToCycleAction,useLeaveUserFromCycleAction} from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -122,6 +122,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   
   // const { id, title, localImages,} = cycle!;
   const { t } = useTranslation('common');
+  const isFetchingCycle = useIsFetching(['CYCLE',`${cycle?.id}`])
+
   
   const isActive = () => cycle ? dayjs().isBetween(cycle.startDate, cycle.endDate, null, '[]') : false;
 
@@ -134,7 +136,12 @@ const MosaicItem: FunctionComponent<Props> = ({
     isLoading: isJoinCycleLoading,
     data: mutationResponse,
     // isSuccess: isJoinCycleSuccess,
-  } = useJoinUserToCycleAction(user!,cycle!,participants!);
+  } = useJoinUserToCycleAction(user!,cycle!,participants!,(_data,error)=>{
+    if(!error)
+      addToast(t('OK'),{appearance:'success',autoDismiss:true});
+    else
+      addToast(t('Internal Server Error'),{appearance:'error',autoDismiss:true});
+});
 
   const {
     mutate: execLeaveCycle,
@@ -142,19 +149,21 @@ const MosaicItem: FunctionComponent<Props> = ({
     // isSuccess: isLeaveCycleSuccess,
   } = useLeaveUserFromCycleAction(user!,cycle!,participants!);
 
-  useEffect(() => {
-    if (mutationResponse) {
-      setGlobalModalsState({
-        ...globalModalsState,
-        showToast: {
-          show: true,
-          type: 'success',
-          title: t('Join Cycle request notification'),
-          message: mutationResponse,
-        },
-      });
-    }
-  }, [mutationResponse]);
+  // useEffect(() => {
+  //   if (mutationResponse) {
+  //     setGlobalModalsState({
+  //       ...globalModalsState,
+  //       showToast: {
+  //         show: true,
+  //         type: 'success',
+  //         title: t('Join Cycle request notification'),
+  //         message: mutationResponse,
+  //       },
+  //     });
+  //   }
+  // }, [mutationResponse]);
+
+  const isPending = ()=> isLoadingSession || isFetchingCycle>0 || isJoinCycleLoading || isLeaveCycleLoading;
 
   const showJoinButtonCycle = () => {
     const isLoading = isJoinCycleLoading || isLeaveCycleLoading;
@@ -233,7 +242,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 
       if(cycle.currentUserIsParticipant)
         return <Button 
-          disabled={(isJoinCycleLoading || isLeaveCycleLoading)}
+          disabled={isPending()}
           onClick={handleLeaveCycleClick} variant="button border-primary text-primary fs-6" className="w-75">
             {t('leaveCycleLabel')}
           </Button>
@@ -246,7 +255,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             </Button>
 
       return <Button 
-        disabled={(isJoinCycleLoading || isLeaveCycleLoading)}
+        disabled={isPending()}
         onClick={handleJoinCycleClick} className="w-75 text-white">
           {t('joinCycleLabel')}
         </Button>

@@ -25,7 +25,7 @@ import { WEBAPP_URL } from '../../src/constants';
 import {CycleMosaicItem} from '@/src/types/cycle'
 import { UserMosaicItem } from '@/src/types/user';
 import { useToasts } from 'react-toast-notifications';
-import {useJoinUserToCycleAction} from '@/src/useCycleJoinOrLeaveActions'
+import {useJoinUserToCycleAction} from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
 
 /*interface Props{
   id:number,
@@ -118,7 +118,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
 
   const getBanner = () => {
     if (cycle && !cycle?.currentUserIsParticipant && router) {
-      if (router.asPath.search(/\/cycle\/20/g) > -1)
+      if (router.asPath.search(/\/cycle\/13/g) > -1)
         return (
           <Banner
             cacheKey={['BANNER-CYCLE', `${cycle.id}`]}
