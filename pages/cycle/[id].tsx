@@ -100,8 +100,11 @@ const CycleDetailPage: NextPage<Props> = (props) => {
     isLoading: isJoinCycleLoading,
     data: mutationResponse,
     isSuccess:isJoined,    
-  } = useJoinUserToCycleAction(session.user,cycle!,participants||[],()=>{
-        addToast(t('OK'),{appearance:'success',autoDismiss:true});
+  } = useJoinUserToCycleAction(session.user,cycle!,participants||[],(_data,error)=>{
+        if(!error)
+          addToast(t('OK'),{appearance:'success',autoDismiss:true});
+        else
+          addToast(t('Internal Server Error'),{appearance:'error',autoDismiss:true});
   });
 
   const requestJoinCycle = async () => {
@@ -115,7 +118,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
 
   const getBanner = () => {
     if (cycle && !cycle?.currentUserIsParticipant && router) {
-      if (router.asPath.search(/\/cycle\/13/g) > -1)
+      if (router.asPath.search(/\/cycle\/20/g) > -1)
         return (
           <Banner
             cacheKey={['BANNER-CYCLE', `${cycle.id}`]}
