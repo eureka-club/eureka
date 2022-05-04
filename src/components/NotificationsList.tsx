@@ -171,22 +171,24 @@ const NotificationsList: React.FC<Props> = ({className}) => {
         </Popover> : <></>
       }
     >
-      <Button variant="outline-light" className="text-dark border-0 " disabled={notNewsNotifications()}>
-              <aside className="position-relative d-none d-md-inline-block">
+      <Button variant="outline-light" className={`text-dark border-0 p-0 ${styles.langSwitch}`} disabled={notNewsNotifications()}>
+              <aside className="position-relative d-none d-md-inline-block mt-1">
                 <IoNotificationsCircleOutline className={`${styles.navbarIconNav} ${notNewsNotifications() ? 'text-dark':'text-primary'}`}  />
                 {notVieweds.length && <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                   {notVieweds.length}
                   <span className="visually-hidden">unread messages</span>
                 </span> || ''}
               </aside>
-              <aside className="d-md-none position-relative">
+              
+              
+              <aside className="d-md-none position-relative me-3">
                 <IoNotificationsCircleOutline className={`${styles.navbarIconNav} ${notNewsNotifications() ? 'text-dark':'text-primary'}`} />
                 {notVieweds.length && <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                   {notVieweds.length}
                   <span className="visually-hidden">unread messages</span>
                 </span>||''}
               </aside>
-              <span className={`d-none d-lg-block ${styles.menuBottomInfo}`} style={{marginTop:'6px'}}>{t('navbar:Notifications')}</span>
+              <span className={`d-none d-lg-block ${styles.menuBottomInfo} mt-2 ms-1`}>{t('navbar:Notifications')}</span>
     
                     </Button>
     </OverlayTrigger>}

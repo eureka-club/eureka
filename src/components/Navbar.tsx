@@ -191,7 +191,7 @@ const NavBar: FunctionComponent = () => {
             )}
           </Nav>
           {session && session.user && (
-            <Nav className={styles.navbarNav}>
+            <Nav className={`${styles.navbarNav} text-center d-flex me-4`}>
               <Nav.Item>
                 <Link href={`/mediatheque/${session.user.id}`}>
                   <a className={styles.navLink}>
@@ -259,7 +259,7 @@ const NavBar: FunctionComponent = () => {
           </Nav>
           </>)}
           {session && session.user && (
-            <Nav className={styles.navbarNav}>
+            <Nav className={`${styles.navbarNav} d-flex me-2`}>
               <Dropdown align="end" className={`${styles.langSwitch} ${styles.avatar}`}>
                 <Dropdown.Toggle as={ChevronToggle} >{getAvatar()}</Dropdown.Toggle>
                 <span className={styles.menuBottomInfo}>{t('Account')}</span>
