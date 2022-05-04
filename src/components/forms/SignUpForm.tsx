@@ -112,7 +112,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
           <Col className={`col-12 col-lg-6`}>
             <div className={`${styles.registerFormSection}`}>
           <Row > 
-              <span className={`ms-3 ${styles.joinEurekaText}`}>{t('JoinEureka')}</span>
+              <span className={`lg-ms-3 ${styles.joinEurekaText}`}>{t('JoinEureka')}</span>
               <p className={`${styles.haveAccounttext}`}>{t('HaveAccounttext')} <Link href="/login">
                  <a className="">{t('Login')}</a></Link></p>
               <button type="button" className={`d-flex justify-content-center ${styles.buttonGoogle}`}>
