@@ -181,35 +181,6 @@ const AboutPage: NextPage = () => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
-                src="/img/aboutUs/igor_hlina.jpg"
-                alt="Picture of Full-stack developer (via Toptal)"
-                width={200}
-                height={200}
-              />
-              <h2 className={styles.peopleName}>
-                Igor Hlina (via Toptal)
-                <a href="https://www.toptal.com/resume/igor-hlina" target="_blank" rel="noreferrer">
-                  <SiToptal className={styles.si} />
-                </a>
-              </h2>
-              <h3 className={styles.professionName}>{t('Full-stack developer')}</h3>
-              <h4 className={styles.positionName}>{t('Devops and front-end expert')}</h4>
-              <Badge pill className={className('badge-secondary', styles.interest)}>
-                {t('electronics')}
-              </Badge>
-              <br />
-              <Badge pill className={className('badge-secondary', styles.interest)}>
-                {t('swimming')}
-              </Badge>
-              <br />
-              <Badge pill className={className('badge-secondary', styles.interest)}>
-                {t('beatbox')}
-              </Badge>
-            </Col>
-
-            <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
-              <Image
-                className="rounded-circle"
                 src="/img/aboutUs/daniela-goncalves.jpeg"
                 alt="Picture of Advisor"
                 width={200}
