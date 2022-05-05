@@ -20,5 +20,10 @@
   "termsText":" Terms and Manifesto",
   "and":"and",
   "policyText":" Privacy Policy",
-  "passRequirements":"Must be at least 8 characters long, 1 letter min., 1 number min."
+  "passRequirements":"Must be at least 8 characters long, 1 letter min., 1 number min.",
+  "UserRegistered":"User already registered",
+  "emptyFields":"All data are required (Email, Password, Name and Last Name)",
+  "InvalidMail":"Invalid mail",
+  "InvalidPassword":"Invalid. Password must be at least 8 characters long, and must contain at least one digit (0-9)."
+
 }

@@ -53,10 +53,32 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
             // return data;
         }
         else{
-            addToast(res.statusText)
+            addToast(res.statusText,{appearance: 'error',autoDismiss:true})
         }
         return null;
     })
+
+     const validateEmail = (text:string)=>{
+       const emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
+
+        if(!text.match(emailRegex)){
+          return false;
+        }
+        return true;
+      }
+
+       const validatePassword = (text:string)=>{
+          if(text.length<8){
+            return false;
+          }
+          if(!text.match(/[a-zA-z]/g)){
+            return false;
+          }
+          if(!text.match(/\d/g)){
+            return false;
+          }
+          return true;
+        }
 
     const handleSubmitSignUp = async (e:React.MouseEvent<HTMLButtonElement>)=>{
         //mutate user custom data
@@ -65,7 +87,19 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
           const email = form.email.value;
           const password = form.password.value;
           const fullName = form.Name.value + ' ' + form.lastname.value;
+          
           if(email && password && fullName){
+
+            if(!validateEmail(email)){
+               addToast( t('InvalidMail') , {appearance: 'error', autoDismiss: true,});
+               return false;
+            }
+
+            if(!validatePassword(password)){
+               addToast( t('InvalidPassword') , {appearance: 'error', autoDismiss: true,});
+               return false;
+            }
+          
             const ur = await userRegistered(email)
             if(!ur){
               mutate({
@@ -74,10 +108,10 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                   fullName,
               }); 
             }
-            else addToast('User already registered',{autoDismiss:true})
+            else addToast(t('UserRegistered') ,{appearance: 'error',autoDismiss:true})
           }
           else
-            addToast('All data are required (Email, Password, Name and Last Name)')
+            addToast(t('emptyFields'), {appearance: 'error', autoDismiss: true,})
         }
     }
 

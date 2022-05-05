@@ -19,5 +19,9 @@
   "termsText":"Termos e manifesto",
   "and":"e",
   "policyText":"Política de privacidade",
-  "passRequirements":"mínimo 8 caracteres, min. 1 letra, min. 1 número"
+  "passRequirements":"mínimo 8 caracteres, min. 1 letra, min. 1 número",
+   "UserRegistered":"Usuário já cadastrado",
+  "emptyFields":"Todos os dados são obrigatórios (E-mail, Senha, Nome e Sobrenome)",
+  "InvalidMail":"E-mail inválido",
+  "InvalidPassword":"Inválido. A senha deve ter pelo menos 8 caracteres e deve conter pelo menos um dígito (0-9)."
 }
