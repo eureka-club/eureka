@@ -233,7 +233,6 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         }
       });
     if (cycle.cycleWorksDates.length) return res;
-        console.log(works,'works')
 
     return works;
   };

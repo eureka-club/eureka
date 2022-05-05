@@ -35,7 +35,7 @@ export default getApiHandler()
         }
         return p;
       },result)
-      res.status(200).json({ notifications:result });
+      return res.status(200).json({ notifications:result });
     }
     else {
       notifications = await prisma.notification.findMany();      

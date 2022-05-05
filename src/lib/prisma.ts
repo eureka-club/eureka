@@ -4,7 +4,7 @@ const { NODE_ENV } = process.env;
 const log: Prisma.LogLevel[] = [];
 
 if (NODE_ENV === 'development') {
-  log.push('query');
+  // log.push('query');
 }
 
 const prisma = new PrismaClient({ log });

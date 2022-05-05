@@ -20,14 +20,14 @@ class MyDocument extends Document {
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
           <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
           <link
-            rel="preload"
+            rel="preconnect"
             href="https://fonts.gstatic.com/s/opensans/v18/mem8YaGs126MiZpBA-UFVZ0bf8pkAg.woff2"
             as="font"
             type="font/woff2"
             crossOrigin="anonymous"
           />
           <link
-            rel="preload"
+            rel="preconnect"
             href="https://fonts.gstatic.com/s/opensans/v18/mem5YaGs126MiZpBA-UNirkOUuhpKKSTjw.woff2"
             as="font"
             type="font/woff2"

@@ -10,9 +10,9 @@ import {SearchResult} from "@/src/types"
 // type Item = WorkMosaicItem | CycleMosaicItem
 
 const getRecordsWorks = async (q?: string): Promise<WorkMosaicItem[]> => {
-  let url = '/api/work';
+  let url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/work`;
   if(q){
-    url = `/api/work${q ? `?q=${q}` : ''}`;
+    url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/work${q ? `?q=${q}` : ''}`;
   }
 
   const res = await fetch(url);
@@ -22,9 +22,9 @@ const getRecordsWorks = async (q?: string): Promise<WorkMosaicItem[]> => {
 };
 
 const getRecordsCycles = async (q?: string): Promise<CycleMosaicItem[]> => {
-  let url = '/api/cycle';
+  let url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle`;
   if (q) {
-    url = `/api/cycle${q ? `?q=${q}` : ''}`;
+    url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle${q ? `?q=${q}` : ''}`;
   }
 
   const res = await fetch(url);
@@ -35,9 +35,9 @@ const getRecordsCycles = async (q?: string): Promise<CycleMosaicItem[]> => {
 };
 
 const getRecordsPosts = async (q?: string): Promise<PostMosaicItem[]> => {
-  let url = '/api/post';
+  let url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/post`;
   if (q) {
-    url = `/api/post${q ? `?q=${q}` : ''}`;
+    url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/post${q ? `?q=${q}` : ''}`;
   }
   
   const res = await fetch(url);

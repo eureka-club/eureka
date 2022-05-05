@@ -62,7 +62,6 @@ describe('WorkDetail suit',()=>{
       .should('have.property','data')
       .should('have.length.gte',1)
       .then((data)=>{
-        console.log(data,'works')
         const work = data[0]
         const wherePosts = encodeURIComponent(JSON.stringify({
           works:{some:{id:work.id}}
