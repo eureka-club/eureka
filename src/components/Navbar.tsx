@@ -191,7 +191,7 @@ const NavBar: FunctionComponent = () => {
             )}
           </Nav>
           {session && session.user && (
-            <Nav className={`${styles.navbarNav} text-center d-flex me-4`}>
+            <Nav className={`${styles.navbarNav} text-center d-flex me-1`}>
               <Nav.Item>
                 <Link href={`/mediatheque/${session.user.id}`}>
                   <a className={styles.navLink}>
@@ -234,7 +234,7 @@ const NavBar: FunctionComponent = () => {
               </Dropdown.Menu>
             </Dropdown>
           </Nav>
-          <Nav className='me-4'>
+          <Nav className='me-1'>
             {router.locales?.length && (
               <Dropdown align="end" className={styles.langSwitch} onSelect={handleLanguageSelect}>
                 <Dropdown.Toggle as={ChevronToggle} id="langSwitch">
@@ -244,7 +244,7 @@ const NavBar: FunctionComponent = () => {
                     alt={`Language flag '${router.locale}'`}
                   />
                 </Dropdown.Toggle>
-                <span className={styles.menuBottomInfo}>{t('Language')}</span>
+                <span className={`${styles.menuBottomInfo}`}>{t('Language')}</span>
                 <Dropdown.Menu>
                   {router.locales.map((locale) => (
                     <Dropdown.Item key={locale} eventKey={locale} active={locale === router.locale}>
@@ -259,7 +259,7 @@ const NavBar: FunctionComponent = () => {
           </Nav>
           </>)}
           {session && session.user && (
-            <Nav className={`${styles.navbarNav} d-flex me-2`}>
+            <Nav className={`${styles.navbarNav} d-flex me-1`}>
               <Dropdown align="end" className={`${styles.langSwitch} ${styles.avatar}`}>
                 <Dropdown.Toggle as={ChevronToggle} >{getAvatar()}</Dropdown.Toggle>
                 <span className={styles.menuBottomInfo}>{t('Account')}</span>
