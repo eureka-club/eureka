@@ -40,24 +40,30 @@ const ResetPassForm: FunctionComponent<Props> = ({userId,email}) => {
     const url = `/api/user/${userId}/resetPass`;
 
     if(!form)return false;
-    
+
+    if(!form.password.value || !form.ConfirmPassword.value){
+           addToast( t('NotEmptyPassword') , {appearance: 'error', autoDismiss: true,});
+           return false;
+    }
+
     const password = form.password.value;
     const ConfirmPassword = form.ConfirmPassword.value;
     
     const validPassword = validatePassword(password)
     const validConfirmPassword = validatePassword(ConfirmPassword)
+    
+      if(ConfirmPassword!==password){
+      setValidated(false)
+      addToast( t('PasswordsDontMatch') , {appearance: 'error', autoDismiss: true,})
+      return false;
+    }
+
     if(!validPassword || !validConfirmPassword){
       setValidated(false)
        addToast( t('InvalidPassword') , {appearance: 'error', autoDismiss: true,})
       return false;
     }
 
-    if(ConfirmPassword!==password){
-      setValidated(false)
-      addToast( t('PasswordsDontMatch') , {appearance: 'error', autoDismiss: true,})
-      return false;
-    }
-    
     setLoading(true);
     setValidated(true)
     const res = await fetch(url,{
@@ -109,7 +115,7 @@ const ResetPassForm: FunctionComponent<Props> = ({userId,email}) => {
              <Form ref={formRef} className={`d-flex flex-column ${styles.sendForm}`}>
                  <Form.Group className="mb-2" controlId="password">
                     <Form.Label>{t('NewpasswordFieldLabel')} <span className={styles.passRequirement}>{` (${t('signUpForm:passRequirements')})`}</span></Form.Label>
-                    <Form.Control type="password" name="password" required />
+                    <Form.Control type="password" name="password" required/>
                   </Form.Group>
                   <Form.Group controlId="ConfirmPassword">
                     <Form.Label>{t('ConfirmNewpasswordFieldLabel')}</Form.Label>
