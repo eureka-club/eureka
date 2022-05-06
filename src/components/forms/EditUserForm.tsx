@@ -488,13 +488,15 @@ const EditUserForm: FunctionComponent = () => {
 
             <Container className="mt-4 py-3">
               <Button variant="primary" disabled={isLoadingUser} type="submit" className="text-white">
-                {t('Edit')}
-                {isLoadingUser ? (
-                  <Spinner animation="grow" variant="info" size="sm" className="ms-1" />
-                ) : (
-                  <span className={styles.placeholder} />
-                )}
-                {isError && editUserError}
+                <>
+                  {t('Edit')}
+                  {isLoadingUser ? (
+                    <Spinner animation="grow" variant="info" size="sm" className="ms-1" />
+                  ) : (
+                    <span className={styles.placeholder} />
+                  )}
+                  {isError && editUserError}
+                </>
               </Button>
             </Container>
         </Form>

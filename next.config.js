@@ -7,7 +7,6 @@ const domain = process.env.NODE_ENV !== 'production'
 
 module.exports = {
     ...nextTranslate(),
-    swcMinify: true,
     sassOptions: {
         includePaths: [path.join(__dirname, 'scss')],
     },

@@ -862,11 +862,13 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
               type="submit"
               className="p-2 text-white"
             >
-              {t('submitBtnLabel')}
-              {isCreateCycleReqLoading && (
-                <Spinner animation="grow" variant="info" size="sm" />
-              )}
-              {isCreateCycleReqError && createCycleReqError}
+              <>
+                {t('submitBtnLabel')}
+                {isCreateCycleReqLoading && (
+                  <Spinner animation="grow" variant="info" size="sm" />
+                )}
+                {isCreateCycleReqError && createCycleReqError}
+              </>
             </Button>
           </section>
  </Form>

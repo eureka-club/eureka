@@ -389,22 +389,26 @@ const CreateWorkForm: FunctionComponent<Props> = ({noModal = false})=> {
       <ModalFooter>
         <Container className="py-1">
           <Button variant="primary" type="submit" className="d-none d-lg-block float-end text-white">
-            {t('submitButtonLabel')}
-            {isLoading ? (
-              <Spinner animation="grow" variant="info" className={`ms-2 ${styles.loadIndicator}`} size="sm"  />
-            ) : (
-              <span className={styles.placeholder} />
-            )}
-            {isError && createWorkError}
+            <>
+              {t('submitButtonLabel')}
+              {isLoading ? (
+                <Spinner animation="grow" variant="info" className={`ms-2 ${styles.loadIndicator}`} size="sm"  />
+              ) : (
+                <span className={styles.placeholder} />
+              )}
+              {isError && createWorkError}
+            </>
           </Button>
           <Button variant="primary" type="submit" className="d-block d-lg-none w-100 text-white">
-            {t('submitButtonLabel')}
-            {isLoading ? (
-              <Spinner animation="grow" variant="info" className={`ms-2 ${styles.loadIndicator}`} size="sm"  />
-            ) : (
-              <span className={styles.placeholder} />
-            )}
-            {isError && createWorkError}
+            <>
+              {t('submitButtonLabel')}
+              {isLoading ? (
+                <Spinner animation="grow" variant="info" className={`ms-2 ${styles.loadIndicator}`} size="sm"  />
+              ) : (
+                <span className={styles.placeholder} />
+              )}
+              {isError && createWorkError}
+            </>
           </Button>
         </Container>
       </ModalFooter>

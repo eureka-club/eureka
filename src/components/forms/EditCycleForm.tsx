@@ -589,13 +589,15 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
                 type="submit"
                 className="float-right ps-5 pe-4"
               >
-                {t('Edit Cycle')}
-                {isEditCycleReqLoading ? (
-                  <Spinner animation="grow" variant="info" className={styles.loadIndicator} />
-                ) : (
-                  <span className={styles.loadIndicator} />
-                )}
-                {isEditCycleReqError && editCycleReqError}
+                <>
+                  {t('Edit Cycle')}
+                  {isEditCycleReqLoading ? (
+                    <Spinner animation="grow" variant="info" className={styles.loadIndicator} />
+                  ) : (
+                    <span className={styles.loadIndicator} />
+                  )}
+                  {isEditCycleReqError && editCycleReqError}
+                </>
               </Button>
               <Button
                 variant="outline-secondary"

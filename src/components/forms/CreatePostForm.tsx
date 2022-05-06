@@ -603,13 +603,15 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
             </Col>
             <Col className="mb-4">
               <Button variant="primary" disabled={isCreatePostLoading} onClick={(e)=>{handleSubmit(e)}} className="w-100 text-white">
-                {t('submitButtonLabel')}
-                {isCreatePostLoading ? (
-                  <Spinner className="ms-2" animation="grow" variant="info" size="sm" />
-                ) : (
-                  <span className={styles.placeholder} />
-                )}
-                {isCreatePostError && createPostError}
+                <>
+                  {t('submitButtonLabel')}
+                  {isCreatePostLoading ? (
+                    <Spinner className="ms-2" animation="grow" variant="info" size="sm" />
+                  ) : (
+                    <span className={styles.placeholder} />
+                  )}
+                  {isCreatePostError && createPostError}
+                </>
               </Button>
             </Col>
           </Row>

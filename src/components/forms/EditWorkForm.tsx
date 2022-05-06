@@ -431,13 +431,15 @@ const EditWorkForm: FunctionComponent = () => {
         <ModalFooter>
           <Container className="py-3">
             <Button variant="primary" type="submit" className="ps-5 pe-4 float-right">
-              {t('titleEdit')}
-              {isLoading ? (
-                <Spinner animation="grow" variant="info" className={styles.loadIndicator} />
-              ) : (
-                <span className={styles.placeholder} />
-              )}
-              {isError && editWorkError}
+              <>
+                {t('titleEdit')}
+                {isLoading ? (
+                  <Spinner animation="grow" variant="info" className={styles.loadIndicator} />
+                ) : (
+                  <span className={styles.placeholder} />
+                )}
+                {isError && editWorkError}
+              </>
             </Button>
           </Container>
         </ModalFooter>

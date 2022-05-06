@@ -515,13 +515,15 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
               </Col>
               <Col className='mb-4' style={{ borderLeft: '1px solid lightgrey' }}>
                 <Button variant="primary" disabled={isEditPostLoading} type="submit" className="ps-5 pe-4 w-100">
-                  {t('titleEdit')}
-                  {isEditPostLoading ? (
-                    <Spinner size="sm" animation="grow" variant="secondary" className={styles.loadIndicator} />
-                  ) : (
-                    <span className={styles.placeholder} />
-                  )}
-                  {isEditPostError && createPostError}
+                  <>
+                    {t('titleEdit')}
+                    {isEditPostLoading ? (
+                      <Spinner size="sm" animation="grow" variant="secondary" className={styles.loadIndicator} />
+                    ) : (
+                      <span className={styles.placeholder} />
+                    )}
+                    {isEditPostError && createPostError}
+                  </>
                 </Button>
               </Col>
             </Row>
