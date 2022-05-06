@@ -100,7 +100,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
     isLoading: isJoinCycleLoading,
     data: mutationResponse,
     isSuccess:isJoined,    
-  } = useJoinUserToCycleAction(session.user,cycle!,participants||[],(_data,error)=>{
+  } = useJoinUserToCycleAction(session?.user,cycle!,participants||[],(_data,error)=>{
         if(!error)
           addToast(t('OK'),{appearance:'success',autoDismiss:true});
         else
@@ -184,7 +184,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {debugger;
   const { params, req } = ctx;
  const queryClient = new QueryClient() 
  const session = await getSession(ctx)

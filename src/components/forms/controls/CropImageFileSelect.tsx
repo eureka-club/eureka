@@ -52,7 +52,6 @@ const CropImageFileSelect: React.FC<Props> = ({onGenerateCrop,onClose,cropShape}
 
 const onFileChange = async  (e:React.ChangeEvent<HTMLInputElement>)  => {
   const files = e.currentTarget.files;
-  console.log(e.currentTarget.value,'e.currentTarget')
     if(files?.length){
       const file = files[0];
       const size = formatBytes(files[0].size);

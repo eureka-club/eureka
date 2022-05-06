@@ -4,7 +4,7 @@ import { FunctionComponent } from 'react';
 // import { useQuery } from 'react-query';
 
 import { CommentMosaicItem } from '../../types/comment';
-import Mosaic from '../Mosaic';
+import Mosaic from '../Mosaic'; 
 
 interface Props {
   comments: CommentMosaicItem[];

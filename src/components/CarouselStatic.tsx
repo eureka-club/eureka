@@ -128,7 +128,6 @@ const CarouselStatic: FunctionComponent<Props> = ({
         setCurrent(() => []);
         setShow(() => []);
       }
-      console.log(dataFiltered)
     }
   }, [data, globalSEState]);
 

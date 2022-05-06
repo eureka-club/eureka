@@ -76,7 +76,6 @@ const Mediatheque: NextPage = () => {
 
   /* useEffect(()=>{
     setSocketIO(new SocketIO([+id],(data)=>{
-      console.log('ver',data.message);
       // alert(data.message)
       setGlobalModals((res)=>({
         ...res,

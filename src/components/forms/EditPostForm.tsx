@@ -88,7 +88,6 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
     if (post && post.topics) items.push(...post.topics.split(','));
     if (post && post.works.length) setSelectedWork(post.works[0] as WorkMosaicItem);
     if (post && post.cycles.length) setSelectedCycle(post.cycles[0] as CycleMosaicItem);
-    console.log(post)
   },[post])
     
 

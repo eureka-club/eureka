@@ -47,7 +47,7 @@ const sendEmailWebhook = async (opt: MailDataRequired) => {
       // eslint-disable-next-line no-console
       console.error(e.response.body.errors[0].message);
       // eslint-disable-next-line no-console
-      console.log(JSON.stringify(e.response.body));
+      console.error(JSON.stringify(e.response.body));
     }
     return false;
   }
@@ -124,7 +124,6 @@ export const sendMailSingIn = async (opt: MailDataRequired, specs: EmailSingInSp
   if (process.env.TEMPLATE_ORIGIN === 'local') {
     const templatePath = path.join(process.cwd(), 'public', 'templates', 'mail', 'eureka_singin.html');
     // eslint-disable-next-line no-console
-    console.log('templatePath ', templatePath);
     const res = await readFile(templatePath);
     if (res) {
       const template = Handlebars.compile(res);

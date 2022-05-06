@@ -43,7 +43,6 @@ export default getApiHandler()
       if (process.env.TEMPLATE_ORIGIN === 'local') {
         const templatePath = path.join(process.cwd(), 'public', 'templates', 'mail', 'eureka_recovery_login.html');
         // eslint-disable-next-line no-console
-        console.log('templatePath ', templatePath);
         const res = await readFile(templatePath);
         if (res) {
           const template = Handlebars.compile(res);

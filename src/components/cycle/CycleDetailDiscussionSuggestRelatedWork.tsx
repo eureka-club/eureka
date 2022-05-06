@@ -157,7 +157,6 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
   //     ...res,
   //     [`${key}`]: val,
   //   }));
-  //   // console.log(newEureka);
   // };
 
   const handleSearchWork = async (query: string) => {

@@ -250,7 +250,6 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
       ...res,
       [`${key}`]: val,
     }));
-    // console.log(newEureka);
   };
 
     const onGenerateCrop = (photo: File) => {

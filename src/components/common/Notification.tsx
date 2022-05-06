@@ -20,7 +20,6 @@ const Notification: FunctionComponent<Props> = ({
     });
 
     socket.on('connection',(data)=>{
-      console.log(data);
     });
 
     

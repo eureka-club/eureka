@@ -286,7 +286,6 @@ const EditUserForm: FunctionComponent = () => {
   };
 
   const avatarError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
-    console.log("AVATAR ERROR")
     e.currentTarget.src = '/img/default-avatar.png';
   };
 
