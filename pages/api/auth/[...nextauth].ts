@@ -1,4 +1,3 @@
-import { LocalImage } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextAuth  from 'next-auth';
 import { PrismaAdapter } from "@next-auth/prisma-adapter"

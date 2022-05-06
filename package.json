@@ -63,7 +63,11 @@
     "next-auth": "^4.3.2",
     "next-connect": "^0.10.0",
     "next-translate": "^1.0.2",
+<<<<<<< HEAD
     "nodemailer": "^6.7.3",
+=======
+    "nodemailer": "^6.7.5",
+>>>>>>> 18925b9666c0e9f6f7e0eea8ad3b2fc32366e22b
     "nookies": "^2.5.2",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.1",
