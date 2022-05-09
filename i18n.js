@@ -4,7 +4,7 @@ module.exports = {
   locales: ['es', 'en', 'fr', 'pt'],
   defaultLocale: 'es',
   pages: { 
-    '*': ['common', 'createWorkForm', 'createPostForm', 'navbar', 'signInForm','signUpForm','PasswordRecovery', 'singInMail','termsAndPolicy', 'searchEngine', 'topics','notification'],
+    '*': ['common', 'createWorkForm', 'createPostForm', 'navbar', 'signInForm','signUpForm','PasswordRecovery', 'singInMail', 'searchEngine', 'topics','notification'],
     '/': ['countries'],
     '/auth/emailVerify': ['common', 'emailVerify'],
     '/work/\\[id]\\': ['common', 'createWorkForm', 'editWorkForm'],
@@ -15,6 +15,7 @@ module.exports = {
     '/search': ['countries'],
     '/profile': ['common','profile','countries'],
     '/manifest': ['manifest'],
+    '/policy': ['termsAndPolicy'],
     'rgx:^/mediatheque/\\[id\\]': ['mediatheque', 'countries'],
     'rgx:^/cycle/\\[id\\]': ['cycleDetail', 'countries'],
     'rgx:^/work/\\[id\\]': ['workDetail', 'countries','cycleDetail'],

@@ -41,5 +41,7 @@
   "manifestEnforcement6": "Suspendre temporairement ou définitivement votre compte",
   "manifestEnforcement7": "D'autres actions au besoin",
   "enforcementFooterLbl": "Dans le cas de 4, 5 ou 6, tout utilisateur-trice peut faire appel de la décision en faisant valoir ses arguments. Nous faisons de notre mieux pour examiner les appels rapidement (dans un délai de 1 à 2 semaines), mais cela peut prendre plus de temps en fonction du nombre de demandes. Envoyez votre message à: ",
-  "learnMore": "En savoir plus"
+  "learnMore": "En savoir plus",
+  "AgreeText":"Veuillez noter qu'en vous inscrivant, vous acceptez notre Manifeste et notre",
+  "policyText":"Politique de confidentialité"
 }

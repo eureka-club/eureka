@@ -1,58 +1,28 @@
 
-.menuSection{
- width: 30%;
- height:auto;
- background-color:var(--color-primary-raised);
+.title{
+  margin-top: 2rem;
+  font-size: 2.8rem;
+  color: var(--color-secondary);
 }
-
-.welcomeMobileSection{
- background-color:var(--color-primary-raised);
- width: 105%;
-  height:auto;
-}
-.menuSectionText{
-margin-top: 3rem;  
-}
-
-
-.otherText{
-font-size: 1.6rem;
-text-align: center;
-color: #fdf7f7;
-}
-
-.otherTextSelected{
-    text-decoration:underline;
-}
-
-.eurekaImage {
-   width: 30%;
-   height: 100%;
-}
-
-.imageContainer{
-  margin-top: 5rem;
-  margin-bottom: 3rem;
-}
-
 .contentText{
-  margin-top: 9rem;
-  text-align: justify;
-  margin-left: 3rem;
+  margin-top: 2rem;
+  text-align: left;
   margin-bottom: 5rem;
+}
+.linkText{
+  text-decoration:underline;
+}
+
+.contentText h2 {
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  color: var(--color-secondary);
 }
 
 
 @media screen and (max-width: 1024px) {
 
-.eurekaImage {
-   width: 40%;
-   height: 100%;
-}
 
-.imageContainer{
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-}
 
 }
