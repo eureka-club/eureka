@@ -1,7 +1,7 @@
 // import { flatten, zip } from 'lodash';
 import { useAtom } from 'jotai';
 import { BiArrowBack } from 'react-icons/bi';
-import { NextPage,GetServerSideProps } from 'next';
+import { NextPage, GetServerSideProps } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useState, useEffect, ReactElement } from 'react';
 import { useRouter } from 'next/router';
@@ -23,10 +23,10 @@ import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import Mosaic from '../src/components/Mosaic';
 // import SearchEngine from '../src/components/SearchEngine';
 import FilterEngine from '../src/components/FilterEngine';
-import useItems,{getRecords} from '../src/useItems';
+import useItems, { getRecords } from '../src/useItems';
 import useCountries from '../src/useCountries';
-import { isPostMosaicItem,isCycleMosaicItem, isWorkMosaicItem, SearchResult } from '@/src/types';
-import { useQueryClient,dehydrate, QueryClient } from 'react-query';
+import { isPostMosaicItem, isCycleMosaicItem, isWorkMosaicItem, SearchResult } from '@/src/types';
+import { useQueryClient, dehydrate, QueryClient } from 'react-query';
 import ListWindow from '@/src/components/ListWindow';
 import { getRecord } from '@/src/useNotifications';
 
@@ -66,54 +66,54 @@ const SearchPage: NextPage = () => {
   const [q, setQ] = useState<string>();
   const [where, setWhere] = useState<string>();
   const queryClient = useQueryClient()
-  
-  const [mounted,setMounted] = useState<boolean>(false)
+
+  const [mounted, setMounted] = useState<boolean>(false)
   useEffect(() => {
     setMounted(true)
-    setGlobalSearchEngineState((res) => ({...res, only:[]}));
+    setGlobalSearchEngineState((res) => ({ ...res, only: [] }));
   }, []);
 
-  useEffect(()=>{
-    if(router.query.q){
-      setQ(router.query.q as string);      
+  useEffect(() => {
+    if (router.query.q) {
+      setQ(router.query.q as string);
     }
-  },[router]);
+  }, [router]);
 
-  useEffect(()=>{
-    if(q){
+  useEffect(() => {
+    if (q) {
       let w = "";
       if (router.query.fields) {
         const fields = (router.query.fields as string).split(',');
         w = encodeURIComponent(
           JSON.stringify({
-            
-              OR: fields.map((f:string) => ({ [`${f}`]: { contains: q}})),          
 
-            
+            OR: fields.map((f: string) => ({ [`${f}`]: { contains: q } })),
+
+
           })
         );
       }
       else {
         w = encodeURIComponent(
-        JSON.stringify({
-          
+          JSON.stringify({
+
             OR: [
               { topics: { contains: q } },
-              { title: { contains: q } }, 
-              { contentText: { contains: q } },              
+              { title: { contains: q } },
+              { contentText: { contains: q } },
             ],
 
-          
+
           }),
         );
       }
       setWhere(w);
     }
-      
 
-  },[q, router.query.fields]);
 
-  
+  }, [q, router.query.fields]);
+
+
 
   // let where = encodeURIComponent(JSON.stringify({ title: { contains: globalSearchEngineState.q } }));
   // const { isLoading, data: works } = useWorks(where);
@@ -130,11 +130,11 @@ const SearchPage: NextPage = () => {
   // const { isLoading: isLoadingCycles, /* isError: isErrorCycles, error: errorCycles, */ data: cycles } = useCycles();
   const { data: onlyByCountriesAux } = useCountries();
 
-  
+
   const [homepageMosaicData, setHomepageMosaicData] = useState<SearchResult[]>([]);
 
   useEffect(() => {
-    if(items){
+    if (items) {
       // items.forEach((i)=>{
       //   if(isCycleMosaicItem(i))
       //     queryClient.setQueryData(['CYCLE',`${i.id}`],i as CycleMosaicItem)
@@ -201,11 +201,19 @@ const SearchPage: NextPage = () => {
       }
       if (onlyByCountries && onlyByCountries.length) {
         filtered = (filtered || homepageMosaicData).filter((i) => {
-          if (i.type !== 'cycle')
+          if (['book', 'fiction-book', 'movie', 'documentary'].includes(i.type as string))
             return (
               onlyByCountries.includes((i as WorkMosaicItem).countryOfOrigin as string) ||
               onlyByCountries.includes((i as WorkMosaicItem).countryOfOrigin2 as string)
             );
+          else if (i.type == 'post') {
+            return onlyByCountries.includes((i as PostMosaicItem).creator.countryOfOrigin as string)
+          }
+          else if(i.type == 'cycle'){
+            const c = (i as CycleMosaicItem);
+            const q = c.countryOfOrigin || c.creator.countryOfOrigin
+            return onlyByCountries.includes(q as string);
+          }
           return false;
         });
         setHomepageMosaicDataFiltered([...filtered]);
@@ -233,20 +241,20 @@ const SearchPage: NextPage = () => {
 
   const renderErrorMessage = () => {
     let e = "";
-    if (!isLoading){
-      if(error) e = t(error?.message, null, {fallback:"common:Error"});
-      else if(!globalSearchEngineState.itemsFound?.length && (!items || !items?.length))
+    if (!isLoading) {
+      if (error) e = t(error?.message, null, { fallback: "common:Error" });
+      else if (!globalSearchEngineState.itemsFound?.length && (!items || !items?.length))
         e = t('notFound');
-    } 
-    if(e)     
-    return (
-      <Alert variant="warning">
-        <p>{e}</p>
-      </Alert>
-    );
+    }
+    if (e)
+      return (
+        <Alert variant="warning">
+          <p>{e}</p>
+        </Alert>
+      );
     return <></>;
   };
-  if(mounted)
+  if (mounted)
     return (
       <SimpleLayout title={t('browserTitleWelcome')}>
         <ButtonGroup className="mb-1">
@@ -259,15 +267,15 @@ const SearchPage: NextPage = () => {
         </h1>
         <FilterEngine key={router.asPath} />
         <div className='d-flex flex-column justify-content-center'>
-        {(
-          !isLoading 
-          && <>
-          <div className='d-none d-md-block'><ListWindow cacheKey={["ITEMS", q!]} items={homepageMosaicDataFiltered} itemsByRow={4} /></div>
-          <div className='d-block d-md-none'><ListWindow cacheKey={["ITEMS", q!]} items={homepageMosaicDataFiltered} itemsByRow={1} /></div>
-          </>
-          ) 
-          || <></>
-        }
+          {(
+            !isLoading
+            && <>
+              <div className='d-none d-md-block'><ListWindow cacheKey={["ITEMS", q!]} items={homepageMosaicDataFiltered} itemsByRow={4} /></div>
+              <div className='d-block d-md-none'><ListWindow cacheKey={["ITEMS", q!]} items={homepageMosaicDataFiltered} itemsByRow={1} /></div>
+            </>
+          )
+            || <></>
+          }
         </div>
         {genLoadingCmp()}
         {renderErrorMessage()}
@@ -288,13 +296,13 @@ const SearchPage: NextPage = () => {
   };
 };
 */
-export const getServerSideProps: GetServerSideProps = async ({query}) => {
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const q = query.q;
   const qc = new QueryClient()
-  await qc.prefetchQuery(["ITEMS",q],()=>getRecords(q?.toString()))
+  await qc.prefetchQuery(["ITEMS", q], () => getRecords(q?.toString()))
   return {
     props: {
-      dehydratedState:dehydrate(qc),
+      dehydratedState: dehydrate(qc),
     },
   };
 };

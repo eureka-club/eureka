@@ -18,7 +18,7 @@ export type CycleWithImages = Prisma.CycleGetPayload<{
 export type CycleMosaicItem = Prisma.CycleGetPayload<{
   include: {
     creator:{
-      select:{id:true;name:true;email:true}
+      select:{id:true;name:true;email:true;countryOfOrigin:true}
     };
     localImages: {select:{
       storedFile:true

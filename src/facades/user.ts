@@ -31,10 +31,10 @@ export const find = async (props: findProps): Promise<UserMosaicItem | null> => 
       ratingWorks:{
         select:{
           workId:true,
-          work:{select:{id:true,title:true,type:true,localImages:{select:{storedFile:true}}}}
+          work:{select:{id:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,localImages:{select:{storedFile:true}}}}
         }
       },
-      favWorks:{select:{id:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
+      favWorks:{select:{id:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,localImages:{select:{storedFile:true}}}},
       favCycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
       favPosts:{select:{id:true}},
       // posts:{select:{id:true}},
@@ -198,10 +198,10 @@ export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<UserMosa
       ratingWorks:{
         select:{
           workId:true,
-          work:{select:{id:true,title:true,type:true,localImages:{select:{storedFile:true}}}}
+          work:{select:{id:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,localImages:{select:{storedFile:true}}}}
         }
       },
-      favWorks:{select:{id:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
+      favWorks:{select:{id:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,localImages:{select:{storedFile:true}}}},
       favCycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
       favPosts:{select:{id:true}},
       // posts:{select:{id:true}},
