@@ -219,6 +219,12 @@ const NavBar: FunctionComponent = () => {
                   {t('About Us')}
                   {/* </Link> */}
                 </Dropdown.Item>
+                  <Dropdown.Item
+                  active={router.asPath.search(/policy$/g) !== -1}
+                  onClick={() => router.push('/policy')}
+                >
+                  {t('policyText')}
+                </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </Nav>
