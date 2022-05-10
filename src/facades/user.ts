@@ -1,7 +1,7 @@
 import { Prisma, User } from '@prisma/client';
 import { UserMosaicItem } from '@/types/user';
 // import { UserDetail } from '../types/user';
-import prisma from '../lib/prisma';
+import {prisma} from '@/src/lib/prisma';
 
 export interface findProps {
   id: number;

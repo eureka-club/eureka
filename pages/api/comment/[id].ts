@@ -4,7 +4,7 @@ import { getSession } from 'next-auth/react';
 import { Work, Cycle } from '@prisma/client';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { find, remove } from '../../../src/facades/comment';
-import prisma from '../../../src/lib/prisma';
+import {prisma} from '@/src/lib/prisma';
 
 export default getApiHandler()
   .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {

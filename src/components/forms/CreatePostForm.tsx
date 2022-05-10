@@ -329,7 +329,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
         title: form.postTitle.value,
         image: imageFile!,
         language: '',
-        contentText: editorRef.current.getContent(), // form.description.value.length ? form.description.value : null,
+        contentText: editorRef.current?.getContent(), // form.description.value.length ? form.description.value : null,
         isPublic: isPublic,//form.isPublic.checked,
         topics: items.join(','),
         tags,

@@ -7,7 +7,7 @@ import { find, update } from '@/src/facades/user';
 import { create } from '@/src/facades/notification';
 
 import getApiHandler from '@/src/lib/getApiHandler';
-import prisma from '@/src/lib/prisma';
+import {prisma} from '@/src/lib/prisma';
 import {storeDeleteFile, storeUploadUserPhoto} from '@/src/facades/fileUpload'
 import { UserMosaicItem } from '@/src/types/user';
 import { Notification } from '@prisma/client';

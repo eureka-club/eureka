@@ -5,7 +5,7 @@ import utc from 'dayjs/plugin/utc';
 import { find } from '@/src/facades/notification';
 
 import getApiHandler from '@/src/lib/getApiHandler';
-import prisma from '@/src/lib/prisma';
+import {prisma} from '@/src/lib/prisma';
 
 dayjs.extend(utc);
 export default getApiHandler()

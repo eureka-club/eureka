@@ -1,7 +1,7 @@
 import { Cycle, Comment, User, Work, Post } from '@prisma/client';
 import {Prisma} from '@prisma/client'
 import {CreateCommentServerPayload, CommentMosaicItem } from '../types/comment';
-import prisma from '../lib/prisma';
+import {prisma} from '@/src/lib/prisma';
 import { Exception } from 'handlebars';
 
 export const find = async (id: number): Promise<CommentMosaicItem | null> => {

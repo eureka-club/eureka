@@ -2,7 +2,7 @@ import { Cycle, Post, Prisma, User, Work } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
 import { CreatePostServerFields, CreatePostServerPayload, PostWithCyclesWorks, PostMosaicItem } from '../types/post';
-import prisma from '../lib/prisma';
+import {prisma} from '@/src/lib/prisma';
 
 export const find = async (id: number): Promise<PostMosaicItem | null> => {
   return prisma.post.findUnique({

@@ -1,12 +1,12 @@
 import { Prisma, Work, User, RatingOnWork } from '@prisma/client';
 import { StoredFileUpload } from '../types';
 import { CreateWorkServerFields, CreateWorkServerPayload, WorkMosaicItem } from '../types/work';
-import prisma from '../lib/prisma';
+import {prisma} from '@/src/lib/prisma';
 
 export const find = async (id: number): Promise<WorkMosaicItem | null> => {
   return prisma.work.findUnique({
     where: { id },
-    include:{
+    include:{ 
       localImages: {select:{storedFile:true}},
       _count:{select:{ratings:true}}
       // favs: {select:{id:true}},

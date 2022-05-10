@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import prisma from '@/src/lib/prisma'
+import {prisma} from '@/src/lib/prisma'
 import { emit } from 'process';
 import {UserCustomData} from '@prisma/client'
 const bcrypt = require('bcryptjs');

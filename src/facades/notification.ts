@@ -1,5 +1,5 @@
 import { Prisma, Notification } from '@prisma/client';
-import prisma from '../lib/prisma';
+import {prisma} from '@/src/lib/prisma';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import {NotificationMosaicItem} from '@/src/types/notification'

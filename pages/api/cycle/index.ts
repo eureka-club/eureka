@@ -6,7 +6,7 @@ import { FileUpload, isCycleMosaicItem, Session, StoredFileUpload } from '../../
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { storeUpload } from '../../../src/facades/fileUpload';
 import { createFromServerFields, findAll } from '../../../src/facades/cycle';
-import prisma from '../../../src/lib/prisma';
+import {prisma} from '@/src/lib/prisma';
 // import redis from '../../../src/lib/redis';
 import { asyncForEach } from '../../../src/lib/utils';
 

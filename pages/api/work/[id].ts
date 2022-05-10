@@ -6,7 +6,7 @@ import utc from 'dayjs/plugin/utc';
 import { Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { find, remove } from '../../../src/facades/work';
-import prisma from '../../../src/lib/prisma';
+import {prisma} from '@/src/lib/prisma';
 // import redis from '../../../src/lib/redis';
 
 dayjs.extend(utc);

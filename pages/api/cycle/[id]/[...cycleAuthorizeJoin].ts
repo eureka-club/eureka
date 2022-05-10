@@ -5,7 +5,7 @@ import { WEBAPP_URL } from '../../../../src/constants';
 // import { Session } from '../../../../src/types';
 import getApiHandler from '../../../../src/lib/getApiHandler';
 import { addParticipant, find } from '../../../../src/facades/cycle';
-import prisma from '../../../../src/lib/prisma';
+import {prisma} from '@/src/lib/prisma';
 import { sendMailRequestJoinCycleResponse } from '../../../../src/facades/mail';
 
 const bcrypt = require('bcryptjs');

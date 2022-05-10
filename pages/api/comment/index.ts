@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { createFromServerFields, findAll, update, find } from '../../../src/facades/comment';
-import prisma from '../../../src/lib/prisma';
+import {prisma} from '@/src/lib/prisma';
 import { create } from '@/src/facades/notification';
 
 export default getApiHandler()

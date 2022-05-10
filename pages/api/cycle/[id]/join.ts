@@ -4,7 +4,7 @@ import getT from 'next-translate/getT';
 import { WEBAPP_URL } from '../../../../src/constants';
 import getApiHandler from '../../../../src/lib/getApiHandler';
 import { addParticipant, find, removeParticipant } from '../../../../src/facades/cycle';
-import prisma from '../../../../src/lib/prisma';
+import {prisma} from '@/src/lib/prisma';
 import { sendMailRequestJoinCycle } from '../../../../src/facades/mail';
 import {create} from '@/src/facades/notification'
 const bcrypt = require('bcryptjs');

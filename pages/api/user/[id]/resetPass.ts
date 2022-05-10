@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '@/src/lib/prisma';
+import {prisma} from '@/src/lib/prisma';
 import getApiHandler from '@/src/lib/getApiHandler';
 import bcrypt from 'bcryptjs'
 
@@ -7,7 +7,7 @@ export default getApiHandler()
 .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
   try {
     const { id:i} = req.query;
-    if(!i){
+    if(!i){ 
       res.status(404).json({error:'id are required'})
     }
     const id = +i.toString()
