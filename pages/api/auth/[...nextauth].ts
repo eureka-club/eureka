@@ -8,7 +8,7 @@ import CredentialsProvider from "next-auth/providers/credentials"
 
 import {find} from '@/src/facades/user'
 import getT from 'next-translate/getT';
-import prisma from '@/src/lib/prisma';
+import {prisma} from '@/src/lib/prisma';
 import { sendMailSingIn } from '@/src/facades/mail';
 const bcrypt = require('bcryptjs');
 

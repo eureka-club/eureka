@@ -7,7 +7,7 @@ import getApiHandler from '@/src/lib/getApiHandler';
 import { storeUpload } from '@/src/facades/fileUpload';
 import { createFromServerFields, findAll } from '@/src/facades/post';
 import { create } from '@/src/facades/notification';
-import prisma from '@/src/lib/prisma';
+import {prisma} from '@/src/lib/prisma';
 import { take } from 'lodash';
 import { count } from 'console';
 import { RiTruckLine } from 'react-icons/ri';

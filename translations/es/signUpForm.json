@@ -22,8 +22,8 @@
   "and":"y",
   "policyText":"Política de privacidad",
   "passRequirements":"mínimo 8 caracteres, mín. 1 letra, mín. 1 dígito",
-  "UserRegistered":"Usuario con este correo ya esta registrado",
-  "emptyFields":"Todos los datos son requeridos (Correo, Contraseña, Nombre y Apellidos)",
-  "InvalidMail":"Correo Inválido",
+  "UserRegistered":"Este correo ya esta registrado.",
+  "emptyFields":"Por favor completa todos los campos (nombre, apellido, correo y contraseña)",
+  "InvalidMail":"Correo electrónico inválido.",
   "InvalidPassword":"Inválido. La contraseña debe tener al menos 8 caracteres y debe contener al menos un dígito (0-9)."
 }

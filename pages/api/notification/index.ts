@@ -5,7 +5,7 @@ import { getSession } from 'next-auth/react';
 import { Session } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { findAll, find, create, update } from '../../../src/facades/notification';
-import prisma from '../../../src/lib/prisma';
+import {prisma} from '@/src/lib/prisma';
 import { isArray } from 'lodash';
 import { NotificationMosaicItem } from '@/src/types/notification';
 

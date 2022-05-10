@@ -9,7 +9,7 @@ import { createFromServerFields, findAll } from '../../../src/facades/work';
 // import redis from '../../../src/lib/redis';
 
 export const config = {
-  api: {
+  api: { 
     bodyParser: false,
   },
 };

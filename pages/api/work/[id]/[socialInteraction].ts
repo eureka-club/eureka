@@ -4,7 +4,7 @@ import { getSession } from 'next-auth/react';
 import { Session } from '../../../../src/types';
 import getApiHandler from '../../../../src/lib/getApiHandler';
 import { find, saveSocialInteraction } from '../../../../src/facades/work';
-import prisma from '../../../../src/lib/prisma';
+import {prisma} from '@/src/lib/prisma';
 // import redis from '../../../../src/lib/redis';
 import {create} from '@/src/facades/notification'
 

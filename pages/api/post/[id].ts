@@ -4,7 +4,7 @@ import { getSession } from 'next-auth/react';
 import { Work, Cycle } from '@prisma/client';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { find, remove } from '../../../src/facades/post';
-import prisma from '../../../src/lib/prisma';
+import {prisma} from '../../../src/lib/prisma';
 import {storeDeleteFile} from '@/src/facades/fileUpload'
 
 export default getApiHandler()

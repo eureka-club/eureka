@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 // import { Session } from '../../src/types';
 import { Work, Cycle } from '@prisma/client';
 import getApiHandler from '../../src/lib/getApiHandler';
-import prisma from '../../src/lib/prisma';
+import {prisma} from '../../src/lib/prisma';
 import bcrypt, { encodeBase64 } from 'bcryptjs'
 import dayjs from 'dayjs';
 import axios from 'axios';

@@ -5,7 +5,7 @@ import { CycleMosaicItem } from '@/src/types/cycle';
 import { WorkMosaicItem } from '@/src/types/work';
 import { PostMosaicItem } from '@/src/types/post';
 import dayjs from 'dayjs';
-import prisma from '@/src/lib/prisma';
+import {prisma} from '@/src/lib/prisma';
 import { findAll as fap } from '@/src/facades/post';
 import { findAll as fac } from '@/src/facades/cycle';
 import { findAll as faw } from '@/src/facades/work';

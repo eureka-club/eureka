@@ -5,7 +5,7 @@ import { getSession } from 'next-auth/react';
 import {findAll as findAllPosts} from '@/src/facades/post'
 import {findAll as findAllComments} from '@/src/facades/comment'
 import getApiHandler from '@/src/lib/getApiHandler';
-import prisma from '@/src/lib/prisma';
+import {prisma} from '@/src/lib/prisma';
 import { PostMosaicItem } from '@/src/types/post';
 import { CommentMosaicItem } from '@/src/types/comment';
 

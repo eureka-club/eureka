@@ -2,7 +2,7 @@ import { Cycle, CycleComplementaryMaterial, LocalImage, Prisma, User, RatingOnCy
 
 import { StoredFileUpload } from '../types';
 import { CreateCycleServerFields, CreateCycleServerPayload, CycleMosaicItem } from '../types/cycle';
-import prisma from '../lib/prisma';
+import {prisma} from '@/src/lib/prisma';
 
 export const NEXT_PUBLIC_MOSAIC_ITEMS_COUNT = +(process.env.NEXT_PUBLIC_NEXT_PUBLIC_MOSAIC_ITEMS_COUNT || 10);
 

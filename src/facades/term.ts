@@ -1,6 +1,6 @@
 import { Term } from '@prisma/client';
 // import { CreateWorkServerFields, CreateWorkServerPayload, WorkDetail, WorkWithImages } from '../types/term';
-import prisma from '../lib/prisma';
+import {prisma} from '@/src/lib/prisma';
 
 /* export const find = async (id: number): Promise<Prisma.TermGetPayload | null> => {
   return prisma.term.findUnique({

@@ -6,7 +6,7 @@ import { isEmpty } from 'lodash';
 import * as removeAccents from 'remove-accents';
 
 import getApiHandler from '../../../src/lib/getApiHandler';
-import prisma from '../../../src/lib/prisma';
+import {prisma} from '@/src/lib/prisma';
 
 import i18nConfig from '../../../i18n';
 
