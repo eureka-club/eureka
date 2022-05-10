@@ -42,6 +42,9 @@
 .bgRow4Box2{
   background-image: url('/img/bg-9.svg');  
 }
+.linkText{
+  text-decoration:underline;
+}
 
 
 

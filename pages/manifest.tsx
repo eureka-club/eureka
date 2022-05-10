@@ -5,6 +5,7 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { BsCircleFill } from 'react-icons/bs';
 import { RiAlertLine } from 'react-icons/ri';
 import { CgArrowLongRight } from 'react-icons/cg';
+import Link from 'next/link'
 
 // import Masonry from 'react-masonry-css';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
@@ -413,6 +414,15 @@ const ManifestPage: NextPage = () => {
             </Col>
           </Row>
         </section>
+       <section className="mb-5">
+         <Row>
+        <span>{t('AgreeText')}
+          <Link href="/policy" passHref>
+              <span className={`cursor-pointer ms-1 ${styles.linkText}`}>{t('policyText')}</span>
+           </Link>
+        </span>
+        </Row>
+       </section> 
       </Container>
     </SimpleLayout>
   );

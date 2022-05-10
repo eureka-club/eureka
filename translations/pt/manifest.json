@@ -41,6 +41,7 @@
   "manifestEnforcement6": "Suspender temporária ou permanentemente sua conta",
   "manifestEnforcement7": "Outras ações, conforme necessário",
   "enforcementFooterLbl": "No caso de 4, 5 ou 6, qualquer pessoa pode apelar da decisão, apresentando seus argumentos. Fazemos o possível para revisar as apelações rapidamente (em uma ou duas semanas), mas pode demorar mais, dependendo do número de solicitações. Envie sua mensagem para: ",
-  "learnMore": "Saber mais"
-
+  "learnMore": "Saber mais",
+  "AgreeText":"Por favor considere que ao se inscrever, você está concordando com nosso Manifesto e",
+  "policyText":"Política de privacidade"
 }
