@@ -42,6 +42,6 @@
   "manifestEnforcement7": "Other as needed",
   "enforcementFooterLbl": "In the event of 4, 5 or 6, any user can activate an appeal mechanism, by exposing your case and arguments. We do our best to review all appeals quickly (within 1-2 weeks), but can take more time depending on the number of requests. To do so, please send your message to: ",
   "learnMore": "Learn More",
-  "AgreeText":"Please note that by joining you are agreeing to our Manifesto and",
-  "policyText":" Privacy Policy"
+  "AgreeText":"Please note that by joining you are agreeing to our Manifesto and our",
+  "policyText":"Privacy Policy."
 }
