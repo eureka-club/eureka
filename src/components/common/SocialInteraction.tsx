@@ -213,6 +213,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   })();
 
   const shareTextDynamicPart = (() => {
+
     if (parent != null && isCycle(parent)) {
       return `${t('postCycleShare')} "${parent.title}"`;
     }
@@ -220,10 +221,10 @@ const SocialInteraction: FunctionComponent<Props> = ({
     //   return `${t('postWorkShare')} "${parent.title}"`;
     // }
     if (isCycle(entity)) {
-      return t('cycleShare');
+      return `${t('cycleShare')} ${('title' in entity) ? `"${entity.title}"` : ''}`;
     }
     if (isWork(entity)) {
-      return t('workShare');
+      return `${t('workShare')} ${('title' in entity) ? `"${entity.title}"` : ''}`;
     }
     if (isPostMosaicItem(entity)) {
       const post = entity as PostMosaicItem;
@@ -234,16 +235,9 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
     throw new Error('Invalid entity or parent');
   })();
-  const title = () => {
-    if (parent != null) {
-      if (isWork(parent) || isCycle(parent)) return '';
-    }
-    if ('title' in entity) return entity.title;
-    //return entity.name; // an user;
-  };
-  const titleStr = title();
-  const shareText = `${shareTextDynamicPart} ${titleStr ? `"${titleStr}"` : ''} ${t('complementShare')}`;
 
+  const shareText = `${shareTextDynamicPart}  ${t('complementShare')}`;
+  console.log(shareText,'shareText')
   const {
     mutate: execSocialInteraction,
     isSuccess,
