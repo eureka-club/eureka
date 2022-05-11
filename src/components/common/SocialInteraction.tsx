@@ -237,7 +237,6 @@ const SocialInteraction: FunctionComponent<Props> = ({
   })();
 
   const shareText = `${shareTextDynamicPart}  ${t('complementShare')}`;
-  console.log(shareText,'shareText')
   const {
     mutate: execSocialInteraction,
     isSuccess,
