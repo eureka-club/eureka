@@ -90,7 +90,7 @@ const Mediatheque: NextPage = () => {
   // const [posts, setPosts] = useState<ItemPost[]>([]);
   // const [savedForLater, setSavedForLater] = useState<Item[]>([]);
   // const [readOrWatched, setReadOrWatched] = useState<Item[]>([]);
-  const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>();
+  
   const queryClient = useQueryClient();
   const { t } = useTranslation('mediatheque');
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
@@ -129,11 +129,13 @@ const Mediatheque: NextPage = () => {
     enabled:!!+id
   });
 
+  const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>(
+    ()=>(user && user.followedBy) ? user.followedBy.findIndex((i) => i.id === session?.user.id) !== -1 : false
+  );
   
 
   const {data:posts} = usePosts(userPostsCondition(+id, +idSession),{enabled:!!(id && !isLoadingSession)})
 
-  
   
   const {data:cycles} = useCycles(cyclesCreatedOrJoinedWhere(+id),
     {enabled:!!id}
@@ -145,14 +147,6 @@ const Mediatheque: NextPage = () => {
     }
   }, [user, id, isSuccessUser]);
 
-
-  useEffect(() => {
-    if (user && user.id && session) {
-      const s = session;
-      const ifbm = s && user.followedBy ? user.followedBy.findIndex((i) => i.id === s.user.id) !== -1 : false;
-      setIsFollowedByMe(() => ifbm);      
-    }
-  }, [user, session]);
 
   const isAccessAllowed = () => {
     if (!isLoadingUser && user && user.id) {
@@ -229,31 +223,33 @@ const Mediatheque: NextPage = () => {
       }
     },
     {
-      // onMutate: async () => {
-      //   await queryClient.cancelQueries(['USER', id]);
-      //   await queryClient.cancelQueries(['USER', idSession]);
+      onMutate: async () => {
+        await queryClient.cancelQueries(['USER', id]);
+        await queryClient.cancelQueries(['USER', idSession]);
 
-      //   type UserFollow = User & { followedBy: User[]; following: User[] };
-      //   const followingUser = queryClient.getQueryData<UserFollow>(['USER', id]);
-      //   const followedByUser = queryClient.getQueryData<UserFollow>(['USER', idSession]);
-      //   let followedBy: User[] = [];
-      //   let following: User[] = [];
-      //   if (followingUser && followedByUser)
-      //     if (isFollowedByMe) {
-      //       followedBy = followingUser.followedBy.filter((i: User) => i.id !== +idSession);
-      //       following = followedByUser.following.filter((i: User) => i.id !== +id);
-      //     } else {
-      //       followedBy = [...followingUser.followedBy, followedByUser];
-      //       following = [...followedByUser.following, followingUser];
-      //     }
-      //   queryClient.setQueryData(['USER', id], { ...followingUser, followedBy });
-      //   queryClient.setQueryData(['USER', idSession], { ...followedByUser, following });
-      //   return { followingUser, followedByUser };
-      // },
-      // onError: (err, data, context: any) => {
-      //   queryClient.setQueryData(['USER', id], context.followingUser);
-      //   queryClient.setQueryData(['USER', idSession], context.followedByUser);
-      // },
+        type UserFollow = User & { followedBy: User[]; following: User[] };
+        const followingUser = queryClient.getQueryData<UserFollow>(['USER', id]);
+        const followedByUser = queryClient.getQueryData<UserFollow>(['USER', idSession]);
+        setIsFollowedByMe(p=>!p)
+        // let followedBy: User[] = [];
+        // let following: User[] = [];
+        // if (followingUser && followedByUser)
+        //   if (isFollowedByMe) {
+        //     followedBy = followingUser.followedBy.filter((i: User) => i.id !== +idSession);
+        //     following = followedByUser.following.filter((i: User) => i.id !== +id);
+        //   } else {
+        //     followedBy = [...followingUser.followedBy, followedByUser];
+        //     following = [...followedByUser.following, followingUser];
+        //   }
+        // queryClient.setQueryData(['USER', id], { ...followingUser, followedBy });
+        // queryClient.setQueryData(['USER', idSession], { ...followedByUser, following });
+
+        return { followingUser, followedByUser };
+      },
+      onError: (err, data, context: any) => {
+        queryClient.setQueryData(['USER', id], context.followingUser);
+        queryClient.setQueryData(['USER', idSession], context.followedByUser);
+      },
 
       onSettled: () => {
         queryClient.invalidateQueries(['USER', id]);
@@ -262,10 +258,14 @@ const Mediatheque: NextPage = () => {
     },
   );
 
+
   const followHandler = async () => {
     const s = session;
     if (user && s) {
-      if (parseInt(id, 10) !== s.user.id) mutateFollowing();
+      if (parseInt(id, 10) !== s.user.id) {
+        mutateFollowing();
+
+      }
     }
   };
 
