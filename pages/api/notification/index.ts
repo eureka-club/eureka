@@ -27,7 +27,7 @@ export default getApiHandler()
       const notifications = await findAll(parseInt(userId.toString()));
       const allreadyExist = new Set();
       const result:NotificationMosaicItem[] | null = [];
-      notifications?.reduce((p,c)=>{debugger;
+      notifications?.reduce((p,c)=>{
         const key = `${c.userId}:${c.notification.contextURL}:${c.notification.message}:${c.notification.fromUserId}`;
         if(!allreadyExist.has(key)){
           p.push(c)

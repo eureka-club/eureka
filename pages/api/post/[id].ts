@@ -78,6 +78,7 @@ export default getApiHandler()
       if(session)
         currentUserIsFav = post.favs.findIndex(f=>f.id==session.user.id) > -1
       post.currentUserIsFav = currentUserIsFav;
+      post.type = 'post';
       res.status(200).json({ status: 'OK', post });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

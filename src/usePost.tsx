@@ -9,10 +9,7 @@ export const getPost = async (id: number): Promise<PostMosaicItem | undefined> =
   const res = await fetch(url);
   if (!res.ok) return undefined;
   const result = await res.json();
-  return result.post ? { ...result.post, type: 'post' } : undefined;
-}
-export const prefetchPost = async (id:number,queryClient:QueryClient):Promise<void> => {
-  return queryClient.prefetchQuery(['POST',`${id}`], async ()=> getPost(id))
+  return result.post;
 }
 
 interface Options {

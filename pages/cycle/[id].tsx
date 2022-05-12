@@ -184,7 +184,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {debugger;
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { params, req } = ctx;
  const queryClient = new QueryClient() 
  const session = await getSession(ctx)

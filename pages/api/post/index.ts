@@ -160,7 +160,16 @@ export default getApiHandler()
       } else {
         data = await findAll({take},page);
       }
-      data.forEach(d=>{d.type='post'})
+      
+      
+
+      data.forEach(p=>{
+        p.type='post';
+        let currentUserIsFav = false;
+        if(session)
+          currentUserIsFav = p.favs.findIndex(f=>f.id==session.user.id) > -1
+        p.currentUserIsFav = currentUserIsFav;
+      })
 
       // const posts_ = await prisma.post.findMany({
       //   select:{

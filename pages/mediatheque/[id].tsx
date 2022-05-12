@@ -2,11 +2,11 @@
 import { useAtom } from 'jotai';
 import dayjs from 'dayjs';
 // import { GetServerSideProps, GetStaticProps, NextPage } from 'next';
-import { /* GetStaticProps, */ NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/react';
-import { useQueryClient, useMutation } from 'react-query';
+import { useSession, getSession } from 'next-auth/react';
+import { useQueryClient, useMutation, dehydrate, QueryClient } from 'react-query';
 // import { dehydrate } from 'react-query/hydration';
 import { useState, useEffect, SyntheticEvent } from 'react';
 
@@ -40,8 +40,8 @@ import { WorkMosaicItem /* , WorkWithImages */ } from '../../src/types/work';
 import { UserMosaicItem /* , UserDetail, WorkWithImages */ } from '../../src/types/user';
 import UnclampText from '../../src/components/UnclampText';
 import { useNotificationContext } from '@/src/useNotificationProvider';
-import usePosts from '@/src/usePosts';
-import useCycles from '@/src/useCycles';
+import usePosts,{getPosts} from '@/src/usePosts';
+import useCycles,{getCycles} from '@/src/useCycles';
 // import MosaicItemCycle from '../../src/components/cycle/MosaicItem';
 // import MosaicItemPost from '../../src/components/post/MosaicItem';
 // import MosaicItemWork from '../../src/components/work/MosaicItem';
@@ -53,7 +53,33 @@ type ItemCycle = CycleMosaicItem & { type: string };
 
 // | WorkMosaicItem | ;
 
+const userPostsCondition = (id: number, idSession?:number)=> ({
+  AND:{
+    creatorId:id,
+    isPublic:true
+  },
+  ... idSession && {
+    OR:{
+      creator:{
+        followedBy:{some:{id:idSession}}
+      }
+    }
+  },
+});
+
+const cyclesCreatedOrJoinedWhere = (id:number) => ({
+  OR:[
+    {
+      participants:{some:{id}},
+    },
+    {
+      creatorId:id
+    }
+  ]
+}) 
+
 const Mediatheque: NextPage = () => {
+  
   const {data:session, status} = useSession();
   const isLoadingSession = status === "loading"
   const [id, setId] = useState<string>('');
@@ -69,6 +95,9 @@ const Mediatheque: NextPage = () => {
   const { t } = useTranslation('mediatheque');
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
   const [globalModals, setGlobalModals] = useAtom(globalModalsAtom);
+
+  
+
   // if (!s?.user) {
   //   router?.push('/');
   //   window.location.href = '/';
@@ -100,30 +129,13 @@ const Mediatheque: NextPage = () => {
     enabled:!!+id
   });
 
-  const {data:posts} = usePosts({
-    AND:{
-      creatorId:+id,
-    },
-    ... idSession && {
-      OR:{
-        creator:{
-          followedBy:{some:{id:+idSession}}
-        }
-      }
-    },
-  },{enabled:!!(id && !isLoadingSession)})
+  
 
-  const cyclesCreatedOrJoinedWhere = {
-    OR:[
-      {
-        participants:{some:{id:+id}},
-      },
-      {
-        creatorId:+id
-      }
-    ]
-  } 
-  const {data:cycles} = useCycles(cyclesCreatedOrJoinedWhere,
+  const {data:posts} = usePosts(userPostsCondition(+id, +idSession),{enabled:!!(id && !isLoadingSession)})
+
+  
+  
+  const {data:cycles} = useCycles(cyclesCreatedOrJoinedWhere(+id),
     {enabled:!!id}
   )
 
@@ -217,31 +229,31 @@ const Mediatheque: NextPage = () => {
       }
     },
     {
-      onMutate: async () => {
-        await queryClient.cancelQueries(['USER', id]);
-        await queryClient.cancelQueries(['USER', idSession]);
+      // onMutate: async () => {
+      //   await queryClient.cancelQueries(['USER', id]);
+      //   await queryClient.cancelQueries(['USER', idSession]);
 
-        type UserFollow = User & { followedBy: User[]; following: User[] };
-        const followingUser = queryClient.getQueryData<UserFollow>(['USER', id]);
-        const followedByUser = queryClient.getQueryData<UserFollow>(['USER', idSession]);
-        let followedBy: User[] = [];
-        let following: User[] = [];
-        if (followingUser && followedByUser)
-          if (isFollowedByMe) {
-            followedBy = followingUser.followedBy.filter((i: User) => i.id !== +idSession);
-            following = followedByUser.following.filter((i: User) => i.id !== +id);
-          } else {
-            followedBy = [...followingUser.followedBy, followedByUser];
-            following = [...followedByUser.following, followingUser];
-          }
-        queryClient.setQueryData(['USER', id], { ...followingUser, followedBy });
-        queryClient.setQueryData(['USER', idSession], { ...followedByUser, following });
-        return { followingUser, followedByUser };
-      },
-      onError: (err, data, context: any) => {
-        queryClient.setQueryData(['USER', id], context.followingUser);
-        queryClient.setQueryData(['USER', idSession], context.followedByUser);
-      },
+      //   type UserFollow = User & { followedBy: User[]; following: User[] };
+      //   const followingUser = queryClient.getQueryData<UserFollow>(['USER', id]);
+      //   const followedByUser = queryClient.getQueryData<UserFollow>(['USER', idSession]);
+      //   let followedBy: User[] = [];
+      //   let following: User[] = [];
+      //   if (followingUser && followedByUser)
+      //     if (isFollowedByMe) {
+      //       followedBy = followingUser.followedBy.filter((i: User) => i.id !== +idSession);
+      //       following = followedByUser.following.filter((i: User) => i.id !== +id);
+      //     } else {
+      //       followedBy = [...followingUser.followedBy, followedByUser];
+      //       following = [...followedByUser.following, followingUser];
+      //     }
+      //   queryClient.setQueryData(['USER', id], { ...followingUser, followedBy });
+      //   queryClient.setQueryData(['USER', idSession], { ...followedByUser, following });
+      //   return { followingUser, followedByUser };
+      // },
+      // onError: (err, data, context: any) => {
+      //   queryClient.setQueryData(['USER', id], context.followingUser);
+      //   queryClient.setQueryData(['USER', idSession], context.followedByUser);
+      // },
 
       onSettled: () => {
         queryClient.invalidateQueries(['USER', id]);
@@ -314,7 +326,7 @@ const Mediatheque: NextPage = () => {
 
     return (cycles && cycles.length) 
     ? <CarouselStatic
-        cacheKey={['CYCLES',JSON.stringify(cyclesCreatedOrJoinedWhere)]}
+        cacheKey={['CYCLES',JSON.stringify(cyclesCreatedOrJoinedWhere(+id))]}
         onSeeAll={async () => seeAll(cycles, t('Cycles I created or joined'))}
         title={t('Cycles I created or joined')}
         data={cycles}
@@ -438,6 +450,10 @@ const Mediatheque: NextPage = () => {
     return '';
   };
 
+  const isPending = () => {
+    return isLoadingSession || isLoadingUser || isLoadingMutateFollowing;
+  }
+
   return (
     <SimpleLayout title={t('Mediatheque')}>
       <article data-cy="mediatheque">
@@ -482,9 +498,14 @@ const Mediatheque: NextPage = () => {
                       </Button>
                     )}
                     {session && session.user!.id !== user.id && !isFollowedByMe && (
-                      <Button data-cy="follow-btn" className='text-white rounded-pill' onClick={followHandler} disabled={isLoadingMutateFollowing}>
+                      <Button 
+                        data-cy="follow-btn" 
+                        className='text-white rounded-pill' 
+                        onClick={followHandler} 
+                        disabled={isPending()}
+                      >
                         {t('Follow')}
-                        {isLoadingMutateFollowing && <Spinner animation="grow" variant="info" size="sm" />}
+                        {isPending() && <Spinner animation="grow" variant="info" size="sm" />}
                       </Button>
                     )}
 
@@ -494,10 +515,10 @@ const Mediatheque: NextPage = () => {
                         variant="button border-primary text-primary fs-6"
                         className="w-80 rounded-pill"
                         onClick={followHandler}
-                        disabled={isLoadingMutateFollowing}
+                        disabled={isPending()}
                       >
                         {t('Unfollow')}
-                        {isLoadingMutateFollowing && <Spinner animation="grow" variant="info" size="sm" />}
+                        {isPending() && <Spinner animation="grow" variant="info" size="sm" />}
                       </Button>
                     )}
                   </Col>
@@ -532,15 +553,31 @@ const Mediatheque: NextPage = () => {
   );
 };
 
-// export const getStaticProps: GetStaticProps = async () => {
-//   const queryClient = new QueryClient();
-//   // await queryClient.prefetchQuery('WORKS', getWorks);
+export const getServerSideProps: GetServerSideProps = async (ctx) => {debugger;
+  const queryClient = new QueryClient();
+  const session = await getSession();
+  const {query} = ctx;
+  const upc = userPostsCondition(+query?.id!, session?.user.id);
+  const posts = await getPosts(upc);
+  await queryClient.prefetchQuery(['POSTS',JSON.stringify(upc)], ()=>posts);
+  posts.forEach(p=>{
+    queryClient.setQueryData(['POST',`${p.id}`], ()=>p)
+  })
+  // await Promise.all(
+  //   posts.map(p=>queryClient.prefetchQuery(['POST',`${p.id}`], ()=>p))
+  // )
 
-//   return {
-//     props: {
-//       dehydratedState: dehydrate(queryClient),
-//     },
-//   };
-// };
+  const cycles = await getCycles(cyclesCreatedOrJoinedWhere(+query?.id!));
+  await queryClient.prefetchQuery(["CYCLES",JSON.stringify(cyclesCreatedOrJoinedWhere(+query?.id!))],()=>cycles)
+  cycles.forEach(c=>{
+    queryClient.setQueryData(['CYCLE',`${c.id}`], ()=>c)
+  })
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
+};
 
 export default Mediatheque;
