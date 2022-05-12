@@ -124,5 +124,6 @@
   "MyCycle": "My cycle",
   "canNotUploadPhoto":"Images larger than 2 MB cannot be uploaded. Image has",
   "selectedCropNotInvalid":"Cropped images larger than 500 KB cannot be uploaded. Image has",
-  "by":"by"
+  "by":"by",
+  "Results":"Results"
 }
