@@ -64,6 +64,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
     //   }),
     // );
     // setSearchEngineState((res) => ({ ...res, where, q: v }));
+    setSearchEngineState((res)=>({...res,itemsFound:[]}))
     setLoading((res) => ({[`${v}`]: true}));
     router.push(`/search?q=${v}`);    
   };
