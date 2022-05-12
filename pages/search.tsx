@@ -256,7 +256,7 @@ const SearchPage: NextPage = () => {
   };
   if (mounted)
     return (
-      <SimpleLayout title={t('browserTitleWelcome')}>
+      <SimpleLayout title={t('Results')}>
         <ButtonGroup className="mb-1">
           <Button variant="primary text-white" onClick={() => router.back()} size="sm">
             <BiArrowBack />
@@ -267,8 +267,9 @@ const SearchPage: NextPage = () => {
         </h1>
         <FilterEngine key={router.asPath} />
         <div className='d-flex flex-column justify-content-center'>
+          {renderErrorMessage()}
           {(
-            !isLoading
+            !isLoading 
             && <>
               <div className='d-none d-md-block'><ListWindow cacheKey={["ITEMS", q!]} items={homepageMosaicDataFiltered} itemsByRow={4} /></div>
               <div className='d-block d-md-none'><ListWindow cacheKey={["ITEMS", q!]} items={homepageMosaicDataFiltered} itemsByRow={1} /></div>
@@ -278,7 +279,6 @@ const SearchPage: NextPage = () => {
           }
         </div>
         {genLoadingCmp()}
-        {renderErrorMessage()}
       </SimpleLayout>
     );
   return <></>
