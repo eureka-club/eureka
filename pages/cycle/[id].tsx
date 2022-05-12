@@ -118,7 +118,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
 
   const getBanner = () => {
     if (cycle && !cycle?.currentUserIsParticipant && router) {
-      if (router.asPath.search(/\/cycle\/13/g) > -1)
+      if (router.asPath.search(/\/cycle\/20/g) > -1)
         return (
           <Banner
             cacheKey={['BANNER-CYCLE', `${cycle.id}`]}
@@ -158,17 +158,17 @@ const CycleDetailPage: NextPage<Props> = (props) => {
       <CycleContext.Provider value={{ cycle, currentUserIsParticipant, linkToCycle: false }}>
        
       <Head>
-        <meta property="og:title" content={props.metas.title}/>
-        <meta property="og:url" content={`${WEBAPP_URL}/cycle/${props.metas.id}`} />
-        <meta property="og:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${props.metas.storedFile}`}/>
+        <meta property="og:title" content={props.metas?.title||""}/>
+        <meta property="og:url" content={`${WEBAPP_URL}/cycle/${props.metas?.id||""}`} />
+        <meta property="og:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${props.metas?.storedFile||""}`}/>
         <meta property="og:type" content='article'/>
 
         <meta name="twitter:card" content="summary_large_image"></meta>
         <meta name="twitter:site" content="@eleurekaclub"></meta>
-        <meta name="twitter:title" content={props.metas.title}></meta>
+        <meta name="twitter:title" content={props.metas?.title||""}></meta>
         {/* <meta name="twitter:description" content=""></meta>*/}
-        <meta name="twitter:url" content={`${WEBAPP_URL}/cycle/${props.metas.id}`}></meta>
-        <meta name="twitter:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${props.metas.storedFile}`}></meta>
+        <meta name="twitter:url" content={`${WEBAPP_URL}/cycle/${props.metas?.id||""}`}></meta>
+        <meta name="twitter:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${props.metas?.storedFile||""}`}></meta>
 
       </Head>  
         <SimpleLayout banner={getBanner()} title={cycle ? cycle.title : ''}>
@@ -200,9 +200,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const wcw = whereCycleWorks(id)
 
   let cycle = await getCycle(id);
-  let metaTags = {id:cycle?.id, title:cycle?.title, storedFile: cycle?.localImages[0].storedFile}
+  let metaTags = null;
+  if(cycle){
+    metaTags = {id:cycle?.id, title:cycle?.title, storedFile: cycle?.localImages[0].storedFile}
 
-   await queryClient.prefetchQuery(['CYCLE',`${id}`], ()=>cycle)
+  }
+
+   await queryClient.prefetchQuery(['CYCLE',`${id}`], ()=>cycle||null)
 
    
    const participants = await getUsers(wcu);

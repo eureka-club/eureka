@@ -4,11 +4,11 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 import { Cycle } from '@prisma/client';
-import getApiHandler from '../../../src/lib/getApiHandler';
-import { find, remove } from '../../../src/facades/cycle';
+import getApiHandler from '@/src/lib/getApiHandler';
+import { find, remove } from '@/src/facades/cycle';
 import {prisma} from '@/src/lib/prisma';
 import {storeDeleteFile} from '@/src/facades/fileUpload'
-// import redis from '../../../src/lib/redis';
+// import redis from '@/src/lib/redis';
 
 dayjs.extend(utc);
 export default getApiHandler()
