@@ -28,6 +28,13 @@ const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,itemSize=400,width
       let mosaics:JSX.Element[] = []
       if(it){
         const items = [...it]
+
+        const allParticipants = items.every(x => isUserMosaicItem(x));
+        if(allParticipants){
+          itemsByRow = 5;
+          itemSize = 80;
+        }
+
         while(items.length){
           const a = items.splice(0,itemsByRow)
           const rows = []
