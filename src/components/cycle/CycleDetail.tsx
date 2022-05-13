@@ -582,7 +582,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       );
       if (cycle.access === 3) return '';
       if (cycle.access === 1) return res;
-      if (cycle.access === 2 && cycleContext.currentUserIsParticipant) return res;
+      if (cycle.access === 2 && (cycleContext.cycle?.currentUserIsCreator || cycleContext.cycle?.currentUserIsParticipant)) return res;
     }
     return '';
   };
@@ -619,7 +619,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       );
       if (cycle.access === 3) return '';
       if (cycle.access === 1) return res;
-      if (cycle.access === 2 && cycleContext.currentUserIsParticipant) return res;
+      if (cycle.access === 2 && (cycleContext.cycle?.currentUserIsCreator || cycleContext.cycle?.currentUserIsParticipant)) return res;
     }
     return '';
   };
@@ -636,7 +636,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         if (cycleContext.currentUserIsParticipant) return 'cycle-discussion';
         return 'cycle-about';
       }
-      if (cycle.access === 2 && cycleContext.currentUserIsParticipant) return 'cycle-discussion';
+      if (cycle.access === 2 && (cycleContext.cycle?.currentUserIsCreator || cycleContext.cycle?.currentUserIsParticipant)) return 'cycle-discussion';
       if (cycle.access === 3 && cycleContext.currentUserIsParticipant) return 'cycle-discussion';
     }
     return 'cycle-about';
