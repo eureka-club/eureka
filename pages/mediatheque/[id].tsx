@@ -128,10 +128,9 @@ const Mediatheque: NextPage = () => {
   const { /* isError, error, */ data: user, isLoading: isLoadingUser, isSuccess: isSuccessUser } = useUser(+id,{
     enabled:!!+id
   });
+  
 
-  const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>(
-    ()=>(user && user.followedBy) ? user.followedBy.findIndex((i) => i.id === session?.user.id) !== -1 : false
-  );
+  const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>(false);
   
 
   const {data:posts} = usePosts(userPostsCondition(+id, +idSession),{enabled:!!(id && !isLoadingSession)})
@@ -142,6 +141,10 @@ const Mediatheque: NextPage = () => {
   )
 
   useEffect(() => {
+    if(user){
+      const ifbm = (user && user.followedBy) ? user.followedBy.findIndex((i) => i.id === session?.user.id) !== -1 : false
+      setIsFollowedByMe(ifbm)
+    }
     if (isSuccessUser && id && !user) {
       queryClient.invalidateQueries(['USER', `${id}`]);
     }
