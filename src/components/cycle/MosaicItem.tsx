@@ -137,8 +137,10 @@ const MosaicItem: FunctionComponent<Props> = ({
     data: mutationResponse,
     // isSuccess: isJoinCycleSuccess,
   } = useJoinUserToCycleAction(user!,cycle!,participants!,(_data,error)=>{
-    if(!error)
-      addToast(t('OK'),{appearance:'success',autoDismiss:true});
+    if(!error) {//para q no salgan dos toast al unirse a ciclo privado
+      if(cycle?.access != 2)
+        addToast(t('OK'),{appearance:'success',autoDismiss:true});
+    }
     else
       addToast(t('Internal Server Error'),{appearance:'error',autoDismiss:true});
 });
