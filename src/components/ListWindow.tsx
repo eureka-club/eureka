@@ -31,7 +31,8 @@ const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,itemSize=400,width
 
         const allParticipants = items.every(x => isUserMosaicItem(x));
         if(allParticipants){
-          itemsByRow = 5;
+          if(!itemsByRow || itemsByRow == 4)
+             itemsByRow = 5 ;
           itemSize = 80;
         }
 
