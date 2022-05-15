@@ -53,6 +53,8 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
     if (setTags) setTags(items.join());
   };
   const handlerBadgeClick = (v: string) => {
+    if(loading[v])return;
+    setLoading(() => ({[`${v}`]: true}));
     // const where = encodeURIComponent(
     //   JSON.stringify({
     //     OR: [
@@ -65,7 +67,6 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
     // );
     // setSearchEngineState((res) => ({ ...res, where, q: v }));
     setSearchEngineState((res)=>({...res,itemsFound:[]}))
-    setLoading((res) => ({[`${v}`]: true}));
     router.push(`/search?q=${v}`);    
   };
   return (
@@ -87,6 +88,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
                     X
                   </Badge> || <Spinner size="sm" animation="grow"/>
                 )}
+                {loading[v] && <Spinner size="sm" animation="grow"/>}
               </Badge>{' '}
             </span>
           );
