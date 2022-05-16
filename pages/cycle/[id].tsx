@@ -115,6 +115,11 @@ const CycleDetailPage: NextPage<Props> = (props) => {
   };
 
   const isPending = ()=> isFetchingCycle>0||isJoinCycleLoading||isLoading||isLoadingParticipants;
+  
+  if(!isPending() && !cycle)
+    return <SimpleLayout title={t('notFound')}>
+      <Alert variant='danger'>{t('notFound')}</Alert>
+    </SimpleLayout>;
 
   const getBanner = () => {
     if (cycle && !cycle?.currentUserIsParticipant && router) {
