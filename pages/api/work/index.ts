@@ -49,13 +49,18 @@ export default getApiHandler()
     });
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-    try {
-      const { q = null, where = null, id = null,take:t=undefined } = req.query;
+    try {debugger;
+      const { q = null, where = null, id = null,take:t=undefined,skip:s=undefined,cursor:c=undefined } = req.query;
       const take = t ? parseInt(t?.toString()) : undefined;
+      const skip = s ? parseInt(s.toString()) : undefined;
+      const cursor = c ? JSON.parse(decodeURIComponent(c.toString())) : undefined;
+
       let data = null;
       if (typeof q === 'string') {
         data = await findAll({
           take,
+          skip,
+          cursor,
           where: {
             OR: [{ title: { contains: q } },{topics:{contains:q}},{tags:{contains:q}}, { contentText: { contains: q } }, { author: { contains: q } }],
           }
@@ -63,15 +68,23 @@ export default getApiHandler()
       } else if (where) {
         data = await findAll({
           take,
+          skip,
+          cursor,
           ...(typeof where === 'string' && { where: JSON.parse(where) }),
         });
       } else if (id) {
         data = await findAll({
           take,
+          skip,
+          cursor,
           where: { id: parseInt(id as string, 10) }
         });
       } else {
-        data = await findAll({});
+        data = await findAll({
+          take,
+          skip,
+          cursor,
+        });
       }
       res.status(200).json({
         data,

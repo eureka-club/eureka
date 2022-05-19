@@ -97,9 +97,11 @@ export const find = async (id: number): Promise<WorkMosaicItem | null> => {
 
 
 export const findAll = async (props?:Prisma.WorkFindManyArgs): Promise<WorkMosaicItem[]> => {
-  const {where,include=null,take} = props || {};
+  const {where,include=null,take,skip,cursor} = props || {};
   return prisma.work.findMany({
     take,
+    skip,
+    cursor,
     orderBy: { createdAt: 'desc' },
     include:{
       localImages: {select:{storedFile:true}},
