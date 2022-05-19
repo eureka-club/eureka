@@ -5,8 +5,9 @@ import { Prisma } from '@prisma/client';
 export const getWorks = async (
   where?: Prisma.WorkWhereInput
 ): Promise<WorkMosaicItem[]> => {
-  const w = encodeURIComponent(JSON.stringify(where))   
-  const res = await fetch(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/work${where ? `?where=${w}` : ''}`);
+  
+  const w = encodeURIComponent(JSON.stringify(where));
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/work${where ? `?where=${w}` : ''}`);
   if (!res.ok) return [];
   const {data} = await res.json();
   return data;

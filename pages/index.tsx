@@ -13,6 +13,8 @@ import Header from '../src/components/layouts/Header';
 import Carousel from '../src/components/Carousel';
 import { v4 } from 'uuid';
 import { WEBAPP_URL } from '../src/constants';
+import {QueryClient, dehydrate} from 'react-query'
+import useWorks,{getWorks} from '@/src/useWorks'
 
 const IndexPage: NextPage = () => {
   const { t } = useTranslation('common');
@@ -69,9 +71,9 @@ const IndexPage: NextPage = () => {
   );
 };
 
-/* export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const queryClient = new QueryClient();
-  // await queryClient.prefetchQuery('WORKS', getWorks);
+  await queryClient.prefetchQuery('WORKS', ()=>getWorks());
 
   return {
     props: {
@@ -79,7 +81,7 @@ const IndexPage: NextPage = () => {
     },
   };
 };
- */
+
 // export const getServerSideProps: GetServerSideProps = async () => {
 //   const cycles = await findAllCycles();
 //   const works = await findAllWorks();
