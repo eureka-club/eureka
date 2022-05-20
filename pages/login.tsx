@@ -1,9 +1,7 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-
+import Container from 'react-bootstrap/Container';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import SignInForm from '../src/components/forms/SignInForm';
 
@@ -11,8 +9,10 @@ const LoginPage: NextPage = () => {
   const { t } = useTranslation('signInForm');
 
   return (
-    <SimpleLayout title={t('login')} showNavBar={false}>
+    <SimpleLayout allPage={true} title={t('login')} showNavBar={false}>
+    <Container className='mt-5 w-50'>
           <SignInForm noModal />
+     </Container>
     </SimpleLayout>
   );
 };

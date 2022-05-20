@@ -1,16 +1,17 @@
 import { GetStaticProps, NextPage } from 'next';
 import Head from "next/head";
+import { useSession, signOut } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { useState,MouseEvent, } from 'react';
 import { RiArrowDownSLine } from 'react-icons/ri';
-
 import { Button } from 'react-bootstrap';
 import TagsInput from '../src/components/forms/controls/TagsInput';
-
 import styles from './index.module.css';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import Header from '../src/components/layouts/Header';
+import HomeNotSingIn from '../src/components/HomeNotSingIn';
 import Carousel from '../src/components/Carousel';
+
 import { v4 } from 'uuid';
 import { WEBAPP_URL } from '../src/constants';
 import {QueryClient, dehydrate} from 'react-query'
@@ -19,6 +20,7 @@ import useWorks,{getWorks} from '@/src/useWorks'
 const IndexPage: NextPage = () => {
   const { t } = useTranslation('common');
   const [show, setShow] = useState<string[]>(['gender-feminisms', 'technology', 'environment']);
+  const {data:session,status} = useSession();
   const [hide /* , setHide */] = useState<string[]>([
     'racism-discrimination',
     'wellness-sports',
@@ -55,18 +57,22 @@ const IndexPage: NextPage = () => {
         <meta name="twitter:title" content="Eureka"></meta>
         <meta name="twitter:description" content="Activa tu mente, transforma el mundo"></meta>
         <meta name="twitter:image" content={`${WEBAPP_URL}/logo.jpg`} ></meta>
-        <meta name="twitter:url" content={`${WEBAPP_URL}`} ></meta>
+        <meta name="twitter:url" content={`${WEBAPP_URL}`} ></meta>  
     </Head>
+    {/* ESTO SERIA PAGINA USUARIO NO LOGUEADO  PAG ARQUIMEDES y EXPLORE */}
+    {!session && (<HomeNotSingIn/>)}
+    {/* ESTO SERIA PAGINA USUARIO LOGUEADO */}
+    {session && session.user && (
     <SimpleLayout showHeader title={t('browserTitleWelcome')}>
-      <h1 className="text-secondary fw-bold">{t('Trending topics')}</h1>
-      <aside className="mb-5">{getTopicsBadgedLinks()}</aside>
-      <>{show && show.map((item, idx) => <Carousel className="mt-5" key={`carousel-${idx}`} topic={item} />)}</>
-      <Button className="my-3 pe-3 rounded-pill text-white" onClick={e=>showTopic(e)} disabled={hide.length === 0}>
-        <span>
-          <RiArrowDownSLine /> {t('loadMoreTopics')}
-        </span>
-      </Button>
-    </SimpleLayout>
+              <h1 className="text-secondary fw-bold">{t('Trending topics')}</h1>
+              <aside className="mb-5">{getTopicsBadgedLinks()}</aside>
+              <>{show && show.map((item, idx) => <Carousel className="mt-5" key={`carousel-${idx}`} topic={item} />)}</>
+              <Button className="my-3 pe-3 rounded-pill text-white" onClick={e=>showTopic(e)} disabled={hide.length === 0}>
+                <span>
+                  <RiArrowDownSLine /> {t('loadMoreTopics')}
+                </span>
+              </Button> 
+    </SimpleLayout>)}
     </>
   );
 };

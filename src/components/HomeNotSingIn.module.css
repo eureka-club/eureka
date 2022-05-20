@@ -1,0 +1,26 @@
+.arquimedesImage {
+   width: 70%;
+   height: 100%;
+}
+
+.WorkSection{
+     background:var(--color-primary-raised);
+}
+.CyclesSection{
+     background:var(--color-emphasis-raised);
+}
+.EurekaSection{
+     background:var(--color-secondary-raised);
+}
+.WorkSectionImage{
+   width: 100%;
+   height: 100%;
+}
+.CyclesSectionImage{
+   width: 85%;
+   height: 100%;
+}
+.EurekaSectionImage{
+   width: 85%;
+   height: 100%;
+}

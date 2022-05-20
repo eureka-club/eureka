@@ -1,7 +1,6 @@
 .modalHeader {
   border: none;
   text-align: center;
-  margin-top: 5rem;
 }
 .modalHeader :global(.modal-title) {
   font-size: 2rem;
@@ -32,7 +31,7 @@
   margin: 0 auto;
   text-align: center;
   height: 3rem;
-  width: 40%;
+  width: 80%;
 }
 .gmailLogo {
    width: 1.5rem;
@@ -44,8 +43,8 @@
 
 .alternativeLabel {
   color: var(--eureka-green);
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-top: 0.6rem;
+  margin-bottom: 0.3rem;
   text-align: center;
 }
 .EurekaText {
@@ -72,7 +71,7 @@
 
 }
 .loginForm{
-  width: 40%;
+  width: 80%;
 }
 
 .forgotPassText{

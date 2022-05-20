@@ -296,13 +296,16 @@ a{
  }
 
  .allPageSection{
-     margin-top: 0px;
+     margin: 0px;
  }
 
 @media screen and (max-width: 388px) {
  .fs-xs {
    display: none;
    }
+   h1 {
+  font-size: 1.6rem;
+}
 }
  @media screen and (max-width: 768px) {
    .avatar {
@@ -321,7 +324,7 @@ a{
      margin-top: 0.8em;
    }
    .allPageSection{
-     margin-top: 0px;
+     margin: 0px;
  }
  }
 
@@ -336,7 +339,7 @@ a{
     margin-top: 0.8em;
   }
   .allPageSection{
-     margin-top: 0px;
+     margin: 0px;
  }
 
  
@@ -355,7 +358,7 @@ a{
      margin-top: 6em;
    }
    .allPageSection{
-     margin-top: 0px;
+     margin: 0px;
  }
 
     .profile-crop {
@@ -379,7 +382,7 @@ a{
     margin-top: 6em;
   }
   .allPageSection{
-     margin-top: 0px;
+     margin: 0px;
  }
 
   .profile-crop {

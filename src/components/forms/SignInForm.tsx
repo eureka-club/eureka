@@ -19,9 +19,10 @@ import styles from './SignInForm.module.css';
 import {useRouter} from 'next/router'
 interface Props {
   noModal?: boolean;
+  logoImage?:boolean
 }
 
-const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
+const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true }) => {
   const { addToast } = useToasts()
   const router = useRouter()
   const { t } = useTranslation('signInForm');
@@ -100,19 +101,19 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
   }
 
   return (
-    <Container>
+      <>
       <ModalHeader className={`position-relative ${styles.modalHeader}`} closeButton={!noModal}>
-        <Container>
+        {logoImage && (<Container>
         <Link href="/" replace>  
         <img  className={`cursor-pointer ${styles.eurekaImage}`} src="/logo.svg" alt="Eureka" /> 
         </Link>
         <p className={styles.EurekaText}>EUREKA</p>
-        </Container>
+        </Container>)}
       </ModalHeader>
       <ModalBody className="pt-0 pb-5">
       
         <div>
-        <p className={`${styles.loginGreeting}`}>{t('loginGreeting')}</p>
+         {logoImage && (<p className={`${styles.loginGreeting}`}>{t('loginGreeting')}</p>)}
           <Row>
               <button type="button" onClick={handleSignInGoogle} className={`d-flex justify-content-center ${styles.buttonGoogle}`}>
                 <div className={`d-flex justify-content-start justify-content-sm-center aling-items-center flex-row ${styles.gmailLogoAndtext}`}>
@@ -122,7 +123,7 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
               </button>
           </Row>
           <Row>
-              <p className={`${styles.alternativeLabel}`}>{t('alternativeText')}</p>
+              <span className={`${styles.alternativeLabel}`}>{t('alternativeText')}</span>
           </Row>
           <Row>
             <div className="d-flex justify-content-center">
@@ -144,14 +145,14 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
                   {t('login')} {loading && <Spinner animation="grow"/>}
                 </Button>
                 </div>
-                 <p className={`mt-5 ${styles.dontHaveAccounttext}`}>{t('dontHaveAccounttext')} <Link href="/register">
+                 <p className={`mt-3 ${styles.dontHaveAccounttext}`}>{t('dontHaveAccounttext')} <Link href="/register">
                  <a className="">{t('Join')}</a></Link></p>
               </Form>
             </div>
           </Row>
         </div>
       </ModalBody>
-    </Container>
+    </>
   );
 };
 
