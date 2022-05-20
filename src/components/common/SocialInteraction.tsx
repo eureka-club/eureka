@@ -232,8 +232,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
       const about = post.works[0] ? 'postWorkShare' : 'postCycleShare';
       return `${t(about)} "${p ? p.title : ''}"`;
     }
-
-    throw new Error('Invalid entity or parent');
+    return `entity unknown`
+    // throw new Error('Invalid entity or parent');
   })();
 
   const shareText = `${shareTextDynamicPart}  ${t('complementShare')}`;
