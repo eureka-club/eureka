@@ -232,7 +232,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
       const about = post.works[0] ? 'postWorkShare' : 'postCycleShare';
       return `${t(about)} "${p ? p.title : ''}"`;
     }
-    return `entity unknown`
+    return 'entity not found'
     // throw new Error('Invalid entity or parent');
   })();
 
