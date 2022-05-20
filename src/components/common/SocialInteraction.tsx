@@ -241,8 +241,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
       const about = post.works[0] ? 'postWorkShare' : 'postCycleShare';
       return `EUREKA: "${post.title}". \n ${t(about)} "${p ? p.title : ''}"`;
     }
-
-    throw new Error('Invalid entity or parent');
+    return 'entity not found'
+    // throw new Error('Invalid entity or parent');
   })();
   const title = () => {
     if (parent != null) {
