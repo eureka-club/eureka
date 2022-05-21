@@ -1,0 +1,21 @@
+
+.fallowsSection a .ti{
+  color: white;
+  font-size: 3em;
+  cursor: pointer;
+}
+.fallowsSection a .tiktok{
+  color: white;
+  font-size: 2em;
+  margin-left: 0.2em ;
+  margin-right: 0.2em ;
+}
+
+.fallowsSection a[href^="mailto:"] .ti{
+  font-size: 2.5em;
+}
+
+.fallowsSection .fallowsSectionTitle{
+  font-size: 1em;
+  color: white;
+}

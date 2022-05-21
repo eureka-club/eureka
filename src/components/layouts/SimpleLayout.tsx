@@ -8,7 +8,7 @@ import Navbar from '../Navbar';
 import NavbarMobile from '../NavbarMobile';
 import Header from './Header';
 import HeaderMobile from './HeaderMobile';
-
+import Footer from '../Footer';
 import CreatePostForm from '../forms/CreatePostForm';
 import CreateWorkForm from '../forms/CreateWorkForm';
 import EditWorkForm from '../forms/EditWorkForm';
@@ -107,6 +107,7 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
          : <Container className='mainContainer'>{children}</Container> }
        
       </section>
+        <Footer/>
 
       <Modal
         animation={false}
