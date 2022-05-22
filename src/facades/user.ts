@@ -175,10 +175,12 @@ export const find = async (props: findProps): Promise<UserMosaicItem | null> => 
   });
 };
 
-export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<UserMosaicItem[]> => {
-  const {where,take} = props||{};
+export const findAll = async (props?:Prisma.UserFindManyArgs): Promise<UserMosaicItem[]> => {
+  const {where,take,skip,cursor} = props||{};
   return prisma.user.findMany({
     take,
+    skip,
+    cursor,
     ... where && {where},
     orderBy: { createdAt: 'desc' },
     select:{

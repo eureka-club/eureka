@@ -50,7 +50,9 @@ export default getApiHandler()
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {debugger;
-      const { q = null, where = null, id = null,take:t=undefined,skip:s=undefined,cursor:c=undefined } = req.query;
+      const { q = null, where:w = null, id = null,take:t=undefined,skip:s=undefined,cursor:c=undefined } = req.query;
+      
+      const where = w ? JSON.parse(decodeURIComponent(w.toString())) : undefined;
       const take = t ? parseInt(t?.toString()) : undefined;
       const skip = s ? parseInt(s.toString()) : undefined;
       const cursor = c ? JSON.parse(decodeURIComponent(c.toString())) : undefined;
@@ -70,7 +72,7 @@ export default getApiHandler()
           take,
           skip,
           cursor,
-          ...(typeof where === 'string' && { where: JSON.parse(where) }),
+          where,
         });
       } else if (id) {
         data = await findAll({

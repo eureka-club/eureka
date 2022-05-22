@@ -92,13 +92,16 @@ export default getApiHandler()
 
     try {
       
-      const { q = null, where:w = undefined, id = null, take:t=undefined, page:c } = req.query;
-      const session = (await getSession({ req })) as unknown as Session;
+      const { q = null, where:w, id = null, take:t,skip:s,cursor:c } = req.query;
+
+      let where = w ? JSON.parse(decodeURIComponent(w.toString())) : undefined;
+      const take = t ? parseInt(t?.toString()) : undefined;
+      const skip = s ? parseInt(s.toString()) : undefined;
+      const cursor = c ? JSON.parse(decodeURIComponent(c.toString())) : undefined;
+
+      const session = await getSession({ req });
     
       let data = null;
-      let where = w ? JSON.parse(w.toString()) : undefined;
-      const take = t ? parseInt(t?.toString()) : undefined;
-      const page = c ? +c : undefined;
       if(session){
         where = {
           AND:{
@@ -152,13 +155,13 @@ export default getApiHandler()
           OR: [{ title: { contains: q } },{topics:{contains:q}},{tags:{contains:q}}, { contentText: { contains: q } }, { creator: { name:{contains: q} } }],
           
         }
-        data = await findAll({take,where},page);
+        data = await findAll({take,skip,cursor,where});
       } else if (where) {
-        data = await findAll({take,where},page);
+        data = await findAll({take,where,skip,cursor});
       } else if (id) {
-        data = await findAll({take,where:{id: parseInt(id as string, 10)}},page);
+        data = await findAll({where:{id: parseInt(id as string, 10)}});
       } else {
-        data = await findAll({take},page);
+        data = await findAll({take,skip,where,cursor});
       }
       
       

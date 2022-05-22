@@ -48,10 +48,11 @@ export const find = async (id: number): Promise<PostMosaicItem | null> => {
 
 
 export const findAll = async (props?:Prisma.PostFindManyArgs,page?:number): Promise<PostMosaicItem[]> => {
-  const {include,where,take,skip} = props || {};
+  const {include,where,take,skip,cursor} = props || {};
   return prisma.post.findMany({
     take,
     skip,
+    cursor,
     orderBy: { createdAt: 'desc' },
     include:{
       works:{select:{id:true,title:true,type:true,localImages:{select:{storedFile:true}}}},

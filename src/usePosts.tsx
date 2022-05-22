@@ -3,14 +3,25 @@ import { useQuery } from 'react-query';
 import { PostMosaicItem } from './types/post';
 // import globalSearchEngineAtom from './atoms/searchEngine';
 import { Prisma } from '@prisma/client';
+import { buildUrl } from 'build-url-ts';
 
 export const getPosts = async (
-  where?: Prisma.PostWhereInput,
+  props?: Prisma.PostFindManyArgs,
 ): Promise<PostMosaicItem[]> => {
-  
-  let url = '';
-  const w = encodeURIComponent(JSON.stringify(where))
-  url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/post${where ? `?where=${w}` : ''}`;
+
+  const {where:w,take,skip,cursor:c} = props || {};
+  const where = w ? encodeURIComponent(JSON.stringify(w)) : '';
+  const cursor = c ? encodeURIComponent(JSON.stringify(c)) : '';
+
+  const url = buildUrl(`${process.env.NEXT_PUBLIC_API_URL}/api`, {
+    path: 'post',
+    queryParams: {
+      where,
+      take,
+      skip,
+      cursor,
+    }
+  });
    
   const res = await fetch(url);
   if (!res.ok) return [];
@@ -23,7 +34,7 @@ interface Options {
   enabled?: boolean;
 }
 
-const usePosts = (where?: Prisma.PostWhereInput, options?: Options) => {
+const usePosts = (where?: Prisma.PostFindManyArgs, options?: Options) => {
   const { staleTime, enabled } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
