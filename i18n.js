@@ -1,4 +1,5 @@
-module.exports = {
+
+const i18n =  {
   loader: false, // because we use babel plugins 😕
   loadLocaleFrom: async (locale, namespace) => import(`./translations/${locale}/${namespace}`).then((m) => m.default),
   locales: ['es', 'en', 'fr', 'pt'],
@@ -21,3 +22,8 @@ module.exports = {
     'rgx:^/work/\\[id\\]': ['workDetail', 'countries','cycleDetail'],
   },
 };
+
+
+
+
+export default i18n;
