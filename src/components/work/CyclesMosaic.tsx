@@ -22,11 +22,11 @@ const CyclesMosaic: FunctionComponent<Props> = ({ work }) => {
   //   },
   // );
   const {data:cycles,isLoading:isLoadingCycles} = useCycles({
-    works:{
+    where:{works:{
       some:{
         id:work.id
       }
-    }
+    }}
   },{enabled:!!work.id})
 
   

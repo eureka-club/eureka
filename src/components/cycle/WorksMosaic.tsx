@@ -18,7 +18,7 @@ interface Props {
 dayjs.extend(isBetween);
 const WorksMosaic: FunctionComponent<Props> = ({ cycle, className }) => {
 
-  const { data: works } = useWorks({ cycles: { some: { id: cycle?.id } } }, {
+  const { data: works } = useWorks({ where:{cycles: { some: { id: cycle?.id } }} }, {
     enabled:!!cycle?.id
   })
 

@@ -33,14 +33,14 @@ import {useJoinUserToCycleAction} from '@/src/hooks/mutations/useCycleJoinOrLeav
 }*/
 
 const whereCycleParticipants = (id:number)=>({
-  OR:[
+  where:{OR:[
     {cycles: { some: { id } }},//creator
     {joinedCycles: { some: { id } }},//participants
-  ], 
+  ]}, 
 });
 
-const whereCycleWorks = (id:number)=> ({ cycles: { some: { id } } })
-const whereCyclePosts = (id:number)=> ({AND:{ cycles:{ some: { id }}}})
+const whereCycleWorks = (id:number)=> ({where:{cycles: { some: { id } } }})
+const whereCyclePosts = (id:number)=> ({where:{AND:{ cycles:{ some: { id }}}}})
 
 interface Props{
   id:number;

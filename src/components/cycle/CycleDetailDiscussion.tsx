@@ -44,10 +44,10 @@ interface Props {
   cacheKey:string[];
 }
 const whereCycleParticipants = (id:number)=>({
-  OR:[
+  where:{OR:[
     {cycles: { some: { id } }},//creator
     {joinedCycles: { some: { id } }},//participants
-  ], 
+  ], }
 });
 const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cacheKey }) => {
   // const [items, setItems] = useState<Item[]>();
@@ -62,7 +62,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
   const { addToast } = useToasts()
   // const hyvorId = `${WEBAPP_URL}cycle/${cycle.id}`;
 
-  const { data: works } = useWorks({ cycles: { some: { id: cycle?.id } } }, {
+  const { data: works } = useWorks({ where:{cycles: { some: { id: cycle?.id } }} }, {
     enabled:!!cycle?.id
   })
 

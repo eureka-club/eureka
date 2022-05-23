@@ -67,20 +67,20 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
   })
 
   const workItemsWhere = {
-    works:{
+    where:{works:{
       some:{
         id:workId
       }
-    }
+    }}
   }
   const workPostsWhere = {
-    AND:{
+    where:{AND:{
       works:{
         some:{
           id:workId
         }
       }
-    }
+    }}
   }
   const {data:cycles} = useCycles(workItemsWhere,{enabled:!!workId})
   const {data:posts} = usePosts(workPostsWhere,{enabled:!!workId})

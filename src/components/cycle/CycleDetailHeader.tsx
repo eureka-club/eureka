@@ -93,7 +93,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
 
   const {data:cycle,isLoading:isLoadingCycle} = useCycle(cycleId,{enabled:!!cycleId})
 
-  const { data: works } = useWorks({ cycles: { some: { id: cycleId} } }, {
+  const { data: works } = useWorks({ where:{cycles: { some: { id: cycleId} }} }, {
     enabled:!!cycleId
   })
   // const hyvorId = `${WEBAPP_URL}cycle/${cycle.id}`;

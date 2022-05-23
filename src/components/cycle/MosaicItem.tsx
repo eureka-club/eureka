@@ -77,10 +77,12 @@ const MosaicItem: FunctionComponent<Props> = ({
   const {data:cycle} = useCycle(cycleId,{enabled:!!cycleId})
   
   const whereCycleParticipants = {
-    OR:[
-      {cycles: { some: { id: cycle?.id } }},//creator
-      {joinedCycles: { some: { id: cycle?.id } }},//participants
-    ], 
+    where:{
+      OR:[
+        {cycles: { some: { id: cycle?.id } }},//creator
+        {joinedCycles: { some: { id: cycle?.id } }},//participants
+      ], 
+    }
   };
   const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants,
     {
