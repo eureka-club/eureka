@@ -27,10 +27,10 @@ interface Props {
 }
 
 const whereCycleParticipants = (id:number)=>({
-  OR:[
+  where:{OR:[
     {cycles: { some: { id } }},//creator
     {joinedCycles: { some: { id } }},//participants
-  ], 
+  ],} 
 });
 
 const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId,metaTags}) => {

@@ -41,22 +41,22 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
   // });
   const [mosaicData, setMosaicData] = useState<MosaicItem[]>([]);
   const {data:cycles,isLoading:isLoadingCycles} = useCycles({
-    works:{
+    where:{works:{
       some:{
         id:work.id
       }
-    }
+    }}
   },{enabled:!!work.id})
 
 
   const {data:posts} = usePosts({
-    AND:{
+    where:{AND:{
       works:{
         some:{
           id:work.id
         }
       }
-    }
+    }}
   },{enabled:!!work.id})
 
 

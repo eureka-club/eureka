@@ -49,10 +49,12 @@ interface Props {
 }
 
 const whereCycleParticipants = (id:number)=>({
-  OR:[
-    {cycles: { some: { id } }},//creator
-    {joinedCycles: { some: { id } }},//participants
-  ], 
+  where:{
+    OR:[
+      {cycles: { some: { id } }},//creator
+      {joinedCycles: { some: { id } }},//participants
+    ],
+  } 
 });
 const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);

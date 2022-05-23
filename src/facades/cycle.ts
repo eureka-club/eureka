@@ -69,9 +69,11 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
 };
 
 export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<CycleMosaicItem[]> => {
-  const {include,where,take} = props || {};
+  const {include,where,take,skip,cursor} = props || {};
   return prisma.cycle.findMany({
     take,
+    skip,
+    cursor,
     ... where && {where},
     orderBy: { createdAt: 'desc' },
     include: {

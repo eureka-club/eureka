@@ -54,28 +54,32 @@ type ItemCycle = CycleMosaicItem & { type: string };
 // | WorkMosaicItem | ;
 
 const userPostsCondition = (id: number, idSession?:number)=> ({
-  AND:{
-    creatorId:id,
-    isPublic:true
-  },
-  ... idSession && {
-    OR:{
-      creator:{
-        followedBy:{some:{id:idSession}}
+  where:{
+    AND:{
+      creatorId:id,
+      isPublic:true
+    },
+    ... idSession && {
+      OR:{
+        creator:{
+          followedBy:{some:{id:idSession}}
+        }
       }
-    }
-  },
+    },
+  }
 });
 
 const cyclesCreatedOrJoinedWhere = (id:number) => ({
-  OR:[
-    {
-      participants:{some:{id}},
-    },
-    {
-      creatorId:id
-    }
-  ]
+  where:{
+    OR:[
+      {
+        participants:{some:{id}},
+      },
+      {
+        creatorId:id
+      }
+    ]
+  }
 }) 
 
 const Mediatheque: NextPage = () => {

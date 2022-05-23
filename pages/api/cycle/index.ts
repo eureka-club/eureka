@@ -74,19 +74,22 @@ export default getApiHandler()
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     try {
       const session = (await getSession({ req })) as unknown as Session;
-      const { q = null, where:w = null,take:t } = req.query;
-      let where = w ? JSON.parse(w.toString()) : undefined;
-      const take = t ? parseInt(t.toString()) : undefined;
+      const { q = null, where:w = null,take:t,skip:s,cursor:c } = req.query;
+
+      let where = w ? JSON.parse(decodeURIComponent(w.toString())) : undefined;
+      const take = t ? parseInt(t?.toString()) : undefined;
+      const skip = s ? parseInt(s.toString()) : undefined;
+      const cursor = c ? JSON.parse(decodeURIComponent(c.toString())) : undefined;
       
       let data = null;
       if (typeof q === 'string') {
         where = {
           OR: [{ title: { contains: q } },{topics:{contains:q}},{tags:{contains:q}}, { contentText: { contains: q } }, { tags: { contains: q } }],
         };
-        data = await findAll({take,where});
+        data = await findAll({take,where,skip,cursor});
       } 
       else{
-        data = await findAll({take,where});
+        data = await findAll({take,where,skip,cursor});
       } 
       data.forEach((c) => {
           c.type ='cycle';

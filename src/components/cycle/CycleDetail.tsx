@@ -105,15 +105,15 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     enabled:!!cycleId
   });
 
-  const { data: works } = useWorks({ cycles: { some: { id: cycle?.id } } }, {
+  const { data: works } = useWorks({ where:{cycles: { some: { id: cycle?.id } } }}, {
     enabled:!!cycle?.id
   })
 
   const whereCycleParticipants = {
-    OR:[
+    where:{OR:[
       {cycles: { some: { id: cycle?.id } }},//creator
       {joinedCycles: { some: { id: cycle?.id } }},//participants
-    ], 
+    ]} 
   };
   const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants,
     {
@@ -150,7 +150,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const [page,setPage] = useState<number>(1);
   const [where,setWhere] = useState<{filtersWork:number[]}>()
 
-  const cyclePostsWhere = {AND:{cycles:{some:{id:+cycleId}}}}
+  const cyclePostsWhere = {where:{AND:{cycles:{some:{id:+cycleId}}}}}
   const {data:posts} = usePosts(cyclePostsWhere,{enabled:!!cycleId})
   
   // const {data} = useCycleItem(+cycleId,-1,where,{

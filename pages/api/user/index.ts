@@ -13,9 +13,14 @@ export const config = {
 export default getApiHandler()
 .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
   try {
-    const { where:w = null,take:t } = req.query;
-    let where = w ? JSON.parse(w.toString()) : undefined;
-    const data = await findAll({where}); 
+    const { where:w = null,take:t,skip:s,cursor:c } = req.query;
+    
+    const where = w ? JSON.parse(decodeURIComponent(w.toString())) : undefined;
+    const take = t ? parseInt(t?.toString()) : undefined;
+    const skip = s ? parseInt(s.toString()) : undefined;
+    const cursor = c ? JSON.parse(decodeURIComponent(c.toString())) : undefined;
+
+    const data = await findAll({where,take,skip,cursor}); 
     data.forEach(u=>{u.type='user'})
     res.status(200).json({
       data,

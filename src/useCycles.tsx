@@ -3,14 +3,30 @@ import { useAtom } from 'jotai';
 import { CycleMosaicItem } from './types/cycle';
 import globalSearchEngineAtom from './atoms/searchEngine';
 import { Prisma } from '@prisma/client';
+import { buildUrl } from 'build-url-ts';
+
 
 export const getCycles = async (
-  where?: Prisma.CycleWhereInput,
+  props?: Prisma.CycleFindManyArgs,
 ): Promise<CycleMosaicItem[]> => {
+
+  const {where:w, take:t, skip:s, cursor:c} = props||{};
   
-  let url = '';
-  const w = encodeURIComponent(JSON.stringify(where))
-  url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle${where ? `?where=${w}` : ''}`;
+  const where = w ? encodeURIComponent(JSON.stringify(w)) : '';
+  const cursor = c ? encodeURIComponent(JSON.stringify(c)) : '';
+  const take = t ? t : ''
+  const skip = s ? s : ''
+
+  const url = buildUrl(`${process.env.NEXT_PUBLIC_API_URL}/api`, {
+    path: 'wocyclerk',
+    queryParams: {
+      where,
+      take,
+      skip,
+      cursor,
+    }
+  });
+
   const res = await fetch(url);
   if (!res.ok) return [];
   const {data} = await res.json();
@@ -22,7 +38,7 @@ interface Options {
   enabled?: boolean;
 }
 
-const useCycles = (where?: Prisma.CycleWhereInput, options?: Options) => {
+const useCycles = (where?: Prisma.CycleFindManyArgs, options?: Options) => {
   const { staleTime, enabled } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,

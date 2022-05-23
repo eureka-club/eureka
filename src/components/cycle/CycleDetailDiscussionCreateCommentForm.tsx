@@ -36,10 +36,12 @@ interface Props {
 }
 
 const whereCycleParticipants = (id:number)=>({
-  OR:[
-    {cycles: { some: { id } }},//creator
-    {joinedCycles: { some: { id } }},//participants
-  ], 
+  where:{
+    OR:[
+      {cycles: { some: { id } }},//creator
+      {joinedCycles: { some: { id } }},//participants
+    ], 
+  }
 });
 
 const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
@@ -75,7 +77,7 @@ const CycleDetailDiscussionCreateCommentForm: FunctionComponent<Props> = ({
   const {notifier} = useNotificationContext();
   const [notifyMessage, setNotifyMessage] = useState<string>('');
   
-  const { data: works } = useWorks({ cycles: { some: { id: cycle?.id } } }, {
+  const { data: works } = useWorks({ where:{cycles: { some: { id: cycle?.id } }} }, {
     enabled:!!cycle?.id
   })
 

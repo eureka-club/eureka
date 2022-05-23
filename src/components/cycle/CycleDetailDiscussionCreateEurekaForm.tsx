@@ -43,10 +43,12 @@ interface Props {
 }
 
 const whereCycleParticipants = (id:number)=>({
-  OR:[
-    {cycles: { some: { id } }},//creator
-    {joinedCycles: { some: { id } }},//participants
-  ], 
+  where:{
+    OR:[
+      {cycles: { some: { id } }},//creator
+      {joinedCycles: { some: { id } }},//participants
+    ],
+  } 
 });
 
 const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
@@ -83,7 +85,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   const {notifier} = useNotificationContext();
   // const gec = useGlobalEventsContext();
 
-  const { data: works } = useWorks({ cycles: { some: { id: cycle?.id } } }, {
+  const { data: works } = useWorks({ where:{cycles: { some: { id: cycle?.id } }} }, {
     enabled:!!cycle?.id
   })
 

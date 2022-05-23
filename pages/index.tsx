@@ -77,16 +77,16 @@ const IndexPage: NextPage = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery('WORKS', ()=>getWorks());
+// export const getStaticProps: GetStaticProps = async () => {
+//   const queryClient = new QueryClient();
+//   await queryClient.prefetchQuery('WORKS', ()=>getWorks());
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-  };
-};
+//   return {
+//     props: {
+//       dehydratedState: dehydrate(queryClient),
+//     },
+//   };
+// };
 
 // export const getServerSideProps: GetServerSideProps = async () => {
 //   const cycles = await findAllCycles();
