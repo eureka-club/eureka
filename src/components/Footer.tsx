@@ -17,7 +17,7 @@ const Footer: FunctionComponent = () => {
   const { t } = useTranslation('navbar');
 
   return (
-    <div className="mt-5"  style={{ background: 'var(--eureka-green)' }}>
+    <div className="m-0"  style={{ background: 'var(--eureka-green)'}}>
   <footer className="text-center text-white">
     <div className="container d-flex flex-column-reverse flex-lg-row justify-content-lg-around">
       <section className="mt-1 mt-lg-2 mb-1">
@@ -31,8 +31,11 @@ const Footer: FunctionComponent = () => {
           <div className="me-lg-5">
               <Link href="/aboutUs" ><p className="text-white cursor-pointer">{t('About Us')}</p></Link>
           </div>
-          <div className="">
+          <div className="me-lg-5">
               <Link href="/policy" ><p className="text-white cursor-pointer">{t('policyText')}</p></Link>
+          </div>
+          <div className="">
+          <p>{t('common:contact')} <a className='text-white' href="mailto:hola@eureka.club">hola@eureka.club</a></p>
           </div>
         </div>
       </section>
@@ -53,15 +56,15 @@ const Footer: FunctionComponent = () => {
              <a href="tiktok">
               <SiTiktok className={styles.tiktok} />
             </a>
-            <a href="mailto:hola@eureka.club">
+            {/*<a href="mailto:hola@eureka.club">
               <RiMailLine className={styles.ti} />
-            </a>
+            </a>*/}
           </section>
     </div>
 
     <div
-         className="text-center p-2" style={{ background: 'var(--eureka-purple)' }}> © 2021  
-      <a className="text-white" href="https://www.eureka.club/">  www.eureka.club</a>
+         className="text-center p-2" style={{ background: 'white' }}>  
+      <a className="text-primary" href="https://www.eureka.club/">  www.eureka.club</a>
     </div>
   </footer>
     </div>

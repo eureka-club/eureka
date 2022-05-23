@@ -147,7 +147,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
             <div className={`${styles.registerFormSection}`}>
           <Row > 
               <span className={`lg-ms-3 ${styles.joinEurekaText}`}>{t('JoinEureka')}</span>
-              <p className={`${styles.haveAccounttext}`}>{t('HaveAccounttext')} <Link href="/login">
+              <p className={`${styles.haveAccounttext}`}>{t('HaveAccounttext')} <Link href="/">
                  <a className="">{t('Login')}</a></Link></p>
               <button type="button" className={`d-flex justify-content-center ${styles.buttonGoogle}`}>
                 <div className={`d-flex justify-content-start justify-content-sm-center aling-items-center flex-row ${styles.gmailLogoAndtext}`}>

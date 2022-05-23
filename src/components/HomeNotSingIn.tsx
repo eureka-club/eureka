@@ -2,16 +2,18 @@
 import { FunctionComponent,useState } from 'react';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/router';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import Link from 'next/link'
 import styles from './HomeNotSingIn.module.css';
 import SignInForm from '@/src/components/forms/SignInForm';
 
 const HomeNotSingIn: FunctionComponent = ({  }) => {
   const { t } = useTranslation('common');
-
+  const router = useRouter();
 
   return <SimpleLayout allPageSize={true} title={t('browserTitleWelcome')}> 
          <div className='pt-2 m-1 pt-lg-5 m-lg-5'>
@@ -39,7 +41,7 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                  </section>
           </div>   
 
-   <div className='d-flex flex-column  m-0 m-lg-3'>
+        <div className='d-flex flex-column  m-0 m-lg-3'>
                  <Row className='d-flex flex-column flex-lg-row justify-content-center'>
                           <Col className={`${styles.WorkSection} col-12 col-lg-6 p-5 d-flex flex-column justify-content-center aling-items-center`}>
                               <h1 className='d-flex justify-content-center text-secondary me-1'>{t('WorkSectionText')}</h1>
@@ -78,6 +80,23 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                         </Col>
                 </Row>   
           </div>   
+         <div className='m-0 m-lg-5'>
+          <Row className='d-flex flex-column flex-lg-row '>
+                        <Col className="d-flex flex-column justify-content-center align-items-center ">
+                           <Button onClick={()=> window.scrollTo(0, 0)} variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
+                                {t('signInForm:login')} 
+                           </Button>
+                           <p className={`mt-1 text-secondary ${styles.dontHaveAccounttext}`}>{t('signInForm:dontHaveAccounttext')} <Link href="/register">
+                           <a className="text-secondary text-decoration-underline">{t('signInForm:Join')}</a></Link></p>
+                        </Col>
+                        <Col className="d-flex flex-column justify-content-center align-items-center ">
+                           <Button variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
+                                {t('Explore')} 
+                           </Button>
+                           <p className={`mt-1 text-secondary ${styles.dontHaveAccounttext}`}>{t('ExploreText')}</p>
+                        </Col>
+                </Row> 
+          </div>      
         </SimpleLayout>
 
 

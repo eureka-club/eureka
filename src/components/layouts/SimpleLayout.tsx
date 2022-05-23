@@ -94,7 +94,7 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
         </div>
 
       </section>
-      <section className={(showNavBar) ? 'mainSection':'allPageSection'}>
+      <section className={(!showNavBar || allPageSize ) ? 'allPageSection': 'mainSection'}>
         <Toast />
         {/* <Navbar /> */}
         <div className="d-none d-lg-block">{showHeader && <Header show={showHeader} />}</div>
@@ -102,12 +102,13 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
 
         {renderBanner()}
         {/* <Toast /> */}
-        {(!showNavBar || allPageSize) ? <div className=''>{children}</div>
+        {(!showNavBar || allPageSize) ? <div className='m-0'>{children}</div>
          : (showHeader) ?  <Container className='mt-4'>{children}</Container>
          : <Container className='mainContainer'>{children}</Container> }
-       
       </section>
-        <Footer/>
+      <section>
+          <Footer/>
+      </section>
 
       <Modal
         animation={false}
