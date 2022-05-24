@@ -1,6 +1,6 @@
 module.exports = {
-  loader: false, // because we use babel plugins 😕
-  loadLocaleFrom: async (locale, namespace) => import(`./translations/${locale}/${namespace}`).then((m) => m.default),
+  // loader: false, // because we use babel plugins 😕
+  // loadLocaleFrom: async (locale, namespace) => import(`./translations/${locale}/${namespace}`).then((m) => m.default),
   locales: ['es', 'en', 'fr', 'pt'],
   defaultLocale: 'es',
   pages: { 

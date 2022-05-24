@@ -65,4 +65,5 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
 };
 
 // @ts-ignore
-export default appWithI18n(App, { ...i18nConfig, skipInitialProps: false });
+export default App;
+// export default appWithI18n(App, { ...i18nConfig, skipInitialProps: false });

@@ -17,8 +17,8 @@ export const getCycles = async (
   const take = t ? t : ''
   const skip = s ? s : ''
 
-  const url = buildUrl(`${process.env.NEXT_PUBLIC_API_URL}/api`, {
-    path: 'wocyclerk',
+  const url = buildUrl(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api`, {
+    path: 'cycle',
     queryParams: {
       where,
       take,

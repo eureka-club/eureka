@@ -13,7 +13,7 @@ export const getWorks = async (
   const take = t ? t : ''
   const skip = s ? s : ''
 
-  const url = buildUrl(`${process.env.NEXT_PUBLIC_API_URL}/api`, {
+  const url = buildUrl(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api`, {
     path: 'work',
     queryParams: {
       where,

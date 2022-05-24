@@ -8,8 +8,8 @@ import * as removeAccents from 'remove-accents';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import {prisma} from '@/src/lib/prisma';
 
-import i18nConfig from '../../../i18n';
-
+// import i18nConfig from '../../../i18n';
+import countries from '../../../locales/es/countries.json'
 
 export const config = {
   api: {
@@ -26,7 +26,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
 
   try {
     // eslint-disable-next-line no-underscore-dangle
-    const namespace = await i18nConfig.loadLocaleFrom(req.cookies.NEXT_LOCALE || 'es', 'countries');
+    // const namespace = await i18nConfig.loadLocaleFrom(req.cookies.NEXT_LOCALE || 'es', 'countries');
     const { q } = req.query;
     const codes: string[] = [];
     let getAll = false;
@@ -35,7 +35,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
         const qFormated = removeAccents.remove(qi as string).toLowerCase();
         const regExp = new RegExp(`${qFormated}`, 'i');
         codes.push(
-          ...Object.entries(namespace)
+          ...Object.entries(countries)
             .filter(([code, value]) => {
               return (value as string).toLowerCase().match(regExp) || (code as string).toLowerCase().match(regExp);
             })

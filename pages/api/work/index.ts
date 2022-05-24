@@ -49,7 +49,7 @@ export default getApiHandler()
     });
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-    try {debugger;
+    try {
       const { q = null, where:w = null, id = null,take:t=undefined,skip:s=undefined,cursor:c=undefined } = req.query;
       
       const where = w ? JSON.parse(decodeURIComponent(w.toString())) : undefined;

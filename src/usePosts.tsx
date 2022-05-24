@@ -13,7 +13,7 @@ export const getPosts = async (
   const where = w ? encodeURIComponent(JSON.stringify(w)) : '';
   const cursor = c ? encodeURIComponent(JSON.stringify(c)) : '';
 
-  const url = buildUrl(`${process.env.NEXT_PUBLIC_API_URL}/api`, {
+  const url = buildUrl(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api`, {
     path: 'post',
     queryParams: {
       where,

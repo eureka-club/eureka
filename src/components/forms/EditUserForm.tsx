@@ -126,7 +126,10 @@ const EditUserForm: FunctionComponent = () => {
   
   useEffect(() => {
     const fn = async () => {
-      const r = await i18nConfig.loadLocaleFrom(locale, 'countries');
+      // const r = await i18nConfig.loadLocaleFrom(locale, 'countries');
+      const res = await fetch('/api/taxonomy/countries')
+      const {result:r} = await res.json()
+      
       setNamespace(r);
     };
     fn();
