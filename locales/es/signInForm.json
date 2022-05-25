@@ -7,5 +7,10 @@
   "passwordFieldLabel":"Contraseña",
   "forgotPassText":"¿Olvidaste tu contraseña?",
   "dontHaveAccounttext":"¿Aún no tienes una cuenta?",
-  "Join":"Únete"
+  "Join":"Únete",
+  "RegisterNotice":"Hemos actualizado nuestro sistema de registro. Si creaste tu cuenta con tu correo electrónico antes de mayo de 2022, por favor Únete en lugar de Iniciar sesión. Esto te permitirá configurar tu contraseña. No perderás ninguna información de tu cuenta Eureka existente.",
+  "RegisterAlert":"Actualizamos nuestro sistema de registro. Únete en lugar de Iniciar sesión, para que puedas configurar su contraseña. No perderás ninguna información de tu cuenta Eureka existente.",
+  "InvalidSesion":"Contraseña incorrecta o sesión inválida",
+  "isNotUser":"Usuario no registrado",
+  "EmailRequired":"El campo de correo electrónico es obligatorio"
 }
