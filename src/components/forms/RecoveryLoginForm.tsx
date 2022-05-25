@@ -18,10 +18,13 @@ const RecoveryLoginForm: FunctionComponent = () => {
   const [validated,setValidated] = useState<boolean>(false);
   const [loading,setLoading] = useState(false);
 
-  const userExist = async (email:string)=>{
-    const res = await fetch(`/api/userCustomData?identifier=${email}`);
-    const {data} = await res.json();
-    return data!=null;
+  const userRegistered = async (email:string)=>{
+    const res = await fetch(`/api/user/isRegistered?identifier=${email}`);
+    if(res.ok){
+      const {data} = await res.json()
+      return data;
+    }
+    return false;
   }
 
   const handlerSubmit = async (e:React.FormEvent<HTMLFormElement>)=>{
@@ -32,11 +35,23 @@ const RecoveryLoginForm: FunctionComponent = () => {
       e.stopPropagation();
     }
     setValidated(true);
-    const ue = await userExist(form.email.value);
-    if(!ue){
+    const ue = await userRegistered(form.email.value)
+   
+    if(ue.isUser){
+      if(ue.hasOwnProperty('hasPassword') && !ue.hasPassword){
+        e.preventDefault();
+        e.stopPropagation();
+        addToast(t('RegisterAlert'),{
+         appearance:'warning',
+         autoDismiss:true,                
+         })
+        setLoading(false)
+        }
+     } else {      
       e.preventDefault();
-      e.stopPropagation();
-      addToast('Invalid session',{
+      e.stopPropagation();  
+      setLoading(false)
+      addToast(t('isNotUser'),{
         autoDismiss:true,
         appearance:'warning'
       })

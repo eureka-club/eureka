@@ -54,10 +54,25 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
   const handleSubmitSignIn = async (e:React.MouseEvent<HTMLButtonElement>)=>{
       const form = formRef.current;
       setLoading(true)
+         if(!form!.email.value){
+            addToast(t('EmailRequired'),{
+                  appearance:'warning',
+                  autoDismiss:true,                
+                })
+                setLoading(false)
+                return false;
+          }
       if(form){
-        if(form.email.value && form.password.value){
           const ur = await userRegistered(form.email.value)
-          if(ur){
+          if(ur.isUser){
+           if(ur.hasOwnProperty('hasPassword') && !ur.hasPassword){
+                addToast(t('RegisterAlert'),{
+                     appearance:'warning',
+                     autoDismiss:true,                
+                     })
+                    setLoading(false)
+           }
+           else {
             signIn('credentials' ,{
               redirect:false,
               email:form.email.value,
@@ -66,7 +81,7 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
             .then(res=>{
               const r = res as unknown as {error:string}
               if(res && r.error){
-                addToast('Invalid session',{
+                addToast(t('InvalidSesion'),{
                   appearance:'warning',
                   autoDismiss:true,                
                 })
@@ -75,11 +90,11 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
               else{
                 router.push(localStorage.getItem('loginRedirect') || '/')
               }
-                
             })
           }
+          }
           else{
-            addToast('User not registered',{
+            addToast(t('isNotUser'),{
               appearance:'warning',
               autoDismiss:true,                
             })
@@ -87,17 +102,8 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
           }
         }
-        else{
-          addToast('Email and Password are required',{
-            appearance:'warning',
-            autoDismiss:true,                
-          })
-          setLoading(false)
-
-        }
       }
       
-  }
 
   return (
     <Container>
@@ -144,7 +150,8 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false }) => {
                   {t('login')} {loading && <Spinner animation="grow"/>}
                 </Button>
                 </div>
-                 <p className={`mt-5 ${styles.dontHaveAccounttext}`}>{t('dontHaveAccounttext')} <Link href="/register">
+                 <p className={`my-4 ${styles.registerNotice}`}>{t('RegisterNotice')}</p>
+                 <p className={`${styles.dontHaveAccounttext}`}>{t('dontHaveAccounttext')} <Link href="/register">
                  <a className="">{t('Join')}</a></Link></p>
               </Form>
             </div>

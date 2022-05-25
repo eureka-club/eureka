@@ -19,7 +19,7 @@ export default getApiHandler()
     const locale = req.cookies.NEXT_LOCALE || 'es';
     const to = em.toString();
     const user = await prisma.user.findUnique({where:{email:to}});
-    if(user){
+    if(user && user.password){
       let html = '';
       const t = await getT(locale, 'recoveryLoginMail');
       const title = t('title');
