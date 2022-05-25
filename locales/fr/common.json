@@ -125,5 +125,20 @@
   "canNotUploadPhoto":"Les images de plus de 2 Mo ne peuvent pas être utilisées. L'image a",
   "selectedCropNotInvalid":"Les images recadrées de plus de 500 Ko ne peuvent pas être utilisées. L'image a",
   "by":"par",
-  "Results":"Résultats"
-}
+  "Results":"Résultats",
+  "infoText1":"Vous en avez assez des",
+  "infoText2":"interactions inutiles",
+  "infoText3":"sur les réseaux sociaux?",
+  "infoSubText":"Activez votre esprit avec le prochain livre ou film, et pensez à un sujet qui compte.",
+  "HowWorkText":"Est-ce ainsi que cela fonctionne",
+  "WorkSectionText":"Encontre livros e filmes sobre tópicos sobre os quais você tem curiosidade",
+  "WorkSectionSubText":"Notre bibliothèque multimédia est crowdsourcée (par des humains) et organisée par sujets d'intérêt",
+  "CyclesSectionText":"Rejoindre des cycles thématiques",
+  "CyclesSectionSubText":"Des espaces créés pour les curieux et les experts pour se plonger dans un sujet, avec une communauté",
+  "EurekaSectionText1":"Partage ton",
+  "EurekaSectionText2":"Moments Eurêka",
+  "EurekaSectionText3":"inspiré de livres, de films et de documentaires!",
+  "EurekaSectionSubText":"Les moments Eureka sont des révélations individuelles qui peuvent transformer le collectif",
+  "Explore":"Explorer",
+  "ExploreText":"Vous pouvez accéder à certains de nos contenus sans compte"
+  }

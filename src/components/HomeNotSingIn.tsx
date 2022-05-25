@@ -10,7 +10,8 @@ import Button from 'react-bootstrap/Button';
 import Link from 'next/link'
 import styles from './HomeNotSingIn.module.css';
 import SignInForm from '@/src/components/forms/SignInForm';
-
+import { BsChevronDown} from 'react-icons/bs';
+BsChevronDown
 const HomeNotSingIn: FunctionComponent = ({  }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
@@ -36,16 +37,16 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                             <SignInForm noModal logoImage={false} />
                         </Col>
                 </Row>
-                <section className='d-flex flex-column justify-content-center align-items-center'>
-                        <h5 className='d-flex flex-row text-primary'>{t('HowWorkText')}</h5>
+                <section className='d-flex flex-row justify-content-center align-items-baseline'>
+                        <h5 className='d-flex flex-row  text-primary'>{t('HowWorkText')}</h5><div className={`ms-2 text-primary ${styles.downArrow}`}><BsChevronDown/></div>
                  </section>
           </div>   
 
         <div className='d-flex flex-column  m-0 m-lg-3'>
                  <Row className='d-flex flex-column flex-lg-row justify-content-center'>
                           <Col className={`${styles.WorkSection} col-12 col-lg-6 p-5 d-flex flex-column justify-content-center aling-items-center`}>
-                              <h1 className='d-flex justify-content-center text-secondary me-1'>{t('WorkSectionText')}</h1>
-                              <h5 className='d-flex justify-content-center text-secondary mt-5'>{t('WorkSectionSubText')}</h5>    
+                              <h1 className='d-flex justify-content-center text-center text-secondary' style={{fontWeight:900}}>{t('WorkSectionText')}</h1>
+                              <h5 className='d-flex justify-content-center text-center text-secondary mt-4' style={{fontStyle:'italic'}}>{t('WorkSectionSubText')}</h5>    
                         </Col>
                         <Col className={`p-3 p-lg-5 col-12 col-lg-6 border-top border-primary`}>
                           <Container className='d-flex justify-content-center '>
@@ -60,18 +61,18 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                           </Container>
                         </Col>
                         <Col className={`${styles.CyclesSection} col-12 col-lg-6 p-5 d-flex flex-column justify-content-center aling-items-center`}>
-                              <h1 className='d-flex justify-content-center text-secondary me-1'>{t('CyclesSectionText')}</h1>
-                              <h5 className='d-flex justify-content-center text-secondary mt-5'>{t('CyclesSectionSubText')}</h5>    
+                              <h1 className='d-flex justify-content-center text-center text-secondary' style={{fontWeight:900}}>{t('CyclesSectionText')}</h1>
+                              <h5 className='d-flex justify-content-center text-center text-secondary mt-4' style={{fontStyle:'italic'}}>{t('CyclesSectionSubText')}</h5>    
                         </Col>
                 </Row>
                 <Row className='d-flex flex-column flex-lg-row '>
                         <Col className={`${styles.EurekaSection} p-3 p-lg-4 col-12 col-lg-6 d-flex flex-column justify-content-center aling-items-center`}>
-                              <span className='d-flex flex-wrap justify-content-center'>
-                                <h1 className='text-white me-1'>{t('EurekaSectionText1')}</h1>
-                                <h1 className='text-primary me-1'>{ t('EurekaSectionText2')}</h1>
-                                <h1 className='text-white me-1'>{t('EurekaSectionText3')}</h1>
+                              <span className='d-flex flex-wrap text-center justify-content-center'>
+                                <h1 className='text-white me-1' style={{fontWeight:900}}>{t('EurekaSectionText1')}</h1>
+                                <h1 className='text-primary me-1' style={{fontWeight:900}}>{ t('EurekaSectionText2')}</h1>
+                                <h1 className='text-white me-1' style={{fontWeight:900}}>{t('EurekaSectionText3')}</h1>
                         </span>
-                        <h5 className='d-flex justify-content-center text-white mt-5'>{t('EurekaSectionSubText')}</h5>    
+                        <h5 className='d-flex justify-content-center text-center text-white mt-4' style={{fontStyle:'italic'}}>{t('EurekaSectionSubText')}</h5>    
                         </Col>
                         <Col className={`p-4 col-12 col-lg-6 border-bottom border-secondary`}>
                           <Container className='d-flex justify-content-center'>

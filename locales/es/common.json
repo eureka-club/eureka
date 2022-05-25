@@ -124,5 +124,20 @@
   "canNotUploadPhoto":"No se puede subir imágenes mayores de 2 MB. Imagen tiene",
   "selectedCropNotInvalid":"No se puede subir imágenes recortadas mayores de 500 KB. Imagen tiene",
   "by":"por",
-  "Results":"Resultados"
-}
+  "Results":"Resultados",
+  "infoText1":"¿Te cansaste de las",
+  "infoText2":"interacciones sin sentido",
+  "infoText3":"en las redes sociales?",
+  "infoSubText":"Activa tu mente con el próximo libro o película, y senti-pensar sobre un tema que importa.",
+  "HowWorkText":"Así es cómo funciona",
+  "WorkSectionText":"Encuentra libros y películas sobre temas que te interesen",
+  "WorkSectionSubText":"Nuestra biblioteca multimedia es de colaboración colectiva (por humanos) y está organizada por temas de interés",
+  "CyclesSectionText":"Únete a Ciclos Temáticos",
+  "CyclesSectionSubText":"Espacios creados para que curiosos y expertos se sumerjan en un tema, junto a una comunidad",
+  "EurekaSectionText1":"Comparte tus",
+  "EurekaSectionText2":"Momentos Eureka",
+  "EurekaSectionText3":"inspirados en libros, películas y documentales!",
+  "EurekaSectionSubText":"Los momentos Eureka son revelaciones individuales que pueden transformar lo colectivo",
+  "Explore":"Explorar",
+  "ExploreText":"Puedes acceder a algunos de nuestros contenidos sin una cuenta"
+} 

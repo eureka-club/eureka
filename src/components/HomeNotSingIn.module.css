@@ -33,6 +33,10 @@
 .dontHaveAccounttext {
   font-size: 0.8rem;
 }
+.downArrow{
+  font-size: 1.5rem;
+  font-weight: 900;
+}
 
 @media screen and (max-width: 724px) {
   .submitButton{
