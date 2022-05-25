@@ -101,7 +101,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
             }
           
             const ur = await userRegistered(email)
-            if(!ur){
+            if(!ur.isUser){
               mutate({
                   identifier:email,
                   password:password,
