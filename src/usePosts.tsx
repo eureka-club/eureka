@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 // import { useAtom } from 'jotai';
 import { PostMosaicItem } from './types/post';
 // import globalSearchEngineAtom from './atoms/searchEngine';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client'; 
 
 export const getPosts = async (
   where?: Prisma.PostWhereInput,
