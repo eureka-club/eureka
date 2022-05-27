@@ -1,11 +1,10 @@
 import dayjs from 'dayjs';
-// import HyvorTalk from 'hyvor-talk-react';
 import { useAtom } from 'jotai';
 import {v4} from 'uuid';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, MouseEvent, useState, useRef, useEffect, ChangeEvent } from 'react';
+import { FunctionComponent, MouseEvent, useState, useRef, useEffect, ChangeEvent, Suspense, lazy } from 'react';
 import {
   TabPane,
   TabContent,
@@ -17,74 +16,49 @@ import {
   Nav,
   NavItem,
   NavLink,
-  Form
+  Form,
+  Spinner,
 } from 'react-bootstrap';
 import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
-import {ImCancelCircle} from 'react-icons/im';
 import { BiArrowBack } from 'react-icons/bi';
-import { Work, Comment, Cycle, User, CycleWork } from '@prisma/client';
-import { MosaicContext } from '../../useMosaicContext';
+import { User } from '@prisma/client';
+import { MosaicContext } from '@/src/useMosaicContext';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { useQueryClient } from 'react-query';
 
-// import UserAvatar from '../common/UserAvatar';
-import Mosaic from '../Mosaic';
-import ListWindow from '@/components/ListWindow'
-// import globalModals from '../../atoms/globalModals';
+import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR /* , HYVOR_WEBSITE_ID, WEBAPP_URL */ } from '@/src/constants';
+import { PostMosaicItem } from '@/src/types/post';
+import { WorkMosaicItem } from '@/src/types/work';
 
-import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR /* , HYVOR_WEBSITE_ID, WEBAPP_URL */ } from '../../constants';
-import { Session, MosaicItem, isCommentMosaicItem, isPostMosaicItem } from '../../types';
-import { CycleMosaicItem } from '../../types/cycle';
-import { PostMosaicItem } from '../../types/post';
-import { WorkMosaicItem } from '../../types/work';
-import { CommentMosaicItem } from '../../types/comment';
-import { UserMosaicItem } from '../../types/user';
-
-// import LocalImageComponent from '../LocalImage';
 import PostDetailComponent from '../post/PostDetail';
-// import CycleSummary from './CycleSummary';
 import HyvorComments from '@/src/components/common/HyvorComments';
-// import SocialInteraction from '../common/SocialInteraction';
-import PostsMosaic from './PostsMosaic';
-// import WorksMosaic from './WorksMosaic';
-import WorkMosaic from '@/src/components/work/MosaicItem'
-import CommentMosaic from '@/src/components/comment/MosaicItem';
-import PostMosaic from '@/src/components/post/MosaicItem';
-// import UnclampText from '../UnclampText';
-import detailPagesAtom from '../../atoms/detailPages';
-import globalModalsAtom from '../../atoms/globalModals';
-import editOnSmallerScreens from '../../atoms/editOnSmallerScreens';
+import detailPagesAtom from '@/src/atoms/detailPages';
+import globalModalsAtom from '@/src/atoms/globalModals';
+import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens';
 import EditPostForm from '../forms/EditPostForm';
 
 import styles from './CycleDetail.module.css';
-import { useCycleContext, CycleContext } from '../../useCycleContext';
+import { useCycleContext } from '@/src/useCycleContext';
 import CycleDetailHeader from './CycleDetailHeader';
-import CycleDetailDiscussion from './CycleDetailDiscussion';
 import useCycle from '@/src/useCycle';
-// import useCycleItem from '@/src/useCycleItems';
 import useWorks from '@/src/useWorks'
 import usePosts from '@/src/usePosts'
 import useUsers from '@/src/useUsers'
+
+const CycleDetailDiscussion = lazy(() => import ('./CycleDetailDiscussion')) 
+const CycleDetailParticipants = lazy(() => import('./CycleDetailParticipants'))
+const CycleDetailWorks = lazy(() => import('./CycleDetailWorks'))
+const CycleDetailPosts = lazy(() => import('./CycleDetailPosts'))
 interface Props {
-  // cycle: CycleMosaicItem;
   post?: PostMosaicItem;
   work?: WorkMosaicItem;
-  // isCurrentUserJoinedToCycle: boolean;
-
-  // mySocialInfo: MySocialInfo;
 }
 
 const CycleDetailComponent: FunctionComponent<Props> = ({
-  // cycle,
   post,
   work,
-  // isCurrentUserJoinedToCycle,
-
-  // mySocialInfo,
 }) => {
-  // const [globalModalsState, setGlobalModalsState] = useAtom(globalModals);
   const cycleContext = useCycleContext();
-  // const [cycle, setCycle] = useState<CycleMosaicItem | null>();
   const router = useRouter();
   
   const queryClient = useQueryClient()
@@ -95,7 +69,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     if(router?.query){
       if(router.query.id){
         setCycleId(router.query.id?.toString())
-  
       }
       if(router.query.tabKey)setTabKey(router.query.tabKey.toString())
     }
@@ -147,48 +120,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     }
   },[queryClient,works])
 
-  const [page,setPage] = useState<number>(1);
   const [where,setWhere] = useState<{filtersWork:number[]}>()
 
   const cyclePostsWhere = {where:{AND:{cycles:{some:{id:+cycleId}}}}}
   const {data:posts} = usePosts(cyclePostsWhere,{enabled:!!cycleId})
-  
-  // const {data} = useCycleItem(+cycleId,-1,where,{
-  //   enabled:!!cycleId
-  // })
-
-  const [items,setItems] = useState<(CommentMosaicItem|PostMosaicItem)[]>();
-  //const [hasNextPage,setHasNextPage] = useState<boolean>();
-
-  // useEffect(()=>{
-  //   if(data){
-  //     setItems(data.items);
-  //     //setHasNextPage(data.hasNextPage);
-
-  //     for(let i of data.items){
-  //       if(isPostMosaicItem(i)){
-  //         queryClient.setQueryData(['POST',i.id.toString()],i)          
-  //       }
-  //       else if(isCommentMosaicItem(i)){
-  //         queryClient.setQueryData(['COMMENT',i.id.toString()],i)          
-  //       }
-        
-  //     }
-  //   }
-  // },[data,queryClient])
-
-
-  // useEffect(()=>{
-  //   if(cycle && posts){
-  //     setItems((res)=>[...res,...posts])
-      
-  //     queryClient.setQueryData(['POSTS', `CYCLE-${cycle.id}`],{...cycle,...{
-  //       posts:items
-  //     }})
-  //     setLastPostId(()=>items.slice(-1)[0].id)
-  //   }
-  // },[cycle,data,queryClient])
-  
 
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -213,35 +148,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     book: false,
     'fiction-book': false, */
   });
-    // const hyvorId = `${WEBAPP_URL}cycle/${router.query.id}`;
-
-  // const { data } = useCycles(1);
-  // const [cycle, setCycle] = useState<CycleDetail>();
-  // useEffect(() => {
-  //   if (data) {
-  //     setCycle(() => data as CycleDetail);
-  //   }
-  // }, [data]);
-
-  // const openSignInModal = () => {
-  //   setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
-  // };
-
-  // const {
-  //   mutate: execJoinCycle,
-  //   isLoading: isJoinCycleLoading,
-  //   isSuccess: isJoinCycleSuccess,
-  // } = useMutation(async () => {
-  //   await fetch(`/api/cycle/${cycle.id}/join`, { method: 'POST' });
-  // });
-  // const {
-  //   mutate: execLeaveCycle,
-  //   isLoading: isLeaveCycleLoading,
-  //   isSuccess: isLeaveCycleSuccess,
-  // } = useMutation(async () => {
-  //   await fetch(`/api/cycle/${cycle.id}/join`, { method: 'DELETE' });
-  // });
-
+    
   if(!cycle)return <></>
 
   const handleSubsectionChange = (key: string | null) => {
@@ -268,31 +175,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       });
   };
 
-  // const handleJoinCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
-  //   ev.preventDefault();
-  //   if (!session) openSignInModal();
-  //   execJoinCycle();
-  // };
-
-  // const handleLeaveCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
-  //   ev.preventDefault();
-  //   execLeaveCycle();
-  // };
-
-  // useEffect(() => {
-  //   if (isJoinCycleSuccess === true) {
-  //     router.replace(router.asPath); // refresh page
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [isJoinCycleSuccess]);
-
-  // useEffect(() => {
-  //   if (isLeaveCycleSuccess === true) {
-  //     router.replace(router.asPath); // refresh page
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [isLeaveCycleSuccess]);
-
   const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
     router.push(`/cycle/${router.query.id}/edit`);
@@ -313,63 +195,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       if (session.user.roles === 'admin' || session!.user.id === cycle.creatorId) return true;
     }
     return false;
-  };
-
+  };  
   
-  /* const renderCycleWorksComments = () => {
-    if (cycle && cycle.comments)
-      return cycle.comments
-        .filter((c) => c.workId && !c.postId && !c.commentId)
-        .sort((p, c) => (p.id > c.id && -1) || 1)
-        .map((c) => {
-          return (
-            <ComentMosaic
-              key={c.id}
-              comment={c as unknown as CommentMosaicItem}
-              detailed
-              showComments
-              commentParent={c.work!}
-              cacheKey={['CYCLE', `${cycle.id}`]}
-              className="mb-4"
-            />
-          );
-        });
-    return null;
-  };
-
-  const renderCycleOwnComments = () => {
-    if (cycle && cycle.comments)
-      return cycle.comments
-        .filter((c) => !c.workId && !c.postId && !c.commentId)
-        .sort((p, c) => (p.id > c.id && -1) || 1)
-        .map((c) => {
-          return (
-            <ComentMosaic
-              key={c.id}
-              comment={c as unknown as CommentMosaicItem}
-              detailed
-              showComments
-              commentParent={cycle}
-              cacheKey={['CYCLE', `${cycle.id}`]}
-              className="mb-4"
-            />
-          );
-        });
-    return null;
-  }; */
-
-  // if (!session || !session.user) {
-  //   if (cycle && cycle.access === 2) {
-  //     return (
-  //       <CycleDetailHeader
-  //         cycle={cycle}
-  //         onParticipantsAction={onParticipantsAction}
-  //         onCarouselSeeAllAction={onCarouselSeeAllAction}
-  //       />
-  //     );
-  //   }
-  // }
-
   const renderCycleDetailHeader = () => {
     if (cycle) {
       const res = (
@@ -385,7 +212,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     }
     return '';
   };
-
   
   const toggleGuidelineDesc = (key: string) => {
     if (key in gldView) {
@@ -457,128 +283,35 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     return '';
   };
 
-  // const loadMorePosts = (e:MouseEvent<HTMLButtonElement>)=>{
-  //   e.preventDefault()
-  //   if(cycle?.posts.length){
-  //     setLastPostId(cycle.posts.slice(-1)[0].id)
-  //   }
-  // }
-
   const renderRestrictTabs = () => {
     if (cycle) {
       const res = (
-        <>
-        <TabPane eventKey="cycle-discussion">
-             <HyvorComments entity='cycle' id={`${cycle.id}`}  />
-        </TabPane>
-         <TabPane eventKey="eurekas">
-            <CycleDetailDiscussion cycle={cycle} className="mb-5" cacheKey={['POSTS',JSON.stringify(cyclePostsWhere)]} />
-            <Row>
-              <Col /* xs={{span:12, order:'last'}} md={{span:9,order:'first'}} */>
-                <MosaicContext.Provider value={{ showShare: true }}>
-                  {posts && <>
-                  <div className='d-none d-md-block'><ListWindow items={posts} cacheKey={['POSTS', JSON.stringify(cyclePostsWhere)]} itemsByRow={4} /></div>
-                  <div className='d-block d-md-none'><ListWindow items={posts} cacheKey={['POSTS', JSON.stringify(cyclePostsWhere)]} itemsByRow={1} /></div>
-                  </>}
-                </MosaicContext.Provider>
-                {/* {page >1 && <Button 
-                className="my-3 pe-3 rounded-pill text-white" 
-                onClick={() => setPage(()=>page-1)} 
-                >
-                  <span>
-                    <RiArrowDownSLine /> {t('common:previous')}
-                  </span>
-                </Button>}
-                {hasNextPage && <Button 
-                className="my-3 pe-3 rounded-pill text-white" 
-                onClick={() => setPage(()=>page+1)} 
-                >
-                  <span>
-                    <RiArrowDownSLine /> {t('common:next')}
-                  </span>
-                </Button>} */}
-                {/* {(cycle.posts && cycle.posts.length && (
-                    <PostsMosaic display="h" posts={items} showComments cacheKey={['CYCLE', `${cycle.id}`]} />
-                )) ||
-                null}
-                {renderComments()} */}
-                {/* {renderCycleWorksComments()} */}
-                {/* {renderCycleOwnComments()} */}
-               {/*</Col>
-              <Col xs={{span:12, order:'first'}} md={{span:3,order:'last'}}>
-                <Form as={Row} className="bg-white mt-0 mb-3">
-                  <Form.Group as={Col} xs={12}>
-                        <Row>
-                          <Form.Label className="text-primary">{t('Filter by work')}</Form.Label>
-                          {renderCycleWorksOrCycleFilters()}
-                        </Row>
-                  </Form.Group>
-                  <Form.Group className="mt-3" as={Col} xs={12}>
-                        <Row>
-                          <Form.Label className="text-primary">{t('Filter by type of element')}</Form.Label>
-                          <Col xs={5}>
-                            <Form.Check label={t('common:post')} 
-                              checked={comboboxChecked['post']}
-                              onChange={(e) => handlerComboxesChange(e, 'post')}
-                            />
-                          </Col>
-                          <Col xs={7}>
-                            <Form.Check label={t('common:comment')} 
-                              checked={comboboxChecked['comment']}
-                              onChange={(e) => handlerComboxesChange(e, 'comment')}
-                            />
-                          </Col>
-                        </Row>
-                  </Form.Group>
-                  <Form.Group className="mt-3" as={Col} xs={12}>
-                        <Form.Label className="text-primary">{t('Filter by Participan')}</Form.Label>
-                        <Typeahead
-                        clearButton={true}
-                          ref={refParticipants}
-                          id="refParticipants"
-                          filterBy={['label']}
-                          labelKey={(u: User) => {
-                            if(u?.name) return u.name;
-                            return u?.email || `${u.id}`;
-                          }}
-                          onChange={onChangeParticipantFilters}                  
-                          options={[...cycle.participants, cycle.creator]}
-                          className="bg-light border border-info rounded"                  
-                        />
-                  </Form.Group>
-                  <Form.Group className="mt-3" as={Col} xs={12}>
-                    <Button title={t('Clean filters')} className="mt-3" variant="warning" size="sm" onClick={resetFilters}><ImCancelCircle/></Button>
-                  </Form.Group>
-                </Form>*/}
-              </Col>
-              
-            </Row> 
-            
+        <Suspense fallback={<Spinner animation="grow"/>}>
+          <TabPane eventKey="cycle-discussion">
+              <HyvorComments entity='cycle' id={`${cycle.id}`}  />
           </TabPane>
-          {/* <TabPane eventKey="my_milestone">
-            <h2 className="mb-3">{t('My milestones')}</h2>
-            <p />
-          </TabPane> */}
+          <TabPane eventKey="eurekas">
+              <CycleDetailDiscussion cycle={cycle} className="mb-5" cacheKey={['POSTS',JSON.stringify(cyclePostsWhere)]} />
+              <Row>
+                <Col /* xs={{span:12, order:'last'}} md={{span:9,order:'first'}} */>
+                  <MosaicContext.Provider value={{ showShare: true }}>
+                    <CycleDetailPosts posts={posts||[]} cacheKey={['POSTS', JSON.stringify(cyclePostsWhere)]}/>
+                  </MosaicContext.Provider>
+                </Col>
+              </Row> 
+          </TabPane>
           <TabPane eventKey="guidelines">
             <section className="text-primary">
               <h4 className="h5 mt-4 mb-3 fw-bold text-gray-dark">{t('guidelinesMP')}</h4>
-              {/* <p className="fst-italic fs-6">({t('guidelinesByInfo')})</p> */}
             </section>
             <section className=" pt-3">{cycle.guidelines && renderGuidelines()}</section>
-            <p />
           </TabPane>
           <TabPane eventKey="participants">
-            {/* {cycle.participants && cycle.participants.map((p) => <UserAvatar className="mb-3 mr-3" user={p} key={p.id} />)} */}
-            {participants && (<>
-               <div className='d-none d-md-block'><ListWindow items={participants} itemSize={80} cacheKey={['CYCLE',JSON.stringify(whereCycleParticipants)]} itemsByRow={5}/></div> 
-               <div className='d-block d-md-none'><ListWindow items={participants} itemSize={80} cacheKey={['CYCLE',JSON.stringify(whereCycleParticipants)]} itemsByRow={1}/></div> 
-
-             </>
-              // <Mosaic cacheKey={['CYCLE',cycle.id.toString()]} showButtonLabels={false} enabledPagination={false} stack={[...participants, cycle.creator] as UserMosaicItem[]} />
-            )}
-            <p />
+              {participants && <CycleDetailParticipants participants={participants} cacheKey={['CYCLE',JSON.stringify(whereCycleParticipants)]} />}            
           </TabPane>
-        </>
+        </Suspense>
+
+        
       );
       if (cycle.access === 3) return '';
       if (cycle.access === 1) return res;
@@ -700,71 +433,17 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     setFilterCycleItSelf(checked);
   };
 
-  // useEffect(() => {
-  //   if(cycle && cycle.posts && cycle.comments){
-  //     let posts = [...filteredPosts];
-  //     let comments = cycle?.comments;
-
-  //     if(filterCycleItSelf){
-  //       posts = posts?.filter((p) => !p.works.length);
-  //       comments = comments?.filter((c) => !c.workId && !c.commentId);  
-  //     }
-  //     if(filtersWork && filtersWork.length){
-  //       posts = posts?.filter((p) => p.works.findIndex((w) => filtersWork.includes(w.id)) !== -1);
-  //       comments = comments?.filter((c) => c.workId && filtersWork.includes(c.workId));
-  //     }
-  //     if(filtersParticipant && filtersParticipant.length){
-  //       posts = posts?.filter((p) => filtersParticipant.findIndex(i => i  === p.creatorId) !== -1);            
-  //       comments = comments?.filter((c) => filtersParticipant.findIndex(i => i  === c.creatorId) !== -1);
-  //     }
-  //     if(filtersContentType && filtersContentType.length){
-  //       if(!filtersContentType.includes('post'))
-  //         posts = [];
-  //       if(!filtersContentType.includes('comment'))
-  //         comments = [];  
-  //     }
-  //     setFilteredPosts(posts as PostMosaicItem[]);
-  //     setFilteredComments(comments || []);
-  //   }
-  //   else {
-  //     setFilteredPosts([]);
-  //     setFilteredComments([]);
-  //   }
-  //   filteredPosts.forEach(p=>{queryClient.setQueryData(['POST',`${p.id}`],p)})
-  // },[filtersWork,filtersParticipant,filtersContentType,filterCycleItSelf,cycle]);
-
-
   const handlerComboxesChange = (e: ChangeEvent<HTMLInputElement>, q: string, workId?: number) => {
     setComboboxChecked((res) => ({ ...res, [`${q}${workId ? `-${workId}`: ''}`]: e.target.checked }));
     
     switch(q){
       case 'post':
         onChangeContentTypeFilters('post', e.target.checked)
-        /* if(e.target.checked){
-          let posts = cycle?.posts;
-          if(filtersParticipant?.length){
-            posts = posts?.filter((p) => filtersParticipant.findIndex(i => i  === p.creatorId) !== -1);            
-          }
-          if(filtersWork.length){
-            posts = posts?.filter((p) => p.works.findIndex((w) => filtersWork.includes(w.id)) !== -1);            
-          }
-          setItems(posts as PostMosaicItem[]);
-        }
-        else setItems([]);   */
+        
         break;
       case 'comment':
         onChangeContentTypeFilters('comment', e.target.checked)
-        /* if(e.target.checked){
-          let comments = cycle?.comments;
-          if(filtersParticipant?.length){
-            comments = comments?.filter((c) => filtersParticipant.findIndex(i => i  === c.creatorId) !== -1);
-          }
-          if(filtersWork.length){
-            comments = comments?.filter((c) => c.workId && filtersWork.includes(c.workId));
-          }
-          setFilteredComments(comments || []);
-        }        
-        else setFilteredComments([]); */  
+          
         break;    
       case 'work':
         if(workId){
@@ -772,30 +451,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           setComboboxChecked((res)=>({...res,'cycle':false}));
           onChangeWorkFilters(workId,e.target.checked);
         }
-        /* if(e.target.checked){
-          if(workId){
-            filtersWork.push(workId);
-            setFiltersWork([...filtersWork]);            
-          }
-        }
-        else {
-          const idx = filtersWork.findIndex((id) => id === workId);
-          if(idx > -1)
-            filtersWork.splice(idx, 1);
-          setFiltersWork(filtersWork);
-        }
-        let posts = cycle?.posts;
-        let comments = cycle?.comments;
-        if(filtersWork.length){
-          posts = posts?.filter((p) => p.works.findIndex((w) => filtersWork.includes(w.id)) !== -1);
-          comments = comments?.filter((c) => c.workId && filtersWork.includes(c.workId));
-        }
-        if(filtersParticipant?.length){
-          posts = posts?.filter((p) => filtersParticipant.findIndex(i => i  === p.creatorId) !== -1);            
-          comments = comments?.filter((c) => filtersParticipant.findIndex(i => i  === c.creatorId) !== -1);
-        }
-        setItems(posts as PostMosaicItem[]);
-        setFilteredComments(comments || []); */
+        
         break;      
         case 'cycle':
           if(e.target.checked){
@@ -838,63 +494,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     return null;
   };
 
-  const getWorksSorted = () => {
-    const res: Work[] = [];
-    if(cycle && !cycle.cycleWorksDates)return works||[];
-    cycle!.cycleWorksDates
-      .sort((f, s) => {
-        const fCD = dayjs(f.startDate!);
-        const sCD = dayjs(s.startDate!);
-       
-        const isActive = (w: {startDate:Date|null,endDate:Date|null}) => {
-          if (w.startDate && w.endDate) return dayjs().isBetween(w.startDate!, w.endDate);
-          if (w.startDate && !w.endDate) return dayjs().isAfter(w.startDate);
-          return false;
-        };
-        const isPast = (w: {startDate:Date|null;endDate:Date|null})  => {
-          if (w.endDate) return dayjs().isAfter(w.endDate);
-          return false;
-        };
-        // orden en Curso, Siguientes y por ultimo visto/leido
-        if (!isPast(f) && isPast(s)) return -1;
-        if (isPast(f) && !isPast(s)) return 1;
- 
-        if (isActive(f) && !isActive(s)) return -1;
-        if (!isActive(f) && isActive(s)) return 1;
-        if (fCD.isAfter(sCD)) return 1;
-        if (fCD.isSame(sCD)) return 0;
-        return -1;
-      })
-      .forEach((cw) => {
-        if (works) {
-          const idx = works.findIndex((w) => w.id === cw.workId);
-          res.push(works[idx]);          
-        }
-      });
-    if (cycle!.cycleWorksDates.length) return res;
-    return works||[];
-  };
-
-  const renderWorks = ()=>{
-    if(cycle && works){
-      
-      // <WorksMosaic cycle={cycle} className="d-flex mb-5 justify-content-center" />
-      return <section className="d-flex justify-content-center justify-content-lg-start">
-          <MosaicContext.Provider value={{ showShare: true }}>  
-          <div className='d-flex flex-wrap flex-column flex-lg-row'>      
-            {getWorksSorted().map(w=>{
-              queryClient.setQueryData(['WORK',`${w.id}`],w)
-              return <div className='p-4' key={v4()}>
-                             <WorkMosaic  workId={w.id} />
-                        </div>
-            })}
-            </div>
-          </MosaicContext.Provider>
-
-      </section> 
-    }
-    return <></>
-  }
 
   return (
     <>
@@ -965,7 +564,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                 <Row className="mb-4">
                   <Col>
                     <Nav variant="tabs" className='scrollNav' fill>
-                      <NavItem className={`border-primary border-bottom bcursor-pointer ${styles.tabBtn}`}>
+                      <NavItem className={`border-primary border-bottom cursor-pointer ${styles.tabBtn}`}>
                         <NavLink eventKey="cycle-about">
                           <span className="mb-3">
                             {t('About')} ({works && works.length})
@@ -990,12 +589,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                             {/* <UnclampText text={cycle.contentText} clampHeight="7rem" /> */}
                           </div>
                         )}
-                        {works && (
-                          <h5 className="mt-5 mb-3 fw-bold text-gray-dark">
-                            {t('worksCountHeader', { count: works.length })}
-                          </h5>
-                        )}
-                        {renderWorks()}
+                        <MosaicContext.Provider value={{ showShare: true }}>                        
+                          <CycleDetailWorks works={works||[]} cycleWorksDates={cycle.cycleWorksDates} />
+                        </MosaicContext.Provider>
                         {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (
                           <Row className="mt-5 mb-5">
                             <Col className='col-12'>

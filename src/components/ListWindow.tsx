@@ -1,6 +1,6 @@
 import React,{useEffect,useMemo,useRef,useState} from 'react'
 import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem, isCommentMosaicItem, isPost } from '@/src/types';
-import { FixedSizeList as List } from 'react-window';
+import { FixedSizeList } from 'react-window';
 import MosaicItemCycle from './cycle/MosaicItem';
 import MosaicItemPost from './post/MosaicItem';
 import MosaicItemWork from './work/MosaicItem';
@@ -110,16 +110,18 @@ const ListWindow:React.FC<Props> = ({items:it,parent,cacheKey,itemSize=400,width
           else return 200  
       };
       
-        return <List
-          className=''
-          height={globalThis.window.innerHeight}
-          itemCount={mosaics.length}
-          itemSize={itemSize+16}//+16 because->post mosaic: my-6(12px) and row section: my-2(4px)
-          //layout="vertical"
-          width={width}
-        >
-          {renderItem}
-        </List>
+        return <>
+          <FixedSizeList
+            className=''
+            height={globalThis.window.innerHeight}
+            itemCount={mosaics.length}
+            itemSize={itemSize+16}//+16 because->post mosaic: my-6(12px) and row section: my-2(4px)
+            //layout="vertical"
+            width={width}
+          >
+            {renderItem}  
+          </FixedSizeList>
+        </>
 
 }
 export default ListWindow;

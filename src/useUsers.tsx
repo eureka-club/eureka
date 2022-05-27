@@ -29,7 +29,7 @@ export const getUsers = async (props?:Prisma.UserFindManyArgs):Promise<UserMosai
   const res = await fetch(url);
   if(!res.ok)return [];
   const {data} = await res.json();
- // console.log(data)
+//  console.log('fetched users',data)
   return data;
 };
 
