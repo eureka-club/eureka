@@ -19,7 +19,8 @@ interface Props{
 const CycleDetailWorks: React.FC<Props> = ({works, cycleWorksDates}) => {
   const {t} = useTranslation('cycleDetail')
   const queryClient = useQueryClient()
-  const getWorksSorted = () => {
+
+  const getWorksSorted = (() => {
     const res: Work[] = [];
     cycleWorksDates
       .sort((f, s) => {
@@ -53,15 +54,16 @@ const CycleDetailWorks: React.FC<Props> = ({works, cycleWorksDates}) => {
       });
     if (cycleWorksDates.length) return res;
     return works||[];
-  };
-
+  })();
+  
   return <>
       <h5 className="mt-5 mb-3 fw-bold text-gray-dark">
         {t('worksCountHeader', { count: works.length })}
       </h5>
       <section className="d-flex justify-content-center justify-content-lg-start">
         <div className='d-flex flex-wrap flex-column flex-lg-row'>      
-          {getWorksSorted().map(w=>{
+          {getWorksSorted.map(w=>{
+            if(!w)return ''
             queryClient.setQueryData(['WORK',`${w.id}`],w)
             return <div className='p-4' key={w.id}>
                             <WorkMosaic  workId={w.id} />

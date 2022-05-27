@@ -590,7 +590,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                           </div>
                         )}
                         <MosaicContext.Provider value={{ showShare: true }}>                        
-                          <CycleDetailWorks works={works||[]} cycleWorksDates={cycle.cycleWorksDates} />
+                          {cycle && works && <CycleDetailWorks works={works} cycleWorksDates={cycle.cycleWorksDates} /> || ''}
                         </MosaicContext.Provider>
                         {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (
                           <Row className="mt-5 mb-5">
