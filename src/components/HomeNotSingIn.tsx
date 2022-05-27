@@ -18,8 +18,8 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
 
   return <SimpleLayout allPageSize={true} title={t('browserTitleWelcome')}> 
          <div className='pt-2 m-1 pt-lg-5 m-lg-5'>
-                 <section className='d-flex flex-column justify-content-center align-items-center'>
-                        <span className='d-flex flex-column flex-md-row border-bottom border-primary'>
+                 <section className='d-flex flex-column justify-content-center align-items-center text-center'>
+                        <span className='d-flex flex-column flex-md-row justify-content-center flex-wrap border-bottom border-primary'>
                                 <h1 className='text-secondary me-1 mb-3'><b>{t('infoText1')}</b></h1>
                                 <h1 className='text-primary me-1 mb-3'><b>{ t('infoText2')}</b></h1>
                                 <h1 className='text-secondary me-1 mb-3'><b>{t('infoText3')}</b></h1>
@@ -42,7 +42,7 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                  </section>
           </div>   
 
-        <div className='d-flex flex-column  m-0 m-lg-3'>
+        <div className='d-flex flex-column  m-0'>
                  <Row className='d-flex flex-column flex-lg-row justify-content-center'>
                           <Col className={`${styles.WorkSection} col-12 col-lg-6 p-5 d-flex flex-column justify-content-center aling-items-center`}>
                               <h1 className='d-flex justify-content-center text-center text-secondary' style={{fontWeight:900}}>{t('WorkSectionText')}</h1>
@@ -94,7 +94,7 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                            <Button variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
                                 {t('Explore')} 
                            </Button>
-                           <p className={`mt-1 text-secondary ${styles.dontHaveAccounttext}`}>{t('ExploreText')}</p>
+                           <p className={`mt-1 text-center text-secondary ${styles.dontHaveAccounttext}`}>{t('ExploreText')}</p>
                         </Col>
                 </Row> 
           </div>      

@@ -297,6 +297,12 @@ a{
 
  .allPageSection{
      margin: 0px;
+    overflow-x: hidden;
+
+ }
+
+ .footerSection{
+   width: 100%;
  }
 
 @media screen and (max-width: 388px) {
@@ -306,6 +312,7 @@ a{
    h1 {
   font-size: 1.6rem;
 }
+
 }
  @media screen and (max-width: 768px) {
    .avatar {
@@ -326,6 +333,7 @@ a{
    .allPageSection{
      margin: 0px;
  }
+  
  }
 
 /*Tablet*/
@@ -341,7 +349,6 @@ a{
   .allPageSection{
      margin: 0px;
  }
-
  
 }
 
