@@ -21,6 +21,7 @@ const IndexPage: NextPage = () => {
   const { t } = useTranslation('common');
   const [show, setShow] = useState<string[]>(['gender-feminisms', 'technology', 'environment']);
   const {data:session,status} = useSession();
+  const isLoadingSession = status === "loading"
   const [hide /* , setHide */] = useState<string[]>([
     'racism-discrimination',
     'wellness-sports',
@@ -60,7 +61,7 @@ const IndexPage: NextPage = () => {
         <meta name="twitter:url" content={`${WEBAPP_URL}`} ></meta>  
     </Head>
     {/* ESTO SERIA PAGINA USUARIO NO LOGUEADO  PAG ARQUIMEDES y EXPLORE */}
-    {!session && (<HomeNotSingIn/>)}
+    {!session && !isLoadingSession && (<HomeNotSingIn/>)}
     {/* ESTO SERIA PAGINA USUARIO LOGUEADO */}
     {session && session.user && (
     <SimpleLayout showHeader title={t('browserTitleWelcome')}>

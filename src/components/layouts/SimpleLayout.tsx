@@ -28,10 +28,11 @@ type Props = {
   showHeader?: boolean;
   banner?: JSX.Element | JSX.Element[];
   showNavBar?:boolean;
+  showFooter?:boolean;
   allPageSize?:boolean
 };
 
-const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, banner,showNavBar = true , allPageSize=false}) => {
+const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, banner,showNavBar = true,showFooter=true , allPageSize=false}) => {
   const {t} = useTranslation('notification');
   
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -107,7 +108,7 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
          : <Container className='mainContainer'>{children}</Container> }
       </section>
       <section>
-          <Footer/>
+          {showFooter && (<Footer/>)}
       </section>
 
       <Modal

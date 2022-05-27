@@ -3,9 +3,9 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent} from 'react';
 import {
-  TiSocialTwitterCircular,
+  TiSocialTwitter,
   TiSocialFacebookCircular,
-  TiSocialInstagramCircular,
+  TiSocialInstagram,
   TiSocialLinkedinCircular,
 } from 'react-icons/ti';
 import { RiMailLine } from 'react-icons/ri';
@@ -17,7 +17,7 @@ const Footer: FunctionComponent = () => {
   const { t } = useTranslation('navbar');
 
   return (
-    <div className="m-0 footerSection"  style={{ background: 'var(--eureka-green)'}}>
+    <div className="m-0"  style={{ background: 'var(--eureka-green)'}}>
   <footer className="text-center text-white">
     <div className="container d-flex flex-column-reverse flex-lg-row justify-content-lg-around">
       <section className="mt-1 mt-lg-2 mb-1">
@@ -42,10 +42,10 @@ const Footer: FunctionComponent = () => {
 
       <section className={`mt-2 mb-1 ${styles.fallowsSection}`}>
             <a href="https://instagram.com/eleurekaclub">
-              <TiSocialInstagramCircular className={styles.ti} />
+              <TiSocialInstagram className={styles.ti} />
             </a>
             <a href="https://twitter.com/eleurekaclub">
-              <TiSocialTwitterCircular className={styles.ti} />
+              <TiSocialTwitter className={styles.ti} />
             </a>
             <a href="https://facebook.com/eleurekaclub">
               <TiSocialFacebookCircular className={styles.ti} />
