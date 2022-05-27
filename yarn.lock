@@ -1015,12 +1015,12 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-dom@^17.0.0":
-  version "17.0.6"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-17.0.6.tgz#c158325cf91b196270bc0f4af73463f149e7eafe"
-  integrity sha512-MGTI+TudxAnGTj8aco8mogaPSJGK2Whje7OZh1CxNLRyhJpTZg/pGQpIbCT0eCVFQyH7UFpdvCqQEThHIp/gsA==
+"@types/react-dom@^17.0.17":
+  version "17.0.17"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-17.0.17.tgz#2e3743277a793a96a99f1bf87614598289da68a1"
+  integrity sha512-VjnqEmqGnasQKV0CWLevqMTXBYG9GbwuE6x3VetERLh0cq2LTptFE73MrQi2S7GkKXCf2GgwItB/melLnxfnsg==
   dependencies:
-    "@types/react" "*"
+    "@types/react" "^17"
 
 "@types/react-helmet@^6.1.5":
   version "6.1.5"
@@ -1070,10 +1070,10 @@
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
-"@types/react@^17.0.36":
-  version "17.0.36"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.36.tgz#0d81e0e2419e6a8e9ba6af5e3a0608e70835d7d1"
-  integrity sha512-CUFUp01OdfbpN/76v4koqgcpcRGT3sYOq3U3N6q0ZVGcyeP40NUdVU+EWe3hs34RNaTefiYyBzOpxBBidCc5zw==
+"@types/react@^17", "@types/react@^17.0.45":
+  version "17.0.45"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.45.tgz#9b3d5b661fd26365fefef0e766a1c6c30ccf7b3f"
+  integrity sha512-YfhQ22Lah2e3CHPsb93tRwIGNiSwkuz1/blk4e6QrWS0jQzCSNbGLtOEYhPg02W0yGTTmpajp7dCTbBAMN3qsg==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -3924,12 +3924,10 @@ jose@^4.1.4, jose@^4.3.7:
   resolved "https://registry.yarnpkg.com/jose/-/jose-4.6.2.tgz#45724b4ec9b1e543240dba3da087f80eb979c1e1"
   integrity sha512-7Jd3kGkgDfhpj+SFqfam70HyVC0gtdfbGc/tHb5dqsWYlQqodgkotqWYEXn1PhQXgdJqsyOAIKT0N4O2riUFiA==
 
-jotai@^0.14.1:
-  version "0.14.5"
-  resolved "https://registry.yarnpkg.com/jotai/-/jotai-0.14.5.tgz#8699b8dbbc417ad2ea4a486da34219546e350233"
-  integrity sha512-8WjJYxLKv79ZF3gRERcYqXkwRWtDQq01hQXdg+qcKE0MtQcwGyReM/WHFGRUhqHW51O8fsjk+9s7U6AJ+p9uLQ==
-  dependencies:
-    use-context-selector "1.3.7"
+jotai@^1.6.7:
+  version "1.6.7"
+  resolved "https://registry.yarnpkg.com/jotai/-/jotai-1.6.7.tgz#d5bdc747b66e369f1d1e859dad8bcda85acb946f"
+  integrity sha512-MxAm86FYHm6asU3O1hbTKOWpPMP5oI8zNlgFRpZBB85cX79psF2eRb7ZqdGewOgYUUUKAlzZ+sH0IM7Pea6MkA==
 
 js-sha3@0.8.0:
   version "0.8.0"
@@ -5367,10 +5365,10 @@ react-popper@^1.0.0:
     typed-styles "^0.0.7"
     warning "^4.0.2"
 
-react-query@~3.34.16:
-  version "3.34.16"
-  resolved "https://registry.yarnpkg.com/react-query/-/react-query-3.34.16.tgz#279ea180bcaeaec49c7864b29d1711ee9f152594"
-  integrity sha512-7FvBvjgEM4YQ8nPfmAr+lJfbW95uyW/TVjFoi2GwCkF33/S8ajx45tuPHPFGWs4qYwPy1mzwxD4IQfpUDrefNQ==
+react-query@^3.39.0:
+  version "3.39.0"
+  resolved "https://registry.yarnpkg.com/react-query/-/react-query-3.39.0.tgz#0caca7b0da98e65008bbcd4df0d25618c2100050"
+  integrity sha512-Od0IkSuS79WJOhzWBx/ys0x13+7wFqgnn64vBqqAAnZ9whocVhl/y1padD5uuZ6EIkXbFbInax0qvY7zGM0thA==
   dependencies:
     "@babel/runtime" "^7.5.5"
     broadcast-channel "^3.4.1"
@@ -5415,10 +5413,10 @@ react-transition-group@^4.4.1:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react-window@^1.8.6:
-  version "1.8.6"
-  resolved "https://registry.yarnpkg.com/react-window/-/react-window-1.8.6.tgz#d011950ac643a994118632665aad0c6382e2a112"
-  integrity sha512-8VwEEYyjz6DCnGBsd+MgkD0KJ2/OXFULyDtorIiTz+QzwoP94tBoA7CnbtyXMm+cCeAUER5KJcPtWl9cpKbOBg==
+react-window@^1.8.7:
+  version "1.8.7"
+  resolved "https://registry.yarnpkg.com/react-window/-/react-window-1.8.7.tgz#5e9fd0d23f48f432d7022cdb327219353a15f0d4"
+  integrity sha512-JHEZbPXBpKMmoNO1bNhoXOOLg/ujhL/BU4IqVU9r8eQPcy5KQnGHIHDRkJ0ns9IM5+Aq5LNwt3j8t3tIrePQzA==
   dependencies:
     "@babel/runtime" "^7.0.0"
     memoize-one ">=3.1.1 <6"
@@ -6499,11 +6497,6 @@ urix@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/urix/-/urix-0.1.0.tgz#da937f7a62e21fec1fd18d49b35c2935067a6c72"
   integrity sha1-2pN/emLiH+wf0Y1Js1wpNQZ6bHI=
-
-use-context-selector@1.3.7:
-  version "1.3.7"
-  resolved "https://registry.yarnpkg.com/use-context-selector/-/use-context-selector-1.3.7.tgz#4e59270baa73417dcb0c5c6c124359fd0e8b3aaf"
-  integrity sha512-O94hcN9UDAPTC4Fsm3p6Og5PVlhTEeKqxJX3HuBbVSuevOSPLDZxowFUmx49/fnu9jpgY83Nd3TALJVDRtYzdQ==
 
 use@^3.1.0:
   version "3.1.1"
