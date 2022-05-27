@@ -106,7 +106,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   };
 
   const renderOngoinOrUpcomingDate = () => {
-    if (cycle && cycle.cycleWorksDates) {
+    if (cycle && cycle.cycleWorksDates) { 
       if (cycle.cycleWorksDates.length) {
         const idx = cycle.cycleWorksDates.findIndex((cw) => cw.workId === work.id);
         if (idx > -1) {
