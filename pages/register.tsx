@@ -11,7 +11,7 @@ const RegisterPage: NextPage = () => {
   const { t } = useTranslation('signUpForm');
 
   return (
-    <SimpleLayout title={t('Sign up')} showNavBar={false}>
+    <SimpleLayout title={t('Sign up')} showNavBar={false} showFooter={false}>
           <SignUpForm noModal />
     </SimpleLayout>
   );
