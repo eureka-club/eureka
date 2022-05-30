@@ -1,5 +1,5 @@
 export const DATE_FORMAT_HUMANIC_ADVANCED = 'MMMM Do YYYY';
-export const DATE_FORMAT_PROPS = 'YYYY-MM-DD';
+export const DATE_FORMAT_PROPS = 'YYYY-MM-DD'; 
 export const DATE_FORMAT_ONLY_YEAR = 'YYYY';
 export const DATE_FORMAT_SHORT = 'D·MM·YYYY';
 export const DATE_FORMAT_SHORT_MONTH_YEAR = 'MM/YYYY';
