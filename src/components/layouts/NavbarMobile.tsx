@@ -1,44 +1,27 @@
-import classNames from 'classnames';
 import { useAtom } from 'jotai';
 import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { setCookie } from 'nookies';
-import { FunctionComponent, MouseEvent,useState,useEffect } from 'react';
+import { FunctionComponent, useState,useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Nav from 'react-bootstrap/Nav';
-import NotificationsList from './NotificationsList';
+import NotificationsList from '@/components/NotificationsList';
 
-// import NavItem from 'react-bootstrap/NavItem';
-
-import {
-  // BootstrapNavbar,
-  Navbar,
-  // Brand,
-  // Toggle,
-  // Collapse
-  Col,
-} from 'react-bootstrap';
-// import NavDropdown from 'react-bootstrap/NavDropdown';
-import { DropdownItemProps } from 'react-bootstrap/DropdownItem';
+import {Navbar} from 'react-bootstrap';
 import { BiUser } from 'react-icons/bi';
-// import { BsBookmark } from 'react-icons/bs';
 import { RiDashboardLine } from 'react-icons/ri';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
-// import DropdownToggle from 'react-bootstrap/esm/DropdownToggle';
-import SearchEngine from './SearchEngine';
-import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '../constants';
-// import { Session } from '../types';
-import ChevronToggle from './ui/dropdown/ChevronToggle';
-import globalModalsAtom from '../atoms/globalModals';
+import SearchEngine from '@/components/SearchEngine';
+import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '@/src/constants';
+import ChevronToggle from '@/components/ui/dropdown/ChevronToggle';
+import globalModalsAtom from '@/src/atoms/globalModals';
 import styles from './NavbarMobile.module.css';
 import useUser from '@/src/useUser';
 import LocalImageComponent from '@/components/LocalImage'
-
-// const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
 
 const NavBar: FunctionComponent = () => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -56,23 +39,6 @@ const NavBar: FunctionComponent = () => {
     staleTime:1
   });
 
-  const openSignInModal = () => {
-    setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
-  };
-
-  const handleCreatePostClick = (ev: MouseEvent<HTMLElement>) => {
-    ev.preventDefault();
-
-    setGlobalModalsState({ ...globalModalsState, ...{ createPostModalOpened: true } });
-  };
-
-  const handleCreateWorkClick = (ev: MouseEvent<HTMLElement>) => {
-    ev.preventDefault();
-
-    setGlobalModalsState({ ...globalModalsState, ...{ createWorkModalOpened: true } });
-  };
-
-
   const handleLanguageSelect = (locale: string | null) => {
     if (locale != null) {
       setCookie(null, LOCALE_COOKIE_NAME, locale, {
@@ -85,11 +51,6 @@ const NavBar: FunctionComponent = () => {
   const handlerLogout = () => {
     signOut({callbackUrl:`${process.env.NEXT_PUBLIC_WEBAPP_URL}/`});
   };
-
-  // const handleAboutSelect = (eventKey: string | null) => {
-  //   if (eventKey === 'aboutEureka') router.push('/about');
-  //   else if (eventKey === 'aboutUs') router.push('/aboutUs');
-  // };
 
   const getAvatar = () => {
       if(user && user.photos){
@@ -117,18 +78,7 @@ const NavBar: FunctionComponent = () => {
                 <p className=" my-0 text-secondary ms-3 font-weight-light fs-xs">{t('tagline')}</p>
               </section>
             </aside>
-            {/* <Container>
-              <Col xs={4} className={styles.brandContainer}>
-                <img src="/img/logo.png" className="d-inline-block align-middle me-2" width={52} alt="Project logo" />
-              </Col>
-              <Col xs={7} className="pe-0">
-                
-                <div className={styles.siteName}>{siteName}</div>
-
-                
-                <div className={styles.brandInfo}>{t('tagline')}</div>
-              </Col>
-            </Container> */}
+            
           </Navbar.Brand>
         </Link>
        <div className='d-flex'>
@@ -162,17 +112,12 @@ const NavBar: FunctionComponent = () => {
                   <Link href="/post/create">
                       <a className="dropdown-item">{t('post')}</a>
                     </Link>
-                  {/*<Dropdown.Item className="" onClick={handleCreatePostClick}>
-                    {t('post')}
-                  </Dropdown.Item>*/}
                   {session?.user.roles && session?.user.roles=='admin' && (
                       <Link href="/work/create">
                       <a className="dropdown-item">{t('work')}</a>
                     </Link>   
                   )}
-                  {/*<Dropdown.Item className="" onClick={handleCreateWorkClick}>
-                      {t('work')}
-                    </Dropdown.Item>*/}
+                  
                 </Dropdown.Menu>
               </Dropdown>
             )}
@@ -202,22 +147,16 @@ const NavBar: FunctionComponent = () => {
                   active={router.asPath.search(/manifest$/g) !== -1}
                   onClick={() => router.push('/manifest')}
                 >
-                  {/* <Link href="/aboutUs"> */}
                   {t('Manifest')}
-                  {/* </Link> */}
                 </Dropdown.Item>
                 <Dropdown.Item active={router.asPath.search(/about$/g) !== -1} onClick={() => router.push('/about')}>
-                  {/* <Link href="/about"> */}
                   {t('About Eureka')}
-                  {/* </Link> */}
                 </Dropdown.Item>
                 <Dropdown.Item
                   active={router.asPath.search(/aboutUs$/g) !== -1}
                   onClick={() => router.push('/aboutUs')}
                 >
-                  {/* <Link href="/aboutUs"> */}
                   {t('About Us')}
-                  {/* </Link> */}
                 </Dropdown.Item>
                   <Dropdown.Item
                   active={router.asPath.search(/policy$/g) !== -1}
@@ -277,7 +216,6 @@ const NavBar: FunctionComponent = () => {
           )}
         </Navbar.Collapse>
         </div>
-                {/* </Container> */}
       </Navbar>
     </Container>
   );
