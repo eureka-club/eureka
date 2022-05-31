@@ -15,7 +15,7 @@ const RecoveryLoginPage: NextPage<Props> = () => {
    const { t } = useTranslation('PasswordRecovery');
 
   return (
-    <SimpleLayout title={t('PasswordRecovery')} showNavBar={false}>
+    <SimpleLayout title={t('PasswordRecovery')} showNavBar={false} showFooter={false}>
          <RecoveryLoginForm />
           {/**/}
     </SimpleLayout>

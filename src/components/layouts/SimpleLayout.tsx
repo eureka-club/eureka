@@ -42,9 +42,7 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
         : (showHeader) ?  <Container className='mt-4'>{children}</Container>
         : <Container className='mainContainer'>{children}</Container> }
       </section>
-      <section>
-          {showFooter && (<Footer/>)}
-      </section>
+      {showFooter && (<Footer/>)}
     </Suspense>    
   );
 };

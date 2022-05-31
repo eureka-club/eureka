@@ -17,7 +17,7 @@ const ResetPassPage: NextPage<Props> = ({userId,email}) => {
   const router = useRouter();
   if(!userId)router.push('/login');
   return (
-    <SimpleLayout title={t('resetPassword1')} showNavBar={false}>
+    <SimpleLayout title={t('resetPassword1')} showNavBar={false} showFooter={false}>
          <ResetPassForm userId={userId} email={email}/>
     </SimpleLayout>
   );

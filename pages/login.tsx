@@ -9,9 +9,9 @@ const LoginPage: NextPage = () => {
   const { t } = useTranslation('signInForm');
 
   return (
-    <SimpleLayout allPageSize={true} title={t('login')} showNavBar={false}>
+    <SimpleLayout allPageSize={true} title={t('login')} showNavBar={false} showFooter={false}>
     <Container className='mt-5 w-50'>
-          <SignInForm noModal />
+          <SignInForm noModal  />
      </Container>
     </SimpleLayout>
   );
