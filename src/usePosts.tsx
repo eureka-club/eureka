@@ -24,6 +24,7 @@ export const getPosts = async (
   });
    
   const res = await fetch(url);
+  console.log('fetching post',where)
   if (!res.ok) return [];
   const {data} = await res.json();
   return data;

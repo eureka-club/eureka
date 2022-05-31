@@ -24,16 +24,16 @@ import {
 // import NavDropdown from 'react-bootstrap/NavDropdown';
 
 import { BiUser } from 'react-icons/bi';
-import NotificationsList from './NotificationsList';
+import NotificationsList from '@/components/NotificationsList';
 // import { BsBookmark } from 'react-icons/bs';
 import { RiDashboardLine } from 'react-icons/ri';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
 // import DropdownToggle from 'react-bootstrap/esm/DropdownToggle';
-import SearchEngine from './SearchEngine';
-import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '../constants';
+import SearchEngine from '@/components/SearchEngine';
+import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '@/src/constants';
 // import { Session } from '../types';
-import ChevronToggle from './ui/dropdown/ChevronToggle';
-import globalModalsAtom from '../atoms/globalModals';
+import ChevronToggle from '@/components/ui/dropdown/ChevronToggle';
+import globalModalsAtom from '@/src/atoms/globalModals';
 import styles from './Navbar.module.css';
 import useUser from '@/src/useUser';
 

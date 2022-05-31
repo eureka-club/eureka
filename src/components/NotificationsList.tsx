@@ -1,22 +1,20 @@
-// import {Session} from '@/src/types'
 import React, {useState, useEffect} from 'react'
-import {ListGroup, Spinner, Button, OverlayTrigger, Popover} from 'react-bootstrap'
-
+import {ListGroup, Button, OverlayTrigger, Popover} from 'react-bootstrap'
+import { useQueryClient, useMutation } from 'react-query'
+import { useAtom } from 'jotai'
 import {IoNotificationsCircleOutline} from 'react-icons/io5'
 import {v4} from 'uuid'
 import {useSession} from 'next-auth/react'
 import {useRouter} from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
-import useUser from '@/src/useUser'
-import {useMutation, useQueryClient} from 'react-query'
 import {EditNotificationClientPayload, NotificationMosaicItem} from '@/src/types/notification'
-import {useAtom} from 'jotai'
-import globalModals from '@/src/atoms/globalModals'
-import styles from './Navbar.module.css';
+import styles from './NotificationsList.module.css';
 import {getNotificationMessage} from '@/src/lib/utils'
 import MosaicItem from '@/src/components/notification/MosaicItem'
 import { UserMosaicItem } from '../types/user'
 import useNotifications from '../useNotifications'
+import globalModals from '@/src/atoms/globalModals'
+
 interface Props {
     className?: string;
 }
