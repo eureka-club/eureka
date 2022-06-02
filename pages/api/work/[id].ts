@@ -53,7 +53,7 @@ export default getApiHandler()
     //   res.status(200).json({ error: 'Unauthorized', work: null });
     //   return;
     // }
-    
+
 
     const { id } = req.query;
     if (typeof id !== 'string') {
@@ -70,8 +70,7 @@ export default getApiHandler()
     try {
       const work = await find(idNum);
       if (work == null) {
-        res.status(404).end();
-        return;
+        return res.status(200).json(null);
       }
       let currentUserIsFav = false;
       let currentUserRating = 0;

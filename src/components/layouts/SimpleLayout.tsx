@@ -2,11 +2,11 @@ import { FunctionComponent, Suspense, lazy} from 'react';
 import { Container, Spinner } from 'react-bootstrap';
 import withTitle from '../../HOCs/withTitle';
 
-const NavbarMobile = lazy(()=>import ('../NavbarMobile'));
-const Header = lazy(()=>import('./Header'));
-const Navbar = lazy(()=>import('../Navbar'));
-const HeaderMobile = lazy(()=>import('./HeaderMobile'));
-const Footer = lazy(()=>import('../Footer'));
+import NavbarMobile from '@/components/layouts/NavbarMobile';
+import Header from '@/components/layouts/Header';
+import Navbar from '@/components/layouts/Navbar';
+import HeaderMobile from '@/components/layouts/HeaderMobile';
+import Footer from '@/components/layouts/Footer';
 
 type Props = {
   children: JSX.Element | JSX.Element[];
