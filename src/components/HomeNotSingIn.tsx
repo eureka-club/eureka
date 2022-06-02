@@ -1,5 +1,6 @@
 
 import { FunctionComponent } from 'react';
+import { useRouter } from 'next/router';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import useTranslation from 'next-translate/useTranslation';
 import Container from 'react-bootstrap/Container';
@@ -13,6 +14,7 @@ import { BsChevronDown} from 'react-icons/bs';
 BsChevronDown
 const HomeNotSingIn: FunctionComponent = ({  }) => {
   const { t } = useTranslation('common');
+  const router = useRouter();
 
   return <SimpleLayout allPageSize={true} title={t('browserTitleWelcome')}> 
          <div className='pt-2 m-1 pt-lg-5 m-lg-5'>
@@ -89,7 +91,7 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                            <a className="text-secondary text-decoration-underline">{t('signInForm:Join')}</a></Link></p>
                         </Col>
                         <Col className="d-flex flex-column justify-content-center align-items-center ">
-                           <Button variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
+                           <Button onClick={()=> router.push('/explore')} variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
                                 {t('Explore')} 
                            </Button>
                            <p className={`mt-1 text-center text-secondary ${styles.dontHaveAccounttext}`}>{t('ExploreText')}</p>
