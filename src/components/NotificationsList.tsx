@@ -29,6 +29,7 @@ const NotificationsList: React.FC<Props> = ({className}) => {
     const [globalModalsState,setGlobalModalsState] = useAtom(globalModals)
     const queryClient = useQueryClient();
     const [userId,setUserId] = useState<number>(0);
+    const [show,setShow] = useState<boolean>(false)
     // const {data:user,isLoading} = useUser(userId || 0,{
     // enabled:!!userId
     // });
@@ -156,22 +157,23 @@ const NotificationsList: React.FC<Props> = ({className}) => {
         }
         return <></>;
     }
-    return <section data-cy="notifications" className={`${className}`}>
-        {/*isLoading && <Spinner animation="grow" variant="info" />*/}
-        {!isLoading && notVieweds && <OverlayTrigger
+    return <section data-cy="notifications" className={`position-relative ${className}`}>
+        {/* {!isLoading && notVieweds && <OverlayTrigger
       trigger="click"
       placement="bottom"
       rootClose
       overlay={
         notVieweds.length ? <Popover id={`popover-positioned-bottom`} className="bg-primary">
-          {/* <Popover.Header as="h3">{`Popover ${t('navbar:Notifications')}`}</Popover.Header> */}
-          {/* <Popover.Body> */}
           {renderNotificationsList()}
-          {/* </Popover.Body> */}
         </Popover> : <></>
       }
-    >
-      <Button variant="outline-light" className={`text-dark border-0 p-0 ${styles.langSwitch}`} disabled={notNewsNotifications()}>
+    > */}
+      <Button 
+        variant="outline-light" 
+        className={`text-dark border-0 p-0 ${styles.langSwitch}`} 
+        disabled={notNewsNotifications()}
+        onClick={()=>setShow(s=>!s)}
+        >
               <aside className="position-relative d-none d-md-inline-block mt-1">
                 <IoNotificationsCircleOutline className={`${styles.navbarIconNav} ${notNewsNotifications() ? 'text-dark':'text-primary'}`}  />
                 {notVieweds.length && <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -191,8 +193,9 @@ const NotificationsList: React.FC<Props> = ({className}) => {
               <span className={`d-none d-lg-block ${styles.menuBottomInfo} mt-2 ms-1`}>{t('navbar:Notifications')}</span>
     
                     </Button>
-    </OverlayTrigger>}
+    {/* </OverlayTrigger>} */}
           
+    {show && <div className="position-fixed botton-0 start-50">{renderNotificationsList()}</div>}
         
     </section>
 }
