@@ -17,8 +17,7 @@ const Footer: FunctionComponent = () => {
   const { t } = useTranslation('navbar');
 
   return (
-    <div className="m-0"  style={{ background: 'var(--eureka-green)'}}>
-  <footer className="text-center text-white">
+  <footer className="text-center text-white m-0" style={{ background: 'var(--eureka-green)'}}>
     <div className="container d-flex flex-column-reverse flex-lg-row justify-content-lg-around">
       <section className="mt-1 mt-lg-2 mb-1">
         <div className="text-center d-flex flex-column flex-lg-row justify-content-center pt-3">
@@ -53,7 +52,7 @@ const Footer: FunctionComponent = () => {
             <a href="https://linkedin.com/company/eleurekaclub">
               <TiSocialLinkedinCircular className={styles.ti} />
             </a>
-             <a href="tiktok">
+             <a href="https://www.tiktok.com/@eleurekaclub">
               <SiTiktok className={styles.tiktok} />
             </a>
             {/*<a href="mailto:hola@eureka.club">
@@ -67,7 +66,6 @@ const Footer: FunctionComponent = () => {
       <a className="text-primary" href="https://www.eureka.club/">  www.eureka.club</a>
     </div>
   </footer>
-    </div>
   );
 };
 

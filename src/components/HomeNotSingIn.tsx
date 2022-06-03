@@ -1,8 +1,7 @@
 
-import { FunctionComponent,useState } from 'react';
+import { FunctionComponent } from 'react';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -14,7 +13,6 @@ import { BsChevronDown} from 'react-icons/bs';
 BsChevronDown
 const HomeNotSingIn: FunctionComponent = ({  }) => {
   const { t } = useTranslation('common');
-  const router = useRouter();
 
   return <SimpleLayout allPageSize={true} title={t('browserTitleWelcome')}> 
          <div className='pt-2 m-1 pt-lg-5 m-lg-5'>
@@ -30,7 +28,7 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                 <Row className='d-flex flex-column-reverse flex-lg-row justify-content-center'>
                         <Col className={`col-12 col-lg-6`}>
                         <Container className='d-flex justify-content-center justify-content-lg-end'>
-                                <img  className={`ms-0 ms-lg-5 ${styles.arquimedesImage}`} src="/arquimedes-es-en-fr-pt.png" alt="Eureka" /> 
+                                <img  className={`ms-0 ms-lg-5 ${styles.arquimedesImage}`} src="/arquimedes-es-en-fr-pt.webp" alt="Eureka" /> 
                         </Container>
                         </Col>
                         <Col className={`col-12 col-lg-6 mt-3`}>
@@ -50,14 +48,14 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                         </Col>
                         <Col className={`p-3 p-lg-5 col-12 col-lg-6 border-top border-primary`}>
                           <Container className='d-flex justify-content-center '>
-                             <img  className={`ms-0 ms-lg-5 ${styles.WorkSectionImage}`} src="/find-works-FR.png" alt="" /> 
+                             <img  className={`ms-0 ms-lg-5 ${styles.WorkSectionImage}`} src="/find-works-FR.webp" alt="" /> 
                           </Container>
                         </Col>
                 </Row>
                  <Row className='d-flex flex-column-reverse flex-lg-row justify-content-center'>
                       <Col className={`p-3 p-lg-4 col-12 col-lg-6`}>
                         <Container className='d-flex justify-content-center'>
-                             <img  className={`ms-0 ms-lg-5 ${styles.CyclesSectionImage}`} src="/join-cycle-FR.png" alt="" /> 
+                             <img  className={`ms-0 ms-lg-5 ${styles.CyclesSectionImage}`} src="/join-cycle-FR.webp" alt="" /> 
                           </Container>
                         </Col>
                         <Col className={`${styles.CyclesSection} col-12 col-lg-6 p-5 d-flex flex-column justify-content-center aling-items-center`}>
@@ -76,7 +74,7 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                         </Col>
                         <Col className={`p-4 col-12 col-lg-6 border-bottom border-secondary`}>
                           <Container className='d-flex justify-content-center'>
-                             <img  className={`ms-0 ms-lg-5 ${styles.EurekaSectionImage}`} src="/share-eureka-FR.png" alt="" /> 
+                             <img  className={`ms-0 ms-lg-5 ${styles.EurekaSectionImage}`} src="/share-eureka-FR.webp" alt="" /> 
                           </Container>                        
                         </Col>
                 </Row>   

@@ -1,31 +1,10 @@
-import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import Notifier from '@/src/lib/Notifier'
 import { useQueryClient } from 'react-query';
-import {User} from '@prisma/client';
-// import { Session } from '@/src/types';
-import { NotifierRequest } from '@/src/types';
-import { NotifierResponse } from '@/src/types';
 import { useSession } from 'next-auth/react';
-// import { useGlobalEventsContext } from './useGlobalEventsContext';
-// useEffect(()=>{
-//   setSocketIO(new SocketIO([+id],(data)=>{
-//     console.log('ver',data.message);
-//     // alert(data.message)
-//     setGlobalModals((res)=>({
-//       ...res,
-//       showToast: {
-//         show: true,
-//         type: 'info',
-//         title: t(`common:Notification`),
-//         message: data.message,
-//       }
-//     }))
-//   }))
-// },[id]);
 
 export type ContextType = {
-  notifier?: Notifier;
-  
+  notifier?: Notifier;  
 };
 
 const NotificationContext = createContext<ContextType>({

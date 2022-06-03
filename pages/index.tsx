@@ -1,21 +1,21 @@
-import { GetStaticProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import Head from "next/head";
-import { useSession, signOut } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { useState,MouseEvent, } from 'react';
 import { RiArrowDownSLine } from 'react-icons/ri';
 import { Button } from 'react-bootstrap';
 import TagsInput from '../src/components/forms/controls/TagsInput';
-import styles from './index.module.css';
+// import styles from './index.module.css';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
-import Header from '../src/components/layouts/Header';
+// import Header from '../src/components/layouts/Header';
 import HomeNotSingIn from '../src/components/HomeNotSingIn';
 import Carousel from '../src/components/Carousel';
 
-import { v4 } from 'uuid';
+// import { v4 } from 'uuid';
 import { WEBAPP_URL } from '../src/constants';
-import {QueryClient, dehydrate} from 'react-query'
-import useWorks,{getWorks} from '@/src/useWorks'
+// import {QueryClient, dehydrate} from 'react-query'
+// import useWorks,{getWorks} from '@/src/useWorks'
 
 const IndexPage: NextPage = () => {
   const { t } = useTranslation('common');
@@ -65,40 +65,17 @@ const IndexPage: NextPage = () => {
     {/* ESTO SERIA PAGINA USUARIO LOGUEADO */}
     {session && session.user && (
     <SimpleLayout showHeader title={t('browserTitleWelcome')}>
-              <h1 className="text-secondary fw-bold">{t('Trending topics')}</h1>
-              <aside className="mb-5">{getTopicsBadgedLinks()}</aside>
-              <>{show && show.map((item, idx) => <Carousel className="mt-5" key={`carousel-${idx}`} topic={item} />)}</>
-              <Button className="my-3 pe-3 rounded-pill text-white" onClick={e=>showTopic(e)} disabled={hide.length === 0}>
-                <span>
-                  <RiArrowDownSLine /> {t('loadMoreTopics')}
-                </span>
-              </Button> 
+      <h1 className="text-secondary fw-bold">{t('Trending topics')}</h1>
+      <aside className="mb-5">{getTopicsBadgedLinks()}</aside>
+      <>{show && show.map((item, idx) => <Carousel className="mt-5" key={`carousel-${idx}`} topic={item} />)}</>
+      <Button className="my-3 pe-3 rounded-pill text-white" onClick={e=>showTopic(e)} disabled={hide.length === 0}>
+        <span>
+          <RiArrowDownSLine /> {t('loadMoreTopics')}
+        </span>
+      </Button> 
     </SimpleLayout>)}
     </>
   );
 };
-
-// export const getStaticProps: GetStaticProps = async () => {
-//   const queryClient = new QueryClient();
-//   await queryClient.prefetchQuery('WORKS', ()=>getWorks());
-
-//   return {
-//     props: {
-//       dehydratedState: dehydrate(queryClient),
-//     },
-//   };
-// };
-
-// export const getServerSideProps: GetServerSideProps = async () => {
-//   const cycles = await findAllCycles();
-//   const works = await findAllWorks();
-//   const interleavedResults = flatten(zip(cycles, works)).filter((workOrCycle) => workOrCycle != null);
-
-//   return {
-//     props: {
-//       homepageMosaicData: interleavedResults,
-//     },
-//   };
-// };
 
 export default IndexPage;
