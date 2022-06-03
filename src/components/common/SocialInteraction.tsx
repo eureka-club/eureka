@@ -21,17 +21,17 @@ import {
   WhatsappIcon,
 } from 'react-share';
 import { Cycle, Work, Post } from '@prisma/client';
-import { useMosaicContext } from '../../useMosaicContext';
-import globalSearchEngineAtom from '../../atoms/searchEngine';
+import { useMosaicContext } from '@/src/useMosaicContext';
+import globalSearchEngineAtom from '@/src/atoms/searchEngine';
 
 import useUser from '@/src/useUser';
-import globalModalsAtom from '../../atoms/globalModals';
+import globalModalsAtom from '@/src/atoms/globalModals';
 // import Notification from '../ui/Notification';
-import { WEBAPP_URL } from '../../constants';
-import { CycleMosaicItem } from '../../types/cycle';
-import { PostMosaicItem } from '../../types/post';
-import { WorkMosaicItem } from '../../types/work';
-import { UserMosaicItem } from '../../types/user';
+import { WEBAPP_URL } from '@/src/constants';
+import { CycleMosaicItem } from '@/src/types/cycle';
+import { PostMosaicItem } from '@/src/types/post';
+import { WorkMosaicItem } from '@/src/types/work';
+import { UserMosaicItem } from '@/src/types/user';
 import { MySocialInfo, isCycle, isWork, isPost, isPostMosaicItem, isWorkMosaicItem, isCycleMosaicItem } from '../../types';
 import styles from './SocialInteraction.module.css';
 import {useNotificationContext} from '@/src/useNotificationProvider';
@@ -81,6 +81,10 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
   // const [optimistLike, setOptimistLike] = useState<boolean | null>();
   const [optimistFav, setOptimistFav] = useState<boolean | null>();
+  const {showShare:ss} = useMosaicContext();
+
+  const [showShare, setShowShare] = useState<boolean>(false);
+
   // const [optimistReadOrWatched, setOptimistReadOrWatched] = useState<boolean | null>();
 
   // const [optimistLikeCount, setOptimistLikeCount] = useState<number>(0);
@@ -97,7 +101,6 @@ const SocialInteraction: FunctionComponent<Props> = ({
     /* error, */ data: user,
   } = useUser(idSession!,{ enabled: !!idSession! });
   // const [user, setuser] = useState<UserDetail>();
-  const {showShare} = useMosaicContext();
   const {notifier} = useNotificationContext();
   
   // const calculateQty = () => {
@@ -433,7 +436,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [isSocialInteractionSuccess]);
   const popoverShares = (
-    <Popover id="popover-basic">
+    <Popover id="popover-basic" style={{width:"200px"}}>
       <Popover.Body>
         <TwitterShareButton windowWidth={800} windowHeight={600} url={shareUrl} title={shareText} via="eleurekaclub">
           <TwitterIcon size={32} round />
@@ -582,26 +585,28 @@ const SocialInteraction: FunctionComponent<Props> = ({
              <div className='mt-1 ms-1 me-2'> <Spinner className={styles.ratingSpinner} size="sm" animation="grow" variant="info" /></div>
             )}
             
-        {showShare && (
-          <div className="ms-auto">
-            <OverlayTrigger trigger="focus" placement="right" overlay={popoverShares}>
+        {ss && (
+          <div className="ms-auto position-relative">
+            {/* <OverlayTrigger trigger="focus" placement="right" overlay={popoverShares}> */}
               <Button
                 // style={{ fontSize: '.9em' }}
                 title={t('Share')}
                 variant="link"
                 className={`${styles.buttonSI} fs-6 p-0 text-primary`}
                 disabled={loadingSocialInteraction}
+                onClick={()=>{setShowShare(ss=>!ss);console.log('done',showShare)}}
               >
                 <FiShare2 />
                 <br />
                 {showButtonLabels && <span className={classnames(styles.info, styles.active)}>{t('Share')}</span>}
               </Button>
-            </OverlayTrigger>
+            {showShare && <div className="position-absolute botton-0 start-50">{popoverShares}</div>}
+            {/* </OverlayTrigger> */}
           </div>
         )}
 
         {/* <Col xs={showRating ? 2 : 12}> */}
-        <div className={`${showShare ? 'ms-1' : 'ms-auto'}`}>
+        <div className={`${ss ? 'ms-1' : 'ms-auto'}`}>
             {renderSaveForLater()}       
         </div>
       </div>
