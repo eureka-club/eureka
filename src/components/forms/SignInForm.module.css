@@ -43,8 +43,7 @@
 
 .alternativeLabel {
   color: var(--eureka-green);
-  margin-top: 0.6rem;
-  margin-bottom: 0.3rem;
+  margin-top: 0.4rem;
   text-align: center;
 }
 .EurekaText {
@@ -65,7 +64,7 @@
 
 .submitButton {
   display: block;
-  margin-top: 2rem;
+  margin-top: 1rem;
   width: 60%;
   font-size: 1.2rem;
 
@@ -81,12 +80,12 @@
 
 .dontHaveAccounttext {
   text-align: center;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
 }
 
 .registerNotice{
   text-align: center;
-  font-size: 0.75rem;
+  font-size: 0.65rem;
 }
 
 @media screen and (max-width: 1024px) {

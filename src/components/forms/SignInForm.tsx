@@ -116,8 +116,7 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
         <p className={styles.EurekaText}>EUREKA</p>
         </Container>)}
       </ModalHeader>
-      <ModalBody className="pt-0 pb-5">
-      
+      <ModalBody className="pt-0">
         <div>
          {logoImage && (<p className={`${styles.loginGreeting}`}>{t('loginGreeting')}</p>)}
           <Row>
@@ -136,8 +135,8 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
               <Form ref={formRef} className={`d-flex flex-column ${styles.loginForm}`}>
                 <Form.Group controlId="email">
                   <Form.Label>{t('emailFieldLabel')}</Form.Label>
-                  <Form.Control className='mb-2' type="email" required />
-                  <div className='d-flex justify-content-between mb-2'><div>{t('passwordFieldLabel')}</div>
+                  <Form.Control className='' type="email" required />
+                  <div className='d-flex justify-content-between mb-1 mt-2'><div>{t('passwordFieldLabel')}</div>
                     <Link href="/recoveryLogin" passHref>
                       <div className={`d-flex align-items-end cursor-pointer ${styles.forgotPassText}`}>{t('forgotPassText')}</div>
                     </Link>
@@ -151,7 +150,7 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
                   {t('login')} {loading && <Spinner animation="grow"/>}
                 </Button>
                 </div>
-                 <p className={`my-4 ${styles.registerNotice}`}>{t('RegisterNotice')}</p>
+                 <p className={`mt-3 ${styles.registerNotice}`}>{t('RegisterNotice')}</p>
                  <p className={`${styles.dontHaveAccounttext}`}>{t('dontHaveAccounttext')} <Link href="/register">
                  <a className="">{t('Join')}</a></Link></p>
               </Form>

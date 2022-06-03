@@ -17,27 +17,29 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
   const router = useRouter();
 
   return <SimpleLayout allPageSize={true} title={t('browserTitleWelcome')}> 
-         <div className='pt-2 m-1 pt-lg-5 m-lg-5'>
-                 <section className='d-flex flex-column justify-content-center align-items-center text-center'>
+         <div className='pt-2 mt-1 pt-lg-5 mt-lg-5'>
+                 <section className='d-flex flex-column justify-content-center align-items-center text-center mt-lg-3'>
                         <span className='d-flex flex-column flex-md-row justify-content-center flex-wrap border-bottom border-primary'>
-                                <h1 className='text-secondary me-1 mb-3'><b>{t('infoText1')}</b></h1>
-                                <h1 className='text-primary me-1 mb-3'><b>{ t('infoText2')}</b></h1>
-                                <h1 className='text-secondary me-1 mb-3'><b>{t('infoText3')}</b></h1>
+                                <h1 className='text-secondary me-1'><b>{t('infoText1')}</b></h1>
+                                <h1 className='text-primary me-1'><b>{ t('infoText2')}</b></h1>
+                                <h1 className='text-secondary me-1'><b>{t('infoText3')}</b></h1>
                         </span>
-                        <h5 className='text-secondary mt-3'>{t('infoSubText')}</h5>
+                        <h5 className='text-secondary mt-1'>{t('infoSubText')}</h5>
 
                  </section>
                 <Row className='d-flex flex-column-reverse flex-lg-row justify-content-center'>
-                        <Col className={`col-12 col-lg-6`}>
-                        <Container className='d-flex justify-content-center justify-content-lg-end'>
+                        <Col className={`col-12 col-lg-4`}>
+                        <Container className='d-flex justify-content-center'>
                                 <img  className={`ms-0 ms-lg-5 ${styles.arquimedesImage}`} src="/arquimedes-es-en-fr-pt.webp" alt="Eureka" /> 
                         </Container>
                         </Col>
-                        <Col className={`col-12 col-lg-6 mt-3`}>
+                        <Col className={`col-12 col-lg-5`}>
+                            <div className='d-flex justify-content-center flex-column flex-lg-row  mt-4' >
                             <SignInForm noModal logoImage={false} />
+                            </div>
                         </Col>
                 </Row>
-                <section className='d-flex flex-row justify-content-center align-items-baseline'>
+                <section className='d-flex flex-row justify-content-center align-items-baseline mb-3'>
                         <h5 className='d-flex flex-row  text-primary'>{t('HowWorkText')}</h5><div className={`ms-2 text-primary ${styles.downArrow}`}><BsChevronDown/></div>
                  </section>
           </div>   

@@ -1,16 +1,19 @@
 .arquimedesImage {
-   width: 70%;
+   width: 95%;
    height: 100%;
 }
 
 .WorkSection{
      background:var(--color-primary-raised);
+     min-height: 410px;
 }
 .CyclesSection{
      background:var(--color-emphasis-raised);
+     min-height: 410px;
 }
 .EurekaSection{
      background:var(--color-secondary-raised);
+     min-height: 410px;
 }
 /*.WorkSectionImage{
    width: 100%;

@@ -10,7 +10,7 @@ const LoginPage: NextPage = () => {
 
   return (
     <SimpleLayout allPageSize={true} title={t('login')} showNavBar={false} showFooter={false}>
-    <Container className='mt-5 w-50'>
+    <Container className='mt-5'>
           <SignInForm noModal  />
      </Container>
     </SimpleLayout>
