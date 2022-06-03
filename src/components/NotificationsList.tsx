@@ -12,7 +12,7 @@ import { useMutation, useQueryClient } from 'react-query'
 import { EditNotificationClientPayload, NotificationMosaicItem } from '@/src/types/notification'
 import { useAtom } from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
-import styles from './Navbar.module.css';
+import styles from './NotificationsList.module.css';
 import { getNotificationMessage } from '@/src/lib/utils'
 import MosaicItem from '@/src/components/notification/MosaicItem'
 import { UserMosaicItem } from '../types/user'
