@@ -3,13 +3,13 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent} from 'react';
 import {
-  TiSocialTwitter,
-  TiSocialFacebookCircular,
-  TiSocialInstagram,
-  TiSocialLinkedinCircular,
-} from 'react-icons/ti';
-import { RiMailLine } from 'react-icons/ri';
+  AiOutlineInstagram,
+  AiOutlineTwitter,
+  AiFillLinkedin,
+  AiFillFacebook,
+} from 'react-icons/ai';
 import { SiTiktok } from 'react-icons/si';
+import { RiMailLine } from 'react-icons/ri';
 import styles from './Footer.module.css';
 
 
@@ -17,44 +17,36 @@ const Footer: FunctionComponent = () => {
   const { t } = useTranslation('navbar');
 
   return (
-  <footer className="text-center text-white m-0" style={{ background: 'var(--eureka-green)'}}>
-    <div className="container d-flex flex-column-reverse flex-lg-row justify-content-lg-around">
-      <section className="mt-1 mt-lg-2 mb-1">
-        <div className="text-center d-flex flex-column flex-lg-row justify-content-center pt-3">
-          <div className="me-lg-5">
-              <Link href="/manifest" ><p className="text-white cursor-pointer">{t('Manifest')}</p></Link>
-          </div>
-          <div className="me-lg-5">
-              <Link href="/about" ><p className="text-white cursor-pointer">{t('About Eureka')}</p></Link>
-          </div>
-          <div className="me-lg-5">
-              <Link href="/aboutUs" ><p className="text-white cursor-pointer">{t('About Us')}</p></Link>
-          </div>
-          <div className="me-lg-5">
-              <Link href="/policy" ><p className="text-white cursor-pointer">{t('policyText')}</p></Link>
-          </div>
-          <div className="">
-          <p>{t('common:contact')} <a className='text-white' href="mailto:hola@eureka.club">hola@eureka.club</a></p>
-          </div>
+  <footer className=" text-center m-0" style={{ background: 'var(--eureka-green)'}}>
+    <div className="container d-flex flex-column-reverse flex-lg-row justify-content-lg-around align-items-lg-center">
+      <section className="mb-1 mb-lg-0">
+        <div className="text-center d-flex flex-column flex-lg-row justify-content-around pt-3 text-white">
+              <Link href="/manifest"><a className='text-white me-lg-5 mb-1 mb-lg-none'>{t('Manifest')}</a></Link>
+              <Link href="/about"><a className='text-white me-lg-5 mb-1 mb-lg-none'>{t('About Eureka')}</a></Link>
+              <Link href="/aboutUs"><a className='text-white me-lg-5 mb-1 mb-lg-none'>{t('About Us')}</a></Link>
+              <Link href="/policy"><a className='text-white me-lg-5 mb-1 mb-lg-none'>{t('policyText')}</a></Link>
+          <p>{t('common:contact')} <a className='text-white me-lg-3' href="mailto:hola@eureka.club">hola@eureka.club</a></p>
         </div>
+
       </section>
 
-      <section className={`mt-2 mb-1 ${styles.fallowsSection}`}>
-            <a href="https://instagram.com/eleurekaclub">
-              <TiSocialInstagram className={styles.ti} />
+      <section className={`mt-2 mt-lg-0 ${styles.fallowsSection}`}>
+            <a className='me-1' href="https://instagram.com/eleurekaclub" target={'_blank'} rel="noreferrer">
+              <AiOutlineInstagram className={styles.ti} /> 
             </a>
-            <a href="https://twitter.com/eleurekaclub">
-              <TiSocialTwitter className={styles.ti} />
-            </a>
-            <a href="https://facebook.com/eleurekaclub">
-              <TiSocialFacebookCircular className={styles.ti} />
-            </a>
-            <a href="https://linkedin.com/company/eleurekaclub">
-              <TiSocialLinkedinCircular className={styles.ti} />
-            </a>
-             <a href="https://www.tiktok.com/@eleurekaclub">
+              <a className='me-1' href="https://www.tiktok.com/@eleurekaclub" target={'_blank'} rel="noreferrer">
               <SiTiktok className={styles.tiktok} />
             </a>
+             <a className='me-1' href="https://linkedin.com/company/eleurekaclub" target={'_blank'} rel="noreferrer">
+              <AiFillLinkedin className={styles.ti} />
+            </a>
+            <a className='me-1' href="https://twitter.com/eleurekaclub" target={'_blank'} rel="noreferrer">
+              <AiOutlineTwitter className={styles.ti} />
+            </a>
+            <a href="https://facebook.com/eleurekaclub" target={'_blank'} rel="noreferrer">
+              <AiFillFacebook className={styles.ti} />
+            </a>
+          
             {/*<a href="mailto:hola@eureka.club">
               <RiMailLine className={styles.ti} />
             </a>*/}

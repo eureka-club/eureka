@@ -12,7 +12,7 @@
 .EurekaSection{
      background:var(--color-secondary-raised);
 }
-.WorkSectionImage{
+/*.WorkSectionImage{
    width: 100%;
    height: 100%;
 }
@@ -23,7 +23,7 @@
 .EurekaSectionImage{
    width: 85%;
    height: 100%;
-}
+}*/
 .submitButton {
   display: block;
   margin-top: 2rem;

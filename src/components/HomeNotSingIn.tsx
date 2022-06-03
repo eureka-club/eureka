@@ -76,7 +76,7 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                         </Col>
                         <Col className={`p-4 col-12 col-lg-6 border-bottom border-secondary`}>
                           <Container className='d-flex justify-content-center'>
-                             <img  className={`ms-0 ms-lg-5 ${styles.EurekaSectionImage}`} src="/share-eureka-FR.webp" alt="" /> 
+                             <img  className={`ms-0 ms-lg-5 ${styles.EurekaSectionImage}`} src="/Eurekas - PORT.png" alt="" /> 
                           </Container>                        
                         </Col>
                 </Row>   

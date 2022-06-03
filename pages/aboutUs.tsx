@@ -333,7 +333,7 @@ const AboutPage: NextPage = () => {
             />
           </div>
 
-          <section className={styles.fallowsSection}>
+          {/*<section className={styles.fallowsSection}>
             <h5 className={styles.fallowsSectionTitle}>{t('Follow us on social media')}:</h5>
             <a href="https://twitter.com/eleurekaclub">
               <TiSocialTwitterCircular className={styles.ti} />
@@ -350,7 +350,7 @@ const AboutPage: NextPage = () => {
             <a href="mailto:hola@eureka.club">
               <RiMailLine className={styles.ti} />
             </a>
-          </section>
+          </section>*/}
         </div>
       </div>
     </SimpleLayout>

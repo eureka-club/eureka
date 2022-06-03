@@ -15,7 +15,7 @@ const ExplorePage: NextPage = () => {
     <>
     <BannerCustomizable/>
     <SimpleLayout title={t('Explore')}>
-        AAA
+        
     </SimpleLayout>
     </>
   );
