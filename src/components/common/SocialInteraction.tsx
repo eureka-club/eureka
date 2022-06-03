@@ -441,7 +441,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
         <TwitterShareButton windowWidth={800} windowHeight={600} url={shareUrl} title={shareText} via="eleurekaclub">
           <TwitterIcon size={32} round />
           {` ${t('wayShare')} Twitter`}
-        </TwitterShareButton>
+        </TwitterShareButton> 
         <br />
         <FacebookShareButton windowWidth={800} windowHeight={600} url={shareUrl} quote={shareText}>
           <FacebookIcon size={32} round />
