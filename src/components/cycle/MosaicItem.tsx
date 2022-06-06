@@ -4,7 +4,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, useEffect, useState, MouseEvent, useMemo } from 'react';
+import { FunctionComponent, useEffect, useState, MouseEvent, useMemo, memo } from 'react';
 import { useMutation, useQueryClient,useIsFetching } from 'react-query';
 import { useRouter } from 'next/router';
 import { Card, Button, Spinner, Badge } from 'react-bootstrap';
@@ -345,4 +345,4 @@ const MosaicItem: FunctionComponent<Props> = ({
   // </article>
 };
 
-export default MosaicItem;
+export default memo(MosaicItem);

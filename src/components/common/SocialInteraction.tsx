@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
+import { FunctionComponent, MouseEvent, useEffect, useState, memo } from 'react';
 // import Dropdown from 'react-bootstrap/Dropdown';
 import { GiBrain } from 'react-icons/gi';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
@@ -10,7 +10,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/react';
 import { useAtom } from 'jotai';
 import Rating from 'react-rating';
-import { OverlayTrigger, Popover, Button, Spinner } from 'react-bootstrap';
+import { Popover, Button, Spinner } from 'react-bootstrap';
 
 import {
   FacebookIcon,
@@ -20,7 +20,7 @@ import {
   WhatsappShareButton,
   WhatsappIcon,
 } from 'react-share';
-import { Cycle, Work, Post } from '@prisma/client';
+import { Cycle, Work } from '@prisma/client';
 import { useMosaicContext } from '@/src/useMosaicContext';
 import globalSearchEngineAtom from '@/src/atoms/searchEngine';
 
@@ -31,7 +31,6 @@ import { WEBAPP_URL } from '@/src/constants';
 import { CycleMosaicItem } from '@/src/types/cycle';
 import { PostMosaicItem } from '@/src/types/post';
 import { WorkMosaicItem } from '@/src/types/work';
-import { UserMosaicItem } from '@/src/types/user';
 import { MySocialInfo, isCycle, isWork, isPost, isPostMosaicItem, isWorkMosaicItem, isCycleMosaicItem } from '../../types';
 import styles from './SocialInteraction.module.css';
 import {useNotificationContext} from '@/src/useNotificationProvider';
@@ -642,4 +641,4 @@ const SocialInteraction: FunctionComponent<Props> = ({
   );
 };
 
-export default SocialInteraction;
+export default memo(SocialInteraction);

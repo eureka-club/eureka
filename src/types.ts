@@ -105,3 +105,15 @@ export  interface NotifierRequest {
     toUsers: number[];
     data: Record<string,any>;
   }
+
+  export interface GetAllByResonse{
+    data: (WorkMosaicItem|CycleMosaicItem)[];
+    extraCyclesRequired: number;
+    extraWorksRequired: number;
+    hasMore: boolean;
+    nextCursor: number;
+    prevCursor: number;
+    status: string;
+    totalCycles: number;
+    totalWorks: number;
+}
