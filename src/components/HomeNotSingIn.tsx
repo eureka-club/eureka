@@ -70,9 +70,9 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                 <Row className='d-flex flex-column flex-lg-row '>
                         <Col className={`${styles.EurekaSection} p-3 p-lg-4 col-12 col-lg-6 d-flex flex-column justify-content-center aling-items-center`}>
                               <span className='d-flex flex-wrap text-center justify-content-center'>
-                                <h1 className='text-white me-1' style={{fontWeight:900}}>{t('EurekaSectionText1')}</h1>
-                                <h1 className='text-primary me-1' style={{fontWeight:900}}>{ t('EurekaSectionText2')}</h1>
-                                <h1 className='text-white me-1' style={{fontWeight:900}}>{t('EurekaSectionText3')}</h1>
+                                <h1 className='text-white me-1' style={{fontWeight:600}}>{t('EurekaSectionText1')}</h1>
+                                <h1 className='text-primary me-1' style={{fontWeight:600}}>{ t('EurekaSectionText2')}</h1>
+                                <h1 className='text-white me-1' style={{fontWeight:600}}>{t('EurekaSectionText3')}</h1>
                         </span>
                         <h5 className='d-flex justify-content-center text-center text-white mt-4' style={{fontStyle:'italic'}}>{t('EurekaSectionSubText')}</h5>    
                         </Col>
