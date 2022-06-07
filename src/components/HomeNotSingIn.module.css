@@ -15,11 +15,11 @@
      background:var(--color-secondary-raised);
      min-height: 410px;
 }
-/*.WorkSectionImage{
+.WorkSectionImage{
    width: 100%;
    height: 100%;
 }
-.CyclesSectionImage{
+/*..CyclesSectionImage{
    width: 85%;
    height: 100%;
 }
@@ -39,6 +39,18 @@
 .downArrow{
   font-size: 1.5rem;
   font-weight: 900;
+}
+
+@media screen and (max-width: 600px) {
+
+.CyclesSectionImage{
+   width: 100%;
+   height: 100%;
+}
+.EurekaSectionImage{
+   width: 100%;
+   height: 100%;
+}
 }
 
 @media screen and (max-width: 724px) {
