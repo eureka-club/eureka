@@ -50,9 +50,9 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
                   <NotificationProvider>
                     <ErrorBoundary>
                       <Component {...pageProps} />
-                      <Toaster position="top-center" reverseOrder={false}/>
                     </ErrorBoundary>
                   </NotificationProvider>
+                      <Toaster position="top-center" reverseOrder={false}/>
                 </Hydrate>
                 <ReactQueryDevtools />
               </QueryClientProvider>
