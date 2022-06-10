@@ -48,11 +48,11 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
                 <Hydrate state={pageProps.dehydratedState}>
                   {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                   <NotificationProvider>
-                    {/* <ErrorBoundary> */}
+                    <ErrorBoundary>
                       <Component {...pageProps} />
-                    {/* </ErrorBoundary> */}
+                    </ErrorBoundary>
                   </NotificationProvider>
-                      <Toaster position="top-center" reverseOrder={false}/>
+                  <Toaster position="top-center" reverseOrder={false}/>
                 </Hydrate>
                 <ReactQueryDevtools />
               </QueryClientProvider>
