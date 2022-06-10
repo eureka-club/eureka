@@ -1,18 +1,17 @@
-import {Component, ReactNode} from 'react'
+import {Component} from 'react'
 import SimpleLayout from '@/src/components/layouts/SimpleLayout'
-import Link from 'next/link'
 import withTranslation from 'next-translate/withTranslation'
 
 
-interface State{
-    hasError:boolean;
-}
-interface Props{
-    children:ReactNode
-    i18n:any
-}
-class ErrorBoundary extends Component<Props,State>{
-    constructor(props:any){
+// interface State{
+//     hasError:boolean;
+// }
+// interface Props{
+//     children:ReactNode
+//     i18n:any
+// }
+class ErrorBoundary extends Component{
+    constructor(props){
         super(props)
         this.state = {
             hasError:false,
@@ -25,7 +24,7 @@ class ErrorBoundary extends Component<Props,State>{
         }
     }
 
-    componentDidCatch(error: any,errorInfo: any){
+    componentDidCatch(error,errorInfo){
         console.error(error,errorInfo)
     }
 
