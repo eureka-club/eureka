@@ -32,8 +32,9 @@ import useUser from '@/src/useUser';
 // import ImageFileSelect from './controls/ImageFileSelect';
 import globalModalsAtom from '../../atoms/globalModals';
 import styles from './EditUserForm.module.css';
-import { useToasts } from 'react-toast-notifications'
+import toast from 'react-hot-toast'
 import i18nConfig from '../../../i18n';
+import Toast from '../common/Toast';
 // import useTopics from '../../useTopics';
 
 dayjs.extend(utc);
@@ -53,7 +54,6 @@ const EditUserForm: FunctionComponent = () => {
   const [changingPhoto, setChangingPhoto] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>();
   const [privacySettings, setPrivacySettings] = useState<number>();
-  const { addToast } = useToasts()
   const [dashboardTypeChecked, setDashboardTypeChecked] = useState<{
     public: boolean;
     protected: boolean;
@@ -155,21 +155,13 @@ const EditUserForm: FunctionComponent = () => {
         body: fd,
       });
       if(res.ok){
-          addToast( t('ProfileSaved'), {appearance: 'success', autoDismiss: true,})
+          toast.success( t('ProfileSaved'))
           router.push(`/mediatheque/${id}`);
          // return res.json();
       }    
       else
       {
-        setGlobalModalsState((r)=>({
-          ...r,
-          showToast: {
-            show: true,
-            type: 'warning',
-            title: t('Warning'),
-            message: res.statusText,
-          },
-        }));
+        toast.error(res.statusText)
         return null;
       }
    

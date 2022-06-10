@@ -24,7 +24,7 @@ import globalModalsAtom from '../../src/atoms/globalModals';
 import { WEBAPP_URL } from '../../src/constants';
 import {CycleMosaicItem} from '@/src/types/cycle'
 import { UserMosaicItem } from '@/src/types/user';
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 import {useJoinUserToCycleAction} from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
 
 /*interface Props{
@@ -50,7 +50,6 @@ interface Props{
 }
 const CycleDetailPage: NextPage<Props> = (props) => {
   // const [session, isLoadingSession] = useSession();
-  const {addToast} = useToasts();
   const session = props.session;
   const router = useRouter();
   const isFetchingCycle = useIsFetching(['CYCLE',`${props.id}`])
@@ -102,9 +101,9 @@ const CycleDetailPage: NextPage<Props> = (props) => {
     isSuccess:isJoined,    
   } = useJoinUserToCycleAction(session?.user,cycle!,participants||[],(_data,error)=>{
         if(!error)
-          addToast(t('OK'),{appearance:'success',autoDismiss:true});
+          toast.success(t('OK'));
         else
-          addToast(t('Internal Server Error'),{appearance:'error',autoDismiss:true});
+          toast.success(t('Internal Server Error'));
   });
 
   const requestJoinCycle = async () => {

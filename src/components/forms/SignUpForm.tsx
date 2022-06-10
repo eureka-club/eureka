@@ -8,8 +8,9 @@ import { useMutation } from "react-query";
 import {Form} from 'react-bootstrap'
 import Row from 'react-bootstrap/Row';
 import Link from 'next/link'
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 import styles from './SignUpForm.module.css';
+import { totalmem } from 'os';
 
 interface Props {
   noModal?: boolean;
@@ -18,7 +19,6 @@ interface Props {
 const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
   const { t } = useTranslation('signUpForm');
   const formRef=useRef<HTMLFormElement>(null)
-  const {addToast} = useToasts()
  interface MutationProps{
         identifier:string;
         password:string;
@@ -53,7 +53,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
             // return data;
         }
         else{
-            addToast(res.statusText,{appearance: 'error',autoDismiss:true})
+            toast.error(res.statusText)
         }
         return null;
     })
@@ -91,12 +91,12 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
           if(email && password && fullName){
 
             if(!validateEmail(email)){
-               addToast( t('InvalidMail') , {appearance: 'error', autoDismiss: true,});
+               toast.error( t('InvalidMail'));
                return false;
             }
 
             if(!validatePassword(password)){
-               addToast( t('InvalidPassword') , {appearance: 'error', autoDismiss: true,});
+               toast.error( t('InvalidPassword'));
                return false;
             }
           
@@ -108,10 +108,10 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                   fullName,
               }); 
             }
-            else addToast(t('UserRegistered') ,{appearance: 'error',autoDismiss:true})
+            else toast.error(t('UserRegistered'))
           }
           else
-            addToast(t('emptyFields'), {appearance: 'error', autoDismiss: true,})
+            toast.error(t('emptyFields'))
         }
     }
 

@@ -4,7 +4,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { FormEvent, FunctionComponent,useState,useRef } from 'react';
 import {Alert,Button,Col,Container,Row} from 'react-bootstrap'
 import Link from 'next/link'
-import { useToasts } from 'react-toast-notifications'
+import toast from 'react-hot-toast'
 
 import styles from './ResetPassForm.module.css';
 import { json } from "stream/consumers";
@@ -17,7 +17,6 @@ interface Props{
 const ResetPassForm: FunctionComponent<Props> = ({userId,email}) => {
   const { t } = useTranslation('PasswordRecovery');
   const router = useRouter();
-  const {addToast} = useToasts();
   const [validated,setValidated] = useState<boolean>(true);
   const formRef = useRef<HTMLFormElement>(null);
   const [loading,setLoading] = useState<boolean>(false);
@@ -42,7 +41,7 @@ const ResetPassForm: FunctionComponent<Props> = ({userId,email}) => {
     if(!form)return false;
 
     if(!form.password.value || !form.ConfirmPassword.value){
-           addToast( t('NotEmptyPassword') , {appearance: 'error', autoDismiss: true,});
+           toast.error( t('NotEmptyPassword'));
            return false;
     }
 
@@ -54,13 +53,13 @@ const ResetPassForm: FunctionComponent<Props> = ({userId,email}) => {
     
       if(ConfirmPassword!==password){
       setValidated(false)
-      addToast( t('PasswordsDontMatch') , {appearance: 'error', autoDismiss: true,})
+      toast.error( t('PasswordsDontMatch') )
       return false;
     }
 
     if(!validPassword || !validConfirmPassword){
       setValidated(false)
-       addToast( t('InvalidPassword') , {appearance: 'error', autoDismiss: true,})
+       toast.error( t('InvalidPassword') )
       return false;
     }
 
@@ -86,7 +85,7 @@ const ResetPassForm: FunctionComponent<Props> = ({userId,email}) => {
         .then(res=>{
           const r = res as unknown as {error:string}
           if(res && r.error)
-            addToast( t('Invalid session') , {appearance: 'error', autoDismiss: true,})
+            toast.error( t('Invalid session'))
           else{
             router.push(localStorage.getItem('loginRedirect') || '/')
           }

@@ -7,14 +7,14 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Link from 'next/link'
-import { useToasts } from 'react-toast-notifications'
+import toast from 'react-hot-toast'
 
 import styles from './RecoveryLoginForm.module.css';
+import Toast from "../common/Toast";
 
 
 const RecoveryLoginForm: FunctionComponent = () => {
    const { t } = useTranslation('PasswordRecovery');
-  const {addToast} = useToasts();
   const [validated,setValidated] = useState<boolean>(false);
   const [loading,setLoading] = useState(false);
 
@@ -41,20 +41,14 @@ const RecoveryLoginForm: FunctionComponent = () => {
       if(ue.hasOwnProperty('hasPassword') && !ue.hasPassword){
         e.preventDefault();
         e.stopPropagation();
-        addToast(t('RegisterAlert'),{
-         appearance:'warning',
-         autoDismiss:true,                
-         })
+        toast.error(t('RegisterAlert'))
         setLoading(false)
         }
      } else {      
       e.preventDefault();
       e.stopPropagation();  
       setLoading(false)
-      addToast(t('isNotUser'),{
-        autoDismiss:true,
-        appearance:'warning'
-      })
+      toast.error(t('isNotUser'))
     }
   }
 

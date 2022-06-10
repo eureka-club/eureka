@@ -26,7 +26,7 @@ import useUsers from '@/src/useUsers'
 import SocialInteraction from '../common/SocialInteraction';
 import { useCycleContext } from '../../useCycleContext';
 import {useNotificationContext} from '@/src/useNotificationProvider'
-import { useToasts } from 'react-toast-notifications'
+import toast from 'react-hot-toast';
 import useCycle from '@/src/useCycle'
 import Avatar from '../common/UserAvatar';
 import { UserMosaicItem } from '@/src/types/user';
@@ -73,7 +73,6 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { addToast } = useToasts()
   const {data:cycle} = useCycle(cycleId,{enabled:!!cycleId})
   
   const whereCycleParticipants = {
@@ -141,10 +140,10 @@ const MosaicItem: FunctionComponent<Props> = ({
   } = useJoinUserToCycleAction(user!,cycle!,participants!,(_data,error)=>{
     if(!error) {//para q no salgan dos toast al unirse a ciclo privado
       if(cycle?.access != 2)
-        addToast(t('OK'),{appearance:'success',autoDismiss:true});
+        toast.success(t('OK'));
     }
     else
-      addToast(t('Internal Server Error'),{appearance:'error',autoDismiss:true});
+      toast.error(t('Internal Server Error'));
 });
 
   const {

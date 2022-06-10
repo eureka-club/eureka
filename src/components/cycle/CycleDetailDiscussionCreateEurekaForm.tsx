@@ -24,7 +24,7 @@ import useTopics from '../../useTopics';
 
 import { useNotificationContext } from '@/src/useNotificationProvider';
 import { useRouter} from 'next/router'
-import { useToasts } from 'react-toast-notifications'
+import toast from 'react-hot-toast'
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
 import useWorks from '@/src/useWorks'
 import useUsers from '@/src/useUsers'
@@ -68,7 +68,6 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   const [eurekaTopics, setEurekaTopics] = useState<string[]>([]);
   const editorRef = useRef<any>(null);
   const formRef = useRef<any>(null);
-  const { addToast } = useToasts()
   const [currentImg, setCurrentImg] = useState<string | null>(null);
   const [showCrop, setShowCrop] = useState<boolean>(false);
   const [newEureka, setNewEureka] = useState({
@@ -117,16 +116,16 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
 
    const formValidation = (payload:any) => {
     if (!discussionItem) {
-          addToast( t('requiredDiscussionItemError') , {appearance: 'error', autoDismiss: true,})
+          toast.error( t('requiredDiscussionItemError'))
           return false;
     }else if (!payload.title.length) {
-      addToast( t('NotTitle') , {appearance: 'error', autoDismiss: true,})
+      toast.error( t('NotTitle'))
           return false;
     }else if (!payload.contentText.length) {
-      addToast( t('NotContentText') , {appearance: 'error', autoDismiss: true,})
+      toast.error( t('NotContentText'))
       return false;
     }else if (!newEurekaImageFile) {
-      addToast( t('requiredEurekaImageError') , {appearance: 'error', autoDismiss: true,})
+      toast.error( t('requiredEurekaImageError'))
           return false;
     }
     return true;
@@ -223,7 +222,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
             });
             
         } 
-        addToast( t('postCreated'), {appearance: 'success', autoDismiss: true,})
+        toast.success( t('postCreated'))
         clearPayload();
         return json.post;
       }

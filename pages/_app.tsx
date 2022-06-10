@@ -6,8 +6,8 @@ import { StrictMode, FunctionComponent, useState, useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { Hydrate } from 'react-query/hydration';
-import { ToastProvider} from 'react-toast-notifications';
-import ToastNew from '../src/components/common/ToastNew';
+import { Toaster } from 'react-hot-toast';
+// import ToastNew from '../src/components/common/ToastNew';
 
 import i18nConfig from '../i18n';
 import detailPagesAtom from '../src/atoms/detailPages';
@@ -38,7 +38,7 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   );
   return (
     <StrictMode>
-     <ToastProvider placement='top-center' components={{ Toast: ToastNew }} autoDismissTimeout={5000}>
+     {/* <ToastProvider placement='top-center' components={{ Toast: ToastNew }} autoDismissTimeout={5000}> */}
       <NextAuthProvider session={pageProps.session} refetchInterval={5 * 60}>
           
         {/* <GlobalEventsContext.Provider value={{...gec}}> */}
@@ -50,6 +50,7 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
                   <NotificationProvider>
                     <ErrorBoundary>
                       <Component {...pageProps} />
+                      <Toaster position="top-center" reverseOrder={false}/>
                     </ErrorBoundary>
                   </NotificationProvider>
                 </Hydrate>
@@ -59,7 +60,7 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
         {/* </GlobalEventsContext.Provider> */}
         
       </NextAuthProvider>
-    </ToastProvider>
+    {/* </ToastProvider> */}
     </StrictMode>
   );
 };

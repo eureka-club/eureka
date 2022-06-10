@@ -13,8 +13,7 @@ import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
 import Link from 'next/link'
-import { useToasts } from 'react-toast-notifications'
-
+import toast from 'react-hot-toast'
 import styles from './SignInForm.module.css';
 import {useRouter} from 'next/router'
 interface Props {
@@ -23,7 +22,6 @@ interface Props {
 }
 
 const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true }) => {
-  const { addToast } = useToasts()
   const router = useRouter()
   const { t } = useTranslation('signInForm');
   const formRef=useRef<HTMLFormElement>(null)
@@ -56,10 +54,7 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
       const form = formRef.current;
       setLoading(true)
          if(!form!.email.value){
-            addToast(t('EmailRequired'),{
-                  appearance:'warning',
-                  autoDismiss:true,                
-                })
+            toast.error(t('EmailRequired'))
                 setLoading(false)
                 return false;
           }
@@ -67,10 +62,7 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
           const ur = await userRegistered(form.email.value)
           if(ur.isUser){
            if(ur.hasOwnProperty('hasPassword') && !ur.hasPassword){
-                addToast(t('RegisterAlert'),{
-                     appearance:'warning',
-                     autoDismiss:true,                
-                     })
+                toast.error(t('RegisterAlert'))
                     setLoading(false)
            }
            else {
@@ -82,10 +74,7 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
             .then(res=>{
               const r = res as unknown as {error:string}
               if(res && r.error){
-                addToast(t('InvalidSesion'),{
-                  appearance:'warning',
-                  autoDismiss:true,                
-                })
+                toast.error(t('InvalidSesion'))
                 setLoading(false)
               }
               else{
@@ -95,10 +84,7 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
           }
           }
           else{
-            addToast(t('isNotUser'),{
-              appearance:'warning',
-              autoDismiss:true,                
-            })
+            toast.error(t('isNotUser'))
             setLoading(false)
 
           }

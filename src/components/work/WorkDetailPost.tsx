@@ -10,7 +10,6 @@ import UserAvatar from '../common/UserAvatar';
 import globalModals from '../../atoms/globalModals';
 import useWork from '@/src/useWork';
 import styles from './WorkDetailPost.module.css';
-import { useToasts } from 'react-toast-notifications'
 
 // import globalSearchEngineAtom from '../../atoms/searchEngine';
 import WorkDetailCreateEurekaForm from './WorkDetailCreateEurekaForm';
@@ -30,7 +29,6 @@ const WorkDetailPost: FunctionComponent<Props> = ({workId,className, cacheKey })
   const isSessionLoading = status == 'loading';
   
   const { t } = useTranslation('cycleDetail');
-  const { addToast } = useToasts()
 
    const {data:work} = useWork(workId,{
     enabled:!!workId

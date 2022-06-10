@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 import { CycleMosaicItem } from './types/cycle';
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 import { UserMosaicItem } from './types/user';
 
 export type ContextType = {

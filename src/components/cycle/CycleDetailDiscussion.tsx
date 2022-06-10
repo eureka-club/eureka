@@ -30,7 +30,7 @@ import useUsers from '@/src/useUsers'
 // import detailPagesAtom from '../../atoms/detailPages';
 
 import styles from './CycleDetailDiscussion.module.css';
-import { useToasts } from 'react-toast-notifications'
+import toast from 'react-hot-toast';
 
 // import globalSearchEngineAtom from '../../atoms/searchEngine';
 import CycleDetailDiscussionCreateEurekaForm from './CycleDetailDiscussionCreateEurekaForm';
@@ -59,7 +59,6 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
   const isSessionLoading = status == 'loading';
   
   const { t } = useTranslation('cycleDetail');
-  const { addToast } = useToasts()
   // const hyvorId = `${WEBAPP_URL}cycle/${cycle.id}`;
 
   const { data: works } = useWorks({ where:{cycles: { some: { id: cycle?.id } }} }, {
@@ -105,7 +104,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
                 // setGlobalModalsState({ ...globalModalsState, ...{ createPostModalOpened: true } });
           }
           else
-            addToast( t('canNotCreatePostJoinToCycle'), {appearance: 'error', autoDismiss: true,})
+            toast.error( t('canNotCreatePostJoinToCycle'))
 
     }
   };

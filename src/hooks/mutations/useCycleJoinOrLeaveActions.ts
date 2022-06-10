@@ -1,6 +1,6 @@
 import {} from 'react';
 import { useMutation, useQueryClient } from 'react-query';
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 import { CycleMosaicItem } from '@/src/types/cycle';
 import { UserMosaicItem } from '@/src/types/user';
 import useTranslation from 'next-translate/useTranslation';
@@ -13,7 +13,6 @@ type ctx = {
 } | undefined;
 
 const useJoinUserToCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,participants:UserMosaicItem[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
-    const {addToast} = useToasts();
     const {t} = useTranslation('common');
     const {notifier} = useNotificationContext();
     const queryClient = useQueryClient();
@@ -43,7 +42,7 @@ const useJoinUserToCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,part
             }),
           });
           if (!res.ok) {
-            addToast(res.statusText,{appearance:'error',autoDismiss:true})
+            toast.success(res.statusText)
           }
           else if(res.ok){
             setCycleJoinRequests({userId:user.id,cycleId:cycle!.id})
@@ -55,7 +54,7 @@ const useJoinUserToCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,part
               });
             }
             if(cycle?.access == 2)
-                   addToast( t(json.message), {appearance: 'success', autoDismiss: true,})
+                   toast.success( t(json.message))
           }
     
         },
@@ -88,7 +87,6 @@ const useJoinUserToCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,part
 }
 
 const useLeaveUserFromCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,participants:UserMosaicItem[]) => {
-    const {addToast} = useToasts();
     const {t} = useTranslation('common');
     const queryClient = useQueryClient();
     const {notifier} = useNotificationContext();
@@ -118,7 +116,7 @@ const useLeaveUserFromCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,p
           })
         });
         if(!res.ok){
-          addToast(res.statusText,{})        
+          toast.error(res.statusText)        
         }
         else{
           await removeCycleJoinRequest(user.id,cycle!.id)

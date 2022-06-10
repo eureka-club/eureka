@@ -19,13 +19,13 @@ import { useMutation, useQueryClient } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import TagsInput from './controls/TagsInput';
 import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
+import toast from 'react-hot-toast'
 import useTopics from '../../useTopics';
 
 import { CreateWorkClientPayload } from '../../types/work';
 import ImageFileSelect from './controls/ImageFileSelect';
 import globalModalsAtom from '../../atoms/globalModals';
 import styles from './CreateWorkForm.module.css';
-import { useToasts } from 'react-toast-notifications'
 
 interface Props {
   noModal?: boolean;
@@ -50,7 +50,6 @@ const CreateWorkForm: FunctionComponent<Props> = ({noModal = false})=> {
   const [countryOrigin, setCountryOrigin] = useState<string>();
   const [hasCountryOrigin2, setHasCountryOrigin2] = useState<boolean>();
   const [countryOrigin2, setCountryOrigin2] = useState<string>();
-  const { addToast } = useToasts()
   const [workId, setWorkId] = useState<number | undefined>();
   const { data: topics } = useTopics();
   const {
@@ -77,7 +76,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({noModal = false})=> {
       if(res.ok){
          const json = await res.json();
          setWorkId(json.id);
-         addToast( t('WorkSaved'), {appearance: 'success', autoDismiss: true,})
+         toast.success( t('WorkSaved'))
          return json.work;
       }
       return null;

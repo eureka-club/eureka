@@ -42,7 +42,8 @@ import useUser from '@/src/useUser';
 import useUsers from '@/src/useUsers'
 import { useNotificationContext } from '@/src/useNotificationProvider';
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
-import { useToasts } from 'react-toast-notifications'
+import toast from 'react-hot-toast'
+import Toast from '../common/Toast';
 
 interface Props {
   noModal?: boolean;
@@ -73,7 +74,6 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
   const editorRef = useRef<any>(null);
   const {data:session} = useSession();
   const [userId, setUserId] = useState<number>();
-  const { addToast } = useToasts();
   const [workId, setWorkId] = useState<string>('');
   const [isPublic, setIsPublic] = useState<boolean>(true);
   //const [photo, setPhoto] = useState<File>();
@@ -196,7 +196,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
             data:{message},
             toUsers: user?.followedBy.map(u=>u.id)
           })
-         addToast( t('postCreated'), {appearance: 'success', autoDismiss: true,})
+         toast.success( t('postCreated'))
         return json.post;
       }
       //TODO toast with error to the user
@@ -289,13 +289,13 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
    const formValidation = (payload:any) => {
   
    if (!payload.title.length) {
-      addToast( t('NotTitle') , {appearance: 'error', autoDismiss: true,})
+      toast.error( t('NotTitle'))
       return false;
     }else if (!imageFile) {
-      addToast( t('requiredEurekaImageError') , {appearance: 'error', autoDismiss: true,})
+      toast.error( t('requiredEurekaImageError'))
       return false;
     }else if (!payload.contentText.length) {
-      addToast( t('NotContentText') , {appearance: 'error', autoDismiss: true,})
+      toast.error( t('NotContentText'))
       return false;
     }
     return true;
@@ -305,7 +305,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
     ev.preventDefault();
 
    if (!selectedWork && !selectedCycle) {
-       addToast( t('requiredDiscussionItemError') , {appearance: 'error', autoDismiss: true,})
+       toast.error( t('requiredDiscussionItemError'))
        return;
    }
 

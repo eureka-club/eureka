@@ -5,7 +5,7 @@ import { Container, Form, Button } from 'react-bootstrap';
 import {image64toCanvasRef,getCroppedImg} from '@/src/lib/utils'
 import useTranslation from 'next-translate/useTranslation';
 import { BsX} from 'react-icons/bs';
-import { useToasts } from 'react-toast-notifications'
+import toast from 'react-hot-toast'
 interface Props{
   onGenerateCrop: (file:File) => void;
   onClose: () => void;
@@ -20,7 +20,6 @@ const CropImageFileSelect: React.FC<Props> = ({onGenerateCrop,onClose,cropShape}
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>();
   const [croppedImage, setCroppedImage] = useState<Area>();
   const { t } = useTranslation('common');
-  const { addToast } = useToasts()
   
   const onCropComplete = async (croppedArea: Area, croppedAreaPixels: Area) => {
          setCroppedAreaPixels(croppedAreaPixels);
@@ -33,7 +32,7 @@ const CropImageFileSelect: React.FC<Props> = ({onGenerateCrop,onClose,cropShape}
     const processSelect = async () => {
      const size = formatBytes(file!.size);
        if(size[1] === 'KB' && size[0] > 500 ){
-          addToast( t('selectedCropNotInvalid') +` ${size[0]}` + ` ${size[1]}`  , {appearance: 'error', autoDismiss: true,})
+          toast.error( t('selectedCropNotInvalid') +` ${size[0]}` + ` ${size[1]}`)
           setFile(undefined);
       }
       else     
@@ -56,7 +55,7 @@ const onFileChange = async  (e:React.ChangeEvent<HTMLInputElement>)  => {
       const file = files[0];
       const size = formatBytes(files[0].size);
       if(size[1] === 'MB' && size[0] > 2 ){
-          addToast( t('canNotUploadPhoto') +` ${size[0]}` + ` ${size[1]}`  , {appearance: 'error', autoDismiss: true,})
+          toast.error( t('canNotUploadPhoto') +` ${size[0]}` + ` ${size[1]}`)
           e.currentTarget.value = '';
       }
       else{
