@@ -11,7 +11,7 @@ import { useAtom } from 'jotai';
 import { Cycle, Work } from '@prisma/client';
 import useTranslation from 'next-translate/useTranslation';
 import { /* useInfiniteQuery, */ useQuery, useQueryClient } from 'react-query';
-import { FunctionComponent /* , ChangeEvent */, useState, useEffect } from 'react';
+import { FunctionComponent /* , ChangeEvent */, useState, memo } from 'react';
 import { Button, Row, Col } from 'react-bootstrap';
 import router from 'next/router';
 import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
@@ -28,6 +28,7 @@ import { WorkMosaicItem /* , WorkWithImages */ } from '../types/work';
 import { CycleMosaicItem /* , CycleWithImages */ } from '../types/cycle';
 import { PostMosaicItem /* , CycleWithImages */ } from '../types/post';
 import { CycleContext } from '../useCycleContext';
+import { GetAllByResonse } from '@/src/types';
 
 type Props = {
   // page: number;
@@ -36,50 +37,11 @@ type Props = {
   topic: string;
   topicLabel?: string;
   className?: string;
+  apiResponse: GetAllByResonse;
   
 };
 
-const renderMosaicItem = (
-  item: MosaicItem,
-  postsParent?: CycleMosaicItem | WorkMosaicItem,
-  topic = '',
-  page = '',
-  showSocialInteraction = true,
-) => {
-  if (isCycleMosaicItem(item)) {
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    return (
-      <CycleContext.Provider key={`cycle-${v4()}`} value={{ cycle: item as CycleMosaicItem }}>
-        <MosaicItemCycle
-          cycleId={item.id}
-          detailed
-          showShare={false}
-          showButtonLabels={false}
-          cacheKey={['CYCLE', `${item.id}`]}
-          showSocialInteraction={showSocialInteraction}
-        />
-      </CycleContext.Provider>
-    );
-  }
-  if (isPostMosaicItem(item) || item.type === 'post') {
-    return <MosaicItemPost cacheKey={['POST', `${item.id}`]} key={`post-${v4()}`} postId={item.id} />;
-  }
-  if (isWorkMosaicItem(item)) {
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    return (
-      <MosaicItemWork
-        showSocialInteraction
-        showShare={false}
-        showButtonLabels={false}
-        key={`work-${v4()}`}
-        workId={item.id}
-        cacheKey={['WORK', `${item.id}`]}
-      />
-    );
-  }
 
-  return '';
-};
 
 interface ItemType {
   data: [];
@@ -89,7 +51,7 @@ interface ItemType {
   delay?: number;
 }
 
-const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) => {
+const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, className }) => {
   const { t } = useTranslation('topics');
   const [page, setPage] = useState(0);
   const [items, setItems] = useState<ItemType>();
@@ -104,53 +66,96 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
   const [extraCyclesRequired, setExtraCyclesRequired] = useState(0);
   const [extraWorksRequired, setExtraWorksRequired] = useState(0);
   const [totalWorks, setTotalWorks] = useState(-1);
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
-  const fetchItems = async (pageParam: number) => {
-    const url = `/api/getAllBy?topic=${topic}&cursor=${pageParam}
-    &extraCyclesRequired=${extraCyclesRequired || 0}
-    &extraWorksRequired=${extraWorksRequired || 0}
-    &totalWorks=${totalWorks}`;
-    const q = await fetch(url);
-    const res = await q.json();
-    return res;
-  };
-  const { isLoading /* , isError, error, isFetching */, data, isPreviousData } = useQuery(
-    ['ITEMS', `${topic}${page}`],
-    () => fetchItems(page),
-    { keepPreviousData: true },
-  );
 
-  useEffect(() => {
-    if (data) {
-      setGlobalSearchEngineState({
-        ...globalSearchEngineState,
-        cacheKey: undefined,
-      });
-      if(data.data){
-        data.data.forEach((i:(CycleMosaicItem|WorkMosaicItem))=>{
-          if(isCycleMosaicItem(i))
-            queryClient.setQueryData(['CYCLE',`${i.id}`],i as CycleMosaicItem)
-          else if(isWorkMosaicItem(i))
-            queryClient.setQueryData(['WORK',`${i.id}`],i as WorkMosaicItem)
-        })
-        setItems(data);
-        if (data.extraCyclesRequired) setExtraCyclesRequired(data.extraCyclesRequired);
-        if (data.extraWorksRequired) setExtraWorksRequired(data.extraWorksRequired);
-        setTotalWorks(data.totalWorks);
-      }
+  const renderMosaicItem = (
+    item: MosaicItem,
+    postsParent?: CycleMosaicItem | WorkMosaicItem,
+    topic = '',
+    page = '',
+    showSocialInteraction = true,
+  ) => {
+    if (isCycleMosaicItem(item)) {
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      return (
+        <CycleContext.Provider key={`cycle-${v4()}`} value={{ cycle: item as CycleMosaicItem }}>
+          <MosaicItemCycle
+            cycleId={item.id}
+            detailed
+            showShare={false}
+            showButtonLabels={false}
+            cacheKey={['CYCLE', `${item.id}`]}
+            showSocialInteraction={showSocialInteraction}
+          />
+        </CycleContext.Provider>
+      );
     }
-  }, [data, page]);
+    if (isPostMosaicItem(item) || item.type === 'post') {
+      return <MosaicItemPost cacheKey={['POST', `${item.id}`]} key={`post-${v4()}`} postId={item.id} />;
+    }
+    if (isWorkMosaicItem(item)) {
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      return (
+        <MosaicItemWork
+          showSocialInteraction
+          showShare={false}
+          showButtonLabels={false}
+          key={`work-${v4()}`}
+          workId={item.id}
+          cacheKey={['WORK', `${item.id}`]}
+        />
+      );
+    }
+  
+    return '';
+  };
+
+  // const fetchItems = async (pageParam: number) => {
+  //   const url = `/api/getAllBy?topic=${topic}&cursor=${pageParam}
+  //   &extraCyclesRequired=${extraCyclesRequired || 0}
+  //   &extraWorksRequired=${extraWorksRequired || 0}
+  //   &totalWorks=${totalWorks}`;
+  //   const q = await fetch(url);
+  //   const res = await q.json();
+  //   return res;
+  // };
+  // const { isLoading /* , isError, error, isFetching */, data, isPreviousData } = useQuery(
+  //   ['ITEMS', `${topic}${page}`],
+  //   () => fetchItems(page),
+  //   { keepPreviousData: true },
+  // );
+
+  // useEffect(() => {
+  //   if (data) {
+  //     setGlobalSearchEngineState({
+  //       ...globalSearchEngineState,
+  //       cacheKey: undefined,
+  //     });
+  //     if(data.data){
+  //       data.data.forEach((i:(CycleMosaicItem|WorkMosaicItem))=>{
+  //         if(isCycleMosaicItem(i))
+  //           queryClient.setQueryData(['CYCLE',`${i.id}`],i as CycleMosaicItem)
+  //         else if(isWorkMosaicItem(i))
+  //           queryClient.setQueryData(['WORK',`${i.id}`],i as WorkMosaicItem)
+  //       })
+  //       setItems(data);
+  //       if (data.extraCyclesRequired) setExtraCyclesRequired(data.extraCyclesRequired);
+  //       if (data.extraWorksRequired) setExtraWorksRequired(data.extraWorksRequired);
+  //       setTotalWorks(data.totalWorks);
+  //     }
+  //   }
+  // }, [data, page]);
 
   const buildMosaics = () => {
     const result: JSX.Element[] = [];
-    if (items) {
+    if (apiResponse && apiResponse.data) {
       // data.pages.forEach((page, idx) => {
-      const mosaics = items.data.map((i: CycleMosaicItem | WorkMosaicItem) => (
-        <div key={`${v4()}`} className="mx-2">
-          {renderMosaicItem(i,undefined, topic, page.toString())}
-        </div>
-      ));
+      const mosaics = apiResponse.data.map((i: CycleMosaicItem | WorkMosaicItem, idx:number) => {
+        return <div key={`${v4()}`} className="mx-2">
+            {renderMosaicItem(i,undefined, topic, page.toString())}
+          </div>
+      });
       const res = (
         // <Masonry
         //   // key={`${topic}${item.id}`}
@@ -166,7 +171,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
         // >
         // <> {mosaics}</>
         <div key={v4()} className="d-flex flex-nowrap w-100 justify-content-xl-left">
-          {page !== 0 && (
+          {/* {page !== 0 && (
             <Button
               className={` text-white rounded-circle align-self-center ${styles.leftButton}`}
               onClick={() => {
@@ -178,11 +183,11 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
             >
               <RiArrowLeftSLine />
             </Button>
-          )}
+          )} */}
 
           {mosaics}
           
-          {data.hasMore && (
+          {/* {data.hasMore && (
             <Button
               className={` text-center text-white rounded-circle align-self-center ${styles.rightButton}`}
               onClick={() => {
@@ -194,7 +199,7 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
             >
               <RiArrowRightSLine />
             </Button>
-          )}
+          )} */}
         </div>
         // </Masonry>
       );
@@ -251,9 +256,9 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
   };
 
   return (
-    (!isLoading && items && items.data && items.data.length && (
+    (apiResponse  && (
       <section className={`${className}`}>
-        {items && items.data && items.data.length && (
+        {apiResponse && apiResponse.data && (
           <div className="position-relative">
             <Row>
               <Col xs={8} md={9}>
@@ -280,7 +285,8 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
 
                   </a>
                 </Link>  
- */}<Button variant="link" className="text-decoration-none" onClick={onItemsFound}>
+ */}
+ <Button variant="link" className="text-decoration-none" onClick={onItemsFound}>
    <span
                       className={`cursor-pointer text-primary ${styles.seeAllButton}`}
                     >
@@ -300,4 +306,4 @@ const Carousel: FunctionComponent<Props> = ({ topic, topicLabel, className }) =>
   );
 };
 
-export default Carousel;
+export default memo(Carousel);
