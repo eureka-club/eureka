@@ -68,7 +68,7 @@ const IndexPage: NextPage<Props> = ({groupedByTopics}) => {
           setTopicIdx(idx);
         }
       }
-      if(inView){
+      if(inView){ 
         if(!exist)
           fi()
       }
