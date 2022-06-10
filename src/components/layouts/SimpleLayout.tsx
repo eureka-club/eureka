@@ -6,6 +6,7 @@ import NavbarMobile from '@/components/layouts/NavbarMobile';
 import Header from '@/components/layouts/Header';
 import Navbar from '@/components/layouts/Navbar';
 import HeaderMobile from '@/components/layouts/HeaderMobile';
+import BannerCustomizable from '@/src/components/BannerCustomizable';
 import Footer from '@/components/layouts/Footer';
 
 type Props = {
@@ -13,12 +14,13 @@ type Props = {
   title?: string;
   showHeader?: boolean;
   banner?: JSX.Element | JSX.Element[];
+  showCustomBaner?: boolean;
   showNavBar?:boolean;
   showFooter?:boolean;
   allPageSize?:boolean
 };
 
-const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, banner,showNavBar = true,showFooter=true , allPageSize=false}) => {
+const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, banner,showCustomBaner=false,showNavBar = true,showFooter=true , allPageSize=false}) => {
   const renderBanner = () => {
     if (banner) return <>{banner}</>;
     return ``;
@@ -34,12 +36,13 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
           {showNavBar &&<NavbarMobile />}
         </div>
       </section>
-      <section className={(!showNavBar || allPageSize ) ? 'allPageSection': 'mainSection'}>
+      <section className={(!showNavBar || allPageSize ) ? 'allPageSection': 'mainSection'}>      
         <div className="d-none d-lg-block">{showHeader && <Header show={showHeader} />}</div>
         <div className="d-lg-none">{showHeader && <HeaderMobile show={showHeader} />}</div>
+        <div className="d-none d-lg-block">{showCustomBaner && <BannerCustomizable/>}</div>
         {renderBanner()}
         {(!showNavBar || allPageSize) ? <div className='m-0'>{children}</div>
-        : (showHeader) ?  <Container className='mt-4'>{children}</Container>
+        : (showHeader || showCustomBaner) ?  <Container className='mt-4'>{children}</Container>
         : <Container className='mainContainer'>{children}</Container> }
       </section>
       {showFooter && (<Footer/>)}
