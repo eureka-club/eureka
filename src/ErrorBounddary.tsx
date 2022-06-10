@@ -46,7 +46,7 @@ class ErrorBoundary extends Component<Props,State>{
 		    </div>
 	    </div>
             </SimpleLayout>
-        return this.props.children
+        return <>this.props.children</>
 
     }
 }
