@@ -11,7 +11,7 @@ import Link from 'next/link'
 import styles from './HomeNotSingIn.module.css';
 import SignInForm from '@/src/components/forms/SignInForm';
 import { BsChevronDown} from 'react-icons/bs';
-BsChevronDown
+
 const HomeNotSingIn: FunctionComponent = ({  }) => {
   const { t } = useTranslation('common');
   const router = useRouter();

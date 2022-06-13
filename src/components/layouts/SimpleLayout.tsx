@@ -1,5 +1,5 @@
-import { FunctionComponent, Suspense, lazy} from 'react';
-import { Container, Spinner } from 'react-bootstrap';
+import { FunctionComponent} from 'react';
+import { Container} from 'react-bootstrap';
 import withTitle from '../../HOCs/withTitle';
 
 import NavbarMobile from '@/components/layouts/NavbarMobile';
@@ -27,18 +27,23 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
   };
 
   return (
-    <Suspense fallback={<Spinner animation="grow" />}>
+    <>
       <section>
-        <div className="d-none d-lg-block">
-          {showNavBar && <Navbar />}
-        </div>
-        <div className="d-lg-none">
-          {showNavBar &&<NavbarMobile />}
-        </div>
+        {showNavBar && <>
+          <div className="d-none d-lg-block">
+            <Navbar />
+          </div>
+          <div className="d-lg-none">
+            <NavbarMobile />
+          </div>
+        </>
+        }
       </section>
-      <section className={(!showNavBar || allPageSize ) ? 'allPageSection': 'mainSection'}>      
-        <div className="d-none d-lg-block">{showHeader && <Header show={showHeader} />}</div>
-        <div className="d-lg-none">{showHeader && <HeaderMobile show={showHeader} />}</div>
+      <section className={(!showNavBar || allPageSize ) ? 'allPageSection': 'mainSection'}> 
+        {showHeader && <>
+          <div className="d-none d-lg-block"><Header show={showHeader} /></div>
+          <div className="d-lg-none"><HeaderMobile show={showHeader} /></div>        
+        </>}     
         <div className="d-none d-lg-block">{showCustomBaner && <BannerCustomizable/>}</div>
         {renderBanner()}
         {(!showNavBar || allPageSize) ? <div className='m-0'>{children}</div>
@@ -46,7 +51,7 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
         : <Container className='mainContainer'>{children}</Container> }
       </section>
       {showFooter && (<Footer/>)}
-    </Suspense>    
+    </>    
   );
 };
 

@@ -1,25 +1,18 @@
 import { Provider } from 'jotai';
 import { AppProps } from 'next/app';
 import { SessionProvider as NextAuthProvider } from 'next-auth/react';
-import appWithI18n from 'next-translate/appWithI18n';
-import { StrictMode, FunctionComponent, useState, useEffect } from 'react';
+import { StrictMode, FunctionComponent, useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { Hydrate } from 'react-query/hydration';
 import { Toaster } from 'react-hot-toast';
-// import ToastNew from '../src/components/common/ToastNew';
 
-import i18nConfig from '../i18n';
 import detailPagesAtom from '../src/atoms/detailPages';
 import globalModalsAtom from '../src/atoms/globalModals';
-// import './_app.css';
 import './scss/custom.scss';
 
 import  ErrorBoundary from '@/src/ErrorBounddary';
-// const queryClient = new QueryClient();
-// import { GlobalEventsContext, useGlobalEventsContext } from '@/src/useGlobalEventsContext';
 import { NotificationProvider } from '@/src/useNotificationProvider';
-
 
 const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   

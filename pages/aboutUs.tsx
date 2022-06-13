@@ -5,13 +5,9 @@ import Image from 'next/image';
 import className from 'classnames';
 
 import {
-  TiSocialTwitterCircular,
-  TiSocialFacebookCircular,
-  TiSocialInstagramCircular,
   TiSocialLinkedinCircular,
 } from 'react-icons/ti';
-import { SiUpwork, SiToptal } from 'react-icons/si';
-import { RiMailLine } from 'react-icons/ri';
+import { SiUpwork } from 'react-icons/si';
 import styles from './aboutUs.module.css';
 
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
@@ -45,15 +41,15 @@ const AboutPage: NextPage = () => {
               </h2>
               <h3 className={styles.professionName}>{t('Founder, Director')}</h3>
               <h4 className={styles.positionName}>{t('Researcher and technologist')}</h4>
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('social justice')}
               </Badge>
               <br />
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('intersectional feminism')}
               </Badge>
               <br />
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('disinformation')}
               </Badge>
             </Col>
@@ -78,15 +74,15 @@ const AboutPage: NextPage = () => {
               </h2>
               <h3 className={styles.professionName}>{t('Co-creator from Prosperia')}</h3>
               <h4 className={styles.positionName}>{t('AI and technology expert')}</h4>
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('artificial intelligence')}
               </Badge>
               <br />
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('social policies')}
               </Badge>
               <br />
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('public health')}
               </Badge>
             </Col>
@@ -107,15 +103,15 @@ const AboutPage: NextPage = () => {
               </h2>
               <h3 className={styles.professionName}>{t('Software Engineer')}</h3>
               <h4 className={styles.positionName}>{t('Full-stack expert')}</h4>
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('environment')}
               </Badge>
               <br />
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('good cinema')}
               </Badge>
               <br />
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('music')}
               </Badge>
             </Col>
@@ -136,15 +132,15 @@ const AboutPage: NextPage = () => {
               </h2>
               <h3 className={styles.professionName}>{t('Software Engineer')}</h3>
               <h4 className={styles.positionName}>{t('Front-end expert')}</h4>
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('History')}
               </Badge>
               <br />
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('music')}
               </Badge>
               <br />
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('Nature')}
               </Badge>
             </Col>
@@ -165,15 +161,15 @@ const AboutPage: NextPage = () => {
               </h2>
               <h3 className={styles.professionName}>{t('Communications Officer')}</h3>
               <h4 className={styles.positionName}>{t('Graphic design and social media expert')}</h4>
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('Communications')}
               </Badge>
               <br />
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('Graphic design')}
               </Badge>
               <br />
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('Social Media')}
               </Badge>
             </Col>
@@ -194,15 +190,15 @@ const AboutPage: NextPage = () => {
               </h2>
               <h3 className={styles.professionName}>{t('Advisor')}</h3>
               <h4 className={styles.positionName}>{t('Cinema and documentary expert')}</h4>
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('anthropology')}
               </Badge>
               <br />
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('cultural heritage and memory')}
               </Badge>
               <br />
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('education')}
               </Badge>
             </Col>
@@ -252,15 +248,15 @@ const AboutPage: NextPage = () => {
               </h2>
               <h3 className={styles.professionName}>{t('UI-UX Consultant')}</h3>
               <h4 className={styles.positionName}>{t('UX/UI Web & App designer')}</h4>
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('technology')}
               </Badge>
               <br />
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('watersports')}
               </Badge>
               <br />
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('foodie')}
               </Badge>
             </Col>
@@ -281,15 +277,15 @@ const AboutPage: NextPage = () => {
               </h2>
               <h3 className={styles.professionName}>{t('Mastermind')}</h3>
               <h4 className={styles.positionName}>{t('Napping expert')}</h4>
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('birds')}
               </Badge>
               <br />
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('sleeping')}
               </Badge>
               <br />
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('music')}
               </Badge>
             </Col>
@@ -331,30 +327,10 @@ const AboutPage: NextPage = () => {
               src="https://static.wixstatic.com/media/9c73d4_6be410789c004ed2b2281f0b7503645f~mv2.png/v1/fill/w_1046,h_700,al_c,q_90,usm_0.66_1.00_0.01/Logo%20-%20prosperia%20only%20-%20E%20normal%20-%20point.webp"
               alt=""
             />
-          </div>
-
-          {/*<section className={styles.fallowsSection}>
-            <h5 className={styles.fallowsSectionTitle}>{t('Follow us on social media')}:</h5>
-            <a href="https://twitter.com/eleurekaclub">
-              <TiSocialTwitterCircular className={styles.ti} />
-            </a>
-            <a href="https://facebook.com/eleurekaclub">
-              <TiSocialFacebookCircular className={styles.ti} />
-            </a>
-            <a href="https://instagram.com/eleurekaclub">
-              <TiSocialInstagramCircular className={styles.ti} />
-            </a>
-            <a href="https://linkedin.com/company/eleurekaclub">
-              <TiSocialLinkedinCircular className={styles.ti} />
-            </a>
-            <a href="mailto:hola@eureka.club">
-              <RiMailLine className={styles.ti} />
-            </a>
-          </section>*/}
+          </div>         
         </div>
       </div>
     </SimpleLayout>
   );
 };
-
 export default AboutPage;

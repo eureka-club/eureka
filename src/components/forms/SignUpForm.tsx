@@ -29,7 +29,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
       const res = await fetch(`/api/user/isRegistered?identifier=${email}`);
       if(res.ok){
         const {data} = await res.json()
-        return data;
+        return data.hasPassword;
       }
       return false;
     }

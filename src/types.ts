@@ -72,31 +72,19 @@ export const isCommentMosaicItem = (obj: MosaicItem): obj is CommentMosaicItem =
 
 
 // TODO separate type-guards for MosaicItem and SearchResult
-export const isCycleMosaicItem = (obj: MosaicItem | SearchResult): obj is CycleMosaicItem => {
-  return obj && typeof (obj as CycleMosaicItem).title === 'string' &&
-  (obj as CycleMosaicItem).startDate !== undefined &&
-  (obj as CycleMosaicItem).endDate !== undefined;
-}
+export const isCycleMosaicItem = (obj: MosaicItem | SearchResult): obj is CycleMosaicItem => 
+  obj && ('type' in obj && obj.type=='cycle');
+
   
 export const isWorkMosaicItem = (obj: MosaicItem | SearchResult): obj is WorkMosaicItem =>
-  obj && typeof (obj as WorkMosaicItem).title === 'string' &&
-  // typeof (obj as WorkMosaicItem).author === 'string' &&
-  typeof (obj as WorkMosaicItem).type === 'string' &&
-  ['book', 'fiction-book', 'movie', 'documentary'].includes((obj as WorkMosaicItem).type);
+  obj && ('type'in obj) && ['work','book', 'fiction-book', 'movie', 'documentary'].includes((obj as WorkMosaicItem).type);
 
-export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMosaicItem => {
-  return obj && ('type' in obj && obj.type=='post');
-  // return (
-  //   typeof (obj as PostMosaicItem).title === 'string' &&
-  //   typeof (obj as PostMosaicItem).creatorId === 'number' &&
-  //   typeof (obj as PostMosaicItem).works === 'object' &&
-  //   typeof (obj as PostMosaicItem).language === 'string'
-  // );
-};
+export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMosaicItem => 
+  obj && ('type' in obj && obj.type=='post');
+  
 
-export const isUserMosaicItem = (obj: MosaicItem | SearchResult): obj is UserMosaicItem =>{
-  return obj && 'name' in obj && ('image' in obj || 'photos' in obj);
-}
+export const isUserMosaicItem = (obj: MosaicItem | SearchResult): obj is UserMosaicItem =>
+  obj && 'name' in obj && ('image' in obj || 'photos' in obj);
 
 export interface NotifierResponse{
     data: Record<string,any>;

@@ -11,13 +11,10 @@ export default getApiHandler()
     }
     let email = identifier.toString();
     const user = await prisma.user.findFirst({where:{email}}); 
-    if(user && !user.password)
-      res.status(200).json({data:{isUser:true,hasPassword:false}}) 
-    else{
-      const isRegistered = !!(user && user.password);
-      res.status(200).json({data:{isUser:isRegistered}})   
-      }
-    
+    if(user)
+      res.status(200).json({data:{isUser:true,hasPassword:!!user.password}}) 
+    else
+      res.status(200).json({data:{isUser:false,hasPassword:false}});
     
   } catch (exc) {
     console.error(exc); // eslint-disable-line no-console

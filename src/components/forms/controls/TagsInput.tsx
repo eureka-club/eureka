@@ -1,10 +1,9 @@
 import { FunctionComponent, useState, useEffect, ChangeEvent, KeyboardEvent } from 'react';
-// import FormControl from 'react-bootstrap/FormControl';
 import { Form, Badge, Spinner } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
-import searchEngine from '../../../atoms/searchEngine';
+import searchEngine from '@/src/atoms/searchEngine';
 
 export type TagsInputProp = {
   tags: string;
@@ -55,17 +54,6 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
   const handlerBadgeClick = (v: string) => {
     if(loading[v])return;
     setLoading(() => ({[`${v}`]: true}));
-    // const where = encodeURIComponent(
-    //   JSON.stringify({
-    //     OR: [
-    //       { tags: { contains: v } },
-    //       { topics: { contains: v } },
-    //       { contentText: { contains: v } },
-    //       { title: { contains: v } },
-    //     ],
-    //   }),
-    // );
-    // setSearchEngineState((res) => ({ ...res, where, q: v }));
     setSearchEngineState((res)=>({...res,itemsFound:[]}))
     router.push(`/search?q=${v}`);    
   };

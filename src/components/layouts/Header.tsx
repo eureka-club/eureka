@@ -1,5 +1,3 @@
-// import { useRouter } from 'next/router';
-import { useAtom } from 'jotai';
 import { FunctionComponent, useState, useEffect } from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
@@ -8,8 +6,6 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import withTitle from '../../HOCs/withTitle';
 import styles from './Header.module.css';
-// import { Session } from '../../types';
-import globalModalsAtom from '../../atoms/globalModals';
 
 type Props = {
   // children: string | JSX.Element | JSX.Element[];
@@ -22,7 +18,6 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
   const [show, setShow] = useState<boolean>(s);
   const {data:session, status} = useSession();
   const isLoadingSession = status === "loading"
-  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const router = useRouter();
 
   useEffect(() => {
