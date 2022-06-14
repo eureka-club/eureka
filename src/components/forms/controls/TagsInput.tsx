@@ -1,7 +1,7 @@
 import { FunctionComponent, useState, useEffect, ChangeEvent, KeyboardEvent } from 'react';
 import { Form, Badge, Spinner } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
-import { useAtom } from 'jotai';
+import { useAtom } from 'jotai'; 
 import { useRouter } from 'next/router';
 import searchEngine from '@/src/atoms/searchEngine';
 
