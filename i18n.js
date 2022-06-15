@@ -16,6 +16,7 @@ module.exports = {
     '/profile': ['common','profile','countries'],
     '/manifest': ['manifest'],
     '/policy': ['termsAndPolicy'],
+    '/back-office': ['backOffice'],
     'rgx:^/mediatheque/\\[id\\]': ['mediatheque', 'countries'],
     'rgx:^/cycle/\\[id\\]': ['cycleDetail', 'countries'],
     'rgx:^/work/\\[id\\]': ['workDetail', 'countries','cycleDetail'],

@@ -1,7 +1,6 @@
 
 import { FunctionComponent } from 'react';
 import { useRouter } from 'next/router';
-import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import useTranslation from 'next-translate/useTranslation';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -16,8 +15,8 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
 
-  return <SimpleLayout allPageSize={true} title={t('browserTitleWelcome')}> 
-         <div className='pt-2 mt-1 pt-lg-5 mt-lg-5'>
+  return  <>
+            <div className='pt-2 mt-1 pt-lg-5 mt-lg-5'>
                  <section className='d-flex flex-column justify-content-center align-items-center text-center mt-lg-3'>
                         <span className='d-flex flex-column flex-md-row justify-content-center flex-wrap border-bottom border-primary'>
                                 <h1 className='text-secondary me-1'><b>{t('infoText1')}</b></h1>
@@ -99,10 +98,7 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                            <p className={`mt-1 text-center text-secondary ${styles.dontHaveAccounttext}`}>{t('ExploreText')}</p>
                         </Col>
                 </Row> 
-          </div>      
-        </SimpleLayout>
-
-
-
+          </div>  
+        </>    
 }
 export default HomeNotSingIn;

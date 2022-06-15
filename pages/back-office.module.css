@@ -1,0 +1,16 @@
+
+.tabBtn a{
+  border: none;
+  border-bottom: solid 1px var(--eureka-green)!important;
+}
+
+.tabBtn a:hover{
+  background-color: var(--eureka-green);
+}
+
+.Image {
+  width: 18em;
+  height: 16em;
+}
+
+

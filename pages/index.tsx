@@ -49,18 +49,21 @@ const IndexPage: NextPage<Props> = ({groupedByTopics}) => {
         <meta name="twitter:image" content={`${process.env.NEXT_PUBLIC_WEBAPP_URL}/logo.jpg`} ></meta>
         <meta name="twitter:url" content={`${process.env.NEXT_PUBLIC_WEBAPP_URL}`} ></meta>  
     </Head>
-    <SimpleLayout showHeader title={t('browserTitleWelcome')}>
+     {/* ESTO SERIA PAGINA USUARIO NO LOGUEADO  PAG ARQUIMEDES y EXPLORE */}
+     {!session && !isLoadingSession && <SimpleLayout allPageSize={true} title={t('browserTitleWelcome')}> 
+       <Suspense fallback={<Spinner animation="grow" />}>
+            <HomeNotSingIn/>
+        </Suspense>
+
+      </SimpleLayout>
+     }
+    {session && session.user && <SimpleLayout showHeader title={t('browserTitleWelcome')}>
       <Suspense fallback={<Spinner animation="grow" />}>
-        {/* ESTO SERIA PAGINA USUARIO NO LOGUEADO  PAG ARQUIMEDES y EXPLORE */}
-        {!session && !isLoadingSession && 
-          <HomeNotSingIn/>
-        }
-
         {/* ESTO SERIA PAGINA USUARIO LOGUEADO */}
-        {session && session.user && <HomeSingIn groupedByTopics={groupedByTopics} />}
-
+        <HomeSingIn groupedByTopics={groupedByTopics} />
       </Suspense>
     </SimpleLayout>
+    }
   </>
 };
 
