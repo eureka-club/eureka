@@ -1,7 +1,9 @@
 import { GetServerSideProps, NextPage } from 'next';
-//import { getSession } from 'next-auth/react';
-import { useState,useRef,RefObject } from 'react';
-
+import {getSession} from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { useState,FormEvent,useEffect } from 'react';
+import { useMutation, useQueryClient } from 'react-query';
+import { backOfficePayload } from '@/src/types/backoffice';
 import useTranslation from 'next-translate/useTranslation';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import {
@@ -16,14 +18,18 @@ import {
   NavItem,
   NavLink,
   Form,
-  Spinner,
 } from 'react-bootstrap';
 import styles from './back-office.module.css'
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
+import toast from 'react-hot-toast'
 
+interface Props {
+  notFound?: boolean;
+}
 
-const BackOffice: NextPage = ({  }) => {
+const BackOffice: NextPage<Props> = ({notFound}) => {
   const { t } = useTranslation('backOffice');
+  const router = useRouter();
   const [tabKey, setTabKey] = useState<string>();
   const [currentSlider, setCurrentSlider] = useState<number>(0);
   const [showCrop, setShowCrop] = useState<boolean>(false);
@@ -35,7 +41,12 @@ const BackOffice: NextPage = ({  }) => {
   const [image2, setImage2] = useState<string | undefined>();
   const [image3, setImage3] = useState<string | undefined>();
 
-  const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
+  useEffect(() => {
+            if (notFound) 
+                router.push('/');
+            
+    }, [notFound]);
+
 
   const handleSubsectionChange = (key: string | null) => {
   if (key != null) 
@@ -69,6 +80,70 @@ const BackOffice: NextPage = ({  }) => {
     setShowCrop(false);
     setCurrentSlider(0);
   };
+
+  const {
+    mutate: execUpdateBackOffice,
+    error: UpdateBackOfficeError,
+    isError,
+    isLoading: isLoadingBackOffice,
+    isSuccess,
+  } = useMutation(
+    async (payload: backOfficePayload) => {
+      const formData = new FormData();
+      console.log(payload,'payload')
+      Object.entries(payload).forEach(([key,value])=>{
+          formData.append(key,value);
+      });
+      const res = await fetch(`/api/backoffice`, {
+        method: 'PATCH',
+        //headers: { 'Content-Type': 'application/json' },
+        body: formData,
+      });
+      if(res.ok){
+          console.log('res OOKOKOK')  
+
+          /*toast.success( t('ProfileSaved'))
+          router.push(`/mediatheque/${id}`);*/
+         // return res.json();
+      }    
+      else
+      {
+        toast.error(res.statusText)
+        return null;
+      }
+   
+    },
+    {
+      onMutate: async () => {
+      },
+      onSettled: (_user, error, _variables, context) => {
+      },
+    },
+  );
+
+
+  const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
+    ev.preventDefault();
+
+    const form = ev.currentTarget;
+    const payload: backOfficePayload = {
+        SlideImage1: imageFile1,
+        SlideTitle1: form.TitleSlider1.value,
+        SlideText1: form.TextSlider1.value,
+        SlideImage2:imageFile2,
+        SlideTitle2: form.TitleSlider2.value,
+        SlideText2: form.TextSlider2.value,
+        SlideImage3: imageFile3,
+        SlideTitle3: form.TitleSlider3.value,
+        SlideText3: form.TextSlider3.value,
+        CyclesExplorePage:form.CyclesToShow.value,
+        PostExplorePage:form.PostToShow.value
+    };
+    //console.log(payload,"payload")
+    await execUpdateBackOffice(payload);
+  };
+
+  
 
   return (
     <SimpleLayout title={t('Admin Panel')}>
@@ -115,7 +190,7 @@ const BackOffice: NextPage = ({  }) => {
                   <TabPane eventKey="explorer-page">     
                       <h2 className='text-secondary mt-3 mb-3'><b>{t('Banner Settings')}</b></h2>
 
-                    <Form ref={formRef} className={`d-flex flex-column`} >
+                    <Form onSubmit={handleSubmit} className={`d-flex flex-column`} >
 
                        <Row className='col-12 px-4 py-2 d-flex flex-column flex-lg-row justify-content-around'>
                           <Col className='col-12 col-lg-4 mb-4'>
@@ -170,11 +245,11 @@ const BackOffice: NextPage = ({  }) => {
                          <Col className='col-12 col-lg-4 mb-4'>
                               <h5 className='text-secondary mb-2'><b>{t('Slider 3')}</b></h5>
                               
-                               <Form.Group  controlId="TitleSlider2">
+                               <Form.Group  controlId="TitleSlider3">
                                   <Form.Label>{t('Title')}</Form.Label>
                                   <Form.Control className='mb-2' type="text"/>
                               </Form.Group>
-                              <Form.Group  controlId="TextSlider2">
+                              <Form.Group  controlId="TextSlider3">
                                   <Form.Label>{t('Text')}</Form.Label>
                                   <Form.Control className='mb-2' type="text"/>
                               </Form.Group>
@@ -210,7 +285,7 @@ const BackOffice: NextPage = ({  }) => {
                        </Col>       
                        </div>
                        <div className='d-flex justify-content-center justify-content-lg-end'> 
-                       <Button variant="primary" className="text-white mb-5" style={{width:'12em'}}>{t('Save')}</Button>
+                       <Button variant="primary" type="submit" className="text-white mb-5" style={{width:'12em'}}>{t('Save')}</Button>
                        </div>
 
                       </Form>
@@ -223,6 +298,17 @@ const BackOffice: NextPage = ({  }) => {
        </TabContainer>
     </SimpleLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = (await getSession(ctx));
+  if (session == null ) {
+    return { props: { notFound: true } };
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default BackOffice;

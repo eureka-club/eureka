@@ -446,3 +446,21 @@ model NotificationsOnUsers {
 
   @@id([userId, notificationId])
 }
+
+model BackOfficeSettings {
+  id                      Int         @id @unique @default(1)
+  SlideImage1             String? 
+  SlideTitle1             String?     @db.VarChar(200)
+  SlideText1              String?     @db.VarChar(200)
+  SlideImage2             String?
+  SlideTitle2             String?     @db.VarChar(200)
+  SlideText2              String?     @db.VarChar(200)
+  SlideImage3             String?
+  SlideTitle3             String?     @db.VarChar(200)
+  SlideText3              String?     @db.VarChar(200)
+  CyclesExplorePage       String?     @db.VarChar(60)
+  PostExplorePage         String?     @db.VarChar(60)
+  
+  @@map("backOfficeSettings")
+  
+}
