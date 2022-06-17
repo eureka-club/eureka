@@ -627,7 +627,7 @@ UserCustomData.forEach((c) => {
   console.log('DONE!');
 }
  
-if(false){
+if(true){
   console.log('running main')
   main()
     .catch((e) => {

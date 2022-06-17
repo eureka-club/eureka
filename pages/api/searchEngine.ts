@@ -13,31 +13,122 @@ import { findAll as faw } from '@/src/facades/work';
 export default getApiHandler()
 .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
   try {
-    const {q} = req.query;
-    const query = q.toString()
-    const responseWork =  await faw({where: {
-      OR: [{ title: { contains: query } }, { contentText: { contains: query } }, { author: { contains: query } }],
-    }}) as WorkMosaicItem[];
-    const responseCycle = await fac({where: {
+    const {q} = req.query;debugger;
+    const query = q.toString();
+    const terms = query.split(" ");
+
+    const worksWhere={
+          OR:[
+            {
+              AND:terms.map(t=>(
+                { 
+                  title: { contains: t } 
+                }
+              ))
+  
+            },
+            {
+              AND:terms.map(t=>(
+                { 
+                  contentText: { contains: t } 
+                }
+              ))
+  
+            },
+            {
+              AND:terms.map(t=>(
+                { 
+                   author: { contains: t } 
+                }
+              ))
+            }
+          ]
+    };
+
+    const responseWork =  await faw({where: worksWhere}) as WorkMosaicItem[];
+
+    const cyclesWhere={
       AND:[{ access:{not:3}}],
-      OR: [{title: { contains: query } }, { contentText: { contains: query } }, { tags: { contains: query } }],
-    }}) as CycleMosaicItem[];
-    const responsePost = await fap({where: {
-      AND:[{
+
+      OR:[
+        {
+          AND:terms.map(t=>(
+            { 
+              title: { contains: t } 
+            }
+          ))
+
+        },
+        {
+          AND:terms.map(t=>(
+            { 
+              contentText: { contains: t } 
+            }
+          ))
+
+        },
+        {
+          AND:terms.map(t=>(
+            { 
+               tags: { contains: t } 
+            }
+          ))
+        },
+        {
+          AND:terms.map(t=>(
+            { 
+               topics: { contains: t } 
+            }
+          ))
+        }
+      ]
+    };
+
+    const responseCycle = await fac({where: cyclesWhere}) as CycleMosaicItem[];
+
+    const postsWhere = {
+        AND:[{
         cycles:{
           some:{
             access:{not:3}
           }
         }
       }],
-      OR: [{ title: { contains: query } }, { contentText: { contains: query } }, { creator: { name:{contains: query} } }],
-    }}) as PostMosaicItem[];
+      OR:[
+        {
+          AND:terms.map(t=>(
+            { 
+              title: { contains: t } 
+            }
+          ))
+
+        },
+        {
+          AND:terms.map(t=>(
+            { 
+              contentText: { contains: t } 
+            }
+          ))
+
+        },
+        {
+          AND:terms.map(t=>(
+            { 
+              creator: { name:{contains: t}}
+            }
+          ))
+
+        },
+      ]
+    }
+
+    const responsePost = await fap({where:postsWhere}) as PostMosaicItem[];
     responseCycle.forEach(c=>{c.type="cycle"})
     responsePost.forEach(p=>{p.type="post"})
     const data: SearchResult[] = [
-      ...responseCycle,//.map(r=>({...r,type:'cycle'})),
+      ...responseCycle,
       ...responseWork,
-      ...responsePost,//.map(r=>({...r,type:'post'})),
+      ...responsePost,
 
     ].sort((f, s) => {
       const fCD = dayjs(f.createdAt);
