@@ -44,8 +44,8 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
   const userRegistered = async (email:string)=>{
     const res = await fetch(`/api/user/isRegistered?identifier=${email}`);
     if(res.ok){
-      const {data} = await res.json()
-      return data;
+      const {data:{hasPassword}} = await res.json()
+      return hasPassword;
     }
     return false;
   }
