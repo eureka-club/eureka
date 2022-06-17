@@ -5,7 +5,7 @@ import getApiHandler from '@/src/lib/getApiHandler';
 export default getApiHandler()
 .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
   try {
-    const { identifier} = req.query;
+    const { identifier} = req.query; 
     if(!identifier){
       res.status(404).json({error:'email is required'})
     }
