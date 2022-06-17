@@ -83,9 +83,42 @@ export default getApiHandler()
       
       let data = null;
       if (typeof q === 'string') {
-        where = {
-          OR: [{ title: { contains: q } },{topics:{contains:q}},{tags:{contains:q}}, { contentText: { contains: q } }, { tags: { contains: q } }],
+        const terms = q.split(" ");
+        const cyclesWhere={
+          OR:[
+            {
+              AND:terms.map(t=>(
+                { 
+                  title: { contains: t } 
+                }
+              ))
+  
+            },
+            {
+              AND:terms.map(t=>(
+                { 
+                  contentText: { contains: t } 
+                }
+              ))
+  
+            },
+            {
+              AND:terms.map(t=>(
+                { 
+                   tags: { contains: t } 
+                }
+              ))
+            },
+            {
+              AND:terms.map(t=>(
+                { 
+                   topics: { contains: t } 
+                }
+              ))
+            }
+          ]
         };
+        where = cyclesWhere;
         data = await findAll({take,where,skip,cursor});
       } 
       else{

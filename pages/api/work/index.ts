@@ -57,15 +57,42 @@ export default getApiHandler()
       const skip = s ? parseInt(s.toString()) : undefined;
       const cursor = c ? JSON.parse(decodeURIComponent(c.toString())) : undefined;
 
+      debugger;
       let data = null;
       if (typeof q === 'string') {
+        const terms = q.split(" ");
+        const worksWhere={
+          OR:[
+            {
+              AND:terms.map(t=>(
+                { 
+                  title: { contains: t } 
+                }
+              ))
+  
+            },
+            {
+              AND:terms.map(t=>(
+                { 
+                  contentText: { contains: t } 
+                }
+              ))
+  
+            },
+            {
+              AND:terms.map(t=>(
+                { 
+                   author: { contains: t } 
+                }
+              ))
+            }
+          ]
+        };
         data = await findAll({
           take,
           skip,
           cursor,
-          where: {
-            OR: [{ title: { contains: q } },{topics:{contains:q}},{tags:{contains:q}}, { contentText: { contains: q } }, { author: { contains: q } }],
-          }
+          where: worksWhere
         });
       } else if (where) {
         data = await findAll({
