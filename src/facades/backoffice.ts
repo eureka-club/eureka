@@ -1,4 +1,4 @@
-import { Prisma, User } from '@prisma/client';
+import { Prisma} from '@prisma/client';
 import { backOfficeData } from '@/src/types/backoffice';
 import {prisma} from '@/src/lib/prisma';
 

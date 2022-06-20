@@ -84,7 +84,7 @@ export const storeUpload = async (file: FileUpload): Promise<StoredFileUpload> =
   }
 };
 
-export const storeUploadUserPhoto = async (file: FileUpload): Promise<StoredFileUpload> => {
+export const storeUploadPhoto = async (file: FileUpload,dir:string): Promise<StoredFileUpload> => {
   const fileHash = getFileHash(file.path);
   const fileStorePath = getFileStorePath(file, fileHash);
 
@@ -94,7 +94,7 @@ export const storeUploadUserPhoto = async (file: FileUpload): Promise<StoredFile
         `https://${AZURE_STORAGE_ACCOUNT_NAME}.blob.core.windows.net`,
         newPipeline(new StorageSharedKeyCredential(AZURE_STORAGE_ACCOUNT_NAME!, AZURE_STORAGE_ACCOUNT_ACCESS_KEY!)),
       );
-      const containerPath = path.join(NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME!,'users-photos');
+      const containerPath = path.join(NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME!,dir);
       const containerClient = blobServiceClient.getContainerClient(containerPath);
       const blockBlobClient = containerClient.getBlockBlobClient(fileStorePath);
 

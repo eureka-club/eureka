@@ -8,7 +8,7 @@ import { create } from '@/src/facades/notification';
 
 import getApiHandler from '@/src/lib/getApiHandler';
 import {prisma} from '@/src/lib/prisma';
-import {storeDeleteFile, storeUploadUserPhoto} from '@/src/facades/fileUpload'
+import {storeDeleteFile, storeUploadPhoto} from '@/src/facades/fileUpload'
 import { UserMosaicItem } from '@/src/types/user';
 import { Notification } from '@prisma/client';
 
@@ -92,7 +92,7 @@ export default getApiHandler()
             console.error('Removing user photo has failed')
           }
         }
-        const coverImageUploadData = await storeUploadUserPhoto(files.photo[0]);
+        const coverImageUploadData = await storeUploadPhoto(files.photo[0],'users-photos');
         const existingLocalImage = await prisma.localImage.findFirst({
           where: { contentHash: coverImageUploadData.contentHash },
         });
