@@ -31,7 +31,7 @@
   margin: 0 auto;
   text-align: center;
   height: 3rem;
-  width: 80%;
+  width: 82%;
 }
 .gmailLogo {
    width: 1.5rem;
@@ -70,7 +70,7 @@
 
 }
 .loginForm{
-  width: 80%;
+  width: 87%;
 }
 
 .forgotPassText{
@@ -85,7 +85,7 @@
 
 .registerNotice{
   text-align: center;
-  font-size: 0.65rem;
+  font-size: 0.58rem;
 }
 
 @media screen and (max-width: 1024px) {

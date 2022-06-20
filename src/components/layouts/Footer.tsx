@@ -17,15 +17,15 @@ const Footer: FunctionComponent = () => {
   const { t } = useTranslation('navbar');
 
   return (
-  <footer className=" text-center m-0" style={{ background: 'var(--eureka-green)'}}>
+  <footer className=" text-center m-0" style={{ background: 'var(--eureka-grey)'}}>
     <div className="container d-flex flex-column-reverse flex-lg-row justify-content-lg-around align-items-lg-center">
       <section className="mb-1 mb-lg-0">
-        <div className="text-center d-flex flex-column flex-lg-row justify-content-around pt-3 text-white">
-              <Link href="/manifest"><a className='text-white me-lg-5 mb-1 mb-lg-none'>{t('Manifest')}</a></Link>
-              <Link href="/about"><a className='text-white me-lg-5 mb-1 mb-lg-none'>{t('About Eureka')}</a></Link>
-              <Link href="/aboutUs"><a className='text-white me-lg-5 mb-1 mb-lg-none'>{t('About Us')}</a></Link>
-              <Link href="/policy"><a className='text-white me-lg-5 mb-1 mb-lg-none'>{t('policyText')}</a></Link>
-          <p>{t('common:contact')} <a className='text-white me-lg-3' href="mailto:hola@eureka.club">hola@eureka.club</a></p>
+        <div className="text-center d-flex flex-column flex-lg-row justify-content-around pt-3 text-secondary">
+              <Link href="/manifest"><a className='text-secondary text-decoration-underline text-blue me-lg-5 mb-1 mb-lg-none'>{t('Manifest')}</a></Link>
+              <Link href="/about"><a className='text-secondary text-decoration-underline me-lg-5 mb-1 mb-lg-none'>{t('About Eureka')}</a></Link>
+              <Link href="/aboutUs"><a className='text-secondary text-decoration-underline me-lg-5 mb-1 mb-lg-none'>{t('About Us')}</a></Link>
+              <Link href="/policy"><a className='text-secondary text-decoration-underline me-lg-5 mb-1 mb-lg-none'>{t('policyText')}</a></Link>
+          <p className='text-decoration-underline'>{t('common:contact')}<a className='text-secondary me-lg-3' href="mailto:hola@eureka.club">hola@eureka.club</a></p>
         </div>
 
       </section>
@@ -55,7 +55,7 @@ const Footer: FunctionComponent = () => {
 
     <div
          className="text-center p-2" style={{ background: 'white' }}>  
-      <a className="text-primary" href="https://www.eureka.club/">  www.eureka.club</a>
+      <a className="text-secondary" href="https://www.eureka.club/">  www.eureka.club</a>
     </div>
   </footer>
   );
