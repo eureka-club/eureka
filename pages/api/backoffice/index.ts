@@ -2,9 +2,9 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { Form } from 'multiparty';
 import { getSession } from 'next-auth/react';
 import { FileUpload, Session } from '@/src/types';
-//import { find, update } from '@/src/facades/user';
 import getApiHandler from '@/src/lib/getApiHandler';
 import {prisma} from '@/src/lib/prisma';
+import { find,create,update } from '@/src/facades/backoffice';
 import {storeDeleteFile, storeUploadUserPhoto} from '@/src/facades/fileUpload'
 
 export const config = {
@@ -27,9 +27,27 @@ export default getApiHandler()
         res.status(500).json({ status: 'Server error' });
         return;
       }
-    
-        console.log(fields)  
-        console.log(files)  
+        console.log(files,'files')  
+      
+        let data:Record<string,any> = Object.entries(fields).reduce((prev, curr)=>{
+              const [k,v] = curr;
+              let val = v[0];
+              if(!['SlideImage1','SlideImage2','SlideImage3'].includes(k))
+                 prev = {...prev, [`${k}`]: val};
+              return prev;
+            },{});    
+
+         console.log(data,'data')  
+
+         const bs = await find({id:1});
+         console.log(bs,'bs');
+         let r;
+         if(!bs){
+           r = await create(1, data);
+         }
+          else{
+             r = await update(1, data);
+         }   
       //ver esto
       return res.status(200).json({ status: 'OKOKOKOKOKOK' });
 

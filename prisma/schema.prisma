@@ -137,6 +137,8 @@ model LocalImage {
   posts   Post[]
   works   Work[]
   users   User[]
+  sliderImages  BackOfficeSettings[]
+
 
   @@index([contentHash], name: "local_images_content_hash_index")
 
@@ -449,15 +451,13 @@ model NotificationsOnUsers {
 
 model BackOfficeSettings {
   id                      Int         @id @unique @default(1)
-  SlideImage1             String? 
   SlideTitle1             String?     @db.VarChar(200)
   SlideText1              String?     @db.VarChar(200)
-  SlideImage2             String?
   SlideTitle2             String?     @db.VarChar(200)
   SlideText2              String?     @db.VarChar(200)
-  SlideImage3             String?
   SlideTitle3             String?     @db.VarChar(200)
   SlideText3              String?     @db.VarChar(200)
+  sliderImages            LocalImage[]
   CyclesExplorePage       String?     @db.VarChar(60)
   PostExplorePage         String?     @db.VarChar(60)
   

@@ -205,6 +205,11 @@ const NavBar: FunctionComponent = () => {
                   onClick={() => router.push('/profile')} >
                     {t('Profile')}
                   </Dropdown.Item>
+                  <Dropdown.Item
+                        active={router.asPath.search(/back-office$/g) !== -1}
+                        onClick={() => router.push('/back-office')} >
+                          {t('Admin Panel')}
+                  </Dropdown.Item>
                   <Dropdown.Item onClick={handlerLogout}>
                     {/* <Button > */}
                     {t('logout')}
