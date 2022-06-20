@@ -23,5 +23,5 @@
    "UserRegistered":"E-mail já cadastrado.",
   "emptyFields":"Por favor preencha todos os campos (nome, sobrenome, e-mail e senha)",
   "InvalidMail":"E-mail inválido.",
-  "InvalidPassword":"Inválido. A senha deve ter pelo menos 8 caracteres e deve conter pelo menos um dígito (0-9)."
+  "InvalidPassword":"Inválido. A senha deve ter pelo menos 8 caracteres e pelo menos um dígito (0-9)."
 }

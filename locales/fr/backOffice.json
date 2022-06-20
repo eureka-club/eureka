@@ -1,8 +1,8 @@
 {
-    "Admin Panel":"Panneau d'administration",
-    "Explore Page":"Explore Page",
+    "Admin Panel":"Tableau de bord admin",
+    "Explore Page":"Page Explorer",
     "Export Cycle Participants":"Exporter les participants d'un cycle",
-    "Banner Settings":"Paramètres de la bannière",
+    "Banner Settings":"Paramètres du banner",
     "Slider 1":"Slider 1",
     "Slider 2":"Slider 2",
     "Slider 3":"Slider 3",
@@ -10,7 +10,7 @@
     "Text":"Texte du Slider",
     "Image":"Photo du Slider",
     "Content Page":"Contenu de la page",
-    "CyclesToShow":"Cycles pour montrer",
-    "PostToShow":"Eurêkas à montrer",
-    "Save":"Save"
+    "CyclesToShow":"Cycles saillants",
+    "PostToShow":"Eurekas saillantes",
+    "Save":"Enregistrer"
 }

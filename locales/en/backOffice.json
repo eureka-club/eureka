@@ -1,7 +1,7 @@
 {
-    "Admin Panel":"Administrator dashboard",
+    "Admin Panel":"Admin Dashboard",
     "Explore Page":"Explore Page",
-    "Export Cycle Participants":"Export cycle participants",
+    "Export Cycle Participants":"Export Cycle Participants",
     "Banner Settings":"Banner Settings",
     "Slider 1":"Slider 1",
     "Slider 2":"Slider 2",
@@ -9,8 +9,8 @@
     "Title":"Slider Title",
     "Text":"Slider Text",
     "Image":"Slider Image",
-    "Content Page":"Content Page",
-    "CyclesToShow":"Cycles to show",
-    "PostToShow":"Eurekas to show",
+    "Content Page":"Page Content",
+    "CyclesToShow":"Featured Cycles",
+    "PostToShow":"Featured Eurekas",
     "Save":"Save"
 }

@@ -25,5 +25,5 @@
   "UserRegistered":"E-mail déjà associé à un compte sur Eureka.",
   "emptyFields":"Merci de compléter tous les champs (prénom, nom, e-mail et mot de passe).",
   "InvalidMail":"E-mail invalide.",
-  "InvalidPassword":"Invalide. Le mot de passe doit comporter au moins 8 caractères et doit contenir au moins un chiffre (0-9)."
+  "InvalidPassword":"Invalide. Le mot de passe doit contenir au moins 8 caractères et au moins un chiffre (0-9)."
 }
