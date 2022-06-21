@@ -28,10 +28,9 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
     const userRegistered = async (email:string)=>{
       const res = await fetch(`/api/user/isRegistered?identifier=${email}`);
       if(res.ok){
-        const {data} = await res.json()
-        return data.hasPassword;
+        return res.json()
       }
-      return false;
+      return null;
     }
 
     const {mutate,isLoading:isMutating} = useMutation(async (props:MutationProps)=>{
@@ -101,6 +100,10 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
             }
           
             const ur = await userRegistered(email)
+            if(!ur){
+              toast.error(t('Error'));
+              return;
+            }
             if(!ur.isUser){
               mutate({
                   identifier:email,

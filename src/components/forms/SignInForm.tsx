@@ -44,10 +44,9 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
   const userRegistered = async (email:string)=>{
     const res = await fetch(`/api/user/isRegistered?identifier=${email}`);
     if(res.ok){
-      const {data:{hasPassword}} = await res.json()
-      return hasPassword;
+      return res.json();
     }
-    return false;
+    return null;
   }
 
   const handleSubmitSignIn = async (e:React.MouseEvent<HTMLButtonElement>)=>{
@@ -59,9 +58,15 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
                 return false;
           }
       if(form){
-          const ur = await userRegistered(form.email.value)
+          const ur = await userRegistered(form.email.value);
+          if(!ur){
+            toast.error('Error');
+            setLoading(false)
+
+            return;
+          }
           if(ur.isUser){
-           if(ur.hasOwnProperty('hasPassword') && !ur.hasPassword){
+           if(!ur.hasPassword){
                 toast.error(t('RegisterAlert'))
                     setLoading(false)
            }
