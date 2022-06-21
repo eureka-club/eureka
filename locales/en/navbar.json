@@ -16,5 +16,6 @@
   "Language": "Language",
   "Account": "Account",
   "Notifications":"Notifications",
-  "policyText":" Privacy Policy"
+  "policyText":" Privacy Policy",
+  "Admin Panel":"Administrator dashboard"
 }

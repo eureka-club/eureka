@@ -18,21 +18,21 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
   return  <>
             <div className='pt-2 mt-1 pt-lg-5 mt-lg-5'>
                  <section className='d-flex flex-column justify-content-center align-items-center text-center mt-lg-3'>
-                        <span className='d-flex flex-column flex-md-row justify-content-center flex-wrap border-bottom border-primary'>
+                        <span className='d-flex flex-column flex-md-row justify-content-center flex-wrap'>
                                 <h1 className='text-secondary me-1'><b>{t('infoText1')}</b></h1>
                                 <h1 className='text-primary me-1'><b>{ t('infoText2')}</b></h1>
                                 <h1 className='text-secondary me-1'><b>{t('infoText3')}</b></h1>
                         </span>
-                        <h5 className='text-secondary mt-1'>{t('infoSubText')}</h5>
+                        <h5 className='text-secondary'>{t('infoSubText')}</h5>
 
                  </section>
                 <Row className='d-flex flex-column-reverse flex-lg-row justify-content-center'>
                         <Col className={`col-12 col-lg-4`}>
-                        <Container className='d-flex justify-content-center'>
-                                <img  className={`ms-0 ms-lg-5 ${styles.arquimedesImage}`} src="/arquimedes-es-en-fr-pt.webp" alt="Eureka" /> 
-                        </Container>
+                        <div className='d-flex justify-content-center justify-content-lg-start'>
+                                <img  className={`${styles.arquimedesImage}`} src="/arquimedes-es-en-fr-pt.webp" alt="Eureka" /> 
+                        </div>
                         </Col>
-                        <Col className={`col-12 col-lg-5`}>
+                        <Col className={`col-12 col-lg-4`}>
                             <div className='d-flex justify-content-center flex-column flex-lg-row  mt-4' >
                             <SignInForm noModal logoImage={false} />
                             </div>
@@ -46,8 +46,8 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
         <div className='d-flex flex-column  m-0'>
                  <Row className='d-flex flex-column flex-lg-row justify-content-center'>
                           <Col className={`${styles.WorkSection} col-12 col-lg-6 p-5 d-flex flex-column justify-content-center aling-items-center`}>
-                              <h1 className='d-flex justify-content-center text-center text-secondary' style={{fontWeight:900}}>{t('WorkSectionText')}</h1>
-                              <h5 className='d-flex justify-content-center text-center text-secondary mt-4' style={{fontStyle:'italic'}}>{t('WorkSectionSubText')}</h5>    
+                              <h1 className='d-flex justify-content-center text-center text-white' style={{fontWeight:900}}>{t('WorkSectionText')}</h1>
+                              <h5 className='d-flex justify-content-center text-center text-white mt-4' style={{fontStyle:'italic'}}>{t('WorkSectionSubText')}</h5>    
                         </Col>
                         <Col className={`p-3 p-lg-5 col-12 col-lg-6 border-top border-primary`}>
                           <Container className='d-flex justify-content-center '>
@@ -62,8 +62,8 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                           </Container>
                         </Col>
                         <Col className={`${styles.CyclesSection} col-12 col-lg-6 p-5 d-flex flex-column justify-content-center aling-items-center`}>
-                              <h1 className='d-flex justify-content-center text-center text-secondary' style={{fontWeight:900}}>{t('CyclesSectionText')}</h1>
-                              <h5 className='d-flex justify-content-center text-center text-secondary mt-4' style={{fontStyle:'italic'}}>{t('CyclesSectionSubText')}</h5>    
+                              <h1 className='d-flex justify-content-center text-center text-white' style={{fontWeight:900}}>{t('CyclesSectionText')}</h1>
+                              <h5 className='d-flex justify-content-center text-center text-white mt-4' style={{fontStyle:'italic'}}>{t('CyclesSectionSubText')}</h5>    
                         </Col>
                 </Row>
                 <Row className='d-flex flex-column flex-lg-row '>

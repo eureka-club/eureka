@@ -110,6 +110,7 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
       <ModalBody className="pt-0">
         <div>
          {logoImage && (<p className={`${styles.loginGreeting}`}>{t('loginGreeting')}</p>)}
+         <div className="py-4 border border-2"  style={{ borderRadius: '1em'}}>
           <Row>
               <button type="button" onClick={handleSignInGoogle} className={`d-flex justify-content-center ${styles.buttonGoogle}`}>
                 <div className={`d-flex justify-content-start justify-content-sm-center aling-items-center flex-row ${styles.gmailLogoAndtext}`}>
@@ -141,12 +142,14 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
                   {t('login')} {loading && <Spinner animation="grow"/>}
                 </Button>
                 </div>
-                 <p className={`mt-3 ${styles.registerNotice}`}>{t('RegisterNotice')}</p>
-                 <p className={`${styles.dontHaveAccounttext}`}>{t('dontHaveAccounttext')} <Link href="/register">
-                 <a className="">{t('Join')}</a></Link></p>
               </Form>
+                 
             </div>
           </Row>
+          </div>
+          <p className={`mt-3 ${styles.registerNotice}`}>{t('RegisterNotice')}</p>
+          <p className={`${styles.dontHaveAccounttext}`}>{t('dontHaveAccounttext')} <Link href="/register">
+          <a className="">{t('Join')}</a></Link></p>
         </div>
       </ModalBody>
     </>

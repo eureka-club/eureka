@@ -1,16 +1,16 @@
 {
-    "Admin Panel":"Panel de administrador",
+    "Admin Panel":"Panel de Admin",
     "Explore Page":"Página Explorar",
-    "Export Cycle Participants":"Exportar Participantes de un ciclo",
-    "Banner Settings":"Configuración del Banner",
+    "Export Cycle Participants":"Exportar participantes de un ciclo",
+    "Banner Settings":"Configuración del banner",
     "Slider 1":"Slider 1",
     "Slider 2":"Slider 2",
     "Slider 3":"Slider 3",
     "Title":"Título Slider",
     "Text":"Texto Slider",
-    "Image":"Foto del Slider",
+    "Image":"Foto Slider",
     "Content Page":"Contenido de la página",
-    "CyclesToShow":"Ciclos a mostrar",
-    "PostToShow":"Eurekas para mostrar",
+    "CyclesToShow":"Ciclos destacados",
+    "PostToShow":"Eurekas destacadas",
     "Save":"Guardar"
 }

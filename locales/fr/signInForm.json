@@ -6,11 +6,11 @@
   "emailFieldLabel": "Connexion avec adresse e-mail",
   "passwordFieldLabel":"Mot de passe",
   "forgotPassText":"Mot de passe oublié?",
-  "dontHaveAccounttext":"Vous n'avez pas encore de compte?",
+  "dontHaveAccounttext":"Pas encore de compte?",
   "Join":"Rejoindre",
-  "RegisterNotice":"Nous avons mis à jour notre système d'inscription. Si vous avez créé votre compte en utilisant votre adresse e-mail avant mai 2022, veuillez Rejoindre au lieu de vous Connecter. Cela vous permettra de définir votre mot de passe. Vous ne perdrez aucune information de votre compte Eureka existant.",
-  "RegisterAlert":"Nous avons mis à jour notre système d'inscription. Rejoignez au lieu de vous Connecter, afin que vous puissiez définir votre mot de passe. Vous ne perdrez aucune information de votre compte Eureka existant.",
-  "InvalidSesion":"Mot de passe erroné ou session invalide",
+  "RegisterNotice":"Nous avons mis à jour notre système d'inscription. Si vous avez créé votre compte en utilisant votre adresse e-mail avant mai 2022, veuillez 'Rejoindre' au lieu de vous 'Connecter'. Cela vous permettra de définir votre mot de passe. Vous ne perdrez aucune information de votre compte Eureka existant.",
+  "RegisterAlert":"Nous avons mis à jour notre système d'inscription. Cliquez 'Rejoindre' au lieu de 'Connecter', afin que de définir votre mot de passe. Vous ne perdrez aucune information de votre compte Eureka existant.",
+  "InvalidSesion":"Mot de passe ou session invalide",
   "isNotUser":"Compte non enregistré",
-  "EmailRequired":"Le champ email est obligatoire"
+  "EmailRequired":"Le champ 'Adresse e-mail' est obligatoire"
 }

@@ -7,10 +7,10 @@
   "passwordFieldLabel":"Password",
   "forgotPassText":"Forgot your password?",
   "dontHaveAccounttext":"Don't have a account yet?",
-  "Join":"Join us",
-  "RegisterNotice":"We have updated our registration system. If you created your account using your email address prior to May 2022, please Join instead of Login. This will allow you to set up your password. You won't lose any information from your existing account.",
+  "Join":"Join",
+  "RegisterNotice":"We have updated our registration system. If you created your account using your email address prior to May 2022, please 'Join' instead of 'Login'. This will allow you to set up your password. You won't lose any information from your existing account.",
   "RegisterAlert":"We updated our registration system. Please Sign Up instead of Login, so you can set up your password. You won't lose any information from your Eureka existing account.",
-  "InvalidSesion":"Wrong password or Invalid sesion",
+  "InvalidSesion":"Invalid password or session",
   "isNotUser":"User not registered",
   "EmailRequired":"The email field is required"
 }
