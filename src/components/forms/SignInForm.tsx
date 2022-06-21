@@ -143,7 +143,7 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
           </Row>
           </div>
           <p className={`mt-3 ${styles.registerNotice}`}>{t('RegisterNotice')}</p>
-          <p className={`${styles.dontHaveAccounttext}`}>{t('dontHaveAccounttext')} <Link href="/register">
+          <p className={`fs-6 ${styles.dontHaveAccounttext}`}>{t('dontHaveAccounttext')} <Link href="/register">
           <a className="">{t('Join')}</a></Link></p>
         </div>
       </ModalBody>

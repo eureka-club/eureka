@@ -20,10 +20,10 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                  <section className='d-flex flex-column justify-content-center align-items-center text-center mt-lg-3'>
                         <span className='d-flex flex-column flex-md-row justify-content-center flex-wrap'>
                                 <h1 className='text-secondary me-1'><b>{t('infoText1')}</b></h1>
-                                <h1 className='text-primary me-1'><b>{ t('infoText2')}</b></h1>
+                                <h1 className='text-primary me-1'><b>{t('infoText2')}</b></h1>
                                 <h1 className='text-secondary me-1'><b>{t('infoText3')}</b></h1>
                         </span>
-                        <h5 className='text-secondary'>{t('infoSubText')}</h5>
+                        <h5 className='text-secondary mt-1 mb-4'>{t('infoSubText')}</h5>
 
                  </section>
                 <Row className='d-flex flex-column-reverse flex-lg-row justify-content-center'>
@@ -38,8 +38,8 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                             </div>
                         </Col>
                 </Row>
-                <section className='d-flex flex-row justify-content-center align-items-baseline mb-3'>
-                        <h5 className='d-flex flex-row  text-primary'>{t('HowWorkText')}</h5><div className={`ms-2 text-primary ${styles.downArrow}`}><BsChevronDown/></div>
+                <section className='d-flex flex-row justify-content-center align-items-baseline mb-0'>
+                        <h6 className='d-flex flex-row  text-primary'>{t('HowWorkText')}</h6><div className={`ms-1 fs-6 text-primary ${styles.downArrow}`}><BsChevronDown/></div>
                  </section>
           </div>   
 
@@ -84,7 +84,7 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
           </div>   
          <div className='m-0 m-lg-5'>
           <Row className='d-flex flex-column flex-lg-row '>
-                        <Col className="d-flex flex-column justify-content-center align-items-center ">
+                        <Col className="d-flex flex-column justify-content-center align-items-center">
                            <Button onClick={()=> window.scrollTo(0, 0)} variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
                                 {t('signInForm:login')} 
                            </Button>
