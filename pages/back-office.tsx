@@ -12,7 +12,7 @@ import {
   TabContainer,
   Row,
   Col,
-  ButtonGroup,
+  Spinner,
   Button,
   Nav,
   NavItem,
@@ -99,19 +99,10 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
         //headers: { 'Content-Type': 'application/json' },
         body: formData,
       });
-      if(res.ok){
-          console.log('res OOKOKOK')  
-
-          /*toast.success( t('ProfileSaved'))
-          router.push(`/mediatheque/${id}`);*/
-         // return res.json();
-      }    
+      if(res.ok)
+         toast.success( t('Banner Settings') + '  Saved')      
       else
-      {
         toast.error(res.statusText)
-        return null;
-      }
-   
     },
     {
       onMutate: async () => {
@@ -285,7 +276,10 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
                        </Col>       
                        </div>
                        <div className='d-flex justify-content-center justify-content-lg-end'> 
-                       <Button variant="primary" type="submit" className="text-white mb-5" style={{width:'12em'}}>{t('Save')}</Button>
+                       <Button variant="primary" type="submit" className="text-white mb-5" style={{width:'12em'}}>{t('Save')}
+                       {isLoadingBackOffice && (
+                       <Spinner animation="grow" variant="info" size="sm" className="ms-1" />)}
+                       </Button>
                        </div>
 
                       </Form>

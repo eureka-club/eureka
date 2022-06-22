@@ -42,49 +42,43 @@ export default getApiHandler()
 
           const ImagesFields = ['SlideImage1','SlideImage2','SlideImage3'];
           let Images = []; 
-            for(let i = 0; i<=ImagesFields.length-1;i++){
-              if(files[ImagesFields[i]] && files[ImagesFields[i]][0]){
-                //console.log(files[ImagesFields[i]][0],'files[Images[i]][0]')
-                if(bs && bs.sliderImages[i]){
-                  //console.log(bs.sliderImages,'sliderImages')
+
+          for(let i = 0; i<=ImagesFields.length-1;i++){
+
+               if(bs && bs.sliderImages[i]){
                    const storedFile = bs.sliderImages[i].storedFile;
                    const resImageRemoving = await storeDeleteFile(storedFile,'backoffice');
                    if(!resImageRemoving){
                        console.error('Removing image has failed')
                    }
                    const resPhotoRemoving = await update(1,{
-                     sliderImages:{deleteMany:{}}//**ESTO HABRA Q MODIFICARLO */
-                    });
-                   if(!resPhotoRemoving){
-                     console.error('Removing user photo has failed')
-                   }
-                }
+                   sliderImages:{deleteMany:{storedFile: storedFile}}
+                   });
+                  if(!resPhotoRemoving)
+                    console.error('Removing sliders photo  has failed')
+              }
 
+              if(files[ImagesFields[i]] && files[ImagesFields[i]][0]){
                 const coverImageUploadData = await storeUploadPhoto(files[ImagesFields[i]][0],'backoffice');
                 Images.push(coverImageUploadData);
               }
-            }
-                
-                /*const existingLocalImage = await prisma.localImage.findFirst({
-                  where: { contentHash: coverImageUploadData.contentHash },
-                });*/
-               console.log(Images,'IMAGES')
-               
-                data = {
-                  ...data,
-                  sliderImages:{
-                     createMany:Images,  //ACACACACACACACACACACA
-                  },
-                }
-         console.log(data,'data')  
+          }
+
+         data = {
+          ...data,
+          sliderImages:{
+          create:Images,  
+           },
+         }
 
          let r;
          if(!bs)
            r = await create(1, data);
-          else
-             r = await update(1, data);          
+         else          
+           r = await update(1, data);          
+          
     
-      return res.status(200).json({ status: 'OKOKOKOKOKOK' });
+      return res.status(200).json({ status: 'ok' });
      }
      catch (exc) {
       console.error(exc); // eslint-disable-line no-console

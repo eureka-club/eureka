@@ -31,7 +31,6 @@ const HomeSingIn: FunctionComponent<Props> = ({ groupedByTopics}) => {
   const { t } = useTranslation('common');
   const [gbt, setGBT] = useState([...Object.entries(groupedByTopics||[])]);
   
-  debugger;
 
   const [topicIdx,setTopicIdx] = useState(gbt.length-1)
   const [ref, inView] = useInView({
