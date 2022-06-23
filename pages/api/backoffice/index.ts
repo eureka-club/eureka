@@ -3,7 +3,6 @@ import { Form } from 'multiparty';
 import { getSession } from 'next-auth/react';
 import { FileUpload, Session } from '@/src/types';
 import getApiHandler from '@/src/lib/getApiHandler';
-import {prisma} from '@/src/lib/prisma';
 import { find,create,update } from '@/src/facades/backoffice';
 import {storeDeleteFile, storeUploadPhoto} from '@/src/facades/fileUpload'
 
@@ -27,7 +26,7 @@ export default getApiHandler()
         res.status(500).json({ status: 'Server error' });
         return;
       }
-        //console.log(files,'files')  
+        console.log(files,'files')  
      try{ 
 
         const bs = await find({id:1});
@@ -87,5 +86,29 @@ export default getApiHandler()
         //prisma.$disconnect();
       }
     });
+  })
+
+ .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
+  const session = (await getSession({ req })) as unknown as Session;
+    if (session == null) {
+      res.status(401).json({ status: 'Unauthorized' });
+      return;
+    }
+
+    try {
+      const backoffice =  await find({id:1});
+      if (!backoffice ) {
+        // res.status(404).end();
+        res.status(200).json({ status: 'OK', backoffice: null });
+        return;
+      }
+      else
+            res.status(200).json({ status: 'ok', backoffice });
+    } catch (exc) {
+      console.error(exc); // eslint-disable-line no-console
+      res.status(500).json({ status: 'server error' });
+    } finally {
+      //prisma.$disconnect();
+    }
   })
  

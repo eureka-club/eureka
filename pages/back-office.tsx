@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useState,FormEvent,useEffect } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { backOfficePayload } from '@/src/types/backoffice';
+import useBackOffice from '@/src/useBackOffice';
 import useTranslation from 'next-translate/useTranslation';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import {
@@ -22,7 +23,8 @@ import {
 import styles from './back-office.module.css'
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
 import toast from 'react-hot-toast'
-
+const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
+const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 interface Props {
   notFound?: boolean;
 }
@@ -33,19 +35,34 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
   const [tabKey, setTabKey] = useState<string>();
   const [currentSlider, setCurrentSlider] = useState<number>(0);
   const [showCrop, setShowCrop] = useState<boolean>(false);
-  
+ 
   const [imageFile1, setImageFile1] = useState<File | null>(null);
   const [imageFile2, setImageFile2] = useState<File | null>(null);
   const [imageFile3, setImageFile3] = useState<File | null>(null);
   const [image1, setImage1] = useState<string | undefined>();
   const [image2, setImage2] = useState<string | undefined>();
   const [image3, setImage3] = useState<string | undefined>();
+  const queryClient = useQueryClient();
+   const {data:bo } = useBackOffice();
+
 
   useEffect(() => {
             if (notFound) 
                 router.push('/');
             
     }, [notFound]);
+
+    useEffect(() => {
+    //console.log(bo,'bo data')
+    if (bo && bo.sliderImages.length) {
+      if(bo.sliderImages[0])
+        setImage1(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${bo.sliderImages[0].storedFile}`);
+      if(bo.sliderImages[1])
+        setImage2(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${bo.sliderImages[1].storedFile}`);
+      if(bo.sliderImages[2])
+        setImage3(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${bo.sliderImages[2].storedFile}`);
+    }
+  }, [bo]);
 
 
   const handleSubsectionChange = (key: string | null) => {
@@ -90,7 +107,7 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
   } = useMutation(
     async (payload: backOfficePayload) => {
       const formData = new FormData();
-      console.log(payload,'payload')
+      //console.log(payload,'payload')
       Object.entries(payload).forEach(([key,value])=>{
           formData.append(key,value);
       });
@@ -106,8 +123,18 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
     },
     {
       onMutate: async () => {
+        const cacheKey = ['BACKOFFICE',"1"];
+        const snapshot = queryClient.getQueryData(cacheKey);
+        return { cacheKey, snapshot };
       },
-      onSettled: (_user, error, _variables, context) => {
+      onSettled: (_backData, error, _variables, context) => {
+        if (context) {
+          const { cacheKey, snapshot } = context;
+          if (error && cacheKey) {
+            queryClient.setQueryData(cacheKey, snapshot);
+          }
+          if (context) queryClient.invalidateQueries(cacheKey);
+        }
       },
     },
   );
@@ -189,11 +216,11 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
 
                               <Form.Group  controlId="TitleSlider1">
                                   <Form.Label>{t('Title')}</Form.Label>
-                                  <Form.Control className='mb-2' type="text"/>
+                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideTitle1 || ""}/>
                               </Form.Group>
                               <Form.Group  controlId="TextSlider1">
                                   <Form.Label>{t('Text')}</Form.Label>
-                                  <Form.Control className='mb-2' type="text"/>
+                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideText1 || ""}/>
                               </Form.Group>
 
                               {(!showCrop && currentSlider != 1) && (<Button data-cy="image-load" variant="primary" className="w-50 text-white mt-2  mb-3" onClick={() => openCrop(1)}>
@@ -213,11 +240,11 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
                               <h5 className='text-secondary mb-2'><b>{t('Slider 2')}</b></h5>
                                <Form.Group  controlId="TitleSlider2">
                                   <Form.Label>{t('Title')}</Form.Label>
-                                  <Form.Control className='mb-2' type="text"/>
+                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideTitle2 || ""}/>
                               </Form.Group>
                               <Form.Group  controlId="TextSlider2">
                                   <Form.Label>{t('Text')}</Form.Label>
-                                  <Form.Control className='mb-2' type="text"/>
+                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideText2 || ""}/>
                               </Form.Group>
 
                               {(!showCrop && currentSlider != 2) && (<Button data-cy="image-load" variant="primary" className="w-50 text-white mt-2 mb-3" onClick={() => openCrop(2)}>
@@ -238,11 +265,11 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
                               
                                <Form.Group  controlId="TitleSlider3">
                                   <Form.Label>{t('Title')}</Form.Label>
-                                  <Form.Control className='mb-2' type="text"/>
+                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideTitle3 || ""}/>
                               </Form.Group>
                               <Form.Group  controlId="TextSlider3">
                                   <Form.Label>{t('Text')}</Form.Label>
-                                  <Form.Control className='mb-2' type="text"/>
+                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideText3 || ""}/>
                               </Form.Group>
 
                               {(!showCrop && currentSlider != 3) && (<Button data-cy="image-load" variant="primary" className="w-50 text-white mt-2 mb-3" onClick={() => openCrop(3)}>
@@ -265,13 +292,13 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
                        <Col className="col-12 col-lg-6 px-2 ">
                               <Form.Group  controlId="CyclesToShow" >
                                   <Form.Label>{t('CyclesToShow')}</Form.Label>
-                                  <Form.Control className='mb-2' type="text"/>
+                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.CyclesExplorePage || ""}/>
                               </Form.Group>
                        </Col>         
                       <Col className="col-12 col-lg-6 px-2">
                               <Form.Group  controlId="PostToShow">
                                   <Form.Label>{t('PostToShow')}</Form.Label>
-                                  <Form.Control className='mb-4' type="text"/>
+                                  <Form.Control className='mb-4' type="text" defaultValue={bo?.PostExplorePage || ""}/>
                               </Form.Group>
                        </Col>       
                        </div>
