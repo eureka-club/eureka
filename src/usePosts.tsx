@@ -24,7 +24,7 @@ export const getPosts = async (
   });
    
   const res = await fetch(url);
-  console.log('fetching post',where)
+
   if (!res.ok) return [];
   const {data} = await res.json();
   return data;
@@ -35,14 +35,14 @@ interface Options {
   enabled?: boolean;
 }
 
-const usePosts = (where?: Prisma.PostFindManyArgs, options?: Options) => {
+const usePosts = (props?: Prisma.PostFindManyArgs, options?: Options) => {
   const { staleTime, enabled } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  let ck = ['POSTS', `${JSON.stringify(where)}`];
+  let ck = ['POSTS', `${JSON.stringify(props)}`];
 
-  return useQuery<PostMosaicItem[]>(ck, () => getPosts(where), {
+  return useQuery<PostMosaicItem[]>(ck, () => getPosts(props), {
     staleTime,
     enabled,
     retry:3

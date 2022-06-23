@@ -1,7 +1,7 @@
+import { FunctionComponent, MouseEvent, useEffect, useState, lazy, Suspense } from 'react';
 import classNames from 'classnames';
 import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
 
 import {
   Nav,
@@ -14,40 +14,35 @@ import {
   NavLink,
   Button,
   ButtonGroup,
+  Spinner,
 } from 'react-bootstrap';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
 import { BiArrowBack } from 'react-icons/bi';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { Session } from '../../types';
-import { PostMosaicItem } from '../../types/post';
-// import { WorkMosaicItem } from '../../types/work';
-// import LocalImageComponent from '../LocalImage';
-import CombinedMosaic from './CombinedMosaic';
-import CyclesMosaic from './CyclesMosaic';
-import PostDetailComponent from '../post/PostDetail';
-import PostsMosaic from './PostsMosaic';
-// import SocialInteraction from '../common/SocialInteraction';
-import UnclampText from '../UnclampText';
+import { PostMosaicItem } from '@/src/types/post';
+import UnclampText from '@/components/UnclampText';
 import WorkSummary from './WorkSummary';
-import detailPagesAtom from '../../atoms/detailPages';
-import globalModalsAtom from '../../atoms/globalModals';
+import detailPagesAtom from '@/src/atoms/detailPages';
+import globalModalsAtom from '@/src/atoms/globalModals';
 import editOnSmallerScreens from '../../atoms/editOnSmallerScreens';
 import styles from './WorkDetail.module.css';
-import TagsInput from '../forms/controls/TagsInput';
+import TagsInput from '@/components/forms/controls/TagsInput';
 import MosaicItem from './MosaicItem';
-import { MosaicContext } from '../../useMosaicContext';
-import { WorkContext } from '../../useWorkContext';
-import EditPostForm from '../forms/EditPostForm';
-import {useQueryClient} from 'react-query'
+import { MosaicContext } from '@/src/useMosaicContext';
+import { WorkContext } from '@/src/useWorkContext';
+import EditPostForm from '@/components/forms/EditPostForm';
 import useWork from '@/src/useWork'
 import useCycles from '@/src/useCycles'
-import usePosts from '@/src/usePosts'
-// import CommentsList from '../common/CommentsList';
+import usePosts,{getPosts} from '@/src/usePosts'
 import ListWindow from '@/components/ListWindow'
-import { CycleMosaicItem } from '@/src/types/cycle';
 import WorkDetailPost from './WorkDetailPost';
 
+import MosaicItemPost from '@/components/post/MosaicItem'
+import { useInView } from 'react-intersection-observer';
+
+const PostDetailComponent = lazy(()=>import('@/components/post/PostDetail')) ;
+ 
 interface Props {
   workId: number;
   post?: PostMosaicItem;
@@ -55,41 +50,61 @@ interface Props {
 
 const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
   const router = useRouter();
-  const queryClient = useQueryClient()
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const { t } = useTranslation('workDetail');
   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
   const {data:session} = useSession();
+  const [ref, inView] = useInView({
+    triggerOnce: false,
+    // rootMargin: '200px 0px',
+    // skip: supportsLazyLoading !== false,
+  });
 
   const {data:work} = useWork(workId,{
     enabled:!!workId
   })
 
-  const workItemsWhere = {
+  const workCyclessWhere = {
     where:{works:{
       some:{
         id:workId
       }
     }}
   }
-  const workPostsWhere = {
-    where:{AND:{
-      works:{
-        some:{
-          id:workId
+  const [workPostsWhere,setWorkPostsWhere] = useState<Record<string,any>>(
+    {
+      take:8,
+      where:{AND:{
+        works:{
+          some:{
+            id:workId
+          }
         }
-      }
-    }}
-  }
-  const {data:cycles} = useCycles(workItemsWhere,{enabled:!!workId})
-  const {data:posts} = usePosts(workPostsWhere,{enabled:!!workId})
-  
-  const [all,setAll] = useState<(CycleMosaicItem|PostMosaicItem)[]>()
-  useEffect(()=>{
-    if(cycles && posts)setAll(()=>[...posts,...cycles])
+      }}
+    }
+  )
+  const {data:cycles} = useCycles(workCyclessWhere,{enabled:!!workId})
+  const {data:dataPosts} = usePosts(workPostsWhere,{enabled:!!workId})//OJO this trigger just once -load the same data that page does
+  const [posts,setPosts] = useState(dataPosts)
 
-  },[posts,cycles])
+  useEffect(()=>{
+    if(dataPosts)
+      setPosts(dataPosts)
+  },[dataPosts])
+
+  useEffect(()=>{
+    if(inView && posts && posts){
+      const loadMore = async ()=>{
+        const {id} = posts.slice(-1)[0];
+        const o = {...workPostsWhere,skip:1,cursor:{id}};
+        const posts_ = [...(posts||[]),...await getPosts(o)];
+        setPosts(posts_);
+      }
+      loadMore();
+    }
+  },[inView]);
+  
 
   let cyclesCount = 0;
   let postsCount = 0;
@@ -98,6 +113,10 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
   
   if(!work)return <></>
   
+  const renderSpinnerForLoadNextCarousel = ()=>{
+    if(posts && posts?.length) return <Spinner animation="grow" />
+            return '';
+  }
 
   const handleSubsectionChange = (key: string | null) => {
     if (key != null) {
@@ -129,6 +148,26 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
     ev.preventDefault();
         setEditPostOnSmallerScreen({ ...editOnSmallerScreens, ...{ value: !editPostOnSmallerScreen.value } });
   };
+
+  const renderPosts = ()=>{
+    if(posts){
+      return <>
+        <WorkDetailPost workId={work.id} className='mb-2' cacheKey={['POSTS',JSON.stringify(workPostsWhere)]}></WorkDetailPost> 
+        {/* <div className='d-none d-md-block'><ListWindow items={posts} cacheKey={['POSTS',JSON.stringify(workPostsWhere)]} itemsByRow={4} /></div>
+        <div className='d-block d-md-none'><ListWindow items={posts} cacheKey={['POSTS',JSON.stringify(workPostsWhere)]} itemsByRow={1} /></div> */}
+        <Row>
+        {posts.map((p)=><Col key={p.id} className="mb-5">
+          <MosaicItemPost  cacheKey={['POST',`${p.id}`]} postId={p.id} />          
+        </Col>
+        )}
+        </Row>
+        <div className="mt-5" ref={ref}>
+          {renderSpinnerForLoadNextCarousel()}
+        </div>
+      </>
+    }
+    return '';
+  }
 
   return (
     <WorkContext.Provider value={{ work, linkToWork: false }}>
@@ -163,7 +202,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
 
      {(!editPostOnSmallerScreen.value) 
       ? <>
-          <>
+          <Suspense fallback={<Spinner animation="grow"/>}>
             {post == null ? (
               <Row className="mb-5 d-flex flex-column flex-md-row">
                 <Col className='col-md-5 col-lg-4 col-xl-3   d-none d-md-block'>
@@ -205,16 +244,16 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
             ) : (
               <>{post && work && <PostDetailComponent postId={post.id} work={work} cacheKey={['POST',`${post.id}`]} />}</>
             )}
-          </>
+          </Suspense>
 
           {post == null && (
             <Row className="mb-5">
               <Col>
                 {detailPagesState.selectedSubsectionWork != null && (
                   <TabContainer
-                    defaultActiveKey={detailPagesState.selectedSubsectionWork}
-                    onSelect={handleSubsectionChange}
-                    transition={false}
+                    defaultActiveKey={'posts'}
+                   // onSelect={handleSubsectionChange}
+                    transition={true}
                   >
                   
                     <style jsx global>
@@ -236,11 +275,11 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
                       <Col>
                       <div className=''>
                         <Nav variant="tabs" className='scrollNav' fill>
-                          <NavItem>
+                          {/* <NavItem>
                             <NavLink eventKey="all">
                               {t('tabHeaderAll')} ({cyclesCount+postsCount})
                             </NavLink>
-                          </NavItem>
+                          </NavItem> */}
                           <NavItem>
                             <NavLink eventKey="posts" data-cy="posts">
                               {t('tabHeaderPosts')} ({postsCount})
@@ -258,24 +297,20 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
                     <Row>
                       <Col>
                         <TabContent>
-                          <TabPane eventKey="all">
-                            {/* {(cyclesCount > 0 || postsCount > 0) && <CombinedMosaic work={work} />} */}
+                          {/* <TabPane eventKey="all">
                             {all && <>
-                            <div className='d-none d-md-block'><ListWindow items={all} cacheKey={['WORK',`${work.id}-ALL`]} itemsByRow={4} /></div>{/* TODO both cycles and posts are in separated cache */}
-                            <div className='d-block d-md-none'><ListWindow items={all} cacheKey={['WORK',`${work.id}-ALL`]} itemsByRow={1} /></div>{/* TODO both cycles and posts are in separated cache */}
+                            <div className='d-none d-md-block'><ListWindow items={all} cacheKey={['WORK',`${work.id}-ALL`]} itemsByRow={4} /></div>
+                            <div className='d-block d-md-none'><ListWindow items={all} cacheKey={['WORK',`${work.id}-ALL`]} itemsByRow={1} /></div>
                             </>}
-                          </TabPane>
-                          <TabPane eventKey="posts">
-                            {posts && <><WorkDetailPost workId={work.id} className='mb-2' cacheKey={['POSTS',JSON.stringify(workPostsWhere)]}></WorkDetailPost> 
-                             <div className='d-none d-md-block'><ListWindow items={posts} cacheKey={['POSTS',JSON.stringify(workPostsWhere)]} itemsByRow={4} /></div>
-                             <div className='d-block d-md-none'><ListWindow items={posts} cacheKey={['POSTS',JSON.stringify(workPostsWhere)]} itemsByRow={1} /></div>
-                            </>}
+                          </TabPane> */}
+                          <TabPane eventKey="posts">{
+                            renderPosts()
+                          }
                           </TabPane>
                           <TabPane eventKey="cycles">
-                            {/* {cyclesCount > 0 && <CyclesMosaic work={work} />} */}
                             {cycles && <>
-                                <div className='d-none d-md-block'><ListWindow items={cycles} cacheKey={['CYCLES',JSON.stringify(workItemsWhere)]} itemsByRow={4} /></div>
-                                <div className='d-block d-md-none'><ListWindow items={cycles} cacheKey={['CYCLES',JSON.stringify(workItemsWhere)]} itemsByRow={1} /></div>
+                                <div className='d-none d-md-block'><ListWindow items={cycles} cacheKey={['CYCLES',JSON.stringify(workCyclessWhere)]} itemsByRow={4} /></div>
+                                <div className='d-block d-md-none'><ListWindow items={cycles} cacheKey={['CYCLES',JSON.stringify(workCyclessWhere)]} itemsByRow={1} /></div>
                                 </> }
                           </TabPane>
                         </TabContent>
@@ -285,9 +320,9 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
                 )}
               </Col>
             </Row>
-          )} 
+          )}
         </> 
-      : <EditPostForm noModal cacheKey={['POSTS',JSON.stringify(workItemsWhere)]} />}
+      : <EditPostForm noModal cacheKey={['POSTS',JSON.stringify(workPostsWhere)]} />}
       </MosaicContext.Provider>
     </WorkContext.Provider>
   );

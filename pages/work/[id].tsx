@@ -14,7 +14,7 @@ import {getCycles} from '@/src/useCycles'
 import {getPosts} from '@/src/usePosts'
 
 const WorkDetailPage: NextPage = (props:any) => {
-
+  
   const router = useRouter();
   const { t } = useTranslation('common');
   const {data:session, status} = useSession();
@@ -79,7 +79,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
     return { notFound: true };
   }
   
-  const workItemsWhere = {
+  const workCyclesWhere = {
     where:{
       works:{
         some:{
@@ -89,16 +89,15 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
     }
   }
   
-  let work = await getWork(id);debugger;
+  let work = await getWork(id);
   let metaTags:Record<string,any>={};
   if(work){
     metaTags = {id:work.id, title:work.title, storedFile: work.localImages[0].storedFile}
-    const workPostsWhere = {where:{AND:{works:{some:{id}}}}}
-    await qc.prefetchQuery(['WORK', `${id}`],()=>work)
-    await qc.prefetchQuery(['CYCLES',JSON.stringify(workItemsWhere)],()=>getCycles(workItemsWhere) )
-    await qc.prefetchQuery(['POSTS',JSON.stringify(workPostsWhere)],()=>getPosts(workPostsWhere) )
+    const workPostsWhere = {take:8,where:{AND:{works:{some:{id}}}}}
+    await qc.prefetchQuery(['WORK', `${id}`],()=>work,{staleTime: 1000 * 60 * 60})
+    await qc.prefetchQuery(['CYCLES',JSON.stringify(workCyclesWhere)],()=>getCycles(workCyclesWhere), {staleTime: 1000 * 60 * 60} )
+    await qc.prefetchQuery(['POSTS',JSON.stringify(workPostsWhere)],()=>getPosts(workPostsWhere),{staleTime: 1000 * 60 * 60} )
   }
-  
   
   return {
     props: {

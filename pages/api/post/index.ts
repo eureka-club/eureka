@@ -7,19 +7,12 @@ import getApiHandler from '@/src/lib/getApiHandler';
 import { storeUpload } from '@/src/facades/fileUpload';
 import { createFromServerFields, findAll } from '@/src/facades/post';
 import { create } from '@/src/facades/notification';
-import {prisma} from '@/src/lib/prisma';
-import { take } from 'lodash';
-import { count } from 'console';
-import { RiTruckLine } from 'react-icons/ri';
-import { GiWhirlwind } from 'react-icons/gi';
 
 export const config = {
   api: {
     bodyParser: false,
   },
 };
-
-
 
 export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
@@ -148,7 +141,7 @@ export default getApiHandler()
       }
       // if(where && !('creatorId' in where)){
       // }
-      
+      debugger;
       if (typeof q === 'string') {
         where = {
           ...where,
