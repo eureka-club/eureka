@@ -110,9 +110,9 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
       <ModalBody className="pt-0">
         <div>
          {logoImage && (<p className={`${styles.loginGreeting}`}>{t('loginGreeting')}</p>)}
-         <div className="py-4 border border-2"  style={{ borderRadius: '1em'}}>
+         <div className="py-4 border border-1"  style={{ borderRadius: '0.5em'}}>
           <Row>
-              <button type="button" onClick={handleSignInGoogle} className={`d-flex justify-content-center ${styles.buttonGoogle}`}>
+              <button type="button" onClick={handleSignInGoogle} className={`d-flex justify-content-center fs-6 ${styles.buttonGoogle}`}>
                 <div className={`d-flex justify-content-start justify-content-sm-center aling-items-center flex-row ${styles.gmailLogoAndtext}`}>
                 <img  className={`${styles.gmailLogo} me-1 me-lg-2`} src="/img/logo-google.png" alt="gmail" /> 
                 {t('loginViaGoogle')}
@@ -124,7 +124,7 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
           </Row>
           <Row>
             <div className="d-flex justify-content-center">
-              <Form ref={formRef} className={`d-flex flex-column ${styles.loginForm}`}>
+              <Form ref={formRef} className={`d-flex flex-column fs-6 ${styles.loginForm}`}>
                 <Form.Group controlId="email">
                   <Form.Label>{t('emailFieldLabel')}</Form.Label>
                   <Form.Control className='' type="email" required />
