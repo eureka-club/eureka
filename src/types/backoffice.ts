@@ -1,15 +1,19 @@
 import { Prisma} from '@prisma/client';
+import { StdioNull } from 'child_process';
 
 export interface backOfficePayload {
-  SlideImage1?: File | null;
   SlideTitle1?: string;
   SlideText1?: string;
-  SlideImage2?: File | null;
+  SlideImage1?: string |null;
+  Image1?: File | null;
   SlideTitle2?: string;
   SlideText2?: string;
-  SlideImage3?: File | null;
+  Image2?: File | null;
+  SlideImage2?:string |null;
   SlideTitle3?: string;
   SlideText3?: string;
+  SlideImage3?: string |null;
+  Image3?: File | null;
   CyclesExplorePage? :string
   PostExplorePage?:string
 }
@@ -19,13 +23,16 @@ type backOfficeModel = {
     id: true,
     SlideTitle1: true,
     SlideText1: true,
+    SlideImage1:true,
     SlideTitle2: true,
     SlideText2: true,
+    SlideImage2:true,
     SlideTitle3: true,
     SlideText3: true,
+    SlideImage3:true,
     CyclesExplorePage: true,
     PostExplorePage: true,
-    sliderImages:{select:{storedFile:true}},
+    sliderImages:{select:{storedFile:true,originalFilename:true}},
   }
 };
 

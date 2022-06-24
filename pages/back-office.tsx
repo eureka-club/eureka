@@ -43,24 +43,33 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
   const [image2, setImage2] = useState<string | undefined>();
   const [image3, setImage3] = useState<string | undefined>();
   const queryClient = useQueryClient();
-   const {data:bo } = useBackOffice();
-
+  const {data:bo } = useBackOffice();
 
   useEffect(() => {
             if (notFound) 
                 router.push('/');
-            
+          
     }, [notFound]);
 
     useEffect(() => {
     //console.log(bo,'bo data')
+    setImage1(undefined);
+    setImage2(undefined);
+    setImage3(undefined);
+
     if (bo && bo.sliderImages.length) {
-      if(bo.sliderImages[0])
-        setImage1(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${bo.sliderImages[0].storedFile}`);
-      if(bo.sliderImages[1])
-        setImage2(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${bo.sliderImages[1].storedFile}`);
-      if(bo.sliderImages[2])
-        setImage3(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${bo.sliderImages[2].storedFile}`);
+      if(bo.SlideImage1 !='null'){
+        let storeFile1 = bo.sliderImages.filter(x=> x.originalFilename == bo.SlideImage1)[0].storedFile;
+        setImage1(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile1}`);
+      }
+      if(bo.SlideImage2 !='null'){
+        let storeFile2 = bo.sliderImages.filter(x=> x.originalFilename == bo.SlideImage2)[0].storedFile;
+        setImage2(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile2}`);
+      }
+       if(bo.SlideImage3 !='null'){
+        let storeFile3 = bo.sliderImages.filter(x=> x.originalFilename == bo.SlideImage3)[0].storedFile;
+        setImage3(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile3}`);
+      }
     }
   }, [bo]);
 
@@ -145,15 +154,18 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
 
     const form = ev.currentTarget;
     const payload: backOfficePayload = {
-        SlideImage1: imageFile1,
         SlideTitle1: form.TitleSlider1.value,
         SlideText1: form.TextSlider1.value,
-        SlideImage2:imageFile2,
+        SlideImage1: (imageFile1) ? imageFile1.name : null ,
+        Image1: imageFile1,
         SlideTitle2: form.TitleSlider2.value,
         SlideText2: form.TextSlider2.value,
-        SlideImage3: imageFile3,
+        SlideImage2: (imageFile2) ? imageFile2.name : null ,
+        Image2: imageFile2,
         SlideTitle3: form.TitleSlider3.value,
         SlideText3: form.TextSlider3.value,
+        SlideImage3: (imageFile3) ? imageFile3.name : null ,
+        Image3: imageFile3,
         CyclesExplorePage:form.CyclesToShow.value,
         PostExplorePage:form.PostToShow.value
     };
@@ -326,6 +338,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (session == null ) {
     return { props: { notFound: true } };
   }
+  if(session?.user.roles && session?.user.roles != 'admin') 
+      return { props: { notFound: true } };
 
   return {
     props: {},
