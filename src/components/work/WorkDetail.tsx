@@ -252,7 +252,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
                 {detailPagesState.selectedSubsectionWork != null && (
                   <TabContainer
                     defaultActiveKey={'posts'}
-                   // onSelect={handleSubsectionChange}
+                    onSelect={handleSubsectionChange}
                     transition={true}
                   >
                   
