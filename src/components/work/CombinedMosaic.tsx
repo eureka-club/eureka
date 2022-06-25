@@ -49,15 +49,22 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
   },{enabled:!!work.id})
 
 
-  const {data:posts} = usePosts({
-    where:{AND:{
+  const {data:dataPosts} = usePosts({
+    where:{
       works:{
         some:{
           id:work.id
         }
       }
-    }}
+    }
   },{enabled:!!work.id})
+  const [posts,setPosts] = useState(dataPosts?.posts);
+
+  useEffect(()=>{
+    if(dataPosts){
+      setPosts(dataPosts.posts)
+    }
+  },[dataPosts])
 
 
   let cyclesCount = 0;

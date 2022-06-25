@@ -1,5 +1,5 @@
 // import { Work } from '@prisma/client';
-import { FunctionComponent } from 'react';
+import { FunctionComponent,useState,useEffect } from 'react';
 // import Spinner from 'react-bootstrap/Spinner';
 // import { useQuery } from 'react-query';
 import { PostMosaicItem } from '../../types/post';
@@ -34,7 +34,14 @@ const PostsMosaic: FunctionComponent<Props> = ({ work }) => {
       }
     }}
   };
-  const {data:posts} = usePosts(workPostsWhere,{enabled:!!work.id})
+  const {data:dataPosts} = usePosts(workPostsWhere,{enabled:!!work.id})
+  const [posts,setPosts] = useState(dataPosts?.posts);
+
+  useEffect(()=>{
+    if(dataPosts){
+      setPosts(dataPosts.posts)
+    }
+  },[dataPosts])
   
 
   return (
