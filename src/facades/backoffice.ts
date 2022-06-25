@@ -14,17 +14,20 @@ export const find = async (props: findProps): Promise<backOfficeData | null> => 
   where: {
     id,
   },
-  select:{
+ select:{
     id: true,
     SlideTitle1: true,
     SlideText1: true,
+    SlideImage1:true,
     SlideTitle2: true,
     SlideText2: true,
+    SlideImage2:true,
     SlideTitle3: true,
     SlideText3: true,
+    SlideImage3:true,
     CyclesExplorePage: true,
     PostExplorePage: true,
-    sliderImages:{select:{storedFile:true}},
+    sliderImages:{select:{storedFile:true,originalFilename:true}},
   }
 })
 

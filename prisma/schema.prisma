@@ -453,10 +453,13 @@ model BackOfficeSettings {
   id                      Int         @id @unique @default(1)
   SlideTitle1             String?     @db.VarChar(200)
   SlideText1              String?     @db.VarChar(200)
+  SlideImage1             String?     @db.VarChar(200)
   SlideTitle2             String?     @db.VarChar(200)
   SlideText2              String?     @db.VarChar(200)
+  SlideImage2             String?     @db.VarChar(200)
   SlideTitle3             String?     @db.VarChar(200)
   SlideText3              String?     @db.VarChar(200)
+  SlideImage3             String?     @db.VarChar(200)
   sliderImages            LocalImage[]
   CyclesExplorePage       String?     @db.VarChar(60)
   PostExplorePage         String?     @db.VarChar(60)
