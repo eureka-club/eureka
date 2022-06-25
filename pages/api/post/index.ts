@@ -91,15 +91,19 @@ export default getApiHandler()
       const take = t ? parseInt(t?.toString()) : undefined;
       const skip = s ? parseInt(s.toString()) : undefined;
       const cursor = c ? JSON.parse(decodeURIComponent(c.toString())) : undefined;
-
+      let total:number|undefined = undefined;
       const session = await getSession({ req });
     
+    debugger;
       let data = null;
       if(session){
         where = {
+          ...where && where,
           AND:{
-            ... where && where.AND,
             OR:[
+              {
+                isPublic:true,
+              },
               {
                 cycles:{
                   some:{
@@ -109,38 +113,32 @@ export default getApiHandler()
                       {participants:{some:{id:session?.user.id}}},  
                     ]
                   }
-                }                  
+                }
               },
-              (where && where.OR)||{},
               {
-                cycles:{none :{}}  
+                cycles:{none:{}}
               }
-            ],
-          },          
-        }
+            ]
+            }
+          }
+        
       }
       else{
         where = {
+          ...where && where,
           AND:{
-            ... where && where.AND,
-            OR:[
-              {
-                cycles:{
-                  some:{
-                    access:1,
-                  }
-                }                  
+            OR:{
+              isPublic:true,
+              cycles:{
+                some:{
+                  access:1,
+                }
               },
-              (where && where.OR)||{},
-              {
-                cycles:{none :{}}  
-              }
-            ],
-          },
+            }
+          }
         }   
       }
-      // if(where && !('creatorId' in where)){
-      // }
+      
       debugger;
       if (typeof q === 'string') {
         where = {
@@ -148,13 +146,22 @@ export default getApiHandler()
           OR: [{ title: { contains: q } },{topics:{contains:q}},{tags:{contains:q}}, { contentText: { contains: q } }, { creator: { name:{contains: q} } }],
           
         }
+        let  res = await prisma?.post.aggregate({where,_count:true})
+        total = res?._count;
         data = await findAll({take,skip,cursor,where});
       } else if (where) {
+        let res = await prisma?.post.aggregate({where,_count:true})
+        total = res?._count;
+
         data = await findAll({take,where,skip,cursor});
       } else if (id) {
         data = await findAll({where:{id: parseInt(id as string, 10)}});
+        total = data.length;
       } else {
+        let  res = await prisma?.post.aggregate({where,_count:true})
         data = await findAll({take,skip,where,cursor});
+        total = res?._count;
+
       }
       
       
@@ -180,7 +187,8 @@ export default getApiHandler()
 
       res.status(200).json({ 
         data, 
-        fetched:data.length
+        fetched:data.length,
+        total,
         //... (take&&page) && {hasNextPage: posts_.length > take * (page+1)}
       });
     } catch (exc) {

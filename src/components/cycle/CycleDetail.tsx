@@ -123,7 +123,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const [where,setWhere] = useState<{filtersWork:number[]}>()
 
   const cyclePostsWhere = {where:{AND:{cycles:{some:{id:+cycleId}}}}}
-  const {data:posts} = usePosts(cyclePostsWhere,{enabled:!!cycleId})
+  const {data:dataPosts} = usePosts(cyclePostsWhere,{enabled:!!cycleId})
+  const [posts,setPosts] = useState(dataPosts?.posts)
 
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -331,7 +332,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           </NavItem>
           <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
             <NavLink eventKey="eurekas">
-              <span className="mb-3">{t('EurekaMoments')} ({posts?.length})</span>
+              <span className="mb-3">{t('EurekaMoments')} ({dataPosts?.total})</span>
             </NavLink>
           </NavItem>
           {/* <NavItem className={`${styles.tabBtn}`}>

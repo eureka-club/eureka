@@ -75,46 +75,50 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
   const [workPostsWhere,setWorkPostsWhere] = useState<Record<string,any>>(
     {
       take:8,
-      where:{AND:{
+      where:{
         works:{
           some:{
             id:workId
           }
         }
-      }}
+      }
     }
   )
   const {data:cycles} = useCycles(workCyclessWhere,{enabled:!!workId})
   const {data:dataPosts} = usePosts(workPostsWhere,{enabled:!!workId})//OJO this trigger just once -load the same data that page does
-  const [posts,setPosts] = useState(dataPosts)
-
+  const [posts,setPosts] = useState(dataPosts?.posts)
+  const [hasMorePosts,setHasMorePosts] = useState(dataPosts?.fetched);
   useEffect(()=>{
-    if(dataPosts)
-      setPosts(dataPosts)
+    if(dataPosts && dataPosts.posts){
+      setHasMorePosts(dataPosts.fetched)
+      setPosts(dataPosts.posts)
+    }
   },[dataPosts])
 
   useEffect(()=>{
-    if(inView && posts && posts){
-      const loadMore = async ()=>{
-        const {id} = posts.slice(-1)[0];
-        const o = {...workPostsWhere,skip:1,cursor:{id}};
-        const posts_ = [...(posts||[]),...await getPosts(o)];
-        setPosts(posts_);
+    if(inView && hasMorePosts){
+      if(posts){
+        const loadMore = async ()=>{
+          const {id} = posts.slice(-1)[0];
+          const o = {...workPostsWhere,skip:1,cursor:{id}};
+          const {posts:pf,fetched} = await getPosts(o)
+          setHasMorePosts(fetched);
+          const posts_ = [...(posts||[]),...pf];
+          setPosts(posts_);
+        }
+        loadMore();
       }
-      loadMore();
     }
   },[inView]);
   
 
   let cyclesCount = 0;
-  let postsCount = 0;
-  if(posts)postsCount = posts.length
   if(cycles)cyclesCount = cycles.length
   
   if(!work)return <></>
   
   const renderSpinnerForLoadNextCarousel = ()=>{
-    if(posts && posts?.length) return <Spinner animation="grow" />
+    if(hasMorePosts) return <Spinner animation="grow" />
             return '';
   }
 
@@ -282,7 +286,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
                           </NavItem> */}
                           <NavItem>
                             <NavLink eventKey="posts" data-cy="posts">
-                              {t('tabHeaderPosts')} ({postsCount})
+                              {t('tabHeaderPosts')} ({dataPosts?.total})
                             </NavLink>
                           </NavItem>
                           <NavItem>
