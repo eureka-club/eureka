@@ -1,17 +1,12 @@
 import { NextPage,GetServerSideProps } from 'next';
 import Head from "next/head";
-import { useSession,getSession } from 'next-auth/react';
 import { useAtom } from 'jotai';
-// import { QueryClient, useQuery } from 'react-query';
-// import { dehydrate } from 'react-query/hydration';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { getSession } from 'next-auth/react';
 import { Spinner, Alert, Button } from 'react-bootstrap';
 
-import { dehydrate, QueryClient, useIsFetching,useQueryClient } from 'react-query';
-// import { CycleMosaicItem } from '../../src/types/cycle';
-// import { Session } from '../../src/types';
+import { dehydrate, QueryClient, useIsFetching } from 'react-query';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '../../src/components/cycle/CycleDetail';
 import Banner from '../../src/components/Banner';
@@ -22,15 +17,8 @@ import {getWorks} from '@/src/useWorks'
 import { CycleContext, useCycleContext } from '../../src/useCycleContext';
 import globalModalsAtom from '../../src/atoms/globalModals';
 import { WEBAPP_URL } from '../../src/constants';
-import {CycleMosaicItem} from '@/src/types/cycle'
-import { UserMosaicItem } from '@/src/types/user';
 import toast from 'react-hot-toast';
 import {useJoinUserToCycleAction} from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
-
-/*interface Props{
-  id:number,
-  metas:any
-}*/
 
 const whereCycleParticipants = (id:number)=>({
   where:{OR:[
@@ -40,7 +28,7 @@ const whereCycleParticipants = (id:number)=>({
 });
 
 const whereCycleWorks = (id:number)=> ({where:{cycles: { some: { id } } }})
-const whereCyclePosts = (id:number)=> ({where:{AND:{ cycles:{ some: { id }}}}})
+const whereCyclePosts = (id:number)=> ({take:8,where:{cycles:{ some: { id }}}})
 
 interface Props{
   id:number;
@@ -63,7 +51,6 @@ const CycleDetailPage: NextPage<Props> = (props) => {
   )
 
   const { t } = useTranslation('common');
-  const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
   const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
@@ -159,7 +146,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
 
   if (cycle)
     return (
-      <CycleContext.Provider value={{ cycle, currentUserIsParticipant, linkToCycle: false }}>
+      <CycleContext.Provider value={{ cycle, currentUserIsParticipant:cycle?.currentUserIsParticipant, linkToCycle: false }}>
        
       <Head>
         <meta property="og:title" content={props.metas?.title||""}/>

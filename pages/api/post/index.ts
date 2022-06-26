@@ -7,6 +7,8 @@ import getApiHandler from '@/src/lib/getApiHandler';
 import { storeUpload } from '@/src/facades/fileUpload';
 import { createFromServerFields, findAll } from '@/src/facades/post';
 import { create } from '@/src/facades/notification';
+import {prisma} from '@/src/lib/prisma'
+import { Prisma } from '@prisma/client';
 
 export const config = {
   api: {
@@ -84,17 +86,12 @@ export default getApiHandler()
     // };
 
     try {
-      
-      const { q = null, where:w, id = null, take:t,skip:s,cursor:c } = req.query;
-
-      let where = w ? JSON.parse(decodeURIComponent(w.toString())) : undefined;
-      const take = t ? parseInt(t?.toString()) : undefined;
-      const skip = s ? parseInt(s.toString()) : undefined;
-      const cursor = c ? JSON.parse(decodeURIComponent(c.toString())) : undefined;
+      const { q = null, props:p } = req.query;
+      const props:Prisma.PostFindManyArgs = JSON.parse(decodeURIComponent(p.toString()));
+      let {where,take,cursor,skip,select} = props;
       let total:number|undefined = undefined;
       const session = await getSession({ req });
     
-    debugger;
       let data = null;
       if(session){
         where = {
@@ -148,18 +145,15 @@ export default getApiHandler()
         }
         let  res = await prisma?.post.aggregate({where,_count:true})
         total = res?._count;
-        data = await findAll({take,skip,cursor,where});
+        data = await findAll({select,take,skip,cursor,where});
       } else if (where) {
         let res = await prisma?.post.aggregate({where,_count:true})
         total = res?._count;
 
-        data = await findAll({take,where,skip,cursor});
-      } else if (id) {
-        data = await findAll({where:{id: parseInt(id as string, 10)}});
-        total = data.length;
+        data = await findAll({select,take,where,skip,cursor});
       } else {
         let  res = await prisma?.post.aggregate({where,_count:true})
-        data = await findAll({take,skip,where,cursor});
+        data = await findAll({select,take,skip,where,cursor});
         total = res?._count;
 
       }

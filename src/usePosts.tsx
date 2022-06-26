@@ -1,7 +1,5 @@
 import { useQuery } from 'react-query';
-// import { useAtom } from 'jotai';
 import { PostMosaicItem } from './types/post';
-// import globalSearchEngineAtom from './atoms/searchEngine';
 import { Prisma } from '@prisma/client';
 import { buildUrl } from 'build-url-ts';
 
@@ -9,17 +7,10 @@ export const getPosts = async (
   props?: Prisma.PostFindManyArgs,
 ): Promise<{posts:PostMosaicItem[],fetched:number,total:number}> => {
 
-  const {where:w,take,skip,cursor:c} = props || {};
-  const where = w ? encodeURIComponent(JSON.stringify(w)) : '';
-  const cursor = c ? encodeURIComponent(JSON.stringify(c)) : '';
-
   const url = buildUrl(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api`, {
     path: 'post',
     queryParams: {
-      where,
-      take,
-      skip,
-      cursor,
+      props:encodeURIComponent(JSON.stringify(props))
     }
   });
    

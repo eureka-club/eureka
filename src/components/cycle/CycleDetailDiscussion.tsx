@@ -1,42 +1,23 @@
-// import HyvorTalk from 'hyvor-talk-react';
 import { useAtom } from 'jotai';
 import { useSession } from 'next-auth/react';
-// import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, FunctionComponent, MouseEvent, useState } from 'react';
 
 import { Button, Col, Row, ButtonGroup, Form } from 'react-bootstrap';
 
-// import Link from 'next/link';
-
-// import { Post, Work } from '@prisma/client';
 import { GiBrain } from 'react-icons/gi';
-import { MdShortText } from 'react-icons/md';
 import { BiBookHeart } from 'react-icons/bi';
-
-// import { useMutation, useQueryClient, useQuery } from 'react-query';
-// import globalModalsAtom from '../../atoms/globalModals';
-
-// import { Session } from '../../types';
-// import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
 import { CycleMosaicItem } from '../../types/cycle';
-// import { WorkMosaicItem } from '../../types/work';
-
-// import HyvorComments from '../common/HyvorComments';
 import UserAvatar from '../common/UserAvatar';
 import globalModals from '../../atoms/globalModals';
 import useWorks from '@/src/useWorks';
 import useUsers from '@/src/useUsers'
-// import detailPagesAtom from '../../atoms/detailPages';
 
 import styles from './CycleDetailDiscussion.module.css';
 import toast from 'react-hot-toast';
-
-// import globalSearchEngineAtom from '../../atoms/searchEngine';
 import CycleDetailDiscussionCreateEurekaForm from './CycleDetailDiscussionCreateEurekaForm';
 import CycleDetailDiscussionSuggestRelatedWork from './CycleDetailDiscussionSuggestRelatedWork';
 import CycleDetailDiscussionCreateCommentForm from './CycleDetailDiscussionCreateCommentForm';
-// import CommentsList from '../common/CommentsList';
 
 interface Props {
   cycle: CycleMosaicItem;
@@ -50,17 +31,10 @@ const whereCycleParticipants = (id:number)=>({
   ], }
 });
 const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cacheKey }) => {
-  // const [items, setItems] = useState<Item[]>();
-  // const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
-  // const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-
-  // const router = useRouter();
   const {data:session, status} = useSession();
   const isSessionLoading = status == 'loading';
   
   const { t } = useTranslation('cycleDetail');
-  // const hyvorId = `${WEBAPP_URL}cycle/${cycle.id}`;
-
   const { data: works } = useWorks({ where:{cycles: { some: { id: cycle?.id } }} }, {
     enabled:!!cycle?.id
   })
@@ -108,20 +82,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
 
     }
   };
-  const handleCreateCommentClick = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-    if (!session) {
-      setGlobalsModalsAtom({
-        ...globalModalsAtom,
-        signInModalOpened: true,
-      });
-    } else {
-      setIsSuggestRelatedWork(false);
-      setIsCreateComment(true);
-      setIsCreateEureka(false);
-      // setGlobalModalsState({ ...globalModalsState, ...{ createPostModalOpened: true } });
-    }
-  };
+  
   const handleCreateRelatedWorkClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
     if (!isSessionLoading && session && session.user.roles === 'admin') {
@@ -179,15 +140,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
                   <GiBrain className="mr-1" />
                   <span className="fs-6">{t('Create an Eureka')}</span>
                 </Button>
-                {/*<Button
-                  disabled={!isParticipant()}
-                  onClick={handleCreateCommentClick}
-                  className={`d-flex align-items-center  justify-content-center ${styles.optButton} ${
-                    styles.commentBtn
-                  } ${isCreateComment && styles.optButtonActive}`}
-                >
-                  <MdShortText className="mr-1" /> <span className="fs-6">{t('Add a quick comment')}</span>
-                </Button>*/}
+               
                 {canCreateWork() && (
                   <Button
                     onClick={handleCreateRelatedWorkClick}
