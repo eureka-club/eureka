@@ -41,6 +41,7 @@ import useWorks from '@/src/useWorks'
 import usePosts,{getPosts} from '@/src/usePosts'
 import useUsers from '@/src/useUsers'
 import MosaicItemPost from '@/components/post/MosaicItem'
+import MosaicItemUser from '@/components/user/MosaicItem'
 import { useInView } from 'react-intersection-observer';
 
 
@@ -299,7 +300,14 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     }
     return '';
   };
-  
+  const renderParticipants = ()=>{
+    if(participants){
+      return <Row>
+        {participants.map(p=><Col xs={12} sm={4} lg={3} key={p.id}><MosaicItemUser user={p} /></Col>)}
+      </Row>
+    }
+    return ''
+  }
   const renderRestrictTabs = () => {
     if (cycle) {
       const res = (
@@ -325,7 +333,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
             <section className=" pt-3">{cycle.guidelines && renderGuidelines()}</section>
           </TabPane>
           <TabPane eventKey="participants">
-              {participants && <CycleDetailParticipants participants={participants} cacheKey={['CYCLE',JSON.stringify(whereCycleParticipants)]} />}            
+              {/* {participants && <CycleDetailParticipants participants={participants} cacheKey={['CYCLE',JSON.stringify(whereCycleParticipants)]} />}             */}
+              {renderParticipants()}
           </TabPane>
         </Suspense>
 
