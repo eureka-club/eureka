@@ -7,6 +7,8 @@ import getApiHandler from '@/src/lib/getApiHandler';
 import { storeUpload } from '@/src/facades/fileUpload';
 import { createFromServerFields, findAll } from '@/src/facades/post';
 import { create } from '@/src/facades/notification';
+import {prisma} from '@/src/lib/prisma'
+import { Prisma } from '@prisma/client';
 
 export const config = {
   api: {
@@ -84,22 +86,21 @@ export default getApiHandler()
     // };
 
     try {
-      
-      const { q = null, where:w, id = null, take:t,skip:s,cursor:c } = req.query;
-
-      let where = w ? JSON.parse(decodeURIComponent(w.toString())) : undefined;
-      const take = t ? parseInt(t?.toString()) : undefined;
-      const skip = s ? parseInt(s.toString()) : undefined;
-      const cursor = c ? JSON.parse(decodeURIComponent(c.toString())) : undefined;
-
+      const { q = null, props:p } = req.query;
+      const props:Prisma.PostFindManyArgs = JSON.parse(decodeURIComponent(p.toString()));
+      let {where,take,cursor,skip,select} = props;
+      let total:number|undefined = undefined;
       const session = await getSession({ req });
     
       let data = null;
       if(session){
         where = {
+          ...where && where,
           AND:{
-            ... where && where.AND,
             OR:[
+              {
+                isPublic:true,
+              },
               {
                 cycles:{
                   some:{
@@ -109,38 +110,32 @@ export default getApiHandler()
                       {participants:{some:{id:session?.user.id}}},  
                     ]
                   }
-                }                  
+                }
               },
-              (where && where.OR)||{},
               {
-                cycles:{none :{}}  
+                cycles:{none:{}}
               }
-            ],
-          },          
-        }
+            ]
+            }
+          }
+        
       }
       else{
         where = {
+          ...where && where,
           AND:{
-            ... where && where.AND,
-            OR:[
-              {
-                cycles:{
-                  some:{
-                    access:1,
-                  }
-                }                  
+            OR:{
+              isPublic:true,
+              cycles:{
+                some:{
+                  access:1,
+                }
               },
-              (where && where.OR)||{},
-              {
-                cycles:{none :{}}  
-              }
-            ],
-          },
+            }
+          }
         }   
       }
-      // if(where && !('creatorId' in where)){
-      // }
+      
       debugger;
       if (typeof q === 'string') {
         where = {
@@ -148,13 +143,19 @@ export default getApiHandler()
           OR: [{ title: { contains: q } },{topics:{contains:q}},{tags:{contains:q}}, { contentText: { contains: q } }, { creator: { name:{contains: q} } }],
           
         }
-        data = await findAll({take,skip,cursor,where});
+        let  res = await prisma?.post.aggregate({where,_count:true})
+        total = res?._count;
+        data = await findAll({select,take,skip,cursor,where});
       } else if (where) {
-        data = await findAll({take,where,skip,cursor});
-      } else if (id) {
-        data = await findAll({where:{id: parseInt(id as string, 10)}});
+        let res = await prisma?.post.aggregate({where,_count:true})
+        total = res?._count;
+
+        data = await findAll({select,take,where,skip,cursor});
       } else {
-        data = await findAll({take,skip,where,cursor});
+        let  res = await prisma?.post.aggregate({where,_count:true})
+        data = await findAll({select,take,skip,where,cursor});
+        total = res?._count;
+
       }
       
       
@@ -180,7 +181,8 @@ export default getApiHandler()
 
       res.status(200).json({ 
         data, 
-        fetched:data.length
+        fetched:data.length,
+        total,
         //... (take&&page) && {hasNextPage: posts_.length > take * (page+1)}
       });
     } catch (exc) {

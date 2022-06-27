@@ -93,7 +93,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
   let metaTags:Record<string,any>={};
   if(work){
     metaTags = {id:work.id, title:work.title, storedFile: work.localImages[0].storedFile}
-    const workPostsWhere = {take:8,where:{AND:{works:{some:{id}}}}}
+    const workPostsWhere = {take:8,where:{works:{some:{id}}}}
     await qc.prefetchQuery(['WORK', `${id}`],()=>work,{staleTime: 1000 * 60 * 60})
     await qc.prefetchQuery(['CYCLES',JSON.stringify(workCyclesWhere)],()=>getCycles(workCyclesWhere), {staleTime: 1000 * 60 * 60} )
     await qc.prefetchQuery(['POSTS',JSON.stringify(workPostsWhere)],()=>getPosts(workPostsWhere),{staleTime: 1000 * 60 * 60} )

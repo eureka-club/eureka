@@ -1,33 +1,24 @@
 import { useQuery } from 'react-query';
-// import { useAtom } from 'jotai';
 import { PostMosaicItem } from './types/post';
-// import globalSearchEngineAtom from './atoms/searchEngine';
 import { Prisma } from '@prisma/client';
 import { buildUrl } from 'build-url-ts';
 
 export const getPosts = async (
   props?: Prisma.PostFindManyArgs,
-): Promise<PostMosaicItem[]> => {
-
-  const {where:w,take,skip,cursor:c} = props || {};
-  const where = w ? encodeURIComponent(JSON.stringify(w)) : '';
-  const cursor = c ? encodeURIComponent(JSON.stringify(c)) : '';
+): Promise<{posts:PostMosaicItem[],fetched:number,total:number}> => {
 
   const url = buildUrl(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api`, {
     path: 'post',
     queryParams: {
-      where,
-      take,
-      skip,
-      cursor,
+      props:encodeURIComponent(JSON.stringify(props))
     }
   });
    
   const res = await fetch(url);
 
-  if (!res.ok) return [];
-  const {data} = await res.json();
-  return data;
+  if (!res.ok) return {posts:[],fetched:0,total:-1};
+  const {data:posts,fetched,total} = await res.json();
+  return {posts,fetched,total};
 };
 
 interface Options {
@@ -42,7 +33,7 @@ const usePosts = (props?: Prisma.PostFindManyArgs, options?: Options) => {
   };
   let ck = ['POSTS', `${JSON.stringify(props)}`];
 
-  return useQuery<PostMosaicItem[]>(ck, () => getPosts(props), {
+  return useQuery<{posts:PostMosaicItem[],fetched:number,total:number}>(ck, () => getPosts(props), {
     staleTime,
     enabled,
     retry:3

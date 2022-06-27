@@ -1,10 +1,9 @@
 import dayjs from 'dayjs';
 import { useAtom } from 'jotai';
-import {v4} from 'uuid';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, MouseEvent, useState, useRef, useEffect, ChangeEvent, Suspense, lazy } from 'react';
+import { FunctionComponent, MouseEvent, useState, useRef, useEffect, Suspense, lazy } from 'react';
 import {
   TabPane,
   TabContent,
@@ -16,14 +15,11 @@ import {
   Nav,
   NavItem,
   NavLink,
-  Form,
   Spinner,
 } from 'react-bootstrap';
 import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
 import { BiArrowBack } from 'react-icons/bi';
-import { User } from '@prisma/client';
 import { MosaicContext } from '@/src/useMosaicContext';
-import { Typeahead } from 'react-bootstrap-typeahead';
 import { useQueryClient } from 'react-query';
 
 import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR /* , HYVOR_WEBSITE_ID, WEBAPP_URL */ } from '@/src/constants';
@@ -42,13 +38,17 @@ import { useCycleContext } from '@/src/useCycleContext';
 import CycleDetailHeader from './CycleDetailHeader';
 import useCycle from '@/src/useCycle';
 import useWorks from '@/src/useWorks'
-import usePosts from '@/src/usePosts'
+import usePosts,{getPosts} from '@/src/usePosts'
 import useUsers from '@/src/useUsers'
+import MosaicItemPost from '@/components/post/MosaicItem'
+import MosaicItemUser from '@/components/user/MosaicItem'
+import { useInView } from 'react-intersection-observer';
+
 
 const CycleDetailDiscussion = lazy(() => import ('./CycleDetailDiscussion')) 
 const CycleDetailParticipants = lazy(() => import('./CycleDetailParticipants'))
 const CycleDetailWorks = lazy(() => import('./CycleDetailWorks'))
-const CycleDetailPosts = lazy(() => import('./CycleDetailPosts'))
+// const CycleDetailPosts = lazy(() => import('./CycleDetailPosts'))
 interface Props {
   post?: PostMosaicItem;
   work?: WorkMosaicItem;
@@ -63,6 +63,11 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   
   const queryClient = useQueryClient()
   const [tabKey, setTabKey] = useState<string>();
+
+  const [ref, inView] = useInView({
+    triggerOnce: false,
+  });
+
 
   const [cycleId,setCycleId] = useState<string>('')
   useEffect(()=>{
@@ -120,36 +125,70 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     }
   },[queryClient,works])
 
-  const [where,setWhere] = useState<{filtersWork:number[]}>()
+  const cyclePostsProps = {take:8,where:{cycles:{some:{id:+cycleId}}}}
+  const {data:dataPosts} = usePosts(cyclePostsProps,{enabled:!!cycleId})
+  const [posts,setPosts] = useState(dataPosts?.posts)
+  const [hasMorePosts,setHasMorePosts] = useState(dataPosts?.fetched);
 
-  const cyclePostsWhere = {where:{AND:{cycles:{some:{id:+cycleId}}}}}
-  const {data:posts} = usePosts(cyclePostsWhere,{enabled:!!cycleId})
+  useEffect(()=>{
+    if(dataPosts && dataPosts.posts){
+      setHasMorePosts(dataPosts.fetched)
+      setPosts(dataPosts.posts)
+    }
+  },[dataPosts])
+
+  useEffect(()=>{
+    if(inView && hasMorePosts){
+      if(posts){
+        const loadMore = async ()=>{
+          const {id} = posts.slice(-1)[0];
+          const o = {...cyclePostsProps,skip:1,cursor:{id}};
+          const {posts:pf,fetched} = await getPosts(o)
+          setHasMorePosts(fetched);
+          const posts_ = [...(posts||[]),...pf];
+          setPosts(posts_);
+        }
+        loadMore();
+      }
+    }
+  },[inView]);
+  
+
 
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
   
   const {data:session, status} = useSession();
-  const isLoadingSession = status == 'loading'
   const { t } = useTranslation('cycleDetail');
   
   const tabContainnerRef = useRef<HTMLDivElement>(null);
-  const refParticipants = useRef<Typeahead<User>>(null);
-  const [filtersWork, setFiltersWork] = useState<number[]>([]);
-  const [filterCycleItSelf, setFilterCycleItSelf] = useState<boolean>(false);  
-  const [filtersParticipant,setFiltersParticipant] = useState<number[]>([]);
   const [filtersContentType, setFiltersContentType] = useState<string[]>([]);
   const [gldView, setgldView] = useState<Record<string, boolean>>({});
-  const [comboboxChecked, setComboboxChecked] = useState<Record<string, boolean>>({
-    post: false,
-    comment: false,
-    /*movie: false,
-    documentary: false,
-    book: false,
-    'fiction-book': false, */
-  });
     
   if(!cycle)return <></>
+
+  const renderSpinnerForLoadNextCarousel = ()=>{
+    if(hasMorePosts) return <Spinner animation="grow" />
+            return '';
+  }
+
+  const renderPosts = ()=>{
+    if(posts){
+      return <>
+        <Row>
+        {posts.map((p)=><Col key={p.id} className="mb-5">
+          <MosaicItemPost  cacheKey={['POST',`${p.id}`]} postId={p.id} />          
+        </Col>
+        )}
+        </Row>
+        <div className="mt-5" ref={ref}>
+          {renderSpinnerForLoadNextCarousel()}
+        </div>
+      </>
+    }
+    return '';
+  }
 
   const handleSubsectionChange = (key: string | null) => {
     if (key != null) {
@@ -220,6 +259,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       });
     } else setgldView((res) => ({ ...res, [`${key}`]: true }));
   };
+
   const renderGuidelines = () => {
     if (cycle) {
       const glc = Math.ceil(cycle.guidelines.length / 2);
@@ -260,29 +300,14 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     }
     return '';
   };
-  
-  const renderCycleWorksOrCycleFilters = () => {
-    if(cycle && works){
-      const res = works.map((w) => {
-        queryClient.setQueryData(['WORK',`${w.id}`],w)
-        return <Col key={v4()} xs={12}>
-        <Form.Check label={w.title} 
-          checked={comboboxChecked[`work-${w.id}`]}
-          onChange={(e) => handlerComboxesChange(e, 'work', w.id)}
-        />
-      </Col>;
-      });
-      res.unshift(<Col key={v4()} xs={12}>
-      <Form.Check label={t('common:cycle')} 
-        checked={comboboxChecked[`cycle`]}
-        onChange={(e) => handlerComboxesChange(e, 'cycle')}
-      />
-    </Col>);
-      return res;
+  const renderParticipants = ()=>{
+    if(participants){
+      return <Row>
+        {participants.map(p=><Col xs={12} sm={4} lg={3} key={p.id}><MosaicItemUser user={p} /></Col>)}
+      </Row>
     }
-    return '';
-  };
-
+    return ''
+  }
   const renderRestrictTabs = () => {
     if (cycle) {
       const res = (
@@ -291,11 +316,12 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
               <HyvorComments entity='cycle' id={`${cycle.id}`}  />
           </TabPane>
           <TabPane eventKey="eurekas">
-              <CycleDetailDiscussion cycle={cycle} className="mb-5" cacheKey={['POSTS',JSON.stringify(cyclePostsWhere)]} />
+              <CycleDetailDiscussion cycle={cycle} className="mb-5" cacheKey={['POSTS',JSON.stringify(cyclePostsProps)]} />
               <Row>
                 <Col /* xs={{span:12, order:'last'}} md={{span:9,order:'first'}} */>
                   <MosaicContext.Provider value={{ showShare: true }}>
-                    <CycleDetailPosts posts={posts||[]} cacheKey={['POSTS', JSON.stringify(cyclePostsWhere)]}/>
+                    {/* <CycleDetailPosts posts={posts||[]} cacheKey={['POSTS', JSON.stringify(cyclePostsProps)]}/> */}
+                    {renderPosts()}
                   </MosaicContext.Provider>
                 </Col>
               </Row> 
@@ -307,7 +333,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
             <section className=" pt-3">{cycle.guidelines && renderGuidelines()}</section>
           </TabPane>
           <TabPane eventKey="participants">
-              {participants && <CycleDetailParticipants participants={participants} cacheKey={['CYCLE',JSON.stringify(whereCycleParticipants)]} />}            
+              {/* {participants && <CycleDetailParticipants participants={participants} cacheKey={['CYCLE',JSON.stringify(whereCycleParticipants)]} />}             */}
+              {renderParticipants()}
           </TabPane>
         </Suspense>
 
@@ -331,7 +358,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           </NavItem>
           <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
             <NavLink eventKey="eurekas">
-              <span className="mb-3">{t('EurekaMoments')} ({posts?.length})</span>
+              <span className="mb-3">{t('EurekaMoments')} ({dataPosts?.total})</span>
             </NavLink>
           </NavItem>
           {/* <NavItem className={`${styles.tabBtn}`}>
@@ -375,100 +402,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     return 'cycle-about';
   };
 
-  const resetComboboxFilters = () => {
-    Object.keys(comboboxChecked).forEach(k => {
-      comboboxChecked[k] = false;
-    });
-    setComboboxChecked(comboboxChecked);
-  };
-
-  const resetFilters = () => {
-    refParticipants.current?.clear();
-    resetComboboxFilters();
-    setFiltersContentType([]);
-    setFiltersParticipant([]);
-    setFiltersWork([]);
-    setFilterCycleItSelf(false);
-  };
-
-  const onChangeParticipantFilters = (p: User[]) => {
-    if(p.length){
-      const {id} = p[0];
-      setFiltersParticipant([id]);
-    }
-    else {
-      setFiltersParticipant([]);
-    }
-  };
-
-  const onChangeContentTypeFilters = (type: string, checked: boolean) => {
-    if(type){
-      if(checked)
-        filtersContentType.push(type);
-      else {
-        const idx = filtersContentType.indexOf(type);
-        if(idx !== -1){
-          filtersContentType.splice(idx,1);
-        }        
-      }
-      setFiltersContentType([...filtersContentType]);
-    }    
-  };
-
-  const onChangeWorkFilters = (id: number, checked: boolean) => {
-    if(checked)
-      filtersWork.push(id);
-    else {
-      const idx = filtersWork.indexOf(id);
-      if(idx !== -1){
-        filtersWork.splice(idx,1);
-      }        
-    }        
-    setFiltersWork([...filtersWork]);
-    setWhere((w)=>({...w,filtersWork}))
-    //console.log(filtersWork,'filtersWork')
-  };
-
-  const onChangeCycleFilters = (checked: boolean) => {
-    setFilterCycleItSelf(checked);
-  };
-
-  const handlerComboxesChange = (e: ChangeEvent<HTMLInputElement>, q: string, workId?: number) => {
-    setComboboxChecked((res) => ({ ...res, [`${q}${workId ? `-${workId}`: ''}`]: e.target.checked }));
-    
-    switch(q){
-      case 'post':
-        onChangeContentTypeFilters('post', e.target.checked)
-        
-        break;
-      case 'comment':
-        onChangeContentTypeFilters('comment', e.target.checked)
-          
-        break;    
-      case 'work':
-        if(workId){
-          setFilterCycleItSelf(false);
-          setComboboxChecked((res)=>({...res,'cycle':false}));
-          onChangeWorkFilters(workId,e.target.checked);
-        }
-        
-        break;      
-        case 'cycle':
-          if(e.target.checked){
-            setComboboxChecked((res)=>{
-              Object.keys(res).forEach((k) => {
-                if(k.startsWith('work-'))
-                  res[k] = false;
-              });
-              return {...res};
-            });
-            setFiltersWork([]);
-          }
-          onChangeCycleFilters(e.target.checked);
-          break;
-    }
-  };
-  
   const removeCycle = async (e:MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     if(cycle){
@@ -493,7 +426,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     }
     return null;
   };
-
 
   return (
     <>

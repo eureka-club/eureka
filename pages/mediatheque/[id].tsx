@@ -55,17 +55,15 @@ type ItemCycle = CycleMosaicItem & { type: string };
 
 const userPostsCondition = (id: number, idSession?:number)=> ({
   where:{
-    AND:{
-      creatorId:id,
-      isPublic:true
-    },
-    ... idSession && {
-      OR:{
-        creator:{
-          followedBy:{some:{id:idSession}}
-        }
-      }
-    },
+    creatorId:id,
+    isPublic:true,
+    // ... idSession && {
+    //   OR:{
+    //     creator:{
+    //       followedBy:{some:{id:idSession}}
+    //     }
+    //   }
+    // },
   }
 });
 
@@ -137,8 +135,14 @@ const Mediatheque: NextPage = () => {
   const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>(false);
   
 
-  const {data:posts} = usePosts(userPostsCondition(+id, +idSession),{enabled:!!(id && !isLoadingSession)})
+  const {data:dataPosts} = usePosts(userPostsCondition(+id, +idSession),{enabled:!!(id && !isLoadingSession)})
+  const [posts,setPosts] = useState(dataPosts?.posts);
 
+  useEffect(()=>{
+    if(dataPosts){
+      setPosts(dataPosts.posts)
+    }
+  },[dataPosts])
   
   const {data:cycles} = useCycles(cyclesCreatedOrJoinedWhere(+id),
     {enabled:!!id}
@@ -565,7 +569,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = await getSession();
   const {query} = ctx;
   const upc = userPostsCondition(+query?.id!, session?.user.id);
-  const posts = await getPosts(upc);
+  const {posts} = await getPosts(upc);
   await queryClient.prefetchQuery(['POSTS',JSON.stringify(upc)], ()=>posts);
   posts.forEach(p=>{
     queryClient.setQueryData(['POST',`${p.id}`], ()=>p)
