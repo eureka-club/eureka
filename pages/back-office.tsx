@@ -335,11 +335,9 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = (await getSession(ctx));
-  if (session == null ) {
+  if (session == null || !session.user.roles.includes('admin')) {
     return { props: { notFound: true } };
   }
-  if(session?.user.roles && session?.user.roles != 'admin') 
-      return { props: { notFound: true } };
 
   return {
     props: {},

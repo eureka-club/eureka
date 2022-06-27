@@ -4,9 +4,7 @@ import { getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import Container from 'react-bootstrap/Container';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
-import BannerCustomizable from '@/src/components/BannerCustomizable';
 import TagsInput from '../src/components/forms/controls/TagsInput';
-
 
 //import SignInForm from '../src/components/forms/SignInForm';
 
