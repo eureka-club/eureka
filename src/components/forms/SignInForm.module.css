@@ -25,26 +25,26 @@
 .buttonGoogle {
   background: transparent ;
   background-size: 26px;
-  border-radius: 0.5rem;
+  border-radius: 0.3rem;
   border: 1px solid var(--eureka-green);
   font-size: 0.9rem;
   margin: 0 auto;
   text-align: center;
-  height: 3rem;
-  width: 82%;
+  height: 2.5rem;
+  width: 83%;
 }
 .gmailLogo {
-   width: 1.5rem;
-  height: 1.5rem;
+   width: 1.4rem;
+  height: 1.4rem;
 }
 .gmailLogoAndtext{
-  margin-top: 11px;  
+  margin-top: 7px;  
 }
 
 .alternativeLabel {
   color: var(--eureka-green);
   margin-top: 0.4rem;
-  text-align: center;
+  text-align: center; 
 }
 .EurekaText {
   margin-top: 1rem;
