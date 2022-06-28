@@ -36,8 +36,14 @@ const getRecordsCycles = async (q?: string): Promise<CycleMosaicItem[]> => {
 
 const getRecordsPosts = async (q?: string): Promise<PostMosaicItem[]> => {
   let url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/post`;
+  const props = JSON.stringify({
+    where:{
+      OR: [{ title: { contains: q } },{topics:{contains:q}},{tags:{contains:q}}, { contentText: { contains: q } }, { creator: { name:{contains: q} } }],
+    }
+  });
+
   if (q) {
-    url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/post${q ? `?q=${q}` : ''}`;
+    url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/post${q ? `?props=${encodeURIComponent(props)}` : ''}`;
   }
   
   const res = await fetch(url);

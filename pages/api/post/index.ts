@@ -86,13 +86,12 @@ export default getApiHandler()
     // };
 
     try {
-      const { q = null, props:p } = req.query;
+      const { q = null, props:p="" } = req.query;
       const props:Prisma.PostFindManyArgs = JSON.parse(decodeURIComponent(p.toString()));
-      let {where,take,cursor,skip,select} = props;
+      let {where,take,cursor,skip,select} = props||{};
       let total:number|undefined = undefined;
       const session = await getSession({ req });
     
-      let data = null;
       if(session){
         where = {
           ...where && where,
@@ -136,29 +135,9 @@ export default getApiHandler()
         }   
       }
       
-      debugger;
-      if (typeof q === 'string') {
-        where = {
-          ...where,
-          OR: [{ title: { contains: q } },{topics:{contains:q}},{tags:{contains:q}}, { contentText: { contains: q } }, { creator: { name:{contains: q} } }],
-          
-        }
-        let  res = await prisma?.post.aggregate({where,_count:true})
-        total = res?._count;
-        data = await findAll({select,take,skip,cursor,where});
-      } else if (where) {
-        let res = await prisma?.post.aggregate({where,_count:true})
-        total = res?._count;
-
-        data = await findAll({select,take,where,skip,cursor});
-      } else {
-        let  res = await prisma?.post.aggregate({where,_count:true})
-        data = await findAll({select,take,skip,where,cursor});
-        total = res?._count;
-
-      }
-      
-      
+      let cr = await prisma?.post.aggregate({where,_count:true})
+      total = cr?._count;
+      let data = await findAll({select,take,where,skip,cursor});
 
       data.forEach(p=>{
         p.type='post';
@@ -168,22 +147,10 @@ export default getApiHandler()
         p.currentUserIsFav = currentUserIsFav;
       })
 
-      // const posts_ = await prisma.post.findMany({
-      //   select:{
-      //     _count:{
-      //       select:{cycles:true}
-      //     }
-
-      //   },
-        
-      //   where
-      // })
-
       res.status(200).json({ 
         data, 
         fetched:data.length,
         total,
-        //... (take&&page) && {hasNextPage: posts_.length > take * (page+1)}
       });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
