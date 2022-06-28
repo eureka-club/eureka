@@ -82,6 +82,13 @@ export default getApiHandler()
             {
               AND:terms.map(t=>(
                 { 
+                   topics: { contains: t } 
+                }
+              ))
+            },
+            {
+              AND:terms.map(t=>(
+                { 
                    author: { contains: t } 
                 }
               ))
