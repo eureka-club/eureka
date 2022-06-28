@@ -15,7 +15,7 @@ interface Props{
 const ResetPassPage: NextPage<Props> = ({userId,email}) => {
   const { t } = useTranslation('PasswordRecovery');
   const router = useRouter();
-  if(!userId)router.push('/login');
+  if(!userId)router.push('/');
   return (
     <SimpleLayout title={t('resetPassword1')} showNavBar={false} showFooter={false}>
          <ResetPassForm userId={userId} email={email}/>

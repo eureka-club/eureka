@@ -30,7 +30,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
 
  const handlerLogin = ()=>{
     localStorage.setItem('loginRedirect',router.asPath)
-    router.push('/login')
+    router.push('/')
   }
 
   return (

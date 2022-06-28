@@ -115,7 +115,7 @@ const NavBar: FunctionComponent = () => {
 
   const handlerLogin = ()=>{
     localStorage.setItem('loginRedirect',router.asPath)
-    router.push('/login')
+    router.push('/')
   }
 
   return (
