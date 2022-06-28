@@ -17,8 +17,8 @@ const Footer: FunctionComponent = () => {
   const { t } = useTranslation('navbar');
 
   return (
-  <footer className=" text-center m-0 mt-4" style={{ background: 'var(--eureka-grey-light)'}}>
-    <div className="container d-flex flex-column-reverse flex-lg-row justify-content-lg-around align-items-lg-center">
+  <footer className=" text-center m-0 mt-4" style={{ background: 'var(--eureka-grey-light'}}>
+    <div className="container d-flex flex-column-reverse flex-lg-row justify-content-lg-between align-items-lg-center">
       <section className="mb-1 mb-lg-0">
         <div className="text-center d-flex flex-column flex-lg-row justify-content-around pt-3 text-secondary fs-6">
               <Link href="/manifest"><a className='text-secondary text-decoration-underline text-blue me-lg-5 mb-1 mb-lg-none'>{t('Manifest')}</a></Link>
