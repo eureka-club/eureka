@@ -1,29 +1,61 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import Container from 'react-bootstrap/Container';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import TagsInput from '../src/components/forms/controls/TagsInput';
+import useBackOffice from '@/src/useBackOffice';
+import { CycleMosaicItem } from '@/src/types/cycle';
+import useCycles,{getCycles} from '@/src/useCycles';
+import CarouselStatic from '@/src/components/CarouselStatic';
 
-//import SignInForm from '../src/components/forms/SignInForm';
+
+const backOfficeCycles = (ids:number[]) => ({
+  where:{
+    id: { in: ids },
+  }
+}) 
 
 const ExplorePage: NextPage = () => {
   const { t } = useTranslation('common');
+  const [ids, setIds] = useState<number[]>([]);
+
   const [topics /* , setHide */] = useState<string[]>([
     'gender-feminisms', 'technology', 'environment','racism-discrimination','wellness-sports', 'social issues',
     'politics-economics', 'philosophy', 'migrants-refugees', 'introspection', 'sciences', 'arts-culture', 'history',
   ]);
 
+  const {data:bo} = useBackOffice();
+
+
+   useEffect(() => {
+    if (bo && bo.CyclesExplorePage?.length) {
+      let ids:number[] = [];
+      bo.CyclesExplorePage.split(',').forEach(x=> ids.push(parseInt(x)));
+      setIds(ids);
+    }
+     
+  }, [bo]);
+
+  const {data:cycles} = useCycles(backOfficeCycles(ids));
+
+  console.log(cycles,'cycles')
+
   const getTopicsBadgedLinks = () => {
     return <TagsInput formatValue={(v: string) => t(`topics:${v}`)} tags={[...topics].join()} readOnly />;
   };
 
+
+
   return (
     <>
     <SimpleLayout showCustomBaner={true} title={t('Explore')}>
-       <h1 className="text-secondary fw-bold mt-5">{t('ExploreTopics')}</h1>
+      <h1 className="text-secondary fw-bold mt-5">{t('ExploreTopics')}</h1>
       <aside className="mb-5">{getTopicsBadgedLinks()}</aside>
+    
+    
+    
     </SimpleLayout>
     </>
   );

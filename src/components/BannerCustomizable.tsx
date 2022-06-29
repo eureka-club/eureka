@@ -32,7 +32,6 @@ const BannerCustomizable: FunctionComponent = ({
   
   
   useEffect(() => {
-    console.log(bo,'bo data')
     if (bo && bo.sliderImages.length) {
       if(bo.SlideImage1 !='null'){
         let storeFile1 = bo.sliderImages.filter(x=> x.originalFilename == bo.SlideImage1)[0].storedFile;
