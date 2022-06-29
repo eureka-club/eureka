@@ -84,9 +84,11 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
       }
     }
   )
-  const {data:cycles} = useCycles(workCyclessWhere,{enabled:!!workId})
-  const {data:dataPosts} = usePosts(workPostsWhere,{enabled:!!workId})//OJO this trigger just once -load the same data that page does
+  const {data:dataCycles} = useCycles(undefined,workCyclessWhere,{enabled:!!workId})
+  const {data:dataPosts} = usePosts(undefined,workPostsWhere,{enabled:!!workId})//OJO this trigger just once -load the same data that page does
   const [posts,setPosts] = useState(dataPosts?.posts)
+  const [cycles,setCycles] = useState(dataCycles?.cycles)
+
   const [hasMorePosts,setHasMorePosts] = useState(dataPosts?.fetched);
   useEffect(()=>{
     if(dataPosts && dataPosts.posts){
@@ -96,12 +98,19 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
   },[dataPosts])
 
   useEffect(()=>{
+    if(dataCycles && dataCycles.cycles){
+      setCycles(dataCycles.cycles)
+    }
+  },[dataCycles])
+
+
+  useEffect(()=>{
     if(inView && hasMorePosts){
       if(posts){
         const loadMore = async ()=>{
           const {id} = posts.slice(-1)[0];
           const o = {...workPostsWhere,skip:1,cursor:{id}};
-          const {posts:pf,fetched} = await getPosts(o)
+          const {posts:pf,fetched} = await getPosts(undefined,o)
           setHasMorePosts(fetched);
           const posts_ = [...(posts||[]),...pf];
           setPosts(posts_);

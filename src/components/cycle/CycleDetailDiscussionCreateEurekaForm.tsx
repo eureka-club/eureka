@@ -84,9 +84,14 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   const {notifier} = useNotificationContext();
   // const gec = useGlobalEventsContext();
 
-  const { data: works } = useWorks({ where:{cycles: { some: { id: cycle?.id } }} }, {
+  const { data: dataWorks } = useWorks(undefined,{ where:{cycles: { some: { id: cycle?.id } }} }, {
     enabled:!!cycle?.id
   })
+  const [works,setWorks] = useState(dataWorks?.works)
+  useEffect(()=>{
+    if(dataWorks)setWorks(dataWorks.works)
+  },[dataWorks])
+
 
   const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants(cycle.id),
     {

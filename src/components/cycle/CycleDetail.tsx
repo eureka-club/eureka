@@ -83,9 +83,16 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     enabled:!!cycleId
   });
 
-  const { data: works } = useWorks({ where:{cycles: { some: { id: cycle?.id } } }}, {
+  const { data: dataWorks } = useWorks(undefined,{ where:{cycles: { some: { id: cycle?.id } } }}, {
     enabled:!!cycle?.id
   })
+  const [works,setWorks] = useState(dataWorks?.works)
+
+  useEffect(()=>{
+    if(dataWorks && dataWorks.works){
+      setWorks(dataWorks.works)
+    }
+  },[dataWorks])
 
   const whereCycleParticipants = {
     where:{OR:[
@@ -115,20 +122,21 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     }
   },[cycle,queryClient])
 
-  useEffect(() => {
-    if (works) {      
-      if (works) { 
-        works.forEach(w => {
-          queryClient.setQueryData(['WORK',`${w.id}`],w)
-        })        
-      }
-    }
-  },[queryClient,works])
+  // useEffect(() => {
+  //   if (works) {      
+  //     if (works) { 
+  //       works.forEach(w => {
+  //         queryClient.setQueryData(['WORK',`${w.id}`],w)
+  //       })        
+  //     }
+  //   }
+  // },[queryClient,works])
 
   const cyclePostsProps = {take:8,where:{cycles:{some:{id:+cycleId}}}}
-  const {data:dataPosts} = usePosts(cyclePostsProps,{enabled:!!cycleId})
+  const {data:dataPosts} = usePosts(undefined,cyclePostsProps,{enabled:!!cycleId})
   const [posts,setPosts] = useState(dataPosts?.posts)
   const [hasMorePosts,setHasMorePosts] = useState(dataPosts?.fetched);
+
 
   useEffect(()=>{
     if(dataPosts && dataPosts.posts){
@@ -137,13 +145,14 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     }
   },[dataPosts])
 
+
   useEffect(()=>{
     if(inView && hasMorePosts){
       if(posts){
         const loadMore = async ()=>{
           const {id} = posts.slice(-1)[0];
           const o = {...cyclePostsProps,skip:1,cursor:{id}};
-          const {posts:pf,fetched} = await getPosts(o)
+          const {posts:pf,fetched} = await getPosts(undefined,o)
           setHasMorePosts(fetched);
           const posts_ = [...(posts||[]),...pf];
           setPosts(posts_);

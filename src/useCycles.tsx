@@ -1,36 +1,26 @@
 import { useQuery } from 'react-query';
-import { useAtom } from 'jotai';
 import { CycleMosaicItem } from './types/cycle';
-import globalSearchEngineAtom from './atoms/searchEngine';
 import { Prisma } from '@prisma/client';
 import { buildUrl } from 'build-url-ts';
 
-
 export const getCycles = async (
+  q?:string,
   props?: Prisma.CycleFindManyArgs,
-): Promise<CycleMosaicItem[]> => {
-
-  const {where:w, take:t, skip:s, cursor:c} = props||{};
-  
-  const where = w ? encodeURIComponent(JSON.stringify(w)) : '';
-  const cursor = c ? encodeURIComponent(JSON.stringify(c)) : '';
-  const take = t ? t : ''
-  const skip = s ? s : ''
+): Promise<{cycles:CycleMosaicItem[],fetched:number,total:number}> => {
 
   const url = buildUrl(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api`, {
     path: 'cycle',
     queryParams: {
-      where,
-      take,
-      skip,
-      cursor,
+      q,
+      props:encodeURIComponent(JSON.stringify(props||{}))
     }
   });
 
   const res = await fetch(url);
-  if (!res.ok) return [];
-  const {data} = await res.json();
-  return data;
+
+  if (!res.ok) return {cycles:[],fetched:0,total:-1};
+  const {data:cycles,fetched,total} = await res.json();
+  return {cycles,fetched,total};
 };
 
 interface Options {
@@ -38,17 +28,14 @@ interface Options {
   enabled?: boolean;
 }
 
-const useCycles = (where?: Prisma.CycleFindManyArgs, options?: Options) => {
+const useCycles = (q?:string,props?: Prisma.CycleFindManyArgs, options?: Options) => {
   const { staleTime, enabled } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  // const [globalSearchEngineState] = useAtom(globalSearchEngineAtom);
-  // const { where, cacheKey, q } = globalSearchEngineState;
-  let ck = ['CYCLES', `${JSON.stringify(where)}`];
-  // if (id) ck = ['CYCLES', `${id}`];
+  let ck = ['CYCLES', `${JSON.stringify(props)}`];
 
-  return useQuery<CycleMosaicItem[]>(ck, () => getCycles(where), {
+  return useQuery<{cycles:CycleMosaicItem[],fetched:number,total:number}>(ck, () => getCycles(q,props), {
     staleTime,
     enabled,
     retry:3

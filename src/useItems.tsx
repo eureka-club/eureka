@@ -1,13 +1,9 @@
 import { useQuery, UseQueryResult } from 'react-query';
-import { useAtom } from 'jotai';
 import dayjs from 'dayjs';
 import { WorkMosaicItem } from './types/work';
 import { CycleMosaicItem } from './types/cycle';
 import { PostMosaicItem } from './types/post';
-import globalSearchEngineAtom from './atoms/searchEngine';
 import {SearchResult} from "@/src/types"
-
-// type Item = WorkMosaicItem | CycleMosaicItem
 
 const getRecordsWorks = async (q?: string): Promise<WorkMosaicItem[]> => {
   let url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/work`;
@@ -75,8 +71,6 @@ const useItems = (q?:string, cacheKey?: string | string [], props?: Props): UseQ
   let opt: Props = {staleTime : 1000 * 60 * 60, enabled : true};
   if(props)
     opt = {...opt, ...props};
-  // const [globalSearchEngineState] = useAtom(globalSearchEngineAtom);
-  // const { q, cacheKey } = globalSearchEngineState;
   const ck = ['ITEMS', q];
 
   return useQuery<SearchResult[], Error>(cacheKey || ck, () => getRecords(q), opt);

@@ -1,7 +1,7 @@
 import { CycleWork } from '@prisma/client';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 // import Spinner from 'react-bootstrap/Spinner';
 // import { useQuery } from 'react-query';
 
@@ -18,9 +18,13 @@ interface Props {
 dayjs.extend(isBetween);
 const WorksMosaic: FunctionComponent<Props> = ({ cycle, className }) => {
 
-  const { data: works } = useWorks({ where:{cycles: { some: { id: cycle?.id } }} }, {
+  const { data: dataWorks } = useWorks(undefined,{ where:{cycles: { some: { id: cycle?.id } }} }, {
     enabled:!!cycle?.id
   })
+  const [works,setWorks] = useState(dataWorks?.works)
+  useEffect(()=>{
+    if(dataWorks)setWorks(dataWorks.works)
+  },[dataWorks])
 
   // const { isLoading, isSuccess, data } = useQuery<WorkMosaicItem[]>(
   //   ['works.mosaic.cycle', cycle.id],

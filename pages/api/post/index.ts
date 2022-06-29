@@ -70,27 +70,43 @@ export default getApiHandler()
     }
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-    // const include =  {
-    //   creator: true,
-    //   localImages: true,
-    //   works: true,
-    //   cycles: true,
-    //   favs: true,
-    //   likes: true,
-    //   comments: {
-    //     include: {
-    //       creator: { select: { id: true, name: true, image: true } },
-    //       comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
-    //     },
-    //   },
-    // };
-
     try {
       const { q = null, props:p="" } = req.query;
-      const props:Prisma.PostFindManyArgs = JSON.parse(decodeURIComponent(p.toString()));
-      let {where,take,cursor,skip,select} = props||{};
-      let total:number|undefined = undefined;
+      const props:Prisma.PostFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
+      let {where:w,take,cursor,skip,select} = props;
       const session = await getSession({ req });
+      let where = {...w}
+      
+      if (typeof q === 'string') {
+        const terms = q.split(" ");
+        where = {
+          OR:[
+            {
+              AND:terms.map(t=>(
+                { 
+                  title: { contains: t } 
+                }
+              ))
+  
+            },
+            {
+              AND:terms.map(t=>(
+                { 
+                  contentText: { contains: t } 
+                }
+              ))
+  
+            },
+            {
+              AND:terms.map(t=>(
+                { 
+                   topics: { contains: t } 
+                }
+              ))
+            },
+          ]
+        };
+      }
     
       if(session){
         where = {
@@ -117,7 +133,6 @@ export default getApiHandler()
             ]
             }
           }
-        
       }
       else{
         where = {
@@ -134,9 +149,9 @@ export default getApiHandler()
           }
         }   
       }
-      
+
       let cr = await prisma?.post.aggregate({where,_count:true})
-      total = cr?._count;
+      const total = cr?._count;
       let data = await findAll({select,take,where,skip,cursor});
 
       data.forEach(p=>{

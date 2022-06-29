@@ -1,14 +1,14 @@
 import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
-import { CycleMosaicItem } from '@/src/types/cycle';
-import { FileUpload, isCycleMosaicItem, Session, StoredFileUpload } from '../../../src/types';
+import { FileUpload, Session, StoredFileUpload } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { storeUpload } from '../../../src/facades/fileUpload';
 import { createFromServerFields, findAll } from '../../../src/facades/cycle';
 import {prisma} from '@/src/lib/prisma';
-// import redis from '../../../src/lib/redis';
 import { asyncForEach } from '../../../src/lib/utils';
+import { Prisma } from '@prisma/client';
+
 
 export const config = {
   api: {
@@ -74,17 +74,17 @@ export default getApiHandler()
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     try {
       const session = (await getSession({ req })) as unknown as Session;
-      const { q = null, where:w = null,take:t,skip:s,cursor:c } = req.query;
 
-      let where = w ? JSON.parse(decodeURIComponent(w.toString())) : undefined;
-      const take = t ? parseInt(t?.toString()) : undefined;
-      const skip = s ? parseInt(s.toString()) : undefined;
-      const cursor = c ? JSON.parse(decodeURIComponent(c.toString())) : undefined;
       
+      const { q = null,props:p=undefined } = req.query;
+      const props:Prisma.CycleFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
+      let {where:w,take,cursor,skip} = props;
+
+      let where = w;
       let data = null;
       if (typeof q === 'string') {
         const terms = q.split(" ");
-        const cyclesWhere={
+        where={
           OR:[
             {
               AND:terms.map(t=>(
@@ -118,18 +118,19 @@ export default getApiHandler()
             }
           ]
         };
-        where = cyclesWhere;
-        data = await findAll({take,where,skip,cursor});
       } 
-      else{
-        data = await findAll({take,where,skip,cursor});
-      } 
+      
+      let cr = await prisma?.cycle.aggregate({where,_count:true})
+      const total = cr?._count;
+      data = await findAll({take,where,skip,cursor});
+
       data.forEach((c) => {
           c.type ='cycle';
       }); 
       res.status(200).json({
         data,
-        fetched:data.length
+        fetched:data.length,
+        total,
       });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

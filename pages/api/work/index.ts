@@ -2,11 +2,13 @@ import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 
-import { FileUpload, Session } from '../../../src/types';
-import getApiHandler from '../../../src/lib/getApiHandler';
-import { storeUpload } from '../../../src/facades/fileUpload';
-import { createFromServerFields, findAll } from '../../../src/facades/work';
-// import redis from '../../../src/lib/redis';
+import { FileUpload, Session } from '@/src/types';
+import getApiHandler from '@/src/lib/getApiHandler';
+import { storeUpload } from '@/src/facades/fileUpload';
+import { createFromServerFields, findAll } from '@/src/facades/work';
+import { Prisma } from '@prisma/client';
+
+// import redis from '@/src/lib/redis';
 
 export const config = {
   api: { 
@@ -50,18 +52,15 @@ export default getApiHandler()
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
-      const { q = null, where:w = null, id = null,take:t=undefined,skip:s=undefined,cursor:c=undefined } = req.query;
-      
-      const where = w ? JSON.parse(decodeURIComponent(w.toString())) : undefined;
-      const take = t ? parseInt(t?.toString()) : undefined;
-      const skip = s ? parseInt(s.toString()) : undefined;
-      const cursor = c ? JSON.parse(decodeURIComponent(c.toString())) : undefined;
+      const { q = null,props:p=undefined } = req.query;
+      const props:Prisma.WorkFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
+      let {where:w,take,cursor,skip} = props;
 
-      debugger;
+      let where = w;
       let data = null;
       if (typeof q === 'string') {
         const terms = q.split(" ");
-        const worksWhere={
+        where = {
           OR:[
             {
               AND:terms.map(t=>(
@@ -95,36 +94,17 @@ export default getApiHandler()
             }
           ]
         };
-        data = await findAll({
-          take,
-          skip,
-          cursor,
-          where: worksWhere
-        });
-      } else if (where) {
-        data = await findAll({
-          take,
-          skip,
-          cursor,
-          where,
-        });
-      } else if (id) {
-        data = await findAll({
-          take,
-          skip,
-          cursor,
-          where: { id: parseInt(id as string, 10) }
-        });
-      } else {
-        data = await findAll({
-          take,
-          skip,
-          cursor,
-        });
-      }
+        
+      } 
+
+      let cr = await prisma?.work.aggregate({where,_count:true})
+      const total = cr?._count;
+      data = await findAll({take,where,skip,cursor});
+
       res.status(200).json({
         data,
-        fetched:data.length
+        fetched:data.length,
+        total
       });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai';
 import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import { ChangeEvent, FunctionComponent, MouseEvent, useState } from 'react';
+import { ChangeEvent, FunctionComponent, MouseEvent, useState,useEffect } from 'react';
 
 import { Button, Col, Row, ButtonGroup, Form } from 'react-bootstrap';
 
@@ -35,9 +35,14 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
   const isSessionLoading = status == 'loading';
   
   const { t } = useTranslation('cycleDetail');
-  const { data: works } = useWorks({ where:{cycles: { some: { id: cycle?.id } }} }, {
+  const { data: dataWorks } = useWorks(undefined,{ where:{cycles: { some: { id: cycle?.id } }} }, {
     enabled:!!cycle?.id
   })
+  const [works,setWorks] = useState(dataWorks?.works)
+  useEffect(()=>{
+    if(dataWorks)setWorks(dataWorks.works)
+  },[dataWorks])
+
 
   const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants(cycle.id),
     {

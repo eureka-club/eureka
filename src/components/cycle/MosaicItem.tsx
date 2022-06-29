@@ -52,7 +52,7 @@ interface Props {
 const MosaicItem: FunctionComponent<Props> = ({
   showButtonLabels = false,
   // showShare,
-  detailed = false,
+  detailed = true,
   showSocialInteraction = true,
   showParticipants = false,
   cacheKey = undefined,
