@@ -6,7 +6,7 @@ import TagsInput from '@/components/forms/controls/TagsInput';
 import { GetAllByResonse } from '@/src/types';
 import { useInView } from 'react-intersection-observer';
 import { CycleMosaicItem } from '../../src/types/cycle';
-import useCycles,{getCycles} from '@/src/useCycles';
+import useCycles from '@/src/useCycles';
 import CarouselStatic from '@/src/components/CarouselStatic';
 import { useSession, getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
