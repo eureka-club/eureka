@@ -35,7 +35,7 @@ import { Cycle } from '@prisma/client';
 
 type Item = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | UserMosaicItem;
 type Props = {
-  title: string | JSX.Element;
+  title?: string | JSX.Element;
   iconBefore?: JSX.Element;
   iconAfter?: JSX.Element;
   onSeeAll?: () => Promise<void>;

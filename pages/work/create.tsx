@@ -23,7 +23,7 @@ const CreateWorkPage: NextPage<Props> = ({notFound}) => {
 
     useEffect(() => {
             if (notFound) 
-                router.push('/login');
+                router.push('/');
             
     }, [notFound]);
 

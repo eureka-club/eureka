@@ -43,7 +43,8 @@
 
 .alternativeLabel {
   color: var(--eureka-green);
-  margin-top: 0.4rem;
+  margin-top: 0.6rem;
+  margin-bottom: 0.4rem;
   text-align: center; 
 }
 .EurekaText {

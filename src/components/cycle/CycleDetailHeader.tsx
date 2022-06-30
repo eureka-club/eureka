@@ -174,7 +174,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           </h4>
           
             <CarouselStatic
-            cacheKey={['CYCLE',cycle.id.toString()]}
+             cacheKey={['CYCLE',cycle.id.toString()]}
               showSocialInteraction={false}
               // onSeeAll={async () => seeAll(works as WorkMosaicItem[], t('Eurekas I created'))}
               onSeeAll={onCarouselSeeAllAction}
