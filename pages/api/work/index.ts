@@ -7,7 +7,7 @@ import getApiHandler from '@/src/lib/getApiHandler';
 import { storeUpload } from '@/src/facades/fileUpload';
 import { createFromServerFields, findAll } from '@/src/facades/work';
 import { Prisma } from '@prisma/client';
-
+import {prisma} from '@/src/lib/prisma'
 // import redis from '@/src/lib/redis';
 
 export const config = {

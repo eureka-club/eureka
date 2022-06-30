@@ -29,7 +29,7 @@ const fetchItems = async (pageParam: number,topic:string):Promise<GetAllByResons
         return q.json();
 };
 
-const cyclesCreatedOrJoinedWhere = (id:number) => ({
+const cyclesCreatedOrJoinedWhere = (id:number) => ({props:{
   where:{
     OR:[
       {
@@ -40,7 +40,7 @@ const cyclesCreatedOrJoinedWhere = (id:number) => ({
       }
     ]
   }
-}) 
+}}) 
 interface Props{
         groupedByTopics: Record<string,GetAllByResonse>;
       }
@@ -83,9 +83,13 @@ const HomeSingIn: FunctionComponent<Props> = ({ groupedByTopics}) => {
   }, [session, router]);
 
 
- const {data:cycles} = useCycles(cyclesCreatedOrJoinedWhere(+id),
+ const {data:dataCycles} = useCycles(cyclesCreatedOrJoinedWhere(+id),
     {enabled:!!id}
   )
+  const [cycles,setCycles] = useState(dataCycles?.cycles)
+  useEffect(()=>{
+    if(dataCycles)setCycles(dataCycles.cycles)
+  },[dataCycles])
 
 const getTopicsBadgedLinks = () => {
         return <TagsInput formatValue={(v: string) => t(`topics:${v}`)} tags={[...topics].join()} readOnly />;

@@ -1,20 +1,8 @@
-// import classNames from 'classnames';
-// import { useAtom } from 'jotai';
-// import { useQuery } from 'react-query';
-// import { useSession } from 'next-auth/react';
-// import Link from 'next/link';
-// import { useRouter } from 'next/router';
 import { useAtom } from 'jotai';
-import Masonry from 'react-masonry-css';
-import classNames from 'classnames';
-// import { Cycle, Work } from '@prisma/client';
 import useTranslation from 'next-translate/useTranslation';
-// import { /* useInfiniteQuery, */ useQuery } from 'react-query';
-import { FunctionComponent /* , ChangeEvent */, useState, useEffect, Fragment } from 'react';
+import { FunctionComponent /* , ChangeEvent */, useState, useEffect } from 'react';
 import { Button, Row, Col } from 'react-bootstrap';
-// import router from 'next/router';
 import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
-// import { BsHash } from 'react-icons/bs';
 import { v4 } from 'uuid';
 import globalSearchEngineAtom from '../atoms/searchEngine';
 import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem } from '../types';
@@ -24,14 +12,11 @@ import MosaicItemWork from './work/MosaicItem';
 import MosaicUserItem from './user/MosaicItem';
 
 import styles from './Carousel.module.css';
-// import { setCookie } from 'nookies';
-// import { Work, Cycle, PrismaPromise } from '@prisma/client';
 import { WorkMosaicItem /* , WorkWithImages */ } from '../types/work';
 import { CycleMosaicItem /* , CycleWithImages */ } from '../types/cycle';
 import { PostMosaicItem } from '../types/post';
 import { UserMosaicItem } from '../types/user';
 import { CycleContext } from '../useCycleContext';
-import { Cycle } from '@prisma/client';
 
 type Item = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | UserMosaicItem;
 type Props = {

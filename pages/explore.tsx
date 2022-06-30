@@ -13,11 +13,11 @@ import globalSearchEngineAtom from '@/src/atoms/searchEngine';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 
-const backOfficeCycles = (ids:number[]) => ({
+const backOfficeCycles = (ids:number[]) => ({props:{
   where:{
     id: { in: ids },
   }
-}) 
+}}) 
 
 const ExplorePage: NextPage = () => {
   const { t } = useTranslation('common');
@@ -41,7 +41,11 @@ const ExplorePage: NextPage = () => {
      
   }, [bo]);
 
-  const {data:cycles} = useCycles(backOfficeCycles(ids));
+  const {data:dataCycles} = useCycles(backOfficeCycles(ids));
+  const [cycles,setCycles] = useState(dataCycles?.cycles)
+  useEffect(()=>{
+    if(dataCycles)setCycles(dataCycles.cycles)
+  },[dataCycles])
 
   console.log(cycles,'cycles')
 

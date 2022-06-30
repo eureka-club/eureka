@@ -1,12 +1,12 @@
 import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
-import { FileUpload, Session, StoredFileUpload } from '../../../src/types';
-import getApiHandler from '../../../src/lib/getApiHandler';
-import { storeUpload } from '../../../src/facades/fileUpload';
-import { createFromServerFields, findAll } from '../../../src/facades/cycle';
+import { FileUpload, Session, StoredFileUpload } from '@/src/types';
+import getApiHandler from '@/src/lib/getApiHandler';
+import { storeUpload } from '@/src/facades/fileUpload';
+import { createFromServerFields, findAll } from '@/src/facades/cycle';
 import {prisma} from '@/src/lib/prisma';
-import { asyncForEach } from '../../../src/lib/utils';
+import { asyncForEach } from '@/src/lib/utils';
 import { Prisma } from '@prisma/client';
 
 
