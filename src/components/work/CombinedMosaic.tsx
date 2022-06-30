@@ -40,13 +40,13 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
   //   return res.json();
   // });
   const [mosaicData, setMosaicData] = useState<MosaicItem[]>([]);
-  const {data:dataCycles,isLoading:isLoadingCycles} = useCycles(undefined,{
+  const {data:dataCycles,isLoading:isLoadingCycles} = useCycles({props:{
     where:{works:{
       some:{
         id:work.id
       }
     }}
-  },{enabled:!!work.id})
+  }},{enabled:!!work.id})
   const [cycles,setCycles] = useState(dataCycles?.cycles);
 
   useEffect(()=>{
@@ -56,7 +56,7 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
   },[dataCycles])
 
 
-  const {data:dataPosts} = usePosts(undefined,{
+  const {data:dataPosts} = usePosts({props:{
     where:{
       works:{
         some:{
@@ -64,7 +64,7 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
         }
       }
     }
-  },{enabled:!!work.id})
+  }},{enabled:!!work.id})
   const [posts,setPosts] = useState(dataPosts?.posts);
 
   useEffect(()=>{

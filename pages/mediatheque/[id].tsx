@@ -53,7 +53,7 @@ type ItemCycle = CycleMosaicItem & { type: string };
 
 // | WorkMosaicItem | ;
 
-const userPostsCondition = (id: number, idSession?:number)=> ({
+const userPostsCondition = (id: number, idSession?:number)=> ({props:{
   where:{
     creatorId:id,
     isPublic:true,
@@ -65,9 +65,9 @@ const userPostsCondition = (id: number, idSession?:number)=> ({
     //   }
     // },
   }
-});
+}});
 
-const cyclesCreatedOrJoinedWhere = (id:number) => ({
+const cyclesCreatedOrJoinedWhere = (id:number) => ({props:{
   where:{
     OR:[
       {
@@ -78,7 +78,7 @@ const cyclesCreatedOrJoinedWhere = (id:number) => ({
       }
     ]
   }
-}) 
+}}) 
 
 const Mediatheque: NextPage = () => {
   
@@ -135,7 +135,7 @@ const Mediatheque: NextPage = () => {
   const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>(false);
   
 
-  const {data:dataPosts} = usePosts(undefined,userPostsCondition(+id, +idSession),{enabled:!!(id && !isLoadingSession)})
+  const {data:dataPosts} = usePosts(userPostsCondition(+id, +idSession),{enabled:!!(id && !isLoadingSession)})
   const [posts,setPosts] = useState(dataPosts?.posts);
 
   useEffect(()=>{
@@ -144,7 +144,7 @@ const Mediatheque: NextPage = () => {
     }
   },[dataPosts])
   
-  const {data:dataCycles} = useCycles(undefined,cyclesCreatedOrJoinedWhere(+id),
+  const {data:dataCycles} = useCycles(cyclesCreatedOrJoinedWhere(+id),
     {enabled:!!id}
   )
   const [cycles,setCycles] = useState(dataCycles?.cycles);
@@ -577,7 +577,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = await getSession();
   const {query} = ctx;
   const upc = userPostsCondition(+query?.id!, session?.user.id);
-  const {posts} = await getPosts(undefined,upc);
+  const {posts} = await getPosts(upc);
   await queryClient.prefetchQuery(['POSTS',JSON.stringify(upc)], ()=>posts);
   posts.forEach(p=>{
     queryClient.setQueryData(['POST',`${p.id}`], ()=>p)
@@ -586,7 +586,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   //   posts.map(p=>queryClient.prefetchQuery(['POST',`${p.id}`], ()=>p))
   // )
 
-  const {cycles} = await getCycles(undefined,cyclesCreatedOrJoinedWhere(+query?.id!));
+  const {cycles} = await getCycles(cyclesCreatedOrJoinedWhere(+query?.id!));
   await queryClient.prefetchQuery(["CYCLES",JSON.stringify(cyclesCreatedOrJoinedWhere(+query?.id!))],()=>cycles)
   cycles.forEach(c=>{
     queryClient.setQueryData(['CYCLE',`${c.id}`], ()=>c)

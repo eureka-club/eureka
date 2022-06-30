@@ -84,8 +84,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
       }
     }
   )
-  const {data:dataCycles} = useCycles(undefined,workCyclessWhere,{enabled:!!workId})
-  const {data:dataPosts} = usePosts(undefined,workPostsWhere,{enabled:!!workId})//OJO this trigger just once -load the same data that page does
+  const {data:dataCycles} = useCycles({props:workCyclessWhere},{enabled:!!workId})
+  const {data:dataPosts} = usePosts({props:workPostsWhere},{enabled:!!workId})//OJO this trigger just once -load the same data that page does
   const [posts,setPosts] = useState(dataPosts?.posts)
   const [cycles,setCycles] = useState(dataCycles?.cycles)
 
@@ -110,7 +110,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
         const loadMore = async ()=>{
           const {id} = posts.slice(-1)[0];
           const o = {...workPostsWhere,skip:1,cursor:{id}};
-          const {posts:pf,fetched} = await getPosts(undefined,o)
+          const {posts:pf,fetched} = await getPosts({props:o})
           setHasMorePosts(fetched);
           const posts_ = [...(posts||[]),...pf];
           setPosts(posts_);

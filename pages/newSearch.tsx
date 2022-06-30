@@ -6,9 +6,9 @@ import { useRouter } from 'next/router';
 import { Spinner, ButtonGroup, Button, Alert ,Tabs,Tab} from 'react-bootstrap';
 import { QueryClient, dehydrate } from 'react-query';
 
-import usePosts,{getPosts} from '@/src/usePosts'
-import useCycles,{getCycles} from '@/src/useCycles'
-import useWorks,{getWorks} from '@/src/useWorks'
+import {getPosts} from '@/src/usePosts'
+import {getCycles} from '@/src/useCycles'
+import {getWorks} from '@/src/useWorks'
 
 import SearchTab from '@/src/components/SearchTab';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
@@ -16,15 +16,11 @@ import SimpleLayout from '../src/components/layouts/SimpleLayout';
 const SearchPage: NextPage = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
-  const [q, setQ] = useState<string>();
+  const [q, setQ] = useState<string>(router.query.q?.toString()!);
 
   let qLabel = t(`topics:${router.query.q as string}`);
   if (qLabel.match(':')) qLabel = router.query.q as string;
-
-  const {data:postsData} = usePosts(q?.toString(),{take:8},{enabled:!!q});
-  const {data:worksData} = useWorks(q?.toString(),{take:8},{enabled:!!q});
-  const {data:cyclesData} = useCycles(q?.toString(),{take:8},{enabled:!!q});
-
+  
   useEffect(() => {
     if (router.query.q) {
       setQ(router.query.q as string);
@@ -41,23 +37,20 @@ const SearchPage: NextPage = () => {
           {t('Results about')}: {`"${qLabel}"`}
         </h1>
         <div className='d-flex flex-column justify-content-center'>
-          <SearchTab initialData={{posts:postsData?.posts||[],works:worksData?.works||[],cycles:cyclesData?.cycles||[]}} />
+          <SearchTab />
         </div>
        
       </SimpleLayout>
-  
-  return <></>
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const q = query.q;
   const qc = new QueryClient()
-
-
-  await qc.prefetchQuery(["POSTS", q], () => getPosts(q?.toString(),{take:8}));
-  await qc.prefetchQuery(["WORKS", q], () => getWorks(q?.toString(),{take:8}));
-  await qc.prefetchQuery(["CYCLES", q], () => getCycles(q?.toString(),{take:8}));
-
+  if(q){
+    await qc.prefetchQuery(["POSTS", q], () => getPosts({q:q?.toString(),props:{take:8}}));
+    await qc.prefetchQuery(["WORKS", q], () => getWorks({q:q?.toString(),props:{take:8}}));
+    await qc.prefetchQuery(["CYCLES", q], () => getPosts({q:q?.toString(),props:{take:8}}));
+  }
   
   return {
     props: {

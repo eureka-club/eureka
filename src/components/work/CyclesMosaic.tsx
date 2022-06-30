@@ -21,13 +21,13 @@ const CyclesMosaic: FunctionComponent<Props> = ({ work }) => {
   //     return res.json();
   //   },
   // );
-  const {data:dataCycles,isLoading:isLoadingCycles} = useCycles(undefined,{
+  const {data:dataCycles,isLoading:isLoadingCycles} = useCycles({props:{
     where:{works:{
       some:{
         id:work.id
       }
     }}
-  },{enabled:!!work.id})
+  }},{enabled:!!work.id})
 
   const cycles = dataCycles?.cycles || [];
   return (

@@ -34,7 +34,7 @@ const PostsMosaic: FunctionComponent<Props> = ({ work }) => {
       }
     }}
   };
-  const {data:dataPosts} = usePosts(undefined,workPostsWhere,{enabled:!!work.id})
+  const {data:dataPosts} = usePosts({props:workPostsWhere},{enabled:!!work.id})
   const [posts,setPosts] = useState(dataPosts?.posts);
 
   useEffect(()=>{

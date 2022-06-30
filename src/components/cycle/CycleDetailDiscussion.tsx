@@ -35,7 +35,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
   const isSessionLoading = status == 'loading';
   
   const { t } = useTranslation('cycleDetail');
-  const { data: dataWorks } = useWorks(undefined,{ where:{cycles: { some: { id: cycle?.id } }} }, {
+  const { data: dataWorks } = useWorks({props:{ where:{cycles: { some: { id: cycle?.id } }} }}, {
     enabled:!!cycle?.id
   })
   const [works,setWorks] = useState(dataWorks?.works)

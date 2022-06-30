@@ -4,18 +4,17 @@ import { Prisma } from '@prisma/client';
 import { buildUrl } from 'build-url-ts';
 
 export const getCycles = async (
-  q?:string,
-  props?: Prisma.CycleFindManyArgs,
+  args: {q?:string;props?:Prisma.CycleFindManyArgs},
 ): Promise<{cycles:CycleMosaicItem[],fetched:number,total:number}> => {
-
+  const {q,props} = args;
   const url = buildUrl(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api`, {
     path: 'cycle',
     queryParams: {
       q,
-      props:encodeURIComponent(JSON.stringify(props||{}))
+      ...props && {props:encodeURIComponent(JSON.stringify(props))}
     }
   });
-
+   
   const res = await fetch(url);
 
   if (!res.ok) return {cycles:[],fetched:0,total:-1};
@@ -28,14 +27,16 @@ interface Options {
   enabled?: boolean;
 }
 
-const useCycles = (q?:string,props?: Prisma.CycleFindManyArgs, options?: Options) => {
+const useCycles = (args: {q?:string;props?:Prisma.CycleFindManyArgs}, options?: Options) => {
   const { staleTime, enabled } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  let ck = ['CYCLES', `${JSON.stringify(props)}`];
+  const {q,props} = args;
+  const key = q ? q : JSON.stringify(props); 
+  let ck = ['CYCLES', `${key}`];
 
-  return useQuery<{cycles:CycleMosaicItem[],fetched:number,total:number}>(ck, () => getCycles(q,props), {
+  return useQuery<{cycles:CycleMosaicItem[],fetched:number,total:number}>(ck, () => getCycles(args), {
     staleTime,
     enabled,
     retry:3
