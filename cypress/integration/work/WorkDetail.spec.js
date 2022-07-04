@@ -1,7 +1,7 @@
 /// <reference types="cypress"/>
 import { WorkplaceShareButton } from 'react-share';
 import {PostMosaicItem} from '@/types/post';
-import {isComment, isPost} from '../../../src/types'
+import {isPost} from '../../../src/types'
 import {getPosts} from '../../../src/usePosts'
 describe('WorkDetail suit',()=>{
 
@@ -85,54 +85,5 @@ describe('WorkDetail suit',()=>{
         })
       })
     })
-    
-
-    // it('render only comments that belongs to this context',()=>{
-    //   cy.visit('/about')
-    //   .get('@work')
-    //   .then(({body})=>{
-    //     const work = body.data[0];
-    //     const workComments = work.comments.filter(c=>!c.cycleId && !c.postId)//directly comments only
-    //     cy.visit(`/work/${work.id}`)
-    //     console.log(workComments,'workComments')
-
-    //     if(workComments.length)
-    //       cy.get(`[data-cy^="comment-cmp-"]:visible`).then(comments=>{
-    //         cy.wrap(comments)
-    //         .should('have.length',workComments.length)
-    //         for(let c of workComments)
-    //           cy.wrap(comments).get(`[data-cy="comment-cmp-${c.id}"]`)  
-    //       })
-    //     else{
-    //       cy.get(`[data-cy^="comment-cmp-"]:visible`).should('not.exist')
-    //     }
-          
-    //   })
-    // })
-    /* it.only('render parent cycle and child post mosaics on All tab',()=>{
-      cy.visit('/about')
-      .get('@work')
-      .then(({body})=>{
-        const work = body.data[0];
-        cy.visit(`/work/${work.id}`)
-        .get('[data-rr-ui-event-key="all"]').click({force:true})
-        .get('[data-cy^="mosaic-item-cycle-"]')
-            .then(cards=>{
-              for(let cycle of work.cycles){
-                cy.wrap(cards).get(`[data-cy="mosaic-item-cycle-${cycle.id}"]`)
-              }
-
-            })
-          .get('[data-cy^="mosaic-item-post-"]')
-            .then(posts=>{
-              for(let post of work.posts){
-                cy.wrap(posts).get(`[data-cy="mosaic-item-post-${post.id}"]`)
-              }
-        })
-        
-      })
-
-    });
- */
     
 });

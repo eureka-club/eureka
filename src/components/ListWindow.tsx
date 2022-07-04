@@ -1,18 +1,16 @@
 import React,{useEffect,useMemo,useRef,useState} from 'react'
-import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem, isCommentMosaicItem, isPost } from '@/src/types';
+import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem, isPost } from '@/src/types';
 import { FixedSizeList } from 'react-window';
 import MosaicItemCycle from './cycle/MosaicItem';
 import MosaicItemPost from './post/MosaicItem';
 import MosaicItemWork from './work/MosaicItem';
 import MosaicItemUser from './user/MosaicItem';
-import MosaicItemComment from './comment/MosaicItem';
 
 import { v4 } from 'uuid';
 import { CycleMosaicItem } from '../types/cycle';
 import { WorkMosaicItem } from '../types/work';
 import { PostMosaicItem } from '../types/post';
 import { CycleContext } from '../useCycleContext';
-import { CommentMosaicItem } from '../types/comment';
 
 interface Props{
     items:MosaicItem[];

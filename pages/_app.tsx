@@ -4,6 +4,7 @@ import { SessionProvider as NextAuthProvider } from 'next-auth/react';
 import { StrictMode, FunctionComponent, useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import {SSRProvider} from 'react-bootstrap'
 import { Hydrate } from 'react-query/hydration';
 import { Toaster } from 'react-hot-toast';
 
@@ -32,27 +33,30 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   return (
     <StrictMode>
      {/* <ToastProvider placement='top-center' components={{ Toast: ToastNew }} autoDismissTimeout={5000}> */}
-      <NextAuthProvider session={pageProps.session} refetchInterval={5 * 60}>
-          
-        {/* <GlobalEventsContext.Provider value={{...gec}}> */}
-            <Provider initialValues={initialState && [[detailPagesAtom, globalModalsAtom, initialState]]}>
-              <QueryClientProvider client={queryClient}>
+     <SSRProvider>
+        <NextAuthProvider session={pageProps.session} refetchInterval={5 * 60}>
+            
+          {/* <GlobalEventsContext.Provider value={{...gec}}> */}
+              <Provider initialValues={initialState && [[detailPagesAtom, globalModalsAtom, initialState]]}>
+                <QueryClientProvider client={queryClient}>
 
-                <Hydrate state={pageProps.dehydratedState}>
-                  {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                  <NotificationProvider>
-                    <ErrorBoundary>
-                      <Component {...pageProps} />
-                    </ErrorBoundary>
-                  </NotificationProvider>
-                  <Toaster position="top-center" reverseOrder={false}/>
-                </Hydrate>
-                <ReactQueryDevtools />
-              </QueryClientProvider>
-            </Provider>
-        {/* </GlobalEventsContext.Provider> */}
-        
-      </NextAuthProvider>
+                  <Hydrate state={pageProps.dehydratedState}>
+                    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+                    <NotificationProvider>
+                      <ErrorBoundary>
+                        <Component {...pageProps} />
+                      </ErrorBoundary>
+                    </NotificationProvider>
+                    <Toaster position="top-center" reverseOrder={false}/>
+                  </Hydrate>
+                  <ReactQueryDevtools />
+                </QueryClientProvider>
+              </Provider>
+          {/* </GlobalEventsContext.Provider> */}
+          
+        </NextAuthProvider>
+
+     </SSRProvider>
     {/* </ToastProvider> */}
     </StrictMode>
   );

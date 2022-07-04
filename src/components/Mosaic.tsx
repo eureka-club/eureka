@@ -4,20 +4,17 @@ import Masonry from 'react-masonry-css';
 
 import { v4 } from 'uuid';
 import {Row, Col, Container,Button} from 'react-bootstrap';
-import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem, isCommentMosaicItem } from '../types';
+import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem } from '../types';
 import MosaicItemCycle from './cycle/MosaicItem';
 import MosaicItemPost from './post/MosaicItem';
 import MosaicItemWork from './work/MosaicItem';
 import MosaicItemUser from './user/MosaicItem';
-import MosaicItemComment from './comment/MosaicItem';
 import styles from './Mosaic.module.css';
 import { CycleMosaicItem } from '../types/cycle';
 import { WorkMosaicItem } from '../types/work';
 import { PostMosaicItem } from '../types/post';
 import { CycleContext } from '../useCycleContext';
-import { CommentMosaicItem } from '../types/comment';
 import {BiChevronRight,BiChevronLeft} from 'react-icons/bi'
-// import { WorkContext } from '../useWorkContext';
 
 const renderMosaicItem = (
   item: MosaicItem,
@@ -64,10 +61,6 @@ const renderMosaicItem = (
   }
   else if (isUserMosaicItem(item)) {
     return <MosaicItemUser  user={item} className="mb-2" />;
-  }
-  else if(isCommentMosaicItem(item)){
-    const it: CommentMosaicItem = item as CommentMosaicItem;
-    return <MosaicItemComment detailed commentId={it.id} cacheKey={cacheKey} />;      
   }
 
   return <></>;

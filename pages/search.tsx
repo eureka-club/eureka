@@ -1,14 +1,10 @@
 import { BiArrowBack } from 'react-icons/bi';
-import { NextPage, GetServerSideProps } from 'next';
+import { NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Spinner, ButtonGroup, Button, Alert } from 'react-bootstrap';
-import { QueryClient, dehydrate } from 'react-query';
 
-import {getPosts} from '@/src/usePosts'
-import {getCycles} from '@/src/useCycles'
-import {getWorks} from '@/src/useWorks'
 
 import SearchTab from '@/src/components/SearchTab';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
@@ -16,16 +12,16 @@ import SimpleLayout from '../src/components/layouts/SimpleLayout';
 const SearchPage: NextPage = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
-  const [q, setQ] = useState<string>(router.query.q?.toString()!);
+  // const [q, setQ] = useState<string>(router.query.q?.toString()!);
 
   let qLabel = t(`topics:${router.query.q as string}`);
   if (qLabel.match(':')) qLabel = router.query.q as string;
   
-  useEffect(() => {
-    if (router.query.q) {
-      setQ(router.query.q as string);
-    }
-  }, [router]);
+  // useEffect(() => {
+  //   if (router.query.q) {
+  //     setQ(router.query.q as string);
+  //   }
+  // }, [router]);
 
   return <SimpleLayout title={t('Results')}>
         <ButtonGroup className="mb-1">
@@ -43,20 +39,20 @@ const SearchPage: NextPage = () => {
       </SimpleLayout>
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const q = query.q;
-  const qc = new QueryClient()
-  if(q){
-    await qc.prefetchQuery(["POSTS", q], () => getPosts({q:q?.toString(),props:{take:8}}));
-    await qc.prefetchQuery(["WORKS", q], () => getWorks({q:q?.toString(),props:{take:8}}));
-    await qc.prefetchQuery(["CYCLES", q], () => getCycles({q:q?.toString(),props:{take:8}}));
-  }
+// export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+//   const q = query.q;
+//   const qc = new QueryClient()
+//   if(q){
+//     await qc.prefetchQuery(["POSTS", q], () => getPosts({q:q?.toString(),props:{take}}));
+//     await qc.prefetchQuery(["WORKS", q], () => getWorks({q:q?.toString(),props:{take}}));
+//     await qc.prefetchQuery(["CYCLES", q], () => getCycles({q:q?.toString(),props:{take:2}}));
+//   }
   
-  return {
-    props: {
-      dehydratedState: dehydrate(qc),
-    },
-  };
-};
+//   return {
+//     props: {
+//       dehydratedState: dehydrate(qc),
+//     },
+//   };
+// };
 
 export default SearchPage;

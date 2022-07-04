@@ -17,7 +17,6 @@ import styles from './CycleDetailDiscussion.module.css';
 import toast from 'react-hot-toast';
 import CycleDetailDiscussionCreateEurekaForm from './CycleDetailDiscussionCreateEurekaForm';
 import CycleDetailDiscussionSuggestRelatedWork from './CycleDetailDiscussionSuggestRelatedWork';
-import CycleDetailDiscussionCreateCommentForm from './CycleDetailDiscussionCreateCommentForm';
 
 interface Props {
   cycle: CycleMosaicItem;
@@ -63,7 +62,6 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
   };
 
   const [isCreateEureka, setIsCreateEureka] = useState<boolean>(false);
-  const [isCreateComment, setIsCreateComment] = useState<boolean>(false);
   const [isSuggestRelatedWork, setIsSuggestRelatedWork] = useState<boolean>(false);
   const [discussionItem, setDiscussionItem] = useState<string | undefined>(undefined); // by default empty but required
   const [globalModalsAtom, setGlobalsModalsAtom] = useAtom(globalModals);
@@ -78,7 +76,6 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
     } else {
           if(isParticipant()){
                 setIsSuggestRelatedWork(false);
-                setIsCreateComment(false);
                 setIsCreateEureka(true);
                 // setGlobalModalsState({ ...globalModalsState, ...{ createPostModalOpened: true } });
           }
@@ -92,7 +89,6 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
     ev.preventDefault();
     if (!isSessionLoading && session && session.user.roles === 'admin') {
       setIsSuggestRelatedWork(true);
-      setIsCreateComment(false);
       setIsCreateEureka(false);
     }
     // setGlobalModalsState({ ...globalModalsState, ...{ createWorkModalOpened: true } });
@@ -157,7 +153,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
                   </Button>
                 )}
               </ButtonGroup>
-              {(isCreateEureka || isCreateComment) && (
+              {(isCreateEureka) && (
                 <Form className="mt-3 font-weight-light">
                   <Form.Group controlId="discussionItem">
                     <Form.Control
@@ -183,18 +179,6 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
                     close={onClose}
                   />
                 </div>
-              )}
-              {isCreateComment && (
-                <>
-                  <div className="mt-3">
-                    <CycleDetailDiscussionCreateCommentForm
-                      cacheKey={cacheKey}
-                      cycle={cycle}
-                      discussionItem={discussionItem}
-                      setDiscussionItem={setDiscussionItem}
-                    />
-                  </div>
-                </>
               )}
               {isSuggestRelatedWork && canCreateWork() && (
                 <div className="mt-3">

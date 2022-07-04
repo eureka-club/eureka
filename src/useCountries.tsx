@@ -1,23 +1,23 @@
 import { useQuery } from 'react-query';
-import { useAtom } from 'jotai';
+import { buildUrl } from 'build-url-ts';
 
-// import { CycleMosaicItem } from './types/cycle';
-// import { WorkMosaicItem } from './types/work';
-// import { PostMosaicItem } from './types/post';
-import globalSearchEngineAtom from './atoms/searchEngine';
-
-const fetchCountries = async (q?: string[]) => {
-  if (!q!.length) return null;
-  const res = await fetch(`/api/taxonomy/countries${q ? `?q=${q.join()}` : ''}`);
+const getCountries = async (q?: string[]):Promise<string[]> => {
+  const url = buildUrl(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api`, {
+    path: 'taxonomy/countries',
+    queryParams: {
+      q,
+    }
+  });
+  
+  const res = await fetch(url);
   const { result = [] } = await res.json();
   const codes = result.map((i: { code: string }) => i.code);
   return codes;
 };
 
-const useCountries = () => {
-  const [globalSearchEngineState] = useAtom(globalSearchEngineAtom);
-  const q = globalSearchEngineState.countryQuery;
-  return useQuery(['COUNTRIES', q!.join()], () => fetchCountries(q), {
+const useCountries = (countryQuery?:string[]) => {
+  const q = countryQuery ? countryQuery : undefined;
+  return useQuery<string[]>(['COUNTRIES', JSON.stringify(q)], () => getCountries(q), {
     staleTime: 1000 * 60 * 60,
   });
 };

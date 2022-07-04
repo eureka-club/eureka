@@ -1,9 +1,8 @@
 import { useQuery } from 'react-query';
 import { PostMosaicItem } from './types/post';
-import { CommentMosaicItem } from './types/comment';
 import { Prisma } from '@prisma/client';
 
-export type CycleItem = PostMosaicItem | CommentMosaicItem;
+export type CycleItem = PostMosaicItem;
 export type WhereT = {filtersWork:number[]}
 
 export const getRecords = async (cycleId:number,page: number,where?:WhereT): Promise<{items:CycleItem[],total:number}|undefined> => {
@@ -18,13 +17,10 @@ export const getRecords = async (cycleId:number,page: number,where?:WhereT): Pro
   
   return {items,total};
 };
-
 interface Options {
   staleTime?: number;
   enabled?: boolean;
 }
-
-
 
 const useCycleItem = (cycleId:number,page: number,where?:WhereT, options?: Options) => {
   const { staleTime, enabled } = options || {

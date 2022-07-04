@@ -1,10 +1,9 @@
-import { Cycle, Post, User, Work, Comment, Prisma } from '@prisma/client';
+import { Cycle, Post, User, Work, Prisma } from '@prisma/client';
 
 import { CycleMosaicItem } from './types/cycle';
 import { PostMosaicItem } from './types/post';
 import { WorkMosaicItem } from './types/work';
 import { UserMosaicItem } from '@/src/types/user';
-import { CommentMosaicItem } from './types/comment';
 import {Session as S} from 'next-auth'
 export interface FileUpload {
   fieldName: string;
@@ -48,7 +47,7 @@ export interface MySocialInfo {
  */
 
 export type BasicEntity = Cycle | Post | Work | User | Comment;
-export type MosaicItem = CycleMosaicItem | PostMosaicItem | WorkMosaicItem | UserMosaicItem | CommentMosaicItem;
+export type MosaicItem = CycleMosaicItem | PostMosaicItem | WorkMosaicItem | UserMosaicItem;
 export type SearchResult = CycleMosaicItem | PostMosaicItem | WorkMosaicItem | UserMosaicItem;
 
 export const isCycle = (obj: BasicEntity): obj is Cycle =>
@@ -66,9 +65,6 @@ export const isWork = (obj: BasicEntity): obj is Work =>
 
 export const isUser = (obj: BasicEntity): obj is User =>
   typeof (obj as User).roles === 'string' && typeof (obj as User).email === 'string';
-
-export const isComment = (obj: BasicEntity): obj is Comment => 'commentId' in (obj as Comment);
-export const isCommentMosaicItem = (obj: MosaicItem): obj is CommentMosaicItem => obj && 'commentId' in (obj as Comment) && 'comments' in (obj as CommentMosaicItem);
 
 
 // TODO separate type-guards for MosaicItem and SearchResult

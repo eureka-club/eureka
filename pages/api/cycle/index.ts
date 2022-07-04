@@ -75,48 +75,51 @@ export default getApiHandler()
     try {
       const session = (await getSession({ req })) as unknown as Session;
 
-      
+      debugger;
       const { q = null,props:p=undefined } = req.query;
       const props:Prisma.CycleFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
       let {where:w,take,cursor,skip} = props;
-
+debugger;
       let where = w;
       let data = null;
       if (typeof q === 'string') {
         const terms = q.split(" ");
         where={
-          OR:[
-            {
-              AND:terms.map(t=>(
-                { 
-                  title: { contains: t } 
-                }
-              ))
-  
-            },
-            {
-              AND:terms.map(t=>(
-                { 
-                  contentText: { contains: t } 
-                }
-              ))
-  
-            },
-            {
-              AND:terms.map(t=>(
-                { 
-                   tags: { contains: t } 
-                }
-              ))
-            },
-            {
-              AND:terms.map(t=>(
-                { 
-                   topics: { contains: t } 
-                }
-              ))
-            }
-          ]
+          AND:{
+            ... where && where,
+            OR:[
+              {
+                AND:terms.map(t=>(
+                  { 
+                    title: { contains: t } 
+                  }
+                ))
+    
+              },
+              {
+                AND:terms.map(t=>(
+                  { 
+                    contentText: { contains: t } 
+                  }
+                ))
+    
+              },
+              {
+                AND:terms.map(t=>(
+                  { 
+                     tags: { contains: t } 
+                  }
+                ))
+              },
+              {
+                AND:terms.map(t=>(
+                  { 
+                     topics: { contains: t } 
+                  }
+                ))
+              }
+            ]
+          }
         };
       } 
       

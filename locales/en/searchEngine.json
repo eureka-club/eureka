@@ -13,5 +13,7 @@
   "Regions": "Regions",
   "Countries": "Countries",
   "See all results": "See all results",
-  "Not found": "Not found"
+  "Not found": "Not found",
+  "public":"Public",
+  "private":"Private"
 }

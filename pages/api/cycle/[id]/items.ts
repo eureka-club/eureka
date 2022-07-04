@@ -1,13 +1,9 @@
 import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/react';
 
 import {findAll as findAllPosts} from '@/src/facades/post'
-import {findAll as findAllComments} from '@/src/facades/comment'
 import getApiHandler from '@/src/lib/getApiHandler';
-import {prisma} from '@/src/lib/prisma';
 import { PostMosaicItem } from '@/src/types/post';
-import { CommentMosaicItem } from '@/src/types/comment';
 
 export const config = {
   api: {
@@ -60,15 +56,11 @@ export default getApiHandler()
             { contentText: { contains: q } }
           ]          
         };
-        comments = await findAllComments({where});
       } else if (where) {
-        comments = await findAllComments({where});
       } else {
-        comments = await findAllComments({where});
       }
 
       const it = [        
-        // ...comments.map(p=>{(p as CommentMosaicItem).type='comment';return p;}),
         ...posts.map(p=>{(p as PostMosaicItem).type='post';return p;})
       ]
 
@@ -78,7 +70,7 @@ export default getApiHandler()
 
       res.status(200).json({ 
          items,
-         total:(comments.length+posts.length),
+         total:(posts.length),
         // hasNextPage: (comments.length+posts.length) > take * (page+1)
        });
     } catch (exc) {
