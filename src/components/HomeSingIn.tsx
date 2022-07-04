@@ -29,7 +29,7 @@ const fetchItems = async (pageParam: number,topic:string):Promise<GetAllByResons
         return q.json();
 };
 
-const cyclesCreatedOrJoinedWhere = (id:number) => ({props:{
+const cyclesCreatedOrJoinedWhere = (id:number) => ({
   where:{
     OR:[
       {
@@ -40,7 +40,7 @@ const cyclesCreatedOrJoinedWhere = (id:number) => ({props:{
       }
     ]
   }
-}}) 
+}) 
 interface Props{
         groupedByTopics: Record<string,GetAllByResonse>;
       }

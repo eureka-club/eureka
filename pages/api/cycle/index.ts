@@ -75,11 +75,9 @@ export default getApiHandler()
     try {
       const session = (await getSession({ req })) as unknown as Session;
 
-      debugger;
       const { q = null,props:p=undefined } = req.query;
       const props:Prisma.CycleFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
       let {where:w,take,cursor,skip} = props;
-debugger;
       let where = w;
       let data = null;
       if (typeof q === 'string') {
@@ -122,7 +120,7 @@ debugger;
           }
         };
       } 
-      
+      debugger;
       let cr = await prisma?.cycle.aggregate({where,_count:true})
       const total = cr?._count;
       data = await findAll({take,where,skip,cursor});

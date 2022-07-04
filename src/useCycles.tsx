@@ -16,7 +16,7 @@ export const getCycles = async (
   const res = await fetch(url);
 
   if (!res.ok) return {cycles:[],fetched:0,total:-1};
-  const {data:cycles,fetched,total} = await res.json();debugger;
+  const {data:cycles,fetched,total} = await res.json();
   return {cycles,fetched,total};
 };
 

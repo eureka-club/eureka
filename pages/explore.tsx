@@ -13,11 +13,11 @@ import globalSearchEngineAtom from '@/src/atoms/searchEngine';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 
-const backOfficeCycles = (ids:number[]) => ({props:{
+const backOfficeCycles = (ids:number[]) => ({
   where:{
     id: { in: ids },
   }
-}}) 
+}) 
 
 const ExplorePage: NextPage = () => {
   const { t } = useTranslation('common');

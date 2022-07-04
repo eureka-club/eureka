@@ -67,7 +67,7 @@ const IndexPage: NextPage<Props> = ({groupedByTopics}) => {
   </>
 };
 
-export const getServerSideProps: GetServerSideProps = async ({req}) => {debugger;
+export const getServerSideProps: GetServerSideProps = async ({req}) => {
   const session = await getSession({req});
   if(!session)
     return {props:{groupedByTopics:null}};

@@ -13,7 +13,7 @@ import { findAll as faw } from '@/src/facades/work';
 export default getApiHandler()
 .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
   try {
-    const {q} = req.query;debugger;
+    const {q} = req.query;
     const query = q.toString();
     const terms = query.split(" ");
 

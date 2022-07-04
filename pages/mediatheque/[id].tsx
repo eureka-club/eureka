@@ -67,7 +67,7 @@ const userPostsCondition = (id: number, idSession?:number)=> ({props:{
   }
 }});
 
-const cyclesCreatedOrJoinedWhere = (id:number) => ({props:{
+const cyclesCreatedOrJoinedWhere = (id:number) => ({
   where:{
     OR:[
       {
@@ -78,7 +78,7 @@ const cyclesCreatedOrJoinedWhere = (id:number) => ({props:{
       }
     ]
   }
-}}) 
+}) 
 
 const Mediatheque: NextPage = () => {
   
