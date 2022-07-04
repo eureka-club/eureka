@@ -7,7 +7,9 @@ import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import TagsInput from '../src/components/forms/controls/TagsInput';
 import useBackOffice from '@/src/useBackOffice';
 import { CycleMosaicItem } from '@/src/types/cycle';
+import { PostMosaicItem } from '@/src/types/post';
 import useCycles from '@/src/useCycles';
+import usePosts from '@/src/usePosts';
 import CarouselStatic from '@/src/components/CarouselStatic';
 import globalSearchEngineAtom from '@/src/atoms/searchEngine';
 import { useAtom } from 'jotai';
@@ -19,10 +21,16 @@ const backOfficeCycles = (ids:number[]) => ({
   }
 }) 
 
+const backOfficePosts = (ids:number[]) => ({props:{
+  where:{
+    id: { in: ids },
+  }
+}}) 
+
 const ExplorePage: NextPage = () => {
   const { t } = useTranslation('common');
-  const [ids, setIds] = useState<number[]>([]);
-
+  const [cyclesIds, setCycleIds] = useState<number[]>([]);
+  const [postsIds, setPostsIds] = useState<number[]>([]);
   const [topics /* , setHide */] = useState<string[]>([
     'gender-feminisms', 'technology', 'environment','racism-discrimination','wellness-sports', 'social issues',
     'politics-economics', 'philosophy', 'migrants-refugees', 'introspection', 'sciences', 'arts-culture', 'history',
@@ -34,26 +42,34 @@ const ExplorePage: NextPage = () => {
 
    useEffect(() => {
     if (bo && bo.CyclesExplorePage?.length) {
-      let ids:number[] = [];
-      bo.CyclesExplorePage.split(',').forEach(x=> ids.push(parseInt(x)));
-      setIds(ids);
+      let cyclesIds:number[] = [];
+      bo.CyclesExplorePage.split(',').forEach(x=> cyclesIds.push(parseInt(x)));
+      setCycleIds(cyclesIds);
+    }
+   if (bo && bo.PostExplorePage?.length) {
+      let postsIds:number[] = [];
+      bo.PostExplorePage.split(',').forEach(x=> postsIds.push(parseInt(x)));
+      setPostsIds(postsIds);
     }
      
   }, [bo]);
 
-  const {data:dataCycles} = useCycles(backOfficeCycles(ids));
-  const [cycles,setCycles] = useState(dataCycles?.cycles)
+  const {data:dataCycles} = useCycles(backOfficeCycles(cyclesIds));
+  const [cycles,setCycles] = useState(dataCycles?.cycles);
+
+  const {data:dataPosts} = usePosts(backOfficePosts(postsIds));
+  const [posts,setPosts] = useState(dataPosts?.posts);
+  
   useEffect(()=>{
     if(dataCycles)setCycles(dataCycles.cycles)
-  },[dataCycles])
-
-  console.log(cycles,'cycles')
+    if(dataPosts)setPosts(dataPosts.posts)
+  },[dataCycles,dataPosts])
 
   const getTopicsBadgedLinks = () => {
     return <TagsInput formatValue={(v: string) => t(`topics:${v}`)} tags={[...topics].join()} readOnly />;
   };
 
-  const seeAll = async (data: CycleMosaicItem[], q: string, showFilterEngine = true): Promise<void> => {
+  const seeAll = async (data: CycleMosaicItem[] | PostMosaicItem[], q: string, showFilterEngine = true): Promise<void> => {
     setGlobalSearchEngineState({
       ...globalSearchEngineState,
       itemsFound: data,
@@ -68,9 +84,24 @@ const renderBackOfficeCycles = () => {
     ? <div>      
        <h1 className="text-secondary fw-bold">{t('Interest cycles')}</h1>
        <CarouselStatic
-        cacheKey={['CYCLES',JSON.stringify(backOfficeCycles(ids))]}
+        cacheKey={['CYCLES',JSON.stringify(backOfficeCycles(cyclesIds))]}
         onSeeAll={async () => seeAll(cycles, t('Interest cycles'))}
         data={cycles}
+        iconBefore={<></>}
+        // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+      />
+      </div>
+    : <></>;
+  };
+
+  const renderBackOfficePosts = () => {
+    return (posts && posts.length) 
+    ? <div>      
+       <h1 className="text-secondary fw-bold">{t('Featured Eurekas')}</h1>
+       <CarouselStatic
+        cacheKey={['POSTS',JSON.stringify(backOfficePosts(postsIds))]}
+        onSeeAll={async () => seeAll(posts, t('Featured Eurekas'))}
+        data={posts}
         iconBefore={<></>}
         // iconAfter={<BsCircleFill className={styles.infoCircle} />}
       />
@@ -87,9 +118,9 @@ const renderBackOfficeCycles = () => {
       <div>
         {renderBackOfficeCycles()}
       </div>
-    
-    
-    
+      <div style={{marginBottom:'6em'}}>
+        {renderBackOfficePosts()}
+      </div>
     </SimpleLayout>
     </>
   );
