@@ -52,7 +52,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     await qc.prefetchQuery(["CYCLES", q], () => getCycles({q:q?.toString(),props:{take:8}}));
   }
   
-  return {
+  return { 
     props: {
       dehydratedState: dehydrate(qc),
     },
