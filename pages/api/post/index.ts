@@ -73,7 +73,7 @@ export default getApiHandler()
     try {
       const { q = null, props:p="" } = req.query;
       const props:Prisma.PostFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
-      let {where:w,take,cursor,skip,select} = props;
+      let {where:w,take,cursor,skip,select} = props;debugger;
       const session = await getSession({ req });
       let where = {...w}
       

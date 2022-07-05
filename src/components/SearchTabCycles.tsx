@@ -5,112 +5,97 @@ import { Spinner, Alert,Row,Tab, Col} from 'react-bootstrap';
 
 import MosaicItem from '@/components/cycle/MosaicItem'
 
-import useCycles,{getCycles} from '@/src/useCycles'
+import {getCycles} from '@/src/useCycles'
 
-import useFilterEngineCycles from './useFilterEngineCycles';
+// import useFilterEnginePosts from './useFilterEnginePosts';
 import { useInView } from 'react-intersection-observer';
 import { Prisma } from '@prisma/client';
-interface Props{
-    
+import { CycleMosaicItem } from '../types/cycle';
+interface Props {
+  cyclesData:{total:number,fetched:number,cycles:CycleMosaicItem[]};
 }
 const take = 8;
-const baseProps = (terms:string[])=>{
-
-  return {
-    OR:[
-      {
-        AND:terms.map(t=>(
-          { 
-            title: { contains: t } 
-          }
-        ))
-
-      },
-      {
-        AND:terms.map(t=>(
-          { 
-            contentText: { contains: t } 
-          }
-        ))
-
-      },
-      {
-        AND:terms.map(t=>(
-          { 
-             tags: { contains: t } 
-          }
-        ))
-      },
-      {
-        AND:terms.map(t=>(
-          { 
-             topics: { contains: t } 
-          }
-        ))
-      }
-    ]
-  }
-};
-const SearchTabCycles: FunctionComponent<Props> = () => {
+const SearchTabCycles: FunctionComponent<Props> = ({cyclesData}) => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const terms = router?.query.q?.toString()!.split(" ") || [];
   
-  const {FilterEngineCycles} = useFilterEngineCycles({
-    filtersTypeChanged:async (filtersType)=>{
-      setCycles([])
-      const {public:pb,private:pv} = filtersType;
-
-      setProps({
-        where:{
-        ...baseProps(terms),
-          AND:{
-            OR:[
-              {
-                ... pb && {access:1}
-              },
-              {
-                ... pv && {access:2}
-              }
-            ]
-          }
+  const baseProps = (terms:string[])=>{
+    return {
+      OR:[
+        {
+          AND:terms.map(t=>(
+            { 
+              title: { contains: t } 
+            }
+          ))
+  
+        },
+        {
+          AND:terms.map(t=>(
+            { 
+              contentText: { contains: t } 
+            }
+          ))
+  
+        },
+        {
+          AND:terms.map(t=>(
+            { 
+               tags: { contains: t } 
+            }
+          ))
+        },
+        {
+          AND:terms.map(t=>(
+            { 
+               topics: { contains: t } 
+            }
+          ))
         }
-      })
+      ],
     }
-  })
+  };
 
-  const [props,setProps]=useState<Prisma.CycleFindManyArgs>({where:{...baseProps(terms)}})
-  const {data:{total,fetched,cycles:c}={total:0,fetched:0,cycles:[]}} = useCycles(props,{enabled:!!router.query?.q});
-  const [cycles,setCycles] = useState(()=>c)
+  const [props,setProps]=useState<Prisma.CycleFindManyArgs>({take,where:{...baseProps(terms)}})
+  // const {data:{total,fetched,cycles:c}={total:0,fetched:0,cycles:[]}} = usecycles(props,{enabled:!!router.query?.q});
+  const [cycles,setCycles] = useState<CycleMosaicItem[]>([])
+  const {total,fetched} = cyclesData;
+  useEffect(()=>{
+    if(cyclesData.cycles)setCycles(cyclesData.cycles)
+  },[cyclesData.cycles])
 
   useEffect(()=>{
-    if(c)setCycles(c)
-  },[c])
+    if(router.query.q){
+      const terms = router?.query.q?.toString()!.split(" ") || [];
 
-  const [refCycles, inViewCycles] = useInView({
+      setProps(()=>({take,where:{...baseProps(terms)}}))
+    }
+  },[router.query.q])
+
+  const [ref, inView] = useInView({
     triggerOnce: false,
   });
-
+  console.log(cycles.length,total)
   useEffect(()=>{
-    if(inViewCycles && cycles.length && fetched){
+    if(inView && cycles.length < total){
       const fi = async ()=>{
         const {id} = cycles.slice(-1)[0]
         const r = await getCycles({...props,skip:1,cursor:{id}});
         setCycles((c: any)=>[...c,...r.cycles])
       }
-      if(fetched)
-        fi()
+      fi()
     }
-  },[inViewCycles])
+  },[inView])
 
   const renderCycles=()=>{
     if(cycles)
       return <div>
-        <FilterEngineCycles/>
+        {/* <FilterEngineCycles/> */}
         <Row>
-            {cycles.map(p=><Col className="mb-3" key={p.id}><MosaicItem cycleId={p.id} cacheKey={['CYCLE',p.id.toString()]}  /></Col>)}
+            {cycles.map(p=><Col xs={12} sm={6} lg={3} className="mb-3" key={p.id}><MosaicItem cycleId={p.id} cacheKey={['CYCLE',p.id.toString()]}  /></Col>)}
       </Row>
-      {cycles?.length<total && <Spinner ref={refCycles} animation="grow" />}
+      {cycles?.length!=total && <Spinner ref={ref} animation="grow" />}
       </div>
       return ''
   }

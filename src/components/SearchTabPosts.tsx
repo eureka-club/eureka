@@ -5,48 +5,96 @@ import { Spinner, Alert,Row,Tab, Col} from 'react-bootstrap';
 
 import MosaicItem from '@/components/post/MosaicItem'
 
-import usePosts,{getPosts} from '@/src/usePosts'
+import {getPosts} from '@/src/usePosts'
 
-import useFilterEnginePosts from './useFilterEnginePosts';
+// import useFilterEnginePosts from './useFilterEnginePosts';
 import { useInView } from 'react-intersection-observer';
-interface Props{
-    
+import { Prisma } from '@prisma/client';
+import { PostMosaicItem } from '../types/post';
+interface Props {
+  postsData:{total:number,fetched:number,posts:PostMosaicItem[]};
 }
 const take = 8;
-const SearchTabPosts: FunctionComponent<Props> = () => {console.log("mounted tab posts")
+const SearchTabPosts: FunctionComponent<Props> = ({postsData}) => {
   const { t } = useTranslation('common');
   const router = useRouter();
+  const terms = router?.query.q?.toString()!.split(" ") || [];
+  
+  const baseProps = (terms:string[])=>{
+    return {
+      OR:[
+        {
+          AND:terms.map(t=>(
+            { 
+              title: { contains: t } 
+            }
+          ))
+  
+        },
+        {
+          AND:terms.map(t=>(
+            { 
+              contentText: { contains: t } 
+            }
+          ))
+  
+        },
+        {
+          AND:terms.map(t=>(
+            { 
+               tags: { contains: t } 
+            }
+          ))
+        },
+        {
+          AND:terms.map(t=>(
+            { 
+               topics: { contains: t } 
+            }
+          ))
+        }
+      ]
+    }
+  };
 
-  const {FilterEngineWorks,filtersChecked} = useFilterEnginePosts()
+  const [props,setProps]=useState<Prisma.PostFindManyArgs>({take,where:{...baseProps(terms)}})
+  // const {data:{total,fetched,posts:c}={total:0,fetched:0,posts:[]}} = usePosts(props,{enabled:!!router.query?.q});
+  const [posts,setPosts] = useState<PostMosaicItem[]>([])
+  const {total,fetched} = postsData;
+  useEffect(()=>{
+    if(postsData.posts)setPosts(postsData.posts)
+  },[postsData.posts])
 
-  const {data:{posts:p,fetched,total}={posts:[],fetched:0,total:0}} = usePosts({q:router.query.q?.toString()!,props:{take}},{enabled:!!router.query?.q});
-  const [posts,setPosts] = useState(p)
+  useEffect(()=>{
+    if(router.query.q){
+      const terms = router?.query.q?.toString()!.split(" ") || [];
+      setProps(()=>({take,where:{...baseProps(terms)}}))
+    }
+  },[router.query.q])
 
-  const [refWorks, inViewPosts] = useInView({
+  const [refPosts, inViewCycles] = useInView({
     triggerOnce: false,
   });
 
   useEffect(()=>{
-    if(inViewPosts && router && posts.length && fetched){
+    if(inViewCycles && posts.length<total){
       const fi = async ()=>{
         const {id} = posts.slice(-1)[0]
-        const r = await getPosts({q:router.query.q?.toString()!,props:{skip:1,cursor:{id},take}});
-        setPosts(p=>[...p,...r.posts])
+        const r = await getPosts({...props,skip:1,cursor:{id}});
+        setPosts((c: any)=>[...c,...r.posts])
       }
-      if(fetched)
-        fi()
-
+      fi()
     }
-  },[inViewPosts])
+  },[inViewCycles])
 
   const renderPosts=()=>{
     if(posts)
       return <div>
-        <FilterEngineWorks/>
+        {/* <FilterEngineCycles/> */}
         <Row>
-            {posts.map(p=><Col className="mb-3" key={p.id}><MosaicItem postId={p.id} cacheKey={['POST',p.id.toString()]}  /></Col>)}
+            {posts.map(p=><Col xs={12} sm={6} lg={3} className="mb-3" key={p.id}><MosaicItem postId={p.id} cacheKey={['POST',p.id.toString()]}  /></Col>)}
       </Row>
-      {posts?.length!=total && <Spinner ref={refWorks} animation="grow" />}
+      {posts.length<total && <Spinner ref={refPosts} animation="grow" />}
       </div>
       return ''
   }

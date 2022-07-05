@@ -4,13 +4,11 @@ import { Prisma } from '@prisma/client';
 import { buildUrl } from 'build-url-ts';
 
 export const getPosts = async (
-  args: {q?:string;props?:Prisma.PostFindManyArgs},
+  props?:Prisma.PostFindManyArgs,
 ): Promise<{posts:PostMosaicItem[],fetched:number,total:number}> => {
-  const {q,props} = args;
   const url = buildUrl(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api`, {
     path: 'post',
     queryParams: {
-      q,
       ...props && {props:encodeURIComponent(JSON.stringify(props))}
     }
   });
@@ -27,16 +25,15 @@ interface Options {
   enabled?: boolean;
 }
 
-const usePosts = (args: {q?:string;props?:Prisma.PostFindManyArgs}, options?: Options) => {
+const usePosts = (props?:Prisma.PostFindManyArgs, options?: Options) => {
   const { staleTime, enabled } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  const {q,props} = args;
-  const key = q ? q : JSON.stringify(props); 
+  const key = JSON.stringify(props); 
   let ck = ['POSTS', `${key}`];
 
-  return useQuery<{posts:PostMosaicItem[],fetched:number,total:number}>(ck, () => getPosts(args), {
+  return useQuery<{posts:PostMosaicItem[],fetched:number,total:number}>(ck, () => getPosts(props), {
     staleTime,
     enabled,
     retry:3
