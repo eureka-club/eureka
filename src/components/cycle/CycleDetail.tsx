@@ -83,7 +83,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     enabled:!!cycleId
   });
 
-  const { data: dataWorks } = useWorks({props:{ where:{cycles: { some: { id: cycle?.id } } }}}, {
+  const { data: dataWorks } = useWorks({where:{cycles: { some: { id: cycle?.id } } }}, {
     enabled:!!cycle?.id
   })
   const [works,setWorks] = useState(dataWorks?.works)
@@ -133,7 +133,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   // },[queryClient,works])
 
   const cyclePostsProps = {take:8,where:{cycles:{some:{id:+cycleId}}}}
-  const {data:dataPosts} = usePosts({props:cyclePostsProps},{enabled:!!cycleId})
+  const {data:dataPosts} = usePosts(cyclePostsProps,{enabled:!!cycleId})
   const [posts,setPosts] = useState(dataPosts?.posts)
   const [hasMorePosts,setHasMorePosts] = useState(dataPosts?.fetched);
 
@@ -152,7 +152,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         const loadMore = async ()=>{
           const {id} = posts.slice(-1)[0];
           const o = {...cyclePostsProps,skip:1,cursor:{id}};
-          const {posts:pf,fetched} = await getPosts({props:o})
+          const {posts:pf,fetched} = await getPosts(o)
           setHasMorePosts(fetched);
           const posts_ = [...(posts||[]),...pf];
           setPosts(posts_);

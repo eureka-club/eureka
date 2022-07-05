@@ -53,7 +53,7 @@ type ItemCycle = CycleMosaicItem & { type: string };
 
 // | WorkMosaicItem | ;
 
-const userPostsCondition = (id: number, idSession?:number)=> ({props:{
+const userPostsCondition = (id: number, idSession?:number)=> ({
   where:{
     creatorId:id,
     isPublic:true,
@@ -65,7 +65,7 @@ const userPostsCondition = (id: number, idSession?:number)=> ({props:{
     //   }
     // },
   }
-}});
+});
 
 const cyclesCreatedOrJoinedWhere = (id:number) => ({
   where:{

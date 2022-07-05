@@ -21,11 +21,11 @@ const backOfficeCycles = (ids:number[]) => ({
   }
 }) 
 
-const backOfficePosts = (ids:number[]) => ({props:{
+const backOfficePosts = (ids:number[]) => ({
   where:{
     id: { in: ids },
   }
-}}) 
+}) 
 
 const ExplorePage: NextPage = () => {
   const { t } = useTranslation('common');

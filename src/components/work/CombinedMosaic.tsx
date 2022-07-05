@@ -56,7 +56,7 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
   },[dataCycles])
 
 
-  const {data:dataPosts} = usePosts({props:{
+  const {data:dataPosts} = usePosts({
     where:{
       works:{
         some:{
@@ -64,7 +64,7 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
         }
       }
     }
-  }},{enabled:!!work.id})
+  },{enabled:!!work.id})
   const [posts,setPosts] = useState(dataPosts?.posts);
 
   useEffect(()=>{
