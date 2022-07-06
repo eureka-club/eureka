@@ -18,7 +18,7 @@ const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
   cacheKey: [string, string];
 };*/
 
-const BannerCustomizable: FunctionComponent = ({
+const BannerCustomizableMobile: FunctionComponent = ({
 }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
@@ -80,14 +80,7 @@ const BannerCustomizable: FunctionComponent = ({
             <Carousel indicators={true} controls={true}  style={{width: '90%'}} >
               <Carousel.Item className="text-secondary bg-gray-light" style={{ height: '20rem' }}>
                   <div className="d-flex flex-row" >
-                    <div className='' >
-                         <img
-                          style={{width:'22em',height:'20em'}}
-                          src={image1}
-                          alt=""
-                        />
-                    </div>
-                    <div className="d-flex flex-column mt-4 px-5 py-3" style={{minWidth:'65%%'}}>
+                    <div className="d-flex flex-column mt-2 px-5 py-3" style={{minWidth:'65%%'}}>
                       <h2 className="h1 fs-2">{bo?.SlideTitle1}</h2>
                       <p className="p-0 mx-1 text-wrap fs-5">{bo?.SlideText1}</p>
                        <div className="d-flex  mt-2"> 
@@ -98,14 +91,7 @@ const BannerCustomizable: FunctionComponent = ({
               </Carousel.Item>
               <Carousel.Item className="text-secondary bg-gray-light" style={{ height: '20rem' }}>
                 <div className="d-flex flex-row" >
-                    <div className='' >
-                         <img
-                          style={{width:'22em',height:'20em'}}
-                          src={image2}
-                          alt=""
-                        />
-                    </div>
-                    <div className="d-flex flex-column mt-4  px-5 py-3" style={{minWidth:'65%'}}>
+                    <div className="d-flex flex-column mt-2  px-5 py-3" style={{minWidth:'65%'}}>
                       <h2 className="h1 fs-2">{bo?.SlideTitle2}</h2>
                       <p className="p-0 mx-1 text-wrap fs-5">{bo?.SlideText2}</p>
                        <div className="d-flex mt-2"> 
@@ -116,14 +102,7 @@ const BannerCustomizable: FunctionComponent = ({
               </Carousel.Item>
               <Carousel.Item className="text-secondary bg-gray-light" style={{ height: '20rem' }}>
                 <div className="d-flex flex-row" >
-                    <div className='' >
-                         <img
-                          style={{width:'22em',height:'20em'}}
-                          src={image3}
-                          alt=""
-                        />
-                    </div>
-                    <div className="d-flex flex-column mt-4  px-5 py-3" style={{minWidth:'65%'}}>
+                    <div className="d-flex flex-column mt-2  px-5 py-3" style={{minWidth:'65%'}}>
                       <h2 className="h1 fs-2">{bo?.SlideTitle3}</h2>
                       <p className="p-0 mx-1 text-wrap fs-5">{bo?.SlideText3}</p>
                        <div className="d-flex  mt-2"> 
@@ -142,4 +121,4 @@ const BannerCustomizable: FunctionComponent = ({
   );
 };
 
-export default BannerCustomizable;
+export default BannerCustomizableMobile;

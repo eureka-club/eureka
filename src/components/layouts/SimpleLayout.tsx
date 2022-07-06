@@ -7,6 +7,8 @@ import Header from '@/components/layouts/Header';
 import Navbar from '@/components/layouts/Navbar';
 import HeaderMobile from '@/components/layouts/HeaderMobile';
 import BannerCustomizable from '@/src/components/BannerCustomizable';
+import BannerCustomizableMobile from '@/src/components/BannerCustomizableMobile';
+
 import Footer from '@/components/layouts/Footer';
 
 type Props = {
@@ -44,7 +46,8 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
           <div className="d-none d-lg-block"><Header show={showHeader} /></div>
           <div className="d-lg-none"><HeaderMobile show={showHeader} /></div>        
         </>}     
-        <div className="d-none d-lg-block">{showCustomBaner && <BannerCustomizable/>}</div>
+        {showCustomBaner &&<div className="d-none d-lg-block"> <BannerCustomizable/></div>}
+        {showCustomBaner &&<div className="d-block d-lg-none"> <BannerCustomizableMobile/></div>}
         {renderBanner()}
         {(!showNavBar || allPageSize) ? <div className='m-0'>{children}</div>
         : (showHeader || showCustomBaner) ?  <Container className='mt-4'>{children}</Container>

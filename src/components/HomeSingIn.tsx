@@ -102,7 +102,7 @@ if(topicIdx < topics.length-1) return <Spinner ref={ref} animation="grow" />
 const cyclesJoined = () => {
     return (cycles && cycles.length) 
     ? <div>      
-       <h1 className="text-secondary fw-bold">{t('Cycles I created or joined')}</h1>
+       <h1 className="text-secondary mb-0 fw-bold">{t('Cycles I created or joined')}</h1>
        <CarouselStatic
         cacheKey={['CYCLES',JSON.stringify(cyclesCreatedOrJoinedWhere(+session!.user.id.toString()))]}
          onSeeAll={async () => seeAll(cycles, t('Cycles I created or joined'))}
