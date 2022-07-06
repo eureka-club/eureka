@@ -288,7 +288,7 @@ const MosaicItem: FunctionComponent<Props> = ({
       </div>
 
       <div className={`${styles.details}`}>
-        {detailed && (
+        {detailed && !showParticipants && (
         <div className={`d-flex flex-column align-items-center justify-content-center ${styles.detailedInfo}`}>
           <h6 className={`d-flex align-items-center text-center cursor-pointer ${styles.title}`}>
             {linkToCycle ? (
