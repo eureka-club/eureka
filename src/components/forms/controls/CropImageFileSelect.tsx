@@ -9,9 +9,11 @@ import toast from 'react-hot-toast'
 interface Props{
   onGenerateCrop: (file:File) => void;
   onClose: () => void;
-  cropShape?: 'rect' | 'round' | undefined
+  cropShape?: 'rect' | 'round' | undefined,
+  width?: number,
+  height?: number
 }
-const CropImageFileSelect: React.FC<Props> = ({onGenerateCrop,onClose,cropShape}) => {
+const CropImageFileSelect: React.FC<Props> = ({onGenerateCrop,onClose,cropShape,width=256,height=256}) => {
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [imageSrc, setImageSrc] = useState<string>('');
   const [file, setFile] = useState<File>();
@@ -85,7 +87,7 @@ const onFileChange = async  (e:React.ChangeEvent<HTMLInputElement>)  => {
           image={imageSrc}
           crop={crop}
           zoom={zoom}
-          cropSize={{ width: 256, height: 256 }}
+          cropSize={{ width: width,height: height }}
           //aspect={2 / 2}
           cropShape	={cropShape}
           onCropChange={setCrop}

@@ -21,10 +21,10 @@ const Footer: FunctionComponent = () => {
     <div className="container d-flex flex-column-reverse flex-lg-row justify-content-lg-between align-items-lg-center">
       <section className="mb-1 mb-lg-0">
         <div className="text-center d-flex flex-column flex-lg-row justify-content-around pt-3 text-secondary fs-6">
-              <Link href="/manifest"><a className='text-secondary text-decoration-underline text-blue me-lg-5 mb-1 mb-lg-none'>{t('Manifest')}</a></Link>
-              <Link href="/about"><a className='text-secondary text-decoration-underline me-lg-5 mb-1 mb-lg-none'>{t('About Eureka')}</a></Link>
-              <Link href="/aboutUs"><a className='text-secondary text-decoration-underline me-lg-5 mb-1 mb-lg-none'>{t('About Us')}</a></Link>
-              <Link href="/policy"><a className='text-secondary text-decoration-underline me-lg-5 mb-1 mb-lg-none'>{t('policyText')}</a></Link>
+              <Link href="/manifest"><a className='text-secondary text-decoration-underline text-blue me-lg-5 mb-1 mb-lg-none' onClick={()=> window.scrollTo(0, 0)}>{t('Manifest')} </a></Link>
+              <Link href="/about"><a className='text-secondary text-decoration-underline me-lg-5 mb-1 mb-lg-none' onClick={()=> window.scrollTo(0, 0)}>{t('About Eureka')}</a></Link>
+              <Link href="/aboutUs"><a className='text-secondary text-decoration-underline me-lg-5 mb-1 mb-lg-none' onClick={()=> window.scrollTo(0, 0)}>{t('About Us')}</a></Link>
+              <Link href="/policy"><a className='text-secondary text-decoration-underline me-lg-5 mb-1 mb-lg-none' onClick={()=> window.scrollTo(0, 0)}>{t('policyText')}</a></Link>
           <p>{t('common:contact')} <a className='text-decoration-underline text-secondary me-lg-3' href="mailto:hola@eureka.club">hola@eureka.club</a></p>
         </div>
 

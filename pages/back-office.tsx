@@ -228,11 +228,11 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
 
                               <Form.Group  controlId="TitleSlider1">
                                   <Form.Label>{t('Title')}</Form.Label>
-                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideTitle1 || ""}/>
+                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideTitle1 || ""} maxLength={100}/>
                               </Form.Group>
                               <Form.Group  controlId="TextSlider1">
                                   <Form.Label>{t('Text')}</Form.Label>
-                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideText1 || ""}/>
+                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideText1 || ""} maxLength={120}/>
                               </Form.Group>
 
                               {(!showCrop && currentSlider != 1) && (<Button data-cy="image-load" variant="primary" className="w-50 text-white mt-2  mb-3" onClick={() => openCrop(1)}>
@@ -242,7 +242,7 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
                               { (showCrop && currentSlider == 1) && (
                               <Row className='d-flex'>
                                 <div className='w-100 border p-3'>  
-                                <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={()=> closeCrop()} cropShape='rect' />
+                                <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={()=> closeCrop()} cropShape='rect' width={352} height={320} />
                                 </div>  
                               </Row>                        
                             )}      
@@ -252,11 +252,11 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
                               <h5 className='text-secondary mb-2'><b>{t('Slider 2')}</b></h5>
                                <Form.Group  controlId="TitleSlider2">
                                   <Form.Label>{t('Title')}</Form.Label>
-                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideTitle2 || ""}/>
+                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideTitle2 || ""} maxLength={100}/>
                               </Form.Group>
                               <Form.Group  controlId="TextSlider2">
                                   <Form.Label>{t('Text')}</Form.Label>
-                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideText2 || ""}/>
+                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideText2 || ""} maxLength={120}/>
                               </Form.Group>
 
                               {(!showCrop && currentSlider != 2) && (<Button data-cy="image-load" variant="primary" className="w-50 text-white mt-2 mb-3" onClick={() => openCrop(2)}>
@@ -266,7 +266,7 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
                               { (showCrop && currentSlider == 2) && (
                               <Row className='d-flex'>
                                 <div className='w-100 border p-3'>  
-                                <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={()=> closeCrop()} cropShape='rect' />
+                                <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={()=> closeCrop()} cropShape='rect' width={352} height={320}  />
                                 </div>  
                               </Row>
                             )}      
@@ -277,11 +277,11 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
                               
                                <Form.Group  controlId="TitleSlider3">
                                   <Form.Label>{t('Title')}</Form.Label>
-                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideTitle3 || ""}/>
+                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideTitle3 || ""} maxLength={100}/>
                               </Form.Group>
                               <Form.Group  controlId="TextSlider3">
                                   <Form.Label>{t('Text')}</Form.Label>
-                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideText3 || ""}/>
+                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideText3 || ""} maxLength={120}/>
                               </Form.Group>
 
                               {(!showCrop && currentSlider != 3) && (<Button data-cy="image-load" variant="primary" className="w-50 text-white mt-2 mb-3" onClick={() => openCrop(3)}>
@@ -291,7 +291,7 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
                               { (showCrop && currentSlider == 3) && (
                               <Row className='d-flex'>
                                 <div className='w-100 border p-3'>  
-                                <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={()=> closeCrop()} cropShape='rect' />
+                                <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={()=> closeCrop()} cropShape='rect' width={352} height={320}  />
                                 </div>  
                               </Row>
                             )}      
