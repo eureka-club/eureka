@@ -10,7 +10,6 @@ import { useQueryClient, useMutation, dehydrate, QueryClient } from 'react-query
 // import { dehydrate } from 'react-query/hydration';
 import { useState, useEffect, SyntheticEvent } from 'react';
 
-// import { loadGetInitialProps } from 'next/dist/next-server/lib/utils';
 import { Spinner, Card, Row, Col, ButtonGroup, Button, Alert } from 'react-bootstrap';
 import { AiOutlineEnvironment } from 'react-icons/ai';
 import { /* BsCircleFill, */ BsBookmark, BsEye } from 'react-icons/bs';
@@ -22,63 +21,33 @@ import { /* RatingOnCycle, */ RatingOnWork, User } from '@prisma/client';
 import styles from './index.module.css';
 import useUser from '@/src/useUser';
 
-import globalSearchEngineAtom from '../../src/atoms/searchEngine';
-import globalModalsAtom from '@/src/atoms/globalModals'
-
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import FilterEngine from '../../src/components/FilterEngine';
 import TagsInput from '../../src/components/forms/controls/TagsInput';
 
 import CarouselStatic from '../../src/components/CarouselStatic';
-// import useWorks from '../src/useWorks';
-// import useCycles from '../src/useCycles';
-// import useCountries from '../src/useCountries';
-// import { Session } from '../../src/types';
+
 import { CycleMosaicItem /* , CycleWithImages */ } from '../../src/types/cycle';
 import { PostMosaicItem /* , PostWithImages */ } from '../../src/types/post';
 import { WorkMosaicItem /* , WorkWithImages */ } from '../../src/types/work';
 import { UserMosaicItem /* , UserDetail, WorkWithImages */ } from '../../src/types/user';
 import UnclampText from '../../src/components/UnclampText';
 import { useNotificationContext } from '@/src/useNotificationProvider';
-import usePosts,{getPosts} from '@/src/usePosts';
-import useCycles,{getCycles} from '@/src/useCycles';
-// import MosaicItemCycle from '../../src/components/cycle/MosaicItem';
-// import MosaicItemPost from '../../src/components/post/MosaicItem';
-// import MosaicItemWork from '../../src/components/work/MosaicItem';
+import useMyPosts,{getMyPosts} from '@/src/useMyPosts';
+import useMyCycles,{getMyCycles} from '@/src/useMyCycles';
+import useMySaved from '@/src/useMySaved';
+import slugify from 'slugify'
 
 type Item = CycleMosaicItem | WorkMosaicItem | (PostMosaicItem & { type: string });
 
 type ItemCycle = CycleMosaicItem & { type: string };
-// type ItemPost = PostMosaicItem & { type: string };
-
-// | WorkMosaicItem | ;
 
 const userPostsCondition = (id: number, idSession?:number)=> ({
   where:{
     creatorId:id,
-    isPublic:true,
-    // ... idSession && {
-    //   OR:{
-    //     creator:{
-    //       followedBy:{some:{id:idSession}}
-    //     }
-    //   }
-    // },
+    isPublic:true    
   }
 });
-
-const cyclesCreatedOrJoinedWhere = (id:number) => ({
-  where:{
-    OR:[
-      {
-        participants:{some:{id}},
-      },
-      {
-        creatorId:id
-      }
-    ]
-  }
-}) 
 
 const Mediatheque: NextPage = () => {
   
@@ -88,41 +57,11 @@ const Mediatheque: NextPage = () => {
   const [idSession, setIdSession] = useState<string>('');
   const router = useRouter();
   const {notifier} = useNotificationContext();
-  // const [cycles, setCycles] = useState<ItemCycle[]>([]);
-  // const [posts, setPosts] = useState<ItemPost[]>([]);
-  // const [savedForLater, setSavedForLater] = useState<Item[]>([]);
-  // const [readOrWatched, setReadOrWatched] = useState<Item[]>([]);
   
   const queryClient = useQueryClient();
   const { t } = useTranslation('mediatheque');
-  const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
-  const [globalModals, setGlobalModals] = useAtom(globalModalsAtom);
-
-  
-
-  // if (!s?.user) {
-  //   router?.push('/');
-  //   window.location.href = '/';
-  // }
-
-  /* useEffect(()=>{
-    setSocketIO(new SocketIO([+id],(data)=>{
-      // alert(data.message)
-      setGlobalModals((res)=>({
-        ...res,
-        showToast: {
-          show: true,
-          type: 'info',
-          title: t(`common:Notification`),
-          message: data.message,
-        }
-      }))
-    }))
-  },[id]);
- */
+ 
   useEffect(() => {
-    // const s = session as unknown as Session;
-    // if (s && s.user) setId(s.user.id.toString());
     setId(router.query.id as string);
     if (session) setIdSession(session.user.id.toString());
   }, [session, router]);
@@ -135,26 +74,25 @@ const Mediatheque: NextPage = () => {
   const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>(false);
   
 
-  const {data:dataPosts} = usePosts(userPostsCondition(+id, +idSession),{enabled:!!(id && !isLoadingSession)})
+  const {data:dataPosts} = useMyPosts(session)
   const [posts,setPosts] = useState(dataPosts?.posts);
 
   useEffect(()=>{
-    if(dataPosts){
+    if(dataPosts?.posts){
       setPosts(dataPosts.posts)
     }
-  },[dataPosts])
-  
-  const {data:dataCycles} = useCycles(cyclesCreatedOrJoinedWhere(+id),
-    {enabled:!!id}
-  )
+  },[dataPosts?.posts])
+
+  const {data:dataCycles} = useMyCycles(session);
   const [cycles,setCycles] = useState(dataCycles?.cycles);
 
   useEffect(()=>{
-    if(dataCycles){
-      setCycles(dataCycles.cycles)
+    if(dataCycles?.cycles){
+      setCycles(dataCycles?.cycles)
     }
-  },[dataCycles])
-  
+  },[dataCycles?.cycles])
+
+  const SFL = useMySaved(+id)
 
   useEffect(() => {
     if(user){
@@ -182,19 +120,6 @@ const Mediatheque: NextPage = () => {
     }
     return false;
   };
-
-  // useEffect(() => {
-  //   if (isAccessAllowed()) prepareData();
-  // }, [isAccessAllowed]);
-
-  // useEffect(() => {
-  //   if (dataUserSession) {
-  //     dataUserSession.following = dataUserSession.following.map((f: UserMosaicItem) => ({ ...f, type: 'user' }));
-  //     dataUserSession.followedBy = dataUserSession.followedBy.map((f: UserMosaicItem) => ({ ...f, type: 'user' }));
-
-  //     setUserSession(dataUserSession);
-  //   }
-  // }, [dataUserSession]);
 
   const { mutate: mutateFollowing, isLoading: isLoadingMutateFollowing } = useMutation<User>(
     async () => {
@@ -277,7 +202,6 @@ const Mediatheque: NextPage = () => {
     },
   );
 
-
   const followHandler = async () => {
     const s = session;
     if (user && s) {
@@ -288,30 +212,22 @@ const Mediatheque: NextPage = () => {
     }
   };
 
-  const seeAll = async (data: (Item | UserMosaicItem)[], q: string, showFilterEngine = true): Promise<void> => {
-    setGlobalSearchEngineState({
-      ...globalSearchEngineState,
-      itemsFound: data,
-      q,
-      show: showFilterEngine,
-    });
-    router.push(`/search?q=${q}`);
-  };
   
-
+  const goTo = (path:string)=>{
+    if(user)router.push(`/user/${slugify(user.name||user.id.toString(),{lower:true})}/${path}`) 
+    else router.push(`/`)
+  }
+  
   const postsCreated = () => {
     if (user && posts && posts.length) {
-      // const P = posts.map((p) => ({ ...p , type: 'post' }));
       return (
         <CarouselStatic
-          cacheKey={['POSTS',`${JSON.stringify({creatorId:id})}`]}
+          cacheKey={['MY-POSTS',id]}
           className="mb-5"
-          onSeeAll={async () => seeAll(posts as Item[], t('Eurekas I created'))}
-          title={t('Eurekas I created')}
+          onSeeAll={()=>goTo('my-posts')}
+          title={t('common:myPosts')}
           data={posts}
-          iconBefore={<></>}
           mosaicBoxClassName="pb-1"
-          // iconAfter={<BsCircleFill className={styles.infoCircle} />}
         />
       );
     }
@@ -319,42 +235,16 @@ const Mediatheque: NextPage = () => {
   };
 
   const cyclesJoined = () => {
-    // const C: ItemCycle[] = [];
-    // if (user && cycles && cycles.length) {
-    //   const c1 = cycles.map((c) => ({ ...c, type: 'cycle' }));
-    //   C.push(...(c1 as ItemCycle[]));
-    // }
-    // if (user && user.joinedCycles && user.joinedCycles.length) {
-    //   const JC: ItemCycle[] = [];
-    //   user.joinedCycles.reduce((p: ItemCycle[], c) => {
-    //     if (c.creatorId !== parseInt(id, 10)) {
-    //       // otherwise will be already on C
-    //       p.push({ ...c, type: 'cycle' } as ItemCycle);
-    //     }
-    //     return p;
-    //   }, JC);
-    //   C.push(...JC);
-    //   C.sort((f: CycleMosaicItem, s: CycleMosaicItem) => {
-    //     const fCD = dayjs(f.createdAt);
-    //     const sCD = dayjs(s.createdAt);
-    //     if (fCD.isAfter(sCD)) return -1;
-    //     if (fCD.isSame(sCD)) return 0;
-    //     return 1;
-    //   });
-    // }
-
     return (cycles && cycles.length) 
     ? <CarouselStatic
-        cacheKey={['CYCLES',JSON.stringify(cyclesCreatedOrJoinedWhere(+id))]}
-        onSeeAll={async () => seeAll(cycles, t('Cycles I created or joined'))}
-        title={t('Cycles I created or joined')}
+        cacheKey={['MY-CYCLES',id]}
+        onSeeAll={()=>goTo('my-cycles')}
+        title={t('common:myCycles')}
         data={cycles}
-        iconBefore={<></>}
-        // iconAfter={<BsCircleFill className={styles.infoCircle} />}
       />
     : <></>;
   };
-
+  
   const readOrWatched = () => {
     if (user && user.ratingWorks && user.ratingWorks.length) {
       const RW = user.ratingWorks.map((w) => w.work as WorkMosaicItem);
@@ -362,8 +252,8 @@ const Mediatheque: NextPage = () => {
       return (
         <CarouselStatic
           cacheKey={['MEDIATHEQUE-WATCHED',`USER-${user.id}`]}
-          onSeeAll={async () => seeAll(RW, t(`Movies/books i've watched/read`))}
-          title={t(`Movies/books i've watched/read`)}
+          onSeeAll={()=>goTo('my-books-movies')}
+          title={t(`common:myBooksMovies`)}
           data={RW}
           iconBefore={<BsEye />}
 
@@ -373,34 +263,14 @@ const Mediatheque: NextPage = () => {
     }
     return '';
   };
-
+  
   const savedForLater = () => {
-    const SFL: Item[] = [];
-    if (user && user.favWorks && user.favWorks.length) {
-      const w1 = user.favWorks as Item[];
-      SFL.push(...w1);
-    }
-    if (user && user.favCycles && user.favCycles.length) {
-      const c1 = user.favCycles.map((c) => ({ ...c, type: 'cycle' })) as Item[];
-      SFL.push(...c1);
-    }
-    if (user && user.favPosts && user.favPosts.length) {
-      const p1 = user.favPosts.map((p) => ({ ...p, type: 'post' })) as Item[];
-      SFL.push(...p1);
-    }
-    SFL.sort((f: Item, s: Item) => {
-      const fCD = dayjs(f.createdAt);
-      const sCD = dayjs(s.createdAt);
-      if (fCD.isAfter(sCD)) return -1;
-      if (fCD.isSame(sCD)) return 0;
-      return 1;
-    });
     if (SFL.length)
       return (
         <CarouselStatic
           cacheKey={['MEDIATHEQUE-SAVED',`USER-${user!.id}`]}
-          onSeeAll={async () => seeAll(SFL, t('Saved for later of forever'))}
-          title={t('Saved for later of forever')}
+          onSeeAll={()=>goTo('my-saved')}
+          title={t('common:mySaved')}
           data={SFL}
           iconBefore={<BsBookmark />}
           // iconAfter={<BsCircleFill className={styles.infoCircle} />}
@@ -408,17 +278,16 @@ const Mediatheque: NextPage = () => {
       );
     return '';
   };
-
+  
   const usersFollowed = () => {
     if (user && user.following && user.following.length) {
       return (
         <CarouselStatic
           cacheKey={['MEDIATHEQUE-FOLLOWING',`USER-${user.id}`]}
-          onSeeAll={async () => seeAll(user!.following as UserMosaicItem[], t('Users I follow'), false)}
-          title={`${t('Users I follow')}  `}
+          onSeeAll={()=>goTo('my-users-followed')}
+          title={`${t('common:myUsersFollowed')}  `}
           data={user!.following as UserMosaicItem[]}
           iconBefore={<HiOutlineUserGroup />}
-          // iconAfter={<BsCircleFill className={styles.infoCircle} />}
         />
       );
     }
@@ -575,21 +444,23 @@ const Mediatheque: NextPage = () => {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const queryClient = new QueryClient();
   const session = await getSession();
-  const {query} = ctx;
-  const upc = userPostsCondition(+query?.id!, session?.user.id);
-  const {posts} = await getPosts(upc);
-  await queryClient.prefetchQuery(['POSTS',JSON.stringify(upc)], ()=>posts);
+  // const {query} = ctx;
+  if(!session){
+    return {
+      props:{
+      dehydratedState: dehydrate(queryClient),
+    }}
+  }
+  const {posts} = await getMyPosts(session?.user.id!,8);
+  await queryClient.prefetchQuery(['MY-POSTS',session?.user.id], ()=>posts);
   posts.forEach(p=>{
     queryClient.setQueryData(['POST',`${p.id}`], ()=>p)
   })
-  // await Promise.all(
-  //   posts.map(p=>queryClient.prefetchQuery(['POST',`${p.id}`], ()=>p))
-  // )
 
-  const {cycles} = await getCycles(cyclesCreatedOrJoinedWhere(+query?.id!));
-  await queryClient.prefetchQuery(["CYCLES",JSON.stringify(cyclesCreatedOrJoinedWhere(+query?.id!))],()=>cycles)
+  const {cycles} = await getMyCycles(session?.user.id!,8);
+  await queryClient.prefetchQuery(["MY-CYCLES"],()=>cycles)
   cycles.forEach(c=>{
-    queryClient.setQueryData(['CYCLE',`${c.id}`], ()=>c)
+    queryClient.setQueryData(['CYCLE',c.id], ()=>c)
   })
 
   return {

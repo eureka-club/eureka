@@ -1,14 +1,13 @@
 import { lazy,Suspense } from 'react';
 import { NextPage } from 'next';
 import {GetServerSideProps} from 'next';
-import useCycles from '@/src/useCycles';
 import Head from "next/head";
 import { Spinner } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { useSession, getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { GetAllByResonse } from '@/src/types';
-
+import useMyCycles from '@/src/useMyCycles';
 const HomeNotSingIn = lazy(()=>import('@/components/HomeNotSingIn'));
 const HomeSingIn = lazy(()=>import('@/src/components/HomeSingIn'));
 
@@ -25,20 +24,6 @@ const fetchItems = async (pageParam: number,topic:string):Promise<GetAllByResons
   return q.json();
 };
 
-
-const cyclesCreatedOrJoinedWhere = (id:number) => ({
-  where:{
-    OR:[
-      {
-        participants:{some:{id}},
-      },
-      {
-        creatorId:id
-      }
-    ]
-  }
-}) 
-
 interface Props{
   groupedByTopics: Record<string,GetAllByResonse>;
 }
@@ -47,10 +32,7 @@ const IndexPage: NextPage<Props> = ({groupedByTopics}) => {
   const { t } = useTranslation('common');
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
-  const {data:dataCycles} = useCycles(cyclesCreatedOrJoinedWhere((session) ? session.user.id : 0  ),
-    {enabled:!!session?.user.id.toString()}
-  )
-  
+  const {data:dataCycles} = useMyCycles(session);
   
   return <>
     <Head>

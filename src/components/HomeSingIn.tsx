@@ -11,7 +11,7 @@ import { useSession, getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useAtom } from 'jotai';
 import globalSearchEngineAtom from '../../src/atoms/searchEngine';
-
+import slugify from 'slugify'
 const Carousel = lazy(()=>import('@/components/Carousel'));
 
 const topics = ['gender-feminisms', 'technology', 'environment',
@@ -90,22 +90,26 @@ if(topicIdx < topics.length-1) return <Spinner ref={ref} animation="grow" />
 }
 
   const seeAll = async (data: CycleMosaicItem[], q: string, showFilterEngine = true): Promise<void> => {
-    setGlobalSearchEngineState({
-      ...globalSearchEngineState,
-      itemsFound: data,
-      q,
-      show: showFilterEngine,
-    });
-    router.push(`/search?q=${q}`);
+    // setGlobalSearchEngineState({
+    //   ...globalSearchEngineState,
+    //   itemsFound: data,
+    //   q,
+    //   show: showFilterEngine,
+    // });
+    if(session){
+
+      const slug = slugify(session?.user.name||session.user.id.toString(),{lower:true})
+      router.push(`/user/${slug}/my-cycles`);
+    }
   };
 
 const cyclesJoined = () => {
     return (cycles && cycles.length) 
     ? <div>      
-       <h1 className="text-secondary fw-bold">{t('Cycles I created or joined')}</h1>
+       <h1 className="text-secondary fw-bold">{t('myCycles')}</h1>
        <CarouselStatic
         cacheKey={['CYCLES',JSON.stringify(cyclesCreatedOrJoinedWhere(+session!.user.id.toString()))]}
-         onSeeAll={async () => seeAll(cycles, t('Cycles I created or joined'))}
+         onSeeAll={async () => seeAll(cycles, t('myCycles'))}
         data={cycles}
         iconBefore={<></>}
         // iconAfter={<BsCircleFill className={styles.infoCircle} />}

@@ -147,8 +147,13 @@
   "ExploreText":"Você pode acessar certos conteúdos sem uma conta",
   "ExploreTopics":"Encontre livros e filmes sobre temas populares",
   "JoinEureka":"Criar conta na Eureka",
-  "Cycles I created or joined": "Ciclos que criei ou participei",
   "Interest cycles": "Ciclos de juros",
   "Featured Eurekas":"Eurekas em destaque",
-  "search":"Procurar"
+  "search":"Procurar",
+  "myCycles":"Ciclos criados ou unidos por mim",
+  "myPosts": "Minhas Eurekas",
+  "myBooksMovies": "Minhas avaliações: filmes e livros que assisti ou li",
+  "mySaved": "Salvo para depois ou para sempre",
+  "myUsersFollowed": "Seguindo"
+
   }

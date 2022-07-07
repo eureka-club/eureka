@@ -38,7 +38,7 @@ interface Props {
   showSocialInteraction?: boolean;
   showdetail?: boolean;
   style?: { [k: string]: string };
-  cacheKey: string[];
+  cacheKey?: string[];
   showTrash?: boolean;
   showComments?: boolean;
   linkToPost?: boolean;
@@ -51,7 +51,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   display = 'v',
   showSocialInteraction = true,
   showdetail = true,
-  cacheKey,
+  cacheKey:ck,
   showComments = false,
   linkToPost = true,
   className,
@@ -60,6 +60,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   // style,
   // showTrash,
 }) => {
+  const cacheKey = ck || ['POST',`${postId}`]
   const [gmAtom,setGmAtom] = useAtom(globalModals);
   const { t } = useTranslation('common');
   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
@@ -238,7 +239,7 @@ const MosaicItem: FunctionComponent<Props> = ({
               </span>
             </div> */}
             <SocialInteraction
-              cacheKey={cacheKey || ['POST',post.id.toString()]}
+              cacheKey={cacheKey}
               showButtonLabels={false}
               showCounts={false}
               entity={post}

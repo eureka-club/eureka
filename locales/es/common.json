@@ -145,9 +145,13 @@
   "ExploreText":"Puedes acceder a ciertos contenidos sin crear una cuenta",
   "ExploreTopics":"Encuentra libros y películas sobre temas de actualidad",
   "JoinEureka":"Únete a Eureka",
-  "Cycles I created or joined": "Ciclos que creé o me uní",
   "Interest cycles": "Ciclos de interés",
   "Featured Eurekas":"Eurekas destacadas",
-  "search":"Buscar"
+  "search":"Buscar",
+  "myCycles":"Ciclos que creé o me uní",
+  "myPosts": "Mis Eurekas",
+  "myBooksMovies": "Mis calificaciones: películas y libros que vi o leí",
+  "mySaved": "Salvado para luego o para siempre",
+  "myUsersFollowed": "Siguiendo"
 
 } 

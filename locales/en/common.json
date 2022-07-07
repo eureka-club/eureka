@@ -146,8 +146,13 @@
   "ExploreText":"You can access some of our content without an account",
   "ExploreTopics":"Find books and movies about trendings topics",
   "JoinEureka":"Join Eureka",
-  "Cycles I created or joined": "Cycles I have created or joined",
   "Interest cycles": "Interest cycles",
   "Featured Eurekas":"Featured Eurekas",
-  "search":"Search"
+  "search":"Search",
+  "myCycles":"Cycles created or joined by me",
+  "myPosts": "My Eurekas",
+  "myBooksMovies": "My ratings: movies and books I watched or read",
+  "mySaved": "Saved for later or forever",
+  "myUsersFollowed": "Users I follow"
+
 }

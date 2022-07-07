@@ -23,7 +23,7 @@ type Props = {
   title?: string | JSX.Element;
   iconBefore?: JSX.Element;
   iconAfter?: JSX.Element;
-  onSeeAll?: () => Promise<void>;
+  onSeeAll?: () => void;
   data: Item[]; // ((CycleMosaicItem & { type: string }) | WorkMosaicItem)[];
   showSocialInteraction?: boolean;
   customMosaicStyle?: { [key: string]: string };
