@@ -9,36 +9,27 @@ import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
 import LocalImageComponent from '@/components/LocalImage'
 
 
-// import NavItem from 'react-bootstrap/NavItem';
-
 import {
-  // BootstrapNavbar,
   Container,
   Button,
   Nav,
   Navbar,
   Dropdown,
-  Spinner
-  // DropdownItemProps
+  Spinner,
+  Form
 } from 'react-bootstrap';
-// import NavDropdown from 'react-bootstrap/NavDropdown';
 
 import { BiUser } from 'react-icons/bi';
 import NotificationsList from '@/components/NotificationsList';
-// import { BsBookmark } from 'react-icons/bs';
 import { RiDashboardLine } from 'react-icons/ri';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
-// import DropdownToggle from 'react-bootstrap/esm/DropdownToggle';
-import SearchEngine from '@/components/SearchEngine';
+import SearchInput from '@/components/SearchInput';
 import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '@/src/constants';
-// import { Session } from '../types';
 import ChevronToggle from '@/components/ui/dropdown/ChevronToggle';
 import globalModalsAtom from '@/src/atoms/globalModals';
 import styles from './Navbar.module.css';
 import useUser from '@/src/useUser';
 
-
-// const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;
 
 const NavBar: FunctionComponent = () => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -118,6 +109,8 @@ const NavBar: FunctionComponent = () => {
     router.push('/')
   }
 
+  
+
   return (
     <Container className={styles.container}>
       <Navbar collapseOnSelect expand="lg" bg="white" fixed="top" className='border-bottom border-primary'>
@@ -154,7 +147,8 @@ const NavBar: FunctionComponent = () => {
         <Navbar.Collapse className={`${styles['responsive-navbar-nav']}`}>
           <Nav className="">
              {!isLoadingSession &&(
-            <SearchEngine className="" />
+            <SearchInput className="" style={{width:'480px'}}/>
+
              )}
           </Nav>
           <Nav className={styles.navbarNav}>

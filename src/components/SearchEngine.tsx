@@ -61,39 +61,7 @@ const SearchEngine: FunctionComponent<Props> = ({ className = ''}) => {
   
   const handleSearchWorkOrCycleDebounced = useMemo(()=>debounce(handleSearchWorkOrCycle,800),[])
 
-  // const handleSearchWorkOrCycle = async (query: string) => {
-  //   // setIsSearchResultsLoading(true);
-  //   setQ(()=>query);
-  //   setGlobalSearchEngineState({ ...globalSearchEngineState, q: ''});
-  //   //const res = await fetch(`/api/searchEngine?q=${query}`);
-
-  //   // const responseWork = await (await fetch(`/api/work/?q=${query}`)).json();
-  //   // const responseCycle = await (await fetch(`/api/cycle/?q=${query}`)).json();
-  //   // const responsePost = await (await fetch(`/api/post/?q=${query}`)).json();
-  //   // const items: SearchResult[] = [
-  //   //   ...((responseWork && responseWork.data) || []),
-  //   //   ...((responseCycle && responseCycle.data) || []).map((i: CycleMosaicItem) => ({
-  //   //     ...i,
-  //   //     type: 'cycle',
-  //   //   })),
-  //   //   ...((responsePost && responsePost.data) || []).map((i: PostMosaicItem) => ({
-  //   //     ...i,
-  //   //     type: 'post',
-  //   //   })),
-  //   // ].sort((f, s) => {
-  //   //   const fCD = dayjs(f.createdAt);
-  //   //   const sCD = dayjs(s.createdAt);
-  //   //   if (fCD.isAfter(sCD)) return -1;
-  //   //   if (fCD.isSame(sCD)) return 0;
-  //   //   return 1;
-  //   // });;
-
-  //   // setSearchResults(items);
-
-    
-    
-  // };
-
+  
   const handleSelectItem = (selected: SearchResult[]): void => {
     const searchResult = selected[0];
     if (searchResult != null) {

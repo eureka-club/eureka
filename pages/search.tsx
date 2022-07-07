@@ -8,6 +8,7 @@ import {getPosts} from '@/src/usePosts'
 import {getWorks} from '@/src/useWorks'
 import {getCycles} from '@/src/useCycles'
 
+import SearchInput from '@/components/SearchInput';
 
 import SearchTab from '@/src/components/SearchTab';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
@@ -40,7 +41,8 @@ const SearchPage: NextPage<Props> = ({postsData,worksData,cyclesData}) => {
             <BiArrowBack />
           </Button>
         </ButtonGroup>
-        <Form.Control size="lg" className="my-3" type="text" placeholder={t('search')} onKeyUp={onTermKeyUp} />
+        <SearchInput className="" />
+
         <h1 className="text-secondary fw-bold mb-2">
           {t('Results about')}: {`"${qLabel}"`}
         </h1>
