@@ -49,7 +49,7 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                               <h1 className='d-flex justify-content-center text-center text-white' style={{fontWeight:900}}>{t('WorkSectionText')}</h1>
                               <h5 className='d-flex justify-content-center text-center text-white mt-4' style={{fontStyle:'italic'}}>{t('WorkSectionSubText')}</h5>    
                         </Col>
-                        <Col className={`p-3 p-lg-5 col-12 col-lg-6 border-top border-primary`}>
+                        <Col className={`p-3 p-lg-5 col-12 col-lg-6 border-top border-primary ${styles.WorkSectionImageContainer}`}>
                           <Container className='d-flex justify-content-center '>
                              <img  className={`ms-0  ${styles.WorkSectionImage}`} src={`/find-works-${router.locale}.webp`} alt="" /> 
                           </Container>

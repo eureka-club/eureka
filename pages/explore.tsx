@@ -82,7 +82,7 @@ const ExplorePage: NextPage = () => {
 const renderBackOfficeCycles = () => {
     return (cycles && cycles.length) 
     ? <div>      
-       <h1 className="text-secondary fw-bold">{t('Interest cycles')}</h1>
+       <h1 className="text-secondary mb-0 fw-bold">{t('Interest cycles')}</h1>
        <CarouselStatic
         cacheKey={['CYCLES',JSON.stringify(backOfficeCycles(cyclesIds))]}
         onSeeAll={async () => seeAll(cycles, t('Interest cycles'))}
@@ -97,7 +97,7 @@ const renderBackOfficeCycles = () => {
   const renderBackOfficePosts = () => {
     return (posts && posts.length) 
     ? <div>      
-       <h1 className="text-secondary fw-bold">{t('Featured Eurekas')}</h1>
+       <h1 className="text-secondary mb-0 fw-bold">{t('Featured Eurekas')}</h1>
        <CarouselStatic
         cacheKey={['POSTS',JSON.stringify(backOfficePosts(postsIds))]}
         onSeeAll={async () => seeAll(posts, t('Featured Eurekas'))}

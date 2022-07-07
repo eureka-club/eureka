@@ -1,6 +1,5 @@
-import { NextPage } from 'next';
+import { GetServerSideProps,NextPage } from 'next';
 import Head from "next/head";
-import {GetServerSideProps} from 'next'
 import { dehydrate, QueryClient } from 'react-query';
 import { Col, Row, Spinner } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';

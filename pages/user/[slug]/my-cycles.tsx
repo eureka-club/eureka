@@ -1,12 +1,12 @@
-import { NextPage } from 'next';
+import { GetServerSideProps,NextPage } from 'next';
 import Head from "next/head";
 import { Col, Row, Spinner } from 'react-bootstrap';
+import { dehydrate, QueryClient } from 'react-query';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
-import { useSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import { GetAllByResonse } from '@/src/types';
 
-import useMyCycles from '@/src/useMyCycles';
+import useMyCycles, { getMyCycles } from '@/src/useMyCycles';
 import CMI from '@/src/components/cycle/MosaicItem';
 import {useRouter} from 'next/router'
 
@@ -57,4 +57,24 @@ const MyCycles: NextPage<Props> = () => {
     </SimpleLayout>
   </>
 };
+export const getServerSideProps:GetServerSideProps= async (ctx)=>{
+  const qc = new QueryClient();
+  const session = await getSession({ctx})
+  let res = {
+    props:{
+      dehydrateState:dehydrate(qc)
+    }
+  }
+  if(!session)return res;
+  const id = session.user.id;
+  await qc.fetchQuery(['MY-CYCLES',id],()=>getMyCycles(id,8));
+  
+  res = {
+    props:{
+      dehydrateState:dehydrate(qc)
+    }
+  }
+  return res;
+}
+
 export default MyCycles;
