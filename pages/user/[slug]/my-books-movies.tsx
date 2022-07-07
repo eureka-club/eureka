@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import Head from "next/head";
-import { Col, Row, Spinner } from 'react-bootstrap';
+import { Button, ButtonGroup, Col, Row, Spinner } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
@@ -9,6 +9,7 @@ import { GetAllByResonse } from '@/src/types';
 import WMI from '@/src/components/work/MosaicItem';
 import {useRouter} from 'next/router'
 import useUser from '@/src/useUser';
+import { BiArrowBack } from 'react-icons/bi';
 
 interface Props{
 }
@@ -36,13 +37,18 @@ const MyBooksMovies: NextPage<Props> = () => {
         <meta name="twitter:url" content={`${process.env.NEXT_PUBLIC_WEBAPP_URL}`} ></meta>  
     </Head>
     <SimpleLayout>
-    <article className='mt-4'>
+    <article className='mt-4' data-cy="my-books-movies">
+      <ButtonGroup className="mt-1 mt-md-3 mb-1">
+          <Button variant="primary text-white" onClick={() => router.back()} size="sm">
+            <BiArrowBack />
+          </Button>
+        </ButtonGroup>
       {
       isLoadingSession 
         ? <Spinner animation="grow"/>
         : session ? (
           <>
-          <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('myBooksMovies')}</h1>
+          <h1 className="text-secondary fw-bold mt-sm-0 mb-5">{t('myBooksMovies')}</h1>
             <Row>
               {user?.ratingWorks.map(c=>
                 <Col key={c.workId} xs={12} sm={6} lg={3}>

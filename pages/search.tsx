@@ -3,7 +3,7 @@ import { NextPage, GetServerSideProps } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import {QueryClient, dehydrate} from 'react-query';
-import { Spinner, ButtonGroup, Button, Alert } from 'react-bootstrap';
+import { Spinner, ButtonGroup, Button, Form } from 'react-bootstrap';
 import {getPosts} from '@/src/usePosts'
 import {getWorks} from '@/src/useWorks'
 import {getCycles} from '@/src/useCycles'
@@ -28,12 +28,19 @@ const SearchPage: NextPage<Props> = ({postsData,worksData,cyclesData}) => {
   let qLabel = t(`topics:${router.query.q as string}`);
   if (qLabel.match(':')) qLabel = router.query.q as string;
 
+  const onTermKeyUp = (e:React.KeyboardEvent<HTMLInputElement>)=>{
+    if(e.code == 'Enter'){
+      router.push(`/search?q=${e.currentTarget.value}`)
+    }
+  }
+
   return <SimpleLayout title={t('Results')}>
         <ButtonGroup className="mb-1">
           <Button variant="primary text-white" onClick={() => router.back()} size="sm">
             <BiArrowBack />
           </Button>
         </ButtonGroup>
+        <Form.Control size="lg" className="my-3" type="text" placeholder={t('search')} onKeyUp={onTermKeyUp} />
         <h1 className="text-secondary fw-bold mb-2">
           {t('Results about')}: {`"${qLabel}"`}
         </h1>

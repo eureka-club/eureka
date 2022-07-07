@@ -1,7 +1,7 @@
 import { GetServerSideProps,NextPage } from 'next';
 import Head from "next/head";
 import { dehydrate, QueryClient } from 'react-query';
-import { Col, Row, Spinner } from 'react-bootstrap';
+import { Button, ButtonGroup, Col, Row, Spinner } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { getSession, useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
@@ -9,6 +9,7 @@ import useTranslation from 'next-translate/useTranslation';
 import useMyPosts,{getMyPosts} from '@/src/useMyPosts';
 import PMI from '@/src/components/post/MosaicItem';
 import {useRouter} from 'next/router'
+import { BiArrowBack } from 'react-icons/bi';
 
 interface Props{
 }
@@ -36,13 +37,18 @@ const MyPosts: NextPage<Props> = () => {
         <meta name="twitter:url" content={`${process.env.NEXT_PUBLIC_WEBAPP_URL}`} ></meta>  
     </Head>
     <SimpleLayout>
-    <article className='mt-4'>
+    <article className='mt-4' data-cy="my-posts">
+      <ButtonGroup className="mt-1 mt-md-3 mb-1">
+          <Button variant="primary text-white" onClick={() => router.back()} size="sm">
+            <BiArrowBack />
+          </Button>
+      </ButtonGroup>
       {
       isLoadingSession 
         ? <Spinner animation="grow"/>
         : session ? (
           <>
-          <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('myPosts')}</h1>
+          <h1 className="text-secondary fw-bold mt-sm-0 mb-5">{t('myPosts')}</h1>
             <Row>
               {dataPosts?.posts.map(c=>
                 <Col key={c.id} xs={12} sm={6} lg={3}>

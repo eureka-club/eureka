@@ -41,11 +41,7 @@ const SearchTab: FunctionComponent<Props> = ({postsData,worksData,cyclesData}) =
     }
     return ''
   }
-  const onTermKeyUp = (e:React.KeyboardEvent<HTMLInputElement>)=>{
-    if(e.code == 'Enter'){
-      router.push(`/search?q=${e.currentTarget.value}`)
-    }
-  }
+  
   return <div>
     {/* language=CSS */}
     <style jsx global>
@@ -67,7 +63,7 @@ const SearchTab: FunctionComponent<Props> = ({postsData,worksData,cyclesData}) =
                     }
                   `}
                 </style>
-                <Form.Control size="lg" type="text" placeholder={t('search')} onKeyUp={onTermKeyUp} />
+                
         {router.query.q && <Tabs  defaultActiveKey={key}
         activeKey={key}
                 onSelect={(k) => setKey(k!)}
