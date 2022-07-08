@@ -24,6 +24,7 @@ type Props = {
   iconBefore?: JSX.Element;
   iconAfter?: JSX.Element;
   onSeeAll?: () => void;
+  seeAll?:boolean;
   data: Item[]; // ((CycleMosaicItem & { type: string }) | WorkMosaicItem)[];
   showSocialInteraction?: boolean;
   customMosaicStyle?: { [key: string]: string };
@@ -83,6 +84,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
   iconBefore,
   iconAfter,
   onSeeAll,
+  seeAll=true,
   showSocialInteraction = true,
   customMosaicStyle = undefined,
   className,
@@ -190,7 +192,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
                 </h5>
               </Col>
               <Col xs={3} className="d-flex justify-content-end">
-                {dataFiltered.length && (
+                {seeAll && dataFiltered.length && (
                   // <Button className={`${styles.seeAllButton}`} onClick={onSeeAll}>
                   //   {t('common:See all')}
                   // </Button>

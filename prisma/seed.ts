@@ -604,17 +604,42 @@ NotificationsOnUsers.forEach((c) => {
   `));   
 });
 
-/***UserCustomData***/
-const UserCustomData = await prismaRemote.userCustomData.findMany();  
-UserCustomData.forEach((c) => {
+
+
+/***backOfficeSettings***/
+const backOfficeSettings = await prismaRemote.backOfficeSettings.findMany({
+  include: {
+    sliderImages:true,
+  },
+});  
+
+backOfficeSettings.forEach((c) => {
+  
   transactions.push(
     prismaLocal.$queryRaw(Prisma.sql`
-    SET IDENTITY_INSERT dbo.UserCustomData ON;
-    INSERT INTO dbo.UserCustomData(id,name,password,identifier) 
-    VALUES(${c.id},${c.name},${c.password},${c.identifier});
-    SET IDENTITY_INSERT dbo.UserCustomData OFF;
-  `));   
+    INSERT INTO dbo.backOfficeSettings(id,SlideTitle1,SlideText1,SlideImage1,SlideTitle2,SlideText2,
+      SlideImage2,SlideTitle3,SlideText3,SlideImage3,CyclesExplorePage,PostExplorePage) 
+    VALUES(${c.id}
+      ,${c.SlideTitle1},${c.SlideText1},${c.SlideImage1}
+      ,${c.SlideTitle2},${c.SlideText2},${c.SlideImage2}
+      ,${c.SlideTitle3},${c.SlideText3},${c.SlideImage3}
+      ,${c.CyclesExplorePage}
+      ,${c.PostExplorePage}
+    );
+  `));
+  
+  /**_BackOfficeSettingsToLocalImage */
+  c.sliderImages.forEach(s => {
+    transactions.push(
+      prismaLocal.$queryRaw(Prisma.sql`
+      INSERT INTO dbo._BackOfficeSettingsToLocalImage(A,B) 
+      VALUES(${c.id},${s.id});
+      `)
+    )
+  });
+  
 });
+
 
 
   try {
@@ -627,8 +652,7 @@ UserCustomData.forEach((c) => {
   console.log('DONE!');
 }
  
-if(true){
-  console.log('running main')
+if(false){
   main()
     .catch((e) => {
       console.error(e);

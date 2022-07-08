@@ -1,0 +1,25 @@
+import useCycles,{getCycles} from './useCycles';
+import useBackOffice from '@/src/useBackOffice';
+
+const interestedCyclesWhere = (ids:number[]) => ({
+  where:{
+    id: { in: ids },
+  }
+}) 
+
+export const getInterestedCycles = async (ids:number[],take:number=8)=>{
+  return getCycles({...interestedCyclesWhere(ids),take});
+}
+
+const useInterestedCycles = () => {
+  const {data:bo} = useBackOffice();
+  let cyclesIds:number[] = [];
+  if(bo && bo.CyclesExplorePage)
+    bo.CyclesExplorePage.split(',').forEach(x=> cyclesIds.push(parseInt(x)));
+      
+  return useCycles(interestedCyclesWhere(cyclesIds),
+    {enabled:!!cyclesIds}
+  )
+};
+
+export default useInterestedCycles;
