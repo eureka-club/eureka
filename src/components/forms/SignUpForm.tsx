@@ -99,12 +99,12 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                return false;
             }
           
-            const ur = await userRegistered(email)
+            const ur = await userRegistered(email);
             if(!ur){
               toast.error(t('Error'));
               return;
             }
-            if(!ur.isUser){
+            if(!ur.isUser || !ur.hasPassword){
               mutate({
                   identifier:email,
                   password:password,

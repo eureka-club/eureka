@@ -1,8 +1,6 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
 
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import SignUpForm from '../src/components/forms/SignUpForm';
