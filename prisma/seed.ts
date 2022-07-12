@@ -652,7 +652,7 @@ backOfficeSettings.forEach((c) => {
   console.log('DONE!');
 }
  
-if(false){
+if(true){
   main()
     .catch((e) => {
       console.error(e);

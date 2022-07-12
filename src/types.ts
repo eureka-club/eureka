@@ -101,3 +101,16 @@ export  interface NotifierRequest {
     totalCycles: number;
     totalWorks: number;
 }
+
+export interface Country {
+  code: string;
+  createdAt:string;
+  creatorId:number;
+  description:string;
+  id:number; 
+  label:string;
+  parentId:number;
+  taxonomyCode:string;
+  updatedAt:string;
+  weight:number;
+}

@@ -41,7 +41,7 @@ const SearchPage: NextPage<Props> = ({postsData,worksData,cyclesData}) => {
             <BiArrowBack />
           </Button>
         </ButtonGroup>
-        <SearchInput className="" />
+        {/* <SearchInput className="" /> */}
 
         <h1 className="text-secondary fw-bold mb-2">
           {t('Results about')}: {`"${qLabel}"`}

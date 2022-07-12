@@ -26,7 +26,7 @@ import { useSession } from 'next-auth/react';
 // import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import { User } from '@prisma/client';
 import TagsInput from './controls/TagsInput';
-// import { Session } from '../../types';
+import { Country } from '@/src/types';
 import { EditUserClientPayload } from '../../types/user';
 import useUser from '@/src/useUser';
 // import ImageFileSelect from './controls/ImageFileSelect';
@@ -116,11 +116,6 @@ const EditUserForm: FunctionComponent = () => {
   const [countrySearchResults, setCountrySearchResults] = useState<{ id: number; code: string; label: string }[]>([]);
   const [countryOrigin, setCountryOrigin] = useState<string>();
 
-  // const [countryOrigin2, setCountryOrigin2] = useState<string | null>();
-  // const [hasCountryOrigin2, sethasCountryOrigin2] = useState<boolean>();
-  // const { data: topics } = useTopics();
-  // const [items, setItems] = useState<string[]>([]);
-
   const { locale } = useRouter();
   const [namespace, setNamespace] = useState<Record<string, string>>();
   
@@ -129,8 +124,13 @@ const EditUserForm: FunctionComponent = () => {
       // const r = await i18nConfig.loadLocaleFrom(locale, 'countries');
       const res = await fetch('/api/taxonomy/countries')
       const {result:r} = await res.json()
-      
-      setNamespace(r);
+      debugger;
+       let o:Record<string, string> ={} 
+      const n = (r as Country[]).reduce((p,c:Country)=>{
+        p[c.code] = c.label;
+        return p;
+      },o)
+      setNamespace(n);
     };
     fn();
   }, [locale]);
