@@ -185,11 +185,11 @@ const CarouselStatic: FunctionComponent<Props> = ({
           <div className={`mb-5 position-relative ${className}`}>
             <Row>
               <Col xs={9}>
-                <h5 className="text-gray-dark mb-2">
+                <h1 className="text-secondary fw-bold fs-3">
                   {iconBefore ? <span className={styles.iconBefore}>{iconBefore}</span> : ''}
                   {` `} {title} {/* {`(${dataFiltered.length})`} */}
                   {iconAfter ? <span className={styles.iconAfter}>{iconAfter}</span> : ''}
-                </h5>
+                </h1>
               </Col>
               <Col xs={3} className="d-flex justify-content-end">
                 {seeAll && dataFiltered.length && (

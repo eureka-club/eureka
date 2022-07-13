@@ -118,7 +118,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
         }
     }
 
-
+//border border-1"  style={{ borderRadius: '0.5em'}}
   return (
     <>
     <section className={`${styles.welcomeMobileSection}`}>
@@ -152,18 +152,20 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
               <span className={`lg-ms-3 ${styles.joinEurekaText}`}>{t('JoinEureka')}</span>
               <p className={`${styles.haveAccounttext}`}>{t('HaveAccounttext')} <Link href="/">
                  <a className="">{t('Login')}</a></Link></p>
-              <button type="button" className={`d-flex justify-content-center ${styles.buttonGoogle}`}>
+              
+          </Row>
+          <section className='border border-1 mb-5'  style={{ borderRadius: '0.5em'}}>
+          <Row>
+            <button type="button" className={`d-flex justify-content-center mt-4  ${styles.buttonGoogle}`}>
                 <div className={`d-flex justify-content-start justify-content-sm-center aling-items-center flex-row ${styles.gmailLogoAndtext}`}>
                 <img  className={`${styles.gmailLogo} me-1 me-lg-2`} src="/img/logo-google.png" alt="gmail" /> 
                 {t('joinViaGoogle')}
                 </div>
               </button>
+              <p className={`mb-2 ${styles.alternativeLabel}`}>{t('alternativeText')}</p>
           </Row>
           <Row>
-              <p className={`mb-3 ${styles.alternativeLabel}`}>{t('alternativeText')}</p>
-          </Row>
-          <Row>
-            <div className="d-flex justify-content-center">
+            <div className="d-flex justify-content-center ">
                        
               <Form ref={formRef} className={`d-flex flex-column ${styles.registerForm}`} >
                 <div className='d-flex flex-column flex-lg-row justify-content-between'>
@@ -192,7 +194,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                 <Button onClick={handleSubmitSignUp} variant="primary text-white" className={`mb-4 d-flex justify-content-center align-items-center ${styles.submitButton}`}>
                   {t('Join')}
                 </Button>
-                 <p className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-5 ${styles.joinedTermsText}`}>{t('joinedTerms')}
+                 <p className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}>{t('joinedTerms')}
                     <Link href="/manifest" passHref>
                       <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`}>{t('termsText')}</span>
                     </Link>
@@ -205,6 +207,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
               </Form>
             </div>
           </Row>
+          </section>
           </div>
           </Col>
           </Row>
