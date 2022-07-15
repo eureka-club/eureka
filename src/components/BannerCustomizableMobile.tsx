@@ -51,7 +51,7 @@ const BannerCustomizableMobile: FunctionComponent = ({
 
   return (
     <>
-      <section className="d-block bg-primary p-3" style={{ backgroundImage: "url('/img/bg-header.svg')",marginBottom:(show) ? '10em' : '2em',marginTop:'4.8em',maxHeight: (show) ? '14em' : '4em' }}>
+      <section className="d-block bg-primary p-3" style={{ backgroundImage: "url('/img/bg-header.svg')",marginBottom:(show) ? '10em' : '2em',maxHeight: (show) ? '14em' : '4em' }}>
         <aside className="d-flex justify-content-end">
           {/*show && (
             <Button

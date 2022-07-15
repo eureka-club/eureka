@@ -15,7 +15,7 @@ import {Navbar} from 'react-bootstrap';
 import { BiUser } from 'react-icons/bi';
 import { RiDashboardLine } from 'react-icons/ri';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
-import SearchEngine from '@/components/SearchEngine';
+import SearchInput from '@/components/SearchInput';
 import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '@/src/constants';
 import ChevronToggle from '@/components/ui/dropdown/ChevronToggle';
 import globalModalsAtom from '@/src/atoms/globalModals';
@@ -87,8 +87,8 @@ const NavBar: FunctionComponent = () => {
         <Navbar.Collapse
           className={`position-absolute top-100 end-0 bg-white border border-info px-2 p-1 ${styles['responsive-navbar-nav']}`}
         >
-          <Nav className="mx-2 mb-1">
-            <SearchEngine />
+          <Nav className="mx-2 my-3">
+             <SearchInput className="" style={{width:'280'}}/>
           </Nav>
           <Nav className="mx-2">
             {!session && (

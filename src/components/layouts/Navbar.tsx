@@ -147,7 +147,7 @@ const NavBar: FunctionComponent = () => {
         <Navbar.Collapse className={`${styles['responsive-navbar-nav']}`}>
           <Nav className="">
              {!isLoadingSession &&(
-            <SearchInput className="" style={{width:'480px'}}/>
+            <SearchInput className="" style={{width:'460px'}}/>
 
              )}
           </Nav>

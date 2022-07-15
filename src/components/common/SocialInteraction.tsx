@@ -436,7 +436,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [isSocialInteractionSuccess]);
   const popoverShares = (
-    <Popover id="popover-basic" style={{width:"200px"}}>
+    <Popover id="popover-basic" style={{width:"zpx"}}>
       <Popover.Body>
         <TwitterShareButton windowWidth={800} windowHeight={600} url={shareUrl} title={shareText} via="eleurekaclub">
           <TwitterIcon size={32} round />

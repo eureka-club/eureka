@@ -90,26 +90,21 @@ if(topicIdx < topics.length-1) return <Spinner ref={ref} animation="grow" />
 }
 
   const seeAll = async (data: CycleMosaicItem[], q: string, showFilterEngine = true): Promise<void> => {
-    // setGlobalSearchEngineState({
-    //   ...globalSearchEngineState,
-    //   itemsFound: data,
-    //   q,
-    //   show: showFilterEngine,
-    // });
     if(session){
 
       const slug = slugify(session?.user.name||session.user.id.toString(),{lower:true})
       router.push(`/user/${slug}/my-cycles`);
     }
   };
+//       <h1 className="text-secondary fw-bold">{t('myCycles')}</h1>
 
 const cyclesJoined = () => {
     return (cycles && cycles.length) 
     ? <div>      
-       <h1 className="text-secondary fw-bold">{t('myCycles')}</h1>
        <CarouselStatic
         cacheKey={['CYCLES',JSON.stringify(cyclesCreatedOrJoinedWhere(+session!.user.id.toString()))]}
-         onSeeAll={async () => seeAll(cycles, t('myCycles'))}
+        onSeeAll={async () => seeAll(cycles, t('myCycles'))}
+        title={t('myCycles')}
         data={cycles}
         iconBefore={<></>}
         // iconAfter={<BsCircleFill className={styles.infoCircle} />}
