@@ -1,7 +1,7 @@
 import { Cycle, Post, Prisma, User, Work } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
-import { CreatePostServerFields, CreatePostServerPayload, PostWithCyclesWorks, PostMosaicItem } from '../types/post';
+import { CreatePostServerFields, CreatePostServerPayload, PostMosaicItem } from '../types/post';
 import {prisma} from '@/src/lib/prisma';
 
 export const find = async (id: number): Promise<PostMosaicItem | null> => {
@@ -9,40 +9,11 @@ export const find = async (id: number): Promise<PostMosaicItem | null> => {
     where: { id },
     include:{
       works:{select:{id:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
-      cycles:{select:{id:true,localImages:{select:{storedFile:true}},creatorId:true,startDate:true,endDate:true,title:true}},
+      cycles:{select:{id:true,creator:{select:{name:true}},localImages:{select:{storedFile:true}},creatorId:true,startDate:true,endDate:true,title:true}},
       favs:{select:{id:true,}},
       creator: {select:{id:true,name:true,photos:true,countryOfOrigin:true}},
       localImages: {select:{storedFile:true}},
     }
-    // include: {
-    //   creator: {select:{id:true,name:true,photos:true}},
-    //   localImages: {select:{storedFile:true}},
-    //   works: {
-    //     include: {
-    //       localImages: true,
-    //     },
-    //   },
-    //   cycles: {
-    //     include: {        
-    //       localImages: {select:{storedFile:true}},
-    //       participants:{select:{id:true}}
-    //     },
-    //   },
-    //   likes: true,
-    //   favs: true,
-    //   comments: {
-    //     include: {
-    //       creator: { include: { photos:true } },
-    //       comments: {
-    //         include: {
-    //           creator: { include: { photos:true } },
-    //         },
-    //       },
-    //       work: {include:{cycles:true}},
-    //       cycle: {include:{participants:{select:{id:true}}}}
-    //     },
-    //   },
-    // }
   });
 };
 
@@ -56,7 +27,7 @@ export const findAll = async (props?:Prisma.PostFindManyArgs,page?:number): Prom
     orderBy: { createdAt: 'desc' },
     include:{
       works:{select:{id:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
-      cycles:{select:{id:true,localImages:{select:{storedFile:true}},creatorId:true,startDate:true,endDate:true,title:true}},
+      cycles:{select:{id:true,creator:{select:{name:true}},localImages:{select:{storedFile:true}},creatorId:true,startDate:true,endDate:true,title:true}},
       favs:{select:{id:true,}},
       creator: {select:{id:true,name:true,photos:true,countryOfOrigin:true}},
       localImages: {select:{storedFile:true}},

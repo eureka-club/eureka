@@ -55,10 +55,6 @@ const MosaicItem: FunctionComponent<Props> = ({
   showComments = false,
   linkToPost = true,
   className,
-  // showButtonLabels,
-  // showShare,
-  // style,
-  // showTrash,
 }) => {
   const cacheKey = ck || ['POST',`${postId}`]
   const [gmAtom,setGmAtom] = useAtom(globalModals);
@@ -123,7 +119,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     return false;
   }
   const onEditPost = async (e:React.MouseEvent<HTMLButtonElement>) => {
-    setGmAtom(res=>({...res,editPostModalOpened:true, editPostId:post.id, cacheKey}))
+    router.push(`/post/${post.id}/edit`)
   }
 
    const onEditSmallScreen = async (e:React.MouseEvent<HTMLButtonElement>) => {

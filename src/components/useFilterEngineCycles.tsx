@@ -126,7 +126,6 @@ const useFilterEngineCycles = (props:Props)=>{
                         //   ...globalSearchEngineState,
                         //   ...{ onlyByCountries },
                         // });
-                        console.log(countries)
                       }}
                       onTagDeleted={(code) => {
                         // const onlyByCountries = [
@@ -138,7 +137,6 @@ const useFilterEngineCycles = (props:Props)=>{
                         //   ...globalSearchEngineState,
                         //   ...{ onlyByCountries },
                         // });
-                        console.log(code,countries)
 
                       }}
                     />

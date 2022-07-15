@@ -76,7 +76,6 @@ const SearchTabCycles: FunctionComponent<Props> = ({cyclesData}) => {
   const [ref, inView] = useInView({
     triggerOnce: false,
   });
-  console.log(cycles.length,total)
   useEffect(()=>{
     if(inView && cycles.length < total){
       const fi = async ()=>{

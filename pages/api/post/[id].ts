@@ -95,20 +95,20 @@ export default getApiHandler()
     }
     let data = JSON.parse(req.body);
     // data.publicationYear = dayjs(`${data.publicationYear}`, 'YYYY').utc().format();
-    const { id } = data;
+    const { id:id_ } = req.query;
     /* if (typeof id !== 'string') {
       res.status(404).end();
       return;
     } */
 
-    const idNum = parseInt(id, 10);
-    if (!Number.isInteger(idNum)) {
+    const id = parseInt(id_.toString(), 10);
+    if (!Number.isInteger(id)) {
       res.status(404).end();
       return;
     }
 
     try {
-      const post = await find(+data.id);
+      const post = await find(id);
       if (!post) res.status(412).json({ status: 'notFound' });
       if (post?.creatorId !== session.user.id) res.status(401).json({ status: 'Unauthorized' });
       delete data.id;
@@ -139,7 +139,7 @@ export default getApiHandler()
       delete data.selectedWorkId;
       delete data.selectedCycleId;
 
-      const r = await prisma.post.update({ where: { id: idNum }, data });
+      const r = await prisma.post.update({ where: { id }, data });
       res.status(200).json({ ...r });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

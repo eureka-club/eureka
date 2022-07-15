@@ -1,4 +1,4 @@
-import { Post, Work,Cycle } from '@prisma/client';
+import { Post } from '@prisma/client';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
@@ -11,10 +11,6 @@ import FormCheck from 'react-bootstrap/FormCheck';
 import FormControl from 'react-bootstrap/FormControl';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
-import ModalBody from 'react-bootstrap/ModalBody';
-import ModalFooter from 'react-bootstrap/ModalFooter';
-import ModalHeader from 'react-bootstrap/ModalHeader';
-import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
@@ -26,8 +22,8 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
 import { EditPostAboutCycleClientPayload, EditPostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
-import { CycleWithImages, CycleMosaicItem } from '../../types/cycle';
-import { WorkMosaicItem, WorkWithImages } from '../../types/work';
+import { CycleMosaicItem } from '../../types/cycle';
+import { WorkMosaicItem } from '../../types/work';
 // import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
 import CycleTypeaheadSearchItem from '../cycle/TypeaheadSearchItem';
@@ -36,16 +32,15 @@ import globalModalsAtom from '../../atoms/globalModals';
 import styles from './CreatePostForm.module.css';
 import useTopics from '../../useTopics';
 import usePost from '../../usePost';
-import { setDefaultResultOrder } from 'dns';
 import editOnSmallerScreens from '../../atoms/editOnSmallerScreens';
-import { IoTerminalSharp } from 'react-icons/io5';
 import toast from 'react-hot-toast'
 interface Props {
   noModal?: boolean;
   cacheKey?:string[]
+  id:number;
 }
 
-const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
+const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
   const [isSearchCycleLoading, setIsSearchCycleLoading] = useState(false);
@@ -53,8 +48,6 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
   const [searchCycleResults, setSearchCycleResults] = useState<CycleMosaicItem[]>([]);
   const [selectedCycle, setSelectedCycle] = useState<CycleMosaicItem | null>(null);
   const [selectedWork, setSelectedWork] = useState<WorkMosaicItem | null>(null);
-  // const [post, setPost] = useState<PostMosaicItem | null>(null);
-  // const [imageFile, setImageFile] = useState<File | null>(null);
   const { data: topics } = useTopics();
 
   const [items, setItems] = useState<string[]>([]);
@@ -70,19 +63,8 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
   const [remove,setRemove] = useState(false);
   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
 
-  useEffect(() => {
-    if(globalModalsState){
-      setCK(globalModalsState.cacheKey);
-      if(globalModalsState.editPostId)
-      setPostId(globalModalsState.editPostId.toString());      
-    }
-    if (router.query && router.query.postId) {
-      setPostId(()=>router.query.postId as string);
-    }
-  }, [globalModalsState,router,ck,postId]);
   
-  const { data: post, isLoading, isFetching } = usePost(globalModalsState.editPostId || +postId);
-  
+  const { data: post, isLoading, isFetching } = usePost(id);
   useEffect(()=>{
     if (post && post.topics) items.push(...post.topics.split(','));
     if (post && post.works.length) setSelectedWork(post.works[0] as WorkMosaicItem);
@@ -99,7 +81,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
     isSuccess: isEditPostSuccess,
   } = useMutation(
     async (payload: EditPostAboutCycleClientPayload | EditPostAboutWorkClientPayload): Promise<Post> => {
-      const res = await fetch(`/api/post/${globalModalsState.editPostId || router.query.postId}`, {
+      const res = await fetch(`/api/post/${id}`, {
         method: remove?'DELETE':'PATCH',
         body: JSON.stringify(payload),
       });
@@ -140,7 +122,6 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
             // const ck = [`POST`, `${globalModalsState.editPostId || post.id}`];
           }
           handleEditPostOnSmallerScreenClose();
-          setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: false, editPostId:undefined } });
         
         // return { snapshot: null, ck: '' };
       },
@@ -293,13 +274,13 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
   return (
     post && (
       <Form onSubmit={handleSubmit} ref={formRef}>
-        <ModalHeader closeButton={!noModal}>
+        {/* <ModalHeader closeButton={!noModal}>
           <Container>
             <ModalTitle> <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('titleEdit')}</h1></ModalTitle>
           </Container>
-        </ModalHeader>
+        </ModalHeader> */}
 
-        <ModalBody>
+        {/* <ModalBody> */}
           <Container>
             <Row className='d-flex flex-column flex-lg-row'>
               <Col className='mb-4'>
@@ -485,24 +466,10 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
                 />
               </FormGroup>
             </Row>
-          </Container>
-        </ModalBody>
+        {/* </ModalBody> */}
 
-        <ModalFooter>
-          <Container className="py-3">
-            <Row className='d-flex flex-column flex-lg-row'>
-              <Col className='mb-4'>
-                {/* <FormCheck
-                  type="checkbox"
-                  defaultChecked={post.isPublic}
-                  onChange={handlerchange}
-                  inline
-                  id="isPublic"
-                  label={t('isPublicFieldLabel')}
-                /> */}
-                {/* <small style={{ color: 'lightgrey', display: 'block', margin: '0.25rem 0 0 1.25rem' }}>
-                  {t('isPublicInfotip')}
-                </small> */}
+        {/* <ModalFooter> */}
+            
                 <FormCheck
                       type="checkbox"
                       defaultChecked={remove}
@@ -511,9 +478,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
                       id="removePost"
                       label={t('common:Remove')}
                     />
-              </Col>
-              <Col className='mb-4' style={{ borderLeft: '1px solid lightgrey' }}>
-                <Button variant="primary" disabled={isEditPostLoading} type="submit" className="ps-5 pe-4 w-100">
+                <Button variant="primary" disabled={isEditPostLoading} type="submit" className="ps-5 pe-4">
                   <>
                     {t('titleEdit')}
                     {isEditPostLoading ? (
@@ -524,10 +489,9 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false}) => {
                     {isEditPostError && createPostError}
                   </>
                 </Button>
-              </Col>
-            </Row>
           </Container>
-        </ModalFooter>
+              
+        {/* </ModalFooter> */}
       </Form>
     )
   );

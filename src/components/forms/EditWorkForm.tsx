@@ -81,7 +81,6 @@ const EditWorkForm: FunctionComponent = () => {
         setPublicationLengthLabel('...');
     }
   };
-  const [id,setId] = useState<string>('')
   const {data:work} = useWork(+(router.query?.id?.toString()!),{enabled:!!router.query?.id})
 
   useEffect(() => {

@@ -31,7 +31,6 @@ import HyvorComments from '@/src/components/common/HyvorComments';
 import detailPagesAtom from '@/src/atoms/detailPages';
 import globalModalsAtom from '@/src/atoms/globalModals';
 import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens';
-import EditPostForm from '../forms/EditPostForm';
 
 import styles from './CycleDetail.module.css';
 import { useCycleContext } from '@/src/useCycleContext';
@@ -395,8 +394,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   const handleEditPostClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    setGlobalModalsState({ ...globalModalsState, ...{ 
-      editPostModalOpened: true } });
+    if(post){
+      localStorage.setItem('redirect',`/cycle/${cycle.id}`)
+      router.push(`/post/${post.id}/edit`)
+    }
   };
 
   const getDefaultActiveKey = () => {
@@ -453,12 +454,13 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         {/* <Button className="" variant="danger" onClick={e=>{removeCycle(e)}}>Remove Cycle</Button> */}
 
         {post && cycle && canEditPost() && (<>
-          <Button className='d-none d-md-block' variant="warning" onClick={handleEditPostClick} size="sm">
+          <Button variant="warning" onClick={handleEditPostClick} size="sm">
             {t('Edit')}
           </Button>
-            <Button className='d-block d-md-none' variant="warning" onClick={handleEditPostOnSmallerScreen} size="sm">
+          {/* <Button className='d-block d-md-none' variant="warning" onClick={handleEditPostOnSmallerScreen} size="sm">
             {t('Edit')}
-          </Button></>
+          </Button> */}
+          </>
         )}
       </ButtonGroup> : 
     
@@ -469,7 +471,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       </ButtonGroup>
      }
 
-{(!editPostOnSmallerScreen.value) ? <>
+{
+// (!editPostOnSmallerScreen.value) ? 
+  <>
       {!post && renderCycleDetailHeader()}
       {post && cycle && (
         <MosaicContext.Provider value={{ showShare: true }}>
@@ -566,7 +570,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
             )}
           </Col>
         </Row>
-      )}</> : <EditPostForm noModal />}
+      )
+      }</> 
+      // : <EditPostForm noModal />
+      }
     </>
   );
 };

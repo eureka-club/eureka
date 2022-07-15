@@ -11,6 +11,8 @@ interface Props {
 
 const TypeaheadSearchItem: FunctionComponent<Props> = ({ cycle }) => {
   const { t } = useTranslation('common');
+  if(!cycle)return <></>
+  debugger;
   return (
     <section>
       <aside className="position-relative">

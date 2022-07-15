@@ -31,7 +31,6 @@ import TagsInput from '@/components/forms/controls/TagsInput';
 import MosaicItem from './MosaicItem';
 import { MosaicContext } from '@/src/useMosaicContext';
 import { WorkContext } from '@/src/useWorkContext';
-import EditPostForm from '@/components/forms/EditPostForm';
 import useWork from '@/src/useWork'
 import useCycles from '@/src/useCycles'
 import usePosts,{getPosts} from '@/src/usePosts'
@@ -139,7 +138,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
 
   const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    setGlobalModalsState({ ...globalModalsState, ...{ editWorkModalOpened: true } });
+    localStorage.setItem('redirect',`/work/${work.id}`)
+    router.push(`/work/${work.id}/edit`)
   };
 
   const canEditWork = (): boolean => {
@@ -154,7 +154,10 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
 
   const handleEditPostClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: true } });
+    if(post){
+      localStorage.setItem('redirect',`/work/${work.id}`)
+      router.push(`/post/${post.id}/edit`)
+    }
   };
 
   const handleEditPostOnSmallerScreen = (ev: MouseEvent<HTMLButtonElement>) => {
@@ -186,7 +189,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
     <WorkContext.Provider value={{ work, linkToWork: false }}>
       <MosaicContext.Provider value={{ showShare: true }}>
        
-       {(!editPostOnSmallerScreen.value) ? 
+       {
+       (!editPostOnSmallerScreen.value) ? 
         <ButtonGroup className="mt-1 mt-md-3 mb-1">
           <Button variant="primary text-white" onClick={() => router.back()} size="sm">
             <BiArrowBack />
@@ -213,8 +217,10 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
       </ButtonGroup>
       }
 
-     {(!editPostOnSmallerScreen.value) 
-      ? <>
+     {
+    //  (!editPostOnSmallerScreen.value) 
+    //   ? 
+      <>
           <Suspense fallback={<Spinner animation="grow"/>}>
             {post == null ? (
               <Row className="mb-5 d-flex flex-column flex-md-row">
@@ -335,7 +341,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
             </Row>
           )}
         </> 
-      : <EditPostForm noModal cacheKey={['POSTS',JSON.stringify(workPostsWhere)]} />}
+      // : <EditPostForm noModal cacheKey={['POSTS',JSON.stringify(workPostsWhere)]} />
+      }
       </MosaicContext.Provider>
     </WorkContext.Provider>
   );
