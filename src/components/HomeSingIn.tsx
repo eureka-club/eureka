@@ -7,10 +7,10 @@ import { GetAllByResonse } from '@/src/types';
 import { useInView } from 'react-intersection-observer';
 import { CycleMosaicItem } from '../../src/types/cycle';
 import CarouselStatic from '@/src/components/CarouselStatic';
-import { useSession, getSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import slugify from 'slugify'
-import { UserMosaicItem } from '../types/user';
+import useMyCycles,{myCyclesWhere} from '@/src/useMyCycles';
 const Carousel = lazy(()=>import('@/components/Carousel'));
 
 const topics = ['gender-feminisms', 'technology', 'environment',
@@ -27,24 +27,12 @@ const fetchItems = async (pageParam: number,topic:string):Promise<GetAllByResons
         return q.json();
 };
 
-const cyclesCreatedOrJoinedWhere = (id:number) => ({
-  where:{
-    OR:[
-      {
-        participants:{some:{id}},
-      },
-      {
-        creatorId:id
-      }
-    ]
-  }
-}) 
 interface Props{
         groupedByTopics: Record<string,GetAllByResonse>;
-        myCycles?:CycleMosaicItem[]
+        // myCycles?:CycleMosaicItem[]
       }
       
-const HomeSingIn: FunctionComponent<Props> = ({ groupedByTopics,myCycles=[]}) => {
+const HomeSingIn: FunctionComponent<Props> = ({ groupedByTopics}) => {
   const {data:session, status} = useSession();
   const router = useRouter();
   const { t } = useTranslation('common');
@@ -53,8 +41,12 @@ const HomeSingIn: FunctionComponent<Props> = ({ groupedByTopics,myCycles=[]}) =>
     // rootMargin: '200px 0px',
     // skip: supportsLazyLoading !== false,
   });
- 
-  const [cycles,setCycles] = useState(myCycles)
+  const [cycles,setCycles] = useState<CycleMosaicItem[]>()
+ const {data:dataCycles} = useMyCycles(session?.user.id!)
+  useEffect(()=>{
+    if(dataCycles)setCycles(dataCycles.cycles)
+  },[dataCycles])
+
   const [gbt, setGBT] = useState([...Object.entries(groupedByTopics||[])]);
   const [topicIdx,setTopicIdx] = useState(gbt.length-1)
 
@@ -93,7 +85,6 @@ const getMediathequeSlug = (id:number,name:string)=>{
     return slug
 }
 
-
   const seeAll = async (data: CycleMosaicItem[], q: string, showFilterEngine = true): Promise<void> => {
     if(session){
       const u = session.user
@@ -103,10 +94,13 @@ const getMediathequeSlug = (id:number,name:string)=>{
 //       <h1 className="text-secondary fw-bold">{t('myCycles')}</h1>
 
 const cyclesJoined = () => {
+  if(!session)return <></>
+  const k = JSON.stringify(myCyclesWhere(session?.user.id))
+
     return (cycles && cycles.length) 
-    ? <div>      
+    ? <div>
        <CarouselStatic
-        cacheKey={['CYCLES',JSON.stringify(cyclesCreatedOrJoinedWhere(+session!.user.id.toString()))]}
+        cacheKey={['CYCLES',k]}
         onSeeAll={async () => seeAll(cycles, t('myCycles'))}
         title={t('myCycles')}
         data={cycles}
@@ -141,8 +135,6 @@ const renderCarousels =  ()=>{
   </>
 </>
 
-
 }
-
 
 export default HomeSingIn;

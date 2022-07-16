@@ -7,7 +7,8 @@ import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { useSession, getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { GetAllByResonse } from '@/src/types';
-import useMyCycles from '@/src/useMyCycles';
+import {getMyCycles,myCyclesWhere} from '@/src/useMyCycles';
+import { dehydrate,QueryClient } from 'react-query';
 const HomeNotSingIn = lazy(()=>import('@/components/HomeNotSingIn'));
 const HomeSingIn = lazy(()=>import('@/src/components/HomeSingIn'));
 
@@ -32,7 +33,6 @@ const IndexPage: NextPage<Props> = ({groupedByTopics}) => {
   const { t } = useTranslation('common');
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
-  const {data:dataCycles} = useMyCycles(session?.user.id!);
   
   return <>
     <Head>
@@ -60,7 +60,7 @@ const IndexPage: NextPage<Props> = ({groupedByTopics}) => {
     {session && session.user && <SimpleLayout showHeader title={t('browserTitleWelcome')}>
       <Suspense fallback={<Spinner animation="grow" />}>
         {/* ESTO SERIA PAGINA USUARIO LOGUEADO */}
-        <HomeSingIn groupedByTopics={groupedByTopics} myCycles={dataCycles?.cycles} />
+        <HomeSingIn groupedByTopics={groupedByTopics} />
       </Suspense>
     </SimpleLayout>
     }
@@ -72,6 +72,7 @@ export const getServerSideProps: GetServerSideProps = async ({req}) => {
   if(!session)
     return {props:{groupedByTopics:null}};
     
+  const id = session.user.id;  
   let groupedByTopics:Record<string,GetAllByResonse>={};
   
   let r = await fetchItems(0,topics[0])
@@ -80,10 +81,14 @@ export const getServerSideProps: GetServerSideProps = async ({req}) => {
   let r1 = await fetchItems(0,topics[1])
   groupedByTopics[topics[1]] = r1;
 
+  const qc = new QueryClient()
+  const k = myCyclesWhere(session.user.id)
+  await qc.fetchQuery(['CYCLES',JSON.stringify(k)],()=>getMyCycles(id,8))
+
   return {
     props: {
       groupedByTopics,
-      // dehydratedState: dehydrate(queryClient),      
+      dehydratedState: dehydrate(qc),      
     },
   };
   
