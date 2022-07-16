@@ -19,7 +19,6 @@ import { CycleMosaicItem } from '../../types/cycle';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import globalModalsAtom from '../../atoms/globalModals';
-
 import useUser from '@/src/useUser';
 import useUsers from '@/src/useUsers'
 // import { Session } from '../../types';
@@ -32,6 +31,10 @@ import Avatar from '../common/UserAvatar';
 import { UserMosaicItem } from '@/src/types/user';
 import useCycleJoinRequests,{setCycleJoinRequests,removeCycleJoinRequest} from '@/src/useCycleJoinRequests'
 import {useJoinUserToCycleAction,useLeaveUserFromCycleAction} from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
+
+import {useModalContext} from '@/src/useModal'
+import SignInForm from '../forms/SignInForm';
+
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -74,6 +77,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   const queryClient = useQueryClient();
   const router = useRouter();
   const {data:cycle} = useCycle(cycleId,{enabled:!!cycleId})
+
+  const {show} = useModalContext()
   
   const whereCycleParticipants = {
     where:{
@@ -180,7 +185,10 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   const handleJoinCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    if (!session) openSignInModal();
+    if (!session) {
+      show(<SignInForm/>)
+      openSignInModal();
+    }
     else execJoinCycle();
   };
 
@@ -235,7 +243,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     return img;
   };
   
-  const renderJoinLeaveCycleBtn = ()=>{
+  const renderJoinLeaveCycleBtn = useMemo(()=>{
     if(cycle && !isLoadingSession){
 
       if(cycle.currentUserIsCreator)
@@ -269,7 +277,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           className="w-75 text-white">
             <Spinner size='sm' animation='grow'/>
           </Button>
-  }
+  },[cycle,isLoadingSession])
 
   if(!cycle)return <></>
 
@@ -303,7 +311,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         </div>
       )}
       <div className={`text-center ${showParticipants ? 'mt-3' : ''} ${styles.joinButtonContainer}`}>
-        {renderJoinLeaveCycleBtn()}
+        {renderJoinLeaveCycleBtn}
       </div>
       {showParticipants && (<p className={`${styles.title} mt-3 fs-6 text-center text-gray my-2`}>
         {`${t('Participants')}: ${participants!.length ||'...'}`}

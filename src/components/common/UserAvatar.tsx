@@ -7,6 +7,8 @@ import useUser from '@/src/useUser'
 
 import styles from './UserAvatar.module.css';
 import LocalImageComponent from '@/src/components/LocalImage'
+import { UserMosaicItem } from '@/src/types/user';
+import slugify from 'slugify'
 interface Props {
   userId: number;
   showName?: boolean;
@@ -16,6 +18,16 @@ interface Props {
   width:number;
   height:number;
 }
+
+const getMediathequeSlug = (user:UserMosaicItem)=>{
+  if(user){
+    const s =`${user.name}`
+    const slug = `${slugify(s,{lower:true})}-${user.id}` 
+    return slug
+  }
+  return ''
+}
+
 
 const UserAvatar: FunctionComponent<Props> = ({
   userId,
@@ -56,7 +68,7 @@ const UserAvatar: FunctionComponent<Props> = ({
     <>
       {user && (
         <section className={`fs-6 ${styles[size]}`}>
-          <Link href={`/mediatheque/${user.id}`}>
+          <Link href={`/mediatheque/${getMediathequeSlug(user)}`}>
             <a className={`text-secondary ${styles.link} d-flex align-items-center`}>
 
                 {(!user?.photos || !user?.photos.length) ?

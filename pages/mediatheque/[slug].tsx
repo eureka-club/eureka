@@ -1,13 +1,8 @@
-// import { flatten, zip } from 'lodash';
-import { useAtom } from 'jotai';
-import dayjs from 'dayjs';
-// import { GetServerSideProps, GetStaticProps, NextPage } from 'next';
 import { GetServerSideProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { useSession, getSession } from 'next-auth/react';
 import { useQueryClient, useMutation, dehydrate, QueryClient } from 'react-query';
-// import { dehydrate } from 'react-query/hydration';
 import { useState, useEffect, SyntheticEvent } from 'react';
 
 import { Spinner, Card, Row, Col, ButtonGroup, Button, Alert } from 'react-bootstrap';
@@ -17,7 +12,7 @@ import { BiArrowBack } from 'react-icons/bi';
 import LocalImageComponent from '@/src/components/LocalImage'
 import { HiOutlineUserGroup } from 'react-icons/hi';
 
-import { /* RatingOnCycle, */ RatingOnWork, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import styles from './index.module.css';
 import useUser from '@/src/useUser';
 
@@ -27,8 +22,6 @@ import TagsInput from '../../src/components/forms/controls/TagsInput';
 
 import CarouselStatic from '../../src/components/CarouselStatic';
 
-import { CycleMosaicItem /* , CycleWithImages */ } from '../../src/types/cycle';
-import { PostMosaicItem /* , PostWithImages */ } from '../../src/types/post';
 import { WorkMosaicItem /* , WorkWithImages */ } from '../../src/types/work';
 import { UserMosaicItem /* , UserDetail, WorkWithImages */ } from '../../src/types/user';
 import UnclampText from '../../src/components/UnclampText';
@@ -38,22 +31,13 @@ import useMyCycles,{getMyCycles} from '@/src/useMyCycles';
 import useMySaved from '@/src/useMySaved';
 import slugify from 'slugify'
 
-type Item = CycleMosaicItem | WorkMosaicItem | (PostMosaicItem & { type: string });
 
-type ItemCycle = CycleMosaicItem & { type: string };
-
-const userPostsCondition = (id: number, idSession?:number)=> ({
-  where:{
-    creatorId:id,
-    isPublic:true    
-  }
-});
-
-const Mediatheque: NextPage = () => {
-  
+interface Props{
+  id:number;
+}
+const Mediatheque: NextPage<Props> = ({id}) => {
   const {data:session, status} = useSession();
   const isLoadingSession = status === "loading"
-  const [id, setId] = useState<string>('');
   const [idSession, setIdSession] = useState<string>('');
   const router = useRouter();
   const {notifier} = useNotificationContext();
@@ -62,19 +46,17 @@ const Mediatheque: NextPage = () => {
   const { t } = useTranslation('mediatheque');
  
   useEffect(() => {
-    setId(router.query.id as string);
     if (session) setIdSession(session.user.id.toString());
   }, [session, router]);
 
   const { /* isError, error, */ data: user, isLoading: isLoadingUser, isSuccess: isSuccessUser } = useUser(+id,{
     enabled:!!+id
   });
-  
 
   const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>(false);
   
 
-  const {data:dataPosts} = useMyPosts(session)
+  const {data:dataPosts} = useMyPosts(id)
   const [posts,setPosts] = useState(dataPosts?.posts);
 
   useEffect(()=>{
@@ -83,7 +65,7 @@ const Mediatheque: NextPage = () => {
     }
   },[dataPosts?.posts])
 
-  const {data:dataCycles} = useMyCycles(session);
+  const {data:dataCycles} = useMyCycles(id);
   const [cycles,setCycles] = useState(dataCycles?.cycles);
 
   useEffect(()=>{
@@ -92,7 +74,7 @@ const Mediatheque: NextPage = () => {
     }
   },[dataCycles?.cycles])
 
-  const SFL = useMySaved(+id)
+  const SFL = useMySaved(id)
 
   useEffect(() => {
     if(user){
@@ -205,16 +187,18 @@ const Mediatheque: NextPage = () => {
   const followHandler = async () => {
     const s = session;
     if (user && s) {
-      if (parseInt(id, 10) !== s.user.id) {
+      if (id !== s.user.id) {
         mutateFollowing();
 
       }
     }
   };
-
   
   const goTo = (path:string)=>{
-    if(user)router.push(`/user/${slugify(user.name||user.id.toString(),{lower:true})}/${path}`) 
+    if(user){
+      const sts = `${user.name||id.toString()}-${id}`
+      router.push(`/user/${slugify(sts,{lower:true})}/${path}`) 
+    }
     else router.push(`/`)
   }
   
@@ -222,7 +206,7 @@ const Mediatheque: NextPage = () => {
     if (user && posts && posts.length) {
       return (
         <CarouselStatic
-          cacheKey={['MY-POSTS',id]}
+          cacheKey={['MY-POSTS',id.toString()]}
           className="mb-5"
           onSeeAll={()=>goTo('my-posts')}
           title={t('common:myPosts')}
@@ -237,7 +221,7 @@ const Mediatheque: NextPage = () => {
   const cyclesJoined = () => {
     return (cycles && cycles.length) 
     ? <CarouselStatic
-        cacheKey={['MY-CYCLES',id]}
+        cacheKey={['MY-CYCLES',id.toString()]}
         onSeeAll={()=>goTo('my-cycles')}
         title={t('common:myCycles')}
         data={cycles}
@@ -443,31 +427,41 @@ const Mediatheque: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const queryClient = new QueryClient();
-  const session = await getSession();
-  // const {query} = ctx;
+  const session = await getSession(ctx);
+
   if(!session){
     return {
       props:{
       dehydratedState: dehydrate(queryClient),
     }}
   }
-  const {posts} = await getMyPosts(session?.user.id!,8);
-  await queryClient.prefetchQuery(['MY-POSTS',session?.user.id], ()=>posts);
-  posts.forEach(p=>{
-    queryClient.setQueryData(['POST',`${p.id}`], ()=>p)
-  })
+  
+  let id = 0;
+  if(ctx.query && ctx.query.slug){
+    const slug = ctx.query.slug.toString()
+    const li = slug.split('-').slice(-1)
+    id = parseInt(li[0])
+    const {posts} = await getMyPosts(id!,8);
+    await queryClient.prefetchQuery(['MY-POSTS',id], ()=>posts);
+    posts.forEach(p=>{
+      queryClient.setQueryData(['POST',`${p.id}`], ()=>p)
+    })
+  
+    const {cycles} = await getMyCycles(id!,8);
+    await queryClient.prefetchQuery(["MY-CYCLES"],()=>cycles)
+    cycles.forEach(c=>{
+      queryClient.setQueryData(['CYCLE',c.id], ()=>c)
+    })
+  
+    return {
+      props: {
+        id,
+        dehydratedState: dehydrate(queryClient),
+      },
+    };
+  }
+  return {props:{}}
 
-  const {cycles} = await getMyCycles(session?.user.id!,8);
-  await queryClient.prefetchQuery(["MY-CYCLES"],()=>cycles)
-  cycles.forEach(c=>{
-    queryClient.setQueryData(['CYCLE',c.id], ()=>c)
-  })
-
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-  };
 };
 
 export default Mediatheque;

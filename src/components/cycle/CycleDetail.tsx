@@ -185,7 +185,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     if(posts){
       return <>
         <Row>
-        {posts.map((p)=><Col key={p.id} className="mb-5">
+        {posts.map((p)=><Col xs={12} sm={6} lg={3} key={p.id} className="mb-5">
           <MosaicItemPost  cacheKey={['POST',`${p.id}`]} postId={p.id} />          
         </Col>
         )}

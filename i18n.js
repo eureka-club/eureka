@@ -17,7 +17,7 @@ module.exports = {
     '/manifest': ['manifest'],
     '/policy': ['termsAndPolicy'],
     '/back-office': ['backOffice'],
-    'rgx:^/mediatheque/\\[id\\]': ['mediatheque', 'countries'],
+    'rgx:^/mediatheque/\\[slug\\]': ['mediatheque', 'countries'],
     'rgx:^/cycle/\\[id\\]': ['cycleDetail', 'countries'],
     'rgx:^/work/\\[id\\]': ['workDetail', 'countries','cycleDetail'],
   },

@@ -12,15 +12,16 @@ import {useRouter} from 'next/router'
 import { BiArrowBack } from 'react-icons/bi';
 
 interface Props{
+  id:number;
 }
 
-const MyCycles: NextPage<Props> = () => {
+const MyCycles: NextPage<Props> = ({id}) => {
   const { t } = useTranslation('common');
   const router = useRouter()
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
   if(!isLoadingSession && !session)router.push('/')
-  const {data:dataCycles} = useMyCycles(session);
+  const {data:dataCycles} = useMyCycles(id);
   return <>
     <Head>
         <meta property="og:title" content='Eureka'/>
@@ -66,17 +67,24 @@ const MyCycles: NextPage<Props> = () => {
 export const getServerSideProps:GetServerSideProps= async (ctx)=>{
   const qc = new QueryClient();
   const session = await getSession({ctx})
+  let id = 0
+  if(ctx.query && ctx.query.slug){
+    const slug = ctx.query.slug.toString()
+    const li = slug.split('-').slice(-1)
+    id = parseInt(li[0])
+  }
   let res = {
     props:{
+      id,
       dehydrateState:dehydrate(qc)
     }
   }
   if(!session)return res;
-  const id = session.user.id;
   await qc.fetchQuery(['MY-CYCLES',id],()=>getMyCycles(id,8));
   
   res = {
     props:{
+      id,
       dehydrateState:dehydrate(qc)
     }
   }

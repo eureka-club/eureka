@@ -1,27 +1,27 @@
-import { NextPage } from 'next';
+import { NextPage,GetServerSideProps } from 'next';
 import Head from "next/head";
 import { Button, ButtonGroup, Col, Row, Spinner } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
-import { useSession } from 'next-auth/react';
+import { useSession, getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import { GetAllByResonse } from '@/src/types';
-
+import { dehydrate,QueryClient } from 'react-query';
 import UMI from '@/src/components/user/MosaicItem';
 import {useRouter} from 'next/router'
-import useUser from '@/src/useUser';
+import useUser,{getUser} from '@/src/useUser';
 import { UserMosaicItem } from '@/src/types/user';
 import { BiArrowBack } from 'react-icons/bi';
 
 interface Props{
+  id:number
 }
 
-const MyUsersFollowed: NextPage<Props> = () => {
+const MyUsersFollowed: NextPage<Props> = ({id}) => {
   const { t } = useTranslation('common');
   const router = useRouter()
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
   if(!isLoadingSession && !session)router.push('/')
-  const {data:user} = useUser(session?session.user.id:0,{enabled:!!session?.user.id})
+  const {data:user} = useUser(id)
   return <>
     <Head>
         <meta property="og:title" content='Eureka'/>
@@ -64,4 +64,30 @@ const MyUsersFollowed: NextPage<Props> = () => {
     </SimpleLayout>
   </>
 };
+export const getServerSideProps:GetServerSideProps= async (ctx)=>{
+  const qc = new QueryClient();
+  const session = await getSession({ctx})
+  let id = 0
+  if(ctx.query && ctx.query.slug){
+    const slug = ctx.query.slug.toString()
+    const li = slug.split('-').slice(-1)
+    id = parseInt(li[0])
+  }
+  let res = {
+    props:{
+      id,
+      dehydrateState:dehydrate(qc)
+    }
+  }
+  if(!session)return res;
+  await qc.fetchQuery(['USER',id.toString()],()=>getUser(id));
+  
+  res = {
+    props:{
+      id,
+      dehydrateState:dehydrate(qc)
+    }
+  }
+  return res;
+}
 export default MyUsersFollowed;

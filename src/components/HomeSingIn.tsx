@@ -9,9 +9,8 @@ import { CycleMosaicItem } from '../../src/types/cycle';
 import CarouselStatic from '@/src/components/CarouselStatic';
 import { useSession, getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useAtom } from 'jotai';
-import globalSearchEngineAtom from '../../src/atoms/searchEngine';
 import slugify from 'slugify'
+import { UserMosaicItem } from '../types/user';
 const Carousel = lazy(()=>import('@/components/Carousel'));
 
 const topics = ['gender-feminisms', 'technology', 'environment',
@@ -54,7 +53,6 @@ const HomeSingIn: FunctionComponent<Props> = ({ groupedByTopics,myCycles=[]}) =>
     // rootMargin: '200px 0px',
     // skip: supportsLazyLoading !== false,
   });
- const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
  
   const [cycles,setCycles] = useState(myCycles)
   const [gbt, setGBT] = useState([...Object.entries(groupedByTopics||[])]);
@@ -89,11 +87,17 @@ if(topicIdx < topics.length-1) return <Spinner ref={ref} animation="grow" />
         return '';
 }
 
+const getMediathequeSlug = (id:number,name:string)=>{
+    const s =`${name}`
+    const slug = `${slugify(s,{lower:true})}-${id}` 
+    return slug
+}
+
+
   const seeAll = async (data: CycleMosaicItem[], q: string, showFilterEngine = true): Promise<void> => {
     if(session){
-
-      const slug = slugify(session?.user.name||session.user.id.toString(),{lower:true})
-      router.push(`/user/${slug}/my-cycles`);
+      const u = session.user
+      router.push(`/user/${getMediathequeSlug(u.id,u.name||u.id.toString())}/my-cycles`);
     }
   };
 //       <h1 className="text-secondary fw-bold">{t('myCycles')}</h1>

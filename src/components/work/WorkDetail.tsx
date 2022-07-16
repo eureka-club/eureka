@@ -172,7 +172,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
         {/* <div className='d-none d-md-block'><ListWindow items={posts} cacheKey={['POSTS',JSON.stringify(workPostsWhere)]} itemsByRow={4} /></div>
         <div className='d-block d-md-none'><ListWindow items={posts} cacheKey={['POSTS',JSON.stringify(workPostsWhere)]} itemsByRow={1} /></div> */}
         <Row>
-        {posts.map((p)=><Col key={p.id} className="mb-5">
+        {posts.map((p)=><Col key={p.id} xs={12} sm={6} lg={3} className="mb-5">
           <MosaicItemPost  cacheKey={['POST',`${p.id}`]} postId={p.id} />          
         </Col>
         )}

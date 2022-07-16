@@ -1,19 +1,13 @@
-// import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 import { Card, Row, Col } from 'react-bootstrap';
 import { AiOutlineEnvironment } from 'react-icons/ai';
-// import { useQuery } from 'react-query';
 import { useSession } from 'next-auth/react';
-// import { User } from '@prisma/client';
 import router from 'next/router';
 import styles from './MosaicItem.module.css';
-import SocialInteraction from '../common/SocialInteraction';
 import UserAvatar from '../common/UserAvatar';
-// import LocalImageComponent from '../LocalImage';
-// import TagsInput from '../forms/controls/TagsInput';
-// import { Session } from '../../types';
 import { UserMosaicItem } from '../../types/user';
+import slugify from 'slugify'
 
 interface Props {
   user: UserMosaicItem;
@@ -22,8 +16,17 @@ interface Props {
   // showButtonLabels?: boolean;
   // showShare?: boolean;
 }
-const openUserMediatheque = (id: number) => {
-  router.push(`/mediatheque/${id}`).then(() => window.scrollTo(0, 0));
+const getMediathequeSlug = (user:UserMosaicItem)=>{
+  if(user){
+    const s =`${user.name}`
+    const slug = `${slugify(s,{lower:true})}-${user.id}` 
+    return slug
+  }
+  return ''
+}
+const openUserMediatheque = (user:UserMosaicItem) => {
+
+  router.push(`/mediatheque/${getMediathequeSlug(user)}`).then(() => window.scrollTo(0, 0));
 };
 
 const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = false, className = '' }) => {
@@ -32,7 +35,7 @@ const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = fa
   const {data:session} = useSession();
 
   return (
-    <Card className={`${styles.container} ${className}`} onClick={() => openUserMediatheque(id)} data-cy={`mosaic-item-user-${user.id}`}>
+    <Card className={`${styles.container} ${className}`} onClick={() => openUserMediatheque(user)} data-cy={`mosaic-item-user-${user.id}`}>
       <Row className='d-flex flex-row'>
         <Col xs={3} md={3}>
           <section>

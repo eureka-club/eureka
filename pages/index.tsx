@@ -32,7 +32,7 @@ const IndexPage: NextPage<Props> = ({groupedByTopics}) => {
   const { t } = useTranslation('common');
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
-  const {data:dataCycles} = useMyCycles(session);
+  const {data:dataCycles} = useMyCycles(session?.user.id!);
   
   return <>
     <Head>

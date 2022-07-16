@@ -10,14 +10,18 @@ import { Toaster } from 'react-hot-toast';
 
 import detailPagesAtom from '../src/atoms/detailPages';
 import globalModalsAtom from '../src/atoms/globalModals';
+
 import './scss/custom.scss';
 
 import  ErrorBoundary from '@/src/ErrorBounddary';
 import { NotificationProvider } from '@/src/useNotificationProvider';
-
+import {ModalProvider} from '@/src/useModal'
 const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
-  
   const { initialState } = pageProps;
+
+  
+  // const {Modal} = useModal()
+  
   // const gec = useGlobalEventsContext();
   const [queryClient] = useState(
     () =>
@@ -42,12 +46,15 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
 
                   <Hydrate state={pageProps.dehydratedState}>
                     {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                    <NotificationProvider>
-                      <ErrorBoundary>
-                        <Component {...pageProps} />
-                      </ErrorBoundary>
-                    </NotificationProvider>
+                    <ModalProvider>
+                      <NotificationProvider>
+                        <ErrorBoundary>
+                          <Component {...pageProps} />
+                        </ErrorBoundary>
+                      </NotificationProvider>
+                    </ModalProvider>
                     <Toaster position="top-center" reverseOrder={false}/>
+                  
                   </Hydrate>
                   <ReactQueryDevtools />
                 </QueryClientProvider>

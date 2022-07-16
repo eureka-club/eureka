@@ -16,6 +16,7 @@ import Link from 'next/link'
 import toast from 'react-hot-toast'
 import styles from './SignInForm.module.css';
 import {useRouter} from 'next/router'
+import {useModalContext} from '@/src/useModal'
 interface Props {
   noModal?: boolean;
   logoImage?:boolean
@@ -26,21 +27,13 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
   const { t } = useTranslation('signInForm');
   const formRef=useRef<HTMLFormElement>(null)
   const [loading,setLoading] = useState(false)
-
   const handleSignInGoogle = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
 
     signIn('google');
   };
 
-  /*const handleEmailLoginSubmit = (ev: FormEvent<HTMLFormElement>) => {
-    ev.preventDefault();
-    const form = ev.currentTarget;
-    const email = form.email.value;
-
-    signIn('email', { email });
-  };*/
-
+  const {close} = useModalContext()
   const userRegistered = async (email:string)=>{
     const res = await fetch(`/api/user/isRegistered?identifier=${email}`);
     if(res.ok){
@@ -96,7 +89,10 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
         }
       }
       
-
+const handlerJoinLink = ()=>{
+  close()
+  router.push("/register")
+}
   return (
       <>
       <ModalHeader className={`position-relative ${styles.modalHeader}`} closeButton={!noModal}>
@@ -148,8 +144,11 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
           </Row>
           </div>
           <p className={`mt-3 ${styles.registerNotice}`}>{t('RegisterNotice')}</p>
-          <p className={`fs-6 ${styles.dontHaveAccounttext}`}>{t('dontHaveAccounttext')} <Link href="/register">
-          <a className="">{t('Join')}</a></Link></p>
+          <p className={`fs-6 ${styles.dontHaveAccounttext}`}>{t('dontHaveAccounttext')} 
+            <Button onClick={handlerJoinLink} className="text-primary" variant="link">
+            {t('Join')}
+            </Button>
+          </p>
         </div>
       </ModalBody>
     </>

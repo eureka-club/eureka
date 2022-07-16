@@ -1,26 +1,29 @@
-import { NextPage } from 'next';
+import { NextPage,GetServerSideProps } from 'next';
 import Head from "next/head";
 import { Button, ButtonGroup, Col, Row, Spinner } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import { GetAllByResonse } from '@/src/types';
-
+import {find} from '@/src/facades/user'
 import WMI from '@/src/components/work/MosaicItem';
 import {useRouter} from 'next/router'
-import useUser from '@/src/useUser';
+import useUser,{getUser} from '@/src/useUser';
 import { BiArrowBack } from 'react-icons/bi';
+import { UserMosaicItem } from '@/src/types/user';
+import {QueryClient,dehydrate} from 'react-query'
 
 interface Props{
+  id:number
 }
 
-const MyBooksMovies: NextPage<Props> = () => {
+const MyBooksMovies: NextPage<Props> = ({id}) => {
   const { t } = useTranslation('common');
   const router = useRouter()
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
   if(!isLoadingSession && !session)router.push('/')
-  const {data:user} = useUser(session?session.user.id:0,{enabled:!!session?.user.id})
+  const {data:user} = useUser(id,{enabled:!!id})
+  console.log(user,'user1111')
   return <>
     <Head>
         <meta property="og:title" content='Eureka'/>
@@ -51,7 +54,7 @@ const MyBooksMovies: NextPage<Props> = () => {
           <h1 className="text-secondary fw-bold mt-sm-0 mb-5">{t('myBooksMovies')}</h1>
             <Row>
               {user?.ratingWorks.map(c=>
-                <Col key={c.workId} xs={12} sm={6} lg={3}>
+                <Col key={c.workId} xs={12} sm={6} lg={3} className='mb-5'>
                   <WMI workId={c.workId!} />
                 </Col>
               )}
@@ -63,4 +66,24 @@ const MyBooksMovies: NextPage<Props> = () => {
     </SimpleLayout>
   </>
 };
+export const getServerSideProps: GetServerSideProps = async (ctx)=>{
+  let user:UserMosaicItem|null = null;
+  const qc = new QueryClient()
+  let id = 0
+  if(ctx.query && ctx.query.slug){
+    const slug = ctx.query.slug.toString()
+    const li = slug.split('-').slice(-1)
+    id = parseInt(li[0])
+    user = await getUser(id)
+    console.log(user)
+    await qc.prefetchQuery(['USER',id.toString()],()=>user)
+  }
+  return {
+    props:{
+      id,
+      dehydratedState: dehydrate(qc),
+
+    }
+  }
+}
 export default MyBooksMovies;

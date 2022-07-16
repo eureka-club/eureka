@@ -17,6 +17,8 @@ interface GlobalModalType {
     show: boolean;
     autohide?: boolean;
   };
+  show:boolean;
+  content:JSX.Element|null
 }
 const o: GlobalModalType = {
   createPostModalOpened: false,
@@ -34,5 +36,7 @@ const o: GlobalModalType = {
     show: false,
     autohide: true,
   },
+  show:false,
+  content:null
 };
 export default atom(o);

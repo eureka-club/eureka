@@ -12,15 +12,16 @@ import {useRouter} from 'next/router'
 import { BiArrowBack } from 'react-icons/bi';
 
 interface Props{
+  id:number
 }
 
-const MyPosts: NextPage<Props> = () => {
+const MyPosts: NextPage<Props> = ({id}) => {
   const { t } = useTranslation('common');
   const router = useRouter()
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
   if(!isLoadingSession && !session)router.push('/')
-  const {data:dataPosts} = useMyPosts(session);
+  const {data:dataPosts} = useMyPosts(id);
   return <>
     <Head>
         <meta property="og:title" content='Eureka'/>
@@ -68,15 +69,22 @@ export const getServerSideProps:GetServerSideProps= async (ctx)=>{
   const session = await getSession({ctx})
   let res = {
     props:{
+      id:0,
       dehydrateState:dehydrate(qc)
     }
   }
   if(!session)return res;
-  const id = session.user.id;
+  let id = 0
+  if(ctx.query && ctx.query.slug){
+    const slug = ctx.query.slug.toString()
+    const li = slug.split('-').slice(-1)
+    id = parseInt(li[0])
+  }
   await qc.fetchQuery(['MY-POSTS',id],()=>getMyPosts(id,8));
   
   res = {
     props:{
+      id,
       dehydrateState:dehydrate(qc)
     }
   }

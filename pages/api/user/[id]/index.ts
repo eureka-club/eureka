@@ -74,7 +74,7 @@ export default getApiHandler()
       },{});
       
       if(files.photo && files.photo[0]){
-        const user = await find({id:idNum}) as UserMosaicItem;
+        const user = await find({where:{id:idNum}}) as UserMosaicItem;
         if(!user){
           res.statusMessage = 'User not found';
           return res.status(405).end();
@@ -135,13 +135,10 @@ export default getApiHandler()
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
-      const { id, select: s, include: i } = req.query;
-      let select = null;
-      if(s){
-        select = JSON.parse(s as string);
-      }
-      const include = i !== 'false';
-      const user = await find({ id: parseInt(id as string, 10), select, include });
+      const { id:id_, select: s, include: i } = req.query;
+    
+      const id = parseInt(id_ as string, 10)
+      const user = await find({where:{ id }});
       if(user)
         user.type = "user";
 

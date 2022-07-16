@@ -29,7 +29,7 @@ import ChevronToggle from '@/components/ui/dropdown/ChevronToggle';
 import globalModalsAtom from '@/src/atoms/globalModals';
 import styles from './Navbar.module.css';
 import useUser from '@/src/useUser';
-
+import slugify from 'slugify'
 
 const NavBar: FunctionComponent = () => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -109,7 +109,15 @@ const NavBar: FunctionComponent = () => {
     router.push('/')
   }
 
-  
+  const getMediathequeSlug = ()=>{
+    if(session){
+      const u = session.user
+      const s =`${u.name}`
+      const slug = `${slugify(s,{lower:true})}-${u.id}` 
+      return slug
+    }
+    return ''
+  }
 
   return (
     <Container className={styles.container}>
@@ -187,7 +195,7 @@ const NavBar: FunctionComponent = () => {
           {session && session.user && (
             <Nav className={`${styles.navbarNav} text-center d-flex me-1`}>
               <Nav.Item>
-                <Link href={`/mediatheque/${session.user.id}`}>
+                <Link href={`/mediatheque/${getMediathequeSlug()}`}>
                   <a className={styles.navLink}>
                     <RiDashboardLine className={styles.navbarIconNav} />
                     <span className={styles.menuBottomInfo}>{t('My Mediatheque')}</span>

@@ -1,11 +1,13 @@
-import { NextPage } from 'next';
+import { NextPage, GetServerSideProps } from 'next';
 import Head from "next/head";
 import { Button, ButtonGroup, Col, Row, Spinner } from 'react-bootstrap';
+import { QueryClient, dehydrate } from 'react-query';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router'
 import useMySaved from '@/src/useMySaved'
+import useUser,{getUser} from '@/src/useUser';
 import { CycleMosaicItem } from '@/src/types/cycle';
 import { PostMosaicItem } from '@/src/types/post';
 import { WorkMosaicItem } from '@/src/types/work';
@@ -14,21 +16,20 @@ import CMI from '@/components/cycle/MosaicItem'
 import PMI from '@/components/post/MosaicItem'
 import WMI from '@/components/work/MosaicItem'
 import { BiArrowBack } from 'react-icons/bi';
+import {getSession} from 'next-auth/react'
 
 interface Props{
+  id:number;
 }
 
-const MySaved: NextPage<Props> = () => {
+const MySaved: NextPage<Props> = ({id}) => {
   const { t } = useTranslation('common');
   const router = useRouter()
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
   if(!isLoadingSession && !session)router.push('/')
-  const sfl = useMySaved(session?+session?.user.id:0)
-  // const [SFL,setSFL] = useState(sfl)
-  // useEffect(()=>{
-  //   if(sfl)setSFL(sfl)
-  // },[sfl])
+  const sfl = useMySaved(id)
+
   const renderSFL = (i:CycleMosaicItem|PostMosaicItem|WorkMosaicItem)=>{
     if(isCycleMosaicItem(i))return <CMI cycleId={i.id}/>
     if(isPostMosaicItem(i))return <PMI postId={i.id}/>
@@ -76,4 +77,31 @@ const MySaved: NextPage<Props> = () => {
     </SimpleLayout>
   </>
 };
+export const getServerSideProps:GetServerSideProps= async (ctx)=>{
+  const qc = new QueryClient();
+  const session = await getSession({ctx})
+  let id = 0
+  if(ctx.query && ctx.query.slug){
+    const slug = ctx.query.slug.toString()
+    const li = slug.split('-').slice(-1)
+    id = parseInt(li[0])
+  }
+  let res = {
+    props:{
+      id,
+      dehydrateState:dehydrate(qc)
+    }
+  }
+  if(!session)return res;
+  await qc.fetchQuery(['USER',id.toString()],()=>getUser(id));
+  
+  res = {
+    props:{
+      id,
+      dehydrateState:dehydrate(qc)
+    }
+  }
+  return res;
+}
+
 export default MySaved;

@@ -3,17 +3,10 @@ import { UserMosaicItem } from '@/types/user';
 // import { UserDetail } from '../types/user';
 import {prisma} from '@/src/lib/prisma';
 
-export interface findProps {
-  id: number;
-  select?: Record<string, boolean>;
-  include?: boolean;
-}
-export const find = async (props: findProps): Promise<UserMosaicItem | null> => {
-  const { id, select = undefined, include = true } = props;
+export const find = async (props: Prisma.UserFindUniqueArgs): Promise<UserMosaicItem | null> => {
+  const { select = undefined, include = true,where } = props;
   return prisma.user.findUnique({
-    where: { 
-      id,
-    },
+    where,
     select:{
       id: true,
       name: true,

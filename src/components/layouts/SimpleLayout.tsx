@@ -8,7 +8,6 @@ import Navbar from '@/components/layouts/Navbar';
 import HeaderMobile from '@/components/layouts/HeaderMobile';
 import BannerCustomizable from '@/src/components/BannerCustomizable';
 import BannerCustomizableMobile from '@/src/components/BannerCustomizableMobile';
-
 import Footer from '@/components/layouts/Footer';
 
 type Props = {

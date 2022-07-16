@@ -1,5 +1,4 @@
 import usePosts,{getPosts} from './usePosts';
-import { Session } from './types';
 
 export const myPostsWhere = (id: number)=> ({
   where:{
@@ -12,9 +11,9 @@ export const getMyPosts = async (id:number,take:number)=>{
   return getPosts({...myPostsWhere(id),take});
 }
 
-const useMyPosts = (session:Session|null) => {
-  return usePosts(myPostsWhere((session) ? session.user.id : 0  ),
-    {enabled:!!session?.user.id.toString()}
+const useMyPosts = (id:number) => {
+  return usePosts(myPostsWhere(id),
+    {enabled:!!id}
   )
 };
 
