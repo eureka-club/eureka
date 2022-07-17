@@ -174,7 +174,7 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
       disabled={notNewsNotifications()}
       onClick={() => setShow(s => !s)}
     >
-      <aside className="position-relative d-none d-md-inline-block mt-1">
+      <aside className="position-relative d-none d-md-inline-block">
         <IoNotificationsCircleOutline className={`${styles.navbarIconNav} ${notNewsNotifications() ? 'text-dark' : 'text-primary'}`} />
         {notVieweds.length && <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
           {notVieweds.length}
@@ -185,12 +185,12 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
 
       <aside className="d-md-none position-relative me-3">
         <IoNotificationsCircleOutline className={`${styles.navbarIconNav} ${notNewsNotifications() ? 'text-dark' : 'text-primary'}`} />
-        {notVieweds.length && <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+        {notVieweds.length && <span className="mt-2 position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
           {notVieweds.length}
           <span className="visually-hidden">unread messages</span>
         </span> || ''}
       </aside>
-      <span className={`d-none d-lg-block ${styles.menuBottomInfo} mt-2 ms-1`}>{t('navbar:Notifications')}</span>
+      <span className={`d-none d-lg-block ${styles.menuBottomInfo} mt-1 ms-1`}>{t('navbar:Notifications')}</span>
 
     </Button>
     {/* </OverlayTrigger>} */}
