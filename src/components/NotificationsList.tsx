@@ -176,7 +176,7 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
     >
       <aside className="position-relative d-none d-md-inline-block">
         <IoNotificationsCircleOutline className={`${styles.navbarIconNav} ${notNewsNotifications() ? 'text-dark' : 'text-primary'}`} />
-        {notVieweds.length && <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+        {notVieweds.length && <span className="position-absolute mt-2 top-0 start-100 translate-middle badge rounded-pill bg-danger">
           {notVieweds.length}
           <span className="visually-hidden">unread messages</span>
         </span> || ''}

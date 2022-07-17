@@ -33,7 +33,7 @@
 .navbarIconNav {
   color: var(--eureka-green);
   transform: scale(1.2);
-  margin-top: .5rem;
+  margin-top: .2rem;
   /* width: 1.5em;*/
   font-size: 1.8em; 
   border-radius: 50%;
