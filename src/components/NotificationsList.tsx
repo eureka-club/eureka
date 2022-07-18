@@ -190,7 +190,7 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
           <span className="visually-hidden">unread messages</span>
         </span> || ''}
       </aside>
-      <span className={`d-none d-lg-block ${styles.menuBottomInfo} mt-1 ms-1`}>{t('navbar:Notifications')}</span>
+      <span className={`d-none d-lg-block ${styles.menuBottomInfo}  ms-1`}>{t('navbar:Notifications')}</span>
 
     </Button>
     {/* </OverlayTrigger>} */}

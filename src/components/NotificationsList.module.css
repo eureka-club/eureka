@@ -95,6 +95,7 @@
   display: block;
   font-size: .7em;
   text-align: center;
+  margin-top: .3em;
 }
 .navLink{
   color:var(--eureka-secondary)!important;
