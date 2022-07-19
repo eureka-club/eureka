@@ -38,7 +38,7 @@ const renderBackOfficeCycles = () => {
     ? <div>      
        <CarouselStatic
         cacheKey={['CYCLES','INTERESTED']}
-        onSeeAll={()=>router.push('/interested-cycles')}
+        onSeeAll={()=>router.push('/features-cycles')}
         data={cycles}
         title={t('Interest cycles')}
         //seeAll={cycles.length<dataCycles?.total}

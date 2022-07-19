@@ -62,10 +62,10 @@ const MySaved: NextPage<Props> = ({id}) => {
         ? <Spinner animation="grow"/>
         : session ? (
           <>
-          <h1 className="text-secondary fw-bold mt-sm-0 mb-5">{t('mySaved')}</h1>
+          <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('mySaved')}</h1>
             <Row>
               {sfl.map(c=>
-                <Col key={c.id} xs={12} sm={6} lg={3}>
+                <Col key={c.id} xs={12} sm={6} lg={3} className='mb-5 d-flex justify-content-center  align-items-center'>
                   {renderSFL(c)}
                 </Col>
               )}

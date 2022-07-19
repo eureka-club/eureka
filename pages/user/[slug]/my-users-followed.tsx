@@ -49,15 +49,15 @@ const MyUsersFollowed: NextPage<Props> = ({id}) => {
         ? <Spinner animation="grow"/>
         : user ? (
           <>
-          <h1 className="text-secondary fw-bold mt-sm-0 mb-5">{t('myUsersFollowed')}</h1>
+          <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('myUsersFollowed')}</h1>
             <Row>
               {(user?.following as UserMosaicItem[]).map(c=>
-                <Col key={c.id} xs={12} sm={6} lg={3}>
+                <Col key={c.id} xs={12} sm={6} lg={3} className='mb-4 d-flex justify-content-center  align-items-center'>
                   <UMI user={c} />
                 </Col>
               )}
             </Row>
-            </>
+           </>
         ) : ''
       }
           </article>

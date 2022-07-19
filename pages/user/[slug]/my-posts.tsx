@@ -49,10 +49,10 @@ const MyPosts: NextPage<Props> = ({id}) => {
         ? <Spinner animation="grow"/>
         : session ? (
           <>
-          <h1 className="text-secondary fw-bold mt-sm-0 mb-5">{t('myPosts')}</h1>
+          <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('myPosts')}</h1>
             <Row>
               {dataPosts?.posts.map(c=>
-                <Col key={c.id} xs={12} sm={6} lg={3}>
+                <Col key={c.id} xs={12} sm={6} lg={3} className='mb-5 d-flex justify-content-center  align-items-center'>
                   <PMI postId={c.id} />
                 </Col>
               )}

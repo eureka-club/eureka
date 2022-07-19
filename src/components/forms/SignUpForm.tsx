@@ -140,7 +140,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                    <Link href="/" replace>  
                         <img  className={` cursor-pointer ${styles.eurekaImage}`} src="/Eureka-VT-web-white.png" alt="Eureka" /> 
                     </Link>
-                    <Link href="/" replace>  
+                    <Link href="/explore" replace>  
                         <p  className={`mt-5 cursor-pointer text-white ${styles.VisitEurekaText}`}>{t('VisitEureka')} </p> 
                     </Link>
                   </Container>
