@@ -135,7 +135,7 @@ const handlerJoinLink = ()=>{
                 </Form.Group>
                 <div className="d-flex justify-content-center">
                 <Button disabled={loading} onClick={handleSubmitSignIn} variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
-                  {t('login')} {loading && <Spinner animation="grow"/>}
+                  {t('login')} {loading && <div className="ms-1"><Spinner animation="grow" size='sm'/></div>}
                 </Button>
                 </div>
               </Form>
