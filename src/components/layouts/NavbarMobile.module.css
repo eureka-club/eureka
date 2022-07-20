@@ -121,3 +121,7 @@
 .actionBtn :global(.btn){
   color: var(--bs-white);
 }
+.searchIcon{
+  width: 25px;
+  height: 25px
+}

@@ -92,7 +92,7 @@ const SearchTabCycles: FunctionComponent<Props> = ({cyclesData}) => {
       return <div>
         {/* <FilterEngineCycles/> */}
         <Row>
-            {cycles.map(p=><Col xs={12} sm={6} lg={3} className="mb-3" key={p.id}><MosaicItem cycleId={p.id} cacheKey={['CYCLE',p.id.toString()]}  /></Col>)}
+            {cycles.map(p=><Col xs={12} sm={6} lg={3} className="mb-3 d-flex justify-content-center  align-items-center" key={p.id}><MosaicItem cycleId={p.id} cacheKey={['CYCLE',p.id.toString()]}  /></Col>)}
       </Row>
       {cycles?.length!=total && <Spinner ref={ref} animation="grow" />}
       </div>

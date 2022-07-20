@@ -22,6 +22,8 @@ import globalModalsAtom from '@/src/atoms/globalModals';
 import styles from './NavbarMobile.module.css';
 import useUser from '@/src/useUser';
 import LocalImageComponent from '@/components/LocalImage'
+import { AiOutlineSearch } from 'react-icons/ai';
+import { CgStyle } from 'react-icons/cg';
 
 const NavBar: FunctionComponent = () => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -29,6 +31,8 @@ const NavBar: FunctionComponent = () => {
   const router = useRouter();
   const { t } = useTranslation('navbar');
   const [userId,setUserId] = useState(-1);
+  const [showSearch, setShowSearch] = useState<boolean>(false)
+
 
   useEffect(()=>{
     if(session)setUserId(session.user.id)
@@ -65,6 +69,10 @@ const NavBar: FunctionComponent = () => {
     return <BiUser className={styles.navbarIconNav} />;
   };
 
+  const renderSearch = () => {
+    return <div className='mb-3'> <SearchInput className="" /> </div>;
+  }
+
   return (
     <Container fluid className={styles.container}>
       <Navbar collapseOnSelect expand="lg" variant="light" className="position-relative" style={{zIndex:9999}}>
@@ -78,28 +86,35 @@ const NavBar: FunctionComponent = () => {
                 <p className=" my-0 text-secondary ms-3 font-weight-light fs-xs">{t('tagline')}</p>
               </section>
             </aside>
-            
           </Navbar.Brand>
         </Link>
        <div className='d-flex'>
+        <div className='me-2'>
+         <Button 
+            size="sm" 
+            variant="" 
+            className={`p-0 text-primary`}
+            onClick={() => setShowSearch(s => !s)}
+            >
+                <AiOutlineSearch className={`mt-2 ${styles.searchIcon}`} />
+          </Button>     
+        </div>
+        <div className='me-1'>
         <NotificationsList />  
+        </div>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse
           className={`position-absolute top-100 end-0 bg-white border border-info px-2 p-1 ${styles['responsive-navbar-nav']}`}
         >
-          <Nav className="mx-2 my-3">
-             <SearchInput className="" style={{width:'280'}}/>
-          </Nav>
-          <Nav className="mx-2">
-            {!session && (
-              <Button className="text-white" onClick={() => router.push('/')}>
+          {!session && (<Nav className="mx-2 mt-2 mb-2">
+            
+              <Button className="text-white w-100" onClick={() => router.push('/')}>
                 {t('login')}
               </Button>
-            )}
-          </Nav>
-          <Nav className="mx-2">
+          </Nav> )}
+          <Nav className="mx-2 mt-2 mb-2">
             {session && session.user && (
-              <Dropdown className={`rounded-1 me-4 ${styles.actionBtn}`}>
+              <Dropdown className={`rounded-1 ${styles.actionBtn}`}>
                 <Dropdown.Toggle as={ChevronToggle} id="create">
                   <span className="text-white">{t('create')}</span>
                 </Dropdown.Toggle>
@@ -222,6 +237,8 @@ const NavBar: FunctionComponent = () => {
         </Navbar.Collapse>
         </div>
       </Navbar>
+          {showSearch && <div className='d-flex justify-content-end align-items-end' >{renderSearch()}</div>}
+
     </Container>
   );
 };

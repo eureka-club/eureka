@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent } from 'react';
-import { Form,InputGroup } from 'react-bootstrap';
+import React, { FunctionComponent,useRef } from 'react';
+import { Form,InputGroup,Button } from 'react-bootstrap';
 
 import { AiOutlineSearch } from 'react-icons/ai';
 
@@ -13,14 +13,23 @@ interface Props {
 const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => {
   const router = useRouter();
   const { t } = useTranslation('common');
+  const formRef=useRef<HTMLFormElement>(null)
+
 
   const onTermKeyUp = (e:React.KeyboardEvent<HTMLInputElement>)=>{
-    if(e.code == 'Enter'){
+    if(e.code == 'Enter' || e.code == 'NumpadEnter' ){
       router.push(`/search?q=${e.currentTarget.value}`)
     }
   }
 
-  return <div className={`${className}`} style={{...style}}>
+   const onSearch= (e:React.MouseEvent<HTMLButtonElement>)=>{
+          const form = formRef.current;
+    if(form && form.search.value) 
+      router.push(`/search?q=${form.search.value}`)
+  }
+
+
+  return <><div className={`d-none d-lg-block ${className}`} style={{...style}}>
     <InputGroup className="">
       <InputGroup.Text className="bg-white border border-primary">
         <AiOutlineSearch className="text-primary focus-border-color-green"/>
@@ -39,6 +48,38 @@ const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => 
       />
     </InputGroup>
   </div>
+  <div className={`d-block d-lg-none ${className}`} style={{...style}}>
+    <InputGroup className="w-100">
+      <style jsx global>
+        {`
+          .form-control:focus {
+            box-shadow: none;
+        }          
+       `}
+       </style>
+       <Form ref={formRef} style={{width:'270px'}}>
+         <Form.Group controlId='search'>
+            <Form.Control
+            aria-label="Username"
+            aria-describedby="basic-search"
+            className={`${className} `} type="text" placeholder={t('common:search')} onKeyUp={onTermKeyUp}
+          />
+         </Form.Group>
+      </Form>
+       <InputGroup.Text className=" d-lg-none text-white border border-primary cursor-pointer bg-primary">
+            <Button 
+            size="sm" 
+            variant="link" 
+            className="p-0 text-white text-decoration-none"
+            onClick={onSearch}
+            >
+                <AiOutlineSearch />
+              </Button>
+            
+          </InputGroup.Text>
+    </InputGroup>
+  </div>
+  </>
 };
 
 export default SearchInput;
