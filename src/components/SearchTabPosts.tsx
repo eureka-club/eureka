@@ -1,7 +1,7 @@
 import { useState, FunctionComponent, useEffect } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { Spinner, Alert,Row,Tab, Col} from 'react-bootstrap';
+import { Spinner,Row, Col} from 'react-bootstrap';
 
 import MosaicItem from '@/components/post/MosaicItem'
 

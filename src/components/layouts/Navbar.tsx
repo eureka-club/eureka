@@ -1,14 +1,10 @@
-//import Image from 'next/image'
-import { useAtom } from 'jotai';
 import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { setCookie } from 'nookies';
-import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 import LocalImageComponent from '@/components/LocalImage'
-
-
 import {
   Container,
   Button,
@@ -16,7 +12,6 @@ import {
   Navbar,
   Dropdown,
   Spinner,
-  Form
 } from 'react-bootstrap';
 
 import { BiUser } from 'react-icons/bi';
@@ -26,13 +21,11 @@ import { AiOutlineInfoCircle } from 'react-icons/ai';
 import SearchInput from '@/components/SearchInput';
 import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '@/src/constants';
 import ChevronToggle from '@/components/ui/dropdown/ChevronToggle';
-import globalModalsAtom from '@/src/atoms/globalModals';
 import styles from './Navbar.module.css';
 import useUser from '@/src/useUser';
 import slugify from 'slugify'
 
 const NavBar: FunctionComponent = () => {
-  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
   const router = useRouter();
@@ -47,29 +40,6 @@ const NavBar: FunctionComponent = () => {
     staleTime:1
   });
 
-  const openSignInModal = () => {
-    setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
-  };
-
-  const handleCreatePostClick = (ev: MouseEvent<HTMLElement>) => {
-    ev.preventDefault();
-
-    setGlobalModalsState({ ...globalModalsState, ...{ createPostModalOpened: true } });
-  };
-
-  const handleCreateWorkClick = (ev: MouseEvent<HTMLElement>) => {
-    ev.preventDefault();
-
-    setGlobalModalsState({ ...globalModalsState, ...{ createWorkModalOpened: true } });
-  };
-
-
-//QUITAR ESTO CUANDO ESTE LA PAGINA DE PERFIL
-  const handlerEditUserClick = (ev: MouseEvent<HTMLElement>) => {
-    ev.preventDefault();
-    setGlobalModalsState({ ...globalModalsState, ...{ editUserModalOpened: true } });
-  };
-
   const handleLanguageSelect = (locale: string | null) => {
     if (locale != null) {
       setCookie(null, LOCALE_COOKIE_NAME, locale, {
@@ -83,10 +53,6 @@ const NavBar: FunctionComponent = () => {
     signOut({callbackUrl:`${process.env.NEXT_PUBLIC_WEBAPP_URL}/`});
   };
 
-  // const handleAboutSelect = (eventKey: string | null) => {
-  //   if (eventKey === 'aboutEureka') router.push('/about');
-  //   else if (eventKey === 'aboutUs') router.push('/aboutUs');
-  // };
   const avatarError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = '/img/default-avatar.png';
   };

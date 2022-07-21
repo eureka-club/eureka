@@ -1,16 +1,11 @@
-import { useSession, signIn, signOut } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import {Form, Spinner} from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
 import { useState, FunctionComponent, MouseEvent,useRef } from 'react';
 import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
-import FormControl from 'react-bootstrap/FormControl';
-import FormGroup from 'react-bootstrap/FormGroup';
-import FormLabel from 'react-bootstrap/FormLabel';
 import ModalBody from 'react-bootstrap/ModalBody';
 import ModalHeader from 'react-bootstrap/ModalHeader';
-import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
 import Link from 'next/link'
 import toast from 'react-hot-toast'

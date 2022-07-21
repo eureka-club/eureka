@@ -1,6 +1,6 @@
 import { signIn } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import { FormEvent, FunctionComponent, MouseEvent,useRef } from 'react';
+import { FunctionComponent,useRef } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -10,7 +10,6 @@ import Row from 'react-bootstrap/Row';
 import Link from 'next/link'
 import toast from 'react-hot-toast';
 import styles from './SignUpForm.module.css';
-import { totalmem } from 'os';
 
 interface Props {
   noModal?: boolean;

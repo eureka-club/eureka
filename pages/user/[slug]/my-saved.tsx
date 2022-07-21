@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router'
 import useMySaved from '@/src/useMySaved'
-import useUser,{getUser} from '@/src/useUser';
+import {getUser} from '@/src/useUser';
 import { CycleMosaicItem } from '@/src/types/cycle';
 import { PostMosaicItem } from '@/src/types/post';
 import { WorkMosaicItem } from '@/src/types/work';

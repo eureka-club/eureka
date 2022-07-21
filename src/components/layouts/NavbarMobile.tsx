@@ -1,4 +1,3 @@
-import { useAtom } from 'jotai';
 import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -18,15 +17,12 @@ import { AiOutlineInfoCircle } from 'react-icons/ai';
 import SearchInput from '@/components/SearchInput';
 import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '@/src/constants';
 import ChevronToggle from '@/components/ui/dropdown/ChevronToggle';
-import globalModalsAtom from '@/src/atoms/globalModals';
 import styles from './NavbarMobile.module.css';
 import useUser from '@/src/useUser';
 import LocalImageComponent from '@/components/LocalImage'
 import { AiOutlineSearch } from 'react-icons/ai';
-import { CgStyle } from 'react-icons/cg';
 
 const NavBar: FunctionComponent = () => {
-  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const {data:session} = useSession();
   const router = useRouter();
   const { t } = useTranslation('navbar');

@@ -4,7 +4,6 @@ import { Button, ButtonGroup, Col, Row, Spinner } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import {find} from '@/src/facades/user'
 import WMI from '@/src/components/work/MosaicItem';
 import {useRouter} from 'next/router'
 import useUser,{getUser} from '@/src/useUser';
