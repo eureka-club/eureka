@@ -169,8 +169,6 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
     if(posts){
       return <>
         <WorkDetailPost workId={work.id} className='mb-2' cacheKey={['POSTS',JSON.stringify(workPostsWhere)]}></WorkDetailPost> 
-        {/* <div className='d-none d-md-block'><ListWindow items={posts} cacheKey={['POSTS',JSON.stringify(workPostsWhere)]} itemsByRow={4} /></div>
-        <div className='d-block d-md-none'><ListWindow items={posts} cacheKey={['POSTS',JSON.stringify(workPostsWhere)]} itemsByRow={1} /></div> */}
         <Row>
         {posts.map((p)=><Col key={p.id} xs={12} sm={6} lg={3} className="mb-5">
           <MosaicItemPost  cacheKey={['POST',`${p.id}`]} postId={p.id} />          
@@ -316,12 +314,6 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
                     <Row>
                       <Col>
                         <TabContent>
-                          {/* <TabPane eventKey="all">
-                            {all && <>
-                            <div className='d-none d-md-block'><ListWindow items={all} cacheKey={['WORK',`${work.id}-ALL`]} itemsByRow={4} /></div>
-                            <div className='d-block d-md-none'><ListWindow items={all} cacheKey={['WORK',`${work.id}-ALL`]} itemsByRow={1} /></div>
-                            </>}
-                          </TabPane> */}
                           <TabPane eventKey="posts">{
                             renderPosts()
                           }

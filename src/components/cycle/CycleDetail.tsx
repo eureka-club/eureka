@@ -45,9 +45,7 @@ import { useInView } from 'react-intersection-observer';
 
 
 const CycleDetailDiscussion = lazy(() => import ('./CycleDetailDiscussion')) 
-const CycleDetailParticipants = lazy(() => import('./CycleDetailParticipants'))
 const CycleDetailWorks = lazy(() => import('./CycleDetailWorks'))
-// const CycleDetailPosts = lazy(() => import('./CycleDetailPosts'))
 interface Props {
   post?: PostMosaicItem;
   work?: WorkMosaicItem;
@@ -328,7 +326,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
               <Row>
                 <Col /* xs={{span:12, order:'last'}} md={{span:9,order:'first'}} */>
                   <MosaicContext.Provider value={{ showShare: true }}>
-                    {/* <CycleDetailPosts posts={posts||[]} cacheKey={['POSTS', JSON.stringify(cyclePostsProps)]}/> */}
                     {renderPosts()}
                   </MosaicContext.Provider>
                 </Col>
@@ -341,7 +338,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
             <section className=" pt-3">{cycle.guidelines && renderGuidelines()}</section>
           </TabPane>
           <TabPane eventKey="participants">
-              {/* {participants && <CycleDetailParticipants participants={participants} cacheKey={['CYCLE',JSON.stringify(whereCycleParticipants)]} />}             */}
               {renderParticipants()}
           </TabPane>
         </Suspense>
