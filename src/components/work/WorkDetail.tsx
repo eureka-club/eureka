@@ -36,7 +36,7 @@ import useCycles from '@/src/useCycles'
 import usePosts,{getPosts} from '@/src/usePosts'
 import ListWindow from '@/components/ListWindow'
 import WorkDetailPost from './WorkDetailPost';
-
+import CMI from '@/components/cycle/MosaicItem'
 import MosaicItemPost from '@/components/post/MosaicItem'
 import { useInView } from 'react-intersection-observer';
 
@@ -183,6 +183,14 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
     return '';
   }
 
+  const renderCycles =()=>{
+    if(cycles){
+      return <Row>
+        {cycles.map(c=><Col xs={12} sm={6} lg={3} className="mb-3 d-flex justify-content-center  align-items-center" key={c.id}><CMI cycleId={c.id} cacheKey={['CYCLES',`WORK-${workId}`]}  /></Col>)}
+      </Row>
+    }
+    return <></> 
+  }
   return (
     <WorkContext.Provider value={{ work, linkToWork: false }}>
       <MosaicContext.Provider value={{ showShare: true }}>
@@ -319,10 +327,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
                           }
                           </TabPane>
                           <TabPane eventKey="cycles">
-                            {cycles && <>
-                                <div className='d-none d-md-block'><ListWindow items={cycles} cacheKey={['CYCLES',JSON.stringify(workCyclessWhere)]} itemsByRow={4} /></div>
-                                <div className='d-block d-md-none'><ListWindow items={cycles} cacheKey={['CYCLES',JSON.stringify(workCyclessWhere)]} itemsByRow={1} /></div>
-                                </> }
+                            {renderCycles()}
                           </TabPane>
                         </TabContent>
                       </Col>

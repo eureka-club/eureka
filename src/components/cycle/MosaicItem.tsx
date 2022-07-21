@@ -5,30 +5,24 @@ import timezone from 'dayjs/plugin/timezone';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useEffect, useState, MouseEvent, useMemo } from 'react';
-import { useMutation, useQueryClient,useIsFetching } from 'react-query';
+import {  useQueryClient,useIsFetching } from 'react-query';
 import { useRouter } from 'next/router';
 import { Card, Button, Spinner, Badge } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 import { CgMediaLive } from 'react-icons/cg';
 
 import { useAtom } from 'jotai';
-// import { Cycle } from '@prisma/client';
 import { DATE_FORMAT_SHORT } from '../../constants';
-import { CycleMosaicItem } from '../../types/cycle';
-// import { UserDetail } from '../../types/user';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import globalModalsAtom from '../../atoms/globalModals';
 import useUser from '@/src/useUser';
 import useUsers from '@/src/useUsers'
-// import { Session } from '../../types';
 import SocialInteraction from '../common/SocialInteraction';
 import { useCycleContext } from '../../useCycleContext';
-import {useNotificationContext} from '@/src/useNotificationProvider'
 import toast from 'react-hot-toast';
 import useCycle from '@/src/useCycle'
 import Avatar from '../common/UserAvatar';
-import { UserMosaicItem } from '@/src/types/user';
 import useCycleJoinRequests,{setCycleJoinRequests,removeCycleJoinRequest} from '@/src/useCycleJoinRequests'
 import {useJoinUserToCycleAction,useLeaveUserFromCycleAction} from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
 
@@ -40,8 +34,6 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(isBetween);
 interface Props {
-  // workWithImages: WorkWithImages;
-  // cycle: CycleMosaicItem;
   cycleId:number;
   showButtonLabels?: boolean;
   showShare?: boolean;
@@ -54,7 +46,6 @@ interface Props {
 }
 const MosaicItem: FunctionComponent<Props> = ({
   showButtonLabels = false,
-  // showShare,
   detailed = true,
   showSocialInteraction = true,
   showParticipants = false,
@@ -63,7 +54,6 @@ const MosaicItem: FunctionComponent<Props> = ({
   className,
   cycleId
 }) => {
-  const {notifier} = useNotificationContext();
   const { linkToCycle = true, currentUserIsParticipant } = useCycleContext();
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
@@ -129,10 +119,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   // const { id, title, localImages,} = cycle!;
   const { t } = useTranslation('common');
   const isFetchingCycle = useIsFetching(['CYCLE',`${cycle?.id}`])
-
   
   const isActive = () => cycle ? dayjs().isBetween(cycle.startDate, cycle.endDate, null, '[]') : false;
-
 
   const openSignInModal = () => {
     setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
@@ -156,20 +144,6 @@ const MosaicItem: FunctionComponent<Props> = ({
     isLoading: isLeaveCycleLoading,
     // isSuccess: isLeaveCycleSuccess,
   } = useLeaveUserFromCycleAction(user!,cycle!,participants!);
-
-  // useEffect(() => {
-  //   if (mutationResponse) {
-  //     setGlobalModalsState({
-  //       ...globalModalsState,
-  //       showToast: {
-  //         show: true,
-  //         type: 'success',
-  //         title: t('Join Cycle request notification'),
-  //         message: mutationResponse,
-  //       },
-  //     });
-  //   }
-  // }, [mutationResponse]);
 
   const isPending = ()=> isLoadingSession || isFetchingCycle>0 || isJoinCycleLoading || isLeaveCycleLoading;
 
