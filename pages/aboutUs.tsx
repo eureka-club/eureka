@@ -314,7 +314,7 @@ const AboutPage: NextPage = () => {
             />
             <img
               className={styles['logo-img3']}
-              src="https://pbs.twimg.com/profile_images/687011340104273920/lvROD7bu_400x400.png"
+              src="equis.jpg"
               alt=""
             />
             <img
