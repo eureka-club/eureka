@@ -29,7 +29,7 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                 <Row className='d-flex flex-column-reverse flex-lg-row justify-content-center'>
                         <Col className={`col-12 col-lg-4`}>
                         <div className='d-flex justify-content-center justify-content-lg-start'>
-                                <img  className={`${styles.arquimedesImage}`} src="/arquimedes-es-en-fr-pt.webp" alt="Eureka" /> 
+                                <img  className={`${styles.arquimedesImage}`} src="/arquimedes-es-en-fr-pt.png" alt="Eureka" /> 
                         </div>
                         </Col>
                         <Col className={`col-12 col-lg-4`}>
