@@ -36,7 +36,7 @@ const SearchPage: NextPage<Props> = ({postsData,worksData,cyclesData}) => {
   }
 
   return <SimpleLayout title={t('Results')}>
-        <ButtonGroup className="mb-1">
+        <ButtonGroup className="mb-1"> 
           <Button variant="primary text-white" onClick={() => router.back()} size="sm">
             <BiArrowBack />
           </Button>
