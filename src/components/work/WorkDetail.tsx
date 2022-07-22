@@ -34,7 +34,6 @@ import { WorkContext } from '@/src/useWorkContext';
 import useWork from '@/src/useWork'
 import useCycles from '@/src/useCycles'
 import usePosts,{getPosts} from '@/src/usePosts'
-import ListWindow from '@/components/ListWindow'
 import WorkDetailPost from './WorkDetailPost';
 import CMI from '@/components/cycle/MosaicItem'
 import MosaicItemPost from '@/components/post/MosaicItem'

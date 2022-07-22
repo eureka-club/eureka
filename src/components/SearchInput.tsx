@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import React, { FunctionComponent,useRef } from 'react';
-import { Form,InputGroup,Button } from 'react-bootstrap';
+import React, { FunctionComponent,useRef, useState } from 'react';
+import { Form,InputGroup,Button,Spinner } from 'react-bootstrap';
 
 import { AiOutlineSearch } from 'react-icons/ai';
 
@@ -14,25 +14,31 @@ const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => 
   const router = useRouter();
   const { t } = useTranslation('common');
   const formRef=useRef<HTMLFormElement>(null)
-
+  const [searching,setSearching] = useState(false)
 
   const onTermKeyUp = (e:React.KeyboardEvent<HTMLInputElement>)=>{
     if(e.code == 'Enter' || e.code == 'NumpadEnter' ){
-      router.push(`/search?q=${e.currentTarget.value}`)
+      setSearching(true)
+      router.push(`/search?q=${e.currentTarget.value}`).then((res)=>{setSearching(false);return res})
     }
   }
 
    const onSearch= (e:React.MouseEvent<HTMLButtonElement>)=>{
-          const form = formRef.current;
-    if(form && form.search.value) 
-      router.push(`/search?q=${form.search.value}`)
+    const form = formRef.current;
+    if(form && form.search.value) {
+      setSearching(true)
+      router.push(`/search?q=${form.search.value}`).then((res)=>{setSearching(false);return res})
+    }
   }
-
 
   return <><div className={`d-none d-lg-block ${className}`} style={{...style}}>
     <InputGroup className="">
       <InputGroup.Text className="bg-white border border-primary">
-        <AiOutlineSearch className="text-primary focus-border-color-green"/>
+        {
+          searching 
+          ? <Spinner animation="border" size="sm" />
+          : <AiOutlineSearch className="text-primary focus-border-color-green"/>
+        }
       </InputGroup.Text>
       <style jsx global>
         {`
@@ -73,7 +79,11 @@ const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => 
             className="p-0 text-white text-decoration-none"
             onClick={onSearch}
             >
-                <AiOutlineSearch />
+                {
+          searching 
+          ? <Spinner animation="border" size="sm"/>
+          : <AiOutlineSearch className="text-white focus-border-color-green"/>
+        }
               </Button>
             
           </InputGroup.Text>
