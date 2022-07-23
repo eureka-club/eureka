@@ -7,7 +7,7 @@ import { AiOutlineSearch } from 'react-icons/ai';
 
 interface Props {
   className?: string;
-  style?: Record<string,string>;
+  style?: Record<string,string>; 
 
 }
 const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => {
