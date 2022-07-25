@@ -6,6 +6,10 @@ const domain = process.env.NODE_ENV !== 'production'
     : process.env.CDN_ENDPOINT_NAME_PRODUCTION;
 
 module.exports = {
+  experimental: {
+    outputStandalone: true,
+  },
+  output: 'standalone',
     ...nextTranslate(),
     sassOptions: {
         includePaths: [path.join(__dirname, 'scss')],
@@ -29,5 +33,5 @@ module.exports = {
             ],
           },
         ]
-      },
+    },
 };
