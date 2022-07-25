@@ -30,6 +30,8 @@ stages:
     steps:
     - task: Docker@2
       displayName: Build and push an image to container registry
+      env:
+        DATABASE_URL: $(DATABASE_URL)
       inputs:
         command: buildAndPush
         repository: $(imageRepository)
