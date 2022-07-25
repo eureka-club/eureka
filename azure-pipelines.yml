@@ -40,3 +40,21 @@ stages:
         containerRegistry: 'eurekaProd'
         repository: 'eurekaProd'
         command: 'push'
+
+- stage: Deploy
+  displayName: Deploy
+  jobs:
+  - job: Delploy
+    displayName: Deploy
+    steps:
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'Azure Resource Manager eurekaProd'
+        appType: 'webAppLinux'
+        WebAppName: 'EurekaClubEureka'
+        deployToSlotOrASE: true
+        ResourceGroupName: 'eureka-webapp'
+        SlotName: 'nextjs-docker-staging'
+        packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+        RuntimeStack: 'NODE|16-lts'
