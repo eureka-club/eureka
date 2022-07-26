@@ -78,7 +78,7 @@ const BannerCustomizable: FunctionComponent = ({
             </Container>
             <div className='d-flex justify-content-center'>
             <Carousel indicators={true} controls={true}  style={{width: '90%'}} >
-              <Carousel.Item className="text-secondary bg-gray-light" style={{ height: '20rem' }}>
+              <Carousel.Item className="text-secondary bg-gray-very-light" style={{ height: '20rem' }}>
                   <div className="d-flex flex-row" >
                     <div className='' >
                          <img
@@ -88,7 +88,7 @@ const BannerCustomizable: FunctionComponent = ({
                         />
                     </div>
                     <div className="d-flex flex-column mt-4 px-5 py-3" style={{minWidth:'65%%'}}>
-                      <h2 className="h1 fs-2">{bo?.SlideTitle1}</h2>
+                      <h2 className="h1 font-weight-bold fs-2">{bo?.SlideTitle1}</h2>
                       <p className="p-0 mx-1 text-wrap fs-5">{bo?.SlideText1}</p>
                        <div className="d-flex  mt-2"> 
                           <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button>
@@ -96,7 +96,7 @@ const BannerCustomizable: FunctionComponent = ({
                     </div>
                   </div>
               </Carousel.Item>
-              <Carousel.Item className="text-secondary bg-gray-light" style={{ height: '20rem' }}>
+              <Carousel.Item className="text-secondary bg-gray-very-light" style={{ height: '20rem' }}>
                 <div className="d-flex flex-row" >
                     <div className='' >
                          <img
@@ -106,7 +106,7 @@ const BannerCustomizable: FunctionComponent = ({
                         />
                     </div>
                     <div className="d-flex flex-column mt-4  px-5 py-3" style={{minWidth:'65%'}}>
-                      <h2 className="h1 fs-2">{bo?.SlideTitle2}</h2>
+                      <h2 className="h1 font-weight-bold fs-2">{bo?.SlideTitle2}</h2>
                       <p className="p-0 mx-1 text-wrap fs-5">{bo?.SlideText2}</p>
                        <div className="d-flex mt-2"> 
                           <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button>
@@ -114,7 +114,7 @@ const BannerCustomizable: FunctionComponent = ({
                     </div>
                   </div>
               </Carousel.Item>
-              <Carousel.Item className="text-secondary bg-gray-light" style={{ height: '20rem' }}>
+              <Carousel.Item className="text-secondary bg-gray-very-light" style={{ height: '20rem' }}>
                 <div className="d-flex flex-row" >
                     <div className='' >
                          <img
@@ -124,7 +124,7 @@ const BannerCustomizable: FunctionComponent = ({
                         />
                     </div>
                     <div className="d-flex flex-column mt-4  px-5 py-3" style={{minWidth:'65%'}}>
-                      <h2 className="h1 fs-2">{bo?.SlideTitle3}</h2>
+                      <h2 className="h1 font-weight-bold fs-2">{bo?.SlideTitle3}</h2>
                       <p className="p-0 mx-1 text-wrap fs-5">{bo?.SlideText3}</p>
                        <div className="d-flex  mt-2"> 
                           <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button>
