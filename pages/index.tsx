@@ -57,7 +57,7 @@ const IndexPage: NextPage = () => {
     </Head>
     <SimpleLayout showHeader title={t('browserTitleWelcome')}>
       <h1 className="text-secondary fw-bold">{t('Trending topics')}</h1>
-      <span>@by geo@</span>
+      <span>!by geo!</span>
       <aside className="mb-5">{getTopicsBadgedLinks()}</aside>
       <>{show && show.map((item, idx) => <Carousel className="mt-5" key={`carousel-${idx}`} topic={item} />)}</>
       <Button className="my-3 pe-3 rounded-pill text-white" onClick={e=>showTopic(e)} disabled={hide.length === 0}>
