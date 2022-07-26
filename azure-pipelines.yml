@@ -3,7 +3,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- master
+- develop
 
 resources:
 - repo: self
@@ -30,13 +30,13 @@ stages:
     steps:
     - task: Docker@2
       inputs:
-        containerRegistry: 'eurekaProd'
-        repository: 'eurekaProd'
+        containerRegistry: 'eurekaPreprod'
+        repository: 'eurekaPreprod'
         command: 'build'
         Dockerfile: '**/Dockerfile'
         arguments: '--build-arg DATABASE_URL=$(DATABASE_URL)'
     - task: Docker@2
       inputs:
-        containerRegistry: 'eurekaProd'
-        repository: 'eurekaProd'
+        containerRegistry: 'eurekaPreprod'
+        repository: 'eurekaPreprod'
         command: 'push'
