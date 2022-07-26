@@ -37,7 +37,7 @@ stages:
         tags: |
           $(Build.BuildId)
           latest
-        arguments: '--build-arg DATABASE_URL=sqlserver://eureka-staging-database-server.database.windows.net:1433;database=eureka-staging;user=EurekaDatabaseAdmin@eureka-staging-database-server;password=ZxZQ2j1UwAlfaOnr^0f_0Q4Z_9b5t~0nsGXr'
+        arguments: '--build-arg DATABASE_URL=$(DATABASE_URL)'
     - task: Docker@2
       inputs:
         containerRegistry: 'eurekaPreprod'
