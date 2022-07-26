@@ -96,7 +96,7 @@ const NavBar: FunctionComponent = () => {
               {/*<Image src="/logo.svg" width={45} height={52} alt="Project logo" />*/}
                <img  className='eurekaLogo' src="/logo.svg" alt="Project logo" /> 
               <section>
-                <div className={`text-secondary ms-3 h4 mb-0 ${styles.brand}`}>Eureka!!!</div>
+                <div className={`text-secondary ms-3 h4 mb-0 ${styles.brand}`}>Eureka</div>
                 <p className="text-secondary my-0 ms-3 font-weight-light fs-xs">{t('tagline')}</p>
               </section>
             </aside>
