@@ -1,0 +1,48 @@
+# Docker
+# Build and push an image to Azure Container Registry
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- develop
+
+resources:
+- repo: self
+
+variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: '9af6d245-59e5-4674-a474-0798335a4001'
+  imageRepository: 'eurekaclubeureka'
+  containerRegistry: 'eurekapreprod.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  tag: '$(Build.BuildId)'
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+stages:
+- stage: Build
+  displayName: Build and push stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'eurekaPreprod'
+        repository: 'eurekaPreprod'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+        tags: |
+          $(Build.BuildId)
+          latest
+        arguments: '--build-arg DATABASE_URL=sqlserver://eureka-staging-database-server.database.windows.net:1433;database=eureka-staging;user=EurekaDatabaseAdmin@eureka-staging-database-server;password=ZxZQ2j1UwAlfaOnr^0f_0Q4Z_9b5t~0nsGXr'
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'eurekaPreprod'
+        repository: 'eurekaPreprod'
+        command: 'push'
+        tags: |
+          $(Build.BuildId)
+          latest
