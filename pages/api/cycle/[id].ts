@@ -20,10 +20,10 @@ export default getApiHandler()
 
     const { id } = req.query;
     if (typeof id !== 'string') {
-      res.status(404).end();
+      return res.status(404).end();
     }
 
-    const idNum = parseInt(id.toString(), 10);
+    const idNum = parseInt(id, 10);
     if (!Number.isInteger(idNum)) {
       res.status(404).end();
     }
@@ -59,11 +59,11 @@ export default getApiHandler()
     // }
     const { id } = req.query;
     if (typeof id !== 'string') {
-      res.status(404).end();
+     return res.status(404).end();
       
     }
 
-    const idNum = parseInt(id.toString(), 10);
+    const idNum = parseInt(id, 10);
     if (!Number.isInteger(idNum)) {
       res.status(404).end();
       

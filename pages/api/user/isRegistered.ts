@@ -7,7 +7,7 @@ export default getApiHandler()
   try {
     const { identifier} = req.query; 
     if(!identifier){
-      res.status(404).json({error:'email is required'})
+      return res.status(404).json({error:'email is required'})
     }
     let email = identifier.toString();
     const user = await prisma.user.findFirst({where:{email}}); 

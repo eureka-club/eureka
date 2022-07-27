@@ -8,7 +8,7 @@ import { createFromServerFields, findAll } from '@/src/facades/cycle';
 import {prisma} from '@/src/lib/prisma';
 import { asyncForEach } from '@/src/lib/utils';
 import { Prisma } from '@prisma/client';
-
+import {cors,middleware} from '@/src/lib/cors'
 
 export const config = {
   api: {
@@ -73,6 +73,7 @@ export default getApiHandler()
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     try {
+      await middleware(req,res,cors)
       const session = (await getSession({ req })) as unknown as Session;
 
       const { q = null,props:p=undefined } = req.query;

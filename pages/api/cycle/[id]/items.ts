@@ -14,10 +14,10 @@ export const config = {
 export default getApiHandler()  
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
-      const { q = null, where:w = null,take:t,page:p} = req.query;
+      const { q = null, where:w = null,take:t,page:p=1,id:id_} = req.query;
       if(!p)
         res.status(400).end()
-      const id = +req.query.id.toString()  
+      const id = id_ ? id_.toString():undefined;  
       let page = parseInt(p.toString())-1;
       const take = page >-1 ? +(process.env.NEXT_PUBLIC_MOSAIC_ITEMS_COUNT||10):undefined
       const skip = page >-1 ? page * take!:undefined;

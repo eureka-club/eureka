@@ -11,9 +11,14 @@ dayjs.extend(utc);
 export default getApiHandler()
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
-      const { id } = req.query;
-      const notification = await find(parseInt(id.toString()));
-      res.status(200).json({ notification });
+      const { id:id_ } = req.query;
+      const id = id_ ? parseInt(id_.toString()) : undefined
+      if(id){
+        const notification = await find(parseInt(id.toString()));
+        res.status(200).json({ notification });
+      }
+      res.status(405).json({  });
+
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
       res.statusMessage = 'server error'

@@ -12,5 +12,7 @@
   "RegisterAlert":"Atualizamos nosso sistema de cadastro. 'Cadastre-se' em vez de 'Entrar', para que você possa definir sua senha. Você não perderá nenhuma informação de sua conta Eureka existente.",
   "InvalidSesion":"Senha incorreta ou sessão inválida",
   "isNotUser":"Conta não cadastrada",
-  "EmailRequired":"O campo 'e-mail' é obrigatório"
+  "EmailRequired":"O campo 'e-mail' é obrigatório",
+  "PasswordRequired":"O campo 'Senha' é obrigatório"
+
 }

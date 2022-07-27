@@ -12,5 +12,7 @@
   "RegisterAlert":"Actualizamos nuestro sistema de registro. 'Únete' en lugar de 'Iniciar sesión', para que puedas configurar su contraseña. No perderás ninguna información de tu cuenta Eureka existente.",
   "InvalidSesion":"Contraseña incorrecta o sesión inválida",
   "isNotUser":"Cuenta no registrada",
-  "EmailRequired":"El campo 'Correo electrónico' es obligatorio"
+  "EmailRequired":"El campo 'Correo electrónico' es obligatorio",
+  "PasswordRequired":"El campo 'Contraseña' es obligatorio"
+
 }

@@ -7,14 +7,15 @@ export default getApiHandler()
 .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
   try {
     const { id:i} = req.query;
-    if(!i){ 
-      res.status(404).json({error:'id are required'})
-    }
-    const id = +i.toString()
+    if(!i)
+      return res.status(404).json({error:'id are required'})
+    
+    const id = +i.toString();
+    
     const {password:p} = req.body;
-    if(!p){
-      res.status(404).json({error:'id are required'})
-    }
+    if(!p)
+      return res.status(404).json({error:'password are required'})
+    
     const password = p.toString();
     const hash = await bcrypt.hash(password,9);
 

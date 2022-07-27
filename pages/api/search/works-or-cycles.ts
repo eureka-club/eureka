@@ -2,9 +2,9 @@ import { flatten, isEmpty, zip } from 'lodash';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import { Cycle } from '@prisma/client';
-import getApiHandler from '../../../src/lib/getApiHandler';
-import { search as searchCycles } from '../../../src/facades/cycle';
-import { search as searchWorks } from '../../../src/facades/work';
+import getApiHandler from '@/src/lib/getApiHandler';
+import { search as searchCycles } from '@/src/facades/cycle';
+import { search as searchWorks } from '@/src/facades/work';
 
 export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
   if (!isEmpty(req.query)) {

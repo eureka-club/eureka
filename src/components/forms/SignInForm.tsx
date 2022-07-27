@@ -38,15 +38,21 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
   }
 
   const handleSubmitSignIn = async (e:React.MouseEvent<HTMLButtonElement>)=>{
-      const form = formRef.current;
-      setLoading(true)
-         if(!form!.email.value){
-            toast.error(t('EmailRequired'))
-                setLoading(false)
-                return false;
-          }
-      if(form){
-          const ur = await userRegistered(form.email.value);
+    const form = formRef.current;
+    setLoading(true);
+    if(!form!.email.value){
+      toast.error(t('EmailRequired'))
+      setLoading(false)
+      return false;
+    }
+    if(!form!.password.value){
+      toast.error(t('PasswordRequired'))
+      setLoading(false)
+      return false;
+    }
+    if(form){
+      const ur = await userRegistered(form.email.value);
+      debugger;
           if(!ur){
             toast.error('Error');
             setLoading(false)

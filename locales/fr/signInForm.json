@@ -12,5 +12,7 @@
   "RegisterAlert":"Nous avons mis à jour notre système d'inscription. Cliquez 'Rejoindre' au lieu de 'Connecter', afin que de définir votre mot de passe. Vous ne perdrez aucune information de votre compte Eureka existant.",
   "InvalidSesion":"Mot de passe ou session invalide",
   "isNotUser":"Compte non enregistré",
-  "EmailRequired":"Le champ 'Adresse e-mail' est obligatoire"
+  "EmailRequired":"Le champ 'Adresse e-mail' est obligatoire",
+  "PasswordRequired":"Le champ 'Mot de passe' est obligatoire"
+
 }

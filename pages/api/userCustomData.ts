@@ -36,6 +36,8 @@ export default async function handler(
   }
   else if(req.method=='GET'){
     const {identifier:i} = req.query
+    
+    if(!i)return res.status(405).json({data:null})
     const identifier = i.toString()
     const data = await prisma.userCustomData.findUnique({
       where:{identifier}

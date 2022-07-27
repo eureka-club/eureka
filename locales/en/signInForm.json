@@ -12,5 +12,7 @@
   "RegisterAlert":"We updated our registration system. Please Sign Up instead of Login, so you can set up your password. You won't lose any information from your Eureka existing account.",
   "InvalidSesion":"Invalid password or session",
   "isNotUser":"User not registered",
-  "EmailRequired":"The email field is required"
+  "EmailRequired":"The email field is required",
+  "PasswordRequired":"The password field is required"
+
 }

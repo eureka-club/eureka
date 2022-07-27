@@ -36,7 +36,7 @@ export const findAll = async (props?:Prisma.PostFindManyArgs,page?:number): Prom
   });
 };
 
-export const search = async (query: { [key: string]: string | string[] }): Promise<Post[]> => {
+export const search = async (query: { [key: string]: string | string[]|undefined }): Promise<Post[]> => {
   const { q, where /* , include */ } = query;
   if (where == null && q == null) {
     throw new Error("[412] Invalid invocation! Either 'q' or 'where' query parameter must be provided");

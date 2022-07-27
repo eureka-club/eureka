@@ -138,7 +138,7 @@ export const findAll = async (props?:Prisma.WorkFindManyArgs): Promise<WorkMosai
   });
 };
 
-export const search = async (query: { [key: string]: string | string[] }): Promise<Work[]> => {
+export const search = async (query: { [key: string]: string | string[]|undefined }): Promise<Work[]> => {
   const { q, where, include } = query;
   if (where == null && q == null) {
     throw new Error("[412] Invalid invocation! Either 'q' or 'where' query parameter must be provided");

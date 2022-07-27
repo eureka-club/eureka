@@ -101,8 +101,8 @@ export default getApiHandler()
       return;
     } */
 
-    const id = parseInt(id_.toString(), 10);
-    if (!Number.isInteger(id)) {
+    const id = id_ ? parseInt(id_.toString(), 10): undefined;
+    if (!id) {
       res.status(404).end();
       return;
     }
