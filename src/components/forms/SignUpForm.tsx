@@ -104,7 +104,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
               return;
             }
             if(!ur.isUser || !ur.hasPassword){
-              mutate({
+              mutate({ 
                   identifier:email,
                   password:password,
                   fullName,
