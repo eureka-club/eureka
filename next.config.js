@@ -7,7 +7,7 @@ const domain = process.env.NODE_ENV !== 'production'
 
 module.exports = {
   experimental: {
-    outputStandalone: true,
+     outputStandalone: true,
   },
   output: 'standalone',
     ...nextTranslate(),
@@ -20,18 +20,5 @@ module.exports = {
     },
     images:{
         domains:[`${domain}.azureedge.net`],
-    },
-    async headers() {
-        return [
-          {
-            source: '/resetPass',
-            headers: [
-              {
-                key: 'gmail',
-                value: 'my custom header value',
-              },
-            ],
-          },
-        ]
     },
 };
