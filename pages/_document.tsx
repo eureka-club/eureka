@@ -19,24 +19,6 @@ class MyDocument extends Document {
           {/* webfont(s) */}
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
           <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
-          <link
-            rel="preconnect"
-            href="https://fonts.gstatic.com/s/opensans/v18/mem8YaGs126MiZpBA-UFVZ0bf8pkAg.woff2"
-            as="font"
-            type="font/woff2"
-            crossOrigin="anonymous"
-          />
-          <link
-            rel="preconnect"
-            href="https://fonts.gstatic.com/s/opensans/v18/mem5YaGs126MiZpBA-UNirkOUuhpKKSTjw.woff2"
-            as="font"
-            type="font/woff2"
-            crossOrigin="anonymous"
-          /> 
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;1,400;1,600&display=swap"
-          />
           {/* Google Tag Manager */}
           {/* <script
             dangerouslySetInnerHTML={{
