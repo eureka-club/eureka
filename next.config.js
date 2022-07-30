@@ -6,7 +6,6 @@ const domain = process.env.NODE_ENV !== 'production'
     : process.env.CDN_ENDPOINT_NAME_PRODUCTION;
 
 module.exports = {
-  output: 'standalone',
     ...nextTranslate(),
     sassOptions: {
         includePaths: [path.join(__dirname, 'scss')],
@@ -18,4 +17,6 @@ module.exports = {
     images:{
         domains:[`${domain}.azureedge.net`],
     },
+    output: 'standalone',
+
 };
