@@ -121,7 +121,6 @@ export default getApiHandler()
           }
         };
       } 
-      debugger;
       let cr = await prisma?.cycle.aggregate({where,_count:true})
       const total = cr?._count;
       data = await findAll({take,where,skip,cursor});

@@ -124,7 +124,6 @@ const EditUserForm: FunctionComponent = () => {
       // const r = await i18nConfig.loadLocaleFrom(locale, 'countries');
       const res = await fetch('/api/taxonomy/countries')
       const {result:r} = await res.json()
-      debugger;
        let o:Record<string, string> ={} 
       const n = (r as Country[]).reduce((p,c:Country)=>{
         p[c.code] = c.label;

@@ -1,10 +1,17 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+// middleware.ts
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function middleware(request: NextRequest) {
-  const response = NextResponse.next()
-  if(request.nextUrl.pathname.match(/\/api\/[cycle|work|post|user]/g)){
-    console.log("executed in ", request.url)
+// If the incoming request has the "beta" cookie
+// then we'll rewrite the request to /beta
+export function middleware(req: NextRequest) {
+  debugger;
+  if(req.nextUrl.pathname.match(/undefined\/api/g)){
+    const url = req.nextUrl.pathname.replace("/undefined","")
+    return NextResponse.redirect(url)
   }
-  return response;
+  return NextResponse.rewrite(req.nextUrl);
 }
+
+export const config = {
+  matcher: '/undefined',
+};
