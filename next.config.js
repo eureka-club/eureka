@@ -18,7 +18,7 @@ module.exports = nextTranslate({
     },
     async redirects() {
         const destination = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/:path*`;
-        return [
+        const res = [
             {
                 source: '/undefined/:path*',
                 destination,
@@ -44,7 +44,11 @@ module.exports = nextTranslate({
                 destination,
                 permanent: false,
             },
+            
+            
         ]
+        console.log(res)
+        return res;
       },
     output: 'standalone'
   })
