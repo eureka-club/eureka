@@ -65,4 +65,6 @@ module.exports = {
     images:{
         domains:[`${domain}.azureedge.net`],
     },
+    output: 'standalone'
+
 }
