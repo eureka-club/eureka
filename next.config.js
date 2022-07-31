@@ -24,6 +24,26 @@ module.exports = nextTranslate({
                 destination,
                 permanent: false,
             },
+            {
+                source: '/en/undefined/:path*',
+                destination,
+                permanent: false,
+            },
+            {
+                source: '/es/undefined/:path*',
+                destination,
+                permanent: false,
+            },
+            {
+                source: '/fr/undefined/:path*',
+                destination,
+                permanent: false,
+            },
+            {
+                source: '/pt/undefined/:path*',
+                destination,
+                permanent: false,
+            },
         ]
       },
     output: 'standalone'
