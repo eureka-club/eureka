@@ -17,13 +17,13 @@ module.exports = nextTranslate({
         domains:[`${domain}.azureedge.net`],
     },
     async redirects() {
-        
+        const destination = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/:path*`;
         return [
-          {
-            source: '/undefined/:path*',
-            destination: '/:path*',
-            permanent: true,
-          },
+            {
+                source: '/undefined/:path*',
+                destination,
+                permanent: false,
+            },
         ]
       },
     output: 'standalone'
