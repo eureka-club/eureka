@@ -6,7 +6,7 @@ import { buildUrl } from 'build-url-ts';
 export const getCycles = async (
   props?:Prisma.CycleFindManyArgs,
 ): Promise<{cycles:CycleMosaicItem[],fetched:number,total:number}> => {
-  const url = buildUrl(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/pt/undefined/api`, {
+  const url = buildUrl(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api`, {
     path: 'cycle',
     queryParams: {
       ...props && {props:encodeURIComponent(JSON.stringify(props))}
