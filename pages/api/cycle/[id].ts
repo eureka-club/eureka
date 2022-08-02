@@ -51,7 +51,7 @@ export default getApiHandler()
       ////prisma.$disconnect();
     }
   })
-  .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+  .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = await getSession({ req }) ;
     // if (session == null || !session.user.roles.includes('admin')) {
     //   res.status(401).json({ status: 'Unauthorized' });
@@ -65,7 +65,7 @@ export default getApiHandler()
 
     const idNum = parseInt(id, 10);
     if (!Number.isInteger(idNum)) {
-      res.status(404).end();
+      return res.status(404).end();
       
     }
 
