@@ -48,9 +48,9 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
                     {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                     <ModalProvider>
                       <NotificationProvider>
-                        <ErrorBoundary>
+                        {/* <ErrorBoundary> */}
                           <Component {...pageProps} />
-                        </ErrorBoundary>
+                        {/* </ErrorBoundary> */}
                       </NotificationProvider>
                     </ModalProvider>
                     <Toaster position="top-center" reverseOrder={false}/>
