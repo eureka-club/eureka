@@ -553,7 +553,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
           <div className="ps-1">
             {showRating && getRatingLabelInfo()}
             {` `}
-            {showRating && (
+            {showRating && 
+             <>
               <Rating
                 initialRating={getInitialRating()}
                 onClick={handlerChangeRating}
@@ -563,7 +564,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
                 fullSymbol={getFullSymbol()}
                 readonly={loadingSocialInteraction}
               />
-            )}{' '}
+             </>
+            }{' '}
             {showRating && !loadingSocialInteraction && getRatingsCount()}{' '}
             {showTrash && mySocialInfo && mySocialInfo.ratingByMe && (
               <Button
