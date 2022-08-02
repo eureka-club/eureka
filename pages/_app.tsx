@@ -18,7 +18,7 @@ import { NotificationProvider } from '@/src/useNotificationProvider';
 import {ModalProvider} from '@/src/useModal'
 const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   const { initialState } = pageProps;
-
+  const AnyComponent = Component as any;
   
   // const {Modal} = useModal()
   
@@ -36,7 +36,6 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   );
   return (
     <StrictMode>
-     {/* <ToastProvider placement='top-center' components={{ Toast: ToastNew }} autoDismissTimeout={5000}> */}
      <SSRProvider>
         <NextAuthProvider session={pageProps.session} refetchInterval={5 * 60}>
             
@@ -49,7 +48,7 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
                     <ModalProvider>
                       <NotificationProvider>
                         {/* <ErrorBoundary> */}
-                          <Component {...pageProps} />
+                          <AnyComponent {...pageProps} />
                         {/* </ErrorBoundary> */}
                       </NotificationProvider>
                     </ModalProvider>
@@ -64,7 +63,6 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
         </NextAuthProvider>
 
      </SSRProvider>
-    {/* </ToastProvider> */}
     </StrictMode>
   );
 };
