@@ -37,7 +37,7 @@ stages:
         tags: |
           $(Build.BuildId)
           latest
-        arguments: '--build-arg DATABASE_URL=$(DATABASE_URL)'
+        arguments: 'DATABASE_URL=$(DATABASE_URL)'
     - task: Docker@2
       inputs:
         containerRegistry: 'eurekastaging'
