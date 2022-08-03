@@ -733,6 +733,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
             </Form.Group> */}
             <Form.Group controlId="description">
               <Form.Label>*{t('newCyclePitchLabel')}</Form.Label>
+              {/* @ts-ignore*/}
               <EditorCmp
                 apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
                 onInit={(_: any, editor) => {
@@ -905,6 +906,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                   onChange={handleSearchWorkSelect}
                   renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work} />}
                 >
+                  {/* @ts-ignore*/}
                   {handleSearchWorkHighlightChange}
                 </AsyncTypeahead>
               </Form.Group>

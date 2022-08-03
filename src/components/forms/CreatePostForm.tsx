@@ -565,6 +565,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
           <Row>
             <FormGroup controlId="description" as={Col}  className="mb-4">
               <FormLabel>*{t('descriptionFieldLabel')}</FormLabel>
+              {/* @ts-ignore*/}
               <EditorCmp
                 apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
                 onInit={(_: any, editor) => {

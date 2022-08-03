@@ -1,6 +1,5 @@
 import crypto from 'crypto-js';
-import HyvorTalk from 'hyvor-talk-react';
-import { FunctionComponent,useEffect } from 'react';
+import { Embed, CommentCount } from 'hyvor-talk-react';
 import { useSession } from 'next-auth/react';
 
 import { HYVOR_SSO_KEY, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
@@ -41,7 +40,7 @@ const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
     hyvorSso = { hash, userData, loginURL: `${WEBAPP_URL}/` };
   }
 
-  return <HyvorTalk.Embed websiteId={Number(3377)} id={`${entity}-${id}`} sso={hyvorSso} />;
+  return <Embed websiteId={Number(3377)} id={`${entity}-${id}`} sso={hyvorSso} />;
 };
 
 export default HyvorComments;

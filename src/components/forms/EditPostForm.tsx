@@ -439,6 +439,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
                   defaultValue={post.contentText}
                   onChange={handlerchange}
                 /> */}
+                {/* @ts-ignore*/}
                 <EditorCmp
                   apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
                   onInit={(_: any, editor) => {

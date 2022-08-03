@@ -236,6 +236,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
               onChange={handleSearchWorkSelect}
               renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work} />}
             >
+              {/* @ts-ignore*/}
               {handleSearchWorkHighlightChange}
             </AsyncTypeahead>
           </Form.Group>

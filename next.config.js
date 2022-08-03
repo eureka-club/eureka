@@ -16,13 +16,6 @@ module.exports = nextTranslate({
     images:{
         domains:[`${domain}.azureedge.net`],
     },
-    typescript: {
-        // !! WARN !!
-        // Dangerously allow production builds to successfully complete even if
-        // your project has type errors.
-        // !! WARN !!
-        ignoreBuildErrors: true,
-      },
     // async redirects() {
     //     const destination = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/:path*`;
     //     const res = [

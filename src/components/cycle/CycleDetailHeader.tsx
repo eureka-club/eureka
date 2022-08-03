@@ -140,6 +140,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
             {cycle.title}
           </h1>
           <div className='d-flex flex-row justify-content-start'>
+            {/* @ts-ignore*/}
           <Rating
             readonly
             initialRating={getRatingAvg()}
@@ -259,6 +260,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
               />
               <TagsInput className="ms-1 d-inline-block" tags={cycle.tags!} readOnly label="" />
               <div className='mt-2 d-flex flex-row justify-content-start'>
+                {/* @ts-ignore*/}
                     <Rating
                       readonly
                       initialRating={getRatingAvg()}
