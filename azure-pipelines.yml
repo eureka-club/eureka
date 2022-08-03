@@ -11,8 +11,8 @@ resources:
 variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: '9af6d245-59e5-4674-a474-0798335a4001'
-  imageRepository: 'eurekaclubeureka'
-  containerRegistry: 'eurekapreprod.azurecr.io'
+  imageRepository: 'eurekastaging'
+  containerRegistry: 'eurekastaging.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
 
@@ -30,8 +30,8 @@ stages:
     steps:
     - task: Docker@2
       inputs:
-        containerRegistry: 'eurekaPreprod'
-        repository: 'eurekaPreprod'
+        containerRegistry: 'eurekastaging'
+        repository: 'eurekastaging'
         command: 'build'
         Dockerfile: '**/Dockerfile'
         tags: |
@@ -40,8 +40,8 @@ stages:
         arguments: '--build-arg DATABASE_URL=$(DATABASE_URL)'
     - task: Docker@2
       inputs:
-        containerRegistry: 'eurekaPreprod'
-        repository: 'eurekaPreprod'
+        containerRegistry: 'eurekastaging'
+        repository: 'eurekastaging'
         command: 'push'
         tags: |
           $(Build.BuildId)
