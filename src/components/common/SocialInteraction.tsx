@@ -555,7 +555,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
             {` `}
             {showRating && 
              <>
-             {/* @ts-ignore*/}
+             {/* @ts-ignore*/} 
               <Rating
                 initialRating={getInitialRating()}
                 onClick={handlerChangeRating}
