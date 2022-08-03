@@ -17,33 +17,30 @@ export default getApiHandler()
     if (session == null || !session.user.roles.includes('admin')) {
       res.status(401).end({ status: 'Unauthorized' });
     }
-
-    const { id } = req.query;
-    if (typeof id !== 'string') {
-      return res.status(404).end();
-    }
-
-    const idNum = parseInt(id, 10);
-    if (!Number.isInteger(idNum)) {
-      res.status(404).end();
-    }
-
+    
     try {
-      const cycle = await find(idNum);
-      if (cycle == null) {
-        res.status(404).end();        
-      }
-      if(cycle && cycle.localImages.length){
-        const rmf = await storeDeleteFile(cycle.localImages[0].storedFile);
-        if(!rmf){
-          res.statusMessage = 'Removing image has failed';
-          res.status(500).end();
+      const { id:id_ } = req.query;
+      const id = parseInt((id_||'').toString());
+      if(!isNaN(id)){
+        const cycle = await find(id);
+        if(cycle && cycle.localImages.length){
+          const rmf = await storeDeleteFile(cycle.localImages[0].storedFile);
+          if(!rmf){
+            res.statusMessage = 'Removing image has failed';
+            res.status(500).end();
+          }
+          else {
+            let c = await remove(cycle);
+            if(c)
+              res.status(200).json({ status: 'OK' });
+            else 
+              res.status(404).end();        
+          }
         }
       }
-      if(cycle)
-        await remove(cycle);
+      else
+        res.status(404).end();        
       // await redis.flushall();
-      res.status(200).json({ status: 'OK' });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
       res.status(500).json({ status: 'server error' });
