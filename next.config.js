@@ -16,41 +16,39 @@ module.exports = nextTranslate({
     images:{
         domains:[`${domain}.azureedge.net`],
     },
-    output: 'standalone' 
-
-    // async redirects() {
-    //     const destination = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/:path*`;
-    //     const res = [
-    //         {
-    //             source: '/undefined/:path*',
-    //             destination,
-    //             permanent: false,
-    //         },
-    //         {
-    //             source: '/en/undefined/:path*',
-    //             destination,
-    //             permanent: false,
-    //         },
-    //         {
-    //             source: '/es/undefined/:path*',
-    //             destination,
-    //             permanent: false,
-    //         },
-    //         {
-    //             source: '/fr/undefined/:path*',
-    //             destination,
-    //             permanent: false,
-    //         },
-    //         {
-    //             source: '/pt/undefined/:path*',
-    //             destination,
-    //             permanent: false,
-    //         },
+    async redirects() {
+        const destination = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/:path*`;
+        const res = [
+            {
+                source: '/undefined/:path*',
+                destination,
+                permanent: false,
+            },
+            // {
+            //     source: '/en/undefined/:path*',
+            //     destination,
+            //     permanent: false,
+            // },
+            // {
+            //     source: '/es/undefined/:path*',
+            //     destination,
+            //     permanent: false,
+            // },
+            // {
+            //     source: '/fr/undefined/:path*',
+            //     destination,
+            //     permanent: false,
+            // },
+            // {
+            //     source: '/pt/undefined/:path*',
+            //     destination,
+            //     permanent: false,
+            // },
             
             
-    //     ]
-    //     console.log(res)
-    //     return res;
-    //   },
-    // output: 'standalone'
+        ]
+        console.log(res)
+        return res;
+      },
+        output: 'standalone'
   })
