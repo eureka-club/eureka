@@ -34,15 +34,9 @@ stages:
         repository: 'eurekastaging'
         command: 'build'
         Dockerfile: '**/Dockerfile'
-        tags: |
-          $(Build.BuildId)
-          latest
-        arguments: 'DATABASE_URL=$(DATABASE_URL)'
+        arguments: '--build-arg DATABASE_URL=$(DATABASE_URL)'      
     - task: Docker@2
       inputs:
         containerRegistry: 'eurekastaging'
         repository: 'eurekastaging'
         command: 'push'
-        tags: |
-          $(Build.BuildId)
-          latest
