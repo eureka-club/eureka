@@ -28,8 +28,8 @@ COPY . .
 ARG DATABASE_URL
 ENV DATABASE_URL=$DATABASE_URL
 
-RUN echo "DATABASE_URL => $some_variable_name"
-RUN echo "DATABASE_URL => ${some_variable_name}"
+RUN echo "DATABASE_URL => $DATABASE_URL"
+RUN echo "DATABASE_URL => ${DATABASE_URL}"
 
 RUN yarn prisma generate
 RUN yarn build
