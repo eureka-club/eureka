@@ -20,6 +20,7 @@ import {
   NavLink,
   Form,
 } from 'react-bootstrap';
+import { FiTrash2 } from 'react-icons/fi';
 import styles from './back-office.module.css'
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
 import toast from 'react-hot-toast'
@@ -27,6 +28,10 @@ const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
 const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 interface Props {
   notFound?: boolean;
+}
+
+interface backOfficeClearSliderPayload{
+originalName?:string
 }
 
 const BackOffice: NextPage<Props> = ({notFound}) => {
@@ -110,9 +115,7 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
   const {
     mutate: execUpdateBackOffice,
     error: UpdateBackOfficeError,
-    isError,
     isLoading: isLoadingBackOffice,
-    isSuccess,
   } = useMutation(
     async (payload: backOfficePayload) => {
       const formData = new FormData();
@@ -148,6 +151,38 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
     },
   );
 
+  const {
+    mutate: execClearSlideBackOffice,
+    error: ClearSlideBackOffice,   
+  } = useMutation(
+    async (clearSliderPayload: backOfficeClearSliderPayload) => {
+       const res = await fetch(`/api/backoffice/${clearSliderPayload.originalName}`, {
+      method: 'delete',
+    });
+    const data = await res.json();
+     if(res.ok)
+         toast.success( t('Banner Settings') + '  Saved')      
+      else
+        toast.error(res.statusText)
+    },  
+    {
+      onMutate: async () => {
+        const cacheKey = ['BACKOFFICE',"1"];
+        const snapshot = queryClient.getQueryData(cacheKey);
+        return { cacheKey, snapshot };
+      },
+      onSettled: (_backData, error, _variables, context) => {
+        if (context) {
+          const { cacheKey, snapshot } = context;
+          if (error && cacheKey) {
+            queryClient.setQueryData(cacheKey, snapshot);
+          }
+          if (context) queryClient.invalidateQueries(cacheKey);
+        }
+      },
+    }, 
+  );
+
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
@@ -171,6 +206,26 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
     };
     //console.log(payload,"payload")
     await execUpdateBackOffice(payload);
+  };
+
+
+  const clearSlider = async (n: number) => {
+
+    let sliderOriginalName;
+    if(n==1)
+      sliderOriginalName = bo!.SlideImage1;
+    if(n==2)
+      sliderOriginalName = bo!.SlideImage2;  
+    if(n==3)
+      sliderOriginalName = bo!.SlideImage3;  
+
+    //console.log('bo',bo, sliderOriginalName)
+
+    const clearSliderPayload: backOfficeClearSliderPayload = {
+        originalName: sliderOriginalName || undefined
+    };
+    //console.log(payload,"payload")
+    await execClearSlideBackOffice(clearSliderPayload);
   };
 
   
@@ -235,9 +290,19 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
                                   <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideText1 || ""} maxLength={120}/>
                               </Form.Group>
 
-                              {(!showCrop && currentSlider != 1) && (<Button data-cy="image-load" variant="primary" className="w-50 text-white mt-2  mb-3" onClick={() => openCrop(1)}>
+                              {(!showCrop && currentSlider != 1) && (<div><Button data-cy="image-load" variant="primary" className="w-50 text-white mt-2  mb-3" onClick={() => openCrop(1)}>
                                 {t('Image')}
                               </Button>
+                              {(bo?.SlideImage1?.length && bo?.SlideImage1 != 'null') && (<Button
+                                  type="button"
+                                  title={t('Delete slider')}
+                                  className={`text-warning p-0 ${styles.sliderDelete}`}
+                                 onClick={()=>clearSlider(1)}
+                                  variant="link"
+                                >
+                                  <FiTrash2 />
+                              </Button>)}
+                              </div>
                               )}        
                               { (showCrop && currentSlider == 1) && (
                               <Row className='d-flex'>
@@ -259,9 +324,19 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
                                   <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideText2 || ""} maxLength={120}/>
                               </Form.Group>
 
-                              {(!showCrop && currentSlider != 2) && (<Button data-cy="image-load" variant="primary" className="w-50 text-white mt-2 mb-3" onClick={() => openCrop(2)}>
+                              {(!showCrop && currentSlider != 2) && (<div><Button data-cy="image-load" variant="primary" className="w-50 text-white mt-2  mb-3" onClick={() => openCrop(2)}>
                                 {t('Image')}
                               </Button>
+                              {(bo?.SlideImage2?.length && bo?.SlideImage2 != 'null') && (<Button
+                                  type="button"
+                                  title={t('Delete slider')}
+                                  className={`text-warning p-0 ${styles.sliderDelete}`}
+                                 onClick={()=>clearSlider(2)}
+                                  variant="link"
+                                >
+                                  <FiTrash2 />
+                              </Button>)}
+                              </div>
                               )}        
                               { (showCrop && currentSlider == 2) && (
                               <Row className='d-flex'>
@@ -284,9 +359,19 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
                                   <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideText3 || ""} maxLength={120}/>
                               </Form.Group>
 
-                              {(!showCrop && currentSlider != 3) && (<Button data-cy="image-load" variant="primary" className="w-50 text-white mt-2 mb-3" onClick={() => openCrop(3)}>
+                              {(!showCrop && currentSlider != 3) && (<div className=''><Button data-cy="image-load" variant="primary" className="w-50 text-white mt-2  mb-3" onClick={() => openCrop(3)}>
                                 {t('Image')}
                               </Button>
+                              {(bo?.SlideImage3?.length && bo?.SlideImage3 != 'null') && (<Button
+                                  type="button"
+                                  title={t('Delete slider')}
+                                  className={`text-warning p-0 ${styles.sliderDelete}`}
+                                 onClick={()=>clearSlider(3)}
+                                  variant="link"
+                                >
+                                  <FiTrash2 />
+                              </Button>)}
+                              </div>
                               )}        
                               { (showCrop && currentSlider == 3) && (
                               <Row className='d-flex'>

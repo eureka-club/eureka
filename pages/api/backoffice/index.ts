@@ -31,7 +31,7 @@ export default getApiHandler()
      try{ 
        const bs = await find({id:1});
        const FileFields = ['Image1','Image2','Image3'];
-       const SlidersImagesFields = ['SlideImage1','SlideImage2','SlideImage3'];
+       //const SlidersImagesFields = ['SlideImage1','SlideImage2','SlideImage3'];
 
        const updateImage = async function(bsData:backOfficeData, originalFilename:string){
        
