@@ -123,7 +123,8 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
       Object.entries(payload).forEach(([key,value])=>{
           formData.append(key,value);
       });
-      const res = await fetch(`/api/backoffice`, {
+      const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/backoffice`;
+      const res = await fetch(url, {
         method: 'PATCH',
         //headers: { 'Content-Type': 'application/json' },
         body: formData,
@@ -156,7 +157,8 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
     error: ClearSlideBackOffice,   
   } = useMutation(
     async (clearSliderPayload: backOfficeClearSliderPayload) => {
-       const res = await fetch(`/api/backoffice/${clearSliderPayload.originalName}`, {
+      const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/backoffice/${clearSliderPayload.originalName}`;
+      const res = await fetch(url, {
       method: 'delete',
     });
     const data = await res.json();
