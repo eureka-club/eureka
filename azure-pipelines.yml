@@ -30,7 +30,7 @@ stages:
     steps:
     - task: Docker@2
       inputs:
-        containerRegistry: 'eurekastaging'
+        containerRegistry: 'eurekacr'
         repository: 'eurekastaging'
         command: 'build'
         Dockerfile: '**/Dockerfile'
@@ -40,7 +40,7 @@ stages:
           latest      
     - task: Docker@2
       inputs:
-        containerRegistry: 'eurekastaging'
+        containerRegistry: 'eurekacr'
         repository: 'eurekastaging'
         command: 'push'
         tags: |
