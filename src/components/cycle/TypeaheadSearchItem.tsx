@@ -1,7 +1,7 @@
 import { FunctionComponent } from 'react';
 import {Badge} from 'react-bootstrap'
 import { CycleMosaicItem } from '@/types/cycle';
-import LocalImageComponent from '@/components/LocalImage';
+import LocalImageComponent from '@/src/components/server.LocalImage';
 import CycleSummary from './CycleSummary';
 import styles from './TypeaheadSearchItem.module.css';
 import useTranslation from 'next-translate/useTranslation';

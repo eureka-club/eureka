@@ -2,7 +2,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 import { Badge } from 'react-bootstrap'
 import { PostMosaicItem } from '@/types/post';
-import LocalImageComponent from '@/components/LocalImage';
+import LocalImageComponent from '@/src/components/server.LocalImage';
 import styles from './TypeaheadSearchItem.module.css';
 
 interface Props {

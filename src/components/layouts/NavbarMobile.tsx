@@ -19,7 +19,7 @@ import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '@/src/constants';
 import ChevronToggle from '@/components/ui/dropdown/ChevronToggle';
 import styles from './NavbarMobile.module.css';
 import useUser from '@/src/useUser';
-import LocalImageComponent from '@/components/LocalImage'
+import LocalImageComponent from '@/src/components/server.LocalImage'
 import { AiOutlineSearch } from 'react-icons/ai';
 
 const NavBar: FunctionComponent = () => {

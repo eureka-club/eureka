@@ -13,7 +13,7 @@ import { CgMediaLive } from 'react-icons/cg';
 
 import { useAtom } from 'jotai';
 import { DATE_FORMAT_SHORT } from '../../constants';
-import LocalImageComponent from '../LocalImage';
+import LocalImageComponent from '../server.LocalImage';
 import styles from './MosaicItem.module.css';
 import globalModalsAtom from '../../atoms/globalModals';
 import useUser from '@/src/useUser';

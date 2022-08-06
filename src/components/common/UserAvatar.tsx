@@ -6,7 +6,7 @@ import { Spinner } from 'react-bootstrap';
 import useUser from '@/src/useUser'
 
 import styles from './UserAvatar.module.css';
-import LocalImageComponent from '@/src/components/LocalImage'
+import LocalImageComponent from '@/src/components/server.LocalImage'
 import { UserMosaicItem } from '@/src/types/user';
 import slugify from 'slugify'
 interface Props {

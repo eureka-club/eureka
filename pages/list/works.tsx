@@ -15,7 +15,7 @@ import { useMutation } from 'react-query';
 import { DATE_FORMAT_ONLY_YEAR } from '../../src/constants';
 import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
-import LocalImageComponent from '../../src/components/LocalImage';
+import LocalImageComponent from '../../src/components/server.LocalImage';
 import { findAll } from '../../src/facades/work';
 
 interface Props {

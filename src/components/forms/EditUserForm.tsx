@@ -18,7 +18,7 @@ import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
-import LocalImageComponent from '@/components/LocalImage'
+import LocalImageComponent from '@/src/components/server.LocalImage'
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
 import { useMutation, useQueryClient } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';

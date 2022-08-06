@@ -11,7 +11,7 @@ import { useMutation } from 'react-query';
 import { PostMosaicItem } from '../../src/types/post';
 import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
-import LocalImageComponent from '../../src/components/LocalImage';
+import LocalImageComponent from '../../src/components/server.LocalImage';
 import { findAll } from '../../src/facades/post';
 
 interface Props {

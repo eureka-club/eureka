@@ -16,6 +16,9 @@ module.exports = nextTranslate({
     images:{
         domains:[`${domain}.azureedge.net`],
     },
+    experimental: {
+        serverComponents: true,
+    },
     // async redirects() {
     //     const destination = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/:path*`;
     //     const res = [

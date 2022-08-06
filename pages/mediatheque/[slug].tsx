@@ -9,7 +9,7 @@ import { Spinner, Card, Row, Col, ButtonGroup, Button, Alert } from 'react-boots
 import { AiOutlineEnvironment } from 'react-icons/ai';
 import { /* BsCircleFill, */ BsBookmark, BsEye } from 'react-icons/bs';
 import { BiArrowBack } from 'react-icons/bi';
-import LocalImageComponent from '@/src/components/LocalImage'
+import LocalImageComponent from '@/src/components/server.LocalImage'
 import { HiOutlineUserGroup } from 'react-icons/hi';
 
 import { User } from '@prisma/client';
