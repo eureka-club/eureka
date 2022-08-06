@@ -123,8 +123,7 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
       Object.entries(payload).forEach(([key,value])=>{
           formData.append(key,value);
       });
-      // const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/backoffice`;
-      const url = `https://eurekastaging.azurewebsites.net/api/backoffice`;
+      const url = `/api/backoffice`;
 
       const res = await fetch(url, {
         method: 'PATCH',
@@ -159,7 +158,7 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
     error: ClearSlideBackOffice,   
   } = useMutation(
     async (clearSliderPayload: backOfficeClearSliderPayload) => {
-      const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/backoffice/${clearSliderPayload.originalName}`;
+      const url = `/api/backoffice/${clearSliderPayload.originalName}`;
       const res = await fetch(url, {
       method: 'delete',
     });
