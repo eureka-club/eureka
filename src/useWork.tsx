@@ -1,22 +1,14 @@
 import { useQuery, UseQueryResult } from 'react-query';
 import { WorkMosaicItem } from './types/work';
 
-export const getWork = async (id: number): Promise<WorkMosaicItem> => {
+export const getWork = async (id: number,origin=''): Promise<WorkMosaicItem> => {
   if (!id) throw new Error('idRequired');
-  // { error: 'not work id provided' };
-  const url = `/api/work/${id}`;
-
+  const url = `${origin}/api/work/${id}`;
   const res = await fetch(url);
   if (!res.ok) 
     throw Error('Error');
-  
-  // { error: 'server error' };
   return res.json();
-  
-
-  // { error };
 };
-
 interface Options {
   staleTime?: number;
   enabled?: boolean;

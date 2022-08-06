@@ -13,8 +13,8 @@ export const myCyclesWhere = (id:number) => ({
   }
 });
 
-export const getMyCycles = async (id:number,take:number)=>{
-  return getCycles({...myCyclesWhere(id),take});
+export const getMyCycles = async (id:number,take:number,origin='')=>{
+  return getCycles({...myCyclesWhere(id),take},origin);
 }
 
 const useMyCycles = (id:number) => {

@@ -71,6 +71,7 @@ export const getServerSideProps: GetServerSideProps = async ({req}) => {
   const session = await getSession({req});
   if(!session)
     return {props:{groupedByTopics:null}};
+  const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
     
   const id = session.user.id;  
   let groupedByTopics:Record<string,GetAllByResonse>={};
@@ -83,7 +84,7 @@ export const getServerSideProps: GetServerSideProps = async ({req}) => {
 
   const qc = new QueryClient()
   const k = myCyclesWhere(session.user.id)
-  await qc.fetchQuery(['CYCLES',JSON.stringify(k)],()=>getMyCycles(id,8))
+  await qc.fetchQuery(['CYCLES',JSON.stringify(k)],()=>getMyCycles(id,8,origin))
 
   return {
     props: {

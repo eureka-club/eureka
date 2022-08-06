@@ -69,6 +69,8 @@ const WorkDetailPage: NextPage = (props:any) => {
 
 
 export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
+  const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
+
   const qc = new QueryClient()
   if (params?.id == null || typeof params.id !== 'string') {
     return { notFound: true };
@@ -89,14 +91,14 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
     }
   }
   
-  let work = await getWork(id);
+  let work = await getWork(id,origin);
   let metaTags:Record<string,any>={};
   if(work){
     metaTags = {id:work.id, title:work.title, storedFile: work.localImages[0].storedFile}
     const workPostsWhere = {take:8,where:{works:{some:{id}}}}
     await qc.prefetchQuery(['WORK', `${id}`],()=>work,{staleTime: 1000 * 60 * 60})
-    await qc.prefetchQuery(['CYCLES',JSON.stringify(workCyclesWhere)],()=>getCycles(workCyclesWhere), {staleTime: 1000 * 60 * 60} )
-    await qc.prefetchQuery(['POSTS',JSON.stringify(workPostsWhere)],()=>getPosts(workPostsWhere),{staleTime: 1000 * 60 * 60} )
+    await qc.prefetchQuery(['CYCLES',JSON.stringify(workCyclesWhere)],()=>getCycles(workCyclesWhere,origin), {staleTime: 1000 * 60 * 60} )
+    await qc.prefetchQuery(['POSTS',JSON.stringify(workPostsWhere)],()=>getPosts(workPostsWhere,origin),{staleTime: 1000 * 60 * 60} )
   }
   
   return {

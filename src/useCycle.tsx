@@ -1,9 +1,9 @@
 import { useQuery } from 'react-query';
 import { CycleMosaicItem } from './types/cycle';
 
-export const getCycle = async (id: number): Promise<CycleMosaicItem | undefined> => {
+export const getCycle = async (id: number,origin=''): Promise<CycleMosaicItem | undefined> => {
   if (!id) throw new Error('idRequired');
-  const url = `/api/cycle/${id}`;
+  const url = `${origin}/api/cycle/${id}`;
 
   const res = await fetch(url);
   if (!res.ok) return undefined;

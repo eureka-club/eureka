@@ -5,24 +5,15 @@ import { Prisma } from '@prisma/client';
 
 export const getPosts = async (
   props?:Prisma.PostFindManyArgs,
+  origin=''
 ): Promise<{posts:PostMosaicItem[],fetched:number,total:number}> => {
   const query = props?`?props=${encodeURIComponent(JSON.stringify(props))}`:''
-  const url = `/api/posts${query}`
-
-  // const url = buildUrl(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api`, {
-  //   path: 'post',
-  //   queryParams: {
-  //     ...props && {props:encodeURIComponent(JSON.stringify(props))}
-  //   }
-  // });
-   
+  const url = `${origin}/api/post${query}`
   const res = await fetch(url);
-
   if (!res.ok) return {posts:[],fetched:0,total:-1};
   const {data:posts,fetched,total} = await res.json();
   return {posts,fetched,total};
 };
-
 interface Options {
   staleTime?: number;
   enabled?: boolean;

@@ -11,12 +11,12 @@ interface Options {
   enabled?: boolean;
   from?:string
 }
-export const getUsers = async (props?:Prisma.UserFindManyArgs):Promise<UserMosaicItem[]> => {
+export const getUsers = async (props?:Prisma.UserFindManyArgs,origin=''):Promise<UserMosaicItem[]> => {
   const {where:w,take,skip,cursor:c} = props || {};
   const where = w ? encodeURIComponent(JSON.stringify(w)) : '';
   const cursor = c ? encodeURIComponent(JSON.stringify(c)) : '';
 
-  const url = buildUrl(`/api`, {
+  const url = buildUrl(`${origin}/api`, {
     path: 'user',
     queryParams: {
       where,

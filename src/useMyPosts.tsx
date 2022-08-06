@@ -7,8 +7,8 @@ export const myPostsWhere = (id: number)=> ({
   }
 });
 
-export const getMyPosts = async (id:number,take:number)=>{
-  return getPosts({...myPostsWhere(id),take});
+export const getMyPosts = async (id:number,take:number,origin='')=>{
+  return getPosts({...myPostsWhere(id),take},origin);
 }
 
 const useMyPosts = (id:number) => {

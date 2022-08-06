@@ -435,19 +435,20 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       dehydratedState: dehydrate(queryClient),
     }}
   }
+  const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
   
   let id = 0;
   if(ctx.query && ctx.query.slug){
     const slug = ctx.query.slug.toString()
     const li = slug.split('-').slice(-1)
     id = parseInt(li[0])
-    const {posts} = await getMyPosts(id!,8);
+    const {posts} = await getMyPosts(id!,8,origin);
     await queryClient.prefetchQuery(['MY-POSTS',id], ()=>posts);
     posts.forEach(p=>{
       queryClient.setQueryData(['POST',`${p.id}`], ()=>p)
     })
   
-    const {cycles} = await getMyCycles(id!,8);
+    const {cycles} = await getMyCycles(id!,8,origin);
     await queryClient.prefetchQuery(["MY-CYCLES"],()=>cycles)
     cycles.forEach(c=>{
       queryClient.setQueryData(['CYCLE',c.id], ()=>c)

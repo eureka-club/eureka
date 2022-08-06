@@ -190,7 +190,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const wcp = whereCyclePosts(id)
   const wcw = whereCycleWorks(id)
 
-  let cycle = await getCycle(id);
+  const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
+  let cycle = await getCycle(id,origin);
   let metaTags = null;
   if(cycle){
     metaTags = {id:cycle?.id, title:cycle?.title, storedFile: cycle?.localImages[0].storedFile}
@@ -200,10 +201,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
    await queryClient.prefetchQuery(['CYCLE',`${id}`], ()=>cycle||null)
 
    
-   const participants = await getUsers(wcu);
+   const participants = await getUsers(wcu,origin);
    await queryClient.prefetchQuery(['USERS',JSON.stringify(wcu)],()=>participants)
-   await queryClient.prefetchQuery(['POSTS',JSON.stringify(wcp)],()=>getPosts(wcp))
-   await queryClient.prefetchQuery(['WORKS',JSON.stringify(wcw)],()=>getWorks(wcw))
+   await queryClient.prefetchQuery(['POSTS',JSON.stringify(wcp)],()=>getPosts(wcp,origin))
+   await queryClient.prefetchQuery(['WORKS',JSON.stringify(wcw)],()=>getWorks(wcw,origin))
 
    participants.map(p=>{
      queryClient.setQueryData(['USER',`${p.id}`],p)

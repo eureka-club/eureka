@@ -55,6 +55,7 @@ const SearchPage: NextPage<Props> = ({postsData,worksData,cyclesData}) => {
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const q = query.q;
+  const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
 
   const terms = q?.toString()!.split(" ") || [];
   const cyclesProps = {
@@ -93,7 +94,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       ]
     },
   }
-  const cyclesData = await getCycles({...cyclesProps,take});
+  const cyclesData = await getCycles({...cyclesProps,take},origin);
 
   const postsProps = {
     where:{
@@ -131,7 +132,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       ]
     },
   }
-  const postsData = await getPosts({...postsProps,take});
+  const postsData = await getPosts({...postsProps,take},origin);
 
   const worksProps = {
     where:{
@@ -169,7 +170,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       ]
     },
   }
-  const worksData = await getWorks({...worksProps,take});
+  const worksData = await getWorks({...worksProps,take},origin);
   
   return {
     props: {
