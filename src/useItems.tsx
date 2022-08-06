@@ -8,7 +8,7 @@ import {SearchResult} from "@/src/types"
 const getRecordsWorks = async (q?: string): Promise<WorkMosaicItem[]> => {
   let url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/work`;
   if(q){
-    url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/work${q ? `?q=${q}` : ''}`;
+    url = `/api/work${q ? `?q=${q}` : ''}`;
   }
 
   const res = await fetch(url);

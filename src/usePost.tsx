@@ -4,7 +4,7 @@ import { PostMosaicItem } from './types/post';
 
 export const getPost = async (id: number): Promise<PostMosaicItem | undefined> => {
   if (!id) return undefined;
-  const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/post/${id}`;
+  const url = `/api/post/${id}`;
 
   const res = await fetch(url);
   if (!res.ok) return undefined;

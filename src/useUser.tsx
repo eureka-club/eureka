@@ -8,7 +8,7 @@ import { PostMosaicItem } from './types/post';
 export const getUser = async (id: number): Promise<UserMosaicItem|null> => {
   if (!id) return null;
   else{
-    const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/user/${id}`;
+    const url = `/api/user/${id}`;
     const res = await fetch(url);
     if (!res.ok) return null;
     const result = await res.json();

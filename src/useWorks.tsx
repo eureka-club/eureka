@@ -7,7 +7,7 @@ export const getWorks = async (
   props?:Prisma.WorkFindManyArgs,
 ): Promise<{works:WorkMosaicItem[],fetched:number,total:number}> => {
   const query = props?`?props=${encodeURIComponent(JSON.stringify(props))}`:''
-  const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/work${query}`
+  const url = `/api/work${query}`
 
   // const url = buildUrl(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api`, {
   //   path: 'work',

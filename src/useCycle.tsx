@@ -3,7 +3,7 @@ import { CycleMosaicItem } from './types/cycle';
 
 export const getCycle = async (id: number): Promise<CycleMosaicItem | undefined> => {
   if (!id) throw new Error('idRequired');
-  const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle/${id}`;
+  const url = `/api/cycle/${id}`;
 
   const res = await fetch(url);
   if (!res.ok) return undefined;

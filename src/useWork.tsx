@@ -4,7 +4,7 @@ import { WorkMosaicItem } from './types/work';
 export const getWork = async (id: number): Promise<WorkMosaicItem> => {
   if (!id) throw new Error('idRequired');
   // { error: 'not work id provided' };
-  const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/work/${id}`;
+  const url = `/api/work/${id}`;
 
   const res = await fetch(url);
   if (!res.ok) 

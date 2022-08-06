@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 import { buildUrl } from 'build-url-ts';
 
 const getCountries = async (q?: string[]):Promise<string[]> => {
-  const url = buildUrl(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api`, {
+  const url = buildUrl(`/api`, {
     path: 'taxonomy/countries',
     queryParams: {
       q,

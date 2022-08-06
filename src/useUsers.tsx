@@ -16,7 +16,7 @@ export const getUsers = async (props?:Prisma.UserFindManyArgs):Promise<UserMosai
   const where = w ? encodeURIComponent(JSON.stringify(w)) : '';
   const cursor = c ? encodeURIComponent(JSON.stringify(c)) : '';
 
-  const url = buildUrl(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api`, {
+  const url = buildUrl(`/api`, {
     path: 'user',
     queryParams: {
       where,

@@ -1,17 +1,20 @@
 import { useQuery } from 'react-query';
 import { PostMosaicItem } from './types/post';
 import { Prisma } from '@prisma/client';
-import { buildUrl } from 'build-url-ts';
+// import { buildUrl } from 'build-url-ts';
 
 export const getPosts = async (
   props?:Prisma.PostFindManyArgs,
 ): Promise<{posts:PostMosaicItem[],fetched:number,total:number}> => {
-  const url = buildUrl(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api`, {
-    path: 'post',
-    queryParams: {
-      ...props && {props:encodeURIComponent(JSON.stringify(props))}
-    }
-  });
+  const query = props?`?props=${encodeURIComponent(JSON.stringify(props))}`:''
+  const url = `/api/posts${query}`
+
+  // const url = buildUrl(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api`, {
+  //   path: 'post',
+  //   queryParams: {
+  //     ...props && {props:encodeURIComponent(JSON.stringify(props))}
+  //   }
+  // });
    
   const res = await fetch(url);
 
