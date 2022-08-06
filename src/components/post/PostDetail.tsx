@@ -20,7 +20,7 @@ import MosaicItem from './MosaicItem';
 import { MosaicContext } from '../../useMosaicContext';
 
 // import CommentsList from '../common/CommentsList';
-import LocalImageComponent from '../server.LocalImage';
+import LocalImageComponent from '../LocalImage';
 import SocialInteraction from '../common/SocialInteraction';
 import UnclampText from '../UnclampText';
 import styles from './PostDetail.module.css';

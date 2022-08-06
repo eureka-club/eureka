@@ -10,7 +10,7 @@ import dayjs from 'dayjs';
 import { DATE_FORMAT_SHORT } from '../../constants';
 import SocialInteraction from '../common/SocialInteraction';
 import { PostMosaicItem } from '../../types/post';
-import LocalImageComponent from '../server.LocalImage';
+import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import { isCycle, isWork, Session } from '../../types';
 // import { CycleMosaicItem } from '../../types/cycle';

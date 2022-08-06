@@ -13,7 +13,7 @@ import utc from 'dayjs/plugin/utc';
 import isBetween from 'dayjs/plugin/isBetween';
 import { CycleMosaicItem } from '../../types/cycle';
 import { /* WorkWithImages, */ WorkMosaicItem } from '../../types/work';
-import LocalImageComponent from '../server.LocalImage';
+import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import SocialInteraction from '../common/SocialInteraction';
 // import { Session } from '../../types';

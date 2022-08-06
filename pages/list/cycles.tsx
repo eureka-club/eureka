@@ -17,7 +17,7 @@ import { DATE_FORMAT_HUMANIC_ADVANCED } from '../../src/constants';
 import { Session } from '../../src/types';
 import { advancedDayjs } from '../../src/lib/utils';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
-import LocalImageComponent from '../../src/components/server.LocalImage';
+import LocalImageComponent from '../../src/components/LocalImage';
 import { findAll } from '../../src/facades/cycle';
 
 dayjs.extend(utc);

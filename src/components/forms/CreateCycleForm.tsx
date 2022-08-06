@@ -21,7 +21,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { DATE_FORMAT_PROPS, DATE_FORMAT_SHORT_MONTH_YEAR } from '../../constants';
 import { ComplementaryMaterial, CreateCycleClientPayload } from '../../types/cycle';
 import { WorkMosaicItem } from '../../types/work';
-import LocalImageComponent from '../server.LocalImage';
+import LocalImageComponent from '../LocalImage';
 import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
 import WorkTypeaheadSearchItem from '../work/TypeaheadSearchItem';

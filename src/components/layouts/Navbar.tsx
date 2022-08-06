@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { setCookie } from 'nookies';
 import { FunctionComponent, useEffect, useState } from 'react';
-import LocalImageComponent from '@/src/components/server.LocalImage'
+import LocalImageComponent from '@/src/components/LocalImage'
 import {
   Container,
   Button,
