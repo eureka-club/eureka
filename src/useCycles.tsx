@@ -1,17 +1,19 @@
 import { useQuery } from 'react-query';
 import { CycleMosaicItem } from './types/cycle';
 import { Prisma } from '@prisma/client';
-import { buildUrl } from 'build-url-ts';
+// import { buildUrl } from 'build-url-ts';
 
 export const getCycles = async (
   props?:Prisma.CycleFindManyArgs,
 ): Promise<{cycles:CycleMosaicItem[],fetched:number,total:number}> => {
-  const url = buildUrl(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api`, {
-    path: 'cycle',
-    queryParams: {
-      ...props && {props:encodeURIComponent(JSON.stringify(props))}
-    }
-  });
+  const query = props?`?props=${encodeURIComponent(JSON.stringify(props))}`:''
+  const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle${query}`
+  // const url = buildUrl(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api`, {
+  //   path: 'cycle',
+  //   queryParams: {
+  //     ...props && {props:encodeURIComponent(JSON.stringify(props))}
+  //   }
+  // });
    
   const res = await fetch(url);
 
