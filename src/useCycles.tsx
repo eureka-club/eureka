@@ -7,7 +7,9 @@ export const getCycles = async (
   props?:Prisma.CycleFindManyArgs,
 ): Promise<{cycles:CycleMosaicItem[],fetched:number,total:number}> => {
   const query = props?`?props=${encodeURIComponent(JSON.stringify(props))}`:''
-  const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle${query}`
+  const url = `https://eurekastaging.azurewebsites.net/api/cycle${query}`;
+
+  // const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle${query}`
   // const url = buildUrl(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api`, {
   //   path: 'cycle',
   //   queryParams: {
