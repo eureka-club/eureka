@@ -40,6 +40,7 @@ FROM node:16-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
+ENV NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME 'public-assets'
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
