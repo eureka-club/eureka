@@ -16,11 +16,6 @@ interface Props {
 }
 
 const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, alt,width,height,blurDataURL=false,notNextImage }) => {
-  console.log('NEXT_PUBLIC_AZURE_CDN_ENDPOINT',NEXT_PUBLIC_AZURE_CDN_ENDPOINT)
-  console.log('NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME',NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME)
-  console.log('NEXT_PUBLIC_PUBLIC_ASSETS_STORAGE_MECHANISM',NEXT_PUBLIC_PUBLIC_ASSETS_STORAGE_MECHANISM)
-
-
   const fallbakImgURL = `https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/Image-not-found.webp`
   const [imgError,setImgError] = useState<boolean>(false)
   const onLoadImgError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {

@@ -1,5 +1,4 @@
-import { useQuery,QueryClient } from 'react-query';
-import { MosaicItem } from './types';
+import { useQuery } from 'react-query';
 import { PostMosaicItem } from './types/post';
 
 export const getPost = async (id: number,origin=''): Promise<PostMosaicItem | undefined> => {

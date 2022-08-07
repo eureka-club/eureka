@@ -7,16 +7,16 @@ import { getSession } from 'next-auth/react';
 import { Spinner, Alert, Button } from 'react-bootstrap';
 
 import { dehydrate, QueryClient, useIsFetching } from 'react-query';
-import SimpleLayout from '../../src/components/layouts/SimpleLayout';
-import CycleDetailComponent from '../../src/components/cycle/CycleDetail';
-import Banner from '../../src/components/Banner';
+import SimpleLayout from '@/src/components/layouts/SimpleLayout';
+import CycleDetailComponent from '@/src/components/cycle/CycleDetail';
+import Banner from '@/src/components/Banner';
 import useCycle,{getCycle} from '@/src/useCycle';
 import useUsers,{getUsers} from '@/src/useUsers'
 import {getPosts} from '@/src/usePosts'
 import {getWorks} from '@/src/useWorks'
-import { CycleContext, useCycleContext } from '../../src/useCycleContext';
-import globalModalsAtom from '../../src/atoms/globalModals';
-import { WEBAPP_URL } from '../../src/constants';
+import { CycleContext } from '@/src/useCycleContext';
+import globalModalsAtom from '@/src/atoms/globalModals';
+import { WEBAPP_URL } from '@/src/constants';
 import toast from 'react-hot-toast';
 import {useJoinUserToCycleAction} from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
 
@@ -34,7 +34,8 @@ interface Props{
   id:number;
   session: any;
   metas:{id:number; title:string; storedFile: string};
-
+  NEXT_PUBLIC_AZURE_CDN_ENDPOINT:string;
+  NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME:string;
 }
 const CycleDetailPage: NextPage<Props> = (props) => {
   // const [session, isLoadingSession] = useSession();
@@ -52,8 +53,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
 
   const { t } = useTranslation('common');
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-  const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
-  const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
+  const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT,NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = props;
  
   const renderCycleDetailComponent = () => {
     if (cycle) {
@@ -199,6 +199,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
    await queryClient.prefetchQuery(['CYCLE',`${id}`], ()=>cycle||null)
+   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT,NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
    
    const participants = await getUsers(wcu,origin);
@@ -216,6 +217,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       dehydratedState: dehydrate(queryClient),
       id,
       session,
+      NEXT_PUBLIC_AZURE_CDN_ENDPOINT,
+      NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME
     },
   }
 }
