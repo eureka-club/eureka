@@ -34,7 +34,7 @@ stages:
         repository: 'eurekastaging'
         command: 'build'
         Dockerfile: '**/Dockerfile'
-        arguments: '--build-arg DATABASE_URL=$(DATABASE_URL)'
+        arguments: '--build-arg DATABASE_URL=$(DATABASE_URL) NEXT_PUBLIC_AZURE_CDN_ENDPOINT=$(NEXT_PUBLIC_AZURE_CDN_ENDPOINT)'
         tags: |
           $(Build.BuildId)
           latest      
