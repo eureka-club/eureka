@@ -33,6 +33,8 @@ ARG NEXT_PUBLIC_AZURE_CDN_ENDPOINT
 ENV NEXT_PUBLIC_AZURE_CDN_ENDPOINT=$NEXT_PUBLIC_AZURE_CDN_ENDPOINT
 RUN echo "NEXT_PUBLIC_AZURE_CDN_ENDPOINT => $NEXT_PUBLIC_AZURE_CDN_ENDPOINT"
 
+ENV NODE_ENV production
+ENV NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME 'public-assets'
 
 RUN yarn prisma generate
 RUN yarn build
@@ -44,8 +46,6 @@ RUN yarn build
 FROM node:16-alpine AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
-ENV NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME 'public-assets'
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
