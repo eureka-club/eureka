@@ -1,7 +1,7 @@
 const nextTranslate = require('next-translate');
 const path = require('path');
 
-const isProduction = process.env.NODE_ENV == 'production'
+// const isProduction = process.env.NODE_ENV == 'production'
 
 module.exports = nextTranslate({
     sassOptions: {
