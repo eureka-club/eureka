@@ -9,14 +9,6 @@ import { useRouter } from 'next/router';
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
 const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
-/*type Props = {
-  content: string | JSX.Element | JSX.Element[];
-  expandBannerLabel?: string | JSX.Element | JSX.Element[];
-  show?: boolean;
-  className?: string;
-  style?: Record<string, string>;
-  cacheKey: [string, string];
-};*/
 
 const BannerCustomizable: FunctionComponent = ({
 }) => {
@@ -51,9 +43,9 @@ const BannerCustomizable: FunctionComponent = ({
 
   return (
     <>
-      <section className="d-block bg-primary p-3" style={{ backgroundImage: "url('/img/bg-header.svg')",marginBottom:(show) ? '10em' : '2em',marginTop:'4.8em',maxHeight: (show) ? '14em' : '4em' }}>
+      <section className="d-block bg-primary p-3" style={{ backgroundImage: "url('/img/bg-header.svg')",marginBottom:(show) ? '8em' : '2em',marginTop:'4.8em',maxHeight: (show) ? '18em' : '4em' }}>
         <aside className="d-flex justify-content-end">
-          {/*show && (
+          {show && (
             <Button
               variant="info"
               onClick={() => setShow(false)}
@@ -61,8 +53,8 @@ const BannerCustomizable: FunctionComponent = ({
             >
               {t('Close')} <AiOutlineClose />
             </Button>
-          )*/}
-          {/*!show && (
+          )}
+          {!show && (
             <Button
               variant="info"
               onClick={() => setShow(true)}
@@ -70,7 +62,7 @@ const BannerCustomizable: FunctionComponent = ({
             >
               {t('Expand')} <AiOutlineDown />
             </Button>
-          )*/}
+          )}
         </aside>
         {show && (
           <>

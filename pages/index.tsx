@@ -57,7 +57,7 @@ const IndexPage: NextPage<Props> = ({groupedByTopics}) => {
 
       </SimpleLayout>
      }
-    {session && session.user && <SimpleLayout showHeader title={t('browserTitleWelcome')}>
+    {session && session.user && <SimpleLayout showCustomBaner={true} title={t('browserTitleWelcome')}>
       <Suspense fallback={<Spinner animation="grow" />}>
         {/* ESTO SERIA PAGINA USUARIO LOGUEADO */}
         <HomeSingIn groupedByTopics={groupedByTopics} />
