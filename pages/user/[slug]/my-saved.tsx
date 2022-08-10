@@ -1,6 +1,6 @@
 import { NextPage, GetServerSideProps } from 'next';
 import Head from "next/head";
-import { Button, ButtonGroup, Col, Row, Spinner } from 'react-bootstrap';
+import { Button, ButtonGroup, Col, Row, Spinner,Tab,Tabs } from 'react-bootstrap';
 import { QueryClient, dehydrate } from 'react-query';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { useSession } from 'next-auth/react';
@@ -35,6 +35,33 @@ const MySaved: NextPage<Props> = ({id}) => {
     if(isPostMosaicItem(i))return <PMI postId={i.id}/>
     if(isWorkMosaicItem(i))return <WMI workId={i.id}/>
   }
+  const renderPosts = ()=>{
+    return <Row>
+    {sfl.favPosts.map(i=>
+      <Col key={i.id} xs={12} sm={6} lg={3} className='mb-5 d-flex justify-content-center  align-items-center'>
+        <PMI postId={i.id}/>
+      </Col>  
+    )}
+    </Row>
+  }
+  const renderCycles = ()=>{
+    return <Row>
+    {sfl.favCycles.map(i=>
+      <Col key={i.id} xs={12} sm={6} lg={3} className='mb-5 d-flex justify-content-center  align-items-center'>
+        <CMI cycleId={i.id}/>
+      </Col>
+    )}
+    </Row>
+  }
+  const renderWorks = ()=>{
+    return <Row>
+    {sfl.favWorks.map(c=>
+        <Col key={c.id} xs={12} sm={6} lg={3} className='mb-5 d-flex justify-content-center  align-items-center'>
+          <WMI workId={c.id}/>
+        </Col>
+    )}
+    </Row>
+  }
   return <>
     <Head>
         <meta property="og:title" content='Eureka'/>
@@ -63,13 +90,49 @@ const MySaved: NextPage<Props> = ({id}) => {
         : session ? (
           <>
           <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('mySaved')}</h1>
-            <Row>
+           {/* language=CSS */}
+    <style jsx global>
+                  {`
+                    .nav-tabs .nav-item.show .nav-link,
+                    .nav-tabs .nav-link.active,
+                    .nav-tabs .nav-link:hover {
+                      background-color: var(--bs-primary);
+                      color: white !important;
+                      border: none !important;
+                      border-bottom: solid 2px var(--bs-primary) !important;
+                    }
+                    .nav-tabs {
+                      border: none !important;
+                      border-bottom: solid 1px var(--bs-primary) !important;
+                    }
+                    .nav-link{
+                        color:var(--bs-primary)
+                    }
+                  `}
+                </style>
+   
+          <Tabs
+      defaultActiveKey="posts"
+      id="uncontrolled-tab-example"
+      className="mb-3"
+    >
+      {sfl.favPosts.length ? <Tab eventKey="posts" title={t('posts')}>
+        {renderPosts()}
+      </Tab> : ''}
+      {sfl.favCycles.length ? <Tab eventKey="cycles" title={t('cycles')}>
+        {renderCycles()}
+      </Tab> : ''}
+      {sfl.favWorks.length ? <Tab eventKey="works" title={t('works')}>
+        {renderWorks()}
+      </Tab>:''}
+    </Tabs>
+            {/* <Row>
               {sfl.map(c=>
                 <Col key={c.id} xs={12} sm={6} lg={3} className='mb-5 d-flex justify-content-center  align-items-center'>
                   {renderSFL(c)}
                 </Col>
               )}
-            </Row>
+            </Row> */}
             </>
         ) : ''
       }

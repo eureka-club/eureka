@@ -21,7 +21,7 @@ const topics = ['gender-feminisms', 'technology', 'environment',
     'sciences','arts-culture','history',
 ];
 
-const fetchItems = async (pageParam: number,topic:string):Promise<GetAllByResonse> => {debugger;
+const fetchItems = async (pageParam: number,topic:string):Promise<GetAllByResonse> => {
         const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/getAllBy?topic=${topic}&cursor=${pageParam}`;
         const q = await fetch(url);
         return q.json();

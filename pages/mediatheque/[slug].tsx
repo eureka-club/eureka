@@ -30,6 +30,8 @@ import useMyPosts,{getMyPosts} from '@/src/useMyPosts';
 import useMyCycles,{getMyCycles} from '@/src/useMyCycles';
 import useMySaved from '@/src/useMySaved';
 import slugify from 'slugify'
+import { PostMosaicItem } from '@/src/types/post';
+import { CycleMosaicItem } from '@/src/types/cycle';
 
 
 interface Props{
@@ -249,13 +251,13 @@ const Mediatheque: NextPage<Props> = ({id}) => {
   };
   
   const savedForLater = () => {
-    if (SFL.length)
+    if (SFL)
       return (
         <CarouselStatic
           cacheKey={['MEDIATHEQUE-SAVED',`USER-${user!.id}`]}
           onSeeAll={()=>goTo('my-saved')}
           title={t('common:mySaved')}
-          data={SFL}
+          data={[...SFL.favPosts,...SFL.favCycles,...SFL.favWorks] as PostMosaicItem[]|CycleMosaicItem[]|WorkMosaicItem[]}
           iconBefore={<BsBookmark />}
           // iconAfter={<BsCircleFill className={styles.infoCircle} />}
         />

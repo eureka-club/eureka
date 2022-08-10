@@ -1,8 +1,7 @@
-// import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import getApiHandler from '../../../src/lib/getApiHandler';
-import { findAll } from '../../../src/facades/user';
+import getApiHandler from '@/src/lib/getApiHandler';
+import { findAll } from '@/src/facades/user';
 
 export const config = {
   api: {
