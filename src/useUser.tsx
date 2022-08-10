@@ -5,10 +5,10 @@ import { PostMosaicItem } from './types/post';
 // import { User } from '@prisma/client';
 
 
-export const getUser = async (id: number): Promise<UserMosaicItem|null> => {
+export const getUser = async (id: number,origin=''): Promise<UserMosaicItem|null> => {
   if (!id) return null;
   else{
-    const url = `/api/user/${id}`;
+    const url = `${origin}/api/user/${id}`;
     const res = await fetch(url);
     if (!res.ok) return null;
     const result = await res.json();

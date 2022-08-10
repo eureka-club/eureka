@@ -80,7 +80,9 @@ export const getServerSideProps:GetServerSideProps= async (ctx)=>{
     }
   }
   if(!session)return res;
-  await qc.fetchQuery(['MY-CYCLES',id],()=>getMyCycles(id,8));
+  const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
+
+  await qc.fetchQuery(['MY-CYCLES',id],()=>getMyCycles(id,8,origin));
   
   res = {
     props:{

@@ -33,7 +33,6 @@ const IndexPage: NextPage<Props> = ({groupedByTopics}) => {
   const { t } = useTranslation('common');
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
-  console.log('NEXT_PUBLIC_SITE_NAME',process.env.NEXT_PUBLIC_SITE_NAME)
   return <>
     <Head>
         <meta property="og:title" content='Eureka'/>

@@ -22,7 +22,6 @@ const MyBooksMovies: NextPage<Props> = ({id}) => {
   const isLoadingSession = status === "loading"
   if(!isLoadingSession && !session)router.push('/')
   const {data:user} = useUser(id,{enabled:!!id})
-  console.log(user,'user1111')
   return <>
     <Head>
         <meta property="og:title" content='Eureka'/>
@@ -73,8 +72,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx)=>{
     const slug = ctx.query.slug.toString()
     const li = slug.split('-').slice(-1)
     id = parseInt(li[0])
-    user = await getUser(id)
-    console.log(user)
+    const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
+    user = await getUser(id,origin)
     await qc.prefetchQuery(['USER',id.toString()],()=>user)
   }
   return {

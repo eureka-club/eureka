@@ -80,7 +80,9 @@ export const getServerSideProps:GetServerSideProps= async (ctx)=>{
     const li = slug.split('-').slice(-1)
     id = parseInt(li[0])
   }
-  await qc.fetchQuery(['MY-POSTS',id],()=>getMyPosts(id,8));
+  const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
+
+  await qc.fetchQuery(['MY-POSTS',id],()=>getMyPosts(id,8,origin));
   
   res = {
     props:{

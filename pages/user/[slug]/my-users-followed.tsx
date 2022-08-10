@@ -80,7 +80,9 @@ export const getServerSideProps:GetServerSideProps= async (ctx)=>{
     }
   }
   if(!session)return res;
-  await qc.fetchQuery(['USER',id.toString()],()=>getUser(id));
+  const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
+
+  await qc.fetchQuery(['USER',id.toString()],()=>getUser(id,origin));
   
   res = {
     props:{
