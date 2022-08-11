@@ -11,8 +11,8 @@ import CarouselStatic from '@/src/components/CarouselStatic';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import slugify from 'slugify'
-import useMyCycles,{myCyclesWhere} from '@/src/useMyCycles';
 import useFeaturedUsers from '@/src/useFeaturedUsers';
+import useMyCycles,{myCyclesWhere} from '@/src/useMyCycles';
 
 const Carousel = lazy(()=>import('@/components/Carousel'));
 
@@ -44,17 +44,15 @@ const HomeSingIn: FunctionComponent<Props> = ({ groupedByTopics}) => {
     // rootMargin: '200px 0px',
     // skip: supportsLazyLoading !== false,
   });
-  const [cycles,setCycles] = useState<CycleMosaicItem[]>()
-  const {data:dataCycles} = useMyCycles(session?.user.id!)
   const [users,setUsers] = useState<UserMosaicItem[]>()
   const {data:dataUsers} = useFeaturedUsers()
-
-
+  const [cycles,setCycles] = useState<CycleMosaicItem[]>()
+  const {data:dataCycles} = useMyCycles(session?.user.id!)
+  
 
   useEffect(()=>{
-    console.log(dataUsers,'dataUsers')
+    if(dataUsers)setUsers(dataUsers)
     if(dataCycles)setCycles(dataCycles.cycles)
-    if(dataUsers)setUsers(dataUsers.users)
 
   },[dataCycles,dataUsers])
 
