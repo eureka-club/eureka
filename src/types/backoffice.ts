@@ -14,8 +14,10 @@ export interface backOfficePayload {
   SlideText3?: string;
   SlideImage3?: string |null;
   Image3?: File | null;
-  CyclesExplorePage? :string
-  PostExplorePage?:string
+  CyclesExplorePage? :string;
+  PostExplorePage?:string;
+  FeaturedUsers?:string
+
 }
 
 type backOfficeModel = {
@@ -32,6 +34,7 @@ type backOfficeModel = {
     SlideImage3:true,
     CyclesExplorePage: true,
     PostExplorePage: true,
+    FeaturedUsers: true,
     sliderImages:{select:{storedFile:true,originalFilename:true}},
   }
 };

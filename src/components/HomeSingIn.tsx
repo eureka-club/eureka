@@ -6,11 +6,14 @@ import TagsInput from '@/components/forms/controls/TagsInput';
 import { GetAllByResonse } from '@/src/types';
 import { useInView } from 'react-intersection-observer';
 import { CycleMosaicItem } from '../../src/types/cycle';
+import { UserMosaicItem } from '../../src/types/user';
 import CarouselStatic from '@/src/components/CarouselStatic';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import slugify from 'slugify'
 import useMyCycles,{myCyclesWhere} from '@/src/useMyCycles';
+import useFeaturedUsers from '@/src/useFeaturedUsers';
+
 const Carousel = lazy(()=>import('@/components/Carousel'));
 
 const topics = ['gender-feminisms', 'technology', 'environment',
@@ -42,10 +45,18 @@ const HomeSingIn: FunctionComponent<Props> = ({ groupedByTopics}) => {
     // skip: supportsLazyLoading !== false,
   });
   const [cycles,setCycles] = useState<CycleMosaicItem[]>()
- const {data:dataCycles} = useMyCycles(session?.user.id!)
+  const {data:dataCycles} = useMyCycles(session?.user.id!)
+  const [users,setUsers] = useState<UserMosaicItem[]>()
+  const {data:dataUsers} = useFeaturedUsers()
+
+
+
   useEffect(()=>{
+    console.log(dataUsers,'dataUsers')
     if(dataCycles)setCycles(dataCycles.cycles)
-  },[dataCycles])
+    if(dataUsers)setUsers(dataUsers.users)
+
+  },[dataCycles,dataUsers])
 
   const [gbt, setGBT] = useState([...Object.entries(groupedByTopics||[])]);
   const [topicIdx,setTopicIdx] = useState(gbt.length-1)
@@ -93,7 +104,20 @@ const getMediathequeSlug = (id:number,name:string)=>{
   };
 //       <h1 className="text-secondary fw-bold">{t('myCycles')}</h1>
 
-const cyclesJoined = () => {
+const featuredUsers = () => {
+    return (users && users.length && dataUsers) 
+    ? <div>      
+       <CarouselStatic
+        cacheKey={['USERS','FEATURED']}
+        //onSeeAll={()=>router.push('/featured-users')}
+        data={users}
+        title={t('Featured users')}
+      />
+      </div>
+    : <></>;
+  };
+
+  const cyclesJoined = () => {
   if(!session)return <></>
   const k = JSON.stringify(myCyclesWhere(session?.user.id))
 
@@ -122,6 +146,7 @@ const renderCarousels =  ()=>{
 }    
 
   return <>  
+  {featuredUsers()}
   {cyclesJoined()}
   <h1 className="text-secondary fw-bold">{t('Trending topics')}</h1>
   <aside className="mb-5">{getTopicsBadgedLinks()}</aside>
