@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import nc from 'next-connect';
+import {cors,middleware} from '@/src/lib/cors'
 
 const res =  () =>
   nc<NextApiRequest, NextApiResponse>({
@@ -18,5 +19,9 @@ const res =  () =>
     onNoMatch(req, res) {
       res.status(405).end();
     },
+  })
+  .use(async (req,res,next)=>{
+    await middleware(req,res,cors)
+    next()
   });
   export default res;

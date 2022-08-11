@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import Cors from 'cors'
 
-// You can read more about the available options here: https://github.com/expressjs/cors#configuration-options
 export const cors = Cors({
-  methods: ['GET', 'HEAD'],
+  // methods: ['GET', 'HEAD'],
+  origin:/http(s)?:\/\/(www\.)?(localhost:3000|eurekastaging.azurewebsites.net|eureka.club)$/
 })
 
 export function middleware(
