@@ -30,11 +30,11 @@ const MySaved: NextPage<Props> = ({id}) => {
   if(!isLoadingSession && !session)router.push('/')
   const sfl = useMySaved(id)
 
-  const renderSFL = (i:CycleMosaicItem|PostMosaicItem|WorkMosaicItem)=>{
-    if(isCycleMosaicItem(i))return <CMI cycleId={i.id}/>
-    if(isPostMosaicItem(i))return <PMI postId={i.id}/>
-    if(isWorkMosaicItem(i))return <WMI workId={i.id}/>
-  }
+  // const renderSFL = (i:CycleMosaicItem|PostMosaicItem|WorkMosaicItem)=>{
+  //   if(isCycleMosaicItem(i))return <CMI cycleId={i.id}/>
+  //   if(isPostMosaicItem(i))return <PMI postId={i.id}/>
+  //   if(isWorkMosaicItem(i))return <WMI workId={i.id}/>
+  // }
   const renderPosts = ()=>{
     return <Row>
     {sfl.favPosts.map(i=>
