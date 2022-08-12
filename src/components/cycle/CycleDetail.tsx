@@ -182,8 +182,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const renderPosts = ()=>{
     if(posts){
       return <>
-        <Row>
-        {posts.map((p)=><Col xs={12} sm={6} lg={3} key={p.id} className="mb-5">
+        <Row className='mt-2'>
+        {posts.map((p)=><Col xs={12} sm={6} lg={3} key={p.id} className="mb-5 d-flex justify-content-center  align-items-center">
           <MosaicItemPost  cacheKey={['POST',`${p.id}`]} postId={p.id} />          
         </Col>
         )}
@@ -308,8 +308,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   };
   const renderParticipants = ()=>{
     if(participants){
-      return <Row>
-        {participants.map(p=><Col xs={12} sm={4} lg={3} key={p.id}><MosaicItemUser user={p} /></Col>)}
+      return <Row className='mt-3'>
+        {participants.map(p=><Col xs={12} sm={4} lg={3} key={p.id} className="mb-3 d-flex justify-content-center  align-items-center"><MosaicItemUser user={p} /></Col>)}
       </Row>
     }
     return ''

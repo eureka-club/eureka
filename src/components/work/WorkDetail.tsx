@@ -168,8 +168,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
     if(posts){
       return <>
         <WorkDetailPost workId={work.id} className='mb-2' cacheKey={['POSTS',JSON.stringify(workPostsWhere)]}></WorkDetailPost> 
-        <Row>
-        {posts.map((p)=><Col key={p.id} xs={12} sm={6} lg={3} className="mb-5">
+        <Row className='mt-5'>
+        {posts.map((p)=><Col key={p.id} xs={12} sm={6} lg={3} className="mb-5 d-flex justify-content-center  align-items-center">
           <MosaicItemPost  cacheKey={['POST',`${p.id}`]} postId={p.id} />          
         </Col>
         )}
@@ -184,8 +184,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
 
   const renderCycles =()=>{
     if(cycles){
-      return <Row>
-        {cycles.map(c=><Col xs={12} sm={6} lg={3} className="mb-3 d-flex justify-content-center  align-items-center" key={c.id}><CMI cycleId={c.id} cacheKey={['CYCLES',`WORK-${workId}`]}  /></Col>)}
+      return <Row className='mt-5'>
+        {cycles.map(c=><Col xs={12} sm={6} lg={3} className="mb-5 d-flex justify-content-center  align-items-center" key={c.id}><CMI cycleId={c.id} cacheKey={['CYCLES',`WORK-${workId}`]}  /></Col>)}
       </Row>
     }
     return <></> 
