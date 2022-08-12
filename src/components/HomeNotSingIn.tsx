@@ -85,7 +85,7 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
          <div className='m-0 m-lg-5'>
           <Row className='d-flex flex-column flex-lg-row '>
                         <Col className="d-flex flex-column justify-content-center align-items-center">
-                           <Button onClick={()=> window.scrollTo(0, 0)} variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
+                           <Button onClick={()=> window.scrollTo(0, 60)} variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
                                 {t('signInForm:login')} 
                            </Button>
                            <p className={`mt-1 text-secondary ${styles.dontHaveAccounttext}`}>{t('signInForm:dontHaveAccounttext')} <Link href="/register">

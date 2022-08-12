@@ -48,6 +48,12 @@ const NavBar: FunctionComponent = () => {
     }
   };
 
+   const handlerLogin = ()=>{
+    localStorage.setItem('loginRedirect',router.asPath);
+    router.push({pathname: `/`}, undefined, { scroll: false });
+    window.scrollTo(0, 200);
+  }
+
   const handlerLogout = () => {
     signOut({callbackUrl:`${process.env.NEXT_PUBLIC_WEBAPP_URL}/`});
   };
@@ -104,7 +110,7 @@ const NavBar: FunctionComponent = () => {
         >
           {!session && (<Nav className="mx-2 mt-2 mb-2">
             
-              <Button className="text-white w-100" onClick={() => router.push('/')}>
+              <Button className="text-white w-100" onClick={handlerLogin}>
                 {t('login')}
               </Button>
           </Nav> )}

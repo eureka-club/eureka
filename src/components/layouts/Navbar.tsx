@@ -71,8 +71,9 @@ const NavBar: FunctionComponent = () => {
   };
 
   const handlerLogin = ()=>{
-    localStorage.setItem('loginRedirect',router.asPath)
-    router.push('/')
+    localStorage.setItem('loginRedirect',router.asPath);
+    router.push({pathname: `/`}, undefined, { scroll: false });
+    window.scrollTo(0, 60);
   }
 
   const getMediathequeSlug = ()=>{
