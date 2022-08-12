@@ -423,6 +423,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
                     items={items}
                     setItems={setItems}
                     labelKey={(res) => t(`topics:${res.code}`)}
+                    formatValue={(v: string) => t(`topics:${v}`)} 
                     max={3}
                   />
                 </FormGroup>

@@ -415,6 +415,7 @@ const EditWorkForm: FunctionComponent = () => {
                     setItems={setItems}
                     max={3}
                     labelKey={(res) => t(`topics:${res.code}`)}
+                    formatValue={(v: string) => t(`topics:${v}`)} 
                   />
                 </FormGroup>
               </Col>

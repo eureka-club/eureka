@@ -51,7 +51,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   //const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const { t } = useTranslation('workDetail');
-  const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
+  //const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
   const {data:session} = useSession();
   const [ref, inView] = useInView({
     triggerOnce: false,
@@ -159,10 +159,10 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
     }
   };
 
-  const handleEditPostOnSmallerScreen = (ev: MouseEvent<HTMLButtonElement>) => {
+  /*const handleEditPostOnSmallerScreen = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
         setEditPostOnSmallerScreen({ ...editOnSmallerScreens, ...{ value: !editPostOnSmallerScreen.value } });
-  };
+  };*/
 
   const renderPosts = ()=>{
     if(posts){
@@ -193,34 +193,24 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
   return (
     <WorkContext.Provider value={{ work, linkToWork: false }}>
       <MosaicContext.Provider value={{ showShare: true }}>
-       
-       {
-       (!editPostOnSmallerScreen.value) ? 
         <ButtonGroup className="mt-1 mt-md-3 mb-1">
           <Button variant="primary text-white" onClick={() => router.back()} size="sm">
             <BiArrowBack />
           </Button>
           {!router.query.postId && canEditWork() && (
             <Button variant="warning" onClick={handleEditClick} size="sm">
-              {t('edit')}
+            {t('edit')}
             </Button>
           )}
           {post && work && canEditPost() && (<>
-          <Button className='d-none d-md-block' variant="warning" onClick={handleEditPostClick} size="sm">
+          <Button variant="warning" onClick={handleEditPostClick} size="sm">
             {t('edit')}
           </Button>
-            <Button className='d-block d-md-none' variant="warning" onClick={handleEditPostOnSmallerScreen} size="sm">
-            {t('edit')}
-          </Button></>
+          </>
           )}
-        </ButtonGroup> :
+        </ButtonGroup> 
         
-        <ButtonGroup className="mt-1 mt-md-3 mb-1">
-        <Button variant="primary text-white" onClick={handleEditPostOnSmallerScreen} size="sm">
-          <BiArrowBack />
-        </Button>
-      </ButtonGroup>
-      }
+        
 
      {
     //  (!editPostOnSmallerScreen.value) 
