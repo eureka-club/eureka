@@ -147,7 +147,7 @@ const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputPr
               onChange={onNewTagAdded}
               // onKeyPress={onKeyPressOnInput}
               options={data}
-              className={styles.textInput}
+              className={'w-100'}
               placeholder={placeholder}
             />
             {/* <InputGroup.Append className={styles.searchButton}>

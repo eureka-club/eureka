@@ -403,7 +403,8 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
               labelKey={(res: { code: string }) => t(`topics:${res.code}`)}
               max={3}
               placeholder={`${t('Type to add tag')}...`}
-              className="mt-3"
+              formatValue={(v: string) => t(`topics:${v}`)} 
+              className="mt-3 w-100"
             />
           </Form.Group>
         </Col>
