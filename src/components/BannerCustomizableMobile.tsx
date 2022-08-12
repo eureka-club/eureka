@@ -51,7 +51,7 @@ const BannerCustomizableMobile: FunctionComponent = ({
 
   return (
     <>
-      <section className="d-block bg-primary p-3" style={{ backgroundImage: "url('/img/bg-header.svg')",marginBottom:(show) ? '8em' : '2em',maxHeight: (show) ? '18em' : '4em' }}>
+      <section className="d-block bg-primary p-3" style={{ backgroundImage: "url('/img/bg-header.svg')",marginBottom:(show) ? '9em' : '2em',maxHeight: (show) ? '18em' : '4em' }}>
         <aside className="d-flex justify-content-end">
           {show && (
             <Button
@@ -77,8 +77,8 @@ const BannerCustomizableMobile: FunctionComponent = ({
             <Container className={`${styles.grid} text-white text-center`} style={{minHeight:'1em'}}>             
             </Container>
             <div className='d-flex justify-content-center'>
-            <Carousel indicators={true} controls={false}  style={{width: '90%'}} >
-              <Carousel.Item className="text-secondary bg-gray-very-light" style={{ height: '20rem' }}>
+            <Carousel indicators={true} controls={false}  style={{width: '98%'}} >
+              <Carousel.Item className="text-secondary bg-gray-very-light" style={{ height: '21rem' }}>
                   <div className="d-flex flex-row" >
                     <div className="d-flex flex-column mt-2 px-3 py-3" style={{minWidth:'65%%'}}>
                       <h1 className="fs-3">{bo?.SlideTitle1}</h1>
@@ -89,7 +89,7 @@ const BannerCustomizableMobile: FunctionComponent = ({
                     </div>
                   </div>
               </Carousel.Item>
-              <Carousel.Item className="text-secondary bg-gray-very-light" style={{ height: '20rem' }}>
+              <Carousel.Item className="text-secondary bg-gray-very-light" style={{ height: '21rem' }}>
                 <div className="d-flex flex-row" >
                     <div className="d-flex flex-column mt-2  px-3 py-3" style={{minWidth:'65%'}}>
                       <h1 className="fs-3">{bo?.SlideTitle2}</h1>
@@ -100,7 +100,7 @@ const BannerCustomizableMobile: FunctionComponent = ({
                     </div>
                   </div>
               </Carousel.Item>
-              <Carousel.Item className="text-secondary bg-gray-very-light" style={{ height: '20rem' }}>
+              <Carousel.Item className="text-secondary bg-gray-very-light" style={{ height: '21rem' }}>
                 <div className="d-flex flex-row" >
                     <div className="d-flex flex-column mt-2  px-3 py-3" style={{minWidth:'65%'}}>
                       <h1 className="fs-3">{bo?.SlideTitle3}</h1>
