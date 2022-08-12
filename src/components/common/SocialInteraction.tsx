@@ -8,7 +8,7 @@ import classnames from 'classnames';
 import { FiShare2, FiTrash2 } from 'react-icons/fi';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/react';
-import { useAtom } from 'jotai';
+//import { useAtom } from 'jotai';
 import Rating from 'react-rating';
 import { OverlayTrigger, Popover, Button, Spinner } from 'react-bootstrap';
 
@@ -25,7 +25,7 @@ import { useMosaicContext } from '@/src/useMosaicContext';
 import globalSearchEngineAtom from '@/src/atoms/searchEngine';
 
 import useUser from '@/src/useUser';
-import globalModalsAtom from '@/src/atoms/globalModals';
+//import globalModalsAtom from '@/src/atoms/globalModals';
 // import Notification from '../ui/Notification';
 import { WEBAPP_URL } from '@/src/constants';
 import { CycleMosaicItem } from '@/src/types/cycle';
@@ -35,6 +35,8 @@ import { UserMosaicItem } from '@/src/types/user';
 import { MySocialInfo, isCycle, isWork, isPost, isPostMosaicItem, isWorkMosaicItem, isCycleMosaicItem } from '../../types';
 import styles from './SocialInteraction.module.css';
 import {useNotificationContext} from '@/src/useNotificationProvider';
+import {useModalContext} from '@/src/useModal'
+import SignInForm from '../forms/SignInForm';
 interface SocialInteractionClientPayload {
   socialInteraction: 'fav' | 'rating';
   doCreate: boolean;
@@ -73,9 +75,10 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
   const isLoadingSession = status === "loading"
   const [qty, setQty] = useState<number>(0);
+  const {show} = useModalContext()
 
-  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-  const [globalSearchEngineState] = useAtom(globalSearchEngineAtom);
+  //const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
+  //const [globalSearchEngineState] = useAtom(globalSearchEngineAtom);
 
   const [mySocialInfo, setMySocialInfo] = useState<MySocialInfo>();
 
@@ -84,6 +87,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const {showShare:ss} = useMosaicContext();
 
   const [showShare, setShowShare] = useState<boolean>(false);
+
 
   // const [optimistReadOrWatched, setOptimistReadOrWatched] = useState<boolean | null>();
 
@@ -179,7 +183,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
   const openSignInModal = () => {
     setQty(0);
-    setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
+    show(<SignInForm/>)
   };
 
   // const likeInc = () => {

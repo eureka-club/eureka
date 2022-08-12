@@ -369,6 +369,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
               labelKey={(res: { code: string }) => t(`topics:${res.code}`)}
               max={3}
               placeholder={`${t('Type to add tag')}...`}
+              formatValue={(v: string) => t(`topics:${v}`)} 
               className="mt-3"
             />
           </Form.Group>

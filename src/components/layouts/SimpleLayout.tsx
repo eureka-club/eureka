@@ -1,7 +1,6 @@
 import { FunctionComponent} from 'react';
 import { Container} from 'react-bootstrap';
 import withTitle from '../../HOCs/withTitle';
-
 import NavbarMobile from '@/components/layouts/NavbarMobile';
 import Header from '@/components/layouts/Header';
 import Navbar from '@/components/layouts/Navbar';
@@ -21,7 +20,10 @@ type Props = {
   allPageSize?:boolean
 };
 
+
+
 const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, banner,showCustomBaner=false,showNavBar = true,showFooter=true , allPageSize=false}) => {
+
   const renderBanner = () => {
     if (banner) return <>{banner}</>;
     return ``;
@@ -53,6 +55,7 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
         : <Container className='mainContainer'>{children}</Container> }
       </section>
       {showFooter && (<Footer/>)}
+
     </>    
   );
 };

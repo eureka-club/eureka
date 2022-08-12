@@ -1,4 +1,3 @@
-import { useAtom } from 'jotai';
 import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, FunctionComponent, MouseEvent, useState,useEffect } from 'react';
@@ -9,15 +8,14 @@ import { GiBrain } from 'react-icons/gi';
 import { BiBookHeart } from 'react-icons/bi';
 import { CycleMosaicItem } from '../../types/cycle';
 import UserAvatar from '../common/UserAvatar';
-import globalModals from '../../atoms/globalModals';
 import useWorks from '@/src/useWorks';
 import useUsers from '@/src/useUsers'
-
+import {useModalContext} from '@/src/useModal'
 import styles from './CycleDetailDiscussion.module.css';
 import toast from 'react-hot-toast';
 import CycleDetailDiscussionCreateEurekaForm from './CycleDetailDiscussionCreateEurekaForm';
 import CycleDetailDiscussionSuggestRelatedWork from './CycleDetailDiscussionSuggestRelatedWork';
-
+import SignInForm from '../forms/SignInForm';
 interface Props {
   cycle: CycleMosaicItem;
   className?: string;
@@ -32,7 +30,7 @@ const whereCycleParticipants = (id:number)=>({
 const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cacheKey }) => {
   const {data:session, status} = useSession();
   const isSessionLoading = status == 'loading';
-  
+  const {show} = useModalContext()
   const { t } = useTranslation('cycleDetail');
   const { data: dataWorks } = useWorks({where:{cycles: { some: { id: cycle?.id } }} }, {
     enabled:!!cycle?.id
@@ -64,15 +62,11 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
   const [isCreateEureka, setIsCreateEureka] = useState<boolean>(false);
   const [isSuggestRelatedWork, setIsSuggestRelatedWork] = useState<boolean>(false);
   const [discussionItem, setDiscussionItem] = useState<string | undefined>(undefined); // by default empty but required
-  const [globalModalsAtom, setGlobalsModalsAtom] = useAtom(globalModals);
 
   const handleCreateEurekaClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    if (!session) {
-      setGlobalsModalsAtom({
-        ...globalModalsAtom,
-        signInModalOpened: true,
-      });
+  if (!session) {
+      show(<SignInForm/>)
     } else {
           if(isParticipant()){
                 setIsSuggestRelatedWork(false);
@@ -125,9 +119,9 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
           <p className={`${styles.initialText}`}>{t('EurekaMomentsExplain')}</p>
           </div>
           <Row className={`d-flex justify-content-center ${styles.discussionContainer}`}>
-            <Col xs={12} md={1} className="d-flex justify-content-center mb-2">
-              {session && session.user && <UserAvatar width={28} height={28} userId={session.user.id} showName={false} />}
-            </Col>
+             {session && session.user && <Col xs={12} md={1} className="d-flex justify-content-center mb-2">
+              <UserAvatar width={28} height={28} userId={session.user.id} showName={false} />
+            </Col>}
             <Col xs={12} md={11}>
               <ButtonGroup className={`d-flex flex-column flex-md-row justify-content-between ${styles.optButtons}`} size="lg">
                 <Button

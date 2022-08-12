@@ -11,11 +11,9 @@ import { Card, Button, Spinner, Badge } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 import { CgMediaLive } from 'react-icons/cg';
 
-import { useAtom } from 'jotai';
 import { DATE_FORMAT_SHORT } from '../../constants';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
-import globalModalsAtom from '../../atoms/globalModals';
 import useUser from '@/src/useUser';
 import useUsers from '@/src/useUsers'
 import SocialInteraction from '../common/SocialInteraction';
@@ -25,7 +23,6 @@ import useCycle from '@/src/useCycle'
 import Avatar from '../common/UserAvatar';
 import useCycleJoinRequests,{setCycleJoinRequests,removeCycleJoinRequest} from '@/src/useCycleJoinRequests'
 import {useJoinUserToCycleAction,useLeaveUserFromCycleAction} from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
-
 import {useModalContext} from '@/src/useModal'
 import SignInForm from '../forms/SignInForm';
 
@@ -63,7 +60,6 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [countParticipants,setCountParticipants] = useState<number>()
   
   const [loading, setLoading] = useState<boolean>(false);
-  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const queryClient = useQueryClient();
   const router = useRouter();
   const {data:cycle} = useCycle(cycleId,{enabled:!!cycleId})
@@ -122,9 +118,6 @@ const MosaicItem: FunctionComponent<Props> = ({
   
   const isActive = () => cycle ? dayjs().isBetween(cycle.startDate, cycle.endDate, null, '[]') : false;
 
-  const openSignInModal = () => {
-    setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
-  };
   const {
     mutate: execJoinCycle,
     isLoading: isJoinCycleLoading,
@@ -161,7 +154,6 @@ const MosaicItem: FunctionComponent<Props> = ({
     ev.preventDefault();
     if (!session) {
       show(<SignInForm/>)
-      openSignInModal();
     }
     else execJoinCycle();
   };

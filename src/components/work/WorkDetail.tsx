@@ -24,7 +24,7 @@ import { PostMosaicItem } from '@/src/types/post';
 import UnclampText from '@/components/UnclampText';
 import WorkSummary from './WorkSummary';
 import detailPagesAtom from '@/src/atoms/detailPages';
-import globalModalsAtom from '@/src/atoms/globalModals';
+//import globalModalsAtom from '@/src/atoms/globalModals';
 import editOnSmallerScreens from '../../atoms/editOnSmallerScreens';
 import styles from './WorkDetail.module.css';
 import TagsInput from '@/components/forms/controls/TagsInput';
@@ -49,7 +49,7 @@ interface Props {
 const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
   const router = useRouter();
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
-  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
+  //const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const { t } = useTranslation('workDetail');
   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
   const {data:session} = useSession();
