@@ -5,7 +5,7 @@ import { Prisma } from '@prisma/client';
 export const getCycles = async (
   props?:Prisma.CycleFindManyArgs,
   origin=''
-): Promise<{cycles:CycleMosaicItem[],fetched:number,total:number}> => {
+): Promise<{cycles:CycleMosaicItem[],fetched:number,total:number}> => {debugger;
   const query = props?`?props=${encodeURIComponent(JSON.stringify(props))}`:''
   const url = `${origin}/api/cycle${query}`
   const res = await fetch(url);

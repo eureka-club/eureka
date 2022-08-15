@@ -5,9 +5,9 @@ import { Spinner,Row, Col} from 'react-bootstrap';
 
 import MosaicItem from '@/components/cycle/MosaicItem'
 
-import {getCycles} from '@/src/useCycles'
+import useCycles,{getCycles} from '@/src/useCycles'
 
-// import useFilterEnginePosts from './useFilterEnginePosts';
+import useFilterEngineCycles from './useFilterEngineCycles';
 import { useInView } from 'react-intersection-observer';
 import { Prisma } from '@prisma/client';
 import { CycleMosaicItem } from '../types/cycle';
@@ -19,6 +19,7 @@ const SearchTabCycles: FunctionComponent<Props> = ({cyclesData}) => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const terms = router?.query.q?.toString()!.split(" ") || [];
+
   
   const baseProps = (terms:string[])=>{
     return {
@@ -58,12 +59,17 @@ const SearchTabCycles: FunctionComponent<Props> = ({cyclesData}) => {
   };
 
   const [props,setProps]=useState<Prisma.CycleFindManyArgs>({take,where:{...baseProps(terms)}})
-  // const {data:{total,fetched,cycles:c}={total:0,fetched:0,cycles:[]}} = usecycles(props,{enabled:!!router.query?.q});
+  const {data:{total,fetched,cycles:c}={total:0,fetched:0,cycles:[]}} = useCycles(props,{enabled:!!router.query?.q});
   const [cycles,setCycles] = useState<CycleMosaicItem[]>([])
-  const {total,fetched} = cyclesData;
+  // const {total,fetched} = cyclesData;
+
   useEffect(()=>{
-    if(cyclesData.cycles)setCycles(cyclesData.cycles)
-  },[cyclesData.cycles])
+    if(c)setCycles(c)
+  },[c])
+
+  // useEffect(()=>{
+  //   if(cyclesData.cycles)setCycles(cyclesData.cycles)
+  // },[cyclesData.cycles])
 
   useEffect(()=>{
     if(router.query.q){
@@ -87,10 +93,35 @@ const SearchTabCycles: FunctionComponent<Props> = ({cyclesData}) => {
     }
   },[inView])
 
+  const {FilterEngineCycles,filtersType} = useFilterEngineCycles()
+  console.log('filtersType',filtersType)
+
+  useEffect(()=>{debugger;
+    if(filtersType){
+      const {OR} = baseProps(terms)
+      const access = {
+        access:{
+          in:[1,2,3]
+        }
+      }
+      
+      setProps(()=>({take,where:{
+        OR:[
+          ...OR,
+        ],
+        AND:{
+          ...access,
+        }
+      }}))
+    }
+  },[filtersType])
+
+
+
   const renderCycles=()=>{
     if(cycles)
       return <div>
-        {/* <FilterEngineCycles/> */}
+        <FilterEngineCycles/>
         <Row>
             {cycles.map(p=><Col xs={12} sm={6} lg={3} className="mb-3 d-flex justify-content-center  align-items-center" key={p.id}><MosaicItem cycleId={p.id} cacheKey={['CYCLE',p.id.toString()]}  /></Col>)}
       </Row>

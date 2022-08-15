@@ -9,11 +9,11 @@ import TagsInputTypeAhead from './forms/controls/TagsInputTypeAhead';
 import useCountries from '@/src/useCountries'
 
 interface Props{
-  filtersTypeChanged?: (filtersType:Record<string,boolean>)=>Promise<void>;
+  // filtersTypeChanged?: (filtersType:Record<string,boolean>)=>Promise<void>;
 }
-const useFilterEngineCycles = (props:Props)=>{
+const useFilterEngineCycles = ()=>{
   const { t } = useTranslation('searchEngine');
-  const {filtersTypeChanged} = props;
+  // const {filtersTypeChanged} = props;
 
     const [filtersType,setFiltersType]=useState<Record<string,boolean>>({private:true,public:true})
     const [filtersRegions,setFiltersRegions]=useState<Record<string,boolean>>({})
@@ -30,8 +30,8 @@ const useFilterEngineCycles = (props:Props)=>{
     const handlerComboxesChangeType = (e: ChangeEvent<HTMLInputElement>, q: string) => {
       const fc = {...filtersType, [`${q}`]: e.target.checked};
       setFiltersType(fc);
-      if(filtersTypeChanged)
-        filtersTypeChanged(fc)
+      // if(filtersTypeChanged)
+      //   filtersTypeChanged(fc)
     };
   
     const {data} = useCountries([...onlyCountries])
