@@ -314,7 +314,7 @@ const AboutPage: NextPage = () => {
             />
             <img
               className={styles['logo-img3']}
-              src="equis.jpg"
+              src="/equis.jpg"
               alt=""
             />
             <img
