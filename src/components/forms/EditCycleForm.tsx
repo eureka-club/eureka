@@ -228,6 +228,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
                   items={items}
                   setItems={setItems}
                   labelKey={(res) => t(`topics:${res.code}`)}
+                  formatValue={(v: string) => t(`topics:${v}`)} 
                   max={3}
                 />
               </FormGroup>
