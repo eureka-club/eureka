@@ -75,7 +75,7 @@ export default getApiHandler()
       const props:Prisma.PostFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
       let {where:w,take,cursor,skip,select} = props;
       const session = await getSession({ req });
-      let where = {...w}
+      let where:Prisma.PostWhereInput = {...w}
       
       if (typeof q === 'string') {
         const terms = q.split(" ");
@@ -107,48 +107,58 @@ export default getApiHandler()
           ]
         };
       }
-    
+
+      let OR = undefined;
       if(session){
-        where = {
-          ...where && where,
-          AND:{
-            OR:[
-              {
-                isPublic:true,
-              },
-              {
-                cycles:{
-                  some:{
-                    OR:[
-                      {access:1},
-                      {creatorId:session?.user.id},
-                      {participants:{some:{id:session?.user.id}}},  
-                    ]
-                  }
-                }
-              },
-              {
-                cycles:{none:{}}
+        OR = [
+          {
+            isPublic:true,
+          },
+          {
+            cycles:{
+              some:{
+                OR:[
+                  {access:1},
+                  {creatorId:session?.user.id},
+                  {participants:{some:{id:session?.user.id}}},  
+                ]
               }
-            ]
+            }
+          },
+          {
+            cycles:{none:{}}
+          }
+        ]
+      }
+      else{
+        OR = [
+          {
+            isPublic:true
+          },
+          {
+            cycles:{
+              some:{
+                access:1,
+              }
             }
           }
+        ]
+      }
+      if(where.OR){
+        const whereOR = [...(where.OR as Array<Prisma.PostWhereInput>)];
+        delete where.OR;
+        where = {
+          ...where,
+          OR:[...whereOR,...OR]
+        }   
       }
       else{
         where = {
-          ...where && where,
-          AND:{
-            OR:{
-              isPublic:true,
-              cycles:{
-                some:{
-                  access:1,
-                }
-              },
-            }
-          }
-        }   
+          ...where,
+          OR
+        }
       }
+      
 
       let cr = await prisma?.post.aggregate({where,_count:true})
       const total = cr?._count;

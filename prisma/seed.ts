@@ -1,4 +1,3 @@
-import axios from 'axios';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
@@ -33,11 +32,23 @@ async function main() {
       prismaLocal.$queryRaw(Prisma.sql`
       SET IDENTITY_INSERT dbo.users ON;
       INSERT INTO dbo.users(id,name,email,email_verified,image,roles,
-        created_at,updated_at,tags,country_of_origin,about_me,dashboard_type) 
+        created_at,updated_at,tags,country_of_origin,about_me,dashboard_type,password) 
       VALUES(${user.id},${user.name},${user.email},${user.emailVerified || ''},${user.image},${user.roles},
-        ${user.createdAt},${user.updatedAt},${user.tags},${user.countryOfOrigin},${user.aboutMe},${user.dashboardType});
+        ${user.createdAt},${user.updatedAt},${user.tags},${user.countryOfOrigin},${user.aboutMe},${user.dashboardType},${user.password});
       SET IDENTITY_INSERT dbo.users OFF;`)); 
   });
+
+  /***UserCustomData***/
+  const ucds = await prismaRemote.userCustomData.findMany();
+  ucds.forEach((ucd) => {
+    transactions.push(
+      prismaLocal.$queryRaw(Prisma.sql`
+      SET IDENTITY_INSERT dbo.UserCustomData ON;
+      INSERT INTO dbo.UserCustomData(id,name,password,identifier) 
+      VALUES(${ucd.id},${ucd.name},${ucd.password},${ucd.identifier});
+      SET IDENTITY_INSERT dbo.UserCustomData OFF;`)); 
+  });
+
 
   /***Account***/
   const accounts = await prismaRemote.account.findMany();
