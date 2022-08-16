@@ -1,6 +1,6 @@
 import React, { useState,ChangeEvent, useEffect  } from "react"
 import styles from './FilterEngine.module.css';
-
+import { Country } from "../types";
 import useTranslation from 'next-translate/useTranslation';
 
 import { Container, Row, Col, Form, OverlayTrigger, Popover, Button } from 'react-bootstrap';
@@ -17,14 +17,20 @@ const useFilterEngineCycles = ()=>{
 
     const [filtersType,setFiltersType]=useState<Record<string,boolean>>({private:true,public:true})
     const [filtersRegions,setFiltersRegions]=useState<Record<string,boolean>>({})
-    const [filtersCountries,setFiltersCountries]=useState<Record<string,boolean>>({})
+    const [filtersCountries,setFiltersCountries]=useState<string[]>([])
 
     const [onlyCountries,setOnlyCountries]=useState<string[]>([])
 
 
     const handlerComboxesChangeRegions = (e: ChangeEvent<HTMLInputElement>, q: string) => {
       const fc = {...filtersRegions, [`${q}`]: e.target.checked};
-      setFiltersRegions(fc);console.log(fc)
+      // let c = data.filter(i=>{
+      //   if(i.parent.code == q)return true;
+      // })
+      
+      console.log(countriesAll,q)
+      setFiltersRegions(fc);
+      console.log(fc)
     };
     
     const handlerComboxesChangeType = (e: ChangeEvent<HTMLInputElement>, q: string) => {
@@ -36,7 +42,10 @@ const useFilterEngineCycles = ()=>{
   
     const {data} = useCountries([...onlyCountries])
     const [countries,setCountries] = useState<string[]>([]);
-    const [countriesAll,setCountriesAll] = useState<{code:string,label:string}[]>(data?data.map((code:string)=>({code,label:code})):[]);
+    const [countriesAll,setCountriesAll] = useState<{code:string,label:string,parentCode:string}[]>([]);
+    useEffect(()=>{
+      if(data)setCountriesAll(data.map((d:Country)=>({code:d.code,label:d.code,parentCode:d.parent!.code})))
+    },[data])
 
     const getPopoverGeography = () => {
       return <Popover id='popover-geography' className="position-absolute top-0">
@@ -114,31 +123,32 @@ const useFilterEngineCycles = ()=>{
                     {/* <TagsInputTypeAhead data={countries} items={items} tags={tags} setTags={setTags} /> */}
                     <TagsInputTypeAhead
                       data={countriesAll}
-                      items={countries}
-                      setItems={setCountries}
+                      items={filtersCountries}
+                      setItems={setFiltersCountries}
                       max={5}
                       labelKey={(res) => `${t(`countries:${res.code}`)}`}
-                      onTagCreated={() => {
-                        // const onlyByCountries = [
-                        //   ...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items]),
-                        // ];
-                        // setGlobalSearchEngineState({
-                        //   ...globalSearchEngineState,
-                        //   ...{ onlyByCountries },
-                        // });
-                      }}
-                      onTagDeleted={(code) => {
-                        // const onlyByCountries = [
-                        //   ...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items]),
-                        // ];
-                        // const idxOBC = onlyByCountries.findIndex((i: string) => i === code);
-                        // onlyByCountries.splice(idxOBC, 1);
-                        // setGlobalSearchEngineState({
-                        //   ...globalSearchEngineState,
-                        //   ...{ onlyByCountries },
-                        // });
+                      // onTagCreated={() => {debugger;
+                      //   setFiltersCountries(countries)
+                      //   // const onlyByCountries = [
+                      //   //   ...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items]),
+                      //   // ];
+                      //   // setGlobalSearchEngineState({
+                      //   //   ...globalSearchEngineState,
+                      //   //   ...{ onlyByCountries },
+                      //   // });
+                      // }}
+                      // onTagDeleted={(code) => {
+                      //   // const onlyByCountries = [
+                      //   //   ...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items]),
+                      //   // ];
+                      //   // const idxOBC = onlyByCountries.findIndex((i: string) => i === code);
+                      //   // onlyByCountries.splice(idxOBC, 1);
+                      //   // setGlobalSearchEngineState({
+                      //   //   ...globalSearchEngineState,
+                      //   //   ...{ onlyByCountries },
+                      //   // });
 
-                      }}
+                      // }}
                     />
         </Popover.Body>
       </Popover>

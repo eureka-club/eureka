@@ -22,7 +22,7 @@ interface Props {
   worksData:{total:number,fetched:number,works:WorkMosaicItem[]};
   cyclesData:{total:number,fetched:number,cycles:CycleMosaicItem[]};
 }
-const SearchPage: NextPage<Props> = ({postsData,worksData,cyclesData}) => {
+const SearchPage: NextPage<Props> = ({postsData,worksData,cyclesData}) => {//TODO sacar estos props a favor de react-query dehydratedState
   const { t } = useTranslation('common');
   const router = useRouter();
 
@@ -177,7 +177,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       postsData,
       worksData,
       cyclesData,
-      // dehydratedState: dehydrate(qc),
+      // dehydratedState: dehydrate(qc), TODO esto hay q reactivarlo 
     },
   };
 };

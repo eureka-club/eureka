@@ -20,9 +20,12 @@ const SearchTabCycles: FunctionComponent<Props> = ({cyclesData}) => {
   const router = useRouter();
   const terms = router?.query.q?.toString()!.split(" ") || [];
 
-  
-  const baseProps = (terms:string[])=>{
-    return {
+  const {FilterEngineCycles,filtersType,filtersCountries} = useFilterEngineCycles()
+  console.log('filtersType',filtersType)
+  console.log('filtersCountries',filtersCountries)
+
+  const getProps = ()=>{
+    const res:Prisma.CycleWhereInput = {
       OR:[
         {
           AND:terms.map(t=>(
@@ -43,45 +46,64 @@ const SearchTabCycles: FunctionComponent<Props> = ({cyclesData}) => {
         {
           AND:terms.map(t=>(
             { 
-               tags: { contains: t } 
+                tags: { contains: t } 
             }
           ))
         },
         {
           AND:terms.map(t=>(
             { 
-               topics: { contains: t } 
+                topics: { contains: t } 
             }
           ))
         }
       ],
     }
+    if(filtersType){
+      const access = {
+        access:{
+          in:[
+            ...filtersType.public ? [1] : [],
+            ...filtersType.private ? [2] : [],
+          ]
+        }
+      }
+      res.AND = {...access};
+    }
+    if(filtersCountries && filtersCountries.length){
+      res.AND = {
+        creator:{
+          countryOfOrigin:{
+            in:filtersCountries
+          }
+        }
+      }
+    }
+    return res;
   };
 
-  const [props,setProps]=useState<Prisma.CycleFindManyArgs>({take,where:{...baseProps(terms)}})
+  const [props,setProps]=useState<Prisma.CycleFindManyArgs>({take,where:{...getProps()}})
+
   const {data:{total,fetched,cycles:c}={total:0,fetched:0,cycles:[]}} = useCycles(props,{enabled:!!router.query?.q});
   const [cycles,setCycles] = useState<CycleMosaicItem[]>([])
-  // const {total,fetched} = cyclesData;
+
+  useEffect(()=>{
+    let props: Prisma.CycleWhereInput|undefined = undefined;
+    if(router.query.q && (filtersType||(filtersCountries && filtersCountries.length))){
+      props = getProps();
+    }
+    if(props)
+      setProps(s=>({...s,where:{...props}}))
+  },[filtersType,filtersCountries,router.query.q])
 
   useEffect(()=>{
     if(c)setCycles(c)
   },[c])
 
-  // useEffect(()=>{
-  //   if(cyclesData.cycles)setCycles(cyclesData.cycles)
-  // },[cyclesData.cycles])
-
-  useEffect(()=>{
-    if(router.query.q){
-      const terms = router?.query.q?.toString()!.split(" ") || [];
-
-      setProps(()=>({take,where:{...baseProps(terms)}}))
-    }
-  },[router.query.q])
-
   const [ref, inView] = useInView({
     triggerOnce: false,
   });
+
   useEffect(()=>{
     if(inView && cycles.length < total){
       const fi = async ()=>{
@@ -92,31 +114,6 @@ const SearchTabCycles: FunctionComponent<Props> = ({cyclesData}) => {
       fi()
     }
   },[inView])
-
-  const {FilterEngineCycles,filtersType} = useFilterEngineCycles()
-  console.log('filtersType',filtersType)
-
-  useEffect(()=>{debugger;
-    if(filtersType){
-      const {OR} = baseProps(terms)
-      const access = {
-        access:{
-          in:[1,2,3]
-        }
-      }
-      
-      setProps(()=>({take,where:{
-        OR:[
-          ...OR,
-        ],
-        AND:{
-          ...access,
-        }
-      }}))
-    }
-  },[filtersType])
-
-
 
   const renderCycles=()=>{
     if(cycles)
