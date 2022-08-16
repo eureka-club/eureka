@@ -87,7 +87,8 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
       });
       if(res.ok){
         handleEditPostOnSmallerScreenClose();
-        toast.success( t('PostEdited'))
+        toast.success( t('PostEdited'));
+        router.push(`/${selectedCycle?'cycle':'work'}/${selectedCycle?selectedCycle.id:selectedWork!.id}/post/${post!.id}`)
       }
       return res.json();
     },
