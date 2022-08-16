@@ -324,7 +324,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
             <Col className='mb-4 d-flex justify-content-center justify-content-lg-start'>
               {<div className={styles.imageContainer}>{renderPhoto()}</div>}
               </Col>
-            <Col className='mb-4'>
+            <Col xs={12} md={8} className='mt-2 mb-4'>
                 {!showCrop && (<Button data-cy="image-load" variant="primary" className="w-100 text-white" onClick={() => setShowCrop(true)}>
                   {t('Image')}
                 </Button>
