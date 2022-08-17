@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import { CycleMosaicItem } from './types/cycle';
 import { PostMosaicItem } from './types/post';
 import { WorkMosaicItem } from './types/work';
@@ -20,13 +19,7 @@ const useMySaved = (id:number) => {
   };
 
   
-  // SFL.sort((f: Item, s: Item) => {
-  //   const fCD = dayjs(f.createdAt);
-  //   const sCD = dayjs(s.createdAt);
-  //   if (fCD.isAfter(sCD)) return -1;
-  //   if (fCD.isSame(sCD)) return 0;
-  //   return 1;
-  // });
+  
   return SFL;
 };
 
