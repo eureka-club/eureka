@@ -146,12 +146,12 @@
   "ExploreText":"Vous pouvez accéder à certains contenus sans compte",
   "ExploreTopics":"Trouvez des livres et des films sur des sujets tendances",
   "JoinEureka":"Rejoindre Eureka",
-  "Interest cycles": "Cycles d'intérêt",
-  "Featured Eurekas":"Eurêkas d'intérêt",
+  "Interest cycles": "Cycles populaires",
+  "Featured Eurekas":"Eurekas populaires",
   "search":"Chercher",
-  "myCycles":"Cycles créés ou rejoints par moi",
+  "myCycles":"Cycles que j'ai créés ou rejoints",
   "myPosts": "Mes Eurekas",
-  "myBooksMovies": "Mes notes: films et livres que j'ai regardés ou lus",
+  "myBooksMovies": "Mes notes: films et livres que j'ai vus ou lus",
   "mySaved": "Enregistré pour plus tard ou pour toujours",
   "myUsersFollowed": "Abonnements"
   }
