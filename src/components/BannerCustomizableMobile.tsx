@@ -5,6 +5,7 @@ import useTranslation from 'next-translate/useTranslation';
 import styles from './BannerCustomizable.module.css';
 import useBackOffice from '@/src/useBackOffice';
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
 const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
@@ -22,6 +23,9 @@ const BannerCustomizableMobile: FunctionComponent = ({
 }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
+  const {data:session, status} = useSession();
+  const isLoadingSession = status === "loading"
+
   const [show, setShow] = useState<boolean>(true);
   const {data:bo } = useBackOffice();
 
@@ -84,7 +88,10 @@ const BannerCustomizableMobile: FunctionComponent = ({
                       <h1 className="fs-3">{bo?.SlideTitle1}</h1>
                       <p className="p-0 mx-1 text-wrap fs-6">{bo?.SlideText1}</p>
                        <div className="d-flex  mt-2"> 
-                          <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button>
+                       {(!isLoadingSession && !session) 
+                            ? <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button> 
+                            : ''
+                          }
                       </div>
                     </div>
                   </div>
@@ -95,7 +102,10 @@ const BannerCustomizableMobile: FunctionComponent = ({
                       <h1 className="fs-3">{bo?.SlideTitle2}</h1>
                       <p className="p-0 mx-1 text-wrap fs-6">{bo?.SlideText2}</p>
                        <div className="d-flex mt-2"> 
-                          <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button>
+                       {(!isLoadingSession && !session) 
+                            ? <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button> 
+                            : ''
+                          }
                       </div>
                     </div>
                   </div>
@@ -106,7 +116,10 @@ const BannerCustomizableMobile: FunctionComponent = ({
                       <h1 className="fs-3">{bo?.SlideTitle3}</h1>
                       <p className="p-0 mx-1 text-wrap fs-6">{bo?.SlideText3}</p>
                        <div className="d-flex  mt-2"> 
-                          <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button>
+                       {(!isLoadingSession && !session) 
+                            ? <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button> 
+                            : ''
+                          }
                       </div>
                     </div>
                   </div>
