@@ -1,8 +1,8 @@
 import { useQuery } from 'react-query';
 import { backOfficeData } from '@/types/backoffice';
 
-export const getbackOfficeData = async (): Promise<backOfficeData|null> => {
-    const url = `/api/backoffice`;
+export const getbackOfficeData = async (origin?:string): Promise<backOfficeData|null> => {
+    const url = `${origin||''}/api/backoffice`;
     const res = await fetch(url, {method: 'GET'});
     if (!res.ok) return null;
     const result = await res.json();

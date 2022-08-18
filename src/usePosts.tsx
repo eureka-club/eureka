@@ -8,7 +8,7 @@ export const getPosts = async (
   origin=''
 ): Promise<{posts:PostMosaicItem[],fetched:number,total:number}> => {
   const query = props?`?props=${encodeURIComponent(JSON.stringify(props))}`:''
-  const url = `${origin}/api/post${query}`
+  const url = `${origin||''}/api/post${query}`
   const res = await fetch(url);
   if (!res.ok) return {posts:[],fetched:0,total:-1};
   const {data:posts,fetched,total} = await res.json();

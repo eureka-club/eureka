@@ -6,6 +6,7 @@ import getApiHandler from '@/src/lib/getApiHandler';
 import { find,create,update } from '@/src/facades/backoffice';
 import {storeDeleteFile, storeUploadPhoto} from '@/src/facades/fileUpload'
 import { backOfficeData } from '@/src/types/backoffice';
+import {cors,middleware} from '@/src/lib/cors'
 
 export const config = {
   api: {
@@ -21,6 +22,8 @@ export default getApiHandler()
       res.status(401).json({ status: 'Unauthorized' });
       return;
     }
+    await middleware(req,res,cors)
+
     new Form().parse(req, async function(err, fields:Record<string,any[]>, files) {
       if (err != null) {
         console.error(err); // eslint-disable-line no-console
@@ -119,8 +122,9 @@ export default getApiHandler()
     });
   })
 
- .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
+ .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {debugger;
   const session = (await getSession({ req })) as unknown as Session;
+  await middleware(req,res,cors)
 
     try {
       const backoffice =  await find({id:1});

@@ -7,7 +7,7 @@ export const getCycles = async (
   origin=''
 ): Promise<{cycles:CycleMosaicItem[],fetched:number,total:number}> => {
   const query = props?`?props=${encodeURIComponent(JSON.stringify(props))}`:''
-  const url = `${origin}/api/cycle${query}`
+  const url = `${origin||''}/api/cycle${query}`
   const res = await fetch(url);
   if (!res.ok) return {cycles:[],fetched:0,total:-1};
   const {data:cycles,fetched,total} = await res.json();
