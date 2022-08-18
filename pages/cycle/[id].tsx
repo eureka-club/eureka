@@ -96,7 +96,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
   const requestJoinCycle = async () => {
     if (!session) openSignInModal();
     else if (cycle) {
-      execJoinCycle();      
+      execJoinCycle();       
     }
   };
 
