@@ -110,11 +110,8 @@ export default getApiHandler()
 
       let OR = undefined;
       if(session){
-        OR = [
-          {
-            isPublic:true,
-          },
-          {
+        where = {...where,
+          AND:{
             cycles:{
               some:{
                 OR:[
@@ -124,44 +121,40 @@ export default getApiHandler()
                 ]
               }
             }
-          },
-          {
-            cycles:{none:{}}
+
           }
-        ]
+      }
       }
       else{
-        OR = [
-          {
-            isPublic:true
-          },
-          {
+        where = {...where,
+          AND:{
             cycles:{
               some:{
                 access:1,
               }
             }
+
           }
-        ]
-      }
-      if(where.OR){
-        const whereOR = [...(where.OR as Array<Prisma.PostWhereInput>)];
-        delete where.OR;
-        where = {
-          ...where,
-          OR:[...whereOR,...OR]
-        }   
-      }
-      else{
-        where = {
-          ...where,
-          OR
         }
       }
-      
+      // if(where.OR){
+      //   const whereOR = [...(where.OR as Array<Prisma.PostWhereInput>)];
+      //   delete where.OR;
+      //   where = {
+      //     ...where,
+      //     OR:[...whereOR,...OR]
+      //   }   
+      // }
+      // else{
+      //   where = {
+      //     ...where,
+      //     OR
+      //   }
+      // }
 
       let cr = await prisma?.post.aggregate({where,_count:true})
       const total = cr?._count;
+      
       let data = await findAll({select,take,where,skip,cursor});
 
       data.forEach(p=>{
