@@ -1,0 +1,23 @@
+import { defineConfig } from "cypress";
+
+export default defineConfig({
+  component: {
+    setupNodeEvents(on, config) {},
+    viewportHeight: 500,
+    viewportWidth: 700,
+    excludeSpecPattern: ["**/examples/**/*.spec.js"],
+    specPattern: "src/**/*.spec.{js,jsx,ts,tsx}",
+    devServer: {
+      framework: 'next',
+      bundler: 'webpack',
+    },
+  },
+
+  e2e: {
+    setupNodeEvents(on, config) {
+      // implement node event listeners here
+    },
+    baseUrl: 'http://localhost:3000',
+  },
+  execTimeout:6000
+});
