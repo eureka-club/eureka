@@ -58,9 +58,8 @@ const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, cl
     showSocialInteraction = true,
   ) => {
     if (isCycleMosaicItem(item)) {
-      // eslint-disable-next-line react/jsx-props-no-spreading
       return (
-        <CycleContext.Provider key={`cycle-${v4()}`} value={{ cycle: item as CycleMosaicItem }}>
+        <CycleContext.Provider key={`cycle-${item.id}`} value={{ cycle: item as CycleMosaicItem }}>
           <MosaicItemCycle
             cycleId={item.id}
             detailed
@@ -73,7 +72,7 @@ const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, cl
       );
     }
     if (isPostMosaicItem(item) || item.type === 'post') {
-      return <MosaicItemPost cacheKey={['POST', `${item.id}`]} key={`post-${v4()}`} postId={item.id} />;
+      return <MosaicItemPost cacheKey={['POST', `${item.id}`]} key={`post-${item.id}`} postId={item.id} />;
     }
     if (isWorkMosaicItem(item)) {
       // eslint-disable-next-line react/jsx-props-no-spreading
@@ -82,7 +81,7 @@ const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, cl
           showSocialInteraction
           showShare={false}
           showButtonLabels={false}
-          key={`work-${v4()}`}
+          key={`work-${item.id}`}
           workId={item.id}
           cacheKey={['WORK', `${item.id}`]}
         />
@@ -93,35 +92,18 @@ const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, cl
   };
 
   const buildMosaics = () => {
-    const result: JSX.Element[] = [];
+    let result: JSX.Element = <></>;
     if (apiResponse && apiResponse.data) {
-      // data.pages.forEach((page, idx) => {
       const mosaics = apiResponse.data.map((i: CycleMosaicItem | WorkMosaicItem, idx:number) => {
-        return <div key={`${v4()}`} className="mx-2">
+        return <div key={`${i.type}-${i.id}`} className="mx-2">
             {renderMosaicItem(i,undefined, topic, page.toString())}
           </div>
       });
-      const res = (
-        
-        <div key={v4()} className="d-flex flex-nowrap w-100 justify-content-xl-left">
+      result = <div className="d-flex flex-nowrap w-100 justify-content-xl-left">
           {mosaics}
         </div>
-      );
-      result.push(res);
     }
     return result;
-  };
-
-  const getWhere = () => {
-    const where = encodeURIComponent(
-      JSON.stringify({
-        ...(topic !== 'uncategorized' && { topics: { contains: topic } }),
-        ...(topic === 'uncategorized' && {
-          OR: [{ topics: { equals: null } }, { topics: { equals: '' } }],
-        }),
-      }),
-    );
-    return where;
   };
 
   const onItemsFound = async () => {
