@@ -123,7 +123,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
             content={
               <aside className="text-center text-white">
                 <h2 className="h2">
-                Participa en nuestra conversación y aporta para construir una Internet diversa, feminista y saludable.
+                Participa en nuestra conversación y aporta para construir espacios digitales para toda la diversidad de cuerpos e identidades
                 </h2>
                 <p>22 de agosto - 14 de octubre</p>
                 <div className="d-grid gap-2">
