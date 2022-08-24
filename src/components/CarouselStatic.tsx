@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent /* , ChangeEvent */, useState, useEffect } from 'react';
-import { Button, Row, Col } from 'react-bootstrap';
+import { Button, Row, Col, Spinner } from 'react-bootstrap';
 import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
 import { v4 } from 'uuid';
 import globalSearchEngineAtom from '../atoms/searchEngine';
@@ -97,6 +97,8 @@ const CarouselStatic: FunctionComponent<Props> = ({
   const [show, setShow] = useState<Item[]>([]);
   const [hide, setHide] = useState<Item[]>([]);
   const [dataFiltered, setDataFiltered] = useState<Item[]>([]);
+  const [isRedirecting, setIsRedirecting] = useState(false);
+
 
   const [globalSEState] = useAtom(globalSearchEngineAtom);
   useEffect(() => {
@@ -178,6 +180,12 @@ const CarouselStatic: FunctionComponent<Props> = ({
     return result;
   };
 
+  const handlerSeeAll = ()=>{
+    setIsRedirecting(true)
+    if(onSeeAll)
+      onSeeAll()
+  }
+
   return (
     (
       <>
@@ -192,18 +200,15 @@ const CarouselStatic: FunctionComponent<Props> = ({
                 </h1>
               </Col>
               <Col xs={3} className="d-flex justify-content-end">
-                {seeAll && dataFiltered.length && (
-                  // <Button className={`${styles.seeAllButton}`} onClick={onSeeAll}>
-                  //   {t('common:See all')}
-                  // </Button>
-                  <span
+                {seeAll && dataFiltered.length && <>
+                  {!isRedirecting ? <span
                     className={`cursor-pointer text-primary ${styles.seeAllButton}`}
                     role="presentation"
-                    onClick={onSeeAll}
+                    onClick={handlerSeeAll}
                   >
                     {t('common:See all')}
-                  </span>
-                )}
+                  </span> : <Spinner animation='grow' />}
+                  </>}
               </Col>
             </Row>
             <div className="carousel d-flex justify-content-center">{buildMosaics()}</div>
