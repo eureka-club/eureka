@@ -54,7 +54,7 @@ stages:
           restoreKeys: cypress | $(Agent.OS) | yarn.lock
         displayName: Cache Cypress binary
 
-      - script: yarn ci
+      - script: yarn install --frozen-lockfile
         displayName: 'Install NPM dependencies'
 
       - script: yarn cy:verify
