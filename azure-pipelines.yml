@@ -60,8 +60,5 @@ stages:
       - script: yarn cy:verify
         displayName: 'Cypress verify'
 
-      # The next command starts the server and runs Cypress end-to-end tests against it.
-      # The test artifacts (video, screenshots, test output) will be uploaded to Cypress dashboard
-      # To record on Cypress dashboard we need to set CYPRESS_RECORD_KEY environment variable
-      - script: yarn test:ci:record
+      - script: yarn test:ci
         displayName: 'Run Cypress tests'      
