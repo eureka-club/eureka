@@ -20,36 +20,12 @@ variables:
   vmImageName: 'ubuntu-latest'
 
 stages:
-- stage: Build
-  displayName: Build and push stage
-  jobs:
-
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: $(vmImageName)
-    steps:
-    - task: Docker@2
-      inputs:
-        containerRegistry: 'eurekastaging'
-        repository: 'eurekacr'
-        command: 'build'
-        Dockerfile: '**/Dockerfile'
-        arguments: '--build-arg DATABASE_URL=$(DATABASE_URL) NEXT_PUBLIC_AZURE_CDN_ENDPOINT=$(NEXT_PUBLIC_AZURE_CDN_ENDPOINT)'
-        tags: |
-          $(Build.BuildId)
-          latest      
-    - task: Docker@2
-      inputs:
-        containerRegistry: 'eurekastaging'
-        repository: 'eurekacr'
-        command: 'push'
-        tags: |
-          $(Build.BuildId)
-          latest
 
 
     # Job names can contain alphanumeric characters and '_', cannot start with a number
+- stage: Tests
+  displayName: Cypress Tests
+  jobs:  
   - job: Cypress_e2e_tests
     pool:
       vmImage: 'ubuntu-latest'
@@ -57,7 +33,6 @@ stages:
       - task: NodeTool@0
         inputs:
           versionSpec: '12.x'
-          displayName: 'Install Node.js'
 
       # NPM modules and Cypress binary should be cached
       # otherwise the install will be too slow
