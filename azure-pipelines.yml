@@ -23,7 +23,7 @@ stages:
 - stage: Build 
   displayName: Build next docker image
   jobs:
-  - job: Build_next_docker_image
+  - job: Build_nextjs_docker_image
     pool:
       vmImage: 'ubuntu-latest'
     steps:  
@@ -76,3 +76,18 @@ stages:
 
       - script: yarn test:ci
         displayName: 'Run Cypress tests'      
+- stage: Deploy 
+  displayName: Build next docker image
+  jobs:
+  - job: Build_next_docker_image
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+      - task: Docker@2
+        inputs:
+          containerRegistry: 'eurekastaging'
+          repository: 'eurekacr'
+          command: 'push'
+          tags: |
+            $(Build.BuildId)
+            latest
