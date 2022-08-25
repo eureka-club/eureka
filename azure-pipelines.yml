@@ -20,74 +20,21 @@ variables:
   vmImageName: 'ubuntu-latest'
 
 stages:
-- stage: Build 
-  displayName: Build next docker image
+- stage: Build
+  displayName: Build and push stage
   jobs:
-  - job: Build_nextjs_docker_image
+  - job: Build
+    displayName: Build
     pool:
-      vmImage: 'ubuntu-latest'
-    steps:  
-      - task: Docker@2
-        inputs:
-          containerRegistry: 'eurekastaging'
-          repository: 'eurekacr'
-          command: 'build'
-          Dockerfile: '**/Dockerfile'
-          tags: |
-            $(Build.BuildId)
-            latest
-          arguments: '--build-arg DATABASE_URL=$(DATABASE_URL)  --build-arg NEXT_PUBLIC_AZURE_CDN_ENDPOINT=$(NEXT_PUBLIC_AZURE_CDN_ENDPOINT) --build-arg  NEXT_PUBLIC_WEBAPP_URL=$(NEXT_PUBLIC_WEBAPP_URL) --build-arg NEXT_PUBLIC_PUBLIC_ASSETS_STORAGE_MECHANISM=$(NEXT_PUBLIC_PUBLIC_ASSETS_STORAGE_MECHANISM)'
-- stage: Tests
-  displayName: Cypress Tests
-  jobs:  
-  - job: Cypress_e2e_tests
-    pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: $(vmImageName)
     steps:
-      - task: NodeTool@0
-        inputs:
-          versionSpec: '14.x'
-
-      # NPM modules and Cypress binary should be cached
-      # otherwise the install will be too slow
-      # https://docs.microsoft.com/en-us/azure/devops/pipelines/caching/?view=azure-devops
-      # since the username / user home directory are not available via system variables
-      # (there is even an open question about it)
-      # https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops
-      # just use "/home/vsts" for now
-      - task: CacheBeta@1
-        inputs:
-          key: yarn | $(Agent.OS) | yarn.lock
-          path: /home/vsts/.yarn
-          restoreKeys: yarn | $(Agent.OS) | yarn.lock
-        displayName: Cache NPM packages
-      - task: CacheBeta@1
-        inputs:
-          key: cypress | $(Agent.OS) | yarn.lock
-          path: /home/vsts/.cache/Cypress
-          restoreKeys: cypress | $(Agent.OS) | yarn.lock
-        displayName: Cache Cypress binary
-
-      - script: yarn install --frozen-lockfile
-        displayName: 'Install NPM dependencies'
-
-      - script: yarn cy:verify
-        displayName: 'Cypress verify'
-
-      - script: yarn test:ci
-        displayName: 'Run Cypress tests'      
-- stage: Deploy 
-  displayName: Build next docker image
-  jobs:
-  - job: Build_next_docker_image
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-      - task: Docker@2
-        inputs:
-          containerRegistry: 'eurekastaging'
-          repository: 'eurekacr'
-          command: 'push'
-          tags: |
-            $(Build.BuildId)
-            latest
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'eurekacr'
+        repository: 'eurekastaging'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+        arguments: '--build-arg DATABASE_URL=$(DATABASE_URL) NEXT_PUBLIC_AZURE_CDN_ENDPOINT=$(NEXT_PUBLIC_AZURE_CDN_ENDPOINT)'
+        tags: |
+          $(Build.BuildId)
+          latest      
