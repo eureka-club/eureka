@@ -47,7 +47,13 @@ stages:
           $(Build.BuildId)
           latest
 
+
+
+
     # Job names can contain alphanumeric characters and '_', cannot start with a number
+- stage: test
+  displayName: Cypress Tests
+  jobs:  
   - job: Cypress_e2e_tests
     pool:
       vmImage: 'ubuntu-latest'
