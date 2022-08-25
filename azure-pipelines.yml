@@ -32,7 +32,7 @@ stages:
     steps:
       - task: NodeTool@0
         inputs:
-          versionSpec: '12.x'
+          versionSpec: '14.x'
 
       # NPM modules and Cypress binary should be cached
       # otherwise the install will be too slow
