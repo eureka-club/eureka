@@ -20,9 +20,23 @@ variables:
   vmImageName: 'ubuntu-latest'
 
 stages:
-
-
-    # Job names can contain alphanumeric characters and '_', cannot start with a number
+- stage: Build 
+  displayName: Build next docker image
+  jobs:
+  - job: Build_next_docker_image
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:  
+      - task: Docker@2
+        inputs:
+          containerRegistry: 'eurekastaging'
+          repository: 'eurekacr'
+          command: 'build'
+          Dockerfile: '**/Dockerfile'
+          tags: |
+            $(Build.BuildId)
+            latest
+          arguments: '--build-arg DATABASE_URL=$(DATABASE_URL)  --build-arg NEXT_PUBLIC_AZURE_CDN_ENDPOINT=$(NEXT_PUBLIC_AZURE_CDN_ENDPOINT) --build-arg  NEXT_PUBLIC_WEBAPP_URL=$(NEXT_PUBLIC_WEBAPP_URL) --build-arg NEXT_PUBLIC_PUBLIC_ASSETS_STORAGE_MECHANISM=$(NEXT_PUBLIC_PUBLIC_ASSETS_STORAGE_MECHANISM)'
 - stage: Tests
   displayName: Cypress Tests
   jobs:  
