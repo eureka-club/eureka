@@ -16,7 +16,7 @@
     "tsc": "tsc --noEmit",
     "e2e": "cypress run",
     "e2e:record": "cypress run --record",
-    "test:ci": "run-p --race start e2e",
+    "test:ci": "npm-run-all -p --race start e2e",
     "test:ci:record": "npm-run-all -p --race start e2e:record",
     "cy:verify": "cypress verify",
     "cy:info": "cypress info",
