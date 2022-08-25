@@ -43,9 +43,9 @@ stages:
       # just use "/home/vsts" for now
       - task: CacheBeta@1
         inputs:
-          key: npm | $(Agent.OS) | yarn.lock
-          path: /home/vsts/.npm
-          restoreKeys: npm | $(Agent.OS) | yarn.lock
+          key: yarn | $(Agent.OS) | yarn.lock
+          path: /home/vsts/.yarn
+          restoreKeys: yarn | $(Agent.OS) | yarn.lock
         displayName: Cache NPM packages
       - task: CacheBeta@1
         inputs:
@@ -54,14 +54,14 @@ stages:
           restoreKeys: cypress | $(Agent.OS) | yarn.lock
         displayName: Cache Cypress binary
 
-      - script: npm ci
+      - script: yarn ci
         displayName: 'Install NPM dependencies'
 
-      - script: npm run cy:verify
+      - script: yarn cy:verify
         displayName: 'Cypress verify'
 
       # The next command starts the server and runs Cypress end-to-end tests against it.
       # The test artifacts (video, screenshots, test output) will be uploaded to Cypress dashboard
       # To record on Cypress dashboard we need to set CYPRESS_RECORD_KEY environment variable
-      - script: npm run test:ci:record
+      - script: yarn test:ci:record
         displayName: 'Run Cypress tests'      
