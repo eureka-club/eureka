@@ -37,7 +37,7 @@ const validateReq = async (
 };
 
 export default getApiHandler()
-  .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
+  .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {debugger;
     const session = (await getSession({ req })) as unknown as Session;
     const { id, socialInteraction } = req.query;
     const { qty, notificationMessage,notificationContextURL,notificationToUsers } = req.body;
@@ -54,7 +54,7 @@ export default getApiHandler()
       }
 
       // @ts-ignore arguments checked in validateReq()
-      await saveSocialInteraction(cycle, session.user, socialInteraction, true, qty);
+      let cycleRes = await saveSocialInteraction(cycle, session.user, socialInteraction, true, qty);
       const notification = await create(
         notificationMessage,
         notificationContextURL,
@@ -64,7 +64,7 @@ export default getApiHandler()
 
       
       // await redis.flushall();
-      res.status(200).json({ status: 'OK' });
+      res.status(200).json({ status: 'OK', cycle:cycleRes });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
       res.status(500).json({ status: 'server error' });
