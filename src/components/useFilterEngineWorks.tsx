@@ -16,7 +16,6 @@ const useFilterEngineWorks = ()=>{
         types.forEach((ty: string) => {
             setFiltersChecked((res) => ({ ...res, [`${ty}`]: !res[`${ty}`] }));
         });
-           console.log(filtersChecked) 
       };
     
 

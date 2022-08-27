@@ -1,9 +1,7 @@
 import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, MouseEvent, FunctionComponent, useEffect, useRef, useState } from 'react';
-import Image from 'next/image'
 import { Button, Col, Row, ButtonGroup, Form, Spinner } from 'react-bootstrap';
-import { useAtom } from 'jotai';
 import { Post } from '@prisma/client';
 
 import { BsCheck } from 'react-icons/bs';
@@ -12,8 +10,6 @@ import { ImCancelCircle } from 'react-icons/im';
 import { useMutation, useQueryClient } from 'react-query';
 
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
-import globalModalsAtom from '../../atoms/globalModals';
-// import { Session } from '../../types';
 import { WorkMosaicItem } from '../../types/work';
 import { CreatePostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
 
@@ -55,7 +51,6 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
   const router = useRouter();
   const {data:session} = useSession();
   const { t } = useTranslation('cycleDetail');
-  //const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [newEurekaImageFile, setNewEurekaImageFile] = useState<File | null>(null);
   const { data: topics } = useTopics();
   const [eurekaTopics, setEurekaTopics] = useState<string[]>([]);

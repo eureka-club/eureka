@@ -6,4 +6,5 @@
 //     : process.env.UPSTASH_REDIS_REST_URL;
 // const client = new Redis(url);
 // export default client;
-export default {}
+const res = {}
+export default res;

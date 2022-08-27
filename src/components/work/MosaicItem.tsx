@@ -1,32 +1,21 @@
-// import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent /*  useEffect, useState */, useEffect, useState } from 'react';
+import { FunctionComponent, useState } from 'react';
 import { Card, Badge, Spinner } from 'react-bootstrap';
-// import { MySocialInfo } from '@/src/types';
-// import { PostDetail } from '../../types/post';
-import { useQuery,useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
-// import { useSession } from 'next-auth/react';
 import { CgMediaLive } from 'react-icons/cg';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import isBetween from 'dayjs/plugin/isBetween';
-import { CycleMosaicItem } from '../../types/cycle';
-import { /* WorkWithImages, */ WorkMosaicItem } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import SocialInteraction from '../common/SocialInteraction';
-// import { Session } from '../../types';
 import { useCycleContext } from '../../useCycleContext';
-// import { useWorkContext } from '../../useWorkContext';
 import { DATE_FORMAT_SHORT } from '../../constants';
 import useWork from '@/src/useWork'
-// import usePosts from '@/src/usePosts'
 
 dayjs.extend(isBetween);
 dayjs.extend(utc);
 interface Props {
-  // workWithImages: WorkWithImages;
   workId: number;
   showButtonLabels?: boolean;
   showShare?: boolean;
@@ -37,12 +26,10 @@ interface Props {
   linkToWork?: boolean;
   tiny?: boolean;
   className?:string;
-  // isOnDiscussion?: boolean;
 }
 const MosaicItem: FunctionComponent<Props> = ({
   workId,
   showButtonLabels = false,
-  // showShare = false,
   showSocialInteraction = true,
   style = undefined,
   cacheKey = undefined,
@@ -50,45 +37,20 @@ const MosaicItem: FunctionComponent<Props> = ({
   linkToWork = true,
   tiny = false,
   className = '',
-  // isOnDiscussion = false,
 }) => {
   const { t } = useTranslation('common');
-  const queryClient = useQueryClient()
   const {cycle} = useCycleContext();
-  // const [cycle, setCycle] = useState<CycleMosaicItem | null>();
-  // useEffect(() => {
-  //   if (cycleContext) setCycle(cycleContext.cycle);
-  // }, [cycleContext]);
   const [loading, setLoading] = useState<boolean>(false);
-  // const { linkToWork = true, work: workFromContext } = useWorkContext();
-  // const [WORK] = useState<WorkMosaicItem>(work!);
   const router = useRouter();
   
   const {data:work} = useWork(workId,{
     enabled:!!workId
   })
 
-  // const workPostsWhere = {
-  //   works:{
-  //     some:{
-  //       id:workId
-  //     }
-  //   }
-  // };
-  // const {data:posts} = usePosts(workPostsWhere,{enabled:!!workId})
-
-  
-  // useEffect(()=>{
-  //   if(work && work.posts){
-  //     work.posts.forEach(p => {
-  //       queryClient.setQueryData(['POST',`${p.id}`],p)
-  //     });
-  //   }
-  // },[work,queryClient])
   
   if(!work)return <></>
   
-  const { id, /* author, */ title, localImages, type } = work;
+  const { id, title, localImages, type } = work;
 
   const isActive = () => {
     if (cycle && cycle.cycleWorksDates) {
@@ -114,9 +76,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           if (cw.endDate) {
             const sd = cw.startDate ? dayjs(cw.startDate).utc().format(DATE_FORMAT_SHORT) : '-';
             const ed = dayjs(cw.endDate).utc().format(DATE_FORMAT_SHORT);
-
             const isPast = dayjs().isAfter(cw.endDate);
-
             const res = () => {
               const dateOut = (
                 <span>
@@ -157,15 +117,6 @@ const MosaicItem: FunctionComponent<Props> = ({
     return <></>;
   };
 
-
-  // const [work, setWork] = useState<WorkDetail>();
-  // const s
-  // const { data: workData } = useQuery(['WORKS', id]);
-  // useEffect(() => {
-  //   if (workData) {
-  //     setWork(workData as WorkDetail);
-  //   }
-  // }, [workData]);
   const canNavigate = () => {
     return !loading;
   };
@@ -185,12 +136,8 @@ const MosaicItem: FunctionComponent<Props> = ({
           role="presentation"
           style={style}
         >
-          {/* <Link href={`/work/${id}`}> */}
-          {/* <a className={`cursor-pointer ${!loading ? 'pe-auto' : ''}`} aria-disabled="true"> */}
           {!canNavigate() && <Spinner className="position-absolute top-50 start-50" animation="grow" variant="info" />}
           {img}
-          {/* </a> */}
-          {/* </Link> */}
         </div>
       );
     }
@@ -202,7 +149,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         {renderLocalImageComponent()}
         {isActive() && <CgMediaLive className={`${styles.isActiveCircle}`} />}
         <Badge bg="orange" className={`fw-normal fs-6 text-black px-2 rounded-pill ${styles.type}`}>
-          {t(type)}
+          {type ? t(type) : '...'}
         </Badge>
       </div>
       {renderOngoinOrUpcomingDate()}

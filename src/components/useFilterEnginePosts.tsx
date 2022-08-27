@@ -16,7 +16,6 @@ const useFilterEnginePosts = ()=>{
         types.forEach((ty: string) => {
             setFiltersChecked((res) => ({ ...res, [`${ty}`]: !res[`${ty}`] }));
         });
-           console.log(filtersChecked) 
       };
     
 
