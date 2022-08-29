@@ -10,7 +10,7 @@ import { useSession } from 'next-auth/react';
 // import Rating from 'react-rating';
 import Rating from '@/components/common/Rating'
 
-import { Popover, Button, Spinner } from 'react-bootstrap';
+import { OverlayTrigger,Popover, Button, Spinner } from 'react-bootstrap';
 
 import {
   FacebookIcon,
@@ -403,19 +403,20 @@ const SocialInteraction: FunctionComponent<Props> = ({
              <div className='mt-1 ms-1 me-2'> <Spinner className={styles.ratingSpinner} size="sm" animation="grow" variant="info" /></div>
             )}
         {ss && (
-          <div className="ms-auto position-relative">
+          <div className="ms-auto">
+            <OverlayTrigger trigger="focus" placement="top" overlay={popoverShares}>
               <Button
+                // style={{ fontSize: '.9em' }}
                 title={t('Share')}
                 variant="link"
                 className={`${styles.buttonSI} fs-6 p-0 text-primary`}
                 disabled={loadingSocialInteraction}
-                onClick={()=>{setShowShare(ss=>!ss);console.log('done',showShare)}}
               >
                 <FiShare2 />
                 <br />
                 {showButtonLabels && <span className={classnames(styles.info, styles.active)}>{t('Share')}</span>}
               </Button>
-            {showShare && <div className="position-absolute botton-0 start-50">{popoverShares}</div>}
+            </OverlayTrigger>
           </div>
         )}
         <div className={`${ss ? 'ms-1' : 'ms-auto'}`}>
