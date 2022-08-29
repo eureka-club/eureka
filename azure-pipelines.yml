@@ -38,11 +38,4 @@ stages:
         tags: |
           $(Build.BuildId)
           latest      
-    - task: Docker@2
-      inputs:
-        containerRegistry: 'eurekacr'
-        repository: 'eurekastaging'
-        command: 'push'
-        tags: |
-          $(Build.BuildId)
-          latest
+    
