@@ -86,21 +86,21 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
   const {data:dataPosts} = usePosts(workPostsWhere,{enabled:!!workId})//OJO this trigger just once -load the same data that page does
   const [posts,setPosts] = useState(dataPosts?.posts)
   const [cycles,setCycles] = useState(dataCycles?.cycles)
-  const [defaultActiveKey,setDefaultActiveKey] = useState<string>('')
+  const [defaultActiveKey,setDefaultActiveKey] = useState<string>('posts')
 
   const [hasMorePosts,setHasMorePosts] = useState(dataPosts?.fetched);
   useEffect(()=>{
     if(dataPosts && dataPosts.posts){
       setHasMorePosts(dataPosts.fetched)
       setPosts(dataPosts.posts)
-      if(dataPosts.posts.length)setDefaultActiveKey('posts')
+      //if(dataPosts.posts.length)setDefaultActiveKey('posts')
     }
   },[dataPosts])
 
   useEffect(()=>{
     if(dataCycles && dataCycles.cycles){
       setCycles(dataCycles.cycles)
-      if(dataCycles.cycles.length)setDefaultActiveKey('cycles')
+      //if(dataCycles.cycles.length)setDefaultActiveKey('cycles')
     }
   },[dataCycles])
 
