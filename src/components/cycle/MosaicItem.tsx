@@ -136,7 +136,12 @@ const MosaicItem: FunctionComponent<Props> = ({
     mutate: execLeaveCycle,
     isLoading: isLeaveCycleLoading,
     // isSuccess: isLeaveCycleSuccess,
-  } = useLeaveUserFromCycleAction(user!,cycle!,participants!);
+  } = useLeaveUserFromCycleAction(user!,cycle!,participants!,(_data,error)=>{
+    if(!error) 
+        toast.success(t('OK'));
+    else
+      toast.error(t('Internal Server Error'));
+});
 
   const isPending = ()=> isLoadingSession || isFetchingCycle>0 || isJoinCycleLoading || isLeaveCycleLoading;
 
