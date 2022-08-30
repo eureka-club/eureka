@@ -112,15 +112,25 @@ export default getApiHandler()
       if(session){
         where = {...where,
           AND:{
-            cycles:{
-              some:{
-                OR:[
-                  {access:1},
-                  {creatorId:session?.user.id},
-                  {participants:{some:{id:session?.user.id}}},  
-                ]
+            OR:[
+              {
+                cycles:{
+                  some:{
+                    OR:[
+                      {access:1},
+                      {creatorId:session?.user.id},
+                      {participants:{some:{id:session?.user.id}}},  
+                    ]
+                  }
+                }
+              },
+              {
+                cycles:{
+                  none:{}
+                }
               }
-            }
+            ]
+            
 
           }
       }
@@ -128,11 +138,21 @@ export default getApiHandler()
       else{
         where = {...where,
           AND:{
-            cycles:{
-              some:{
-                access:1,
+            OR:[
+              {
+                cycles:{
+                  some:{
+                    access:1,
+                  }
+                }
+
+              },
+              {
+                cycles:{
+                  none:{}
+                }
               }
-            }
+            ]
 
           }
         }
@@ -177,3 +197,4 @@ export default getApiHandler()
       //prisma.$disconnect();
     }
   });
+
