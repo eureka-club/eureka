@@ -38,3 +38,4 @@ stages:
         tags: |
           $(Build.BuildId)
           latest      
+    
