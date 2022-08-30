@@ -233,7 +233,7 @@ const Mediatheque: NextPage<Props> = ({id}) => {
   
   const readOrWatched = () => {
     if (user && user.ratingWorks && user.ratingWorks.length) {
-      const RW = user.ratingWorks.filter(rw=>rw.work).map((w) => w.work as WorkMosaicItem).sort((a,b)=>a.id > b.id ? -1 : 1)
+      const RW = user.ratingWorks.filter(rw=>rw.work).map((w) => w.work as WorkMosaicItem).sort((a,b)=>a.createdAt > b.createdAt ? -1 : 1)
       return (
         <CarouselStatic
           cacheKey={['MEDIATHEQUE-WATCHED',`USER-${user.id}`]}
