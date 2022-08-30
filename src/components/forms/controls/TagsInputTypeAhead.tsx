@@ -1,4 +1,4 @@
-import { FunctionComponent, /* useState, useEffect, */ useRef } from 'react';
+import { FunctionComponent, /* useState, useEffect, */ useRef, Dispatch, SetStateAction } from 'react';
 // import FormControl from 'react-bootstrap/FormControl';
 import { Form, Badge, InputGroup } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
@@ -19,7 +19,7 @@ export type TagsInputProp = {
   readOnly?: boolean | null;
   data: { code: string; label: string }[];
   items: string[];
-  setItems: (value: string[]) => void;
+  setItems: Dispatch<SetStateAction<string[]>>;
   max?: number;
   onTagCreated?: (e: { code: string; label: string }) => void;
   onTagDeleted?: (code: string) => void;
@@ -114,49 +114,53 @@ const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputPr
   //   setSearchWorkOrCycleResults(items);
   //   setIsSearchWorkOrCycleLoading(false);
   // };
+  const renderItems = ()=>{
+    return items.length 
+    ? items.map((v, idx) => {
+      return (
+        <span key={`${idx + 1}$q{t}`}>
+          <Badge 
+          className="fw-light fs-6 cursor-pointer"
+          pill
+          bg="secondary px-2 py-1 mb-1 me-1"
+          >
+            {formatValue ? formatValue(v) : v}{' '}
+            {!readOnly && (
+              <Badge className="bg-warning text-withe rounded-pill ms-2" style={{ cursor: 'pointer' }} onClick={(e) => deleteTag(e,idx)} pill bg="default">
+                X
+              </Badge>
+            )}
+          </Badge>{' '}
+        </span>
+      );
+    })
+    : <></>
+  }
+  const renderInput = ()=>{
 
+    if(!readOnly && items.length < max && data && data.length){
+      return <InputGroup style={style}>
+      <Typeahead
+        ref={ref}
+        id="TagsInputTypeAhead"
+        filterBy={['label']}
+        labelKey={(res: { code: string }) => (labelKey ? labelKey(res) : `${t(`${res.code}`)}`)}
+        onChange={onNewTagAdded}
+        // onKeyPress={onKeyPressOnInput}
+        options={data}
+        className={'w-100'}
+        placeholder={placeholder}
+      />
+    </InputGroup>
+    }
+     return <></> 
+  }
   return (
     <Form.Group controlId="tags" className={`${className}`}>
       {label && <Form.Label>{label}</Form.Label>}
       <div>
-        {items.map((v, idx) => {
-          return (
-            <span key={`${idx + 1}$q{t}`}>
-              <Badge 
-              className="fw-light fs-6 cursor-pointer"
-              pill
-              bg="secondary px-2 py-1 mb-1 me-1"
-              >
-                {formatValue ? formatValue(v) : v}{' '}
-                {!readOnly && (
-                  <Badge className="bg-warning text-withe rounded-pill ms-2" style={{ cursor: 'pointer' }} onClick={(e) => deleteTag(e,idx)} pill bg="default">
-                    X
-                  </Badge>
-                )}
-              </Badge>{' '}
-            </span>
-          );
-        })}
-        {!readOnly && items.length < max && data && data.length && (
-          <InputGroup style={style}>
-            <Typeahead
-              ref={ref}
-              id="TagsInputTypeAhead"
-              filterBy={['label']}
-              labelKey={(res: { code: string }) => (labelKey ? labelKey(res) : `${t(`${res.code}`)}`)}
-              onChange={onNewTagAdded}
-              // onKeyPress={onKeyPressOnInput}
-              options={data}
-              className={'w-100'}
-              placeholder={placeholder}
-            />
-            {/* <InputGroup.Append className={styles.searchButton}>
-              
-              <AiOutlineSearch onClick={() => ({})} />
-              
-            </InputGroup.Append> */}
-          </InputGroup>
-        )}
+        {renderItems()}
+        {renderInput()}
       </div>
     </Form.Group>
   );

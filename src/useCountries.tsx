@@ -1,7 +1,9 @@
 import { useQuery } from 'react-query';
 import { buildUrl } from 'build-url-ts';
+import { Country } from './types';
 
-const getCountries = async (q?: string[]):Promise<string[]> => {
+
+const getCountries = async (q?: string[]):Promise<Country[]> => {
   const url = buildUrl(`/api`, {
     path: 'taxonomy/countries',
     queryParams: {
@@ -11,13 +13,14 @@ const getCountries = async (q?: string[]):Promise<string[]> => {
   
   const res = await fetch(url);
   const { result = [] } = await res.json();
-  const codes = result.map((i: { code: string }) => i.code);
-  return codes;
+  return result
+  // const codes = result.map((i: { code: string }) => i.code);
+  // return codes;
 };
 
 const useCountries = (countryQuery?:string[]) => {
   const q = countryQuery ? countryQuery : undefined;
-  return useQuery<string[]>(['COUNTRIES', JSON.stringify(q)], () => getCountries(q), {
+  return useQuery<Country[]>(['COUNTRIES', JSON.stringify(q)], () => getCountries(q), {
     staleTime: 1000 * 60 * 60,
   });
 };
