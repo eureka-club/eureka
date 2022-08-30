@@ -86,20 +86,23 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
   const {data:dataPosts} = usePosts(workPostsWhere,{enabled:!!workId})//OJO this trigger just once -load the same data that page does
   const [posts,setPosts] = useState(dataPosts?.posts)
   const [cycles,setCycles] = useState(dataCycles?.cycles)
+  const [defaultActiveKey,setDefaultActiveKey] = useState<string>('posts')
 
   const [hasMorePosts,setHasMorePosts] = useState(dataPosts?.fetched);
   useEffect(()=>{
     if(dataPosts && dataPosts.posts){
       setHasMorePosts(dataPosts.fetched)
       setPosts(dataPosts.posts)
+      if(dataPosts.posts.length)setDefaultActiveKey('posts')
     }
   },[dataPosts])
 
   useEffect(()=>{
     if(dataCycles && dataCycles.cycles){
       setCycles(dataCycles.cycles)
+      if(dataCycles.cycles.length && !posts?.length)setDefaultActiveKey('cycles')
     }
-  },[dataCycles])
+  },[dataCycles,posts])
 
 
   useEffect(()=>{
@@ -131,6 +134,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
 
   const handleSubsectionChange = (key: string | null) => {
     if (key != null) {
+      setDefaultActiveKey(key)
       setDetailPagesState({ ...detailPagesState, selectedSubsectionWork: key });
     }
   };
@@ -265,7 +269,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
               <Col>
                 {detailPagesState.selectedSubsectionWork != null && (
                   <TabContainer
-                    defaultActiveKey={'posts'}
+                    // defaultActiveKey={defaultActiveKey}
+                    activeKey={defaultActiveKey}
                     onSelect={handleSubsectionChange}
                     transition={true}
                   >

@@ -3,7 +3,8 @@ import { Work } from '@prisma/client';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useState,useEffect } from 'react';
 import { Col, Row,Spinner } from 'react-bootstrap';
-import Rating from 'react-rating';
+import Rating from '@/components/common/Rating'
+
 import { GiBrain } from 'react-icons/gi';
 import {BsChevronUp, BsX} from 'react-icons/bs';
 import dayjs from 'dayjs';
@@ -53,6 +54,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   // const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   // const router = useRouter();
   const [show, setShow] = useState<boolean>(s);
+
   const {data:session} = useSession();
   const { t } = useTranslation('cycleDetail');
 
@@ -66,8 +68,11 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
     if(dataWorks)setWorks(dataWorks.works)
   },[dataWorks])
 
-  
-  
+  const [qty, setQty] = useState(cycle?.ratingAVG||0);
+  useEffect(()=>{
+    setQty(cycle?.ratingAVG||0)
+  },[cycle])
+
   const getFullSymbol = () => {
     if (cycle && cycle.currentUserRating) return <GiBrain style={{ color: 'var(--eureka-blue)' }} />;
 
@@ -141,7 +146,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           </h1>
           <div className='d-flex flex-row justify-content-start'>
             {/* @ts-ignore*/}
-          <Rating
+          {/* <Rating
             readonly
             initialRating={getRatingAvg()}
             // onChange={handlerChangeRating}
@@ -149,7 +154,14 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
             stop={5}
             emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
             fullSymbol={getFullSymbol()}
-          />{' '}
+          /> */}
+          <Rating
+              readonly
+              qty={qty}
+              onClick={(val)=>{setQty(val)}}
+              stop={5}
+            />
+          {' '}
           <div className='d-flex flex-nowrap ms-2'>
           {getRatingAvg().toFixed(1)}
           {' - '}
@@ -261,7 +273,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
               <TagsInput className="ms-1 d-inline-block" tags={cycle.tags!} readOnly label="" />
               <div className='mt-2 d-flex flex-row justify-content-start'>
                 {/* @ts-ignore*/}
-                    <Rating
+                    {/* <Rating
                       readonly
                       initialRating={getRatingAvg()}
                       // onChange={handlerChangeRating}
@@ -269,7 +281,14 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                       stop={5}
                       emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
                       fullSymbol={getFullSymbol()}
-                    />{' '}
+                    /> */}
+                    <Rating
+                      readonly
+                      qty={qty}
+                      onClick={(val)=>{setQty(val)}}
+                      stop={5}
+                    />
+                    {' '}
                     <div className='ms-2'>
                     {getRatingAvg()!.toFixed(1)}
                     {' - '}

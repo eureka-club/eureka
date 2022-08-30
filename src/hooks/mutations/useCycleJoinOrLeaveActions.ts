@@ -86,7 +86,7 @@ const useJoinUserToCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,part
 
 }
 
-const useLeaveUserFromCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,participants:UserMosaicItem[]) => {
+const useLeaveUserFromCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,participants:UserMosaicItem[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
     const {t} = useTranslation('common');
     const queryClient = useQueryClient();
     const {notifier} = useNotificationContext();
@@ -149,6 +149,9 @@ const useLeaveUserFromCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,p
             queryClient.invalidateQueries(ck)
             }
             queryClient.invalidateQueries(['USER', `${user.id}`, 'cycles-join-requests'])
+             queryClient.invalidateQueries(['USER', `${user.id}`, 'cycles-join-requests']);
+            if(onSettledCallback)
+                onSettledCallback(_data,error,_variable,context);
         },
       },
     );

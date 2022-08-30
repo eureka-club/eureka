@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useSession, getSession } from 'next-auth/react';
 import { useQueryClient, useMutation, dehydrate, QueryClient } from 'react-query';
 import { useState, useEffect, SyntheticEvent } from 'react';
+import dayjs from 'dayjs';
 
 import { Spinner, Card, Row, Col, ButtonGroup, Button, Alert } from 'react-bootstrap';
 import { AiOutlineEnvironment } from 'react-icons/ai';
@@ -77,7 +78,6 @@ const Mediatheque: NextPage<Props> = ({id}) => {
   },[dataCycles?.cycles])
 
   const SFL = useMySaved(id)
-
   useEffect(() => {
     if(user){
       const ifbm = (user && user.followedBy) ? user.followedBy.findIndex((i) => i.id === session?.user.id) !== -1 : false
@@ -233,8 +233,7 @@ const Mediatheque: NextPage<Props> = ({id}) => {
   
   const readOrWatched = () => {
     if (user && user.ratingWorks && user.ratingWorks.length) {
-      const RW = user.ratingWorks.map((w) => w.work as WorkMosaicItem);
-
+      const RW = user.ratingWorks.filter(rw=>rw.work).map((w) => w.work as WorkMosaicItem).sort((a,b)=>a.createdAt > b.createdAt ? -1 : 1)
       return (
         <CarouselStatic
           cacheKey={['MEDIATHEQUE-WATCHED',`USER-${user.id}`]}
@@ -251,17 +250,26 @@ const Mediatheque: NextPage<Props> = ({id}) => {
   };
   
   const savedForLater = () => {
-    if (SFL)
+    if (SFL){
+      const items = [...SFL.favPosts,...SFL.favCycles,...SFL.favWorks] as PostMosaicItem[]|CycleMosaicItem[]|WorkMosaicItem[];
+      items.sort((f, s) => {
+        const fCD = dayjs(f.createdAt);
+        const sCD = dayjs(s.createdAt);
+        if (fCD.isAfter(sCD)) return -1;
+        if (fCD.isSame(sCD)) return 0;
+        return 1;
+      });
       return (
         <CarouselStatic
           cacheKey={['MEDIATHEQUE-SAVED',`USER-${user!.id}`]}
           onSeeAll={()=>goTo('my-saved')}
           title={t('common:mySaved')}
-          data={[...SFL.favPosts,...SFL.favCycles,...SFL.favWorks] as PostMosaicItem[]|CycleMosaicItem[]|WorkMosaicItem[]}
+          data={items}
           iconBefore={<BsBookmark />}
           // iconAfter={<BsCircleFill className={styles.infoCircle} />}
         />
       );
+    }
     return '';
   };
   

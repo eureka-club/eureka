@@ -26,7 +26,7 @@ const SearchPage: NextPage<Props> = ({postsData,worksData,cyclesData}) => {//TOD
   const { t } = useTranslation('common');
   const router = useRouter();
 
-  let qLabel = t(`topics:${router.query.q as string}`);
+  let qLabel = `${router.query.q as string}`;
   if (qLabel.match(':')) qLabel = router.query.q as string;
 
   const onTermKeyUp = (e:React.KeyboardEvent<HTMLInputElement>)=>{

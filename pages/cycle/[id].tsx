@@ -19,6 +19,8 @@ import globalModalsAtom from '@/src/atoms/globalModals';
 import { WEBAPP_URL } from '@/src/constants';
 import toast from 'react-hot-toast';
 import {useJoinUserToCycleAction} from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
+import {useModalContext} from '@/src/useModal'
+import SignInForm from '@/components/forms/SignInForm';
 
 const whereCycleParticipants = (id:number)=>({
   where:{OR:[
@@ -43,6 +45,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
   const router = useRouter();
   const isFetchingCycle = useIsFetching(['CYCLE',`${props.id}`])
   const { data: cycle, isSuccess, isLoading, isFetching, isError, error } = useCycle(+props.id,{enabled:!!session});
+  const {show} = useModalContext()
   
   const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants(props.id),
     {
@@ -78,7 +81,8 @@ const CycleDetailPage: NextPage<Props> = (props) => {
   }; 
 
   const openSignInModal = () => {
-    setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
+    show(<SignInForm/>)
+    // setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
   };
 
   const {
@@ -93,10 +97,10 @@ const CycleDetailPage: NextPage<Props> = (props) => {
           toast.success(t('Internal Server Error'));
   });
 
-  const requestJoinCycle = async () => {
+  const requestJoinCycle = async () => {debugger;
     if (!session) openSignInModal();
     else if (cycle) {
-      execJoinCycle();      
+      execJoinCycle();       
     }
   };
 
@@ -109,7 +113,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
 
   const getBanner = () => {
     if (cycle && !cycle?.currentUserIsParticipant && router) {
-      if (router.asPath.search(/\/cycle\/20/g) > -1)
+      if (router.asPath.search(/\/cycle\/21/g) > -1)
         return (
           <Banner
             cacheKey={['BANNER-CYCLE', `${cycle.id}`]}
@@ -119,10 +123,9 @@ const CycleDetailPage: NextPage<Props> = (props) => {
             content={
               <aside className="text-center text-white">
                 <h2 className="h2">
-                  Participa en nuestra conversación inédita sobre la relación que como humanidad tenemos con el agua.
+                Participa en nuestra conversación y aporta para construir espacios digitales para toda la diversidad de cuerpos e identidades
                 </h2>
-                <p>18 de marzo - 18 de agosto</p>
-
+                <p>22 de agosto - 14 de octubre</p>
                 <div className="d-grid gap-2">
                   <Button
                     disabled={isPending()}

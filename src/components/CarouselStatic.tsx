@@ -1,9 +1,8 @@
 import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent /* , ChangeEvent */, useState, useEffect } from 'react';
-import { Button, Row, Col } from 'react-bootstrap';
+import { Button, Row, Col, Spinner } from 'react-bootstrap';
 import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
-import { v4 } from 'uuid';
 import globalSearchEngineAtom from '../atoms/searchEngine';
 import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem } from '../types';
 import MosaicItemCycle from './cycle/MosaicItem';
@@ -46,7 +45,7 @@ const renderMosaicItem = (
   if (isCycleMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
     return (
-      <CycleContext.Provider key={`cycle-${v4()}`} value={{ cycle: item as CycleMosaicItem }}>
+      <CycleContext.Provider key={`cycle-${item.id}`} value={{ cycle: item as CycleMosaicItem }}>
         <MosaicItemCycle detailed cycleId={item.id} showSocialInteraction={showSocialInteraction} showButtonLabels={false} />
       </CycleContext.Provider>
     );
@@ -57,7 +56,7 @@ const renderMosaicItem = (
     // if (it.works && it.works.length > 0) pp = it.works[0] as WorkMosaicItem;
     // else if (it.cycles && it.cycles.length > 0) pp = it.cycles[0] as CycleMosaicItem;
 
-    return <MosaicItemPost cacheKey={cacheKey} key={`post-${v4()}`} postId={it.id} />;
+    return <MosaicItemPost cacheKey={cacheKey} key={`post-${it.id}`} postId={it.id} />;
   }
   if (isWorkMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -72,7 +71,7 @@ const renderMosaicItem = (
     );
   }
   if (isUserMosaicItem(item)) {
-    return <MosaicUserItem user={item} key={`user-${v4()}`} showSocialInteraction={false} />;
+    return <MosaicUserItem user={item} key={`user-${item.id}`} showSocialInteraction={false} />;
   }
 
   return '';
@@ -97,6 +96,8 @@ const CarouselStatic: FunctionComponent<Props> = ({
   const [show, setShow] = useState<Item[]>([]);
   const [hide, setHide] = useState<Item[]>([]);
   const [dataFiltered, setDataFiltered] = useState<Item[]>([]);
+  const [isRedirecting, setIsRedirecting] = useState(false);
+
 
   const [globalSEState] = useAtom(globalSearchEngineAtom);
   useEffect(() => {
@@ -119,29 +120,16 @@ const CarouselStatic: FunctionComponent<Props> = ({
   }, [data, globalSEState]);
 
   const buildMosaics = () => {
-    const result: JSX.Element[] = [];
+    let result: JSX.Element = <></>;
+    
     if (current) {
       const mosaics = current.map((i, idx: number) => (
-        <div key={`${idx * 1}${v4()}`} className={`${mosaicBoxClassName} mx-2`}/*className="pb-5 mx-2"*/>
+        <div key={`mosaic-${i.type}-${i.id}`} className={`${mosaicBoxClassName} mx-2`}/*className="pb-5 mx-2"*/>
           {renderMosaicItem(i, undefined, showSocialInteraction,cacheKey, customMosaicStyle, tiny)}
         </div>
       ));
-      const res = (
-        // <Masonry
-        //   // key={`${topic}${item.id}`}
-        //   key={`${title}`}
-        //   breakpointCols={{
-        //     default: 4,
-        //     1199: 3,
-        //     768: 2,
-        //     576: 1,
-        //   }}
-        //   className={classNames('d-flex', styles.masonry)}
-        //   columnClassName={styles.masonryColumn}
-        // >
-        //   {mosaics}
-        // </Masonry>
-        <div key={v4()} className="d-flex flex-nowrap w-100 justify-content-xl-left">
+      result = (
+        <div className="d-flex flex-nowrap w-100 justify-content-xl-left">
           {hide.length && <Button
             className={`text-white rounded-circle align-self-center ${styles.leftButton}`}
             onClick={() => {
@@ -156,8 +144,6 @@ const CarouselStatic: FunctionComponent<Props> = ({
             <RiArrowLeftSLine />
           </Button> || ''}
           {mosaics}
-          {/* )} */}
-          {/* {dataFiltered.length && ( */}
           {show.length && <Button
             className={`text-center text-white rounded-circle align-self-center ${styles.rightButton}`}
             onClick={() => {
@@ -172,11 +158,15 @@ const CarouselStatic: FunctionComponent<Props> = ({
           </Button> || ''}
         </div>
       );
-      result.push(res);
-      // });
     }
     return result;
   };
+
+  const handlerSeeAll = ()=>{
+    setIsRedirecting(true)
+    if(onSeeAll)
+      onSeeAll()
+  }
 
   return (
     (
@@ -192,18 +182,15 @@ const CarouselStatic: FunctionComponent<Props> = ({
                 </h1>
               </Col>
               <Col xs={3} className="d-flex justify-content-end">
-                {seeAll && dataFiltered.length && (
-                  // <Button className={`${styles.seeAllButton}`} onClick={onSeeAll}>
-                  //   {t('common:See all')}
-                  // </Button>
-                  <span
+                {seeAll && dataFiltered.length && <>
+                  {!isRedirecting ? <span
                     className={`cursor-pointer text-primary ${styles.seeAllButton}`}
                     role="presentation"
-                    onClick={onSeeAll}
+                    onClick={handlerSeeAll}
                   >
                     {t('common:See all')}
-                  </span>
-                )}
+                  </span> : <Spinner animation='grow' />}
+                  </>}
               </Col>
             </Row>
             <div className="carousel d-flex justify-content-center">{buildMosaics()}</div>

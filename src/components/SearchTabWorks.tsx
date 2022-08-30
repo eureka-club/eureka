@@ -76,6 +76,7 @@ const SearchTabWorks: FunctionComponent<Props> = ({worksData}) => {
   const [ref, inView] = useInView({
     triggerOnce: false,
   });
+  
   useEffect(()=>{
     if(inView && works.length < total){
       const fi = async ()=>{

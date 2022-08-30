@@ -1,20 +1,14 @@
-import { Cycle, Work } from '@prisma/client';
 import { FunctionComponent,useState } from 'react';
-import Masonry from 'react-masonry-css';
-
-import { v4 } from 'uuid';
-import {Row, Col, Container,Button} from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem } from '../types';
 import MosaicItemCycle from './cycle/MosaicItem';
 import MosaicItemPost from './post/MosaicItem';
 import MosaicItemWork from './work/MosaicItem';
 import MosaicItemUser from './user/MosaicItem';
-import styles from './Mosaic.module.css';
 import { CycleMosaicItem } from '../types/cycle';
 import { WorkMosaicItem } from '../types/work';
 import { PostMosaicItem } from '../types/post';
 import { CycleContext } from '../useCycleContext';
-import {BiChevronRight,BiChevronLeft} from 'react-icons/bi'
 
 const renderMosaicItem = (
   item: MosaicItem,
@@ -88,45 +82,10 @@ const Mosaic: FunctionComponent<Props> = ({
 }) => {
   const count = +(process.env.NEXT_PUBLIC_MOSAIC_ITEMS_COUNT||10)
   const [page,setPage] =useState<number>(0)
-  // const next = ()=>{
-  //   setPage(p=>p+1)
-  // }
-  // const previous = ()=>{
-  //   setPage(p=>p-1)
-  // }
+  
   const renderMosaic = () => {
     if(!stack)return <></>
-    /* return (
-      <Row>
-        {stack.map((item: MosaicItem) => (
-            <Col className={` ${className}`} key={`${v4()}`}>
-              {renderMosaicItem(item, postsLinksTo, showButtonLabels, display, showComments, cacheKey)}
-            </Col>
-          ))}
-      </Row>
-      
-    ); */
-    /*return <Masonry
-    breakpointCols={{
-      default: display === 'v' ? 4 : 1,
-      1199: display === 'v' ? 3 : 1,
-      926: display === 'v' ? 2: 1,
-      812: display === 'v' ? 2: 1,
-      768: display === 'v' ? 2: 1,
-      640: 1,
-      428: 1,
-    }}
-    className={`d-flex ${styles.masonry}`}
-    columnClassName={styles.masonryColumn}
-  >
-    {stack && stack.length &&
-      stack.map((item: MosaicItem) => (
-        <aside className={` ${className}`} key={`${v4()}`}>
-          {renderMosaicItem(item, parent, showButtonLabels, display, showComments, cacheKey)}
-        </aside>
-      )) || ''}
-  </Masonry>*/
-  
+    
   const items = enabledPagination && stack
     ? stack.slice(page*count,count*(page+1))
     : stack;
@@ -135,20 +94,18 @@ const Mosaic: FunctionComponent<Props> = ({
   className={`d-flex justify-content-center ${display=='h' ? 'flex-column' : 'flex-row'} flex-wrap justify-content-start`}>
     {items
     .map((item: MosaicItem) => (
-        <aside className={`${className} p-4`} key={v4()}>
+        <aside className={`${className} p-4`} key={`${item.type||'mosaic-item'}-${item.id}`}>
           {renderMosaicItem(item, parent, showButtonLabels, display, showComments, cacheKey)}
         </aside>
       ))}
   </section>
-
-
   }
   const renderPagesLinks = ()=>{
     if(!stack)return <></>
     const pages = stack.length / count
     const res = []
     for(let i=0;i<pages;i++)
-      res.push(<Button key={v4()} className={`rounded-circle me-1 shadow ${page===i ? 'text-white bg-secondary':''}`} size="sm" onClick={()=>setPage(i)}>{i+1}</Button>)
+      res.push(<Button key={`page-${i}`} className={`rounded-circle me-1 shadow ${page===i ? 'text-white bg-secondary':''}`} size="sm" onClick={()=>setPage(i)}>{i+1}</Button>)
     return <>
     {res}
     </>

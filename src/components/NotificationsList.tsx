@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react'
 import { ListGroup, Button,  } from 'react-bootstrap'
 
 import { IoNotificationsCircleOutline } from 'react-icons/io5'
-import { v4 } from 'uuid'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
@@ -135,7 +134,7 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
       if (notVieweds.length) {
         return <ListGroup className='NotificationsList' as="ul">{notVieweds.slice(0, 5).map((n, idx) => {
           return <ListGroup.Item
-            key={v4()}
+            key={`notification-${n.notificationId}`}
             as="li"
             className="d-flex justify-content-between align-items-start cursor-pointer"
             onClick={(e) => notificationOnClick(e, n.userId, n.notificationId, n.notification.contextURL)}

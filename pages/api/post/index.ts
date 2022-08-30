@@ -75,7 +75,7 @@ export default getApiHandler()
       const props:Prisma.PostFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
       let {where:w,take,cursor,skip,select} = props;
       const session = await getSession({ req });
-      let where = {...w}
+      let where:Prisma.PostWhereInput = {...w}
       
       if (typeof q === 'string') {
         const terms = q.split(" ");
@@ -107,15 +107,12 @@ export default getApiHandler()
           ]
         };
       }
-    
+
+      let OR = undefined;
       if(session){
-        where = {
-          ...where && where,
+        where = {...where,
           AND:{
             OR:[
-              {
-                isPublic:true,
-              },
               {
                 cycles:{
                   some:{
@@ -128,30 +125,56 @@ export default getApiHandler()
                 }
               },
               {
-                cycles:{none:{}}
+                cycles:{
+                  none:{}
+                }
               }
             ]
-            }
+            
+
           }
+      }
       }
       else{
-        where = {
-          ...where && where,
+        where = {...where,
           AND:{
-            OR:{
-              isPublic:true,
-              cycles:{
-                some:{
-                  access:1,
+            OR:[
+              {
+                cycles:{
+                  some:{
+                    access:1,
+                  }
                 }
+
               },
-            }
+              {
+                cycles:{
+                  none:{}
+                }
+              }
+            ]
+
           }
-        }   
+        }
       }
+      // if(where.OR){
+      //   const whereOR = [...(where.OR as Array<Prisma.PostWhereInput>)];
+      //   delete where.OR;
+      //   where = {
+      //     ...where,
+      //     OR:[...whereOR,...OR]
+      //   }   
+      // }
+      // else{
+      //   where = {
+      //     ...where,
+      //     OR
+      //   }
+      // }
 
       let cr = await prisma?.post.aggregate({where,_count:true})
       const total = cr?._count;
+      
       let data = await findAll({select,take,where,skip,cursor});
 
       data.forEach(p=>{
@@ -174,3 +197,4 @@ export default getApiHandler()
       //prisma.$disconnect();
     }
   });
+

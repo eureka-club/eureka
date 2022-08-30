@@ -3,7 +3,7 @@ import { WorkMosaicItem } from './types/work';
 
 export const getWork = async (id: number,origin=''): Promise<WorkMosaicItem> => {
   if (!id) throw new Error('idRequired');
-  const url = `${origin}/api/work/${id}`;
+  const url = `${origin||''}/api/work/${id}`;
   const res = await fetch(url);
   if (!res.ok) 
     throw Error('Error');
