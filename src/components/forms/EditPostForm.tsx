@@ -85,6 +85,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
         method: remove?'DELETE':'PATCH',
         body: JSON.stringify(payload),
       });
+      console.log(res,'res')
       if(res.ok){
         handleEditPostOnSmallerScreenClose();
         toast.success( t('PostEdited'));
@@ -204,6 +205,20 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
    // if (formRef.current) formRef.current.isPublic.checked = true;
   };
 
+  const formValidation = (payload:any) => {
+    if (!payload.title.length) {
+      toast.error( t('NotTitle'))
+      return false;
+    }else if (!payload.language.length) {
+      toast.error( t('NotLanguage'))
+      return false;
+    }else if (!payload.contentText.length) {
+      toast.error( t('NotContentText'))
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
@@ -224,7 +239,8 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
         isPublic: post?.isPublic,
         topics: items.join(','),
       };
-      await execEditPost(payload);
+      if(formValidation(payload))
+         await execEditPost(payload);
     } else if (selectedCycle != null) {
       const payload: EditPostAboutCycleClientPayload = {
         id: globalModalsState.editPostId ? globalModalsState.editPostId.toString() : router.query.postId as string,
@@ -237,8 +253,11 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
         isPublic: post ? post.isPublic : false,
         topics: items.join(','),
       };
-      await execEditPost(payload);
+      if(formValidation(payload))
+         await execEditPost(payload);
     }
+    else
+       toast.error( t('NotAboutItem'))
   };
 
   useEffect(() => {
@@ -314,7 +333,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
                         id="create-post--search-work-or-cycle"
                         // Bypass client-side filtering. Results are already filtered by the search endpoint
                         filterBy={() => true}
-                        inputProps={{ required: true }}
+                        inputProps={{ required: false}}
                         placeholder={t('searchCycleOrWorkFieldPlaceholder')}
                         isLoading={isSearchWorkOrCycleLoading}
                         labelKey={labelKeyFn}
@@ -340,7 +359,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
               <Col className='mb-4'>
                 <FormGroup controlId="postTitle">
                   <FormLabel>*{t('titleFieldLabel')}</FormLabel>
-                  <FormControl type="text" maxLength={80} required onChange={handlerchange} defaultValue={post.title} />
+                  <FormControl type="text" maxLength={80} onChange={handlerchange} defaultValue={post.title} />
                 </FormGroup>
               </Col>
             </Row>

@@ -21,6 +21,8 @@
   "PostEdited":"Your Eureka has been edited",
   "NotTitle":"Please specify a title",
   "NotContentText":"Please add content",
+  "NotLanguage":"Please add a language",
+  "NotAboutItem":"Please specify which work or cycle this Eureka is about",
   "requiredDiscussionItemError": "Please select if your Eureka is about the topic of the cycle or one of the works",
   "requiredEurekaImageError": "Please add an image to your Eureka"
 }

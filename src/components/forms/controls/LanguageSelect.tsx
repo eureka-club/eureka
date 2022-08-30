@@ -6,7 +6,7 @@ type Props = {
 };
 const LanguageSelect: FunctionComponent<Props> = ({ defaultValue }) => {
   return (
-    <FormControl type="text" as="select" required defaultValue={defaultValue}>
+    <FormControl type="text" as="select"  defaultValue={defaultValue}>
       <option value="">select...</option>
       <option value="spanish">Spanish</option>
       <option value="english">English</option>
