@@ -263,18 +263,20 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const popoverShares = (
     <Popover id="popover-basic" style={{width:"zpx"}}>
       <Popover.Body>
+        <div className='mb-2'>
         <TwitterShareButton windowWidth={800} windowHeight={600} url={shareUrl} title={shareText} via="eleurekaclub">
-          <TwitterIcon size={32} round />
+          <TwitterIcon size={30} round />
           {` ${t('wayShare')} Twitter`}
         </TwitterShareButton> 
-        <br />
+        </div>
+        <div className='mb-2'>
         <FacebookShareButton windowWidth={800} windowHeight={600} url={shareUrl} quote={shareText}>
-          <FacebookIcon size={32} round />
+          <FacebookIcon size={30} round />
           {` ${t('wayShare')} Facebook`}
         </FacebookShareButton>
-        <br />
+        </div>
         <WhatsappShareButton windowWidth={800} windowHeight={600} url={shareUrl} title={`${shareText} ${t('whatsappComplement')}`}>
-          <WhatsappIcon size={32} round />
+          <WhatsappIcon size={30} round />
           {` ${t('wayShare')} Whatsapp`}
         </WhatsappShareButton>
       </Popover.Body>

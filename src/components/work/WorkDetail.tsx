@@ -93,16 +93,16 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
     if(dataPosts && dataPosts.posts){
       setHasMorePosts(dataPosts.fetched)
       setPosts(dataPosts.posts)
-      //if(dataPosts.posts.length)setDefaultActiveKey('posts')
+      if(dataPosts.posts.length)setDefaultActiveKey('posts')
     }
   },[dataPosts])
 
   useEffect(()=>{
     if(dataCycles && dataCycles.cycles){
       setCycles(dataCycles.cycles)
-      //if(dataCycles.cycles.length)setDefaultActiveKey('cycles')
+      if(dataCycles.cycles.length && !posts?.length)setDefaultActiveKey('cycles')
     }
-  },[dataCycles])
+  },[dataCycles,posts])
 
 
   useEffect(()=>{
