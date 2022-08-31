@@ -293,7 +293,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
             'insertdatetime media table paste code help wordcount',
           ],
           relative_urls: false,
-          forced_root_block : "p,a",
+          forced_root_block : "div",
           toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
           // toolbar:
           //   'undo redo | formatselect | ' +
