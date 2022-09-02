@@ -143,7 +143,7 @@ const handlerRecoveryLogin = ()=>{
                   <Form.Control type="password" required />
                 </Form.Group>
                 <div className="d-flex justify-content-center">
-                <Button disabled={loading} onClick={handleSubmitSignIn} className={`btn-eureka ${styles.submitButton} me-1`}>
+                <Button data-cy='btn-login' disabled={loading} onClick={handleSubmitSignIn} className={`btn-eureka ${styles.submitButton} me-1`}>
                   {t('login')} {loading && <Spinner animation="grow" size='sm'/>}
                 </Button>
                 </div>

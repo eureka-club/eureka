@@ -17,6 +17,7 @@
     "e2e": "cypress run",
     "e2e:record": "cypress run --record",
     "test:ci": "npm-run-all -p --race start e2e",
+    "test": "npm-run-all -p --race start cy:open",
     "test:ci:record": "npm-run-all -p --race start e2e:record",
     "cy:verify": "cypress verify",
     "cy:info": "cypress info",
