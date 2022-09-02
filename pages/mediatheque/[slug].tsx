@@ -17,15 +17,15 @@ import { User } from '@prisma/client';
 import styles from './index.module.css';
 import useUser from '@/src/useUser';
 
-import SimpleLayout from '../../src/components/layouts/SimpleLayout';
-import FilterEngine from '../../src/components/FilterEngine';
-import TagsInput from '../../src/components/forms/controls/TagsInput';
+import SimpleLayout from '@/src/components/layouts/SimpleLayout';
+import FilterEngine from '@/src/components/FilterEngine';
+import TagsInput from '@/src/components/forms/controls/TagsInput';
 
-import CarouselStatic from '../../src/components/CarouselStatic';
+import CarouselStatic from '@/src/components/CarouselStatic';
 
-import { WorkMosaicItem /* , WorkWithImages */ } from '../../src/types/work';
-import { UserMosaicItem /* , UserDetail, WorkWithImages */ } from '../../src/types/user';
-import UnclampText from '../../src/components/UnclampText';
+import { WorkMosaicItem /* , WorkWithImages */ } from '@/src/types/work';
+import { UserMosaicItem /* , UserDetail, WorkWithImages */ } from '@/src/types/user';
+import UnclampText from '@/src/components/UnclampText';
 import { useNotificationContext } from '@/src/useNotificationProvider';
 import useMyPosts,{getMyPosts} from '@/src/useMyPosts';
 import useMyCycles,{getMyCycles} from '@/src/useMyCycles';
