@@ -375,14 +375,14 @@ const Mediatheque: NextPage<Props> = ({id}) => {
                   </Col>
                   <Col className='mt-2 d-grid gap-2 d-md-flex align-items-start  justify-content-md-end d-lg-block'>
                       {session && session.user!.id == user.id && (
-                      <Button className='text-white rounded-pill' onClick={()=>router.push('/profile')}>
+                      <Button className='btn-eureka' onClick={()=>router.push('/profile')}>
                         {t('editProfile')}
                       </Button>
                     )}
                     {session && session.user!.id !== user.id && !isFollowedByMe && (
                       <Button 
                         data-cy="follow-btn" 
-                        className='text-white rounded-pill' 
+                        className='btn-eureka' 
                         onClick={followHandler} 
                         disabled={isPending()}
                       >
@@ -394,10 +394,10 @@ const Mediatheque: NextPage<Props> = ({id}) => {
                     {session && session.user!.id !== user.id && isFollowedByMe && (
                       <Button
                         data-cy="follow-btn"
-                        variant="button border-primary text-primary fs-6"
-                        className="w-80 rounded-pill"
+                        variant="button border-primary text-primary "
                         onClick={followHandler}
                         disabled={isPending()}
+                        style={{ width: '10em' }}
                       >
                         {t('Unfollow')}
                         {isPending() && <Spinner animation="grow" variant="info" size="sm" />}

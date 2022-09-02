@@ -101,7 +101,7 @@ const onFileChange = async  (e:React.ChangeEvent<HTMLInputElement>)  => {
           <Form.Range id='zoom-range' className="ms-3" value={zoom} min={0.8} max={2.8} step={0.5}  onChange={(e) => setZoom(e.target.valueAsNumber)}/>
         </>
         
-        <Button variant="primary" data-cy="set-image" className="ms-3 text-white" onClick={processSelect} >
+        <Button  data-cy="set-image" className="ms-3 btn-eureka " onClick={processSelect} >
                 {t('select')}
                </Button>
       </div></>

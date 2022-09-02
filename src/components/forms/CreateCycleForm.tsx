@@ -850,19 +850,17 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
  */}      
     <section className="d-flex justify-content-end">
             
-            <Button
-              variant="outline-secondary"
+            <Button              
               type="button"
               onClick={handleFormClear}
-              className="me-4 p-2"
+              className="me-4 p-2 btn-eureka"
             >
               {t('resetBtnLabel')}
             </Button>
             <Button
               disabled={!selectedWorksForCycle.length || !cycleCoverImageFile}
-              variant="primary"
               type="submit"
-              className="p-2 text-white"
+              className="p-2 text-white btn-eureka"
             >
               <>
                 {t('submitBtnLabel')}

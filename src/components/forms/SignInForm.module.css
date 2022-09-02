@@ -64,10 +64,8 @@
 }
 
 .submitButton {
-  display: block;
   margin-top: 1rem;
-  width: 60%;
-  font-size: 1.2rem;
+  width: 65%;
 
 }
 .loginForm{
@@ -96,9 +94,5 @@
   .loginForm{
   width: 90%;
 }
-  .submitButton{
-  width: 75%;
-}
- 
    
 }

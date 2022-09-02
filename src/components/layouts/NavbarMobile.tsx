@@ -95,7 +95,7 @@ const NavBar: FunctionComponent = () => {
          <Button 
             size="sm" 
             variant="" 
-            className={`p-0 text-primary`}
+            className={`border-0 p-0 text-primary`}
             onClick={() => setShowSearch(s => !s)}
             >
                 <AiOutlineSearch className={`mt-2 ${styles.searchIcon}`} />

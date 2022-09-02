@@ -335,12 +335,18 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
             </Col>
           </Row>
           <Row>
-            <Col>
+            <Col className='d-flex justify-content-end mt-4 mb-2'>
+               <Button
+                onClick={handleFormClear}
+                className="btn-eureka ms-3 me-4 px-3"
+              >
+                {t('resetBtnLabel')}
+              </Button>
               <Button
                 // disabled={!selectedWorksForCycle.length || !cycleCoverImageFile}
-                variant="primary"
                 type="submit"
-                className="float-right ps-5 pe-4"
+                className=" ps-5 pe-4 btn-eureka"
+                style={{ width: '12em' }}
               >
                 <>
                   {t('Edit Cycle')}
@@ -352,14 +358,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
                   {isEditCycleReqError && editCycleReqError}
                 </>
               </Button>
-              <Button
-                variant="outline-secondary"
-                type="button"
-                onClick={handleFormClear}
-                className="float-right me-4 px-3"
-              >
-                {t('resetBtnLabel')}
-              </Button>
+           
             </Col>
           </Row>
         </Form>

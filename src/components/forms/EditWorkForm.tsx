@@ -431,8 +431,8 @@ const EditWorkForm: FunctionComponent = () => {
         </ModalBody>
 
         <ModalFooter>
-          <Container className="py-3">
-            <Button variant="primary" type="submit" className="ps-5 pe-4 float-right">
+          <Container className="py-4 d-flex justify-content-end">
+            <Button type="submit" className="ps-5 pe-4 float-right btn-eureka" style={{ width: '15em' }}>
               <>
                 {t('titleEdit')}
                 {isLoading ? (

@@ -190,7 +190,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                     <Form.Control type="password" required />
                   </Form.Group>
                 <div className="d-flex flex-column align-items-center justify-content-center">
-                <Button onClick={handleSubmitSignUp} variant="primary text-white" className={`mb-4 d-flex justify-content-center align-items-center ${styles.submitButton}`}>
+                <Button onClick={handleSubmitSignUp}  className={`mb-4 btn-eureka ${styles.submitButton}`}>
                   {t('Join')}
                 </Button>
                  <p className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}>{t('joinedTerms')}

@@ -359,7 +359,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
               {<div className={styles.imageContainer}>{renderPhoto()}</div>}
               </Col>
               <Col xs={12} md={8} className='mb-4 mt-2'>
-                {!showCrop && (<Button data-cy="image-load" variant="primary" className="w-100 text-white" onClick={() => setShowCrop(true)}>
+                {!showCrop && (<Button data-cy="image-load" variant="primary" className="btn-eureka w-100" onClick={() => setShowCrop(true)}>
                   {t('Image')}
                 </Button>
                 )}        
@@ -415,7 +415,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
           <Button variant="warning" onClick={clearCreateEurekaForm} disabled={isLoading}>
             <ImCancelCircle />
           </Button>
-          <Button data-cy="create-eureka-btn" onClick={handlerSubmitCreateEureka} className="text-white" disabled={isLoading}>
+          <Button data-cy="create-eureka-btn" onClick={handlerSubmitCreateEureka} className="text-white"  style={{ width: '5rem' }} disabled={isLoading}>
             <span>
               <BsCheck /> {t('Create')}
             </span>

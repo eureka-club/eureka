@@ -87,7 +87,7 @@ const BannerCustomizable: FunctionComponent = ({
                       <p className="p-0 mx-1 text-wrap fs-5">{bo?.SlideText1}</p>
                        <div className="d-flex  mt-2"> 
                           {(!isLoadingSession && !session) 
-                            ? <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button> 
+                            ? <Button className='btn-eureka' onClick={() => router.push("/")} >{t('JoinEureka')}</Button> 
                             : ''
                           }
                       </div>
@@ -108,7 +108,7 @@ const BannerCustomizable: FunctionComponent = ({
                       <p className="p-0 mx-1 text-wrap fs-5">{bo?.SlideText2}</p>
                        <div className="d-flex mt-2"> 
                        {(!isLoadingSession && !session) 
-                            ? <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button> 
+                            ? <Button className='btn-eureka' onClick={() => router.push("/")} >{t('JoinEureka')}</Button> 
                             : ''
                           }
                       </div>
@@ -129,7 +129,7 @@ const BannerCustomizable: FunctionComponent = ({
                       <p className="p-0 mx-1 text-wrap fs-5">{bo?.SlideText3}</p>
                        <div className="d-flex  mt-2"> 
                        {(!isLoadingSession && !session) 
-                            ? <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button> 
+                            ? <Button className='btn-eureka' onClick={() => router.push("/")} >{t('JoinEureka')}</Button> 
                             : ''
                           }
                       </div>

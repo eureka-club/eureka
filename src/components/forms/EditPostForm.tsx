@@ -500,7 +500,9 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
                       id="removePost"
                       label={t('common:Remove')}
                     />
-                <Button variant="primary" disabled={isEditPostLoading} type="submit" className="ps-5 pe-4">
+               <Col className='d-none d-lg-flex justify-content-end mt-2 mb-2'>
+    
+                <Button disabled={isEditPostLoading} type="submit" className="mt-4 ps-5 pe-4 btn-eureka" style={{ width: '15em' }}>
                   <>
                     {t('titleEdit')}
                     {isEditPostLoading ? (
@@ -511,6 +513,21 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
                     {isEditPostError && createPostError}
                   </>
                 </Button>
+                </Col>
+                <Col className='d-block d-lg-none mt-2 mb-2'>
+    
+                <Button disabled={isEditPostLoading} type="submit" className="mt-4 ps-5 pe-4 btn-eureka" style={{ width: '100%' }}>
+                  <>
+                    {t('titleEdit')}
+                    {isEditPostLoading ? (
+                      <Spinner size="sm" animation="grow" variant="secondary" className={styles.loadIndicator} />
+                    ) : (
+                      <span className={styles.placeholder} />
+                    )}
+                    {isEditPostError && createPostError}
+                  </>
+                </Button>
+                </Col>
           </Container>
               
         {/* </ModalFooter> */}

@@ -27,11 +27,8 @@
 }
 
 .submitButton {
-  display: block;
   margin-top: 2rem;
   width: 90%;
-  font-size: 1rem;
-
 }
 .sendForm{
   width: 40%;

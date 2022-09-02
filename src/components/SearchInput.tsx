@@ -63,16 +63,17 @@ const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => 
         }          
        `}
        </style>
-       <Form ref={formRef} style={{width:'270px'}}>
+       <Form ref={formRef} style={{width:'250px'}}>
          <Form.Group controlId='search'>
             <Form.Control
             aria-label="Username"
             aria-describedby="basic-search"
             className={`${className} `} type="text" placeholder={t('common:search')} onKeyUp={onTermKeyUp}
+
           />
          </Form.Group>
       </Form>
-       <InputGroup.Text className=" d-lg-none text-white border border-primary cursor-pointer bg-primary">
+       <InputGroup.Text className="d-lg-none text-white border border-primary cursor-pointer bg-primary">
             <Button 
             size="sm" 
             variant="link" 

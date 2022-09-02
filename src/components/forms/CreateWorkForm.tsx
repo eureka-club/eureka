@@ -387,7 +387,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({noModal = false})=> {
 
       <ModalFooter>
         <Container className="py-1">
-          <Button variant="primary" type="submit" className="d-none d-lg-block float-end text-white">
+          <Button variant="primary" type="submit" className={`btn-eureka d-none d-lg-block float-end ${styles.submitButton}`}>
             <>
               {t('submitButtonLabel')}
               {isLoading ? (
@@ -398,7 +398,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({noModal = false})=> {
               {isError && createWorkError}
             </>
           </Button>
-          <Button variant="primary" type="submit" className="d-block d-lg-none w-100 text-white">
+          <Button type="submit" className="btn-eureka d-block d-lg-none w-100">
             <>
               {t('submitButtonLabel')}
               {isLoading ? (

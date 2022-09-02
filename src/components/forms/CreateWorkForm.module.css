@@ -48,3 +48,8 @@
   background-color: white;
   font-style: italic;
 }
+
+.submitButton {
+  margin-top: 1rem;
+  width: 15%;
+}

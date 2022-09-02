@@ -34,12 +34,10 @@
 }
 
 .submitButton {
-  display: block;
-  margin-top: 2rem;
-  width: 90%;
-  font-size: 1rem;
-
+  margin-top: 1.5rem;
+  width: 100%;
 }
+
 .sendForm{
   width: 40%;
 }

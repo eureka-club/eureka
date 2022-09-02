@@ -135,7 +135,7 @@ const handlerRecoveryLogin = ()=>{
                   <Form.Control className='' type="email" required />
                   <div className='d-flex justify-content-between mb-1 mt-2'><div>{t('passwordFieldLabel')}</div>
                     {/* <Link href="/recoveryLogin" passHref> */}
-                      <Button onClick={handlerRecoveryLogin} variant="link" className={`d-flex link align-items-end cursor-pointer ${styles.forgotPassText}`}>{t('forgotPassText')}</Button>
+                      <Button onClick={handlerRecoveryLogin} variant="link" className={`btn-link d-flex link align-items-end cursor-pointer ${styles.forgotPassText}`}>{t('forgotPassText')}</Button>
                     {/* </Link> */}
                   </div>
                 </Form.Group>
@@ -143,8 +143,8 @@ const handlerRecoveryLogin = ()=>{
                   <Form.Control type="password" required />
                 </Form.Group>
                 <div className="d-flex justify-content-center">
-                <Button disabled={loading} onClick={handleSubmitSignIn} variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
-                  {t('login')} {loading && <div className="ms-1"><Spinner animation="grow" size='sm'/></div>}
+                <Button disabled={loading} onClick={handleSubmitSignIn} className={`btn-eureka ${styles.submitButton} me-1`}>
+                  {t('login')} {loading && <Spinner animation="grow" size='sm'/>}
                 </Button>
                 </div>
               </Form>

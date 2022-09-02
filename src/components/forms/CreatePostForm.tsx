@@ -453,13 +453,13 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
               </FormGroup>
             </Col>
           </Row>
-          <Row>
+          <Row className='d-flex justify-content-center justify-content-lg-start'>
              <Row className="d-flex justify-content-center flex-column flex-column-reverse flex-lg-row flex-lg-row-reverse">
             <Col className='mb-4 d-flex justify-content-center justify-content-lg-start'>
               {<div className={styles.imageContainer}>{renderPhoto()}</div>}
               </Col>
-            <Col className='mb-4'>
-                {!showCrop && (<Button data-cy="image-load" variant="primary" className="w-100 text-white" onClick={() => setShowCrop(true)}>
+            <Col className='mb-4 d-flex'>
+                {!showCrop && (<Button data-cy="image-load" className="btn-eureka w-100 text-white" onClick={() => setShowCrop(true)}>
                   {t('imageFieldLabel')}
                 </Button>
                 )}        
@@ -605,8 +605,21 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
                 {t('isPublicInfotip')}
               </small>*/}
             </Col>
-            <Col className="mb-4">
-              <Button variant="primary" disabled={isCreatePostLoading} onClick={(e)=>{handleSubmit(e)}} className="w-100 text-white">
+            <Col className="d-none d-lg-block mb-4">
+              <Button disabled={isCreatePostLoading} onClick={(e)=>{handleSubmit(e)}} className={`btn-eureka float-end ${styles.submitButton}`}>
+                <>
+                  {t('submitButtonLabel')}
+                  {isCreatePostLoading ? (
+                    <Spinner className="ms-2" animation="grow" variant="info" size="sm" />
+                  ) : (
+                    <span className={styles.placeholder} />
+                  )}
+                  {isCreatePostError && createPostError}
+                </>
+              </Button>
+            </Col>
+            <Col className="d-block d-lg-none mb-4">
+              <Button disabled={isCreatePostLoading} onClick={(e)=>{handleSubmit(e)}} className={`btn-eureka w-100`}>
                 <>
                   {t('submitButtonLabel')}
                   {isCreatePostLoading ? (
