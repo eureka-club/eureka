@@ -18,7 +18,7 @@ const useInterestedCycles = () => {
     bo.CyclesExplorePage.split(',').forEach(x=> cyclesIds.push(parseInt(x)));
       
   return useCycles(interestedCyclesWhere(cyclesIds),
-    {enabled:!!cyclesIds}
+    {enabled:!!cyclesIds.length}
   )
 };
 

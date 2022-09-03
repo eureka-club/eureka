@@ -93,7 +93,7 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                         </Col>
                         <Col className="d-flex flex-column justify-content-center align-items-center ">
                                 <Link href='/explore'>
-                                        <Button  className={` btn-eureka ${styles.submitButton}`}>
+                                        <Button  data-cy="btn-explore" className={` btn-eureka ${styles.submitButton}`}>
                                                 {t('Explore')} 
                                         </Button>
                                 </Link>

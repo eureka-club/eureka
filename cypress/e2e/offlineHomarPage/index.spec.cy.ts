@@ -9,10 +9,13 @@ describe('Offline home page',()=>{
         cy.contains('Explore')
     })
     it('should have a explorer button linked to /explore page',()=>{
-         cy.intercept('/api/*').as('apiCall')
+        cy.intercept('/api/cycle?props=*').as('featuredCyclesReq')
         cy.get('[data-cy="btn-explore"]').click({force:true})
-        cy.wait('@apiCall').then(()=>{
+        cy.wait('@featuredCyclesReq').then((inter)=>{
             cy.url().should('include', '/explore')
+            expect(inter.response?.body).to.have.keys('data','fetched','total')
+            expect(inter.response?.body.data).to.have.length.gt(0)
+
         })
     })
     it('should login works',()=>{
