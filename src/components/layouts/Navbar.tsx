@@ -128,7 +128,7 @@ const NavBar: FunctionComponent = () => {
           </Nav>
           <Nav className={styles.navbarNav}>
             {!session && !isLoadingSession &&(
-              <Button className="ms-4 btn-eureka"  onClick={handlerLogin} /*onClick={openSignInModal}*/>
+              <Button className="ms-4 btn-eureka"  data-cy="btn-login" onClick={handlerLogin} /*onClick={openSignInModal}*/>
                 {t('login')}
               </Button>
             )}
@@ -173,12 +173,12 @@ const NavBar: FunctionComponent = () => {
           )}
           {!isLoadingSession  && (<>
           <Nav className={styles.navbarNav}>
-            <Dropdown align="end" className={styles.langSwitch}>
+            <Dropdown data-cy="link-about" align="end" className={styles.langSwitch}>
               <Dropdown.Toggle as={ChevronToggle}>
                 <AiOutlineInfoCircle className={styles.navbarIconNav} />
               </Dropdown.Toggle>
               <span className={styles.menuBottomInfo}>{t('About')}</span>
-              <Dropdown.Menu>
+              <Dropdown.Menu data-cy="links-about">
                 <Dropdown.Item
                   active={router.asPath.search(/manifest$/g) !== -1}
                   onClick={() => router.push('/manifest')}
@@ -211,7 +211,7 @@ const NavBar: FunctionComponent = () => {
           </Nav>
           <Nav className='me-1'>
             {router.locales?.length && (
-              <Dropdown align="end" className={styles.langSwitch} onSelect={handleLanguageSelect}>
+              <Dropdown data-cy="link-language" align="end" className={styles.langSwitch} onSelect={handleLanguageSelect}>
                 <Dropdown.Toggle as={ChevronToggle} id="langSwitch">
                   <img
                     className={styles.navbarIconNav}
@@ -220,7 +220,7 @@ const NavBar: FunctionComponent = () => {
                   />
                 </Dropdown.Toggle>
                 <span className={`${styles.menuBottomInfo}`}>{t('Language')}</span>
-                <Dropdown.Menu>
+                <Dropdown.Menu data-cy="links-language">
                   {router.locales.map((locale) => (
                     <Dropdown.Item key={locale} eventKey={locale} active={locale === router.locale}>
                       <Link href={router.asPath} locale={locale}>
