@@ -129,7 +129,7 @@ const handlerRecoveryLogin = ()=>{
           </Row>
           <Row>
             <div className="d-flex justify-content-center">
-              <Form ref={formRef} className={`d-flex flex-column fs-6 ${styles.loginForm}`}>
+              <Form ref={formRef} className={`d-flex flex-column fs-6 ${styles.loginForm}`} data-cy="login-form">
                 <Form.Group controlId="email">
                   <Form.Label>{t('emailFieldLabel')}</Form.Label>
                   <Form.Control className='' type="email" required />

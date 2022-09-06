@@ -47,10 +47,9 @@ describe('Offline home page',()=>{
     it('should login works',()=>{
         cy.visit('/en')
         cy.intercept('/api/user/isRegistered?identifier=gbanoaol@gmail.com').as('isRegisteredReq')
-        cy.get('form')
-        cy.get('form').find('[type="email"]').type('gbanoaol@gmail.com',{force:true})
-        cy.get('form').find('[type="password"]').type('gbanoaol@gmail.com1',{force:true})
-        cy.get('form').find("[data-cy='btn-login']").click({force:true})
+        cy.get('[data-cy="login-form"]').find('[type="email"]').type('gbanoaol@gmail.com',{force:true})
+        cy.get('[data-cy="login-form"]').find('[type="password"]').type('gbanoaol@gmail.com1',{force:true})
+        cy.get('[data-cy="login-form"]').find("[data-cy='btn-login']").click({force:true})
         cy.wait('@isRegisteredReq').then((inter)=>{
             expect(inter.response?.body).to.have.nested.property('hasPassword')
             expect(inter.response?.body).to.have.nested.property('isUser')
