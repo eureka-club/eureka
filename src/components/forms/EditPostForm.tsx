@@ -325,8 +325,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
                       {/* language=CSS */}
                       <style jsx global>{`
                         .rbt-menu {
-                          background-color: #d0f7ed;
-                          min-width: 468px;
+                          min-width: 300px;
                         }
                       `}</style>
                       <AsyncTypeahead
@@ -397,8 +396,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
                       {/* language=CSS */}
                       <style jsx global>{`
                         .rbt-menu {
-                          background-color: #d0f7ed;
-                          min-width: 468px;
+                          min-width: 300px;
                         }
                       `}</style>
                       <AsyncTypeahead
@@ -444,6 +442,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
                     setItems={setItems}
                     labelKey={(res) => t(`topics:${res.code}`)}
                     formatValue={(v: string) => t(`topics:${v}`)} 
+                    placeholder={`${t('Type to add tag')}...`}
                     max={3}
                   />
                 </FormGroup>

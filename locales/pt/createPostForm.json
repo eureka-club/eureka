@@ -24,5 +24,6 @@
   "NotLanguage":"Adicione um idioma",
   "NotAboutItem":"Especifique que material ou ciclo é.",
   "requiredDiscussionItemError": "Por favor indique se sua Eureka é sobre o tema do ciclo ou uma das obras",
-  "requiredEurekaImageError": "Por favor adicione uma imagem à sua Eureka"
+  "requiredEurekaImageError": "Por favor adicione uma imagem à sua Eureka",
+  "Type to add tag": "Tema da sua Eureka (3 max, selecione na lista)"
 }
