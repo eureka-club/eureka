@@ -55,8 +55,8 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
           setItems([...items]);
           if (setTags) setTags(items.join());
         }
+        form.tag.value = "";
     }
-    form.tag.value = "";
   }
 
   const deleteTag = (e:React.MouseEvent<HTMLElement>,idx: number): void => {
