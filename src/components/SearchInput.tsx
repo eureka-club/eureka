@@ -31,7 +31,7 @@ const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => 
     }
   }
 
-  return <><div className={`d-none d-lg-block ${className}`} style={{...style}}>
+  return <><div className={`d-none d-lg-block ${className}`} style={{...style}} data-cy="search-engine">
     <InputGroup className="">
       <InputGroup.Text className="bg-white border border-primary">
         {
@@ -48,8 +48,9 @@ const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => 
        `}
        </style>
       <Form.Control
-        aria-label="Username"
+        aria-label="Search Term"
         aria-describedby="basic-search"
+        data-cy="search-engine-control"
         className={`${className} border-start-0`} type="text" placeholder={t('common:search')} onKeyUp={onTermKeyUp}
       />
     </InputGroup>

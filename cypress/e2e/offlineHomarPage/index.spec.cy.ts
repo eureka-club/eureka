@@ -17,8 +17,14 @@ describe('Offline home page',()=>{
     it('should have a login button',()=>{
         cy.get('[data-cy="btn-login"]')
     })
-    
+    it('should have the search engine and works',()=>{
+        cy.get('[data-cy="search-engine"]').within(()=>{
+            cy.get('[data-cy="search-engine-control"]').type('femin').type('{enter}')
+            cy.url({timeout:30000}).should('match',/search\?q=femin/)
+        })
+    })
     it('should have a login form',()=>{
+        cy.visit('/en')
         cy.get('form')
     })
     it('should have a link with about links nested',()=>{
