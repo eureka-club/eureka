@@ -3,7 +3,7 @@ import { NextPage, GetServerSideProps } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import {QueryClient, dehydrate} from 'react-query';
-import { Spinner, ButtonGroup, Button, Form } from 'react-bootstrap';
+import { Spinner, ButtonGroup, Button, Form, Alert } from 'react-bootstrap';
 import {getPosts} from '@/src/usePosts'
 import {getWorks} from '@/src/useWorks'
 import {getCycles} from '@/src/useCycles'
@@ -26,6 +26,8 @@ const SearchPage: NextPage<Props> = ({postsData,worksData,cyclesData}) => {//TOD
   const { t } = useTranslation('common');
   const router = useRouter();
 
+  console.log(postsData,worksData,cyclesData,'postsData,worksData,cyclesData')  
+
   let qLabel = `${router.query.q as string}`;
   if (qLabel.match(':')) qLabel = router.query.q as string;
 
@@ -46,9 +48,16 @@ const SearchPage: NextPage<Props> = ({postsData,worksData,cyclesData}) => {//TOD
         <h1 className="text-secondary fw-bold mb-2">
           {t('Results about')}: {`"${qLabel}"`}
         </h1>
+        { (postsData.posts.length ||  worksData.works.length || cyclesData.cycles.length) ?
         <div className='d-flex flex-column justify-content-center'>
           <SearchTab postsData={postsData} worksData={worksData} cyclesData={cyclesData} />
-        </div>
+        </div> :
+        <>
+        <Alert className='mt-4' variant="primary">
+        <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
+      </Alert>
+        </>
+         }
        
       </SimpleLayout>
 };
