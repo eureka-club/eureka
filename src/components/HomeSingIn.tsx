@@ -98,7 +98,7 @@ const cyclesJoined = () => {
   const k = JSON.stringify(myCyclesWhere(session?.user.id))
 
     return (cycles && cycles.length) 
-    ? <div>
+    ? <div data-cy="myCycles">
        <CarouselStatic
         cacheKey={['CYCLES',k]}
         onSeeAll={async () => seeAll(cycles, t('myCycles'))}
