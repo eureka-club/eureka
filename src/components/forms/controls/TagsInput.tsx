@@ -1,9 +1,10 @@
-import { FunctionComponent, useState, useEffect, ChangeEvent, KeyboardEvent } from 'react';
-import { Form, Badge, Spinner } from 'react-bootstrap';
+import { FunctionComponent, useState, useEffect, ChangeEvent, KeyboardEvent,useRef } from 'react';
+import { Form, InputGroup,Button, Badge, Spinner,Col } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation'; 
 import { useAtom } from 'jotai'; 
 import { useRouter } from 'next/router';
 import searchEngine from '@/src/atoms/searchEngine';
+import { BiPlus} from 'react-icons/bi';
 
 export type TagsInputProp = {
   tags: string;
@@ -16,6 +17,7 @@ export type TagsInputProp = {
 };
 const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
   const { t } = useTranslation('createWorkForm');
+  const formRef=useRef<HTMLFormElement>(null)
   const { tags, setTags, label = '', readOnly = false, max = 2, className, formatValue = undefined } = props;
   const [loading, setLoading] = useState<Record<string,boolean>>({});
   const [tagInput, setTagInput] = useState<string>('');
@@ -45,6 +47,18 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
     }
   };
 
+   const addTag= (e:React.MouseEvent<HTMLButtonElement>)=>{
+    const form = formRef.current;
+    if(form && form.tag.value) {
+      if (max > items.length) {
+          items.push(form.tag.value);
+          setItems([...items]);
+          if (setTags) setTags(items.join());
+        }
+        form.tag.value = "";
+    }
+  }
+
   const deleteTag = (e:React.MouseEvent<HTMLElement>,idx: number): void => {
     e.preventDefault()
     e.stopPropagation()
@@ -57,7 +71,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
     setSearchEngineState((res)=>({...res,itemsFound:[]}))
     router.push(`/search?q=${v}`);    
   };
-  return (
+  return ( 
     <Form.Group controlId="tags" className={`${className}`}>
       {label && <Form.Label>{label}</Form.Label>}
       <div>
@@ -81,13 +95,32 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
             </span>
           );
         })}
-        {!readOnly && items.length < max && (
-          <Form.Control
-            type="text"
-            placeholder={t('tagsInputPlaceholder')}
-            onChange={onChangeInput}
-            onKeyPress={onKeyPressOnInput}
-          />
+        {!readOnly && items.length < max && (<>
+          <div className='d-none d-lg-block'>
+              <Form.Control
+                type="text"
+                placeholder={t('tagsInputPlaceholder')}
+                onChange={onChangeInput}
+                onKeyPress={onKeyPressOnInput}
+              />
+          </div>
+          <div className='d-block d-lg-none'>
+            <InputGroup className="w-100">
+              <Col className='col-11'> 
+              <Form ref={formRef} className='me-2' >
+                <Form.Group controlId='tag'>
+                   <Form.Control
+                      type="text"
+                    />
+                </Form.Group>
+              </Form>
+              </Col>
+              <Col className='col-1'> 
+                 <Button className="w-100 h-100 p-0 text-white"  onClick={addTag} ><BiPlus /></Button>            
+            </Col>
+            </InputGroup>
+          </div>
+          </>
         )}
       </div>
     </Form.Group>

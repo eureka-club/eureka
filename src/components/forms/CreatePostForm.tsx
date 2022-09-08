@@ -415,8 +415,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
                     {/* language=CSS */}
                     <style jsx global>{`
                       .rbt-menu {
-                        background-color: #d0f7ed;
-                        min-width: 468px;
+                        min-width: 300px;
                       }
                     `}</style>
                     <AsyncTypeahead
@@ -506,8 +505,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
                     {/* language=CSS */}
                     <style jsx global>{`
                       .rbt-menu {
-                        background-color: #d0f7ed;
-                        min-width: 468px;
+                        min-width: 300px;
                       }
                     `}</style>
                     <AsyncTypeahead
@@ -554,6 +552,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
                   labelKey={(res) => t(`topics:${res.code}`)}
                   formatValue={(v: string) => t(`topics:${v}`)} 
                   max={3}
+                  placeholder={`${t('Type to add tag')}...`}
                 />
               </FormGroup>
             </Col>
