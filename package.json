@@ -14,7 +14,7 @@
     "start1": "NODE_ENV=production TS_NODE_COMPILER_OPTIONS='{ \"module\":\"commonjs\" }' ts-node server.ts",
     "start": "NODE_ENV=production next start",
     "tsc": "tsc --noEmit",
-    "e2e": "npx cypress run --reporter junit",
+    "e2e": "cypress run",
     "e2e:record": "cypress run --record",
     "test:ci": "npm-run-all -p --race start e2e",
     "test": "npm-run-all -p --race start cy:open",

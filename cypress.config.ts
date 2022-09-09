@@ -1,6 +1,10 @@
 import { defineConfig } from "cypress";
 
 export default defineConfig({
+  reporter: 'junit',
+  reporterOptions: {
+    mochaFile: 'test-results/result-[hash].xml'
+  },
   component: {
     setupNodeEvents(on, config) {},
     viewportHeight: 500,
