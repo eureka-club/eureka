@@ -5,6 +5,9 @@ export default defineConfig({
   reporterOptions: {
     mochaFile: 'test-results/result-[hash].xml'
   },
+  "retries": {
+    "runMode": 3,
+  },
   component: {
     setupNodeEvents(on, config) {},
     viewportHeight: 500,
