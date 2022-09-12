@@ -235,7 +235,7 @@ const NavBar: FunctionComponent = () => {
           </>)}
           {session && session.user && (
             <Nav className={`${styles.navbarNav} d-flex me-1`}>
-              <Dropdown align="end" className={`${styles.langSwitch} ${styles.avatar}`}>
+              <Dropdown data-cy="session-actions" align="end" className={`${styles.langSwitch} ${styles.avatar}`}>
                 <Dropdown.Toggle as={ChevronToggle} >{getAvatar()}</Dropdown.Toggle>
                 <span className={styles.menuBottomInfo}>{t('Account')}</span>
                 <Dropdown.Menu>
@@ -260,7 +260,7 @@ const NavBar: FunctionComponent = () => {
               </Dropdown>
             </Nav>
           )}
-          <Nav.Item>
+          <Nav.Item data-cy="notifications-btn">
             <NotificationsList />  
           </Nav.Item>
         </Navbar.Collapse>

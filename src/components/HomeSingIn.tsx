@@ -114,7 +114,7 @@ const cyclesJoined = () => {
 const renderCarousels =  ()=>{
         return <>
                 {gbt.map(([topic,apiResponse])=>{
-                return <div className='mb-5' style={{minHeight:"448px"}} key={topic}>
+                return <div className='mb-5' data-cy-={`carousel-${topic}`} style={{minHeight:"448px"}} key={topic}>
                 <Carousel topic={topic} apiResponse={apiResponse} />
                 </div>
                 })}
