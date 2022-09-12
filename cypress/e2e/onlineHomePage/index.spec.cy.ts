@@ -46,7 +46,7 @@ describe('Online home page',()=>{
 
     it('should have in "Cycles I created or joined" the correct cycle mosaics qty', ()=>{
         const url = '/api/cycle?props=%7B%22where%22%3A%7B%22OR%22%3A%5B%7B%22participants%22%3A%7B%22some%22%3A%7B%22id%22%3A127%7D%7D%7D%2C%7B%22creatorId%22%3A127%7D%5D%7D%7D'
-        fetch(url).then(r=>r.json()).then(res=>{
+        fetch(url).then(r=>r.json()).then(res=>{debugger;
             cy.wrap(res).should('have.a.property','data')
             cy.get('[data-cy="myCycles"]').within(()=>{
                 cy.get('[data-cy^="mosaic-item-cycle-"]').should('have.lengthOf',res.data.length)
