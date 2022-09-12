@@ -1,7 +1,24 @@
+// import { signIn } from "next-auth/react";
+
 describe('Online home page',()=>{
-    beforeEach(()=>{
+    // beforeEach(()=>{
+    //     cy.visit('/en')
         
-    })
+    //     signIn('credentials' ,{
+    //         redirect:false,
+    //         email:'gbanoaol@gmail.com',
+    //         password:'gbanoaol@gmail.com1'
+    //       })
+    //       .then(res=>{
+    //         const r = res as unknown as {error:string}
+    //         if(res && r.error){
+    //           return false
+    //         }
+    //         return true
+    //       })
+        
+    // })
+    
     
     it('should login works',()=>{
         cy.visit('/en')
@@ -15,7 +32,7 @@ describe('Online home page',()=>{
     
     it('should contains main elements',()=>{
         cy.intercept('/api/auth/session').as('sessionReq')
-        cy.wait('@sessionReq',{timeout:30000}).then(inter=>{
+        cy.wait('@sessionReq').then(inter=>{
             cy.wrap(inter).its('response').its('body').its('user').then(u=>{
                 expect(u.email).to.be.eq('gbanoaol@gmail.com')
             })
@@ -25,6 +42,16 @@ describe('Online home page',()=>{
     it('should have a section "Cycles I created or joined"', ()=>{
         cy.contains('Cycles I created or joined')
         cy.get('[data-cy="myCycles"]')
+    })
+
+    it('should have in "Cycles I created or joined" the correct cycle mosaics qty', ()=>{
+        const url = '/api/cycle?props=%7B%22where%22%3A%7B%22OR%22%3A%5B%7B%22participants%22%3A%7B%22some%22%3A%7B%22id%22%3A127%7D%7D%7D%2C%7B%22creatorId%22%3A127%7D%5D%7D%7D'
+        fetch(url).then(r=>r.json()).then(res=>{
+            cy.wrap(res).should('have.a.property','data')
+            cy.get('[data-cy="myCycles"]').within(()=>{
+                cy.get('[data-cy^="mosaic-item-cycle-"]').should('have.lengthOf',res.data.length)
+            })
+        })
     })
 
     it('should have a section "Trending topics"', ()=>{
@@ -40,7 +67,7 @@ describe('Online home page',()=>{
     it('should load the carousel "Environment"',()=>{
         cy.scrollTo('bottom')
         cy.scrollTo('bottom')
-        cy.contains('Environment',{timeout:30000})
+        cy.contains('Environment')
     })
 
     it('should have a "Create" button with link to creat Cycle, Eureka and Work',()=>{
@@ -67,25 +94,7 @@ describe('Online home page',()=>{
         cy.get('.NotificationsList')
     })
 
-    // it('should have a label carousel for "Cycles I created or joined"', ()=>{
-    //     // cy.intercept('/api/cycle\?props=*').as('cyclesCreatedOrJoinedReq')
-
-    //     // cy.wait('@cyclesCreatedOrJoinedReq',{timeout:30000}).then((inter)=>{
-    //     //     cy.contains('Cycles I created or joined');
-    //     //     cy.wrap(inter)
-    //     //         .its('response.body')
-    //     //         .then(body=>{
-    //     //                 console.log(body,'body')
-    //     //                 cy.wrap(body).should('have.a.property','data')
-        
-    //     //                 cy.get('[data-cy="myCycles"]').within(()=>{
-    //     //                     cy.get('[data-cy^="mosaic-item-cycle-"]').should('have.lengthOf',body.data.length)
-    //     //                 })
-        
-    //     //             })
-
-    //     // })
-    // })
+    
 
 })
 
