@@ -1,23 +1,9 @@
-// import { signIn } from "next-auth/react";
+import { signIn } from "next-auth/react";
 
 describe('Online home page',()=>{
-    // beforeEach(()=>{
-    //     cy.visit('/en')
+    beforeEach(()=>{
         
-    //     signIn('credentials' ,{
-    //         redirect:false,
-    //         email:'gbanoaol@gmail.com',
-    //         password:'gbanoaol@gmail.com1'
-    //       })
-    //       .then(res=>{
-    //         const r = res as unknown as {error:string}
-    //         if(res && r.error){
-    //           return false
-    //         }
-    //         return true
-    //       })
-        
-    // })
+    })
     
     
     it('should login works',()=>{
@@ -25,8 +11,23 @@ describe('Online home page',()=>{
         cy.get('[data-cy="login-form"]').within(()=>{
             cy.get('[type="email"]').type('gbanoaol@gmail.com',{force:true})
             cy.get('[type="password"]').type('gbanoaol@gmail.com1',{force:true})
-            cy.get('[data-cy="btn-login"]').click({force:true})
+            cy.get('[data-cy="btn-login"]')
+            .click({force:true})
         })
+        
+        // signIn('credentials' ,{
+        //     redirect:false,
+        //     email:'gbanoaol@gmail.com',
+        //     password:'gbanoaol@gmail.com1'
+        //   })
+        //   .then(res=>{
+        //     const r = res as unknown as {error:string}
+        //     if(res && r.error){
+        //       return false
+        //     }
+        //     return true
+        //   })
+        
         
     })
     
@@ -46,10 +47,9 @@ describe('Online home page',()=>{
 
     it('should have in "Cycles I created or joined" the correct cycle mosaics qty', ()=>{
         const url = '/api/cycle?props=%7B%22where%22%3A%7B%22OR%22%3A%5B%7B%22participants%22%3A%7B%22some%22%3A%7B%22id%22%3A127%7D%7D%7D%2C%7B%22creatorId%22%3A127%7D%5D%7D%7D'
-        fetch(url).then(r=>r.json()).then(res=>{debugger;
-            cy.wrap(res).should('have.a.property','data')
+        cy.request(url).its('body').should('have.a.property','data').then(data=>{
             cy.get('[data-cy="myCycles"]').within(()=>{
-                cy.get('[data-cy^="mosaic-item-cycle-"]').should('have.lengthOf',res.data.length)
+                cy.get('[data-cy^="mosaic-item-cycle-"]').should('have.lengthOf',data.length)
             })
         })
     })
