@@ -236,12 +236,19 @@ hr {
   background-color: var(--color-primary-raised);
   border-color: var(--color-primary-raised);
 }
+
+.btn-warning {
+ color: var(--text-color-extralight);
+}
 .btn-warning:hover {
  background-color: var(--color-danger);
+ font-weight: 900;
+ color: var(--text-color-extralight);
+
 }
 .btn-warning:focus {
   box-shadow: none;
-  
+  color: var(--text-color-extralight);
 }
 
 .top-50{

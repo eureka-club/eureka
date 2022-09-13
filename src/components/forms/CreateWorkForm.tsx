@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, FormEvent, FunctionComponent, useEffect, useState, useRef } from 'react';
 import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
@@ -21,6 +22,7 @@ import TagsInput from './controls/TagsInput';
 import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import toast from 'react-hot-toast'
 import useTopics from '../../useTopics';
+import { ImCancelCircle } from 'react-icons/im';
 
 import { CreateWorkClientPayload } from '../../types/work';
 import ImageFileSelect from './controls/ImageFileSelect';
@@ -386,16 +388,16 @@ const CreateWorkForm: FunctionComponent<Props> = ({noModal = false})=> {
       </ModalBody>
 
       <ModalFooter>
-        <Container className="py-1">
-          <Button disabled={isLoading}  variant="primary" type="submit" className={`btn-eureka d-none d-lg-block float-end ${styles.submitButton}`}>
-            <>
-              {t('submitButtonLabel')}
-              {isLoading && (
-                <Spinner animation="grow" variant="info" className={`ms-2 ${styles.loadIndicator}`} size="sm"  />
-              )}
-            </>
-          </Button>
-          <Button disabled={isLoading} type="submit" className="btn-eureka d-block d-lg-none w-100">
+        <Container className="p-0 d-flex justify-content-end">
+           <ButtonGroup  className="py-4">
+            <Button
+               variant="warning"
+                //onClick={handleFormClear}
+                className="text-white"
+              >
+                <ImCancelCircle />
+              </Button>
+          <Button disabled={isLoading} type="submit" className="btn-eureka">
             <>
               {t('submitButtonLabel')}
               {isLoading && (
@@ -403,6 +405,9 @@ const CreateWorkForm: FunctionComponent<Props> = ({noModal = false})=> {
               ) }
             </>
           </Button>
+            </ButtonGroup>
+          
+
         </Container>
       </ModalFooter>
     </Form>

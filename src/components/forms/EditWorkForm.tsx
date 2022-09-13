@@ -5,7 +5,6 @@ import utc from 'dayjs/plugin/utc';
 import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, FormEvent, useEffect, useState, FunctionComponent, useRef } from 'react';
 import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
@@ -29,7 +28,6 @@ import styles from './CreateWorkForm.module.css';
 import i18nConfig from '../../../i18n';
 import useTopics from '../../useTopics';
 import useWork from '@/src/useWork'
-import { ImCancelCircle } from 'react-icons/im';
 
 dayjs.extend(utc);
 const EditWorkForm: FunctionComponent = () => {
@@ -433,16 +431,17 @@ const EditWorkForm: FunctionComponent = () => {
         </ModalBody>
 
         <ModalFooter>
-          <Container className="py-4 d-flex justify-content-end">
-            <ButtonGroup  className="pt-3">
-            <Button
+           <Row>
+            <Col className='d-flex justify-content-end mt-4 mb-2'>
+             <Button
                variant="warning"
                 //onClick={handleFormClear}
-                className="text-white"
+                className="text-white me-3 mt-3"
+                style={{ width: '10em' }}
               >
-                <ImCancelCircle />
+                {t('resetBtnLabel')}
               </Button>
-            <Button disabled={isLoading} type="submit" className="float-end btn-eureka" style={{ width: '10em' }}>
+            <Button disabled={isLoading} type="submit" className="mt-3 btn-eureka" style={{ width: '10em' }}>
               <>
                 {t('titleEdit')}
                 {isLoading && (
@@ -450,8 +449,8 @@ const EditWorkForm: FunctionComponent = () => {
                 ) }
               </>
             </Button>
-            </ButtonGroup>
-          </Container>
+            </Col>
+          </Row>
         </ModalFooter>
       </Form>
     )

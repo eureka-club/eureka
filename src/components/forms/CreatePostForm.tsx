@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
@@ -43,7 +44,7 @@ import useUsers from '@/src/useUsers'
 import { useNotificationContext } from '@/src/useNotificationProvider';
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
 import toast from 'react-hot-toast'
-import Toast from '../common/Toast';
+import { ImCancelCircle } from 'react-icons/im';
 
 interface Props {
   noModal?: boolean;
@@ -463,7 +464,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
                 </Button>
                 )}        
                 { showCrop && (
-                <Col className='d-flex'>
+                <Col className=''>
                   <div className='w-100 border p-3'>  
                   <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={closeCrop} cropShape='rect' />
                   </div>  
@@ -596,16 +597,16 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
       </ModalBody>
 
       <ModalFooter>
-        <Container className="py-3">
             <Row className='d-flex flex-column flex-lg-row'>
-            <Col className="mb-4">
-             {/* <FormCheck type="checkbox" defaultChecked inline id="isPublic" label={t('isPublicFieldLabel')} />
-              <small style={{ color: 'lightgrey', display: 'block', margin: '0.25rem 0 0 1.25rem' }}>
-                {t('isPublicInfotip')}
-              </small>*/}
-            </Col>
-            <Col className="d-none d-lg-block mb-4">
-              <Button disabled={isCreatePostLoading} onClick={(e)=>{handleSubmit(e)}} className={`btn-eureka float-end d-flex justify-content-center align-items-center ${styles.submitButton}`}>
+            <Container className="p-0 d-flex justify-content-end">
+             <ButtonGroup  className="py-4">
+              <Button
+               variant="warning"
+                //onClick={handleFormClear}
+              >
+                <ImCancelCircle />
+              </Button>
+              <Button disabled={isCreatePostLoading} onClick={(e)=>{handleSubmit(e)}} className="btn-eureka"  style={{ width: '12em' }}>
                 <>
                   {t('submitButtonLabel')}
                   {isCreatePostLoading && (
@@ -613,19 +614,9 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
                   ) }
                 </>
               </Button>
-            </Col>
-            <Col className="d-block d-lg-none mb-4">
-              <Button disabled={isCreatePostLoading} onClick={(e)=>{handleSubmit(e)}} className={`btn-eureka w-100`}>
-                <>
-                  {t('submitButtonLabel')}
-                  {isCreatePostLoading && (
-                    <Spinner className="ms-2" animation="grow" variant="info" size="sm" />
-                  ) }
-                </>
-              </Button>
-            </Col>
+              </ButtonGroup>
+            </Container>            
           </Row>
-        </Container>
       </ModalFooter>
     </Form>
   );

@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import Trans from 'next-translate/Trans';
 import { ChangeEvent, FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
-import { Button, Col, Form, ButtonGroup, ListGroup, Modal, Row, Spinner } from 'react-bootstrap';
+import { Button, Col, Form, ButtonGroup, ListGroup, Modal, Row, Spinner,Container } from 'react-bootstrap';
 import { useMutation } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BiTrash, BiPlus, BiEdit } from 'react-icons/bi';
@@ -850,9 +850,8 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
           
         </Row>
  */}      
-    <section className="d-flex justify-content-end">
-           <ButtonGroup  className="pt-3">
-
+    <Container className="p-0 d-flex justify-content-end">
+           <ButtonGroup  className="py-4">
             <Button     
               variant="warning"         
               type="button"
@@ -864,7 +863,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
             <Button
               disabled={!selectedWorksForCycle.length || !cycleCoverImageFile}
               type="submit"
-              className="p-2 text-white btn-eureka"
+              className="text-white btn-eureka"
             >
               <>
                 {t('submitBtnLabel')}
@@ -875,7 +874,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
               </>
             </Button>
             </ButtonGroup>
-          </section>
+          </Container>
  </Form>
 
       <Modal show={addWorkModalOpened} onHide={handleAddWorkModalClose} animation={false}>

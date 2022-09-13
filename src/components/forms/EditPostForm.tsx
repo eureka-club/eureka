@@ -60,7 +60,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
   const [postId, setPostId] = useState<string>('');
   const [ck,setCK] = useState<string[]>();
   const editorRef = useRef<any>(null);
-  const [remove,setRemove] = useState(false);
+  //const [remove,setRemove] = useState<boolean>(false);
   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
 
   
@@ -82,14 +82,83 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
   } = useMutation(
     async (payload: EditPostAboutCycleClientPayload | EditPostAboutWorkClientPayload): Promise<Post> => {
       const res = await fetch(`/api/post/${id}`, {
-        method: remove?'DELETE':'PATCH',
+        method: 'PATCH',
         body: JSON.stringify(payload),
       });
       console.log(res,'res')
       if(res.ok){
         handleEditPostOnSmallerScreenClose();
-        toast.success( t('PostEdited'));
-        router.push(`/${selectedCycle?'cycle':'work'}/${selectedCycle?selectedCycle.id:selectedWork!.id}/post/${post!.id}`)
+         toast.success( t('PostEdited'));
+         router.push(`/${selectedCycle?'cycle':'work'}/${selectedCycle?selectedCycle.id:selectedWork!.id}/post/${post!.id}`)
+      }
+      return res.json();
+    },
+    {
+      onMutate: async (variables) => {
+         if (post) {
+            const ck_ = ck||['POST',`${post.id}`];
+            await queryClient.cancelQueries(ck_)
+            const snapshot = queryClient.getQueryData<PostMosaicItem[]|PostMosaicItem>(ck_)
+            const {title,contentText} = variables;
+            if(snapshot){
+              let posts = [];
+              if(('length' in snapshot)){
+                posts = [...snapshot] as PostMosaicItem[];                  
+                const idx = posts.findIndex(p=>p.id == +postId)
+                if(idx >- 1){
+                  const oldPost = posts[idx];
+                  const newPost = {
+                    ...oldPost,
+                    contentText: contentText??oldPost.contentText,
+                    title: title??oldPost.title,
+                  }
+                  posts.splice(idx,1,newPost);
+                  queryClient.setQueryData(ck_, [...posts]);
+                }
+              }
+              else 
+                queryClient.setQueryData(ck_,{...snapshot,title,contentText});
+              
+              return { snapshot, ck:ck_ };
+            }
+            // const ck = [`POST`, `${globalModalsState.editPostId || post.id}`];
+          }
+          handleEditPostOnSmallerScreenClose();
+        
+        // return { snapshot: null, ck: '' };
+      },
+      onSettled: (_post, error, _variables, context) => {
+        if (error){
+          queryClient.invalidateQueries(ck);
+          queryClient.invalidateQueries(['POST',`${postId}`]);
+        }
+        // this make the page to do a refresh
+        queryClient.invalidateQueries(ck);
+        // queryClient.invalidateQueries(['POST',postId]);
+        
+      },
+    },
+  );
+
+   const {
+    mutate: execDeletePost,
+    data: deletePost,
+    error: deletePostError,
+    isError: isDeletePostError,
+    isLoading: isDeletePostLoading,
+    isSuccess: isDeletePostSuccess,
+  } = useMutation(
+    async (payload: EditPostAboutCycleClientPayload | EditPostAboutWorkClientPayload): Promise<Post> => {
+       const res = await fetch(`/api/post/${id}`, {
+        method: 'DELETE',
+        body: JSON.stringify(payload),
+      });
+      console.log(res,'res')
+      if(res.ok){
+        handleEditPostOnSmallerScreenClose();
+        toast.success( t('PostRemoved'));
+        console.log(`/${selectedCycle?'cycle':'work'}/${selectedCycle?selectedCycle.id:selectedWork!.id}`)
+        router.push(`/${selectedCycle?'cycle':'work'}/${selectedCycle?selectedCycle.id:selectedWork!.id}`)
       }
       return res.json();
     },
@@ -204,6 +273,24 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
     setSelectedCycle(null);
    // if (formRef.current) formRef.current.isPublic.checked = true;
   };
+
+    const handleRemove = async (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    const payload: EditPostAboutWorkClientPayload = {
+        id: globalModalsState.editPostId ? globalModalsState.editPostId.toString() : router.query.postId as string,
+        selectedCycleId: selectedCycle != null ? selectedCycle.id : null,
+        selectedWorkId: selectedWork != null ? selectedWork.id : undefined,
+        title: '',
+        // image: imageFile,
+        language: '',
+        contentText: '', // form.description.value.length ? form.description.value : null,
+        isPublic: false,
+        topics: '',
+      }; 
+      console.log(payload,'payload') 
+    await execDeletePost(payload);
+
+    }
 
   const formValidation = (payload:any) => {
     if (!payload.title.length) {
@@ -489,7 +576,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
             </Row>
         {/* </ModalBody> */}
 
-        {/* <ModalFooter> */}
+        {/* <ModalFooter>
             
                 <FormCheck
                       type="checkbox"
@@ -498,35 +585,33 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
                       className="text-danger"
                       id="removePost"
                       label={t('common:Remove')}
-                    />
-               <Col className='d-none d-lg-flex justify-content-end mt-2 mb-2'>
-    
-                <Button disabled={isEditPostLoading} type="submit" className="mt-4 ps-5 pe-4 btn-eureka" style={{ width: '15em' }}>
+                    /> */}
+               
+                <Row>
+            <Col className='d-flex justify-content-end  py-5'>
+             <Button
+               variant="warning"
+               disabled={isDeletePostLoading}
+                onClick={handleRemove}
+                className="text-white  me-3"
+                style={{ width: '10em' }}
+              >
+                <>
+                {t('resetBtnLabel')}
+                 {isDeletePostLoading && (
+                      <Spinner size="sm" animation="grow" variant="secondary" className={`ms-2 ${styles.loadIndicator}`}/>
+                    )}</>
+              </Button>
+                <Button disabled={isEditPostLoading} type="submit" className="btn-eureka" style={{ width: '10em' }}>
                   <>
                     {t('titleEdit')}
-                    {isEditPostLoading ? (
-                      <Spinner size="sm" animation="grow" variant="secondary" className={styles.loadIndicator} />
-                    ) : (
-                      <span className={styles.placeholder} />
+                    {isEditPostLoading && (
+                      <Spinner size="sm" animation="grow" variant="secondary" className={`ms-2 ${styles.loadIndicator}`}/>
                     )}
-                    {isEditPostError && createPostError}
                   </>
                 </Button>
                 </Col>
-                <Col className='d-block d-lg-none mt-2 mb-2'>
-    
-                <Button disabled={isEditPostLoading} type="submit" className="mt-4 ps-5 pe-4 btn-eureka" style={{ width: '100%' }}>
-                  <>
-                    {t('titleEdit')}
-                    {isEditPostLoading ? (
-                      <Spinner size="sm" animation="grow" variant="secondary" className={styles.loadIndicator} />
-                    ) : (
-                      <span className={styles.placeholder} />
-                    )}
-                    {isEditPostError && createPostError}
-                  </>
-                </Button>
-                </Col>
+                </Row>
           </Container>
               
         {/* </ModalFooter> */}

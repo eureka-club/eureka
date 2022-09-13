@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
@@ -19,7 +18,6 @@ import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import TagsInput from './controls/TagsInput';
 // import i18nConfig from '../../../i18n';
 import useTopics from '../../useTopics';
-import { ImCancelCircle } from 'react-icons/im';
 
 
 import {
@@ -339,31 +337,27 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
           </Row>
           <Row>
             <Col className='d-flex justify-content-end mt-4 mb-2'>
-               <ButtonGroup  className="pt-3">
                <Button
                variant="warning"
-                onClick={handleFormClear}
-                className="text-white"
+                //onClick={handleFormClear}
+                className="text-white me-3 mt-3"
+                style={{ width: '10em' }}
               >
-                <ImCancelCircle />
+                {t('resetBtnLabel')}
               </Button>
               <Button
-                // disabled={!selectedWorksForCycle.length || !cycleCoverImageFile}
+                disabled={isEditCycleReqLoading}
                 type="submit"
-                className=" btn-eureka"
-                style={{ width: '12em' }}
+                className=" btn-eureka mt-3"
+                style={{ width: '10em' }}
               >
                 <>
                   {t('Edit Cycle')}
-                  {isEditCycleReqLoading ? (
+                  {isEditCycleReqLoading && (
                     <Spinner animation="grow" variant="info" className={styles.loadIndicator} />
-                  ) : (
-                    <span className={styles.loadIndicator} />
                   )}
-                  {isEditCycleReqError && editCycleReqError}
                 </>
               </Button>
-              </ButtonGroup>
            
             </Col>
           </Row>
