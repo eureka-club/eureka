@@ -2,6 +2,7 @@ describe('Offline home page',()=>{
     it('should be found',()=>{
         cy.visit('/en')
     })
+    //en/
     it('should have language links',()=>{
         cy.get('[data-cy="link-language"]')
         .find('button')
@@ -14,18 +15,13 @@ describe('Offline home page',()=>{
             .should('match',/(es|en|fr|pt).(png|webp)$/)
         })
     })
+    it('should have a login form',()=>{
+        cy.get('[data-cy="login-form"]').find('[type="email"]')
+        cy.get('[data-cy="login-form"]').find('[type="password"]')
+        cy.get('[data-cy="login-form"]').find("[data-cy='btn-login']")
+    })
     it('should have a login button',()=>{
         cy.get('[data-cy="btn-login"]')
-    })
-    it('should have the search engine and works',()=>{
-        cy.get('[data-cy="search-engine"]').within(()=>{
-            cy.get('[data-cy="search-engine-control"]').type('femin').type('{enter}')
-            cy.url({timeout:30000}).should('match',/search\?q=femin/)
-        })
-    })
-    it('should have a login form',()=>{
-        cy.visit('/en')
-        cy.get('form')
     })
     it('should have a link with about links nested',()=>{
         cy.viewport(1300, 750)
@@ -38,39 +34,27 @@ describe('Offline home page',()=>{
             expect(linksText).includes(a.text())
         })
     })
-    it('should have a explorer button',()=>{
-        cy.contains('Explore')
+    it('should have the search engine and works',()=>{
+        cy.get('[data-cy="search-engine"]').within(()=>{
+            cy.get('[data-cy="search-engine-control"]').type('femin').type('{enter}')
+            cy.url({timeout:30000}).should('match',/search\?q=femin/)
+        })
     })
+    //en/explore
     it('should have a explorer button linked to /explore page',()=>{
-        cy.intercept('/api/cycle?props=*').as('featuredCyclesReq')
-        cy.get('[data-cy="btn-explore"]').click({force:true})
-        cy.wait('@featuredCyclesReq').then((inter)=>{
-            cy.url().should('include', '/explore')
-            expect(inter.response?.body).to.have.keys('data','fetched','total')
-            expect(inter.response?.body.data).to.have.length.gt(0)
-        })
-    })
-    it('should login works',()=>{
         cy.visit('/en')
-        cy.intercept('/api/user/isRegistered?identifier=gbanoaol@gmail.com').as('isRegisteredReq')
-        cy.get('[data-cy="login-form"]').find('[type="email"]').type('gbanoaol@gmail.com',{force:true})
-        cy.get('[data-cy="login-form"]').find('[type="password"]').type('gbanoaol@gmail.com1',{force:true})
-        cy.get('[data-cy="login-form"]').find("[data-cy='btn-login']").click({force:true})
-        cy.wait('@isRegisteredReq').then((inter)=>{
-            expect(inter.response?.body).to.have.nested.property('hasPassword')
-            expect(inter.response?.body).to.have.nested.property('isUser')
-
-        })
-        cy.intercept('/api/auth/session').as('authSessionReq')
-        cy.wait('@authSessionReq').then((inter)=>{
-            expect(inter.response?.body).to.have.keys('user','expires')
-            expect(inter.response?.body.user).to.have.nested.property('email')
-            expect(inter.response?.body.user).to.have.nested.property('id')
-            expect(inter.response?.body.user).to.have.nested.property('image')
-            expect(inter.response?.body.user).to.have.nested.property('name')
-            expect(inter.response?.body.user).to.have.nested.property('roles')
-        })
-
+        cy.get('[data-cy="btn-explore"]').click({force:true})
     })
+    it('should have the explore a section "Featured Cycles"',()=>{
+        cy.contains('Featured Cycles')
+    })
+    it('should the "Featured Cycles" have the correct cycles qty',()=>{
+        const url = '/api/cycle?props=%7B%22take%22%3A8%2C%22where%22%3A%7B%22OR%22%3A%5B%7B%22AND%22%3A%5B%7B%22title%22%3A%7B%22contains%22%3A%22femin%22%7D%7D%5D%7D%2C%7B%22AND%22%3A%5B%7B%22contentText%22%3A%7B%22contains%22%3A%22femin%22%7D%7D%5D%7D%2C%7B%22AND%22%3A%5B%7B%22tags%22%3A%7B%22contains%22%3A%22femin%22%7D%7D%5D%7D%2C%7B%22AND%22%3A%5B%7B%22topics%22%3A%7B%22contains%22%3A%22femin%22%7D%7D%5D%7D%5D%2C%22AND%22%3A%7B%22access%22%3A%7B%22in%22%3A%5B1%2C2%5D%7D%7D%7D%7D'
+        cy.request(url).its('body').should('have.a.property','data').then(data=>{
+            cy.url().should('include', '/explore')
+            expect(data).to.have.length.gt(0)
+        })
+    })
+    
 })
 export {}

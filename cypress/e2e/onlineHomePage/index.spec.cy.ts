@@ -5,40 +5,67 @@ describe('Online home page',()=>{
         
     })
     
-    
+    //en/
     it('should login works',()=>{
         cy.visit('/en')
-        cy.get('[data-cy="login-form"]').within(()=>{
-            cy.get('[type="email"]').type('gbanoaol@gmail.com',{force:true})
-            cy.get('[type="password"]').type('gbanoaol@gmail.com1',{force:true})
-            cy.get('[data-cy="btn-login"]')
-            .click({force:true})
-        })
+        cy.get('[data-cy="login-form"]').find('[type="email"]').type('gbanoaol@gmail.com',{force:true})
+        cy.get('[data-cy="login-form"]').find('[type="password"]').type('gbanoaol@gmail.com1',{force:true})
+        cy.get('[data-cy="login-form"]').find("[data-cy='btn-login']").click({force:true})
         
-        // signIn('credentials' ,{
-        //     redirect:false,
-        //     email:'gbanoaol@gmail.com',
-        //     password:'gbanoaol@gmail.com1'
-        //   })
-        //   .then(res=>{
-        //     const r = res as unknown as {error:string}
-        //     if(res && r.error){
-        //       return false
-        //     }
-        //     return true
-        //   })
-        
-        
+
     })
+    // it('should login works',()=>{
+    //     cy.visit('/en')
+
+    //     cy.intercept('/api/user/isRegistered?identifier=gbanoaol@gmail.com').as('isRegisteredReq')
+    //     cy.intercept('/api/auth/session').as('authSessionReq')
+
+    //     cy.get('[data-cy="login-form"]').within(()=>{
+    //         cy.get('[type="email"]').type('gbanoaol@gmail.com',{force:true})
+    //         cy.get('[type="password"]').type('gbanoaol@gmail.com1',{force:true})
+    //         cy.get('[data-cy="btn-login"]')
+    //         .click({force:true})
+
+            
+    //     })
+        
+    //     cy.wait('@isRegisteredReq').then((inter)=>{
+    //         expect(inter.response?.body).to.have.nested.property('hasPassword')
+    //         expect(inter.response?.body).to.have.nested.property('isUser')
+    //     })
+
+    //     cy.wait('@authSessionReq').then((inter)=>{
+    //         expect(inter.response?.body).to.have.keys('user','expires')
+    //         expect(inter.response?.body.user).to.have.nested.property('email')
+    //         expect(inter.response?.body.user).to.have.nested.property('id')
+    //         expect(inter.response?.body.user).to.have.nested.property('image')
+    //         expect(inter.response?.body.user).to.have.nested.property('name')
+    //         expect(inter.response?.body.user).to.have.nested.property('roles')
+    //     })
+    //     // signIn('credentials' ,{
+    //     //     redirect:false,
+    //     //     email:'gbanoaol@gmail.com',
+    //     //     password:'gbanoaol@gmail.com1'
+    //     //   })
+    //     //   .then(res=>{
+    //     //     const r = res as unknown as {error:string}
+    //     //     if(res && r.error){
+    //     //       return false
+    //     //     }
+    //     //     return true
+    //     //   })
+        
+        
+    // })
     
-    it('should contains main elements',()=>{
-        cy.intercept('/api/auth/session').as('sessionReq')
-        cy.wait('@sessionReq').then(inter=>{
-            cy.wrap(inter).its('response').its('body').its('user').then(u=>{
-                expect(u.email).to.be.eq('gbanoaol@gmail.com')
-            })
-        })
-    })
+    // it('should contains main elements',()=>{
+    //     cy.intercept('/api/auth/session').as('sessionReq')
+    //     cy.wait('@sessionReq').then(inter=>{
+    //         cy.wrap(inter).its('response').its('body').its('user').then(u=>{
+    //             expect(u.email).to.be.eq('gbanoaol@gmail.com')
+    //         })
+    //     })
+    // })
 
     it('should have a section "Cycles I created or joined"', ()=>{
         cy.contains('Cycles I created or joined')
