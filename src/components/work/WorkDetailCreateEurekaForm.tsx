@@ -373,12 +373,12 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
 
       <aside className="d-flex justify-content-end">
         <ButtonGroup size="sm" className="pt-3">
-          <Button variant="warning" onClick={clearCreateEurekaForm} disabled={isLoading}>
+          <Button variant="warning" className='text-white' onClick={clearCreateEurekaForm} disabled={isLoading}>
             <ImCancelCircle />
           </Button>
           <Button data-cy="create-eureka-btn" onClick={handlerSubmitCreateEureka} className="text-white" style={{ width: '5rem' }} disabled={isLoading}>
             <span>
-              <BsCheck /> {t('Create')}
+               {t('Create')}
             </span>
             {isLoading && <Spinner size="sm" animation="grow" />}
           </Button>

@@ -387,26 +387,20 @@ const CreateWorkForm: FunctionComponent<Props> = ({noModal = false})=> {
 
       <ModalFooter>
         <Container className="py-1">
-          <Button variant="primary" type="submit" className={`btn-eureka d-none d-lg-block float-end ${styles.submitButton}`}>
+          <Button disabled={isLoading}  variant="primary" type="submit" className={`btn-eureka d-none d-lg-block float-end ${styles.submitButton}`}>
             <>
               {t('submitButtonLabel')}
-              {isLoading ? (
+              {isLoading && (
                 <Spinner animation="grow" variant="info" className={`ms-2 ${styles.loadIndicator}`} size="sm"  />
-              ) : (
-                <span className={styles.placeholder} />
               )}
-              {isError && createWorkError}
             </>
           </Button>
-          <Button type="submit" className="btn-eureka d-block d-lg-none w-100">
+          <Button disabled={isLoading} type="submit" className="btn-eureka d-block d-lg-none w-100">
             <>
               {t('submitButtonLabel')}
-              {isLoading ? (
+              {isLoading && (
                 <Spinner animation="grow" variant="info" className={`ms-2 ${styles.loadIndicator}`} size="sm"  />
-              ) : (
-                <span className={styles.placeholder} />
-              )}
-              {isError && createWorkError}
+              ) }
             </>
           </Button>
         </Container>

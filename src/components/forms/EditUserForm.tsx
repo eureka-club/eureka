@@ -480,7 +480,7 @@ const EditUserForm: FunctionComponent = () => {
                 </Col>
               </Row>
 
-            <Container className="mt-4 py-3 d-flex justify-content-center justify-content-lg-start">
+            <Container className="mt-4 py-3 d-flex justify-content-center justify-content-lg-end">
               <Button  disabled={isLoadingUser} type="submit" className="btn-eureka">
                 <>
                   {t('Edit')}
