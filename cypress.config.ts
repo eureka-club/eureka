@@ -24,6 +24,6 @@ export default defineConfig({
     setupNodeEvents(on, config) {},
     baseUrl: 'http://localhost:3000',
   },
-  requestTimeout: 30000,
-  defaultCommandTimeout: 30000,
+  requestTimeout: 8000,
+  defaultCommandTimeout: 8000,
 });
