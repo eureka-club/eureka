@@ -9,6 +9,7 @@ import { useMutation } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BiTrash, BiPlus, BiEdit } from 'react-icons/bi';
 import { GiCancel } from 'react-icons/gi';
+import { ImCancelCircle } from 'react-icons/im';
 
 import { Prisma } from '@prisma/client';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
@@ -290,19 +291,20 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
   const handleFormClear = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-
     setSelectedWorksForCycle([]);
     setCycleCoverImageFile(null);
     editorRef.current.setContent('');
+    setItems(() => []);
+    setTags('');
+
+
     if (formRef.current != null) {
       const form = formRef.current;
 
       form.cycleTitle.value = '';
       form.languages.value = '';
-      form.topics.value = '';
       form.startDate.value = '';
       form.endDate.value = '';
-      form.description.value = '';
     }
   };
 
@@ -810,7 +812,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
               />
             </Form.Group>
             <ButtonGroup size="sm" className="mt-3">
-              <Button size="sm" onClick={addGuideline}>
+              <Button size="sm" className="text-white" onClick={addGuideline}>
                 {guidelineEditIdx !== undefined ? <BiEdit /> : <BiPlus />}
               </Button>
               {guidelineEditIdx !== undefined && (
@@ -849,13 +851,15 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
         </Row>
  */}      
     <section className="d-flex justify-content-end">
-            
-            <Button              
+           <ButtonGroup  className="pt-3">
+
+            <Button     
+              variant="warning"         
               type="button"
               onClick={handleFormClear}
-              className="me-4 p-2 btn-eureka"
+              className="text-white"
             >
-              {t('resetBtnLabel')}
+             <ImCancelCircle />
             </Button>
             <Button
               disabled={!selectedWorksForCycle.length || !cycleCoverImageFile}
@@ -870,6 +874,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 {isCreateCycleReqError && createCycleReqError}
               </>
             </Button>
+            </ButtonGroup>
           </section>
  </Form>
 

@@ -123,7 +123,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
               <UserAvatar width={28} height={28} userId={session.user.id} showName={false} />
             </Col>}
             <Col xs={12} md={11}>
-              <ButtonGroup className={`d-flex flex-column flex-md-row justify-content-between ${styles.optButtons}`} size="lg">
+              <ButtonGroup className={`border-0 d-flex flex-column flex-md-row justify-content-between ${styles.optButtons}`} size="lg">
                 <Button
                   //disabled={!isParticipant()}
                   data-cy="bt-create-eureka"

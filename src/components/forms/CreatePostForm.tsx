@@ -598,22 +598,19 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
       <ModalFooter>
         <Container className="py-3">
             <Row className='d-flex flex-column flex-lg-row'>
-            <Col className="border-end border-info mb-4">
+            <Col className="mb-4">
              {/* <FormCheck type="checkbox" defaultChecked inline id="isPublic" label={t('isPublicFieldLabel')} />
               <small style={{ color: 'lightgrey', display: 'block', margin: '0.25rem 0 0 1.25rem' }}>
                 {t('isPublicInfotip')}
               </small>*/}
             </Col>
             <Col className="d-none d-lg-block mb-4">
-              <Button disabled={isCreatePostLoading} onClick={(e)=>{handleSubmit(e)}} className={`btn-eureka float-end ${styles.submitButton}`}>
+              <Button disabled={isCreatePostLoading} onClick={(e)=>{handleSubmit(e)}} className={`btn-eureka float-end d-flex justify-content-center align-items-center ${styles.submitButton}`}>
                 <>
                   {t('submitButtonLabel')}
-                  {isCreatePostLoading ? (
+                  {isCreatePostLoading && (
                     <Spinner className="ms-2" animation="grow" variant="info" size="sm" />
-                  ) : (
-                    <span className={styles.placeholder} />
-                  )}
-                  {isCreatePostError && createPostError}
+                  ) }
                 </>
               </Button>
             </Col>
@@ -621,12 +618,9 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
               <Button disabled={isCreatePostLoading} onClick={(e)=>{handleSubmit(e)}} className={`btn-eureka w-100`}>
                 <>
                   {t('submitButtonLabel')}
-                  {isCreatePostLoading ? (
+                  {isCreatePostLoading && (
                     <Spinner className="ms-2" animation="grow" variant="info" size="sm" />
-                  ) : (
-                    <span className={styles.placeholder} />
-                  )}
-                  {isCreatePostError && createPostError}
+                  ) }
                 </>
               </Button>
             </Col>

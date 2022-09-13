@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
@@ -18,6 +19,8 @@ import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import TagsInput from './controls/TagsInput';
 // import i18nConfig from '../../../i18n';
 import useTopics from '../../useTopics';
+import { ImCancelCircle } from 'react-icons/im';
+
 
 import {
   DATE_FORMAT_PROPS,
@@ -336,16 +339,18 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
           </Row>
           <Row>
             <Col className='d-flex justify-content-end mt-4 mb-2'>
+               <ButtonGroup  className="pt-3">
                <Button
+               variant="warning"
                 onClick={handleFormClear}
-                className="btn-eureka ms-3 me-4 px-3"
+                className="text-white"
               >
-                {t('resetBtnLabel')}
+                <ImCancelCircle />
               </Button>
               <Button
                 // disabled={!selectedWorksForCycle.length || !cycleCoverImageFile}
                 type="submit"
-                className=" ps-5 pe-4 btn-eureka"
+                className=" btn-eureka"
                 style={{ width: '12em' }}
               >
                 <>
@@ -358,6 +363,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
                   {isEditCycleReqError && editCycleReqError}
                 </>
               </Button>
+              </ButtonGroup>
            
             </Col>
           </Row>
