@@ -2,15 +2,42 @@ import { signIn } from "next-auth/react";
 
 describe('Online home page',()=>{
     beforeEach(()=>{
+        // signIn('credentials' ,{
+        //     redirect:false,
+        //     email:'gbanoaol@gmail.com',
+        //     password:'gbanoaol@gmail.com1'
+        //   })
+        //   .then(res=>{
+        //     const r = res as unknown as {error:string}
+        //     if(res && r.error){
+        //       return false
+        //     }
+        //     return true
+        //   })
         
     })
     
     //en/
     it('should login works',()=>{
-        cy.visit('/en')
+        cy.visit('/en')  
         cy.get('[data-cy="login-form"]').find('[type="email"]').type('gbanoaol@gmail.com',{force:true})
         cy.get('[data-cy="login-form"]').find('[type="password"]').type('gbanoaol@gmail.com1',{force:true})
-        cy.get('[data-cy="login-form"]').find("[data-cy='btn-login']").click({force:true})
+        cy.get('[data-cy="login-form"]').find("[data-cy='btn-login']")
+        .click({force:true})
+
+        // cy.wait(5000)
+        // signIn('credentials' ,{
+        //     redirect:false,
+        //     email:'gbanoaol@gmail.com',
+        //     password:'gbanoaol@gmail.com1'
+        //   })
+        //   .then(res=>{
+        //     const r = res as unknown as {error:string}
+        //     if(res && r.error){
+        //       return false
+        //     }
+        //     return true
+        //   })
         
 
     })
@@ -66,8 +93,10 @@ describe('Online home page',()=>{
     //         })
     //     })
     // })
-
+    
     it('should have a section "Cycles I created or joined"', ()=>{
+        // cy.visit('/en')
+
         cy.contains('Cycles I created or joined')
         cy.get('[data-cy="myCycles"]')
     })
@@ -88,13 +117,14 @@ describe('Online home page',()=>{
 
     it('should have a carousel "Gender and feminisms"',()=>{
         cy.contains('Gender and feminisms')
-        cy.get('[data-cy-="carousel-gender-feminisms"]')
+        cy.get('[data-cy="carousel-gender-feminisms"]')
     })
 
     it('should load the carousel "Environment"',()=>{
         cy.scrollTo('bottom')
         cy.scrollTo('bottom')
         cy.contains('Environment')
+        cy.get('[data-cy="carousel-environment"]')
     })
 
     it('should have a "Create" button with link to creat Cycle, Eureka and Work',()=>{
