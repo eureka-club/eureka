@@ -28,7 +28,7 @@
   "newCycleEndDateLabel": "Fecha de cierre",
   "newCyclePitchLabel": "Presentación del ciclo: ¿cuál es el tema de este ciclo y por qué es un tema relevante? ¿Por qué la gente debería participar en este ciclo?",
   "submitBtnLabel": "Crear ciclo",
-  "resetBtnLabel": "Borrar",
+  "resetBtnLabel": "Eliminar",
   "addWrkPopupTitle": "Agregar obra al ciclo",
   "addWrkTypeaheadLabel": "Selecciona una obra",
   "addWrkTypeaheadPlaceholder": "Busca una obra...",
