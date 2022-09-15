@@ -25,7 +25,7 @@ describe('Online home page',()=>{
         cy.get('[data-cy="login-form"]').find("[data-cy='btn-login']")
         .click({force:true})
 
-        // cy.wait(5000)
+        cy.wait(10000)
         // signIn('credentials' ,{
         //     redirect:false,
         //     email:'gbanoaol@gmail.com',
