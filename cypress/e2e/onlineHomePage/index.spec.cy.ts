@@ -1,7 +1,7 @@
 import { signIn } from "next-auth/react";
 
 describe('Online home page',()=>{
-    const options = {timeout:100000}
+    const options = {timeout:15000}
     beforeEach(()=>{
 
         // signIn('credentials' ,{
