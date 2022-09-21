@@ -83,7 +83,12 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
       setNamespace(r);
     };
     fn();
-    if (cycle.topics) items.push(...cycle.topics.split(','));
+    if (cycle.topics?.length){
+        for(let topic of cycle.topics.split(',')){
+          if(!items.includes(topic))
+            items.push(...cycle.topics.split(','));
+      }
+    } 
   }, []);
 
   const {

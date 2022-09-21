@@ -87,7 +87,12 @@ const EditWorkForm: FunctionComponent = () => {
     if(work){
         setTags(work.tags||'');
         labelsChange(work.type);
-        if (work.topics) items.push(...work.topics.split(','));
+        if (work.topics?.length) {
+           for(let topic of work.topics.split(',')){
+             if(!items.includes(topic))
+              items.push(...work.topics.split(','));
+          }
+        }
         if (work.countryOfOrigin2) setCountryOrigin2(work.countryOfOrigin2);
     }
   }, [work]);
