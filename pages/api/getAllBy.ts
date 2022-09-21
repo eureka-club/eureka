@@ -57,6 +57,18 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
           },
         ],
       }),
+      OR: [
+          {
+            disabled: {
+              equals: null,
+            },
+          },
+          {
+            disabled: {
+              equals: false,
+            },
+          },
+        ],
     };
     interface PropsArgs {
       isWork?: boolean;

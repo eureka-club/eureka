@@ -80,7 +80,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     enabled:!!cycleId
   });
 
-  const { data: dataWorks } = useWorks({where:{cycles: { some: { id: cycle?.id } } }}, {
+  const { data: dataWorks } = useWorks({where:{cycles: { some: { id: cycle?.id } },OR: [{disabled: {equals: null}},{disabled: {equals: false}}] }}, {
     enabled:!!cycle?.id
   })
   const [works,setWorks] = useState(dataWorks?.works)

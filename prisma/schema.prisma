@@ -179,6 +179,7 @@ model Cycle {
   topics                  String?
   ratings                 RatingOnCycle[]
   comments                Comment[]
+  disabled                Boolean? @default(false)
 
   @@index([creatorId], name: "cycles_creator_id_index")
   @@index([title], name: "cycles_title_index")
@@ -217,6 +218,7 @@ model Work {
 
   ratings           RatingOnWork[]
   comments          Comment[]
+  disabled          Boolean? @default(false)
   
   @@index([title], name: "works_title_index")
   @@index([author], name: "works_author_index")

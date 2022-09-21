@@ -16,7 +16,7 @@ export type WorkWithImages = Prisma.WorkGetPayload<{
 
 export type WorkMosaicItem = Prisma.WorkGetPayload<{
   include:{
-    localImages: {select:{storedFile:true}};
+    localImages: {select:{storedFile:true}};     
     // favs: {select:{id:true}};
     _count:{select:{ratings:true}};
     // ratings: {
@@ -158,4 +158,5 @@ export interface EditWorkClientPayload {
   length?: string | null;
   tags?: string;
   topics?: string;
+  disabled?:boolean;
 }

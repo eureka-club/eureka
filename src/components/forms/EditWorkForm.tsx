@@ -27,7 +27,8 @@ import globalModalsAtom from '../../atoms/globalModals';
 import styles from './CreateWorkForm.module.css';
 import i18nConfig from '../../../i18n';
 import useTopics from '../../useTopics';
-import useWork from '@/src/useWork'
+import useWork from '@/src/useWork';
+import toast from 'react-hot-toast'
 
 dayjs.extend(utc);
 const EditWorkForm: FunctionComponent = () => {
@@ -43,6 +44,7 @@ const EditWorkForm: FunctionComponent = () => {
   const typeaheadRef = useRef<AsyncTypeahead<{ id: number; code: string; label: string }>>(null);
   const [isCountriesSearchLoading, setIsCountriesSearchLoading] = useState(false);
   const [isCountriesSearchLoading2, setIsCountriesSearchLoading2] = useState(false);
+  const [disabled, setDisabled] = useState(false);
   const [countrySearchResults, setCountrySearchResults] = useState<{ id: number; code: string; label: string }[]>([]);
   const [countryOrigin, setCountryOrigin] = useState<string>();
   const [countryOrigin2, setCountryOrigin2] = useState<string | null>();
@@ -87,7 +89,12 @@ const EditWorkForm: FunctionComponent = () => {
     if(work){
         setTags(work.tags||'');
         labelsChange(work.type);
-        if (work.topics) items.push(...work.topics.split(','));
+        if (work.topics?.length){
+          for(let topic of work.topics.split(',')){
+             if(!items.includes(topic))
+              items.push(...work.topics.split(','));
+          }
+         }
         if (work.countryOfOrigin2) setCountryOrigin2(work.countryOfOrigin2);
     }
   }, [work]);
@@ -105,7 +112,18 @@ const EditWorkForm: FunctionComponent = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    return res.json();
+    console.log(res,'res')
+    if(res.ok){
+         const json = await res.json();
+         toast.success( t('WorkEdited'))
+         if(payload.disabled){
+            router.push('/');
+         } 
+         else
+           return json.work;
+      }
+      return res.json();
+
   },{
     onMutate(vars){
       const ck = ['WORK',`${work!.id}`]
@@ -141,8 +159,17 @@ const EditWorkForm: FunctionComponent = () => {
         setPublicationLengthLabel(`${t('Length')} | ${t('Duration')}`);
     } */
   };
+  const handleDisabledWork = async (ev: React.MouseEvent<HTMLButtonElement>) => {
+      //setDisabled(true);
+      const payload: EditWorkClientPayload = {
+      id: router.query.id as string,
+      disabled:true
+    };
+    await execEditWork(payload);
+  }
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
+    //setDisabled(false);
     ev.preventDefault();
 
     // if (coverFile == null) {
@@ -166,6 +193,7 @@ const EditWorkForm: FunctionComponent = () => {
       length: form.workLength.value.length ? form.workLength.value : null,
       tags,
       topics: items.join(),
+      disabled:false
     };
 
     await execEditWork(payload);
@@ -435,17 +463,20 @@ const EditWorkForm: FunctionComponent = () => {
             <Col className='d-flex justify-content-end mt-4 mb-2'>
              <Button
                variant="warning"
-                //onClick={handleFormClear}
+                onClick={handleDisabledWork}
                 className="text-white me-3 mt-3"
                 style={{ width: '10em' }}
               >
                 {t('resetBtnLabel')}
+                {isLoading && (
+                  <Spinner size="sm" animation="grow" variant="info" className={`ms-2 ${styles.loadIndicator}`} />
+                ) }
               </Button>
             <Button disabled={isLoading} type="submit" className="mt-3 btn-eureka" style={{ width: '10em' }}>
               <>
                 {t('titleEdit')}
                 {isLoading && (
-                  <Spinner animation="grow" variant="info" className={styles.loadIndicator} />
+                  <Spinner size="sm" animation="grow" variant="info" className={`ms-2 ${styles.loadIndicator}`} />
                 ) }
               </>
             </Button>

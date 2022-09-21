@@ -114,7 +114,10 @@ export default getApiHandler()
     }
 
     const data = req.body;
-    data.publicationYear = dayjs(`${data.publicationYear}`, 'YYYY').utc().format();
+    
+    if(!data.disabled)
+        data.publicationYear = dayjs(`${data.publicationYear}`, 'YYYY').utc().format();
+    
     const { id } = data;
     if (typeof id !== 'string') {
       res.status(404).end();

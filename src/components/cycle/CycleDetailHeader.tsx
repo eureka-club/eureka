@@ -60,9 +60,8 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
 
   const {data:cycle,isLoading:isLoadingCycle} = useCycle(cycleId,{enabled:!!cycleId})
 
-  const { data: dataWorks } = useWorks({ where:{cycles: { some: { id: cycleId} }} }, {
-    enabled:!!cycleId
-  })
+  const { data: dataWorks } = useWorks({ where:{cycles: { some: { id: cycleId} },OR: [{disabled: {equals: null}},{disabled: {equals: false}}]}}, {enabled:!!cycleId})
+  
   const [works,setWorks] = useState(dataWorks?.works)
   useEffect(()=>{
     if(dataWorks)setWorks(dataWorks.works)
