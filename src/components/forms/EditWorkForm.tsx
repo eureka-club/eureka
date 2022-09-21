@@ -433,14 +433,14 @@ const EditWorkForm: FunctionComponent = () => {
         <ModalFooter>
            <Row>
             <Col className='d-flex justify-content-end mt-4 mb-2'>
-             <Button
+             {/*<Button
                variant="warning"
                 //onClick={handleFormClear}
                 className="text-white me-3 mt-3"
                 style={{ width: '10em' }}
               >
                 {t('resetBtnLabel')}
-              </Button>
+              </Button>*/}
             <Button disabled={isLoading} type="submit" className="mt-3 btn-eureka" style={{ width: '10em' }}>
               <>
                 {t('titleEdit')}
