@@ -302,6 +302,25 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
     return true;
   };
 
+   const handleFormClear = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    /*setSelectedWorksForCycle([]);
+    setCycleCoverImageFile(null);
+    editorRef.current.setContent('');*/
+    setItems([]);
+    setTags('');
+
+
+   /* if (formRef.current != null) {
+      const form = formRef.current;
+
+      form.cycleTitle.value = '';
+      form.languages.value = '';
+      form.startDate.value = '';
+      form.endDate.value = '';
+    }*/
+  };
+
   const handleSubmit = async (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
 
@@ -602,7 +621,8 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
              <ButtonGroup  className="py-4">
               <Button
                variant="warning"
-                //onClick={handleFormClear}
+               onClick={handleFormClear}
+               className="text-white"
               >
                 <ImCancelCircle />
               </Button>
