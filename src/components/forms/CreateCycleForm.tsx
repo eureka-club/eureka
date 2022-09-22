@@ -294,7 +294,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     setSelectedWorksForCycle([]);
     setCycleCoverImageFile(null);
     editorRef.current.setContent('');
-    setItems(() => []);
+    setItems([]);
     setTags('');
 
 
