@@ -87,7 +87,12 @@ const EditWorkForm: FunctionComponent = () => {
     if(work){
         setTags(work.tags||'');
         labelsChange(work.type);
-        if (work.topics) items.push(...work.topics.split(','));
+        if (work.topics?.length) {
+           for(let topic of work.topics.split(',')){
+             if(!items.includes(topic))
+              items.push(...work.topics.split(','));
+          }
+        }
         if (work.countryOfOrigin2) setCountryOrigin2(work.countryOfOrigin2);
     }
   }, [work]);
@@ -433,14 +438,14 @@ const EditWorkForm: FunctionComponent = () => {
         <ModalFooter>
            <Row>
             <Col className='d-flex justify-content-end mt-4 mb-2'>
-             <Button
+             {/*<Button
                variant="warning"
                 //onClick={handleFormClear}
                 className="text-white me-3 mt-3"
                 style={{ width: '10em' }}
               >
                 {t('resetBtnLabel')}
-              </Button>
+              </Button>*/}
             <Button disabled={isLoading} type="submit" className="mt-3 btn-eureka" style={{ width: '10em' }}>
               <>
                 {t('titleEdit')}
