@@ -3,20 +3,6 @@ import { signIn } from "next-auth/react";
 describe('Online home page',()=>{
     const options = {timeout:15000}
     beforeEach(()=>{
-
-        // signIn('credentials' ,{
-        //     redirect:false,
-        //     email:'gbanoaol@gmail.com',
-        //     password:'gbanoaol@gmail.com1'
-        //   })
-        //   .then(res=>{
-        //     const r = res as unknown as {error:string}
-        //     if(res && r.error){
-        //       return false
-        //     }
-        //     return true
-        //   })
-        
     })
     
     //en/
@@ -26,45 +12,6 @@ describe('Online home page',()=>{
         cy.get('[data-cy="login-form"]',options).find('[type="password"]').type('gbanoaol@gmail.com1',{force:true})
         cy.get('[data-cy="login-form"]',options).find("[data-cy='btn-login']")
             .click({force:true})
-
-
-        
-        // cy.intercept('/api/auth/session').as('sessionReq')
-        // cy.wait('@sessionReq').then(inter=>{
-        //     cy.wrap(inter).its('response').its('body').its('user').then(u=>{
-        //         expect(u.email).to.be.eq('gbanoaol@gmail.com')
-
-        //         cy.contains('Cycles I created or joined',options)
-        //         cy.get('[data-cy="myCycles"]',options)
-
-        //         cy.contains('Trending topics',options)
-        //         cy.get('[data-cy="tag"]',options)
-
-        //         cy.contains('Gender and feminisms',options)
-        //         cy.get('[data-cy="carousel-gender-feminisms"]',options)
-
-        //         // cy.get('footer').scrollIntoView().should('be.visible')
-        //         // cy.contains('Environment',options)
-        //         // cy.get('[data-cy="carousel-environment"]',options)
-
-        //     })
-        // })
-
-
-        // cy.wait(10000)
-        // signIn('credentials' ,{
-        //     redirect:false,
-        //     email:'gbanoaol@gmail.com',
-        //     password:'gbanoaol@gmail.com1'
-        //   })
-        //   .then(res=>{
-        //     const r = res as unknown as {error:string}
-        //     if(res && r.error){
-        //       return false
-        //     }
-        //     return true
-        //   })
-        
 
     })
     // it('should login works',()=>{
@@ -168,6 +115,10 @@ describe('Online home page',()=>{
         cy.get('[data-cy="notifications-btn"]',options).find('button').click({force:true})
         cy.get('.NotificationsList',options)
     })
+
+    
+
+    
 
     
 

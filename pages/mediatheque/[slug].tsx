@@ -206,7 +206,8 @@ const Mediatheque: NextPage<Props> = ({id}) => {
   
   const postsCreated = () => {
     if (user && posts && posts.length) {
-      return (
+      return <div data-cy="my-posts">
+
         <CarouselStatic
           cacheKey={['MY-POSTS',id.toString()]}
           className="mb-5"
@@ -215,19 +216,22 @@ const Mediatheque: NextPage<Props> = ({id}) => {
           data={posts}
           mosaicBoxClassName="pb-1"
         />
-      );
+      </div>
+      
     }
     return '';
   };
 
   const cyclesJoined = () => {
     return (cycles && cycles.length) 
-    ? <CarouselStatic
+    ?<div data-cy="cycles-created-or-joined">
+      <CarouselStatic
         cacheKey={['MY-CYCLES',id.toString()]}
         onSeeAll={()=>goTo('my-cycles')}
         title={t('common:myCycles')}
         data={cycles}
       />
+    </div> 
     : <></>;
   };
   
@@ -235,15 +239,17 @@ const Mediatheque: NextPage<Props> = ({id}) => {
     if (user && user.ratingWorks && user.ratingWorks.length) {
       const RW = user.ratingWorks.filter(rw=>rw.work).map((w) => w.work as WorkMosaicItem).sort((a,b)=>a.createdAt > b.createdAt ? -1 : 1)
       return (
-        <CarouselStatic
-          cacheKey={['MEDIATHEQUE-WATCHED',`USER-${user.id}`]}
-          onSeeAll={()=>goTo('my-books-movies')}
-          title={t(`common:myBooksMovies`)}
-          data={RW}
-          iconBefore={<BsEye />}
-
-          // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-        />
+        <div data-cy="my-books-movies">
+          <CarouselStatic
+            cacheKey={['MEDIATHEQUE-WATCHED',`USER-${user.id}`]}
+            onSeeAll={()=>goTo('my-books-movies')}
+            title={t(`common:myBooksMovies`)}
+            data={RW}
+            iconBefore={<BsEye />}
+  
+            // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+          />
+        </div>
       );
     }
     return '';
@@ -260,14 +266,17 @@ const Mediatheque: NextPage<Props> = ({id}) => {
         return 1;
       });
       return (
-        <CarouselStatic
-          cacheKey={['MEDIATHEQUE-SAVED',`USER-${user!.id}`]}
-          onSeeAll={()=>goTo('my-saved')}
-          title={t('common:mySaved')}
-          data={items}
-          iconBefore={<BsBookmark />}
-          // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-        />
+        <div data-cy="my-saved">
+          <CarouselStatic
+            cacheKey={['MEDIATHEQUE-SAVED',`USER-${user!.id}`]}
+            onSeeAll={()=>goTo('my-saved')}
+            title={t('common:mySaved')}
+            data={items}
+            iconBefore={<BsBookmark />}
+            // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+          />
+
+        </div>
       );
     }
     return '';
@@ -276,13 +285,16 @@ const Mediatheque: NextPage<Props> = ({id}) => {
   const usersFollowed = () => {
     if (user && user.following && user.following.length) {
       return (
-        <CarouselStatic
-          cacheKey={['MEDIATHEQUE-FOLLOWING',`USER-${user.id}`]}
-          onSeeAll={()=>goTo('my-users-followed')}
-          title={`${t('common:myUsersFollowed')}  `}
-          data={user!.following as UserMosaicItem[]}
-          iconBefore={<HiOutlineUserGroup />}
-        />
+        <div data-cy="my-users-followed">
+          <CarouselStatic
+            cacheKey={['MEDIATHEQUE-FOLLOWING',`USER-${user.id}`]}
+            onSeeAll={()=>goTo('my-users-followed')}
+            title={`${t('common:myUsersFollowed')}  `}
+            data={user!.following as UserMosaicItem[]}
+            iconBefore={<HiOutlineUserGroup />}
+          />
+
+        </div>
       );
     }
     return '';
