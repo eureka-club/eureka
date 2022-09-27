@@ -121,7 +121,7 @@ const ResetPassForm: FunctionComponent<Props> = ({userId,email}) => {
                     <Form.Control type="password" required />
                   </Form.Group>
                  <div className="d-flex justify-content-center">
-                  <Button disabled={loading} onClick={handlerSubmit} variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
+                  <Button disabled={loading} onClick={handlerSubmit} className={`btn-eureka ${styles.submitButton}`}>
                   {t('resetPassword1')} {loading && <Spinner animation="grow" />}
                 </Button>
                 </div>

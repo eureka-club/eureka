@@ -300,7 +300,7 @@ const FilterEngine: FunctionComponent<Props> = ({
     (globalSearchEngineState.show && (
       <Container className={styles.container}>
         <Row className='ms-1'>
-          <Col className='d-flex flex-row'>
+          <Col className='d-flex flex-row flex-wrap'>
             <Form.Group className={styles.formGroup}>
               <Form.Check
                 className={styles.filter}

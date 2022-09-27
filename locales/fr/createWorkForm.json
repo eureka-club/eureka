@@ -33,5 +33,6 @@
   "Topics": "Thèmes",
   "topicsLabel": "Principaux thèmes de l'œuvre (3 max, choisir les plus pertinents dans la liste)",
   "topicsFieldLabel": "Thèmes supplémentaires de l'œuvre (2 max, entrée libre)",
-  "WorkSaved":"Oeuvre ajoutée à notre bibliothèque. Merci!"
+  "WorkSaved":"Oeuvre ajoutée à notre bibliothèque. Merci!",
+  "resetBtnLabel": "Retirer"
 }

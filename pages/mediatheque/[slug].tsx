@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useSession, getSession } from 'next-auth/react';
 import { useQueryClient, useMutation, dehydrate, QueryClient } from 'react-query';
 import { useState, useEffect, SyntheticEvent } from 'react';
+import dayjs from 'dayjs';
 
 import { Spinner, Card, Row, Col, ButtonGroup, Button, Alert } from 'react-bootstrap';
 import { AiOutlineEnvironment } from 'react-icons/ai';
@@ -16,15 +17,15 @@ import { User } from '@prisma/client';
 import styles from './index.module.css';
 import useUser from '@/src/useUser';
 
-import SimpleLayout from '../../src/components/layouts/SimpleLayout';
-import FilterEngine from '../../src/components/FilterEngine';
-import TagsInput from '../../src/components/forms/controls/TagsInput';
+import SimpleLayout from '@/src/components/layouts/SimpleLayout';
+import FilterEngine from '@/src/components/FilterEngine';
+import TagsInput from '@/src/components/forms/controls/TagsInput';
 
-import CarouselStatic from '../../src/components/CarouselStatic';
+import CarouselStatic from '@/src/components/CarouselStatic';
 
-import { WorkMosaicItem /* , WorkWithImages */ } from '../../src/types/work';
-import { UserMosaicItem /* , UserDetail, WorkWithImages */ } from '../../src/types/user';
-import UnclampText from '../../src/components/UnclampText';
+import { WorkMosaicItem /* , WorkWithImages */ } from '@/src/types/work';
+import { UserMosaicItem /* , UserDetail, WorkWithImages */ } from '@/src/types/user';
+import UnclampText from '@/src/components/UnclampText';
 import { useNotificationContext } from '@/src/useNotificationProvider';
 import useMyPosts,{getMyPosts} from '@/src/useMyPosts';
 import useMyCycles,{getMyCycles} from '@/src/useMyCycles';
@@ -77,7 +78,6 @@ const Mediatheque: NextPage<Props> = ({id}) => {
   },[dataCycles?.cycles])
 
   const SFL = useMySaved(id)
-
   useEffect(() => {
     if(user){
       const ifbm = (user && user.followedBy) ? user.followedBy.findIndex((i) => i.id === session?.user.id) !== -1 : false
@@ -206,7 +206,8 @@ const Mediatheque: NextPage<Props> = ({id}) => {
   
   const postsCreated = () => {
     if (user && posts && posts.length) {
-      return (
+      return <div data-cy="my-posts">
+
         <CarouselStatic
           cacheKey={['MY-POSTS',id.toString()]}
           className="mb-5"
@@ -215,66 +216,85 @@ const Mediatheque: NextPage<Props> = ({id}) => {
           data={posts}
           mosaicBoxClassName="pb-1"
         />
-      );
+      </div>
+      
     }
     return '';
   };
 
   const cyclesJoined = () => {
     return (cycles && cycles.length) 
-    ? <CarouselStatic
+    ?<div data-cy="cycles-created-or-joined">
+      <CarouselStatic
         cacheKey={['MY-CYCLES',id.toString()]}
         onSeeAll={()=>goTo('my-cycles')}
         title={t('common:myCycles')}
         data={cycles}
       />
+    </div> 
     : <></>;
   };
   
   const readOrWatched = () => {
     if (user && user.ratingWorks && user.ratingWorks.length) {
-      const RW = user.ratingWorks.map((w) => w.work as WorkMosaicItem);
-
+      const RW = user.ratingWorks.filter(rw=>rw.work).map((w) => w.work as WorkMosaicItem).sort((a,b)=>a.createdAt > b.createdAt ? -1 : 1)
       return (
-        <CarouselStatic
-          cacheKey={['MEDIATHEQUE-WATCHED',`USER-${user.id}`]}
-          onSeeAll={()=>goTo('my-books-movies')}
-          title={t(`common:myBooksMovies`)}
-          data={RW}
-          iconBefore={<BsEye />}
-
-          // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-        />
+        <div data-cy="my-books-movies">
+          <CarouselStatic
+            cacheKey={['MEDIATHEQUE-WATCHED',`USER-${user.id}`]}
+            onSeeAll={()=>goTo('my-books-movies')}
+            title={t(`common:myBooksMovies`)}
+            data={RW}
+            iconBefore={<BsEye />}
+  
+            // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+          />
+        </div>
       );
     }
     return '';
   };
   
   const savedForLater = () => {
-    if (SFL)
+    if (SFL){
+      const items = [...SFL.favPosts,...SFL.favCycles,...SFL.favWorks] as PostMosaicItem[]|CycleMosaicItem[]|WorkMosaicItem[];
+      items.sort((f, s) => {
+        const fCD = dayjs(f.createdAt);
+        const sCD = dayjs(s.createdAt);
+        if (fCD.isAfter(sCD)) return -1;
+        if (fCD.isSame(sCD)) return 0;
+        return 1;
+      });
       return (
-        <CarouselStatic
-          cacheKey={['MEDIATHEQUE-SAVED',`USER-${user!.id}`]}
-          onSeeAll={()=>goTo('my-saved')}
-          title={t('common:mySaved')}
-          data={[...SFL.favPosts,...SFL.favCycles,...SFL.favWorks] as PostMosaicItem[]|CycleMosaicItem[]|WorkMosaicItem[]}
-          iconBefore={<BsBookmark />}
-          // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-        />
+        <div data-cy="my-saved">
+          <CarouselStatic
+            cacheKey={['MEDIATHEQUE-SAVED',`USER-${user!.id}`]}
+            onSeeAll={()=>goTo('my-saved')}
+            title={t('common:mySaved')}
+            data={items}
+            iconBefore={<BsBookmark />}
+            // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+          />
+
+        </div>
       );
+    }
     return '';
   };
   
   const usersFollowed = () => {
     if (user && user.following && user.following.length) {
       return (
-        <CarouselStatic
-          cacheKey={['MEDIATHEQUE-FOLLOWING',`USER-${user.id}`]}
-          onSeeAll={()=>goTo('my-users-followed')}
-          title={`${t('common:myUsersFollowed')}  `}
-          data={user!.following as UserMosaicItem[]}
-          iconBefore={<HiOutlineUserGroup />}
-        />
+        <div data-cy="my-users-followed">
+          <CarouselStatic
+            cacheKey={['MEDIATHEQUE-FOLLOWING',`USER-${user.id}`]}
+            onSeeAll={()=>goTo('my-users-followed')}
+            title={`${t('common:myUsersFollowed')}  `}
+            data={user!.following as UserMosaicItem[]}
+            iconBefore={<HiOutlineUserGroup />}
+          />
+
+        </div>
       );
     }
     return '';
@@ -367,14 +387,14 @@ const Mediatheque: NextPage<Props> = ({id}) => {
                   </Col>
                   <Col className='mt-2 d-grid gap-2 d-md-flex align-items-start  justify-content-md-end d-lg-block'>
                       {session && session.user!.id == user.id && (
-                      <Button className='text-white rounded-pill' onClick={()=>router.push('/profile')}>
+                      <Button className='btn-eureka' onClick={()=>router.push('/profile')}>
                         {t('editProfile')}
                       </Button>
                     )}
                     {session && session.user!.id !== user.id && !isFollowedByMe && (
                       <Button 
                         data-cy="follow-btn" 
-                        className='text-white rounded-pill' 
+                        className='btn-eureka' 
                         onClick={followHandler} 
                         disabled={isPending()}
                       >
@@ -386,10 +406,10 @@ const Mediatheque: NextPage<Props> = ({id}) => {
                     {session && session.user!.id !== user.id && isFollowedByMe && (
                       <Button
                         data-cy="follow-btn"
-                        variant="button border-primary text-primary fs-6"
-                        className="w-80 rounded-pill"
+                        variant="button border-primary text-primary "
                         onClick={followHandler}
                         disabled={isPending()}
+                        style={{ width: '10em' }}
                       >
                         {t('Unfollow')}
                         {isPending() && <Spinner animation="grow" variant="info" size="sm" />}

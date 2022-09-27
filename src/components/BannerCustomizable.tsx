@@ -5,7 +5,7 @@ import useTranslation from 'next-translate/useTranslation';
 import styles from './BannerCustomizable.module.css';
 import useBackOffice from '@/src/useBackOffice';
 import { useRouter } from 'next/router';
-
+import { useSession } from 'next-auth/react';
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
 const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
@@ -14,6 +14,9 @@ const BannerCustomizable: FunctionComponent = ({
 }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
+  const {data:session, status} = useSession();
+  const isLoadingSession = status === "loading"
+
   const [show, setShow] = useState<boolean>(true);
   const {data:bo } = useBackOffice();
 
@@ -83,7 +86,10 @@ const BannerCustomizable: FunctionComponent = ({
                       <h2 className="h1 font-weight-bold fs-2">{bo?.SlideTitle1}</h2>
                       <p className="p-0 mx-1 text-wrap fs-5">{bo?.SlideText1}</p>
                        <div className="d-flex  mt-2"> 
-                          <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button>
+                          {(!isLoadingSession && !session) 
+                            ? <Button className='btn-eureka' onClick={() => router.push("/")} >{t('JoinEureka')}</Button> 
+                            : ''
+                          }
                       </div>
                     </div>
                   </div>
@@ -101,7 +107,10 @@ const BannerCustomizable: FunctionComponent = ({
                       <h2 className="h1 font-weight-bold fs-2">{bo?.SlideTitle2}</h2>
                       <p className="p-0 mx-1 text-wrap fs-5">{bo?.SlideText2}</p>
                        <div className="d-flex mt-2"> 
-                          <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button>
+                       {(!isLoadingSession && !session) 
+                            ? <Button className='btn-eureka' onClick={() => router.push("/")} >{t('JoinEureka')}</Button> 
+                            : ''
+                          }
                       </div>
                     </div>
                   </div>
@@ -119,7 +128,10 @@ const BannerCustomizable: FunctionComponent = ({
                       <h2 className="h1 font-weight-bold fs-2">{bo?.SlideTitle3}</h2>
                       <p className="p-0 mx-1 text-wrap fs-5">{bo?.SlideText3}</p>
                        <div className="d-flex  mt-2"> 
-                          <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button>
+                       {(!isLoadingSession && !session) 
+                            ? <Button className='btn-eureka' onClick={() => router.push("/")} >{t('JoinEureka')}</Button> 
+                            : ''
+                          }
                       </div>
                     </div>
                   </div>

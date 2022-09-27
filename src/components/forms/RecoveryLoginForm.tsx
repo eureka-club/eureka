@@ -73,7 +73,7 @@ const RecoveryLoginForm: FunctionComponent = () => {
                   <Form.Control className='mb-2' name="email" type="email" required />
                  </Form.Group>
                  <div className="d-flex justify-content-center">
-                  <Button type='submit' disabled={loading} variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
+                  <Button type='submit' disabled={loading} className={`btn-eureka ${styles.submitButton}`}>
                   {t('sendText')} {loading && <Spinner animation="grow"/>}
                 </Button>
                 </div>

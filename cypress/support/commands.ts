@@ -1,5 +1,6 @@
+/// <reference types="cypress" />
 // ***********************************************
-// This example commands.js shows you how to
+// This example commands.ts shows you how to
 // create various custom commands and overwrite
 // existing commands.
 //
@@ -23,21 +24,15 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-
-Cypress.Commands.add('login',()=>{
-    cy.intercept('GET','**/api/auth/session',(req)=>{
-        req.continue((res) => {
-            // user = {
-            //   name: "Geordanis Baño Vega Rodriguez Cruz",
-            //   email: "gbanoaol@gmail.com",
-            //   image: "/logo.svg",
-            //   id: 127,
-            //   roles: "admin",
-            //   photos: [ ]
-            // }
-            res.send({ fixture: 'session.json' })
-            // console.log('intercepted',res);
-        })
-    }).as('session');
-     
-})
+//
+// declare global {
+//   namespace Cypress {
+//     interface Chainable {
+//       login(email: string, password: string): Chainable<void>
+//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
+//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
+//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
+//     }
+//   }
+// }
+export {}

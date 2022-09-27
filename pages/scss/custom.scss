@@ -59,11 +59,12 @@ $font-size-base: 1rem;
   --eureka-purple-dark: #443283;
 
   --color-primary: var(--eureka-green);
-  --color-primary-raised: #13B4BC;
+  --color-primary-raised: #13c0c9;
   --color-secondary: var(--eureka-purple);
   --color-secondary-raised: var(--eureka-purple-dark);
   --color-emphasis: #f5a623;
   --color-emphasis-raised: #fca719;
+  --color-danger: #E3506D;
   --text-color-primary: #333;
   --text-color-secondary: #555;
   --text-color-light: #f7f7f7;
@@ -155,6 +156,48 @@ hr {
   color: var(--color-secondary-raised);
 }
 
+
+.btn-eureka {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--text-color-extralight);
+  text-align: center;
+  min-width: 10em;
+  //max-width: 40em;
+  //display: block;
+  font-size: 1rem;
+  min-height: 2.5rem;
+}
+
+.btn-eureka:not(:disabled):not(.disabled):active {
+  background-color: var(--color-primary-raised);
+  border-color: var(--color-primary-raised);
+}
+.btn-eureka:not(:disabled):not(.disabled).active:focus,
+.btn-eureka:not(:disabled):not(.disabled):active:focus {
+  box-shadow: none;
+}
+.btn-eureka:disabled,
+.btn-eureka.disabled {
+  background-color: var(--color-primary-raised);
+  border-color: var(--color-primary-raised);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.btn-eureka:focus {
+  background-color: var(--color-primary-raised);
+  border-color: var(--color-primary-raised);
+  box-shadow: none;
+  color: var(--text-color-extralight);
+
+}
+.btn-eureka:hover {
+ background-color: var(--color-primary-raised);
+  border-color: var(--color-primary-raised);
+    color: var(--text-color-extralight);
+    font-weight: 900;
+}
+
 .btn-primary {
   background-color: var(--color-primary);
   border-color: var(--color-primary);
@@ -182,6 +225,7 @@ hr {
 .btn-primary:hover {
   background-color: var(--color-primary-raised);
   border-color: var(--color-primary-raised);
+  font-weight: 900;
 }
 
 .btn-outline-primary {
@@ -191,6 +235,20 @@ hr {
 .btn-outline-primary:hover {
   background-color: var(--color-primary-raised);
   border-color: var(--color-primary-raised);
+}
+
+.btn-warning {
+ color: var(--text-color-extralight);
+}
+.btn-warning:hover {
+ background-color: var(--color-danger);
+ font-weight: 900;
+ color: var(--text-color-extralight);
+
+}
+.btn-warning:focus {
+  box-shadow: none;
+  color: var(--text-color-extralight);
 }
 
 .top-50{
@@ -283,7 +341,7 @@ a{
 
 .crop-container {
   position: relative;
-  height: 300px;
+  height: 400px;
   width: 100%;
 }
 

@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
@@ -43,7 +44,7 @@ import useUsers from '@/src/useUsers'
 import { useNotificationContext } from '@/src/useNotificationProvider';
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
 import toast from 'react-hot-toast'
-import Toast from '../common/Toast';
+import { ImCancelCircle } from 'react-icons/im';
 
 interface Props {
   noModal?: boolean;
@@ -301,6 +302,25 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
     return true;
   };
 
+   const handleFormClear = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    /*setSelectedWorksForCycle([]);
+    setCycleCoverImageFile(null);
+    editorRef.current.setContent('');*/
+    setItems([]);
+    setTags('');
+
+
+   /* if (formRef.current != null) {
+      const form = formRef.current;
+
+      form.cycleTitle.value = '';
+      form.languages.value = '';
+      form.startDate.value = '';
+      form.endDate.value = '';
+    }*/
+  };
+
   const handleSubmit = async (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
 
@@ -415,8 +435,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
                     {/* language=CSS */}
                     <style jsx global>{`
                       .rbt-menu {
-                        background-color: #d0f7ed;
-                        min-width: 468px;
+                        min-width: 300px;
                       }
                     `}</style>
                     <AsyncTypeahead
@@ -453,18 +472,18 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
               </FormGroup>
             </Col>
           </Row>
-          <Row>
+          <Row className='d-flex justify-content-center justify-content-lg-start'>
              <Row className="d-flex justify-content-center flex-column flex-column-reverse flex-lg-row flex-lg-row-reverse">
             <Col className='mb-4 d-flex justify-content-center justify-content-lg-start'>
               {<div className={styles.imageContainer}>{renderPhoto()}</div>}
               </Col>
-            <Col className='mb-4'>
-                {!showCrop && (<Button data-cy="image-load" variant="primary" className="w-100 text-white" onClick={() => setShowCrop(true)}>
+            <Col className='mb-4 d-flex'>
+                {!showCrop && (<Button data-cy="image-load" className="btn-eureka w-100 text-white" onClick={() => setShowCrop(true)}>
                   {t('imageFieldLabel')}
                 </Button>
                 )}        
                 { showCrop && (
-                <Col className='d-flex'>
+                <Col className=''>
                   <div className='w-100 border p-3'>  
                   <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={closeCrop} cropShape='rect' />
                   </div>  
@@ -506,8 +525,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
                     {/* language=CSS */}
                     <style jsx global>{`
                       .rbt-menu {
-                        background-color: #d0f7ed;
-                        min-width: 468px;
+                        min-width: 300px;
                       }
                     `}</style>
                     <AsyncTypeahead
@@ -552,7 +570,9 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
                   items={items}
                   setItems={setItems}
                   labelKey={(res) => t(`topics:${res.code}`)}
+                  formatValue={(v: string) => t(`topics:${v}`)} 
                   max={3}
+                  placeholder={`${t('Type to add tag')}...`}
                 />
               </FormGroup>
             </Col>
@@ -581,7 +601,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
                     'insertdatetime media table paste code help wordcount',
                   ],
                   relative_urls: false,
-                  forced_root_block : "p,a",
+                  forced_root_block : "div",
                   toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
                   // toolbar:
                   //   'undo redo | formatselect | ' +
@@ -596,29 +616,27 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
       </ModalBody>
 
       <ModalFooter>
-        <Container className="py-3">
             <Row className='d-flex flex-column flex-lg-row'>
-            <Col className="border-end border-info mb-4">
-             {/* <FormCheck type="checkbox" defaultChecked inline id="isPublic" label={t('isPublicFieldLabel')} />
-              <small style={{ color: 'lightgrey', display: 'block', margin: '0.25rem 0 0 1.25rem' }}>
-                {t('isPublicInfotip')}
-              </small>*/}
-            </Col>
-            <Col className="mb-4">
-              <Button variant="primary" disabled={isCreatePostLoading} onClick={(e)=>{handleSubmit(e)}} className="w-100 text-white">
+            <Container className="p-0 d-flex justify-content-end">
+             <ButtonGroup  className="py-4">
+              <Button
+               variant="warning"
+               onClick={handleFormClear}
+               className="text-white"
+              >
+                <ImCancelCircle />
+              </Button>
+              <Button disabled={isCreatePostLoading} onClick={(e)=>{handleSubmit(e)}} className="btn-eureka"  style={{ width: '12em' }}>
                 <>
                   {t('submitButtonLabel')}
-                  {isCreatePostLoading ? (
+                  {isCreatePostLoading && (
                     <Spinner className="ms-2" animation="grow" variant="info" size="sm" />
-                  ) : (
-                    <span className={styles.placeholder} />
-                  )}
-                  {isCreatePostError && createPostError}
+                  ) }
                 </>
               </Button>
-            </Col>
+              </ButtonGroup>
+            </Container>            
           </Row>
-        </Container>
       </ModalFooter>
     </Form>
   );

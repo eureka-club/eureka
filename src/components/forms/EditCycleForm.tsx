@@ -19,6 +19,7 @@ import TagsInput from './controls/TagsInput';
 // import i18nConfig from '../../../i18n';
 import useTopics from '../../useTopics';
 
+
 import {
   DATE_FORMAT_PROPS,
 } from '../../constants';
@@ -82,7 +83,12 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
       setNamespace(r);
     };
     fn();
-    if (cycle.topics) items.push(...cycle.topics.split(','));
+    if (cycle.topics?.length){
+        for(let topic of cycle.topics.split(',')){
+          if(!items.includes(topic))
+            items.push(...cycle.topics.split(','));
+      }
+    } 
   }, []);
 
   const {
@@ -228,6 +234,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
                   items={items}
                   setItems={setItems}
                   labelKey={(res) => t(`topics:${res.code}`)}
+                  formatValue={(v: string) => t(`topics:${v}`)} 
                   max={3}
                 />
               </FormGroup>
@@ -294,7 +301,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
                       'insertdatetime media table paste code help wordcount',
                     ],
                     relative_urls: false,
-                    forced_root_block : "p,a",
+                    forced_root_block : "div",
                     toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
                     // toolbar:
                     //   'undo redo | formatselect | ' +
@@ -334,31 +341,29 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
             </Col>
           </Row>
           <Row>
-            <Col>
+            <Col className='d-flex justify-content-end mt-4 mb-2'>
+               {/*<Button
+               variant="warning"
+                //onClick={handleFormClear}
+                className="text-white me-3 mt-3"
+                style={{ width: '10em' }}
+              >
+                {t('resetBtnLabel')}
+              </Button>*/}
               <Button
-                // disabled={!selectedWorksForCycle.length || !cycleCoverImageFile}
-                variant="primary"
+                disabled={isEditCycleReqLoading}
                 type="submit"
-                className="float-right ps-5 pe-4"
+                className=" btn-eureka mt-3"
+                style={{ width: '10em' }}
               >
                 <>
                   {t('Edit Cycle')}
-                  {isEditCycleReqLoading ? (
+                  {isEditCycleReqLoading && (
                     <Spinner animation="grow" variant="info" className={styles.loadIndicator} />
-                  ) : (
-                    <span className={styles.loadIndicator} />
                   )}
-                  {isEditCycleReqError && editCycleReqError}
                 </>
               </Button>
-              <Button
-                variant="outline-secondary"
-                type="button"
-                onClick={handleFormClear}
-                className="float-right me-4 px-3"
-              >
-                {t('resetBtnLabel')}
-              </Button>
+           
             </Col>
           </Row>
         </Form>

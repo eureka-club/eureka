@@ -60,13 +60,18 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
   const [postId, setPostId] = useState<string>('');
   const [ck,setCK] = useState<string[]>();
   const editorRef = useRef<any>(null);
-  const [remove,setRemove] = useState(false);
+  //const [remove,setRemove] = useState<boolean>(false);
   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
 
   
   const { data: post, isLoading, isFetching } = usePost(id);
   useEffect(()=>{
-    if (post && post.topics) items.push(...post.topics.split(','));
+    if (post && post.topics?.length){
+      for(let topic of post.topics.split(',')){
+          if(!items.includes(topic))
+            items.push(...post.topics.split(','));
+      }
+    }
     if (post && post.works.length) setSelectedWork(post.works[0] as WorkMosaicItem);
     if (post && post.cycles.length) setSelectedCycle(post.cycles[0] as CycleMosaicItem);
   },[post])
@@ -82,12 +87,83 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
   } = useMutation(
     async (payload: EditPostAboutCycleClientPayload | EditPostAboutWorkClientPayload): Promise<Post> => {
       const res = await fetch(`/api/post/${id}`, {
-        method: remove?'DELETE':'PATCH',
+        method: 'PATCH',
         body: JSON.stringify(payload),
       });
+      console.log(res,'res')
       if(res.ok){
         handleEditPostOnSmallerScreenClose();
-        toast.success( t('PostEdited'))
+         toast.success( t('PostEdited'));
+         router.push(`/${selectedCycle?'cycle':'work'}/${selectedCycle?selectedCycle.id:selectedWork!.id}/post/${post!.id}`)
+      }
+      return res.json();
+    },
+    {
+      onMutate: async (variables) => {
+         if (post) {
+            const ck_ = ck||['POST',`${post.id}`];
+            await queryClient.cancelQueries(ck_)
+            const snapshot = queryClient.getQueryData<PostMosaicItem[]|PostMosaicItem>(ck_)
+            const {title,contentText} = variables;
+            if(snapshot){
+              let posts = [];
+              if(('length' in snapshot)){
+                posts = [...snapshot] as PostMosaicItem[];                  
+                const idx = posts.findIndex(p=>p.id == +postId)
+                if(idx >- 1){
+                  const oldPost = posts[idx];
+                  const newPost = {
+                    ...oldPost,
+                    contentText: contentText??oldPost.contentText,
+                    title: title??oldPost.title,
+                  }
+                  posts.splice(idx,1,newPost);
+                  queryClient.setQueryData(ck_, [...posts]);
+                }
+              }
+              else 
+                queryClient.setQueryData(ck_,{...snapshot,title,contentText});
+              
+              return { snapshot, ck:ck_ };
+            }
+            // const ck = [`POST`, `${globalModalsState.editPostId || post.id}`];
+          }
+          handleEditPostOnSmallerScreenClose();
+        
+        // return { snapshot: null, ck: '' };
+      },
+      onSettled: (_post, error, _variables, context) => {
+        if (error){
+          queryClient.invalidateQueries(ck);
+          queryClient.invalidateQueries(['POST',`${postId}`]);
+        }
+        // this make the page to do a refresh
+        queryClient.invalidateQueries(ck);
+        // queryClient.invalidateQueries(['POST',postId]);
+        
+      },
+    },
+  );
+
+   const {
+    mutate: execDeletePost,
+    data: deletePost,
+    error: deletePostError,
+    isError: isDeletePostError,
+    isLoading: isDeletePostLoading,
+    isSuccess: isDeletePostSuccess,
+  } = useMutation(
+    async (payload: EditPostAboutCycleClientPayload | EditPostAboutWorkClientPayload): Promise<Post> => {
+       const res = await fetch(`/api/post/${id}`, {
+        method: 'DELETE',
+        body: JSON.stringify(payload),
+      });
+      console.log(res,'res')
+      if(res.ok){
+        handleEditPostOnSmallerScreenClose();
+        toast.success( t('PostRemoved'));
+        console.log(`/${selectedCycle?'cycle':'work'}/${selectedCycle?selectedCycle.id:selectedWork!.id}`)
+        router.push(`/${selectedCycle?'cycle':'work'}/${selectedCycle?selectedCycle.id:selectedWork!.id}`)
       }
       return res.json();
     },
@@ -203,6 +279,38 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
    // if (formRef.current) formRef.current.isPublic.checked = true;
   };
 
+    const handleRemove = async (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    const payload: EditPostAboutWorkClientPayload = {
+        id: globalModalsState.editPostId ? globalModalsState.editPostId.toString() : router.query.postId as string,
+        selectedCycleId: selectedCycle != null ? selectedCycle.id : null,
+        selectedWorkId: selectedWork != null ? selectedWork.id : undefined,
+        title: '',
+        // image: imageFile,
+        language: '',
+        contentText: '', // form.description.value.length ? form.description.value : null,
+        isPublic: false,
+        topics: '',
+      }; 
+      console.log(payload,'payload') 
+    await execDeletePost(payload);
+
+    }
+
+  const formValidation = (payload:any) => {
+    if (!payload.title.length) {
+      toast.error( t('NotTitle'))
+      return false;
+    }else if (!payload.language.length) {
+      toast.error( t('NotLanguage'))
+      return false;
+    }else if (!payload.contentText.length) {
+      toast.error( t('NotContentText'))
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
@@ -223,7 +331,8 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
         isPublic: post?.isPublic,
         topics: items.join(','),
       };
-      await execEditPost(payload);
+      if(formValidation(payload))
+         await execEditPost(payload);
     } else if (selectedCycle != null) {
       const payload: EditPostAboutCycleClientPayload = {
         id: globalModalsState.editPostId ? globalModalsState.editPostId.toString() : router.query.postId as string,
@@ -236,8 +345,11 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
         isPublic: post ? post.isPublic : false,
         topics: items.join(','),
       };
-      await execEditPost(payload);
+      if(formValidation(payload))
+         await execEditPost(payload);
     }
+    else
+       toast.error( t('NotAboutItem'))
   };
 
   useEffect(() => {
@@ -305,15 +417,14 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
                       {/* language=CSS */}
                       <style jsx global>{`
                         .rbt-menu {
-                          background-color: #d0f7ed;
-                          min-width: 468px;
+                          min-width: 300px;
                         }
                       `}</style>
                       <AsyncTypeahead
                         id="create-post--search-work-or-cycle"
                         // Bypass client-side filtering. Results are already filtered by the search endpoint
                         filterBy={() => true}
-                        inputProps={{ required: true }}
+                        inputProps={{ required: false}}
                         placeholder={t('searchCycleOrWorkFieldPlaceholder')}
                         isLoading={isSearchWorkOrCycleLoading}
                         labelKey={labelKeyFn}
@@ -339,7 +450,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
               <Col className='mb-4'>
                 <FormGroup controlId="postTitle">
                   <FormLabel>*{t('titleFieldLabel')}</FormLabel>
-                  <FormControl type="text" maxLength={80} required onChange={handlerchange} defaultValue={post.title} />
+                  <FormControl type="text" maxLength={80} onChange={handlerchange} defaultValue={post.title} />
                 </FormGroup>
               </Col>
             </Row>
@@ -377,8 +488,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
                       {/* language=CSS */}
                       <style jsx global>{`
                         .rbt-menu {
-                          background-color: #d0f7ed;
-                          min-width: 468px;
+                          min-width: 300px;
                         }
                       `}</style>
                       <AsyncTypeahead
@@ -423,6 +533,8 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
                     items={items}
                     setItems={setItems}
                     labelKey={(res) => t(`topics:${res.code}`)}
+                    formatValue={(v: string) => t(`topics:${v}`)} 
+                    placeholder={`${t('Type to add tag')}...`}
                     max={3}
                   />
                 </FormGroup>
@@ -455,7 +567,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
                       'insertdatetime media table paste code help wordcount',
                     ],
                     relative_urls: false,
-                    forced_root_block : "p,a",   
+                    forced_root_block : "div",   
                     toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
                     // toolbar:
                     //   'undo redo | formatselect | ' +
@@ -469,7 +581,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
             </Row>
         {/* </ModalBody> */}
 
-        {/* <ModalFooter> */}
+        {/* <ModalFooter>
             
                 <FormCheck
                       type="checkbox"
@@ -478,18 +590,33 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
                       className="text-danger"
                       id="removePost"
                       label={t('common:Remove')}
-                    />
-                <Button variant="primary" disabled={isEditPostLoading} type="submit" className="ps-5 pe-4">
+                    /> */}
+               
+                <Row>
+            <Col className='d-flex justify-content-end  py-5'>
+             <Button
+               variant="warning"
+               disabled={isDeletePostLoading}
+                onClick={handleRemove}
+                className="text-white  me-3"
+                style={{ width: '10em' }}
+              >
+                <>
+                {t('resetBtnLabel')}
+                 {isDeletePostLoading && (
+                      <Spinner size="sm" animation="grow" variant="secondary" className={`ms-2 ${styles.loadIndicator}`}/>
+                    )}</>
+              </Button>
+                <Button disabled={isEditPostLoading} type="submit" className="btn-eureka" style={{ width: '10em' }}>
                   <>
                     {t('titleEdit')}
-                    {isEditPostLoading ? (
-                      <Spinner size="sm" animation="grow" variant="secondary" className={styles.loadIndicator} />
-                    ) : (
-                      <span className={styles.placeholder} />
+                    {isEditPostLoading && (
+                      <Spinner size="sm" animation="grow" variant="secondary" className={`ms-2 ${styles.loadIndicator}`}/>
                     )}
-                    {isEditPostError && createPostError}
                   </>
                 </Button>
+                </Col>
+                </Row>
           </Container>
               
         {/* </ModalFooter> */}

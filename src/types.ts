@@ -102,15 +102,46 @@ export  interface NotifierRequest {
     totalWorks: number;
 }
 
-export interface Country {
-  code: string;
-  createdAt:string;
-  creatorId:number;
-  description:string;
-  id:number; 
-  label:string;
-  parentId:number;
-  taxonomyCode:string;
-  updatedAt:string;
-  weight:number;
+// export interface Country {
+//   id:number; 
+//   taxonomyCode:string;
+//   parentId:number;
+//   creatorId:number;
+//   label:string;
+//   code: string;
+//   description:string;
+  
+//   parent:{
+//     code:string;
+//   }
+
+
+
+// }
+
+export type Country = Prisma.TermGetPayload<{
+  select:{
+    label:true,
+    code:true,
+    parent:{select:{code:true}}
+  }
+}>
+
+/**
+ * 
+ {
+id: 103,
+taxonomyCode: "region",
+parentId: 17,
+creatorId: 1,
+label: "Afghanistan",
+code: "afghanistan",
+description: "Afghanistan",
+weight: 1,
+createdAt: "2021-08-11T15:13:01.000Z",
+updatedAt: "2021-08-11T15:13:01.000Z",
+parent: {
+code: "Asia"
 }
+}
+ */

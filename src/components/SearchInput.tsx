@@ -31,7 +31,7 @@ const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => 
     }
   }
 
-  return <><div className={`d-none d-lg-block ${className}`} style={{...style}}>
+  return <><div className={`d-none d-lg-block ${className}`} style={{...style}} data-cy="search-engine">
     <InputGroup className="">
       <InputGroup.Text className="bg-white border border-primary">
         {
@@ -48,8 +48,9 @@ const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => 
        `}
        </style>
       <Form.Control
-        aria-label="Username"
+        aria-label="Search Term"
         aria-describedby="basic-search"
+        data-cy="search-engine-control"
         className={`${className} border-start-0`} type="text" placeholder={t('common:search')} onKeyUp={onTermKeyUp}
       />
     </InputGroup>
@@ -63,16 +64,17 @@ const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => 
         }          
        `}
        </style>
-       <Form ref={formRef} style={{width:'270px'}}>
+       <Form ref={formRef} style={{width:'250px'}}>
          <Form.Group controlId='search'>
             <Form.Control
             aria-label="Username"
             aria-describedby="basic-search"
             className={`${className} `} type="text" placeholder={t('common:search')} onKeyUp={onTermKeyUp}
+
           />
          </Form.Group>
       </Form>
-       <InputGroup.Text className=" d-lg-none text-white border border-primary cursor-pointer bg-primary">
+       <InputGroup.Text className="d-lg-none text-white border border-primary cursor-pointer bg-primary">
             <Button 
             size="sm" 
             variant="link" 

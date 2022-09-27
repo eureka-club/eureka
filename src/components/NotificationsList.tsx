@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react'
 import { ListGroup, Button,  } from 'react-bootstrap'
 
 import { IoNotificationsCircleOutline } from 'react-icons/io5'
-import { v4 } from 'uuid'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
@@ -135,7 +134,7 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
       if (notVieweds.length) {
         return <ListGroup className='NotificationsList' as="ul">{notVieweds.slice(0, 5).map((n, idx) => {
           return <ListGroup.Item
-            key={v4()}
+            key={`notification-${n.notificationId}`}
             as="li"
             className="d-flex justify-content-between align-items-start cursor-pointer"
             onClick={(e) => notificationOnClick(e, n.userId, n.notificationId, n.notification.contextURL)}
@@ -173,24 +172,25 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
       disabled={notNewsNotifications()}
       onClick={() => setShow(s => !s)}
     >
-      <aside className="position-relative d-none d-md-inline-block">
-        <IoNotificationsCircleOutline className={`${styles.navbarIconNav} ${notNewsNotifications() ? 'text-dark' : 'text-primary'}`} />
-        {notVieweds.length && <span className="position-absolute mt-2 top-0 start-100 translate-middle badge rounded-pill bg-danger">
-          {notVieweds.length}
-          <span className="visually-hidden">unread messages</span>
-        </span> || ''}
-      </aside>
+      <div>
+        <aside className="position-relative d-none d-md-inline-block">
+          <IoNotificationsCircleOutline className={`${styles.navbarIconNav} ${notNewsNotifications() ? 'text-dark' : 'text-primary'}`} />
+          {notVieweds.length && <span className="position-absolute mt-2 top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {notVieweds.length}
+            <span className="visually-hidden">unread messages</span>
+          </span> || ''}
+        </aside>
 
 
-      <aside className="d-md-none position-relative me-3">
-        <IoNotificationsCircleOutline className={`${styles.navbarIconNav} ${notNewsNotifications() ? 'text-dark' : 'text-primary'}`} />
-        {notVieweds.length && <span className="mt-2 position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-          {notVieweds.length}
-          <span className="visually-hidden">unread messages</span>
-        </span> || ''}
-      </aside>
-      <span className={`d-none d-lg-block ${styles.menuBottomInfo}  ms-1`}>{t('navbar:Notifications')}</span>
-
+        <aside className="d-md-none position-relative me-3">
+          <IoNotificationsCircleOutline className={`${styles.navbarIconNav} ${notNewsNotifications() ? 'text-dark' : 'text-primary'}`} />
+          {notVieweds.length && <span className="mt-2 position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {notVieweds.length}
+            <span className="visually-hidden">unread messages</span>
+          </span> || ''}
+        </aside>
+        <span className={`d-none d-lg-block ${styles.menuBottomInfo}  ms-1`}>{t('navbar:Notifications')}</span>
+      </div>
     </Button>
     {/* </OverlayTrigger>} */}
 

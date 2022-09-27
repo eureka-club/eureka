@@ -19,8 +19,13 @@
   "topicsFieldLabel": "Thèmes supplémentaires de l'Eureka (2 max, entrée libre)",
   "postCreated":"Votre Eureka a été partagée avec succès",
   "PostEdited":"Votre Eureka a été modifiée",
+  "PostRemoved":"Votre Eureka a été supprimé",
   "NotTitle":"Merci d'indiquer un titre",
   "NotContentText":"Merci d'ajouter du contenu",
+  "NotLanguage":"Veuillez ajouter une langue",
+  "NotAboutItem":"Veuillez préciser de quel matériau ou cycle il s'agit.",
   "requiredDiscussionItemError": "Merci d'indiquer si votre Eureka porte sur le cycle ou l'une des œuvres",
-  "requiredEurekaImageError": "Merci d'ajouter une image à votre Eureka"
+  "requiredEurekaImageError": "Merci d'ajouter une image à votre Eureka",
+  "Type to add tag": "Thème de votre Eureka (3 max, sélectionez les plus pertinents)",
+  "resetBtnLabel": "Retirer"
 }

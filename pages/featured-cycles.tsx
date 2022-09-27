@@ -58,11 +58,11 @@ const InterestedCycles: NextPage<Props> = () => {
 };
 export const getServerSideProps:GetServerSideProps= async (ctx)=>{
   const qc = new QueryClient();
-  
-  const bod = await getbackOfficeData()
+  const {NEXT_PUBLIC_WEBAPP_URL:origin}=process.env;
+  const bod = await getbackOfficeData(origin)
   if(bod && bod?.CyclesExplorePage){
     const ids = bod?.CyclesExplorePage.split('').map(i=>+i)
-    await qc.fetchQuery(['CYCLES','INTERESTED'],()=>getInterestedCycles(ids,8));
+    await qc.fetchQuery(['CYCLES','INTERESTED'],()=>getInterestedCycles(ids,8,origin));
   }
   return {
     props:{

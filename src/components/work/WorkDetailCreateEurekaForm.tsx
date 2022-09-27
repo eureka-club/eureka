@@ -1,9 +1,7 @@
 import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, MouseEvent, FunctionComponent, useEffect, useRef, useState } from 'react';
-import Image from 'next/image'
 import { Button, Col, Row, ButtonGroup, Form, Spinner } from 'react-bootstrap';
-import { useAtom } from 'jotai';
 import { Post } from '@prisma/client';
 
 import { BsCheck } from 'react-icons/bs';
@@ -12,8 +10,6 @@ import { ImCancelCircle } from 'react-icons/im';
 import { useMutation, useQueryClient } from 'react-query';
 
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
-import globalModalsAtom from '../../atoms/globalModals';
-// import { Session } from '../../types';
 import { WorkMosaicItem } from '../../types/work';
 import { CreatePostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
 
@@ -55,7 +51,6 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
   const router = useRouter();
   const {data:session} = useSession();
   const { t } = useTranslation('cycleDetail');
-  //const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [newEurekaImageFile, setNewEurekaImageFile] = useState<File | null>(null);
   const { data: topics } = useTopics();
   const [eurekaTopics, setEurekaTopics] = useState<string[]>([]);
@@ -298,7 +293,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
             'insertdatetime media table paste code help wordcount',
           ],
           relative_urls: false,
-          forced_root_block : "p,a",
+          forced_root_block : "div",
           toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
           // toolbar:
           //   'undo redo | formatselect | ' +
@@ -324,8 +319,8 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
             <Col className='mb-4 d-flex justify-content-center justify-content-lg-start'>
               {<div className={styles.imageContainer}>{renderPhoto()}</div>}
               </Col>
-            <Col className='mb-4'>
-                {!showCrop && (<Button data-cy="image-load" variant="primary" className="w-100 text-white" onClick={() => setShowCrop(true)}>
+            <Col xs={12} md={8} className='mt-2 mb-4'>
+                {!showCrop && (<Button data-cy="image-load" variant="primary" className="btn-eureka w-100" onClick={() => setShowCrop(true)}>
                   {t('Image')}
                 </Button>
                 )}        
@@ -369,6 +364,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
               labelKey={(res: { code: string }) => t(`topics:${res.code}`)}
               max={3}
               placeholder={`${t('Type to add tag')}...`}
+              formatValue={(v: string) => t(`topics:${v}`)} 
               className="mt-3"
             />
           </Form.Group>
@@ -377,12 +373,12 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
 
       <aside className="d-flex justify-content-end">
         <ButtonGroup size="sm" className="pt-3">
-          <Button variant="warning" onClick={clearCreateEurekaForm} disabled={isLoading}>
+          <Button variant="warning" className='text-white' onClick={clearCreateEurekaForm} disabled={isLoading}>
             <ImCancelCircle />
           </Button>
-          <Button data-cy="create-eureka-btn" onClick={handlerSubmitCreateEureka} className="text-white" disabled={isLoading}>
+          <Button data-cy="create-eureka-btn" onClick={handlerSubmitCreateEureka} className="text-white" style={{ width: '5rem' }} disabled={isLoading}>
             <span>
-              <BsCheck /> {t('Create')}
+               {t('Create')}
             </span>
             {isLoading && <Spinner size="sm" animation="grow" />}
           </Button>

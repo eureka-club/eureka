@@ -4,11 +4,12 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import Trans from 'next-translate/Trans';
 import { ChangeEvent, FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
-import { Button, Col, Form, ButtonGroup, ListGroup, Modal, Row, Spinner } from 'react-bootstrap';
+import { Button, Col, Form, ButtonGroup, ListGroup, Modal, Row, Spinner,Container } from 'react-bootstrap';
 import { useMutation } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BiTrash, BiPlus, BiEdit } from 'react-icons/bi';
 import { GiCancel } from 'react-icons/gi';
+import { ImCancelCircle } from 'react-icons/im';
 
 import { Prisma } from '@prisma/client';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
@@ -290,19 +291,20 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
   const handleFormClear = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-
     setSelectedWorksForCycle([]);
     setCycleCoverImageFile(null);
-    editorRef.current.setContent('');
+   // editorRef.current.setContent('');
+    setItems([]);
+    setTags('');
+
+
     if (formRef.current != null) {
       const form = formRef.current;
 
       form.cycleTitle.value = '';
       form.languages.value = '';
-      form.topics.value = '';
       form.startDate.value = '';
       form.endDate.value = '';
-      form.description.value = '';
     }
   };
 
@@ -687,6 +689,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 items={items}
                 setItems={setItems}
                 labelKey={(res) => t(`topics:${res.code}`)}
+                formatValue={(v: string) => t(`topics:${v}`)} 
                 max={3}
               />
             </Form.Group>
@@ -749,7 +752,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                     'insertdatetime media table paste code help wordcount',
                   ],
                   relative_urls: false,
-                  forced_root_block : "p,a",
+                  forced_root_block : "div",
                   toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
                   // toolbar:
                   //   'undo redo | formatselect | ' +
@@ -809,7 +812,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
               />
             </Form.Group>
             <ButtonGroup size="sm" className="mt-3">
-              <Button size="sm" onClick={addGuideline}>
+              <Button size="sm" className="text-white" onClick={addGuideline}>
                 {guidelineEditIdx !== undefined ? <BiEdit /> : <BiPlus />}
               </Button>
               {guidelineEditIdx !== undefined && (
@@ -847,21 +850,20 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
           
         </Row>
  */}      
-    <section className="d-flex justify-content-end">
-            
-            <Button
-              variant="outline-secondary"
+    <Container className="p-0 d-flex justify-content-end">
+           <ButtonGroup  className="py-4">
+            <Button     
+              variant="warning"         
               type="button"
               onClick={handleFormClear}
-              className="me-4 p-2"
+              className="text-white"
             >
-              {t('resetBtnLabel')}
+             <ImCancelCircle />
             </Button>
             <Button
               disabled={!selectedWorksForCycle.length || !cycleCoverImageFile}
-              variant="primary"
               type="submit"
-              className="p-2 text-white"
+              className="text-white btn-eureka"
             >
               <>
                 {t('submitBtnLabel')}
@@ -871,7 +873,8 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 {isCreateCycleReqError && createCycleReqError}
               </>
             </Button>
-          </section>
+            </ButtonGroup>
+          </Container>
  </Form>
 
       <Modal show={addWorkModalOpened} onHide={handleAddWorkModalClose} animation={false}>

@@ -118,4 +118,5 @@
 }
 .actionBtn :global(.btn){
   color: var(--bs-white);
+  width: 6em;
 }

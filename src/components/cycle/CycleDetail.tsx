@@ -163,7 +163,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-  const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
+ // const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
   
   const {data:session, status} = useSession();
   const { t } = useTranslation('cycleDetail');
@@ -182,8 +182,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const renderPosts = ()=>{
     if(posts){
       return <>
-        <Row>
-        {posts.map((p)=><Col xs={12} sm={6} lg={3} key={p.id} className="mb-5">
+        <Row className='mt-2'>
+        {posts.map((p)=><Col xs={12} sm={6} lg={3} key={p.id} className="mb-5 d-flex justify-content-center  align-items-center">
           <MosaicItemPost  cacheKey={['POST',`${p.id}`]} postId={p.id} />          
         </Col>
         )}
@@ -225,10 +225,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     router.push(`/cycle/${router.query.id}/edit`);
   };
 
-   const handleEditPostOnSmallerScreen = (ev: MouseEvent<HTMLButtonElement>) => {
+   /*const handleEditPostOnSmallerScreen = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
         setEditPostOnSmallerScreen({ ...editOnSmallerScreens, ...{ value: !editPostOnSmallerScreen.value } });
-  };
+  };*/
 
   const canEditPost = (): boolean => {
     if (session && post && session.user.id === post.creatorId) return true;
@@ -308,8 +308,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   };
   const renderParticipants = ()=>{
     if(participants){
-      return <Row>
-        {participants.map(p=><Col xs={12} sm={4} lg={3} key={p.id}><MosaicItemUser user={p} /></Col>)}
+      return <Row className='mt-3'>
+        {participants.map(p=><Col xs={12} sm={4} lg={3} key={p.id} className="mb-3 d-flex justify-content-center  align-items-center"><MosaicItemUser user={p} /></Col>)}
       </Row>
     }
     return ''
@@ -391,6 +391,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const handleEditPostClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
     if(post){
+      console.log('post',post)
       localStorage.setItem('redirect',`/cycle/${cycle.id}`)
       router.push(`/post/${post.id}/edit`)
     }
@@ -435,7 +436,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   return (
     <>
-    {(!editPostOnSmallerScreen.value) ? 
       <ButtonGroup className="mt-1 mt-md-3 mb-1">
         <Button variant="primary text-white" onClick={() => router.back()} size="sm">
           <BiArrowBack />
@@ -453,19 +453,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           <Button variant="warning" onClick={handleEditPostClick} size="sm">
             {t('Edit')}
           </Button>
-          {/* <Button className='d-block d-md-none' variant="warning" onClick={handleEditPostOnSmallerScreen} size="sm">
-            {t('Edit')}
-          </Button> */}
-          </>
+         </>
         )}
-      </ButtonGroup> : 
-    
-      <ButtonGroup className="mt-1 mt-md-3 mb-1">
-        <Button variant="primary text-white" onClick={handleEditPostOnSmallerScreen} size="sm">
-          <BiArrowBack />
-        </Button>
-      </ButtonGroup>
-     }
+      </ButtonGroup> 
+     
 
 {
 // (!editPostOnSmallerScreen.value) ? 

@@ -16,7 +16,7 @@ export const getUsers = async (props?:Prisma.UserFindManyArgs,origin=''):Promise
   const where = w ? encodeURIComponent(JSON.stringify(w)) : '';
   const cursor = c ? encodeURIComponent(JSON.stringify(c)) : '';
 
-  const url = buildUrl(`${origin}/api`, {
+  const url = buildUrl(`${origin||''}/api`, {
     path: 'user',
     queryParams: {
       where,
@@ -29,7 +29,6 @@ export const getUsers = async (props?:Prisma.UserFindManyArgs,origin=''):Promise
   const res = await fetch(url);
   if(!res.ok)return [];
   const {data} = await res.json();
-//  console.log('fetched users',data)
   return data;
 };
 

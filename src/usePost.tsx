@@ -3,7 +3,7 @@ import { PostMosaicItem } from './types/post';
 
 export const getPost = async (id: number,origin=''): Promise<PostMosaicItem | undefined> => {
   if (!id) return undefined;
-  const url = `${origin}/api/post/${id}`;
+  const url = `${origin||''}/api/post/${id}`;
 
   const res = await fetch(url);
   if (!res.ok) return undefined;

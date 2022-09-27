@@ -24,12 +24,12 @@ export const find = async (props: Prisma.UserFindUniqueArgs): Promise<UserMosaic
       ratingWorks:{
         select:{
           workId:true,
-          work:{select:{id:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,localImages:{select:{storedFile:true}}}}
+          work:{select:{id:true,createdAt:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,localImages:{select:{storedFile:true}}}}
         }
       },
-      favWorks:{select:{id:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,localImages:{select:{storedFile:true}}}},
-      favCycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
-      favPosts:{select:{id:true}},
+      favWorks:{select:{id:true,createdAt:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,localImages:{select:{storedFile:true}}}},
+      favCycles:{select:{id:true,createdAt:true,creatorId:true,startDate:true,endDate:true,title:true}},
+      favPosts:{select:{id:true,createdAt:true}},
       cycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
       joinedCycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
       ratingCycles:{select:{cycleId:true}},
@@ -64,12 +64,12 @@ export const findAll = async (props?:Prisma.UserFindManyArgs): Promise<UserMosai
       ratingWorks:{
         select:{
           workId:true,
-          work:{select:{id:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,localImages:{select:{storedFile:true}}}}
-        }
+          work:{select:{id:true,createdAt:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,localImages:{select:{storedFile:true}}}}
+        },
       },
-      favWorks:{select:{id:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,localImages:{select:{storedFile:true}}}},
-      favCycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
-      favPosts:{select:{id:true}},
+      favWorks:{select:{id:true,createdAt:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,localImages:{select:{storedFile:true}}}},
+      favCycles:{select:{id:true,createdAt:true,creatorId:true,startDate:true,endDate:true,title:true}},
+      favPosts:{select:{id:true,createdAt:true}},
       // posts:{select:{id:true}},
       cycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
       joinedCycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},

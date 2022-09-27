@@ -19,8 +19,14 @@
   "topicsFieldLabel": "Additional topics of Eureka (2 max, input freely)",
   "postCreated":"Your Eureka was successfully shared",
   "PostEdited":"Your Eureka has been edited",
+  "PostRemoved":"Your Eureka has been removed",
   "NotTitle":"Please specify a title",
   "NotContentText":"Please add content",
+  "NotLanguage":"Please add a language",
+  "NotAboutItem":"Please specify which work or cycle this Eureka is about",
   "requiredDiscussionItemError": "Please select if your Eureka is about the topic of the cycle or one of the works",
-  "requiredEurekaImageError": "Please add an image to your Eureka"
+  "requiredEurekaImageError": "Please add an image to your Eureka",
+  "Type to add tag": "Topic of your Eureka (3 max, select most relevant from list)",
+  "resetBtnLabel": "Remove"
+
 }

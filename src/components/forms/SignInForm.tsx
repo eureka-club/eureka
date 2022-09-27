@@ -43,16 +43,17 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
     if(!form!.email.value){
       toast.error(t('EmailRequired'))
       setLoading(false)
+
       return false;
     }
     if(!form!.password.value){
       toast.error(t('PasswordRequired'))
       setLoading(false)
+
       return false;
     }
     if(form){
       const ur = await userRegistered(form.email.value);
-      debugger;
           if(!ur){
             toast.error('Error');
             setLoading(false)
@@ -77,6 +78,7 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
                 setLoading(false)
               }
               else{
+               close()
                 router.push(localStorage.getItem('loginRedirect') || '/')
               }
             })
@@ -88,12 +90,18 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
 
           }
         }
+
       }
       
 const handlerJoinLink = ()=>{
   close()
   router.push("/register")
 }
+const handlerRecoveryLogin = ()=>{
+  close()
+  router.push("/recoveryLogin")
+}
+
   return (
       <>
       <ModalHeader className={`position-relative ${styles.modalHeader}`} closeButton={!noModal}>
@@ -121,22 +129,22 @@ const handlerJoinLink = ()=>{
           </Row>
           <Row>
             <div className="d-flex justify-content-center">
-              <Form ref={formRef} className={`d-flex flex-column fs-6 ${styles.loginForm}`}>
+              <Form ref={formRef} className={`d-flex flex-column fs-6 ${styles.loginForm}`} data-cy="login-form">
                 <Form.Group controlId="email">
                   <Form.Label>{t('emailFieldLabel')}</Form.Label>
                   <Form.Control className='' type="email" required />
                   <div className='d-flex justify-content-between mb-1 mt-2'><div>{t('passwordFieldLabel')}</div>
-                    <Link href="/recoveryLogin" passHref>
-                      <div className={`d-flex align-items-end cursor-pointer ${styles.forgotPassText}`}>{t('forgotPassText')}</div>
-                    </Link>
+                    {/* <Link href="/recoveryLogin" passHref> */}
+                      <Button onClick={handlerRecoveryLogin} variant="link" className={`btn-link d-flex link align-items-end cursor-pointer ${styles.forgotPassText}`}>{t('forgotPassText')}</Button>
+                    {/* </Link> */}
                   </div>
                 </Form.Group>
                 <Form.Group controlId='password'>
                   <Form.Control type="password" required />
                 </Form.Group>
                 <div className="d-flex justify-content-center">
-                <Button disabled={loading} onClick={handleSubmitSignIn} variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
-                  {t('login')} {loading && <div className="ms-1"><Spinner animation="grow" size='sm'/></div>}
+                <Button data-cy='btn-login' disabled={loading} onClick={handleSubmitSignIn} className={`btn-eureka ${styles.submitButton} me-1`}>
+                  {t('login')} {loading && <Spinner animation="grow" size='sm'/>}
                 </Button>
                 </div>
               </Form>

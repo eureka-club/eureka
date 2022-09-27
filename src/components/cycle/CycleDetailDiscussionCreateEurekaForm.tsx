@@ -332,7 +332,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
             'insertdatetime media table paste code help wordcount',
           ],
           relative_urls: false,
-          forced_root_block : "p,a",
+          forced_root_block : "div",
           toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
           // toolbar:
           //   'undo redo | formatselect | ' +
@@ -358,8 +358,8 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
             <Col className='mb-4 d-flex justify-content-center justify-content-lg-start'>
               {<div className={styles.imageContainer}>{renderPhoto()}</div>}
               </Col>
-            <Col className='mb-4'>
-                {!showCrop && (<Button data-cy="image-load" variant="primary" className="w-100 text-white" onClick={() => setShowCrop(true)}>
+              <Col xs={12} md={8} className='mb-4 mt-2'>
+                {!showCrop && (<Button data-cy="image-load" variant="primary" className="btn-eureka w-100" onClick={() => setShowCrop(true)}>
                   {t('Image')}
                 </Button>
                 )}        
@@ -403,7 +403,8 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
               labelKey={(res: { code: string }) => t(`topics:${res.code}`)}
               max={3}
               placeholder={`${t('Type to add tag')}...`}
-              className="mt-3"
+              formatValue={(v: string) => t(`topics:${v}`)} 
+              className="mt-3 w-100"
             />
           </Form.Group>
         </Col>
@@ -411,12 +412,12 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
 
       <aside className="d-flex justify-content-end">
         <ButtonGroup size="sm" className="pt-3">
-          <Button variant="warning" onClick={clearCreateEurekaForm} disabled={isLoading}>
+          <Button variant="warning" className='text-white' onClick={clearCreateEurekaForm} disabled={isLoading}>
             <ImCancelCircle />
           </Button>
-          <Button data-cy="create-eureka-btn" onClick={handlerSubmitCreateEureka} className="text-white" disabled={isLoading}>
+          <Button data-cy="create-eureka-btn" onClick={handlerSubmitCreateEureka} className="text-white"  style={{ width: '5rem' }} disabled={isLoading}>
             <span>
-              <BsCheck /> {t('Create')}
+             {t('Create')}
             </span>
             {isLoading && <Spinner size="sm" animation="grow" />}
           </Button>

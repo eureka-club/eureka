@@ -1,0 +1,6 @@
+.notRated {
+  color:var(--eureka-grey);
+}
+.rated {
+  color:var(--eureka-green) !important;
+}

@@ -83,18 +83,24 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                 </Row>   
           </div>   
          <div className='m-0 m-lg-5'>
-          <Row className='d-flex flex-column flex-lg-row '>
+          <Row className='mt-4 d-flex flex-column flex-lg-row '>
                         <Col className="d-flex flex-column justify-content-center align-items-center">
-                           <Button onClick={()=> window.scrollTo(0, 0)} variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
+                           <Button onClick={()=> window.scrollTo(0, 60)}  className={` btn-eureka ${styles.submitButton}`}>
                                 {t('signInForm:login')} 
                            </Button>
                            <p className={`mt-1 text-secondary ${styles.dontHaveAccounttext}`}>{t('signInForm:dontHaveAccounttext')} <Link href="/register">
                            <a className="text-secondary text-decoration-underline">{t('signInForm:Join')}</a></Link></p>
                         </Col>
                         <Col className="d-flex flex-column justify-content-center align-items-center ">
-                           <Button onClick={()=> router.push('/explore')} variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
-                                {t('Explore')} 
-                           </Button>
+                                <Link href='/explore'>
+                                        <Button  data-cy="btn-explore" className={` btn-eureka ${styles.submitButton}`}>
+                                                {t('Explore')} 
+                                        </Button>
+                                </Link>
+                           {/* <Button data-cy="btn-explore" onClick={()=> router.push('/explore')} variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
+                           {t('Explore')} 
+                           
+                           </Button> */}
                            <p className={`mt-1 text-center text-secondary ${styles.dontHaveAccounttext}`}>{t('ExploreText')}</p>
                         </Col>
                 </Row> 

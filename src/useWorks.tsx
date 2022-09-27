@@ -7,7 +7,7 @@ export const getWorks = async (
   origin=''
 ): Promise<{works:WorkMosaicItem[],fetched:number,total:number}> => {
   const query = props?`?props=${encodeURIComponent(JSON.stringify(props))}`:''
-  const url = `${origin}/api/work${query}`
+  const url = `${origin||''}/api/work${query}`
   const res = await fetch(url);
   if (!res.ok) return {works:[],fetched:0,total:-1};
   const {data:works,fetched,total} = await res.json();

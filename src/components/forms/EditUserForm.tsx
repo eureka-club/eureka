@@ -314,7 +314,7 @@ const EditUserForm: FunctionComponent = () => {
               <Row className='d-flex flex-column'>
                 <Col className='d-flex flex-column flex-md-row justify-content-center align-items-center' >
                   {renderAvatar()}
-                 {!showCrop && <Button variant="primary" className="mt-3 ms-0 mt-md-0 ms-md-3 text-white" onClick={() => setShowCrop(true)}>
+                 {!showCrop && <Button  className="btn-eureka mt-3 ms-0 mt-md-0 ms-md-3 text-white" onClick={() => setShowCrop(true)}>
                 {t('Change Photo')}
                </Button>}
                 </Col>
@@ -480,8 +480,8 @@ const EditUserForm: FunctionComponent = () => {
                 </Col>
               </Row>
 
-            <Container className="mt-4 py-3">
-              <Button variant="primary" disabled={isLoadingUser} type="submit" className="text-white">
+            <Container className="mt-4 p-0 py-4 d-flex justify-content-end">
+              <Button  disabled={isLoadingUser} type="submit" className="btn-eureka">
                 <>
                   {t('Edit')}
                   {isLoadingUser ? (

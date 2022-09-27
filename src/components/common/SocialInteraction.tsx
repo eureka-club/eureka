@@ -1,16 +1,16 @@
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
-// import Dropdown from 'react-bootstrap/Dropdown';
 import { GiBrain } from 'react-icons/gi';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 import classnames from 'classnames';
 import { FiShare2, FiTrash2 } from 'react-icons/fi';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/react';
-import { useAtom } from 'jotai';
-import Rating from 'react-rating';
-import { OverlayTrigger, Popover, Button, Spinner } from 'react-bootstrap';
+// import Rating from 'react-rating';
+import Rating from '@/components/common/Rating'
+
+import { OverlayTrigger,Popover, Button, Spinner } from 'react-bootstrap';
 
 import {
   FacebookIcon,
@@ -20,21 +20,19 @@ import {
   WhatsappShareButton,
   WhatsappIcon,
 } from 'react-share';
-import { Cycle, Work, Post } from '@prisma/client';
+import { Cycle, Work } from '@prisma/client';
 import { useMosaicContext } from '@/src/useMosaicContext';
-import globalSearchEngineAtom from '@/src/atoms/searchEngine';
 
 import useUser from '@/src/useUser';
-import globalModalsAtom from '@/src/atoms/globalModals';
-// import Notification from '../ui/Notification';
 import { WEBAPP_URL } from '@/src/constants';
 import { CycleMosaicItem } from '@/src/types/cycle';
 import { PostMosaicItem } from '@/src/types/post';
 import { WorkMosaicItem } from '@/src/types/work';
-import { UserMosaicItem } from '@/src/types/user';
 import { MySocialInfo, isCycle, isWork, isPost, isPostMosaicItem, isWorkMosaicItem, isCycleMosaicItem } from '../../types';
 import styles from './SocialInteraction.module.css';
 import {useNotificationContext} from '@/src/useNotificationProvider';
+import {useModalContext} from '@/src/useModal'
+import SignInForm from '../forms/SignInForm';
 interface SocialInteractionClientPayload {
   socialInteraction: 'fav' | 'rating';
   doCreate: boolean;
@@ -44,9 +42,7 @@ interface SocialInteractionClientPayload {
 interface Props {
   entity: CycleMosaicItem | PostMosaicItem | WorkMosaicItem /* | UserMosaicItem */;
   parent?: Cycle | Work | null;
-  // mySocialInfo: MySocialInfo;
   showCounts?: boolean;
-  // showShare?: boolean;
   showButtonLabels?: boolean;
   cacheKey: string[];
   showTrash?: boolean;
@@ -56,8 +52,7 @@ interface Props {
 
 const SocialInteraction: FunctionComponent<Props> = ({
   entity,
-  parent /* ,  mySocialInfo */,
-  // showShare = false,
+  parent, 
   showCounts = false,
   showButtonLabels = true,
   cacheKey = '',
@@ -73,9 +68,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
   const isLoadingSession = status === "loading"
   const [qty, setQty] = useState<number>(0);
-
-  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-  const [globalSearchEngineState] = useAtom(globalSearchEngineAtom);
+  const {show} = useModalContext()
 
   const [mySocialInfo, setMySocialInfo] = useState<MySocialInfo>();
 
@@ -84,15 +77,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const {showShare:ss} = useMosaicContext();
 
   const [showShare, setShowShare] = useState<boolean>(false);
-
-  // const [optimistReadOrWatched, setOptimistReadOrWatched] = useState<boolean | null>();
-
-  // const [optimistLikeCount, setOptimistLikeCount] = useState<number>(0);
-  // const [optimistFavCount, setOptimistFavCount] = useState<number>(0);
-  // const [optimistReadOrWatchedCount, setOptimistReadOrWatchedCount] = useState<number>(0);
   const queryClient = useQueryClient();
-  
-
   const {
     isFetching: isFetchingUser,
     isLoading: isLoadingUser,
@@ -100,20 +85,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
     isError,
     /* error, */ data: user,
   } = useUser(idSession!,{ enabled: !!idSession! });
-  // const [user, setuser] = useState<UserDetail>();
   const {notifier} = useNotificationContext();
   
-  // const calculateQty = () => {
-  //   if (entity && (isWork(entity) || isCycle(entity))) {
-  //     let qtySum = 0;
-  //     entity.ratings.forEach((rating) => {
-  //       qtySum += rating.qty;
-  //     });
-  //     qtySum /= entity.ratings.length;
-  //     setQty(() => qtySum);
-  //   }
-  // };
-
   useEffect(() => {
     if (isSuccessUser && idSession && !user) {
       queryClient.invalidateQueries(['USER', `${idSession}`]);
@@ -121,57 +94,24 @@ const SocialInteraction: FunctionComponent<Props> = ({
   }, [user, idSession, isSuccessUser]);
 
   useEffect(() => {
-    // calculateQty();
 
     let ratingByMe = false;
     if (session && user && user.id && entity) {
       if (isWork(entity)) {
-        // if (entity.id === 125) 
-        // let idx = user.readOrWatchedWorks.findIndex((i: Work) => i.id === entity.id);
-        // const readOrWatchedByMe = idx !== -1;
-        // setOptimistReadOrWatched(readOrWatchedByMe);
-        // setOptimistReadOrWatchedCount(entity.readOrWatcheds.length);
-        // let idx = user.favWorks ? user.favWorks.findIndex((i) => i.id === entity.id) : -1;
-        // setOptimistFavCount(entity.favs ? entity.favs.length : 0);
-        
-        // idx = user.ratingWorks ? user.ratingWorks.findIndex((i) => i.workId === entity.id) : -1;
-        // if (idx !== -1) {
-          //   ratingByMe = true;
-          // }
         const favoritedByMe = entity.currentUserIsFav;
         setOptimistFav(favoritedByMe);
         ratingByMe = !!entity.currentUserRating;
         setMySocialInfo({ favoritedByMe, ratingByMe });
+        setQty(entity.ratingAVG||0)
       } else if (isCycle(entity)) {
-        // setOptimistReadOrWatchedCount(0);
-
-        // let idx = user.likedCycles.findIndex((i: Cycle) => i.id === entity.id);
-        // const likedByMe = idx !== -1;
-        // setOptimistLike(likedByMe);
-        // setOptimistLikeCount(entity.likes.length);
-
-        // let idx = user.favCycles ? user.favCycles.findIndex((i) => i.id === entity.id) : -1;
         const favoritedByMe = entity.currentUserIsFav;
         setOptimistFav(favoritedByMe);
-        // setOptimistFavCount(entity.favs.length);
-
-        // idx = user.ratingCycles
-        //   ? user.ratingCycles.findIndex((i) => i.cycleId === entity.id)
-        //   : -1;
-        // if (idx !== -1) {
-        //   ratingByMe = true;
-        // }
         ratingByMe = !!entity.currentUserRating;
         setMySocialInfo({ favoritedByMe, ratingByMe });
+        setQty(entity.ratingAVG||0)
       } else if (isPostMosaicItem(entity)) {
-        // setOptimistReadOrWatchedCount(0);
-
-        // const idx = user.favPosts ? user.favPosts.findIndex((i) => i.id === entity.id) : -1;
         const favoritedByMe = entity.currentUserIsFav;
         setOptimistFav(favoritedByMe);
-        // if (!entity.favs) console.error('missing favs in ', entity);
-        // else setOptimistFavCount(entity.favs.length);
-
         setMySocialInfo({ favoritedByMe });
       }
     }
@@ -179,29 +119,9 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
   const openSignInModal = () => {
     setQty(0);
-    setGlobalModalsState({ ...globalModalsState, ...{ signInModalOpened: true } });
+    show(<SignInForm/>)
   };
 
-  // const likeInc = () => {
-  //   if (!optimistLike) {
-  //     return 1;
-  //   }
-  //   return optimistLikeCount ? -1 : 0;
-  // };
-
-  // const favInc = () => {
-  //   if (!optimistFav) {
-  //     return 1;
-  //   }
-  //   return optimistFavCount ? -1 : 0;
-  // };
-
-  // const readOrWatchedInc = () => {
-  //   if (!optimistReadOrWatched) {
-  //     return 1;
-  //   }
-  //   return optimistReadOrWatchedCount ? -1 : 0;
-  // };
   const shareUrl = (() => {
     if (isPost(entity)) {
       const post = entity as PostMosaicItem;
@@ -220,9 +140,6 @@ const SocialInteraction: FunctionComponent<Props> = ({
     if (parent != null && isCycle(parent)) {
       return `${t('postCycleShare')} "${parent.title}"`;
     }
-    // if (parent != null && isWork(parent)) {
-    //   return `${t('postWorkShare')} "${parent.title}"`;
-    // }
     if (isCycle(entity)) {
       return `${t('cycleShare')} ${('title' in entity) ? `"${entity.title}"` : ''}`;
     }
@@ -236,7 +153,6 @@ const SocialInteraction: FunctionComponent<Props> = ({
       return `${t(about)} "${p ? p.title : ''}"`;
     }
     return 'entity not found'
-    // throw new Error('Invalid entity or parent');
   })();
 
   const shareText = `${shareTextDynamicPart}  ${t('complementShare')}`;
@@ -245,7 +161,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
     isSuccess,
     isLoading: loadingSocialInteraction,
   } = useMutation(
-    async ({ socialInteraction, doCreate, ratingQty }: SocialInteractionClientPayload) => {
+    async ({ socialInteraction, doCreate, ratingQty }: SocialInteractionClientPayload) => {debugger;
       const entityEndpoint = (() => {
         if (parent != null) {
           return 'post';
@@ -294,61 +210,15 @@ const SocialInteraction: FunctionComponent<Props> = ({
           });
         return res.json();
       }
-      // calculateQty();
       openSignInModal();
       return null;
     },
     {
       onMutate: async (payload) => {
         await queryClient.cancelQueries(cacheKey);
-        // if (payload.socialInteraction === 'like') {
-        //   const ol = optimistLike;
-        //   setOptimistLike(!optimistLike);
-        //   const olc = optimistLikeCount;
-        //   setOptimistLikeCount(optimistLikeCount + likeInc());
-
-        //   if (isWork(entity)) {
-        //     let likedWorks;
-        //     if (ol) {
-        //       likedWorks = user?.likedWorks.filter((i: Work) => i.id !== entity.id);
-        //     } else {
-        //       user?.likedWorks.push(entity);
-        //       likedWorks = user?.likedWorks;
-        //     }
-        //     queryClient.setQueryData(['USER', `${idSession}`], { ...user, likedWorks });
-        //   } else if (isCycle(entity)) {
-        //     let likedCycles;
-        //     if (ol) {
-        //       likedCycles = user?.likedCycles.filter((i: Cycle) => i.id !== entity.id);
-        //     } else {
-        //       user?.likedCycles.push(entity);
-        //       likedCycles = user?.likedCycles;
-        //     }
-        //     queryClient.setQueryData(['USER', `${idSession}`], { ...user, likedCycles });
-        //   }
-        //   return { optimistLike: ol, optimistLikeCount: olc };
-        // }
-        // if (isWork(entity) && payload.socialInteraction === 'readOrWatched') {
-        //   const ol = optimistReadOrWatched;
-        //   setOptimistReadOrWatched(!optimistReadOrWatched);
-        //   const olc = optimistReadOrWatchedCount;
-        //   setOptimistReadOrWatchedCount(optimistReadOrWatchedCount! + readOrWatchedInc());
-
-        //   let readOrWatchedWorks;
-        //   if (ol) {
-        //     readOrWatchedWorks = user?.readOrWatchedWorks.filter((i: Cycle) => i.id !== entity.id);
-        //   } else {
-        //     user?.readOrWatchedWorks.push(entity);
-        //     readOrWatchedWorks = user?.readOrWatchedWorks;
-        //   }
-        //   queryClient.setQueryData(['USER', `${idSession}`], { ...user, readOrWatchedWorks });
-        //   return { optimistreadOrWatched: ol, optimistreadOrWatchedCount: olc };
-        // }
         if (session && payload.socialInteraction === 'fav') {
-          // const opfc = optimistFavCount;
           const opf = optimistFav;
           setOptimistFav(!optimistFav);
-          // setOptimistFavCount(optimistFavCount + favInc());
           let favWorks;
           if (isWork(entity)) {
             if (opf) favWorks = user?.favWorks.filter((i) => i.id !== entity.id);
@@ -376,16 +246,10 @@ const SocialInteraction: FunctionComponent<Props> = ({
           }
           return { optimistFav: opf,/*  optimistFavCount: opfc */ };
         }
-        // const opf = optimistFav;
-        // const opfc = optimistFavCount;
-        // setOptimistFav(!optimistFav);
-        // setOptimistFavCount(optimistFavCount + favInc());
         return {};
       },
       onSuccess: () => {
-        //const ck = globalSearchEngineState ? globalSearchEngineState.cacheKey : cacheKey;
         queryClient.invalidateQueries(['USER', `${idSession}`]);
-        //if (!ck) router.replace(router.asPath);
         queryClient.invalidateQueries(cacheKey);
       },
     },
@@ -396,60 +260,23 @@ const SocialInteraction: FunctionComponent<Props> = ({
     execSocialInteraction({ socialInteraction: 'fav', doCreate: mySocialInfo ? !mySocialInfo!.favoritedByMe : true });
   };
 
-  // const handleLikeClick = (ev: MouseEvent<HTMLButtonElement>) => {
-  //   ev.preventDefault();
-  //   execSocialInteraction({ socialInteraction: 'like', doCreate: mySocialInfo ? !mySocialInfo!.likedByMe : true });
-  // };
-
-  // const handleReadOrWatchedClick = (ev: MouseEvent<HTMLButtonElement>) => {
-  //   ev.preventDefault();
-  //   execSocialInteraction({
-  //     socialInteraction: 'readOrWatched',
-  //     doCreate: mySocialInfo ? !mySocialInfo!.readOrWatchedByMe : true,
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   // if (!isSocialInteractionSuccess) {
-  //   //   if (optimistLikeCount && optimistLikeCount > entity.likes.length)
-  //   //     setOptimistLikeCount(entity.likes.length - 1);
-  //   //   if (optimistLikeCount && optimistLikeCount < entity.likes.length)
-  //   //     setOptimistLikeCount(entity.likes.length + 1);
-  //   // }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [isSocialInteractionSuccess, optimistLike]);
-
-  // useEffect(() => {
-  //   // if (!isSocialInteractionSuccess) {
-  //   //   if (optimistFavCount && optimistFavCount > entity.favs.length)
-  //   //     setOptimistFavCount(entity.favs.length - 1);
-  //   //   if (optimistFavCount && optimistFavCount < entity.favs.length)
-  //   //     setOptimistFavCount(entity.favs.length + 1);
-  //   // }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [isSocialInteractionSuccess, optimistFav]);
-
-  // useEffect(() => {
-  //   if (isSocialInteractionSuccess) {
-  //     router.replace(router.asPath); // refresh page
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [isSocialInteractionSuccess]);
   const popoverShares = (
     <Popover id="popover-basic" style={{width:"zpx"}}>
       <Popover.Body>
+        <div className='mb-2'>
         <TwitterShareButton windowWidth={800} windowHeight={600} url={shareUrl} title={shareText} via="eleurekaclub">
-          <TwitterIcon size={32} round />
+          <TwitterIcon size={30} round />
           {` ${t('wayShare')} Twitter`}
         </TwitterShareButton> 
-        <br />
+        </div>
+        <div className='mb-2'>
         <FacebookShareButton windowWidth={800} windowHeight={600} url={shareUrl} quote={shareText}>
-          <FacebookIcon size={32} round />
+          <FacebookIcon size={30} round />
           {` ${t('wayShare')} Facebook`}
         </FacebookShareButton>
-        <br />
+        </div>
         <WhatsappShareButton windowWidth={800} windowHeight={600} url={shareUrl} title={`${shareText} ${t('whatsappComplement')}`}>
-          <WhatsappIcon size={32} round />
+          <WhatsappIcon size={30} round />
           {` ${t('wayShare')} Whatsapp`}
         </WhatsappShareButton>
       </Popover.Body>
@@ -465,12 +292,12 @@ const SocialInteraction: FunctionComponent<Props> = ({
     });
   };
 
-  const handlerChangeRating = (value: number) => {
+  const handlerChangeRating = (value: number) => {debugger;
     setQty(value);
     execSocialInteraction({
       socialInteraction: 'rating',
       ratingQty: value,
-      doCreate: true,
+      doCreate: value ? true : false,
     });
   };
 
@@ -481,12 +308,6 @@ const SocialInteraction: FunctionComponent<Props> = ({
           return <GiBrain className="text-secondary" /*  style={{ color: 'var(--eureka-blue)' }} */ />;
 
     }
-    // if (session) {
-    //   if (user && mySocialInfo) {
-    //     if (mySocialInfo.ratingByMe)
-    //       return <GiBrain className="text-secondary" /*  style={{ color: 'var(--eureka-blue)' }} */ />;
-    //   }
-    // }
     return <GiBrain className="text-primary" /* style={{ color: 'var(--eureka-green)' }} */ />;
   };
 
@@ -497,10 +318,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
     } 
     else if (isCycleMosaicItem(entity)) count = entity._count.ratings;
 
-    // if (!session || (user && mySocialInfo && !mySocialInfo.ratingByMe))
     return <span className={styles.ratingsCount}>{`${count}`}</span>;
-    // return <Badge variant="secondary">{`${entity.ratings.length}`}</Badge>;
-    // return <Badge variant="info">{`${entity.ratings.length}`}</Badge>;
   };
   const renderSaveForLater = ()=>{
     if(!entity || isLoadingSession)
@@ -524,7 +342,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
 
   }
-  const getInitialRating = ()=>{
+  const getInitialRating = ()=>{debugger;
     if(entity){
       if(isCycleMosaicItem(entity) || isWorkMosaicItem(entity)){
         return entity.ratingAVG
@@ -537,26 +355,19 @@ const SocialInteraction: FunctionComponent<Props> = ({
         return !entity.currentUserRating ? <span className={styles.ratingLabelInfo}>{t('Rate it')}</span> : '';
     }
     return ''
-    // if (!session || (user && mySocialInfo && !mySocialInfo.ratingByMe)) {
-    //   return <span className={styles.ratingLabelInfo}>{t('Rate it')}</span>;
-    // }
-    // return undefined;
   };
   if (isLoadingSession || isLoadingUser) return <Spinner animation="grow" variant="info" size="sm" />;
   return (
-    // (session && user && (
     <section className={`${className}`}>
-      {/* <Row> */}
       <div className="d-flex">
         {showRating && (
-          // <Col xs={10}>
           <div className="ps-1">
             {showRating && getRatingLabelInfo()}
             {` `}
             {showRating && 
              <>
              {/* @ts-ignore*/} 
-              <Rating
+             {/* <Rating
                 initialRating={getInitialRating()}
                 onClick={handlerChangeRating}
                 className={styles.rating}
@@ -564,7 +375,13 @@ const SocialInteraction: FunctionComponent<Props> = ({
                 emptySymbol={<GiBrain className="fs-6 text-info" />}
                 fullSymbol={getFullSymbol()}
                 readonly={loadingSocialInteraction}
-              />
+              />  */}
+               <Rating
+                qty={qty}
+                onClick={handlerChangeRating}
+                stop={5}
+                readonly={loadingSocialInteraction}
+              /> 
              </>
             }{' '}
             {showRating && !loadingSocialInteraction && getRatingsCount()}{' '}
@@ -587,62 +404,28 @@ const SocialInteraction: FunctionComponent<Props> = ({
         {loadingSocialInteraction && (
              <div className='mt-1 ms-1 me-2'> <Spinner className={styles.ratingSpinner} size="sm" animation="grow" variant="info" /></div>
             )}
-            
         {ss && (
-          <div className="ms-auto position-relative">
-            {/* <OverlayTrigger trigger="focus" placement="right" overlay={popoverShares}> */}
+          <div className="ms-auto">
+            <OverlayTrigger trigger="focus" placement="top" overlay={popoverShares}>
               <Button
                 // style={{ fontSize: '.9em' }}
                 title={t('Share')}
                 variant="link"
                 className={`${styles.buttonSI} fs-6 p-0 text-primary`}
                 disabled={loadingSocialInteraction}
-                onClick={()=>{setShowShare(ss=>!ss);console.log('done',showShare)}}
               >
                 <FiShare2 />
                 <br />
                 {showButtonLabels && <span className={classnames(styles.info, styles.active)}>{t('Share')}</span>}
               </Button>
-            {showShare && <div className="position-absolute botton-0 start-50">{popoverShares}</div>}
-            {/* </OverlayTrigger> */}
+            </OverlayTrigger>
           </div>
         )}
-
-        {/* <Col xs={showRating ? 2 : 12}> */}
         <div className={`${ss ? 'ms-1' : 'ms-auto'}`}>
             {renderSaveForLater()}       
         </div>
       </div>
-      {/* {isWork(entity) && (
-          <button
-            className={styles.socialBtn}
-            title={t('Read / watched')}
-            onClick={handleReadOrWatchedClick}
-            type="button"
-          >
-            {optimistReadOrWatched ? <BsEyeFill className={styles.active} /> : <BsEye />}
-            {showCounts && optimistReadOrWatchedCount}
-            {showButtonLabels && (
-              <span className={classnames(...[styles.info, ...[optimistReadOrWatched ? styles.active : '']])}>
-                {t('Read / watched')}
-              </span>
-            )}
-          </button>
-        )}
-        <button className={styles.socialBtn} title={t('I learned')} onClick={handleLikeClick} type="button">
-          {optimistLike  ? <GiBrain className={styles.active} /> : <GiBrain />}
-          {showCounts && optimistLikeCount}
-          {showButtonLabels && (
-            <span className={classnames(...[styles.info, ...[optimistLike ? styles.active : '']])}>
-              {t('I learned')}!
-            </span>
-          )}
-        </button>
-            */}
     </section>
-    // )) ||
-    // null
   );
 };
-
 export default SocialInteraction;

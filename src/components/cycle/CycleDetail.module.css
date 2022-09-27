@@ -64,6 +64,5 @@
 }
 
 .tabBtn a:hover{
-  background-color: var(--eureka-)
-  
+  background-color: var(--eureka-);
 }

@@ -3,7 +3,7 @@ import { NextPage, GetServerSideProps } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import {QueryClient, dehydrate} from 'react-query';
-import { Spinner, ButtonGroup, Button, Form } from 'react-bootstrap';
+import { Spinner, ButtonGroup, Button, Form, Alert } from 'react-bootstrap';
 import {getPosts} from '@/src/usePosts'
 import {getWorks} from '@/src/useWorks'
 import {getCycles} from '@/src/useCycles'
@@ -22,11 +22,13 @@ interface Props {
   worksData:{total:number,fetched:number,works:WorkMosaicItem[]};
   cyclesData:{total:number,fetched:number,cycles:CycleMosaicItem[]};
 }
-const SearchPage: NextPage<Props> = ({postsData,worksData,cyclesData}) => {
+const SearchPage: NextPage<Props> = ({postsData,worksData,cyclesData}) => {//TODO sacar estos props a favor de react-query dehydratedState
   const { t } = useTranslation('common');
   const router = useRouter();
 
-  let qLabel = t(`topics:${router.query.q as string}`);
+  console.log(postsData,worksData,cyclesData,'postsData,worksData,cyclesData')  
+
+  let qLabel = `${router.query.q as string}`;
   if (qLabel.match(':')) qLabel = router.query.q as string;
 
   const onTermKeyUp = (e:React.KeyboardEvent<HTMLInputElement>)=>{
@@ -46,9 +48,16 @@ const SearchPage: NextPage<Props> = ({postsData,worksData,cyclesData}) => {
         <h1 className="text-secondary fw-bold mb-2">
           {t('Results about')}: {`"${qLabel}"`}
         </h1>
+        { (postsData.posts.length ||  worksData.works.length || cyclesData.cycles.length) ?
         <div className='d-flex flex-column justify-content-center'>
           <SearchTab postsData={postsData} worksData={worksData} cyclesData={cyclesData} />
-        </div>
+        </div> :
+        <>
+        <Alert className='mt-4' variant="primary">
+        <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
+      </Alert>
+        </>
+         }
        
       </SimpleLayout>
 };
@@ -177,7 +186,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       postsData,
       worksData,
       cyclesData,
-      // dehydratedState: dehydrate(qc),
+      // dehydratedState: dehydrate(qc), TODO esto hay q reactivarlo 
     },
   };
 };

@@ -51,7 +51,7 @@ const MyBooksMovies: NextPage<Props> = ({id}) => {
           <>
           <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('myBooksMovies')}</h1>
             <Row>
-              {user?.ratingWorks.map(c=>
+              {user?.ratingWorks.filter(rw=>rw.workId).map(c=>
                 <Col key={c.workId} xs={12} sm={6} lg={3} className='mb-5 d-flex justify-content-center  align-items-center'>
                   <WMI workId={c.workId!} />
                 </Col>

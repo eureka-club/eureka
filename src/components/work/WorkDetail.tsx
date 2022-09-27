@@ -24,7 +24,7 @@ import { PostMosaicItem } from '@/src/types/post';
 import UnclampText from '@/components/UnclampText';
 import WorkSummary from './WorkSummary';
 import detailPagesAtom from '@/src/atoms/detailPages';
-import globalModalsAtom from '@/src/atoms/globalModals';
+//import globalModalsAtom from '@/src/atoms/globalModals';
 import editOnSmallerScreens from '../../atoms/editOnSmallerScreens';
 import styles from './WorkDetail.module.css';
 import TagsInput from '@/components/forms/controls/TagsInput';
@@ -49,9 +49,9 @@ interface Props {
 const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
   const router = useRouter();
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
-  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
+  //const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const { t } = useTranslation('workDetail');
-  const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
+  //const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
   const {data:session} = useSession();
   const [ref, inView] = useInView({
     triggerOnce: false,
@@ -86,20 +86,23 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
   const {data:dataPosts} = usePosts(workPostsWhere,{enabled:!!workId})//OJO this trigger just once -load the same data that page does
   const [posts,setPosts] = useState(dataPosts?.posts)
   const [cycles,setCycles] = useState(dataCycles?.cycles)
+  const [defaultActiveKey,setDefaultActiveKey] = useState<string>('posts')
 
   const [hasMorePosts,setHasMorePosts] = useState(dataPosts?.fetched);
   useEffect(()=>{
     if(dataPosts && dataPosts.posts){
       setHasMorePosts(dataPosts.fetched)
       setPosts(dataPosts.posts)
+      if(dataPosts.posts.length)setDefaultActiveKey('posts')
     }
   },[dataPosts])
 
   useEffect(()=>{
     if(dataCycles && dataCycles.cycles){
       setCycles(dataCycles.cycles)
+      if(dataCycles.cycles.length && !posts?.length)setDefaultActiveKey('cycles')
     }
-  },[dataCycles])
+  },[dataCycles,posts])
 
 
   useEffect(()=>{
@@ -131,6 +134,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
 
   const handleSubsectionChange = (key: string | null) => {
     if (key != null) {
+      setDefaultActiveKey(key)
       setDetailPagesState({ ...detailPagesState, selectedSubsectionWork: key });
     }
   };
@@ -159,17 +163,17 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
     }
   };
 
-  const handleEditPostOnSmallerScreen = (ev: MouseEvent<HTMLButtonElement>) => {
+  /*const handleEditPostOnSmallerScreen = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
         setEditPostOnSmallerScreen({ ...editOnSmallerScreens, ...{ value: !editPostOnSmallerScreen.value } });
-  };
+  };*/
 
   const renderPosts = ()=>{
     if(posts){
       return <>
         <WorkDetailPost workId={work.id} className='mb-2' cacheKey={['POSTS',JSON.stringify(workPostsWhere)]}></WorkDetailPost> 
-        <Row>
-        {posts.map((p)=><Col key={p.id} xs={12} sm={6} lg={3} className="mb-5">
+        <Row className='mt-5'>
+        {posts.map((p)=><Col key={p.id} xs={12} sm={6} lg={3} className="mb-5 d-flex justify-content-center  align-items-center">
           <MosaicItemPost  cacheKey={['POST',`${p.id}`]} postId={p.id} />          
         </Col>
         )}
@@ -184,8 +188,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
 
   const renderCycles =()=>{
     if(cycles){
-      return <Row>
-        {cycles.map(c=><Col xs={12} sm={6} lg={3} className="mb-3 d-flex justify-content-center  align-items-center" key={c.id}><CMI cycleId={c.id} cacheKey={['CYCLES',`WORK-${workId}`]}  /></Col>)}
+      return <Row className='mt-5'>
+        {cycles.map(c=><Col xs={12} sm={6} lg={3} className="mb-5 d-flex justify-content-center  align-items-center" key={c.id}><CMI cycleId={c.id} cacheKey={['CYCLES',`WORK-${workId}`]}  /></Col>)}
       </Row>
     }
     return <></> 
@@ -193,34 +197,24 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
   return (
     <WorkContext.Provider value={{ work, linkToWork: false }}>
       <MosaicContext.Provider value={{ showShare: true }}>
-       
-       {
-       (!editPostOnSmallerScreen.value) ? 
         <ButtonGroup className="mt-1 mt-md-3 mb-1">
           <Button variant="primary text-white" onClick={() => router.back()} size="sm">
             <BiArrowBack />
           </Button>
           {!router.query.postId && canEditWork() && (
             <Button variant="warning" onClick={handleEditClick} size="sm">
-              {t('edit')}
+            {t('edit')}
             </Button>
           )}
           {post && work && canEditPost() && (<>
-          <Button className='d-none d-md-block' variant="warning" onClick={handleEditPostClick} size="sm">
+          <Button variant="warning" onClick={handleEditPostClick} size="sm">
             {t('edit')}
           </Button>
-            <Button className='d-block d-md-none' variant="warning" onClick={handleEditPostOnSmallerScreen} size="sm">
-            {t('edit')}
-          </Button></>
+          </>
           )}
-        </ButtonGroup> :
+        </ButtonGroup> 
         
-        <ButtonGroup className="mt-1 mt-md-3 mb-1">
-        <Button variant="primary text-white" onClick={handleEditPostOnSmallerScreen} size="sm">
-          <BiArrowBack />
-        </Button>
-      </ButtonGroup>
-      }
+        
 
      {
     //  (!editPostOnSmallerScreen.value) 
@@ -275,7 +269,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
               <Col>
                 {detailPagesState.selectedSubsectionWork != null && (
                   <TabContainer
-                    defaultActiveKey={'posts'}
+                    // defaultActiveKey={defaultActiveKey}
+                    activeKey={defaultActiveKey}
                     onSelect={handleSubsectionChange}
                     transition={true}
                   >

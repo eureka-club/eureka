@@ -28,11 +28,9 @@
    height: 100%;
 }*/
 .submitButton {
-  display: block;
-  margin-top: 2rem;
-  width: 50%;
-  font-size: 1.2rem;
+  width: 40%;
 }
+
 .dontHaveAccounttext {
   font-size: 0.8rem;
 }

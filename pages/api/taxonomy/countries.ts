@@ -5,7 +5,7 @@ import utc from 'dayjs/plugin/utc';
 import { isEmpty } from 'lodash';
 import * as removeAccents from 'remove-accents';
 
-import getApiHandler from '../../../src/lib/getApiHandler';
+import getApiHandler from '@/src/lib/getApiHandler';
 import {prisma} from '@/src/lib/prisma';
 
 // import i18nConfig from '../../../i18n';
@@ -58,6 +58,11 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     }
 
     const result = await prisma.term.findMany({
+      select:{
+        label:true,
+        code:true,
+        parent:{select:{code:true}}
+      },      
       where: {
         taxonomy: {
           code: 'region',
