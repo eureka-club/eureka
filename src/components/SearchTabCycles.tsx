@@ -15,14 +15,13 @@ interface Props {
   cyclesData:{total:number,fetched:number,cycles:CycleMosaicItem[]};
 }
 const take = 8;
-const SearchTabCycles: FunctionComponent<Props> = ({cyclesData}) => {
+const SearchTabCycles: FunctionComponent<Props> = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const terms = router?.query.q?.toString()!.split(" ") || [];
 
   const {FilterEngineCycles,filtersType,filtersCountries} = useFilterEngineCycles()
-  console.log('filtersType',filtersType)
-  console.log('filtersCountries',filtersCountries)
+  console.log(filtersCountries,"filtersCountries")
 
   const getProps = ()=>{
     const res:Prisma.CycleWhereInput = {
@@ -86,7 +85,7 @@ const SearchTabCycles: FunctionComponent<Props> = ({cyclesData}) => {
 
   const {data:{total,fetched,cycles:c}={total:0,fetched:0,cycles:[]}} = useCycles(props,{enabled:!!router.query?.q});
   const [cycles,setCycles] = useState<CycleMosaicItem[]>([])
-
+  
   useEffect(()=>{
     let props: Prisma.CycleWhereInput|undefined = undefined;
     if(router.query.q && (filtersType||(filtersCountries && filtersCountries.length))){
@@ -94,7 +93,7 @@ const SearchTabCycles: FunctionComponent<Props> = ({cyclesData}) => {
     }
     if(props)
       setProps(s=>({...s,where:{...props}}))
-  },[filtersType,filtersCountries,router.query.q])
+  },[filtersType.public,filtersType.private,filtersCountries,router.query.q])
 
   useEffect(()=>{
     if(c)setCycles(c)
