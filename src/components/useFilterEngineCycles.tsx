@@ -20,31 +20,30 @@ const useFilterEngineCycles = ()=>{
     };
     
 const FilterEngineCycles: React.FC = ()=>{
-    return <Row>
-    <Col className="my-3">
-    <Form.Check inline
-    type="checkbox"
-    label={t('private')}
-    checked={filtersType['private']}
-    onChange={(e) => handlerComboxesChangeType(e, 'private')}
-    />
-    <Form.Check inline
-    type="checkbox"
-    label={t('public')}
-    checked={filtersType['public']}
-    onChange={(e) => handlerComboxesChangeType(e, 'public')}
-    />
-    
-  </Col>
-    <Col >
-    <FilterEngineCountries 
-      filtersCountries={filtersCountries}
-      setFiltersCountries={setFiltersCountries}
-      filtersRegions={filtersRegions}
-      setFiltersRegions={setFiltersRegions}
-    />
-    </Col>
-    </Row>
+    return <section className="d-flex flex-row align-items-center justify-content-end my-2">
+    <div className="my-3">
+      <Form.Check inline
+      type="checkbox"
+      label={t('private')}
+      checked={filtersType['private']}
+      onChange={(e) => handlerComboxesChangeType(e, 'private')}
+      />
+      <Form.Check inline
+      type="checkbox"
+      label={t('public')}
+      checked={filtersType['public']}
+      onChange={(e) => handlerComboxesChangeType(e, 'public')}
+      />
+    </div>
+    <div className="my-3">
+      <FilterEngineCountries 
+        filtersCountries={filtersCountries}
+        setFiltersCountries={setFiltersCountries}
+        filtersRegions={filtersRegions}
+        setFiltersRegions={setFiltersRegions}
+      />
+    </div>
+    </section>
   }
   return {FilterEngineCycles,filtersType,filtersCountries};
 }

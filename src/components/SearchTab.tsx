@@ -67,7 +67,7 @@ const SearchTab: FunctionComponent<Props> = ({postsData,worksData,cyclesData}) =
         {router.query.q && <Tabs  defaultActiveKey={key}
         activeKey={key}
                 onSelect={(k) => setKey(k!)}
-                className="my-5"
+                className="mt-5"
             >
                 {cyclesData.fetched ? <Tab eventKey="cycles" title={t('cycles')}  className={`cursor-pointer`}>
                     {renderTab("cycles")}
