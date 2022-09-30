@@ -53,7 +53,6 @@ const HomeSingIn: FunctionComponent<Props> = ({ groupedByTopics}) => {
   useEffect(()=>{
     if(dataUsers)setUsers(dataUsers)
     if(dataCycles)setCycles(dataCycles.cycles)
-
   },[dataCycles,dataUsers])
 
   const [gbt, setGBT] = useState([...Object.entries(groupedByTopics||[])]);
@@ -107,9 +106,10 @@ const featuredUsers = () => {
     ? <div>      
        <CarouselStatic
         cacheKey={['USERS','FEATURED']}
-        //onSeeAll={()=>router.push('/featured-users')}
+        onSeeAll={()=>router.push('/featured-users')}
         data={users}
         title={t('Featured users')}
+        userMosaicDetailed = {true}
       />
       </div>
     : <></>;

@@ -57,7 +57,7 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
     }, [notFound]);
 
     useEffect(() => {
-    console.log(bo,'bo data')
+    //console.log(bo,'bo data')
     setImage1(undefined);
     setImage2(undefined);
     setImage3(undefined);
@@ -131,7 +131,7 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
         body: formData,
       });
       if(res.ok)
-         toast.success( t('Banner Settings') + '  Saved')      
+         toast.success( t('Settings') + '  Saved')      
       else
         toast.error(res.statusText)
     },
