@@ -1,7 +1,7 @@
 import { useState, FunctionComponent, useEffect } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { Spinner,Row, Col} from 'react-bootstrap';
+import { Spinner,Row, Col, Tab} from 'react-bootstrap';
 
 import MosaicItem from '@/components/post/MosaicItem'
 import usePosts,{getPosts} from '@/src/usePosts'
@@ -12,7 +12,7 @@ import { Prisma } from '@prisma/client';
 import { PostMosaicItem } from '../types/post';
 
 const take = 8;
-const SearchTabCycles: FunctionComponent = () => {
+const SearchTabCycles:FunctionComponent = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const terms = router?.query.q?.toString()!.split(" ") || [];
@@ -100,20 +100,19 @@ const SearchTabCycles: FunctionComponent = () => {
     }
   },[inView])
 
-  const renderCycles=()=>{
+  const renderPosts=()=>{
     if(posts)
-      return <div>
-        <FilterEnginePosts/>
-        <Row>
-            {posts.map(p=><Col xs={12} sm={6} lg={3} className="mb-3 d-flex justify-content-center  align-items-center" key={p.id}><MosaicItem postId={p.id} cacheKey={['POST',p.id.toString()]}  /></Col>)}
-      </Row>
-      {posts?.length!=total && <Spinner ref={ref} animation="grow" />}
-      </div>
-      return ''
+      return       <>
+
+          <FilterEnginePosts/>
+          <Row>
+              {posts.map(p=><Col xs={12} sm={6} lg={3} className="mb-3 d-flex justify-content-center  align-items-center" key={p.id}><MosaicItem postId={p.id} cacheKey={['POST',p.id.toString()]}  /></Col>)}
+        </Row>
+        {posts?.length!=total && <Spinner ref={ref} animation="grow" />}
+      </>
+      return <></>
   }
 
-  return <div>
-  {renderCycles()}
-  </div>
+  return renderPosts()
 };
 export default SearchTabCycles;

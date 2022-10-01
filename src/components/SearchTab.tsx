@@ -1,46 +1,37 @@
-import React, { useState, FunctionComponent, useEffect } from 'react';
+import React, { useState, FunctionComponent } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { Spinner, Alert,Row ,Tabs,Tab, Col, Form} from 'react-bootstrap';
+import { Tab, Tabs} from 'react-bootstrap';
 
 import SearchTabWorks from './SearchTabWorks';
 import SearchTabPosts from './SearchTabPosts';
 import SearchTabCycles from './SearchTabCycles';
-import { PostMosaicItem } from '@/src/types/post';
-import { WorkMosaicItem } from '@/src/types/work';
-import { CycleMosaicItem } from '@/src/types/cycle';
-import posts from 'pages/api/search/posts';
 
-
-interface Props {
-  postsData:{total:number,fetched:number,posts:PostMosaicItem[]};
-  worksData:{total:number,fetched:number,works:WorkMosaicItem[]};
-  cyclesData:{total:number,fetched:number,cycles:CycleMosaicItem[]};
-}
-const SearchTab: FunctionComponent<Props> = ({postsData,worksData,cyclesData}) => {
+const SearchTab: FunctionComponent = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
   
   const [key, setKey] = useState<string>('cycles');
+  const [cyclesLenght,setCyclesLenght] = useState(1);
 
-  useEffect(()=>{
-    const k = cyclesData.fetched 
-    ? 'cycles' 
-    : postsData.fetched ? 'posts' : 'works'
-    setKey(k)
-  },[postsData,worksData,cyclesData]);// :-(
+  // useEffect(()=>{
+  //   const k = cyclesData.fetched 
+  //   ? 'cycles' 
+  //   : postsData.fetched ? 'posts' : 'works'
+  //   setKey(k)
+  // },[postsData,worksData,cyclesData]);// :-(
 
-  const renderTab = (k:string)=>{
-    switch(k){
-      case 'posts':
-        return <SearchTabPosts postsData={postsData}/>
-      case 'works':
-          return <SearchTabWorks worksData={worksData}/>
-      case 'cycles':
-        return <SearchTabCycles cyclesData={cyclesData}/>
-    }
-    return ''
-  }
+  // const renderTab = (k:string)=>{
+  //   switch(k){
+  //     case 'posts':
+  //       return <SearchTabPosts />
+  //     case 'works':
+  //         return <SearchTabWorks />
+  //     case 'cycles':
+  //       return <SearchTabCycles />
+  //   }
+  //   return ''
+  // }
   
   return <div>
     {/* language=CSS */}
@@ -64,22 +55,26 @@ const SearchTab: FunctionComponent<Props> = ({postsData,worksData,cyclesData}) =
                   `}
                 </style>
                 
-        {router.query.q && <Tabs  defaultActiveKey={key}
-        activeKey={key}
-                onSelect={(k) => setKey(k!)}
-                className="mt-5"
+        {router.query.q
+          ? <Tabs  
+              defaultActiveKey={key}
+              activeKey={key}
+              onSelect={(k) => setKey(k!)}
+              className="mt-5"
             >
-                {cyclesData.fetched ? <Tab eventKey="cycles" title={t('cycles')}  className={`cursor-pointer`}>
-                    {renderTab("cycles")}
-                </Tab>:''}
-                 {postsData.fetched ? <Tab eventKey="posts" title={t('posts')} className={`cursor-pointer`}>
-                    {renderTab("posts")}
-                </Tab>:''}
-                {worksData.fetched ? <Tab eventKey="works" title={t('works')} className={`cursor-pointer`}>
-                    {renderTab("works")}
-                </Tab>:''}  
-                
-            </Tabs>}
+             
+              <Tab eventKey="cycles" title={t('cycles')}  className={`cursor-pointer`}>
+                    <SearchTabCycles />
+              </Tab>
+              <Tab eventKey="posts" title={t('posts')} className={`cursor-pointer`}>
+                <SearchTabPosts />
+              </Tab>
+              <Tab eventKey="works" title={t('works')} className={`cursor-pointer`}>
+                <SearchTabWorks />
+              </Tab>
+            </Tabs>
+          :<></>
+        }
   </div>
 };
 export default SearchTab;
