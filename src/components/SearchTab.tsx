@@ -1,4 +1,4 @@
-import React, { useState, FunctionComponent } from 'react';
+import React, { useState, FunctionComponent,useEffect } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { Tab, Tabs} from 'react-bootstrap';
@@ -7,19 +7,25 @@ import SearchTabWorks from './SearchTabWorks';
 import SearchTabPosts from './SearchTabPosts';
 import SearchTabCycles from './SearchTabCycles';
 
-const SearchTab: FunctionComponent = () => {
+interface Props{
+  hasCycles:boolean;
+  hasPosts:boolean;
+  hasWorks:boolean;
+}
+
+const SearchTab: FunctionComponent<Props> = ({hasCycles,hasPosts,hasWorks}) => {
   const { t } = useTranslation('common');
   const router = useRouter();
   
   const [key, setKey] = useState<string>('cycles');
-  const [cyclesLenght,setCyclesLenght] = useState(1);
 
-  // useEffect(()=>{
-  //   const k = cyclesData.fetched 
-  //   ? 'cycles' 
-  //   : postsData.fetched ? 'posts' : 'works'
-  //   setKey(k)
-  // },[postsData,worksData,cyclesData]);// :-(
+  useEffect(()=>{
+    setKey(
+      hasCycles 
+      ? 'cycles'
+      : hasPosts ? 'posts' : 'works'
+    )
+  },[hasCycles,hasPosts,hasWorks]);
 
   // const renderTab = (k:string)=>{
   //   switch(k){
@@ -63,15 +69,15 @@ const SearchTab: FunctionComponent = () => {
               className="mt-5"
             >
              
-              <Tab eventKey="cycles" title={t('cycles')}  className={`cursor-pointer`}>
+              {hasCycles ? <Tab eventKey="cycles" title={t('cycles')}  className={`cursor-pointer`}>
                     <SearchTabCycles />
-              </Tab>
-              <Tab eventKey="posts" title={t('posts')} className={`cursor-pointer`}>
+              </Tab> : <></>}
+              {hasPosts ? <Tab eventKey="posts" title={t('posts')} className={`cursor-pointer`}>
                 <SearchTabPosts />
-              </Tab>
-              <Tab eventKey="works" title={t('works')} className={`cursor-pointer`}>
+              </Tab> : <></>}
+              {hasWorks ? <Tab eventKey="works" title={t('works')} className={`cursor-pointer`}>
                 <SearchTabWorks />
-              </Tab>
+              </Tab>:<></>}
             </Tabs>
           :<></>
         }

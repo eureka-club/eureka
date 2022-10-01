@@ -14,7 +14,12 @@ import SearchTab from '@/src/components/SearchTab';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 
 const take=8;
-const SearchPage: NextPage = () => {
+interface Props{
+  hasCycles:boolean;
+  hasPosts:boolean;
+  hasWorks:boolean;
+}
+const SearchPage: NextPage<Props> = ({hasCycles,hasPosts,hasWorks}) => {
   const { t } = useTranslation('common');
   const router = useRouter();
 
@@ -41,7 +46,7 @@ const SearchPage: NextPage = () => {
         </h1>
         {/* { (postsData.posts.length ||  worksData.works.length || cyclesData.cycles.length) ? */}
         <div className='d-flex flex-column justify-content-center'>
-          <SearchTab  />
+        <SearchTab {...{hasCycles,hasPosts,hasWorks}}  />
         </div> 
         {/* :
         <>
@@ -97,6 +102,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   }
   const cyclesData = await getCycles({...cyclesProps,take},origin);
   qc.prefetchQuery(['CYCLES',JSON.stringify(cyclesProps)],()=>cyclesData)
+  const hasCycles = cyclesData.total > 0
 
   const postsProps = {
     where:{
@@ -136,6 +142,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   }
   const postsData = await getPosts({...postsProps,take},origin);
   qc.prefetchQuery(['POSTS',JSON.stringify(postsProps)],()=>postsData)
+  const hasPosts = postsData.total > 0
 
   const worksProps = {
     where:{
@@ -175,9 +182,13 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   }
   const worksData = await getWorks({...worksProps,take},origin);
   qc.prefetchQuery(['WORK',JSON.stringify(worksProps)],()=>worksData)
+  const hasWorks = worksData.total > 0
 
   return {
     props: {
+      hasCycles,
+      hasPosts,
+      hasWorks,
       dehydratedState: dehydrate(qc), 
     },
   };
