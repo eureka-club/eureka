@@ -163,7 +163,7 @@ const NavBar: FunctionComponent = () => {
             <Nav className={`${styles.navbarNav} text-center d-flex me-1`}>
               <Nav.Item>
                 <Link href={`/mediatheque/${getMediathequeSlug()}`}>
-                  <a className={styles.navLink}>
+                  <a data-cy="my-mediatheque-link" className={styles.navLink}>
                     <RiDashboardLine className={styles.navbarIconNav} />
                     <span className={styles.menuBottomInfo}>{t('My Mediatheque')}</span>
                   </a>
