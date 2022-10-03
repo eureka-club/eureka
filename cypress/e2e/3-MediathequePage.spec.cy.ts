@@ -24,7 +24,7 @@ describe('Mediatheque page',()=>{
 
     it('should have a link "My Mediatheque"',()=>{
         cy.visit('/en')  
-        cy.get('[data-cy="my-mediatheque-link"]')
+        cy.get('[data-cy="my-mediatheque-link"]',options)
         .should('have.attr','href')
         .should('eq',url)
     })
@@ -39,7 +39,7 @@ describe('Mediatheque page',()=>{
     // })
 
     it('should have "Cycles I created or joined" section',()=>{
-        cy.get('[data-cy="my-mediatheque-link"]').click()
+        cy.get('[data-cy="my-mediatheque-link"]',options).click()
 
         // cy.wait(10000)
 
