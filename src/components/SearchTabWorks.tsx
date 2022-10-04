@@ -1,27 +1,28 @@
 import { useState, FunctionComponent, useEffect } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { Spinner,Row, Col} from 'react-bootstrap';
+import { Spinner,Row, Col, Tab} from 'react-bootstrap';
 
 import MosaicItem from '@/components/work/MosaicItem'
 
-import {getWorks} from '@/src/useWorks'
+import useWorks,{getWorks} from '@/src/useWorks'
 
-// import useFilterEnginePosts from './useFilterEnginePosts';
+import useFilterEngineWorks from './useFilterEngineWorks';
 import { useInView } from 'react-intersection-observer';
 import { Prisma } from '@prisma/client';
 import { WorkMosaicItem } from '../types/work';
-interface Props {
-  worksData:{total:number,fetched:number,works:WorkMosaicItem[]};
-}
+
 const take = 8;
-const SearchTabWorks: FunctionComponent<Props> = ({worksData}) => {
+const SearchTabworks:FunctionComponent = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const terms = router?.query.q?.toString()!.split(" ") || [];
-  
-  const baseProps = (terms:string[])=>{
-    return {
+
+  const {FilterEngineWork,filtersType,filtersCountries} = useFilterEngineWorks()
+  console.log(filtersCountries,"filtersCountries")
+
+  const getProps = ()=>{
+    const res:Prisma.WorkWhereInput = {
       OR:[
         {
           AND:terms.map(t=>(
@@ -42,41 +43,71 @@ const SearchTabWorks: FunctionComponent<Props> = ({worksData}) => {
         {
           AND:terms.map(t=>(
             { 
-               tags: { contains: t } 
+                tags: { contains: t } 
             }
           ))
         },
         {
           AND:terms.map(t=>(
             { 
-               topics: { contains: t } 
+                topics: { contains: t } 
             }
           ))
         }
       ],
     }
+    let AND = {}
+    if(filtersType){
+      const typesChecked = Object.entries(filtersType).filter(([_,v])=>v).map(([k,_])=>k)
+      const type = {
+        type:{
+          in:typesChecked
+        }
+      }
+      AND = {...AND,...type};
+    }
+    if(filtersCountries && filtersCountries.length){
+      AND = {...AND,
+        countryOfOrigin:{
+            in:filtersCountries
+        },
+        countryOfOrigin2:{
+          in:filtersCountries
+      }
+      }
+    }
+    res.AND=AND
+    return res;
   };
 
-  const [props,setProps]=useState<Prisma.WorkFindManyArgs>({take,where:{...baseProps(terms)}})
-  // const {data:{total,fetched,works:c}={total:0,fetched:0,works:[]}} = useWorks(props,{enabled:!!router.query?.q});
+  const [props,setProps]=useState<Prisma.WorkFindManyArgs>({take,where:{...getProps()}})
+
+  const {data:{total,fetched,works:c}={total:0,fetched:0,works:[]}} = useWorks(props,{enabled:!!router.query?.q});
   const [works,setWorks] = useState<WorkMosaicItem[]>([])
-  const {total,fetched} = worksData;
+  
   useEffect(()=>{
-    if(worksData.works)setWorks(worksData.works)
-  },[worksData.works])
-
-  useEffect(()=>{
-    if(router.query.q){
-      const terms = router?.query.q?.toString()!.split(" ") || [];
-
-      setProps(()=>({take,where:{...baseProps(terms)}}))
+    let props: Prisma.WorkWhereInput|undefined = undefined;
+    if(router.query.q && (filtersType||(filtersCountries && filtersCountries.length))){
+      props = getProps();
     }
-  },[router.query.q])
+    if(props)
+      setProps(s=>({...s,where:{...props}}))
+  },[
+    filtersType.book,
+    filtersType['fiction-book'],
+    filtersType.movie,
+    filtersType.documentary,
+    filtersCountries,router.query.q
+  ])
+
+  useEffect(()=>{
+    if(c)setWorks(c)
+  },[c])
 
   const [ref, inView] = useInView({
     triggerOnce: false,
   });
-  
+
   useEffect(()=>{
     if(inView && works.length < total){
       const fi = async ()=>{
@@ -90,18 +121,16 @@ const SearchTabWorks: FunctionComponent<Props> = ({worksData}) => {
 
   const renderWorks=()=>{
     if(works)
-      return <div>
-        {/* <FilterEngineCycles/> */}
+      return <>
+        <FilterEngineWork/>
         <Row>
             {works.map(p=><Col xs={12} sm={6} lg={3} className="mb-3 d-flex justify-content-center  align-items-center" key={p.id}><MosaicItem workId={p.id} cacheKey={['WORK',p.id.toString()]}  /></Col>)}
-      </Row>
-      {works?.length!=total && <Spinner ref={ref} animation="grow" />}
-      </div>
-      return ''
+        </Row>
+        {works?.length!=total && <Spinner ref={ref} animation="grow" />}
+      </>
+      return <></>
   }
 
-  return <div>
-  {renderWorks()}
-  </div>
+  return renderWorks()
 };
-export default SearchTabWorks;
+export default SearchTabworks;

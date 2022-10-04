@@ -12,21 +12,17 @@ import SearchInput from '@/components/SearchInput';
 
 import SearchTab from '@/src/components/SearchTab';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
-import { PostMosaicItem } from '@/src/types/post';
-import { WorkMosaicItem } from '@/src/types/work';
-import { CycleMosaicItem } from '@/src/types/cycle';
 
 const take=8;
-interface Props {
-  postsData:{total:number,fetched:number,posts:PostMosaicItem[]};
-  worksData:{total:number,fetched:number,works:WorkMosaicItem[]};
-  cyclesData:{total:number,fetched:number,cycles:CycleMosaicItem[]};
+interface Props{
+  hasCycles:boolean;
+  hasPosts:boolean;
+  hasWorks:boolean;
 }
-const SearchPage: NextPage<Props> = ({postsData,worksData,cyclesData}) => {//TODO sacar estos props a favor de react-query dehydratedState
+const SearchPage: NextPage<Props> = ({hasCycles,hasPosts,hasWorks}) => {
   const { t } = useTranslation('common');
   const router = useRouter();
 
-  console.log(postsData,worksData,cyclesData,'postsData,worksData,cyclesData')  
 
   let qLabel = `${router.query.q as string}`;
   if (qLabel.match(':')) qLabel = router.query.q as string;
@@ -48,16 +44,17 @@ const SearchPage: NextPage<Props> = ({postsData,worksData,cyclesData}) => {//TOD
         <h1 className="text-secondary fw-bold mb-2">
           {t('Results about')}: {`"${qLabel}"`}
         </h1>
-        { (postsData.posts.length ||  worksData.works.length || cyclesData.cycles.length) ?
+        {/* { (postsData.posts.length ||  worksData.works.length || cyclesData.cycles.length) ? */}
         <div className='d-flex flex-column justify-content-center'>
-          <SearchTab postsData={postsData} worksData={worksData} cyclesData={cyclesData} />
-        </div> :
+        <SearchTab {...{hasCycles,hasPosts,hasWorks}}  />
+        </div> 
+        {/* :
         <>
         <Alert className='mt-4' variant="primary">
         <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
       </Alert>
         </>
-         }
+         } */}
        
       </SimpleLayout>
 };
@@ -65,7 +62,7 @@ const SearchPage: NextPage<Props> = ({postsData,worksData,cyclesData}) => {//TOD
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const q = query.q;
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
-
+  const qc = new QueryClient()
   const terms = q?.toString()!.split(" ") || [];
   const cyclesProps = {
     where:{
@@ -104,6 +101,8 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     },
   }
   const cyclesData = await getCycles({...cyclesProps,take},origin);
+  qc.prefetchQuery(['CYCLES',JSON.stringify(cyclesProps)],()=>cyclesData)
+  const hasCycles = cyclesData.total > 0
 
   const postsProps = {
     where:{
@@ -142,6 +141,8 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     },
   }
   const postsData = await getPosts({...postsProps,take},origin);
+  qc.prefetchQuery(['POSTS',JSON.stringify(postsProps)],()=>postsData)
+  const hasPosts = postsData.total > 0
 
   const worksProps = {
     where:{
@@ -180,13 +181,15 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     },
   }
   const worksData = await getWorks({...worksProps,take},origin);
-  
+  qc.prefetchQuery(['WORK',JSON.stringify(worksProps)],()=>worksData)
+  const hasWorks = worksData.total > 0
+
   return {
     props: {
-      postsData,
-      worksData,
-      cyclesData,
-      // dehydratedState: dehydrate(qc), TODO esto hay q reactivarlo 
+      hasCycles,
+      hasPosts,
+      hasWorks,
+      dehydratedState: dehydrate(qc), 
     },
   };
 };

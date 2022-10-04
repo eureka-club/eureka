@@ -161,7 +161,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
     isSuccess,
     isLoading: loadingSocialInteraction,
   } = useMutation(
-    async ({ socialInteraction, doCreate, ratingQty }: SocialInteractionClientPayload) => {debugger;
+    async ({ socialInteraction, doCreate, ratingQty }: SocialInteractionClientPayload) => {
       const entityEndpoint = (() => {
         if (parent != null) {
           return 'post';
@@ -292,7 +292,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
     });
   };
 
-  const handlerChangeRating = (value: number) => {debugger;
+  const handlerChangeRating = (value: number) => {
     setQty(value);
     execSocialInteraction({
       socialInteraction: 'rating',
@@ -342,7 +342,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
 
   }
-  const getInitialRating = ()=>{debugger;
+  const getInitialRating = ()=>{
     if(entity){
       if(isCycleMosaicItem(entity) || isWorkMosaicItem(entity)){
         return entity.ratingAVG

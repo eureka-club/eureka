@@ -72,7 +72,7 @@ export default getApiHandler()
     });
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
-    try {debugger;
+    try {
       await middleware(req,res,cors)
       const session = (await getSession({ req })) as unknown as Session;
 

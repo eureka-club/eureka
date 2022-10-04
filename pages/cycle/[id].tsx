@@ -97,7 +97,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
           toast.success(t('Internal Server Error'));
   });
 
-  const requestJoinCycle = async () => {debugger;
+  const requestJoinCycle = async () => {
     if (!session) openSignInModal();
     else if (cycle) {
       execJoinCycle();       
