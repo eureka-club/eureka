@@ -3,9 +3,11 @@ import styles from './FilterEngine.module.css';
 import { Country } from "../types";
 import useTranslation from 'next-translate/useTranslation';
 
-import { Form, OverlayTrigger, Popover, Button } from 'react-bootstrap';
+import { Form, OverlayTrigger, Popover, Button,ButtonGroup} from 'react-bootstrap';
 import TagsInputTypeAhead from './forms/controls/TagsInputTypeAhead';
 import useCountries from '@/src/useCountries'
+import { ImCancelCircle } from 'react-icons/im';
+
 interface Props{
   filtersCountries:string[];
   setFiltersCountries: Dispatch<SetStateAction<string[]>>;
@@ -135,11 +137,22 @@ const FilterEngineCountries:React.FC<Props> = ({filtersCountries,setFiltersCount
                 />
 
               </div>
-              <Button className="my-3" onClick={()=>{
+              <div className="d-flex justify-content-end">
+               <ButtonGroup  className="py-3">
+                <Button
+                variant="warning"
+                onClick={()=>{setFC([])}}
+                className="text-white"
+                >
+                <ImCancelCircle />
+              </Button>  
+              <Button className="btn-eureka" onClick={()=>{
                 setFiltersCountries(fc)
                 setFiltersRegions(fr)
                 }}>{t('common:select')}
               </Button>
+              </ButtonGroup>
+              </div>
         </Popover.Body>
       </Popover>
     };
