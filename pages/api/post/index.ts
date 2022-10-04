@@ -76,7 +76,6 @@ export default getApiHandler()
       let {where:w,take,cursor,skip,select} = props;
       const session = await getSession({ req });
       let where:Prisma.PostWhereInput = {...w}
-      
       if (typeof q === 'string') {
         const terms = q.split(" ");
         where = {
@@ -110,51 +109,72 @@ export default getApiHandler()
 
       let OR = undefined;
       if(session){
-        where = {...where,
-          AND:{
-            OR:[
-              {
-                cycles:{
-                  some:{
-                    OR:[
-                      {access:1},
-                      {creatorId:session?.user.id},
-                      {participants:{some:{id:session?.user.id}}},  
-                    ]
-                  }
-                }
-              },
-              {
-                cycles:{
-                  none:{}
+        const AND = {
+          OR:[
+            {
+              cycles:{
+                some:{
+                  OR:[
+                    {access:1},
+                    {creatorId:session?.user.id},
+                    {participants:{some:{id:session?.user.id}}},  
+                  ]
                 }
               }
-            ]
-            
+            },
+            {
+              cycles:{
+                none:{}
+              }
+            }
+          ]
+          
 
+        }
+        where = {...where,
+          ...where.AND 
+          ? {
+            AND:{
+              ...where.AND,
+              ...AND
+            }
+          } 
+          : {
+            AND
           }
-      }
+          
+        }
       }
       else{
-        where = {...where,
-          AND:{
-            OR:[
-              {
-                cycles:{
-                  some:{
-                    access:1,
-                  }
-                }
-
-              },
-              {
-                cycles:{
-                  none:{}
+        const AND={
+          OR:[
+            {
+              cycles:{
+                some:{
+                  access:1,
                 }
               }
-            ]
 
+            },
+            {
+              cycles:{
+                none:{}
+              }
+            }
+          ]
+        }
+        where = {...where,
+          ...where.AND 
+          ? {
+            AND:{
+              ...where.AND,
+              ...AND
+            }
+          } 
+          : {
+            AND
           }
+          
         }
       }
       // if(where.OR){

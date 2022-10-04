@@ -9,14 +9,24 @@ import useCountries from '@/src/useCountries'
 interface Props{
   filtersCountries:string[];
   setFiltersCountries: Dispatch<SetStateAction<string[]>>;
-  filtersRegions:Record<string,boolean>;
-  setFiltersRegions: Dispatch<SetStateAction<Record<string,boolean>>>;
+  filtersRegions:FiltersRegionsType;
+  setFiltersRegions: Dispatch<SetStateAction<FiltersRegionsType>>;
 }
+export interface FiltersRegionsType {
+  Asia:boolean;
+  Europe:boolean;
+  ['Latin America and the Caribbean']:boolean;
+  ['Middle East and North Africa']:boolean;
+  ['Northern America']:boolean;
+  Oceania:boolean;
+  ['Sub-Saharan Africa']:boolean;
+} 
+
 const FilterEngineCountries:React.FC<Props> = ({filtersCountries,setFiltersCountries,filtersRegions,setFiltersRegions})=>{
     const { t } = useTranslation('searchEngine');
 
     const [fc,setFC]=useState<string[]>(filtersCountries)
-    const [fr,setFR]=useState<Record<string,boolean>>(filtersRegions)
+    const [fr,setFR]=useState<FiltersRegionsType>(filtersRegions)
 
     const handlerComboxesChangeRegions = (e: ChangeEvent<HTMLInputElement>, q: string) => {
       const parentCode = q;
@@ -133,7 +143,6 @@ const FilterEngineCountries:React.FC<Props> = ({filtersCountries,setFiltersCount
         </Popover.Body>
       </Popover>
     };
-  
 
     // return <>
     //     <Button className="ms-3" variant="light" onClick={

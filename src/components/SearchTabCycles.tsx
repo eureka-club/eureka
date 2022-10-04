@@ -1,7 +1,7 @@
 import { useState, FunctionComponent, useEffect } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { Spinner,Row, Col} from 'react-bootstrap';
+import { Spinner,Row, Col, Tab} from 'react-bootstrap';
 
 import MosaicItem from '@/components/cycle/MosaicItem'
 
@@ -11,18 +11,16 @@ import useFilterEngineCycles from './useFilterEngineCycles';
 import { useInView } from 'react-intersection-observer';
 import { Prisma } from '@prisma/client';
 import { CycleMosaicItem } from '../types/cycle';
-interface Props {
-  cyclesData:{total:number,fetched:number,cycles:CycleMosaicItem[]};
-}
+
 const take = 8;
-const SearchTabCycles: FunctionComponent<Props> = ({cyclesData}) => {
+interface Props{
+}
+const SearchTabCycles:FunctionComponent<Props> = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const terms = router?.query.q?.toString()!.split(" ") || [];
 
   const {FilterEngineCycles,filtersType,filtersCountries} = useFilterEngineCycles()
-  console.log('filtersType',filtersType)
-  console.log('filtersCountries',filtersCountries)
 
   const getProps = ()=>{
     const res:Prisma.CycleWhereInput = {
@@ -94,10 +92,12 @@ const SearchTabCycles: FunctionComponent<Props> = ({cyclesData}) => {
     }
     if(props)
       setProps(s=>({...s,where:{...props}}))
-  },[filtersType,filtersCountries,router.query.q])
+  },[filtersType.public,filtersType.private,filtersCountries,router.query.q])
 
   useEffect(()=>{
-    if(c)setCycles(c)
+    if(c){
+      setCycles(c);
+    }
   },[c])
 
   const [ref, inView] = useInView({
@@ -115,20 +115,20 @@ const SearchTabCycles: FunctionComponent<Props> = ({cyclesData}) => {
     }
   },[inView])
 
-  const renderCycles=()=>{
+  const render=()=>{
     if(cycles)
-      return <div>
-        <FilterEngineCycles/>
-        <Row>
-            {cycles.map(p=><Col xs={12} sm={6} lg={3} className="mb-3 d-flex justify-content-center  align-items-center" key={p.id}><MosaicItem cycleId={p.id} cacheKey={['CYCLE',p.id.toString()]}  /></Col>)}
-      </Row>
-      {cycles?.length!=total && <Spinner ref={ref} animation="grow" />}
-      </div>
-      return ''
+      return <>
+          <FilterEngineCycles/>
+          <Row>
+              {cycles.map(p=><Col xs={12} sm={6} lg={3} className="mb-3 d-flex justify-content-center  align-items-center" key={p.id}><MosaicItem cycleId={p.id} cacheKey={['CYCLE',p.id.toString()]}  /></Col>)}
+          </Row>
+          {cycles?.length!=total && <Spinner ref={ref} animation="grow" />}
+      </>
+    return <></>    
   }
 
-  return <div>
-  {renderCycles()}
-  </div>
+  return  render();
+  
+
 };
 export default SearchTabCycles;
