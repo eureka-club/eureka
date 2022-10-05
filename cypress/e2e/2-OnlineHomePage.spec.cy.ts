@@ -2,37 +2,52 @@ import { signIn } from "next-auth/react"
 
 describe('Online home page',()=>{
     beforeEach(()=>{
-        
+        cy.visit('/en')  
+        cy.intercept('api/auth/session',{fixture:'session.json'}).as('reqSession')
+        signIn('credentials' ,{
+            redirect:false,
+            email:'gbanoaol@gmail.com',
+            password:'gbanoaol@gmail.com1'
+          })
+          .then(res=>{
+            const r = res as unknown as {error:string}
+            if(res && r.error){
+              return false
+            }
+            return true
+          })
+        cy.visit('/en')  
+
 
     })
     
     //en/
-    it('should login works',()=>{
-        cy.visit('/en')  
+    // it('should login works',()=>{
+    //     cy.visit('/en')  
 
-        cy.get('[data-cy="login-form"]').find('[type="email"]').type('gbanoaol@gmail.com',{force:true})
-        cy.get('[data-cy="login-form"]').find('[type="password"]').type('gbanoaol@gmail.com1',{force:true})
-        cy.get('[data-cy="login-form"]').find("[data-cy='btn-login']")
-        .click({force:true})
+    //     cy.get('[data-cy="login-form"]').find('[type="email"]').type('gbanoaol@gmail.com',{force:true})
+    //     cy.get('[data-cy="login-form"]').find('[type="password"]').type('gbanoaol@gmail.com1',{force:true})
+    //     cy.get('[data-cy="login-form"]').find("[data-cy='btn-login']")
+    //     .click({force:true})
 
-        // signIn('credentials' ,{
-        //     redirect:false,
-        //     email:'gbanoaol@gmail.com',
-        //     password:'gbanoaol@gmail.com1'
-        //   })
-        //   .then(res=>{
-        //     const r = res as unknown as {error:string}
-        //     if(res && r.error){
-        //       return false
-        //     }
-        //     return true
-        //   })
+    //     // signIn('credentials' ,{
+    //     //     redirect:false,
+    //     //     email:'gbanoaol@gmail.com',
+    //     //     password:'gbanoaol@gmail.com1'
+    //     //   })
+    //     //   .then(res=>{
+    //     //     const r = res as unknown as {error:string}
+    //     //     if(res && r.error){
+    //     //       return false
+    //     //     }
+    //     //     return true
+    //     //   })
 
-        cy.visit('/en')  
+    //     cy.visit('/en')  
 
 
 
-    })
+    // })
     
     
     it('should have a section "Cycles I created or joined"', ()=>{

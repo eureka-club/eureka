@@ -4,6 +4,14 @@ describe('Mediatheque page',()=>{
     const url_mediatheque = '/en/mediatheque/geordanis-vega-127'
 
     beforeEach(()=>{
+        
+
+    })
+    afterEach(()=>{
+        
+    })
+
+    it('should have a link "My Mediatheque" after user login',()=>{
         cy.visit('/en')  
         cy.intercept('api/auth/session',{fixture:'session.json'}).as('reqSession')
         signIn('credentials' ,{
@@ -18,23 +26,20 @@ describe('Mediatheque page',()=>{
             }
             return true
           })
-        cy.visit(url_mediatheque)  
+        cy.visit('/en')  
+        // cy.visit(url_mediatheque)  
 
-    })
-    afterEach(()=>{
-        
-    })
-
-    it('should have a link "My Mediatheque"',()=>{
-        // cy.visit('/en')  
         cy.get('[data-cy="my-mediatheque-link"]')
         .should('have.attr','href')
         .should('eq',url_mediatheque)
+
+        cy.get('[data-cy="my-mediatheque-link"]').click()
+
         
     })
 
     it('should have "Cycles I created or joined" section',()=>{
-        cy.get('[data-cy="my-mediatheque-link"]').click()
+        // cy.get('[data-cy="my-mediatheque-link"]').click()
 
         cy.contains('Cycles I created or joined')
         cy.get('[data-cy="cycles-created-or-joined"]')
