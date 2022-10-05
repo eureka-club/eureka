@@ -51,13 +51,11 @@ describe('Offline home page',()=>{
     it('should have a explorer button linked to /explore page',()=>{
         cy.get('[data-cy="btn-explore"]').click({force:true})
     })
-    it('should have the explore a section "Featured Cycles"',()=>{
-            cy.contains('Featured Cycles')
-    })
     it('should the "Featured Cycles" have the correct cycles qty',()=>{
         cy.request(url_featured_cycles).its('body').should('have.a.property','data').then(data=>{
             cy.url().should('include', '/explore')
             expect(data).to.have.length.gt(0)
+            cy.contains('Featured Cycles')
         })
     })
 
