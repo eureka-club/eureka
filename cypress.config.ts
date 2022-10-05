@@ -26,7 +26,7 @@ export default defineConfig({
     video:process.env.NODE_ENV=='development',
     chromeWebSecurity: false
   },
-  pageLoadTimeout:30000,
-  requestTimeout: 30000,
+  pageLoadTimeout:15000,
+  requestTimeout: 15000,
   defaultCommandTimeout: 10000,
 });
