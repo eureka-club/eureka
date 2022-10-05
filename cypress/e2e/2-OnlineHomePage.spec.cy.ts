@@ -10,7 +10,8 @@ describe('Online home page',()=>{
         cy.intercept('/api/getAllBy?topic=technology*',{fixture:'api-getAllBy-topic-technology.json'})
         cy.intercept('/api/getAllBy?topic=environment*',{fixture:'api-getAllBy-topic-environment.json'})
 
-        cy.intercept('api/auth/session',{fixture:'session.json'}).as('reqSession')
+        cy.intercept('api/auth/session',{fixture:'session.json'})
+        // .as('reqSession')
         
         cy.visit('/en')  
 
