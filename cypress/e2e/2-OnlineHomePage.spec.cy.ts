@@ -1,9 +1,19 @@
 import { signIn } from "next-auth/react"
 
 describe('Online home page',()=>{
+    const url_cycles_created_or_joined = '/api/cycle?props=%7B%22where%22%3A%7B%22OR%22%3A%5B%7B%22participants%22%3A%7B%22some%22%3A%7B%22id%22%3A127%7D%7D%7D%2C%7B%22creatorId%22%3A127%7D%5D%7D%7D'
     beforeEach(()=>{
-        cy.visit('/en')  
+
+        cy.intercept(url_cycles_created_or_joined,{fixture:'api-cycles-created-or-joined-user-127.json'}).as('reqCyclesCreatedOrJoined')
+        
+        cy.intercept('/api/getAllBy?topic=gender-feminisms*',{fixture:'api-getAllBy-topic-gender-feminisms.json'})
+        cy.intercept('/api/getAllBy?topic=technology*',{fixture:'api-getAllBy-topic-technology.json'})
+        cy.intercept('/api/getAllBy?topic=environment*',{fixture:'api-getAllBy-topic-environment.json'})
+
         cy.intercept('api/auth/session',{fixture:'session.json'}).as('reqSession')
+        
+        cy.visit('/en')  
+
         signIn('credentials' ,{
             redirect:false,
             email:'gbanoaol@gmail.com',
@@ -56,10 +66,11 @@ describe('Online home page',()=>{
     })
 
     it('should have in "Cycles I created or joined" the correct cycle mosaics qty', ()=>{
-        const url = '/api/cycle?props=%7B%22where%22%3A%7B%22OR%22%3A%5B%7B%22participants%22%3A%7B%22some%22%3A%7B%22id%22%3A127%7D%7D%7D%2C%7B%22creatorId%22%3A127%7D%5D%7D%7D'
-        cy.request(url).its('body').should('have.a.property','data').then(data=>{
-            cy.get('[data-cy="myCycles"]').within(()=>{
-                cy.get('[data-cy^="mosaic-item-cycle-"]').should('have.lengthOf',data.length)
+        cy.wait('@reqCyclesCreatedOrJoined').then(inter=>{
+            cy.wrap(inter).its('response').its('body').should('have.a.property','data').then(data=>{
+                cy.get('[data-cy="myCycles"]').within(()=>{
+                    cy.get('[data-cy^="mosaic-item-cycle-"]').should('have.lengthOf',data.length)
+                })
             })
         })
     })
