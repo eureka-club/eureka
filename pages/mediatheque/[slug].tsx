@@ -406,7 +406,7 @@ const Mediatheque: NextPage<Props> = ({id}) => {
                     {session && session.user!.id !== user.id && isFollowedByMe && (
                       <Button
                         data-cy="follow-btn"
-                        variant="button border-primary text-primary "
+                        variant="button border-primary text-primary"
                         onClick={followHandler}
                         disabled={isPending()}
                         style={{ width: '10em' }}

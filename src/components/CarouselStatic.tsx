@@ -31,6 +31,7 @@ type Props = {
   mosaicBoxClassName?:string;
   tiny?: boolean;
   cacheKey:[string,string];
+  userMosaicDetailed?: boolean
 };
 
 const renderMosaicItem = (
@@ -41,6 +42,7 @@ const renderMosaicItem = (
   customMosaicStyle?: { [key: string]: string },
   tiny?: boolean,
   className?:string,
+  userMosaicDetailed?:boolean
 ) => {
   if (isCycleMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -71,7 +73,7 @@ const renderMosaicItem = (
     );
   }
   if (isUserMosaicItem(item)) {
-    return <MosaicUserItem user={item} key={`user-${item.id}`} showSocialInteraction={false} />;
+    return <MosaicUserItem user={item} key={`user-${item.id}`} showSocialInteraction={false} MosaicDetailed={userMosaicDetailed} />;
   }
 
   return '';
@@ -89,7 +91,8 @@ const CarouselStatic: FunctionComponent<Props> = ({
   className,
   mosaicBoxClassName,
   tiny = false,
-  cacheKey
+  cacheKey,
+  userMosaicDetailed = false 
 }) => {
   const { t } = useTranslation('topics');
   const [current, setCurrent] = useState<Item[]>([]);
@@ -125,7 +128,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
     if (current) {
       const mosaics = current.map((i, idx: number) => (
         <div key={`mosaic-${i.type}-${i.id}`} className={`${mosaicBoxClassName} mx-2`}/*className="pb-5 mx-2"*/>
-          {renderMosaicItem(i, undefined, showSocialInteraction,cacheKey, customMosaicStyle, tiny)}
+          {renderMosaicItem(i, undefined, showSocialInteraction,cacheKey, customMosaicStyle, tiny,undefined,userMosaicDetailed)}
         </div>
       ));
       result = (

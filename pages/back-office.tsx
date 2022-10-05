@@ -131,7 +131,7 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
         body: formData,
       });
       if(res.ok)
-         toast.success( t('Banner Settings') + '  Saved')      
+         toast.success( t('Settings') + '  Saved')      
       else
         toast.error(res.statusText)
     },
@@ -205,7 +205,8 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
         SlideImage3: (imageFile3) ? imageFile3.name : null ,
         Image3: imageFile3,
         CyclesExplorePage:form.CyclesToShow.value,
-        PostExplorePage:form.PostToShow.value
+        PostExplorePage:form.PostToShow.value,
+        FeaturedUsers:form.UsersToShow.value     
     };
     //console.log(payload,"payload")
     await execUpdateBackOffice(payload);
@@ -401,6 +402,14 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
                                   <Form.Control className='mb-4' type="text" defaultValue={bo?.PostExplorePage || ""}/>
                               </Form.Group>
                        </Col>       
+                       </div>
+                        <div className="py-2 d-flex flex-column flex-lg-row justify-content-between">
+                       <Col className="col-12 col-lg-6 px-2 ">
+                              <Form.Group  controlId="UsersToShow" >
+                                  <Form.Label>{t('UsersToShow')}</Form.Label>
+                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.FeaturedUsers || ""}/>
+                              </Form.Group>
+                       </Col>         
                        </div>
                        <div className='d-flex justify-content-center justify-content-lg-end'> 
                        <Button variant="primary" type="submit" className="text-white mb-5" style={{width:'12em'}}>{t('Save')}

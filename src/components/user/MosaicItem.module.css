@@ -1,3 +1,12 @@
+
+
+.detailedContainer{
+    width: 200px;
+    max-width: 200px;
+    height: 330px;
+    max-height: 330px;
+}
+
 .container{
     border:none !important;
     cursor: pointer!important;

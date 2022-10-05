@@ -396,7 +396,8 @@ model BackOfficeSettings {
   SlideText3              String?     @db.VarChar(200)
   CyclesExplorePage       String?     @db.VarChar(60)
   PostExplorePage         String?     @db.VarChar(60)
-  
+  FeaturedUsers           String?     @db.VarChar(60)
+
   @@map("backOfficeSettings")
   
 }

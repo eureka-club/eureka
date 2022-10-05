@@ -66,7 +66,12 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
   
   const { data: post, isLoading, isFetching } = usePost(id);
   useEffect(()=>{
-    if (post && post.topics) items.push(...post.topics.split(','));
+    if (post && post.topics?.length){
+      for(let topic of post.topics.split(',')){
+          if(!items.includes(topic))
+            items.push(...post.topics.split(','));
+      }
+    }
     if (post && post.works.length) setSelectedWork(post.works[0] as WorkMosaicItem);
     if (post && post.cycles.length) setSelectedCycle(post.cycles[0] as CycleMosaicItem);
   },[post])

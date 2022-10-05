@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { ChangeEvent, FormEvent, FunctionComponent, useEffect, useState, useRef } from 'react';
+import { ChangeEvent, FormEvent, FunctionComponent, useEffect, useState, useRef,MouseEvent } from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Col from 'react-bootstrap/Col';
@@ -147,6 +147,25 @@ const CreateWorkForm: FunctionComponent<Props> = ({noModal = false})=> {
       // setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
       // setAddWorkModalOpened(false);
     }
+  };
+
+  const handleFormClear = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    /*setSelectedWorksForCycle([]);
+    setCycleCoverImageFile(null);
+    editorRef.current.setContent('');*/
+    setItems([]);
+    setTags('');
+
+
+   /* if (formRef.current != null) {
+      const form = formRef.current;
+
+      form.cycleTitle.value = '';
+      form.languages.value = '';
+      form.startDate.value = '';
+      form.endDate.value = '';
+    }*/
   };
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
@@ -392,7 +411,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({noModal = false})=> {
            <ButtonGroup  className="py-4">
             <Button
                variant="warning"
-                //onClick={handleFormClear}
+                onClick={handleFormClear}
                 className="text-white"
               >
                 <ImCancelCircle />

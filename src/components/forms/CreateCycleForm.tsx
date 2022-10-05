@@ -293,8 +293,8 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     ev.preventDefault();
     setSelectedWorksForCycle([]);
     setCycleCoverImageFile(null);
-    editorRef.current.setContent('');
-    setItems(() => []);
+   // editorRef.current.setContent('');
+    setItems([]);
     setTags('');
 
 

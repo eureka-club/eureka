@@ -54,7 +54,7 @@ const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, alt,
 
     case STORAGE_MECHANISM_LOCAL_FILES:
       // eslint-disable-next-line @next/next/no-img-element
-      return <img src={`${ASSETS_BASE_URL}/${filePath}`} alt={alt} className={className} style={style} />;
+      return <img src={`${ASSETS_BASE_URL}/${filePath}`} alt={alt} className={className} style={{...style,width:`${width}px`,height:`${height}px`}}/>;
 
     default:
       return null;

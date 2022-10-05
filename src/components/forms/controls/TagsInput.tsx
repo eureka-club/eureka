@@ -26,7 +26,9 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
   const [, setSearchEngineState] = useAtom(searchEngine);
 
   useEffect(() => {
-    if (tags) setItems(tags.split(','));
+    if (tags && tags.length) setItems(tags.split(','));
+    else
+    setItems([]);
   }, [tags]);
 
   const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -90,7 +92,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
                     X
                   </Badge> || <Spinner size="sm" animation="grow"/>
                 )}
-                {loading[v] && <Spinner size="sm" animation="grow"/>}
+                {!readOnly && (loading[v] && <Spinner size="sm" animation="grow"/>)}
               </Badge>{' '}
             </span>
           );

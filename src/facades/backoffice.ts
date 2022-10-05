@@ -27,6 +27,7 @@ export const find = async (props: findProps): Promise<backOfficeData | null> => 
     SlideImage3:true,
     CyclesExplorePage: true,
     PostExplorePage: true,
+    FeaturedUsers: true,
     sliderImages:{select:{storedFile:true,originalFilename:true}},
   }
 })
