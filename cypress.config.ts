@@ -23,9 +23,10 @@ export default defineConfig({
   e2e: {
     setupNodeEvents(on, config) {},
     baseUrl: 'http://localhost:3000',
-    video:false
+    video:process.env.NODE_ENV=='development',
+    chromeWebSecurity: false
   },
-  pageLoadTimeout:1000000,
-  requestTimeout: 8000,
-  defaultCommandTimeout: 8000,
+  pageLoadTimeout:60000,
+  requestTimeout: 60000,
+  defaultCommandTimeout: 60000,
 });

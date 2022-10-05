@@ -1,0 +1,203 @@
+{
+    "user": {
+        "id": 127,
+        "name": "Geordanis Vega",
+        "email": "gbanoaol@gmail.com",
+        "image": "https://lh3.googleusercontent.com/a-/AOh14Gja4j89adBbctYqAhpvmB9dPkgHygROfLiudNXseA=s96-c",
+        "roles": "admin",
+        "createdAt": "2021-04-20T11:36:47.056Z",
+        "updatedAt": "2022-09-02T14:27:35.582Z",
+        "countryOfOrigin": "cuba",
+        "aboutMe": "",
+        "dashboardType": 1,
+        "tags": null,
+        "followedBy": [
+            {
+                "id": 2
+            }
+        ],
+        "following": [
+            {
+                "id": 2,
+                "name": "Julie Ricarda",
+                "image": "https://datapopalliance.org/wp-content/uploads/2017/10/JRicard.jpg",
+                "photos": []
+            }
+        ],
+        "ratingWorks": [
+            {
+                "workId": 248,
+                "work": {
+                    "id": 248,
+                    "createdAt": "2021-12-27T16:21:59.548Z",
+                    "title": "No mires arriba",
+                    "type": "movie",
+                    "countryOfOrigin": "united-states",
+                    "countryOfOrigin2": null,
+                    "localImages": [
+                        {
+                            "storedFile": "d7/d7064436c6b60a437c9dd2019c2c3fe15c0f1da697e5848d4ed8044d4f435943.jpg"
+                        }
+                    ]
+                }
+            },
+            {
+                "workId": 249,
+                "work": {
+                    "id": 249,
+                    "createdAt": "2022-01-12T21:36:43.011Z",
+                    "title": "Sin tregua",
+                    "type": "documentary",
+                    "countryOfOrigin": "mexico",
+                    "countryOfOrigin2": null,
+                    "localImages": [
+                        {
+                            "storedFile": "f3/f39781ffe8e8c841998b36e6b0b51c365a16d1b2d5afbc4cc27f6875ab3ff80c.png"
+                        }
+                    ]
+                }
+            },
+            {
+                "workId": 247,
+                "work": {
+                    "id": 247,
+                    "createdAt": "2021-12-06T14:49:04.817Z",
+                    "title": " The Feminist Utopia Project: Fifty-Seven Visions of a Wildly Better Future",
+                    "type": "book",
+                    "countryOfOrigin": "united-states",
+                    "countryOfOrigin2": null,
+                    "localImages": [
+                        {
+                            "storedFile": "dd/ddf03dfd477856c4617193be516387e20749daf7a69c1bbee63c7994e7752a5c.jpg"
+                        }
+                    ]
+                }
+            },
+            {
+                "workId": 240,
+                "work": {
+                    "id": 240,
+                    "createdAt": "2021-11-04T01:58:49.184Z",
+                    "title": "Corazón borrado",
+                    "type": "movie",
+                    "countryOfOrigin": "australia",
+                    "countryOfOrigin2": null,
+                    "localImages": [
+                        {
+                            "storedFile": "da/da3af0b5fdba0780c726bdb0f92e9d2f8a7920e5655f084c21e54c26a95558a7.jpg"
+                        }
+                    ]
+                }
+            },
+            {
+                "workId": 232,
+                "work": {
+                    "id": 232,
+                    "createdAt": "2021-11-02T23:16:33.331Z",
+                    "title": "La sociedad del cansancio",
+                    "type": "book",
+                    "countryOfOrigin": "south-korea",
+                    "countryOfOrigin2": null,
+                    "localImages": [
+                        {
+                            "storedFile": "db/dba0cbd22aeaaf9b4a9cbacb00cc267f56bdaa20682b54edf6ba93b39d59bd78.jpg"
+                        }
+                    ]
+                }
+            }
+        ],
+        "favWorks": [
+            {
+                "id": 232,
+                "createdAt": "2021-11-02T23:16:33.331Z",
+                "title": "La sociedad del cansancio",
+                "type": "book",
+                "countryOfOrigin": "south-korea",
+                "countryOfOrigin2": null,
+                "localImages": [
+                    {
+                        "storedFile": "db/dba0cbd22aeaaf9b4a9cbacb00cc267f56bdaa20682b54edf6ba93b39d59bd78.jpg"
+                    }
+                ]
+            },
+            {
+                "id": 240,
+                "createdAt": "2021-11-04T01:58:49.184Z",
+                "title": "Corazón borrado",
+                "type": "movie",
+                "countryOfOrigin": "australia",
+                "countryOfOrigin2": null,
+                "localImages": [
+                    {
+                        "storedFile": "da/da3af0b5fdba0780c726bdb0f92e9d2f8a7920e5655f084c21e54c26a95558a7.jpg"
+                    }
+                ]
+            },
+            {
+                "id": 247,
+                "createdAt": "2021-12-06T14:49:04.817Z",
+                "title": " The Feminist Utopia Project: Fifty-Seven Visions of a Wildly Better Future",
+                "type": "book",
+                "countryOfOrigin": "united-states",
+                "countryOfOrigin2": null,
+                "localImages": [
+                    {
+                        "storedFile": "dd/ddf03dfd477856c4617193be516387e20749daf7a69c1bbee63c7994e7752a5c.jpg"
+                    }
+                ]
+            },
+            {
+                "id": 249,
+                "createdAt": "2022-01-12T21:36:43.011Z",
+                "title": "Sin tregua",
+                "type": "documentary",
+                "countryOfOrigin": "mexico",
+                "countryOfOrigin2": null,
+                "localImages": [
+                    {
+                        "storedFile": "f3/f39781ffe8e8c841998b36e6b0b51c365a16d1b2d5afbc4cc27f6875ab3ff80c.png"
+                    }
+                ]
+            }
+        ],
+        "favCycles": [],
+        "favPosts": [],
+        "cycles": [],
+        "joinedCycles": [
+            {
+                "id": 10,
+                "creatorId": 2,
+                "startDate": "2021-03-02T00:00:00.000Z",
+                "endDate": "2021-07-10T00:00:00.000Z",
+                "title": "F-club"
+            },
+            {
+                "id": 16,
+                "creatorId": 152,
+                "startDate": "2021-11-15T00:00:00.000Z",
+                "endDate": "2021-12-12T00:00:00.000Z",
+                "title": "El capitalismo de las redes: adicción, desinformación y violencia"
+            },
+            {
+                "id": 18,
+                "creatorId": 2,
+                "startDate": "2021-12-06T00:00:00.000Z",
+                "endDate": "2022-02-04T00:00:00.000Z",
+                "title": "The Handmaid’s Tale and the Tautology of the Dystopian Patriarchy"
+            }
+        ],
+        "ratingCycles": [
+            {
+                "cycleId": 10
+            },
+            {
+                "cycleId": 16
+            },
+            {
+                "cycleId": 18
+            }
+        ],
+        "photos": [],
+        "type": "user"
+    }
+}
