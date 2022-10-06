@@ -82,8 +82,52 @@
             ],
             "type": "post",
             "currentUserIsFav": false
+        },
+        {
+            "id": 331,
+            "creatorId": 127,
+            "title": "AAA",
+            "language": "",
+            "contentText": "<h1>AAA&nbsp;</h1>\r\nBBB",
+            "isPublic": true,
+            "createdAt": "2022-05-12T13:28:55.684Z",
+            "updatedAt": "2022-05-12T13:28:55.685Z",
+            "topics": "gender-feminisms",
+            "tags": "psicologia",
+            "works": [],
+            "cycles": [
+                {
+                    "id": 16,
+                    "creator": {
+                        "name": "Data-Pop Alliance"
+                    },
+                    "localImages": [
+                        {
+                            "storedFile": "e1/e1f0708fbcdd911ff4abfbbefcea348d83f8644cb68806d103e76fd730757c3f.png"
+                        }
+                    ],
+                    "creatorId": 152,
+                    "startDate": "2021-11-15T00:00:00.000Z",
+                    "endDate": "2021-12-12T00:00:00.000Z",
+                    "title": "El capitalismo de las redes: adicción, desinformación y violencia"
+                }
+            ],
+            "favs": [],
+            "creator": {
+                "id": 127,
+                "name": "Geordanis Vega",
+                "photos": [],
+                "countryOfOrigin": "cuba"
+            },
+            "localImages": [
+                {
+                    "storedFile": "39/395b7d66449dc196a12af12aa1a05f4da78077da1ffa2cc05f2fef04a4b2a2b6.webp"
+                }
+            ],
+            "type": "post",
+            "currentUserIsFav": false
         }
     ],
-    "fetched": 2,
-    "total": 2
+    "fetched": 3,
+    "total": 48
 }

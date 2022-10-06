@@ -37,25 +37,25 @@ const useFilterEngineWorks = ()=>{
     const FilterEngineWork: React.FC = ()=>{
     return <section className="d-flex flex-row align-items-center justify-content-end my-2">
     <div className="my-3">
-      <Form.Check inline
+      <Form.Check data-cy="check-fiction-book" inline
       type="checkbox"
       label={t('Fiction books')}
       checked={filtersType['fiction-book']}
       onChange={(e) => handlerComboxesChangeType(e, 'fiction-book')}
       />
-      <Form.Check inline
+      <Form.Check data-cy="check-book" inline
       type="checkbox"
       label={t('Nofictions books')}
       checked={filtersType['book']}
       onChange={(e) => handlerComboxesChangeType(e, 'book')}
       />
-      <Form.Check inline
+      <Form.Check data-cy="check-movie" inline
       type="checkbox"
       label={t('Movies')}
       checked={filtersType.movie}
       onChange={(e) => handlerComboxesChangeType(e, 'movie')}
       />
-      <Form.Check inline
+      <Form.Check data-cy="check-documentary" inline
       type="checkbox"
       label={t('Documentaries')}
       checked={filtersType.documentary}

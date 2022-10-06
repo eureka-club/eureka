@@ -59,19 +59,5 @@ describe('Offline home page',()=>{
         })
     })
 
-    it('should have the search engine and works',()=>{
-        const url_search_femin_in_cycles='/api/cycle?props*'
-        const url_search_femin_in_posts='/api/post?props*'
-        const url_search_femin_in_works='/api/work?props*'
-        cy.intercept(url_search_femin_in_cycles,{fixture:'api-search-femin-in-cycles.json'})
-        cy.intercept(url_search_femin_in_posts,{fixture:'api-search-femin-in-posts.json'})
-        cy.intercept(url_search_femin_in_works,{fixture:'api-search-femin-in-works.json'})
-
-        cy.get('[data-cy="search-engine"]').within(()=>{
-            cy.get('[data-cy="search-engine-control"]').type('femin').type('{enter}')
-            cy.url({timeout:30000}).should('match',/search\?q=femin/)
-        })
-    })
-    
 })
 export {}

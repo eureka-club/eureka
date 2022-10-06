@@ -69,13 +69,13 @@ const SearchTab: FunctionComponent<Props> = ({hasCycles,hasPosts,hasWorks}) => {
               className="mt-5"
             >
              
-              {hasCycles ? <Tab eventKey="cycles" title={t('cycles')}  className={`cursor-pointer`}>
+              {hasCycles ? <Tab eventKey="cycles" data-cy="tab-cycles" title={t('cycles')}  className={`cursor-pointer`}>
                     <SearchTabCycles />
               </Tab> : <></>}
-              {hasPosts ? <Tab eventKey="posts" title={t('posts')} className={`cursor-pointer`}>
+              {hasPosts ? <Tab eventKey="posts" data-cy="tab-posts" title={t('posts')} className={`cursor-pointer`}>
                 <SearchTabPosts />
               </Tab> : <></>}
-              {hasWorks ? <Tab eventKey="works" title={t('works')} className={`cursor-pointer`}>
+              {hasWorks ? <Tab eventKey="works" data-cy="tab-works" title={t('works')} className={`cursor-pointer`}>
                 <SearchTabWorks />
               </Tab>:<></>}
             </Tabs>
