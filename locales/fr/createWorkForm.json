@@ -1,6 +1,6 @@
 {
   "title": "Ajouter une nouvelle œuvre à la bibliothèque",
-  "titleEdit": "Modifier la œuvre",
+  "titleEdit": "Modifier l'œuvre",
   "typeFieldLabel": "Type d'œuvre",
   "typeFieldPlaceholder": "sélectioner...",
   "linkFieldLabel": "Lien vers l'œuvre",
@@ -34,5 +34,5 @@
   "topicsLabel": "Principaux thèmes de l'œuvre (3 max, choisir les plus pertinents dans la liste)",
   "topicsFieldLabel": "Thèmes supplémentaires de l'œuvre (2 max, entrée libre)",
   "WorkSaved":"Oeuvre ajoutée à notre bibliothèque. Merci!",
-  "resetBtnLabel": "Retirer"
+  "resetBtnLabel": "Supprimer"
 }

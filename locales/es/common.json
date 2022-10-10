@@ -7,7 +7,7 @@
   "OK": "¡Acción éxitosa!",
   "Unauthorized": "No autorizado",
   "Forbidden": "Prohibido",
-  "Not Found": "No encontradx",
+  "Not Found": "No encontrado",
   "Internal Server Error": "Error de Servidor Interno",
   "Bad Request": "Solicitud incorrecta",
   "book": "Libro no-ficción",
@@ -81,7 +81,7 @@
   "edited": "editado",
   "Read / watched": "Libro leído o película vista",
   "I learned": "¡Aprendí",
-  "Rating Eureka": "Rating Eureka",
+  "Rating Eureka": "Calificación Eureka",
   "Save for later": "Guardar para luego",
   "Share": "Compartir",
   "MyCycle": "Mi ciclo",
@@ -122,8 +122,8 @@
   "private": "Ciclo privado",
   "secret": "Ciclo secreto",
   "select": "Seleccionar",
-  "next":"Siguientes",
-  "previous":"Previos",
+  "next":"siguiente",
+  "previous":"anterior",
   "canNotUploadPhoto":"No se puede subir imágenes mayores de 2 MB. Imagen tiene",
   "selectedCropNotInvalid":"No se puede subir imágenes recortadas mayores de 500 KB. Imagen tiene",
   "by":"por",
@@ -154,5 +154,5 @@
   "myBooksMovies": "Mis calificaciones: películas y libros que vi o leí",
   "mySaved": "Guardado para luego o para siempre",
   "myUsersFollowed": "Siguiendo",
-  "Featured users":"Usuarios destacados"
+  "Featured users":"Usuarias destacadas"
 } 

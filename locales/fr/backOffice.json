@@ -10,8 +10,8 @@
     "Text":"Texte du Slider",
     "Image":"Photo du Slider",
     "Content Page":"Contenu de la page",
-    "CyclesToShow":"Cycles saillants",
-    "PostToShow":"Eurekas saillantes",
-    "UsersToShow":"Utilisateurs saillants",
+    "CyclesToShow":"Cycles populaires",
+    "PostToShow":"Eurekas populaires",
+    "UsersToShow":"Utilisateurs-trices populaires",
     "Save":"Enregistrer"
 }

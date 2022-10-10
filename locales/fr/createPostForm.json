@@ -1,11 +1,11 @@
 {
-  "title": "Créer une Eureka",
+  "title": "Créer un Moment Eureka",
   "searchCycleOrWorkFieldLabel": "À quelle œuvre ou cycle cette Eureka fait-elle référence?",
   "searchCycleOrWorkFieldPlaceholder": "Cherchez l'œuvre ou le cycle dans notre bibliothèque...",
   "titleFieldLabel": "Titre de votre Eureka (80 caractères max)",
   "imageFieldLabel": "Ajouter une image à votre Eureka (carrée, idéal 250x250px)",
   "imageFieldPlaceholder": "sélectionnez le fichier...",
-  "languageFieldLabel": "Langue de la Eureka",
+  "languageFieldLabel": "Langue de cette Eureka",
   "searchCycleFieldLabel": "Ajouter cette Eureka à un cycle (optionnel)",
   "searchCycleFieldPlaceholder": "Cherchez le cycle auquel sera ajoutée cette Eureka...",
   "searchCycleInfotip": "En ajoutant votre Eureka à un cycle, vous deviendrez automatiquement un-e participant-e du cycle (si vous ne l'êtes pas déjà).",
@@ -27,5 +27,5 @@
   "requiredDiscussionItemError": "Merci d'indiquer si votre Eureka porte sur le cycle ou l'une des œuvres",
   "requiredEurekaImageError": "Merci d'ajouter une image à votre Eureka",
   "Type to add tag": "Thème de votre Eureka (3 max, sélectionez les plus pertinents)",
-  "resetBtnLabel": "Retirer"
+  "resetBtnLabel": "Supprimer"
 }

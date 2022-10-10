@@ -19,7 +19,7 @@
 
   "userStartFollowing":"{{userName}} a commencé à te suivre. Jette un œil aussi à sa Médiathèque!",
 
-  "userJoinedCycle":"{{userName}} a rejoin le cycle '{{cycleTitle}}'!",
+  "userJoinedCycle":"{{userName}} a rejoint le cycle '{{cycleTitle}}'!",
   "userLeftCycle":"{{userName}} a quitté le cycle '{{cycleTitle}}'!",
 
   "userHasSaveForLater":"{{userName}} a sauvegardé '{{entityTitle}}'. Jette un œil aussi!",

@@ -1,6 +1,6 @@
 {
   "createCycle": "Create a Cycle",
-  "editCycle": "Edit a Cycle",
+  "editCycle": "Edit Cycle",
   "addWrkBtnTitle": "Add work to a cycle",
   "addWrkBtnSubtitle": "Search for work in our library",
   "addCoverBtnTitle": "Add cover image to cycle",
@@ -28,7 +28,7 @@
   "newCycleEndDateLabel": "End date of the cycle",
   "newCyclePitchLabel": "Cycle pitch: what is this cycle about and why is it a relevant topic. Why should people join this cycle?",
   "submitBtnLabel": "Create cycle",
-  "resetBtnLabel": "Remove",
+  "resetBtnLabel": "Delete",
   "addWrkPopupTitle": "Add work to cycle",
   "addWrkTypeaheadLabel": "Select work",
   "addWrkTypeaheadPlaceholder": "Search for existing work...",
@@ -50,6 +50,6 @@
   "addDatesForWork": "Add dates individual for each work",
   "invalidInput": "Invalid input",
   "cycleStartAndEndRequired": "Cycle Start and End Dates are required",
-  "Date Range Error": "Date Range Error",
+  "Date Range Error": "Date range error",
   "cycleGuidelineInfo":"We consider that rules should be contextual. Thematic cycles are diverse: in terms of topic, context and community. To ensure that rules are relevant and culturally sensitive, each cycle has the ability to define its own guidelines, including what it means by ‘safe space’ and what classifies as harmful content. Of course, these must be generally aligned with our Manifesto."
 }

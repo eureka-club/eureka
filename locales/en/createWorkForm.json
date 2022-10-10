@@ -34,5 +34,5 @@
   "topicsLabel": "Main topics of the work (3 max, select most relevant from list)",
   "topicsFieldLabel": "Additional topics of the work (2 max, input freely)",
   "WorkSaved":"Work added to our library. Thanks!",
-  "resetBtnLabel": "Remove"
+  "resetBtnLabel": "Delete"
 }

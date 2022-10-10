@@ -1,6 +1,6 @@
 {
   "createCycle": "Criar um ciclo",
-  "editCycle": "Edit a Cycle",
+  "editCycle": "Editar ciclo",
   "addWrkBtnTitle": "Adicionar uma obra ao ciclo",
   "addWrkBtnSubtitle": "Procure uma obra em nossa biblioteca",
   "addCoverBtnTitle": "Adicionar imagem de capa para o ciclo",
@@ -52,5 +52,5 @@
   "invalidInput": "Entrada inválida",
   "cycleStartAndEndRequired": "As datas de início e fim do ciclo são obrigatórias",
   "Date Range Error": "Erro de intervalo de datas",
-  "cycleGuidelineInfo":"We consider that rules should be contextual. Thematic cycles are diverse: in terms of topic, context and community. To ensure that rules are relevant and culturally sensitive, each cycle has the ability to define its own guidelines, including what it means by ‘safe space’ and what classifies as harmful content. Of course, these must be generally aligned with our Manifesto."
+  "cycleGuidelineInfo":"Consideramos que as regras devem ser contextuais. Os ciclos temáticos são diversos: em termos de assunto, contexto e comunidade. Para garantir que as regras sejam relevantes e culturalmente sensíveis, cada ciclo tem a oportunidade de definir suas próprias diretrizes, incluindo o que significa ‘espaço seguro’ e o que é considerado conteúdo perigoso. Naturalmente, estas regras devem ser coerentes com nosso Manifesto."
 }

@@ -1,5 +1,5 @@
 {
-  "title": "Criar uma Eureka",
+  "title": "Criar um Momento Eureka",
   "searchCycleOrWorkFieldLabel": "Sobre que obra ou ciclo é esta Eureka?",
   "searchCycleOrWorkFieldPlaceholder": "Procure a obra ou o ciclo em nossa biblioteca...",
   "titleFieldLabel": "Título para a sua Eureka (80 caracteres máx)",
@@ -12,7 +12,7 @@
   "descriptionFieldLabel": "Escreva o que você pensou e / ou aprendeu com esta obra ou ciclo. Por que você achou interessante?",
   "isPublicFieldLabel": "Esta Eureka é pública",
   "isPublicInfotip": "As Eurekas públicas são acessíveis por todas. Desmarque a caixa para torná-laprivada (somente você pode vê-la).",
-  "submitButtonLabel": "Compartilhar Eureka",
+  "submitButtonLabel": "Compartilhar",
   "titleEdit": "Editar Eureka",
   "edit": "Editar",
   "topicsPostLabel": "Principais temas da Eureka (3 máx, selecione os mais relevantes da lista)",
