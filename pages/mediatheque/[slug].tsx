@@ -237,7 +237,15 @@ const Mediatheque: NextPage<Props> = ({id}) => {
   
   const readOrWatched = () => {
     if (user && user.ratingWorks && user.ratingWorks.length) {
-      const RW = user.ratingWorks.filter(rw=>rw.work).map((w) => w.work as WorkMosaicItem).sort((a,b)=>a.createdAt > b.createdAt ? -1 : 1)
+      const RW = user.ratingWorks.filter(rw=>rw.work).map((w) => w.work as WorkMosaicItem).reverse();
+      /*RW.sort((f, s) => {
+          const fCD = dayjs(f.createdAt);
+          const sCD = dayjs(s.createdAt);
+          if (fCD.isAfter(sCD)) return -1;
+          if (fCD.isSame(sCD)) return 0;
+          return -1;
+        });*/
+     
       return (
         <div data-cy="my-books-movies">
           <CarouselStatic
