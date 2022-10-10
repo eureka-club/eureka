@@ -42,19 +42,19 @@ const SearchPage: NextPage<Props> = ({hasCycles,hasPosts,hasWorks}) => {
         {/* <SearchInput className="" /> */}
 
         <h1 className="text-secondary fw-bold mb-2">
-          {t('Results about')}: {`"${qLabel}"`}
+          {t('Results about')}: {`"${t("topics:" + qLabel,{ count: 1 }, { default: qLabel })}"`} 
         </h1>
-        {/* { (postsData.posts.length ||  worksData.works.length || cyclesData.cycles.length) ? */}
+        { (hasCycles||  hasPosts || hasWorks) ? 
         <div className='d-flex flex-column justify-content-center'>
         <SearchTab {...{hasCycles,hasPosts,hasWorks}}  />
         </div> 
-        {/* :
+         :
         <>
         <Alert className='mt-4' variant="primary">
         <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
       </Alert>
         </>
-         } */}
+         } 
        
       </SimpleLayout>
 };
