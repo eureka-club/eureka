@@ -19,7 +19,6 @@ const SearchTabworks:FunctionComponent = () => {
   const terms = router?.query.q?.toString()!.split(" ") || [];
 
   const {FilterEngineWork,filtersType,filtersCountries} = useFilterEngineWorks()
-  console.log(filtersCountries,"filtersCountries")
 
   const getProps = ()=>{
     const res:Prisma.WorkWhereInput = {
@@ -56,27 +55,28 @@ const SearchTabworks:FunctionComponent = () => {
         }
       ],
     }
-    let AND = {}
     if(filtersType){
       const typesChecked = Object.entries(filtersType).filter(([_,v])=>v).map(([k,_])=>k)
-      const type = {
+      res.AND = {
+        ...res.AND ? res.AND : {},
         type:{
           in:typesChecked
         }
       }
-      AND = {...AND,...type};
     }
     if(filtersCountries && filtersCountries.length){
-      AND = {...AND,
-        countryOfOrigin:{
+      res.AND = {
+        ...res.AND ? res.AND : {},
+        OR:[
+          {countryOfOrigin:{
             in:filtersCountries
-        },
-        countryOfOrigin2:{
+        }},
+        {countryOfOrigin2:{
           in:filtersCountries
-      }
+      } }
+        ]
       }
     }
-    res.AND=AND
     return res;
   };
 
@@ -92,13 +92,7 @@ const SearchTabworks:FunctionComponent = () => {
     }
     if(props)
       setProps(s=>({...s,where:{...props}}))
-  },[
-    filtersType.book,
-    filtersType['fiction-book'],
-    filtersType.movie,
-    filtersType.documentary,
-    filtersCountries,router.query.q
-  ])
+  },[filtersType,filtersCountries,router.query.q])
 
   useEffect(()=>{
     if(c)setWorks(c)

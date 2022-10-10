@@ -66,10 +66,14 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
           ]
         }
       }
-      res.AND = {...access};
+      res.AND = {
+        ...res.AND ? res.AND : {},
+        ...access
+      };
     }
     if(filtersCountries && filtersCountries.length){
       res.AND = {
+        ...res.AND ? res.AND : {},
         creator:{
           countryOfOrigin:{
             in:filtersCountries

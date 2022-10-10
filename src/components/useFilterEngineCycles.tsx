@@ -36,12 +36,14 @@ const useFilterEngineCycles = ()=>{
       type="checkbox"
       label={t('private')}
       checked={filtersType['private']}
+      data-cy="check-private"
       onChange={(e) => handlerComboxesChangeType(e, 'private')}
       />
       <Form.Check inline
       type="checkbox"
       label={t('public')}
       checked={filtersType['public']}
+      data-cy="check-public"
       onChange={(e) => handlerComboxesChangeType(e, 'public')}
       />
     </div>
