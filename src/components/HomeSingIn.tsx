@@ -106,7 +106,8 @@ const featuredUsers = () => {
     ? <div>      
        <CarouselStatic
         cacheKey={['USERS','FEATURED']}
-        onSeeAll={()=>router.push('/featured-users')}
+        //onSeeAll={()=>router.push('/featured-users')}
+        seeAll={false}
         data={users}
         title={t('Featured users')}
         userMosaicDetailed = {true}
