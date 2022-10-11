@@ -477,7 +477,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
             <Col className='mb-4 d-flex justify-content-center justify-content-lg-start'>
               {<div className={styles.imageContainer}>{renderPhoto()}</div>}
               </Col>
-            <Col className='mb-4 d-flex'>
+            <Col className='mb-4'>
                 {!showCrop && (<Button data-cy="image-load" className="btn-eureka w-100 text-white" onClick={() => setShowCrop(true)}>
                   {t('imageFieldLabel')}
                 </Button>
