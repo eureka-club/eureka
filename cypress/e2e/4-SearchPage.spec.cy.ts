@@ -75,6 +75,53 @@ describe('Offline home page',()=>{
         })
 
     })
+
+    it('should filters works correctly in tab "Cycles"',()=>{
+        cy.contains('button','Cycles').click({force:true})
+        
+        
+        cy.get('[data-cy="tab-cycles"]').within(()=>{
+            cy.get('[data-cy="check-private"]').uncheck({force:true})
+            cy.get('[data-cy="check-public"]').uncheck({force:true})
+            cy.get('[data-cy^="mosaic-item-cycle-"]').should('not.exist')
+
+            cy.get('[data-cy="check-private"]').check({force:true})
+            cy.get('[data-cy^="mosaic-item-cycle-"]').contains('span','Public cycle').should('not.exist')
+            cy.get('[data-cy="check-private"]').uncheck({force:true})
+
+            cy.get('[data-cy="check-public"]').check({force:true})
+            cy.get('[data-cy^="mosaic-item-cycle-"]').contains('span','Private cycle').should('not.exist')
+            cy.get('[data-cy="check-public"]').uncheck({force:true})
+
+            cy.get('[data-cy="check-public"]').check({force:true})
+            cy.get('[data-cy="check-private"]').check({force:true})
+            // cy.get('[data-cy^="mosaic-item-cycle-"]').contains('span','Public cycle')
+            // cy.get('[data-cy^="mosaic-item-cycle-"]').contains('span','Private cycle')
+        
+            // cy.get('[data-cy^="mosaic-item-cycle-"]').find('span')
+            // .each(s=>{
+            //     expect(s.text().match(/Public cycle/)).to.be.null
+            // })
+
+            
+            // expect(cy.get('[data-cy^="mosaic-item-cycle-"]')).to.be.null;
+            // cy.get('[data-cy^="mosaic-item-cycle-"]').find('span')
+            // .each(s=>{
+            //     expect(s.text().match(/Private cycle/)).to.be.null
+            // })
+            // cy.get('[data-cy="check-private"]').check({force:true})
+            // cy.get('[data-cy="tab-cycles"]').within(()=>{
+            //     cy.contains('Private cycle')
+            // })
+        })
+
+        cy.contains('button','Geography:visible')
+        // cy.get('[data-cy="tab-cycles"]')
+        //     .find('[data-cy="btn-filters-geography"]').click({force:true})
+        //     // data-cy='popover-geography'
+        // cy.get('[data-cy="check-laac"]').check({force:true})
+            
+    })
     
 })
 export {}

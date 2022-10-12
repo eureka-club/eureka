@@ -53,7 +53,7 @@ const FilterEngineCountries:React.FC<Props> = ({filtersCountries,setFiltersCount
     },[data])
     
     const getPopoverGeography = () => {
-      return <Popover id='popover-geography' className="position-absolute top-0">
+      return <Popover data-cy='popover-geography' className="position-absolute top-0">
         <Popover.Body>
               <div>
                 <Form.Label>
@@ -83,6 +83,7 @@ const FilterEngineCountries:React.FC<Props> = ({filtersCountries,setFiltersCount
                     type="checkbox"
                     label={`${t('countries:Latin America and the Caribbean')} `}
                     checked={fr['Latin America and the Caribbean']}
+                    data-cy="check-laac"
                     onChange={(e) => handlerComboxesChangeRegions(e, 'Latin America and the Caribbean')}
                   />
                 </Form.Group>
@@ -166,7 +167,7 @@ const FilterEngineCountries:React.FC<Props> = ({filtersCountries,setFiltersCount
 
     // </>
     return <OverlayTrigger trigger="click" placement="bottom" overlay={getPopoverGeography()}>
-        <Button className="ms-3" variant="light">{t('Geography')}</Button>
+        <Button className="ms-3" data-cy="btn-filters-geography" variant="light">{t('Geography')}</Button>
       </OverlayTrigger>
 
   }

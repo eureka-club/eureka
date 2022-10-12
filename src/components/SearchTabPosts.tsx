@@ -18,7 +18,6 @@ const SearchTabCycles:FunctionComponent = () => {
   const terms = router?.query.q?.toString()!.split(" ") || [];
 
   const {FilterEnginePosts,filtersCountries} = useFilterEnginePosts()
-  console.log(filtersCountries,"filtersCountries")
 
   const getProps = ()=>{
     const res:Prisma.PostWhereInput = {
