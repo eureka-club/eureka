@@ -203,7 +203,7 @@ const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = fa
            <LocalImageComponent /* className='avatarProfile' */className="rounded rounded-circle" width={140} height={140} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />}   
         </div>
         <div className='mt-2 d-flex flex-column justify-content-center align-items-center'>
-          <h5 className='text-secondary cursor-pointer' onClick={() => openUserMediatheque(user)} >{name || 'unknown'}</h5>
+          <h6 className='text-secondary cursor-pointer' onClick={() => openUserMediatheque(user)} >{name || 'unknown'}</h6>
           <TagsInput className='mt-1 px-4 text-center' tags={tags || ''} readOnly label="" />
         </div>
     </Card>}</>
