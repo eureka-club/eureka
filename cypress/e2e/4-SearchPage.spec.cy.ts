@@ -20,7 +20,7 @@ describe('Offline home page',()=>{
         const url_search_femin_in_posts='/api/post?props*'
         const url_search_femin_in_works='/api/work?props*'
 
-        cy.intercept(url_search_femin_in_cycles,{fixture:'api-search-femin-in-cycles'}).as('reqCycles')
+        cy.intercept(url_search_femin_in_cycles,{fixture:'api-search-femin-in-cycles.json'}).as('reqCycles')
         cy.intercept(url_search_femin_in_posts,{fixture:'api-search-femin-in-posts.json'}).as('reqPosts')
         cy.intercept(url_search_femin_in_works,{fixture:'api-search-femin-in-works.json'}).as('reqWorks')
 
@@ -115,7 +115,26 @@ describe('Offline home page',()=>{
             // })
         })
 
-        cy.contains('button','Geography:visible')
+        cy.get('[data-cy="btn-filters-geography"]:visible').click({force:true})
+        cy.get('.popover-body').within(()=>{
+            cy.contains('Regions')
+            cy.get('.rbt-input-main').type('cuba')
+            cy.get('#TagsInputTypeAhead-item-0').click({force:true})
+            cy.contains('Select').click({force:true})
+        })
+        cy.get('[data-cy^="mosaic-item-cycle-"]').should('not.exist')
+
+        cy.wait(3000)
+
+        cy.get('[data-cy="btn-filters-geography"]:visible').click({force:true})
+        cy.get('.popover-body').within(()=>{
+            cy.contains('Regions')
+            cy.get('.rbt-input-main').type('brazil')
+            cy.get('#TagsInputTypeAhead-item-0').click({force:true})
+            cy.contains('Select').click({force:true})
+        })
+        cy.get('[data-cy^="mosaic-item-cycle-"]').should('exist')
+
         // cy.get('[data-cy="tab-cycles"]')
         //     .find('[data-cy="btn-filters-geography"]').click({force:true})
         //     // data-cy='popover-geography'
