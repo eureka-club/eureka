@@ -12,10 +12,12 @@ import detailPagesAtom from '../src/atoms/detailPages';
 import globalModalsAtom from '../src/atoms/globalModals';
 
 import './scss/custom.scss';
+import { GTM_ID, pageview } from '@/src/lib/gtag'
 
 import  ErrorBoundary from '@/src/ErrorBounddary';
 import { NotificationProvider } from '@/src/useNotificationProvider';
 import {ModalProvider} from '@/src/useModal'
+import Script from 'next/script';
 const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   const { initialState } = pageProps;
   const AnyComponent = Component as any;
@@ -44,10 +46,25 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
                 <QueryClientProvider client={queryClient}>
 
                   <Hydrate state={pageProps.dehydratedState}>
+                     {/* Google Tag Manager - Global base code */}
+                  <Script
+                    id="gtag-base"
+                    strategy="afterInteractive"
+                    dangerouslySetInnerHTML={{
+                      __html: `
+                        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                        })(window,document,'script','dataLayer', '${GTM_ID}');
+                      `,
+                    }}
+                  />
                     {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                     <ModalProvider>
                       <NotificationProvider>
                         {/* <ErrorBoundary> */}
+                        
                           <AnyComponent {...pageProps} />
                         {/* </ErrorBoundary> */}
                       </NotificationProvider>
