@@ -459,12 +459,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const queryClient = new QueryClient();
   const session = await getSession(ctx);
 
-  if(!session){
-    return {
-      props:{
-      dehydratedState: dehydrate(queryClient),
-    }}
-  }
+  
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
   
   let id = 0;
@@ -472,6 +467,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const slug = ctx.query.slug.toString()
     const li = slug.split('-').slice(-1)
     id = parseInt(li[0])
+    if(!session){
+      return {
+        props:{
+          id,
+        dehydratedState: dehydrate(queryClient),
+      }}
+    }
     const {posts} = await getMyPosts(id!,8,origin);
     await queryClient.prefetchQuery(['MY-POSTS',id], ()=>posts);
     posts.forEach(p=>{
