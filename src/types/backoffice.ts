@@ -21,20 +21,7 @@ export interface backOfficePayload {
 }
 
 type backOfficeModel = {
-  select:{
-    id: true,
-    SlideTitle1: true,
-    SlideText1: true,
-    SlideImage1:true,
-    SlideTitle2: true,
-    SlideText2: true,
-    SlideImage2:true,
-    SlideTitle3: true,
-    SlideText3: true,
-    SlideImage3:true,
-    CyclesExplorePage: true,
-    PostExplorePage: true,
-    FeaturedUsers: true,
+  include:{
     sliderImages:{select:{storedFile:true,originalFilename:true}},
   }
 };
