@@ -5,10 +5,9 @@ import { Spinner } from 'react-bootstrap';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 
 interface Props {
-  r:string
 }
 
-const TestOpenai: NextPage<Props> = ({r}) => {
+const TestOpenai: NextPage<Props> = () => {
   const [loading,setLoading] = useState(false)
   const [text,setText] = useState('')
   const [images,setImages] = useState<HTMLImageElement[]>([])
@@ -47,7 +46,6 @@ const TestOpenai: NextPage<Props> = ({r}) => {
   }
 
   return <SimpleLayout title={'test openai'}>
-    <code>{r}</code>
       <form onSubmit={onSubmit}>
         <textarea value={text} onChange={onTextChange}></textarea>
         <button type='submit' disabled={loading}>submit</button>
@@ -60,9 +58,8 @@ const TestOpenai: NextPage<Props> = ({r}) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = (await getSession(ctx));
-  const r = process.env.OPENAI_API_KEY
   return {
-    props: {r},
+    props: {},
   };
 };
 
