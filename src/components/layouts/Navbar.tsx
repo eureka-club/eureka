@@ -1,9 +1,11 @@
 import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
+import { useAtom } from 'jotai'; 
+import searchEngine from '@/src/atoms/searchEngine';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { setCookie } from 'nookies';
-import { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent, MouseEventHandler, useEffect, useState } from 'react';
 import LocalImageComponent from '@/src/components/LocalImage'
 import {
   Container,
@@ -18,6 +20,7 @@ import { BiUser } from 'react-icons/bi';
 import NotificationsList from '@/components/NotificationsList';
 import { RiDashboardLine } from 'react-icons/ri';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
+import { HiOutlineHashtag } from 'react-icons/hi'
 import SearchInput from '@/components/SearchInput';
 import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '@/src/constants';
 import ChevronToggle from '@/components/ui/dropdown/ChevronToggle';
@@ -25,12 +28,22 @@ import styles from './Navbar.module.css';
 import useUser from '@/src/useUser';
 import slugify from 'slugify'
 
+const topics = ['gender-feminisms', 'technology', 'environment',
+ 'racism-discrimination',
+    'wellness-sports','social issues',
+    'politics-economics','philosophy',
+    'migrants-refugees','introspection',
+    'sciences','arts-culture','history',
+];
+
 const NavBar: FunctionComponent = () => {
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
   const router = useRouter();
   const { t } = useTranslation('navbar');
   const [userId,setUserId] = useState(-1)
+    const [, setSearchEngineState] = useAtom(searchEngine);
+
   useEffect(()=>{
     if(session)setUserId(session.user.id)
   },[session])
@@ -86,10 +99,28 @@ const NavBar: FunctionComponent = () => {
     return ''
   }
 
+  const handlerTopicsLinkClick = (v: string) => {
+    setSearchEngineState((res)=>({...res,itemsFound:[]}))
+    router.push(`/search?q=${v}`);    
+  };
+
+  const getTopicsLinks = () => {
+         return <>{topics.map((topic)=>{
+            return <Dropdown.Item key={topic}                
+                  onClick={() =>handlerTopicsLinkClick(topic)}
+                >
+                  {/* <Link href="/aboutUs"> */}
+                  {t(`topics:${topic}`)}
+                  {/* </Link> */}
+                </Dropdown.Item>
+                })}</>
+
+      };
+
   return (
     <Container className={styles.container}>
       <Navbar collapseOnSelect expand="lg" bg="white" fixed="top" className='border-bottom border-primary'>
-        <Container>
+        <Container className='px-0'>
         <Link href="/" replace>
           <a className="d-flex align-items-center">
           <Navbar.Brand className="cursor-pointer">
@@ -122,45 +153,23 @@ const NavBar: FunctionComponent = () => {
         <Navbar.Collapse className={`${styles['responsive-navbar-nav']}`}>
           <Nav className="">
              {!isLoadingSession &&(
-            <SearchInput className="" style={{width:'460px'}}/>
+            <SearchInput className="" style={{width:'440px'}}/>
 
              )}
-          </Nav>
-          <Nav className={styles.navbarNav}>
-            {!session && !isLoadingSession &&(
-              <Button className="ms-4 btn-eureka"  data-cy="btn-login" onClick={handlerLogin} /*onClick={openSignInModal}*/>
-                {t('login')}
-              </Button>
-            )}
-          </Nav>
-          <Nav className="me-3">
-            {session && session.user && (
-              <Dropdown className={`rounded-1 ${styles.actionBtn}`}>
-                <Dropdown.Toggle as={ChevronToggle} id="create">
-                  <span className="text-white">{t('create')}</span>
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  {session?.user.roles && session?.user.roles=='admin' && (
-                    <Link href="/cycle/create">
-                      <a className="dropdown-item">{t('cycle')}</a>
-                    </Link>
-                  )}
-                  <Link href="/post/create">
-                      <a className="dropdown-item">{t('post')}</a>
-                    </Link>
-                  {/*<Dropdown.Item onClick={handleCreatePostClick}>{t('post')}</Dropdown.Item>*/}
-                  {session?.user.roles && session?.user.roles=='admin' && (
-                    <Link href="/work/create">
-                      <a className="dropdown-item">{t('work')}</a>
-                    </Link>                    
-                  )}
-                  {/*<Dropdown.Item onClick={handleCreateWorkClick}>{t('v')}</Dropdown.Item>*/}
-                </Dropdown.Menu>
-              </Dropdown>
-            )}
+          </Nav>         
+          <Nav className={`${styles.navbarNav} ms-2`}>
+            <Dropdown data-cy="link-topics" align="end" className={styles.langSwitch}>
+              <Dropdown.Toggle as={ChevronToggle}>
+                <HiOutlineHashtag className={`${styles.navbarIconNav} border border-3 border-primary`} style={{scale:'90%',padding:'2px'}} />
+              </Dropdown.Toggle>
+              <span className={styles.menuBottomInfo}>{t('Topics')}</span>
+              <Dropdown.Menu data-cy="links-topics">
+                {getTopicsLinks()}
+              </Dropdown.Menu>
+            </Dropdown>
           </Nav>
           {session && session.user && (
-            <Nav className={`${styles.navbarNav} text-center d-flex me-1`}>
+            <Nav className={`${styles.navbarNav} text-center d-flex`}>
               <Nav.Item>
                 <Link href={`/mediatheque/${getMediathequeSlug()}`}>
                   <a data-cy="my-mediatheque-link" className={styles.navLink}>
@@ -265,6 +274,39 @@ const NavBar: FunctionComponent = () => {
           </Nav.Item>
         </Navbar.Collapse>
         </>}
+         <Nav className={styles.navbarNav}>
+            {!session && !isLoadingSession &&(
+              <Button className="ms-4 btn-eureka"  data-cy="btn-login" onClick={handlerLogin} /*onClick={openSignInModal}*/>
+                {t('login')}
+              </Button>
+            )}
+          </Nav>
+          <Nav className="ms-2">
+            {session && session.user && (
+              <Dropdown className={`rounded-1 ${styles.actionBtn}`}>
+                <Dropdown.Toggle as={ChevronToggle} id="create">
+                  <span className="text-white">{t('create')}</span>
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {session?.user.roles && session?.user.roles=='admin' && (
+                    <Link href="/cycle/create">
+                      <a className="dropdown-item">{t('cycle')}</a>
+                    </Link>
+                  )}
+                  <Link href="/post/create">
+                      <a className="dropdown-item">{t('post')}</a>
+                    </Link>
+                  {/*<Dropdown.Item onClick={handleCreatePostClick}>{t('post')}</Dropdown.Item>*/}
+                  {session?.user.roles && session?.user.roles=='admin' && (
+                    <Link href="/work/create">
+                      <a className="dropdown-item">{t('work')}</a>
+                    </Link>                    
+                  )}
+                  {/*<Dropdown.Item onClick={handleCreateWorkClick}>{t('v')}</Dropdown.Item>*/}
+                </Dropdown.Menu>
+              </Dropdown>
+            )}
+          </Nav>
         </Container>
       </Navbar>
     </Container>
