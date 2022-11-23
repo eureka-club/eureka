@@ -51,7 +51,7 @@ export default getApiHandler()
     });
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-    try {debugger;
+    try {
       const { q = null,props:p=undefined } = req.query;
       const props:Prisma.WorkFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
       let {where:w,take,cursor,skip} = props;

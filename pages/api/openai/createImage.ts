@@ -4,7 +4,7 @@ import { Configuration, OpenAIApi,ImagesResponse } from "openai";
 
 
 const configuration = new Configuration({
-  apiKey: "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",
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 const openai = new OpenAIApi(configuration);
@@ -28,8 +28,6 @@ export default async function handler(
         size,
         response_format:'b64_json'
     });
-    debugger;
-
     res.status(200).json({ data });
   }
 }

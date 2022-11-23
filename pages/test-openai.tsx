@@ -1,18 +1,14 @@
 import { GetServerSideProps,NextPage } from 'next';
-import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import {getSession, useSession } from 'next-auth/react';
-import { useState, useEffect, SyntheticEvent, ChangeEvent, MouseEventHandler, FormEvent } from 'react';
-import { Spinner, Card, Row, Col, ButtonGroup, Button, Alert } from 'react-bootstrap';
-import { BiArrowBack } from 'react-icons/bi';
+import {getSession } from 'next-auth/react';
+import { useState, ChangeEvent, FormEvent } from 'react';
+import { Spinner } from 'react-bootstrap';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
-import EditUserForm from '@/components/forms/EditUserForm';
-
 
 interface Props {
+  r:string
 }
 
-const TestOpenai: NextPage<Props> = () => {
+const TestOpenai: NextPage<Props> = ({r}) => {
   const [loading,setLoading] = useState(false)
   const [text,setText] = useState('')
   const [images,setImages] = useState<HTMLImageElement[]>([])
@@ -51,6 +47,7 @@ const TestOpenai: NextPage<Props> = () => {
   }
 
   return <SimpleLayout title={'test openai'}>
+    <code>{r}</code>
       <form onSubmit={onSubmit}>
         <textarea value={text} onChange={onTextChange}></textarea>
         <button type='submit' disabled={loading}>submit</button>
@@ -63,9 +60,9 @@ const TestOpenai: NextPage<Props> = () => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = (await getSession(ctx));
-
+  const r = process.env.OPENAI_API_KEY
   return {
-    props: {},
+    props: {r},
   };
 };
 
