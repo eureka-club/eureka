@@ -2,6 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { Configuration, OpenAIApi,ImagesResponse } from "openai";
 
+
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -27,8 +28,6 @@ export default async function handler(
         size,
         response_format:'b64_json'
     });
-    debugger;
-
     res.status(200).json({ data });
   }
 }
