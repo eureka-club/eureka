@@ -33,7 +33,7 @@ class MyDocument extends Document {
  */}
           {/* End Google Tag Manager */}
           {/* MS Clarity analytics */}
-          {CLARITY_TRACKING_ID != null && (
+          {/* {CLARITY_TRACKING_ID != null && (
             <>
               <script
                 dangerouslySetInnerHTML={{
@@ -42,9 +42,9 @@ class MyDocument extends Document {
               />
               <script async src={`https://www.clarity.ms/tag/${CLARITY_TRACKING_ID}`} />
             </>
-          )}
+          )} */}
           {/* <!-- Facebook Pixel Code --> */}
-          <>
+          {/* <>
             <script
               dangerouslySetInnerHTML={{
                 __html: `!function(f,b,e,v,n,t,s)
@@ -61,7 +61,7 @@ class MyDocument extends Document {
               }}
             />
             
-          </>
+          </> */}
           {/* <!-- End Facebook Pixel Code --> */}
           {/* <script async src="https://cdn.tiny.cloud/1/f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l/tinymce/5/tinymce.min.js"></script> */}
         </Head>
