@@ -62,19 +62,23 @@ const HomeSingIn: FunctionComponent<Props> = ({ groupedByTopics}) => {
   useEffect(()=>{
     const idx = topicIdx+1;
     if(inView && idx < topics.length){
-      const exist = topics[idx] in gbt;
-  
-      const fi = async ()=>{
-        const r = await fetchItems(0,topics[idx]);
-        gbt.push([topics[idx],r])
-        if(r){
-          setGBT([...gbt]);
-          setTopicIdx(idx);
+      let isCanceled = false;
+      if(!isCanceled){
+        const exist = topics[idx] in gbt;
+        const fi = async ()=>{
+          const r = await fetchItems(0,topics[idx]);
+          gbt.push([topics[idx],r])
+          if(r){
+            setGBT([...gbt]);
+            setTopicIdx(idx);
+          }
         }
+        if(!exist)
+          fi()
       }
-      if(!exist)
-        fi()
-
+      return ()=>{
+        isCanceled = true
+      }
     }
   },[inView, gbt, topicIdx]); 
    
