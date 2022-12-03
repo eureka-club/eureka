@@ -162,6 +162,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             showCounts
             entity={work}
             showTrash={showTrash}
+            className='w-100'
           />
         </Card.Footer>
       )}

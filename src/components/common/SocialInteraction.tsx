@@ -47,6 +47,9 @@ interface Props {
   showCounts?: boolean;
   showButtonLabels?: boolean;
   cacheKey: string[];
+  showCreateEureka?: boolean;
+  showReaction?: boolean;
+  showSaveForLater?: boolean;
   showTrash?: boolean;
   showRating?: boolean;
   className?: string;
@@ -58,6 +61,9 @@ const SocialInteraction: FunctionComponent<Props> = ({
   showCounts = false,
   showButtonLabels = true,
   cacheKey = '',
+  showCreateEureka = true,
+  showReaction = true,
+  showSaveForLater = false,
   showTrash = false,
   showRating = true,
   className,
@@ -373,14 +379,14 @@ const renderAddReaction = ()=>{
     if(!entity || isLoadingSession)
       return '...'
     if(isWork(entity) || isCycle(entity))
-      return <Button
+      return <><Button
         variant="link"
         className={`${styles.buttonSI} p-0 text-primary`}
         title={t('Create eureka')}
         //onClick={handleFavClick}
           disabled={loadingSocialInteraction}
       >
-        <BiImageAdd className={styles.active} /> 
+        <BiImageAdd className={styles.active} />
         <br />
         {showButtonLabels && (
           <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>
@@ -388,6 +394,8 @@ const renderAddReaction = ()=>{
           </span>
         )}
       </Button>
+      <span className='d-none d-md-flex align-items-center text-primary' style={{fontSize: '0.8em'}}>Create Eureka</span>
+      </>
 
 
   }
@@ -410,7 +418,7 @@ const renderAddReaction = ()=>{
   if (isLoadingSession || isLoadingUser) return <Spinner animation="grow" variant="info" size="sm" />;
   return (
     <section className={`${className}`}>
-      <div className="d-flex">
+      <div className="d-flex justify-content-between">
         {showRating && (
           <div className="ps-1">
             {showRating && getRatingLabelInfo()}
@@ -455,7 +463,7 @@ const renderAddReaction = ()=>{
         {loadingSocialInteraction && (
              <div className='mt-1 ms-1 me-2'> <Spinner className={styles.ratingSpinner} size="sm" animation="grow" variant="info" /></div>
             )}
-        <div className={`ms-1`}>
+        <div className={`d-flex flex-row`}>
             {renderCreateEureka()}       
         </div>    
         {ss && (
@@ -478,9 +486,9 @@ const renderAddReaction = ()=>{
         <div className={`ms-1`}>
             {renderAddReaction()}       
         </div>
-        <div className={`ms-1`}>
+        { showSaveForLater && <div className={`ms-1`}>
             {renderSaveForLater()}       
-        </div>
+        </div>}
       </div>
     </section>
   );
