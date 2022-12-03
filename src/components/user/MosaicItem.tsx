@@ -188,7 +188,7 @@ const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = fa
             </Tooltip>
           }
         >
-          <Button variant="button " className='border-primary text-primary rounded rounded-5 ' size='sm'  disabled={isLoadingMutateFollowing}  onClick={followHandler} > <h4 className='mb-1'><AiOutlineUserDelete/></h4></Button>
+          <Button variant="button" className='border-primary text-primary rounded rounded-5 ' size='sm'  disabled={isLoadingMutateFollowing}  onClick={followHandler} > <h4 className='mb-1'><AiOutlineUserDelete/></h4></Button>
         </OverlayTrigger>)}
         
         </div>

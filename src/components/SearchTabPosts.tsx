@@ -3,7 +3,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { Spinner,Row, Col, Tab} from 'react-bootstrap';
 
-import MosaicItem from '@/components/post/MosaicItem'
+import MosaicItem from '@/components/post/NewMosaicItem'
 import usePosts,{getPosts} from '@/src/usePosts'
 
 import useFilterEnginePosts from './useFilterEnginePosts';
@@ -105,7 +105,9 @@ const SearchTabCycles:FunctionComponent = () => {
 
           <FilterEnginePosts/>
           <Row>
-              {posts.map(p=><Col xs={12} sm={6} lg={3} className="mb-3 d-flex justify-content-center  align-items-center" key={p.id}><MosaicItem postId={p.id} cacheKey={['POST',p.id.toString()]}  /></Col>)}
+              {posts.map(p=><Col xs={12} sm={6} lg={3} className="mb-3 d-flex justify-content-center  align-items-center" key={p.id}>
+                <MosaicItem postId={p.id} className="mb-5" cacheKey={['POST',p.id.toString()]} size={'md'} />
+                </Col>)}
         </Row>
         {posts?.length!=total && <Spinner ref={ref} animation="grow" />}
       </>

@@ -8,6 +8,7 @@ interface Props {
   className?: string;
   style?: Record<string, string>;
   filePath: string;
+  title?: string;
   alt: string;
   width?:number;
   height?:number;
@@ -15,7 +16,7 @@ interface Props {
   blurDataURL?:boolean;
 }
 
-const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, alt,width,height,blurDataURL=false,notNextImage }) => {
+const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, title,alt,width,height,blurDataURL=false,notNextImage }) => {
   const fallbakImgURL = `https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/Image-not-found.webp`
   const [imgError,setImgError] = useState<boolean>(false)
   const onLoadImgError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
@@ -45,6 +46,7 @@ const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, alt,
         // : 
         <img
           src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${filePath}`}
+          title={title}
           alt={alt}
           className={className}
           onError={onLoadImgError}
@@ -54,7 +56,7 @@ const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, alt,
 
     case STORAGE_MECHANISM_LOCAL_FILES:
       // eslint-disable-next-line @next/next/no-img-element
-      return <img src={`${ASSETS_BASE_URL}/${filePath}`} alt={alt} className={className} style={{...style,width:`${width}px`,height:`${height}px`}}/>;
+      return <img src={`${ASSETS_BASE_URL}/${filePath}`} title={title}  alt={alt} className={className} style={{...style,width:`${width}px`,height:`${height}px`}}/>;
 
     default:
       return null;

@@ -1,7 +1,7 @@
 
 import { FunctionComponent, useEffect, useState, lazy } from 'react';
 import useTranslation from 'next-translate/useTranslation';
-import {Spinner} from 'react-bootstrap';
+import {Spinner, Col} from 'react-bootstrap';
 import TagsInput from '@/components/forms/controls/TagsInput';
 import { GetAllByResonse } from '@/src/types';
 import { useInView } from 'react-intersection-observer';
@@ -137,18 +137,23 @@ const featuredUsers = () => {
 const renderCarousels =  ()=>{
         return <>
                 {gbt.map(([topic,apiResponse])=>{
-                return <div className='mb-5' data-cy={`carousel-${topic}`} style={{minHeight:"448px"}} key={topic}>
+                return <div className='mb-4' data-cy={`carousel-${topic}`} style={{minHeight:"300px"}} key={topic}>
                 <Carousel topic={topic} apiResponse={apiResponse} />
                 </div>
                 })}
         </>
 }    
 
-  return <>  
+  return <section className='d-flex flex-column flex-lg-row'>
+  <Col xs={12} lg={2}>
+    <h1 className="text-secondary fw-bold">{t('Trending topics')}</h1>
+  <aside className="mb-5">{getTopicsBadgedLinks()}</aside>
+  </Col>  
+  <Col xs={12} lg={10}>
+  <section className='ms-0 ms-lg-5'>  
   {featuredUsers()}
   {cyclesJoined()}
-  <h1 className="text-secondary fw-bold">{t('Trending topics')}</h1>
-  <aside className="mb-5">{getTopicsBadgedLinks()}</aside>
+  
   <>
     <div>
       {renderCarousels()}
@@ -157,7 +162,9 @@ const renderCarousels =  ()=>{
       {renderSpinnerForLoadNextCarousel()}
     </div>
   </>
-</>
+  </section>
+  </Col>
+</section>  
 
 }
 

@@ -9,7 +9,7 @@ import router from 'next/router';
 import { BsHash } from 'react-icons/bs';
 import globalSearchEngineAtom from '../atoms/searchEngine';
 import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem } from '../types';
-import MosaicItemCycle from './cycle/MosaicItem';
+import MosaicItemCycle from './cycle/NewMosaicItem';
 import MosaicItemPost from './post/MosaicItem';
 import MosaicItemWork from './work/MosaicItem';
 import styles from './Carousel.module.css';

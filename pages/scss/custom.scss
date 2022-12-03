@@ -257,19 +257,85 @@ hr {
 .start-50{
   left: 50%!important;
 }
-.card.mosaic{
-  width: 260px !important;
-  height: 400px !important;
-  max-height: 400px !important;
+
+.card.mosaic{//Mosaicos pag inicio
+  width: 190px !important;
+  height: 285px !important;
+  max-width: 190px !important;
+  max-height: 2850px !important;
 }
-.card.mosaic-tiny{
-  width: 175.5px !important;
-  height: 280 !important;
+
+.card.mosaic-sm{ //Mosaicos carrousel en obras de ciclos
+  width: 157px !important;
+  height: 240px !important;
+  max-width: 157px !important;
+  max-height: 240px !important;
 }
+
+.card.mosaic-md{ // resultados y tabs eurekas y ciclos en detalles
+  width: 250px !important;
+  height: 350px !important;
+  max-width: 250px !important;
+  max-height: 350px !important;
+}
+
+.card.mosaic-lg{ //Mosaico de la entidad en un detalle
+  width: 280px !important;
+  height: 380px !important;
+  max-width: 280px !important;
+  max-height: 380px !important;
+}
+
 .card.mosaic-post-comments {
   width: 260px !important;
   height: 280 !important;
 }
+
+@media only screen and (max-width: 450px) {
+.card.mosaic{ //Mosaicos pag inicio vista movil
+  width: 157px !important;
+  height: 250px !important;
+  max-width: 157px !important;
+  max-height: 250px !important;
+}
+}
+
+
+.card-body {
+     padding: 0;
+}
+
+.cycle-img-card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+ // transition: transform 0.3s ease-out;
+}
+
+.post-img-card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+}
+
+/*.card:hover .cycle-img-card  {
+  //transform: rotateY(90deg);
+  //transform: translateX(-100%);
+
+}*/
+
+/*.mosaic-detail{
+  text-align: center;
+  padding: 2px;
+  background: var(--color-secondary);
+  height: 100%;
+  }*/
+
+
 
 .fs-6 {
   font-size: .875rem !important;

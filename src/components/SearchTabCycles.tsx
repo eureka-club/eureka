@@ -3,7 +3,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { Spinner,Row, Col, Tab} from 'react-bootstrap';
 
-import MosaicItem from '@/components/cycle/MosaicItem'
+import MosaicItem from '@/components/cycle/NewMosaicItem'
 
 import useCycles,{getCycles} from '@/src/useCycles'
 
@@ -124,7 +124,8 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
       return <>
           <FilterEngineCycles/>
           <Row>
-              {cycles.map(p=><Col xs={12} sm={6} lg={3} className="mb-3 d-flex justify-content-center  align-items-center" key={p.id}><MosaicItem cycleId={p.id} cacheKey={['CYCLE',p.id.toString()]}  /></Col>)}
+              {cycles.map(p=><Col xs={12} sm={6} lg={3} className="mb-3 d-flex justify-content-center  align-items-center" key={p.id}>
+                <MosaicItem cycleId={p.id} className="mb-5" cacheKey={['CYCLE',p.id.toString()]} size={'md'} /></Col>)}
           </Row>
           {cycles?.length!=total && <Spinner ref={ref} animation="grow" />}
       </>
