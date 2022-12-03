@@ -1,9 +1,7 @@
-import { FunctionComponent, SyntheticEvent,useEffect} from 'react';
-import Image from 'next/image'
-import Link from 'next/link';
-import { Spinner } from 'react-bootstrap';
-//import { UserWhitPhoto } from '@/src/types/user';
+import { FunctionComponent, SyntheticEvent,MouseEvent} from 'react';
 import useUser from '@/src/useUser'
+import { useRouter } from 'next/router';
+
 
 import styles from './UserAvatar.module.css';
 import LocalImageComponent from '@/src/components/LocalImage'
@@ -28,7 +26,6 @@ const getMediathequeSlug = (user:UserMosaicItem)=>{
   return ''
 }
 
-
 const UserAvatar: FunctionComponent<Props> = ({
   userId,
   size = 'md',
@@ -38,14 +35,13 @@ const UserAvatar: FunctionComponent<Props> = ({
   width,
   height,
 }) => {
-
+  const router = useRouter()
   const onLoadImgError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = '/img/default-avatar.png';
   };
  const {data:user} = useUser(userId,{
     enabled:!!userId
   })
-   
 
   const renderUserName = () => {
     let res = '';
@@ -63,13 +59,15 @@ const UserAvatar: FunctionComponent<Props> = ({
     }
     return <div className='d-flex flex-nowrap ms-2'><span>{res}</span></div>;
   };
-  
+  const onClick = (e:MouseEvent<HTMLAnchorElement>,user:UserMosaicItem)=>{
+    e.stopPropagation()
+    router.push(`/mediatheque/${getMediathequeSlug(user)}`)
+  }
   return (
     <>
       {user && (
-        <section className={`fs-6 ${styles[size]}`}>
-          <Link href={`/mediatheque/${getMediathequeSlug(user)}`}>
-            <a className={`text-secondary ${styles.link} d-flex align-items-center`}>
+        <section className={`fs-6 ${styles[size]} cursor-pointer`}>
+            <a onClick={(e)=>onClick(e,user)} className={`text-secondary ${styles.link} d-flex align-items-center`}>
 
                 {(!user?.photos || !user?.photos.length) ?
          <img
@@ -80,7 +78,6 @@ const UserAvatar: FunctionComponent<Props> = ({
       /> : <LocalImageComponent className={`rounded rounded-circle`} width={width} height={height} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />}
               {renderUserName()}
             </a>
-          </Link>
         </section>
       )}
     </>

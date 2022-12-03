@@ -3,7 +3,6 @@ import {getSession } from 'next-auth/react';
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { Spinner } from 'react-bootstrap';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
-
 interface Props {
 }
 
@@ -19,13 +18,17 @@ const TestOpenai: NextPage<Props> = () => {
     setLoading(true)
     setImages([])
     form.preventDefault()
+
+    const {data:en_text} = await fetch(`/api/google-translate/?text=${text}&target=en`)
+    .then(r=>r.json())
+
     const {data:{data}} =  await fetch('/api/openai/createImage',{
       method:'POST',
       headers:{
           'Content-type':'application/json'
       },
-      body:JSON.stringify({text})
-    }).then(r=>r.json())
+      body:JSON.stringify({text:en_text})
+    }).then(r=>r.json()) 
 
     const promises = (data as {b64_json:string}[]).map(d=>{
       return new Promise((resolve,reject)=>{
