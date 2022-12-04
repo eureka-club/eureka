@@ -230,7 +230,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           <aside className='d-flex flex-column'>
             <UserAvatar width={42} height={42} userId={cycle.creatorId}  showFullName />
             <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
-              <MosaicItem cycleId={cycle.id} showTrash showParticipants={true} className="mt-4" cacheKey={['CYCLE', `${cycle.id}`]} size={'lg'} />
+              <MosaicItem cycleId={cycle.id} showTrash showParticipants={true} showSaveForLater={true} className="mt-4" cacheKey={['CYCLE', `${cycle.id}`]} size={'lg'} />
             </MosaicContext.Provider>
           </aside>
         </Col>

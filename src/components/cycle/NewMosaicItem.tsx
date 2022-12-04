@@ -42,6 +42,8 @@ interface Props {
   detailed?: boolean;
   cacheKey?: [string,string];
   showSocialInteraction?: boolean;
+  showCreateEureka?: boolean;
+  showSaveForLater?: boolean;
   showTrash?: boolean;
   size?: string;
   className?: string;
@@ -51,6 +53,8 @@ const NewMosaicItem: FunctionComponent<Props> = ({
   detailed = true,
   showSocialInteraction = true,
   showParticipants = true,
+  showCreateEureka,
+  showSaveForLater,
   cacheKey = undefined,
   showTrash = false,
   size,
@@ -327,6 +331,8 @@ const NewMosaicItem: FunctionComponent<Props> = ({
               showCounts
               entity={cycle}
               showTrash={showTrash}
+              showCreateEureka={showCreateEureka}
+              showSaveForLater={showSaveForLater}
               className="w-100"
             />
           )}

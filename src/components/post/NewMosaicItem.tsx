@@ -31,6 +31,8 @@ interface Props {
   showButtonLabels?: boolean;
   showShare?: boolean;
   showSocialInteraction?: boolean;
+  showCreateEureka?: boolean;
+  showSaveForLater?: boolean;
   showdetail?: boolean;
   style?: { [k: string]: string };
   cacheKey?: string[];
@@ -45,6 +47,8 @@ const NewMosaicItem: FunctionComponent<Props> = ({
   postId,
   //display = 'v',
   showSocialInteraction = true,
+  showCreateEureka,
+  showSaveForLater,
   showdetail = true,
   cacheKey:ck,
   showComments = false,
@@ -221,6 +225,7 @@ const getParentTitle = () => {
               parent={postParent}
               showRating={false}
               showTrash={false}
+              showSaveForLater={showSaveForLater}
               className="ms-auto"
             />
           </Card.Footer>

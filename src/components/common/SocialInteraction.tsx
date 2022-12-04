@@ -385,16 +385,16 @@ const renderAddReaction = ()=>{
         title={t('Create eureka')}
         //onClick={handleFavClick}
           disabled={loadingSocialInteraction}
-      >
-        <BiImageAdd className={styles.active} />
-        <br />
+      > 
+      <div className={`d-flex flex-row`}>
+           <BiImageAdd className={styles.active}/><span className='d-none d-md-flex align-items-center text-primary' style={{fontSize: '0.8em'}}>Create Eureka</span>
+      </div>
         {showButtonLabels && (
           <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>
             {t('Create eureka')}
           </span>
         )}
       </Button>
-      <span className='d-none d-md-flex align-items-center text-primary' style={{fontSize: '0.8em'}}>Create Eureka</span>
       </>
 
 
@@ -463,9 +463,7 @@ const renderAddReaction = ()=>{
         {loadingSocialInteraction && (
              <div className='mt-1 ms-1 me-2'> <Spinner className={styles.ratingSpinner} size="sm" animation="grow" variant="info" /></div>
             )}
-        <div className={`d-flex flex-row`}>
             {renderCreateEureka()}       
-        </div>    
         {ss && (
           <div className="ms-auto">
             <OverlayTrigger trigger="focus" placement="top" overlay={popoverShares}>

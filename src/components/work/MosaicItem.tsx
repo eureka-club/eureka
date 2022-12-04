@@ -20,6 +20,8 @@ interface Props {
   showButtonLabels?: boolean;
   showShare?: boolean;
   showSocialInteraction?: boolean;
+  showCreateEureka?: boolean;
+  showSaveForLater?: boolean;
   style?: { [k: string]: string };
   cacheKey?: [string,string];
   showTrash?: boolean;
@@ -31,6 +33,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   workId,
   showButtonLabels = false,
   showSocialInteraction = true,
+  showCreateEureka,
+  showSaveForLater,
   style = undefined,
   cacheKey = undefined,
   showTrash = false,
@@ -162,6 +166,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             showCounts
             entity={work}
             showTrash={showTrash}
+            showSaveForLater={showSaveForLater}
             className='w-100'
           />
         </Card.Footer>
