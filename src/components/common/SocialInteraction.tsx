@@ -3,6 +3,8 @@ import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
 import { GiBrain } from 'react-icons/gi';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
+import { BiImageAdd } from 'react-icons/bi';
+import { FaRegSmileBeam } from 'react-icons/fa'
 import classnames from 'classnames';
 import { FiShare2, FiTrash2 } from 'react-icons/fi';
 import { useMutation, useQueryClient } from 'react-query';
@@ -45,6 +47,9 @@ interface Props {
   showCounts?: boolean;
   showButtonLabels?: boolean;
   cacheKey: string[];
+  showCreateEureka?: boolean;
+  showReaction?: boolean;
+  showSaveForLater?: boolean;
   showTrash?: boolean;
   showRating?: boolean;
   className?: string;
@@ -56,6 +61,9 @@ const SocialInteraction: FunctionComponent<Props> = ({
   showCounts = false,
   showButtonLabels = true,
   cacheKey = '',
+  showCreateEureka = true,
+  showReaction = true,
+  showSaveForLater = false,
   showTrash = false,
   showRating = true,
   className,
@@ -320,6 +328,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
     return <span className={styles.ratingsCount}>{`${count}`}</span>;
   };
+
   const renderSaveForLater = ()=>{
     if(!entity || isLoadingSession)
       return '...'
@@ -342,6 +351,56 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
 
   }
+
+const renderAddReaction = ()=>{
+    if(!entity || isLoadingSession)
+      return '...'
+    if(entity)
+      return <Button
+        variant="link"
+        className={`${styles.buttonSI} p-0 text-primary`}
+        title={t('Add reaction')}
+        //onClick={handleFavClick}
+          disabled={loadingSocialInteraction}
+      >
+        <FaRegSmileBeam className={styles.active} /> 
+        <br />
+        {showButtonLabels && (
+          <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>
+            {t('Add reaction')}
+          </span>
+        )}
+      </Button>
+
+
+  }
+
+  const renderCreateEureka = ()=>{
+    if(!entity || isLoadingSession)
+      return '...'
+    if(isWork(entity) || isCycle(entity))
+      return <><Button
+        variant="link"
+        className={`${styles.buttonSI} p-0 text-primary`}
+        title={t('Create eureka')}
+        //onClick={handleFavClick}
+          disabled={loadingSocialInteraction}
+      > 
+      <div className={`d-flex flex-row`}>
+           <BiImageAdd className={styles.active}/><span className='d-none d-md-flex align-items-center text-primary' style={{fontSize: '0.8em'}}>Create Eureka</span>
+      </div>
+        {showButtonLabels && (
+          <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>
+            {t('Create eureka')}
+          </span>
+        )}
+      </Button>
+      </>
+
+
+  }
+
+
   const getInitialRating = ()=>{
     if(entity){
       if(isCycleMosaicItem(entity) || isWorkMosaicItem(entity)){
@@ -359,7 +418,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   if (isLoadingSession || isLoadingUser) return <Spinner animation="grow" variant="info" size="sm" />;
   return (
     <section className={`${className}`}>
-      <div className="d-flex">
+      <div className="d-flex justify-content-between">
         {showRating && (
           <div className="ps-1">
             {showRating && getRatingLabelInfo()}
@@ -404,6 +463,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
         {loadingSocialInteraction && (
              <div className='mt-1 ms-1 me-2'> <Spinner className={styles.ratingSpinner} size="sm" animation="grow" variant="info" /></div>
             )}
+            {renderCreateEureka()}       
         {ss && (
           <div className="ms-auto">
             <OverlayTrigger trigger="focus" placement="top" overlay={popoverShares}>
@@ -421,9 +481,12 @@ const SocialInteraction: FunctionComponent<Props> = ({
             </OverlayTrigger>
           </div>
         )}
-        <div className={`${ss ? 'ms-1' : 'ms-auto'}`}>
-            {renderSaveForLater()}       
+        <div className={`ms-1`}>
+            {renderAddReaction()}       
         </div>
+        { showSaveForLater && <div className={`ms-1`}>
+            {renderSaveForLater()}       
+        </div>}
       </div>
     </section>
   );

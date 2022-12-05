@@ -35,8 +35,8 @@ import useWork from '@/src/useWork'
 import useCycles from '@/src/useCycles'
 import usePosts,{getPosts} from '@/src/usePosts'
 import WorkDetailPost from './WorkDetailPost';
-import CMI from '@/components/cycle/MosaicItem'
-import MosaicItemPost from '@/components/post/MosaicItem'
+import CMI from '@/components/cycle/NewMosaicItem'
+import MosaicItemPost from '@/components/post/NewMosaicItem'
 import { useInView } from 'react-intersection-observer';
 
 const PostDetailComponent = lazy(()=>import('@/components/post/PostDetail')) ;
@@ -174,7 +174,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
         <WorkDetailPost workId={work.id} className='mb-2' cacheKey={['POSTS',JSON.stringify(workPostsWhere)]}></WorkDetailPost> 
         <Row className='mt-5'>
         {posts.map((p)=><Col key={p.id} xs={12} sm={6} lg={3} className="mb-5 d-flex justify-content-center  align-items-center">
-          <MosaicItemPost  cacheKey={['POST',`${p.id}`]} postId={p.id} />          
+          <MosaicItemPost  cacheKey={['POST',`${p.id}`]} postId={p.id} size={'md'} showSaveForLater={true}  />          
         </Col>
         )}
         </Row>
@@ -189,7 +189,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
   const renderCycles =()=>{
     if(cycles){
       return <Row className='mt-5'>
-        {cycles.map(c=><Col xs={12} sm={6} lg={3} className="mb-5 d-flex justify-content-center  align-items-center" key={c.id}><CMI cycleId={c.id} cacheKey={['CYCLES',`WORK-${workId}`]}  /></Col>)}
+        {cycles.map(c=><Col xs={12} sm={6} lg={3} className="mb-5 d-flex justify-content-center  align-items-center" key={c.id}>
+          <CMI cycleId={c.id} cacheKey={['CYCLES',`WORK-${workId}`]} size={'md'} showSaveForLater={true}  /></Col>)}
       </Row>
     }
     return <></> 
@@ -224,7 +225,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
             {post == null ? (
               <Row className="mb-5 d-flex flex-column flex-md-row">
                 <Col className='col-md-5 col-lg-4 col-xl-3   d-none d-md-block'>
-                  <MosaicItem workId={work.id} showTrash linkToWork={false} />
+                  <MosaicItem workId={work.id} showTrash linkToWork={false} size={'lg'} showSaveForLater={true} />
 
                   {/* <div className={classNames(styles.imgWrapper, 'mb-3')}>
                   <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
@@ -247,7 +248,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
                     )}
                   
                   <div className='container d-sm-block d-md-none mt-4 mb-4 position-relative'>
-                    <MosaicItem className='postition-absolute start-50 translate-middle-x'  workId={work.id} showTrash linkToWork={false} />
+                    <MosaicItem className='postition-absolute start-50 translate-middle-x'  workId={work.id} showTrash linkToWork={false} size={'lg'} showSaveForLater={true}  />
                   </div>
                   {work.contentText != null && <UnclampText isHTML={false} text={work.contentText} clampHeight="8rem" />}
                   </section>

@@ -14,7 +14,7 @@ import { PostMosaicItem } from '../../types/post';
 import { WorkMosaicItem } from '../../types/work';
 import CycleSummary from './CycleSummary';
 import styles from './CycleDetailHeader.module.css';
-import MosaicItem from './MosaicItem';
+import MosaicItem from './NewMosaicItem';
 import TagsInput from '../forms/controls/TagsInput';
 import UserAvatar from '../common/UserAvatar';
 import CarouselStatic from '../CarouselStatic';
@@ -195,7 +195,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
               data={getWorksSorted() as WorkMosaicItem[]}
               iconBefore={<></>}
               customMosaicStyle={{ height: '16em' }}
-              tiny
+              size='sm'
               mosaicBoxClassName="pb-5"
               // iconAfter={<BsCircleFill className={styles.infoCircle} />}
             />
@@ -218,7 +218,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                   data={getWorksSorted() as WorkMosaicItem[]}
                   iconBefore={<></>}
                   customMosaicStyle={{ height: '16em' }}
-                  tiny
+                  size={'sm'}
                   mosaicBoxClassName="pb-5"
                   // iconAfter={<BsCircleFill className={styles.infoCircle} />}
                 />
@@ -230,7 +230,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           <aside className='d-flex flex-column'>
             <UserAvatar width={42} height={42} userId={cycle.creatorId}  showFullName />
             <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
-              <MosaicItem cycleId={cycle.id} showTrash showParticipants={true} className="mt-4" cacheKey={['CYCLE', `${cycle.id}`]} />
+              <MosaicItem cycleId={cycle.id} showTrash showParticipants={true} showSaveForLater={true} className="mt-4" cacheKey={['CYCLE', `${cycle.id}`]} size={'lg'} />
             </MosaicContext.Provider>
           </aside>
         </Col>
@@ -238,7 +238,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         <Col className='col-12 d-flex justify-content-center d-lg-none' >
             <aside className='d-flex flex-column'>
               <MosaicContext.Provider value={{ showShare: true,cacheKey: ['CYCLE', `${cycle.id}`] }}>
-                <MosaicItem cycleId={cycle.id} showTrash showParticipants={true} className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} />
+                <MosaicItem cycleId={cycle.id} showTrash showParticipants={true} className="mt-2" cacheKey={['CYCLE', `${cycle.id}`]} size={'lg'} />
               </MosaicContext.Provider>
             </aside>
         </Col>

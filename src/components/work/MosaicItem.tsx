@@ -20,22 +20,26 @@ interface Props {
   showButtonLabels?: boolean;
   showShare?: boolean;
   showSocialInteraction?: boolean;
+  showCreateEureka?: boolean;
+  showSaveForLater?: boolean;
   style?: { [k: string]: string };
   cacheKey?: [string,string];
   showTrash?: boolean;
   linkToWork?: boolean;
-  tiny?: boolean;
+  size?: string;
   className?:string;
 }
 const MosaicItem: FunctionComponent<Props> = ({
   workId,
   showButtonLabels = false,
   showSocialInteraction = true,
+  showCreateEureka,
+  showSaveForLater,
   style = undefined,
   cacheKey = undefined,
   showTrash = false,
   linkToWork = true,
-  tiny = false,
+  size,
   className = '',
 }) => {
   const { t } = useTranslation('common');
@@ -144,8 +148,8 @@ const MosaicItem: FunctionComponent<Props> = ({
     return img;
   };
   return (
-    <Card className={`${tiny ? 'mosaic-tiny' : 'mosaic'} ${isActive() ? 'my-1 isActive' : ''} ${className}`} data-cy={`mosaic-item-work-${id}`}>
-      <div className={`${styles.imageContainer} ${tiny ? styles.imageContainerTiny : ''}`}>
+    <Card className={`${size?.length ? `mosaic-${size}` : 'mosaic'} ${isActive() ? 'my-1 isActive' : ''} ${className}`} data-cy={`mosaic-item-work-${id}`}>
+      <div className={`${styles.imageContainer}`}>
         {renderLocalImageComponent()}
         {isActive() && <CgMediaLive className={`${styles.isActiveCircle}`} />}
         <Badge bg="orange" className={`fw-normal fs-6 text-black px-2 rounded-pill ${styles.type}`}>
@@ -154,13 +158,16 @@ const MosaicItem: FunctionComponent<Props> = ({
       </div>
       {renderOngoinOrUpcomingDate()}
       {showSocialInteraction && work && (
-        <Card.Footer className={`${styles.footer}`} style={{zIndex:3,backgroundColor:'#F7F7F7'}}>
+        <Card.Footer className={`${styles.footer}  d-flex justify-content-end `}>
           <SocialInteraction
             cacheKey={cacheKey || ['WORK',work.id.toString()]}
             showButtonLabels={showButtonLabels}
+            showRating={false}
             showCounts
             entity={work}
             showTrash={showTrash}
+            showSaveForLater={showSaveForLater}
+            className='w-100'
           />
         </Card.Footer>
       )}

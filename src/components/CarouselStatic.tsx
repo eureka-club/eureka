@@ -1,12 +1,12 @@
 import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent /* , ChangeEvent */, useState, useEffect } from 'react';
-import { Button, Row, Col, Spinner } from 'react-bootstrap';
+import { Button, Row, Col, Spinner,CardGroup } from 'react-bootstrap';
 import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
 import globalSearchEngineAtom from '../atoms/searchEngine';
 import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem } from '../types';
-import MosaicItemCycle from './cycle/MosaicItem';
-import MosaicItemPost from './post/MosaicItem';
+import MosaicItemCycle from './cycle/NewMosaicItem';
+import MosaicItemPost from './post/NewMosaicItem';
 import MosaicItemWork from './work/MosaicItem';
 import MosaicUserItem from './user/MosaicItem';
 
@@ -29,7 +29,7 @@ type Props = {
   customMosaicStyle?: { [key: string]: string };
   className?: string;
   mosaicBoxClassName?:string;
-  tiny?: boolean;
+  size?: string,
   cacheKey:[string,string];
   userMosaicDetailed?: boolean
 };
@@ -40,7 +40,7 @@ const renderMosaicItem = (
   showSocialInteraction = true,
   cacheKey:[string,string],
   customMosaicStyle?: { [key: string]: string },
-  tiny?: boolean,
+  size?: string,
   className?:string,
   userMosaicDetailed?:boolean
 ) => {
@@ -48,7 +48,8 @@ const renderMosaicItem = (
     // eslint-disable-next-line react/jsx-props-no-spreading
     return (
       <CycleContext.Provider key={`cycle-${item.id}`} value={{ cycle: item as CycleMosaicItem }}>
-        <MosaicItemCycle detailed cycleId={item.id} showSocialInteraction={showSocialInteraction} showButtonLabels={false} />
+        <MosaicItemCycle detailed cycleId={item.id} showSocialInteraction={showSocialInteraction} showButtonLabels={false} size={size}
+/>
       </CycleContext.Provider>
     );
   }
@@ -58,7 +59,7 @@ const renderMosaicItem = (
     // if (it.works && it.works.length > 0) pp = it.works[0] as WorkMosaicItem;
     // else if (it.cycles && it.cycles.length > 0) pp = it.cycles[0] as CycleMosaicItem;
 
-    return <MosaicItemPost cacheKey={cacheKey} key={`post-${it.id}`} postId={it.id} />;
+    return <MosaicItemPost cacheKey={cacheKey} key={`post-${it.id}`} postId={it.id} size={size} />;
   }
   if (isWorkMosaicItem(item)) {
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -68,7 +69,7 @@ const renderMosaicItem = (
         showButtonLabels={false}
         workId={item.id}
         style={customMosaicStyle}
-        tiny={tiny}
+        size={size}
       />
     );
   }
@@ -90,7 +91,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
   customMosaicStyle = undefined,
   className,
   mosaicBoxClassName,
-  tiny = false,
+  size,
   cacheKey,
   userMosaicDetailed = false 
 }) => {
@@ -128,7 +129,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
     if (current) {
       const mosaics = current.map((i, idx: number) => (
         <div key={`mosaic-${i.type}-${i.id}`} className={`${mosaicBoxClassName} mx-2`}/*className="pb-5 mx-2"*/>
-          {renderMosaicItem(i, undefined, showSocialInteraction,cacheKey, customMosaicStyle, tiny,undefined,userMosaicDetailed)}
+          {renderMosaicItem(i, undefined, showSocialInteraction,cacheKey, customMosaicStyle, size,undefined,userMosaicDetailed)}
         </div>
       ));
       result = (
@@ -172,15 +173,48 @@ const CarouselStatic: FunctionComponent<Props> = ({
   }
 
   return (
-    (
-      <>
-        {(dataFiltered && dataFiltered.length && (
+     <>
+        {(dataFiltered && dataFiltered.length && ( 
+          <CardGroup className='mb-3'>  
+              <section className="d-flex flex-row  justify-content-between w-100">
+                              <Col xs={9}>
+
+                <h1 className="text-secondary fw-bold fs-3">
+                  {iconBefore ? <span className={styles.iconBefore}>{iconBefore}</span> : ''}
+                  {` `} {title} 
+                  {iconAfter ? <span className={styles.iconAfter}>{iconAfter}</span> : ''}
+                </h1>
+                </Col>
+                <Col xs={3}>
+                {seeAll && dataFiltered.length && <>
+                  {!isRedirecting ? <span
+                    className={`cursor-pointer text-primary ${styles.seeAllButton}`}
+                    role="presentation"
+                    onClick={handlerSeeAll}
+                  >
+                    {t('common:See all')}
+                  </span> : <Spinner animation='grow' />}
+                  </>}
+                  </Col>
+            </section>
+             <div className="carousel d-flex justify-content-center">{buildMosaics()}</div>
+          </CardGroup>  
+       ))} 
+     </>
+        
+  );
+};
+
+export default CarouselStatic;
+  {/*
+   <>
+  {(dataFiltered && dataFiltered.length && (
           <div className={`mb-5 position-relative ${className}`}>
             <Row>
               <Col xs={9}>
                 <h1 className="text-secondary fw-bold fs-3">
                   {iconBefore ? <span className={styles.iconBefore}>{iconBefore}</span> : ''}
-                  {` `} {title} {/* {`(${dataFiltered.length})`} */}
+                  {` `} {title} 
                   {iconAfter ? <span className={styles.iconAfter}>{iconAfter}</span> : ''}
                 </h1>
               </Col>
@@ -196,13 +230,14 @@ const CarouselStatic: FunctionComponent<Props> = ({
                   </>}
               </Col>
             </Row>
+
+
             <div className="carousel d-flex justify-content-center">{buildMosaics()}</div>
+
+
           </div>
         )) ||
           ''}
       </>
     ) || ''
-  );
-};
-
-export default CarouselStatic;
+  */}

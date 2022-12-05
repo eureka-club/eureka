@@ -39,7 +39,7 @@ import useCycle from '@/src/useCycle';
 import useWorks from '@/src/useWorks'
 import usePosts,{getPosts} from '@/src/usePosts'
 import useUsers from '@/src/useUsers'
-import MosaicItemPost from '@/components/post/MosaicItem'
+import MosaicItemPost from '@/components/post/NewMosaicItem'
 import MosaicItemUser from '@/components/user/MosaicItem'
 import { useInView } from 'react-intersection-observer';
 
@@ -184,7 +184,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       return <>
         <Row className='mt-2'>
         {posts.map((p)=><Col xs={12} sm={6} lg={3} key={p.id} className="mb-5 d-flex justify-content-center  align-items-center">
-          <MosaicItemPost  cacheKey={['POST',`${p.id}`]} postId={p.id} />          
+          <MosaicItemPost  cacheKey={['POST',`${p.id}`]} postId={p.id} showSaveForLater={true} size={'md'} />          
         </Col>
         )}
         </Row>
