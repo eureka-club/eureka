@@ -320,7 +320,7 @@ const NewMosaicItem: FunctionComponent<Props> = ({
        
         <Card.Footer className={`${styles.footer}  d-flex justifify-content-between`}>
               {showParticipants && (<><MdGroup className='text-primary  d-flex aling-items-end' style={{fontSize:'1.5em'}}/>
-              <span className='text-primary d-flex align-items-end me-1' style={{fontSize:'.8em'}}>{`${participants?.length ||'...'}`}
+              <span className='text-primary d-flex align-items-end' style={{fontSize:'.8em'}}>{`${participants?.length ||'...'}`}
             </span></>)
           } 
           {showSocialInteraction && cycle && (

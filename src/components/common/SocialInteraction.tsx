@@ -387,7 +387,9 @@ const renderAddReaction = ()=>{
           disabled={loadingSocialInteraction}
       > 
       <div className={`d-flex flex-row`}>
-           <BiImageAdd className={styles.active}/><span className='d-none d-md-flex align-items-center text-primary' style={{fontSize: '0.8em'}}>Create Eureka</span>
+           <BiImageAdd className={styles.active}/>
+           <span className='d-none d-md-flex align-items-center text-primary' style={{fontSize: '0.8em'}}>Create Eureka</span>
+           <span className='d-flex d-md-none align-items-center text-primary' style={{fontSize: '0.8em'}}>Eureka</span>
       </div>
         {showButtonLabels && (
           <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>

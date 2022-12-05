@@ -134,11 +134,11 @@ const getParentTitle = () => {
       let full =''
       if (post.works.length) {
         full = post.works[0].title
-        res = full.slice(0, 9);
+        res = full.slice(0, 18);
       }
       else if(post.cycles.length){
         full = post.cycles[0].title
-        res = full.slice(0, 9);
+        res = full.slice(0, 18);
       }
       if (res.length + 3 < full.length) res = `${res}...`;
       else res = full;
@@ -177,13 +177,13 @@ const getParentTitle = () => {
         <Card.Body>       
         <div className={`${styles.imageContainer}`}>
           {renderLocalImageComponent()}        
-          {/*post && showdetail && (
+          {post && showdetail && (
           <div className={`w-100 d-flex flex-row align-items-center ${styles.postDetail}`}>
                 <Avatar width={28} height={28} userId={post.creator.id} size="xs" />
                 <span className='ms-1 me-1'>-</span>
                 <span className="fs-6">{dayjs(post.createdAt).format(DATE_FORMAT_SHORT)}</span>
                 </div>
-            )*/}
+            )}
           <Badge bg="success" className={`fw-normal fs-6 text-white px-2 rounded-pill ${styles.type}`}>
             {t(type || 'post')}
           </Badge>
