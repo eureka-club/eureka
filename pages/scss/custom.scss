@@ -261,30 +261,30 @@ hr {
 
 .card.mosaic{//Mosaicos pag inicio
   width: 190px !important;
-  height: 285px !important;
+  height: 292px !important;
   max-width: 190px !important;
-  max-height: 2850px !important;
+  max-height: 292px !important;
 }
 
 .card.mosaic-sm{ //Mosaicos carrousel en obras de ciclos
   width: 157px !important;
-  height: 240px !important;
+  height: 242px !important;
   max-width: 157px !important;
-  max-height: 240px !important;
+  max-height: 242 !important;
 }
 
 .card.mosaic-md{ // resultados y tabs eurekas y ciclos en detalles
   width: 250px !important;
-  height: 350px !important;
-  max-width: 250px !important;
+  height: 385px !important;
+  max-width: 385px !important;
   max-height: 350px !important;
 }
 
 .card.mosaic-lg{ //Mosaico de la entidad en un detalle
   width: 280px !important;
-  height: 380px !important;
+  height: 431px !important;
   max-width: 280px !important;
-  max-height: 380px !important;
+  max-height: 431px !important;
 }
 
 .card.mosaic-post-comments {
@@ -295,9 +295,9 @@ hr {
 @media only screen and (max-width: 450px) {
 .card.mosaic{ //Mosaicos pag inicio vista movil
   width: 157px !important;
-  height: 250px !important;
+  height: 242px !important;
   max-width: 157px !important;
-  max-height: 250px !important;
+  max-height: 242px !important;
 }
 }
 

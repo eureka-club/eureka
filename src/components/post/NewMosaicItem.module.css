@@ -77,39 +77,39 @@ text-decoration: underline;}
 
 
  .marquee {
-        -moz-animation: marquee 15s linear infinite;
-        -webkit-animation: marquee 15s linear infinite;
-        animation: marquee 15s linear infinite;
+        -moz-animation: marquee 20s linear infinite;
+        -webkit-animation: marquee 20s linear infinite;
+        animation: marquee 20s linear infinite;
         width: 200%;
 
       }
    @-moz-keyframes marquee {
       0% {
-         transform: translateX(50%);
+         transform: translateX(40%);
         }
       100% {
-        transform: translateX(-85%);
+        transform: translateX(-60%);
         }
       }
    @-webkit-keyframes marquee {
         0% {
-          transform: translateX(50%);
+          transform: translateX(40%);
         }
         100% {
-          transform: translateX(-85%);
+          transform: translateX(-60%);
         }
       }
     
    @keyframes marquee {
         0% {
-          -moz-transform: translateX(50%);
-          -webkit-transform: translateX(50%);
-          transform: translateX(50%)
+          -moz-transform: translateX(40%);
+          -webkit-transform: translateX(40%);
+          transform: translateX(40%)
         }
         100% {
-          -moz-transform: translateX(-85%);
-          -webkit-transform: translateX(-85%);
-          transform: translateX(-85%);
+          -moz-transform: translateX(-60%);
+          -webkit-transform: translateX(-60%);
+          transform: translateX(-60%);
         }
       }
 
