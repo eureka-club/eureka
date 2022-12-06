@@ -45,7 +45,7 @@ const UserAvatar: FunctionComponent<Props> = ({
     let res = '';
     if (showName) {
       if(user){
-        const truncateName = user?.name?.slice(0, 13);
+        const truncateName = user?.name?.slice(0,13);
       
         if (showFullName) {
           res = user?.name!;
@@ -55,7 +55,7 @@ const UserAvatar: FunctionComponent<Props> = ({
 
       }
     }
-    return <div className='d-flex flex-nowrap ms-2'><span>{res}</span></div>;
+    return <span className='ms-3'>{res}</span>
   };
   const onClick = (e:MouseEvent<HTMLAnchorElement>,user:UserMosaicItem)=>{
     e.stopPropagation()
@@ -64,17 +64,17 @@ const UserAvatar: FunctionComponent<Props> = ({
   return (
     <>
       {user && (
-        <section className={`fs-6 ${styles[size]} cursor-pointer`}>
+        <section className={`${styles[size]} cursor-pointer`}>
             <a onClick={(e)=>onClick(e,user)} className={`text-secondary ${styles.link} d-flex align-items-center`}>
 
                 {(!user?.photos || !user?.photos.length) ?
-         <img
-        onError={onLoadImgError}
-        className={`${styles.cycleCreatorAvatar}`}
-        src={user.image || '/img/default-avatar.png'}
-        alt={user.name||''}
-      /> : <LocalImageComponent className={`rounded rounded-circle`} width={width} height={height} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />}
-              {renderUserName()}
+                <img
+                onError={onLoadImgError}
+                className={`${styles.cycleCreatorAvatar}`}
+                src={user.image || '/img/default-avatar.png'}
+                alt={user.name||''}
+              /> : <LocalImageComponent className={`rounded rounded-circle`} width={width} height={height} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />}
+                 {renderUserName()}
             </a>
         </section>
       )}

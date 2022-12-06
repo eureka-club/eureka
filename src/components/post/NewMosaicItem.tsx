@@ -25,7 +25,6 @@ import useCycle from '@/src/useCycle';
 import useWork from '@/src/useWork'
 import { useSession} from 'next-auth/react';
 import { BiEdit} from 'react-icons/bi';
-import Marquee from "react-fast-marquee";
 interface Props {
   postId: number|string;
   //display?: 'v' | 'h';
@@ -179,13 +178,13 @@ const getParentTitle = () => {
         <div className={`${styles.imageContainer}`}>
           {renderLocalImageComponent()}        
           {post && showdetail && (
-          <div className={`w-100 d-flex flex-row align-items-center ${styles.postDetail}`}>
-                <Marquee  className='ms-2 me-2' gradient={false} speed={30}>
-                <Avatar className='ms-5'  width={28} height={28} showFullName={true} userId={post.creator.id} size="xs" />
-                <span className='ms-1 me-1'>-</span>
-                <span className="fs-6 me-5">{dayjs(post.createdAt).format(DATE_FORMAT_SHORT)}</span>
-                </Marquee>
+          <div className={`${styles.postDetail}`}>
+               <div  className={`d-flex flex-row  ${styles.marquee}`}>
+                <Avatar width={28} height={28} userId={post.creator.id} showFullName={true} size="xs" />
+                <span className='ms-1 me-1 d-flex align-items-center'>-</span>
+                <span className="d-flex align-items-center">{dayjs(post.createdAt).format(DATE_FORMAT_SHORT)}</span>
                 </div>
+             </div>
             )}
           <Badge bg="success" className={`fw-normal fs-6 text-white px-2 rounded-pill ${styles.type}`}>
             {t(type || 'post')}

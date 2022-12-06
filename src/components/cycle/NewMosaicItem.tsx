@@ -29,7 +29,6 @@ import useCycleJoinRequests,{setCycleJoinRequests,removeCycleJoinRequest} from '
 import {useJoinUserToCycleAction,useLeaveUserFromCycleAction} from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
 import {useModalContext} from '@/src/useModal'
 import SignInForm from '../forms/SignInForm';
-import Marquee from "react-fast-marquee";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -201,7 +200,7 @@ const NewMosaicItem: FunctionComponent<Props> = ({
       <LocalImageComponent className='cycle-img-card'  filePath={cycle?.localImages[0].storedFile} title={cycle?.title} alt={cycle?.title} />
       
       {detailed && (cycle && cycle.creator && cycle.startDate && cycle.endDate ) && (<div className={`d-flex flex-row justify-content-between  ${styles.date}`}>
-                         <Marquee  className='ms-2 me-2' gradient={false} speed={30}>
+                        <div  className={`ms-2 me-2 d-flex flex-row ${styles.marquee}`}>
                          <Avatar className='me-3' width={26} height={26} userId={cycle.creator.id} showName={false} size="xs" />
                           {dayjs(cycle?.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
                           <span className='ms-1 me-1'>-</span>
@@ -211,7 +210,7 @@ const NewMosaicItem: FunctionComponent<Props> = ({
               <span className='text-white d-flex align-items-end' style={{fontSize:'.9em'}}>{`${participants?.length ||'...'}`}
             </span></div>)
           } 
-          </Marquee>
+          </div>
                         </div>)}
                           
       </div>
