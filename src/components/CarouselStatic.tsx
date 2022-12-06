@@ -185,7 +185,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
                   {iconAfter ? <span className={styles.iconAfter}>{iconAfter}</span> : ''}
                 </h1>
                 </Col>
-                <Col xs={3}>
+                <Col xs={3} className="d-flex justify-content-end">
                 {seeAll && dataFiltered.length && <>
                   {!isRedirecting ? <span
                     className={`cursor-pointer text-primary ${styles.seeAllButton}`}

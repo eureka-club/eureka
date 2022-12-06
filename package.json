@@ -90,7 +90,6 @@
     "react-bootstrap-typeahead": "^5.2.2",
     "react-dom": "^18.1.0",
     "react-easy-crop": "^4.0.1",
-    "react-helmet": "^6.1.0",
     "react-hot-toast": "^2.2.0",
     "react-icons": "~4.2.0",
     "react-image-crop": "^9.0.5",
