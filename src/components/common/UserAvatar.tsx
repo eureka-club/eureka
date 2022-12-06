@@ -1,8 +1,6 @@
 import { FunctionComponent, SyntheticEvent,MouseEvent} from 'react';
 import useUser from '@/src/useUser'
 import { useRouter } from 'next/router';
-
-
 import styles from './UserAvatar.module.css';
 import LocalImageComponent from '@/src/components/LocalImage'
 import { UserMosaicItem } from '@/src/types/user';
