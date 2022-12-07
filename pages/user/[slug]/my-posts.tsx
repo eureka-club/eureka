@@ -7,7 +7,7 @@ import { getSession, useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 
 import useMyPosts,{getMyPosts} from '@/src/useMyPosts';
-import PMI from '@/src/components/post/MosaicItem';
+import PMI from '@/src/components/post/NewMosaicItem';
 import {useRouter} from 'next/router'
 import { BiArrowBack } from 'react-icons/bi';
 
