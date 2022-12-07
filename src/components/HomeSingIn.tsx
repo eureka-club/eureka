@@ -152,12 +152,12 @@ const renderCarousels =  ()=>{
 }    
 
   return <>
-   <Container className= {`my-5  ${styles.container}`}>
+   <Container className= {`w-100 my-5  ${styles.container}`}>
       <h4 className='text-secondary text-center'>¡Crea un Momento Eureka para resumir una obra que te impactó con una imagen!</h4>
-       <section className='mt-3 mx-2 d-flex flex-row' >
-          <TextField className='w-50'  label="Describe la imagen que quieres generar" variant="outlined" helperText="Agrega el máximo de detalles posible." style={{width:'70%'}}>
+       <section className='mt-3 mx-3 d-flex flex-row justify-content-center' >
+          <TextField  label="Describe la imagen que quieres generar" variant="outlined" helperText="Agrega el máximo de detalles posible." style={{width:'60%'}}>
           </TextField>
-           <FormControl className='ms-2 me-2 m-0' sx={{ m: 1, minWidth: 160 }} style={{width:'15%'}}>
+           <FormControl className='ms-2 me-2 my-0' sx={{ m: 1, minWidth: 120 }} style={{width:'15%'}}>
                <InputLabel id="select-style">Style</InputLabel>
               <Select
                 labelId="select-style"
