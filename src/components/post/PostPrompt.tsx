@@ -24,13 +24,11 @@ const PostPrompt: FunctionComponent<Props> = ({redirect = false,searchtext,searc
   const [progress, setProgress] = useState(0);
 
     useEffect(() => {
-
-      console.log('useEffect',images.length)
-    const fetchImages = async () => {
-              await searchImages();              
-          }
-    if(text && text.length)
-     fetchImages()                    
+      const fetchImages = async () => {
+                await searchImages();              
+            }
+      if(text && text.length)
+      fetchImages()                    
   },[])
 
 
