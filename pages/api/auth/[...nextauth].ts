@@ -10,8 +10,9 @@ import {find} from '@/src/facades/user'
 import getT from 'next-translate/getT';
 import {prisma} from '@/src/lib/prisma';
 import { sendMailSingIn } from '@/src/facades/mail';
+import { use } from 'chai';
 const bcrypt = require('bcryptjs');
-
+import { subscribe_to_segment } from '@/src/lib/mailchimp';
 
 /* const getOptions = (req: NextApiRequest) => {
   const locale = req.cookies.NEXT_LOCALE;
@@ -138,7 +139,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
               name:vt.name
             }
           })
-  
+
         }
       },
       createUser:async({user})=>{
@@ -146,14 +147,21 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
         if(vt){
         // const hash = bcrypt.hashSync(vt.password, 8);
 
-          const res = await prisma.user.update({
+          await prisma.user.update({
             where:{email:user.email!},
             data:{
               password:vt.password,
               name:vt.name
             }
           })
-  
+
+          subscribe_to_segment({
+            segment:'eureka-all-users',
+            email_address:user.email!,
+            onSuccess: async (res)=>console.log('ok',res),
+            onFailure: async (err)=>console.error('error',err)
+          })
+
         }
       }
     },
@@ -232,8 +240,10 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
           
           if (user && credentials) {
             const c = await bcrypt.compare(credentials.password, user.password);
-            if(c)
+            if(c){
+              
               return {id:user.id,email:user.email,image:user.image}
+            }
             return null;
             // Any object returned will be saved in `user` property of the JWT
           } else {

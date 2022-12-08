@@ -19,7 +19,8 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   if(req.method=='DELETE'){
-    const {list_id=process.env.MAILCHIMP_AUDIENCE,segment,email_address} = req.body
+    const {segment,email_address} = req.query
+    const list_id=process.env.MAILCHIMP_AUDIENCE;
     let data = null
     const {segments} = await client.lists.listSegments(list_id)
     const s = segments.filter((s:{name:string})=>s.name==segment)

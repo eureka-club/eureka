@@ -6,6 +6,7 @@ import { UserMosaicItem } from '@/src/types/user';
 import useTranslation from 'next-translate/useTranslation';
 import {useNotificationContext} from '@/src/useNotificationProvider';
 import useCycleJoinRequests,{setCycleJoinRequests,removeCycleJoinRequest} from '@/src/useCycleJoinRequests'
+import { subscribe_to_segment, unsubscribe_to_segment } from '@/src/lib/mailchimp';
 
 type ctx = {
     ss: UserMosaicItem[] | undefined;
@@ -54,7 +55,13 @@ const useJoinUserToCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,part
               });
             }
             if(cycle?.access == 2)
-                   toast.success( t(json.message))
+              toast.success( t(json.message))
+            subscribe_to_segment({
+              segment:`ciclo-${cycle.id}-pax`,
+              email_address:user.email!,
+              onSuccess: async (res)=>console.log('ok',res),
+              onFailure: async (err)=>console.error('error',err)
+            })       
           }
     
         },
@@ -127,6 +134,12 @@ const useLeaveUserFromCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,p
               data:{message:notificationMessage}
             });
           }
+          unsubscribe_to_segment({
+            segment:`ciclo-${cycle.id}-pax`,
+            email_address:user.email!,
+            onSuccess: async (res)=>console.log('ok',res),
+            onFailure: async (err)=>console.error('error',err)
+          }) 
         }
         
       },
