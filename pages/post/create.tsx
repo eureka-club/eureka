@@ -5,7 +5,8 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 // import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
-import CreatePostForm from '../../src/components/forms/CreatePostForm';
+//import CreatePostForm from '../../src/components/forms/CreatePostForm';
+import CreatePostForm from '../../src/components/forms/CreateIAPostForm';
 import { Spinner, Card, Row, Col, ButtonGroup, Button, Alert } from 'react-bootstrap';
 import { BiArrowBack } from 'react-icons/bi';
 import { stubFalse } from 'lodash';
@@ -18,13 +19,11 @@ const CreatePostPage: NextPage<Props> = ({notFound}) => {
   const {data:session, status} = useSession();
   const isLoadingSession = status === "loading"
   const router = useRouter();
-
-
+  const query = router.query;
 
     useEffect(() => {
             if (notFound) 
                 router.push('/login');
-            
     }, [notFound]);
 
 
@@ -38,7 +37,7 @@ const CreatePostPage: NextPage<Props> = ({notFound}) => {
             <BiArrowBack />
           </Button>
         </ButtonGroup>
-      <CreatePostForm noModal/></>}
+      <CreatePostForm noModal params={query}/></>}
     </SimpleLayout>
   );
   else

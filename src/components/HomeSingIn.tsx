@@ -13,9 +13,7 @@ import { useRouter } from 'next/router';
 import slugify from 'slugify'
 import useFeaturedUsers from '@/src/useFeaturedUsers';
 import useMyCycles,{myCyclesWhere} from '@/src/useMyCycles';
-import styles from './HomeSingIn.module.css';
-import { TextField,FormControl,InputLabel, Select, MenuItem } from '@mui/material';
-
+import Prompt from '@/src/components/post/PostPrompt';
 
 const Carousel = lazy(()=>import('@/components/Carousel'));
 
@@ -152,34 +150,7 @@ const renderCarousels =  ()=>{
 }    
 
   return <>
-   <Container className= {`w-100 my-5  ${styles.container}`}>
-      <h4 className='text-secondary text-center'>¡Crea un Momento Eureka para resumir una obra que te impactó con una imagen!</h4>
-       <section className='mt-3 mx-3 d-flex flex-row justify-content-center' >
-          <TextField  label="Describe la imagen que quieres generar" variant="outlined" helperText="Agrega el máximo de detalles posible." style={{width:'60%'}}>
-          </TextField>
-           <FormControl className='ms-2 me-2 my-0' sx={{ m: 1, minWidth: 120 }} style={{width:'15%'}}>
-               <InputLabel id="select-style">Style</InputLabel>
-              <Select
-                labelId="select-style"
-                id="select-style"
-                label="Style"
-                autoWidth
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-              </Select>
-            </FormControl>
-           <Button  className={`btn-eureka`} style={{width:'15%',height:"3.5em"}}>
-              Crear Imagen con IA
-           </Button>
-       </section>
-   
-   </Container>  
-  
+  <section className='my-5'><Prompt redirect={true}/></section>
    <section className='d-flex flex-column flex-lg-row'>
   <Col xs={12} lg={2}>
     <h1 className="text-secondary fw-bold">{t('Trending topics')}</h1>
