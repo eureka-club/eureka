@@ -12,8 +12,8 @@ import { CycleMosaicItem } from '@/src/types/cycle';
 import { PostMosaicItem } from '@/src/types/post';
 import { WorkMosaicItem } from '@/src/types/work';
 import { isCycleMosaicItem, isPostMosaicItem, isWorkMosaicItem } from '@/src/types';
-import CMI from '@/components/cycle/MosaicItem'
-import PMI from '@/components/post/MosaicItem'
+import CMI from '@/components/cycle/NewMosaicItem'
+import PMI from '@/components/post/NewMosaicItem'
 import WMI from '@/components/work/MosaicItem'
 import { BiArrowBack } from 'react-icons/bi';
 import {getSession} from 'next-auth/react'

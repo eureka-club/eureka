@@ -55,7 +55,7 @@ const UserAvatar: FunctionComponent<Props> = ({
 
       }
     }
-    return <span className='ms-3'>{res}</span>
+    return <span className='ms-2'>{res}</span>
   };
   const onClick = (e:MouseEvent<HTMLAnchorElement>,user:UserMosaicItem)=>{
     e.stopPropagation()
@@ -64,7 +64,7 @@ const UserAvatar: FunctionComponent<Props> = ({
   return (
     <>
       {user && (
-        <section className={`${styles[size]} cursor-pointer`}>
+        <section className={`fs-6 ${styles[size]} cursor-pointer`}>
             <a onClick={(e)=>onClick(e,user)} className={`text-secondary ${styles.link} d-flex align-items-center`}>
 
                 {(!user?.photos || !user?.photos.length) ?

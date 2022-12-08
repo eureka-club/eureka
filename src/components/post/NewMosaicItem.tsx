@@ -155,7 +155,7 @@ const getParentTitle = () => {
 
     const renderLocalImageComponent = () => {
       const img = post?.localImages 
-        ? <LocalImageComponent className='post-img-card' filePath={post?.localImages[0].storedFile} alt={post?.title} />
+        ? <LocalImageComponent className='post-img-card' filePath={post?.localImages[0].storedFile} title={post?.title} alt={post?.title} />
         : undefined;
       if (linkToPost) {
         return (
@@ -179,10 +179,10 @@ const getParentTitle = () => {
           {renderLocalImageComponent()}        
           {post && showdetail && (
           <div className={`${styles.postDetail}`}>
-               <div  className={`d-flex flex-row  ${styles.marquee}`}>
+               <div  className={`d-flex flex-row fs-6 ${styles.marquee}`}>
                 <Avatar width={28} height={28} userId={post.creator.id} showFullName={true} size="xs" />
                 <span className='ms-1 me-1 d-flex align-items-center'>-</span>
-                <span className="d-flex align-items-center">{dayjs(post.createdAt).format(DATE_FORMAT_SHORT)}</span>
+                <span className="d-flex align-items-center ">{dayjs(post.createdAt).format(DATE_FORMAT_SHORT)}</span>
                 </div>
              </div>
             )}

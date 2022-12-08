@@ -200,12 +200,11 @@ const NewMosaicItem: FunctionComponent<Props> = ({
       <LocalImageComponent className='cycle-img-card'  filePath={cycle?.localImages[0].storedFile} title={cycle?.title} alt={cycle?.title} />
       
       {detailed && (cycle && cycle.creator && cycle.startDate && cycle.endDate ) && (<div className={`d-flex flex-row justify-content-between  ${styles.date}`}>
-                        <div  className={`ms-2 me-2 d-flex flex-row ${styles.marquee}`}>
+                        <div  className={`ms-2 me-2 d-flex flex-row aling-items-center fs-6  ${styles.marquee}`}>
                          <Avatar className='me-3' width={26} height={26} userId={cycle.creator.id} showName={false} size="xs" />
-                          {dayjs(cycle?.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
+                            {dayjs(cycle?.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
                           <span className='ms-1 me-1'>-</span>
-                          {dayjs(cycle?.endDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
-                        
+                            {dayjs(cycle?.endDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
                          {showParticipants && (<div className='ms-4 me-4 d-flex flex-row'><MdGroup className='text-white  d-flex aling-items-center' style={{fontSize:'1.65em'}}/>
               <span className='text-white d-flex align-items-end' style={{fontSize:'.9em'}}>{`${participants?.length ||'...'}`}
             </span></div>)

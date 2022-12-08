@@ -1,7 +1,7 @@
 
 import { FunctionComponent, useEffect, useState, lazy } from 'react';
 import useTranslation from 'next-translate/useTranslation';
-import {Spinner, Col} from 'react-bootstrap';
+import {Spinner, Container,Button, Col} from 'react-bootstrap';
 import TagsInput from '@/components/forms/controls/TagsInput';
 import { GetAllByResonse } from '@/src/types';
 import { useInView } from 'react-intersection-observer';
@@ -13,6 +13,7 @@ import { useRouter } from 'next/router';
 import slugify from 'slugify'
 import useFeaturedUsers from '@/src/useFeaturedUsers';
 import useMyCycles,{myCyclesWhere} from '@/src/useMyCycles';
+import Prompt from '@/src/components/post/PostPrompt';
 
 const Carousel = lazy(()=>import('@/components/Carousel'));
 
@@ -148,17 +149,16 @@ const renderCarousels =  ()=>{
         </>
 }    
 
-  return <section className='d-flex flex-column flex-lg-row'>
+  return <>
+  <section className='my-5'><Prompt redirect={true}/></section>
+   <section className='d-flex flex-column flex-lg-row'>
   <Col xs={12} lg={2}>
     <h1 className="text-secondary fw-bold">{t('Trending topics')}</h1>
   <aside className="mb-5">{getTopicsBadgedLinks()}</aside>
   </Col>  
   <Col xs={12} lg={10}>
   <section className='ms-0 ms-lg-5'>  
-  {featuredUsers()}
-  {cyclesJoined()}
-  
-  <>
+    <>
     <div>
       {renderCarousels()}
     </div>
@@ -166,9 +166,12 @@ const renderCarousels =  ()=>{
       {renderSpinnerForLoadNextCarousel()}
     </div>
   </>
+   {featuredUsers()}
+  {cyclesJoined()}
   </section>
   </Col>
 </section>  
+</>
 
 }
 
