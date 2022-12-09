@@ -3,3 +3,8 @@
   padding:1em;
   border-radius: .2em;
 }
+
+.selectedPhoto{
+    width: 35%;
+    height: 30%;
+}
