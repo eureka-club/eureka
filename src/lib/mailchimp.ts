@@ -25,7 +25,7 @@ export interface MailchimpUnsubscribe{
     onFailure?:(err:Record<string,any>)=>Promise<void>
 }
 
-export const unsubscribe_to_segment = (props:MailchimpUnsubscribe)=>{
+export const unsubscribe_from_segment = (props:MailchimpUnsubscribe)=>{
     const {segment='eureka-all-users',email_address,onSuccess,onFailure} = props
     const url =`/segments/remove_member`
           instance.delete(url,{params:{
