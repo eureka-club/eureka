@@ -1,5 +1,6 @@
 import { FunctionComponent, useState, useEffect, ChangeEvent, KeyboardEvent,useRef } from 'react';
 import { Form, InputGroup,Button, Badge, Spinner,Col } from 'react-bootstrap';
+import { TextField,FormGroup,FormControl,InputLabel,Input,FormHelperText,FormControlLabel} from '@mui/material';
 import useTranslation from 'next-translate/useTranslation'; 
 import { useAtom } from 'jotai'; 
 import { useRouter } from 'next/router';
@@ -45,8 +46,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
           if (setTags) setTags(items.join());
         }
       }
-      (e.currentTarget as HTMLInputElement).value = '';
-    }
+      setTagInput('');    }
   };
 
    const addTag= (e:React.MouseEvent<HTMLButtonElement>)=>{
@@ -75,7 +75,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
   };
   return ( 
     <Form.Group controlId="tags" className={`${className}`}>
-      {label && <Form.Label>{label}</Form.Label>}
+      {/*label && <Form.Label>{label}</Form.Label>*/}
       <div>
         {items.map((v, idx) => {
           return (
@@ -98,27 +98,32 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
           );
         })}
         {!readOnly && items.length < max && (<>
-          <div className='d-none d-lg-block'>
-              <Form.Control
+          <div className='d-none d-lg-block mt-2'>
+              <Form.Group controlId="tag" >
+                 <TextField  className="w-100" label={label} helperText={t('tagsInputPlaceholder')} 
+                 variant="outlined" size="small" value={tagInput} onChange={onChangeInput}
+                onKeyPress={onKeyPressOnInput}> </TextField>
+              </Form.Group>
+              {/*<Form.Control
                 type="text"
                 placeholder={t('tagsInputPlaceholder')}
                 onChange={onChangeInput}
                 onKeyPress={onKeyPressOnInput}
-              />
+              />*/}
           </div>
-          <div className='d-block d-lg-none'>
+          <div className='d-block d-lg-none mt-3'>
             <InputGroup className="w-100">
               <Col className='col-11'> 
-              <Form ref={formRef} className='me-2' >
-                <Form.Group controlId='tag'>
-                   <Form.Control
-                      type="text"
-                    />
+              <Form ref={formRef} className='me-2 ' >
+                <Form.Group controlId='tag' >
+                  <FormControl className='w-100'>
+                      <TextField  id="tag"  label={label}  variant="outlined" size="small" />
+                </FormControl>
                 </Form.Group>
               </Form>
               </Col>
-              <Col className='col-1'> 
-                 <Button className="w-100 h-100 p-0 text-white"  onClick={addTag} ><BiPlus /></Button>            
+              <Col className='col-1 d-flex align-items-center'> 
+                 <Button className="w-100 h-100   p-0 text-white"  onClick={addTag} ><BiPlus /></Button>            
             </Col>
             </InputGroup>
           </div>

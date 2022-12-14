@@ -31,7 +31,7 @@ const CreatePostPage: NextPage<Props> = ({notFound}) => {
   return  (
     <SimpleLayout title={t('title')}>
          <section className='d-flex flex-column flex-lg-row'>
-         <Col xs={12} lg={2}>
+         <Col className='d-none d-lg-flex'  xs={12} lg={2}>
             <h4 className="mt-4 text-secondary fw-bold"> Como usar la IA?</h4>
           </Col>  
         <Col xs={12} lg={10}>
