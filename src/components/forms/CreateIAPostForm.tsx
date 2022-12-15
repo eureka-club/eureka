@@ -18,6 +18,7 @@ import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
+import { Switch,TextField,FormControlLabel,Autocomplete} from '@mui/material';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BsFillXCircleFill } from 'react-icons/bs';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
@@ -46,6 +47,7 @@ import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect
 import toast from 'react-hot-toast'
 import { ImCancelCircle } from 'react-icons/im';
 import Prompt from '@/src/components/post/PostPrompt';
+import { set } from 'lodash';
 
 interface Props {
   noModal?: boolean;
@@ -71,6 +73,7 @@ const CreateIAPostForm: FunctionComponent<Props> = ({noModal = false,params}) =>
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [items, setItems] = useState<string[]>([]);
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
+  const [useCrop, setUSeCrop] = useState<boolean>(false);
   const [showCrop, setShowCrop] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -78,7 +81,10 @@ const CreateIAPostForm: FunctionComponent<Props> = ({noModal = false,params}) =>
   const {data:session} = useSession();
   const [userId, setUserId] = useState<number>();
   const [workId, setWorkId] = useState<string>('');
+  const [postTitle, setPostTitle] = useState<string>('');
   const [isPublic, setIsPublic] = useState<boolean>(true);
+  const [useOtherFields, setUseOtherFields] = useState<boolean>(false); 
+
   //const [photo, setPhoto] = useState<File>();
   const [currentImg, setCurrentImg] = useState<string | undefined>();
 
@@ -291,7 +297,7 @@ const CreateIAPostForm: FunctionComponent<Props> = ({noModal = false,params}) =>
 
    const formValidation = (payload:any) => {
   
-   if (!payload.title.length) {
+   /*if (!payload.title.length) {
       toast.error( t('NotTitle'))
       return false;
     }else if (!imageFile) {
@@ -300,7 +306,7 @@ const CreateIAPostForm: FunctionComponent<Props> = ({noModal = false,params}) =>
     }else if (!payload.contentText.length) {
       toast.error( t('NotContentText'))
       return false;
-    }
+    }*/
     return true;
   };
 
@@ -326,6 +332,10 @@ const CreateIAPostForm: FunctionComponent<Props> = ({noModal = false,params}) =>
   const handleSubmit = async (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
 
+   if (!imageFile) {
+      toast.error( t('requiredEurekaImageError'))
+      return ;
+    }
    if (!selectedWork && !selectedCycle) {
        toast.error( t('requiredDiscussionItemError'))
        return;
@@ -336,7 +346,7 @@ const CreateIAPostForm: FunctionComponent<Props> = ({noModal = false,params}) =>
       const payload: CreatePostAboutWorkClientPayload = {
         selectedCycleId: selectedCycle != null ? selectedCycle.id : null,
         selectedWorkId: selectedWork.id,
-        title: form.postTitle.value,
+        title: postTitle,
         image: imageFile!,
         language: '',
         contentText: editorRef.current.getContent(), // form.description.value.length ? form.description.value : null,
@@ -350,7 +360,7 @@ const CreateIAPostForm: FunctionComponent<Props> = ({noModal = false,params}) =>
       const payload: CreatePostAboutCycleClientPayload = {
         selectedCycleId: selectedCycle.id,
         selectedWorkId: null,
-        title: form.postTitle.value,
+        title: postTitle,
         image: imageFile!,
         language: '',
         contentText: editorRef.current?.getContent(), // form.description.value.length ? form.description.value : null,
@@ -400,27 +410,60 @@ const CreateIAPostForm: FunctionComponent<Props> = ({noModal = false,params}) =>
 
   const renderPhoto = ()=>{
    if(currentImg)
-    return <img
-        className={styles.postImage}
-        src={currentImg}
-        alt=''
-      />;
+    return  <Container className="my-4 d-flex justify-content-center">
+                <img className={styles.selectedPhoto} src={currentImg} />
+           </Container>
   };
 
-    const onImageSelect = (photo: File) => {
+    const onImageSelect = (photo: File, text: string) => {
     setImageFile(()=>photo);
+    setPostTitle(text)
+  };
+
+  const handleChangeUseCropSwith = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUSeCrop(event.target.checked);
+    window.scroll(0,0);
+    setCurrentImg(undefined);
+  };
+
+  const handleChangeUseOtherFields = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setUseOtherFields(event.target.checked);
+      setSelectedCycle(null);
+      setItems([]);
+      setTags('');
   };
 
   return (
     <Form ref={formRef}>
 
       <ModalHeader closeButton={!noModal}>
-         <ModalTitle> <h1 className="text-secondary fw-bold mt-sm-0 mb-2">Crea Momento Eureka con inteligencia artificial.</h1></ModalTitle>
+         <ModalTitle> <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('title')}</h1></ModalTitle>
       </ModalHeader>
-     <ModalBody>
-         <section className='my-3'><Prompt onImageSelect={onImageSelect}  searchtext={params?.searchtext} searchstyle={params?.searchstyle}/></section>
+     <ModalBody className=''>
+         <section className='my-3'>
+         {!useCrop && <Prompt onImageSelect={onImageSelect}  searchtext={params?.searchtext} searchstyle={params?.searchstyle}/>}
+         <FormGroup className='mt-4 mb-4'>
+          <FormControlLabel control={<Switch  checked={useCrop} onChange={handleChangeUseCropSwith}/>} label={t('showCrop')} />
+        </FormGroup>
+        {useCrop && <Col className='mb-4'>
+                {!showCrop && (<><Button data-cy="image-load" className="btn-eureka w-100 px-2 px-lg-5 text-white" onClick={() => setShowCrop(true)}>
+                  {t('imageFieldLabel')}
+                </Button>
+                {currentImg && renderPhoto()}
+                </>)}        
+                { showCrop && (
+                <Col className='px-2 px-lg-5'>
+                  <div className='w-100 border p-3 '>  
+                      <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={closeCrop} cropShape='rect' />
+                  </div>
+                  
+               </Col>
+               )}      
+            </Col>}
+
+         </section>
          
-         <Row className='d-flex flex-column mt-5'>
+         <Row className='d-flex flex-column px-2 px-lg-5'>
             <Col className='mb-4'>
               <FormGroup controlId="workOrCycle">
                 <FormLabel>*{t('searchCycleOrWorkFieldLabel')}</FormLabel>
@@ -475,16 +518,51 @@ const CreateIAPostForm: FunctionComponent<Props> = ({noModal = false,params}) =>
             </Col>
               <Col className='mb-4'>
               <FormGroup controlId="postTitle" >
-                <FormLabel>*{t('titleFieldLabel')}</FormLabel>
-                <FormControl type="text" maxLength={80} required />
+                 <TextField id="postTitle" className="w-100" label={t('titleFieldLabel')+ ' Optional'}
+                        variant="outlined" size="small"  value={postTitle}
+                      onChange={(e) => setPostTitle(e.target.value)}> 
+                 </TextField>
               </FormGroup>
-            </Col>
-            <Col className="mb-4">
+             </Col>           
+          </Row> 
+          <FormGroup controlId="description" as={Col}  className="mb-4 px-2 px-lg-5">
+              <FormLabel>{t('descriptionFieldLabel')}</FormLabel>
+              {/* @ts-ignore*/}
+              <EditorCmp
+                apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
+                onInit={(_: any, editor) => {
+                  editorRef.current = editor;
+                }}
+                // initialValue={newEureka.contentText}
+                init={{
+                  height: 300,
+                  menubar: false,
+                  plugins: [
+                    'advlist autolink lists link image charmap print preview anchor',
+                    'searchreplace visualblocks code fullscreen',
+                    'insertdatetime media table paste code help wordcount',
+                  ],
+                  relative_urls: false,
+                  forced_root_block : "div",
+                  toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
+                  // toolbar:
+                  //   'undo redo | formatselect | ' +
+                  //   'bold italic backcolor | alignleft aligncenter ' +
+                  //   'alignright alignjustify | bullist numlist outdent indent | ' +
+                  //   'removeformat | help',
+                  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                }}
+              />
+            </FormGroup>    
+            <FormGroup className='mt-5 mb-4'>
+                <FormControlLabel control={<Switch  checked={useOtherFields} onChange={handleChangeUseOtherFields}/>} label={t('showOthersFields')} />
+            </FormGroup>   
+            {useOtherFields && <Row className='mt-5 px-2 px-lg-5 d-flex flex-column'>
+              <Col className="mb-4">
               <FormGroup controlId="workOrCycle">
                 <FormLabel>{t('searchCycleFieldLabel')}</FormLabel>
                 {!selectedCycle ? (
                   <>
-                    {/* language=CSS */}
                     <style jsx global>{`
                       .rbt-menu {
                         min-width: 300px;
@@ -537,36 +615,7 @@ const CreateIAPostForm: FunctionComponent<Props> = ({noModal = false,params}) =>
              <Col className="mb-4">
               <TagsInput tags={tags} setTags={setTags} label={t('topicsFieldLabel')}/>
             </Col>
-          </Row> 
-          <FormGroup controlId="description" as={Col}  className="mb-4">
-              <FormLabel>*{t('descriptionFieldLabel')}</FormLabel>
-              {/* @ts-ignore*/}
-              <EditorCmp
-                apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
-                onInit={(_: any, editor) => {
-                  editorRef.current = editor;
-                }}
-                // initialValue={newEureka.contentText}
-                init={{
-                  height: 300,
-                  menubar: false,
-                  plugins: [
-                    'advlist autolink lists link image charmap print preview anchor',
-                    'searchreplace visualblocks code fullscreen',
-                    'insertdatetime media table paste code help wordcount',
-                  ],
-                  relative_urls: false,
-                  forced_root_block : "div",
-                  toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
-                  // toolbar:
-                  //   'undo redo | formatselect | ' +
-                  //   'bold italic backcolor | alignleft aligncenter ' +
-                  //   'alignright alignjustify | bullist numlist outdent indent | ' +
-                  //   'removeformat | help',
-                  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-                }}
-              />
-            </FormGroup>         
+            </Row>}  
      </ModalBody>
      <ModalFooter>
             <Row className='d-flex flex-column flex-lg-row'>

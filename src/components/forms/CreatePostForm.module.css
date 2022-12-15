@@ -20,6 +20,11 @@
   top: 0.25rem;
 }
 
+.selectedPhoto{
+    width: 35%;
+    height: 30%;
+}
+
 .imageControl {
   background-clip: padding-box;
   background-color: #fff;

@@ -8,3 +8,10 @@
     width: 35%;
     height: 30%;
 }
+
+@media only screen and (max-width: 600px) {
+.selectedPhoto{ 
+  width: 70%;
+  height: 70%;
+}
+}

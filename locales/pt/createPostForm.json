@@ -27,5 +27,7 @@
   "requiredDiscussionItemError": "Por favor indique se sua Eureka é sobre o tema do ciclo ou uma das obras",
   "requiredEurekaImageError": "Por favor adicione uma imagem à sua Eureka",
   "Type to add tag": "Tema da sua Eureka (3 max, selecione na lista)",
-  "resetBtnLabel": "Remover"
+  "resetBtnLabel": "Remover",
+  "showCrop":"Usar imagem carregada por você.",
+  "showOthersFields":"Quero adicionar meu momento Eureka a um loop e/ou adicionar tags."
 }

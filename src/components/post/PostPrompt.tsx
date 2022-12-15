@@ -7,10 +7,10 @@ import { useRouter } from 'next/router';
 import styles from './PostPrompt.module.css';
 import {getImg} from '@/src/lib/utils';
 import { BiArrowBack } from 'react-icons/bi';
-
+import toast from 'react-hot-toast'
 
 interface Props {
-  onImageSelect?: (file:File) => void;
+  onImageSelect?: (file:File,text:string) => void;
   redirect?: boolean;
   searchtext?:string | "";
   searchstyle?:string | ""
@@ -63,20 +63,31 @@ const PostPrompt: FunctionComponent<Props> = ({onImageSelect,redirect = false,se
     setText(e.target.value)
   }
 
+   function formValidation() {  
+      if (!text.length) {
+          toast.error( t('NoPromptText'))
+          return false;
+      }
+        return true;
+  }
+
   async function handleSearch(e:MouseEvent<HTMLButtonElement>){
     e.stopPropagation()
-    if(redirect)
-      router.push(`/post/create?searchtext=${text}&searchstyle=${style}`)
-    else
-      await searchImages();    
+   if(formValidation()){
+      if(redirect)
+        router.push(`/post/create?searchtext=${text}&searchstyle=${style}`)
+      else
+        await searchImages();    
    }
+  }
+
+
 
   async function searchImages(){
     setLoading(true)
     setShowOptions(true)
     setProgress(0)
     setImages([])
-    //console.log(text + ", " + style,'TEXTO BUSQUEDA')  
     const {data:en_text} = await fetch(`/api/google-translate/?text=${text + ", " + style}&target=en`)
     .then(r=>r.json())
 
@@ -100,16 +111,17 @@ const PostPrompt: FunctionComponent<Props> = ({onImageSelect,redirect = false,se
     })
     await Promise.all(promises)
     setLoading(false)
+    
   }
 
   const renderImages = ()=>{
     if(showOptions)
         return <Container className="my-4"  >
           <h6 className='my-4'>
-            <em>Selecciona la imagen que más te gusta. Si ninguna te convence, ajusta tu prompt y genera otras!</em>.
+            <em>{t("SelectImage")}</em>.
           </h6>
-        <section  className='d-flex flex-row justify-content-around'>
-                {images.map((img,idx)=><img key={idx} className='cursor-pointer' onClick={()=> processSelect(img.src)}  src={img.src}/>)}
+        <section  className='d-flex flex-column flex-lg-row justify-content-around'>
+                {images.map((img,idx)=><img key={idx} className='cursor-pointer mb-4' onClick={()=> processSelect(img.src)}  src={img.src}/>)}
         </section> 
         </Container>
      else
@@ -121,7 +133,7 @@ const PostPrompt: FunctionComponent<Props> = ({onImageSelect,redirect = false,se
      setFile(file!) ;
      setCurrentImg(URL.createObjectURL(file!));
      setShowOptions(false)
-     onImageSelect!(file!)
+     onImageSelect!(file!,text)
     }
 
    const renderSelectedPhoto = ()=>{
@@ -136,36 +148,93 @@ const PostPrompt: FunctionComponent<Props> = ({onImageSelect,redirect = false,se
            </section>
   };
 
-  return <> <Container className= {`w-100 ${styles.container}`}>
-      {redirect && <h4 className='text-secondary text-center'>¡Crea un Momento Eureka para resumir una obra que te impactó con una imagen!</h4>}
-      {!redirect && <h6 className='my-3 text-center'><em>Escribe una descripción de la imagen q quieres generar + selecciona en que estilo</em>.</h6>}
-       <section className='mt-3 mx-3' >
-       <form className='d-flex flex-row justify-content-center'>
-         <TextField  label="Describe la imagen que quieres generar" required name="text"
-          variant="outlined" helperText="Agrega el máximo de detalles posible." style={{width:'60%'}}
+ return <> <Container className= {`w-100 ${styles.container}`}>
+      {redirect ? <h4 className='text-secondary text-center'>{t("CreateEureka")}</h4>
+       : <h4 className='text-secondary text-center'>{t("CreateEureka1")}</h4>}
+      {!redirect && <h6 className='my-3 text-center'><em>{t("PromptText")}</em>.</h6>}
+       <section className='mt-3 mx-0 mx-lg-3' >
+       <form className='d-none d-lg-flex flex-row justify-content-center'>
+         <TextField  label={t("descriptionLabel")} name="text"
+          variant="outlined" helperText={t("descriptionHelperText")} style={{width:'60%'}}
           onChange={onTextChange}
           value={text}>
           </TextField>
-           <FormControl className='ms-2 me-2 my-0' sx={{ m: 1, minWidth: 120 }} style={{width:'15%'}}>
-               <InputLabel id="select-style">Style</InputLabel>
+           <FormControl className='ms-2 me-2 my-0' sx={{ m: 1, minWidth: 120 }} style={{width:'20%'}}>
+               <InputLabel id="select-style">{t("Style")}</InputLabel>
               <Select variant="outlined"
                 labelId="select-style"
                 name="style"
                 id="select-style"
-                label="Style"
+                label={t("Style")}
                 onChange={onStyleChange}
                 value={style}
               >
-                <MenuItem value=""><em>None</em></MenuItem>
-                <MenuItem value={'Digital Art'}>Digital Art</MenuItem>
-                <MenuItem value={'Oil painting'}>Oil painting</MenuItem>
-                <MenuItem value={'Van Gogh'}>Van Gogh</MenuItem>
+                <MenuItem value="None"><em>{t("None")}</em></MenuItem>
+                <MenuItem value={'3D illustration'}>{t("3D illustration")}</MenuItem>
+                <MenuItem value={'Crayon drawing'}>{t("Crayon drawing")}</MenuItem>
+                <MenuItem value={'Cartoon'}>{t("Cartoon")}</MenuItem>
+                <MenuItem value={'Cyberpunk'}>{t("Cyberpunk")}</MenuItem>
+                <MenuItem value={'Digital art'}>{t("Digital art")}</MenuItem>
+                <MenuItem value={'Geometric'}>{t("Geometric")}</MenuItem>
+                <MenuItem value={'Oil painting'}>{t("Oil painting")}</MenuItem>
+                <MenuItem value={'Monet style'}>{t("Monet style")}</MenuItem>
+                <MenuItem value={'Pop art'}>{t("Pop art")}</MenuItem>
+                <MenuItem value={'Psychedelic'}>{t("Psychedelic")}</MenuItem>
+                <MenuItem value={'Realistic photograph'}>{t("Realistic photograph")}</MenuItem>
+                <MenuItem value={'Salvador Dali style'}>{t("Salvador Dali style")}</MenuItem>
+                <MenuItem value={'Surrealism'}>{t("Surrealism")}</MenuItem>
+                <MenuItem value={'Tim Burton style'}>{t("Tim Burton style")}</MenuItem>
+                <MenuItem value={'Ukiyo-e'}>{t("Ukiyo-e")}</MenuItem>
+                <MenuItem value={'Van Gogh style'}>{t("Van Gogh style")}</MenuItem>
+                <MenuItem value={'Vintage'}>{t("Vintage")}</MenuItem>
+                <MenuItem value={'Vintage'}>{t("Vintage")}</MenuItem>
               </Select>
             </FormControl>
            <Button className={`btn-eureka`} onClick={handleSearch} disabled={loading} style={{width:'20%',height:"3.5em"}}>
-              Crear Imagen con IA
+             {t("CreateImage")}
            </Button>
-       </form>          
+       </form> 
+        <form className='d-flex d-lg-none flex-column justify-content-center'>
+         <TextField className='mt-3' label={t("descriptionLabel")} name="text"
+          variant="outlined" helperText={t("descriptionHelperText")} style={{width:'100%'}}
+          onChange={onTextChange}
+          value={text}>
+          </TextField>
+           <FormControl className='mt-4 mb-4' sx={{ minWidth: 120 }} style={{width:'100%'}}>
+               <InputLabel id="select-style">{t("Style")}</InputLabel>
+              <Select variant="outlined"
+                labelId="select-style"
+                name="style"
+                id="select-style"
+                label={t("Style")}
+                onChange={onStyleChange}
+                value={style}
+              >
+                 <MenuItem value="None"><em>{t("None")}</em></MenuItem>
+                <MenuItem value={'3D illustration'}>{t("3D illustration")}</MenuItem>
+                <MenuItem value={'Crayon drawing'}>{t("Crayon drawing")}</MenuItem>
+                <MenuItem value={'Cartoon'}>{t("Cartoon")}</MenuItem>
+                <MenuItem value={'Cyberpunk'}>{t("Cyberpunk")}</MenuItem>
+                <MenuItem value={'Digital art'}>{t("Digital art")}</MenuItem>
+                <MenuItem value={'Geometric'}>{t("Geometric")}</MenuItem>
+                <MenuItem value={'Oil painting'}>{t("Oil painting")}</MenuItem>
+                <MenuItem value={'Monet style'}>{t("Monet style")}</MenuItem>
+                <MenuItem value={'Pop art'}>{t("Pop art")}</MenuItem>
+                <MenuItem value={'Psychedelic'}>{t("Psychedelic")}</MenuItem>
+                <MenuItem value={'Realistic photograph'}>{t("Realistic photograph")}</MenuItem>
+                <MenuItem value={'Salvador Dali style'}>{t("Salvador Dali style")}</MenuItem>
+                <MenuItem value={'Surrealism'}>{t("Surrealism")}</MenuItem>
+                <MenuItem value={'Tim Burton style'}>{t("Tim Burton style")}</MenuItem>
+                <MenuItem value={'Ukiyo-e'}>{t("Ukiyo-e")}</MenuItem>
+                <MenuItem value={'Van Gogh style'}>{t("Van Gogh style")}</MenuItem>
+                <MenuItem value={'Vintage'}>{t("Vintage")}</MenuItem>
+                <MenuItem value={'Vintage'}>{t("Vintage")}</MenuItem>
+              </Select>
+            </FormControl>
+           <Button className={`btn-eureka mt-1`} onClick={handleSearch} disabled={loading} style={{width:'100%',height:"3.5em"}}>
+             {t("CreateImage")}
+           </Button>
+       </form>             
        </section>
    </Container>  
      { !loading  ? <>{(images.length > 0) && renderImages()}</>:<LinearProgress variant="determinate" value={progress} />}
