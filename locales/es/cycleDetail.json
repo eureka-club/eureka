@@ -56,6 +56,7 @@
   "NotTitle":"Por favor agrega un título",
   "NotContentText":"Por favor agrega contenido",
   "requiredDiscussionItemError": "Por favor indica si tu Eureka es sobre el tema del ciclo o una de las obras",
-  "requiredEurekaImageError": "Por favor agrega una imagén a la Eureka"
-
+  "requiredEurekaImageError": "Por favor agrega una imagén a la Eureka",
+  "showCrop":"Usar imagen subida por usted.",
+  "showOthersFields":"Quiero agregar tags a mi momento Eureka."
 }
