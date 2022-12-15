@@ -443,7 +443,7 @@ const CreateIAPostForm: FunctionComponent<Props> = ({noModal = false,params}) =>
          <section className='my-3'>
          {!useCrop && <Prompt onImageSelect={onImageSelect}  searchtext={params?.searchtext} searchstyle={params?.searchstyle}/>}
          <FormGroup className='mt-4 mb-4'>
-          <FormControlLabel control={<Switch  checked={useCrop} onChange={handleChangeUseCropSwith}/>} label="Usar imagen subida por usted." />
+          <FormControlLabel control={<Switch  checked={useCrop} onChange={handleChangeUseCropSwith}/>} label={t('showCrop')} />
         </FormGroup>
         {useCrop && <Col className='mb-4'>
                 {!showCrop && (<><Button data-cy="image-load" className="btn-eureka w-100 px-2 px-lg-5 text-white" onClick={() => setShowCrop(true)}>
@@ -555,7 +555,7 @@ const CreateIAPostForm: FunctionComponent<Props> = ({noModal = false,params}) =>
               />
             </FormGroup>    
             <FormGroup className='mt-5 mb-4'>
-                <FormControlLabel control={<Switch  checked={useOtherFields} onChange={handleChangeUseOtherFields}/>} label="Quiero agregar mi momento Eureka a un ciclo y/o agregar tags." />
+                <FormControlLabel control={<Switch  checked={useOtherFields} onChange={handleChangeUseOtherFields}/>} label={t('showOthersFields')} />
             </FormGroup>   
             {useOtherFields && <Row className='mt-5 px-2 px-lg-5 d-flex flex-column'>
               <Col className="mb-4">

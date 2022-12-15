@@ -65,7 +65,7 @@ const PostPrompt: FunctionComponent<Props> = ({onImageSelect,redirect = false,se
 
    function formValidation() {  
       if (!text.length) {
-          toast.error( t('NotTitle'))
+          toast.error( t('NoPromptText'))
           return false;
       }
         return true;
@@ -88,7 +88,6 @@ const PostPrompt: FunctionComponent<Props> = ({onImageSelect,redirect = false,se
     setShowOptions(true)
     setProgress(0)
     setImages([])
-    //console.log(text + ", " + style,'TEXTO BUSQUEDA')  
     const {data:en_text} = await fetch(`/api/google-translate/?text=${text + ", " + style}&target=en`)
     .then(r=>r.json())
 
@@ -119,7 +118,7 @@ const PostPrompt: FunctionComponent<Props> = ({onImageSelect,redirect = false,se
     if(showOptions)
         return <Container className="my-4"  >
           <h6 className='my-4'>
-            <em>Selecciona la imagen que más te gusta. Si ninguna te convence, ajusta tu prompt y genera otras!</em>.
+            <em>{t("SelectImage")}</em>.
           </h6>
         <section  className='d-flex flex-column flex-lg-row justify-content-around'>
                 {images.map((img,idx)=><img key={idx} className='cursor-pointer mb-4' onClick={()=> processSelect(img.src)}  src={img.src}/>)}
@@ -150,90 +149,90 @@ const PostPrompt: FunctionComponent<Props> = ({onImageSelect,redirect = false,se
   };
 
  return <> <Container className= {`w-100 ${styles.container}`}>
-      {redirect ? <h4 className='text-secondary text-center'>¡Crea un Momento Eureka para resumir una obra que te impactó con una imagen!</h4>
-       : <h4 className='text-secondary text-center'>¡Crea un Momento Eureka con una imagen generada por IA!</h4>}
-      {!redirect && <h6 className='my-3 text-center'><em>Escribe una descripción de la imagen q quieres generar + selecciona en que estilo</em>.</h6>}
+      {redirect ? <h4 className='text-secondary text-center'>{t("CreateEureka")}</h4>
+       : <h4 className='text-secondary text-center'>{t("CreateEureka1")}</h4>}
+      {!redirect && <h6 className='my-3 text-center'><em>{t("PromptText")}</em>.</h6>}
        <section className='mt-3 mx-0 mx-lg-3' >
        <form className='d-none d-lg-flex flex-row justify-content-center'>
-         <TextField  label="Describe la imagen que quieres generar" name="text"
-          variant="outlined" helperText="Agrega el máximo de detalles posible." style={{width:'60%'}}
+         <TextField  label={t("descriptionLabel")} name="text"
+          variant="outlined" helperText={t("descriptionHelperText")} style={{width:'60%'}}
           onChange={onTextChange}
           value={text}>
           </TextField>
            <FormControl className='ms-2 me-2 my-0' sx={{ m: 1, minWidth: 120 }} style={{width:'20%'}}>
-               <InputLabel id="select-style">Style</InputLabel>
+               <InputLabel id="select-style">{t("Style")}</InputLabel>
               <Select variant="outlined"
                 labelId="select-style"
                 name="style"
                 id="select-style"
-                label="Style"
+                label={t("Style")}
                 onChange={onStyleChange}
                 value={style}
               >
-                <MenuItem value=""><em>None</em></MenuItem>
-                <MenuItem value={'3D illustration'}>3D illustration</MenuItem>
-                <MenuItem value={'Crayon drawing'}>Crayon drawing</MenuItem>
-                <MenuItem value={'Cartoon'}>Cartoon</MenuItem>
-                <MenuItem value={'Cyberpunk'}>Cyberpunk</MenuItem>
-                <MenuItem value={'Digital art'}>Digital art</MenuItem>
-                <MenuItem value={'Geometric'}>Geometric</MenuItem>
-                <MenuItem value={'Oil painting'}>Oil painting</MenuItem>
-                <MenuItem value={'Monet style'}>Monet style</MenuItem>
-                <MenuItem value={'Pop art'}>Pop art</MenuItem>
-                <MenuItem value={'Psychedelic'}>Psychedelic</MenuItem>
-                <MenuItem value={'Realistic photograph'}>Realistic photograph</MenuItem>
-                <MenuItem value={'Salvador Dali style'}>Salvador Dali style</MenuItem>
-                <MenuItem value={'Surrealism'}>Surrealism</MenuItem>
-                <MenuItem value={'Tim Burton style'}>Tim Burton style</MenuItem>
-                <MenuItem value={'Ukiyo-e'}>Ukiyo-e</MenuItem>
-                <MenuItem value={'Van Gogh style'}>Van Gogh style</MenuItem>
-                <MenuItem value={'Vintage'}>Vintage</MenuItem>
-                <MenuItem value={'Vector'}>Vector</MenuItem>
+                <MenuItem value="None"><em>{t("None")}</em></MenuItem>
+                <MenuItem value={'3D illustration'}>{t("3D illustration")}</MenuItem>
+                <MenuItem value={'Crayon drawing'}>{t("Crayon drawing")}</MenuItem>
+                <MenuItem value={'Cartoon'}>{t("Cartoon")}</MenuItem>
+                <MenuItem value={'Cyberpunk'}>{t("Cyberpunk")}</MenuItem>
+                <MenuItem value={'Digital art'}>{t("Digital art")}</MenuItem>
+                <MenuItem value={'Geometric'}>{t("Geometric")}</MenuItem>
+                <MenuItem value={'Oil painting'}>{t("Oil painting")}</MenuItem>
+                <MenuItem value={'Monet style'}>{t("Monet style")}</MenuItem>
+                <MenuItem value={'Pop art'}>{t("Pop art")}</MenuItem>
+                <MenuItem value={'Psychedelic'}>{t("Psychedelic")}</MenuItem>
+                <MenuItem value={'Realistic photograph'}>{t("Realistic photograph")}</MenuItem>
+                <MenuItem value={'Salvador Dali style'}>{t("Salvador Dali style")}</MenuItem>
+                <MenuItem value={'Surrealism'}>{t("Surrealism")}</MenuItem>
+                <MenuItem value={'Tim Burton style'}>{t("Tim Burton style")}</MenuItem>
+                <MenuItem value={'Ukiyo-e'}>{t("Ukiyo-e")}</MenuItem>
+                <MenuItem value={'Van Gogh style'}>{t("Van Gogh style")}</MenuItem>
+                <MenuItem value={'Vintage'}>{t("Vintage")}</MenuItem>
+                <MenuItem value={'Vintage'}>{t("Vintage")}</MenuItem>
               </Select>
             </FormControl>
            <Button className={`btn-eureka`} onClick={handleSearch} disabled={loading} style={{width:'20%',height:"3.5em"}}>
-              Crear Imagen
+             {t("CreateImage")}
            </Button>
        </form> 
         <form className='d-flex d-lg-none flex-column justify-content-center'>
-         <TextField className='mt-3' label="Describe la imagen que quieres generar" name="text"
-          variant="outlined" helperText="Agrega el máximo de detalles posible." style={{width:'100%'}}
+         <TextField className='mt-3' label={t("descriptionLabel")} name="text"
+          variant="outlined" helperText={t("descriptionHelperText")} style={{width:'100%'}}
           onChange={onTextChange}
           value={text}>
           </TextField>
            <FormControl className='mt-4 mb-4' sx={{ minWidth: 120 }} style={{width:'100%'}}>
-               <InputLabel id="select-style">Style</InputLabel>
+               <InputLabel id="select-style">{t("Style")}</InputLabel>
               <Select variant="outlined"
                 labelId="select-style"
                 name="style"
                 id="select-style"
-                label="Style"
+                label={t("Style")}
                 onChange={onStyleChange}
                 value={style}
               >
-                <MenuItem value=""><em>None</em></MenuItem>
-                <MenuItem value={'3D illustration'}>3D illustration</MenuItem>
-                <MenuItem value={'Crayon drawing'}>Crayon drawing</MenuItem>
-                <MenuItem value={'Cartoon'}>Cartoon</MenuItem>
-                <MenuItem value={'Cyberpunk'}>Cyberpunk</MenuItem>
-                <MenuItem value={'Digital art'}>Digital art</MenuItem>
-                <MenuItem value={'Geometric'}>Geometric</MenuItem>
-                <MenuItem value={'Oil painting'}>Oil painting</MenuItem>
-                <MenuItem value={'Monet style'}>Monet style</MenuItem>
-                <MenuItem value={'Pop art'}>Pop art</MenuItem>
-                <MenuItem value={'Psychedelic'}>Psychedelic</MenuItem>
-                <MenuItem value={'Realistic photograph'}>Realistic photograph</MenuItem>
-                <MenuItem value={'Salvador Dali style'}>Salvador Dali style</MenuItem>
-                <MenuItem value={'Surrealism'}>Surrealism</MenuItem>
-                <MenuItem value={'Tim Burton style'}>Tim Burton style</MenuItem>
-                <MenuItem value={'Ukiyo-e'}>Ukiyo-e</MenuItem>
-                <MenuItem value={'Van Gogh style'}>Van Gogh style</MenuItem>
-                <MenuItem value={'Vintage'}>Vintage</MenuItem>
-                <MenuItem value={'Vector'}>Vector</MenuItem>
+                 <MenuItem value="None"><em>{t("None")}</em></MenuItem>
+                <MenuItem value={'3D illustration'}>{t("3D illustration")}</MenuItem>
+                <MenuItem value={'Crayon drawing'}>{t("Crayon drawing")}</MenuItem>
+                <MenuItem value={'Cartoon'}>{t("Cartoon")}</MenuItem>
+                <MenuItem value={'Cyberpunk'}>{t("Cyberpunk")}</MenuItem>
+                <MenuItem value={'Digital art'}>{t("Digital art")}</MenuItem>
+                <MenuItem value={'Geometric'}>{t("Geometric")}</MenuItem>
+                <MenuItem value={'Oil painting'}>{t("Oil painting")}</MenuItem>
+                <MenuItem value={'Monet style'}>{t("Monet style")}</MenuItem>
+                <MenuItem value={'Pop art'}>{t("Pop art")}</MenuItem>
+                <MenuItem value={'Psychedelic'}>{t("Psychedelic")}</MenuItem>
+                <MenuItem value={'Realistic photograph'}>{t("Realistic photograph")}</MenuItem>
+                <MenuItem value={'Salvador Dali style'}>{t("Salvador Dali style")}</MenuItem>
+                <MenuItem value={'Surrealism'}>{t("Surrealism")}</MenuItem>
+                <MenuItem value={'Tim Burton style'}>{t("Tim Burton style")}</MenuItem>
+                <MenuItem value={'Ukiyo-e'}>{t("Ukiyo-e")}</MenuItem>
+                <MenuItem value={'Van Gogh style'}>{t("Van Gogh style")}</MenuItem>
+                <MenuItem value={'Vintage'}>{t("Vintage")}</MenuItem>
+                <MenuItem value={'Vintage'}>{t("Vintage")}</MenuItem>
               </Select>
             </FormControl>
            <Button className={`btn-eureka mt-1`} onClick={handleSearch} disabled={loading} style={{width:'100%',height:"3.5em"}}>
-              Crear Imagen
+             {t("CreateImage")}
            </Button>
        </form>             
        </section>
