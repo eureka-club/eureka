@@ -5,7 +5,7 @@
   "scripts": {
     "build": "next build",
     "dev1": "NODE_OPTIONS='--inspect' NODE_ENV=development TS_NODE_COMPILER_OPTIONS='{ \"module\":\"commonjs\" }' ts-node server.ts",
-    "dev": "NODE_OPTIONS='--inspect=9229' NODE_ENV=development next dev",
+    "dev": "NODE_OPTIONS='--inspect=9229 --trace-warnings' NODE_ENV=development next dev",
     "knex": "TS_NODE_COMPILER_OPTIONS='{ \"module\":\"commonjs\" }' knex",
     "lint": "eslint '**/*.{ts,tsx}'",
     "lt": "yarn lint && yarn tsc",
@@ -27,7 +27,7 @@
     "prepare": "husky install"
   },
   "engines": {
-    "node": "^16 || ^14",
+    "node": "^18 || ^16",
     "yarn": "^1"
   },
   "dependencies": {
