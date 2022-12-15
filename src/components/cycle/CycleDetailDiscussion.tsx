@@ -3,6 +3,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, FunctionComponent, MouseEvent, useState,useEffect } from 'react';
 
 import { Button, Col, Row, ButtonGroup, Form } from 'react-bootstrap';
+import { SelectChangeEvent,TextField,FormControl,InputLabel, Select, MenuItem,LinearProgress} from '@mui/material';
 
 import { GiBrain } from 'react-icons/gi';
 import { BiBookHeart } from 'react-icons/bi';
@@ -52,10 +53,11 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
     if (!works) return [];
     return works.map((w) => {
       return (
-        <option key={w.id} value={`work-${w.id}`}>
+        <MenuItem key={w.id} value={`work-${w.id}`}>{w.title}</MenuItem> );
+        {/*<option key={w.id} value={`work-${w.id}`}>
           {w.title}
-        </option>
-      );
+        </option>*/}
+     
     });
   };
 
@@ -88,7 +90,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
     // setGlobalModalsState({ ...globalModalsState, ...{ createWorkModalOpened: true } });
   };
 
-  const onChangeDiscussionItem = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChangeDiscussionItem = (e: SelectChangeEvent) => {
     setDiscussionItem(() => e.target.value);
   };
 
@@ -147,8 +149,22 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
                   </Button>
                 )}
               </ButtonGroup>
-              {(isCreateEureka) && (
-                <Form className="mt-3 font-weight-light">
+              {(isCreateEureka) && (                
+                <FormControl className='mt-5 mb-3 w-100' >
+                    <InputLabel id="discussionItem">{t('emptyDiscussionItemLbl')}</InputLabel>
+                    <Select variant="outlined" 
+                      labelId="discussionItem"
+                      name="discussionItem"
+                      id="discussionItem"
+                      label={t('emptyDiscussionItemLbl')}
+                      onChange={onChangeDiscussionItem}
+                      value={discussionItem}
+                    >
+                      <MenuItem value='-1'>{t('Cycle itself')}</MenuItem>
+                      {getWorksOpt()}
+                    </Select>
+                </FormControl>)}
+                {/*<Form className="mt-3 font-weight-light">
                   <Form.Group controlId="discussionItem">
                     <Form.Control
                       as="select"
@@ -161,8 +177,9 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
                       {getWorksOpt()}
                     </Form.Control>
                   </Form.Group>
-                </Form>
-              )}
+                </Form>*/}
+
+            
               {isCreateEureka && (
                 <div className="mt-3">
                   <CycleDetailDiscussionCreateEurekaForm

@@ -293,7 +293,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
 
   return <Form ref={formRef}>
     <section className='my-3'>
-         {!useCrop && <Prompt onImageSelect={onImageSelect} />}
+         {!useCrop && <Prompt onImageSelect={onImageSelect} margin={false} />}
          <Form.Group className='mt-4 mb-4'>
           <FormControlLabel control={<Switch  checked={useCrop} onChange={handleChangeUseCropSwith}/>} label={t('showCrop')} />
         </Form.Group>
