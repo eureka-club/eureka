@@ -56,5 +56,7 @@
   "NotTitle":"Merci d'indiquer un titre",
   "NotContentText":"Merci d'ajouter du contenu",
   "requiredDiscussionItemError": "Merci d'indiquer si votre Eureka porte sur le cycle ou l'une des œuvres",
-  "requiredEurekaImageError": "Merci d'ajouter une image à votre Eureka"
+  "requiredEurekaImageError": "Merci d'ajouter une image à votre Eureka",
+  "showCrop":"Utiliser l'image téléchargée par vous.",
+  "showOthersFields":"Je veux ajouter des balises à mon moment Eureka."
 }

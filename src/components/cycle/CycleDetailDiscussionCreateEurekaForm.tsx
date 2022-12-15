@@ -30,6 +30,8 @@ import useWorks from '@/src/useWorks'
 import useUsers from '@/src/useUsers'
 // import {useGlobalEventsContext} from '@/src/useGlobalEventsContext'
 import styles from './CycleDetailDiscussionCreateEureka.module.css';
+import { Switch,TextField,FormControlLabel,Autocomplete} from '@mui/material';
+import Prompt from '@/src/components/post/PostPrompt';
 // import { devNull } from 'os';
 // import { isNullOrUndefined } from 'util';
 
@@ -69,7 +71,9 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   const editorRef = useRef<any>(null);
   const formRef = useRef<any>(null);
   const [currentImg, setCurrentImg] = useState<string | null>(null);
+  const [useCrop, setUSeCrop] = useState<boolean>(false);
   const [showCrop, setShowCrop] = useState<boolean>(false);
+  const [useOtherFields, setUseOtherFields] = useState<boolean>(false);
   const [newEureka, setNewEureka] = useState({
     selectedCycleId: cycle.id,
     selectedWorkId: 0,
@@ -123,16 +127,16 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
     if (!discussionItem) {
           toast.error( t('requiredDiscussionItemError'))
           return false;
+    }else  if (!newEurekaImageFile) {
+      toast.error( t('requiredEurekaImageError'))
+          return false;
     }else if (!payload.title.length) {
       toast.error( t('NotTitle'))
           return false;
-    }else if (!payload.contentText.length) {
+    }/*else if (!payload.contentText.length) {
       toast.error( t('NotContentText'))
       return false;
-    }else if (!newEurekaImageFile) {
-      toast.error( t('requiredEurekaImageError'))
-          return false;
-    }
+    }*/
     return true;
   };
   
@@ -305,9 +309,59 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
       />;
   };
 
+    const onImageSelect = (photo: File, text: string) => {
+    setNewEurekaImageFile(()=>photo);
+     setNewEureka((res) => ({
+      ...res,
+      title: text,
+    }));
+  };
+
+  const handleChangeUseCropSwith = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUSeCrop(event.target.checked);
+    setCurrentImg('');
+  };
+
+  const handleChangeUseOtherFields = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setUseOtherFields(event.target.checked);
+      //setSelectedCycle(null);
+      setEurekaTopics([]);
+  };
+
   return <Form ref={formRef}>
-      <Form.Group controlId="eureka-title" className="mb-3">
-        <Form.Control
+      <section className='my-3'>
+         {!useCrop && <Prompt onImageSelect={onImageSelect} margin={false} />}
+         <Form.Group className='mt-4 mb-4'>
+          <FormControlLabel control={<Switch  checked={useCrop} onChange={handleChangeUseCropSwith}/>} label={t('showCrop')} />
+        </Form.Group>
+        {useCrop && <Row className="d-flex justify-content-center flex-column flex-column-reverse flex-lg-row flex-lg-row-reverse">
+            <Col className='mb-4 d-flex justify-content-center justify-content-lg-start'>
+              {<div className={styles.imageContainer}>{renderPhoto()}</div>}
+              </Col>
+            <Col xs={12} md={8} className='mt-2 mb-4'>
+                {!showCrop && (<Button data-cy="image-load" variant="primary" className="btn-eureka w-100" onClick={() => setShowCrop(true)}>
+                  {t('Image')}
+                </Button>
+                )}        
+                { showCrop && (
+                <Col className='d-flex'>
+                  <div className='w-100 border p-3'>  
+                  <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={closeCrop} cropShape='rect' />
+                  </div>  
+                </Col>
+               )}      
+            </Col>  
+            </Row>}
+         </section>
+         <Form.Group controlId="eureka-title" >
+                 <TextField id="eureka-title" className="w-100 mb-4" inputProps={{ maxLength: 80 }} label={t('Title')}
+                        variant="outlined" size="small"  value={newEureka.title}
+                      onChange={onChangeFieldEurekaForm}> 
+                 </TextField>
+              </Form.Group>  
+
+      {/*<Form.Group controlId="eureka-title" className="mb-3">
+        {/*<Form.Control
           type="text"
           maxLength={80}
           required
@@ -352,7 +406,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
           value={newEureka.contentText}
           onChange={onChangeFieldEurekaForm}
         />
-      </Form.Group> */}
+      </Form.Group> 
       <Form.Group className="mt-3" controlId="eureka-image">
          <Row className="d-flex justify-content-center flex-column flex-column-reverse flex-lg-row flex-lg-row-reverse">
             <Col className='mb-4 d-flex justify-content-center justify-content-lg-start'>
@@ -389,12 +443,12 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
               </Row>
             </Form.Group>
           )}
-        </ImageFileSelect>*/}
-      </Form.Group>
-      <Row>
+        </ImageFileSelect>
+      </Form.Group>*/}
+      {/*<Row>
         <Col xs={12} md={8}>
           <Form.Group controlId="topics">
-            {/* <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel> */}
+            {/* <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel> 
             <TagsInputTypeAhead
               style={{ background: 'white' }}
               data={topics}
@@ -408,6 +462,27 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
             />
           </Form.Group>
         </Col>
+      </Row>*/}
+      <Row>
+        <Col xs={12} md={8}>
+           <Form.Group className='mt-5 mb-4'>
+                <FormControlLabel control={<Switch  checked={useOtherFields} onChange={handleChangeUseOtherFields}/>} label={t('showOthersFields')} />
+            </Form.Group>  
+          {useOtherFields && <Form.Group controlId="topics">
+            {/* <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel> */}
+            <TagsInputTypeAhead
+              style={{ background: 'white' }}
+              data={topics}
+              items={eurekaTopics}
+              setItems={setEurekaTopics}
+              labelKey={(res: { code: string }) => t(`topics:${res.code}`)}
+              max={3}
+              placeholder={`${t('Type to add tag')}...`}
+              formatValue={(v: string) => t(`topics:${v}`)} 
+              className="mt-3"
+            />
+          </Form.Group>}
+        </Col>
       </Row>
 
       <aside className="d-flex justify-content-end">
@@ -415,7 +490,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
           <Button variant="warning" className='text-white' onClick={clearCreateEurekaForm} disabled={isLoading}>
             <ImCancelCircle />
           </Button>
-          <Button data-cy="create-eureka-btn" onClick={handlerSubmitCreateEureka} className="text-white"  style={{ width: '5rem' }} disabled={isLoading}>
+          <Button data-cy="create-eureka-btn" onClick={handlerSubmitCreateEureka} className="text-white"  style={{ width: '8rem' }} disabled={isLoading}>
             <span>
              {t('Create')}
             </span>

@@ -508,7 +508,6 @@ const CreateIAPostForm: FunctionComponent<Props> = ({noModal = false,params}) =>
                         if (isWorkMosaicItem(searchResult)) {
                           return <WorkTypeaheadSearchItem work={searchResult} />;
                         }
-
                         return null;
                       }}
                     />
