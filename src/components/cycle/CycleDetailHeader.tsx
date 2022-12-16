@@ -183,7 +183,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           </div>
           <div className="">
           <h4 className="mt-4 mb-1 text-dark">
-            {t('Content calendar')} ({works && works.length})
+            {t('Content calendar')} ({works && (works.length)})
           </h4>
           
             <CarouselStatic
@@ -208,7 +208,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
       <Col className='mt-3 col-12  d-flex flex-column justify-content-center d-lg-none'>
             <div className="">
               <h4 className="mt-3 mb-1 text-dark">
-                {t('Content calendar')} ({works && works.length})
+                {t('Content calendar')} ({works && (works.length)})
               </h4>
                 <CarouselStatic
                   cacheKey={['CYCLE',cycle.id.toString()]}

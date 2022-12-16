@@ -53,7 +53,7 @@ const MyPosts: NextPage<Props> = ({id}) => {
             <Row>
               {dataPosts?.posts.map(c=>
                 <Col key={c.id} xs={12} sm={6} lg={3} className='mb-5 d-flex justify-content-center  align-items-center'>
-                  <PMI postId={c.id} />
+                  <PMI postId={c.id} size='md' />
                 </Col>
               )}
             </Row>
