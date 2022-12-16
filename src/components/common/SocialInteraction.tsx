@@ -274,7 +274,22 @@ const SocialInteraction: FunctionComponent<Props> = ({
     ev.preventDefault();
     ev.stopPropagation()
     setShowEmojisPicker(r=>!r)
+  }
     // execSocialInteraction({ socialInteraction: 'reaction', doCreate: mySocialInfo ? !mySocialInfo!.favoritedByMe : true });
+  const handleCreateEurekaClick = (ev: MouseEvent<HTMLButtonElement>) => { 
+    ev.preventDefault();
+    if (canNavigate()){
+       if(isWorkMosaicItem(entity))
+           router.push({ pathname:`/work/${entity.id}`,query: {tabKey:'posts'}});
+       if(isCycleMosaicItem(entity))
+           router.push({ pathname:`/cycle/${entity.id}`,query: {tabKey:'eurekas'}});    
+    }
+    
+  };
+
+  const canNavigate = () => {
+    return  !(!entity || isLoadingSession);
+;
   };
 
   const popoverShares = (
@@ -400,7 +415,7 @@ const renderAddReaction = ()=>{
         variant="link"
         className={`${styles.buttonSI} p-0 text-primary`}
         title={t('Create eureka')}
-        //onClick={handleFavClick}
+        onClick={handleCreateEurekaClick}
           disabled={loadingSocialInteraction}
       > 
       <div className={`d-flex flex-row`}>

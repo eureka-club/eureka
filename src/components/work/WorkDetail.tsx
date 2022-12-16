@@ -89,6 +89,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
   const [defaultActiveKey,setDefaultActiveKey] = useState<string>('posts')
 
   const [hasMorePosts,setHasMorePosts] = useState(dataPosts?.fetched);
+  const query = router.query;
+
   useEffect(()=>{
     if(dataPosts && dataPosts.posts){
       setHasMorePosts(dataPosts.fetched)
@@ -102,6 +104,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
       setCycles(dataCycles.cycles)
       if(dataCycles.cycles.length && !posts?.length)setDefaultActiveKey('cycles')
     }
+    if(router.query.tabKey)setDefaultActiveKey(router.query.tabKey.toString())
+
   },[dataCycles,posts])
 
 

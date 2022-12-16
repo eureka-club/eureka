@@ -134,7 +134,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
       ));
       result = (
         <div className="d-flex flex-nowrap w-100 justify-content-xl-left">
-          {hide.length && <Button
+          {!!(hide.length) && <Button
             className={`text-white rounded-circle align-self-center ${styles.leftButton}`}
             onClick={() => {
               const s = current.slice(0, 6);
@@ -148,7 +148,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
             <RiArrowLeftSLine />
           </Button> || ''}
           {mosaics}
-          {show.length && <Button
+          {!!(show.length) && <Button
             className={`text-center text-white rounded-circle align-self-center ${styles.rightButton}`}
             onClick={() => {
               const c = current.splice(0, 6);
@@ -174,7 +174,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
 
   return (
      <>
-        {(dataFiltered && dataFiltered.length && ( 
+        {(dataFiltered && !!(dataFiltered.length) && ( 
           <CardGroup className='mb-3'>  
               <section className="d-flex flex-row  justify-content-between w-100">
                               <Col xs={9}>
@@ -186,7 +186,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
                 </h1>
                 </Col>
                 <Col xs={3} className="d-flex justify-content-end">
-                {seeAll && dataFiltered.length && <>
+                {seeAll && !!(dataFiltered.length) && <>
                   {!isRedirecting ? <span
                     className={`cursor-pointer text-primary ${styles.seeAllButton}`}
                     role="presentation"

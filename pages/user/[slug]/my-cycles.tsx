@@ -53,7 +53,7 @@ const MyCycles: NextPage<Props> = ({id}) => {
             <Row>
               {dataCycles?.cycles.map(c=>
                 <Col key={c.id} xs={12} sm={6} lg={3} className='mb-5 d-flex justify-content-center  align-items-center'>
-                  <CMI cycleId={c.id} />
+                  <CMI cycleId={c.id} size='md' />
                 </Col>
               )}
             </Row>

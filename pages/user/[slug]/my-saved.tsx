@@ -36,28 +36,28 @@ const MySaved: NextPage<Props> = ({id}) => {
   //   if(isWorkMosaicItem(i))return <WMI workId={i.id}/>
   // }
   const renderPosts = ()=>{
-    return <Row>
+    return <Row className='mt-5'>
     {sfl.favPosts.map(i=>
       <Col key={i.id} xs={12} sm={6} lg={3} className='mb-5 d-flex justify-content-center  align-items-center'>
-        <PMI postId={i.id}/>
+        <PMI postId={i.id} size='md'/>
       </Col>  
     )}
     </Row>
   }
   const renderCycles = ()=>{
-    return <Row>
+    return <Row className='mt-5'>
     {sfl.favCycles.map(i=>
       <Col key={i.id} xs={12} sm={6} lg={3} className='mb-5 d-flex justify-content-center  align-items-center'>
-        <CMI cycleId={i.id}/>
+        <CMI cycleId={i.id} size='md'/>
       </Col>
     )}
     </Row>
   }
   const renderWorks = ()=>{
-    return <Row>
+    return <Row className='mt-5'>
     {sfl.favWorks.map(c=>
         <Col key={c.id} xs={12} sm={6} lg={3} className='mb-5 d-flex justify-content-center  align-items-center'>
-          <WMI workId={c.id}/>
+          <WMI workId={c.id }  size='md'/>
         </Col>
     )}
     </Row>

@@ -53,7 +53,7 @@ const MyBooksMovies: NextPage<Props> = ({id}) => {
             <Row>
               {user?.ratingWorks.filter(rw=>rw.workId).reverse().map(c=>
                 <Col key={c.workId} xs={12} sm={6} lg={3} className='mb-5 d-flex justify-content-center  align-items-center'>
-                  <WMI workId={c.workId!} />
+                  <WMI workId={c.workId!}  size='md' />
                 </Col>
               )}
             </Row>

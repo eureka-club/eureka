@@ -1,5 +1,6 @@
 import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/router';
 import { ChangeEvent, FunctionComponent, MouseEvent, useState,useEffect } from 'react';
 
 import { Button, Col, Row, ButtonGroup, Form } from 'react-bootstrap';
@@ -30,6 +31,7 @@ const whereCycleParticipants = (id:number)=>({
 });
 const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cacheKey }) => {
   const {data:session, status} = useSession();
+  const router = useRouter();
   const isSessionLoading = status == 'loading';
   const {show} = useModalContext()
   const { t } = useTranslation('cycleDetail');
@@ -48,6 +50,20 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
       from:'CycleDetailDiscussion'
     }
   )
+
+   useEffect(()=>{
+       if(router.query.tabKey && router.query.tabKey.toString() === 'eurekas'){ 
+         if (!session) {
+      show(<SignInForm/>)
+    } else if(isParticipant()){
+                setIsSuggestRelatedWork(false);
+                setDiscussionItem("-1");
+                setIsCreateEureka(true);
+          }
+          else
+            toast.error( t('canNotCreatePostJoinToCycle'))
+     }
+  },[router])
 
   const getWorksOpt = () => {
     if (!works) return [];
