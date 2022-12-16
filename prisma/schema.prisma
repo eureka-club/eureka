@@ -1,5 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
+  binaryTargets = ["debian-openssl-1.1.x"]
   // previewFeatures = ["microsoftSqlServer"]
 }
 
@@ -52,7 +53,8 @@ model User {
   photos              LocalImage[]
   notify              Notification[]
   notifications       NotificationsOnUsers[]
-  
+
+  reactions           Reaction[]
 
   @@map(name: "users")
 }
