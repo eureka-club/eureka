@@ -44,8 +44,8 @@ model User {
   taxonomies          Taxonomy[]  
   terms               Term[]  
   tags                String?
-  followedBy          User[]   @relation("_UserFollows", references: [id])
-  following           User[]   @relation("_UserFollows", references: [id])
+  followedBy          User[]   @relation("_UserFollows")
+  following           User[]   @relation("_UserFollows")
   ratingWorks         RatingOnWork[]
   ratingCycles        RatingOnCycle[]
   comments            Comment[]
