@@ -5,7 +5,7 @@
   "scripts": {
     "build": "next build",
     "dev1": "NODE_OPTIONS='--inspect' NODE_ENV=development TS_NODE_COMPILER_OPTIONS='{ \"module\":\"commonjs\" }' ts-node server.ts",
-    "dev": "NODE_OPTIONS='--inspect=9229' NODE_ENV=development next dev",
+    "dev": "NODE_OPTIONS='--inspect=9229 --trace-warnings' NODE_ENV=development next dev",
     "knex": "TS_NODE_COMPILER_OPTIONS='{ \"module\":\"commonjs\" }' knex",
     "lint": "eslint '**/*.{ts,tsx}'",
     "lt": "yarn lint && yarn tsc",
@@ -43,7 +43,7 @@
     "@next-auth/prisma-adapter": "^1.0.3",
     "@next/bundle-analyzer": "^12.1.6",
     "@next/eslint-plugin-next": "^12.0.4",
-    "@prisma/client": "^3.9.0",
+    "@prisma/client": "^4.7.1",
     "@sendgrid/client": "^7.4.3",
     "@sendgrid/helpers": "^7.4.3",
     "@sendgrid/mail": "^7.4.4",
@@ -133,7 +133,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "husky": "^8.0.2",
     "prettier": "^2.1.2",
-    "prisma": "^3.9.0",
+    "prisma": "^4.7.1",
     "typescript": "^4.7.4"
   },
   "prisma": {

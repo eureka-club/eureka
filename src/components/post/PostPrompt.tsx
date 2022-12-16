@@ -13,10 +13,11 @@ interface Props {
   onImageSelect?: (file:File,text:string) => void;
   redirect?: boolean;
   searchtext?:string | "";
-  searchstyle?:string | ""
+  searchstyle?:string | "";
+  margin?:boolean
 }
 
-const PostPrompt: FunctionComponent<Props> = ({onImageSelect,redirect = false,searchtext,searchstyle}) => {
+const PostPrompt: FunctionComponent<Props> = ({onImageSelect,redirect = false,searchtext,searchstyle,margin=true}) => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const [text,setText] = useState<any>(searchtext || "");
@@ -148,18 +149,18 @@ const PostPrompt: FunctionComponent<Props> = ({onImageSelect,redirect = false,se
            </section>
   };
 
- return <> <Container className= {`w-100 ${styles.container}`}>
+ return <> <Container className= {`w-100 ${styles.container} ${!margin ? 'p-0 m-0':''}`}>
       {redirect ? <h4 className='text-secondary text-center'>{t("CreateEureka")}</h4>
        : <h4 className='text-secondary text-center'>{t("CreateEureka1")}</h4>}
       {!redirect && <h6 className='my-3 text-center'><em>{t("PromptText")}</em>.</h6>}
-       <section className='mt-3 mx-0 mx-lg-3' >
+       <section className={`mt-3 mx-0 ${margin ? 'mx-lg-3' :''} `} >
        <form className='d-none d-lg-flex flex-row justify-content-center'>
          <TextField  label={t("descriptionLabel")} name="text"
           variant="outlined" helperText={t("descriptionHelperText")} style={{width:'60%'}}
           onChange={onTextChange}
           value={text}>
           </TextField>
-           <FormControl className='ms-2 me-2 my-0' sx={{ m: 1, minWidth: 120 }} style={{width:'20%'}}>
+           <FormControl className='ms-2 me-2 my-0' sx={{ minWidth: 120 }} style={{width:'20%'}}>
                <InputLabel id="select-style">{t("Style")}</InputLabel>
               <Select variant="outlined"
                 labelId="select-style"

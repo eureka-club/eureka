@@ -56,7 +56,7 @@
   "NotTitle":"Please specify a title",
   "NotContentText":"Please add content",
   "requiredDiscussionItemError": "Please select if your Eureka is about the topic of the cycle or one of the works",
-  "requiredEurekaImageError": "Please add an image to your Eureka"
-
-
+  "requiredEurekaImageError": "Please add an image to your Eureka",
+  "showCrop":"Use image uploaded by you.",
+  "showOthersFields":"I want to add tags to my Eureka moment."
 }
