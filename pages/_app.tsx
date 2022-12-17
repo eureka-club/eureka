@@ -19,7 +19,10 @@ import { NotificationProvider } from '@/src/useNotificationProvider';
 import {ModalProvider} from '@/src/useModal'
 import Script from 'next/script';
 const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
-  const { initialState } = pageProps;
+  let initialState = null
+  if('initialState' in pageProps){
+    initialState = pageProps.initialState;
+  }
   const AnyComponent = Component as any;
   
   // const {Modal} = useModal()
