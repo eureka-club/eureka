@@ -52,11 +52,11 @@
   "Clean filters":"Effacer filtres",
   "commentCreated":"Votre réaction ou question a été partagée avec succès",
   "postCreated":"Votre Eureka a été partagée avec succès",
-  "canNotCreatePostJoinToCycle":"Vous ne pouvez pas encore partager une Eureka: REJOIGNEZ d'abord le cycle!",
+  "canNotCreatePostJoinToCycle":"Vous ne pouvez pas encore partager un Moment Eureka: REJOIGNEZ d'abord le cycle!",
   "NotTitle":"Merci d'indiquer un titre",
   "NotContentText":"Merci d'ajouter du contenu",
-  "requiredDiscussionItemError": "Merci d'indiquer si votre Eureka porte sur le cycle ou l'une des œuvres",
-  "requiredEurekaImageError": "Merci d'ajouter une image à votre Eureka",
-  "showCrop":"Utiliser l'image téléchargée par vous.",
-  "showOthersFields":"Je veux ajouter des balises à mon moment Eureka."
+  "requiredDiscussionItemError": "Merci d'indiquer si votre Moment Eureka porte sur le cycle ou l'une des œuvres",
+  "requiredEurekaImageError": "Merci d'ajouter une image à votre Moment Eureka",
+  "showCrop":"Téléchargez une image ou une photo de votre choix au lieu d'utiliser l'IA.",
+  "showOthersFields":"Ajouter des étiquettes à mon Moment Eureka."
 }

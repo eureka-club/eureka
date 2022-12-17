@@ -52,11 +52,11 @@
   "Clean filters":"Limpar filtros",
   "commentCreated":"Sua reação ou pergunta foi compartilhada com sucesso.",
   "postCreated":"Sua Eureka foi compartilhada com sucesso.",
-  "canNotCreatePostJoinToCycle":"Você ainda não pode compartilhar Eurekas: se inscreva no ciclo primeiro!",
+  "canNotCreatePostJoinToCycle":"Você ainda não pode compartilhar Momentos Eureka: se inscreva no ciclo primeiro!",
   "NotTitle":"Por favor adicione um título",
   "NotContentText":"Por favor adicione conteúdo",
-  "requiredDiscussionItemError": "Por favor indique se sua Eureka é sobre o tema do ciclo ou uma das obras",
-  "requiredEurekaImageError": "Por favor adicione uma imagem à sua Eureka",
-  "showCrop":"Usar imagem carregada por você.",
-  "showOthersFields":"Quero adicionar tags ao meu momento Eureka."
+  "requiredDiscussionItemError": "Por favor indique se seu Momento Eureka é sobre o tema do ciclo ou uma das obras",
+  "requiredEurekaImageError": "Por favor adicione uma imagem ao seu Momento Eureka",
+  "showCrop":"Carregue uma imagem ou foto sua em vez de usar IA.",
+  "showOthersFields":"Adicionar tags ao meu Momento Eureka."
 }

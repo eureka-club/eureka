@@ -28,6 +28,6 @@
   "requiredEurekaImageError": "Por favor adicione uma imagem à sua Eureka",
   "Type to add tag": "Tema da sua Eureka (3 max, selecione na lista)",
   "resetBtnLabel": "Remover",
-  "showCrop":"Usar imagem carregada por você.",
-  "showOthersFields":"Quero adicionar meu momento Eureka a um loop e/ou adicionar tags."
+  "showCrop":"Carregue uma imagem ou foto sua em vez de usar IA.",
+  "showOthersFields":"Quero adicionar meu Momento Eureka a um ciclo e/ou adicionar tags."
 }
