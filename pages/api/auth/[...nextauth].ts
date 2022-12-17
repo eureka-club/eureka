@@ -167,7 +167,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
     },
     debug: process.env.NODE_ENV === 'development',
     providers: [
-      GoogleProvider({
+      GoogleProvider({ 
         clientId: process.env.GOOGLE_ID!,
         clientSecret: process.env.GOOGLE_SECRET!,
       }),
