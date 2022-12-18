@@ -1,7 +1,7 @@
 module.exports = {
     apps: [
       {
-        name: "app-name",
+        name: "eureka-staging",
         script: "./node_modules/.bin/next",
         args: "start -p " + (process.env.PORT || 3000),
         watch: false,
