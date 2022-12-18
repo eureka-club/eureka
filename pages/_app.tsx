@@ -93,7 +93,7 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
 
      </SSRProvider>
     </StrictMode>
-  );
+  ); 
 };
 
 // @ts-ignore
