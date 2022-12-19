@@ -1,9 +1,13 @@
 # Install dependencies only when needed
-FROM node:18 AS deps
+FROM ubuntu:20.04 AS deps
 
 
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat
+RUN apt-get update && apt-get install -y locales && rm -rf /var/lib/apt/lists/* \
+	&& localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
+  && add && libc6-compat
+ENV LANG en_US.utf8
+# RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
@@ -17,7 +21,7 @@ RUN \
 
 
 # Rebuild the source code only when needed
-FROM node:18 AS builder
+FROM ubuntu:20.04 AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
