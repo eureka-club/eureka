@@ -10,9 +10,10 @@ import { FiShare2, FiTrash2 } from 'react-icons/fi';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/react';
 // import Rating from 'react-rating';
+import useEmojiPicker from './useEmojiPicker';
 import Rating from '@/components/common/Rating'
 
-import { OverlayTrigger,Popover, Button, Spinner } from 'react-bootstrap';
+import { OverlayTrigger,Popover, Button, Spinner, Modal } from 'react-bootstrap';
 
 import {
   FacebookIcon,
@@ -77,6 +78,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const isLoadingSession = status === "loading"
   const [qty, setQty] = useState<number>(0);
   const {show} = useModalContext()
+  const {EmojiPicker,setShowEmojisPicker} = useEmojiPicker()
 
   const [mySocialInfo, setMySocialInfo] = useState<MySocialInfo>();
 
@@ -268,6 +270,12 @@ const SocialInteraction: FunctionComponent<Props> = ({
     execSocialInteraction({ socialInteraction: 'fav', doCreate: mySocialInfo ? !mySocialInfo!.favoritedByMe : true });
   };
 
+  const handleReactionClick = (ev: MouseEvent<HTMLButtonElement>) => { 
+    ev.preventDefault();
+    ev.stopPropagation()
+    setShowEmojisPicker(r=>!r)
+  }
+    // execSocialInteraction({ socialInteraction: 'reaction', doCreate: mySocialInfo ? !mySocialInfo!.favoritedByMe : true });
   const handleCreateEurekaClick = (ev: MouseEvent<HTMLButtonElement>) => { 
     ev.preventDefault();
     if (canNavigate()){
@@ -368,15 +376,24 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
   }
 
+  const renderEmojiPicker = ()=>{
+    return <EmojiPicker entity={entity} onSaved={console.log}/>
+  }
+
 const renderAddReaction = ()=>{
     if(!entity || isLoadingSession)
       return '...'
     if(entity)
-      return <Button
+      return  <div
+      >
+        <div style={{position:'relative'}}>
+        {renderEmojiPicker()}
+        </div>
+      <Button
         variant="link"
         className={`${styles.buttonSI} p-0 text-primary`}
         title={t('Add reaction')}
-        //onClick={handleFavClick}
+        onClick={handleReactionClick}
           disabled={loadingSocialInteraction}
       >
         <FaRegSmileBeam className={styles.active} /> 
@@ -387,8 +404,7 @@ const renderAddReaction = ()=>{
           </span>
         )}
       </Button>
-
-
+    </div>
   }
 
   const renderCreateEureka = ()=>{
@@ -413,8 +429,6 @@ const renderAddReaction = ()=>{
         )}
       </Button>
       </>
-
-
   }
 
 

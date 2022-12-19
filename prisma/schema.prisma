@@ -52,7 +52,8 @@ model User {
   photos              LocalImage[]
   notify              Notification[]
   notifications       NotificationsOnUsers[]
-  
+
+  reactions           Reaction[]
 
   @@map(name: "users")
 }
@@ -165,9 +166,11 @@ model Cycle {
   localImages             LocalImage[]
   complementaryMaterials  CycleComplementaryMaterial[]
   guidelines              Guideline[]
-  participants            User[]  @relation("CycleToParticipant")
-  likes                   User[]  @relation("CycleToLikes")
-  favs                    User[]  @relation("CycleToFavs")
+  participants            User[]      @relation("CycleToParticipant")
+  likes                   User[]      @relation("CycleToLikes")
+  favs                    User[]      @relation("CycleToFavs")
+  reactions               Reaction[]  
+
   posts                   Post[]
   works                   Work[]  
   cycleWorksDates         CycleWork[]
@@ -207,9 +210,10 @@ model Work {
   cycles            Cycle[]
   cyclesWorkDates   CycleWork[]
   posts             Post[]
-  likes             User[]    @relation("WorkToLikes")
-  favs              User[]    @relation("WorkToFavs")
-  readOrWatcheds    User[]    @relation("WorkReadOrWatched")
+  likes             User[]      @relation("WorkToLikes")
+  favs              User[]      @relation("WorkToFavs")
+  reactions         Reaction[]  
+  readOrWatcheds    User[]      @relation("WorkReadOrWatched")
   tags              String?
 
   terms             Term[]    @relation("TaxonomyTermWork")
@@ -299,8 +303,10 @@ model Post {
   localImages  LocalImage[]
   cycles       Cycle[]
   works        Work[]
-  likes        User[]    @relation("PostToLikes")
-  favs         User[]    @relation("PostToFavs")
+  likes        User[]       @relation("PostToLikes")
+  favs         User[]       @relation("PostToFavs")
+  reactions    Reaction[]   
+
 
   terms        Term[]    @relation("TaxonomyTermPost")
   topics       String?  
@@ -340,6 +346,29 @@ model Comment {
   @@index([creatorId], name: "comment_creator_id_index")
 
   @@map(name: "comments")
+}
+
+model Reaction {
+  id           Int         @default(autoincrement()) @id
+  creator      User        @relation(fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  creatorId    Int         @map(name: "creator_id")
+  contentText  String      @db.VarChar(4000) @map(name: "content_text")
+
+  cycle        Cycle?      @relation(fields: [cycleId], references: [id])
+  cycleId      Int?        @map(name: "cycle_id")
+
+  work         Work?       @relation(fields: [workId], references: [id])
+  workId       Int?        @map(name: "work_id")
+
+  post         Post?       @relation(fields: [postId], references: [id])
+  postId       Int?        @map(name: "post_id")
+
+  createdAt    DateTime    @default(now()) @map(name: "created_at")
+  updatedAt    DateTime    @updatedAt @map(name: "updated_at")
+  
+  @@index([creatorId], name: "reaction_creator_id_index")
+
+  @@map(name: "reactions")
 }
 
 model Taxonomy {

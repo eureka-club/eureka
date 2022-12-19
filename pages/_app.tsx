@@ -12,14 +12,26 @@ import detailPagesAtom from '../src/atoms/detailPages';
 import globalModalsAtom from '../src/atoms/globalModals';
 
 import './scss/custom.scss';
-import { GTM_ID, pageview } from '@/src/lib/gtag'
+import { GTM_ID } from '@/src/lib/gtag'
 
-import  ErrorBoundary from '@/src/ErrorBounddary';
+// import  ErrorBoundary from '@/src/ErrorBounddary';
 import { NotificationProvider } from '@/src/useNotificationProvider';
 import {ModalProvider} from '@/src/useModal'
 import Script from 'next/script';
 const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
-  const { initialState } = pageProps;
+  let initialState = null
+  let session = null
+  let dehydratedState = null
+  
+  if('initialState' in pageProps){
+    initialState = pageProps.initialState;
+  }
+  if('session' in pageProps){
+    session = pageProps.session;
+  }
+  if('dehydratedState' in pageProps){
+    dehydratedState = pageProps.dehydratedState;
+  }
   const AnyComponent = Component as any;
   
   // const {Modal} = useModal()
@@ -39,13 +51,13 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   return (
     <StrictMode>
      <SSRProvider>
-        <NextAuthProvider session={pageProps.session} refetchInterval={5 * 60}>
+        <NextAuthProvider session={session} refetchInterval={5 * 60}>
             
           {/* <GlobalEventsContext.Provider value={{...gec}}> */}
               <Provider initialValues={initialState && [[detailPagesAtom, globalModalsAtom, initialState]]}>
                 <QueryClientProvider client={queryClient}>
 
-                  <Hydrate state={pageProps.dehydratedState}>
+                  <Hydrate state={dehydratedState}>
                      {/* Google Tag Manager - Global base code */}
                   <Script
                     id="gtag-base"
@@ -81,7 +93,7 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
 
      </SSRProvider>
     </StrictMode>
-  );
+  ); 
 };
 
 // @ts-ignore

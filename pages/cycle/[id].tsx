@@ -1,6 +1,6 @@
 import { NextPage,GetServerSideProps } from 'next';
 import Head from "next/head";
-import { useAtom } from 'jotai';
+import { useAtom } from 'jotai'; 
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { getSession } from 'next-auth/react';
