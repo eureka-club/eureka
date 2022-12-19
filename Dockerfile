@@ -1,13 +1,7 @@
 # Install dependencies only when needed
-FROM ubuntu:20.04 AS deps
-
-
+FROM node:16-alpine AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apt-get update && apt-get install -y locales && rm -rf /var/lib/apt/lists/* \
-	&& localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
-  && add && libc6-compat
-ENV LANG en_US.utf8
-# RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
@@ -21,7 +15,7 @@ RUN \
 
 
 # Rebuild the source code only when needed
-FROM ubuntu:20.04 AS builder
+FROM node:16-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -59,8 +53,6 @@ RUN echo "NEXT_PUBLIC_PUBLIC_ASSETS_STORAGE_MECHANISM => $NEXT_PUBLIC_PUBLIC_ASS
 ENV NODE_ENV production
 ENV NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME 'public-assets'
 
-
-RUN yarn prisma -v
 RUN yarn prisma generate
 RUN yarn build
 
@@ -68,7 +60,7 @@ RUN yarn build
 # RUN npm run build
 
 # Production image, copy all the files and run next
-FROM node:alpine AS runner
+FROM node:16-alpine AS runner
 WORKDIR /app
 
 # Uncomment the following line in case you want to disable telemetry during runtime.
