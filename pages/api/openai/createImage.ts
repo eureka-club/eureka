@@ -10,7 +10,8 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 type Data = {
-  data: ImagesResponse
+  data?: ImagesResponse;
+  error?:string;
 }
 
 export default async function handler(
@@ -21,13 +22,20 @@ export default async function handler(
       const {n:n_,size:s} = req.body
       const n = n_ ? n_ : 3
       const size = s ? s : '256x256'
+      try{
+        const r = await openai.createImage({
+          prompt: req.body.text,
+          n,
+          size,
+          response_format:'b64_json'
+          });
+          if(r.data){
+            return res.status(200).json({ data:r.data });
+          }
+      }
+      catch(e){
+        return res.status(400).json({ error:'Server Error' });
+      }
 
-      const {data} = await openai.createImage({
-        prompt: req.body.text,
-        n,
-        size,
-        response_format:'b64_json'
-    });
-    res.status(200).json({ data });
   }
 }
