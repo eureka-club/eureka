@@ -56,6 +56,8 @@ RUN echo "NEXT_PUBLIC_PUBLIC_ASSETS_STORAGE_MECHANISM => $NEXT_PUBLIC_PUBLIC_ASS
 ENV NODE_ENV production
 ENV NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME 'public-assets'
 
+
+RUN yarn prisma -v
 RUN yarn prisma generate
 RUN yarn build
 
