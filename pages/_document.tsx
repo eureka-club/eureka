@@ -20,6 +20,7 @@ class MyDocument extends Document {
           {/* webfont(s) */}
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
           <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+          <meta name="google-site-verification" content="DQ6vv8bgVIsNmgpKCdmmvahFJd6-OhWGRhoqjGyW14A" />
           {/* Google Tag Manager */}
           {/* <script
             dangerouslySetInnerHTML={{
