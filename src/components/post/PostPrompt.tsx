@@ -18,7 +18,7 @@ interface Props {
 }
 
 const PostPrompt: FunctionComponent<Props> = ({onImageSelect,redirect = false,searchtext,searchstyle,margin=true}) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation('createPostForm');
   const router = useRouter();
   const [text,setText] = useState<any>(searchtext || "");
   const [style,setStyle] = useState<any>(searchstyle || "")
@@ -150,9 +150,7 @@ const PostPrompt: FunctionComponent<Props> = ({onImageSelect,redirect = false,se
   };
 
  return <> <Container className= {`w-100 ${styles.container} ${!margin ? 'p-0 m-0':''}`}>
-      {redirect ? <h4 className='text-secondary text-center'>{t("CreateEureka")}</h4>
-       : <h4 className='text-secondary text-center'>{t("CreateEureka1")}</h4>}
-      {!redirect && <h6 className='my-3 text-center'><em>{t("PromptText")}</em>.</h6>}
+      {redirect && <h4 className='text-secondary text-center'>{t("CreateEureka")}</h4>}
        <section className={`mt-3 mx-0 ${margin ? 'mx-lg-3' :''} `} >
        <form className='d-none d-lg-flex flex-row justify-content-center'>
          <TextField  label={t("descriptionLabel")} name="text"
@@ -187,7 +185,6 @@ const PostPrompt: FunctionComponent<Props> = ({onImageSelect,redirect = false,se
                 <MenuItem value={'Tim Burton style'}>{t("Tim Burton style")}</MenuItem>
                 <MenuItem value={'Ukiyo-e'}>{t("Ukiyo-e")}</MenuItem>
                 <MenuItem value={'Van Gogh style'}>{t("Van Gogh style")}</MenuItem>
-                <MenuItem value={'Vintage'}>{t("Vintage")}</MenuItem>
                 <MenuItem value={'Vintage'}>{t("Vintage")}</MenuItem>
               </Select>
             </FormControl>

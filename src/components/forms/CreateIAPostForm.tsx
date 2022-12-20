@@ -312,9 +312,10 @@ const CreateIAPostForm: FunctionComponent<Props> = ({noModal = false,params}) =>
 
    const handleFormClear = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    /*setSelectedWorksForCycle([]);
-    setCycleCoverImageFile(null);
-    editorRef.current.setContent('');*/
+    setSelectedCycle(null);
+    setSelectedWork(null);
+    setCurrentImg(undefined);
+    editorRef.current.setContent('');
     setItems([]);
     setTags('');
 

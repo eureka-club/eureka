@@ -104,7 +104,8 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   )
 
   const clearPayload = () => {
-    editorRef.current.setContent('');
+    if(editorRef.current)
+      editorRef.current.setContent('');
     setDiscussionItem('');
     setEurekaTopics(() => []);
     setNewEurekaImageFile(null);
@@ -150,7 +151,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         title: newEureka.title,
         image: newEurekaImageFile!,
         language: newEureka.language,
-        contentText: editorRef.current.getContent(),
+        contentText: (editorRef.current) ? editorRef.current.getContent() : "",
         isPublic: newEureka.isPublic,
         topics: eurekaTopics.join(','),
       };
@@ -163,7 +164,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         title: newEureka.title,
         image: newEurekaImageFile!,
         language: newEureka.language,
-        contentText: editorRef.current.getContent(),
+        contentText: (editorRef.current) ? editorRef.current.getContent() : "",
         isPublic: newEureka.isPublic,
         topics: eurekaTopics.join(','),
       }; 
@@ -353,6 +354,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
             </Col>  
             </Row>}
          </section>
+         {currentImg && <>
          <Form.Group controlId="eureka-title" >
                  <TextField id="eureka-title" className="w-100 mb-4" inputProps={{ maxLength: 80 }} label={t('Title')}
                         variant="outlined" size="small"  value={newEureka.title}
@@ -483,7 +485,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
             />
           </Form.Group>}
         </Col>
-      </Row>
+      </Row> </>}
 
       <aside className="d-flex justify-content-end">
         <ButtonGroup size="sm" className="pt-3">
