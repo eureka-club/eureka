@@ -70,7 +70,7 @@ RUN yarn build
 # RUN npm run build
 
 # Production image, copy all the files and run next
-FROM node:16-alpine AS runner
+FROM node:16-bullseye-slim AS runner
 WORKDIR /app
 
 # Uncomment the following line in case you want to disable telemetry during runtime.
