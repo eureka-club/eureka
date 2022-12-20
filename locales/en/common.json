@@ -157,6 +157,11 @@
   "mySaved": "Saved for later or forever",
   "myUsersFollowed": "Users I follow",
   "Featured users":"Featured Users",
-  "Create eureka":"Create Eureka"
+  "Create eureka":"Create Eureka",
+  "About Eureka":"About Eureka",
+  "aboutBox1":"Eureka is a non-profit platform whose goal is to promote conversations on complex topics in a simple and entertaining way.",
+  "aboutBox2":"We’re here to support your reflection process: on Eureka you can summarize a book/movie that had an impact on you by generating an image using artificial intelligence.",
+  "aboutBox3":"Eureka is for people who want to browse, learn and imagine a different world.",
+  "aboutBox4":"We work with civil society organizations that seek to amplify the reach of their activism. Interested? Contact us!"
   
 }

@@ -1,5 +1,6 @@
 
 import { FunctionComponent, useEffect, useState, lazy } from 'react';
+import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import {Spinner, Container,Button, Col} from 'react-bootstrap';
 import TagsInput from '@/components/forms/controls/TagsInput';
@@ -190,7 +191,23 @@ const renderCarousels =  ()=>{
    <section className='d-flex flex-column flex-lg-row'>
   <Col xs={12} lg={2}>
     <h1 className="text-secondary fw-bold">{t('Trending topics')}</h1>
-  <aside className="mb-5">{getTopicsBadgedLinks()}</aside>
+    <aside className="mb-5">{getTopicsBadgedLinks()}</aside>
+    <section className='mt-4'>
+        <h4 className="text-secondary fw-bold">{t('About Eureka')}</h4>
+        <Link href="/about"><a className='text-primary text-decoration-underline text-blue me-lg-5 mb-1 mb-lg-none' onClick={()=> window.scrollTo(0, 0)}>{t('browserTitleAbout')} </a></Link>
+    </section>
+     <section  className="mt-4 p-3 rounded overflow-auto bg-secondary text-white" role="presentation" >
+        <p className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox1')}</p>
+     </section>
+      <section  className="mt-5 p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation" >
+        <p className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox2')}</p>
+     </section>
+      <section  className="mt-5 p-3 rounded overflow-auto bg-secondary text-white" role="presentation" >
+        <p className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox3')}</p>
+     </section>
+      <section  className="mt-5 p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation" >
+        <p className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox4')}</p>
+     </section>
   </Col>  
   <Col xs={12} lg={10}>
   <section className='ms-0 ms-lg-5'>  
