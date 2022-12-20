@@ -148,11 +148,14 @@
   "JoinEureka":"Únete a Eureka",
   "Interest cycles": "Ciclos destacados",
   "Featured Eurekas":"Eurekas destacadas",
+  "IA Eurekas":"Momentos Eureka con inteligencia artificial",
   "search":"Buscar",
   "myCycles":"Ciclos que creé o me uní",
   "myPosts": "Mis Eurekas",
   "myBooksMovies": "Mis calificaciones: películas y libros que vi o leí",
   "mySaved": "Guardado para luego o para siempre",
   "myUsersFollowed": "Siguiendo",
-  "Featured users":"Usuarias destacadas"  
+  "Featured users":"Usuarias destacadas",
+  "Create eureka":"Crear Eureka"
+  
 } 

@@ -262,17 +262,17 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
                 <NavItem className={`border-primary border-bottom cursor-pointer  ${styles.tabBtn}`}>
                   <NavLink eventKey="explorer-page">
                       <span className="mb-3">
-                      {t('Explore Page')}
+                      {t('Content administration')}
                       </span>
                   </NavLink>
                 </NavItem>
-                <NavItem className={`border-primary border-bottom cursor-pointer  ${styles.tabBtn}`}>
+                {<NavItem className={`border-primary border-bottom cursor-pointer  ${styles.tabBtn}`}>
                   <NavLink eventKey="export-participants">
                       <span className="mb-3">
-                      {t('Export Cycle Participants')}
+                      ...
                       </span>
                   </NavLink>
-                </NavItem>
+                </NavItem>}
               </Nav>
        
               <TabContent>
@@ -422,7 +422,7 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
                   </TabPane>
             
                   <TabPane eventKey="export-participants">
-                    Export specific Cycle Participants Function HERE!!!
+                    
                   </TabPane>
               </TabContent>     
        </TabContainer>

@@ -149,12 +149,14 @@
   "JoinEureka":"Join Eureka",
   "Interest cycles": "Featured Cycles",
   "Featured Eurekas":"Featured Eurekas",
+  "IA Eurekas":"Eureka moments with artificial intelligence",
   "search":"Search",
   "myCycles":"Cycles I created or joined",
   "myPosts": "My Eurekas",
   "myBooksMovies": "My ratings: movies and books I watched or read",
   "mySaved": "Saved for later or forever",
   "myUsersFollowed": "Users I follow",
-  "Featured users":"Featured Users"
+  "Featured users":"Featured Users",
+  "Create eureka":"Create Eureka"
   
 }
