@@ -463,7 +463,7 @@ const CreateIAPostForm: FunctionComponent<Props> = ({noModal = false,params}) =>
 
          </section>
          
-         <Row className='d-flex flex-column px-2 px-lg-5'>
+         {currentImg && <><Row className='d-flex flex-column px-2 px-lg-5'>
             <Col className='mb-4'>
               <FormGroup controlId="workOrCycle">
                 <FormLabel>*{t('searchCycleOrWorkFieldLabel')}</FormLabel>
@@ -614,7 +614,7 @@ const CreateIAPostForm: FunctionComponent<Props> = ({noModal = false,params}) =>
              <Col className="mb-4">
               <TagsInput tags={tags} setTags={setTags} label={t('topicsFieldLabel')}/>
             </Col>
-            </Row>}  
+            </Row>}  </>}
      </ModalBody>
      <ModalFooter>
             <Row className='d-flex flex-column flex-lg-row'>
