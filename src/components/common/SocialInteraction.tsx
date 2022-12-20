@@ -420,7 +420,7 @@ const renderAddReaction = ()=>{
       > 
       <div className={`d-flex flex-row`}>
            <BiImageAdd className={styles.active}/>
-           <span className='d-flex align-items-center text-primary' style={{fontSize: '0.8em'}}>Create Eureka</span>
+           <span className='d-flex align-items-center text-primary' style={{fontSize: '0.8em'}}>{t('Create eureka')}</span>
       </div>
         {showButtonLabels && (
           <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>

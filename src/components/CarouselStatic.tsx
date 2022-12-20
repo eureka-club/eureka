@@ -112,9 +112,11 @@ const CarouselStatic: FunctionComponent<Props> = ({
           d = data.filter((i) => globalSEState.only.includes((i && i.type) || ''));
         }
         setDataFiltered(() => d);
-        const s = d.slice(0, 6);
-        setCurrent(() => [...s]);
-        setShow(() => [...d.slice(6, d.length)]);
+        //const s = d.slice(0, 6);
+        setCurrent(() => [...d]);
+        setShow(() => [...d]);
+        //setCurrent(() => [...s]);
+        //setShow(() => [...d.slice(6, d.length)]);
       } else {
         setDataFiltered(() => []);
         setCurrent(() => []);
@@ -134,7 +136,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
       ));
       result = (
         <div className="d-flex flex-nowrap w-100 justify-content-xl-left">
-          {!!(hide.length) && <Button
+         {/* {!!(hide.length) && <Button
             className={`text-white rounded-circle align-self-center ${styles.leftButton}`}
             onClick={() => {
               const s = current.slice(0, 6);
@@ -146,9 +148,9 @@ const CarouselStatic: FunctionComponent<Props> = ({
             disabled={!hide.length}
           >
             <RiArrowLeftSLine />
-          </Button> || ''}
+          </Button> || ''}*/}
           {mosaics}
-          {!!(show.length) && <Button
+          {/*  {!!(show.length) && <Button
             className={`text-center text-white rounded-circle align-self-center ${styles.rightButton}`}
             onClick={() => {
               const c = current.splice(0, 6);
@@ -159,7 +161,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
             disabled={!show.length}
           >
             <RiArrowRightSLine />
-          </Button> || ''}
+          </Button> || ''}*/}
         </div>
       );
     }
