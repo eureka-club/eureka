@@ -12,7 +12,9 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import slugify from 'slugify'
 import useFeaturedUsers from '@/src/useFeaturedUsers';
+import useInterestedCycles from '@/src/useInterestedCycles';
 import useMyCycles,{myCyclesWhere} from '@/src/useMyCycles';
+import useFeaturedEurekas from '@/src/useFeaturedEurekas';
 import Prompt from '@/src/components/post/PostPrompt';
 
 const Carousel = lazy(()=>import('@/components/Carousel'));
@@ -47,14 +49,20 @@ const HomeSingIn: FunctionComponent<Props> = ({ groupedByTopics}) => {
   });
   const [users,setUsers] = useState<UserMosaicItem[]>()
   const {data:dataUsers} = useFeaturedUsers()
-  const [cycles,setCycles] = useState<CycleMosaicItem[]>()
   const {data:dataCycles} = useMyCycles(session?.user.id!)
-  
+  const [cycles,setCycles] = useState<CycleMosaicItem[]>()
+  const {data:dataFeaturedCycles} = useInterestedCycles()
+  const [featuredCycles,setfeaturedCycles] = useState(dataFeaturedCycles?.cycles);
+  const {data:dataPosts} = useFeaturedEurekas()
+  const [posts,setPosts] = useState(dataPosts?.posts);
 
   useEffect(()=>{
     if(dataUsers)setUsers(dataUsers)
-    if(dataCycles)setCycles(dataCycles.cycles)
-  },[dataCycles,dataUsers])
+    if(dataFeaturedCycles)setfeaturedCycles(dataFeaturedCycles.cycles)
+    if(dataPosts)setPosts(dataPosts.posts)
+    if(dataCycles)setCycles(dataCycles.cycles)   
+
+  },[dataCycles,dataUsers,dataFeaturedCycles,dataPosts])
 
   const [gbt, setGBT] = useState([...Object.entries(groupedByTopics||[])]);
   const [topicIdx,setTopicIdx] = useState(gbt.length-1)
@@ -139,6 +147,34 @@ const featuredUsers = () => {
     : <></>;
   };
 
+   const renderFeaturedEurekas = () => {
+    return (posts && posts.length && dataPosts) 
+    ? <div>      
+       <CarouselStatic
+        cacheKey={['POSTS','FEATURED']}
+        onSeeAll={()=>router.push('/featured-eurekas')}
+        data={posts}
+        title={t('IA Eurekas')}
+        //seeAll={posts.length<dataPosts.total}
+      />
+      </div>
+    : <></>;
+  };
+
+  const renderFeaturedCycles = () => {
+    return (featuredCycles && featuredCycles.length && dataFeaturedCycles) 
+    ? <div>      
+       <CarouselStatic
+        cacheKey={['CYCLES','INTERESTED']}
+        onSeeAll={()=>router.push('/featured-cycles')}
+        data={featuredCycles}
+        title={t('Interest cycles')}
+        //seeAll={cycles.length<dataCycles?.total}
+      />
+      </div>
+    : <></>;
+  };
+
 const renderCarousels =  ()=>{
         return <>
                 {gbt.map(([topic,apiResponse])=>{
@@ -158,16 +194,18 @@ const renderCarousels =  ()=>{
   </Col>  
   <Col xs={12} lg={10}>
   <section className='ms-0 ms-lg-5'>  
+    {renderFeaturedEurekas()}
+    {renderFeaturedCycles()}
+    {/*cyclesJoined()*/}
+    {featuredUsers()}
     <>
-    <div>
+    <div className="mt-5">
       {renderCarousels()}
     </div>
     <div className="mb-5">
       {renderSpinnerForLoadNextCarousel()}
     </div>
   </>
-   {featuredUsers()}
-  {cyclesJoined()}
   </section>
   </Col>
 </section>  

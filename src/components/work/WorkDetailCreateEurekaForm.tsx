@@ -95,7 +95,8 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
 
 
   const clearPayload = () => {
-    editorRef.current.setContent('');
+    if(editorRef.current)
+      editorRef.current.setContent('');
     setDiscussionItem('');
     setEurekaTopics(() => []);
     setNewEurekaImageFile(null);
@@ -141,7 +142,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
         title: newEureka.title,
         image: newEurekaImageFile!,
         language: newEureka.language,
-        contentText: editorRef.current.getContent(),
+        contentText: (editorRef.current) ? editorRef.current.getContent() : "",
         isPublic: newEureka.isPublic,
         topics: eurekaTopics.join(','),
       };
@@ -292,7 +293,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
   };
 
   return <Form ref={formRef}>
-    <section id='create-post' className='my-3'>
+    <section id='create-post' className='mt-5 my-3'>
          {!useCrop && <Prompt onImageSelect={onImageSelect} margin={false} />}
          <Form.Group className='mt-4 mb-4'>
           <FormControlLabel control={<Switch  checked={useCrop} onChange={handleChangeUseCropSwith}/>} label={t('showCrop')} />
@@ -316,6 +317,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
             </Col>  
             </Row>}
          </section>
+         {currentImg && <>
          <Form.Group controlId="eureka-title" >
                  <TextField id="eureka-title" className="w-100 mb-4" inputProps={{ maxLength: 80 }} label={t('Title')}
                         variant="outlined" size="small"  value={newEureka.title}
@@ -427,7 +429,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
             />
           </Form.Group>}
         </Col>
-      </Row>
+      </Row></>}
 
       <aside className="d-flex justify-content-end">
         <ButtonGroup size="sm" className="pt-3">

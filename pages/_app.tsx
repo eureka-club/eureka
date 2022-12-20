@@ -1,4 +1,4 @@
-import { Provider } from 'jotai';
+import { Provider,Atom } from 'jotai';
 import { AppProps } from 'next/app';
 import { SessionProvider as NextAuthProvider } from 'next-auth/react';
 import { StrictMode, FunctionComponent, useState } from 'react';
@@ -18,16 +18,17 @@ import { GTM_ID } from '@/src/lib/gtag'
 import { NotificationProvider } from '@/src/useNotificationProvider';
 import {ModalProvider} from '@/src/useModal'
 import Script from 'next/script';
+import { Session } from '@/src/types';
 const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
-  let initialState = null
-  let session = null
+  let initialState : Iterable<readonly [Atom<unknown>, unknown]> | undefined = undefined
+  let session:  Session | null | undefined = null
   let dehydratedState = null
   
   if('initialState' in pageProps){
-    initialState = pageProps.initialState;
+    initialState = pageProps.initialState as  Iterable<readonly [Atom<unknown>, unknown]> | undefined;
   }
   if('session' in pageProps){
-    session = pageProps.session;
+    session = pageProps.session as Session | null | undefined;
   }
   if('dehydratedState' in pageProps){
     dehydratedState = pageProps.dehydratedState;
@@ -53,8 +54,9 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
      <SSRProvider>
         <NextAuthProvider session={session} refetchInterval={5 * 60}>
             
-          {/* <GlobalEventsContext.Provider value={{...gec}}> */}
-              <Provider initialValues={initialState && [[detailPagesAtom, globalModalsAtom, initialState]]}>
+          {/* <GlobalEventsContext.Provider value={{...gec}}> 
+          //<Provider initialValues={initialState && [[detailPagesAtom, globalModalsAtom, initialState]]}>*/}
+              <Provider initialValues={initialState && [[detailPagesAtom, initialState]]}>
                 <QueryClientProvider client={queryClient}>
 
                   <Hydrate state={dehydratedState}>
