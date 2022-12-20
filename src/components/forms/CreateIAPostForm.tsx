@@ -315,7 +315,8 @@ const CreateIAPostForm: FunctionComponent<Props> = ({noModal = false,params}) =>
     setSelectedCycle(null);
     setSelectedWork(null);
     setCurrentImg(undefined);
-    editorRef.current.setContent('');
+    if(editorRef.current)
+      editorRef.current.setContent('');
     setItems([]);
     setTags('');
 

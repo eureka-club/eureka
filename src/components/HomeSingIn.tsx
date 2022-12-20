@@ -158,16 +158,16 @@ const renderCarousels =  ()=>{
   </Col>  
   <Col xs={12} lg={10}>
   <section className='ms-0 ms-lg-5'>  
+    {featuredUsers()}
+    {cyclesJoined()}
     <>
-    <div>
+    <div className="mt-5">
       {renderCarousels()}
     </div>
     <div className="mb-5">
       {renderSpinnerForLoadNextCarousel()}
     </div>
   </>
-   {featuredUsers()}
-  {cyclesJoined()}
   </section>
   </Col>
 </section>  
