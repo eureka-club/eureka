@@ -1,7 +1,7 @@
 export const DATE_FORMAT_HUMANIC_ADVANCED = 'MMMM Do YYYY';
 export const DATE_FORMAT_PROPS = 'YYYY-MM-DD';
 export const DATE_FORMAT_ONLY_YEAR = 'YYYY';
-export const DATE_FORMAT_SHORT = 'D·MM·YYYY';
+export const DATE_FORMAT_SHORT = 'DD·MM·YY';
 export const DATE_FORMAT_SHORT_MONTH_YEAR = 'MM/YYYY';
 
 export const ASSETS_BASE_URL = process.env.NEXT_PUBLIC_LOCAL_ASSETS_BASE_URL;

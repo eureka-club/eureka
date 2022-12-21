@@ -138,7 +138,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   if(!cycle)return <></>
 
   return (
-      cycle && <Row className="d-flex flex-column-reverse flex-lg-row mb-1 mb-lg-5">
+      cycle && <section className="d-flex flex-column-reverse flex-lg-row mb-1 mb-lg-5">
         {/* xs={{ span: 12, order: 2 }} md={{ span: 7, order: 1 }} lg={{ span: 8 }}*/}
          <Col className="d-none d-lg-flex col-12 col-lg-3 justify-content-center justify-content-lg-start">
           <aside className='d-flex flex-column'>            
@@ -148,7 +148,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
             <div className="mt-3"><UserAvatar  width={42} height={42} userId={cycle.creatorId}  showFullName /></div>
           </aside>
         </Col>
-        <Col className='mt-3 mt-lg-0 col-12 col-lg-9 d-none d-lg-flex flex-column justify-content-center justify-content-lg-start'>
+        <Col className='mt-3 ms-lg-3 mt-lg-0 col-12 col-lg-9 d-none d-lg-flex flex-column justify-content-center justify-content-lg-start'>
           <h1 className="d-none d-lg-block mb-1 fw-bold text-secondary">
             {cycle.title}
           </h1>
@@ -301,7 +301,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           )}
         </Col>
 
-      </Row>
+      </section>
     );
 };
 

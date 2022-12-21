@@ -92,7 +92,7 @@ const PostPrompt: FunctionComponent<Props> = ({onImageSelect,redirect = false,se
     const {data:en_text} = await fetch(`/api/google-translate/?text=${text + ", " + style}&target=en`)
     .then(r=>r.json())
 
-    const {data:{data}} =  await fetch('/api/openai/createImage',{
+    const {error,data} =  await fetch('/api/openai/createImage',{
       method:'POST',
       headers:{
           'Content-type':'application/json'
@@ -100,17 +100,22 @@ const PostPrompt: FunctionComponent<Props> = ({onImageSelect,redirect = false,se
       body:JSON.stringify({text:en_text})
     }).then(r=>r.json()) 
 
-    const promises = (data as {b64_json:string}[]).map(d=>{
-      return new Promise((resolve,reject)=>{
-        const img = new Image()
-        img.onload = function(){
-          setImages(res=>[...res,img])
-          resolve(true)
-        }
-        img.src = `data:image/webp;base64,${d.b64_json}`
+     if(data){
+      const promises = (data as {b64_json:string}[]).map(d=>{
+        return new Promise((resolve,reject)=>{
+          const img = new Image()
+          img.onload = function(){
+            setImages(res=>[...res,img])
+            resolve(true)
+          }
+          img.src = `data:image/webp;base64,${d.b64_json}`
+        })
       })
-    })
-    await Promise.all(promises)
+      await Promise.all(promises)
+
+    }
+    else if(error)
+        toast.error(error)
     setLoading(false)
     
   }

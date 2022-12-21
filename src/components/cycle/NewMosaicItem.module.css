@@ -114,11 +114,15 @@
   /*height: 20%;
   //max-height: 20%;
   margin: 8px;*/
+   width: 80%;
    position: absolute;
-   margin-bottom: 35%;
-   margin-right: 5%;
-   font-size: 1.5em;
+   margin-bottom: 32%;
    padding: auto;
+}
+
+.participants{
+   position: absolute;
+   /*margin-bottom: 28%;*/
 }
 
  .marquee {

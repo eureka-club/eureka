@@ -209,7 +209,7 @@ const renderCarousels =  ()=>{
         <p className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox4')}</p>
      </section>
   </Col>  
-  <Col xs={12} lg={10} className="border-start">
+  <Col xs={12} lg={10} className="">
   <section className='ms-0 ms-lg-5'>  
     {renderFeaturedEurekas()}
     {renderFeaturedCycles()}

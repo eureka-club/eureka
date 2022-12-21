@@ -200,15 +200,14 @@ const NewMosaicItem: FunctionComponent<Props> = ({
       <LocalImageComponent className='cycle-img-card'  filePath={cycle?.localImages[0].storedFile} title={cycle?.title} alt={cycle?.title} />
       
       {detailed && (cycle && cycle.creator && cycle.startDate && cycle.endDate ) && (<div className={`d-flex flex-row justify-content-between  ${styles.date}`}>
-                        <div  className={`ms-2 me-2 d-flex flex-row aling-items-center fs-6  ${styles.marquee}`}>
-                         <Avatar className='me-3' width={26} height={26} userId={cycle.creator.id} showName={false} size="xs" />
+                        <div  className={` d-flex flex-row aling-items-center fs-6`}>
+                         <Avatar className='' width={26} height={26} userId={cycle.creator.id} showName={false} size="xs" />
+                         <div className='d-flex align-items-center'>
                             {dayjs(cycle?.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
-                          <span className='ms-1 me-1'>-</span>
+                          <span className='' style={{marginLeft:'1.5px',marginRight:'1.5px'}}>-</span>
                             {dayjs(cycle?.endDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
-                         {showParticipants && (<div className='ms-4 me-4 d-flex flex-row'><MdGroup className='text-white  d-flex aling-items-center' style={{fontSize:'1.65em'}}/>
-              <span className='text-white d-flex align-items-end' style={{fontSize:'.9em'}}>{`${participants?.length ||'...'}`}
-            </span></div>)
-          } 
+                         </div>   
+                        
           </div>
                         </div>)}
                           
@@ -233,70 +232,31 @@ const NewMosaicItem: FunctionComponent<Props> = ({
   
   const renderJoinLeaveCycleBtn = useMemo(()=>{
     if(cycle && !isLoadingSession){
+     
       if(cycle.currentUserIsCreator)
-        return <OverlayTrigger
-          key='currentUserIsCreator'
-          placement='top'
-          overlay={
-            <Tooltip id={`tooltip-right`}>
-        {t('MyCycle')}
-            </Tooltip>
-          }
-        >          
-        <Button  className={`rounded rounded-5 text-white  ${styles.joinButtonContainer}`} size='sm'>
-          <h4 className='mb-1'><AiOutlineCrown className='text-white'/></h4>
+        return   <Button   variant="btn-warning border-warning text-white fs-6 disabled" className={`rounded rounded-2  ${styles.joinButtonContainer}`} size='sm'>
+          <span className='fs-6'>{t('MyCycle')}</span>
       </Button>
-      </OverlayTrigger>
 
-      if(cycle.currentUserIsParticipant)
-        return <OverlayTrigger
-          key='currentUserIsParticipant'
-          placement='top'
-          overlay={
-            <Tooltip id={`tooltip-top`}>
-            {t('leaveCycleLabel')}
-            </Tooltip>
-          }
-        >          
-         <Button  disabled={isPending()} onClick={handleLeaveCycleClick} className={`rounded rounded-5 text-white ${styles.joinButtonContainer}`} size='sm'>
-            <h4 className='mb-1'><RiDoorClosedLine className='text-white'/></h4>
-          </Button>
-        </OverlayTrigger>
+      if(cycle.currentUserIsParticipant)         
+          return <Button  disabled={isPending()} onClick={handleLeaveCycleClick} variant="button border-primary text-primary" className={`rounded rounded-2  ${styles.joinButtonContainer}`} size='sm'>
+           {!isPending() ? <span className='fs-6'>{t('leaveCycleLabel')}</span> :  <Spinner size='sm' animation='grow'/> } 
+            </Button>
 
       if(cycle.currentUserIsPending)
-         return <OverlayTrigger
-          key='currentUserIsPending'
-          placement='top'
-          overlay={
-            <Tooltip id={`tooltip-top`}>
-              {t('joinCyclePending')}
-            </Tooltip>
-          }
-        >
-          <Button 
-             disabled={false}
-            className={`rounded rounded-5 text-white ${styles.joinButtonContainer}`} size='sm'>
-             <h4 className='mb-1'><BiAlarm className='text-white'/></h4>
+         return  <Button 
+            disabled={true}
+            className={`rounded rounded-2 text-white ${styles.joinButtonContainer}`} size='sm'>
+            <span className='fs-6'>{t('joinCyclePending')}</span>
             </Button>
-        </OverlayTrigger>
 
-      return <OverlayTrigger
-          key='currentUserjoin'
-          placement='top'
-          overlay={
-            <Tooltip id={`tooltip-top`}>
-             {t('joinCycleLabel')}
-            </Tooltip>
-          }
-        >        
-       <Button 
-        disabled={isPending()}
-        onClick={handleJoinCycleClick} className={`rounded rounded-5 text-white ${styles.joinButtonContainer}`} size='sm'>
-          <h4 className='mb-1'><RiDoorOpenLine className='text-white'/></h4>
-        </Button>
-              </OverlayTrigger>
-
+          return  <Button 
+            disabled={isPending()}
+            onClick={handleJoinCycleClick} className={`rounded rounded-2 text-white ${styles.joinButtonContainer}`} size='sm'>
+              {!isPending() ? <span className='fs-6'>{t('joinCycleLabel')}</span> :  <Spinner size='sm' animation='grow'/> }
+            </Button>           
     }
+
     return <Button 
           disabled={true}
           className="text-white">
@@ -312,11 +272,16 @@ const NewMosaicItem: FunctionComponent<Props> = ({
         <div className={`${linkToCycle ? 'cursor-pointer' : ''} ${styles.imageContainer}`} >
             {renderLocalImageComponent()}
             {isActive() && <CgMediaLive className={`${styles.isActiveCircle}`} />}
-            <Badge bg="primary" className={`fw-normal fs-6 text-black rounded-pill px-2 ${styles.type}`}>
+            <Badge bg="primary" className={`d-flex flex-row align-items-center  fw-normal fs-6 text-black rounded-pill px-2 ${styles.type}`}>
               {getCycleAccesLbl()}
+               {showParticipants && (<div className={`ms-2 d-flex  flex-row`}><MdGroup className='text-black  d-flex align-items-start' style={{fontSize:'1.1em'}}/>
+              <span className='text-black d-flex align-items-center' style={{fontSize:'.9em'}}>{`${participants?.length ||'...'}`}
+            </span></div>)
+          } 
             </Badge>
-           <div className={`h-100 d-flex justify-content-end align-items-end`}>
+           <div className={`h-100 d-flex justify-content-center align-items-end`}>
               {renderJoinLeaveCycleBtn}
+              
            </div> 
          </div>
                 
