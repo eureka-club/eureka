@@ -140,7 +140,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           role="presentation"
           style={style}
         >
-          {!canNavigate() && <Spinner className="position-absolute top-50 start-50" animation="grow" variant="info" />}
+          {!canNavigate() && <Spinner className="position-absolute top-50 start-50" size="sm" animation="grow" variant="info" />}
           {img}
         </div>
       );

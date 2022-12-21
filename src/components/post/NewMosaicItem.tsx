@@ -164,7 +164,7 @@ const getParentTitle = () => {
           onClick={onImgClick}
           role="presentation"
         >
-          {!canNavigate() && <Spinner className="position-absolute top-50 start-50" animation="grow" variant="info" style={{zIndex:'1'}} />}
+          {!canNavigate() && <Spinner className="position-absolute top-50 start-50" size="sm" animation="grow" variant="info" style={{zIndex:'1'}} />}
           {img}
         </div>
         );
@@ -179,8 +179,8 @@ const getParentTitle = () => {
           {renderLocalImageComponent()}        
           {post && showdetail && (
           <div className={`${styles.postDetail}`}>
-               <div  className={`d-flex flex-row fs-6 ${styles.marquee}`}>
-                <Avatar width={28} height={28} userId={post.creator.id} showFullName={true} size="xs" />
+               <div  className={`d-flex flex-row fs-6 `}>
+                <Avatar width={27} height={27} userId={post.creator.id} showFullName={false} size="xs" />
                 <span className='ms-1 me-1 d-flex align-items-center'>-</span>
                 <span className="d-flex align-items-center ">{dayjs(post.createdAt).format(DATE_FORMAT_SHORT)}</span>
                 </div>

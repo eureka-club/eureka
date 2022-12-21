@@ -220,7 +220,7 @@ const NewMosaicItem: FunctionComponent<Props> = ({
           onClick={onImgClick}
           role="presentation"
         >
-          {!canNavigate() && <Spinner className="position-absolute top-50 start-50" animation="grow" variant="info" style={{zIndex:'1'}} />}
+          {!canNavigate() && <Spinner className="position-absolute top-50 start-50"  size="sm" animation="grow" variant="info" style={{zIndex:'1'}} />}
           {img}
         </div>
       );
@@ -272,10 +272,10 @@ const NewMosaicItem: FunctionComponent<Props> = ({
         <div className={`${linkToCycle ? 'cursor-pointer' : ''} ${styles.imageContainer}`} >
             {renderLocalImageComponent()}
             {isActive() && <CgMediaLive className={`${styles.isActiveCircle}`} />}
-            <Badge bg="primary" className={`d-flex flex-row align-items-center  fw-normal fs-6 text-black rounded-pill px-2 ${styles.type}`}>
+            <Badge bg="primary" className={`d-flex flex-row align-items-center  fw-normal fs-6 text-white rounded-pill px-2 ${styles.type}`}>
               {getCycleAccesLbl()}
-               {showParticipants && (<div className={`ms-2 d-flex  flex-row`}><MdGroup className='text-black  d-flex align-items-start' style={{fontSize:'1.1em'}}/>
-              <span className='text-black d-flex align-items-center' style={{fontSize:'.9em'}}>{`${participants?.length ||'...'}`}
+               {showParticipants && (<div className={`ms-2 d-flex  flex-row`}><MdGroup className='text-white  d-flex align-items-start' style={{fontSize:'1.1em'}}/>
+              <span className='text-white d-flex align-items-center' style={{fontSize:'.9em'}}>{`${participants?.length ||'...'}`}
             </span></div>)
           } 
             </Badge>

@@ -513,9 +513,9 @@ const renderAddReaction = ()=>{
             </OverlayTrigger>
           </div>
         )}
-        <div className={`ms-1`}>
+        {/*<div className={`ms-1`}>
             {renderAddReaction()}       
-        </div>
+        </div>*/}
         { showSaveForLater && <div className={`ms-1`}>
             {renderSaveForLater()}       
         </div>}
