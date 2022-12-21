@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
 import { GiBrain } from 'react-icons/gi';
+import { VscReactions } from 'react-icons/vsc';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 import { BiImageAdd } from 'react-icons/bi';
 import { FaRegSmileBeam } from 'react-icons/fa'
@@ -396,7 +397,7 @@ const renderAddReaction = ()=>{
         onClick={handleReactionClick}
           disabled={loadingSocialInteraction}
       >
-        <FaRegSmileBeam className={styles.active} /> 
+        <VscReactions className={styles.active} /> 
         <br />
         {showButtonLabels && (
           <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>

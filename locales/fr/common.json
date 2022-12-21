@@ -157,6 +157,16 @@
   "mySaved": "Enregistré pour plus tard ou pour toujours",
   "myUsersFollowed": "Abonnements",
   "Featured users":"Utilisateurs-trices populaires",
+<<<<<<< HEAD
   "Create eureka":"Créer Eureka"
   
+=======
+  "Create eureka":"Créer Eureka",
+  "About Eureka":"À propos d’Eureka",
+  "aboutBox1":"Eureka est une plateforme à but non lucratif dont le but est de promouvoir des échanges sur des sujets complexes de manière simple et amusante.",
+  "aboutBox2":"Nous accompagnons votre réflexion: ici vous pouvez résumer une œuvre qui vous a marqué en créant une image à l'aide de l'intelligence artificielle.",
+  "aboutBox3":"Eureka s'adresse aux personnes qui souhaitent découvrir, apprendre et imaginer un monde différent.",
+  "aboutBox4":"Nous travaillons avec des organisations de la société civile qui cherchent à faire en sorte que leur activisme touche le plus de personnes possible. Ça vous intéresse? Écrivez-nous!."
+
+>>>>>>> develop
   }
