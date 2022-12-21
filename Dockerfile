@@ -5,7 +5,8 @@ FROM ubuntu:jammy AS deps
 RUN apt-get update && \
     apt-get install -y \
       curl \
-    libc6 \
+      gnupg \
+      libc6 \
       wget \
       openssl \
       bash \
