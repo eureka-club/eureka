@@ -474,7 +474,7 @@ a{
      margin-top: 0.8em;
    }
    .allPageSection{
-     margin: 0px;
+    margin: 0px;
     min-height: 100vh;
  }
   
@@ -652,3 +652,12 @@ a{
   }
 }
 /*fin pagina error*/
+
+//solo mozilla
+@-moz-document url-prefix() {
+   //Dentro irían todos los estilos que quieres que se apliquen solo en Firefox.
+     @media (min-width: 1200px){
+  .container-xl, .container-lg, .container-md, .container-sm, .container {
+      max-width: 1250px;}
+  }
+}

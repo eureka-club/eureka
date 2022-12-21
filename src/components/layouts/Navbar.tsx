@@ -153,14 +153,14 @@ const NavBar: FunctionComponent = () => {
         <Navbar.Collapse className={`${styles['responsive-navbar-nav']}`}>
           <Nav className="">
              {!isLoadingSession &&(
-            <SearchInput className="" style={{width:'440px'}}/>
+            <SearchInput className="" style={{width:'400px'}}/>
 
              )}
           </Nav>         
           <Nav className={`${styles.navbarNav} ms-2`}>
             <Dropdown data-cy="link-topics" align="end" className={styles.langSwitch}>
               <Dropdown.Toggle as={ChevronToggle}>
-                <HiOutlineHashtag className={`${styles.navbarIconNav} border border-3 border-primary`} style={{scale:'90%',padding:'2px'}} />
+                <HiOutlineHashtag className={`${styles.navbarIconNav} border border-2 border-primary`} style={{scale:'90%',padding:'2px'}} />
               </Dropdown.Toggle>
               <span className={styles.menuBottomInfo}>{t('Topics')}</span>
               <Dropdown.Menu data-cy="links-topics">

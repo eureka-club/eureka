@@ -189,10 +189,10 @@ const renderCarousels =  ()=>{
   return <>
   <section className='my-5'><Prompt redirect={true}/></section>
    <section className='d-flex flex-column flex-lg-row'>
-  <Col xs={12} lg={2}>
+  <Col xs={12} lg={2} className="me-5" >
     <h3 className="text-secondary fw-bold">{t('Trending topics')}</h3>
     <aside className="mb-4">{getTopicsBadgedLinks()}</aside>
-    <section className='mt-2'>
+    <section className='mt-5'>
         <h3 className="text-secondary  fw-bold">{t('About Eureka')}</h3>
         <Link href="/about"><a className='text-primary text-decoration-underline text-blue' onClick={()=> window.scrollTo(0, 0)}>{t('browserTitleAbout')} </a></Link>
     </section>
@@ -209,7 +209,7 @@ const renderCarousels =  ()=>{
         <p className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox4')}</p>
      </section>
   </Col>  
-  <Col xs={12} lg={10}>
+  <Col xs={12} lg={10} className="border-start">
   <section className='ms-0 ms-lg-5'>  
     {renderFeaturedEurekas()}
     {renderFeaturedCycles()}
