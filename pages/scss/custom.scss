@@ -274,10 +274,14 @@ hr {
 }
 
 .card.mosaic-md{ // resultados y tabs eurekas y ciclos en detalles
-  width: 250px !important;
-  height: 385px !important;
-  max-width: 385px !important;
-  max-height: 350px !important;
+  width: 190px !important;
+  height: 292px !important;
+  max-width: 190px !important;
+  max-height: 292px !important;
+  //width: 250px !important;
+  //height: 385px !important;
+  //max-width: 385px !important;
+  //max-height: 350px !important;
 }
 
 .card.mosaic-lg{ //Mosaico de la entidad en un detalle
@@ -298,6 +302,12 @@ hr {
   height: 242px !important;
   max-width: 157px !important;
   max-height: 242px !important;
+}
+.card.mosaic-md{ //// resultados y tabs eurekas y ciclos en detalles vista movil
+  width: 250px !important;
+  height: 385px !important;
+  max-width: 385px !important;
+  max-height: 350px !important;;
 }
 }
 

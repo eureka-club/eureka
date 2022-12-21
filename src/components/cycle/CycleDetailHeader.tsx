@@ -140,7 +140,15 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   return (
       cycle && <Row className="d-flex flex-column-reverse flex-lg-row mb-1 mb-lg-5">
         {/* xs={{ span: 12, order: 2 }} md={{ span: 7, order: 1 }} lg={{ span: 8 }}*/}
-        <Col className='mt-3 mt-lg-0 col-12 col-lg-8 d-none d-lg-flex flex-column justify-content-center justify-content-lg-start'>
+         <Col className="d-none d-lg-flex col-12 col-lg-3 justify-content-center justify-content-lg-start">
+          <aside className='d-flex flex-column'>            
+            <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
+              <MosaicItem cycleId={cycle.id} showTrash detailed={false} showSaveForLater={true} className="mt-1" cacheKey={['CYCLE', `${cycle.id}`]} size={'lg'} />
+            </MosaicContext.Provider>
+            <div className="mt-3"><UserAvatar  width={42} height={42} userId={cycle.creatorId}  showFullName /></div>
+          </aside>
+        </Col>
+        <Col className='mt-3 mt-lg-0 col-12 col-lg-9 d-none d-lg-flex flex-column justify-content-center justify-content-lg-start'>
           <h1 className="d-none d-lg-block mb-1 fw-bold text-secondary">
             {cycle.title}
           </h1>
@@ -226,14 +234,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           {/* </CycleContext.Provider> */}
         </Col>
         )}
-        <Col className="d-none d-lg-flex col-12 col-lg-4 justify-content-center justify-content-lg-end">
-          <aside className='d-flex flex-column'>
-            <UserAvatar width={42} height={42} userId={cycle.creatorId}  showFullName />
-            <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
-              <MosaicItem cycleId={cycle.id} showTrash detailed={false} showSaveForLater={true} className="mt-4" cacheKey={['CYCLE', `${cycle.id}`]} size={'lg'} />
-            </MosaicContext.Provider>
-          </aside>
-        </Col>
+       
         {show && (
         <Col className='col-12 d-flex justify-content-center d-lg-none' >
             <aside className='d-flex flex-column'>

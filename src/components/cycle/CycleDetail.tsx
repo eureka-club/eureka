@@ -183,7 +183,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     if(posts){
       return <>
         <Row className='mt-2'>
-        {posts.map((p)=><Col xs={12} sm={6} lg={3} key={p.id} className="mb-5 d-flex justify-content-center  align-items-center">
+        {posts.map((p)=><Col xs={12} sm={3} lg={2} key={p.id} className="mb-5 d-flex justify-content-center  align-items-center">
           <MosaicItemPost  cacheKey={['POST',`${p.id}`]} postId={p.id} showSaveForLater={true} size={'md'} />          
         </Col>
         )}

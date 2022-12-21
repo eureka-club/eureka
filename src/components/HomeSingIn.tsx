@@ -190,11 +190,11 @@ const renderCarousels =  ()=>{
   <section className='my-5'><Prompt redirect={true}/></section>
    <section className='d-flex flex-column flex-lg-row'>
   <Col xs={12} lg={2}>
-    <h1 className="text-secondary fw-bold">{t('Trending topics')}</h1>
-    <aside className="mb-5">{getTopicsBadgedLinks()}</aside>
-    <section className='mt-4'>
-        <h4 className="text-secondary fw-bold">{t('About Eureka')}</h4>
-        <Link href="/about"><a className='text-primary text-decoration-underline text-blue me-lg-5 mb-1 mb-lg-none' onClick={()=> window.scrollTo(0, 0)}>{t('browserTitleAbout')} </a></Link>
+    <h3 className="text-secondary fw-bold">{t('Trending topics')}</h3>
+    <aside className="mb-4">{getTopicsBadgedLinks()}</aside>
+    <section className='mt-2'>
+        <h3 className="text-secondary  fw-bold">{t('About Eureka')}</h3>
+        <Link href="/about"><a className='text-primary text-decoration-underline text-blue' onClick={()=> window.scrollTo(0, 0)}>{t('browserTitleAbout')} </a></Link>
     </section>
      <section  className="mt-4 p-3 rounded overflow-auto bg-secondary text-white" role="presentation" >
         <p className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox1')}</p>

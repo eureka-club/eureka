@@ -177,7 +177,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
       return <>
         <WorkDetailPost workId={work.id} className='mb-2' cacheKey={['POSTS',JSON.stringify(workPostsWhere)]}></WorkDetailPost> 
         <Row className='mt-5'>
-        {posts.map((p)=><Col key={p.id} xs={12} sm={6} lg={3} className="mb-5 d-flex justify-content-center  align-items-center">
+        {posts.map((p)=><Col key={p.id} xs={12} sm={3} lg={2} className="mb-5 d-flex justify-content-center  align-items-center">
           <MosaicItemPost  cacheKey={['POST',`${p.id}`]} postId={p.id} size={'md'} showSaveForLater={true}  />          
         </Col>
         )}
