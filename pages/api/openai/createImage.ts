@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Configuration, OpenAIApi,ImagesResponse } from "openai";
+import { Configuration, OpenAIApi,ImagesResponseDataInner } from "openai";
 
 
 const configuration = new Configuration({
@@ -10,7 +10,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 type Data = {
-  data?: ImagesResponse;
+  data?: ImagesResponseDataInner[];
   error?:string;
 }
 
@@ -30,7 +30,7 @@ export default async function handler(
           response_format:'b64_json'
           });
           if(r.data){
-            return res.status(200).json({ data:r.data });
+            return res.status(200).json({ data:r.data?.data });
           }
       }
       catch(e){

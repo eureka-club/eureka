@@ -18,35 +18,41 @@ const TestOpenai: NextPage<Props> = () => {
     setLoading(true)
     setImages([])
     form.preventDefault()
-
-    const {data:en_text} = await fetch(`/api/google-translate/?text=${text}&target=en`)
-    .then(r=>r.json())
-
-    const {error,data} =  await fetch('/api/openai/createImage',{
-      method:'POST',
-      headers:{
-          'Content-type':'application/json'
-      },
-      body:JSON.stringify({text:en_text})
-    }).then(r=>r.json()) 
-    debugger;
-    if(data){
-      const promises = (data as {b64_json:string}[]).map(d=>{
-        return new Promise((resolve,reject)=>{
-          const img = new Image()
-          img.onload = function(){
-            setImages(res=>[...res,img])
-            resolve(true)
-          }
-          img.src = `data:image/webp;base64,${d.b64_json}`
+    try{
+      const {data:en_text} = await fetch(`/api/google-translate/?text=${text}&target=en`)
+      .then(r=>r.json())
+  
+      const {error,data} =  await fetch('/api/openai/createImage',{
+        method:'POST',
+        headers:{
+            'Content-type':'application/json'
+        },
+        body:JSON.stringify({text:en_text})
+      }).then(r=>r.json()) 
+      
+      if(data){
+        const promises = (data as {b64_json:string}[]).map(d=>{
+          return new Promise((resolve,reject)=>{
+            const img = new Image()
+            img.onload = function(){
+              setImages(res=>[...res,img])
+              resolve(true)
+            }
+            img.src = `data:image/webp;base64,${d.b64_json}`
+          })
         })
-      })
-      await Promise.all(promises)
+        await Promise.all(promises)
+  
+      }
+      else if(error)
+        alert(error)
+      setLoading(false)
 
     }
-    else if(error)
-      alert(error)
-    setLoading(false)
+    catch(e){
+      console.error(e)
+      setLoading(false)
+    }
   }
 
   const renderImages = ()=>{
