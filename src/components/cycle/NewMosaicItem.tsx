@@ -225,8 +225,8 @@ const NewMosaicItem: FunctionComponent<Props> = ({
         </div>
       );
     }
-    return img;
-  };
+    return <div className={`mb-2`} role="presentation">{img}</div>;
+     };
 
 
   
@@ -234,32 +234,36 @@ const NewMosaicItem: FunctionComponent<Props> = ({
     if(cycle && !isLoadingSession){
      
       if(cycle.currentUserIsCreator)
-        return   <Button   variant="btn-warning border-warning text-white fs-6 disabled" className={`rounded rounded-2  ${styles.joinButtonContainer}`} size='sm'>
+        return   <Button   variant="btn-warning border-warning bg-warning text-white fs-6 disabled"
+         className={`rounded rounded-3  ${styles.joinButtonContainer}`} size='sm' style={(size=='lg') ? {marginBottom:'15%'} : {marginBottom:'35%'} }>
           <span className='fs-6'>{t('MyCycle')}</span>
       </Button>
 
       if(cycle.currentUserIsParticipant)         
-          return <Button  disabled={isPending()} onClick={handleLeaveCycleClick} variant="button border-primary text-primary" className={`rounded rounded-2  ${styles.joinButtonContainer}`} size='sm'>
-           {!isPending() ? <span className='fs-6'>{t('leaveCycleLabel')}</span> :  <Spinner size='sm' animation='grow'/> } 
+          return <Button  disabled={isPending()} onClick={handleLeaveCycleClick} variant="button border-primary bg-white text-primary" 
+          className={`rounded rounded-3  ${styles.joinButtonContainer}`} size='sm' style={(size=='lg') ? {marginBottom:'15%'} : {marginBottom:'35%'} }>
+           <span className='fs-6'>{t('leaveCycleLabel')}</span> 
             </Button>
 
       if(cycle.currentUserIsPending)
          return  <Button 
             disabled={true}
-            className={`rounded rounded-2 text-white ${styles.joinButtonContainer}`} size='sm'>
+            className={`rounded rounded-2 text-white ${styles.joinButtonContainer}`} 
+            size='sm' style={(size=='lg') ? {marginBottom:'15%'} : {marginBottom:'35%'} }>
             <span className='fs-6'>{t('joinCyclePending')}</span>
             </Button>
 
           return  <Button 
             disabled={isPending()}
-            onClick={handleJoinCycleClick} className={`rounded rounded-2 text-white ${styles.joinButtonContainer}`} size='sm'>
-              {!isPending() ? <span className='fs-6'>{t('joinCycleLabel')}</span> :  <Spinner size='sm' animation='grow'/> }
+            onClick={handleJoinCycleClick} className={`rounded rounded-3 text-white ${styles.joinButtonContainer}`} 
+            size='sm' style={(size=='lg') ? {marginBottom:'15%'} : {marginBottom:'35%'} }>
+               <span className='fs-6'>{t('joinCycleLabel')}</span> 
             </Button>           
     }
-
+    else
     return <Button 
           disabled={true}
-          className="text-white">
+          className="rounded rounded-3  text-white" style={(size=='lg') ? {marginBottom:'15%'} : {marginBottom:'33%'} }>
             <Spinner size='sm' animation='grow'/>
           </Button>
   },[cycle,isLoadingSession])
@@ -281,7 +285,6 @@ const NewMosaicItem: FunctionComponent<Props> = ({
             </Badge>
            <div className={`h-100 d-flex justify-content-center align-items-end`}>
               {renderJoinLeaveCycleBtn}
-              
            </div> 
          </div>
                 

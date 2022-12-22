@@ -142,7 +142,7 @@ const NavBar: FunctionComponent = () => {
        <Nav className={`mx-2 ${styles.navbarNav}`}>
             <Dropdown align="end" className={styles.langSwitch}>
               <Dropdown.Toggle as={ChevronToggle}>
-                <HiOutlineHashtag className={`${styles.navbarIconNav} border border-3 border-primary`} style={{scale:'90%',padding:'2px'}} />
+                <HiOutlineHashtag className={`${styles.navbarIconNav} border border-2 border-primary`} style={{scale:'90%',padding:'2px'}} />
                 {` `}
               <span className={styles.menuBottomInfo}>{t('Topics')}</span>
               </Dropdown.Toggle>
