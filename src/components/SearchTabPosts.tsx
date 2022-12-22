@@ -105,7 +105,7 @@ const SearchTabCycles:FunctionComponent = () => {
 
           <FilterEnginePosts/>
           <Row>
-              {posts.map(p=><Col xs={12} sm={4} lg={2} className="mb-5 d-flex justify-content-center  align-items-center" key={p.id}>
+              {posts.map(p=><Col xs={12} sm={6} lg={3} xxl={2} className="mb-5 d-flex justify-content-center  align-items-center" key={p.id}>
                 <MosaicItem postId={p.id} className="" cacheKey={['POST',p.id.toString()]} size={'md'} />
                 </Col>)}
         </Row>

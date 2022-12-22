@@ -235,35 +235,35 @@ const NewMosaicItem: FunctionComponent<Props> = ({
      
       if(cycle.currentUserIsCreator)
         return   <Button   variant="btn-warning border-warning bg-warning text-white fs-6 disabled"
-         className={`rounded rounded-3  ${styles.joinButtonContainer}`} size='sm' style={(size=='lg') ? {marginBottom:'15%'} : {marginBottom:'35%'} }>
-          <span className='fs-6'>{t('MyCycle')}</span>
+         className={`rounded rounded-3  ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} size='sm'>
+          <span className='fs-6'>{t('MyCycle')}</span> {/*MyCycle*/}
       </Button>
 
       if(cycle.currentUserIsParticipant)         
           return <Button  disabled={isPending()} onClick={handleLeaveCycleClick} variant="button border-primary bg-white text-primary" 
-          className={`rounded rounded-3  ${styles.joinButtonContainer}`} size='sm' style={(size=='lg') ? {marginBottom:'15%'} : {marginBottom:'35%'} }>
-           <span className='fs-6'>{t('leaveCycleLabel')}</span> 
+          className={`rounded rounded-3  ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} size='sm' >
+           <span className='fs-6'>{t('common:leaveCycleLabel')}</span> {/*leaveCycleLabel*/}
             </Button>
 
       if(cycle.currentUserIsPending)
          return  <Button 
             disabled={true}
-            className={`rounded rounded-2 text-white ${styles.joinButtonContainer}`} 
-            size='sm' style={(size=='lg') ? {marginBottom:'15%'} : {marginBottom:'35%'} }>
-            <span className='fs-6'>{t('joinCyclePending')}</span>
+            className={`rounded rounded-2 text-white ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} 
+            size='sm' >
+            <span className='fs-6'>{t('joinCyclePending')}</span>{/*joinCyclePending*/}
             </Button>
 
           return  <Button 
             disabled={isPending()}
-            onClick={handleJoinCycleClick} className={`rounded rounded-3 text-white ${styles.joinButtonContainer}`} 
-            size='sm' style={(size=='lg') ? {marginBottom:'15%'} : {marginBottom:'35%'} }>
-               <span className='fs-6'>{t('joinCycleLabel')}</span> 
+            onClick={handleJoinCycleClick} className={`rounded rounded-3 text-white ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} 
+            size='sm'>
+               <span className='fs-6'>{t('joinCycleLabel')}</span> {/*joinCycleLabel*/}
             </Button>           
     }
     else
     return <Button 
           disabled={true}
-          className="rounded rounded-3  text-white" style={(size=='lg') ? {marginBottom:'15%'} : {marginBottom:'33%'} }>
+          className={`rounded rounded-3  text-white ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`}>
             <Spinner size='sm' animation='grow'/>
           </Button>
   },[cycle,isLoadingSession])

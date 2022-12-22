@@ -519,7 +519,7 @@ const CreateIAPostForm: FunctionComponent<Props> = ({noModal = false,params}) =>
             </Col>
               <Col className='mb-4'>
               <FormGroup controlId="postTitle" >
-                 <TextField id="postTitle" className="w-100" label={t('titleFieldLabel')+ ' Optional'}
+                 <TextField id="postTitle" className="w-100" label={t('titleFieldLabel')}
                         variant="outlined" size="small"  value={postTitle}
                       onChange={(e) => setPostTitle(e.target.value)}> 
                  </TextField>

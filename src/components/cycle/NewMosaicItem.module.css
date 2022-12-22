@@ -113,7 +113,28 @@
 .joinButtonContainer{
   /*height: 20%;
   //max-height: 20%;
-  margin: 8px;*/
+   margin: 8px;*/
+   margin-bottom: 28%;
+   width: 75%;
+   position: absolute;
+   padding: auto;
+}
+
+@media only screen and (max-width: 450px) {
+.joinButtonContainer{ 
+  margin-bottom: 35%;
+   width: 75%;
+   position: absolute;
+   padding: auto;
+}
+
+}
+
+.joinButtonContainerlg{
+  /*height: 20%;
+  //max-height: 20%;
+   margin: 8px;*/
+   margin-bottom: 8%;
    width: 75%;
    position: absolute;
    padding: auto;
