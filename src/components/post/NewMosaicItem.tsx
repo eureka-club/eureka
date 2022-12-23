@@ -182,7 +182,7 @@ const getParentTitle = () => {
                <div  className={`d-flex flex-row fs-6 `}>
                 <Avatar width={27} height={27} userId={post.creator.id} showFullName={false} size= {(!size) ? "xs" :"sm" } />
                 <span className={` ms-1 me-1 d-flex align-items-center ${(!size) ?  styles.detailText : ""}`}>-</span>
-                <span className={`d-flex align-items-center${(!size) ?  styles.detailText : ""}`}>{dayjs(post.createdAt).format(DATE_FORMAT_SHORT)}</span>
+                <span className={`d-flex align-items-center ${(!size) ?  styles.detailText : ""}`}>{dayjs(post.createdAt).format(DATE_FORMAT_SHORT)}</span>
                 </div>
              </div>
             )}
