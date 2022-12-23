@@ -317,7 +317,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
             </Col>  
             </Row>}
          </section>
-         {currentImg && <>
+         {newEurekaImageFile && <>
          <Form.Group controlId="eureka-title" >
                  <TextField id="eureka-title" className="w-100 mb-4" inputProps={{ maxLength: 80 }} label={t('Title')}
                         variant="outlined" size="small"  value={newEureka.title}

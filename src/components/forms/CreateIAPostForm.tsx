@@ -465,7 +465,7 @@ const CreateIAPostForm: FunctionComponent<Props> = ({noModal = false,params}) =>
 
          </section>
          
-         {currentImg && <><Row className='d-flex flex-column px-2 px-lg-5'>
+         {imageFile && <><Row className='d-flex flex-column px-2 px-lg-5'>
             <Col className='mb-4'>
               <FormGroup controlId="workOrCycle">
                 <FormLabel>*{t('searchCycleOrWorkFieldLabel')}</FormLabel>
