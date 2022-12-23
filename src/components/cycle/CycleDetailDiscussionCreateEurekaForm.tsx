@@ -131,10 +131,10 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
     }else  if (!newEurekaImageFile) {
       toast.error( t('requiredEurekaImageError'))
           return false;
-    }else if (!payload.title.length) {
+    }/*else if (!payload.title.length) {
       toast.error( t('NotTitle'))
           return false;
-    }/*else if (!payload.contentText.length) {
+    }else if (!payload.contentText.length) {
       toast.error( t('NotContentText'))
       return false;
     }*/
