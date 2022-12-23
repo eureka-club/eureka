@@ -55,5 +55,11 @@
 	"Ukiyo-e":"Ukiyo-e",
 	"Van Gogh style":"Style Van Gogh",
 	"Vintage":"Vintage",
-	"Vector":"Vecteur"
+	"Vector":"Vecteur",
+  "DoubtsAI":"Des doutes sur l'IA ?",
+  "AIAbout1":"Soyez précise et fournissez des détails sur ce que vous voulez que l’IA génère. Ex: au lieu d'écrire simplement 'paysage', écrivez 'paysage d'un lac cristallin et de montagnes enneigées en arrière-plan'.",
+  "AIAbout2":"Assurez-vous que le 'prompt' soit cohérent et logique. Ex: ne demandez pas des montagnes enneigées et une plage tropicale dans la même image.",
+  "AIAbout3":"Utilisez un langage clair que l’IA puisse comprendre facilement. Évitez d'utiliser des mots ambigus.",
+  "AIAbout4":"Soyez créatif et explorez différentes idées.",
+  "AIAbout5":"Essayez différentes formulations et idées pour voir ce qui fonctionne le mieux."
 }

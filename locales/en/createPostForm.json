@@ -55,5 +55,12 @@
 	"Ukiyo-e":"Ukiyo-e",
 	"Van Gogh style":"Van Gogh style",
 	"Vintage":"Vintage",
-	"Vector":"Vector"  
+	"Vector":"Vector",
+  "DoubtsAI":"Doubts about the AI?",
+  "AIAbout1":"Be specific and provide details about what you want the AI to generate. Eg: instead of simply writing 'landscape,' write 'landscape of a crystal clear lake and snow-capped mountains in the background.'",
+  "AIAbout2":"Make sure the 'prompt' is consistent and makes sense. Eg: don't ask for snow-capped mountains and a tropical beach in the same image.",
+  "AIAbout3":"Use clear language that is easy for the AI to understand. Avoid using ambiguous words.",
+  "AIAbout4":"Be creative and explore different ideas.",
+  "AIAbout5":"Try different wordings and ideas to see what works best."
+
 }

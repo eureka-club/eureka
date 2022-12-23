@@ -193,7 +193,7 @@ const renderCarousels =  ()=>{
     <h3 className="text-secondary fw-bold">{t('Trending topics')}</h3>
     <aside className="mb-4">{getTopicsBadgedLinks()}</aside>
     <section className='mt-5'>
-        <h3 className="text-secondary  fw-bold">{t('About Eureka')}</h3>
+        <h4 className="text-secondary  fw-bold">{t('About Eureka')}</h4>
         <Link href="/about"><a className='text-primary text-decoration-underline text-blue' onClick={()=> window.scrollTo(0, 0)}>{t('browserTitleAbout')} </a></Link>
     </section>
      <section  className="mt-4 p-3 rounded overflow-auto bg-secondary text-white" role="presentation" >

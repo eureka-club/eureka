@@ -30,12 +30,30 @@ const CreatePostPage: NextPage<Props> = ({notFound}) => {
  if (!notFound) 
   return  (
     <SimpleLayout title={t('title')}>
-         <section className='d-flex flex-column flex-lg-row'>
-         <Col className='d-none d-lg-flex'  xs={12} lg={2}>
-            <h4 className="mt-4 text-secondary fw-bold"> Como usar la IA?</h4>
-          </Col>  
+         <section className='d-flex flex-column-reverse flex-lg-row'>
+         <Col xs={12} lg={2} className="me-4" >
+          <section className='mt-5'>
+            <h3 className="text-secondary fw-bold">{t('DoubtsAI')}</h3>
+            {/*<Link href="/about"><a className='text-primary text-decoration-underline text-blue' onClick={()=> window.scrollTo(0, 0)}>{t('browserTitleAbout')} </a></Link>*/}
+        </section>
+          <section  className="mt-4 p-3 rounded overflow-auto bg-secondary text-white" role="presentation" >
+              <p className="p-2 m-0 text-wrap text-center fs-6">{t('AIAbout1')}</p>
+          </section>
+            <section  className="mt-4 p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation" >
+              <p className="p-2 m-0 text-wrap text-center fs-6">{t('AIAbout2')}</p>
+          </section>
+            <section  className="mt-4 p-3 rounded overflow-auto bg-secondary text-white" role="presentation" >
+              <p className="p-2 m-0 text-wrap text-center fs-6">{t('AIAbout3')}</p>
+          </section>
+            <section  className="mt-4 p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation" >
+              <p className="p-2 m-0 text-wrap text-center fs-6">{t('AIAbout4')}</p>
+          </section>
+             <section  className="mt-4 p-3 rounded overflow-auto bg-secondary text-white" role="presentation" >
+              <p className="p-2 m-0 text-wrap text-center fs-6">{t('AIAbout5')}</p>
+          </section>
+        </Col>    
         <Col xs={12} lg={10}>
-         <section className='ms-0 ms-lg-5'>  
+         <section className='ms-0 ms-lg-4'>  
          {(isLoadingSession) ?
         <Spinner animation="grow" variant="info" />:<>
         <ButtonGroup className="mt-1 mt-md-3 mb-1">

@@ -206,10 +206,9 @@ const NewMosaicItem: FunctionComponent<Props> = ({
                             {dayjs(cycle?.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
                           <span className='' style={{marginLeft:'1.5px',marginRight:'1.5px'}}>-</span>
                             {dayjs(cycle?.endDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
-                         </div>   
-                        
+                         </div>                          
           </div>
-                        </div>)}
+       </div>)}
                           
       </div>
       : undefined;
@@ -242,7 +241,7 @@ const NewMosaicItem: FunctionComponent<Props> = ({
       if(cycle.currentUserIsParticipant)         
           return <Button  disabled={isPending()} onClick={handleLeaveCycleClick} variant="button border-primary bg-white text-primary" 
           className={`rounded rounded-3  ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} size='sm' >
-           <span className='fs-6'>{t('common:leaveCycleLabel')}</span> {/*leaveCycleLabel*/}
+           <span className='fs-6'>{t('common:leaveCycleLabel')}</span>
             </Button>
 
       if(cycle.currentUserIsPending)
@@ -250,14 +249,14 @@ const NewMosaicItem: FunctionComponent<Props> = ({
             disabled={true}
             className={`rounded rounded-2 text-white ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} 
             size='sm' >
-            <span className='fs-6'>{t('joinCyclePending')}</span>{/*joinCyclePending*/}
+            <span className='fs-6'>{t('joinCyclePending')}</span>
             </Button>
 
           return  <Button 
             disabled={isPending()}
             onClick={handleJoinCycleClick} className={`rounded rounded-3 text-white ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} 
             size='sm'>
-               <span className='fs-6'>{t('joinCycleLabel')}</span> {/*joinCycleLabel*/}
+               <span className='fs-6'>{t('joinCycleLabel')}</span> 
             </Button>           
     }
     else
