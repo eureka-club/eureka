@@ -60,6 +60,16 @@ text-decoration: underline;}
      text-align: left;
      width: 100%;
 }
+
+ @media only screen and (max-width: 450px) {
+.detailText{ 
+  font-size: .8em!important;
+}
+.title{ 
+  font-size: .8em!important;
+} 
+}
+
 .postDetail a{
   color: white !important;
 }

@@ -22,3 +22,10 @@
     
   }
   a.link:hover {color: inherit !important;}
+
+  @media only screen and (max-width: 450px) {
+.xs{ 
+  font-size: .85em!important;
+}
+
+}
