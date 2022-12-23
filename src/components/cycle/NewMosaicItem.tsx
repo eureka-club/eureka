@@ -229,7 +229,7 @@ const NewMosaicItem: FunctionComponent<Props> = ({
 
 
   
-  const renderJoinLeaveCycleBtn = useMemo(()=>{
+  const renderJoinLeaveCycleBtn = ()=>{
     if(cycle && !isLoadingSession){
      
       if(cycle.currentUserIsCreator)
@@ -265,7 +265,7 @@ const NewMosaicItem: FunctionComponent<Props> = ({
           className={`rounded rounded-3  text-white ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`}>
             <Spinner size='sm' animation='grow'/>
           </Button>
-  },[cycle,isLoadingSession])
+  }
 
   if(!cycle)return <></>
 
@@ -283,7 +283,7 @@ const NewMosaicItem: FunctionComponent<Props> = ({
           } 
             </Badge>
            <div className={`h-100 d-flex justify-content-center align-items-end`}>
-              {renderJoinLeaveCycleBtn}
+              {renderJoinLeaveCycleBtn()}
            </div> 
          </div>
                 
