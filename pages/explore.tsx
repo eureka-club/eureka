@@ -80,10 +80,6 @@ const renderBackOfficeCycles = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const session = await getSession(ctx);
-  if (session != null) {
-    return { redirect: { destination: '/', permanent: false } };
-  }
   const origin = `${process.env.NEXT_PUBLIC_WEBAPP_URL}`
   const qc = new QueryClient()
   const bo = await getbackOfficeData(origin)
