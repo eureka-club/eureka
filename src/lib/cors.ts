@@ -3,7 +3,7 @@ import Cors from 'cors'
 
 export const cors = Cors({
   // methods: ['GET', 'HEAD'],
-  origin:/http(s)?:\/\/(www\.)?(eurekastaging.azurewebsites.net|eureka.club)$/
+  origin:/http(s)?:\/\/(www\.)?(eureka-staging.azurewebsites.net|eureka.club)$/
 })
 
 export function middleware(
