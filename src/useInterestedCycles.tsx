@@ -1,7 +1,7 @@
 import useCycles,{getCycles} from './useCycles';
 import useBackOffice from '@/src/useBackOffice';
 
-const interestedCyclesWhere = (ids:number[]) => ({
+export const interestedCyclesWhere = (ids:number[]) => ({
   where:{
     id: { in: ids },
   }
@@ -18,7 +18,7 @@ const useInterestedCycles = () => {
     bo.CyclesExplorePage.split(',').forEach(x=> cyclesIds.push(parseInt(x)));
       
   return useCycles(interestedCyclesWhere(cyclesIds),
-    {enabled:!!cyclesIds.length}
+    {enabled:!!cyclesIds.length,cacheKey:'cycles-of-interest'}
   )
 };
 

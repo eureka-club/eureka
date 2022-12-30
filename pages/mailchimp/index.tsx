@@ -142,21 +142,21 @@ const IndexPage: NextPage<Props> = (props) => {
         </Box>
         : <></>
         }
-        {JSON.stringify(members)}
+        {/* {JSON.stringify(members)} */}
         
         </TabPanel>
 
         <TabPanel value={value} index={1}>
         
-        {JSON.stringify(audiences)}
+        {/* {JSON.stringify(audiences)} */}
         </TabPanel>
         <TabPanel value={value} index={2}>
-        {JSON.stringify(campaigns)}
+        {/* {JSON.stringify(campaigns)} */}
 
         
         </TabPanel>
         <TabPanel value={value} index={3}>
-        {JSON.stringify(automations)}
+        {/* {JSON.stringify(automations)} */}
         
         </TabPanel>
         

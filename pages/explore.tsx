@@ -6,9 +6,10 @@ import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import TagsInput from '../src/components/forms/controls/TagsInput';
 import CarouselStatic from '@/src/components/CarouselStatic';
 import { useRouter } from 'next/router';
-import useInterestedCycles from '@/src/useInterestedCycles';
-import useFeaturedEurekas from '@/src/useFeaturedEurekas';
-
+import useInterestedCycles,{getInterestedCycles} from '@/src/useInterestedCycles';
+import useFeaturedEurekas, { getFeaturedEurekas } from '@/src/useFeaturedEurekas';
+import { dehydrate, QueryClient } from 'react-query';
+import {getbackOfficeData} from '@/src/useBackOffice'
 const ExplorePage: NextPage = () => {
   const { t } = useTranslation('common');
   const [topics /* , setHide */] = useState<string[]>([
@@ -83,8 +84,27 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (session != null) {
     return { redirect: { destination: '/', permanent: false } };
   }
+  const origin = `${process.env.NEXT_PUBLIC_WEBAPP_URL}`
+  const qc = new QueryClient()
+  const bo = await getbackOfficeData(origin)
+ 
+  let cyclesIds:number[] = [];
+  if(bo && bo.CyclesExplorePage)
+    bo.CyclesExplorePage.split(',').forEach(x=> cyclesIds.push(parseInt(x)));
 
-  return { props: {} };
+  let postsId:number[] = [];
+  if(bo && bo.PostExplorePage)
+    bo.PostExplorePage.split(',').forEach(x=> postsId.push(parseInt(x)));
+      
+  await qc.fetchQuery(['BACKOFFICE', `1`], () => bo)
+  await qc.fetchQuery(['CYCLES','cycles-of-interest'],()=>getInterestedCycles(cyclesIds,undefined,origin))
+  await qc.fetchQuery(['POSTS','eurekas-of-interest'],()=>getFeaturedEurekas(postsId,undefined,origin))
+
+  return { 
+    props: {
+      dehydratedState: dehydrate(qc),      
+    } 
+  };
 };
 
 export default ExplorePage;

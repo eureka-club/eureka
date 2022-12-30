@@ -17,14 +17,15 @@ export const getCycles = async (
 interface Options {
   staleTime?: number;
   enabled?: boolean;
+  cacheKey?:string;
 }
 
 const useCycles = (props?:Prisma.CycleFindManyArgs, options?: Options) => {
-  const { staleTime, enabled } = options || {
+  const { staleTime, enabled, cacheKey } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  const key = JSON.stringify(props); 
+  const key = cacheKey ? cacheKey : JSON.stringify(props); 
   let ck = ['CYCLES', `${key}`];
 
   return useQuery<{cycles:CycleMosaicItem[],fetched:number,total:number}>(ck, () => getCycles(props), {

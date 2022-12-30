@@ -17,14 +17,15 @@ export const getPosts = async (
 interface Options {
   staleTime?: number;
   enabled?: boolean;
+  cacheKey?:string;
 }
 
 const usePosts = (props?:Prisma.PostFindManyArgs, options?: Options) => {
-  const { staleTime, enabled } = options || {
+  const { staleTime, enabled, cacheKey } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  const key = JSON.stringify(props); 
+  const key = cacheKey ? cacheKey : JSON.stringify(props); 
   let ck = ['POSTS', `${key}`];
 
   return useQuery<{posts:PostMosaicItem[],fetched:number,total:number}>(ck, () => getPosts(props), {
