@@ -92,15 +92,15 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                            <a className="text-secondary text-decoration-underline">{t('signInForm:Join')}</a></Link></p>
                         </Col>
                         <Col className="d-flex flex-column justify-content-center align-items-center ">
-                                <Link href='/explore'>
+                                {/* <Link href='/explore'>
                                         <Button  data-cy="btn-explore" className={` btn-eureka ${styles.submitButton}`}>
                                                 {t('Explore')} 
                                         </Button>
-                                </Link>
-                           {/* <Button data-cy="btn-explore" onClick={()=> router.push('/explore')} variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
+                                </Link> */}
+                           <Button data-cy="btn-explore" onClick={()=> router.push('/explore')} variant="primary text-white" className={`d-flex justify-content-center align-items-center ${styles.submitButton}`}>
                            {t('Explore')} 
                            
-                           </Button> */}
+                           </Button>
                            <p className={`mt-1 text-center text-secondary ${styles.dontHaveAccounttext}`}>{t('ExploreText')}</p>
                         </Col>
                 </Row> 
