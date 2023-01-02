@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import Head from "next/head";
 import useTranslation from 'next-translate/useTranslation';
 
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
@@ -6,7 +7,11 @@ import SimpleLayout from '../src/components/layouts/SimpleLayout';
 const AboutPage: NextPage = () => {
   const { t } = useTranslation('common');
 
-  return (
+  return (<>
+  <Head>
+        <meta name="title" content={t('meta:aboutTitle')}></meta>
+        <meta name="description" content={t('meta:aboutDescription')}></meta>
+    </Head> 
     <SimpleLayout title={t('browserTitleAbout')}>
       {/* Language=css */}
       <style jsx>{`
@@ -116,6 +121,7 @@ const AboutPage: NextPage = () => {
         <div className="contact-me" />
       </div>
     </SimpleLayout>
+    </>
   );
 };
 

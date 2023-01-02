@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import Head from "next/head";
 import useTranslation from 'next-translate/useTranslation';
 import { useState /* , useEffect, ReactElement, Children */ } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
@@ -28,7 +29,11 @@ const ManifestPage: NextPage = () => {
     return show[key];
   };
 
-  return (
+  return (<>
+   <Head>
+        <meta name="title" content={t('meta:manifestTitle')}></meta>
+        <meta name="description" content={t('meta:manifestDescription')}></meta>
+    </Head>    
     <SimpleLayout title={t('browserTitleWelcome')}>
       <Container>
         <section className="mb-5">
@@ -425,6 +430,7 @@ const ManifestPage: NextPage = () => {
        </section> 
       </Container>
     </SimpleLayout>
+    </>
   );
 };
 
