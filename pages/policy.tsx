@@ -1,4 +1,5 @@
 import {NextPage } from 'next';
+import Head from "next/head";
 import useTranslation from 'next-translate/useTranslation';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import TermsAndPolicy from '@/src/components/TermsAndPolicy';
@@ -12,10 +13,15 @@ const policyPage: NextPage = () => {
   //const {show} = router.query ;
 
 
-  return (
+  return (<>
+    <Head>
+        <meta name="title" content={t('meta:policyTitle')}></meta>
+        <meta name="description" content={t('meta:policyDescription')}></meta>
+    </Head> 
     <SimpleLayout title={t('termsAndPolicy')}>
           <TermsAndPolicy/>
     </SimpleLayout>
+    </>
   );
 };
 

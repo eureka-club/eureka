@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import Head from "next/head";
 import useTranslation from 'next-translate/useTranslation';
 import { Container, Row, Col, Badge } from 'react-bootstrap';
 import Image from 'next/image';
@@ -15,7 +16,11 @@ import SimpleLayout from '../src/components/layouts/SimpleLayout';
 const AboutPage: NextPage = () => {
   const { t } = useTranslation('aboutUs');
 
-  return (
+  return (<>
+    <Head>
+        <meta name="title" content={t('meta:aboutUsTitle')}></meta>
+        <meta name="description" content={t('meta:aboutUsDescription')}></meta>
+    </Head> 
     <SimpleLayout title={t('browserTitle')}>
       <div style={{ textAlign: 'center' }}>
         <h1 className="text-secondary fw-bold">{t('title')}</h1>
@@ -331,6 +336,7 @@ const AboutPage: NextPage = () => {
         </div>
       </div>
     </SimpleLayout>
+    </>
   );
 };
 export default AboutPage;

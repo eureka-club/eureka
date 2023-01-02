@@ -35,6 +35,8 @@ const IndexPage: NextPage<Props> = ({groupedByTopics}) => {
   const isLoadingSession = status === "loading"
   return <>
     <Head>
+        <meta name="title" content={t('meta:indexTitle')}></meta>
+        <meta name="description" content={t('meta:indexDescription')}></meta>
         <meta property="og:title" content='Eureka'/>
         <meta property="og:description" content="Activa tu mente, transforma el mundo"/>
         <meta property="og:url" content={`${process.env.NEXT_PUBLIC_WEBAPP_URL}`} />
