@@ -299,9 +299,9 @@ const AboutPage: NextPage = () => {
         <div style={{ textAlign: 'center', marginBottom: '4em' }}>
           <div className={styles.thanks}>
             <hr />
-            <h4 style={{ color: 'var(--eureka-green)' }}>
+            <h5 className='h4' style={{ color: 'var(--eureka-green)' }}>
               {t('We are grateful for Eureka’s many friends that support us in a variety of ways!')}
-            </h4>
+            </h5>
             <p>
               Roland Trompette, Giovanna Salazar, Maïssa Hubert Chakour, Amy Shapiro Raikar, Jessie Keating, Jacques
               Ricard, Ricardo Sanginés, Rafael Millán
@@ -311,7 +311,7 @@ const AboutPage: NextPage = () => {
           <div className={styles['contact-me']}>
             <br />
             <hr />
-            <h4 style={{ color: 'var(--eureka-green)' }}>{t('common:eurekaSupport')}</h4>
+            <h5 className='h4' style={{ color: 'var(--eureka-green)' }}>{t('common:eurekaSupport')}</h5>
             <img
               className={styles['logo-img2']}
               src="https://mozilla.design/files/2019/06/Mozilla_Logo_Static.png"

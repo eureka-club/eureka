@@ -117,14 +117,14 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
                     {t(`common:${work.type}`)}
                   </Badge>
                   <section className="my-1">
-                    <h6 className="mb-0">
+                    <h2 className="mb-0" style={{fontSize:'1rem'}}>
                       <Link href={`/work/${work.id}`} passHref>
                         <p className="text-break mb-0 tagText">
                           <a className="cursor-pointer">{work.title}</a>,{' '}
                           <span className={styles.workInfoAuthor}>{work.author}</span>
                         </p>
                       </Link>
-                    </h6>
+                    </h2>
                   </section>
                 </aside>
               )}
@@ -134,13 +134,13 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
                     {t('common:cycle')}
                   </Badge>
                   <section className="my-1">
-                    <h6>
+                    <h2 style={{fontSize:'1rem'}}>
                       <Link href={`/cycle/${post.cycles[0].id}`} passHref>
                         <p className="text-break mb-0 tagText">
                           <a className="cursor-pointer">{post.cycles[0].title}</a>
                         </p>
                       </Link>
-                    </h6>
+                    </h2>
                   </section>
                 </aside>
               )}
@@ -194,14 +194,14 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
                     {t(`common:${work.type}`)}
                   </Badge>
                   <section className="my-1">
-                    <h6 className="mb-0">
+                    <h2 className="mb-0" style={{fontSize:'1rem'}}>
                       <Link href={`/work/${work.id}`} passHref>
                         <p className="text-break mb-0 tagText">
                           <a className="cursor-pointer">{work.title}</a>,{' '}
                           <span className={styles.workInfoAuthor}>{work.author}</span>
                         </p>
                       </Link>
-                    </h6>
+                    </h2>
                   </section>
                 </aside>
               )}
@@ -211,13 +211,13 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
                     {t('common:cycle')}
                   </Badge>
                   <section className="my-1">
-                    <h6>
+                    <h2 style={{fontSize:'1rem'}}>
                       <Link href={`/cycle/${post.cycles[0].id}`} passHref>
                         <p className="text-break mb-0 tagText">
                           <a className="cursor-pointer">{post.cycles[0].title}</a>
                         </p>
                       </Link>
-                    </h6>
+                    </h2>
                   </section>
                 </aside>
               )}

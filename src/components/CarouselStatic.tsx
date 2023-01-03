@@ -181,11 +181,11 @@ const CarouselStatic: FunctionComponent<Props> = ({
               <section className="d-flex flex-row  justify-content-between w-100">
                               <Col xs={9}>
 
-                <h1 className="text-secondary fw-bold fs-3">
+                <h2 className="text-secondary fw-bold">
                   {iconBefore ? <span className={styles.iconBefore}>{iconBefore}</span> : ''}
                   {` `} {title} 
                   {iconAfter ? <span className={styles.iconAfter}>{iconAfter}</span> : ''}
-                </h1>
+                </h2>
                 </Col>
                 <Col xs={3} className="d-flex justify-content-end">
                 {seeAll && !!(dataFiltered.length) && <>

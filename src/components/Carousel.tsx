@@ -119,16 +119,16 @@ const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, cl
           <div className="position-relative">
             <Row>
               <Col xs={8} md={9}>
-                <h5>
-                <Link href={`/search?q=${topic}&fields=topics`}>
-                  <a className="text-dark cursor-pointer">
+                <h3>
+                <Link href={`/search?q=${topic}&fields=topics`} >
+                  <a className="text-dark cursor-pointer" style={{fontSize:'1.25rem'}}>
                   <span className={styles.iconBefore}>
                     <BsHash className="rounded-circle border border-1 border-gray" />
                   </span>
                   {topicLabel || t(`${topic}`)}
           </a>
                 </Link>
-                </h5>
+                </h3>
               </Col>
               <Col xs={4} md={3} className="d-flex justify-content-end">
  {!isRedirecting ? <Button variant="link" className="text-decoration-none" onClick={onItemsFound}>

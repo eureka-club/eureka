@@ -79,22 +79,22 @@ const AboutPage: NextPage = () => {
       <hr />
 
       <div className="middle-container">
-        <h1 className="text-secondary">{t('aboutHeading')}</h1>
+        <h2 className="h1 text-secondary">{t('aboutHeading')}</h2>
         <p className="summary">{t('aboutText')}</p>
 
         <div className="what-is2">
-          <h1 className="text-secondary">{t('whatisCycleHeading')}</h1>
+          <h2 className="h1 text-secondary">{t('whatisCycleHeading')}</h2>
           <p className="summary">{t('whatisCycleText')}</p>
         </div>
 
         <div className="what-is1">
-          <h1 className="text-secondary">{t('whatisPostHeading')}</h1>
+          <h2 className="h1 text-secondary">{t('whatisPostHeading')}</h2>
           <p className="summary">{t('whatisPostText')}</p>
         </div>
         <hr />
         <br />
 
-        <h1 className="text-secondary">{t('ethicsHeading')}</h1>
+        <h3 className="h1 text-secondary">{t('ethicsHeading')}</h3>
         <p className="summary">
           {} <a href="https://www.eureka.club/manifest"> {t('ethicsText1')}</a>
           {/* <a href="https://www.mozilla.org/en-US/about/governance/policies/participation/"> {t('hereLinkENG')}</a>,{' '}

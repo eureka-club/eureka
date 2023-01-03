@@ -43,7 +43,7 @@ const ManifestPage: NextPage = () => {
                 {t('manifestLbl')} <br />
                 Eureka <BsCircleFill style={{ fontSize: '.2em' }} />{' '}
               </h1>
-              <em className="d-block text-gray">{t('eurekaPrinciple')}</em>
+              <h2 style={{fontSize:'1rem'}}><em className="d-block text-gray">{t('eurekaPrinciple')}</em></h2>
             </Col>
             <Col xs={12} md={8} className="ms-0 border-start border-info border-2">
               <p>
@@ -397,9 +397,9 @@ const ManifestPage: NextPage = () => {
                 className="text-yellow"
                 style={{ opacity: '.7', fontSize: '15em', margin: '-.3em -.5em 0 -.3em' }}
               />
-              <h1 className="h1 fw-bolder text-secondary mb-5 me-4" style={{ zIndex: 9999 }}>
+              <h2 className="h1 fw-bolder text-secondary mb-5 me-4" style={{ zIndex: 9999 }}>
                 {t('enforcement')}
-              </h1>
+              </h2>
             </Col>
             <Col xs={12} md={8} className="ms-0 border-start border-info border-2">
               <h2 className="h6 fw-bolder">{t('enforcementHeadLbl')}</h2>

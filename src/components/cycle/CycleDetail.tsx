@@ -333,7 +333,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           </TabPane>
           <TabPane eventKey="guidelines">
             <section className="text-primary">
-              <h4 className="h5 mt-4 mb-3 fw-bold text-gray-dark">{t('guidelinesMP')}</h4>
+              <h3 className="h5 mt-4 mb-3 fw-bold text-gray-dark">{t('guidelinesMP')}</h3>
             </section>
             <section className=" pt-3">{cycle.guidelines && renderGuidelines()}</section>
           </TabPane>
@@ -511,7 +511,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                   <Col>
                     <TabContent>
                       <TabPane eventKey="cycle-about">
-                        <h5 className="mt-4 mb-3 fw-bold text-gray-dark">{t('Why does this cycle matter')}?</h5>
+                        <h3 className="h5 mt-4 mb-3 fw-bold text-gray-dark">{t('Why does this cycle matter')}?</h3>
                         {cycle.contentText != null && (
                           <div className="">
                             <div
@@ -527,7 +527,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                         {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (
                           <Row className="mt-5 mb-5">
                             <Col className='col-12'>
-                              <h5 className="mt-5 mb-3 fw-bold text-gray-dark">{t('complementaryMaterialsTitle')}</h5>
+                              <h4 className="h5 mt-5 mb-3 fw-bold text-gray-dark">{t('complementaryMaterialsTitle')}</h4>
                               <ul className={styles.complementaryMaterials}>
                                 {cycle.complementaryMaterials.map((cm) => (
                                   <li key={cm.id}>

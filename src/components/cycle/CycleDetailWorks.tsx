@@ -57,9 +57,9 @@ const CycleDetailWorks: React.FC<Props> = ({works, cycleWorksDates}) => {
   })();
   
   return <>
-      <h5 className="mt-5 mb-3 fw-bold text-gray-dark">
+      <h4 className="h5 mt-5 mb-3 fw-bold text-gray-dark">
         {t('worksCountHeader', { count: works.length })}
-      </h5>
+      </h4>
       <section className="d-flex justify-content-center justify-content-lg-start">
         <div className='d-flex flex-wrap flex-column flex-lg-row'>      
           {getWorksSorted.map(w=>{

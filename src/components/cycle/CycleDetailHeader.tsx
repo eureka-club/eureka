@@ -149,7 +149,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           </aside>
         </Col>
         <Col className='mt-3 ms-lg-3 mt-lg-0 col-12 col-md-10 col-lg-9 d-none d-lg-flex flex-column justify-content-center justify-content-lg-start'>
-          <h1 className="d-none d-lg-block mb-1 fw-bold text-secondary">
+          <h1 className="d-none d-lg-block mb-1 fw-bold text-secondary" >
             {cycle.title}
           </h1>
           <div className='d-flex flex-row justify-content-start'>
@@ -190,9 +190,9 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           )}
           </div>
           <div className="">
-          <h4 className="mt-4 mb-1 text-dark">
+          <h2 className="mt-4 mb-1 text-dark" style={{fontSize:'1.4rem'}}>
             {t('Content calendar')} ({works && (works.length)})
-          </h4>
+          </h2>
           
             <CarouselStatic
              cacheKey={['CYCLE',cycle.id.toString()]}

@@ -19,7 +19,7 @@ const TermsAndPolicy: FunctionComponent = () => {
     <Container className='p-lg-0 m-lg-0'>
     <Row className='d-flex justify-content-between'>
           <Col className={`col-12`}>
-          <h3 className={`${styles.title} mb-4`} >{t('policyText')}</h3>
+          <h1 className={`${styles.title} mb-4`} >{t('policyText')}</h1>
 
           <Row>
             <span>{t('AgreeText')}
