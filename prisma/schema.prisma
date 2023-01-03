@@ -54,7 +54,6 @@ model User {
   notify              Notification[]
   notifications       NotificationsOnUsers[]
 
-  reactions           Reaction[]
 
   @@map(name: "users")
 }
@@ -170,7 +169,6 @@ model Cycle {
   participants            User[]      @relation("CycleToParticipant")
   likes                   User[]      @relation("CycleToLikes")
   favs                    User[]      @relation("CycleToFavs")
-  reactions               Reaction[]  
 
   posts                   Post[]
   works                   Work[]  
@@ -213,7 +211,6 @@ model Work {
   posts             Post[]
   likes             User[]      @relation("WorkToLikes")
   favs              User[]      @relation("WorkToFavs")
-  reactions         Reaction[]  
   readOrWatcheds    User[]      @relation("WorkReadOrWatched")
   tags              String?
 
@@ -306,7 +303,6 @@ model Post {
   works        Work[]
   likes        User[]       @relation("PostToLikes")
   favs         User[]       @relation("PostToFavs")
-  reactions    Reaction[]   
 
 
   terms        Term[]    @relation("TaxonomyTermPost")
@@ -349,28 +345,6 @@ model Comment {
   @@map(name: "comments")
 }
 
-model Reaction {
-  id           Int         @default(autoincrement()) @id
-  creator      User        @relation(fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  creatorId    Int         @map(name: "creator_id")
-  contentText  String      @db.VarChar(4000) @map(name: "content_text")
-
-  cycle        Cycle?      @relation(fields: [cycleId], references: [id])
-  cycleId      Int?        @map(name: "cycle_id")
-
-  work         Work?       @relation(fields: [workId], references: [id])
-  workId       Int?        @map(name: "work_id")
-
-  post         Post?       @relation(fields: [postId], references: [id])
-  postId       Int?        @map(name: "post_id")
-
-  createdAt    DateTime    @default(now()) @map(name: "created_at")
-  updatedAt    DateTime    @updatedAt @map(name: "updated_at")
-  
-  @@index([creatorId], name: "reaction_creator_id_index")
-
-  @@map(name: "reactions")
-}
 
 model Taxonomy {
   id           Int       @default(autoincrement()) @id
