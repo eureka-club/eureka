@@ -40,7 +40,7 @@ const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
     hyvorSso = { hash, userData, loginURL: `${WEBAPP_URL}/` };
   }
 
-  return <Embed websiteId={Number(3377)} id={`${entity}-${id}`} sso={hyvorSso} />;
+  return <Embed websiteId={Number(3377)} id={`${entity}-${id}`} sso={hyvorSso}/>;
 };
 
 export default HyvorComments;
