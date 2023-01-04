@@ -38,6 +38,7 @@ import WorkDetailPost from './WorkDetailPost';
 import CMI from '@/components/cycle/NewMosaicItem'
 import MosaicItemPost from '@/components/post/NewMosaicItem'
 import { useInView } from 'react-intersection-observer';
+import HyvorComments from '@/src/components/common/HyvorComments';
 
 const PostDetailComponent = lazy(()=>import('@/components/post/PostDetail')) ;
  
@@ -225,7 +226,6 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
     //  (!editPostOnSmallerScreen.value) 
     //   ? 
       <>
-          <Suspense fallback={<Spinner animation="grow"/>}>
             {post == null ? (
               <Row className="mb-5 d-flex flex-column flex-md-row">
                 <Col className='col-md-5 col-lg-4 col-xl-3   d-none d-md-block'>
@@ -255,6 +255,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
                     <MosaicItem className='postition-absolute start-50 translate-middle-x'  workId={work.id} showTrash linkToWork={false} size={'lg'} showSaveForLater={true}  />
                   </div>
                   {work.contentText != null && <UnclampText isHTML={false} text={work.contentText} clampHeight="8rem" />}
+                   <HyvorComments entity='work' id={`${work.id}`}  />
                   </section>
                 {/* <div className='container d-none d-lg-block mt-5'>
                   <CommentsList entity={work} parent={undefined}/>
@@ -267,7 +268,6 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
             ) : (
               <>{post && work && <PostDetailComponent postId={post.id} work={work} cacheKey={['POST',`${post.id}`]} />}</>
             )}
-          </Suspense>
 
           {post == null && (
             <Row className="mb-5">
@@ -277,7 +277,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
                     // defaultActiveKey={defaultActiveKey}
                     activeKey={defaultActiveKey}
                     onSelect={handleSubsectionChange}
-                    transition={true}
+                    transition={false}
                   >
                   
                     <style jsx global>
@@ -299,9 +299,9 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
                       <Col>
                       <div className=''>
                         <Nav variant="tabs" className='scrollNav' fill>
-                          {/* <NavItem>
-                            <NavLink eventKey="all">
-                              {t('tabHeaderAll')} ({cyclesCount+postsCount})
+                           {/*<NavItem>
+                            <NavLink eventKey="discussion">
+                              {t('discussion')}
                             </NavLink>
                           </NavItem> */}
                           <NavItem>
@@ -321,6 +321,9 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
                     <Row>
                       <Col>
                         <TabContent>
+                          {/*<TabPane eventKey="discussion"> 
+                            <HyvorComments entity='work' id={`${work.id}`}  />
+                          </TabPane>*/}
                           <TabPane eventKey="posts">{
                             renderPosts()
                           }
