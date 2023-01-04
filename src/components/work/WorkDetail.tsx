@@ -256,11 +256,12 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
                     <MosaicItem className='postition-absolute start-50 translate-middle-x'  workId={work.id} showTrash linkToWork={false} size={'lg'} showSaveForLater={true}  />
                   </div>
                   {work.contentText != null && <UnclampText isHTML={false} text={work.contentText} clampHeight="8rem" />}
-                   <HyvorComments entity='work' id={`${work.id}`}  />
+                  
                   </section>
                 {/* <div className='container d-none d-lg-block mt-5'>
                   <CommentsList entity={work} parent={undefined}/>
                 </div> */}
+                 <HyvorComments entity='work' id={`${work.id}`}  />
           </Col>
             {/* <div className='container d-sm-block d-lg-none mt-3'>
                   <CommentsList entity={work} parent={undefined}/>
