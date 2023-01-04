@@ -225,7 +225,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
      {
     //  (!editPostOnSmallerScreen.value) 
     //   ? 
-      <>
+      <> 
+          <Suspense fallback={<Spinner animation="grow"/>}>
             {post == null ? (
               <Row className="mb-5 d-flex flex-column flex-md-row">
                 <Col className='col-md-5 col-lg-4 col-xl-3   d-none d-md-block'>
@@ -268,6 +269,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
             ) : (
               <>{post && work && <PostDetailComponent postId={post.id} work={work} cacheKey={['POST',`${post.id}`]} />}</>
             )}
+           </Suspense>
+
 
           {post == null && (
             <Row className="mb-5">
@@ -277,7 +280,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
                     // defaultActiveKey={defaultActiveKey}
                     activeKey={defaultActiveKey}
                     onSelect={handleSubsectionChange}
-                    transition={false}
+                    transition={true}
                   >
                   
                     <style jsx global>
