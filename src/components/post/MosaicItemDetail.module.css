@@ -1,0 +1,63 @@
+
+.imageContainer {
+  box-shadow: 1px 0 7px -2px rgba(0, 0, 0, 0.25);
+  overflow: hidden; 
+  position: relative;
+  background-color: #f9f8f87a;
+  height: 100%;
+  border: 5pt;
+
+}
+
+.imageContainer img {
+  width: 100%;
+  height: 100%
+}
+
+.type {
+  left: 0.85rem;
+  position: absolute;
+}
+
+.footer{
+  padding:.2em;
+}
+
+.title:hover {
+text-decoration: underline;}
+
+.detailedInfo .date {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 200;
+}
+
+.postDetail{
+    position: absolute;
+     bottom: 0px;
+     background: linear-gradient(200deg, #f0dadad7, #05050561 5rem);
+     color: white !important;
+     text-align:left;
+     padding:.25em;
+     text-align: left;
+     width: 100%;
+}
+
+
+
+.postDetail a{
+  color: white !important;
+}
+
+.type {
+  border-radius: 1rem;
+  font-size: 0.85rem;
+  left: 0.85rem;
+  line-height: 1;
+  padding: 0.25rem 0.75rem;
+  top:3%;
+  position: absolute;
+  color:white;
+}
+
+
