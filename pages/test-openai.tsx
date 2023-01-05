@@ -14,6 +14,14 @@ const TestOpenai: NextPage<Props> = () => {
   function onTextChange(e:ChangeEvent<HTMLTextAreaElement>){
     setText(e.target.value)
   }
+
+    async function onHyvorTalkCall (){
+    let res =  await fetch("https://talk.hyvor.com/api/v1/comments?website_id=3377&sort=most_upvoted&page_identifier=cycle-21")
+    console.log(await res.json(),'res')
+
+    }
+
+
   async function onSubmit(form:FormEvent<HTMLFormElement>){
     setLoading(true)
     setImages([])
@@ -64,6 +72,9 @@ const TestOpenai: NextPage<Props> = () => {
         <textarea value={text} onChange={onTextChange}></textarea>
         <button type='submit' disabled={loading}>submit</button>
       </form>
+
+      <button onClick={onHyvorTalkCall}>Hyvor Talk Access</button>
+
       <div>
         {!loading ? renderImages():<Spinner animation="grow" />}
       </div>

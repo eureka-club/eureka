@@ -2,7 +2,7 @@ import { FunctionComponent,useState } from 'react';
 import {Button} from 'react-bootstrap';
 import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem } from '../types';
 import MosaicItemCycle from './cycle/MosaicItem';
-import MosaicItemPost from './post/MosaicItem';
+import MosaicItemPost from './post/Old_MosaicItem';
 import MosaicItemWork from './work/MosaicItem';
 import MosaicItemUser from './user/MosaicItem';
 import { CycleMosaicItem } from '../types/cycle';

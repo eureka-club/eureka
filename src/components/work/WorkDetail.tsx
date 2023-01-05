@@ -36,7 +36,7 @@ import useCycles from '@/src/useCycles'
 import usePosts,{getPosts} from '@/src/usePosts'
 import WorkDetailPost from './WorkDetailPost';
 import CMI from '@/components/cycle/NewMosaicItem'
-import MosaicItemPost from '@/components/post/NewMosaicItem'
+import MosaicItemPost from '@/src/components/post/MosaicItem'
 import { useInView } from 'react-intersection-observer';
 import HyvorComments from '@/src/components/common/HyvorComments';
 
