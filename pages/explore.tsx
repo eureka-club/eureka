@@ -82,7 +82,7 @@ const renderBackOfficeCycles = () => {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const origin = `${process.env.NEXT_PUBLIC_WEBAPP_URL}`
   const qc = new QueryClient()
-  const bo = await getbackOfficeData(origin);
+  const bo = await getbackOfficeData(origin)
  
   let cyclesIds:number[] = [];
   if(bo && bo.CyclesExplorePage)
