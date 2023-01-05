@@ -296,6 +296,23 @@ hr {
   height: 280 !important;
 }
 
+.card.mosaic-post-detail{ //Mosaico en detalle de posts
+  width: 475px !important;
+  height: 475px !important;
+  max-width: 475px !important;
+  max-height: 475px !important;
+}
+
+@media only screen and (max-width: 1200px) {
+.card.mosaic-post-detail{ //Mosaico en detalle de posts
+  width: 325px !important;
+  height: 325px !important;
+  max-width: 325px !important;
+  max-height: 325px !important;
+}
+}
+
+
 @media only screen and (max-width: 450px) {
 .card.mosaic{ //Mosaicos pag inicio vista movil
   width: 157px !important;

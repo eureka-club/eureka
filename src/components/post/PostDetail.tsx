@@ -16,7 +16,7 @@ import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
 // import globalModalsAtom from '../../atoms/globalModals';
 import { WorkMosaicItem } from '../../types/work';
-import MosaicItem from './NewMosaicItem';
+import MosaicItem from './MosaicItemDetail';
 import { MosaicContext } from '../../useMosaicContext';
 
 // import CommentsList from '../common/CommentsList';
@@ -84,18 +84,10 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
       {/* {work ||
         (cycle && ( */}
      <MosaicContext.Provider value={{ showShare: true }}>
-      <div  className={classNames('d-flex d-md-none flex-row justify-content-between mt-3', styles.postInfo)}>
+      <div  className={classNames('d-flex d-lg-none flex-row justify-content-between mt-3', styles.postInfo)}>
 
              <div>
                     <Link href={`/mediatheque/${post.creator.id}`} passHref>
-                      {/* <a>
-                        <img
-                          src={post.creator.image || '/img/default-avatar.png'}
-                          alt="creator avatar"
-                          className={styles.creatorAvatar}
-                        />
-                        {post.creator.name}
-                      </a> */}
                       <Avatar width={28} height={28} userId={post.creator.id} showFullName />
                     </Link>
                </div>
@@ -103,14 +95,13 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
                     <small className={styles.postDate}>
                       {
                         dayjs(post.createdAt).tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)
-                        // dayjs(post.createdAt).format(DATE_FORMAT_SHORT)
                       }
                     </small>
                  </div>
             </div>
            
-            <h1 className="text-secondary fw-bold mb-2 d-sm-block d-md-none"> {post.title} </h1> {/*titulo y abajo texto eureka*/}
-           <div className='d-flex d-md-none flex-row flex-wrap'>
+            <h1 className="text-secondary fw-bold mb-2 d-sm-block d-lg-none"> {post.title} </h1> {/*titulo y abajo texto eureka*/}
+           <div className='d-flex d-lg-none flex-row flex-wrap'>
                 {work != null && (
                 <aside className='me-3' >
                   <Badge bg="orange" className="rounded-pill fw-light text-black tagText">
@@ -147,23 +138,18 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
             </div>
 
      
-      <Row className="mb-5 d-flex flex-column flex-md-row">
-        <Col className='col-md-5 col-lg-4 col-xl-3'>
-          {/* {canEditPost() && (
-            <Button variant="warning" onClick={handleEditClick} size="sm">
-              {t('edit')}
-            </Button>
-          )} */}
-          <div className='mb-2 d-none d-md-block'>
-            <MosaicItem cacheKey={cacheKey} className='' postId={post.id} showdetail={false} linkToPost={false} size={'lg'} showSaveForLater={true}/>
+      <Row className="mb-5 d-flex flex-column flex-lg-row">
+        <Col className='col-lg-4 col-xl-5'>
+          <div className='mb-2 d-none d-lg-block'>
+            <MosaicItem cacheKey={cacheKey} className='' postId={post.id} showdetail={false} linkToPost={false}  showSaveForLater={true}/>
           </div>
-          <div className='container d-sm-block d-md-none mb-2 mt-2 position-relative'>
-             <MosaicItem cacheKey={cacheKey} className='postition-absolute start-50 translate-middle-x' postId={post.id} showdetail={false} linkToPost={false} showSaveForLater={true} size={'lg'}/>
+          <div className='container d-sm-block d-lg-none mb-2 mt-2 position-relative'>
+             <MosaicItem cacheKey={cacheKey} className='postition-absolute start-50 translate-middle-x' postId={post.id} showdetail={false} linkToPost={false} showSaveForLater={true} />
           </div>
          </Col>
-        <Col className='col-md-7 col-lg-8 col-xl-9'>
+        <Col className='col-lg-8 col-xl-7'>
           <div className="px-4">
-            <div className={classNames('d-none d-md-flex flex-row justify-content-between', styles.postInfo)}>
+            <div className={classNames('d-none d-lg-flex flex-row justify-content-between', styles.postInfo)}>
               <div>
               <Link href={`/mediatheque/${post.creator.id}`} passHref>
                 {/* <a>
@@ -186,8 +172,8 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
               </small>
               </div>
             </div>
-            <h1 className="text-secondary fw-bold mb-2  d-none d-md-block"> {post.title} </h1> {/*titulo y abajo texto eureka*/}
-           <div className='d-none d-md-flex flex-row flex-wrap'>
+            <h1 className="text-secondary fw-bold mb-2  d-none d-lg-block"> {post.title} </h1> {/*titulo y abajo texto eureka*/}
+           <div className='d-none d-lg-flex flex-row flex-wrap'>
                 {work != null && (
                 <aside className="me-3">
                   <Badge bg="orange" className="rounded-pill py-1 px-2 fw-light text-black tagText">
@@ -223,16 +209,15 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
               )}
             </div>
             <div className='mt-3'>
-            {post.contentText != null && <UnclampText text={post.contentText} clampHeight="8rem" />}
+            {(post.contentText != null && post.contentText.length !=0 ) && <UnclampText text={post.contentText} clampHeight="8rem" />}
             </div>
           </div>
           {/*<div className='container d-none d-lg-block'>
             <CommentsList en
             tity={post} parent={cycle! || work!} cacheKey={['POST', `${post.id}`]} />
           </div>*/}
-          <HyvorComments entity='post' id={`${post.id}`}  />
         </Col>
-
+          <HyvorComments entity='post' id={`${post.id}`}  />
         {/*<div className='container d-sm-block d-lg-none mt-3'>
             <CommentsList entity={post} parent={cycle! || work!} cacheKey={['POST', `${post.id}`]} />
           </div>*/}

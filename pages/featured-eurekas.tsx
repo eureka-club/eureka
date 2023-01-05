@@ -7,7 +7,7 @@ import useTranslation from 'next-translate/useTranslation';
 
 import {getbackOfficeData} from '@/src/useBackOffice'
 import useFeaturedEurekas,{ getFeaturedEurekas } from '@/src/useFeaturedEurekas';
-import PMI from '@/src/components/post/NewMosaicItem';
+import PMI from '@/src/components/post/MosaicItem';
 import {useRouter} from 'next/router'
 import { BiArrowBack } from 'react-icons/bi';
 

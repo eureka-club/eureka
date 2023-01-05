@@ -3,7 +3,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { Spinner,Row, Col, Tab} from 'react-bootstrap';
 
-import MosaicItem from '@/components/post/NewMosaicItem'
+import MosaicItem from '@/src/components/post/MosaicItem'
 import usePosts,{getPosts} from '@/src/usePosts'
 
 import useFilterEnginePosts from './useFilterEnginePosts';

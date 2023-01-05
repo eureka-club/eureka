@@ -39,7 +39,7 @@ import useCycle from '@/src/useCycle';
 import useWorks from '@/src/useWorks'
 import usePosts,{getPosts} from '@/src/usePosts'
 import useUsers from '@/src/useUsers'
-import MosaicItemPost from '@/components/post/NewMosaicItem'
+import MosaicItemPost from '@/src/components/post/MosaicItem'
 import MosaicItemUser from '@/components/user/MosaicItem'
 import { useInView } from 'react-intersection-observer';
 
