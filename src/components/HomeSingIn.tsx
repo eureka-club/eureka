@@ -90,7 +90,7 @@ const HomeSingIn: FunctionComponent<Props> = ({ groupedByTopics}) => {
         isCanceled = true
       }
     }
-  },[inView, gbt, topicIdx]); 
+  },[inView, gbt, topicIdx]);  
    
 const getTopicsBadgedLinks = () => {
         return <TagsInput formatValue={(v: string) => t(`topics:${v}`)} tags={[...topics].join()} readOnly />;
