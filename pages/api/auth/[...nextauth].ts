@@ -6,11 +6,9 @@ import GoogleProvider from "next-auth/providers/google"
 import EmailProvider from "next-auth/providers/email"
 import CredentialsProvider from "next-auth/providers/credentials"
 
-import {find} from '@/src/facades/user'
 import getT from 'next-translate/getT';
 import {prisma} from '@/src/lib/prisma';
 import { sendMailSingIn } from '@/src/facades/mail';
-import { use } from 'chai';
 const bcrypt = require('bcryptjs');
 import { subscribe_to_segment } from '@/src/lib/mailchimp';
 
@@ -154,7 +152,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
               name:vt.name
             }
           })
-
+debugger;
           subscribe_to_segment({
             segment:'eureka-all-users',
             email_address:user.email!,
