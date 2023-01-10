@@ -4,7 +4,7 @@ import { UserMosaicItem } from '@/types/user';
 import {prisma} from '@/src/lib/prisma';
 
 export const find = async (props: Prisma.UserFindUniqueArgs): Promise<UserMosaicItem | null> => {
-  const { select = undefined, include = true,where } = props;
+  const { select = undefined, include = true,where } = props;debugger;
   return prisma.user.findUnique({
     where,
     select:{
