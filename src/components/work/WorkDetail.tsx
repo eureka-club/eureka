@@ -277,7 +277,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                     // defaultActiveKey={defaultActiveKey}
                     activeKey={defaultActiveKey}
                     onSelect={handleSubsectionChange}
-                    transition={false}
+                    transition={true}
                   >
                   
                     <style jsx global>
