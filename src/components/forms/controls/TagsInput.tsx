@@ -12,6 +12,7 @@ export type TagsInputProp = {
   setTags?: (value: string) => void;
   label?: string;
   readOnly?: boolean | null;
+  br?: boolean | null;
   max?: number;
   className?: string;
   formatValue?: (v: string) => string;
@@ -19,7 +20,7 @@ export type TagsInputProp = {
 const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
   const { t } = useTranslation('createWorkForm');
   const formRef=useRef<HTMLFormElement>(null)
-  const { tags, setTags, label = '', readOnly = false, max = 2, className, formatValue = undefined } = props;
+  const { tags, setTags, label = '', readOnly = false,br = false, max = 2, className, formatValue = undefined } = props;
   const [loading, setLoading] = useState<Record<string,boolean>>({});
   const [tagInput, setTagInput] = useState<string>('');
   const [items, setItems] = useState<string[]>([]);
@@ -78,7 +79,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
       {/*label && <Form.Label>{label}</Form.Label>*/}
       <div>
         {items.map((v, idx) => {
-          return (
+          return (<>
             <span key={`${idx + 1}${t}`} data-cy="tag">
               <Badge
                 className="fw-light fs-6 cursor-pointer"
@@ -94,7 +95,8 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
                 )}
                 {!readOnly && (loading[v] && <Spinner size="sm" animation="grow"/>)}
               </Badge>{' '}
-            </span>
+            </span> {br && <><br/></> }</>
+
           );
         })}
         {!readOnly && items.length < max && (<>
