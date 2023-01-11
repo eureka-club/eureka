@@ -38,6 +38,7 @@ import WorkDetailPost from './WorkDetailPost';
 import CMI from '@/components/cycle/NewMosaicItem'
 import MosaicItemPost from '@/src/components/post/MosaicItem'
 import { useInView } from 'react-intersection-observer';
+import { Session } from '@/src/types';
 //import HyvorComments from '@/src/components/common/HyvorComments';
 
 const PostDetailComponent = lazy(()=>import('@/components/post/PostDetail')) ;
@@ -45,15 +46,15 @@ const PostDetailComponent = lazy(()=>import('@/components/post/PostDetail')) ;
 interface Props {
   workId: number;
   post?: PostMosaicItem;
+  session:Session
 }
 
-const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
+const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session }) => {
   const router = useRouter();
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   //const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const { t } = useTranslation('workDetail');
   //const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
-  const {data:session} = useSession();
   const [ref, inView] = useInView({
     triggerOnce: false,
     // rootMargin: '200px 0px',
@@ -219,8 +220,6 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
           </>
           )}
         </ButtonGroup> 
-        
-        
 
      {
     //  (!editPostOnSmallerScreen.value) 
@@ -231,7 +230,6 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
               <Row className="mb-5 d-flex flex-column flex-md-row">
                 <Col className='col-md-5 col-lg-4 col-xl-3   d-none d-md-block'>
                   <MosaicItem workId={work.id} showTrash linkToWork={false} size={'lg'} showSaveForLater={true} />
-
                   {/* <div className={classNames(styles.imgWrapper, 'mb-3')}>
                   <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
                 </div>
@@ -251,12 +249,10 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
                         {t('workLinkLabel')} <BsBoxArrowUpRight />
                       </a>
                     )}
-                  
                   <div className='container d-sm-block d-md-none mt-4 mb-4 position-relative'>
                     <MosaicItem className='postition-absolute start-50 translate-middle-x'  workId={work.id} showTrash linkToWork={false} size={'lg'} showSaveForLater={true}  />
                   </div>
                   {work.contentText != null && <UnclampText isHTML={false} text={work.contentText} clampHeight="8rem" />}
-                  
                   </section>
                 {/* <div className='container d-none d-lg-block mt-5'>
                   <CommentsList entity={work} parent={undefined}/>
@@ -271,7 +267,6 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post }) => {
               <>{post && work && <PostDetailComponent postId={post.id} work={work} cacheKey={['POST',`${post.id}`]} />}</>
             )}
            </Suspense>
-
 
           {post == null && (
             <Row className="mb-5">
