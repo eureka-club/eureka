@@ -37,10 +37,12 @@ import { CycleMosaicItem } from '@/src/types/cycle';
 
 interface Props{
   id:number;
+  session: {user:any};
+
 }
-const Mediatheque: NextPage<Props> = ({id}) => {
-  const {data:session, status} = useSession();
-  const isLoadingSession = status === "loading"
+const Mediatheque: NextPage<Props> = ({id,session}) => {
+  // const {data:session, status} = useSession();
+  // const isLoadingSession = status === "loading"
   const [idSession, setIdSession] = useState<string>('');
   const router = useRouter();
   const {notifier} = useNotificationContext();
@@ -92,7 +94,7 @@ const Mediatheque: NextPage<Props> = ({id}) => {
   const isAccessAllowed = () => {
     if (!isLoadingUser && user && user.id) {
       if (!user.dashboardType || user.dashboardType === 1) return true;
-      if (!isLoadingSession) {
+      // if (!isLoadingSession) {
         // if (!session) return false;
         if (session) {
           const s = session;
@@ -100,7 +102,7 @@ const Mediatheque: NextPage<Props> = ({id}) => {
           if (user.dashboardType === 2 && isFollowedByMe) return true;
           if (user.dashboardType === 3 && user.id === s.user.id) return true;
         }
-      }
+      // }
     }
     return false;
   };
@@ -309,7 +311,7 @@ const Mediatheque: NextPage<Props> = ({id}) => {
   };
 
   const renderAccessInfo = () => {
-    if (!(isLoadingUser || isLoadingSession)) {
+    if (!(isLoadingUser)) {
       if (user) {
         const aa = isAccessAllowed();
         if (user.dashboardType === 3 && !aa)
@@ -353,7 +355,7 @@ const Mediatheque: NextPage<Props> = ({id}) => {
   };
 
   const isPending = () => {
-    return isLoadingSession || isLoadingUser || isLoadingMutateFollowing;
+    return isLoadingUser || isLoadingMutateFollowing;
   }
 
   return (
@@ -365,7 +367,7 @@ const Mediatheque: NextPage<Props> = ({id}) => {
           </Button>
         </ButtonGroup>
 
-        {!(isLoadingUser || isLoadingSession) && user && (
+        {!(isLoadingUser) && user && (
           <section>
             <Card className='userHeader'>
               <Card.Body>
@@ -447,7 +449,7 @@ const Mediatheque: NextPage<Props> = ({id}) => {
         )}
         <aside>
           {renderAccessInfo()}  
-          {(isLoadingUser || isLoadingSession) && <Spinner animation="grow" variant="info" />}
+          {(isLoadingUser) && <Spinner animation="grow" variant="info" />}
           {isSuccessUser && id && !user && <Spinner animation="grow" variant="info" />}
         </aside>
       </article>
@@ -488,6 +490,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   
     return {
       props: {
+        session,
         id,
         dehydratedState: dehydrate(queryClient),
       },
