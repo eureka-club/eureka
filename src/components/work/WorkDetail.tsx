@@ -266,7 +266,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
               </Row>
             ) : (
               <>{post && work && <PostDetailComponent postId={post.id} work={work} cacheKey={['POST',`${post.id}`]} />}</>
-            )}
+            )} 
            </Suspense>
 
           {post == null && (
