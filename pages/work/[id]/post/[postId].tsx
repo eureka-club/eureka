@@ -7,13 +7,16 @@ import useWork,{getWork} from '@/src/useWork';
 import usePost,{getPost} from '@/src/usePost';
 import { QueryClient,dehydrate } from 'react-query';
 import { WEBAPP_URL } from '@/src/constants';
+import { getSession } from 'next-auth/react';
+import { Session } from '@/src/types';
 interface Props {
   postId:number;
   workId:number;
-  metaTags:any
+  metaTags:any;
+  session:Session
 }
 
-const PostDetailInWorkPage: NextPage<Props> = ({postId,workId,metaTags}) => {
+const PostDetailInWorkPage: NextPage<Props> = ({postId,workId,metaTags,session}) => {
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
   const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
@@ -46,14 +49,16 @@ const PostDetailInWorkPage: NextPage<Props> = ({postId,workId,metaTags}) => {
 
   if (!post || !work || isLoadingData()) return getLayout(<Spinner animation="grow" variant="info" />);
   return getLayout(
-    <WorkDetailComponent workId={work.id!} post={post} />,
+    <WorkDetailComponent workId={work.id!} post={post} session={session} />,
     `${post!.title} · ${work!.title}`,
   );
 
 };
 
 
-export const getServerSideProps:GetServerSideProps = async ({query}) => {
+export const getServerSideProps:GetServerSideProps = async (ctx) => {
+  const session = await getSession(ctx)
+  const {query} = ctx
   const {id:wid,postId:pid} = query;
   const workId = parseInt(wid ? wid.toString():'')
   const postId = parseInt(pid ? pid.toString():'')
@@ -70,6 +75,7 @@ export const getServerSideProps:GetServerSideProps = async ({query}) => {
 
   return {
     props: {
+      session,
       dehydratedState: dehydrate(queryClient),
       workId,
       postId,
