@@ -6,7 +6,7 @@ import { Spinner } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import { GetAllByResonse } from '@/src/types';
+import { GetAllByResonse, Session } from '@/src/types';
 import {getMyCycles,myCyclesWhere} from '@/src/useMyCycles';
 import { dehydrate,QueryClient } from 'react-query';
 const HomeNotSingIn = lazy(()=>import('@/components/HomeNotSingIn'));
@@ -27,7 +27,7 @@ const fetchItems = async (pageParam: number,topic:string):Promise<GetAllByResons
 
 interface Props{
   groupedByTopics: Record<string,GetAllByResonse>;
-  session: {user:any};
+  session: Session;
 }
 
 const IndexPage: NextPage<Props> = ({groupedByTopics,session}) => {

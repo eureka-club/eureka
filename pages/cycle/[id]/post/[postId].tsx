@@ -1,7 +1,7 @@
 import { NextPage,GetServerSideProps } from 'next';
 import Head from "next/head";
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { Spinner } from 'react-bootstrap';
 import { QueryClient,dehydrate } from 'react-query';
@@ -13,7 +13,9 @@ import usePost,{getPost} from '@/src/usePost';
 import useUsers,{getUsers} from '@/src/useUsers';
 import { CycleContext } from '@/src/useCycleContext';
 import { WEBAPP_URL } from '@/src/constants';
+import { Session } from '@/src/types';
 interface Props {
+  session:Session;
   postId:number;
   cycleId:number;
   metaTags:any
@@ -27,9 +29,7 @@ const whereCycleParticipants = (id:number)=>({
   ],} 
 });
 
-const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId,metaTags}) => {
-  const {data:session, status} = useSession();
-  const isLoadingSession = status === "loading"
+const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId,metaTags,session}) => {
   const router = useRouter();
   // const [post, setPost] = useState<PostMosaicItem>();
   const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
@@ -60,7 +60,7 @@ const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId,metaTags}) => {
 
 
   const isLoadingOrFetching = () => {
-    return !post && (isLoadingSession || isLoadingCycle || isLoadingPost || isFetchingPost);
+    return !post && (isLoadingCycle || isLoadingPost || isFetchingPost);
   };
 
   return (
@@ -96,7 +96,9 @@ const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId,metaTags}) => {
   );
 };
 
-export const getServerSideProps:GetServerSideProps = async ({query}) => {
+export const getServerSideProps:GetServerSideProps = async (ctx) => {
+  const session = await getSession(ctx)
+  const {query} = ctx
   const {id:cid,postId:pid} = query;
   const cycleId = parseInt(cid ? cid.toString():'')
   const postId = parseInt(pid ? pid.toString():'')
@@ -116,6 +118,7 @@ export const getServerSideProps:GetServerSideProps = async ({query}) => {
 
   return {
     props: {
+      session,
       dehydratedState: dehydrate(queryClient),
       cycleId,
       postId,

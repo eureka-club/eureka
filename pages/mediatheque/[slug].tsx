@@ -33,12 +33,12 @@ import useMySaved from '@/src/useMySaved';
 import slugify from 'slugify'
 import { PostMosaicItem } from '@/src/types/post';
 import { CycleMosaicItem } from '@/src/types/cycle';
+import { Session } from '@/src/types';
 
 
 interface Props{
   id:number;
-  session: {user:any};
-
+  session: Session;
 }
 const Mediatheque: NextPage<Props> = ({id,session}) => {
   // const {data:session, status} = useSession();
