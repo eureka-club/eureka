@@ -1,6 +1,6 @@
 import { NextPage,GetServerSideProps,  } from 'next';
 import Head from "next/head";
-import { useSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import { useState, useEffect, ReactElement } from 'react';
 import { useRouter } from 'next/router';
 import { Spinner, Alert } from 'react-bootstrap';
@@ -12,13 +12,16 @@ import { dehydrate,QueryClient } from 'react-query';
 import useWork,{getWork} from '@/src/useWork';
 import {getCycles} from '@/src/useCycles'
 import {getPosts} from '@/src/usePosts'
+import { Session } from '@/src/types';
 
-const WorkDetailPage: NextPage = (props:any) => {
+interface Props{
+  metas:Record<string,any>;
+  session:Session
+}
+const WorkDetailPage: NextPage<Props> = ({session,metas}) => {
   
   const router = useRouter();
   const { t } = useTranslation('common');
-  const {data:session, status} = useSession();
-  const isLoadingSession = status == 'loading'
   const [id, setId] = useState<string>('');
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
   const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
@@ -35,17 +38,17 @@ const WorkDetailPage: NextPage = (props:any) => {
     return <>
 
     <Head>
-        <meta property="og:title" content={props.metas.title}/>
-        <meta property="og:url" content={`${WEBAPP_URL}/work/${props.metas.id}`} />
-        <meta property="og:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${props.metas.storedFile}`}/>
+        <meta property="og:title" content={metas.title}/>
+        <meta property="og:url" content={`${WEBAPP_URL}/work/${metas.id}`} />
+        <meta property="og:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${metas.storedFile}`}/>
         <meta property="og:type" content="article" /> 
 
         <meta name="twitter:card" content="summary_large_image"></meta>
         <meta name="twitter:site" content="@eleurekaclub"></meta>
-        <meta name="twitter:title" content={props.metas.title}></meta>
+        <meta name="twitter:title" content={metas.title}></meta>
        {/* <meta name="twitter:description" content=""></meta>*/}
-        <meta name="twitter:url" content={`${WEBAPP_URL}/work/${props.metas.id}`}></meta>
-        <meta name="twitter:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${props.metas.storedFile}`}></meta>
+        <meta name="twitter:url" content={`${WEBAPP_URL}/work/${metas.id}`}></meta>
+        <meta name="twitter:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${metas.storedFile}`}></meta>
 
     </Head>
      <SimpleLayout title={title}>{children}</SimpleLayout>;
@@ -58,17 +61,21 @@ const WorkDetailPage: NextPage = (props:any) => {
     return rendetLayout(
       work.title,
       <WorkDetailComponent
+        session={session}
         workId={work.id}
       />,
     );
   }
-  if(!isLoadingSession && !isLoadingWork && !work)
+  if(!isLoadingWork && !work)
     return rendetLayout('Work not found', <Alert variant="warning">{t('notFound')}</Alert>);
   return rendetLayout('Loading...', <Spinner animation="grow" />);
 };
 
 
-export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getSession(ctx)
+  const { params } = ctx
+
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
 
   const qc = new QueryClient()
@@ -103,6 +110,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
   
   return {
     props: {
+      session,
       dehydratedState: dehydrate(qc),
       metas:metaTags
     },
