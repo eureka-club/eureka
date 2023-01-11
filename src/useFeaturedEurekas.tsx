@@ -1,5 +1,6 @@
 import usePosts,{getPosts} from './usePosts';
 import useBackOffice from '@/src/useBackOffice';
+import { PostMosaicItem } from './types/post';
 
 const backOfficePosts = (ids:number[]) => ({
   where:{

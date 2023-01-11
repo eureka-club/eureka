@@ -1,13 +1,13 @@
 
-import { FunctionComponent, useEffect, useState, lazy } from 'react';
+import { FunctionComponent, useEffect, useState, lazy, FC, memo } from 'react';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
-import {Spinner, Container,Button, Col} from 'react-bootstrap';
+import {Spinner, Col} from 'react-bootstrap';
 import TagsInput from '@/components/forms/controls/TagsInput';
 import { GetAllByResonse } from '@/src/types';
 import { useInView } from 'react-intersection-observer';
-import { CycleMosaicItem } from '../../src/types/cycle';
-import { UserMosaicItem } from '../../src/types/user';
+import { CycleMosaicItem } from '@/src/types/cycle';
+import { UserMosaicItem } from '@/src/types/user';
 import CarouselStatic from '@/src/components/CarouselStatic';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
@@ -17,9 +17,11 @@ import useInterestedCycles from '@/src/useInterestedCycles';
 import useMyCycles,{myCyclesWhere} from '@/src/useMyCycles';
 import useFeaturedEurekas from '@/src/useFeaturedEurekas';
 import Prompt from '@/src/components/post/PostPrompt';
+import { PostMosaicItem } from '@/src/types/post';
+import FeaturedCycles from './FeaturedCycles';
+import FeaturedEurekas from './FeaturedEurekas';
 
 const Carousel = lazy(()=>import('@/components/Carousel'));
-
 const topics = ['gender-feminisms', 'technology', 'environment',
  'racism-discrimination',
     'wellness-sports','social issues',
@@ -147,35 +149,7 @@ const featuredUsers = () => {
       </div>
     : <></>;
   };
-
-   const renderFeaturedEurekas = () => {
-    return (posts && posts.length && dataPosts) 
-    ? <div>      
-       <CarouselStatic
-        cacheKey={['POSTS','FEATURED']}
-        onSeeAll={()=>router.push('/featured-eurekas')}
-        data={posts}
-        title={t('IA Eurekas')}
-        //seeAll={posts.length<dataPosts.total}
-      />
-      </div>
-    : <></>;
-  };
-
-  const renderFeaturedCycles = () => {
-    return (featuredCycles && featuredCycles.length && dataFeaturedCycles) 
-    ? <div>      
-       <CarouselStatic
-        cacheKey={['CYCLES','INTERESTED']}
-        onSeeAll={()=>router.push('/featured-cycles')}
-        data={featuredCycles}
-        title={t('Interest cycles')}
-        //seeAll={cycles.length<dataCycles?.total}
-      />
-      </div>
-    : <></>;
-  };
-
+   
 const renderCarousels =  ()=>{
         return <>
                 {gbt.map(([topic,apiResponse])=>{
@@ -211,8 +185,10 @@ const renderCarousels =  ()=>{
   </Col>  
   <Col xs={12} lg={10} className="mt-5 mt-lg-0">
   <section className='ms-0 ms-lg-5'>  
-    {renderFeaturedEurekas()}
-    {renderFeaturedCycles()}
+    <FeaturedEurekas posts={posts} dataPosts={dataPosts}/>
+    {/* {renderFeaturedEurekas()} */}
+    <FeaturedCycles featuredCycles={featuredCycles} dataFeaturedCycles={dataFeaturedCycles} />
+    {/* {renderFeaturedCycles()} */}
     {/*cyclesJoined()*/}
     {featuredUsers()}
     <>

@@ -4,7 +4,7 @@ import {GetServerSideProps} from 'next';
 import Head from "next/head";
 import { Spinner } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
-import { useSession, getSession } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { GetAllByResonse } from '@/src/types';
 import {getMyCycles,myCyclesWhere} from '@/src/useMyCycles';
@@ -27,12 +27,13 @@ const fetchItems = async (pageParam: number,topic:string):Promise<GetAllByResons
 
 interface Props{
   groupedByTopics: Record<string,GetAllByResonse>;
+  session: {user:any};
 }
 
-const IndexPage: NextPage<Props> = ({groupedByTopics}) => {
+const IndexPage: NextPage<Props> = ({groupedByTopics,session}) => {
   const { t } = useTranslation('common');
-  const {data:session,status} = useSession();
-  const isLoadingSession = status === "loading"
+  // const {data:session,status} = useSession();
+  // const isLoadingSession = status === "loading"
   return <>
     <Head>
         <meta name="title" content={t('meta:indexTitle')}></meta>
@@ -51,7 +52,7 @@ const IndexPage: NextPage<Props> = ({groupedByTopics}) => {
         <meta name="twitter:url" content={`${process.env.NEXT_PUBLIC_WEBAPP_URL}`} ></meta>  
     </Head>
      {/* ESTO SERIA PAGINA USUARIO NO LOGUEADO  PAG ARQUIMEDES y EXPLORE */}
-     {!session && !isLoadingSession && <SimpleLayout allPageSize={true} title={t('browserTitleWelcome')}> 
+     {!session && <SimpleLayout allPageSize={true} title={t('browserTitleWelcome')}> 
        <Suspense fallback={<Spinner animation="grow" />}>
             <HomeNotSingIn/>
         </Suspense>
@@ -68,8 +69,8 @@ const IndexPage: NextPage<Props> = ({groupedByTopics}) => {
   </>
 };
 
-export const getServerSideProps: GetServerSideProps = async ({req}) => {
-  const session = await getSession({req});
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getSession(ctx)
   if(!session)
     return {props:{groupedByTopics:null}};
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
@@ -89,6 +90,7 @@ export const getServerSideProps: GetServerSideProps = async ({req}) => {
 
   return {
     props: {
+      session,
       groupedByTopics,
       dehydratedState: dehydrate(qc),      
     },
