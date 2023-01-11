@@ -134,11 +134,11 @@ const getParentTitle = () => {
       let full =''
       if (post.works.length) {
         full = post.works[0].title
-        res = full.slice(0, 10);
+        res = full.slice(0, 65);
       }
       else if(post.cycles.length){
         full = post.cycles[0].title
-        res = full.slice(0, 10);
+        res = full.slice(0, 65);
       }
       if (res.length + 3 < full.length) res = `${res}...`;
       else res = full;
