@@ -44,18 +44,24 @@ const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = fa
   const { id, name, countryOfOrigin /* image*/  , tags  } = user;
   const {data:session} = useSession();
   const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>(false);
+  const [tagsToShow, setTagsToShow] = useState<string>('');
   const {notifier} = useNotificationContext();
   const queryClient = useQueryClient();
   
-
 
   useEffect(() => {
     if(user){
       const ifbm = (user && user.followedBy) ? user.followedBy.findIndex((i) => i.id === session?.user.id) !== -1 : false
       setIsFollowedByMe(ifbm)
     }
+    if(tags){
+      if(tags.split(',').length > 3 )
+           setTagsToShow(tags.split(",").slice(0,3).join());
+      else
+            setTagsToShow(tags);
+    }
    
-  }, [user]);
+  }, [user,tags]);
 
   const { mutate: mutateFollowing, isLoading: isLoadingMutateFollowing } = useMutation<User>(
     async () => {
@@ -154,7 +160,7 @@ const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = fa
           {user && <SocialInteraction showButtonLabels={false} showCounts={false} entity={user} />}
         </Card.Footer>
       )} */}
-    </Card> : <Card className={`border border-2 ${styles.detailedContainer}`} data-cy={`mosaic-item-user-${user.id}`}>
+    </Card> : <Card className={`border border-2 mosaic`} data-cy={`mosaic-item-user-${user.id}`}>
         <div className='d-flex justify-content-end mt-2 me-2'>
          {session && session.user!.id == user.id && ((<OverlayTrigger
           key='right'
@@ -165,7 +171,7 @@ const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = fa
             </Tooltip>
           }
         >
-          <Button className='rounded rounded-5' size='sm'  onClick={()=>router.push('/profile')}> <h4 className='mb-1 text-white'><AiOutlineUser className='text-white'/></h4></Button>
+          <Button className='rounded rounded-5' size='sm'  onClick={()=>router.push('/profile')} style={{width:'2.7em',height:'2.8em'}}> <span className='fs-5 text-white'><AiOutlineUser className='text-white mb-1 me-1'/></span></Button>
         </OverlayTrigger>))}
           { session && session.user!.id !== user.id && !isFollowedByMe &&  (<OverlayTrigger
           key='right'
@@ -176,7 +182,7 @@ const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = fa
             </Tooltip>
           }
         >          
-          <Button className='rounded rounded-5' size='sm' disabled={isLoadingMutateFollowing}  onClick={followHandler} > <h4 className='mb-1'><AiOutlineUserAdd className='text-white'/></h4></Button>
+          <Button className='rounded rounded-5' size='sm' disabled={isLoadingMutateFollowing}  onClick={followHandler} style={{width:'2.8em',height:'2.8em'}} > <span className='fs-5 '><AiOutlineUserAdd className='text-white mb-1 me-1'/></span></Button>
         </OverlayTrigger>)}
 
          { session && session.user!.id !== user.id && isFollowedByMe && (<OverlayTrigger
@@ -188,23 +194,23 @@ const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = fa
             </Tooltip>
           }
         >
-          <Button variant="button" className='border-primary text-primary rounded rounded-5 ' size='sm'  disabled={isLoadingMutateFollowing}  onClick={followHandler} > <h4 className='mb-1'><AiOutlineUserDelete/></h4></Button>
+          <Button variant="button" className='border-primary text-primary rounded rounded-5 ' size='sm'  disabled={isLoadingMutateFollowing}  onClick={followHandler}  style={{width:'2.8em',height:'2.8em'}} > <span className='fs-5 mb-2'><AiOutlineUserDelete className=' mb-1 me-1'/></span></Button>
         </OverlayTrigger>)}
         
         </div>
         <div className='d-flex flex-row justify-content-center  px-3' >
            {(!user?.photos || !user?.photos.length) ?
                <img
-                className="rounded rounded-circle"
+                className={`rounded rounded-circle ${styles.avatar}`}
                 src={user.image||''}
                 alt={user.name||''}
-                style={{width:'140px',height:'140px'}}
+               // style={{width:'110px',height:'110px'}}
               />:
-           <LocalImageComponent /* className='avatarProfile' */className="rounded rounded-circle" width={140} height={140} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />}   
+           <LocalImageComponent  className={`rounded rounded-circle ${styles.avatar}`} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />}   
         </div>
-        <div className='mt-2 d-flex flex-column justify-content-center align-items-center'>
+        <div className='mt-1 d-flex flex-column justify-content-center align-items-center'>
           <h6 className='text-secondary cursor-pointer' onClick={() => openUserMediatheque(user)} >{name || 'unknown'}</h6>
-          <TagsInput className='mt-1 px-4 text-center' tags={tags || ''} readOnly label="" />
+          <TagsInput className='mt-0 px-4 text-center' tags={tagsToShow || ''} readOnly br={true} label="" />
         </div>
     </Card>}</>
   
