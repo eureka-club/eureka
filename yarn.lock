@@ -1153,7 +1153,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/next-auth@^3.1.16":
+"@types/next-auth@^3.15.0":
   version "3.15.0"
   resolved "https://registry.yarnpkg.com/@types/next-auth/-/next-auth-3.15.0.tgz#b602f4689b35fff3d2af09500c79ab11c4745bca"
   integrity sha512-ZVfejlu81YiIRX1m0iKAfvZ3nK7K9EyZWhNARNKsFop8kNAgEvMnlKpTpwN59xkK2OhyWLagPuiDAVBYSO9jSA==

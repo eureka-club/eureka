@@ -56,11 +56,9 @@ const useJoinUserToCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,part
             }
             if(cycle?.access == 2)
               toast.success( t(json.message))
-            subscribe_to_segment({
+            await subscribe_to_segment({
               segment:`ciclo-${cycle.id}-pax`,
               email_address:user.email!,
-              onSuccess: async (res)=>console.log('ok',res),
-              onFailure: async (err)=>console.error('error',err)
             })       
           }
     
@@ -134,11 +132,9 @@ const useLeaveUserFromCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,p
               data:{message:notificationMessage}
             });
           }
-          unsubscribe_from_segment({
+          await unsubscribe_from_segment({
             segment:`ciclo-${cycle.id}-pax`,
-            email_address:user.email!,
-            onSuccess: async (res)=>console.log('ok',res),
-            onFailure: async (err)=>console.error('error',err)
+            email_address:user.email!
           }) 
         }
         
