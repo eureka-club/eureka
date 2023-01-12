@@ -39,7 +39,7 @@ import CMI from '@/components/cycle/NewMosaicItem'
 import MosaicItemPost from '@/src/components/post/MosaicItem'
 import { useInView } from 'react-intersection-observer';
 import { Session } from '@/src/types';
-//import HyvorComments from '@/src/components/common/HyvorComments';
+import HyvorComments from '@/src/components/common/HyvorComments';
 
 const PostDetailComponent = lazy(()=>import('@/components/post/PostDetail')) ;
  
@@ -256,8 +256,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                   </section>
                 {/* <div className='container d-none d-lg-block mt-5'>
                   <CommentsList entity={work} parent={undefined}/>
-                </div>
-                 <HyvorComments entity='work' id={`${work.id}`}  /> */}
+                </div>*/}
+                 <HyvorComments entity='work' id={`${work.id}`}  /> 
           </Col>
             {/* <div className='container d-sm-block d-lg-none mt-3'>
                   <CommentsList entity={work} parent={undefined}/>
