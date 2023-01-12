@@ -152,7 +152,6 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
               name:vt.name
             }
           })
-debugger;
           subscribe_to_segment({
             segment:'eureka-all-users',
             email_address:user.email!,

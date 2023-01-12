@@ -41,8 +41,6 @@ interface Props{
   session: Session;
 }
 const Mediatheque: NextPage<Props> = ({id,session}) => {
-  // const {data:session, status} = useSession();
-  // const isLoadingSession = status === "loading"
   const [idSession, setIdSession] = useState<string>('');
   const router = useRouter();
   const {notifier} = useNotificationContext();
