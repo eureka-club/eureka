@@ -138,7 +138,7 @@ const useLeaveUserFromCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,p
           }) 
         }
         
-      },
+      }, 
       {
         onMutate: async () => {
             const ck = ['USERS',JSON.stringify(whereCycleParticipants)];
