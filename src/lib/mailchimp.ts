@@ -7,36 +7,25 @@ const instance = axios.create({
 export interface MailchimpSubscribe{
     segment?:string;
     email_address:string;
-    onSuccess?:(res:Record<string,any>)=>Promise<void>;
-    onFailure?:(err:Record<string,any>)=>Promise<void>
 }
 
-export const subscribe_to_segment = (props:MailchimpSubscribe)=>{
-    const {segment='eureka-all-users',email_address,onSuccess,onFailure} = props
+export const subscribe_to_segment = async (props:MailchimpSubscribe)=>{
+    const {segment='eureka-all-users',email_address} = props
     const url =`/segments/add_member`
     try{
-        get_member({
-            email_address,
-            onSuccess:async (res)=>{
-                const fn_subscribe = async ()=>instance.post(url,{segment,email_address})
-                .then(onSuccess??console.log)
-                .catch(onFailure??console.error)
-
-                if(res.data){
-                    const {member} = res.data
-                    if(member){
-                        await fn_subscribe()
-                    }
-                    else{
-                        const rnm = await add_member({email_address})
-                        if(rnm){
-                            await fn_subscribe()
-                        }
-                    }
-                }
-            },
-            onFailure:async (e)=>console.error(e)
-        })
+        const fn_subscribe = async ()=>instance.post(url,{segment,email_address})
+        const member = await get_member({email_address})
+        if(member){
+            const res = await fn_subscribe()
+            return res;
+        }
+        else{
+            const rnm = await add_member({email_address})
+            if(rnm){
+                const res = await fn_subscribe()
+                return res
+            }
+        }
     }
     catch(e){
         console.error(e)
@@ -46,19 +35,16 @@ export const subscribe_to_segment = (props:MailchimpSubscribe)=>{
 export interface MailchimpUnsubscribe{
     segment?:string;
     email_address:string;
-    onSuccess?:(res:Record<string,any>)=>Promise<void>;
-    onFailure?:(err:Record<string,any>)=>Promise<void>
 }
 
-export const unsubscribe_from_segment = (props:MailchimpUnsubscribe)=>{
-    const {segment='eureka-all-users',email_address,onSuccess,onFailure} = props
+export const unsubscribe_from_segment = async (props:MailchimpUnsubscribe)=>{
+    const {segment='eureka-all-users',email_address} = props
     const url =`/segments/remove_member`
     try{
-        instance.delete(url,{params:{
+        const res = await instance.delete(url,{params:{
           segment,email_address
         }})
-        .then(onSuccess??console.log)
-        .catch(onFailure??console.error)
+        return res;
     }
     catch(e){
         console.error(e)
@@ -68,18 +54,15 @@ export const unsubscribe_from_segment = (props:MailchimpUnsubscribe)=>{
 export interface MailchimpListMember{
     list_id?:string;
     email_address:string;
-    onSuccess?:(res:Record<string,any>)=>Promise<void>;
-    onFailure?:(err:Record<string,any>)=>Promise<void>
 }
-export const get_member = (props:MailchimpListMember)=>{
-    const {list_id,email_address,onSuccess,onFailure} = props
+export const get_member = async (props:MailchimpListMember)=>{
+    const {list_id,email_address} = props
     const url =`/list/get_member`
     try{
-        instance.get(url,{params:{
+        const m = await instance.get(url,{params:{
           list_id,email_address
-        }})
-        .then(onSuccess??console.log)
-        .catch(onFailure??console.error)
+        }});
+        return m.data?.member;
     }
     catch(e){
         console.error(e)
@@ -92,17 +75,15 @@ export interface MailchimpListMember{
     email_address:string;
     tags?:string[];
     status?:string;
-    onSuccess?:(res:Record<string,any>)=>Promise<void>;
-    onFailure?:(err:Record<string,any>)=>Promise<void>
 }
 export const add_member = async (props:MailchimpListMember)=>{
-    const {list_id,email_address,status,onSuccess,onFailure} = props
+    const {list_id,email_address,status} = props
     const url =`/list/add_member`
     try{
         const res = await instance.post(url,{params:{
           list_id,email_address,status
         }})
-        return res.data.member??null
+        return res.data?.member??null
     }
     catch(e){
         console.error(e)

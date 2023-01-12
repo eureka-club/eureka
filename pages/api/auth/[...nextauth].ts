@@ -141,7 +141,15 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
         }
       },
       createUser:async({user})=>{
-        const vt = await prisma.userCustomData.findFirst({where:{identifier:user.email!}})
+        const vt = await prisma.userCustomData.findFirst({where:{identifier:user.email!}});
+
+        await subscribe_to_segment({
+          segment:'eureka-all-users',
+          email_address:user.email!,
+          // onSuccess: async (res)=>console.log('ok',res),
+          // onFailure: async (err)=>console.error('error',err)
+        })
+
         if(vt){
         // const hash = bcrypt.hashSync(vt.password, 8);
 
@@ -152,12 +160,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
               name:vt.name
             }
           })
-          subscribe_to_segment({
-            segment:'eureka-all-users',
-            email_address:user.email!,
-            onSuccess: async (res)=>console.log('ok',res),
-            onFailure: async (err)=>console.error('error',err)
-          })
+          
 
         }
       }
