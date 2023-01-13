@@ -185,7 +185,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
         )}
         </Row>
         <div className="mt-5" ref={ref}>
-          {renderSpinnerForLoadNextCarousel()}
+          {hasMorePosts ? <Spinner animation="grow" />
+            :<></>}
         </div>
       </>
     }
@@ -325,11 +326,33 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                             <HyvorComments entity='work' id={`${work.id}`}  />
                           </TabPane>*/}
                           <TabPane eventKey="posts">{
-                            renderPosts()
+                            posts?(
+                              <>
+                                <WorkDetailPost workId={work.id} className='mb-2' cacheKey={['POSTS',JSON.stringify(workPostsWhere)]}></WorkDetailPost> 
+                                <Row className='mt-5'>
+                                {posts.map((p)=><Col key={p.id} xs={12} sm={6} lg={3} xxl={2} className="mb-5 d-flex justify-content-center  align-items-center">
+                                  <MosaicItemPost  cacheKey={['POST',`${p.id}`]} postId={p.id} size={'md'} showSaveForLater={true}  />          
+                                </Col>
+                                )}
+                                </Row>
+                                {/* TODO this make rerender the hyvor talk but is needed <div className="mt-5" ref={ref}>
+                                  {hasMorePosts ? <Spinner animation="grow" />
+                                  :<></>}
+                                </div> */}
+                              </>
+                            )
+                            :<></>
                           }
                           </TabPane>
                           <TabPane eventKey="cycles">
-                            {renderCycles()}
+                            {
+                              cycles
+                              ? <Row className='mt-5'>
+                                  {cycles.map(c=><Col xs={12} sm={6} lg={3} xxl={2} className="mb-5 d-flex justify-content-center  align-items-center" key={c.id}>
+                                    <CMI cycleId={c.id} cacheKey={['CYCLES',`WORK-${workId}`]} size={'md'} showSaveForLater={true}  /></Col>)}
+                                </Row>
+                              : <></>
+                            } 
                           </TabPane>
                         </TabContent>
                       </Col>
