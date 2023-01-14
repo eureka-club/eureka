@@ -182,7 +182,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
         },
         from: process.env.EMAILING_FROM,
         sendVerificationRequest: async ({ identifier: email, url }): Promise<void> => {
-          // const site = url.replace(/^https?:\/\//, '');
+          // const site = url.replace(/^https?:\/\//, ''); 
           const t = await getT(locale, 'singInMail');
           const title = t('title');
           const subtitle = t('subtitle');
