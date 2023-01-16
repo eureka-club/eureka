@@ -15,7 +15,6 @@ import { Session } from '@/src/types';
 import { dehydrate, QueryClient } from 'react-query';
 
 interface Props {
-  cycle: CycleMosaicItem;
   notFound?: boolean;
   session: Session
 }
