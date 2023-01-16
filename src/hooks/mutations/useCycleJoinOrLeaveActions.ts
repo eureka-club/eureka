@@ -134,7 +134,7 @@ const useLeaveUserFromCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,p
           }
           await unsubscribe_from_segment({
             segment:`ciclo-${cycle.id}-pax`,
-            email_address:user.email!
+            email_address:user.email! 
           }) 
         }
         
