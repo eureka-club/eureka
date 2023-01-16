@@ -1,6 +1,6 @@
 import { FunctionComponent, useState, useEffect, ChangeEvent, KeyboardEvent,useRef } from 'react';
 import { Form, InputGroup,Button, Badge, Spinner,Col } from 'react-bootstrap';
-import { TextField,FormGroup,FormControl,InputLabel,Input,FormHelperText,FormControlLabel} from '@mui/material';
+import { TextField,FormGroup,FormControl,InputLabel,Input,FormHelperText,FormControlLabel, Box} from '@mui/material';
 import useTranslation from 'next-translate/useTranslation'; 
 import { useAtom } from 'jotai'; 
 import { useRouter } from 'next/router';
@@ -79,7 +79,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
       {/*label && <Form.Label>{label}</Form.Label>*/}
       <div>
         {items.map((v, idx) => {
-          return (<>
+          return (<Box key={idx}>
             <span key={`${idx + 1}${t}`} data-cy="tag">
               <Badge
                 className="fw-light fs-6 cursor-pointer"
@@ -95,7 +95,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
                 )}
                 {!readOnly && (loading[v] && <Spinner size="sm" animation="grow"/>)}
               </Badge>{' '}
-            </span> {br && <><br/></> }</>
+            </span> {br && <><br/></> }</Box>
 
           );
         })}
