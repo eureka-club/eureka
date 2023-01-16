@@ -64,9 +64,10 @@ const EditCyclePage: NextPage<Props> = ({session}) => {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cycleId = parseInt(ctx.params?.id as string, 10);
   const session = await getSession(ctx)
+  const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
  
   const qc = new QueryClient()
-  await qc.fetchQuery(['CYCLE', `${cycleId}`], () => getCycle(cycleId))
+  await qc.fetchQuery(['CYCLE', `${cycleId}`], () => getCycle(cycleId,origin))
 
   // const cycle = await find(cycleId);
   // if (session == null || (session.user.id !== cycle?.creatorId && !session.user.roles.includes('admin'))) {
