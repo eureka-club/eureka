@@ -391,7 +391,7 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
                     <div className='mt-3 d-sm-block d-md-none'>
                        <UnclampText isHTML={false} text={user.aboutMe || ''} clampHeight="6rem" />
                     </div>
-                    <TagsInput className='d-none d-md-block' tags={user.tags || ''} readOnly label="" />
+                    <TagsInput className='d-none d-md-flex flex-row' tags={user.tags || ''} readOnly label="" />
                   </Col>
                   <Col className='mt-2 d-grid gap-2 d-md-flex align-items-start  justify-content-md-end d-lg-block'>
                       {session && session.user!.id == user.id && (

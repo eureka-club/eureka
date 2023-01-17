@@ -18,7 +18,7 @@ import { CycleMosaicItem } from '../../types/cycle';
 import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
 
 import ImageFileSelect from '../forms/controls/ImageFileSelect';
-import TagsInputTypeAhead from '../forms/controls/TagsInputTypeAhead';
+import TagsInputTypeAheadMaterial from '../forms/controls/TagsInputTypeAheadMaterial';
 import stylesImageFileSelect from '../forms/CreatePostForm.module.css';
 import useTopics from '../../useTopics';
 
@@ -472,13 +472,13 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
             </Form.Group>  
           {useOtherFields && <Form.Group controlId="topics">
             {/* <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel> */}
-            <TagsInputTypeAhead
+            <TagsInputTypeAheadMaterial
               style={{ background: 'white' }}
               data={topics}
               items={eurekaTopics}
               setItems={setEurekaTopics}
-              labelKey={(res: { code: string }) => t(`topics:${res.code}`)}
               max={3}
+              label={t('Type to add tag')}
               placeholder={`${t('Type to add tag')}...`}
               formatValue={(v: string) => t(`topics:${v}`)} 
               className="mt-3"

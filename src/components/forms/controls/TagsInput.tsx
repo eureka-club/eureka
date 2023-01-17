@@ -75,9 +75,9 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
     router.push(`/search?q=${v}`);    
   };
   return ( 
-    <Form.Group controlId="tags" className={`${className}`}>
+    <Form.Group controlId="tags" >
       {/*label && <Form.Label>{label}</Form.Label>*/}
-      <div className='d-flex flex-row'>
+      <div className={`${className}`}>
         {items.map((v, idx) => {
           return (<Box key={idx}>
             <span key={`${idx + 1}${t}`} data-cy="tag">
