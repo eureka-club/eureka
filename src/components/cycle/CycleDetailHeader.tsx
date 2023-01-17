@@ -178,15 +178,15 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           <span className="ms-1 text-gray">{t('ratings')}</span>
           
           {cycle.topics && (
-            <aside className=" d-flex flex-wrap ms-3">
+            <section className=" d-flex flex-nowrap ms-2 w-100">
               <TagsInput
                 formatValue={(v: string) => t(`topics:${v}`)}
                 className=""
                 tags={cycle.topics}
                 readOnly
               />
-              <TagsInput className="ms-1 d-inline-block" tags={cycle.tags!} readOnly label="" />
-            </aside>
+              <TagsInput className="ms-1" tags={cycle.tags!} readOnly label="" />
+            </section>
           )}
           </div>
           <div className="">

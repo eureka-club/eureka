@@ -77,7 +77,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
   return ( 
     <Form.Group controlId="tags" className={`${className}`}>
       {/*label && <Form.Label>{label}</Form.Label>*/}
-      <div>
+      <div className='d-flex flex-row'>
         {items.map((v, idx) => {
           return (<Box key={idx}>
             <span key={`${idx + 1}${t}`} data-cy="tag">
@@ -95,7 +95,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
                 )}
                 {!readOnly && (loading[v] && <Spinner size="sm" animation="grow"/>)}
               </Badge>{' '}
-            </span> {br && <><br/></> }</Box>
+            </span> </Box>
 
           );
         })}
