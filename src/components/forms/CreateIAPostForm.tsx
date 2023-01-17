@@ -24,7 +24,9 @@ import { BsFillXCircleFill } from 'react-icons/bs';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import { useMutation, useQueryClient } from 'react-query';
 import TagsInput from './controls/TagsInput';
-import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
+import TagsInputMaterial from './controls/TagsInputMaterial';
+import TagsInputTypeAheadMaterial from './controls/TagsInputTypeAheadMaterial';
+import AsyncTypeaheadMaterial from './controls/AsyncTypeaheadMaterial';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
 import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload } from '../../types/post';
@@ -356,6 +358,8 @@ const CreateIAPostForm: FunctionComponent<Props> = ({noModal = false,params}) =>
         topics: items.join(','),
         tags,
       };
+        console.log(payload,'payload')
+
       if(formValidation(payload))
           await execCreatePost(payload);
     } else if (form && selectedCycle != null) {
@@ -485,7 +489,6 @@ const CreateIAPostForm: FunctionComponent<Props> = ({noModal = false,params}) =>
                   </div>
                 ) : (
                   <>
-                    {/* language=CSS */}
                     <style jsx global>{`
                       .rbt-menu {
                         min-width: 300px;
@@ -515,7 +518,8 @@ const CreateIAPostForm: FunctionComponent<Props> = ({noModal = false,params}) =>
                     />
                   </>
                 )}
-              </FormGroup>
+              </FormGroup> 
+              {/*<AsyncTypeaheadMaterial label={`*${t('searchCycleOrWorkFieldLabel')}`} helperText={`${t('searchCycleOrWorkFieldPlaceholder')}`}/>*/}
             </Col>
               <Col className='mb-4'>
               <FormGroup controlId="postTitle" >
@@ -600,21 +604,20 @@ const CreateIAPostForm: FunctionComponent<Props> = ({noModal = false,params}) =>
               </small>
             </Col>
              <Col  className="mb-4">
-              <FormGroup controlId="topics">
-                <FormLabel>{t('topicsPostLabel')}</FormLabel>
-                <TagsInputTypeAhead
+             <FormGroup controlId="topics">
+                <TagsInputTypeAheadMaterial
                   data={topics}
                   items={items}
                   setItems={setItems}
-                  labelKey={(res) => t(`topics:${res.code}`)}
                   formatValue={(v: string) => t(`topics:${v}`)} 
                   max={3}
+                  label={t('topicsPostLabel')}
                   placeholder={`${t('Type to add tag')}...`}
                 />
               </FormGroup>
             </Col>
              <Col className="mb-4">
-              <TagsInput tags={tags} setTags={setTags} label={t('topicsFieldLabel')}/>
+              <TagsInputMaterial tags={tags} setTags={setTags} label={t('topicsFieldLabel')}/>
             </Col>
             </Row>}  </>}
      </ModalBody>
