@@ -30,7 +30,7 @@ const ExplorePage: NextPage = () => {
   },[dataCycles,dataPosts])
 
   const getTopicsBadgedLinks = () => {
-    return <TagsInput formatValue={(v: string) => t(`topics:${v}`)} tags={[...topics].join()} readOnly />;
+    return <TagsInput className='d-flex flex-wrap flex-row' formatValue={(v: string) => t(`topics:${v}`)} tags={[...topics].join()} readOnly />;
   };
 
   

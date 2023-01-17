@@ -95,7 +95,7 @@ const HomeSingIn: FunctionComponent<Props> = ({ groupedByTopics}) => {
   },[inView, gbt, topicIdx]);  
    
 const getTopicsBadgedLinks = () => {
-        return <TagsInput formatValue={(v: string) => t(`topics:${v}`)} tags={[...topics].join()} readOnly />;
+        return <TagsInput className='d-flex flex-wrap' formatValue={(v: string) => t(`topics:${v}`)} tags={[...topics].join()} readOnly />;
       };
 
 const renderSpinnerForLoadNextCarousel = ()=>{
