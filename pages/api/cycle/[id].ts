@@ -107,7 +107,7 @@ export default getApiHandler()
     }
   })
   .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {//TODO not update with prisma, /faced/cycle -> update must be used !!!
-    const session = await getSession({ req });
+    const session = await getSession({ req });debugger;
     if (session == null || !session.user.roles.includes('admin')) {
       res.status(401).end({ status: 'Unauthorized' });
       
@@ -118,12 +118,22 @@ export default getApiHandler()
 
     try {
       let r: Cycle;
-      if (includedWorksIds) {
+      if (includedWorksIds?.length) {
         r = await prisma.cycle.update({
           where: { id },
           data: {
             updatedAt: dayjs().utc().format(),
             works: { connect: includedWorksIds.map((workId: number) => ({ id: workId })) },
+            cycleWorksDates: {
+              createMany:{
+                data:includedWorksIds.map((workId: number) => ({ 
+                  workId,
+                  startDate: dayjs().utc().format(),
+                  endDate: dayjs().utc().format()
+                }))
+              }
+            },
+            
           },
         });
       } else {
