@@ -63,7 +63,7 @@ const NavBar: FunctionComponent = () => {
   };
 
   const handlerLogout = () => {
-    signOut({callbackUrl:`${process.env.NEXT_PUBLIC_WEBAPP_URL}/`});
+    signOut({callbackUrl:`${process.env.NEXT_PUBLIC_WEBAPP_URL}`});
   };
 
   const avatarError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {

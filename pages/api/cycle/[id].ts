@@ -118,12 +118,22 @@ export default getApiHandler()
 
     try {
       let r: Cycle;
-      if (includedWorksIds) {
+      if (includedWorksIds?.length) {
         r = await prisma.cycle.update({
           where: { id },
           data: {
             updatedAt: dayjs().utc().format(),
             works: { connect: includedWorksIds.map((workId: number) => ({ id: workId })) },
+            cycleWorksDates: {
+              createMany:{
+                data:includedWorksIds.map((workId: number) => ({ 
+                  workId,
+                  startDate: dayjs().utc().format(),
+                  endDate: dayjs().utc().format()
+                }))
+              }
+            },
+            
           },
         });
       } else {

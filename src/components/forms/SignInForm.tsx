@@ -78,8 +78,11 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
                 setLoading(false)
               }
               else{
-               close()
-                router.push(localStorage.getItem('loginRedirect') || '/')
+                close()
+                localStorage.setItem('loginRedirect',router.asPath)
+                router.push(localStorage.getItem('loginRedirect') || '/').then(()=>{
+                  localStorage.setItem('loginRedirect','')
+                })
               }
             })
           }

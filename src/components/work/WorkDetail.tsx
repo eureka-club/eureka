@@ -347,7 +347,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                           <TabPane eventKey="cycles">
                             {
                               cycles
-                              ? <Row className='mt-5'>
+                              ? <Row className='mt-5'> 
                                   {cycles.map(c=><Col xs={12} sm={6} lg={3} xxl={2} className="mb-5 d-flex justify-content-center  align-items-center" key={c.id}>
                                     <CMI cycleId={c.id} cacheKey={['CYCLES',`WORK-${workId}`]} size={'md'} showSaveForLater={true}  /></Col>)}
                                 </Row>

@@ -142,7 +142,7 @@ const getParentTitle = () => {
       }
       if (res.length + 3 < full.length) res = `${res}...`;
       else res = full;
-      return res;
+      return res; 
     };
 
     const canNavigate = () => {

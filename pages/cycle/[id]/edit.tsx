@@ -2,26 +2,24 @@ import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { BiArrowBack } from 'react-icons/bi';
-import { Alert, ButtonGroup, Button, Spinner } from 'react-bootstrap';
+import { ButtonGroup, Button, Spinner } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 // import { Session } from '../../../src/types';
-import { useSession } from 'next-auth/react';
 import { CycleMosaicItem } from '../../../src/types/cycle';
 import SimpleLayout from '../../../src/components/layouts/SimpleLayout';
 import EditCycleForm from '../../../src/components/forms/EditCycleForm';
-import { find } from '../../../src/facades/cycle';
-import useCycle from '@/src/useCycle';
+import useCycle,{getCycle} from '@/src/useCycle';
 import { useEffect, useState } from 'react';
 import { Cycle } from '@prisma/client';
+import { Session } from '@/src/types';
+import { dehydrate, QueryClient } from 'react-query';
 
 interface Props {
-  cycle: CycleMosaicItem;
   notFound?: boolean;
+  session: Session
 }
 
-const EditCyclePage: NextPage<Props> = () => {
-  const {data:session, status} = useSession();
-  const isLoadingSession = status === "loading"
+const EditCyclePage: NextPage<Props> = ({session}) => {
   const { t } = useTranslation('createCycleForm');
   const router = useRouter();
 
@@ -31,7 +29,7 @@ const EditCyclePage: NextPage<Props> = () => {
   },[router])
   const {data:cycle,isLoading} = useCycle(+id,{enabled:!!id})
 
-  if(isLoading || isLoadingSession)
+  if(isLoading)
     return <SimpleLayout title={t('editCycle')}>
     <Spinner animation='grow'/>
   </SimpleLayout>
@@ -41,7 +39,7 @@ const EditCyclePage: NextPage<Props> = () => {
     {t('common:Not Found')}
   </SimpleLayout>
 
-  if (!isLoadingSession && session == null || (session && session.user.id !== cycle?.creatorId && !(session.user.roles && session.user.roles =='admin'))) {
+  if (session == null || (session && session.user.id !== cycle?.creatorId && !(session.user.roles && session.user.roles =='admin'))) {
     return <SimpleLayout title={t('editCycle')}>
       {t('common:Unauthorized')}
     </SimpleLayout>
@@ -62,18 +60,26 @@ const EditCyclePage: NextPage<Props> = () => {
   );
 };
 
-// export const getServerSideProps: GetServerSideProps = async (ctx) => {
-//   const session = (await getSession(ctx)) as unknown as Session;
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const cycleId = parseInt(ctx.params?.id as string, 10);
+  const session = await getSession(ctx)
+  const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
+ 
+  const qc = new QueryClient()
+  await qc.fetchQuery(['CYCLE', `${cycleId}`], () => getCycle(cycleId,origin))
 
-//   const cycleId = parseInt(ctx.params?.id as string, 10);
-//   const cycle = await find(cycleId);
-//   if (session == null || (session.user.id !== cycle?.creatorId && !session.user.roles.includes('admin'))) {
-//     return { props: { notFound: true } };
-//   }
+  // const cycle = await find(cycleId);
+  // if (session == null || (session.user.id !== cycle?.creatorId && !session.user.roles.includes('admin'))) {
+  //   return { props: { notFound: true } };
+  // }
 
-//   return {
-//     props: { cycle },
-//   };
-// };
+  return {
+    props: { 
+      session,
+      dehydratedState: dehydrate(qc),      
+     },
+
+  };
+};
 
 export default EditCyclePage;

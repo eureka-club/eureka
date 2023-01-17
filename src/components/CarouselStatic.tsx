@@ -16,6 +16,7 @@ import { CycleMosaicItem /* , CycleWithImages */ } from '../types/cycle';
 import { PostMosaicItem } from '../types/post';
 import { UserMosaicItem } from '../types/user';
 import { CycleContext } from '../useCycleContext';
+import {v1} from 'uuid'
 
 type Item = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | UserMosaicItem;
 type Props = {
@@ -130,7 +131,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
     
     if (current) {
       const mosaics = current.map((i, idx: number) => (
-        <div key={`mosaic-${i.type}-${i.id}`} className={`${mosaicBoxClassName} mx-2`}/*className="pb-5 mx-2"*/>
+        <div key={`mosaic-${v1()}`} className={`${mosaicBoxClassName} mx-2`}/*className="pb-5 mx-2"*/>
           {renderMosaicItem(i, undefined, showSocialInteraction,cacheKey, customMosaicStyle, size,undefined,userMosaicDetailed)}
         </div>
       ));

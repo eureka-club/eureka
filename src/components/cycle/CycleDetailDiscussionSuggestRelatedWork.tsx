@@ -15,7 +15,7 @@ import styles from './CycleDetailDiscussionSuggestRelatedWork.module.css';
 // import { Session } from '../../types';
 import { WorkMosaicItem } from '../../types/work';
 import { CycleMosaicItem } from '../../types/cycle';
-
+import useWorks from '@/src/useWorks';
 import globalModalsAtom from '../../atoms/globalModals';
 // import ImageFileSelect from '../forms/controls/ImageFileSelect';
 // import TagsInputTypeAhead from '../forms/controls/TagsInputTypeAhead';
@@ -77,7 +77,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
 
       const json = await res.json();
       if (json.ok) {
-        return json.post;
+        return {...json,type:'cycle'};
       }
 
       return null;
@@ -97,76 +97,41 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
           if (context) {
             queryClient.setQueryData(context.cacheKey, context.previewsItems);
           }
-          // console.error(error);
         }
         if (context) queryClient.invalidateQueries(context.cacheKey);
+        queryClient.invalidateQueries(['WORKS',JSON.stringify({where:{cycles: { some: { id: cycle?.id } } }})])
       },
     },
   );
 
-  // const handlerSubmitCreateEureka = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
-  //   e.preventDefault();
-
-  //   if (!newEurekaImageFile) return;
-
-  //   if (newEureka.selectedWorkId) {
-  //     const payload: CreatePostAboutWorkClientPayload = {
-  //       selectedCycleId: newEureka.selectedCycleId ? newEureka.selectedCycleId : null,
-  //       selectedWorkId: newEureka.selectedWorkId,
-  //       title: newEureka.title,
-  //       image: newEurekaImageFile,
-  //       language: newEureka.language,
-  //       contentText: newEureka.contentText,
-  //       isPublic: newEureka.isPublic,
-  //       topics: eurekaTopics.join(','),
-  //     };
-  //     await execCreateEureka(payload);
-  //   } else if (newEureka.selectedCycleId) {
-  //     const payload: CreatePostAboutCycleClientPayload = {
-  //       selectedCycleId: newEureka.selectedCycleId,
-  //       selectedWorkId: null,
-  //       title: newEureka.title,
-  //       image: newEurekaImageFile,
-  //       language: newEureka.language,
-  //       contentText: newEureka.contentText,
-  //       isPublic: newEureka.isPublic,
-  //       topics: eurekaTopics.join(','),
-  //     };
-  //     await execCreateEureka(payload);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (discussionItem === '-1') {
-  //     setNewEureka((res) => ({
-  //       ...res,
-  //       selectedCycleId: cycle.id,
-  //     }));
-  //   } else
-  //     setNewEureka((res) => ({
-  //       ...res,
-  //       selectedWorkId: parseInt(discussionItem, 10),
-  //     }));
-  // }, [discussionItem, cycle.id]);
-
-  // const onChangeFieldEurekaForm = (e: ChangeEvent<HTMLInputElement>) => {
-  //   const key: string = e.target.id.split('-')[1];
-  //   const val: number | string = e.target.value;
-
-  //   setNewEureka((res) => ({
-  //     ...res,
-  //     [`${key}`]: val,
-  //   }));
-  // };
+ 
+  const [worksFilteredQuery,setWorksFilteredQuery] = useState('')
+  
+  const {data} = useWorks({
+    where:{
+      AND:[
+        {
+          id:{
+            notIn:cycle.cycleWorksDates.map(w=>w.workId!)
+          }
+        },
+        {
+          OR:[
+            {
+                title: { contains: worksFilteredQuery } 
+            },
+            {
+                contentText: { contains: worksFilteredQuery } 
+            },
+          ]
+        }
+      ]
+    },
+  })
 
   const handleSearchWork = async (query: string) => {
     setIsWorkSearchLoading(true);
-
-    const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
-    const response = await fetch(`/api/search/works?q=${query}&include=${includeQP}`);
-    const itemsSW: WorkMosaicItem[] = await response.json();
-
-    setWorkSearchResults(itemsSW);
+    setWorksFilteredQuery(query)
     setIsWorkSearchLoading(false);
   };
 
@@ -232,7 +197,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
               labelKey={(res) => `${res.title}`}
               minLength={2}
               onSearch={handleSearchWork}
-              options={workSearchResults}
+              options={data?.works||[]}
               onChange={handleSearchWorkSelect}
               renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work} />}
             >

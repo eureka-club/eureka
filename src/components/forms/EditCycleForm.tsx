@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc'
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
@@ -31,6 +32,7 @@ import {
 import LanguageSelect from './controls/LanguageSelect';
 import styles from './CreateCycleForm.module.css';
 
+dayjs.extend(utc)
 interface Props {
   className?: string;
   cycle: Cycle;
