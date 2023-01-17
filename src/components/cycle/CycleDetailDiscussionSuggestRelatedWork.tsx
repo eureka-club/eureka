@@ -68,7 +68,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
   // };
 
   const { mutate: addWorkToCycle, isLoading: isAddingWorkToCycle } = useMutation(
-    async (): Promise<Cycle | null> => {debugger;
+    async (): Promise<Cycle | null> => {
       const res = await fetch(`/api/cycle/${cycle.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
