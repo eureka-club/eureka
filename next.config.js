@@ -21,7 +21,6 @@ module.exports = nextTranslate({
                   },
                 ],
                 destination: '/:path*',
-                permanent: true
             }
         ]
     },
