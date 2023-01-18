@@ -10,6 +10,21 @@ module.exports = nextTranslate({
     images:{
         domains:[`${process.env.CDN_ENDPOINT_NAME}.azureedge.net`],
     },
+    async rewrites(){
+        return [
+            {
+                source: '/:path*',
+                has: [
+                  {
+                    type: 'host',
+                    value: 'www',
+                  },
+                ],
+                destination: '/:path*',
+                permanent: true
+            }
+        ]
+    },
     // async redirects() {
     //     const destination = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/:path*`;
     //     const res = [
