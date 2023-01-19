@@ -209,7 +209,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
               )}
             </div>
             <div className='mt-3'>
-            {(post.contentText != null && post.contentText.length !=0 ) && <UnclampText text={post.contentText} clampHeight="8rem" />}
+            {(post.contentText != null && post.contentText.length !=0 ) && <UnclampText text={post.contentText} clampHeight="16rem" />}
             </div>
           </div>
           {/*<div className='container d-none d-lg-block'>
