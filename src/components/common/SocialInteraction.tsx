@@ -88,6 +88,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const {showShare:ss} = useMosaicContext();
 
   const [showShare, setShowShare] = useState<boolean>(false);
+  const [isLoadingCreateEureka, setIsLoadingCreateEureka] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const {
     isFetching: isFetchingUser,
@@ -279,18 +280,21 @@ const SocialInteraction: FunctionComponent<Props> = ({
     // execSocialInteraction({ socialInteraction: 'reaction', doCreate: mySocialInfo ? !mySocialInfo!.favoritedByMe : true });
   const handleCreateEurekaClick = (ev: MouseEvent<HTMLButtonElement>) => { 
     ev.preventDefault();
+    console.log(canNavigate(),'canNavigate()')
     if (canNavigate()){
+        setIsLoadingCreateEureka(true)
        if(isWorkMosaicItem(entity))
            router.push({ pathname:`/work/${entity.id}`,query: {tabKey:'posts'}});
        if(isCycleMosaicItem(entity))
            router.push({ pathname:`/cycle/${entity.id}`,query: {tabKey:'eurekas'}});    
     }
+       setIsLoadingCreateEureka(false)
+
     
   };
 
   const canNavigate = () => {
     return  !(!entity || isLoadingSession);
-;
   };
 
   const popoverShares = (
@@ -412,12 +416,13 @@ const renderAddReaction = ()=>{
     if(!entity || isLoadingSession)
       return '...'
     if(isWork(entity) || isCycle(entity))
-      return <><Button
+      return <>
+      {!isLoadingCreateEureka &&  (<Button
         variant="link"
         className={`${styles.buttonSI} p-0 text-primary`}
         title={t('Create eureka')}
         onClick={handleCreateEurekaClick}
-          disabled={loadingSocialInteraction}
+        disabled={loadingSocialInteraction}
       > 
       <div className={`d-flex flex-row`}>
            <BiImageAdd className={styles.active}/>
@@ -428,7 +433,8 @@ const renderAddReaction = ()=>{
             {t('Create eureka')}
           </span>
         )}
-      </Button>
+      </Button>)}  
+       {isLoadingCreateEureka  && <Spinner animation="grow" variant="info" size="sm" /> }
       </>
   }
 
