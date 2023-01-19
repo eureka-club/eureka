@@ -38,7 +38,6 @@ const CarouselStatic: FunctionComponent<Props> = ({
   seeAll=true,
   showSocialInteraction = true,
   customMosaicStyle = undefined,
-  className,
   mosaicBoxClassName,
   size,
   cacheKey,
@@ -97,6 +96,10 @@ const CarouselStatic: FunctionComponent<Props> = ({
            <div className="carousel d-flex justify-content-center">
              <Mosaics 
                data={dataFiltered} cacheKey={cacheKey} userMosaicDetailed={userMosaicDetailed}
+               showSocialInteraction={showSocialInteraction}
+               customMosaicStyle={customMosaicStyle}
+               mosaicBoxClassName={mosaicBoxClassName}
+               size={size}
              />
            </div>
          </CardGroup>  
