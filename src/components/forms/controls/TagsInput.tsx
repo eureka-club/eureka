@@ -93,7 +93,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
                     X
                   </Badge> || <Spinner size="sm" animation="grow"/>
                 )}
-                {!readOnly && (loading[v] && <Spinner size="sm" animation="grow"/>)}
+                {readOnly && (loading[v] && <Spinner size="sm" animation="grow"/>)}
               </Badge>{' '}
             </span> </Box>
 
