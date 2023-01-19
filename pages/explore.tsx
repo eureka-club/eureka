@@ -1,15 +1,14 @@
 import { useState,useEffect } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
-import { getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import TagsInput from '../src/components/forms/controls/TagsInput';
-import CarouselStatic from '@/src/components/CarouselStatic';
 import { useRouter } from 'next/router';
 import useInterestedCycles,{getInterestedCycles} from '@/src/useInterestedCycles';
 import useFeaturedEurekas, { getFeaturedEurekas } from '@/src/useFeaturedEurekas';
 import { dehydrate, QueryClient } from 'react-query';
 import {getbackOfficeData} from '@/src/useBackOffice'
+import CarouselStatic from '@/src/components/CarouselStatic';
 const ExplorePage: NextPage = () => {
   const { t } = useTranslation('common');
   const [topics /* , setHide */] = useState<string[]>([
@@ -82,7 +81,7 @@ const renderBackOfficeCycles = () => {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const origin = `${process.env.NEXT_PUBLIC_WEBAPP_URL}`
   const qc = new QueryClient()
-  const bo = await getbackOfficeData(origin)
+  const bo = await getbackOfficeData(origin);
  
   let cyclesIds:number[] = [];
   if(bo && bo.CyclesExplorePage)

@@ -8,7 +8,6 @@ import { GetAllByResonse } from '@/src/types';
 import { useInView } from 'react-intersection-observer';
 import { CycleMosaicItem } from '@/src/types/cycle';
 import { UserMosaicItem } from '@/src/types/user';
-import CarouselStatic from '@/src/components/CarouselStatic';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import slugify from 'slugify'
@@ -17,11 +16,11 @@ import useInterestedCycles from '@/src/useInterestedCycles';
 import useMyCycles,{myCyclesWhere} from '@/src/useMyCycles';
 import useFeaturedEurekas from '@/src/useFeaturedEurekas';
 import Prompt from '@/src/components/post/PostPrompt';
-import { PostMosaicItem } from '@/src/types/post';
-import FeaturedCycles from './FeaturedCycles';
-import FeaturedEurekas from './FeaturedEurekas';
+import FeaturedCycles from '../FeaturedCycles';
+import FeaturedEurekas from '../FeaturedEurekas';
+import CarouselsByTopics from './CarouselsByTopics';
+import CarouselStatic from '../CarouselStatic';
 
-const Carousel = lazy(()=>import('@/components/Carousel'));
 const topics = ['gender-feminisms', 'technology', 'environment',
  'racism-discrimination',
     'wellness-sports','social issues',
@@ -150,15 +149,6 @@ const featuredUsers = () => {
     : <></>;
   };
    
-const renderCarousels =  ()=>{
-        return <>
-                {gbt.map(([topic,apiResponse])=>{
-                return <div className='mb-4' data-cy={`carousel-${topic}`} style={{minHeight:"300px"}} key={topic}>
-                <Carousel topic={topic} apiResponse={apiResponse} />
-                </div>
-                })}
-        </>
-}    
 
   return <>
   <section className='my-5'><Prompt redirect={true}/></section>
@@ -193,7 +183,7 @@ const renderCarousels =  ()=>{
     {featuredUsers()}
     <>
     <div className="mt-5">
-      {renderCarousels()}
+      <CarouselsByTopics groupedByTopics={gbt}/>
     </div>
     <div className="mb-5">
       {renderSpinnerForLoadNextCarousel()}
