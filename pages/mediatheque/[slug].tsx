@@ -21,8 +21,6 @@ import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import FilterEngine from '@/src/components/FilterEngine';
 import TagsInput from '@/src/components/forms/controls/TagsInput';
 
-import CarouselStatic from '@/src/components/CarouselStatic';
-
 import { WorkMosaicItem /* , WorkWithImages */ } from '@/src/types/work';
 import { UserMosaicItem /* , UserDetail, WorkWithImages */ } from '@/src/types/user';
 import UnclampText from '@/src/components/UnclampText';
@@ -34,6 +32,7 @@ import slugify from 'slugify'
 import { PostMosaicItem } from '@/src/types/post';
 import { CycleMosaicItem } from '@/src/types/cycle';
 import { Session } from '@/src/types';
+import CarouselStatic from '@/src/components/CarouselStatic';
 
 
 interface Props{

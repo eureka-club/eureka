@@ -17,10 +17,10 @@ import styles from './CycleDetailHeader.module.css';
 import MosaicItem from './NewMosaicItem';
 import TagsInput from '../forms/controls/TagsInput';
 import UserAvatar from '../common/UserAvatar';
-import CarouselStatic from '../CarouselStatic';
 import { MosaicContext } from '../../useMosaicContext';
 import useWorks from '@/src/useWorks'
 import useCycle from '@/src/useCycle'
+import CarouselStatic from '../CarouselStatic';
 interface Props {
   // cycle: CycleMosaicItem;
   cycleId:number;
