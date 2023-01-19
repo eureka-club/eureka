@@ -280,15 +280,14 @@ const SocialInteraction: FunctionComponent<Props> = ({
     // execSocialInteraction({ socialInteraction: 'reaction', doCreate: mySocialInfo ? !mySocialInfo!.favoritedByMe : true });
   const handleCreateEurekaClick = (ev: MouseEvent<HTMLButtonElement>) => { 
     ev.preventDefault();
-    console.log(canNavigate(),'canNavigate()')
     if (canNavigate()){
         setIsLoadingCreateEureka(true)
+        setTimeout(()=>{setIsLoadingCreateEureka(false)},2500)
        if(isWorkMosaicItem(entity))
            router.push({ pathname:`/work/${entity.id}`,query: {tabKey:'posts'}});
        if(isCycleMosaicItem(entity))
            router.push({ pathname:`/cycle/${entity.id}`,query: {tabKey:'eurekas'}});    
     }
-       setIsLoadingCreateEureka(false)
 
     
   };
@@ -434,7 +433,7 @@ const renderAddReaction = ()=>{
           </span>
         )}
       </Button>)}  
-       {isLoadingCreateEureka  && <Spinner animation="grow" variant="info" size="sm" /> }
+       {isLoadingCreateEureka  && <div className='d-flex align-items-center' ><Spinner   animation="grow" variant="info" size="sm" /></div> }
       </>
   }
 
