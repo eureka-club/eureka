@@ -406,20 +406,20 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
                         disabled={isPending()}
                       >
                         {t('Follow')}
-                        {isPending() && <Spinner animation="grow" variant="info" size="sm" />}
+                        {isPending() && <Spinner className='ms-2' animation="grow" variant="info" size="sm" />}
                       </Button>
                     )}
 
                     {session && session.user!.id !== user.id && isFollowedByMe && (
                       <Button
                         data-cy="follow-btn"
-                        variant="button border-primary text-primary"
+                        variant="button border-primary text-primary w-100"
                         onClick={followHandler}
                         disabled={isPending()}
                         style={{ width: '10em' }}
                       >
                         {t('Unfollow')}
-                        {isPending() && <Spinner animation="grow" variant="info" size="sm" />}
+                        {isPending() && <Spinner className='ms-2' animation="grow" variant="info" size="sm" />}
                       </Button>
                     )}
                   </Col>
