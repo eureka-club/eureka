@@ -7,19 +7,20 @@ import { WorkMosaicItem } from '@/src/types/work'
 import { Work } from '@prisma/client'
 
 interface Props{
-  works:WorkMosaicItem[];
   cycleWorksDates:{
     id: number;
     startDate: Date | null;
     endDate: Date | null;
     workId: number | null;
+    work:WorkMosaicItem | null;
   }[];
 }
 
-const CycleDetailWorks: React.FC<Props> = ({works, cycleWorksDates}) => {
+const CycleDetailWorks: React.FC<Props> = ({cycleWorksDates}) => {
+  const works = cycleWorksDates.map(c=>c.work!)
+
   const {t} = useTranslation('cycleDetail')
   const queryClient = useQueryClient()
-
   const getWorksSorted = (() => {
     const res: Work[] = [];
     cycleWorksDates

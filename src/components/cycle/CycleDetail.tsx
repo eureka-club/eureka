@@ -30,13 +30,11 @@ import PostDetailComponent from '../post/PostDetail';
 import HyvorComments from '@/src/components/common/HyvorComments';
 import detailPagesAtom from '@/src/atoms/detailPages';
 import globalModalsAtom from '@/src/atoms/globalModals';
-import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens';
 
 import styles from './CycleDetail.module.css';
 import { useCycleContext } from '@/src/useCycleContext';
 import CycleDetailHeader from './CycleDetailHeader';
 import useCycle from '@/src/useCycle';
-import useWorks from '@/src/useWorks'
 import usePosts,{getPosts} from '@/src/usePosts'
 import useUsers from '@/src/useUsers'
 import MosaicItemPost from '@/src/components/post/MosaicItem'
@@ -80,16 +78,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     enabled:!!cycleId
   });
 
-  const { data: dataWorks } = useWorks({where:{cycles: { some: { id: cycle?.id } } }}, {
-    enabled:!!cycle?.id
-  })
-  const [works,setWorks] = useState(dataWorks?.works)
-
-  useEffect(()=>{
-    if(dataWorks && dataWorks.works){
-      setWorks(dataWorks.works)
-    }
-  },[dataWorks])
 
   const whereCycleParticipants = {
     where:{OR:[
@@ -104,30 +92,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     }
   )
 
-  useEffect(() => {
-    if (cycle) {
-      if (cycle.cycleWorksDates) { 
-        cycle.cycleWorksDates.forEach(w => {
-          queryClient.setQueryData(['WORK',`${w.id}`],w)
-        })        
-      }
-      if(participants){
-        participants.forEach(u => {
-          queryClient.setQueryData(['USER',`${u.id}`],u)
-        })
-      }
-    }
-  },[cycle,queryClient])
+  
 
-  // useEffect(() => {
-  //   if (works) {      
-  //     if (works) { 
-  //       works.forEach(w => {
-  //         queryClient.setQueryData(['WORK',`${w.id}`],w)
-  //       })        
-  //     }
-  //   }
-  // },[queryClient,works])
+  
 
   const cyclePostsProps = {take:8,where:{cycles:{some:{id:+cycleId}}}}
   const {data:dataPosts} = usePosts(cyclePostsProps,{enabled:!!cycleId})
@@ -499,7 +466,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                       <NavItem className={`border-primary border-bottom cursor-pointer ${styles.tabBtn}`}>
                         <NavLink eventKey="cycle-about">
                           <span className="mb-3">
-                            {t('About')} ({works && works.length})
+                            {t('About')} ({cycle.cycleWorksDates && cycle.cycleWorksDates.length})
                           </span>
                         </NavLink>
                       </NavItem>
@@ -522,7 +489,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                           </div>
                         )}
                         <MosaicContext.Provider value={{ showShare: true }}>                        
-                          {cycle && works && <CycleDetailWorks works={works} cycleWorksDates={cycle.cycleWorksDates} /> || ''}
+                          {cycle && cycle.cycleWorksDates && <CycleDetailWorks cycleWorksDates={cycle.cycleWorksDates} /> || ''}
                         </MosaicContext.Provider>
                         {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (
                           <Row className="mt-5 mb-5">

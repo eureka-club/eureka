@@ -60,6 +60,12 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
         startDate:true;
         endDate:true;
         workId:true;
+        work:{
+          include:{
+            localImages: {select:{storedFile:true}};
+            _count:{select:{ratings:true}};
+          }
+        };
       }
     };
     // comments:true;

@@ -10,16 +10,14 @@ import { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
-//import Button from '@mui/material/Button'
 
 
 import detailPagesAtom from '../src/atoms/detailPages';
-import globalModalsAtom from '../src/atoms/globalModals';
+// import globalModalsAtom from '../src/atoms/globalModals';
 
 import './scss/custom.scss';
 import { GTM_ID } from '@/src/lib/gtag'
 
-// import  ErrorBoundary from '@/src/ErrorBounddary';
 import { NotificationProvider } from '@/src/useNotificationProvider';
 import {ModalProvider} from '@/src/useModal'
 import Script from 'next/script';
@@ -28,7 +26,6 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   let initialState : Iterable<readonly [Atom<unknown>, unknown]> | undefined = undefined
   let session:  Session | null | undefined = null
   let dehydratedState = null
-
 
 function Loading() {
   const router = useRouter();
@@ -57,8 +54,6 @@ function Loading() {
         <CircularProgress color="inherit" />
       </Backdrop>
 }
-
-
   
   if('initialState' in pageProps){
     initialState = pageProps.initialState as  Iterable<readonly [Atom<unknown>, unknown]> | undefined;
