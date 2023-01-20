@@ -34,7 +34,7 @@ function Loading() {
 
   useEffect(() => {
       const handleStart = (url: string) => (url !== router.asPath) && setLoading(true);
-      const handleComplete = (url: string) => (url === router.asPath) && setTimeout(() =>{setLoading(false)},5000);
+      const handleComplete = (url: string) => (url === router.asPath) && setLoading(false)/*setTimeout(() =>{setLoading(false)},5000)*/;
 
       router.events.on('routeChangeStart', handleStart)
       router.events.on('routeChangeComplete', handleComplete)
@@ -81,7 +81,6 @@ function Loading() {
       }),
   );
   return (<>  
-      <Loading/>  
     <StrictMode>
      <SSRProvider>
         <NextAuthProvider session={session} refetchInterval={5 * 60}>
