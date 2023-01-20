@@ -116,7 +116,6 @@
     "@types/lodash": "^4.14.165",
     "@types/mssql": "^6.0.5",
     "@types/multiparty": "^0.0.32",
-    "@types/next-auth": "^3.15.0",
     "@types/qs": "^6.9.5",
     "@types/react": "^18.0.15",
     "@types/react-bootstrap": "^0.32.30",

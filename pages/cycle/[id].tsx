@@ -206,13 +206,18 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
    
    const participants = await getUsers(wcu,origin);
+   const {works} = await getWorks(wcw,origin);
+   
    await queryClient.prefetchQuery(['USERS',JSON.stringify(wcu)],()=>participants)
    await queryClient.prefetchQuery(['POSTS',JSON.stringify(wcp)],()=>getPosts(wcp,origin))
-   await queryClient.prefetchQuery(['WORKS',JSON.stringify(wcw)],()=>getWorks(wcw,origin))
+   await queryClient.prefetchQuery(['WORKS',JSON.stringify(wcw)],()=>works)
 
    participants.map(p=>{
      queryClient.setQueryData(['USER',`${p.id}`],p)
    })
+   works.map(w=>{
+    queryClient.setQueryData(['WORK',`${w.id}`],w)
+  })
    
   return {
     props: {
