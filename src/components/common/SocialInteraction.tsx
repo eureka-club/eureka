@@ -281,8 +281,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const handleCreateEurekaClick = (ev: MouseEvent<HTMLButtonElement>) => { 
     ev.preventDefault();
     if (canNavigate()){
-        setIsLoadingCreateEureka(true)
-        setTimeout(()=>{setIsLoadingCreateEureka(false)},2500)
+        /*setIsLoadingCreateEureka(true)
+        setTimeout(()=>{setIsLoadingCreateEureka(false)},2500)*/
        if(isWorkMosaicItem(entity))
            router.push({ pathname:`/work/${entity.id}`,query: {tabKey:'posts'}});
        if(isCycleMosaicItem(entity))
@@ -416,7 +416,7 @@ const renderAddReaction = ()=>{
       return '...'
     if(isWork(entity) || isCycle(entity))
       return <>
-      {!isLoadingCreateEureka &&  (<Button
+      <Button
         variant="link"
         className={`${styles.buttonSI} p-0 text-primary`}
         title={t('Create eureka')}
@@ -432,8 +432,8 @@ const renderAddReaction = ()=>{
             {t('Create eureka')}
           </span>
         )}
-      </Button>)}  
-       {isLoadingCreateEureka  && <div className='d-flex align-items-center' ><Spinner   animation="grow" variant="info" size="sm" /></div> }
+      </Button>
+       {/*isLoadingCreateEureka  && <div className='d-flex align-items-center' ><Spinner   animation="grow" variant="info" size="sm" /></div> */}
       </>
   }
 
