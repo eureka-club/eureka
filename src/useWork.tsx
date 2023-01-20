@@ -7,6 +7,7 @@ export const getWork = async (id: number,origin=''): Promise<WorkMosaicItem> => 
   const res = await fetch(url);
   if (!res.ok) 
     throw Error('Error');
+
   return res.json();
 };
 interface Options {

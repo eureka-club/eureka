@@ -97,7 +97,6 @@ export default getApiHandler()
       work.currentUserRating = currentUserRating;
       work.ratingAVG = ratingAVG;
       work.currentUserIsFav = currentUserIsFav;
-
       res.status(200).json(work);
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
