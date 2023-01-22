@@ -5,7 +5,7 @@ import { CycleMosaicItem } from '@/src/types/cycle';
 import { UserMosaicItem } from '@/src/types/user';
 import useTranslation from 'next-translate/useTranslation';
 import {useNotificationContext} from '@/src/useNotificationProvider';
-import useCycleJoinRequests,{setCycleJoinRequests,removeCycleJoinRequest} from '@/src/useCycleJoinRequests'
+import {setCycleJoinRequests,removeCycleJoinRequest} from '@/src/useCycleJoinRequests'
 import { subscribe_to_segment, unsubscribe_from_segment } from '@/src/lib/mailchimp';
 
 type ctx = {

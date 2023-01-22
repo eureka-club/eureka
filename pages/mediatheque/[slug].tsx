@@ -1,7 +1,7 @@
 import { GetServerSideProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { useSession, getSession } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
 import { useQueryClient, useMutation, dehydrate, QueryClient } from 'react-query';
 import { useState, useEffect, SyntheticEvent } from 'react';
 import dayjs from 'dayjs';

@@ -1,4 +1,4 @@
-import { Prisma, Notification } from '@prisma/client';
+import { Notification } from '@prisma/client';
 import {prisma} from '@/src/lib/prisma';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';

@@ -1,6 +1,5 @@
-import { FunctionComponent, SyntheticEvent, useState, useEffect } from 'react';
+import { FunctionComponent, useEffect } from 'react';
 import {io} from 'socket.io-client'
-import {WEBAPP_URL} from '@/src/constants'
 interface Props {
   id: string;
   callback: (data:Record<string,any>)=>void;

@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import isBetween from 'dayjs/plugin/isBetween';
 import {v4} from 'uuid'
-import { Point, Area } from "react-easy-crop/types";
+import { Area } from "react-easy-crop/types";
 
 export const advancedDayjs = (date: string | number | Date): dayjs.Dayjs => {
   dayjs.extend(advancedFormat);
