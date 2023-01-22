@@ -18,7 +18,7 @@ export default class Notifier {
     this.fromUser = fromUser;
     const socketIOServervice = process.env.NODE_ENV === 'development'
       ? 'http://localhost:4000/'
-      : "https://eurekaclubeureka-notification.azurewebsites.net/";
+      : process.env.NOTIFICATION_SERVER!;
     this.socket = io(socketIOServervice,{
       // withCredentials: true,
       extraHeaders: {
