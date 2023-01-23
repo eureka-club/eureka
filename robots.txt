@@ -1,0 +1,16 @@
+User-agent: *
+Disallow: /api
+Disallow: /*/actions_panel*
+Disallow: /users/auth/twitter*
+Disallow: /users/auth/github*
+Disallow: /report-abuse?url=*
+Disallow: /connect/@*
+Disallow: /search?q=*
+Disallow: /search/?q=*
+Disallow: /search/feed_content?*
+Disallow: /mod/*
+Disallow: /mod?*
+Disallow: /admin/*
+Disallow: /reactions?*
+
+Sitemap: https://www.eureka.club/sitemap.xml
