@@ -3,6 +3,8 @@ import advancedFormat from 'dayjs/plugin/advancedFormat';
 import isBetween from 'dayjs/plugin/isBetween';
 import {v4} from 'uuid'
 import { Area } from "react-easy-crop/types";
+import { Session } from '../types';
+import { UserMosaicItem } from '../types/user';
 
 export const advancedDayjs = (date: string | number | Date): dayjs.Dayjs => {
   dayjs.extend(advancedFormat);
@@ -261,3 +263,19 @@ export const getImg = async (
       }, 'image/webp');
   })
 }
+
+export const isAccessAllowed = (session:Session,user:UserMosaicItem,isLoadingUser:boolean,isFollowedByMe:boolean) => {
+  if (!isLoadingUser && user && user.id) {
+    if (!user.dashboardType || user.dashboardType === 1) return true;
+    // if (!isLoadingSession) {
+      // if (!session) return false;
+      if (session) {
+        const s = session;
+        if (user.id === s.user.id) return true;
+        if (user.dashboardType === 2 && isFollowedByMe) return true;
+        if (user.dashboardType === 3 && user.id === s.user.id) return true;
+      }
+    // }
+  }
+  return false;
+};

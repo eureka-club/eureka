@@ -3,15 +3,12 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { getSession } from 'next-auth/react';
 import { useQueryClient, useMutation, dehydrate, QueryClient } from 'react-query';
-import { useState, useEffect, SyntheticEvent } from 'react';
-import dayjs from 'dayjs';
+import { useState, useEffect, SyntheticEvent, useCallback } from 'react';
 
-import { Spinner, Card, Row, Col, ButtonGroup, Button, Alert } from 'react-bootstrap';
+import { Spinner, Card, Row, Col, ButtonGroup, Button } from 'react-bootstrap';
 import { AiOutlineEnvironment } from 'react-icons/ai';
-import { /* BsCircleFill, */ BsBookmark, BsEye } from 'react-icons/bs';
 import { BiArrowBack } from 'react-icons/bi';
 import LocalImageComponent from '@/src/components/LocalImage'
-import { HiOutlineUserGroup } from 'react-icons/hi';
 
 import { User } from '@prisma/client';
 import styles from './index.module.css';
@@ -21,35 +18,31 @@ import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import FilterEngine from '@/src/components/FilterEngine';
 import TagsInput from '@/src/components/forms/controls/TagsInput';
 
-import { WorkMosaicItem /* , WorkWithImages */ } from '@/src/types/work';
-import { UserMosaicItem /* , UserDetail, WorkWithImages */ } from '@/src/types/user';
 import UnclampText from '@/src/components/UnclampText';
 import { useNotificationContext } from '@/src/useNotificationProvider';
 import useMyPosts,{getMyPosts} from '@/src/useMyPosts';
 import useMyCycles,{getMyCycles} from '@/src/useMyCycles';
-import useMySaved from '@/src/useMySaved';
 import slugify from 'slugify'
-import { PostMosaicItem } from '@/src/types/post';
-import { CycleMosaicItem } from '@/src/types/cycle';
 import { Session } from '@/src/types';
-import CarouselStatic from '@/src/components/CarouselStatic';
-
+import PostsCreated from './PostsCreated';
+import CyclesJoined from './CyclesJoined';
+import ReadOrWatched from './ReadOrWatched';
+import SavedForLater from './SavedForLater';
+import UsersFollowed from './UsersFollowed';
+import {isAccessAllowed} from '@/src/lib/utils';
+import RenderAccessInfo from './RenderAccessInfo';
 
 interface Props{
   id:number;
   session: Session;
 }
 const Mediatheque: NextPage<Props> = ({id,session}) => {
-  const [idSession, setIdSession] = useState<string>('');
   const router = useRouter();
   const {notifier} = useNotificationContext();
   
   const queryClient = useQueryClient();
   const { t } = useTranslation('mediatheque');
  
-  useEffect(() => {
-    if (session) setIdSession(session.user.id.toString());
-  }, [session, router]);
 
   const { /* isError, error, */ data: user, isLoading: isLoadingUser, isSuccess: isSuccessUser } = useUser(+id,{
     enabled:!!+id
@@ -76,7 +69,6 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
     }
   },[dataCycles?.cycles])
 
-  const SFL = useMySaved(id)
   useEffect(() => {
     if(user){
       const ifbm = (user && user.followedBy) ? user.followedBy.findIndex((i) => i.id === session?.user.id) !== -1 : false
@@ -86,23 +78,6 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
       queryClient.invalidateQueries(['USER', `${id}`]);
     }
   }, [user, id, isSuccessUser]);
-
-
-  const isAccessAllowed = () => {
-    if (!isLoadingUser && user && user.id) {
-      if (!user.dashboardType || user.dashboardType === 1) return true;
-      // if (!isLoadingSession) {
-        // if (!session) return false;
-        if (session) {
-          const s = session;
-          if (user.id === s.user.id) return true;
-          if (user.dashboardType === 2 && isFollowedByMe) return true;
-          if (user.dashboardType === 3 && user.id === s.user.id) return true;
-        }
-      // }
-    }
-    return false;
-  };
 
   const { mutate: mutateFollowing, isLoading: isLoadingMutateFollowing } = useMutation<User>(
     async () => {
@@ -118,7 +93,7 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
       }))
       form.append('notificationData',JSON.stringify({
         notificationMessage,
-        notificationContextURL:`/mediatheque/${idSession}`,
+        notificationContextURL:`/mediatheque/${session.user.id}`,
         notificationToUsers:[id]
       }))
       
@@ -152,11 +127,11 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
     {
       onMutate: async () => {
         await queryClient.cancelQueries(['USER', id]);
-        await queryClient.cancelQueries(['USER', idSession]);
+        await queryClient.cancelQueries(['USER', session.user.id]);
 
         type UserFollow = User & { followedBy: User[]; following: User[] };
         const followingUser = queryClient.getQueryData<UserFollow>(['USER', id]);
-        const followedByUser = queryClient.getQueryData<UserFollow>(['USER', idSession]);
+        const followedByUser = queryClient.getQueryData<UserFollow>(['USER', session.user.id]);
         setIsFollowedByMe(p=>!p)
         // let followedBy: User[] = [];
         // let following: User[] = [];
@@ -175,12 +150,12 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
       },
       onError: (err, data, context: any) => {
         queryClient.setQueryData(['USER', id], context.followingUser);
-        queryClient.setQueryData(['USER', idSession], context.followedByUser);
+        queryClient.setQueryData(['USER', session.user.id], context.followedByUser);
       },
 
       onSettled: () => {
         queryClient.invalidateQueries(['USER', id]);
-        queryClient.invalidateQueries(['USER', idSession]);
+        queryClient.invalidateQueries(['USER', session.user.id]);
       },
     },
   );
@@ -195,130 +170,14 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
     }
   };
   
-  const goTo = (path:string)=>{
+  const goTo = useCallback((path:string)=>{
     if(user){
       const sts = `${user.name||id.toString()}-${id}`
       router.push(`/user/${slugify(sts,{lower:true})}/${path}`) 
     }
     else router.push(`/`)
-  }
+  },[router,user]) 
   
-  const postsCreated = () => {
-    if (user && posts && posts.length) {
-      return <div data-cy="my-posts">
-
-        <CarouselStatic
-          cacheKey={['MY-POSTS',id.toString()]}
-          className="mb-5"
-          onSeeAll={()=>goTo('my-posts')}
-          title={t('common:myPosts')}
-          data={posts}
-          mosaicBoxClassName="pb-1"
-        />
-      </div>
-      
-    }
-    return '';
-  };
-
-  const cyclesJoined = () => {
-    return (cycles && cycles.length) 
-    ?<div data-cy="cycles-created-or-joined">
-      <CarouselStatic
-        cacheKey={['MY-CYCLES',id.toString()]}
-        onSeeAll={()=>goTo('my-cycles')}
-        title={t('common:myCycles')}
-        data={cycles}
-      />
-    </div> 
-    : <></>;
-  };
-  
-  const readOrWatched = () => {
-    if (user && user.ratingWorks && user.ratingWorks.length) {
-      const RW = user.ratingWorks.filter(rw=>rw.work).map((w) => w.work as WorkMosaicItem).reverse();
-      /*RW.sort((f, s) => {
-          const fCD = dayjs(f.createdAt);
-          const sCD = dayjs(s.createdAt);
-          if (fCD.isAfter(sCD)) return -1;
-          if (fCD.isSame(sCD)) return 0;
-          return -1;
-        });*/
-     
-      return (
-        <div data-cy="my-books-movies">
-          <CarouselStatic
-            cacheKey={['MEDIATHEQUE-WATCHED',`USER-${user.id}`]}
-            onSeeAll={()=>goTo('my-books-movies')}
-            title={t(`common:myBooksMovies`)}
-            data={RW}
-            iconBefore={<BsEye />}
-  
-            // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-          />
-        </div>
-      );
-    }
-    return '';
-  };
-  
-  const savedForLater = () => {
-    if (SFL){
-      const items = [...SFL.favPosts,...SFL.favCycles,...SFL.favWorks] as PostMosaicItem[]|CycleMosaicItem[]|WorkMosaicItem[];
-      items.sort((f, s) => {
-        const fCD = dayjs(f.createdAt);
-        const sCD = dayjs(s.createdAt);
-        if (fCD.isAfter(sCD)) return -1;
-        if (fCD.isSame(sCD)) return 0;
-        return 1;
-      });
-      return (
-        <div data-cy="my-saved">
-          <CarouselStatic
-            cacheKey={['MEDIATHEQUE-SAVED',`USER-${user!.id}`]}
-            onSeeAll={()=>goTo('my-saved')}
-            title={t('common:mySaved')}
-            data={items}
-            iconBefore={<BsBookmark />}
-            // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-          />
-
-        </div>
-      );
-    }
-    return '';
-  };
-  
-  const usersFollowed = () => {
-    if (user && user.following && user.following.length) {
-      return (
-        <div data-cy="my-users-followed">
-          <CarouselStatic
-            cacheKey={['MEDIATHEQUE-FOLLOWING',`USER-${user.id}`]}
-            onSeeAll={()=>goTo('my-users-followed')}
-            title={`${t('common:myUsersFollowed')}  `}
-            data={user!.following as UserMosaicItem[]}
-            iconBefore={<HiOutlineUserGroup />}
-          />
-
-        </div>
-      );
-    }
-    return '';
-  };
-
-  const renderAccessInfo = () => {
-    if (!(isLoadingUser)) {
-      if (user) {
-        const aa = isAccessAllowed();
-        if (user.dashboardType === 3 && !aa)
-          return <Alert variant="warning">{t('secretMediathequeNotification')}</Alert>;
-        if (!aa) return <Alert variant="warning">{t('notAuthorized')}</Alert>;
-      }
-    }
-    return '';
-  };
-
   const renderCountry = () => {
     if (user && user.countryOfOrigin)
       return (
@@ -427,25 +286,21 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
                 {/* <BsCircleFill className={styles.infoCircle} /> */}
               </Card.Body>
             </Card>
-            {isAccessAllowed() && (
+            {isAccessAllowed(session,user,isLoadingUser,isFollowedByMe) && (
               <>
                 <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('Mediatheque')}</h1>
                 <FilterEngine fictionOrNotFilter={false} geographyFilter={false} />
-                  {postsCreated()}
-
-                  {cyclesJoined()}
-
-                  {readOrWatched()}
-
-                  {savedForLater()}
-
-                  {usersFollowed()}
+                <PostsCreated posts={posts!} user={user} goTo={goTo} id={id.toString()} t={t}/>
+                <CyclesJoined cycles={cycles!} goTo={goTo} id={id.toString()} t={t}/>
+                <ReadOrWatched user={user} id={id.toString()} goTo={goTo} t={t}/>
+                <SavedForLater user={user} goTo={goTo} t={t} id={id}/>
+                <UsersFollowed user={user} goTo={goTo} t={t} />
               </>
             )}
           </section>
         )}
         <aside>
-          {renderAccessInfo()}  
+          <RenderAccessInfo session={session} user={user!} t={t} isLoadingUser={isLoadingUser} isFollowedByMe={isFollowedByMe} />
           {(isLoadingUser) && <Spinner animation="grow" variant="info" />}
           {isSuccessUser && id && !user && <Spinner animation="grow" variant="info" />}
         </aside>
@@ -457,8 +312,6 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const queryClient = new QueryClient();
   const session = await getSession(ctx);
-
-  
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
   
   let id = 0;
@@ -494,7 +347,5 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
   return {props:{}}
-
 };
-
 export default Mediatheque;
