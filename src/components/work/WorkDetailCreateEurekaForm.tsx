@@ -292,39 +292,58 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
       setEurekaTopics([]);
   };
 
-  return <Form ref={formRef}>
-    <section id='create-post' className='mt-5 my-3'>
-         {!useCrop && <Prompt onImageSelect={onImageSelect} margin={false} />}
-         <Form.Group className='mt-4 mb-4'>
-          <FormControlLabel control={<Switch  checked={useCrop} onChange={handleChangeUseCropSwith}/>} label={t('showCrop')} />
+  return (
+    <Form ref={formRef}>
+      <section id="create-post" className=" my-3">
+        {!useCrop && <Prompt onImageSelect={onImageSelect} showTitle={true} margin={false} />}
+        <Form.Group className="mt-4 mb-4">
+          <FormControlLabel
+            control={<Switch checked={useCrop} onChange={handleChangeUseCropSwith} />}
+            label={t('showCrop')}
+          />
         </Form.Group>
-        {useCrop && <Row className="d-flex justify-content-center flex-column flex-column-reverse flex-lg-row flex-lg-row-reverse">
-            <Col className='mb-4 d-flex justify-content-center justify-content-lg-start'>
+        {useCrop && (
+          <Row className="d-flex justify-content-center flex-column flex-column-reverse flex-lg-row flex-lg-row-reverse">
+            <Col className="mb-4 d-flex justify-content-center justify-content-lg-start">
               {<div className={styles.imageContainer}>{renderPhoto()}</div>}
-              </Col>
-            <Col xs={12} md={8} className='mt-2 mb-4'>
-                {!showCrop && (<Button data-cy="image-load" variant="primary" className="btn-eureka w-100" onClick={() => setShowCrop(true)}>
+            </Col>
+            <Col xs={12} md={8} className="mt-2 mb-4">
+              {!showCrop && (
+                <Button
+                  data-cy="image-load"
+                  variant="primary"
+                  className="btn-eureka w-100"
+                  onClick={() => setShowCrop(true)}
+                >
                   {t('Image')}
                 </Button>
-                )}        
-                { showCrop && (
-                <Col className='d-flex'>
-                  <div className='w-100 border p-3'>  
-                  <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={closeCrop} cropShape='rect' />
-                  </div>  
+              )}
+              {showCrop && (
+                <Col className="d-flex">
+                  <div className="w-100 border p-3">
+                    <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={closeCrop} cropShape="rect" />
+                  </div>
                 </Col>
-               )}      
-            </Col>  
-            </Row>}
-         </section>
-         {newEurekaImageFile && <>
-         <Form.Group controlId="eureka-title" >
-                 <TextField id="eureka-title" className="w-100 mb-4" inputProps={{ maxLength: 80 }} label={t('Title')}
-                        variant="outlined" size="small"  value={newEureka.title}
-                      onChange={onChangeFieldEurekaForm}> 
-                 </TextField>
-              </Form.Group>
-      {/*<Form.Group controlId="eureka-title" className="mb-3">
+              )}
+            </Col>
+          </Row>
+        )}
+      </section>
+      {newEurekaImageFile && (
+        <>
+          <Form.Group controlId="eureka-title">
+            <TextField
+              id="eureka-title"
+              className="w-100 mb-4"
+              inputProps={{ maxLength: 80 }}
+              label={t('Title')}
+              variant="outlined"
+              size="small"
+              value={newEureka.title}
+              onChange={onChangeFieldEurekaForm}
+            ></TextField>
+          </Form.Group>
+          {/*<Form.Group controlId="eureka-title" className="mb-3">
         <Form.Control
           type="text"
           maxLength={80}
@@ -335,33 +354,33 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
         />
       </Form.Group>
 {/* @ts-ignore*/}
-      <EditorCmp
-        apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
-        onInit={(_: any, editor) => {
-          editorRef.current = editor;
-        }}
-        initialValue={newEureka.contentText}
-        init={{
-          height: 300,
-          menubar: false,
-          plugins: [
-            'advlist autolink lists link image charmap print preview anchor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table paste code help wordcount',
-          ],
-          relative_urls: false,
-          forced_root_block : "div",
-          toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
-          // toolbar:
-          //   'undo redo | formatselect | ' +
-          //   'bold italic backcolor | alignleft aligncenter ' +
-          //   'alignright alignjustify | bullist numlist outdent indent | ' +
-          //   'removeformat | help',
-          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-        }}
-      />
+          <EditorCmp
+            apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
+            onInit={(_: any, editor) => {
+              editorRef.current = editor;
+            }}
+            initialValue={newEureka.contentText}
+            init={{
+              height: 300,
+              menubar: false,
+              plugins: [
+                'advlist autolink lists link image charmap print preview anchor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table paste code help wordcount',
+              ],
+              relative_urls: false,
+              forced_root_block: 'div',
+              toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
+              // toolbar:
+              //   'undo redo | formatselect | ' +
+              //   'bold italic backcolor | alignleft aligncenter ' +
+              //   'alignright alignjustify | bullist numlist outdent indent | ' +
+              //   'removeformat | help',
+              content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+            }}
+          />
 
-      {/* <Form.Group controlId="eureka-contentText">
+          {/* <Form.Group controlId="eureka-contentText">
         <Form.Control
           as="textarea"
           rows={3}
@@ -371,7 +390,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
           onChange={onChangeFieldEurekaForm}
         />
       </Form.Group> */}
-      {/*<Form.Group className="mt-3" controlId="eureka-image">
+          {/*<Form.Group className="mt-3" controlId="eureka-image">
          <Row className="d-flex justify-content-center flex-column flex-column-reverse flex-lg-row flex-lg-row-reverse">
             <Col className='mb-4 d-flex justify-content-center justify-content-lg-start'>
               {<div className={styles.imageContainer}>{renderPhoto()}</div>}
@@ -409,41 +428,53 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
           )}
         </ImageFileSelect>
       </Form.Group>*/}
-      <Row>
-        <Col xs={12} md={8}>
-           <Form.Group className='mt-5 mb-4'>
-                <FormControlLabel control={<Switch  checked={useOtherFields} onChange={handleChangeUseOtherFields}/>} label={t('showOthersFields')} />
-            </Form.Group>  
-          {useOtherFields && <Form.Group controlId="topics">
-            {/* <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel> */}
-            <TagsInputTypeAheadMaterial
-              style={{ background: 'white' }}
-              data={topics}
-              items={eurekaTopics}
-              setItems={setEurekaTopics}
-              max={3}
-              label={`${t('Type to add tag')}...`}
-              formatValue={(v: string) => t(`topics:${v}`)} 
-              className="mt-3"
-            />
-          </Form.Group>}
-        </Col>
-      </Row></>}
+          <Row>
+            <Col xs={12} md={8}>
+              <Form.Group className="mt-5 mb-4">
+                <FormControlLabel
+                  control={<Switch checked={useOtherFields} onChange={handleChangeUseOtherFields} />}
+                  label={t('showOthersFields')}
+                />
+              </Form.Group>
+              {useOtherFields && (
+                <Form.Group controlId="topics">
+                  {/* <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel> */}
+                  <TagsInputTypeAheadMaterial
+                    style={{ background: 'white' }}
+                    data={topics}
+                    items={eurekaTopics}
+                    setItems={setEurekaTopics}
+                    max={3}
+                    label={`${t('Type to add tag')}...`}
+                    formatValue={(v: string) => t(`topics:${v}`)}
+                    className="mt-3"
+                  />
+                </Form.Group>
+              )}
+            </Col>
+          </Row>
 
-      <aside className="d-flex justify-content-end">
-        <ButtonGroup size="sm" className="pt-3">
-          <Button variant="warning" className='text-white' onClick={clearCreateEurekaForm} disabled={isLoading}>
-            <ImCancelCircle />
-          </Button>
-          <Button data-cy="create-eureka-btn" onClick={handlerSubmitCreateEureka} className="text-white" style={{ width: '8rem' }} disabled={isLoading}>
-            <span>
-               {t('Create')}
-            </span>
-            {isLoading && <Spinner size="sm" animation="grow" />}
-          </Button>
-        </ButtonGroup>
-      </aside>
-    </Form>;
+          <aside className="d-flex justify-content-end">
+            <ButtonGroup size="sm" className="pt-3">
+              <Button variant="warning" className="text-white" onClick={clearCreateEurekaForm} disabled={isLoading}>
+                <ImCancelCircle />
+              </Button>
+              <Button
+                data-cy="create-eureka-btn"
+                onClick={handlerSubmitCreateEureka}
+                className="text-white"
+                style={{ width: '8rem' }}
+                disabled={isLoading}
+              >
+                <span>{t('Create')}</span>
+                {isLoading && <Spinner size="sm" animation="grow" />}
+              </Button>
+            </ButtonGroup>
+          </aside>
+        </>
+      )}
+    </Form>
+  );
   
 };
 
