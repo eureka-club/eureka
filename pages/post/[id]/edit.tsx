@@ -24,29 +24,22 @@ const EditPostPage: NextPage<Props> = ({session}) => {
     }
     else router.back()
   }
-const render = ()=>{
-  
-  if (!session) 
-    return <Alert>{t('notSession')}</Alert>
-  else if(router && router.query.id){
-    return <>
-      <ButtonGroup className="mt-1 mt-md-3 mb-1">
-          <Button variant="primary text-white" onClick={goTo} size="sm">
-            <BiArrowBack />
-          </Button>
-        </ButtonGroup>
-      <EditPostForm id={+router.query.id.toString()} noModal/>
-    </>
-  }
-  return <Spinner animation="grow" variant="info" />
 
-}
 
   return <SimpleLayout title={t('title')}>
-  {render()}
-</SimpleLayout>
-
- 
+    {!session ? <Alert>{t('notSession')}</Alert> : <></> }
+    {router && router.query.id 
+      ? <>
+        <ButtonGroup className="mt-1 mt-md-3 mb-1">
+            <Button variant="primary text-white" onClick={goTo} size="sm">
+              <BiArrowBack />
+            </Button>
+          </ButtonGroup>
+        <EditPostForm id={+router.query.id.toString()} noModal/>
+      </>
+      : <Spinner animation="grow" variant="info" />
+    }
+  </SimpleLayout>
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {

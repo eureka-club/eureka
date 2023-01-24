@@ -10,10 +10,7 @@ import {storeDeleteFile} from '@/src/facades/fileUpload'
 export default getApiHandler()
   .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = await getSession({ req });
-    if (session == null || !session.user.roles.includes('admin')) {
-      res.status(401).json({ status: 'Unauthorized' });
-      return;
-    }
+    
 
     let { id } = req.query;
     if (typeof id !== 'string') {
@@ -32,6 +29,10 @@ export default getApiHandler()
       const post = await find(idNum);
       if (post == null) {
         res.status(404).end();
+        return;
+      }
+      if (session == null || (!session.user.roles.includes('admin') && post.creatorId!=session.user.id)) {
+        res.status(401).json({ status: 'Unauthorized' });
         return;
       }
       

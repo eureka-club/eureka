@@ -7,7 +7,6 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
-import FormCheck from 'react-bootstrap/FormCheck';
 import FormControl from 'react-bootstrap/FormControl';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
@@ -34,6 +33,7 @@ import useTopics from '../../useTopics';
 import usePost from '../../usePost';
 import editOnSmallerScreens from '../../atoms/editOnSmallerScreens';
 import toast from 'react-hot-toast'
+import { Alert } from 'react-bootstrap';
 interface Props {
   noModal?: boolean;
   cacheKey?:string[]
@@ -168,7 +168,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
       return res.json();
     },
     {
-      onMutate: async (variables) => {
+      onMutate: async (variables) => {debugger;
          if (post) {
             const ck_ = ck||['POST',`${post.id}`];
             await queryClient.cancelQueries(ck_)
@@ -382,9 +382,9 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
   };
 
   if (isLoading || isFetching || !post) return <Spinner animation="grow" variant="info" size="sm" />;
-
+debugger;
   return (
-    post && (
+    post ? (
       <Form onSubmit={handleSubmit} ref={formRef}>
         {/* <ModalHeader closeButton={!noModal}>
           <Container>
@@ -622,6 +622,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
         {/* </ModalFooter> */}
       </Form>
     )
+    : <Alert variant="warning">Not Found</Alert>
   );
 };
 
