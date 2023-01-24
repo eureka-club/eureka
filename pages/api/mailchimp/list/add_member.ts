@@ -19,12 +19,15 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   if(req.method=='POST'){
-    const {list_id=process.env.MAILCHIMP_AUDIENCE,email_address,status='subscribed'} = req.body.params
+    const {list_id=process.env.MAILCHIMP_AUDIENCE,email_address,name,status='subscribed'} = req.body.params
+    const merge_fields = {
+      FNAME:name,
+    }
     if(email_address){
         if(list_id){
             try{
               const rblm = await client.lists.batchListMembers(list_id, {
-                members:[{email_address,status}],
+                members:[{email_address,status,merge_fields}],
               });
               if(rblm.new_members.length)
                 return res.status(200).json({ member:rblm.new_members[0] })

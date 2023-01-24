@@ -59,6 +59,7 @@ const useJoinUserToCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,part
             await subscribe_to_segment({
               segment:`ciclo-${cycle.id}-pax`,
               email_address:user.email!,
+              name:user.name||'unknown'
             })       
           }
     

@@ -7,11 +7,13 @@ const instance = axios.create({
 export interface MailchimpSubscribe{
     segment?:string;
     email_address:string;
+    name:string;
 }
 
 export const subscribe_to_segment = async (props:MailchimpSubscribe)=>{
-    const {segment='eureka-all-users',email_address} = props
+    const {segment='eureka-all-users',email_address,name} = props
     const url =`/segments/add_member`
+    
     try{
         const fn_subscribe = async ()=>instance.post(url,{segment,email_address})
         const member = await get_member({email_address})
@@ -20,7 +22,7 @@ export const subscribe_to_segment = async (props:MailchimpSubscribe)=>{
             return res;
         }
         else{
-            const rnm = await add_member({email_address})
+            const rnm = await add_member({email_address,name})
             if(rnm){
                 const res = await fn_subscribe()
                 return res
@@ -70,18 +72,19 @@ export const get_member = async (props:MailchimpListMember)=>{
     }
 }
 
-export interface MailchimpListMember{
+export interface MailchimpListAddMember{
     list_id?:string;
     email_address:string;
+    name:string;
     tags?:string[];
     status?:string;
 }
-export const add_member = async (props:MailchimpListMember)=>{
-    const {list_id,email_address,status} = props
+export const add_member = async (props:MailchimpListAddMember)=>{
+    const {list_id,email_address,name,status} = props
     const url =`/list/add_member`
     try{
         const res = await instance.post(url,{params:{
-          list_id,email_address,status
+          list_id,email_address,status,name
         }})
         return res.data?.member??null
     }
