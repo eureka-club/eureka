@@ -31,6 +31,7 @@ import useWork from '@/src/useWork'
 import { useSession} from 'next-auth/react';
 import { BiEdit} from 'react-icons/bi';
 interface Props {
+  post?:PostMosaicItem;
   postId: number|string;
   display?: 'v' | 'h';
   showButtonLabels?: boolean;
@@ -47,6 +48,7 @@ interface Props {
 }
 
 const MosaicItem: FunctionComponent<Props> = ({
+  post:postItem,
   postId,
   display = 'v',
   showSocialInteraction = true,
@@ -68,10 +70,13 @@ const MosaicItem: FunctionComponent<Props> = ({
   const {data:session} = useSession()
   //const postFromCache = queryClient.getQueryData<PostMosaicItem>(['POST',postId.toString()]);
   // const pp = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(cacheKey);
-
-  const {data:post} = usePost(+postId,{
-    enabled:!!postId
+  const [post,setPost]=useState(postItem)
+  const {data} = usePost(+postId,{
+    enabled:!!postId && !postItem
   })
+  useEffect(()=>{
+    if(data && !postItem)setPost(data)
+  },[data])
 
   useEffect(()=>{
     if(post){

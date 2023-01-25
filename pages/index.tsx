@@ -9,6 +9,13 @@ import useTranslation from 'next-translate/useTranslation';
 import { GetAllByResonse, Session } from '@/src/types';
 import {getMyCycles,myCyclesWhere} from '@/src/useMyCycles';
 import { dehydrate,QueryClient } from 'react-query';
+import {getbackOfficeData} from '@/src/useBackOffice'
+import { getFeaturedEurekas } from '@/src/useFeaturedEurekas';
+import {getInterestedCycles} from '@/src/useInterestedCycles';
+import { backOfficeData } from '@/src/types/backoffice';
+
+
+
 const HomeNotSingIn = lazy(()=>import('@/components/HomeNotSingIn'));
 const HomeSingIn = lazy(()=>import('@/src/components/HomeSingIn'));
 
@@ -77,16 +84,42 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     
   const id = session.user.id;  
   let groupedByTopics:Record<string,GetAllByResonse>={};
-  
-  let r = await fetchItems(0,topics[0])
-  groupedByTopics[topics[0]] = r;
 
-  let r1 = await fetchItems(0,topics[1])
-  groupedByTopics[topics[1]] = r1;
+  const bo =  await getbackOfficeData(origin)
+
+  let postsId:number[] = [];
+  if(bo && bo.PostExplorePage)
+    bo.PostExplorePage.split(',').forEach((x:string)=> postsId.push(parseInt(x)));
+
+  let cyclesIds:number[] = [];
+  if(bo && bo.CyclesExplorePage)
+    bo.CyclesExplorePage.split(',').forEach((x:string)=> cyclesIds.push(parseInt(x)));
+
+  let promises:Promise<any>[] = [
+    getFeaturedEurekas(postsId,undefined,origin),
+    getInterestedCycles(cyclesIds,undefined,origin),
+  ]
+  let resolved = await Promise.all(promises)
+  const featuredEurekas = resolved[0]
+  const interestedCycles = resolved[1]
+
+  promises = [
+    fetchItems(0,topics[0]),
+    fetchItems(0,topics[1])
+  ]
+  resolved = await Promise.all(promises)
+
+  groupedByTopics[topics[0]] = resolved[0];
+  groupedByTopics[topics[1]] = resolved[1];
 
   const qc = new QueryClient()
-  const k = myCyclesWhere(session.user.id)
-  await qc.fetchQuery(['CYCLES',JSON.stringify(k)],()=>getMyCycles(id,8,origin))
+  
+  await qc.fetchQuery(['BACKOFFICE', `1`], () => bo)
+  await qc.fetchQuery(['POSTS','eurekas-of-interest'],()=>featuredEurekas)
+  await qc.fetchQuery(['CYCLES','cycles-of-interest'],()=>interestedCycles)
+  
+  // const k = myCyclesWhere(session.user.id)
+  // await qc.fetchQuery(['CYCLES',JSON.stringify(k)],()=>getMyCycles(id,8,origin))
 
   return {
     props: {

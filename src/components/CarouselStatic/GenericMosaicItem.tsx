@@ -20,13 +20,13 @@ import { GenericMosaicItemProps } from "./types";
     if (isCycleMosaicItem(item)) {
       return (
         // <CycleContext.Provider key={`cycle-${item.id}`} value={{ cycle: item as CycleMosaicItem }}>
-          <MosaicItemCycle detailed cycleId={item.id} showSocialInteraction={showSocialInteraction} showButtonLabels={false} size={size}/>
+          <MosaicItemCycle detailed cycle={item} cycleId={item.id} showSocialInteraction={showSocialInteraction} showButtonLabels={false} size={size}/>
         // </CycleContext.Provider>
       );
     }
     if (isPostMosaicItem(item) || (item && item.type === 'post')) {
       const it: PostMosaicItem = item as PostMosaicItem;
-      return <MosaicItemPost cacheKey={cacheKey} key={`post-${it.id}`} postId={it.id} size={size} />;
+      return <MosaicItemPost cacheKey={cacheKey} key={`post-${it.id}`} post={it} postId={it.id} size={size} />;
     }
     if (isWorkMosaicItem(item)) {
       return (

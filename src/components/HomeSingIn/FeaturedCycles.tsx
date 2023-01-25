@@ -1,25 +1,23 @@
 import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
 import { FC } from "react";
-import { CycleMosaicItem } from "../types/cycle";
-import CarouselStatic from "./CarouselStatic";
+import CarouselStatic from "../CarouselStatic";
+import useInterestedCycles from '@/src/useInterestedCycles';
 
-interface DataFeaturedCycles {
-    cycles: CycleMosaicItem[];
-    fetched: number;
-    total: number;
-  }
-  
-const FeaturedCycles:FC<{featuredCycles:CycleMosaicItem[]|undefined,dataFeaturedCycles:DataFeaturedCycles|undefined}> = ({featuredCycles,dataFeaturedCycles}) => {
+interface Props {
+}
+
+const FeaturedCycles:FC<Props> = ({}) => {
     const router = useRouter()
     const { t } = useTranslation('common');
+    const {data} = useInterestedCycles()
 
-    return (featuredCycles && featuredCycles.length && dataFeaturedCycles) 
+    return (data?.cycles && data?.cycles.length) 
     ? <div>      
        <CarouselStatic
         cacheKey={['CYCLES','INTERESTED']}
         onSeeAll={()=>router.push('/featured-cycles')}
-        data={featuredCycles}
+        data={data?.cycles}
         title={t('Interest cycles')}
         //seeAll={cycles.length<dataCycles?.total}
       />

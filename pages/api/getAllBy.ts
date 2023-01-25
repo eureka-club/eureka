@@ -65,7 +65,9 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     const getOpt = (takePlus = 0, skipPlus = 0, args: PropsArgs = { isWork: false, isCycle: false }) => ({
       skip: c * countItemsPerPage + skipPlus,
       take: takePlus || countItemsPerPage,
-      select:{id:true},
+      include:{
+        localImages: {select:{storedFile:true}}
+      },
       // include: {
       //   _count:{select:{ratings:true}},
       //   localImages: true,
@@ -173,7 +175,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     };
     // const seconds = 60 * 60 * 8; //8 hours
     // redis.set(redisKey, JSON.stringify(result), 'EX', seconds);
-
+debugger;
     res.status(200).json(result);
   } catch (exc) {
     console.error(exc); // eslint-disable-line no-console

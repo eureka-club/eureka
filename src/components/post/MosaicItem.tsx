@@ -17,7 +17,9 @@ import globalModals from '@/src/atoms/globalModals'
 import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
 import usePost from '@/src/usePost'
 import { useSession} from 'next-auth/react';
+import { PostMosaicItem } from '@/src/types/post';
 interface Props {
+  post?:PostMosaicItem;
   postId: number|string;
   //display?: 'v' | 'h';
   showButtonLabels?: boolean;
@@ -36,6 +38,7 @@ interface Props {
 }
 
 const MosaicItem: FunctionComponent<Props> = ({
+  post:postItem,
   postId,
   //display = 'v',
   showSocialInteraction = true,
@@ -58,9 +61,14 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [postParent,setPostParent] = useState<CycleMosaicItem|WorkMosaicItem>();
   const {data:session} = useSession()
 
-  const {data:post} = usePost(+postId,{
-    enabled:!!postId
+  const {data} = usePost(+postId,{
+    enabled:!!postId && !postItem
   })
+  
+  const [post,setPost] = useState(postItem)
+  useEffect(()=>{
+    if(!postItem && data)setPost(data)
+  },[data])
 
   useEffect(()=>{
     if(post){

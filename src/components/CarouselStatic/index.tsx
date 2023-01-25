@@ -67,7 +67,6 @@ const CarouselStatic: FunctionComponent<Props> = ({
     if(onSeeAll)
       onSeeAll()
         setIsRedirecting(false)
-  
   }
 
   return useMemo(()=>(

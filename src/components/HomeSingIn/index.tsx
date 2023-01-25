@@ -11,15 +11,13 @@ import { UserMosaicItem } from '@/src/types/user';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import slugify from 'slugify'
-import useFeaturedUsers from '@/src/useFeaturedUsers';
-import useInterestedCycles from '@/src/useInterestedCycles';
 import useMyCycles,{myCyclesWhere} from '@/src/useMyCycles';
-import useFeaturedEurekas from '@/src/useFeaturedEurekas';
 import Prompt from '@/src/components/post/PostPrompt';
-import FeaturedCycles from '../FeaturedCycles';
-import FeaturedEurekas from '../FeaturedEurekas';
+import FeaturedCycles from './FeaturedCycles';
+import FeaturedEurekas from './FeaturedEurekas';
 import CarouselsByTopics from './CarouselsByTopics';
 import CarouselStatic from '../CarouselStatic';
+import FeaturedUsers from './FeaturedUsers';
 
 const topics = ['gender-feminisms', 'technology', 'environment',
  'racism-discrimination',
@@ -50,25 +48,16 @@ const HomeSingIn: FunctionComponent<Props> = ({ groupedByTopics}) => {
     // skip: supportsLazyLoading !== false,
   });
   const [users,setUsers] = useState<UserMosaicItem[]>()
-  const {data:dataUsers} = useFeaturedUsers()
   const {data:dataCycles} = useMyCycles(session?.user.id!)
   const [cycles,setCycles] = useState<CycleMosaicItem[]>()
-  const {data:dataFeaturedCycles} = useInterestedCycles()
-  const [featuredCycles,setfeaturedCycles] = useState(dataFeaturedCycles?.cycles);
-  const {data:dataPosts} = useFeaturedEurekas()
-  const [posts,setPosts] = useState(dataPosts?.posts);
 
   useEffect(()=>{
-    if(dataUsers)setUsers(dataUsers)
-    if(dataFeaturedCycles)setfeaturedCycles(dataFeaturedCycles.cycles)
-    if(dataPosts)setPosts(dataPosts.posts)
     if(dataCycles)setCycles(dataCycles.cycles)   
 
-  },[dataCycles,dataUsers,dataFeaturedCycles,dataPosts])
+  },[dataCycles])
 
   const [gbt, setGBT] = useState([...Object.entries(groupedByTopics||[])]);
   const [topicIdx,setTopicIdx] = useState(gbt.length-1)
-
   
   useEffect(()=>{
     const idx = topicIdx+1;
@@ -116,20 +105,7 @@ const getMediathequeSlug = (id:number,name:string)=>{
   };
 //       <h1 className="text-secondary fw-bold">{t('myCycles')}</h1>
 
-const featuredUsers = () => {
-    return (users && users.length && dataUsers) 
-    ? <div>      
-       <CarouselStatic
-        cacheKey={['USERS','FEATURED']}
-        //onSeeAll={()=>router.push('/featured-users')}
-        seeAll={false}
-        data={users}
-        title={t('Featured users')}
-        userMosaicDetailed = {true}
-      />
-      </div>
-    : <></>;
-  };
+
 
   const cyclesJoined = () => {
   if(!session)return <></>
@@ -184,12 +160,10 @@ const featuredUsers = () => {
         </Col>
         <Col xs={12} lg={10} className="mt-5 mt-lg-0">
           <section className="ms-0 ms-lg-5">
-            <FeaturedEurekas posts={posts} dataPosts={dataPosts} />
-            {/* {renderFeaturedEurekas()} */}
-            <FeaturedCycles featuredCycles={featuredCycles} dataFeaturedCycles={dataFeaturedCycles} />
-            {/* {renderFeaturedCycles()} */}
+            <FeaturedEurekas />
+            <FeaturedCycles />
             {/*cyclesJoined()*/}
-            {featuredUsers()}
+            {/* <FeaturedUsers/> */}
             <>
               <div className="mt-5">
                 <CarouselsByTopics groupedByTopics={gbt} />

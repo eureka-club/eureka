@@ -1,5 +1,5 @@
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, useState } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 import { Card, Badge, Spinner } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import { CgMediaLive } from 'react-icons/cg';
@@ -12,10 +12,12 @@ import SocialInteraction from '../common/SocialInteraction';
 import { useCycleContext } from '../../useCycleContext';
 import { DATE_FORMAT_SHORT } from '../../constants';
 import useWork from '@/src/useWork'
+import { WorkMosaicItem } from '@/src/types/work';
 
 dayjs.extend(isBetween);
 dayjs.extend(utc);
 interface Props {
+  work?:WorkMosaicItem;
   workId: number;
   showButtonLabels?: boolean;
   showShare?: boolean;
@@ -30,6 +32,7 @@ interface Props {
   className?:string;
 }
 const MosaicItem: FunctionComponent<Props> = ({
+  work:workItem,
   workId,
   showButtonLabels = false,
   showSocialInteraction = true,
@@ -46,12 +49,15 @@ const MosaicItem: FunctionComponent<Props> = ({
   const {cycle} = useCycleContext();
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
+  const [work,setWork] = useState(workItem)
   
-  const {data:work} = useWork(workId,{
-    enabled:!!workId
+  const {data} = useWork(workId,{
+    enabled:!!workId && !workItem
   })
+  useEffect(()=>{
+    if(data && !workItem)setWork(data)
+  },[data])
 
-  
   if(!work)return <></>
   
   const { id, title, localImages, type } = work;

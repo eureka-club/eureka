@@ -24,11 +24,13 @@ import Avatar from '../common/UserAvatar';
 import {useJoinUserToCycleAction,useLeaveUserFromCycleAction} from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
 import {useModalContext} from '@/src/useModal'
 import SignInForm from '../forms/SignInForm';
+import { CycleMosaicItem } from '@/src/types/cycle';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(isBetween);
 interface Props {
+  cycle?:CycleMosaicItem;
   cycleId:number;
   showButtonLabels?: boolean;
   showShare?: boolean;
@@ -43,6 +45,7 @@ interface Props {
   className?: string;
 }
 const MosaicItem: FunctionComponent<Props> = ({
+  cycle:cycleItem,
   showButtonLabels = false,
   detailed = true,
   showSocialInteraction = true,
@@ -64,8 +67,13 @@ const MosaicItem: FunctionComponent<Props> = ({
   
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
-  const {data:cycle} = useCycle(cycleId,{enabled:!!cycleId})
-
+  const {data} = useCycle(cycleId,{enabled:!!cycleId && !cycleItem})
+  
+  const [cycle,setCycle]=useState(cycleItem)
+  useEffect(()=>{
+    if(!cycleItem && data)setCycle(data)
+  },[data])
+  
   const {show} = useModalContext()
   
   const whereCycleParticipants = {
@@ -83,7 +91,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     }
   )
 
-  const isFetchingParticipants = useIsFetching(['USERS',JSON.stringify(whereCycleParticipants)])
+  // const isFetchingParticipants = useIsFetching(['USERS',JSON.stringify(whereCycleParticipants)])
   
   useEffect(() => {
     const s = session;
@@ -208,6 +216,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   
   const renderJoinLeaveCycleBtn = ()=>{
+    if(cycleItem)return <></>
     if(cycle && !isLoadingSession){
      
       if(cycle.currentUserIsCreator)

@@ -17,6 +17,7 @@ import { WorkMosaicItem /* , WorkWithImages */ } from '../types/work';
 import { CycleMosaicItem /* , CycleWithImages */ } from '../types/cycle';
 import { CycleContext } from '../useCycleContext';
 import { GetAllByResonse } from '@/src/types';
+import { PostMosaicItem } from '../types/post';
 
 type Props = {
   // page: number;
@@ -61,6 +62,7 @@ const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, cl
       return (
         <CycleContext.Provider key={`cycle-${item.id}`} value={{ cycle: item as CycleMosaicItem }}>
           <MosaicItemCycle
+            cycle={item}
             cycleId={item.id}
             detailed
             showShare={false}
@@ -72,7 +74,7 @@ const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, cl
       );
     }
     if (isPostMosaicItem(item) || item.type === 'post') {
-      return <MosaicItemPost cacheKey={['POST', `${item.id}`]} key={`post-${item.id}`} postId={item.id} />;
+      return <MosaicItemPost post={item as PostMosaicItem} cacheKey={['POST', `${item.id}`]} key={`post-${item.id}`} postId={item.id} />;
     }
     if (isWorkMosaicItem(item)) {
       // eslint-disable-next-line react/jsx-props-no-spreading
@@ -82,6 +84,7 @@ const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, cl
           showShare={false}
           showButtonLabels={false}
           key={`work-${item.id}`}
+          work={item}
           workId={item.id}
           cacheKey={['WORK', `${item.id}`]}
         />
