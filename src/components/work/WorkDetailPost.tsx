@@ -37,7 +37,7 @@ const WorkDetailPost: FunctionComponent<Props> = ({workId,className, cacheKey })
     enabled:!!workId
   })
 
-  const [isCreateEureka, setIsCreateEureka] = useState<boolean>(false);
+  const [isCreateEureka, setIsCreateEureka] = useState<boolean>(true);
   const [discussionItem, setDiscussionItem] = useState<string | undefined>(undefined); // by default empty but required
   const router = useRouter();
   const query = router.query;
@@ -59,22 +59,24 @@ const WorkDetailPost: FunctionComponent<Props> = ({workId,className, cacheKey })
 
 
     const onClose = () => {
-    setIsCreateEureka(false);
+    //setIsCreateEureka(false);
   };
 
   return (
     <>
       {work && (
         <div className={`${styles.container} ${className}`}>
-          <div className='container text-center'>
-          <p className={`${styles.initialText}`}>{t('EurekaMomentsExplain')}</p>
-          </div>
+          {/*<div className='container text-center'>
+         <p className={`${styles.initialText}`}>{t('EurekaMomentsExplain')}</p>
+          </div>*/}
           <Row className={`d-flex justify-content-center ${styles.discussionContainer}`}>
-            {session && session.user && <Col xs={12} md={1} className="d-flex justify-content-center mb-2">
-               <UserAvatar width={28} height={28} userId={session.user.id} showName={false} />
-            </Col>}
+            {session && session.user && (
+              <Col xs={12} md={1} className="d-flex justify-content-center mb-2 mt-3">
+                <UserAvatar  width={28} height={28} userId={session.user.id} showName={false} />
+              </Col>
+            )}
             <Col xs={12} md={11}>
-              <ButtonGroup className={`border-0 d-flex flex-column flex-md-row justify-content-between ${styles.optButtons}`} size="lg">
+              {/*<ButtonGroup className={`border-0 d-flex flex-column flex-md-row justify-content-between ${styles.optButtons}`} size="lg">
                 <Button
                   //disabled={!isParticipant()}
                   data-cy="bt-create-eureka"
@@ -86,11 +88,11 @@ const WorkDetailPost: FunctionComponent<Props> = ({workId,className, cacheKey })
                   <GiBrain className="mr-1" />
                   <span className="fs-6">{t('Create an Eureka')}</span>
                 </Button>
-              </ButtonGroup>
-             
+              </ButtonGroup>*/}
+
               {isCreateEureka && (
-                <div className="mt-3">
-                 <WorkDetailCreateEurekaForm
+                <div className="">
+                  <WorkDetailCreateEurekaForm
                     cacheKey={cacheKey}
                     workItem={work}
                     discussionItem={`work-${work.id}`}
@@ -99,7 +101,7 @@ const WorkDetailPost: FunctionComponent<Props> = ({workId,className, cacheKey })
                   />
                 </div>
               )}
-             </Col>
+            </Col>
           </Row>
         </div>
       )}

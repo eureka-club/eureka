@@ -150,49 +150,57 @@ const featuredUsers = () => {
   };
    
 
-  return <>
-  <section className='my-5'><Prompt redirect={true}/></section>
-   <section className='d-flex flex-column flex-lg-row'>
-  <Col xs={12} lg={2} className="me-5" >
-    <h2 className="text-secondary fw-bold">{t('Trending topics')}</h2>
-    <aside className="mb-4">{getTopicsBadgedLinks()}</aside>
-    <section className='mt-5'>
-        <h1 className="text-secondary  fw-bold" style={{fontSize:'1.5rem'}}>{t('About Eureka')} </h1>
-        <Link href="/about"><a className='text-primary text-decoration-underline text-blue' onClick={()=> window.scrollTo(0, 0)}>{t('browserTitleAbout')} </a></Link>
-    </section>
-     <section  className="mt-4 p-3 rounded overflow-auto bg-secondary text-white" role="presentation" >
-        <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox1')}</h4>
-     </section>
-      <section  className="mt-5 p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation" >
-        <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox2')}</h4>
-     </section>
-      <section  className="mt-5 p-3 rounded overflow-auto bg-secondary text-white" role="presentation" >
-        <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox3')}</h4>
-     </section>
-      <section  className="mt-5 p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation" >
-        <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox4')}</h4>
-     </section>
-  </Col>  
-  <Col xs={12} lg={10} className="mt-5 mt-lg-0">
-  <section className='ms-0 ms-lg-5'>  
-    <FeaturedEurekas posts={posts} dataPosts={dataPosts}/>
-    {/* {renderFeaturedEurekas()} */}
-    <FeaturedCycles featuredCycles={featuredCycles} dataFeaturedCycles={dataFeaturedCycles} />
-    {/* {renderFeaturedCycles()} */}
-    {/*cyclesJoined()*/}
-    {featuredUsers()}
+  return (
     <>
-    <div className="mt-5">
-      <CarouselsByTopics groupedByTopics={gbt}/>
-    </div>
-    <div className="mb-5">
-      {renderSpinnerForLoadNextCarousel()}
-    </div>
-  </>
-  </section>
-  </Col>
-</section>  
-</>
+      <section className="my-5">
+        <Prompt redirect={true} showTitle={true} />
+      </section>
+      <section className="d-flex flex-column flex-lg-row">
+        <Col xs={12} lg={2} className="me-5">
+          <h2 className="text-secondary fw-bold">{t('Trending topics')}</h2>
+          <aside className="mb-4">{getTopicsBadgedLinks()}</aside>
+          <section className="mt-5">
+            <h1 className="text-secondary  fw-bold" style={{ fontSize: '1.5rem' }}>
+              {t('About Eureka')}{' '}
+            </h1>
+            <Link href="/about">
+              <a className="text-primary text-decoration-underline text-blue" onClick={() => window.scrollTo(0, 0)}>
+                {t('browserTitleAbout')}{' '}
+              </a>
+            </Link>
+          </section>
+          <section className="mt-4 p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
+            <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox1')}</h4>
+          </section>
+          <section className="mt-5 p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
+            <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox2')}</h4>
+          </section>
+          <section className="mt-5 p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
+            <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox3')}</h4>
+          </section>
+          <section className="mt-5 p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
+            <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox4')}</h4>
+          </section>
+        </Col>
+        <Col xs={12} lg={10} className="mt-5 mt-lg-0">
+          <section className="ms-0 ms-lg-5">
+            <FeaturedEurekas posts={posts} dataPosts={dataPosts} />
+            {/* {renderFeaturedEurekas()} */}
+            <FeaturedCycles featuredCycles={featuredCycles} dataFeaturedCycles={dataFeaturedCycles} />
+            {/* {renderFeaturedCycles()} */}
+            {/*cyclesJoined()*/}
+            {featuredUsers()}
+            <>
+              <div className="mt-5">
+                <CarouselsByTopics groupedByTopics={gbt} />
+              </div>
+              <div className="mb-5">{renderSpinnerForLoadNextCarousel()}</div>
+            </>
+          </section>
+        </Col>
+      </section>
+    </>
+  );
 
 }
 
