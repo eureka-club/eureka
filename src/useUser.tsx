@@ -1,9 +1,5 @@
 import { useQuery } from 'react-query';
 import { UserMosaicItem } from '@/types/user';
-import { PostMosaicItem } from './types/post';
-// import { UserDetail } from '@/types/user';
-// import { User } from '@prisma/client';
-
 
 export const getUser = async (id: number,origin=''): Promise<UserMosaicItem|null> => {
   if (!id) return null;

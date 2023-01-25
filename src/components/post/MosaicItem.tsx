@@ -1,30 +1,22 @@
-import { Cycle, Work } from '@prisma/client';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Row, Col, Card, Badge,Button,Spinner } from 'react-bootstrap';
-import { FaRegComments, FaRegCompass } from 'react-icons/fa';
+import { Card, Badge,Spinner } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import { DATE_FORMAT_SHORT } from '../../constants';
 import SocialInteraction from '../common/SocialInteraction';
-import { PostMosaicItem } from '../../types/post';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
-import { isCycle, isWork, Session } from '../../types';
+import {  Session } from '../../types';
 import Avatar from '../common/UserAvatar';
-import UnclampText from '../UnclampText';
 import { CycleMosaicItem } from '@/src/types/cycle';
 import { WorkMosaicItem } from '@/src/types/work';
 import {useAtom} from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
 import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
 import usePost from '@/src/usePost'
-import {useQueryClient} from 'react-query'
-import useCycle from '@/src/useCycle';
-import useWork from '@/src/useWork'
 import { useSession} from 'next-auth/react';
-import { BiEdit} from 'react-icons/bi';
 interface Props {
   postId: number|string;
   //display?: 'v' | 'h';
@@ -114,11 +106,10 @@ const NewMosaicItem: FunctionComponent<Props> = ({
         setEditPostOnSmallerScreen({ ...editOnSmallerScreens, ...{ value: true } });
   }
 
-
   const renderVerticalMosaic = (props: { showDetailedInfo: boolean,specifyDataCy?:boolean,commentSection?:boolean }) => {
-    const { showDetailedInfo, specifyDataCy=true,commentSection=false } = props;
+  const { showDetailedInfo, specifyDataCy=true,commentSection=false } = props;
 
-const getParentTitle = () => {
+  const getParentTitle = () => {
       let res = '';
       if (post.works.length) {
         res = post.works[0].title
@@ -127,7 +118,7 @@ const getParentTitle = () => {
         res = post.cycles[0].title
       }
       return res;
-    };
+  };
    
     const renderParentTitle = () => {
       let res = '';
@@ -235,68 +226,8 @@ const getParentTitle = () => {
       </Card>
     );
   };
-
   
   return <>{renderVerticalMosaic({ showDetailedInfo: true })}</>;
 };
 
 export default NewMosaicItem;
-
-
-/*{(
-          <h2 className="m-0 p-1 fs-6 text-info" data-cy="parent-title">
-            <FaRegCompass className="text-info" />
-            {` `}
-            {parentLinkHref != null ? (
-              <Link href={parentLinkHref}>
-                <a className="text-info">
-                  <span>{renderParentTitle()} </span>
-                </a>
-              </Link>
-            ) : (
-              <h2 className="m-0 p-1 fs-6 text-secondary">{renderParentTitle()}</h2>
-            )}
-          </h2>
-        )}
-        <div className={`${styles.imageContainer}`}>
-          {renderLocalImageComponent()}
-         
-          {post && showdetail && (
-          <div className={`w-100 d-flex flex-row align-items-center ${styles.postDetail}`}>
-                <Avatar width={28} height={28} userId={post.creator.id} size="xs" />
-                <span className='ms-1 me-1'>-</span>
-                <span className="fs-6">{dayjs(post.createdAt).format(DATE_FORMAT_SHORT)}</span>
-                </div>
-            )}
-
-
-          <Badge bg="success" className={`fw-normal fs-6 text-white px-2 rounded-pill ${styles.type}`}>
-            {t(type || 'post')}
-          </Badge>
-        </div>
-        {showDetailedInfo && (
-          <div className={`d-flex align-items-center justify-content-center ${styles.detailedInfo}`}>
-            <h6 className="text-center d-flex" data-cy="post-title">
-              <Link href={postLinkHref}>
-                <a className="text-primary">{post.title}</a>
-              </Link>              
-            </h6>
-          </div>
-        )}
-        {showSocialInteraction && post && (
-          <Card.Footer className={`d-flex ${styles.footer}`}>
-            <SocialInteraction
-              cacheKey={cacheKey}
-              showButtonLabels={false}
-              showCounts={false}
-              entity={post}
-              parent={postParent}
-              showRating={false}
-              showTrash={false}
-              className="ms-auto"
-            />
-          </Card.Footer>
-        )}
-        {canEditPost() && <section className="position-absolute top-0 end-0">
-          <Button onClick={onEditPost} className="p-0 text-danger" size='sm' variant='link'><BiEdit/></Button>
-        </section>}*/

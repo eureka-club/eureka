@@ -5,7 +5,7 @@ import timezone from 'dayjs/plugin/timezone';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useEffect, useState, MouseEvent, useMemo } from 'react';
-import {  useQueryClient,useIsFetching } from 'react-query';
+import {  useIsFetching } from 'react-query';
 import { useRouter } from 'next/router';
 import { Card, Button, Spinner, Badge } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
@@ -21,11 +21,10 @@ import { useCycleContext } from '../../useCycleContext';
 import toast from 'react-hot-toast';
 import useCycle from '@/src/useCycle'
 import Avatar from '../common/UserAvatar';
-import useCycleJoinRequests,{setCycleJoinRequests,removeCycleJoinRequest} from '@/src/useCycleJoinRequests'
+// import useCycleJoinRequests,{setCycleJoinRequests,removeCycleJoinRequest} from '@/src/useCycleJoinRequests'
 import {useJoinUserToCycleAction,useLeaveUserFromCycleAction} from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
 import {useModalContext} from '@/src/useModal'
 import SignInForm from '../forms/SignInForm';
-
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -60,10 +59,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [countParticipants,setCountParticipants] = useState<number>()
   
   const [loading, setLoading] = useState<boolean>(false);
-  const queryClient = useQueryClient();
   const router = useRouter();
   const {data:cycle} = useCycle(cycleId,{enabled:!!cycleId})
-
   const {show} = useModalContext()
   
   const whereCycleParticipants = {
@@ -81,7 +78,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     }
   )
 
-  const isFetchingParticipants = useIsFetching(['USERS',JSON.stringify(whereCycleParticipants)])
+  // const isFetchingParticipants = useIsFetching(['USERS',JSON.stringify(whereCycleParticipants)])
   
   useEffect(() => {
     const s = session;
@@ -90,7 +87,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     }
   }, [session]);
   
-  const {data:cycleJoinRequests,isLoading:isLoadingCycleJoinRequests} = useCycleJoinRequests(+idSession,{enabled:!!idSession})
+  // const {data:cycleJoinRequests,isLoading:isLoadingCycleJoinRequests} = useCycleJoinRequests(+idSession,{enabled:!!idSession})
 
   useEffect(() => {
     setIsCurrentUserJoinedToCycle(false)
@@ -99,20 +96,9 @@ const MosaicItem: FunctionComponent<Props> = ({
       const idx = participants.findIndex(p=>p.id==user.id);
       if(idx > -1) 
         setIsCurrentUserJoinedToCycle(true)
-      // if (currentUserIsParticipant === undefined) {
-      //   if (session && user && user.joinedCycles) {
-      //     if (!user.joinedCycles.length) setIsCurrentUserJoinedToCycle(false);
-      //     else {
-      //       const icujtc = user.joinedCycles.findIndex((c) => cycle.id === c!.id) !== -1;
-      //       setIsCurrentUserJoinedToCycle(icujtc);
-      //     }
-      //   }
-      // } else setIsCurrentUserJoinedToCycle(!!currentUserIsParticipant);
     }
   }, [user, cycle,participants, /* currentUserIsParticipant, */ session]);
-
   
-  // const { id, title, localImages,} = cycle!;
   const { t } = useTranslation('common');
   const isFetchingCycle = useIsFetching(['CYCLE',`${cycle?.id}`])
   
@@ -135,7 +121,6 @@ const MosaicItem: FunctionComponent<Props> = ({
   const {
     mutate: execLeaveCycle,
     isLoading: isLeaveCycleLoading,
-    // isSuccess: isLeaveCycleSuccess,
   } = useLeaveUserFromCycleAction(user!,cycle!,participants!,(_data,error)=>{
     if(!error) 
         toast.success(t('OK'));
@@ -145,15 +130,15 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   const isPending = ()=> isLoadingSession || isFetchingCycle>0 || isJoinCycleLoading || isLeaveCycleLoading;
 
-  const showJoinButtonCycle = () => {
-    const isLoading = isJoinCycleLoading || isLeaveCycleLoading;
-    if (isLoading) return false;
-    if (user) {
-      if (isJoinCycleLoading) return false;
-      if (user.id === cycle!.creatorId) return false;
-    }
-    return true;
-  };
+  // const showJoinButtonCycle = () => {
+  //   const isLoading = isJoinCycleLoading || isLeaveCycleLoading;
+  //   if (isLoading) return false;
+  //   if (user) {
+  //     if (isJoinCycleLoading) return false;
+  //     if (user.id === cycle!.creatorId) return false;
+  //   }
+  //   return true;
+  // };
 
   const handleJoinCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
@@ -304,23 +289,6 @@ const MosaicItem: FunctionComponent<Props> = ({
       )}
     </Card>
   );
-  // <article className={styles.cycle}>
-  //   <Link href={`/cycle/${id}`}>
-  //     <a className="d-inline-block">
-  //       <LocalImageComponent filePath={localImages[0].storedFile} alt={title} />
-
-  //       <div className={styles.gradient} />
-  //       <div className={styles.embeddedInfo}>
-  //         <h3 className={styles.title}>{title}</h3>
-  //         <span className={styles.date}>
-  //           {sd.format(DATE_FORMAT_SHORT)}
-  //           &mdash; {ed.format(DATE_FORMAT_SHORT)}
-  //         </span>
-  //       </div>
-  //       <span className={styles.type}>{t('cycle')}</span>
-  //     </a>
-  //   </Link>
-  // </article>
 };
 
 export default MosaicItem;
