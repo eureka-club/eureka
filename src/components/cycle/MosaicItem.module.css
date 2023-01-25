@@ -23,16 +23,11 @@
   /* height: 16em; */
 }
 .imageContainer {
-   /* border-radius: 0.5rem 0; */
   box-shadow: 1px 0 7px -2px rgba(0, 0, 0, 0.25);
-  /* margin-bottom: 1rem; */
   overflow: hidden; 
-  /* display: inline-block;  */
   position: relative;
   background-color: #f9f8f87a;
-  height: 16em;
-  min-height: 16em;
-  max-height: 16em;
+  height: 100%;
 }
 
 .detailedImageContainer img {
@@ -49,6 +44,7 @@
   top:3%;
   position: absolute; 
 }
+
 
 .actions {
   bottom: 0.95rem;
@@ -75,7 +71,7 @@
 }
 
 .title {
-  color: #333;
+  color: #fff;
   /*display: block;*/
   font-weight: 600;
   font-size: 1rem;
@@ -98,14 +94,7 @@
   /* text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8); */
 
 }
-.details{
-  min-height: 6.8rem;
-  height: 6.8rem;
-  max-height: 6.8rem;
-}
-.detailedInfo {
-  min-height: 4em;
-}
+
 
  .date {
      position: absolute;
@@ -122,23 +111,75 @@
   font-weight: 200;*/
 }
 .joinButtonContainer{
-  height: 40px;
+  /*height: 20%;
+  //max-height: 20%;
+   margin: 8px;*/
+   margin-bottom: 28%;
+   width: 75%;
+   position: absolute;
+   padding: auto;
+}
 
-  /* margin: 1em 0 0 0; */
-  /* text-align: center;
-    text-align: -moz-center;
-    text-align: -webkit-center; */
-  
+@media only screen and (max-width: 450px) {
+.joinButtonContainer{ 
+  margin-bottom: 35%;
+   width: 75%;
+   position: absolute;
+   padding: auto;
 }
-.joinButtonContainer button {
-  /* display: block;
-  width: 90%; */
+
 }
-/* .participantsInfo{
-  color:gray;
-  text-align: center;
-  font-size: .875rem;
-  margin: .4em 0 0 0;
-} */
+
+.joinButtonContainerlg{
+  /*height: 20%;
+  //max-height: 20%;
+   margin: 8px;*/
+   margin-bottom: 8%;
+   width: 75%;
+   position: absolute;
+   padding: auto;
+}
+
+.participants{
+   position: absolute;
+   /*margin-bottom: 28%;*/
+}
+
+ .marquee {
+        -moz-animation: marquee 20s linear infinite;
+        -webkit-animation: marquee 20s linear infinite;
+        animation: marquee 20s linear infinite;
+      }
+   @-moz-keyframes marquee {
+      0% {
+         transform: translateX(40%);
+        }
+      100% {
+        transform: translateX(-90%);
+        }
+      }
+   @-webkit-keyframes marquee {
+        0% {
+          transform: translateX(40%);
+        }
+        100% {
+          transform: translateX(-90%);
+        }
+      }
+    
+   @keyframes marquee {
+        0% {
+          -moz-transform: translateX(40%);
+          -webkit-transform: translateX(40%);
+          transform: translateX(40%)
+        }
+        100% {
+          -moz-transform: translateX(-90%);
+          -webkit-transform: translateX(-90%);
+          transform: translateX(-90%);
+        }
+      }
+
+
 
 

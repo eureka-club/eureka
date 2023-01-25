@@ -35,7 +35,7 @@ interface Props {
   className?: string;
 }
 
-const NewMosaicItem: FunctionComponent<Props> = ({
+const MosaicItem: FunctionComponent<Props> = ({
   postId,
   //display = 'v',
   showSocialInteraction = true,
@@ -230,4 +230,4 @@ const NewMosaicItem: FunctionComponent<Props> = ({
   return <>{renderVerticalMosaic({ showDetailedInfo: true })}</>;
 };
 
-export default NewMosaicItem;
+export default MosaicItem;

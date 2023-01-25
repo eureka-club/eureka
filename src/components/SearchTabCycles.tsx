@@ -3,7 +3,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { Spinner,Row, Col, Tab} from 'react-bootstrap';
 
-import MosaicItem from '@/components/cycle/NewMosaicItem'
+import MosaicItem from '@/src/components/cycle/MosaicItem'
 
 import useCycles,{getCycles} from '@/src/useCycles'
 

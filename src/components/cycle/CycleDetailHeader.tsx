@@ -14,7 +14,7 @@ import { PostMosaicItem } from '../../types/post';
 import { WorkMosaicItem } from '../../types/work';
 import CycleSummary from './CycleSummary';
 import styles from './CycleDetailHeader.module.css';
-import MosaicItem from './NewMosaicItem';
+import MosaicItem from './MosaicItem';
 import TagsInput from '../forms/controls/TagsInput';
 import UserAvatar from '../common/UserAvatar';
 import { MosaicContext } from '../../useMosaicContext';

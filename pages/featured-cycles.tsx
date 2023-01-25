@@ -7,7 +7,7 @@ import useTranslation from 'next-translate/useTranslation';
 
 import {getbackOfficeData} from '@/src/useBackOffice'
 import useInterestCycles, { getInterestedCycles } from '@/src/useInterestedCycles';
-import CMI from '@/src/components/cycle/NewMosaicItem';
+import CMI from '@/src/components/cycle/MosaicItem';
 import {useRouter} from 'next/router'
 import { BiArrowBack } from 'react-icons/bi';
 

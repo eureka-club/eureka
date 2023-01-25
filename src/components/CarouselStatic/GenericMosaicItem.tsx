@@ -1,5 +1,5 @@
 import { FC } from "react";
-import MosaicItemCycle from '../cycle/NewMosaicItem';
+import MosaicItemCycle from '../cycle/MosaicItem';
 import MosaicItemPost from '../post/MosaicItem';
 import MosaicItemWork from '../work/MosaicItem';
 import MosaicUserItem from '../user/MosaicItem';

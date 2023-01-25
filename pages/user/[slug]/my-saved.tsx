@@ -12,7 +12,7 @@ import { CycleMosaicItem } from '@/src/types/cycle';
 import { PostMosaicItem } from '@/src/types/post';
 import { WorkMosaicItem } from '@/src/types/work';
 import { isCycleMosaicItem, isPostMosaicItem, isWorkMosaicItem } from '@/src/types';
-import CMI from '@/components/cycle/NewMosaicItem'
+import CMI from '@/src/components/cycle/MosaicItem'
 import PMI from '@/src/components/post/MosaicItem'
 import WMI from '@/components/work/MosaicItem'
 import { BiArrowBack } from 'react-icons/bi';

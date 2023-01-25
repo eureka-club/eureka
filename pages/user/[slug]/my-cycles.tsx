@@ -7,7 +7,7 @@ import { getSession, useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 
 import useMyCycles, { getMyCycles } from '@/src/useMyCycles';
-import CMI from '@/src/components/cycle/NewMosaicItem';
+import CMI from '@/src/components/cycle/MosaicItem';
 import {useRouter} from 'next/router'
 import { BiArrowBack } from 'react-icons/bi';
 

@@ -35,7 +35,7 @@ import useWork from '@/src/useWork'
 import useCycles from '@/src/useCycles'
 import usePosts,{getPosts} from '@/src/usePosts'
 import WorkDetailPost from './WorkDetailPost';
-import CMI from '@/components/cycle/NewMosaicItem'
+import CMI from '@/src/components/cycle/MosaicItem'
 import MosaicItemPost from '@/src/components/post/MosaicItem'
 import { useInView } from 'react-intersection-observer';
 import { Session } from '@/src/types';
