@@ -1,7 +1,7 @@
 import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, MouseEvent, FunctionComponent, useEffect, useRef, useState } from 'react';
-import Image from 'next/image'
+import Image from 'next/image';
 import { Button, Col, Row, ButtonGroup, Form, Spinner } from 'react-bootstrap';
 import { useAtom } from 'jotai';
 import { Post } from '@prisma/client';
@@ -23,34 +23,44 @@ import stylesImageFileSelect from '../forms/CreatePostForm.module.css';
 import useTopics from '../../useTopics';
 
 import { useNotificationContext } from '@/src/useNotificationProvider';
-import { useRouter} from 'next/router'
-import toast from 'react-hot-toast'
+import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
-import useWorks from '@/src/useWorks'
-import useUsers from '@/src/useUsers'
+import useWorks from '@/src/useWorks';
+import useUsers from '@/src/useUsers';
 // import {useGlobalEventsContext} from '@/src/useGlobalEventsContext'
 import styles from './CycleDetailDiscussionCreateEureka.module.css';
-import { Switch,TextField,FormControlLabel,Autocomplete} from '@mui/material';
+import {
+  Switch,
+  FormControlLabel,
+  SelectChangeEvent,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@mui/material';
 import Prompt from '@/src/components/post/PostPrompt';
+import { WorkMosaicItem } from '@/src/types/work';
+
 // import { devNull } from 'os';
 // import { isNullOrUndefined } from 'util';
 
 interface Props {
-  cacheKey:string[];
+  cacheKey: string[];
   cycle: CycleMosaicItem;
   discussionItem?: string;
   setDiscussionItem: (val: string | undefined) => void;
   close: () => void;
-
 }
 
-const whereCycleParticipants = (id:number)=>({
-  where:{
-    OR:[
-      {cycles: { some: { id } }},//creator
-      {joinedCycles: { some: { id } }},//participants
+const whereCycleParticipants = (id: number) => ({
+  where: {
+    OR: [
+      { cycles: { some: { id } } }, //creator
+      { joinedCycles: { some: { id } } }, //participants
     ],
-  } 
+  },
 });
 
 const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
@@ -58,11 +68,11 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   cycle,
   discussionItem,
   setDiscussionItem,
-  close
+  close,
 }) => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const {data:session} = useSession();
+  const { data: session } = useSession();
   const { t } = useTranslation('cycleDetail');
   //const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [newEurekaImageFile, setNewEurekaImageFile] = useState<File | null>(null);
@@ -85,28 +95,32 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
     topics: eurekaTopics,
   });
 
-  const {notifier} = useNotificationContext();
+
+  const { notifier } = useNotificationContext();
   // const gec = useGlobalEventsContext();
+  const [selection, setSelection] = useState<string | undefined>(undefined); // by default empty but required
+ useEffect(() => {
+   if (discussionItem) setSelection(discussionItem);
+ }, [discussionItem]);
 
-  const { data: dataWorks } = useWorks({ where:{cycles: { some: { id: cycle?.id } }} }, {
-    enabled:!!cycle?.id
-  })
-  const [works,setWorks] = useState(dataWorks?.works)
-  useEffect(()=>{
-    if(dataWorks)setWorks(dataWorks.works)
-  },[dataWorks])
-
-
-  const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants(cycle.id),
+  const { data: dataWorks } = useWorks(
+    { where: { cycles: { some: { id: cycle?.id } } } },
     {
-      enabled:!!cycle
-    }
-  )
+      enabled: !!cycle?.id,
+    },
+  );
+  const [works, setWorks] = useState(dataWorks?.works);
+  useEffect(() => {
+    if (dataWorks) setWorks(dataWorks.works);
+  }, [dataWorks]);
+
+  const { data: participants, isLoading: isLoadingParticipants } = useUsers(whereCycleParticipants(cycle.id), {
+    enabled: !!cycle,
+  });
 
   const clearPayload = () => {
-    if(editorRef.current)
-      editorRef.current.setContent('');
-    setDiscussionItem('');
+    if (editorRef.current) editorRef.current.setContent('');
+    setSelection('');
     setEurekaTopics(() => []);
     setNewEurekaImageFile(null);
     setCurrentImg(null);
@@ -117,21 +131,21 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
       contentText: '',
       topics: eurekaTopics,
     }));
-
+    setUSeCrop(false);
     close();
   };
   const clearCreateEurekaForm = () => {
     clearPayload();
   };
 
-   const formValidation = (payload:any) => {
-    if (!discussionItem) {
-          toast.error( t('requiredDiscussionItemError'))
-          return false;
-    }else  if (!newEurekaImageFile) {
-      toast.error( t('requiredEurekaImageError'))
-          return false;
-    }/*else if (!payload.title.length) {
+  const formValidation = (payload: any) => {
+    if (!selection) {
+      toast.error(t('requiredDiscussionItemError'));
+      return false;
+    } else if (!newEurekaImageFile) {
+      toast.error(t('requiredEurekaImageError'));
+      return false;
+    } /*else if (!payload.title.length) {
       toast.error( t('NotTitle'))
           return false;
     }else if (!payload.contentText.length) {
@@ -140,7 +154,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
     }*/
     return true;
   };
-  
+
   const handlerSubmitCreateEureka = async (e: MouseEvent<HTMLButtonElement>): Promise<void> => {
     e.preventDefault();
 
@@ -151,12 +165,11 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         title: newEureka.title,
         image: newEurekaImageFile!,
         language: newEureka.language,
-        contentText: (editorRef.current) ? editorRef.current.getContent() : "",
+        contentText: editorRef.current ? editorRef.current.getContent() : '',
         isPublic: newEureka.isPublic,
         topics: eurekaTopics.join(','),
       };
-      if(formValidation(payload))
-        await execCreateEureka(payload);
+      if (formValidation(payload)) await execCreateEureka(payload);
     } else if (newEureka.selectedCycleId) {
       const payload: CreatePostAboutCycleClientPayload = {
         selectedCycleId: newEureka.selectedCycleId,
@@ -164,42 +177,39 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         title: newEureka.title,
         image: newEurekaImageFile!,
         language: newEureka.language,
-        contentText: (editorRef.current) ? editorRef.current.getContent() : "",
+        contentText: editorRef.current ? editorRef.current.getContent() : '',
         isPublic: newEureka.isPublic,
         topics: eurekaTopics.join(','),
-      }; 
-      if(formValidation(payload))
-         await execCreateEureka(payload);
+      };
+      if (formValidation(payload)) await execCreateEureka(payload);
     }
   };
 
   const { mutate: execCreateEureka, isLoading } = useMutation(
     async (payload: CreatePostAboutCycleClientPayload | CreatePostAboutWorkClientPayload): Promise<Post | null> => {
       const u = session!.user;
-      const toUsers = (participants||[]).filter(p=>p.id!==u.id).map(p=>p.id);
-      if(u.id !== cycle.creatorId)
-        toUsers.push(cycle.creatorId);
+      const toUsers = (participants || []).filter((p) => p.id !== u.id).map((p) => p.id);
+      if (u.id !== cycle.creatorId) toUsers.push(cycle.creatorId);
       let message = '';
-      let notificationContextURL = router.asPath
+      let notificationContextURL = router.asPath;
       if (payload.selectedWorkId) {
         if (works) {
-          const work = works.find(w=>w.id === payload.selectedWorkId);
-          if(work){
+          const work = works.find((w) => w.id === payload.selectedWorkId);
+          if (work) {
             message = `eurekaCreatedAboutWorkInCycle!|!${JSON.stringify({
-              userName:u.name||'',
-              workTitle:work.title,
-              cycleTitle:cycle.title
-            })}`; 
-            notificationContextURL = `/work/${work.id}/post`         
-          }          
+              userName: u.name || '',
+              workTitle: work.title,
+              cycleTitle: cycle.title,
+            })}`;
+            notificationContextURL = `/work/${work.id}/post`;
+          }
         }
-      }
-      else if(payload.selectedCycleId){
+      } else if (payload.selectedCycleId) {
         message = `eurekaCreatedAboutCycle!|!${JSON.stringify({
-          userName:u.name||'',
-          cycleTitle:cycle.title
-        })}`;  
-        notificationContextURL = `/cycle/${cycle.id}/post`       
+          userName: u.name || '',
+          cycleTitle: cycle.title,
+        })}`;
+        notificationContextURL = `/cycle/${cycle.id}/post`;
       }
       const formData = new FormData();
       Object.entries(payload).forEach(([key, value]) => {
@@ -217,22 +227,20 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         body: formData,
       });
 
-      if(!res.ok)//TODO add Toast notification to the user
+      if (!res.ok)
+        //TODO add Toast notification to the user
         return null;
 
       const json = await res.json();
 
       if (json) {
-        
-        if(notifier){
-          
-            notifier.notify({
-              toUsers,
-              data:{message}
-            });
-            
-        } 
-        toast.success( t('postCreated'))
+        if (notifier) {
+          notifier.notify({
+            toUsers,
+            data: { message },
+          });
+        }
+        toast.success(t('postCreated'));
         clearPayload();
         return json.post;
       }
@@ -246,38 +254,36 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         return { previewsItems, cacheKey };
       },
       onSettled: (_eureka, error, _variables, context) => {
-
         if (error) {
           if (context) {
             queryClient.setQueryData(context.cacheKey, context.previewsItems);
           }
           // console.error(error);
         }
-        if (context && session){
+        if (context && session) {
           queryClient.invalidateQueries(context.cacheKey);
-          queryClient.invalidateQueries(['USER',session.user.id.toString()]);//to get the new notification
-        } 
+          queryClient.invalidateQueries(['USER', session.user.id.toString()]); //to get the new notification
+        }
       },
     },
   );
 
-
   useEffect(() => {
-    if (!discussionItem) return;
-    if (discussionItem === '-1') {
+    if (!selection) return;
+    if (selection === '-1') {
       setNewEureka((res) => ({
         ...res,
         selectedCycleId: cycle.id,
       }));
     } else {
-      const [entity, id] = discussionItem.split('-');
+      const [entity, id] = selection.split('-');
       if (entity === 'work')
         setNewEureka((res) => ({
           ...res,
           selectedWorkId: parseInt(id, 10),
         }));
     }
-  }, [discussionItem, cycle.id]);
+  }, [selection, cycle.id]);
 
   const onChangeFieldEurekaForm = (e: ChangeEvent<HTMLInputElement>) => {
     const key: string = e.target.id.split('-')[1];
@@ -290,29 +296,24 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
     // console.log(newEureka);
   };
 
-    const onGenerateCrop = (photo: File) => {
-    setNewEurekaImageFile(()=>photo);
+  const onGenerateCrop = (photo: File) => {
+    setNewEurekaImageFile(() => photo);
     setCurrentImg(URL.createObjectURL(photo));
     //setChangingPhoto(true);
     setShowCrop(false);
   };
 
-    const closeCrop = () => {
+  const closeCrop = () => {
     setShowCrop(false);
   };
 
-  const renderPhoto = ()=>{
-   if(currentImg)
-    return <img
-        className={styles.postImage}
-        src={currentImg}
-        alt=''
-      />;
+  const renderPhoto = () => {
+    if (currentImg) return <img className={styles.postImage} src={currentImg} alt="" />;
   };
 
-    const onImageSelect = (photo: File, text: string) => {
-    setNewEurekaImageFile(()=>photo);
-     setNewEureka((res) => ({
+  const onImageSelect = (photo: File, text: string) => {
+    setNewEurekaImageFile(() => photo);
+    setNewEureka((res) => ({
       ...res,
       title: text,
     }));
@@ -324,45 +325,95 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   };
 
   const handleChangeUseOtherFields = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setUseOtherFields(event.target.checked);
-      //setSelectedCycle(null);
-      setEurekaTopics([]);
+    setUseOtherFields(event.target.checked);
+    //setSelectedCycle(null);
+    setEurekaTopics([]);
   };
 
-  return <Form ref={formRef}>
-      <section className='my-3'>
-         {!useCrop && <Prompt onImageSelect={onImageSelect} margin={false} />}
-         <Form.Group className='mt-4 mb-4'>
-          <FormControlLabel control={<Switch  checked={useCrop} onChange={handleChangeUseCropSwith}/>} label={t('showCrop')} />
+  const onChangeDiscussionItem = (e: SelectChangeEvent) => {
+    setSelection(() => e.target.value);
+    setDiscussionItem(selection);
+  };
+
+  const getWorksOpt = () => {
+    if (!works) return [];
+    return works.map((w) => {
+      return (
+        <MenuItem key={w.id} value={`work-${w.id}`}>
+          {w.title}
+        </MenuItem>
+      );
+    });
+  };
+
+  return (
+    <Form ref={formRef}>
+      <section className="my-3">
+        {!useCrop && <Prompt onImageSelect={onImageSelect} showTitle={true} margin={false} />}
+        <Form.Group className="mt-4 mb-4">
+          <FormControlLabel
+            control={<Switch checked={useCrop} onChange={handleChangeUseCropSwith} />}
+            label={t('showCrop')}
+          />
         </Form.Group>
-        {useCrop && <Row className="d-flex justify-content-center flex-column flex-column-reverse flex-lg-row flex-lg-row-reverse">
-            <Col className='mb-4 d-flex justify-content-center justify-content-lg-start'>
+        {useCrop && (
+          <Row className="d-flex justify-content-center flex-column flex-column-reverse flex-lg-row flex-lg-row-reverse">
+            <Col className="mb-4 d-flex justify-content-center justify-content-lg-start">
               {<div className={styles.imageContainer}>{renderPhoto()}</div>}
-              </Col>
-            <Col xs={12} md={8} className='mt-2 mb-4'>
-                {!showCrop && (<Button data-cy="image-load" variant="primary" className="btn-eureka w-100" onClick={() => setShowCrop(true)}>
+            </Col>
+            <Col xs={12} md={8} className="mt-2 mb-4">
+              {!showCrop && (
+                <Button
+                  data-cy="image-load"
+                  variant="primary"
+                  className="btn-eureka w-100"
+                  onClick={() => setShowCrop(true)}
+                >
                   {t('Image')}
                 </Button>
-                )}        
-                { showCrop && (
-                <Col className='d-flex'>
-                  <div className='w-100 border p-3'>  
-                  <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={closeCrop} cropShape='rect' />
-                  </div>  
+              )}
+              {showCrop && (
+                <Col className="d-flex">
+                  <div className="w-100 border p-3">
+                    <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={closeCrop} cropShape="rect" />
+                  </div>
                 </Col>
-               )}      
-            </Col>  
-            </Row>}
-         </section>
-         {newEurekaImageFile && <>
-         <Form.Group controlId="eureka-title" >
-                 <TextField id="eureka-title" className="w-100 mb-4" inputProps={{ maxLength: 80 }} label={t('Title')}
-                        variant="outlined" size="small"  value={newEureka.title}
-                      onChange={onChangeFieldEurekaForm}> 
-                 </TextField>
-              </Form.Group>  
-
-      {/*<Form.Group controlId="eureka-title" className="mb-3">
+              )}
+            </Col>
+          </Row>
+        )}
+      </section>
+      {newEurekaImageFile && (
+        <>
+          <Form.Group controlId="eureka-title">
+            <FormControl className="mb-4 w-100">
+              <InputLabel id="discussionItem">{t('emptyDiscussionItemLbl')}</InputLabel>
+              <Select
+                variant="outlined"
+                labelId="discussionItem"
+                size="small"
+                name="discussionItem"
+                id="discussionItem"
+                label={t('emptyDiscussionItemLbl')}
+                onChange={onChangeDiscussionItem}
+                value={selection}
+              >
+                <MenuItem value="-1">{t('Cycle itself')}</MenuItem>
+                {getWorksOpt()}
+              </Select>
+            </FormControl>
+            <TextField
+              id="eureka-title"
+              className="w-100 mb-4"
+              inputProps={{ maxLength: 80 }}
+              label={t('Title')}
+              variant="outlined"
+              size="small"
+              value={newEureka.title}
+              onChange={onChangeFieldEurekaForm}
+            ></TextField>
+          </Form.Group>
+          {/*<Form.Group controlId="eureka-title" className="mb-3">
         {/*<Form.Control
           type="text"
           maxLength={80}
@@ -373,33 +424,32 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         />
       </Form.Group>
       {/* @ts-ignore*/}
-      <EditorCmp
-        apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
-        onInit={(_: any, editor) => {
-          editorRef.current = editor;
-        }}
-        initialValue={newEureka.contentText}
-        init={{
-          height: 300,
-          menubar: false,
-          plugins: [
-            'advlist autolink lists link image charmap print preview anchor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table paste code help wordcount',
-          ],
-          relative_urls: false,
-          forced_root_block : "div",
-          toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
-          // toolbar:
-          //   'undo redo | formatselect | ' +
-          //   'bold italic backcolor | alignleft aligncenter ' +
-          //   'alignright alignjustify | bullist numlist outdent indent | ' +
-          //   'removeformat | help',
-          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-        }}
-      />
-
-      {/* <Form.Group controlId="eureka-contentText">
+          <EditorCmp
+            apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
+            onInit={(_: any, editor) => {
+              editorRef.current = editor;
+            }}
+            initialValue={newEureka.contentText}
+            init={{
+              height: 300,
+              menubar: false,
+              plugins: [
+                'advlist autolink lists link image charmap print preview anchor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table paste code help wordcount',
+              ],
+              relative_urls: false,
+              forced_root_block: 'div',
+              toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
+              // toolbar:
+              //   'undo redo | formatselect | ' +
+              //   'bold italic backcolor | alignleft aligncenter ' +
+              //   'alignright alignjustify | bullist numlist outdent indent | ' +
+              //   'removeformat | help',
+              content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+            }}
+          />
+          {/* <Form.Group controlId="eureka-contentText">
         <Form.Control
           as="textarea"
           rows={3}
@@ -447,7 +497,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
           )}
         </ImageFileSelect>
       </Form.Group>*/}
-      {/*<Row>
+          {/*<Row>
         <Col xs={12} md={8}>
           <Form.Group controlId="topics">
             {/* <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel> 
@@ -465,43 +515,53 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
           </Form.Group>
         </Col>
       </Row>*/}
-      <Row>
-        <Col xs={12} md={8}>
-           <Form.Group className='mt-5 mb-4'>
-                <FormControlLabel control={<Switch  checked={useOtherFields} onChange={handleChangeUseOtherFields}/>} label={t('showOthersFields')} />
-            </Form.Group>  
-          {useOtherFields && <Form.Group controlId="topics">
-            {/* <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel> */}
-            <TagsInputTypeAheadMaterial
-              style={{ background: 'white' }}
-              data={topics}
-              items={eurekaTopics}
-              setItems={setEurekaTopics}
-              max={3}
-              label={t('Type to add tag')}
-              placeholder={`${t('Type to add tag')}...`}
-              formatValue={(v: string) => t(`topics:${v}`)} 
-              className="mt-3"
-            />
-          </Form.Group>}
-        </Col>
-      </Row> </>}
-
-      <aside className="d-flex justify-content-end">
-        <ButtonGroup size="sm" className="pt-3">
-          <Button variant="warning" className='text-white' onClick={clearCreateEurekaForm} disabled={isLoading}>
-            <ImCancelCircle />
-          </Button>
-          <Button data-cy="create-eureka-btn" onClick={handlerSubmitCreateEureka} className="text-white"  style={{ width: '8rem' }} disabled={isLoading}>
-            <span>
-             {t('Create')}
-            </span>
-            {isLoading && <Spinner size="sm" animation="grow" />}
-          </Button>
-        </ButtonGroup>
-      </aside>
-    </Form>;
-  
+          <Row>
+            <Col xs={12} md={8}>
+              <Form.Group className="mt-5 mb-4">
+                <FormControlLabel
+                  control={<Switch checked={useOtherFields} onChange={handleChangeUseOtherFields} />}
+                  label={t('showOthersFields')}
+                />
+              </Form.Group>
+              {useOtherFields && (
+                <Form.Group controlId="topics">
+                  {/* <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel> */}
+                  <TagsInputTypeAheadMaterial
+                    style={{ background: 'white' }}
+                    data={topics}
+                    items={eurekaTopics}
+                    setItems={setEurekaTopics}
+                    max={3}
+                    label={t('Type to add tag')}
+                    placeholder={`${t('Type to add tag')}...`}
+                    formatValue={(v: string) => t(`topics:${v}`)}
+                    className="mt-3"
+                  />
+                </Form.Group>
+              )}
+            </Col>
+          </Row>{' '}
+          <aside className="d-flex justify-content-end">
+            <ButtonGroup size="sm" className="pt-3">
+              <Button variant="warning" className="text-white" onClick={clearCreateEurekaForm} disabled={isLoading}>
+                <ImCancelCircle />
+              </Button>
+              <Button
+                data-cy="create-eureka-btn"
+                onClick={handlerSubmitCreateEureka}
+                className="text-white"
+                style={{ width: '8rem' }}
+                disabled={isLoading}
+              >
+                <span>{t('Create')}</span>
+                {isLoading && <Spinner size="sm" animation="grow" />}
+              </Button>
+            </ButtonGroup>
+          </aside>
+        </>
+      )}
+    </Form>
+  );
 };
 
 export default CycleDetailDiscussionCreateEurekaForm;

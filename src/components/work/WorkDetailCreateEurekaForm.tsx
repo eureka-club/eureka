@@ -108,7 +108,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
       contentText: '',
       topics: eurekaTopics,
     }));
-
+    setUSeCrop(false);
     close();
   };
   const clearCreateEurekaForm = () => {
