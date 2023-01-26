@@ -27,8 +27,8 @@ const topics = ['gender-feminisms', 'technology', 'environment',
     'sciences','arts-culture','history',
 ];
 
-const fetchItems = async (pageParam: number,topic:string):Promise<GetAllByResonse> => {
-        const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/getAllBy?topic=${topic}&cursor=${pageParam}`;
+const fetchItems = async (pageParam: number,topic:string,sessionId:number):Promise<GetAllByResonse> => {
+        const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/getAllBy?topic=${topic}&cursor=${pageParam}&sessionId=${sessionId}`;
         const q = await fetch(url);
         return q.json();
 };
@@ -66,7 +66,7 @@ const HomeSingIn: FunctionComponent<Props> = ({ groupedByTopics}) => {
       if(!isCanceled){
         const exist = topics[idx] in gbt;
         const fi = async ()=>{
-          const r = await fetchItems(0,topics[idx]);
+          const r = await fetchItems(0,topics[idx],session?.user.id!);
           gbt.push([topics[idx],r])
           if(r){
             setGBT([...gbt]);

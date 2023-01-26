@@ -29,8 +29,8 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
         contentText: true;
       };
     };
-    usersJoined:true;
-    participants:true;
+    usersJoined:{select:{userId:true,pending:true}};
+    participants:{select:{id:true}};
     works:{include:{
       localImages: {select:{storedFile:true}};
       _count:{select:{ratings:true}};

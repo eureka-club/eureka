@@ -23,8 +23,8 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
           contentText: true,
         },
       },
-      usersJoined:true,
-      participants:true,
+      usersJoined:{select:{userId:true,pending:true}},
+      participants:{select:{id:true}},
       works:{include:{
         localImages: {select:{storedFile:true}},
         _count:{select:{ratings:true}},
@@ -102,8 +102,8 @@ export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<CycleMos
           contentText: true,
         },
       },
-      participants:true,
-      usersJoined:true,
+      usersJoined:{select:{userId:true,pending:true}},
+      participants:{select:{id:true}},
       works:{include:{
         localImages: {select:{storedFile:true}},
         _count:{select:{ratings:true}},
