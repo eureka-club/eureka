@@ -80,21 +80,27 @@ const MosaicItem: FunctionComponent<Props> = ({
    if(!post)return <></>
 
   const parentLinkHref = ((): string | null => {
-    if (post.works.length) {
-      return `/work/${post.works[0].id}`;
-    }
-    else if (post.cycles[0]) {
-      return `/cycle/${post.cycles[0].id}`;
+    if(post){
+      if (post.works?.length) {
+        return `/work/${post.works[0].id}`;
+      }
+      else if (post.cycles?.length && post.cycles[0]) {
+        return `/cycle/${post.cycles[0].id}`;
+      }
     }
     return null;
   })();
   const postLinkHref = ((): string => {
-    if (post.works.length) {
-      return `/work/${post.works[0].id}/post/${post.id}`;
+    if(post){
+      if(!post.works){debugger;}
+      if (post.works.length) {
+        return `/work/${post.works[0].id}/post/${post.id}`;
+      }
+      else if (post.cycles.length) {
+        return `/cycle/${post.cycles[0].id}/post/${post.id}`;
+      }    
+
     }
-    else if (post.cycles.length) {
-      return `/cycle/${post.cycles[0].id}/post/${post.id}`;
-    }    
     return `/post/${post.id}`;
   })();
 
@@ -179,7 +185,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           {post && showdetail && (
           <div className={`${styles.postDetail}`}>
                <div  className={`d-flex flex-row fs-6 `}>
-                <Avatar width={27} height={27} userId={post.creator.id} showFullName={false} size= {(!size) ? "xs" :"sm" } />
+                <Avatar width={27} height={27} userId={post.creatorId} showFullName={false} size= {(!size) ? "xs" :"sm" } />
                 <span className={` ms-1 me-1 d-flex align-items-center ${(!size) ?  styles.detailText : ""}`}>-</span>
                 <span className={`d-flex align-items-center ${(!size) ?  styles.detailText : ""}`}>{dayjs(post.createdAt).format(DATE_FORMAT_SHORT)}</span>
                 </div>

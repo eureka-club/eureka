@@ -231,7 +231,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
               {post == null ? (
                 <Row className="mb-5 d-flex flex-column flex-md-row">
                   <Col className="col-md-5 col-lg-4 col-xl-3   d-none d-md-block">
-                    <MosaicItem workId={work.id} showTrash linkToWork={false} size={'lg'} showSaveForLater={true} />
+                    <MosaicItem work={work} workId={work.id} showTrash linkToWork={false} size={'lg'} showSaveForLater={true} />
                     {/* <div className={classNames(styles.imgWrapper, 'mb-3')}>
                   <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
                 </div>
@@ -266,6 +266,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                       <div className="container d-sm-block d-md-none mt-4 mb-4 position-relative">
                         <MosaicItem
                           className="postition-absolute start-50 translate-middle-x"
+                          work={work}
                           workId={work.id}
                           showTrash
                           linkToWork={false}

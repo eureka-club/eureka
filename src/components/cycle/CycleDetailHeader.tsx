@@ -55,7 +55,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   // const router = useRouter();
   const [show, setShow] = useState<boolean>(s);
 
-  const {data:session} = useSession();
+  // const {data:session} = useSession();
   const { t } = useTranslation('cycleDetail');
 
   const {data:cycle,isLoading:isLoadingCycle} = useCycle(cycleId,{enabled:!!cycleId})
