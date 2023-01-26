@@ -59,7 +59,7 @@ const CycleDetailWorks: React.FC<Props> = ({cycleWorksDates}) => {
   
   return <>
       <h4 className="h5 mt-5 mb-3 fw-bold text-gray-dark">
-        {t('worksCountHeader', { count: works.length })}
+        {t('worksCountHeader', { count: works.length })} 
       </h4>
       <section className="d-flex justify-content-center justify-content-lg-start">
         <div className='d-flex flex-wrap flex-column flex-lg-row'>      
@@ -67,7 +67,7 @@ const CycleDetailWorks: React.FC<Props> = ({cycleWorksDates}) => {
             if(!w)return ''
             queryClient.setQueryData(['WORK',`${w.id}`],w)
             return <div className='p-4' key={w.id}>
-                            <WorkMosaic  workId={w.id} size={'md'} showSaveForLater={true} />
+                            <WorkMosaic work={w as WorkMosaicItem} workId={w.id} size={'md'} showSaveForLater={true} />
                       </div>
           })}
         </div>

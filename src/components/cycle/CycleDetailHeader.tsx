@@ -18,7 +18,7 @@ import MosaicItem from './MosaicItem';
 import TagsInput from '../forms/controls/TagsInput';
 import UserAvatar from '../common/UserAvatar';
 import { MosaicContext } from '../../useMosaicContext';
-import useWorks from '@/src/useWorks'
+// import useWorks from '@/src/useWorks'
 import useCycle from '@/src/useCycle'
 import CarouselStatic from '../CarouselStatic';
 interface Props {
@@ -60,13 +60,14 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
 
   const {data:cycle,isLoading:isLoadingCycle} = useCycle(cycleId,{enabled:!!cycleId})
 
-  const { data: dataWorks } = useWorks({ where:{cycles: { some: { id: cycleId} }} }, {
-    enabled:!!cycleId
-  })
-  const [works,setWorks] = useState(dataWorks?.works)
-  useEffect(()=>{
-    if(dataWorks)setWorks(dataWorks.works)
-  },[dataWorks])
+  // const { data: dataWorks } = useWorks({ where:{cycles: { some: { id: cycleId} }} }, {
+  //   enabled:!!cycleId
+  // })
+  const works = cycle?.cycleWorksDates?.map(c=>c.work)
+  // const [works,setWorks] = useState(dataWorks?.works)
+  // useEffect(()=>{
+  //   if(dataWorks)setWorks(dataWorks.works)
+  // },[dataWorks])
 
   const [qty, setQty] = useState(cycle?.ratingAVG||0);
   useEffect(()=>{
@@ -124,8 +125,8 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
       })
       .forEach((cw) => {
         if (works) {
-          const idx = works.findIndex((w) => w.id === cw.workId);
-          res.push(works[idx]);          
+          const idx = works?.findIndex((w) => w!.id === cw.workId);
+          res.push(works[idx]!);          
         }
       });
     if (cycle.cycleWorksDates.length) return res;

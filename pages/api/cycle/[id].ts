@@ -65,20 +65,13 @@ export default getApiHandler()
           let ratingAVG = 0;
           if(session){
             currentUserIsCreator = cycle.creatorId == session.user.id
-            const c = await prisma.cycle.findUnique({
-              where:{id},
-              select:{
-                participants:{select:{id:true}},
-                usersJoined:{select:{userId:true,cycleId:true,pending:true}},
-                ratings:true,
-              }
-            })
+            const c = await find(id)
             if(c){
               currentUserIsParticipant =  currentUserIsCreator || c.participants.findIndex(p=>p.id==session.user.id) > -1;
               currentUserIsPending = c.usersJoined.findIndex(p=>p.userId==session.user.id && cycle.id==p.cycleId && p.pending) > -1;
-              ratingAVG = c.ratings.reduce((p,c)=>c.qty+p,0)/ratingCount
-              let r  = c.ratings.find(r=>r.userId==session.user.id)
-              if(r)currentUserRating = r.qty;
+              // ratingAVG = c.ratings.reduce((p,c)=>c.qty+p,0)/ratingCount
+              // let r  = c.ratings.find(r=>r.userId==session.user.id)
+              // if(r)currentUserRating = r.qty;
             }
             currentUserIsFav = cycle.favs.findIndex(p=>p.id==session.user.id) > -1;
             

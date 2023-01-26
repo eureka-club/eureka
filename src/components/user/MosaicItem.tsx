@@ -140,7 +140,7 @@ const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = fa
       <Row className='d-flex flex-row'>
         <Col xs={3} md={3}>
           <section>
-            <UserAvatar width={42} height={42} userId={user.id} showName={false} />
+            <UserAvatar width={42} height={42} user={user} userId={user.id} showName={false} />
           </section>
           {/* <img src={image || '/assets/avatar.png'} alt="User Avatar" /> */}
         </Col>

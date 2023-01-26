@@ -30,6 +30,8 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
         contentText: true;
       };
     };
+    usersJoined:true,
+    participants:true,
     // participants:{
     //   select:{
     //     id:true;

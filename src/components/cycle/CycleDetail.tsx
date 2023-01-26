@@ -92,10 +92,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     }
   )
 
-  
-
-  
-
   const cyclePostsProps = {take:8,where:{cycles:{some:{id:+cycleId}}}}
   const {data:dataPosts} = usePosts(cyclePostsProps,{enabled:!!cycleId})
   const [posts,setPosts] = useState(dataPosts?.posts)

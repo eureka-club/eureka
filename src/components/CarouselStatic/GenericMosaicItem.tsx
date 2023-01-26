@@ -33,6 +33,7 @@ import { GenericMosaicItemProps } from "./types";
         <MosaicItemWork
           showSocialInteraction={showSocialInteraction}
           showButtonLabels={false}
+          work={item}
           workId={item.id}
           style={customMosaicStyle}
           size={size}

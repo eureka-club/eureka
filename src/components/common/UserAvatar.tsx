@@ -1,4 +1,4 @@
-import { FunctionComponent, SyntheticEvent,MouseEvent} from 'react';
+import { FunctionComponent, SyntheticEvent,MouseEvent, useState, useEffect} from 'react';
 import useUser from '@/src/useUser'
 import { useRouter } from 'next/router';
 import styles from './UserAvatar.module.css';
@@ -6,6 +6,7 @@ import LocalImageComponent from '@/src/components/LocalImage'
 import { UserMosaicItem } from '@/src/types/user';
 import slugify from 'slugify'
 interface Props {
+  user?:UserMosaicItem;
   userId: number;
   showName?: boolean;
   showFullName?: boolean;
@@ -25,6 +26,7 @@ const getMediathequeSlug = (user:UserMosaicItem)=>{
 }
 
 const UserAvatar: FunctionComponent<Props> = ({
+  user:userItem,
   userId,
   size = 'md',
   showName = true,
@@ -37,9 +39,13 @@ const UserAvatar: FunctionComponent<Props> = ({
   const onLoadImgError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = '/img/default-avatar.png';
   };
- const {data:user} = useUser(userId,{
-    enabled:!!userId
+  const [user,setUser] = useState(userItem)
+  const {data} = useUser(userId,{
+    enabled:!!userId && !userItem
   })
+  useEffect(()=>{
+    if(data && !userItem)setUser(data)
+  },[data])
 
   const renderUserName = () => {
     let res = '';
