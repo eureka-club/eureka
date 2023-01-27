@@ -7,7 +7,9 @@ import styles from './PostPrompt.module.css';
 import { getImg } from '@/src/lib/utils';
 import { BiArrowBack } from 'react-icons/bi';
 import toast from 'react-hot-toast';
-
+import { useSession } from 'next-auth/react';
+import { useModalContext } from '@/src/useModal';
+import SignInForm from '../forms/SignInForm';
 interface Props {
   onImageSelect?: (file: File, text: string) => void;
   showTitle?:boolean;
@@ -35,6 +37,8 @@ const PostPrompt: FunctionComponent<Props> = ({
   const [currentImg, setCurrentImg] = useState<string | undefined>();
   const [progress, setProgress] = useState(0);
   const [showOptions, setShowOptions] = useState<boolean>(true);
+  const { data: session, status } = useSession();
+  const { show } = useModalContext();
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -68,7 +72,7 @@ const PostPrompt: FunctionComponent<Props> = ({
   }
 
   function formValidation() {
-    if (!text.length) {
+    if (session && !text.length) {
       toast.error(t('NoPromptText'));
       return false;
     }
@@ -77,6 +81,10 @@ const PostPrompt: FunctionComponent<Props> = ({
 
   async function handleSearch(e: MouseEvent<HTMLButtonElement>) {
     e.stopPropagation();
+     if (!session){ 
+        show(<SignInForm/>)
+        return null;
+     }
     if (formValidation()) {
       if (redirect) router.push(`/post/create?searchtext=${text}&searchstyle=${style}`);
       else await searchImages();

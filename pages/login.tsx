@@ -20,7 +20,7 @@ const LoginPage: NextPage = () => {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   ///const session = await getSession(ctx);
  // if (session != null) {
-    return { redirect: { destination: '/', permanent: false } };
+    //return { redirect: { destination: '/', permanent: false } };
  // }
 
   return { props: {} };
