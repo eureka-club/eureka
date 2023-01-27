@@ -78,6 +78,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     enabled:!!cycleId
   });
 
+  const works = cycle?.cycleWorksDates?.length
+    ? cycle?.cycleWorksDates
+    : cycle?.works.map(w=>({id:w.id,workId:w.id,work:w,startDate:new Date(),endDate:new Date()}))
 
   const whereCycleParticipants = {
     where:{OR:[
@@ -462,7 +465,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                       <NavItem className={`border-primary border-bottom cursor-pointer ${styles.tabBtn}`}>
                         <NavLink eventKey="cycle-about">
                           <span className="mb-3">
-                            {t('About')} ({cycle.cycleWorksDates && cycle.cycleWorksDates.length})
+                            {t('About')} ({works?.length})
                           </span>
                         </NavLink>
                       </NavItem>
@@ -484,8 +487,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                             {/* <UnclampText text={cycle.contentText} clampHeight="7rem" /> */}
                           </div>
                         )}
-                        <MosaicContext.Provider value={{ showShare: true }}>                        
-                          {cycle && cycle.cycleWorksDates && <CycleDetailWorks cycleWorksDates={cycle.cycleWorksDates} /> || ''}
+                        <MosaicContext.Provider value={{ showShare: true }}>                     
+                          {works && <CycleDetailWorks cycleWorksDates={works!} /> || ''}
                         </MosaicContext.Provider>
                         {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (
                           <Row className="mt-5 mb-5">

@@ -23,36 +23,18 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
     localImages: {select:{
       storedFile:true
     }};
-    //complementaryMaterials: true;
     guidelines: {
       select: {
         title: true;
         contentText: true;
       };
     };
-    usersJoined:true,
-    participants:true,
-    // participants:{
-    //   select:{
-    //     id:true;
-    //     name:true;
-    //     countryOfOrigin:true;
-    //     favWorks:{select:{id:true}};
-    //     ratingWorks:{select:{workId:true}};
-    //     photos:{select:{storedFile:true}};
-    //     notifications:{
-    //       select:{
-    //         viewed:true;
-    //         notification:{select:{message:true;createdAt:true}}}
-    //       }
-    //   }
-    // };     
-    // ratings: { 
-    //   select: { 
-    //     qty:true;
-    //     userId:true;
-    //   } 
-    // };
+    usersJoined:{select:{userId:true,pending:true}};
+    participants:{select:{id:true}};
+    works:{include:{
+      localImages: {select:{storedFile:true}};
+      _count:{select:{ratings:true}};
+    }};
     favs: {
       select:{id:true}
     };
@@ -70,7 +52,6 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
         };
       }
     };
-    // comments:true;
     _count:{
       select:{
         participants:true;
@@ -78,7 +59,6 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
       },
     };
     complementaryMaterials:true;
-    
   }
 }> & { 
   type?: 'cycle';

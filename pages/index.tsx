@@ -24,8 +24,8 @@ const topics = ['gender-feminisms', 'technology', 'environment',
     'migrants-refugees','introspection',
     'sciences','arts-culture','history',
 ];
-const fetchItems = async (pageParam: number,topic:string):Promise<GetAllByResonse> => {
-  const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/getAllBy?topic=${topic}&cursor=${pageParam}`;
+const fetchItems = async (pageParam: number,topic:string,sessionId:number):Promise<GetAllByResonse> => {
+  const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/getAllBy?topic=${topic}&cursor=${pageParam}&sessionId=${sessionId}`;
   const q = await fetch(url);
   return q.json();
 };
@@ -105,8 +105,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const interestedCycles = resolved[1]
 
   promises = [
-    fetchItems(0,topics[0]),
-    fetchItems(0,topics[1])
+    fetchItems(0,topics[0],session.user.id),
+    fetchItems(0,topics[1],session.user.id)
   ]
   resolved = await Promise.all(promises)
 
