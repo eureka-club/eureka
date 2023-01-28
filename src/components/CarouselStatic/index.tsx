@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useState, useEffect, useMemo } from 'react';
-import { Col, Spinner,CardGroup } from 'react-bootstrap';
+import { Col, Spinner, CardGroup } from 'react-bootstrap';
 import globalSearchEngineAtom from '../../atoms/searchEngine';
 
 import styles from './index.module.css';
@@ -17,17 +17,16 @@ type Props = {
   iconBefore?: JSX.Element;
   iconAfter?: JSX.Element;
   onSeeAll?: () => void;
-  seeAll?:boolean;
+  seeAll?: boolean;
   data: Item[]; // ((CycleMosaicItem & { type: string }) | WorkMosaicItem)[];
   showSocialInteraction?: boolean;
   customMosaicStyle?: { [key: string]: string };
   className?: string;
-  mosaicBoxClassName?:string;
-  size?: string,
-  cacheKey:[string,string];
-  userMosaicDetailed?: boolean
+  mosaicBoxClassName?: string;
+  size?: string;
+  cacheKey: [string, string];
+  userMosaicDetailed?: boolean;
 };
-
 
 const CarouselStatic: FunctionComponent<Props> = ({
   title,
@@ -35,13 +34,13 @@ const CarouselStatic: FunctionComponent<Props> = ({
   iconBefore,
   iconAfter,
   onSeeAll,
-  seeAll=true,
+  seeAll = true,
   showSocialInteraction = true,
   customMosaicStyle = undefined,
   mosaicBoxClassName,
   size,
   cacheKey,
-  userMosaicDetailed = false 
+  userMosaicDetailed = false,
 }) => {
   const { t } = useTranslation('topics');
   const [dataFiltered, setDataFiltered] = useState<Item[]>([]);
@@ -62,53 +61,60 @@ const CarouselStatic: FunctionComponent<Props> = ({
     }
   }, [data, globalSEState]);
 
-  const handlerSeeAll = ()=>{
-    setIsRedirecting(true)
-    if(onSeeAll)
-      onSeeAll()
-        setIsRedirecting(false)
-  }
+  const handlerSeeAll = () => {
+    setIsRedirecting(true);
+    if (onSeeAll) onSeeAll();
+    setIsRedirecting(false);
+  };
 
-  return useMemo(()=>(
-    <>
-       {(dataFiltered && !!(dataFiltered.length) && ( 
-         <CardGroup className='mb-3'>  
-             <section className="d-flex flex-row  justify-content-between w-100">
-                             <Col xs={9}>
-
-               <h2 className="text-secondary fw-bold">
-                 {iconBefore ? <span className={styles.iconBefore}>{iconBefore}</span> : ''}
-                 {` `} {title} 
-                 {iconAfter ? <span className={styles.iconAfter}>{iconAfter}</span> : ''}
-               </h2>
-               </Col>
-               <Col xs={3} className="d-flex justify-content-end">
-               {seeAll && !!(dataFiltered.length) && <>
-                 {!isRedirecting ? <span
-                   className={`cursor-pointer text-primary ${styles.seeAllButton}`}
-                   role="presentation"
-                   onClick={handlerSeeAll}
-                 >
-                   {t('common:See all')}
-                 </span> : <Spinner animation='grow' />}
-                 </>}
-                 </Col>
-           </section>
-           <div className="carousel d-flex justify-content-center">
-             <Mosaics 
-               data={dataFiltered} cacheKey={cacheKey} userMosaicDetailed={userMosaicDetailed}
-               showSocialInteraction={showSocialInteraction}
-               customMosaicStyle={customMosaicStyle}
-               mosaicBoxClassName={mosaicBoxClassName}
-               size={size}
-             />
-           </div>
-         </CardGroup>  
-      ))} 
-    </>
-       
- ),[dataFiltered])
+  return useMemo(
+    () => (
+      <>
+        {dataFiltered && !!dataFiltered.length && (
+          <CardGroup className="mb-3">
+            <section className="d-flex flex-row  justify-content-between w-100">
+              <Col xs={9}>
+                <h2 className="text-secondary fw-bold">
+                  {iconBefore ? <span className={styles.iconBefore}>{iconBefore}</span> : ''}
+                  {` `} {title}
+                  {iconAfter ? <span className={styles.iconAfter}>{iconAfter}</span> : ''}
+                </h2>
+              </Col>
+              <Col xs={3} className="d-flex justify-content-end">
+                {seeAll && !!dataFiltered.length && (
+                  <>
+                    {!isRedirecting ? (
+                      <span
+                        className={`cursor-pointer text-primary ${styles.seeAllButton}`}
+                        role="presentation"
+                        onClick={handlerSeeAll}
+                      >
+                        {t('common:See all')}
+                      </span>
+                    ) : (
+                      <Spinner animation="grow" />
+                    )}
+                  </>
+                )}
+              </Col>
+            </section>
+            <div className="carousel d-flex justify-content-center">
+              <Mosaics
+                data={dataFiltered}
+                cacheKey={cacheKey}
+                userMosaicDetailed={userMosaicDetailed}
+                showSocialInteraction={showSocialInteraction}
+                customMosaicStyle={customMosaicStyle}
+                mosaicBoxClassName={mosaicBoxClassName}
+                size={size}
+              />
+            </div>
+          </CardGroup>
+        )}
+      </>
+    ),
+    [dataFiltered],
+  );
 };
 
 export default CarouselStatic;
- 

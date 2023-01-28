@@ -129,7 +129,9 @@ const getMediathequeSlug = (id:number,name:string)=>{
   return (
     <>
       <section className="my-5">
-        <Prompt redirect={true} showTitle={true} />
+        <div className="pt-4">
+          <Prompt redirect={true} showTitle={true} />
+        </div>
       </section>
       <section className="d-flex flex-column flex-lg-row">
         <Col xs={12} lg={2} className="me-5">
@@ -157,13 +159,15 @@ const getMediathequeSlug = (id:number,name:string)=>{
           <section className="mt-5 p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
             <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox4')}</h4>
           </section>
+          <section className='mt-4'>
+            <FeaturedUsers />
+          </section>
         </Col>
         <Col xs={12} lg={10} className="mt-5 mt-lg-0">
           <section className="ms-0 ms-lg-5">
             <FeaturedEurekas />
             <FeaturedCycles />
             {/*cyclesJoined()*/}
-            {/* <FeaturedUsers/> */}
             <>
               <div className="mt-5">
                 <CarouselsByTopics groupedByTopics={gbt} />
