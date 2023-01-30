@@ -135,6 +135,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const { t } = useTranslation('cycleDetail');
   
   const tabContainnerRef = useRef<HTMLDivElement>(null);
+  const cycleWorksRef = useRef<HTMLDivElement>(null);
   const [filtersContentType, setFiltersContentType] = useState<string[]>([]);
   const [gldView, setgldView] = useState<Record<string, boolean>>({});
     
@@ -172,8 +173,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   const onCarouselSeeAllAction = async () => {
     setTabKey('cycle-about');
-    if (tabContainnerRef)
-      tabContainnerRef.current!.scrollIntoView({
+    if (cycleWorksRef)
+      cycleWorksRef.current!.scrollIntoView({
         behavior: 'smooth',
       });
   };
@@ -465,7 +466,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                       <NavItem className={`border-primary border-bottom cursor-pointer ${styles.tabBtn}`}>
                         <NavLink eventKey="cycle-about">
                           <span className="mb-3">
-                            {t('About')} ({works?.length})
+                            {t('About')}
                           </span>
                         </NavLink>
                       </NavItem>
@@ -487,9 +488,11 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                             {/* <UnclampText text={cycle.contentText} clampHeight="7rem" /> */}
                           </div>
                         )}
-                        <MosaicContext.Provider value={{ showShare: true }}>                     
-                          {works && <CycleDetailWorks cycleWorksDates={works!} /> || ''}
-                        </MosaicContext.Provider>
+                        <div ref={cycleWorksRef}>
+                          <MosaicContext.Provider value={{ showShare: true }}>                     
+                            {works && <CycleDetailWorks cycleWorksDates={works!} /> || ''}
+                          </MosaicContext.Provider>
+                        </div>
                         {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (
                           <Row className="mt-5 mb-5">
                             <Col className='col-12'>

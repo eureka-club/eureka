@@ -3,7 +3,7 @@ import { NextPage, GetServerSideProps } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import {QueryClient, dehydrate} from 'react-query';
-import { Spinner, ButtonGroup, Button, Form, Alert } from 'react-bootstrap';
+import { ButtonGroup, Button, Alert } from 'react-bootstrap';
 import {getPosts} from '@/src/usePosts'
 import {getWorks} from '@/src/useWorks'
 import {getCycles} from '@/src/useCycles'
