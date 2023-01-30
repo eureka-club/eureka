@@ -119,7 +119,7 @@ const SearchTabworks:FunctionComponent = () => {
         <FilterEngineWork/>
         <Row>
             {works.map(p=><Col xs={12} sm={6} lg={3} xxl={2} className="mb-5 d-flex justify-content-center  align-items-center" key={p.id}>
-              <MosaicItem workId={p.id} className="" cacheKey={['WORK',p.id.toString()]} size={'md'}  /></Col>)}
+              <MosaicItem work={p} workId={p.id} className="" cacheKey={['WORK',p.id.toString()]} size={'md'}  /></Col>)}
         </Row>
         {works?.length!=total && <Spinner ref={ref} animation="grow" />}
       </>
