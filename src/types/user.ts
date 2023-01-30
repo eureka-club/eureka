@@ -33,7 +33,7 @@ type UserFoolow = {
       }
     },
     favWorks:{select:{id:true,createdAt:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,localImages:{select:{storedFile:true}}}},
-    favCycles:{select:{id:true,createdAt:true,creatorId:true,startDate:true,endDate:true,title:true}},
+    favCycles:{select:{id:true,createdAt:true,creatorId:true,startDate:true,endDate:true,title:true,usersJoined:{select:{userId:true,pending:true}},participants:{select:{id:true}}}},
     favPosts:{select:{id:true,createdAt:true}},
     // posts:{select:{id:true}},
     cycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
