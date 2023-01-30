@@ -280,6 +280,10 @@ const SocialInteraction: FunctionComponent<Props> = ({
     // execSocialInteraction({ socialInteraction: 'reaction', doCreate: mySocialInfo ? !mySocialInfo!.favoritedByMe : true });
   const handleCreateEurekaClick = (ev: MouseEvent<HTMLButtonElement>) => { 
     ev.preventDefault();
+    if(!session){
+       openSignInModal();
+       return null;
+    }
     if (canNavigate()){
         /*setIsLoadingCreateEureka(true)
         setTimeout(()=>{setIsLoadingCreateEureka(false)},2500)*/

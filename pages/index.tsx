@@ -14,9 +14,7 @@ import { getFeaturedEurekas } from '@/src/useFeaturedEurekas';
 import {getInterestedCycles} from '@/src/useInterestedCycles';
 import { backOfficeData } from '@/src/types/backoffice';
 
-
-
-const HomeNotSingIn = lazy(()=>import('@/components/HomeNotSingIn'));
+//const HomeNotSingIn = lazy(()=>import('@/components/HomeNotSingIn')); ARQUIMEDES
 const HomeSingIn = lazy(()=>import('@/src/components/HomeSingIn'));
 
 const topics = ['gender-feminisms', 'technology', 'environment',
@@ -41,39 +39,42 @@ const IndexPage: NextPage<Props> = ({groupedByTopics,session}) => {
   const { t } = useTranslation('common');
   // const {data:session,status} = useSession();
   // const isLoadingSession = status === "loading"
-  return <>
-    <Head>
+  return (
+    <>
+      <Head>
         <meta name="title" content={t('meta:indexTitle')}></meta>
         <meta name="description" content={t('meta:indexDescription')}></meta>
-        <meta property="og:title" content='Eureka'/>
-        <meta property="og:description" content="Activa tu mente, transforma el mundo"/>
+        <meta property="og:title" content="Eureka" />
+        <meta property="og:description" content="Activa tu mente, transforma el mundo" />
         <meta property="og:url" content={`${process.env.NEXT_PUBLIC_WEBAPP_URL}`} />
         <meta property="og:image" content={`${process.env.NEXT_PUBLIC_WEBAPP_URL}/logo.jpg`} />
-        <meta property="og:type" content='website' />
+        <meta property="og:type" content="website" />
 
         <meta name="twitter:card" content="summary_large_image"></meta>
         <meta name="twitter:site" content="@eleurekaclub"></meta>
         <meta name="twitter:title" content="Eureka"></meta>
         <meta name="twitter:description" content="Activa tu mente, transforma el mundo"></meta>
-        <meta name="twitter:image" content={`${process.env.NEXT_PUBLIC_WEBAPP_URL}/logo.jpg`} ></meta>
-        <meta name="twitter:url" content={`${process.env.NEXT_PUBLIC_WEBAPP_URL}`} ></meta>  
-    </Head>
-     {/* ESTO SERIA PAGINA USUARIO NO LOGUEADO  PAG ARQUIMEDES y EXPLORE */}
-     {!session && <SimpleLayout allPageSize={true} title={t('browserTitleWelcome')}> 
+        <meta name="twitter:image" content={`${process.env.NEXT_PUBLIC_WEBAPP_URL}/logo.jpg`}></meta>
+        <meta name="twitter:url" content={`${process.env.NEXT_PUBLIC_WEBAPP_URL}`}></meta>
+      </Head>
+
+      {/* ESTO SERIA PAGINA USUARIO NO LOGUEADO  PAG ARQUIMEDES y EXPLORE */}
+      {/*!session && <SimpleLayout allPageSize={true} title={t('browserTitleWelcome')}> 
        <Suspense fallback={<Spinner animation="grow" />}>
             <HomeNotSingIn/>
         </Suspense>
 
       </SimpleLayout>
-     }
-    {session && session.user && <SimpleLayout showCustomBaner={true} title={t('browserTitleWelcome')}>
-      <Suspense fallback={<Spinner animation="grow" />}>
-        {/* ESTO SERIA PAGINA USUARIO LOGUEADO */}
-        <HomeSingIn groupedByTopics={groupedByTopics} />
-      </Suspense>
-    </SimpleLayout>
-    }
-  </>
+         */}
+      {/*{session && session.user &&  */}
+
+      <SimpleLayout showCustomBaner={(!session) ? true : false} title={t('browserTitleWelcome')}>
+        <Suspense fallback={<Spinner animation="grow" />}>
+          <HomeSingIn groupedByTopics={groupedByTopics} />
+        </Suspense>
+      </SimpleLayout>
+    </>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
