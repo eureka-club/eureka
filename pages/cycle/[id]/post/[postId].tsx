@@ -1,4 +1,5 @@
 import { NextPage,GetServerSideProps } from 'next';
+import useTranslation from 'next-translate/useTranslation';
 import Head from "next/head";
 import { useEffect, useState } from 'react';
 import { getSession, useSession } from 'next-auth/react';
@@ -31,6 +32,8 @@ const whereCycleParticipants = (id:number)=>({
 
 const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId,metaTags,session}) => {
   const router = useRouter();
+  const { t } = useTranslation('meta');
+
   // const [post, setPost] = useState<PostMosaicItem>();
   const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
   
@@ -65,33 +68,40 @@ const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId,metaTags,session
 
   return (
     <>
-     <Head>
-        <meta property="og:title" content={`${metaTags.title} · ${metaTags.cycleTitle}`}/>
+      <Head>
+        <meta name="title" content={`${t('postTitle')} ${metaTags.title} - ${metaTags.creator} ${t('postTitle1')} `}></meta>
+        <meta name="description" content={t('postDescription')}></meta>
+        <meta property="og:title" content={`${metaTags.title} · ${metaTags.cycleTitle}`} />
         <meta property="og:url" content={`${WEBAPP_URL}/cycle/${metaTags.cycleId}/post/${metaTags.id}`} />
-        <meta property="og:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${metaTags.storedFile}`}/>
-        <meta property="og:type" content='article'/>
+        <meta
+          property="og:image"
+          content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${metaTags.storedFile}`}
+        />
+        <meta property="og:type" content="article" />
 
         <meta name="twitter:card" content="summary_large_image"></meta>
         <meta name="twitter:site" content="@eleurekaclub"></meta>
         <meta name="twitter:title" content={`${metaTags.title} · ${metaTags.cycleTitle}`}></meta>
         {/* <meta name="twitter:description" content=""></meta>*/}
         <meta name="twitter:url" content={`${WEBAPP_URL}/cycle/${metaTags.cycleId}/post/${metaTags.id}`}></meta>
-        <meta name="twitter:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${metaTags.storedFile}`}></meta>
-
-    </Head>
-    <SimpleLayout title={`${post ? post.title : ''} · ${cycle ? cycle.title : ''}`}>
-      <>
-        {isLoadingOrFetching() && <Spinner animation="grow" variant="info" />}
-        {!isLoadingOrFetching() && post && cycle && (
-          <CycleContext.Provider value={{ cycle, currentUserIsParticipant }}>
-            <CycleDetailComponent
-              post={post}
-              work={post.works.length ? (post.works[0] as WorkMosaicItem) : undefined}
-            />
-          </CycleContext.Provider>
-        )}
-      </>
-    </SimpleLayout>
+        <meta
+          name="twitter:image"
+          content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${metaTags.storedFile}`}
+        ></meta>
+      </Head>
+      <SimpleLayout title={`${post ? post.title : ''} · ${cycle ? cycle.title : ''}`}>
+        <>
+          {isLoadingOrFetching() && <Spinner animation="grow" variant="info" />}
+          {!isLoadingOrFetching() && post && cycle && (
+            <CycleContext.Provider value={{ cycle, currentUserIsParticipant }}>
+              <CycleDetailComponent
+                post={post}
+                work={post.works.length ? (post.works[0] as WorkMosaicItem) : undefined}
+              />
+            </CycleContext.Provider>
+          )}
+        </>
+      </SimpleLayout>
     </>
   );
 };
@@ -109,7 +119,7 @@ export const getServerSideProps:GetServerSideProps = async (ctx) => {
 
  let post = await getPost(postId,origin);
  let cycle = await getCycle(cycleId,origin);
- let metaTags = {id:post?.id, cycleId:cycle?.id, title:post?.title,cycleTitle:cycle?.title, storedFile: post?.localImages[0].storedFile}
+ let metaTags = {id:post?.id, cycleId:cycle?.id, title:post?.title,cycleTitle:cycle?.title,creator:post?.creator.name, storedFile: post?.localImages[0].storedFile}
 
   const queryClient = new QueryClient() 
    await queryClient.prefetchQuery(['USERS',JSON.stringify(wcu)],()=>getUsers(wcu,origin))

@@ -35,24 +35,35 @@ const WorkDetailPage: NextPage<Props> = ({session,metas}) => {
   const { data: work, isLoading: isLoadingWork } = useWork(+id, { enabled: !!id });
 
   const rendetLayout = (title: string, children: ReactElement) => {
-    return <>
+    return (
+      <>
+        <Head>
+          <meta name="title" content={`${t('meta:workTitle')} - ${metas.title} ${t('meta:workTitle1')}`}></meta>
+          <meta
+            name="description"
+            content={`${t('meta:workDescription')} ${metas.title} - ${metas.author} ${t('meta:workDescription1')}`}
+          ></meta>
+          <meta property="og:title" content={metas.title} />
+          <meta property="og:url" content={`${WEBAPP_URL}/work/${metas.id}`} />
+          <meta
+            property="og:image"
+            content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${metas.storedFile}`}
+          />
+          <meta property="og:type" content="article" />
 
-    <Head>
-        <meta property="og:title" content={metas.title}/>
-        <meta property="og:url" content={`${WEBAPP_URL}/work/${metas.id}`} />
-        <meta property="og:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${metas.storedFile}`}/>
-        <meta property="og:type" content="article" /> 
-
-        <meta name="twitter:card" content="summary_large_image"></meta>
-        <meta name="twitter:site" content="@eleurekaclub"></meta>
-        <meta name="twitter:title" content={metas.title}></meta>
-       {/* <meta name="twitter:description" content=""></meta>*/}
-        <meta name="twitter:url" content={`${WEBAPP_URL}/work/${metas.id}`}></meta>
-        <meta name="twitter:image" content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${metas.storedFile}`}></meta>
-
-    </Head>
-     <SimpleLayout title={title}>{children}</SimpleLayout>;
-     </>
+          <meta name="twitter:card" content="summary_large_image"></meta>
+          <meta name="twitter:site" content="@eleurekaclub"></meta>
+          <meta name="twitter:title" content={metas.title}></meta>
+          {/* <meta name="twitter:description" content=""></meta>*/}
+          <meta name="twitter:url" content={`${WEBAPP_URL}/work/${metas.id}`}></meta>
+          <meta
+            name="twitter:image"
+            content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${metas.storedFile}`}
+          ></meta>
+        </Head>
+        <SimpleLayout title={title}>{children}</SimpleLayout>;
+      </>
+    );
   };
   
   if (isLoadingWork) return rendetLayout('Loading...', <Spinner animation="grow" />);
@@ -101,7 +112,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   let work = await getWork(id,origin);
   let metaTags:Record<string,any>={};
   if(work){
-    metaTags = {id:work.id, title:work.title, storedFile: work.localImages[0].storedFile}
+    metaTags = { id: work.id, title: work.title, author: work.author, storedFile: work.localImages[0].storedFile };
     const workPostsWhere = {take:8,where:{works:{some:{id}}}}
     await qc.prefetchQuery(['WORK', `${id}`],()=>work,{staleTime: 1000 * 60 * 60})
     await qc.prefetchQuery(['CYCLES',JSON.stringify(workCyclesWhere)],()=>getCycles(workCyclesWhere,origin), {staleTime: 1000 * 60 * 60} )
