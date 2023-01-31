@@ -5,23 +5,42 @@ import {findAll as findAllPosts} from '@/src/facades/post'
 import { PostMosaicItem } from "@/src/types/post";
 
 const {NEXT_PUBLIC_WEBAPP_URL:origin}=process.env;
+const languages = [
+  ['es','es-ES'],
+  ['en','en-US'],
+  ['fr','fr-FR'],
+  ['pt','pt-BR'],
+]
+const dateFormat = (date:Date,locale:string) => new Intl.DateTimeFormat(locale, { dateStyle: 'full', timeStyle: 'long'}).format(date)
 
 const generateCyclesMap = async ()=>{
   const cycles = await findAllCycles({
     select:{id:true,title:true,contentText:true}
   })
-  return cycles.map(c=>`<url>
-    <loc>${`${origin}/cycle/${c.id}`}</loc>
-  </url>`).join('')
+  return cycles.map(c=>{
+    return languages.map(l=>{
+      return `<url>
+    <loc>${`${origin}/${l[0]}/cycle/${c.id}`}</loc>
+    <lastmod>${dateFormat(c.updatedAt,l[1])}</lastmod>
+    <priority>1</priority>
+   </url>`
+    }).join('')
+  }).join('')
 }
 
 const generateWorksMap = async ()=>{
   const works = await findAllWoks({
     select:{id:true,title:true,contentText:true}
   })
-  return works.map(w=>`<url>
-    <loc>${`${origin}/work/${w.id}`}</loc>
-  </url>`).join('')
+  return works.map(w=>{
+    return languages.map(l=>{
+      return `<url>
+        <loc>${`${origin}/${l[0]}/work/${w.id}`}</loc>
+        <lastmod>${dateFormat(w.updatedAt,l[1])}</lastmod>
+        <priority>0.9</priority>
+      </url>`
+    }).join('')
+  }).join('')
 }
 
 const generatePostsMap = async ()=>{
@@ -39,28 +58,55 @@ const generatePostsMap = async ()=>{
   }
     return posts.reduce<string[]>((res,p)=>{
       const parent = getParentData(p)
-      if(parent)
-        res.push(`<url>
-        <loc>${`${origin}/${parent[0]}/${parent[1]}/post/${p.id}`}</loc>
-      </url>`)
+      if(parent){
+        languages.forEach(l=>{
+          res.push(`<url>
+          <loc>${`${origin}/${l[0]}/${parent[0]}/${parent[1]}/post/${p.id}`}</loc>
+          <lastmod>${dateFormat(p.updatedAt,l[1])}</lastmod>
+          <priority>0.8</priority>
+        </url>`)
+        })
+      }
       return res;
     },[]).join('')
-
   }
 
+  const generateHomePage = ()=>{
+    return languages.map(l=>{
+      return `
+        <url>
+          <loc>${origin!}/${l[0]}</loc>
+          <changefreq>monthly</changefreq>
+          <priority>1.0</priority>
+        </url>
+      `
+    }).join('')
+  }
+
+  const generateStaticPages = ()=>{
+    const staticPages = ['manifest','about','aboutUs','policy'] 
+    return languages.map(l=>{
+      return staticPages.map(sp=>{
+        return `
+          <url>
+              <loc>${origin!}/${l[0]}/${sp}</loc>
+              <priority>0.9</priority>
+            </url>
+        `
+      }).join('')
+    }).join('')
+  }
 
 const generateSiteMap = async () => {
   return `<?xml version="1.0" encoding="UTF-8"?>
-   <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-     <!--We manually set the two URLs we know already-->
-     <url>
-       <loc>${origin!}</loc>
-     </url>
-     ${await generateCyclesMap()}
-     ${await generateWorksMap()}
-     ${await generatePostsMap()}
-   </urlset>
- `;
+  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  ${generateHomePage()}
+  ${generateStaticPages()}
+  ${await generateCyclesMap()}
+  ${await generateWorksMap()}
+  ${await generatePostsMap()}
+  </urlset>
+  `;
 }
 
 function SiteMap() {
