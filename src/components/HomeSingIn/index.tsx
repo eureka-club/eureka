@@ -15,6 +15,7 @@ import useMyCycles,{myCyclesWhere} from '@/src/useMyCycles';
 import Prompt from '@/src/components/post/PostPrompt';
 import FeaturedCycles from './FeaturedCycles';
 import FeaturedEurekas from './FeaturedEurekas';
+import FeaturedWorks from '@/src/components/HomeSingIn/FeaturedWorks/index';
 import CarouselsByTopics from './CarouselsByTopics';
 import CarouselStatic from '../CarouselStatic';
 import FeaturedUsers from './FeaturedUsers';
@@ -128,13 +129,13 @@ const getMediathequeSlug = (id:number,name:string)=>{
 
   return (
     <>
-      <section className="my-5">
+      <section className="my-5 w-100">
         <div className="pt-4">
           <Prompt redirect={true} showTitle={true} />
         </div>
       </section>
       <section className="d-flex flex-column flex-lg-row">
-        <Col xs={12} lg={2} className="me-5">
+        <Col xs={12} lg={2} className="me-4">
           <h2 className="text-secondary fw-bold">{t('Trending topics')}</h2>
           <aside className="mb-4">{getTopicsBadgedLinks()}</aside>
           <section className="mt-5">
@@ -159,12 +160,13 @@ const getMediathequeSlug = (id:number,name:string)=>{
           <section className="mt-5 p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
             <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox4')}</h4>
           </section>
-          <section className='mt-4'>
+          <section className="mt-4">
             <FeaturedUsers />
           </section>
         </Col>
         <Col xs={12} lg={10} className="mt-5 mt-lg-0">
           <section className="ms-0 ms-lg-5">
+            <FeaturedWorks />
             <FeaturedEurekas />
             <FeaturedCycles />
             {/*cyclesJoined()*/}

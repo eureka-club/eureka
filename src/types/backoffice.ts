@@ -16,7 +16,8 @@ export interface backOfficePayload {
   Image3?: File | null;
   CyclesExplorePage? :string;
   PostExplorePage?:string;
-  FeaturedUsers?:string
+  FeaturedUsers?:string;
+  FeaturedWorks?:string
 
 }
 

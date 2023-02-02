@@ -206,7 +206,8 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
         Image3: imageFile3,
         CyclesExplorePage:form.CyclesToShow.value,
         PostExplorePage:form.PostToShow.value,
-        FeaturedUsers:form.UsersToShow.value     
+        FeaturedUsers:form.UsersToShow.value,    
+        FeaturedWorks:form.WorksToShow.value     
     };
     //console.log(payload,"payload")
     await execUpdateBackOffice(payload);
@@ -236,196 +237,261 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
 
   return (
     <SimpleLayout title={t('Admin Panel')}>
-       <h1 className='text-secondary me-1 mb-4'><b>{t('Admin Panel')}</b></h1>
-      <TabContainer
-         onSelect={handleSubsectionChange}
-         activeKey={ tabKey || "explorer-page"}
-         transition={false}
-      > 
-       <style jsx global>
-                  {`
-                    .nav-tabs .nav-item.show .nav-link,
-                    .nav-tabs .nav-link.active,
-                    .nav-tabs .nav-link:hover {
-                      background-color: var(--bs-primary);
-                      color: white !important;
-                      border: none !important;
-                      border-bottom: solid 2px var(--bs-primary) !important;
-                    }
-                    .nav-tabs {
-                      border: none !important;
-                    }
-                  `}
-                </style>
-            
-            <Nav variant="tabs" className='scrollNav' fill>
-                <NavItem className={`border-primary border-bottom cursor-pointer  ${styles.tabBtn}`}>
-                  <NavLink eventKey="explorer-page">
-                      <span className="mb-3">
-                      {t('Content administration')}
-                      </span>
-                  </NavLink>
-                </NavItem>
-                {<NavItem className={`border-primary border-bottom cursor-pointer  ${styles.tabBtn}`}>
-                  <NavLink eventKey="export-participants">
-                      <span className="mb-3">
-                      ...
-                      </span>
-                  </NavLink>
-                </NavItem>}
-              </Nav>
-       
-              <TabContent>
-                  <TabPane eventKey="explorer-page">     
-                      <h2 className='text-secondary mt-3 mb-3'><b>{t('Banner Settings')}</b></h2>
+      <h1 className="text-secondary me-1 mb-4">
+        <b>{t('Admin Panel')}</b>
+      </h1>
+      <TabContainer onSelect={handleSubsectionChange} activeKey={tabKey || 'explorer-page'} transition={false}>
+        <style jsx global>
+          {`
+            .nav-tabs .nav-item.show .nav-link,
+            .nav-tabs .nav-link.active,
+            .nav-tabs .nav-link:hover {
+              background-color: var(--bs-primary);
+              color: white !important;
+              border: none !important;
+              border-bottom: solid 2px var(--bs-primary) !important;
+            }
+            .nav-tabs {
+              border: none !important;
+            }
+          `}
+        </style>
 
-                    <Form onSubmit={handleSubmit} className={`d-flex flex-column`} >
+        <Nav variant="tabs" className="scrollNav" fill>
+          <NavItem className={`border-primary border-bottom cursor-pointer  ${styles.tabBtn}`}>
+            <NavLink eventKey="explorer-page">
+              <span className="mb-3">{t('Content administration')}</span>
+            </NavLink>
+          </NavItem>
+          {
+            <NavItem className={`border-primary border-bottom cursor-pointer  ${styles.tabBtn}`}>
+              <NavLink eventKey="export-participants">
+                <span className="mb-3">...</span>
+              </NavLink>
+            </NavItem>
+          }
+        </Nav>
 
-                       <Row className='col-12 px-4 py-2 d-flex flex-column flex-lg-row justify-content-around'>
-                          <Col className='col-12 col-lg-4 mb-4'>
-                             <h5 className='text-secondary mb-2'><b>{t('Slider 1')}</b></h5>
+        <TabContent>
+          <TabPane eventKey="explorer-page">
+            <h2 className="text-secondary mt-3 mb-3">
+              <b>{t('Banner Settings')}</b>
+            </h2>
 
-                              <Form.Group  controlId="TitleSlider1">
-                                  <Form.Label>{t('Title')}</Form.Label>
-                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideTitle1 || ""} maxLength={100}/>
-                              </Form.Group>
-                              <Form.Group  controlId="TextSlider1">
-                                  <Form.Label>{t('Text')}</Form.Label>
-                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideText1 || ""} maxLength={120}/>
-                              </Form.Group>
+            <Form onSubmit={handleSubmit} className={`d-flex flex-column`}>
+              <Row className="col-12 px-4 py-2 d-flex flex-column flex-lg-row justify-content-around">
+                <Col className="col-12 col-lg-4 mb-4">
+                  <h5 className="text-secondary mb-2">
+                    <b>{t('Slider 1')}</b>
+                  </h5>
 
-                              {(!showCrop && currentSlider != 1) && (<div><Button data-cy="image-load" variant="primary" className="w-50 text-white mt-2  mb-3" onClick={() => openCrop(1)}>
-                                {t('Image')}
-                              </Button>
-                              {(bo?.SlideImage1?.length && bo?.SlideImage1 != 'null') && (<Button
-                                  type="button"
-                                  title={t('Delete slider')}
-                                  className={`text-warning p-0 ${styles.sliderDelete}`}
-                                 onClick={()=>clearSlider(1)}
-                                  variant="link"
-                                >
-                                  <FiTrash2 />
-                              </Button>)}
-                              </div>
-                              )}        
-                              { (showCrop && currentSlider == 1) && (
-                              <Row className='d-flex'>
-                                <div className='w-100 border p-3'>  
-                                <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={()=> closeCrop()} cropShape='rect' width={352} height={320} />
-                                </div>  
-                              </Row>                        
-                            )}      
-                            { image1  && (<Row><img className={styles.Image} src={image1}  alt='' /></Row>)}
-                          </Col>  
-                         <Col className='col-12 col-lg-4 mb-4'>
-                              <h5 className='text-secondary mb-2'><b>{t('Slider 2')}</b></h5>
-                               <Form.Group  controlId="TitleSlider2">
-                                  <Form.Label>{t('Title')}</Form.Label>
-                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideTitle2 || ""} maxLength={100}/>
-                              </Form.Group>
-                              <Form.Group  controlId="TextSlider2">
-                                  <Form.Label>{t('Text')}</Form.Label>
-                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideText2 || ""} maxLength={120}/>
-                              </Form.Group>
+                  <Form.Group controlId="TitleSlider1">
+                    <Form.Label>{t('Title')}</Form.Label>
+                    <Form.Control className="mb-2" type="text" defaultValue={bo?.SlideTitle1 || ''} maxLength={100} />
+                  </Form.Group>
+                  <Form.Group controlId="TextSlider1">
+                    <Form.Label>{t('Text')}</Form.Label>
+                    <Form.Control className="mb-2" type="text" defaultValue={bo?.SlideText1 || ''} maxLength={120} />
+                  </Form.Group>
 
-                              {(!showCrop && currentSlider != 2) && (<div><Button data-cy="image-load" variant="primary" className="w-50 text-white mt-2  mb-3" onClick={() => openCrop(2)}>
-                                {t('Image')}
-                              </Button>
-                              {(bo?.SlideImage2?.length && bo?.SlideImage2 != 'null') && (<Button
-                                  type="button"
-                                  title={t('Delete slider')}
-                                  className={`text-warning p-0 ${styles.sliderDelete}`}
-                                 onClick={()=>clearSlider(2)}
-                                  variant="link"
-                                >
-                                  <FiTrash2 />
-                              </Button>)}
-                              </div>
-                              )}        
-                              { (showCrop && currentSlider == 2) && (
-                              <Row className='d-flex'>
-                                <div className='w-100 border p-3'>  
-                                <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={()=> closeCrop()} cropShape='rect' width={352} height={320}  />
-                                </div>  
-                              </Row>
-                            )}      
-                            { image2  && (<Row><img className={styles.Image} src={image2}  alt='' /></Row>)}
-                          </Col>     
-                         <Col className='col-12 col-lg-4 mb-4'>
-                              <h5 className='text-secondary mb-2'><b>{t('Slider 3')}</b></h5>
-                              
-                               <Form.Group  controlId="TitleSlider3">
-                                  <Form.Label>{t('Title')}</Form.Label>
-                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideTitle3 || ""} maxLength={100}/>
-                              </Form.Group>
-                              <Form.Group  controlId="TextSlider3">
-                                  <Form.Label>{t('Text')}</Form.Label>
-                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.SlideText3 || ""} maxLength={120}/>
-                              </Form.Group>
+                  {!showCrop && currentSlider != 1 && (
+                    <div>
+                      <Button
+                        data-cy="image-load"
+                        variant="primary"
+                        className="w-50 text-white mt-2  mb-3"
+                        onClick={() => openCrop(1)}
+                      >
+                        {t('Image')}
+                      </Button>
+                      {bo?.SlideImage1?.length && bo?.SlideImage1 != 'null' && (
+                        <Button
+                          type="button"
+                          title={t('Delete slider')}
+                          className={`text-warning p-0 ${styles.sliderDelete}`}
+                          onClick={() => clearSlider(1)}
+                          variant="link"
+                        >
+                          <FiTrash2 />
+                        </Button>
+                      )}
+                    </div>
+                  )}
+                  {showCrop && currentSlider == 1 && (
+                    <Row className="d-flex">
+                      <div className="w-100 border p-3">
+                        <CropImageFileSelect
+                          onGenerateCrop={onGenerateCrop}
+                          onClose={() => closeCrop()}
+                          cropShape="rect"
+                          width={352}
+                          height={320}
+                        />
+                      </div>
+                    </Row>
+                  )}
+                  {image1 && (
+                    <Row>
+                      <img className={styles.Image} src={image1} alt="" />
+                    </Row>
+                  )}
+                </Col>
+                <Col className="col-12 col-lg-4 mb-4">
+                  <h5 className="text-secondary mb-2">
+                    <b>{t('Slider 2')}</b>
+                  </h5>
+                  <Form.Group controlId="TitleSlider2">
+                    <Form.Label>{t('Title')}</Form.Label>
+                    <Form.Control className="mb-2" type="text" defaultValue={bo?.SlideTitle2 || ''} maxLength={100} />
+                  </Form.Group>
+                  <Form.Group controlId="TextSlider2">
+                    <Form.Label>{t('Text')}</Form.Label>
+                    <Form.Control className="mb-2" type="text" defaultValue={bo?.SlideText2 || ''} maxLength={120} />
+                  </Form.Group>
 
-                              {(!showCrop && currentSlider != 3) && (<div className=''><Button data-cy="image-load" variant="primary" className="w-50 text-white mt-2  mb-3" onClick={() => openCrop(3)}>
-                                {t('Image')}
-                              </Button>
-                              {(bo?.SlideImage3?.length && bo?.SlideImage3 != 'null') && (<Button
-                                  type="button"
-                                  title={t('Delete slider')}
-                                  className={`text-warning p-0 ${styles.sliderDelete}`}
-                                 onClick={()=>clearSlider(3)}
-                                  variant="link"
-                                >
-                                  <FiTrash2 />
-                              </Button>)}
-                              </div>
-                              )}        
-                              { (showCrop && currentSlider == 3) && (
-                              <Row className='d-flex'>
-                                <div className='w-100 border p-3'>  
-                                <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={()=> closeCrop()} cropShape='rect' width={352} height={320}  />
-                                </div>  
-                              </Row>
-                            )}      
-                            { image3  && (<Row><img className={styles.Image} src={image3}  alt='' /></Row>)}
-                          </Col>  
-                      </Row>
+                  {!showCrop && currentSlider != 2 && (
+                    <div>
+                      <Button
+                        data-cy="image-load"
+                        variant="primary"
+                        className="w-50 text-white mt-2  mb-3"
+                        onClick={() => openCrop(2)}
+                      >
+                        {t('Image')}
+                      </Button>
+                      {bo?.SlideImage2?.length && bo?.SlideImage2 != 'null' && (
+                        <Button
+                          type="button"
+                          title={t('Delete slider')}
+                          className={`text-warning p-0 ${styles.sliderDelete}`}
+                          onClick={() => clearSlider(2)}
+                          variant="link"
+                        >
+                          <FiTrash2 />
+                        </Button>
+                      )}
+                    </div>
+                  )}
+                  {showCrop && currentSlider == 2 && (
+                    <Row className="d-flex">
+                      <div className="w-100 border p-3">
+                        <CropImageFileSelect
+                          onGenerateCrop={onGenerateCrop}
+                          onClose={() => closeCrop()}
+                          cropShape="rect"
+                          width={352}
+                          height={320}
+                        />
+                      </div>
+                    </Row>
+                  )}
+                  {image2 && (
+                    <Row>
+                      <img className={styles.Image} src={image2} alt="" />
+                    </Row>
+                  )}
+                </Col>
+                <Col className="col-12 col-lg-4 mb-4">
+                  <h5 className="text-secondary mb-2">
+                    <b>{t('Slider 3')}</b>
+                  </h5>
 
-                      <h2 className='text-secondary mt-3 mb-3'><b>{t('Content Page')}</b></h2>
-                       <div className="py-2 d-flex flex-column flex-lg-row justify-content-between">
-                       <Col className="col-12 col-lg-6 px-2 ">
-                              <Form.Group  controlId="CyclesToShow" >
-                                  <Form.Label>{t('CyclesToShow')}</Form.Label>
-                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.CyclesExplorePage || ""}/>
-                              </Form.Group>
-                       </Col>         
-                      <Col className="col-12 col-lg-6 px-2">
-                              <Form.Group  controlId="PostToShow">
-                                  <Form.Label>{t('PostToShow')}</Form.Label>
-                                  <Form.Control className='mb-4' type="text" defaultValue={bo?.PostExplorePage || ""}/>
-                              </Form.Group>
-                       </Col>       
-                       </div>
-                        <div className="py-2 d-flex flex-column flex-lg-row justify-content-between">
-                       <Col className="col-12 col-lg-6 px-2 ">
-                              <Form.Group  controlId="UsersToShow" >
-                                  <Form.Label>{t('UsersToShow')}</Form.Label>
-                                  <Form.Control className='mb-2' type="text" defaultValue={bo?.FeaturedUsers || ""}/>
-                              </Form.Group>
-                       </Col>         
-                       </div>
-                       <div className='d-flex justify-content-center justify-content-lg-end'> 
-                       <Button variant="primary" type="submit" className="text-white mb-5" style={{width:'12em'}}>{t('Save')}
-                       {isLoadingBackOffice && (
-                       <Spinner animation="grow" variant="info" size="sm" className="ms-1" />)}
-                       </Button>
-                       </div>
+                  <Form.Group controlId="TitleSlider3">
+                    <Form.Label>{t('Title')}</Form.Label>
+                    <Form.Control className="mb-2" type="text" defaultValue={bo?.SlideTitle3 || ''} maxLength={100} />
+                  </Form.Group>
+                  <Form.Group controlId="TextSlider3">
+                    <Form.Label>{t('Text')}</Form.Label>
+                    <Form.Control className="mb-2" type="text" defaultValue={bo?.SlideText3 || ''} maxLength={120} />
+                  </Form.Group>
 
-                      </Form>
-                  </TabPane>
-            
-                  <TabPane eventKey="export-participants">
-                    
-                  </TabPane>
-              </TabContent>     
-       </TabContainer>
+                  {!showCrop && currentSlider != 3 && (
+                    <div className="">
+                      <Button
+                        data-cy="image-load"
+                        variant="primary"
+                        className="w-50 text-white mt-2  mb-3"
+                        onClick={() => openCrop(3)}
+                      >
+                        {t('Image')}
+                      </Button>
+                      {bo?.SlideImage3?.length && bo?.SlideImage3 != 'null' && (
+                        <Button
+                          type="button"
+                          title={t('Delete slider')}
+                          className={`text-warning p-0 ${styles.sliderDelete}`}
+                          onClick={() => clearSlider(3)}
+                          variant="link"
+                        >
+                          <FiTrash2 />
+                        </Button>
+                      )}
+                    </div>
+                  )}
+                  {showCrop && currentSlider == 3 && (
+                    <Row className="d-flex">
+                      <div className="w-100 border p-3">
+                        <CropImageFileSelect
+                          onGenerateCrop={onGenerateCrop}
+                          onClose={() => closeCrop()}
+                          cropShape="rect"
+                          width={352}
+                          height={320}
+                        />
+                      </div>
+                    </Row>
+                  )}
+                  {image3 && (
+                    <Row>
+                      <img className={styles.Image} src={image3} alt="" />
+                    </Row>
+                  )}
+                </Col>
+              </Row>
+
+              <h2 className="text-secondary mt-3 mb-3">
+                <b>{t('Content Page')}</b>
+              </h2>
+              <div className="py-2 d-flex flex-column flex-lg-row justify-content-between">
+                <Col className="col-12 col-lg-6 px-2 ">
+                  <Form.Group controlId="CyclesToShow">
+                    <Form.Label>{t('CyclesToShow')}</Form.Label>
+                    <Form.Control className="mb-2" type="text" defaultValue={bo?.CyclesExplorePage || ''} />
+                  </Form.Group>
+                </Col>
+                <Col className="col-12 col-lg-6 px-2">
+                  <Form.Group controlId="PostToShow">
+                    <Form.Label>{t('PostToShow')}</Form.Label>
+                    <Form.Control className="mb-4" type="text" defaultValue={bo?.PostExplorePage || ''} />
+                  </Form.Group>
+                </Col>
+              </div>
+              <div className="py-2 d-flex flex-column flex-lg-row justify-content-between">
+                <Col className="col-12 col-lg-6 px-2 ">
+                  <Form.Group controlId="UsersToShow">
+                    <Form.Label>{t('UsersToShow')}</Form.Label>
+                    <Form.Control className="mb-2" type="text" defaultValue={bo?.FeaturedUsers || ''} />
+                  </Form.Group>
+                </Col>
+                <Col className="col-12 col-lg-6 px-2 ">
+                  <Form.Group controlId="WorksToShow">
+                    <Form.Label>{t('WorksToShow')}</Form.Label>
+                    <Form.Control className="mb-2" type="text" defaultValue={bo?.FeaturedWorks || ''} />
+                  </Form.Group>
+                </Col>
+              </div>
+              <div className="d-flex justify-content-center justify-content-lg-end">
+                <Button variant="primary" type="submit" className="text-white mb-5" style={{ width: '12em' }}>
+                  {t('Save')}
+                  {isLoadingBackOffice && <Spinner animation="grow" variant="info" size="sm" className="ms-1" />}
+                </Button>
+              </div>
+            </Form>
+          </TabPane>
+
+          <TabPane eventKey="export-participants"></TabPane>
+        </TabContent>
+      </TabContainer>
     </SimpleLayout>
   );
 };
