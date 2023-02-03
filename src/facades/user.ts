@@ -5,7 +5,7 @@ import {prisma} from '@/src/lib/prisma';
 
 export const find = async (props: Prisma.UserFindUniqueArgs): Promise<UserMosaicItem | null> => {
   const { select = undefined, include = true,where } = props;
-  return prisma.user.findUnique({
+  const user:any = await prisma.user.findUnique({
     where,
     select:{
       id: true,
@@ -24,12 +24,12 @@ export const find = async (props: Prisma.UserFindUniqueArgs): Promise<UserMosaic
       ratingWorks:{
         select:{
           workId:true,
-          work:{select:{id:true,createdAt:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,localImages:{select:{storedFile:true}}}}
+          work:{select:{id:true,author:true,createdAt:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,favs:{select:{id:true}},localImages:{select:{storedFile:true}}}}
         }
       },
-      favWorks:{select:{id:true,createdAt:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,localImages:{select:{storedFile:true}}}},
-      favCycles:{select:{id:true,createdAt:true,creatorId:true,startDate:true,endDate:true,title:true,participants:{select:{id:true}},usersJoined:{select:{userId:true,pending:true}},localImages:{select:{storedFile:true}}}},
-      favPosts:{select:{id:true,title:true,createdAt:true,localImages:{select:{storedFile:true}},works:{select:{id:true,title:true}},cycles:{select:{id:true,title:true}},creatorId:true}},
+      favWorks:{select:{id:true,author:true,createdAt:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,favs:{select:{id:true}},localImages:{select:{storedFile:true}}}},
+      favPosts:{select:{id:true,title:true,createdAt:true,favs:{select:{id:true}},localImages:{select:{storedFile:true}},works:{select:{id:true,title:true}},cycles:{select:{id:true,title:true}},creatorId:true}},
+      favCycles:{select:{id:true,createdAt:true,creatorId:true,startDate:true,endDate:true,title:true,favs:{select:{id:true}},participants:{select:{id:true}},usersJoined:{select:{userId:true,pending:true}},localImages:{select:{storedFile:true}}}},
       cycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
       joinedCycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
       ratingCycles:{select:{cycleId:true}},
@@ -37,6 +37,10 @@ export const find = async (props: Prisma.UserFindUniqueArgs): Promise<UserMosaic
     }
     
   });
+  user.favWorks.forEach((w:any)=>{
+    w.currentUserIsFav = true
+  })
+  return user;
 };
 
 export const findAll = async (props?:Prisma.UserFindManyArgs): Promise<UserMosaicItem[]> => {
@@ -64,12 +68,12 @@ export const findAll = async (props?:Prisma.UserFindManyArgs): Promise<UserMosai
       ratingWorks:{
         select:{
           workId:true,
-          work:{select:{id:true,createdAt:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,localImages:{select:{storedFile:true}}}}
+          work:{select:{id:true,createdAt:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,favs:{select:{id:true}},localImages:{select:{storedFile:true}}}}
         },
       },
-      favWorks:{select:{id:true,createdAt:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,localImages:{select:{storedFile:true}}}},
-      favCycles:{select:{id:true,createdAt:true,creatorId:true,startDate:true,endDate:true,title:true,usersJoined:{select:{userId:true,pending:true}},participants:{select:{id:true}}}},
-      favPosts:{select:{id:true,createdAt:true}},
+      favWorks:{select:{id:true,createdAt:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,favs:{select:{id:true}},localImages:{select:{storedFile:true}}}},
+      favCycles:{select:{id:true,createdAt:true,creatorId:true,startDate:true,endDate:true,title:true,favs:{select:{id:true}},usersJoined:{select:{userId:true,pending:true}},participants:{select:{id:true}}}},
+      favPosts:{select:{id:true,createdAt:true,favs:{select:{id:true}},localImages:{select:{storedFile:true}}}},
       // posts:{select:{id:true}},
       cycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
       joinedCycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},

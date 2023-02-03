@@ -37,6 +37,7 @@ import styles from './SocialInteraction.module.css';
 import {useNotificationContext} from '@/src/useNotificationProvider';
 import {useModalContext} from '@/src/useModal'
 import SignInForm from '../forms/SignInForm';
+import _ from 'lodash';
 interface SocialInteractionClientPayload {
   socialInteraction: 'fav' | 'rating';
   doCreate: boolean;
@@ -84,7 +85,6 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const [mySocialInfo, setMySocialInfo] = useState<MySocialInfo>();
 
   // const [optimistLike, setOptimistLike] = useState<boolean | null>();
-  const [optimistFav, setOptimistFav] = useState<boolean | null>();
   const {showShare:ss} = useMosaicContext();
 
   const [showShare, setShowShare] = useState<boolean>(false);
@@ -105,29 +105,28 @@ const SocialInteraction: FunctionComponent<Props> = ({
     }
   }, [user, idSession, isSuccessUser]);
 
-  useEffect(() => {
 
+  const [currentUserIsFav,setcurrentUserIsFav] = useState(false)
+
+  useEffect(() => {
     let ratingByMe = false;
-    if (session && user && user.id && entity) {
+    if (session && entity && entity.favs) {
+      const favoritedByMe = entity.favs.findIndex(f=>f.id==session.user.id) > -1;
+      setcurrentUserIsFav(()=>favoritedByMe);
+
       if (isWork(entity)) {
-        const favoritedByMe = entity.currentUserIsFav;
-        setOptimistFav(favoritedByMe);
         ratingByMe = !!entity.currentUserRating;
         setMySocialInfo({ favoritedByMe, ratingByMe });
         setQty(entity.ratingAVG||0)
       } else if (isCycle(entity)) {
-        const favoritedByMe = entity.currentUserIsFav;
-        setOptimistFav(favoritedByMe);
         ratingByMe = !!entity.currentUserRating;
         setMySocialInfo({ favoritedByMe, ratingByMe });
         setQty(entity.ratingAVG||0)
       } else if (isPostMosaicItem(entity)) {
-        const favoritedByMe = entity.currentUserIsFav;
-        setOptimistFav(favoritedByMe);
         setMySocialInfo({ favoritedByMe });
       }
     }
-  }, [user, entity, session]);
+  }, [entity, session]);
 
   const openSignInModal = () => {
     setQty(0);
@@ -202,12 +201,12 @@ const SocialInteraction: FunctionComponent<Props> = ({
         })}`;
         
         const notificationToUsers = user?.followedBy.map(f=>f.id);
-
         const res = await fetch(`/api/${entityEndpoint}/${entity.id}/${socialInteraction}`, {
           method: doCreate ? 'POST' : 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             qty: ratingQty,
+            doCreate,
             ... doCreate && {
               notificationMessage,
               notificationContextURL,
@@ -227,49 +226,55 @@ const SocialInteraction: FunctionComponent<Props> = ({
     },
     {
       onMutate: async (payload) => {
-        await queryClient.cancelQueries(cacheKey);
-        if (session && payload.socialInteraction === 'fav') {
-          const opf = optimistFav;
-          setOptimistFav(!optimistFav);
-          let favWorks;
-          if (isWork(entity)) {
-            if (opf) favWorks = user?.favWorks.filter((i) => i.id !== entity.id);
-            else {
-              user?.favWorks.push(entity);
-              favWorks = user?.favWorks;
-            }
-            queryClient.setQueryData(['USER', `${idSession}`], { ...user, favWorks });
-          } else if (isCycle(entity)) {
-            let favCycles;
-            if (opf) favCycles = user?.favCycles.filter((i) => i.id !== entity.id);
-            else {
-              user?.favCycles.push(entity);
-              favCycles = user?.favCycles;
-            }
-            queryClient.setQueryData(['USER', `${idSession}`], { ...user, favCycles });
-          } else if (isPost(entity)) {
-            let favPosts;
-            if (opf) favPosts = user?.favPosts.filter((i) => i.id !== entity.id);
-            else {
-              user?.favPosts.push(entity);
-              favPosts = user?.favPosts;
-            }
-            queryClient.setQueryData(['USER', `${idSession}`], { ...user, favPosts });
+        
+        if (session && user && payload.socialInteraction === 'fav') {
+          await queryClient.cancelQueries(['USER', `${session.user.id}`]);
+          await queryClient.cancelQueries(cacheKey);
+
+          const prevUser = queryClient.getQueryData(['USER', `${session.user.id}`]);
+          const prevEntity = queryClient.getQueryData(cacheKey);
+       
+          const entityFavKey = isWork(entity) 
+            ? "favWorks" 
+            : isCycle(entity)
+              ? "favCycles"
+              : "favPosts";
+            
+          let favInUser = user[entityFavKey] as {id:number}[];
+          let favs = entity.favs;
+
+          setcurrentUserIsFav(()=>payload.doCreate);
+
+          if (!payload.doCreate) {
+            favInUser = favInUser.filter((i:{id:number}) => i.id !== entity.id);
+            favs = entity.favs.filter(i=>i.id!=session.user.id);
           }
-          return { optimistFav: opf,/*  optimistFavCount: opfc */ };
+          else {
+            favInUser?.push(entity as any);
+            favs.push({id:+session.user.id})
+          }
+          queryClient.setQueryData(['WORK', `${entity.id}`], {...entity, favs});
+          queryClient.setQueryData(['USER', `${session.user.id}`], { ...user, [entityFavKey]: favInUser});
+
+          return {prevUser,prevEntity};
         }
-        return {};
       },
-      onSuccess: () => {
-        queryClient.invalidateQueries(['USER', `${idSession}`]);
+      onSettled:(_,error,__,context) => {
+        if(error && context){
+          if('prevUser' in context)
+            queryClient.setQueryData(['USER', `${session?.user.id}`],context?.prevUser);
+          if('prevEntity' in context)
+            queryClient.setQueryData(cacheKey,context?.prevEntity);
+        }
+        queryClient.invalidateQueries(['USER', `${session?.user.id}`]);
         queryClient.invalidateQueries(cacheKey);
       },
     },
   );
 
-  const handleFavClick = (ev: MouseEvent<HTMLButtonElement>) => { 
+  const handleFavClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    execSocialInteraction({ socialInteraction: 'fav', doCreate: mySocialInfo ? !mySocialInfo!.favoritedByMe : true });
+    execSocialInteraction({ socialInteraction: 'fav', doCreate: !currentUserIsFav });
   };
 
   const handleReactionClick = (ev: MouseEvent<HTMLButtonElement>) => { 
@@ -372,10 +377,10 @@ const SocialInteraction: FunctionComponent<Props> = ({
         onClick={handleFavClick}
           disabled={loadingSocialInteraction}
       >
-        {/* optimistFav */ entity.currentUserIsFav ? <BsBookmarkFill className={styles.active} /> : <BsBookmark />}
+        {/* optimistFav */ currentUserIsFav ? <BsBookmarkFill className={styles.active} /> : <BsBookmark />}
         <br />
         {showButtonLabels && (
-          <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>
+          <span className={classnames(...[styles.info, ...[currentUserIsFav ? styles.active : '']])}>
             {t('Save for later')}
           </span>
         )}
@@ -407,7 +412,7 @@ const renderAddReaction = ()=>{
         <VscReactions className={styles.active} /> 
         <br />
         {showButtonLabels && (
-          <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>
+          <span className={classnames(...[styles.info, ...[currentUserIsFav ? styles.active : '']])}>
             {t('Add reaction')}
           </span>
         )}
@@ -432,7 +437,7 @@ const renderAddReaction = ()=>{
            <span className='d-flex align-items-center text-primary' style={{fontSize: '0.8em'}}>{t('Create eureka')}</span>
       </div>
         {showButtonLabels && (
-          <span className={classnames(...[styles.info, ...[optimistFav ? styles.active : '']])}>
+          <span className={classnames(...[styles.info, ...[currentUserIsFav ? styles.active : '']])}>
             {t('Create eureka')}
           </span>
         )}

@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 
-import { Session } from '../../../../src/types';
-import getApiHandler from '../../../../src/lib/getApiHandler';
-import { find, saveSocialInteraction } from '../../../../src/facades/work';
-// import redis from '../../../../src/lib/redis';
+import { Session } from '@/src/types';
+import getApiHandler from '@/src/lib/getApiHandler';
+import { find, saveSocialInteraction } from '@/src/facades/work';
+// import redis from '@/src/lib/redis';
 import {create} from '@/src/facades/notification'
 
 const validateReq = async (
@@ -38,9 +38,8 @@ const validateReq = async (
 export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = (await getSession({ req })) as unknown as Session;
-
     const { id, socialInteraction } = req.query;
-    const { qty, notificationMessage,notificationContextURL,notificationToUsers } = req.body;
+    const { qty,doCreate, notificationMessage,notificationContextURL,notificationToUsers } = req.body;
 
     if (!(await validateReq(session, id, socialInteraction, res))) {
       return;
@@ -54,13 +53,14 @@ export default getApiHandler()
       }
 
       // @ts-ignore arguments checked in validateReq()
-      await saveSocialInteraction(work, session.user, socialInteraction, true, qty);
-      await create(
-        notificationMessage,
-        notificationContextURL,
-        session.user.id,
-        notificationToUsers
-      );
+      await saveSocialInteraction(work, session.user, socialInteraction, doCreate, qty);
+      if(doCreate)
+        await create(
+          notificationMessage,
+          notificationContextURL,
+          session.user.id,
+          notificationToUsers
+        );
 
       // await redis.flushall();
       res.status(200).json({ status: 'OK' });

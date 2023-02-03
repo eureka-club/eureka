@@ -13,10 +13,11 @@ import useWork,{getWork} from '@/src/useWork';
 import {getCycles} from '@/src/useCycles'
 import {getPosts} from '@/src/usePosts'
 import { Session } from '@/src/types';
+import { WorkMosaicItem } from '@/src/types/work';
 
 interface Props{
   metas:Record<string,any>;
-  session:Session
+  session:Session;
 }
 const WorkDetailPage: NextPage<Props> = ({session,metas}) => {
   
@@ -114,13 +115,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if(work){
     metaTags = { id: work.id, title: work.title, author: work.author, storedFile: work.localImages[0].storedFile };
     const workPostsWhere = {take:8,where:{works:{some:{id}}}}
-    await qc.prefetchQuery(['WORK', `${id}`],()=>work,{staleTime: 1000 * 60 * 60})
-    await qc.prefetchQuery(['CYCLES',JSON.stringify(workCyclesWhere)],()=>getCycles(workCyclesWhere,origin), {staleTime: 1000 * 60 * 60} )
-    await qc.prefetchQuery(['POSTS',JSON.stringify(workPostsWhere)],()=>getPosts(workPostsWhere,origin),{staleTime: 1000 * 60 * 60} )
+    await qc.prefetchQuery(['WORK', `${id}`],()=>work)
+    await qc.prefetchQuery(['CYCLES',JSON.stringify(workCyclesWhere)],()=>getCycles(workCyclesWhere,origin))
+    await qc.prefetchQuery(['POSTS',JSON.stringify(workPostsWhere)],()=>getPosts(workPostsWhere,origin))
   }
   
   return {
     props: {
+      work,
       session,
       dehydratedState: dehydrate(qc),
       metas:metaTags

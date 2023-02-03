@@ -25,10 +25,14 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
       },
       usersJoined:{select:{userId:true,pending:true}},
       participants:{select:{id:true}},
-      works:{include:{
-        localImages: {select:{storedFile:true}},
-        _count:{select:{ratings:true}},
-      }},
+      works:{
+        include:{
+          localImages: {select:{storedFile:true}},
+          _count:{select:{ratings:true}},
+          favs:{select:{id:true}},
+          ratings: {select:{userId:true,qty:true}},
+        }
+      },
       // participants:{
       //   select:{
       //     id:true,
@@ -63,6 +67,8 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
             include:{
               localImages: {select:{storedFile:true}},
               _count:{select:{ratings:true}},
+              favs:{select:{id:true}},
+              ratings: {select:{userId:true,qty:true}},
             }
           },
         }
@@ -104,10 +110,14 @@ export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<CycleMos
       },
       usersJoined:{select:{userId:true,pending:true}},
       participants:{select:{id:true}},
-      works:{include:{
-        localImages: {select:{storedFile:true}},
-        _count:{select:{ratings:true}},
-      }},
+      works:{
+        include:{
+          localImages: {select:{storedFile:true}},
+          _count:{select:{ratings:true}},
+          favs:{select:{id:true}},
+          ratings: {select:{userId:true,qty:true}},
+        }
+      },
       // participants:{
       //   select:{
       //     id:true,
@@ -142,6 +152,8 @@ export const findAll = async (props?:Prisma.CycleFindManyArgs): Promise<CycleMos
             include:{
               localImages: {select:{storedFile:true}},
               _count:{select:{ratings:true}},
+              favs:{select:{id:true}},
+              ratings: {select:{userId:true,qty:true}},
             }
           },
         }
@@ -402,19 +414,19 @@ export const saveSocialInteraction = async (
   cycle: Cycle,
   user: User,
   socialInteraction: 'fav' | 'like' | 'rating',
-  create: boolean,
+  connect: boolean,
   qty?: number,
 ): Promise<Cycle | null> => {
   if (socialInteraction !== 'rating') {
     return prisma.cycle.update({
       where: { id: cycle.id },
-      data: { [`${socialInteraction}s`]: { [create ? 'connect' : 'disconnect']: { id: user.id } } },
+      data: { [`${socialInteraction}s`]: { [connect ? 'connect' : 'disconnect']: { id: user.id } } },
     });
   }
   const rating: RatingOnCycle | null = await prisma.ratingOnCycle.findFirst({
     where: { userId: user.id, cycleId: cycle.id },
   });
-  if (create) {
+  if (connect) {
     if (rating) {
       const q1 = prisma.cycle.update({
         where: { id: cycle.id },

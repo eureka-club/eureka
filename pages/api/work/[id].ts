@@ -54,7 +54,6 @@ export default getApiHandler()
     //   return;
     // }
 
-
     const { id } = req.query;
     if (typeof id !== 'string') {
       res.status(404).end();
@@ -72,31 +71,20 @@ export default getApiHandler()
       if (work == null) {
         return res.status(200).json(null);
       }
-      let currentUserIsFav = false;
-      let currentUserRating = 0;
-      let ratingCount = work._count.ratings;
-      let ratingAVG = 0;
+      // let currentUserIsFav = false;
+      // let currentUserRating = 0;
+      // let ratingCount = work._count.ratings;
+      // let ratingAVG = 0;
 
-      if(session){
-        const w = await prisma.work.findUnique({
-          where:{id:work.id},
-          select:{
-            favs:{select:{id:true}},
-            ratings:true,
-          }
-        })
-        if(w){
-          let r  = w.ratings.find(r=>r.userId==session.user.id)
-          if(r)currentUserRating = r.qty;
-          ratingAVG = w.ratings.reduce((p,c)=>c.qty+p,0)/ratingCount
-          currentUserIsFav = w.favs.findIndex(f=>f.id==session.user.id) > -1
-        }
-
-      }
-      work.currentUserIsFav= currentUserIsFav
-      work.currentUserRating = currentUserRating;
-      work.ratingAVG = ratingAVG;
-      work.currentUserIsFav = currentUserIsFav;
+      // if(session){
+      //     let r  = work.ratings.find(r=>r.userId==session.user.id)
+      //     if(r)currentUserRating = r.qty;
+      //     ratingAVG = work.ratings.reduce((p,c)=>c.qty+p,0)/ratingCount
+      //     currentUserIsFav = work.favs.findIndex(f=>f.id==session.user.id) > -1
+      // }
+      // work.currentUserRating = currentUserRating;
+      // work.ratingAVG = ratingAVG;
+      // work.currentUserIsFav = currentUserIsFav;
       res.status(200).json(work);
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

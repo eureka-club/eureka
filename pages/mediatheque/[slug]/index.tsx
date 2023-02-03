@@ -294,7 +294,7 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
                 <CyclesJoined cycles={cycles!} goTo={goTo} id={id.toString()} t={t}/>
                 <ReadOrWatched user={user} id={id.toString()} goTo={goTo} t={t}/>
                 <SavedForLater user={user} goTo={goTo} t={t} id={id}/>
-                <UsersFollowed user={user} goTo={goTo} t={t} />
+                {/* <UsersFollowed user={user} goTo={goTo} t={t} /> */}
               </>
             )}
           </section>

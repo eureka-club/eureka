@@ -59,7 +59,6 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   const { t } = useTranslation('cycleDetail');
 
   const {data:cycle,isLoading:isLoadingCycle} = useCycle(cycleId,{enabled:!!cycleId})
-
   // const { data: dataWorks } = useWorks({ where:{cycles: { some: { id: cycleId} }} }, {
   //   enabled:!!cycleId
   // })

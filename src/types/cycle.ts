@@ -31,13 +31,15 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
     };
     usersJoined:{select:{userId:true,pending:true}};
     participants:{select:{id:true}};
-    works:{include:{
-      localImages: {select:{storedFile:true}};
-      _count:{select:{ratings:true}};
-    }};
-    favs: {
-      select:{id:true}
+    works:{
+      include:{
+        localImages: {select:{storedFile:true}};
+        _count:{select:{ratings:true}};
+        favs:{select:{id:true}},
+        ratings: {select:{userId:true,qty:true}};
+      }
     };
+    favs:{select:{id:true}},
     cycleWorksDates: {
       select:{
         id:true;
@@ -48,6 +50,8 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
           include:{
             localImages: {select:{storedFile:true}};
             _count:{select:{ratings:true}};
+            favs:{select:{id:true}},
+            ratings: {select:{userId:true,qty:true}};
           }
         };
       }

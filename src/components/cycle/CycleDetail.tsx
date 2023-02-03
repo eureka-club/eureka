@@ -151,7 +151,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       return <>
         <Row className='mt-2'>
         {posts.map((p)=><Col xs={12} sm={6} lg={3} xxl={2} key={p.id} className="mb-5 d-flex justify-content-center  align-items-center">
-          <MosaicItemPost  cacheKey={['POST',`${p.id}`]} postId={p.id} showSaveForLater={true} size={'md'} />          
+          <MosaicItemPost  cacheKey={['POST',`${p.id}`]} postId={p.id} showSaveForLater={false} size={'md'} />          
         </Col>
         )}
         </Row>
@@ -291,7 +291,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           <TabPane eventKey="eurekas">
               <CycleDetailDiscussion cycle={cycle} className="mb-5" cacheKey={['POSTS',JSON.stringify(cyclePostsProps)]} />
               <Row>
-                <Col /* xs={{span:12, order:'last'}} md={{span:9,order:'first'}} */>
+                <Col>
                   <MosaicContext.Provider value={{ showShare: true }}>
                     {renderPosts()}
                   </MosaicContext.Provider>

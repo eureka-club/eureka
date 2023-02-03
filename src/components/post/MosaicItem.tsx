@@ -93,7 +93,6 @@ const MosaicItem: FunctionComponent<Props> = ({
   })();
   const postLinkHref = ((): string => {
     if(post){
-      if(!post.works){debugger;}
       if (post.works.length) {
         return `/work/${post.works[0].id}/post/${post.id}`;
       }

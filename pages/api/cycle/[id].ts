@@ -58,7 +58,6 @@ export default getApiHandler()
         if (cycle) {
           let currentUserIsParticipant = false;
           let currentUserIsCreator = false;
-          let currentUserIsFav = false;
           let currentUserIsPending = false;
           let currentUserRating = 0;
           let ratingCount = cycle._count.ratings;
@@ -73,17 +72,14 @@ export default getApiHandler()
               // let r  = c.ratings.find(r=>r.userId==session.user.id)
               // if(r)currentUserRating = r.qty;
             }
-            currentUserIsFav = cycle.favs.findIndex(p=>p.id==session.user.id) > -1;
             
           }
           cycle.currentUserIsParticipant = currentUserIsParticipant;
           cycle.currentUserIsCreator = currentUserIsCreator;
-          cycle.currentUserIsFav = currentUserIsFav;
           cycle.currentUserIsPending = currentUserIsPending;
           cycle.currentUserRating = currentUserRating;
           cycle.ratingCount = ratingCount;
           cycle.ratingAVG = ratingAVG;
-    
           res.status(200).json({ ok: true, cycle });
         }
         else

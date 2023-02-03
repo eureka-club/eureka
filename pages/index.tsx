@@ -7,12 +7,12 @@ import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { GetAllByResonse, Session } from '@/src/types';
-import {getMyCycles,myCyclesWhere} from '@/src/useMyCycles';
+// import {getMyCycles,myCyclesWhere} from '@/src/useMyCycles';
 import { dehydrate,QueryClient } from 'react-query';
 import {getbackOfficeData} from '@/src/useBackOffice'
 import { getFeaturedEurekas } from '@/src/useFeaturedEurekas';
 import {getInterestedCycles} from '@/src/useInterestedCycles';
-import { backOfficeData } from '@/src/types/backoffice';
+// import { backOfficeData } from '@/src/types/backoffice';
 
 //const HomeNotSingIn = lazy(()=>import('@/components/HomeNotSingIn')); ARQUIMEDES
 const HomeSingIn = lazy(()=>import('@/src/components/HomeSingIn'));

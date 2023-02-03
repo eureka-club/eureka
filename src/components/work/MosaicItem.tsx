@@ -59,7 +59,6 @@ const MosaicItem: FunctionComponent<Props> = ({
   },[data])
 
   if(!work)return <></>
-  
   const { id, title, localImages, type } = work;
 
   const isActive = () => {
