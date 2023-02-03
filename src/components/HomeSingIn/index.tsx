@@ -172,7 +172,7 @@ const getMediathequeSlug = (id:number,name:string)=>{
               <div className="mt-5">
                 <CarouselsByTopics groupedByTopics={gbt} />
               </div>
-              <div className="mb-5">{renderSpinnerForLoadNextCarousel()}</div>
+              <div className="mb-5">{renderSpinnerForLoadNextCarousel()} </div>
             </>
           </section>
         </Col>

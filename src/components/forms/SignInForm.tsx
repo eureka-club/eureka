@@ -118,7 +118,7 @@ const handlerRecoveryLogin = ()=>{
       <ModalBody className="pt-0">
         <div>
          {logoImage && (<p className={`${styles.loginGreeting}`}>{t('loginGreeting')}</p>)}
-         <div className="py-4 border border-1"  style={{ borderRadius: '0.5em'}}>
+         <div className="py-3 border border-1"  style={{ borderRadius: '0.5em'}}>
           <Row>
               <button type="button" onClick={handleSignInGoogle} className={`d-flex justify-content-center fs-6 ${styles.buttonGoogle}`}>
                 <div className={`d-flex justify-content-start justify-content-sm-center aling-items-center flex-row ${styles.gmailLogoAndtext}`}>
@@ -155,9 +155,9 @@ const handlerRecoveryLogin = ()=>{
             </div>
           </Row>
           </div>
-          <p className={`mt-3 ${styles.registerNotice}`}>{t('RegisterNotice')}</p>
-          <p className={`fs-6 ${styles.dontHaveAccounttext}`}>{t('dontHaveAccounttext')} 
-            <Button onClick={handlerJoinLink} className="text-primary" variant="link">
+          <p className={`mt-2 ${styles.registerNotice}`}>{t('RegisterNotice')}</p>
+          <p className={`fs-6 ${styles.dontHaveAccounttext} mb-0 pb-0`}>{t('dontHaveAccounttext')} 
+            <Button onClick={handlerJoinLink} className="text-primary fs-5 " variant="link">
             {t('Join')}
             </Button>
           </p>

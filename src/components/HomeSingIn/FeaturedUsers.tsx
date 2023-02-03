@@ -10,7 +10,7 @@ const FeaturedUsers = () => {
 
   if (users && users.length) {
     return (
-      <section className="d-flex flex-column justify-content-center align-items-center">
+      <section className="d-flex flex-column ">
         <h2 className="text-secondary fw-bold">{t('Featured users')}</h2>
         {users.map((user) => (
           <div key={user.id}>

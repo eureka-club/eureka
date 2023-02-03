@@ -181,13 +181,13 @@ const MosaicItem: FunctionComponent<Props> = ({
   }; 
 
   const renderLocalImageComponent = () => {
+    console.log(cycle, 'cycle');
     const img = cycle?.localImages 
       ? <div className='img h-100 cursor-pointer'> 
       <LocalImageComponent className='cycle-img-card'  filePath={cycle?.localImages[0].storedFile} title={cycle?.title} alt={cycle?.title} />
-      
-      {detailed && (cycle && cycle.creator && cycle.startDate && cycle.endDate ) && (<div className={`d-flex flex-row justify-content-between  ${styles.date}`}>
+      {detailed && (cycle && cycle.creatorId && cycle.startDate && cycle.endDate ) && (<div className={`d-flex flex-row justify-content-between  ${styles.date}`}>
                         <div  className={` d-flex flex-row aling-items-center fs-6`}>
-                         <Avatar className='' width={26} height={26} userId={cycle.creator.id} showName={false} size="xs" />
+                         <Avatar className='' width={26} height={26} userId={cycle.creatorId} showName={false} size="xs" />
                          <div className='d-flex align-items-center'>
                             {dayjs(cycle?.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
                           <span className='' style={{marginLeft:'1.5px',marginRight:'1.5px'}}>-</span>
