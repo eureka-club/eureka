@@ -8,7 +8,8 @@ export const getWork = async (id: number,origin=''): Promise<WorkMosaicItem> => 
   if (!res.ok) 
     throw Error('Error');
 
-  return res.json();
+  const w =await  res.json();
+  return w;
 };
 interface Options {
   staleTime?: number;

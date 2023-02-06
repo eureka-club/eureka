@@ -12,7 +12,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ){
-  debugger;
   if(req.method?.toLocaleLowerCase()=='get'){
     try {
       const {sessionId:si} = req.query;
@@ -71,7 +70,8 @@ export default async function handler(
           ... args.isCycle && {
             usersJoined:{select:{userId:true,pending:true}},
             participants:{select:{id:true}},
-          }
+          },
+          // favs:{select:{id:true}},
         },
         // include: {
         //   _count:{select:{ratings:true}},
@@ -178,9 +178,6 @@ export default async function handler(
         prevCursor: c,
         nextCursor: c + 1,
       };
-      // const seconds = 60 * 60 * 8; //8 hours
-      // redis.set(redisKey, JSON.stringify(result), 'EX', seconds);
-  debugger;
       res.status(200).json(result);
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

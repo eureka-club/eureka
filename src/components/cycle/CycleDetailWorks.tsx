@@ -67,7 +67,7 @@ const CycleDetailWorks: React.FC<Props> = ({cycleWorksDates}) => {
             if(!w)return ''
             queryClient.setQueryData(['WORK',`${w.id}`],w)
             return <div className='p-4' key={w.id}>
-                            <WorkMosaic work={w as WorkMosaicItem} workId={w.id} size={'md'} showSaveForLater={true} />
+                            <WorkMosaic work={w as WorkMosaicItem} workId={w.id} size={'md'} showSaveForLater={false} />
                       </div>
           })}
         </div>

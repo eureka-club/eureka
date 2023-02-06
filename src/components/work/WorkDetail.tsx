@@ -18,14 +18,14 @@ import {
 } from 'react-bootstrap';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
 import { BiArrowBack } from 'react-icons/bi';
-import { useSession } from 'next-auth/react';
+// import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { PostMosaicItem } from '@/src/types/post';
 import UnclampText from '@/components/UnclampText';
 import WorkSummary from './WorkSummary';
 import detailPagesAtom from '@/src/atoms/detailPages';
 //import globalModalsAtom from '@/src/atoms/globalModals';
-import editOnSmallerScreens from '../../atoms/editOnSmallerScreens';
+// import editOnSmallerScreens from '../../atoms/editOnSmallerScreens';
 import styles from './WorkDetail.module.css';
 import TagsInput from '@/components/forms/controls/TagsInput';
 import MosaicItem from './MosaicItem';
@@ -62,9 +62,9 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
   });
 
   const {data:work} = useWork(workId,{
-    enabled:!!workId
-  })
-
+    enabled:!!(workId) 
+  });
+  
   const workCyclessWhere = {
     where:{works:{
       some:{
@@ -72,7 +72,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
       }
     }}
   }
-  const [workPostsWhere,setWorkPostsWhere] = useState<Record<string,any>>(
+  const [workPostsWhere] = useState<Record<string,any>>(
     {
       take:8,
       where:{
@@ -91,7 +91,6 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
   const [defaultActiveKey,setDefaultActiveKey] = useState<string>('posts')
 
   const [hasMorePosts,setHasMorePosts] = useState(dataPosts?.fetched);
-  const query = router.query;
 
   useEffect(()=>{
     if(dataPosts && dataPosts.posts){
@@ -109,7 +108,6 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
     if(router.query.tabKey)setDefaultActiveKey(router.query.tabKey.toString())
 
   },[dataCycles,posts])
-
 
   useEffect(()=>{
     if(inView && hasMorePosts){
@@ -231,7 +229,14 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
               {post == null ? (
                 <Row className="mb-5 d-flex flex-column flex-md-row">
                   <Col className="col-md-5 col-lg-4 col-xl-3   d-none d-md-block">
-                    <MosaicItem work={work} workId={work.id} showTrash linkToWork={false} size={'lg'} showSaveForLater={true} />
+                    <MosaicItem
+                      workId={work.id}
+                      showTrash
+                      linkToWork={false}
+                      size={'lg'}
+                      showCreateEureka = {false}
+                      showSaveForLater={true}
+                    />
                     {/* <div className={classNames(styles.imgWrapper, 'mb-3')}>
                   <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
                 </div>
@@ -291,7 +296,12 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
               ) : (
                 <>
                   {post && work && (
-                    <PostDetailComponent postId={post.id} work={work} cacheKey={['POST', `${post.id}`]} />
+                    <PostDetailComponent
+                      showSaveForLater={true}
+                      postId={post.id}
+                      work={work}
+                      cacheKey={['POST', `${post.id}`]}
+                    />
                   )}
                 </>
               )}
@@ -374,7 +384,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                                           cacheKey={['POST', `${p.id}`]}
                                           postId={p.id}
                                           size={'md'}
-                                          showSaveForLater={true}
+                                          showSaveForLater={false}
                                         />
                                       </Col>
                                     ))}
@@ -404,7 +414,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                                         cycleId={c.id}
                                         cacheKey={['CYCLES', `WORK-${workId}`]}
                                         size={'md'}
-                                        showSaveForLater={true}
+                                        showSaveForLater={false}
                                       />
                                     </Col>
                                   ))}

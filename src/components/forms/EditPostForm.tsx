@@ -168,7 +168,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
       return res.json();
     },
     {
-      onMutate: async (variables) => {debugger;
+      onMutate: async (variables) => {
          if (post) {
             const ck_ = ck||['POST',`${post.id}`];
             await queryClient.cancelQueries(ck_)
@@ -382,7 +382,6 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
   };
 
   if (isLoading || isFetching || !post) return <Spinner animation="grow" variant="info" size="sm" />;
-debugger;
   return (
     post ? (
       <Form onSubmit={handleSubmit} ref={formRef}>

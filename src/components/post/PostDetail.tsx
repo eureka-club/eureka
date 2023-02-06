@@ -35,12 +35,13 @@ interface Props {
   work?: WorkMosaicItem;
   // mySocialInfo?: MySocialInfo;
   cacheKey:[string,string];
+  showSaveForLater?:boolean;
 }
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
+const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey,showSaveForLater=false }) => {
   const { t } = useTranslation('createPostForm');
   const router = useRouter();
   const queryClient = useQueryClient()
@@ -141,7 +142,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey }) => {
       <Row className="mb-5 d-flex flex-column flex-lg-row">
         <Col className='col-lg-4 col-xl-5'>
           <div className='mb-2 d-none d-lg-block'>
-            <MosaicItem cacheKey={cacheKey} className='' postId={post.id} showdetail={false} linkToPost={false}  showSaveForLater={true}/>
+            <MosaicItem  cacheKey={cacheKey} className='' postId={post.id} showdetail={false} linkToPost={false}  showSaveForLater={true}/>
           </div>
           <div className='container d-sm-block d-lg-none mb-2 mt-2 position-relative'>
              <MosaicItem cacheKey={cacheKey} className='postition-absolute start-50 translate-middle-x' postId={post.id} showdetail={false} linkToPost={false} showSaveForLater={true} />

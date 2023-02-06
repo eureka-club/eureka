@@ -141,7 +141,6 @@ export default getApiHandler()
       const user = await find({where:{ id }});
       if(user)
         user.type = "user";
-
       res.status(200).json({ user });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
