@@ -68,9 +68,9 @@ export default getApiHandler()
             if(c){
               currentUserIsParticipant =  currentUserIsCreator || c.participants.findIndex(p=>p.id==session.user.id) > -1;
               currentUserIsPending = c.usersJoined.findIndex(p=>p.userId==session.user.id && p.pending) > -1;
-              // ratingAVG = c.ratings.reduce((p,c)=>c.qty+p,0)/ratingCount
-              // let r  = c.ratings.find(r=>r.userId==session.user.id)
-              // if(r)currentUserRating = r.qty;
+              ratingAVG = c.ratings.reduce((p,c)=>c.qty+p,0)/ratingCount
+              let r  = c.ratings.find(r=>r.userId==session.user.id)
+              if(r)currentUserRating = r.qty;
             }
             
           }
