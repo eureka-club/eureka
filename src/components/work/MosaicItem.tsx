@@ -11,13 +11,13 @@ import styles from './MosaicItem.module.css';
 import SocialInteraction from '../common/SocialInteraction';
 import { useCycleContext } from '../../useCycleContext';
 import { DATE_FORMAT_SHORT } from '../../constants';
-import useWork from '@/src/useWork'
+import useWork from '@/src/useWork';
 import { WorkMosaicItem } from '@/src/types/work';
 
 dayjs.extend(isBetween);
 dayjs.extend(utc);
 interface Props {
-  work?:WorkMosaicItem;
+  work?: WorkMosaicItem;
   workId: number;
   showButtonLabels?: boolean;
   showShare?: boolean;
@@ -25,14 +25,14 @@ interface Props {
   showCreateEureka?: boolean;
   showSaveForLater?: boolean;
   style?: { [k: string]: string };
-  cacheKey?: [string,string];
+  cacheKey?: [string, string];
   showTrash?: boolean;
   linkToWork?: boolean;
   size?: string;
-  className?:string;
+  className?: string;
 }
 const MosaicItem: FunctionComponent<Props> = ({
-  work:workItem,
+  work: workItem,
   workId,
   showButtonLabels = false,
   showSocialInteraction = true,
@@ -46,19 +46,19 @@ const MosaicItem: FunctionComponent<Props> = ({
   className = '',
 }) => {
   const { t } = useTranslation('common');
-  const {cycle} = useCycleContext();
+  const { cycle } = useCycleContext();
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
-  const [work,setWork] = useState(workItem)
+  const [work, setWork] = useState(workItem);
 
-  const {data} = useWork(workId,{
-    enabled:!!workId && !workItem
-  })
-  useEffect(()=>{
-    if(data && !workItem)setWork(data)
-  },[data])
+  const { data } = useWork(workId, {
+    enabled: !!workId && !workItem,
+  });
+  useEffect(() => {
+    if (data && !workItem) setWork(data);
+  }, [data]);
 
-  if(!work)return <></>
+  if (!work) return <></>;
   const { id, title, localImages, type } = work;
 
   const isActive = () => {
@@ -134,9 +134,9 @@ const MosaicItem: FunctionComponent<Props> = ({
     setLoading(true);
   };
   const renderLocalImageComponent = () => {
-    const img = localImages 
-      ? <LocalImageComponent filePath={localImages[0].storedFile} title={title} alt={title} />
-      : undefined;
+    const img = localImages ? (
+      <LocalImageComponent filePath={localImages[0].storedFile} title={title} alt={title} />
+    ) : undefined;
     if (linkToWork) {
       return (
         <div
@@ -145,7 +145,9 @@ const MosaicItem: FunctionComponent<Props> = ({
           role="presentation"
           style={style}
         >
-          {!canNavigate() && <Spinner className="position-absolute top-50 start-50" size="sm" animation="grow" variant="info" />}
+          {!canNavigate() && (
+            <Spinner className="position-absolute top-50 start-50" size="sm" animation="grow" variant="info" />
+          )}
           {img}
         </div>
       );
@@ -153,7 +155,10 @@ const MosaicItem: FunctionComponent<Props> = ({
     return img;
   };
   return (
-    <Card className={`${size?.length ? `mosaic-${size}` : 'mosaic'} ${isActive() ? 'my-1 isActive' : ''} ${className}`} data-cy={`mosaic-item-work-${id}`}>
+    <Card
+      className={`${size?.length ? `mosaic-${size}` : 'mosaic'} ${isActive() ? 'my-1 isActive' : ''} ${className}`}
+      data-cy={`mosaic-item-work-${id}`}
+    >
       <div className={`${styles.imageContainer}`}>
         {renderLocalImageComponent()}
         {isActive() && <CgMediaLive className={`${styles.isActiveCircle}`} />}
@@ -165,14 +170,15 @@ const MosaicItem: FunctionComponent<Props> = ({
       {showSocialInteraction && work && (
         <Card.Footer className={`${styles.footer}  d-flex justify-content-end `}>
           <SocialInteraction
-            cacheKey={cacheKey || ['WORK',work.id.toString()]}
+            cacheKey={cacheKey || ['WORK', work.id.toString()]}
             showButtonLabels={showButtonLabels}
             showRating={false}
             showCounts
             entity={work}
             showTrash={showTrash}
             showSaveForLater={showSaveForLater}
-            className='w-100'
+            showCreateEureka={showCreateEureka}
+            className="w-100"
           />
         </Card.Footer>
       )}

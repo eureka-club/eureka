@@ -229,7 +229,14 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
               {post == null ? (
                 <Row className="mb-5 d-flex flex-column flex-md-row">
                   <Col className="col-md-5 col-lg-4 col-xl-3   d-none d-md-block">
-                    <MosaicItem workId={work.id} showTrash linkToWork={false} size={'lg'} showSaveForLater={true} />
+                    <MosaicItem
+                      workId={work.id}
+                      showTrash
+                      linkToWork={false}
+                      size={'lg'}
+                      showCreateEureka = {false}
+                      showSaveForLater={true}
+                    />
                     {/* <div className={classNames(styles.imgWrapper, 'mb-3')}>
                   <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
                 </div>
@@ -289,7 +296,12 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
               ) : (
                 <>
                   {post && work && (
-                    <PostDetailComponent showSaveForLater={true} postId={post.id} work={work} cacheKey={['POST', `${post.id}`]} />
+                    <PostDetailComponent
+                      showSaveForLater={true}
+                      postId={post.id}
+                      work={work}
+                      cacheKey={['POST', `${post.id}`]}
+                    />
                   )}
                 </>
               )}
