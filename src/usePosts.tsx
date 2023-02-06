@@ -14,6 +14,8 @@ export const getPosts = async (
   const {data:posts,fetched,total} = await res.json();
   return {posts,fetched,total};
 };
+
+
 interface Options {
   staleTime?: number;
   enabled?: boolean;

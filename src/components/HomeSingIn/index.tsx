@@ -135,7 +135,7 @@ const getMediathequeSlug = (id:number,name:string)=>{
         </div>
       </section>
       <section className="d-flex flex-column flex-lg-row">
-        <Col xs={12} lg={2} className="me-4">
+        <Col xs={12} lg={2} className="me-2">
           <h2 className="text-secondary fw-bold">{t('Trending topics')}</h2>
           <aside className="mb-4">{getTopicsBadgedLinks()}</aside>
           <section className="mt-5">

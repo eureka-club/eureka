@@ -4,6 +4,7 @@ import useBackOffice from '@/src/useBackOffice';
 //TODO ver de usar como  el detalle de las obrasss buscar eurekas de una  sola obra
 
 const featuredWorksPostsWhere = (id: number) => ({
+  take:4,
   where: {
     works: {
       some: {

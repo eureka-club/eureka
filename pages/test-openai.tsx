@@ -16,8 +16,15 @@ const TestOpenai: NextPage<Props> = () => {
   }
 
     async function onHyvorTalkCall (){
-    let res =  await fetch("https://talk.hyvor.com/api/v1/comments?website_id=3377&sort=most_upvoted&page_identifier=cycle-21")
-    console.log(await res.json(),'res')
+    const { error, data } = await fetch('/api/hyvor_talk/searchComments?id=work-247', {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json',
+      },
+    }).then((r) => r.json());
+
+    console.log(data,'data')
+
 
     }
 
