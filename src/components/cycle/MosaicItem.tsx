@@ -181,7 +181,6 @@ const MosaicItem: FunctionComponent<Props> = ({
   }; 
 
   const renderLocalImageComponent = () => {
-    console.log(cycle, 'cycle');
     const img = cycle?.localImages 
       ? <div className='img h-100 cursor-pointer'> 
       <LocalImageComponent className='cycle-img-card'  filePath={cycle?.localImages[0].storedFile} title={cycle?.title} alt={cycle?.title} />
