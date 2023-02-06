@@ -146,7 +146,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                     alt="Eureka"
                   />
                 </Link>
-                <Link href="/explore" replace>
+                <Link href="/" replace>
                   <p className={`mt-5 cursor-pointer text-white ${styles.VisitEurekaText}`}>{t('VisitEureka')} </p>
                 </Link>
               </Container>
