@@ -1,0 +1,97 @@
+import {} from 'react';
+import { useModalContext } from '@/src/useModal';
+import SignInForm from '@/src/components/forms/SignInForm';
+
+import { useMutation, useQueryClient } from 'react-query';
+import { CycleMosaicItem } from '@/src/types/cycle';
+import { WorkMosaicItem } from '@/src/types/work';
+import { useSession } from 'next-auth/react';
+import { isCycle, isWork } from '@/src/types';
+import { UserMosaicItem } from '@/src/types/user';
+import useUser from '@/src/useUser';
+
+export interface ExecRatingPayload {
+  doCreate:boolean;
+  ratingQty:number;
+}
+interface MutateReturn{
+  prevUser:UserMosaicItem|undefined;
+  prevcycle:CycleMosaicItem|undefined;
+}
+interface Props{
+  cycle:CycleMosaicItem;
+}
+
+const useExecRating = (props:Props)=>{
+  const {cycle} = props;
+  const queryClient = useQueryClient();
+  const {data:session,status} = useSession();
+  const { data: user } = useUser(session?.user?.id||0, {
+    enabled:!!session?.user?.id
+  });
+
+  const { show } = useModalContext();
+
+  const openSignInModal = () => {
+    show(<SignInForm />);
+  };
+    
+  return useMutation(
+    async ({ doCreate, ratingQty }:ExecRatingPayload) => {
+      if (session && cycle) {
+        const res = await fetch(`/api/cycle/${cycle.id}/rating`, {
+          method: doCreate ? 'POST' : 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            qty: ratingQty,
+            doCreate,
+          }),
+        });
+        return res.json();
+      }
+      openSignInModal();
+      return null;
+    },
+    {
+      onMutate:async (payload: ExecRatingPayload) => {
+        let prevUser =undefined;
+        let prevCycle =undefined;
+        if (cycle && session && user) {
+          const cacheKey = ['CYCLE',`${cycle.id}`];
+          await queryClient.cancelQueries(['USER', `${session.user.id}`]);
+          await queryClient.cancelQueries(cacheKey);
+          
+          prevUser = queryClient.getQueryData<UserMosaicItem>(['USER', `${session.user.id}`]);
+          prevCycle = queryClient.getQueryData<CycleMosaicItem>(cacheKey);
+      
+          let ratingCycles = user.ratingCycles
+          let ratings = cycle.ratings;
+      
+          if (!payload.doCreate) {
+            ratingCycles = ratingCycles.filter((i) => i.cycleId !== cycle.id);
+            ratings = ratings.filter((i) => i.userId != session.user.id);
+          } 
+          else {
+            ratingCycles?.push({cycleId:cycle.id,qty:payload.ratingQty});
+            ratings.push({ userId: +user.id, qty:payload.ratingQty });
+          }
+          queryClient.setQueryData(cacheKey, { ...cycle, ratings });
+          queryClient.setQueryData(['USER', `${user.id}`], { ...user, ratingCycles });
+        }
+        return { prevUser, prevCycle };
+      },
+      onSettled:(_, error, __, context) => {
+        const cacheKey = ['CYCLE',`${cycle.id}`];
+        if (error && context) {
+          if ('prevUser' in context) queryClient.setQueryData(['USER', `${session?.user.id}`], context?.prevUser);
+          if ('prevCycle' in context) queryClient.setQueryData(cacheKey, context?.prevCycle);
+        }
+        queryClient.invalidateQueries(['USER', `${session?.user.id}`]);
+        queryClient.invalidateQueries(cacheKey);
+      },
+    },
+  );
+}
+
+
+export default useExecRating

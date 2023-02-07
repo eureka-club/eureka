@@ -12,7 +12,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/react';
 // import Rating from 'react-rating';
 import useEmojiPicker from './useEmojiPicker';
-import Rating from '@/components/common/Rating';
+import Rating from '@/src/components/common/Rating';
 
 import { OverlayTrigger, Popover, Button, Spinner, Modal } from 'react-bootstrap';
 
@@ -472,7 +472,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
                 fullSymbol={getFullSymbol()}
                 readonly={loadingSocialInteraction}
               />  */}
-                <Rating qty={qty} onClick={handlerChangeRating} stop={5} readonly={loadingSocialInteraction} />
+                <Rating qty={qty} onChange={handlerChangeRating} stop={5} readonly={loadingSocialInteraction} />
               </>
             )}{' '}
             {showRating && !loadingSocialInteraction && getRatingsCount()}{' '}

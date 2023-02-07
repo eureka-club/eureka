@@ -1,9 +1,9 @@
 import { useSession } from 'next-auth/react';
-import { Work } from '@prisma/client';
+import { Cycle, Work } from '@prisma/client';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useState,useEffect } from 'react';
 import { Col, Row,Spinner } from 'react-bootstrap';
-import Rating from '@/components/common/Rating'
+import Rating from '@/src/components/common/Rating'
 
 import { GiBrain } from 'react-icons/gi';
 import {BsChevronUp, BsX} from 'react-icons/bs';
@@ -21,6 +21,12 @@ import { MosaicContext } from '../../useMosaicContext';
 // import useWorks from '@/src/useWorks'
 import useCycle from '@/src/useCycle'
 import CarouselStatic from '../CarouselStatic';
+import { Box } from '@mui/material';
+import useExecRatingCycle, { ExecRatingPayload } from '@/src/hooks/mutations/useExecRatingCycle';
+import { UserMosaicItem } from '@/src/types/user';
+import { useQueryClient } from 'react-query';
+import useUser from '@/src/useUser';
+import { CycleMosaicItem } from '@/src/types/cycle';
 interface Props {
   // cycle: CycleMosaicItem;
   cycleId:number;
@@ -54,14 +60,13 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   // const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   // const router = useRouter();
   const [show, setShow] = useState<boolean>(s);
+  const queryClient = useQueryClient();
 
-  // const {data:session} = useSession();
+  const {data:session} = useSession();
   const { t } = useTranslation('cycleDetail');
 
   const {data:cycle,isLoading:isLoadingCycle} = useCycle(cycleId,{enabled:!!cycleId})
-  // const { data: dataWorks } = useWorks({ where:{cycles: { some: { id: cycleId} }} }, {
-  //   enabled:!!cycleId
-  // })
+  
   const works = cycle?.cycleWorksDates?.length 
     ? cycle?.cycleWorksDates?.map(c=>c.work)
     : cycle?.works
@@ -71,8 +76,14 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   // },[dataWorks])
 
   const [qty, setQty] = useState(cycle?.ratingAVG||0);
+  const [qtyByUser,setqtyByUser] = useState(0);
+
   useEffect(()=>{
-    setQty(cycle?.ratingAVG||0)
+    if(cycle){
+      setQty(cycle?.ratingAVG||0);
+      const currentRating = cycle?.ratings.filter(c=>c.userId==session?.user.id);
+      setqtyByUser(currentRating?.length ? currentRating[0].qty : 0);
+    }
   },[cycle])
 
   const getFullSymbol = () => {
@@ -93,6 +104,19 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
       return cycle.ratingAVG || 0;
     }
     return 0;
+  };
+  
+  const {mutate:execRating} = useExecRatingCycle({
+    cycle:cycle!,
+  });
+
+  const handlerChangeRating = (value: number) => {
+    setQty(value);
+    setqtyByUser(value);
+    execRating({
+      ratingQty: value,
+      doCreate: value ? true : false,
+    });
   };
 
   const getWorksSorted = () => {
@@ -136,7 +160,6 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   };
 
   if(isLoadingCycle) return <Spinner animation='grow'/>
-  
   if(!cycle)return <></>
 
   return (
@@ -145,6 +168,9 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         {/* xs={{ span: 12, order: 2 }} md={{ span: 7, order: 1 }} lg={{ span: 8 }}*/}
         <Col className="d-none d-lg-flex col-12 col-md-2 col-lg-3 justify-content-center justify-content-lg-start">
           <aside className="d-flex flex-column">
+            <div className="mt-3">
+              <UserAvatar width={42} height={42} userId={cycle.creatorId} showFullName />
+            </div>
             <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
               <MosaicItem
                 cycleId={cycle.id}
@@ -157,9 +183,13 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                 size={'lg'}
               />
             </MosaicContext.Provider>
-            <div className="mt-3">
-              <UserAvatar width={42} height={42} userId={cycle.creatorId} showFullName />
-            </div>
+            <Box mt={1}>
+              <Rating
+                qty={qtyByUser}
+                onChange={handlerChangeRating}
+                size="medium"
+              />
+            </Box>
           </aside>
         </Col>
         <Col className="mt-3 ms-lg-3 mt-lg-0 col-12 col-md-10 col-lg-9 d-none d-lg-flex flex-column justify-content-center justify-content-lg-start">
@@ -178,10 +208,9 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
             <Rating
               readonly
               qty={qty}
-              onClick={(val) => {
-                setQty(val);
-              }}
+              onChange={handlerChangeRating}
               stop={5}
+              size="small"
             />{' '}
             <div className="d-flex flex-nowrap ms-2">
               {getRatingAvg().toFixed(1)}
@@ -316,10 +345,11 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                 <Rating
                   readonly
                   qty={qty}
-                  onClick={(val) => {
-                    setQty(val);
+                  onChange={(val) => {
+                    setQty(val||0);
                   }}
                   stop={5}
+                  size="small"
                 />{' '}
                 <div className="ms-2">
                   {getRatingAvg()!.toFixed(1)}

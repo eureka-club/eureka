@@ -28,7 +28,9 @@ type UserFoolow = {
     following:{select:{id:true,name:true,image:true,photos:{select:{storedFile:true}}}},
     ratingWorks:{
       select:{
-        workId:true,work:{select:{id:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,favs:{select:{id:true}},localImages:{select:{storedFile:true}}}}
+        workId:true,
+        qty:true,
+        work:{select:{id:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,favs:{select:{id:true}},localImages:{select:{storedFile:true}}}}
       }
     },
     favWorks:{select:{id:true,createdAt:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,favs:{select:{id:true}},localImages:{select:{storedFile:true}}}},
@@ -37,7 +39,7 @@ type UserFoolow = {
     // posts:{select:{id:true}},
     cycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
     joinedCycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
-    ratingCycles:{select:{cycleId:true}},
+    ratingCycles:{select:{cycleId:true,qty:true}},
     photos:{select:{storedFile:true}},
     // notifications:{
     //   select:{

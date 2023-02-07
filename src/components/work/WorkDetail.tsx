@@ -1,4 +1,4 @@
-import { FunctionComponent, MouseEvent, useEffect, useState, lazy, Suspense } from 'react';
+import { FunctionComponent, MouseEvent, useEffect, useState, lazy, Suspense, useCallback } from 'react';
 import classNames from 'classnames';
 import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
@@ -40,6 +40,9 @@ import MosaicItemPost from '@/src/components/post/MosaicItem'
 import { useInView } from 'react-intersection-observer';
 import { Session } from '@/src/types';
 import HyvorComments from '@/src/components/common/HyvorComments';
+import useExecRatingWork from '@/src/hooks/mutations/useExecRatingWork';
+import Rating from '../common/Rating';
+import { Box } from '@mui/material';
 
 const PostDetailComponent = lazy(()=>import('@/components/post/PostDetail')) ;
  
@@ -64,6 +67,21 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
   const {data:work} = useWork(workId,{
     enabled:!!(workId) 
   });
+
+  const [qty, setQty] = useState(work?.ratingAVG||0);
+  const [qtyByUser,setqtyByUser] = useState(0);
+
+  useEffect(()=>{
+    if(work && session){
+      let ratingCount = work.ratings.length;
+      const ratingAVG = work.ratings.reduce((p,c)=>c.qty+p,0)/ratingCount;
+      setQty(ratingAVG);
+
+      const currentRating = work?.ratings.filter(w=>w.userId==session?.user.id);
+      setqtyByUser(currentRating?.length ? currentRating[0].qty : 0);
+    }
+
+  },[work,session])
   
   const workCyclessWhere = {
     where:{works:{
@@ -91,6 +109,10 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
   const [defaultActiveKey,setDefaultActiveKey] = useState<string>('posts')
 
   const [hasMorePosts,setHasMorePosts] = useState(dataPosts?.fetched);
+
+  const {mutate:execRating} = useExecRatingWork({
+    work:work!,
+  });
 
   useEffect(()=>{
     if(dataPosts && dataPosts.posts){
@@ -200,6 +222,18 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
     }
     return <></> 
   }
+
+  
+
+  const handlerChangeRating = (value: number) => {
+    setQty(value);
+    setqtyByUser(value);
+    execRating({
+      ratingQty: value,
+      doCreate: value ? true : false,
+    });
+  };
+
   return (
     <WorkContext.Provider value={{ work, linkToWork: false }}>
       <MosaicContext.Provider value={{ showShare: true }}>
@@ -237,6 +271,13 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                       showCreateEureka = {false}
                       showSaveForLater={true}
                     />
+                    <Box mt={1}>
+                      <Rating
+                        qty={qtyByUser}
+                        onChange={handlerChangeRating}
+                        size="medium"
+                      />
+                    </Box>
                     {/* <div className={classNames(styles.imgWrapper, 'mb-3')}>
                   <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
                 </div>
@@ -279,6 +320,14 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                           showSaveForLater={true}
                         />
                       </div>
+                      <Box mt={1}>
+                        <Rating
+                          qty={qty}
+                          onChange={handlerChangeRating}
+                          size="medium"
+                          readonly
+                        />
+                      </Box>
                       {work.contentText != null && (
                         <UnclampText isHTML={false} text={work.contentText} clampHeight="8rem" />
                       )}
@@ -386,6 +435,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                                           size={'md'}
                                           showSaveForLater={false}
                                         />
+                                        
                                       </Col>
                                     ))}
                                   </Row>
