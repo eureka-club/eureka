@@ -3,7 +3,7 @@ import { useAtom } from 'jotai';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, MouseEvent, useState, useRef, useEffect, Suspense, lazy } from 'react';
+import { FunctionComponent, MouseEvent, useState, useRef, useEffect, Suspense, lazy, FC } from 'react';
 import {
   TabPane,
   TabContent,
@@ -40,6 +40,7 @@ import useUsers from '@/src/useUsers'
 import MosaicItemPost from '@/src/components/post/MosaicItem'
 import MosaicItemUser from '@/components/user/MosaicItem'
 import { useInView } from 'react-intersection-observer';
+import { CycleMosaicItem } from '@/src/types/cycle';
 
 
 const CycleDetailDiscussion = lazy(() => import ('./CycleDetailDiscussion')) 
@@ -318,8 +319,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     return '';
   };
 
-  const renderRestrictTabsHeaders = () => {
-    if (cycle && participants) {
+  const RenderRestrictTabsHeaders:FC<{cycle:CycleMosaicItem}> = ({cycle}) => {
+    if (cycle) {
       const res = (
         <>
           <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
@@ -343,16 +344,16 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
           <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
             <NavLink eventKey="participants">
-              <span className="mb-3">{t('Participants')} ({participants.length})</span>
+              <span className="mb-3">{t('Participants')} ({cycle.participants.length})</span>
             </NavLink>
           </NavItem>
         </>
       );
-      if (cycle.access === 3) return '';
+      if (cycle.access === 3) return <></>;
       if (cycle.access === 1) return res;
       if (cycle.access === 2 && (cycleContext.cycle?.currentUserIsCreator || cycleContext.cycle?.currentUserIsParticipant)) return res;
     }
-    return '';
+    return <></>;
   };
 
   const handleEditPostClick = (ev: MouseEvent<HTMLButtonElement>) => {
@@ -470,7 +471,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                           </span>
                         </NavLink>
                       </NavItem>
-                      {renderRestrictTabsHeaders()}
+                      <RenderRestrictTabsHeaders cycle={cycle}/>
                     </Nav>
                   </Col>
                 </Row>
