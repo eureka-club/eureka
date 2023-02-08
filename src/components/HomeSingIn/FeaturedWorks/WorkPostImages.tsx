@@ -1,10 +1,8 @@
-//import useFeaturedWorks from '@/src/useFeaturedWorks';
 import { FunctionComponent } from 'react';
 import { Row } from 'react-bootstrap';
 import useFeaturedWorksPostsImages from '@/src/useFeaturedWorksPostsImages';
 import LocalImageComponent from '../../LocalImage';
-//import { Button, Container, Carousel } from 'react-bootstrap';
-//import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/router';
 import MosaicItem from '@/components/work/MosaicItem';
 
 interface Props {
@@ -13,27 +11,25 @@ interface Props {
 }
 
 const WorkPostImages: FunctionComponent<Props> = ({ workId, workTitle }) => {
-  //const { data: dataFeaturedWorks } = useFeaturedWorks();
-  const { data: imagesWorkPosts } = useFeaturedWorksPostsImages(workId);
-  // const { t } = useTranslation('common');
+  const router = useRouter();
+  const { data: posts } = useFeaturedWorksPostsImages(workId);
 
-  //console.log(imagesWorkPosts, 'work  imagesWorkPosts ');
-
-  if (imagesWorkPosts && imagesWorkPosts.length) {
+  if (posts && posts.length) {
     return (
-      <section>
-        <h3 className="text-secondary fs-5 mb-1">{`Imagenes sobre ${workTitle}`}</h3>
-        <div className="d-flex flex-row justify-content-between">
-          {imagesWorkPosts.map((image) => (
-            <LocalImageComponent
-              key={image}
-              className="pe-1"
-              filePath={image}
-              title=""
-              alt=""
-              height={150}
-              width={150}
-            />
+      <section className="d-flex flex-column">
+        <h3 className="text-secondary fs-5 mb-2">{`Imagenes sobre ${workTitle}`}</h3>
+        <div className="d-flex flex-wrap justify-content-center justify-content-lg-start">
+          {posts.map((post) => (
+            <div className='cursor-pointer' key={post.id} onClick={() => router.push(`/work/${workId}/post/${post.id}`)}>
+              <LocalImageComponent
+                className="pe-lg-1"
+                filePath={post.storedFile}
+                title=""
+                alt=""
+                height={150}
+                width={150}
+              />
+            </div>
           ))}
         </div>
       </section>
