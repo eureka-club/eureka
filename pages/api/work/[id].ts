@@ -73,17 +73,17 @@ export default getApiHandler()
       }
       // let currentUserIsFav = false;
       // let currentUserRating = 0;
-      // let ratingCount = work._count.ratings;
       // let ratingAVG = 0;
-
+      
+      let ratingCount = work._count.ratings;
+      const ratingAVG = work.ratings.reduce((p,c)=>c.qty+p,0)/ratingCount;
       // if(session){
       //     let r  = work.ratings.find(r=>r.userId==session.user.id)
       //     if(r)currentUserRating = r.qty;
-      //     ratingAVG = work.ratings.reduce((p,c)=>c.qty+p,0)/ratingCount
       //     currentUserIsFav = work.favs.findIndex(f=>f.id==session.user.id) > -1
       // }
       // work.currentUserRating = currentUserRating;
-      // work.ratingAVG = ratingAVG;
+      work.ratingAVG = ratingAVG;
       // work.currentUserIsFav = currentUserIsFav;
       res.status(200).json(work);
     } catch (exc) {

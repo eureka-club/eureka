@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from "react";
 import { GiBrain } from 'react-icons/gi';
 import styles from './Rating.module.css';
+import RatingMUI from "./RatingMUI";
 
 interface Props {
  stop?:number;
  qty:number;
- onClick:(value:number)=>void;
+ onClick:(value:number|null)=>void;
+
  readonly?:boolean;
 }
 
@@ -45,8 +47,6 @@ const Rating:React.FC<Props> = ({stop:s1,qty,onClick:ock,readonly})=>{
             )
         return res;
     }
-    return <>
-        {renderValues()}
-    </>
+    return <RatingMUI qty={qty} onChange={ock} readonly={readonly} />
 }
 export default Rating;

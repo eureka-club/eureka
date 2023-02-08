@@ -55,22 +55,23 @@ export default getApiHandler()
       const id = parseInt((id_||'').toString())
       if(!isNaN(id)){
         const cycle = await find(id);
+        
         if (cycle) {
+          let ratingCount = cycle.ratings.length;
+          const ratingAVG = cycle.ratings.reduce((p,c)=>c.qty+p,0)/ratingCount;
+
           let currentUserIsParticipant = false;
           let currentUserIsCreator = false;
           let currentUserIsPending = false;
           let currentUserRating = 0;
-          let ratingCount = cycle._count.ratings;
-          let ratingAVG = 0;
           if(session){
             currentUserIsCreator = cycle.creatorId == session.user.id
             const c = await find(id)
             if(c){
               currentUserIsParticipant =  currentUserIsCreator || c.participants.findIndex(p=>p.id==session.user.id) > -1;
               currentUserIsPending = c.usersJoined.findIndex(p=>p.userId==session.user.id && p.pending) > -1;
-              // ratingAVG = c.ratings.reduce((p,c)=>c.qty+p,0)/ratingCount
-              // let r  = c.ratings.find(r=>r.userId==session.user.id)
-              // if(r)currentUserRating = r.qty;
+              let r  = c.ratings.find(r=>r.userId==session.user.id)
+              if(r)currentUserRating = r.qty;
             }
             
           }
