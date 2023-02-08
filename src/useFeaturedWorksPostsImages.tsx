@@ -19,9 +19,9 @@ const useFeaturedWorksPostsImages = (id: number) => {
 
   const { data: dataFeaturedWorksPosts } = usePosts(featuredWorksPostsWhere(id), { enabled: !!id });
 
-  let images: string[] = [];
+  let images: any[] = [];
   if (dataFeaturedWorksPosts && dataFeaturedWorksPosts.posts.length) {
-    images = dataFeaturedWorksPosts.posts.map((x) => x.localImages[0].storedFile);
+    images = dataFeaturedWorksPosts.posts.map((x) => ({id:x.id,storedFile:x.localImages[0].storedFile}));
   }
   return { data: images };
 };

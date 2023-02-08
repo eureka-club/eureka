@@ -13,7 +13,7 @@ const FeaturedUsers = () => {
       <section className="d-flex flex-column ">
         <h2 className="text-secondary fw-bold">{t('Featured users')}</h2>
         {users.map((user) => (
-          <div key={user.id}>
+          <div key={user.id} className="d-flex justify-content-center justify-content-lg-start">
             <MosaicItemUser user={user} />
           </div>
         ))}

@@ -1,10 +1,11 @@
 import useFeaturedWorks from '@/src/useFeaturedWorks';
 import useFeaturedWorksPosts from '@/src/useFeaturedWorksPostsImages';
-import { Button, Container, Carousel } from 'react-bootstrap';
+import { Button, Col,Row, Carousel } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
 import MosaicItem from '@/components/work/MosaicItem';
 import WorkPostImages from './WorkPostImages';
 import WorkComments from './WorkComments';
+//import HyvorComments from '@/src/components/common/HyvorComments';
 
 const FeaturedWorks = () => {
   const { data: dataFeaturedWorks } = useFeaturedWorks();
@@ -12,7 +13,7 @@ const FeaturedWorks = () => {
 
   if (dataFeaturedWorks && dataFeaturedWorks.works.length) {
     return (
-      <section className="">
+      <section className=" mb-4">
         <h2 className="text-secondary fw-bold mb-2"> Discusiones destacadas</h2>
         <div className="d-flex justify-content-center">
           <Carousel
@@ -25,30 +26,30 @@ const FeaturedWorks = () => {
             //fade
           >
             {dataFeaturedWorks.works.map((work) => (
-              <Carousel.Item key={work.id} className="px-2" style={{ height: '33rem' }}>
-                <div className="d-flex flex-row w-100  border justify-content-around border-primary rounded-3 py-2 m-0   ">
-                  <MosaicItem
-                    work={work}
-                    workId={work.id}
-                    showCreateEureka={false}
-                    className=""
-                    cacheKey={['WORK', work.id.toString()]}
-                    size={'lg'}
-                  />
-                  <div className="">
+              <Carousel.Item key={work.id} className="">
+                <Row className="d-flex flex-row w-100  bg-gray-very-light rounded-3 py-4 m-0  pe-0 pe-lg-3">
+                  <Col xs={12} lg={4} className="d-flex justify-content-center">
+                    <MosaicItem
+                      work={work}
+                      workId={work.id}
+                      showCreateEureka={true}
+                      showSocialInteraction={true}
+                      className="mb-4 mb-lg-0"
+                      cacheKey={['WORK', work.id.toString()]}
+                      size={'lg'}
+                    />
+                  </Col>
+                  <Col xs={12} lg={8} className="d-flex flex-column">
                     <WorkPostImages workId={work.id} workTitle={work.title} />
-                    <section className="mt-2">
-                      <h3 className="text-secondary fs-5 mb-1">{'Comentarios de nuestres usuaries'}</h3>
-                    </section>
                     <WorkComments workId={work.id} />
-                    <Button
-                      className="ms-4 btn-eureka"
-                      //onClick={handlerLogin} /*onClick={openSignInModal}*/
+                    {/* <Button
+                      className="btn-eureka"
+                      //onClick={handlerLogin} /*onClick={openSignInModal}
                     >
                       Participa
-                    </Button>
-                  </div>
-                </div>
+                    </Button>*/}
+                  </Col>
+                </Row>
               </Carousel.Item>
             ))}
           </Carousel>
