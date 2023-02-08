@@ -63,6 +63,12 @@ const WorkComments: FunctionComponent<Props> = ({ workId }) => {
         </section>
       </>
     );
-  } else return <></>;
+  } else return (
+    <section className="py-5 d-flex justify-content-center ">
+      <Button className="btn-eureka" onClick={() => router.push(`work/${workId}`)}>
+        Participa
+      </Button>
+    </section>
+  );
 };
 export default WorkComments;
