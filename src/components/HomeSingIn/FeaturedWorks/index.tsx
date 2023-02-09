@@ -9,8 +9,7 @@ import WorkComments from './WorkComments';
 
 const FeaturedWorks = () => {
   const { data: dataFeaturedWorks } = useFeaturedWorks();
-  const { t } = useTranslation('common');
-
+  // const { t } = useTranslation('common');
   if (dataFeaturedWorks && dataFeaturedWorks.works.length) {
     return (
       <section className=" mb-4">
@@ -40,7 +39,7 @@ const FeaturedWorks = () => {
                     />
                   </Col>
                   <Col xs={12} lg={8} className="d-flex flex-column">
-                    <WorkPostImages workId={work.id} workTitle={work.title} />
+                    <WorkPostImages work={work} workId={work.id} workTitle={work.title} />
                     <WorkComments workId={work.id} />
                     {/* <Button
                       className="btn-eureka"
