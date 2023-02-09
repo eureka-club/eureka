@@ -20,6 +20,7 @@ export type WorkMosaicItem = Prisma.WorkGetPayload<{
     _count:{select:{ratings:true}};
     favs:{select:{id:true}},
     ratings: {select:{userId:true,qty:true}};
+    posts?:{select:{id:true,localImages: {select:{storedFile:true}}}}
   }
 }> & {
   currentUserRating?:number;

@@ -15,7 +15,7 @@ import useMyCycles,{myCyclesWhere} from '@/src/useMyCycles';
 import Prompt from '@/src/components/post/PostPrompt';
 import FeaturedCycles from './FeaturedCycles';
 import FeaturedEurekas from './FeaturedEurekas';
-import FeaturedWorks from '@/src/components/HomeSingIn/FeaturedWorks/index';
+import FeaturedWorks from '@/src/components/HomeSingIn/FeaturedWorks';
 import CarouselsByTopics from './CarouselsByTopics';
 import CarouselStatic from '../CarouselStatic';
 import FeaturedUsers from './FeaturedUsers';

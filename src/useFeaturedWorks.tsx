@@ -1,17 +1,17 @@
 import useWorks, { getWorks } from './useWorks';
 import useBackOffice from '@/src/useBackOffice';
 
-const featuredWorksWhere = (ids:number[]) => ({
+export const featuredWorksWhere = (ids:number[]) => ({
   where:{
     id: { in: ids },
   }
 }) 
 
-export const getFeaturedWorks = async (ids:number[],take:number=8)=>{
-  return getWorks({ ...featuredWorksWhere(ids), take });
+export const getFeaturedWorks = async (ids:number[],take:number=8,origin?:string)=>{debugger;
+  return getWorks({ ...featuredWorksWhere(ids), take },origin||'');
 }
 
-const useFeaturedUsers = () => {
+const useFeaturedWorks = () => {
   const {data:bo} = useBackOffice();
   let worksIds:number[] = [];
   if(bo && bo.FeaturedWorks)
@@ -22,4 +22,4 @@ const useFeaturedUsers = () => {
   
 };
 
-export default useFeaturedUsers;
+export default useFeaturedWorks;
