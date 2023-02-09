@@ -28,7 +28,6 @@ import PostsCreated from './PostsCreated';
 import CyclesJoined from './CyclesJoined';
 import ReadOrWatched from './ReadOrWatched';
 import SavedForLater from './SavedForLater';
-import UsersFollowed from './UsersFollowed';
 import {isAccessAllowed} from '@/src/lib/utils';
 import RenderAccessInfo from './RenderAccessInfo';
 
@@ -42,7 +41,6 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
   
   const queryClient = useQueryClient();
   const { t } = useTranslation('mediatheque');
- 
 
   const { /* isError, error, */ data: user, isLoading: isLoadingUser, isSuccess: isSuccessUser } = useUser(+id,{
     enabled:!!+id
@@ -50,9 +48,11 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
 
   const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>(false);
   
-
   const {data:dataPosts} = useMyPosts(id)
   const [posts,setPosts] = useState(dataPosts?.posts);
+
+  const {data:dataCycles} = useMyCycles(id);
+  const [cycles,setCycles] = useState(dataCycles?.cycles);
 
   useEffect(()=>{
     if(dataPosts?.posts){
@@ -60,24 +60,23 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
     }
   },[dataPosts?.posts])
 
-  const {data:dataCycles} = useMyCycles(id);
-  const [cycles,setCycles] = useState(dataCycles?.cycles);
-
   useEffect(()=>{
-    if(dataCycles?.cycles){
-      setCycles(dataCycles?.cycles)
+    if(dataPosts?.posts && dataCycles?.cycles){
+        setCycles(dataCycles?.cycles)
     }
-  },[dataCycles?.cycles])
+  },[dataPosts?.posts,dataCycles?.cycles])
 
   useEffect(() => {
-    if(user){
-      const ifbm = (user && user.followedBy) ? user.followedBy.findIndex((i) => i.id === session?.user.id) !== -1 : false
-      setIsFollowedByMe(ifbm)
-    }
-    if (isSuccessUser && id && !user) {
-      queryClient.invalidateQueries(['USER', `${id}`]);
-    }
-  }, [user, id, isSuccessUser]);
+      if(dataPosts?.posts && dataCycles?.cycles){
+          if(user){
+            const ifbm = (user && user.followedBy) ? user.followedBy.findIndex((i) => i.id === session?.user.id) !== -1 : false
+            setIsFollowedByMe(ifbm)
+          }
+          if (isSuccessUser && id && !user) {
+            queryClient.invalidateQueries(['USER', `${id}`]);
+          }
+      }
+  }, [dataPosts?.posts,dataCycles?.cycles,user, id, isSuccessUser]);
 
   const { mutate: mutateFollowing, isLoading: isLoadingMutateFollowing } = useMutation<User>(
     async () => {
@@ -290,8 +289,8 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
               <>
                 <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('Mediatheque')}</h1>
                 <FilterEngine fictionOrNotFilter={false} geographyFilter={false} />
-                <PostsCreated posts={posts!} user={user} goTo={goTo} id={id.toString()} t={t}/>
-                <CyclesJoined cycles={cycles!} goTo={goTo} id={id.toString()} t={t}/>
+                <PostsCreated posts={posts?.slice(0,6)!} user={user} goTo={goTo} id={id.toString()} t={t}/>
+                <CyclesJoined cycles={cycles?.slice(0,6)!} goTo={goTo} id={id.toString()} t={t}/>
                 <ReadOrWatched user={user} id={id.toString()} goTo={goTo} t={t}/>
                 <SavedForLater user={user} goTo={goTo} t={t} id={id}/>
                 {/* <UsersFollowed user={user} goTo={goTo} t={t} /> */}
