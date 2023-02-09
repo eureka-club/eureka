@@ -276,6 +276,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                         qty={qtyByUser}
                         onChange={handlerChangeRating}
                         size="medium"
+                        iconColor="var(--bs-danger)"
+
                       />
                     </Box>
                     {/* <div className={classNames(styles.imgWrapper, 'mb-3')}>
@@ -326,6 +328,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                           onChange={handlerChangeRating}
                           size="medium"
                           readonly
+                          
                         />
                       </Box>
                       {work.contentText != null && (
