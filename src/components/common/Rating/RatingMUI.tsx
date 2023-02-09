@@ -11,16 +11,16 @@ interface Props {
  size?:RatingProps["size"];
  icon?:ReactNode;
  emptyIcon?:ReactNode;
- 
+ iconColor?:string;
 }
 
-const RatingMUI:FC<Props> = ({qty,onChange,readonly,size=undefined,icon=undefined,emptyIcon=undefined}) => {
-  const [value, setValue] = React.useState<number>(qty);
+const RatingMUI:FC<Props> = ({qty,onChange,readonly,size=undefined,icon=undefined,emptyIcon=undefined,iconColor}) => {
+  const [value, setValue] = React.useState<number>(qty);debugger;
   useEffect(()=>{
     setValue(qty);
   },[qty])
   const icons = {
-    icon:icon || <StarIcon style={{color:"var(--eureka-green)"}}/>,
+    icon:icon || <StarIcon style={{color:iconColor}}/>,
     emptyIcon: emptyIcon || <StarOutlineIcon style={{color:"var(--eureka-grey)"}}/>
   }
   return (

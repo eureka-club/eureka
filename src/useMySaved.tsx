@@ -17,9 +17,6 @@ const useMySaved = (id:number) => {
     favPosts:user.favPosts.map((p) => ({ ...p, type: 'post' })),
     favWorks:user.favWorks
   };
-
-  
-  
   return SFL;
 };
 
