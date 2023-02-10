@@ -139,7 +139,7 @@ const getMediathequeSlug = (id:number,name:string)=>{
           <h2 className="text-secondary fw-bold">{t('Trending topics')}</h2>
           <aside className="mb-4">{getTopicsBadgedLinks()}</aside>
           <section className="mt-5">
-            <h1 className="text-secondary  fw-bold" style={{ fontSize: '1.5rem' }}>
+            <h1 className="text-secondary  fw-bold" style={{ fontSize: '1.25rem' }}>
               {t('About Eureka')}{' '}
             </h1>
             <Link href="/about">
