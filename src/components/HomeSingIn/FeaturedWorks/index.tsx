@@ -9,11 +9,13 @@ import WorkComments from './WorkComments';
 
 const FeaturedWorks = () => {
   const { data: dataFeaturedWorks } = useFeaturedWorks();
-  // const { t } = useTranslation('common');
+  const { t } = useTranslation('featuredWorks');
   if (dataFeaturedWorks && dataFeaturedWorks.works.length) {
     return (
       <section className=" mb-4">
-        <h2 className="text-secondary fw-bold mb-2"> Discusiones destacadas</h2>
+        <h2 className="text-secondary fw-bold mb-2" style={{ fontSize: '1.5rem' }}>
+          {t('FeaturedDiscussions')}
+        </h2>
         <div className="d-flex justify-content-center">
           <Carousel
             //interval={3000}
