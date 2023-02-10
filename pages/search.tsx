@@ -1,40 +1,78 @@
 import { BiArrowBack } from 'react-icons/bi';
 import { NextPage, GetServerSideProps } from 'next';
+import Head from 'next/head';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import {QueryClient, dehydrate} from 'react-query';
+import { QueryClient, dehydrate } from 'react-query';
 import { ButtonGroup, Button, Alert } from 'react-bootstrap';
-import {getPosts} from '@/src/usePosts'
-import {getWorks} from '@/src/useWorks'
-import {getCycles} from '@/src/useCycles'
+import { getPosts } from '@/src/usePosts';
+import { getWorks } from '@/src/useWorks';
+import { getCycles } from '@/src/useCycles';
 
 import SearchInput from '@/components/SearchInput';
 
 import SearchTab from '@/src/components/SearchTab';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 
-const take=8;
-interface Props{
-  hasCycles:boolean;
-  hasPosts:boolean;
-  hasWorks:boolean;
+const topics = [
+  'gender-feminisms',
+  'technology',
+  'environment',
+  'racism-discrimination',
+  'wellness-sports',
+  'social issues',
+  'politics-economics',
+  'philosophy',
+  'migrants-refugees',
+  'introspection',
+  'sciences',
+  'arts-culture',
+  'history',
+];
+
+const take = 8;
+interface Props {
+  hasCycles: boolean;
+  hasPosts: boolean;
+  hasWorks: boolean;
+  metas: any;
 }
-const SearchPage: NextPage<Props> = ({hasCycles,hasPosts,hasWorks}) => {
+const SearchPage: NextPage<Props> = ({ hasCycles, hasPosts, hasWorks, metas }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
-
 
   let qLabel = `${router.query.q as string}`;
   if (qLabel.match(':')) qLabel = router.query.q as string;
 
-  const onTermKeyUp = (e:React.KeyboardEvent<HTMLInputElement>)=>{
-    if(e.code == 'Enter'){
-      router.push(`/search?q=${e.currentTarget.value}`)
+  const onTermKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.code == 'Enter') {
+      router.push(`/search?q=${e.currentTarget.value}`);
     }
-  }
+  };
 
-  return <SimpleLayout title={t('Results')}>
-        <ButtonGroup className="mb-1"> 
+  const isEurekaTopic = (t: string) => {
+    if (topics.includes(t!.toString())) return true;
+    return false;
+  };
+
+  return (
+    <>
+      {metas && (
+        <Head>
+          <meta
+            name="title"
+            content={`${t('meta:topicsTitle')} ${t('topics:' + metas.topic)} ${t('meta:topicsTitle1')}`}
+          ></meta>
+          <meta
+            name="description"
+            content={`${t('meta:topicsDescription')}: ${metas.works}, ${t('meta:topicsDescription1')}:  ${
+              metas.cycles
+            }.`}
+          ></meta>
+        </Head>
+      )}
+      <SimpleLayout title={t('Results')}>
+        <ButtonGroup className="mb-1">
           <Button variant="primary text-white" onClick={() => router.back()} size="sm">
             <BiArrowBack />
           </Button>
@@ -42,154 +80,147 @@ const SearchPage: NextPage<Props> = ({hasCycles,hasPosts,hasWorks}) => {
         {/* <SearchInput className="" /> */}
 
         <h1 className="text-secondary fw-bold mb-2">
-          {t('Results about')}: {`"${t("topics:" + qLabel,{ count: 1 }, { default: qLabel })}"`} 
+          {t('Results about')}: {`"${isEurekaTopic(qLabel) ? t('topics:' + qLabel) : qLabel}"`}
         </h1>
-        { (hasCycles||  hasPosts || hasWorks) ? 
-        <div className='d-flex flex-column justify-content-center'>
-        <SearchTab {...{hasCycles,hasPosts,hasWorks}}  />
-        </div> 
-         :
-        <>
-        <Alert className='mt-4' variant="primary">
-        <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
-      </Alert>
-        </>
-         } 
-       
+        {hasCycles || hasPosts || hasWorks ? (
+          <div className="d-flex flex-column justify-content-center">
+            <SearchTab {...{ hasCycles, hasPosts, hasWorks }} />
+          </div>
+        ) : (
+          <>
+            <Alert className="mt-4" variant="primary">
+              <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
+            </Alert>
+          </>
+        )}
       </SimpleLayout>
+    </>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const q = query.q;
-  const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
-  const qc = new QueryClient()
-  const terms = q?.toString()!.split(" ") || [];
+  const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
+  const qc = new QueryClient();
+  const terms = q?.toString()!.split(' ') || [];
   const cyclesProps = {
-    where:{
-      OR:[
+    where: {
+      OR: [
         {
-          AND:terms.map(t=>(
-            { 
-              title: { contains: t } 
-            }
-          ))
-
+          AND: terms.map((t) => ({
+            title: { contains: t },
+          })),
         },
         {
-          AND:terms.map(t=>(
-            { 
-              contentText: { contains: t } 
-            }
-          ))
-
+          AND: terms.map((t) => ({
+            contentText: { contains: t },
+          })),
         },
         {
-          AND:terms.map(t=>(
-            { 
-              tags: { contains: t } 
-            }
-          ))
+          AND: terms.map((t) => ({
+            tags: { contains: t },
+          })),
         },
         {
-          AND:terms.map(t=>(
-            { 
-              topics: { contains: t } 
-            }
-          ))
-        }
-      ]
+          AND: terms.map((t) => ({
+            topics: { contains: t },
+          })),
+        },
+      ],
     },
-  }
-  const cyclesData = await getCycles({...cyclesProps,take},origin);
-  qc.prefetchQuery(['CYCLES',JSON.stringify(cyclesProps)],()=>cyclesData)
-  const hasCycles = cyclesData.total > 0
+  };
+  const cyclesData = await getCycles({ ...cyclesProps, take }, origin);
+  qc.prefetchQuery(['CYCLES', JSON.stringify(cyclesProps)], () => cyclesData);
+  const hasCycles = cyclesData.total > 0;
 
   const postsProps = {
-    where:{
-      OR:[
+    where: {
+      OR: [
         {
-          AND:terms.map(t=>(
-            { 
-              title: { contains: t } 
-            }
-          ))
-
+          AND: terms.map((t) => ({
+            title: { contains: t },
+          })),
         },
         {
-          AND:terms.map(t=>(
-            { 
-              contentText: { contains: t } 
-            }
-          ))
-
+          AND: terms.map((t) => ({
+            contentText: { contains: t },
+          })),
         },
         {
-          AND:terms.map(t=>(
-            { 
-              tags: { contains: t } 
-            }
-          ))
+          AND: terms.map((t) => ({
+            tags: { contains: t },
+          })),
         },
         {
-          AND:terms.map(t=>(
-            { 
-              topics: { contains: t } 
-            }
-          ))
-        }
-      ]
+          AND: terms.map((t) => ({
+            topics: { contains: t },
+          })),
+        },
+      ],
     },
-  }
-  const postsData = await getPosts({...postsProps,take},origin);
-  qc.prefetchQuery(['POSTS',JSON.stringify(postsProps)],()=>postsData)
-  const hasPosts = postsData.total > 0
+  };
+  const postsData = await getPosts({ ...postsProps, take }, origin);
+  qc.prefetchQuery(['POSTS', JSON.stringify(postsProps)], () => postsData);
+  const hasPosts = postsData.total > 0;
 
   const worksProps = {
-    where:{
-      OR:[
+    where: {
+      OR: [
         {
-          AND:terms.map(t=>(
-            { 
-              title: { contains: t } 
-            }
-          ))
-
+          AND: terms.map((t) => ({
+            title: { contains: t },
+          })),
         },
         {
-          AND:terms.map(t=>(
-            { 
-              contentText: { contains: t } 
-            }
-          ))
-
+          AND: terms.map((t) => ({
+            contentText: { contains: t },
+          })),
         },
         {
-          AND:terms.map(t=>(
-            { 
-              tags: { contains: t } 
-            }
-          ))
+          AND: terms.map((t) => ({
+            tags: { contains: t },
+          })),
         },
         {
-          AND:terms.map(t=>(
-            { 
-              topics: { contains: t } 
-            }
-          ))
-        }
-      ]
+          AND: terms.map((t) => ({
+            topics: { contains: t },
+          })),
+        },
+      ],
     },
+  };
+  const worksData = await getWorks({ ...worksProps, take }, origin);
+  qc.prefetchQuery(['WORK', JSON.stringify(worksProps)], () => worksData);
+  const hasWorks = worksData.total > 0;
+
+  let metaTags = null;
+
+  if (topics.includes(q!.toString())) {
+    metaTags = {
+      //id: cycle?.id,
+      topic: q!.toString(),
+      works: hasWorks
+        ? worksData.works
+            .map((x) => `${x.title} - ${x.author}`)
+            .slice(0, 5)
+            .join()
+        : "",
+      cycles: hasCycles
+        ? cyclesData.cycles
+            .map((x) => `${x.title} - ${x.creator.name}`)
+            .slice(0, 2)
+            .join()
+        : "",
+    };
   }
-  const worksData = await getWorks({...worksProps,take},origin);
-  qc.prefetchQuery(['WORK',JSON.stringify(worksProps)],()=>worksData)
-  const hasWorks = worksData.total > 0
 
   return {
     props: {
       hasCycles,
       hasPosts,
       hasWorks,
-      dehydratedState: dehydrate(qc), 
+      metas: metaTags,
+      dehydratedState: dehydrate(qc),
     },
   };
 };
