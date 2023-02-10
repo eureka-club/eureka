@@ -26,8 +26,8 @@ const topics = ['gender-feminisms', 'technology', 'environment',
     'migrants-refugees','introspection',
     'sciences','arts-culture','history',
 ];
-const fetchItems = async (pageParam: number,topic:string,sessionId:number):Promise<GetAllByResonse> => {
-  const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/getAllBy?topic=${topic}&cursor=${pageParam}&sessionId=${sessionId}`;
+const fetchItems = async (pageParam: number,topic:string):Promise<GetAllByResonse> => {
+  const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/getAllBy?topic=${topic}&cursor=${pageParam}`;
   const q = await fetch(url);
   return q.json();
 };
@@ -81,11 +81,10 @@ const IndexPage: NextPage<Props> = ({groupedByTopics,session}) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = await getSession(ctx)
-  if(!session)
-  return {props:{groupedByTopics:null}};
+  // if(!session)
+  // return {props:{groupedByTopics:null}};
+  // const id = session.user.id;  
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
-  
-  const id = session.user.id;  
   let groupedByTopics:Record<string,GetAllByResonse>={};
   
   const bo =  await getbackOfficeData(origin)
@@ -106,7 +105,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     getFeaturedEurekas(postsId,undefined,origin),
     getInterestedCycles(cyclesIds,undefined,origin),
     getFeaturedWorks(worksIds,8,origin),
-    ...worksIds.map(id=>getHyvorComments(id.toString())),
+    ...worksIds.map(id=>getHyvorComments(`work-${id}`,origin)),
   ]
   let resolved = await Promise.all(promises);
   const featuredEurekas = resolved[0];
@@ -115,8 +114,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const hyvorComments = promises.slice(3);
 
   promises = [
-    fetchItems(0,topics[0],session.user.id),
-    fetchItems(0,topics[1],session.user.id)
+    fetchItems(0,topics[0]),
+    fetchItems(0,topics[1])
   ]
   resolved = await Promise.all(promises);
 
@@ -130,7 +129,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   await qc.fetchQuery(['CYCLES','cycles-of-interest'],()=>interestedCycles)
   await qc.fetchQuery(['WORKS',`${JSON.stringify(featuredWorksWhere(worksIds))}`],()=>featuredWorks)
   await worksIds.forEach(async (id,idx)=>{
-    await qc.fetchQuery(['HYVOR-COMMENTS', id],()=>hyvorComments[idx])
+    await qc.fetchQuery(['HYVOR-COMMENTS', `work-${id}`],()=>hyvorComments[idx])
   });
   
   // const k = myCyclesWhere(session.user.id)
