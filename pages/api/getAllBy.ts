@@ -15,7 +15,7 @@ export default async function handler(
   if(req.method?.toLocaleLowerCase()=='get'){
     try {
       const {sessionId:si} = req.query;
-      const sessionId = si ? parseInt(si.toString()) : undefined
+      // const sessionId = si ? parseInt(si.toString()) : undefined
       const data: { id:number;type: string }[] = [];
       // const result: { [index: string]: (Work | (Cycle & { type: string }))[] } = {};
       const { cursor, topic, extraCyclesRequired = 0, extraWorksRequired = 0 } = req.query;
