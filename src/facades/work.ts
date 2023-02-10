@@ -11,6 +11,8 @@ export const find = async (id: number): Promise<WorkMosaicItem | null> => {
       _count:{select:{ratings:true}},
       favs:{select:{id:true}},
     ratings: {select:{userId:true,qty:true}},
+    posts:{orderBy:{updatedAt:'desc'},select:{id:true,updatedAt:true,localImages: {select:{storedFile:true}}}}
+
 
 
       // favs: {select:{id:true}},
@@ -112,6 +114,8 @@ export const findAll = async (props?:Prisma.WorkFindManyArgs): Promise<WorkMosai
       _count:{select:{ratings:true}},
       favs:{select:{id:true}},
     ratings: {select:{userId:true,qty:true}},
+    posts:{orderBy:{updatedAt:'desc'} ,select:{id:true,updatedAt:true,localImages: {select:{storedFile:true}}}}
+
       // favs: {select:{id:true}},
       // ratings: {
       //   select:{qty:true}

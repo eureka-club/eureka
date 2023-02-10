@@ -188,6 +188,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                 qty={qtyByUser}
                 onChange={handlerChangeRating}
                 size="medium"
+                iconColor="var(--bs-danger)"
               />
             </Box>
           </aside>

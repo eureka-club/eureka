@@ -12,7 +12,7 @@ interface Props{
 }
 const ReadOrWatched:FC<Props> = ({user,id,goTo,t}) => {
     if (user && user.ratingWorks && user.ratingWorks.length) {
-      const RW = user.ratingWorks.filter(rw=>rw.work).map((w) => w.work as WorkMosaicItem).reverse();
+      const RW = user.ratingWorks.filter(rw=>rw.work).map((w) => w.work as WorkMosaicItem).reverse().slice(0,6);
       /*RW.sort((f, s) => {
           const fCD = dayjs(f.createdAt);
           const sCD = dayjs(s.createdAt);

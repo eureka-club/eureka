@@ -13,7 +13,7 @@ const validateReq = async (
   id: unknown,
   socialInteraction: unknown,
   res: NextApiResponse,
-): Promise<boolean> => {
+): Promise<boolean> => { 
   if (session == null) {
     res.status(401).json({ status: 'Unauthorized' });
     return false;

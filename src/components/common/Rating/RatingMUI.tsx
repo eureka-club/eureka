@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Rating, { RatingProps } from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
+import { useSession } from 'next-auth/react';
 interface Props {
  stop?:number;
  qty:number;
@@ -11,16 +12,21 @@ interface Props {
  size?:RatingProps["size"];
  icon?:ReactNode;
  emptyIcon?:ReactNode;
- 
+ iconColor?:string;
 }
 
-const RatingMUI:FC<Props> = ({qty,onChange,readonly,size=undefined,icon=undefined,emptyIcon=undefined}) => {
+const RatingMUI:FC<Props> = ({qty,onChange,readonly,size=undefined,icon=undefined,emptyIcon=undefined,iconColor}) => {
+  const {status}=useSession()
   const [value, setValue] = React.useState<number>(qty);
-  useEffect(()=>{
-    setValue(qty);
-  },[qty])
+  useEffect(()=>{debugger;
+    if(status=="authenticated")
+      setValue(qty);
+    else{
+      setValue(0)
+    }
+  },[qty,status])
   const icons = {
-    icon:icon || <StarIcon style={{color:"var(--eureka-green)"}}/>,
+    icon:icon || <StarIcon style={{color:iconColor}}/>,
     emptyIcon: emptyIcon || <StarOutlineIcon style={{color:"var(--eureka-grey)"}}/>
   }
   return (
@@ -33,8 +39,17 @@ const RatingMUI:FC<Props> = ({qty,onChange,readonly,size=undefined,icon=undefine
         name="rating-controlled"
         value={value}
         onChange={(event, newValue) => {
-          setValue(newValue||0);
-          onChange(newValue||0);
+          const {target} = event;
+          if(status=="unauthenticated"){
+            setValue(0)
+            onChange(0);
+            if(event)
+              (target as HTMLInputElement).blur()
+          }
+          else{
+            setValue(newValue||0);
+            onChange(newValue||0);
+          }
         }}
         readOnly={readonly}
         precision={readonly ? 0.5 : 1} 

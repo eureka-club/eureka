@@ -1,6 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-//import { Configuration, OpenAIApi,ImagesResponseDataInner } from "openai";
-//
 
 const apiKey = process.env.HYVOR_TALK_API_KEY;
 

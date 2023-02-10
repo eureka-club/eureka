@@ -25,7 +25,7 @@ export const find = async (props: Prisma.UserFindUniqueArgs): Promise<UserMosaic
         select:{
           workId:true,
           qty:true,
-          work:{select:{id:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,favs:{select:{id:true}},localImages:{select:{storedFile:true}}}}
+          work:{select:{id:true,author:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,favs:{select:{id:true}},localImages:{select:{storedFile:true}}}}
         }
       },
       favWorks:{select:{id:true,author:true,createdAt:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,favs:{select:{id:true}},localImages:{select:{storedFile:true}}}},
@@ -70,7 +70,7 @@ export const findAll = async (props?:Prisma.UserFindManyArgs): Promise<UserMosai
         select:{
           workId:true,
           qty:true,
-          work:{select:{id:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,favs:{select:{id:true}},localImages:{select:{storedFile:true}}}}
+          work:{select:{id:true,author:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,favs:{select:{id:true}},localImages:{select:{storedFile:true}}}}
         }
       },
       favWorks:{select:{id:true,author:true,createdAt:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,favs:{select:{id:true}},localImages:{select:{storedFile:true}}}},
