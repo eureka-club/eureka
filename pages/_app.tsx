@@ -49,7 +49,7 @@ function Loading() {
   })
   
   return <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-         open={loading}
+         open={loading||true}
         //onClick={handleClose}
       >
         {/* <CircularProgress color="inherit" /> */}
