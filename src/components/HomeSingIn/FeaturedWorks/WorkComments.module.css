@@ -1,12 +1,12 @@
 
 .commentsSection{
-  height: 160px;
+  min-height: 160px;
   /*max-width: 50%x;
   width:  50%;*/
   border-color: var(--color-primary);
     border-style: solid;
     border-radius: 6px;
-    border-width: .1rem;
+    border-width: .05rem;
   max-height: 160px;
   overflow-y: scroll;
 }

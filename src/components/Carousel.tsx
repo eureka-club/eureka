@@ -116,33 +116,31 @@ const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, cl
   };
 
   return (
-    (apiResponse  && (
+    (apiResponse && (
       <section className={`${className}`}>
         {apiResponse && apiResponse.data && (
           <div className="position-relative">
             <Row>
               <Col xs={8} md={9}>
                 <h3>
-                <Link href={`/search?q=${topic}&fields=topics`} >
-                  <a className="text-dark cursor-pointer" style={{fontSize:'1.25rem'}}>
-                  <span className={styles.iconBefore}>
-                    <BsHash className="rounded-circle border border-1 border-gray" />
-                  </span>
-                  {topicLabel || t(`${topic}`)}
-          </a>
-                </Link>
+                  <Link href={`/search?q=${topic}&fields=topics`}>
+                    <h2 className=" text-secondary fw-bold cursor-pointer">
+                      <span className={styles.iconBefore}>
+                        <BsHash className="rounded-circle border border-1 border-gray" />
+                      </span>
+                      {topicLabel || t(`${topic}`)}
+                    </h2>
+                  </Link>
                 </h3>
               </Col>
               <Col xs={4} md={3} className="d-flex justify-content-end">
- {!isRedirecting ? <Button variant="link" className="text-decoration-none" onClick={onItemsFound}>
-   <span
-                      className={`cursor-pointer text-primary ${styles.seeAllButton}`}
-                    >
-                      {t('common:See all')}
-                    </span>
-
- </Button>:<Spinner animation='grow' />}
-                
+                {!isRedirecting ? (
+                  <Button variant="link" className="text-decoration-none" onClick={onItemsFound}>
+                    <span className={`cursor-pointer text-primary ${styles.seeAllButton}`}>{t('common:See all')}</span>
+                  </Button>
+                ) : (
+                  <Spinner animation="grow" />
+                )}
               </Col>
             </Row>
             <div className="carousel d-flex justify-content-center">{buildMosaics()}</div>
