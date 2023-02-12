@@ -22,6 +22,7 @@ import { NotificationProvider } from '@/src/useNotificationProvider';
 import {ModalProvider} from '@/src/useModal'
 import Script from 'next/script';
 import { Session } from '@/src/types';
+import Spinner from '@/src/components/Spinner';
 const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   let initialState : Iterable<readonly [Atom<unknown>, unknown]> | undefined = undefined
   let session:  Session | null | undefined = null
@@ -51,7 +52,8 @@ function Loading() {
          open={loading}
         //onClick={handleClose}
       >
-        <CircularProgress color="inherit" />
+        {/* <CircularProgress color="inherit" /> */}
+        <Spinner/>
       </Backdrop>
 }
   
