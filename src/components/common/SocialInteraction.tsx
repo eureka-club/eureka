@@ -448,7 +448,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const getRatingLabelInfo = () => {
     if (entity) {
       if (isCycleMosaicItem(entity) || isWorkMosaicItem(entity))
-        return !entity.currentUserRating ? <span className={styles.ratingLabelInfo}>{t('Rate it')}</span> : '';
+        return !entity.currentUserRating ? <span className={styles.ratingLabelInfo}>{t('Rate it')}:</span> : '';
     }
     return '';
   };
