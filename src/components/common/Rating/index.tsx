@@ -19,7 +19,7 @@ interface Props {
 const Rating:React.FC<Props> = ({qty,onChange:ock,readonly,size=undefined,icon=undefined,emptyIcon=undefined,iconColor="var(--eureka-green)"})=>{
   const { t } = useTranslation('common');
     return <Box sx={{display:'flex'}}>
-    {qty==0 ? <span>{t('Rate it')}</span> : <></>}
+    {!readonly && qty==0 ? <span>{t('Rate it')}</span> : <></>}
         <RatingMUI 
             icon={icon} 
             emptyIcon={emptyIcon} 
