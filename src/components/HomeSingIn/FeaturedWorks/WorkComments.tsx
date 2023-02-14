@@ -56,7 +56,7 @@ const WorkComments: FunctionComponent<Props> = ({ workId }) => {
             </section>
           ))}
         </section>
-        <section className="mb-3 d-flex justify-content-center ">
+        <section className="mb-3 d-flex justify-content-end">
           <Button className="btn-eureka" onClick={() => router.push(`work/${workId}`)}>
             {t('Participate')}
           </Button>
@@ -64,7 +64,7 @@ const WorkComments: FunctionComponent<Props> = ({ workId }) => {
       </>
     );
   } else return (
-    <section className="py-5 d-flex justify-content-center ">
+    <section className="py-5 d-flex justify-content-end">
       <Button className="btn-eureka" onClick={() => router.push(`work/${workId}`)}>
         Participa
       </Button>
