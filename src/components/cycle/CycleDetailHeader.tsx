@@ -218,7 +218,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
               {' - '}
               {getRatingQty()}
             </div>
-            <span className="ms-1 text-gray">{t('ratings')}</span>
+            <span className="ms-1 text-gray">{t('common:ratings')}</span>
             {cycle.topics && (
               <section className=" d-flex flex-nowrap ms-2">
                 <TagsInput
@@ -357,7 +357,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                   {' - '}
                   {getRatingQty()}
                 </div>
-                <span className="ms-1 text-gray">{t('ratings')}</span>
+                <span className="ms-1 text-gray">{t('common:ratings')}</span>
               </div>
             </aside>
           )}

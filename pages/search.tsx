@@ -130,7 +130,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     },
   };
   const cyclesData = await getCycles({ ...cyclesProps, take }, origin);
-  qc.prefetchQuery(['CYCLES', JSON.stringify(cyclesProps)], () => cyclesData);
+  qc.prefetchQuery(`cycles-search-${q?.toString()}111`, () => cyclesData);
   const hasCycles = cyclesData.total > 0;
 
   const postsProps = {
@@ -160,7 +160,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     },
   };
   const postsData = await getPosts({ ...postsProps, take }, origin);
-  qc.prefetchQuery(['POSTS', JSON.stringify(postsProps)], () => postsData);
+  qc.prefetchQuery(`posts-search-${q?.toString()}`, () => postsData);
   const hasPosts = postsData.total > 0;
 
   const worksProps = {
@@ -190,7 +190,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     },
   };
   const worksData = await getWorks({ ...worksProps, take }, origin);
-  qc.prefetchQuery(['WORK', JSON.stringify(worksProps)], () => worksData);
+  qc.prefetchQuery(`works-search-${q?.toString()}`, () => worksData);
   const hasWorks = worksData.total > 0;
 
   let metaTags = null;

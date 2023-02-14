@@ -234,6 +234,20 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
     });
   };
 
+  const getRatingQty = () => {
+    if (work) {
+      return work.ratings.length || 0;
+    }
+    return 0;
+  };
+
+  const getRatingAvg = () => {
+    if (work) {
+      return work.ratingAVG || 0;
+    }
+    return 0;
+  };
+
   return (
     <WorkContext.Provider value={{ work, linkToWork: false }}>
       <MosaicContext.Provider value={{ showShare: true }}>
@@ -322,7 +336,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                           showSaveForLater={true}
                         />
                       </div>
-                      <Box mt={1}>
+                      <Box mt={1} sx={{display:"flex"}}>
                         <Rating
                           qty={qty}
                           onChange={handlerChangeRating}
@@ -330,6 +344,12 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                           readonly
                           
                         />
+                        <div className="d-flex flex-nowrap ms-2">
+                          {getRatingAvg().toFixed(1)}
+                          {' - '}
+                          {getRatingQty()}
+                        </div>
+                        <span className="ms-1 text-gray">{t('common:ratings')}</span>
                       </Box>
                       {work.contentText != null && (
                         <UnclampText isHTML={false} text={work.contentText} clampHeight="8rem" />

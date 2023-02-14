@@ -16,7 +16,7 @@ const SearchTabCycles:FunctionComponent = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const terms = router?.query.q?.toString()!.split(" ") || [];
-
+  const cacheKey = `posts-search-${router?.query.q?.toString()}`
   const {FilterEnginePosts,filtersCountries} = useFilterEnginePosts()
 
   const getProps = ()=>{
@@ -68,7 +68,7 @@ const SearchTabCycles:FunctionComponent = () => {
 
   const [props,setProps]=useState<Prisma.PostFindManyArgs>({take,where:{...getProps()}})
 
-  const {data:{total,fetched,posts:c}={total:0,fetched:0,posts:[]}} = usePosts(props,{enabled:!!router.query?.q});
+  const {data:{total,fetched,posts:c}={total:0,fetched:0,posts:[]}} = usePosts(props,{cacheKey,enabled:!!router.query?.q});
   const [posts,setPosts] = useState<PostMosaicItem[]>([])
   
   useEffect(()=>{
@@ -89,7 +89,7 @@ const SearchTabCycles:FunctionComponent = () => {
   });
 
   useEffect(()=>{
-    if(inView && posts.length < total){
+    if(posts && inView && posts.length < total){
       const fi = async ()=>{
         const {id} = posts.slice(-1)[0]
         const r = await getPosts({...props,skip:1,cursor:{id}});
