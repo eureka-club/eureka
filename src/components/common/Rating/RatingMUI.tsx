@@ -18,7 +18,7 @@ interface Props {
 const RatingMUI:FC<Props> = ({qty,onChange,readonly,size=undefined,icon=undefined,emptyIcon=undefined,iconColor}) => {
   const {status}=useSession()
   const [value, setValue] = React.useState<number>(qty);
-  useEffect(()=>{debugger;
+  useEffect(()=>{
     if(status=="authenticated")
       setValue(qty);
     else{
