@@ -17,14 +17,14 @@ export const getWorks = async (
 interface Options {
   staleTime?: number;
   enabled?: boolean;
+  cacheKey?:string|string[];
 }
 const useWorks = (props?:Prisma.WorkFindManyArgs,options?: Options) => {
-  const { staleTime, enabled } = options || {
+  const { staleTime, enabled,cacheKey } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  const key = JSON.stringify(props); 
-  let ck = ['WORKS', `${key}`];
+  let ck = cacheKey ? cacheKey : ['WORKS', `${JSON.stringify(props)}`];
 
   return useQuery<{works:WorkMosaicItem[],fetched:number,total:number}>(ck, () => getWorks(props), {
     staleTime,

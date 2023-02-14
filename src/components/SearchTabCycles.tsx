@@ -11,6 +11,7 @@ import useFilterEngineCycles from './useFilterEngineCycles';
 import { useInView } from 'react-intersection-observer';
 import { Prisma } from '@prisma/client';
 import { CycleMosaicItem } from '../types/cycle';
+import cycle from 'pages/api/cycle';
 
 const take = 8;
 interface Props{
@@ -19,7 +20,7 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const terms = router?.query.q?.toString()!.split(" ") || [];
-
+  const cacheKey = `cycles-search-${router?.query.q?.toString()}`;
   const {FilterEngineCycles,filtersType,filtersCountries} = useFilterEngineCycles()
 
   const getProps = ()=>{
@@ -86,7 +87,7 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
 
   const [props,setProps]=useState<Prisma.CycleFindManyArgs>({take,where:{...getProps()}})
 
-  const {data:{total,fetched,cycles:c}={total:0,fetched:0,cycles:[]}} = useCycles(props,{enabled:!!router.query?.q});
+  const {data:{total,fetched,cycles:c}={total:0,fetched:0,cycles:[]}} = useCycles(props,{cacheKey,enabled:!!router.query?.q});
   const [cycles,setCycles] = useState<CycleMosaicItem[]>([])
 
   useEffect(()=>{
@@ -125,7 +126,7 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
           <FilterEngineCycles/>
           <Row>
               {cycles.map(p=><Col xs={12} sm={6} lg={3} xxl={2} className="mb-5 d-flex justify-content-center  align-items-center" key={p.id}>
-                <MosaicItem cycleId={p.id} className="" cacheKey={['CYCLE',p.id.toString()]} size={'md'} /></Col>)}
+                <MosaicItem cycle={p} cycleId={p.id} className="" cacheKey={['CYCLE',p.id.toString()]} size={'md'} /></Col>)}
           </Row>
           {cycles?.length!=total && <Spinner ref={ref} animation="grow" />}
       </>

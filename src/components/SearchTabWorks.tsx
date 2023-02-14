@@ -1,7 +1,7 @@
 import { useState, FunctionComponent, useEffect } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { Spinner,Row, Col, Tab} from 'react-bootstrap';
+import { Spinner,Row, Col} from 'react-bootstrap';
 
 import MosaicItem from '@/components/work/MosaicItem'
 
@@ -17,6 +17,7 @@ const SearchTabworks:FunctionComponent = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const terms = router?.query.q?.toString()!.split(" ") || [];
+  const cacheKey = `works-search-${router?.query.q?.toString()}`;
 
   const {FilterEngineWork,filtersType,filtersCountries} = useFilterEngineWorks()
 
@@ -82,7 +83,7 @@ const SearchTabworks:FunctionComponent = () => {
 
   const [props,setProps]=useState<Prisma.WorkFindManyArgs>({take,where:{...getProps()}})
 
-  const {data:{total,fetched,works:c}={total:0,fetched:0,works:[]}} = useWorks(props,{enabled:!!router.query?.q});
+  const {data:{total,fetched,works:c}={total:0,fetched:0,works:[]}} = useWorks(props,{cacheKey,enabled:!!router.query?.q});
   const [works,setWorks] = useState<WorkMosaicItem[]>([])
   
   useEffect(()=>{
