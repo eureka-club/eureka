@@ -72,15 +72,13 @@ const generatePostsMap = async ()=>{
   }
 
   const generateHomePage = ()=>{
-    return languages.map(l=>{
-      return `
-        <url>
-          <loc>${origin!}/${l[0]}</loc>
-          <changefreq>monthly</changefreq>
-          <priority>1.0</priority>
-        </url>
-      `
-    }).join('')
+    return `
+      <url>
+        <loc>${origin!}</loc>
+        <changefreq>monthly</changefreq>
+        <priority>1.0</priority>
+      </url>
+    `;
   }
 
   const generateStaticPages = ()=>{
