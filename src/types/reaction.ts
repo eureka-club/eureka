@@ -16,6 +16,6 @@ type ReactionIncludes = {
   };
 };
 
-export type ReactionMosaicItem = Prisma.PostReactionsGetPayload<ReactionIncludes> & {
+export type ReactionMosaicItem = Prisma.PostReactionGetPayload<ReactionIncludes> & {
   type?: 'reaction';
 };
