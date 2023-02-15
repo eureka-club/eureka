@@ -35,6 +35,7 @@ export const find = async (props: Prisma.UserFindUniqueArgs): Promise<UserMosaic
       joinedCycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
       ratingCycles:{select:{cycleId:true,qty:true}},
       photos:{select:{storedFile:true}},
+      reactions:true,
     }
     
   });
@@ -80,6 +81,7 @@ export const findAll = async (props?:Prisma.UserFindManyArgs): Promise<UserMosai
       joinedCycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
       ratingCycles:{select:{cycleId:true,qty:true}},
       photos:{select:{storedFile:true}},
+      reactions:true,
     }
   });
 };

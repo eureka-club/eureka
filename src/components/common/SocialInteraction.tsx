@@ -11,7 +11,7 @@ import { FiShare2, FiTrash2 } from 'react-icons/fi';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/react';
 // import Rating from 'react-rating';
-import useEmojiPicker from './useEmojiPicker';
+import usePostEmojiPicker from './usePostEmojiPicker';
 import Rating from '@/src/components/common/Rating';
 
 import { OverlayTrigger, Popover, Button, Spinner, Modal } from 'react-bootstrap';
@@ -88,7 +88,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const isLoadingSession = status === 'loading';
   const [qty, setQty] = useState<number>(0);
   const { show } = useModalContext();
-  const { EmojiPicker, setShowEmojisPicker } = useEmojiPicker();
+  const { EmojiPicker, setShowEmojisPicker } = usePostEmojiPicker({post:entity as PostMosaicItem});
 
   const [mySocialInfo, setMySocialInfo] = useState<MySocialInfo>();
 
@@ -276,9 +276,11 @@ const SocialInteraction: FunctionComponent<Props> = ({
   };
 
   const handleReactionClick = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-    ev.stopPropagation();
-    setShowEmojisPicker((r) => !r);
+    if(isPost(entity)){
+      ev.preventDefault();
+      ev.stopPropagation();
+      setShowEmojisPicker((r) => !r);
+    }
   };
   // execSocialInteraction({ socialInteraction: 'reaction', doCreate: mySocialInfo ? !mySocialInfo!.favoritedByMe : true });
   const handleCreateEurekaClick = (ev: MouseEvent<HTMLButtonElement>) => {
@@ -385,35 +387,6 @@ const SocialInteraction: FunctionComponent<Props> = ({
       );
   };
 
-  const renderEmojiPicker = () => {
-    return <EmojiPicker entity={entity} onSaved={console.log} />;
-  };
-
-  const renderAddReaction = () => {
-    if (!entity || isLoadingSession) return '...';
-    if (entity)
-      return (
-        <div>
-          <div style={{ position: 'relative' }}>{renderEmojiPicker()}</div>
-          <Button
-            variant="link"
-            className={`${styles.buttonSI} p-0 text-primary`}
-            title={t('Add reaction')}
-            onClick={handleReactionClick}
-            disabled={loadingSocialInteraction}
-          >
-            <VscReactions className={styles.active} />
-            <br />
-            {showButtonLabels && (
-              <span className={classnames(...[styles.info, ...[currentUserIsFav ? styles.active : '']])}>
-                {t('Add reaction')}
-              </span>
-            )}
-          </Button>
-        </div>
-      );
-  };
-
   const renderCreateEureka = () => {
     if (!entity || isLoadingSession) return '...';
     if (showCreateEureka && (isWork(entity) || isCycle(entity)))
@@ -515,9 +488,36 @@ const SocialInteraction: FunctionComponent<Props> = ({
             </OverlayTrigger>
           </div>
         )}
-        {/*<div className={`ms-1`}>
-            {renderAddReaction()}       
-        </div>*/}
+        <div className={`ms-1`}>
+          { entity && isPost(entity) && user ? (
+            <div>
+            <div style={{ position: 'relative' }}>
+              <EmojiPicker post={entity as PostMosaicItem} onSaved={console.log} />
+            </div>
+            <Button
+            variant="link"
+            className={`${styles.buttonSI} p-0 text-primary`}
+            title={t('Add reaction')}
+            onClick={handleReactionClick}
+            disabled={loadingSocialInteraction}
+          >
+            {
+              entity?.reactions[0] 
+               ? <span role="img" aria-label="emoji-ico" dangerouslySetInnerHTML={{__html: `${entity?.reactions[0].emoji}`}} />
+               : <></>
+            }
+            <VscReactions className={styles.active} />
+            <br />
+            {showButtonLabels && (
+              <span className={classnames(...[styles.info, ...[currentUserIsFav ? styles.active : '']])}>
+                {t('Add reaction')}
+              </span>
+            )}
+            </Button>
+            </div>
+          )
+          : <></>}       
+        </div>
         {showSaveForLater && <div className={`ms-1`}>{renderSaveForLater()}</div>}
       </div>
     </section>

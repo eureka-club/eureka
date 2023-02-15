@@ -13,6 +13,7 @@ export const find = async (id: number): Promise<PostMosaicItem | null> => {
       favs:{select:{id:true,}},
       creator: {select:{id:true,name:true,photos:true,countryOfOrigin:true}},
       localImages: {select:{storedFile:true}},
+      reactions:true,
     }
   });
 };
@@ -31,6 +32,7 @@ export const findAll = async (props?:Prisma.PostFindManyArgs,page?:number): Prom
       favs:{select:{id:true,}},
       creator: {select:{id:true,name:true,photos:true,countryOfOrigin:true}},
       localImages: {select:{storedFile:true}},
+      reactions:true,
     },    
     where,
   });
