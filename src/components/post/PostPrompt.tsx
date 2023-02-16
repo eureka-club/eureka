@@ -1,7 +1,8 @@
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, FormEvent, ChangeEvent, useState, useEffect, MouseEvent } from 'react';
 import { Container, Button, Spinner } from 'react-bootstrap';
-import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem, LinearProgress } from '@mui/material';
+import LinearProgressMUI from '@/components/common/LinearProgressMUI'
+import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { useRouter } from 'next/router';
 import styles from './PostPrompt.module.css';
 import { getImg } from '@/src/lib/utils';
@@ -35,7 +36,6 @@ const PostPrompt: FunctionComponent<Props> = ({
   const [images, setImages] = useState<HTMLImageElement[]>([]);
   const [file, setFile] = useState<File>();
   const [currentImg, setCurrentImg] = useState<string | undefined>();
-  const [progress, setProgress] = useState(0);
   const [showOptions, setShowOptions] = useState<boolean>(true);
   const { data: session, status } = useSession();
   const { show } = useModalContext();
@@ -47,21 +47,7 @@ const PostPrompt: FunctionComponent<Props> = ({
     if (text && text.length) fetchImages();
   },[]);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((oldProgress) => {
-        if (oldProgress === 100) {
-          return 0;
-        }
-        const diff = Math.random() * 10;
-        return Math.min(oldProgress + diff, 100);
-      });
-    }, 500);
-
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
+  
 
   function onStyleChange(e: SelectChangeEvent<HTMLTextAreaElement>) {
     setStyle(e.target.value as string);
@@ -94,8 +80,8 @@ const PostPrompt: FunctionComponent<Props> = ({
   async function searchImages() {
     setLoading(true);
     setShowOptions(true);
-    setProgress(0);
     setImages([]);
+
     const { data: en_text } = await fetch(`/api/google-translate/?text=${text + ', ' + style}&target=en`).then((r) =>
       r.json(),
     );
@@ -279,8 +265,7 @@ const PostPrompt: FunctionComponent<Props> = ({
       </Container>
       {!loading ? (
         <>{images.length > 0 && renderImages()}</>
-      ) : (
-        <LinearProgress variant="determinate" value={progress} />
+      ) : ( <LinearProgressMUI/>
       )}
       {!showOptions && renderSelectedPhoto()}
     </>
