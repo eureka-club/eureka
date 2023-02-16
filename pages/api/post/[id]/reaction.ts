@@ -35,8 +35,7 @@ export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     const session = (await getSession({ req })) as unknown as Session;
     const { id } = req.query;
-    const { emoji,doCreate} = req.body;
-debugger;
+    const { emoji} = req.body;
     if (!(await validateReq(session, id, res))) {
       return;
     }
@@ -47,13 +46,30 @@ debugger;
         res.status(404).end();
         return;
       }
-      let result = null;
-      if(doCreate){
-        result = await create(post.id,session.user.id,emoji);
+      let result = await create(post.id,session.user.id,emoji);
+      res.status(200).json({ status: 'OK', result });
+    } catch (exc) {
+      console.error(exc); // eslint-disable-line no-console
+      res.status(500).json({ status: 'server error' });
+    } finally {
+      //prisma.$disconnect();
+    }
+  })
+  .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+    const session = (await getSession({ req })) as unknown as Session;
+    const { id } = req.query;
+    const { emoji} = req.body;
+    if (!(await validateReq(session, id, res))) {
+      return;
+    }
+
+    try {
+      const post = await find(Number(id));
+      if (post == null) {
+        res.status(404).end();
+        return;
       }
-      else{
-        result = await update(post.id,session.user.id,emoji);
-      }
+      let result = await update(post.id,session.user.id,emoji);
       res.status(200).json({ status: 'OK', result });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

@@ -6,7 +6,6 @@ import {} from 'react-query'
 import dynamic from 'next/dynamic';
 import { EmojiClickData } from 'emoji-picker-react';
 import usePostReactionCreateOrEdit from '@/src/hooks/mutations/usePostReactionCreateOrEdit';
-import { User } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import { isPost } from '@/src/types';
 const EP = dynamic(
@@ -36,7 +35,6 @@ const usePostEmojiPicker = (props:Props)=>{
             if(user){
                 const doCreate = post.reactions.findIndex(r=>r.userId==+user.id) == -1;
                 // event.preventDefault();
-                debugger;
                 mutate({doCreate,emoji:emojiData.emoji});
                 onSaved ? onSaved(emojiData) : null;
             }

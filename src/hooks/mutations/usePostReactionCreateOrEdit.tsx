@@ -37,8 +37,9 @@ const usePostReactionCreateOrEdit = (props:Props)=>{
   return useMutation(
     async ({ doCreate, emoji }:ExecReactionPayload) => {
       if (session && post) {
+        const doDelete = post.reactions.findIndex(r=>r.userId==session.user.id && r.emoji == emoji) !== -1;
         const res = await fetch(`/api/post/${post.id}/reaction`, {
-          method: doCreate ? 'POST' : 'DELETE',
+          method: doCreate ? 'POST' : doDelete ? 'DELETE' : 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             emoji,

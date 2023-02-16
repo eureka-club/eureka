@@ -494,6 +494,11 @@ const SocialInteraction: FunctionComponent<Props> = ({
             <div style={{ position: 'relative' }}>
               <EmojiPicker post={entity as PostMosaicItem} onSaved={console.log} />
             </div>
+            {
+              entity?.reactions[0] 
+               ? <span role="img" className="m-1" style={{verticalAlign:"bottom"}} aria-label="emoji-ico" dangerouslySetInnerHTML={{__html: `${entity?.reactions[0].emoji}`}} />
+               : <></>
+            }
             <Button
             variant="link"
             className={`${styles.buttonSI} p-0 text-primary`}
@@ -501,11 +506,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
             onClick={handleReactionClick}
             disabled={loadingSocialInteraction}
           >
-            {
-              entity?.reactions[0] 
-               ? <span role="img" aria-label="emoji-ico" dangerouslySetInnerHTML={{__html: `${entity?.reactions[0].emoji}`}} />
-               : <></>
-            }
+            
             <VscReactions className={styles.active} />
             <br />
             {showButtonLabels && (
