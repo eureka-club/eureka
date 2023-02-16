@@ -42,7 +42,7 @@ export const findAllByPost = async (postId: number): Promise<ReactionMosaicItem[
   });
 };
 
-export const remove = async (userId: number,postId:number): Promise<PostReaction> => {debugger;
+export const remove = async (userId: number,postId:number): Promise<PostReaction> => {
   const pr = await  prisma.postReaction.delete({
     where: { userId_postId:{
       userId,
@@ -79,7 +79,7 @@ export const update = async (
   userId: number,
   emoji?:string
   )=>{
-    try{debugger;
+    try{
         const res = await prisma.postReaction.update({
           where:{userId_postId:{
             userId,
@@ -113,7 +113,7 @@ export const create = async (
   postId: number, 
   userId: number,
   emoji:string
-): Promise<ReactionMosaicItem> => {debugger;
+): Promise<ReactionMosaicItem> => {
   const r = await prisma.postReaction.create({data:{
     emoji,
     user:{connect:{id:userId}},
