@@ -169,7 +169,7 @@ const getMediathequeSlug = (id:number,name:string)=>{
             <FeaturedWorks />
             <FeaturedEurekas />
             <FeaturedCycles />
-            {/*cyclesJoined()*/}
+           {/*cyclesJoined()*/}
             <>
               <div className="mt-5">
                 <CarouselsByTopics groupedByTopics={gbt} />

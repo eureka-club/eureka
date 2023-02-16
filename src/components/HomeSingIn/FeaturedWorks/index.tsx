@@ -19,7 +19,7 @@ const FeaturedWorks = () => {
         <div className="d-flex justify-content-center">
           <Carousel
             //interval={3000}
-            variant="dark"
+            //variant="dark"
             slide={true}
             indicators={true}
             controls={false}

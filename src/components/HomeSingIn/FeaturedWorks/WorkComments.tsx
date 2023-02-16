@@ -33,7 +33,7 @@ const WorkComments: FunctionComponent<Props> = ({ workId }) => {
         <h3 className="text-secondary mt-3 fs-5 mb-2">{t('UsersComments')}</h3>
         <section className={`mb-3 ${styles.commentsSection}`}>
           {comments?.map((e, index) => (
-            <section key={index} className="d-flex flex-row ps-3 py-2">
+            <section key={index} className="d-flex flex-row px-3 py-2">
               <img
                 className={`${styles.avatar}`}
                 src={e.user.picture || '/img/default-avatar.png'}

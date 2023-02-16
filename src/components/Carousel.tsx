@@ -122,7 +122,6 @@ const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, cl
           <div className="position-relative">
             <Row>
               <Col xs={8} md={9}>
-                <h3>
                   <Link href={`/search?q=${topic}&fields=topics`}>
                     <h2 className=" text-secondary fw-bold cursor-pointer">
                       <span className={styles.iconBefore}>
@@ -131,7 +130,6 @@ const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, cl
                       {topicLabel || t(`${topic}`)}
                     </h2>
                   </Link>
-                </h3>
               </Col>
               <Col xs={4} md={3} className="d-flex justify-content-end">
                 {!isRedirecting ? (

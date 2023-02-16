@@ -79,7 +79,7 @@ const BannerCustomizable: FunctionComponent = ({
           <>
             <Container className={`${styles.grid} text-white text-center`} style={{ minHeight: '1em' }}></Container>
             <div className="d-flex justify-content-center">
-              <Carousel indicators={true} controls={true} style={{ width: '90%' }}>
+              <Carousel indicators={true} controls={false} style={{ width: '90%' }}>
                 <Carousel.Item className="text-secondary bg-gray-very-light" style={{ height: '20rem' }}>
                   <div className="d-flex flex-row">
                     <div className="">
