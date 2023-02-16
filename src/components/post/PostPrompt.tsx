@@ -155,7 +155,7 @@ const PostPrompt: FunctionComponent<Props> = ({
       <Container className={`w-100 ${styles.container} ${!margin ? 'p-0 m-0' : ''}`}>
         {showTitle && <h4 className="text-secondary text-center">{t('CreateEureka')}</h4>}
         <section className={`mt-3 mx-0 ${margin ? 'mx-lg-3' : ''} `}>
-          <form className="d-none d-lg-flex flex-row justify-content-center">
+          <form className="d-none d-lg-flex flex-lg-row justify-content-center">
             <TextField
               label={t('descriptionLabel')}
               name="text"
