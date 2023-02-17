@@ -481,7 +481,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
                 className={`${styles.buttonSI} fs-6 p-0 text-primary`}
                 disabled={loadingSocialInteraction}
               >
-                <FiShare2 />
+                <FiShare2 style={{verticalAlign:"bottom"}} />
                 <br />
                 {showButtonLabels && <span className={classnames(styles.info, styles.active)}>{t('Share')}</span>}
               </Button>
@@ -489,16 +489,18 @@ const SocialInteraction: FunctionComponent<Props> = ({
           </div>
         )}
         <div className={`ms-1`}>
+        {
+              isPost(entity) && entity?.reactions[0] 
+               ? <span role="img" className="m-1" style={{verticalAlign:"sub"}} aria-label="emoji-ico" dangerouslySetInnerHTML={{__html: `${entity?.reactions[0].emoji}`}} />
+               : <></>
+        }
+        </div>
+        <div className={`ms-1`}>
           { entity && isPost(entity) && user ? (
             <div>
             <div style={{ position: 'relative' }}>
               <EmojiPicker post={entity as PostMosaicItem} onSaved={console.log} />
             </div>
-            {
-              entity?.reactions[0] 
-               ? <span role="img" className="m-1" style={{verticalAlign:"bottom"}} aria-label="emoji-ico" dangerouslySetInnerHTML={{__html: `${entity?.reactions[0].emoji}`}} />
-               : <></>
-            }
             <Button
             variant="link"
             className={`${styles.buttonSI} p-0 text-primary`}
