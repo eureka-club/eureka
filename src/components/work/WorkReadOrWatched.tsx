@@ -1,0 +1,122 @@
+import { WorkMosaicItem } from '@/src/types/work';
+import useTranslation from 'next-translate/useTranslation';
+import { FunctionComponent, useState } from 'react';
+import RemoveRedEyeRoundedIcon from '@mui/icons-material/RemoveRedEyeRounded';
+import Button from '@mui/material/Button';
+import Dialog, { DialogProps } from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import dayjs from 'dayjs';
+
+import styles from './WorkSummary.module.css';
+
+interface Props {
+  work: WorkMosaicItem; //Work ID
+}
+
+const years = ()=> {
+  let dates = []
+   const max = dayjs().year();
+   const min = max - 30;
+
+   for (let i = max; i >= min; i--) {
+     dates.push(i.toString());
+   }
+   return dates;
+
+} 
+
+
+const WorkReadOrWatched: FunctionComponent<Props> = ({ work }) => {
+  const { t } = useTranslation('common');
+
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState('');
+
+
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+
+    const handleClose = () => {
+      setOpen(false);
+    };
+
+     const handleListItemClick = (value: string) => {
+       setValue(value);
+       console.log(value)
+       setOpen(false);
+
+     };
+
+  return (
+    <>
+      <Button
+        style={{
+          width: '280px',
+          background: 'var(--eureka-green)',
+          fontFamily: 'Open Sans, sans-serif',
+          textTransform: 'none',
+          
+        }}
+        variant="contained"
+        size="small"
+        startIcon={<RemoveRedEyeRoundedIcon />}
+        onClick={handleClickOpen}
+      >
+        Marcar como visto o leído
+      </Button>
+      <Dialog open={open} onClose={handleClose} scroll="paper">
+        <DialogTitle
+          style={{
+            fontSize: '1em',
+            fontFamily: 'Open Sans, sans-serif',
+          }}
+        >
+          Especifique año de visto o leído
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText></DialogContentText>
+          <List sx={{ pt: 0, mt: 0 }} className="h-50">
+            {years().map((year) => (
+              <ListItem disablePadding key={year}>
+                <ListItemButton onClick={() => handleListItemClick(year)}>
+                  <ListItemText className='d-flex justify-content-center'
+                    disableTypography
+                    primary={year}
+                    sx={{
+                      fontSize: '1em',
+                      fontFamily: 'Open Sans, sans-serif',
+                    }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </DialogContent>
+        <DialogActions>      
+          <Button
+            variant="contained"
+            style={{
+              background: 'var(--eureka-green)',
+              fontFamily: 'Open Sans, sans-serif',
+              textTransform: 'none',
+              fontSize: '1em',
+            }}
+            onClick={handleClose}
+          >
+            Cerrar
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+};
+
+export default WorkReadOrWatched;

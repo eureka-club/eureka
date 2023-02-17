@@ -383,6 +383,23 @@ model RatingOnCycle {
   
 }
 
+model ReadOrWatchedWork {
+  readOrWatchedWorkId     Int       @default(autoincrement()) @id @map("id")
+  user                    User?     @relation(fields: [userId], references: [id])
+  userId                  Int?      
+  work                    Work?    @relation(fields: [workId], references: [id])
+  workId                  Int?      
+  
+  year                    Int       @default(0)
+  
+  createdAt               DateTime  @default(now()) @map(name: "created_at")
+  updatedAt               DateTime  @updatedAt @map(name: "updated_at")
+
+
+  @@map("readOrWatchedWorkId")
+  
+}
+
 model BackOfficeSettings {
   id                      Int         @id @unique @default(1)
   SlideImage1             String? 

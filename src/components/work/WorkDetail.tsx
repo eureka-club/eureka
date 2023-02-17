@@ -23,6 +23,7 @@ import { useRouter } from 'next/router';
 import { PostMosaicItem } from '@/src/types/post';
 import UnclampText from '@/components/UnclampText';
 import WorkSummary from './WorkSummary';
+import WorkReadOrWatched from './WorkReadOrWatched';
 import detailPagesAtom from '@/src/atoms/detailPages';
 //import globalModalsAtom from '@/src/atoms/globalModals';
 // import editOnSmallerScreens from '../../atoms/editOnSmallerScreens';
@@ -282,7 +283,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                       showTrash
                       linkToWork={false}
                       size={'lg'}
-                      showCreateEureka = {false}
+                      showCreateEureka={false}
                       showSaveForLater={true}
                     />
                     <Box mt={1}>
@@ -291,8 +292,10 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                         onChange={handlerChangeRating}
                         size="medium"
                         iconColor="var(--bs-danger)"
-
                       />
+                    </Box>
+                    <Box mt={1}>
+                      <WorkReadOrWatched work={work} />
                     </Box>
                     {/* <div className={classNames(styles.imgWrapper, 'mb-3')}>
                   <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
@@ -304,6 +307,15 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                       <h1 className="fw-bold text-secondary">{work.title}</h1>
                       <h2 className={styles.author}>{work.author}</h2>
                       <WorkSummary work={work} />
+                      <Box mt={1} sx={{ display: 'flex' }}>
+                        <Rating qty={qty} onChange={handlerChangeRating} size="medium" readonly />
+                        <div className="d-flex flex-nowrap ms-2">
+                          {getRatingAvg().toFixed(1)}
+                          {' - '}
+                          {getRatingQty()}
+                        </div>
+                        <span className="ms-1 text-gray">{t('common:ratings')}</span>
+                      </Box>
                       <div className="d-flex flex-wrap flex-row">
                         {work.topics && (
                           <TagsInput
@@ -333,24 +345,21 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                           showTrash
                           linkToWork={false}
                           size={'lg'}
+                          showCreateEureka={false}
                           showSaveForLater={true}
                         />
+                        <Box className="d-flex justify-content-center" mt={1}>
+                          <Rating
+                            qty={qtyByUser}
+                            onChange={handlerChangeRating}
+                            size="medium"
+                            iconColor="var(--bs-danger)"
+                          />
+                        </Box>
+                        <Box className="d-flex justify-content-center" mt={1}>
+                          <WorkReadOrWatched work={work} />
+                        </Box>
                       </div>
-                      <Box mt={1} sx={{display:"flex"}}>
-                        <Rating
-                          qty={qty}
-                          onChange={handlerChangeRating}
-                          size="medium"
-                          readonly
-                          
-                        />
-                        <div className="d-flex flex-nowrap ms-2">
-                          {getRatingAvg().toFixed(1)}
-                          {' - '}
-                          {getRatingQty()}
-                        </div>
-                        <span className="ms-1 text-gray">{t('common:ratings')}</span>
-                      </Box>
                       {work.contentText != null && (
                         <UnclampText isHTML={false} text={work.contentText} clampHeight="8rem" />
                       )}
@@ -458,7 +467,6 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                                           size={'md'}
                                           showSaveForLater={false}
                                         />
-                                        
                                       </Col>
                                     ))}
                                   </Row>
