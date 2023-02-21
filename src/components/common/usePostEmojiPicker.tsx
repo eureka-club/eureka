@@ -1,33 +1,46 @@
 import { Modal } from 'react-bootstrap';
 import React, { useState } from 'react'
-import { CycleMosaicItem } from '@/src/types/cycle'
 import { PostMosaicItem } from '@/src/types/post'
-import { WorkMosaicItem } from '@/src/types/work'
+import {} from 'react-query'
 // import {default as EP, EmojiClickData} from 'emoji-picker-react'
 import dynamic from 'next/dynamic';
 import { EmojiClickData } from 'emoji-picker-react';
+import usePostReactionCreateOrEdit from '@/src/hooks/mutations/usePostReactionCreateOrEdit';
+import { useSession } from 'next-auth/react';
+import { isPost } from '@/src/types';
 const EP = dynamic(
   () => {
     return import('emoji-picker-react');
   },
   { ssr: false }
 );
-
-const useEmojiPicker = ()=>{
-    interface Props{
-        entity: CycleMosaicItem|WorkMosaicItem|PostMosaicItem;
-        onSaved: (emoji:EmojiClickData)=>void
-    }
-    const [showEmojisPicker,setShowEmojisPicker] = useState(false)
+interface Props{
+    post: PostMosaicItem;
+    onSaved?: (emoji:EmojiClickData)=>void
+}
+const usePostEmojiPicker = (props:Props)=>{
+    const {post,onSaved} = props;
     
-    const EmojiPicker: React.FC<Props> = ({entity,onSaved})=>{
+    const {data:session,status} = useSession();
+    const user = session?.user;
+
+    const [showEmojisPicker,setShowEmojisPicker] = useState(false)
+    const {mutate,isLoading:isMutating} = usePostReactionCreateOrEdit({post});
+    
+    const EmojiPicker: React.FC<Props> = ()=>{
+        if(!isPost(post))return <></>;
+
         const handleClose = ()=>setShowEmojisPicker(false)
         const handleSave = (emojiData: EmojiClickData, event: MouseEvent)=>{
-            event.preventDefault()
-            onSaved(emojiData)
-            handleClose()
+            if(user){
+                const doCreate = post.reactions.filter(r=>r.userId==+user.id).length<+process.env.NEXT_PUBLIC_MAX_REACTIONS!;
+                // event.preventDefault();
+                mutate({doCreate,unified:emojiData.unified,emoji:emojiData.emoji});
+                onSaved ? onSaved(emojiData) : null;
+            }
+            handleClose();
         }
-        return <Modal show={showEmojisPicker} onHide={handleClose} id={`modal-${entity.type}-${entity.id}`}>
+        return <Modal show={showEmojisPicker} onHide={handleClose} id={`modal-post-${post.id}`}>
             <Modal.Header closeButton>
             </Modal.Header>
             <Modal.Body>
@@ -46,4 +59,4 @@ const useEmojiPicker = ()=>{
     }
     return {showEmojisPicker,setShowEmojisPicker, EmojiPicker}
 }
-export default useEmojiPicker
+export default usePostEmojiPicker

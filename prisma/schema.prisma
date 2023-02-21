@@ -52,6 +52,7 @@ model User {
   photos             LocalImage[]
   notify             Notification[]
   notifications      NotificationsOnUsers[]
+  reactions          PostReaction[]
 
   @@map(name: "users")
 }
@@ -298,6 +299,8 @@ model Post {
   tags     String?
   comments Comment[]
 
+  reactions      PostReaction[]
+
   @@index([creatorId], name: "posts_creator_id_index")
   @@map(name: "posts")
 }
@@ -466,4 +469,21 @@ model BackOfficeSettings {
   FeaturedWorks     String?      @db.VarChar(60)
 
   @@map("backOfficeSettings")
+  
+}
+
+model PostReaction {
+  user             User     @relation(fields: [userId], references: [id])
+  userId           Int      
+  
+  post             Post    @relation(fields: [postId], references: [id])
+  postId           Int      
+  
+  emoji            String 
+  unified          String
+  
+  createdAt        DateTime  @default(now()) @map(name: "created_at")
+  updatedAt        DateTime  @updatedAt @map(name: "updated_at")
+
+  @@id([userId, postId, unified])
 }
