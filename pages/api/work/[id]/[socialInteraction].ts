@@ -39,7 +39,7 @@ export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = (await getSession({ req })) as unknown as Session;
     const { id, socialInteraction } = req.query;
-    const { qty,doCreate, notificationMessage,notificationContextURL,notificationToUsers } = req.body;
+    const { qty,year,doCreate, notificationMessage,notificationContextURL,notificationToUsers } = req.body;
 
     if (!(await validateReq(session, id, socialInteraction, res))) {
       return;
@@ -53,7 +53,7 @@ export default getApiHandler()
       }
 
       // @ts-ignore arguments checked in validateReq()
-      await saveSocialInteraction(work, session.user, socialInteraction, doCreate, qty);
+      await saveSocialInteraction(work, session.user, socialInteraction, doCreate, qty, year);
       if(doCreate)
         await create(
           notificationMessage,

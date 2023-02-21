@@ -35,7 +35,7 @@ model User {
   favCycles           Cycle[]    @relation("CycleToFavs")
   likedWorks          Work[]     @relation("WorkToLikes")
   favWorks            Work[]     @relation("WorkToFavs")
-  readOrWatchedWorks  Work[]     @relation("WorkReadOrWatched")
+  readOrWatchedWorks ReadOrWatchedWork[]                
   likedPosts          Post[]     @relation("PostToLikes")
   favPosts            Post[]     @relation("PostToFavs")
   posts               Post[]  
@@ -143,7 +143,7 @@ model Work {
   posts             Post[]
   likes             User[]    @relation("WorkToLikes")
   favs              User[]    @relation("WorkToFavs")
-  readOrWatcheds    User[]    @relation("WorkReadOrWatched")
+  readOrWatchedWorks ReadOrWatchedWork[]                
   tags              String?
 
   terms             Term[]    @relation("TaxonomyTermWork")

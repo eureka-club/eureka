@@ -37,7 +37,7 @@ model User {
   favCycles          Cycle[]                @relation("CycleToFavs")
   likedWorks         Work[]                 @relation("WorkToLikes")
   favWorks           Work[]                 @relation("WorkToFavs")
-  readOrWatchedWorks Work[]                 @relation("WorkReadOrWatched")
+  readOrWatchedWorks ReadOrWatchedWork[]                
   likedPosts         Post[]                 @relation("PostToLikes")
   favPosts           Post[]                 @relation("PostToFavs")
   posts              Post[]
@@ -52,7 +52,6 @@ model User {
   photos             LocalImage[]
   notify             Notification[]
   notifications      NotificationsOnUsers[]
-  ReadOrWatchedWork  ReadOrWatchedWork[]
 
   @@map(name: "users")
 }
@@ -205,7 +204,7 @@ model Work {
   posts           Post[]
   likes           User[]       @relation("WorkToLikes")
   favs            User[]       @relation("WorkToFavs")
-  readOrWatcheds  User[]       @relation("WorkReadOrWatched")
+  readOrWatchedWorks ReadOrWatchedWork[]                
   tags            String?
 
   terms  Term[]  @relation("TaxonomyTermWork")
@@ -213,7 +212,6 @@ model Work {
 
   ratings           RatingOnWork[]
   comments          Comment[]
-  ReadOrWatchedWork ReadOrWatchedWork[]
 
   @@index([title], name: "works_title_index")
   @@index([author], name: "works_author_index")

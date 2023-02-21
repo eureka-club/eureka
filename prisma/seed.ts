@@ -137,10 +137,10 @@ async function main() {
       terms: {
         select: { id: true },
       },
-      readOrWatcheds: {
-        select: { id: true}
-      }
-    }
+      readOrWatchedWorks: {
+        select: { readOrWatchedWorkId: true },
+      },
+    },
   });
   WORKS.forEach((w) => {
     transactions.push(
@@ -565,12 +565,13 @@ async function main() {
 
   /***_WorkReadOrWatched */
   WORKS.forEach((w) => {
-    for (let u of w.readOrWatcheds) {
+    for (let u of w.readOrWatchedWorks) {
       transactions.push(
         prismaLocal.$queryRaw(Prisma.sql`
-        INSERT INTO dbo._WorkReadOrWatched(A,B) 
-        VALUES(${u.id},${w.id});
-        `));       
+        INSERT INTO dbo.ReadOrWatchedWork(A,B) 
+        VALUES(${u.readOrWatchedWorkId},${w.id});
+        `),
+      );
     }
   });
 

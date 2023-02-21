@@ -5,9 +5,9 @@ import {prisma} from '@/src/lib/prisma';
 
 export const find = async (props: Prisma.UserFindUniqueArgs): Promise<UserMosaicItem | null> => {
   const { select = undefined, include = true,where } = props;
-  const user:any = await prisma.user.findUnique({
+  const user: any = await prisma.user.findUnique({
     where,
-    select:{
+    select: {
       id: true,
       name: true,
       email: true,
@@ -19,24 +19,88 @@ export const find = async (props: Prisma.UserFindUniqueArgs): Promise<UserMosaic
       aboutMe: true,
       dashboardType: true,
       tags: true,
-      followedBy:{select:{id:true}},
-      following:{select:{id:true,name:true,image:true,photos:{select:{storedFile:true}}}},
-      ratingWorks:{
-        select:{
-          workId:true,
-          qty:true,
-          work:{select:{id:true,author:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,favs:{select:{id:true}},localImages:{select:{storedFile:true}}}}
-        }
+      followedBy: { select: { id: true } },
+      following: { select: { id: true, name: true, image: true, photos: { select: { storedFile: true } } } },
+      ratingWorks: {
+        select: {
+          workId: true,
+          qty: true,
+          work: {
+            select: {
+              id: true,
+              author: true,
+              title: true,
+              type: true,
+              countryOfOrigin: true,
+              countryOfOrigin2: true,
+              favs: { select: { id: true } },
+              localImages: { select: { storedFile: true } },
+            },
+          },
+        },
       },
-      favWorks:{select:{id:true,author:true,createdAt:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,favs:{select:{id:true}},localImages:{select:{storedFile:true}}}},
-      favPosts:{select:{id:true,title:true,createdAt:true,favs:{select:{id:true}},localImages:{select:{storedFile:true}},works:{select:{id:true,title:true}},cycles:{select:{id:true,title:true}},creatorId:true}},
-      favCycles:{select:{id:true,createdAt:true,creatorId:true,startDate:true,endDate:true,title:true,favs:{select:{id:true}},participants:{select:{id:true}},usersJoined:{select:{userId:true,pending:true}},localImages:{select:{storedFile:true}}}},
-      cycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
-      joinedCycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
-      ratingCycles:{select:{cycleId:true,qty:true}},
-      photos:{select:{storedFile:true}},
-    }
-    
+      readOrWatchedWorks: {
+        select: {
+          workId: true,
+          year: true,
+          work: {
+            select: {
+              id: true,
+              author: true,
+              title: true,
+              type: true,
+              countryOfOrigin: true,
+              countryOfOrigin2: true,
+              favs: { select: { id: true } },
+              localImages: { select: { storedFile: true } },
+            },
+          },
+        },
+      },
+      favWorks: {
+        select: {
+          id: true,
+          author: true,
+          createdAt: true,
+          title: true,
+          type: true,
+          countryOfOrigin: true,
+          countryOfOrigin2: true,
+          favs: { select: { id: true } },
+          localImages: { select: { storedFile: true } },
+        },
+      },
+      favPosts: {
+        select: {
+          id: true,
+          title: true,
+          createdAt: true,
+          favs: { select: { id: true } },
+          localImages: { select: { storedFile: true } },
+          works: { select: { id: true, title: true } },
+          cycles: { select: { id: true, title: true } },
+          creatorId: true,
+        },
+      },
+      favCycles: {
+        select: {
+          id: true,
+          createdAt: true,
+          creatorId: true,
+          startDate: true,
+          endDate: true,
+          title: true,
+          favs: { select: { id: true } },
+          participants: { select: { id: true } },
+          usersJoined: { select: { userId: true, pending: true } },
+          localImages: { select: { storedFile: true } },
+        },
+      },
+      cycles: { select: { id: true, creatorId: true, startDate: true, endDate: true, title: true } },
+      joinedCycles: { select: { id: true, creatorId: true, startDate: true, endDate: true, title: true } },
+      ratingCycles: { select: { cycleId: true, qty: true } },
+      photos: { select: { storedFile: true } },
+    },
   });
   user.favWorks.forEach((w:any)=>{
     w.currentUserIsFav = true
@@ -50,9 +114,9 @@ export const findAll = async (props?:Prisma.UserFindManyArgs): Promise<UserMosai
     take,
     skip,
     cursor,
-    ... where && {where},
+    ...(where && { where }),
     orderBy: { createdAt: 'desc' },
-    select:{
+    select: {
       id: true,
       name: true,
       email: true,
@@ -64,23 +128,88 @@ export const findAll = async (props?:Prisma.UserFindManyArgs): Promise<UserMosai
       aboutMe: true,
       dashboardType: true,
       tags: true,
-      followedBy:{select:{id:true}},
-      following:{select:{id:true,name:true,image:true,photos:{select:{storedFile:true}}}},
-      ratingWorks:{
-        select:{
-          workId:true,
-          qty:true,
-          work:{select:{id:true,author:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,favs:{select:{id:true}},localImages:{select:{storedFile:true}}}}
-        }
+      followedBy: { select: { id: true } },
+      following: { select: { id: true, name: true, image: true, photos: { select: { storedFile: true } } } },
+      ratingWorks: {
+        select: {
+          workId: true,
+          qty: true,
+          work: {
+            select: {
+              id: true,
+              author: true,
+              title: true,
+              type: true,
+              countryOfOrigin: true,
+              countryOfOrigin2: true,
+              favs: { select: { id: true } },
+              localImages: { select: { storedFile: true } },
+            },
+          },
+        },
       },
-      favWorks:{select:{id:true,author:true,createdAt:true,title:true,type:true,countryOfOrigin:true,countryOfOrigin2:true,favs:{select:{id:true}},localImages:{select:{storedFile:true}}}},
-      favPosts:{select:{id:true,title:true,createdAt:true,favs:{select:{id:true}},localImages:{select:{storedFile:true}},works:{select:{id:true,title:true}},cycles:{select:{id:true,title:true}},creatorId:true}},
-      favCycles:{select:{id:true,createdAt:true,creatorId:true,startDate:true,endDate:true,title:true,favs:{select:{id:true}},participants:{select:{id:true}},usersJoined:{select:{userId:true,pending:true}},localImages:{select:{storedFile:true}}}},
-      cycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
-      joinedCycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
-      ratingCycles:{select:{cycleId:true,qty:true}},
-      photos:{select:{storedFile:true}},
-    }
+      readOrWatchedWorks: {
+        select: {
+          workId: true,
+          year: true,
+          work: {
+            select: {
+              id: true,
+              author: true,
+              title: true,
+              type: true,
+              countryOfOrigin: true,
+              countryOfOrigin2: true,
+              favs: { select: { id: true } },
+              localImages: { select: { storedFile: true } },
+            },
+          },
+        },
+      },
+      favWorks: {
+        select: {
+          id: true,
+          author: true,
+          createdAt: true,
+          title: true,
+          type: true,
+          countryOfOrigin: true,
+          countryOfOrigin2: true,
+          favs: { select: { id: true } },
+          localImages: { select: { storedFile: true } },
+        },
+      },
+      favPosts: {
+        select: {
+          id: true,
+          title: true,
+          createdAt: true,
+          favs: { select: { id: true } },
+          localImages: { select: { storedFile: true } },
+          works: { select: { id: true, title: true } },
+          cycles: { select: { id: true, title: true } },
+          creatorId: true,
+        },
+      },
+      favCycles: {
+        select: {
+          id: true,
+          createdAt: true,
+          creatorId: true,
+          startDate: true,
+          endDate: true,
+          title: true,
+          favs: { select: { id: true } },
+          participants: { select: { id: true } },
+          usersJoined: { select: { userId: true, pending: true } },
+          localImages: { select: { storedFile: true } },
+        },
+      },
+      cycles: { select: { id: true, creatorId: true, startDate: true, endDate: true, title: true } },
+      joinedCycles: { select: { id: true, creatorId: true, startDate: true, endDate: true, title: true } },
+      ratingCycles: { select: { cycleId: true, qty: true } },
+      photos: { select: { storedFile: true } },
+    },
   });
 };
 
