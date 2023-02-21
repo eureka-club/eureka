@@ -42,11 +42,12 @@ export const findAllByPost = async (postId: number): Promise<ReactionMosaicItem[
   });
 };
 
-export const remove = async (userId: number,postId:number): Promise<PostReaction> => {
+export const remove = async (userId: number,postId:number,unified:string): Promise<PostReaction> => {
   const pr = await  prisma.postReaction.delete({
-    where: { userId_postId:{
+    where: { userId_postId_unified:{
       userId,
-      postId
+      postId,
+      unified
     } },
   });
   // if(pr){
@@ -77,15 +78,18 @@ export const remove = async (userId: number,postId:number): Promise<PostReaction
 export const update = async (
   postId: number, 
   userId: number,
+  unified: string,
   emoji?:string
   )=>{
     try{
         const res = await prisma.postReaction.update({
-          where:{userId_postId:{
+          where:{userId_postId_unified:{
             userId,
-            postId
+            postId,
+            unified
           }},
           data:{
+            unified,
             emoji,
             updatedAt: dayjs.utc().format()
           }
@@ -108,14 +112,17 @@ export const update = async (
       throw new Error('Error updating the reaction');
     }
 };
-
-export const create = async (
+interface CreateProps{
   postId: number, 
   userId: number,
+  unified: string,
   emoji:string
-): Promise<ReactionMosaicItem> => {
+}
+export const create = async (props:CreateProps): Promise<ReactionMosaicItem> => {
+  const {postId,userId,unified,emoji} = props;
   const r = await prisma.postReaction.create({data:{
     emoji,
+    unified,
     user:{connect:{id:userId}},
     post:{connect:{id:postId}},
    

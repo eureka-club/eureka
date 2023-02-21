@@ -11,6 +11,7 @@ import { PostMosaicItem } from '@/src/types/post';
 export interface ExecReactionPayload {
   doCreate:boolean;
   emoji:string;
+  unified:string;
 }
 interface MutateReturn{
   prevUser:UserMosaicItem|undefined;
@@ -35,14 +36,15 @@ const usePostReactionCreateOrEdit = (props:Props)=>{
   };
     
   return useMutation(
-    async ({ doCreate, emoji }:ExecReactionPayload) => {
+    async ({ doCreate, emoji,unified }:ExecReactionPayload) => {
       if (session && post) {
-        const doDelete = post.reactions.findIndex(r=>r.userId==session.user.id && r.emoji == emoji) !== -1;
+        // const doDelete = post.reactions.findIndex(r=>r.userId==session.user.id && r.emoji == emoji) !== -1;
         const res = await fetch(`/api/post/${post.id}/reaction`, {
-          method: doCreate ? 'POST' : doDelete ? 'DELETE' : 'PATCH',
+          method: doCreate ? 'POST' : 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             emoji,
+            unified,
             doCreate,
           }),
         });
@@ -71,8 +73,8 @@ const usePostReactionCreateOrEdit = (props:Props)=>{
             ratings = ratings.filter((i) => i.userId != session.user.id);
           } 
           else {
-            reactionsPost?.push({postId:post.id,emoji:payload.emoji});
-            ratings.push({ userId: +user.id, emoji:payload.emoji });
+            reactionsPost?.push({postId:post.id,unified:payload.unified,emoji:payload.emoji});
+            ratings.push({ userId: +user.id,unified:payload.unified, emoji:payload.emoji });
           }
           queryClient.setQueryData(cacheKey, { ...post, ratings });
           queryClient.setQueryData(['USER', `${user.id}`], { ...user, reactionsPost });

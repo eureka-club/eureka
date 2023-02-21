@@ -33,9 +33,9 @@ const usePostEmojiPicker = (props:Props)=>{
         const handleClose = ()=>setShowEmojisPicker(false)
         const handleSave = (emojiData: EmojiClickData, event: MouseEvent)=>{
             if(user){
-                const doCreate = post.reactions.findIndex(r=>r.userId==+user.id) == -1;
+                const doCreate = post.reactions.filter(r=>r.userId==+user.id).length<+process.env.NEXT_PUBLIC_MAX_REACTIONS!;
                 // event.preventDefault();
-                mutate({doCreate,emoji:emojiData.emoji});
+                mutate({doCreate,unified:emojiData.unified,emoji:emojiData.emoji});
                 onSaved ? onSaved(emojiData) : null;
             }
             handleClose();

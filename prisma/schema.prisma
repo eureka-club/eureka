@@ -483,10 +483,11 @@ model PostReaction {
   post             Post    @relation(fields: [postId], references: [id])
   postId           Int      
   
-  emoji            String    
+  emoji            String 
+  unified          String
   
   createdAt        DateTime  @default(now()) @map(name: "created_at")
   updatedAt        DateTime  @updatedAt @map(name: "updated_at")
 
-  @@id([userId, postId])
+  @@id([userId, postId, unified])
 }

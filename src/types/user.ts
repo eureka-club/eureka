@@ -41,7 +41,7 @@ type UserFoolow = {
     joinedCycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
     ratingCycles:{select:{cycleId:true,qty:true}},
     photos:{select:{storedFile:true}},
-    reactions:{select:{postId:true,emoji:true}},
+    reactions:{select:{postId:true,unified:true,emoji:true}},
 
     // notifications:{
     //   select:{
