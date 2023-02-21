@@ -6,7 +6,7 @@ import { PostMosaicItem } from "@/src/types/post";
 
 const {NEXT_PUBLIC_WEBAPP_URL:origin}=process.env;
 const languages = [
-  ['es','es-ES'],
+  // ['es','es-ES'],
   ['en','en-US'],
   ['fr','fr-FR'],
   ['pt','pt-BR'],
