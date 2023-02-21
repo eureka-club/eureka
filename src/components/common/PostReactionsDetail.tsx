@@ -41,6 +41,7 @@ const PostReactionsDetail: FunctionComponent<Props> = ({post}) => {
 
     return Object.entries(reactionsGrouped).map(([emoji,{qty,unified}])=>{
       return <Button
+      key={unified}
       variant='light' 
       role="img" 
       size="sm"
