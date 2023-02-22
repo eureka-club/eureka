@@ -13,7 +13,7 @@ import usePostReactionCreateOrEdit from '@/src/hooks/mutations/usePostReactionCr
 interface Props {
   post:PostMosaicItem;
 }
-
+const MAX_REACTIONS = 2;
 const PostReactionsDetail: FunctionComponent<Props> = ({post}) => {
   const {data:session} = useSession();
   const { t } = useTranslation('common');
@@ -52,7 +52,7 @@ const PostReactionsDetail: FunctionComponent<Props> = ({post}) => {
       onClick={(e)=>{
         e.preventDefault();
         if(session?.user){
-          let doCreate = post.reactions.filter(r=>r.userId==+session?.user.id).length<+process.env.NEXT_PUBLIC_MAX_REACTIONS!;
+          let doCreate = post.reactions.filter(r=>r.userId==+session?.user.id).length<MAX_REACTIONS;
           doCreate = post.reactions.findIndex(r=>r.unified==unified && r.userId==session.user.id)==-1;
           mutate({doCreate,unified,emoji});
         }
@@ -63,7 +63,7 @@ const PostReactionsDetail: FunctionComponent<Props> = ({post}) => {
   }
   const currentUserCanReact = ()=>{
     const reactionsQty = post.reactions.filter(r=>r.userId==session?.user.id).length;
-    return reactionsQty<+process.env.NEXT_PUBLIC_MAX_REACTIONS!;
+    return reactionsQty<MAX_REACTIONS;
   }
   const RenderReactionAction = ()=>{
     if(post && session?.user && currentUserCanReact())
