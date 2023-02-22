@@ -1,10 +1,12 @@
 {
-    "Mediatheque": "Mediatheque",
-    "Follow": "Follow",
-    "Unfollow": "Unfollow",
-    "notAuthorized": "This user's Mediatheque is private. Become a follower to see his/her/their activity!",
-    "notFound": "Not found",
-    "secretMediathequeNotification": "This Mediatheque is secret. User's activity is not available.",
-    "editProfile": "Edit profile"
-
+  "Mediatheque": "Mediatheque",
+  "Follow": "Follow",
+  "Unfollow": "Unfollow",
+  "notAuthorized": "This user's Mediatheque is private. Become a follower to see his/her/their activity!",
+  "notFound": "Not found",
+  "secretMediathequeNotification": "This Mediatheque is secret. User's activity is not available.",
+  "editProfile": "Edit profile",
+  "readOrWatchedWorks": "Watched or read works",
+  "readOrWatchedBooks": "Books read in",
+  "readOrWatchedMovies": "Movies or documentaries watched in"
 }

@@ -8,7 +8,7 @@ import { useState, useEffect, SyntheticEvent, useCallback } from 'react';
 import { Spinner, Card, Row, Col, ButtonGroup, Button } from 'react-bootstrap';
 import { AiOutlineEnvironment } from 'react-icons/ai';
 import { BiArrowBack } from 'react-icons/bi';
-import LocalImageComponent from '@/src/components/LocalImage'
+import LocalImageComponent from '@/src/components/LocalImage';
 
 import { User } from '@prisma/client';
 import styles from './index.module.css';
@@ -20,63 +20,68 @@ import TagsInput from '@/src/components/forms/controls/TagsInput';
 
 import UnclampText from '@/src/components/UnclampText';
 import { useNotificationContext } from '@/src/useNotificationProvider';
-import useMyPosts,{getMyPosts} from '@/src/useMyPosts';
-import useMyCycles,{getMyCycles} from '@/src/useMyCycles';
-import slugify from 'slugify'
+import useMyPosts, { getMyPosts } from '@/src/useMyPosts';
+import useMyCycles, { getMyCycles } from '@/src/useMyCycles';
+import slugify from 'slugify';
 import { Session } from '@/src/types';
 import PostsCreated from './PostsCreated';
 import CyclesJoined from './CyclesJoined';
 import ReadOrWatched from './ReadOrWatched';
 import SavedForLater from './SavedForLater';
-import {isAccessAllowed} from '@/src/lib/utils';
+import { isAccessAllowed } from '@/src/lib/utils';
 import RenderAccessInfo from './RenderAccessInfo';
+import dayjs from 'dayjs';
 
-interface Props{
-  id:number;
+interface Props {
+  id: number;
   session: Session;
 }
-const Mediatheque: NextPage<Props> = ({id,session}) => {
+const Mediatheque: NextPage<Props> = ({ id, session }) => {
   const router = useRouter();
-  const {notifier} = useNotificationContext();
-  
+  const { notifier } = useNotificationContext();
+
   const queryClient = useQueryClient();
   const { t } = useTranslation('mediatheque');
 
-  const { /* isError, error, */ data: user, isLoading: isLoadingUser, isSuccess: isSuccessUser } = useUser(+id,{
-    enabled:!!+id
+  const {
+    /* isError, error, */ data: user,
+    isLoading: isLoadingUser,
+    isSuccess: isSuccessUser,
+  } = useUser(+id, {
+    enabled: !!+id,
   });
-
   const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>(false);
-  
-  const {data:dataPosts} = useMyPosts(id)
-  const [posts,setPosts] = useState(dataPosts?.posts);
 
-  const {data:dataCycles} = useMyCycles(id);
-  const [cycles,setCycles] = useState(dataCycles?.cycles);
+  const { data: dataPosts } = useMyPosts(id);
+  const [posts, setPosts] = useState(dataPosts?.posts);
 
-  useEffect(()=>{
-    if(dataPosts?.posts){
-      setPosts(dataPosts.posts)
-    }
-  },[dataPosts?.posts])
-
-  useEffect(()=>{
-    if(dataPosts?.posts && dataCycles?.cycles){
-        setCycles(dataCycles?.cycles)
-    }
-  },[dataPosts?.posts,dataCycles?.cycles])
+  const { data: dataCycles } = useMyCycles(id);
+  const [cycles, setCycles] = useState(dataCycles?.cycles);
 
   useEffect(() => {
-      if(dataPosts?.posts && dataCycles?.cycles){
-          if(user){
-            const ifbm = (user && user.followedBy) ? user.followedBy.findIndex((i) => i.id === session?.user.id) !== -1 : false
-            setIsFollowedByMe(ifbm)
-          }
-          if (isSuccessUser && id && !user) {
-            queryClient.invalidateQueries(['USER', `${id}`]);
-          }
+    if (dataPosts?.posts) {
+      setPosts(dataPosts.posts);
+    }
+  }, [dataPosts?.posts]);
+
+  useEffect(() => {
+    if (dataPosts?.posts && dataCycles?.cycles) {
+      setCycles(dataCycles?.cycles);
+    }
+  }, [dataPosts?.posts, dataCycles?.cycles]);
+
+  useEffect(() => {
+    if (dataPosts?.posts && dataCycles?.cycles) {
+      if (user) {
+        const ifbm =
+          user && user.followedBy ? user.followedBy.findIndex((i) => i.id === session?.user.id) !== -1 : false;
+        setIsFollowedByMe(ifbm);
       }
-  }, [dataPosts?.posts,dataCycles?.cycles,user, id, isSuccessUser]);
+      if (isSuccessUser && id && !user) {
+        queryClient.invalidateQueries(['USER', `${id}`]);
+      }
+    }
+  }, [dataPosts?.posts, dataCycles?.cycles, user, id, isSuccessUser]);
 
   const { mutate: mutateFollowing, isLoading: isLoadingMutateFollowing } = useMutation<User>(
     async () => {
@@ -84,22 +89,28 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
       const action = isFollowedByMe ? 'disconnect' : 'connect';
 
       const notificationMessage = `userStartFollowing!|!${JSON.stringify({
-        userName:user.name,
-      })}`
-      const form = new FormData()
-      form.append('followedBy',JSON.stringify({
+        userName: user.name,
+      })}`;
+      const form = new FormData();
+      form.append(
+        'followedBy',
+        JSON.stringify({
           [`${action}`]: [{ id: user.id }],
-      }))
-      form.append('notificationData',JSON.stringify({
-        notificationMessage,
-        notificationContextURL:`/mediatheque/${session.user.id}`,
-        notificationToUsers:[id]
-      }))
-      
+        }),
+      );
+      form.append(
+        'notificationData',
+        JSON.stringify({
+          notificationMessage,
+          notificationContextURL: `/mediatheque/${session.user.id}`,
+          notificationToUsers: [id],
+        }),
+      );
+
       const res = await fetch(`/api/user/${id}`, {
         method: 'PATCH',
         // headers: { 'Content-Type': 'application/json' },
-        body:form,
+        body: form,
         // body: JSON.stringify({
         //   followedBy: {
         //     [`${action}`]: [{ id: user.id }],
@@ -110,16 +121,15 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
         // }),
         //"userStartFollowing":"{{userName}} has started following you. Take a look at his/her Mediatheque too!""
       });
-      if(res.ok){
+      if (res.ok) {
         const json = await res.json();
-        if(notifier)
+        if (notifier)
           notifier.notify({
-            toUsers:[+id],
-            data:{message:notificationMessage}
+            toUsers: [+id],
+            data: { message: notificationMessage },
           });
         return json;
-      }
-      else{
+      } else {
         return null;
       }
     },
@@ -131,7 +141,7 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
         type UserFollow = User & { followedBy: User[]; following: User[] };
         const followingUser = queryClient.getQueryData<UserFollow>(['USER', id]);
         const followedByUser = queryClient.getQueryData<UserFollow>(['USER', session.user.id]);
-        setIsFollowedByMe(p=>!p)
+        setIsFollowedByMe((p) => !p);
         // let followedBy: User[] = [];
         // let following: User[] = [];
         // if (followingUser && followedByUser)
@@ -164,19 +174,20 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
     if (user && s) {
       if (id !== s.user.id) {
         mutateFollowing();
-
       }
     }
   };
-  
-  const goTo = useCallback((path:string)=>{
-    if(user){
-      const sts = `${user.name||id.toString()}-${id}`
-      router.push(`/user/${slugify(sts,{lower:true})}/${path}`) 
-    }
-    else router.push(`/`)
-  },[router,user]) 
-  
+
+  const goTo = useCallback(
+    (path: string) => {
+      if (user) {
+        const sts = `${user.name || id.toString()}-${id}`;
+        router.push(`/user/${slugify(sts, { lower: true })}/${path}`);
+      } else router.push(`/`);
+    },
+    [router, user],
+  );
+
   const renderCountry = () => {
     if (user && user.countryOfOrigin)
       return (
@@ -191,27 +202,66 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
     e.currentTarget.src = '/img/default-avatar.png';
   };
 
-  const renderAvatar = ()=>{
-    if(user){
-      if(!user?.photos || !user?.photos.length)
-        return <img
-        onError={avatarError}
-        className='avatar'
-        src={user.image || '/img/default-avatar.png'}
-        alt={user.name||''}
-      />;
-      return <>      
-      <div className='d-flex d-md-none mb-2'><LocalImageComponent className="rounded rounded-circle" /* className='avatar' */ width={65} height={65} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} /></div>
-      <div className='d-none d-md-flex'><LocalImageComponent className="rounded rounded-circle" /* className='avatar' */ width={160} height={160} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} /></div>
-
-      </>
+  const renderAvatar = () => {
+    if (user) {
+      if (!user?.photos || !user?.photos.length)
+        return (
+          <img
+            onError={avatarError}
+            className="avatar"
+            src={user.image || '/img/default-avatar.png'}
+            alt={user.name || ''}
+          />
+        );
+      return (
+        <>
+          <div className="d-flex d-md-none mb-2">
+            <LocalImageComponent
+              className="rounded rounded-circle"
+              /* className='avatar' */ width={65}
+              height={65}
+              filePath={`users-photos/${user.photos[0].storedFile}`}
+              alt={user.name || ''}
+            />
+          </div>
+          <div className="d-none d-md-flex">
+            <LocalImageComponent
+              className="rounded rounded-circle"
+              /* className='avatar' */ width={160}
+              height={160}
+              filePath={`users-photos/${user.photos[0].storedFile}`}
+              alt={user.name || ''}
+            />
+          </div>
+        </>
+      );
     }
     return '';
   };
 
   const isPending = () => {
     return isLoadingUser || isLoadingMutateFollowing;
-  }
+  };
+
+  const getReadOrWatchedTotal = () => {
+    if (user) return user.readOrWatchedWorks.length;
+  };
+
+  const getReadCurrentYear = () => {
+    if (user) {
+      if (user.readOrWatchedWorks.length) return user.readOrWatchedWorks.filter(x => ['book','fiction-book'].includes(x.work!.type) && x.year === dayjs().year()).length;
+      else return 0;
+    }
+  };
+
+  const getWatchedCurrentYear = () => {
+ if (user) {
+   if (user.readOrWatchedWorks.length)
+     return user.readOrWatchedWorks.filter(
+       (x) => ['movie', 'documentary'].includes(x.work!.type) && x.year === dayjs().year(),
+     ).length;
+   else return 0;
+ }  };
 
   return (
     <SimpleLayout title={t('Mediatheque')}>
@@ -222,49 +272,49 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
           </Button>
         </ButtonGroup>
 
-        {!(isLoadingUser) && user && (
+        {!isLoadingUser && user && (
           <section>
-            <Card className='userHeader'>
+            <Card className="userHeader">
               <Card.Body>
-                <Row className='d-flex flex-column flex-md-row' >
-                  <Col className='d-flex flex-column flex-sm-wrap align-items-start'>
+                <Row className="d-flex flex-column flex-md-row">
+                  <Col className="d-flex flex-column flex-sm-wrap align-items-start">
                     <div className="d-flex flex-nowrap">
-                       {renderAvatar()}
-                        <div className='ms-3 d-sm-block d-md-none'>
-                         <h2>{user.name}</h2>
-                         {renderCountry()}
-                         </div>
+                      {renderAvatar()}
+                      <div className="ms-3 d-sm-block d-md-none">
+                        <h2>{user.name}</h2>
+                        {renderCountry()}
                       </div>
-                    <TagsInput className='d-sm-block d-md-none' tags={user.tags || ''} readOnly label="" />
+                    </div>
+                    <TagsInput className="d-sm-block d-md-none" tags={user.tags || ''} readOnly label="" />
                   </Col>
-                  <Col className='col col-sm-12 col-md-8'>
-                    <div className='d-none d-md-block'>
+                  <Col className="col col-sm-12 col-md-8">
+                    <div className="d-none d-md-block">
                       <h2>{user.name}</h2>
                       {renderCountry()}
                     </div>
-                    <div className='d-none d-md-block'>
-                       <p className={styles.description}>{user.aboutMe}</p>
+                    <div className="d-none d-md-block">
+                      <p className={styles.description}>{user.aboutMe}</p>
                     </div>
-                    <div className='mt-3 d-sm-block d-md-none'>
-                       <UnclampText isHTML={false} text={user.aboutMe || ''} clampHeight="6rem" />
+                    <div className="mt-3 d-sm-block d-md-none">
+                      <UnclampText isHTML={false} text={user.aboutMe || ''} clampHeight="6rem" />
                     </div>
-                    <TagsInput className='d-none d-md-flex flex-row' tags={user.tags || ''} readOnly label="" />
+                    <TagsInput className="d-none d-md-flex flex-row" tags={user.tags || ''} readOnly label="" />
                   </Col>
-                  <Col className='mt-2 d-grid gap-2 d-md-flex align-items-start  justify-content-md-end d-lg-block'>
-                      {session && session.user!.id == user.id && (
-                      <Button className='btn-eureka' onClick={()=>router.push('/profile')}>
+                  <Col className="mt-2 d-grid gap-2 d-md-flex align-items-start  justify-content-md-end d-lg-block">
+                    {session && session.user!.id == user.id && (
+                      <Button className="btn-eureka" onClick={() => router.push('/profile')}>
                         {t('editProfile')}
                       </Button>
                     )}
                     {session && session.user!.id !== user.id && !isFollowedByMe && (
-                      <Button 
-                        data-cy="follow-btn" 
-                        className='btn-eureka' 
-                        onClick={followHandler} 
+                      <Button
+                        data-cy="follow-btn"
+                        className="btn-eureka"
+                        onClick={followHandler}
                         disabled={isPending()}
                       >
                         {t('Follow')}
-                        {isPending() && <Spinner className='ms-2' animation="grow" variant="info" size="sm" />}
+                        {isPending() && <Spinner className="ms-2" animation="grow" variant="info" size="sm" />}
                       </Button>
                     )}
 
@@ -277,7 +327,7 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
                         style={{ width: '10em' }}
                       >
                         {t('Unfollow')}
-                        {isPending() && <Spinner className='ms-2' animation="grow" variant="info" size="sm" />}
+                        {isPending() && <Spinner className="ms-2" animation="grow" variant="info" size="sm" />}
                       </Button>
                     )}
                   </Col>
@@ -285,22 +335,49 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
                 {/* <BsCircleFill className={styles.infoCircle} /> */}
               </Card.Body>
             </Card>
-            {isAccessAllowed(session,user,isLoadingUser,isFollowedByMe) && (
+            {isAccessAllowed(session, user, isLoadingUser, isFollowedByMe) && (
               <>
                 <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('Mediatheque')}</h1>
                 <FilterEngine fictionOrNotFilter={false} geographyFilter={false} />
-                <PostsCreated posts={posts?.slice(0,6)!} user={user} goTo={goTo} id={id.toString()} t={t}/>
-                <CyclesJoined cycles={cycles?.slice(0,6)!} goTo={goTo} id={id.toString()} t={t}/>
-                <ReadOrWatched user={user} id={id.toString()} goTo={goTo} t={t}/>
-                <SavedForLater user={user} goTo={goTo} t={t} id={id}/>
-                {/* <UsersFollowed user={user} goTo={goTo} t={t} /> */}
+                <section className="d-flex flex-column flex-lg-row">
+                  <Col xs={12} lg={2} className="me-2">
+                    <h2 className="text-secondary ">{`${t('readOrWatchedWorks')} (${getReadOrWatchedTotal()})`}</h2>
+                    <section className="mt-4 p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
+                      <h2 className="p-1 m-0 text-wrap text-center fs-6">
+                        {`${t('readOrWatchedBooks').toLocaleUpperCase()} ${dayjs().year()}`}
+                      </h2>
+                      <h2 className="p-1 m-0 text-wrap text-center fs-5">{`(${getReadCurrentYear()})`}</h2>
+                    </section>
+                    <section className="mt-5 p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
+                      <h2 className="p-1 m-0 text-wrap text-center fs-6">
+                        {`${t('readOrWatchedMovies').toLocaleUpperCase()} ${dayjs().year()}`}
+                      </h2>
+                      <h2 className="p-1 m-0 text-wrap text-center fs-5">{`(${getWatchedCurrentYear()})`}</h2>
+                    </section>
+                  </Col>
+                  <Col xs={12} lg={10} className="mt-5 mt-lg-0">
+                    <section className="ms-0 ms-lg-5">
+                      <PostsCreated posts={posts?.slice(0, 6)!} user={user} goTo={goTo} id={id.toString()} t={t} />
+                      <CyclesJoined cycles={cycles?.slice(0, 6)!} goTo={goTo} id={id.toString()} t={t} />
+                      <ReadOrWatched user={user} id={id.toString()} goTo={goTo} t={t} />
+                      <SavedForLater user={user} goTo={goTo} t={t} id={id} />
+                      {/* <UsersFollowed user={user} goTo={goTo} t={t} /> */}
+                    </section>
+                  </Col>
+                </section>
               </>
             )}
           </section>
         )}
         <aside>
-          <RenderAccessInfo session={session} user={user!} t={t} isLoadingUser={isLoadingUser} isFollowedByMe={isFollowedByMe} />
-          {(isLoadingUser) && <Spinner animation="grow" variant="info" />}
+          <RenderAccessInfo
+            session={session}
+            user={user!}
+            t={t}
+            isLoadingUser={isLoadingUser}
+            isFollowedByMe={isFollowedByMe}
+          />
+          {isLoadingUser && <Spinner animation="grow" variant="info" />}
           {isSuccessUser && id && !user && <Spinner animation="grow" variant="info" />}
         </aside>
       </article>
@@ -311,32 +388,33 @@ const Mediatheque: NextPage<Props> = ({id,session}) => {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const queryClient = new QueryClient();
   const session = await getSession(ctx);
-  const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
-  
+  const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
+
   let id = 0;
-  if(ctx.query && ctx.query.slug){
-    const slug = ctx.query.slug.toString()
-    const li = slug.split('-').slice(-1)
-    id = parseInt(li[0])
-    if(!session){
+  if (ctx.query && ctx.query.slug) {
+    const slug = ctx.query.slug.toString();
+    const li = slug.split('-').slice(-1);
+    id = parseInt(li[0]);
+    if (!session) {
       return {
-        props:{
+        props: {
           id,
-        dehydratedState: dehydrate(queryClient),
-      }}
+          dehydratedState: dehydrate(queryClient),
+        },
+      };
     }
-    const {posts} = await getMyPosts(id!,8,origin);
-    await queryClient.prefetchQuery(['MY-POSTS',id], ()=>posts);
-    posts.forEach(p=>{
-      queryClient.setQueryData(['POST',`${p.id}`], ()=>p)
-    })
-  
-    const {cycles} = await getMyCycles(id!,8,origin);
-    await queryClient.prefetchQuery(["MY-CYCLES"],()=>cycles)
-    cycles.forEach(c=>{
-      queryClient.setQueryData(['CYCLE',c.id], ()=>c)
-    })
-  
+    const { posts } = await getMyPosts(id!, 8, origin);
+    await queryClient.prefetchQuery(['MY-POSTS', id], () => posts);
+    posts.forEach((p) => {
+      queryClient.setQueryData(['POST', `${p.id}`], () => p);
+    });
+
+    const { cycles } = await getMyCycles(id!, 8, origin);
+    await queryClient.prefetchQuery(['MY-CYCLES'], () => cycles);
+    cycles.forEach((c) => {
+      queryClient.setQueryData(['CYCLE', c.id], () => c);
+    });
+
     return {
       props: {
         session,
@@ -345,6 +423,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   }
-  return {props:{}}
+  return { props: {} };
 };
 export default Mediatheque;
