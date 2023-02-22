@@ -18,6 +18,8 @@ interface Props{
     post: PostMosaicItem;
     onSaved?: (emoji:EmojiClickData)=>void
 }
+const MAX_REACTIONS=2;
+
 const usePostEmojiPicker = (props:Props)=>{
     const {post,onSaved} = props;
     
@@ -33,7 +35,7 @@ const usePostEmojiPicker = (props:Props)=>{
         const handleClose = ()=>setShowEmojisPicker(false)
         const handleSave = (emojiData: EmojiClickData, event: MouseEvent)=>{
             if(user){
-                const doCreate = post.reactions.filter(r=>r.userId==+user.id).length<+process.env.NEXT_PUBLIC_MAX_REACTIONS!;
+                const doCreate = post.reactions.filter(r=>r.userId==+user.id).length<MAX_REACTIONS;
                 // event.preventDefault();
                 mutate({doCreate,unified:emojiData.unified,emoji:emojiData.emoji});
                 onSaved ? onSaved(emojiData) : null;
