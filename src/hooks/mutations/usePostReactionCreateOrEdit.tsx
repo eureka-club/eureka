@@ -59,7 +59,8 @@ const usePostReactionCreateOrEdit = (props:Props)=>{
         let prevUser =undefined;
         let prevPost =undefined;
         if (post && session && user) {
-          const ck = cacheKey || ['POST',`${post.id}`];
+          const ck = ['POST',`${post.id}`];
+          // const ck = cacheKey || ['POST',`${post.id}`];
           
           await queryClient.cancelQueries(['USER', `${session.user.id}`]);
           await queryClient.cancelQueries(ck);
@@ -84,7 +85,8 @@ const usePostReactionCreateOrEdit = (props:Props)=>{
         return { prevUser, prevPost };
       },
       onSettled:(_, error, __, context) => {
-        const ck = cacheKey || ['POST',`${post.id}`];
+        const ck =  ['POST',`${post.id}`];
+        // const ck = cacheKey || ['POST',`${post.id}`];
         if (error && context) {
           if ('prevUser' in context) queryClient.setQueryData(['USER', `${session?.user.id}`], context?.prevUser);
           if ('prevPost' in context) queryClient.setQueryData(ck, context?.prevPost);

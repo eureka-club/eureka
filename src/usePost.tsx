@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { PostMosaicItem } from './types/post';
 
 export const getPost = async (id: number,origin=''): Promise<PostMosaicItem | undefined> => {
@@ -17,6 +17,7 @@ interface Options {
 }
 
 const usePost = (id: number, options?: Options) => {
+  const qc = useQueryClient()
   const { staleTime, enabled } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
@@ -24,6 +25,9 @@ const usePost = (id: number, options?: Options) => {
   return useQuery<PostMosaicItem | undefined>(['POST', `${id}`], () => getPost(id), {
     staleTime,
     enabled,
+    initialData:()=>{
+      return qc.getQueryData<{posts:PostMosaicItem[]}>(['POSTS','eurekas-of-interest'])?.posts.find(p=>p.id==id)
+    }
   });
 };
 
