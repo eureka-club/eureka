@@ -31,6 +31,7 @@ const validateReq = async (
 
   return true;
 };
+const MAX_REACTIONS = 2;
 
 export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
@@ -48,7 +49,7 @@ export default getApiHandler()
         return;
       }
       const reactions_per_current_user = post.reactions.filter(r=>r.userId==session.user.id)
-      if(reactions_per_current_user.length<+process.env.NEXT_PUBLIC_MAX_REACTIONS!){
+      if(reactions_per_current_user.length<MAX_REACTIONS){
         let result = await create({
           postId:post.id,
           userId:session.user.id,
