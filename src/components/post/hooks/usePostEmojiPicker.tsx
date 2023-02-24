@@ -16,18 +16,19 @@ const EP = dynamic(
 );
 interface Props{
     post: PostMosaicItem;
+    cacheKey:string[]|[string,string];
     onSaved?: (emoji:EmojiClickData)=>void
 }
 const MAX_REACTIONS=2;
 
 const usePostEmojiPicker = (props:Props)=>{
-    const {post,onSaved} = props;
+    const {post,cacheKey,onSaved} = props;
     
     const {data:session,status} = useSession();
     const user = session?.user;
 
     const [showEmojisPicker,setShowEmojisPicker] = useState(false)
-    const {mutate,isLoading:isMutating} = usePostReactionCreateOrEdit({post});
+    const {mutate,isLoading:isMutating} = usePostReactionCreateOrEdit({post,cacheKey});
     
     const EmojiPicker: React.FC<Props> = ()=>{
         if(!isPost(post))return <></>;

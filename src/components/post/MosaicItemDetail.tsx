@@ -1,31 +1,25 @@
-import { Cycle, Work } from '@prisma/client';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Row, Col, Card, Badge,Button,Spinner } from 'react-bootstrap';
-import { FaRegComments, FaRegCompass } from 'react-icons/fa';
+import { Card, Badge,Spinner } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import { DATE_FORMAT_SHORT } from '../../constants';
-import SocialInteraction from '../common/SocialInteraction';
-import { PostMosaicItem } from '../../types/post';
+import SocialInteraction from './SocialInteraction';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItemDetail.module.css';
-import { isCycle, isWork, Session } from '../../types';
+import { Session } from '../../types';
 import Avatar from '../common/UserAvatar';
-import UnclampText from '../UnclampText';
 import { CycleMosaicItem } from '@/src/types/cycle';
 import { WorkMosaicItem } from '@/src/types/work';
 import {useAtom} from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
 import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
 import usePost from '@/src/usePost'
-import {useQueryClient} from 'react-query'
-import useCycle from '@/src/useCycle';
-import useWork from '@/src/useWork'
 import { useSession} from 'next-auth/react';
-import { BiEdit} from 'react-icons/bi';
+import { PostMosaicItem } from '@/src/types/post';
 interface Props {
+  post?:PostMosaicItem;
   postId: number|string;
   //display?: 'v' | 'h';
   showButtonLabels?: boolean;
@@ -35,7 +29,7 @@ interface Props {
   showSaveForLater?: boolean;
   showdetail?: boolean;
   style?: { [k: string]: string };
-  cacheKey?: string[];
+  cacheKey?: [string,string];
   showTrash?: boolean;
   showComments?: boolean;
   linkToPost?: boolean;
@@ -44,6 +38,7 @@ interface Props {
 }
 
 const MosaicItemDetail: FunctionComponent<Props> = ({
+  post:postItem,
   postId,
   //display = 'v',
   showSocialInteraction = true,
@@ -66,9 +61,14 @@ const MosaicItemDetail: FunctionComponent<Props> = ({
   const [postParent,setPostParent] = useState<CycleMosaicItem|WorkMosaicItem>();
   const {data:session} = useSession()
 
-  const {data:post} = usePost(+postId,{
-    enabled:!!postId
+  const {data} = usePost(+postId,{
+    enabled:!!postId && !postItem
   })
+
+  const [post,setPost] = useState(postItem)
+  useEffect(()=>{
+    if(!postItem && data)setPost(data)
+  },[data])
 
   useEffect(()=>{
     if(post){
@@ -79,15 +79,7 @@ const MosaicItemDetail: FunctionComponent<Props> = ({
    
    if(!post)return <></>
 
-  const parentLinkHref = ((): string | null => {
-    if (post.works.length) {
-      return `/work/${post.works[0].id}`;
-    }
-    else if (post.cycles[0]) {
-      return `/cycle/${post.cycles[0].id}`;
-    }
-    return null;
-  })();
+  
   const postLinkHref = ((): string => {
     if (post.works.length) {
       return `/work/${post.works[0].id}/post/${post.id}`;
@@ -118,32 +110,7 @@ const MosaicItemDetail: FunctionComponent<Props> = ({
   const renderVerticalMosaic = (props: { showDetailedInfo: boolean,specifyDataCy?:boolean,commentSection?:boolean }) => {
     const { showDetailedInfo, specifyDataCy=true,commentSection=false } = props;
 
-const getParentTitle = () => {
-      let res = '';
-      if (post.works.length) {
-        res = post.works[0].title
-      }
-      else if(post.cycles.length){
-        res = post.cycles[0].title
-      }
-      return res;
-    };
-   
-    const renderParentTitle = () => {
-      let res = '';
-      let full =''
-      if (post.works.length) {
-        full = post.works[0].title
-        res = full.slice(0, 65);
-      }
-      else if(post.cycles.length){
-        full = post.cycles[0].title
-        res = full.slice(0, 65);
-      }
-      if (res.length + 3 < full.length) res = `${res}...`;
-      else res = full;
-      return res; 
-    };
+
 
     const canNavigate = () => {
       return !loading;
@@ -193,32 +160,18 @@ const getParentTitle = () => {
        
       </Card.Body>    
       {showSocialInteraction && post && (
-          <Card.Footer className={`d-flex ${styles.footer} d-flex justify-content-between`}>
-                {(
-          <h2 className="m-0 p-1 fs-6 text-info" data-cy="parent-title">
-            {/*<FaRegCompass className="text-info" />*/}
-            {` `}
-            {parentLinkHref != null ? (
-              <Link href={parentLinkHref}>
-                <a title={getParentTitle()} className="text-info">
-                  <span>{renderParentTitle()} </span>
-                </a>
-              </Link>
-            ) : (
-              <h2 className="m-0 p-1 fs-6 text-secondary">{renderParentTitle()}</h2>
-            )}
-          </h2>
-        )}
+          <Card.Footer className={` ${styles.footer}`}>
+               
             <SocialInteraction
               cacheKey={cacheKey}
               showButtonLabels={false}
               showCounts={false}
-              entity={post}
+              post={post}
               parent={postParent}
-              showRating={false}
               showTrash={false}
               showSaveForLater={showSaveForLater}
               className="ms-auto"
+              showTitle={false}
             />
           </Card.Footer>
       )} 

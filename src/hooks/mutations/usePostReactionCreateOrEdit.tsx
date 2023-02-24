@@ -19,10 +19,11 @@ interface MutateReturn{
 }
 interface Props{
   post:PostMosaicItem;
+  cacheKey:string[]|[string,string];
 }
 
 const usePostReactionCreateOrEdit = (props:Props)=>{
-  const {post} = props;
+  const {post,cacheKey} = props;
   const queryClient = useQueryClient();
   const {data:session,status} = useSession();
   const { data: user } = useUser(session?.user?.id||0, {
@@ -58,12 +59,13 @@ const usePostReactionCreateOrEdit = (props:Props)=>{
         let prevUser =undefined;
         let prevPost =undefined;
         if (post && session && user) {
-          const cacheKey = ['POST',`${post.id}`];
+          const ck = cacheKey || ['POST',`${post.id}`];
+          
           await queryClient.cancelQueries(['USER', `${session.user.id}`]);
-          await queryClient.cancelQueries(cacheKey);
+          await queryClient.cancelQueries(ck);
           
           prevUser = queryClient.getQueryData<UserMosaicItem>(['USER', `${session.user.id}`]);
-          prevPost = queryClient.getQueryData<PostMosaicItem>(cacheKey);
+          prevPost = queryClient.getQueryData<PostMosaicItem>(ck);
       
           let reactionsPost = user.reactions;
           let ratings = post.reactions;
@@ -74,21 +76,21 @@ const usePostReactionCreateOrEdit = (props:Props)=>{
           } 
           else {
             reactionsPost?.push({postId:post.id,unified:payload.unified,emoji:payload.emoji});
-            ratings.push({ userId: +user.id,unified:payload.unified, emoji:payload.emoji });
+            ratings.push({ userId: +user.id,unified:payload.unified, emoji:payload.emoji,createdAt:new Date() });
           }
-          queryClient.setQueryData(cacheKey, { ...post, ratings });
+          queryClient.setQueryData(ck, { ...post, ratings });
           queryClient.setQueryData(['USER', `${user.id}`], { ...user, reactionsPost });
         }
         return { prevUser, prevPost };
       },
       onSettled:(_, error, __, context) => {
-        const cacheKey = ['POST',`${post.id}`];
+        const ck = cacheKey || ['POST',`${post.id}`];
         if (error && context) {
           if ('prevUser' in context) queryClient.setQueryData(['USER', `${session?.user.id}`], context?.prevUser);
-          if ('prevPost' in context) queryClient.setQueryData(cacheKey, context?.prevPost);
+          if ('prevPost' in context) queryClient.setQueryData(ck, context?.prevPost);
         }
         queryClient.invalidateQueries(['USER', `${session?.user.id}`]);
-        queryClient.invalidateQueries(cacheKey);
+        queryClient.invalidateQueries(ck);
       },
     },
   );
