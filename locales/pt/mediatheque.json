@@ -1,9 +1,12 @@
 {
-    "Mediatheque": "Mediateca",
-    "Follow": "Seguir",
-    "Unfollow": "Deixar de seguir",
-    "notAuthorized": "Esta Mediateca é privada. Para obter acesso, clique em Seguir!",
-    "notFound": "Não encontrado",
-    "editProfile": "Editar meu perfil",
-    "secretMediathequeNotification": "Esta Mediateca é secreta. A atividade desta pessoa não está disponível."
+  "Mediatheque": "Mediateca",
+  "Follow": "Seguir",
+  "Unfollow": "Deixar de seguir",
+  "notAuthorized": "Esta Mediateca é privada. Para obter acesso, clique em Seguir!",
+  "notFound": "Não encontrado",
+  "editProfile": "Editar meu perfil",
+  "secretMediathequeNotification": "Esta Mediateca é secreta. A atividade desta pessoa não está disponível.",
+  "readOrWatchedWorks": "Assistiu ou leu trabalhos",
+  "readOrWatchedBooks": "Livros lidos em",
+  "readOrWatchedMovies": "Filmes ou documentários assistidos em"
 }

@@ -13,7 +13,7 @@ import {
   Col,
   NavLink,
   Button,
-  ButtonGroup, 
+  ButtonGroup,
   Spinner,
 } from 'react-bootstrap';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
@@ -23,6 +23,7 @@ import { useRouter } from 'next/router';
 import { PostMosaicItem } from '@/src/types/post';
 import UnclampText from '@/components/UnclampText';
 import WorkSummary from './WorkSummary';
+import WorkReadOrWatched from './WorkReadOrWatched';
 import detailPagesAtom from '@/src/atoms/detailPages';
 //import globalModalsAtom from '@/src/atoms/globalModals';
 // import editOnSmallerScreens from '../../atoms/editOnSmallerScreens';
@@ -31,12 +32,12 @@ import TagsInput from '@/components/forms/controls/TagsInput';
 import MosaicItem from './MosaicItem';
 import { MosaicContext } from '@/src/useMosaicContext';
 import { WorkContext } from '@/src/useWorkContext';
-import useWork from '@/src/useWork'
-import useCycles from '@/src/useCycles'
-import usePosts,{getPosts} from '@/src/usePosts'
+import useWork from '@/src/useWork';
+import useCycles from '@/src/useCycles';
+import usePosts, { getPosts } from '@/src/usePosts';
 import WorkDetailPost from './WorkDetailPost';
-import CMI from '@/src/components/cycle/MosaicItem'
-import MosaicItemPost from '@/src/components/post/MosaicItem'
+import CMI from '@/src/components/cycle/MosaicItem';
+import MosaicItemPost from '@/src/components/post/MosaicItem';
 import { useInView } from 'react-intersection-observer';
 import { Session } from '@/src/types';
 import HyvorComments from '@/src/components/common/HyvorComments';
@@ -44,15 +45,15 @@ import useExecRatingWork from '@/src/hooks/mutations/useExecRatingWork';
 import Rating from '../common/Rating';
 import { Box } from '@mui/material';
 
-const PostDetailComponent = lazy(()=>import('@/components/post/PostDetail')) ;
- 
+const PostDetailComponent = lazy(() => import('@/components/post/PostDetail'));
+
 interface Props {
   workId: number;
   post?: PostMosaicItem;
-  session:Session
+  session: Session;
 }
 
-const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session }) => {
+const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }) => {
   const router = useRouter();
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   //const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -64,111 +65,108 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
     // skip: supportsLazyLoading !== false,
   });
 
-  const {data:work} = useWork(workId,{
-    enabled:!!(workId) 
+  const { data: work } = useWork(workId, {
+    enabled: !!workId,
   });
 
-  const [qty, setQty] = useState(work?.ratingAVG||0);
-  const [qtyByUser,setqtyByUser] = useState(0);
+  const [qty, setQty] = useState(work?.ratingAVG || 0);
+  const [qtyByUser, setqtyByUser] = useState(0);
 
-  useEffect(()=>{
-    if(work && session){
+  useEffect(() => {
+    if (work && session) {
       let ratingCount = work.ratings.length;
-      const ratingAVG = work.ratings.reduce((p,c)=>c.qty+p,0)/ratingCount;
+      const ratingAVG = work.ratings.reduce((p, c) => c.qty + p, 0) / ratingCount;
       setQty(ratingAVG);
 
-      const currentRating = work?.ratings.filter(w=>w.userId==session?.user.id);
+      const currentRating = work?.ratings.filter((w) => w.userId == session?.user.id);
       setqtyByUser(currentRating?.length ? currentRating[0].qty : 0);
     }
+  }, [work, session]);
 
-  },[work,session])
-  
   const workCyclessWhere = {
-    where:{works:{
-      some:{
-        id:workId
-      }
-    }}
-  }
-  const [workPostsWhere] = useState<Record<string,any>>(
-    {
-      take:8,
-      where:{
-        works:{
-          some:{
-            id:workId
-          }
-        }
-      }
-    }
-  )
-  const {data:dataCycles} = useCycles(workCyclessWhere,{enabled:!!workId})
-  const {data:dataPosts} = usePosts(workPostsWhere,{enabled:!!workId})//OJO this trigger just once -load the same data that page does
-  const [posts,setPosts] = useState(dataPosts?.posts)
-  const [cycles,setCycles] = useState(dataCycles?.cycles)
-  const [defaultActiveKey,setDefaultActiveKey] = useState<string>('posts')
+    where: {
+      works: {
+        some: {
+          id: workId,
+        },
+      },
+    },
+  };
+  const [workPostsWhere] = useState<Record<string, any>>({
+    take: 8,
+    where: {
+      works: {
+        some: {
+          id: workId,
+        },
+      },
+    },
+  });
+  const { data: dataCycles } = useCycles(workCyclessWhere, { enabled: !!workId });
+  const { data: dataPosts } = usePosts(workPostsWhere, { enabled: !!workId }); //OJO this trigger just once -load the same data that page does
+  const [posts, setPosts] = useState(dataPosts?.posts);
+  const [cycles, setCycles] = useState(dataCycles?.cycles);
+  const [defaultActiveKey, setDefaultActiveKey] = useState<string>('posts');
 
-  const [hasMorePosts,setHasMorePosts] = useState(dataPosts?.fetched);
+  const [hasMorePosts, setHasMorePosts] = useState(dataPosts?.fetched);
 
-  const {mutate:execRating} = useExecRatingWork({
-    work:work!,
+  const { mutate: execRating } = useExecRatingWork({
+    work: work!,
   });
 
-  useEffect(()=>{
-    if(dataPosts && dataPosts.posts){
-      setHasMorePosts(dataPosts.fetched)
-      setPosts(dataPosts.posts)
-      if(dataPosts.posts.length)setDefaultActiveKey('posts')
+  useEffect(() => {
+    if (dataPosts && dataPosts.posts) {
+      setHasMorePosts(dataPosts.fetched);
+      setPosts(dataPosts.posts);
+      if (dataPosts.posts.length) setDefaultActiveKey('posts');
     }
-  },[dataPosts])
+  }, [dataPosts]);
 
-  useEffect(()=>{
-    if(dataCycles && dataCycles.cycles){
-      setCycles(dataCycles.cycles)
-      if(dataCycles.cycles.length && !posts?.length)setDefaultActiveKey('cycles')
+  useEffect(() => {
+    if (dataCycles && dataCycles.cycles) {
+      setCycles(dataCycles.cycles);
+      if (dataCycles.cycles.length && !posts?.length) setDefaultActiveKey('cycles');
     }
-    if(router.query.tabKey)setDefaultActiveKey(router.query.tabKey.toString())
+    if (router.query.tabKey) setDefaultActiveKey(router.query.tabKey.toString());
+  }, [dataCycles, posts]);
 
-  },[dataCycles,posts])
-
-  useEffect(()=>{
-    if(inView && hasMorePosts){
-      if(posts){
-        const loadMore = async ()=>{
-          const {id} = posts.slice(-1)[0];
-          const o = {...workPostsWhere,skip:1,cursor:{id}};
-          const {posts:pf,fetched} = await getPosts(o)
+  useEffect(() => {
+    if (inView && hasMorePosts) {
+      if (posts) {
+        const loadMore = async () => {
+          const { id } = posts.slice(-1)[0];
+          const o = { ...workPostsWhere, skip: 1, cursor: { id } };
+          const { posts: pf, fetched } = await getPosts(o);
           setHasMorePosts(fetched);
-          const posts_ = [...(posts||[]),...pf];
+          const posts_ = [...(posts || []), ...pf];
           setPosts(posts_);
-        }
+        };
         loadMore();
       }
     }
-  },[inView]);
-  
+  }, [inView]);
 
   let cyclesCount = 0;
-  if(cycles)cyclesCount = cycles.length
-  
-  if(!work)return <></>
-  
-  const renderSpinnerForLoadNextCarousel = ()=>{
-    if(hasMorePosts) return <Spinner animation="grow" />
-            return '';
-  }
+  if (cycles) cyclesCount = cycles.length;
+
+  if (!work) return <></>;
+
+  const renderSpinnerForLoadNextCarousel = () => {
+    if (hasMorePosts) return <Spinner animation="grow" />;
+    return '';
+  };
 
   const handleSubsectionChange = (key: string | null) => {
     if (key != null) {
-      setDefaultActiveKey(key)
+      setDefaultActiveKey(key);
       setDetailPagesState({ ...detailPagesState, selectedSubsectionWork: key });
     }
   };
 
   const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    localStorage.setItem('redirect',`/work/${work.id}`)
-    router.push(`/work/${work.id}/edit`)
+    localStorage.setItem('redirect', `/work/${work.id}`);
+    router.push(`/work/${work.id}/edit`);
   };
 
   const canEditWork = (): boolean => {
@@ -183,9 +181,9 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
 
   const handleEditPostClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    if(post){
-      localStorage.setItem('redirect',`/work/${work.id}`)
-      router.push(`/post/${post.id}/edit`)
+    if (post) {
+      localStorage.setItem('redirect', `/work/${work.id}`);
+      router.push(`/post/${post.id}/edit`);
     }
   };
 
@@ -194,36 +192,59 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
         setEditPostOnSmallerScreen({ ...editOnSmallerScreens, ...{ value: !editPostOnSmallerScreen.value } });
   };*/
 
-  const renderPosts = ()=>{
-    if(posts){
-      return <>
-        <WorkDetailPost workId={work.id} className='mb-2' cacheKey={['POSTS',JSON.stringify(workPostsWhere)]}></WorkDetailPost> 
-        <Row className='mt-5'>
-        {posts.map((p)=><Col key={p.id} xs={12} sm={6} lg={3} xxl={2} className="mb-5 d-flex justify-content-center  align-items-center">
-          <MosaicItemPost  cacheKey={['POST',`${p.id}`]} postId={p.id} size={'md'} showSaveForLater={true}  />          
-        </Col>
-        )}
-        </Row>
-        <div className="mt-5" ref={ref}>
-          {hasMorePosts ? <Spinner animation="grow" />
-            :<></>}
-        </div>
-      </>
+  const renderPosts = () => {
+    if (posts) {
+      return (
+        <>
+          <WorkDetailPost
+            workId={work.id}
+            className="mb-2"
+            cacheKey={['POSTS', JSON.stringify(workPostsWhere)]}
+          ></WorkDetailPost>
+          <Row className="mt-5">
+            {posts.map((p) => (
+              <Col
+                key={p.id}
+                xs={12}
+                sm={6}
+                lg={3}
+                xxl={2}
+                className="mb-5 d-flex justify-content-center  align-items-center"
+              >
+                <MosaicItemPost cacheKey={['POST', `${p.id}`]} postId={p.id} size={'md'} showSaveForLater={true} />
+              </Col>
+            ))}
+          </Row>
+          <div className="mt-5" ref={ref}>
+            {hasMorePosts ? <Spinner animation="grow" /> : <></>}
+          </div>
+        </>
+      );
     }
     return '';
-  }
+  };
 
-  const renderCycles =()=>{
-    if(cycles){
-      return <Row className='mt-5'>
-        {cycles.map(c=><Col xs={12} sm={6} lg={3} xxl={2} className="mb-5 d-flex justify-content-center  align-items-center" key={c.id}>
-          <CMI cycleId={c.id} cacheKey={['CYCLES',`WORK-${workId}`]} size={'md'} showSaveForLater={true}  /></Col>)}
-      </Row>
+  const renderCycles = () => {
+    if (cycles) {
+      return (
+        <Row className="mt-5">
+          {cycles.map((c) => (
+            <Col
+              xs={12}
+              sm={6}
+              lg={3}
+              xxl={2}
+              className="mb-5 d-flex justify-content-center  align-items-center"
+              key={c.id}
+            >
+              <CMI cycleId={c.id} cacheKey={['CYCLES', `WORK-${workId}`]} size={'md'} showSaveForLater={true} />
+            </Col>
+          ))}
+        </Row>
+      );
     }
-    return <></> 
-  }
-
-  
+    return <></>;
+  };
 
   const handlerChangeRating = (value: number) => {
     setQty(value);
@@ -246,7 +267,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
       return work.ratingAVG || 0;
     }
     return 0;
-  };
+  };  
 
   return (
     <WorkContext.Provider value={{ work, linkToWork: false }}>
@@ -282,7 +303,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                       showTrash
                       linkToWork={false}
                       size={'lg'}
-                      showCreateEureka = {false}
+                      showCreateEureka={false}
                       showSaveForLater={true}
                     />
                     <Box mt={1}>
@@ -291,8 +312,10 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                         onChange={handlerChangeRating}
                         size="medium"
                         iconColor="var(--bs-danger)"
-
                       />
+                    </Box>
+                    <Box mt={1}>
+                      <WorkReadOrWatched work={work} session={session} />
                     </Box>
                     {/* <div className={classNames(styles.imgWrapper, 'mb-3')}>
                   <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
@@ -305,9 +328,18 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                       <h2 className={styles.author}>{work.author}</h2>
                       <WorkSummary work={work} />
                       <div className="d-flex flex-wrap flex-row">
+                        <Box sx={{ display: 'flex' }}>
+                          <Rating qty={qty} onChange={handlerChangeRating} size="medium" readonly />
+                          <div className="d-flex flex-nowrap ms-2">
+                            {getRatingAvg().toFixed(1)}
+                            {' - '}
+                            {getRatingQty()}
+                          </div>
+                          <span className="ms-1 text-gray">{t('common:ratings')}</span>
+                        </Box>
                         {work.topics && (
                           <TagsInput
-                            className="d-flex flex-row"
+                            className="ms-0 ms-lg-2 d-flex flex-row"
                             formatValue={(v: string) => t(`topics:${v}`)}
                             tags={work.topics}
                             readOnly
@@ -333,24 +365,21 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                           showTrash
                           linkToWork={false}
                           size={'lg'}
+                          showCreateEureka={false}
                           showSaveForLater={true}
                         />
+                        <Box className="d-flex justify-content-center" mt={1}>
+                          <Rating
+                            qty={qtyByUser}
+                            onChange={handlerChangeRating}
+                            size="medium"
+                            iconColor="var(--bs-danger)"
+                          />
+                        </Box>
+                        <Box className="d-flex justify-content-center" mt={1}>
+                          <WorkReadOrWatched work={work} session={session} />
+                        </Box>
                       </div>
-                      <Box mt={1} sx={{display:"flex"}}>
-                        <Rating
-                          qty={qty}
-                          onChange={handlerChangeRating}
-                          size="medium"
-                          readonly
-                          
-                        />
-                        <div className="d-flex flex-nowrap ms-2">
-                          {getRatingAvg().toFixed(1)}
-                          {' - '}
-                          {getRatingQty()}
-                        </div>
-                        <span className="ms-1 text-gray">{t('common:ratings')}</span>
-                      </Box>
                       {work.contentText != null && (
                         <UnclampText isHTML={false} text={work.contentText} clampHeight="8rem" />
                       )}
@@ -458,7 +487,6 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post,session })
                                           size={'md'}
                                           showSaveForLater={false}
                                         />
-                                        
                                       </Col>
                                     ))}
                                   </Row>

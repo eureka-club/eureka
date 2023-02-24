@@ -1,19 +1,21 @@
-import { Prisma, Work, User, RatingOnWork } from '@prisma/client';
+import { Prisma, Work, User, RatingOnWork, ReadOrWatchedWork } from '@prisma/client';
 import { StoredFileUpload } from '../types';
 import { CreateWorkServerFields, CreateWorkServerPayload, WorkMosaicItem } from '../types/work';
-import {prisma} from '@/src/lib/prisma';
+import { prisma } from '@/src/lib/prisma';
 
 export const find = async (id: number): Promise<WorkMosaicItem | null> => {
   return prisma.work.findUnique({
     where: { id },
-    include:{ 
-      localImages: {select:{storedFile:true}},
-      _count:{select:{ratings:true}},
-      favs:{select:{id:true}},
-    ratings: {select:{userId:true,qty:true}},
-    posts:{orderBy:{updatedAt:'desc'},select:{id:true,updatedAt:true,localImages: {select:{storedFile:true}}}}
-
-
+    include: {
+      localImages: { select: { storedFile: true } },
+      _count: { select: { ratings: true } },
+      favs: { select: { id: true } },
+      ratings: { select: { userId: true, qty: true } },
+      readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+      posts: {
+        orderBy: { updatedAt: 'desc' },
+        select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+      },
 
       // favs: {select:{id:true}},
       // ratings: {
@@ -42,7 +44,7 @@ export const find = async (id: number): Promise<WorkMosaicItem | null> => {
       //     ratings:{select:{qty:true}}
       //   }
       // },
-    }
+    },
     // include: {
     //   localImages: true,
     //   favs: true,
@@ -51,9 +53,9 @@ export const find = async (id: number): Promise<WorkMosaicItem | null> => {
     //     select:{
     //       posts:true,
     //       ratings: true,
-    //       cycles:true, 
+    //       cycles:true,
     //     },
-        
+
     //   },
     //   posts: {
     //     include: {
@@ -101,20 +103,23 @@ export const find = async (id: number): Promise<WorkMosaicItem | null> => {
   });
 };
 
-
-export const findAll = async (props?:Prisma.WorkFindManyArgs): Promise<WorkMosaicItem[]> => {
-  const {where,include=null,take,skip,cursor} = props || {};
+export const findAll = async (props?: Prisma.WorkFindManyArgs): Promise<WorkMosaicItem[]> => {
+  const { where, include = null, take, skip, cursor } = props || {};
   return prisma.work.findMany({
     take,
     skip,
     cursor,
     orderBy: { createdAt: 'desc' },
-    include:{
-      localImages: {select:{storedFile:true}},
-      _count:{select:{ratings:true}},
-      favs:{select:{id:true}},
-    ratings: {select:{userId:true,qty:true}},
-    posts:{orderBy:{updatedAt:'desc'} ,select:{id:true,updatedAt:true,localImages: {select:{storedFile:true}}}}
+    include: {
+      localImages: { select: { storedFile: true } },
+      _count: { select: { ratings: true } },
+      favs: { select: { id: true } },
+      ratings: { select: { userId: true, qty: true } },
+      readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+      posts: {
+        orderBy: { updatedAt: 'desc' },
+        select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+      },
 
       // favs: {select:{id:true}},
       // ratings: {
@@ -148,7 +153,7 @@ export const findAll = async (props?:Prisma.WorkFindManyArgs): Promise<WorkMosai
   });
 };
 
-export const search = async (query: { [key: string]: string | string[]|undefined }): Promise<Work[]> => {
+export const search = async (query: { [key: string]: string | string[] | undefined }): Promise<Work[]> => {
   const { q, where, include } = query;
   if (where == null && q == null) {
     throw new Error("[412] Invalid invocation! Either 'q' or 'where' query parameter must be provided");
@@ -212,7 +217,7 @@ export const isReadOrWatchedByUser = async (work: Work, user: User): Promise<num
   return prisma.work.count({
     where: {
       id: work.id,
-      readOrWatcheds: { some: { id: user.id } },
+      readOrWatchedWorks: { some: { userId: user.id } },
     },
   });
 };
@@ -261,21 +266,92 @@ export const createFromServerFields = async (
 export const saveSocialInteraction = async (
   work: Work,
   user: User,
-  socialInteraction: 'fav' | 'rating',
+  socialInteraction: 'fav' | 'rating' | 'readOrWatched',
   create: boolean,
   qty?: number,
+  year?: number,
 ): Promise<Work | null> => {
-  if (socialInteraction !== 'rating') {
+  if (!['readOrWatched', 'rating'].includes(socialInteraction)) {
     return prisma.work.update({
       where: { id: work.id },
       data: { [`${socialInteraction}s`]: { [create ? 'connect' : 'disconnect']: { id: user.id } } },
     });
   }
-  const rating: RatingOnWork | null = await prisma.ratingOnWork.findFirst({
-    where: { userId: user.id, workId: work.id },
-  });
 
-  if (create) {
+  if (socialInteraction == 'rating') {
+    const rating: RatingOnWork | null = await prisma.ratingOnWork.findFirst({
+      where: { userId: user.id, workId: work.id },
+    });
+
+    if (create) {
+      if (rating) {
+        const q1 = prisma.work.update({
+          where: { id: work.id },
+          data: {
+            ratings: {
+              disconnect: {
+                ratingOnWorkId: rating.ratingOnWorkId,
+              },
+            },
+          },
+        });
+
+        const q2 = prisma.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            ratingWorks: {
+              disconnect: {
+                ratingOnWorkId: rating.ratingOnWorkId,
+              },
+            },
+          },
+        });
+
+        const q3 = prisma.ratingOnWork.delete({
+          where: {
+            ratingOnWorkId: rating.ratingOnWorkId,
+          },
+        });
+
+        await prisma.$transaction([q1, q2, q3]);
+
+        return prisma.work.update({
+          where: { id: work.id },
+          data: {
+            ratings: {
+              connectOrCreate: {
+                where: {
+                  ratingOnWorkId: -1, // faild always, so a create will be executed :-)
+                },
+                create: {
+                  userId: user.id,
+                  qty,
+                },
+              },
+            },
+          },
+        });
+      }
+
+      return prisma.work.update({
+        where: { id: work.id },
+        data: {
+          ratings: {
+            connectOrCreate: {
+              where: {
+                ratingOnWorkId: -1, // faild always, so a create will be executed :-)
+              },
+              create: {
+                userId: user.id,
+                qty,
+              },
+            },
+          },
+        },
+      });
+    }
     if (rating) {
       const q1 = prisma.work.update({
         where: { id: work.id },
@@ -307,77 +383,67 @@ export const saveSocialInteraction = async (
         },
       });
 
-      await prisma.$transaction([q1, q2, q3]);
+      const res = await prisma.$transaction([q1, q2, q3]);
+      return res[0];
+    }
+  }
 
+  if (socialInteraction == 'readOrWatched') {
+    const readOrWatched: ReadOrWatchedWork | null = await prisma.readOrWatchedWork.findFirst({
+      where: { userId: user.id, workId: work.id },
+    });
+    if (create) {
       return prisma.work.update({
         where: { id: work.id },
         data: {
-          ratings: {
+          readOrWatchedWorks: {
             connectOrCreate: {
               where: {
-                ratingOnWorkId: -1, // faild always, so a create will be executed :-)
+                readOrWatchedWorkId: -1, // faild always, so a create will be executed :-)
               },
               create: {
                 userId: user.id,
-                qty,
+                year,
               },
             },
           },
         },
       });
+    } else {
+      const q1 = prisma.work.update({
+        where: { id: work.id },
+        data: {
+          readOrWatchedWorks: {
+            disconnect: {
+              readOrWatchedWorkId: readOrWatched!.readOrWatchedWorkId,
+            },
+          },
+        },
+      });
+
+      const q2 = prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          readOrWatchedWorks: {
+            disconnect: {
+              readOrWatchedWorkId: readOrWatched!.readOrWatchedWorkId,
+            },
+          },
+        },
+      });
+      const q3 = prisma.readOrWatchedWork.delete({
+        where: {
+          readOrWatchedWorkId: readOrWatched!.readOrWatchedWorkId,
+        },
+      });
+
+      const res = await prisma.$transaction([q1, q2, q3]);
+      return res[0];
     }
-
-    return prisma.work.update({
-      where: { id: work.id },
-      data: {
-        ratings: {
-          connectOrCreate: {
-            where: {
-              ratingOnWorkId: -1, // faild always, so a create will be executed :-)
-            },
-            create: {
-              userId: user.id,
-              qty,
-            },
-          },
-        },
-      },
-    });
   }
-  if (rating) {
-    const q1 = prisma.work.update({
-      where: { id: work.id },
-      data: {
-        ratings: {
-          disconnect: {
-            ratingOnWorkId: rating.ratingOnWorkId,
-          },
-        },
-      },
-    });
 
-    const q2 = prisma.user.update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        ratingWorks: {
-          disconnect: {
-            ratingOnWorkId: rating.ratingOnWorkId,
-          },
-        },
-      },
-    });
-
-    const q3 = prisma.ratingOnWork.delete({
-      where: {
-        ratingOnWorkId: rating.ratingOnWorkId,
-      },
-    });
-
-    const res = await prisma.$transaction([q1, q2, q3]);
-    return res[0];
-  }
   return null;
 };
 

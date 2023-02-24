@@ -1,5 +1,5 @@
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 
   // previewFeatures = ["microsoftSqlServer"]
 }
@@ -9,107 +9,105 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 // Next-auth models (https://next-auth.js.org/schemas/adapters#prisma-schema)
 
 model User {
-  id                Int        @id @default(autoincrement())
-  name              String?
-  email             String?    @unique
-  password          String?
-  emailVerified     DateTime?  @map(name: "email_verified")
-  image             String?
-  roles             String     @default("member")
-  createdAt         DateTime   @default(now()) @map(name: "created_at")
-  updatedAt         DateTime   @updatedAt @map(name: "updated_at")
-  countryOfOrigin   String?    @map(name: "country_of_origin")
-  aboutMe           String?    @map(name: "about_me")
-  
-  // 1 public, 2 protected, 3 private
-  dashboardType     Int?       @map(name: "dashboard_type") @default(1)
- 
-  accounts       Account[]
-  sessions       Session[]
+  id              Int       @id @default(autoincrement())
+  name            String?
+  email           String?   @unique
+  password        String?
+  emailVerified   DateTime? @map(name: "email_verified")
+  image           String?
+  roles           String    @default("member")
+  createdAt       DateTime  @default(now()) @map(name: "created_at")
+  updatedAt       DateTime  @updatedAt @map(name: "updated_at")
+  countryOfOrigin String?   @map(name: "country_of_origin")
+  aboutMe         String?   @map(name: "about_me")
 
-  cycles              Cycle[]    @relation("CreatedBy")
-  joinedCycles        Cycle[]    @relation("CycleToParticipant")
-  cyclesJoined        CycleUserJoin[]
-  likedCycles         Cycle[]    @relation("CycleToLikes")
-  favCycles           Cycle[]    @relation("CycleToFavs")
-  likedWorks          Work[]     @relation("WorkToLikes")
-  favWorks            Work[]     @relation("WorkToFavs")
-  readOrWatchedWorks  Work[]     @relation("WorkReadOrWatched")
-  likedPosts          Post[]     @relation("PostToLikes")
-  favPosts            Post[]     @relation("PostToFavs")
-  posts               Post[]  
-  taxonomies          Taxonomy[]  
-  terms               Term[]  
-  tags                String?
-  followedBy          User[]   @relation("_UserFollows")
-  following           User[]   @relation("_UserFollows")
-  ratingWorks         RatingOnWork[]
-  ratingCycles        RatingOnCycle[]
-  comments            Comment[]
-  photos              LocalImage[]
-  notify              Notification[]
-  notifications       NotificationsOnUsers[]
-  reactions           PostReaction[]
+  // 1 public, 2 protected, 3 private
+  dashboardType Int? @default(1) @map(name: "dashboard_type")
+
+  accounts Account[]
+  sessions Session[]
+
+  cycles             Cycle[]                @relation("CreatedBy")
+  joinedCycles       Cycle[]                @relation("CycleToParticipant")
+  cyclesJoined       CycleUserJoin[]
+  likedCycles        Cycle[]                @relation("CycleToLikes")
+  favCycles          Cycle[]                @relation("CycleToFavs")
+  likedWorks         Work[]                 @relation("WorkToLikes")
+  favWorks           Work[]                 @relation("WorkToFavs")
+  readOrWatchedWorks ReadOrWatchedWork[]                
+  likedPosts         Post[]                 @relation("PostToLikes")
+  favPosts           Post[]                 @relation("PostToFavs")
+  posts              Post[]
+  taxonomies         Taxonomy[]
+  terms              Term[]
+  tags               String?
+  followedBy         User[]                 @relation("_UserFollows")
+  following          User[]                 @relation("_UserFollows")
+  ratingWorks        RatingOnWork[]
+  ratingCycles       RatingOnCycle[]
+  comments           Comment[]
+  photos             LocalImage[]
+  notify             Notification[]
+  notifications      NotificationsOnUsers[]
+  reactions          PostReaction[]
 
   @@map(name: "users")
 }
 
 model UserCustomData {
-  id                    Int      @id @default(autoincrement())
-  name                  String
-  password              String
-  identifier            String  @unique
+  id         Int    @id @default(autoincrement())
+  name       String
+  password   String
+  identifier String @unique
 }
 
 model Account {
-  id                  Int        @id @default(autoincrement())
-  user                User       @relation(fields: [userId], references: [id])
-  userId              Int        @map(name: "user_id")
-  type                String     @map(name: "provider_type")
-  
-  provider            String     @map(name: "provider_id")
-  providerAccountId   String     @map(name: "provider_account_id")
-  refreshToken        String?    @map(name: "refresh_token")
-  access_token         String?    @map(name: "access_token")
-  expires_at          Int?
-  token_type          String?
-  scope               String?
-  id_token            String?  @db.Text
-  session_state       String?
+  id     Int    @id @default(autoincrement())
+  user   User   @relation(fields: [userId], references: [id])
+  userId Int    @map(name: "user_id")
+  type   String @map(name: "provider_type")
 
-  createdAt           DateTime   @default(now()) @map(name: "created_at")
-  updatedAt           DateTime   @updatedAt @map(name: "updated_at")
+  provider          String  @map(name: "provider_id")
+  providerAccountId String  @map(name: "provider_account_id")
+  refreshToken      String? @map(name: "refresh_token")
+  access_token      String? @map(name: "access_token")
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
 
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
+  @@unique([provider, providerAccountId])
   @@index([userId], name: "accounts_user_id_index")
   @@index([provider], name: "accounts_provider_id_index")
   @@index([providerAccountId], name: "accounts_provider_account_id_index")
-  @@unique([provider, providerAccountId])
-
   @@map(name: "accounts")
 }
 
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
-  userId       Int      
+  userId       Int
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt   DateTime  @default(now()) @map(name: "created_at")
-  updatedAt   DateTime  @updatedAt @map(name: "updated_at")
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
 }
 
 model VerificationRequest {
-  id          Int       @id @default(autoincrement())
-  identifier  String
-  token       String    @unique
-  expires     DateTime
-  createdAt   DateTime  @default(now()) @map(name: "created_at")
-  updatedAt   DateTime  @updatedAt @map(name: "updated_at")
+  id         Int      @id @default(autoincrement())
+  identifier String
+  token      String   @unique
+  expires    DateTime
+  createdAt  DateTime @default(now()) @map(name: "created_at")
+  updatedAt  DateTime @updatedAt @map(name: "updated_at")
 
   @@map(name: "verification_requests")
 }
@@ -122,356 +120,354 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-
 // App models
 
 model LocalImage {
-  id                Int       @default(autoincrement()) @id
-  originalFilename  String    @map(name: "original_filename")
-  storedFile        String    @map(name: "stored_file")
-  mimeType          String    @map(name: "mime_type")
-  contentHash       String    @map(name: "content_hash")
-  createdAt         DateTime  @default(now()) @map(name: "created_at")
-  updatedAt         DateTime  @updatedAt @map(name: "updated_at")
+  id               Int      @id @default(autoincrement())
+  originalFilename String   @map(name: "original_filename")
+  storedFile       String   @map(name: "stored_file")
+  mimeType         String   @map(name: "mime_type")
+  contentHash      String   @map(name: "content_hash")
+  createdAt        DateTime @default(now()) @map(name: "created_at")
+  updatedAt        DateTime @updatedAt @map(name: "updated_at")
 
-  cycles  Cycle[]
-  posts   Post[]
-  works   Work[]
-  users   User[]
-  sliderImages  BackOfficeSettings[]
-
+  cycles       Cycle[]
+  posts        Post[]
+  works        Work[]
+  users        User[]
+  sliderImages BackOfficeSettings[]
 
   @@index([contentHash], name: "local_images_content_hash_index")
-
   @@map(name: "local_images")
 }
 
 model Cycle {
-  id                      Int       @default(autoincrement()) @id
-  creator                 User      @relation(name:"CreatedBy", fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  creatorId               Int       @map(name: "creator_id")
+  id              Int      @id @default(autoincrement())
+  creator         User     @relation(name: "CreatedBy", fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  creatorId       Int      @map(name: "creator_id")
   // isPublic                Boolean   @map(name: "is_public")
-  title                   String
-  languages               String
-  contentText             String?   @db.VarChar(4000)  @map(name: "content_text")
-  startDate               DateTime  @map(name: "start_date")
-  endDate                 DateTime  @map(name: "end_date")
-  countryOfOrigin         String?   @map(name: "country_of_origin")
-  createdAt               DateTime  @default(now()) @map(name: "created_at")
-  updatedAt               DateTime  @updatedAt @map(name: "updated_at")
-  
+  title           String
+  languages       String
+  contentText     String?  @map(name: "content_text") @db.VarChar(4000)
+  startDate       DateTime @map(name: "start_date")
+  endDate         DateTime @map(name: "end_date")
+  countryOfOrigin String?  @map(name: "country_of_origin")
+  createdAt       DateTime @default(now()) @map(name: "created_at")
+  updatedAt       DateTime @updatedAt @map(name: "updated_at")
+
   // 1 -> public, 2 -> private, 3 -> secret
-  access                  Int       @default(1)            
+  access Int @default(1)
 
-  localImages             LocalImage[]
-  complementaryMaterials  CycleComplementaryMaterial[]
-  guidelines              Guideline[]
-  participants            User[]      @relation("CycleToParticipant")
-  likes                   User[]      @relation("CycleToLikes")
-  favs                    User[]      @relation("CycleToFavs")
+  localImages            LocalImage[]
+  complementaryMaterials CycleComplementaryMaterial[]
+  guidelines             Guideline[]
+  participants           User[]                       @relation("CycleToParticipant")
+  likes                  User[]                       @relation("CycleToLikes")
+  favs                   User[]                       @relation("CycleToFavs")
 
-  posts                   Post[]
-  works                   Work[]  
-  cycleWorksDates         CycleWork[]
-  usersJoined             CycleUserJoin[]
-  
-  tags                    String?
+  posts           Post[]
+  works           Work[]
+  cycleWorksDates CycleWork[]
+  usersJoined     CycleUserJoin[]
 
-  terms                   Term[]    @relation("TaxonomyTermCycle")
-  topics                  String?
-  ratings                 RatingOnCycle[]
-  comments                Comment[]
+  tags String?
+
+  terms    Term[]          @relation("TaxonomyTermCycle")
+  topics   String?
+  ratings  RatingOnCycle[]
+  comments Comment[]
 
   @@index([creatorId], name: "cycles_creator_id_index")
   @@index([title], name: "cycles_title_index")
-
   @@map(name: "cycles")
 }
 
 model Work {
-  id               Int       @default(autoincrement()) @id
-  creatorId        Int       @map(name: "creator_id") @default(1)
+  id               Int       @id @default(autoincrement())
+  creatorId        Int       @default(1) @map(name: "creator_id")
   type             String
   title            String
-  contentText      String?    @db.VarChar(4000) @map(name: "content_text")
+  contentText      String?   @map(name: "content_text") @db.VarChar(4000)
   author           String
-  authorGender     String?    @map(name: "author_gender")
-  authorRace       String?    @map(name: "author_race")
+  authorGender     String?   @map(name: "author_gender")
+  authorRace       String?   @map(name: "author_race")
   link             String?
-  publicationYear  DateTime?  @map(name: "publication_year")
-  countryOfOrigin  String?    @map(name: "country_of_origin")
-  countryOfOrigin2 String?    @map(name: "country_of_origin2")
+  publicationYear  DateTime? @map(name: "publication_year")
+  countryOfOrigin  String?   @map(name: "country_of_origin")
+  countryOfOrigin2 String?   @map(name: "country_of_origin2")
   length           String?
-  createdAt        DateTime   @default(now()) @map(name: "created_at")
-  updatedAt        DateTime   @updatedAt @map(name: "updated_at")
+  createdAt        DateTime  @default(now()) @map(name: "created_at")
+  updatedAt        DateTime  @updatedAt @map(name: "updated_at")
 
-  localImages       LocalImage[]
-  cycles            Cycle[]
-  cyclesWorkDates   CycleWork[]
-  posts             Post[]
-  likes             User[]      @relation("WorkToLikes")
-  favs              User[]      @relation("WorkToFavs")
-  readOrWatcheds    User[]      @relation("WorkReadOrWatched")
-  tags              String?
+  localImages     LocalImage[]
+  cycles          Cycle[]
+  cyclesWorkDates CycleWork[]
+  posts           Post[]
+  likes           User[]       @relation("WorkToLikes")
+  favs            User[]       @relation("WorkToFavs")
+  readOrWatchedWorks ReadOrWatchedWork[]                
+  tags            String?
 
-  terms             Term[]    @relation("TaxonomyTermWork")
-  topics            String?
+  terms  Term[]  @relation("TaxonomyTermWork")
+  topics String?
 
   ratings           RatingOnWork[]
   comments          Comment[]
-  
+
   @@index([title], name: "works_title_index")
   @@index([author], name: "works_author_index")
   @@index([creatorId], name: "works_creator_id_index")
-
   @@map(name: "works")
 }
 
 model CycleComplementaryMaterial {
-  id                Int       @default(autoincrement()) @id
-  cycle             Cycle     @relation(fields: [cycleId], references: [id])
-  cycleId           Int       @map(name: "cycle_id")
-  title             String
-  author            String
-  publicationDate   DateTime  @map(name: "publication_name")
-  link              String?
+  id              Int      @id @default(autoincrement())
+  cycle           Cycle    @relation(fields: [cycleId], references: [id])
+  cycleId         Int      @map(name: "cycle_id")
+  title           String
+  author          String
+  publicationDate DateTime @map(name: "publication_name")
+  link            String?
 
-  originalFilename  String?   @map(name: "original_filename")
-  storedFile        String?   @map(name: "stored_file")
-  mimeType          String?   @map(name: "mime_type")
-  contentHash       String?   @map(name: "content_hash")
+  originalFilename String? @map(name: "original_filename")
+  storedFile       String? @map(name: "stored_file")
+  mimeType         String? @map(name: "mime_type")
+  contentHash      String? @map(name: "content_hash")
 
-  createdAt         DateTime  @default(now()) @map(name: "created_at")
-  updatedAt         DateTime  @updatedAt @map(name: "updated_at")
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
 
   @@index([cycleId], name: "cycle_complementary_materials_cycle_id_index")
-
   @@map(name: "cycle_complementary_materials")
 }
 
 model CycleWork {
-  id        Int   @id @default(autoincrement())
-  cycle     Cycle? @relation(fields: [cycleId], references: [id])
-  work      Work?  @relation(fields: [workId], references: [id])
+  id        Int       @id @default(autoincrement())
+  cycle     Cycle?    @relation(fields: [cycleId], references: [id])
+  work      Work?     @relation(fields: [workId], references: [id])
   cycleId   Int?
   workId    Int?
-  startDate DateTime?  @map(name: "start_date")
-  endDate   DateTime?  @map(name: "end_date")
+  startDate DateTime? @map(name: "start_date")
+  endDate   DateTime? @map(name: "end_date")
 }
 
 model CycleUserJoin {
-  cycle       Cycle @relation(fields: [cycleId], references: [id])
-  user        User  @relation(fields: [userId], references: [id])
-  cycleId     Int
-  userId      Int
-  pending     Boolean? @default(false)
-  createdAt   DateTime  @default(now()) @map(name: "created_at")
-  updatedAt   DateTime  @updatedAt @map(name: "updated_at")
+  cycle     Cycle    @relation(fields: [cycleId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  cycleId   Int
+  userId    Int
+  pending   Boolean? @default(false)
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
   @@id([cycleId, userId])
 }
 
-
-
 model Guideline {
-  id                Int       @default(autoincrement()) @id
-  cycle             Cycle     @relation(fields: [cycleId], references: [id])
-  cycleId           Int       @map(name: "cycle_id")
-  title             String
-  contentText       String?   @db.VarChar(4000)  @map(name: "content_text")
-  
-  createdAt         DateTime  @default(now()) @map(name: "created_at")
-  updatedAt         DateTime  @updatedAt @map(name: "updated_at")
+  id          Int     @id @default(autoincrement())
+  cycle       Cycle   @relation(fields: [cycleId], references: [id])
+  cycleId     Int     @map(name: "cycle_id")
+  title       String
+  contentText String? @map(name: "content_text") @db.VarChar(4000)
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
 
   @@index([cycleId], name: "guideline_cycle_id_index")
-
   @@map(name: "guidelines")
 }
 
 model Post {
-  id           Int       @default(autoincrement()) @id
-  creator      User      @relation(fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  creatorId    Int       @map(name: "creator_id")
-  title        String
-  language     String
-  contentText  String    @db.Text @map(name: "content_text")
-  isPublic     Boolean   @map(name: "is_public")
-  createdAt    DateTime  @default(now()) @map(name: "created_at")
-  updatedAt    DateTime  @updatedAt @map(name: "updated_at")
+  id          Int      @id @default(autoincrement())
+  creator     User     @relation(fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  creatorId   Int      @map(name: "creator_id")
+  title       String
+  language    String
+  contentText String   @map(name: "content_text") @db.Text
+  isPublic    Boolean  @map(name: "is_public")
+  createdAt   DateTime @default(now()) @map(name: "created_at")
+  updatedAt   DateTime @updatedAt @map(name: "updated_at")
 
-  localImages  LocalImage[]
-  cycles       Cycle[]
-  works        Work[]
-  likes        User[]       @relation("PostToLikes")
-  favs         User[]       @relation("PostToFavs")
+  localImages LocalImage[]
+  cycles      Cycle[]
+  works       Work[]
+  likes       User[]       @relation("PostToLikes")
+  favs        User[]       @relation("PostToFavs")
 
-
-  terms        Term[]    @relation("TaxonomyTermPost")
-  topics       String?  
-  tags         String?
-  comments                Comment[]
+  terms    Term[]    @relation("TaxonomyTermPost")
+  topics   String?
+  tags     String?
+  comments Comment[]
 
   reactions      PostReaction[]
 
   @@index([creatorId], name: "posts_creator_id_index")
-
   @@map(name: "posts")
 }
 
 model Comment {
-  id           Int         @default(autoincrement()) @id
-  creator      User        @relation(fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  creatorId    Int         @map(name: "creator_id")
-  contentText  String      @db.VarChar(4000) @map(name: "content_text")
+  id          Int    @id @default(autoincrement())
+  creator     User   @relation(fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  creatorId   Int    @map(name: "creator_id")
+  contentText String @map(name: "content_text") @db.VarChar(4000)
 
-  cycle        Cycle?      @relation(fields: [cycleId], references: [id])
-  cycleId      Int?        @map(name: "cycle_id")
+  cycle   Cycle? @relation(fields: [cycleId], references: [id])
+  cycleId Int?   @map(name: "cycle_id")
 
-  work         Work?       @relation(fields: [workId], references: [id])
-  workId       Int?        @map(name: "work_id")
+  work   Work? @relation(fields: [workId], references: [id])
+  workId Int?  @map(name: "work_id")
 
-  post         Post?       @relation(fields: [postId], references: [id])
-  postId       Int?        @map(name: "post_id")
+  post   Post? @relation(fields: [postId], references: [id])
+  postId Int?  @map(name: "post_id")
 
-  commentId    Int?
-  comment      Comment?    @relation("CommentCommented", fields: [commentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  comments     Comment[]   @relation("CommentCommented")
+  commentId Int?
+  comment   Comment?  @relation("CommentCommented", fields: [commentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  comments  Comment[] @relation("CommentCommented")
 
-  createdAt    DateTime    @default(now()) @map(name: "created_at")
-  updatedAt    DateTime    @updatedAt @map(name: "updated_at")
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
 
   // 0||null-new 1-edited
-  status       Int? @default(0) 
+  status Int? @default(0)
 
   @@index([creatorId], name: "comment_creator_id_index")
-
   @@map(name: "comments")
 }
 
-
 model Taxonomy {
-  id           Int       @default(autoincrement()) @id
-  creator      User?     @relation(fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  creatorId    Int?      @map(name: "creator_id")
-  label        String
-  code         String    @unique
-  description  String    @db.VarChar(4000) @map(name: "content_text")
-  weight       Int?      @default(1)
-  createdAt    DateTime  @default(now()) @map(name: "created_at")
-  updatedAt    DateTime  @updatedAt @map(name: "updated_at")
+  id          Int      @id @default(autoincrement())
+  creator     User?    @relation(fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  creatorId   Int?     @map(name: "creator_id")
+  label       String
+  code        String   @unique
+  description String   @map(name: "content_text") @db.VarChar(4000)
+  weight      Int?     @default(1)
+  createdAt   DateTime @default(now()) @map(name: "created_at")
+  updatedAt   DateTime @updatedAt @map(name: "updated_at")
 
-  terms        Term[]
-  
+  terms Term[]
+
   @@index([code], name: "taxonomy_code_index")
-
   @@map(name: "taxonomies")
 }
 
 model Term {
-  id           Int       @default(autoincrement()) @id
-  taxonomy     Taxonomy  @relation(fields: [taxonomyCode], references: [code])
-  taxonomyCode String    @default("region") @map(name: "taxonomy_code") 
+  id           Int      @id @default(autoincrement())
+  taxonomy     Taxonomy @relation(fields: [taxonomyCode], references: [code])
+  taxonomyCode String   @default("region") @map(name: "taxonomy_code")
 
-  parentId     Int?      @map(name: "parent_id") 
-  parent       Term?     @relation("TermHierarchy", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  child        Term[]    @relation("TermHierarchy")
+  parentId Int?   @map(name: "parent_id")
+  parent   Term?  @relation("TermHierarchy", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  child    Term[] @relation("TermHierarchy")
 
-  creator      User?     @relation(fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  creatorId    Int?      @map(name: "creator_id")
-  
-  label        String
-  code         String    
-  description  String    @db.VarChar(4000) @map(name: "content_text")
-  weight       Int?      @default(1)
+  creator   User? @relation(fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  creatorId Int?  @map(name: "creator_id")
 
-  createdAt    DateTime  @default(now()) @map(name: "created_at")
-  updatedAt    DateTime  @updatedAt @map(name: "updated_at")
+  label       String
+  code        String
+  description String @map(name: "content_text") @db.VarChar(4000)
+  weight      Int?   @default(1)
 
-  works        Work[]    @relation("TaxonomyTermWork")
-  cycles       Cycle[]   @relation("TaxonomyTermCycle")
-  posts        Post[]    @relation("TaxonomyTermPost")
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
+  works  Work[]  @relation("TaxonomyTermWork")
+  cycles Cycle[] @relation("TaxonomyTermCycle")
+  posts  Post[]  @relation("TaxonomyTermPost")
 
   @@index([code], name: "term_code_index")
-
   @@map(name: "terms")
 }
 
 model RatingOnWork {
-  ratingOnWorkId      Int       @default(autoincrement()) @id @map("id")
-  user                User?     @relation(fields: [userId], references: [id])
-  userId              Int?      
-  work                Work?     @relation(fields: [workId], references: [id])
-  workId              Int?      
-  
-  qty                 Int       @default(0)
-  
-  createdAt           DateTime  @default(now()) @map(name: "created_at")
-  updatedAt           DateTime  @updatedAt @map(name: "updated_at")
+  ratingOnWorkId Int   @id @default(autoincrement()) @map("id")
+  user           User? @relation(fields: [userId], references: [id])
+  userId         Int?
+  work           Work? @relation(fields: [workId], references: [id])
+  workId         Int?
+
+  qty Int @default(0)
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
 
   @@map("ratingOnWorkId")
-  
 }
 
 model RatingOnCycle {
-  ratingOnCycleId     Int       @default(autoincrement()) @id @map("id")
-  user                User?     @relation(fields: [userId], references: [id])
-  userId              Int?      
-  cycle               Cycle?    @relation(fields: [cycleId], references: [id])
-  cycleId             Int?      
-  
-  qty                 Int       @default(0)
-  
-  createdAt           DateTime  @default(now()) @map(name: "created_at")
-  updatedAt           DateTime  @updatedAt @map(name: "updated_at")
+  ratingOnCycleId Int    @id @default(autoincrement()) @map("id")
+  user            User?  @relation(fields: [userId], references: [id])
+  userId          Int?
+  cycle           Cycle? @relation(fields: [cycleId], references: [id])
+  cycleId         Int?
 
+  qty Int @default(0)
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
 
   @@map("ratingOnCycleId")
-  
+}
+
+model ReadOrWatchedWork {
+  readOrWatchedWorkId Int   @id @default(autoincrement()) @map("id")
+  user                User? @relation(fields: [userId], references: [id])
+  userId              Int?
+  work                Work? @relation(fields: [workId], references: [id])
+  workId              Int?
+
+  year Int @default(0)
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
+  @@map("readOrWatchedWorkId")
 }
 
 model Notification {
-  id               Int                     @default(autoincrement()) @id
-  contextURL       String  
-  
+  id         Int    @id @default(autoincrement())
+  contextURL String
+
   //translationKey!|!JSON.stringify(variable1:value;variable2:value)
-  message          String
-  
-  fromUser         User                   @relation(fields: [fromUserId], references: [id])
-  fromUserId       Int
-  
-  createdAt        DateTime                @default(now()) @map(name: "created_at")
-  updatedAt        DateTime                @updatedAt @map(name: "updated_at")
-  toUsers          NotificationsOnUsers[]
+  message String
+
+  fromUser   User @relation(fields: [fromUserId], references: [id])
+  fromUserId Int
+
+  createdAt DateTime               @default(now()) @map(name: "created_at")
+  updatedAt DateTime               @updatedAt @map(name: "updated_at")
+  toUsers   NotificationsOnUsers[]
 }
 
 model NotificationsOnUsers {
-  user                User                 @relation(fields: [userId], references: [id], onUpdate: NoAction)
-  userId              Int 
+  user   User @relation(fields: [userId], references: [id], onUpdate: NoAction)
+  userId Int
 
-  notification        Notification         @relation(fields: [notificationId], references: [id], onUpdate: NoAction)
-  notificationId      Int
+  notification   Notification @relation(fields: [notificationId], references: [id], onUpdate: NoAction)
+  notificationId Int
 
-  viewed              Boolean              @default(false)
+  viewed Boolean @default(false)
 
   @@id([userId, notificationId])
 }
 
 model BackOfficeSettings {
-  id                      Int         @id @unique @default(1)
-  SlideTitle1             String?     @db.VarChar(200)
-  SlideText1              String?     @db.VarChar(200)
-  SlideImage1             String?     @db.VarChar(200)
-  SlideTitle2             String?     @db.VarChar(200)
-  SlideText2              String?     @db.VarChar(200)
-  SlideImage2             String?     @db.VarChar(200)
-  SlideTitle3             String?     @db.VarChar(200)
-  SlideText3              String?     @db.VarChar(200)
-  SlideImage3             String?     @db.VarChar(200)
-  sliderImages            LocalImage[]
-  CyclesExplorePage       String?     @db.VarChar(60)
-  PostExplorePage         String?     @db.VarChar(60)
-  FeaturedUsers           String?     @db.VarChar(60)
-  FeaturedWorks           String?     @db.VarChar(60)
-  
+  id                Int          @id @unique @default(1)
+  SlideTitle1       String?      @db.VarChar(200)
+  SlideText1        String?      @db.VarChar(200)
+  SlideImage1       String?      @db.VarChar(200)
+  SlideTitle2       String?      @db.VarChar(200)
+  SlideText2        String?      @db.VarChar(200)
+  SlideImage2       String?      @db.VarChar(200)
+  SlideTitle3       String?      @db.VarChar(200)
+  SlideText3        String?      @db.VarChar(200)
+  SlideImage3       String?      @db.VarChar(200)
+  sliderImages      LocalImage[]
+  CyclesExplorePage String?      @db.VarChar(60)
+  PostExplorePage   String?      @db.VarChar(60)
+  FeaturedUsers     String?      @db.VarChar(60)
+  FeaturedWorks     String?      @db.VarChar(60)
+
   @@map("backOfficeSettings")
   
 }

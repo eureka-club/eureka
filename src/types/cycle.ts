@@ -17,63 +17,67 @@ export type CycleWithImages = Prisma.CycleGetPayload<{
 
 export type CycleMosaicItem = Prisma.CycleGetPayload<{
   include: {
-    creator:{
-      select:{id:true;name:true;email:true;countryOfOrigin:true}
+    creator: {
+      select: { id: true; name: true; email: true; countryOfOrigin: true };
     };
-    localImages: {select:{
-      storedFile:true
-    }};
+    localImages: {
+      select: {
+        storedFile: true;
+      };
+    };
     guidelines: {
       select: {
         title: true;
         contentText: true;
       };
     };
-    usersJoined:{select:{userId:true,pending:true}};
-    participants:{select:{id:true}};
-    ratings:{select:{userId:true,qty:true}};
-    works:{
-      include:{
-        localImages: {select:{storedFile:true}};
-        _count:{select:{ratings:true}};
-        favs:{select:{id:true}},
-        ratings: {select:{userId:true,qty:true}};
-      }
+    usersJoined: { select: { userId: true; pending: true } };
+    participants: { select: { id: true } };
+    ratings: { select: { userId: true; qty: true } };
+    works: {
+      include: {
+        localImages: { select: { storedFile: true } };
+        _count: { select: { ratings: true } };
+        favs: { select: { id: true } };
+        ratings: { select: { userId: true; qty: true } };
+        readOrWatchedWorks: { select: { userId: true; workId: true; year: true } };
+      };
     };
-    favs:{select:{id:true}},
+    favs: { select: { id: true } };
     cycleWorksDates: {
-      select:{
-        id:true;
-        startDate:true;
-        endDate:true;
-        workId:true;
-        work:{
-          include:{
-            localImages: {select:{storedFile:true}};
-            _count:{select:{ratings:true}};
-            favs:{select:{id:true}},
-            ratings: {select:{userId:true,qty:true}};
-          }
+      select: {
+        id: true;
+        startDate: true;
+        endDate: true;
+        workId: true;
+        work: {
+          include: {
+            localImages: { select: { storedFile: true } };
+            _count: { select: { ratings: true } };
+            favs: { select: { id: true } };
+            ratings: { select: { userId: true; qty: true } };
+            readOrWatchedWorks: { select: { userId: true; workId: true; year: true } };
+          };
         };
-      }
+      };
     };
-    _count:{
-      select:{
-        participants:true;
-        ratings:true;
-      },
+    _count: {
+      select: {
+        participants: true;
+        ratings: true;
+      };
     };
-    complementaryMaterials:true;
-  }
-}> & { 
+    complementaryMaterials: true;
+  };
+}> & {
   type?: 'cycle';
-  currentUserIsCreator?:boolean;
-  currentUserIsParticipant?:boolean;
-  currentUserIsFav?:boolean; 
-  currentUserIsPending?:boolean;
-  currentUserRating?:number;
-  ratingCount?:number;
-  ratingAVG?:number;
+  currentUserIsCreator?: boolean;
+  currentUserIsParticipant?: boolean;
+  currentUserIsFav?: boolean;
+  currentUserIsPending?: boolean;
+  currentUserRating?: number;
+  ratingCount?: number;
+  ratingAVG?: number;
 };
 
 // export type CycleDetail = Prisma.CycleGetPayload<{

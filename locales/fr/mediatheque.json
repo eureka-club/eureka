@@ -1,9 +1,12 @@
 {
-    "Mediatheque": "Mediathèque",
-    "Follow": "S'abonner",
-    "Unfollow": "Se désabonner",
-    "notAuthorized": "Cette Médiathèque est privée. Pour y avoir accès, cliquez sur Suivre!",
-    "notFound": "Non trouvé",
-    "editProfile": "Editer mon profil",
-    "secretMediathequeNotification": "Cette Médiathèque est secrète. L'activité de cette personne n'est pas disponible."
+  "Mediatheque": "Mediathèque",
+  "Follow": "S'abonner",
+  "Unfollow": "Se désabonner",
+  "notAuthorized": "Cette Médiathèque est privée. Pour y avoir accès, cliquez sur Suivre!",
+  "notFound": "Non trouvé",
+  "editProfile": "Editer mon profil",
+  "secretMediathequeNotification": "Cette Médiathèque est secrète. L'activité de cette personne n'est pas disponible.",
+  "readOrWatchedWorks": "Œuvres regardées ou lues",
+  "readOrWatchedBooks": "Livres lus en",
+  "readOrWatchedMovies": "Films ou documentaires regardés en"
 }
