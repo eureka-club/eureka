@@ -341,7 +341,10 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                 <FilterEngine fictionOrNotFilter={false} geographyFilter={false} />
                 <section className="d-flex flex-column flex-lg-row">
                   <Col xs={12} lg={2} className="me-2">
-                    <h2 className="text-secondary ">{`${t('readOrWatchedWorks')} (${getReadOrWatchedTotal()})`}</h2>
+
+                    <h2 className="text-secondary">
+                      {`${t('readOrWatchedWorks')} (${getReadOrWatchedTotal()})`} 
+                    </h2>
                     <section className="mt-4 p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
                       <h2 className="p-1 m-0 text-wrap text-center fs-6">
                         {`${t('readOrWatchedBooks').toLocaleUpperCase()} ${dayjs().year()}`}
