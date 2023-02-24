@@ -4,25 +4,27 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent } from 'react';
 import { Row, Col, Badge } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import { DATE_FORMAT_SHORT } from '../../constants';
-import { CycleMosaicItem } from '../../types/cycle';
 import { WorkMosaicItem } from '../../types/work';
 import MosaicItem from './MosaicItemDetail';
 import { MosaicContext } from '../../useMosaicContext';
 import UnclampText from '../UnclampText';
 import styles from './PostDetail.module.css';
 import Avatar from '../common/UserAvatar';
-import { useCycleContext } from '../../useCycleContext';
+// import { useCycleContext } from '../../useCycleContext';
 import usePost from '@/src/usePost'
 import HyvorComments from '@/src/components/common/HyvorComments';
+import { useSession } from 'next-auth/react';
+import Spinner from '../Spinner';
+import useUser from '@/src/useUser';
+import { Alert } from '@mui/material';
+import useCycle from '@/src/useCycle';
 interface Props {
   postId: number;
-  // cycle?: CycleMosaicItem;
   work?: WorkMosaicItem;
-  // mySocialInfo?: MySocialInfo;
   cacheKey:[string,string];
   showSaveForLater?:boolean;
 }
@@ -33,26 +35,28 @@ dayjs.extend(timezone);
 const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey,showSaveForLater=false }) => {
   const { t } = useTranslation('createPostForm');
   const router = useRouter();
-  const cycleContext = useCycleContext();
-  const [cycle, setCycle] = useState<CycleMosaicItem | null>();
-  const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
-  useEffect(() => {
-    if (cycleContext) {
-      if (cycleContext.cycle) {
-        if (!cycleContext.currentUserIsParticipant && cycleContext.cycle.access !== 1)
-          router.push(`/cycle/${cycleContext.cycle.id}`);
-        setCycle(cycleContext.cycle);
-        setCurrentUserIsParticipant(cycleContext.currentUserIsParticipant || false);
-      }
-    }
-  }, [cycleContext, router]);
+  
+  const {data:session,status} = useSession();
+  const {data:cycle} = useCycle(+router?.query.id!,{enabled:!!router?.query.id!});
+  const {data:user} = useUser(session?.user.id!,{enabled:!!session?.user.id});
+
+  const currentUserIsParticipant = user?.cycles.findIndex(c=>c.id==+router.query.id!);
+  const isPublicPost = cycle?.access == 1;
+  
+  // if(status=='unauthenticated')
+  //   router.push(`/cycle/${router.query.id}`);
 
   const {data:post} = usePost(+postId,{
     enabled:!!postId
   })
 
-  if(!post)return <></>
-  if (cycle && cycle.access !== 1 && !currentUserIsParticipant) return null;
+  if(!post)
+    return <Alert color='warning'>Not found</Alert>;
+  
+  if (cycle && !isPublicPost && !currentUserIsParticipant) 
+    return <Alert color='warning'>Unauthorized</Alert>;
+
+  if(status=='loading')return <Spinner/>;
 
   return (
     <article data-cy="post-detail">

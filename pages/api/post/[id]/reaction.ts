@@ -91,7 +91,7 @@ export default getApiHandler()
       //prisma.$disconnect();
     }
   })
-  .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {debugger;
+  .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     const session = (await getSession({ req })) as unknown as Session;
     const { id } = req.query;
     const {unified} = req.body;

@@ -29,9 +29,6 @@ const PostReactionsActions: FunctionComponent<Props> = ({post,cacheKey}) => {
       setShowEmojisPicker((r) => !r);
   };
   const getReactionsGrouped = ()=>{
-    if(post.id==116){
-      debugger;
-    }
     const rgo:Record<string,{emoji:string,unified:string,qty:number}> = {};
     for(let i=0;i<post.reactions.length;i++){
         const {emoji,unified} = post.reactions[i];
