@@ -1,9 +1,5 @@
-// import { Work } from '@prisma/client';
 import { FunctionComponent,useState,useEffect } from 'react';
-// import Spinner from 'react-bootstrap/Spinner';
-// import { useQuery } from 'react-query';
-import { PostMosaicItem } from '../../types/post';
-import { WorkMosaicItem } from '../../types/work';
+import { WorkMosaicItem } from '@/src/types/work';
 import Mosaic from '../Mosaic';
 import usePosts from '@/src/usePosts'
 
