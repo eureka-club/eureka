@@ -300,6 +300,33 @@ const SocialInteraction: FunctionComponent<Props> = ({
     return res; 
   };
 
+  const handleFavClick = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    execSocialInteraction({ socialInteraction: 'fav', doCreate: !currentUserIsFav });
+  };
+
+  const renderSaveForLater = () => {
+    if (!post || isLoadingSession) return '...';
+    if (post)
+      return (
+        <Button
+          variant="link"
+          className={`${styles.buttonSI} p-0 text-primary`}
+          title={t('Save for later')}
+          onClick={handleFavClick}
+          disabled={loadingSocialInteraction}
+        >
+          {/* optimistFav */ currentUserIsFav ? <BsBookmarkFill style={{fontSize: "1.3em",verticalAlign:"bottom"}} className={styles.active} /> : <BsBookmark style={{fontSize: "1.3em",verticalAlign:"bottom"}} />}
+          <br />
+          {showButtonLabels && (
+            <span className={classnames(...[styles.info, ...[currentUserIsFav ? styles.active : '']])}>
+              {t('Save for later')}
+            </span>
+          )}
+        </Button>
+      );
+  };
+
   if (isLoadingSession || isLoadingUser) return <Spinner animation="grow" variant="info" size="sm" />;
   return (
     <section className={`${className}`}>
@@ -344,6 +371,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
             </OverlayTrigger>
           </div>
         )}
+        {showSaveForLater && <div className={`ms-1`}>{renderSaveForLater()}</div>}
+
       </div>
     </section>
   );

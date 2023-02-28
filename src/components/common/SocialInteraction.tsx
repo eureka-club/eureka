@@ -487,8 +487,9 @@ const SocialInteraction: FunctionComponent<Props> = ({
                : <></>
         }
         </div> */}
-        
-        {showSaveForLater && <div className={`ms-1`}>{renderSaveForLater()}</div>}
+        <div className="ms-auto">
+          {showSaveForLater && <div className={`ms-1`}>{renderSaveForLater()}</div>}
+        </div>
       </div>
     </section>
   );

@@ -69,18 +69,18 @@ const usePostReactionCreateOrEdit = (props:Props)=>{
           prevPost = queryClient.getQueryData<PostMosaicItem>(ck);
       
           let reactionsPost = user.reactions;
-          let ratings = post.reactions;
+          let reactions = post.reactions;
       
           if (!payload.doCreate) {
             reactionsPost = reactionsPost.filter((i) => i.postId !== post.id);
-            ratings = ratings.filter((i) => i.userId != session.user.id);
+            reactions = reactions.filter((i) => i.userId != session.user.id);
           }   
           else {
             reactionsPost?.push({postId:post.id,unified:payload.unified,emoji:payload.emoji});
-            ratings.push({ userId: +user.id,unified:payload.unified, emoji:payload.emoji,createdAt:new Date() });
+            reactions.push({ userId: +user.id,unified:payload.unified, emoji:payload.emoji,createdAt:new Date() });
           }
-          queryClient.setQueryData(ck, { ...post, ratings });
-          queryClient.setQueryData(['USER', `${user.id}`], { ...user, reactionsPost });
+          queryClient.setQueryData(ck, { ...post, reactions });
+          queryClient.setQueryData(['USER', `${user.id}`], { ...user, reactions:reactionsPost });
         }
         return { prevUser, prevPost };
       },
