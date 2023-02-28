@@ -3,7 +3,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { getSession } from 'next-auth/react';
 import { useQueryClient, useMutation, dehydrate, QueryClient } from 'react-query';
-import { useState, useEffect, SyntheticEvent, useCallback } from 'react';
+import { useState, useEffect, SyntheticEvent, useCallback, MouseEvent } from 'react';
 
 import { Spinner, Card, Row, Col, ButtonGroup, Button } from 'react-bootstrap';
 import { AiOutlineEnvironment } from 'react-icons/ai';
@@ -249,19 +249,29 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
 
   const getReadCurrentYear = () => {
     if (user) {
-      if (user.readOrWatchedWorks.length) return user.readOrWatchedWorks.filter(x => ['book','fiction-book'].includes(x.work!.type) && x.year === dayjs().year()).length;
+      if (user.readOrWatchedWorks.length) return user.readOrWatchedWorks.filter(x => ['book', 'fiction-book'].includes(x.work!.type) && x.year === dayjs().year()).length;
       else return 0;
     }
   };
 
   const getWatchedCurrentYear = () => {
- if (user) {
-   if (user.readOrWatchedWorks.length)
-     return user.readOrWatchedWorks.filter(
-       (x) => ['movie', 'documentary'].includes(x.work!.type) && x.year === dayjs().year(),
-     ).length;
-   else return 0;
- }  };
+    if (user) {
+      if (user.readOrWatchedWorks.length)
+        return user.readOrWatchedWorks.filter(
+          (x) => ['movie', 'documentary'].includes(x.work!.type) && x.year === dayjs().year(),
+        ).length;
+      else return 0;
+    }
+  };
+
+  const goToReadOrWatched = (e: MouseEvent<HTMLDivElement>, tab: string | null, year: string | null) => {
+    e.preventDefault();
+    const sts = `${user!.name || id.toString()}-${id}`;
+    if (tab && year)
+      router.push(`/user/${slugify(sts, { lower: true })}/my-read-or-watched?tabKey=${tab}&&year=${year}`)
+    else
+      router.push(`/user/${slugify(sts, { lower: true })}/my-read-or-watched`)
+  };
 
   return (
     <SimpleLayout title={t('Mediatheque')}>
@@ -341,18 +351,16 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                 <FilterEngine fictionOrNotFilter={false} geographyFilter={false} />
                 <section className="d-flex flex-column flex-lg-row">
                   <Col xs={12} lg={2} className="me-2">
-
-                    <h2 className="text-secondary">
-                      {`${t('readOrWatchedWorks')} (${getReadOrWatchedTotal()})`} 
-                    </h2>
+                    <h2 onClick={(e) => goToReadOrWatched(e, null, null)} className="text-secondary text-center  cursor-pointer" style={{ textDecoration: "underline" }}>{`${t('readOrWatchedWorks')}`}</h2>
+                    <h2 className="text-secondary text-center fs-5">{`(${getReadOrWatchedTotal()})`}</h2>
                     <section className="mt-4 p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
-                      <h2 className="p-1 m-0 text-wrap text-center fs-6">
+                      <h2 className="p-1 m-0 text-wrap text-center fs-6 cursor-pointer" style={{ textDecoration: "underline" }} onClick={(e) => goToReadOrWatched(e, 'books', dayjs().year().toString())}>
                         {`${t('readOrWatchedBooks').toLocaleUpperCase()} ${dayjs().year()}`}
                       </h2>
                       <h2 className="p-1 m-0 text-wrap text-center fs-5">{`(${getReadCurrentYear()})`}</h2>
                     </section>
                     <section className="mt-5 p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
-                      <h2 className="p-1 m-0 text-wrap text-center fs-6">
+                      <h2 className="p-1 m-0 text-wrap text-center fs-6 cursor-pointer" style={{ textDecoration: "underline" }} onClick={(e) => goToReadOrWatched(e, 'movies', dayjs().year().toString())}>
                         {`${t('readOrWatchedMovies').toLocaleUpperCase()} ${dayjs().year()}`}
                       </h2>
                       <h2 className="p-1 m-0 text-wrap text-center fs-5">{`(${getWatchedCurrentYear()})`}</h2>
@@ -362,7 +370,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                     <section className="ms-0 ms-lg-5">
                       <PostsCreated posts={posts?.slice(0, 6)!} user={user} goTo={goTo} id={id.toString()} t={t} />
                       <CyclesJoined cycles={cycles?.slice(0, 6)!} goTo={goTo} id={id.toString()} t={t} />
-                      <ReadOrWatched user={user} id={id.toString()} goTo={goTo} t={t} />
+                      {/*<ReadOrWatched user={user} id={id.toString()} goTo={goTo} t={t} />*/}
                       <SavedForLater user={user} goTo={goTo} t={t} id={id} />
                       {/* <UsersFollowed user={user} goTo={goTo} t={t} /> */}
                     </section>
