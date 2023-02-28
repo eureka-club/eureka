@@ -6,9 +6,7 @@ import usePostEmojiPicker from './hooks/usePostEmojiPicker';
 import { VscReactions } from 'react-icons/vsc';
 
 import { Toast as T } from 'react-bootstrap';
-import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import usePostReactionCreateOrEdit from '@/src/hooks/mutations/usePostReactionCreateOrEdit';
 
 interface Props {
   post:PostMosaicItem;
@@ -17,17 +15,10 @@ interface Props {
 const MAX_REACTIONS = 2;
 const PostReactionsActions: FunctionComponent<Props> = ({post,cacheKey}) => {
   const {data:session} = useSession();
-  const { t } = useTranslation('common');
   const router = useRouter();
   const { EmojiPicker, setShowEmojisPicker } = usePostEmojiPicker({post,cacheKey});
-  const {mutate,isLoading:isMutating} = usePostReactionCreateOrEdit({post,cacheKey});
 
-
-  const handleReactionClick = (ev: MouseEvent<HTMLButtonElement>) => {
-      ev.preventDefault();
-      ev.stopPropagation();
-      setShowEmojisPicker((r) => !r);
-  };
+  
   const getReactionsGrouped = ()=>{
     const rgo:Record<string,{emoji:string,unified:string,qty:number}> = {};
     for(let i=0;i<post.reactions.length;i++){
@@ -57,21 +48,7 @@ const PostReactionsActions: FunctionComponent<Props> = ({post,cacheKey}) => {
       {/* <div style={{ position: 'relative' }}> */}
         <EmojiPicker cacheKey={cacheKey} post={post as PostMosaicItem} onSaved={console.log} />
       {/* </div> */}
-      <Button
-      variant='link'
-      className={`ms-1 p-0 text-primary`}
-      title={t('Add reaction')}
-      onClick={handleReactionClick}
       
-      // disabled={loadingSocialInteraction}
-    >
-      
-      <VscReactions   style={{fontSize: "1.5em",verticalAlign:"sub"}}  />
-        {/* <br />
-         <span className={classnames(...[styles.info, ...[currentUserIsFav ? styles.active : '']])}> 
-          {t('Add reaction')}
-        </span> */}
-      </Button>
       </div>
     )
     return <></>;
