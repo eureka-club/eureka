@@ -74,7 +74,7 @@ const usePostReactionCreateOrEdit = (props:Props)=>{
           if (!payload.doCreate) {
             reactionsPost = reactionsPost.filter((i) => i.postId !== post.id);
             ratings = ratings.filter((i) => i.userId != session.user.id);
-          } 
+          }   
           else {
             reactionsPost?.push({postId:post.id,unified:payload.unified,emoji:payload.emoji});
             ratings.push({ userId: +user.id,unified:payload.unified, emoji:payload.emoji,createdAt:new Date() });
