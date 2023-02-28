@@ -2,7 +2,7 @@ import { PostMosaicItem } from '@/src/types/post';
 import { Button } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 import { FunctionComponent, MouseEvent, SyntheticEvent } from 'react';
-import usePostEmojiPicker from './usePostEmojiPicker';
+import usePostEmojiPicker from './hooks/usePostEmojiPicker';
 import { VscReactions } from 'react-icons/vsc';
 
 import { Toast as T } from 'react-bootstrap';
@@ -12,14 +12,15 @@ import usePostReactionCreateOrEdit from '@/src/hooks/mutations/usePostReactionCr
 
 interface Props {
   post:PostMosaicItem;
+  cacheKey:string[]|[string,string];
 }
 const MAX_REACTIONS = 2;
-const PostReactionsDetail: FunctionComponent<Props> = ({post}) => {
+const PostReactionsActions: FunctionComponent<Props> = ({post,cacheKey}) => {
   const {data:session} = useSession();
   const { t } = useTranslation('common');
   const router = useRouter();
-  const { EmojiPicker, setShowEmojisPicker } = usePostEmojiPicker({post});
-  const {mutate,isLoading:isMutating} = usePostReactionCreateOrEdit({post});
+  const { EmojiPicker, setShowEmojisPicker } = usePostEmojiPicker({post,cacheKey});
+  const {mutate,isLoading:isMutating} = usePostReactionCreateOrEdit({post,cacheKey});
 
 
   const handleReactionClick = (ev: MouseEvent<HTMLButtonElement>) => {
@@ -27,50 +28,34 @@ const PostReactionsDetail: FunctionComponent<Props> = ({post}) => {
       ev.stopPropagation();
       setShowEmojisPicker((r) => !r);
   };
-  const RenderReactions = ()=>{
-    
-    const reactionsGrouped:Record<string,{unified:string,qty:number}> = {};
+  const getReactionsGrouped = ()=>{
+    const rgo:Record<string,{emoji:string,unified:string,qty:number}> = {};
     for(let i=0;i<post.reactions.length;i++){
         const {emoji,unified} = post.reactions[i];
-        if(emoji in reactionsGrouped)
-          reactionsGrouped[emoji].qty+=1;
+        if(emoji in rgo)
+          rgo[emoji].qty+=1;
         else{
-          reactionsGrouped[emoji] = {qty:1,unified};
+        const {emoji,unified} = post.reactions[i];
+          rgo[emoji] = {qty:1,unified,emoji};
         }
     }
-
-    return Object.entries(reactionsGrouped).map(([emoji,{qty,unified}])=>{
-      return <Button
-      key={unified}
-      variant='light' 
-      role="img" 
-      size="sm"
-      className="p-0 mx-1 bg-red" 
-      style={{fontSize: "1.2em",textDecoration:'none'}} 
-      aria-label="emoji-ico" 
-      dangerouslySetInnerHTML={{__html: `${emoji} <b class="fs-6 color-danger">${qty}</b>`}}
-      onClick={(e)=>{
-        e.preventDefault();
-        if(session?.user){
-          let doCreate = post.reactions.filter(r=>r.userId==+session?.user.id).length<MAX_REACTIONS;
-          doCreate = post.reactions.findIndex(r=>r.unified==unified && r.userId==session.user.id)==-1;
-          mutate({doCreate,unified,emoji});
-        }
-      }}
-      disabled={!session?.user} 
-      />
-    })
+    return Object.values(rgo);
   }
+
   const currentUserCanReact = ()=>{
     const reactionsQty = post.reactions.filter(r=>r.userId==session?.user.id).length;
-    return reactionsQty<MAX_REACTIONS;
+    const isPostDetailPage = router.asPath.match(/\/post\//);
+    const q1 = reactionsQty<MAX_REACTIONS;
+    const q2 = !isPostDetailPage && getReactionsGrouped().length < 2;
+    if(isPostDetailPage)return q1;
+    return q1 && q2;
   }
   const RenderReactionAction = ()=>{
     if(post && session?.user && currentUserCanReact())
      return (
       <div>
       {/* <div style={{ position: 'relative' }}> */}
-        <EmojiPicker post={post as PostMosaicItem} onSaved={console.log} />
+        <EmojiPicker cacheKey={cacheKey} post={post as PostMosaicItem} onSaved={console.log} />
       {/* </div> */}
       <Button
       variant='link'
@@ -92,9 +77,8 @@ const PostReactionsDetail: FunctionComponent<Props> = ({post}) => {
     return <></>;
   }
   return <div className='d-flex justify-content-between align-items-center'>
-    {RenderReactions()}
     {RenderReactionAction()} 
   </div>
 };
 
-export default PostReactionsDetail;
+export default PostReactionsActions;

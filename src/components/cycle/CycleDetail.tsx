@@ -432,7 +432,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       {!post && renderCycleDetailHeader()}
       {post && cycle && (
         <MosaicContext.Provider value={{ showShare: true }}>
-          <PostDetailComponent cacheKey={['CYCLE',cycle.id.toString()]} postId={post.id} work={work} />
+          <PostDetailComponent cacheKey={['POST',post.id.toString()]} postId={post.id} work={work} />
         </MosaicContext.Provider>
       )}
       {cycle && post == null && (

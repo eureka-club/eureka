@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { Card, Badge,Spinner } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import { DATE_FORMAT_SHORT } from '../../constants';
-import SocialInteraction from '../common/SocialInteraction';
+import SocialInteraction from './SocialInteraction';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import {  Session } from '../../types';
@@ -30,7 +30,7 @@ interface Props {
   showSaveForLater?: boolean;
   showdetail?: boolean;
   style?: { [k: string]: string };
-  cacheKey?: string[];
+  cacheKey?: [string,string];
   showTrash?: boolean;
   showComments?: boolean;
   linkToPost?: boolean;
@@ -62,14 +62,17 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [postParent,setPostParent] = useState<CycleMosaicItem|WorkMosaicItem>();
   const {data:session} = useSession()
 
-  const {data} = usePost(+postId,{
-    enabled:!!postId && !postItem
+  const {data:post} = usePost(+postId,{
+    // enabled:!!postId && !postItem
+    enabled:!!postId
   })
   
-  const [post,setPost] = useState(postItem)
-  useEffect(()=>{
-    if(!postItem && data)setPost(data)
-  },[data])
+  // const [post,setPost] = useState(data)
+  // const [post,setPost] = useState(postItem)
+  // useEffect(()=>{
+  //   // if(!postItem && data)setPost(data)
+  //   if(data)setPost(data)
+  // },[data])
 
   useEffect(()=>{
     if(post){
@@ -208,10 +211,9 @@ const MosaicItem: FunctionComponent<Props> = ({
         )}
       </Card.Body>    
       {showSocialInteraction && post && (
-          <Card.Footer className={`d-flex ${styles.footer} d-flex justify-content-between`}>
-                {(
-          <h2 className="m-0 p-1 fs-6 text-info" data-cy="parent-title">
-            {/*<FaRegCompass className="text-info" />*/}
+          <Card.Footer className={` ${styles.footer} `}>
+                
+          {/* <h2 className="m-0 p-1 fs-6 text-info" data-cy="parent-title">
             {` `}
             {parentLinkHref != null ? (
               <Link href={parentLinkHref}>
@@ -222,15 +224,14 @@ const MosaicItem: FunctionComponent<Props> = ({
             ) : (
               <h2 className="m-0 p-1 fs-6 text-secondary">{renderParentTitle()}</h2>
             )}
-          </h2>
-        )}
+          </h2> */}
+        
             <SocialInteraction
               cacheKey={cacheKey}
               showButtonLabels={false}
               showCounts={false}
-              entity={post}
+              post={post}
               parent={postParent}
-              showRating={false}
               showTrash={false}
               showSaveForLater={showSaveForLater}
               className="ms-auto"

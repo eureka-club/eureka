@@ -1,39 +1,30 @@
 import classNames from 'classnames';
-// import { useAtom } from 'jotai';
-// import { useSession } from 'next-auth/react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent } from 'react';
 import { Row, Col, Badge } from 'react-bootstrap';
-
 import { useRouter } from 'next/router';
 import { DATE_FORMAT_SHORT } from '../../constants';
-// import { Session } from '../../types';
-import { CycleMosaicItem } from '../../types/cycle';
-import { PostMosaicItem } from '../../types/post';
-// import globalModalsAtom from '../../atoms/globalModals';
 import { WorkMosaicItem } from '../../types/work';
 import MosaicItem from './MosaicItemDetail';
 import { MosaicContext } from '../../useMosaicContext';
-
-// import CommentsList from '../common/CommentsList';
-import LocalImageComponent from '../LocalImage';
-import SocialInteraction from '../common/SocialInteraction';
 import UnclampText from '../UnclampText';
 import styles from './PostDetail.module.css';
 import Avatar from '../common/UserAvatar';
-import { useCycleContext } from '../../useCycleContext';
+// import { useCycleContext } from '../../useCycleContext';
 import usePost from '@/src/usePost'
-import {useQueryClient} from 'react-query'
 import HyvorComments from '@/src/components/common/HyvorComments';
+import { useSession } from 'next-auth/react';
+import Spinner from '../Spinner';
+import useUser from '@/src/useUser';
+import { Alert } from '@mui/material';
+import useCycle from '@/src/useCycle';
 interface Props {
   postId: number;
-  // cycle?: CycleMosaicItem;
   work?: WorkMosaicItem;
-  // mySocialInfo?: MySocialInfo;
   cacheKey:[string,string];
   showSaveForLater?:boolean;
 }
@@ -44,49 +35,33 @@ dayjs.extend(timezone);
 const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey,showSaveForLater=false }) => {
   const { t } = useTranslation('createPostForm');
   const router = useRouter();
-  const queryClient = useQueryClient()
-  const cycleContext = useCycleContext();
-  const [cycle, setCycle] = useState<CycleMosaicItem | null>();
-  const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
-  useEffect(() => {
-    if (cycleContext) {
-      if (cycleContext.cycle) {
-        if (!cycleContext.currentUserIsParticipant && cycleContext.cycle.access !== 1)
-          router.push(`/cycle/${cycleContext.cycle.id}`);
-        setCycle(cycleContext.cycle);
-        setCurrentUserIsParticipant(cycleContext.currentUserIsParticipant || false);
-      }
-    }
-  }, [cycleContext, router]);
+  
+  const {data:session,status} = useSession();
+  const {data:cycle} = useCycle(+router?.query.id!,{enabled:!!router?.query.id!});
+  const {data:user} = useUser(session?.user.id!,{enabled:!!session?.user.id});
+
+  const currentUserIsParticipant = user?.cycles.findIndex(c=>c.id==+router.query.id!);
+  const isPublicPost = cycle?.access == 1;
+  
+  // if(status=='unauthenticated')
+  //   router.push(`/cycle/${router.query.id}`);
 
   const {data:post} = usePost(+postId,{
     enabled:!!postId
   })
 
-  if(!post)return <></>
+  if(!post)
+    return <Alert color='warning'>Not found</Alert>;
+  
+  if (cycle && !isPublicPost && !currentUserIsParticipant) 
+    return <Alert color='warning'>Unauthorized</Alert>;
 
-
-  // const [session] = useSession() as [Session | null | undefined, boolean];
-  // const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-
-  // const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
-  //   ev.preventDefault();
-  //   setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: true } });
-  // };
-  // const canEditPost = (): boolean => {
-  //   if (session && session.user.id === post.creatorId) return true;
-  //   return false;
-  // };
-
-  if (cycle && cycle.access !== 1 && !currentUserIsParticipant) return null;
+  if(status=='loading')return <Spinner/>;
 
   return (
     <article data-cy="post-detail">
-      {/* {work ||
-        (cycle && ( */}
      <MosaicContext.Provider value={{ showShare: true }}>
       <div  className={classNames('d-flex d-lg-none flex-row justify-content-between mt-3', styles.postInfo)}>
-
              <div>
                     <Link href={`/mediatheque/${post.creator.id}`} passHref>
                       <Avatar width={28} height={28} userId={post.creator.id} showFullName />
@@ -137,7 +112,6 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey,showSaveFo
                 </aside>
               )}
             </div>
-
      
       <Row className="mb-5 d-flex flex-column flex-lg-row">
         <Col className='col-lg-4 col-xl-5'>

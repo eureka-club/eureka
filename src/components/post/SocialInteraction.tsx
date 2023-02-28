@@ -10,7 +10,7 @@ import { FiShare2, FiTrash2 } from 'react-icons/fi';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/react';
 // import Rating from 'react-rating';
-import usePostEmojiPicker from '../post/hooks/usePostEmojiPicker';
+
 import Rating from '@/src/components/common/Rating';
 
 import { OverlayTrigger, Popover, Button, Spinner, Modal } from 'react-bootstrap';
@@ -33,18 +33,17 @@ import { PostMosaicItem } from '@/src/types/post';
 import { WorkMosaicItem } from '@/src/types/work';
 import {
   MySocialInfo,
-  isCycle,
-  isWork,
-  isPost,
-  isPostMosaicItem,
-  isWorkMosaicItem,
-  isCycleMosaicItem,
 } from '../../types';
 import styles from './SocialInteraction.module.css';
 import { useNotificationContext } from '@/src/useNotificationProvider';
 import { useModalContext } from '@/src/useModal';
-import SignInForm from '../forms/SignInForm';
+import SignInForm from '@/src/components/forms/SignInForm';
 import _ from 'lodash';
+import PostReactionsDetail from './PostReactionsDetail';
+
+import usePostEmojiPicker from './hooks/usePostEmojiPicker';
+import PostReactionsActions from './PostReactionsActions';
+import Link from 'next/link';
 interface SocialInteractionClientPayload {
   socialInteraction: 'fav' | 'rating';
   doCreate: boolean;
@@ -52,30 +51,30 @@ interface SocialInteractionClientPayload {
 }
 
 interface Props {
-  entity: CycleMosaicItem | PostMosaicItem | WorkMosaicItem /* | UserMosaicItem */;
+  post: PostMosaicItem;
   parent?: Cycle | Work | null;
   showCounts?: boolean;
   showButtonLabels?: boolean;
-  cacheKey: string[];
+  cacheKey: [string,string];
   showCreateEureka?: boolean;
   showReaction?: boolean;
   showSaveForLater?: boolean;
   showTrash?: boolean;
-  showRating?: boolean;
   className?: string;
+  showTitle?:boolean;
 }
 
 const SocialInteraction: FunctionComponent<Props> = ({
-  entity,
+  post,
   parent,
   showCounts = false,
   showButtonLabels = true,
-  cacheKey = '',
+  cacheKey,
   showCreateEureka = true,
   showReaction = true,
   showSaveForLater = false,
   showTrash = false,
-  showRating = true,
+  showTitle = true,
   className,
 }) => {
   const { t } = useTranslation('common');
@@ -87,6 +86,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const isLoadingSession = status === 'loading';
   const [qty, setQty] = useState<number>(0);
   const { show } = useModalContext();
+  const { EmojiPicker, setShowEmojisPicker } = usePostEmojiPicker({post,cacheKey});
 
   const [mySocialInfo, setMySocialInfo] = useState<MySocialInfo>();
 
@@ -115,23 +115,12 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
   useEffect(() => {
     let ratingByMe = false;
-    if (session && entity && entity.favs) {
-      const favoritedByMe = entity.favs.findIndex((f) => f.id == session.user.id) > -1;
+    if (session && post && post.favs) {
+      const favoritedByMe = post.favs.findIndex((f) => f.id == session.user.id) > -1;
       setcurrentUserIsFav(() => favoritedByMe);
-
-      if (isWork(entity)) {
-        ratingByMe = !!entity.currentUserRating;
-        setMySocialInfo({ favoritedByMe, ratingByMe });
-        setQty(entity.ratingAVG || 0);
-      } else if (isCycle(entity)) {
-        ratingByMe = !!entity.currentUserRating;
-        setMySocialInfo({ favoritedByMe, ratingByMe });
-        setQty(entity.ratingAVG || 0);
-      } else if (isPostMosaicItem(entity)) {
-        setMySocialInfo({ favoritedByMe });
-      }
+      setMySocialInfo({ favoritedByMe });
     }
-  }, [entity, session]);
+  }, [post, session]);
 
   const openSignInModal = () => {
     setQty(0);
@@ -139,35 +128,22 @@ const SocialInteraction: FunctionComponent<Props> = ({
   };
 
   const shareUrl = (() => {
-    if (isPost(entity)) {
-      const post = entity as PostMosaicItem;
+    if (post) {
       const parentIsWork = post.works ? post.works.length > 0 : false;
       const parentIsCycle = !parentIsWork && post.cycles && post.cycles.length;
       if (parentIsWork) return `${WEBAPP_URL}/work/${post.works[0].id}/post/${post.id}`;
       if (parentIsCycle) return `${WEBAPP_URL}/cycle/${post.cycles[0].id}/post/${post.id}`;
     }
-    if (isWork(entity)) return `${WEBAPP_URL}/work/${entity.id}`;
-    if (isCycle(entity)) return `${WEBAPP_URL}/cycle/${entity.id}`;
     return `${WEBAPP_URL}/${router.asPath}`;
   })();
 
   const shareTextDynamicPart = (() => {
-    if (parent != null && isCycle(parent)) {
-      return `${t('postCycleShare')} "${parent.title}"`;
-    }
-    if (isCycle(entity)) {
-      return `${t('cycleShare')} ${'title' in entity ? `"${entity.title}"` : ''}`;
-    }
-    if (isWork(entity)) {
-      return `${t('workShare')} ${'title' in entity ? `"${entity.title}"` : ''}`;
-    }
-    if (isPostMosaicItem(entity)) {
-      const post = entity as PostMosaicItem;
+    if (post) {
       const p = post.works ? post.works[0] : null || post.cycles ? post.cycles[0] : null;
       const about = post.works[0] ? 'postWorkShare' : 'postCycleShare';
       return `${t(about)} "${p ? p.title : ''}"`;
     }
-    return 'entity not found';
+    return 'post not found';
   })();
 
   const shareText = `${shareTextDynamicPart}  ${t('complementShare')}`;
@@ -177,35 +153,22 @@ const SocialInteraction: FunctionComponent<Props> = ({
     isLoading: loadingSocialInteraction,
   } = useMutation(
     async ({ socialInteraction, doCreate, ratingQty }: SocialInteractionClientPayload) => {
-      const entityEndpoint = (() => {
-        if (parent != null) {
-          return 'post';
-        }
-        if (isCycle(entity)) {
-          return 'cycle';
-        }
-        if (isWork(entity)) {
-          return 'work';
-        }
-
-        throw new Error('Unknown entity');
-      })();
       if (session) {
         //[user that does action] has saved the [title of book/movie/documentary/cycle] for later. Check it out.
         let translationKey = 'userHasRating';
-        let notificationContextURL = `/${entityEndpoint}/${entity.id}`;
+        let notificationContextURL = `/post/${post.id}`;
         if (socialInteraction == 'fav') {
           translationKey = 'userHasSaveForLater';
         }
 
         const notificationMessage = `${translationKey}!|!${JSON.stringify({
           userName: user?.name,
-          entity: entityEndpoint.replace(/\w/, (c) => c.toUpperCase()),
-          entityTitle: entity.title,
+          post: 'Post',
+          entityTitle: post.title,
         })}`;
 
         const notificationToUsers = user?.followedBy.map((f) => f.id);
-        const res = await fetch(`/api/${entityEndpoint}/${entity.id}/${socialInteraction}`, {
+        const res = await fetch(`/api/post/${post.id}/${socialInteraction}`, {
           method: doCreate ? 'POST' : 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -237,22 +200,20 @@ const SocialInteraction: FunctionComponent<Props> = ({
           const prevUser = queryClient.getQueryData(['USER', `${session.user.id}`]);
           const prevEntity = queryClient.getQueryData(cacheKey);
 
-          const entityFavKey = isWork(entity) ? 'favWorks' : isCycle(entity) ? 'favCycles' : 'favPosts';
-
-          let favInUser = user[entityFavKey] as { id: number }[];
-          let favs = entity.favs;
+          let favPosts = user.favPosts as { id: number }[];
+          let favs = post.favs;
 
           setcurrentUserIsFav(() => payload.doCreate);
 
           if (!payload.doCreate) {
-            favInUser = favInUser.filter((i: { id: number }) => i.id !== entity.id);
-            favs = entity.favs.filter((i) => i.id != session.user.id);
+            favPosts = favPosts.filter((i: { id: number }) => i.id !== post.id);
+            favs = post.favs.filter((i) => i.id != session.user.id);
           } else {
-            favInUser?.push(entity as any);
+            favPosts?.push(post as any);
             favs.push({ id: +session.user.id });
           }
-          queryClient.setQueryData(['WORK', `${entity.id}`], { ...entity, favs });
-          queryClient.setQueryData(['USER', `${session.user.id}`], { ...user, [entityFavKey]: favInUser });
+          queryClient.setQueryData(['WORK', `${post.id}`], { ...post, favs });
+          queryClient.setQueryData(['USER', `${session.user.id}`], { ...user, favPosts });
 
           return { prevUser, prevEntity };
         }
@@ -268,29 +229,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
     },
   );
 
-  const handleFavClick = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-    execSocialInteraction({ socialInteraction: 'fav', doCreate: !currentUserIsFav });
-  };
-
-  
-  // execSocialInteraction({ socialInteraction: 'reaction', doCreate: mySocialInfo ? !mySocialInfo!.favoritedByMe : true });
-  const handleCreateEurekaClick = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-    if (!session) {
-      openSignInModal();
-      return null;
-    }
-    if (canNavigate()) {
-      /*setIsLoadingCreateEureka(true)
-        setTimeout(()=>{setIsLoadingCreateEureka(false)},2500)*/
-      if (isWorkMosaicItem(entity)) router.push({ pathname: `/work/${entity.id}`, query: { tabKey: 'posts' } });
-      if (isCycleMosaicItem(entity)) router.push({ pathname: `/cycle/${entity.id}`, query: { tabKey: 'eurekas' } });
-    }
-  };
-
   const canNavigate = () => {
-    return !(!entity || isLoadingSession);
+    return !(!post || isLoadingSession);
   };
 
   const popoverShares = (
@@ -321,45 +261,53 @@ const SocialInteraction: FunctionComponent<Props> = ({
     </Popover>
   );
 
-  const clearRating = () => {
-    setQty(0);
-    execSocialInteraction({
-      socialInteraction: 'rating',
-      ratingQty: 0,
-      doCreate: false,
-    });
-  };
-
-  const handlerChangeRating = (value: number) => {
-    setQty(value);
-    execSocialInteraction({
-      socialInteraction: 'rating',
-      ratingQty: value,
-      doCreate: value ? true : false,
-    });
-  };
-
-  const getFullSymbol = () => {
-    if (entity) {
-      if (isWorkMosaicItem(entity) || isCycleMosaicItem(entity))
-        if (entity.currentUserRating)
-          return <GiBrain className="text-secondary" /*  style={{ color: 'var(--eureka-blue)' }} */ />;
+  
+  const parentLinkHref = ((): string | null => {
+    if (post.works.length) {
+      return `/work/${post.works[0].id}`;
     }
-    return <GiBrain className="text-primary" /* style={{ color: 'var(--eureka-green)' }} */ />;
+    else if (post.cycles[0]) {
+      return `/cycle/${post.cycles[0].id}`;
+    }
+    return null;
+  })();
+
+  const getParentTitle = () => {
+    let res = '';
+    if (post.works.length) {
+      res = post.works[0].title
+    }
+    else if(post.cycles.length){
+      res = post.cycles[0].title
+    }
+    return res;
+  };
+ 
+  const renderParentTitle = () => {
+    const chars = 7
+    let res = '';
+    let full =''
+    if (post.works.length) {
+      full = post.works[0].title
+      res = full.slice(0, chars);
+    }
+    else if(post.cycles.length){
+      full = post.cycles[0].title
+      res = full.slice(0, chars);
+    }
+    if (res.length + 3 < full.length) res = `${res}...`;
+    else res = full;
+    return res; 
   };
 
-  const getRatingsCount = () => {
-    let count = 0;
-    if (isWorkMosaicItem(entity)) {
-      count = entity._count.ratings;
-    } else if (isCycleMosaicItem(entity)) count = entity._count.ratings;
-
-    return <span className={styles.ratingsCount}>{`${count}`}</span>;
+  const handleFavClick = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    execSocialInteraction({ socialInteraction: 'fav', doCreate: !currentUserIsFav });
   };
 
   const renderSaveForLater = () => {
-    if (!entity || isLoadingSession) return '...';
-    if (entity)
+    if (!post || isLoadingSession) return '...';
+    if (post)
       return (
         <Button
           variant="link"
@@ -379,92 +327,35 @@ const SocialInteraction: FunctionComponent<Props> = ({
       );
   };
 
-  const renderCreateEureka = () => {
-    if (!entity || isLoadingSession) return '...';
-    if (showCreateEureka && (isWork(entity) || isCycle(entity)))
-      return (
-        <>
-          <Button
-            variant="link"
-            className={`${styles.buttonSI} p-0 text-primary`}
-            title={t('Create eureka')}
-            onClick={handleCreateEurekaClick}
-            disabled={loadingSocialInteraction}
-          >
-            <div className={`d-flex flex-row`}>
-              <BiImageAdd className={styles.active} />
-              <span className="d-flex align-items-center text-primary" style={{ fontSize: '0.8em' }}>
-                {t('Create eureka')}
-              </span>
-            </div>
-          </Button>
-          {/*isLoadingCreateEureka  && <div className='d-flex align-items-center' ><Spinner   animation="grow" variant="info" size="sm" /></div> */}
-        </>
-      );
-  };
-
-  const getInitialRating = () => {
-    if (entity) {
-      if (isCycleMosaicItem(entity) || isWorkMosaicItem(entity)) {
-        return entity.ratingAVG;
-      }
-    }
-  };
-  const getRatingLabelInfo = () => {
-    if (entity) {
-      if (isCycleMosaicItem(entity) || isWorkMosaicItem(entity))
-        return !entity.currentUserRating ? <span className={styles.ratingLabelInfo}>{t('Rate it')}:</span> : '';
-    }
-    return '';
-  };
   if (isLoadingSession || isLoadingUser) return <Spinner animation="grow" variant="info" size="sm" />;
   return (
     <section className={`${className}`}>
       <div className="d-flex justify-content-between align-items-center">
-        {showRating && (
-          <div className="ps-1">
-            {showRating && getRatingLabelInfo()}
+        {
+          showTitle 
+            ? <div className="flex-grow-1"><h2 className="m-0 p-1 fs-6 text-info" data-cy="parent-title">
             {` `}
-            {showRating && (
-              <>
-                {/* @ts-ignore*/}
-                {/* <Rating
-                initialRating={getInitialRating()}
-                onClick={handlerChangeRating}
-                className={styles.rating}
-                stop={5}
-                emptySymbol={<GiBrain className="fs-6 text-info" />}
-                fullSymbol={getFullSymbol()}
-                readonly={loadingSocialInteraction}
-              />  */}
-                <Rating qty={qty} onChange={handlerChangeRating} stop={5} readonly={loadingSocialInteraction} />
-              </>
-            )}{' '}
-            {showRating && !loadingSocialInteraction && getRatingsCount()}{' '}
-            {showTrash && mySocialInfo && mySocialInfo.ratingByMe && (
-              <Button
-                type="button"
-                title={t('Clear rating')}
-                className="text-warning p-0"
-                onClick={clearRating}
-                variant="link"
-                disabled={loadingSocialInteraction}
-              >
-                <FiTrash2 />
-              </Button>
+            {parentLinkHref != null ? (
+              <Link href={parentLinkHref}>
+                <a title={getParentTitle()} className="text-info">
+                  <span>{renderParentTitle()} </span>
+                </a>
+              </Link>
+            ) : (
+              <h2 className="m-0 p-1 fs-6 text-secondary">{renderParentTitle()}</h2>
             )}
-          </div>
-        )}
-
-        {loadingSocialInteraction && (
-          <div className="mt-1 ms-1 me-2">
-            {' '}
-            <Spinner className={styles.ratingSpinner} size="sm" animation="grow" variant="info" />
-          </div>
-        )}
-        {renderCreateEureka()}
+          </h2>
+          </div>: <></>
+        }
+        
+        <div className='ms-auto'>
+            <PostReactionsDetail cacheKey={cacheKey} post={post as PostMosaicItem}/>
+        </div>
+        <div className={`ms-1`}>
+            <PostReactionsActions cacheKey={cacheKey} post={post as PostMosaicItem}/>
+        </div>
         {ss && (
-          <div className="ms-auto">
+          <div className="">
             <OverlayTrigger trigger="focus" placement="top" overlay={popoverShares}>
               <Button
                 // style={{ fontSize: '.9em' }}
@@ -480,16 +371,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
             </OverlayTrigger>
           </div>
         )}
-        {/* <div className={`ms-1`}>
-        {
-              isPost(entity) && entity?.reactions[0] 
-               ? <span role="img" className="m-1" style={{verticalAlign:"sub"}} aria-label="emoji-ico" dangerouslySetInnerHTML={{__html: `${entity?.reactions[0].emoji}`}} />
-               : <></>
-        }
-        </div> */}
-        <div className="ms-auto">
-          {showSaveForLater && <div className={`ms-1`}>{renderSaveForLater()}</div>}
-        </div>
+        {showSaveForLater && <div className={`ms-1`}>{renderSaveForLater()}</div>}
+
       </div>
     </section>
   );

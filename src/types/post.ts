@@ -12,7 +12,7 @@ export type PostMosaicItem = Prisma.PostGetPayload<{
     favs:{select:{id:true,}},
     creator: {select:{id:true,name:true,photos:true,countryOfOrigin:true}},
     localImages: {select:{storedFile:true}},
-    reactions:{select:{userId:true,unified:true,emoji:true}},
+    reactions:{select:{userId:true,unified:true,emoji:true,createdAt:true}},
   }
 }> & { 
   type?: 'post';
