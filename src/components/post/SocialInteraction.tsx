@@ -37,7 +37,7 @@ import {
 import styles from './SocialInteraction.module.css';
 import { useNotificationContext } from '@/src/useNotificationProvider';
 import { useModalContext } from '@/src/useModal';
-import SignInForm from '../forms/SignInForm';
+import SignInForm from '@/src/components/forms/SignInForm';
 import _ from 'lodash';
 import PostReactionsDetail from './PostReactionsDetail';
 
