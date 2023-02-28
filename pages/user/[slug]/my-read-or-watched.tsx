@@ -19,13 +19,15 @@ import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import WMI from '@/src/components/work/MosaicItem';
 import { useRouter } from 'next/router';
-import useUser, { getUser } from '@/src/useUser';
+import { getUser } from '@/src/useUser';
 import { BiArrowBack } from 'react-icons/bi';
 import { UserMosaicItem } from '@/src/types/user';
 import { QueryClient, dehydrate } from 'react-query';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import slugify from 'slugify';
 import toast from 'react-hot-toast'
+import useMyReadOrWatched from '@/src/useMyReadOrWatched'
+
 //import styles from './my-read-or-watched.module.css';
 
 interface Props {
@@ -38,7 +40,8 @@ const MyReadOrWatched: NextPage<Props> = ({ id }) => {
   const { data: session, status } = useSession();
   const isLoadingSession = status === 'loading';
   // if(!isLoadingSession && !session)router.push('/')
-  const { data: user } = useUser(id, { enabled: !!id });
+  const row = useMyReadOrWatched(id)
+  //console.log(row,'rowrow')
   const [yearFilter, setYearFilter] = useState<string>('');
   const [booksTotal, setBooksTotal] = useState<number>(0);
   const [moviesTotal, setMoviesTotal] = useState<number>(0);
@@ -57,9 +60,9 @@ const MyReadOrWatched: NextPage<Props> = ({ id }) => {
   }, [router]);
 
   useEffect(() => {
-    if (user && user.readOrWatchedWorks.length) {
-      let books = user.readOrWatchedWorks.filter((rw) => ['book', 'fiction-book'].includes(rw.work!.type)).reverse();
-      let movies = user.readOrWatchedWorks.filter((rw) => ['movie', 'documentary'].includes(rw.work!.type)).reverse();
+    if (row && row.readOrWatchedWorks.length) {
+      let books = row.readOrWatchedWorks.filter((rw) => ['book', 'fiction-book'].includes(rw.work!.type)).reverse();
+      let movies = row.readOrWatchedWorks.filter((rw) => ['movie', 'documentary'].includes(rw.work!.type)).reverse();
 
       if (yearFilter.length) {
         books = books.filter((b) => b.year.toString() === yearFilter);
@@ -79,7 +82,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id }) => {
 
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [yearFilter]);
+  }, [row,yearFilter]);
 
   const groupBy = (array: any[], key: string | number) => {
     return array.reduce((acc: { [x: string]: any[] }, item: { [x: string]: string | number }) => {
@@ -99,7 +102,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id }) => {
 
   const copyURL = (e: MouseEvent<HTMLDivElement>, tab: string, year: string) => {
     e.preventDefault();
-    const sts = `${user!.name || id.toString()}-${id}`;
+    const sts = `${row.userName || id.toString()}-${id}`;
     navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/user/${slugify(sts, { lower: true })}/my-read-or-watched?tabKey=${tab}&&year=${year}`)
       .then(() => {
         toast.success('Url copied to clipboard')
@@ -203,7 +206,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id }) => {
           </ButtonGroup>
           {isLoadingSession ? (
             <Spinner animation="grow" />
-          ) : session ? (
+          ) : 
             <>
               <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{`${t('MyReadOrWatched')}  ${yearFilter}`}</h1>
               <style jsx global>
@@ -344,9 +347,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id }) => {
                   ))}
               </Row>*/}
             </>
-          ) : (
-            ''
-          )}
+         }
         </article>
       </SimpleLayout>
     </>
