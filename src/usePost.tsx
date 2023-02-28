@@ -20,7 +20,7 @@ const usePost = (id: number, options?: Options) => {
   const qc = useQueryClient()
   const { staleTime, enabled } = options || {
     staleTime: 1000 * 60 * 60,
-    enabled: true,
+    enabled: true, 
   };
   return useQuery<PostMosaicItem | undefined>(['POST', `${id}`], () => getPost(id), {
     staleTime,
