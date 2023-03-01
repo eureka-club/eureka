@@ -1,48 +1,90 @@
 import { NextPage, GetServerSideProps } from 'next';
-import { useState, useEffect, Key } from 'react';
+import { useState, useEffect, ChangeEvent, MouseEvent } from 'react';
 import Head from 'next/head';
-import { Button, ButtonGroup, Nav, NavItem, NavLink, Tabs, Tab, Col, Row, Spinner } from 'react-bootstrap';
+import {
+  Alert,
+  Form,
+  OverlayTrigger,
+  Popover,
+  Button,
+  ButtonGroup,
+  Tabs,
+  Tab,
+  Col,
+  Row,
+  Spinner,
+} from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
-import { useSession } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
+import { Session } from '@/src/types';
 import useTranslation from 'next-translate/useTranslation';
 import WMI from '@/src/components/work/MosaicItem';
 import { useRouter } from 'next/router';
-import useUser, { getUser } from '@/src/useUser';
+import { getUser } from '@/src/useUser';
 import { BiArrowBack } from 'react-icons/bi';
 import { UserMosaicItem } from '@/src/types/user';
 import { QueryClient, dehydrate } from 'react-query';
+import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
+import slugify from 'slugify';
+import toast from 'react-hot-toast'
+import useMyReadOrWatched from '@/src/useMyReadOrWatched'
+
 //import styles from './my-read-or-watched.module.css';
 
 interface Props {
   id: number;
+  session: Session;
 }
 
-const MyReadOrWatched: NextPage<Props> = ({ id }) => {
+const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
-  const { data: session, status } = useSession();
-  const isLoadingSession = status === 'loading';
+  const query = router.query;
+  //const { data: session, status } = useSession();
+  //const isLoadingSession = status === 'loading';
   // if(!isLoadingSession && !session)router.push('/')
-  const { data: user } = useUser(id, { enabled: !!id });
+  const row = useMyReadOrWatched(id)
+  //console.log(row,'rowrow')
+  const [yearFilter, setYearFilter] = useState<string>('');
+  const [booksTotal, setBooksTotal] = useState<number>(0);
+  const [moviesTotal, setMoviesTotal] = useState<number>(0);
   const [books, setBooks] = useState<any>(null);
   const [movies, setMovies] = useState<any>(null);
+  const [tabKey, setTabKey] = useState<string>();
 
   useEffect(() => {
-    if (user && user.readOrWatchedWorks.length) {
-      let books = user.readOrWatchedWorks
-        .filter((rw) => rw.workId && rw.year && ['book', 'fiction-book'].includes(rw.work!.type))
-        .reverse();
-      let movies = user.readOrWatchedWorks
-        .filter((rw) => rw.workId && rw.year && ['movie', 'documentary'].includes(rw.work!.type))
-        .reverse();
+    if (query?.tabKey) {
+      setTabKey(query.tabKey.toString());
+    }
+    if (query?.year) {
+      setYearFilter(query.year.toString());
+    }
+  }, [query]);
 
-      if (books.length) setBooks(groupBy(books, 'year'));
+  useEffect(() => {
+    if (row && row.readOrWatchedWorks.length) {
+      let books = row.readOrWatchedWorks.filter((rw) => ['book', 'fiction-book'].includes(rw.work!.type)).reverse();
+      let movies = row.readOrWatchedWorks.filter((rw) => ['movie', 'documentary'].includes(rw.work!.type)).reverse();
+
+      if (yearFilter.length) {
+        books = books.filter((b) => b.year.toString() === yearFilter);
+        movies = movies.filter((b) => b.year.toString() === yearFilter);
+      }
+      if (books.length) {
+        setBooks(groupBy(books, 'year'));
+      }
       else setBooks(null);
-      if (movies.length) setMovies(groupBy(movies, 'year'));
+      if (movies.length) {
+        setMovies(groupBy(movies, 'year'));
+      }
       else setMovies(null);
+
+      setBooksTotal(books.length);
+      setMoviesTotal(movies.length);
+
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [yearFilter]);
 
   const groupBy = (array: any[], key: string | number) => {
     return array.reduce((acc: { [x: string]: any[] }, item: { [x: string]: string | number }) => {
@@ -52,8 +94,94 @@ const MyReadOrWatched: NextPage<Props> = ({ id }) => {
     }, {});
   };
 
-  console.log(books, 'books');
-  console.log(movies, 'movies');
+  //console.log(books, 'books');
+  //console.log(movies, 'movies');
+
+  const handlerComboxesChangeYear = (e: ChangeEvent<HTMLInputElement>, q: string) => {
+    if (e.target.checked) setYearFilter(q);
+    else setYearFilter('');
+  };
+
+  const copyURL = (e: MouseEvent<HTMLDivElement>, tab: string, year: string) => {
+    e.preventDefault();
+    const sts = `${row.userName || id.toString()}-${id}`;
+    navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/user/${slugify(sts, { lower: true })}/my-read-or-watched?tabKey=${tab}&year=${year}`)
+      .then(() => {
+        toast.success('Url copied to clipboard')
+      })
+      .catch(err => {
+        //console.error('Error al copiar al portapapeles:', err)
+      })
+  };
+
+  const getDefaultActiveKey = () => {
+    if (booksTotal > 0)
+      return 'books'
+    else if (moviesTotal > 0 && !books)
+      return 'movies';
+    else
+      return 'books';
+  };
+
+  const handleSubsectionChange = (key: string | null) => {
+    if (key != null) {
+      setTabKey(key);
+    }
+  };
+
+  const getPopoverYears = () => {
+    return (
+      <Popover data-cy="popover-geography" className="position-absolute top-0">
+        <Popover.Body>
+          <div>
+            <Form.Label>
+              <strong>{`Years`}</strong>
+            </Form.Label>
+            <Form.Group>
+              <Form.Check
+                type="checkbox"
+                label="2023"
+                checked={yearFilter.includes('2023')}
+                onChange={(e) => handlerComboxesChangeYear(e, '2023')}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Check
+                type="checkbox"
+                label="2022"
+                checked={yearFilter.includes('2022')}
+                onChange={(e) => handlerComboxesChangeYear(e, '2022')}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Check
+                type="checkbox"
+                label="2021"
+                checked={yearFilter.includes('2021')}
+                onChange={(e) => handlerComboxesChangeYear(e, '2021')}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Check
+                type="checkbox"
+                label="2020"
+                checked={yearFilter.includes('2020')}
+                onChange={(e) => handlerComboxesChangeYear(e, '2020')}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Check
+                type="checkbox"
+                label="2019"
+                checked={yearFilter.includes('2019')}
+                onChange={(e) => handlerComboxesChangeYear(e, '2019')}
+              />
+            </Form.Group>
+          </div>
+        </Popover.Body>
+      </Popover>
+    );
+  };
 
   return (
     <>
@@ -78,11 +206,11 @@ const MyReadOrWatched: NextPage<Props> = ({ id }) => {
               <BiArrowBack />
             </Button>
           </ButtonGroup>
-          {isLoadingSession ? (
+          {/*isLoadingSession ? (
             <Spinner animation="grow" />
-          ) : session ? (
+          ) : */}
             <>
-              <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('MyReadOrWatched')}</h1>
+              <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{`MyReadOrWatched  ${yearFilter}`}</h1>
               <style jsx global>
                 {`
                   .nav-tabs .nav-item.show .nav-link,
@@ -100,79 +228,117 @@ const MyReadOrWatched: NextPage<Props> = ({ id }) => {
                   .nav-link {
                     color: var(--bs-primary);
                   }
+
+                  .form-check {
+                    color: gray !important;
+                  }
+                  .form-check-label {
+                    margin-left: 0.2em;
+                    font-size: 1.1em;
+                  }
                 `}
               </style>
 
-              <Tabs defaultActiveKey="books" id="uncontrolled-tab-example" className="mb-3">
-                <Tab className="mt-5" eventKey="books" title={t('Books')}>
-                  {Object.keys(books).map((year) => (
-                    <Row className="mt-0" key={year}>
-                      <h2 className="fs-4 mb-3 text-secondary fw-bold">{year}</h2>
-                      {books[year].reverse().map((w: any) => (
-                        <Col
-                          key={w.workId}
-                          xs={12}
-                          sm={6}
-                          lg={3}
-                          xxl={2}
-                          className="mb-5 d-flex justify-content-center  align-items-center"
-                        >
-                          <WMI workId={w.workId!} size="md" />
-                        </Col>
-                      ))}
-                    </Row>
-                  ))}
-                </Tab>
-                <Tab className="mt-5" eventKey="movies" title={t('Movies')}>
-                  {Object.keys(movies)
-                    .reverse()
-                    .map((year) => (
+                <Tabs activeKey={tabKey || getDefaultActiveKey()} onSelect={handleSubsectionChange}
+ id="uncontrolled-tab-example" className="mb-3">
+                <Tab eventKey="books" title={`Books (${booksTotal})`}>
+                  <section className="d-flex justify-content-end">
+                    <OverlayTrigger trigger="click" rootClose={true} placement="bottom" overlay={getPopoverYears()}>
+                      <Button variant="light">{`Filter by years`}</Button>
+                    </OverlayTrigger>
+                  </section>
+                  {books ? (
+                    Object.keys(books).reverse().map((year) => (
                       <Row className="mt-0" key={year}>
-                        <h2 className="fs-4 mb-3 text-secondary fw-bold">{year}</h2>
-                        {movies[year].map((w: any) => (
-                          <Col
-                            key={w.workId}
-                            xs={12}
-                            sm={6}
-                            lg={3}
-                            xxl={2}
-                            className="mb-5 d-flex justify-content-center  align-items-center"
-                          >
-                            <WMI workId={w.workId!} size="md" />
-                          </Col>
-                        ))}
+                        <section className="d-flex flex-row">
+                          <h2 className="fs-4 mb-3 text-secondary fw-bold">{year}</h2>
+
+                          <div className="cursor-pointer" onClick={(e) => copyURL(e, "books", year)}>
+
+                            <ContentCopyRoundedIcon
+                              className="ms-2"
+                              style={{
+                                color: 'var(--eureka-purple)',
+                              }}
+                            />
+                          </div>
+                        </section>
+                        {
+                          books[year].map((w: any) => (
+                            <Col
+                              key={w.workId}
+                              xs={12}
+                              sm={6}
+                              lg={3}
+                              xxl={2}
+                              className="mb-5 d-flex justify-content-center  align-items-center"
+                            >
+                              <WMI workId={w.workId!} size="md" />
+                            </Col>
+                          ))
+                        }
                       </Row>
-                    ))}
+                    ))
+                  ) : (
+                    <Alert className="mt-4" variant="primary">
+                      <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
+                    </Alert>
+                  )}
+                </Tab>
+                <Tab eventKey="movies" title={`Movies (${moviesTotal})`}>
+                  <section className="d-flex justify-content-end">
+                    <OverlayTrigger trigger="click" rootClose={true} placement="bottom" overlay={getPopoverYears()}>
+                      <Button variant="light">{`Filter by years`}</Button>
+                    </OverlayTrigger>
+                  </section>
+
+                  {movies ? (
+                    Object.keys(movies)
+                      .reverse()
+                      .map((year) => (
+                        <Row className="mt-0" key={year}>
+                          <section className="d-flex flex-row">
+                            <h2 className="fs-4 mb-3 text-secondary fw-bold">{year}</h2>
+                            <div className="cursor-pointer" onClick={(e) => copyURL(e, "movies", year)}>
+
+                              <ContentCopyRoundedIcon
+                                className="ms-2"
+                                style={{
+                                  color: 'var(--eureka-purple)',
+                                }}
+                              />
+                            </div>
+                          </section>
+                          {movies[year].map((w: any) => (
+                            <Col
+                              key={w.workId}
+                              xs={12}
+                              sm={6}
+                              lg={3}
+                              xxl={2}
+                              className="mb-5 d-flex justify-content-center  align-items-center"
+                            >
+                              <WMI workId={w.workId!} size="md" />
+                            </Col>
+                          ))}
+                        </Row>
+                      ))
+                  ) : (
+                    <Alert className="mt-4" variant="primary">
+                      <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
+                    </Alert>
+                  )}
                 </Tab>
               </Tabs>
-
-              {/*<Row>
-                {user?.readOrWatchedWorks
-                  .filter((rw) => rw.workId)
-                  .reverse()
-                  .map((c) => (
-                    <Col
-                      key={c.workId}
-                      xs={12}
-                      sm={6}
-                      lg={3}
-                      xxl={2}
-                      className="mb-5 d-flex justify-content-center  align-items-center"
-                    >
-                      <WMI workId={c.workId!} size="md" />
-                    </Col>
-                  ))}
-              </Row>*/}
             </>
-          ) : (
-            ''
-          )}
-        </article>
+        {/* }*/}       
+         </article>
       </SimpleLayout>
     </>
   );
 };
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getSession(ctx)
   let user: UserMosaicItem | null = null;
   const qc = new QueryClient();
   let id = 0;
@@ -186,6 +352,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
   return {
     props: {
+      session,
       id,
       dehydratedState: dehydrate(qc),
     },

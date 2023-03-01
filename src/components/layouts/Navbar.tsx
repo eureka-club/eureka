@@ -188,14 +188,40 @@ const NavBar: FunctionComponent = () => {
                 </Nav>
                 {session && session.user && (
                   <Nav className={`${styles.navbarNav} text-center d-flex`}>
-                    <Nav.Item>
+                    <Dropdown className={styles.langSwitch}>
+                      <Dropdown.Toggle as={ChevronToggle}>
+                        <RiDashboardLine className={styles.navbarIconNav} />
+                      </Dropdown.Toggle>
+                      <span className={styles.menuBottomInfo}>{t('My Mediatheque')}</span>
+                        <Dropdown.Menu >
+                          <Dropdown.Item>
+                            <Link href={`/mediatheque/${getMediathequeSlug()}`}>
+                              <a data-cy="my-mediatheque-link" className={styles.navLink}>
+                                {t('My Mediatheque')}
+                              </a>
+                            </Link>
+
+                          </Dropdown.Item>
+                          <Dropdown.Item>
+                            <Link href={`/user/${getMediathequeSlug() }/my-read-or-watched`}>
+                              <a className={styles.navLink}>
+                                {`My Read or watched`}
+                              </a>
+                            </Link>
+
+                          </Dropdown.Item>
+                         
+                        </Dropdown.Menu>
+
+                    </Dropdown>
+                    {/*<Nav.Item>
                       <Link href={`/mediatheque/${getMediathequeSlug()}`}>
                         <a data-cy="my-mediatheque-link" className={styles.navLink}>
                           <RiDashboardLine className={styles.navbarIconNav} />
                           <span className={styles.menuBottomInfo}>{t('My Mediatheque')}</span>
                         </a>
                       </Link>
-                    </Nav.Item>
+                    </Nav.Item>*/}
                   </Nav>
                 )}
                 {!isLoadingSession && (
