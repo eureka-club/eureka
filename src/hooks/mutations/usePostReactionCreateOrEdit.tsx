@@ -7,6 +7,7 @@ import { useSession } from 'next-auth/react';
 import { UserMosaicItem } from '@/src/types/user';
 import useUser from '@/src/useUser';
 import { PostMosaicItem } from '@/src/types/post';
+import { PostReaction } from '@prisma/client';
 
 export interface ExecReactionPayload {
   doCreate:boolean;
@@ -70,10 +71,11 @@ const usePostReactionCreateOrEdit = (props:Props)=>{
       
           let reactionsPost = user.reactions;
           let reactions = post.reactions;
-      
           if (!payload.doCreate) {
-            reactionsPost = reactionsPost.filter((i) => i.postId !== post.id);
-            reactions = reactions.filter((i) => i.userId != session.user.id);
+            const idx_in_user = user.reactions.findIndex((i)=>i.postId==post.id && i.unified==payload.unified);
+            const idx_in_post = post.reactions.findIndex((i) => i.userId == session.user.id && i.unified==payload.unified);
+            user.reactions.splice(idx_in_user,1);
+            post.reactions.splice(idx_in_post,1);
           }   
           else {
             reactionsPost?.push({postId:post.id,unified:payload.unified,emoji:payload.emoji});

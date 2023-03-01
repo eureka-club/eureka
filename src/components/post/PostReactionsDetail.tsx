@@ -46,9 +46,10 @@ const PostReactionsDetail: FunctionComponent<Props> = ({post,cacheKey}) => {
           rgo[emoji] = {qty:1,unified,emoji,createdAt};
         }
     }
-    let reactionsGrouped = Object.values(rgo).sort((a,b)=>{
-      if(a.qty<b.qty)return 1;
-      else if(a.qty==b.qty && a.createdAt < b.createdAt) return 1; 
+    let reactionsGrouped = Object.values(rgo)
+    .sort((a,b)=>{
+      if(a.unified<b.unified)return 1;
+      // else if(a.qty==b.qty && a.createdAt < b.createdAt) return 1; 
       return -1;       
     })
     if(!router.asPath.match(/\/post\//)){
