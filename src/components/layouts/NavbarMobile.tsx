@@ -24,6 +24,7 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { useAtom } from 'jotai';
 import searchEngine from '@/src/atoms/searchEngine';
 import { HiOutlineHashtag } from 'react-icons/hi';
+import slugify from 'slugify';
 
 const topics = [
   'gender-feminisms',
@@ -112,6 +113,16 @@ const NavBar: FunctionComponent = () => {
     router.push(`/search?q=${v}`);
   };
 
+  const getMediathequeSlug = () => {
+    if (session) {
+      const u = session.user;
+      const s = `${u.name}`;
+      const slug = `${slugify(s, { lower: true })}-${u.id}`;
+      return slug;
+    }
+    return '';
+  };
+
   const getTopicsLinks = () => {
     return (
       <>
@@ -177,15 +188,32 @@ const NavBar: FunctionComponent = () => {
 
             {session && session.user && (
               <Nav className="mx-2">
-                <Nav.Item>
-                  <Link href={`/mediatheque/${session.user.id}`}>
-                    <a className={styles.navLink}>
-                      <RiDashboardLine className={styles.navbarIconNav} />
-                      {` `}
-                      <span className={styles.menuBottomInfo}>{t('My Mediatheque')}</span>
-                    </a>
-                  </Link>
-                </Nav.Item>
+                <Dropdown className={styles.langSwitch}>
+                  <Dropdown.Toggle as={ChevronToggle}>
+                    <RiDashboardLine className={styles.navbarIconNav} />
+                    <span className={styles.menuBottomInfo}>{t('My Mediatheque')}</span>
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu >
+                    <Dropdown.Item>
+                      <Link href={`/mediatheque/${getMediathequeSlug()}`}>
+                        <a data-cy="my-mediatheque-link" className={styles.navLink}>
+                          {t('My Mediatheque')}
+                        </a>
+                      </Link>
+
+                    </Dropdown.Item>
+                    <Dropdown.Item>
+                      <Link href={`/user/${getMediathequeSlug()}/my-read-or-watched`}>
+                        <a className={styles.navLink}>
+                          {t("MyReadOrWatched")}
+                        </a>
+                      </Link>
+
+                    </Dropdown.Item>
+
+                  </Dropdown.Menu>
+
+                </Dropdown>
               </Nav>
             )}
             <Nav className={`mx-2 ${styles.navbarNav}`}>

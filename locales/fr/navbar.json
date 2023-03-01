@@ -15,8 +15,9 @@
   "tagline": "Activer l'esprit, transformer le monde",
   "Language": "Langue",
   "Account": "Compte",
-  "Notifications":"Notifications",
-  "policyText":"Politique de confidentialité",
-  "Admin Panel":"Panneau d'administration",
-  "Topics":"Thèmes"
+  "Notifications": "Notifications",
+  "policyText": "Politique de confidentialité",
+  "Admin Panel": "Panneau d'administration",
+  "Topics": "Thèmes",
+  "MyReadOrWatched": "Mes livres lus ou regardés"
 }

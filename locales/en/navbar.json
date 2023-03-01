@@ -15,8 +15,9 @@
   "tagline": "Activate your mind, transform the world",
   "Language": "Language",
   "Account": "Account",
-  "Notifications":"Notifications",
-  "policyText":"Privacy Policy",
-  "Admin Panel":"Administrator Dashboard",
-  "Topics":"Topics"
+  "Notifications": "Notifications",
+  "policyText": "Privacy Policy",
+  "Admin Panel": "Administrator Dashboard",
+  "Topics": "Topics",
+  "MyReadOrWatched": "My read or watched"
 }

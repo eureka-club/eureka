@@ -15,8 +15,9 @@
   "tagline": "Ative sua mente, transforme o mundo",
   "Language": "Idioma",
   "Account": "Conta",
-  "Notifications":"Notifications",
-  "policyText":"Política de privacidade",
-  "Admin Panel":"Painel de administração",
-  "Topics":"Temas"
+  "Notifications": "Notifications",
+  "policyText": "Política de privacidade",
+  "Admin Panel": "Painel de administração",
+  "Topics": "Temas",
+  "MyReadOrWatched": "Meus livros lidos ou assistidos"
 }

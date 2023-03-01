@@ -107,7 +107,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
     const sts = `${row.userName || id.toString()}-${id}`;
     navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/user/${slugify(sts, { lower: true })}/my-read-or-watched?tabKey=${tab}&year=${year}`)
       .then(() => {
-        toast.success('Url copied to clipboard')
+        toast.success(t('UrlCopied'))
       })
       .catch(err => {
         //console.error('Error al copiar al portapapeles:', err)
@@ -135,7 +135,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
         <Popover.Body>
           <div>
             <Form.Label>
-              <strong>{`Years`}</strong>
+              <strong>{t(`Years`)}</strong>
             </Form.Label>
             <Form.Group>
               <Form.Check
@@ -210,7 +210,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
             <Spinner animation="grow" />
           ) : */}
             <>
-              <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{`MyReadOrWatched  ${yearFilter}`}</h1>
+              <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{`${t('MyReadOrWatched')}  ${yearFilter}`}</h1>
               <style jsx global>
                 {`
                   .nav-tabs .nav-item.show .nav-link,
@@ -241,10 +241,10 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
 
                 <Tabs activeKey={tabKey || getDefaultActiveKey()} onSelect={handleSubsectionChange}
  id="uncontrolled-tab-example" className="mb-3">
-                <Tab eventKey="books" title={`Books (${booksTotal})`}>
+              <Tab eventKey="books" title={`${t('Books')} (${booksTotal})`}>
                   <section className="d-flex justify-content-end">
                     <OverlayTrigger trigger="click" rootClose={true} placement="bottom" overlay={getPopoverYears()}>
-                      <Button variant="light">{`Filter by years`}</Button>
+                    <Button variant="light">{t(`FilterYears`)}</Button>
                     </OverlayTrigger>
                   </section>
                   {books ? (
@@ -285,7 +285,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                     </Alert>
                   )}
                 </Tab>
-                <Tab eventKey="movies" title={`Movies (${moviesTotal})`}>
+              <Tab eventKey="movies" title={`${t('Movies')} (${moviesTotal})`}>
                   <section className="d-flex justify-content-end">
                     <OverlayTrigger trigger="click" rootClose={true} placement="bottom" overlay={getPopoverYears()}>
                       <Button variant="light">{`Filter by years`}</Button>
