@@ -15,7 +15,8 @@ import {
   Spinner,
 } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
-import { useSession } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
+import { Session } from '@/src/types';
 import useTranslation from 'next-translate/useTranslation';
 import WMI from '@/src/components/work/MosaicItem';
 import { useRouter } from 'next/router';
@@ -32,13 +33,15 @@ import useMyReadOrWatched from '@/src/useMyReadOrWatched'
 
 interface Props {
   id: number;
+  session: Session;
 }
 
-const MyReadOrWatched: NextPage<Props> = ({ id }) => {
+const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
-  const { data: session, status } = useSession();
-  const isLoadingSession = status === 'loading';
+  const query = router.query;
+  //const { data: session, status } = useSession();
+  //const isLoadingSession = status === 'loading';
   // if(!isLoadingSession && !session)router.push('/')
   const row = useMyReadOrWatched(id)
   //console.log(row,'rowrow')
@@ -49,15 +52,14 @@ const MyReadOrWatched: NextPage<Props> = ({ id }) => {
   const [movies, setMovies] = useState<any>(null);
   const [tabKey, setTabKey] = useState<string>();
 
-
   useEffect(() => {
-    if (router && router.query?.tabKey) {
-      setTabKey(router.query.tabKey.toString());
+    if (query?.tabKey) {
+      setTabKey(query.tabKey.toString());
     }
-    if (router && router.query?.year) {
-      setYearFilter(router.query.year.toString());
+    if (query?.year) {
+      setYearFilter(query.year.toString());
     }
-  }, [router]);
+  }, [query]);
 
   useEffect(() => {
     if (row && row.readOrWatchedWorks.length) {
@@ -82,7 +84,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id }) => {
 
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [row,yearFilter]);
+  }, [yearFilter]);
 
   const groupBy = (array: any[], key: string | number) => {
     return array.reduce((acc: { [x: string]: any[] }, item: { [x: string]: string | number }) => {
@@ -103,7 +105,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id }) => {
   const copyURL = (e: MouseEvent<HTMLDivElement>, tab: string, year: string) => {
     e.preventDefault();
     const sts = `${row.userName || id.toString()}-${id}`;
-    navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/user/${slugify(sts, { lower: true })}/my-read-or-watched?tabKey=${tab}&&year=${year}`)
+    navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/user/${slugify(sts, { lower: true })}/my-read-or-watched?tabKey=${tab}&year=${year}`)
       .then(() => {
         toast.success('Url copied to clipboard')
       })
@@ -133,7 +135,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id }) => {
         <Popover.Body>
           <div>
             <Form.Label>
-              <strong>{t('Years')}</strong>
+              <strong>{`Years`}</strong>
             </Form.Label>
             <Form.Group>
               <Form.Check
@@ -204,11 +206,11 @@ const MyReadOrWatched: NextPage<Props> = ({ id }) => {
               <BiArrowBack />
             </Button>
           </ButtonGroup>
-          {isLoadingSession ? (
+          {/*isLoadingSession ? (
             <Spinner animation="grow" />
-          ) : 
+          ) : */}
             <>
-              <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{`${t('MyReadOrWatched')}  ${yearFilter}`}</h1>
+              <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{`MyReadOrWatched  ${yearFilter}`}</h1>
               <style jsx global>
                 {`
                   .nav-tabs .nav-item.show .nav-link,
@@ -239,10 +241,10 @@ const MyReadOrWatched: NextPage<Props> = ({ id }) => {
 
                 <Tabs activeKey={tabKey || getDefaultActiveKey()} onSelect={handleSubsectionChange}
  id="uncontrolled-tab-example" className="mb-3">
-                <Tab eventKey="books" title={`${t('Books')} (${booksTotal})`}>
+                <Tab eventKey="books" title={`Books (${booksTotal})`}>
                   <section className="d-flex justify-content-end">
                     <OverlayTrigger trigger="click" rootClose={true} placement="bottom" overlay={getPopoverYears()}>
-                      <Button variant="light">{t('Filter by years')}</Button>
+                      <Button variant="light">{`Filter by years`}</Button>
                     </OverlayTrigger>
                   </section>
                   {books ? (
@@ -283,10 +285,10 @@ const MyReadOrWatched: NextPage<Props> = ({ id }) => {
                     </Alert>
                   )}
                 </Tab>
-                <Tab eventKey="movies" title={`${t('Movies')} (${moviesTotal})`}>
+                <Tab eventKey="movies" title={`Movies (${moviesTotal})`}>
                   <section className="d-flex justify-content-end">
                     <OverlayTrigger trigger="click" rootClose={true} placement="bottom" overlay={getPopoverYears()}>
-                      <Button variant="light">{t('Filter by years')}</Button>
+                      <Button variant="light">{`Filter by years`}</Button>
                     </OverlayTrigger>
                   </section>
 
@@ -328,32 +330,15 @@ const MyReadOrWatched: NextPage<Props> = ({ id }) => {
                   )}
                 </Tab>
               </Tabs>
-
-              {/*<Row>
-                {user?.readOrWatchedWorks
-                  .filter((rw) => rw.workId)
-                  .reverse()
-                  .map((c) => (
-                    <Col
-                      key={c.workId}
-                      xs={12}
-                      sm={6}
-                      lg={3}
-                      xxl={2}
-                      className="mb-5 d-flex justify-content-center  align-items-center"
-                    >
-                      <WMI workId={c.workId!} size="md" />
-                    </Col>
-                  ))}
-              </Row>*/}
             </>
-         }
-        </article>
+        {/* }*/}       
+         </article>
       </SimpleLayout>
     </>
   );
 };
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getSession(ctx)
   let user: UserMosaicItem | null = null;
   const qc = new QueryClient();
   let id = 0;
@@ -367,6 +352,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
   return {
     props: {
+      session,
       id,
       dehydratedState: dehydrate(qc),
     },

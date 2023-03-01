@@ -268,7 +268,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
     e.preventDefault();
     const sts = `${user!.name || id.toString()}-${id}`;
     if (tab && year)
-      router.push(`/user/${slugify(sts, { lower: true })}/my-read-or-watched?tabKey=${tab}&&year=${year}`)
+      router.push(`/user/${slugify(sts, { lower: true })}/my-read-or-watched?tabKey=${tab}&year=${year}`)
     else
       router.push(`/user/${slugify(sts, { lower: true })}/my-read-or-watched`)
   };
