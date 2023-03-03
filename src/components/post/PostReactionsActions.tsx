@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import { FunctionComponent, MouseEvent, SyntheticEvent } from 'react';
 import usePostEmojiPicker from './hooks/usePostEmojiPicker';
 import { VscReactions } from 'react-icons/vsc';
+import toast from 'react-hot-toast'
 
 import { Toast as T } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
@@ -26,7 +27,12 @@ const PostReactionsActions: FunctionComponent<Props> = ({post,cacheKey}) => {
   const handleReactionClick = (ev: MouseEvent<HTMLButtonElement>) => {
       ev.preventDefault();
       ev.stopPropagation();
-      setShowEmojisPicker((r) => !r);
+      if(currentUserReachedMaxReactions()){
+        toast.error(t("max_reactions_reached"));      
+      }
+      else{
+        setShowEmojisPicker((r) => !r);
+      }
   };
   const getReactionsGrouped = ()=>{
     const rgo:Record<string,{emoji:string,unified:string,qty:number}> = {};
@@ -41,17 +47,15 @@ const PostReactionsActions: FunctionComponent<Props> = ({post,cacheKey}) => {
     }
     return Object.values(rgo);
   }
-
-  const currentUserCanReact = ()=>{
+  const currentUserReachedMaxReactions = ()=>{
     const reactionsQty = post.reactions.filter(r=>r.userId==session?.user.id).length;
-    const isPostDetailPage = router.asPath.match(/\/post\//);
-    const q1 = reactionsQty<MAX_REACTIONS;
-    const q2 = !isPostDetailPage && getReactionsGrouped().length < 2;
-    if(isPostDetailPage)return q1;
-    return q1 && q2;
+    return reactionsQty>=MAX_REACTIONS;
+  }
+  const isPostDetailPage = ()=>{
+    return router.asPath.match(/\/post\//);
   }
   const RenderReactionAction = ()=>{
-    if(post && session?.user && currentUserCanReact())
+    if(post && session?.user && (isPostDetailPage()||getReactionsGrouped().length<MAX_REACTIONS))
      return (
       <div>
       {/* <div style={{ position: 'relative' }}> */}
