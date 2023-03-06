@@ -28,6 +28,8 @@ import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import slugify from 'slugify';
 import toast from 'react-hot-toast'
 import useMyReadOrWatched from '@/src/useMyReadOrWatched'
+import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import dayjs from 'dayjs';
 
 //import styles from './my-read-or-watched.module.css';
 
@@ -45,7 +47,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   // if(!isLoadingSession && !session)router.push('/')
   const row = useMyReadOrWatched(id)
   //console.log(row,'rowrow')
-  const [yearFilter, setYearFilter] = useState<string>('');
+  const [yearFilter, setYearFilter] = useState<any>(dayjs().year().toString());
   const [booksTotal, setBooksTotal] = useState<number>(0);
   const [moviesTotal, setMoviesTotal] = useState<number>(0);
   const [books, setBooks] = useState<any>(null);
@@ -97,10 +99,9 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   //console.log(books, 'books');
   //console.log(movies, 'movies');
 
-  const handlerComboxesChangeYear = (e: ChangeEvent<HTMLInputElement>, q: string) => {
-    if (e.target.checked) setYearFilter(q);
-    else setYearFilter('');
-  };
+  function handlerComboxesChangeYear(e: SelectChangeEvent<HTMLTextAreaElement>) {
+    setYearFilter(e.target.value as string);
+  }
 
   const copyURL = (e: MouseEvent<HTMLDivElement>, tab: string, year: string) => {
     e.preventDefault();
@@ -129,58 +130,11 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
     }
   };
 
-  const getPopoverYears = () => {
-    return (
-      <Popover data-cy="popover-geography" className="position-absolute top-0">
-        <Popover.Body>
-          <div>
-            <Form.Label>
-              <strong>{t(`Years`)}</strong>
-            </Form.Label>
-            <Form.Group>
-              <Form.Check
-                type="checkbox"
-                label="2023"
-                checked={yearFilter.includes('2023')}
-                onChange={(e) => handlerComboxesChangeYear(e, '2023')}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Check
-                type="checkbox"
-                label="2022"
-                checked={yearFilter.includes('2022')}
-                onChange={(e) => handlerComboxesChangeYear(e, '2022')}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Check
-                type="checkbox"
-                label="2021"
-                checked={yearFilter.includes('2021')}
-                onChange={(e) => handlerComboxesChangeYear(e, '2021')}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Check
-                type="checkbox"
-                label="2020"
-                checked={yearFilter.includes('2020')}
-                onChange={(e) => handlerComboxesChangeYear(e, '2020')}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Check
-                type="checkbox"
-                label="2019"
-                checked={yearFilter.includes('2019')}
-                onChange={(e) => handlerComboxesChangeYear(e, '2019')}
-              />
-            </Form.Group>
-          </div>
-        </Popover.Body>
-      </Popover>
-    );
+  const getYears = () => {
+    let years = [];
+    for (let i = 0; i < 5; i++)
+      years.push((dayjs().year() - i).toString())
+    return years;
   };
 
   return (
@@ -209,10 +163,10 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
           {/*isLoadingSession ? (
             <Spinner animation="grow" />
           ) : */}
-            <>
-              <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{`${t('MyReadOrWatched')}  ${yearFilter}`}</h1>
-              <style jsx global>
-                {`
+          <>
+            <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{`${t('MyReadOrWatched')}`}</h1>
+            <style jsx global>
+              {`
                   .nav-tabs .nav-item.show .nav-link,
                   .nav-tabs .nav-link.active,
                   .nav-tabs .nav-link:hover {
@@ -237,23 +191,87 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                     font-size: 1.1em;
                   }
                 `}
-              </style>
+            </style>
 
-                <Tabs activeKey={tabKey || getDefaultActiveKey()} onSelect={handleSubsectionChange}
- id="uncontrolled-tab-example" className="mb-3">
+            <FormControl className="mb-4" sx={{ minWidth: 120 }} style={{ width: '20%' }}>
+              <InputLabel id="select-years">{t('Year')}</InputLabel>
+              <Select
+                variant="outlined"
+                labelId="select-style"
+                name="Years"
+                size='small'
+                id="select-years"
+                label={t('Year')}
+                onChange={handlerComboxesChangeYear}
+                value={yearFilter}
+              >
+                {getYears().map(x => (
+                  <MenuItem key={x} value={x}>{x}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <Tabs activeKey={tabKey || getDefaultActiveKey()} onSelect={handleSubsectionChange}
+              id="uncontrolled-tab-example" className="mb-4">
               <Tab eventKey="books" title={`${t('Books')} (${booksTotal})`}>
-                  <section className="d-flex justify-content-end">
+                {/*<section className="d-flex justify-content-end">
                     <OverlayTrigger trigger="click" rootClose={true} placement="bottom" overlay={getPopoverYears()}>
                     <Button variant="light">{t(`FilterYears`)}</Button>
                     </OverlayTrigger>
-                  </section>
-                  {books ? (
-                    Object.keys(books).reverse().map((year) => (
+                  </section>*/}
+                {books ? (
+                  Object.keys(books).reverse().map((year) => (
+                    <Row className="mt-0" key={year}>
+                      <section className="d-flex flex-row">
+                        <h2 className="fs-4 mb-3 text-secondary fw-bold">{t('shareText')}</h2>
+
+                        <div className="cursor-pointer" onClick={(e) => copyURL(e, "books", year)}>
+
+                          <ContentCopyRoundedIcon
+                            className="ms-2"
+                            style={{
+                              color: 'var(--eureka-purple)',
+                            }}
+                          />
+                        </div>
+                      </section>
+                      {
+                        books[year].map((w: any) => (
+                          <Col
+                            key={w.workId}
+                            xs={12}
+                            sm={6}
+                            lg={3}
+                            xxl={2}
+                            className="mb-5 d-flex justify-content-center  align-items-center"
+                          >
+                            <WMI workId={w.workId!} size="md" />
+                          </Col>
+                        ))
+                      }
+                    </Row>
+                  ))
+                ) : (
+                  <Alert className="mt-4" variant="primary">
+                    <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
+                  </Alert>
+                )}
+              </Tab>
+              <Tab eventKey="movies" title={`${t('Movies')} (${moviesTotal})`}>
+                {/*<section className="d-flex justify-content-end">
+                    <OverlayTrigger trigger="click" rootClose={true} placement="bottom" overlay={getPopoverYears()}>
+                      <Button variant="light">{`Filter by years`}</Button>
+                    </OverlayTrigger>
+                  </section>*/}
+
+                {movies ? (
+                  Object.keys(movies)
+                    .reverse()
+                    .map((year) => (
                       <Row className="mt-0" key={year}>
                         <section className="d-flex flex-row">
-                          <h2 className="fs-4 mb-3 text-secondary fw-bold">{year}</h2>
-
-                          <div className="cursor-pointer" onClick={(e) => copyURL(e, "books", year)}>
+                          <h2 className="fs-4 mb-3 text-secondary fw-bold">{t('shareText')}</h2>
+                          <div className="cursor-pointer" onClick={(e) => copyURL(e, "movies", year)}>
 
                             <ContentCopyRoundedIcon
                               className="ms-2"
@@ -263,76 +281,30 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                             />
                           </div>
                         </section>
-                        {
-                          books[year].map((w: any) => (
-                            <Col
-                              key={w.workId}
-                              xs={12}
-                              sm={6}
-                              lg={3}
-                              xxl={2}
-                              className="mb-5 d-flex justify-content-center  align-items-center"
-                            >
-                              <WMI workId={w.workId!} size="md" />
-                            </Col>
-                          ))
-                        }
+                        {movies[year].map((w: any) => (
+                          <Col
+                            key={w.workId}
+                            xs={12}
+                            sm={6}
+                            lg={3}
+                            xxl={2}
+                            className="mb-5 d-flex justify-content-center  align-items-center"
+                          >
+                            <WMI workId={w.workId!} size="md" />
+                          </Col>
+                        ))}
                       </Row>
                     ))
-                  ) : (
-                    <Alert className="mt-4" variant="primary">
-                      <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
-                    </Alert>
-                  )}
-                </Tab>
-              <Tab eventKey="movies" title={`${t('Movies')} (${moviesTotal})`}>
-                  <section className="d-flex justify-content-end">
-                    <OverlayTrigger trigger="click" rootClose={true} placement="bottom" overlay={getPopoverYears()}>
-                      <Button variant="light">{`Filter by years`}</Button>
-                    </OverlayTrigger>
-                  </section>
-
-                  {movies ? (
-                    Object.keys(movies)
-                      .reverse()
-                      .map((year) => (
-                        <Row className="mt-0" key={year}>
-                          <section className="d-flex flex-row">
-                            <h2 className="fs-4 mb-3 text-secondary fw-bold">{year}</h2>
-                            <div className="cursor-pointer" onClick={(e) => copyURL(e, "movies", year)}>
-
-                              <ContentCopyRoundedIcon
-                                className="ms-2"
-                                style={{
-                                  color: 'var(--eureka-purple)',
-                                }}
-                              />
-                            </div>
-                          </section>
-                          {movies[year].map((w: any) => (
-                            <Col
-                              key={w.workId}
-                              xs={12}
-                              sm={6}
-                              lg={3}
-                              xxl={2}
-                              className="mb-5 d-flex justify-content-center  align-items-center"
-                            >
-                              <WMI workId={w.workId!} size="md" />
-                            </Col>
-                          ))}
-                        </Row>
-                      ))
-                  ) : (
-                    <Alert className="mt-4" variant="primary">
-                      <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
-                    </Alert>
-                  )}
-                </Tab>
-              </Tabs>
-            </>
-        {/* }*/}       
-         </article>
+                ) : (
+                  <Alert className="mt-4" variant="primary">
+                    <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
+                  </Alert>
+                )}
+              </Tab>
+            </Tabs>
+          </>
+          {/* }*/}
+        </article>
       </SimpleLayout>
     </>
   );
