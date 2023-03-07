@@ -45,7 +45,7 @@ import { useNotificationContext } from '@/src/useNotificationProvider';
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
 import toast from 'react-hot-toast'
 import { ImCancelCircle } from 'react-icons/im';
-
+/* ESTE FICHERO NO SE ESTA USANDO desde la incorporacion de dall-e*/
 interface Props {
   noModal?: boolean;
 }

@@ -18,7 +18,7 @@ export type AsyncTypeaheadMaterialProp = {
   //readOnly?: boolean | undefined;
   //data: { code: string; label: string }[];
   //items: string[];
-  //setItems: Dispatch<SetStateAction<string[]>>;
+  onSelected: (value: SearchResult | null) => void;
   // max?: number;
   // onTagCreated?: (e: { code: string; label: string }) => void;
   //  onTagDeleted?: (code: string) => void;
@@ -29,11 +29,9 @@ export type AsyncTypeaheadMaterialProp = {
 
 };
 
-const AsyncTypeaheadMaterial: FunctionComponent<AsyncTypeaheadMaterialProp> = (props: AsyncTypeaheadMaterialProp) => {
- // const { data, max = 5,  placeholder, style, className,formatValue = undefined  } = props;
-  const {/*items, setItems, */label = '',helperText=''/*, readOnly = false*/ } = props;
+  const AsyncTypeaheadMaterial: FunctionComponent<AsyncTypeaheadMaterialProp> = (props: AsyncTypeaheadMaterialProp) => {
+    const {/*items,*/ onSelected, label = '',helperText=''/*, readOnly = false*/ } = props;
   const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
-  //const [searchCycleResults, setSearchCycleResults] = useState<CycleMosaicItem[]>([]);
   const [value, setValue] = useState<SearchResult | null>(null);
   const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
 
@@ -65,8 +63,9 @@ const AsyncTypeaheadMaterial: FunctionComponent<AsyncTypeaheadMaterialProp> = (p
 
    function onTagsUpdate(event: SyntheticEvent<Element, Event>, value: SearchResult | null, reason: AutocompleteChangeReason, details?: AutocompleteChangeDetails<SearchResult | null> | undefined) {
       
-     setSearchWorkOrCycleResults([]);
+     //setSearchWorkOrCycleResults([]);
      setValue(value);
+     onSelected(value);
 
   }
 
