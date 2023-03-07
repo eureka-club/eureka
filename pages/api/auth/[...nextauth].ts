@@ -242,7 +242,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
             const c = await bcrypt.compare(credentials.password, user.password);
             if(c){
               
-              return {id:user.id,email:user.email,image:user.image} as unknown as User
+              return {id:+user.id,email:user.email,image:user.image} as unknown as User
             }
             return null;
             // Any object returned will be saved in `user` property of the JWT
