@@ -1,5 +1,5 @@
 import { NextPage, GetServerSideProps } from 'next';
-import { useState, useEffect, ChangeEvent, MouseEvent } from 'react';
+import { useState, useEffect, SyntheticEvent, MouseEvent } from 'react';
 import Head from 'next/head';
 import {
   Alert,
@@ -30,7 +30,7 @@ import toast from 'react-hot-toast'
 import useMyReadOrWatched from '@/src/useMyReadOrWatched'
 import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import dayjs from 'dayjs';
-
+import LocalImageComponent from '@/src/components/LocalImage';
 //import styles from './my-read-or-watched.module.css';
 
 interface Props {
@@ -45,7 +45,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   //const { data: session, status } = useSession();
   //const isLoadingSession = status === 'loading';
   // if(!isLoadingSession && !session)router.push('/')
-  const row = useMyReadOrWatched(id)
+  const user = useMyReadOrWatched(id)
   //console.log(row,'rowrow')
   const [yearFilter, setYearFilter] = useState<any>(dayjs().year().toString());
   const [booksTotal, setBooksTotal] = useState<number>(0);
@@ -64,9 +64,9 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   }, [query]);
 
   useEffect(() => {
-    if (row && row.readOrWatchedWorks.length) {
-      let books = row.readOrWatchedWorks.filter((rw) => ['book', 'fiction-book'].includes(rw.work!.type)).reverse();
-      let movies = row.readOrWatchedWorks.filter((rw) => ['movie', 'documentary'].includes(rw.work!.type)).reverse();
+    if (user && user.readOrWatchedWorks.length) {
+      let books = user.readOrWatchedWorks.filter((rw) => ['book', 'fiction-book'].includes(rw.work!.type)).reverse();
+      let movies = user.readOrWatchedWorks.filter((rw) => ['movie', 'documentary'].includes(rw.work!.type)).reverse();
 
       if (yearFilter.length) {
         books = books.filter((b) => b.year.toString() === yearFilter);
@@ -105,7 +105,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
 
   const copyURL = (e: MouseEvent<HTMLDivElement>, tab: string, year: string) => {
     e.preventDefault();
-    const sts = `${row.userName || id.toString()}-${id}`;
+    const sts = `${user.userName || id.toString()}-${id}`;
     navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/user/${slugify(sts, { lower: true })}/my-read-or-watched?tabKey=${tab}&year=${year}`)
       .then(() => {
         toast.success(t('UrlCopied'))
@@ -136,6 +136,47 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
       years.push((dayjs().year() - i).toString())
     return years;
   };
+  const avatarError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.src = '/img/default-avatar.png';
+  };
+
+  const renderAvatar = () => {
+    if (user) {
+      if (!user?.photos || !user?.photos.length)
+        return (
+          <img
+            onError={avatarError}
+            className="rounded rounded-circle"
+            style={{ width: '60px', height: '60px' }}
+            src={user.image || '/img/default-avatar.png'}
+            alt={user.userName || ''}
+          />
+        );
+      return (
+        <>
+          <div className="d-flex d-md-none mb-2">
+            <LocalImageComponent
+              className="rounded rounded-circle"
+              /* className='avatar' */ width={60}
+              height={60}
+              filePath={`users-photos/${user.photos[0].storedFile}`}
+              alt={user.userName || ''}
+            />
+          </div>
+          <div className="d-none d-md-flex">
+            <LocalImageComponent
+              className="rounded rounded-circle"
+              /* className='avatar' */ width={60}
+              height={60}
+              filePath={`users-photos/${user.photos[0].storedFile}`}
+              alt={user.userName || ''}
+            />
+          </div>
+        </>
+      );
+    }
+    return '';
+  };
 
   return (
     <>
@@ -164,7 +205,11 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
             <Spinner animation="grow" />
           ) : */}
           <>
-            <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{`${t('MyReadOrWatched')}`}</h1>
+            <section className='mt-sm-0 mb-4 d-flex flex-row '>
+              <h1 className="text-secondary fw-bold me-3 d-flex align-items-center">{`${t('MyReadOrWatched')} ${user.userName}`}</h1>
+              {renderAvatar()}
+            </section>
+
             <style jsx global>
               {`
                   .nav-tabs .nav-item.show .nav-link,
@@ -214,19 +259,12 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
             <Tabs activeKey={tabKey || getDefaultActiveKey()} onSelect={handleSubsectionChange}
               id="uncontrolled-tab-example" className="mb-4">
               <Tab eventKey="books" title={`${t('Books')} (${booksTotal})`}>
-                {/*<section className="d-flex justify-content-end">
-                    <OverlayTrigger trigger="click" rootClose={true} placement="bottom" overlay={getPopoverYears()}>
-                    <Button variant="light">{t(`FilterYears`)}</Button>
-                    </OverlayTrigger>
-                  </section>*/}
                 {books ? (
                   Object.keys(books).reverse().map((year) => (
                     <Row className="mt-0" key={year}>
                       <section className="d-flex flex-row">
-                        <h2 className="fs-4 mb-3 text-secondary fw-bold">{t('shareText')}</h2>
-
+                        <h2 className="fs-5 mb-3 text-secondary">{t('shareText')}</h2>
                         <div className="cursor-pointer" onClick={(e) => copyURL(e, "books", year)}>
-
                           <ContentCopyRoundedIcon
                             className="ms-2"
                             style={{
@@ -258,19 +296,13 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                 )}
               </Tab>
               <Tab eventKey="movies" title={`${t('Movies')} (${moviesTotal})`}>
-                {/*<section className="d-flex justify-content-end">
-                    <OverlayTrigger trigger="click" rootClose={true} placement="bottom" overlay={getPopoverYears()}>
-                      <Button variant="light">{`Filter by years`}</Button>
-                    </OverlayTrigger>
-                  </section>*/}
-
                 {movies ? (
                   Object.keys(movies)
                     .reverse()
                     .map((year) => (
                       <Row className="mt-0" key={year}>
                         <section className="d-flex flex-row">
-                          <h2 className="fs-4 mb-3 text-secondary fw-bold">{t('shareText')}</h2>
+                          <h2 className="fs-5 mb-3 text-secondary">{t('shareText')}</h2>
                           <div className="cursor-pointer" onClick={(e) => copyURL(e, "movies", year)}>
 
                             <ContentCopyRoundedIcon
