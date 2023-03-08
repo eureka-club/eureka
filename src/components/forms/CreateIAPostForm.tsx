@@ -273,11 +273,11 @@ const CreateIAPostForm: FunctionComponent<Props> = ({ noModal = false, params })
         setSelectedWork(searchResult);
       }
     }
-    console.log(searchResult,'searchResult')
+    //console.log(searchResult, 'searchResult')
   };
 
-  const handleSelectCycle = (selected: CycleMosaicItem[]): void => {
-    const searchResult = selected[0];
+  const handleSelectCycle = (selected: SearchResult | null): void => {
+    const searchResult = selected as CycleMosaicItem | null
     if (searchResult != null) {
       setSelectedCycle(searchResult);
       if (searchResult.access === 2)
@@ -287,7 +287,6 @@ const CreateIAPostForm: FunctionComponent<Props> = ({ noModal = false, params })
 
   const handleClearSelectedWork = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-
     setSelectedWork(null);
   };
 
@@ -317,6 +316,7 @@ const CreateIAPostForm: FunctionComponent<Props> = ({ noModal = false, params })
     ev.preventDefault();
     setSelectedCycle(null);
     setSelectedWork(null);
+    setPostTitle('');
     setCurrentImg(undefined);
     if (editorRef.current)
       editorRef.current.setContent('');
@@ -359,7 +359,7 @@ const CreateIAPostForm: FunctionComponent<Props> = ({ noModal = false, params })
         topics: items.join(','),
         tags,
       };
-      console.log(payload, 'payload')
+      //console.log(payload, 'payload')
 
       if (formValidation(payload))
         await execCreatePost(payload);
@@ -520,8 +520,8 @@ const CreateIAPostForm: FunctionComponent<Props> = ({ noModal = false, params })
                   </>
                 )}
               </FormGroup> */}
-            <AsyncTypeaheadMaterial onSelected={handleSelectWorkOrCycle}
-              label={`*${t('searchCycleOrWorkFieldLabel')}`} 
+            <AsyncTypeaheadMaterial item={(selectedWork) ? selectedWork : selectedCycle} searchType="all" onSelected={handleSelectWorkOrCycle}
+              label={`*${t('searchCycleOrWorkFieldLabel')}`}
               helperText={`${t('searchCycleOrWorkFieldPlaceholder')}`} />
           </Col>
           <Col className='mb-4'>
@@ -568,8 +568,7 @@ const CreateIAPostForm: FunctionComponent<Props> = ({ noModal = false, params })
           {useOtherFields && <Row className='mt-5 px-2 px-lg-5 d-flex flex-column'>
             <Col className="mb-4">
               <FormGroup controlId="workOrCycle">
-                <FormLabel>{t('searchCycleFieldLabel')}</FormLabel>
-                {!selectedCycle ? (
+                {/*!selectedCycle ? (
                   <>
                     <style jsx global>{`
                       .rbt-menu {
@@ -598,14 +597,14 @@ const CreateIAPostForm: FunctionComponent<Props> = ({ noModal = false, params })
                       <BsFillXCircleFill />
                     </button>
                   </div>
-                )}
+                )*/}
+                <AsyncTypeaheadMaterial item={selectedCycle} onSelected={handleSelectCycle} searchType="cycles"
+                  workSelected={selectedWork}
+                  label={`${t('searchCycleFieldLabel')}`}
+                  helperText={`${t('searchCycleInfotip')}`} />
               </FormGroup>
             </Col>
-            <Col className="mb-4">
-              <small style={{ color: 'lightgrey', position: 'relative', top: '-0.75rem' }}>
-                {t('searchCycleInfotip')}
-              </small>
-            </Col>
+
             <Col className="mb-4">
               <FormGroup controlId="topics">
                 <TagsInputTypeAheadMaterial

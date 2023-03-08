@@ -243,9 +243,9 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
     return isLoadingUser || isLoadingMutateFollowing;
   };
 
-  /*const getReadOrWatchedTotal = () => {
+ const getReadOrWatchedTotal = () => {
     if (user) return user.readOrWatchedWorks.length;
-  };*/
+  };
 
   const getReadCurrentYear = () => {
     if (user) {
@@ -352,7 +352,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                 <section className="d-flex flex-column flex-lg-row">
                   <Col xs={12} lg={2} className="me-2">
                     <h2 onClick={(e) => goToReadOrWatched(e, null, null)} className="text-secondary text-center  cursor-pointer" style={{ textDecoration: "underline" }}>{`${t('readOrWatchedWorks')}`}</h2>
-                    <h2 className="text-secondary text-center fs-5">{/*`(${getReadOrWatchedTotal()})`*/}</h2>
+                    <h2 className="text-secondary text-center fs-5">{`(${getReadOrWatchedTotal()})`}</h2>
                     <section className="mt-4 p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
                       <h2 className="p-1 m-0 text-wrap text-center fs-6 cursor-pointer" style={{ textDecoration: "underline" }} onClick={(e) => goToReadOrWatched(e, 'books', dayjs().year().toString())}>
                         {`${t('readOrWatchedBooks').toLocaleUpperCase()} ${dayjs().year()}`}

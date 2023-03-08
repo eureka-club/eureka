@@ -1,6 +1,6 @@
-import { FunctionComponent, useState ,useEffect, useRef, Dispatch, SetStateAction, SyntheticEvent } from 'react';
+import { FunctionComponent, useState, useEffect, useRef, Dispatch, SetStateAction, SyntheticEvent } from 'react';
 import useTranslation from 'next-translate/useTranslation';
-import { Autocomplete, CircularProgress,AutocompleteChangeDetails, AutocompleteChangeReason } from '@mui/material';
+import { Autocomplete, CircularProgress, AutocompleteChangeDetails, AutocompleteChangeReason } from '@mui/material';
 import { TextField } from '@mui/material';
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '@/src/types';
 import { CycleMosaicItem } from '@/src/types/cycle';
@@ -10,120 +10,138 @@ import WorkTypeaheadSearchItem from '@/src/components/work/TypeaheadSearchItem';
 
 
 export type AsyncTypeaheadMaterialProp = {
-  // tags: string;
-  // setTags?: (value: string) => void;
+  item: SearchResult | null;
+  searchType: string,
+  workSelected?: SearchResult | null; // para buscar solo ciclos donde este la obra
   label?: string;
   helperText?: string;
-  //labelKey?: (res: { code: string }) => string;
-  //readOnly?: boolean | undefined;
-  //data: { code: string; label: string }[];
-  //items: string[];
   onSelected: (value: SearchResult | null) => void;
-  // max?: number;
-  // onTagCreated?: (e: { code: string; label: string }) => void;
-  //  onTagDeleted?: (code: string) => void;
-  //placeholder?: string;
-  //style?: { [key: string]: string };
-  //className?: string;
-  //formatValue?: (v: string) => string;
-
 };
 
-  const AsyncTypeaheadMaterial: FunctionComponent<AsyncTypeaheadMaterialProp> = (props: AsyncTypeaheadMaterialProp) => {
-    const {/*items,*/ onSelected, label = '',helperText=''/*, readOnly = false*/ } = props;
-  const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
+const AsyncTypeaheadMaterial: FunctionComponent<AsyncTypeaheadMaterialProp> = (props: AsyncTypeaheadMaterialProp) => {
+  const {/*items,*/item, searchType, workSelected, onSelected, label = '', helperText = ''/*, readOnly = false*/ } = props;
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [value, setValue] = useState<SearchResult | null>(null);
-  const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
+  const [isSearchLoading, setIsSearchLoading] = useState(false);
 
-/*
-   useEffect(() => {
-    let value =[];
-    if(data.length && items.length){
-      
-      for (let i of items){
-         let d = data.filter(x => x.code == i ) 
-         if(d.length)
-           value.push(d[0])
+  useEffect(() => {
+    setValue(item)
+  }, [item])
 
-       } 
-    }
-   setValue(value)
-  },[data,items])
-
-
-  function onTagsUpdate(event: SyntheticEvent<Element, Event>, value: {code: string; label: string;}[], reason: AutocompleteChangeReason, details?: AutocompleteChangeDetails<{
-    code: string; label: string;}> | undefined) {
-  
-    if (value && value.length <= max) {
-      setValue(value)
-      setItems([...new Set(value.map(v => v.code))]);
-    }
-
-  }*/
-
-   function onTagsUpdate(event: SyntheticEvent<Element, Event>, value: SearchResult | null, reason: AutocompleteChangeReason, details?: AutocompleteChangeDetails<SearchResult | null> | undefined) {
-      
-     //setSearchWorkOrCycleResults([]);
-     setValue(value);
-     onSelected(value);
+  function onTagsUpdate(event: SyntheticEvent<Element, Event>, value: SearchResult | null, reason: AutocompleteChangeReason, details?: AutocompleteChangeDetails<SearchResult | null> | undefined) {
+    setValue(value);
+    onSelected(value);
+    setSearchResults([]);
 
   }
 
-   const handleSearchWorkOrCycle = async (query: string) => {
-        setIsSearchWorkOrCycleLoading(true);
-        const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
-        const response = await fetch(`/api/search/works-or-cycles?q=${query}&include=${includeQP}`);
-        const itemsSWC: SearchResult[] = await response.json();
-        setSearchWorkOrCycleResults(itemsSWC);
-        setIsSearchWorkOrCycleLoading(false);
+  const handleSearchWorkOrCycle = async (query: string) => {
+
+    setIsSearchLoading(true);
+    const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
+    const response = await fetch(`/api/search/works-or-cycles?q=${query}&include=${includeQP}`);
+    const itemsSWC: SearchResult[] = await response.json();
+    setSearchResults(itemsSWC);
+    setIsSearchLoading(false);
   };
 
+  const handleSearchCycle = async (query: string) => {
+    let criteria = `q=${query}`;
+    if (query.length) {
+      if (workSelected != null) {
+        criteria = `where=${JSON.stringify({
+          title: { contains: query },
+          works: { some: { id: workSelected.id } },
+        })}`;
+      }
+      const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
 
- return (
-    <Autocomplete
-      id="typeahead-mui"
-      getOptionLabel={ option => (isCycleMosaicItem(option) || isWorkMosaicItem(option) ) ? `${option.title}` : `${option.id}`}
-      size="small" 
-      loading={isSearchWorkOrCycleLoading}
-      filterOptions={(x) => x}
-      options={searchWorkOrCycleResults}
-      includeInputInList
-      filterSelectedOptions
-      value={value}
-      noOptionsText="No options"
-      /*onChange={(event: any, newValue: SearchResult | null) => {
-        setSearchWorkOrCycleResults([]);
-        setValue(newValue);
-      }}*/
-      onChange={onTagsUpdate}
+      setIsSearchLoading(true);
+      const response = await fetch(`/api/search/cycles?${criteria}&include=${includeQP}`);
+      const itemsCL: CycleMosaicItem[] = await response.json();
+      setSearchResults(itemsCL);
+      setIsSearchLoading(false);
+    }
+  };
 
-      onInputChange={(event, newInputValue) => {
-        handleSearchWorkOrCycle(newInputValue);
-      }}
-      renderInput={(params) => (
-        <TextField {...params} label={label} helperText={helperText}  fullWidth 
-           InputProps={{
-            ...params.InputProps,
-            endAdornment: (<>
-                {isSearchWorkOrCycleLoading ? <CircularProgress color="inherit" size={20} /> : null}
+  if (searchType == 'all')
+    return (
+      <Autocomplete
+        id="typeahead-mui"
+        getOptionLabel={option => (isCycleMosaicItem(option) || isWorkMosaicItem(option)) ? `${option.title}` : `${option.id}`}
+        size="small"
+        loading={isSearchLoading}
+        filterOptions={(x) => x}
+        options={searchResults}
+        includeInputInList
+        filterSelectedOptions
+        value={value}
+        noOptionsText="No options"
+        onChange={onTagsUpdate}
+
+        onInputChange={(event, newInputValue) => {
+          handleSearchWorkOrCycle(newInputValue);
+        }}
+        renderInput={(params) => (
+          <TextField {...params} label={label} helperText={helperText} fullWidth
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: (<>
+                {isSearchLoading ? <CircularProgress color="inherit" size={20} /> : null}
                 {params.InputProps.endAdornment}</>
-            )
-          }}
-        />
-      )}
-      renderOption={(props, option) => {
-              if (isCycleMosaicItem(option)) {
-               return <li {...props}><CycleTypeaheadSearchItem key={`cycle-${option.id}`} cycle={option as CycleMosaicItem} /></li>
-             }
-           if (isWorkMosaicItem(option)) {
-              return <li {...props}><WorkTypeaheadSearchItem key={`work-${option.id}`} work={option as WorkMosaicItem}  /></li>
-               }
-      }}
+              )
+            }}
+          />
+        )}
+        renderOption={(props, option) => {
+          if (isCycleMosaicItem(option)) {
+            return <li {...props}><CycleTypeaheadSearchItem key={`cycle-${option.id}`} cycle={option as CycleMosaicItem} /></li>
+          }
+          if (isWorkMosaicItem(option)) {
+            return <li {...props}><WorkTypeaheadSearchItem key={`work-${option.id}`} work={option as WorkMosaicItem} /></li>
+          }
+        }}
         isOptionEqualToValue={(option, value) => option.id === value.id}
 
-    />
-  );
-
+      />
+    );
+  else if (searchType == 'cycles')
+    return (
+      <Autocomplete
+        id="typeahead-mui-only-cycles"
+        getOptionLabel={(option) => `${(option as CycleMosaicItem).title}`}
+        size="small"
+        loading={isSearchLoading}
+        filterOptions={(x) => x}
+        options={searchResults}
+        includeInputInList
+        filterSelectedOptions
+        value={value}
+        noOptionsText="No options"
+        onChange={onTagsUpdate}
+        onInputChange={(event, newInputValue) => {
+          handleSearchCycle(newInputValue);
+        }}
+        renderInput={(params) => (
+          <TextField {...params} label={label} helperText={helperText} fullWidth
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: (<>
+                {isSearchLoading ? <CircularProgress color="inherit" size={20} /> : null}
+                {params.InputProps.endAdornment}</>
+              )
+            }}
+          />
+        )}
+        renderOption={(props, option) => {
+          return <li {...props}><CycleTypeaheadSearchItem key={`cycle-${option.id}`} cycle={option as CycleMosaicItem} /></li>
+        }}
+        isOptionEqualToValue={(option, value) => option.id === value.id}
+      />
+    );
+  else
+    return (<></>)
 }
+
 
 export default AsyncTypeaheadMaterial;
