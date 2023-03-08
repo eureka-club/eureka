@@ -42,11 +42,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const query = router.query;
-  //const { data: session, status } = useSession();
-  //const isLoadingSession = status === 'loading';
-  // if(!isLoadingSession && !session)router.push('/')
   const user = useMyReadOrWatched(id)
-  //console.log(row,'rowrow')
   const [yearFilter, setYearFilter] = useState<any>(dayjs().year().toString());
   const [booksTotal, setBooksTotal] = useState<number>(0);
   const [moviesTotal, setMoviesTotal] = useState<number>(0);
