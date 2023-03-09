@@ -264,6 +264,8 @@ const CreateIAPostForm: FunctionComponent<Props> = ({ noModal = false, params })
   };
 
   const handleSelectWorkOrCycle = (selected: SearchResult | null): void => {
+    console.log(selected, 'selected')
+
     const searchResult = selected;
     if (searchResult != null) {
       if (isCycleMosaicItem(searchResult)) {
@@ -271,9 +273,16 @@ const CreateIAPostForm: FunctionComponent<Props> = ({ noModal = false, params })
       }
       if (isWorkMosaicItem(searchResult)) {
         setSelectedWork(searchResult);
+        setSelectedCycle(null);
       }
     }
-    //console.log(searchResult, 'searchResult')
+    else{
+      setSelectedWork(null);
+      setSelectedCycle(null);
+    }
+
+    
+
   };
 
   const handleSelectCycle = (selected: SearchResult | null): void => {

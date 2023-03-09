@@ -22,11 +22,21 @@ const AsyncTypeaheadMaterial: FunctionComponent<AsyncTypeaheadMaterialProp> = (p
   const {/*items,*/item, searchType, workSelected, onSelected, label = '', helperText = ''/*, readOnly = false*/ } = props;
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [value, setValue] = useState<SearchResult | null>(null);
+  const [work, setWork] = useState<SearchResult | null>(null);
+
   const [isSearchLoading, setIsSearchLoading] = useState(false);
+
 
   useEffect(() => {
     setValue(item)
-  }, [item])
+    if(workSelected)
+      setWork(workSelected)
+     else
+        setWork(null) 
+  }, [item, workSelected])
+
+    //console.log(work, 'work')
+
 
   function onTagsUpdate(event: SyntheticEvent<Element, Event>, value: SearchResult | null, reason: AutocompleteChangeReason, details?: AutocompleteChangeDetails<SearchResult | null> | undefined) {
     setValue(value);
@@ -45,13 +55,13 @@ const AsyncTypeaheadMaterial: FunctionComponent<AsyncTypeaheadMaterialProp> = (p
     setIsSearchLoading(false);
   };
 
-  const handleSearchCycle = async (query: string) => {
+  const handleSearchCycle = async (query: string = " ") => {
     let criteria = `q=${query}`;
     if (query.length) {
-      if (workSelected != null) {
+      if (work != null) {
         criteria = `where=${JSON.stringify({
           title: { contains: query },
-          works: { some: { id: workSelected.id } },
+          works: { some: { id: work.id } },
         })}`;
       }
       const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
@@ -119,8 +129,8 @@ const AsyncTypeaheadMaterial: FunctionComponent<AsyncTypeaheadMaterialProp> = (p
         value={value}
         noOptionsText="No options"
         onChange={onTagsUpdate}
-        onInputChange={(event, newInputValue) => {
-          handleSearchCycle(newInputValue);
+        onOpen={(event) => {
+          handleSearchCycle();
         }}
         renderInput={(params) => (
           <TextField {...params} label={label} helperText={helperText} fullWidth
@@ -134,7 +144,7 @@ const AsyncTypeaheadMaterial: FunctionComponent<AsyncTypeaheadMaterialProp> = (p
           />
         )}
         renderOption={(props, option) => {
-          return <li {...props}><CycleTypeaheadSearchItem key={`cycle-${option.id}`} cycle={option as CycleMosaicItem} /></li>
+          return <li {...props}>{(option as CycleMosaicItem).title}</li>
         }}
         isOptionEqualToValue={(option, value) => option.id === value.id}
       />
