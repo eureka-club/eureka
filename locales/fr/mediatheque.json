@@ -8,5 +8,13 @@
   "secretMediathequeNotification": "Cette Médiathèque est secrète. L'activité de cette personne n'est pas disponible.",
   "readOrWatchedWorks": "Mes livres et films",
   "readOrWatchedBooks": "Livres lus en",
-  "readOrWatchedMovies": "Films et documentaires vus en"
+  "readOrWatchedMovies": "Films et documentaires vus en",
+  "MyReadOrWatched": "Livres et films vus/lus par",
+  "Books": "Livres",
+  "Movies": "Films",
+  "FilterYears": "Filtrer par années",
+  "Years": "Années",
+  "Year": "Année",
+  "shareText": "Partagez votre liste avec vos ami-es",
+  "UrlCopied": "URL copiée"
 }

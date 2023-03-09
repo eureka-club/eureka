@@ -19,6 +19,7 @@ module.exports = {
     '/policy': ['termsAndPolicy'],
     '/back-office': ['backOffice'],
     'rgx:^/mediatheque/\\[slug\\]': ['mediatheque', 'countries'],
+    'rgx:^/user/\\[slug\\]/my-read-or-watched': ['mediatheque'],
     'rgx:^/cycle/\\[id\\]': ['cycleDetail', 'countries'],
     'rgx:^/work/\\[id\\]': ['workDetail', 'countries', 'cycleDetail'],
   },

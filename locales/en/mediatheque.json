@@ -8,5 +8,13 @@
   "editProfile": "Edit profile",
   "readOrWatchedWorks": "My books and movies",
   "readOrWatchedBooks": "Books read in",
-  "readOrWatchedMovies": "Movies or documentaries watched in"
+  "readOrWatchedMovies": "Movies or documentaries watched in",
+  "MyReadOrWatched": "Books and movies read/watched by",
+  "Books": "Books",
+  "Movies": "Movies",
+  "FilterYears": "Filter by years",
+  "Years": "Years",
+  "Year": "Year",
+  "shareText": "Share your list with your friends",
+  "UrlCopied": "Url copied to clipboard"
 }

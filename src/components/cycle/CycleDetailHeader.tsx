@@ -291,6 +291,14 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                   size={'lg'}
                 />
               </MosaicContext.Provider>
+              <Box className="d-flex justify-content-center" mt={2}>
+                <Rating
+                  qty={qtyByUser}
+                  onChange={handlerChangeRating}
+                  size="medium"
+                  iconColor="var(--bs-danger)"
+                />
+              </Box>
             </aside>
           </Col>
         )}
@@ -324,14 +332,14 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         <Col className="col-12 d-lg-none">
           <h1 className=" mb-1 fw-bold text-secondary">{cycle.title}</h1>
           {cycle.topics && (
-            <aside className="d-inline-block mb-4">
+            <aside className="d-flex flex-wrap d-lg-inline-block mb-4">
               <TagsInput
                 formatValue={(v: string) => t(`topics:${v}`)}
-                className="d-inline-block"
+                className="d-flex flex-wrap d-lg-inline-block"
                 tags={cycle.topics}
                 readOnly
               />
-              <TagsInput className="ms-1 d-inline-block" tags={cycle.tags!} readOnly label="" />
+              <TagsInput className="ms-1 d-flex flex-wrap d-lg-inline-block" tags={cycle.tags!} readOnly label="" />
               <div className="mt-2 d-flex flex-row justify-content-start">
                 {/* @ts-ignore*/}
                 {/* <Rating

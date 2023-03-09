@@ -162,16 +162,9 @@
   "Featured users": "Quién participa",
   "Create eureka": "Crear Eureka",
   "About Eureka": "Sobre Eureka",
-  "MyReadOrWatched": "Libros y películas de",
-  "Books": "Libros",
-  "Movies": "Películas",
-  "FilterYears": "Filtrar por años",
-  "Years": "Años",
-  "Year": "Año",
-  "shareText": "Compartir tu lista con tus amigues",
-  "UrlCopied": "URL copiada al portapapeles",
+  "max_reactions_reached": "Sólo puedes agregar 2 reacciones por Eureka! Pero puedes dejar un comentario.",
   "aboutBox1": "Eureka es una plataforma sin fines de lucro cuyo objetivo es promover la conversación pública sobre temas complejos de forma sencilla y entretenida.",
   "aboutBox2": "Apoyamos tu proceso de reflexión: aquí puedes resumir una obra que te impactó creando una imagen con la ayuda de inteligencia artificial.",
   "aboutBox3": "Eureka es para personas que quieren curiosear, aprender e imaginar un mundo distinto.",
   "aboutBox4": "Trabajamos con organizaciones de la sociedad civil que buscan hacer que su activismo llegue al máximo de personas posible. Te interesa? Escríbenos!"
-} 
+}

@@ -8,5 +8,13 @@
   "editProfile": "Editar Perfil",
   "readOrWatchedWorks": "Mis libros y películas",
   "readOrWatchedBooks": "Libros leídos en",
-  "readOrWatchedMovies": "Películas y documentales vistos en"
+  "readOrWatchedMovies": "Películas y documentales vistos en",
+  "MyReadOrWatched": "Libros y películas de",
+  "Books": "Libros",
+  "Movies": "Películas",
+  "FilterYears": "Filtrar por años",
+  "Years": "Años",
+  "Year": "Año",
+  "shareText": "Compartir tu lista con tus amigues",
+  "UrlCopied": "URL copiada al portapapeles"
 }

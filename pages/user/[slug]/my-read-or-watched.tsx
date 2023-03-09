@@ -39,7 +39,7 @@ interface Props {
 }
 
 const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation('mediatheque');
   const router = useRouter();
   const query = router.query;
   const user = useMyReadOrWatched(id)
