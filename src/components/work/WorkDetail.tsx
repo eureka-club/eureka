@@ -267,7 +267,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
       return work.ratingAVG || 0;
     }
     return 0;
-  };  
+  };
 
   return (
     <WorkContext.Provider value={{ work, linkToWork: false }}>
@@ -325,9 +325,9 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                   <Col className="col-md-7 col-lg-8 col-xl-9">
                     <section className="mx-md-4">
                       <h1 className="fw-bold text-secondary">{work.title}</h1>
-                      <h2 className={styles.author}>{work.author}</h2>
+                      <h2 className={`${styles.author}`}>{work.author}</h2>
                       <WorkSummary work={work} />
-                      <div className="d-flex flex-wrap flex-row">
+                      <div className="d-flex flex-wrap flex-row mt-2 mb-2">
                         <Box sx={{ display: 'flex' }}>
                           <Rating qty={qty} onChange={handlerChangeRating} size="medium" readonly />
                           <div className="d-flex flex-nowrap ms-2">
@@ -380,61 +380,48 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                           <WorkReadOrWatched work={work} session={session} />
                         </Box>
                       </div>
-                      <Box mt={1} sx={{display:"flex"}}>
-                        <Rating
-                          qty={qty}
-                          onChange={handlerChangeRating}
-                          size="medium"
-                          readonly
-                          
-                        />
-                        <div className="d-flex flex-nowrap ms-2">
-                          {getRatingAvg().toFixed(1)}
-                          {' - '}
-                          {getRatingQty()}
-                        </div>
-                        <span className="ms-1 text-gray">{t('common:ratings')}</span>
-                      </Box>
+                      <Box className="" mt={1}>
                       {work.contentText != null && (
                         <UnclampText isHTML={false} text={work.contentText} clampHeight="8rem" />
                       )}
-                      {/* <HyvorComments entity='work' id={`${work.id}`}  /> */}
-                    </section>
-                    {/* <div className='container d-none d-lg-block mt-5'>
+                    </Box>
+                    {/* <HyvorComments entity='work' id={`${work.id}`}  /> */}
+                  </section>
+                  {/* <div className='container d-none d-lg-block mt-5'>
                   <CommentsList entity={work} parent={undefined}/>
                 </div>*/}
-                    <HyvorComments entity="work" id={`${work.id}`} />
-                  </Col>
+                  <HyvorComments entity="work" id={`${work.id}`} />
+                </Col>
                   {/* <div className='container d-sm-block d-lg-none mt-3'>
                   <CommentsList entity={work} parent={undefined}/>
             </div> */}
-                </Row>
-              ) : (
-                <>
-                  {post && work && (
-                    <PostDetailComponent
-                      showSaveForLater={true}
-                      postId={post.id}
-                      work={work}
-                      cacheKey={['POST', `${post.id}`]}
-                    />
-                  )}
-                </>
+            </Row>
+            ) : (
+            <>
+              {post && work && (
+                <PostDetailComponent
+                  showSaveForLater={true}
+                  postId={post.id}
+                  work={work}
+                  cacheKey={['POST', `${post.id}`]}
+                />
               )}
-            </Suspense>
+            </>
+              )}
+          </Suspense>
 
             {post == null && (
-              <Row className="mb-5">
-                <Col>
-                  {detailPagesState.selectedSubsectionWork != null && (
-                    <TabContainer
-                      // defaultActiveKey={defaultActiveKey}
-                      activeKey={defaultActiveKey}
-                      onSelect={handleSubsectionChange}
-                      transition={true}
-                    >
-                      <style jsx global>
-                        {`
+          <Row className="mb-5">
+            <Col>
+              {detailPagesState.selectedSubsectionWork != null && (
+                <TabContainer
+                  // defaultActiveKey={defaultActiveKey}
+                  activeKey={defaultActiveKey}
+                  onSelect={handleSubsectionChange}
+                  transition={true}
+                >
+                  <style jsx global>
+                    {`
                           .nav-tabs .nav-item.show .nav-link,
                           .nav-tabs .nav-link.active,
                           .nav-tabs .nav-link:hover {
@@ -448,111 +435,111 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                             border-bottom: solid 1px var(--bs-primary) !important;
                           }
                         `}
-                      </style>
-                      <Row className="mb-4">
-                        <Col>
-                          <div className="">
-                            <Nav variant="tabs" className="scrollNav" fill>
-                              {/*<NavItem>
+                  </style>
+                  <Row className="mb-4">
+                    <Col>
+                      <div className="">
+                        <Nav variant="tabs" className="scrollNav" fill>
+                          {/*<NavItem>
                             <NavLink eventKey="discussion">
                               {t('discussion')}
                             </NavLink>
                           </NavItem> */}
-                              <NavItem>
-                                <NavLink eventKey="posts" data-cy="posts">
-                                  {t('tabHeaderPosts')} ({dataPosts?.total})
-                                </NavLink>
-                              </NavItem>
-                              <NavItem>
-                                <NavLink eventKey="cycles">
-                                  {t('tabHeaderCycles')} ({cyclesCount})
-                                </NavLink>
-                              </NavItem>
-                            </Nav>
-                          </div>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col>
-                          <TabContent>
-                            {/*<TabPane eventKey="discussion"> 
+                          <NavItem>
+                            <NavLink eventKey="posts" data-cy="posts">
+                              {t('tabHeaderPosts')} ({dataPosts?.total})
+                            </NavLink>
+                          </NavItem>
+                          <NavItem>
+                            <NavLink eventKey="cycles">
+                              {t('tabHeaderCycles')} ({cyclesCount})
+                            </NavLink>
+                          </NavItem>
+                        </Nav>
+                      </div>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <TabContent>
+                        {/*<TabPane eventKey="discussion"> 
                             <HyvorComments entity='work' id={`${work.id}`}  />
                           </TabPane>*/}
-                            <TabPane eventKey="posts">
-                              {posts ? (
-                                <>
-                                  <WorkDetailPost
-                                    workId={work.id}
-                                    className="mb-2"
-                                    cacheKey={['POSTS', JSON.stringify(workPostsWhere)]}
-                                  ></WorkDetailPost>
-                                  <Row className="mt-5">
-                                    {posts.map((p) => (
-                                      <Col
-                                        key={p.id}
-                                        xs={12}
-                                        sm={6}
-                                        lg={3}
-                                        xxl={2}
-                                        className="mb-5 d-flex justify-content-center  align-items-center"
-                                      >
-                                        <MosaicItemPost
-                                          cacheKey={['POST', `${p.id}`]}
-                                          postId={p.id}
-                                          size={'md'}
-                                          showSaveForLater={false}
-                                        />
-                                        
-                                      </Col>
-                                    ))}
-                                  </Row>
-                                  {/* TODO this make rerender the hyvor talk but is needed <div className="mt-5" ref={ref}>
+                        <TabPane eventKey="posts">
+                          {posts ? (
+                            <>
+                              <WorkDetailPost
+                                workId={work.id}
+                                className="mb-2"
+                                cacheKey={['POSTS', JSON.stringify(workPostsWhere)]}
+                              ></WorkDetailPost>
+                              <Row className="mt-5">
+                                {posts.map((p) => (
+                                  <Col
+                                    key={p.id}
+                                    xs={12}
+                                    sm={6}
+                                    lg={3}
+                                    xxl={2}
+                                    className="mb-5 d-flex justify-content-center  align-items-center"
+                                  >
+                                    <MosaicItemPost
+                                      cacheKey={['POST', `${p.id}`]}
+                                      postId={p.id}
+                                      size={'md'}
+                                      showSaveForLater={false}
+                                    />
+
+                                  </Col>
+                                ))}
+                              </Row>
+                              {/* TODO this make rerender the hyvor talk but is needed <div className="mt-5" ref={ref}>
                                   {hasMorePosts ? <Spinner animation="grow" />
                                   :<></>}
                                 </div> */}
-                                </>
-                              ) : (
-                                <></>
-                              )}
-                            </TabPane>
-                            <TabPane eventKey="cycles">
-                              {cycles ? (
-                                <Row className="mt-5">
-                                  {cycles.map((c) => (
-                                    <Col
-                                      xs={12}
-                                      sm={6}
-                                      lg={3}
-                                      xxl={2}
-                                      className="mb-5 d-flex justify-content-center  align-items-center"
-                                      key={c.id}
-                                    >
-                                      <CMI
-                                        cycleId={c.id}
-                                        cacheKey={['CYCLES', `WORK-${workId}`]}
-                                        size={'md'}
-                                        showSaveForLater={false}
-                                      />
-                                    </Col>
-                                  ))}
-                                </Row>
-                              ) : (
-                                <></>
-                              )}
-                            </TabPane>
-                          </TabContent>
-                        </Col>
-                      </Row>
-                    </TabContainer>
-                  )}
-                </Col>
-              </Row>
-            )}
-          </>
-          // : <EditPostForm noModal cacheKey={['POSTS',JSON.stringify(workPostsWhere)]} />
+                            </>
+                          ) : (
+                            <></>
+                          )}
+                        </TabPane>
+                        <TabPane eventKey="cycles">
+                          {cycles ? (
+                            <Row className="mt-5">
+                              {cycles.map((c) => (
+                                <Col
+                                  xs={12}
+                                  sm={6}
+                                  lg={3}
+                                  xxl={2}
+                                  className="mb-5 d-flex justify-content-center  align-items-center"
+                                  key={c.id}
+                                >
+                                  <CMI
+                                    cycleId={c.id}
+                                    cacheKey={['CYCLES', `WORK-${workId}`]}
+                                    size={'md'}
+                                    showSaveForLater={false}
+                                  />
+                                </Col>
+                              ))}
+                            </Row>
+                          ) : (
+                            <></>
+                          )}
+                        </TabPane>
+                      </TabContent>
+                    </Col>
+                  </Row>
+                </TabContainer>
+              )}
+            </Col>
+          </Row>
+        )}
+      </>
+          // : <EditPostForm noModal cacheKey={['POSTS', JSON.stringify(workPostsWhere)]} />
         }
-      </MosaicContext.Provider>
-    </WorkContext.Provider>
+    </MosaicContext.Provider>
+    </WorkContext.Provider >
   );
 };
 
