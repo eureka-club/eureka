@@ -380,6 +380,21 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                           <WorkReadOrWatched work={work} session={session} />
                         </Box>
                       </div>
+                      <Box mt={1} sx={{display:"flex"}}>
+                        <Rating
+                          qty={qty}
+                          onChange={handlerChangeRating}
+                          size="medium"
+                          readonly
+                          
+                        />
+                        <div className="d-flex flex-nowrap ms-2">
+                          {getRatingAvg().toFixed(1)}
+                          {' - '}
+                          {getRatingQty()}
+                        </div>
+                        <span className="ms-1 text-gray">{t('common:ratings')}</span>
+                      </Box>
                       {work.contentText != null && (
                         <UnclampText isHTML={false} text={work.contentText} clampHeight="8rem" />
                       )}
@@ -487,6 +502,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                                           size={'md'}
                                           showSaveForLater={false}
                                         />
+                                        
                                       </Col>
                                     ))}
                                   </Row>

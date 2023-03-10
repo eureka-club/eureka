@@ -10,7 +10,6 @@ import { FiShare2, FiTrash2 } from 'react-icons/fi';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/react';
 // import Rating from 'react-rating';
-import usePostEmojiPicker from '../post/hooks/usePostEmojiPicker';
 import Rating from '@/src/components/common/Rating';
 
 import { OverlayTrigger, Popover, Button, Spinner, Modal } from 'react-bootstrap';
