@@ -51,7 +51,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
   const [isCountriesSearchLoading, setIsCountriesSearchLoading] = useState(false);
   const [countrySearchResults, setCountrySearchResults] = useState<{ id: number; code: string; label: string }[]>([]);
   const [tags, setTags] = useState<string>('');
-  const [namespace, setNamespace] = useState<Record<string, string>>();
+  const [namespace, setNamespace] = useState<Record<string,string>>();
   const { data: topics } = useTopics();
   const [items, setItems] = useState<string[]>([]);
   const [access, setAccess] = useState<number | undefined>(1);
@@ -80,9 +80,14 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
     const fn = async () => {
       // const r = await i18nConfig.loadLocaleFrom(locale, 'countries');
       const res = await fetch('/api/taxonomy/countries')
-      const {result:r} = await res.json()
-      
-      setNamespace(r);
+      const {result} = await res.json()
+      let r = (result as {code:string,label:string,parent:{code:string}}[]);
+      let n:Record<string,string>|{} = {};
+      n  = r.reduce((p,c)=>{
+        p = {...p,[c.code]:c.label};
+        return p;
+      },{});
+      setNamespace(n);
     };
     fn();
     if (cycle.topics?.length){
