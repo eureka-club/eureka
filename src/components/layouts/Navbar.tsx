@@ -99,6 +99,7 @@ const NavBar: FunctionComponent = () => {
   };
 
   const handlerLogin = () => {
+    localStorage.setItem('loginRedirect', router.asPath)
     show(<SignInForm />);
 
     /*localStorage.setItem('loginRedirect',router.asPath);
