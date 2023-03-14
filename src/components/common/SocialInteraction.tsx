@@ -418,8 +418,9 @@ const SocialInteraction: FunctionComponent<Props> = ({
   };
   if (isLoadingSession || isLoadingUser) return <Spinner animation="grow" variant="info" size="sm" />;
   return (
-    <section className={`${className}`}>
-      <div className="d-flex justify-content-between align-items-center">
+    <section className={`${className} d-flex flex-row`}>
+        {renderCreateEureka()}
+
         {showRating && (
           <div className="ps-1">
             {showRating && getRatingLabelInfo()}
@@ -461,9 +462,9 @@ const SocialInteraction: FunctionComponent<Props> = ({
             <Spinner className={styles.ratingSpinner} size="sm" animation="grow" variant="info" />
           </div>
         )}
-        {renderCreateEureka()}
+      <div className="ms-auto d-flex justify-content-end">
+
         {ss && (
-          <div className="ms-auto">
             <OverlayTrigger trigger="focus" placement="top" overlay={popoverShares}>
               <Button
                 // style={{ fontSize: '.9em' }}
@@ -477,7 +478,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
                 {showButtonLabels && <span className={classnames(styles.info, styles.active)}>{t('Share')}</span>}
               </Button>
             </OverlayTrigger>
-          </div>
+         
         )}
         {/* <div className={`ms-1`}>
         {
