@@ -44,6 +44,8 @@ import HyvorComments from '@/src/components/common/HyvorComments';
 import useExecRatingWork from '@/src/hooks/mutations/useExecRatingWork';
 import Rating from '../common/Rating';
 import { Box } from '@mui/material';
+import { FiTrash2 } from 'react-icons/fi';
+
 
 const PostDetailComponent = lazy(() => import('@/components/post/PostDetail'));
 
@@ -255,6 +257,14 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
     });
   };
 
+  const clearRating = () => {
+    setQty(0);
+    execRating({
+      ratingQty: 0,
+      doCreate: false,
+    });
+  };
+
   const getRatingQty = () => {
     if (work) {
       return work.ratings.length || 0;
@@ -306,13 +316,22 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                       showCreateEureka={false}
                       showSaveForLater={true}
                     />
-                    <Box mt={1}>
+                    <Box className="d-flex flex-row align-items-baseline" mt={1}>
                       <Rating
                         qty={qtyByUser}
                         onChange={handlerChangeRating}
                         size="medium"
                         iconColor="var(--bs-danger)"
-                      />
+                      /> { qtyByUser > 0 && <Button
+                        type="button"
+                        title={t('Clear rating')}
+                        className="text-warning p-0 ms-2"
+                        onClick={clearRating}
+                        variant="link"
+                        //disabled={loadingSocialInteraction}
+                      >
+                        <FiTrash2 />
+                      </Button>}
                     </Box>
                     <Box mt={1}>
                       <WorkReadOrWatched work={work} session={session} />
@@ -368,13 +387,22 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                           showCreateEureka={false}
                           showSaveForLater={true}
                         />
-                        <Box className="d-flex justify-content-center" mt={1}>
+                        <Box className="d-flex flex-row justify-content-center align-items-baseline" mt={2}>
                           <Rating
                             qty={qtyByUser}
                             onChange={handlerChangeRating}
                             size="medium"
                             iconColor="var(--bs-danger)"
-                          />
+                          /> {qtyByUser > 0 && <Button
+                            type="button"
+                            title={t('Clear rating')}
+                            className="text-warning p-0 ms-2"
+                            onClick={clearRating}
+                            variant="link"
+                            //disabled={loadingSocialInteraction}
+                          >
+                            <FiTrash2 />
+                          </Button>}
                         </Box>
                         <Box className="d-flex justify-content-center" mt={1}>
                           <WorkReadOrWatched work={work} session={session} />

@@ -2,9 +2,9 @@ import { useSession } from 'next-auth/react';
 import { Cycle, Work } from '@prisma/client';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useState,useEffect } from 'react';
-import { Col, Row,Spinner } from 'react-bootstrap';
+import { Col, Row,Spinner,Button } from 'react-bootstrap';
 import Rating from '@/src/components/common/Rating'
-
+import { FiTrash2 } from 'react-icons/fi';
 import { GiBrain } from 'react-icons/gi';
 import {BsChevronUp, BsX} from 'react-icons/bs';
 import dayjs from 'dayjs';
@@ -119,6 +119,14 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
     });
   };
 
+  const clearRating = () => {
+    setQty(0);
+    execRating({
+      ratingQty: 0,
+      doCreate: false,
+    });
+  };
+
   const getWorksSorted = () => {
     const res: Work[] = [];
     if(!cycle)return []
@@ -183,13 +191,21 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                 size={'lg'}
               />
             </MosaicContext.Provider>
-            <Box mt={1}>
+            <Box className="d-flex flex-row align-items-baseline" mt={1}>
               <Rating
                 qty={qtyByUser}
                 onChange={handlerChangeRating}
                 size="medium"
                 iconColor="var(--bs-danger)"
-              />
+              />{qtyByUser > 0 && <Button
+                type="button"
+                title={t('Clear rating')}
+                className="text-warning p-0 ms-2"
+                onClick={clearRating}
+                variant="link"
+              >
+                <FiTrash2 />
+              </Button>}
             </Box>
           </aside>
         </Col>
@@ -291,13 +307,21 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                   size={'lg'}
                 />
               </MosaicContext.Provider>
-              <Box className="d-flex justify-content-center" mt={2}>
+              <Box className="d-flex flex-row justify-content-center align-items-baseline" mt={2}>
                 <Rating
                   qty={qtyByUser}
                   onChange={handlerChangeRating}
                   size="medium"
                   iconColor="var(--bs-danger)"
-                />
+                />{qtyByUser > 0 && <Button
+                  type="button"
+                  title={t('Clear rating')}
+                  className="text-warning p-0 ms-2"
+                  onClick={clearRating}
+                  variant="link"
+                >
+                  <FiTrash2 />
+                </Button>}
               </Box>
             </aside>
           </Col>
