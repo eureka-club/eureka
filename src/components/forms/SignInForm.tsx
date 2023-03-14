@@ -24,6 +24,8 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
   const [loading,setLoading] = useState(false)
   const handleSignInGoogle = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
+    if(!noModal)
+      localStorage.setItem('loginRedirect', router.asPath)
     signIn('google',{ callbackUrl: localStorage.getItem('loginRedirect')?.toString()||'/' });
   };
 
