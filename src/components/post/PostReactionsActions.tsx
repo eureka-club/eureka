@@ -58,24 +58,7 @@ const PostReactionsActions: FunctionComponent<Props> = ({post,cacheKey}) => {
     if(post && session?.user && (isPostDetailPage()||getReactionsGrouped().length<MAX_REACTIONS))
      return (
       <div>
-      {/* <div style={{ position: 'relative' }}> */}
         <EmojiPicker cacheKey={cacheKey} post={post as PostMosaicItem} onSaved={console.log} />
-      {/* </div> */}
-      <Button
-      variant='link'
-      className={`ms-1 p-0 text-primary`}
-      title={t('Add reaction')}
-      onClick={handleReactionClick}
-      
-      // disabled={loadingSocialInteraction}
-    >
-      
-      <VscReactions   style={{fontSize: "1.5em",verticalAlign:"sub"}}  />
-        {/* <br />
-         <span className={classnames(...[styles.info, ...[currentUserIsFav ? styles.active : '']])}> 
-          {t('Add reaction')}
-        </span> */}
-      </Button>
       </div>
     )
     return <></>;

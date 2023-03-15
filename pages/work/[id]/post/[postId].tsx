@@ -36,7 +36,7 @@ const PostDetailInWorkPage: NextPage<Props> = ({postId,workId,metaTags,session})
         <Head>
           <meta
             name="title"
-            content={`${t('postTitle')} ${metaTags.title} - ${metaTags.creator} ${t('postTitle2')} `}
+            content={`${t('postTitle')} ${metaTags.title} - ${metaTags.creator} - ${t('postTitle1')} `}
           ></meta>
           <meta name="description" content={t('postDescription')}></meta>
           <meta property="og:title" content={`${metaTags.title} · ${metaTags.workTitle}`} />

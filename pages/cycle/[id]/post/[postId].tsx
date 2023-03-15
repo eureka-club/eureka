@@ -69,7 +69,7 @@ const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId,metaTags,session
   return (
     <>
       <Head>
-        <meta name="title" content={`${t('postTitle')} ${metaTags.title} - ${metaTags.creator} ${t('postTitle1')} `}></meta>
+        <meta name="title" content={`${t('postTitle')} ${metaTags.title} - ${metaTags.creator} - ${t('postTitle1')} `}></meta>
         <meta name="description" content={t('postDescription')}></meta>
         <meta property="og:title" content={`${metaTags.title} · ${metaTags.cycleTitle}`} />
         <meta property="og:url" content={`${WEBAPP_URL}/cycle/${metaTags.cycleId}/post/${metaTags.id}`} />
