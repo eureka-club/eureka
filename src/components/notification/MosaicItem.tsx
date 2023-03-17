@@ -40,7 +40,7 @@ const MosaicItem: FunctionComponent<Props> = ({ notification, className = '' }) 
         </em>  
       </aside>
         <aside className="">
-          <BsFillCircleFill className={notification.viewed ? "text-info" : "text-primary"} />
+          <BsFillCircleFill className="text-primary" />
         </aside>
       </>}
     </section>

@@ -28,7 +28,7 @@ export const findAll = async (userId: number): Promise<NotificationMosaicItem[] 
     },
     where:{
       userId,
-      viewed:false,      
+      //viewed:false,      
     }
   });
 };
@@ -81,6 +81,26 @@ export const update = async (
       console.error(e);
       throw new Error('Error updating the notification');
     }
+};
+
+export const updateToVieweds = async (
+  user: number,
+) => {
+  try {
+      const nou = await prisma.notificationsOnUsers.updateMany({
+        where: {
+          userId:user,
+          viewed:false
+        },
+        data: {
+          viewed: true,
+        },
+      });
+      if (!nou) throw new Error('Error updating the notifications');
+  } catch (e) {
+    console.error(e);
+    throw new Error('Error updating the notification');
+  }
 };
 
 export const create = async (

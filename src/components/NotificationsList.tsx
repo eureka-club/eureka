@@ -1,6 +1,6 @@
 // import {Session} from '@/src/types'
 import React, { useState, useEffect } from 'react'
-import { ListGroup, Button,  } from 'react-bootstrap'
+import { ListGroup, Button, } from 'react-bootstrap'
 
 import { IoNotificationsCircleOutline } from 'react-icons/io5'
 import { useSession } from 'next-auth/react'
@@ -38,10 +38,18 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
 
   const { data: notifications, isLoading } = useNotifications(userId, { enabled: !!userId })
 
-  const [notVieweds, setNotVieweds] = useState<NotificationMosaicItem[]>()
+  const [notVieweds, setNotVieweds] = useState<NotificationMosaicItem[]>([])
+  const [AllNotifications, setAllNotifications] = useState<NotificationMosaicItem[]>([])
+
   useEffect(() => {
-    if (notifications && notifications.length) setNotVieweds(notifications?.filter(n => !n.viewed))
+    if (notifications && notifications.length) {
+      setNotVieweds(notifications?.filter(n => !n.viewed));
+      setAllNotifications(notifications);
+    }
   }, [notifications])
+
+  console.log(AllNotifications,'AllNotificationsAllNotifications')
+  console.log(notVieweds, 'notViewedsnotVieweds')
 
   const {
     mutate: execEditNotification,
@@ -98,20 +106,52 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
     },
   );
 
-  if (!notVieweds)
-    return <></>
+  const {
+    mutate: execAllToVieweds,
+    error: editExecAllToVieweds,
+    isError: isErrorExecAllToVieweds,
+    isLoading: isLoadingExecAllToVieweds,
+    isSuccess: isSuccessExecAllToVieweds,
+  } = useMutation(
+    async () => {
+      const res = await fetch(`/api/notification/check-all-vieweds?user=${userId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      return res.json();
+    },
+    {
+      onMutate: async (vars) => {
+        const ck = ['USER', `${userId}`, 'NOTIFICATIONS'];
+        const ss = queryClient.getQueryData(ck);
+        return { ck, ss };
+      },
+      onSettled: (_user, error, _variables, context) => {
+        if (context) {
+          interface ctx { ck: string[], ss: UserMosaicItem }
+          const { ck, ss } = context as ctx;
+          if (error && ck) {
+            queryClient.setQueryData(ck, ss);
+          }
+          if (context) queryClient.invalidateQueries(ck);
+        }
+      },
+    },
+  );
+
+
   const notificationOnClick = (e: React.MouseEvent<Element>, userId: number, notificationId: number, contextURL: string) => {
     e.preventDefault();
-    if (notificationId) {
-      const payload = {
-        notificationId,
-        userId,
-        data: {
-          viewed: true,
-        }
-      }
-      execEditNotification(payload);
-    }
+    /*if (notificationId) {
+       const payload = {
+         notificationId,
+         userId,
+         data: {
+           viewed: true,
+         }
+       }
+       execEditNotification(payload);
+     }*/
     router.push(contextURL);
   }
 
@@ -124,6 +164,14 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
       router.push(`/notification`);
   };
 
+  const checkAllToVieweds = () => {
+    console.log(show, 'home')
+    if (!show)
+      execAllToVieweds()
+    setShow(s => !s)
+    console.log(show, 'final')
+
+  };
   const notNewsNotifications = () => {
     return !notVieweds || !notVieweds.length;
   }
@@ -131,8 +179,8 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
   const renderNotificationsList = () => {
     if (notVieweds) {
 
-      if (notVieweds.length) {
-        return <ListGroup className='NotificationsList' as="ul">{notVieweds.slice(0, 5).map((n, idx) => {
+      if (AllNotifications.length) {
+        return <ListGroup className='NotificationsList' as="ul">{AllNotifications.slice(0, 5).map((n, idx) => {
           return <ListGroup.Item
             key={`notification-${n.notificationId}`}
             as="li"
@@ -169,12 +217,12 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
     <Button
       variant="outline-light"
       className={`text-dark border-0 p-0 ${styles.langSwitch}`}
-      disabled={notNewsNotifications()}
-      onClick={() => setShow(s => !s)}
+      //disabled={notNewsNotifications()}
+      onClick={checkAllToVieweds} //poner accion aca , llamar a api para marcar todas vistas
     >
       <div>
         <aside className="position-relative d-none d-md-inline-block">
-          <IoNotificationsCircleOutline className={`${styles.navbarIconNav} ${notNewsNotifications() ? 'text-dark' : 'text-primary'}`} />
+          <IoNotificationsCircleOutline className={`${styles.navbarIconNav} text-primary`} />
           {notVieweds.length && <span className="position-absolute mt-2 top-0 start-100 translate-middle badge rounded-pill bg-danger">
             {notVieweds.length}
             <span className="visually-hidden">unread messages</span>
@@ -183,7 +231,7 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
 
 
         <aside className="d-md-none position-relative me-3">
-          <IoNotificationsCircleOutline className={`${styles.navbarIconNav} ${notNewsNotifications() ? 'text-dark' : 'text-primary'}`} />
+          <IoNotificationsCircleOutline className={`${styles.navbarIconNav} text-primary`} />
           {notVieweds.length && <span className="mt-2 position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
             {notVieweds.length}
             <span className="visually-hidden">unread messages</span>
