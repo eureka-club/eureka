@@ -2,9 +2,9 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 
 import { Session } from '@/src/types';
-import getApiHandler from '../../../../src/lib/getApiHandler';
-import { find, saveSocialInteraction } from '../../../../src/facades/post';
-import {create} from '@/src/facades/notification'
+import getApiHandler from '@/src/lib/getApiHandler';
+import { find, saveSocialInteraction } from '@/src/facades/post';
+// import {create} from '@/src/facades/notification'
 
 const validateReq = async (
   session: Session,
@@ -39,7 +39,7 @@ export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     const session = (await getSession({ req })) as unknown as Session;
     const { id, socialInteraction } = req.query;
-    const { notificationMessage,notificationContextURL,notificationToUsers } = req.body;
+    // const { notificationMessage,notificationContextURL,notificationToUsers } = req.body;
 
     if (!(await validateReq(session, id, socialInteraction, res))) {
       return;
@@ -54,13 +54,12 @@ export default getApiHandler()
 
       // @ts-ignore arguments checked in validateReq()
       await saveSocialInteraction(post, session.user, socialInteraction, true);
-      const notification = await create(
-        notificationMessage,
-        notificationContextURL,
-        session.user.id,
-        notificationToUsers
-      );
-
+      // const notification = await create(
+      //   notificationMessage,
+      //   notificationContextURL,
+      //   session.user.id,
+      //   notificationToUsers
+      // );
 
       res.status(200).json({ status: 'OK' });
     } catch (exc) {

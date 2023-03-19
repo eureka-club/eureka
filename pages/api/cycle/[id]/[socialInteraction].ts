@@ -4,7 +4,7 @@ import { getSession } from 'next-auth/react';
 import { Session } from '@/src/types';
 import getApiHandler from '@/src/lib/getApiHandler';
 import { find, saveSocialInteraction } from '@/src/facades/cycle';
-import {prisma} from '@/src/lib/prisma';
+// import {prisma} from '@/src/lib/prisma';
 // import redis from '@/src/lib/redis';
 import {create} from '@/src/facades/notification'
 
@@ -40,7 +40,7 @@ export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = (await getSession({ req })) as unknown as Session;
     const { id, socialInteraction } = req.query;
-    const { qty, notificationMessage,notificationContextURL,notificationToUsers } = req.body;
+    const { qty,/* notificationMessage,notificationContextURL,notificationToUsers*/ } = req.body;
 
     if (!(await validateReq(session, id, socialInteraction, res))) {
       return;
@@ -55,14 +55,14 @@ export default getApiHandler()
 
       // @ts-ignore arguments checked in validateReq()
       let cycleRes = await saveSocialInteraction(cycle, session.user, socialInteraction, true, qty);
-      if(socialInteraction!='rating'){
-        const notification = await create(
-          notificationMessage,
-          notificationContextURL,
-          session.user.id,
-          notificationToUsers
-        );
-      }
+      // if(socialInteraction!='rating'){
+      //   const notification = await create(
+      //     notificationMessage,
+      //     notificationContextURL,
+      //     session.user.id,
+      //     notificationToUsers
+      //   );
+      // }
       
       // await redis.flushall();
       res.status(200).json({ status: 'OK', cycle:cycleRes });

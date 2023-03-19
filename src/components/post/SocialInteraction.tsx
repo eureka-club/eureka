@@ -1,19 +1,19 @@
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
-import { GiBrain } from 'react-icons/gi';
+// import { GiBrain } from 'react-icons/gi';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
-import { BiImageAdd } from 'react-icons/bi';
-import { FaRegSmileBeam } from 'react-icons/fa';
+// import { BiImageAdd } from 'react-icons/bi';
+// import { FaRegSmileBeam } from 'react-icons/fa';
 import classnames from 'classnames';
 import { FiShare2, FiTrash2 } from 'react-icons/fi';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/react';
 // import Rating from 'react-rating';
 
-import Rating from '@/src/components/common/Rating';
+// import Rating from '@/src/components/common/Rating';
 
-import { OverlayTrigger, Popover, Button, Spinner, Modal } from 'react-bootstrap';
+import { OverlayTrigger, Popover, Button, Spinner } from 'react-bootstrap';
 
 import {
   FacebookIcon,
@@ -28,14 +28,14 @@ import { useMosaicContext } from '@/src/useMosaicContext';
 
 import useUser from '@/src/useUser';
 import { WEBAPP_URL } from '@/src/constants';
-import { CycleMosaicItem } from '@/src/types/cycle';
+// import { CycleMosaicItem } from '@/src/types/cycle';
 import { PostMosaicItem } from '@/src/types/post';
-import { WorkMosaicItem } from '@/src/types/work';
+// import { WorkMosaicItem } from '@/src/types/work';
 import {
   MySocialInfo,
 } from '../../types';
 import styles from './SocialInteraction.module.css';
-import { useNotificationContext } from '@/src/useNotificationProvider';
+// import { useNotificationContext } from '@/src/useNotificationProvider';
 import { useModalContext } from '@/src/useModal';
 import SignInForm from '@/src/components/forms/SignInForm';
 import _ from 'lodash';
@@ -103,7 +103,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
     isError,
     /* error, */ data: user,
   } = useUser(idSession!, { enabled: !!idSession! });
-  const { notifier } = useNotificationContext();
+  // const { notifier } = useNotificationContext();
 
   useEffect(() => {
     if (isSuccessUser && idSession && !user) {
@@ -156,36 +156,36 @@ const SocialInteraction: FunctionComponent<Props> = ({
       if (session) {
         //[user that does action] has saved the [title of book/movie/documentary/cycle] for later. Check it out.
         let translationKey = 'userHasRating';
-        let notificationContextURL = `/post/${post.id}`;
+        // let notificationContextURL = `/post/${post.id}`;
         if (socialInteraction == 'fav') {
           translationKey = 'userHasSaveForLater';
         }
 
-        const notificationMessage = `${translationKey}!|!${JSON.stringify({
-          userName: user?.name,
-          post: 'Post',
-          entityTitle: post.title,
-        })}`;
+        // const notificationMessage = `${translationKey}!|!${JSON.stringify({
+        //   userName: user?.name,
+        //   post: 'Post',
+        //   entityTitle: post.title,
+        // })}`;
 
-        const notificationToUsers = user?.followedBy.map((f) => f.id);
+        // const notificationToUsers = user?.followedBy.map((f) => f.id);
         const res = await fetch(`/api/post/${post.id}/${socialInteraction}`, {
           method: doCreate ? 'POST' : 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             qty: ratingQty,
             doCreate,
-            ...(doCreate && {
-              notificationMessage,
-              notificationContextURL,
-              notificationToUsers,
-            }),
+            // ...(doCreate && {
+            //   notificationMessage,
+            //   notificationContextURL,
+            //   notificationToUsers,
+            // }),
           }),
         });
-        if (notifier && notificationToUsers)
-          notifier.notify({
-            toUsers: notificationToUsers,
-            data: { message: notificationMessage },
-          });
+        // if (notifier && notificationToUsers)
+        //   notifier.notify({
+        //     toUsers: notificationToUsers,
+        //     data: { message: notificationMessage },
+        //   });
         return res.json();
       }
       openSignInModal();
