@@ -50,7 +50,7 @@ const useJoinUserToCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,part
             const json = await res.json();
             if(notifier){
               notifier.notify({
-                toUsers:notificationToUsers,
+                toUsers:[cycle.creatorId],
                 data:{message:notificationMessage}
               });
             }
