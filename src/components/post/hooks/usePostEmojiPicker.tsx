@@ -1,5 +1,4 @@
 import { Modal } from 'react-bootstrap';
-import Drawer from '@mui/material/SwipeableDrawer';
 import React, { useState } from 'react'
 import { PostMosaicItem } from '@/src/types/post'
 import { } from 'react-query'
@@ -44,35 +43,22 @@ const usePostEmojiPicker = (props: Props) => {
             }
             handleClose();
         }
-        return <>
-        <Modal className='d-none d-md-flex' show={showEmojisPicker} onHide={handleClose} id={`modal-post-${post.id}`}>
+        return <Modal show={showEmojisPicker} onHide={handleClose} id={`modal-post-${post.id}`}>
             <Modal.Header closeButton>
             </Modal.Header>
             <Modal.Body>
-            <EP 
-                searchDisabled
-                // categories={[
-                //   {
-                //     name: "Smiles & Emotions",
-                //     category: Categories.SMILEYS_PEOPLE
-                //   },
-                // ]} 
-                onEmojiClick={handleSave}
-            width='auto' />
+                <EP
+                    searchDisabled
+                    // categories={[
+                    //   {
+                    //     name: "Smiles & Emotions",
+                    //     category: Categories.SMILEYS_PEOPLE
+                    //   },
+                    // ]} 
+                    onEmojiClick={handleSave}
+                    width='auto' />
             </Modal.Body>
         </Modal>
-            <Drawer className='d-flex d-md-none' id={`drawer-post-${post.id}`}
-             anchor="bottom"
-            open={showEmojisPicker}
-            onOpen={() => setShowEmojisPicker(true)}
-            onClose={() => setShowEmojisPicker(false)}
-          >
-            <EP
-                searchDisabled
-                onEmojiClick={handleSave}
-                width='zpx' />
-          </Drawer>
-        </>
     }
     return { showEmojisPicker, setShowEmojisPicker, EmojiPicker }
 }
