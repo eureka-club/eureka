@@ -1,10 +1,8 @@
-import { OverlayTrigger, Button, Popover } from 'react-bootstrap';
-import Box from '@mui/material/Box';
-import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import { Modal } from 'react-bootstrap';
+import Drawer from '@mui/material/SwipeableDrawer';
 import React, { useState } from 'react'
 import { PostMosaicItem } from '@/src/types/post'
 import { } from 'react-query'
-import { VscReactions } from 'react-icons/vsc';
 // import {default as EP, EmojiClickData} from 'emoji-picker-react'
 import dynamic from 'next/dynamic';
 import { EmojiClickData } from 'emoji-picker-react';
@@ -46,56 +44,8 @@ const usePostEmojiPicker = (props: Props) => {
             }
             handleClose();
         }
-
-        const popoverEmojisPicker = (
-            <Popover id="popover-basic" style={{ width: 'zpx' }} >
-                <Popover.Body style={{ width: 'zpx' }} >
-                    <EP
-                        searchDisabled
-                        onEmojiClick={handleSave}
-                        width='zpx' />
-                </Popover.Body>
-            </Popover>
-        );
-
-
         return <>
-            <section className='d-none d-md-flex'><OverlayTrigger trigger="click" rootClose={true} placement="top" overlay={popoverEmojisPicker}>
-                <Button
-                    variant='link'
-                    className={`ms-1 p-0 text-primary`}
-                    title='Add reaction'
-                //onClick={handleReactionClick}
-                >
-
-                    <VscReactions style={{ fontSize: "1.5em", verticalAlign: "sub" }} />
-                </Button>
-            </OverlayTrigger>
-            </section>
-            <section className='d-flex d-md-none'>
-                <Button
-                    variant='link'
-                    className={`ms-1 p-0 text-primary`}
-                    title='Add reaction'
-                    onClick={() => setShowEmojisPicker(true)}>
-
-                    <VscReactions style={{ fontSize: "1.5em", verticalAlign: "sub" }} />
-                </Button>
-                <SwipeableDrawer
-                    anchor="bottom"
-                    open={showEmojisPicker}
-                    onClose={() => setShowEmojisPicker(false)}
-                    onOpen={() => setShowEmojisPicker(true)}
-                >
-
-                    <EP
-                        searchDisabled
-                        onEmojiClick={handleSave}
-                        width='zpx' />
-                </SwipeableDrawer>
-            </section>
-        </>
-        /*<Modal show={showEmojisPicker} onHide={handleClose} id={`modal-post-${post.id}`}>
+        <Modal className='d-none d-md-flex' show={showEmojisPicker} onHide={handleClose} id={`modal-post-${post.id}`}>
             <Modal.Header closeButton>
             </Modal.Header>
             <Modal.Body>
@@ -110,7 +60,19 @@ const usePostEmojiPicker = (props: Props) => {
                 onEmojiClick={handleSave}
             width='auto' />
             </Modal.Body>
-        </Modal>*/
+        </Modal>
+            <Drawer className='d-flex d-md-none' id={`drawer-post-${post.id}`}
+             anchor="bottom"
+            open={showEmojisPicker}
+            onOpen={() => setShowEmojisPicker(true)}
+            onClose={() => setShowEmojisPicker(false)}
+          >
+            <EP
+                searchDisabled
+                onEmojiClick={handleSave}
+                width='zpx' />
+          </Drawer>
+        </>
     }
     return { showEmojisPicker, setShowEmojisPicker, EmojiPicker }
 }
