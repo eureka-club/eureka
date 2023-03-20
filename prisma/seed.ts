@@ -137,9 +137,7 @@ async function main() {
       terms: {
         select: { id: true },
       },
-      readOrWatchedWorks: {
-        select: { readOrWatchedWorkId: true },
-      },
+      readOrWatchedWorks:true
     },
   });
   WORKS.forEach((w) => {
@@ -250,20 +248,20 @@ async function main() {
     
   });
 
-  /***Comment***/
-  const comments = await prismaRemote.comment.findMany();  
-  comments.forEach((c) => {
-    transactions.push(
-      prismaLocal.$queryRaw(Prisma.sql`
-      SET IDENTITY_INSERT dbo.comments ON;
-      INSERT INTO dbo.comments(id,creator_id,content_text,cycle_id,work_id,commentId,post_id,status,
-        created_at,updated_at) 
-      VALUES(${c.id},${c.creatorId},${c.contentText},${c.cycleId},${c.workId},${c.commentId},${c.postId},${c.status},
-  ${c.createdAt},${c.updatedAt});
-      SET IDENTITY_INSERT dbo.comments OFF;
-    `));      
+//   /***Comment***/
+//   const comments = await prismaRemote.comment.findMany();  
+//   comments.forEach((c) => {
+//     transactions.push(
+//       prismaLocal.$queryRaw(Prisma.sql`
+//       SET IDENTITY_INSERT dbo.comments ON;
+//       INSERT INTO dbo.comments(id,creator_id,content_text,cycle_id,work_id,commentId,post_id,status,
+//         created_at,updated_at) 
+//       VALUES(${c.id},${c.creatorId},${c.contentText},${c.cycleId},${c.workId},${c.commentId},${c.postId},${c.status},
+//   ${c.createdAt},${c.updatedAt});
+//       SET IDENTITY_INSERT dbo.comments OFF;
+//     `));      
     
-  });
+//   });
 
   /***_LocalImageToPost***/
   const _LocalImageToPost = await prismaRemote.post.findMany({
@@ -341,8 +339,8 @@ async function main() {
     transactions.push(
       prismaLocal.$queryRaw(Prisma.sql`
       SET IDENTITY_INSERT dbo.CycleWork ON;
-      INSERT INTO dbo.CycleWork(id,cycleId,workId,start_date,end_date) 
-      VALUES(${c.id},${c.cycleId},${c.workId},${c.startDate},${c.endDate});
+      INSERT INTO dbo.CycleWork(id,cycleId,workId) 
+      VALUES(${c.id},${c.cycleId},${c.workId});
       SET IDENTITY_INSERT dbo.CycleWork OFF;
     `));   
   });
@@ -563,16 +561,18 @@ async function main() {
     }
   });
 
-  /***_WorkReadOrWatched */
+  /***readOrWatchedWorkId */
   WORKS.forEach((w) => {
-    for (let u of w.readOrWatchedWorks) {
+    w.readOrWatchedWorks.forEach(rww=>{
       transactions.push(
         prismaLocal.$queryRaw(Prisma.sql`
-        INSERT INTO dbo.ReadOrWatchedWork(A,B) 
-        VALUES(${u.readOrWatchedWorkId},${w.id});
+        SET IDENTITY_INSERT dbo.readOrWatchedWorkId ON;
+        INSERT INTO dbo.readOrWatchedWorkId(id,userId,workId,year,created_at,updated_at) 
+        VALUES(${rww.readOrWatchedWorkId},${rww.userId},${rww.workId},${rww.year},${rww.createdAt},${rww.updatedAt});
+        SET IDENTITY_INSERT dbo.readOrWatchedWorkId OFF;
         `),
       );
-    }
+    })
   });
 
   /***__UserFollows***/
@@ -664,7 +664,7 @@ backOfficeSettings.forEach((c) => {
   console.log('DONE!');
 }
  
-if(true){
+if(1){
   main()
     .catch((e) => {
       console.error(e);

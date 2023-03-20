@@ -118,7 +118,7 @@ const useLeaveUserFromCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,p
           body: JSON.stringify({
             notificationMessage,
             notificationContextURL: `/cycle/${cycle!.id}?tabKey=participants`,
-            notificationToUsers,
+            notificationToUsers:[cycle.creatorId],
           })
         });
         if(!res.ok){

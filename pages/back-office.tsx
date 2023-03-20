@@ -24,6 +24,7 @@ import { FiTrash2 } from 'react-icons/fi';
 import styles from './back-office.module.css'
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
 import toast from 'react-hot-toast'
+import axios from 'axios';
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
 const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 interface Props {
@@ -233,13 +234,20 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
     await execClearSlideBackOffice(clearSliderPayload);
   };
 
-  
+  const removeNotificationsSinceLastMonth = async ()=>{
+    const url = '/api/notification/remove-since-last-month';
+    const res = await axios.delete(url);
+    if(res.data?.error)
+      toast.error(res.data?.error);
+    else toast.success(`${res.data?.notifications.count} notifications where deleted`);
+  }
 
   return (
     <SimpleLayout title={t('Admin Panel')}>
       <h1 className="text-secondary me-1 mb-4">
         <b>{t('Admin Panel')}</b>
       </h1>
+      <Button variant='danger' className='text-white my-1' onClick={removeNotificationsSinceLastMonth}>Remove old notifications</Button>
       <TabContainer onSelect={handleSubsectionChange} activeKey={tabKey || 'explorer-page'} transition={false}>
         <style jsx global>
           {`

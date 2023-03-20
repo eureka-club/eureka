@@ -443,7 +443,7 @@ model NotificationsOnUsers {
   user   User @relation(fields: [userId], references: [id], onUpdate: NoAction)
   userId Int
 
-  notification   Notification @relation(fields: [notificationId], references: [id], onUpdate: NoAction)
+  notification   Notification @relation(fields: [notificationId], references: [id], onUpdate: NoAction,onDelete:Cascade)
   notificationId Int
 
   viewed Boolean @default(false)
