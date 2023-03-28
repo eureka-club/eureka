@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
-import CreateWorkForm from '../../src/components/forms/CreateWorkForm';
+import CreateWorkForm from '@/components/forms/CreateWorkForm';
 import { Spinner, Card, Row, Col, ButtonGroup, Button, Alert } from 'react-bootstrap';
 import { BiArrowBack } from 'react-icons/bi';
 import { stubFalse } from 'lodash';
