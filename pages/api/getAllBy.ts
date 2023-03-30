@@ -145,7 +145,7 @@ export default async function handler(
       // }, []);
   
       data.push(...cycles.map((c1) => ({ ...c1, type: 'cycle' })));
-      data.push(...works.map((w1) => ({ ...w1, type: 'work' })));
+      data.push(...works);
   
       // data.push(...works);
   

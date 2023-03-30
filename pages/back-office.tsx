@@ -247,7 +247,6 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
       <h1 className="text-secondary me-1 mb-4">
         <b>{t('Admin Panel')}</b>
       </h1>
-      <Button variant='danger' className='text-white my-1' onClick={removeNotificationsSinceLastMonth}>Remove old notifications</Button>
       <TabContainer onSelect={handleSubsectionChange} activeKey={tabKey || 'explorer-page'} transition={false}>
         <style jsx global>
           {`
@@ -500,6 +499,8 @@ const BackOffice: NextPage<Props> = ({notFound}) => {
           <TabPane eventKey="export-participants"></TabPane>
         </TabContent>
       </TabContainer>
+      <Button variant='danger' className='text-white my-1' onClick={removeNotificationsSinceLastMonth}>Remove old notifications</Button>
+
     </SimpleLayout>
   );
 };
