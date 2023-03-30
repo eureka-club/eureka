@@ -14,7 +14,8 @@ import SimpleLayout from '../src/components/layouts/SimpleLayout';
 
 const AboutPage: NextPage = () => {
   const { t } = useTranslation('aboutUs');
-
+  const NEXT_PUBLIC_AZURE_CDN_ENDPOINT = process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT;
+  const NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME = process.env.NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME;
   return (<>
     <Head>
         <meta name="title" content={t('meta:aboutUsTitle')}></meta>
@@ -32,7 +33,7 @@ const AboutPage: NextPage = () => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
-                src="/img/aboutUs/julie_ricard.webp"
+                src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/julie_ricard.webp`}
                 alt="Founder, Director"
                 width={200}
                 height={200}
@@ -61,7 +62,7 @@ const AboutPage: NextPage = () => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
-                src="/img/aboutUs/alejandro_noriega.jpeg"
+                src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/alejandro_noriega.jpeg`}
                 alt="Co-creator from Prosperia"
                 width={200}
                 height={200}
@@ -94,7 +95,7 @@ const AboutPage: NextPage = () => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
-                src="/img/aboutUs/geordanis_bano_vega.png"
+                src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/geordanis_bano_vega.png`}
                 alt="Picture of Software Engineer"
                 width={200}
                 height={200}
@@ -123,7 +124,7 @@ const AboutPage: NextPage = () => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
-                src="/img/aboutUs/jose-manuel-gallardo.webp"
+                src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/jose-manuel-gallardo.webp`}
                 alt="Picture of Software Engineer"
                 width={200}
                 height={200}
@@ -152,7 +153,7 @@ const AboutPage: NextPage = () => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
-                src="/img/aboutUs/aime_cruz.webp"
+                src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/aime_cruz.webp`}
                 alt="Picture of Software Engineer"
                 width={200}
                 height={200}
@@ -181,7 +182,7 @@ const AboutPage: NextPage = () => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
-                src="/img/aboutUs/daniela-goncalves.jpeg"
+                src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/daniela-goncalves.jpeg`}
                 alt="Picture of Advisor"
                 width={200}
                 height={200}
@@ -210,7 +211,7 @@ const AboutPage: NextPage = () => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
-                src="/img/aboutUs/aranzazu-zaga.jpeg"
+                src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/aranzazu-zaga.jpeg`}
                 alt="Picture of Advisor"
                 width={200}
                 height={200}
@@ -239,7 +240,7 @@ const AboutPage: NextPage = () => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
-                src="/img/aboutUs/fernanda-pacheco.jpeg"
+                src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/fernanda-pacheco.jpeg`}
                 alt="Picture of UI-UX Consultant"
                 width={200}
                 height={200}
@@ -268,7 +269,7 @@ const AboutPage: NextPage = () => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
-                src="/img/aboutUs/don-zamna.jpeg"
+                src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/don-zamna.jpeg`}
                 alt="Picture of Mastermind"
                 width={200}
                 height={200}
