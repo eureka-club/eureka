@@ -33,7 +33,7 @@ const AboutPage: NextPage = () => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
-                src="/img/aboutUs/julie_ricard.jpg"
+                src="/img/aboutUs/julie_ricard.webp"
                 alt="Founder, Director"
                 width={200}
                 height={200}
