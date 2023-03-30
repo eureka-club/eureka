@@ -3,7 +3,6 @@ import Head from "next/head";
 import useTranslation from 'next-translate/useTranslation';
 import { Container, Row, Col, Badge } from 'react-bootstrap';
 import Image from 'next/image';
-import className from 'classnames';
 
 import {
   TiSocialLinkedinCircular,
@@ -224,15 +223,15 @@ const AboutPage: NextPage = () => {
               </h2>
               <h3 className={styles.professionName}>{t('Advisor')}</h3>
               <h4 className={styles.positionName}>{t('Narrative and public affairs expert')}</h4>
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('Communication')}
               </Badge>
               <br />
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('Crisis management')}
               </Badge>
               <br />
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('Public relations')}
               </Badge>
             </Col>
@@ -312,26 +311,40 @@ const AboutPage: NextPage = () => {
             <br />
             <hr />
             <h5 className='h4' style={{ color: 'var(--eureka-green)' }}>{t('common:eurekaSupport')}</h5>
-            <img
-              className={styles['logo-img2']}
-              src="https://mozilla.design/files/2019/06/Mozilla_Logo_Static.png"
-              alt=""
-            />
-            <img
-              className={styles['logo-img3']}
-              src="/equis.jpg"
-              alt=""
-            />
-            <img
-              className={styles['logo-img']}
-              src="https://datapopalliance.org/wp-content/uploads/2019/02/DPA-Logo-Color.png"
-              alt=""
-            />
-            <img
-              className={styles['logo-img']}
-              src="https://static.wixstatic.com/media/9c73d4_6be410789c004ed2b2281f0b7503645f~mv2.png/v1/fill/w_1046,h_700,al_c,q_90,usm_0.66_1.00_0.01/Logo%20-%20prosperia%20only%20-%20E%20normal%20-%20point.webp"
-              alt=""
-            />
+            <section className='d-flex flex-row justify-content-around align-items-center mt-3'>
+              <figure>
+                <Image
+              width={120}
+              height={37}
+                src="https://mozilla.design/files/2019/06/Mozilla_Logo_Static.png"
+                alt=""
+              />
+              </figure>
+              <figure>
+                <Image
+                width={110}
+                height={110}
+                  src="/equis.jpg"
+                  alt=""
+                />
+              </figure>
+              <figure>
+                <Image
+                width={70}
+                height={90}
+                  src="https://datapopalliance.org/wp-content/uploads/2019/02/DPA-Logo-Color.png"
+                  alt=""
+                />
+              </figure>
+              <figure>
+                <Image
+                width={120}
+                height={80}
+                  src="https://static.wixstatic.com/media/9c73d4_6be410789c004ed2b2281f0b7503645f~mv2.png/v1/fill/w_1046,h_700,al_c,q_90,usm_0.66_1.00_0.01/Logo%20-%20prosperia%20only%20-%20E%20normal%20-%20point.webp"
+                  alt=""
+                />
+              </figure>
+            </section>
           </div>         
         </div>
       </div>
