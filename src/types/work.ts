@@ -97,3 +97,33 @@ export interface EditWorkClientPayload {
   tags?: string;
   topics?: string;
 }
+
+
+export interface GoogleBooksProps {
+  id: string
+  volumeInfo: {
+    title: string;
+    authors: string[];
+    publishedDate: string;
+    description: string;
+    publisher: string;
+    language: string;
+    imageLinks: {
+      thumbnail: string;
+    };
+  };
+  saleInfo: {
+    saleability: string;
+    buyLink: string;
+  };
+}
+
+export interface TMDBVideosProps {
+  id: number;
+  title:string;
+  original_title: string;
+  release_date:string;
+  overview: string;
+  original_language: string;
+  poster_path: string;
+}

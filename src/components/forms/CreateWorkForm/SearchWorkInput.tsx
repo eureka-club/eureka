@@ -28,7 +28,7 @@ const SearchWorkInput: FunctionComponent<Props> = ({ callback }) => {
 
 
     return (
-        <form className="d-flex flex-row mb-4" >
+        <div className="d-flex flex-row mb-4" >
             <TextField id="searchTitle" className="w-100" label={t('titleFieldLabel')}
                 variant="outlined" size="small" helperText={'Search on API available'}
                 onChange={(e) => setSearchValue(e.target.value)}
@@ -48,7 +48,7 @@ const SearchWorkInput: FunctionComponent<Props> = ({ callback }) => {
             >
                 {t('Search')}
             </Button>
-        </form>
+        </div>
     )
 }
 

@@ -23,13 +23,24 @@ import TagsInputTypeAhead from '@/components/forms/controls/TagsInputTypeAhead';
 import toast from 'react-hot-toast'
 import useTopics from 'src/useTopics';
 import { ImCancelCircle } from 'react-icons/im';
-import { CreateWorkClientPayload } from '@/types/work';
+import { CreateWorkClientPayload, GoogleBooksProps, TMDBVideosProps } from '@/types/work';
 import ImageFileSelect from '@/components/forms/controls/ImageFileSelect';
 import globalModalsAtom from 'src/atoms/globalModals';
 import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import SearchWorkInput from './SearchWorkInput';
+import BookCard from './BookCard';
+import VideoCard from './VideoCard';
 
 import styles from './CreateWorkNewForm.module.css';
+import { set } from 'lodash';
+const apiKeyTMDB = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+
 
 interface Props {
     noModal?: boolean;
@@ -39,7 +50,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
     const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
     const [publicationYearLabel, setPublicationYearLabel] = useState('...');
     const formRef = useRef<HTMLFormElement>(null)
-
+    const [resultWorks, setResultWorks] = useState<GoogleBooksProps[] | TMDBVideosProps[] >([]);
     const [coverFile, setCoverFile] = useState<File | null>(null);
     const [tags, setTags] = useState<string>('');
     const [items, setItems] = useState<string[]>([]);
@@ -53,9 +64,11 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
     const [isCountriesSearchLoading2, setIsCountriesSearchLoading2] = useState(false);
     const [countrySearchResults, setCountrySearchResults] = useState<{ id: number; code: string; label: string }[]>([]);
     const [countryOrigin, setCountryOrigin] = useState<string>();
+    const [workType, setWorkType] = useState<string>();
     const [hasCountryOrigin2, setHasCountryOrigin2] = useState<boolean>();
     const [countryOrigin2, setCountryOrigin2] = useState<string>();
     const [workId, setWorkId] = useState<number | undefined>();
+
     const { data: topics } = useTopics();
     const {
         mutate: execCreateWork,
@@ -223,23 +236,44 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
     //   }
     // };
 
-    async function handleSearchTitle(e: MouseEvent<HTMLButtonElement>) {
-        e.stopPropagation();
-        const form = formRef.current;
-        if (form && form.searchTitle.value) {
-            console.log(form.searchTitle.value, 'form.searchTitle.value')
-        } else
-            toast.error('Title required');
+    function handleChangeWorkType(ev: SelectChangeEvent<HTMLTextAreaElement>) {
+        ev.preventDefault();
+        setResultWorks([])
+        setWorkType(ev.target.value as string);
     }
 
-    async function searchImages(q:string) {
-        console.log(q,'I DID IT')
-        /*setLoading(true);
-        setShowOptions(true);
-        setImages([]);
-        const { data: en_text } = await fetch(`/api/google-translate/?text=${text + ', ' + style}&target=en`).then((r) =>
-          r.json(),
-        );*/
+    async function searchTitles(q: string) {
+        //setLoading(true);
+        //setShowOptions(true);
+        //setImages([]);
+        if (workType) {
+            if (['book', 'fiction-book'].includes(workType)) {
+
+                const { items: data, totalItems, error } = await fetch(`https://www.googleapis.com/books/v1/volumes?q="${q}"&maxResults=20`).then((r) =>
+                    r.json()
+                );
+                //console.log(data, totalItems, 'google books API')
+                if (error) toast.error(error.message)
+                else if (data)
+                    setResultWorks(data);
+            }
+
+            if (['documentary', 'movie'].includes(workType)) {  //src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/wKVCk0U3KAcCthWQQgDxwyJAJJc.jpg"
+
+                const { results: data, total_results: totalItems, success, status_code, status_message } = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKeyTMDB}&query=${q}`).then((r) =>
+                    r.json()
+                );
+                console.log(data, totalItems, 'tmdb API')
+                if (status_code && !success) toast.error(status_message)
+                else if (data)
+                    setResultWorks(data);
+            }
+
+        }
+        else toast.error("Work type required");
+        //setLoading(false);
+
+        //console.log(resultWorks,'resultWorks')
     }
 
     return (
@@ -252,15 +286,15 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                 <span className='text-primary fw-bold'>Core Information</span>
                 <Row className='d-flex flex-column flex-lg-row mt-4'>
                     <Col className="">
-                        <FormGroup controlId="type">
+                        <FormGroup controlId="worktype">
                             <FormControl size="small" fullWidth>
-                                <InputLabel id="type-label">*{t('typeFieldLabel')}</InputLabel>
+                                <InputLabel id="worktype-label">*{t('typeFieldLabel')}</InputLabel>
                                 <Select
-                                    labelId="type-label"
-                                    id="type"
+                                    labelId="worktype-label"
+                                    id="worktype"
                                     //value={age}
                                     label={`*${t("typeFieldLabel")}`}
-                                // onChange={handleChange}
+                                    onChange={handleChangeWorkType}
                                 >
                                     <MenuItem value="">{t('typeFieldPlaceholder')}</MenuItem>
                                     <MenuItem value="book">{t('common:book')}</MenuItem>
@@ -272,40 +306,20 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                         </FormGroup>
                     </Col>
                     <Col className="mb-5">
-                        <FormGroup controlId="language">
-                            <FormControl size="small" fullWidth>
-                                <InputLabel id="language-label">*Language of Input</InputLabel>
-                                <Select
-                                    labelId="language-label"
-                                    id="language"
-                                    //value={age}
-                                    label={"*Language of Input"}
-                                // onChange={handleChange}
-                                >
-                                    <MenuItem value="">{t('typeFieldPlaceholder')}</MenuItem>
-                                    <MenuItem value="spanish">Spanish</MenuItem>
-                                    <MenuItem value="english">English</MenuItem>
-                                    <MenuItem value="hindi">Hindi</MenuItem>
-                                    <MenuItem value="portuguese">Portuguese</MenuItem>
-                                    <MenuItem value="bengali">Bengali</MenuItem>
-                                    <MenuItem value="russian">Russian</MenuItem>
-                                    <MenuItem value="japanese">Japanese</MenuItem>
-                                    <MenuItem value="german">German</MenuItem>
-                                    <MenuItem value="french">French</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </FormGroup>
+                        <SearchWorkInput callback={searchTitles} />
+                    </Col>
+                </Row>
+                
+                
+                <div className='d-flex flex-row justify-content-around flex-wrap '>
+                    {(resultWorks.length > 0) && (['book', 'fiction-book'].includes(workType!)) && resultWorks.map((work) => {
+                        return <BookCard key={work.id} book={work as GoogleBooksProps} />;
+                    })}
+                    {(resultWorks.length > 0) && (['documentary', 'movie'].includes(workType!)) && resultWorks.map((work) => {
+                        return <VideoCard key={work.id} video={work as TMDBVideosProps} />;
+                    })}
 
-                    </Col>
-                </Row>
-                <Row className='d-flex flex-column flex-lg-row'>
-                    <Col >
-                        <SearchWorkInput callback={searchImages} />
-                    </Col>
-                    <Col className="mb-4">
-                        
-                    </Col>
-                </Row>
+                </div>
 
 
 
