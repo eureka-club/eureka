@@ -10,10 +10,11 @@ module.exports = nextTranslate({
     images:{
         domains:[
             `${process.env.CDN_ENDPOINT_NAME}.azureedge.net`,
-            'static.wixstatic.com',
+            'mozilla.design',
             'datapopalliance.org',
-            'mozilla.design'
+            'static.wixstatic.com',
         ],
+        
     },
     // async rewrites(){
     //     return [
