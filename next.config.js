@@ -8,7 +8,12 @@ module.exports = nextTranslate({
         includePaths: [path.join(__dirname, 'scss')],
     },
     images:{
-        domains:[`${process.env.CDN_ENDPOINT_NAME}.azureedge.net`],
+        domains:[
+            `${process.env.CDN_ENDPOINT_NAME}.azureedge.net`,
+            'static.wixstatic.com',
+            'datapopalliance.org',
+            'mozilla.design'
+        ],
     },
     // async rewrites(){
     //     return [
