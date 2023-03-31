@@ -56,6 +56,11 @@ const Footer: FunctionComponent = () => {
     <div
          className="text-center p-2 fs-6" style={{ background: 'white' }}>  
       <a className="text-secondary" href="https://www.eureka.club/">  www.eureka.club</a>
+    <section>
+      <Link href={'https://www-archive.mozilla.org/mpl/mpl-1.0'}>
+            <a>MOZILLA PUBLIC LICENSE Version 1.0 (MPL-1.0)</a>
+      </Link>
+    </section>
     </div>
   </footer>
   );
