@@ -9,20 +9,24 @@ import Box from '@mui/material/Box';
 
 const fallbakImgURL = `https://${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${process.env.NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/Image-not-found.webp`
 
-
-
 interface Props {
-    book: GoogleBooksProps
+    book: GoogleBooksProps,
+    callback: Function;
 }
 
 const BookCard: React.FC<Props> = (Props) => {
 
     const { id, volumeInfo, saleInfo } = Props.book;
+    const { callback } = Props;
+
+    const handleSelect = useCallback((work: GoogleBooksProps) => {
+        callback(work);
+    }, [callback]);
 
     return (
         <section className='p-2 w-50'>
-            <Card variant="outlined" sx={{ display: 'flex', height: 250, minWidth:'100%' }}>
-                <CardMedia
+            <Card variant="outlined" sx={{ display: 'flex', height: 250, minWidth: '100%' }}>
+                <CardMedia className="cursor-pointer" onClick={() => handleSelect(Props.book)}
                     component="img"
                     sx={{ width: 175 }}
                     image={(volumeInfo.imageLinks) ? volumeInfo.imageLinks.thumbnail : fallbakImgURL}
@@ -41,14 +45,14 @@ const BookCard: React.FC<Props> = (Props) => {
                             })}
 
                         <Typography variant="subtitle1" color="text.secondary" component="div">
-                            {volumeInfo.publishedDate}
+                            {volumeInfo.publishedDate} - ({volumeInfo.language})
                         </Typography>
                         <Typography variant="subtitle1" color="text.secondary" component="div">
                             {volumeInfo.publisher}
                         </Typography>
                         <Typography variant="subtitle1" color="text.secondary" component="div">
-                            {volumeInfo.language}
-                        </Typography>
+                            {(volumeInfo.description) ? (volumeInfo.description.length > 150) ? `${volumeInfo.description.slice(0, 150)}...` : volumeInfo.description :""}
+                        </Typography> 
                     </CardContent>
                 </Box>
             </Card>

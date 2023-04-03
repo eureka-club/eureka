@@ -9,20 +9,24 @@ import Box from '@mui/material/Box';
 
 const fallbakImgURL = `https://${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${process.env.NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/Image-not-found.webp`
 
-
-
 interface Props {
     video: TMDBVideosProps
+    callback: Function;
 }
 
 const VideoCard: React.FC<Props> = (Props) => {
 
     const video = Props.video;
+    const { callback } = Props;
+
+    const handleSelect = useCallback((work: TMDBVideosProps) => {
+        callback(work);
+    }, [callback]);
 
     return (
-        <section className='p-2 w-50'>
-            <Card variant="outlined" sx={{ display: 'flex', height: 300, minWidth:'100%'}}>
-                <CardMedia
+        <section className='p-2 w-50 '>
+            <Card  variant="outlined" sx={{ display: 'flex', height: 300, minWidth: '100%' }} >
+                <CardMedia className="cursor-pointer" onClick={() => handleSelect(video)}
                     component="img"
                     sx={{ width: 200 }}
                     image={(video.poster_path) ? `https://image.tmdb.org/t/p/w600_and_h900_bestv2${video.poster_path}` : fallbakImgURL}
@@ -34,14 +38,12 @@ const VideoCard: React.FC<Props> = (Props) => {
                             {(video.title.length > 25) ? `${video.title.slice(0, 30)}...` : video.title}
                         </Typography>
                         <Typography variant="subtitle1" color="text.secondary" component="div">
-                            {video.release_date}
+                            {video.release_date} - ({video.original_language})
+
                         </Typography>
                         <Typography variant="subtitle1" color="text.secondary" component="div">
                             {(video.overview.length > 250) ? `${video.overview.slice(0,250)}...` : video.overview}
                         </Typography> 
-                        <Typography variant="subtitle1" color="text.secondary" component="div">
-                            {video.original_language}
-                        </Typography>
                     </CardContent>
                 </Box>
             </Card>

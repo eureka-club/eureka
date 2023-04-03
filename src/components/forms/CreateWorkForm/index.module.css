@@ -1,0 +1,27 @@
+.imageControl {
+    background-clip: padding-box;
+    background-color: #fff;
+    border-radius: 0.25rem;
+    color: #495057;
+    padding: 0.375rem 0.75rem;
+    position: relative;
+    width: 100%;
+    height: calc(1.5em + 0.75rem + 2px);
+}
+
+.imageControl img {
+    border-radius: 5px;
+    height: 32px;
+    object-fit: cover;
+    position: absolute;
+    top: 2px;
+    right: 4px;
+}
+
+.imageName {
+    display: inline-block;
+    max-width: 75%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
