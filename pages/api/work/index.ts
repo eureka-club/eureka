@@ -50,6 +50,9 @@ export default getApiHandler()
       }
     });
   })
+
+
+  
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
       const { q = null,props:p=undefined } = req.query;

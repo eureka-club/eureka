@@ -23,7 +23,9 @@ const WorkSummary: FunctionComponent<Props> = ({ work }) => {
           `${
             work.type === 'book' || work.type === 'fiction-book' ? t('publicationYearLabel') : t('releaseYearLabel')
           }:  ${dayjs(work.publicationYear).utc().format(DATE_FORMAT_ONLY_YEAR)}`,
-        work.countryOfOrigin && `${t('countryLabel')}: ${t(`countries:${work.countryOfOrigin}` as string)}`,
+
+        work.countryOfOrigin && `${t('countryLabel')}: ${(work.countryOfOrigin.split(',')).map(c=>{return t(`countries:${c}`)})}`,
+       
         work.length &&
           `${t('workLengthLabel')}: ${work.length} ${
             work.type === 'book' || work.type === 'fiction-book'

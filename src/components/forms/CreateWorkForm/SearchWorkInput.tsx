@@ -28,10 +28,11 @@ const SearchWorkInput: FunctionComponent<Props> = ({ callback }) => {
 
 
     return (
-        <div className="d-flex flex-row" >
+        <div className="mt-4 mt-lg-0 d-flex flex-column flex-md-row" >
             <TextField id="searchTitle" className="w-100" label={t('titleFieldLabel')}
                 variant="outlined" size="small" 
                 onChange={(e) => setSearchValue(e.target.value)}
+                helperText='Search a Work on APIs'
                 value={searchValue}
                 type="text"
                 placeholder={
@@ -42,7 +43,14 @@ const SearchWorkInput: FunctionComponent<Props> = ({ callback }) => {
             >
             </TextField>
             <Button
-                className={`ms-2 btn-eureka`}
+                className={`d-md-none mt-3 btn-eureka`}
+                onClick={(e) => handleSearch(e)}
+                style={{ width: '100%', height: '2.5em' }}
+            >
+                {'Search'}
+            </Button>
+            <Button
+                className={`d-none d-md-block ms-2  btn-eureka`}
                 onClick={(e)=> handleSearch(e)}
                 style={{ width: '20%', height: '2.5em' }}
             >

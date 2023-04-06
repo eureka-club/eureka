@@ -28,7 +28,7 @@ import { ImCancelCircle } from 'react-icons/im';
 import { CreateWorkClientPayload, GoogleBooksProps, TMDBVideosProps } from '@/types/work';
 import ImageFileSelect from '@/components/forms/controls/ImageFileSelectMUI';
 import globalModalsAtom from 'src/atoms/globalModals';
-import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem, FormControlLabel ,Switch} from '@mui/material';
 import Textarea from '@mui/joy/Textarea';
 import SearchWorkInput from './SearchWorkInput';
 import BookCard from './BookCard';
@@ -54,48 +54,64 @@ interface Props {
     noModal?: boolean;
 }
 
+interface FormValues {
+    type?: string | '';
+    title?: string;
+    link?: string;
+    author?: string;
+    authorGender?: string;
+    authorRace?: string;
+    publicationYear?: string;
+    workLength?: string;
+    description?: string;
+}
+
+
+
+
 const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
     const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-    const formRef = useRef<HTMLFormElement>(null)
-    const [resultWorks, setResultWorks] = useState<APIMediaSearchResult[] | APIMediaSearchResult[]>([]);
-    const [selectedWork, setSelectedWork] = useState<APIMediaSearchResult | APIMediaSearchResult | null>(null);
-    const [coverFile, setCoverFile] = useState<File | null>(null);
-    const [tags, setTags] = useState<string>('');
-    const [items, setItems] = useState<string[]>([]);
-
     const queryClient = useQueryClient();
     const router = useRouter();
     const { t } = useTranslation('createWorkForm')
+
+    const [resultWorks, setResultWorks] = useState<APIMediaSearchResult[] | APIMediaSearchResult[]>([]);
+    const [countrySearchResults, setCountrySearchResults] = useState<{ code: string; label: string }[]>([]);
+    const [selectedWork, setSelectedWork] = useState<APIMediaSearchResult | APIMediaSearchResult | null>(null);
+
+    const [formValues, setFormValues] = useState<FormValues>({
+        type: '',
+        title: '',
+        link: '',
+        author: '',
+        authorGender: '',
+        authorRace: '',
+        publicationYear: '',
+        workLength: '',
+        description: ''
+    });
+
+    const [coverFile, setCoverFile] = useState<File | null>(null);
+    const [countryOrigin, setCountryOrigin] = useState<string[]>([]);
+    const [tags, setTags] = useState<string>('');
+    const [items, setItems] = useState<string[]>([]);  //topics
+
     const [publicationLengthLabel, setPublicationLengthLabel] = useState('...');
     const [publicationYearLabel, setPublicationYearLabel] = useState('...');
     const [publicationLinkLabel, setPublicationLinkLabel] = useState('...');
     const typeaheadRef = useRef<AsyncTypeahead<{ id: number; code: string; label: string }>>(null);
-    //const [isCountriesSearchLoading, setIsCountriesSearchLoading] = useState(false);
-    // const [isCountriesSearchLoading2, setIsCountriesSearchLoading2] = useState(false);
-    const [countrySearchResults, setCountrySearchResults] = useState<{ code: string; label: string }[]>([]);
-    const [countryOrigin, setCountryOrigin] = useState<string[]>([]);
-    const [workType, setWorkType] = useState<string>("");
-    const [title, setTitle] = useState<string>("");
-    const [link, setLink] = useState<string>("");
-    const [author, setAuthor] = useState<string>("");
-    const [publicationYear, setPublicationYear] = useState<string>("");
-    const [workLength, setWorkLength] = useState<string>("");
-    const [authorGender, setAuthorGender] = useState<string>("");
-    const [authorRace, setAuthorRace] = useState<string>(""); 
-    const [description, setDescription] = useState<string>("");
-
-
-    //const [hasCountryOrigin2, setHasCountryOrigin2] = useState<boolean>();
-    //const [countryOrigin2, setCountryOrigin2] = useState<string>();
     const [workId, setWorkId] = useState<number | undefined>();
+    const [useApiSearch, setUseApiSearch] = useState<boolean>(true);
+
 
     const { data: topics } = useTopics();
     const { data: countries } = useCountries();
 
     useEffect(() => {
         if (countries) setCountrySearchResults(countries.map((d: Country) => ({ code: d.code, label: d.code })))
-        console.log(countrySearchResults, 'countrySearchResultscountrySearchResultss')
     }, [countries])
+    
+    
     const {
         mutate: execCreateWork,
         error: createWorkError,
@@ -133,22 +149,21 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
     );
 
     const handleFormClear = (ev: MouseEvent<HTMLButtonElement>) => {
-        ev.preventDefault();
-        /*setSelectedWorksForCycle([]);
-        setCycleCoverImageFile(null);
-        editorRef.current.setContent('');*/
+        setFormValues({
+            type: '',
+            title: '',
+            link: '',
+            author: '',
+            authorGender: '',
+            authorRace: '',
+            publicationYear: '',
+            workLength: '',
+            description: ''});
         setItems([]);
         setTags('');
-
-
-        /* if (formRef.current != null) {
-           const form = formRef.current;
-     
-           form.cycleTitle.value = '';
-           form.languages.value = '';
-           form.startDate.value = '';
-           form.endDate.value = '';
-         }*/
+        setCountryOrigin([]);
+        setCoverFile(null);
+        setSelectedWork(null);
     };
 
     const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
@@ -158,20 +173,19 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
             return;
         }
 
-        const form = ev.currentTarget;
         const payload: CreateWorkClientPayload = {
-            type: form.type.value,
-            title: form.workTitle.value,
-            author: form.author.value,
-            authorGender: form.authorGender.value.length ? form.authorGender.value : null,
-            authorRace: form.authorRace.value.length ? form.authorRace.value : null,
+            type: formValues?.type!,
+            title: formValues?.title!,
+            author: formValues?.author!,
+            authorGender: formValues.authorGender ? formValues.authorGender : null,
+            authorRace: formValues.authorRace ? formValues.authorRace : null,
             cover: coverFile,
-            contentText: form.description.value.length ? form.description.value : null,
-            link: form.link.value.length ? form.link.value : null,
+            contentText: formValues.description ? formValues.description : null,
+            link: formValues.link ? formValues.link : null,
             countryOfOrigin: countryOrigin || null,
             //countryOfOrigin2: countryOrigin2 || null,
-            publicationYear: form.publicationYear.value.length ? form.publicationYear.value : null,
-            length: form.workLength.value.length ? form.workLength.value : null,
+            publicationYear: formValues.publicationYear ? formValues.publicationYear : null,
+            length: formValues.workLength ? formValues.workLength : null,
             tags,
             topics: items.join(','),
         };
@@ -191,61 +205,78 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
     }, [isSuccess]);
 
 
-    function handleChangeWorkType(ev: SelectChangeEvent) {
+    function handleChangeSelectField(ev: SelectChangeEvent) {
         ev.preventDefault();
-        setResultWorks([])
-        switch (ev.target.value) {
-            case 'movie':
-                setPublicationLinkLabel('Streaming on')
-                setPublicationYearLabel(t('releaseYearFieldLabel'));
-                setPublicationLengthLabel(`${t('Duration')} (${t('minutes')})`);
-                break;
-            case 'documentary':
-                setPublicationLinkLabel('Streaming on')
-                setPublicationYearLabel(t('releaseYearFieldLabel'));
-                setPublicationLengthLabel(`${t('Duration')} (${t('minutes')})`);
-                break;
-            case 'book':
-                setPublicationLinkLabel(t('linkFieldLabel'));
-                setPublicationLengthLabel(t('Length pages'));
-                setPublicationYearLabel(t('Publication year'));
-                break;
-            case 'fiction-book':
-                setPublicationLinkLabel(t('linkFieldLabel'));
-                setPublicationLengthLabel(t('Length pages'));
-                setPublicationYearLabel(t('Publication year'));
-                break;
-            default:
-                setPublicationLinkLabel(t('linkFieldLabel'));
-                setPublicationYearLabel('...');
-                setPublicationLengthLabel('...');
+
+        const { name, value } = ev.target;
+        setFormValues({
+            ...formValues,
+            [name]: value
+        });
+
+        if (name === 'type') {
+            setResultWorks([])
+            switch (value) {
+                case 'movie':
+                    setPublicationLinkLabel('Streaming on')
+                    setPublicationYearLabel(t('releaseYearFieldLabel'));
+                    setPublicationLengthLabel(`${t('Duration')} (${t('minutes')})`);
+                    break;
+                case 'documentary':
+                    setPublicationLinkLabel('Streaming on')
+                    setPublicationYearLabel(t('releaseYearFieldLabel'));
+                    setPublicationLengthLabel(`${t('Duration')} (${t('minutes')})`);
+                    break;
+                case 'book':
+                    setPublicationLinkLabel(t('linkFieldLabel'));
+                    setPublicationLengthLabel(t('Length pages'));
+                    setPublicationYearLabel(t('Publication year'));
+                    break;
+                case 'fiction-book':
+                    setPublicationLinkLabel(t('linkFieldLabel'));
+                    setPublicationLengthLabel(t('Length pages'));
+                    setPublicationYearLabel(t('Publication year'));
+                    break;
+                default:
+                    setPublicationLinkLabel(t('linkFieldLabel'));
+                    setPublicationYearLabel('...');
+                    setPublicationLengthLabel('...');
+            }
+            //setWorkType(ev.target.value as string);
         }
-        setWorkType(ev.target.value as string);
     }
+
+    function handleChangeTextField(ev: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+        ev.preventDefault();
+        const { name, value } = ev.target;
+        setFormValues({
+            ...formValues,
+            [name]: value
+        });
+    }
+
 
     async function searchTitles(q: string) {
         //setLoading(true);
-        //setShowOptions(true);
-        //setImages([]);
-        if (workType) {
-            if (['book', 'fiction-book'].includes(workType)) {
-
+        if (formValues && formValues.type) {
+            if (['book', 'fiction-book'].includes(formValues.type)) {
                 try {
                     const { items: data, totalItems, error } = await fetch(`https://www.googleapis.com/books/v1/volumes?q="${q}"&maxResults=20`).then((r) =>
                         r.json()
                     );
-                    //console.log(data, totalItems, 'google books API')
+                    console.log(data, totalItems, 'google books API')
                     if (error) toast.error(error.message)
                     else if (data)
                         setResultWorks(data);
+                    else if (!data.length)
+                        toast.error('No data found')
                 }
                 catch (error: any) {
                     toast.error(error.message)
                 }
             }
 
-            if (['documentary', 'movie'].includes(workType)) {  //src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/wKVCk0U3KAcCthWQQgDxwyJAJJc.jpg"
-
+            if (['documentary', 'movie'].includes(formValues.type)) {
                 try {
                     const { results: data, total_results: totalItems, success, status_code, status_message } = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKeyTMDB}&query=${q}`).then((r) =>
                         r.json()
@@ -254,72 +285,90 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                     if (status_code && !success) toast.error(status_message)
                     else if (data)
                         setResultWorks(data);
+                    else if (!data.length)
+                        toast.error('No data found')
                 }
                 catch (error: any) {
                     toast.error(error.message)
                 }
             }
-
         }
         else toast.error("Work type required");
         //setLoading(false);
-
-        console.log(resultWorks, 'resultWorks')
     }
 
     const handleSelect = async (work: APIMediaSearchResult) => {
-        //console.log(isBookGoogleBookApi(work), 'is a Book')
-        // console.log(isVideoTMDB(work), 'is a Video')
         setSelectedWork(work);
         if (isBookGoogleBookApi(work)) {
-            setTitle(work.volumeInfo.title)
             if (work.volumeInfo.imageLinks) {
                 console.log(isBookGoogleBookApi(work), 'is a work')
                 let url = work.volumeInfo.imageLinks.thumbnail;
                 url = url.replace('http://', 'https://');
                 url = url.replace('zoom=1', 'zoom=5');
-                let image = new Image();
+                let image = new Image(); // hice esto aca por errores de CORS
                 image.crossOrigin = "Anonymous";
                 image.src = url;
                 let file = await getImageFile(image)
                 setCoverFile(file as File | null);
             }
+            formValues['title'] = work.volumeInfo.title;
+            formValues['author'] = work.volumeInfo.authors.join(',');
+            formValues['publicationYear'] = (work.volumeInfo.publishedDate) ? work.volumeInfo.publishedDate : "";
+            formValues['workLength'] = (work.volumeInfo.pageCount) ? `${work.volumeInfo.pageCount}` : "";
+            formValues['description'] = (work.volumeInfo.description) ? work.volumeInfo.description : "";
+            setFormValues({
+                ...formValues,
+            });
+
         }
         if (isVideoTMDB(work)) {
-            setTitle(work.title)
             if (work.poster_path) {
                 console.log(isVideoTMDB(work), 'is a video')
-                let image = new Image();
+                let image = new Image();// hice esto aca por errores de CORS
                 image.crossOrigin = "Anonymous";
                 image.src = `https://image.tmdb.org/t/p/w600_and_h900_bestv2${work.poster_path}`;
                 let file = await getImageFile(image)
                 setCoverFile(file as File | null);
             }
+            formValues['title'] = work.title;
+            formValues['publicationYear'] = work.release_date;
+            formValues['description'] = work.overview;
+            setFormValues({
+                ...formValues,
+            });
         }
         setResultWorks([]);
         toast.success("Work selected!!!!!");
     }
 
+    const handleChangeUseApiSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setUseApiSearch(event.target.checked);
+        setResultWorks([]);
+        setSelectedWork(null);
+    };
 
     return (
-        <Form ref={formRef} onSubmit={handleSubmit}>
+        <Form  onSubmit={handleSubmit}>
             <ModalHeader closeButton={!noModal}>
                 <ModalTitle> <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('title')}</h1></ModalTitle>
             </ModalHeader>
-
             <ModalBody>
+                <FormGroup className='d-flex justify-content-end'>
+                    <FormControlLabel control={<Switch checked={useApiSearch} onChange={handleChangeUseApiSearch} />} label={'Use integrated APIs to add work , turn off to add manuallly.'} />
+                </FormGroup>
                 <span className='text-primary fw-bold'>Core Information</span>
                 <Row className='d-flex flex-column flex-lg-row mt-4'>
                     <Col className="">
-                        <FormGroup controlId="worktype">
+                        <FormGroup controlId="type">
                             <FormControl size="small" fullWidth>
-                                <InputLabel id="worktype-label">*{t('typeFieldLabel')}</InputLabel>
+                                <InputLabel id="type-label">*{t('typeFieldLabel')}</InputLabel>
                                 <Select
-                                    labelId="worktype-label"
-                                    id="worktype"
-                                    value={workType}
+                                    labelId="type-label"
+                                    id="type"
+                                    name="type"
+                                    value={formValues.type}
                                     label={`*${t("typeFieldLabel")}`}
-                                    onChange={handleChangeWorkType}
+                                    onChange={handleChangeSelectField}
                                 //disabled={(selectedWork) ? true : false}
                                 >
                                     <MenuItem value="">{t('typeFieldPlaceholder')}</MenuItem>
@@ -332,26 +381,28 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                         </FormGroup>
                     </Col>
                     <Col className="">
-                        {(!selectedWork || resultWorks.length > 0) && <SearchWorkInput callback={searchTitles} />}
-                        {(selectedWork && !resultWorks.length) && <TextField id="title" className="w-100" label={`*${t('titleFieldLabel')}`}
-                            variant="outlined" size="small"
-                            value={title}
+                        {(!selectedWork || resultWorks.length > 0) && (useApiSearch) && <SearchWorkInput callback={searchTitles} />}
+                        {((selectedWork && !resultWorks.length) || !useApiSearch) && <TextField id="title" className="w-100  mt-4 mt-lg-0" label={`*${t('titleFieldLabel')}`}
+                            variant="outlined" size="small" name="title"
+                            value={formValues.title!}
                             type="text"
-                            onChange={(e) => setTitle(e.target.value)}
+                            onChange={handleChangeTextField}
                         >
                         </TextField>}
                     </Col>
-                    {(!selectedWork || resultWorks.length > 0) && <Box className='d-flex flex-row justify-content-around flex-wrap mt-5'>
-                        {(['book', 'fiction-book'].includes(workType!)) && resultWorks.map((work) => {
+
+                    {useApiSearch ? <> {(!selectedWork || resultWorks.length > 0)  && <Box className='d-flex flex-row justify-content-around flex-wrap mt-5'>
+                        {(['book', 'fiction-book'].includes(formValues?.type!)) && resultWorks.map((work) => {
                             return <BookCard key={work.id} book={work as GoogleBooksProps} callback={handleSelect} />;
                         })}
-                        {(['documentary', 'movie'].includes(workType!)) && resultWorks.map((work) => {
+                        {(['documentary', 'movie'].includes(formValues?.type!)) && resultWorks.map((work) => {
                             return <VideoCard key={work.id} video={work as TMDBVideosProps} callback={handleSelect} />;
                         })}
 
-                    </Box>}
+                    </Box>} </> : <></>}
+
                 </Row>
-                {(selectedWork && !resultWorks.length) &&
+                {((selectedWork && !resultWorks.length) || !useApiSearch) &&
                     <><Row className='d-flex flex-column flex-lg-row mt-4 mb-4'>
                         <Col className="">
                             <ImageFileSelect aceptedFileTypes="image/*" file={coverFile} setFile={setCoverFile} >
@@ -366,12 +417,12 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                 )}
                             </ImageFileSelect>
                         </Col>
-                        <Col className="">
+                    <Col className=" mt-4 mt-lg-0">
                             <TextField id="link" className="w-100" label={publicationLinkLabel}
-                                variant="outlined" size="small"
-                                value={link}
+                                variant="outlined" size="small" name='link'
+                                value={formValues.link}
                                 type="text"
-                                onChange={(e) => setLink(e.target.value)}
+                                onChange={handleChangeTextField}
                             >
                             </TextField>
                         </Col>
@@ -381,16 +432,16 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                         <Row className='d-flex flex-column flex-lg-row mt-4 mb-4'>
                             <Col className="">
                                 <TextField id="author" className="w-100" label={`*${t('authorFieldLabel')}`}
-                                    variant="outlined" size="small"
-                                    value={author}
+                                    variant="outlined" size="small" name='author'
+                                    value={formValues.author}
                                     type="text"
-                                    onChange={(e) => setAuthor(e.target.value)}
+                                    onChange={handleChangeTextField}
                                 >
                                 </TextField>
 
 
                             </Col>
-                            <Col className="">
+                        <Col className=" mt-4 mt-lg-0">
                                 <FormGroup controlId="countryOrigin">
                                     <TagsInputTypeAheadMaterial
                                         data={countrySearchResults}
@@ -412,9 +463,10 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                         <Select
                                             labelId="authorGender-label"
                                             id="authorGender"
-                                            value={authorGender}
+                                            name='authorGender'
+                                            value={formValues.authorGender}
                                             label={`*${t("authorGenderFieldLabel")}`}
-                                            onChange={(e) => setAuthorGender(e.target.value)}
+                                            onChange={handleChangeSelectField}
                                         >
                                             <MenuItem value="">{t('authorGenderFieldPlaceholder')}</MenuItem>
                                             <MenuItem value="female">{t('authorGenderFemale')}</MenuItem>
@@ -427,16 +479,17 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                 </FormGroup>
 
                             </Col>
-                            <Col className="">
+                        <Col className=" mt-4 mt-lg-0">
                                 <FormGroup controlId="authorRace">
                                     <FormControl size="small" fullWidth>
                                         <InputLabel id="authorRace-label">*{t('authorEthnicityFieldLabel')}</InputLabel>
                                         <Select
                                             labelId="authorRace-label"
                                             id="authorRace"
-                                            value={authorRace}
+                                            name='authorRace'
+                                            value={formValues.authorRace}
                                             label={`*${t("authorEthnicityFieldLabel")}`}
-                                            onChange={(e) => setAuthorRace(e.target.value)}
+                                            onChange={handleChangeSelectField}
                                         >
                                             <MenuItem value="">{t('authorEthnicityFieldPlaceholder')}</MenuItem>
                                             <MenuItem value="white">{t('authorEthnicityIsWhite')}</MenuItem>
@@ -462,7 +515,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                     />
                                 </FormGroup>
                             </Col>
-                            <Col className="">
+                        <Col className=" mt-4 mt-lg-0">
                                 <TagsInputMaterial tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
 
                             </Col>
@@ -471,27 +524,27 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                         <Row className='d-flex flex-column flex-lg-row mt-4'>
                             <Col className="">
                                 <TextField id="publicationYear" className="w-100" label={publicationYearLabel}
-                                    variant="outlined" size="small"
-                                    value={publicationYear}
+                                    variant="outlined" size="small" name="publicationYear"
+                                    value={formValues.publicationYear}
                                     type="text"
-                                    onChange={(e) => setPublicationYear(e.target.value)}
+                                    onChange={handleChangeTextField}
                                 />
                             </Col>
-                            <Col className="">
+                        <Col className=" mt-4 mt-lg-0">
                                 <TextField id="workLength" className="w-100" label={publicationLengthLabel}
-                                    variant="outlined" size="small"
-                                    value={workLength}
+                                    variant="outlined" size="small" name="workLength"
+                                    value={formValues.workLength}
                                     type="text"
-                                    onChange={(e) => setWorkLength(e.target.value)}
+                                    onChange={handleChangeTextField}
                                 />
                             </Col>
                         </Row>
                         <Row className='d-flex flex-column flex-lg-row mt-4 mb-5'>
                             <Col className="">
                                 <FormGroup controlId="description">
-                                <FormLabel>{t('workSummaryFieldLabel')}</FormLabel>
-                                <Textarea minRows={5} value={description} onChange={(e) => setDescription(e.target.value)}
- />
+                                    <FormLabel>{t('workSummaryFieldLabel')}</FormLabel>
+                                    <Textarea minRows={5} name="description" value={formValues.description} onChange={handleChangeTextField} />
+
                                 </FormGroup>
                             </Col>
                         </Row>
@@ -501,7 +554,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
             </ModalBody>
             <ModalFooter>
-                <Container className="p-0 d-flex justify-content-end">
+                {(selectedWork || !useApiSearch) && <Container className="p-0 d-flex justify-content-end">
                     <ButtonGroup className="py-4">
                         <Button
                             variant="warning"
@@ -519,7 +572,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                             </>
                         </Button>
                     </ButtonGroup>
-                </Container>
+                </Container>}
             </ModalFooter>
         </Form>
     );

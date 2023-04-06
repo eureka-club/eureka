@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
+//import FormControl from 'react-bootstrap/FormControl';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
 import ModalBody from 'react-bootstrap/ModalBody';
@@ -22,438 +22,517 @@ import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import TagsInput from './controls/TagsInput';
 import { EditWorkClientPayload, WorkMosaicItem } from '../../types/work';
+import { Country } from '@/src/types';
 // import ImageFileSelect from './controls/ImageFileSelect';
 import globalModalsAtom from '../../atoms/globalModals';
-import styles from './CreateWorkForm.module.css';
+import styles from './EditWorkForm.module.css';
 import i18nConfig from '../../../i18n';
 import useTopics from '../../useTopics';
+import useCountries from 'src/useCountries';
 import useWork from '@/src/useWork'
+import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem, FormControlLabel, Switch } from '@mui/material';
+import Textarea from '@mui/joy/Textarea';
+import TagsInputTypeAheadMaterial from '@/components/forms/controls/TagsInputTypeAheadMaterial';
+import TagsInputMaterial from '@/components/forms/controls/TagsInputMaterial';
+import ImageFileSelect from '@/components/forms/controls/ImageFileSelectMUI';
+import LocalImageComponent from '../LocalImage';
+import { PostMosaicItem } from '@/src/types/post';
 
 dayjs.extend(utc);
+
+interface FormValues {
+  type: string;
+  title: string;
+  link: string | null;
+  author: string;
+  authorGender: string | null;
+  authorRace: string | null;
+  publicationYear: number | null;
+  workLength: string | null;
+  description: string | null;
+}
+
 const EditWorkForm: FunctionComponent = () => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-  const [publicationYearLabel, setPublicationYearLabel] = useState('...');
-  // const [coverFile, setCoverFile] = useState<File | null>(null);
   const queryClient = useQueryClient();
-  const { t } = useTranslation('createWorkForm');
   const router = useRouter();
+  const { t } = useTranslation('createWorkForm')
+  const [countrySearchResults, setCountrySearchResults] = useState<{ code: string; label: string }[]>([]);
+  const [formValues, setFormValues] = useState<FormValues>({
+    type: '',
+    title: '',
+    link: '',
+    author: '',
+    authorGender: '',
+    authorRace: '',
+    publicationYear: null,
+    workLength: '',
+    description: ''
+  });
+  const [coverFile, setCoverFile] = useState<File | null>(null);
+  const [countryOrigin, setCountryOrigin] = useState<string[]>([]);
   const [tags, setTags] = useState<string>('');
-  //const [work, setWork] = useState<WorkMosaicItem | null>(null);
+  const [items, setItems] = useState<string[]>([]);  //topics
   const [publicationLengthLabel, setPublicationLengthLabel] = useState('...');
-  const typeaheadRef = useRef<AsyncTypeahead<{ id: number; code: string; label: string }>>(null);
-  const [isCountriesSearchLoading, setIsCountriesSearchLoading] = useState(false);
-  const [isCountriesSearchLoading2, setIsCountriesSearchLoading2] = useState(false);
-  const [countrySearchResults, setCountrySearchResults] = useState<{ id: number; code: string; label: string }[]>([]);
-  const [countryOrigin, setCountryOrigin] = useState<string>();
-  const [countryOrigin2, setCountryOrigin2] = useState<string | null>();
-  const [hasCountryOrigin2, sethasCountryOrigin2] = useState<boolean>();
+  const [publicationYearLabel, setPublicationYearLabel] = useState('...');
+  const [publicationLinkLabel, setPublicationLinkLabel] = useState('...');
+  const [ck, setCK] = useState<string[]>();
+
   const { data: topics } = useTopics();
-  const [items, setItems] = useState<string[]>([]);
+  const { data: work } = useWork(+(router.query?.id?.toString()!), { enabled: !!router.query?.id })
+  const { data: countries } = useCountries();
 
-  const { locale } = useRouter();
-  const [namespace, setNamespace] = useState<Record<string, string>>();
-
-  useEffect(() => {
-    const fn = async () => {
-      // const r = await i18nConfig.loadLocaleFrom(locale, 'countries');
-      const res = await fetch('/api/taxonomy/countries')
-      const {result:r} = await res.json()
-      setNamespace(r);
-    };
-    fn();
-  }, [locale]);
-
-  const labelsChange = (fieldName: string) => {
-    switch (fieldName) {
-      case 'fiction-book':
-      case 'book':
-        setPublicationLengthLabel(t('Length pages'));
-        setPublicationYearLabel(t('Publication year'));
-        break;
-      case 'movie':
-      case 'documentary':
-        setPublicationYearLabel(t('releaseYearFieldLabel'));
-        setPublicationLengthLabel(`${t('Duration')} (${t('minutes')})`);
-        break;
-
-      default:
-        setPublicationYearLabel('...');
-        setPublicationLengthLabel('...');
-    }
-  };
-  const {data:work} = useWork(+(router.query?.id?.toString()!),{enabled:!!router.query?.id})
 
   useEffect(() => {
-    if(work){
-        setTags(work.tags||'');
-        labelsChange(work.type);
-        if (work.topics?.length) {
-           for(let topic of work.topics.split(',')){
-             if(!items.includes(topic))
-              items.push(...work.topics.split(','));
-          }
+    if (countries) setCountrySearchResults(countries.map((d: Country) => ({ code: d.code, label: d.code })))
+  }, [countries])
+
+  useEffect(() => {
+    console.log(work?.localImages, 'work work')
+    if (work) {
+      let formValues = {
+        type: work.type,
+        title: work.title,
+        link: work.link,
+        author: work.author,
+        authorGender: work.authorGender,
+        authorRace: work.authorRace,
+        publicationYear: dayjs(work.publicationYear?.toString()).utc().year(),
+        workLength: work.length,
+        description: work.contentText,
+      }
+      setFormValues(formValues);
+
+      setTags(work.tags || '');
+      labelsChange(work.type);
+      if (work.topics?.length) {
+        for (let topic of work.topics.split(',')) {
+          if (!items.includes(topic))
+            items.push(...work.topics.split(','));
         }
-        if (work.countryOfOrigin2) setCountryOrigin2(work.countryOfOrigin2);
+      }
+      if (work.countryOfOrigin) setCountryOrigin(work.countryOfOrigin.split(','));
     }
   }, [work]);
 
 
-  const {
-    mutate: execEditWork,
-    error: editWorkError,
-    isError,
-    isLoading,
-    isSuccess,
-  } = useMutation(async (payload: EditWorkClientPayload) => {
-    const res = await fetch(`/api/work/${router.query.id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    return res.json();
-  },{
-    onMutate(vars){
-      const ck = ['WORK',`${work!.id}`]
-      queryClient.cancelQueries(ck)
-      const snapshot = queryClient.getQueryData<WorkMosaicItem>(ck)
-      queryClient.setQueryData(ck,{...work,...vars})
-      return {snapshot,ck}
-    },
-    onSettled(data,error,vars,context){
-      type ctx = {snapshot:WorkMosaicItem,ck:string[]}
-      const {snapshot,ck} = context as ctx;
-      if(error){
-        queryClient.setQueryData(ck,snapshot)
-      }
-      //queryClient.invalidateQueries(ck)  
-    }
-  });
 
-  const handleWorkTypeChange = (ev: ChangeEvent<HTMLSelectElement>) => {
-    labelsChange(ev.currentTarget.value);
-    /* switch (ev.currentTarget.value) {
-      case 'book':
-        setPublicationLengthLabel(`${t('Length')} (${t('pages')})`);
-        break;
+  const labelsChange = (fieldName: string) => {
+    switch (fieldName) {
       case 'movie':
-      case 'documentary':
+        setPublicationLinkLabel('Streaming on')
         setPublicationYearLabel(t('releaseYearFieldLabel'));
         setPublicationLengthLabel(`${t('Duration')} (${t('minutes')})`);
         break;
-
+      case 'documentary':
+        setPublicationLinkLabel('Streaming on')
+        setPublicationYearLabel(t('releaseYearFieldLabel'));
+        setPublicationLengthLabel(`${t('Duration')} (${t('minutes')})`);
+        break;
+      case 'book':
+        setPublicationLinkLabel(t('linkFieldLabel'));
+        setPublicationLengthLabel(t('Length pages'));
+        setPublicationYearLabel(t('Publication year'));
+        break;
+      case 'fiction-book':
+        setPublicationLinkLabel(t('linkFieldLabel'));
+        setPublicationLengthLabel(t('Length pages'));
+        setPublicationYearLabel(t('Publication year'));
+        break;
       default:
-        setPublicationYearLabel(t('publicationYearFieldLabel'));
-        setPublicationLengthLabel(`${t('Length')} | ${t('Duration')}`);
-    } */
+        setPublicationLinkLabel(t('linkFieldLabel'));
+        setPublicationYearLabel('...');
+        setPublicationLengthLabel('...');
+    }
   };
+
+  function handleChangeSelectField(ev: SelectChangeEvent) {
+    ev.preventDefault();
+
+    const { name, value } = ev.target;
+    setFormValues({
+      ...formValues,
+      [name]: value
+    });
+
+    if (name === 'type') {
+      switch (value) {
+        case 'movie':
+          setPublicationLinkLabel('Streaming on')
+          setPublicationYearLabel(t('releaseYearFieldLabel'));
+          setPublicationLengthLabel(`${t('Duration')} (${t('minutes')})`);
+          break;
+        case 'documentary':
+          setPublicationLinkLabel('Streaming on')
+          setPublicationYearLabel(t('releaseYearFieldLabel'));
+          setPublicationLengthLabel(`${t('Duration')} (${t('minutes')})`);
+          break;
+        case 'book':
+          setPublicationLinkLabel(t('linkFieldLabel'));
+          setPublicationLengthLabel(t('Length pages'));
+          setPublicationYearLabel(t('Publication year'));
+          break;
+        case 'fiction-book':
+          setPublicationLinkLabel(t('linkFieldLabel'));
+          setPublicationLengthLabel(t('Length pages'));
+          setPublicationYearLabel(t('Publication year'));
+          break;
+        default:
+          setPublicationLinkLabel(t('linkFieldLabel'));
+          setPublicationYearLabel('...');
+          setPublicationLengthLabel('...');
+      }
+      //setWorkType(ev.target.value as string);
+    }
+  }
+
+  function handleChangeTextField(ev: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    ev.preventDefault();
+    const { name, value } = ev.target;
+    setFormValues({
+      ...formValues,
+      [name]: value
+    });
+  }
+
+
+
+
+  const {
+    mutate: execEditWork,
+    isLoading,
+    isSuccess,
+  } = useMutation(async (payload: EditWorkClientPayload) => {
+
+    const formData = new FormData();
+
+    Object.entries(payload).forEach(([key, value]) => {
+      if (value != null) {
+        formData.append(key, value);
+      }
+    });
+
+    const res = await fetch(`/api/work/${work!.id}`, {
+      method: 'POST',
+     // headers: { 'Content-Type': 'application/json' },
+      body: formData,//JSON.stringify(payload),
+    });
+
+    return res.json();
+  }, {
+    onMutate: async (variables) => {
+      if (work) {
+        const ck_ = ck || ['WORK', `${work.id}`];
+        await queryClient.cancelQueries(ck_)
+        const snapshot = queryClient.getQueryData<WorkMosaicItem>(ck_)
+        const { title, contentText } = variables;
+        if (snapshot) {
+          queryClient.setQueryData(ck_, { ...snapshot, title, contentText });
+
+          return { snapshot, ck: ck_ };
+        }
+      }
+    },
+    onSettled: (_work, error, _variables, context) => {
+      if (error) {
+        queryClient.invalidateQueries(ck);
+        queryClient.invalidateQueries(['WORK', `${work!.id}`]);
+      }
+      queryClient.invalidateQueries(ck);
+
+    },
+  });
+
+
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
-    // if (coverFile == null) {
-    //   return;
-    // }
 
-    const form = ev.currentTarget;
     const payload: EditWorkClientPayload = {
-      id: router.query.id as string,
-      type: form.type.value,
-      title: form.workTitle.value,
-      author: form.author.value,
-      authorGender: form.authorGender.value.length ? form.authorGender.value : null,
-      authorRace: form.authorRace.value.length ? form.authorRace.value : null,
-      // cover: coverFile,
-      contentText: form.description.value.length ? form.description.value : null,
-      link: form.link.value.length ? form.link.value : null,
-      countryOfOrigin: countryOrigin,
-      countryOfOrigin2: countryOrigin2,
-      publicationYear: form.publicationYear.value.length ? form.publicationYear.value : null,
-      length: form.workLength.value.length ? form.workLength.value : null,
+    id: router.query.id as string,
+      type: formValues?.type!,
+      title: formValues?.title!,
+      author: formValues?.author!,
+      authorGender: formValues.authorGender ? formValues.authorGender : null,
+      authorRace: formValues.authorRace ? formValues.authorRace : null,
+      cover: coverFile,
+      contentText: formValues.description ? formValues.description : null,
+      link: formValues.link ? formValues.link : null,
+      countryOfOrigin: countryOrigin.join(',') || null,
+      //countryOfOrigin2: countryOrigin2 || null,
+      publicationYear: formValues.publicationYear ? formValues.publicationYear.toString() : null,
+      length: formValues.workLength ? formValues.workLength : null,
       tags,
-      topics: items.join(),
+      topics: items.join(','),
     };
 
     await execEditWork(payload);
   };
 
-  const handlerchange = (ev: ChangeEvent<HTMLInputElement>) => {
-    if (work && ev.currentTarget.id in work) {
-      let w: WorkMosaicItem & { [key: string]: unknown } = work;
-      w = work;
-      w[ev.currentTarget.id] = ev.currentTarget.value;
-      // setWork(w);
-    }
-  };
+ 
+
 
   useEffect(() => {
     if (isSuccess === true) {
       setGlobalModalsState({ ...globalModalsState, ...{ editWorkModalOpened: false } });
       queryClient.invalidateQueries('works.mosaic');
-      router.replace(router.asPath);
+      router.push(`/work/${work!.id}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
-  const handleSearchCountry = async (query: string) => {
-    setIsCountriesSearchLoading(true);
-    const response = await fetch(`/api/taxonomy/countries?q=${query}`);
-    const itemsSC: { id: number; code: string; label: string }[] = (await response.json()).result;
-    itemsSC.forEach((i, idx: number) => {
-      itemsSC[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
-    });
-    setCountrySearchResults(itemsSC);
-    setIsCountriesSearchLoading(false);
-  };
+  /* const handleSearchCountry = async (query: string) => {
+     setIsCountriesSearchLoading(true);
+     const response = await fetch(`/api/taxonomy/countries?q=${query}`);
+     const itemsSC: { id: number; code: string; label: string }[] = (await response.json()).result;
+     itemsSC.forEach((i, idx: number) => {
+       itemsSC[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
+     });
+     setCountrySearchResults(itemsSC);
+     setIsCountriesSearchLoading(false);
+   };
+ 
+   const handleSearchCountrySelect = (selected: { id: number; code: string; label: string }[]): void => {
+     if (selected[0] != null) {
+       setCountryOrigin(selected[0].code);
+     }
+   };
+ 
+   const toogleCountryOrigin2Handler = (countryOpt?: number) => {
+     if (countryOpt === 2) {
+       sethasCountryOrigin2(false);
+       setCountryOrigin2(null);
+     } else {
+       sethasCountryOrigin2(true);
+       setCountryOrigin2(null);
+     }
+   };
+ 
+   const handleSearchCountry2Select = (selected: { id: number; code: string; label: string }[]): void => {
+     if (selected[0] != null) {
+       // if (hasCountryOrigin2)
+       setCountryOrigin2(selected[0].code);
+     }
+   };
+ 
+   const handleSearchCountry2 = async (query: string) => {
+     setIsCountriesSearchLoading2(true);
+     const response = await fetch(`/api/taxonomy/countries?q=${query}`);
+     const itemsSC2: { id: number; code: string; label: string }[] = (await response.json()).result;
+     itemsSC2.forEach((i, idx: number) => {
+       itemsSC2[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
+     });
+     setCountrySearchResults(itemsSC2);
+     setIsCountriesSearchLoading2(false);
+   };*/
 
-  const handleSearchCountrySelect = (selected: { id: number; code: string; label: string }[]): void => {
-    if (selected[0] != null) {
-      setCountryOrigin(selected[0].code);
-    }
-  };
 
-  const toogleCountryOrigin2Handler = (countryOpt?: number) => {
-    if (countryOpt === 2) {
-      sethasCountryOrigin2(false);
-      setCountryOrigin2(null);
-    } else {
-      sethasCountryOrigin2(true);
-      setCountryOrigin2(null);
-    }
-  };
-
-  const handleSearchCountry2Select = (selected: { id: number; code: string; label: string }[]): void => {
-    if (selected[0] != null) {
-      // if (hasCountryOrigin2)
-      setCountryOrigin2(selected[0].code);
-    }
-  };
-
-  const handleSearchCountry2 = async (query: string) => {
-    setIsCountriesSearchLoading2(true);
-    const response = await fetch(`/api/taxonomy/countries?q=${query}`);
-    const itemsSC2: { id: number; code: string; label: string }[] = (await response.json()).result;
-    itemsSC2.forEach((i, idx: number) => {
-      itemsSC2[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
-    });
-    setCountrySearchResults(itemsSC2);
-    setIsCountriesSearchLoading2(false);
-  };
-  if(!work)return <></>
+  if (!work) return <></>
   return (
     work && (
       <Form onSubmit={handleSubmit}>
         <ModalHeader>
-          <Container>
-            <ModalTitle>{t('titleEdit')}</ModalTitle>
-          </Container>
+          <ModalTitle className='d-flex flex-row justified-content-between mt-sm-0 mb-3  w-100'>
+            <h1 className="d-flex align-items-end text-secondary fw-bold w-100">{t('titleEdit')}</h1>
+            <LocalImageComponent filePath={work.localImages[0].storedFile} alt='' width={140} className='rounded-2' />
+          </ModalTitle>
         </ModalHeader>
-
         <ModalBody>
-          <Container>
-            <Row>
-              <Col>
-                <FormGroup controlId="type">
-                  <FormLabel>*{t('typeFieldLabel')}</FormLabel>
-                  <Form.Select as="select" required onChange={handleWorkTypeChange} defaultValue={work.type}>
-                    <option value="">{t('typeFieldPlaceholder')}</option>
-                    <option value="book">{t('common:book')}</option>
-                    <option value="fiction-book">{t('common:fiction-book')}</option>
-                    <option value="documentary">{t('common:documentary')}</option>
-                    <option value="movie">{t('common:movie')}</option>
-                  </Form.Select>
-                </FormGroup>
+          <span className='text-primary fw-bold'>Core Information</span>
+          <Row className='d-flex flex-column flex-lg-row mt-4'>
+            <Col className="">
+              <FormGroup controlId="type">
+                <FormControl size="small" fullWidth>
+                  <InputLabel id="type-label">*{t('typeFieldLabel')}</InputLabel>
+                  <Select
+                    labelId="type-label"
+                    id="type"
+                    name="type"
+                    value={formValues.type}
+                    label={`*${t("typeFieldLabel")}`}
+                    onChange={handleChangeSelectField}
+                  //disabled={(selectedWork) ? true : false}
+                  >
+                    <MenuItem value="">{t('typeFieldPlaceholder')}</MenuItem>
+                    <MenuItem value="book">{t('common:book')}</MenuItem>
+                    <MenuItem value="fiction-book">{t('common:fiction-book')}</MenuItem>
+                    <MenuItem value="documentary">{t('common:documentary')}</MenuItem>
+                    <MenuItem value="movie">{t('common:movie')}</MenuItem>
+                  </Select>
+                </FormControl>
+              </FormGroup>
+            </Col>
+            <Col className="mt-4 mt-lg-0">
+              <TextField id="title" className="w-100" label={`*${t('titleFieldLabel')}`}
+                variant="outlined" size="small" name="title"
+                value={formValues.title!}
+                type="text"
+                onChange={handleChangeTextField}
+              >
+              </TextField>
+            </Col>
+
+          </Row>
+          <><Row className='d-flex flex-column flex-lg-row mt-4 mb-4'>
+            <Col className="">
+              <ImageFileSelect aceptedFileTypes="image/*" file={coverFile} setFile={setCoverFile} >
+                {(imagePreview) => (
+                  <div className={styles.imageControl}>
+                    {coverFile != null && imagePreview != null ? (
+                      <>
+                        <img src={imagePreview} className="float-left" alt="Work cover" />
+                      </>
+                    ) : ""}
+                  </div>
+                )}
+              </ImageFileSelect>
+            </Col>
+            <Col className="mt-4 mt-lg-0">
+              <TextField id="link" className="w-100" label={publicationLinkLabel}
+                variant="outlined" size="small" name='link'
+                value={formValues.link}
+                type="text"
+                onChange={handleChangeTextField}
+              >
+              </TextField>
+            </Col>
+          </Row>
+
+            <span className='text-primary fw-bold'>Auhorship</span>
+            <Row className='d-flex flex-column flex-lg-row mt-4 mb-4'>
+              <Col className="">
+                <TextField id="author" className="w-100" label={`*${t('authorFieldLabel')}`}
+                  variant="outlined" size="small" name='author'
+                  value={formValues.author}
+                  type="text"
+                  onChange={handleChangeTextField}
+                >
+                </TextField>
+
+
               </Col>
-              <Col>
-                <FormGroup controlId="workTitle">
-                  <FormLabel>*{t('titleFieldLabel')}</FormLabel>
-                  <FormControl type="text" required defaultValue={work.title} />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <FormGroup controlId="author">
-                  <FormLabel>*{t('authorFieldLabel')}</FormLabel>
-                  <FormControl type="text" required defaultValue={work.author} />
-                </FormGroup>
-              </Col>
-              <Col>
-                <FormGroup controlId="link">
-                  <FormLabel>{t('linkFieldLabel')}</FormLabel>
-                  <FormControl
-                    type="text"
-                    placeholder="http://"
-                    defaultValue={work.link?.toString()}
-                    onChange={handlerchange}
+              <Col className="mt-4 mt-lg-0">
+                <FormGroup controlId="countryOrigin">
+                  <TagsInputTypeAheadMaterial
+                    data={countrySearchResults}
+                    items={countryOrigin}
+                    setItems={setCountryOrigin}
+                    formatValue={(v: string) => t(`countries:${v}`)}
+                    max={2}
+                    label={`${t('countryFieldLabel')} - 2 max`}
+                  //placeholder={`${t('Type to add tag')}...`}
                   />
                 </FormGroup>
               </Col>
             </Row>
-            <Row>
-              <Col>
-                <FormGroup controlId="publicationYear">
-                  <FormLabel>{publicationYearLabel}</FormLabel>
-                  <FormControl
-                    defaultValue={dayjs(work.publicationYear?.toString()).utc().year()}
-                    type="number"
-                    min="-5000"
-                    max="2200"
-                  />
+            <Row className='d-flex flex-column flex-lg-row mt-4 mb-4'>
+              <Col className="">
+                <FormGroup controlId="authorGender">
+                  <FormControl size="small" fullWidth>
+                    <InputLabel id="authorGender-label">*{t('authorGenderFieldLabel')}</InputLabel>
+                    <Select
+                      labelId="authorGender-label"
+                      id="authorGender"
+                      name='authorGender'
+                      value={formValues.authorGender!}
+                      label={`*${t("authorGenderFieldLabel")}`}
+                      onChange={handleChangeSelectField}
+                    >
+                      <MenuItem value="">{t('authorGenderFieldPlaceholder')}</MenuItem>
+                      <MenuItem value="female">{t('authorGenderFemale')}</MenuItem>
+                      <MenuItem value="male">{t('authorGenderMale')}</MenuItem>
+                      <MenuItem value="non-binary">{t('authorGenderNonbinary')}</MenuItem>
+                      <MenuItem value="trans">{t('authorGenderTrans')}</MenuItem>
+                      <MenuItem value="other">{t('authorGenderOther')}</MenuItem>
+                    </Select>
+                  </FormControl>
+                </FormGroup>
+
+              </Col>
+              <Col className=" mt-4 mt-lg-0">
+                <FormGroup controlId="authorRace">
+                  <FormControl size="small" fullWidth>
+                    <InputLabel id="authorRace-label">*{t('authorEthnicityFieldLabel')}</InputLabel>
+                    <Select
+                      labelId="authorRace-label"
+                      id="authorRace"
+                      name='authorRace'
+                      value={formValues.authorRace!}
+                      label={`*${t("authorEthnicityFieldLabel")}`}
+                      onChange={handleChangeSelectField}
+                    >
+                      <MenuItem value="">{t('authorEthnicityFieldPlaceholder')}</MenuItem>
+                      <MenuItem value="white">{t('authorEthnicityIsWhite')}</MenuItem>
+                      <MenuItem value="non-white">{t('authorEthnicityIsNotWhite')}</MenuItem>
+                    </Select>
+                  </FormControl>
                 </FormGroup>
               </Col>
-              <Col>
-                <FormGroup controlId="countryOfOrigin1">
-                  <FormLabel>{t('countryFieldLabel')}</FormLabel>
-                  <AsyncTypeahead
-                    id="create-work--search-country"
-                    // Bypass client-side filtering. Results are already filtered by the search endpoint
-                    filterBy={() => true}
-                    // inputProps={{ required: true }}
-                    // placeholder={t('addWrkTypeaheadPlaceholder')}
-                    ref={typeaheadRef}
-                    isLoading={isCountriesSearchLoading}
-                    labelKey={(res) => `${res.label}`}
-                    minLength={2}
-                    onSearch={handleSearchCountry}
-                    options={countrySearchResults}
-                    onChange={handleSearchCountrySelect}
-                    placeholder={namespace && work.countryOfOrigin ? namespace[work.countryOfOrigin] : ''}
-                    // renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work} />}
-                  />
-                  {!countryOrigin2 && !hasCountryOrigin2 && (
-                    <Button className={styles.toogleSecondOriginCountry} onClick={() => toogleCountryOrigin2Handler()}>
-                      {t('Add a second origin country')}
-                    </Button>
-                  )}
-                </FormGroup>
-              </Col>
-              {(countryOrigin2 || hasCountryOrigin2) && (
-                <Col>
-                  <FormGroup controlId="countryOfOrigin2">
-                    <FormLabel>{t('countryFieldLabel')} 2</FormLabel>
-                    <AsyncTypeahead
-                      id="create-work--search-country2"
-                      // Bypass client-side filtering. Results are already filtered by the search endpoint
-                      filterBy={() => true}
-                      // inputProps={{ required: true }}
-                      // placeholder={t('addWrkTypeaheadPlaceholder')}
-                      // ref={typeaheadRef}
-                      isLoading={isCountriesSearchLoading2}
-                      labelKey={(res) => `${res.label}`}
-                      minLength={2}
-                      onSearch={handleSearchCountry2}
-                      options={countrySearchResults}
-                      onChange={handleSearchCountry2Select}
-                      placeholder={namespace && countryOrigin2 ? namespace[countryOrigin2] : ''}
-                      // renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work} />}
-                    />
-                    <Button className={styles.toogleSecondOriginCountry} onClick={() => toogleCountryOrigin2Handler(2)}>
-                      {t('Remove the second origin country')}
-                    </Button>
-                  </FormGroup>
-                </Col>
-              )}
-              <Col>
-                <FormGroup controlId="workLength">
-                  <FormLabel>{publicationLengthLabel}</FormLabel>
-                  <FormControl defaultValue={work.length?.toString()} type="number" min="0" max="999999" />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <TagsInput tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
-              </Col>
-              {/* <Col>
-                <ImageFileSelect acceptedFileTypes="image/*" file={coverFile} setFile={setCoverFile} required>
-                  {(imagePreview) => (
-                    <FormGroup>
-                      <FormLabel>*{t('imageCoverFieldLabel')}</FormLabel>
-                      <div className={styles.imageControl}>
-                        {coverFile != null && imagePreview != null ? (
-                          <>
-                            <span className={styles.imageName}>{coverFile?.name}</span>
-                            <img src={imagePreview} className="float-right" alt="Work cover" />
-                          </>
-                        ) : (
-                          t('imageCoverFieldPlaceholder')
-                        )}
-                      </div>
-                    </FormGroup>
-                  )}
-                </ImageFileSelect>
-              </Col> */}
             </Row>
 
-            <Row>
-              <Col>
-                <FormGroup controlId="authorGender">
-                  <FormLabel>{t('authorGenderFieldLabel')}</FormLabel>
-                  <FormControl as="select" defaultValue={work.authorGender?.toString()}>
-                    <option value="">{t('authorGenderFieldPlaceholder')}</option>
-                    <option value="female">{t('authorGenderFemale')}</option>
-                    <option value="male">{t('authorGenderMale')}</option>
-                    <option value="non-binary">{t('authorGenderNonbinary')}</option>
-                    <option value="trans">{t('authorGenderTrans')}</option>
-                    <option value="other">{t('authorGenderOther')}</option>
-                  </FormControl>
-                </FormGroup>
-              </Col>
-              <Col>
-                <FormGroup controlId="authorRace">
-                  <FormLabel>{t('authorEthnicityFieldLabel')}</FormLabel>
-                  <FormControl as="select" defaultValue={work.authorRace?.toString()}>
-                    <option value="">{t('authorEthnicityFieldPlaceholder')}</option>
-                    <option value="white">{t('authorEthnicityIsWhite')}</option>
-                    <option value="non-white">{t('authorEthnicityIsNotWhite')}</option>
-                  </FormControl>
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
+            <span className='text-primary fw-bold'>Content</span>
+            <Row className='d-flex flex-column flex-lg-row mt-4'>
+              <Col className="">
                 <FormGroup controlId="topics">
-                  <FormLabel>{t('topicsLabel')}</FormLabel>
-                  <TagsInputTypeAhead
+                  <TagsInputTypeAheadMaterial
                     data={topics}
                     items={items}
                     setItems={setItems}
+                    formatValue={(v: string) => t(`topics:${v}`)}
                     max={3}
-                    labelKey={(res) => t(`topics:${res.code}`)}
-                    formatValue={(v: string) => t(`topics:${v}`)} 
+                    label={t('topicsLabel')}
+                    placeholder={`${t('Type to add tag')}...`}
                   />
+                </FormGroup>
+              </Col>
+              <Col className="mt-4 mt-lg-0">
+                <TagsInputMaterial tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
+
+              </Col>
+            </Row>
+            <span className='text-primary fw-bold'>Additional Information about work</span>
+            <Row className='d-flex flex-column flex-lg-row mt-4'>
+              <Col className="">
+                <TextField id="publicationYear" className="w-100" label={publicationYearLabel}
+                  variant="outlined" size="small" name="publicationYear"
+                  value={formValues.publicationYear}
+                  type="number"
+                  onChange={handleChangeTextField}
+                />
+              </Col>
+              <Col className="mt-4 mt-lg-0">
+                <TextField id="workLength" className="w-100" label={publicationLengthLabel}
+                  variant="outlined" size="small" name="workLength"
+                  value={formValues.workLength}
+                  type="text"
+                  onChange={handleChangeTextField}
+                />
+              </Col>
+            </Row>
+            <Row className='d-flex flex-column flex-lg-row mt-4 mb-5'>
+              <Col className="">
+                <FormGroup controlId="description">
+                  <FormLabel>{t('workSummaryFieldLabel')}</FormLabel>
+                  <Textarea minRows={5} name="description" value={formValues.description!} onChange={handleChangeTextField} />
                 </FormGroup>
               </Col>
             </Row>
 
-            <Row>
-              <FormGroup controlId="description" as={Col}>
-                <FormLabel>{t('workSummaryFieldLabel')}</FormLabel>
-                <FormControl as="textarea" rows={6} maxLength={4000} defaultValue={work.contentText?.toString()} />
-              </FormGroup>
-            </Row>
-          </Container>
-        </ModalBody>
+          </>
 
+        </ModalBody>
         <ModalFooter>
-           <Row>
+          <Row>
             <Col className='d-flex justify-content-end mt-4 mb-2'>
-             {/*<Button
-               variant="warning"
-                //onClick={handleFormClear}
-                className="text-white me-3 mt-3"
-                style={{ width: '10em' }}
-              >
-                {t('resetBtnLabel')}
-              </Button>*/}
-            <Button disabled={isLoading} type="submit" className="mt-3 btn-eureka" style={{ width: '10em' }}>
-              <>
-                {t('titleEdit')}
-                {isLoading && (
-                  <Spinner animation="grow" variant="info" className={styles.loadIndicator} />
-                ) }
-              </>
-            </Button>
+              <Button disabled={isLoading} type="submit" className="mt-3 btn-eureka" style={{ width: '10em' }}>
+                <>
+                  {t('titleEdit')}
+                  {isLoading && (
+                    <Spinner animation="grow" variant="info" className={`ms-2 ${styles.loadIndicator}`} size="sm" />
+                  )}
+                </>
+              </Button>
             </Col>
           </Row>
         </ModalFooter>

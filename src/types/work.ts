@@ -81,7 +81,7 @@ export interface CreateWorkServerPayload {
 }
 
 export interface EditWorkClientPayload {
-  // cover: File;
+  cover: File | null;
   id: string;
   type?: string;
   title?: string;
@@ -100,7 +100,7 @@ export interface EditWorkClientPayload {
 
 
 export interface GoogleBooksProps {
-  id: string
+  id: string;
   volumeInfo: {
     title: string;
     authors: string[];
@@ -108,6 +108,7 @@ export interface GoogleBooksProps {
     description: string;
     publisher: string;
     language: string;
+    pageCount:number
     imageLinks: {
       thumbnail: string;
     };
