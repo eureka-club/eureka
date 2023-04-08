@@ -1,4 +1,4 @@
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Head from "next/head";
 import useTranslation from 'next-translate/useTranslation';
 import { useState /* , useEffect, ReactElement, Children */ } from 'react';
@@ -11,8 +11,13 @@ import Link from 'next/link'
 // import Masonry from 'react-masonry-css';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import styles from './manifest.module.css';
+import { getSession } from 'next-auth/react';
+import { Session } from '@/src/types';
 
-const ManifestPage: NextPage = () => {
+interface Props{
+  session:Session
+}
+const ManifestPage: NextPage<Props> = ({session}) => {
   const { t } = useTranslation('manifest');
 
   const [show, setShow] = useState<Record<string, boolean>>({});
@@ -432,6 +437,15 @@ const ManifestPage: NextPage = () => {
     </SimpleLayout>
     </>
   );
+};
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getSession(ctx);
+  return {
+    props: {
+      session,
+    },
+  };
+  
 };
 
 export default ManifestPage;
