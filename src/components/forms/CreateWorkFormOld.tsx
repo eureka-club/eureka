@@ -170,7 +170,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({noModal = false})=> {
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
-
+/*
     if (coverFile == null) {
       return;
     }
@@ -193,7 +193,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({noModal = false})=> {
       topics: items.join(','),
     };
 
-    await execCreateWork(payload);
+    await execCreateWork(payload);*/
   };
 
   const toogleCountryOrigin2Handler = (countryOpt?: number) => {

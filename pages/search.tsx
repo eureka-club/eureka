@@ -43,8 +43,8 @@ const SearchPage: NextPage<Props> = ({ hasCycles, hasPosts, hasWorks, metas,sess
   const { t } = useTranslation('common');
   const router = useRouter();
 
-  let qLabel = `${router.query.q as string}`;
-  if (qLabel.match(':')) qLabel = router.query.q as string;
+  let qLabel = router.query.q?.toString();
+  if (qLabel && qLabel.match(':')) qLabel = router.query.q as string;
 
   const onTermKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.code == 'Enter') {
@@ -81,9 +81,11 @@ const SearchPage: NextPage<Props> = ({ hasCycles, hasPosts, hasWorks, metas,sess
         </ButtonGroup>
         {/* <SearchInput className="" /> */}
 
-        <h1 className="text-secondary fw-bold mb-2">
-          {t('Results about')}: {`"${isEurekaTopic(qLabel) ? t('topics:' + qLabel) : qLabel}"`}
-        </h1>
+        <>
+          {qLabel ? <h1 className="text-secondary fw-bold mb-2">
+            {t('Results about')}: {qLabel && `"${isEurekaTopic(qLabel) ? t('topics:' + qLabel) : qLabel}"`}
+          </h1> : ''}
+        </>
         {hasCycles || hasPosts || hasWorks ? (
           <div className="d-flex flex-column justify-content-center">
             <SearchTab {...{ hasCycles, hasPosts, hasWorks }} />
@@ -199,7 +201,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   let metaTags = null;
 
-  if (topics.includes(q!.toString())) {
+  if (q && topics.includes(q!.toString())) {
     metaTags = {
       //id: cycle?.id,
       topic: q!.toString(),

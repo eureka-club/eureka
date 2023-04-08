@@ -263,6 +263,84 @@ export const createFromServerFields = async (
   });
 };
 
+export const UpdateFromServerFields = async (
+  fields: CreateWorkServerFields,
+  coverImageUpload: StoredFileUpload | null,
+  workId: number,
+): Promise<Work> => {
+  const payload = Object.entries(fields).reduce((memo, field) => {
+    const [fieldName, fieldValues] = field;
+
+    if (fieldName === 'publicationYear') {
+      return { ...memo, [fieldName]: new Date(fieldValues) };
+    }
+
+    return { ...memo, [fieldName]: fieldValues[0] };
+  }, {} as CreateWorkServerPayload);
+
+  const existingLocalImage = coverImageUpload //NO EXISTE IMAGEN EN TABLA localImage
+    ? await prisma.localImage.findFirst({
+        where: { contentHash: coverImageUpload.contentHash },
+      })
+    : null;
+
+  if (existingLocalImage != null) {
+     const q1 = prisma.work.update({
+       where: { id: workId },
+       data: {
+         localImages: {
+           set: [],
+         },
+       },
+     });
+
+     await prisma.$transaction([q1]);
+
+
+    return prisma.work.update({
+      where: { id: workId },
+      data: {
+        ...payload,
+        localImages: {
+          connect: {
+            id: existingLocalImage.id,
+          },
+        },
+      },
+    });
+  }
+
+  if (coverImageUpload !== null && !existingLocalImage) {
+    const q1 = prisma.work.update({
+      where: { id: workId },
+      data: {
+        localImages: {
+          set: [],
+        },
+      },
+    });
+
+    await prisma.$transaction([q1]);
+
+    return prisma.work.update({
+      where: { id: workId },
+      data: {
+        ...payload,
+        localImages: {
+          create: { ...coverImageUpload! },
+        },
+      },
+    });
+  }
+
+  return prisma.work.update({
+    where: { id: workId },
+    data: {
+      ...payload,
+    },
+  });
+};
+
 export const saveSocialInteraction = async (
   work: Work,
   user: User,

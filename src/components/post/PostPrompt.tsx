@@ -81,7 +81,6 @@ const PostPrompt: FunctionComponent<Props> = ({
     setLoading(true);
     setShowOptions(true);
     setImages([]);
-
     const { data: en_text } = await fetch(`/api/google-translate/?text=${text + ', ' + style}&target=en`).then((r) =>
       r.json(),
     );

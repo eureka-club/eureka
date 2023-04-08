@@ -2,9 +2,9 @@ import { Cycle, Post, User, Work, Prisma } from '@prisma/client';
 
 import { CycleMosaicItem } from './types/cycle';
 import { PostMosaicItem } from './types/post';
-import { WorkMosaicItem } from './types/work';
+import { WorkMosaicItem, GoogleBooksProps, TMDBVideosProps } from './types/work';
 import { UserMosaicItem } from '@/src/types/user';
-import {Session as S} from 'next-auth'
+import { Session as S } from 'next-auth';
 export interface FileUpload {
   fieldName: string;
   originalFilename: string;
@@ -20,13 +20,11 @@ export type Session = S;
 //   expires: string;
 //   user: Prisma.UserGetPayload<{
 //     include:{
-//       photos:true, 
+//       photos:true,
 //       notifications:{include:{notification:true}}
 //     }
 //   }>;
 // }
-
-
 
 export interface StoredFileUpload {
   contentHash: string;
@@ -49,83 +47,90 @@ export interface MySocialInfo {
 export type BasicEntity = Cycle | Post | Work | User | Comment;
 export type MosaicItem = CycleMosaicItem | PostMosaicItem | WorkMosaicItem | UserMosaicItem;
 export type SearchResult = CycleMosaicItem | PostMosaicItem | WorkMosaicItem | UserMosaicItem;
+export type APIMediaSearchResult = GoogleBooksProps | TMDBVideosProps;
 
 export const isCycle = (obj: BasicEntity): obj is Cycle =>
-  obj && typeof (obj as Cycle).title === 'string' &&
+  obj &&
+  typeof (obj as Cycle).title === 'string' &&
   (obj as CycleMosaicItem).startDate !== undefined &&
   (obj as CycleMosaicItem).endDate !== undefined;
 export const isPost = (obj: BasicEntity): obj is Post =>
-  obj && typeof (obj as Post).title === 'string' &&
+  obj &&
+  typeof (obj as Post).title === 'string' &&
   typeof (obj as Post).creatorId === 'number' &&
   typeof (obj as Post).language === 'string';
 export const isWork = (obj: BasicEntity): obj is Work =>
-  obj && typeof (obj as Work).title === 'string' &&
+  obj &&
+  typeof (obj as Work).title === 'string' &&
   typeof (obj as Work).author === 'string' &&
   typeof (obj as Work).type === 'string';
 
 export const isUser = (obj: BasicEntity): obj is User =>
   typeof (obj as User).roles === 'string' && typeof (obj as User).email === 'string';
 
-
 // TODO separate type-guards for MosaicItem and SearchResult
-export const isCycleMosaicItem = (obj: MosaicItem | SearchResult): obj is CycleMosaicItem => 
-  obj && ('type' in obj && obj.type=='cycle');
+export const isCycleMosaicItem = (obj: MosaicItem | SearchResult): obj is CycleMosaicItem =>
+  obj && 'type' in obj && obj.type == 'cycle';
 
-  
 export const isWorkMosaicItem = (obj: MosaicItem | SearchResult): obj is WorkMosaicItem =>
-  obj && ('type'in obj) && ['work','book', 'fiction-book', 'movie', 'documentary'].includes((obj as WorkMosaicItem).type);
+  obj &&
+  'type' in obj &&
+  ['work', 'book', 'fiction-book', 'movie', 'documentary'].includes((obj as WorkMosaicItem).type);
 
-export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMosaicItem => 
-  obj && ('type' in obj && obj.type=='post');
-  
+export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMosaicItem =>
+  obj && 'type' in obj && obj.type == 'post';
+
+export const isBookGoogleBookApi = (obj: GoogleBooksProps | APIMediaSearchResult): obj is GoogleBooksProps =>
+  obj && 'volumeInfo' in obj; ;
+
+export const isVideoTMDB = (obj: TMDBVideosProps | APIMediaSearchResult): obj is TMDBVideosProps =>
+  obj && 'release_date' in obj;
 
 export const isUserMosaicItem = (obj: MosaicItem | SearchResult): obj is UserMosaicItem =>
   obj && 'name' in obj && ('image' in obj || 'photos' in obj);
 
-export interface NotifierResponse{
-    data: Record<string,any>;
-  } 
-export  interface NotifierRequest {
-    toUsers: number[];
-    data: Record<string,any>;
-  }
+export interface NotifierResponse {
+  data: Record<string, any>;
+}
+export interface NotifierRequest {
+  toUsers: number[];
+  data: Record<string, any>;
+}
 
-  export interface GetAllByResonse{
-    data: (WorkMosaicItem|CycleMosaicItem)[];
-    extraCyclesRequired: number;
-    extraWorksRequired: number;
-    hasMore: boolean;
-    nextCursor: number;
-    prevCursor: number;
-    status: string;
-    totalCycles: number;
-    totalWorks: number;
+export interface GetAllByResonse {
+  data: (WorkMosaicItem | CycleMosaicItem)[];
+  extraCyclesRequired: number;
+  extraWorksRequired: number;
+  hasMore: boolean;
+  nextCursor: number;
+  prevCursor: number;
+  status: string;
+  totalCycles: number;
+  totalWorks: number;
 }
 
 // export interface Country {
-//   id:number; 
+//   id:number;
 //   taxonomyCode:string;
 //   parentId:number;
 //   creatorId:number;
 //   label:string;
 //   code: string;
 //   description:string;
-  
+
 //   parent:{
 //     code:string;
 //   }
 
-
-
 // }
 
 export type Country = Prisma.TermGetPayload<{
-  select:{
-    label:true,
-    code:true,
-    parent:{select:{code:true}}
-  }
-}>
+  select: {
+    label: true;
+    code: true;
+    parent: { select: { code: true } };
+  };
+}>;
 
 /**
  * 

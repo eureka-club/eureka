@@ -364,7 +364,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                             readOnly
                           />
                         )}
-                        {work.tags && <TagsInput className="d-flex flex-row" tags={work.tags} readOnly />}
+                        {work.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={work.tags} readOnly />}
                       </div>
                       {work.link != null && (
                         <a

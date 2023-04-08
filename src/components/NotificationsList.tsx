@@ -48,9 +48,6 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
     }
   }, [notifications])
 
-  console.log(AllNotifications,'AllNotificationsAllNotifications')
-  console.log(notVieweds, 'notViewedsnotVieweds')
-
   const {
     mutate: execEditNotification,
     error: editNotificationError,

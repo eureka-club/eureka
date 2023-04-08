@@ -3,7 +3,6 @@ import Head from "next/head";
 import useTranslation from 'next-translate/useTranslation';
 import { Container, Row, Col, Badge } from 'react-bootstrap';
 import Image from 'next/image';
-import className from 'classnames';
 
 import {
   TiSocialLinkedinCircular,
@@ -20,7 +19,8 @@ interface Props{
 }
 const AboutPage: NextPage<Props> = ({session}) => {
   const { t } = useTranslation('aboutUs');
-
+  const NEXT_PUBLIC_AZURE_CDN_ENDPOINT = process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT;
+  const NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME = process.env.NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME;
   return (<>
     <Head>
         <meta name="title" content={t('meta:aboutUsTitle')}></meta>
@@ -38,7 +38,7 @@ const AboutPage: NextPage<Props> = ({session}) => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
-                src="/img/aboutUs/julie_ricard.webp"
+                src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/julie_ricard.webp`}
                 alt="Founder, Director"
                 width={200}
                 height={200}
@@ -67,7 +67,7 @@ const AboutPage: NextPage<Props> = ({session}) => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
-                src="/img/aboutUs/alejandro_noriega.jpeg"
+                src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/alejandro_noriega.jpeg`}
                 alt="Co-creator from Prosperia"
                 width={200}
                 height={200}
@@ -100,7 +100,7 @@ const AboutPage: NextPage<Props> = ({session}) => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
-                src="/img/aboutUs/geordanis_bano_vega.png"
+                src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/geordanis_bano_vega.png`}
                 alt="Picture of Software Engineer"
                 width={200}
                 height={200}
@@ -129,7 +129,7 @@ const AboutPage: NextPage<Props> = ({session}) => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
-                src="/img/aboutUs/jose-manuel-gallardo.webp"
+                src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/jose-manuel-gallardo.webp`}
                 alt="Picture of Software Engineer"
                 width={200}
                 height={200}
@@ -158,7 +158,7 @@ const AboutPage: NextPage<Props> = ({session}) => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
-                src="/img/aboutUs/aime_cruz.webp"
+                src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/aime_cruz.webp`}
                 alt="Picture of Software Engineer"
                 width={200}
                 height={200}
@@ -187,7 +187,7 @@ const AboutPage: NextPage<Props> = ({session}) => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
-                src="/img/aboutUs/daniela-goncalves.jpeg"
+                src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/daniela-goncalves.jpeg`}
                 alt="Picture of Advisor"
                 width={200}
                 height={200}
@@ -216,7 +216,7 @@ const AboutPage: NextPage<Props> = ({session}) => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
-                src="/img/aboutUs/aranzazu-zaga.jpeg"
+                src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/aranzazu-zaga.jpeg`}
                 alt="Picture of Advisor"
                 width={200}
                 height={200}
@@ -229,15 +229,15 @@ const AboutPage: NextPage<Props> = ({session}) => {
               </h2>
               <h3 className={styles.professionName}>{t('Advisor')}</h3>
               <h4 className={styles.positionName}>{t('Narrative and public affairs expert')}</h4>
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('Communication')}
               </Badge>
               <br />
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('Crisis management')}
               </Badge>
               <br />
-              <Badge pill className={className('badge-secondary', styles.interest)}>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('Public relations')}
               </Badge>
             </Col>
@@ -245,7 +245,7 @@ const AboutPage: NextPage<Props> = ({session}) => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
-                src="/img/aboutUs/fernanda-pacheco.jpeg"
+                src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/fernanda-pacheco.jpeg`}
                 alt="Picture of UI-UX Consultant"
                 width={200}
                 height={200}
@@ -274,7 +274,7 @@ const AboutPage: NextPage<Props> = ({session}) => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
-                src="/img/aboutUs/don-zamna.jpeg"
+                src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/don-zamna.jpeg`}
                 alt="Picture of Mastermind"
                 width={200}
                 height={200}
@@ -317,26 +317,40 @@ const AboutPage: NextPage<Props> = ({session}) => {
             <br />
             <hr />
             <h5 className='h4' style={{ color: 'var(--eureka-green)' }}>{t('common:eurekaSupport')}</h5>
-            <img
-              className={styles['logo-img2']}
-              src="https://mozilla.design/files/2019/06/Mozilla_Logo_Static.png"
-              alt=""
-            />
-            <img
-              className={styles['logo-img3']}
-              src="/equis.jpg"
-              alt=""
-            />
-            <img
-              className={styles['logo-img']}
-              src="https://datapopalliance.org/wp-content/uploads/2019/02/DPA-Logo-Color.png"
-              alt=""
-            />
-            <img
-              className={styles['logo-img']}
-              src="https://static.wixstatic.com/media/9c73d4_6be410789c004ed2b2281f0b7503645f~mv2.png/v1/fill/w_1046,h_700,al_c,q_90,usm_0.66_1.00_0.01/Logo%20-%20prosperia%20only%20-%20E%20normal%20-%20point.webp"
-              alt=""
-            />
+            <section className='d-flex flex-row justify-content-around align-items-center mt-3'>
+              <figure>
+                <Image
+              width={120}
+              height={37}
+                src="https://mozilla.design/files/2019/06/Mozilla_Logo_Static.png"
+                alt=""
+              />
+              </figure>
+              <figure>
+                <Image
+                width={110}
+                height={110}
+                  src="/equis.jpg"
+                  alt=""
+                />
+              </figure>
+              <figure>
+                <Image
+                width={70}
+                height={90}
+                  src="https://datapopalliance.org/wp-content/uploads/2019/02/DPA-Logo-Color.png"
+                  alt=""
+                />
+              </figure>
+              <figure>
+                <Image
+                width={120}
+                height={80}
+                  src="https://static.wixstatic.com/media/9c73d4_6be410789c004ed2b2281f0b7503645f~mv2.png/v1/fill/w_1046,h_700,al_c,q_90,usm_0.66_1.00_0.01/Logo%20-%20prosperia%20only%20-%20E%20normal%20-%20point.webp"
+                  alt=""
+                />
+              </figure>
+            </section>
           </div>         
         </div>
       </div>

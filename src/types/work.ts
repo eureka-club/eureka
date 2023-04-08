@@ -38,8 +38,8 @@ export interface CreateWorkClientPayload {
   authorRace: string | null;
   contentText: string | null;
   link: string | null;
-  countryOfOrigin: string | null;
-  countryOfOrigin2: string | null;
+  countryOfOrigin: string[] | null;
+  //countryOfOrigin2: string | null;
   publicationYear: string | null;
   length: string | null;
   tags: string;
@@ -81,7 +81,7 @@ export interface CreateWorkServerPayload {
 }
 
 export interface EditWorkClientPayload {
-  // cover: File;
+  cover: File | null;
   id: string;
   type?: string;
   title?: string;
@@ -96,4 +96,35 @@ export interface EditWorkClientPayload {
   length?: string | null;
   tags?: string;
   topics?: string;
+}
+
+
+export interface GoogleBooksProps {
+  id: string;
+  volumeInfo: {
+    title: string;
+    authors: string[];
+    publishedDate: string;
+    description: string;
+    publisher: string;
+    language: string;
+    pageCount:number
+    imageLinks: {
+      thumbnail: string;
+    };
+  };
+  saleInfo: {
+    saleability: string;
+    buyLink: string;
+  };
+}
+
+export interface TMDBVideosProps {
+  id: number;
+  title:string;
+  original_title: string;
+  release_date:string;
+  overview: string;
+  original_language: string;
+  poster_path: string;
 }
