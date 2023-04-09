@@ -5,6 +5,7 @@ import { v4 } from 'uuid';
 import { Area } from 'react-easy-crop/types';
 import { Session } from '../types';
 import { UserMosaicItem } from '../types/user';
+import fs from 'fs'
 
 export const advancedDayjs = (date: string | number | Date): dayjs.Dayjs => {
   dayjs.extend(advancedFormat);
@@ -12,6 +13,7 @@ export const advancedDayjs = (date: string | number | Date): dayjs.Dayjs => {
 
   return dayjs(date);
 };
+
 
 export const asyncForEach = async (
   array: Array<unknown>,
@@ -31,6 +33,8 @@ interface Props {
     height: number;
   };
 }
+
+
 export const image64toCanvasRef = (
   canvasRef: HTMLCanvasElement,
   image64: string | ArrayBuffer,
@@ -95,12 +99,13 @@ export const getNotificationMessage = (
 
 //**canvasUtils.js */
 
-export const createImage = (url: string) =>
+export const createImage = (url: string) => 
   new Promise((resolve, reject) => {
     const image = new Image();
     image.addEventListener('load', () => resolve(image));
     image.addEventListener('error', (error) => reject(error));
     image.setAttribute('crossOrigin', 'anonymous'); // needed to avoid cross-origin issues on CodeSandbox
+    console.log(url, 'create image utils');
     image.src = url;
   });
 
@@ -193,6 +198,7 @@ export const getImg = async (
   flip = { horizontal: false, vertical: false },
 ): Promise<File | null> => {
   const image = <ImageBitmap>await createImage(imageSrc);
+  console.log(image, 'image');
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
   if (!ctx) {
@@ -264,7 +270,7 @@ export const getImageFile = async (
   const rotRad = getRadianAngle(rotation);
 
   // calculate bounding box of the rotated image
-  const { width: bBoxWidth, height: bBoxHeight } = rotateSize(image.width, image.height, rotation);
+  const { width: bBoxWidth, height: bBoxHeight } = rotateSize(image.width ? image.width : 200 ,image.height ? image.height : 500 , rotation);
 
   // set canvas size to match the bounding box
   canvas.width = bBoxWidth;

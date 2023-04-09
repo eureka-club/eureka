@@ -28,7 +28,7 @@ import { ImCancelCircle } from 'react-icons/im';
 import { CreateWorkClientPayload, GoogleBooksProps, TMDBVideosProps } from '@/types/work';
 import ImageFileSelect from '@/components/forms/controls/ImageFileSelectMUI';
 import globalModalsAtom from 'src/atoms/globalModals';
-import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem, FormControlLabel ,Switch} from '@mui/material';
+import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem, FormControlLabel, Switch } from '@mui/material';
 import Textarea from '@mui/joy/Textarea';
 import SearchWorkInput from './SearchWorkInput';
 import BookCard from './BookCard';
@@ -38,8 +38,9 @@ import TagsInputTypeAheadMaterial from '@/components/forms/controls/TagsInputTyp
 import TagsInputMaterial from '@/components/forms/controls/TagsInputMaterial';
 import styles from './index.module.css';
 import { set } from 'lodash';
-const apiKeyTMDB = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-import { getImageFile } from '@/src/lib/utils'
+import { getImageFile, getImg } from '@/src/lib/utils'
+import { decode } from 'base64-arraybuffer'
+
 
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -65,8 +66,6 @@ interface FormValues {
     workLength?: string;
     description?: string;
 }
-
-
 
 
 const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
@@ -110,8 +109,8 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
     useEffect(() => {
         if (countries) setCountrySearchResults(countries.map((d: Country) => ({ code: d.code, label: d.code })))
     }, [countries])
-    
-    
+
+
     const {
         mutate: execCreateWork,
         error: createWorkError,
@@ -158,7 +157,8 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
             authorRace: '',
             publicationYear: '',
             workLength: '',
-            description: ''});
+            description: ''
+        });
         setItems([]);
         setTags('');
         setCountryOrigin([]);
@@ -259,39 +259,18 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
     async function searchTitles(q: string) {
         //setLoading(true);
         if (formValues && formValues.type) {
-            if (['book', 'fiction-book'].includes(formValues.type)) {
-                try {
-                    const { items: data, totalItems, error } = await fetch(`https://www.googleapis.com/books/v1/volumes?q="${q}"&maxResults=20`).then((r) =>
-                        r.json()
-                    );
-                    console.log(data, totalItems, 'google books API')
-                    if (error) toast.error(error.message)
-                    else if (data)
-                        setResultWorks(data);
-                    else if (!data.length)
-                        toast.error('No data found')
-                }
-                catch (error: any) {
-                    toast.error(error.message)
-                }
-            }
+            const { error, data } = await fetch('/api/external-works/search', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify({ type: formValues.type, search: q }),
+            }).then((r) => r.json());
 
-            if (['documentary', 'movie'].includes(formValues.type)) {
-                try {
-                    const { results: data, total_results: totalItems, success, status_code, status_message } = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKeyTMDB}&query=${q}`).then((r) =>
-                        r.json()
-                    );
-                    console.log(data, totalItems, 'tmdb API')
-                    if (status_code && !success) toast.error(status_message)
-                    else if (data)
-                        setResultWorks(data);
-                    else if (!data.length)
-                        toast.error('No data found')
-                }
-                catch (error: any) {
-                    toast.error(error.message)
-                }
-            }
+            if (data)
+                setResultWorks(data);
+            else if (error)
+                toast.error(error)
         }
         else toast.error("Work type required");
         //setLoading(false);
@@ -301,18 +280,27 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
         setSelectedWork(work);
         if (isBookGoogleBookApi(work)) {
             if (work.volumeInfo.imageLinks) {
-                console.log(isBookGoogleBookApi(work), 'is a work')
+                console.log(isBookGoogleBookApi(work), work, 'is a work')
                 let url = work.volumeInfo.imageLinks.thumbnail;
                 url = url.replace('http://', 'https://');
                 url = url.replace('zoom=1', 'zoom=5');
-                let image = new Image(); // hice esto aca por errores de CORS
-                image.crossOrigin = "Anonymous";
-                image.src = url;
-                let file = await getImageFile(image)
-                setCoverFile(file as File | null);
+
+                const { buffer } = await fetch('/api/external-works/select', {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json',
+                    },
+                    body: JSON.stringify({ url: work.volumeInfo.imageLinks.thumbnail })
+                }).then((r) => r.json());
+
+                const blob = new Blob([decode(buffer)], { type: 'image/webp' });
+
+                let src = URL.createObjectURL(blob)
+                let file = await getImg(src) 
+                setCoverFile(file);
             }
             formValues['title'] = work.volumeInfo.title;
-            formValues['author'] = work.volumeInfo.authors.join(',');
+            formValues['author'] = work.volumeInfo.authors ? work.volumeInfo.authors.join(',') : "";
             formValues['publicationYear'] = (work.volumeInfo.publishedDate) ? work.volumeInfo.publishedDate : "";
             formValues['workLength'] = (work.volumeInfo.pageCount) ? `${work.volumeInfo.pageCount}` : "";
             formValues['description'] = (work.volumeInfo.description) ? work.volumeInfo.description : "";
@@ -324,10 +312,11 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
         if (isVideoTMDB(work)) {
             if (work.poster_path) {
                 console.log(isVideoTMDB(work), 'is a video')
-                let image = new Image();// hice esto aca por errores de CORS
-                image.crossOrigin = "Anonymous";
-                image.src = `https://image.tmdb.org/t/p/w600_and_h900_bestv2${work.poster_path}`;
-                let file = await getImageFile(image)
+                //let image = new Image();// hice esto aca por errores de CORS
+                //image.crossOrigin = "Anonymous";
+                let url = `https://image.tmdb.org/t/p/w600_and_h900_bestv2${work.poster_path}`;
+                console.log(url)
+                let file = await getImg(url + '?not-from-cache-please')  //OKOKOKOK
                 setCoverFile(file as File | null);
             }
             formValues['title'] = work.title;
@@ -348,7 +337,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
     };
 
     return (
-        <Form  onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit}>
             <ModalHeader closeButton={!noModal}>
                 <ModalTitle> <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('title')}</h1></ModalTitle>
             </ModalHeader>
@@ -390,14 +379,14 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                         >
                         </TextField>}
                     </Col>
-
-                    {useApiSearch ? <> {(!selectedWork || resultWorks.length > 0)  && <Box className='d-flex flex-row justify-content-around flex-wrap mt-5'>
+                    {useApiSearch ? <> {(!selectedWork || resultWorks.length > 0) && <Box className='d-flex flex-row justify-content-around flex-wrap mt-5'>
                         {(['book', 'fiction-book'].includes(formValues?.type!)) && resultWorks.map((work) => {
                             return <BookCard key={work.id} book={work as GoogleBooksProps} callback={handleSelect} />;
                         })}
                         {(['documentary', 'movie'].includes(formValues?.type!)) && resultWorks.map((work) => {
                             return <VideoCard key={work.id} video={work as TMDBVideosProps} callback={handleSelect} />;
                         })}
+
 
                     </Box>} </> : <></>}
 
@@ -417,7 +406,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                 )}
                             </ImageFileSelect>
                         </Col>
-                    <Col className=" mt-4 mt-lg-0">
+                        <Col className=" mt-4 mt-lg-0">
                             <TextField id="link" className="w-100" label={publicationLinkLabel}
                                 variant="outlined" size="small" name='link'
                                 value={formValues.link}
@@ -441,7 +430,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
 
                             </Col>
-                        <Col className=" mt-4 mt-lg-0">
+                            <Col className=" mt-4 mt-lg-0">
                                 <FormGroup controlId="countryOrigin">
                                     <TagsInputTypeAheadMaterial
                                         data={countrySearchResults}
@@ -479,7 +468,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                 </FormGroup>
 
                             </Col>
-                        <Col className=" mt-4 mt-lg-0">
+                            <Col className=" mt-4 mt-lg-0">
                                 <FormGroup controlId="authorRace">
                                     <FormControl size="small" fullWidth>
                                         <InputLabel id="authorRace-label">*{t('authorEthnicityFieldLabel')}</InputLabel>
@@ -515,7 +504,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                     />
                                 </FormGroup>
                             </Col>
-                        <Col className=" mt-4 mt-lg-0">
+                            <Col className=" mt-4 mt-lg-0">
                                 <TagsInputMaterial tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
 
                             </Col>
@@ -530,7 +519,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                     onChange={handleChangeTextField}
                                 />
                             </Col>
-                        <Col className=" mt-4 mt-lg-0">
+                            <Col className=" mt-4 mt-lg-0">
                                 <TextField id="workLength" className="w-100" label={publicationLengthLabel}
                                     variant="outlined" size="small" name="workLength"
                                     value={formValues.workLength}
