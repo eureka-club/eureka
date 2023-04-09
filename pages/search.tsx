@@ -9,10 +9,11 @@ import { getPosts } from '@/src/usePosts';
 import { getWorks } from '@/src/useWorks';
 import { getCycles } from '@/src/useCycles';
 
-import SearchInput from '@/components/SearchInput';
+import { Session } from '@/src/types';
 
 import SearchTab from '@/src/components/SearchTab';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
+import { getSession } from 'next-auth/react';
 
 const topics = [
   'gender-feminisms',
@@ -35,9 +36,10 @@ interface Props {
   hasCycles: boolean;
   hasPosts: boolean;
   hasWorks: boolean;
+  session: Session;
   metas: any;
 }
-const SearchPage: NextPage<Props> = ({ hasCycles, hasPosts, hasWorks, metas }) => {
+const SearchPage: NextPage<Props> = ({ hasCycles, hasPosts, hasWorks, metas,session }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
 
@@ -100,7 +102,9 @@ const SearchPage: NextPage<Props> = ({ hasCycles, hasPosts, hasWorks, metas }) =
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { query } = ctx;
+  const session = await getSession(ctx);
   const q = query.q;
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
   const qc = new QueryClient();
@@ -222,6 +226,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       hasPosts,
       hasWorks,
       metas: metaTags,
+      session,
       dehydratedState: dehydrate(qc),
     },
   };

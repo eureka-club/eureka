@@ -1,10 +1,14 @@
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Head from "next/head";
 import useTranslation from 'next-translate/useTranslation';
 
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
-
-const AboutPage: NextPage = () => {
+import { getSession } from 'next-auth/react';
+import { Session } from '@/src/types';
+interface Props{
+  session:Session
+}
+const AboutPage: NextPage<Props> = ({session}) => {
   const { t } = useTranslation('common');
 
   return (<>
@@ -124,5 +128,13 @@ const AboutPage: NextPage = () => {
     </>
   );
 };
-
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getSession(ctx);
+  return {
+    props: {
+      session,
+    },
+  };
+  
+};
 export default AboutPage;

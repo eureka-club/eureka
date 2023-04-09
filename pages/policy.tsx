@@ -1,12 +1,16 @@
-import {NextPage } from 'next';
+import {GetServerSideProps, NextPage } from 'next';
 import Head from "next/head";
 import useTranslation from 'next-translate/useTranslation';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import TermsAndPolicy from '@/src/components/TermsAndPolicy';
+import { getSession } from 'next-auth/react';
+import { Session } from '@/src/types';
 //import { useRouter } from 'next/router';
 
-
-const policyPage: NextPage = () => {
+interface Props{
+  session:Session
+}
+const policyPage: NextPage<Props> = ({session}) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const {t } = useTranslation('termsAndPolicy');
   //const router = useRouter();
@@ -23,6 +27,15 @@ const policyPage: NextPage = () => {
     </SimpleLayout>
     </>
   );
+};
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getSession(ctx);
+  return {
+    props: {
+      session,
+    },
+  };
+  
 };
 
 

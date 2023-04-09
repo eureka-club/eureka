@@ -1,4 +1,4 @@
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Head from "next/head";
 import useTranslation from 'next-translate/useTranslation';
 import { Container, Row, Col, Badge } from 'react-bootstrap';
@@ -11,8 +11,13 @@ import { SiUpwork } from 'react-icons/si';
 import styles from './aboutUs.module.css';
 
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
+import { getSession } from 'next-auth/react';
+import { Session } from '@/src/types';
 
-const AboutPage: NextPage = () => {
+interface Props{
+  session:Session
+}
+const AboutPage: NextPage<Props> = ({session}) => {
   const { t } = useTranslation('aboutUs');
   const NEXT_PUBLIC_AZURE_CDN_ENDPOINT = process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT;
   const NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME = process.env.NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME;
@@ -352,5 +357,14 @@ const AboutPage: NextPage = () => {
     </SimpleLayout>
     </>
   );
+};
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getSession(ctx);
+  return {
+    props: {
+      session,
+    },
+  };
+  
 };
 export default AboutPage;
