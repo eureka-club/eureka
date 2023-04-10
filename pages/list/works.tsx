@@ -10,22 +10,28 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 
 import Table from 'react-bootstrap/Table';
-import { useMutation } from 'react-query';
+import { QueryClient, useMutation, dehydrate, useQuery } from 'react-query';
 
-import { DATE_FORMAT_ONLY_YEAR } from '../../src/constants';
-import { Session } from '../../src/types';
-import SimpleLayout from '../../src/components/layouts/SimpleLayout';
-import LocalImageComponent from '../../src/components/LocalImage';
-import { findAll } from '../../src/facades/work';
+import { DATE_FORMAT_ONLY_YEAR } from '@/src/constants';
+import { Session } from '@/src/types';
+import SimpleLayout from '@/src/components/layouts/SimpleLayout';
+import LocalImageComponent from '@/src/components/LocalImage';
+import { findAll } from '@/src/facades/work';
+import { getWorks } from '@/src/useWorks';
+import useWorks from '@/src/useWorks';
 
 interface Props {
-  works: (Work & {
-    localImages: LocalImage[];
-  })[];
+  // works: (Work & {
+  //   localImages: LocalImage[];
+  // })[];
+  session:Session
 }
 
-const ListWorksPage: NextPage<Props> = ({ works }) => {
+const ListWorksPage: NextPage<Props> = ({ session }) => {
   const router = useRouter();
+  const {data} = useWorks();
+  const works = data?.works;
+  
   const { mutate: execDeleteWork, isSuccess: isDeleteWorkSucces } = useMutation(async (work: Work) => {
     const res = await fetch(`/api/work/${work.id}`, {
       method: 'delete',
@@ -49,7 +55,7 @@ const ListWorksPage: NextPage<Props> = ({ works }) => {
   return (
     <SimpleLayout title="Works library">
       <h1 style={{ marginBottom: '2rem' }}>Works library</h1>
-
+      {works ?
       <Table>
         <thead>
           <tr>
@@ -67,8 +73,9 @@ const ListWorksPage: NextPage<Props> = ({ works }) => {
               <td>
                 <LocalImageComponent
                   alt="work cover"
+                  height={96}
                   filePath={work.localImages[0].storedFile}
-                  style={{ height: '96px', marginRight: '1rem' }}
+                  style={{marginRight: '1rem' }}
                 />
               </td>
               <td>{work.type}</td>
@@ -103,6 +110,7 @@ const ListWorksPage: NextPage<Props> = ({ works }) => {
           ))}
         </tbody>
       </Table>
+      : <>...</>}
     </SimpleLayout>
   );
 };
@@ -112,12 +120,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (session == null || !session.user.roles.includes('admin')) {
     return { notFound: true };
   }
-
-  const works = await findAll();
+  const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
+  const qc = new QueryClient();
+  const worksData = await getWorks(undefined, origin);
+  qc.prefetchQuery('list/works', () => worksData);
 
   return {
     props: {
-      works,
+      session,
+      dehydratedState: dehydrate(qc),
     },
   };
 };
