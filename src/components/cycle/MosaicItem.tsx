@@ -41,6 +41,7 @@ interface Props {
   showCreateEureka?: boolean;
   showSaveForLater?: boolean;
   showTrash?: boolean;
+  imageLink?: boolean;
   size?: string;
   className?: string;
 }
@@ -54,6 +55,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   showSaveForLater,
   cacheKey = undefined,
   showTrash = false,
+  imageLink = false,
   size,
   className,
   cycleId
@@ -205,7 +207,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           role="presentation"
         >
           {!canNavigate() && <Spinner className="position-absolute top-50 start-50"  size="sm" animation="grow" variant="info" style={{zIndex:'1'}} />}
-          {img}
+          {imageLink ? <a href={`/cycle/${cycle?.id}`}>{img}</a> : img}
         </div>
       );
     }

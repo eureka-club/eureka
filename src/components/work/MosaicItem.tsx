@@ -28,6 +28,7 @@ interface Props {
   cacheKey?: [string, string];
   showTrash?: boolean;
   linkToWork?: boolean;
+  imageLink?: boolean;
   size?: string;
   className?: string;
 }
@@ -42,6 +43,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   cacheKey = undefined,
   showTrash = false,
   linkToWork = true,
+  imageLink = false,
   size,
   className = '',
 }) => {
@@ -148,7 +150,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           {!canNavigate() && (
             <Spinner className="position-absolute top-50 start-50" size="sm" animation="grow" variant="info" />
           )}
-          {img}
+          {imageLink ? <a href={`/work/${id}`}>{img}</a> : img}
         </div>
       );
     }

@@ -302,12 +302,12 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                       <h2>{user.name}</h2>
                       {renderCountry()}
                     </div>
-                    <div className="d-none d-md-block">
+                    <div className="">
                       <p className={styles.description}>{user.aboutMe}</p>
                     </div>
-                    <div className="mt-3 d-sm-block d-md-none">
+                    {/*<div className="mt-3 d-sm-block d-md-none">
                       <UnclampText isHTML={false} text={user.aboutMe || ''} clampHeight="6rem" />
-                    </div>
+                    </div>*/}
                     <TagsInput className="d-none d-md-flex flex-row" tags={user.tags || ''} readOnly label="" />
                   </Col>
                   <Col className="mt-2 d-grid gap-2 d-md-flex align-items-start  justify-content-md-end d-lg-block">

@@ -28,7 +28,7 @@ import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import slugify from 'slugify';
 import toast from 'react-hot-toast'
 import useMyReadOrWatched from '@/src/useMyReadOrWatched'
-import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { SelectChangeEvent, Button as ButtonMui, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import dayjs from 'dayjs';
 import LocalImageComponent from '@/src/components/LocalImage';
 //import styles from './my-read-or-watched.module.css';
@@ -201,10 +201,21 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
             <Spinner animation="grow" />
           ) : */}
           <>
-            <section className='mt-sm-0 mb-4 d-flex flex-row '>
-              <h1 className="text-secondary fw-bold me-3 d-flex align-items-center">{`${t('MyReadOrWatched')} ${user.userName}`}</h1>
-              {renderAvatar()}
-            </section>
+            <Row className='mt-sm-0 mb-4 d-flex flex-column flex-lg-row'>
+              <Col className='d-flex flex-row'>
+                <h1 className="text-secondary fw-bold me-3 d-flex align-items-center">{`${t('MyReadOrWatched')} ${user.userName}`}</h1>
+                {renderAvatar()}
+              </Col>
+              <Col className='d-flex flex-row justify-content-center justify-content-lg-end'>
+                <Button type='button' className='d-none d-lg-block btn-eureka btn btn-primary mt-2 mt-lg-0 px-5' style={{ width: '50%' }} onClick={() => router.push('/work/create')} size="sm">
+                  <span>{t('AddWork')}</span>
+                                  </Button>
+                <Button type='button' className='text-center d-block d-lg-none btn-eureka btn btn-primary mt-3' style={{ width: '100%' }} onClick={() => router.push('/work/create')} size="sm">
+                  <span className='text-center'>{t('AddWork')}</span>
+                </Button>
+              </Col>
+
+            </Row>
 
             <style jsx global>
               {`
@@ -220,7 +231,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                     border: none !important;
                     border-bottom: solid 1px var(--bs-primary) !important;
                   }
-                  .nav-link {
+                  .nav-link {Button
                     color: var(--bs-primary);
                   }
 
@@ -234,7 +245,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                 `}
             </style>
 
-            <FormControl className="mb-4" sx={{ minWidth: 120 }} style={{ width: '20%' }}>
+            <FormControl className="mb-4 d-none d-lg-flex" sx={{ minWidth: 120 }} style={{ width: '20%' }}>
               <InputLabel id="select-years">{t('Year')}</InputLabel>
               <Select
                 variant="outlined"
@@ -251,6 +262,25 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                 ))}
               </Select>
             </FormControl>
+            <section className='d-flex d-lg-none justify-content-center align-items-center'>
+            <FormControl className="mb-4 " style={{ width: '100%' }}>
+              <InputLabel id="select-years">{t('Year')}</InputLabel>
+              <Select sx={{ width: 1 }} 
+                variant="outlined"
+                labelId="select-style"
+                name="Years"
+                size='small'
+                id="select-years"
+                label={t('Year')}
+                onChange={handlerComboxesChangeYear}
+                value={yearFilter}
+              >
+                {getYears().map(x => (
+                  <MenuItem key={x} value={x}>{x}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            </section>
 
             <Tabs activeKey={tabKey || getDefaultActiveKey()} onSelect={handleSubsectionChange}
               id="uncontrolled-tab-example" className="mb-4">

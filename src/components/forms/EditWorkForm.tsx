@@ -333,13 +333,12 @@ const EditWorkForm: FunctionComponent = () => {
     work && (
       <Form onSubmit={handleSubmit}>
         <ModalHeader>
-          <ModalTitle className='d-flex flex-row justified-content-between mt-sm-0 mb-3  w-100'>
-            <h1 className="d-flex align-items-end text-secondary fw-bold w-100">{t('titleEdit')}</h1>
-            <LocalImageComponent filePath={work.localImages[0].storedFile} alt='' width={140} className='rounded-2' />
+          <ModalTitle className='d-flex flex-row justified-content-between mt-sm-0 mt-2 mb-3  w-100'>
+            <h1 className="text-secondary fw-bold w-100">{t('titleEdit')}</h1>
           </ModalTitle>
         </ModalHeader>
         <ModalBody>
-          <span className='text-primary fw-bold'>Core Information</span>
+          <span className='text-primary fw-bold'>{t('BasicInformation')}</span>
           <Row className='d-flex flex-column flex-lg-row mt-4'>
             <Col className="">
               <FormGroup controlId="type">
@@ -375,7 +374,7 @@ const EditWorkForm: FunctionComponent = () => {
 
           </Row>
           <><Row className='d-flex flex-column flex-lg-row mt-4 mb-4'>
-            <Col className="">
+            <Col className="d-flex flex-row ">
               <ImageFileSelect aceptedFileTypes="image/*" file={coverFile} setFile={setCoverFile} >
                 {(imagePreview) => (
                   <div className={styles.imageControl}>
@@ -387,6 +386,7 @@ const EditWorkForm: FunctionComponent = () => {
                   </div>
                 )}
               </ImageFileSelect>
+              <LocalImageComponent filePath={work.localImages[0].storedFile} alt='' width={80} className='ms-2 rounded-2' />
             </Col>
             <Col className="mt-4 mt-lg-0">
               <TextField id="link" className="w-100" label={publicationLinkLabel}
@@ -399,7 +399,7 @@ const EditWorkForm: FunctionComponent = () => {
             </Col>
           </Row>
 
-            <span className='text-primary fw-bold'>Auhorship</span>
+            <span className='text-primary fw-bold'>{t('Authorship')}</span>
             <Row className='d-flex flex-column flex-lg-row mt-4 mb-4'>
               <Col className="">
                 <TextField id="author" className="w-100" label={`*${t('authorFieldLabel')}`}
@@ -471,7 +471,7 @@ const EditWorkForm: FunctionComponent = () => {
               </Col>
             </Row>
 
-            <span className='text-primary fw-bold'>Content</span>
+            <span className='text-primary fw-bold'>{t('Content')}</span>
             <Row className='d-flex flex-column flex-lg-row mt-4'>
               <Col className="">
                 <FormGroup controlId="topics">
@@ -491,7 +491,7 @@ const EditWorkForm: FunctionComponent = () => {
 
               </Col>
             </Row>
-            <span className='text-primary fw-bold'>Additional Information about work</span>
+            <span className='text-primary fw-bold'>{t('AdditionalInformation')}</span>
             <Row className='d-flex flex-column flex-lg-row mt-4'>
               <Col className="">
                 <TextField id="publicationYear" className="w-100" label={publicationYearLabel}

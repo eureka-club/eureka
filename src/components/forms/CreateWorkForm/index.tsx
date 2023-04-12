@@ -8,7 +8,7 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import { v4 } from 'uuid'
-//import FormControl from 'react-bootstrap/FormControl';
+import Backdrop from '@mui/material/Backdrop';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
 import ModalBody from 'react-bootstrap/ModalBody';
@@ -40,6 +40,7 @@ import styles from './index.module.css';
 import { set } from 'lodash';
 import { getImageFile, getImg } from '@/src/lib/utils'
 import { decode } from 'base64-arraybuffer'
+import SpinnerComp from '@/src/components/Spinner';
 
 
 import Card from '@mui/material/Card';
@@ -101,6 +102,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
     const typeaheadRef = useRef<AsyncTypeahead<{ id: number; code: string; label: string }>>(null);
     const [workId, setWorkId] = useState<number | undefined>();
     const [useApiSearch, setUseApiSearch] = useState<boolean>(true);
+    const [loading, setLoading] = useState<boolean>(false);
 
 
     const { data: topics } = useTopics();
@@ -257,7 +259,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
 
     async function searchTitles(q: string) {
-        //setLoading(true);
+        setLoading(true);
         if (formValues && formValues.type) {
             const { error, data } = await fetch('/api/external-works/search', {
                 method: 'POST',
@@ -267,20 +269,25 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                 body: JSON.stringify({ type: formValues.type, search: q }),
             }).then((r) => r.json());
 
-            if (data)
+            if (data.length)
                 setResultWorks(data);
+            else if (!data.length){
+                toast.error(t('NoDataError'))
+                setResultWorks([]);
+            }
             else if (error)
                 toast.error(error)
         }
-        else toast.error("Work type required");
-        //setLoading(false);
+        else toast.error(t('WorkTypeError'));
+        setLoading(false);
     }
 
     const handleSelect = async (work: APIMediaSearchResult) => {
+        setLoading(true);
         setSelectedWork(work);
         if (isBookGoogleBookApi(work)) {
             if (work.volumeInfo.imageLinks) {
-                console.log(isBookGoogleBookApi(work), work, 'is a work')
+                //console.log(isBookGoogleBookApi(work), work, 'is a work')
                 let url = work.volumeInfo.imageLinks.thumbnail;
                 url = url.replace('http://', 'https://');
                 url = url.replace('zoom=1', 'zoom=5');
@@ -290,13 +297,12 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                     headers: {
                         'Content-type': 'application/json',
                     },
-                    body: JSON.stringify({ url: work.volumeInfo.imageLinks.thumbnail })
+                    body: JSON.stringify({ url: url })
                 }).then((r) => r.json());
 
                 const blob = new Blob([decode(buffer)], { type: 'image/webp' });
-
                 let src = URL.createObjectURL(blob)
-                let file = await getImg(src) 
+                let file = await getImg(src)
                 setCoverFile(file);
             }
             formValues['title'] = work.volumeInfo.title;
@@ -311,12 +317,22 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
         }
         if (isVideoTMDB(work)) {
             if (work.poster_path) {
-                console.log(isVideoTMDB(work), 'is a video')
+               // console.log(isVideoTMDB(work), 'is a video')
                 //let image = new Image();// hice esto aca por errores de CORS
                 //image.crossOrigin = "Anonymous";
-                let url = `https://image.tmdb.org/t/p/w600_and_h900_bestv2${work.poster_path}`;
-                console.log(url)
-                let file = await getImg(url + '?not-from-cache-please')  //OKOKOKOK
+                let url = `https://image.tmdb.org/t/p/w600_and_h900_bestv2${work.poster_path}?not-from-cache-please`;
+
+                const { buffer } = await fetch('/api/external-works/select', {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json',
+                    },
+                    body: JSON.stringify({ url: url })
+                }).then((r) => r.json());
+
+                const blob = new Blob([decode(buffer)], { type: 'image/webp' });
+                let src = URL.createObjectURL(blob)
+                let file = await getImg(src)
                 setCoverFile(file as File | null);
             }
             formValues['title'] = work.title;
@@ -327,7 +343,9 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
             });
         }
         setResultWorks([]);
-        toast.success("Work selected!!!!!");
+        setLoading(false);
+
+        toast.success(t('WorkSelected'));
     }
 
     const handleChangeUseApiSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -338,14 +356,19 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
     return (
         <Form onSubmit={handleSubmit}>
+            <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={loading}
+            >
+                <SpinnerComp />
+            </Backdrop>
             <ModalHeader closeButton={!noModal}>
                 <ModalTitle> <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('title')}</h1></ModalTitle>
             </ModalHeader>
             <ModalBody>
                 <FormGroup className='d-flex justify-content-end'>
-                    <FormControlLabel control={<Switch checked={useApiSearch} onChange={handleChangeUseApiSearch} />} label={'Use integrated APIs to add work , turn off to add manuallly.'} />
+                    <FormControlLabel control={<Switch checked={useApiSearch} onChange={handleChangeUseApiSearch} />} label={t('APIUseText') } />
                 </FormGroup>
-                <span className='text-primary fw-bold'>Core Information</span>
+                <span className='text-primary fw-bold'>{t('BasicInformation')}</span>
                 <Row className='d-flex flex-column flex-lg-row mt-4'>
                     <Col className="">
                         <FormGroup controlId="type">
@@ -417,7 +440,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                         </Col>
                     </Row>
 
-                        <span className='text-primary fw-bold'>Auhorship</span>
+                    <span className='text-primary fw-bold'>{t('Authorship')}</span>
                         <Row className='d-flex flex-column flex-lg-row mt-4 mb-4'>
                             <Col className="">
                                 <TextField id="author" className="w-100" label={`*${t('authorFieldLabel')}`}
@@ -489,7 +512,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                             </Col>
                         </Row>
 
-                        <span className='text-primary fw-bold'>Content</span>
+                    <span className='text-primary fw-bold'>{t('Content')}</span>
                         <Row className='d-flex flex-column flex-lg-row mt-4'>
                             <Col className="">
                                 <FormGroup controlId="topics">
@@ -509,7 +532,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
                             </Col>
                         </Row>
-                        <span className='text-primary fw-bold'>Additional Information about work</span>
+                    <span className='text-primary fw-bold'>{t('AdditionalInformation')}</span>
                         <Row className='d-flex flex-column flex-lg-row mt-4'>
                             <Col className="">
                                 <TextField id="publicationYear" className="w-100" label={publicationYearLabel}

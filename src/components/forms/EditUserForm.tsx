@@ -25,7 +25,7 @@ import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { useSession } from 'next-auth/react';
 // import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import { User } from '@prisma/client';
-import TagsInput from './controls/TagsInput';
+import TagsInputMaterial from '@/components/forms/controls/TagsInputMaterial';
 import { Country } from '@/src/types';
 import { EditUserClientPayload } from '../../types/user';
 import useUser from '@/src/useUser';
@@ -78,7 +78,7 @@ const EditUserForm: FunctionComponent = () => {
     if (user) {
       // setUser(data);
       setUserName(user.name!);
-      setTags(() => user.tags!);
+      setTags(user.tags!);
       setDashboardTypeChecked((res) => {
         let v = 'private';
         switch (user.dashboardType) {
@@ -434,7 +434,7 @@ const EditUserForm: FunctionComponent = () => {
               </Row>
               <Row>
                 <Col>
-                  <TagsInput tags={tags} max={5} setTags={setTags} label={t('Topics')} className="mb-5"/>
+                 <TagsInputMaterial tags={tags} max={5} setTags={setTags} label={t('Topics')} className="mb-5"/>
                 </Col>
               </Row>
               <Row>

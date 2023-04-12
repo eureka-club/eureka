@@ -34,6 +34,7 @@ interface Props {
   showTrash?: boolean;
   showComments?: boolean;
   linkToPost?: boolean;
+  imageLink?: boolean;
   size?: string;
   className?: string;
 }
@@ -49,6 +50,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   cacheKey:ck,
   showComments = false,
   linkToPost = true,
+  imageLink = false,
   size,
   className,
 }) => {
@@ -173,7 +175,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           role="presentation"
         >
           {!canNavigate() && <Spinner className="position-absolute top-50 start-50" size="sm" animation="grow" variant="info" style={{zIndex:'1'}} />}
-          {img}
+            {imageLink ? <a href={`${postLinkHref}`}>{img}</a> : img}
         </div>
         );
       }

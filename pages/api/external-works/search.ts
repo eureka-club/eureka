@@ -25,7 +25,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         ).then((r) => r.json());
         if (data.length) {
           return res.status(200).json({ data: data });
-        } 
+        }
+        if (!data.length) return res.status(200).json({ data: [] });
       } catch (error: any) {
         return res.status(400).json({ error: 'Server Error' });
       }
@@ -36,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         const {
           results: data,
           //total_results: totalItems,
-         // success,
+          // success,
           //status_code,
           //status_message,
         } = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKeyTMDB}&query=${searchCriteria}`).then(
@@ -44,7 +45,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         );
         if (data.length) {
           return res.status(200).json({ data: data });
-        }  
+        }
+        if (!data.length) return res.status(200).json({ data: [] });
       } catch (error: any) {
         return res.status(400).json({ error: 'Server Error' });
       }

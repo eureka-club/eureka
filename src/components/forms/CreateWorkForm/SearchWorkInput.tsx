@@ -18,7 +18,7 @@ const SearchWorkInput: FunctionComponent<Props> = ({ callback }) => {
         event.preventDefault();
         if (!searchValue) {
             setIsEmpty(true);
-            toast.error('Title required');
+            toast.error(t('TitleError'));
             return;
         }
         setIsEmpty(false);
@@ -32,14 +32,10 @@ const SearchWorkInput: FunctionComponent<Props> = ({ callback }) => {
             <TextField id="searchTitle" className="w-100" label={t('titleFieldLabel')}
                 variant="outlined" size="small" 
                 onChange={(e) => setSearchValue(e.target.value)}
-                helperText='Search a Work on APIs'
+                //helperText={t('titleFieldLabel')}
                 value={searchValue}
                 type="text"
-                placeholder={
-                    isEmpty
-                        ? "The field cannot be empty"
-                        : "Search a book"
-                }
+               
             >
             </TextField>
             <Button
@@ -47,14 +43,14 @@ const SearchWorkInput: FunctionComponent<Props> = ({ callback }) => {
                 onClick={(e) => handleSearch(e)}
                 style={{ width: '100%', height: '2.5em' }}
             >
-                {'Search'}
+                {t('Search')}
             </Button>
             <Button
                 className={`d-none d-md-block ms-2  btn-eureka`}
                 onClick={(e)=> handleSearch(e)}
                 style={{ width: '20%', height: '2.5em' }}
             >
-                {'Search'}
+                {t('Search')}
             </Button>
         </div>
     )

@@ -33,6 +33,17 @@
   "Topics": "Temas",
   "topicsLabel": "Temas principales de la obra (3 máx, selecciona en la lista)",
   "topicsFieldLabel": "Temas adicionales de la obra (2 máx, libre)",
-  "WorkSaved":"Obra agregada a nuestra biblioteca. ¡Gracias!",
-  "resetBtnLabel": "Eliminar"
+  "WorkSaved": "Obra agregada a nuestra biblioteca. ¡Gracias!",
+  "resetBtnLabel": "Eliminar",
+  "BasicInformation": "Información básica",
+  "APIUseText": "Use las API integradas para agregar obras, o desactive para agregar manualmente.",
+  "MakeSearchText": "Hacer busqueda de obra",
+  "Search": "Buscar",
+  "TitleError": "Título requerido",
+  "WorkTypeError": "Tipo de trabajo requerido",
+  "NoDataError": "No se encontraron resultados",
+  "Authorship": "Autoría",
+  "Content": "Contenido",
+  "AdditionalInformation": "Información adicional sobre la obra",
+  "WorkSelected": "Obra seleccionada"
 }
