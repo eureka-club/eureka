@@ -24,7 +24,43 @@ const BookCard: React.FC<Props> = (Props) => {
     }, [callback]);
 
     return (
-        <section className='p-2 w-50'>
+        <>
+            <section className='p-2 w-100 d-flex d-lg-none '>
+                <Card variant="outlined" sx={{ display: 'flex', flexDirection: 'column', minWidth: '100%' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', px: 5, mt: 4 }}>
+                        <CardMedia className="cursor-pointer" onClick={() => handleSelect(Props.book)}
+                            component="img"
+                            sx={{ width: 200 }}
+                            image={(volumeInfo.imageLinks) ? volumeInfo.imageLinks.thumbnail : fallbakImgURL}
+                            alt="Live from space album cover"
+                        />
+                    </Box>
+                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                        <CardContent sx={{ flex: '1 0 auto' }}>
+                            <Typography component="div" variant="h6">
+                                {(volumeInfo.title.length > 25) ? `${volumeInfo.title.slice(0, 30)}...` : volumeInfo.title}
+                            </Typography>
+                            {volumeInfo.authors !== undefined &&
+                                volumeInfo.authors.map((author) => {
+                                    return <Typography key={`${author}_${id}`} variant="subtitle1" color="text.secondary" component="div">
+                                        {author}
+                                    </Typography>;
+                                })}
+
+                            <Typography variant="subtitle1" color="text.secondary" component="div">
+                                {volumeInfo.publishedDate} - ({volumeInfo.language})
+                            </Typography>
+                            <Typography variant="subtitle1" color="text.secondary" component="div">
+                                {volumeInfo.publisher}
+                            </Typography>
+                            <Typography variant="subtitle1" color="text.secondary" component="div">
+                                {(volumeInfo.description) ? (volumeInfo.description.length > 150) ? `${volumeInfo.description.slice(0, 150)}...` : volumeInfo.description : ""}
+                            </Typography>
+                        </CardContent>
+                    </Box>
+                </Card>
+            </section>
+        <section className='p-2 w-50 d-none d-lg-flex'>
             <Card variant="outlined" sx={{ display: 'flex', height: 250, minWidth: '100%' }}>
                 <CardMedia className="cursor-pointer" onClick={() => handleSelect(Props.book)}
                     component="img"
@@ -57,6 +93,7 @@ const BookCard: React.FC<Props> = (Props) => {
                 </Box>
             </Card>
         </section>
+        </>
 
     );
 };

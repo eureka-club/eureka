@@ -168,6 +168,25 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
         setSelectedWork(null);
     };
 
+    const handleClear = () => { //lo repito para tenerlo sin tener q pasar evento
+        setFormValues({
+            type: '',
+            title: '',
+            link: '',
+            author: '',
+            authorGender: '',
+            authorRace: '',
+            publicationYear: '',
+            workLength: '',
+            description: ''
+        });
+        setItems([]);
+        setTags('');
+        setCountryOrigin([]);
+        setCoverFile(null);
+        setSelectedWork(null);
+    };
+
     const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
 
@@ -349,6 +368,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
     }
 
     const handleChangeUseApiSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        handleClear();
         setUseApiSearch(event.target.checked);
         setResultWorks([]);
         setSelectedWork(null);
