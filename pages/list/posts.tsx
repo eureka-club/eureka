@@ -6,19 +6,20 @@ import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import Table from 'react-bootstrap/Table';
-import { useMutation } from 'react-query';
+import { QueryClient, dehydrate, useMutation } from 'react-query';
 
-import { PostMosaicItem } from '../../src/types/post';
-import { Session } from '../../src/types';
-import SimpleLayout from '../../src/components/layouts/SimpleLayout';
-import LocalImageComponent from '../../src/components/LocalImage';
-import { findAll } from '../../src/facades/post';
+import { PostMosaicItem } from '@/src/types/post';
+import { Session } from '@/src/types';
+import SimpleLayout from '@/src/components/layouts/SimpleLayout';
+import LocalImageComponent from '@/src/components/LocalImage';
+import { findAll } from '@/src/facades/post';
+import usePosts, { getPosts } from '@/src/usePosts';
 
 interface Props {
-  posts: PostMosaicItem[];
+  session:Session;
 }
 
-const ListPostsPage: NextPage<Props> = ({ posts }) => {
+const ListPostsPage: NextPage<Props> = ({ session }) => {
   const router = useRouter();
   const { mutate: execDeletePost, isSuccess: isDeletePostSuccess } = useMutation(async (post: PostMosaicItem) => {
     const res = await fetch(`/api/post/${post.id}`, {
@@ -28,6 +29,9 @@ const ListPostsPage: NextPage<Props> = ({ posts }) => {
 
     return data;
   });
+
+  const {data} = usePosts();
+  const posts = data?.posts;
 
   const handleDeleteClick = (post: PostMosaicItem) => {
     execDeletePost(post);
@@ -43,8 +47,7 @@ const ListPostsPage: NextPage<Props> = ({ posts }) => {
   return (
     <SimpleLayout title="Posts list">
       <h1 style={{ marginBottom: '2rem' }}>Posts list</h1>
-
-      <Table>
+      {posts?<Table>
         <thead>
           <tr>
             <th>&nbsp;</th>
@@ -61,6 +64,8 @@ const ListPostsPage: NextPage<Props> = ({ posts }) => {
                 <LocalImageComponent
                   alt="post cover"
                   filePath={post.localImages[0].storedFile}
+                  height={96}
+
                   style={{ height: '96px', marginRight: '1rem' }}
                 />
               </td>
@@ -90,7 +95,7 @@ const ListPostsPage: NextPage<Props> = ({ posts }) => {
             </tr>
           ))}
         </tbody>
-      </Table>
+      </Table>:<>...</>}
     </SimpleLayout>
   );
 };
@@ -101,11 +106,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return { notFound: true };
   }
 
-  const posts = await findAll();
+  const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
+  const qc = new QueryClient();
+  const postsData = await getPosts(undefined, origin);
+  qc.prefetchQuery('list/cycles', () => postsData);
 
   return {
     props: {
-      posts,
+      session,
+      dehydratedState: dehydrate(qc),
     },
   };
 };
