@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import Table from 'react-bootstrap/Table';
-import { useMutation } from 'react-query';
+import { QueryClient, dehydrate, useMutation } from 'react-query';
 
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -19,16 +19,16 @@ import { advancedDayjs } from '../../src/lib/utils';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import LocalImageComponent from '../../src/components/LocalImage';
 import { findAll } from '../../src/facades/cycle';
+import useCycles, { getCycles } from '@/src/useCycles';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 interface Props {
-  cycles: (Cycle & {
-    localImages: LocalImage[];
-  })[];
+  session:Session;
+  
 }
 
-const ListCyclesPage: NextPage<Props> = ({ cycles }) => {
+const ListCyclesPage: NextPage<Props> = ({ session }) => {
   const router = useRouter();
   const { mutate: execDeleteCycle, isSuccess: isDeleteCycleSucces } = useMutation(async (cycle: Cycle) => {
     const res = await fetch(`/api/cycle/${cycle.id}`, {
@@ -38,6 +38,9 @@ const ListCyclesPage: NextPage<Props> = ({ cycles }) => {
 
     return data;
   });
+
+  const {data} = useCycles();
+  const cycles = data?.cycles;
 
   const handleDeleteClick = (cycle: Cycle) => {
     execDeleteCycle(cycle);
@@ -54,7 +57,7 @@ const ListCyclesPage: NextPage<Props> = ({ cycles }) => {
     <SimpleLayout title="Cycles list">
       <h1 style={{ marginBottom: '2rem' }}>Cycles list</h1>
 
-      <Table>
+      {cycles ? <Table>
         <thead>
           <tr>
             <th>&nbsp;</th>
@@ -73,6 +76,8 @@ const ListCyclesPage: NextPage<Props> = ({ cycles }) => {
                 <LocalImageComponent
                   alt="cycle cover"
                   filePath={cycle.localImages[0].storedFile}
+                  height={96}
+
                   style={{ height: '96px', marginRight: '1rem' }}
                 />
               </td>
@@ -108,7 +113,7 @@ const ListCyclesPage: NextPage<Props> = ({ cycles }) => {
             </tr>
           ))}
         </tbody>
-      </Table>
+      </Table>:<>...</>}
     </SimpleLayout>
   );
 };
@@ -119,11 +124,16 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return { notFound: true };
   }
 
-  const cycles = await findAll();
+  const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
+  const qc = new QueryClient();
+  const cyclesData = await getCycles(undefined, origin);
+  qc.prefetchQuery('list/cycles', () => cyclesData);
+
 
   return {
     props: {
-      cycles,
+      session,
+      dehydratedState: dehydrate(qc),
     },
   };
 };
