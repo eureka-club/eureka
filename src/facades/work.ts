@@ -244,6 +244,7 @@ export const createFromServerFields = async (
     return prisma.work.create({
       data: {
         ...payload,
+        ToCheck: true,
         localImages: {
           connect: {
             id: existingLocalImage.id,
@@ -256,6 +257,7 @@ export const createFromServerFields = async (
   return prisma.work.create({
     data: {
       ...payload,
+      ToCheck:true,
       localImages: {
         create: { ...coverImageUpload },
       },

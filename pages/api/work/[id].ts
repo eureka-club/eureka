@@ -8,7 +8,8 @@ import getApiHandler from '../../../src/lib/getApiHandler';
 import { find, remove, UpdateFromServerFields } from '../../../src/facades/work';
 import { prisma } from '@/src/lib/prisma';
 import { storeUpload } from '@/src/facades/fileUpload';
-
+import { cors, middleware } from '@/src/lib/cors';
+import { Work } from '@prisma/client';
 // import redis from '../../../src/lib/redis';
 export const config = {
   api: {
@@ -165,4 +166,31 @@ export default getApiHandler()
     } finally {
       //prisma.$disconnect();
     }*/
-  });
+  })
+
+.patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
+  const session = (await getSession({ req })) as unknown as Session;
+  if (session == null) {
+    res.status(401).json({ status: 'Unauthorized' });
+    return;
+  }
+  
+ let data = req.query;
+ const  id = parseInt(data.id as string, 10);
+
+ try {
+   let r: Work;
+     r = await prisma.work.update({  //Esto lo uso para el validar obra en BackOffice, se puede llevar a un facade
+       where: { id },
+       data: {
+         ToCheck: false
+       },
+     });
+   res.status(200).json({ ...r });
+ } catch (exc) {
+   console.error(exc); // eslint-disable-line no-console
+   res.status(500).json({ status: 'server error' });
+ } finally {
+   ////prisma.$disconnect();
+ }
+});

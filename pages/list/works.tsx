@@ -30,7 +30,9 @@ interface Props {
 const ListWorksPage: NextPage<Props> = ({ session }) => {
   const router = useRouter();
   const {data} = useWorks();
-  const works = data?.works;
+  const works = data?.works.filter(x => x.ToCheck)
+
+  console.log(works,'worksworks')
   
   const { mutate: execDeleteWork, isSuccess: isDeleteWorkSucces } = useMutation(async (work: Work) => {
     const res = await fetch(`/api/work/${work.id}`, {

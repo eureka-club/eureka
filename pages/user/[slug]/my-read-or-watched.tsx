@@ -231,7 +231,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                     border: none !important;
                     border-bottom: solid 1px var(--bs-primary) !important;
                   }
-                  .nav-link {Button
+                  .nav-link {
                     color: var(--bs-primary);
                   }
 

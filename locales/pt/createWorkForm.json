@@ -36,14 +36,14 @@
   "WorkSaved": "Obra adicionada à nossa biblioteca. Obrigada!",
   "resetBtnLabel": "Remover",
   "BasicInformation": "Informação básica",
-  "APIUseText": "Use as APIs integradas para adicionar trabalhos ou desative para adicionar manualmente.",
-  "MakeSearchText": "Procurar fazer obra",
+  "APIUseText": "Use as APIs integradas para adicionar obras ou desative para adicionar manualmente.",
+  "MakeSearchText": "Procurar uma obra",
   "Search": "Procurar",
   "TitleError": "Título necessário",
   "WorkTypeError": "Tipo de obra necessário",
   "NoDataError": "Nenhum resultado encontrado",
   "Authorship": "Autoria",
-  "Content": "Contente",
+  "Content": "Conteúdo",
   "AdditionalInformation": "Informações adicionais sobre a obra",
   "WorkSelected": "Obra selecionada"
 }
