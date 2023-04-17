@@ -295,7 +295,6 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
     },
   );
 
-
   const { mutate: execRevisionWork, isSuccess: isRevisionWorkSucces } = useMutation(async (work: Work) => {
     const res = await fetch(`/api/work/${work.id}`, {
       method: "PATCH",
@@ -323,7 +322,6 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
       },
     },
   );
-
 
   const handleDeleteClick = (work: Work) => {
     execDeleteWork(work)
