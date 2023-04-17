@@ -27,7 +27,7 @@ const usePosts = (props?:Prisma.PostFindManyArgs, options?: Options) => {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  let ck = cacheKey ? cacheKey : ['POSTS', `${JSON.stringify(props)}`];
+  let ck = cacheKey ? `${cacheKey}-${JSON.stringify(props)}` : ['POSTS', `${JSON.stringify(props)}`];
 
   return useQuery<{posts:PostMosaicItem[],fetched:number,total:number}>(ck, () => getPosts(props), {
     staleTime,
