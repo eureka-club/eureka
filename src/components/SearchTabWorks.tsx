@@ -87,12 +87,14 @@ const SearchTabworks:FunctionComponent = () => {
   const [works,setWorks] = useState<WorkMosaicItem[]>([])
   
   useEffect(()=>{
+
     let props: Prisma.WorkWhereInput|undefined = undefined;
     if(router.query.q && (filtersType||(filtersCountries && filtersCountries.length))){
       props = getProps();
     }
-    if(props)
+    if(props){
       setProps(s=>({...s,where:{...props}}))
+    }
   },[filtersType,filtersCountries,router.query.q])
 
   useEffect(()=>{

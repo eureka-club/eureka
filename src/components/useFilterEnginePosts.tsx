@@ -16,7 +16,6 @@ const useFilterEnginePosts = ()=>{
       Oceania:false,
       ['Sub-Saharan Africa']:false,
     })
-
     
 const FilterEnginePosts: React.FC = ()=>{
     return <section className="d-flex flex-row align-items-center justify-content-end my-2">

@@ -17,8 +17,6 @@ export default getApiHandler()
         try{
           const { storedFile:storedFile_ } = req.query;
           const storedFile = (storedFile_||'').toString();
-          console.log(storedFile,'storeFile')
-           
 
          const updateImage = async function(bsData:backOfficeData, originalFilename:string){
           const file = bsData.sliderImages.filter(x=> x.originalFilename == originalFilename);

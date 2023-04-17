@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
       //console.log('response', response);
     } catch (error: any) {
-      console.log(error, 'error');
+      console.error(error, 'error');
       return res.status(400).json({ error: 'Server Error' });
     }
   }
