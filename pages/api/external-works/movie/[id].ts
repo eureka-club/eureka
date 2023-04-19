@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-const apiKeyTMDB = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+const apiKeyTMDB = process.env.TMDB_API_KEY;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   let id = req.query.id;
