@@ -20,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           return res.status(200).json({ buffer: encode(buffer) });
         });
     } catch (error: any) {
-      console.log(error, 'error');
+      console.error(error, 'error');
       return res.status(400).json({ error: 'Server Error' });
     }
   }

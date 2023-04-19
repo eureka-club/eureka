@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { APIMediaSearchResult } from '@/src/types';
 
-const apiKeyTMDB = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+const apiKeyTMDB = process.env.TMDB_API_KEY;
 
 type Data = {
   data?: APIMediaSearchResult[];
@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           //totalItems,
           //error,
         } = await fetch(
-          `https://www.googleapis.com/books/v1/volumes?q="${searchCriteria}"&maxResults=20&key=AIzaSyCw90FMmKJl2eYADMDLYpjHeCW44f5KROc`,
+          `https://www.googleapis.com/books/v1/volumes?q="${searchCriteria}"&maxResults=20&key=${process.env.GOOGLE_CLOUD_BOOKS_CREDENTIALS}`,
         ).then((r) => r.json());
         if (data.length) {
           return res.status(200).json({ data: data });

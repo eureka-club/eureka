@@ -23,7 +23,6 @@ const TestOpenai: NextPage<Props> = () => {
       },
     }).then((r) => r.json());
 
-    console.log(data,'data')
 
 
     }

@@ -72,12 +72,14 @@ const SearchTabCycles:FunctionComponent = () => {
   const [posts,setPosts] = useState<PostMosaicItem[]>([])
   
   useEffect(()=>{
+
     let props: Prisma.PostWhereInput|undefined = undefined;
     if(router.query.q && (filtersCountries)){
       props = getProps();
     }
-    if(props)
+    if(props){
       setProps(s=>({...s,where:{...props}}))
+    }
   },[filtersCountries,router.query.q])
 
   useEffect(()=>{
