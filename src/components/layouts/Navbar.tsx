@@ -362,12 +362,12 @@ const NavBar: FunctionComponent = () => {
                     <a className="dropdown-item">{t('post')}</a>
                   </Link>
                   {/*<Dropdown.Item onClick={handleCreatePostClick}>{t('post')}</Dropdown.Item>*/}
-                  {session?.user.roles && session?.user.roles == 'admin' && (
+                  {/*{session?.user.roles && session?.user.roles == 'admin' && (*/}
                     <Link href="/work/create">
                       <a className="dropdown-item">{t('work')}</a>
                     </Link>
-                  )}
-                  {/*<Dropdown.Item onClick={handleCreateWorkClick}>{t('v')}</Dropdown.Item>*/}
+                  {/*)}
+                  <Dropdown.Item onClick={handleCreateWorkClick}>{t('v')}</Dropdown.Item>*/}
                 </Dropdown.Menu>
               </Dropdown>
             )}

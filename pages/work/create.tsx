@@ -53,7 +53,7 @@ const CreateWorkPage: NextPage<Props> = ({notFound}) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = (await getSession(ctx)) as unknown as Session;
-  if (session == null || !session.user.roles.includes('admin')) {
+  if (session == null /*|| !session.user.roles.includes('admin')*/) {
     return { props: { notFound: true } };
   }
 

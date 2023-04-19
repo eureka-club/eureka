@@ -329,11 +329,11 @@ const NavBar: FunctionComponent = () => {
                     <Link href="/post/create">
                       <a className="dropdown-item">{t('post')}</a>
                     </Link>
-                    {session?.user.roles && session?.user.roles == 'admin' && (
+                    {/* {session?.user.roles && session?.user.roles == 'admin' && ( */}
                       <Link href="/work/create">
                         <a className="dropdown-item">{t('work')}</a>
                       </Link>
-                    )}
+                  {/* )} */}
                   </Dropdown.Menu>
                 </Dropdown>
               )}
