@@ -105,7 +105,6 @@ export const createImage = (url: string) =>
     image.addEventListener('load', () => resolve(image));
     image.addEventListener('error', (error) => reject(error));
     image.setAttribute('crossOrigin', 'anonymous'); // needed to avoid cross-origin issues on CodeSandbox
-    console.log(url, 'create image utils');
     image.src = url;
   });
 
@@ -198,7 +197,6 @@ export const getImg = async (
   flip = { horizontal: false, vertical: false },
 ): Promise<File | null> => {
   const image = <ImageBitmap>await createImage(imageSrc);
-  console.log(image, 'image');
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
   if (!ctx) {

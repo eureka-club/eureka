@@ -290,7 +290,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
             if (data.length)
                 setResultWorks(data);
-            else if (!data.length){
+            else if (!data.length) {
                 toast.error(t('NoDataError'))
                 setResultWorks([]);
             }
@@ -305,8 +305,8 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
         setLoading(true);
         setSelectedWork(work);
         if (isBookGoogleBookApi(work)) {
+            //Buscar poster y traerlo a eureka//////////////////
             if (work.volumeInfo.imageLinks) {
-                //console.log(isBookGoogleBookApi(work), work, 'is a work')
                 let url = work.volumeInfo.imageLinks.thumbnail;
                 url = url.replace('http://', 'https://');
                 url = url.replace('zoom=1', 'zoom=5');
@@ -324,6 +324,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                 let file = await getImg(src)
                 setCoverFile(file);
             }
+            //////////////////////////////////////////////////
             formValues['title'] = work.volumeInfo.title;
             formValues['author'] = work.volumeInfo.authors ? work.volumeInfo.authors.join(',') : "";
             formValues['publicationYear'] = (work.volumeInfo.publishedDate) ? work.volumeInfo.publishedDate : "";
@@ -335,10 +336,17 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
         }
         if (isVideoTMDB(work)) {
+            //Busco mas detalles del Video TMDB /////////////////////   
+            const {video} = await fetch(`/api/external-works/movie/${work.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+            }).then((r) => r.json());
+            ////////////////////////////////////////////////////////
+
+            //Buscar poster y traerlo a eureka//////////////////////
             if (work.poster_path) {
-               // console.log(isVideoTMDB(work), 'is a video')
-                //let image = new Image();// hice esto aca por errores de CORS
-                //image.crossOrigin = "Anonymous";
                 let url = `https://image.tmdb.org/t/p/w600_and_h900_bestv2${work.poster_path}?not-from-cache-please`;
 
                 const { buffer } = await fetch('/api/external-works/select', {
@@ -354,9 +362,14 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                 let file = await getImg(src)
                 setCoverFile(file as File | null);
             }
-            formValues['title'] = work.title;
-            formValues['publicationYear'] = work.release_date;
-            formValues['description'] = work.overview;
+            ////////////////////////////////////////////////////////
+
+
+            formValues['title'] = video.title;
+            formValues['author'] = video.director.name ? video.director.name : "";
+            formValues['publicationYear'] = video.release_date;
+            formValues['workLength'] = (video.runtime) ? `${video.runtime}` : "";
+            formValues['description'] = video.overview;
             setFormValues({
                 ...formValues,
             });
@@ -386,7 +399,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
             </ModalHeader>
             <ModalBody>
                 <FormGroup className='d-flex justify-content-end'>
-                    <FormControlLabel control={<Switch checked={useApiSearch} onChange={handleChangeUseApiSearch} />} label={t('APIUseText') } />
+                    <FormControlLabel control={<Switch checked={useApiSearch} onChange={handleChangeUseApiSearch} />} label={t('APIUseText')} />
                 </FormGroup>
                 <span className='text-primary fw-bold'>{t('BasicInformation')}</span>
                 <Row className='d-flex flex-column flex-lg-row mt-4'>
@@ -460,7 +473,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                         </Col>
                     </Row>
 
-                    <span className='text-primary fw-bold'>{t('Authorship')}</span>
+                        <span className='text-primary fw-bold'>{t('Authorship')}</span>
                         <Row className='d-flex flex-column flex-lg-row mt-4 mb-4'>
                             <Col className="">
                                 <TextField id="author" className="w-100" label={`*${t('authorFieldLabel')}`}
@@ -532,7 +545,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                             </Col>
                         </Row>
 
-                    <span className='text-primary fw-bold'>{t('Content')}</span>
+                        <span className='text-primary fw-bold'>{t('Content')}</span>
                         <Row className='d-flex flex-column flex-lg-row mt-4'>
                             <Col className="">
                                 <FormGroup controlId="topics">
@@ -552,7 +565,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
                             </Col>
                         </Row>
-                    <span className='text-primary fw-bold'>{t('AdditionalInformation')}</span>
+                        <span className='text-primary fw-bold'>{t('AdditionalInformation')}</span>
                         <Row className='d-flex flex-column flex-lg-row mt-4'>
                             <Col className="">
                                 <TextField id="publicationYear" className="w-100" label={publicationYearLabel}
