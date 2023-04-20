@@ -140,7 +140,7 @@ const NavBar: FunctionComponent = () => {
   return (
     <Container className={styles.container}>
       <Navbar collapseOnSelect expand="lg" bg="white" fixed="top" className="border-bottom border-primary">
-        <Container className="px-0">
+        <Container className="px-0 d-flex flex-wrap">
           <Link href="/" replace>
             <a className="d-flex align-items-center">
               <Navbar.Brand className="cursor-pointer">
