@@ -137,6 +137,7 @@ const NavBar: FunctionComponent = () => {
     );
   };
 
+
   return (
     <Container className={styles.container}>
       <Navbar collapseOnSelect expand="lg" bg="white" fixed="top" className="border-bottom border-primary">
