@@ -19,11 +19,11 @@ const WorkPostImages: FunctionComponent<Props> = ({ work, workId, workTitle }) =
     return (
       <section className="d-flex flex-column">
         <h3 className="text-secondary fs-5 mb-2">{`${t("ImagesAbout")} ${workTitle}`}</h3>
-        <div className="d-flex flex-wrap justify-content-center justify-content-lg-around">
+        <div className="d-flex flex-wrap justify-content-center justify-content-xl-around">
           {posts.slice(0,4).map((post) => (
             <div className='cursor-pointer' key={post.id} onClick={() => router.push(`/work/${workId}/post/${post.id}`)}>
               <LocalImageComponent
-                className="pe-lg-1"
+                className="pe-xl-1"
                 // filePath={post.storedFile}
                 filePath={post.localImages[0].storedFile}
                 title=""
