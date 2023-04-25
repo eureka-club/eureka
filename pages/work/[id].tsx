@@ -8,7 +8,7 @@ import useTranslation from 'next-translate/useTranslation';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import { WEBAPP_URL } from '@/src/constants';
 import WorkDetailComponent from '@/src/components/work/WorkDetail';
-import { dehydrate,QueryClient } from 'react-query';
+import { dehydrate, QueryClient } from 'react-query';
 import useWork,{getWork} from '@/src/useWork';
 import {getCycles} from '@/src/useCycles'
 import {getPosts} from '@/src/usePosts'
@@ -16,24 +16,20 @@ import { Session } from '@/src/types';
 import { WorkMosaicItem } from '@/src/types/work';
 
 interface Props{
+  workId: number;
   metas:Record<string,any>;
   session:Session;
 }
-const WorkDetailPage: NextPage<Props> = ({session,metas}) => {
+const WorkDetailPage: NextPage<Props> = ({ session, metas, workId }) => {
   
   const router = useRouter();
   const { t } = useTranslation('common');
-  const [id, setId] = useState<string>('');
+  //const [id, setId] = useState<string>('');
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
   const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
-  useEffect(() => {
-    if (router) {
-      if (router.query.id) setId(router.query.id as string);
-    }
-  }, [router]);
 
-  const { data: work, isLoading: isLoadingWork } = useWork(+id, { enabled: !!id });
+  const { data: work, isLoading, isFetching, isError, error } = useWork(+workId, { enabled: !!workId });
 
   const rendetLayout = (title: string, children: ReactElement) => {
     return (
@@ -66,8 +62,21 @@ const WorkDetailPage: NextPage<Props> = ({session,metas}) => {
       </>
     );
   };
-  
-  if (isLoadingWork) return rendetLayout('Loading...', <Spinner animation="grow" />);
+
+
+  if (isError)
+    return (
+      <Alert variant="warning">
+        <>{error}</>
+      </Alert>
+    );
+
+  if (!isLoading  && !work)
+    return (
+      <SimpleLayout title={t('notFound')}>
+        <Alert variant="danger">{t('notFound')}</Alert>
+      </SimpleLayout>
+    );
   
   if (work) {
     return rendetLayout(
@@ -78,9 +87,11 @@ const WorkDetailPage: NextPage<Props> = ({session,metas}) => {
       />,
     );
   }
-  if(!isLoadingWork && !work)
-    return rendetLayout('Work not found', <Alert variant="warning">{t('notFound')}</Alert>);
-  return rendetLayout('Loading...', <Spinner animation="grow" />);
+  return (
+    <SimpleLayout title="Loading...">
+      <Spinner animation="grow" variant="info" />
+    </SimpleLayout>
+  ); 
 };
 
 
@@ -122,6 +133,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   
   return {
     props: {
+      workId: work?.id || null,
       work,
       session,
       dehydratedState: dehydrate(qc),
