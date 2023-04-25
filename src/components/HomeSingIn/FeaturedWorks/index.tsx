@@ -29,7 +29,7 @@ const FeaturedWorks = () => {
             {dataFeaturedWorks.works.map((work) => (
               <Carousel.Item key={work.id} className="">
                 <Row className="d-flex flex-row w-100  bg-gray-very-light rounded-3 py-4 m-0  pe-0 pe-lg-3">
-                  <Col xs={12} lg={4} className="d-flex justify-content-center">
+                  <Col xs={12}  xl={4} className="d-flex justify-content-center">
                     <MosaicItem
                       work={work}
                       workId={work.id}
@@ -40,16 +40,11 @@ const FeaturedWorks = () => {
                       size={'lg'}
                     />
                   </Col>
-                  <Col xs={12} lg={8} className="d-flex flex-column">
+                  <Col xs={12} xl={8} className="d-flex flex-column">
                     <WorkPostImages work={work} workId={work.id} workTitle={work.title} />
                     <WorkComments workId={work.id} />
-                    {/* <Button
-                      className="btn-eureka"
-                      //onClick={handlerLogin} /*onClick={openSignInModal}
-                    >
-                      Participa
-                    </Button>*/}
                   </Col>
+                
                 </Row>
               </Carousel.Item>
             ))}
