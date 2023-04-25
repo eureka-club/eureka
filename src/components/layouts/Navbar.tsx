@@ -142,7 +142,7 @@ const NavBar: FunctionComponent = () => {
     <Container className={`${styles.container}`}>
       <Navbar collapseOnSelect expand="lg" bg="white" fixed="top" className="border-bottom border-primary">
         <Container className="px-0  d-flex flex-lg-column flex-xxl-row">
-          <section className='d-flex flex-row' >
+          <section className='d-flex flex-row w-100 justify-content-start ms-2 ' >
           <Link href="/" replace>
             <a className="d-flex align-items-center">
               <Navbar.Brand className="cursor-pointer">
@@ -159,14 +159,14 @@ const NavBar: FunctionComponent = () => {
           </Link>
             <Nav className="d-flex align-items-center ms-5">{!isLoadingSession && <SearchInput className="" style={{ width: '450px' }} />}</Nav>
         </section>
-          <section className='d-flex my-lg-1 flex-row  flex-wrap' >
+          <section className='d-flex my-lg-1 flex-row w-100 justify-content-start' >
           {isLoadingSession ? (
             <Spinner animation="grow" variant="info" />
           ) : (
             <>
               <Navbar.Toggle aria-controls="responsive-navbar-nav" />
               <Navbar.Collapse className={`${styles['responsive-navbar-nav']}`}>
-                <Nav className={`${styles.navbarNav} ms-2`}>
+                <Nav className={`${styles.navbarNav} ms-xxl-2`}>
                   <Dropdown data-cy="link-topics" align="end" className={styles.langSwitch}>
                     <Dropdown.Toggle as={ChevronToggle}>
                       <HiOutlineHashtag
@@ -321,49 +321,52 @@ const NavBar: FunctionComponent = () => {
                     </Dropdown>
                   </Nav>
                 )}
-                <Nav.Item data-cy="notifications-btn">
+                
+                    <Nav className={styles.navbarNav}>
+                      {!session && !isLoadingSession && (
+                        <Button
+                          className="ms-4 btn-eureka"
+                          data-cy="btn-login"
+                          onClick={handlerLogin} /*onClick={openSignInModal}*/
+                        >
+                          {t('login')}
+                        </Button>
+                      )}
+                    </Nav>
+                   {session && session.user && ( <>
+                   <Nav.Item data-cy="notifications-btn">
                   <NotificationsList />
                 </Nav.Item>
-              </Navbar.Collapse>
-            </>
-          )}
-          <Nav className={styles.navbarNav}>
-            {!session && !isLoadingSession && (
-              <Button
-                className="ms-4 btn-eureka"
-                data-cy="btn-login"
-                onClick={handlerLogin} /*onClick={openSignInModal}*/
-              >
-                {t('login')}
-              </Button>
-            )}
-          </Nav>
-            <Nav className="ms-2  d-flex justify-content-end align-items-center ">
-            {session && session.user && (
-                <Dropdown className={`rounded-1 ${styles.actionBtn}`}>
-                <Dropdown.Toggle as={ChevronToggle} id="create">
-                  <span className="text-white">{t('create')}</span>
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  {session?.user.roles && session?.user.roles == 'admin' && (
-                    <Link href="/cycle/create">
-                      <a className="dropdown-item">{t('cycle')}</a>
-                    </Link>
-                  )}
-                  <Link href="/post/create">
-                    <a className="dropdown-item">{t('post')}</a>
-                  </Link>
-                  {/*<Dropdown.Item onClick={handleCreatePostClick}>{t('post')}</Dropdown.Item>*/}
-                  {/*{session?.user.roles && session?.user.roles == 'admin' && (*/}
-                    <Link href="/work/create">
-                      <a className="dropdown-item">{t('work')}</a>
-                    </Link>
-                  {/*)}
+                   <Nav className="ms-2 d-flex align-items-center ">
+                      
+                        <Dropdown className={`rounded-1 ${styles.actionBtn}`}>
+                          <Dropdown.Toggle as={ChevronToggle} id="create">
+                            <span className="text-white">{t('create')}</span>
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu>
+                            {session?.user.roles && session?.user.roles == 'admin' && (
+                              <Link href="/cycle/create">
+                                <a className="dropdown-item">{t('cycle')}</a>
+                              </Link>
+                            )}
+                            <Link href="/post/create">
+                              <a className="dropdown-item">{t('post')}</a>
+                            </Link>
+                            {/*<Dropdown.Item onClick={handleCreatePostClick}>{t('post')}</Dropdown.Item>*/}
+                            {/*{session?.user.roles && session?.user.roles == 'admin' && (*/}
+                            <Link href="/work/create">
+                              <a className="dropdown-item">{t('work')}</a>
+                            </Link>
+                            {/*)}
                   <Dropdown.Item onClick={handleCreateWorkClick}>{t('v')}</Dropdown.Item>*/}
-                </Dropdown.Menu>
-              </Dropdown>
-            )}
-          </Nav>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      
+                      </Nav></>)}
+              </Navbar.Collapse>
+                  
+            </>
+          )}          
           </section>
         </Container>
       </Navbar>

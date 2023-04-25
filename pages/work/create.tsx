@@ -12,10 +12,11 @@ import { stubFalse } from 'lodash';
 
 interface Props {
   notFound?: boolean;
+  session: Session
 }
-const CreateWorkPage: NextPage<Props> = ({notFound}) => {
+const CreateWorkPage: NextPage<Props> = ({ notFound, session }) => {
   const { t } = useTranslation('createWorkForm');
-  const {data:session, status} = useSession();
+  //const {data:session, status} = useSession();
   const isLoadingSession = status == 'loading'
   const router = useRouter();
 
@@ -52,13 +53,15 @@ const CreateWorkPage: NextPage<Props> = ({notFound}) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const session = (await getSession(ctx)) as unknown as Session;
+  const session = await getSession(ctx);
   if (session == null /*|| !session.user.roles.includes('admin')*/) {
     return { props: { notFound: true } };
   }
 
   return {
-    props: {},
+    props: {
+      session,
+    },
   };
 };
 
