@@ -35,7 +35,7 @@ const FeaturedWorks = () => {
                       workId={work.id}
                       showCreateEureka={true}
                       showSocialInteraction={true}
-                      className="mb-4 mb-lg-0"
+                      className="mb-4 mb-xl-0"
                       cacheKey={['WORK', work.id.toString()]}
                       size={'lg'}
                     />

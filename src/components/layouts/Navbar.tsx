@@ -141,7 +141,8 @@ const NavBar: FunctionComponent = () => {
   return (
     <Container className={styles.container}>
       <Navbar collapseOnSelect expand="lg" bg="white" fixed="top" className="border-bottom border-primary">
-        <Container className="px-0 d-flex flex-wrap">
+        <Container className="px-0 d-flex flex-lg-column-reverse flex-xl-row">
+          <section className='d-flex flex-row' >
           <Link href="/" replace>
             <a className="d-flex align-items-center">
               <Navbar.Brand className="cursor-pointer">
@@ -153,28 +154,18 @@ const NavBar: FunctionComponent = () => {
                     <p className="text-secondary my-0 ms-3 font-weight-light fs-xs">{t('tagline')}</p>
                   </section>
                 </aside>
-                {/* <Container>
-              <Col xs={4} className={styles.brandContainer}>
-                <img src="/img/logo.png" className="d-inline-block align-middle me-2" width={52} alt="Project logo" />
-              </Col>
-              <Col xs={7} className="pe-0">
-                
-                <div className={styles.siteName}>{siteName}</div>
-
-                
-                <div className={styles.brandInfo}>{t('tagline')}</div>
-              </Col>
-            </Container> */}
               </Navbar.Brand>
             </a>
           </Link>
+            <Nav className="d-flex  align-items-center">{!isLoadingSession && <SearchInput className="" style={{ width: '400px' }} />}</Nav>
+        </section>
+          <section className='d-flex flex-row flex-wrap-reverse' >
           {isLoadingSession ? (
             <Spinner animation="grow" variant="info" />
           ) : (
             <>
               <Navbar.Toggle aria-controls="responsive-navbar-nav" />
               <Navbar.Collapse className={`${styles['responsive-navbar-nav']}`}>
-                <Nav className="">{!isLoadingSession && <SearchInput className="" style={{ width: '400px' }} />}</Nav>
                 <Nav className={`${styles.navbarNav} ms-2`}>
                   <Dropdown data-cy="link-topics" align="end" className={styles.langSwitch}>
                     <Dropdown.Toggle as={ChevronToggle}>
@@ -373,6 +364,7 @@ const NavBar: FunctionComponent = () => {
               </Dropdown>
             )}
           </Nav>
+          </section>
         </Container>
       </Navbar>
     </Container>
