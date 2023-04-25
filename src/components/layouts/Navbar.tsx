@@ -139,9 +139,9 @@ const NavBar: FunctionComponent = () => {
 
 
   return (
-    <Container className={styles.container}>
+    <Container className={`${styles.container}`}>
       <Navbar collapseOnSelect expand="lg" bg="white" fixed="top" className="border-bottom border-primary">
-        <Container className="px-0 d-flex flex-lg-column-reverse flex-xl-row">
+        <Container className="px-0  d-flex flex-lg-column flex-xxl-row">
           <section className='d-flex flex-row' >
           <Link href="/" replace>
             <a className="d-flex align-items-center">
@@ -157,9 +157,9 @@ const NavBar: FunctionComponent = () => {
               </Navbar.Brand>
             </a>
           </Link>
-            <Nav className="d-flex  align-items-center">{!isLoadingSession && <SearchInput className="" style={{ width: '400px' }} />}</Nav>
+            <Nav className="d-flex align-items-center ms-5">{!isLoadingSession && <SearchInput className="" style={{ width: '450px' }} />}</Nav>
         </section>
-          <section className='d-flex flex-row flex-wrap-reverse' >
+          <section className='d-flex my-lg-1 flex-row  flex-wrap' >
           {isLoadingSession ? (
             <Spinner animation="grow" variant="info" />
           ) : (
@@ -338,9 +338,9 @@ const NavBar: FunctionComponent = () => {
               </Button>
             )}
           </Nav>
-          <Nav className="ms-2">
+            <Nav className="ms-2  d-flex justify-content-end align-items-center ">
             {session && session.user && (
-              <Dropdown className={`rounded-1 ${styles.actionBtn}`}>
+                <Dropdown className={`rounded-1 ${styles.actionBtn}`}>
                 <Dropdown.Toggle as={ChevronToggle} id="create">
                   <span className="text-white">{t('create')}</span>
                 </Dropdown.Toggle>
