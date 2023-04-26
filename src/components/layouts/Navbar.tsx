@@ -157,7 +157,7 @@ const NavBar: FunctionComponent = () => {
               </Navbar.Brand>
             </a>
           </Link>
-            <Nav className="d-flex align-items-center ms-5">{!isLoadingSession && <SearchInput className="" style={{ width: '450px' }} />}</Nav>
+            <Nav className="d-flex align-items-center ms-2 ms-xxl-5">{!isLoadingSession && <SearchInput className="" style={{ width: '400px' }} />}</Nav>
         </section>
           <section className='d-flex my-lg-1 flex-row w-100 justify-content-start' >
           {isLoadingSession ? (
@@ -165,7 +165,7 @@ const NavBar: FunctionComponent = () => {
           ) : (
             <>
               <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-              <Navbar.Collapse className={`${styles['responsive-navbar-nav']}`}>
+                  <Navbar.Collapse className={`d-flex justify-content-lg-start justify-content-xxl-center`}>
                 <Nav className={`${styles.navbarNav} ms-xxl-2`}>
                   <Dropdown data-cy="link-topics" align="end" className={styles.langSwitch}>
                     <Dropdown.Toggle as={ChevronToggle}>
