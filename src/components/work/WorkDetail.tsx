@@ -306,8 +306,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
           <>
             <Suspense fallback={<Spinner animation="grow" />}>
               {post == null ? (
-                <Row className="mb-5 d-flex flex-column flex-md-row">
-                  <Col className="col-md-5 col-lg-4 col-xl-3   d-none d-md-block">
+                <Row className="mb-5 d-flex flex-column flex-lg-row">
+                  <Col className="col-md-12 col-lg-4 col-xl-3   d-none d-lg-block">
                     <MosaicItem
                       workId={work.id}
                       showTrash
@@ -341,7 +341,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                 </div>
                 <SocialInteraction cacheKey={['WORKS', `${work.id}`]} entity={work} showCounts showShare showTrash /> */}
                   </Col>
-                  <Col className="col-md-7 col-lg-8 col-xl-9">
+                  <Col className="col-md-12 col-lg-8 col-xl-9">
                     <section className="mx-md-4">
                       <h1 className="fw-bold text-secondary">{work.title}</h1>
                       <h2 className={`${styles.author}`}>{work.author}</h2>
@@ -376,7 +376,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                           {t('workLinkLabel')} <BsBoxArrowUpRight />
                         </a>
                       )}
-                      <div className="container d-sm-block d-md-none mt-4 mb-4 position-relative">
+                      <div className="container d-sm-block d-lg-none mt-4 mb-4 position-relative">
                         <MosaicItem
                           className="postition-absolute start-50 translate-middle-x"
                           work={work}

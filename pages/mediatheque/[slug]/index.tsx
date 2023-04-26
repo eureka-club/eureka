@@ -295,7 +295,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                         {renderCountry()}
                       </div>
                     </div>
-                    <TagsInput className="d-sm-block d-md-none" tags={user.tags || ''} readOnly label="" />
+                    <TagsInput className="d-sm-flex d-md-none d-flex flex-row" tags={user.tags || ''} readOnly label="" />
                   </Col>
                   <Col className="col col-sm-12 col-md-8">
                     <div className="d-none d-md-block">

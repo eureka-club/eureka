@@ -167,7 +167,7 @@ const NavBar: FunctionComponent = () => {
               <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                   <Navbar.Collapse className={`d-flex justify-content-lg-start justify-content-xxl-center`}>
                 <Nav className={`${styles.navbarNav} ms-xxl-2`}>
-                  <Dropdown data-cy="link-topics" align="end" className={styles.langSwitch}>
+                  <Dropdown data-cy="link-topics" align="start" className={styles.langSwitch}>
                     <Dropdown.Toggle as={ChevronToggle}>
                       <HiOutlineHashtag
                         className={`${styles.navbarIconNav} border border-2 border-primary`}

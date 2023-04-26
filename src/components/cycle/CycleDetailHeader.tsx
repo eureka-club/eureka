@@ -172,9 +172,9 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
 
   return (
     cycle && (
-      <section className="d-flex flex-column-reverse flex-lg-row mb-1 mb-lg-5">
+      <section className="d-flex flex-column-reverse flex-xl-row mb-1 mb-lg-5">
         {/* xs={{ span: 12, order: 2 }} md={{ span: 7, order: 1 }} lg={{ span: 8 }}*/}
-        <Col className="d-none d-lg-flex col-12 col-md-2 col-lg-3 justify-content-center justify-content-lg-start">
+        <Col className="d-none d-xl-flex col-12 col-md-2 col-lg-3 justify-content-center justify-content-lg-start">
           <aside className="d-flex flex-column">
             <div className="mt-3">
               <UserAvatar width={42} height={42} userId={cycle.creatorId} showFullName />
@@ -209,8 +209,8 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
             </Box>
           </aside>
         </Col>
-        <Col className="mt-3 ms-lg-3 mt-lg-0 col-12 col-md-10 col-lg-9 d-none d-lg-flex flex-column justify-content-center justify-content-lg-start">
-          <h1 className="d-none d-lg-block mb-1 fw-bold text-secondary">{cycle.title}</h1>
+        <Col className="mt-3 ms-lg-3 mt-lg-0 col-12 col-md-10 col-lg-9 d-none d-xl-flex flex-column justify-content-center justify-content-lg-start">
+          <h1 className="d-none d-xl-block mb-1 fw-bold text-secondary">{cycle.title}</h1>
           <div className="d-flex flex-row justify-content-start">
             {/* @ts-ignore*/}
             {/* <Rating
@@ -271,7 +271,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         {/*xs={{ span: 12, order: 1 }} md={{ span: 5, order: 2 }} lg={{ span: 4 }}*/}
 
         {show && (
-          <Col className="mt-3 col-12  d-flex flex-column justify-content-center d-lg-none">
+          <Col className="mt-3 col-12  d-flex flex-column justify-content-center d-xl-none">
             <div className="">
               <h4 className="mt-3 mb-1 text-dark">
                 {t('Content calendar')} ({works && works.length})
@@ -294,7 +294,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         )}
 
         {show && (
-          <Col className="col-12 d-flex justify-content-center d-lg-none">
+          <Col className="col-12 d-flex justify-content-center d-xl-none">
             <aside className="d-flex flex-column">
               <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
                 <MosaicItem
@@ -326,7 +326,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
             </aside>
           </Col>
         )}
-        <Col className="col-12 d-flex justify-content-between align-items-baseline d-lg-none">
+        <Col className="col-12 d-flex justify-content-between align-items-baseline d-xl-none">
           <Row>
             <UserAvatar width={42} height={42} userId={cycle.creatorId} showFullName />
           </Row>
@@ -353,7 +353,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
             )}
           </Row>
         </Col>
-        <Col className="col-12 d-lg-none">
+        <Col className="col-12 d-xl-none">
           <h1 className=" mb-1 fw-bold text-secondary">{cycle.title}</h1>
           {cycle.topics && (
             <aside className="d-flex flex-wrap d-lg-inline-block mb-4">
