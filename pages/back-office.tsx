@@ -594,7 +594,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                 </Button>
               </div>
             </Form>
-            <Button variant='danger' className='text-white my-1' onClick={removeNotificationsSinceLastMonth}>Remove old notifications</Button>
+            <Button variant='danger' className='text-white my-1' onClick={removeNotificationsSinceLastMonth}>{t('RemoveOldNotifications')}</Button>
 
           </TabPane>
         </TabContent>
