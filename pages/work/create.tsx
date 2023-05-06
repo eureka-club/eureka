@@ -1,14 +1,13 @@
 import { GetServerSideProps, NextPage} from 'next';
 import { useEffect } from 'react';
-import { getSession,useSession } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CreateWorkForm from '@/components/forms/CreateWorkForm';
-import { Spinner, Card, Row, Col, ButtonGroup, Button, Alert } from 'react-bootstrap';
+import { Spinner,ButtonGroup, Button } from 'react-bootstrap';
 import { BiArrowBack } from 'react-icons/bi';
-import { stubFalse } from 'lodash';
 
 interface Props {
   notFound?: boolean;
@@ -19,8 +18,6 @@ const CreateWorkPage: NextPage<Props> = ({ notFound, session }) => {
   //const {data:session, status} = useSession();
   const isLoadingSession = status == 'loading'
   const router = useRouter();
-
-
 
     useEffect(() => {
             if (notFound) 

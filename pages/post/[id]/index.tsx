@@ -2,6 +2,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { Alert } from 'react-bootstrap';
 import { sendMail } from '@/src/facades/mail';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
+import { getSession } from 'next-auth/react';
 
 const CycleDetailPage: NextPage = () => {
   return (
@@ -12,6 +13,8 @@ const CycleDetailPage: NextPage = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getSession(ctx);
+
   const opt = {
     to: [
       {
@@ -30,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   };
 
   sendMail(opt);
-  return { props: {} };
+  return { props: {session} };
 };
 
 export default CycleDetailPage;

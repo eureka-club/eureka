@@ -6,6 +6,7 @@ import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import SignInForm from '../src/components/forms/SignInForm';
 
 const LoginPage: NextPage = () => {
+  
   const { t } = useTranslation('signInForm');
 
   return (
@@ -18,12 +19,15 @@ const LoginPage: NextPage = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  ///const session = await getSession(ctx);
+  const session = await getSession(ctx);
+  if (session != null) {
+    return { redirect: { destination: '/', permanent: false } };
+  }
  // if (session != null) {
     //return { redirect: { destination: '/', permanent: false } };
  // }
 
-  return { props: {} };
+  return { props: {session} };
 };
 
 export default LoginPage;

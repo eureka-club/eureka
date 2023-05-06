@@ -152,6 +152,7 @@ export const getServerSideProps:GetServerSideProps= async (ctx)=>{
   let res = {
     props:{
       id,
+      session,
       dehydrateState:dehydrate(qc)
     }
   }
@@ -162,6 +163,7 @@ export const getServerSideProps:GetServerSideProps= async (ctx)=>{
   res = {
     props:{
       id,
+      session,
       dehydrateState:dehydrate(qc)
     }
   }

@@ -1,12 +1,11 @@
 import React from 'react';
-import { Session } from '@/src/types';
+// import { Session } from '@/src/types';
 import { NextPage, GetServerSideProps } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import ResetPassForm from '../src/components/forms/ResetPassForm';
-import dayjs from 'dayjs';
 import {prisma} from '@/src/lib/prisma';
-import { Router, useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 
 interface Props{
   userId:string;

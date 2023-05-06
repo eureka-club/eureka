@@ -89,7 +89,11 @@ const TestOpenai: NextPage<Props> = () => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = (await getSession(ctx));
+  if (session == null || !session.user.roles.includes('admin')) {
+    return { props: { notFound: true } };
+  }
   return {
+    session,
     props: {},
   };
 };

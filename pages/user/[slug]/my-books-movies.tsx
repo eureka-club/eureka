@@ -2,7 +2,7 @@ import { NextPage,GetServerSideProps } from 'next';
 import Head from "next/head";
 import { Button, ButtonGroup, Col, Row, Spinner } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
-import { useSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import WMI from '@/src/components/work/MosaicItem';
 import {useRouter} from 'next/router'
@@ -65,6 +65,8 @@ const MyBooksMovies: NextPage<Props> = ({id}) => {
   </>
 };
 export const getServerSideProps: GetServerSideProps = async (ctx)=>{
+  const session = await getSession(ctx)
+
   let user:UserMosaicItem|null = null;
   const qc = new QueryClient()
   let id = 0
@@ -80,7 +82,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx)=>{
     props:{
       id,
       dehydratedState: dehydrate(qc),
-
+      session
     }
   }
 }

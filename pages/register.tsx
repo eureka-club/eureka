@@ -2,8 +2,8 @@ import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 
-import SimpleLayout from '../src/components/layouts/SimpleLayout';
-import SignUpForm from '../src/components/forms/SignUpForm';
+import SimpleLayout from '@/src/components/layouts/SimpleLayout';
+import SignUpForm from '@/src/components/forms/SignUpForm';
 
 const RegisterPage: NextPage = () => {
   const { t } = useTranslation('signUpForm'); 

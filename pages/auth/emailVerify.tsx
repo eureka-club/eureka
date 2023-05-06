@@ -1,4 +1,4 @@
-import { getCsrfToken } from 'next-auth/react';
+import { getCsrfToken, getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { GetServerSideProps } from 'next';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
@@ -21,8 +21,12 @@ export default function EmailVerify(/* props: Props */) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async function getServerSideProps(context) {
-  const csrfToken = await getCsrfToken(context);
+export const getServerSideProps: GetServerSideProps = async function getServerSideProps(ctx) {
+  const session = await getSession(ctx);
+  if (session != null) {
+    return { redirect: { destination: '/', permanent: false } };
+  }
+  const csrfToken = await getCsrfToken(ctx);
   return {
     props: { csrfToken },
   };

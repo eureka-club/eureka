@@ -1,15 +1,13 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { getSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
-import { QueryClient, useMutation, dehydrate, useQuery } from 'react-query';
+import { useState } from 'react';
+import { QueryClient, dehydrate, useQuery } from 'react-query';
 
-import { Session } from '../../src/types';
-import SimpleLayout from '../../src/components/layouts/SimpleLayout';
+import { Session } from '@/src/types';
+import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import { Box, Chip, LinearProgress, Tab, Tabs, Typography } from '@mui/material';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import dayjs from 'dayjs'
-import { data } from 'cypress/types/jquery';
 interface Props {
 }
 interface TabPanelProps {
@@ -55,8 +53,9 @@ const fetchDataCampaigns = ()=>{
 const fetchDataAutomations = ()=>{
   return fetch(`/api/mailchimp/automations`).then(res=>res.json()).then(json=>json.data.automations)
 }
-const fetchDataMembers = ()=>{
-  return fetch(`/api/mailchimp/members`).then(res=>res.json()).then(json=>json.data.members)
+const fetchDataMembers = async ()=>{
+  return fetch(`/api/mailchimp/list/members`).then(res=>res.json()).then(json=>json.data.members)
+
 }
 const columnsMembers: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 100 },
@@ -99,6 +98,68 @@ const columnsMembers: GridColDef[] = [
     },
   }
 ];
+const columnsAudiences: GridColDef[] = [
+  { field: 'id', headerName: 'ID', width: 100 },
+  {
+    field: 'name',
+    headerName: 'Name',
+    width: 150,
+    valueGetter: (params: GridValueGetterParams) => params.row.full_name,
+  },
+];
+const columnsCampaigns: GridColDef[] = [
+  { field: 'id', headerName: 'ID', width: 100 },
+  {
+    field: 'type',
+    headerName: 'Type',
+    width: 150,
+    valueGetter: (params: GridValueGetterParams) => params.row.type,
+  },
+  {
+    field: 'create_time',
+    headerName: 'Create Time',
+    width: 200,
+    valueGetter: (params: GridValueGetterParams) => params.row.create_time,
+
+  },
+];
+const columnsAutomations: GridColDef[] = [
+  { field: 'id', headerName: 'ID', width: 100 },
+  {
+    field: 'status',
+    headerName: 'Status',
+    width: 150,
+    valueGetter: (params: GridValueGetterParams) => params.row.status,
+  },
+  {
+    field: 'create_time',
+    headerName: 'Create Time',
+    width: 200,
+    valueGetter: (params: GridValueGetterParams) => params.row.create_time,
+
+  },
+  {
+    field: 'title',
+    headerName: 'Title',
+    width: 200,
+    valueGetter: (params: GridValueGetterParams) => params.row.settings.title,
+
+  },
+  {
+    field: 'emails_sent',
+    headerName: 'Emails sent',
+    width: 200,
+    valueGetter: (params: GridValueGetterParams) => params.row.emails_sent,
+
+  },
+  {
+    field: 'list_name',
+    headerName: 'List name',
+    width: 200,
+    valueGetter: (params: GridValueGetterParams) => params.row.recipients.list_name,
+
+  },
+];
 const getRangeColor = (value:number)=>{
   if(value <= 25) return 'error'
   else if(value > 25 && value <= 75)return 'info'
@@ -112,7 +173,6 @@ const IndexPage: NextPage<Props> = (props) => {
   const {data:campaigns,isLoading:isLoadingCampaigns} = useQuery(['campaigns'],fetchDataCampaigns)
   const {data:automations,isLoading:isLoadingAutomations} = useQuery(['automations'],fetchDataAutomations)
   const {data:members,isLoading:isLoadingMembers} = useQuery(['members'],fetchDataMembers)
-
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -123,7 +183,7 @@ const IndexPage: NextPage<Props> = (props) => {
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="members" {...a11yProps(0)} />
-          <Tab label="audiences" {...a11yProps(1)} />
+           <Tab label="audiences" {...a11yProps(1)} />
           <Tab label="campaigns" {...a11yProps(2)} />
           <Tab label="automations" {...a11yProps(3)} />
         </Tabs>
@@ -142,22 +202,52 @@ const IndexPage: NextPage<Props> = (props) => {
         </Box>
         : <></>
         }
-        {/* {JSON.stringify(members)} */}
-        
         </TabPanel>
 
         <TabPanel value={value} index={1}>
-        
-        {/* {JSON.stringify(audiences)} */}
+        {!isLoadingAudiences 
+          ? <Box sx={{ height: 400, width: '100%' }}>
+              <DataGrid
+                rows={audiences}
+                columns={columnsAudiences}
+                pageSize={20}
+                rowsPerPageOptions={[20]}
+                checkboxSelection
+                disableSelectionOnClick
+              />
+            </Box>
+            : <></>
+        }        
         </TabPanel>
         <TabPanel value={value} index={2}>
-        {/* {JSON.stringify(campaigns)} */}
-
-        
+        {!isLoadingCampaigns 
+          ? <Box sx={{ height: 400, width: '100%' }}>
+              <DataGrid
+                rows={campaigns}
+                columns={columnsCampaigns}
+                pageSize={20}
+                rowsPerPageOptions={[20]}
+                checkboxSelection
+                disableSelectionOnClick
+              />
+            </Box>
+            : <></>
+        }  
         </TabPanel>
         <TabPanel value={value} index={3}>
-        {/* {JSON.stringify(automations)} */}
-        
+        {!isLoadingAutomations 
+          ? <Box sx={{ height: 400, width: '100%' }}>
+              <DataGrid
+                rows={automations}
+                columns={columnsAutomations}
+                pageSize={20}
+                rowsPerPageOptions={[20]}
+                checkboxSelection
+                disableSelectionOnClick
+              />
+            </Box>
+            : <></>
+        }  
         </TabPanel>
         
     </SimpleLayout>

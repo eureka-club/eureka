@@ -1,7 +1,7 @@
 import { NextPage,GetServerSideProps,  } from 'next';
 import Head from "next/head";
-import { getSession, useSession } from 'next-auth/react';
-import { useState, useEffect, ReactElement } from 'react';
+import { getSession } from 'next-auth/react';
+import { ReactElement } from 'react';
 import { useRouter } from 'next/router';
 import { Spinner, Alert } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
@@ -13,7 +13,6 @@ import useWork,{getWork} from '@/src/useWork';
 import {getCycles} from '@/src/useCycles'
 import {getPosts} from '@/src/usePosts'
 import { Session } from '@/src/types';
-import { WorkMosaicItem } from '@/src/types/work';
 
 interface Props{
   workId: number;

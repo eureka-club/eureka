@@ -10,6 +10,7 @@ import useInterestCycles, { getInterestedCycles } from '@/src/useInterestedCycle
 import CMI from '@/src/components/cycle/MosaicItem';
 import {useRouter} from 'next/router'
 import { BiArrowBack } from 'react-icons/bi';
+import { getSession } from 'next-auth/react';
 
 interface Props{
 }
@@ -57,7 +58,9 @@ const InterestedCycles: NextPage<Props> = () => {
   </>
 };
 export const getServerSideProps:GetServerSideProps= async (ctx)=>{
+  const session = await getSession(ctx);
   const qc = new QueryClient();
+
   const {NEXT_PUBLIC_WEBAPP_URL:origin}=process.env;
   const bod = await getbackOfficeData(origin)
   if(bod && bod?.CyclesExplorePage){
@@ -66,6 +69,7 @@ export const getServerSideProps:GetServerSideProps= async (ctx)=>{
   }
   return {
     props:{
+      session,
       dehydrateState:dehydrate(qc)
     }
   };

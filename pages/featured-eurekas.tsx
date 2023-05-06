@@ -10,6 +10,7 @@ import useFeaturedEurekas,{ getFeaturedEurekas } from '@/src/useFeaturedEurekas'
 import PMI from '@/src/components/post/MosaicItem';
 import {useRouter} from 'next/router'
 import { BiArrowBack } from 'react-icons/bi';
+import { getSession } from 'next-auth/react';
 
 interface Props{
 }
@@ -57,6 +58,7 @@ const InterestedCycles: NextPage<Props> = () => {
   </>
 };
 export const getServerSideProps:GetServerSideProps= async (ctx)=>{
+  const session = await getSession(ctx);
   const qc = new QueryClient();
   const {NEXT_PUBLIC_WEBAPP_URL:origin}=process.env;
   
@@ -67,6 +69,7 @@ export const getServerSideProps:GetServerSideProps= async (ctx)=>{
   }
   return {
     props:{
+      session,
       dehydrateState:dehydrate(qc)
     }
   };
