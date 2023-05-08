@@ -15,7 +15,7 @@ export default getApiHandler()
 .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
   try {
     const {language:l} = req.query;
-    const language = l?.toString();
+    const language =  l? l?.toString():undefined;
     const data: { id:number;type: string }[] = [];
     // const result: { [index: string]: (Work | (Cycle & { type: string }))[] } = {};
     const { cursor, topic, extraCyclesRequired = 0, extraWorksRequired = 0 } = req.query;
