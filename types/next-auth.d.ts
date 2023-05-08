@@ -12,6 +12,7 @@ declare module "next-auth" {
           id:true,
           roles:true,
           photos:true, 
+          language:true,
           notifications:{include:{notification:true}}
         }
       }> & DefaultSession["user"]

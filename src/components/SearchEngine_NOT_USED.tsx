@@ -33,7 +33,7 @@ import { CycleMosaicItem } from '../types/cycle';
 // import { CycleMosaicItem } from '../types/cycle';
 import { PostMosaicItem } from '../types/post';
 import { WorkMosaicItem } from '../types/work';
-import useItems from '@/src/useItems'
+import useItems from '@/src/useItemsByTopic'
 import { debounce } from 'lodash';
 
 // const { NEXT_PUBLIC_SITE_NAME: siteName } = process.env;

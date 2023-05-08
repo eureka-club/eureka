@@ -20,7 +20,7 @@ import CarouselsByTopics from './CarouselsByTopics';
 import CarouselStatic from '../CarouselStatic';
 import FeaturedUsers from './FeaturedUsers';
 import { BsChevronUp, BsChevronDown } from 'react-icons/bs';
-
+import useItemsByTopic, { getItemsByTopic } from '@/src/useItemsByTopic';
 
 const topics = ['gender-feminisms', 'technology', 'environment',
   'racism-discrimination',
@@ -30,23 +30,22 @@ const topics = ['gender-feminisms', 'technology', 'environment',
   'sciences', 'arts-culture', 'history',
 ];
 
-const fetchItems = async (pageParam: number, topic: string, sessionId: number): Promise<GetAllByResonse> => {
-  const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/getAllBy?topic=${topic}&cursor=${pageParam}&sessionId=${sessionId}`;
-  const q = await fetch(url);
-  return q.json();
-};
+// const fetchItems = async (pageParam: number, topic: string, sessionId: number): Promise<GetAllByResonse> => {
+//   const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/getAllBy?topic=${topic}&cursor=${pageParam}&sessionId=${sessionId}`;
+//   const q = await fetch(url);
+//   return q.json();
+// };
 
 interface Props {
-  groupedByTopics: Record<string, GetAllByResonse>;
   // myCycles?:CycleMosaicItem[]
 }
 
-const HomeSingIn: FunctionComponent<Props> = ({ groupedByTopics }) => {
+const HomeSingIn: FunctionComponent<Props> = ({  }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { t } = useTranslation('common');
   const [ref, inView] = useInView({
-    triggerOnce: true,
+    triggerOnce: false,
     // rootMargin: '200px 0px',
     // skip: supportsLazyLoading !== false,
   });
@@ -59,32 +58,38 @@ const HomeSingIn: FunctionComponent<Props> = ({ groupedByTopics }) => {
 
   }, [dataCycles])
 
-  const [gbt, setGBT] = useState([...Object.entries(groupedByTopics || [])]);
-  const [topicIdx, setTopicIdx] = useState(gbt.length - 1)
+  const [topicIdx, setTopicIdx] = useState(0);
+  const [topicsFetched, setTopicsFetched] = useState(new Set());
   const [showAboutSection, setShowAboutSection] = useState<boolean>(false)
+
+  const {data:itemsByTopic} = useItemsByTopic(0,topics[topicIdx],session?.user.language!);
+  const [gbt, setGBT] = useState<any[]>([]);
+  
+  useEffect(()=>{
+    console.log(itemsByTopic);
+    
+    let isCanceled = false;
+    if(!isCanceled){
+      if(itemsByTopic){
+        const exist = topicsFetched.has(topics[topicIdx]);
+        if(!exist){
+           setGBT((prev)=>[...prev,[topics[topicIdx],itemsByTopic]])
+            topicsFetched.add(topics[topicIdx]);
+            setTopicsFetched(topicsFetched);
+        }
+      }
+    }
+    return () => {
+      isCanceled = true
+    }
+  },[itemsByTopic])
 
   useEffect(() => {
     const idx = topicIdx + 1;
     if (inView && idx < topics.length) {
-      let isCanceled = false;
-      if (!isCanceled) {
-        const exist = topics[idx] in gbt;
-        const fi = async () => {
-          const r = await fetchItems(0, topics[idx], session?.user.id!);
-          gbt.push([topics[idx], r])
-          if (r) {
-            setGBT([...gbt]);
-            setTopicIdx(idx);
-          }
-        }
-        if (!exist)
-          fi()
-      }
-      return () => {
-        isCanceled = true
-      }
+      setTopicIdx(()=>idx);
     }
-  }, [inView, gbt, topicIdx]);
+  }, [inView]);
 
   const getTopicsBadgedLinks = () => {
     return <TagsInput className='d-flex flex-wrap' formatValue={(v: string) => t(`topics:${v}`)} tags={[...topics].join()} readOnly />;

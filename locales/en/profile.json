@@ -16,5 +16,6 @@
  "My Dashboard is secret": "My Mediatheque is secret",
  "Only I can see my Dashboard": "Only I can see my Mediatheque",
  "Edit Profile": "Edit profile",
- "ProfileSaved":"Edits made in your profile are saved"
+ "ProfileSaved":"Edits made in your profile are saved",
+ "userLanguage":"See the contents in language"
 }

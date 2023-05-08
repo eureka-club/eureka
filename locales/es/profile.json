@@ -16,5 +16,6 @@
  "Users I fallow or that follow me can see my Dashboard": "Los usuarios que yo sigo o que me siguen pueden ver mi Mediateca",
  "Only I can see my Dashboard": "Solo yo puedo ver mi Mediateca",
  "Edit Profile": "Editar mi perfil",
- "ProfileSaved":"Las modificaciones realizadas en tu perfil se guardaron"
+ "ProfileSaved":"Las modificaciones realizadas en tu perfil se guardaron",
+ "userLanguage":"Ver los contenidos en idioma"
 }

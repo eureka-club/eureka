@@ -15,6 +15,7 @@ import {getInterestedCycles} from '@/src/useInterestedCycles';
 import { featuredWorksWhere, getFeaturedWorks } from '@/src/useFeaturedWorks';
 import { getHyvorComments } from '@/src/useHyvorComments';
 // import { backOfficeData } from '@/src/types/backoffice';
+import {getItemsByTopic} from '@/src/useItemsByTopic';
 
 //const HomeNotSingIn = lazy(()=>import('@/components/HomeNotSingIn')); ARQUIMEDES
 const HomeSingIn = lazy(()=>import('@/src/components/HomeSingIn'));
@@ -26,11 +27,11 @@ const topics = ['gender-feminisms', 'technology', 'environment',
     'migrants-refugees','introspection',
     'sciences','arts-culture','history',
 ];
-const fetchItems = async (pageParam: number,topic:string):Promise<GetAllByResonse> => {
-  const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/getAllBy?topic=${topic}&cursor=${pageParam}`;
-  const q = await fetch(url);
-  return q.json();
-};
+// const fetchItems = async (pageParam: number,topic:string):Promise<GetAllByResonse> => {
+//   const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/getAllBy?topic=${topic}&cursor=${pageParam}`;
+//   const q = await fetch(url);
+//   return q.json();
+// };
 
 interface Props{
   groupedByTopics: Record<string,GetAllByResonse>;
@@ -72,7 +73,7 @@ const IndexPage: NextPage<Props> = ({groupedByTopics,session}) => {
 
       <SimpleLayout showCustomBaner={(!session) ? true : false} title={t('browserTitleWelcome')}>
         <Suspense fallback={<Spinner animation="grow" />}>
-          <HomeSingIn groupedByTopics={groupedByTopics} />
+          <HomeSingIn />
         </Suspense>
       </SimpleLayout>
     </>
@@ -100,7 +101,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if(bo && bo.FeaturedWorks)
   bo.FeaturedWorks.split(',').forEach((x) => worksIds.push(parseInt(x)));
   
-  
   let promises:Promise<any>[] = [
     getFeaturedEurekas(postsId,undefined,origin),
     getInterestedCycles(cyclesIds,undefined,origin),
@@ -113,17 +113,19 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const featuredWorks = resolved[2];
   const hyvorComments = promises.slice(3);
 
+  
   promises = [
-    fetchItems(0,topics[0]),
-    fetchItems(0,topics[1])
+    getItemsByTopic(0,topics[0],session?.user.language!),
+    getItemsByTopic(0,topics[1],session?.user.language!)
   ]
   resolved = await Promise.all(promises);
-
-  groupedByTopics[topics[0]] = resolved[0];
-  groupedByTopics[topics[1]] = resolved[1];
-
+  // groupedByTopics[topics[0]] = resolved[0];
+  // groupedByTopics[topics[1]] = resolved[1];
   const qc = new QueryClient();
-  
+
+  await qc.fetchQuery(['ITEMS-BY-TOPIC',`${topics[0]}-${0}`],()=>resolved[0])
+  await qc.fetchQuery(['ITEMS-BY-TOPIC',`${topics[1]}-${0}`],()=>resolved[1])
+
   await qc.fetchQuery(['BACKOFFICE', `1`], () => bo)
   await qc.fetchQuery(['POSTS','eurekas-of-interest'],()=>featuredEurekas)
   await qc.fetchQuery(['CYCLES','cycles-of-interest'],()=>interestedCycles)
@@ -138,7 +140,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
     props: {
       session,
-      groupedByTopics,
       dehydratedState: dehydrate(qc),      
     },
   };

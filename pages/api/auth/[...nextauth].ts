@@ -100,6 +100,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
           s.user.roles = u.roles; // eslint-disable-line no-param-reassign
           s.user.name = u.name; // eslint-disable-line no-param-reassign
           s.user.photos = u.photos||[];
+          s.user.language = u.language;
         }
         return Promise.resolve(session);        
       },

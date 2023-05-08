@@ -9,6 +9,7 @@ export interface EditUserClientPayload {
   dashboardType?: number;
   tags?: string;
   photo?:File;
+  language?:string|null;
 }
 
 type UserFoolow = {
@@ -101,7 +102,7 @@ type UserFoolow = {
     ratingCycles:{select:{cycleId:true,qty:true}},
     photos:{select:{storedFile:true}},
     reactions:{select:{postId:true,unified:true,emoji:true}},
-
+    language:true,
     // notifications:{
     //   select:{
     //     userId:true,

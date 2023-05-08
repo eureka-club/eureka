@@ -127,11 +127,11 @@ export default getApiHandler()
                 none:{}
               }
             }
-          ]
-          
-
+          ],
+          ... session?.user.language && {language:session?.user.language}
         }
-        where = {...where,
+        where = {
+          ...where,
           ...where.AND 
           ? {
             AND:{

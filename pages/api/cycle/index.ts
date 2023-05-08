@@ -79,7 +79,9 @@ export default getApiHandler()
       const { q = null,props:p=undefined } = req.query;
       const props:Prisma.CycleFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
       let {where:w,take,cursor,skip} = props;
-      let where = w;
+      let where = {...w,
+        ... session?.user.language && {languages:{contains:session?.user.language}},
+      };
       let data = null;
       if (typeof q === 'string') {
         const terms = q.split(" ");
@@ -117,7 +119,8 @@ export default getApiHandler()
                   }
                 ))
               }
-            ]
+            ],
+          ... session?.user.language && {languages:{contains:session?.user.language}},
           }
         };
       } 

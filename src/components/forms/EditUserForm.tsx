@@ -12,10 +12,6 @@ import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
-import ModalBody from 'react-bootstrap/ModalBody';
-import ModalFooter from 'react-bootstrap/ModalFooter';
-import ModalHeader from 'react-bootstrap/ModalHeader';
-import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 import LocalImageComponent from '@/src/components/LocalImage'
@@ -35,6 +31,8 @@ import styles from './EditUserForm.module.css';
 import toast from 'react-hot-toast'
 import i18nConfig from '../../../i18n';
 import Toast from '../common/Toast';
+import { Select, FormControl as FormControlMUI, InputLabel, MenuItem } from '@mui/material';
+import Image from 'next/image';
 // import useTopics from '../../useTopics';
 
 dayjs.extend(utc);
@@ -53,6 +51,7 @@ const EditUserForm: FunctionComponent = () => {
   const [currentImg, setCurrentImg] = useState<string | undefined>();
   const [changingPhoto, setChangingPhoto] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>();
+  const [language, setLanguage] = useState<string>();
   const [privacySettings, setPrivacySettings] = useState<number>();
   const [dashboardTypeChecked, setDashboardTypeChecked] = useState<{
     public: boolean;
@@ -218,6 +217,7 @@ const EditUserForm: FunctionComponent = () => {
       ... privacySettings && {dashboardType: privacySettings},
       tags,
       ... (photo && {photo}),
+      language
     };
 
     setChangingPhoto(false);
@@ -423,6 +423,35 @@ const EditUserForm: FunctionComponent = () => {
                   </FormGroup>
                 </Col>
               )} */}
+              </Row>
+              <Row>
+                <Col xs={12}>
+                <FormControlMUI fullWidth>
+                  <InputLabel id="user-language-select-label">{t('userLanguage')}</InputLabel>
+                  <Select
+                    labelId="user-language-select-label"
+                    id="user-language-select"
+                    value={language || user.language}
+                    label={t('userLanguage')}
+                    onChange={(args)=>{setLanguage(args.target.value!);}}
+                  >
+                    <MenuItem value={'spanish'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/es.png" alt="Language flag 'es'"/></MenuItem>
+                    <MenuItem value={'english'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/en.png" alt="Language flag 'en'"/></MenuItem>
+                    <MenuItem value={'french'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/fr.png" alt="Language flag 'fr'"/></MenuItem>
+                    <MenuItem value={'portuguese'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/pt.png" alt="Language flag 'pt'"/></MenuItem>
+                  </Select>
+                </FormControlMUI>
+                  {/* <Form.Group controlId="language" className="mb-5">
+                    <Form.Label>{t('userLanguage')}</Form.Label>
+                    <Form.Select aria-label={t('userLanguage')}>
+                      <option>{t('userLanguage')}</option>
+                      <option value="spanish"><img className="m-1" src="/img/lang-flags/es.png" alt="Language flag 'es'"/></option>
+                      <option value="english"><img className="m-1" src="/img/lang-flags/en.png" alt="Language flag 'en'"/></option>
+                      <option value="french"><img className="m-1" src="/img/lang-flags/fr.png" alt="Language flag 'fr'"/></option>
+                      <option value="portuguese"><img className="m-1" src="/img/lang-flags/pt.png" alt="Language flag 'pt'"/></option>
+                    </Form.Select>
+                  </Form.Group> */}
+                </Col>
               </Row>
               <Row>
                 <Col xs={12}>

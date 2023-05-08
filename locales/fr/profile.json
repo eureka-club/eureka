@@ -16,5 +16,7 @@
   "Only I can see my Dashboard": "Je suis lx seul-e à voir ma Médiathèque",
   "About me": "À propos (quelques phrases)",
   "Edit Profile": "Editer mon profil",
-  "ProfileSaved":"Les modifications apportées à votre profil ont bien été enregistrées"
+  "ProfileSaved":"Les modifications apportées à votre profil ont bien été enregistrées",
+ "userLanguage":"Voir le contenu en langue"
+
 }
