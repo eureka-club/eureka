@@ -49,6 +49,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import Image from 'next/image';
 
 
 
@@ -66,8 +67,15 @@ interface FormValues {
     publicationYear?: string;
     workLength?: string;
     description?: string;
+    language?: string;
 }
 
+const languages:Record<string,string> = {
+    es:"spanish",
+    en:'english',
+    fr:'french',
+    pt:'portuguese'
+}
 
 const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
     const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -88,9 +96,10 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
         authorRace: '',
         publicationYear: '',
         workLength: '',
-        description: ''
+        description: '',
+        language:'',
     });
-
+console.log("formValues",formValues)
     const [coverFile, setCoverFile] = useState<File | null>(null);
     const [countryOrigin, setCountryOrigin] = useState<string[]>([]);
     const [tags, setTags] = useState<string>('');
@@ -159,7 +168,8 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
             authorRace: '',
             publicationYear: '',
             workLength: '',
-            description: ''
+            description: '',
+            language:'',
         });
         setItems([]);
         setTags('');
@@ -178,7 +188,8 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
             authorRace: '',
             publicationYear: '',
             workLength: '',
-            description: ''
+            description: '',
+            language:'',
         });
         setItems([]);
         setTags('');
@@ -209,6 +220,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
             length: formValues.workLength ? formValues.workLength : null,
             tags,
             topics: items.join(','),
+            language: formValues?.language!,
         };
 
         await execCreateWork(payload);
@@ -330,10 +342,12 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
             formValues['publicationYear'] = (work.volumeInfo.publishedDate) ? work.volumeInfo.publishedDate : "";
             formValues['workLength'] = (work.volumeInfo.pageCount) ? `${work.volumeInfo.pageCount}` : "";
             formValues['description'] = (work.volumeInfo.description) ? work.volumeInfo.description : "";
+            let l = work.volumeInfo.language.split("-");
+            let language = l.length ? l[0] : undefined;
+            formValues['language'] = language ? languages[language] :'spanish';
             setFormValues({
                 ...formValues,
             });
-
         }
         if (isVideoTMDB(work)) {
             //Busco mas detalles del Video TMDB /////////////////////   
@@ -498,6 +512,28 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                     //placeholder={`${t('Type to add tag')}...`}
                                     />
                                 </FormGroup>
+                            </Col>
+                        </Row>
+                        <Row>
+                        <Col className="">
+                                <FormGroup controlId="language">
+                                    <FormControl size="small" fullWidth>
+                                        <InputLabel id="language-label">*{t('languageFieldLabel')}</InputLabel>
+                                        <Select
+                                            defaultValue={formValues.language}
+                                            labelId="language-label"
+                                            id="language"
+                                            name='language'
+                                            label={`*${t("languageFieldLabel")}`}
+                                        >
+                                            <MenuItem value={'spanish'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/es.png" alt="Language flag 'es'"/></MenuItem>
+                                            <MenuItem value={'english'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/en.png" alt="Language flag 'en'"/></MenuItem>
+                                            <MenuItem value={'french'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/fr.png" alt="Language flag 'fr'"/></MenuItem>
+                                            <MenuItem value={'portuguese'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/pt.png" alt="Language flag 'pt'"/></MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </FormGroup>
+
                             </Col>
                         </Row>
                         <Row className='d-flex flex-column flex-lg-row mt-4 mb-4'>

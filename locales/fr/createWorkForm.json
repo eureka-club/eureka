@@ -45,5 +45,7 @@
   "Authorship": "Auteur-e",
   "Content": "Contenu",
   "AdditionalInformation": "Informations supplémentaires sur l'œuvre",
-  "WorkSelected": "Oeuvre sélectionné"
+  "WorkSelected": "Oeuvre sélectionné",
+  "languageFieldLabel":"Langage"
+
 }
