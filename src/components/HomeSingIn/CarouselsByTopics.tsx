@@ -8,9 +8,12 @@ interface Props{
   const CarouselsByTopics:FC<Props> =  ({groupedByTopics})=>{
     return <>
             {groupedByTopics.map(([topic,apiResponse])=>{
-            return <div className='mb-4' data-cy={`carousel-${topic}`} style={{minHeight:"300px"}} key={topic}>
-            <Carousel topic={topic} apiResponse={apiResponse} />
-            </div>
+              if(apiResponse.data.length){
+                return <div className='mb-4' data-cy={`carousel-${topic}`} style={{minHeight:"300px"}} key={topic}>
+                <Carousel topic={topic} apiResponse={apiResponse} />
+                </div>
+              }
+              return <></>;
             })}
     </>
   } 

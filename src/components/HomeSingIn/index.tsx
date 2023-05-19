@@ -37,10 +37,11 @@ const topics = ['gender-feminisms', 'technology', 'environment',
 // };
 
 interface Props {
+  language:string;
   // myCycles?:CycleMosaicItem[]
 }
 
-const HomeSingIn: FunctionComponent<Props> = ({  }) => {
+const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { t } = useTranslation('common');
@@ -62,7 +63,7 @@ const HomeSingIn: FunctionComponent<Props> = ({  }) => {
   const [topicsFetched, setTopicsFetched] = useState(new Set());
   const [showAboutSection, setShowAboutSection] = useState<boolean>(false)
 
-  const {data:itemsByTopic} = useItemsByTopic(0,topics[topicIdx],session?.user.language!);
+  const {data:itemsByTopic} = useItemsByTopic(0,topics[topicIdx],language!);
   const [gbt, setGBT] = useState<any[]>([]);
   
   useEffect(()=>{
