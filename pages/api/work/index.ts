@@ -55,8 +55,25 @@ export default getApiHandler()
       const { q = null,props:p=undefined } = req.query;
       const props:Prisma.WorkFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
       let {where:w,take,cursor,skip} = props;
+      const session = await getSession({ req });
 
-      let where = w;
+      const AND = {
+        ... session?.user.language && {language:session?.user.language}
+      }
+      const prev_and = {...w?.AND};
+      delete w?.AND;
+
+      let where = {
+        ...w,
+        ... prev_and
+        ? {
+          AND:{
+            ...prev_and,
+            ...AND
+          }
+        }
+        :{AND}
+      };
       let data = null;
       if (typeof q === 'string') {
         const terms = q.split(" ");
@@ -92,10 +109,12 @@ export default getApiHandler()
                 }
               ))
             }
-          ]
+          ],
+          AND
         };
         
       } 
+      
 
       let cr = await prisma?.work.aggregate({where,_count:true})
       const total = cr?._count;

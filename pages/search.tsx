@@ -136,7 +136,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     },
   };
   const cyclesData = await getCycles({ ...cyclesProps, take }, origin);
-  qc.prefetchQuery(`cycles-search-${q?.toString()}111`, () => cyclesData);
+  qc.prefetchQuery(`cycles-search-${q?.toString()}`, () => cyclesData);
   const hasCycles = cyclesData.total > 0;
 
   const postsProps = {

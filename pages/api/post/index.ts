@@ -106,8 +106,9 @@ export default getApiHandler()
           ]
         };
       }
-
-      let OR = undefined;
+      const prev_and = where.AND;
+      delete where.AND;
+      
       if(session){
         const AND = {
           OR:[
@@ -132,10 +133,10 @@ export default getApiHandler()
         }
         where = {
           ...where,
-          ...where.AND 
+          ...prev_and 
           ? {
             AND:{
-              ...where.AND,
+              ...prev_and,
               ...AND
             }
           } 
@@ -164,10 +165,10 @@ export default getApiHandler()
           ]
         }
         where = {...where,
-          ...where.AND 
+          ...prev_and 
           ? {
             AND:{
-              ...where.AND,
+              ...prev_and,
               ...AND
             }
           } 
@@ -177,24 +178,9 @@ export default getApiHandler()
           
         }
       }
-      // if(where.OR){
-      //   const whereOR = [...(where.OR as Array<Prisma.PostWhereInput>)];
-      //   delete where.OR;
-      //   where = {
-      //     ...where,
-      //     OR:[...whereOR,...OR]
-      //   }   
-      // }
-      // else{
-      //   where = {
-      //     ...where,
-      //     OR
-      //   }
-      // }
 
       let cr = await prisma?.post.aggregate({where,_count:true})
       const total = cr?._count;
-      
       let data = await findAll({select,take,where,skip,cursor});
 
       data.forEach(p=>{

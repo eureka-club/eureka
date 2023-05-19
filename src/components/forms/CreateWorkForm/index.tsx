@@ -99,7 +99,6 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
         description: '',
         language:'',
     });
-console.log("formValues",formValues)
     const [coverFile, setCoverFile] = useState<File | null>(null);
     const [countryOrigin, setCountryOrigin] = useState<string[]>([]);
     const [tags, setTags] = useState<string>('');
