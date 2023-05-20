@@ -7,7 +7,6 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
-import { v4 } from 'uuid'
 import Backdrop from '@mui/material/Backdrop';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
@@ -19,8 +18,6 @@ import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 import { useMutation, useQueryClient } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import TagsInput from '@/components/forms/controls/TagsInput';
-import TagsInputTypeAhead from '@/components/forms/controls/TagsInputTypeAhead';
 import toast from 'react-hot-toast'
 import useTopics from 'src/useTopics';
 import useCountries from 'src/useCountries';
@@ -37,21 +34,11 @@ import { APIMediaSearchResult, Country, isBookGoogleBookApi, isVideoTMDB } from 
 import TagsInputTypeAheadMaterial from '@/components/forms/controls/TagsInputTypeAheadMaterial';
 import TagsInputMaterial from '@/components/forms/controls/TagsInputMaterial';
 import styles from './index.module.css';
-import { set } from 'lodash';
-import { getImageFile, getImg } from '@/src/lib/utils'
+import { getImg } from '@/src/lib/utils'
 import { decode } from 'base64-arraybuffer'
 import SpinnerComp from '@/src/components/Spinner';
-
-
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Image from 'next/image';
-
-
 
 interface Props {
     noModal?: boolean;
@@ -377,12 +364,13 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
             }
             ////////////////////////////////////////////////////////
 
-
             formValues['title'] = video.title;
             formValues['author'] = video.director.name ? video.director.name : "";
             formValues['publicationYear'] = video.release_date;
             formValues['workLength'] = (video.runtime) ? `${video.runtime}` : "";
             formValues['description'] = video.overview;
+            let language = video.original_language;
+            formValues['language'] = language ? languages[language] :'spanish';
             setFormValues({
                 ...formValues,
             });
