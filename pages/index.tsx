@@ -16,6 +16,7 @@ import { featuredWorksWhere, getFeaturedWorks } from '@/src/useFeaturedWorks';
 import { getHyvorComments } from '@/src/useHyvorComments';
 // import { backOfficeData } from '@/src/types/backoffice';
 import {getItemsByTopic} from '@/src/useItemsByTopic';
+import { getUser } from '@/src/useUser';
 
 //const HomeNotSingIn = lazy(()=>import('@/components/HomeNotSingIn')); ARQUIMEDES
 const HomeSingIn = lazy(()=>import('@/src/components/HomeSingIn'));
@@ -34,11 +35,12 @@ const topics = ['gender-feminisms', 'technology', 'environment',
 // };
 
 interface Props{
-  groupedByTopics: Record<string,GetAllByResonse>;
+  // groupedByTopics: Record<string,GetAllByResonse>;
   session: Session;
+  language:string;
 }
 
-const IndexPage: NextPage<Props> = ({groupedByTopics,session}) => {
+const IndexPage: NextPage<Props> = ({language,session}) => {
   const { t } = useTranslation('common');
   // const {data:session,status} = useSession();
   // const isLoadingSession = status === "loading"
@@ -73,7 +75,7 @@ const IndexPage: NextPage<Props> = ({groupedByTopics,session}) => {
 
       <SimpleLayout showCustomBaner={(!session) ? true : false} title={t('browserTitleWelcome')}>
         <Suspense fallback={<Spinner animation="grow" />}>
-          <HomeSingIn />
+          <HomeSingIn language={language}/>
         </Suspense>
       </SimpleLayout>
     </>
@@ -87,7 +89,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   // const id = session.user.id;  
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
   let groupedByTopics:Record<string,GetAllByResonse>={};
-  
+  const user = await  getUser(session?.user.id!,origin);
   const bo =  await getbackOfficeData(origin)
   let postsId:number[] = [];
   if(bo && bo.PostExplorePage)
@@ -139,6 +141,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
     props: {
       session,
+      language:ctx.locale,
       dehydratedState: dehydrate(qc),      
     },
   };

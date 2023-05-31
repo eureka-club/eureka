@@ -16,7 +16,6 @@ interface Props {
 const CreateWorkPage: NextPage<Props> = ({ notFound, session }) => {
   const { t } = useTranslation('createWorkForm');
   //const {data:session, status} = useSession();
-  const isLoadingSession = status == 'loading'
   const router = useRouter();
 
     useEffect(() => {
@@ -29,8 +28,7 @@ const CreateWorkPage: NextPage<Props> = ({ notFound, session }) => {
  if (!notFound) 
   return  (
     <SimpleLayout title={t('title')}>
-         {(isLoadingSession) ?
-        <Spinner animation="grow" variant="info" />:<>
+         {<>
         <ButtonGroup className="mt-1 mt-md-3 mb-1">
           <Button variant="primary text-white" onClick={() => router.back()} size="sm">
             <BiArrowBack />

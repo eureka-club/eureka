@@ -7,7 +7,6 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
-import { v4 } from 'uuid'
 import Backdrop from '@mui/material/Backdrop';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
@@ -19,8 +18,6 @@ import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 import { useMutation, useQueryClient } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import TagsInput from '@/components/forms/controls/TagsInput';
-import TagsInputTypeAhead from '@/components/forms/controls/TagsInputTypeAhead';
 import toast from 'react-hot-toast'
 import useTopics from 'src/useTopics';
 import useCountries from 'src/useCountries';
@@ -37,20 +34,11 @@ import { APIMediaSearchResult, Country, isBookGoogleBookApi, isVideoTMDB } from 
 import TagsInputTypeAheadMaterial from '@/components/forms/controls/TagsInputTypeAheadMaterial';
 import TagsInputMaterial from '@/components/forms/controls/TagsInputMaterial';
 import styles from './index.module.css';
-import { set } from 'lodash';
-import { getImageFile, getImg } from '@/src/lib/utils'
+import { getImg } from '@/src/lib/utils'
 import { decode } from 'base64-arraybuffer'
 import SpinnerComp from '@/src/components/Spinner';
-
-
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-
-
+import Image from 'next/image';
 
 interface Props {
     noModal?: boolean;
@@ -66,8 +54,15 @@ interface FormValues {
     publicationYear?: string;
     workLength?: string;
     description?: string;
+    language?: string;
 }
 
+const languages:Record<string,string> = {
+    es:"spanish",
+    en:'english',
+    fr:'french',
+    pt:'portuguese'
+}
 
 const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
     const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -88,9 +83,9 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
         authorRace: '',
         publicationYear: '',
         workLength: '',
-        description: ''
+        description: '',
+        language:'',
     });
-
     const [coverFile, setCoverFile] = useState<File | null>(null);
     const [countryOrigin, setCountryOrigin] = useState<string[]>([]);
     const [tags, setTags] = useState<string>('');
@@ -159,7 +154,8 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
             authorRace: '',
             publicationYear: '',
             workLength: '',
-            description: ''
+            description: '',
+            language:'',
         });
         setItems([]);
         setTags('');
@@ -178,7 +174,8 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
             authorRace: '',
             publicationYear: '',
             workLength: '',
-            description: ''
+            description: '',
+            language:'',
         });
         setItems([]);
         setTags('');
@@ -209,6 +206,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
             length: formValues.workLength ? formValues.workLength : null,
             tags,
             topics: items.join(','),
+            language: formValues?.language!,
         };
 
         await execCreateWork(payload);
@@ -330,10 +328,12 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
             formValues['publicationYear'] = (work.volumeInfo.publishedDate) ? work.volumeInfo.publishedDate : "";
             formValues['workLength'] = (work.volumeInfo.pageCount) ? `${work.volumeInfo.pageCount}` : "";
             formValues['description'] = (work.volumeInfo.description) ? work.volumeInfo.description : "";
+            let l = work.volumeInfo.language.split("-");
+            let language = l.length ? l[0] : undefined;
+            formValues['language'] = language ? languages[language] :'spanish';
             setFormValues({
                 ...formValues,
             });
-
         }
         if (isVideoTMDB(work)) {
             //Busco mas detalles del Video TMDB /////////////////////   
@@ -364,12 +364,13 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
             }
             ////////////////////////////////////////////////////////
 
-
             formValues['title'] = video.title;
             formValues['author'] = video.director.name ? video.director.name : "";
             formValues['publicationYear'] = video.release_date;
             formValues['workLength'] = (video.runtime) ? `${video.runtime}` : "";
             formValues['description'] = video.overview;
+            let language = video.original_language;
+            formValues['language'] = language ? languages[language] :'spanish';
             setFormValues({
                 ...formValues,
             });
@@ -498,6 +499,28 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                     //placeholder={`${t('Type to add tag')}...`}
                                     />
                                 </FormGroup>
+                            </Col>
+                        </Row>
+                        <Row>
+                        <Col className="">
+                                <FormGroup controlId="language">
+                                    <FormControl size="small" fullWidth>
+                                        <InputLabel id="language-label">*{t('languageFieldLabel')}</InputLabel>
+                                        <Select
+                                            defaultValue={formValues.language}
+                                            labelId="language-label"
+                                            id="language"
+                                            name='language'
+                                            label={`*${t("languageFieldLabel")}`}
+                                        >
+                                            <MenuItem value={'spanish'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/es.png" alt="Language flag 'es'"/></MenuItem>
+                                            <MenuItem value={'english'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/en.png" alt="Language flag 'en'"/></MenuItem>
+                                            <MenuItem value={'french'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/fr.png" alt="Language flag 'fr'"/></MenuItem>
+                                            <MenuItem value={'portuguese'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/pt.png" alt="Language flag 'pt'"/></MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </FormGroup>
+
                             </Col>
                         </Row>
                         <Row className='d-flex flex-column flex-lg-row mt-4 mb-4'>

@@ -37,10 +37,11 @@ const topics = ['gender-feminisms', 'technology', 'environment',
 // };
 
 interface Props {
+  language:string;
   // myCycles?:CycleMosaicItem[]
 }
 
-const HomeSingIn: FunctionComponent<Props> = ({  }) => {
+const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { t,lang } = useTranslation('common');

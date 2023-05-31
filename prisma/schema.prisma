@@ -215,6 +215,7 @@ model Work {
   comments          Comment[]
 
   ToCheck       Boolean? @default(false)
+  language      String @default("spanish")
 
   @@index([title], name: "works_title_index")
   @@index([author], name: "works_author_index")

@@ -44,6 +44,7 @@ export interface CreateWorkClientPayload {
   length: string | null;
   tags: string;
   topics: string;
+  language: string;
 }
 
 export interface CreateWorkServerFields {
@@ -61,6 +62,7 @@ export interface CreateWorkServerFields {
   tags: string;
   topics: string;
   creatorId: number;
+  language: string;
 }
 
 export interface CreateWorkServerPayload {
@@ -78,6 +80,8 @@ export interface CreateWorkServerPayload {
   tags: string;
   topics: string;
   creatorId: number;
+  language: string;
+
 }
 
 export interface EditWorkClientPayload {

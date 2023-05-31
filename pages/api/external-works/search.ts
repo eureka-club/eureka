@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { APIMediaSearchResult } from '@/src/types';
+import { GoogleBooksProps } from '@/src/types/work';
+import { TMDBVideosProps } from '@/src/types/work';
 
 const apiKeyTMDB = process.env.TMDB_API_KEY;
 
@@ -7,6 +9,7 @@ type Data = {
   data?: APIMediaSearchResult[];
   error?: string;
 };
+const available_languages = ['en','es','fr','pt'];
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   if (req.method == 'POST') {
@@ -24,7 +27,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           `https://www.googleapis.com/books/v1/volumes?q="${searchCriteria}"&maxResults=20&key=${process.env.GOOGLE_CLOUD_BOOKS_CREDENTIALS}`,
         ).then((r) => r.json());
         if (data.length) {
-          return res.status(200).json({ data: data });
+          const d:APIMediaSearchResult[]=[];
+          let i = 0;
+          let length = data.length;
+          for(;i<length;i++){
+            const aux = (data[i] as GoogleBooksProps).volumeInfo.language.split("-");
+            const l = aux.length ? aux[0].toLowerCase() : undefined;
+            if(l && available_languages.includes(l)){
+              d.push(data[i]);
+            }
+          }
+          return res.status(200).json({ data: d });
         }
         if (!data.length) return res.status(200).json({ data: [] });
       } catch (error: any) {
@@ -44,7 +57,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           (r) => r.json(),
         );
         if (data.length) {
-          return res.status(200).json({ data: data });
+          const d:APIMediaSearchResult[]=[];
+          let i = 0;
+          let length = data.length;
+          for(;i<length;i++){
+            const l = (data[i] as TMDBVideosProps).original_language;
+            if(l && available_languages.includes(l)){
+              d.push(data[i]);
+            }
+          }
+          return res.status(200).json({ data: d });
         }
         if (!data.length) return res.status(200).json({ data: [] });
       } catch (error: any) {

@@ -56,6 +56,7 @@ export default getApiHandler()
       const language = Languages[l?.toString()!];
       const props:Prisma.WorkFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
       let {where:w,take,cursor,skip} = props;
+      const session = await getSession({ req });
 
       let AND = w?.AND;
       delete w?.AND;

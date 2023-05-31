@@ -176,7 +176,7 @@ const EditUserForm: FunctionComponent = () => {
           if (error && cacheKey) {
             queryClient.setQueryData(cacheKey, snapshot);
           }
-          if (context) queryClient.invalidateQueries(cacheKey);
+          if (context) queryClient.resetQueries();
         }
       },
     },
