@@ -65,7 +65,7 @@ const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
 
   const {data:itemsByTopic} = useItemsByTopic(0,topics[topicIdx],lang!);
   const [gbt, setGBT] = useState<any[]>([]);
-  
+  debugger;
   useEffect(()=>{
     console.log(itemsByTopic);
     
@@ -97,7 +97,7 @@ const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
   };
 
   const renderSpinnerForLoadNextCarousel = () => {
-    if (topicIdx < topics.length - 1) return <Spinner ref={ref} animation="grow" />
+    if (itemsByTopic?.data.length && topicIdx < topics.length - 1) return <Spinner ref={ref} animation="grow" />
     return '';
   }
 
