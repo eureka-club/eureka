@@ -229,10 +229,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT, NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
   const participants = await getUsers(wcu, origin);
-  const { works } = await getWorks(wcw, origin);
+  const { works } = await getWorks(ctx.locale!,wcw, origin);
 
   await queryClient.prefetchQuery(['USERS', JSON.stringify(wcu)], () => participants);
-  await queryClient.prefetchQuery(['POSTS', JSON.stringify(wcp)], () => getPosts(wcp, origin));
+  await queryClient.prefetchQuery(['POSTS', JSON.stringify(wcp)], () => getPosts(ctx.locale!,wcp, origin));
   await queryClient.prefetchQuery(['WORKS', JSON.stringify(wcw)], () => works);
 
   participants.map((p) => {

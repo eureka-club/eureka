@@ -13,7 +13,7 @@ import { PostMosaicItem } from '../types/post';
 
 const take = 8;
 const SearchTabCycles:FunctionComponent = () => {
-  const { t } = useTranslation('common');
+  const { t,lang } = useTranslation('common');
   const router = useRouter();
   const terms = router?.query.q?.toString()!.split(" ") || [];
   const cacheKey = `posts-search-${router?.query.q?.toString()}`
@@ -94,7 +94,7 @@ const SearchTabCycles:FunctionComponent = () => {
     if(posts && inView && posts.length < total){
       const fi = async ()=>{
         const {id} = posts.slice(-1)[0]
-        const r = await getPosts({...props,skip:1,cursor:{id}});
+        const r = await getPosts(lang,{...props,skip:1,cursor:{id}});
         setPosts((c: any)=>[...c,...r.posts])
       }
       fi()

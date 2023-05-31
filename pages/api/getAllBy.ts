@@ -3,7 +3,7 @@ import getApiHandler from '@/src/lib/getApiHandler';
 
 import {prisma} from '@/src/lib/prisma';
 import { getSession } from 'next-auth/react';
-import { Session, isWork } from '@/src/types';
+import { Languages, Session, isWork } from '@/src/types';
 // import redis from '../../src/lib/redis';
 
 export const config = {
@@ -15,8 +15,10 @@ export default getApiHandler()
 .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
   try {
     const {language:l} = req.query;
-    const language = l?.toString();
+    const lstr = l?.toString();
+    const language = Languages[lstr!];
     const data: { id:number;type: string }[] = [];
+    console.log("language ",language)
     // const result: { [index: string]: (Work | (Cycle & { type: string }))[] } = {};
     const { cursor, topic, extraCyclesRequired = 0, extraWorksRequired = 0 } = req.query;
     const c = parseInt(cursor as string, 10);
@@ -67,6 +69,7 @@ export default getApiHandler()
       const w = {
         ... (args.isCycle && language) && {languages:{contains:language}},
         ... args.isPost && language && {language},
+        ... args.isWork && language && {language},
         ...where
       };
       return {
@@ -308,7 +311,7 @@ export default getApiHandler()
 //       let cyclesPlus = 0;
 //       if (works.length !== countItemsPerPage) cyclesPlus = countItemsPerPage - works.length;
 //       // promisesWorks.push(works);
-//       const ecr = parseInt(extraCyclesRequired as string, 10);debugger;
+//       const ecr = parseInt(extraCyclesRequired as string, 10);
 //       const cycles = await prisma.cycle.findMany({
 //         ...getOpt(countItemsPerPage + cyclesPlus, ecr, { isCycle: true }),
 //         orderBy: {

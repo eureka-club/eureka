@@ -7,8 +7,8 @@ export const featuredWorksWhere = (ids:number[]) => ({
   }
 }) 
 
-export const getFeaturedWorks = async (ids:number[],take:number=8,origin?:string)=>{
-  return getWorks({ ...featuredWorksWhere(ids), take },origin||'');
+export const getFeaturedWorks = async (lang:string,ids:number[],take:number=8,origin?:string)=>{
+  return getWorks(lang,{ ...featuredWorksWhere(ids), take },origin||'');
 }
 
 const useFeaturedWorks = () => {

@@ -17,7 +17,7 @@ const take = 8;
 interface Props{
 }
 const SearchTabCycles:FunctionComponent<Props> = () => {
-  const { t } = useTranslation('common');
+  const { t,lang } = useTranslation('common');
   const router = useRouter();
   const terms = router?.query.q?.toString()!.split(" ") || [];
   const cacheKey = `cycles-search-${router?.query.q?.toString()}`;
@@ -113,7 +113,7 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
     if(inView && cycles.length < total){
       const fi = async ()=>{
         const {id} = cycles.slice(-1)[0]
-        const r = await getCycles({...props,skip:1,cursor:{id}});
+        const r = await getCycles(lang,{...props,skip:1,cursor:{id}});
         setCycles((c: any)=>[...c,...r.cycles])
       }
       fi()

@@ -51,7 +51,7 @@ const EditUserForm: FunctionComponent = () => {
   const [currentImg, setCurrentImg] = useState<string | undefined>();
   const [changingPhoto, setChangingPhoto] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>();
-  const [language, setLanguage] = useState<string>();
+  // const [language, setLanguage] = useState<string>();
   const [privacySettings, setPrivacySettings] = useState<number>();
   const [dashboardTypeChecked, setDashboardTypeChecked] = useState<{
     public: boolean;
@@ -217,7 +217,7 @@ const EditUserForm: FunctionComponent = () => {
       ... privacySettings && {dashboardType: privacySettings},
       tags,
       ... (photo && {photo}),
-      language
+      //language
     };
 
     setChangingPhoto(false);
@@ -426,7 +426,7 @@ const EditUserForm: FunctionComponent = () => {
               </Row>
               <Row>
                 <Col xs={12}>
-                <FormControlMUI fullWidth>
+                {/* <FormControlMUI fullWidth>
                   <InputLabel id="user-language-select-label">{t('userLanguage')}</InputLabel>
                   <Select
                     labelId="user-language-select-label"
@@ -440,7 +440,7 @@ const EditUserForm: FunctionComponent = () => {
                     <MenuItem value={'french'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/fr.png" alt="Language flag 'fr'"/></MenuItem>
                     <MenuItem value={'portuguese'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/pt.png" alt="Language flag 'pt'"/></MenuItem>
                   </Select>
-                </FormControlMUI>
+                </FormControlMUI> */}
                   {/* <Form.Group controlId="language" className="mb-5">
                     <Form.Label>{t('userLanguage')}</Form.Label>
                     <Form.Select aria-label={t('userLanguage')}>

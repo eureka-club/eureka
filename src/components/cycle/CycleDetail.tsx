@@ -54,6 +54,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   post,
   work,
 }) => {
+  const {lang} = useTranslation();
   const cycleContext = useCycleContext();
   const router = useRouter();
   
@@ -116,7 +117,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         const loadMore = async ()=>{
           const {id} = posts.slice(-1)[0];
           const o = {...cyclePostsProps,skip:1,cursor:{id}};
-          const {posts:pf,fetched} = await getPosts(o)
+          const {posts:pf,fetched} = await getPosts(lang,o)
           setHasMorePosts(fetched);
           const posts_ = [...(posts||[]),...pf];
           setPosts(posts_);

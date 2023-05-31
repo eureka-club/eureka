@@ -43,7 +43,7 @@ interface Props {
 const HomeSingIn: FunctionComponent<Props> = ({  }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const { t } = useTranslation('common');
+  const { t,lang } = useTranslation('common');
   const [ref, inView] = useInView({
     triggerOnce: false,
     // rootMargin: '200px 0px',
@@ -62,7 +62,7 @@ const HomeSingIn: FunctionComponent<Props> = ({  }) => {
   const [topicsFetched, setTopicsFetched] = useState(new Set());
   const [showAboutSection, setShowAboutSection] = useState<boolean>(false)
 
-  const {data:itemsByTopic} = useItemsByTopic(0,topics[topicIdx],session?.user.language!);
+  const {data:itemsByTopic} = useItemsByTopic(0,topics[topicIdx],lang!);
   const [gbt, setGBT] = useState<any[]>([]);
   
   useEffect(()=>{

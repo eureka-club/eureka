@@ -22,6 +22,7 @@ import ChevronToggle from '@/components/ui/dropdown/ChevronToggle';
 import styles from './Navbar.module.css';
 import useUser from '@/src/useUser';
 import slugify from 'slugify';
+import { useQueryClient } from 'react-query';
 
 const topics = [
   'gender-feminisms',
@@ -40,6 +41,8 @@ const topics = [
 ];
 
 const NavBar: FunctionComponent = () => {
+  const queryClient = useQueryClient();
+  
   const { data: session, status } = useSession();
   const isLoadingSession = status === 'loading';
   const router = useRouter();
@@ -59,10 +62,12 @@ const NavBar: FunctionComponent = () => {
 
   const handleLanguageSelect = (locale: string | null) => {
     if (locale != null) {
+      queryClient.clear();
       setCookie(null, LOCALE_COOKIE_NAME, locale, {
         maxAge: LOCALE_COOKIE_TTL,
         path: '/',
       });
+      window.location.replace(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/${locale}${router.asPath}`);
     }
   };
 
@@ -277,13 +282,13 @@ const NavBar: FunctionComponent = () => {
                           <Dropdown.Menu data-cy="links-language">
                             {router.locales.map((locale) => (
                               <Dropdown.Item key={locale} eventKey={locale} active={locale === router.locale}>
-                                <Link href={router.asPath} locale={locale}>
+                                {/* <Link href={router.asPath} locale={locale}> */}
                                   <img
                                     className={`m-1 ${styles.navbarIconNav}`}
                                     src={`/img/lang-flags/${locale}.png`}
                                     alt={`Language flag '${locale}'`}
                                   />
-                                </Link>
+                                {/* </Link> */}
                               </Dropdown.Item>
                             ))}
                           </Dropdown.Menu>

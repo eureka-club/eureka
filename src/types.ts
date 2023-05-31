@@ -132,6 +132,13 @@ export type Country = Prisma.TermGetPayload<{
   };
 }>;
 
+export const Languages:Record<string,string> = {
+  "en":"english",
+  "es":"spanish",
+  "pt":"portuguese",
+  "fr":"french"
+};
+
 /**
  * 
  {

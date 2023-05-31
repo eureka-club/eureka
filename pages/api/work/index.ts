@@ -2,7 +2,7 @@ import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 
-import { FileUpload, Session } from '@/src/types';
+import { FileUpload, Languages, Session } from '@/src/types';
 import getApiHandler from '@/src/lib/getApiHandler';
 import { storeUpload } from '@/src/facades/fileUpload';
 import { createFromServerFields, findAll } from '@/src/facades/work';
@@ -52,50 +52,57 @@ export default getApiHandler()
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
-      const { q = null,props:p=undefined } = req.query;
+      const { q = null,props:p=undefined,lang:l } = req.query;
+      const language = Languages[l?.toString()!];
       const props:Prisma.WorkFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
       let {where:w,take,cursor,skip} = props;
 
-      let where = w;
+      let AND = w?.AND;
+      delete w?.AND;
+      let where = {...w,AND:{
+        ...AND && {AND},
+        language
+      }};
       let data = null;
-      if (typeof q === 'string') {
-        const terms = q.split(" ");
-        where = {
-          OR:[
-            {
-              AND:terms.map(t=>(
-                { 
-                  title: { contains: t } 
-                }
-              ))
-  
-            },
-            {
-              AND:terms.map(t=>(
-                { 
-                  contentText: { contains: t } 
-                }
-              ))
-  
-            },
-            {
-              AND:terms.map(t=>(
-                { 
-                   topics: { contains: t } 
-                }
-              ))
-            },
-            {
-              AND:terms.map(t=>(
-                { 
-                   author: { contains: t } 
-                }
-              ))
-            }
-          ]
-        };
+      // if (typeof q === 'string') {
+      //   const terms = q.split(" ");
+      //   where = {
         
-      } 
+      //     OR:[
+      //       {
+      //         AND:terms.map(t=>(
+      //           { 
+      //             title: { contains: t } 
+      //           }
+      //         ))
+  
+      //       },
+      //       {
+      //         AND:terms.map(t=>(
+      //           { 
+      //             contentText: { contains: t } 
+      //           }
+      //         ))
+  
+      //       },
+      //       {
+      //         AND:terms.map(t=>(
+      //           { 
+      //              topics: { contains: t } 
+      //           }
+      //         ))
+      //       },
+      //       {
+      //         AND:terms.map(t=>(
+      //           { 
+      //              author: { contains: t } 
+      //           }
+      //         ))
+      //       }
+      //     ]
+      //   };
+        
+      // } 
 
       let cr = await prisma?.work.aggregate({where,_count:true})
       const total = cr?._count;

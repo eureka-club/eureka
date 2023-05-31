@@ -81,7 +81,7 @@ const IndexPage: NextPage<Props> = ({groupedByTopics,session}) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const session = await getSession(ctx)
+  const session = await getSession(ctx);
   // if(!session)
   // return {props:{groupedByTopics:null}};
   // const id = session.user.id;  
@@ -102,9 +102,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   bo.FeaturedWorks.split(',').forEach((x) => worksIds.push(parseInt(x)));
   
   let promises:Promise<any>[] = [
-    getFeaturedEurekas(postsId,undefined,origin),
-    getInterestedCycles(cyclesIds,undefined,origin),
-    getFeaturedWorks(worksIds,8,origin),
+    getFeaturedEurekas(ctx.locale!,postsId,undefined,origin),
+    getInterestedCycles(ctx.locale!,cyclesIds,undefined,origin),
+    getFeaturedWorks(ctx.locale!,worksIds,8,origin),
     ...worksIds.map(id=>getHyvorComments(`work-${id}`,origin)),
   ]
   let resolved = await Promise.all(promises);
@@ -113,10 +113,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const featuredWorks = resolved[2];
   const hyvorComments = promises.slice(3);
 
-  
   promises = [
-    getItemsByTopic(0,topics[0],session?.user.language!),
-    getItemsByTopic(0,topics[1],session?.user.language!)
+    getItemsByTopic(0,topics[0],ctx.locale!),
+    getItemsByTopic(0,topics[1],ctx.locale!)
   ]
   resolved = await Promise.all(promises);
   // groupedByTopics[topics[0]] = resolved[0];

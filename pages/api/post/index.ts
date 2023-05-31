@@ -2,7 +2,7 @@ import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 
-import { FileUpload, Session } from '@/src/types';
+import { FileUpload, Languages, Session } from '@/src/types';
 import getApiHandler from '@/src/lib/getApiHandler';
 import { storeUpload } from '@/src/facades/fileUpload';
 import { createFromServerFields, findAll } from '@/src/facades/post';
@@ -71,11 +71,19 @@ export default getApiHandler()
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
-      const { q = null, props:p="" } = req.query;
+      const { q = null, props:p="",lang:l } = req.query;
+      const locale = l?.toString();
+      const language = Languages[locale!];
+
       const props:Prisma.PostFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
       let {where:w,take,cursor,skip,select} = props;
       const session = await getSession({ req });
-      let where:Prisma.PostWhereInput = {...w}
+      let AND = w?.AND;
+      delete w?.AND;
+      let where:Prisma.PostWhereInput = {...w,AND:{
+        ... AND && {AND},
+        language
+      }}
       if (typeof q === 'string') {
         const terms = q.split(" ");
         where = {
@@ -128,7 +136,8 @@ export default getApiHandler()
               }
             }
           ],
-          ... session?.user.language && {language:session?.user.language}
+          // ... session?.user.language && {language:session?.user.language}
+          language
         }
         where = {
           ...where,

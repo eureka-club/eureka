@@ -7,8 +7,8 @@ export const interestedCyclesWhere = (ids:number[]) => ({
   }
 }) 
 
-export const getInterestedCycles = async (ids:number[],take:number=8,origin?:string)=>{
-  return getCycles({...interestedCyclesWhere(ids),take},origin);
+export const getInterestedCycles = async (lang:string,ids:number[],take:number=8,origin?:string)=>{
+  return getCycles(lang,{...interestedCyclesWhere(ids),take},origin);
 }
 
 const useInterestedCycles = () => {

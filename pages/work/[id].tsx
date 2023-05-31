@@ -126,8 +126,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     metaTags = { id: work.id, title: work.title, author: work.author, storedFile: work.localImages[0].storedFile };
     const workPostsWhere = {take:8,where:{works:{some:{id}}}}
     await qc.prefetchQuery(['WORK', `${id}`],()=>work)
-    await qc.prefetchQuery(['CYCLES',JSON.stringify(workCyclesWhere)],()=>getCycles(workCyclesWhere,origin))
-    await qc.prefetchQuery(['POSTS',JSON.stringify(workPostsWhere)],()=>getPosts(workPostsWhere,origin))
+    await qc.prefetchQuery(['CYCLES',JSON.stringify(workCyclesWhere)],()=>getCycles(ctx.locale!,workCyclesWhere,origin))
+    await qc.prefetchQuery(['POSTS',JSON.stringify(workPostsWhere)],()=>getPosts(ctx.locale!,workPostsWhere,origin))
   }
   
   return {

@@ -86,6 +86,7 @@ import { subscribe_to_segment } from '@/src/lib/mailchimp';
 }; */
 const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> => {
   const locale = req.cookies.NEXT_LOCALE || 'es';
+  
   return NextAuth(req, res, {
     adapter: PrismaAdapter(prisma),
     callbacks: {

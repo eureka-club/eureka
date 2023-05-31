@@ -122,7 +122,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
   const qc = new QueryClient();
-  const worksData = await getWorks(undefined, origin);
+  const worksData = await getWorks(ctx.locale!,undefined, origin);
   qc.prefetchQuery('list/works', () => worksData);
 
   return {

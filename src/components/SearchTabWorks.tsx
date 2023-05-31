@@ -14,7 +14,7 @@ import { WorkMosaicItem } from '../types/work';
 
 const take = 8;
 const SearchTabworks:FunctionComponent = () => {
-  const { t } = useTranslation('common');
+  const { t,lang } = useTranslation('common');
   const router = useRouter();
   const terms = router?.query.q?.toString()!.split(" ") || [];
   const cacheKey = `works-search-${router?.query.q?.toString()}`;
@@ -109,7 +109,7 @@ const SearchTabworks:FunctionComponent = () => {
     if(inView && works.length < total){
       const fi = async ()=>{
         const {id} = works.slice(-1)[0]
-        const r = await getWorks({...props,skip:1,cursor:{id}});
+        const r = await getWorks(lang,{...props,skip:1,cursor:{id}});
         setWorks((c: any)=>[...c,...r.works])
       }
       fi()

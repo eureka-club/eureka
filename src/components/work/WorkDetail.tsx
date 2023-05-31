@@ -59,7 +59,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
   const router = useRouter();
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   //const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-  const { t } = useTranslation('workDetail');
+  const { t,lang } = useTranslation('workDetail');
   //const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
   const [ref, inView] = useInView({
     triggerOnce: false,
@@ -138,7 +138,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
         const loadMore = async () => {
           const { id } = posts.slice(-1)[0];
           const o = { ...workPostsWhere, skip: 1, cursor: { id } };
-          const { posts: pf, fetched } = await getPosts(o);
+          const { posts: pf, fetched } = await getPosts(lang,o);
           setHasMorePosts(fetched);
           const posts_ = [...(posts || []), ...pf];
           setPosts(posts_);

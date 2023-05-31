@@ -1,7 +1,7 @@
 import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
-import { FileUpload, Session, StoredFileUpload } from '@/src/types';
+import { FileUpload, Languages, Session, StoredFileUpload } from '@/src/types';
 import getApiHandler from '@/src/lib/getApiHandler';
 import { storeUpload } from '@/src/facades/fileUpload';
 import { createFromServerFields, findAll } from '@/src/facades/cycle';
@@ -76,54 +76,64 @@ export default getApiHandler()
       await middleware(req,res,cors)
       const session = (await getSession({ req })) as unknown as Session;
 
-      const { q = null,props:p=undefined } = req.query;
+      const { q = null,props:p=undefined,lang:l } = req.query;
+      const language = Languages[l?.toString()!];
+
       const props:Prisma.CycleFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
       let {where:w,take,cursor,skip} = props;
+      let AND = w?.AND;
+      delete w?.AND;
       let where = {...w,
-        ... session?.user.language && {languages:{contains:session?.user.language}},
+        AND:{
+          ... AND && {AND},
+          languages:{contains:language}
+        }
+        // ... session?.user.language && {languages:{contains:session?.user.language}},
       };
       let data = null;
-      if (typeof q === 'string') {
-        const terms = q.split(" ");
-        where={
-          AND:{
-            ... where && where,
-            OR:[
-              {
-                AND:terms.map(t=>(
-                  { 
-                    title: { contains: t } 
-                  }
-                ))
+      
+      // if (typeof q === 'string') {
+      //   const terms = q.split(" ");
+      //   where={
+      //     AND:{
+      //       ... where && where,
+      //       OR:[
+      //         {
+      //           AND:terms.map(t=>(
+      //             { 
+      //               title: { contains: t } 
+      //             }
+      //           ))
     
-              },
-              {
-                AND:terms.map(t=>(
-                  { 
-                    contentText: { contains: t } 
-                  }
-                ))
+      //         },
+      //         {
+      //           AND:terms.map(t=>(
+      //             { 
+      //               contentText: { contains: t } 
+      //             }
+      //           ))
     
-              },
-              {
-                AND:terms.map(t=>(
-                  { 
-                     tags: { contains: t } 
-                  }
-                ))
-              },
-              {
-                AND:terms.map(t=>(
-                  { 
-                     topics: { contains: t } 
-                  }
-                ))
-              }
-            ],
-          ... session?.user.language && {languages:{contains:session?.user.language}},
-          }
-        };
-      } 
+      //         },
+      //         {
+      //           AND:terms.map(t=>(
+      //             { 
+      //                tags: { contains: t } 
+      //             }
+      //           ))
+      //         },
+      //         {
+      //           AND:terms.map(t=>(
+      //             { 
+      //                topics: { contains: t } 
+      //             }
+      //           ))
+      //         }
+      //       ],
+      //     ... session?.user.language && {languages:{contains:session?.user.language}},
+      //     }
+      //   };
+      // } 
+      
       let cr = await prisma?.cycle.aggregate({where,_count:true})
       const total = cr?._count;
       data = await findAll({take,where,skip,cursor});

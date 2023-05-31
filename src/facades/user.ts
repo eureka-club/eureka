@@ -101,7 +101,7 @@ export const find = async (props: Prisma.UserFindUniqueArgs): Promise<UserMosaic
       ratingCycles: { select: { cycleId: true, qty: true } },
       photos: { select: { storedFile: true } },
       reactions:true,
-      language:true,
+      // language:true,
     },
     
   });
@@ -213,7 +213,7 @@ export const findAll = async (props?:Prisma.UserFindManyArgs): Promise<UserMosai
       ratingCycles: { select: { cycleId: true, qty: true } },
       photos: { select: { storedFile: true } },
       reactions: true,
-      language:true,
+      // language:true,
     },
   });
 };

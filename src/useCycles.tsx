@@ -1,12 +1,14 @@
 import { useQuery } from 'react-query';
 import { CycleMosaicItem } from './types/cycle';
 import { Prisma } from '@prisma/client';
+import useTranslation from 'next-translate/useTranslation';
 
 export const getCycles = async (
+  lang:string,
   props?:Prisma.CycleFindManyArgs,
   origin=''
 ): Promise<{cycles:CycleMosaicItem[],fetched:number,total:number}> => {
-  const query = props?`?props=${encodeURIComponent(JSON.stringify(props))}`:''
+  const query = props?`?lang=${lang}&props=${encodeURIComponent(JSON.stringify(props))}`:''
   const url = `${origin||''}/api/cycle${query}`
   const res = await fetch(url);
   if (!res.ok) return {cycles:[],fetched:0,total:-1};
@@ -21,13 +23,14 @@ interface Options {
 }
 
 const useCycles = (props?:Prisma.CycleFindManyArgs, options?: Options) => {
+  const {lang} = useTranslation();
   const { staleTime, enabled, cacheKey } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
   let ck = cacheKey ? `${cacheKey}-${JSON.stringify(props)}` : ['CYCLES', `${JSON.stringify(props)}`];
 
-  return useQuery<{cycles:CycleMosaicItem[],fetched:number,total:number}>(ck, () => getCycles(props), {
+  return useQuery<{cycles:CycleMosaicItem[],fetched:number,total:number}>(ck, () => getCycles(lang,props), {
     staleTime,
     enabled,
     retry:3

@@ -9,8 +9,8 @@ export const myPostsProps = (id: number)=> ({
   }
 });
 
-export const getMyPosts = async (id:number,take:number,origin='')=>{
-  return getPosts({...myPostsProps(id),take},origin);
+export const getMyPosts = async (lang:string,id:number,take:number,origin='')=>{
+  return getPosts(lang,{...myPostsProps(id),take},origin);
 }
 
 const useMyPosts = (id:number) => {

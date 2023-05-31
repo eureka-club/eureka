@@ -414,13 +414,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
       };
     }
-    const { posts } = await getMyPosts(id!, 8, origin);
+    const { posts } = await getMyPosts(ctx.locale!,id!, 8, origin);
     await queryClient.prefetchQuery(['MY-POSTS', id], () => posts);
     posts.forEach((p) => {
       queryClient.setQueryData(['POST', `${p.id}`], () => p);
     });
 
-    const { cycles } = await getMyCycles(id!, 8, origin);
+    const { cycles } = await getMyCycles(ctx.locale!,id!, 8, origin);
     await queryClient.prefetchQuery(['MY-CYCLES'], () => cycles);
     cycles.forEach((c) => {
       queryClient.setQueryData(['CYCLE', c.id], () => c);

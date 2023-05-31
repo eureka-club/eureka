@@ -135,10 +135,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       ],
     },
   };
-  const cyclesData = await getCycles({ ...cyclesProps, take }, origin);
+  const cyclesData = await getCycles(ctx.locale!,{ ...cyclesProps, take }, origin);
   qc.prefetchQuery(`cycles-search-${q?.toString()}111`, () => cyclesData);
   const hasCycles = cyclesData.total > 0;
-
   const postsProps = {
     where: {
       OR: [
@@ -165,7 +164,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       ],
     },
   };
-  const postsData = await getPosts({ ...postsProps, take }, origin);
+  const postsData = await getPosts(ctx.locale!,{ ...postsProps, take }, origin);
   qc.prefetchQuery(`posts-search-${q?.toString()}`, () => postsData);
   const hasPosts = postsData.total > 0;
 
@@ -195,7 +194,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       ],
     },
   };
-  const worksData = await getWorks({ ...worksProps, take }, origin);
+  const worksData = await getWorks(ctx.locale!,{ ...worksProps, take }, origin);
   qc.prefetchQuery(`works-search-${q?.toString()}`, () => worksData);
   const hasWorks = worksData.total > 0;
 
