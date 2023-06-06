@@ -1,23 +1,58 @@
-import { FunctionComponent } from 'react';
-import FormControl from 'react-bootstrap/FormControl';
+import { FunctionComponent, useState, useEffect, ChangeEvent } from 'react';
+//import FormControl from 'react-bootstrap/FormControl';
+import { SelectChangeEvent, Button as ButtonMui, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import useTranslation from 'next-translate/useTranslation';
+
 
 type Props = {
-  defaultValue?: string;
+  defaultValue?: string | null;
+  label?: string;
+  onSelectLanguage: (string: string) => void;
+
 };
-const LanguageSelect: FunctionComponent<Props> = ({ defaultValue }) => {
+const LanguageSelect: FunctionComponent<Props> = ({ defaultValue, label, onSelectLanguage }) => {
+
+  const { t } = useTranslation('common');
+  const [language, setLanguage] = useState<string>('');
+
+  useEffect(() => {
+    //console.log(defaultValue,'defaultValue')
+    if (defaultValue) {
+      setLanguage(defaultValue);
+
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultValue]);
+
+  function handlerSelectLanguage(ev: SelectChangeEvent) {
+    ev.preventDefault();
+    const { name, value } = ev.target;
+    setLanguage(value);
+    onSelectLanguage(value);
+  }
+
+
   return (
-    <FormControl type="text" as="select"  defaultValue={defaultValue}>
-      <option value="">select...</option>
-      <option value="spanish">Spanish</option>
-      <option value="english">English</option>
-      <option value="hindi">Hindi</option>
-      <option value="portuguese">Portuguese</option>
-      <option value="bengali">Bengali</option>
-      <option value="russian">Russian</option>
-      <option value="japanese">Japanese</option>
-      <option value="german">German</option>
-      <option value="french">French</option>
+    <FormControl size="small" fullWidth>
+      <InputLabel className='' id="select-language">{label}</InputLabel>
+      <Select
+        variant="outlined"
+        labelId="select-language"
+        name="Language"
+        size='small'
+        id="select-language"
+        label={label}
+        onChange={handlerSelectLanguage}
+        value={language}
+      >
+        <MenuItem value='spanish'>{t('hereLinkSPA')}</MenuItem>
+        <MenuItem value='english'>{t('hereLinkENG')}</MenuItem>
+        <MenuItem value='portuguese'>{t('hereLinkPORT')}</MenuItem>
+        <MenuItem value='french'>{t('hereLinkFR')}</MenuItem>
+
+      </Select>
     </FormControl>
+
   );
 };
 

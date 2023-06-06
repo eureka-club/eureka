@@ -60,6 +60,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
   const [postId, setPostId] = useState<string>('');
   const [ck,setCK] = useState<string[]>();
   const editorRef = useRef<any>(null);
+  const [language, setLanguage] = useState<string>('');
   //const [remove,setRemove] = useState<boolean>(false);
   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
 
@@ -74,6 +75,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
     }
     if (post && post.works.length) setSelectedWork(post.works[0] as WorkMosaicItem);
     if (post && post.cycles.length) setSelectedCycle(post.cycles[0] as CycleMosaicItem);
+    if(post && post.language) setLanguage(post.language);
   },[post])
     
 
@@ -326,7 +328,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
         selectedWorkId: selectedWork.id,
         title: form.postTitle.value,
         // image: imageFile,
-        language: form.language.value,
+        language: language,
         contentText: editorRef.current.getContent(), // form.description.value.length ? form.description.value : null,
         isPublic: post?.isPublic,
         topics: items.join(','),
@@ -379,6 +381,10 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
     if ('title' in res)
       return `${res.title}`;
     return `${res.name}`;
+  };
+
+  const onSelectLanguage = (language: string) => {
+    setLanguage(language)
   };
 
   if (isLoading || isFetching || !post) return <Spinner animation="grow" variant="info" size="sm" />;
@@ -474,7 +480,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
               <Col className='mb-4'>
                 <FormGroup controlId="language">
                   <FormLabel>*{t('languageFieldLabel')}</FormLabel>
-                  <LanguageSelect defaultValue={post.language} />
+                <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={language} label={t('languageFieldLabel')} />
                 </FormGroup>
               </Col>
             </Row>

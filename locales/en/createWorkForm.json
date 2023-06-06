@@ -46,6 +46,6 @@
   "Content": "Content",
   "AdditionalInformation": "Additional information about the work",
   "WorkSelected": "Work selected",
-  "languageFieldLabel":"Language"
+  "languageFieldLabel":"Work version language"
 
 }

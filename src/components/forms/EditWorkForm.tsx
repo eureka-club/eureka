@@ -8,6 +8,7 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
+import LanguageSelect from './controls/LanguageSelect';
 //import FormControl from 'react-bootstrap/FormControl';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
@@ -43,6 +44,7 @@ dayjs.extend(utc);
 interface FormValues {
   type: string;
   title: string;
+  language: string | null;
   link: string | null;
   author: string;
   authorGender: string | null;
@@ -61,6 +63,7 @@ const EditWorkForm: FunctionComponent = () => {
   const [formValues, setFormValues] = useState<FormValues>({
     type: '',
     title: '',
+    language:'',
     link: '',
     author: '',
     authorGender: '',
@@ -88,21 +91,22 @@ const EditWorkForm: FunctionComponent = () => {
   }, [countries])
 
   useEffect(() => {
-    console.log(work?.localImages, 'work work')
+    //console.log(work, 'work work')
     if (work) {
       let formValues = {
         type: work.type,
         title: work.title,
+        language: work.language,
         link: work.link,
         author: work.author,
-        authorGender: work.authorGender,
-        authorRace: work.authorRace,
+        authorGender: work.authorGender || '',
+        authorRace: work.authorRace || '',
         publicationYear: dayjs(work.publicationYear?.toString()).utc().year(),
         workLength: work.length,
         description: work.contentText,
       }
       setFormValues(formValues);
-
+      //console.log(formValues, 'formValues formValues')
       setTags(work.tags || '');
       labelsChange(work.type);
       if (work.topics?.length) {
@@ -188,6 +192,7 @@ const EditWorkForm: FunctionComponent = () => {
 
   function handleChangeTextField(ev: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     ev.preventDefault();
+    console.log(ev.target,'event')
     const { name, value } = ev.target;
     setFormValues({
       ...formValues,
@@ -253,6 +258,7 @@ const EditWorkForm: FunctionComponent = () => {
     id: router.query.id as string,
       type: formValues?.type!,
       title: formValues?.title!,
+      language: formValues?.language!,
       author: formValues?.author!,
       authorGender: formValues.authorGender ? formValues.authorGender : null,
       authorRace: formValues.authorRace ? formValues.authorRace : null,
@@ -266,7 +272,7 @@ const EditWorkForm: FunctionComponent = () => {
       tags,
       topics: items.join(','),
     };
-
+    //console.log(payload)
     await execEditWork(payload);
   };
 
@@ -281,6 +287,13 @@ const EditWorkForm: FunctionComponent = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
+
+  const onSelectLanguage = (language: string) => {
+    setFormValues({
+      ...formValues,
+      ['language']: language
+    });
+  };
 
   /* const handleSearchCountry = async (query: string) => {
      setIsCountriesSearchLoading(true);
@@ -386,9 +399,12 @@ const EditWorkForm: FunctionComponent = () => {
                   </div>
                 )}
               </ImageFileSelect>
-              <LocalImageComponent filePath={work.localImages[0].storedFile} alt='' width={80} className='ms-2 rounded-2' />
+              <LocalImageComponent filePath={work.localImages[0].storedFile} alt='' width={75} className='ms-2 rounded-2' />
             </Col>
             <Col className="mt-4 mt-lg-0">
+              <div className='mb-4'>
+                <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={formValues.language} label={t('languageFieldLabel')}/>
+              </div>
               <TextField id="link" className="w-100" label={publicationLinkLabel}
                 variant="outlined" size="small" name='link'
                 value={formValues.link}
@@ -482,7 +498,7 @@ const EditWorkForm: FunctionComponent = () => {
                     formatValue={(v: string) => t(`topics:${v}`)}
                     max={3}
                     label={t('topicsLabel')}
-                    placeholder={`${t('Type to add tag')}...`}
+                   // placeholder={`${t('Type to add tag')}...`}
                   />
                 </FormGroup>
               </Col>

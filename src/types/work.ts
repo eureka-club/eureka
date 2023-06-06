@@ -89,6 +89,7 @@ export interface EditWorkClientPayload {
   id: string;
   type?: string;
   title?: string;
+  language?: string;
   author?: string;
   authorGender?: string | null;
   authorRace?: string | null;

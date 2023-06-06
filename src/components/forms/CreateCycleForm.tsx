@@ -58,6 +58,8 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const typeaheadRef = useRef<AsyncTypeahead<WorkMosaicItem>>(null);
   const typeaheadRefOC = useRef<AsyncTypeahead<{ id: number; code: string; label: string }>>(null);
   const [countryOrigin, setCountryOrigin] = useState<string>();
+  const [language, setLanguage] = useState<string>('');
+
   const [isCountriesSearchLoading, setIsCountriesSearchLoading] = useState(false);
   const [countrySearchResults, setCountrySearchResults] = useState<{ id: number; code: string; label: string }[]>([]);
   const [cycleCoverImageFile, setCycleCoverImageFile] = useState<File | null>(null);
@@ -405,7 +407,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
       includedWorksIds: selectedWorksForCycle.map((work) => work.id),
       coverImage: cycleCoverImageFile,
       title: form.cycleTitle.value,
-      languages: form.languages.value,
+      languages: language,//form.languages.value,
       startDate: form.startDate.value,
       endDate: form.endDate.value,
       countryOfOrigin: countryOrigin,
@@ -525,6 +527,11 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
       return res;
     });
   };
+
+  const onSelectLanguage = (language: string) => {
+    setLanguage(language)
+  };
+
 
   return (
     <>
@@ -724,7 +731,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
             </Form.Group>
             <Form.Group controlId="languages">
               <Form.Label>*{t('newCycleLanguageLabel')}</Form.Label>
-              <LanguageSelect />
+              <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={language} label={t('common:Language')}/>
             </Form.Group>
           </Col>
         </Row>

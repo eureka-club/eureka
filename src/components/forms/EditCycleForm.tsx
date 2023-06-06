@@ -55,6 +55,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
   const { data: topics } = useTopics();
   const [items, setItems] = useState<string[]>([]);
   const [access, setAccess] = useState<number | undefined>(1);
+  const [language, setLanguage] = useState<string>('');
   const [cycleAccessChecked, setCycleAccessChecked] = useState<{
     public: boolean;
     private: boolean;
@@ -73,6 +74,8 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
       const secret = cycle.access === 3;
       setCycleAccessChecked(() => ({ public: pc, private: pr, secret }));
     }
+    if (cycle && cycle.languages) setLanguage(cycle.languages);
+
   }, [cycle]);
 
   useEffect(() => {
@@ -96,6 +99,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
             items.push(...cycle.topics.split(','));
       }
     } 
+
   }, []);
 
   const {
@@ -174,7 +178,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
       // coverImage: cycleCoverImageFile,
       access: access || 1,
       title: form.cycleTitle.value,
-      languages: form.languages.value,
+      languages: language,
       startDate: form.startDate.value,
       endDate: form.endDate.value,
       countryOfOrigin: countryOrigin,
@@ -217,6 +221,10 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
     }
   };
 
+  const onSelectLanguage = (language: string) => {
+    setLanguage(language)
+  };
+
   return (
     <>
       {cycle && (
@@ -232,7 +240,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
               </FormGroup>
               <FormGroup controlId="languages">
                 <FormLabel>*{t('newCycleLanguageLabel')}</FormLabel>
-                <LanguageSelect defaultValue={cycle.languages} />
+                <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={language} label={t('newCycleLanguageLabel')} />
               </FormGroup>
               <FormGroup controlId="topics">
                 <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel>
