@@ -22,6 +22,7 @@ export type WorkMosaicItem = Prisma.WorkGetPayload<{
     ratings: { select: { userId: true; qty: true } };
     readOrWatchedWorks: { select: { userId: true; workId: true; year: true } };
     posts?: { select: { id: true; localImages: { select: { storedFile: true } } } };
+    editions?:{select:{id:true}};
   };
 }> & {
   currentUserRating?: number;

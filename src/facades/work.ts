@@ -16,7 +16,7 @@ export const find = async (id: number): Promise<WorkMosaicItem | null> => {
         orderBy: { updatedAt: 'desc' },
         select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
       },
-
+      editions:true,
       // favs: {select:{id:true}},
       // ratings: {
       //   select:{qty:true}
@@ -120,7 +120,7 @@ export const findAll = async (props?: Prisma.WorkFindManyArgs): Promise<WorkMosa
         orderBy: { updatedAt: 'desc' },
         select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
       },
-
+      editions:true,
       // favs: {select:{id:true}},
       // ratings: {
       //   select:{qty:true}

@@ -135,6 +135,7 @@ model LocalImage {
   posts        Post[]
   works        Work[]
   users        User[]
+  editions     Edition[]
   sliderImages BackOfficeSettings[]
 
   @@index([contentHash], name: "local_images_content_hash_index")
@@ -217,11 +218,34 @@ model Work {
   ToCheck       Boolean? @default(false)
   language      String @default("spanish")
 
+  editions Edition[]
+
   @@index([title], name: "works_title_index")
   @@index([author], name: "works_author_index")
   @@index([creatorId], name: "works_creator_id_index")
   @@map(name: "works")
 }
+
+model Edition {
+  id              Int       @id @default(autoincrement())
+  title           String
+  contentText     String?
+  publicationYear DateTime? @map(name: "publication_year")
+  language        String
+  countryOfOrigin String?  
+  length          String?
+  work            Work      @relation(fields: [workId], references: [id])
+  workId          Int
+
+  localImages     LocalImage[]
+
+  createdAt        DateTime  @default(now()) @map(name: "created_at")
+  updatedAt        DateTime  @updatedAt @map(name: "updated_at")
+
+  @@index([language])
+  @@index([workId])
+}
+
 
 model CycleComplementaryMaterial {
   id              Int      @id @default(autoincrement())
