@@ -14,6 +14,7 @@ export interface CreateEditionPayload {
   publicationYear?: string;
   length?: string;
   language: string;
+  ToCheck: boolean;
   workId: number;
 }
 
@@ -25,5 +26,6 @@ export interface EditEditionPayload {
   publicationYear?: string;
   length?: string;
   language?: string;
+  ToCheck?: boolean;
   workId?: number;
 }

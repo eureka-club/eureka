@@ -236,6 +236,7 @@ model Edition {
   length          String?
   work            Work      @relation(fields: [workId], references: [id])
   workId          Int
+  ToCheck         Boolean? @default(false)
 
   localImages     LocalImage[]
 
