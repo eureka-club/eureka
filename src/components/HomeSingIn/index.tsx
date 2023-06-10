@@ -65,7 +65,6 @@ const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
 
   const {data:itemsByTopic} = useItemsByTopic(0,topics[topicIdx],lang!);
   const [gbt, setGBT] = useState<any[]>([]);
-  debugger;
   useEffect(()=>{
     console.log(itemsByTopic);
     

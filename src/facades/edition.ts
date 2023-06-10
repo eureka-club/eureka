@@ -2,6 +2,7 @@ import { Prisma, Edition } from '@prisma/client';
 import { StoredFileUpload } from '../types';
 import { CreateEditionPayload, EditEditionPayload, EditionMosaicItem } from '../types/edition';
 import { prisma } from '@/src/lib/prisma';
+import { connect } from 'http2';
 
 export const find = async (id: number): Promise<EditionMosaicItem | null> => {
   return prisma.edition.findUnique({
@@ -48,40 +49,34 @@ export const createFromServerFields = async (
   payload: CreateEditionPayload,
   coverImageUpload: StoredFileUpload,
 ): Promise<Edition> => {
-
-  const data = Object.entries(payload).reduce((memo,field)=>{
-    const [fieldName, fieldValues] = field;
-    if (fieldName === 'publicationYear') {
-      return { ...memo, [fieldName]: new Date(fieldValues) };
-    }
-    return {...memo,[fieldName]:fieldValues};
-  },{});
+  console.log(JSON.stringify(payload));
 
   const existingLocalImage = await prisma.localImage.findFirst({
     where: { contentHash: coverImageUpload.contentHash },
   });
-
-  if (existingLocalImage != null) {
-    return prisma.edition.create({
-      data: {
-        ...payload,
-        localImages: {
-          connect: {
-            id: existingLocalImage.id,
-          },
-        },
-      },
-    });
+  let localImages = existingLocalImage != null 
+  ?{
+    connect: {
+      id: existingLocalImage.id,
+    },
+  }
+  :
+  {
+    create: { ...coverImageUpload },
   }
 
-  return prisma.edition.create({
-    data: {
-      ...payload,
-      localImages: {
-        create: { ...coverImageUpload },
-      },
-    },
-  });
+  let data:Prisma.EditionCreateInput = {
+    title:payload.title.pop()!,
+    language:payload.language.pop()!,
+    ...payload.contentText && {contentText:payload.contentText.pop()},
+    ...payload.countryOfOrigin && {countryOfOrigin:payload.countryOfOrigin.pop()},
+    ...payload.publicationYear && {publicationYear:payload.publicationYear},
+    ...payload.length && {length:payload.length.pop()},
+    ...payload.ToCheck && {ToCheck:payload.ToCheck},
+    localImages,
+    work:{connect:{id:payload.workId}}
+  };
+  return prisma.edition.create({data});
 };
 
 export const UpdateFromServerFields = async (

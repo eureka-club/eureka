@@ -8,13 +8,13 @@ export type EditionMosaicItem = Prisma.EditionGetPayload<{
 
 export interface CreateEditionPayload {
   cover: File;
-  title: string;
-  contentText?: string;
-  countryOfOrigin?: string;
+  title: string[];
+  contentText?: string[];
+  countryOfOrigin?: string[];
   publicationYear?: string;
-  length?: string;
-  language: string;
-  ToCheck: boolean;
+  length?: string[];
+  language: string[];
+  ToCheck?: boolean;
   workId: number;
 }
 

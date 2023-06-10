@@ -13,7 +13,6 @@ export const config = {
 };
 
 export default getApiHandler()
-  
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
       const { q = null,props:p=undefined,lang:l } = req.query;
@@ -45,4 +44,3 @@ export default getApiHandler()
       //prisma.$disconnect();
     }
   })
-  
