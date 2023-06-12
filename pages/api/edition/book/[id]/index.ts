@@ -24,9 +24,9 @@ const invalidRequest =  (
   req: NextApiRequest,
   res: NextApiResponse,
 ): {error:string}|null => {
-  // if (session == null) {
-  //   return { error: 'Unauthorized' };
-  // }
+  if (session == null) {
+    return { error: 'Unauthorized' };
+  }
   const {id} = req.query;
   if(isNaN(+id!)){
     return { error: 'book\'s id (number) is required' };

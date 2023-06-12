@@ -108,7 +108,7 @@
   "Join Cycle request notification": "Notificação de solicitação de participação ao ciclo",
   "Request sent successfully": "Solicitação de participação ao ciclo enviada com sucesso. Por favor, aguarde a aprovação.",
   "Failed to send the request": "Falha ao enviar a solicitação",
-  "Clear rating": "Remover avaliação",
+  "clearRating": "Remover avaliação",
   "Close": "Fechar",
   "Expand": "Abrir",
   "underEurekaLabel": "Bem-vinda!",

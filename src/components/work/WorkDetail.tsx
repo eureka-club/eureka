@@ -324,7 +324,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                         iconColor="var(--bs-danger)"
                       /> { qtyByUser > 0 && <Button
                         type="button"
-                        title={t('Clear rating')}
+                        title={t('common:clearRating')}
                         className="text-warning p-0 ms-2"
                         onClick={clearRating}
                         variant="link"
@@ -395,7 +395,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                             iconColor="var(--bs-danger)"
                           /> {qtyByUser > 0 && <Button
                             type="button"
-                            title={t('Clear rating')}
+                            title={t('common:clearRating')}
                             className="text-warning p-0 ms-2"
                             onClick={clearRating}
                             variant="link"

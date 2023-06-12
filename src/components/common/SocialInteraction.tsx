@@ -444,7 +444,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
             {showTrash && mySocialInfo && mySocialInfo.ratingByMe && (
               <Button
                 type="button"
-                title={t('Clear rating')}
+                title={t('clearRating')}
                 className="text-warning p-0"
                 onClick={clearRating}
                 variant="link"

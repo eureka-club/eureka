@@ -108,7 +108,7 @@
   "Join Cycle request notification": "Request to join cycle notification",
   "Request sent successfully": "Request to join cycle sent successfully. Please wait for approval.",
   "Failed to send the request": "Failed to send request",
-  "Clear rating": "Clear rating",
+  "clearRating": "Clear rating",
   "Close": "Close",
   "Expand": "Expand",
   "underEurekaLabel": "Welcome!",

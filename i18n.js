@@ -21,6 +21,6 @@ module.exports = {
     'rgx:^/mediatheque/\\[slug\\]': ['mediatheque', 'countries'],
     'rgx:^/user/\\[slug\\]/my-read-or-watched': ['mediatheque'],
     'rgx:^/cycle/\\[id\\]': ['cycleDetail', 'countries'],
-    'rgx:^/work/\\[id\\]': ['workDetail', 'countries', 'cycleDetail'],
+    'rgx:^/work/\\[id\\]': ['common','workDetail', 'countries', 'cycleDetail'],
   },
 };
