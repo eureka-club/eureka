@@ -54,6 +54,13 @@ interface Props {
   close: () => void;
 }
 
+const languages: Record<string, string> = {
+  es: "spanish",
+  en: 'english',
+  fr: 'french',
+  pt: 'portuguese'
+}
+
 const whereCycleParticipants = (id: number) => ({
   where: {
     OR: [
@@ -89,7 +96,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
     selectedWorkId: 0,
     title: '',
     image: null,
-    language: cycle.languages,
+    language: languages[`${router.locale}`],
     contentText: '',
     isPublic: cycle.access === 1,
     topics: eurekaTopics,
@@ -164,7 +171,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         selectedWorkId: newEureka.selectedWorkId,
         title: newEureka.title,
         image: newEurekaImageFile!,
-        language: newEureka.language,
+        language: languages[`${router.locale}`],
         contentText: editorRef.current ? editorRef.current.getContent() : '',
         isPublic: newEureka.isPublic,
         topics: eurekaTopics.join(','),
@@ -176,7 +183,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         selectedWorkId: null,
         title: newEureka.title,
         image: newEurekaImageFile!,
-        language: newEureka.language,
+        language: languages[`${router.locale}`],
         contentText: editorRef.current ? editorRef.current.getContent() : '',
         isPublic: newEureka.isPublic,
         topics: eurekaTopics.join(','),

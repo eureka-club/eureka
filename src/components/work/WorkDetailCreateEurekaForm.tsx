@@ -34,7 +34,12 @@ import useCycles from '@/src/useCycles'
 
 // import { devNull } from 'os';
 // import { isNullOrUndefined } from 'util';
-
+const languages: Record<string, string> = {
+  es: "spanish",
+  en: 'english',
+  fr: 'french',
+  pt: 'portuguese'
+}
 interface Props {
   cacheKey:string[];
   workItem: WorkMosaicItem;
@@ -69,7 +74,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
     selectedWorkId: workItem.id,
     title: '',
     image: null,
-    language: '',
+    language: languages[`${router.locale}`],
     contentText: '',
     isPublic: true,
     topics: eurekaTopics,
@@ -141,7 +146,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
         selectedWorkId: newEureka.selectedWorkId,
         title: newEureka.title,
         image: newEurekaImageFile!,
-        language: newEureka.language,
+        language: languages[`${router.locale}`],
         contentText: (editorRef.current) ? editorRef.current.getContent() : "",
         isPublic: newEureka.isPublic,
         topics: eurekaTopics.join(','),

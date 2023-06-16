@@ -56,6 +56,13 @@ interface Props {
   params?: any;
 }
 
+const languages: Record<string, string> = {
+  es: "spanish",
+  en: 'english',
+  fr: 'french',
+  pt: 'portuguese'
+}
+
 const whereCycleParticipants = (id: number) => ({
   where: {
     OR: [
@@ -362,13 +369,13 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
         selectedWorkId: selectedWork.id,
         title: postTitle,
         image: imageFile!,
-        language: '',
+        language: languages[`${router.locale}`],
         contentText: editorRef.current.getContent(), // form.description.value.length ? form.description.value : null,
         isPublic: isPublic,//form.isPublic.checked,
         topics: items.join(','),
         tags,
       };
-      //console.log(payload, 'payload')
+      console.log(payload, 'payload')
 
       if (formValidation(payload))
         await execCreatePost(payload);
@@ -378,7 +385,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
         selectedWorkId: null,
         title: postTitle,
         image: imageFile!,
-        language: '',
+        language: languages[`${router.locale}`],
         contentText: editorRef.current?.getContent(), // form.description.value.length ? form.description.value : null,
         isPublic: isPublic,//form.isPublic.checked,
         topics: items.join(','),
