@@ -2,43 +2,62 @@ import { Cycle, Post, Prisma, User, Work } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
 import { CreatePostServerFields, CreatePostServerPayload, PostMosaicItem } from '../types/post';
-import {prisma} from '@/src/lib/prisma';
+import { prisma } from '@/src/lib/prisma';
 
 export const find = async (id: number): Promise<PostMosaicItem | null> => {
   return prisma.post.findUnique({
     where: { id },
-    include:{
-      works:{select:{id:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
-      cycles:{select:{id:true,creator:{select:{name:true}},localImages:{select:{storedFile:true}},creatorId:true,startDate:true,endDate:true,title:true}},
-      favs:{select:{id:true,}},
-      creator: {select:{id:true,name:true,photos:true,countryOfOrigin:true}},
-      localImages: {select:{storedFile:true}},
-      reactions:true,
-    }
+    include: {
+      works: { select: { id: true, title: true, type: true, localImages: { select: { storedFile: true } } } },
+      cycles: {
+        select: {
+          id: true,
+          creator: { select: { name: true } },
+          localImages: { select: { storedFile: true } },
+          creatorId: true,
+          startDate: true,
+          endDate: true,
+          title: true,
+        },
+      },
+      favs: { select: { id: true } },
+      creator: { select: { id: true, name: true, photos: true, countryOfOrigin: true } },
+      localImages: { select: { storedFile: true } },
+      reactions: true,
+    },
   });
 };
 
-
-export const findAll = async (props?:Prisma.PostFindManyArgs,page?:number): Promise<PostMosaicItem[]> => {
-  const {include,where,take,skip,cursor} = props || {};
+export const findAll = async (props?: Prisma.PostFindManyArgs, page?: number): Promise<PostMosaicItem[]> => {
+  const { include, where, take, skip, cursor } = props || {};
   return prisma.post.findMany({
     take,
     skip,
     cursor,
     orderBy: { createdAt: 'desc' },
-    include:{
-      works:{select:{id:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
-      cycles:{select:{id:true,creator:{select:{name:true}},localImages:{select:{storedFile:true}},creatorId:true,startDate:true,endDate:true,title:true}},
-      favs:{select:{id:true,}},
-      creator: {select:{id:true,name:true,photos:true,countryOfOrigin:true}},
-      localImages: {select:{storedFile:true}},
-      reactions:true,
-    },    
+    include: {
+      works: { select: { id: true, title: true, type: true, localImages: { select: { storedFile: true } } } },
+      cycles: {
+        select: {
+          id: true,
+          creator: { select: { name: true } },
+          localImages: { select: { storedFile: true } },
+          creatorId: true,
+          startDate: true,
+          endDate: true,
+          title: true,
+        },
+      },
+      favs: { select: { id: true } },
+      creator: { select: { id: true, name: true, photos: true, countryOfOrigin: true } },
+      localImages: { select: { storedFile: true } },
+      reactions: true,
+    },
     where,
   });
 };
 
-export const search = async (query: { [key: string]: string | string[]|undefined }): Promise<Post[]> => {
+export const search = async (query: { [key: string]: string | string[] | undefined }): Promise<Post[]> => {
   const { q, where /* , include */ } = query;
   if (where == null && q == null) {
     throw new Error("[412] Invalid invocation! Either 'q' or 'where' query parameter must be provided");
@@ -202,5 +221,114 @@ export const remove = async (post: PostMosaicItem): Promise<Post> => {
 
   return prisma.post.delete({
     where: { id: post.id },
+  });
+};
+
+export const UpdateFromServerFields = async (
+  fields: CreatePostServerFields,
+  coverImageUpload: StoredFileUpload | null,
+  postId: number,
+): Promise<Post> => {
+  let payload = Object.entries(fields).reduce((memo, [fieldName, fieldValues]) => {
+    switch (fieldName) {
+      case 'selectedCycleId':
+      case 'selectedWorkId':
+        return { ...memo, [fieldName]: Number(fieldValues[0]) };
+      case 'isPublic':
+        return { ...memo, [fieldName]: fieldValues[0] === 'true' };
+      default:
+        return { ...memo, [fieldName]: fieldValues[0] };
+    }
+  }, {} as CreatePostServerPayload);
+
+  let existingCycle: Cycle | null = null;
+
+  if (payload.selectedCycleId != null) {
+    existingCycle = await prisma.cycle.findUnique({ where: { id: payload.selectedCycleId } });
+    if (existingCycle == null) {
+      throw new Error('[412] Invalid Cycle ID provided');
+    }
+  }
+
+  let existingWork: Work | null = null;
+  if (payload.selectedWorkId != null) {
+    existingWork = await prisma.work.findUnique({ where: { id: payload.selectedWorkId } });
+    if (existingWork == null) {
+      throw new Error('[412] Invalid Work ID provided');
+    }
+  }
+  const cycles = existingCycle ? [{ id: existingCycle.id }] : [];
+  const works = existingWork ? [{ id: existingWork.id }] : [];
+
+  delete payload.selectedWorkId;
+  delete payload.selectedCycleId;
+
+  const existingLocalImage = coverImageUpload //NO EXISTE IMAGEN EN TABLA localImage
+    ? await prisma.localImage.findFirst({
+        where: { contentHash: coverImageUpload.contentHash },
+      })
+    : null;
+
+  if (existingLocalImage != null) {
+    const q1 = prisma.post.update({
+      where: { id: postId },
+      data: {
+        localImages: {
+          set: [],
+        },
+      },
+    });
+
+    await prisma.$transaction([q1]);
+
+    return prisma.post.update({
+      where: { id: postId },
+      data: {
+        ...payload,
+        cycles: { set: cycles },
+        works: { set: works },
+        localImages: {
+          connect: {
+            id: existingLocalImage.id,
+          },
+        },
+      },
+    });
+  }
+
+  if (coverImageUpload !== null && !existingLocalImage) {
+    const q1 = prisma.post.update({
+      where: { id: postId },
+      data: {
+        cycles: { set: cycles },
+        works: { set: works },
+        localImages: {
+          set: [],
+        },
+      },
+    });
+
+    await prisma.$transaction([q1]);
+
+    return prisma.post.update({
+      where: { id: postId },
+      data: {
+        ...payload,
+        cycles: { set: cycles },
+        works: { set: works },
+        localImages: {
+          create: { ...coverImageUpload! },
+        },
+      },
+    });
+  }
+
+  return prisma.post.update({
+    where: { id: postId },
+    data: {
+      ...payload,
+      cycles: { set: cycles },
+      works: { set: works },
+    },
   });
 };

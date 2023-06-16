@@ -2,45 +2,89 @@ import { Post } from '@prisma/client';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { FormEvent, FunctionComponent, MouseEvent, ChangeEvent, RefObject, useEffect, useRef, useState } from 'react';
+import { FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
+import { BsX } from 'react-icons/bs';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
+import FormCheck from 'react-bootstrap/FormCheck';
 import FormControl from 'react-bootstrap/FormControl';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
+import ModalBody from 'react-bootstrap/ModalBody';
+import ModalFooter from 'react-bootstrap/ModalFooter';
+import ModalHeader from 'react-bootstrap/ModalHeader';
+import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
+import { Switch, TextField, FormControlLabel, Autocomplete } from '@mui/material';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BsFillXCircleFill } from 'react-icons/bs';
-import { useMutation, useQueryClient } from 'react-query';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
-import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
+import { useMutation, useQueryClient } from 'react-query';
+import TagsInput from './controls/TagsInput';
+import TagsInputMaterial from './controls/TagsInputMaterial';
+import TagsInputTypeAheadMaterial from './controls/TagsInputTypeAheadMaterial';
+import AsyncTypeaheadMaterial from './controls/AsyncTypeaheadMaterial';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
-
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
-import { EditPostAboutCycleClientPayload, EditPostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
+import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload } from '../../types/post';
 import { CycleMosaicItem } from '../../types/cycle';
 import { WorkMosaicItem } from '../../types/work';
-// import ImageFileSelect from './controls/ImageFileSelect';
+//import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
 import CycleTypeaheadSearchItem from '../cycle/TypeaheadSearchItem';
 import WorkTypeaheadSearchItem from '../work/TypeaheadSearchItem';
 import globalModalsAtom from '../../atoms/globalModals';
 import styles from './CreatePostForm.module.css';
 import useTopics from '../../useTopics';
-import usePost from '../../usePost';
-import editOnSmallerScreens from '../../atoms/editOnSmallerScreens';
+import useWork from '../../useWork';
+// import { Session } from '@/src/types';
+import { useSession } from 'next-auth/react';
+import useUser from '@/src/useUser';
+import useUsers from '@/src/useUsers'
+import { useNotificationContext } from '@/src/useNotificationProvider';
+import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
 import toast from 'react-hot-toast'
-import { Alert } from 'react-bootstrap';
+import { ImCancelCircle } from 'react-icons/im';
+import Prompt from '@/src/components/post/PostPrompt';
+import { set } from 'lodash';
+import usePost from '../../usePost';
+import LocalImageComponent from '../LocalImage';
+import { EditPostAboutCycleClientPayload, EditPostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
 interface Props {
   noModal?: boolean;
-  cacheKey?:string[]
-  id:number;
+  cacheKey?: string[]
+  id: number;
 }
 
-const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
+interface FormValues {
+  id: number | null;
+  title: string;
+  language: string | undefined;
+  contentText: string | null;
+  image?: File | null;
+  currentImage?: any;
+  selectedCycle: any | null;
+  selectedWork: any | null;
+  isPublic: boolean;
+  topics: string[];
+  tags: string;
+}
+
+const whereCycleParticipants = (id: number) => ({
+  where: {
+    OR: [
+      { cycles: { some: { id } } },//creator
+      { joinedCycles: { some: { id } } },//participants
+    ],
+  }
+});
+const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
+  const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
+  const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
   const [isSearchCycleLoading, setIsSearchCycleLoading] = useState(false);
@@ -48,36 +92,173 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
   const [searchCycleResults, setSearchCycleResults] = useState<CycleMosaicItem[]>([]);
   const [selectedCycle, setSelectedCycle] = useState<CycleMosaicItem | null>(null);
   const [selectedWork, setSelectedWork] = useState<WorkMosaicItem | null>(null);
-  const { data: topics } = useTopics();
-
-  const [items, setItems] = useState<string[]>([]);
-
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  //const [items, setItems] = useState<string[]>([]);
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
+  const [changePhoto, setChangePhoto] = useState<boolean>(false);
+  const [useCrop, setUSeCrop] = useState<boolean>(false);
+  const [showCrop, setShowCrop] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const router = useRouter();
+  const editorRef = useRef<any>(null);
+  const { data: session } = useSession();
+  const [userId, setUserId] = useState<number>();
+  const [workId, setWorkId] = useState<string>('');
+  const [postTitle, setPostTitle] = useState<string>('');
+  const [isPublic, setIsPublic] = useState<boolean>(true);
+  const [formValues, setFormValues] = useState<FormValues>({
+    id: null,
+    title: '',
+    language: '',
+    contentText: '',
+    selectedCycle: null,
+    selectedWork: null,
+    isPublic: true,
+    topics: [],
+    tags: ''
+  });
+  const [imageChanged, setImageChanged] = useState<string | undefined>();
+  const [ck, setCK] = useState<string[]>();
+
+  const { data: post, isLoading, isFetching } = usePost(id);
+
+
+  useEffect(() => {
+
+    if (post) {
+      let form = {
+        id: post.id,
+        title: post.title,
+        language: post.language,
+        image: null,
+        currentImage: `https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${post.localImages[0].storedFile}`,
+        contentText: post.contentText,
+        selectedCycle: post.cycles[0] as CycleMosaicItem | null,
+        selectedWork: post.works[0] as WorkMosaicItem | null,
+        isPublic: post.isPublic,
+        topics: [] as string[],
+        tags: post.tags as string
+      }
+
+      if (post.topics?.length) {
+        for (let topic of post.topics.split(',')) {
+          if (!form.topics.includes(topic))
+            form.topics.push(...post.topics.split(','));
+        }
+      }
+      setFormValues(form);
+    }
+  }, [post])
+
+  /*useEffect(() => {
+    if (router && router.query?.id) {
+      setWorkId(router.query.id.toString());
+    }
+  }, [router])*/
+  const { data: work } = useWork(+workId, {
+    enabled: !!workId
+  });
+
+  const { data: user } = useUser(userId!, {
+    enabled: !!userId
+  });
+
+  /*const { data: participants, isLoading: isLoadingParticipants } = useUsers(selectedCycle ? whereCycleParticipants(selectedCycle.id) : {},
+    {
+      enabled: !!selectedCycle
+    }
+  )*/
+
+  const { notifier } = useNotificationContext();
+  useEffect(() => {
+    if (session) {
+      const user = session.user;
+      setUserId(user.id);
+    }
+  }, [session]);
+  // useEffect(() => {
+  //   if (router) {
+  //     const routeValues = router.route.split('/').filter((i) => i);
+  //     if (routeValues.length) {
+  //       if (routeValues[0] === 'work') {
+  //         setWorkId(router.query.id as string);
+  //       }
+  //     }
+  //   }
+  // }, [router, router.query.id]);
+
+  useEffect(() => {
+    if (work) setSelectedWork(work as WorkMosaicItem);
+  }, [work]);
+
   const { t } = useTranslation('createPostForm');
 
-  const [postId, setPostId] = useState<string>('');
-  const [ck,setCK] = useState<string[]>();
-  const editorRef = useRef<any>(null);
-  const [language, setLanguage] = useState<string>('');
-  //const [remove,setRemove] = useState<boolean>(false);
-  const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
+  const { data: topics } = useTopics();
+  //const [tags, setTags] = useState<string>('');
+  //const [postId, setPostId] = useState<number | undefined>();
 
-  
-  const { data: post, isLoading, isFetching } = usePost(id);
-  useEffect(()=>{
-    if (post && post.topics?.length){
-      for(let topic of post.topics.split(',')){
-          if(!items.includes(topic))
-            items.push(...post.topics.split(','));
+
+  const handleSelectWorkOrCycle = (selected: SearchResult | null): void => {
+    //console.log(selected, 'selected')
+
+    const searchResult = selected;
+    if (searchResult != null) {
+      if (isCycleMosaicItem(searchResult)) {
+        setFormValues({
+          ...formValues,
+          ['selectedCycle']: searchResult
+        });
+      }
+      if (isWorkMosaicItem(searchResult)) {
+        setFormValues({
+          ...formValues,
+          ['selectedWork']: searchResult,
+          ['selectedCycle']: null
+
+        });
       }
     }
-    if (post && post.works.length) setSelectedWork(post.works[0] as WorkMosaicItem);
-    if (post && post.cycles.length) setSelectedCycle(post.cycles[0] as CycleMosaicItem);
-    if(post && post.language) setLanguage(post.language);
-  },[post])
-    
+    else {
+      setFormValues({
+        ...formValues,
+        ['selectedWork']: null,
+        ['selectedCycle']: null
+
+      });
+    }
+
+  };
+
+  const handleSelectCycle = (selected: SearchResult | null): void => {
+    const searchResult = selected as CycleMosaicItem | null
+    setFormValues({
+      ...formValues,
+      ['selectedCycle']: searchResult
+    });
+    if (searchResult != null) {     
+      if (searchResult.access === 2)
+        setFormValues({
+          ...formValues,
+          ['isPublic']: false
+        });
+    }
+  };
+
+
+  /*const formValidation = (payload: any) => {
+
+    if (!payload.title.length) {
+       toast.error( t('NotTitle'))
+       return false;
+     }else if (!imageFile) {
+       toast.error( t('requiredEurekaImageError'))
+       return false;
+     }else if (!payload.contentText.length) {
+       toast.error( t('NotContentText'))
+       return false;
+     }
+    return true;
+  };*/
 
   const {
     mutate: execEditPost,
@@ -88,66 +269,71 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
     isSuccess: isEditPostSuccess,
   } = useMutation(
     async (payload: EditPostAboutCycleClientPayload | EditPostAboutWorkClientPayload): Promise<Post> => {
+
+      const formData = new FormData();
+
+      Object.entries(payload).forEach(([key, value]) => {
+        if (value != null) {
+          formData.append(key, value);
+        }
+      });
+
       const res = await fetch(`/api/post/${id}`, {
         method: 'PATCH',
-        body: JSON.stringify(payload),
+        body: formData,//JSON.stringify(payload),
       });
-      console.log(res,'res')
-      if(res.ok){
-        handleEditPostOnSmallerScreenClose();
-         toast.success( t('PostEdited'));
-         router.push(`/${selectedCycle?'cycle':'work'}/${selectedCycle?selectedCycle.id:selectedWork!.id}/post/${post!.id}`)
+      //console.log(res, 'res')
+      if (res.ok) {
+        toast.success(t('PostEdited'));
+        router.push(`/${formValues.selectedCycle ? 'cycle' : 'work'}/${formValues.selectedCycle ? formValues.selectedCycle.id : formValues.selectedWork!.id}/post/${post!.id}`)
       }
       return res.json();
     },
     {
       onMutate: async (variables) => {
-         if (post) {
-            const ck_ = ck||['POST',`${post.id}`];
-            await queryClient.cancelQueries(ck_)
-            const snapshot = queryClient.getQueryData<PostMosaicItem[]|PostMosaicItem>(ck_)
-            const {title,contentText} = variables;
-            if(snapshot){
-              let posts = [];
-              if(('length' in snapshot)){
-                posts = [...snapshot] as PostMosaicItem[];                  
-                const idx = posts.findIndex(p=>p.id == +postId)
-                if(idx >- 1){
-                  const oldPost = posts[idx];
-                  const newPost = {
-                    ...oldPost,
-                    contentText: contentText??oldPost.contentText,
-                    title: title??oldPost.title,
-                  }
-                  posts.splice(idx,1,newPost);
-                  queryClient.setQueryData(ck_, [...posts]);
+        if (post) {
+          const ck_ = ck || ['POST', `${post.id}`];
+          await queryClient.cancelQueries(ck_)
+          const snapshot = queryClient.getQueryData<PostMosaicItem[] | PostMosaicItem>(ck_)
+          const { title, contentText } = variables;
+          if (snapshot) {
+            let posts = [];
+            if (('length' in snapshot)) {
+              posts = [...snapshot] as PostMosaicItem[];
+              const idx = posts.findIndex(p => p.id == +post.id)
+              if (idx > - 1) {
+                const oldPost = posts[idx];
+                const newPost = {
+                  ...oldPost,
+                  contentText: contentText ?? oldPost.contentText,
+                  title: title ?? oldPost.title,
                 }
+                posts.splice(idx, 1, newPost);
+                queryClient.setQueryData(ck_, [...posts]);
               }
-              else 
-                queryClient.setQueryData(ck_,{...snapshot,title,contentText});
-              
-              return { snapshot, ck:ck_ };
             }
-            // const ck = [`POST`, `${globalModalsState.editPostId || post.id}`];
+            else
+              queryClient.setQueryData(ck_, { ...snapshot, title, contentText });
+
+            return { snapshot, ck: ck_ };
           }
-          handleEditPostOnSmallerScreenClose();
-        
-        // return { snapshot: null, ck: '' };
+        }
+
       },
       onSettled: (_post, error, _variables, context) => {
-        if (error){
+        if (error) {
           queryClient.invalidateQueries(ck);
-          queryClient.invalidateQueries(['POST',`${postId}`]);
+          queryClient.invalidateQueries(['POST', `${formValues.id}`]);
         }
         // this make the page to do a refresh
         queryClient.invalidateQueries(ck);
         // queryClient.invalidateQueries(['POST',postId]);
-        
+
       },
     },
   );
 
-   const {
+  const {
     mutate: execDeletePost,
     data: deletePost,
     error: deletePostError,
@@ -156,478 +342,415 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
     isSuccess: isDeletePostSuccess,
   } = useMutation(
     async (payload: EditPostAboutCycleClientPayload | EditPostAboutWorkClientPayload): Promise<Post> => {
-       const res = await fetch(`/api/post/${id}`, {
+      const res = await fetch(`/api/post/${id}`, {
         method: 'DELETE',
         body: JSON.stringify(payload),
       });
-      console.log(res,'res')
-      if(res.ok){
-        handleEditPostOnSmallerScreenClose();
-        toast.success( t('PostRemoved'));
-        console.log(`/${selectedCycle?'cycle':'work'}/${selectedCycle?selectedCycle.id:selectedWork!.id}`)
-        router.push(`/${selectedCycle?'cycle':'work'}/${selectedCycle?selectedCycle.id:selectedWork!.id}`)
+      console.log(res, 'res')
+      if (res.ok) {
+        toast.success(t('PostRemoved'));
+        router.push(`/${formValues.selectedCycle ? 'cycle' : 'work'}/${formValues.selectedCycle ? formValues.selectedCycle.id : formValues.selectedWork!.id}`)
       }
       return res.json();
     },
     {
       onMutate: async (variables) => {
-         if (post) {
-            const ck_ = ck||['POST',`${post.id}`];
-            await queryClient.cancelQueries(ck_)
-            const snapshot = queryClient.getQueryData<PostMosaicItem[]|PostMosaicItem>(ck_)
-            const {title,contentText} = variables;
-            if(snapshot){
-              let posts = [];
-              if(('length' in snapshot)){
-                posts = [...snapshot] as PostMosaicItem[];                  
-                const idx = posts.findIndex(p=>p.id == +postId)
-                if(idx >- 1){
-                  const oldPost = posts[idx];
-                  const newPost = {
-                    ...oldPost,
-                    contentText: contentText??oldPost.contentText,
-                    title: title??oldPost.title,
-                  }
-                  posts.splice(idx,1,newPost);
-                  queryClient.setQueryData(ck_, [...posts]);
+        if (post) {
+          const ck_ = ck || ['POST', `${post.id}`];
+          await queryClient.cancelQueries(ck_)
+          const snapshot = queryClient.getQueryData<PostMosaicItem[] | PostMosaicItem>(ck_)
+          const { title, contentText } = variables;
+          if (snapshot) {
+            let posts = [];
+            if (('length' in snapshot)) {
+              posts = [...snapshot] as PostMosaicItem[];
+              const idx = posts.findIndex(p => p.id == +post.id)
+              if (idx > - 1) {
+                const oldPost = posts[idx];
+                const newPost = {
+                  ...oldPost,
+                  contentText: contentText ?? oldPost.contentText,
+                  title: title ?? oldPost.title,
                 }
+                posts.splice(idx, 1, newPost);
+                queryClient.setQueryData(ck_, [...posts]);
               }
-              else 
-                queryClient.setQueryData(ck_,{...snapshot,title,contentText});
-              
-              return { snapshot, ck:ck_ };
             }
-            // const ck = [`POST`, `${globalModalsState.editPostId || post.id}`];
+            else
+              queryClient.setQueryData(ck_, { ...snapshot, title, contentText });
+
+            return { snapshot, ck: ck_ };
           }
-          handleEditPostOnSmallerScreenClose();
-        
+          // const ck = [`POST`, `${globalModalsState.editPostId || post.id}`];
+        }
+
         // return { snapshot: null, ck: '' };
       },
       onSettled: (_post, error, _variables, context) => {
-        if (error){
+        if (error) {
           queryClient.invalidateQueries(ck);
-          queryClient.invalidateQueries(['POST',`${postId}`]);
+          queryClient.invalidateQueries(['POST', `${post!.id}`]);
         }
         // this make the page to do a refresh
         queryClient.invalidateQueries(ck);
         // queryClient.invalidateQueries(['POST',postId]);
-        
+
       },
     },
   );
 
-  const handleEditPostOnSmallerScreenClose = () => {
-        setEditPostOnSmallerScreen({ ...editOnSmallerScreens, ...{ value: false } });
-  };
-
-  const handleSearchWorkOrCycle = async (query: string) => {
-    setIsSearchWorkOrCycleLoading(true);
-
-    const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
-    const response = await fetch(`/api/search/works-or-cycles?q=${query}&include=${includeQP}`);
-    const itemsSWC: SearchResult[] = await response.json();
-
-    setSearchWorkOrCycleResults(itemsSWC);
-    setIsSearchWorkOrCycleLoading(false);
-  };
-
-  const handleSearchCycle = async (query: string) => {
-    let criteria = `q=${query}`;
-    if (selectedWork != null) {
-      criteria = `where=${JSON.stringify({
-        title: { contains: query },
-        works: { some: { id: selectedWork.id } },
-      })}`;
-    }
-    const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
-
-    setIsSearchCycleLoading(true);
-    const response = await fetch(`/api/search/cycles?${criteria}&include=${includeQP}`);
-    const itemsSCL: CycleMosaicItem[] = await response.json();
-
-    setSearchCycleResults(itemsSCL);
-    setIsSearchCycleLoading(false);
-  };
-
-  const handleSelectWorkOrCycle = (selected: SearchResult[]): void => {
-    const searchResult = selected[0];
-    if (searchResult != null) {
-      if (isCycleMosaicItem(searchResult)) {
-        setSelectedCycle(searchResult);
-       // if (formRef.current) formRef.current.isPublic.checked = searchResult.access === 1;
-      }
-      if (isWorkMosaicItem(searchResult)) {
-        setSelectedWork(searchResult);
-      }
-    }
-  };
-
-  const handleSelectCycle = (selected: CycleMosaicItem[]): void => {
-    const searchResult = selected[0];
-    if (searchResult != null) {
-      setSelectedCycle(searchResult);
-    }
-  };
-
-  const handleClearSelectedWork = (ev: MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
 
-    setSelectedWork(null);
-  };
-
-  const handleClearSelectedCycle = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-    setSelectedCycle(null);
-   // if (formRef.current) formRef.current.isPublic.checked = true;
-  };
-
-    const handleRemove = async (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-    const payload: EditPostAboutWorkClientPayload = {
-        id: globalModalsState.editPostId ? globalModalsState.editPostId.toString() : router.query.postId as string,
-        selectedCycleId: selectedCycle != null ? selectedCycle.id : null,
-        selectedWorkId: selectedWork != null ? selectedWork.id : undefined,
-        title: '',
-        // image: imageFile,
-        language: '',
-        contentText: '', // form.description.value.length ? form.description.value : null,
-        isPublic: false,
-        topics: '',
-      }; 
-      console.log(payload,'payload') 
-    await execDeletePost(payload);
-
+    console.log(formValues)
+    if (!imageFile && !formValues.currentImage) {
+      toast.error(t('requiredEurekaImageError'))
+      return;
     }
 
-  const formValidation = (payload:any) => {
-    if (!payload.title.length) {
-      toast.error( t('NotTitle'))
-      return false;
-    }else if (!payload.language.length) {
-      toast.error( t('NotLanguage'))
-      return false;
-    }else if (!payload.contentText.length) {
-      toast.error( t('NotContentText'))
-      return false;
-    }
-    return true;
-  };
-
-  const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
-    ev.preventDefault();
-
-    // if (imageFile == null) {
-    //   return;
-    // }
-
-    const form = ev.currentTarget;
-    if (selectedWork != null) {
+    //const form = ev.currentTarget;
+    if (formValues.selectedWork != null) {
       const payload: EditPostAboutWorkClientPayload = {
-        id: globalModalsState.editPostId ? globalModalsState.editPostId.toString() : router.query.postId as string,
-        selectedCycleId: selectedCycle != null ? selectedCycle.id : null,
-        selectedWorkId: selectedWork.id,
-        title: form.postTitle.value,
-        // image: imageFile,
-        language: language,
+        id: formValues.id!.toString(),
+        selectedCycleId: formValues.selectedCycle != null ? formValues.selectedCycle?.id : null,
+        selectedWorkId: formValues.selectedWork.id,
+        title: formValues.title,
+        image: imageFile!,
+        language: formValues.language,
         contentText: editorRef.current.getContent(), // form.description.value.length ? form.description.value : null,
-        isPublic: post?.isPublic,
-        topics: items.join(','),
+        isPublic: formValues.isPublic,
+        topics: formValues.topics.join(','),
+        tags: formValues.tags
       };
-      if(formValidation(payload))
-         await execEditPost(payload);
-    } else if (selectedCycle != null) {
+      //if (formValidation(payload))
+      await execEditPost(payload);   
+      console.log(payload, 'payload')
+
+    } else if (formValues.selectedCycle != null) {
       const payload: EditPostAboutCycleClientPayload = {
-        id: globalModalsState.editPostId ? globalModalsState.editPostId.toString() : router.query.postId as string,
-        selectedCycleId: selectedCycle.id,
-        selectedWorkId: null,
-        title: form.postTitle.value,
-        // image: imageFile,
-        language: form.language.value,
+        id: formValues.id!.toString(),
+        selectedCycleId: formValues.selectedCycle != null ? formValues.selectedCycle?.id : null,
+        selectedWorkId: formValues.selectedWork.id,
+        title: formValues.title,
+        image: imageFile!,
+        language: formValues.language,
         contentText: editorRef.current.getContent(), // form.description.value.length ? form.description.value : null,
-        isPublic: post ? post.isPublic : false,
-        topics: items.join(','),
+        isPublic: formValues.isPublic,
+        topics: formValues.topics.join(','),
+        tags: formValues.tags
       };
-      if(formValidation(payload))
-         await execEditPost(payload);
+      console.log(payload, 'payload')
+      // (formValidation(payload))
+      await execEditPost(payload);
     }
     else
-       toast.error( t('NotAboutItem'))
+      toast.error(t('NotAboutItem'))
   };
 
-  useEffect(() => {
-    if (isEditPostSuccess === true && editPost != null) {
-      setGlobalModalsState({ ...globalModalsState, ...{ editPostModalOpened: false, editPostId:undefined } });
-      // queryClient.invalidateQueries(['POST',`${globalModalsState.editPostId || router.query.postId}`]);
+  const handleRemove = async (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    const payload: EditPostAboutWorkClientPayload = {
+      id: formValues.id!.toString(),
+      selectedCycleId: formValues.selectedCycle != null ? formValues.selectedCycle?.id : null,
+      selectedWorkId: formValues.selectedWork.id,
+      title: '',
+      language: '',
+      contentText: '', 
+      isPublic: false,
+      topics: '',
+    };
+    await execDeletePost(payload);
 
-      /* if (selectedWork != null) {
-        router.push(`/work/${selectedWork.id}/post/${router.query.postId}`);
-        return;
-      }
-      if (selectedCycle != null) {
-        router.push(`/cycle/${selectedCycle.id}/post/${router.query.postId}`);
-      } */
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editPost, isEditPostSuccess]);
+  }
 
-  const handlerchange = (ev: ChangeEvent<HTMLInputElement>) => {
-    if (post && ev.currentTarget.id in post) {
-      const p: PostMosaicItem & { [key: string]: unknown } = post;
-      p[ev.currentTarget.id] = ev.currentTarget.value;
-      // setPost(p);
-    }
-  };
+  /* useEffect(() => {
+     if (isCreatePostSuccess === true && createdPost != null) {
+       setGlobalModalsState({ ...globalModalsState, ...{ createPostModalOpened: false } });
+       queryClient.invalidateQueries('posts.mosaic');
+ 
+       if (selectedWork != null) {
+         router.push(`/work/${selectedWork.id}/post/${createdPost.id || postId}`);
+         return;
+       }
+       if (selectedCycle != null) {
+         router.push(`/cycle/${selectedCycle.id}/post/${createdPost.id || postId}`);
+       }
+     } else if (status === 'error') {
+       alert('Error creating the post');
+     }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [createdPost, isCreatePostSuccess]);*/
+
   const labelKeyFn = (res: SearchResult) => {
     if ('title' in res)
       return `${res.title}`;
     return `${res.name}`;
   };
 
-  const onSelectLanguage = (language: string) => {
-    setLanguage(language)
+  const onGenerateCrop = (photo: File) => {
+    setImageFile(() => photo);
+    setImageChanged(URL.createObjectURL(photo));
+    setChangePhoto(false);
+    setShowCrop(false);
+    setFormValues({
+      ...formValues,
+      ['currentImage']: undefined
+    });
   };
 
-  if (isLoading || isFetching || !post) return <Spinner animation="grow" variant="info" size="sm" />;
+  const closeCrop = () => {
+    setShowCrop(false);
+  };
+
+  const renderPhoto = () => {
+    if (formValues.currentImage)
+      return <Row className='d-flex flex-column'>
+        <Col className='d-flex flex-column justify-content-center align-items-center  flex-xxl-row justify-content-xxl-start align-items-xxl-start' >
+          <img className={styles.selectedPhoto} src={formValues.currentImage} />
+          <Button className="btn-eureka ms-0 ms-xxl-3  text-white" onClick={() => handleChangePhoto()}>
+            {t('Change Photo')}
+          </Button>
+        </Col>
+      </Row>
+    if (imageChanged)
+      return <Row className='d-flex flex-column'>
+        <Col className='d-flex flex-column justify-content-center align-items-center  flex-xxl-row justify-content-xxl-start align-items-xxl-start' >
+          <img className={styles.selectedPhoto} src={imageChanged} />
+          <Button className="btn-eureka ms-0 ms-xxl-3  text-white" onClick={() => handleChangePhoto()}>
+            {t('Change Photo')}
+          </Button>
+        </Col>
+      </Row>
+  };
+
+
+  const onImageSelect = (photo: File, text: string) => {
+    setImageFile(() => photo);
+    setImageChanged(URL.createObjectURL(photo));
+    setChangePhoto(false);
+    setFormValues({
+      ...formValues,
+      ['currentImage']: undefined,
+      ['title']: text,
+    });
+  };
+
+  const handleChangeUseCropSwith = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUSeCrop(event.target.checked);
+    window.scroll(0, 0);
+    setImageChanged(undefined);
+  };
+
+
+
+  const handleChangePhoto = () => {
+    setChangePhoto(true);
+    setUSeCrop(false);
+  };
+
+  const onCloseChangePhoto = () => {
+    setChangePhoto(false);
+  };
+
+  const onSelectLanguage = (language: string) => {
+    setFormValues({
+      ...formValues,
+      ['language']: language
+    });
+  };
+
+  const handleSetTitle = (title: string) => {
+    setFormValues({
+      ...formValues,
+      ['title']: title
+    });
+
+  };
+
+  const handleSetTopics = (topics: string[]) => {
+    setFormValues({
+      ...formValues,
+      ['topics']: topics
+    });
+
+  };
+
+  const handleSetTags = (tags: string) => {
+    setFormValues({
+      ...formValues,
+      ['tags']: tags
+    });
+
+  };
+
+
   return (
-    post ? (
-      <Form onSubmit={handleSubmit} ref={formRef}>
-        {/* <ModalHeader closeButton={!noModal}>
-          <Container>
-            <ModalTitle> <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('titleEdit')}</h1></ModalTitle>
-          </Container>
-        </ModalHeader> */}
+    <Form ref={formRef}>
+      <ModalHeader closeButton={!noModal}>
+        <ModalTitle> <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('titleEdit')}</h1></ModalTitle>
+      </ModalHeader>
+      <ModalBody className=''>
+        <section className='my-3'>
 
-        {/* <ModalBody> */}
-          <Container>
-            <Row className='d-flex flex-column flex-lg-row'>
-              <Col className='mb-4'>
-                <FormGroup controlId="workOrCycle">
-                  <FormLabel>*{t('searchCycleOrWorkFieldLabel')}</FormLabel>
-                  {selectedWork != null ? (
-                    <div className={styles.searchResult}>
-                      <WorkTypeaheadSearchItem work={selectedWork} />
-                      <button onClick={handleClearSelectedWork} type="button" className={styles.discardSearchResult}>
-                        <BsFillXCircleFill />
-                      </button>
-                    </div>
-                  ) : selectedCycle != null ? (
-                    <div className={styles.searchResult}>
-                      <CycleTypeaheadSearchItem cycle={selectedCycle} />
-                      <button onClick={handleClearSelectedCycle} type="button" className={styles.discardSearchResult}>
-                        <BsFillXCircleFill />
-                      </button>
-                    </div>
-                  ) : (
-                    <>
-                      {/* language=CSS */}
-                      <style jsx global>{`
-                        .rbt-menu {
-                          min-width: 300px;
-                        }
-                      `}</style>
-                      <AsyncTypeahead
-                        id="create-post--search-work-or-cycle"
-                        // Bypass client-side filtering. Results are already filtered by the search endpoint
-                        filterBy={() => true}
-                        inputProps={{ required: false}}
-                        placeholder={t('searchCycleOrWorkFieldPlaceholder')}
-                        isLoading={isSearchWorkOrCycleLoading}
-                        labelKey={labelKeyFn}
-                        minLength={2}
-                        onSearch={handleSearchWorkOrCycle}
-                        options={searchWorkOrCycleResults}
-                        onChange={handleSelectWorkOrCycle}
-                        renderMenuItemChildren={(searchResult) => {
-                          if (isCycleMosaicItem(searchResult)) {
-                            return <CycleTypeaheadSearchItem cycle={searchResult} />;
-                          }
-                          if (isWorkMosaicItem(searchResult)) {
-                            return <WorkTypeaheadSearchItem work={searchResult} />;
-                          }
+          {!changePhoto && renderPhoto()}
+          {changePhoto && <>   <div className='d-flex justify-content-end mb-2'> <Button variant="primary text-white" onClick={onCloseChangePhoto} size="sm">
+            <BsX fontSize='1.5em' />
+          </Button></div>{!useCrop && <Prompt onImageSelect={onImageSelect} />}
+            <FormGroup className='mt-4 mb-4'>
+              <FormControlLabel control={<Switch checked={useCrop} onChange={handleChangeUseCropSwith} />} label={t('showCrop')} />
+            </FormGroup>
+            {useCrop && <Col className='mb-4'>
+              {!showCrop && (<><Button data-cy="image-load" className="btn-eureka w-100 px-2 px-lg-5 text-white" onClick={() => setShowCrop(true)}>
+                {t('imageFieldLabel')}
+              </Button>
+                {/*currentImg && renderPhoto()*/}
+              </>)}
+              {showCrop && (
+                <Col className='px-2 px-lg-5'>
+                  <div className='w-100 border p-3 '>
+                    <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={closeCrop} cropShape='rect' />
+                  </div>
 
-                          return null;
-                        }}
-                      />
-                    </>
-                  )}
-                </FormGroup>
-              </Col>
-              <Col className='mb-4'>
-                <FormGroup controlId="postTitle">
-                  <FormLabel>*{t('titleFieldLabel')}</FormLabel>
-                  <FormControl type="text" maxLength={80} onChange={handlerchange} defaultValue={post.title} />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              {/* <Col>
-              <ImageFileSelect acceptedFileTypes="image/*" file={imageFile} setFile={setImageFile} required>
-                {(imagePreview) => (
-                  <FormGroup>
-                    <FormLabel>*{t('imageFieldLabel')}</FormLabel>
-                    <div className={styles.imageControl}>
-                      {(imageFile != null && imagePreview) != null ? (
-                        <span className={styles.imageName}>{imageFile?.name}</span>
-                      ) : (
-                        t('imageFieldPlaceholder')
-                      )}
-                      {imagePreview && <img src={imagePreview} className="float-right" alt="Work cover" />}
-                    </div>
-                  </FormGroup>
-                )}
-              </ImageFileSelect>
-            </Col> */}
-              <Col className='mb-4'>
-                <FormGroup controlId="language">
-                  <FormLabel>*{t('languageFieldLabel')}</FormLabel>
-                <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={language} label={t('languageFieldLabel')} />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col sm={{ span: 6 }} className='mb-4'>
-                <FormGroup controlId="workOrCycle">
-                  <FormLabel>{t('searchCycleFieldLabel')}</FormLabel>
-                  {!selectedCycle ? (
-                    <>
-                      {/* language=CSS */}
-                      <style jsx global>{`
-                        .rbt-menu {
-                          min-width: 300px;
-                        }
-                      `}</style>
-                      <AsyncTypeahead
-                        id="create-post--search-cycle"
-                        filterBy={() => true}
-                        inputProps={{ id: 'create-post--search-cycle' }}
-                        placeholder={t('searchCycleFieldPlaceholder')}
-                        isLoading={isSearchCycleLoading}
-                        labelKey={labelKeyFn}
-                        minLength={2}
-                        useCache={false}
-                        onSearch={handleSearchCycle}
-                        options={searchCycleResults}
-                        onChange={handleSelectCycle}
-                        renderMenuItemChildren={(searchResult) => <CycleTypeaheadSearchItem cycle={searchResult} />}
-                      />
-                    </>
-                  ) : (
-                    <div className={styles.searchResult}>
-                      {selectedCycle !== null && <CycleTypeaheadSearchItem cycle={selectedCycle} />}
-                      <button onClick={handleClearSelectedCycle} type="button" className={styles.discardSearchResult}>
-                        <BsFillXCircleFill />
-                      </button>
-                    </div>
-                  )}
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col className='mb-4'>
-                <small style={{ color: 'lightgrey', position: 'relative', top: '-0.75rem' }}>
-                  {t('searchCycleInfotip')}
-                </small>
-              </Col>
-            </Row>
-            <Row>
-              <Col className='mb-4'>
-                <FormGroup controlId="topics">
-                  <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel>
-                  <TagsInputTypeAhead
-                    data={topics}
-                    items={items}
-                    setItems={setItems}
-                    labelKey={(res) => t(`topics:${res.code}`)}
-                    formatValue={(v: string) => t(`topics:${v}`)} 
-                    placeholder={`${t('Type to add tag')}...`}
-                    max={3}
-                  />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <FormGroup controlId="description" as={Col}>
-                <FormLabel>*{t('descriptionFieldLabel')}</FormLabel>
-                {/* <FormControl
-                  as="textarea"
-                  rows={6}
-                  maxLength={4000}
-                  required
-                  defaultValue={post.contentText}
-                  onChange={handlerchange}
-                /> */}
-                {/* @ts-ignore*/}
-                <EditorCmp
-                  apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
-                  onInit={(_: any, editor) => {
-                    editorRef.current = editor;
-                  }}
-                  initialValue={post.contentText}
-                  init={{
-                    height: 300,
-                    menubar: false,
-                    plugins: [
-                      'advlist autolink lists link image charmap print preview anchor',
-                      'searchreplace visualblocks code fullscreen',
-                      'insertdatetime media table paste code help wordcount',
-                    ],
-                    relative_urls: false,
-                    forced_root_block : "div",   
-                    toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
-                    // toolbar:
-                    //   'undo redo | formatselect | ' +
-                    //   'bold italic backcolor | alignleft aligncenter ' +
-                    //   'alignright alignjustify | bullist numlist outdent indent | ' +
-                    //   'removeformat | help',
-                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-                  }}
+                </Col>
+              )}
+            </Col>}</>}
+
+        </section>
+
+        {!changePhoto && <><Row className='d-flex flex-column px-2 mt-5 '>
+          <Col className='mb-4'>
+            <AsyncTypeaheadMaterial item={(formValues.selectedWork) ? formValues.selectedWork : formValues.selectedCycle} searchType="all" onSelected={handleSelectWorkOrCycle}
+              label={`*${t('searchCycleOrWorkFieldLabel')}`}
+              helperText={`${t('searchCycleOrWorkFieldPlaceholder')}`} />
+          </Col>
+          <Col className='mb-4'>
+            <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={formValues.language} label={t('languageFieldLabel')} />
+          </Col>
+          <Col className='mb-4'>
+            <FormGroup controlId="postTitle" >
+              <TextField id="postTitle" className="w-100" label={t('titleFieldLabel')}
+                variant="outlined" size="small" value={formValues.title}
+                onChange={(e) => handleSetTitle(e.target.value)}>
+              </TextField>
+            </FormGroup>
+          </Col>
+        </Row>
+          <FormGroup controlId="description" as={Col} className="mb-4 px-2">
+            <FormLabel>{t('descriptionFieldLabel')}</FormLabel>
+            {/* @ts-ignore*/}
+            <EditorCmp
+              apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
+              onInit={(_: any, editor) => {
+                editorRef.current = editor;
+              }}
+              initialValue={formValues.contentText || ''}
+              init={{
+                height: 300,
+                menubar: false,
+                plugins: [
+                  'advlist autolink lists link image charmap print preview anchor',
+                  'searchreplace visualblocks code fullscreen',
+                  'insertdatetime media table paste code help wordcount',
+                ],
+                relative_urls: false,
+                forced_root_block: "div",
+                toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
+                // toolbar:
+                //   'undo redo | formatselect | ' +
+                //   'bold italic backcolor | alignleft aligncenter ' +
+                //   'alignright alignjustify | bullist numlist outdent indent | ' +
+                //   'removeformat | help',
+                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+              }}
+            />
+          </FormGroup>
+          <Row className='mt-5 px-2 d-flex flex-column'>
+            <Col className="mb-4">
+              <FormGroup controlId="workOrCycle">
+                {/*!selectedCycle ? (
+                  <>
+                    <style jsx global>{`
+                      .rbt-menu {
+                        min-width: 300px;
+                      }
+                    `}</style>
+                    <AsyncTypeahead
+                      id="create-post--search-cycle"
+                      filterBy={() => true}
+                      inputProps={{ id: 'create-post--search-cycle' }}
+                      placeholder={t('searchCycleFieldPlaceholder')}
+                      isLoading={isSearchCycleLoading}
+                      labelKey={labelKeyFn}
+                      minLength={2}
+                      useCache={false}
+                      onSearch={handleSearchCycle}
+                      options={searchCycleResults}
+                      onChange={handleSelectCycle}
+                      renderMenuItemChildren={(searchResult) => <CycleTypeaheadSearchItem cycle={searchResult} />}
+                    />
+                  </>
+                ) : (
+                  <div className={styles.searchResult}>
+                    {selectedCycle !== null && <CycleTypeaheadSearchItem cycle={selectedCycle} />}
+                    <button onClick={handleClearSelectedCycle} type="button" className={styles.discardSearchResult}>
+                      <BsFillXCircleFill />
+                    </button>
+                  </div>
+                )*/}
+                <AsyncTypeaheadMaterial item={formValues.selectedCycle} onSelected={handleSelectCycle} searchType="cycles"
+                  workSelected={formValues.selectedWork}
+                  label={`${t('searchCycleFieldLabel')}`}
+                  helperText={`${t('searchCycleInfotip')}`} />
+              </FormGroup>
+            </Col>
+
+            <Col className="mb-4">
+              <FormGroup controlId="topics">
+                <TagsInputTypeAheadMaterial
+                  data={topics}
+                  items={formValues.topics}
+                  setItems={handleSetTopics}
+                  formatValue={(v: string) => t(`topics:${v}`)}
+                  max={3}
+                  label={t('topicsPostLabel')}
+                  placeholder={`${t('Type to add tag')}...`}
                 />
               </FormGroup>
-            </Row>
-        {/* </ModalBody> */}
-
-        {/* <ModalFooter>
-            
-                <FormCheck
-                      type="checkbox"
-                      defaultChecked={remove}
-                      onChange={()=>setRemove(!remove)}
-                      className="text-danger"
-                      id="removePost"
-                      label={t('common:Remove')}
-                    /> */}
-               
-                <Row>
-            <Col className='d-flex justify-content-end  py-5'>
-             <Button
-               variant="warning"
-               disabled={isDeletePostLoading}
+            </Col>
+            <Col className="mb-4">
+              <TagsInputMaterial tags={formValues.tags} setTags={handleSetTags} label={t('topicsFieldLabel')} />
+            </Col>
+          </Row></>}
+      </ModalBody>
+      <ModalFooter>
+        {!changePhoto && <Row className='d-flex flex-column flex-lg-row'>
+          <Container className="p-0 d-flex justify-content-end">
+            <ButtonGroup className="py-4">
+              <Button
+                variant="warning"
+                disabled={isDeletePostLoading}
                 onClick={handleRemove}
-                className="text-white  me-3"
-                style={{ width: '10em' }}
               >
                 <>
-                {t('resetBtnLabel')}
-                 {isDeletePostLoading && (
-                      <Spinner size="sm" animation="grow" variant="secondary" className={`ms-2 ${styles.loadIndicator}`}/>
-                    )}</>
+                  {t('resetBtnLabel')}
+                  {isDeletePostLoading && (
+                    <Spinner size="sm" animation="grow" variant="secondary" className={`ms-2 ${styles.loadIndicator}`} />
+                  )}</>
               </Button>
-                <Button disabled={isEditPostLoading} type="submit" className="btn-eureka" style={{ width: '10em' }}>
-                  <>
-                    {t('titleEdit')}
-                    {isEditPostLoading && (
-                      <Spinner size="sm" animation="grow" variant="secondary" className={`ms-2 ${styles.loadIndicator}`}/>
-                    )}
-                  </>
-                </Button>
-                </Col>
-                </Row>
+              <Button disabled={isEditPostLoading} onClick={(e) => { handleSubmit(e) }} className="btn-eureka" style={{ width: '10em' }}>
+                <>
+                  {t('titleEdit')}
+                  {isEditPostLoading && (
+                    <Spinner size="sm" animation="grow" variant="secondary" className={`ms-2 ${styles.loadIndicator}`} />
+                  )}
+                </>
+              </Button>
+            </ButtonGroup>
           </Container>
-              
-        {/* </ModalFooter> */}
-      </Form>
-    )
-    : <Alert variant="warning">Not Found</Alert>
+        </Row>}
+      </ModalFooter>
+
+    </Form>
   );
 };
 

@@ -24,6 +24,28 @@
     width: 35%;
     height: 30%;
 }
+@media screen and (max-width: 1400px) {
+.selectedPhoto {
+    width: 45%;
+    height: 40%;
+}
+
+}
+
+@media screen and (max-width: 992px) {
+  .selectedPhoto {
+    width: 55%;
+    height: 50%;
+  }
+
+}
+@media screen and (max-width: 576px) {
+  .selectedPhoto {
+    width: 75%;
+    height: 70%;
+  }
+
+}
 
 .imageControl {
   background-clip: padding-box;

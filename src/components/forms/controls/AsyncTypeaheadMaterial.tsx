@@ -28,14 +28,14 @@ const AsyncTypeaheadMaterial: FunctionComponent<AsyncTypeaheadMaterialProp> = (p
 
 
   useEffect(() => {
-    setValue(item)
-    if(workSelected)
+    setValue((item || null));
+    if (workSelected)
       setWork(workSelected)
-     else
-        setWork(null) 
+    else if(!workSelected)
+      setWork(null)
   }, [item, workSelected])
 
-    //console.log(work, 'work')
+  //console.log(work, 'work')
 
 
   function onTagsUpdate(event: SyntheticEvent<Element, Event>, value: SearchResult | null, reason: AutocompleteChangeReason, details?: AutocompleteChangeDetails<SearchResult | null> | undefined) {
