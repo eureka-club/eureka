@@ -301,7 +301,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
     }
   };
 
-  const handleClearSelectedWork = (ev: MouseEvent<HTMLButtonElement>) => {
+ /* const handleClearSelectedWork = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
     setSelectedWork(null);
   };
@@ -311,7 +311,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
     setSelectedCycle(null);
     setIsPublic(true);
     //if (formRef.current) formRef.current.isPublic.checked = true;
-  };
+  };*/
 
   const formValidation = (payload: any) => {
 
