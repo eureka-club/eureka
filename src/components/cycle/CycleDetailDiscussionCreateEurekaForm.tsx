@@ -19,6 +19,8 @@ import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload, Po
 
 import ImageFileSelect from '../forms/controls/ImageFileSelect';
 import TagsInputTypeAheadMaterial from '../forms/controls/TagsInputTypeAheadMaterial';
+import TagsInputMaterial from '../forms/controls/TagsInputMaterial';
+
 import stylesImageFileSelect from '../forms/CreatePostForm.module.css';
 import useTopics from '../../useTopics';
 
@@ -85,6 +87,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   const [newEurekaImageFile, setNewEurekaImageFile] = useState<File | null>(null);
   const { data: topics } = useTopics();
   const [eurekaTopics, setEurekaTopics] = useState<string[]>([]);
+  const [tags, setTags] = useState<string>('');
   const editorRef = useRef<any>(null);
   const formRef = useRef<any>(null);
   const [currentImg, setCurrentImg] = useState<string | null>(null);
@@ -100,15 +103,16 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
     contentText: '',
     isPublic: cycle.access === 1,
     topics: eurekaTopics,
+    tags: tags
   });
 
 
   const { notifier } = useNotificationContext();
   // const gec = useGlobalEventsContext();
   const [selection, setSelection] = useState<string | undefined>(undefined); // by default empty but required
- useEffect(() => {
-   if (discussionItem) setSelection(discussionItem);
- }, [discussionItem]);
+  useEffect(() => {
+    if (discussionItem) setSelection(discussionItem);
+  }, [discussionItem]);
 
   const { data: dataWorks } = useWorks(
     { where: { cycles: { some: { id: cycle?.id } } } },
@@ -129,6 +133,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
     if (editorRef.current) editorRef.current.setContent('');
     setSelection('');
     setEurekaTopics(() => []);
+    setTags('');
     setNewEurekaImageFile(null);
     setCurrentImg(null);
     setNewEureka((res) => ({
@@ -137,6 +142,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
       image: null,
       contentText: '',
       topics: eurekaTopics,
+      tags:tags
     }));
     setUSeCrop(false);
     close();
@@ -175,6 +181,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         contentText: editorRef.current ? editorRef.current.getContent() : '',
         isPublic: newEureka.isPublic,
         topics: eurekaTopics.join(','),
+        tags:tags
       };
       if (formValidation(payload)) await execCreateEureka(payload);
     } else if (newEureka.selectedCycleId) {
@@ -187,6 +194,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         contentText: editorRef.current ? editorRef.current.getContent() : '',
         isPublic: newEureka.isPublic,
         topics: eurekaTopics.join(','),
+        tags: tags
       };
       if (formValidation(payload)) await execCreateEureka(payload);
     }
@@ -335,6 +343,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
     setUseOtherFields(event.target.checked);
     //setSelectedCycle(null);
     setEurekaTopics([]);
+    setTags('');
   };
 
   const onChangeDiscussionItem = (e: SelectChangeEvent) => {
@@ -530,7 +539,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
                   label={t('showOthersFields')}
                 />
               </Form.Group>
-              {useOtherFields && (
+              {useOtherFields && (<>
                 <Form.Group controlId="topics">
                   {/* <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel> */}
                   <TagsInputTypeAheadMaterial
@@ -545,6 +554,9 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
                     className="mt-3"
                   />
                 </Form.Group>
+                <Form.Group controlId="tags" className='mt-4'>
+                  <TagsInputMaterial tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
+                </Form.Group></>
               )}
             </Col>
           </Row>{' '}
