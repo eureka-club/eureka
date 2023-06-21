@@ -295,51 +295,6 @@ const EditWorkForm: FunctionComponent = () => {
     });
   };
 
-  /* const handleSearchCountry = async (query: string) => {
-     setIsCountriesSearchLoading(true);
-     const response = await fetch(`/api/taxonomy/countries?q=${query}`);
-     const itemsSC: { id: number; code: string; label: string }[] = (await response.json()).result;
-     itemsSC.forEach((i, idx: number) => {
-       itemsSC[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
-     });
-     setCountrySearchResults(itemsSC);
-     setIsCountriesSearchLoading(false);
-   };
- 
-   const handleSearchCountrySelect = (selected: { id: number; code: string; label: string }[]): void => {
-     if (selected[0] != null) {
-       setCountryOrigin(selected[0].code);
-     }
-   };
- 
-   const toogleCountryOrigin2Handler = (countryOpt?: number) => {
-     if (countryOpt === 2) {
-       sethasCountryOrigin2(false);
-       setCountryOrigin2(null);
-     } else {
-       sethasCountryOrigin2(true);
-       setCountryOrigin2(null);
-     }
-   };
- 
-   const handleSearchCountry2Select = (selected: { id: number; code: string; label: string }[]): void => {
-     if (selected[0] != null) {
-       // if (hasCountryOrigin2)
-       setCountryOrigin2(selected[0].code);
-     }
-   };
- 
-   const handleSearchCountry2 = async (query: string) => {
-     setIsCountriesSearchLoading2(true);
-     const response = await fetch(`/api/taxonomy/countries?q=${query}`);
-     const itemsSC2: { id: number; code: string; label: string }[] = (await response.json()).result;
-     itemsSC2.forEach((i, idx: number) => {
-       itemsSC2[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
-     });
-     setCountrySearchResults(itemsSC2);
-     setIsCountriesSearchLoading2(false);
-   };*/
-
 
   if (!work) return <></>
   return (

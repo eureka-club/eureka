@@ -11,7 +11,7 @@ export type TagsInputProp = {
   readOnly?: boolean | undefined;
   data: { code: string; label: string }[];
   items: string[];
-  setItems: Dispatch<SetStateAction<string[]>>;
+  setItems?: (value: string[]) => void; //Dispatch<SetStateAction<string[]>>;
   max?: number;
  // onTagCreated?: (e: { code: string; label: string }) => void;
 //  onTagDeleted?: (code: string) => void;
@@ -25,12 +25,12 @@ export type TagsInputProp = {
 const TagsInputTypeAheadMaterial: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
   const { data, max = 5,  placeholder, style, className,formatValue = undefined  } = props;
   const {items, setItems, label = '', readOnly = false } = props;
-  const [value, setValue] = useState<{code: string; label: string;}[]>([]);
+  const [value, setValue] = useState<{code: string, label: string}[]>([]);
 
 
    useEffect(() => {
     let value =[];
-    if(data.length && items.length){
+    if(data && items.length){
       
       for (let i of items){
          let d = data.filter(x => x.code == i ) 
@@ -48,7 +48,9 @@ const TagsInputTypeAheadMaterial: FunctionComponent<TagsInputProp> = (props: Tag
   
     if (value && value.length <= max) {
       setValue(value)
-      setItems([...new Set(value.map(v => v.code))]);
+      //setItems([...new Set(value.map(v => v.code))]);
+      if (setItems) setItems(value.map(v => v.code));
+
     }
 
   }
@@ -60,7 +62,7 @@ const TagsInputTypeAheadMaterial: FunctionComponent<TagsInputProp> = (props: Tag
         id="tags-standard"
         size="small" 
         onChange={onTagsUpdate}
-        options={data}
+        options={data || []}
         readOnly={readOnly}
         getOptionLabel={(option) => formatValue ? formatValue(option.code) : option.label}
         value={value}

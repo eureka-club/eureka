@@ -283,7 +283,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                 headers: {
                     'Content-type': 'application/json',
                 },
-                body: JSON.stringify({ type: formValues.type, search: q }),
+                body: JSON.stringify({ type: formValues.type, search: q, language: `${router.locale}` }),
             }).then((r) => r.json());
 
             if (data.length)
