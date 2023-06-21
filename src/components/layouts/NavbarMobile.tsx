@@ -1,6 +1,6 @@
 import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useRouter,usePathname } from 'next/navigation';
 import useTranslation from 'next-translate/useTranslation';
 import { setCookie } from 'nookies';
 import { FunctionComponent, useState, useEffect } from 'react';
@@ -25,7 +25,7 @@ import { useAtom } from 'jotai';
 import searchEngine from '@/src/atoms/searchEngine';
 import { HiOutlineHashtag } from 'react-icons/hi';
 import slugify from 'slugify';
-
+import { Languages } from '@/src/types';
 const topics = [
   'gender-feminisms',
   'technology',
@@ -45,11 +45,13 @@ const topics = [
 const NavBar: FunctionComponent = () => {
   const { data: session } = useSession();
   const router = useRouter();
-  const { t } = useTranslation('navbar');
+  const path = usePathname();
+  const { t,lang } = useTranslation('navbar');
   const [userId, setUserId] = useState(-1);
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const [, setSearchEngineState] = useAtom(searchEngine);
 
+  const locales = Object.keys(Languages);
   useEffect(() => {
     if (session) setUserId(session.user.id);
   }, [session]);
@@ -69,7 +71,7 @@ const NavBar: FunctionComponent = () => {
   };
 
   const handlerLogin = () => {
-    localStorage.setItem('loginRedirect', router.asPath);
+    localStorage.setItem('loginRedirect', path!);
     router.push("/login")
 
     /*     localStorage.setItem('loginRedirect', router.asPath);
@@ -130,7 +132,7 @@ const NavBar: FunctionComponent = () => {
         {topics.map((topic) => {
           return (
             <Dropdown.Item key={topic} onClick={() => handlerTopicsLinkClick(topic)}>
-              {/* <Link href="/aboutUs"> */}
+              {/* <Link legacyBehavior href="/aboutUs"> */}
               {t(`topics:${topic}`)}
               {/* </Link> */}
             </Dropdown.Item>
@@ -144,7 +146,7 @@ const NavBar: FunctionComponent = () => {
     <Container fluid className={styles.container}>
       <Navbar collapseOnSelect expand="lg" variant="light" className="position-relative" style={{ zIndex: 9999 }}>
         {/* <Container> */}
-        <Link href="/">
+        <Link legacyBehavior href="/">
           <Navbar.Brand className="cursor-pointer">
             <aside className="d-flex justify-content-between align-items-center">
               <img className="eurekaLogo" src="/logo.svg" alt="Project logo" />
@@ -196,7 +198,7 @@ const NavBar: FunctionComponent = () => {
                   </Dropdown.Toggle>
                   <Dropdown.Menu >
                     <Dropdown.Item>
-                      <Link href={`/mediatheque/${getMediathequeSlug()}`}>
+                      <Link legacyBehavior href={`/mediatheque/${getMediathequeSlug()}`}>
                         <a data-cy="my-mediatheque-link" className={styles.navLink}>
                           {t('My Mediatheque')}
                         </a>
@@ -204,7 +206,7 @@ const NavBar: FunctionComponent = () => {
 
                     </Dropdown.Item>
                     <Dropdown.Item>
-                      <Link href={`/user/${getMediathequeSlug()}/my-read-or-watched`}>
+                      <Link legacyBehavior href={`/user/${getMediathequeSlug()}/my-read-or-watched`}>
                         <a className={styles.navLink}>
                           {t("MyReadOrWatched")}
                         </a>
@@ -226,22 +228,22 @@ const NavBar: FunctionComponent = () => {
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item
-                    active={router.asPath.search(/manifest$/g) !== -1}
+                    active={path?.search(/manifest$/g) !== -1}
                     onClick={() => router.push('/manifest')}
                   >
                     {t('Manifest')}
                   </Dropdown.Item>
-                  <Dropdown.Item active={router.asPath.search(/about$/g) !== -1} onClick={() => router.push('/about')}>
+                  <Dropdown.Item active={path?.search(/about$/g) !== -1} onClick={() => router.push('/about')}>
                     {t('About Eureka')}
                   </Dropdown.Item>
                   <Dropdown.Item
-                    active={router.asPath.search(/aboutUs$/g) !== -1}
+                    active={path?.search(/aboutUs$/g) !== -1}
                     onClick={() => router.push('/aboutUs')}
                   >
                     {t('About Us')}
                   </Dropdown.Item>
                   <Dropdown.Item
-                    active={router.asPath.search(/policy$/g) !== -1}
+                    active={path?.search(/policy$/g) !== -1}
                     onClick={() => router.push('/policy')}
                   >
                     {t('policyText')}
@@ -250,21 +252,21 @@ const NavBar: FunctionComponent = () => {
               </Dropdown>
             </Nav>
             <Nav className="mx-2">
-              {router.locales?.length && (
+              {locales?.length && (
                 <Dropdown align="end" className={styles.langSwitch} onSelect={handleLanguageSelect}>
                   <Dropdown.Toggle as={ChevronToggle} id="langSwitch">
                     <img
                       className={styles.navbarIconNav}
-                      src={`/img/lang-flags/${router.locale}.png`}
-                      alt={`Language flag '${router.locale}'`}
+                      src={`/img/lang-flags/${lang}.png`}
+                      alt={`Language flag '${lang}'`}
                     />
                     {` `}
                     <span className={styles.menuBottomInfo}>{t('Language')}</span>
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    {router.locales.map((locale) => (
-                      <Dropdown.Item key={locale} eventKey={locale} active={locale === router.locale}>
-                        <Link href={router.asPath} locale={locale}>
+                    {locales.map((locale) => (
+                      <Dropdown.Item key={locale} eventKey={locale} active={locale === lang}>
+                        <Link legacyBehavior href={path!} locale={locale}>
                           <img
                             className={`m-1 ${styles.navbarIconNav}`}
                             src={`/img/lang-flags/${locale}.png`}
@@ -287,13 +289,13 @@ const NavBar: FunctionComponent = () => {
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <Dropdown.Item
-                      active={router.asPath.search(/profile$/g) !== -1}
+                      active={path?.search(/profile$/g) !== -1}
                       onClick={() => router.push('/profile')}
                     >
                       {t('Profile')}
                     </Dropdown.Item>
                     <Dropdown.Item
-                      active={router.asPath.search(/back-office$/g) !== -1}
+                      active={path?.search(/back-office$/g) !== -1}
                       onClick={() => router.push('/back-office')}
                     >
                       {t('Admin Panel')}
@@ -322,15 +324,15 @@ const NavBar: FunctionComponent = () => {
                   </Dropdown.Toggle>
                   <Dropdown.Menu className={styles.dropdownMenu}>
                     {session?.user.roles && session?.user.roles == 'admin' && (
-                      <Link href="/cycle/create">
+                      <Link legacyBehavior href="/cycle/create">
                         <a className="dropdown-item">{t('cycle')}</a>
                       </Link>
                     )}
-                    <Link href="/post/create">
+                    <Link legacyBehavior href="/post/create">
                       <a className="dropdown-item">{t('post')}</a>
                     </Link>
                     {/* {session?.user.roles && session?.user.roles == 'admin' && ( */}
-                      <Link href="/work/create">
+                      <Link legacyBehavior href="/work/create">
                         <a className="dropdown-item">{t('work')}</a>
                       </Link>
                   {/* )} */}

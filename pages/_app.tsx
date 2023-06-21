@@ -15,7 +15,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import detailPagesAtom from '../src/atoms/detailPages';
 // import globalModalsAtom from '../src/atoms/globalModals';
 
-import './scss/custom.scss';
+import '../scss/custom.scss';
 import { GTM_ID } from '@/src/lib/gtag'
 
 import { NotificationProvider } from '@/src/useNotificationProvider';

@@ -4,7 +4,7 @@ import { ListGroup, Button, } from 'react-bootstrap'
 
 import { IoNotificationsCircleOutline } from 'react-icons/io5'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import useTranslation from 'next-translate/useTranslation'
 import { useMutation, useQueryClient } from 'react-query'
 import { EditNotificationClientPayload, NotificationMosaicItem } from '@/src/types/notification'

@@ -63,7 +63,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey,showSaveFo
      <MosaicContext.Provider value={{ showShare: true }}>
       <div  className={classNames('d-flex d-lg-none flex-row justify-content-between mt-3', styles.postInfo)}>
              <div>
-                    <Link href={`/mediatheque/${post.creator.id}`} passHref>
+                    <Link legacyBehavior href={`/mediatheque/${post.creator.id}`} passHref>
                       <Avatar width={28} height={28} userId={post.creator.id} showFullName />
                     </Link>
                </div>
@@ -85,7 +85,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey,showSaveFo
                   </Badge>
                   <section className="my-1">
                     <h2 className="mb-0" style={{fontSize:'1rem'}}>
-                      <Link href={`/work/${work.id}`} passHref>
+                      <Link legacyBehavior href={`/work/${work.id}`} passHref>
                         <p className="text-break mb-0 tagText">
                           <a className="cursor-pointer">{work.title}</a>,{' '}
                           <span className={styles.workInfoAuthor}>{work.author}</span>
@@ -102,7 +102,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey,showSaveFo
                   </Badge>
                   <section className="my-1">
                     <h2 style={{fontSize:'1rem'}}>
-                      <Link href={`/cycle/${post.cycles[0].id}`} passHref>
+                      <Link legacyBehavior href={`/cycle/${post.cycles[0].id}`} passHref>
                         <p className="text-break mb-0 tagText">
                           <a className="cursor-pointer">{post.cycles[0].title}</a>
                         </p>
@@ -126,7 +126,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey,showSaveFo
           <div className="px-4">
             <div className={classNames('d-none d-lg-flex flex-row justify-content-between', styles.postInfo)}>
               <div>
-              <Link href={`/mediatheque/${post.creator.id}`} passHref>
+              <Link legacyBehavior href={`/mediatheque/${post.creator.id}`} passHref>
                 {/* <a>
                   <img
                     src={post.creator.image || '/img/default-avatar.png'}
@@ -156,7 +156,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey,showSaveFo
                   </Badge>
                   <section className="my-1">
                     <h2 className="mb-0" style={{fontSize:'1rem'}}>
-                      <Link href={`/work/${work.id}`} passHref>
+                      <Link legacyBehavior href={`/work/${work.id}`} passHref>
                         <p className="text-break mb-0 tagText">
                           <a className="cursor-pointer">{work.title}</a>,{' '}
                           <span className={styles.workInfoAuthor}>{work.author}</span>
@@ -173,7 +173,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cacheKey,showSaveFo
                   </Badge>
                   <section className="my-1">
                     <h2 style={{fontSize:'1rem'}}>
-                      <Link href={`/cycle/${post.cycles[0].id}`} passHref>
+                      <Link legacyBehavior href={`/cycle/${post.cycles[0].id}`} passHref>
                         <p className="text-break mb-0 tagText">
                           <a className="cursor-pointer">{post.cycles[0].title}</a>
                         </p>

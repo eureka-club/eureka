@@ -193,7 +193,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             <FaRegCompass className="text-info" />
             {` `}
             {parentLinkHref != null ? (
-              <Link href={parentLinkHref}>
+              <Link  legacyBehavior href={parentLinkHref}>
                 <a className="text-info">
                   <span>{renderParentTitle()} </span>
                 </a>
@@ -222,7 +222,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         {showDetailedInfo && (
           <div className={`d-flex align-items-center justify-content-center ${styles.detailedInfo}`}>
             <h6 className="text-center d-flex" data-cy="post-title">
-              <Link href={postLinkHref}>
+              <Link legacyBehavior href={postLinkHref}>
                 <a className="text-primary">{post.title}</a>
               </Link>              
             </h6>
@@ -269,7 +269,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           <Col xs={12} md={12} xl={8}>
             <div className={styles.detailedInfo}>
               <h6 className="d-flex" data-cy="post-title">
-                <Link href={postLinkHref}>
+                <Link legacyBehavior href={postLinkHref}>
                   <a className="cursor-pointer text-secondary">
                     {post.title}
                   </a>
@@ -329,7 +329,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   //           {parent && (
   //             <h2 className={styles.parentTitle}>
   //               {parentLinkHref != null ? (
-  //                 <Link href={parentLinkHref}>
+  //                 <Link legacyBehavior href={parentLinkHref}>
   //                   <a>
   //                     <FaRegCompass /> <span>{getDirectParent()!.title}</span>
   //                   </a>
@@ -352,7 +352,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   //         <Col md={5} xs={5}>
   //           <div className={styles.imageContainerHorizontally}>
   //             {parentLinkHref != null ? (
-  //               <Link href={parentLinkHref}>
+  //               <Link legacyBehavior href={parentLinkHref}>
   //                 <a>
   //                   <LocalImageComponent
   //                     className={styles.postImage}

@@ -1,9 +1,11 @@
-const nextTranslate = require('next-translate');
+const nextTranslate = require('next-translate-plugin') 
 const path = require('path');
 
 // const isProduction = process.env.NODE_ENV == 'production'
 
 module.exports = nextTranslate({
+    experimental: { appDir: false },
+
     sassOptions: {
         includePaths: [path.join(__dirname, 'scss')],
     },

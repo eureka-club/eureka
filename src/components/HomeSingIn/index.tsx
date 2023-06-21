@@ -170,7 +170,7 @@ const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
             </h1>
           </section>
           {showAboutSection && (<div className='d-flex d-lg-none flex-column'>
-            <Link href="/about">
+            <Link legacyBehavior href="/about">
               <a className="text-primary text-decoration-underline text-blue" onClick={() => window.scrollTo(0, 0)}>
                 {t('browserTitleAbout')}{' '}
               </a>
@@ -189,7 +189,7 @@ const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
             </section>
           </div>)}
           <div className='d-none d-lg-flex flex-column'>
-            <Link href="/about">
+            <Link  legacyBehavior href="/about">
               <a className="text-primary text-decoration-underline text-blue" onClick={() => window.scrollTo(0, 0)}>
                 {t('browserTitleAbout')}{' '}
               </a>

@@ -16,11 +16,12 @@ module.exports = {
     '/search': ['countries'],
     '/profile': ['common', 'profile', 'countries'],
     '/manifest': ['manifest'],
+    '/test':['manifest',],
     '/policy': ['termsAndPolicy'],
     '/back-office': ['backOffice'],
     'rgx:^/mediatheque/\\[slug\\]': ['mediatheque', 'countries'],
     'rgx:^/user/\\[slug\\]/my-read-or-watched': ['mediatheque'],
     'rgx:^/cycle/\\[id\\]': ['cycleDetail', 'countries'],
     'rgx:^/work/\\[id\\]': ['common','workDetail', 'countries', 'cycleDetail'],
-  },
+  }
 };

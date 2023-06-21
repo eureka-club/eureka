@@ -83,7 +83,7 @@ const ListWorksPage: NextPage<Props> = ({ session }) => {
               <td>{work.author}</td>
               <td>{work.publicationYear && dayjs(work.publicationYear).format(DATE_FORMAT_ONLY_YEAR)}</td>
               <td>
-                <Link href={`/work/${work.id}`}>
+                <Link legacyBehavior href={`/work/${work.id}`}>
                   <a>detail</a>
                 </Link>
 

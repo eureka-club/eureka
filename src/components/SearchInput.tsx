@@ -1,6 +1,6 @@
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import useTranslation from 'next-translate/useTranslation';
-import React, { FunctionComponent,useRef, useState } from 'react';
+import React, { FunctionComponent,startTransition,useEffect,useRef, useState, useTransition } from 'react';
 import { Form,InputGroup,Button,Spinner } from 'react-bootstrap';
 
 import { AiOutlineSearch } from 'react-icons/ai';
@@ -15,11 +15,14 @@ const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => 
   const { t } = useTranslation('common');
   const formRef=useRef<HTMLFormElement>(null)
   const [searching,setSearching] = useState(false)
-
+  const [isPending,starTransition] = useTransition()
+  
   const onTermKeyUp = (e:React.KeyboardEvent<HTMLInputElement>)=>{
     if(e.code == 'Enter' || e.code == 'NumpadEnter' ){
       setSearching(true)
-      router.push(`/search?q=${e.currentTarget.value}`).then((res)=>{setSearching(false);return res})
+      startTransition(()=>{
+        router.push(`/search?q=${e.currentTarget.value}`)
+      })
     }
   }
 
@@ -27,9 +30,15 @@ const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => 
     const form = formRef.current;
     if(form && form.search.value) {
       setSearching(true)
-      router.push(`/search?q=${form.search.value}`).then((res)=>{setSearching(false);return res})
+      starTransition(()=>{
+        router.push(`/search?q=${form.search.value}`)
+      })
     }
   }
+
+  useEffect(()=>{
+    if(!isPending)setSearching(false)
+  },[isPending])
 
   return <><div className={`d-none d-lg-block ${className}`} style={{...style}} data-cy="search-engine">
     <InputGroup className="">
