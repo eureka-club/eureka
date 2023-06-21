@@ -191,6 +191,25 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
             topics: { contains: t },
           })),
         },
+        {
+          editions:{
+            some:{
+              OR:[
+                {
+                  AND: terms.map((t) => ({
+                    title: { contains: t },
+                  })),
+                },
+                {
+                  AND: terms.map((t) => ({
+                    contentText: { contains: t },
+                  })),
+                },
+        
+              ]
+            }
+          }
+        }
       ],
     },
   };

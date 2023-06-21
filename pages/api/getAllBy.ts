@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import getApiHandler from '@/src/lib/getApiHandler';
 import {prisma} from '@/src/lib/prisma';
 import { Languages } from '@/src/types';
+import edition from './edition';
 // import redis from '../../src/lib/redis';
 
 export const config = {
@@ -49,38 +50,55 @@ export default getApiHandler()
         ],
       }),
     };
-    interface PropsArgs {
-      isWork?: boolean;
-      isCycle?: boolean;
-      isPost?: boolean;
-    }
-    const getOpt = (takePlus = 0, skipPlus = 0, args: PropsArgs = { isPost:false,isWork: false, isCycle: false }) => {
+
+    if (totalWorks === -1) totalWorks = await prisma.work.count({ where });
+    if (totalCycles === -1) totalCycles = await prisma.cycle.count({ where });
+
+    const getOptCycle = (takePlus = 0, skipPlus = 0) => {
       const w = {
-        ... (args.isCycle && language) && {languages:{contains:language}},
-        ... args.isPost && language && {language},
-        ... args.isWork && language && {language},
-        ...where
+        ...where,
+        languages:{contains:language}
       };
       return {
         skip: c * countItemsPerPage + skipPlus,
         take: takePlus || countItemsPerPage,
         include:{
           localImages: {select:{storedFile:true}},
-          ... args.isCycle && {
-            usersJoined:{select:{userId:true,pending:true}},
-            participants:{select:{id:true}},
-          },
+          usersJoined:{select:{userId:true,pending:true}},
+          participants:{select:{id:true}},
         },
         where:w
       }
     };
-   
-    if (totalWorks === -1) totalWorks = await prisma.work.count({ where });
-    if (totalCycles === -1) totalCycles = await prisma.cycle.count({ where });
+
+    const getOptWork = (takePlus = 0, skipPlus = 0) => {
+      const w = {
+        ...where,
+        OR:[
+          {
+            language
+          },
+          {
+            editions:{
+              some:{language}
+            }
+          }
+        ]
+      };
+      return {
+        skip: c * countItemsPerPage + skipPlus,
+        take: takePlus || countItemsPerPage,
+        include:{
+          localImages: {select:{storedFile:true}},
+          editions:true
+        },
+        where:w
+      }
+    };
 
     const ewr = parseInt(extraWorksRequired as string, 10);
     const works = await prisma.work.findMany({
-      ...getOpt(0, ewr, { isWork: true }),
+      ...getOptWork(0, ewr),
       orderBy: {
         id: 'desc',
       },
@@ -90,7 +108,7 @@ export default getApiHandler()
     if (works.length !== countItemsPerPage) cyclesPlus = countItemsPerPage - works.length;
     const ecr = parseInt(extraCyclesRequired as string, 10);
     const cycles = await prisma.cycle.findMany({
-      ...getOpt(countItemsPerPage + cyclesPlus, ecr, { isCycle: true }),
+      ...getOptCycle(countItemsPerPage + cyclesPlus, ecr),
       orderBy: {
         id: 'desc',
       },
@@ -100,7 +118,7 @@ export default getApiHandler()
     if (cycles.length !== countItemsPerPage && works.length === countItemsPerPage) {
       worksPlus = countItemsPerPage - cycles.length;
       const extraWorks = await prisma.work.findMany({
-        ...getOpt(worksPlus, ewr + countItemsPerPage, { isWork: true }),
+        ...getOptWork(worksPlus, ewr + countItemsPerPage),
         orderBy: {
           id: 'desc',
         },
