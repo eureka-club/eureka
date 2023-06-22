@@ -286,9 +286,9 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                 body: JSON.stringify({ type: formValues.type, search: q, language: `${router.locale}` }),
             }).then((r) => r.json());
 
-            if (data.length)
+            if (data && data.length)
                 setResultWorks(data);
-            else if (!data.length) {
+            else if (!data || !data.length) {
                 toast.error(t('NoDataError'))
                 setResultWorks([]);
             }
