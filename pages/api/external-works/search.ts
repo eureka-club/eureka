@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           //totalItems,
           //error,
         } = await fetch(
-          `https://www.googleapis.com/books/v1/volumes?q="${searchCriteria}"&maxResults=20&langRestrict=${language}&key=${process.env.GOOGLE_CLOUD_BOOKS_CREDENTIALS}`,
+          `https://www.googleapis.com/books/v1/volumes?q="${searchCriteria}"+intitle:"${searchCriteria}"&maxResults=20&printType=books&langRestrict=${language}&key=${process.env.GOOGLE_CLOUD_BOOKS_CREDENTIALS}`,
         ).then((r) => r.json());
         if (data.length) {
           const d:APIMediaSearchResult[]=[];
