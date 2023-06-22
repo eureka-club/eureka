@@ -72,7 +72,6 @@ const BookCard: React.FC<Props> = (Props) => {
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <CardContent sx={{ flex: '1 0 auto' }}>
                             {volumeInfo.title !== undefined &&
-
                                 <Typography component="div" variant="h6">
                                     {(volumeInfo.title.length > 25) ? `${volumeInfo.title.slice(0, 30)}...` : volumeInfo.title}
                                 </Typography>}
