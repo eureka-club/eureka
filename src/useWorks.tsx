@@ -27,7 +27,7 @@ const useWorks = (props?:Prisma.WorkFindManyArgs,options?: Options) => {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  let ck = cacheKey ? `${cacheKey}-${JSON.stringify(props)}` : ['WORKS', `${JSON.stringify(props)}`];
+  let ck = cacheKey ? `${cacheKey}-${JSON.stringify(props)}` : ['WORKS', `${lang}-${JSON.stringify(props)}`];
 
   return useQuery<{works:WorkMosaicItem[],fetched:number,total:number}>(ck, () => getWorks(lang,props), {
     staleTime,

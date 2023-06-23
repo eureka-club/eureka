@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 
-import { Session } from '@/src/types';
+import { Languages, Session } from '@/src/types';
 import getApiHandler from '@/src/lib/getApiHandler';
 import { find, saveSocialInteraction } from '@/src/facades/work';
 // import redis from '@/src/lib/redis';
@@ -38,7 +38,8 @@ const validateReq = async (
 export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = (await getSession({ req })) as unknown as Session;
-    const { id, socialInteraction } = req.query;
+    const { id, socialInteraction,lang:l } = req.query;
+    const language = Languages[l?.toString()??"es"];
     const { qty,year,doCreate, notificationMessage,notificationContextURL,notificationToUsers } = req.body;
 
     if (!(await validateReq(session, id, socialInteraction, res))) {
@@ -46,7 +47,7 @@ export default getApiHandler()
     }
 
     try {
-      const work = await find(Number(id));
+      const work = await find(Number(id),language);
       if (work == null) {
         res.status(404).end();
         return;
@@ -73,14 +74,16 @@ export default getApiHandler()
   })
   .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = (await getSession({ req })) as unknown as Session;
-    const { id, socialInteraction } = req.query;
+    const { id, socialInteraction,lang:l } = req.query;
+    const language = Languages[l?.toString()??"es"];
+
 
     if (!(await validateReq(session, id, socialInteraction, res))) {
       return;
     }
 
     try {
-      const work = await find(Number(id));
+      const work = await find(Number(id),language);
       if (work == null) {
         res.status(404).end();
         return;

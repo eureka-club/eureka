@@ -16,6 +16,8 @@ export const config = {
   },
 };
 
+
+
 export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = (await getSession({ req })) as unknown as Session;
@@ -53,17 +55,30 @@ export default getApiHandler()
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
       const { q = null,props:p=undefined,lang:l } = req.query;
-      const language = Languages[l?.toString()!];
+      const language = Languages[l?.toString()??"es"];
+      
       const props:Prisma.WorkFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
       let {where:w,take,cursor,skip} = props;
       const session = await getSession({ req });
 
       let AND = w?.AND;
       delete w?.AND;
-      let where = {...w,AND:{
-        ...AND && {AND},
-        language
-      }};
+      let where = {...w,
+        AND:{
+          ...AND && {AND},
+          OR:[
+            {
+              language
+            },
+            {
+              editions:{
+                    some:{language}
+              },
+            }
+          ]
+        },
+      
+    };
       let data = null;
       // if (typeof q === 'string') {
       //   const terms = q.split(" ");
@@ -107,8 +122,8 @@ export default getApiHandler()
 
       let cr = await prisma?.work.aggregate({where,_count:true})
       const total = cr?._count;
-      data = await findAll({take,where,skip,cursor});
-
+      data = await findAll(language,{take,where,skip,cursor});
+      
       res.status(200).json({
         data,
         fetched:data.length,

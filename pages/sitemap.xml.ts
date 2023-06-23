@@ -28,8 +28,8 @@ const generateCyclesMap = async ()=>{
   }).join('')
 }
 
-const generateWorksMap = async ()=>{
-  const works = await findAllWoks({
+const generateWorksMap = async (locale:string)=>{
+  const works = await findAllWoks(locale,{
     select:{id:true,title:true,contentText:true}
   })
   return works.map(w=>{
@@ -95,13 +95,13 @@ const generatePostsMap = async ()=>{
     }).join('')
   }
 
-const generateSiteMap = async () => {
+const generateSiteMap = async (locale:string) => {
   return `<?xml version="1.0" encoding="UTF-8"?>
   <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   ${generateHomePage()}
   ${generateStaticPages()}
   ${await generateCyclesMap()}
-  ${await generateWorksMap()}
+  ${await generateWorksMap(locale)}
   ${await generatePostsMap()}
   </urlset>
   `;
@@ -113,7 +113,7 @@ function SiteMap() {
 
 export const  getServerSideProps:GetServerSideProps = async (ctx)=> {
   const {res} = ctx;
-  const sitemap = await generateSiteMap();
+  const sitemap = await generateSiteMap(ctx?.locale??"es");
 
   res.setHeader('Content-Type', 'text/xml');
   res.write(sitemap);

@@ -214,6 +214,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     },
   };
   const worksData = await getWorks(ctx.locale!,{ ...worksProps, take }, origin);
+
   qc.prefetchQuery(`works-search-${q?.toString()}`, () => worksData);
   const hasWorks = worksData.total > 0;
 

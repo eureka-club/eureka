@@ -3,7 +3,7 @@ import { getSession } from 'next-auth/react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { Form } from 'multiparty';
-import { Session, FileUpload } from '../../../src/types';
+import { Session, FileUpload, Languages } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { find, remove, UpdateFromServerFields } from '../../../src/facades/work';
 import { prisma } from '@/src/lib/prisma';
@@ -26,7 +26,10 @@ export default getApiHandler()
       return;
     }
 
-    const { id } = req.query;
+    const { id,lang:l } = req.query;
+    const language = Languages[l?.toString()??"es"];
+
+
     if (typeof id !== 'string') {
       res.status(404).end();
       return;
@@ -39,7 +42,7 @@ export default getApiHandler()
     }
 
     try {
-      const work = await find(idNum);
+      const work = await find(idNum,language);
       if (work == null) {
         res.status(404).end();
         return;
@@ -62,7 +65,9 @@ export default getApiHandler()
     //   return;
     // }
 
-    const { id } = req.query;
+    const { id,lang:l } = req.query;
+    const language = Languages[l?.toString()??"es"];
+
     if (typeof id !== 'string') {
       res.status(404).end();
       return;
@@ -75,7 +80,7 @@ export default getApiHandler()
     }
 
     try {
-      const work = await find(idNum);
+      const work = await find(idNum,language);
       if (work == null) {
         return res.status(200).json(null);
       }

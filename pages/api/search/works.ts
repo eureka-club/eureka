@@ -6,6 +6,7 @@ import { search } from '../../../src/facades/work';
 
 export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
   if (!isEmpty(req.query)) {
+    
     const works = await search(req.query);
     res.json(works);
     return;

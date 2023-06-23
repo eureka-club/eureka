@@ -30,11 +30,15 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
       participants: { select: { id: true } },
       works: {
         include: {
-          localImages: { select: { storedFile: true } },
           _count: { select: { ratings: true } },
+          localImages: { select: { storedFile: true } },
           favs: { select: { id: true } },
           ratings: { select: { userId: true, qty: true } },
           readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+          posts: {
+            select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+          },
+          editions:{include:{localImages: { select: { storedFile: true } }}},
         },
       },
       // participants:{
@@ -69,11 +73,15 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
           workId: true,
           work: {
             include: {
-              localImages: { select: { storedFile: true } },
               _count: { select: { ratings: true } },
+              localImages: { select: { storedFile: true } },
               favs: { select: { id: true } },
               ratings: { select: { userId: true, qty: true } },
               readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+              posts: {
+                select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+              },
+              editions:{include:{localImages: { select: { storedFile: true } }}},
             },
           },
         },
@@ -119,11 +127,15 @@ export const findAll = async (props?: Prisma.CycleFindManyArgs): Promise<CycleMo
       ratings: { select: { userId: true, qty: true } },
       works: {
         include: {
-          localImages: { select: { storedFile: true } },
           _count: { select: { ratings: true } },
+          localImages: { select: { storedFile: true } },
           favs: { select: { id: true } },
           ratings: { select: { userId: true, qty: true } },
           readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+          posts: {
+            select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+          },
+          editions:{include:{localImages: { select: { storedFile: true } }}},
         },
       },
       // participants:{
@@ -158,11 +170,15 @@ export const findAll = async (props?: Prisma.CycleFindManyArgs): Promise<CycleMo
           workId: true,
           work: {
             include: {
-              localImages: { select: { storedFile: true } },
               _count: { select: { ratings: true } },
+              localImages: { select: { storedFile: true } },
               favs: { select: { id: true } },
               ratings: { select: { userId: true, qty: true } },
               readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+              posts: {
+                select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+              },
+              editions:{include:{localImages: { select: { storedFile: true } }}},
             },
           },
         },

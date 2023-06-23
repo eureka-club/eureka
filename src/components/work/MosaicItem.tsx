@@ -53,7 +53,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const router = useRouter();
   const [work, setWork] = useState(workItem);
 
-  const { data } = useWork(workId, {
+  const { data } = useWork(workId,{
     enabled: !!workId && !workItem,
   });
   useEffect(() => {
@@ -136,6 +136,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     setLoading(true);
   };
   const renderLocalImageComponent = () => {
+    const localePath = router.locale ? `${router.locale}/`:"";
     const img = localImages ? (
       <LocalImageComponent filePath={localImages[0].storedFile} title={title} alt={title} />
     ) : undefined;
@@ -150,7 +151,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           {!canNavigate() && (
             <Spinner className="position-absolute top-50 start-50" size="sm" animation="grow" variant="info" />
           )}
-          {imageLink ? <a href={`/work/${id}`}>{img}</a> : img}
+          {imageLink ? <a href={`/${localePath}work/${id}`}>{img}</a> : img}
         </div>
       );
     }

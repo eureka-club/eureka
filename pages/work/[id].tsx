@@ -97,7 +97,6 @@ const WorkDetailPage: NextPage<Props> = ({ session, metas, workId }) => {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = await getSession(ctx)
   const { params } = ctx
-
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
 
   const qc = new QueryClient()
@@ -119,13 +118,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       }
     }
   }
-  
-  let work = await getWork(id,origin);
+  let lang = ctx.locale ?? "es";
+  let work = await getWork(id,lang,origin);
   let metaTags:Record<string,any>={};
   if(work){
     metaTags = { id: work.id, title: work.title, author: work.author, storedFile: work.localImages[0].storedFile };
     const workPostsWhere = {take:8,where:{works:{some:{id}}}}
-    await qc.prefetchQuery(['WORK', `${id}`],()=>work)
+    await qc.prefetchQuery(['WORK', `${id}-${lang}`],()=>work)
     await qc.prefetchQuery(['CYCLES',JSON.stringify(workCyclesWhere)],()=>getCycles(ctx.locale!,workCyclesWhere,origin))
     await qc.prefetchQuery(['POSTS',JSON.stringify(workPostsWhere)],()=>getPosts(ctx.locale!,workPostsWhere,origin))
   }

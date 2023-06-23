@@ -10,6 +10,7 @@ import { WEBAPP_URL } from '@/src/constants';
 import { getSession } from 'next-auth/react';
 import { Session } from '@/src/types';
 import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/router';
 interface Props {
   postId:number;
   workId:number;
@@ -21,6 +22,7 @@ const PostDetailInWorkPage: NextPage<Props> = ({postId,workId,metaTags,session})
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
   const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
   const { t } = useTranslation('meta');
+  const router = useRouter();
 
   const { data: work, isLoading: loadingWork } = useWork(+workId, { enabled: !!workId });
   const { data: post, isLoading: loadingPost } = usePost(+postId, { enabled: !!postId });
@@ -78,10 +80,10 @@ export const getServerSideProps:GetServerSideProps = async (ctx) => {
   const workId = parseInt(wid ? wid.toString():'')
   const postId = parseInt(pid ? pid.toString():'')
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
-
+  const router = useRouter();
 
  let post = await getPost(postId,origin);
- let work = await getWork(workId,origin);
+ let work = await getWork(workId,router.locale!,origin);
  let metaTags = {
    id: post?.id,
    workId: work?.id,

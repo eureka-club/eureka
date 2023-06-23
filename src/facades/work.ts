@@ -1,10 +1,33 @@
-import { Prisma, Work, User, RatingOnWork, ReadOrWatchedWork } from '@prisma/client';
-import { StoredFileUpload } from '../types';
+import { Prisma, Work, User, RatingOnWork, ReadOrWatchedWork, Edition } from '@prisma/client';
+import { Languages, StoredFileUpload } from '../types';
 import { CreateWorkServerFields, CreateWorkServerPayload, WorkMosaicItem } from '../types/work';
 import { prisma } from '@/src/lib/prisma';
 
-export const find = async (id: number): Promise<WorkMosaicItem | null> => {
-  return prisma.work.findUnique({
+const editionsToBook = (book:WorkMosaicItem, language:string):WorkMosaicItem|null => {
+  if(book.language==language){
+    return book;
+  }
+  let i = 0, count = book.editions?.length;
+  for(;i<count;i++){
+    const e = book?.editions[i];
+    if(e.language==language){
+      book.title = e.title;
+      book.contentText = e.contentText;
+      book.publicationYear = e.publicationYear;
+      book.language = e.language;
+      book.countryOfOrigin = e.countryOfOrigin;
+      book.length = e.length;
+      book.ToCheck = e.ToCheck;
+      book.localImages = e.localImages;
+      return book;
+    }
+  }
+  return null;
+}
+
+
+export const find = async (id: number,language:string): Promise<WorkMosaicItem | null> => {
+  let work = await prisma.work.findUnique({
     where: { id },
     include: {
       localImages: { select: { storedFile: true } },
@@ -13,158 +36,66 @@ export const find = async (id: number): Promise<WorkMosaicItem | null> => {
       ratings: { select: { userId: true, qty: true } },
       readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
       posts: {
-        orderBy: { updatedAt: 'desc' },
         select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
       },
-      editions:true,
-      // favs: {select:{id:true}},
-      // ratings: {
-      //   select:{qty:true}
-      // },
-      // posts: {
-      //   select:{
-      //     id:true,
-      //     title:true,
-      //     contentText:true,
-      //     createdAt:true,
-      //     works:{select:{id:true,title:true}},
-      //     cycles:{select:{id:true}},
-      //     favs:{select:{id:true}},
-      //     creator: {select:{id:true,name:true,photos:true}},
-      //     localImages: {select:{storedFile:true}},
-      //   },
-      //   orderBy:{id:'desc'}
-      // },
-      // cycles:{
-      //   select:{
-      //     id:true,
-      //     title:true,
-      //     startDate:true,
-      //     endDate:true,
-      //     ratings:{select:{qty:true}}
-      //   }
-      // },
+      editions:{include:{localImages: { select: { storedFile: true } }}},
     },
-    // include: {
-    //   localImages: true,
-    //   favs: true,
-    //   ratings: true,
-    //     _count: {
-    //     select:{
-    //       posts:true,
-    //       ratings: true,
-    //       cycles:true,
-    //     },
-
-    //   },
-    //   posts: {
-    //     include: {
-    //       creator: {include:{photos:true}},
-    //       localImages: true,
-    //       works: {
-    //         include: {
-    //           localImages: true,
-    //         },
-    //       },
-    //       cycles: {
-    //         include: {
-    //           localImages: true,
-    //           participants:true
-    //         },
-    //       },
-    //       likes: true,
-    //       favs: true,
-    //       comments: {
-    //         include: {
-    //           creator: { include: { photos:true } },
-    //           comments: {
-    //             include: {
-    //               creator: { include: { photos:true } },
-    //             },
-    //           },
-    //           work: {include:{cycles:true}},
-    //           cycle:{include:{participants:true}},
-    //         },
-    //       },
-    //     },
-    //     orderBy:{id:'desc'}
-    //   },
-    // //  comments: {
-    // //         include: {
-    // //           creator: { include: { photos: true } },
-    // //           comments: { include: { creator: { include: { photos: true } } } },
-    // //           cycle:{include:{participants:true}}
-    // //         },
-    // //       },
-    //   cycles: {
-    //     orderBy:{id:'desc'}
-    //   },
-    // },
   });
+  if(work){
+    work = editionsToBook(work,language);
+    return work;
+  }
+  return null;
 };
 
-export const findAll = async (props?: Prisma.WorkFindManyArgs): Promise<WorkMosaicItem[]> => {
+export const findAll = async (language:string, props?: Prisma.WorkFindManyArgs): Promise<WorkMosaicItem[]> => {
   const { where, include = null, take, skip, cursor } = props || {};
-  return prisma.work.findMany({
+  
+  let works = await prisma.work.findMany({
     take,
     skip,
     cursor,
     orderBy: { createdAt: 'desc' },
-    include: {
+    include:{
       localImages: { select: { storedFile: true } },
       _count: { select: { ratings: true } },
       favs: { select: { id: true } },
       ratings: { select: { userId: true, qty: true } },
       readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
       posts: {
-        orderBy: { updatedAt: 'desc' },
         select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
       },
-      editions:true,
-      // favs: {select:{id:true}},
-      // ratings: {
-      //   select:{qty:true}
-      // },
-      // posts: {
-      //   select:{
-      //     id:true,
-      //     title:true,
-      //     contentText:true,
-      //     createdAt:true,
-      //     works:{select:{id:true,title:true}},
-      //     cycles:{select:{id:true}},
-      //     favs:{select:{id:true}},
-      //     creator: {select:{id:true,name:true,photos:true}},
-      //     localImages: {select:{storedFile:true}},
-      //   },
-      //   orderBy:{id:'desc'}
-      // },
-      // cycles:{
-      //   select:{
-      //     id:true,
-      //     title:true,
-      //     startDate:true,
-      //     endDate:true,
-      //     ratings:{select:{qty:true}}
-      //   }
-      // },
+      editions:{include:{localImages: { select: { storedFile: true } }}},
     },
     where,
   });
+
+  if(works){
+    works = works.map(w=>editionsToBook(w,language)!);
+  }
+  return works;
 };
 
 export const search = async (query: { [key: string]: string | string[] | undefined }): Promise<Work[]> => {
-  const { q, where, include } = query;
+  const { q, where, include,lang:l } = query;
+  const language = Languages[l?.toString()??"es"];
+  
   if (where == null && q == null) {
     throw new Error("[412] Invalid invocation! Either 'q' or 'where' query parameter must be provided");
   }
 
   if (typeof q === 'string') {
     return prisma.work.findMany({
-      include: {
-        // localImages: true,
-        favs: true,
-        ratings: true,
+      include:{
+        localImages: { select: { storedFile: true } },
+        _count: { select: { ratings: true } },
+        favs: { select: { id: true } },
+        ratings: { select: { userId: true, qty: true } },
+        readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+        posts: {
+          select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+        },
+        editions:{include:{localImages: { select: { storedFile: true } }}},
       },
       where: {
         OR: [{ title: { contains: q } }, { author: { contains: q } }],
@@ -173,10 +104,23 @@ export const search = async (query: { [key: string]: string | string[] | undefin
     });
   }
 
-  return prisma.work.findMany({
+  let works = await prisma.work.findMany({
     ...(typeof where === 'string' && { where: JSON.parse(where) }),
-    ...(typeof include === 'string' && { include: JSON.parse(include) }),
+    include:{
+      localImages: { select: { storedFile: true } },
+      _count: { select: { ratings: true } },
+      favs: { select: { id: true } },
+      ratings: { select: { userId: true, qty: true } },
+      readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+      posts: {
+        select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+      },
+      editions:{include:{localImages: { select: { storedFile: true } }}},
+    },
   });
+  if(works)
+    works = works.map(w=>editionsToBook(w, language)!);
+  return works;
 };
 
 export const countCycles = async (

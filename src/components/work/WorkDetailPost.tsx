@@ -30,7 +30,8 @@ const WorkDetailPost: FunctionComponent<Props> = ({workId,className, cacheKey })
   const {data:session, status} = useSession();
   const isSessionLoading = status == 'loading';
   const {show} = useModalContext()
-
+  const router = useRouter();
+  
   const { t } = useTranslation('cycleDetail');
 
    const {data:work} = useWork(workId,{
@@ -39,7 +40,6 @@ const WorkDetailPost: FunctionComponent<Props> = ({workId,className, cacheKey })
 
   const [isCreateEureka, setIsCreateEureka] = useState<boolean>(true);
   const [discussionItem, setDiscussionItem] = useState<string | undefined>(undefined); // by default empty but required
-  const router = useRouter();
   const query = router.query;
 
    useEffect(()=>{

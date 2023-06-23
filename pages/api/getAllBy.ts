@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import getApiHandler from '@/src/lib/getApiHandler';
 import {prisma} from '@/src/lib/prisma';
 import { Languages } from '@/src/types';
-import edition from './edition';
+import { getWorks } from '@/src/useWorks';
 // import redis from '../../src/lib/redis';
 
 export const config = {
@@ -17,7 +17,8 @@ export default getApiHandler()
     const lstr = l?.toString();
     const language = Languages[lstr!];
     const data: { id:number;type: string }[] = [];
-    console.log("language ",language)
+    const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
+
     // const result: { [index: string]: (Work | (Cycle & { type: string }))[] } = {};
     const { cursor, topic, extraCyclesRequired = 0, extraWorksRequired = 0 } = req.query;
     const c = parseInt(cursor as string, 10);
@@ -90,19 +91,19 @@ export default getApiHandler()
         take: takePlus || countItemsPerPage,
         include:{
           localImages: {select:{storedFile:true}},
-          editions:true
+          editions:{include:{localImages: { select: { storedFile: true } }}},
         },
         where:w
       }
     };
 
     const ewr = parseInt(extraWorksRequired as string, 10);
-    const works = await prisma.work.findMany({
+    let {works} = await getWorks(language,{
       ...getOptWork(0, ewr),
       orderBy: {
         id: 'desc',
       },
-    });
+    },origin);
 
     let cyclesPlus = 0;
     if (works.length !== countItemsPerPage) cyclesPlus = countItemsPerPage - works.length;
@@ -117,13 +118,13 @@ export default getApiHandler()
     let worksPlus = 0;
     if (cycles.length !== countItemsPerPage && works.length === countItemsPerPage) {
       worksPlus = countItemsPerPage - cycles.length;
-      const extraWorks = await prisma.work.findMany({
+      const extraWorks = await getWorks(language,{
         ...getOptWork(worksPlus, ewr + countItemsPerPage),
         orderBy: {
           id: 'desc',
         },
-      });
-      works.push(...extraWorks);
+      },origin);
+      works.push(...extraWorks.works);
     }
 
     data.push(...cycles.map((c1) => ({ ...c1, type: 'cycle' })));
