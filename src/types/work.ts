@@ -114,7 +114,8 @@ export interface GoogleBooksProps {
     description: string;
     publisher: string;
     language: string;
-    pageCount:number
+    pageCount:number;
+    printType:string;
     imageLinks: {
       thumbnail: string;
     };

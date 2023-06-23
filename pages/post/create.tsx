@@ -6,7 +6,7 @@ import useTranslation from 'next-translate/useTranslation';
 // import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 //import CreatePostForm from '../../src/components/forms/CreatePostForm';
-import CreatePostForm from '../../src/components/forms/CreateIAPostForm';
+import CreatePostForm from '../../src/components/forms/CreatePostForm';
 import { Spinner, Card, Row, Col, ButtonGroup, Button, Alert } from 'react-bootstrap';
 import { BiArrowBack } from 'react-icons/bi';
 import { stubFalse } from 'lodash';

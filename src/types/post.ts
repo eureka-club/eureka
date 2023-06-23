@@ -59,7 +59,7 @@ export interface EditPostAboutCycleClientPayload {
   language?: string;
   contentText?: string;
   isPublic?: boolean;
-  selectedCycleId?: number;
+  selectedCycleId?: number | null;
   selectedWorkId?: null;
   topics?: string;
   tags?: string;

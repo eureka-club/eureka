@@ -9,6 +9,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { crew } = await fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${apiKeyTMDB}`).then((r) =>
       r.json(),
     );
+    /* const { translations } = await fetch(
+       `https://api.themoviedb.org/3/movie/${id}/translations?api_key=${apiKeyTMDB}`,
+     ).then((r) => r.json());
+
+     console.log(translations, 'translations');*/
 
     if (details) {
       if (crew.length) {
