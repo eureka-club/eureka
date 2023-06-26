@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import getApiHandler from '@/src/lib/getApiHandler';
 import {prisma} from '@/src/lib/prisma';
 import { Languages } from '@/src/types';
-import { getWorks } from '@/src/useWorks';
+import { findAll } from '@/src/facades/work';
 // import redis from '../../src/lib/redis';
 
 export const config = {
@@ -98,12 +98,12 @@ export default getApiHandler()
     };
 
     const ewr = parseInt(extraWorksRequired as string, 10);
-    let {works} = await getWorks(language,{
+    let works = await findAll(language,{
       ...getOptWork(0, ewr),
       orderBy: {
         id: 'desc',
       },
-    },origin);
+    });
 
     let cyclesPlus = 0;
     if (works.length !== countItemsPerPage) cyclesPlus = countItemsPerPage - works.length;
@@ -118,13 +118,13 @@ export default getApiHandler()
     let worksPlus = 0;
     if (cycles.length !== countItemsPerPage && works.length === countItemsPerPage) {
       worksPlus = countItemsPerPage - cycles.length;
-      const extraWorks = await getWorks(language,{
+      const extraWorks = await findAll(language,{
         ...getOptWork(worksPlus, ewr + countItemsPerPage),
         orderBy: {
           id: 'desc',
         },
-      },origin);
-      works.push(...extraWorks.works);
+      });
+      works.push(...extraWorks);
     }
 
     data.push(...cycles.map((c1) => ({ ...c1, type: 'cycle' })));
