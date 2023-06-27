@@ -8,6 +8,52 @@ import { Prisma } from '@prisma/client';
 //   };
 // }>;
 
+export const getWorksProps = (terms:string[])=>{
+  return {
+    OR: [
+      {
+        AND: terms.map((t) => ({
+          title: { contains: t },
+        })),
+      },
+      {
+        AND: terms.map((t) => ({
+          contentText: { contains: t },
+        })),
+      },
+      {
+        AND: terms.map((t) => ({
+          tags: { contains: t },
+        })),
+      },
+      {
+        AND: terms.map((t) => ({
+          topics: { contains: t },
+        })),
+      },
+      {
+        editions:{
+          some:{
+            OR:[
+              {
+                AND: terms.map((t) => ({
+                  title: { contains: t },
+                })),
+              },
+              {
+                AND: terms.map((t) => ({
+                  contentText: { contains: t },
+                })),
+              },
+      
+            ]
+          }
+        }
+      }
+    ],
+  }
+};
+
 export type WorkWithImages = Prisma.WorkGetPayload<{
   include: {
     localImages: {select:{storedFile:true}}
