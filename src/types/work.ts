@@ -167,6 +167,7 @@ export interface GoogleBooksProps {
     imageLinks: {
       thumbnail: string;
     };
+    infoLink:string;
   };
   saleInfo: {
     saleability: string;

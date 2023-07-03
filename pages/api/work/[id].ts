@@ -64,7 +64,6 @@ export default getApiHandler()
     //   res.status(200).json({ error: 'Unauthorized', work: null });
     //   return;
     // }
-
     const { id,lang:l } = req.query;
     const language = Languages[l?.toString()??"es"];
 

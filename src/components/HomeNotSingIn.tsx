@@ -14,7 +14,6 @@ import { BsChevronDown} from 'react-icons/bs';
 const HomeNotSingIn: FunctionComponent = ({  }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
-
   return  <>
             <div className='pt-2 mt-1 pt-lg-5 mt-lg-5'>
                  <section className='d-flex flex-column justify-content-center align-items-center text-center mt-lg-3'>

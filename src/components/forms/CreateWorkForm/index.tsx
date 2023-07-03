@@ -328,6 +328,8 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
             formValues['publicationYear'] = (work.volumeInfo.publishedDate) ? work.volumeInfo.publishedDate : "";
             formValues['workLength'] = (work.volumeInfo.pageCount) ? `${work.volumeInfo.pageCount}` : "";
             formValues['description'] = (work.volumeInfo.description) ? work.volumeInfo.description : "";
+            formValues['link'] = (work.volumeInfo?.infoLink) ? work.volumeInfo.infoLink : "";
+
             let l = work.volumeInfo.language.split("-");
             let language = l.length ? l[0] : undefined;
             formValues['language'] = language ? languages[language] :'spanish';
