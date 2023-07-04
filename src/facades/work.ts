@@ -194,17 +194,7 @@ export const createFromServerFields = async (
     where:{
       author:payload.author
     },
-    include: {
-      localImages: { select: { storedFile: true } },
-      _count: { select: { ratings: true } },
-      favs: { select: { id: true } },
-      ratings: { select: { userId: true, qty: true } },
-      readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
-      posts: {
-        select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
-      },
-      editions:{include:{localImages: { select: { storedFile: true } }}},
-    }
+    include
   });
 
   const fuseOpt = {
