@@ -46,5 +46,6 @@
   "Content": "Contenu",
   "AdditionalInformation": "Informations supplémentaires sur l'œuvre",
   "WorkSelected": "Oeuvre sélectionné",
-  "languageFieldLabel":"Langue de la version de l'œuvre"
+  "languageFieldLabel": "Langue de la version de l'œuvre",
+  "ExistingWorktitle": "Nous avons déjà l'ouvrage sélectionné dans notre bibliothèque"
 }

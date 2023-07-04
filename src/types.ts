@@ -139,6 +139,13 @@ export const Languages:Record<string,string> = {
   "fr":"french"
 };
 
+export const UserLanguages: Record<string, string> = {
+  english: 'en',
+  spanish: 'es',
+  portuguese: 'pt',
+  french: 'fr',
+};
+
 /**
  * 
  {
