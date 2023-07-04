@@ -39,11 +39,7 @@ import { decode } from 'base64-arraybuffer'
 import SpinnerComp from '@/src/components/Spinner';
 import Box from '@mui/material/Box';
 import Image from 'next/image';
-import { UserLanguages } from '@/src/types';
 import WMI from '@/src/components/work/MosaicItem';
-import { getWorks } from '@/src/useWorks';
-import { getEditions } from '@/src/useEditions';
-import { resourceUsage } from 'process';
 
 interface Props {
     noModal?: boolean;
@@ -69,11 +65,6 @@ const languages: Record<string, string> = {
     pt: 'portuguese'
 }
 
-export const validWorkToAddWhere = (title: string) => ({
-    where: {
-        title: title,
-    }
-})
 
 const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
     const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -137,7 +128,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
             const res = await fetch('/api/work', {
                 method: 'POST',
                 body: formData,
-            }); 
+            });
 
 
             if (res.ok) {
@@ -147,7 +138,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                     toast.success(t('WorkSaved'))
                     return json.work;
                 }
-                else if (json.error && ['WORK_ALREADY_EXIST','EDITION_ALREADY_EXIST'].includes(json.error)) {
+                else if (json.error && ['WORK_ALREADY_EXIST', 'EDITION_ALREADY_EXIST'].includes(json.error)) {
                     setShowExistingWork(true)
                     setWorkId(json.work.id)
                 }
@@ -247,7 +238,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
         else
             setLoading(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isSuccess,isLoading]);
+    }, [isSuccess, isLoading]);
 
 
     function handleChangeSelectField(ev: SelectChangeEvent) {
@@ -326,121 +317,89 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
         setLoading(false);
     }
 
-    async function validForExistingWork(work: APIMediaSearchResult) {
-
-        /*  if (isBookGoogleBookApi(work)) {
-              const { works } = await getWorks(work.volumeInfo.language, validWorkToAddWhere(work.volumeInfo.title));
-              console.log(works, 'work')
-              if (works.length > 0) {
-                  setShowExistingWork(true)
-                  setWorkId(works[0].id)
-                  setLoading(false);
-                  return true;//existe
-              } else {
-                  const { editions } = await getEditions(work.volumeInfo.language, validWorkToAddWhere(work.volumeInfo.title));
-                  console.log(editions, 'edition')
-                  if (editions.length > 0) {
-                      setShowExistingWork(true)
-                      setWorkId(editions[0].workId)
-                      setLoading(false);
-                      return true;//existe como edicion
-                  }
-              }
-          }*/
-        return false;
-
-    }
-
     const handleSelect = async (work: APIMediaSearchResult) => {
         setLoading(true);
+        setSelectedWork(work);
+        if (isBookGoogleBookApi(work)) {
+            //Buscar poster y traerlo a eureka//////////////////
+            if (work.volumeInfo.imageLinks) {
+                let url = work.volumeInfo.imageLinks.thumbnail;
+                url = url.replace('http://', 'https://');
+                url = url.replace('zoom=1', 'zoom=5');
 
-        // Hago validacion inicial de mismo titulo en mismo idioma. en libros solamente de momento.
-        let existing = await validForExistingWork(work);
-        if (!existing) {
-
-            setSelectedWork(work);
-            if (isBookGoogleBookApi(work)) {
-                //Buscar poster y traerlo a eureka//////////////////
-                if (work.volumeInfo.imageLinks) {
-                    let url = work.volumeInfo.imageLinks.thumbnail;
-                    url = url.replace('http://', 'https://');
-                    url = url.replace('zoom=1', 'zoom=5');
-
-                    const { buffer } = await fetch('/api/external-works/select', {
-                        method: 'POST',
-                        headers: {
-                            'Content-type': 'application/json',
-                        },
-                        body: JSON.stringify({ url: url })
-                    }).then((r) => r.json());
-
-                    const blob = new Blob([decode(buffer)], { type: 'image/webp' });
-                    let src = URL.createObjectURL(blob)
-                    let file = await getImg(src)
-                    setCoverFile(file);
-                }
-                //////////////////////////////////////////////////
-                formValues['title'] = work.volumeInfo.title;
-                formValues['author'] = work.volumeInfo.authors ? work.volumeInfo.authors.join(',') : "";
-                formValues['publicationYear'] = (work.volumeInfo.publishedDate) ? work.volumeInfo.publishedDate : "";
-                formValues['workLength'] = (work.volumeInfo.pageCount) ? `${work.volumeInfo.pageCount}` : "";
-                formValues['description'] = (work.volumeInfo.description) ? work.volumeInfo.description : "";
-                formValues['link'] = (work.volumeInfo?.infoLink) ? work.volumeInfo.infoLink : "";
-
-                let l = work.volumeInfo.language.split("-");
-                let language = l.length ? l[0] : undefined;
-                formValues['language'] = language ? languages[language] : 'spanish';
-                setFormValues({
-                    ...formValues,
-                });
-            }
-            if (isVideoTMDB(work)) {
-                //Busco mas detalles del Video TMDB /////////////////////   
-                const { video } = await fetch(`/api/external-works/movie/${work.id}`, {
-                    method: 'GET',
+                const { buffer } = await fetch('/api/external-works/select', {
+                    method: 'POST',
                     headers: {
                         'Content-type': 'application/json',
                     },
+                    body: JSON.stringify({ url: url })
                 }).then((r) => r.json());
-                ////////////////////////////////////////////////////////
 
-                //Buscar poster y traerlo a eureka//////////////////////
-                if (work.poster_path) {
-                    let url = `https://image.tmdb.org/t/p/w600_and_h900_bestv2${work.poster_path}?not-from-cache-please`;
-
-                    const { buffer } = await fetch('/api/external-works/select', {
-                        method: 'POST',
-                        headers: {
-                            'Content-type': 'application/json',
-                        },
-                        body: JSON.stringify({ url: url })
-                    }).then((r) => r.json());
-
-                    const blob = new Blob([decode(buffer)], { type: 'image/webp' });
-                    let src = URL.createObjectURL(blob)
-                    let file = await getImg(src)
-                    setCoverFile(file as File | null);
-                }
-                ////////////////////////////////////////////////////////
-
-                formValues['title'] = video.title;
-                formValues['author'] = video.director.name ? video.director.name : "";
-                formValues['publicationYear'] = video.release_date;
-                formValues['workLength'] = (video.runtime) ? `${video.runtime}` : "";
-                formValues['description'] = video.overview;
-                let language = video.original_language;
-                formValues['language'] = language ? languages[language] : 'spanish';
-                setFormValues({
-                    ...formValues,
-                });
+                const blob = new Blob([decode(buffer)], { type: 'image/webp' });
+                let src = URL.createObjectURL(blob)
+                let file = await getImg(src)
+                setCoverFile(file);
             }
-            setResultWorks([]);
-            setLoading(false);
+            //////////////////////////////////////////////////
+            formValues['title'] = work.volumeInfo.title;
+            formValues['author'] = work.volumeInfo.authors ? work.volumeInfo.authors.join(',') : "";
+            formValues['publicationYear'] = (work.volumeInfo.publishedDate) ? work.volumeInfo.publishedDate : "";
+            formValues['workLength'] = (work.volumeInfo.pageCount) ? `${work.volumeInfo.pageCount}` : "";
+            formValues['description'] = (work.volumeInfo.description) ? work.volumeInfo.description : "";
+            formValues['link'] = (work.volumeInfo?.infoLink) ? work.volumeInfo.infoLink : "";
 
-            toast.success(t('WorkSelected'));
+            let l = work.volumeInfo.language.split("-");
+            let language = l.length ? l[0] : undefined;
+            formValues['language'] = language ? languages[language] : 'spanish';
+            setFormValues({
+                ...formValues,
+            });
         }
-        else
-            return;
+        if (isVideoTMDB(work)) {
+            //Busco mas detalles del Video TMDB /////////////////////   
+            const { video } = await fetch(`/api/external-works/movie/${work.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+            }).then((r) => r.json());
+            ////////////////////////////////////////////////////////
+
+            //Buscar poster y traerlo a eureka//////////////////////
+            if (work.poster_path) {
+                let url = `https://image.tmdb.org/t/p/w600_and_h900_bestv2${work.poster_path}?not-from-cache-please`;
+
+                const { buffer } = await fetch('/api/external-works/select', {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json',
+                    },
+                    body: JSON.stringify({ url: url })
+                }).then((r) => r.json());
+
+                const blob = new Blob([decode(buffer)], { type: 'image/webp' });
+                let src = URL.createObjectURL(blob)
+                let file = await getImg(src)
+                setCoverFile(file as File | null);
+            }
+            ////////////////////////////////////////////////////////
+
+            formValues['title'] = video.title;
+            formValues['author'] = video.director.name ? video.director.name : "";
+            formValues['publicationYear'] = video.release_date;
+            formValues['workLength'] = (video.runtime) ? `${video.runtime}` : "";
+            formValues['description'] = video.overview;
+            let language = video.original_language;
+            formValues['language'] = language ? languages[language] : 'spanish';
+            setFormValues({
+                ...formValues,
+            });
+        }
+        setResultWorks([]);
+        setLoading(false);
+        toast.success(t('WorkSelected'));
+
+        return;
     }
 
     const handleChangeUseApiSearch = (event: React.ChangeEvent<HTMLInputElement>) => {

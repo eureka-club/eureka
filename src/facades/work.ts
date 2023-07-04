@@ -268,6 +268,7 @@ export const createFromServerFields = async (
   }
   else{
     //adding as work's edition
+    console.log(payload.contentText?.length, 'payload.contentText');
     const edition = await prisma.edition.create({
       include:{localImages: { select: { storedFile: true } }},
       data: {
