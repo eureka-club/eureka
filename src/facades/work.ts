@@ -3,7 +3,19 @@ import { Languages, StoredFileUpload } from '../types';
 import { CreateWorkServerFields, CreateWorkServerPayload, WorkMosaicItem } from '../types/work';
 import { prisma } from '@/src/lib/prisma';
 import Fuse from 'fuse.js'
+import { EDITION_ALREADY_EXIST, WORK_ALREADY_EXIST } from '@/src/api_code';
 
+const  include = {
+  localImages: { select: { storedFile: true } },
+  _count: { select: { ratings: true } },
+  favs: { select: { id: true } },
+  ratings: { select: { userId: true, qty: true } },
+  readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+  posts: {
+    select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+  },
+  editions:{include:{localImages: { select: { storedFile: true } }}},
+}
 const editionsToBook = (book:WorkMosaicItem, language:string):WorkMosaicItem|null => {
   if(book.language==language){
     return book;
@@ -29,17 +41,7 @@ const editionsToBook = (book:WorkMosaicItem, language:string):WorkMosaicItem|nul
 export const find = async (id: number,language:string): Promise<WorkMosaicItem | null> => {
   let work = await prisma.work.findUnique({
     where: { id },
-    include: {
-      localImages: { select: { storedFile: true } },
-      _count: { select: { ratings: true } },
-      favs: { select: { id: true } },
-      ratings: { select: { userId: true, qty: true } },
-      readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
-      posts: {
-        select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
-      },
-      editions:{include:{localImages: { select: { storedFile: true } }}},
-    },
+    include,
   });
   if(work){
     work = editionsToBook(work,language);
@@ -169,7 +171,7 @@ export const isReadOrWatchedByUser = async (work: Work, user: User): Promise<num
 export const createFromServerFields = async (
   fields: CreateWorkServerFields,
   coverImageUpload: StoredFileUpload,
-): Promise<Work> => {
+): Promise<{error?:string,work?:Work|null}> => {
   const payload = Object.entries(fields).reduce((memo, field) => {
     const [fieldName, fieldValues] = field;
 
@@ -192,17 +194,7 @@ export const createFromServerFields = async (
     where:{
       author:payload.author
     },
-    include: {
-      localImages: { select: { storedFile: true } },
-      _count: { select: { ratings: true } },
-      favs: { select: { id: true } },
-      ratings: { select: { userId: true, qty: true } },
-      readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
-      posts: {
-        select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
-      },
-      editions:{include:{localImages: { select: { storedFile: true } }}},
-    }
+    include
   });
 
   const fuseOpt = {
@@ -219,7 +211,7 @@ export const createFromServerFields = async (
   
   if(fuseForWorkRes.length){
     const work = fuseForWorkRes[0].item;
-    throw Error(`work with a title: ${payload.title} already exist on work: ${work.id}`);
+    return {error:WORK_ALREADY_EXIST,work};
   }
   else{
       //for every work's editions check whether already exist one or not 
@@ -227,7 +219,7 @@ export const createFromServerFields = async (
           const fuseForEdition = new Fuse(w.editions, fuseOpt);
           let fuseForEditionRes = fuseForEdition.search(payload.title).filter(f=>payload.language == f.item.language);
           if(fuseForEditionRes?.length){
-            throw Error(`edition with a title: ${payload.title} already exist on work: ${w.id}`);
+            return {error:EDITION_ALREADY_EXIST,work};
           }
       });
   }
@@ -253,23 +245,25 @@ export const createFromServerFields = async (
   
   if(!work){
     //adding as work
-      return prisma.work.create({
-        data: {
-          ...payload,
-          ToCheck: true,
-          localImages: {
-            ... existingLocalImage 
-            ? {
-              connect: {
-                id: existingLocalImage.id,
-              }
+    const w = await prisma.work.create({
+      include,
+      data: {
+        ...payload,
+        ToCheck: true,
+        localImages: {
+          ... existingLocalImage 
+          ? {
+            connect: {
+              id: existingLocalImage.id,
             }
-            : {
-              create: { ...coverImageUpload }
-            }
-          },
+          }
+          : {
+            create: { ...coverImageUpload }
+          }
         },
-      });
+      },
+    });
+      return {work:w};
     
   }
   else{
@@ -305,7 +299,8 @@ export const createFromServerFields = async (
     });
     work.editions.unshift(edition);
     // work.editions.push(edition);
-    return editionsToBook(work,edition.language)!;
+    const w = editionsToBook(work,edition.language)!;
+    return {work:w};
   }
 };
 
