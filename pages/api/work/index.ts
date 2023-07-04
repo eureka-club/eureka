@@ -43,7 +43,7 @@ export default getApiHandler()
         const uploadData = await storeUpload(coverImage);
         const fieldsA = { ...fields, creatorId: [session.user.id] };
         const {work,error} = await createFromServerFields(fieldsA, uploadData);
-        // await redis.flushall();
+        console.log(work, error,'AHAHAHAHAH');// await redis.flushall();
         if(work)
           return res.status(201).json({work,error});
         return res.status(200).json({work,error});

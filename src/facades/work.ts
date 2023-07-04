@@ -231,7 +231,7 @@ export const createFromServerFields = async (
     let i = 0, til_length = titles_in_languages.length ;
     for(; i < til_length; i++){
       let title = titles_in_languages[i];
-      let fuseForWorkRes = fuseForWork.search(title).filter(f=>payload.language == f.item.language); 
+      let fuseForWorkRes = fuseForWork.search(title);//.filter(f=>payload.language == f.item.language); 
       if(fuseForWorkRes?.length){
         work = fuseForWorkRes[0].item;
         break;

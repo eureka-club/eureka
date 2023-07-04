@@ -137,19 +137,23 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
             const res = await fetch('/api/work', {
                 method: 'POST',
                 body: formData,
-            });
+            }); 
+
+
             if (res.ok) {
                 const json = await res.json();
-                if (json.added) {
+                if (!json.error) {
                     setWorkId(json.work.id);
                     toast.success(t('WorkSaved'))
                     return json.work;
                 }
-                else {
-                    console.log('Existe')
+                else if (json.error && ['WORK_ALREADY_EXIST','EDITION_ALREADY_EXIST'].includes(json.error)) {
                     setShowExistingWork(true)
                     setWorkId(json.work.id)
                 }
+                else if (json.error)
+                    toast.error(t(json.error))
+
             }
             return null;
         },
@@ -236,8 +240,14 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
             queryClient.invalidateQueries('works.mosaic');
             router.push(`/work/${workId}`);
         }
+
+        if (isLoading === true) {
+            setLoading(true);
+        }
+        else
+            setLoading(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isSuccess]);
+    }, [isSuccess,isLoading]);
 
 
     function handleChangeSelectField(ev: SelectChangeEvent) {
