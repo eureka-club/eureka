@@ -40,6 +40,7 @@ import SpinnerComp from '@/src/components/Spinner';
 import Box from '@mui/material/Box';
 import Image from 'next/image';
 import WMI from '@/src/components/work/MosaicItem';
+import { EDITION_ALREADY_EXIST, WORK_ALREADY_EXIST } from '@/src/api_code';
 
 interface Props {
     noModal?: boolean;
@@ -138,7 +139,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                     toast.success(t('WorkSaved'))
                     return json.work;
                 }
-                else if (json.error && ['WORK_ALREADY_EXIST', 'EDITION_ALREADY_EXIST'].includes(json.error)) {
+                else if (json.error && [WORK_ALREADY_EXIST, EDITION_ALREADY_EXIST].includes(json.error)) {
                     setShowExistingWork(true)
                     setWorkId(json.work.id)
                 }
