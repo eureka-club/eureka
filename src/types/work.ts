@@ -122,6 +122,7 @@ export interface CreateWorkServerPayload {
   authorRace?: string;
   contentText?: string;
   link?: string;
+  isbn?:string;
   countryOfOrigin?: string;
   countryOfOrigin2?: string;
   publicationYear?: Date;

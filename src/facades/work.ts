@@ -1,9 +1,8 @@
-import { Prisma, Work, User, RatingOnWork, ReadOrWatchedWork, Edition, LocalImage } from '@prisma/client';
+import { Prisma, Work, User, RatingOnWork, ReadOrWatchedWork } from '@prisma/client';
 import { Languages, StoredFileUpload } from '../types';
 import { CreateWorkServerFields, CreateWorkServerPayload, WorkMosaicItem } from '../types/work';
 import { prisma } from '@/src/lib/prisma';
-import Fuse from 'fuse.js'
-import { EDITION_ALREADY_EXIST, WORK_ALREADY_EXIST } from '@/src/api_code';
+import { MISSING_FIELD, WORK_ALREADY_EXIST } from '@/src/api_code';
 
 const  include = {
   localImages: { select: { storedFile: true } },
@@ -178,131 +177,41 @@ export const createFromServerFields = async (
     if (fieldName === 'publicationYear') {
       return { ...memo, [fieldName]: new Date(fieldValues[0]) };
     }
-
     return { ...memo, [fieldName]: fieldValues[0] };
   }, {} as CreateWorkServerPayload);
-  
-  const fn =(text:string,language:string)=>fetch(`${process.env.NEXTAUTH_URL}/api/google-translate/?text=${text}&target=${language}`)
-      .then(d=>d.json());
-  
-  let promises = Object.keys(Languages).map(language=>fn(payload.title, language));
-
-  let tilr = await Promise.all<{data:string}>(promises);
-  const titles_in_languages = tilr.map(i=>i.data);
-
-  const worksByAuthor = await prisma.work.findMany({
-    where:{
-      author:payload.author
-    },
-    include
-  });
-
-  const fuseOpt = {
-    includeScore: true,
-    shouldSort: true,
-    threshold: 0.5, 
-    keys: [
-      "title",
-    ]
-  }
-
-  const fuseForWork = new Fuse(worksByAuthor, fuseOpt);
-  let fuseForWorkRes = fuseForWork.search(payload.title).filter(f=>payload.language == f.item.language); 
-  
-  if(fuseForWorkRes.length){
-    const work = fuseForWorkRes[0].item;
-    return {error:WORK_ALREADY_EXIST,work};
-  }
-  else{
-      //for every work's editions check whether already exist one or not 
-      worksByAuthor.forEach(w=>{
-          const fuseForEdition = new Fuse(w.editions, fuseOpt);
-          let fuseForEditionRes = fuseForEdition.search(payload.title).filter(f=>payload.language == f.item.language);
-          if(fuseForEditionRes?.length){
-            return {error:EDITION_ALREADY_EXIST,work};
-          }
-      });
-  }
-  
-  // if not already exist, then should find a work wich title matching on titles_in_languages
-  
-  let work:WorkMosaicItem|null = null;
-  if(worksByAuthor?.length){
-    let i = 0, til_length = titles_in_languages.length ;
-    for(; i < til_length; i++){
-      let title = titles_in_languages[i];
-      let fuseForWorkRes = fuseForWork.search(title);//.filter(f=>payload.language == f.item.language); 
-      if(fuseForWorkRes?.length){
-        work = fuseForWorkRes[0].item;
-        break;
-      }
-    }
-  }
   
   const existingLocalImage = await prisma.localImage.findFirst({
     where: { contentHash: coverImageUpload.contentHash },
   });
-  
-  if(!work){
-    //adding as work
-    const w = await prisma.work.create({
-      include,
-      data: {
-        ...payload,
-        ToCheck: true,
-        localImages: {
-          ... existingLocalImage 
-          ? {
-            connect: {
-              id: existingLocalImage.id,
-            }
-          }
-          : {
-            create: { ...coverImageUpload }
-          }
-        },
-      },
-    });
-      return {work:w};
-    
+
+  if("isbn" in payload){
+    if(!payload.isbn)
+      return{error:MISSING_FIELD('isbn')};
+    const w = await prisma.work.findFirst({where:{
+      isbn:payload.isbn
+    }});
+    if(w)
+      return{error:WORK_ALREADY_EXIST};
   }
-  else{
-    //adding as work's edition
-    console.log(payload.contentText?.length, 'payload.contentText');
-    const edition = await prisma.edition.create({
-      include:{localImages: { select: { storedFile: true } }},
-      data: {
-        title:payload.title,
-        contentText:payload.contentText,
-        publicationYear:payload.publicationYear,
-        language:payload.language,
-        countryOfOrigin:payload.countryOfOrigin,
-        length:payload.length,
-        ToCheck: true,
-        localImages: {
-          ... existingLocalImage 
-          ? {
-            connect: {
-              id: existingLocalImage.id,
-            }
+  const w = await prisma.work.create({
+    include,
+    data: {
+      ...payload,
+      ToCheck: true,
+      localImages: {
+        ... existingLocalImage 
+        ? {
+          connect: {
+            id: existingLocalImage.id,
           }
-          : {
-            create: { ...coverImageUpload }
-          }
-        },
-        work:{
-          connect:{id:work.id}
-        },
-        creator:{
-          connect:{id:work.creatorId}
+        }
+        : {
+          create: { ...coverImageUpload }
         }
       },
-    });
-    work.editions.unshift(edition);
-    // work.editions.push(edition);
-    const w = editionsToBook(work,edition.language)!;
-    return {work:w};
-  }
+    },
+  });
+  return {work:w};
 };
 
 export const UpdateFromServerFields = async (

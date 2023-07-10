@@ -186,6 +186,7 @@ model Cycle {
 
 model Work {
   id               Int       @id @default(autoincrement())
+  isbn             String?   
   creatorId        Int       @default(1) @map(name: "creator_id")
   type             String
   title            String
