@@ -229,16 +229,17 @@ model Work {
 }
 
 model Edition {
-  id              Int       @id @default(autoincrement())
-  title           String
-  contentText     String?
-  publicationYear DateTime? @map(name: "publication_year")
-  language        String
-  countryOfOrigin String?  
-  length          String?
-  work            Work      @relation(fields: [workId], references: [id])
-  workId          Int
-  ToCheck         Boolean? @default(false)
+  id                Int       @id @default(autoincrement())
+  title             String
+  isbn              String?   
+  contentText       String?   @map(name: "content_text") @db.VarChar(4000)
+  publicationYear   DateTime? @map(name: "publication_year")
+  language          String
+  countryOfOrigin   String?  
+  length            String?
+  work              Work      @relation(fields: [workId], references: [id])
+  workId            Int
+  ToCheck           Boolean? @default(false)
 
   creator     User     @relation(fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   creatorId   Int      @default(1) @map(name: "creator_id")

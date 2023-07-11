@@ -59,7 +59,6 @@ export default getApiHandler()
     try {
       const { q = null,props:p=undefined,lang:l } = req.query;
       const language = Languages[l?.toString()??"es"];
-      
       const props:Prisma.WorkFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
       let {where:w,take,cursor,skip} = props;
       const session = await getSession({ req });
@@ -136,6 +135,6 @@ export default getApiHandler()
       console.error(exc); // eslint-disable-line no-console
       res.status(200).json({ status: SERVER_ERROR,error:SERVER_ERROR });
     } finally {
-      //prisma.$disconnect();
+     //prisma.$disconnect();
     }
   });

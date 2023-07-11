@@ -72,7 +72,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   const [image3, setImage3] = useState<string | undefined>();
   const queryClient = useQueryClient();
   const { data: bo } = useBackOffice();
-  const { data } = useWorks(WorkToCheckWhere());
+  const { data } = useWorks(WorkToCheckWhere(), { cacheKey: 'WORKS' });
   const works = data?.works;
 
   useEffect(() => {
@@ -278,7 +278,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   },
     {
       onMutate: async () => {
-        const cacheKey = ['WORKS', `${JSON.stringify(WorkToCheckWhere())}`];
+        const cacheKey = [`WORKS-${JSON.stringify(WorkToCheckWhere())}`];
         const snapshot = queryClient.getQueryData(cacheKey);
         return { cacheKey, snapshot };
       },

@@ -1,8 +1,8 @@
-import { Prisma, Work, User, RatingOnWork, ReadOrWatchedWork } from '@prisma/client';
+import { Prisma, Work,Edition, User, RatingOnWork, ReadOrWatchedWork } from '@prisma/client';
 import { Languages, StoredFileUpload } from '../types';
 import { CreateWorkServerFields, CreateWorkServerPayload, WorkMosaicItem } from '../types/work';
 import { prisma } from '@/src/lib/prisma';
-import { MISSING_FIELD, WORK_ALREADY_EXIST } from '@/src/api_code';
+import { MISSING_FIELD, WORK_ALREADY_EXIST ,EDITION_ALREADY_EXIST} from '@/src/api_code';
 
 const  include = {
   localImages: { select: { storedFile: true } },
@@ -170,7 +170,7 @@ export const isReadOrWatchedByUser = async (work: Work, user: User): Promise<num
 export const createFromServerFields = async (
   fields: CreateWorkServerFields,
   coverImageUpload: StoredFileUpload,
-): Promise<{error?:string,work?:Work|null}> => {
+): Promise<{error?:string,work?:Work|Edition|null}> => {
   const payload = Object.entries(fields).reduce((memo, field) => {
     const [fieldName, fieldValues] = field;
 
@@ -193,6 +193,13 @@ export const createFromServerFields = async (
         },
       });
       if (w) return { work: w, error: WORK_ALREADY_EXIST };
+      const e = await prisma.edition.findFirst({
+        where: {
+          isbn: payload.isbn,
+        },
+      });
+      if (e) return { work: e, error: WORK_ALREADY_EXIST };
+
     }
   }
 
