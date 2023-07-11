@@ -81,6 +81,7 @@ export type WorkMosaicItem = Prisma.WorkGetPayload<{
 export interface CreateWorkClientPayload {
   cover: File;
   type: string;
+  isbn: string | null;
   title: string;
   author: string;
   authorGender: string | null;
@@ -163,12 +164,13 @@ export interface GoogleBooksProps {
     description: string;
     publisher: string;
     language: string;
-    pageCount:number;
-    printType:string;
+    pageCount: number;
+    printType: string;
     imageLinks: {
       thumbnail: string;
     };
-    infoLink:string;
+    infoLink: string;
+    industryIdentifiers: { type: string; identifier: string }[];//aca viene isbn de 10 y 13 
   };
   saleInfo: {
     saleability: string;

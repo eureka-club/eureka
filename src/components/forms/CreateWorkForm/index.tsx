@@ -41,6 +41,7 @@ import Box from '@mui/material/Box';
 import Image from 'next/image';
 import WMI from '@/src/components/work/MosaicItem';
 import { EDITION_ALREADY_EXIST, WORK_ALREADY_EXIST } from '@/src/api_code';
+import Link from 'next/link'
 
 interface Props {
     noModal?: boolean;
@@ -48,6 +49,7 @@ interface Props {
 
 interface FormValues {
     type?: string | '';
+    isbn?: string;
     title?: string;
     link?: string;
     author?: string;
@@ -79,6 +81,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
     const [formValues, setFormValues] = useState<FormValues>({
         type: '',
+        isbn: '',
         title: '',
         link: '',
         author: '',
@@ -134,6 +137,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
             if (res.ok) {
                 const json = await res.json();
+                console.log(json)
                 if (!json.error) {
                     setWorkId(json.work.id);
                     toast.success(t('WorkSaved'))
@@ -159,6 +163,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
     const handleFormClear = (ev: MouseEvent<HTMLButtonElement>) => {
         setFormValues({
             type: '',
+            isbn: '',
             title: '',
             link: '',
             author: '',
@@ -179,6 +184,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
     const handleClear = () => { //lo repito para tenerlo sin tener q pasar evento
         setFormValues({
             type: '',
+            isbn: '',
             title: '',
             link: '',
             author: '',
@@ -196,6 +202,14 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
         setSelectedWork(null);
     };
 
+    const handleToDoOtherSearch = (ev: MouseEvent<HTMLButtonElement>) => {
+        ev.preventDefault();
+        handleClear();
+        setSelectedWork(null);
+        setWorkId(undefined);
+        setShowExistingWork(false);
+    };
+
     const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
 
@@ -206,6 +220,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
         const payload: CreateWorkClientPayload = {
             type: formValues?.type!,
             title: formValues?.title!,
+            isbn: formValues?.isbn!,
             author: formValues?.author!,
             authorGender: formValues.authorGender ? formValues.authorGender : null,
             authorRace: formValues.authorRace ? formValues.authorRace : null,
@@ -220,7 +235,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
             topics: items.join(','),
             language: formValues?.language!,
         };
-
+        // console.log(payload,'payload')
         await execCreateWork(payload);
     };
 
@@ -304,7 +319,6 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                 },
                 body: JSON.stringify({ type: formValues.type, search: q, language: `${router.locale}` }),
             }).then((r) => r.json());
-
             if (data && data.length)
                 setResultWorks(data);
             else if (!data || !data.length) {
@@ -341,7 +355,14 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                 let file = await getImg(src)
                 setCoverFile(file);
             }
+
+            let isbn;
+            if (work.volumeInfo?.industryIdentifiers && work.volumeInfo?.industryIdentifiers.length)
+                isbn = work.volumeInfo?.industryIdentifiers.filter(x => x.type == 'ISBN_10')[0].identifier;
+
             //////////////////////////////////////////////////
+            formValues['link'] = (work.volumeInfo?.infoLink) ? work.volumeInfo.infoLink : "";
+            formValues['isbn'] = isbn;
             formValues['title'] = work.volumeInfo.title;
             formValues['author'] = work.volumeInfo.authors ? work.volumeInfo.authors.join(',') : "";
             formValues['publicationYear'] = (work.volumeInfo.publishedDate) ? work.volumeInfo.publishedDate : "";
@@ -667,25 +688,38 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                     </Container>}
                 </ModalFooter></>}
             {
-                showExistingWork && <>
-                    <ModalHeader closeButton={!noModal}>
-                        <ModalTitle> <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('ExistingWorktitle')}</h1></ModalTitle>
-                    </ModalHeader>
+                showExistingWork && <Row className="mb-5 d-flex flex-column">
 
-                    <ModalBody>
+                    <Col>
+                        <h1 className="text-secondary text-center  fw-bold mt-sm-0 mb-3 mb-lg-5">{t('ExistingWorktitle')}</h1>
+                       
+                    </Col>
+                    <Col className='d-flex  justify-content-center align-items-center'>
                         <WMI workId={workId!}
-                            showTrash
                             size={'lg'}
                             showCreateEureka={false}
                             showSaveForLater={true}
+                            showSocialInteraction
                         />
-                    </ModalBody>
-
-
-                </>
+                    </Col>
+                    <Col className='d-flex  justify-content-center align-items-center'>
+                        <Box sx={{
+                            width: {
+                                xs: '80%', // theme.breakpoints.up('xs')
+                                md: '30%', // theme.breakpoints.up('md')
+                            },
+                        }} >
+                        <Button
+                            className={`mt-3 mt-lg-5 btn-eureka `}
+                                onClick={(e) => handleToDoOtherSearch(e)}
+                            style={{ width: '100%', height: '2.5em' }}
+                        >
+                                {t('MakeSearchText')}
+                            </Button></Box> </Col>
+                </Row>
 
             }
-        </Form>
+        </Form >
 
 
 

@@ -184,15 +184,18 @@ export const createFromServerFields = async (
     where: { contentHash: coverImageUpload.contentHash },
   });
 
-  if("isbn" in payload){
-    if(!payload.isbn)
-      return{error:MISSING_FIELD('isbn')};
-    const w = await prisma.work.findFirst({where:{
-      isbn:payload.isbn
-    }});
-    if(w)
-      return{error:WORK_ALREADY_EXIST};
+  if (['book', 'fiction-book'].includes(payload.type)) {
+    if ('isbn' in payload) {
+      if (!payload.isbn) return { error: MISSING_FIELD('isbn') };
+      const w = await prisma.work.findFirst({
+        where: {
+          isbn: payload.isbn,
+        },
+      });
+      if (w) return { work: w, error: WORK_ALREADY_EXIST };
+    }
   }
+
   const w = await prisma.work.create({
     include,
     data: {
