@@ -1,10 +1,10 @@
-import { Prisma, Work,Edition, User, RatingOnWork, ReadOrWatchedWork } from '@prisma/client';
+import { Prisma, Work, Edition, User, RatingOnWork, ReadOrWatchedWork } from '@prisma/client';
 import { Languages, StoredFileUpload } from '../types';
 import { CreateWorkServerFields, CreateWorkServerPayload, WorkMosaicItem } from '../types/work';
 import { prisma } from '@/src/lib/prisma';
-import { MISSING_FIELD, WORK_ALREADY_EXIST ,EDITION_ALREADY_EXIST} from '@/src/api_code';
+import { MISSING_FIELD, WORK_ALREADY_EXIST, EDITION_ALREADY_EXIST } from '@/src/api_code';
 
-const  include = {
+const include = {
   localImages: { select: { storedFile: true } },
   _count: { select: { ratings: true } },
   favs: { select: { id: true } },
@@ -13,16 +13,17 @@ const  include = {
   posts: {
     select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
   },
-  editions:{include:{localImages: { select: { storedFile: true } }}},
-}
-const editionsToBook = (book:WorkMosaicItem, language:string):WorkMosaicItem|null => {
-  if(book.language==language){
+  editions: { include: { localImages: { select: { storedFile: true } } } },
+};
+const editionsToBook = (book: WorkMosaicItem, language: string): WorkMosaicItem | null => {
+  if (book.language == language) {
     return book;
   }
-  let i = 0, count = book.editions?.length;
-  for(;i<count;i++){
+  let i = 0,
+    count = book.editions?.length;
+  for (; i < count; i++) {
     const e = book?.editions[i];
-    if(e.language==language){
+    if (e.language == language) {
       book.title = e.title;
       book.contentText = e.contentText;
       book.publicationYear = e.publicationYear;
@@ -35,29 +36,40 @@ const editionsToBook = (book:WorkMosaicItem, language:string):WorkMosaicItem|nul
     }
   }
   return null;
-}
+};
 
-export const find = async (id: number,language:string): Promise<WorkMosaicItem | null> => {
+export const find = async (id: number, language: string): Promise<WorkMosaicItem | null> => {
   let work = await prisma.work.findUnique({
     where: { id },
     include,
   });
-  if(work){
-    work = editionsToBook(work,language);
+  if (work) {
+    work = editionsToBook(work, language);
     return work;
   }
   return null;
 };
 
-export const findAll = async (language:string, props?: Prisma.WorkFindManyArgs): Promise<WorkMosaicItem[]> => {
+export const findWithoutLangRestrict = async (id: number): Promise<WorkMosaicItem | null> => {
+  let work = await prisma.work.findUnique({
+    where: { id },
+    include,
+  });
+  if (work) {
+    return work;
+  }
+  return null;
+};
+
+export const findAll = async (language: string, props?: Prisma.WorkFindManyArgs): Promise<WorkMosaicItem[]> => {
   const { where, include = null, take, skip, cursor } = props || {};
-  
+
   let works = await prisma.work.findMany({
     take,
     skip,
     cursor,
     orderBy: { createdAt: 'desc' },
-    include:{
+    include: {
       localImages: { select: { storedFile: true } },
       _count: { select: { ratings: true } },
       favs: { select: { id: true } },
@@ -66,28 +78,56 @@ export const findAll = async (language:string, props?: Prisma.WorkFindManyArgs):
       posts: {
         select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
       },
-      editions:{include:{localImages: { select: { storedFile: true } }}},
+      editions: { include: { localImages: { select: { storedFile: true } } } },
     },
     where,
   });
 
-  if(works){
-    works = works.map(w=>editionsToBook(w,language)!);
+  if (works) {
+    works = works.map((w) => editionsToBook(w, language)!);
+  }
+  return works;
+};
+
+export const findAllWithoutLangRestrict = async (props?: Prisma.WorkFindManyArgs): Promise<WorkMosaicItem[]> => {
+  const { where, include = null, take, skip, cursor } = props || {};
+
+  let works = await prisma.work.findMany({
+    take,
+    skip,
+    cursor,
+    orderBy: { createdAt: 'desc' },
+    include: {
+      localImages: { select: { storedFile: true } },
+      _count: { select: { ratings: true } },
+      favs: { select: { id: true } },
+      ratings: { select: { userId: true, qty: true } },
+      readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+      posts: {
+        select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+      },
+      editions: { include: { localImages: { select: { storedFile: true } } } },
+    },
+    where,
+  });
+
+  if (works) {
+    works = works.map((w) => editionsToBook(w, w.language)!);
   }
   return works;
 };
 
 export const search = async (query: { [key: string]: string | string[] | undefined }): Promise<Work[]> => {
-  const { q, where, include,lang:l } = query;
-  const language = Languages[l?.toString()??"es"];
-  
+  const { q, where, include, lang: l } = query;
+  const language = Languages[l?.toString() ?? 'es'];
+
   if (where == null && q == null) {
     throw new Error("[412] Invalid invocation! Either 'q' or 'where' query parameter must be provided");
   }
 
   if (typeof q === 'string') {
     return prisma.work.findMany({
-      include:{
+      include: {
         localImages: { select: { storedFile: true } },
         _count: { select: { ratings: true } },
         favs: { select: { id: true } },
@@ -96,7 +136,7 @@ export const search = async (query: { [key: string]: string | string[] | undefin
         posts: {
           select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
         },
-        editions:{include:{localImages: { select: { storedFile: true } }}},
+        editions: { include: { localImages: { select: { storedFile: true } } } },
       },
       where: {
         OR: [{ title: { contains: q } }, { author: { contains: q } }],
@@ -107,7 +147,7 @@ export const search = async (query: { [key: string]: string | string[] | undefin
 
   let works = await prisma.work.findMany({
     ...(typeof where === 'string' && { where: JSON.parse(where) }),
-    include:{
+    include: {
       localImages: { select: { storedFile: true } },
       _count: { select: { ratings: true } },
       favs: { select: { id: true } },
@@ -116,11 +156,10 @@ export const search = async (query: { [key: string]: string | string[] | undefin
       posts: {
         select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
       },
-      editions:{include:{localImages: { select: { storedFile: true } }}},
+      editions: { include: { localImages: { select: { storedFile: true } } } },
     },
   });
-  if(works)
-    works = works.map(w=>editionsToBook(w, language)!);
+  if (works) works = works.map((w) => editionsToBook(w, language)!);
   return works;
 };
 
@@ -170,7 +209,7 @@ export const isReadOrWatchedByUser = async (work: Work, user: User): Promise<num
 export const createFromServerFields = async (
   fields: CreateWorkServerFields,
   coverImageUpload: StoredFileUpload,
-): Promise<{error?:string,work?:Work|Edition|null}> => {
+): Promise<{ error?: string; work?: Work | Edition | null }> => {
   const payload = Object.entries(fields).reduce((memo, field) => {
     const [fieldName, fieldValues] = field;
 
@@ -179,7 +218,7 @@ export const createFromServerFields = async (
     }
     return { ...memo, [fieldName]: fieldValues[0] };
   }, {} as CreateWorkServerPayload);
-  
+
   const existingLocalImage = await prisma.localImage.findFirst({
     where: { contentHash: coverImageUpload.contentHash },
   });
@@ -199,7 +238,6 @@ export const createFromServerFields = async (
         },
       });
       if (e) return { work: e, error: WORK_ALREADY_EXIST };
-
     }
   }
 
@@ -209,19 +247,19 @@ export const createFromServerFields = async (
       ...payload,
       ToCheck: true,
       localImages: {
-        ... existingLocalImage 
-        ? {
-          connect: {
-            id: existingLocalImage.id,
-          }
-        }
-        : {
-          create: { ...coverImageUpload }
-        }
+        ...(existingLocalImage
+          ? {
+              connect: {
+                id: existingLocalImage.id,
+              },
+            }
+          : {
+              create: { ...coverImageUpload },
+            }),
       },
     },
   });
-  return {work:w};
+  return { work: w };
 };
 
 export const UpdateFromServerFields = async (
@@ -246,17 +284,16 @@ export const UpdateFromServerFields = async (
     : null;
 
   if (existingLocalImage != null) {
-     const q1 = prisma.work.update({
-       where: { id: workId },
-       data: {
-         localImages: {
-           set: [],
-         },
-       },
-     });
+    const q1 = prisma.work.update({
+      where: { id: workId },
+      data: {
+        localImages: {
+          set: [],
+        },
+      },
+    });
 
-     await prisma.$transaction([q1]);
-
+    await prisma.$transaction([q1]);
 
     return prisma.work.update({
       where: { id: workId },

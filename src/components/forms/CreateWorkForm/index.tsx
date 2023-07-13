@@ -137,7 +137,6 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
             if (res.ok) {
                 const json = await res.json();
-                console.log(json)
                 if (!json.error) {
                     setWorkId(json.work.id);
                     toast.success(t('WorkSaved'))
