@@ -2,7 +2,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { UserLanguages } from '@/src/types';
-import { useState, FormEvent, useEffect } from 'react';
+import { useState, FormEvent, useEffect, useCallback, ChangeEventHandler, ChangeEvent } from 'react';
 import { QueryClient, dehydrate, useMutation, useQueryClient } from 'react-query';
 import { backOfficePayload } from '@/src/types/backoffice';
 import useBackOffice from '@/src/useBackOffice';
@@ -11,7 +11,7 @@ import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import LocalImageComponent from '@/src/components/LocalImage';
 import { getWorks } from '@/src/useWorks';
 import useWorks from '@/src/useWorks';
-import { Work } from '@prisma/client';
+import { Edition, Work } from '@prisma/client';
 import { Session } from '@/src/types';
 import dayjs from 'dayjs';
 import { DATE_FORMAT_ONLY_YEAR } from '@/src/constants';
@@ -40,6 +40,10 @@ import styles from './back-office.module.css'
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
 import toast from 'react-hot-toast'
 import axios from 'axios';
+import MosaicItem from '@/src/components/work/MosaicItem';
+import { debounce } from 'lodash';
+import { WorkMosaicItem } from '@/src/types/work';
+import { Box, Fab, Paper, TextField, Typography } from '@mui/material';
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
 const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 interface Props {
@@ -74,8 +78,36 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   const queryClient = useQueryClient();
   const { data: bo } = useBackOffice();
   const { data } = useWorks(WorkToCheckWhere(), { cacheKey: 'WORKS', notLangRestrict: true });
+  
+  const [searchWorksFilter,setSearchWorksFilter] = useState('');
+  const { data:dataAW } = useWorks({where: {
+    ToCheck: null,
+    title:{
+      contains:searchWorksFilter
+    }
+  }}, { cacheKey: 'WORKS-ALL',enabled:!!searchWorksFilter });
+  const [allWorks,setAllWorks] = useState<WorkMosaicItem[]>();
+
+  const debounceFn = useCallback(debounce((value:string)=>{
+    if(value)
+      setSearchWorksFilter(value);
+  },400),[searchWorksFilter]);
+  
+  useEffect(()=>{
+    setAllWorks(dataAW?.works);
+    return ()=>{
+      debounceFn.cancel();
+    }
+  },[dataAW,searchWorksFilter]);
+
+  function OnFilterWorksChanged(e:ChangeEvent<HTMLInputElement>){
+    debounceFn(e.target.value);
+  }
+
   const works = data?.works;
 
+  const [workDnD,setWorkDnd] = useState<any>();//:-|
+  
   useEffect(() => {
     if (notFound)
       router.push('/');
@@ -603,8 +635,8 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
         <TabContent>
           <TabPane eventKey="work-administration">
             <h1 className='mt-4'>Works for Revision</h1>
-            {works ?
-              <Table>
+            {works ?<div className="row">
+              <Table className='col'>
                 <thead>
                   <tr>
                     <th>&nbsp;</th>
@@ -618,7 +650,10 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                 </thead>
                 <tbody>
                   {works.map((work) => (
-                    <tr key={work.id}>
+                    <tr key={work.id} draggable onDragStart={(e)=>{
+                      setWorkDnd(work);
+                      //e.dataTransfer.setData("work",JSON.stringify(work))
+                    }}>
                       <td>
                         <LocalImageComponent
                           alt="work cover"
@@ -686,6 +721,49 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                   ))}
                 </tbody>
               </Table>
+              <Paper className='col' elevation={2} style={{padding:'.5rem'}}>
+              <TextField label="Search books by title" fullWidth onChange={OnFilterWorksChanged} />
+                {allWorks?.map((w,idx)=><Box m={1} key={`aw-${w.id}`} className='d-flex'>
+                  <MosaicItem work={w} workId={w.id}/>
+                  <Paper 
+                  className='work-item m-2 border'
+
+                  onDragOver={(e)=>{
+                    e.preventDefault();
+                    e.currentTarget.classList.add("border-primary");
+                  }}
+                  onDragLeave={(e)=>{
+                    e.currentTarget.classList.remove("border-primary");
+                  }}
+                  
+                  onDrop={(e)=>{
+                    e.currentTarget.classList.remove("border-primary");
+                    //let work = JSON.parse(e.dataTransfer.getData("work")); //:-|
+                    w.editions.push(workDnD!);
+                    setAllWorks(_=>[...allWorks]);
+                  }}
+                  >
+                    <Typography variant='h5' m={2}>
+                    {w.editions.length ? 'Editions' : "Drop edition here"}
+                    </Typography> 
+                    <Box className='d-flex'>
+                      {w.editions.map((ed:Edition,idx)=><Box>
+                        <Box style={{transform: "scale(.5)"}}>
+                            <Fab color="secondary" aria-label="edit" onClick={(e)=>{
+                              e.preventDefault();
+                              w.editions.splice(idx,1);
+                              setAllWorks(_=>[...allWorks]);
+                            }}>
+                              <DeleteIcon />
+                            </Fab>
+                          <MosaicItem workId={ed.id} />
+                        </Box>
+                        </Box>)}
+                    </Box>
+                  </Paper>
+                </Box>)}
+              </Paper>
+            </div>
               : <>...</>}
 
           </TabPane>
