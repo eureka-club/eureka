@@ -2,9 +2,13 @@ import { useQuery, UseQueryResult } from 'react-query';
 import { WorkMosaicItem } from './types/work';
 import useTranslation from 'next-translate/useTranslation';
 
-export const getWork = async (id: number,language:string,origin=''): Promise<WorkMosaicItem> => {
+export const getWork = async (id: number,language:string | undefined,origin=''): Promise<WorkMosaicItem> => {
   if (!id) throw new Error('idRequired');
-  const url = `${origin||''}/api/work/${id}?lang=${language}`;
+  let url = `${origin || ''}/api/work/${id}`; // ?lang=${language}
+  if(language)
+    url += `?lang=${language}`;
+
+  console.log(url,'urlurlurlurlurlurlurlurlurl')
   const res = await fetch(url);
   if (!res.ok) 
     throw Error('Error');
@@ -15,16 +19,17 @@ export const getWork = async (id: number,language:string,origin=''): Promise<Wor
 interface Options {
   staleTime?: number;
   enabled?: boolean;
+  notLangRestrict?:boolean
 }
 
 const useWork = (id: number, options?: Options): UseQueryResult<WorkMosaicItem,Error> => {
   const {lang} = useTranslation();
-  const ck = ['WORK', `${id}-${lang}`];
-  const { staleTime, enabled } = options || {
+  const { staleTime, enabled, notLangRestrict } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  return useQuery<WorkMosaicItem,Error>(ck, () => getWork(id,lang!), {
+  const ck = notLangRestrict ? ['WORK', `${id}`] : ['WORK', `${id}-${lang}`];
+  return useQuery<WorkMosaicItem, Error>(ck, () => getWork(id, !notLangRestrict ? lang!:undefined), {
     staleTime,
     enabled,
   });

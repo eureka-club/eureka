@@ -1,6 +1,7 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { UserLanguages } from '@/src/types';
 import { useState, FormEvent, useEffect, useCallback, ChangeEvent } from 'react';
 import { QueryClient, dehydrate, useMutation, useQueryClient } from 'react-query';
 import { backOfficePayload } from '@/src/types/backoffice';
@@ -17,7 +18,7 @@ import { DATE_FORMAT_ONLY_YEAR } from '@/src/constants';
 import FindInPageOutlinedIcon from '@mui/icons-material/FindInPageOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-
+import Image from 'next/image';
 import {
   TabPane,
   TabContent,
@@ -64,7 +65,9 @@ export const WorkToCheckWhere = () => ({
 })
 
 const BackOffice: NextPage<Props> = ({ notFound, session }) => {
-  const { t } = useTranslation('backOffice');
+  //let { t } = useTranslation('backOffice');
+  //TODO
+  const t=(s:string)=>s;
   const router = useRouter();
   const [tabKey, setTabKey] = useState<string>();
   const [currentSlider, setCurrentSlider] = useState<number>(0);
@@ -78,7 +81,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   const [image3, setImage3] = useState<string | undefined>();
   const queryClient = useQueryClient();
   const { data: bo } = useBackOffice();
-  const { data } = useWorks(WorkToCheckWhere(), { cacheKey: 'WORKS' });
+  const { data } = useWorks(WorkToCheckWhere(), { cacheKey: 'WORKS', notLangRestrict: true });
   
   const [searchWorksFilter,setSearchWorksFilter] = useState('');
   const { data:dataAW } = useWorks({where: {
@@ -340,7 +343,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   },
     {
       onMutate: async () => {
-        const cacheKey = ['WORKS', `${JSON.stringify(WorkToCheckWhere())}`];
+        const cacheKey = [`WORKS-${JSON.stringify(WorkToCheckWhere())}`];
         const snapshot = queryClient.getQueryData(cacheKey);
         return { cacheKey, snapshot };
       },
@@ -645,6 +648,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                     <th>Title</th>
                     <th>Author</th>
                     <th>Year</th>
+                    <th className='text-center'>Language</th>
                     <th className='text-center'>Actions</th>
                   </tr>
                 </thead>
@@ -666,9 +670,10 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                       <td>{work.title}</td>
                       <td>{work.author}</td>
                       <td>{work.publicationYear && dayjs(work.publicationYear).format(DATE_FORMAT_ONLY_YEAR)}</td>
+                      <td className='text-center'><Image width={24} height={24} className="m-0" src={`/img/lang-flags/${UserLanguages[work.language]}.png`} alt="Language flag 'es'" /></td>
                       <td >
                         <div className='d-flex flex-row justify-content-center'>
-                          <Button variant="link" href={`/work/${work.id}`} className="ms-2">
+                          <Button variant="link" href={`/work/${work.id}/edit?admin=${true}`} className="ms-2">
                             <FindInPageOutlinedIcon />
                           </Button>
 
@@ -753,7 +758,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                       }
                     </Box>
                     <Box sx={{display:"flex"}}>
-                      {w.editions.map((ed:Edition,idx)=><Box>
+                      {w.editions.map((ed:Edition,idx)=><Box key={`edition-${ed.id}`}>
                         <Box style={{transform: "scale(.5)"}}>
                             <Fab color="secondary" aria-label="edit" onClick={(e)=>{
                               e.preventDefault();
@@ -797,7 +802,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
   const qc = new QueryClient();
-  const worksData = await getWorks(ctx.locale!,undefined, origin);
+  const worksData = await getWorks(undefined, WorkToCheckWhere(), origin);
   qc.prefetchQuery('list/works', () => worksData);
 
   return {
