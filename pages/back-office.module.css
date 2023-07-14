@@ -16,5 +16,7 @@
 .sliderDelete{
   margin-inline-start: 7em;
 }
-
+.SuccessButon{
+  background-color: var(--eureka-green);
+}
 
