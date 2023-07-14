@@ -2,7 +2,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { UserLanguages } from '@/src/types';
-import { useState, FormEvent, useEffect, useCallback, ChangeEventHandler, ChangeEvent } from 'react';
+import { useState, FormEvent, useEffect, useCallback, ChangeEvent } from 'react';
 import { QueryClient, dehydrate, useMutation, useQueryClient } from 'react-query';
 import { backOfficePayload } from '@/src/types/backoffice';
 import useBackOffice from '@/src/useBackOffice';
@@ -33,7 +33,8 @@ import {
   Form,
   Popover,
   OverlayTrigger,
-  Table
+  Table,
+  
 } from 'react-bootstrap';
 import { FiTrash2 } from 'react-icons/fi';
 import styles from './back-office.module.css'
@@ -43,7 +44,8 @@ import axios from 'axios';
 import MosaicItem from '@/src/components/work/MosaicItem';
 import { debounce } from 'lodash';
 import { WorkMosaicItem } from '@/src/types/work';
-import { Box, Fab, Paper, TextField, Typography } from '@mui/material';
+import { Box, Fab, Paper, TextField, Typography, Button as MaButton, ButtonGroup } from '@mui/material';
+import { FaSave } from 'react-icons/fa';
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
 const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 interface Props {
@@ -723,30 +725,37 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
               </Table>
               <Paper className='col' elevation={2} style={{padding:'.5rem'}}>
               <TextField label="Search books by title" fullWidth onChange={OnFilterWorksChanged} />
-                {allWorks?.map((w,idx)=><Box m={1} key={`aw-${w.id}`} className='d-flex'>
+                {allWorks?.map((w,idx)=><Box m={1} key={`aw-${w.id}`} sx={{display:"flex"}}>
                   <MosaicItem work={w} workId={w.id}/>
                   <Paper 
-                  className='work-item m-2 border'
-
+                  sx={{marginLeft:".5rem"}}
                   onDragOver={(e)=>{
                     e.preventDefault();
-                    e.currentTarget.classList.add("border-primary");
+                    e.currentTarget.style.boxShadow = "0px 0px 7px var(--eureka-green)";
                   }}
                   onDragLeave={(e)=>{
-                    e.currentTarget.classList.remove("border-primary");
+                    e.currentTarget.style.boxShadow="";
                   }}
                   
                   onDrop={(e)=>{
-                    e.currentTarget.classList.remove("border-primary");
-                    //let work = JSON.parse(e.dataTransfer.getData("work")); //:-|
+                    e.currentTarget.style.boxShadow="";
                     w.editions.push(workDnD!);
                     setAllWorks(_=>[...allWorks]);
                   }}
                   >
-                    <Typography variant='h5' m={2}>
-                    {w.editions.length ? 'Editions' : "Drop edition here"}
-                    </Typography> 
-                    <Box className='d-flex'>
+                    <Box sx={{display:"flex"}}>
+                      <Typography variant='h5' m={2}>
+                      {w.editions.length ? 'Editions' : "Drop edition here"}
+                      </Typography> 
+                      {
+                        w.editions.length 
+                        ?<ButtonGroup  sx={{marginLeft:'auto'}}>
+                          <MaButton className={styles.SuccessButon} style={{height:'3rem'}} variant="contained"><FaSave /></MaButton>
+                          </ButtonGroup>
+                        :<></>
+                      }
+                    </Box>
+                    <Box sx={{display:"flex"}}>
                       {w.editions.map((ed:Edition,idx)=><Box>
                         <Box style={{transform: "scale(.5)"}}>
                             <Fab color="secondary" aria-label="edit" onClick={(e)=>{
