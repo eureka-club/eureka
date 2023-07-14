@@ -89,7 +89,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
     title:{
       contains:searchWorksFilter
     }
-  }}, { cacheKey: 'WORKS-ALL',enabled:!!searchWorksFilter });
+  }}, { cacheKey: 'WORKS-ALL', notLangRestrict: true, enabled:!!searchWorksFilter });
   const [allWorks,setAllWorks] = useState<WorkMosaicItem[]>();
 
   const debounceFn = useCallback(debounce((value:string)=>{
