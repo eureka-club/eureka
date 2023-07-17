@@ -183,6 +183,34 @@ const AboutPage: NextPage<Props> = ({session}) => {
                 {t('Social Media')}
               </Badge>
             </Col>
+            <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
+              <Image
+                className="rounded-circle"
+                src={`/amanda_gois.webp`}
+                alt="Master in Literature"
+                width={200}
+                height={200}
+              />
+              <h2 className={styles.peopleName}>
+                Amanda Quitério de Gois
+                <a href="https://www.linkedin.com/in/amanda-quit%C3%A9rio-de-gois-0b5b111b5/" target="_blank" rel="noreferrer">
+                  <TiSocialLinkedinCircular className={styles.si} />
+                </a>
+              </h2>
+              <h3 className={styles.professionName}>{t('Master in Literature')}</h3>
+              <h4 className={styles.positionName}>{t('Partnerships and Development')}</h4>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
+                {t('Gender and feminisms')}
+              </Badge>
+              <br />
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
+                {t('Brazilian Popular Music')}
+              </Badge>
+              <br />
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
+                {t('Books')}
+              </Badge>
+            </Col>
 
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
@@ -242,35 +270,8 @@ const AboutPage: NextPage<Props> = ({session}) => {
               </Badge>
             </Col>
 
-            <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
-              <Image
-                className="rounded-circle"
-                src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/fernanda-pacheco.jpeg`}
-                alt="Picture of UI-UX Consultant"
-                width={200}
-                height={200}
-              />
-              <h2 className={styles.peopleName}>
-                Fernanda Pacheco
-                <a href="https://www.upwork.com/freelancers/fernandaland" target="_blank" rel="noreferrer">
-                  <SiUpwork className={styles.si} />
-                </a>
-              </h2>
-              <h3 className={styles.professionName}>{t('UI-UX Consultant')}</h3>
-              <h4 className={styles.positionName}>{t('UX/UI Web & App designer')}</h4>
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('technology')}
-              </Badge>
-              <br />
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('watersports')}
-              </Badge>
-              <br />
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('foodie')}
-              </Badge>
-            </Col>
-
+            
+<Row className='w-100 d-flex justify-content-center'>
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
@@ -299,6 +300,7 @@ const AboutPage: NextPage<Props> = ({session}) => {
                 {t('music')}
               </Badge>
             </Col>
+            </Row>
           </Row>
         </Container>
         <div style={{ textAlign: 'center', marginBottom: '4em' }}>
