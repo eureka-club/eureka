@@ -14,18 +14,18 @@ import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import { getSession } from 'next-auth/react';
 import { Session } from '@/src/types';
 
-interface Props{
-  session:Session
+interface Props {
+  session: Session
 }
-const AboutPage: NextPage<Props> = ({session}) => {
+const AboutPage: NextPage<Props> = ({ session }) => {
   const { t } = useTranslation('aboutUs');
   const NEXT_PUBLIC_AZURE_CDN_ENDPOINT = process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT;
   const NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME = process.env.NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME;
   return (<>
     <Head>
-        <meta name="title" content={t('meta:aboutUsTitle')}></meta>
-        <meta name="description" content={t('meta:aboutUsDescription')}></meta>
-    </Head> 
+      <meta name="title" content={t('meta:aboutUsTitle')}></meta>
+      <meta name="description" content={t('meta:aboutUsDescription')}></meta>
+    </Head>
     <SimpleLayout title={t('browserTitle')}>
       <div style={{ textAlign: 'center' }}>
         <h1 className="text-secondary fw-bold">{t('title')}</h1>
@@ -183,6 +183,34 @@ const AboutPage: NextPage<Props> = ({session}) => {
                 {t('Social Media')}
               </Badge>
             </Col>
+            <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
+              <Image
+                className="rounded-circle"
+                src={`/amanda_gois.webp`}
+                alt="Master in Literature"
+                width={200}
+                height={200}
+              />
+              <h2 className={styles.peopleName}>
+                Amanda Quitério de Gois
+                <a href="https://www.linkedin.com/in/amanda-quit%C3%A9rio-de-gois-0b5b111b5/" target="_blank" rel="noreferrer">
+                  <TiSocialLinkedinCircular className={styles.si} />
+                </a>
+              </h2>
+              <h3 className={styles.professionName}>{t('Master in Literature')}</h3>
+              <h4 className={styles.positionName}>{t('Partnerships and Development')}</h4>
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
+                {t('Gender and feminisms')}
+              </Badge>
+              <br />
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
+                {t('Brazilian Popular Music')}
+              </Badge>
+              <br />
+              <Badge pill className={`badge-secondary ${styles.interest}`}>
+                {t('Books')}
+              </Badge>
+            </Col>
 
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
@@ -242,63 +270,37 @@ const AboutPage: NextPage<Props> = ({session}) => {
               </Badge>
             </Col>
 
-            <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
-              <Image
-                className="rounded-circle"
-                src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/fernanda-pacheco.jpeg`}
-                alt="Picture of UI-UX Consultant"
-                width={200}
-                height={200}
-              />
-              <h2 className={styles.peopleName}>
-                Fernanda Pacheco
-                <a href="https://www.upwork.com/freelancers/fernandaland" target="_blank" rel="noreferrer">
-                  <SiUpwork className={styles.si} />
-                </a>
-              </h2>
-              <h3 className={styles.professionName}>{t('UI-UX Consultant')}</h3>
-              <h4 className={styles.positionName}>{t('UX/UI Web & App designer')}</h4>
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('technology')}
-              </Badge>
-              <br />
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('watersports')}
-              </Badge>
-              <br />
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('foodie')}
-              </Badge>
-            </Col>
 
-            <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
-              <Image
-                className="rounded-circle"
-                src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/don-zamna.jpeg`}
-                alt="Picture of Mastermind"
-                width={200}
-                height={200}
-              />
-              <h2 className={styles.peopleName}>
-                Don Zamna
-                <a href="https://linkedin.com/company/eleurekaclub" target="_blank" rel="noreferrer">
-                  <TiSocialLinkedinCircular className={styles.si} />
-                </a>
-              </h2>
-              <h3 className={styles.professionName}>{t('Mastermind')}</h3>
-              <h4 className={styles.positionName}>{t('Napping expert')}</h4>
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('birds')}
-              </Badge>
-              <br />
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('sleeping')}
-              </Badge>
-              <br />
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('music')}
-              </Badge>
-            </Col>
+            <Row className='w-100 d-flex justify-content-center'>
+              <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
+                <Image
+                  className="rounded-circle"
+                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/don-zamna.jpeg`}
+                  alt="Picture of Mastermind"
+                  width={200}
+                  height={200}
+                />
+                <h2 className={styles.peopleName}>
+                  Don Zamna
+                  <a href="https://linkedin.com/company/eleurekaclub" target="_blank" rel="noreferrer">
+                    <TiSocialLinkedinCircular className={styles.si} />
+                  </a>
+                </h2>
+                <h3 className={styles.professionName}>{t('Mastermind')}</h3>
+                <h4 className={styles.positionName}>{t('Napping expert')}</h4>
+                <Badge pill className={`badge-secondary ${styles.interest}`}>
+                  {t('birds')}
+                </Badge>
+                <br />
+                <Badge pill className={`badge-secondary ${styles.interest}`}>
+                  {t('sleeping')}
+                </Badge>
+                <br />
+                <Badge pill className={`badge-secondary ${styles.interest}`}>
+                  {t('music')}
+                </Badge>
+              </Col>
+            </Row>
           </Row>
         </Container>
         <div style={{ textAlign: 'center', marginBottom: '4em' }}>
@@ -320,42 +322,42 @@ const AboutPage: NextPage<Props> = ({session}) => {
             <section className='d-flex flex-row justify-content-around align-items-center mt-3'>
               <figure>
                 <Image
-              width={120}
-              height={37}
-                src="https://mozilla.design/files/2019/06/Mozilla_Logo_Static.png"
-                alt=""
-              />
+                  width={120}
+                  height={37}
+                  src="https://mozilla.design/files/2019/06/Mozilla_Logo_Static.png"
+                  alt=""
+                />
               </figure>
               <figure>
                 <Image
-                width={110}
-                height={110}
+                  width={110}
+                  height={110}
                   src="/equis.jpg"
                   alt=""
                 />
               </figure>
               <figure>
                 <Image
-                width={70}
-                height={90}
+                  width={70}
+                  height={90}
                   src="https://datapopalliance.org/wp-content/uploads/2019/02/DPA-Logo-Color.png"
                   alt=""
                 />
               </figure>
               <figure>
                 <Image
-                width={120}
-                height={80}
+                  width={120}
+                  height={80}
                   src="https://static.wixstatic.com/media/9c73d4_6be410789c004ed2b2281f0b7503645f~mv2.png/v1/fill/w_1046,h_700,al_c,q_90,usm_0.66_1.00_0.01/Logo%20-%20prosperia%20only%20-%20E%20normal%20-%20point.webp"
                   alt=""
                 />
               </figure>
             </section>
-          </div>         
+          </div>
         </div>
       </div>
     </SimpleLayout>
-    </>
+  </>
   );
 };
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
@@ -365,6 +367,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       session,
     },
   };
-  
+
 };
 export default AboutPage;
