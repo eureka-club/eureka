@@ -108,7 +108,10 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
     debounceFn(e.target.value);
   }
 
-  const works = data?.works;
+  const [works,setWorks] = useState(data?.works);
+  useEffect(()=>{
+    if(data?.works)setWorks(data.works);
+  },data?.works);
 
   const [workDnD,setWorkDnd] = useState<any>();//:-|
   
@@ -743,6 +746,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                     e.currentTarget.style.boxShadow="";
                     w.editions.push(workDnD!);
                     setAllWorks(_=>[...allWorks]);
+                    setWorks(_=>works.filter(w=>w.id!=workDnD.id));
                   }}
                   >
                     <Box sx={{display:"flex"}}>
@@ -758,12 +762,18 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                       }
                     </Box>
                     <Box sx={{display:"flex"}}>
-                      {w.editions.map((ed:Edition,idx)=><Box key={`edition-${ed.id}`}>
+                      {w.editions.map((ed:Edition,idx)=><Box  key={`edition-${ed.id}`}
+                        onDragStart={(e)=>{
+                          e.preventDefault();
+                        }}
+                      >
                         <Box style={{transform: "scale(.5)"}}>
                             <Fab color="secondary" aria-label="edit" onClick={(e)=>{
                               e.preventDefault();
-                              w.editions.splice(idx,1);
+                              let er = w.editions.splice(idx,1)[0] as unknown as WorkMosaicItem;
                               setAllWorks(_=>[...allWorks]);
+                              works.push(er);
+                              setWorks(_=>works);
                             }}>
                               <DeleteIcon />
                             </Fab>
