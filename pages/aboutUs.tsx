@@ -187,7 +187,7 @@ const AboutPage: NextPage<Props> = ({session}) => {
               <Image
                 className="rounded-circle"
                 src={`/amanda_gois.webp`}
-                alt="Master in Literature"
+                alt="Partnerships and Development"
                 width={200}
                 height={200}
               />
@@ -197,8 +197,8 @@ const AboutPage: NextPage<Props> = ({session}) => {
                   <TiSocialLinkedinCircular className={styles.si} />
                 </a>
               </h2>
-              <h3 className={styles.professionName}>{t('Master in Literature')}</h3>
-              <h4 className={styles.positionName}>{t('Partnerships and Development')}</h4>
+              <h3 className={styles.professionName}>{t('Partnerships and Development')}</h3>
+              <h4 className={styles.positionName}>{t('Master in Literature')}</h4>
               <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('Gender and feminisms')}
               </Badge>
