@@ -873,7 +873,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                       }}
                     >
                       <Box sx={{ display: "flex" }}>
-                        <Typography variant='h3' m={2}>
+                        <Typography variant='h5' m={2}>
                           {w.editions.length ? 'Editions' : "Drop edition here"}
                         </Typography>
                         {
