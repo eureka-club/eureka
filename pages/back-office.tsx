@@ -33,7 +33,7 @@ import {
   Form,
   Popover,
   OverlayTrigger,
-  Table,
+  //Table,
   
 } from 'react-bootstrap';
 import { FiTrash2 } from 'react-icons/fi';
@@ -44,7 +44,12 @@ import axios from 'axios';
 import MosaicItem from '@/src/components/work/MosaicItem';
 import { debounce } from 'lodash';
 import { WorkMosaicItem } from '@/src/types/work';
-import { Box, Fab, Paper, TextField, Typography, Button as MaButton, ButtonGroup } from '@mui/material';
+import { Box, Fab, Paper, TextField, Typography, Button as MaButton, ButtonGroup, Table, TableBody,
+  TableFooter, TablePagination, TableCell, TableContainer, TableHead, TableRow, Drawer, IconButton, Divider } from '@mui/material';
+import PaginationActions from '@/src/components/common/MUITablePaginationActions';
+import { styled, useTheme } from '@mui/material/styles';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { FaSave } from 'react-icons/fa';
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
 const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
@@ -57,6 +62,16 @@ interface Props {
 interface backOfficeClearSliderPayload {
   originalName?: string
 }
+const drawerWidth = 500;
+
+const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+  justifyContent: 'flex-start',
+}));
 
 export const WorkToCheckWhere = () => ({
   where: {
@@ -79,10 +94,13 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   const [image1, setImage1] = useState<string | undefined>();
   const [image2, setImage2] = useState<string | undefined>();
   const [image3, setImage3] = useState<string | undefined>();
+  const [page, setPage] = useState<number>(0);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const queryClient = useQueryClient();
   const { data: bo } = useBackOffice();
   const { data } = useWorks(WorkToCheckWhere(), { cacheKey: 'WORKS', notLangRestrict: true });
-  
+  const theme = useTheme();
+  const [open, setOpen] = useState<boolean>(false);
   const [searchWorksFilter,setSearchWorksFilter] = useState('');
   const { data:dataAW } = useWorks({where: {
     ToCheck: null,
@@ -380,6 +398,34 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDeleteWorkSucces, isRevisionWorkSucces]);
 
+ 
+
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - works!.length) : 0;
+
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number,
+  ) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+  
   /////////////////////////////////////////////////////////
   return (
     <SimpleLayout title={t('Admin Panel')}>
@@ -641,41 +687,60 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
 
         <TabContent>
           <TabPane eventKey="work-administration">
-            <h1 className='mt-4'>Works for Revision</h1>
+            <Box className='mt-4 d-flex flex-row justify-content-start'>
+            {/*<h1 className=''>Works for Revision</h1>*/}
+              <MaButton
+                style={{
+                  width: '200px',
+                  background: 'var(--eureka-green)',
+                  fontFamily: 'Open Sans, sans-serif',
+                  textTransform: 'none',
+                }}
+                variant="contained"
+                size="small"
+                onClick={handleDrawerOpen}
+              >
+                Search ours works
+              </MaButton>
+            </Box>
             {works ?<div className="row">
-              <Table className='col'>
-                <thead>
-                  <tr>
-                    <th>&nbsp;</th>
-                    <th>Type</th>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Year</th>
-                    <th className='text-center'>Language</th>
-                    <th className='text-center'>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {works.map((work) => (
-                    <tr key={work.id} draggable onDragStart={(e)=>{
-                      setWorkDnd(work);
-                      //e.dataTransfer.setData("work",JSON.stringify(work))
-                    }}>
-                      <td>
-                        <LocalImageComponent
+              <TableContainer>
+                <Table sx={{ minWidth: '100%' }} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>&nbsp;</TableCell>
+                      <TableCell align="left">Language</TableCell>
+                      <TableCell align="left">Type</TableCell>
+                      <TableCell align="left">Title</TableCell>
+                      <TableCell align="left">Author</TableCell>
+                      <TableCell align="left">Year</TableCell>
+                      <TableCell align="center">Actions</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {(rowsPerPage > 0
+                      ? works.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                      : works
+                    ).map((work) => (
+                      <TableRow
+                        key={work.id}
+                        draggable onDragStart={(e) => {
+                          setWorkDnd(work);
+                          //e.dataTransfer.setData("work",JSON.stringify(work))
+                        }}
+                      >
+                        <TableCell align="right"> <LocalImageComponent
                           alt="work cover"
-                          height={96}
+                          height={80}
                           filePath={work.localImages[0].storedFile}
                           style={{ marginRight: '1rem' }}
-                        />
-                      </td>
-                      <td>{work.type}</td>
-                      <td>{work.title}</td>
-                      <td>{work.author}</td>
-                      <td>{work.publicationYear && dayjs(work.publicationYear).format(DATE_FORMAT_ONLY_YEAR)}</td>
-                      <td className='text-center'><Image width={24} height={24} className="m-0" src={`/img/lang-flags/${UserLanguages[work.language]}.png`} alt="Language flag 'es'" /></td>
-                      <td >
-                        <div className='d-flex flex-row justify-content-center'>
+                        /></TableCell>
+                        <TableCell align="left"><Image width={24} height={24} className="m-0" src={`/img/lang-flags/${UserLanguages[work.language]}.png`} alt="Language flag 'es'" /></TableCell>
+                        <TableCell align="left">{work.type}</TableCell>
+                        <TableCell align="left">{work.title}</TableCell>
+                        <TableCell align="left">{work.author}</TableCell>
+                        <TableCell align="left">{work.publicationYear && dayjs(work.publicationYear).format(DATE_FORMAT_ONLY_YEAR)}</TableCell>
+                        <TableCell align="center"><div className='d-flex flex-row justify-content-center'>
                           <Button variant="link" href={`/work/${work.id}/edit?admin=${true}`} className="ms-2">
                             <FindInPageOutlinedIcon />
                           </Button>
@@ -701,8 +766,6 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                             </Button>
                           </OverlayTrigger>
 
-
-
                           <OverlayTrigger
                             trigger="click"
                             placement="bottom"
@@ -722,68 +785,113 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                               <DeleteIcon className='text-primary' />
                             </Button>
                           </OverlayTrigger>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-              <Paper className='col' elevation={2} style={{padding:'.5rem'}}>
-              <TextField label="Search books by title" fullWidth onChange={OnFilterWorksChanged} />
-                {allWorks?.map((w,idx)=><Box m={1} key={`aw-${w.id}`} sx={{display:"flex"}}>
-                  <MosaicItem work={w} workId={w.id}/>
-                  <Paper 
-                  sx={{marginLeft:".5rem"}}
-                  onDragOver={(e)=>{
-                    e.preventDefault();
-                    e.currentTarget.style.boxShadow = "0px 0px 7px var(--eureka-green)";
-                  }}
-                  onDragLeave={(e)=>{
-                    e.currentTarget.style.boxShadow="";
-                  }}
-                  
-                  onDrop={(e)=>{
-                    e.currentTarget.style.boxShadow="";
-                    w.editions.push(workDnD!);
-                    setAllWorks(_=>[...allWorks]);
-                    setWorks(_=>works.filter(w=>w.id!=workDnD.id));
-                  }}
-                  >
-                    <Box sx={{display:"flex"}}>
-                      <Typography variant='h5' m={2}>
-                      {w.editions.length ? 'Editions' : "Drop edition here"}
-                      </Typography> 
-                      {
-                        w.editions.length 
-                        ?<ButtonGroup  sx={{marginLeft:'auto'}}>
-                          <MaButton className={styles.SuccessButon} style={{height:'3rem'}} variant="contained"><FaSave /></MaButton>
-                          </ButtonGroup>
-                        :<></>
-                      }
-                    </Box>
-                    <Box sx={{display:"flex"}}>
-                      {w.editions.map((ed:Edition,idx)=><Box  key={`edition-${ed.id}`}
-                        onDragStart={(e)=>{
-                          e.preventDefault();
+                        </div></TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                  <TableFooter >
+                    <TableRow>
+                      <TablePagination sx={{
+                        "& .MuiTablePagination-spacer": {
+                          //order: 2
+                          width:'33%'
+                        },
+                       
+                      }}
+                        rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                        colSpan={12}
+                        count={works.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        SelectProps={{
+                          inputProps: {
+                            'aria-label': 'rows per page',
+                          },
+                          native: true,
                         }}
-                      >
-                        <Box style={{transform: "scale(.5)"}}>
-                            <Fab color="secondary" aria-label="edit" onClick={(e)=>{
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                        ActionsComponent={PaginationActions as any}
+                      />
+                    </TableRow>
+                  </TableFooter>
+                </Table>
+              </TableContainer>
+              <Drawer
+                sx={{
+                  width: drawerWidth,
+                  flexShrink: 0,
+                  '& .MuiDrawer-paper': {
+                    width: drawerWidth,
+                  },
+                }}
+                variant="persistent"
+                anchor="right"
+                open={open}
+              >
+                <DrawerHeader>
+                  <IconButton onClick={handleDrawerClose}>
+                    {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                  </IconButton>
+                </DrawerHeader>
+                <Divider/>
+                <Paper className='col' elevation={2} style={{ padding: '.5rem' }}>
+                  <TextField sx={{ marginTop: 2 }} label="Search books by title" fullWidth onChange={OnFilterWorksChanged} />
+                  {allWorks?.map((w, idx) => <Box m={1} key={`aw-${w.id}`} sx={{ display: "flex"}}>
+                    <MosaicItem work={w} workId={w.id} />
+                    <Paper
+                      sx={{ marginLeft: ".5rem" }}
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        e.currentTarget.style.boxShadow = "0px 0px 7px var(--eureka-green)";
+                      }}
+                      onDragLeave={(e) => {
+                        e.currentTarget.style.boxShadow = "";
+                      }}
+
+                      onDrop={(e) => {
+                        e.currentTarget.style.boxShadow = "";
+                        w.editions.push(workDnD!);
+                        setAllWorks(_ => [...allWorks]);
+                        setWorks(_ => works.filter(w => w.id != workDnD.id));
+                      }}
+                    >
+                      <Box sx={{ display: "flex" }}>
+                        <Typography variant='h5' m={2}>
+                          {w.editions.length ? 'Editions' : "Drop edition here"}
+                        </Typography>
+                        {
+                          w.editions.length
+                            ? <ButtonGroup sx={{ marginLeft: 'auto' }}>
+                              <MaButton className={styles.SuccessButon} style={{ height: '3rem' }} variant="contained"><FaSave /></MaButton>
+                            </ButtonGroup>
+                            : <></>
+                        }
+                      </Box>
+                      <Box sx={{ display: "flex" }}>
+                        {w.editions.map((ed: Edition, idx) => <Box key={`edition-${ed.id}`}
+                          onDragStart={(e) => {
+                            e.preventDefault();
+                          }}
+                        >
+                          <Box style={{ transform: "scale(.5)" }}>
+                            <Fab color="secondary" aria-label="edit" onClick={(e) => {
                               e.preventDefault();
-                              let er = w.editions.splice(idx,1)[0] as unknown as WorkMosaicItem;
-                              setAllWorks(_=>[...allWorks]);
+                              let er = w.editions.splice(idx, 1)[0] as unknown as WorkMosaicItem;
+                              setAllWorks(_ => [...allWorks]);
                               works.push(er);
-                              setWorks(_=>works);
+                              setWorks(_ => works);
                             }}>
                               <DeleteIcon />
                             </Fab>
-                          <MosaicItem workId={ed.id} />
-                        </Box>
+                            <MosaicItem workId={ed.id} />
+                          </Box>
                         </Box>)}
-                    </Box>
-                  </Paper>
-                </Box>)}
-              </Paper>
+                      </Box>
+                    </Paper>
+                  </Box>)}
+                </Paper>
+              </Drawer>
             </div>
               : <>...</>}
 
