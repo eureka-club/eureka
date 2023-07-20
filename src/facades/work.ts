@@ -1,6 +1,6 @@
 import { Prisma, Work, Edition, User, RatingOnWork, ReadOrWatchedWork } from '@prisma/client';
 import { Languages, StoredFileUpload } from '../types';
-import { CreateWorkServerFields, CreateWorkServerPayload, WorkMosaicItem } from '../types/work';
+import { CreateWorkServerFields, CreateWorkServerPayload, EditWorkServerFields, WorkMosaicItem } from '../types/work';
 import { prisma } from '@/src/lib/prisma';
 import { MISSING_FIELD, WORK_ALREADY_EXIST, EDITION_ALREADY_EXIST } from '@/src/api_code';
 
@@ -263,13 +263,14 @@ export const createFromServerFields = async (
 };
 
 export const UpdateFromServerFields = async (
-  fields: CreateWorkServerFields,
+  fields: EditWorkServerFields,
   coverImageUpload: StoredFileUpload | null,
   workId: number,
+  editions?:{id:number}[],
 ): Promise<Work> => {
   const payload = Object.entries(fields).reduce((memo, field) => {
     const [fieldName, fieldValues] = field;
-
+debugger;
     if (fieldName === 'publicationYear') {
       return { ...memo, [fieldName]: new Date(fieldValues) };
     }
@@ -290,6 +291,11 @@ export const UpdateFromServerFields = async (
         localImages: {
           set: [],
         },
+        ... editions && {
+          editions:{
+            connect:editions
+          }
+        }
       },
     });
 

@@ -262,7 +262,7 @@ const EditWorkForm: FunctionComponent = () => {
 
 
     const payload: EditWorkClientPayload = {
-    id: router.query.id as string,
+      id: router.query.id as string,
       type: formValues?.type!,
       title: formValues?.title!,
       language: formValues?.language!,

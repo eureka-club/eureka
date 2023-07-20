@@ -2,11 +2,11 @@ import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { UserLanguages } from '@/src/types';
-import { useState, FormEvent, useEffect, useCallback, ChangeEvent } from 'react';
+import { useState, FormEvent, useEffect, useCallback, ChangeEvent, EventHandler } from 'react';
 import { QueryClient, dehydrate, useMutation, useQueryClient } from 'react-query';
 import { backOfficePayload } from '@/src/types/backoffice';
 import useBackOffice from '@/src/useBackOffice';
-import useTranslation from 'next-translate/useTranslation';
+// import useTranslation from 'next-translate/useTranslation';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import LocalImageComponent from '@/src/components/LocalImage';
 import { getWorks } from '@/src/useWorks';
@@ -43,9 +43,10 @@ import toast from 'react-hot-toast'
 import axios from 'axios';
 import MosaicItem from '@/src/components/work/MosaicItem';
 import { debounce } from 'lodash';
-import { WorkMosaicItem } from '@/src/types/work';
+import { EditWorkClientPayload, WorkMosaicItem } from '@/src/types/work';
 import { Box, Fab, Paper, TextField, Typography, Button as MaButton, ButtonGroup } from '@mui/material';
 import { FaSave } from 'react-icons/fa';
+import useUpdateWork from '@/src/hooks/mutations/useUpdateWork';
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
 const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 interface Props {
@@ -83,10 +84,19 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   const { data: bo } = useBackOffice();
   const { data } = useWorks(WorkToCheckWhere(), { cacheKey: 'WORKS', notLangRestrict: true });
   
+  const {mutate:execUpdateWork} = useUpdateWork();
+
   const [searchWorksFilter,setSearchWorksFilter] = useState('');
   const { data:dataAW } = useWorks({where: {
-    ToCheck: null,
-    title:{
+    OR:[
+      {
+        ToCheck: null,
+      },
+      {
+        ToCheck: false,
+      }
+    ],
+    author:{
       contains:searchWorksFilter
     }
   }}, { cacheKey: 'WORKS-ALL', notLangRestrict: true, enabled:!!searchWorksFilter });
@@ -369,6 +379,10 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   const handleRevisionClick = (work: Work) => {
     execRevisionWork(work)
   };
+
+  const updateWork = (e:any,payload:EditWorkClientPayload)=>{
+    execUpdateWork(payload);
+  }
 
   useEffect(() => {
     if (isDeleteWorkSucces === true) {
@@ -744,6 +758,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                   
                   onDrop={(e)=>{
                     e.currentTarget.style.boxShadow="";
+                    workDnD.ToCheck = false;
                     w.editions.push(workDnD!);
                     setAllWorks(_=>[...allWorks]);
                     setWorks(_=>works.filter(w=>w.id!=workDnD.id));
@@ -756,7 +771,11 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                       {
                         w.editions.length 
                         ?<ButtonGroup  sx={{marginLeft:'auto'}}>
-                          <MaButton className={styles.SuccessButon} style={{height:'3rem'}} variant="contained"><FaSave /></MaButton>
+                          <MaButton className={styles.SuccessButon} style={{height:'3rem'}} variant="contained"
+                          onClick={(e)=>updateWork(e,{...w})}
+                          >
+                            <FaSave />
+                          </MaButton>
                           </ButtonGroup>
                         :<></>
                       }

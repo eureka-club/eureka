@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Edition, Prisma } from '@prisma/client';
 
 // export type WorkDetail = Prisma.WorkGetPayload<{
 //   include: {
@@ -109,10 +109,10 @@ export interface CreateWorkServerFields {
   countryOfOrigin2?: string[];
   publicationYear?: string[];
   length?: string[];
-  tags: string;
-  topics: string;
-  creatorId: number;
-  language: string;
+  tags?: string[];
+  topics?: string;
+  creatorId?: string[];
+  language?: string[];
 }
 
 export interface CreateWorkServerPayload {
@@ -135,26 +135,66 @@ export interface CreateWorkServerPayload {
 
 }
 
+export interface EditWorkServerFields {
+  id: string[];
+  type?: string[];
+  title?: string[];
+  author?: string[];
+  authorGender?: string[];
+  authorRace?: string [];
+  contentText?: string[];
+  link?: string[];
+  isbn?:string[];
+  countryOfOrigin?: string [];
+  countryOfOrigin2?: string [];
+  publicationYear?: string [];
+  length?: string[];
+  tags?: string[];
+  topics?: string[];
+  creatorId?: string[];
+  language?: string[];
+}
+export interface EditWorkServerPayload {
+  id: string[];
+  type?: string[];
+  title?: string[];
+  author?: string[];
+  authorGender?: string[];
+  authorRace?: string [];
+  contentText?: string[];
+  link?: string[];
+  isbn?:string[];
+  countryOfOrigin?: string [];
+  countryOfOrigin2?: string [];
+  publicationYear?: string [];
+  length?: string[];
+  tags?: string[];
+  topics?: string[];
+  creatorId?: string[];
+  language?: string[];
+  // editions?:  {id:number}[];
+}
 export interface EditWorkClientPayload {
-  cover: File | null;
-  id: string;
+  id: string|number;
   type?: string;
   title?: string;
-  language?: string;
   author?: string;
   authorGender?: string | null;
   authorRace?: string | null;
   contentText?: string | null;
   link?: string | null;
+  cover?: File | null;
+  isbn?:string|null;
   countryOfOrigin?: string | null;
   countryOfOrigin2?: string | null;
-  publicationYear?: string | null;
+  publicationYear?: Date|string | null;
   length?: string | null;
-  tags?: string;
-  topics?: string;
+  tags?: string | null;
+  topics?: string | null;
+  creatorId?: number;
+  language?: string | null;
+  editions?:  Edition[];
 }
-
-
 export interface GoogleBooksProps {
   id: string;
   volumeInfo: {
@@ -177,7 +217,6 @@ export interface GoogleBooksProps {
     buyLink: string;
   };
 }
-
 export interface TMDBVideosProps {
   id: number;
   title:string;
