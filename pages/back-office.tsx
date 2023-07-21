@@ -806,10 +806,12 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                   </TableBody>
                   <TableFooter >
                     <TableRow>
-                      <TablePagination sx={{
+                      <TablePagination sx={{ //MuiTablePagination-selectLabel 
                         "& .MuiTablePagination-spacer": {
-                          //order: 2
-                          width:'33%'
+                          order: 2
+                        },
+                        "& .MuiTablePagination-selectLabel": {
+                          ml: 12
                         },
                        
                       }}
@@ -852,10 +854,12 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                 <Divider/>
                 <Paper className='col' elevation={2} style={{ padding: '.5rem' }}>
                   <TextField label="Search books by title" fullWidth onChange={OnFilterWorksChanged} />
-                  {allWorks?.map((w, idx) => <Box m={1} key={`aw-${w.id}`} sx={{ display: "flex" }}>
-                    <MosaicItem work={w} workId={w.id} />
+                  {allWorks?.map((w, idx) => <Box m={1} key={`aw-${w.id}`} sx={{ display: "flex"}}>
+                    <Box  sx={{ width: '40%' }}>
+                    <MosaicItem work={w} workId={w.id} size='sm' linkToWork={false} showCreateEureka={false} />
+                    </Box>
                     <Paper
-                      sx={{ marginLeft: ".5rem" }}
+                      sx={{width:'60%' }}
                       onDragOver={(e) => {
                         e.preventDefault();
                         e.currentTarget.style.boxShadow = "0px 0px 7px var(--eureka-green)";
@@ -872,7 +876,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                         setWorks(_ => works.filter(w => w.id != workDnD.id));
                       }}
                     >
-                      <Box sx={{ display: "flex" }}>
+                      <Box sx={{ display: "flex", }}>
                         <Typography variant='h5' m={2}>
                           {w.editions.length ? 'Editions' : "Drop edition here"}
                         </Typography>
@@ -888,14 +892,14 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                             : <></>
                         }
                       </Box>
-                      <Box sx={{ display: "flex" }}>
+                      <Box sx={{ display: "flex", flexWrap:'wrap',flexDirection:'column'}} >
                         {w.editions.map((ed: Edition, idx) => <Box key={`edition-${ed.id}`}
                           onDragStart={(e) => {
                             e.preventDefault();
                           }}
                         >
-                          <Box style={{ transform: "scale(.5)" }}>
-                            <Fab color="secondary" aria-label="edit" onClick={(e) => {
+                          <Box sx={{ display: 'flex',flexDirection:'row-reverse', justifyContent:'center'}} style={{ transform: "scale(.75)"}}  > {/*style={{ transform: "scale(1)" }}*/}
+                            <Fab className='ms-2' color="secondary" aria-label="edit" onClick={(e) => {
                               e.preventDefault();
                               let er = w.editions.splice(idx, 1)[0] as unknown as WorkMosaicItem;
                               setAllWorks(_ => [...allWorks]);
@@ -904,7 +908,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                             }}>
                               <DeleteIcon />
                             </Fab>
-                            <MosaicItem workId={ed.id} />
+                            <MosaicItem workId={ed.id} size='sm' showCreateEureka={false} linkToWork={false}/>
                           </Box>
                         </Box>)}
                       </Box>
