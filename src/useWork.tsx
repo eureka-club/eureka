@@ -8,7 +8,6 @@ export const getWork = async (id: number,language:string | undefined,origin=''):
   if(language)
     url += `?lang=${language}`;
 
-  console.log(url,'urlurlurlurlurlurlurlurlurl')
   const res = await fetch(url);
   if (!res.ok) 
     throw Error('Error');

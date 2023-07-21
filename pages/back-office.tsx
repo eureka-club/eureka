@@ -434,11 +434,14 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   };
 
   const handleDrawerOpen = () => {
-    setOpen(true);
+    setOpen(!open);
+    setAllWorks([]);
+
   };
 
   const handleDrawerClose = () => {
     setOpen(false);
+    setAllWorks([]);
   };
   
   /////////////////////////////////////////////////////////
