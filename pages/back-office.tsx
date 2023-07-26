@@ -400,6 +400,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   };
 
   const updateWork = (e:any,payload:EditWorkClientPayload)=>{
+    console.log(payload,'payload updateWork')
     execUpdateWork(payload);
   }
 
@@ -911,7 +912,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                             }}>
                               <DeleteIcon />
                             </Fab>
-                            <MosaicItem workId={ed.id} size='sm' showCreateEureka={false} linkToWork={false}/>
+                            <MosaicItem workId={ed.id} size='sm' showCreateEureka={false} linkToWork={false} notLangRestrict={true}/>
                           </Box>
                         </Box>)}
                       </Box>

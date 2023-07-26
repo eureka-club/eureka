@@ -24,6 +24,7 @@ interface Props {
   showSocialInteraction?: boolean;
   showCreateEureka?: boolean;
   showSaveForLater?: boolean;
+  notLangRestrict?: boolean;
   style?: { [k: string]: string };
   cacheKey?: [string, string];
   showTrash?: boolean;
@@ -39,6 +40,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   showSocialInteraction = true,
   showCreateEureka,
   showSaveForLater,
+  notLangRestrict,
   style = undefined,
   cacheKey = undefined,
   showTrash = false,
@@ -54,7 +56,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [work, setWork] = useState(workItem);
 
   const { data } = useWork(workId,{
-    enabled: !!workId && !workItem,
+    enabled: !!workId && !workItem, notLangRestrict: notLangRestrict
   });
   useEffect(() => {
     if (data && !workItem) setWork(data);
