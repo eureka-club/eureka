@@ -27,7 +27,7 @@ import { Session } from '@/src/types';
 import PostsCreated from './PostsCreated';
 import CyclesJoined from './CyclesJoined';
 // import ReadOrWatched from './ReadOrWatched';
-import SavedForLater from './SavedForLater';
+import SavedForLater from '@/src/components/SavedForLater';
 import { isAccessAllowed } from '@/src/lib/utils';
 import RenderAccessInfo from './RenderAccessInfo';
 import dayjs from 'dayjs';

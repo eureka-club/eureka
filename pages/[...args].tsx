@@ -2,6 +2,7 @@ import {NextPage} from 'next'
 import React from 'react'
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import useTranslation from 'next-translate/useTranslation';
+
 import {Alert} from 'react-bootstrap'
 
  const Error:NextPage = ()=>{

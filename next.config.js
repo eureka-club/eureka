@@ -4,7 +4,7 @@ const path = require('path');
 // const isProduction = process.env.NODE_ENV == 'production'
 
 module.exports = nextTranslate({
-    experimental: { appDir: false },
+    experimental: { appDir: true },
 
     sassOptions: {
         includePaths: [path.join(__dirname, 'scss')],
