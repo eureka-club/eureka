@@ -1,23 +1,24 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useState, FormEvent, useEffect } from 'react';
+import { UserLanguages } from '@/src/types';
+import { useState, FormEvent, useEffect, useCallback, ChangeEvent, EventHandler } from 'react';
 import { QueryClient, dehydrate, useMutation, useQueryClient } from 'react-query';
 import { backOfficePayload } from '@/src/types/backoffice';
 import useBackOffice from '@/src/useBackOffice';
-import useTranslation from 'next-translate/useTranslation';
+// import useTranslation from 'next-translate/useTranslation';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import LocalImageComponent from '@/src/components/LocalImage';
 import { getWorks } from '@/src/useWorks';
 import useWorks from '@/src/useWorks';
-import { Work } from '@prisma/client';
+import { Edition, Work } from '@prisma/client';
 import { Session } from '@/src/types';
 import dayjs from 'dayjs';
 import { DATE_FORMAT_ONLY_YEAR } from '@/src/constants';
 import FindInPageOutlinedIcon from '@mui/icons-material/FindInPageOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-
+import Image from 'next/image';
 import {
   TabPane,
   TabContent,
@@ -32,13 +33,25 @@ import {
   Form,
   Popover,
   OverlayTrigger,
-  Table
+  //Table,
+  
 } from 'react-bootstrap';
 import { FiTrash2 } from 'react-icons/fi';
 import styles from './back-office.module.css'
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
 import toast from 'react-hot-toast'
 import axios from 'axios';
+import MosaicItem from '@/src/components/work/MosaicItem';
+import { debounce } from 'lodash';
+import { Box, Fab, Paper, TextField, Typography, Button as MaButton, ButtonGroup, Table, TableBody,
+  TableFooter, TablePagination, TableCell, TableContainer, TableHead, TableRow, Drawer, IconButton, Divider } from '@mui/material';
+import PaginationActions from '@/src/components/common/MUITablePaginationActions';
+import { styled, useTheme } from '@mui/material/styles';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { EditWorkClientPayload, WorkMosaicItem } from '@/src/types/work';
+import { FaSave } from 'react-icons/fa';
+import useUpdateWork from '@/src/hooks/mutations/useUpdateWork';
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
 const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 interface Props {
@@ -50,6 +63,16 @@ interface Props {
 interface backOfficeClearSliderPayload {
   originalName?: string
 }
+const drawerWidth = 500;
+
+const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+  justifyContent: 'flex-start',
+}));
 
 export const WorkToCheckWhere = () => ({
   where: {
@@ -58,7 +81,9 @@ export const WorkToCheckWhere = () => ({
 })
 
 const BackOffice: NextPage<Props> = ({ notFound, session }) => {
-  const { t } = useTranslation('backOffice');
+  //let { t } = useTranslation('backOffice');
+  //TODO
+  const t=(s:string)=>s;
   const router = useRouter();
   const [tabKey, setTabKey] = useState<string>();
   const [currentSlider, setCurrentSlider] = useState<number>(0);
@@ -70,11 +95,55 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   const [image1, setImage1] = useState<string | undefined>();
   const [image2, setImage2] = useState<string | undefined>();
   const [image3, setImage3] = useState<string | undefined>();
+  const [page, setPage] = useState<number>(0);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const queryClient = useQueryClient();
   const { data: bo } = useBackOffice();
-  const { data } = useWorks(WorkToCheckWhere());
-  const works = data?.works;
+  const { data } = useWorks(WorkToCheckWhere(), { cacheKey: 'WORKS', notLangRestrict: true });
+  const theme = useTheme();
+  const [open, setOpen] = useState<boolean>(false);
+  
+  const {mutate:execUpdateWork} = useUpdateWork();
 
+  const [searchWorksFilter,setSearchWorksFilter] = useState('');
+  const { data:dataAW } = useWorks({where: {
+    OR:[
+      {
+        ToCheck: null,
+      },
+      {
+        ToCheck: false,
+      }
+    ],
+    author:{
+      contains:searchWorksFilter
+    }
+  }}, { cacheKey: 'WORKS-ALL', notLangRestrict: true, enabled:!!searchWorksFilter });
+  const [allWorks,setAllWorks] = useState<WorkMosaicItem[]>();
+
+  const debounceFn = useCallback(debounce((value:string)=>{
+    if(value)
+      setSearchWorksFilter(value);
+  },400),[searchWorksFilter]);
+  
+  useEffect(()=>{
+    setAllWorks(dataAW?.works);
+    return ()=>{
+      debounceFn.cancel();
+    }
+  },[dataAW,searchWorksFilter]);
+
+  function OnFilterWorksChanged(e:ChangeEvent<HTMLInputElement>){
+    debounceFn(e.target.value);
+  }
+
+  const [works,setWorks] = useState(data?.works);
+  useEffect(()=>{
+    if(data?.works)setWorks(data.works);
+  },data?.works);
+
+  const [workDnD,setWorkDnd] = useState<any>();//:-|
+  
   useEffect(() => {
     if (notFound)
       router.push('/');
@@ -278,7 +347,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   },
     {
       onMutate: async () => {
-        const cacheKey = ['WORKS', `${JSON.stringify(WorkToCheckWhere())}`];
+        const cacheKey = [`WORKS-${JSON.stringify(WorkToCheckWhere())}`];
         const snapshot = queryClient.getQueryData(cacheKey);
         return { cacheKey, snapshot };
       },
@@ -306,7 +375,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   },
     {
       onMutate: async () => {
-        const cacheKey = ['WORKS', `${JSON.stringify(WorkToCheckWhere())}`];
+        const cacheKey = [`WORKS-${JSON.stringify(WorkToCheckWhere())}`];
         const snapshot = queryClient.getQueryData(cacheKey);
         return { cacheKey, snapshot };
       },
@@ -330,6 +399,11 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
     execRevisionWork(work)
   };
 
+  const updateWork = (e:any,payload:EditWorkClientPayload)=>{
+    console.log(payload,'payload updateWork')
+    execUpdateWork(payload);
+  }
+
   useEffect(() => {
     if (isDeleteWorkSucces === true) {
       router.replace(router.asPath);
@@ -340,6 +414,37 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDeleteWorkSucces, isRevisionWorkSucces]);
 
+ 
+
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - works!.length) : 0;
+
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number,
+  ) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleDrawerOpen = () => {
+    setOpen(!open);
+    setAllWorks([]);
+
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+    setAllWorks([]);
+  };
+  
   /////////////////////////////////////////////////////////
   return (
     <SimpleLayout title={t('Admin Panel')}>
@@ -601,37 +706,61 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
 
         <TabContent>
           <TabPane eventKey="work-administration">
-            <h1 className='mt-4'>Works for Revision</h1>
-            {works ?
-              <Table>
-                <thead>
-                  <tr>
-                    <th>&nbsp;</th>
-                    <th>Type</th>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Year</th>
-                    <th className='text-center'>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {works.map((work) => (
-                    <tr key={work.id}>
-                      <td>
-                        <LocalImageComponent
+            <Box className='mt-4 d-flex flex-row justify-content-start'>
+            {/*<h1 className=''>Works for Revision</h1>*/}
+              <MaButton
+                style={{
+                  width: '200px',
+                  background: 'var(--eureka-green)',
+                  fontFamily: 'Open Sans, sans-serif',
+                  textTransform: 'none',
+                }}
+                variant="contained"
+                size="small"
+                onClick={handleDrawerOpen}
+              >
+                Search ours works
+              </MaButton>
+            </Box>
+            {works ?<div className="row">
+              <TableContainer>
+                <Table sx={{ minWidth: '100%' }} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>&nbsp;</TableCell>
+                      <TableCell align="left">Language</TableCell>
+                      <TableCell align="left">Type</TableCell>
+                      <TableCell align="left">Title</TableCell>
+                      <TableCell align="left">Author</TableCell>
+                      <TableCell align="left">Year</TableCell>
+                      <TableCell align="center">Actions</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {(rowsPerPage > 0
+                      ? works.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                      : works
+                    ).map((work) => (
+                      <TableRow
+                        key={work.id}
+                        draggable onDragStart={(e) => {
+                          setWorkDnd(work);
+                          //e.dataTransfer.setData("work",JSON.stringify(work))
+                        }}
+                      >
+                        <TableCell align="right"> <LocalImageComponent
                           alt="work cover"
-                          height={96}
+                          height={80}
                           filePath={work.localImages[0].storedFile}
                           style={{ marginRight: '1rem' }}
-                        />
-                      </td>
-                      <td>{work.type}</td>
-                      <td>{work.title}</td>
-                      <td>{work.author}</td>
-                      <td>{work.publicationYear && dayjs(work.publicationYear).format(DATE_FORMAT_ONLY_YEAR)}</td>
-                      <td >
-                        <div className='d-flex flex-row justify-content-center'>
-                          <Button variant="link" href={`/work/${work.id}`} className="ms-2">
+                        /></TableCell>
+                        <TableCell align="left"><Image width={24} height={24} className="m-0" src={`/img/lang-flags/${UserLanguages[work.language]}.png`} alt="Language flag 'es'" /></TableCell>
+                        <TableCell align="left">{work.type}</TableCell>
+                        <TableCell align="left">{work.title}</TableCell>
+                        <TableCell align="left">{work.author}</TableCell>
+                        <TableCell align="left">{work.publicationYear && dayjs(work.publicationYear).format(DATE_FORMAT_ONLY_YEAR)}</TableCell>
+                        <TableCell align="center"><div className='d-flex flex-row justify-content-center'>
+                          <Button variant="link" href={`/work/${work.id}/edit?admin=${true}`} className="ms-2">
                             <FindInPageOutlinedIcon />
                           </Button>
 
@@ -656,8 +785,6 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                             </Button>
                           </OverlayTrigger>
 
-
-
                           <OverlayTrigger
                             trigger="click"
                             placement="bottom"
@@ -677,12 +804,123 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                               <DeleteIcon className='text-primary' />
                             </Button>
                           </OverlayTrigger>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
+                        </div></TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                  <TableFooter >
+                    <TableRow>
+                      <TablePagination sx={{ //MuiTablePagination-selectLabel 
+                        "& .MuiTablePagination-spacer": {
+                          order: 2
+                        },
+                        "& .MuiTablePagination-selectLabel": {
+                          ml: 12
+                        },
+                       
+                      }}
+                        rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                        colSpan={12}
+                        count={works.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        SelectProps={{
+                          inputProps: {
+                            'aria-label': 'rows per page',
+                          },
+                          native: true,
+                        }}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                        ActionsComponent={PaginationActions as any}
+                      />
+                    </TableRow>
+                  </TableFooter>
+                </Table>
+              </TableContainer>
+              <Drawer
+                sx={{
+                  width: drawerWidth,
+                  flexShrink: 0,
+                  '& .MuiDrawer-paper': {
+                    width: drawerWidth,
+                  },
+                }}
+                variant="persistent"
+                anchor="right"
+                open={open}
+              >
+                <DrawerHeader>
+                  <IconButton onClick={handleDrawerClose}>
+                    {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                  </IconButton>
+                </DrawerHeader>
+                <Divider/>
+                <Paper className='col' elevation={2} style={{ padding: '.5rem' }}>
+                  <TextField label="Search books by title" fullWidth onChange={OnFilterWorksChanged} />
+                  {allWorks?.map((w, idx) => <Box m={1} key={`aw-${w.id}`} sx={{ display: "flex"}}>
+                    <Box  sx={{ width: '40%' }}>
+                    <MosaicItem work={w} workId={w.id} size='sm' linkToWork={false} showCreateEureka={false} />
+                    </Box>
+                    <Paper
+                      sx={{width:'60%' }}
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        e.currentTarget.style.boxShadow = "0px 0px 7px var(--eureka-green)";
+                      }}
+                      onDragLeave={(e) => {
+                        e.currentTarget.style.boxShadow = "";
+                      }}
+
+                      onDrop={(e) => {
+                        e.currentTarget.style.boxShadow = "";
+                        workDnD.ToCheck = false;
+                        w.editions.push(workDnD!);
+                        setAllWorks(_ => [...allWorks]);
+                        setWorks(_ => works.filter(w => w.id != workDnD.id));
+                      }}
+                    >
+                      <Box sx={{ display: "flex", }}>
+                        <Typography variant='h5' m={2}>
+                          {w.editions.length ? 'Editions' : "Drop edition here"}
+                        </Typography>
+                        {
+                          w.editions.length
+                            ? <ButtonGroup sx={{ marginLeft: 'auto' }}>
+                              <MaButton className={styles.SuccessButon} style={{ height: '3rem' }} variant="contained"
+                                onClick={(e) => updateWork(e, { ...w })}
+                              >
+                                <FaSave />
+                              </MaButton>
+                            </ButtonGroup>
+                            : <></>
+                        }
+                      </Box>
+                      <Box sx={{ display: "flex", flexWrap:'wrap',flexDirection:'column'}} >
+                        {w.editions.map((ed: Edition, idx) => <Box key={`edition-${ed.id}`}
+                          onDragStart={(e) => {
+                            e.preventDefault();
+                          }}
+                        >
+                          <Box sx={{ display: 'flex',flexDirection:'row-reverse', justifyContent:'center'}} style={{ transform: "scale(.75)"}}  > {/*style={{ transform: "scale(1)" }}*/}
+                            <Fab className='ms-2' color="secondary" aria-label="edit" onClick={(e) => {
+                              e.preventDefault();
+                              let er = w.editions.splice(idx, 1)[0] as unknown as WorkMosaicItem;
+                              setAllWorks(_ => [...allWorks]);
+                              works.push(er);
+                              setWorks(_ => works);
+                            }}>
+                              <DeleteIcon />
+                            </Fab>
+                            <MosaicItem workId={ed.id} size='sm' showCreateEureka={false} linkToWork={false} notLangRestrict={true}/>
+                          </Box>
+                        </Box>)}
+                      </Box>
+                    </Paper>
+                  </Box>)}
+                </Paper>
+              </Drawer>
+            </div>
               : <>...</>}
 
           </TabPane>
@@ -710,7 +948,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
   const qc = new QueryClient();
-  const worksData = await getWorks(ctx.locale!,undefined, origin);
+  const worksData = await getWorks(undefined, WorkToCheckWhere(), origin);
   qc.prefetchQuery('list/works', () => worksData);
 
   return {

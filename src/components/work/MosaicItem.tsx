@@ -24,6 +24,7 @@ interface Props {
   showSocialInteraction?: boolean;
   showCreateEureka?: boolean;
   showSaveForLater?: boolean;
+  notLangRestrict?: boolean;
   style?: { [k: string]: string };
   cacheKey?: [string, string];
   showTrash?: boolean;
@@ -39,6 +40,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   showSocialInteraction = true,
   showCreateEureka,
   showSaveForLater,
+  notLangRestrict,
   style = undefined,
   cacheKey = undefined,
   showTrash = false,
@@ -53,8 +55,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   const router = useRouter();
   const [work, setWork] = useState(workItem);
 
-  const { data } = useWork(workId, {
-    enabled: !!workId && !workItem,
+  const { data } = useWork(workId,{
+    enabled: !!workId && !workItem, notLangRestrict: notLangRestrict
   });
   useEffect(() => {
     if (data && !workItem) setWork(data);
@@ -136,6 +138,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     setLoading(true);
   };
   const renderLocalImageComponent = () => {
+    const localePath = router.locale ? `${router.locale}/`:"";
     const img = localImages ? (
       <LocalImageComponent filePath={localImages[0].storedFile} title={title} alt={title} />
     ) : undefined;
@@ -150,7 +153,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           {!canNavigate() && (
             <Spinner className="position-absolute top-50 start-50" size="sm" animation="grow" variant="info" />
           )}
-          {imageLink ? <a href={`/work/${id}`}>{img}</a> : img}
+          {imageLink ? <a href={`/${localePath}work/${id}`}>{img}</a> : img}
         </div>
       );
     }

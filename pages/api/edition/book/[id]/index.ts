@@ -117,16 +117,20 @@ export default getApiHandler()
       fields.publicationYear = dayjs(`${fields.publicationYear}`, 'YYYY').utc().format();
 
       try {
-        const work = await prisma?.work.findFirst({include:{editions:{select:{language:true}}},where:{id:workId}});
+        const work = await prisma?.work.findFirst({include:{editions:{select:{language:true,title:true}}},where:{id:workId}});
         if(!work)
           return res.status(200).json({ error:`book ${workId} it is missing` });
 
         const existEditionInSameLang = work.editions.some(e=>e.language==fields?.language);
+        const existEditionInSameTitle = work.editions.some(e=>e.title==fields?.title);
 
         if(work?.language==fields?.language)
           return res.status(200).json({ error:`book and it is edition have the same language: '${work?.language}'` });
         else if(existEditionInSameLang)
           return res.status(200).json({ error:`book already has an edition with the same language: '${work?.language}'` });
+        else if(existEditionInSameTitle){
+          return res.status(200).json({ error:`book already has an edition with the same title: '${fields?.title}'` });
+        }  
 
         if(work){
           const coverImage: FileUpload = files?.cover != null ? files.cover[0] : null;

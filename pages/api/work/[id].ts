@@ -3,9 +3,9 @@ import { getSession } from 'next-auth/react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { Form } from 'multiparty';
-import { Session, FileUpload } from '../../../src/types';
+import { Session, FileUpload, Languages } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
-import { find, remove, UpdateFromServerFields } from '../../../src/facades/work';
+import { find, findWithoutLangRestrict, remove, UpdateFromServerFields } from '../../../src/facades/work';
 import { prisma } from '@/src/lib/prisma';
 import { storeUpload } from '@/src/facades/fileUpload';
 import { cors, middleware } from '@/src/lib/cors';
@@ -26,7 +26,9 @@ export default getApiHandler()
       return;
     }
 
-    const { id } = req.query;
+    const { id, lang: l } = req.query;
+    const language = l ? Languages[l.toString()] : null;
+
     if (typeof id !== 'string') {
       res.status(404).end();
       return;
@@ -39,7 +41,10 @@ export default getApiHandler()
     }
 
     try {
-      const work = await find(idNum);
+      let work = null;
+      if (language) work = await find(idNum, language);
+      else work = await findWithoutLangRestrict(idNum);
+
       if (work == null) {
         res.status(404).end();
         return;
@@ -61,8 +66,9 @@ export default getApiHandler()
     //   res.status(200).json({ error: 'Unauthorized', work: null });
     //   return;
     // }
-
-    const { id } = req.query;
+    const { id, lang: l } = req.query;
+    const language = l ? Languages[l.toString()] : null;
+   
     if (typeof id !== 'string') {
       res.status(404).end();
       return;
@@ -75,7 +81,10 @@ export default getApiHandler()
     }
 
     try {
-      const work = await find(idNum);
+
+      let work = null;
+      if (language) work = await find(idNum, language);
+      else work = await findWithoutLangRestrict(idNum);
       if (work == null) {
         return res.status(200).json(null);
       }
@@ -168,29 +177,30 @@ export default getApiHandler()
     }*/
   })
 
-.patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
-  const session = (await getSession({ req })) as unknown as Session;
-  if (session == null) {
-    res.status(401).json({ status: 'Unauthorized' });
-    return;
-  }
-  
- let data = req.query;
- const  id = parseInt(data.id as string, 10);
+  .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
+    const session = (await getSession({ req })) as unknown as Session;
+    if (session == null) {
+      res.status(401).json({ status: 'Unauthorized' });
+      return;
+    }
 
- try {
-   let r: Work;
-     r = await prisma.work.update({  //Esto lo uso para el validar obra en BackOffice, se puede llevar a un facade
-       where: { id },
-       data: {
-         ToCheck: false
-       },
-     });
-   res.status(200).json({ ...r });
- } catch (exc) {
-   console.error(exc); // eslint-disable-line no-console
-   res.status(500).json({ status: 'server error' });
- } finally {
-   ////prisma.$disconnect();
- }
-});
+    let data = req.query;
+    const id = parseInt(data.id as string, 10);
+
+    try {
+      let r: Work;
+      r = await prisma.work.update({
+        //Esto lo uso para el validar obra en BackOffice, se puede llevar a un facade
+        where: { id },
+        data: {
+          ToCheck: false,
+        },
+      });
+      res.status(200).json({ ...r });
+    } catch (exc) {
+      console.error(exc); // eslint-disable-line no-console
+      res.status(500).json({ status: 'server error' });
+    } finally {
+      ////prisma.$disconnect();
+    }
+  });

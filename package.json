@@ -5,7 +5,7 @@
   "scripts": {
     "build": "next build",
     "dev1": "NODE_OPTIONS='--inspect' NODE_ENV=development TS_NODE_COMPILER_OPTIONS='{ \"module\":\"commonjs\" }' ts-node server.ts",
-    "dev": " NODE_ENV=development next dev",
+    "dev": "NODE_OPTIONS='--inspect' NODE_ENV=development next dev",
     "knex": "TS_NODE_COMPILER_OPTIONS='{ \"module\":\"commonjs\" }' knex",
     "lint": "eslint '**/*.{ts,tsx}'",
     "lt": "yarn lint && yarn tsc",
@@ -72,7 +72,7 @@
     "emoji-picker-react": "^4.4.7",
     "express": "^4.17.1",
     "fs": "^0.0.1-security",
-    "fuse.js": "^6.4.6",
+    "fuse.js": "^6.6.2",
     "handlebars": "^4.7.7",
     "hyvor-talk-react": "^2.0.0",
     "install": "^0.13.0",

@@ -5,13 +5,14 @@ import { getSession } from 'next-auth/react';
 import { FileUpload, Languages, Session } from '@/src/types';
 import getApiHandler from '@/src/lib/getApiHandler';
 import { storeUpload } from '@/src/facades/fileUpload';
-import { createFromServerFields, findAll } from '@/src/facades/work';
+import { createFromServerFields, findAll, findAllWithoutLangRestrict } from '@/src/facades/work';
 import { Prisma } from '@prisma/client';
-import {prisma} from '@/src/lib/prisma'
+import { prisma } from '@/src/lib/prisma';
+import { NOT_COVER_IMAGE_RECEIVED, SERVER_ERROR, UNAUTHORIZED } from '@/src/api_code';
 // import redis from '@/src/lib/redis';
 
 export const config = {
-  api: { 
+  api: {
     bodyParser: false,
   },
 };
@@ -20,18 +21,18 @@ export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = (await getSession({ req })) as unknown as Session;
     if (session == null) {
-      res.status(401).json({ status: 'Unauthorized' });
+      res.status(200).json({ status: UNAUTHORIZED });
       return;
     }
 
     new Form().parse(req, async (err, fields, files) => {
       if (err != null) {
         console.error(err); // eslint-disable-line no-console
-        res.status(500).json({ status: 'Server error' });
+        res.status(200).json({ status: SERVER_ERROR, error: SERVER_ERROR });
         return;
       }
       if (files?.cover == null) {
-        res.status(422).json({ error: 'No cover image received' });
+        res.status(200).json({ error: NOT_COVER_IMAGE_RECEIVED });
         return;
       }
 
@@ -39,12 +40,12 @@ export default getApiHandler()
       try {
         const uploadData = await storeUpload(coverImage);
         const fieldsA = { ...fields, creatorId: [session.user.id] };
-        const work = await createFromServerFields(fieldsA, uploadData);
-        // await redis.flushall();
-        res.status(201).json(work);
+        const { work, error } = await createFromServerFields(fieldsA, uploadData);
+        if (work) return res.status(201).json({ work, error });
+        return res.status(200).json({ work, error });
       } catch (exc) {
         console.error(exc); // eslint-disable-line no-console
-        res.status(500).json({ status: 'server error' });
+        res.status(200).json({ status: SERVER_ERROR, error: SERVER_ERROR });
       } finally {
         //prisma.$disconnect();
       }
@@ -52,71 +53,100 @@ export default getApiHandler()
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
-      const { q = null,props:p=undefined,lang:l } = req.query;
-      const language = Languages[l?.toString()!];
-      const props:Prisma.WorkFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
-      let {where:w,take,cursor,skip} = props;
+      const { q = null, props: p = undefined, lang: l } = req.query;
+
+      const language = l ? Languages[l.toString()] : null;
+      const props: Prisma.WorkFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())) : {};
+      let { where: w, take, cursor, skip } = props;
       const session = await getSession({ req });
 
       let AND = w?.AND;
       delete w?.AND;
-      let where = {...w,AND:{
-        ...AND && {AND},
-        language
-      }};
       let data = null;
-      // if (typeof q === 'string') {
-      //   const terms = q.split(" ");
-      //   where = {
-        
-      //     OR:[
-      //       {
-      //         AND:terms.map(t=>(
-      //           { 
-      //             title: { contains: t } 
-      //           }
-      //         ))
-  
-      //       },
-      //       {
-      //         AND:terms.map(t=>(
-      //           { 
-      //             contentText: { contains: t } 
-      //           }
-      //         ))
-  
-      //       },
-      //       {
-      //         AND:terms.map(t=>(
-      //           { 
-      //              topics: { contains: t } 
-      //           }
-      //         ))
-      //       },
-      //       {
-      //         AND:terms.map(t=>(
-      //           { 
-      //              author: { contains: t } 
-      //           }
-      //         ))
-      //       }
-      //     ]
-      //   };
-        
-      // } 
 
-      let cr = await prisma?.work.aggregate({where,_count:true})
-      const total = cr?._count;
-      data = await findAll({take,where,skip,cursor});
+      if (language) {
+        let where = {
+          ...w,
+          AND: {
+            ...(AND && { AND }),
+            OR: [
+              {
+                language,
+              },
+              {
+                editions: {
+                  some: { language },
+                },
+              },
+            ],
+          },
+        };
+        // if (typeof q === 'string') {
+        //   const terms = q.split(" ");
+        //   where = {
 
-      res.status(200).json({
-        data,
-        fetched:data.length,
-        total
-      });
+        //     OR:[
+        //       {
+        //         AND:terms.map(t=>(
+        //           {
+        //             title: { contains: t }
+        //           }
+        //         ))
+
+        //       },
+        //       {
+        //         AND:terms.map(t=>(
+        //           {
+        //             contentText: { contains: t }
+        //           }
+        //         ))
+
+        //       },
+        //       {
+        //         AND:terms.map(t=>(
+        //           {
+        //              topics: { contains: t }
+        //           }
+        //         ))
+        //       },
+        //       {
+        //         AND:terms.map(t=>(
+        //           {
+        //              author: { contains: t }
+        //           }
+        //         ))
+        //       }
+        //     ]
+        //   };
+
+        // }
+
+        let cr = await prisma?.work.aggregate({ where, _count: true });
+        const total = cr?._count;
+        data = await findAll(language, { take, where, skip, cursor });
+
+        res.status(200).json({
+          data,
+          fetched: data.length,
+          total,
+        });
+      } else {
+        let where = {
+          ...w,
+        };
+        let cr = await prisma?.work.aggregate({ where, _count: true });
+        const total = cr?._count;
+        data = await findAllWithoutLangRestrict({ take, where, skip, cursor });
+
+        res.status(200).json({
+          data,
+          fetched: data.length,
+          total,
+        });
+      }
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
-      res.status(500).json({ status: 'server error' });
+      res.status(200).json({ status: SERVER_ERROR, error: SERVER_ERROR });
     } finally {
       //prisma.$disconnect();
     }

@@ -271,7 +271,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
   };
 
   const handleSelectWorkOrCycle = (selected: SearchResult | null): void => {
-    console.log(selected, 'selected')
+    //console.log(selected, 'selected')
 
     const searchResult = selected;
     if (searchResult != null) {
@@ -375,7 +375,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
         topics: items.join(','),
         tags,
       };
-      console.log(payload, 'payload')
+      //console.log(payload, 'payload')
 
       if (formValidation(payload))
         await execCreatePost(payload);

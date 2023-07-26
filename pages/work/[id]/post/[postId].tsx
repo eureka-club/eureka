@@ -10,6 +10,7 @@ import { WEBAPP_URL } from '@/src/constants';
 import { getSession } from 'next-auth/react';
 import { Session } from '@/src/types';
 import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/router';
 interface Props {
   postId:number;
   workId:number;
@@ -78,10 +79,10 @@ export const getServerSideProps:GetServerSideProps = async (ctx) => {
   const workId = parseInt(wid ? wid.toString():'')
   const postId = parseInt(pid ? pid.toString():'')
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
-
+  const locale = ctx.locale??"es";
 
  let post = await getPost(postId,origin);
- let work = await getWork(workId,origin);
+ let work = await getWork(workId,locale,origin);
  let metaTags = {
    id: post?.id,
    workId: work?.id,

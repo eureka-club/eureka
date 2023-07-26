@@ -11,6 +11,7 @@ import useFilterEngineWorks from './useFilterEngineWorks';
 import { useInView } from 'react-intersection-observer';
 import { Prisma } from '@prisma/client';
 import { WorkMosaicItem } from '../types/work';
+import { getWorksProps } from '../types/work';
 
 const take = 8;
 const SearchTabworks:FunctionComponent = () => {
@@ -23,38 +24,7 @@ const SearchTabworks:FunctionComponent = () => {
 
   const getProps = ()=>{
     const res:Prisma.WorkWhereInput = {
-      OR:[
-        {
-          AND:terms.map(t=>(
-            { 
-              title: { contains: t } 
-            }
-          ))
-  
-        },
-        {
-          AND:terms.map(t=>(
-            { 
-              contentText: { contains: t } 
-            }
-          ))
-  
-        },
-        {
-          AND:terms.map(t=>(
-            { 
-                tags: { contains: t } 
-            }
-          ))
-        },
-        {
-          AND:terms.map(t=>(
-            { 
-                topics: { contains: t } 
-            }
-          ))
-        }
-      ],
+     ... getWorksProps(terms)
     }
     if(filtersType){
       const typesChecked = Object.entries(filtersType).filter(([_,v])=>v).map(([k,_])=>k)

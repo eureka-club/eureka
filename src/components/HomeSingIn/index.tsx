@@ -64,7 +64,7 @@ const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
   const [showAboutSection, setShowAboutSection] = useState<boolean>(false)
 
   const {data:itemsByTopic} = useItemsByTopic(0,topics[topicIdx],lang!);
-  const [gbt, setGBT] = useState<any[]>([]);
+const [gbt, setGBT] = useState<any[]>([]);
   useEffect(()=>{
     console.log(itemsByTopic);
     

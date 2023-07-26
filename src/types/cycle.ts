@@ -36,12 +36,16 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
     ratings: { select: { userId: true; qty: true } };
     works: {
       include: {
-        localImages: { select: { storedFile: true } };
-        _count: { select: { ratings: true } };
-        favs: { select: { id: true } };
-        ratings: { select: { userId: true; qty: true } };
-        readOrWatchedWorks: { select: { userId: true; workId: true; year: true } };
-      };
+        _count: { select: { ratings: true } },
+        localImages: { select: { storedFile: true } },
+        favs: { select: { id: true } },
+        ratings: { select: { userId: true, qty: true } },
+        readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+        posts: {
+          select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+        },
+        editions:{include:{localImages: { select: { storedFile: true } }}},
+      },
     };
     favs: { select: { id: true } };
     cycleWorksDates: {
@@ -52,12 +56,16 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
         workId: true;
         work: {
           include: {
-            localImages: { select: { storedFile: true } };
-            _count: { select: { ratings: true } };
-            favs: { select: { id: true } };
-            ratings: { select: { userId: true; qty: true } };
-            readOrWatchedWorks: { select: { userId: true; workId: true; year: true } };
-          };
+            _count: { select: { ratings: true } },
+            localImages: { select: { storedFile: true } },
+            favs: { select: { id: true } },
+            ratings: { select: { userId: true, qty: true } },
+            readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+            posts: {
+              select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+            },
+            editions:{include:{localImages: { select: { storedFile: true } }}},
+          },
         };
       };
     };

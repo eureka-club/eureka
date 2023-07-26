@@ -75,6 +75,7 @@ const EditWorkForm: FunctionComponent = () => {
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [countryOrigin, setCountryOrigin] = useState<string[]>([]);
   const [tags, setTags] = useState<string>('');
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [items, setItems] = useState<string[]>([]);  //topics
   const [publicationLengthLabel, setPublicationLengthLabel] = useState('...');
   const [publicationYearLabel, setPublicationYearLabel] = useState('...');
@@ -82,13 +83,19 @@ const EditWorkForm: FunctionComponent = () => {
   const [ck, setCK] = useState<string[]>();
 
   const { data: topics } = useTopics();
-  const { data: work } = useWork(+(router.query?.id?.toString()!), { enabled: !!router.query?.id })
+  const { data: work } = useWork(+(router.query?.id?.toString()!), { enabled: !!router.query?.id, notLangRestrict: true })
   const { data: countries } = useCountries();
 
 
   useEffect(() => {
     if (countries) setCountrySearchResults(countries.map((d: Country) => ({ code: d.code, label: d.code })))
   }, [countries])
+
+  useEffect(() => {
+    if (router && router.query?.admin) {
+      setIsAdmin(true);
+    }
+  }, [router])
 
   useEffect(() => {
     //console.log(work, 'work work')
@@ -255,7 +262,7 @@ const EditWorkForm: FunctionComponent = () => {
 
 
     const payload: EditWorkClientPayload = {
-    id: router.query.id as string,
+      id: router.query.id as string,
       type: formValues?.type!,
       title: formValues?.title!,
       language: formValues?.language!,
@@ -283,7 +290,10 @@ const EditWorkForm: FunctionComponent = () => {
     if (isSuccess === true) {
       setGlobalModalsState({ ...globalModalsState, ...{ editWorkModalOpened: false } });
       queryClient.invalidateQueries('works.mosaic');
+      if(!isAdmin)
       router.push(`/work/${work!.id}`);
+      else
+        router.back();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);

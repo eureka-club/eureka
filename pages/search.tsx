@@ -14,6 +14,7 @@ import { Session } from '@/src/types';
 import SearchTab from '@/src/components/SearchTab';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import { getSession } from 'next-auth/react';
+import { getWorksProps } from '@/src/types/work';
 
 const topics = [
   'gender-feminisms',
@@ -135,7 +136,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       ],
     },
   };
-  const cyclesData = await getCycles(ctx.locale!,{ ...cyclesProps, take }, origin);
+  const cyclesData = await getCycles(ctx.locale!,{ ... cyclesProps, take }, origin);
   qc.prefetchQuery(`cycles-search-${q?.toString()}`, () => cyclesData);
   const hasCycles = cyclesData.total > 0;
   const postsProps = {
@@ -164,56 +165,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       ],
     },
   };
-  const postsData = await getPosts(ctx.locale!,{ ...postsProps, take }, origin);
+  const postsData = await getPosts(ctx.locale!,{ ... postsProps, take }, origin);
   qc.prefetchQuery(`posts-search-${q?.toString()}`, () => postsData);
   const hasPosts = postsData.total > 0;
+  
+  const worksData = await getWorks(ctx.locale!,{ ... getWorksProps(terms), take }, origin);
 
-  const worksProps = {
-    where: {
-      OR: [
-        {
-          AND: terms.map((t) => ({
-            title: { contains: t },
-          })),
-        },
-        {
-          AND: terms.map((t) => ({
-            contentText: { contains: t },
-          })),
-        },
-        {
-          AND: terms.map((t) => ({
-            tags: { contains: t },
-          })),
-        },
-        {
-          AND: terms.map((t) => ({
-            topics: { contains: t },
-          })),
-        },
-        {
-          editions:{
-            some:{
-              OR:[
-                {
-                  AND: terms.map((t) => ({
-                    title: { contains: t },
-                  })),
-                },
-                {
-                  AND: terms.map((t) => ({
-                    contentText: { contains: t },
-                  })),
-                },
-        
-              ]
-            }
-          }
-        }
-      ],
-    },
-  };
-  const worksData = await getWorks(ctx.locale!,{ ...worksProps, take }, origin);
   qc.prefetchQuery(`works-search-${q?.toString()}`, () => worksData);
   const hasWorks = worksData.total > 0;
 
