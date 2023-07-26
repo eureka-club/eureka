@@ -110,7 +110,7 @@ export default getApiHandler()
       //prisma.$disconnect();
     }
   })
-  .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+  .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     const session = (await getSession({ req })) as unknown as Session;
     if (session == null || !session.user.roles.includes('admin')) {
       res.status(401).json({ status: 'Unauthorized' });
@@ -138,8 +138,9 @@ export default getApiHandler()
         res.status(500).json({ status: 'Server error' });
         return;
       }
-
-      fields.publicationYear = dayjs(`${fields.publicationYear}`, 'YYYY').utc().format();
+      //console.log(fields, 'fields, files');
+      if (fields.publicationYear) fields.publicationYear = dayjs(`${fields.publicationYear}`, 'YYYY').utc().format();
+      
       const { id } = fields;
 
       const idNum = parseInt(id, 10);
@@ -177,7 +178,7 @@ export default getApiHandler()
     }*/
   })
 
-  .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
+ /* .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = (await getSession({ req })) as unknown as Session;
     if (session == null) {
       res.status(401).json({ status: 'Unauthorized' });
@@ -203,4 +204,4 @@ export default getApiHandler()
     } finally {
       ////prisma.$disconnect();
     }
-  });
+  });*/

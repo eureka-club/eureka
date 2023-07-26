@@ -270,14 +270,18 @@ export const UpdateFromServerFields = async (
 ): Promise<Work> => {
   const payload = Object.entries(fields).reduce((memo, field) => {
     const [fieldName, fieldValues] = field;
-debugger;
+//debugger;
     if (fieldName === 'publicationYear') {
       return { ...memo, [fieldName]: new Date(fieldValues) };
+    }
+    if (fieldName === 'ToCheck') {
+      return { ...memo, [fieldName]: (fieldValues == '0' ? false : true) };
     }
 
     return { ...memo, [fieldName]: fieldValues[0] };
   }, {} as CreateWorkServerPayload);
-
+  
+  //console.log(payload, 'payload');
   const existingLocalImage = coverImageUpload //NO EXISTE IMAGEN EN TABLA localImage
     ? await prisma.localImage.findFirst({
         where: { contentHash: coverImageUpload.contentHash },
