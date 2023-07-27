@@ -12,7 +12,6 @@ export const getWorks = async (
   if (lang)
     query += `&lang=${lang}`;
   const url = `${origin || ''}/api/work${query}`
-  console.log(url, 'url')
   const res = await fetch(url);
   if (!res.ok) return { works: [], fetched: 0, total: -1 };
   const { data: works, fetched, total } = await res.json();

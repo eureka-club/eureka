@@ -52,6 +52,8 @@ import { styled, useTheme } from '@mui/material/styles';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { EditWorkClientPayload, WorkMosaicItem } from '@/src/types/work';
+import { EditionMosaicItem } from '@/src/types/edition';
+
 import { FaSave } from 'react-icons/fa';
 import useUpdateWork from '@/src/hooks/mutations/useUpdateWork';
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
@@ -102,6 +104,11 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   const queryClient = useQueryClient();
   const { data: bo } = useBackOffice();
   const { data } = useWorks(WorkToCheckWhere(), { cacheKey: 'WORKS', notLangRestrict: true });
+  const [works, setWorks] = useState<WorkMosaicItem[]>();
+  useEffect(() => {
+    if (data?.works) setWorks(data.works);
+  },[data?.works]);
+  
   const theme = useTheme();
   const [open, setOpen] = useState<boolean>(false);
 
@@ -141,10 +148,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
     debounceFn(e.target.value);
   }
 
-  const [works, setWorks] = useState(data?.works);
-  useEffect(() => {
-    if (data?.works) setWorks(data.works);
-  }, data?.works);
+
 
   const [workDnD, setWorkDnd] = useState<any>();//:-|
 
@@ -347,6 +351,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
     });
     toast.success('Work deleted!!')
     const data = await res.json();
+
     return data;
   },
     {
@@ -410,7 +415,6 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   };
 
   const updateWork = (e: any, payload: EditWorkClientPayload) => {
-    console.log(payload, 'payload updateWork')
     execUpdateWork(payload);
   }
 
@@ -907,22 +911,31 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                         }
                       </Box>
                       <Box sx={{ display: "flex", flexWrap: 'wrap', flexDirection: 'column' }} >
-                        {w.editions.map((ed: Edition, idx) => <Box key={`edition-${ed.id}`}
+                        {w.editions.map((ed: EditionMosaicItem, idx) => <Box key={`edition-${ed.id}`}
                           onDragStart={(e) => {
                             e.preventDefault();
                           }}
                         >
-                          <Box sx={{ display: 'flex', flexDirection: 'row-reverse', justifyContent: 'center' }} style={{ transform: "scale(.75)" }}  > {/*style={{ transform: "scale(1)" }}*/}
-                            <Fab className='ms-2' color="secondary" aria-label="edit" onClick={(e) => {
+                          <Box sx={{ display: 'flex', flexDirection: 'row-reverse', justifyContent: 'center',marginBottom:2 }} > {/*style={{ transform: "scale(1)" }}*/}
+                            {ed.ToCheck ? <Fab className='ms-1' color="secondary" aria-label="edit" onClick={(e) => {
                               e.preventDefault();
                               let er = w.editions.splice(idx, 1)[0] as unknown as WorkMosaicItem;
                               setAllWorks(_ => [...allWorks]);
                               works.push(er);
                               setWorks(_ => works);
-                            }}>
+                            }} style={{ transform: "scale(.6)" }}>
+                              <DeleteIcon/>
+                            </Fab> : <Fab className='ms-1' color="secondary" aria-label="edit" onClick={(e) => { // aca llamaria a api borrar edicion directo
+                              e.preventDefault();
+                            }} style={{ transform: "scale(.6)" }}>
                               <DeleteIcon />
-                            </Fab>
-                            <MosaicItem workId={ed.id} size='sm' showCreateEureka={false} linkToWork={false} notLangRestrict={true} />
+                            </Fab>}
+                            <LocalImageComponent className='mb-3'
+                              alt="work cover"
+                              height={180}
+                              filePath={ed.localImages[0].storedFile}
+                            />
+                            {/*<MosaicItem workId={ed.id} size='sm' showCreateEureka={false} linkToWork={false} notLangRestrict={true} />*/}
                           </Box>
                         </Box>)}
                       </Box>

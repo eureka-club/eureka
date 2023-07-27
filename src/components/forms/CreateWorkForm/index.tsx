@@ -306,9 +306,26 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
         });
     }
 
+
+    /*   { type: 'ISBN_10', identifier: '8498383439' },
+      { type: 'ISBN_13', identifier: '9788498383430' } */
+    function getBookIdentifier(identifiers: any[]) {
+
+        if (identifiers.filter(x => x.type === 'ISBN_10').length > 0)
+            return identifiers.filter(x => x.type === 'ISBN_10')[0].identifier;
+        else
+            if (identifiers.filter(x => x.type === 'ISBN_13').length > 0)
+                return identifiers.filter(x => x.type === 'ISBN_13')[0].identifier;
+            else
+                if (identifiers.filter(x => x.type === 'OTHER').length > 0)
+                    return identifiers.filter(x => x.type === 'OTHER')[0].identifier;
+                else
+                    return '';
+
+    }
+
     async function searchTitles(q: string) {
         setLoading(true);
-
 
         if (formValues && formValues.type) {
             const { error, data } = await fetch('/api/external-works/search', {
@@ -357,8 +374,8 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
             let isbn;
             if (work.volumeInfo?.industryIdentifiers && work.volumeInfo?.industryIdentifiers.length)
-                isbn = work.volumeInfo?.industryIdentifiers.filter(x => x.type == 'ISBN_10')[0].identifier;
-
+                isbn = getBookIdentifier(work.volumeInfo?.industryIdentifiers);
+            // isbn = work.volumeInfo?.industryIdentifiers.filter(x => x.type == 'ISBN_10')[0].identifier;
             //////////////////////////////////////////////////
             formValues['link'] = (work.volumeInfo?.infoLink) ? work.volumeInfo.infoLink : "";
             formValues['isbn'] = isbn;
@@ -691,7 +708,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
                     <Col>
                         <h1 className="text-secondary text-center  fw-bold mt-sm-0 mb-3 mb-lg-5">{t('ExistingWorktitle')}</h1>
-                       
+
                     </Col>
                     <Col className='d-flex  justify-content-center align-items-center'>
                         <WMI workId={workId!}
@@ -708,11 +725,11 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                 md: '30%', // theme.breakpoints.up('md')
                             },
                         }} >
-                        <Button
-                            className={`mt-3 mt-lg-5 btn-eureka `}
+                            <Button
+                                className={`mt-3 mt-lg-5 btn-eureka `}
                                 onClick={(e) => handleToDoOtherSearch(e)}
-                            style={{ width: '100%', height: '2.5em' }}
-                        >
+                                style={{ width: '100%', height: '2.5em' }}
+                            >
                                 {t('MakeSearchText')}
                             </Button></Box> </Col>
                 </Row>

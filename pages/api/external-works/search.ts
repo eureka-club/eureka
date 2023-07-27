@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           for(;i<length;i++){
             const aux = (data[i] as GoogleBooksProps).volumeInfo.language.split("-");
             const l = aux.length ? aux[0].toLowerCase() : undefined;
-            if(l && available_languages.includes(l)){
+            if (l && available_languages.includes(l) && data[i].volumeInfo.hasOwnProperty('industryIdentifiers')) {
               d.push(data[i]);
             }
           }
