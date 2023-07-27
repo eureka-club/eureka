@@ -5,11 +5,15 @@ import utc from 'dayjs/plugin/utc';
 import { Form } from 'multiparty';
 import { Session, FileUpload, Languages } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
-import { find, findWithoutLangRestrict, remove, UpdateFromServerFields } from '../../../src/facades/work';
+import { find, findWithoutLangRestrict, remove, updateFromServerFields } from '../../../src/facades/work';
+import { createFromServerFields as editionCreateFromServerFields } from '@/src/facades/edition';
 import { prisma } from '@/src/lib/prisma';
 import { storeUpload } from '@/src/facades/fileUpload';
 import { cors, middleware } from '@/src/lib/cors';
-import { Work } from '@prisma/client';
+import { Edition, Prisma, Work } from '@prisma/client';
+import { CreateEditionPayload, CreateEditionServerPayload } from '@/src/types/edition';
+import { WorkMosaicItem } from '@/src/types/work';
+import { MISSING_FIELD, SERVER_ERROR, UNAUTHORIZED } from '@/src/api_code';
 // import redis from '../../../src/lib/redis';
 export const config = {
   api: {
@@ -22,22 +26,19 @@ export default getApiHandler()
   .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = (await getSession({ req })) as unknown as Session;
     if (session == null || !session.user.roles.includes('admin')) {
-      res.status(401).json({ status: 'Unauthorized' });
-      return;
+      return res.status(200).json({ status: UNAUTHORIZED, error:UNAUTHORIZED });
     }
 
     const { id, lang: l } = req.query;
     const language = l ? Languages[l.toString()] : null;
 
     if (typeof id !== 'string') {
-      res.status(404).end();
-      return;
+      return res.status(200).json({error:MISSING_FIELD('id')});
     }
 
     const idNum = parseInt(id, 10);
     if (!Number.isInteger(idNum)) {
-      res.status(404).end();
-      return;
+      return res.status(200).json({error:MISSING_FIELD('id')});
     }
 
     try {
@@ -55,7 +56,7 @@ export default getApiHandler()
       res.status(200).json({ status: 'OK' });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
-      res.status(500).json({ status: 'server error' });
+      res.status(500).json({ status: SERVER_ERROR,error:SERVER_ERROR });
     } finally {
       //prisma.$disconnect();
     }
@@ -105,7 +106,7 @@ export default getApiHandler()
       res.status(200).json(work);
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
-      res.status(500).json({ status: 'server error' });
+      res.status(500).json({ status:SERVER_ERROR,error:SERVER_ERROR });
     } finally {
       //prisma.$disconnect();
     }
@@ -113,69 +114,87 @@ export default getApiHandler()
   .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     const session = (await getSession({ req })) as unknown as Session;
     if (session == null || !session.user.roles.includes('admin')) {
-      res.status(401).json({ status: 'Unauthorized' });
-      return;
+      return res.status(401).json({ error: UNAUTHORIZED });
     }
-
-    /*  const data = req.body;
-    data.publicationYear = dayjs(`${data.publicationYear}`, 'YYYY').utc().format();
-    const { id } = data;
-    if (typeof id !== 'string') {
-      res.status(404).end();
-      return;
-    }
-
-    const idNum = parseInt(id, 10);
-    if (!Number.isInteger(idNum)) {
-      // res.status(404).end();
-      res.status(200).json({ status: 'OK', work: null });
-      return;
-    }*/
-
+    
     new Form().parse(req, async (err, fields, files) => {
       if (err != null) {
         console.error(err); // eslint-disable-line no-console
-        res.status(500).json({ status: 'Server error' });
+        res.status(500).json({ error: SERVER_ERROR });
         return;
       }
-      //console.log(fields, 'fields, files');
       if (fields.publicationYear) fields.publicationYear = dayjs(`${fields.publicationYear}`, 'YYYY').utc().format();
-      
-      const { id } = fields;
+      const now = dayjs().utc();
 
-      const idNum = parseInt(id, 10);
-      if (!Number.isInteger(idNum)) {
-        res.status(200).json({ status: 'OK', work: null });
-        return;
+      const { id:id_ } = fields;
+      const id = parseInt(id_, 10);
+      if (!Number.isInteger(id)) {
+        return res.status(200).json({ status: 'OK', work: null });
       }
+      let editionsIds:{id:number}[]=[];
+
+      const worksToSaveAsEdition:WorkMosaicItem[] = fields.editions?.length ? JSON.parse(fields.editions[0]) : undefined;
+
+      if(worksToSaveAsEdition?.length){
+        const editions = worksToSaveAsEdition.reduce((p,c)=>{
+          const edition:CreateEditionServerPayload={
+            title:c.title,
+            language:c.language,
+            isbn:c.isbn!,
+            contentText:c.contentText!,
+            publicationYear:c.publicationYear!,
+            countryOfOrigin:c.countryOfOrigin!,
+            ToCheck:false,
+            length:c.language,
+            workId:id,
+            createdAt:now.toDate(),
+            creatorId:c.creatorId,
+            updatedAt:now.toDate(),
+            localImages:c.localImages.map(l=>({id:l.id})) 
+          }
+          p.push(edition);
+          return p;
+        },[] as CreateEditionServerPayload[] );
+  
+        let removeOldWorks:Promise<Work>[] = [];
+        worksToSaveAsEdition.forEach(w=>{removeOldWorks.push(
+          remove(w.id)
+        )});
+  
+        await Promise.all(removeOldWorks);
+  
+        let saveEditions:Promise<Edition>[] = [];
+        editions.forEach(e=>{saveEditions.push(
+          editionCreateFromServerFields(e)
+        )});
+        
+        const editionsSaved = await Promise.all(saveEditions);
+        editionsIds =  editionsSaved.map(({id})=>({id}));
+      }
+      
       const coverImage: FileUpload = files?.cover != null ? files.cover[0] : null;
       try {
         const uploadData = coverImage ? await storeUpload(coverImage) : null;
+        
         delete fields.id;
+        delete fields.localImages;
+        delete fields.favs;
+        delete fields.ratings;
+        delete fields.posts;
+        delete fields._count;
+        delete fields.readOrWatchedWorks;
+
         const fieldsA = { ...fields };
-        const work = await UpdateFromServerFields(fieldsA, uploadData, idNum);
-        //const work = await prisma.work.update({ where: { id: idNum }, data });
+        const work = await updateFromServerFields(fieldsA, uploadData, id, editionsIds);
         // await redis.flushall();
         res.status(200).json({ work });
       } catch (exc) {
         console.error(exc); // eslint-disable-line no-console
-        res.status(500).json({ status: 'server error' });
+        res.status(500).json({ error: SERVER_ERROR });
       } finally {
         //prisma.$disconnect();
       }
     });
-
-    /*  try {
-      delete data.id;
-      const work = await prisma.work.update({ where: { id: idNum }, data });
-      // await redis.flushall();
-      res.status(200).json({ work });
-    } catch (exc) {
-      console.error(exc); // eslint-disable-line no-console
-      res.status(500).json({ status: 'server error' });
-    } finally {
-      //prisma.$disconnect();
-    }*/
   })
 
  /* .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {

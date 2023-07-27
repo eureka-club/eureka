@@ -15,6 +15,8 @@ const useUpdateWork = ()=>{
 
         Object.entries(payload).forEach(([key, value]) => {
           if (value != null) {
+            if(typeof(value) == 'object')
+              formData.append(key, JSON.stringify(value));
             formData.append(key, value);
           }
         });

@@ -224,7 +224,7 @@ export const remove = async (post: PostMosaicItem): Promise<Post> => {
   });
 };
 
-export const UpdateFromServerFields = async (
+export const updateFromServerFields = async (
   fields: CreatePostServerFields,
   coverImageUpload: StoredFileUpload | null,
   postId: number,

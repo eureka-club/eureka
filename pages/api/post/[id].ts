@@ -4,7 +4,7 @@ import { Form } from 'multiparty';
 import { FileUpload } from '../../../src/types';
 import { Work, Cycle } from '@prisma/client';
 import getApiHandler from '../../../src/lib/getApiHandler';
-import { find, remove, UpdateFromServerFields } from '../../../src/facades/post';
+import { find, remove, updateFromServerFields } from '../../../src/facades/post';
 import { storeUpload } from '@/src/facades/fileUpload';
 import { prisma } from '../../../src/lib/prisma';
 import { storeDeleteFile } from '@/src/facades/fileUpload';
@@ -128,7 +128,7 @@ export default getApiHandler()
 
         const uploadData = coverImage ? await storeUpload(coverImage) : null;
         
-        const r = await UpdateFromServerFields(fieldsA, uploadData, idNum);
+        const r = await updateFromServerFields(fieldsA, uploadData, idNum);
         res.status(200).json({ ...r });
       } catch (exc) {
         console.error(exc); // eslint-disable-line no-console

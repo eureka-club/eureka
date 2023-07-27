@@ -37,14 +37,14 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
     works: {
       include: {
         _count: { select: { ratings: true } },
-        localImages: { select: { storedFile: true } },
+        localImages: { select: { id:true,storedFile: true } },
         favs: { select: { id: true } },
         ratings: { select: { userId: true, qty: true } },
         readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
         posts: {
           select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
         },
-        editions:{include:{localImages: { select: { storedFile: true } }}},
+        editions:{include:{localImages: { select: { id:true,storedFile: true } }}},
       },
     };
     favs: { select: { id: true } };
@@ -57,14 +57,14 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
         work: {
           include: {
             _count: { select: { ratings: true } },
-            localImages: { select: { storedFile: true } },
+            localImages: { select: { id:true,storedFile: true } },
             favs: { select: { id: true } },
             ratings: { select: { userId: true, qty: true } },
             readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
             posts: {
               select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
             },
-            editions:{include:{localImages: { select: { storedFile: true } }}},
+            editions:{include:{localImages: { select: { id:true,storedFile: true } }}},
           },
         };
       };
