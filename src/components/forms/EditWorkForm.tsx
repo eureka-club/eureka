@@ -225,7 +225,7 @@ const EditWorkForm: FunctionComponent = () => {
     });
 
     const res = await fetch(`/api/work/${work!.id}`, {
-      method: 'POST',
+      method: 'PATCH',
      // headers: { 'Content-Type': 'application/json' },
       body: formData,//JSON.stringify(payload),
     });

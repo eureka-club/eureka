@@ -1,6 +1,6 @@
-import { Prisma, Edition } from '@prisma/client';
+import { Prisma, Edition, LocalImage } from '@prisma/client';
 import { StoredFileUpload } from '../types';
-import { CreateEditionPayload, EditEditionPayload, EditionMosaicItem } from '../types/edition';
+import { CreateEditionPayload, CreateEditionServerPayload, EditEditionPayload, EditionMosaicItem } from '../types/edition';
 import { prisma } from '@/src/lib/prisma';
 import { connect } from 'http2';
 
@@ -8,7 +8,7 @@ export const find = async (id: number): Promise<EditionMosaicItem | null> => {
   return prisma.edition.findUnique({
     where: { id },
     include: {
-      localImages: { select: { storedFile: true } },
+      localImages: { select: { id:true,storedFile: true } },
     },
     
   });
@@ -22,7 +22,7 @@ export const findAll = async (props?: Prisma.EditionFindManyArgs): Promise<Editi
     cursor,
     orderBy: { createdAt: 'desc' },
     include: {
-      localImages: { select: { storedFile: true } },
+      localImages: { select: { id:true,storedFile: true } },
     },
     where,
   });
@@ -32,7 +32,7 @@ export const findAllByWork = async (workId:number): Promise<EditionMosaicItem[]>
   return prisma.edition.findMany({
     orderBy: { createdAt: 'desc' },
     include: {
-      localImages: { select: { storedFile: true } },
+      localImages: { select: { id:true,storedFile: true } },
     },
     where:{workId},
   });
@@ -46,40 +46,50 @@ export const deleteAllByWork = async (workId:number): Promise<void> => {
 
 
 export const createFromServerFields = async (
-  payload: CreateEditionPayload,
-  coverImageUpload: StoredFileUpload,
+  payload: Partial<CreateEditionServerPayload>,
+  coverImageUpload?:StoredFileUpload
 ): Promise<Edition> => {
-  console.log(JSON.stringify(payload));
 
-  const existingLocalImage = await prisma.localImage.findFirst({
-    where: { contentHash: coverImageUpload.contentHash },
-  });
-  let localImages = existingLocalImage != null 
-  ?{
-    connect: {
-      id: existingLocalImage.id,
-    },
+  let o = {...payload};
+  let creatorId = o.creatorId;
+  let workId = o.workId;
+  let localImages:any ;
+
+  if(coverImageUpload){
+    const existingLocalImage = await prisma.localImage.findFirst({
+      where: { contentHash: coverImageUpload.contentHash },
+    });
+
+    localImages = !existingLocalImage
+      ? {
+        create: { ...coverImageUpload },
+      }
+      : {
+        connect: {
+          id: existingLocalImage.id,
+        },
+      };
   }
-  :
-  {
-    create: { ...coverImageUpload },
+  else{
+    localImages = {
+      connect:o.localImages
+    };
   }
+
+  delete o.localImages;
+  delete o.creatorId;
+  delete o.workId;
 
   let data:Prisma.EditionCreateInput = {
-    title:payload.title.pop()!,
-    language:payload.language.pop()!,
-    ...payload.contentText && {contentText:payload.contentText.pop()},
-    ...payload.countryOfOrigin && {countryOfOrigin:payload.countryOfOrigin.pop()},
-    ...payload.publicationYear && {publicationYear:payload.publicationYear},
-    ...payload.length && {length:payload.length.pop()},
-    ...payload.ToCheck && {ToCheck:payload.ToCheck},
+    ... o as CreateEditionServerPayload,
     localImages,
-    work:{connect:{id:payload.workId}}
+    work:{connect:{id:workId}},
+    creator:{connect:{id:creatorId}}
   };
   return prisma.edition.create({data});
 };
 
-export const UpdateFromServerFields = async (
+export const updateFromServerFields = async (
   payload:EditEditionPayload,
   coverImageUpload: StoredFileUpload | null,
   id: number,

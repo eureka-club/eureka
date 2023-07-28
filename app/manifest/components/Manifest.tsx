@@ -8,7 +8,6 @@ import Link from 'next/link'
 import useTranslation from 'next-translate/useTranslation';
 
 import styles from './Manifest.module.css';
-import { getSession } from 'next-auth/react';
 
 interface Props{}
 const Manifest:FC<Props> = ({})=>{

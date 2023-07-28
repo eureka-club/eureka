@@ -5,7 +5,7 @@ import utc from 'dayjs/plugin/utc';
 import { Form } from 'multiparty';
 import { Session, FileUpload } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
-import { find, remove, UpdateFromServerFields } from '@/src/facades/edition';
+import { find, remove, updateFromServerFields } from '@/src/facades/edition';
 import { storeUpload } from '@/src/facades/fileUpload';
 import { use } from 'chai';
 // import redis from '../../../src/lib/redis';
@@ -107,7 +107,7 @@ export default getApiHandler()
         const uploadData = await storeUpload(coverImage);
         delete fields.id;
         const fieldsA = { ...fields };
-        const edition = await UpdateFromServerFields(fieldsA, uploadData,id);
+        const edition = await updateFromServerFields(fieldsA, uploadData,id);
         // await redis.flushall();
         res.status(200).json({ edition });
       } catch (exc) {

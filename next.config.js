@@ -4,7 +4,7 @@ const path = require('path');
 // const isProduction = process.env.NODE_ENV == 'production'
 
 module.exports = nextTranslate({
-    experimental: { appDir: true },
+    // experimental: { appDir: true },
 
     sassOptions: {
         includePaths: [path.join(__dirname, 'scss')],
@@ -18,53 +18,6 @@ module.exports = nextTranslate({
         ],
         
     },
-    // async rewrites(){
-    //     return [
-    //         {
-    //             source: '/:path*',
-    //             has: [
-    //               {
-    //                 type: 'host',
-    //                 value: 'www',
-    //               },
-    //             ],
-    //             destination: '/:path*',
-    //         }
-    //     ]
-    // },
-    // async redirects() {
-    //     const destination = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/:path*`;
-    //     const res = [
-    //         {
-    //             source: '/undefined/:path*',
-    //             destination,
-    //             permanent: false,
-    //         },
-    //         // {
-    //         //     source: '/en/undefined/:path*',
-    //         //     destination,
-    //         //     permanent: false,
-    //         // },
-    //         // {
-    //         //     source: '/es/undefined/:path*',
-    //         //     destination,
-    //         //     permanent: false,
-    //         // },
-    //         // {
-    //         //     source: '/fr/undefined/:path*',
-    //         //     destination,
-    //         //     permanent: false,
-    //         // },
-    //         // {
-    //         //     source: '/pt/undefined/:path*',
-    //         //     destination,
-    //         //     permanent: false,
-    //         // },
-            
-            
-    //     ]
-    //     console.log(res)
-    //     return res;
-    //   },
+    
     output: 'standalone'
   })

@@ -34,7 +34,7 @@ import {
   Popover,
   OverlayTrigger,
   //Table,
-  
+
 } from 'react-bootstrap';
 import { FiTrash2 } from 'react-icons/fi';
 import styles from './back-office.module.css'
@@ -43,8 +43,10 @@ import toast from 'react-hot-toast'
 import axios from 'axios';
 import MosaicItem from '@/src/components/work/MosaicItem';
 import { debounce } from 'lodash';
-import { Box, Fab, Paper, TextField, Typography, Button as MaButton, ButtonGroup, Table, TableBody,
-  TableFooter, TablePagination, TableCell, TableContainer, TableHead, TableRow, Drawer, IconButton, Divider } from '@mui/material';
+import {
+  Box, Fab, Paper, TextField, Typography, Button as MaButton, ButtonGroup, Table, TableBody,
+  TableFooter, TablePagination, TableCell, TableContainer, TableHead, TableRow, Drawer, IconButton, Divider
+} from '@mui/material';
 import PaginationActions from '@/src/components/common/MUITablePaginationActions';
 import { styled, useTheme } from '@mui/material/styles';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -83,7 +85,7 @@ export const WorkToCheckWhere = () => ({
 const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   //let { t } = useTranslation('backOffice');
   //TODO
-  const t=(s:string)=>s;
+  const t = (s: string) => s;
   const router = useRouter();
   const [tabKey, setTabKey] = useState<string>();
   const [currentSlider, setCurrentSlider] = useState<number>(0);
@@ -102,48 +104,50 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   const { data } = useWorks(WorkToCheckWhere(), { cacheKey: 'WORKS', notLangRestrict: true });
   const theme = useTheme();
   const [open, setOpen] = useState<boolean>(false);
-  
-  const {mutate:execUpdateWork} = useUpdateWork();
 
-  const [searchWorksFilter,setSearchWorksFilter] = useState('');
-  const { data:dataAW } = useWorks({where: {
-    OR:[
-      {
-        ToCheck: null,
-      },
-      {
-        ToCheck: false,
+  const { mutate: execUpdateWork } = useUpdateWork();
+
+  const [searchWorksFilter, setSearchWorksFilter] = useState('');
+  const { data: dataAW } = useWorks({
+    where: {
+      OR: [
+        {
+          ToCheck: null,
+        },
+        {
+          ToCheck: false,
+        }
+      ],
+      author: {
+        contains: searchWorksFilter
       }
-    ],
-    author:{
-      contains:searchWorksFilter
     }
-  }}, { cacheKey: 'WORKS-ALL', notLangRestrict: true, enabled:!!searchWorksFilter });
-  const [allWorks,setAllWorks] = useState<WorkMosaicItem[]>();
+  }, { cacheKey: 'WORKS-ALL', notLangRestrict: true, enabled: !!searchWorksFilter });
+  const [allWorks, setAllWorks] = useState<WorkMosaicItem[]>();
 
-  const debounceFn = useCallback(debounce((value:string)=>{
-    if(value)
+  const debounceFn = useCallback(debounce((value: string) => {
+    if (value)
       setSearchWorksFilter(value);
-  },400),[searchWorksFilter]);
-  
-  useEffect(()=>{
+  }, 400), [searchWorksFilter]);
+
+  useEffect(() => {
     setAllWorks(dataAW?.works);
-    return ()=>{
+    return () => {
       debounceFn.cancel();
     }
-  },[dataAW,searchWorksFilter]);
+  }, [dataAW, searchWorksFilter]);
 
-  function OnFilterWorksChanged(e:ChangeEvent<HTMLInputElement>){
+  function OnFilterWorksChanged(e: ChangeEvent<HTMLInputElement>) {
     debounceFn(e.target.value);
   }
 
-  const [works,setWorks] = useState(data?.works);
-  useEffect(()=>{
-    if(data?.works)setWorks(data.works);
-  },data?.works);
+  const [works, setWorks] = useState(data?.works);
+  useEffect(() => {
+    if (data?.works) setWorks(data.works);
+  }, data?.works);
 
-  const [workDnD,setWorkDnd] = useState<any>();//:-|
-  
+  const [workDnD, setWorkDnd] = useState<any>();//:-|
+
   useEffect(() => {
     if (notFound)
       router.push('/');
@@ -364,10 +368,16 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   );
 
   const { mutate: execRevisionWork, isSuccess: isRevisionWorkSucces } = useMutation(async (work: Work) => {
+
+    const formData = new FormData();
+   
+    formData.append('id', work.id.toString());
+    formData.append('ToCheck', '0');
+
     const res = await fetch(`/api/work/${work.id}`, {
       method: "PATCH",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify({ id: work.id })
+      //headers: { "Content-type": "multipart/form-data" },
+      body: formData //JSON.stringify({ id: work.id,ToCheck:false })
     });
     toast.success('Work checked!!')
     const data = await res.json();
@@ -399,8 +409,8 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
     execRevisionWork(work)
   };
 
-  const updateWork = (e:any,payload:EditWorkClientPayload)=>{
-    console.log(payload,'payload updateWork')
+  const updateWork = (e: any, payload: EditWorkClientPayload) => {
+    console.log(payload, 'payload updateWork')
     execUpdateWork(payload);
   }
 
@@ -414,7 +424,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDeleteWorkSucces, isRevisionWorkSucces]);
 
- 
+
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -444,7 +454,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
     setOpen(false);
     setAllWorks([]);
   };
-  
+
   /////////////////////////////////////////////////////////
   return (
     <SimpleLayout title={t('Admin Panel')}>
@@ -707,7 +717,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
         <TabContent>
           <TabPane eventKey="work-administration">
             <Box className='mt-4 d-flex flex-row justify-content-start'>
-            {/*<h1 className=''>Works for Revision</h1>*/}
+              {/*<h1 className=''>Works for Revision</h1>*/}
               <MaButton
                 style={{
                   width: '200px',
@@ -722,7 +732,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                 Search ours works
               </MaButton>
             </Box>
-            {works ?<div className="row">
+            {works ? <div className="row">
               <TableContainer>
                 <Table sx={{ minWidth: '100%' }} aria-label="simple table">
                   <TableHead>
@@ -817,7 +827,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                         "& .MuiTablePagination-selectLabel": {
                           ml: 12
                         },
-                       
+
                       }}
                         rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                         colSpan={12}
@@ -855,15 +865,15 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                     {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                   </IconButton>
                 </DrawerHeader>
-                <Divider/>
+                <Divider />
                 <Paper className='col' elevation={2} style={{ padding: '.5rem' }}>
                   <TextField label="Search books by title" fullWidth onChange={OnFilterWorksChanged} />
-                  {allWorks?.map((w, idx) => <Box m={1} key={`aw-${w.id}`} sx={{ display: "flex"}}>
-                    <Box  sx={{ width: '40%' }}>
-                    <MosaicItem work={w} workId={w.id} size='sm' linkToWork={false} showCreateEureka={false} />
+                  {allWorks?.map((w, idx) => <Box m={1} key={`aw-${w.id}`} sx={{ display: "flex" }}>
+                    <Box sx={{ width: '40%' }}>
+                      <MosaicItem work={w} workId={w.id} size='sm' linkToWork={false} showCreateEureka={false} />
                     </Box>
                     <Paper
-                      sx={{width:'60%' }}
+                      sx={{ width: '60%' }}
                       onDragOver={(e) => {
                         e.preventDefault();
                         e.currentTarget.style.boxShadow = "0px 0px 7px var(--eureka-green)";
@@ -896,13 +906,13 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                             : <></>
                         }
                       </Box>
-                      <Box sx={{ display: "flex", flexWrap:'wrap',flexDirection:'column'}} >
+                      <Box sx={{ display: "flex", flexWrap: 'wrap', flexDirection: 'column' }} >
                         {w.editions.map((ed: Edition, idx) => <Box key={`edition-${ed.id}`}
                           onDragStart={(e) => {
                             e.preventDefault();
                           }}
                         >
-                          <Box sx={{ display: 'flex',flexDirection:'row-reverse', justifyContent:'center'}} style={{ transform: "scale(.75)"}}  > {/*style={{ transform: "scale(1)" }}*/}
+                          <Box sx={{ display: 'flex', flexDirection: 'row-reverse', justifyContent: 'center' }} style={{ transform: "scale(.75)" }}  > {/*style={{ transform: "scale(1)" }}*/}
                             <Fab className='ms-2' color="secondary" aria-label="edit" onClick={(e) => {
                               e.preventDefault();
                               let er = w.editions.splice(idx, 1)[0] as unknown as WorkMosaicItem;
@@ -912,7 +922,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                             }}>
                               <DeleteIcon />
                             </Fab>
-                            <MosaicItem workId={ed.id} size='sm' showCreateEureka={false} linkToWork={false} notLangRestrict={true}/>
+                            <MosaicItem workId={ed.id} size='sm' showCreateEureka={false} linkToWork={false} notLangRestrict={true} />
                           </Box>
                         </Box>)}
                       </Box>

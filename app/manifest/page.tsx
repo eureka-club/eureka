@@ -5,6 +5,7 @@ import Manifest from './components/Manifest';
 
 const ManifestPage: NextPage = () => {
   const { t } = useTranslation('manifest');
+  
   return (<>
    <Head>
         <meta name="title" content={t('meta:manifestTitle')}></meta>

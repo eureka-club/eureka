@@ -10,10 +10,21 @@ const useUpdateWork = ()=>{
   return useMutation(
     async (payload:EditWorkClientPayload) => {debugger;
       if (session && payload) {
+
+        const formData = new FormData();
+
+        Object.entries(payload).forEach(([key, value]) => {
+          if (value != null) {
+            if(typeof(value) == 'object')
+              formData.append(key, JSON.stringify(value));
+            formData.append(key, value);
+          }
+        });
+
         const res = await fetch(`/api/work/${payload.id}`, {
           method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
+         // headers: { 'Content-Type': 'application/multipart' },
+          body: formData,//JSON.stringify(payload),
         });
         return res.json();
       }

@@ -1,23 +1,18 @@
-/* eslint-disable react/no-unescaped-entities */
-import { signIn } from 'next-auth/react';
+"use client"
 import useTranslation from 'next-translate/useTranslation';
 import Trans from 'next-translate/Trans'
-import { FormEvent, FunctionComponent, MouseEvent,useRef } from 'react';
+import { FunctionComponent } from 'react';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
-import { useMutation } from "react-query";
 import Row from 'react-bootstrap/Row';
 import Link from 'next/link'
-import { useRouter } from 'next/router';
 import styles from './TermsAndPolicy.module.css';
 
 const TermsAndPolicy: FunctionComponent = () => {
   const { t } = useTranslation('termsAndPolicy');
 
-  return (
-    <>
-    <Container className='p-lg-0 m-lg-0'>
-    <Row className='d-flex justify-content-between'>
+  return <Container>
+          <Row className='d-flex justify-content-between'>
           <Col className={`col-12`}>
           <h1 className={`${styles.title} mb-4`} >{t('policyText')}</h1>
 
@@ -70,9 +65,7 @@ const TermsAndPolicy: FunctionComponent = () => {
           </div>
           </Col>
           </Row>
-          </Container>
-          </>
-  );
+        </Container>
 };
 
 export default TermsAndPolicy;

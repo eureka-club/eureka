@@ -2,10 +2,11 @@ import { Prisma, Work, Edition, User, RatingOnWork, ReadOrWatchedWork } from '@p
 import { Languages, StoredFileUpload } from '../types';
 import { CreateWorkServerFields, CreateWorkServerPayload, EditWorkServerFields, WorkMosaicItem } from '../types/work';
 import { prisma } from '@/src/lib/prisma';
-import { MISSING_FIELD, WORK_ALREADY_EXIST, EDITION_ALREADY_EXIST } from '@/src/api_code';
+import { MISSING_FIELD, WORK_ALREADY_EXIST } from '@/src/api_code';
+import { CreateEditionServerPayload } from '../types/edition';
 
 const include = {
-  localImages: { select: { storedFile: true } },
+  localImages: { select: { id:true, storedFile: true } },
   _count: { select: { ratings: true } },
   favs: { select: { id: true } },
   ratings: { select: { userId: true, qty: true } },
@@ -13,7 +14,7 @@ const include = {
   posts: {
     select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
   },
-  editions: { include: { localImages: { select: { storedFile: true } } } },
+  editions: { include: { localImages: { select: { id:true, storedFile: true } } } },
 };
 const editionsToBook = (book: WorkMosaicItem, language: string): WorkMosaicItem | null => {
   if (book.language == language) {
@@ -70,7 +71,7 @@ export const findAll = async (language: string, props?: Prisma.WorkFindManyArgs)
     cursor,
     orderBy: { createdAt: 'desc' },
     include: {
-      localImages: { select: { storedFile: true } },
+      localImages: { select: { id:true,storedFile: true } },
       _count: { select: { ratings: true } },
       favs: { select: { id: true } },
       ratings: { select: { userId: true, qty: true } },
@@ -78,7 +79,7 @@ export const findAll = async (language: string, props?: Prisma.WorkFindManyArgs)
       posts: {
         select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
       },
-      editions: { include: { localImages: { select: { storedFile: true } } } },
+      editions: { include: { localImages: { select: { id:true,storedFile: true } } } },
     },
     where,
   });
@@ -98,7 +99,7 @@ export const findAllWithoutLangRestrict = async (props?: Prisma.WorkFindManyArgs
     cursor,
     orderBy: { createdAt: 'desc' },
     include: {
-      localImages: { select: { storedFile: true } },
+      localImages: { select: { id:true,storedFile: true } },
       _count: { select: { ratings: true } },
       favs: { select: { id: true } },
       ratings: { select: { userId: true, qty: true } },
@@ -106,7 +107,7 @@ export const findAllWithoutLangRestrict = async (props?: Prisma.WorkFindManyArgs
       posts: {
         select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
       },
-      editions: { include: { localImages: { select: { storedFile: true } } } },
+      editions: { include: { localImages: { select: { id:true,storedFile: true } } } },
     },
     where,
   });
@@ -148,7 +149,7 @@ export const search = async (query: { [key: string]: string | string[] | undefin
   let works = await prisma.work.findMany({
     ...(typeof where === 'string' && { where: JSON.parse(where) }),
     include: {
-      localImages: { select: { storedFile: true } },
+      localImages: { select: { id:true,storedFile: true } },
       _count: { select: { ratings: true } },
       favs: { select: { id: true } },
       ratings: { select: { userId: true, qty: true } },
@@ -156,7 +157,7 @@ export const search = async (query: { [key: string]: string | string[] | undefin
       posts: {
         select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
       },
-      editions: { include: { localImages: { select: { storedFile: true } } } },
+      editions: { include: { localImages: { select: { id:true,storedFile: true } } } },
     },
   });
   if (works) works = works.map((w) => editionsToBook(w, language)!);
@@ -262,27 +263,42 @@ export const createFromServerFields = async (
   return { work: w };
 };
 
-export const UpdateFromServerFields = async (
+export const updateFromServerFields = async (
   fields: EditWorkServerFields,
   coverImageUpload: StoredFileUpload | null,
   workId: number,
-  editions?:{id:number}[],
+  editions:{id:number}[]
 ): Promise<Work> => {
   const payload = Object.entries(fields).reduce((memo, field) => {
     const [fieldName, fieldValues] = field;
-debugger;
+//debugger;
+    if(fieldName=='creatorId') return {...memo, [fieldName]:parseInt(fieldValues)};
     if (fieldName === 'publicationYear') {
       return { ...memo, [fieldName]: new Date(fieldValues) };
     }
-
+    if (fieldName === 'ToCheck') {
+      return { ...memo, [fieldName]: (fieldValues == '0' ? false : true) };
+    }
+    
     return { ...memo, [fieldName]: fieldValues[0] };
   }, {} as CreateWorkServerPayload);
-
+  
+  //console.log(payload, 'payload');
   const existingLocalImage = coverImageUpload //NO EXISTE IMAGEN EN TABLA localImage
     ? await prisma.localImage.findFirst({
         where: { contentHash: coverImageUpload.contentHash },
       })
     : null;
+
+    let editionsPayload={};
+    if(editions?.length){
+      editionsPayload = {
+        editions:{
+          connect:editions.map(({id})=>({id}))
+        }
+      };
+      payload.ToCheck = false;
+    }
 
   if (existingLocalImage != null) {
     const q1 = prisma.work.update({
@@ -291,15 +307,11 @@ debugger;
         localImages: {
           set: [],
         },
-        ... editions && {
-          editions:{
-            connect:editions
-          }
-        }
       },
     });
 
     await prisma.$transaction([q1]);
+    //TODO delete the localImage that already exist if new one comes
 
     return prisma.work.update({
       where: { id: workId },
@@ -310,6 +322,7 @@ debugger;
             id: existingLocalImage.id,
           },
         },
+       ... editionsPayload
       },
     });
   }
@@ -333,6 +346,7 @@ debugger;
         localImages: {
           create: { ...coverImageUpload! },
         },
+        ... editionsPayload
       },
     });
   }
@@ -341,6 +355,7 @@ debugger;
     where: { id: workId },
     data: {
       ...payload,
+      ... editionsPayload
     },
   });
 };
