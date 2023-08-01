@@ -198,7 +198,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
                 </a>
               </h2>
               <h3 className={styles.professionName}>{t('Partnerships and Development')}</h3>
-              <h4 className={styles.positionName}>{t('Master in Literature')}</h4>    
+              <h4 className={styles.positionName}>{t('Master in Literature')}</h4>
               <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('Gender and feminisms')}
               </Badge>
