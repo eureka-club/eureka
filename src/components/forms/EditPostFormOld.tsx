@@ -92,7 +92,6 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
         method: 'PATCH',
         body: JSON.stringify(payload),
       });
-      console.log(res,'res')
       if(res.ok){
         handleEditPostOnSmallerScreenClose();
          toast.success( t('PostEdited'));
@@ -160,11 +159,9 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
         method: 'DELETE',
         body: JSON.stringify(payload),
       });
-      console.log(res,'res')
       if(res.ok){
         handleEditPostOnSmallerScreenClose();
         toast.success( t('PostRemoved'));
-        console.log(`/${selectedCycle?'cycle':'work'}/${selectedCycle?selectedCycle.id:selectedWork!.id}`)
         router.push(`/${selectedCycle?'cycle':'work'}/${selectedCycle?selectedCycle.id:selectedWork!.id}`)
       }
       return res.json();
@@ -294,7 +291,6 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
         isPublic: false,
         topics: '',
       }; 
-      console.log(payload,'payload') 
     await execDeletePost(payload);
 
     }

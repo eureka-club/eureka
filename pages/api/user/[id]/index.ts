@@ -11,6 +11,7 @@ import {prisma} from '@/src/lib/prisma';
 import {storeDeleteFile, storeUploadPhoto} from '@/src/facades/fileUpload'
 import { UserMosaicItem } from '@/src/types/user';
 import { Notification } from '@prisma/client';
+import { LANGUAGES } from '@/src/constants';
 
 export const config = {
   api: {
@@ -135,12 +136,15 @@ export default getApiHandler()
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
-      const { id:id_, select: s, include: i } = req.query;
+      const { id:id_, select: s, include: i ,language:l} = req.query;
     
       const id = parseInt(id_ as string, 10)
-      const user = await find({where:{ id }});
+      let language = l?.toString();
+      const user = await find({where:{ id }},language!);
+
       if(user)
-        user.type = "user";
+        (user as unknown as UserMosaicItem).type = "user";
+
       res.status(200).json({ user });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

@@ -66,7 +66,6 @@ const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
   const {data:itemsByTopic} = useItemsByTopic(0,topics[topicIdx],lang!);
 const [gbt, setGBT] = useState<any[]>([]);
   useEffect(()=>{
-    console.log(itemsByTopic);
     
     let isCanceled = false;
     if(!isCanceled){
