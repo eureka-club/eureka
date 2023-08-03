@@ -23,7 +23,7 @@ const MySaved: NextPage<Props> = ({id}) => {
   const router = useRouter()
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
-  if(!isLoadingSession && !session)router.push('/')
+  if(!isLoadingSession && !session)router?.push('/')
   const sfl = useMySaved(id)
 
   // const renderSFL = (i:CycleMosaicItem|PostMosaicItem|WorkMosaicItem)=>{
