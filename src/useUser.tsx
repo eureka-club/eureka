@@ -1,7 +1,6 @@
 import { useQuery } from 'react-query';
 import { UserMosaicItem } from '@/types/user';
 import { useRouter } from 'next/router';
-import { LANGUAGES } from './constants';
 
 export const getUser = async (id: number,origin='',language?:string): Promise<UserMosaicItem|null> => {
   if (!id) return null;
@@ -27,7 +26,7 @@ const useUser = (id: number, options?: Options) => {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  return useQuery<UserMosaicItem|null>(['USER', `${id}`], () => getUser(id,'',LANGUAGES[router.locale||'es']), {
+  return useQuery<UserMosaicItem|null>(['USER', `${id}`], () => getUser(id,''), {
     staleTime,
     enabled,
   });
