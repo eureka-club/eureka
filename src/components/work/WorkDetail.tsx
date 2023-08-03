@@ -1,4 +1,4 @@
-import { FunctionComponent, MouseEvent, useEffect, useState, lazy, Suspense, useCallback } from 'react';
+import { FunctionComponent, MouseEvent, useEffect, useState, lazy, Suspense } from 'react';
 import classNames from 'classnames';
 import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
