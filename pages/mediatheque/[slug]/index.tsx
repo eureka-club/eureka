@@ -12,7 +12,7 @@ import LocalImageComponent from '@/src/components/LocalImage';
 
 import { User } from '@prisma/client';
 import styles from './index.module.css';
-import useUser from '@/src/useUser';
+import useUser, { getUser } from '@/src/useUser';
 
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import FilterEngine from '@/src/components/FilterEngine';
@@ -425,6 +425,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     cycles.forEach((c) => {
       queryClient.setQueryData(['CYCLE', c.id], () => c);
     });
+
+    const user = await getUser(id, origin);
+    await queryClient.prefetchQuery(['USER', id.toString()], () => user);
 
     return {
       props: {

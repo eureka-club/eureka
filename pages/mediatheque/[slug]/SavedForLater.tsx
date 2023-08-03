@@ -36,7 +36,6 @@ const SavedForLater:FC<Props> = ({user,id,goTo,t}) => {
           <CarouselStatic
             cacheKey={['MEDIATHEQUE-SAVED',`USER-${user!.id}`]}
             onSeeAll={()=>goTo('my-saved')}
-            seeAll={!!session}
             title={t('common:mySaved')}
             data={items.slice(0,6)}
             iconBefore={<BsBookmark />}
