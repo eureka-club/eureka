@@ -20,7 +20,6 @@ const PostsCreated:FC<Props> = ({posts,user,id,goTo,t}) => {
           cacheKey={['MY-POSTS',id]}
           className="mb-5"
           onSeeAll={()=>goTo('my-posts')}
-          seeAll={!!session}
           title={t('common:myPosts')}
           data={posts}
           mosaicBoxClassName="pb-1"
