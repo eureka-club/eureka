@@ -55,7 +55,7 @@ export default getApiHandler()
 
       // @ts-ignore arguments checked in validateReq()
       await saveSocialInteraction(work, session.user, socialInteraction, doCreate, qty, year);
-      if(doCreate)
+      if(doCreate && notificationMessage && notificationContextURL)
         await create(
           notificationMessage,
           notificationContextURL,

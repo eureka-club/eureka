@@ -44,7 +44,7 @@ import axios from 'axios';
 import MosaicItem from '@/src/components/work/MosaicItem';
 import { debounce } from 'lodash';
 import {
-  Box, Fab, Paper, TextField, Typography, Button as MaButton, ButtonGroup, Table, TableBody,
+  Box, Fab, Paper, TextField, Typography, Button as MaButton, ButtonGroup, CircularProgress, Table, TableBody,
   TableFooter, TablePagination, TableCell, TableContainer, TableHead, TableRow, Drawer, IconButton, Divider
 } from '@mui/material';
 import PaginationActions from '@/src/components/common/MUITablePaginationActions';
@@ -52,8 +52,11 @@ import { styled, useTheme } from '@mui/material/styles';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { EditWorkClientPayload, WorkMosaicItem } from '@/src/types/work';
+import { EditionMosaicItem } from '@/src/types/edition';
+
 import { FaSave } from 'react-icons/fa';
 import useUpdateWork from '@/src/hooks/mutations/useUpdateWork';
+import { error } from 'node:console';
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
 const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 interface Props {
@@ -102,10 +105,16 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   const queryClient = useQueryClient();
   const { data: bo } = useBackOffice();
   const { data } = useWorks(WorkToCheckWhere(), { cacheKey: 'WORKS', notLangRestrict: true });
+  const [works, setWorks] = useState<WorkMosaicItem[]>();
+  useEffect(() => {
+    if (data?.works) setWorks(data.works);
+  }, [data?.works]);
+
   const theme = useTheme();
   const [open, setOpen] = useState<boolean>(false);
 
-  const { mutate: execUpdateWork } = useUpdateWork();
+  const { mutate: execUpdateWork, data: UpdateWorkResponse, isLoading: isUpdateWorkLoading, isSuccess: isUpdateWorkSuccess, isError: isUpdateWorkError,
+  } = useUpdateWork();
 
   const [searchWorksFilter, setSearchWorksFilter] = useState('');
   const { data: dataAW } = useWorks({
@@ -140,11 +149,6 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   function OnFilterWorksChanged(e: ChangeEvent<HTMLInputElement>) {
     debounceFn(e.target.value);
   }
-
-  const [works, setWorks] = useState(data?.works);
-  useEffect(() => {
-    if (data?.works) setWorks(data.works);
-  }, data?.works);
 
   const [workDnD, setWorkDnd] = useState<any>();//:-|
 
@@ -347,6 +351,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
     });
     toast.success('Work deleted!!')
     const data = await res.json();
+
     return data;
   },
     {
@@ -370,7 +375,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   const { mutate: execRevisionWork, isSuccess: isRevisionWorkSucces } = useMutation(async (work: Work) => {
 
     const formData = new FormData();
-   
+
     formData.append('id', work.id.toString());
     formData.append('ToCheck', '0');
 
@@ -410,8 +415,14 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   };
 
   const updateWork = (e: any, payload: EditWorkClientPayload) => {
-    console.log(payload, 'payload updateWork')
     execUpdateWork(payload);
+    console.log(UpdateWorkResponse, 'UpdateWorkResponse')
+    if (UpdateWorkResponse) {
+      if (!UpdateWorkResponse.error)
+        toast.success(t("Work and editions saved"))
+      else
+        toast.error(t(UpdateWorkResponse.error))
+    }
   }
 
   useEffect(() => {
@@ -890,39 +901,69 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                         setWorks(_ => works.filter(w => w.id != workDnD.id));
                       }}
                     >
-                      <Box sx={{ display: "flex", }}>
-                        <Typography variant='h5' m={2}>
-                          {w.editions.length ? 'Editions' : "Drop edition here"}
+                      <Box sx={{ display: "flex", justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Typography variant='h5' m={2} style={{ color: 'var(--eureka-purple)', fontFamily: 'Open Sans, sans-serif' }}>
+                          {w.editions.length ? <b>Editions</b> : <b>Drop edition here</b>}
                         </Typography>
                         {
                           w.editions.length
-                            ? <ButtonGroup sx={{ marginLeft: 'auto' }}>
-                              <MaButton className={styles.SuccessButon} style={{ height: '3rem' }} variant="contained"
+                            ? <>{!isUpdateWorkLoading && <ButtonGroup sx={{ marginRight: '.5rem' }}>
+                              <MaButton
+                                style={{
+                                  height: '2rem',
+                                  background: 'var(--eureka-green)',
+                                }}
+                                variant="contained"
+                                size="small"
                                 onClick={(e) => updateWork(e, { ...w })}
+                                disabled={isUpdateWorkLoading}
                               >
                                 <FaSave />
                               </MaButton>
-                            </ButtonGroup>
+                            </ButtonGroup>}
+                              {isUpdateWorkLoading && (
+                                <CircularProgress
+                                  size={30}
+                                  sx={{
+                                    color: 'var(--eureka-green)',
+                                    marginRight: '.5rem',
+                                    //margin:'.5rem'
+                                  }}
+                                />
+                              )}
+                            </>
+
                             : <></>
                         }
                       </Box>
                       <Box sx={{ display: "flex", flexWrap: 'wrap', flexDirection: 'column' }} >
-                        {w.editions.map((ed: Edition, idx) => <Box key={`edition-${ed.id}`}
+                        {w.editions.map((ed: EditionMosaicItem, idx) => <Box key={`edition-${ed.id}`}
                           onDragStart={(e) => {
                             e.preventDefault();
                           }}
                         >
-                          <Box sx={{ display: 'flex', flexDirection: 'row-reverse', justifyContent: 'center' }} style={{ transform: "scale(.75)" }}  > {/*style={{ transform: "scale(1)" }}*/}
-                            <Fab className='ms-2' color="secondary" aria-label="edit" onClick={(e) => {
+                          <Box sx={{ display: 'flex', flexDirection: 'row-reverse', justifyContent: 'center', marginBottom: 2 }} > {/*style={{ transform: "scale(1)" }}*/}
+                            {ed.ToCheck ? <Fab className='ms-1' aria-label="edit" onClick={(e) => {
                               e.preventDefault();
                               let er = w.editions.splice(idx, 1)[0] as unknown as WorkMosaicItem;
                               setAllWorks(_ => [...allWorks]);
                               works.push(er);
                               setWorks(_ => works);
-                            }}>
+                            }} style={{
+                              transform: "scale(.6)", background: 'var(--eureka-purple)'
+                            }} disabled={isUpdateWorkLoading}>
                               <DeleteIcon />
-                            </Fab>
-                            <MosaicItem workId={ed.id} size='sm' showCreateEureka={false} linkToWork={false} notLangRestrict={true} />
+                            </Fab> : <Fab className='ms-1' color="secondary" aria-label="edit" onClick={(e) => { // aca llamaria a api borrar edicion directo
+                              e.preventDefault();
+                            }} style={{ transform: "scale(.6)", background: 'var(--eureka-purple)' }} disabled={isUpdateWorkLoading}>
+                              <DeleteIcon />
+                            </Fab>}
+                            <LocalImageComponent className='mb-3'
+                              alt="work cover"
+                              height={180}
+                              filePath={ed.localImages[0].storedFile}
+                            />
+                            {/*<MosaicItem workId={ed.id} size='sm' showCreateEureka={false} linkToWork={false} notLangRestrict={true} />*/}
                           </Box>
                         </Box>)}
                       </Box>

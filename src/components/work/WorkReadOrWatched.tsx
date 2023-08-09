@@ -4,7 +4,7 @@ import { FunctionComponent, useState } from 'react';
 import RemoveRedEyeRoundedIcon from '@mui/icons-material/RemoveRedEyeRounded';
 import VisibilityOffRoundedIcon from '@mui/icons-material/VisibilityOffRounded';
 import Button from '@mui/material/Button';
-import Dialog, { DialogProps } from '@mui/material/Dialog';
+import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -16,24 +16,17 @@ import ListItemText from '@mui/material/ListItemText';
 import dayjs from 'dayjs';
 import useExecReadOrWatchedWork from '@/src/hooks/mutations/useExecReadOrWatchedWork';
 import { Session } from '@/src/types';
-
-import styles from './WorkSummary.module.css';
+// import styles from './WorkSummary.module.css';
 
 interface Props {
   work: WorkMosaicItem; //Work ID
   session: Session;
 }
 
-const years = ()=> {
-  let dates = []
+const years = (publicationYear:Date|null)=> {
    const max = dayjs().year();
-   const min = max - 30;
-
-   for (let i = max; i >= min; i--) {
-     dates.push(i.toString());
-   }
-   return dates;
-
+   const yearsAgo = dayjs(dayjs()).diff(publicationYear||1993,'year');
+   return [...Array(yearsAgo+1).keys()].map(y => `${max-y}`);
 } 
 
 
@@ -115,7 +108,7 @@ const WorkReadOrWatched: FunctionComponent<Props> = ({ work,session }) => {
             <DialogContent>
               <DialogContentText></DialogContentText>
               <List sx={{ pt: 0, mt: 0 }} className="h-50">
-                {years().map((year) => (
+                {years(work.publicationYear).map((year) => (
                   <ListItem disablePadding key={year}>
                     <ListItemButton onClick={() => handleListItemClick(year)}>
                       <ListItemText

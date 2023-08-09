@@ -167,7 +167,7 @@ const locales = Object.keys(Languages)
               </Navbar.Brand>
             </a>
           </Link>
-            <Nav className="d-flex align-items-center ms-2 ms-xxl-5">{!isLoadingSession && <SearchInput className="" style={{ width: '400px' }} />}</Nav>
+            <Nav className="d-flex align-items-center ms-2 ms-xxl-5">{!isLoadingSession && <SearchInput className="" style={{ width: '385px' }} />}</Nav>
         </section>
           <section className='d-flex my-lg-1 flex-row w-100 justify-content-start' >
           {isLoadingSession ? (

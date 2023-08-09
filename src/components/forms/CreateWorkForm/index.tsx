@@ -42,6 +42,7 @@ import Image from 'next/image';
 import WMI from '@/src/components/work/MosaicItem';
 import { EDITION_ALREADY_EXIST, WORK_ALREADY_EXIST } from '@/src/api_code';
 import Link from 'next/link'
+import { LANGUAGES } from '@/src/constants';
 
 interface Props {
     noModal?: boolean;
@@ -61,12 +62,7 @@ interface FormValues {
     language?: string;
 }
 
-const languages: Record<string, string> = {
-    es: "spanish",
-    en: 'english',
-    fr: 'french',
-    pt: 'portuguese'
-}
+
 
 
 const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
@@ -306,9 +302,26 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
         });
     }
 
+
+    /*   { type: 'ISBN_10', identifier: '8498383439' },
+      { type: 'ISBN_13', identifier: '9788498383430' } */
+    function getBookIdentifier(identifiers: any[]) {
+
+        if (identifiers.filter(x => x.type === 'ISBN_10').length > 0)
+            return identifiers.filter(x => x.type === 'ISBN_10')[0].identifier;
+        else
+            if (identifiers.filter(x => x.type === 'ISBN_13').length > 0)
+                return identifiers.filter(x => x.type === 'ISBN_13')[0].identifier;
+            else
+                if (identifiers.filter(x => x.type === 'OTHER').length > 0)
+                    return identifiers.filter(x => x.type === 'OTHER')[0].identifier;
+                else
+                    return '';
+
+    }
+
     async function searchTitles(q: string) {
         setLoading(true);
-
 
         if (formValues && formValues.type) {
             const { error, data } = await fetch('/api/external-works/search', {
@@ -357,8 +370,8 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
             let isbn;
             if (work.volumeInfo?.industryIdentifiers && work.volumeInfo?.industryIdentifiers.length)
-                isbn = work.volumeInfo?.industryIdentifiers.filter(x => x.type == 'ISBN_10')[0].identifier;
-
+                isbn = getBookIdentifier(work.volumeInfo?.industryIdentifiers);
+            // isbn = work.volumeInfo?.industryIdentifiers.filter(x => x.type == 'ISBN_10')[0].identifier;
             //////////////////////////////////////////////////
             formValues['link'] = (work.volumeInfo?.infoLink) ? work.volumeInfo.infoLink : "";
             formValues['isbn'] = isbn;
@@ -371,7 +384,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
             let l = work.volumeInfo.language.split("-");
             let language = l.length ? l[0] : undefined;
-            formValues['language'] = language ? languages[language] : 'spanish';
+            formValues['language'] = language ? LANGUAGES[language] : 'spanish';
             setFormValues({
                 ...formValues,
             });
@@ -411,7 +424,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
             formValues['workLength'] = (video.runtime) ? `${video.runtime}` : "";
             formValues['description'] = video.overview;
             let language = video.original_language;
-            formValues['language'] = language ? languages[language] : 'spanish';
+            formValues['language'] = language ? LANGUAGES[language] : 'spanish';
             setFormValues({
                 ...formValues,
             });
@@ -691,7 +704,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
                     <Col>
                         <h1 className="text-secondary text-center  fw-bold mt-sm-0 mb-3 mb-lg-5">{t('ExistingWorktitle')}</h1>
-                       
+
                     </Col>
                     <Col className='d-flex  justify-content-center align-items-center'>
                         <WMI workId={workId!}
@@ -708,11 +721,11 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                 md: '30%', // theme.breakpoints.up('md')
                             },
                         }} >
-                        <Button
-                            className={`mt-3 mt-lg-5 btn-eureka `}
+                            <Button
+                                className={`mt-3 mt-lg-5 btn-eureka `}
                                 onClick={(e) => handleToDoOtherSearch(e)}
-                            style={{ width: '100%', height: '2.5em' }}
-                        >
+                                style={{ width: '100%', height: '2.5em' }}
+                            >
                                 {t('MakeSearchText')}
                             </Button></Box> </Col>
                 </Row>

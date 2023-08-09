@@ -26,19 +26,19 @@ export default getApiHandler()
   .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = (await getSession({ req })) as unknown as Session;
     if (session == null || !session.user.roles.includes('admin')) {
-      return res.status(200).json({ status: UNAUTHORIZED, error:UNAUTHORIZED });
+      return res.status(200).json({ status: UNAUTHORIZED, error: UNAUTHORIZED });
     }
 
     const { id, lang: l } = req.query;
     const language = l ? Languages[l.toString()] : null;
 
     if (typeof id !== 'string') {
-      return res.status(200).json({error:MISSING_FIELD('id')});
+      return res.status(200).json({ error: MISSING_FIELD('id') });
     }
 
     const idNum = parseInt(id, 10);
     if (!Number.isInteger(idNum)) {
-      return res.status(200).json({error:MISSING_FIELD('id')});
+      return res.status(200).json({ error: MISSING_FIELD('id') });
     }
 
     try {
@@ -56,7 +56,7 @@ export default getApiHandler()
       res.status(200).json({ status: 'OK' });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
-      res.status(500).json({ status: SERVER_ERROR,error:SERVER_ERROR });
+      res.status(500).json({ status: SERVER_ERROR, error: SERVER_ERROR });
     } finally {
       //prisma.$disconnect();
     }
@@ -69,7 +69,7 @@ export default getApiHandler()
     // }
     const { id, lang: l } = req.query;
     const language = l ? Languages[l.toString()] : null;
-   
+
     if (typeof id !== 'string') {
       res.status(404).end();
       return;
@@ -82,7 +82,6 @@ export default getApiHandler()
     }
 
     try {
-
       let work = null;
       if (language) work = await find(idNum, language);
       else work = await findWithoutLangRestrict(idNum);
@@ -106,7 +105,7 @@ export default getApiHandler()
       res.status(200).json(work);
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
-      res.status(500).json({ status:SERVER_ERROR,error:SERVER_ERROR });
+      res.status(500).json({ status: SERVER_ERROR, error: SERVER_ERROR });
     } finally {
       //prisma.$disconnect();
     }
@@ -116,7 +115,7 @@ export default getApiHandler()
     if (session == null || !session.user.roles.includes('admin')) {
       return res.status(401).json({ error: UNAUTHORIZED });
     }
-    
+
     new Form().parse(req, async (err, fields, files) => {
       if (err != null) {
         console.error(err); // eslint-disable-line no-console
@@ -126,56 +125,58 @@ export default getApiHandler()
       if (fields.publicationYear) fields.publicationYear = dayjs(`${fields.publicationYear}`, 'YYYY').utc().format();
       const now = dayjs().utc();
 
-      const { id:id_ } = fields;
+      const { id: id_ } = fields;
       const id = parseInt(id_, 10);
       if (!Number.isInteger(id)) {
         return res.status(200).json({ status: 'OK', work: null });
       }
-      let editionsIds:{id:number}[]=[];
+      let editionsIds: { id: number }[] = [];
 
-      const worksToSaveAsEdition:WorkMosaicItem[] = fields.editions?.length ? JSON.parse(fields.editions[0]) : undefined;
+      const worksToSaveAsEdition: WorkMosaicItem[] = fields.editions?.length
+        ? JSON.parse(fields.editions[0])
+        : undefined;
 
-      if(worksToSaveAsEdition?.length){
-        const editions = worksToSaveAsEdition.reduce((p,c)=>{
-          const edition:CreateEditionServerPayload={
-            title:c.title,
-            language:c.language,
-            isbn:c.isbn!,
-            contentText:c.contentText!,
-            publicationYear:c.publicationYear!,
-            countryOfOrigin:c.countryOfOrigin!,
-            ToCheck:false,
-            length:c.language,
-            workId:id,
-            createdAt:now.toDate(),
-            creatorId:c.creatorId,
-            updatedAt:now.toDate(),
-            localImages:c.localImages.map(l=>({id:l.id})) 
-          }
-          p.push(edition);
-          return p;
-        },[] as CreateEditionServerPayload[] );
-  
-        let removeOldWorks:Promise<Work>[] = [];
-        worksToSaveAsEdition.forEach(w=>{removeOldWorks.push(
-          remove(w.id)
-        )});
-  
-        await Promise.all(removeOldWorks);
-  
-        let saveEditions:Promise<Edition>[] = [];
-        editions.forEach(e=>{saveEditions.push(
-          editionCreateFromServerFields(e)
-        )});
-        
-        const editionsSaved = await Promise.all(saveEditions);
-        editionsIds =  editionsSaved.map(({id})=>({id}));
-      }
-      
       const coverImage: FileUpload = files?.cover != null ? files.cover[0] : null;
       try {
+        if (worksToSaveAsEdition?.length) {
+          const editions = worksToSaveAsEdition.reduce((p, c) => {
+            const edition: CreateEditionServerPayload = {
+              title: c.title,
+              language: c.language,
+              isbn: c.isbn!,
+              contentText: c.contentText!,
+              publicationYear: c.publicationYear!,
+              countryOfOrigin: c.countryOfOrigin!,
+              ToCheck: false,
+              length: c.language,
+              workId: id,
+              createdAt: now.toDate(),
+              creatorId: c.creatorId,
+              updatedAt: now.toDate(),
+              localImages: c.localImages.map((l) => ({ id: l.id })),
+            };
+            p.push(edition);
+            return p;
+          }, [] as CreateEditionServerPayload[]);
+
+          let removeOldWorks: Promise<Work>[] = [];
+          worksToSaveAsEdition.forEach((w) => {
+            removeOldWorks.push(remove(w.id));
+          });
+
+          await Promise.all(removeOldWorks);
+
+          let saveEditions: Promise<Edition>[] = [];
+          editions.forEach((e) => {
+            saveEditions.push(editionCreateFromServerFields(e));
+          });
+
+          const editionsSaved = await Promise.all(saveEditions);
+          editionsIds = editionsSaved.map(({ id }) => ({ id }));
+        }
+
         const uploadData = coverImage ? await storeUpload(coverImage) : null;
-        
+
         delete fields.id;
         delete fields.localImages;
         delete fields.favs;
@@ -195,9 +196,9 @@ export default getApiHandler()
         //prisma.$disconnect();
       }
     });
-  })
+  });
 
- /* .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
+/* .patch<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = (await getSession({ req })) as unknown as Session;
     if (session == null) {
       res.status(401).json({ status: 'Unauthorized' });

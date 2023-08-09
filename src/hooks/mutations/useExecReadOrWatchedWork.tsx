@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react';
 import { UserMosaicItem } from '@/src/types/user';
 import useUser from '@/src/useUser';
 import { WorkMosaicItem } from '@/src/types/work';
+import useTranslation from 'next-translate/useTranslation';
 
 export interface ExecReadOrWatchedWorkPayload {
   doCreate: boolean;
@@ -13,10 +14,12 @@ export interface ExecReadOrWatchedWorkPayload {
 }
 interface Props{
   work:WorkMosaicItem;
+  notLangRestrict?:boolean
 }
 
 const useExecReadOrWatchedWork = (props: Props) => {
-  const { work } = props;
+  const {lang} = useTranslation();
+  const { work,notLangRestrict } = props;
   const queryClient = useQueryClient();
   const { data: session } = useSession();
   const { data: user } = useUser(session?.user?.id || 0, {
@@ -49,8 +52,9 @@ const useExecReadOrWatchedWork = (props: Props) => {
       onMutate: async (payload: ExecReadOrWatchedWorkPayload) => {
         let prevUser = undefined;
         let prevWork = undefined;
+        let cacheKey = undefined;
         if (work && session && user) {
-          const cacheKey = ['WORK', `${work.id}`];
+          cacheKey = notLangRestrict ? ['WORK', `${work.id}`] : ['WORK', `${work.id}-${lang}`];
           await queryClient.cancelQueries(['USER', `${session.user.id}`]);
           await queryClient.cancelQueries(cacheKey);
 
@@ -70,16 +74,16 @@ const useExecReadOrWatchedWork = (props: Props) => {
           queryClient.setQueryData(cacheKey, { ...work, readOrWatchedWork });
           queryClient.setQueryData(['USER', `${user.id}`], { ...user, readOrWatchedUser });
         }
-        return { prevUser, prevWork };
+        return { prevUser, prevWork, cacheKey };
       },
       onSettled: (_, error, __, context) => {
-        const cacheKey = ['WORK', `${work.id}`];
+        // const cacheKey = ['WORK', `${work.id}`];
         if (error && context) {
-          if ('prevUser' in context) queryClient.setQueryData(['USER', `${session?.user.id}`], context?.prevUser);
-          if ('prevWork' in context) queryClient.setQueryData(cacheKey, context?.prevWork);
+          queryClient.setQueryData(['USER', `${session?.user.id}`], context?.prevUser!);
+          queryClient.setQueryData(context?.cacheKey!, context?.prevWork!);
         }
         queryClient.invalidateQueries(['USER', `${session?.user.id}`]);
-        queryClient.invalidateQueries(cacheKey);
+        queryClient.invalidateQueries(context?.cacheKey!);
       },
     },
   );

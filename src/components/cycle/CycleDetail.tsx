@@ -360,7 +360,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const handleEditPostClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
     if(post){
-      console.log('post',post)
       localStorage.setItem('redirect',`/cycle/${cycle.id}`)
       router.push(`/post/${post.id}/edit`)
     }

@@ -3,25 +3,17 @@ import { UserMosaicItem } from '@/types/user';
 // import { UserDetail } from '../types/user';
 import {prisma} from '@/src/lib/prisma';
 
-export const find = async (props: Prisma.UserFindUniqueArgs): Promise<UserMosaicItem | null> => {
+export const find = async (props: Prisma.UserFindUniqueArgs,language?:string): Promise<UserMosaicItem | null> => {
   const { select = undefined, include = true,where } = props;
-  const user: any = await prisma.user.findUnique({
+  const user: any = await prisma.user.findFirst({
     where,
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      image: true,
-      roles: true,
-      createdAt: true,
-      updatedAt: true,
-      countryOfOrigin: true,
-      aboutMe: true,
-      dashboardType: true,
-      tags: true,
+    include: {
       followedBy: { select: { id: true } },
       following: { select: { id: true, name: true, image: true, photos: { select: { storedFile: true } } } },
       ratingWorks: {
+        ...language && {where:{
+          work:{language}
+        }},
         select: {
           workId: true,
           qty: true,
@@ -40,6 +32,9 @@ export const find = async (props: Prisma.UserFindUniqueArgs): Promise<UserMosaic
         },
       },
       readOrWatchedWorks: {
+        ...language && {where:{
+          work:{language}
+        }},
         select: {
           workId: true,
           year: true,
@@ -58,6 +53,7 @@ export const find = async (props: Prisma.UserFindUniqueArgs): Promise<UserMosaic
         },
       },
       favWorks: {
+        ...language && {where:{language}},
         select: {
           id: true,
           author: true,
@@ -68,9 +64,11 @@ export const find = async (props: Prisma.UserFindUniqueArgs): Promise<UserMosaic
           countryOfOrigin2: true,
           favs: { select: { id: true } },
           localImages: { select: { storedFile: true } },
+          language:true
         },
       },
       favPosts: {
+        ...language && {where:{language}},
         select: {
           id: true,
           title: true,
@@ -83,6 +81,7 @@ export const find = async (props: Prisma.UserFindUniqueArgs): Promise<UserMosaic
         },
       },
       favCycles: {
+        ...language && {where:{languages:{contains:language}}},
         select: {
           id: true,
           createdAt: true,
@@ -96,12 +95,21 @@ export const find = async (props: Prisma.UserFindUniqueArgs): Promise<UserMosaic
           localImages: { select: { storedFile: true } },
         },
       },
-      cycles: { select: { id: true, creatorId: true, startDate: true, endDate: true, title: true } },
-      joinedCycles: { select: { id: true, creatorId: true, startDate: true, endDate: true, title: true } },
-      ratingCycles: { select: { cycleId: true, qty: true } },
+      cycles: { 
+        select: { id: true, creatorId: true, startDate: true, endDate: true, title: true, },
+        ...language && {where:{languages:{contains:language}}},
+      },
+      joinedCycles: { 
+        select: { id: true, creatorId: true, startDate: true, endDate: true, title: true },
+        ...language && {where:{languages:{contains:language}}},
+       },
+      ratingCycles: { 
+        select: { cycleId: true, qty: true },
+        ...language && {where:{
+          cycle:{languages:{contains:language}}
+        }}
+      },
       photos: { select: { storedFile: true } },
-      reactions:true,
-      // language:true,
     },
     
   });

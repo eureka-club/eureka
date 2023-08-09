@@ -14,3 +14,9 @@ export const WEBAPP_URL = process.env.NEXT_PUBLIC_WEBAPP_URL;
 
 export const LOCALE_COOKIE_NAME = 'NEXT_LOCALE';
 export const LOCALE_COOKIE_TTL = 60 * 60 * 24 * 90;
+export const LANGUAGES : Record<string, string> = {
+    es: "spanish",
+    en: 'english',
+    fr: 'french',
+    pt: 'portuguese'
+}

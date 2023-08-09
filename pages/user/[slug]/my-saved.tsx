@@ -8,10 +8,6 @@ import useTranslation from 'next-translate/useTranslation';
 import {useRouter} from 'next/router'
 import useMySaved from '@/src/useMySaved'
 import {getUser} from '@/src/useUser';
-import { CycleMosaicItem } from '@/src/types/cycle';
-import { PostMosaicItem } from '@/src/types/post';
-import { WorkMosaicItem } from '@/src/types/work';
-import { isCycleMosaicItem, isPostMosaicItem, isWorkMosaicItem } from '@/src/types';
 import CMI from '@/src/components/cycle/MosaicItem'
 import PMI from '@/src/components/post/MosaicItem'
 import WMI from '@/components/work/MosaicItem'
@@ -27,7 +23,7 @@ const MySaved: NextPage<Props> = ({id}) => {
   const router = useRouter()
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
-  if(!isLoadingSession && !session)router.push('/')
+  if(!isLoadingSession && !session)router?.push('/')
   const sfl = useMySaved(id)
 
   // const renderSFL = (i:CycleMosaicItem|PostMosaicItem|WorkMosaicItem)=>{
@@ -57,7 +53,7 @@ const MySaved: NextPage<Props> = ({id}) => {
     return <Row className='mt-5'>
     {sfl.favWorks.map(c=>
         <Col key={c.id} xs={12} sm={6} lg={3} xxl={2} className='mb-5 d-flex justify-content-center  align-items-center'>
-          <WMI workId={c.id }  size='md'/>
+          <WMI notLangRestrict workId={c.id }  size='md'/>
         </Col>
     )}
     </Row>

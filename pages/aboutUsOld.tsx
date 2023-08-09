@@ -186,8 +186,8 @@ const AboutPage: NextPage<Props> = ({ session }) => {
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
-                src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/amanda_gois.webp`}
                 alt="Partnerships and Development"
+                src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/amanda_gois.webp`}
                 width={200}
                 height={200}
               />
@@ -198,7 +198,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
                 </a>
               </h2>
               <h3 className={styles.professionName}>{t('Partnerships and Development')}</h3>
-              <h4 className={styles.positionName}>{t('Master in Literature')}</h4>    
+              <h4 className={styles.positionName}>{t('Master in Literature')}</h4>
               <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('Gender and feminisms')}
               </Badge>

@@ -2,6 +2,7 @@ import { FC } from "react";
 import CarouselStatic from '@/src/components/CarouselStatic';
 import { PostMosaicItem } from "@/src/types/post";
 import { UserMosaicItem } from "@/src/types/user";
+import { useSession } from "next-auth/react";
 
 interface Props{
   posts:PostMosaicItem[];
@@ -11,6 +12,8 @@ interface Props{
   t:(val:string)=>string;
 }
 const PostsCreated:FC<Props> = ({posts,user,id,goTo,t}) => {
+    const {data:session} = useSession();
+
     if (user && posts && posts.length) {
       return <div data-cy="my-posts">
         <CarouselStatic

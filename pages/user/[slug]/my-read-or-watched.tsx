@@ -3,16 +3,12 @@ import { useState, useEffect, SyntheticEvent, MouseEvent } from 'react';
 import Head from 'next/head';
 import {
   Alert,
-  Form,
-  OverlayTrigger,
-  Popover,
   Button,
   ButtonGroup,
   Tabs,
   Tab,
   Col,
   Row,
-  Spinner,
 } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { getSession } from 'next-auth/react';
@@ -309,7 +305,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                             xxl={2}
                             className="mb-5 d-flex justify-content-center  align-items-center"
                           >
-                            <WMI workId={w.workId!} size="md" />
+                            <WMI notLangRestrict workId={w.workId!} size="md" />
                           </Col>
                         ))
                       }
@@ -348,7 +344,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                             xxl={2}
                             className="mb-5 d-flex justify-content-center  align-items-center"
                           >
-                            <WMI workId={w.workId!} size="md" />
+                            <WMI notLangRestrict workId={w.workId!} size="md" />
                           </Col>
                         ))}
                       </Row>

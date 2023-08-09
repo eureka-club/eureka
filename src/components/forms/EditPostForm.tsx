@@ -346,7 +346,6 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
         method: 'DELETE',
         body: JSON.stringify(payload),
       });
-      console.log(res, 'res')
       if (res.ok) {
         toast.success(t('PostRemoved'));
         router.push(`/${formValues.selectedCycle ? 'cycle' : 'work'}/${formValues.selectedCycle ? formValues.selectedCycle.id : formValues.selectedWork!.id}`)
@@ -402,7 +401,6 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
   const handleSubmit = async (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
 
-    console.log(formValues)
     if (!imageFile && !formValues.currentImage) {
       toast.error(t('requiredEurekaImageError'))
       return;
@@ -424,7 +422,6 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
       };
       //if (formValidation(payload))
       await execEditPost(payload);   
-      console.log(payload, 'payload')
 
     } else if (formValues.selectedCycle != null) {
       const payload: EditPostAboutCycleClientPayload = {
@@ -439,7 +436,6 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
         topics: formValues.topics.join(','),
         tags: formValues.tags
       };
-      console.log(payload, 'payload')
       // (formValidation(payload))
       await execEditPost(payload);
     }

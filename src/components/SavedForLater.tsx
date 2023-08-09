@@ -8,6 +8,7 @@ import useMySaved from '@/src/useMySaved';
 
 import dayjs from 'dayjs';
 import { FC } from 'react';
+import { useSession } from 'next-auth/react';
 
 interface Props{
     id:number;
@@ -18,6 +19,8 @@ interface Props{
 }
 const SavedForLater:FC<Props> = ({user,id,goTo,t}) => {
   const SFL = useMySaved(id)
+
+  const {data:session} = useSession();
 
     if (SFL){
       const items = [...SFL.favPosts,...SFL.favCycles,...SFL.favWorks] as PostMosaicItem[]|CycleMosaicItem[]|WorkMosaicItem[];
