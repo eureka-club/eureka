@@ -1,4 +1,4 @@
-import React,{FC, ReactElement, ReactNode, useEffect} from 'react';
+import React,{FC, ReactNode, useEffect} from 'react';
 import Box from '@mui/material/Box';
 import Rating, { RatingProps } from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';

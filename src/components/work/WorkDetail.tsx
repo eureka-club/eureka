@@ -259,6 +259,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
 
   const clearRating = () => {
     setQty(0);
+    setqtyByUser(0);
     execRating({
       ratingQty: 0,
       doCreate: false,
