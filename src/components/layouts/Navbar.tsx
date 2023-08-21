@@ -263,7 +263,7 @@ const NavBar: FunctionComponent = () => {
                         </Dropdown.Menu>
                       </Dropdown>
                     </Nav>
-                    <Nav className="me-1">
+                    {/* <Nav className="me-1">
                       {router.locales?.length && (
                         <Dropdown
                           data-cy="link-language"
@@ -282,19 +282,17 @@ const NavBar: FunctionComponent = () => {
                           <Dropdown.Menu data-cy="links-language">
                             {router.locales.map((locale) => (
                               <Dropdown.Item key={locale} eventKey={locale} active={locale === router.locale}>
-                                {/* <Link href={router.asPath} locale={locale}> */}
                                   <img
                                     className={`m-1 ${styles.navbarIconNav}`}
                                     src={`/img/lang-flags/${locale}.png`}
                                     alt={`Language flag '${locale}'`}
                                   />
-                                {/* </Link> */}
                               </Dropdown.Item>
                             ))}
                           </Dropdown.Menu>
                         </Dropdown>
                       )}
-                    </Nav>
+                    </Nav> */}
                   </>
                 )}
                 {session && session.user && (
