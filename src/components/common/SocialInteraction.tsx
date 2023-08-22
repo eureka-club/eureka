@@ -77,7 +77,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   showRating = true,
   className,
 }) => {
-  const { t } = useTranslation('common');
+  const { t,lang } = useTranslation('common');
   const router = useRouter();
   // const [session] = useSession() as [Session | null | undefined, boolean];
   const { data: session, status } = useSession();
@@ -204,7 +204,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
         // })}`;
 
         // const notificationToUsers = user?.followedBy.map((f) => f.id);
-        const res = await fetch(`/api/${entityEndpoint}/${entity.id}/${socialInteraction}`, {
+        const res = await fetch(`/api/${entityEndpoint}/${entity.id}/${socialInteraction}?lang=${lang}`, {
           method: doCreate ? 'POST' : 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
