@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react';
 import { UserMosaicItem } from '@/src/types/user';
 import useUser from '@/src/useUser';
 import { WorkMosaicItem } from '@/src/types/work';
+import useTranslation from 'next-translate/useTranslation';
 
 export interface ExecRatingPayload {
   doCreate:boolean;
@@ -22,7 +23,7 @@ const useExecRating = (props:Props)=>{
   const { data: user } = useUser(session?.user?.id||0, {
     enabled:!!session?.user?.id
   });
-
+  const {lang} = useTranslation();
   const { show } = useModalContext();
 
   const openSignInModal = () => {
@@ -32,7 +33,7 @@ const useExecRating = (props:Props)=>{
   return useMutation(
     async ({ doCreate, ratingQty }:ExecRatingPayload) => {
       if (session && work) {
-        const res = await fetch(`/api/work/${work.id}/rating`, {
+        const res = await fetch(`/api/work/${work.id}/rating?lang=${lang}`, {
           method: doCreate ? 'POST' : 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
