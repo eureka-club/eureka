@@ -63,7 +63,7 @@ const EditWorkForm: FunctionComponent = () => {
   const [formValues, setFormValues] = useState<FormValues>({
     type: '',
     title: '',
-    language:'',
+    language: '',
     link: '',
     author: '',
     authorGender: '',
@@ -75,7 +75,6 @@ const EditWorkForm: FunctionComponent = () => {
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [countryOrigin, setCountryOrigin] = useState<string[]>([]);
   const [tags, setTags] = useState<string>('');
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [items, setItems] = useState<string[]>([]);  //topics
   const [publicationLengthLabel, setPublicationLengthLabel] = useState('...');
   const [publicationYearLabel, setPublicationYearLabel] = useState('...');
@@ -91,11 +90,6 @@ const EditWorkForm: FunctionComponent = () => {
     if (countries) setCountrySearchResults(countries.map((d: Country) => ({ code: d.code, label: d.code })))
   }, [countries])
 
-  useEffect(() => {
-    if (router && router.query?.admin) {
-      setIsAdmin(true);
-    }
-  }, [router])
 
   useEffect(() => {
     //console.log(work, 'work work')
@@ -199,7 +193,7 @@ const EditWorkForm: FunctionComponent = () => {
 
   function handleChangeTextField(ev: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     ev.preventDefault();
-    console.log(ev.target,'event')
+    console.log(ev.target, 'event')
     const { name, value } = ev.target;
     setFormValues({
       ...formValues,
@@ -226,7 +220,7 @@ const EditWorkForm: FunctionComponent = () => {
 
     const res = await fetch(`/api/work/${work!.id}`, {
       method: 'PATCH',
-     // headers: { 'Content-Type': 'application/json' },
+      // headers: { 'Content-Type': 'application/json' },
       body: formData,//JSON.stringify(payload),
     });
 
@@ -283,17 +277,14 @@ const EditWorkForm: FunctionComponent = () => {
     await execEditWork(payload);
   };
 
- 
+
 
 
   useEffect(() => {
     if (isSuccess === true) {
       setGlobalModalsState({ ...globalModalsState, ...{ editWorkModalOpened: false } });
       queryClient.invalidateQueries('works.mosaic');
-      if(!isAdmin)
-      router.push(`/work/${work!.id}`);
-      else
-        router.back();
+      router.back();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
@@ -368,7 +359,7 @@ const EditWorkForm: FunctionComponent = () => {
             </Col>
             <Col className="mt-4 mt-lg-0">
               <div className='mb-4'>
-                <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={formValues.language} label={t('languageFieldLabel')}/>
+                <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={formValues.language} label={t('languageFieldLabel')} />
               </div>
               <TextField id="link" className="w-100" label={publicationLinkLabel}
                 variant="outlined" size="small" name='link'
@@ -463,7 +454,7 @@ const EditWorkForm: FunctionComponent = () => {
                     formatValue={(v: string) => t(`topics:${v}`)}
                     max={3}
                     label={t('topicsLabel')}
-                   // placeholder={`${t('Type to add tag')}...`}
+                  // placeholder={`${t('Type to add tag')}...`}
                   />
                 </FormGroup>
               </Col>

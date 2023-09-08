@@ -249,7 +249,7 @@ const NavBar: FunctionComponent = () => {
                 </Dropdown.Menu>
               </Dropdown>
             </Nav>
-            <Nav className="mx-2">
+            {/*<Nav className="mx-2">
               {router.locales?.length && (
                 <Dropdown align="end" className={styles.langSwitch} onSelect={handleLanguageSelect}>
                   <Dropdown.Toggle as={ChevronToggle} id="langSwitch">
@@ -276,7 +276,7 @@ const NavBar: FunctionComponent = () => {
                   </Dropdown.Menu>
                 </Dropdown>
               )}
-            </Nav>
+            </Nav>*/}
             {session && session.user && (
               <Nav className="mx-1">
                 <Dropdown align="end" className={styles.langSwitch}>

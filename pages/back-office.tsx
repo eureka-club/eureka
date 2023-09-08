@@ -781,7 +781,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                         <TableCell align="left">{work.author}</TableCell>
                         <TableCell align="left">{work.publicationYear && dayjs(work.publicationYear).format(DATE_FORMAT_ONLY_YEAR)}</TableCell>
                         <TableCell align="center"><div className='d-flex flex-row justify-content-center'>
-                          <Button variant="link" href={`/work/${work.id}/edit?admin=${true}`} className="ms-2">
+                          <Button variant="link" href={`/${router.locale}/work/${work.id}/edit`} className="ms-2">
                             <FindInPageOutlinedIcon />
                           </Button>
 
