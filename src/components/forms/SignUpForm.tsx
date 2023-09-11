@@ -1,6 +1,6 @@
 import { signIn } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, useRef, MouseEvent } from 'react';
+import { FunctionComponent, useState, MouseEvent, ChangeEvent, FormEvent, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -10,19 +10,74 @@ import Row from 'react-bootstrap/Row';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import styles from './SignUpForm.module.css';
+import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem, FormControlLabel, Switch } from '@mui/material';
+import LanguageSelect from './controls/LanguageSelect';
+
 
 interface Props {
   noModal?: boolean;
 }
 
+interface FormValues {
+  identifier: string;
+  password: string;
+  name: string,
+  lastname: string,
+  language: string
+}
+
 const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
   const { t } = useTranslation('signUpForm');
-  const formRef = useRef<HTMLFormElement>(null);
+  //const formRef = useRef<HTMLFormElement>(null);
+  const [formValues, setFormValues] = useState<FormValues>({
+    identifier: '',
+    password: '',
+    name: '',
+    lastname: '',
+    language: '',
+  });
   interface MutationProps {
     identifier: string;
     password: string;
     fullName: string;
+    language: string
   }
+
+
+  function handleChangeTextField(ev: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    ev.preventDefault();
+    ev.preventDefault();
+    const { name, value } = ev.target;
+    console.log(name, value, 'name, value')
+    setFormValues({
+      ...formValues,
+      [name]: value
+    });
+  }
+
+ 
+
+  const onSelectLanguage = (language: string) => {
+    setFormValues({
+      ...formValues,
+      ['language']: language
+    });
+  };
+
+  useEffect(() => {
+    if (/^en\b/.test(navigator.language))
+      onSelectLanguage('english');
+
+    if (/^es\b/.test(navigator.language))
+      onSelectLanguage('spanish');
+
+    if (/^fr\b/.test(navigator.language))
+      onSelectLanguage('french');
+
+    if (/^pt\b/.test(navigator.language))
+      onSelectLanguage('portuguese');
+
+  }, []);
 
   const handleSignUpGoogle = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
@@ -39,7 +94,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
   };
 
   const { mutate, isLoading: isMutating } = useMutation(async (props: MutationProps) => {
-    const { identifier, password, fullName } = props;
+    const { identifier, password,language, fullName } = props;
     const res = await fetch('/api/userCustomData', {
       method: 'POST',
       headers: {
@@ -49,6 +104,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
         identifier,
         password,
         fullName,
+        language
       }),
     });
     if (res.ok) {
@@ -83,39 +139,43 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
     return true;
   };
 
-  const handleSubmitSignUp = async (e: React.MouseEvent<HTMLButtonElement>) => {
+
+  const handleSubmitSignUp = async (ev: FormEvent<HTMLFormElement>) => {
     //mutate user custom data
-    const form = formRef.current;
-    if (form) {
-      const email = form.email.value;
-      const password = form.password.value;
-      const fullName = form.Name.value + ' ' + form.lastname.value;
+    ev.preventDefault();
 
-      if (email && password && fullName) {
-        if (!validateEmail(email)) {
-          toast.error(t('InvalidMail'));
-          return false;
-        }
+    const email = formValues.identifier;
+    const password = formValues.password;
+    const language = formValues.language;
+    const fullName = formValues.name + ' ' + formValues.lastname;
 
-        if (!validatePassword(password)) {
-          toast.error(t('InvalidPassword'));
-          return false;
-        }
+    console.log(formValues)
 
-        const ur = await userRegistered(email);
-        if (!ur) {
-          toast.error(t('Error'));
-          return;
-        }
-        if (!ur.isUser || !ur.hasPassword) {
-          mutate({
-            identifier: email,
-            password: password,
-            fullName,
-          });
-        } else toast.error(t('UserRegistered'));
-      } else toast.error(t('emptyFields'));
-    }
+    if (email && password && fullName && language) {
+      if (!validateEmail(email)) {
+        toast.error(t('InvalidMail'));
+        return false;
+      }
+
+      if (!validatePassword(password)) {
+        toast.error(t('InvalidPassword'));
+        return false;
+      }
+
+      const ur = await userRegistered(email);
+      if (!ur) {
+        toast.error(t('Error'));
+        return;
+      }
+      if (!ur.isUser || !ur.hasPassword) {
+        mutate({
+          identifier: email,
+          password: password,
+          language,
+          fullName,
+        });
+      } else toast.error(t('UserRegistered'));
+    } else toast.error(t('emptyFields'));
   };
 
   //border border-1"  style={{ borderRadius: '0.5em'}}
@@ -181,7 +241,74 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                 </Row>
                 <Row>
                   <div className="d-flex justify-content-center ">
-                    <Form ref={formRef} className={`d-flex flex-column ${styles.registerForm}`}>
+                    <Form onSubmit={handleSubmitSignUp}>
+                      <div className="d-flex flex-column flex-lg-row justify-content-between">
+                        <div className={`d-flex flex-column ${styles.personalData}`}>
+                          <TextField id="name" className="w-100" label={`${t('Name')}`}
+                            variant="outlined" size="small" name="name"
+                            value={formValues.name!}
+                            type="text"
+                            onChange={handleChangeTextField}
+                          >
+                          </TextField>
+                        </div>
+                        <div className={`d-flex flex-column ${styles.personalData}`}>
+                          <TextField id="lastname" className="w-100" label={`${t('LastName')}`}
+                            variant="outlined" size="small" name="lastname"
+                            value={formValues.lastname!}
+                            type="text"
+                            onChange={handleChangeTextField}
+                          >
+                          </TextField>
+                        </div>
+                      </div>
+                      <div className='mt-4'>
+                        <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={formValues.language} label={t('languageFieldLabel')} />
+                      </div>
+
+                      <TextField id="email" className="w-100 mt-4" label={`${t('emailFieldLabel')}`}
+                        variant="outlined" size="small" name="identifier"
+                        value={formValues.identifier!}
+                        type="text"
+                        onChange={handleChangeTextField}
+                      >
+                      </TextField>
+
+                      <TextField id="pass" className="w-100 mt-4" label={`${t('passwordFieldLabel')}`}
+                        variant="outlined" size="small" name="password"
+                        value={formValues.password!}
+                        autoComplete="current-password"
+                        type="password"
+                        helperText={`(${t('passRequirements')})`}
+                        onChange={handleChangeTextField}
+                      >
+                      </TextField>
+
+                      <div className="d-flex flex-column align-items-center justify-content-center">
+                        <Button type="submit" className={`mb-4 btn-eureka ${styles.submitButton}`}>
+                          {t('Join')}
+                        </Button>
+                        <p
+                          className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
+                        >
+                          {t('joinedTerms')}
+                          <Link href="/manifest" passHref>
+                            <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`}>
+                              {t('termsText')}
+                            </span>
+                          </Link>
+                          {t('and')}
+                          <Link href="/policy" passHref>
+                            <span className={`d-flex cursor-pointer ms-1 ${styles.linkText}`}>{t('policyText')}</span>
+                          </Link>
+                        </p>
+                      </div>
+
+                    </Form>
+
+
+
+                    {/*<Form ref={formRef} className={`d-flex flex-column ${styles.registerForm}`}>
                       <div className="d-flex flex-column flex-lg-row justify-content-between">
                         <div className={`d-flex flex-column ${styles.personalData}`}>
                           <Form.Group controlId="Name">
@@ -196,10 +323,15 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                           </Form.Group>
                         </div>
                       </div>
+                     
+                     
                       <Form.Group controlId="email">
                         <Form.Label>{t('emailFieldLabel')}</Form.Label>
                         <Form.Control className="mb-2" type="email" required />
                       </Form.Group>
+                     
+                     
+                     
                       <Form.Group controlId="password">
                         <Form.Label>
                           {t('passwordFieldLabel')}{' '}
@@ -207,6 +339,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                         </Form.Label>
                         <Form.Control type="password" required />
                       </Form.Group>
+                     
                       <div className="d-flex flex-column align-items-center justify-content-center">
                         <Button onClick={handleSubmitSignUp} className={`mb-4 btn-eureka ${styles.submitButton}`}>
                           {t('Join')}
@@ -226,7 +359,8 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                           </Link>
                         </p>
                       </div>
-                    </Form>
+
+                    </Form>*/}
                   </div>
                 </Row>
               </section>

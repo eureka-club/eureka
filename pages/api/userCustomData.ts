@@ -15,7 +15,7 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   if(req.method=='POST'){
-    const {identifier:i,password,fullName:name} = req.body;
+    const {identifier:i,password,language,fullName:name} = req.body;
     const identifier = i.toString()
     const exist = await prisma.userCustomData.findFirst({
       where:{identifier}
@@ -27,6 +27,7 @@ export default async function handler(
           password:hash,
           name,
           identifier,
+          language,
         }
       })
       return res.status(201).json({data:resC})
