@@ -306,61 +306,6 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
                     </Form>
 
-
-
-                    {/*<Form ref={formRef} className={`d-flex flex-column ${styles.registerForm}`}>
-                      <div className="d-flex flex-column flex-lg-row justify-content-between">
-                        <div className={`d-flex flex-column ${styles.personalData}`}>
-                          <Form.Group controlId="Name">
-                            <Form.Label>{t('Name')}</Form.Label>
-                            <Form.Control className="mb-2" type="text" required />
-                          </Form.Group>
-                        </div>
-                        <div className={`d-flex flex-column ${styles.personalData}`}>
-                          <Form.Group controlId="lastname">
-                            <Form.Label>{t('LastName')}</Form.Label>
-                            <Form.Control className="mb-2" type="text" required />
-                          </Form.Group>
-                        </div>
-                      </div>
-                     
-                     
-                      <Form.Group controlId="email">
-                        <Form.Label>{t('emailFieldLabel')}</Form.Label>
-                        <Form.Control className="mb-2" type="email" required />
-                      </Form.Group>
-                     
-                     
-                     
-                      <Form.Group controlId="password">
-                        <Form.Label>
-                          {t('passwordFieldLabel')}{' '}
-                          <span className={styles.passRequirement}>{` (${t('passRequirements')})`}</span>
-                        </Form.Label>
-                        <Form.Control type="password" required />
-                      </Form.Group>
-                     
-                      <div className="d-flex flex-column align-items-center justify-content-center">
-                        <Button onClick={handleSubmitSignUp} className={`mb-4 btn-eureka ${styles.submitButton}`}>
-                          {t('Join')}
-                        </Button>
-                        <p
-                          className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
-                        >
-                          {t('joinedTerms')}
-                          <Link href="/manifest" passHref>
-                            <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`}>
-                              {t('termsText')}
-                            </span>
-                          </Link>
-                          {t('and')}
-                          <Link href="/policy" passHref>
-                            <span className={`d-flex cursor-pointer ms-1 ${styles.linkText}`}>{t('policyText')}</span>
-                          </Link>
-                        </p>
-                      </div>
-
-                    </Form>*/}
                   </div>
                 </Row>
               </section>
