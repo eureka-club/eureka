@@ -95,6 +95,13 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
     fr:'french',
     en:'english',
   }
+
+  const locales:Record<string,string> = {
+    portuguese:'pt',
+    spanish:'es',
+    french:'fr',
+    english:'en',
+  }
   
   let found = false;
   locale = Object.keys(langs).reduce((p,lang)=>{
@@ -105,6 +112,8 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
     }
     return p;
   },locale);
+
+  
 
   return NextAuth(req, res, {
     adapter: PrismaAdapter(prisma),
@@ -224,7 +233,8 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
         from: process.env.EMAILING_FROM,
         sendVerificationRequest: async ({ identifier: email, url }): Promise<void> => {
           // const site = url.replace(/^https?:\/\//, ''); 
-          const t = await getT(locale, 'singInMail');
+          
+          const t = await getT(locales[locale], 'singInMail');
           const title = t('title');
           const subtitle = t('subtitle');
           const singIngConfirmationUrl = t('singIngConfirmationUrl');
@@ -297,7 +307,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
     ],
     secret: process.env.SECRET,
     pages: {
-      verifyRequest: `/${locale}/auth/emailVerify`, // (used for check email message)
+      verifyRequest: `/${locales[locale]}/auth/emailVerify`, // (used for check email message)
     },
   });
 };

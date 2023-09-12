@@ -15,13 +15,19 @@ import Handlebars from 'handlebars';
 export default getApiHandler()
 .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
   try {
+    const locales:Record<string,string> = {
+      portuguese:'pt',
+      spanish:'es',
+      french:'fr',
+      english:'en',
+    }
     const {email:em} = req.body;
-    const locale = req.cookies.NEXT_LOCALE || 'es';
+    const locale = req.cookies.NEXT_LOCALE || 'portuguese';
     const to = em.toString();
     const user = await prisma.user.findUnique({where:{email:to}});
     if(user && user.password){
       let html = '';
-      const t = await getT(locale, 'recoveryLoginMail');
+      const t = await getT(locales[locale], 'recoveryLoginMail');
       const title = t('title');
       const subtitle = t('subtitle');
       const ignoreEmailInf = t('ignoreEmailInf');
@@ -31,7 +37,7 @@ export default getApiHandler()
       const base64Hash = Buffer.from(`${user.email}!|!${user.password}`,'binary').toString('base64');
 
       const specs = {
-        url: `${process.env.NEXTAUTH_URL}/${locale||'es'}/resetPass?hash=${base64Hash}`,
+        url: `${process.env.NEXTAUTH_URL}/${locales[locale]}/resetPass?hash=${base64Hash}`,
         to,
         title,
         subtitle,
@@ -57,7 +63,7 @@ export default getApiHandler()
       });
       
       if(status == 200)
-        res.redirect(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/${locale||'es'}/auth/emailVerify`)
+        res.redirect(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/${locales[locale]}/auth/emailVerify`)
       else{
         res.statusMessage = statusText;  
         res.status(status).json({data:null});
