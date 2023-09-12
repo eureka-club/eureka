@@ -10,7 +10,7 @@ import Row from 'react-bootstrap/Row';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import styles from './SignUpForm.module.css';
-import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem, FormControlLabel, Switch } from '@mui/material';
+import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem, FormControlLabel, Switch, Box } from '@mui/material';
 import LanguageSelect from './controls/LanguageSelect';
 
 
@@ -182,16 +182,16 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
   return (
     <>
       <section className={`${styles.welcomeMobileSection}`}>
-        <div className="d-flex d-lg-none flex-column justify-content-center">
+        <div className="d-flex d-xl-none flex-column justify-content-center">
           <Container className={`${styles.imageContainer} d-flex justify-content-center`}>
             <img className={`${styles.eurekaImage}`} src="/Eureka-VT-web-white.png" alt="Eureka" />
           </Container>
           <p className={`mt-3 ${styles.welcomeText}`}>{t('Welcome')}</p>
         </div>
       </section>
-      <Container className="p-lg-0 m-lg-0">
+      <Container className="p-xl-0 m-xl-0">
         <Row className="d-flex justify-content-between">
-          <Col className={`d-none d-lg-flex col-6 ${styles.welcomeSection}`}>
+          <Col className={`d-none d-xl-flex col-6 ${styles.welcomeSection}`}>
             <section className={`d-flex flex-column w-100 ${styles.welcomeSectionText}`}>
               <p className={`ms-5 ${styles.welcomeText}`}>{t('Welcome')}</p>
               <p className={`ms-5 mb-4 ${styles.otherText}`}>{t('welcomeText1')}</p>
@@ -212,10 +212,10 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
               </Container>
             </section>
           </Col>
-          <Col className={`col-12 col-lg-6`}>
+          <Col className={`col-12 col-xl-6`}>
             <div className={`${styles.registerFormSection}`}>
               <Row>
-                <span className={`lg-ms-3 ${styles.joinEurekaText}`}>{t('JoinEureka')}</span>
+                <span className={`xl-ms-3 ${styles.joinEurekaText}`}>{t('JoinEureka')}</span>
                 <p className={`${styles.haveAccounttext}`}>
                   {t('HaveAccounttext')}{' '}
                   <Link href="/">
@@ -223,7 +223,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                   </Link>
                 </p>
               </Row>
-              <section className="border border-1 mb-5" style={{ borderRadius: '0.5em' }}>
+              <Box className="d-flex flex-column border border-1 mb-5" style={{ borderRadius: '0.5em' }}>
                 <Row>
                   <button
                     type="button"
@@ -240,11 +240,11 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                   <p className={`mb-2 ${styles.alternativeLabel}`}>{t('alternativeText')}</p>
                 </Row>
                 <Row>
-                  <div className="d-flex justify-content-center ">
+                  <div className="d-flex justify-content-center w-100 ">
                     <Form onSubmit={handleSubmitSignUp}>
                       <div className="d-flex flex-column flex-lg-row justify-content-between">
                         <div className={`d-flex flex-column ${styles.personalData}`}>
-                          <TextField id="name" className="w-100" label={`${t('Name')}`}
+                          <TextField id="name" className="p-2 w-100 mt-4" label={`${t('Name')}`}
                             variant="outlined" size="small" name="name"
                             value={formValues.name!}
                             type="text"
@@ -253,20 +253,20 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                           </TextField>
                         </div>
                         <div className={`d-flex flex-column ${styles.personalData}`}>
-                          <TextField id="lastname" className="w-100" label={`${t('LastName')}`}
+                          <TextField id="lastname" className="p-2 w-100 mt-4" label={`${t('LastName')}`}
                             variant="outlined" size="small" name="lastname"
                             value={formValues.lastname!}
                             type="text"
                             onChange={handleChangeTextField}
-                          >
+                          >   
                           </TextField>
                         </div>
                       </div>
-                      <div className='mt-4'>
+                      <div className='p-2 mt-4'>
                         <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={formValues.language} label={t('languageFieldLabel')} />
                       </div>
 
-                      <TextField id="email" className="w-100 mt-4" label={`${t('emailFieldLabel')}`}
+                      <TextField id="email" className="p-2 w-100 mt-4" label={`${t('emailFieldLabel')}`}
                         variant="outlined" size="small" name="identifier"
                         value={formValues.identifier!}
                         type="text"
@@ -274,7 +274,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                       >
                       </TextField>
 
-                      <TextField id="pass" className="w-100 mt-4" label={`${t('passwordFieldLabel')}`}
+                      <TextField id="pass" className="p-2 w-100 mt-4" label={`${t('passwordFieldLabel')}`}
                         variant="outlined" size="small" name="password"
                         value={formValues.password!}
                         autoComplete="current-password"
@@ -308,7 +308,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
                   </div>
                 </Row>
-              </section>
+              </Box>
             </div>
           </Col>
         </Row>

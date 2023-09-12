@@ -1,7 +1,7 @@
 
 .welcomeSection{
  width: 40%;
- height:auto;
+ height:100vh;
  background-color:var(--color-primary-raised);
 }
 
@@ -14,7 +14,7 @@
 margin-top: 8rem;  
 }
 .welcomeText{
-font-size: 2.0rem;
+font-size: 2.5rem;
 margin-bottom: 6rem; 
 color: #fdf7f7;
 }
@@ -46,7 +46,7 @@ color: #fdf7f7;
 }
 
   .joinEurekaText{
-    font-size: 2rem;
+    font-size: 2.5rem;
     text-align: center;
     color:var(--color-primary-raised);
   }
@@ -84,7 +84,7 @@ color: #fdf7f7;
 }
 
 .personalData{
-  width: 48%;
+  width: 50%;
 }
 
 .submitButton {
@@ -93,7 +93,7 @@ color: #fdf7f7;
 
 }
 .joinedTermsText{
-  font-size: 1rem;
+  font-size: .9rem;
   width: 110%;
 }
 
@@ -106,7 +106,7 @@ color: #fdf7f7;
   font-size: 0.75rem;
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1200px) {
 
 .personalData{
   width: 100%;
@@ -117,15 +117,15 @@ color: #fdf7f7;
   }
 
    .buttonGoogle {
-  width: 85%;
-}
-
-   .registerForm{
   width: 90%;
 }
 
+   .registerFormSection{
+  margin: 0;
+}
+
 .welcomeText{
-font-size: 2.5rem;
+font-size: 1.5rem;
 margin-bottom: 1rem; 
 text-align: center;
 }
@@ -141,7 +141,7 @@ text-align: center;
 }
 
 .joinEurekaText{
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 
 }
