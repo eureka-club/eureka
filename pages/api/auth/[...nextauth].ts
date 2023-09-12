@@ -5,12 +5,13 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import GoogleProvider from "next-auth/providers/google"
 import EmailProvider from "next-auth/providers/email"
 import CredentialsProvider from "next-auth/providers/credentials"
-
+// import axios from 'axios';
 import getT from 'next-translate/getT';
 import {prisma} from '@/src/lib/prisma';
 import { sendMailSingIn } from '@/src/facades/mail';
 const bcrypt = require('bcryptjs');
 import { subscribe_to_segment } from '@/src/lib/mailchimp';
+import { use } from 'chai';
 
 /* const getOptions = (req: NextApiRequest) => {
   const locale = req.cookies.NEXT_LOCALE;
@@ -85,8 +86,26 @@ import { subscribe_to_segment } from '@/src/lib/mailchimp';
   return options;
 }; */
 const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> => {
-  const locale = req.cookies.NEXT_LOCALE || 'es';
+  // const locale = req.cookies.NEXT_LOCALE || 'es';
+  //this is by eureka langs priority
+  let locale = 'portuguese';
+  const langs:Record<string,string> = {
+    pt:'portuguese',
+    es:'spanish',
+    fr:'french',
+    en:'english',
+  }
   
+  let found = false;
+  locale = Object.keys(langs).reduce((p,lang)=>{
+    let re = new RegExp(`${lang}`);
+    if(req?.headers['accept-language']!.match(re) &&!found){
+      found = true;
+      p = langs[lang];
+    }
+    return p;
+  },locale);
+
   return NextAuth(req, res, {
     adapter: PrismaAdapter(prisma),
     callbacks: {
@@ -105,6 +124,39 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
         }
         return Promise.resolve(session);        
       },
+      // signIn: async (params) =>{debugger;
+      //   const {user,account,profile:p} = params;
+      //   const profile = (p as {email_verified:boolean,at_hash:string});
+
+      //   if (account?.provider === 'google' &&
+      //         profile.email_verified === true
+      //       ) {
+      //         // debugger;
+      //         // let uu = await prisma.user.update({
+      //         //   where:{email:user.email!},
+      //         //   data:{
+      //         //     language: locale
+      //         //   }
+      //         // })
+      //         // const vt = await prisma.userCustomData.create({data:{
+      //         //   name:user.name!,
+      //         //   password:profile.at_hash,
+      //         //   identifier:user.email!,
+      //         //   language:locale
+      //         // }});
+      //         // if(vt){
+      //         //   const {data,status, statusText} = await axios.post(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/sendMail`,{
+      //         //     to:[{email:user.email,name:user.name}],
+      //         //     // to,
+      //         //     subject:t('subject'),
+      //         //     html
+      //         //   });
+      //         // }
+      //     return true
+      //   } else {
+      //     return false
+      //   }
+      // },
       // async jwt({ token, user, account, profile, isNewUser }) {
       //   if(user)
       //   return {token,roles:user.roles}
@@ -127,44 +179,31 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
     },
     events:{
       updateUser:async({user})=>{
-        
         const vt = await prisma.userCustomData.findFirst({where:{identifier:user.email!}})
-        if(vt){
-        // const hash = bcrypt.hashSync(vt.password, 8);
-
-          const res = await prisma.user.update({
-            where:{email:user.email!},
-            data:{
-              password:vt.password,
-              name:vt.name
-            }
-          })
-
-        }
+        const password = vt?.password;
+        const name = vt?.name||user.name;
+        const language = vt?.language || locale;
+        await prisma.user.update({
+          where:{email:user.email!},
+          data:{password,name,language}
+        });
       },
       createUser:async({user})=>{
         const vt = await prisma.userCustomData.findFirst({where:{identifier:user.email!}});
         await subscribe_to_segment({
           segment:'eureka-all-users',
           email_address:user.email!,
-          name:user.name||'unknown'
+          name:user.name||'unknown',
           // onSuccess: async (res)=>console.log('ok',res),
           // onFailure: async (err)=>console.error('error',err)
         })
-
-        if(vt){
-        // const hash = bcrypt.hashSync(vt.password, 8);
-
-          await prisma.user.update({
-            where:{email:user.email!},
-            data:{
-              password:vt.password,
-              name:vt.name
-            }
-          })
-          
-
-        }
+        const password = vt?.password;
+        const name = vt?.name||user.name;
+        const language = vt?.language || locale;
+        await prisma.user.update({
+          where:{email:user.email!},
+          data:{password,name,language}
+        })
       }
     },
     debug: process.env.NODE_ENV === 'development',
