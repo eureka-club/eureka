@@ -46,10 +46,10 @@ const LanguageSelect: FunctionComponent<Props> = ({ defaultValue, label, onSelec
         onChange={handlerSelectLanguage}
         value={language}
       >
-        <MenuItem value={'spanish'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/es.png" alt="Language flag 'es'" /></MenuItem>
-        <MenuItem value={'english'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/en.png" alt="Language flag 'en'" /></MenuItem>
-        <MenuItem value={'french'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/fr.png" alt="Language flag 'fr'" /></MenuItem>
-        <MenuItem value={'portuguese'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/pt.png" alt="Language flag 'pt'" /></MenuItem>
+        <MenuItem value={'spanish'}>{t('hereLinkSPA')}</MenuItem>
+        <MenuItem value={'english'}>{t('hereLinkENG')}</MenuItem>
+        <MenuItem value={'french'}>{t('hereLinkPORT')}</MenuItem>
+        <MenuItem value={'portuguese'}>{t('hereLinkFR')}</MenuItem>
 
       </Select>
     </FormControl>
