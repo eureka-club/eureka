@@ -9,9 +9,7 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
 import FormGroup from 'react-bootstrap/FormGroup';
-import FormLabel from 'react-bootstrap/FormLabel';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 import LocalImageComponent from '@/src/components/LocalImage'
@@ -31,9 +29,21 @@ import styles from './EditUserForm.module.css';
 import toast from 'react-hot-toast'
 import i18nConfig from '../../../i18n';
 import Toast from '../common/Toast';
-import { Select, FormControl as FormControlMUI, InputLabel, MenuItem } from '@mui/material';
+import { TextField, FormControl, FormLabel, FormControlLabel, Radio, RadioGroup, InputLabel, MenuItem } from '@mui/material';
+import Textarea from '@mui/joy/Textarea';
+import TagsInputTypeAheadMaterial from '@/components/forms/controls/TagsInputTypeAheadMaterial';
+import useCountries from 'src/useCountries';
+import LanguageSelectMultiple from './controls/LanguageSelectMultiple';
+
 import Image from 'next/image';
 // import useTopics from '../../useTopics';
+
+interface FormValues {
+  name: string;
+  email: string;
+  languages: string[],
+  aboutMe:string,
+}
 
 dayjs.extend(utc);
 const EditUserForm: FunctionComponent = () => {
@@ -50,9 +60,25 @@ const EditUserForm: FunctionComponent = () => {
   const [id, setId] = useState<string>('');
   const [currentImg, setCurrentImg] = useState<string | undefined>();
   const [changingPhoto, setChangingPhoto] = useState<boolean>(false);
-  const [userName, setUserName] = useState<string>();
+  //const [userName, setUserName] = useState<string>();
+  //const [items, setItems] = useState<string[]>([]);  //topics
+
   // const [language, setLanguage] = useState<string>();
-  const [privacySettings, setPrivacySettings] = useState<number>();
+  const [formValues, setFormValues] = useState<FormValues>({
+    name: '',
+    email: '',
+    languages: [],
+    aboutMe: ''
+  });
+  const [countrySearchResults, setCountrySearchResults] = useState<{ code: string; label: string }[]>([]);
+  const [countryOrigin, setCountryOrigin] = useState<string[]>([]);
+  const { data: countries } = useCountries();
+  useEffect(() => {
+    if (countries) setCountrySearchResults(countries.map((d: Country) => ({ code: d.code, label: d.code })))
+  }, [countries])
+
+
+  const [privacySettings, setPrivacySettings] = useState<number>(1);
   const [dashboardTypeChecked, setDashboardTypeChecked] = useState<{
     public: boolean;
     protected: boolean;
@@ -66,7 +92,7 @@ const EditUserForm: FunctionComponent = () => {
   useEffect(() => {
     if(session)
       setId(session.user.id.toString());
-  }, [session]);
+  }, [session])
 
   const {data:user } = useUser(+id,{
     enabled: !!+id,
@@ -75,10 +101,21 @@ const EditUserForm: FunctionComponent = () => {
 
   useEffect(() => {
     if (user) {
+      console.log(user)
+      let formValues = {
+        name: user.name!,
+        email: user.email!,
+        languages: user.language!.split(","),
+        aboutMe: user.aboutMe!
+      }
+      setFormValues(formValues);
       // setUser(data);
-      setUserName(user.name!);
+      setCountryOrigin(user.countryOfOrigin!.split(","))
+      //setUserName(user.name!);
       setTags(user.tags!);
-      setDashboardTypeChecked((res) => {
+      setPrivacySettings(user.dashboardType!);
+
+     /* setDashboardTypeChecked((res) => {
         let v = 'private';
         switch (user.dashboardType) {
           case 2:
@@ -94,7 +131,7 @@ const EditUserForm: FunctionComponent = () => {
           ...res,
           [`${v}`]: true,
         };
-      });
+      });*/
 
 
       // if(user.photos.length)
@@ -111,9 +148,8 @@ const EditUserForm: FunctionComponent = () => {
 
   const typeaheadRef = useRef<AsyncTypeahead<{ id: number; code: string; label: string }>>(null);
   const [isCountriesSearchLoading, setIsCountriesSearchLoading] = useState(false);
-
-  const [countrySearchResults, setCountrySearchResults] = useState<{ id: number; code: string; label: string }[]>([]);
-  const [countryOrigin, setCountryOrigin] = useState<string>();
+  
+ 
 
   const { locale } = useRouter();
   const [namespace, setNamespace] = useState<Record<string, string>>();
@@ -200,26 +236,35 @@ const EditUserForm: FunctionComponent = () => {
   //   }
   // };
 
+  const validateEmail = (text: string) => {
+    const emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
+
+    if (!text.match(emailRegex)) {
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
-    // if (coverFile == null) {
-    //   return;
-    // }
+    if (!validateEmail(formValues.email)) {
+      toast.error(t('InvalidMail'));
+      return false;
+    }
 
-    const form = ev.currentTarget;
     const payload: EditUserClientPayload = {
-      name: userName,
-      email: form.email.value,
-     // image: form.image.value,
-      countryOfOrigin: countryOrigin,
-      aboutMe: form.aboutMe.value,
-      ... privacySettings && {dashboardType: privacySettings},
+      name: formValues.name.slice(0, 30),
+      email: formValues.email,
+      countryOfOrigin: countryOrigin.join(",") || null,
+      aboutMe: formValues.aboutMe,
+      language: formValues.languages.join(","),
+      dashboardType: privacySettings,
+      //... privacySettings && {dashboardType: privacySettings},
       tags,
       ... (photo && {photo}),
-      //language
     };
-
+    //console.log(payload)
     setChangingPhoto(false);
     setShowCrop(false)
     await execEditUser(payload);
@@ -234,7 +279,7 @@ const EditUserForm: FunctionComponent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
-  const handleSearchCountry = async (query: string) => {
+  /*const handleSearchCountry = async (query: string) => {
     setIsCountriesSearchLoading(true);
     const response = await fetch(`/api/taxonomy/countries?q=${query}`);
     const itemsSC: { id: number; code: string; label: string }[] = (await response.json()).result;
@@ -249,23 +294,27 @@ const EditUserForm: FunctionComponent = () => {
     if (selected[0] != null) {
       setCountryOrigin(selected[0].code);
     }
-  };
+  };*/
 
-  const handlerDashboardTypeRadioChange = (val: string) => {
-    setDashboardTypeChecked(() => ({
+  const handlerDashboardTypeRadioChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    ev.preventDefault();
+    /*setDashboardTypeChecked(() => ({
       private: false,
       protected: false,
       public: false,
-    }));
+    }));*/
+    setPrivacySettings(parseInt(ev.target.value));
+
+   /* 
     setPrivacySettings(() => {
-      return { public: 1, protected: 2, private: 3 }[`${val}`];
+      return { public: 1, protected: 2, private: 3 }[`${ev.target.value}` as number;
     });
-    setDashboardTypeChecked((res) => ({ ...res, [`${val}`]: true }));
+   setDashboardTypeChecked((res) => ({ ...res, [`${val}`]: true }));*/
   };
 
-  const onChangeUserName = (e: ChangeEvent<HTMLInputElement>) => {
+  /*const onChangeUserName = (e: ChangeEvent<HTMLInputElement>) => {
     setUserName(e.currentTarget.value.slice(0, 30));
-  };
+  };*/
 
   const onGenerateCrop = (photo: File) => {
     //console.log(URL.createObjectURL(photo),'photo src') 
@@ -277,6 +326,23 @@ const EditUserForm: FunctionComponent = () => {
 
   const closeCrop = () => {
     setShowCrop(false);
+  };
+
+  function handleChangeTextField(ev: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    ev.preventDefault();
+    const { name, value } = ev.target;
+    //console.log(name, value, 'name, value')
+    setFormValues({
+      ...formValues,
+      [name]: value
+    });
+  }
+
+  const onSelectLanguage = (language: string[]) => {
+    setFormValues({
+      ...formValues,
+      ['languages']: language
+    });
   };
 
   const avatarError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
@@ -309,220 +375,113 @@ const EditUserForm: FunctionComponent = () => {
      return (
     <>
       {user && (
-        <Form onSubmit={handleSubmit}>
-           <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('Edit Profile')}</h1>
-              <Row className='d-flex flex-column'>
-                <Col className='d-flex flex-column flex-md-row justify-content-center align-items-center' >
-                  {renderAvatar()}
-                 {!showCrop && <Button  className="btn-eureka mt-3 ms-0 mt-md-0 ms-md-3 text-white" onClick={() => setShowCrop(true)}>
-                {t('Change Photo')}
-               </Button>}
-                </Col>
-                { showCrop && (
-                <Col className='d-flex justify-content-center mt-3'>
-                  <div className='profile-crop border p-3'>  
-                  <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={closeCrop} cropShape='round' />
-                  </div>
-                </Col>
-                )}
-              </Row>
-                { /* <Row>
-                <Col>
-                  <FormGroup controlId="image" className="mb-3">
-                    <FormLabel>
-                      *{t('Image')}
-                      {` (URL)`}
-                    </FormLabel>
-                    <Row>
-                      <Col xs={12} md={2}>
-                           
-                      </Col>
-                      <Col xs={12} md={10}>
-                        <FormControl
-                          type="text"
-                          placeholder="http://"
-                          required
-                          defaultValue={user.image || undefined}
-                          onChange={handlerCurrentImgChange}
-                        />
-                      </Col>
-                    </Row>
-                  </FormGroup>
-                </Col>
-              </Row> */}
-            <Row className="mt-4 d-flex flex-column flex-md-row">
-                <Col>
-                  <FormGroup controlId="userName" className="mb-4">
-                    <FormLabel>*{t('Name')}</FormLabel>
-                    <FormControl
-                      type="text"
-                      onChange={onChangeUserName}
-                      required
-                      value={userName}
-                      // defaultValue={userName || undefined}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col>
-                  <FormGroup controlId="email" className="mb-4">
-                    <FormLabel>*{t('Email')}</FormLabel>
-                    <FormControl type="email" required defaultValue={user.email || undefined} />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <FormGroup controlId="countryOfOrigin1" className="mb-4">
-                    <FormLabel>{t('countryFieldLabel')}</FormLabel>
-                    <AsyncTypeahead
-                      id="create-work--search-country"
-                      // Bypass client-side filtering. Results are already filtered by the search endpoint
-                      filterBy={() => true}
-                      // inputProps={{ required: true }}
-                      // placeholder={t('addWrkTypeaheadPlaceholder')}
-                      ref={typeaheadRef}
-                      isLoading={isCountriesSearchLoading}
-                      labelKey={(res) => `${res.label}`}
-                      minLength={2}
-                      onSearch={handleSearchCountry}
-                      options={countrySearchResults}
-                      onChange={handleSearchCountrySelect}
-                      placeholder={namespace && user.countryOfOrigin ? namespace[user.countryOfOrigin] : ''}
-                      // renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work} />}
-                    />
-                    {/* {!countryOrigin2 && !hasCountryOrigin2 && (
-                    <Button className={styles.toogleSecondOriginCountry} onClick={() => toogleCountryOrigin2Handler()}>
-                      {t('Add a second origin country')}
-                    </Button>
-                  )} */}
-                  </FormGroup>
-                </Col>
-                {/* {(countryOrigin2 || hasCountryOrigin2) && (
-                <Col>
-                  <FormGroup controlId="countryOfOrigin2">
-                    <FormLabel>{t('countryFieldLabel')} 2</FormLabel>
-                    <AsyncTypeahead
-                      id="create-work--search-country2"
-                      // Bypass client-side filtering. Results are already filtered by the search endpoint
-                      filterBy={() => true}
-                      // inputProps={{ required: true }}
-                      // placeholder={t('addWrkTypeaheadPlaceholder')}
-                      // ref={typeaheadRef}
-                      isLoading={isCountriesSearchLoading2}
-                      labelKey={(res) => `${res.label}`}
-                      minLength={2}
-                      onSearch={handleSearchCountry2}
-                      options={countrySearchResults}
-                      onChange={handleSearchCountry2Select}
-                      placeholder={namespace && countryOrigin2 ? namespace[countryOrigin2] : ''}
-                      // renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work} />}
-                    />
-                    <Button className={styles.toogleSecondOriginCountry} onClick={() => toogleCountryOrigin2Handler(2)}>
-                      {t('Remove the second origin country')}
-                    </Button>
-                  </FormGroup>
-                </Col>
-              )} */}
-              </Row>
-              <Row>
-                <Col xs={12}>
-                {/* <FormControlMUI fullWidth>
-                  <InputLabel id="user-language-select-label">{t('userLanguage')}</InputLabel>
-                  <Select
-                    labelId="user-language-select-label"
-                    id="user-language-select"
-                    value={language || user.language}
-                    label={t('userLanguage')}
-                    onChange={(args)=>{setLanguage(args.target.value!);}}
-                  >
-                    <MenuItem value={'spanish'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/es.png" alt="Language flag 'es'"/></MenuItem>
-                    <MenuItem value={'english'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/en.png" alt="Language flag 'en'"/></MenuItem>
-                    <MenuItem value={'french'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/fr.png" alt="Language flag 'fr'"/></MenuItem>
-                    <MenuItem value={'portuguese'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/pt.png" alt="Language flag 'pt'"/></MenuItem>
-                  </Select>
-                </FormControlMUI> */}
-                  {/* <Form.Group controlId="language" className="mb-5">
-                    <Form.Label>{t('userLanguage')}</Form.Label>
-                    <Form.Select aria-label={t('userLanguage')}>
-                      <option>{t('userLanguage')}</option>
-                      <option value="spanish"><img className="m-1" src="/img/lang-flags/es.png" alt="Language flag 'es'"/></option>
-                      <option value="english"><img className="m-1" src="/img/lang-flags/en.png" alt="Language flag 'en'"/></option>
-                      <option value="french"><img className="m-1" src="/img/lang-flags/fr.png" alt="Language flag 'fr'"/></option>
-                      <option value="portuguese"><img className="m-1" src="/img/lang-flags/pt.png" alt="Language flag 'pt'"/></option>
-                    </Form.Select>
-                  </Form.Group> */}
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={12}>
-                  <Form.Group controlId="aboutMe" className="mb-5">
-                    <Form.Label>{t('About me')}</Form.Label>
-                    <Form.Control as="textarea" rows={3} defaultValue={user.aboutMe || undefined} />
-                  </Form.Group>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                 <TagsInputMaterial tags={tags} max={5} setTags={setTags} label={t('Topics')} className="mb-5"/>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <Form.Group controlId="privacySettings" className={styles.privacySettings}>
-                    <Form.Label className="d-flex flex-column">{t('Privacy settings')}</Form.Label>
-                    <Form.Text>{t('mediathequeInfo')}.</Form.Text>
-                    <Form.Check type="radio" id="dashboardTypePublic" className={styles.checkPublic}>
-                      <Form.Check.Input
-                        type="radio"
-                        isValid
-                        onChange={() => handlerDashboardTypeRadioChange('public')}
-                        checked={dashboardTypeChecked.public}
-                      />
-                      <Form.Check.Label className="ms-2">{t('My Mediatheque is public')}</Form.Check.Label>
-                      <Form.Control.Feedback type="valid" className="ms-4">{t('Anyone can see my Mediatheque')}</Form.Control.Feedback>
-                    </Form.Check>
+           <Form onSubmit={handleSubmit}>
 
-                    <Form.Check className={styles.checkProtected} type="radio" id="dashboardTypeProtected">
-                      <Form.Check.Input
-                        type="radio"
-                        isValid
-                        onChange={() => handlerDashboardTypeRadioChange('protected')}
-                        checked={dashboardTypeChecked.protected}
-                      />
-                      <Form.Check.Label className="ms-2">{t('Fallowers can see my Dashboard')}</Form.Check.Label>
-                      <Form.Control.Feedback type="valid" className="ms-4">
-                        {t('Users I fallow or that follow me can see my Dashboard')}
-                      </Form.Control.Feedback>
-                    </Form.Check>
+             <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('Edit Profile')}</h1>
+             <Row className='d-flex flex-column'>
+               <Col className='d-flex flex-column flex-md-row justify-content-center align-items-center' >
+                 {renderAvatar()}
+                 {!showCrop && <Button className="btn-eureka mt-3 ms-0 mt-md-0 ms-md-3 text-white" onClick={() => setShowCrop(true)}>
+                   {t('Change Photo')}
+                 </Button>}
+               </Col>
+               {showCrop && (
+                 <Col className='d-flex justify-content-center mt-3'>
+                   <div className='profile-crop border p-3'>
+                     <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={closeCrop} cropShape='round' />
+                   </div>
+                 </Col>
+               )}
+             </Row>
+             
+             <Row className="mt-4 d-flex flex-column flex-md-row">
+               <Col>
+                 <TextField id="name" className="w-100 mt-5" label={`*${t('Name')}`}
+                   variant="outlined" size="small" name="name"
+                   value={formValues.name!}
+                   type="text"
+                   onChange={handleChangeTextField}
+                 >
+                 </TextField>
+                 
+               </Col>
+               <Col>
+                 <TextField id="email" className="w-100 mt-5" label={`*${t('Email')}`}
+                   variant="outlined" size="small" name="email"
+                   value={formValues.email!}
+                   type="text"
+                   onChange={handleChangeTextField}
+                 >
+                 </TextField>
+               </Col>
+             </Row>
+             <Row className="d-flex flex-column flex-md-row">
+               <Col className='mt-5'>
+                 <FormGroup controlId="countryOrigin" >
+                   <TagsInputTypeAheadMaterial
+                     data={countrySearchResults}
+                     items={countryOrigin}
+                     setItems={setCountryOrigin}
+                     formatValue={(v: string) => t(`countries:${v}`)}
+                     max={1}
+                     label={`${t('countryFieldLabel')}`}
+                   //placeholder={`${t('Type to add tag')}...`}
+                   />
+                 </FormGroup>
+               </Col>
+               <Col className='mt-5'>
+                 <LanguageSelectMultiple onSelectLanguage={onSelectLanguage} defaultValue={formValues.languages} label={t('userLanguage')}/>
+               </Col>
+             </Row>
+             <Row className="mt-5">
+               <Col>
+                 <TagsInputMaterial tags={tags} max={5} setTags={setTags} label={t('Topics')} className="mb-5" />
+               </Col>
+             </Row>
+             <Row className="mt-4">
+                 <Col className="">
+                   <FormGroup controlId="aboutMe">
+                     <FormLabel>{t('About me')}</FormLabel>
+                     <Textarea minRows={3} name="aboutMe" value={formValues.aboutMe!} onChange={handleChangeTextField} />
+                   </FormGroup>
+                 </Col>
+               </Row>
+               <Row className='mt-5'>
+             <FormControl>
+                 <FormLabel id="privacy-settings-label-placement">{t('Privacy settings')}</FormLabel>
+                 <Form.Text>{t('mediathequeInfo')}.</Form.Text>
+                 <RadioGroup
+                   aria-labelledby="privacy-settings-radio-buttons-group"
+                   defaultValue={1}
+                   name="privacySettings"
+                   value={privacySettings}
+                   onChange={handlerDashboardTypeRadioChange}
+                 >
+                   <FormControlLabel value={1} control={<Radio />} label={t('My Mediatheque is public')}  />
+                   <Form.Text className="ms-4">{t('Anyone can see my Mediatheque')}.</Form.Text>
+                   <FormControlLabel value={2} control={<Radio />} label={t('Fallowers can see my Dashboard')} />
+                   <Form.Text className="ms-4"> {t('Fallowers can see my Dashboard')}.</Form.Text>
+                   <FormControlLabel value={3} control={<Radio />} label={t('My Dashboard is secret')} />
+                   <Form.Text className="ms-4">{t('Only I can see my Dashboard')}.</Form.Text>
+                 </RadioGroup>
+             </FormControl>
+             </Row>
 
-                    <Form.Check type="radio" id="dashboardTypePrivate" className={styles.checkPrivate}>
-                      <Form.Check.Input
-                        type="radio"
-                        isValid
-                        onChange={() => handlerDashboardTypeRadioChange('private')}
-                        checked={dashboardTypeChecked.private}
-                      />
-                      <Form.Check.Label className="ms-2">{t('My Dashboard is secret')}</Form.Check.Label>
-                      <Form.Control.Feedback type="valid" className="ms-4">{t('Only I can see my Dashboard')}</Form.Control.Feedback>
-                    </Form.Check>
-                  </Form.Group>
-                </Col>
-              </Row>
+             <Container className="mt-4 p-0 py-4 d-flex justify-content-end">
+               <Button disabled={isLoadingUser} type="submit" className="btn-eureka">
+                 <>
+                   {t('Edit')}
+                   {isLoadingUser ? (
+                     <Spinner animation="grow" variant="info" size="sm" className="ms-1" />
+                   ) : (
+                     <span className={styles.placeholder} />
+                   )}
+                   {isError && editUserError}
+                 </>
+               </Button>
+             </Container>
 
-            <Container className="mt-4 p-0 py-4 d-flex justify-content-end">
-              <Button  disabled={isLoadingUser} type="submit" className="btn-eureka">
-                <>
-                  {t('Edit')}
-                  {isLoadingUser ? (
-                    <Spinner animation="grow" variant="info" size="sm" className="ms-1" />
-                  ) : (
-                    <span className={styles.placeholder} />
-                  )}
-                  {isError && editUserError}
-                </>
-              </Button>
-            </Container>
-        </Form>
+            </Form>
       )}
     </>
   );

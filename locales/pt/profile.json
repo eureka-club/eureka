@@ -1,6 +1,6 @@
 {
- "Profile":"Perfil",
- "Change Photo": "Mudar a foto",
+  "Profile": "Perfil",
+  "Change Photo": "Mudar a foto",
   "Name": "Nome",
   "Email": "Email",
   "countryFieldLabel": "País",
@@ -16,7 +16,7 @@
   "My Dashboard is secret": "Minha Mediateca é secreta",
   "Only I can see my Dashboard": "Somente eu posso ver minha Mediateca",
   "Edit Profile": "Editar meu perfil",
-  "ProfileSaved":"As edições feitas em seu perfil foram salvas",
-  "userLanguage":"Veja o conteúdo no idioma"
-
+  "InvalidMail": "E-mail inválido.",
+  "ProfileSaved": "As edições feitas em seu perfil foram salvas",
+  "userLanguage": "Veja o conteúdo no idioma"
 }

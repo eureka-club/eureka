@@ -35,7 +35,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
     name: '',
     lastname: '',
     language: '',
-  });
+  }); 
   interface MutationProps {
     identifier: string;
     password: string;
@@ -46,9 +46,8 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
   function handleChangeTextField(ev: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     ev.preventDefault();
-    ev.preventDefault();
     const { name, value } = ev.target;
-    console.log(name, value, 'name, value')
+    //console.log(name, value, 'name, value')
     setFormValues({
       ...formValues,
       [name]: value
