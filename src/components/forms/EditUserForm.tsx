@@ -105,7 +105,7 @@ const EditUserForm: FunctionComponent = () => {
       let formValues = {
         name: user.name!,
         email: user.email!,
-        languages: user.language!.split(","),
+        languages: (user.language! && user.language!.length > 0) ?  user.language.split(",") : [],
         aboutMe: user.aboutMe!
       }
       setFormValues(formValues);
