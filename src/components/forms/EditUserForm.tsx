@@ -110,7 +110,7 @@ const EditUserForm: FunctionComponent = () => {
       }
       setFormValues(formValues);
       // setUser(data);
-      setCountryOrigin(user.countryOfOrigin!.split(","))
+      setCountryOrigin((user.countryOfOrigin! && user.countryOfOrigin!.length > 0) ? user.countryOfOrigin.split(",") : []),
       //setUserName(user.name!);
       setTags(user.tags!);
       setPrivacySettings(user.dashboardType!);
