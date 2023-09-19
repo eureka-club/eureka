@@ -29,7 +29,7 @@ const generateCyclesMap = async ()=>{
 }
 
 const generateWorksMap = async (locale:string)=>{
-  const works = await findAllWoks(locale,{
+  const works = await findAllWoks([locale],{
     select:{id:true,title:true,contentText:true}
   })
   return works.map(w=>{

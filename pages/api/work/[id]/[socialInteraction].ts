@@ -39,7 +39,7 @@ export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = (await getSession({ req })) as unknown as Session;
     const { id, socialInteraction,lang:l } = req.query;
-    const language = Languages[l?.toString()??"es"];
+    const language = Languages[l?.toString()??"pt"];
     const { qty,year,doCreate, notificationMessage,notificationContextURL,notificationToUsers } = req.body;
 
     if (!(await validateReq(session, id, socialInteraction, res))) {
@@ -47,7 +47,7 @@ export default getApiHandler()
     }
 
     try {
-      const work = await find(Number(id),language);
+      const work = await find(Number(id),[language]);
       if (work == null) {
         res.status(404).end();
         return;
@@ -75,7 +75,7 @@ export default getApiHandler()
   .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = (await getSession({ req })) as unknown as Session;
     const { id, socialInteraction,lang:l } = req.query;
-    const language = Languages[l?.toString()??"es"];
+    const language = Languages[l?.toString()??"pt"];
 
 
     if (!(await validateReq(session, id, socialInteraction, res))) {
@@ -83,7 +83,7 @@ export default getApiHandler()
     }
 
     try {
-      const work = await find(Number(id),language);
+      const work = await find(Number(id),[language]);
       if (work == null) {
         res.status(404).end();
         return;

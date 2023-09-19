@@ -53,9 +53,9 @@ export default getApiHandler()
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
-      const { q = null, props: p = undefined, lang: l } = req.query;
+      const { q = null, props: p = undefined, language: l } = req.query;
+      const languages:string[] = l?.toString().split(',')||[];
 
-      const language = l ? Languages[l.toString()] : null;
       const props: Prisma.WorkFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())) : {};
       let { where: w, take, cursor, skip } = props;
       const session = await getSession({ req });
@@ -64,20 +64,18 @@ export default getApiHandler()
       delete w?.AND;
       let data = null;
 
-      if (language) {
+      if (languages?.length) {
         let where = {
           ...w,
           AND: {
             ...(AND && { AND }),
             OR: [
-              {
-                language,
-              },
-              {
+              ... languages.map(language=>({language})),
+              ... languages.map(language=>({
                 editions: {
                   some: { language },
-                },
-              },
+                }
+              }))
             ],
           },
         };
@@ -123,7 +121,7 @@ export default getApiHandler()
 
         let cr = await prisma?.work.aggregate({ where, _count: true });
         const total = cr?._count;
-        data = await findAll(language, { take, where, skip, cursor });
+        data = await findAll(languages, { take, where, skip, cursor });
 
         res.status(200).json({
           data,
@@ -136,7 +134,7 @@ export default getApiHandler()
         };
         let cr = await prisma?.work.aggregate({ where, _count: true });
         const total = cr?._count;
-        data = await findAllWithoutLangRestrict({ take, where, skip, cursor });
+        data = await findAllWithoutLangRestrict(languages,{ take, where, skip, cursor });
 
         res.status(200).json({
           data,

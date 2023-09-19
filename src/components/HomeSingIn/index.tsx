@@ -4,7 +4,7 @@ import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { Spinner, Col } from 'react-bootstrap';
 import TagsInput from '@/components/forms/controls/TagsInput';
-import { GetAllByResonse } from '@/src/types';
+import { GetAllByResonse, Languages } from '@/src/types';
 import { useInView } from 'react-intersection-observer';
 import { CycleMosaicItem } from '@/src/types/cycle';
 import { UserMosaicItem } from '@/src/types/user';
@@ -20,7 +20,7 @@ import CarouselsByTopics from './CarouselsByTopics';
 import CarouselStatic from '../CarouselStatic';
 import FeaturedUsers from './FeaturedUsers';
 import { BsChevronUp, BsChevronDown } from 'react-icons/bs';
-import useItemsByTopic, { getItemsByTopic } from '@/src/useItemsByTopic';
+import useItemsByTopic from '@/src/useItemsByTopic';
 
 const topics = ['gender-feminisms', 'technology', 'environment',
   'racism-discrimination',
@@ -41,7 +41,7 @@ interface Props {
   // myCycles?:CycleMosaicItem[]
 }
 
-const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
+const HomeSingIn: FunctionComponent<Props> = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { t,lang } = useTranslation('common');
@@ -63,8 +63,10 @@ const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
   const [topicsFetched, setTopicsFetched] = useState(new Set());
   const [showAboutSection, setShowAboutSection] = useState<boolean>(false)
 
-  const {data:itemsByTopic} = useItemsByTopic(0,topics[topicIdx],lang!);
-const [gbt, setGBT] = useState<any[]>([]);
+  let language = session?.user.language ?? (Languages[lang] || Languages['pt']);
+
+  const {data:itemsByTopic} = useItemsByTopic(0,topics[topicIdx],language);
+  const [gbt, setGBT] = useState<any[]>([]);
   useEffect(()=>{
     
     let isCanceled = false;

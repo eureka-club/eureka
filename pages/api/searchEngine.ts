@@ -47,7 +47,7 @@ export default getApiHandler()
           ]
     };
 
-    const responseWork =  await faw(language,{where: worksWhere}) as WorkMosaicItem[];
+    const responseWork =  await faw([language],{where: worksWhere}) as WorkMosaicItem[];
 
     const cyclesWhere={
       AND:[{ access:{not:3}}],

@@ -6,7 +6,7 @@ export const getWork = async (id: number,language:string | undefined,origin=''):
   if (!id) throw new Error('idRequired');
   let url = `${origin || ''}/api/work/${id}`; // ?lang=${language}
   if(language)
-    url += `?lang=${language}`;
+    url += `?language=${language}`;
 
   const res = await fetch(url);
   if (!res.ok) 

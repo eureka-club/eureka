@@ -3,6 +3,7 @@ import getApiHandler from '@/src/lib/getApiHandler';
 import {prisma} from '@/src/lib/prisma';
 import { Languages } from '@/src/types';
 import { findAll } from '@/src/facades/work';
+import { Prisma } from '@prisma/client';
 // import redis from '../../src/lib/redis';
 
 export const config = {
@@ -14,8 +15,9 @@ export default getApiHandler()
 .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
   try {
     const {language:l} = req.query;
-    const lstr = l?.toString();
-    const language = Languages[lstr!];
+    const languages:string[] = l?.toString().split(',')||[];
+debugger;
+    // const language = Languages[lstr!];
     const data: { id:number;type: string }[] = [];
     const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
 
@@ -52,13 +54,30 @@ export default getApiHandler()
       }),
     };
 
-    if (totalWorks === -1) totalWorks = await prisma.work.count({ where });
-    if (totalCycles === -1) totalCycles = await prisma.cycle.count({ where });
+    let OR = [
+      ...languages.map(language=>({language})),
+      ...languages.map(language=>({
+        editions:{
+          some:{language}
+        }
+      }))
+    ];
+
+    if (totalWorks === -1) totalWorks = await prisma.work.count({ where:{...where,OR} });
+    if (totalCycles === -1) totalCycles = await prisma.cycle.count({ where:{
+      ...where,
+      OR:languages.map(l=>({
+        languages:{contains:l}
+      })),
+    }
+   });
 
     const getOptCycle = (takePlus = 0, skipPlus = 0) => {
       const w = {
         ...where,
-        languages:{contains:language}
+        OR:languages.map(l=>({
+          languages:{contains:l}
+        })),
       };
       return {
         skip: c * countItemsPerPage + skipPlus,
@@ -75,16 +94,7 @@ export default getApiHandler()
     const getOptWork = (takePlus = 0, skipPlus = 0) => {
       const w = {
         ...where,
-        OR:[
-          {
-            language
-          },
-          {
-            editions:{
-              some:{language}
-            }
-          }
-        ]
+        OR
       };
       return {
         skip: c * countItemsPerPage + skipPlus,
@@ -96,9 +106,8 @@ export default getApiHandler()
         where:w
       }
     };
-
     const ewr = parseInt(extraWorksRequired as string, 10);
-    let works = await findAll(language,{
+    let works = await findAll(languages,{
       ...getOptWork(0, ewr),
       orderBy: {
         id: 'desc',
@@ -118,7 +127,7 @@ export default getApiHandler()
     let worksPlus = 0;
     if (cycles.length !== countItemsPerPage && works.length === countItemsPerPage) {
       worksPlus = countItemsPerPage - cycles.length;
-      const extraWorks = await findAll(language,{
+      const extraWorks = await findAll(languages,{
         ...getOptWork(worksPlus, ewr + countItemsPerPage),
         orderBy: {
           id: 'desc',

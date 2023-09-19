@@ -6,7 +6,7 @@ import { Spinner } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import { GetAllByResonse, Session } from '@/src/types';
+import { GetAllByResonse, Languages, Session } from '@/src/types';
 // import {getMyCycles,myCyclesWhere} from '@/src/useMyCycles';
 import { dehydrate,QueryClient } from 'react-query';
 import {getbackOfficeData} from '@/src/useBackOffice'
@@ -115,9 +115,20 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const featuredWorks = resolved[2];
   const hyvorComments = promises.slice(3);
 
+  const langMaps:Record<string,string> = {
+    'es':'spanish',
+    'fr':'french',
+    'pt':'portuguese',
+    'en':'english'
+  }
+  debugger;
+  const languages = session?.user.language! ?? langMaps[ctx.locale??ctx.defaultLocale!]
+    // ? session?.user.language.split(',').map(l=>langMaps[l]).join(",")
+    // : ctx.locale??ctx.defaultLocale!;
+
   promises = [
-    getItemsByTopic(0,topics[0],ctx.locale!),
-    getItemsByTopic(0,topics[1],ctx.locale!)
+    getItemsByTopic(0,topics[0],languages),
+    getItemsByTopic(0,topics[1],languages)
   ]
   resolved = await Promise.all(promises);
   // groupedByTopics[topics[0]] = resolved[0];

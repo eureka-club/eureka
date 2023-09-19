@@ -43,7 +43,7 @@ export default getApiHandler()
 
     try {
       let work = null;
-      if (language) work = await find(idNum, language);
+      if (language) work = await find(idNum, [language]);
       else work = await findWithoutLangRestrict(idNum);
 
       if (work == null) {
@@ -83,7 +83,7 @@ export default getApiHandler()
 
     try {
       let work = null;
-      if (language) work = await find(idNum, language);
+      if (language) work = await find(idNum, [language]);
       else work = await findWithoutLangRestrict(idNum);
       if (work == null) {
         return res.status(200).json(null);
