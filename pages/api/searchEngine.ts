@@ -1,11 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import getApiHandler from '../../src/lib/getApiHandler';
-import {Languages, SearchResult} from '@/src/types'
+import getApiHandler from '@/src/lib/getApiHandler';
+import {SearchResult} from '@/src/types'
 import { CycleMosaicItem } from '@/src/types/cycle';
 import { WorkMosaicItem } from '@/src/types/work';
 import { PostMosaicItem } from '@/src/types/post';
 import dayjs from 'dayjs';
-import {prisma} from '@/src/lib/prisma';
 import { findAll as fap } from '@/src/facades/post';
 import { findAll as fac } from '@/src/facades/cycle';
 import { findAll as faw } from '@/src/facades/work';
@@ -14,7 +13,7 @@ export default getApiHandler()
 .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
   try {
     const {q:q_,lang:l} = req.query;
-    const language = Languages[l?.toString()??"es"];
+    const languages:string[] = l?.toString().split(',')||[];
 
     const query = q_ ? q_.toString() : undefined;
     const terms = query ? query.split(" ") : [];
@@ -47,7 +46,7 @@ export default getApiHandler()
           ]
     };
 
-    const responseWork =  await faw([language],{where: worksWhere}) as WorkMosaicItem[];
+    const responseWork =  await faw(languages,{where: worksWhere}) as WorkMosaicItem[];
 
     const cyclesWhere={
       AND:[{ access:{not:3}}],

@@ -6,6 +6,7 @@ import getApiHandler from '@/src/lib/getApiHandler';
 import { find, saveSocialInteraction } from '@/src/facades/work';
 // import redis from '@/src/lib/redis';
 import {create} from '@/src/facades/notification'
+import { SERVER_ERROR } from '@/src/api_code';
 
 const validateReq = async (
   session: Session,
@@ -39,7 +40,8 @@ export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = (await getSession({ req })) as unknown as Session;
     const { id, socialInteraction,lang:l } = req.query;
-    const language = Languages[l?.toString()??"pt"];
+    const language = l?.toString();
+
     const { qty,year,doCreate, notificationMessage,notificationContextURL,notificationToUsers } = req.body;
 
     if (!(await validateReq(session, id, socialInteraction, res))) {
@@ -47,27 +49,30 @@ export default getApiHandler()
     }
 
     try {
-      const work = await find(Number(id),[language]);
-      if (work == null) {
-        res.status(404).end();
-        return;
+      if(language){
+        const work = await find(Number(id),[language]);
+        if (work == null) {
+          res.status(404).end();
+          return;
+        }
+        // @ts-ignore arguments checked in validateReq()
+        await saveSocialInteraction(work, session.user, socialInteraction, doCreate, qty, year);
+        if(doCreate && notificationMessage && notificationContextURL)
+          await create(
+            notificationMessage,
+            notificationContextURL,
+            session.user.id,
+            notificationToUsers
+          );
+        // await redis.flushall();
+        return res.status(200).json({ status: 'OK' });
       }
+      else 
+      return res.status(500).json({ status: SERVER_ERROR, error: SERVER_ERROR });
 
-      // @ts-ignore arguments checked in validateReq()
-      await saveSocialInteraction(work, session.user, socialInteraction, doCreate, qty, year);
-      if(doCreate && notificationMessage && notificationContextURL)
-        await create(
-          notificationMessage,
-          notificationContextURL,
-          session.user.id,
-          notificationToUsers
-        );
-
-      // await redis.flushall();
-      res.status(200).json({ status: 'OK' });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
-      res.status(500).json({ status: 'server error' });
+      res.status(500).json({ status: SERVER_ERROR, error:SERVER_ERROR });
     } finally {
       //prisma.$disconnect();
     }

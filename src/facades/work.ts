@@ -3,6 +3,7 @@ import { Languages, StoredFileUpload } from '../types';
 import { CreateWorkServerFields, CreateWorkServerPayload, EditWorkServerFields, WorkMosaicItem } from '../types/work';
 import { prisma } from '@/src/lib/prisma';
 import { MISSING_FIELD, WORK_ALREADY_EXIST } from '@/src/api_code';
+import work from 'pages/api/work';
 // import { CreateEditionServerPayload } from '../types/edition';
 
 const include = {
@@ -96,7 +97,7 @@ export const findAll = async (languages: string[], props?: Prisma.WorkFindManyAr
   return works;
 };
 
-export const findAllWithoutLangRestrict = async (languages:string[],props?: Prisma.WorkFindManyArgs): Promise<WorkMosaicItem[]> => {
+export const findAllWithoutLangRestrict = async (props?: Prisma.WorkFindManyArgs): Promise<WorkMosaicItem[]> => {
   const { where, include = null, take, skip, cursor } = props || {};
 
   let works = await prisma.work.findMany({
@@ -119,17 +120,13 @@ export const findAllWithoutLangRestrict = async (languages:string[],props?: Pris
   });
 
   if (works) {
-    works = works.map((w) => editionsToBook(w, languages)!);
+    works = works.map((w) => editionsToBook(w, Object.values(Languages))!);
   }
   return works;
 };
 
 export const search = async (query: { [key: string]: string | string[] | undefined }): Promise<Work[]> => {
   const { q, where, include, lang: l } = query;
-  let languages:string[] = l?.toString().split(',')||[];
-  languages?.forEach((l,idx)=>{
-    languages[idx] = Languages[l];
-  })
 
   if (where == null && q == null) {
     throw new Error("[412] Invalid invocation! Either 'q' or 'where' query parameter must be provided");
@@ -169,7 +166,7 @@ export const search = async (query: { [key: string]: string | string[] | undefin
       editions: { include: { localImages: { select: { id:true,storedFile: true } } } },
     },
   });
-  if (works) works = works.map((w) => editionsToBook(w, languages)!);
+  if (works) works = works.map((w) => editionsToBook(w, Object.values(Languages))!);
   return works;
 };
 
@@ -553,8 +550,26 @@ export const saveSocialInteraction = async (
   return null;
 };
 
-export const remove = async (id: number): Promise<Work> => {
-  return prisma.work.delete({
-    where: { id },
-  });
+export const remove = async (id: number,language?:string): Promise<Work|undefined> => {
+  
+  if(!language){
+    return prisma.work.delete({
+      where: { id },
+    });
+  }
+  else {
+    const work = await findWithoutLangRestrict(id);
+
+    if(work){
+
+      const edition = await prisma.edition.findFirst({where:{workId:id}});
+      if(edition){
+        let res = await prisma.edition.delete({where:{id:edition.id}});
+        if(res)
+          return editionsToBook(work, [language]) as Work;
+      }
+
+    }
+  }
+  return undefined;
 };

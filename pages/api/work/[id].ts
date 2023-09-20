@@ -3,18 +3,16 @@ import { getSession } from 'next-auth/react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { Form } from 'multiparty';
-import { Session, FileUpload, Languages } from '../../../src/types';
-import getApiHandler from '../../../src/lib/getApiHandler';
-import { find, findWithoutLangRestrict, remove, updateFromServerFields } from '../../../src/facades/work';
+import { Session, FileUpload, Languages } from '@/src/types';
+import getApiHandler from '@/src/lib/getApiHandler';
+import { find, findWithoutLangRestrict, remove, updateFromServerFields } from '@/src/facades/work';
 import { createFromServerFields as editionCreateFromServerFields } from '@/src/facades/edition';
-import { prisma } from '@/src/lib/prisma';
 import { storeUpload } from '@/src/facades/fileUpload';
-import { cors, middleware } from '@/src/lib/cors';
-import { Edition, Prisma, Work } from '@prisma/client';
-import { CreateEditionPayload, CreateEditionServerPayload } from '@/src/types/edition';
+import { Edition, Work } from '@prisma/client';
+import { CreateEditionServerPayload } from '@/src/types/edition';
 import { WorkMosaicItem } from '@/src/types/work';
 import { MISSING_FIELD, SERVER_ERROR, UNAUTHORIZED } from '@/src/api_code';
-// import redis from '../../../src/lib/redis';
+// import redis from '@/src/lib/redis';
 export const config = {
   api: {
     bodyParser: false,
@@ -30,7 +28,7 @@ export default getApiHandler()
     }
 
     const { id, lang: l } = req.query;
-    const language = l ? Languages[l.toString()] : null;
+    const languages:string[] = l?.toString().split(',')||[];
 
     if (typeof id !== 'string') {
       return res.status(200).json({ error: MISSING_FIELD('id') });
@@ -43,7 +41,7 @@ export default getApiHandler()
 
     try {
       let work = null;
-      if (language) work = await find(idNum, [language]);
+      if (languages?.length) work = await find(idNum, languages);
       else work = await findWithoutLangRestrict(idNum);
 
       if (work == null) {
@@ -159,7 +157,7 @@ export default getApiHandler()
             return p;
           }, [] as CreateEditionServerPayload[]);
 
-          let removeOldWorks: Promise<Work>[] = [];
+          let removeOldWorks: Promise<Work|undefined>[] = [];
           worksToSaveAsEdition.forEach((w) => {
             removeOldWorks.push(remove(w.id));
           });

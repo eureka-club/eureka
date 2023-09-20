@@ -134,7 +134,7 @@ export default getApiHandler()
         };
         let cr = await prisma?.work.aggregate({ where, _count: true });
         const total = cr?._count;
-        data = await findAllWithoutLangRestrict(languages,{ take, where, skip, cursor });
+        data = await findAllWithoutLangRestrict({ take, where, skip, cursor });
 
         res.status(200).json({
           data,

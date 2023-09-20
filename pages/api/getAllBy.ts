@@ -16,7 +16,7 @@ export default getApiHandler()
   try {
     const {language:l} = req.query;
     const languages:string[] = l?.toString().split(',')||[];
-debugger;
+
     // const language = Languages[lstr!];
     const data: { id:number;type: string }[] = [];
     const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
