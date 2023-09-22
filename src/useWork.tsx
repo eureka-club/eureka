@@ -4,7 +4,7 @@ import useTranslation from 'next-translate/useTranslation';
 
 export const getWork = async (id: number,language:string | undefined,origin=''): Promise<WorkMosaicItem> => {
   if (!id) throw new Error('idRequired');
-  let url = `${origin || ''}/api/work/${id}`; // ?lang=${language}
+  let url = `${origin || ''}/api/work/${id}`; // ?language=${language}
   if(language)
     url += `?language=${language}`;
 

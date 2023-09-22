@@ -33,7 +33,7 @@ const useExecRating = (props:Props)=>{
   return useMutation(
     async ({ doCreate, ratingQty }:ExecRatingPayload) => {
       if (session && work) {
-        const res = await fetch(`/api/work/${work.id}/rating?lang=${lang}`, {
+        const res = await fetch(`/api/work/${work.id}/rating?language=${lang}`, {
           method: doCreate ? 'POST' : 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
