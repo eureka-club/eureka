@@ -1,6 +1,6 @@
 import { FunctionComponent, useState, useEffect, ChangeEvent } from 'react';
 //import FormControl from 'react-bootstrap/FormControl';
-import { SelectChangeEvent, Button as ButtonMui, FormControl, InputLabel, Select, MenuItem, OutlinedInput } from '@mui/material';
+import { SelectChangeEvent, Button as ButtonMui, FormControl, InputLabel, Select, MenuItem, OutlinedInput, Box, Chip,ListItemText, Checkbox } from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
 import Image from 'next/image';
 
@@ -8,7 +8,7 @@ import Image from 'next/image';
 type Props = {
   defaultValue?: string[];
   label?: string;
-  onSelectLanguage: (string: string[] ) => void;
+  onSelectLanguage: (string: string[]) => void;
 
 };
 const LanguageSelectMultiple: FunctionComponent<Props> = ({ defaultValue, label, onSelectLanguage }) => {
@@ -27,12 +27,13 @@ const LanguageSelectMultiple: FunctionComponent<Props> = ({ defaultValue, label,
   function handlerSelectLanguage(ev: SelectChangeEvent) {
     ev.preventDefault();
     const { name, value } = ev.target;
-   // console.log(value,'valuevaluevalue')
+    // console.log(value,'valuevaluevalue')
     setLanguage(// On autofill we get a stringified value.
       typeof value === 'string' ? value.split(',') : value,);
     onSelectLanguage(value as unknown as string[]);
   }
 
+  
 
   return (
     <FormControl size="small" fullWidth>
@@ -46,13 +47,33 @@ const LanguageSelectMultiple: FunctionComponent<Props> = ({ defaultValue, label,
         id="select-language"
         label={label}
         onChange={handlerSelectLanguage}
-        value={language  as unknown as string} 
-      >
-        <MenuItem value={'spanish'}>{t('hereLinkSPA')}</MenuItem>
-        <MenuItem value={'english'}>{t('hereLinkENG')}</MenuItem>
-        <MenuItem value={'french'}>{t('hereLinkFR')}</MenuItem>
-        <MenuItem value={'portuguese'}>{t('hereLinkPORT')}</MenuItem>
+        value={language as unknown as string}
+        //renderValue={(language) => (language as unknown as []).join(', ')}
+        renderValue={(language) => (
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+            {(language as unknown as []).map((value) => (
+              <Chip size="small" key={value} label={t(`${value}`)} />
+            ))}
+          </Box>
+        )}
 
+      >
+        <MenuItem value={'spanish'}>
+          <Checkbox checked={language.includes('spanish')} />
+          <ListItemText primary={t('hereLinkSPA')} />
+        </MenuItem>
+        <MenuItem value={'english'}>
+          <Checkbox checked={language.includes('english')} />
+          <ListItemText primary={t('hereLinkENG')} />
+        </MenuItem>
+        <MenuItem value={'french'}>
+          <Checkbox checked={language.includes('french')} />
+          <ListItemText primary={t('hereLinkFR')} />
+        </MenuItem>
+        <MenuItem value={'portuguese'}>
+          <Checkbox checked={language.includes('portuguese')} />
+          <ListItemText primary={t('hereLinkPORT')} />
+        </MenuItem>
       </Select>
     </FormControl>
 
