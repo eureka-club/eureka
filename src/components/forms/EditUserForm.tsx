@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import useTranslation from 'next-translate/useTranslation';
-import { ChangeEvent, FormEvent, useEffect, useState, FunctionComponent, useRef,SyntheticEvent } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState, FunctionComponent, useRef, SyntheticEvent } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -34,6 +34,9 @@ import Textarea from '@mui/joy/Textarea';
 import TagsInputTypeAheadMaterial from '@/components/forms/controls/TagsInputTypeAheadMaterial';
 import useCountries from 'src/useCountries';
 import LanguageSelectMultiple from './controls/LanguageSelectMultiple';
+import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '@/src/constants';
+import { setCookie } from 'nookies';
+import { LOCALES_LANG } from '@/src/constants';
 
 import Image from 'next/image';
 // import useTopics from '../../useTopics';
@@ -42,12 +45,12 @@ interface FormValues {
   name: string;
   email: string;
   languages: string[],
-  aboutMe:string,
+  aboutMe: string,
 }
 
 dayjs.extend(utc);
 const EditUserForm: FunctionComponent = () => {
-  const {data:session,status} = useSession();
+  const { data: session, status } = useSession();
   const isLoadingSession = status == 'loading'
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const queryClient = useQueryClient();
@@ -90,48 +93,48 @@ const EditUserForm: FunctionComponent = () => {
   });
 
   useEffect(() => {
-    if(session)
+    if (session)
       setId(session.user.id.toString());
   }, [session])
 
-  const {data:user } = useUser(+id,{
+  const { data: user } = useUser(+id, {
     enabled: !!+id,
-    staleTime:1
+    staleTime: 1
   });
 
   useEffect(() => {
     if (user) {
-      console.log(user)
+      //console.log(user)
       let formValues = {
         name: user.name!,
         email: user.email!,
-        languages: (user.language! && user.language!.length > 0) ?  user.language.split(",") : [],
+        languages: (user.language! && user.language!.length > 0) ? user.language.split(",") : [],
         aboutMe: user.aboutMe!
       }
       setFormValues(formValues);
       // setUser(data);
       setCountryOrigin((user.countryOfOrigin! && user.countryOfOrigin!.length > 0) ? user.countryOfOrigin.split(",") : []),
-      //setUserName(user.name!);
-      setTags(user.tags!);
+        //setUserName(user.name!);
+        setTags(user.tags!);
       setPrivacySettings(user.dashboardType!);
 
-     /* setDashboardTypeChecked((res) => {
-        let v = 'private';
-        switch (user.dashboardType) {
-          case 2:
-            v = 'protected';
-            break;
-          case 1:
-            v = 'public';
-            break;
-          default:
-            v = 'private';
-        }
-        return {
-          ...res,
-          [`${v}`]: true,
-        };
-      });*/
+      /* setDashboardTypeChecked((res) => {
+         let v = 'private';
+         switch (user.dashboardType) {
+           case 2:
+             v = 'protected';
+             break;
+           case 1:
+             v = 'public';
+             break;
+           default:
+             v = 'private';
+         }
+         return {
+           ...res,
+           [`${v}`]: true,
+         };
+       });*/
 
 
       // if(user.photos.length)
@@ -148,28 +151,28 @@ const EditUserForm: FunctionComponent = () => {
 
   const typeaheadRef = useRef<AsyncTypeahead<{ id: number; code: string; label: string }>>(null);
   const [isCountriesSearchLoading, setIsCountriesSearchLoading] = useState(false);
-  
- 
+
+
 
   const { locale } = useRouter();
   const [namespace, setNamespace] = useState<Record<string, string>>();
-  
+
   useEffect(() => {
     const fn = async () => {
       // const r = await i18nConfig.loadLocaleFrom(locale, 'countries');
       const res = await fetch('/api/taxonomy/countries')
-      const {result:r} = await res.json()
-       let o:Record<string, string> ={} 
-      const n = (r as Country[]).reduce((p,c:Country)=>{
+      const { result: r } = await res.json()
+      let o: Record<string, string> = {}
+      const n = (r as Country[]).reduce((p, c: Country) => {
         p[c.code] = c.label;
         return p;
-      },o)
+      }, o)
       setNamespace(n);
     };
     fn();
   }, [locale]);
 
-  
+
   const {
     mutate: execEditUser,
     error: editUserError,
@@ -179,32 +182,30 @@ const EditUserForm: FunctionComponent = () => {
   } = useMutation(
     async (payload: EditUserClientPayload) => {
       const fd = new FormData();
-      Object.entries(payload).forEach(([key,value])=>{
-        if(value)
-          fd.append(key,value);
+      Object.entries(payload).forEach(([key, value]) => {
+        if (value)
+          fd.append(key, value);
       });
       const res = await fetch(`/api/user/${id}`, {
         method: 'PATCH',
         // headers: { 'Content-Type': 'application/json' },
         body: fd,
       });
-      if(res.ok){
-          toast.success( t('ProfileSaved'))
-          router.push(`/mediatheque/${id}`);
-         // return res.json();
-      }    
-      else
-      {
+      if (res.ok) {
+        toast.success(t('ProfileSaved'))
+        // return res.json();
+      }
+      else {
         toast.error(res.statusText)
         return null;
       }
-   
+
     },
     {
       onMutate: async () => {
-        const cacheKey = ['USER',id];
+        const cacheKey = ['USER', id];
         const snapshot = queryClient.getQueryData(cacheKey);
-        return { cacheKey, snapshot };        
+        return { cacheKey, snapshot };
       },
       onSettled: (_user, error, _variables, context) => {
         if (context) {
@@ -212,7 +213,22 @@ const EditUserForm: FunctionComponent = () => {
           if (error && cacheKey) {
             queryClient.setQueryData(cacheKey, snapshot);
           }
-          if (context) queryClient.resetQueries();
+          if (context) {
+            console.log(context, 'context')
+
+            queryClient.resetQueries();
+            if (formValues.languages) {
+              let l = formValues.languages[0];
+              setCookie(null, LOCALE_COOKIE_NAME, LOCALES_LANG[l], {
+                maxAge: LOCALE_COOKIE_TTL,
+                path: '/',
+              });
+              window.location.replace(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/${LOCALES_LANG[l]}/mediatheque/${user!.id}`);
+              router.push(`/mediatheque/${id}`);
+            }
+
+          }
+
         }
       },
     },
@@ -262,7 +278,7 @@ const EditUserForm: FunctionComponent = () => {
       dashboardType: privacySettings,
       //... privacySettings && {dashboardType: privacySettings},
       tags,
-      ... (photo && {photo}),
+      ... (photo && { photo }),
     };
     //console.log(payload)
     setChangingPhoto(false);
@@ -305,11 +321,11 @@ const EditUserForm: FunctionComponent = () => {
     }));*/
     setPrivacySettings(parseInt(ev.target.value));
 
-   /* 
-    setPrivacySettings(() => {
-      return { public: 1, protected: 2, private: 3 }[`${ev.target.value}` as number;
-    });
-   setDashboardTypeChecked((res) => ({ ...res, [`${val}`]: true }));*/
+    /* 
+     setPrivacySettings(() => {
+       return { public: 1, protected: 2, private: 3 }[`${ev.target.value}` as number;
+     });
+    setDashboardTypeChecked((res) => ({ ...res, [`${val}`]: true }));*/
   };
 
   /*const onChangeUserName = (e: ChangeEvent<HTMLInputElement>) => {
@@ -318,7 +334,7 @@ const EditUserForm: FunctionComponent = () => {
 
   const onGenerateCrop = (photo: File) => {
     //console.log(URL.createObjectURL(photo),'photo src') 
-    setPhoto(()=>photo);
+    setPhoto(() => photo);
     setCurrentImg(URL.createObjectURL(photo));
     setChangingPhoto(true);
     setShowCrop(false);
@@ -349,139 +365,139 @@ const EditUserForm: FunctionComponent = () => {
     e.currentTarget.src = '/img/default-avatar.png';
   };
 
-  const renderAvatar = ()=>{
-   
-   if(changingPhoto)
-    return <img
+  const renderAvatar = () => {
+
+    if (changingPhoto)
+      return <img
         onError={avatarError}
         className='avatarProfile'
         src={currentImg}
         alt=''
       />;
-      else{
-   if(user && user?.photos){
-      if(!user?.photos.length)
-        return <img
-        onError={avatarError}
-        className='avatarProfile'
-        src={user.image||''}
-        alt={user.name||''}
-      />;
-     return <LocalImageComponent /* className='avatarProfile' */className="rounded rounded-circle" width={160} height={160} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />
-    }
+    else {
+      if (user && user?.photos) {
+        if (!user?.photos.length)
+          return <img
+            onError={avatarError}
+            className='avatarProfile'
+            src={user.image || ''}
+            alt={user.name || ''}
+          />;
+        return <LocalImageComponent /* className='avatarProfile' */ className="rounded rounded-circle" width={160} height={160} filePath={`users-photos/${user.photos[0].storedFile}`} alt={user.name || ''} />
       }
+    }
   };
 
-     return (
+  return (
     <>
       {user && (
-           <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit}>
 
-             <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('Edit Profile')}</h1>
-             <Row className='d-flex flex-column'>
-               <Col className='d-flex flex-column flex-md-row justify-content-center align-items-center' >
-                 {renderAvatar()}
-                 {!showCrop && <Button className="btn-eureka mt-3 ms-0 mt-md-0 ms-md-3 text-white" onClick={() => setShowCrop(true)}>
-                   {t('Change Photo')}
-                 </Button>}
-               </Col>
-               {showCrop && (
-                 <Col className='d-flex justify-content-center mt-3'>
-                   <div className='profile-crop border p-3'>
-                     <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={closeCrop} cropShape='round' />
-                   </div>
-                 </Col>
-               )}
-             </Row>
-             
-             <Row className="mt-4 d-flex flex-column flex-md-row">
-               <Col>
-                 <TextField id="name" className="w-100 mt-5" label={`*${t('Name')}`}
-                   variant="outlined" size="small" name="name"
-                   value={formValues.name!}
-                   type="text"
-                   onChange={handleChangeTextField}
-                 >
-                 </TextField>
-                 
-               </Col>
-               <Col>
-                 <TextField id="email" className="w-100 mt-5" label={`*${t('Email')}`}
-                   variant="outlined" size="small" name="email"
-                   value={formValues.email!}
-                   type="text"
-                   onChange={handleChangeTextField}
-                 >
-                 </TextField>
-               </Col>
-             </Row>
-             <Row className="d-flex flex-column flex-md-row">
-               <Col className='mt-5'>
-                 <FormGroup controlId="countryOrigin" >
-                   <TagsInputTypeAheadMaterial
-                     data={countrySearchResults}
-                     items={countryOrigin}
-                     setItems={setCountryOrigin}
-                     formatValue={(v: string) => t(`countries:${v}`)}
-                     max={1}
-                     label={`${t('countryFieldLabel')}`}
-                   //placeholder={`${t('Type to add tag')}...`}
-                   />
-                 </FormGroup>
-               </Col>
-               <Col className='mt-5'>
-                 <LanguageSelectMultiple onSelectLanguage={onSelectLanguage} defaultValue={formValues.languages} label={t('userLanguage')}/>
-               </Col>
-             </Row>
-             <Row className="mt-5">
-               <Col>
-                 <TagsInputMaterial tags={tags} max={5} setTags={setTags} label={t('Topics')} className="mb-5" />
-               </Col>
-             </Row>
-             <Row className="mt-4">
-                 <Col className="">
-                   <FormGroup controlId="aboutMe">
-                     <FormLabel>{t('About me')}</FormLabel>
-                     <Textarea minRows={3} name="aboutMe" value={formValues.aboutMe!} onChange={handleChangeTextField} />
-                   </FormGroup>
-                 </Col>
-               </Row>
-               <Row className='mt-5'>
-             <FormControl>
-                 <FormLabel id="privacy-settings-label-placement">{t('Privacy settings')}</FormLabel>
-                 <Form.Text>{t('mediathequeInfo')}.</Form.Text>
-                 <RadioGroup
-                   aria-labelledby="privacy-settings-radio-buttons-group"
-                   defaultValue={1}
-                   name="privacySettings"
-                   value={privacySettings}
-                   onChange={handlerDashboardTypeRadioChange}
-                 >
-                   <FormControlLabel value={1} control={<Radio />} label={t('My Mediatheque is public')}  />
-                   <Form.Text className="ms-4">{t('Anyone can see my Mediatheque')}.</Form.Text>
-                   <FormControlLabel value={2} control={<Radio />} label={t('Fallowers can see my Dashboard')} />
-                   <Form.Text className="ms-4"> {t('Fallowers can see my Dashboard')}.</Form.Text>
-                   <FormControlLabel value={3} control={<Radio />} label={t('My Dashboard is secret')} />
-                   <Form.Text className="ms-4">{t('Only I can see my Dashboard')}.</Form.Text>
-                 </RadioGroup>
-             </FormControl>
-             </Row>
+          <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('Edit Profile')}</h1>
+          <Row className='d-flex flex-column'>
+            <Col className='d-flex flex-column flex-md-row justify-content-center align-items-center' >
+              {renderAvatar()}
+              {!showCrop && <Button className="btn-eureka mt-3 ms-0 mt-md-0 ms-md-3 text-white" onClick={() => setShowCrop(true)}>
+                {t('Change Photo')}
+              </Button>}
+            </Col>
+            {showCrop && (
+              <Col className='d-flex justify-content-center mt-3'>
+                <div className='profile-crop border p-3'>
+                  <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={closeCrop} cropShape='round' />
+                </div>
+              </Col>
+            )}
+          </Row>
 
-             <Container className="mt-4 p-0 py-4 d-flex justify-content-end">
-               <Button disabled={isLoadingUser} type="submit" className="btn-eureka">
-                 <>
-                   {t('Edit')}
-                   {isLoadingUser ? (
-                     <Spinner animation="grow" variant="info" size="sm" className="ms-1" />
-                   ) : (
-                     <span className={styles.placeholder} />
-                   )}
-                   {isError && editUserError}
-                 </>
-               </Button>
-             </Container>
+          <Row className="mt-4 d-flex flex-column flex-md-row">
+            <Col>
+              <TextField id="name" className="w-100 mt-5" label={`*${t('Name')}`}
+                variant="outlined" size="small" name="name"
+                value={formValues.name!}
+                type="text"
+                onChange={handleChangeTextField}
+              >
+              </TextField>
 
-            </Form>
+            </Col>
+            <Col>
+              <TextField id="email" className="w-100 mt-5" label={`*${t('Email')}`}
+                variant="outlined" size="small" name="email"
+                value={formValues.email!}
+                type="text"
+                onChange={handleChangeTextField}
+              >
+              </TextField>
+            </Col>
+          </Row>
+          <Row className="d-flex flex-column flex-md-row">
+            <Col className='mt-5'>
+              <FormGroup controlId="countryOrigin" >
+                <TagsInputTypeAheadMaterial
+                  data={countrySearchResults}
+                  items={countryOrigin}
+                  setItems={setCountryOrigin}
+                  formatValue={(v: string) => t(`countries:${v}`)}
+                  max={1}
+                  label={`${t('countryFieldLabel')}`}
+                //placeholder={`${t('Type to add tag')}...`}
+                />
+              </FormGroup>
+            </Col>
+            <Col className='mt-5'>
+              <LanguageSelectMultiple onSelectLanguage={onSelectLanguage} defaultValue={formValues.languages} label={t('userLanguage')} />
+            </Col>
+          </Row>
+          <Row className="mt-5">
+            <Col>
+              <TagsInputMaterial tags={tags} max={5} setTags={setTags} label={t('Topics')} className="mb-5" />
+            </Col>
+          </Row>
+          <Row className="mt-4">
+            <Col className="">
+              <FormGroup controlId="aboutMe">
+                <FormLabel>{t('About me')}</FormLabel>
+                <Textarea minRows={3} name="aboutMe" value={formValues.aboutMe!} onChange={handleChangeTextField} />
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row className='mt-5'>
+            <FormControl>
+              <FormLabel id="privacy-settings-label-placement">{t('Privacy settings')}</FormLabel>
+              <Form.Text>{t('mediathequeInfo')}.</Form.Text>
+              <RadioGroup
+                aria-labelledby="privacy-settings-radio-buttons-group"
+                defaultValue={1}
+                name="privacySettings"
+                value={privacySettings}
+                onChange={handlerDashboardTypeRadioChange}
+              >
+                <FormControlLabel value={1} control={<Radio />} label={t('My Mediatheque is public')} />
+                <Form.Text className="ms-4">{t('Anyone can see my Mediatheque')}.</Form.Text>
+                <FormControlLabel value={2} control={<Radio />} label={t('Fallowers can see my Dashboard')} />
+                <Form.Text className="ms-4"> {t('Fallowers can see my Dashboard')}.</Form.Text>
+                <FormControlLabel value={3} control={<Radio />} label={t('My Dashboard is secret')} />
+                <Form.Text className="ms-4">{t('Only I can see my Dashboard')}.</Form.Text>
+              </RadioGroup>
+            </FormControl>
+          </Row>
+
+          <Container className="mt-4 p-0 py-4 d-flex justify-content-end">
+            <Button disabled={isLoadingUser} type="submit" className="btn-eureka">
+              <>
+                {t('Edit')}
+                {isLoadingUser ? (
+                  <Spinner animation="grow" variant="info" size="sm" className="ms-1" />
+                ) : (
+                  <span className={styles.placeholder} />
+                )}
+                {isError && editUserError}
+              </>
+            </Button>
+          </Container>
+
+        </Form>
       )}
     </>
   );
