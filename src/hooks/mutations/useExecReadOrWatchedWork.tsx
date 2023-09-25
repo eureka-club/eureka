@@ -35,7 +35,7 @@ const useExecReadOrWatchedWork = (props: Props) => {
   return useMutation(
     async ({ doCreate, year }: ExecReadOrWatchedWorkPayload) => {
       if (session && work) {
-        const res = await fetch(`/api/work/${work.id}/readOrWatched?lang=${lang}`, {
+        const res = await fetch(`/api/work/${work.id}/readOrWatched?language=${lang}`, {
           method: doCreate ? 'POST' : 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

@@ -54,7 +54,7 @@ export default getApiHandler()
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
       const { q = null, props: p = undefined, language: l } = req.query;
-      const languages:string[] = l?.toString().split(',')||[];
+      const languages =  l ? l?.toString().split(',') : null;
 
       const props: Prisma.WorkFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())) : {};
       let { where: w, take, cursor, skip } = props;
@@ -69,14 +69,16 @@ export default getApiHandler()
           ...w,
           AND: {
             ...(AND && { AND }),
-            OR: [
-              ... languages.map(language=>({language})),
-              ... languages.map(language=>({
-                editions: {
-                  some: { language },
-                }
-              }))
-            ],
+            ... languages?.length && {
+              OR: [
+                ... languages.map(language=>({language})),
+                ... languages.map(language=>({
+                  editions: {
+                    some: { language },
+                  }
+                }))
+              ],
+            }
           },
         };
         // if (typeof q === 'string') {

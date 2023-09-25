@@ -91,7 +91,7 @@ export const findAll = async (languages: string[], props?: Prisma.WorkFindManyAr
     where,
   });
 
-  if (works) {debugger;
+  if (works) {
     works = works.map((w) => editionsToBook(w, languages)!);
   }
   return works;
