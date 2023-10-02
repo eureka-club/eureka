@@ -11,9 +11,10 @@ interface Props{
   hasCycles:boolean;
   hasPosts:boolean;
   hasWorks:boolean;
+  languages:string;
 }
 
-const SearchTab: FunctionComponent<Props> = ({hasCycles,hasPosts,hasWorks}) => {
+const SearchTab: FunctionComponent<Props> = ({hasCycles,hasPosts,hasWorks,languages}) => {
   const { t } = useTranslation('common');
   const router = useRouter();
   
@@ -76,7 +77,7 @@ const SearchTab: FunctionComponent<Props> = ({hasCycles,hasPosts,hasWorks}) => {
                 <SearchTabPosts />
               </Tab> : <></>}
               {hasWorks ? <Tab eventKey="works" data-cy="tab-works" title={t('works')} className={`cursor-pointer`}>
-                <SearchTabWorks />
+                <SearchTabWorks languages={languages} />
               </Tab>:<></>}
             </Tabs>
           :<></>

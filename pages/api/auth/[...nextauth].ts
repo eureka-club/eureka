@@ -133,14 +133,14 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
         }
         return Promise.resolve(session);        
       },
-      // signIn: async (params) =>{debugger;
+      // signIn: async (params) =>{
       //   const {user,account,profile:p} = params;
       //   const profile = (p as {email_verified:boolean,at_hash:string});
 
       //   if (account?.provider === 'google' &&
       //         profile.email_verified === true
       //       ) {
-      //         // debugger;
+      //         // 
       //         // let uu = await prisma.user.update({
       //         //   where:{email:user.email!},
       //         //   data:{

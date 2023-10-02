@@ -1,7 +1,7 @@
 import { useQuery, UseQueryResult } from 'react-query';
 import { GetAllByResonse, Languages } from '@/src/types';
 
-export const getItemsByTopic = async (pageParam: number,topic:string,languages:string|undefined):Promise<GetAllByResonse> => {debugger;
+export const getItemsByTopic = async (pageParam: number,topic:string,languages:string|undefined):Promise<GetAllByResonse> => {
   const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/getAllBy?topic=${topic}&language=${languages}&cursor=${pageParam}`;
   const q = await fetch(url);
   return q.json();

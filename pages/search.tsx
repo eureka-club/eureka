@@ -39,8 +39,9 @@ interface Props {
   hasWorks: boolean;
   session: Session;
   metas: any;
+  languages:string;
 }
-const SearchPage: NextPage<Props> = ({ hasCycles, hasPosts, hasWorks, metas,session }) => {
+const SearchPage: NextPage<Props> = ({ hasCycles, hasPosts, hasWorks, metas,session,languages }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
 
@@ -89,7 +90,7 @@ const SearchPage: NextPage<Props> = ({ hasCycles, hasPosts, hasWorks, metas,sess
         </>
         {hasCycles || hasPosts || hasWorks ? (
           <div className="d-flex flex-column justify-content-center">
-            <SearchTab {...{ hasCycles, hasPosts, hasWorks }} />
+            <SearchTab {...{ hasCycles, hasPosts, hasWorks }} languages={languages} />
           </div>
         ) : (
           <>
@@ -168,8 +169,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const postsData = await getPosts(ctx.locale!,{ ... postsProps, take }, origin);
   qc.prefetchQuery(`posts-search-${q?.toString()}`, () => postsData);
   const hasPosts = postsData.total > 0;
-  
-  const worksData = await getWorks(ctx.locale!,{ ... getWorksProps(terms), take }, origin);
+
+  const langMaps:Record<string,string> = {
+    'es':'spanish',
+    'fr':'french',
+    'pt':'portuguese',
+    'en':'english'
+  }
+  const languages = session?.user.language! ?? langMaps[ctx.locale??ctx.defaultLocale!]
+  const worksData = await getWorks(languages,{ ... getWorksProps(terms), take }, origin);
 
   qc.prefetchQuery(`works-search-${q?.toString()}`, () => worksData);
   const hasWorks = worksData.total > 0;
@@ -202,6 +210,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       hasWorks,
       metas: metaTags,
       session,
+      languages,
       dehydratedState: dehydrate(qc),
     },
   };

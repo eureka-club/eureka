@@ -14,7 +14,10 @@ import { WorkMosaicItem } from '../types/work';
 import { getWorksProps } from '../types/work';
 
 const take = 8;
-const SearchTabworks:FunctionComponent = () => {
+interface Props{
+  languages:string;
+}
+const SearchTabworks:FunctionComponent<Props> = ({languages}) => {
   const { t,lang } = useTranslation('common');
   const router = useRouter();
   const terms = router?.query.q?.toString()!.split(" ") || [];
@@ -53,7 +56,7 @@ const SearchTabworks:FunctionComponent = () => {
 
   const [props,setProps]=useState<Prisma.WorkFindManyArgs>({take,where:{...getProps()}})
 
-  const {data:{total,fetched,works:c}={total:0,fetched:0,works:[]}} = useWorks(props,{cacheKey,enabled:!!router.query?.q});
+  const {data:{total,fetched,works:c}={total:0,fetched:0,works:[]}} = useWorks(props,{cacheKey,enabled:!!router.query?.q},languages);
   const [works,setWorks] = useState<WorkMosaicItem[]>([])
   
   useEffect(()=>{

@@ -8,7 +8,7 @@ const useUpdateWork = ()=>{
   const {data:session} = useSession();
     
   return useMutation(
-    async (payload:EditWorkClientPayload) => {debugger;
+    async (payload:EditWorkClientPayload) => {
       if (session && payload) {
 
         const formData = new FormData();

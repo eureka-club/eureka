@@ -121,7 +121,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     'pt':'portuguese',
     'en':'english'
   }
-  debugger;
   const languages = session?.user.language! ?? langMaps[ctx.locale??ctx.defaultLocale!]
     // ? session?.user.language.split(',').map(l=>langMaps[l]).join(",")
     // : ctx.locale??ctx.defaultLocale!;

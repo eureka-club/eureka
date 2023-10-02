@@ -277,7 +277,7 @@ export const updateFromServerFields = async (
 ): Promise<Work> => {
   const payload = Object.entries(fields).reduce((memo, field) => {
     const [fieldName, fieldValues] = field;
-//debugger;
+
     if(fieldName=='creatorId') return {...memo, [fieldName]:parseInt(fieldValues)};
     if (fieldName === 'publicationYear') {
       return { ...memo, [fieldName]: new Date(fieldValues) };
