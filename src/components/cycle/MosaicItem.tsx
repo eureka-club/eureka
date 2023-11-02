@@ -40,6 +40,7 @@ interface Props {
   showSocialInteraction?: boolean;
   showCreateEureka?: boolean;
   showSaveForLater?: boolean;
+  showJoinOrLeaveButton?:boolean;
   showTrash?: boolean;
   imageLink?: boolean;
   size?: string;
@@ -53,6 +54,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   showParticipants = true,
   showCreateEureka,
   showSaveForLater,
+  showJoinOrLeaveButton = true,
   cacheKey = undefined,
   showTrash = false,
   imageLink = false,
@@ -270,15 +272,13 @@ const MosaicItem: FunctionComponent<Props> = ({
           } 
             </Badge>
            <div className={`h-100 d-flex justify-content-center align-items-end`}>
-              {renderJoinLeaveCycleBtn()}
+              {showJoinOrLeaveButton && renderJoinLeaveCycleBtn()}
            </div> 
          </div>
                 
       </Card.Body>    
-       
+         {showSocialInteraction && cycle && (
         <Card.Footer className={`${styles.footer}  d-flex justifify-content-between`}>
-             
-          {showSocialInteraction && cycle && (
             <SocialInteraction
               cacheKey={cacheKey||['CYCLE',cycle.id.toString()]}
               showButtonLabels={showButtonLabels}
@@ -290,8 +290,9 @@ const MosaicItem: FunctionComponent<Props> = ({
               showSaveForLater={showSaveForLater}
               className="w-100"
             />
-          )}
+         
         </Card.Footer>
+         )}
      </Card>
   );
 };
