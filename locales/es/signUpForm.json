@@ -18,6 +18,7 @@
   "Join": "Únete",
   "VisitEureka": "Ir a Eureka",
   "joinedTerms": "Al unirte, aceptas",
+  "joinedCycleSignInTerms": "Al inscribirme al ciclo, me estoy uniendo a Eureka y aceptando ",
   "termsText": "nuestro Manifiesto",
   "and": "y",
   "policyText": "la Política de privacidad",
@@ -31,5 +32,7 @@
   "worksCountHeader_0": "No hay obras en el ciclo",
   "worksCountHeader": "1 obra en el ciclo",
   "worksCountHeader_other": "{{count}} obras en el ciclo",
+  "I want to register now": "Quiero inscribirme ahora",
+  "I want to participate!": "¡Quiero participar!",
   "InvalidPassword": "Inválido. La contraseña debe tener al menos 8 caracteres y al menos un dígito (0-9)."
 }

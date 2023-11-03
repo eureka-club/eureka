@@ -18,6 +18,7 @@
   "Join": "Rejoindre",
   "VisitEureka": "Visitez Eureka",
   "joinedTerms": "En adhérant, vous acceptez",
+  "joinedCycleSignInTerms": "En m'inscrivant au cycle, j'adhère à Eurêka et j'accepte ",
   "termsText": "le Manifeste",
   "and": "et",
   "policyText": "la Politique de confidentialité",
@@ -31,5 +32,7 @@
   "worksCountHeader_0": "Pas d'œuvres dans ce cycle",
   "worksCountHeader": "1 œuvre dans ce cycle",
   "worksCountHeader_other": "{{count}} œuvres dans ce cycle",
+  "I want to register now": "Je veux m'inscrire maintenant",
+  "I want to participate!": "Je veux participer!",
   "InvalidPassword": "Invalide. Le mot de passe doit contenir au moins 8 caractères et au moins un chiffre (0-9)."
 }

@@ -1,6 +1,6 @@
 import { signIn } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, useEffect, useState, useRef, MouseEvent } from 'react';
+import { FunctionComponent, useState, MouseEvent, ChangeEvent, FormEvent, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -14,9 +14,9 @@ import MosaicItem from '@/src/components/cycle/MosaicItem';
 import { CycleContext } from '@/src/useCycleContext';
 import useCycle from '@/src/useCycle';
 import UserAvatar from '@/src/components/common/UserAvatar';
-import Box from '@mui/material/Box';
 import CycleDetailWorks from '@/src/components/cycle/CycleDetailWorks';
 import Footer from '@/components/layouts/Footer';
+import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem, FormControlLabel, Switch, Box } from '@mui/material';
 
 
 
@@ -24,14 +24,42 @@ interface Props {
   noModal?: boolean;
 }
 
+interface FormValues {
+  identifier: string;
+  password: string;
+  name: string,
+  lastname: string,
+  // language: string
+}
+
 const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) => {
   const { t } = useTranslation('signUpForm');
-  const formRef = useRef<HTMLFormElement>(null);
+  //const formRef = useRef<HTMLFormElement>(null);
+  const [formValues, setFormValues] = useState<FormValues>({
+    identifier: '',
+    password: '',
+    name: '',
+    lastname: ''
+    // language: '',
+  });
+
   interface MutationProps {
     identifier: string;
     password: string;
     fullName: string;
+    // language: string
   }
+
+  function handleChangeTextField(ev: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    ev.preventDefault();
+    const { name, value } = ev.target;
+    //console.log(name, value, 'name, value')
+    setFormValues({
+      ...formValues,
+      [name]: value
+    });
+  }
+
   const router = useRouter();
   const [cycleId, setCycleId] = useState<string>('')
   useEffect(() => {
@@ -110,39 +138,42 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
     return true;
   };
 
-  const handleSubmitSignUp = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmitSignUp = async (ev: FormEvent<HTMLFormElement>) => {
     //mutate user custom data
-    const form = formRef.current;
-    if (form) {
-      const email = form.email.value;
-      const password = form.password.value;
-      const fullName = form.Name.value + ' ' + form.lastname.value;
+    ev.preventDefault();
 
-      if (email && password && fullName) {
-        if (!validateEmail(email)) {
-          toast.error(t('InvalidMail'));
-          return false;
-        }
+    const email = formValues.identifier;
+    const password = formValues.password;
+    // const language = formValues.language;
+    const fullName = formValues.name + ' ' + formValues.lastname;
 
-        if (!validatePassword(password)) {
-          toast.error(t('InvalidPassword'));
-          return false;
-        }
+    //console.log(formValues)
 
-        const ur = await userRegistered(email);
-        if (!ur) {
-          toast.error(t('Error'));
-          return;
-        }
-        if (!ur.isUser || !ur.hasPassword) {
-          mutate({
-            identifier: email,
-            password: password,
-            fullName,
-          });
-        } else toast.error(t('UserRegistered'));
-      } else toast.error(t('emptyFields'));
-    }
+    if (email && password && fullName) {//&& language
+      if (!validateEmail(email)) {
+        toast.error(t('InvalidMail'));
+        return false;
+      }
+
+      if (!validatePassword(password)) {
+        toast.error(t('InvalidPassword'));
+        return false;
+      }
+
+      const ur = await userRegistered(email);
+      if (!ur) {
+        toast.error(t('Error'));
+        return;
+      }
+      if (!ur.isUser || !ur.hasPassword) {
+        mutate({
+          identifier: email,
+          password: password,
+          //language,
+          fullName,
+        });
+      } else toast.error(t('UserRegistered'));
+    } else toast.error(t('emptyFields'));
   };
 
   //border border-1"  style={{ borderRadius: '0.5em'}}
@@ -151,27 +182,6 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
       <>
         <Box >
           <Row className="d-flex justify-content-between">
-            {/* <Col className={`d-none d-lg-flex col-6 ${styles.welcomeSection}`}>
-            <section className={`d-flex flex-column w-100 ${styles.welcomeSectionText}`}>
-              <p className={`ms-5 ${styles.welcomeText}`}>{t('Welcome')}</p>
-              <p className={`ms-5 mb-4 ${styles.otherText}`}>{t('welcomeText1')}</p>
-              <p className={`ms-5 mb-4 ${styles.otherText}`}>{t('welcomeText2')}</p>
-              <Container
-                className={`${styles.imageContainer} d-flex flex-column align-items-center justify-content-center`}
-              >
-                <Link href="/" replace>
-                  <img
-                    className={` cursor-pointer ${styles.eurekaImage}`}
-                    src="/Eureka-VT-web-white.png"
-                    alt="Eureka"
-                  />
-                </Link>
-                <Link href="/" replace>
-                  <p className={`mt-5 cursor-pointer text-white ${styles.VisitEurekaText}`}>{t('VisitEureka')} </p>
-                </Link>
-              </Container>
-            </section>
-          </Col> */}
             <Col className='col-12'>
               <Row className='p-4'>
                 <Link href="/" replace >
@@ -194,59 +204,55 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
               </Row>
             </Col>
             <Col className={`col-12 col-lg-6 mt-5`}>
-              <div className=''>
-                <section className="border border-2 mt-2 mb-5 d-flex flex-column justify-content-end " style={{ borderRadius: '0.5em' }}>
-                  <Row>
-                    <button
-                      type="button"
-                      onClick={handleSignUpGoogle}
-                      className={`d-flex justify-content-center mt-4  ${styles.buttonGoogle}`}
-                    >
-                      <div
-                        className={`d-flex justify-content-start justify-content-sm-center aling-items-center flex-row ${styles.gmailLogoAndtext}`}
-                      >
-                        <img className={`${styles.gmailLogo} me-1 me-lg-2`} src="/img/logo-google.png" alt="gmail" />
-                        {t('joinViaGoogle')}
-                      </div>
-                    </button>
-                    <p className={`mb-2 ${styles.alternativeLabel}`}>{t('alternativeText')}</p>
-                  </Row>
-                  <Row>
-                    <div className="d-flex justify-content-center">
-                      <Form ref={formRef} className={`d-flex flex-column ${styles.registerForm}`}>
-                        <div className="d-flex flex-column flex-lg-row justify-content-between">
-                          <div className={`d-flex flex-column ${styles.personalData}`}>
-                            <Form.Group controlId="Name">
-                              <Form.Label>{t('Name')}</Form.Label>
-                              <Form.Control className="mb-2" type="text" required />
-                            </Form.Group>
-                          </div>
-                          <div className={`d-flex flex-column ${styles.personalData}`}>
-                            <Form.Group controlId="lastname">
-                              <Form.Label>{t('LastName')}</Form.Label>
-                              <Form.Control className="mb-2" type="text" required />
-                            </Form.Group>
-                          </div>
-                        </div>
-                        <Form.Group controlId="email">
-                          <Form.Label>{t('emailFieldLabel')}</Form.Label>
-                          <Form.Control className="mb-2" type="email" required />
-                        </Form.Group>
-                        <Form.Group controlId="password">
-                          <Form.Label>
-                            {t('passwordFieldLabel')}{' '}
-                            <span className={styles.passRequirement}>{` (${t('passRequirements')})`}</span>
-                          </Form.Label>
-                          <Form.Control type="password" required />
-                        </Form.Group>
-                        <div className="d-flex flex-column align-items-center justify-content-center">
-                          <Button onClick={handleSubmitSignUp} className={`mb-4 btn-eureka ${styles.submitButton}`}>
-                            {t('Join')}
+              <div className='p-3 d-flex flex-column justify-content-center align-items-center'>
+                <span className='text-center text-primary' style={{ fontSize: '1.5em' }}>{t('I want to participate!').toUpperCase()}</span>
+                <Box sx={{width:['100%','100%','70%']}} >
+                      <Form onSubmit={handleSubmitSignUp}>
+                        <TextField id="name" className="p-2 w-100 mt-4" label={`${t('Name')}`}
+                          variant="outlined" size="small" name="name"
+                          value={formValues.name!}
+                          type="text"
+                          onChange={handleChangeTextField}
+                        >
+                        </TextField>
+                        <TextField id="lastname" className="p-2 w-100 mt-4" label={`${t('LastName')}`}
+                          variant="outlined" size="small" name="lastname"
+                          value={formValues.lastname!}
+                          type="text"
+                          onChange={handleChangeTextField}
+                        >
+                        </TextField>
+                        {/* <div className='p-2 mt-4'>
+                        <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={formValues.language} label={t('languageFieldLabel')} />
+                      </div> */}
+
+                        <TextField id="email" className="p-2 w-100 mt-4" label={`${t('emailFieldLabel')}`}
+                          variant="outlined" size="small" name="identifier"
+                          value={formValues.identifier!}
+                          type="text"
+                          onChange={handleChangeTextField}
+                        >
+                        </TextField>
+
+                        <TextField id="pass" className="p-2 w-100 my-4" label={`${t('passwordFieldLabel')}`}
+                          variant="outlined" size="small" name="password"
+                          value={formValues.password!}
+                          autoComplete="current-password"
+                          type="password"
+                          helperText={`(${t('passRequirements')})`}
+                          onChange={handleChangeTextField}
+                        >
+                        </TextField>
+
+                        <Box sx={{padding: '1em'}}>
+                          <Button type="submit" className={`mb-4 btn btn-eureka p-2 w-100`}>
+                            {t('I want to register now')}
                           </Button>
+                          </Box> 
                           <p
                             className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
                           >
-                            {t('joinedTerms')}
+                            {t('joinedCycleSignInTerms')}
                             <Link href="/manifest" passHref>
                               <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`}>
                                 {t('termsText')}
@@ -257,24 +263,23 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
                               <span className={`d-flex cursor-pointer ms-1 ${styles.linkText}`}>{t('policyText')}</span>
                             </Link>
                           </p>
-                        </div>
+                       
+
                       </Form>
-                    </div>
-                  </Row>
-                </section>
+                </Box>
               </div>
             </Col>
             <Col className={`col-12 col-lg-6 my-5`}>
-              <div className=''>
+              <div className='d-flex justify-content-center justify-content-xl-start align-items-center align-items-xl-start'>
                 <div className='d-flex flex-column justify-content-center'>
-                  <div className="mb-1">
+                  <div className="mb-2">
                     <UserAvatar width={42} height={42} userId={cycle.creatorId} showFullName />
                   </div>
                   <CycleContext.Provider value={{ linkToCycle:false, showShare: false, cycle: cycle }}>
                     <MosaicItem
                       cycleId={cycle.id}
                       showTrash
-                      detailed={false}
+                      detailed={true}
                       showSaveForLater={false}
                       showCreateEureka={false}
                       showJoinOrLeaveButton={false}
