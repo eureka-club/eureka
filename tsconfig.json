@@ -21,20 +21,34 @@
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "@/src/*":["src/*"],
-      "@/types/*":["src/types/*"],
-      "@/components/*": ["src/components/*"],
+      "@/src/*": [
+        "src/*"
+      ],
+      "@/types/*": [
+        "src/types/*"
+      ],
+      "@/components/*": [
+        "src/components/*"
+      ]
     },
     "types": [
       "tinymce"
     ],
-    "incremental": true
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "src/components/common/HyvorComments.tsx", "src/ErrorBounddary.tsx"  ],
+    "**/*.tsx",
+    "src/components/common/HyvorComments.tsx",
+    "src/ErrorBounddary.tsx",
+    ".next/types/**/*.ts"
+  ],
   "exclude": [
     "node_modules"
   ]

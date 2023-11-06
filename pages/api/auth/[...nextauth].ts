@@ -12,6 +12,7 @@ import { sendMailSingIn } from '@/src/facades/mail';
 const bcrypt = require('bcryptjs');
 import { subscribe_to_segment } from '@/src/lib/mailchimp';
 import axios from 'axios';
+import { addParticipant, find } from '@/src/facades/cycle';
 
 /* const getOptions = (req: NextApiRequest) => {
   const locale = req.cookies.NEXT_LOCALE;
@@ -157,6 +158,20 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
         // const hash = bcrypt.hashSync(vt.password, 8);
         if(vt.joinToCycle>=0){
           const res = await axios.post(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle/${vt.joinToCycle}/join`);
+          const cycle = await find(vt.joinToCycle);
+          if(cycle){
+            await addParticipant(cycle, +user.id);
+            await prisma.cycleUserJoin.upsert({
+                where:{
+                  cycleId_userId:{
+                    userId:+user.id,
+                    cycleId:vt.joinToCycle
+                  }
+                },
+                create:{userId:+user.id,cycleId:vt.joinToCycle,pending:false},
+                update:{pending:false}
+              });
+          }
         }
 
           await prisma.user.update({
