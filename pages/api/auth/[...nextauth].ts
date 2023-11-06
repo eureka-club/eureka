@@ -11,6 +11,7 @@ import {prisma} from '@/src/lib/prisma';
 import { sendMailSingIn } from '@/src/facades/mail';
 const bcrypt = require('bcryptjs');
 import { subscribe_to_segment } from '@/src/lib/mailchimp';
+import axios from 'axios';
 
 /* const getOptions = (req: NextApiRequest) => {
   const locale = req.cookies.NEXT_LOCALE;
@@ -154,6 +155,9 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
 
         if(vt){
         // const hash = bcrypt.hashSync(vt.password, 8);
+        if(vt.joinToCycle>=0){
+          const res = await axios.post(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle/${vt.joinToCycle}/join`);
+        }
 
           await prisma.user.update({
             where:{email:user.email!},
@@ -161,8 +165,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
               password:vt.password,
               name:vt.name
             }
-          })
-          
+          });
 
         }
       }
