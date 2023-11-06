@@ -63,7 +63,7 @@ model UserCustomData {
   name       String
   password   String
   identifier String @unique
-  joinToCycle Int
+  joinToCycle Int @default(-1)
 }
 
 model Account {
