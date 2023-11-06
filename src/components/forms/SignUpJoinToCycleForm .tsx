@@ -47,6 +47,8 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
     identifier: string;
     password: string;
     fullName: string;
+    joinToCycle: number;
+
     // language: string
   }
 
@@ -94,7 +96,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
   };
 
   const { mutate, isLoading: isMutating } = useMutation(async (props: MutationProps) => {
-    const { identifier, password, fullName } = props;
+    const { identifier, password, fullName, joinToCycle } = props;
     const res = await fetch('/api/userCustomData', {
       method: 'POST',
       headers: {
@@ -104,6 +106,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
         identifier,
         password,
         fullName,
+        joinToCycle
       }),
     });
     if (res.ok) {
@@ -171,6 +174,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
           password: password,
           //language,
           fullName,
+          joinToCycle:cycle!.id || -1
         });
       } else toast.error(t('UserRegistered'));
     } else toast.error(t('emptyFields'));
@@ -313,8 +317,8 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
               <span className='text-center text-white'>{t("Works on Cycle").toUpperCase()}</span>
             </Row>
           </Col>
-          <Col className='col-12 d-flex justify-content-center'>
-            <div className="p-1">
+          <Col className='col-12'>
+            <div className="px-1 px-lg-5 ms-lg-4">
               {works && <CycleDetailWorks cycleWorksDates={works!} showSocialInteraction={false} /> || ''}
             </div>
           </Col>
