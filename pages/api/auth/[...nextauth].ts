@@ -157,7 +157,6 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
         if(vt){
         // const hash = bcrypt.hashSync(vt.password, 8);
         if(vt.joinToCycle>=0){
-          const res = await axios.post(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle/${vt.joinToCycle}/join`);
           const cycle = await find(vt.joinToCycle);
           if(cycle){
             await addParticipant(cycle, +user.id);
