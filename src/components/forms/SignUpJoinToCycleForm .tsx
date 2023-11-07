@@ -211,15 +211,15 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
               <div className='p-3 d-flex flex-column justify-content-center align-items-center'>
                 <span className='text-center text-primary' style={{ fontSize: '1.5em' }}>{t('I want to participate!').toUpperCase()}</span>
                 <Box sx={{width:['100%','100%','70%']}} >
-                      <Form onSubmit={handleSubmitSignUp}>
-                        <TextField id="name" className="p-2 w-100 mt-4" label={`${t('Name')}`}
+                      <Form onSubmit={handleSubmitSignUp} className='mt-4'>
+                        <TextField id="name" className="px-2 w-100 my-4" label={`${t('Name')}`}
                           variant="outlined" size="small" name="name"
                           value={formValues.name!}
                           type="text"
                           onChange={handleChangeTextField}
                         >
                         </TextField>
-                        <TextField id="lastname" className="p-2 w-100 mt-4" label={`${t('LastName')}`}
+                        <TextField id="lastname" className="px-2 w-100 mb-4" label={`${t('LastName')}`}
                           variant="outlined" size="small" name="lastname"
                           value={formValues.lastname!}
                           type="text"
@@ -230,7 +230,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
                         <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={formValues.language} label={t('languageFieldLabel')} />
                       </div> */}
 
-                        <TextField id="email" className="p-2 w-100 mt-4" label={`${t('emailFieldLabel')}`}
+                        <TextField id="email" className="px-2 w-100 mb-4" label={`${t('emailFieldLabel')}`}
                           variant="outlined" size="small" name="identifier"
                           value={formValues.identifier!}
                           type="text"
@@ -238,7 +238,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
                         >
                         </TextField>
 
-                        <TextField id="pass" className="p-2 w-100 my-4" label={`${t('passwordFieldLabel')}`}
+                        <TextField id="pass" className="px-2 w-100 mb-4" label={`${t('passwordFieldLabel')}`}
                           variant="outlined" size="small" name="password"
                           value={formValues.password!}
                           autoComplete="current-password"
