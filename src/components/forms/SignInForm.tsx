@@ -27,7 +27,7 @@ const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,log
     ev.preventDefault();
     if(!noModal)
       localStorage.setItem('loginRedirect', router.asPath)
-    const callbackUrl = joinToCycle!=-1 
+    const callbackUrl = !!joinToCycle&&joinToCycle!=-1 
        ? `/cycle/${joinToCycle}`
        : localStorage.getItem('loginRedirect')?.toString()||'/';
     signIn('google',{ callbackUrl });
