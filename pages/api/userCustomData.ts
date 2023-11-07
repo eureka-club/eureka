@@ -27,7 +27,7 @@ export default async function handler(
           password: hash,
           name,
           identifier,
-          joinToCycle: parseInt(cycle),
+          ... !!cycle && {joinToCycle: parseInt(cycle)},
         },
       });
       return res.status(201).json({data:resC})

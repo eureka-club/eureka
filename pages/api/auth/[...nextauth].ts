@@ -181,7 +181,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
             }
           });
 
-          if(vt.joinToCycle>=0){
+          if(!!vt.joinToCycle&&vt.joinToCycle>=0){
             const cycle = await find(vt.joinToCycle);
             if(cycle){
               await addParticipant(cycle, +user.id);
