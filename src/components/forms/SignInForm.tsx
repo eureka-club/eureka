@@ -106,7 +106,7 @@ const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,log
       
 const handlerJoinLink = ()=>{
   close()
-  router.push(`/register/${joinToCycle}`)
+  router.push(`/register/${joinToCycle??''}`)
 }
 const handlerRecoveryLogin = ()=>{
   close()
