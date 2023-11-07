@@ -95,7 +95,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
     return null;
   };
 
-  const { mutate, isLoading: isMutating } = useMutation(async (props: MutationProps) => {
+  const { mutate, isLoading: isMutating } = useMutation(async (props: MutationProps) => {debugger;
     const { identifier, password, fullName, joinToCycle } = props;
     const res = await fetch('/api/userCustomData', {
       method: 'POST',

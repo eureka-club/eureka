@@ -155,9 +155,9 @@ const MosaicItem: FunctionComponent<Props> = ({
   };
 
   const handleJoinCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
+    ev.preventDefault();debugger;
     if (!session) {
-      show(<SignInForm/>)
+      show(<SignInForm joinToCycle={cycle?.id} />)
     }
     else execJoinCycle();
   };

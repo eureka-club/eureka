@@ -14,10 +14,11 @@ import {useRouter} from 'next/router'
 import {useModalContext} from '@/src/useModal'
 interface Props {
   noModal?: boolean;
-  logoImage?:boolean
+  logoImage?:boolean;
+  joinToCycle?:number;
 }
 
-const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true }) => {
+const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,logoImage = true }) => {
   const router = useRouter()
   const { t } = useTranslation('signInForm');
   const formRef=useRef<HTMLFormElement>(null)
@@ -26,7 +27,10 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
     ev.preventDefault();
     if(!noModal)
       localStorage.setItem('loginRedirect', router.asPath)
-    signIn('google',{ callbackUrl: localStorage.getItem('loginRedirect')?.toString()||'/' });
+    const callbackUrl = joinToCycle!=-1 
+       ? `/cycle/${joinToCycle}`
+       : localStorage.getItem('loginRedirect')?.toString()||'/';
+    signIn('google',{ callbackUrl });
   };
 
   const {close} = useModalContext()
@@ -66,9 +70,12 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
                 toast.error(t('RegisterAlert'))
                     setLoading(false)
            }
-           else {
+           else {debugger;
+            const callbackUrl = joinToCycle!=-1 
+            ? `/cycle/${joinToCycle}`
+            : localStorage.getItem('loginRedirect')?.toString()||'/';
             signIn('credentials' ,{
-              redirect:false,
+              callbackUrl,
               email:form.email.value,
               password:form.password.value
             })
@@ -99,7 +106,7 @@ const SignInForm: FunctionComponent<Props> = ({ noModal = false,logoImage = true
       
 const handlerJoinLink = ()=>{
   close()
-  router.push("/register")
+  router.push(`/register/${joinToCycle}`)
 }
 const handlerRecoveryLogin = ()=>{
   close()

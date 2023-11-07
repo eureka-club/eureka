@@ -128,34 +128,11 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
       maxAge: 60 * 60 * 24 * 30,
     },
     events:{
-      updateUser:async({user})=>{
-        
+      updateUser:async({user})=>{debugger;
         const vt = await prisma.userCustomData.findFirst({where:{identifier:user.email!}})
         if(vt){
         // const hash = bcrypt.hashSync(vt.password, 8);
 
-          const res = await prisma.user.update({
-            where:{email:user.email!},
-            data:{
-              password:vt.password,
-              name:vt.name
-            }
-          })
-
-        }
-      },
-      createUser:async({user})=>{
-        const vt = await prisma.userCustomData.findFirst({where:{identifier:user.email!}});
-        await subscribe_to_segment({
-          segment:'eureka-all-users',
-          email_address:user.email!,
-          name:user.name||'unknown'
-          // onSuccess: async (res)=>console.log('ok',res),
-          // onFailure: async (err)=>console.error('error',err)
-        })
-
-        if(vt){
-        // const hash = bcrypt.hashSync(vt.password, 8);
         if(vt.joinToCycle>=0){
           const cycle = await find(vt.joinToCycle);
           if(cycle){
@@ -173,6 +150,29 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
           }
         }
 
+          const res = await prisma.user.update({
+            where:{email:user.email!},
+            data:{
+              password:vt.password,
+              name:vt.name
+            }
+          })
+
+        }
+      },
+      createUser:async({user})=>{debugger;
+        const vt = await prisma.userCustomData.findFirst({where:{identifier:user.email!}});
+        await subscribe_to_segment({
+          segment:'eureka-all-users',
+          email_address:user.email!,
+          name:user.name||'unknown'
+          // onSuccess: async (res)=>console.log('ok',res),
+          // onFailure: async (err)=>console.error('error',err)
+        })
+        if(vt){
+        // const hash = bcrypt.hashSync(vt.password, 8);
+        
+
           await prisma.user.update({
             where:{email:user.email!},
             data:{
@@ -180,6 +180,32 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
               name:vt.name
             }
           });
+
+          if(vt.joinToCycle>=0){
+            const cycle = await find(vt.joinToCycle);
+            if(cycle){
+              await addParticipant(cycle, +user.id);
+              await prisma.cycleUserJoin.upsert({
+                  where:{
+                    cycleId_userId:{
+                      userId:+user.id,
+                      cycleId:vt.joinToCycle
+                    }
+                  },
+                  create:{userId:+user.id,cycleId:vt.joinToCycle,pending:false},
+                  update:{pending:false}
+                });
+            }
+            await prisma.userCustomData.update({
+              data:{
+                joinToCycle:-1
+              },
+              where:{identifier:user.email!}
+            });
+  
+          }
+
+          
 
         }
       }
@@ -202,6 +228,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
         from: process.env.EMAILING_FROM,
         sendVerificationRequest: async ({ identifier: email, url }): Promise<void> => {
           // const site = url.replace(/^https?:\/\//, ''); 
+          debugger;
           const t = await getT(locale, 'singInMail');
           const title = t('title');
           const subtitle = t('subtitle');
