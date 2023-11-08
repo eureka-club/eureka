@@ -13,6 +13,7 @@
   "InvalidSesion":"Senha incorreta ou sessão inválida",
   "isNotUser":"Conta não cadastrada",
   "EmailRequired":"O campo 'e-mail' é obrigatório",
-  "PasswordRequired":"O campo 'Senha' é obrigatório"
+  "PasswordRequired":"O campo 'Senha' é obrigatório",
+  "RegisteredUsingGoogleProvider":"Registrado usando o provedor Google"
 
 }

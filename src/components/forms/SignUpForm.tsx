@@ -142,7 +142,6 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
   const handleSubmitSignUp = async (ev: FormEvent<HTMLFormElement>) => {
     //mutate user custom data
     ev.preventDefault();
-
     const email = formValues.identifier;
     const password = formValues.password;
     // const language = formValues.language;
@@ -166,6 +165,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
         toast.error(t('Error'));
         return;
       }
+
       if (!ur.isUser || !ur.hasPassword) {
         mutate({
           identifier: email,

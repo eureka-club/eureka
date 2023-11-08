@@ -128,7 +128,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
       maxAge: 60 * 60 * 24 * 30,
     },
     events:{
-      updateUser:async({user})=>{debugger;
+      updateUser:async({user})=>{
         const vt = await prisma.userCustomData.findFirst({where:{identifier:user.email!}})
         if(vt){
         // const hash = bcrypt.hashSync(vt.password, 8);
@@ -160,7 +160,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
 
         }
       },
-      createUser:async({user})=>{debugger;
+      createUser:async({user})=>{
         const vt = await prisma.userCustomData.findFirst({where:{identifier:user.email!}});
         await subscribe_to_segment({
           segment:'eureka-all-users',
@@ -228,7 +228,6 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
         from: process.env.EMAILING_FROM,
         sendVerificationRequest: async ({ identifier: email, url }): Promise<void> => {
           // const site = url.replace(/^https?:\/\//, ''); 
-          debugger;
           const t = await getT(locale, 'singInMail');
           const title = t('title');
           const subtitle = t('subtitle');

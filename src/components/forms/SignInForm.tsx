@@ -66,11 +66,15 @@ const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,log
             return;
           }
           if(ur.isUser){
-           if(!ur.hasPassword){
+           if(!ur.provider && !ur.hasPassword){
                 toast.error(t('RegisterAlert'))
                     setLoading(false)
            }
-           else {debugger;
+           else if(ur.provider=='google'){
+            toast.error(t('RegisteredUsingGoogleProvider'))
+            setLoading(false)
+           }
+           else {
             const callbackUrl = !!joinToCycle&&joinToCycle!=-1 
             ? `/cycle/${joinToCycle}`
             : localStorage.getItem('loginRedirect')?.toString()||'/';
