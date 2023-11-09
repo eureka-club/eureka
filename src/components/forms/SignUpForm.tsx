@@ -23,7 +23,7 @@ interface FormValues {
   password: string;
   name: string,
   lastname: string,
-  language: string
+ // language: string
 }
 
 const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
@@ -33,14 +33,14 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
     identifier: '',
     password: '',
     name: '',
-    lastname: '',
-    language: '',
-  }); 
+    lastname: ''
+   // language: '',
+  });
   interface MutationProps {
     identifier: string;
     password: string;
     fullName: string;
-    language: string
+   // language: string
   }
 
 
@@ -54,29 +54,29 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
     });
   }
 
- 
 
-  const onSelectLanguage = (language: string) => {
-    setFormValues({
-      ...formValues,
-      ['language']: language
-    });
-  };
 
-  useEffect(() => {
-    if (/^en\b/.test(navigator.language))
-      onSelectLanguage('english');
+  // const onSelectLanguage = (language: string) => {
+  //   setFormValues({
+  //     ...formValues,
+  //     ['language']: language
+  //   });
+  // };
 
-    if (/^es\b/.test(navigator.language))
-      onSelectLanguage('spanish');
+  // useEffect(() => {
+  //   if (/^en\b/.test(navigator.language))
+  //     onSelectLanguage('english');
 
-    if (/^fr\b/.test(navigator.language))
-      onSelectLanguage('french');
+  //   if (/^es\b/.test(navigator.language))
+  //     onSelectLanguage('spanish');
 
-    if (/^pt\b/.test(navigator.language))
-      onSelectLanguage('portuguese');
+  //   if (/^fr\b/.test(navigator.language))
+  //     onSelectLanguage('french');
 
-  }, []);
+  //   if (/^pt\b/.test(navigator.language))
+  //     onSelectLanguage('portuguese');
+
+  // }, []);
 
   const handleSignUpGoogle = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
@@ -93,7 +93,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
   };
 
   const { mutate, isLoading: isMutating } = useMutation(async (props: MutationProps) => {
-    const { identifier, password,language, fullName } = props;
+    const { identifier, password, fullName } = props;//language,
     const res = await fetch('/api/userCustomData', {
       method: 'POST',
       headers: {
@@ -102,8 +102,8 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
       body: JSON.stringify({
         identifier,
         password,
-        fullName,
-        language
+        fullName
+       // language
       }),
     });
     if (res.ok) {
@@ -145,12 +145,12 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
     const email = formValues.identifier;
     const password = formValues.password;
-    const language = formValues.language;
+    // const language = formValues.language;
     const fullName = formValues.name + ' ' + formValues.lastname;
 
     console.log(formValues)
 
-    if (email && password && fullName && language) {
+    if (email && password && fullName) {//&& language
       if (!validateEmail(email)) {
         toast.error(t('InvalidMail'));
         return false;
@@ -170,7 +170,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
         mutate({
           identifier: email,
           password: password,
-          language,
+          //language,
           fullName,
         });
       } else toast.error(t('UserRegistered'));
@@ -257,13 +257,13 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                             value={formValues.lastname!}
                             type="text"
                             onChange={handleChangeTextField}
-                          >   
+                          >
                           </TextField>
                         </div>
                       </div>
-                      <div className='p-2 mt-4'>
+                      {/* <div className='p-2 mt-4'>
                         <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={formValues.language} label={t('languageFieldLabel')} />
-                      </div>
+                      </div> */}
 
                       <TextField id="email" className="p-2 w-100 mt-4" label={`${t('emailFieldLabel')}`}
                         variant="outlined" size="small" name="identifier"

@@ -11,7 +11,8 @@ import {prisma} from '@/src/lib/prisma';
 import { sendMailSingIn } from '@/src/facades/mail';
 const bcrypt = require('bcryptjs');
 import { subscribe_to_segment } from '@/src/lib/mailchimp';
-import { use } from 'chai';
+import axios from 'axios';
+import { addParticipant, find } from '@/src/facades/cycle';
 
 /* const getOptions = (req: NextApiRequest) => {
   const locale = req.cookies.NEXT_LOCALE;
@@ -187,17 +188,39 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
       maxAge: 60 * 60 * 24 * 30,
     },
     events:{
-      updateUser:async({user})=>{
+      updateUser:async({user})=>{debugger;
         const vt = await prisma.userCustomData.findFirst({where:{identifier:user.email!}})
-        const password = vt?.password;
-        const name = vt?.name||user.name;
-        const language = vt?.language || locale;
-        await prisma.user.update({
-          where:{email:user.email!},
-          data:{password,name,language}
-        });
+        if(vt){
+        // const hash = bcrypt.hashSync(vt.password, 8);
+
+        if(vt.joinToCycle>=0){
+          const cycle = await find(vt.joinToCycle);
+          if(cycle){
+            await addParticipant(cycle, +user.id);
+            await prisma.cycleUserJoin.upsert({
+                where:{
+                  cycleId_userId:{
+                    userId:+user.id,
+                    cycleId:vt.joinToCycle
+                  }
+                },
+                create:{userId:+user.id,cycleId:vt.joinToCycle,pending:false},
+                update:{pending:false}
+              });
+          }
+        }
+
+          const res = await prisma.user.update({
+            where:{email:user.email!},
+            data:{
+              password:vt.password,
+              name:vt.name
+            }
+          })
+
+        }
       },
-      createUser:async({user})=>{
+      createUser:async({user})=>{debugger;
         const vt = await prisma.userCustomData.findFirst({where:{identifier:user.email!}});
         await subscribe_to_segment({
           segment:'eureka-all-users',
@@ -206,13 +229,45 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
           // onSuccess: async (res)=>console.log('ok',res),
           // onFailure: async (err)=>console.error('error',err)
         })
-        const password = vt?.password;
-        const name = vt?.name||user.name;
-        const language = vt?.language || locale;
-        await prisma.user.update({
-          where:{email:user.email!},
-          data:{password,name,language}
-        })
+        if(vt){
+        // const hash = bcrypt.hashSync(vt.password, 8);
+        
+
+          await prisma.user.update({
+            where:{email:user.email!},
+            data:{
+              password:vt.password,
+              name:vt.name
+            }
+          });
+
+          if(vt.joinToCycle>=0){
+            const cycle = await find(vt.joinToCycle);
+            if(cycle){
+              await addParticipant(cycle, +user.id);
+              await prisma.cycleUserJoin.upsert({
+                  where:{
+                    cycleId_userId:{
+                      userId:+user.id,
+                      cycleId:vt.joinToCycle
+                    }
+                  },
+                  create:{userId:+user.id,cycleId:vt.joinToCycle,pending:false},
+                  update:{pending:false}
+                });
+            }
+            await prisma.userCustomData.update({
+              data:{
+                joinToCycle:-1
+              },
+              where:{identifier:user.email!}
+            });
+  
+          }
+
+          
+
+        }
       }
     },
     debug: process.env.NODE_ENV === 'development',
@@ -233,8 +288,8 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
         from: process.env.EMAILING_FROM,
         sendVerificationRequest: async ({ identifier: email, url }): Promise<void> => {
           // const site = url.replace(/^https?:\/\//, ''); 
-          
-          const t = await getT(locales[locale], 'singInMail');
+          debugger;
+          const t = await getT(locale, 'singInMail');
           const title = t('title');
           const subtitle = t('subtitle');
           const singIngConfirmationUrl = t('singIngConfirmationUrl');

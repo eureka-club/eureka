@@ -7,6 +7,7 @@ import { WorkMosaicItem } from '@/src/types/work'
 import { Work } from '@prisma/client'
 
 interface Props{
+  showSocialInteraction?:boolean
   cycleWorksDates:{
     id: number;
     startDate: Date | null;
@@ -16,9 +17,8 @@ interface Props{
   }[];
 }
 
-const CycleDetailWorks: React.FC<Props> = ({cycleWorksDates}) => {
+const CycleDetailWorks: React.FC<Props> = ({showSocialInteraction = true,cycleWorksDates}) => {
   const works = cycleWorksDates.map(c=>c.work!)
-
   const {t} = useTranslation('cycleDetail')
   const queryClient = useQueryClient()
   const getWorksSorted = (() => {
@@ -67,7 +67,7 @@ const CycleDetailWorks: React.FC<Props> = ({cycleWorksDates}) => {
             if(!w)return ''
             queryClient.setQueryData(['WORK',`${w.id}`],w)
             return <div className='p-4' key={w.id}>
-                            <WorkMosaic work={w as WorkMosaicItem} workId={w.id} size={'md'} showSaveForLater={false} />
+              <WorkMosaic work={w as WorkMosaicItem} workId={w.id} size={'md'} showSocialInteraction={showSocialInteraction} showSaveForLater={false} />
                       </div>
           })}
         </div>

@@ -17,7 +17,7 @@ export default getApiHandler()
     try {
       const { q = null,props:p=undefined,lang:l } = req.query;
       const language = Languages[l?.toString()!];
-      const props:Prisma.WorkFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
+      const props:Prisma.EditionFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
       let {where:w,take,cursor,skip} = props;
 
       let AND = w?.AND;

@@ -15,7 +15,7 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   if(req.method=='POST'){
-    const {identifier:i,password,language,fullName:name} = req.body;
+    const { identifier: i, password, fullName: name, joinToCycle:cycle } = req.body;
     const identifier = i.toString()
     const exist = await prisma.userCustomData.findFirst({
       where:{identifier}
@@ -23,13 +23,13 @@ export default async function handler(
     if(!exist){
       const hash = await bcrypt.hash(password, 8);
       const resC = await prisma.userCustomData.create({
-        data:{
-          password:hash,
+        data: {
+          password: hash,
           name,
           identifier,
-          language,
-        }
-      })
+          joinToCycle: parseInt(cycle),
+        },
+      });
       return res.status(201).json({data:resC})
     }
     res.statusMessage ='identifier already used'
