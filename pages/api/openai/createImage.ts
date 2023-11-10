@@ -24,7 +24,7 @@ export default async function handler(
       const size = s ? s : '256x256'
       try{
         const r = await openai.createImage({
-          prompt: req.body.text,
+          prompt: req.body.text.replace(/,|;/g,''),
           n,
           size,
           response_format:'b64_json'
