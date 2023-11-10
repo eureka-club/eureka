@@ -107,6 +107,7 @@
     "sharp": "^0.32.0",
     "slugify": "^1.6.5",
     "socket.io-client": "^4.4.0",
+    "stripe": "^14.4.0",
     "tinymce": "^5",
     "ts-node": "^9.0.0",
     "uuid": "^8.3.2"
