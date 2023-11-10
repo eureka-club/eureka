@@ -34,7 +34,8 @@ export default async function handler(
           }
       }
       catch(e){
-        return res.status(400).json({ error:'Server Error' });
+        const error = (e as {response:{statusText:string}})
+        return res.status(400).json({ error:error.response.statusText });
       }
 
   }
