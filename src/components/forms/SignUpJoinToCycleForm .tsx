@@ -17,9 +17,10 @@ import UserAvatar from '@/src/components/common/UserAvatar';
 import CycleDetailWorks from '@/src/components/cycle/CycleDetailWorks';
 import Footer from '@/components/layouts/Footer';
 import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem, FormControlLabel, Switch, Box } from '@mui/material';
-
-
-
+import { DATE_FORMAT_LARGE } from '../../constants';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 interface Props {
   noModal?: boolean;
 }
@@ -79,7 +80,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
     ? cycle?.cycleWorksDates
     : cycle?.works.map(w => ({ id: w.id, workId: w.id, work: w, startDate: new Date(), endDate: new Date() }))
 
-  
+  console.log(cycle, 'cycle')
 
   const handleSignUpGoogle = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
@@ -174,7 +175,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
           password: password,
           //language,
           fullName,
-          joinToCycle:cycle!.id || -1
+          joinToCycle: cycle!.id || -1
         });
       } else toast.error(t('UserRegistered'));
     } else toast.error(t('emptyFields'));
@@ -190,139 +191,213 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
               <Row className='p-4'>
                 <Link href="/" replace >
                   <a className="d-flex align-items-center">
-                      <aside className="d-flex justify-content-around align-items-center">
-                        {/*<Image src="/logo.svg" width={45} height={52} alt="Project logo" />*/}
-                        <img className="eurekaLogo" src="/logo.svg" alt="Project logo" />
-                        <section>
-                          <div className={`text-secondary ms-3 h4 mb-0 ${styles.brand}`}>Eureka</div>
-                        <p className="text-secondary my-0 ms-3 font-weight-light" style={{fontSize:'.7em'}}>{t('navbar:tagline')}</p>
-                        </section>
-                      </aside>
+                    <aside className="d-flex justify-content-around align-items-center">
+                      {/*<Image src="/logo.svg" width={45} height={52} alt="Project logo" />*/}
+                      <img className="eurekaLogo" src="/logo.svg" alt="Project logo" />
+                      <section>
+                        <div className={`text-secondary ms-3 h4 mb-0 ${styles.brand}`}>Eureka</div>
+                        <p className="text-secondary my-0 ms-3 font-weight-light" style={{ fontSize: '.7em' }}>{t('navbar:tagline')}</p>
+                      </section>
+                    </aside>
                   </a>
                 </Link>
               </Row>
             </Col>
             <Col className='col-12'>
-              <Row className='bg-secondary d-flex align-items-center' style={{height:'4.5rem',fontSize:'1.2em'}}>
-                 <span className='text-center text-white'>{cycle.title.toUpperCase()}</span>
+              <Row className='bg-secondary d-flex align-items-center' style={{ height: '.2rem', fontSize: '1.2em' }}>
               </Row>
+              {/* <Row className='bg-primary d-flex align-items-center' style={{ height: '.2rem', fontSize: '1.2em' }}>
+              </Row> */}
             </Col>
-            <Col className={`col-12 col-lg-6 mt-5`}>
-              <div className='p-3 d-flex flex-column justify-content-center align-items-center'>
-                <span className='text-center text-primary' style={{ fontSize: '1.5em' }}>{t('I want to participate!').toUpperCase()}</span>
-                <Box sx={{width:['100%','100%','70%']}} >
-                      <Form onSubmit={handleSubmitSignUp} className='mt-4'>
-                        <TextField id="name" className="px-2 w-100 my-4" label={`${t('Name')}`}
-                          variant="outlined" size="small" name="name"
-                          value={formValues.name!}
-                          type="text"
-                          onChange={handleChangeTextField}
-                        >
-                        </TextField>
-                        <TextField id="lastname" className="px-2 w-100 mb-4" label={`${t('LastName')}`}
-                          variant="outlined" size="small" name="lastname"
-                          value={formValues.lastname!}
-                          type="text"
-                          onChange={handleChangeTextField}
-                        >
-                        </TextField>
-                        {/* <div className='p-2 mt-4'>
-                        <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={formValues.language} label={t('languageFieldLabel')} />
-                      </div> */}
-
-                        <TextField id="email" className="px-2 w-100 mb-4" label={`${t('emailFieldLabel')}`}
-                          variant="outlined" size="small" name="identifier"
-                          value={formValues.identifier!}
-                          type="text"
-                          onChange={handleChangeTextField}
-                        >
-                        </TextField>
-
-                        <TextField id="pass" className="px-2 w-100 mb-4" label={`${t('passwordFieldLabel')}`}
-                          variant="outlined" size="small" name="password"
-                          value={formValues.password!}
-                          autoComplete="current-password"
-                          type="password"
-                          helperText={`(${t('passRequirements')})`}
-                          onChange={handleChangeTextField}
-                        >
-                        </TextField>
-
-                        <Box sx={{padding: '1em'}}>
-                          <Button type="submit" className={`mb-4 btn btn-eureka p-2 w-100`}>
-                            {t('I want to register now')}
-                          </Button>
-                          </Box> 
-                          <p
-                            className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
-                          >
-                            {t('joinedCycleSignInTerms')}
-                            <Link href="/manifest" passHref>
-                              <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`}>
-                                {t('termsText')}
-                              </span>
-                            </Link>
-                            {t('and')}
-                            <Link href="/policy" passHref>
-                              <span className={`d-flex cursor-pointer ms-1 ${styles.linkText}`}>{t('policyText')}</span>
-                            </Link>
-                          </p>
-                       
-
-                      </Form>
-                </Box>
-              </div>
-            </Col>
-            <Col className={`col-12 col-lg-6 my-5`}>
-              <div className='d-flex justify-content-center justify-content-xl-start align-items-center align-items-xl-start'>
-                <div className='d-flex flex-column justify-content-center'>
-                  <div className="mb-2">
+            <Box className='d-flex flex-column flex-xl-row'
+              sx={{
+                backgroundImage: "url('/registro_desktop_bg.webp')",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+                height: ['600px'],
+                width: '100%',
+              }}
+            >
+              <Col className={`col-12 col-xl-6 mt-5`}>
+                <div className='p-3 d-flex flex-column justify-content-center align-items-center'>
+                  <Box sx={{ width: ['100%', '100%', '100%', '65%'], paddingLeft: ['0', '0', , '8em'] }} >
+                    <Row className='mb-2'>
+                      <span className='text-center ' style={{ fontSize: '.8em', fontStyle: 'italic' }}>Organizado por:</span>
+                    </Row>
+                    <Row className='mb-2'>
+                      <UserAvatar className='d-flex justify-content-center' size={'xl'} width={75} height={75} userId={cycle.creatorId} showName={false} />
+                    </Row>
+                    <Row className='mb-4'>
+                      <span className='text-center ' style={{ fontSize: '1em' }}>{cycle.creator.name}</span>
+                    </Row>
+                    <Row className='mb-4 ' style={{ height: '9rem', fontSize: '1.6em', fontStyle: 'italic' }}>
+                      <span className='d-flex justify-content-center align-items-center'><b>{cycle.title.toUpperCase()}</b></span>
+                    </Row>
+                    <Row className='mb-4 ' style={{ fontSize: '1.4em', fontStyle: 'italic' }}>
+                      <span className='text-center '>{dayjs(cycle?.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_LARGE)} - {dayjs(cycle?.endDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_LARGE)}</span>
+                    </Row>
+                    <Row className='mb-4 ' >
+                      <Box sx={{ padding: '1em' }}>
+                        <Button className={`mb-4 btn btn-eureka p-2 w-100`}>
+                          {t('I want to register now')}
+                        </Button>
+                      </Box>
+                    </Row>
+                  </Box>
+                </div>
+              </Col>
+              <Col className={`col-12 col-xl-6 my-5`}>
+                <div className='d-flex justify-content-center justify-content-xl-start align-items-center align-items-xl-start'>
+                  <div className='d-flex flex-column justify-content-center'>
+                    {/* <div className="mb-2">
                     <UserAvatar width={42} height={42} userId={cycle.creatorId} showFullName />
+                  </div> */}
+                    <CycleContext.Provider value={{ linkToCycle: false, showShare: false, cycle: cycle }}>
+                      <MosaicItem
+                        cycleId={cycle.id}
+                        showTrash
+                        detailed={false}
+                        showSaveForLater={false}
+                        showCreateEureka={false}
+                        showJoinOrLeaveButton={false}
+                        showSocialInteraction={false}
+                        className="mt-1"
+                        cacheKey={['CYCLE', `${cycle.id}`]}
+                        size={'xxl'}
+                      />
+                    </CycleContext.Provider>
                   </div>
-                  <CycleContext.Provider value={{ linkToCycle:false, showShare: false, cycle: cycle }}>
-                    <MosaicItem
-                      cycleId={cycle.id}
-                      showTrash
-                      detailed={true}
-                      showSaveForLater={false}
-                      showCreateEureka={false}
-                      showJoinOrLeaveButton={false}
-                      showSocialInteraction={false}
-                      className="mt-1"
-                      cacheKey={['CYCLE', `${cycle.id}`]}
-                      size={'xxl'}
-                    />
-                  </CycleContext.Provider>
                 </div>
-              </div>
-            </Col>
+              </Col>
+            </Box>
           </Row>
-          {cycle.contentText != null && (<>
           <Col className='col-12'>
-              <Row className='bg-secondary d-flex align-items-center' style={{ height: '4.5rem', fontSize: '1.2em' }}>
-              <span className='text-center text-white'>{t("Why does this cycle matter").toUpperCase()}?</span>
+            {/* <Row className='bg-secondary d-flex align-items-center' style={{ height: '.2rem', fontSize: '1.2em' }}>
+            </Row> */}
+            <Row className='bg-primary d-flex align-items-center' style={{ height: '.2rem', fontSize: '1.2em' }}>
             </Row>
           </Col>
+          {cycle.contentText != null && (<>
+
+
+            <Col className='col-12'>
+              <Box className='d-flex flex-column flex-xl-row'
+                sx={{
+                  backgroundImage: "url('/registro_desktop_about_bg.webp')",
+                  backgroundSize: `100% auto`,
+                  // height: ['100%'],
+                  // width: '100%',
+                }}
+              >
+                <Box className='' sx={{ paddingX: '15em', paddingY: '5em' }}>
+                  <div className="">
+                    <div
+                      className={styles.dangerouslySetInnerHTML}
+                      dangerouslySetInnerHTML={{ __html: cycle.contentText }}
+                    />
+                  </div>
+                </Box>
+              </Box>
+            </Col></>)
+          }
 
           <Col className='col-12'>
-                <div className="p-5">
-                  <div
-                    className={styles.dangerouslySetInnerHTML}
-                    dangerouslySetInnerHTML={{ __html: cycle.contentText }}
-                  />
-                </div>
-            </Col></>)}
-          <Col className='col-12'>
-            <Row className='bg-secondary d-flex align-items-center' style={{ height: '4.5rem', fontSize: '1.2em' }}>
-              <span className='text-center text-white'>{t("Works on Cycle").toUpperCase()}</span>
+            <Row className='bg-primary d-flex align-items-center' style={{ height: '3rem', fontSize: '1.2em' }}>
+              <span className='text-center text-white'>CITA CITA CITA CITA</span>
             </Row>
           </Col>
           <Col className='col-12'>
-            <div className="px-1 px-lg-5 ms-lg-4">
-              {works && <CycleDetailWorks cycleWorksDates={works!} showSocialInteraction={false} /> || ''}
-            </div>
+            <Box className='d-flex flex-column flex-xl-row'
+              sx={{
+                backgroundImage: "url('/registro_desktop_works.webp')",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: `100% auto`,
+                // height: ['100%'],
+                // width: '100%',
+              }}
+            >
+              <Box className='' sx={{ paddingX: '15em', paddingY: '1em' }}>
+                {works && <CycleDetailWorks size={'sm'} cycleWorksDates={works!} showSocialInteraction={false} /> || ''}
+              </Box>
+            </Box>
           </Col>
-        </Box>
+          <Col className='col-12'>
+            <Row className='bg-secondary d-flex align-items-center' style={{ height: '3rem', fontSize: '1.2em' }}>
+              <span className='text-center text-white'>PRICE PRICE PRICE PRICE</span>
+            </Row>
+          </Col>
+          <Col className='col-12'>
+            <Box className='d-flex justify-content-center'
+              sx={{
+                backgroundImage: "url('/registro_desktop_form_bg.webp')",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: `100% auto`,
+                // height: ['100%'],
+                // width: '100%',
+              }}
+            >
+              <Box className='py-5 '
+                sx={{ width: ['90%', '60%', '45%', '30%'] }}>
+                <Form onSubmit={handleSubmitSignUp} className='mt-4'>
+                  <TextField id="name" className="w-100 mb-4 " label={`${t('Name')}`}
+                    variant="outlined" size="small" name="name"
+                    value={formValues.name!}
+                    type="text"
+                    onChange={handleChangeTextField}
+                  >
+                  </TextField>
+                  <TextField id="lastname" className=" w-100 mb-4" label={`${t('LastName')}`}
+                    variant="outlined" size="small" name="lastname"
+                    value={formValues.lastname!}
+                    type="text"
+                    onChange={handleChangeTextField}
+                  >
+                  </TextField>
+
+                  <TextField id="email" className="w-100 mb-4" label={`${t('emailFieldLabel')}`}
+                    variant="outlined" size="small" name="identifier"
+                    value={formValues.identifier!}
+                    type="text"
+                    onChange={handleChangeTextField}
+                  >
+                  </TextField>
+
+                  <TextField id="pass" className="w-100 mb-5" label={`${t('passwordFieldLabel')}`}
+                    variant="outlined" size="small" name="password"
+                    value={formValues.password!}
+                    autoComplete="current-password"
+                    type="password"
+                    helperText={`(${t('passRequirements')})`}
+                    onChange={handleChangeTextField}
+                  >
+                  </TextField>
+
+                  <Box >
+                    <Button type="submit" className={`mb-4 btn btn-eureka  w-100`}>
+                      {t('I want to register now')}
+                    </Button>
+                  </Box>
+                  <p
+                    className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
+                  >
+                    {t('joinedCycleSignInTerms')}
+                    <Link href="/manifest" passHref>
+                      <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`}>
+                        {t('termsText')}
+                      </span>
+                    </Link>
+                    {t('and')}
+                    <Link href="/policy" passHref>
+                      <span className={`d-flex cursor-pointer ms-1 ${styles.linkText}`}>{t('policyText')}</span>
+                    </Link>
+                  </p>
+
+
+                </Form>
+              </Box>
+            </Box>
+          </Col>
+        </Box >
         <Footer />
       </>
     );

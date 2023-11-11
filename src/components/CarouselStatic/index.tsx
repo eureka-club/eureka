@@ -48,6 +48,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
 
   const [globalSEState] = useAtom(globalSearchEngineAtom);
   useEffect(() => {
+    console.log(data,'datadatadatadatadata')
     if (data) {
       if (data.length) {
         let d = [...data];

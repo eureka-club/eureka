@@ -10,7 +10,7 @@ interface Props {
   userId: number;
   showName?: boolean;
   showFullName?: boolean;
-  size?: 'md' | 'sm' | 'xs';
+  size?: 'md' | 'sm' | 'xs' | 'xl';
   className?: string;
   width:number;
   height:number;
@@ -70,7 +70,7 @@ const UserAvatar: FunctionComponent<Props> = ({
   return (
     <>
       {user && (
-        <section className={`fs-6 ${styles[size]} cursor-pointer`}>
+        <section className={`fs-6 ${styles[size]} cursor-pointer ${className}`}>
             <a onClick={(e)=>onClick(e,user)} className={`text-secondary ${styles.link} d-flex align-items-center`}>
 
                 {(!user?.photos || !user?.photos.length) ?
