@@ -6,13 +6,16 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === 'POST') {
-    let {price,code,client_reference_id,customer_email,id:product_id} = req.body;
+    console.log(req.body);
+    //let {price,code,client_reference_id,customer_email,id:product_id} = req.body;
+        let { price, product:product_id, user:client_reference_id, email:customer_email} = req.body;
+
     try {
       //DEVELOP ONLY
         product_id=product_id??'prod_OyqslFUmYVAFWx';
         price=price??'price_1OAtArHYKOHA4EIyjjEISJm7';
       //DEVELOP ONLY
-      
+      console.log(product_id,price,client_reference_id,customer_email)
       const session = await stripe.checkout.sessions.create({
         client_reference_id,
         metadata:{price,product_id},  
