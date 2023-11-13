@@ -87,8 +87,9 @@ import { addParticipant, find } from '@/src/facades/cycle';
   return options;
 }; */
 const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> => {
-  const locale = req.cookies.NEXT_LOCALE || 'es';
-  
+  const locale = req.cookies.NEXT_LOCALE || 'es';debugger;
+  const {joinToCycle} = req.body;
+
   return NextAuth(req, res, {
     adapter: PrismaAdapter(prisma),
     callbacks: {
@@ -205,7 +206,6 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
   
           }
 
-          
 
         }
       }
@@ -226,8 +226,9 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
           },          
         },
         from: process.env.EMAILING_FROM,
-        sendVerificationRequest: async ({ identifier: email, url }): Promise<void> => {
+        sendVerificationRequest: async ({ identifier: email, url:u }): Promise<void> => {
           // const site = url.replace(/^https?:\/\//, ''); 
+          const url = !!joinToCycle && joinToCycle!=-1 ?`${process.env.NEXTAUTH_URL}/cycle/${joinToCycle}`: u;
           const t = await getT(locale, 'singInMail');
           const title = t('title');
           const subtitle = t('subtitle');
