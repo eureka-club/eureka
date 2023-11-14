@@ -33,15 +33,15 @@ export default async function handler(
         //   coupon:"10PERCENT",
         // }],
         allow_promotion_codes:true,
-        success_url: `${req.headers.origin}/confirmation-pass?success=true`,
-        cancel_url: `${req.headers.origin}/pass?canceled=true`,        
+        success_url: `${req.headers.origin}/payment_success`,
+        cancel_url: `${req.headers.origin}/payment_cancel`,        
       });
-      res.redirect(303, session.url);
+      res.json({stripe_session_url:session.url});
     } catch (e) {
       const err = e as {message:string};
       res.statusMessage = err.message;
       console.error(err.message)
-      res.redirect(`${req.headers.origin}/pass?error=true`)
+      res.redirect(`${req.headers.origin}/payment_error`)
       // res.status(err.statusCode || 500).end();
     }
   } else {

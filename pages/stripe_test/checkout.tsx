@@ -50,6 +50,10 @@ const StripeCheckoutPage: NextPage = () => {
       },
       body: JSON.stringify(formValues)
     })
+    if(res.ok){
+      const {stripe_session_url} = await res.json();
+      window.location.href = stripe_session_url;
+    }
   };
 
 
