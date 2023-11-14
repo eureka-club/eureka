@@ -87,7 +87,7 @@ import { addParticipant, find } from '@/src/facades/cycle';
   return options;
 }; */
 const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> => {
-  const locale = req.cookies.NEXT_LOCALE || 'es';debugger;
+  const locale = req.cookies.NEXT_LOCALE || 'es';
   const {joinToCycle} = req.body;
 
   return NextAuth(req, res, {
