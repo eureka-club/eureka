@@ -108,6 +108,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
         }
         return Promise.resolve(session);        
       },
+      
       // async jwt({ token, user, account, profile, isNewUser }) {
       //   if(user)
       //   return {token,roles:user.roles}
@@ -172,7 +173,6 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
         })
         if(vt){
         // const hash = bcrypt.hashSync(vt.password, 8);
-        
 
           await prisma.user.update({
             where:{email:user.email!},
@@ -186,16 +186,16 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
             const cycle = await find(vt.joinToCycle);
             if(cycle){
               await addParticipant(cycle, +user.id);
-              await prisma.cycleUserJoin.upsert({
-                  where:{
-                    cycleId_userId:{
-                      userId:+user.id,
-                      cycleId:vt.joinToCycle
-                    }
-                  },
-                  create:{userId:+user.id,cycleId:vt.joinToCycle,pending:false},
-                  update:{pending:false}
-                });
+              // await prisma.cycleUserJoin.upsert({
+              //     where:{
+              //       cycleId_userId:{
+              //         userId:+user.id,
+              //         cycleId:vt.joinToCycle
+              //       }
+              //     },
+              //     create:{userId:+user.id,cycleId:vt.joinToCycle,pending:false},
+              //     update:{pending:false}
+              //   });
             }
             await prisma.userCustomData.update({
               data:{
@@ -226,9 +226,9 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
           },          
         },
         from: process.env.EMAILING_FROM,
-        sendVerificationRequest: async ({ identifier: email, url:u }): Promise<void> => {
+        sendVerificationRequest: async ({ identifier: email, url }): Promise<void> => {
           // const site = url.replace(/^https?:\/\//, ''); 
-          const url = !!joinToCycle && joinToCycle!=-1 ?`${process.env.NEXTAUTH_URL}/cycle/${joinToCycle}`: u;
+          
           const t = await getT(locale, 'singInMail');
           const title = t('title');
           const subtitle = t('subtitle');

@@ -7,7 +7,7 @@ import SignUpJoinToCycleForm from '@/src/components/forms/SignUpJoinToCycleForm 
 
 const RegisterJoinToCyclePage: NextPage = () => {
   const { t } = useTranslation('signUpForm'); 
-
+  
   return (
     <SimpleLayout title={t('Sign up')} showNavBar={false} showFooter={false}>
       <SignUpJoinToCycleForm noModal />

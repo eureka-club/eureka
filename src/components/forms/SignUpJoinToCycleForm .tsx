@@ -112,7 +112,10 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
     });
     if (res.ok) {
       const data = await res.json();
-      signIn('email', { email: identifier });
+      const callbackUrl = !!joinToCycle&&joinToCycle>=1 
+        ? `/cycle/${joinToCycle}`
+        : ''
+      signIn('email', { ... callbackUrl&&{callbackUrl},email: identifier });
       // return data;
     } else {
       toast.error(res.statusText);
