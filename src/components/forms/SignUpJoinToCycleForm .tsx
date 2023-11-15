@@ -220,7 +220,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
             >
                     <Col className={`col-12 col-xl-6 mt-5`}>
                       <div className='p-3 d-flex flex-column justify-content-center align-items-center'>
-                  <Box sx={{ width: ['80%', '50%', '50%', '65%'], paddingLeft: {lg:'5em', xl:'12em'} }} >
+                  <Box sx={{ width: ['80%', '50%', '50%', '65%'], paddingLeft: {lg:'5em', xl:'14em'} }} >
                           <Row className='mb-2'>
                             <span className='text-center ' style={{ fontSize: '.8em', fontStyle: 'italic' }}>Organizado por:</span>
                           </Row>
@@ -285,7 +285,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
                   // width: '100%',
                 }}
               >
-                <Box className='' sx={{ paddingX: { xs: '2em', sm: '7em',md: '12em', lg:'15em',xl:'22em'}, paddingY: '6em' }}>
+                <Box className='' sx={{ paddingX: { xs: '2em', sm: '7em',md: '12em', lg:'15em',xl:'25em'}, paddingY: '6em' }}>
                   <div className="">
                     <div
                       className={styles.dangerouslySetInnerHTML}
@@ -312,7 +312,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
                 // width: '100%',
               }}
             >
-              <Box className='d-flex flex-column justify-content-center align-items-center' sx={{ paddingX: { md: '8em', lg: '15em', xl: '22em' }, paddingY: '4em' }}>
+              <Box className='d-flex flex-column justify-content-center align-items-center' sx={{ paddingX: { md: '8em', lg: '15em', xl: '25em' }, paddingY: '4em' }}>
                 {works && <CycleDetailWorks size={'md'} cycleWorksDates={works!} showSocialInteraction={false} showHeader={false} /> || ''}
               </Box>
             </Box>
