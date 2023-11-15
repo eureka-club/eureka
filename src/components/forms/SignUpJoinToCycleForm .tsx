@@ -207,8 +207,6 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
               </Row>
             </Col>
             <Col className='col-12'>
-              <Row className='bg-secondary d-flex align-items-center' style={{ height: '.2rem', fontSize: '1.2em' }}>
-              </Row>
               {/* <Row className='bg-primary d-flex align-items-center' style={{ height: '.2rem', fontSize: '1.2em' }}>
               </Row> */}
             </Col>
@@ -216,65 +214,63 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
               sx={{
                 backgroundImage: "url('/registro_desktop_bg.webp')",
                 backgroundRepeat: "no-repeat",
-                backgroundSize: "cover",
-                height: ['600px'],
+                backgroundSize: `100% 600px`,
                 width: '100%',
               }}
             >
-              <Col className={`col-12 col-xl-6 mt-5`}>
-                <div className='p-3 d-flex flex-column justify-content-center align-items-center'>
-                  <Box sx={{ width: ['80%', '50%', '50%', '65%'], paddingLeft: ['0', '0', , '8em'] }} >
-                    <Row className='mb-2'>
-                      <span className='text-center ' style={{ fontSize: '.8em', fontStyle: 'italic' }}>Organizado por:</span>
-                    </Row>
-                    <Row className='mb-2'>
-                      <UserAvatar className='d-flex justify-content-center' size={'xl'} width={75} height={75} userId={cycle.creatorId} showName={false} />
-                    </Row>
-                    <Row className='mb-4'>
-                      <span className='text-center ' style={{ fontSize: '1em' }}>{cycle.creator.name}</span>
-                    </Row>
-                    <Row className='mb-4 ' style={{ height: '9rem', fontSize: '1.6em', fontStyle: 'italic' }}>
-                      <span className='d-flex justify-content-center align-items-center'><b>{cycle.title.toUpperCase()}</b></span>
-                    </Row>
-                    <Row className='mb-4 ' style={{ fontSize: '1.4em', fontStyle: 'italic' }}>
-                      <span className='text-center '>{dayjs(cycle?.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_LARGE)} - {dayjs(cycle?.endDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_LARGE)}</span>
-                    </Row>
-                    <Row className='mb-4 ' >
-                      <Box sx={{ padding: '1em' }}>
-                        <a href='#FormContainer'>
-                        <Button className={`mb-4 btn btn-eureka p-2 w-100`}>
-                          {t('I want to register now')}
-                        </Button></a>
+                    <Col className={`col-12 col-xl-6 mt-5`}>
+                      <div className='p-3 d-flex flex-column justify-content-center align-items-center'>
+                  <Box sx={{ width: ['80%', '50%', '50%', '65%'], paddingLeft: {lg:'5em', xl:'12em'} }} >
+                          <Row className='mb-2'>
+                            <span className='text-center ' style={{ fontSize: '.8em', fontStyle: 'italic' }}>Organizado por:</span>
+                          </Row>
+                          <Row className='mb-2'>
+                            <UserAvatar className='d-flex justify-content-center' size={'xl'} width={75} height={75} userId={cycle.creatorId} showName={false} />
+                          </Row>
+                          <Row className='mb-4'>
+                            <span className='text-center ' style={{ fontSize: '1em' }}>{cycle.creator.name}</span>
+                          </Row>
+                          <Row className='mb-4 ' style={{ height: '9rem', fontSize: '1.6em', fontStyle: 'italic' }}>
+                            <span className='d-flex justify-content-center align-items-center'><b>{cycle.title.toUpperCase()}</b></span>
+                          </Row>
+                          <Row className='mb-4 ' style={{ fontSize: '1.4em', fontStyle: 'italic' }}>
+                            <span className='text-center '>{dayjs(cycle?.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_LARGE)} - {dayjs(cycle?.endDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_LARGE)}</span>
+                          </Row>
+                          <Row className='mb-4 ' >
+                            <Box sx={{ padding: '1em' }}>
+                              <a href='#FormContainer'>
+                              <Button className={`mb-4 btn btn-eureka p-2 w-100`}>
+                                {t('I want to register now')}
+                              </Button></a>
+                            </Box>
+                          </Row>
+                        </Box>
+                      </div>
+                    </Col>
+                    <Col className={`col-12 col-xl-6 my-5`}>
+                      <Box sx={{ ml:{xl:'6em'} }} className='d-flex justify-content-center justify-content-xl-start align-items-center align-items-xl-start'>
+                          <CycleContext.Provider value={{ linkToCycle: false, showShare: false, cycle: cycle }}>
+                            <MosaicItem
+                              cycleId={cycle.id}
+                              showTrash
+                              detailed={false}
+                              showSaveForLater={false}
+                              showCreateEureka={false}
+                              showJoinOrLeaveButton={false}
+                              showSocialInteraction={false}
+                              className="mt-1"
+                              cacheKey={['CYCLE', `${cycle.id}`]}
+                              size={'xxl'}
+                            />
+                          </CycleContext.Provider>
                       </Box>
-                    </Row>
-                  </Box>
-                </div>
-              </Col>
-              <Col className={`col-12 col-xl-6 my-5`}>
-                <Box sx={{ ml:{xl:'5em'} }} className='d-flex justify-content-center justify-content-xl-start align-items-center align-items-xl-start'>
-                    <CycleContext.Provider value={{ linkToCycle: false, showShare: false, cycle: cycle }}>
-                      <MosaicItem
-                        cycleId={cycle.id}
-                        showTrash
-                        detailed={false}
-                        showSaveForLater={false}
-                        showCreateEureka={false}
-                        showJoinOrLeaveButton={false}
-                        showSocialInteraction={false}
-                        className="mt-1"
-                        cacheKey={['CYCLE', `${cycle.id}`]}
-                        size={'xxl'}
-                      />
-                    </CycleContext.Provider>
-                </Box>
-              </Col>
+                    </Col>
             </Box>
           </Row>
           <Col className='col-12'>
             {/* <Row className='bg-secondary d-flex align-items-center' style={{ height: '.2rem', fontSize: '1.2em' }}>
             </Row> */}
-            <Row className='bg-primary d-flex align-items-center' style={{ height: '.2rem', fontSize: '1.2em' }}>
-            </Row>
+           
           </Col>
           {cycle.contentText != null && (<>
 
@@ -289,7 +285,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
                   // width: '100%',
                 }}
               >
-                <Box className='' sx={{ paddingX: { xs: '2em', sm: '7em',md: '10em', lg:'15em',xl:'19em'}, paddingY: '6em' }}>
+                <Box className='' sx={{ paddingX: { xs: '2em', sm: '7em',md: '12em', lg:'15em',xl:'22em'}, paddingY: '6em' }}>
                   <div className="">
                     <div
                       className={styles.dangerouslySetInnerHTML}
@@ -316,8 +312,8 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
                 // width: '100%',
               }}
             >
-              <Box className='d-flex flex-column justify-content-center align-items-center' sx={{ paddingX: { md: '5em', lg: '12em', xl: '19em' }, paddingY: '4em' }}>
-                {works && <CycleDetailWorks size={'md'} cycleWorksDates={works!} showSocialInteraction={false} /> || ''}
+              <Box className='d-flex flex-column justify-content-center align-items-center' sx={{ paddingX: { md: '8em', lg: '15em', xl: '22em' }, paddingY: '4em' }}>
+                {works && <CycleDetailWorks size={'md'} cycleWorksDates={works!} showSocialInteraction={false} showHeader={false} /> || ''}
               </Box>
             </Box>
           </Col>
