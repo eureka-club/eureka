@@ -15,13 +15,13 @@ const RegisterJoinToCyclePage: NextPage = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const session = await getSession(ctx);
-  if (session != null) {
-    return { redirect: { destination: '/', permanent: false } };
-  }
+// export const getServerSideProps: GetServerSideProps = async (ctx) => {
+//   const session = await getSession(ctx);
+//   if (session != null) {
+//     return { redirect: { destination: '/', permanent: false } };
+//   }
 
-  return { props: {} };
-};
+//   return { props: {} };
+// };
 
 export default RegisterJoinToCyclePage;

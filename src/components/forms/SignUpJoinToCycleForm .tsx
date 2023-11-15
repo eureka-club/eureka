@@ -16,7 +16,7 @@ import useCycle from '@/src/useCycle';
 import UserAvatar from '@/src/components/common/UserAvatar';
 import CycleDetailWorks from '@/src/components/cycle/CycleDetailWorks';
 import Footer from '@/components/layouts/Footer';
-import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem, FormControlLabel, Switch, Box } from '@mui/material';
+import { TextField,  Box } from '@mui/material';
 import { DATE_FORMAT_LARGE } from '../../constants';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -223,7 +223,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
             >
               <Col className={`col-12 col-xl-6 mt-5`}>
                 <div className='p-3 d-flex flex-column justify-content-center align-items-center'>
-                  <Box sx={{ width: ['100%', '100%', '100%', '65%'], paddingLeft: ['0', '0', , '8em'] }} >
+                  <Box sx={{ width: ['80%', '50%', '50%', '65%'], paddingLeft: ['0', '0', , '8em'] }} >
                     <Row className='mb-2'>
                       <span className='text-center ' style={{ fontSize: '.8em', fontStyle: 'italic' }}>Organizado por:</span>
                     </Row>
@@ -241,20 +241,17 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
                     </Row>
                     <Row className='mb-4 ' >
                       <Box sx={{ padding: '1em' }}>
+                        <a href='#FormContainer'>
                         <Button className={`mb-4 btn btn-eureka p-2 w-100`}>
                           {t('I want to register now')}
-                        </Button>
+                        </Button></a>
                       </Box>
                     </Row>
                   </Box>
                 </div>
               </Col>
               <Col className={`col-12 col-xl-6 my-5`}>
-                <div className='d-flex justify-content-center justify-content-xl-start align-items-center align-items-xl-start'>
-                  <div className='d-flex flex-column justify-content-center'>
-                    {/* <div className="mb-2">
-                    <UserAvatar width={42} height={42} userId={cycle.creatorId} showFullName />
-                  </div> */}
+                <Box sx={{ ml:{xl:'5em'} }} className='d-flex justify-content-center justify-content-xl-start align-items-center align-items-xl-start'>
                     <CycleContext.Provider value={{ linkToCycle: false, showShare: false, cycle: cycle }}>
                       <MosaicItem
                         cycleId={cycle.id}
@@ -269,8 +266,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
                         size={'xxl'}
                       />
                     </CycleContext.Provider>
-                  </div>
-                </div>
+                </Box>
               </Col>
             </Box>
           </Row>
@@ -287,12 +283,13 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
               <Box className='d-flex flex-column flex-xl-row'
                 sx={{
                   backgroundImage: "url('/registro_desktop_about_bg.webp')",
+                  backgroundRepeat: "no-repeat",
                   backgroundSize: `100% auto`,
                   // height: ['100%'],
                   // width: '100%',
                 }}
               >
-                <Box className='' sx={{ paddingX: '15em', paddingY: '5em' }}>
+                <Box className='' sx={{ paddingX: { xs: '2em', sm: '7em',md: '10em', lg:'15em',xl:'19em'}, paddingY: '6em' }}>
                   <div className="">
                     <div
                       className={styles.dangerouslySetInnerHTML}
@@ -319,8 +316,8 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
                 // width: '100%',
               }}
             >
-              <Box className='' sx={{ paddingX: '15em', paddingY: '1em' }}>
-                {works && <CycleDetailWorks size={'sm'} cycleWorksDates={works!} showSocialInteraction={false} /> || ''}
+              <Box className='d-flex flex-column justify-content-center align-items-center' sx={{ paddingX: { md: '5em', lg: '12em', xl: '19em' }, paddingY: '4em' }}>
+                {works && <CycleDetailWorks size={'md'} cycleWorksDates={works!} showSocialInteraction={false} /> || ''}
               </Box>
             </Box>
           </Col>
@@ -339,7 +336,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
                 // width: '100%',
               }}
             >
-              <Box className='py-5 '
+              <Box className='py-5' id='FormContainer'
                 sx={{ width: ['90%', '60%', '45%', '30%'] }}>
                 <Form onSubmit={handleSubmitSignUp} className='mt-4'>
                   <TextField id="name" className="w-100 mb-4 " label={`${t('Name')}`}
