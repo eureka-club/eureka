@@ -27,7 +27,7 @@ interface FormValues {
 }
 
 const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
-  const { t } = useTranslation('signUpForm');debugger;
+  const { t } = useTranslation('signUpForm');
   //const formRef = useRef<HTMLFormElement>(null);
   const [formValues, setFormValues] = useState<FormValues>({
     identifier: '',
