@@ -169,15 +169,14 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
           // onSuccess: async (res)=>console.log('ok',res),
           // onFailure: async (err)=>console.error('error',err)
         });
-
+        
         const {cookies,query:{nextauth}} = req;
-        if(nextauth?.includes('google')){
-          const cbu = cookies['next-auth.callback-url'];
-          if(cbu?.match(/cycle\/(\d+)$/)){
+        const cbu = cookies['next-auth.callback-url'];
+        
+        if(cbu?.match(/cycle\/(\d+)$/)){
             joinToCycle = +RegExp.$1;
-          }
         }
-        else{
+        if(!nextauth?.includes('google')){
           const vt = await prisma.userCustomData.findFirst({where:{identifier:user.email!}});
           
           if(vt){
@@ -189,7 +188,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
                 name:vt.name
               }
             });
-            joinToCycle = vt.joinToCycle;
+            //joinToCycle = vt.joinToCycle;
           }
           await prisma.userCustomData.update({
             data:{

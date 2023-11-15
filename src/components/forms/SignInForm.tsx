@@ -75,7 +75,7 @@ const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,log
             setLoading(false)
            }
            else {
-            const callbackUrl = !!joinToCycle&&joinToCycle!=-1 
+            const callbackUrl = !!joinToCycle&&joinToCycle>0 
             ? `/cycle/${joinToCycle}`
             : localStorage.getItem('loginRedirect')?.toString()||'/';
             signIn('credentials' ,{

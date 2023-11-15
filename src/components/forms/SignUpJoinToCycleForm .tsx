@@ -84,8 +84,8 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
 
   const handleSignUpGoogle = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-
-    signIn('google');
+    const callbackUrl = `/cycle/${router.query.cycleId}`;
+    signIn('google',{callbackUrl});
   };
 
   const userRegistered = async (email: string) => {
@@ -97,7 +97,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
   };
 
   const { mutate, isLoading: isMutating } = useMutation(async (props: MutationProps) => {
-    const { identifier, password, fullName, joinToCycle } = props;
+    const { identifier, password, fullName } = props;
     const res = await fetch('/api/userCustomData', {
       method: 'POST',
       headers: {
@@ -107,14 +107,11 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
         identifier,
         password,
         fullName,
-        joinToCycle
       }),
     });
     if (res.ok) {
       const data = await res.json();
-      const callbackUrl = !!joinToCycle&&joinToCycle>=1 
-        ? `/cycle/${joinToCycle}`
-        : ''
+      const callbackUrl = `/cycle/${router.query.cycleId}`;
       signIn('email', { ... callbackUrl&&{callbackUrl},email: identifier });
       // return data;
     } else {
