@@ -1,7 +1,7 @@
 import { addParticipant } from "@/src/facades/cycle";
 import { NextApiRequest, NextApiResponse } from "next";
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const endpointSecret = 'whsec_c40464540a3e7b1fac872b6fbcea8735b70956c1bcab6b59d51a5b54d01a4418';
+const endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
 
 const buffer = (req:any) => {
   return new Promise((resolve, reject) => {
