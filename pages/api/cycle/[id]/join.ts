@@ -19,7 +19,7 @@ export default getApiHandler()
       res.statusMessage = 'unauthorized';
       return res.status(400).end();      
     }
-    const userId = +ui;
+    const userId = session?.user.id ?? +ui;
     const { id } = req.query;
     const {notificationMessage,notificationContextURL,notificationToUsers} = req.body;
     if (typeof id !== 'string') {
