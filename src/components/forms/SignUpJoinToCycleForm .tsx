@@ -80,7 +80,6 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
     ? cycle?.cycleWorksDates
     : cycle?.works.map(w => ({ id: w.id, workId: w.id, work: w, startDate: new Date(), endDate: new Date() }))
 
-  console.log(cycle, 'cycle')
 
   const handleSignUpGoogle = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
@@ -330,7 +329,20 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
               }}
             >
               <Box className='py-5' id='FormContainer'
-                sx={{ width: ['90%', '60%', '45%', '30%'] }}>
+                sx={{ width: ['90%', '60%', '45%', '20%'] }}>
+                  <button
+                    type="button"
+                    onClick={handleSignUpGoogle}
+                  className={`d-flex justify-content-center mt-4  ${styles.buttonGoogleSignUpJoinCycle}`}
+                  >
+                    <div
+                      className={`d-flex justify-content-start justify-content-sm-center aling-items-center flex-row ${styles.gmailLogoAndtext}`}
+                    >
+                      <img className={`${styles.gmailLogo} me-1 me-lg-2`} src="/img/logo-google.png" alt="gmail" />
+                      {t('joinViaGoogle')}
+                    </div>
+                  </button>
+                  <p className={`mb-2 ${styles.alternativeLabel}`}>{t('alternativeText')}</p>
                 <Form onSubmit={handleSubmitSignUp} className='mt-4'>
                   <TextField id="name" className="w-100 mb-4 " label={`${t('Name')}`}
                     variant="outlined" size="small" name="name"

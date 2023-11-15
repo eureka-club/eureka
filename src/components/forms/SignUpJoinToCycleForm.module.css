@@ -92,6 +92,17 @@ color: #fdf7f7;
   height: 3rem;
   width: 82%;
 }
+
+.buttonGoogleSignUpJoinCycle {
+  background: transparent ;
+  background-size: 26px;
+  border: 1px solid var(--eureka-green);
+  font-size: 0.9rem;
+  margin: 0 auto;
+  text-align: center;
+  height: 3rem;
+  width: 100%;
+}
 .gmailLogo {
    width: 1.5rem;
   height: 1.5rem;

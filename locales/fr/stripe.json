@@ -1,0 +1,10 @@
+{
+  "successText": "L'inscription a été effectuée avec succès !",
+  "successExtraText": "Nous vous souhaitons la bienvenue au Club !",
+  "successButtomText": "Consulter le matériel du Club",
+  "cancelText": "cancel text",
+  "cancelExtraText": "cancel extra text",
+  "errorText": "error text",
+  "errorExtraText": "error extra text",
+  "VisitEureka": "Visitez Eureka"
+}
