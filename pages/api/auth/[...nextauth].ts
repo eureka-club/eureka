@@ -11,7 +11,6 @@ import {prisma} from '@/src/lib/prisma';
 import { sendMailSingIn } from '@/src/facades/mail';
 const bcrypt = require('bcryptjs');
 import { subscribe_to_segment } from '@/src/lib/mailchimp';
-import axios from 'axios';
 import { addParticipant, find } from '@/src/facades/cycle';
 
 /* const getOptions = (req: NextApiRequest) => {
@@ -88,7 +87,7 @@ import { addParticipant, find } from '@/src/facades/cycle';
 }; */
 const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> => {
   const locale = req.cookies.NEXT_LOCALE || 'es';
-  const {joinToCycle} = req.body;
+  let {joinToCycle} = req.body;
 
   return NextAuth(req, res, {
     adapter: PrismaAdapter(prisma),
@@ -163,50 +162,47 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
         }
       },
       createUser:async({user})=>{
-        const vt = await prisma.userCustomData.findFirst({where:{identifier:user.email!}});
         await subscribe_to_segment({
           segment:'eureka-all-users',
           email_address:user.email!,
           name:user.name||'unknown'
           // onSuccess: async (res)=>console.log('ok',res),
           // onFailure: async (err)=>console.error('error',err)
-        })
-        if(vt){
-        // const hash = bcrypt.hashSync(vt.password, 8);
+        });
 
-          await prisma.user.update({
-            where:{email:user.email!},
-            data:{
-              password:vt.password,
-              name:vt.name
-            }
-          });
-
-          if(!!vt.joinToCycle&&vt.joinToCycle>=0){
-            const cycle = await find(vt.joinToCycle);
-            if(cycle){
-              await addParticipant(cycle, +user.id);
-              // await prisma.cycleUserJoin.upsert({
-              //     where:{
-              //       cycleId_userId:{
-              //         userId:+user.id,
-              //         cycleId:vt.joinToCycle
-              //       }
-              //     },
-              //     create:{userId:+user.id,cycleId:vt.joinToCycle,pending:false},
-              //     update:{pending:false}
-              //   });
-            }
-            await prisma.userCustomData.update({
-              data:{
-                joinToCycle:-1
-              },
-              where:{identifier:user.email!}
-            });
-  
+        const {cookies,query:{nextauth}} = req;
+        if(nextauth?.includes('google')){
+          const cbu = cookies['next-auth.callback-url'];
+          if(cbu?.match(/cycle\/(\d+)$/)){
+            joinToCycle = +RegExp.$1;
           }
-
-
+        }
+        else{
+          const vt = await prisma.userCustomData.findFirst({where:{identifier:user.email!}});
+          
+          if(vt){
+          // const hash = bcrypt.hashSync(vt.password, 8);
+            await prisma.user.update({
+              where:{email:user.email!},
+              data:{
+                password:vt.password,
+                name:vt.name
+              }
+            });
+            joinToCycle = vt.joinToCycle;
+          }
+          await prisma.userCustomData.update({
+            data:{
+              joinToCycle:-1
+            },
+            where:{identifier:user.email!}
+          });
+        }
+        if(!!joinToCycle&&joinToCycle>0){
+          const cycle = await find(joinToCycle);
+          if(cycle){
+            await addParticipant(cycle, +user.id);
+          }
         }
       }
     },

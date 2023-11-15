@@ -3,6 +3,8 @@ import { Cycle, CycleComplementaryMaterial, LocalImage, Prisma, User, RatingOnCy
 import { StoredFileUpload } from '../types';
 import { CreateCycleServerFields, CreateCycleServerPayload, CycleMosaicItem } from '../types/cycle';
 import { prisma } from '@/src/lib/prisma';
+import { subscribe_to_segment, unsubscribe_from_segment } from '@/src/lib/mailchimp';
+import { use } from 'chai';
 
 export const NEXT_PUBLIC_MOSAIC_ITEMS_COUNT = +(process.env.NEXT_PUBLIC_NEXT_PUBLIC_MOSAIC_ITEMS_COUNT || 10);
 
@@ -421,18 +423,41 @@ export const createFromServerFields = async (
   });
 };
 
-export const addParticipant = async (cycle: Cycle, userId: number): Promise<Cycle> => {
-  return prisma.cycle.update({
+export const addParticipant = async (cycle: Cycle, id: number): Promise<Cycle> => {
+  const res = await prisma.cycle.update({
     where: { id: cycle.id },
-    data: { participants: { connect: { id: userId } } },
+    data: { participants: { connect: { id } } },
   });
+  if(res){
+    const user = await prisma.user.findUnique({where:{id}});
+    if(user){
+      await subscribe_to_segment({
+        segment:`ciclo-${cycle.id}-pax`,
+        email_address:user.email!,
+        name:user.name||'unknown'
+        // onSuccess: async (res)=>console.log('ok',res),
+        // onFailure: async (err)=>console.error('error',err)
+      });
+    }
+  }
+  return res;
 };
 
 export const removeParticipant = async (cycle: Cycle, id: number): Promise<Cycle> => {
-  return prisma.cycle.update({
+  const res = await prisma.cycle.update({
     where: { id: cycle.id },
     data: { participants: { disconnect: { id } } },
   });
+  if(res){
+    const user = await prisma.user.findUnique({where:{id}});
+    if(user){
+      await unsubscribe_from_segment({
+        segment:`ciclo-${cycle.id}-pax`,
+          email_address:user.email!,
+      });
+    }
+  }
+  return res;
 };
 
 export const saveSocialInteraction = async (
