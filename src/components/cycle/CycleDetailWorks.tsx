@@ -7,7 +7,8 @@ import { WorkMosaicItem } from '@/src/types/work'
 import { Work } from '@prisma/client'
 
 interface Props{
-  showSocialInteraction?:boolean
+  showSocialInteraction?:boolean,
+  showHeader?: boolean,
   size?: string | undefined,
   cycleWorksDates:{
     id: number;
@@ -18,7 +19,7 @@ interface Props{
   }[];
 }
 
-const CycleDetailWorks: React.FC<Props> = ({ showSocialInteraction = true,size = 'md',cycleWorksDates}) => {
+const CycleDetailWorks: React.FC<Props> = ({ showSocialInteraction = true, showHeader = true,size = 'md',cycleWorksDates}) => {
   const works = cycleWorksDates.map(c=>c.work!)
   const {t} = useTranslation('cycleDetail')
   const queryClient = useQueryClient()
@@ -59,9 +60,9 @@ const CycleDetailWorks: React.FC<Props> = ({ showSocialInteraction = true,size =
   })();
   
   return <>
-      <h4 className="h5 mt-5 mb-3 fw-bold text-gray-dark">
+      {showHeader && <h4 className="h5 mt-5 mb-3 fw-bold text-gray-dark">
         {t('worksCountHeader', { count: works.length })} 
-      </h4>
+      </h4>}
       <section className="d-flex justify-content-center justify-content-lg-start">
       <div className='d-flex flex-wrap flex-column flex-lg-row justify-content-center justify-content-xl-start'>      
           {getWorksSorted.map(w=>{
