@@ -1,0 +1,20 @@
+BEGIN TRY
+
+BEGIN TRAN;
+
+-- AlterTable
+ALTER TABLE [dbo].[cycles] ADD [price] NVARCHAR(1000) NOT NULL CONSTRAINT [cycles_price_df] DEFAULT '',
+[product_id] NVARCHAR(1000) NOT NULL CONSTRAINT [cycles_product_id_df] DEFAULT '';
+
+COMMIT TRAN;
+
+END TRY
+BEGIN CATCH
+
+IF @@TRANCOUNT > 0
+BEGIN
+    ROLLBACK TRAN;
+END;
+THROW
+
+END CATCH

@@ -7,16 +7,19 @@ import { addParticipant, find, removeParticipant } from '../../../../src/facades
 import {prisma} from '@/src/lib/prisma';
 import { sendMailRequestJoinCycle } from '../../../../src/facades/mail';
 import {create} from '@/src/facades/notification'
+import { find as findUser } from '@/src/facades/user';
 const bcrypt = require('bcryptjs');
 
 export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = await getSession({ req });
-    if (session == null) {
+    const {userId:ui}=req.body;
+
+    if (session == null && !ui) {
       res.statusMessage = 'unauthorized';
       return res.status(400).end();      
     }
-
+    const userId = +ui;
     const { id } = req.query;
     const {notificationMessage,notificationContextURL,notificationToUsers} = req.body;
     if (typeof id !== 'string') {
@@ -36,19 +39,20 @@ export default getApiHandler()
         res.status(404).end();
         return;
       }
+      const user = await findUser({where:{id:userId}});
 
-      if (cycle.access === 2) {
-        const params = `${cycle.id}!|!${session.user.id}`;
+      if (user && cycle.access === 2) {
+        const params = `${cycle.id}!|!${userId}`;
         const hash = bcrypt.hashSync(params, 8);
         const base64Hash = Buffer.from(hash, 'binary').toString('base64');
-        const authorizeURL = `${WEBAPP_URL}/api/cycle/${cycle.id}/${session.user.id}/${base64Hash}/1`;
-        const denyURL = `${WEBAPP_URL}/api/cycle/${cycle.id}/${session.user.id}/${base64Hash}/0`;
-        const applicantMediathequeURL = `${WEBAPP_URL}/mediatheque/${session.user.id}`;
+        const authorizeURL = `${WEBAPP_URL}/api/cycle/${cycle.id}/${userId}/${base64Hash}/1`;
+        const denyURL = `${WEBAPP_URL}/api/cycle/${cycle.id}/${userId}/${base64Hash}/0`;
+        const applicantMediathequeURL = `${WEBAPP_URL}/mediatheque/${userId}`;
         const locale = req.cookies.NEXT_LOCALE;
         const t = await getT(locale, 'cycleJoin');
 
         const title = `${t('Hello')} ${cycle.creator.name}!`;
-        const emailReason = `${session.user.name} ${t('has asked to Join your cycle')} "${cycle.title}". ${t(
+        const emailReason = `${user.name} ${t('has asked to Join your cycle')} "${cycle.title}". ${t(
           'userMediathequeInfo',
         )}`;
         const authorizeText = t('authorizeText');
@@ -92,11 +96,11 @@ export default getApiHandler()
             await prisma.cycleUserJoin.upsert({
               where:{
                 cycleId_userId:{
-                  userId:session.user.id,
+                  userId:userId,
                   cycleId:cycle.id
                 }
               },
-              create:{userId:session.user.id,cycleId:cycle.id,pending:true},
+              create:{userId:userId,cycleId:cycle.id,pending:true},
               update:{pending:true}
             });
       
@@ -113,23 +117,23 @@ export default getApiHandler()
         return;
       }
 
-      await addParticipant(cycle, session.user.id);
+      await addParticipant(cycle, userId);
 
      await prisma.cycleUserJoin.upsert({
         where:{
           cycleId_userId:{
-            userId:session.user.id,
+            userId:userId,
             cycleId:cycle.id
           }
         },
-        create:{userId:session.user.id,cycleId:cycle.id,pending:false},
+        create:{userId:userId,cycleId:cycle.id,pending:false},
         update:{pending:false}
       });
 
       const notification = await create(
         notificationMessage,
         notificationContextURL,
-        session.user.id,
+        userId,
         notificationToUsers
       );
       res.status(200).json({notification});

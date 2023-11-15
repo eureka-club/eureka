@@ -12,6 +12,10 @@ import { sendMailSingIn } from '@/src/facades/mail';
 const bcrypt = require('bcryptjs');
 import { subscribe_to_segment } from '@/src/lib/mailchimp';
 import { addParticipant, find } from '@/src/facades/cycle';
+import axios from 'axios';
+import cycle from '../cycle';
+import { Cycle } from '@prisma/client';
+import { CycleMosaicItem } from '@/src/types/cycle';
 
 /* const getOptions = (req: NextApiRequest) => {
   const locale = req.cookies.NEXT_LOCALE;
@@ -85,6 +89,29 @@ import { addParticipant, find } from '@/src/facades/cycle';
   };
   return options;
 }; */
+const joinToCycleHandler = async (req: NextApiRequest,cycle:Cycle & {
+  participants: {
+      id: number;
+  }[];
+},user:User)=>{
+  if(cycle?.access!==4){
+    let notificationMessage = `userJoinedCycle!|!${JSON.stringify({
+      userName: user?.name,
+      cycleTitle: cycle?.title,
+    })}`;
+
+    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/cycle/${cycle!.id}/join`, { 
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId:user.id,
+        notificationMessage,
+        notificationContextURL: `/cycle/${cycle!.id}?tabKey=participants`,
+        notificationToUsers:cycle.participants.map(i=>i.id),
+      }),
+    });
+  }
+}
 const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> => {
   const locale = req.cookies.NEXT_LOCALE || 'es';
   let {joinToCycle} = req.body;
@@ -107,7 +134,17 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
         }
         return Promise.resolve(session);        
       },
-      
+    //   async redirect({url, baseUrl}) {
+    //     const {cookies,query:{nextauth}} = req;
+    //     const cbu = cookies['next-auth.callback-url'];
+        
+    //     if(cbu?.match(/cycle\/(\d+)$/)){
+    //         joinToCycle = +RegExp.$1;
+    //         return `${process.env.NEXTAUTH_URL}/cycle`
+    //     }
+
+    //   return baseUrl
+    // },
       // async jwt({ token, user, account, profile, isNewUser }) {
       //   if(user)
       //   return {token,roles:user.roles}
@@ -197,12 +234,15 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
             where:{identifier:user.email!}
           });
         }
-        if(!!joinToCycle&&joinToCycle>0){
-          const cycle = await find(joinToCycle);
-          if(cycle){
-            await addParticipant(cycle, +user.id);
-          }
+        if(joinToCycle){
+          const cycle = await prisma.cycle.findUnique({
+            where:{id:joinToCycle},
+            include:{participants:{select:{id:true}}}
+          });
+          if(cycle)
+            await joinToCycleHandler(req,cycle,user);
         }
+        
       }
     },
     debug: process.env.NODE_ENV === 'development',
