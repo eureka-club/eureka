@@ -32,37 +32,54 @@ const useJoinUserToCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,part
           })}`;
           const notificationToUsers = (participants || []).map(p=>p.id);
           if(cycle?.creatorId) notificationToUsers.push(cycle?.creatorId);
-    
-          const res = await fetch(`/api/cycle/${cycle!.id}/join`, { 
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              notificationMessage,
-              notificationContextURL: `/cycle/${cycle!.id}?tabKey=participants`,
-              notificationToUsers,
-            }),
-          });
-          if (!res.ok) {
-            toast.success(res.statusText)
+          if(cycle.access==4){
+            const fr = await fetch('/api/stripe/checkout_sessions',{
+              method:'POST',
+              body:JSON.stringify({
+                product_id:cycle.product_id,
+                price:cycle.price,
+                client_reference_id:user.id,
+                customer_email: user.email,
+                cycleId:cycle.id
+              }),
+              headers:{
+                'Content-Type':'application/json'
+              }
+            });
+            const {stripe_session_url} = await fr.json();
+            window.location.href = stripe_session_url;
           }
-          else if(res.ok){
-            setCycleJoinRequests({userId:user.id,cycleId:cycle!.id})
-            const json = await res.json();
-            if(notifier){
-              notifier.notify({
-                toUsers:notificationToUsers,
-                data:{message:notificationMessage}
-              });
+          else{
+            const res = await fetch(`/api/cycle/${cycle!.id}/join`, { 
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                notificationMessage,
+                notificationContextURL: `/cycle/${cycle!.id}?tabKey=participants`,
+                notificationToUsers,
+              }),
+            });
+            if (!res.ok) {
+              toast.success(res.statusText)
             }
-            if(cycle?.access == 2)
-              toast.success( t(json.message))
-            await subscribe_to_segment({
-              segment:`ciclo-${cycle.id}-pax`,
-              email_address:user.email!,
-              name:user.name||'unknown'
-            })       
+            else if(res.ok){
+              setCycleJoinRequests({userId:user.id,cycleId:cycle!.id})
+              const json = await res.json();
+              if(notifier){
+                notifier.notify({
+                  toUsers:notificationToUsers,
+                  data:{message:notificationMessage}
+                });
+              }
+              if(cycle?.access == 2)
+                toast.success( t(json.message))
+              await subscribe_to_segment({
+                segment:`ciclo-${cycle.id}-pax`,
+                email_address:user.email!,
+                name:user.name||'unknown'
+              })       
+            }
           }
-    
         },
         {
           onMutate: async () => {
