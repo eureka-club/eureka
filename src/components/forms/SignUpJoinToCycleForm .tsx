@@ -208,15 +208,27 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
             </Col>
             <Box className='d-flex flex-column flex-xl-row'
               sx={{
-                backgroundImage: "url('/registro_desktop_bg.webp')",
+                backgroundImage: { xs: "url('/registro_movil_bg.webp')",lg:"url('/registro_desktop_bg.webp')"},
                 backgroundRepeat: "no-repeat",
-                backgroundSize: `100% 600px`,
+                backgroundSize: { xs:`100% 1000px`,lg:`100% 600px`},
+                height :{xs:'1000px' ,lg:'auto'},
                 width: '100%',
               }}
             >
-                    <Col className={`col-12 col-xl-6 mt-5`}>
+              <section className='d-flex d-md-none justify-content-end aling-items-end me-1' style={{marginTop:'6em'}}>
+                <div className=' d-flex flex-column justify-content-center align-items-baseline me-1'>
+                  <span className=' ' style={{ fontSize: '.6em', fontStyle: 'italic' }}>Organizado por:</span>
+                  <span className=' ' style={{ fontSize: '.8em' }}>{cycle.creator.name}</span>
+                </div>
+                <Row className=''>
+                  <UserAvatar className='d-flex justify-content-center' size={'md'} width={75} height={75} userId={cycle.creatorId} showName={false} />
+                </Row>
+              </section>
+                    <Col className={`col-12 col-xl-6 mt-md-5`}>
                       <div className='p-3 d-flex flex-column justify-content-center align-items-center'>
-                  <Box sx={{ width: ['80%', '50%', '50%', '65%'], paddingLeft: {lg:'5em', xl:'14em'} }} >
+                  <Box sx={{ width: ['80%', '50%', '40%', '90%'], paddingLeft: {lg:'10em', xl:'22em'} }} >
+                  
+                    <section className='d-none d-md-block'>
                           <Row className='mb-2'>
                             <span className='text-center ' style={{ fontSize: '.8em', fontStyle: 'italic' }}>Organizado por:</span>
                           </Row>
@@ -226,16 +238,23 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
                           <Row className='mb-4'>
                             <span className='text-center ' style={{ fontSize: '1em' }}>{cycle.creator.name}</span>
                           </Row>
-                          <Row className='mb-4 ' style={{ height: '9rem', fontSize: '1.6em', fontStyle: 'italic' }}>
-                            <span className='d-flex justify-content-center align-items-center'><b>{cycle.title.toUpperCase()}</b></span>
+                    </section>
+                    <Row className='mb-4 d-none d-md-flex justify-content-center align-items-center' style={{ height: '9rem', fontSize: '1.6em', fontStyle: 'italic' }}>
+                      <span className='text-center'><b>PERSPECTIVAS FEMINISTAS EN LA MODERACIÓN DE CONTENIDOS EN REDES SOCIALES</b></span>
                           </Row>
-                          <Row className='mb-4 ' style={{ fontSize: '1.4em', fontStyle: 'italic' }}>
+                    <Row className='mb-4 d-flex d-md-none justify-content-center align-items-center' style={{ height: '9rem', fontSize: '1.2em', fontStyle: 'italic' }}>
+                      <span className='text-center'><b>PERSPECTIVAS FEMINISTAS EN LA MODERACIÓN DE CONTENIDOS EN REDES SOCIALES</b></span>
+                    </Row>
+                    <Row className='mb-4 d-none d-md-flex' style={{ fontSize: '1.4em', fontStyle: 'italic' }}>
                             <span className='text-center '>{dayjs(cycle?.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_LARGE)} - {dayjs(cycle?.endDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_LARGE)}</span>
                           </Row>
+                    <Row className='mb-4 d-flex d-md-none' style={{ fontSize: '1em', fontStyle: 'italic' }}>
+                      <span className='text-center '>{dayjs(cycle?.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_LARGE)} - {dayjs(cycle?.endDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_LARGE)}</span>
+                    </Row>
                           <Row className='mb-4 ' >
                             <Box sx={{ padding: '1em' }}>
                               <a href='#FormContainer'>
-                              <Button className={`mb-4 btn btn-eureka p-2 w-100`}>
+                              <Button className={`mb-xl-4 btn btn-eureka p-2 w-100`}>
                                 {t('I want to register now')}
                               </Button></a>
                             </Box>
@@ -243,7 +262,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
                         </Box>
                       </div>
                     </Col>
-                    <Col className={`col-12 col-xl-6 my-5`}>
+                    <Col className={`col-12 col-xl-6 my-xl-5`}>
                       <Box sx={{ ml:{xl:'6em'} }} className='d-flex justify-content-center justify-content-xl-start align-items-center align-items-xl-start'>
                           <CycleContext.Provider value={{ linkToCycle: false, showShare: false, cycle: cycle }}>
                             <MosaicItem
@@ -274,7 +293,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
             <Col className='col-12'>
               <Box className='d-flex flex-column flex-xl-row'
                 sx={{
-                  backgroundImage: "url('/registro_desktop_about_bg.webp')",
+                  backgroundImage: {sm:"url('/registro_desktop_about_bg.webp')"},
                   backgroundRepeat: "no-repeat",
                   backgroundSize: `100% auto`,
                   // height: ['100%'],
@@ -301,7 +320,8 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
           <Col className='col-12'>
             <Box className='d-flex flex-column flex-xl-row'
               sx={{
-                backgroundImage: "url('/registro_desktop_works.webp')",
+                backgroundImage: {
+                  sm: "url('/registro_desktop_works.webp')"},
                 backgroundRepeat: "no-repeat",
                 backgroundSize: `100% auto`,
                 // height: ['100%'],
@@ -321,7 +341,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
           <Col className='col-12'>
             <Box className='d-flex justify-content-center'
               sx={{
-                backgroundImage: "url('/registro_desktop_form_bg.webp')",
+                backgroundImage: {sm:"url('/registro_desktop_form_bg.webp')"},
                 backgroundRepeat: "no-repeat",
                 backgroundSize: `100% auto`,
                 // height: ['100%'],
@@ -329,7 +349,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
               }}
             >
               <Box className='py-5' id='FormContainer'
-                sx={{ width: ['90%', '60%', '45%', '20%'] }}>
+                sx={{ width: ['90%', '60%', '40%', '30%','25%'] }}>
                   <button
                     type="button"
                     onClick={handleSignUpGoogle}
@@ -399,6 +419,16 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
 
 
                 </Form>
+                <Box className='d-block d-sm-none'
+                  sx={{
+                    backgroundImage:  "url('/mano2.webp')",
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "100% 100%",
+                    backgroundPositionX: '40px',
+                    width: '100%',
+                    height:'300px'
+                  }}
+                ></Box>
               </Box>
             </Box>
           </Col>

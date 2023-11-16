@@ -18,19 +18,19 @@ const Footer: FunctionComponent = () => {
 
   return (
   <footer className=" text-center m-0 mt-4" style={{ background: 'var(--eureka-grey-light'}}>
-    <div className="container d-flex flex-column-reverse flex-lg-row justify-content-lg-between align-items-lg-center">
-      <section className="mb-1 mb-lg-0">
-        <div className="text-center d-flex flex-column flex-lg-row justify-content-around pt-3 text-secondary fs-6">
-              <Link href="/manifest"><a className='text-secondary text-decoration-underline text-blue me-lg-5 mb-1 mb-lg-none' onClick={()=> window.scrollTo(0, 0)}>{t('Manifest')} </a></Link>
-              <Link href="/about"><a className='text-secondary text-decoration-underline me-lg-5 mb-1 mb-lg-none' onClick={()=> window.scrollTo(0, 0)}>{t('About Eureka')}</a></Link>
-              <Link href="/aboutUs"><a className='text-secondary text-decoration-underline me-lg-5 mb-1 mb-lg-none' onClick={()=> window.scrollTo(0, 0)}>{t('About Us')}</a></Link>
-              <Link href="/policy"><a className='text-secondary text-decoration-underline me-lg-5 mb-1 mb-lg-none' onClick={()=> window.scrollTo(0, 0)}>{t('policyText')}</a></Link>
-          <p>{t('common:contact')} <a className='text-decoration-underline text-secondary me-lg-3' href="mailto:hola@eureka.club">hola@eureka.club</a></p>
+    <div className="container d-flex flex-column-reverse flex-xl-row justify-content-xl-between align-items-lg-center">
+      <section className="mb-1 mb-xl-0">
+        <div className="text-center d-flex flex-column flex-xl-row justify-content-around pt-3 text-secondary fs-6">
+              <Link href="/manifest"><a className='text-secondary text-decoration-underline text-blue me-xl-5 mb-1 mb-xl-none' onClick={()=> window.scrollTo(0, 0)}>{t('Manifest')} </a></Link>
+            <Link href="/about"><a className='text-secondary text-decoration-underline me-xl-5 mb-1 mb-xl-none' onClick={()=> window.scrollTo(0, 0)}>{t('About Eureka')}</a></Link>
+            <Link href="/aboutUs"><a className='text-secondary text-decoration-underline me-xl-5 mb-1 mb-xl-none' onClick={()=> window.scrollTo(0, 0)}>{t('About Us')}</a></Link>
+            <Link href="/policy"><a className='text-secondary text-decoration-underline me-xl-5 mb-1 mb-xl-none' onClick={()=> window.scrollTo(0, 0)}>{t('policyText')}</a></Link>
+            <p>{t('common:contact')} <a className='text-decoration-underline text-secondary me-xl-3' href="mailto:hola@eureka.club">hola@eureka.club</a></p>
         </div>
 
       </section>
 
-      <section className={`mt-2 mt-lg-0 ${styles.fallowsSection}`}>
+        <section className={`mt-2 mt-xl-0 ${styles.fallowsSection}`}>
             <a className='me-1' href="https://instagram.com/eleurekaclub" target={'_blank'} rel="noreferrer">
               <AiOutlineInstagram className={styles.ti} /> 
             </a>

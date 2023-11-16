@@ -64,7 +64,7 @@ const CycleDetailWorks: React.FC<Props> = ({ showSocialInteraction = true, showH
         {t('worksCountHeader', { count: works.length })} 
       </h4>}
       <section className="d-flex justify-content-center justify-content-lg-start">
-      <div className='d-flex flex-wrap flex-column flex-lg-row justify-content-center justify-content-xl-start'>      
+      <div className='d-flex flex-wrap flex-column flex-lg-row justify-content-center '>      
           {getWorksSorted.map(w=>{
             if(!w)return ''
             queryClient.setQueryData(['WORK',`${w.id}`],w)

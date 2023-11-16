@@ -323,6 +323,12 @@ hr {
   max-width: 325px !important;
   max-height: 325px !important;
 }
+.card.mosaic-xxl{ //Mosaico de la entidad en un detalle
+  width: 300px !important;
+  height: 400px !important;
+  max-width: 300px !important;
+  max-height: 400px !important;
+}
 }
 
 
@@ -340,13 +346,15 @@ hr {
   max-height: 350px !important;;
 }
 
-.card.mosaic-xxl{ //Mosaico de la entidad en un detalle
-  width: 280px !important;
-  height: 380px !important;
-  max-width: 280px !important;
-  max-height: 380px !important;
 }
+@media only screen and (max-width: 300px) {
 
+.card.mosaic-xxl{ //Mosaico de la entidad en un detalle
+  width: 250px !important;
+  height: 350px !important;
+  max-width: 250px !important;
+  max-height: 350px !important;
+}
 }
 
 
