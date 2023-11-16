@@ -39,16 +39,19 @@ const StripePaymentErrorPage: NextPage = () => {
                   backgroundImage: { sm: "url('/registro_desktop_about_bg.webp')" },
                   backgroundRepeat: "no-repeat",
                   backgroundSize: { sm: `100% auto` },
-                  height: { xs: '500px', md: '750px' },//lg:'500px'
+                  height: { md: '750px' },//lg:'500px'
                 }}
               >
                 <Col className=' d-flex w-100 justify-content-center align-items-center '>
-                  <Box className=' d-flex flex-column justify-content-center align-items-center '>
+                  <Box className=' d-flex flex-column justify-content-start ' 
+                    sx={{ paddingX: { xs: '1em', sm: '8em', md: '10em', lg: '20em',xl:'35em'}}}>
                     <Row className='p-3 '><h1 className='text-primary text-center  mb-5'><b>{t('errorText')}</b></h1></Row>
-                    <Row className='p-3 '><h1 className='text-primary text-center   mb-5'><b>{t('errorExtraText')}</b></h1></Row>
-                    <Row className='w-100  p-2'>
-                      <Button className={`mt-4 btn btn-eureka  w-100`} onClick={()=> router.push('/')}>
-                        {t('VisitEureka')}
+                    <Row className='py-1'><p className='text-left mb-3'>{t('errorExtraText')}</p></Row>
+                    <Row className='py-2'><p className='text-left  mb-3'>{t('errorExtraText2')}</p></Row>
+                    <Row className='py-2'><p className='text-left  mb-5'>{t('errorExtraText3')}<b><u>hola@eureka.club.</u></b></p></Row>
+                    <Row className='w-100 p-2'>
+                      <Button className={`mt-4 btn btn-eureka  `} onClick={()=> router.push('/')}>
+                        {t('Try again')}
                       </Button>
                     </Row>
                   </Box>

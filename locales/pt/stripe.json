@@ -4,7 +4,10 @@
   "successButtomText": "Consultar os materiais do Clube",
   "cancelText": "cancel text",
   "cancelExtraText": "cancel extra text",
-  "errorText": "error text",
-  "errorExtraText": "error extra text",
-  "VisitEureka": "Visite Eureka"
+  "errorText": "Inscrição Não Concluída: Erro no Pagamento",
+  "errorExtraText": "Infelizmente, detectamos um problema com o pagamento e sua inscrição não foi finalizada. Para participar deste Clube, por favor tente novamente.",
+  "errorExtraText2": "Por favor, verifique as informações de pagamento inseridas e tente novamente.",
+  "errorExtraText3": "Precisa de ajuda? Estamos aqui para te apoiar. Entre em contato conosco através do email ",
+  "Try again": "Réessayer",
+  "VisitEureka": "Tentar Novamente"
 }
