@@ -206,16 +206,26 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
               {/* <Row className='bg-primary d-flex align-items-center' style={{ height: '.2rem', fontSize: '1.2em' }}>
               </Row> */}
             </Col>
+            <Box className='d-block d-sm-none'
+              sx={{
+                backgroundImage: "url('/pelicula.webp')",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "60% 80%",
+                //backgroundPositionX: '100px',
+                width: '100%',
+                height: '150px'
+              }}
+            ></Box>
             <Box className='d-flex flex-column flex-xl-row'
               sx={{
-                backgroundImage: { xs: "url('/registro_movil_bg.webp')",lg:"url('/registro_desktop_bg.webp')"},
+                backgroundImage: { sm: "url('/registro_movil_bg.webp')",lg:"url('/registro_desktop_bg.webp')"},
                 backgroundRepeat: "no-repeat",
-                backgroundSize: { xs:`100% 1000px`,lg:`100% 600px`},
-                height :{xs:'1000px' ,lg:'auto'},
+                backgroundSize: { sm:`cover`,xl:`100% 600px`},
+                height :{sm:'1000px' ,lg:'auto'},
                 width: '100%',
               }}
             >
-              <section className='d-flex d-md-none justify-content-end aling-items-end me-1' style={{marginTop:'6em'}}>
+              <section className='d-flex d-md-none justify-content-end aling-items-end me-1 mt-sm-5'>
                 <div className=' d-flex flex-column justify-content-center align-items-baseline me-1'>
                   <span className=' ' style={{ fontSize: '.6em', fontStyle: 'italic' }}>Organizado por:</span>
                   <span className=' ' style={{ fontSize: '.8em' }}>{cycle.creator.name}</span>
@@ -280,13 +290,19 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
                           </CycleContext.Provider>
                       </Box>
                     </Col>
+              <Box className='d-block d-sm-none mt-5'
+                sx={{
+                  backgroundImage: "url('/libro.webp')",
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "60% 80%",
+                  backgroundPositionX: '150px',
+                  width: '100%',
+                  height: '250px'
+                }}
+              ></Box>
             </Box>
           </Row>
-          <Col className='col-12'>
-            {/* <Row className='bg-secondary d-flex align-items-center' style={{ height: '.2rem', fontSize: '1.2em' }}>
-            </Row> */}
-           
-          </Col>
+          
           {cycle.contentText != null && (<>
 
 
@@ -300,7 +316,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
                   // width: '100%',
                 }}
               >
-                <Box className='' sx={{ paddingX: { xs: '2em', sm: '7em',md: '12em', lg:'15em',xl:'25em'}, paddingY: '6em' }}>
+                <Box className='' sx={{ paddingX: { xs: '2em', sm: '7em', md: '12em', lg: '15em', xl: '25em' }, paddingY: { xs: '1em',sm:'6em'} }}>
                   <div className="">
                     <div
                       className={styles.dangerouslySetInnerHTML}
@@ -423,10 +439,10 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
                   sx={{
                     backgroundImage:  "url('/mano2.webp')",
                     backgroundRepeat: "no-repeat",
-                    backgroundSize: "100% 100%",
-                    backgroundPositionX: '40px',
+                    backgroundSize: "80% 100%",
+                    backgroundPositionX: '100px',
                     width: '100%',
-                    height:'300px'
+                    height:'200px'
                   }}
                 ></Box>
               </Box>
