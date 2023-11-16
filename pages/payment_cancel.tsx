@@ -7,9 +7,12 @@ import { Box } from '@mui/material';
 import Link from 'next/link';
 import { Col, Row } from 'react-bootstrap';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout'
+import { useRouter } from 'next/router';
+
 
 const StripePaymentCancelPage: NextPage = () => {
   const { t } = useTranslation('stripe');
+  const router = useRouter();
 
   return (
     <SimpleLayout title="Payment Cancel" showNavBar={false} showFooter={false}>
@@ -33,10 +36,10 @@ const StripePaymentCancelPage: NextPage = () => {
               </Row>
               <Box className='d-flex flex-column flex-xl-row'
                 sx={{
-                  backgroundImage: "url('/registro_desktop_about_bg.webp')",
+                  backgroundImage: { sm: "url('/registro_desktop_about_bg.webp')" },
                   backgroundRepeat: "no-repeat",
-                  backgroundSize: `100% auto`,
-                  height: { xs: '500px', md: '700px' },//lg:'500px'
+                  backgroundSize: { sm: `100% auto` },
+                  height: { xs: '500px', md: '750px' },//lg:'500px'
                 }}
               >
                 <Col className=' d-flex w-100 justify-content-center align-items-center '>
@@ -44,7 +47,7 @@ const StripePaymentCancelPage: NextPage = () => {
                     <Row className='p-3 '><h1 className='text-primary text-center  mb-5'><b>{t('cancelText')}</b></h1></Row>
                     <Row className='p-3 '><h1 className='text-primary text-center   mb-5'><b>{t('cancelExtraText')}</b></h1></Row>
                     <Row className='w-100  p-2'>
-                      <Button className={`mt-4 btn btn-eureka  w-100`}>
+                      <Button className={`mt-4 btn btn-eureka  w-100`} onClick={() => router.push('/')}>
                         {t('VisitEureka')}
                       </Button>
                     </Row>
