@@ -34,5 +34,13 @@
   "worksCountHeader_other": "{{count}} œuvres dans ce cycle",
   "I want to register now": "Je veux m'inscrire maintenant",
   "I want to participate!": "Je veux participer!",
-  "InvalidPassword": "Invalide. Le mot de passe doit contenir au moins 8 caractères et au moins un chiffre (0-9)."
+  "InvalidPassword": "Invalide. Le mot de passe doit contenir au moins 8 caractères et au moins un chiffre (0-9).",
+  "OrganinedBy": "Organisé par:",
+  "WantToJoin": "Je veux participer au club de lecture et de cinéma",
+  "WhyJoin": "POURQUOI REJOINDRE NOTRE CLUB DE LECTURE ET DE CINÉMA ?",
+  "ManifestoText": "Découvre nos principes : Lire le ",
+  "Manifesto": "Manifeste Eurêka",
+  "CurationText": "UNE SÉLECTION SPÉCIALE DE LIVRES ET DE FILMS POUR COMPRENDRE LE THÈME :",
+  "MembershipFee": "FRAIS D'ADHÉSION:",
+  "JoinOurClub": "REJOINS NOTRE CLUB DÈS AUJOURD'HUI !"
 }

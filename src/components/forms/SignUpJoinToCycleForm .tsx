@@ -17,7 +17,7 @@ import useCycle from '@/src/useCycle';
 import UserAvatar from '@/src/components/common/UserAvatar';
 import CycleDetailWorks from '@/src/components/cycle/CycleDetailWorks';
 import Footer from '@/components/layouts/Footer';
-import { TextField,  Box } from '@mui/material';
+import { TextField, Box } from '@mui/material';
 import { DATE_FORMAT_LARGE } from '../../constants';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -85,7 +85,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
   const handleSignUpGoogle = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
     const callbackUrl = `/cycle/${router.query.cycleId}`;
-    signIn('google',{callbackUrl});
+    signIn('google', { callbackUrl });
   };
 
   const userRegistered = async (email: string) => {
@@ -112,7 +112,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
     if (res.ok) {
       const data = await res.json();
       const callbackUrl = `/cycle/${router.query.cycleId}`;
-      signIn('email', { ... callbackUrl&&{callbackUrl},email: identifier });
+      signIn('email', { ...callbackUrl && { callbackUrl }, email: identifier });
       // return data;
     } else {
       toast.error(res.statusText);
@@ -207,23 +207,23 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
               {/* <Row className='bg-primary d-flex align-items-center' style={{ height: '.2rem', fontSize: '1.2em' }}>
               </Row> */}
             </Col>
-            <Box 
+            <Box
               sx={{
-                display:{xs:'block',sm:'none'},
-                backgroundColor: { xs: '#f7f7f7' },
+                display: { xs: 'block', sm: 'none' },
+                //backgroundColor: { xs: '#f7f7f7' },
               }}
             ><section className='mt-3'>
-              <Image  src="/pelicula.webp" width={200}
-                height={120}
+                <Image src="/pelicula.webp" width={200}
+                  height={120}
                   alt=""></Image></section>
             </Box>
             <Box className='d-flex flex-column flex-xl-row'
               sx={{
-                backgroundImage: {  sm: "url('/registro_movil_bg.webp')",lg:"url('/registro_desktop_bg.webp')"},
-                backgroundColor: { xs:'#f7f7f7'},
+                backgroundImage: { sm: "url('/registro_movil_bg.webp')", lg: "url('/registro_desktop_bg.webp')" },
+                //backgroundColor: { xs:'#f7f7f7'},
                 backgroundRepeat: "no-repeat",
-                backgroundSize: { sm:`cover`,xl:`100% 600px`},
-                height :{sm:'1000px' ,lg:'auto'},
+                backgroundSize: { sm: `cover`, xl: `100% 600px` },
+                height: { sm: '1000px', lg: 'auto' },
                 width: '100%',
               }}
             >
@@ -236,89 +236,90 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
                   <UserAvatar className='d-flex justify-content-center' size={'md'} width={75} height={75} userId={cycle.creatorId} showName={false} />
                 </Row>
               </section> */}
-                    <Col className={`col-12 col-xl-6 mt-md-5`}>
-                      <div className='p-3 d-flex flex-column justify-content-center align-items-center'>
-                  <Box sx={{ width: ['80%', '50%', '40%', '90%'],paddingTop:{sm:'5em'}, paddingLeft: {lg:'10em', xl:'22em'} }} >
-                  
+              <Col className={`col-12 col-xl-6 mt-md-5`}>
+                <div className='p-3 d-flex flex-column justify-content-center align-items-center'>
+                  <Box sx={{ width: ['80%', '50%', '40%', '90%'], paddingTop: { sm: '5em' }, paddingLeft: { lg: '10em', xl: '22em' } }} >
+
                     <section className=''>
-                          <Row className='mb-2'>
-                            <span className='text-center ' style={{ fontSize: '.8em', fontStyle: 'italic' }}>Organizado por:</span>
-                          </Row>
-                          <Row className='mb-2'>
-                            <UserAvatar className='d-flex justify-content-center' size={'xl'} width={75} height={75} userId={cycle.creatorId} showName={false} />
-                          </Row>
-                          <Row className='mb-4'>
-                            <span className='text-center ' style={{ fontSize: '1em' }}>{cycle.creator.name}</span>
-                          </Row>
+                      <Row className='mb-2'>
+                        <span className='text-center ' style={{ fontSize: '.8em', fontStyle: 'italic' }}>{t("OrganinedBy")}</span>
+                      </Row>
+                      <Row className='mb-2'>
+                        <UserAvatar className='d-flex justify-content-center' size={'xl'} width={75} height={75} userId={cycle.creatorId} showName={false} />
+                      </Row>
+                      <Row className='mb-4'>
+                        <span className='text-center ' style={{ fontSize: '1em' }}>{cycle.creator.name}</span>
+                      </Row>
                     </section>
                     <Row className='mb-4 d-none d-md-flex justify-content-center align-items-center' style={{ fontSize: '1.6em', fontStyle: 'italic' }}>
                       <span className='text-center'><b>{cycle.title.toUpperCase()}</b></span>
-                          </Row>
+                    </Row>
                     <Row className='mb-4 d-flex d-md-none justify-content-center align-items-center' style={{ fontSize: '1.2em', fontStyle: 'italic' }}>
                       <span className='text-center'><b>{cycle.title.toUpperCase()}</b></span>
                     </Row>
                     <Row className='mb-4 d-none d-md-flex' style={{ fontSize: '1.4em', fontStyle: 'italic' }}>
-                            <span className='text-center '>{dayjs(cycle?.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_LARGE)} - {dayjs(cycle?.endDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_LARGE)}</span>
-                          </Row>
+                      <span className='text-center '>{dayjs(cycle?.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_LARGE)} - {dayjs(cycle?.endDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_LARGE)}</span>
+                    </Row>
                     <Row className='mb-4 d-flex d-md-none' style={{ fontSize: '1em', fontStyle: 'italic' }}>
                       <span className='text-center '>{dayjs(cycle?.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_LARGE)} - {dayjs(cycle?.endDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_LARGE)}</span>
                     </Row>
-                          <Row className='mb-4 ' >
-                            <Box sx={{ padding: '1em' }}>
-                              <a href='#FormContainer'>
-                              <Button className={`mb-xl-4 btn btn-eureka p-2 w-100`}>
-                                {t('I want to register now')}
-                              </Button></a>
-                            </Box>
-                          </Row>
-                        </Box>
-                      </div>
-                    </Col>
-                    <Col className={`col-12 col-xl-6 my-xl-5`}>
-                      <Box sx={{ ml:{xl:'6em'} }} className='d-flex justify-content-center justify-content-xl-start align-items-center align-items-xl-start'>
-                          <CycleContext.Provider value={{ linkToCycle: false, showShare: false, cycle: cycle }}>
-                            <MosaicItem
-                              cycleId={cycle.id}
-                              showTrash
-                              detailed={false}
-                              showSaveForLater={false}
-                              showCreateEureka={false}
-                              showJoinOrLeaveButton={false}
-                              showSocialInteraction={false}
-                              className="mt-1"
-                              cacheKey={['CYCLE', `${cycle.id}`]}
-                              size={'xxl'}
-                            />
-                          </CycleContext.Provider>
+                    <Row className='mb-4 ' >
+                      <Box sx={{ padding: '1em' }}>
+                        <a href='#FormContainer'>
+                          <Button className={`mb-xl-4 btn btn-eureka p-2 w-100`}>
+                            <Box sx={{ fontSize: { xs: '.8em', md: '1em' } }}>{t('WantToJoin')}</Box>
+                          </Button></a>
                       </Box>
-                    </Col>
+                    </Row>
+                  </Box>
+                </div>
+              </Col>
+              <Col className={`col-12 col-xl-6 my-xl-5`}>
+                <Box sx={{ ml: { xl: '6em' } }} className='d-flex justify-content-center justify-content-xl-start align-items-center align-items-xl-start'>
+                  <CycleContext.Provider value={{ linkToCycle: false, showShare: false, cycle: cycle }}>
+                    <MosaicItem
+                      cycleId={cycle.id}
+                      showTrash
+                      detailed={false}
+                      showSaveForLater={false}
+                      showCreateEureka={false}
+                      showJoinOrLeaveButton={false}
+                      showSocialInteraction={false}
+                      className="mt-1"
+                      cacheKey={['CYCLE', `${cycle.id}`]}
+                      size={'xxl'}
+                    />
+                  </CycleContext.Provider>
+                </Box>
+              </Col>
               <Box className='mt-5 w-100'
                 sx={{
                   display: { xs: 'flex', sm: 'none' },
-                  justifyContent:{xs:'flex-end'},
-                   backgroundColor: { xs: '#f7f7f7' },
+                  justifyContent: { xs: 'flex-end' },
+                  //backgroundColor: { xs: '#f7f7f7' },
                 }}
               > <Image className='mb-3' src="/libro.webp" width={200}
                 height={200}
                 alt=""></Image></Box>
             </Box>
           </Row>
-          
+
           {cycle.contentText != null && (<>
 
 
             <Col className='col-12'>
               <Box className='d-flex flex-column flex-xl-row'
                 sx={{
-                  backgroundImage: {sm:"url('/registro_desktop_about_bg.webp')"},
+                  backgroundImage: { sm: "url('/registro_desktop_about_bg.webp')" },
                   backgroundRepeat: "no-repeat",
                   backgroundSize: `100% auto`,
                   // height: ['100%'],
                   // width: '100%',
                 }}
               >
-                <Box className='' sx={{ paddingX: { xs: '2em', sm: '7em', md: '12em', lg: '15em', xl: '25em' }, paddingY: { xs: '3em',sm:'6em'} }}>
+                <Box className='' sx={{ paddingX: { xs: '2em', sm: '7em', md: '12em', lg: '15em', xl: '25em' }, paddingY: { xs: '3em', sm: '6em' } }}>
                   <div className="">
+                    <Box className="" sx={{ width: '1', paddingX: { lg: '2em' }, fontSize: { sx: '.6em', lg: '1.4em' }, display: 'flex', justifyContent: 'center' }}> <span className='text-primary text-center mb-3  '><b>{t('WhyJoin')}</b></span></Box>
                     <div
                       className={styles.dangerouslySetInnerHTML}
                       dangerouslySetInnerHTML={{ __html: cycle.contentText }}
@@ -330,15 +331,18 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
           }
 
           <Col className='col-12'>
-            <Row className='bg-primary d-flex align-items-center' style={{ height: '3rem', fontSize: '1.2em' }}>
-              <span className='text-center text-white'>CITA CITA CITA CITA</span>
+            <Row className='bg-primary d-flex justify-content-center align-items-center' style={{ height: '3rem' }}>
+              <Box sx={{ fontSize: { xs: '.9em', md: '1.1em' }, display: 'flex', justifyContent: 'center' }}><span className='text-center text-white'>{t('ManifestoText')}
+                <Link href="/manifest"><a className='text-white text-decoration-underline' onClick={() => window.scrollTo(0, 0)}>{t('Manifesto')}</a></Link></span>
+              </Box>
             </Row>
           </Col>
           <Col className='col-12'>
             <Box className='d-flex flex-column flex-xl-row'
               sx={{
                 backgroundImage: {
-                  sm: "url('/registro_desktop_works.webp')"},
+                  sm: "url('/registro_desktop_works.webp')"
+                },
                 backgroundRepeat: "no-repeat",
                 backgroundSize: `100% auto`,
                 // height: ['100%'],
@@ -346,31 +350,38 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
               }}
             >
               <Box className='d-flex flex-column justify-content-center align-items-center' sx={{ paddingX: { md: '8em', lg: '15em', xl: '25em' }, paddingY: '4em' }}>
+                <Box className="" sx={{ width: '1', paddingX: { xs: '2em', sm: '7em', lg: '2em' }, fontSize: { sx: '.6em', lg: '1.4em' }, display: 'flex', justifyContent: 'center' }}> <span className='text-primary text-center mb-3  '><b>{t('CurationText')}</b></span></Box>
                 {works && <CycleDetailWorks size={'md'} cycleWorksDates={works!} showSocialInteraction={false} showHeader={false} /> || ''}
               </Box>
             </Box>
           </Col>
           <Col className='col-12'>
             <Row className='bg-secondary d-flex align-items-center' style={{ height: '3rem', fontSize: '1.2em' }}>
-              <span className='text-center text-white'>PRICE PRICE PRICE PRICE</span>
+              <Box sx={{ fontSize: { xs: '.9em', md: '1.1em' }, display: 'flex', justifyContent: 'center' }}>
+                <span className='text-center text-white'>{t('MembershipFee')}</span>
+              </Box>
             </Row>
           </Col>
           <Col className='col-12'>
+            <Box className="mt-5" sx={{ width: '1', paddingX: { xs: '2em', sm: '7em', lg: '2em' }, fontSize: { sx: '.6em', lg: '1.4em' }, display: 'flex', justifyContent: 'center' }}>
+              <span className='text-primary text-center'><b>{t('JoinOurClub')}</b></span>
+            </Box>
             <Box className='d-flex justify-content-center'
               sx={{
-                backgroundImage: {sm:"url('/registro_desktop_form_bg.webp')"},
+                backgroundImage: { sm: "url('/registro_desktop_form_bg.webp')" },
                 backgroundRepeat: "no-repeat",
                 backgroundSize: `100% auto`,
                 // height: ['100%'],
                 // width: '100%',
               }}
             >
-              <Box className='py-5' id='FormContainer'
-                sx={{ width: ['90%', '60%', '40%', '30%','25%'] }}>
+               
+                <Box className='py-4' id='FormContainer'
+                  sx={{ width: ['90%', '60%', '40%', '30%', '25%'] }}>
                   <button
                     type="button"
                     onClick={handleSignUpGoogle}
-                  className={`d-flex justify-content-center mt-4  ${styles.buttonGoogleSignUpJoinCycle}`}
+                    className={`d-flex justify-content-center   ${styles.buttonGoogleSignUpJoinCycle}`}
                   >
                     <div
                       className={`d-flex justify-content-start justify-content-sm-center aling-items-center flex-row ${styles.gmailLogoAndtext}`}
@@ -380,83 +391,85 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
                     </div>
                   </button>
                   <p className={`mb-2 ${styles.alternativeLabel}`}>{t('alternativeText')}</p>
-                <Form onSubmit={handleSubmitSignUp} className='mt-4'>
-                  <TextField id="name" className="w-100 mb-4 " label={`${t('Name')}`}
-                    variant="outlined" size="small" name="name"
-                    value={formValues.name!}
-                    type="text"
-                    onChange={handleChangeTextField}
-                  >
-                  </TextField>
-                  <TextField id="lastname" className=" w-100 mb-4" label={`${t('LastName')}`}
-                    variant="outlined" size="small" name="lastname"
-                    value={formValues.lastname!}
-                    type="text"
-                    onChange={handleChangeTextField}
-                  >
-                  </TextField>
+                  <Form onSubmit={handleSubmitSignUp} className='mt-4'>
+                    <TextField id="name" className="w-100 mb-4 " label={`${t('Name')}`}
+                      variant="outlined" size="small" name="name"
+                      value={formValues.name!}
+                      type="text"
+                      onChange={handleChangeTextField}
+                    >
+                    </TextField>
+                    <TextField id="lastname" className=" w-100 mb-4" label={`${t('LastName')}`}
+                      variant="outlined" size="small" name="lastname"
+                      value={formValues.lastname!}
+                      type="text"
+                      onChange={handleChangeTextField}
+                    >
+                    </TextField>
 
-                  <TextField id="email" className="w-100 mb-4" label={`${t('emailFieldLabel')}`}
-                    variant="outlined" size="small" name="identifier"
-                    value={formValues.identifier!}
-                    type="text"
-                    onChange={handleChangeTextField}
-                  >
-                  </TextField>
+                    <TextField id="email" className="w-100 mb-4" label={`${t('emailFieldLabel')}`}
+                      variant="outlined" size="small" name="identifier"
+                      value={formValues.identifier!}
+                      type="text"
+                      onChange={handleChangeTextField}
+                    >
+                    </TextField>
 
-                  <TextField id="pass" className="w-100 mb-5" label={`${t('passwordFieldLabel')}`}
-                    variant="outlined" size="small" name="password"
-                    value={formValues.password!}
-                    autoComplete="current-password"
-                    type="password"
-                    helperText={`(${t('passRequirements')})`}
-                    onChange={handleChangeTextField}
-                  >
-                  </TextField>
+                    <TextField id="pass" className="w-100 mb-5" label={`${t('passwordFieldLabel')}`}
+                      variant="outlined" size="small" name="password"
+                      value={formValues.password!}
+                      autoComplete="current-password"
+                      type="password"
+                      helperText={`(${t('passRequirements')})`}
+                      onChange={handleChangeTextField}
+                    >
+                    </TextField>
 
-                  <Box >
-                    <Button type="submit" className={`mb-4 btn btn-eureka  w-100`}>
-                      {t('I want to register now')}
-                    </Button>
+                    <Box >
+                      <Button type="submit" className={`mb-4 btn btn-eureka  w-100`}>
+                        {t('I want to register now')}
+                      </Button>
+                    </Box>
+                    <p
+                      className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
+                    >
+                      {t('joinedCycleSignInTerms')}
+                      <Link href="/manifest" passHref>
+                        <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`}>
+                          {t('termsText')}
+                        </span>
+                      </Link>
+                      {t('and')}
+                      <Link href="/policy" passHref>
+                        <span className={`d-flex cursor-pointer ms-1 ${styles.linkText}`}>{t('policyText')}</span>
+                      </Link>
+                    </p>
+
+
+                  </Form>
+                  <Box className='mt-5 w-100'
+                    sx={{
+                      display: { xs: 'flex', sm: 'none' },
+                      justifyContent: { xs: 'flex-end' },
+                      marginLeft: '40px'
+
+                    }}
+                  > <Image src="/mano2.webp" width={250}
+                    height={250}
+                    alt=""></Image>
                   </Box>
-                  <p
-                    className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
-                  >
-                    {t('joinedCycleSignInTerms')}
-                    <Link href="/manifest" passHref>
-                      <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`}>
-                        {t('termsText')}
-                      </span>
-                    </Link>
-                    {t('and')}
-                    <Link href="/policy" passHref>
-                      <span className={`d-flex cursor-pointer ms-1 ${styles.linkText}`}>{t('policyText')}</span>
-                    </Link>
-                  </p>
 
-
-                </Form>
-                <Box className='mt-5 w-100'
-                  sx={{
-                    display: { xs: 'flex', sm: 'none' },
-                    justifyContent: { xs: 'flex-end' },
-                    marginLeft:'40px'
-
-                  }}
-                > <Image src="/mano2.webp" width={250}
-                  height={250}
-                  alt=""></Image>
-              </Box>
-                
-              </Box>
             </Box>
-          </Col>
+
+        </Box>
+
+      </Col >
         </Box >
-        <Footer />
+  <Footer />
       </>
     );
   else
-    return (<></>)
+return (<></>)
 };
 
 export default SignUpJoinToCycleForm;

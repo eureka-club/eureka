@@ -17,7 +17,7 @@
   "Join": "Join us",
   "VisitEureka": "Visit Eureka",
   "joinedTerms": "By joining, you agree to",
-  "joinedCycleSignInTerms":"By signing up for the cycle, I am joining Eureka and accepting ",
+  "joinedCycleSignInTerms": "By signing up for the cycle, I am joining Eureka and accepting ",
   "termsText": "our Manifesto",
   "and": "and",
   "policyText": "the Privacy Policy",
@@ -31,7 +31,16 @@
   "worksCountHeader_0": "No work in the cycle",
   "worksCountHeader": "1 work in the cycle",
   "worksCountHeader_other": "{{count}} works in the cycle",
-  "I want to register now":"I want to register now",
-  "I want to participate!":"I want to participate!",
-  "InvalidPassword": "Invalid. Password must be at least 8 characters long, and must contain at least one digit (0-9)."
+  "I want to register now": "I want to register now",
+  "I want to participate!": "I want to participate!",
+  "InvalidPassword": "Invalid. Password must be at least 8 characters long, and must contain at least one digit (0-9).",
+  "OrganinedBy": "Organized by:",
+  "WantToJoin": "I Want to Join the Book and Movie Club",
+  "WhyJoin": "WHY JOIN OUR BOOK AND MOVIE CLUB?",
+  "ManifestoText": "Find out About Our Principles: Read the ",
+  "Manifesto": "Eureka Manifesto",
+  "CurationText":"A SPECIAL CURATION OF BOOKS AND FILMS TO UNDERSTAND THE TOPIC:",
+  "MembershipFee":"MEMBERSHIP FEE",
+  "JoinOurClub":"JOIN OUR CLUB TODAY!"
+
 }

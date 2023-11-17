@@ -32,5 +32,13 @@
   "worksCountHeader_other": "{{count}} obras no ciclo",
   "I want to register now": "Quero me registrar agora",
   "I want to participate!": "Eu quero participar!",
-  "InvalidPassword": "Inválido. A senha deve ter pelo menos 8 caracteres e pelo menos um dígito (0-9)."
+  "InvalidPassword": "Inválido. A senha deve ter pelo menos 8 caracteres e pelo menos um dígito (0-9).",
+  "OrganinedBy": "Organizado por:",
+  "WantToJoin": "Quero Entrar para o Clube de Leitura e Cinema",
+  "WhyJoin": "POR QUE PARTICIPAR DO NOSSO CLUBE DE LEITURA E CINEMA?",
+  "ManifestoText": "Descubra Nossos Princípios: Leia o Manifesto Eureka",
+  "Manifesto": "Manifesto Eureka",
+  "CurationText": "UMA CURADORIA ESPECIAL DE LIVROS E FILMES PARA ENTENDER O TEMA:",
+  "MembershipFee": "VALOR DA ADESÃO:",
+  "JoinOurClub": "FAÇA PARTE DO NOSSO CLUBE HOJE!"
 }
