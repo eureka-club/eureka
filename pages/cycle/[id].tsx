@@ -61,8 +61,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
   const renderCycleDetailComponent = () => {
     if (cycle) {
       const res = <CycleDetailComponent />;
-      if (cycle.access === 1) return res;
-      if (cycle.access === 2) return res;
+      if([1,2,4].includes(cycle.access))return res;
       if (cycle.access === 3 && !cycle.currentUserIsParticipant) return <Alert>Not authorized</Alert>;
     }
 

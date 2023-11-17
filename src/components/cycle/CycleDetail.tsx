@@ -220,9 +220,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           onCarouselSeeAllAction={onCarouselSeeAllAction}
         />
       );
+      if([1,2,4].includes(cycle.access))return res;
       if (cycle.access === 3) return '';
-      if (cycle.access === 1) return res;
-      if (cycle.access === 2) return res;
     }
     return '';
   };
