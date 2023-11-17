@@ -25,6 +25,8 @@ import {useJoinUserToCycleAction,useLeaveUserFromCycleAction} from '@/src/hooks/
 import {useModalContext} from '@/src/useModal'
 import SignInForm from '../forms/SignInForm';
 import { CycleMosaicItem } from '@/src/types/cycle';
+import { BadgeMark } from '@mui/material';
+import { useCyclePrice } from '@/src/hooks/useCyclePrices';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -46,6 +48,8 @@ interface Props {
   size?: string;
   className?: string;
 }
+
+
 const MosaicItem: FunctionComponent<Props> = ({
   cycle:cycleItem,
   showButtonLabels = false,
@@ -73,10 +77,13 @@ const MosaicItem: FunctionComponent<Props> = ({
   const router = useRouter();
   const {data} = useCycle(cycleId,{enabled:!!cycleId && !cycleItem})
   
+  
   const [cycle,setCycle]=useState(cycleItem)
   useEffect(()=>{
     if(!cycleItem && data)setCycle(data)
   },[data])
+
+  const {data:{price,currency}={currency:'',price:-1}} =  useCyclePrice(cycle);
   
   const {show} = useModalContext()
   
@@ -172,6 +179,7 @@ const MosaicItem: FunctionComponent<Props> = ({
       if (cycle.access === 1) return t('public');
       if (cycle.access === 2) return t('private');
       if (cycle.access === 3) return t('secret');
+      if (cycle.access === 4) return t('payment');
     }
     return '';
   };
@@ -245,7 +253,12 @@ const MosaicItem: FunctionComponent<Props> = ({
             disabled={isPending()}
             onClick={handleJoinCycleClick} className={`rounded rounded-3 text-white ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} 
             size='sm'>
-               <span className='fs-6'>{t('joinCycleLabel')}</span> 
+              <span className='fs-6'>{t('joinCycleLabel')}</span> 
+              
+              {cycle.access==4 && price!=-1
+                ? <span className="mx-1 fw-bolder">{`$${price} ${currency}`}</span>
+                : <></>
+              }
             </Button>           
     }
     else
