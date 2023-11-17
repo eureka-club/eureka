@@ -7,6 +7,8 @@ import getApiHandler from '../../../../src/lib/getApiHandler';
 import { addParticipant, find } from '../../../../src/facades/cycle';
 import {prisma} from '@/src/lib/prisma';
 import { sendMailRequestJoinCycleResponse } from '../../../../src/facades/mail';
+import getLocale from '@/src/getLocale';
+import { NextRequest } from 'next/server';
 
 const bcrypt = require('bcryptjs');
 
@@ -53,7 +55,8 @@ export default getApiHandler()
       // res.redirect('/cycle/cycleJoinedSuccefully');
     }
     if (user && user.email) {
-      const locale = req.cookies.NEXT_LOCALE;
+      //const locale = req.cookies.NEXT_LOCALE;
+      const locale = await getLocale(req);
       const t = await getT(locale, 'cycleJoin');
       const title = `${t('Hello')} ${user.name}!`;
       /// Your request to Join the cycle [name of the cycle] has been approved.
