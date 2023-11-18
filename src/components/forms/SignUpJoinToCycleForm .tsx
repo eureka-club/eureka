@@ -29,6 +29,7 @@ import { useSession } from 'next-auth/react';
 import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
 import useUser from '@/src/useUser';
 import useUsers from '@/src/useUsers'
+import { useCyclePrice } from '@/src/hooks/useCyclePrices';
 
 
 interface Props {
@@ -99,6 +100,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
 
 
   const { data: cycle, isLoading: isLoadingCycle } = useCycle(+cycleId, { enabled: !!cycleId })
+  const { data: { price, currency } = { currency: '', price: -1 } } = useCyclePrice(cycle);
 
   const works = cycle?.cycleWorksDates?.length
     ? cycle?.cycleWorksDates
@@ -507,9 +509,8 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
           </Col>
           <Col className='col-12'>
             <Row className='bg-secondary d-flex align-items-center' style={{ height: '3rem', fontSize: '1.2em' }}>
-              <Box sx={{ fontSize: { xs: '.9em', md: '1.1em' }, display: 'flex', justifyContent: 'center' }}>
-                <span className='text-center text-white'>{t('MembershipFee')}</span>
-              </Box>
+              {cycle.access == 4 && price != -1 ? <Box sx={{ fontSize: { xs: '.9em', md: '1.1em' }, display: 'flex', justifyContent: 'center' }}>
+                <span className='text-center text-white'>{t('MembershipFee')}: {`$${price} ${currency}`}</span> </Box> : <></>}
             </Row>
           </Col>
           <Col className='col-12'>
