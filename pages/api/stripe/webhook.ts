@@ -2,6 +2,7 @@ import { addParticipant } from "@/src/facades/cycle";
 import { NextApiRequest, NextApiResponse } from "next";
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
+import {prisma} from '@/src/lib/prisma';
 
 const buffer = (req:any) => {
   return new Promise((resolve, reject) => {
@@ -69,11 +70,11 @@ export default async function handler(
     }
 
     // Return a 200 response to acknowledge receipt of the event
-    res.status(200).end('Acknowledge receipt');
+    res.status(200).send('Acknowledge receipt');
 
   } 
   else {
     res.setHeader('Allow', 'POST');
-    res.status(405).end('Method Not Allowed');
+    res.status(405).send('Method Not Allowed');
   }
 }
