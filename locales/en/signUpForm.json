@@ -39,8 +39,16 @@
   "WhyJoin": "WHY JOIN OUR BOOK AND MOVIE CLUB?",
   "ManifestoText": "Find out About Our Principles: Read the ",
   "Manifesto": "Eureka Manifesto",
-  "CurationText":"A SPECIAL CURATION OF BOOKS AND FILMS TO UNDERSTAND THE TOPIC:",
-  "MembershipFee":"MEMBERSHIP FEE",
-  "JoinOurClub":"JOIN OUR CLUB TODAY!"
-
+  "CurationText": "A SPECIAL CURATION OF BOOKS AND FILMS TO UNDERSTAND THE TOPIC:",
+  "MembershipFee": "MEMBERSHIP FEE",
+  "JoinOurClub": "JOIN OUR CLUB TODAY!",
+  "clic": "Click here",
+  "joinClub": "to join the club.",
+  "RegisterNotice": "We have updated our registration system. If you created your account using your email address prior to May 2022, please 'Join' instead of 'Login'. This will allow you to set up your password. You won't lose any information from your existing account.",
+  "RegisterAlert": "We updated our registration system. Please Sign Up instead of Login, so you can set up your password. You won't lose any information from your Eureka existing account.",
+  "InvalidSesion": "Invalid password or session",
+  "isNotUser": "User not registered",
+  "EmailRequired": "The email field is required",
+  "PasswordRequired": "The password field is required",
+  "RegisteredUsingGoogleProvider": "Registered Using Google Provider"
 }

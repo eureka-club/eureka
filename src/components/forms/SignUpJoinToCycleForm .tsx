@@ -1,4 +1,6 @@
 import { signIn } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
+
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useState, MouseEvent, ChangeEvent, FormEvent, useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -22,6 +24,13 @@ import { DATE_FORMAT_LARGE } from '../../constants';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import { Session } from '@/src/types';
+import { useSession } from 'next-auth/react';
+import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
+import useUser from '@/src/useUser';
+import useUsers from '@/src/useUsers'
+
+
 interface Props {
   noModal?: boolean;
 }
@@ -36,7 +45,9 @@ interface FormValues {
 
 const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) => {
   const { t } = useTranslation('signUpForm');
+  const { data: session, status } = useSession();
   //const formRef = useRef<HTMLFormElement>(null);
+  const [idSession, setIdSession] = useState<string>('')
   const [formValues, setFormValues] = useState<FormValues>({
     identifier: '',
     password: '',
@@ -54,6 +65,9 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
     // language: string
   }
 
+  console.log(session, 'SESSION SESSION')
+
+
   function handleChangeTextField(ev: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     ev.preventDefault();
     const { name, value } = ev.target;
@@ -66,6 +80,8 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
 
   const router = useRouter();
   const [cycleId, setCycleId] = useState<string>('')
+  const [haveAccount, setHaveAccount] = useState<boolean>(false)
+
   useEffect(() => {
     if (router?.query) {
       if (router.query.cycleId) {
@@ -74,12 +90,47 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
     }
   }, [router])
 
+  useEffect(() => {
+    const s = session;
+    if (s) {
+      setIdSession(s.user.id.toString());
+    }
+  }, [session]);
+
 
   const { data: cycle, isLoading: isLoadingCycle } = useCycle(+cycleId, { enabled: !!cycleId })
 
   const works = cycle?.cycleWorksDates?.length
     ? cycle?.cycleWorksDates
     : cycle?.works.map(w => ({ id: w.id, workId: w.id, work: w, startDate: new Date(), endDate: new Date() }))
+
+  const whereCycleParticipants = {
+    where: {
+      OR: [
+        { cycles: { some: { id: cycle?.id } } },//creator
+        { joinedCycles: { some: { id: cycle?.id } } },//participants
+      ],
+    }
+  };
+  const { data: participants, isLoading: isLoadingParticipants } = useUsers(whereCycleParticipants,
+    {
+      enabled: !!cycle?.id,
+      from: 'cycle/Mosaic'
+    }
+  )
+
+  const { data: user } = useUser(+idSession, { enabled: !!+idSession });
+
+  const handleHaveAccountLink = (ev: MouseEvent<HTMLButtonElement>) => {
+    setFormValues({
+      identifier: '',
+      password: '',
+      name: '',
+      lastname: ''
+    });
+    setHaveAccount(!haveAccount);
+    
+  }
 
 
   const handleSignUpGoogle = (ev: MouseEvent<HTMLButtonElement>) => {
@@ -142,6 +193,86 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
     return true;
   };
 
+  const handleSubmitSignIn = async (ev: FormEvent<HTMLFormElement>) => {
+    ev.preventDefault();
+    const joinToCycle = cycle!.id || -1;
+    const email = formValues.identifier;
+    const password = formValues.password;
+    //setLoading(true);
+
+    if (!email) {
+      toast.error(t('EmailRequired'))
+      //setLoading(false)
+
+      return false;
+    }
+    if (!password) {
+      toast.error(t('PasswordRequired'))
+      //setLoading(false)
+
+      return false;
+    }
+    if (email && password) {
+
+      if (!validateEmail(email)) {
+        toast.error(t('InvalidMail'));
+        return false;
+      }
+
+      const ur = await userRegistered(email);
+      if (!ur) {
+        toast.error('Error');
+        //setLoading(false)
+
+        return;
+      }
+      if (ur.isUser) {
+        if (!ur.provider && !ur.hasPassword) {
+          toast.error(t('RegisterAlert'))
+          //setLoading(false)
+        }
+        else if (ur.provider == 'google') {
+          toast.error(t('RegisteredUsingGoogleProvider'))
+          //setLoading(false)
+        }
+        else {
+          const callbackUrl = !!joinToCycle && joinToCycle > 0
+            ? `/cycle/${joinToCycle}`
+            : localStorage.getItem('loginRedirect')?.toString() || '/';
+
+          signIn('credentials', {
+            callbackUrl,
+            email: email,
+            password: password
+          })
+            .then(res => {
+              const r = res as unknown as { error: string }
+
+
+              if (res && r.error) {
+                toast.error(t('InvalidSesion'))
+                //setLoading(false)
+              }
+              else {
+                close()
+                localStorage.setItem('loginRedirect', router.asPath)
+                router.push(localStorage.getItem('loginRedirect') || '/').then(() => {
+                  localStorage.setItem('loginRedirect', '')
+                })
+              }
+            })
+        }
+      }
+      else {
+        toast.error(t('isNotUser'))
+        //setLoading(false)
+
+      }
+    }
+
+  }
+
+
   const handleSubmitSignUp = async (ev: FormEvent<HTMLFormElement>) => {
     //mutate user custom data
     ev.preventDefault();
@@ -180,6 +311,25 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
       } else toast.error(t('UserRegistered'));
     } else toast.error(t('emptyFields'));
   };
+
+  const handleJoinCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    execJoinCycle();
+  };
+
+  const {
+    mutate: execJoinCycle,
+    isLoading: isJoinCycleLoading,
+    data: mutationResponse,
+    // isSuccess: isJoinCycleSuccess,
+  } = useJoinUserToCycleAction(user!, cycle!, participants!, (_data, error) => {
+    if (!error) {//para q no salgan dos toast al unirse a ciclo privado
+      if (cycle?.access != 2)
+        toast.success(t('OK'));
+    }
+    else
+      toast.error(t('Internal Server Error'));
+  });
 
   //border border-1"  style={{ borderRadius: '0.5em'}}
   if (cycle)
@@ -375,10 +525,20 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
                 // width: '100%',
               }}
             >
-               
-                <Box className='py-4' id='FormContainer'
-                  sx={{ width: ['90%', '60%', '40%', '30%', '25%'] }}>
-                  <button
+
+              <Box className='py-4' id='FormContainer'
+                sx={{ width: ['90%', '60%', '40%', '30%', '25%'] }}>
+                {/*CASO CUANDO HAY SESSION*/}
+                {session && <>
+                  <Box >
+                    <Button onClick={handleJoinCycleClick} className={`mb-4 btn btn-eureka  w-100`}>
+                      {t('I want to register now')}
+                    </Button>
+                  </Box>
+                </>}
+                {/*CASO CUANDO NO HAY SESSION*/}
+                {!session &&
+                  <><button
                     type="button"
                     onClick={handleSignUpGoogle}
                     className={`d-flex justify-content-center   ${styles.buttonGoogleSignUpJoinCycle}`}
@@ -390,86 +550,143 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
                       {t('joinViaGoogle')}
                     </div>
                   </button>
-                  <p className={`mb-2 ${styles.alternativeLabel}`}>{t('alternativeText')}</p>
-                  <Form onSubmit={handleSubmitSignUp} className='mt-4'>
-                    <TextField id="name" className="w-100 mb-4 " label={`${t('Name')}`}
-                      variant="outlined" size="small" name="name"
-                      value={formValues.name!}
-                      type="text"
-                      onChange={handleChangeTextField}
-                    >
-                    </TextField>
-                    <TextField id="lastname" className=" w-100 mb-4" label={`${t('LastName')}`}
-                      variant="outlined" size="small" name="lastname"
-                      value={formValues.lastname!}
-                      type="text"
-                      onChange={handleChangeTextField}
-                    >
-                    </TextField>
+                    <p className={`my-2 ${styles.alternativeLabelSignUpJoinCycle}`}>{t('alternativeText')}</p>
+                    {!haveAccount && <Form onSubmit={handleSubmitSignUp} className='mt-2'>
+                      <TextField id="name" className="w-100 mb-4 " label={`${t('Name')}`}
+                        variant="outlined" size="small" name="name"
+                        value={formValues.name!}
+                        type="text"
+                        onChange={handleChangeTextField}
+                      >
+                      </TextField>
+                      <TextField id="lastname" className=" w-100 mb-4" label={`${t('LastName')}`}
+                        variant="outlined" size="small" name="lastname"
+                        value={formValues.lastname!}
+                        type="text"
+                        onChange={handleChangeTextField}
+                      >
+                      </TextField>
 
-                    <TextField id="email" className="w-100 mb-4" label={`${t('emailFieldLabel')}`}
-                      variant="outlined" size="small" name="identifier"
-                      value={formValues.identifier!}
-                      type="text"
-                      onChange={handleChangeTextField}
-                    >
-                    </TextField>
+                      <TextField id="email" className="w-100 mb-4" label={`${t('emailFieldLabel')}`}
+                        variant="outlined" size="small" name="identifier"
+                        value={formValues.identifier!}
+                        type="text"
+                        onChange={handleChangeTextField}
+                      >
+                      </TextField>
 
-                    <TextField id="pass" className="w-100 mb-5" label={`${t('passwordFieldLabel')}`}
-                      variant="outlined" size="small" name="password"
-                      value={formValues.password!}
-                      autoComplete="current-password"
-                      type="password"
-                      helperText={`(${t('passRequirements')})`}
-                      onChange={handleChangeTextField}
-                    >
-                    </TextField>
+                      <TextField id="pass" className="w-100 mb-4" label={`${t('passwordFieldLabel')}`}
+                        variant="outlined" size="small" name="password"
+                        value={formValues.password!}
+                        autoComplete="current-password"
+                        type="password"
+                        helperText={`(${t('passRequirements')})`}
+                        onChange={handleChangeTextField}
+                      >
+                      </TextField>
 
-                    <Box >
-                      <Button type="submit" className={`mb-4 btn btn-eureka  w-100`}>
-                        {t('I want to register now')}
-                      </Button>
-                    </Box>
-                    <p
-                      className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
-                    >
-                      {t('joinedCycleSignInTerms')}
-                      <Link href="/manifest" passHref>
-                        <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`}>
-                          {t('termsText')}
-                        </span>
-                      </Link>
-                      {t('and')}
-                      <Link href="/policy" passHref>
-                        <span className={`d-flex cursor-pointer ms-1 ${styles.linkText}`}>{t('policyText')}</span>
-                      </Link>
-                    </p>
+                      <Box >
+                        <p
+                          className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
+                        >
+                          {t('HaveAccounttext')}
+                        <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`} onClick={handleHaveAccountLink}>
+                            {t('clic')}
+                          </span>
+                          {t('joinClub')}
+                        </p>
+                      </Box>
+
+                      <Box >
+                        <Button type="submit" className={`mb-4 btn btn-eureka  w-100`}>
+                          {t('I want to register now')}
+                        </Button>
+                      </Box>
+                      <p
+                        className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
+                      >
+                        {t('joinedCycleSignInTerms')}
+                        <Link href="/manifest" passHref>
+                          <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`}>
+                            {t('termsText')}
+                          </span>
+                        </Link>
+                        {t('and')}
+                        <Link href="/policy" passHref>
+                          <span className={`d-flex cursor-pointer ms-1 ${styles.linkText}`}>{t('policyText')}</span>
+                        </Link>
+                      </p>
 
 
-                  </Form>
-                  <Box className='mt-5 w-100'
-                    sx={{
-                      display: { xs: 'flex', sm: 'none' },
-                      justifyContent: { xs: 'flex-end' },
-                      marginLeft: '40px'
+                    </Form>}
 
-                    }}
-                  > <Image src="/mano2.webp" width={250}
-                    height={250}
-                    alt=""></Image>
-                  </Box>
+                    {haveAccount && <Form onSubmit={handleSubmitSignIn} className='mt-2'>
+
+                      <TextField id="email" className="w-100 mb-4" label={`${t('emailFieldLabel')}`}
+                        variant="outlined" size="small" name="identifier"
+                        value={formValues.identifier!}
+                        type="text"
+                        onChange={handleChangeTextField}
+                      >
+                      </TextField>
+
+                      <TextField id="pass" className="w-100 mb-4" label={`${t('passwordFieldLabel')}`}
+                        variant="outlined" size="small" name="password"
+                        value={formValues.password!}
+                        autoComplete="current-password"
+                        type="password"
+                        helperText={`(${t('passRequirements')})`}
+                        onChange={handleChangeTextField}
+                      >
+                      </TextField>
+
+                      <Box >
+                        <p
+                          className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
+                        >
+                          {t('dontHaveAccounttext')}
+                        <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`} onClick={handleHaveAccountLink}>
+                            {t('clic')}
+                          </span>
+                          {t('joinClub')}
+                        </p>
+                      </Box>
+
+
+                      <Box >
+                        <Button type="submit" className={`mb-4 btn btn-eureka  w-100`}>
+                          {t('I want to register now')}
+                        </Button>
+                      </Box>
+
+
+
+                    </Form>}
+
+                  </>}
+                <Box className='mt-5 w-100'
+                  sx={{
+                    display: { xs: 'flex', sm: 'none' },
+                    justifyContent: { xs: 'flex-end' },
+                    marginLeft: '40px'
+
+                  }}
+                > <Image src="/mano2.webp" width={250}
+                  height={250}
+                  alt=""></Image>
+                </Box>
+
+              </Box>
 
             </Box>
 
-        </Box>
-
-      </Col >
+          </Col >
         </Box >
-  <Footer />
+        <Footer />
       </>
     );
   else
-return (<></>)
+    return (<></>)
 };
 
 export default SignUpJoinToCycleForm;

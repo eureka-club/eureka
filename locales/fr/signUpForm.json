@@ -42,5 +42,14 @@
   "Manifesto": "Manifeste Eurêka",
   "CurationText": "UNE SÉLECTION SPÉCIALE DE LIVRES ET DE FILMS POUR COMPRENDRE LE THÈME :",
   "MembershipFee": "FRAIS D'ADHÉSION:",
-  "JoinOurClub": "REJOINS NOTRE CLUB DÈS AUJOURD'HUI !"
+  "JoinOurClub": "REJOINS NOTRE CLUB DÈS AUJOURD'HUI !",
+  "clic": "Cliquez ici",
+  "joinClub": "rejoindre le club.",
+  "RegisterNotice": "Nous avons mis à jour notre système d'inscription. Si vous avez créé votre compte en utilisant votre adresse e-mail avant mai 2022, veuillez 'Rejoindre' au lieu de vous 'Connecter'. Cela vous permettra de définir votre mot de passe. Vous ne perdrez aucune information de votre compte Eureka existant.",
+  "RegisterAlert": "Nous avons mis à jour notre système d'inscription. Cliquez 'Rejoindre' au lieu de 'Connecter', afin que de définir votre mot de passe. Vous ne perdrez aucune information de votre compte Eureka existant.",
+  "InvalidSesion": "Mot de passe ou session invalide",
+  "isNotUser": "Compte non enregistré",
+  "EmailRequired": "Le champ 'Adresse e-mail' est obligatoire",
+  "PasswordRequired": "Le champ 'Mot de passe' est obligatoire",
+  "RegisteredUsingGoogleProvider": "Inscrit à l'aide du fournisseur Google"
 }

@@ -81,6 +81,10 @@ color: #fdf7f7;
   text-align: center;
 }
 
+.alternativeLabelSignUpJoinCycle {
+  color: var(--eureka-green);
+  text-align: center;
+}
   .buttonGoogle {
   background: transparent ;
   background-size: 26px;
