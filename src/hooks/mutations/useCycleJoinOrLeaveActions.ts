@@ -48,6 +48,7 @@ const useJoinUserToCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,part
             });
             const {stripe_session_url} = await fr.json();
             window.location.href = stripe_session_url;
+            return;
           }
           else{
             const res = await fetch(`/api/cycle/${cycle!.id}/join`, { 
