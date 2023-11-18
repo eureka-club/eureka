@@ -25,7 +25,6 @@ import {useJoinUserToCycleAction,useLeaveUserFromCycleAction} from '@/src/hooks/
 import {useModalContext} from '@/src/useModal'
 import SignInForm from '../forms/SignInForm';
 import { CycleMosaicItem } from '@/src/types/cycle';
-import { BadgeMark } from '@mui/material';
 import { useCyclePrice } from '@/src/hooks/useCyclePrices';
 
 dayjs.extend(utc);
@@ -171,6 +170,11 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   const handleLeaveCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
+    
+    if(cycle?.access==4){
+      const res = confirm("This is a warning alert — due to the cycle is paid check it out, otherwise you will have to pay again to join to it!");
+      if(!res)return;
+    }
     execLeaveCycle();
   };
 
