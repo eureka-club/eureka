@@ -510,7 +510,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
           <Col className='col-12'>
             <Row className='bg-secondary d-flex align-items-center' style={{ height: '3rem', fontSize: '1.2em' }}>
               {cycle.access == 4 && price != -1 ? <Box sx={{ fontSize: { xs: '.9em', md: '1.1em' }, display: 'flex', justifyContent: 'center' }}>
-                <span className='text-center text-white'>{t('MembershipFee')}: {`$${price} ${currency}`}</span> </Box> : <></>}
+                <span className='text-center text-white'>{t('MembershipFee')} {`$${price} ${currency}`}</span> </Box> : <></>}
             </Row>
           </Col>
           <Col className='col-12'>
