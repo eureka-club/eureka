@@ -1,5 +1,6 @@
 import {memo,FC} from 'react';
 import crypto from 'crypto-js';
+const bcrypt = require('bcryptjs');
 import { Embed, CommentCount } from 'hyvor-talk-react';
 //import { useSession } from 'next-auth/react';
 
@@ -30,6 +31,7 @@ const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
     const { user } = session;
     const userDataObj = {
       id: user.id,
+      timestamp: Math.floor(Date.now() / 1000),
       email: user.email,
       name: user.name || user.email?.split('@')[0] || 'User',
       picture: (user.photos && user.photos.length) 
