@@ -23,6 +23,7 @@ import {ModalProvider} from '@/src/useModal'
 import Script from 'next/script';
 import { Session } from '@/src/types';
 import Spinner from '@/src/components/Spinner';
+import ErrorBounddary from '@/src/ErrorBounddary';
 const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   let initialState : Iterable<readonly [Atom<unknown>, unknown]> | undefined = undefined
   let session:  Session | null | undefined = null
@@ -110,10 +111,10 @@ function Loading() {
                     {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                     <ModalProvider>
                       <NotificationProvider>
-                        {/* <ErrorBoundary> */}
+                       <ErrorBounddary> 
                         
                           <AnyComponent {...pageProps} />
-                        {/* </ErrorBoundary> */}
+                         </ErrorBounddary> 
                       </NotificationProvider>
                     </ModalProvider>
                     <Toaster position="top-center" reverseOrder={false}/>
