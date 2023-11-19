@@ -66,7 +66,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
     // language: string
   }
 
-  console.log(session, 'SESSION SESSION')
+  //console.log(session, 'SESSION SESSION')
 
 
   function handleChangeTextField(ev: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
