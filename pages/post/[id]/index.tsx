@@ -18,10 +18,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const opt = {
     to: [
       {
-        email: 'gbanoaol@gmail.com',
+        email: process.env.DEV_EMAIL!,
       },
       {
-        email: 'julie@eureka.club',
+        email: process.env.EMAILING_FROM!,
       },
     ],
     from: {

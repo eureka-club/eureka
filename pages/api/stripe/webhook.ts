@@ -68,7 +68,7 @@ export default async function handler(
             if(user){
               const subject =`After the user paid successfully -failed join ${user.email} to the cycle: ${cycleId}`;
               await sendMail ({       
-                from:process.env.EMAILING_FROM!,
+                from:process.env.DEV_EMAIL!,
                 to:process.env.EMAILING_FROM!,
                 subject,
                 html:`<p>${subject}</p>`
