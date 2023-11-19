@@ -313,7 +313,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         
       );
       if (cycle.access === 3) return '';
-      if (cycle.access === 1) return res;
+      if ([1, 4].includes(cycle.access)) return res;
       if (cycle.access === 2 && (cycleContext.cycle?.currentUserIsCreator || cycleContext.cycle?.currentUserIsParticipant)) return res;
     }
     return '';
@@ -350,7 +350,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         </>
       );
       if (cycle.access === 3) return <></>;
-      if (cycle.access === 1) return res;
+      if ([1, 4].includes(cycle.access)) return res;
       if (cycle.access === 2 && (cycleContext.cycle?.currentUserIsCreator || cycleContext.cycle?.currentUserIsParticipant)) return res;
     }
     return <></>;
@@ -366,7 +366,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   const getDefaultActiveKey = () => {
     if (cycle) {
-      if (cycle.access === 1) {
+      if ([1, 4].includes(cycle.access)) {
         if (cycleContext.currentUserIsParticipant) return 'cycle-discussion';
         return 'cycle-about';
       }
