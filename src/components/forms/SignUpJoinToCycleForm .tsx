@@ -138,7 +138,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
 
   const handleSignUpGoogle = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    const callbackUrl = `/cycle/${router.query.cycleId}`;
+    const callbackUrl = `/cycle/${router.query.cycleId}?join=true`;
     signIn('google', { callbackUrl });
   };
 
@@ -165,7 +165,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
     });
     if (res.ok) {
       const data = await res.json();
-      const callbackUrl = `/cycle/${router.query.cycleId}`;
+      const callbackUrl = `/cycle/${router.query.cycleId}?join=true`;
       signIn('email', { ...callbackUrl && { callbackUrl }, email: identifier });
       // return data;
     } else {

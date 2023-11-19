@@ -21,6 +21,7 @@ import toast from 'react-hot-toast';
 import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLeaveActions';
 import { useModalContext } from '@/src/useModal';
 import SignInForm from '@/components/forms/SignInForm';
+import { addParticipant } from '@/src/facades/cycle';
 
 const whereCycleParticipants = (id: number) => ({
   where: {
@@ -197,15 +198,18 @@ const CycleDetailPage: NextPage<Props> = (props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { params, req } = ctx;
+  const { params, req, query } = ctx;
   const queryClient = new QueryClient();
   const session = await getSession(ctx);
 
   if (params?.id == null || typeof params.id !== 'string') {
     return { notFound: true };
   }
-  //const {id:id_} = context.query;
+  
   const id = parseInt(params.id);
+  
+
+  //const {id:id_} = context.query;
 
   const wcu = whereCycleParticipants(id);
   const wcp = whereCyclePosts(id);
@@ -215,6 +219,17 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   let cycle = await getCycle(id, origin);
   let metaTags = null;
   if (cycle) {
+    const {join} = query;
+    
+    if(
+      session?.user && 
+      join && 
+      cycle.participants.findIndex(i=>i.id==session.user.id)==-1
+    ){
+      await addParticipant(id,+session?.user.id!);
+    }
+
+
     metaTags = {
       id: cycle?.id,
       title: cycle?.title,

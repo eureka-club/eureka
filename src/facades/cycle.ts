@@ -424,26 +424,26 @@ export const createFromServerFields = async (
   });
 };
 
-export const addParticipant = async (cycle: Cycle, id: number): Promise<Cycle> => {
+export const addParticipant = async (cycleId: number, userId: number): Promise<Cycle> => {
   const res = await prisma.cycle.update({
-    where: { id: cycle.id },
-    data: { participants: { connect: { id } } },
+    where: { id: cycleId },
+    data: { participants: { connect: { id:userId } } },
   });
   if(res){
-    const user = await prisma.user.findUnique({where:{id}});
+    const user = await prisma.user.findUnique({where:{id:userId}});
 
     const mailchimpErrorHandler = async (email_address:string,segment:string)=>{
       const subject =`Failed subscribing ${email_address} to the segment: ${segment}`;
       
       await sendMail({
-        from:{email:process.env.DEV_EMAIL!},
-        to:[{email:process.env.EMAILING_FROM!}],
+        from:{email:process.env.EMAILING_FROM!},
+        to:[{email:process.env.DEV_EMAIL!}],
         subject,
         html:`<p>${subject}</p>`
       });
     }
     
-    const segment = `ciclo-${cycle.id}-pax`;
+    const segment = `ciclo-${cycleId}-pax`;
     if(user){
       const r = await subscribe_to_segment({
         segment,
@@ -453,7 +453,7 @@ export const addParticipant = async (cycle: Cycle, id: number): Promise<Cycle> =
         // onFailure: async (err)=>console.error('error',err)
       });
       if(!r){
-        mailchimpErrorHandler(user.email!,segment);
+        await mailchimpErrorHandler(user.email!,segment);
       }
     }
   }
