@@ -1,19 +1,17 @@
 import {memo,FC} from 'react';
 import crypto from 'crypto-js';
-const bcrypt = require('bcryptjs');
 import { Embed, CommentCount } from 'hyvor-talk-react';
 //import { useSession } from 'next-auth/react';
 
 import { HYVOR_SSO_KEY, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
-import { Session } from '@/src/types';
+import { Session } from '../../types';
 
 interface Props {
   entity: string;
   id: string;
-  session: Session;
+  session: Session
 }
 const HyvorComments: FC<Props> = ({ entity, id, session })=>{
-  //const {data:session, status} = useSession() ;
   const isSessionLoading = status == 'loading'
   let hyvorSso = {};
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
@@ -22,18 +20,10 @@ const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
   if (isSessionLoading) {
     return null;
   }
-
-  if (session == null) {
-    const userData = Buffer.from(JSON.stringify({})).toString('base64');
-    console.log(userData, HYVOR_SSO_KEY!, 'userData, HYVOR_SSO_KEY!')
-
-    const hash = crypto.HmacSHA1(userData, HYVOR_SSO_KEY!).toString();
-    hyvorSso = { hash, userData, loginURL: `${WEBAPP_URL}/` };
-  } else {
+if(session){
     const { user } = session;
     const userDataObj = {
       id: user.id,
-      timestamp: Math.floor(Date.now() / 1000),
       email: user.email,
       name: user.name || user.email?.split('@')[0] || 'User',
       picture: (user.photos && user.photos.length) 
@@ -41,13 +31,14 @@ const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
       : user.image,
     };
     const userData = Buffer.from(JSON.stringify(userDataObj)).toString('base64');
-    console.log(userData, HYVOR_SSO_KEY!,'userData, HYVOR_SSO_KEY!')
     const hash = crypto.HmacSHA1(userData, HYVOR_SSO_KEY!).toString();
 
     hyvorSso = { hash, userData, loginURL: `${WEBAPP_URL}/` };
-  }
+  
 
   return <Embed websiteId={Number(3377)} id={`${entity}-${id}`} sso={hyvorSso}/>;
+}
+else return <></>
 };
 
 export default memo(HyvorComments);
