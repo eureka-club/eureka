@@ -22,6 +22,7 @@ import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLe
 import { useModalContext } from '@/src/useModal';
 import SignInForm from '@/components/forms/SignInForm';
 import { addParticipant } from '@/src/facades/cycle';
+import { useEffect } from 'react';
 
 const whereCycleParticipants = (id: number) => ({
   where: {
@@ -94,6 +95,17 @@ const CycleDetailPage: NextPage<Props> = (props) => {
     if (!error) toast.success(t('OK'));
     else toast.success(t('Internal Server Error'));
   });
+
+  useEffect(()=>{debugger;
+    const {join} = router.query;
+    if(
+      session?.user && 
+      join && 
+      cycle?.participants.findIndex(i=>i.id==session.user.id)==-1
+    ){
+      execJoinCycle();
+    }
+  },[])
 
   const requestJoinCycle = async () => {
     if (!session) openSignInModal();
@@ -189,6 +201,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
         </SimpleLayout>
       </CycleContext.Provider>
     );
+    
 
   return (
     <SimpleLayout banner={getBanner()} title="Loading...">
@@ -219,15 +232,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   let cycle = await getCycle(id, origin);
   let metaTags = null;
   if (cycle) {
-    const {join} = query;
     
-    if(
-      session?.user && 
-      join && 
-      cycle.participants.findIndex(i=>i.id==session.user.id)==-1
-    ){
-      await addParticipant(id,+session?.user.id!);
-    }
 
 
     metaTags = {

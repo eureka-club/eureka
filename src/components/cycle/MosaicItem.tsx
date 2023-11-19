@@ -144,7 +144,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   } = useLeaveUserFromCycleAction(user!,cycle!,participants!,(_data,error)=>{
     if(!error) {
       toast.success(t('OK'));
-      router.push(`/cycle/${cycle?.id}`);
+      if(router.query.join)
+        router.push(`/cycle/${cycle?.id}`);
     }
     else
       toast.error(t('Internal Server Error'));
