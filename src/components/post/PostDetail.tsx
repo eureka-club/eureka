@@ -215,7 +215,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
             tity={post} parent={cycle! || work!} cacheKey={['POST', `${post.id}`]} />
           </div>*/}
           </Col>
-          <HyvorComments entity='post' id={`${post.id}`} />
+          {/* <HyvorComments entity='post' id={`${post.id}`} /> */}
           {/*<div className='container d-sm-block d-lg-none mt-3'>
             <CommentsList entity={post} parent={cycle! || work!} cacheKey={['POST', `${post.id}`]} />
           </div>*/}

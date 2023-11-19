@@ -287,7 +287,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       const res = (
         <Suspense fallback={<Spinner animation="grow"/>}>
           <TabPane eventKey="cycle-discussion">
-              <HyvorComments entity='cycle' id={`${cycle.id}`}  />
+              {/* <HyvorComments entity='cycle' id={`${cycle.id}`}  /> */}
           </TabPane>
           <TabPane eventKey="eurekas">
               <CycleDetailDiscussion cycle={cycle} className="mb-5" cacheKey={['POSTS',JSON.stringify(cyclePostsProps)]} />

@@ -419,7 +419,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                   {/* <div className='container d-none d-lg-block mt-5'>
                   <CommentsList entity={work} parent={undefined}/>
                 </div>*/}
-                  <HyvorComments entity="work" id={`${work.id}`} />
+                  {/* <HyvorComments entity="work" id={`${work.id}`} /> */}
                 </Col>
                   {/* <div className='container d-sm-block d-lg-none mt-3'>
                   <CommentsList entity={work} parent={undefined}/>
