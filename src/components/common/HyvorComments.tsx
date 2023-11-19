@@ -1,17 +1,18 @@
 import {memo,FC} from 'react';
 import crypto from 'crypto-js';
 import { Embed, CommentCount } from 'hyvor-talk-react';
-import { useSession } from 'next-auth/react';
+//import { useSession } from 'next-auth/react';
 
 import { HYVOR_SSO_KEY, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
-import { Session } from '../../types';
+import { Session } from '@/src/types';
 
 interface Props {
   entity: string;
   id: string;
+  session: Session;
 }
-const HyvorComments:FC<Props> = ({ entity,id })=>{
-  const {data:session, status} = useSession() ;
+const HyvorComments: FC<Props> = ({ entity, id, session })=>{
+  //const {data:session, status} = useSession() ;
   const isSessionLoading = status == 'loading'
   let hyvorSso = {};
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
