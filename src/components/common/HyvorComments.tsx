@@ -25,6 +25,8 @@ const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
   if (session == null) {
     const userData = Buffer.from(JSON.stringify({})).toString('base64');
+    console.log(userData, HYVOR_SSO_KEY!, 'userData, HYVOR_SSO_KEY!')
+
     const hash = crypto.HmacSHA1(userData, HYVOR_SSO_KEY!).toString();
     hyvorSso = { hash, userData, loginURL: `${WEBAPP_URL}/` };
   } else {
@@ -39,6 +41,7 @@ const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
       : user.image,
     };
     const userData = Buffer.from(JSON.stringify(userDataObj)).toString('base64');
+    console.log(userData, HYVOR_SSO_KEY!,'userData, HYVOR_SSO_KEY!')
     const hash = crypto.HmacSHA1(userData, HYVOR_SSO_KEY!).toString();
 
     hyvorSso = { hash, userData, loginURL: `${WEBAPP_URL}/` };
