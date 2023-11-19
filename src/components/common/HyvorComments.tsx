@@ -3,15 +3,15 @@ import crypto from 'crypto-js';
 import { Embed, CommentCount } from 'hyvor-talk-react';
 //import { useSession } from 'next-auth/react';
 
-import { HYVOR_SSO_KEY, HYVOR_WEBSITE_ID, WEBAPP_URL } from '../../constants';
-import { Session } from '@/src/types';
+import { HYVOR_SSO_KEY, HYVOR_WEBSITE_ID, WEBAPP_URL } from '@/src/constants';
+import { Session } from '../../types';
 
 interface Props {
   entity: string;
   id: string;
-  session: Session;
+  session: Session
 }
-const HyvorComments: FC<Props> = ({ entity, id, session })=>{
+const HyvorComments:FC<Props> = ({ entity,id,session })=>{
   //const {data:session, status} = useSession() ;
   const isSessionLoading = status == 'loading'
   let hyvorSso = {};
@@ -24,6 +24,7 @@ const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
   if (session == null) {
     const userData = Buffer.from(JSON.stringify({})).toString('base64');
+    console.log('userData:', userData, 'HYVOR_SSO_KEY:',HYVOR_SSO_KEY)
     const hash = crypto.HmacSHA1(userData, HYVOR_SSO_KEY!).toString();
     hyvorSso = { hash, userData, loginURL: `${WEBAPP_URL}/` };
   } else {
@@ -37,6 +38,7 @@ const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
       : user.image,
     };
     const userData = Buffer.from(JSON.stringify(userDataObj)).toString('base64');
+    console.log('userData:', userData, 'HYVOR_SSO_KEY:', HYVOR_SSO_KEY)
     const hash = crypto.HmacSHA1(userData, HYVOR_SSO_KEY!).toString();
 
     hyvorSso = { hash, userData, loginURL: `${WEBAPP_URL}/` };
