@@ -67,7 +67,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
     // language: string
   }
 
-  console.log(session, 'SESSION1 SESSION1 SESSION1')
+  //console.log(session, 'SESSION1 SESSION1 SESSION1')
 
 
   function handleChangeTextField(ev: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -318,6 +318,8 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
   const handleJoinCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
     execJoinCycle();
+    if(session && cycle?.access == 1)
+      router.push(`/cycle/${cycle.id}`);
   };
 
   const {
