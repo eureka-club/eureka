@@ -25,7 +25,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import { Session } from '@/src/types';
-import { useSession } from 'next-auth/react';
+//import { useSession } from 'next-auth/react';
 import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
 import useUser from '@/src/useUser';
 import useUsers from '@/src/useUsers'
@@ -34,6 +34,7 @@ import { useCyclePrice } from '@/src/hooks/useCyclePrices';
 
 interface Props {
   noModal?: boolean;
+  session:Session
 }
 
 interface FormValues {
@@ -44,9 +45,9 @@ interface FormValues {
   // language: string
 }
 
-const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) => {
+const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, session }) => {
   const { t } = useTranslation('signUpForm');
-  const { data: session, status } = useSession();
+  //const { data: session, status } = useSession();
   //const formRef = useRef<HTMLFormElement>(null);
   const [idSession, setIdSession] = useState<string>('')
   const [formValues, setFormValues] = useState<FormValues>({
@@ -66,7 +67,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
     // language: string
   }
 
-  //console.log(session, 'SESSION SESSION')
+  console.log(session, 'SESSION1 SESSION1 SESSION1')
 
 
   function handleChangeTextField(ev: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
