@@ -28,7 +28,7 @@ const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,log
     if(!noModal)
       localStorage.setItem('loginRedirect', router.asPath)
     const callbackUrl = !!joinToCycle&&joinToCycle!=-1 
-       ? `/cycle/${joinToCycle}`
+       ? `/cycle/${joinToCycle}?join=true`
        : localStorage.getItem('loginRedirect')?.toString()||'/';
     signIn('google',{ callbackUrl });
   };
@@ -76,7 +76,7 @@ const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,log
            }
            else {
             const callbackUrl = !!joinToCycle&&joinToCycle>0 
-            ? `/cycle/${joinToCycle}`
+            ? `/cycle/${joinToCycle}?join=true`
             : localStorage.getItem('loginRedirect')?.toString()||'/';
             signIn('credentials' ,{
               callbackUrl,

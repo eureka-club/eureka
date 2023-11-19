@@ -60,7 +60,7 @@ export default async function handler(
 
         if(cycle){
           try{
-            await addParticipant(cycle,+userId);
+            await addParticipant(cycle.id,+userId);
           }
           catch(e){
             console.error(e);

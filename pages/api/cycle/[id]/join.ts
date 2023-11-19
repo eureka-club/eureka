@@ -14,7 +14,6 @@ export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const session = await getSession({ req });
     const {userId:ui}=req.body;
-
     if (session == null && !ui) {
       res.statusMessage = 'unauthorized';
       return res.status(400).end();      
@@ -117,7 +116,7 @@ export default getApiHandler()
         return;
       }
 
-      await addParticipant(cycle, userId);
+      await addParticipant(cycle.id, userId);
 
      await prisma.cycleUserJoin.upsert({
         where:{

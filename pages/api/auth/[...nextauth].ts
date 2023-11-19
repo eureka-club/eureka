@@ -93,8 +93,6 @@ const mailchimpErrorHandler = async (email_address:string,segment:string)=>{
   const subject =`Failed subscribing ${email_address} to the segment: ${segment}`;
   
   await sendMail({
-    // from:{email:process.env.DEV_EMAIL!},
-    // to:[{email:process.env.EMAILING_FROM!}],
     from:{email:process.env.EMAILING_FROM!},
     to:[{email:process.env.DEV_EMAIL!}],
     subject,
@@ -102,32 +100,32 @@ const mailchimpErrorHandler = async (email_address:string,segment:string)=>{
   });
 }
 
-const joinToCycleHandler = async (req: NextApiRequest,cycle:Cycle & {
-  participants: {
-      id: number;
-  }[];
-},user:User)=>{
-  if(cycle?.access!==4){
-    let notificationMessage = `userJoinedCycle!|!${JSON.stringify({
-      userName: user?.name,
-      cycleTitle: cycle?.title,
-    })}`;
+// const joinToCycleHandler = async (req: NextApiRequest,cycle:Cycle & {
+//   participants: {
+//       id: number;
+//   }[];
+// },user:User)=>{
+//   if(cycle?.access!==4){
+//     let notificationMessage = `userJoinedCycle!|!${JSON.stringify({
+//       userName: user?.name,
+//       cycleTitle: cycle?.title,
+//     })}`;
 
-    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/cycle/${cycle!.id}/join`, { 
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        userId:user.id,
-        notificationMessage,
-        notificationContextURL: `/cycle/${cycle!.id}?tabKey=participants`,
-        notificationToUsers:cycle.participants.map(i=>i.id),
-      }),
-    });
-  }
-}
+//     const res = await fetch(`${process.env.NEXTAUTH_URL}/api/cycle/${cycle!.id}/join`, { 
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({
+//         userId:user.id,
+//         notificationMessage,
+//         notificationContextURL: `/cycle/${cycle!.id}?tabKey=participants`,
+//         notificationToUsers:cycle.participants.map(i=>i.id),
+//       }),
+//     });
+//   }
+// }
 const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> => {
   const locale = req.cookies.NEXT_LOCALE || 'es';
-  let {joinToCycle} = req.body;
+  // let {joinToCycle} = req.body;
 
   return NextAuth(req, res, {
     adapter: PrismaAdapter(prisma),
@@ -182,25 +180,6 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
       updateUser:async({user})=>{
         const vt = await prisma.userCustomData.findFirst({where:{identifier:user.email!}})
         if(vt){
-        // const hash = bcrypt.hashSync(vt.password, 8);
-
-        if(vt.joinToCycle>=0){
-          const cycle = await find(vt.joinToCycle);
-          if(cycle){
-            await addParticipant(cycle, +user.id);
-            await prisma.cycleUserJoin.upsert({
-                where:{
-                  cycleId_userId:{
-                    userId:+user.id,
-                    cycleId:vt.joinToCycle
-                  }
-                },
-                create:{userId:+user.id,cycleId:vt.joinToCycle,pending:false},
-                update:{pending:false}
-              });
-          }
-        }
-
           const res = await prisma.user.update({
             where:{email:user.email!},
             data:{
@@ -208,7 +187,6 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
               name:vt.name
             }
           })
-
         }
       },
       createUser:async({user})=>{
@@ -225,11 +203,11 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
         }
                 
         const {cookies,query:{nextauth}} = req;
-        const cbu = cookies['next-auth.callback-url'];
+        // const cbu = cookies['next-auth.callback-url'];
         
-        if(cbu?.match(/cycle\/(\d+)$/)){
-            joinToCycle = +RegExp.$1;
-        }
+        // if(cbu?.match(/cycle\/(\d+)$/)){
+        //     joinToCycle = +RegExp.$1;
+        // }
         if(!nextauth?.includes('google')){
           const vt = await prisma.userCustomData.findFirst({where:{identifier:user.email!}});
           
@@ -251,14 +229,14 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
             where:{identifier:user.email!}
           });
         }
-        if(joinToCycle){
-          const cycle = await prisma.cycle.findUnique({
-            where:{id:joinToCycle},
-            include:{participants:{select:{id:true}}}
-          });
-          if(cycle)
-            await joinToCycleHandler(req,cycle,user);
-        }
+        // if(joinToCycle){
+        //   const cycle = await prisma.cycle.findUnique({
+        //     where:{id:joinToCycle},
+        //     include:{participants:{select:{id:true}}}
+        //   });
+        //   if(cycle)
+        //     await joinToCycleHandler(req,cycle,user);
+        // }
         
       }
     },

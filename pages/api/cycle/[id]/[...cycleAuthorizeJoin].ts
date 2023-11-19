@@ -41,7 +41,7 @@ export default getApiHandler()
     }
     const user = await prisma.user.findFirst({ where: { id: parseInt(userId, 10) } });
     if (authorized === '1') {
-      await addParticipant(cycle, +userId);
+      await addParticipant(cycle.id, +userId);
       
       let cuj = await prisma.cycleUserJoin.update({
         where:{
