@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
 import {prisma} from '@/src/lib/prisma';
+import { sendMail} from "@/src/facades/mail";
 
 const buffer = (req:any) => {
   return new Promise((resolve, reject) => {
@@ -56,8 +57,24 @@ export default async function handler(
         const paymentIntent = event.data.object;
         const {client_reference_id:userId,cycleId}=paymentIntent.metadata;
         const cycle = await prisma?.cycle.findUnique({where:{id:+cycleId}});
+
         if(cycle){
-          await addParticipant(cycle,+userId);
+          try{debugger;
+            await addParticipant(cycle,+userId);
+          }
+          catch(e){
+            console.error(e);
+            const user = await prisma.user.findUnique({where:{id:+userId}});
+            if(user){
+              const subject =`After the user paid successfully -failed join ${user.email} to the cycle: ${cycleId}`;
+              await sendMail ({       
+                from:process.env.EMAILING_FROM!,
+                to:process.env.EMAILING_FROM!,
+                subject,
+                html:`<p>${subject}</p>`
+              });
+            }
+          }
         }
         console.log(`PaymentIntent for ${paymentIntent.amount} was successful!`,paymentIntent.metadata);
         break;

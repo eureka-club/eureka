@@ -4,6 +4,7 @@ import { StoredFileUpload } from '../types';
 import { CreateCycleServerFields, CreateCycleServerPayload, CycleMosaicItem } from '../types/cycle';
 import { prisma } from '@/src/lib/prisma';
 import { subscribe_to_segment, unsubscribe_from_segment } from '@/src/lib/mailchimp';
+import { sendMail } from './mail';
 
 export const NEXT_PUBLIC_MOSAIC_ITEMS_COUNT = +(process.env.NEXT_PUBLIC_NEXT_PUBLIC_MOSAIC_ITEMS_COUNT || 10);
 
@@ -430,14 +431,34 @@ export const addParticipant = async (cycle: Cycle, id: number): Promise<Cycle> =
   });
   if(res){
     const user = await prisma.user.findUnique({where:{id}});
+
+    const mailchimpErrorHandler = async (email_address:string,segment:string)=>{
+      const subject =`Failed subscribing ${email_address} to the segment: ${segment}`;
+      
+      await sendMail({
+        from:{email:process.env.DEV_EMAIL!},
+        to:[{email:process.env.EMAILING_FROM!}],
+        subject,
+        html:`<p>${subject}</p>`
+      });
+    }
+    const segment = `ciclo-${cycle.id}-pax`;
     if(user){
-      await subscribe_to_segment({
-        segment:`ciclo-${cycle.id}-pax`,
+      subscribe_to_segment({
+        segment,
         email_address:user.email!,
         name:user.name||'unknown'
         // onSuccess: async (res)=>console.log('ok',res),
         // onFailure: async (err)=>console.error('error',err)
-      });
+      })
+      .then(r=>{
+        if(!r){
+          mailchimpErrorHandler(user.email!,segment);
+        }
+      })
+      .catch(e=>{
+        mailchimpErrorHandler(user.email!,segment);
+      })
     }
   }
   return res;

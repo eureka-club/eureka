@@ -8,7 +8,7 @@ import CredentialsProvider from "next-auth/providers/credentials"
 
 import getT from 'next-translate/getT';
 import {prisma} from '@/src/lib/prisma';
-import { sendMailSingIn } from '@/src/facades/mail';
+import { sendMail, sendMailSingIn } from '@/src/facades/mail';
 const bcrypt = require('bcryptjs');
 import { subscribe_to_segment } from '@/src/lib/mailchimp';
 import { addParticipant, find } from '@/src/facades/cycle';
@@ -89,6 +89,17 @@ import { CycleMosaicItem } from '@/src/types/cycle';
   };
   return options;
 }; */
+const mailchimpErrorHandler = async (email_address:string,segment:string)=>{
+  const subject =`Failed subscribing ${email_address} to the segment: ${segment}`;
+  
+  await sendMail({
+    from:{email:process.env.DEV_EMAIL!},
+    to:[{email:process.env.EMAILING_FROM!}],
+    subject,
+    html:`<p>${subject}</p>`
+  });
+}
+
 const joinToCycleHandler = async (req: NextApiRequest,cycle:Cycle & {
   participants: {
       id: number;
@@ -198,13 +209,22 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
 
         }
       },
-      createUser:async({user})=>{
-        await subscribe_to_segment({
-          segment:'eureka-all-users',
+      createUser:async({user})=>{debugger;
+        const segment = 'eureka-all-users';
+        subscribe_to_segment({
+          segment,
           email_address:user.email!,
           name:user.name||'unknown'
           // onSuccess: async (res)=>console.log('ok',res),
           // onFailure: async (err)=>console.error('error',err)
+        })
+        .then(r=>{
+          if(!r){
+            mailchimpErrorHandler(user.email!,segment);
+          }
+        })
+        .catch(e=>{
+          mailchimpErrorHandler(user.email!,segment);
         });
         
         const {cookies,query:{nextauth}} = req;

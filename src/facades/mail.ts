@@ -44,10 +44,11 @@ const sendEmailWebhook = async (opt: MailDataRequired) => {
   } catch (error) {
     const e = error as unknown as { response: { body: any } };
     if (error) {
+      const e = (error as {message:string,code?:string});
       // eslint-disable-next-line no-console
-      console.error(e.response.body.errors[0].message);
+      console.error(`${e?.code} ${e.message}`);
       // eslint-disable-next-line no-console
-      console.error(JSON.stringify(e.response.body));
+      console.error(e);
     }
     return false;
   }

@@ -28,8 +28,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       email: process.env.EMAILING_FROM!,
       name: 'EUREKA-CLUB',
     },
-    subject: `Error on post: ${ctx.params!.id}`,
-    html: `Error on post: ${ctx.params!.id}.`,
+    subject: `Error on post: ${ctx.params!.id}, wrong url.`,
+    html: `Error on post: ${ctx.params!.id}, wrong url.`,
   };
 
   sendMail(opt);
