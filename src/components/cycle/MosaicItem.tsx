@@ -172,7 +172,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     ev.preventDefault();
     
     if(cycle?.access==4){
-      const res = confirm("This is a warning alert — due to the cycle is paid check it out, otherwise you will have to pay again to join to it!");
+      const res = confirm(t('abandoningPaidCycleWarning'));
       if(!res)return;
     }
     execLeaveCycle();
