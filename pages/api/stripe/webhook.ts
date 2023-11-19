@@ -59,7 +59,7 @@ export default async function handler(
         const cycle = await prisma?.cycle.findUnique({where:{id:+cycleId}});
 
         if(cycle){
-          try{debugger;
+          try{
             await addParticipant(cycle,+userId);
           }
           catch(e){

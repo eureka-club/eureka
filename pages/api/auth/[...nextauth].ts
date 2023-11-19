@@ -93,8 +93,10 @@ const mailchimpErrorHandler = async (email_address:string,segment:string)=>{
   const subject =`Failed subscribing ${email_address} to the segment: ${segment}`;
   
   await sendMail({
-    from:{email:process.env.DEV_EMAIL!},
-    to:[{email:process.env.EMAILING_FROM!}],
+    // from:{email:process.env.DEV_EMAIL!},
+    // to:[{email:process.env.EMAILING_FROM!}],
+    from:{email:process.env.EMAILING_FROM!},
+    to:[{email:process.env.DEV_EMAIL!}],
     subject,
     html:`<p>${subject}</p>`
   });
@@ -209,24 +211,19 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
 
         }
       },
-      createUser:async({user})=>{debugger;
+      createUser:async({user})=>{
         const segment = 'eureka-all-users';
-        subscribe_to_segment({
+        const r = await subscribe_to_segment({
           segment,
           email_address:user.email!,
           name:user.name||'unknown'
           // onSuccess: async (res)=>console.log('ok',res),
           // onFailure: async (err)=>console.error('error',err)
         })
-        .then(r=>{
-          if(!r){
-            mailchimpErrorHandler(user.email!,segment);
-          }
-        })
-        .catch(e=>{
+        if(!r){
           mailchimpErrorHandler(user.email!,segment);
-        });
-        
+        }
+                
         const {cookies,query:{nextauth}} = req;
         const cbu = cookies['next-auth.callback-url'];
         

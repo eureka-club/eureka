@@ -429,38 +429,34 @@ export const addParticipant = async (cycle: Cycle, id: number): Promise<Cycle> =
     where: { id: cycle.id },
     data: { participants: { connect: { id } } },
   });
-  // if(res){
-  //   const user = await prisma.user.findUnique({where:{id}});
+  if(res){
+    const user = await prisma.user.findUnique({where:{id}});
 
-  //   const mailchimpErrorHandler = async (email_address:string,segment:string)=>{
-  //     const subject =`Failed subscribing ${email_address} to the segment: ${segment}`;
+    const mailchimpErrorHandler = async (email_address:string,segment:string)=>{
+      const subject =`Failed subscribing ${email_address} to the segment: ${segment}`;
       
-  //     await sendMail({
-  //       from:{email:process.env.DEV_EMAIL!},
-  //       to:[{email:process.env.EMAILING_FROM!}],
-  //       subject,
-  //       html:`<p>${subject}</p>`
-  //     });
-  //   }
-  //   const segment = `ciclo-${cycle.id}-pax`;
-  //   if(user){
-  //     subscribe_to_segment({
-  //       segment,
-  //       email_address:user.email!,
-  //       name:user.name||'unknown'
-  //       // onSuccess: async (res)=>console.log('ok',res),
-  //       // onFailure: async (err)=>console.error('error',err)
-  //     })
-  //     .then(r=>{
-  //       if(!r){
-  //         mailchimpErrorHandler(user.email!,segment);
-  //       }
-  //     })
-  //     .catch(e=>{
-  //       mailchimpErrorHandler(user.email!,segment);
-  //     })
-  //   }
-  // }
+      await sendMail({
+        from:{email:process.env.DEV_EMAIL!},
+        to:[{email:process.env.EMAILING_FROM!}],
+        subject,
+        html:`<p>${subject}</p>`
+      });
+    }
+    
+    const segment = `ciclo-${cycle.id}-pax`;
+    if(user){
+      const r = await subscribe_to_segment({
+        segment,
+        email_address:user.email!,
+        name:user.name||'unknown'
+        // onSuccess: async (res)=>console.log('ok',res),
+        // onFailure: async (err)=>console.error('error',err)
+      });
+      if(!r){
+        mailchimpErrorHandler(user.email!,segment);
+      }
+    }
+  }
   return res;
 };
 
