@@ -57,7 +57,7 @@ export default async function handler(
         const paymentIntent = event.data.object;
         const {client_reference_id:userId,cycleId}=paymentIntent.metadata;
         const cycle = await prisma?.cycle.findUnique({where:{id:+cycleId}});
-
+        
         if(cycle){
           try{
             await addParticipant(cycle.id,+userId);

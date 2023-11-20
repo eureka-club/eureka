@@ -424,7 +424,13 @@ export const createFromServerFields = async (
   });
 };
 
-export const addParticipant = async (cycleId: number, userId: number): Promise<Cycle> => {
+export const addParticipant = async (cycleId: number, userId: number): Promise<boolean> => {
+  const alreadyJoin = await prisma.cycle.findFirst({where:{
+    participants:{
+      every:{id:userId}
+    }
+  }});
+  if(alreadyJoin)return true;
   const res = await prisma.cycle.update({
     where: { id: cycleId },
     data: { participants: { connect: { id:userId } } },
@@ -457,7 +463,7 @@ export const addParticipant = async (cycleId: number, userId: number): Promise<C
       }
     }
   }
-  return res;
+  return !!res;
 };
 
 export const removeParticipant = async (cycle: Cycle, id: number): Promise<Cycle> => {

@@ -118,16 +118,16 @@ export default getApiHandler()
 
       await addParticipant(cycle.id, userId);
 
-     await prisma.cycleUserJoin.upsert({
-        where:{
-          cycleId_userId:{
-            userId:userId,
-            cycleId:cycle.id
-          }
-        },
-        create:{userId:userId,cycleId:cycle.id,pending:false},
-        update:{pending:false}
-      });
+    //  await prisma.cycleUserJoin.upsert({
+    //     where:{
+    //       cycleId_userId:{
+    //         userId:userId,
+    //         cycleId:cycle.id
+    //       }
+    //     },
+    //     create:{userId:userId,cycleId:cycle.id,pending:false},
+    //     update:{pending:false}
+    //   });
 
       const notification = await create(
         notificationMessage,
