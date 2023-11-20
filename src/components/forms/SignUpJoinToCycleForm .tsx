@@ -348,6 +348,11 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
       toast.error(t('Internal Server Error'));
   });
 
+  const handlerRecoveryLogin = () => {
+    close()
+    router.push("/recoveryLogin")
+  }
+
   //border border-1"  style={{ borderRadius: '0.5em'}}
   if (cycle)
     return (
@@ -639,14 +644,16 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
 
                     {haveAccount && <Form onSubmit={handleSubmitSignIn} className='mt-2'>
 
-                      <TextField id="email" className="w-100 mb-4" label={`${t('emailFieldLabel')}`}
+                      <TextField id="email" className="w-100 mb-2" label={`${t('emailFieldLabel')}`}
                         variant="outlined" size="small" name="identifier"
                         value={formValues.identifier!}
                         type="text"
                         onChange={handleChangeTextField}
                       >
                       </TextField>
-
+                    <div className='d-flex justify-content-between mb-1'><div></div>
+                      <Button onClick={handlerRecoveryLogin} variant="link" className={`btn-link d-flex link align-items-end cursor-pointer text-gray`} style={{fontSize:'.8em'}}>{t('forgotPassText')}</Button>
+                    </div>
                       <TextField id="pass" className="w-100 mb-4" label={`${t('passwordFieldLabel')}`}
                         variant="outlined" size="small" name="password"
                         value={formValues.password!}
