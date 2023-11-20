@@ -411,7 +411,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
               </section> */}
               <Col className={`col-12 col-xl-6 mt-md-5`}>
                 <div className='p-3 d-flex flex-column justify-content-center align-items-center'>
-                  <Box sx={{ width: ['100%', '60%', '40%', '90%'], paddingTop: { sm: '5em' }, paddingLeft: { lg: '10em', xl: '22em' } }} >
+                  <Box sx={{ width: ['100%', '60%', '40%', '90%'], paddingTop: { sm: '5em' }, paddingLeft: { lg: '10em', xl: '21em' } }} >
 
                     <section className=''>
                       <Row className='mb-2'>
