@@ -30,11 +30,13 @@ import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLe
 import useUser from '@/src/useUser';
 import useUsers from '@/src/useUsers'
 import { useCyclePrice } from '@/src/hooks/useCyclePrices';
+import LinearProgress from '@mui/material/LinearProgress';
+
 
 
 interface Props {
   noModal?: boolean;
-  session:Session
+  session: Session
 }
 
 interface FormValues {
@@ -57,6 +59,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
     lastname: ''
     // language: '',
   });
+  const [loading, setLoading] = useState(false)
 
   interface MutationProps {
     identifier: string;
@@ -67,7 +70,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
     // language: string
   }
 
-  console.log(session, 'SESSION1 SESSION1 SESSION1')
+  //console.log(session, 'SESSION1 SESSION1 SESSION1')
 
 
   function handleChangeTextField(ev: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -132,7 +135,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
       lastname: ''
     });
     setHaveAccount(!haveAccount);
-    
+
   }
 
 
@@ -201,17 +204,17 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
     const joinToCycle = cycle!.id || -1;
     const email = formValues.identifier;
     const password = formValues.password;
-    //setLoading(true);
+    setLoading(true);
 
     if (!email) {
       toast.error(t('EmailRequired'))
-      //setLoading(false)
+      setLoading(false)
 
       return false;
     }
     if (!password) {
       toast.error(t('PasswordRequired'))
-      //setLoading(false)
+      setLoading(false)
 
       return false;
     }
@@ -225,18 +228,18 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
       const ur = await userRegistered(email);
       if (!ur) {
         toast.error('Error');
-        //setLoading(false)
+        setLoading(false)
 
         return;
       }
       if (ur.isUser) {
         if (!ur.provider && !ur.hasPassword) {
           toast.error(t('RegisterAlert'))
-          //setLoading(false)
+          setLoading(false)
         }
         else if (ur.provider == 'google') {
           toast.error(t('RegisteredUsingGoogleProvider'))
-          //setLoading(false)
+          setLoading(false)
         }
         else {
           const callbackUrl = !!joinToCycle && joinToCycle > 0
@@ -268,7 +271,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
       }
       else {
         toast.error(t('isNotUser'))
-        //setLoading(false)
+        setLoading(false)
 
       }
     }
@@ -284,23 +287,27 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
     const password = formValues.password;
     // const language = formValues.language;
     const fullName = formValues.name + ' ' + formValues.lastname;
+    setLoading(true)
 
     //console.log(formValues)
 
     if (email && password && fullName) {//&& language
       if (!validateEmail(email)) {
         toast.error(t('InvalidMail'));
+        setLoading(false)
         return false;
       }
 
       if (!validatePassword(password)) {
         toast.error(t('InvalidPassword'));
+        setLoading(false)
         return false;
       }
 
       const ur = await userRegistered(email);
       if (!ur) {
         toast.error(t('Error'));
+        setLoading(false)
         return;
       }
       if (!ur.isUser || !ur.hasPassword) {
@@ -311,15 +318,24 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
           fullName,
           joinToCycle: cycle!.id || -1
         });
-      } else toast.error(t('UserRegistered'));
-    } else toast.error(t('emptyFields'));
+      } else {
+        toast.error(t('UserRegistered'));
+        setLoading(false)
+      }
+    } else {
+      toast.error(t('emptyFields'));
+      setLoading(false)
+    }
   };
 
   const handleJoinCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
+    setLoading(true);
     execJoinCycle();
-    if(session && cycle?.access == 1)
+    if (session && cycle?.access == 1)
       router.push(`/cycle/${cycle.id}`);
+    setLoading(false)
+
   };
 
   const {
@@ -328,13 +344,14 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
     data: mutationResponse,
     // isSuccess: isJoinCycleSuccess,
   } = useJoinUserToCycleAction(user!, cycle!, participants!, (_data, error) => {
-    if (!error) {//para q no salgan dos toast al unirse a ciclo privado
-      if (cycle?.access != 2)
-        toast.success(t('OK'));
-    }
-    else
+    if (error) 
       toast.error(t('Internal Server Error'));
   });
+
+  const handlerRecoveryLogin = () => {
+    close()
+    router.push("/recoveryLogin")
+  }
 
   //border border-1"  style={{ borderRadius: '0.5em'}}
   if (cycle)
@@ -393,7 +410,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
               </section> */}
               <Col className={`col-12 col-xl-6 mt-md-5`}>
                 <div className='p-3 d-flex flex-column justify-content-center align-items-center'>
-                  <Box sx={{ width: ['80%', '50%', '40%', '90%'], paddingTop: { sm: '5em' }, paddingLeft: { lg: '10em', xl: '22em' } }} >
+                  <Box sx={{ width: ['100%', '60%', '40%', '90%'], paddingTop: { sm: '5em' }, paddingLeft: { lg: '10em', xl: '22em' } }} >
 
                     <section className=''>
                       <Row className='mb-2'>
@@ -421,8 +438,8 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                     <Row className='mb-4 ' >
                       <Box sx={{ padding: '1em' }}>
                         <a href='#FormContainer'>
-                          <Button className={`mb-xl-4 btn btn-eureka p-2 w-100`}>
-                            <Box sx={{ fontSize: { xs: '.8em', md: '1em' } }}>{t('WantToJoin')}</Box>
+                          <Button className={`mb-xl-4 btn btn-eureka  w-100`}>
+                            <Box sx={{}}>{t('WantToJoin')}</Box>
                           </Button></a>
                       </Box>
                     </Row>
@@ -447,14 +464,14 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                   </CycleContext.Provider>
                 </Box>
               </Col>
-              <Box className='mt-5 w-100'
+              <Box className=' w-100 mt-5'
                 sx={{
                   display: { xs: 'flex', sm: 'none' },
                   justifyContent: { xs: 'flex-end' },
                   //backgroundColor: { xs: '#f7f7f7' },
                 }}
-              > <Image className='mb-3' src="/libro.webp" width={200}
-                height={200}
+              > <Image className='' src="/libro.webp" width={180}
+                height={284}
                 alt=""></Image></Box>
             </Box>
           </Row>
@@ -468,6 +485,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                   backgroundImage: { sm: "url('/registro_desktop_about_bg.webp')" },
                   backgroundRepeat: "no-repeat",
                   backgroundSize: `100% auto`,
+                  paddingTop: { sx: '4em' }
                   // height: ['100%'],
                   // width: '100%',
                 }}
@@ -486,9 +504,9 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
           }
 
           <Col className='col-12'>
-            <Row className='bg-primary d-flex justify-content-center align-items-center' style={{ height: '3rem' }}>
-              <Box sx={{ fontSize: { xs: '.9em', md: '1.1em' }, display: 'flex', justifyContent: 'center' }}><span className='text-center text-white'>{t('ManifestoText')}
-                <Link href="/manifest"><a className='text-white text-decoration-underline' onClick={() => window.scrollTo(0, 0)}>{t('Manifesto')}</a></Link></span>
+            <Row className='bg-primary d-flex justify-content-center align-items-center' style={{ height: '5rem' }}>
+              <Box sx={{ fontSize: { sx: '.6em', lg: '1.4em' }, display: 'flex', justifyContent: 'center' }}><p className='text-center text-white mt-2'>{t('ManifestoText1').toUpperCase()}<br></br>
+                {t('ManifestoText2')}<Link href="/manifest"><a className='text-white text-decoration-underline' onClick={() => window.scrollTo(0, 0)}>{t('Manifesto')}</a></Link></p>
               </Box>
             </Row>
           </Col>
@@ -511,8 +529,8 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
             </Box>
           </Col>
           <Col className='col-12'>
-            <Row className='bg-secondary d-flex align-items-center' style={{ height: '3rem', fontSize: '1.2em' }}>
-              {cycle.access == 4 && price != -1 ? <Box sx={{ fontSize: { xs: '.9em', md: '1.1em' }, display: 'flex', justifyContent: 'center' }}>
+            <Row className='bg-secondary d-flex align-items-center' style={{ height: '3rem' }}>
+              {cycle.access == 4 && price != -1 ? <Box sx={{ fontSize: { sx: '.6em', lg: '1.4em' }, display: 'flex', justifyContent: 'center' }}>
                 <span className='text-center text-white'>{t('MembershipFee')} {`$${price} ${currency}`}</span> </Box> : <></>}
             </Row>
           </Col>
@@ -535,9 +553,9 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                 {/*CASO CUANDO HAY SESSION*/}
                 {session && <>
                   <Box >
-                    <Button onClick={handleJoinCycleClick} className={`mb-4 btn btn-eureka  w-100`}>
+                    {!loading && <Button onClick={handleJoinCycleClick} className={`mb-4 btn btn-eureka  w-100`}>
                       {t('I want to register now')}
-                    </Button>
+                    </Button>}{loading && <LinearProgress className='mb-4' />}
                   </Box>
                 </>}
                 {/*CASO CUANDO NO HAY SESSION*/}
@@ -594,7 +612,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                           className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
                         >
                           {t('HaveAccounttext')}
-                        <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`} onClick={handleHaveAccountLink}>
+                          <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`} onClick={handleHaveAccountLink}>
                             {t('clic')}
                           </span>
                           {t('joinClub')}
@@ -602,9 +620,9 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                       </Box>
 
                       <Box >
-                        <Button type="submit" className={`mb-4 btn btn-eureka  w-100`}>
+                        {!loading && <Button type="submit" disabled={loading} className={`mb-4 btn btn-eureka  w-100`}>
                           {t('I want to register now')}
-                        </Button>
+                      </Button>} {loading && <LinearProgress className='mb-4'/>}
                       </Box>
                       <p
                         className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
@@ -626,14 +644,16 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
 
                     {haveAccount && <Form onSubmit={handleSubmitSignIn} className='mt-2'>
 
-                      <TextField id="email" className="w-100 mb-4" label={`${t('emailFieldLabel')}`}
+                      <TextField id="email" className="w-100 mb-2" label={`${t('emailFieldLabel')}`}
                         variant="outlined" size="small" name="identifier"
                         value={formValues.identifier!}
                         type="text"
                         onChange={handleChangeTextField}
                       >
                       </TextField>
-
+                    <div className='d-flex justify-content-between mb-1'><div></div>
+                      <Button onClick={handlerRecoveryLogin} variant="link" className={`btn-link d-flex link align-items-end cursor-pointer text-gray`} style={{fontSize:'.8em'}}>{t('forgotPassText')}</Button>
+                    </div>
                       <TextField id="pass" className="w-100 mb-4" label={`${t('passwordFieldLabel')}`}
                         variant="outlined" size="small" name="password"
                         value={formValues.password!}
@@ -649,7 +669,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                           className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
                         >
                           {t('dontHaveAccounttext')}
-                        <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`} onClick={handleHaveAccountLink}>
+                          <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`} onClick={handleHaveAccountLink}>
                             {t('clic')}
                           </span>
                           {t('joinClub')}
@@ -658,9 +678,9 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
 
 
                       <Box >
-                        <Button type="submit" className={`mb-4 btn btn-eureka  w-100`}>
-                          {t('I want to register now')}
-                        </Button>
+                      {!loading && <Button type="submit" disabled={loading} className={`mb-4 btn btn-eureka  w-100`}>
+                        {t('I want to register now')}
+                      </Button>} {loading && <LinearProgress className='mb-4' />}
                       </Box>
 
 

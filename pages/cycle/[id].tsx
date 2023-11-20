@@ -94,21 +94,24 @@ const CycleDetailPage: NextPage<Props> = (props) => {
     isLoading: isJoinCycleLoading,
     data: mutationResponse,
     isSuccess: isJoined,
-  } = useJoinUserToCycleAction(( session as any)?.user, cycle!, participants || [], (_data, error) => {
-    if (!error) toast.success(t('OK'));
+  } = useJoinUserToCycleAction((session as any)?.user, cycle!, participants || [], (_data, error) => {
+    if (!error) {
+      if (cycle && ![2, 4].includes(cycle?.access))
+        toast.success(t('OK'))
+    }
     else toast.success(t('Internal Server Error'));
   });
 
-  useEffect(()=>{
-    const {join} = router.query;
-    if(
-      session?.user && 
-      join && 
-      cycle?.participants.findIndex(i=>i.id==session.user.id)==-1
-    ){
+  useEffect(() => {
+    const { join } = router.query;
+    if (
+      session?.user &&
+      join &&
+      cycle?.participants.findIndex(i => i.id == session.user.id) == -1
+    ) {
       execJoinCycle();
     }
-  },[])
+  }, [])
 
   const requestJoinCycle = async () => {
     if (!session) openSignInModal();
@@ -181,9 +184,8 @@ const CycleDetailPage: NextPage<Props> = (props) => {
           <meta property="og:url" content={`${WEBAPP_URL}/cycle/${props.metas?.id || ''}`} />
           <meta
             property="og:image"
-            content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${
-              props.metas?.storedFile || ''
-            }`}
+            content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${props.metas?.storedFile || ''
+              }`}
           />
           <meta property="og:type" content="article" />
 
@@ -194,9 +196,8 @@ const CycleDetailPage: NextPage<Props> = (props) => {
           <meta name="twitter:url" content={`${WEBAPP_URL}/cycle/${props.metas?.id || ''}`}></meta>
           <meta
             name="twitter:image"
-            content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${
-              props.metas?.storedFile || ''
-            }`}
+            content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${props.metas?.storedFile || ''
+              }`}
           ></meta>
         </Head>
         <SimpleLayout banner={getBanner()} title={cycle ? cycle.title : ''}>
@@ -204,7 +205,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
         </SimpleLayout>
       </CycleContext.Provider>
     );
-    
+
 
   return (
     <SimpleLayout banner={getBanner()} title="Loading...">
@@ -221,9 +222,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (params?.id == null || typeof params.id !== 'string') {
     return { notFound: true };
   }
-  
+
   const id = parseInt(params.id);
-  
+
 
   //const {id:id_} = context.query;
 
@@ -235,7 +236,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   let cycle = await getCycle(id, origin);
   let metaTags = null;
   if (cycle) {
-    
+
 
 
     metaTags = {
@@ -251,10 +252,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT, NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
   const participants = await getUsers(wcu, origin);
-  const { works } = await getWorks(ctx.locale!,wcw, origin);
+  const { works } = await getWorks(ctx.locale!, wcw, origin);
 
   await queryClient.prefetchQuery(['USERS', JSON.stringify(wcu)], () => participants);
-  await queryClient.prefetchQuery(['POSTS', JSON.stringify(wcp)], () => getPosts(ctx.locale!,wcp, origin));
+  await queryClient.prefetchQuery(['POSTS', JSON.stringify(wcp)], () => getPosts(ctx.locale!, wcp, origin));
   await queryClient.prefetchQuery(['WORKS', JSON.stringify(wcw)], () => works);
 
   participants.map((p) => {
