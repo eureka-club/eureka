@@ -393,7 +393,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
               </section> */}
               <Col className={`col-12 col-xl-6 mt-md-5`}>
                 <div className='p-3 d-flex flex-column justify-content-center align-items-center'>
-                  <Box sx={{ width: ['80%', '50%', '40%', '90%'], paddingTop: { sm: '5em' }, paddingLeft: { lg: '10em', xl: '22em' } }} >
+                  <Box sx={{ width: ['100%', '60%', '40%', '90%'], paddingTop: { sm: '5em' }, paddingLeft: { lg: '10em', xl: '22em' } }} >
 
                     <section className=''>
                       <Row className='mb-2'>
@@ -421,8 +421,8 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                     <Row className='mb-4 ' >
                       <Box sx={{ padding: '1em' }}>
                         <a href='#FormContainer'>
-                          <Button className={`mb-xl-4 btn btn-eureka p-2 w-100`}>
-                            <Box sx={{ fontSize: { xs: '.8em', md: '1em' } }}>{t('WantToJoin')}</Box>
+                          <Button className={`mb-xl-4 btn btn-eureka  w-100`}>
+                            <Box sx={{ }}>{t('WantToJoin')}</Box>
                           </Button></a>
                       </Box>
                     </Row>
@@ -447,14 +447,14 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                   </CycleContext.Provider>
                 </Box>
               </Col>
-              <Box className='mt-5 w-100'
+              <Box className=' w-100 mt-5'
                 sx={{
                   display: { xs: 'flex', sm: 'none' },
                   justifyContent: { xs: 'flex-end' },
                   //backgroundColor: { xs: '#f7f7f7' },
                 }}
-              > <Image className='mb-3' src="/libro.webp" width={200}
-                height={200}
+              > <Image className='' src="/libro.webp" width={180}
+                height={284}
                 alt=""></Image></Box>
             </Box>
           </Row>
@@ -468,11 +468,12 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                   backgroundImage: { sm: "url('/registro_desktop_about_bg.webp')" },
                   backgroundRepeat: "no-repeat",
                   backgroundSize: `100% auto`,
+                  paddingTop:{sx:'4em'}
                   // height: ['100%'],
                   // width: '100%',
                 }}
               >
-                <Box className='' sx={{ paddingX: { xs: '2em', sm: '7em', md: '12em', lg: '15em', xl: '25em' }, paddingY: { xs: '3em', sm: '6em' } }}>
+                <Box className='' sx={{ paddingX: { xs: '2em', sm: '7em', md: '12em', lg: '15em', xl: '25em' }, paddingY: { xs: '3em', sm: '6em'  } }}>
                   <div className="">
                     <Box className="" sx={{ width: '1', paddingX: { lg: '2em' }, fontSize: { sx: '.6em', lg: '1.4em' }, display: 'flex', justifyContent: 'center' }}> <span className='text-primary text-center mb-3  '><b>{t('WhyJoin')}</b></span></Box>
                     <div
@@ -486,9 +487,9 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
           }
 
           <Col className='col-12'>
-            <Row className='bg-primary d-flex justify-content-center align-items-center' style={{ height: '3rem' }}>
-              <Box sx={{ fontSize: { xs: '.9em', md: '1.1em' }, display: 'flex', justifyContent: 'center' }}><span className='text-center text-white'>{t('ManifestoText')}
-                <Link href="/manifest"><a className='text-white text-decoration-underline' onClick={() => window.scrollTo(0, 0)}>{t('Manifesto')}</a></Link></span>
+            <Row className='bg-primary d-flex justify-content-center align-items-center' style={{ height: '5rem' }}>
+              <Box sx={{ fontSize: { sx: '.6em', lg: '1.4em' }, display: 'flex', justifyContent: 'center' }}><p className='text-center text-white mt-2'>{t('ManifestoText1').toUpperCase()}<br></br>
+                {t('ManifestoText2')}<Link href="/manifest"><a className='text-white text-decoration-underline' onClick={() => window.scrollTo(0, 0)}>{t('Manifesto')}</a></Link></p>
               </Box>
             </Row>
           </Col>
@@ -511,8 +512,8 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
             </Box>
           </Col>
           <Col className='col-12'>
-            <Row className='bg-secondary d-flex align-items-center' style={{ height: '3rem', fontSize: '1.2em' }}>
-              {cycle.access == 4 && price != -1 ? <Box sx={{ fontSize: { xs: '.9em', md: '1.1em' }, display: 'flex', justifyContent: 'center' }}>
+            <Row className='bg-secondary d-flex align-items-center' style={{ height: '3rem' }}>
+              {cycle.access == 4 && price != -1 ? <Box sx={{ fontSize: { sx: '.6em', lg: '1.4em' }, display: 'flex', justifyContent: 'center' }}>
                 <span className='text-center text-white'>{t('MembershipFee')} {`$${price} ${currency}`}</span> </Box> : <></>}
             </Row>
           </Col>
