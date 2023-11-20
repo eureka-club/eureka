@@ -23,21 +23,25 @@ import Spinner from '../Spinner';
 import useUser from '@/src/useUser';
 import { Alert } from '@mui/material';
 import useCycle from '@/src/useCycle';
+import { Session } from '@/src/types';
+
 interface Props {
   postId: number;
   work?: WorkMosaicItem;
   cacheKey: [string, string];
   showSaveForLater?: boolean;
+  session: Session
+
 }
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSaveForLater = false }) => {
+const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSaveForLater = false, session }) => {
   const { t } = useTranslation('createPostForm');
   const router = useRouter();
 
-  const { data: session, status } = useSession();
+  //const { data: session, status } = useSession();
   const { data: cycle } = useCycle(+router?.query.id!, { enabled: !!router?.query.id! });
   const { data: user } = useUser(session?.user.id!, { enabled: !!session?.user.id });
 
@@ -215,7 +219,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
             tity={post} parent={cycle! || work!} cacheKey={['POST', `${post.id}`]} />
           </div>*/}
           </Col>
-          {/* <HyvorComments entity='post' id={`${post.id}`} /> */}
+          <HyvorComments entity='post' id={`${post.id}`} session={session} />
           {/*<div className='container d-sm-block d-lg-none mt-3'>
             <CommentsList entity={post} parent={cycle! || work!} cacheKey={['POST', `${post.id}`]} />
           </div>*/}

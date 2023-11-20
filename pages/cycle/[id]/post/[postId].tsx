@@ -97,6 +97,7 @@ const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId,metaTags,session
               <CycleDetailComponent
                 post={post}
                 work={post.works.length ? (post.works[0] as WorkMosaicItem) : undefined}
+                session={session}
               />
             </CycleContext.Provider>
           )}

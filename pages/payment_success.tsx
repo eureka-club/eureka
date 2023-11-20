@@ -9,9 +9,13 @@ import Link from 'next/link';
 import {Col,Row} from 'react-bootstrap';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import { useRouter } from 'next/router';
+import { Session } from '@/src/types';
 
+interface Props {
+  session: Session
+}
 
-const StripePaymentSuccessPage: NextPage = () => {
+const StripePaymentSuccessPage: NextPage<Props> = ({ session }) => {
   const { t } = useTranslation('stripe');
 
   const router = useRouter();
@@ -24,6 +28,9 @@ const StripePaymentSuccessPage: NextPage = () => {
       }
     }
   }, [router])
+
+  console.log(session, 'SESSION1 SESSION1 SESSION1')
+
 
   return (
     <SimpleLayout title="Payment Success" showNavBar={false} showFooter={false}>
@@ -81,7 +88,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   //   return { redirect: { destination: '/', permanent: false } };
   // }
 
-  return { props: {} };
+  return { props: { session } };
 };
 
 export default StripePaymentSuccessPage;

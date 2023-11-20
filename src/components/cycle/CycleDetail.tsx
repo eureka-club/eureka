@@ -41,6 +41,7 @@ import MosaicItemPost from '@/src/components/post/MosaicItem'
 import MosaicItemUser from '@/components/user/MosaicItem'
 import { useInView } from 'react-intersection-observer';
 import { CycleMosaicItem } from '@/src/types/cycle';
+import { Session } from '@/src/types';
 
 
 const CycleDetailDiscussion = lazy(() => import ('./CycleDetailDiscussion')) 
@@ -48,11 +49,13 @@ const CycleDetailWorks = lazy(() => import('./CycleDetailWorks'))
 interface Props {
   post?: PostMosaicItem;
   work?: WorkMosaicItem;
+  session:Session
 }
 
 const CycleDetailComponent: FunctionComponent<Props> = ({
   post,
   work,
+  session
 }) => {
   const {lang} = useTranslation();
   const cycleContext = useCycleContext();
@@ -133,7 +136,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
  // const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
   
-  const {data:session, status} = useSession();
+  //const {data:session, status} = useSession();
   const { t } = useTranslation('cycleDetail');
   
   const tabContainnerRef = useRef<HTMLDivElement>(null);
@@ -287,7 +290,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       const res = (
         <Suspense fallback={<Spinner animation="grow"/>}>
           <TabPane eventKey="cycle-discussion">
-              {/* <HyvorComments entity='cycle' id={`${cycle.id}`}  /> */}
+            <HyvorComments entity='cycle' id={`${cycle.id}`} session={session}  />
           </TabPane>
           <TabPane eventKey="eurekas">
               <CycleDetailDiscussion cycle={cycle} className="mb-5" cacheKey={['POSTS',JSON.stringify(cyclePostsProps)]} />
@@ -431,7 +434,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       {!post && renderCycleDetailHeader()}
       {post && cycle && (
         <MosaicContext.Provider value={{ showShare: true }}>
-          <PostDetailComponent cacheKey={['POST',post.id.toString()]} postId={post.id} work={work} />
+          <PostDetailComponent cacheKey={['POST',post.id.toString()]} postId={post.id} work={work} session={session} />
         </MosaicContext.Provider>
       )}
       {cycle && post == null && (

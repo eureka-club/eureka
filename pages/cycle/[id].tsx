@@ -23,6 +23,7 @@ import { useModalContext } from '@/src/useModal';
 import SignInForm from '@/components/forms/SignInForm';
 import { addParticipant } from '@/src/facades/cycle';
 import { useEffect } from 'react';
+import { Session } from '@/src/types';
 
 const whereCycleParticipants = (id: number) => ({
   where: {
@@ -38,7 +39,7 @@ const whereCyclePosts = (id: number) => ({ take: 8, where: { cycles: { some: { i
 
 interface Props {
   id: number;
-  session: any;
+  session: Session;
   metas: { id: number; title: string; creator: string; works: string; storedFile: string };
   NEXT_PUBLIC_AZURE_CDN_ENDPOINT: string;
   NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME: string;
@@ -62,7 +63,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
 
   const renderCycleDetailComponent = () => {
     if (cycle) {
-      const res = <CycleDetailComponent />;
+      const res = <CycleDetailComponent session={session} />;
       if([1,2,4].includes(cycle.access))return res;
       if (cycle.access === 3 && !cycle.currentUserIsParticipant) return <Alert>Not authorized</Alert>;
     }
@@ -91,7 +92,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
     isLoading: isJoinCycleLoading,
     data: mutationResponse,
     isSuccess: isJoined,
-  } = useJoinUserToCycleAction(session?.user, cycle!, participants || [], (_data, error) => {
+  } = useJoinUserToCycleAction(( session as any)?.user, cycle!, participants || [], (_data, error) => {
     if (!error) toast.success(t('OK'));
     else toast.success(t('Internal Server Error'));
   });
