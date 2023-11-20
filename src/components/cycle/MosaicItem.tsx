@@ -130,7 +130,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     // isSuccess: isJoinCycleSuccess,
   } = useJoinUserToCycleAction(user!,cycle!,participants!,(_data,error)=>{
     if(!error) {//para q no salgan dos toast al unirse a ciclo privado
-      if(cycle?.access != 2)
+      if (cycle && ![2,4].includes(cycle?.access))
         toast.success(t('OK'));
     }
     else

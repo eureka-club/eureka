@@ -29,7 +29,7 @@ const StripePaymentSuccessPage: NextPage<Props> = ({ session }) => {
     }
   }, [router])
 
-  console.log(session, 'SESSION1 SESSION1 SESSION1')
+  //console.log(session, 'SESSION1 SESSION1 SESSION1')
 
 
   return (
