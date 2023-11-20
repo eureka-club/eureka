@@ -21,7 +21,7 @@
   "and": "e",
   "policyText": "a Política de privacidade",
   "passRequirements": "mínimo 8 caracteres, min. 1 letra, min. 1 número",
-  "UserRegistered": "E-mail já cadastrado.",
+  "UserRegistered": "O endereço de e-mail que você digitou já está registrado. Use um e-mail diferente ou faça login na sua conta existente.",
   "emptyFields": "Por favor preencha todos os campos (nome, sobrenome, e-mail e senha)",
   "InvalidMail": "E-mail inválido.",
   "Why does this cycle matter": "Por que este ciclo é importante",

@@ -111,7 +111,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
       signIn('email', { email: identifier });
       // return data;
     } else {
-      toast.error(res.statusText);
+      toast.error(t(res.statusText));
     }
     return null;
   });

@@ -172,7 +172,8 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
       signIn('email', { ...callbackUrl && { callbackUrl }, email: identifier });
       // return data;
     } else {
-      toast.error(res.statusText);
+      toast.error(t(res.statusText));
+//toast.error(res.statusText);
     }
     return null;
   });

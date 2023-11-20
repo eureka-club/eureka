@@ -481,7 +481,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                   <Col>
                     <TabContent>
                       <TabPane eventKey="cycle-about">
-                        <h3 className="h5 mt-4 mb-3 fw-bold text-gray-dark">{t('Why does this cycle matter')}?</h3>
+                            <h3 className="h5 mt-4 mb-3 fw-bold text-gray-dark">{t('WhyJoin')}</h3>
                         {cycle.contentText != null && (
                           <div className="">
                             <div

@@ -32,7 +32,7 @@ export default async function handler(
       });
       return res.status(201).json({data:resC})
     }
-    res.statusMessage ='identifier already used'
+    res.statusMessage = 'UserRegistered';
     res.status(400).json({data:null})
   }
   else if(req.method=='GET'){

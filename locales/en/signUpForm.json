@@ -22,7 +22,7 @@
   "and": "and",
   "policyText": "the Privacy Policy",
   "passRequirements": "Must be at least 8 characters long, 1 letter min., 1 number min.",
-  "UserRegistered": "Email already registered.",
+  "UserRegistered": "The email address you entered is already registered. Please use a different email or log in to your existing account.",
   "emptyFields": "Please complete all fields (name, last name, email and password).",
   "InvalidMail": "Invalid email.",
   "Why does this cycle matter": "Why does this cycle matter",
