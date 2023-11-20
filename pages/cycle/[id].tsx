@@ -96,7 +96,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
     else toast.success(t('Internal Server Error'));
   });
 
-  useEffect(()=>{debugger;
+  useEffect(()=>{
     const {join} = router.query;
     if(
       session?.user && 

@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { on } from 'events';
 
 const instance = axios.create({
     baseURL:`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/mailchimp`
