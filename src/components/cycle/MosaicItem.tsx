@@ -234,7 +234,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   
   const renderJoinLeaveCycleBtn = ()=>{
-    if(cycle && !isLoadingSession){
+    if (cycle && !isLoadingSession ){
 
       if(cycle.creatorId == session?.user.id)
         return   <Button   variant="btn-warning border-warning bg-warning text-white fs-6 disabled"
@@ -242,7 +242,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           <span className='fs-6'>{t('MyCycle')}</span> {/*MyCycle*/}
       </Button>
 
-      if(cycle.participants.findIndex(p=>p.id==session?.user.id) > -1)         
+      if(cycle.participants.findIndex(p=>p.id==session?.user.id) > -1 )         
           return <Button  disabled={isPending()} onClick={handleLeaveCycleClick} variant="button border-primary bg-white text-primary" 
           className={`rounded rounded-3  ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} size='sm' >
            <span className='fs-6'>{t('common:leaveCycleLabel')}</span>
@@ -292,7 +292,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           } 
             </Badge>
            <div className={`h-100 d-flex justify-content-center align-items-end`}>
-              {showJoinOrLeaveButton && renderJoinLeaveCycleBtn()}
+            {showJoinOrLeaveButton && !(cycle.participants.findIndex(p => p.id == session?.user.id) > -1 && cycle.access == 4) && renderJoinLeaveCycleBtn()}
            </div> 
          </div>
                 
