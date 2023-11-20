@@ -63,7 +63,9 @@ const CycleDetailPage: NextPage<Props> = (props) => {
 
   const renderCycleDetailComponent = () => {
     if (cycle) {
-      const res = <CycleDetailComponent session={session} />;
+      const res = <div style={isJoinCycleLoading ? {pointerEvents:'none'}:{}}>
+        <CycleDetailComponent session={session} />;
+        </div>
       if([1,2,4].includes(cycle.access))return res;
       if (cycle.access === 3 && !cycle.currentUserIsParticipant) return <Alert>Not authorized</Alert>;
     }
