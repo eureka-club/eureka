@@ -12,7 +12,7 @@ const bcrypt = require('bcryptjs');
 
 export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
-    const session = await getSession({ req });
+    const session = await getSession({ req });debugger;
     const {userId:ui}=req.body;
     if (session == null && !ui) {
       res.statusMessage = 'unauthorized';
@@ -118,16 +118,16 @@ export default getApiHandler()
 
       await addParticipant(cycle.id, userId);
 
-    //  await prisma.cycleUserJoin.upsert({
-    //     where:{
-    //       cycleId_userId:{
-    //         userId:userId,
-    //         cycleId:cycle.id
-    //       }
-    //     },
-    //     create:{userId:userId,cycleId:cycle.id,pending:false},
-    //     update:{pending:false}
-    //   });
+     await prisma.cycleUserJoin.upsert({
+        where:{
+          cycleId_userId:{
+            userId:userId,
+            cycleId:cycle.id
+          }
+        },
+        create:{userId:userId,cycleId:cycle.id,pending:false},
+        update:{pending:false}
+      });
 
       const notification = await create(
         notificationMessage,
