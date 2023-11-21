@@ -425,12 +425,14 @@ export const createFromServerFields = async (
 };
 
 export const addParticipant = async (cycleId: number, userId: number): Promise<boolean> => {
-  const alreadyJoin = await prisma.cycle.findFirst({where:{
-    participants:{
-      every:{id:userId}
-    }
-  }});
-  if(alreadyJoin)return true;
+  const cycle = await prisma.cycle.findFirst({
+    where:{
+      id:cycleId,
+    },
+    select:{participants:{select:{id:true}}}
+  });
+  const alreadyParticipant = cycle?.participants.findIndex(p=>p.id==userId)!=-1;
+  if(alreadyParticipant)return true;
   const res = await prisma.cycle.update({
     where: { id: cycleId },
     data: { participants: { connect: { id:userId } } },
