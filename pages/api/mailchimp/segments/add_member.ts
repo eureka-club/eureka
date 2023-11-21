@@ -20,7 +20,7 @@ export default async function handler(
   if(req.method=='POST'){
     const {list_id=process.env.MAILCHIMP_AUDIENCE,segment,email_address} = req.body
     let data = null;
-    const {segments} = await client.lists.listSegments(list_id)
+    const {segments} = await client.lists.listSegments(list_id,{count:1000});
     const s = segments.filter((s:{name:string})=>s.name==segment)
     const segment_id = s && s.length ? s[0].id : undefined
     if(segment_id){
