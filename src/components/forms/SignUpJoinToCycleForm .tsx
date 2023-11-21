@@ -507,7 +507,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
           <Col className='col-12'>
             <Row className='bg-primary d-flex justify-content-center align-items-center' style={{ height: '5rem' }}>
               <Box sx={{ fontSize: { sx: '.6em', lg: '1.4em' }, display: 'flex', justifyContent: 'center' }}><p className='text-center text-white mt-2'>{t('ManifestoText1').toUpperCase()}<br></br>
-                {t('ManifestoText2')}<Link href="/manifest"><a className='text-white text-decoration-underline' onClick={() => window.scrollTo(0, 0)}>{t('Manifesto')}</a></Link></p>
+                {t('ManifestoText2')}<Link href="/manifest"><a target="_blank" className='text-white text-decoration-underline' onClick={() => window.scrollTo(0, 0)}>{t('Manifesto')}</a></Link></p>
               </Box>
             </Row>
           </Col>
