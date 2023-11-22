@@ -102,16 +102,16 @@ const CycleDetailPage: NextPage<Props> = (props) => {
     else toast.success(t('Internal Server Error'));
   });
 
-  useEffect(() => {
-    const { join } = router.query;
-    if (
-      session?.user &&
-      join &&
-      cycle?.participants.findIndex(i => i.id == session.user.id) == -1
-    ) {
-      execJoinCycle();
-    }
-  }, [])
+  // useEffect(() => {
+  //   const { join } = router.query;
+  //   if (
+  //     session?.user &&
+  //     join &&
+  //     cycle?.participants.findIndex(i => i.id == session.user.id) == -1
+  //   ) {
+  //     execJoinCycle();
+  //   }
+  // }, [])
 
   const requestJoinCycle = async () => {
     if (!session) openSignInModal();

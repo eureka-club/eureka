@@ -75,7 +75,6 @@ export default getApiHandler()
     try {
       await middleware(req,res,cors)
       const session = (await getSession({ req })) as unknown as Session;
-
       const { q = null,props:p=undefined,lang:l } = req.query;
       const language = Languages[l?.toString()!];
 

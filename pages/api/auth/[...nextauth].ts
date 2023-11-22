@@ -100,32 +100,31 @@ const mailchimpErrorHandler = async (email_address:string,segment:string)=>{
   });
 }
 
-// const joinToCycleHandler = async (req: NextApiRequest,cycle:Cycle & {
-//   participants: {
-//       id: number;
-//   }[];
-// },user:User)=>{
-//   if(cycle?.access!==4){
-//     let notificationMessage = `userJoinedCycle!|!${JSON.stringify({
-//       userName: user?.name,
-//       cycleTitle: cycle?.title,
-//     })}`;
+const joinToCycleHandler = async (req: NextApiRequest,cycle:Cycle & {
+  participants: {
+      id: number;
+  }[];
+},user:User)=>{
+  if(cycle?.access!==4){
+    let notificationMessage = `userJoinedCycle!|!${JSON.stringify({
+      userName: user?.name,
+      cycleTitle: cycle?.title,
+    })}`;
 
-//     const res = await fetch(`${process.env.NEXTAUTH_URL}/api/cycle/${cycle!.id}/join`, { 
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({
-//         userId:user.id,
-//         notificationMessage,
-//         notificationContextURL: `/cycle/${cycle!.id}?tabKey=participants`,
-//         notificationToUsers:cycle.participants.map(i=>i.id),
-//       }),
-//     });
-//   }
-// }
+    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/cycle/${cycle!.id}/join`, { 
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId:user.id,
+        notificationMessage,
+        notificationContextURL: `/cycle/${cycle!.id}?tabKey=participants`,
+        notificationToUsers:cycle.participants.map(i=>i.id),
+      }),
+    });
+  }
+}
 const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> => {
   const locale = req.cookies.NEXT_LOCALE || 'es';
-  // let {joinToCycle} = req.body;
 
   return NextAuth(req, res, {
     adapter: PrismaAdapter(prisma),
@@ -201,13 +200,13 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
         if(!r){
           mailchimpErrorHandler(user.email!,segment);
         }
-                
         const {cookies,query:{nextauth}} = req;
-        // const cbu = cookies['next-auth.callback-url'];
-        
-        // if(cbu?.match(/cycle\/(\d+)$/)){
-        //     joinToCycle = +RegExp.$1;
-        // }
+        const cbu = cookies['next-auth.callback-url'];
+        let joinToCycle = -1;
+
+        if(cbu?.match(/cycle\/(\d+)\?join=true/)){
+            joinToCycle = +RegExp.$1;
+        }
         if(!nextauth?.includes('google')){
           const vt = await prisma.userCustomData.findFirst({where:{identifier:user.email!}});
           
@@ -220,23 +219,22 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
                 name:vt.name
               }
             });
-            //joinToCycle = vt.joinToCycle;
           }
-          await prisma.userCustomData.update({
-            data:{
-              joinToCycle:-1
-            },
-            where:{identifier:user.email!}
-          });
+          // await prisma.userCustomData.update({
+          //   data:{
+          //     joinToCycle:-1
+          //   },
+          //   where:{identifier:user.email!}
+          // });
         }
-        // if(joinToCycle){
-        //   const cycle = await prisma.cycle.findUnique({
-        //     where:{id:joinToCycle},
-        //     include:{participants:{select:{id:true}}}
-        //   });
-        //   if(cycle)
-        //     await joinToCycleHandler(req,cycle,user);
-        // }
+        if(joinToCycle>-1){
+          const cycle = await prisma.cycle.findUnique({
+            where:{id:joinToCycle},
+            include:{participants:{select:{id:true}}}
+          });
+          if(cycle)
+            await joinToCycleHandler(req,cycle,user);
+        }
         
       }
     },
