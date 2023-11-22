@@ -126,7 +126,7 @@
   "public": "Ciclo público",
   "private": "Ciclo privado",
   "secret": "Ciclo secreto",
-  "payment":"Ciclo de pagamento",
+  "payment":"Ciclo $",
   "Notifications": "Notificações",
   "abandoningPaidCycleWarning":"Você está abandonando um ciclo pago, tem certeza que deseja continuar?",
   "select": "Selecionar",

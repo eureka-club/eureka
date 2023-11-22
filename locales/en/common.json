@@ -126,7 +126,7 @@
   "public": "Public cycle",
   "private": "Private cycle",
   "secret": "Secret cycle",
-  "payment":"Payment cycle",
+  "payment":"Cycle $",
   "abandoningPaidCycleWarning":"You are abandoning a paid cycle, are you sure you want to continue?",
   "select": "Select",
   "next": "next",
