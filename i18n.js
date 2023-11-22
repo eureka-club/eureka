@@ -2,7 +2,7 @@ module.exports = {
   // loader: false, // because we use babel plugins 😕
   // loadLocaleFrom: async (locale, namespace) => import(`./translations/${locale}/${namespace}`).then((m) => m.default),
   locales: ['es', 'en', 'fr', 'pt'],
-  defaultLocale: 'es',
+  defaultLocale: 'pt',
   pages: {
     '*': ['common', 'meta','stripe', 'featuredWorks', 'createWorkForm', 'createPostForm', 'navbar', 'signInForm', 'signUpForm', 'PasswordRecovery', 'singInMail', 'searchEngine', 'topics', 'notification','cycleDetail'],
     '/': ['countries'],

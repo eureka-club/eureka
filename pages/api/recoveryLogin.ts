@@ -10,13 +10,14 @@ import path from 'path';
 import readFile from '@/src/facades/readFile';
 import getT from 'next-translate/getT';
 import Handlebars from 'handlebars';
+import { defaultLocale } from 'i18n';
 
 
 export default getApiHandler()
 .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
   try {
     const {email:em} = req.body;
-    const locale = req.cookies.NEXT_LOCALE || 'es';
+    const locale = req.cookies.NEXT_LOCALE || defaultLocale;
     const to = em.toString();
     const user = await prisma.user.findUnique({where:{email:to}});
     if(user && user.password){
@@ -57,7 +58,7 @@ export default getApiHandler()
       });
       
       if(status == 200)
-        res.redirect(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/${locale||'es'}/auth/emailVerify`)
+        res.redirect(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/${locale||defaultLocale}/auth/emailVerify`)
       else{
         res.statusMessage = statusText;  
         res.status(status).json({data:null});

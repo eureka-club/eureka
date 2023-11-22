@@ -16,6 +16,7 @@ import axios from 'axios';
 import cycle from '../cycle';
 import { Cycle } from '@prisma/client';
 import { CycleMosaicItem } from '@/src/types/cycle';
+import { defaultLocale } from 'i18n';
 
 /* const getOptions = (req: NextApiRequest) => {
   const locale = req.cookies.NEXT_LOCALE;
@@ -124,7 +125,7 @@ const joinToCycleHandler = async (req: NextApiRequest,cycle:Cycle & {
   }
 }
 const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> => {
-  const locale = req.cookies.NEXT_LOCALE || 'es';
+  const locale = req.cookies.NEXT_LOCALE || defaultLocale;
 
   return NextAuth(req, res, {
     adapter: PrismaAdapter(prisma),

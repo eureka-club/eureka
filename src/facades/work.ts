@@ -4,6 +4,7 @@ import { CreateWorkServerFields, CreateWorkServerPayload, EditWorkServerFields, 
 import { prisma } from '@/src/lib/prisma';
 import { MISSING_FIELD, WORK_ALREADY_EXIST } from '@/src/api_code';
 import { CreateEditionServerPayload } from '../types/edition';
+import { defaultLocale } from 'i18n';
 
 const include = {
   localImages: { select: { id:true, storedFile: true } },
@@ -120,7 +121,7 @@ export const findAllWithoutLangRestrict = async (props?: Prisma.WorkFindManyArgs
 
 export const search = async (query: { [key: string]: string | string[] | undefined }): Promise<Work[]> => {
   const { q, where, include, lang: l } = query;
-  const language = Languages[l?.toString() ?? 'es'];
+  const language = Languages[l?.toString() ?? defaultLocale];
 
   if (where == null && q == null) {
     throw new Error("[412] Invalid invocation! Either 'q' or 'where' query parameter must be provided");

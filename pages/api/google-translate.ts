@@ -1,4 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { defaultLocale } from 'i18n';
 import type { NextApiRequest, NextApiResponse } from 'next'
 const {Translate} = require('@google-cloud/translate').v2;
 
@@ -21,7 +22,7 @@ export default async function handler(
   if(req.method=='GET'){
     const {text:t,target:ta} = req.query
     const text = t?t.toString():'';
-    const target = ta?ta.toString():'es';
+    const target = ta?ta.toString():defaultLocale;
 
     const [translation] = await translate.translate(text, target);
     return res.status(200).json({data:translation})
