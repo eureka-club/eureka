@@ -141,7 +141,15 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
 
   const handleSignUpGoogle = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    const callbackUrl = `/cycle/${router.query.cycleId}?join=true`;
+    let callbackUrl = `/cycle/${router.query.cycleId}?join=true`;
+
+    if (cycle?.access == 2)
+      callbackUrl = `/transitionJoinPrivateCycle`;
+
+    if (cycle?.access == 4)
+      callbackUrl = `/transitionSignUpToPayCycle?cycleId=${router.query.cycleId}`;
+
+
     signIn('google', { callbackUrl });
   };
 
@@ -168,12 +176,21 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
     });
     if (res.ok) {
       const data = await res.json();
-      const callbackUrl = `/cycle/${router.query.cycleId}?join=true`;
+      //const callbackUrl = `/cycle/${router.query.cycleId}?join=true`;
+
+      let callbackUrl = `/cycle/${router.query.cycleId}?join=true`;
+
+      if (cycle?.access == 2)
+        callbackUrl = `/transitionJoinPrivateCycle`;
+
+      if (cycle?.access == 4)
+        callbackUrl = `/transitionSignUpToPayCycle?cycleId=${router.query.cycleId}`;
+
       signIn('email', { ...callbackUrl && { callbackUrl }, email: identifier });
       // return data;
     } else {
       toast.error(t(res.statusText));
-//toast.error(res.statusText);
+      //toast.error(res.statusText);
     }
     return null;
   });
@@ -243,9 +260,21 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
           setLoading(false)
         }
         else {
-          const callbackUrl = !!joinToCycle && joinToCycle > 0
-            ? `/cycle/${joinToCycle}`
-            : localStorage.getItem('loginRedirect')?.toString() || '/';
+          let callbackUrl = localStorage.getItem('loginRedirect')?.toString() || '/';;
+          // ? `/cycle/${joinToCycle}`
+          // : localStorage.getItem('loginRedirect')?.toString() || '/';
+
+          if (!!joinToCycle && joinToCycle > 0) {
+
+            callbackUrl = `/cycle/${router.query.cycleId}?join=true`;
+
+            if (cycle?.access == 2)
+              callbackUrl = `/transitionJoinPrivateCycle`;
+
+            if (cycle?.access == 4)
+              callbackUrl = `/transitionSignUpToPayCycle?cycleId=${router.query.cycleId}`;
+          }
+
 
           signIn('credentials', {
             callbackUrl,
@@ -345,7 +374,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
     data: mutationResponse,
     // isSuccess: isJoinCycleSuccess,
   } = useJoinUserToCycleAction(user!, cycle!, participants!, (_data, error) => {
-    if (error) 
+    if (error)
       toast.error(t('Internal Server Error'));
   });
 
@@ -623,7 +652,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                       <Box >
                         {!loading && <Button type="submit" disabled={loading} className={`mb-4 btn btn-eureka  w-100`}>
                           {t('I want to register now')}
-                      </Button>} {loading && <LinearProgress className='mb-4'/>}
+                        </Button>} {loading && <LinearProgress className='mb-4' />}
                       </Box>
                       <p
                         className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
@@ -652,9 +681,9 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                         onChange={handleChangeTextField}
                       >
                       </TextField>
-                    <div className='d-flex justify-content-between mb-1'><div></div>
-                      <Button onClick={handlerRecoveryLogin} variant="link" className={`btn-link d-flex link align-items-end cursor-pointer text-gray`} style={{fontSize:'.8em'}}>{t('forgotPassText')}</Button>
-                    </div>
+                      <div className='d-flex justify-content-between mb-1'><div></div>
+                        <Button onClick={handlerRecoveryLogin} variant="link" className={`btn-link d-flex link align-items-end cursor-pointer text-gray`} style={{ fontSize: '.8em' }}>{t('forgotPassText')}</Button>
+                      </div>
                       <TextField id="pass" className="w-100 mb-4" label={`${t('passwordFieldLabel')}`}
                         variant="outlined" size="small" name="password"
                         value={formValues.password!}
@@ -679,9 +708,9 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
 
 
                       <Box >
-                      {!loading && <Button type="submit" disabled={loading} className={`mb-4 btn btn-eureka  w-100`}>
-                        {t('I want to register now')}
-                      </Button>} {loading && <LinearProgress className='mb-4' />}
+                        {!loading && <Button type="submit" disabled={loading} className={`mb-4 btn btn-eureka  w-100`}>
+                          {t('I want to register now')}
+                        </Button>} {loading && <LinearProgress className='mb-4' />}
                       </Box>
 
 
