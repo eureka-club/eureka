@@ -318,7 +318,6 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
     // const language = formValues.language;
     const fullName = formValues.name + ' ' + formValues.lastname;
     setLoading(true)
-
     //console.log(formValues)
 
     if (email && password && fullName) {//&& language
@@ -350,12 +349,14 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
         });
       } else {
         toast.error(t('UserRegistered'));
-        setLoading(false)
       }
+      setLoading(false)
+
     } else {
       toast.error(t('emptyFields'));
       setLoading(false)
     }
+
   };
 
   const handleJoinCycleClick = (ev: MouseEvent<HTMLButtonElement>) => {
