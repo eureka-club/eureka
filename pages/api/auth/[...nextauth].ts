@@ -130,95 +130,98 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
   return NextAuth(req, res, {
     adapter: PrismaAdapter(prisma),
     callbacks: {
-      session: async ({session}) => {
+      session: async ({ session }) => {
         const u = await prisma.user.findFirst({
-          where:{email:session.user.email},
-          include:{photos:true}
+          where: { email: session.user.email },
+          include: { photos: true },
         });
-        if(u){
+        if (u) {
           const s = session;
           s.user.id = +u.id; // eslint-disable-line no-param-reassign
           s.user.roles = u.roles; // eslint-disable-line no-param-reassign
           s.user.name = u.name; // eslint-disable-line no-param-reassign
-          s.user.photos = u.photos||[];
+          s.user.photos = u.photos || [];
           s.user.language = u.language;
         }
-        return Promise.resolve(session);        
+        return Promise.resolve(session);
       },
-    //   async redirect({url, baseUrl}) {
-    //     const {cookies,query:{nextauth}} = req;
-    //     const cbu = cookies['next-auth.callback-url'];
-        
-    //     if(cbu?.match(/cycle\/(\d+)$/)){
-    //         joinToCycle = +RegExp.$1;
-    //         return `${process.env.NEXTAUTH_URL}/cycle`
-    //     }
+      //   async redirect({url, baseUrl}) {
+      //     const {cookies,query:{nextauth}} = req;
+      //     const cbu = cookies['next-auth.callback-url'];
 
-    //   return baseUrl
-    // },
+      //     if(cbu?.match(/cycle\/(\d+)$/)){
+      //         joinToCycle = +RegExp.$1;
+      //         return `${process.env.NEXTAUTH_URL}/cycle`
+      //     }
+
+      //   return baseUrl
+      // },
       // async jwt({ token, user, account, profile, isNewUser }) {
       //   if(user)
       //   return {token,roles:user.roles}
       //   return token
       // }
       // async signIn(user, account, profile:{verificationRequest?:boolean}) {
-        
+
       //   if(profile.verificationRequest){
 
       //   }
       //   return true
       // },
     },
-    session:{
-      strategy:"jwt",
+    session: {
+      strategy: 'jwt',
     },
-    jwt:{
-      secret:process.env.SECRET,
+    jwt: {
+      secret: process.env.SECRET,
       maxAge: 60 * 60 * 24 * 30,
     },
-    events:{
-      updateUser:async({user})=>{
-        const vt = await prisma.userCustomData.findFirst({where:{identifier:user.email!}})
-        if(vt){
+    events: {
+      updateUser: async ({ user }) => {
+        const vt = await prisma.userCustomData.findFirst({ where: { identifier: user.email! } });
+        if (vt) {
           const res = await prisma.user.update({
-            where:{email:user.email!},
-            data:{
-              password:vt.password,
-              name:vt.name
-            }
-          })
+            where: { email: user.email! },
+            data: {
+              password: vt.password,
+              name: vt.name,
+            },
+          });
         }
       },
-      createUser:async({user})=>{
+      createUser: async ({ user }) => {
         const segment = 'eureka-all-users';
         const r = await subscribe_to_segment({
           segment,
-          email_address:user.email!,
-          name:user.name||'unknown'
+          email_address: user.email!,
+          name: user.name || 'unknown',
           // onSuccess: async (res)=>console.log('ok',res),
           // onFailure: async (err)=>console.error('error',err)
-        })
-        if(!r){
-          mailchimpErrorHandler(user.email!,segment);
+        });
+        if (!r) {
+          mailchimpErrorHandler(user.email!, segment);
         }
-        const {cookies,query:{nextauth}} = req;
+        const {
+          cookies,
+          query: { nextauth },
+        } = req;
         const cbu = cookies['next-auth.callback-url'];
         let joinToCycle = -1;
 
-        if(cbu?.match(/cycle\/(\d+)\?join=true/)){
-            joinToCycle = +RegExp.$1;
+        if (cbu?.match(/cycle\/(\d+)\?join=true/)) {
+          joinToCycle = +RegExp.$1;
         }
-        if(!nextauth?.includes('google')){
-          const vt = await prisma.userCustomData.findFirst({where:{identifier:user.email!}});
-          
-          if(vt){
-          // const hash = bcrypt.hashSync(vt.password, 8);
+        if (!nextauth?.includes('google')) {
+          const vt = await prisma.userCustomData.findFirst({ where: { identifier: user.email! } });
+
+          if (vt) {
+            // const hash = bcrypt.hashSync(vt.password, 8);
             await prisma.user.update({
-              where:{email:user.email!},
-              data:{
-                password:vt.password,
-                name:vt.name
-              }
+              where: { email: user.email! },
+              data: {
+                password: vt.password,
+                name: vt.name,
+              },
             });
           }
           // await prisma.userCustomData.update({
@@ -228,20 +231,18 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
           //   where:{identifier:user.email!}
           // });
         }
-        if(joinToCycle>-1){
+        if (joinToCycle > -1) {
           const cycle = await prisma.cycle.findUnique({
-            where:{id:joinToCycle},
-            include:{participants:{select:{id:true}}}
+            where: { id: joinToCycle },
+            include: { participants: { select: { id: true } } },
           });
-          if(cycle)
-            await joinToCycleHandler(req,cycle,user);
+          if (cycle) await joinToCycleHandler(req, cycle, user);
         }
-        
-      }
+      },
     },
     debug: process.env.NODE_ENV === 'development',
     providers: [
-      GoogleProvider({ 
+      GoogleProvider({
         clientId: process.env.GOOGLE_ID!,
         clientSecret: process.env.GOOGLE_SECRET!,
       }),
@@ -252,12 +253,12 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
           auth: {
             user: process.env.EMAIL_SERVER_USER!,
             pass: process.env.EMAIL_SERVER_PASS!,
-          },          
+          },
         },
         from: process.env.EMAILING_FROM,
         sendVerificationRequest: async ({ identifier: email, url }): Promise<void> => {
-          // const site = url.replace(/^https?:\/\//, ''); 
-          
+          // const site = url.replace(/^https?:\/\//, '');
+
           const t = await getT(locale, 'singInMail');
           const title = t('title');
           const subtitle = t('subtitle');
@@ -269,7 +270,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
             to: [
               {
                 email,
-                name:'EUREKA'
+                name: 'EUREKA',
               },
             ],
             from: process.env.EMAILING_FROM!,
@@ -299,39 +300,40 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
       }),
       CredentialsProvider({
         // The name to display on the sign in form (e.g. "Sign in with...")
-        name: "Credentials",
+        name: 'Credentials',
         // The credentials is used to generate a suitable form on the sign in page.
         // You can specify whatever fields you are expecting to be submitted.
         // e.g. domain, username, password, 2FA token, etc.
         // You can pass any HTML attribute to the <input> tag through the object.
         credentials: {
-          email: { label: "User name", type: "text", placeholder: "User name" },
-          password: {  label: "Password", type: "password", placeholder:'Password' }
+          email: { label: 'User name', type: 'text', placeholder: 'User name' },
+          password: { label: 'Password', type: 'password', placeholder: 'Password' },
         },
         async authorize(credentials, req) {
-          const user = await prisma.user.findFirst({where:{
-            email:credentials?.email
-          }})
-          
+          const user = await prisma.user.findFirst({
+            where: {
+              email: credentials?.email,
+            },
+          });
+
           if (user && credentials) {
             const c = await bcrypt.compare(credentials.password, user.password);
-            if(c){
-              
-              return {id:+user.id,email:user.email,image:user.image} as unknown as User
+            if (c) {
+              return { id: +user.id, email: user.email, image: user.image } as unknown as User;
             }
             return null;
             // Any object returned will be saved in `user` property of the JWT
           } else {
             // If you return null then an error will be displayed advising the user to check their details.
-            return null    
+            return null;
             // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
           }
-        }
-      })
+        },
+      }),
     ],
     secret: process.env.SECRET,
     pages: {
-      verifyRequest: `/${locale}/auth/emailVerify`, // (used for check email message)
+      verifyRequest: `/auth/emailVerify`, // /${locale} (used for check email message)
     },
   });
 };

@@ -52,7 +52,7 @@ const TransitionJoinPrivateCyclePage: NextPage<Props> = ({ session }) => {
                   </a>
                 </Link>
               </Row>
-              <Box className='d-flex flex-column justify-content-center align-items-center flex-xl-row'
+              <Box className='d-flex flex-column justify-content-center  flex-xl-row'
                 sx={{
                   backgroundImage: { sm:"url('/registro_desktop_about_bg.webp')"},
                   backgroundRepeat: "no-repeat",
@@ -60,8 +60,8 @@ const TransitionJoinPrivateCyclePage: NextPage<Props> = ({ session }) => {
                   height: { sm: '500px', md: '750px' },//lg:'500px'
                 }}
               >
-                <Col className=' d-flex col-12 col-xl-6 justify-content-center align-items-center'>
-                  <Box className=' d-flex flex-column justify-content-center align-items-center'>
+                <Col className=' d-flex col-12 col-xl-6 mt-5'>
+                  <Box className=' d-flex flex-column '>
                     <Row className='p-3 '><h1 className='text-primary text-center  mb-5'><b>{t('JoinToPrivateCycleText')}</b></h1></Row>
                     <Row className='p-3 '><h1 className='text-primary text-center   mb-5'><b>{t('privateCycleJoinRequestText')}</b></h1></Row>
                     <Row className='w-100  p-2'>
