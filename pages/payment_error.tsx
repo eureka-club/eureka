@@ -42,9 +42,9 @@ const StripePaymentErrorPage: NextPage = () => {
                   height: { md: '750px' },//lg:'500px'
                 }}
               >
-                <Col className=' d-flex w-100 justify-content-center align-items-center '>
-                  <Box className=' d-flex flex-column justify-content-start ' 
-                    sx={{ paddingX: { xs: '1em', sm: '8em', md: '10em', lg: '20em',xl:'35em'}}}>
+                <Col className=' d-flex w-100 justify-content-center mt-5'>
+                  <Box className=' d-flex flex-column' 
+                    sx={{ paddingX: { xs: '1em', sm: '8em', md: '10em', lg: '20em',xl:'30em'}}}>
                     <Row className='p-3 '><h1 className='text-primary text-center  mb-5'><b>{t('errorText')}</b></h1></Row>
                     <Row className='py-1'><p className='text-left mb-3'>{t('errorExtraText')}</p></Row>
                     <Row className='py-2'><p className='text-left  mb-3'>{t('errorExtraText2')}</p></Row>

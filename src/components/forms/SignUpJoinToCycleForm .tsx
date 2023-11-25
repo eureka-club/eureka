@@ -190,7 +190,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
       // return data;
     } else {
       toast.error(t(res.statusText));
-      //toast.error(res.statusText);
+      setLoading(false);
     }
     return null;
   });
@@ -233,7 +233,6 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
     if (!password) {
       toast.error(t('PasswordRequired'))
       setLoading(false)
-
       return false;
     }
     if (email && password) {
@@ -348,9 +347,11 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
           joinToCycle: cycle!.id || -1
         });
       } else {
+        console.log('AAAAAaaa')
         toast.error(t('UserRegistered'));
+        setLoading(false)
+        return;
       }
-      setLoading(false)
 
     } else {
       toast.error(t('emptyFields'));
@@ -439,9 +440,9 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                   <UserAvatar className='d-flex justify-content-center' size={'md'} width={75} height={75} userId={cycle.creatorId} showName={false} />
                 </Row>
               </section> */}
-              <Col className={`col-12 col-xl-6 mt-md-5`}>
+              <Col className={`col-12 col-xl-6 mt-lg-4`}>
                 <div className='p-3 d-flex flex-column justify-content-center align-items-center'>
-                  <Box sx={{ width: ['100%', '60%', '40%', '90%'], paddingTop: { sm: '5em' }, paddingLeft: { lg: '10em', xl: '21em' } }} >
+                  <Box sx={{ width: ['100%', '60%', '40%', '90%', '100%'], paddingTop: { sm: '5em' }, paddingLeft: { lg: '10em', xl: '21em' } }} >
 
                     <section className=''>
                       <Row className='mb-2'>
@@ -560,13 +561,13 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
             </Box>
           </Col>
           <Col className='col-12'>
-            <Row className='bg-secondary d-flex align-items-center' style={{ height: '3rem' }}>
+            <Row id='FormContainer' className='bg-secondary d-flex align-items-center' style={{ height: '3rem' }}>
               {cycle.access == 4 && price != -1 ? <Box sx={{ fontSize: { sx: '.6em', lg: '1.4em' }, display: 'flex', justifyContent: 'center' }}>
                 <span className='text-center text-white'>{t('MembershipFee')} {`$${price} ${currency}`}</span> </Box> : <></>}
             </Row>
           </Col>
           <Col className='col-12'>
-            <Box className="mt-5" sx={{ width: '1', paddingX: { xs: '2em', sm: '7em', lg: '2em' }, fontSize: { sx: '.6em', lg: '1.4em' }, display: 'flex', justifyContent: 'center' }}>
+            <Box  className="mt-5" sx={{ width: '1', paddingX: { xs: '2em', sm: '7em', lg: '2em' }, fontSize: { sx: '.6em', lg: '1.4em' }, display: 'flex', justifyContent: 'center' }}>
               <span className='text-primary text-center'><b>{t('JoinOurClub')}</b></span>
             </Box>
             <Box className='d-flex justify-content-center'
@@ -579,7 +580,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
               }}
             >
 
-              <Box className='py-4' id='FormContainer'
+              <Box className='py-4' 
                 sx={{ width: ['90%', '60%', '40%', '30%', '25%'] }}>
                 {/*CASO CUANDO HAY SESSION*/}
                 {session && <>
@@ -656,17 +657,17 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                         </Button>} {loading && <LinearProgress className='mb-4' />}
                       </Box>
                       <p
-                        className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
+                        className={`text-center align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
                       >
                         {t('joinedCycleSignInTerms')}
                         <Link href="/manifest" passHref>
-                          <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`}>
+                          <span className={` cursor-pointer ms-1 me-1 ${styles.linkText}`}>
                             {t('termsText')}
                           </span>
                         </Link>
                         {t('and')}
                         <Link href="/policy" passHref>
-                          <span className={`d-flex cursor-pointer ms-1 ${styles.linkText}`}>{t('policyText')}</span>
+                          <span className={`cursor-pointer ms-1 ${styles.linkText}`}>{t('policyText')}</span>
                         </Link>
                       </p>
 

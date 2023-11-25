@@ -60,8 +60,8 @@ const StripePaymentSuccessPage: NextPage<Props> = ({ session }) => {
                   height: { sm: '500px', md: '750px' },//lg:'500px'
                 }}
               >
-                <Col className=' d-flex w-100 justify-content-center align-items-center'>
-                  <Box className=' d-flex flex-column justify-content-center align-items-center'>
+                <Col className=' d-flex w-100 justify-content-center mt-5'>
+                  <Box className=' d-flex flex-column'>
                     <Row className='p-3 '><h1 className='text-primary text-center  mb-5'><b>{t('successText')}</b></h1></Row>
                     <Row className='p-3 '><h1 className='text-primary text-center   mb-5'><b>{t('successExtraText')}</b></h1></Row>
                     <Row className='w-100  p-2'>
