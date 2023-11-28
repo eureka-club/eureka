@@ -151,7 +151,7 @@ model Cycle {
   // isPublic                Boolean   @map(name: "is_public")
   title           String
   languages       String
-  contentText     String?  @map(name: "content_text") @db.VarChar(4000)
+  contentText     String?  @map(name: "content_text") @db.VarChar(8000)
   startDate       DateTime @map(name: "start_date")
   endDate         DateTime @map(name: "end_date")
   countryOfOrigin String?  @map(name: "country_of_origin")
