@@ -50,7 +50,7 @@
     "@sendgrid/client": "^7.4.3",
     "@sendgrid/helpers": "^7.4.3",
     "@sendgrid/mail": "^7.4.4",
-    "@tinymce/tinymce-react": "^4.2.0",
+    "@tinymce/tinymce-react": "^4.3.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/cors": "^2.8.12",
     "@types/node": "^16.11.9",

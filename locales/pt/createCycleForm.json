@@ -42,15 +42,15 @@
   "Public": "Público",
   "Private": "Privado",
   "Secret": "Secreto",
+  "Payment": "Com Pagamento",
   "cycleAccesPublicInfo": "Qualquer pessoa pode participar deste ciclo. O ciclo aparece nas buscas",
   "cycleAccesPrivateInfo": "A participação deve ser solicitada e é aprovada pela criadora do ciclo. O ciclo aparece nas buscas",
   "cycleAccesSecretInfo": "Somente quem recebeu um convite através de um link pode ver e participar do ciclo. O ciclo não aparece nas buscas",
-  
   "Start date of work": "Data de início da obra",
   "End date of work": "Data de fim da obra",
   "addDatesForWork": "Adicionar datas individuais para cada obra",
   "invalidInput": "Entrada inválida",
   "cycleStartAndEndRequired": "As datas de início e fim do ciclo são obrigatórias",
   "Date Range Error": "Erro de intervalo de datas",
-  "cycleGuidelineInfo":"Consideramos que as regras devem ser contextuais. Os ciclos temáticos são diversos: em termos de assunto, contexto e comunidade. Para garantir que as regras sejam relevantes e culturalmente sensíveis, cada ciclo tem a oportunidade de definir suas próprias diretrizes, incluindo o que significa ‘espaço seguro’ e o que é considerado conteúdo perigoso. Naturalmente, estas regras devem ser coerentes com nosso Manifesto."
+  "cycleGuidelineInfo": "Consideramos que as regras devem ser contextuais. Os ciclos temáticos são diversos: em termos de assunto, contexto e comunidade. Para garantir que as regras sejam relevantes e culturalmente sensíveis, cada ciclo tem a oportunidade de definir suas próprias diretrizes, incluindo o que significa ‘espaço seguro’ e o que é considerado conteúdo perigoso. Naturalmente, estas regras devem ser coerentes com nosso Manifesto."
 }

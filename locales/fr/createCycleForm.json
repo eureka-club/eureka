@@ -42,15 +42,16 @@
   "Public": "Public",
   "Private": "Privé",
   "Secret": "Secret",
+  "Payment": "Payant",
   "cycleAccesPublicInfo": "Tout le monde peut rejoindre ce cycle. Le cycle apparaît dans les recherches",
   "cycleAccesPrivateInfo": "La participation doit être demandée et est approuvée par les créateur-trices du cycle. Le cycle apparaît dans les recherches",
   "cycleAccesSecretInfo": "Seules les personnes ayant reçu une invitation via un lien peuvent voir et participer au cycle. Le cycle n'apparaît pas dans les recherches",
-  
+
   "Start date of work": "Date de début de l'œuvre",
   "End date of work": "Date de fin de l'œuvre",
   "addDatesForWork": "Ajouter des dates individuelles pour chaque œuvre",
   "invalidInput": "Entrée invalide",
   "cycleStartAndEndRequired": "Les dates de début et de fin de cycle sont obligatoires",
   "Date Range Error": "Erreur d'intervalle de dates",
-  "cycleGuidelineInfo":"Nous considérons que les règles doivent être contextuelles. Les cycles thématiques sont divers: en termes de sujet, de contexte et de communauté. Pour s'assurer que les règles sont pertinentes et culturellement sensibles, chaque cycle a la possibilité de définir ses propres directives, y compris ce qu'il entend par 'espace sûr' et ce qui est considéré comme un contenu dangereux. Bien entendu, ces règles doivent être conformes à notre Manifeste."
+  "cycleGuidelineInfo": "Nous considérons que les règles doivent être contextuelles. Les cycles thématiques sont divers: en termes de sujet, de contexte et de communauté. Pour s'assurer que les règles sont pertinentes et culturellement sensibles, chaque cycle a la possibilité de définir ses propres directives, y compris ce qu'il entend par 'espace sûr' et ce qui est considéré comme un contenu dangereux. Bien entendu, ces règles doivent être conformes à notre Manifeste."
 }

@@ -596,13 +596,13 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
                   height: 300,
                   menubar: false,
                   plugins: [
-                    'advlist autolink lists link image charmap print preview anchor',
-                    'searchreplace visualblocks code fullscreen',
-                    'insertdatetime media table paste code help wordcount',
+                    'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'print', 'preview', 'anchor',
+                    'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                    'insertdatetime', 'media', 'table', 'paste', 'code', 'help', 'wordcount', 'emoticons'
                   ],
                   relative_urls: false,
-                  forced_root_block : "div",
-                  toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
+                  forced_root_block: "div",
+                  toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link | emoticons  | help',
                   // toolbar:
                   //   'undo redo | formatselect | ' +
                   //   'bold italic backcolor | alignleft aligncenter ' +

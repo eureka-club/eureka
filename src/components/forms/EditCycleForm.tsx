@@ -60,10 +60,12 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
     public: boolean;
     private: boolean;
     secret: boolean;
+    payment: boolean
   }>({
     private: false,
     public: false,
     secret: false,
+    payment: false
   });
   const queryClient = useQueryClient()
 
@@ -72,7 +74,9 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
       const pc = cycle.access === 1;
       const pr = cycle.access === 2;
       const secret = cycle.access === 3;
-      setCycleAccessChecked(() => ({ public: pc, private: pr, secret }));
+      const payment = cycle.access === 4;
+      setCycleAccessChecked(() => ({ public: pc, private: pr, secret, payment}));
+      setAccess(cycle.access);
     }
     if (cycle && cycle.languages) setLanguage(cycle.languages);
 
@@ -142,9 +146,10 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
       private: false,
       public: false,
       secret: false,
+      payment: false,
     }));
     setAccess(() => {
-      return { public: 1, private: 2, secret: 3 }[`${val}`];
+      return { public: 1, private: 2, secret: 3, payment: 4 }[`${val}`];
     });
     setCycleAccessChecked((res) => ({ ...res, [`${val}`]: true }));
   };
@@ -169,7 +174,6 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
-
     
     const form = ev.currentTarget;
     const payload: EditCycleClientPayload = {
@@ -311,13 +315,13 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
                     height: 300,
                     menubar: false,
                     plugins: [
-                      'advlist autolink lists link image charmap print preview anchor',
-                      'searchreplace visualblocks code fullscreen',
-                      'insertdatetime media table paste code help wordcount',
+                      'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'print', 'preview', 'anchor',
+                      'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                      'insertdatetime', 'media', 'table', 'paste', 'code', 'help', 'wordcount', 'emoticons'
                     ],
                     relative_urls: false,
                     forced_root_block : "div",
-                    toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
+                    toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link | emoticons  | help',
                     // toolbar:
                     //   'undo redo | formatselect | ' +
                     //   'bold italic backcolor | alignleft aligncenter ' +
@@ -352,6 +356,13 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
                   checked={cycleAccessChecked.secret}
                 />
                 <small className="ms-3 text-muted">{t('cycleAccesSecretInfo')}.</small>
+                <Form.Check
+                  label={t('Payment')}
+                  type="radio"
+                  onChange={() => handlerCycleAccessCheckedChange('payment')}
+                  checked={cycleAccessChecked.payment}
+                />
+                {/* <small className="ms-3 text-muted">{t('cycleAccesPaymentInfo')}.</small> */}
               </Form.Group>
             </Col>
           </Row>

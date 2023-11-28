@@ -41,6 +41,7 @@
   "Public": "Public",
   "Private": "Private",
   "Secret": "Secret",
+  "Payment":"Paid",
   "Privacy settings": "Privacy settings",
   "cycleAccesPublicInfo": "Anyone can join this cycle. Cycle appears in searches",
   "cycleAccesPrivateInfo": "Users need to request participation, which is approved by the cycle creator and/or moderator(s). Cycle appears in searches",

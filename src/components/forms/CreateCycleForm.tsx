@@ -83,10 +83,12 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     public: boolean;
     private: boolean;
     secret: boolean;
+    payment: boolean
   }>({
     private: false,
     public: false,
     secret: false,
+    payment: false
   });
 
   const handlerCycleAccessCheckedChange = (val: string) => {
@@ -94,9 +96,10 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
       private: false,
       public: false,
       secret: false,
+      payment: false
     }));
     setAccess(() => {
-      return { public: 1, private: 2, secret: 3 }[`${val}`];
+      return { public: 1, private: 2, secret: 3, payment: 4 }[`${val}`];
     });
     setCycleAccessChecked((res) => ({ ...res, [`${val}`]: true }));
   };
@@ -754,13 +757,13 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                   height: 300,
                   menubar: false,
                   plugins: [
-                    'advlist autolink lists link image charmap print preview anchor',
-                    'searchreplace visualblocks code fullscreen',
-                    'insertdatetime media table paste code help wordcount',
+                    'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'print', 'preview', 'anchor',
+                    'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                    'insertdatetime', 'media', 'table', 'paste', 'code', 'help', 'wordcount', 'emoticons'
                   ],
                   relative_urls: false,
-                  forced_root_block : "div",
-                  toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link  | help',
+                  forced_root_block: "div",
+                  toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link | emoticons  | help',
                   // toolbar:
                   //   'undo redo | formatselect | ' +
                   //   'bold italic backcolor | alignleft aligncenter ' +
@@ -795,6 +798,13 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 checked={cycleAccessChecked.secret}
               />
               <small className="ms-3 text-muted">{t('cycleAccesSecretInfo')}.</small>
+              <Form.Check
+                label={t('Payment')}
+                type="radio"
+                onChange={() => handlerCycleAccessCheckedChange('payment')}
+                checked={cycleAccessChecked.payment}
+              />
+              {/* <small className="ms-3 text-muted">{t('cycleAccesPaymentInfo')}.</small> */}
             </Form.Group>
           </Col>
         </Row>
