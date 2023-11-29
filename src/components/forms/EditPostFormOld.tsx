@@ -569,6 +569,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
                     ],
                     relative_urls: false,
                     forced_root_block: "div",
+                    emoticons_database: 'emojiimages',
                     toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link | emoticons  | help',
                     // toolbar:
                     //   'undo redo | formatselect | ' +
