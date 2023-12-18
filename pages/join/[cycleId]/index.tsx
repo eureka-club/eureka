@@ -9,7 +9,7 @@ import { getSession } from 'next-auth/react';
 // }
 
 const RegisterJoinToCyclePage: NextPage = ({  }) => {
-  const { t } = useTranslation('signUpForm'); 
+  const { t } = useTranslation('signUpForm');  
   
   return (
     <SimpleLayout title={t('Sign up')} showNavBar={false} showFooter={false}>
