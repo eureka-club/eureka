@@ -21,7 +21,6 @@ import toast from 'react-hot-toast';
 import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLeaveActions';
 import { useModalContext } from '@/src/useModal';
 import SignInForm from '@/components/forms/SignInForm';
-import { addParticipant } from '@/src/facades/cycle';
 import { useEffect } from 'react';
 import { Session } from '@/src/types';
 
@@ -102,16 +101,16 @@ const CycleDetailPage: NextPage<Props> = (props) => {
     else toast.success(t('Internal Server Error'));
   });
 
-  // useEffect(() => {
-  //   const { join } = router.query;
-  //   if (
-  //     session?.user &&
-  //     join &&
-  //     cycle?.participants.findIndex(i => i.id == session.user.id) == -1
-  //   ) {
-  //     execJoinCycle();
-  //   }
-  // }, [])
+  useEffect(() => {
+    const { join } = router.query;
+    if (
+      session?.user &&
+      join &&
+      cycle?.participants.findIndex(i => i.id == session.user.id) == -1
+    ) {
+      execJoinCycle();
+    }
+  }, [])
 
   const requestJoinCycle = async () => {
     if (!session) openSignInModal();
