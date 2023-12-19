@@ -132,7 +132,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
     callbacks: {
       session: async ({ session }) => {
         const u = await prisma.user.findFirst({
-          where: { email: session.user.email },
+          where: { email: session.user.email! },
           include: { photos: true },
         });
         if (u) {
