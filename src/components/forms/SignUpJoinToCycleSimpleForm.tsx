@@ -350,6 +350,12 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
 
   };
 
+
+  const handlerRecoveryLogin = () => {
+    close()
+    router.push("/recoveryLogin")
+  }
+
   if (cycle)
     return (
       <>
@@ -379,7 +385,7 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
             </Row>
           </Col> */}
           <Col className='col-12'>
-            <Box  className="mt-5" sx={{ width: '1', paddingX: { xs: '2em', sm: '7em', lg: '2em' }, fontSize: { sx: '.6em', lg: '1.4em' }, display: 'flex', justifyContent: 'center' }}>
+            <Box  className="mt-2" sx={{ width: '1', paddingX: { xs: '2em', sm: '7em', lg: '2em' }, fontSize: { sx: '.6em', lg: '1.4em' }, display: 'flex', justifyContent: 'center' }}>
               <span className='text-primary text-center'><b>{t('JoinOurClub')}</b></span>
             </Box>
             <Box className='d-flex justify-content-center'
@@ -407,7 +413,7 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
                     </div>
                   </button>
                     <p className={`my-2 ${styles.alternativeLabelSignUpJoinCycle}`}>{t('alternativeText')}</p>
-                   <Form onSubmit={handleSubmitSignUp} className='mt-2'>
+                {!haveAccount &&  <Form onSubmit={handleSubmitSignUp} className='mt-2'>
                       <TextField id="name" className="w-100 mb-4 " label={`${t('Name')}`}
                         variant="outlined" size="small" name="name"
                         value={formValues.name!}
@@ -441,7 +447,7 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
                       >
                       </TextField>
 
-                      {/* <Box >
+                      <Box >
                         <p
                           className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
                         >
@@ -451,7 +457,7 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
                           </span>
                           {t('joinClub')}
                         </p>
-                      </Box> */}
+                      </Box>
 
                   <Box >
                         {!loading && <Button type="submit" disabled={loading} className={`mb-4 btn btn-eureka  w-100`}>
@@ -474,7 +480,54 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
                       </p>
 
 
-                    </Form>
+                    </Form>}
+
+                {haveAccount && <Box sx={{ height: {xl:'800px'} }}>
+                  
+                  <Form onSubmit={handleSubmitSignIn} className='mt-2'>
+
+                  <TextField id="email" className="w-100 mb-2" label={`${t('emailFieldLabel')}`}
+                    variant="outlined" size="small" name="identifier"
+                    value={formValues.identifier!}
+                    type="text"
+                    onChange={handleChangeTextField}
+                  >
+                  </TextField>
+                  <div className='d-flex justify-content-between mb-1'><div></div>
+                    <Button onClick={handlerRecoveryLogin} variant="link" className={`btn-link d-flex link align-items-end cursor-pointer text-gray`} style={{ fontSize: '.8em' }}>{t('forgotPassText')}</Button>
+                  </div>
+                  <TextField id="pass" className="w-100 mb-4" label={`${t('passwordFieldLabel')}`}
+                    variant="outlined" size="small" name="password"
+                    value={formValues.password!}
+                    autoComplete="current-password"
+                    type="password"
+                    helperText={`(${t('passRequirements')})`}
+                    onChange={handleChangeTextField}
+                  >
+                  </TextField>
+
+                  <Box >
+                    <p
+                      className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
+                    >
+                      {t('dontHaveAccounttext')}
+                      <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`} onClick={handleHaveAccountLink}>
+                        {t('clic')}
+                      </span>
+                      {t('joinClub')}
+                    </p>
+                  </Box>
+
+
+                  <Box >
+                    {!loading && <Button type="submit" disabled={loading} className={`mb-4 btn btn-eureka  w-100`}>
+                      {t('I want to register now')}
+                    </Button>} {loading && <LinearProgress className='mb-4' />}
+                  </Box>
+
+                </Form>
+                </Box>
+                }
                
                 <Box className='mt-5 w-100'
                   sx={{
