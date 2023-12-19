@@ -347,6 +347,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
           joinToCycle: cycle!.id || -1
         });
       } else {
+        console.log('AAAAAaaa')
         toast.error(t('UserRegistered'));
         setLoading(false)
         return;
