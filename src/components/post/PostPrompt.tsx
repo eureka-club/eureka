@@ -51,9 +51,7 @@ const PostPrompt: FunctionComponent<Props> = ({
       await searchImages();
     };
     if (text && text.length) fetchImages();
-  },[]);
-
-  
+  },[text]);
 
   function onStyleChange(e: SelectChangeEvent<HTMLTextAreaElement>) {
     setStyle(e.target.value as string);
