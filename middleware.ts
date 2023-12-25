@@ -3,11 +3,7 @@ import type { NextRequest } from 'next/server'
 
 import { i18n } from '@/i18n-config'
 import getLocale from '@/src/getLocale';
-import SESSION from './ResolveUserSessionForMiddleware';
-import { Session } from './src/types';
-import { LANGUAGES } from './src/constants';
 
-import {prisma} from '@/src/lib/prisma';
 
 
 import { withAuth } from "next-auth/middleware"
