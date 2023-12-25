@@ -27,7 +27,7 @@ const PaymentSuccessPage: NextPage<Props> = async ({ params: { lang,id } }) => {
     const langs = session?.user.language ?? LANGUAGES[lang];
 
     return (
-        <Layout dict={dict} langs={langs} showNavBar={false} >
+        <Layout dict={dict} showNavBar={false} >
             <PaymentSuccess session={session} cycleId={id}/>
         </Layout>
     );

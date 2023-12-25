@@ -109,7 +109,7 @@ const postsData = await getPosts({ ... postsProps, /*take*/ }, origin);
           ></meta>
         </Head>
       )}
-      <Layout dict={dict} langs={langs} >
+      <Layout dict={dict}>
         <SearchTab value={1}/>
         <SearchTabPosts posts={postsData.posts}/>
       </Layout>

@@ -30,7 +30,7 @@ const CyclePage: NextPage<Props> = async ({ params: { lang, id } }) => {
     let cycle = await getCycle(+id, origin);
 
     
-    return <Layout dict={dict} langs={langs} showNavBar={false}>
+    return <Layout dict={dict} showNavBar={false}>
         <SignUpJoinToCycleForm cycle={cycle!}  session={session!} />
     </Layout>
 

@@ -16,7 +16,7 @@ interface Props {
 
 const TransitionPrivateCycle: FC<Props> = ({ session }) => {
 
-    const { dict, langs } = useDictContext();
+    const { dict } = useDictContext();
 
     const router = useRouter();
 

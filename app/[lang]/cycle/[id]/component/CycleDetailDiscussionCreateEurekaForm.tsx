@@ -11,7 +11,7 @@ import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload, Po
 import TagsInputTypeAheadMaterial from '../../../../../src/components/forms/controls/TagsInputTypeAheadMaterial';
 import TagsInputMaterial from '../../../../../src/components/forms/controls/TagsInputMaterial';
 import { useNotificationContext } from '@/src/hooks/useNotificationProvider';
-import { useRouter,usePathname } from 'next/navigation';
+import { useRouter,usePathname, useParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
 import useWorks from '@/src/hooks/useWorks';
@@ -61,6 +61,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   const queryClient = useQueryClient();
   const router = useRouter();
   const path = usePathname();
+  const {lang}=useParams<{lang:string}>();
   const { data: session } = useSession();
   const [newEurekaImageFile, setNewEurekaImageFile] = useState<File | null>(null);
   const { data: topics } = useTopics();
@@ -73,16 +74,14 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   const [showCrop, setShowCrop] = useState<boolean>(false);
   const [useOtherFields, setUseOtherFields] = useState<boolean>(false);
  
-  const{dict,langs}=useDictContext();
-  const lenguages = langs.split(',').map(l => LANGUAGES[l]).join(',');
-  const l = lenguages[0];
+  const{dict}=useDictContext();
 
   const [newEureka, setNewEureka] = useState({
     selectedCycleId: cycle.id,
     selectedWorkId: 0,
     title: '',
     image: null,
-    language: l,
+    language: lang,
     contentText: '',
     isPublic: cycle.access === 1,
     topics: eurekaTopics,
@@ -159,7 +158,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         selectedWorkId: newEureka.selectedWorkId,
         title: newEureka.title,
         image: newEurekaImageFile!,
-        language: l,
+        language: lang,
         contentText: editorRef.current ? editorRef.current.getContent() : '',
         isPublic: newEureka.isPublic,
         topics: eurekaTopics.join(','),
@@ -172,7 +171,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         selectedWorkId: null,
         title: newEureka.title,
         image: newEurekaImageFile!,
-        language: l,
+        language: lang,
         contentText: editorRef.current ? editorRef.current.getContent() : '',
         isPublic: newEureka.isPublic,
         topics: eurekaTopics.join(','),

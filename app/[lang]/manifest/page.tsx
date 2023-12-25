@@ -35,7 +35,7 @@ const ManifestPage: NextPage<Props> = async ({ params: { lang } }) => {
       <meta name="title" content={dict['manifestTitle']}></meta>
       <meta name="description" content={dict['manifestDescription']}></meta>
     </Head>
-    <Layout dict={dict} langs={langs} >
+    <Layout dict={dict}>
       <Manifest />
     </Layout>
   </>

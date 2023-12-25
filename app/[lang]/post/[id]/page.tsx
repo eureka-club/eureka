@@ -26,7 +26,7 @@ const CyclePage: NextPage<Props> = async ({params:{lang,id}}) => {
     const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
     let post = await getPost(+id, origin);
 
-    return  <Layout dict={dict} langs={langs} >
+    return  <Layout dict={dict}>
       <>
         {
         post 

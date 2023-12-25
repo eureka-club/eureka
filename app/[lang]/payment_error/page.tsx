@@ -27,7 +27,7 @@ const PaymentErrorPage: NextPage<Props> = async ({ params: { lang } }) => {
     const langs = session?.user.language ?? LANGUAGES[lang];
 
     return (
-        <Layout dict={dict} langs={langs} showNavBar={false} >
+        <Layout dict={dict} showNavBar={false} >
             <PaymentError session={session}/>
         </Layout>
     );

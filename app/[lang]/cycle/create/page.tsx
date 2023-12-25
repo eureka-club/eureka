@@ -25,7 +25,7 @@ const CycleCreatePage: NextPage<Props> = async ({params:{lang}}) => {
 
     const langs = session?.user.language??LANGUAGES[lang];
     
-    return   <Layout dict={dict} langs={langs} >
+    return   <Layout dict={dict}>
       <CycleCreate session={session!}/>
     </Layout>
       

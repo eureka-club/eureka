@@ -37,7 +37,7 @@ const MyCyclesPage: NextPage<Props> = async ({ params: { lang, slug } }) => {
     //console.log(user, 'useruseruseruseruser')
 
     return (
-        <Layout dict={dict} langs={langs} >
+        <Layout dict={dict}>
             <MyCycles session={session} user={user} />
         </Layout>
     );

@@ -40,7 +40,7 @@ interface Props{
         <meta name="description" content={dict['aboutUsDescription']}></meta>
       </Head>
   
-      <Layout dict={dict} langs={langs} >
+      <Layout dict={dict} >
         <WorkCreate/>
       </Layout>
     </>

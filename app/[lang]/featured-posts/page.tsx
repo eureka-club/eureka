@@ -1,5 +1,4 @@
 import { NextPage } from 'next';
-import { Spinner } from 'react-bootstrap';
 import Layout from '@/src/components/layout/Layout';
 import FeaturedPosts from './component/FeaturedPosts';
 import { getServerSession } from 'next-auth';
@@ -9,7 +8,6 @@ import { Locale } from '@/i18n-config';
 import { LANGUAGES } from '@/src/constants';
 import { redirect } from 'next/navigation';
 import { getUser } from '@/src/hooks/useUser';
-import getLocale from '@/src/getLocale';
 
 interface Props {
     params: { lang: Locale }
@@ -27,12 +25,11 @@ const FeaturedPostsPage: NextPage<Props> = async ({ params: { lang } }) => {
         ...dictionary['meta'], ...dictionary['common'],
         ...dictionary['topics'], ...dictionary['navbar'],
     }
-
     const langs = session?.user.language ?? LANGUAGES[lang];
 
     let user = await getUser(+session?.user.id.toString(), origin, langs);
     return (
-        <Layout dict={dict} langs={langs} >
+        <Layout dict={dict}>
             <FeaturedPosts session={session} />
         </Layout>
     );

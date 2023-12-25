@@ -40,7 +40,7 @@ const EditWorkPage: NextPage<Props> = async ({ params: { lang, id } }) => {
             <meta name="description" content={dict['aboutUsDescription']}></meta>
         </Head>
 
-        <Layout dict={dict} langs={langs} >
+        <Layout dict={dict}>
             <EditWorkForm work={work} session={session} />
         </Layout>
     </>

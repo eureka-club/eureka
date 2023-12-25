@@ -76,7 +76,7 @@ const CyclePage: NextPage<Props> = async ({params:{lang,id}}) => {
     // await queryClient.prefetchQuery(['POSTS', JSON.stringify(wcp)], () => getPosts(ctx.locale!,wcp, origin));
     // await queryClient.prefetchQuery(['WORKS', JSON.stringify(wcw)], () => works);
 
-    return   <Layout dict={dict} langs={langs} >
+    return   <Layout dict={dict} >
       <HydrationBoundary state={dehydrate(qc)}>
         <Cycle participants={participants!} session={session!}/>
       </HydrationBoundary>

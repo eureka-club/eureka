@@ -1,14 +1,12 @@
 'use client'
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { FC } from "react";import useInterestedCycles from '@/src/hooks/useInterestedCycles';
 import { t } from '@/src/get-dictionary';
 import { useDictContext } from '@/src/hooks/useDictContext';
-import { LANGUAGES } from '@/src/constants';
 import { Session } from '@/src/types';
 import { Button, ButtonGroup, Col, Row } from 'react-bootstrap';
 import CMI from '@/src/components/cycle/MosaicItem';
 import { BiArrowBack } from 'react-icons/bi';
-
 
 interface Props {
     session: Session | null;
@@ -16,10 +14,9 @@ interface Props {
 
 const FeaturedCycles: FC<Props> = ({ session }) => {
     const router = useRouter()
-    const { dict, langs } = useDictContext();
-    const languages = langs.split(',').map(l => LANGUAGES[l]).join(',');
-
-    const { data: dataCycles } = useInterestedCycles(session?.user.language || languages)
+    const { dict } = useDictContext();
+    const {lang}=useParams<{lang:string}>();
+    const { data: dataCycles } = useInterestedCycles(lang)
    
     return (dataCycles?.cycles && dataCycles?.cycles.length)
         ? <article className='mt-4' data-cy="my-cycles">

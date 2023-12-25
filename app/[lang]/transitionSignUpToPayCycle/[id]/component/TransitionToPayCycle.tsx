@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { Box } from '@mui/material';
 import Link from 'next/link';
 import { Col, Row } from 'react-bootstrap';
-import { useRouter,useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Session } from '@/src/types';
 import { t } from "@/src/get-dictionary";
 import { useDictContext } from "@/src/hooks/useDictContext";
@@ -23,7 +23,7 @@ interface Props {
 
 const TransitionToPayCycle: FC<Props> = ({ session, cycle,participants }) => {
 
-    const { dict, langs } = useDictContext();
+    const { dict } = useDictContext();
 
     const router = useRouter();
     //const [cycleId, setCycleId] = useState<string>('');

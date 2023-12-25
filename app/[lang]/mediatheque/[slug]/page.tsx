@@ -83,7 +83,7 @@ const MediathequePage: NextPage<Props> = async ({ params: { lang, slug } }) => {
     })
 
     return (
-        <Layout dict={dict} langs={langs} >
+        <Layout dict={dict}>
         <HydrationBoundary state={dehydrate(qc)}>
             <Mediatheque session={session} />  
         </HydrationBoundary>

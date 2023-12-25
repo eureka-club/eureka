@@ -25,3 +25,6 @@ export const GET = async (req:NextRequest) => {
     //prisma.$disconnect();
   }
 }
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 60*60 

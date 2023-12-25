@@ -33,7 +33,7 @@ const ProfilePage: NextPage<Props> = async ({ params: { lang } }) => {
 
     let user = await getUser(+session?.user.id.toString(), origin, langs);
     return (
-        <Layout dict={dict} langs={langs} >
+        <Layout dict={dict}>
             <Profile user={user!} session={session} />
         </Layout>
     );

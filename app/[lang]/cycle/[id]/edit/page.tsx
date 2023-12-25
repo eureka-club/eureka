@@ -39,7 +39,7 @@ const EditCyclePage: NextPage<Props> = async ({ params: { lang, id } }) => {
             <meta name="title" content={dict['aboutUsTitle']}></meta>
             <meta name="description" content={dict['aboutUsDescription']}></meta>
         </Head>
-        <Layout dict={dict} langs={langs} >
+        <Layout dict={dict}>
             <EditCycleForm cycle={cycle!} session={session} />
         </Layout>
     </>

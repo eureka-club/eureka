@@ -37,7 +37,7 @@ const MyReadOrWatchedPage: NextPage<Props> = async ({ params: { lang, slug } }) 
     //console.log(user, 'useruseruseruseruser')
 
     return (
-        <Layout dict={dict} langs={langs} >
+        <Layout dict={dict}>
             <MyReadOrWatched session={session} user={user} />
         </Layout>
     );

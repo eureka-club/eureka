@@ -47,7 +47,7 @@ const TransitionSignUpToPayCyclePage: NextPage<Props> = async ({ params: { lang,
 
 
     return (
-        <Layout dict={dict} langs={langs} showNavBar={false} showFooter={false}>
+        <Layout dict={dict} showNavBar={false} showFooter={false}>
             <TransitionToPayCycle session={session} cycle={cycle!} participants={participants!} ></TransitionToPayCycle>
         </Layout>
     );

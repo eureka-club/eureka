@@ -1,6 +1,6 @@
 'use client'
 import { signIn } from 'next-auth/react';
-import { FunctionComponent, useState, MouseEvent, ChangeEvent, FormEvent, useEffect } from 'react';
+import { FunctionComponent, useState, MouseEvent, ChangeEvent, FormEvent } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -13,18 +13,13 @@ import toast from 'react-hot-toast';
 import styles from './SignUpJoinToCycleForm.module.css';
 import MosaicItem from '@/src/components/cycle/MosaicItem';
 import { CycleContext } from '@/src/hooks/useCycleContext';
-import useCycle from '@/src/hooks/useCycle';
 import UserAvatar from '@/src/components/common/UserAvatar';
 import CycleDetailWorks from '@/app/[lang]/cycle/[id]/component/CycleDetailWorks';
-import Footer from '@/src/components/layout/Footer';
 import { TextField, Box } from '@mui/material';
 import { DATE_FORMAT_LARGE } from '@/src/constants/index';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
 import { Session } from '@/src/types';
 import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
-import useUser from '@/src/hooks/useUser';
 import useUsers from '@/src/hooks/useUsers'
 import { useCyclePrice } from '@/src/hooks/useCyclePrices';
 import LinearProgress from '@mui/material/LinearProgress';
@@ -47,7 +42,7 @@ interface FormValues {
 }
 
 const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ cycle, session }) => {
-  const { dict, langs } = useDictContext();
+  const { dict } = useDictContext();
   const asPath = usePathname();
   const searchParams = useSearchParams();
 

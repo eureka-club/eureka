@@ -25,7 +25,7 @@ const AboutPage: NextPage<Props> =async ({params:{lang}}) => {
       <meta name="description" content={dict['aboutUsDescription']}></meta>
     </Head>
 
-    <Layout dict={dict} langs={langs} >
+    <Layout dict={dict} >
       <AboutUs
         NEXT_PUBLIC_AZURE_CDN_ENDPOINT={NEXT_PUBLIC_AZURE_CDN_ENDPOINT!}
         NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME={NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME!}

@@ -8,6 +8,7 @@ import { UserMosaicItem } from '@/src/types/user';
 import useUser from '@/src/hooks/useUser';
 import { WorkMosaicItem } from '@/src/types/work';
 import { useDictContext } from '../useDictContext';
+import { useParams } from 'next/navigation';
 
 export interface ExecReadOrWatchedWorkPayload {
   doCreate: boolean;
@@ -20,13 +21,14 @@ interface Props{
 
 const useExecReadOrWatchedWork = (props: Props) => {
   // const {lang} = useTranslation();
+  const {lang}=useParams()
   const { work,notLangRestrict } = props;
   const queryClient = useQueryClient();
   const { data: session } = useSession();
   const { data: user } = useUser(session?.user?.id || 0, {
     enabled: !!session?.user?.id,
   });
-  const {dict,langs} = useDictContext();
+  const {dict} = useDictContext();
   const { show } = useModalContext();
 
   const openSignInModal = () => {
@@ -55,7 +57,7 @@ const useExecReadOrWatchedWork = (props: Props) => {
         let prevWork = undefined;
         let cacheKey = undefined;
         if (work && session && user) {
-          cacheKey = notLangRestrict ? ['WORK', `${work.id}`] : ['WORK', `${work.id}-${langs}`];
+          cacheKey = notLangRestrict ? ['WORK', `${work.id}`] : ['WORK', `${work.id}-${lang}`];
           await queryClient.cancelQueries({queryKey:['USER', `${session.user.id}`]});
           await queryClient.cancelQueries({queryKey:cacheKey});
 

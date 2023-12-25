@@ -96,7 +96,7 @@ const SearchPage: NextPage<Props> = async ({ params: { lang, type }, searchParam
           ></meta>
         </Head>
       )} */}
-      <Layout dict={dict} langs={langs} >
+      <Layout dict={dict}>
         <SearchTab value={2} />
         <SearchTabWorks works={worksData.works} />
       </Layout>

@@ -1,8 +1,8 @@
-import Layout from '@/src/components/layout/Layout';
 import Link from 'next/link'
 import { getDictionary, t } from '@/src/get-dictionary';
 import { Locale } from '@/i18n-config';
 import { NextPage } from 'next';
+import Layout from '@/src/components/layout/Layout';
 
 interface Props {
   params:{lang:Locale,id:string},
@@ -12,7 +12,7 @@ const EmailVerifyPage:NextPage<Props> = async function ({ params: { lang } }) {
   const {emailVerify,common} = await getDictionary(lang);
   
   return (
-    <Layout dict={{emailVerify,common}} langs={lang}>
+    <Layout dict={{emailVerify,common}}>
       <p>{t(emailVerify,'text')}</p>
       <Link href="/">
       {/* <a className="btn btn-primary text-white"> */}

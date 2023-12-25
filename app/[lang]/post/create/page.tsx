@@ -22,9 +22,7 @@ const CreatePostPage: NextPage<Props> = async ({params:{lang}}) => {
      ...dictionary['signInForm'],...dictionary['createPostForm'],
     }
 
-    const langs = session?.user.language??LANGUAGES[lang];
-
-    return  <Layout dict={dict} langs={langs} >
+    return  <Layout dict={dict}>
         <CreatePost/>
     </Layout>
 };

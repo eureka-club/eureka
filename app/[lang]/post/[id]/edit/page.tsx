@@ -39,7 +39,7 @@ const EditPostPage: NextPage<Props> = async ({ params: { lang, id } }) => {
             <meta name="description" content={dict['aboutUsDescription']}></meta>
         </Head>
 
-        <Layout dict={dict} langs={langs} >
+        <Layout dict={dict}>
             <EditPostForm post={post!} session={session}/>
         </Layout>
     </>

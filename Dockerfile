@@ -72,10 +72,10 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # You only need to copy next.config.js if you are NOT using the default configuration
-COPY --from=builder /app/next.config.js ./
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/i18n.js ./i18n.js
+# COPY --from=builder /app/next.config.js ./
+# COPY --from=builder /app/public ./public
+# COPY --from=builder /app/package.json ./package.json
+# COPY --from=builder /app/i18n.js ./i18n.js
 
 
 # Automatically leverage output traces to reduce image size 

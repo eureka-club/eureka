@@ -84,7 +84,7 @@ export default async function IndexPage(props:Props) {
 
   return (
     <>
-      <Layout dict={dict} langs={langs} showCustomBaner={(!session) ? true : false}> 
+      <Layout dict={dict} showCustomBaner={(!session) ? true : false}> 
         <Suspense fallback={<Spinner animation="grow" />}>
           <HomeSingIn session={session} /*language={language}*/ /> 
         </Suspense>
