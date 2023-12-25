@@ -1,12 +1,11 @@
-import { FunctionComponent, useState, useEffect, ChangeEvent, KeyboardEvent,useRef, SyntheticEvent } from 'react';
-import { Form, InputGroup,Button, Badge, Spinner,Col } from 'react-bootstrap';
-import useTranslation from 'next-translate/useTranslation'; 
+import { FunctionComponent, useState, useEffect,useRef, SyntheticEvent } from 'react';
 import { useAtom } from 'jotai'; 
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import searchEngine from '@/src/atoms/searchEngine';
-import { BiPlus} from 'react-icons/bi';
-import { Autocomplete, AutocompleteChangeDetails, AutocompleteChangeReason } from '@mui/material';
-import { TextField,Chip } from '@mui/material';
+import { Autocomplete, AutocompleteChangeDetails, AutocompleteChangeReason, Chip } from '@mui/material';
+import { TextField } from '@mui/material';
+import { useDictContext } from '@/src/hooks/useDictContext';
+import { t } from '@/src/get-dictionary';
 
 export type TagsInputProp = {
   tags: string;
@@ -19,7 +18,8 @@ export type TagsInputProp = {
   formatValue?: (v: string) => string;
 };
 const TagsInputMaterial: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
-  const { t } = useTranslation('createWorkForm');
+  // const { t } = useTranslation('createWorkForm');
+  const{dict}=useDictContext()
   const formRef=useRef<HTMLFormElement>(null)
   const { tags, setTags, label = '', readOnly = false,br = false, max = 2, className, formatValue = undefined } = props;
   const [loading, setLoading] = useState<Record<string,boolean>>({});
@@ -75,6 +75,18 @@ const TagsInputMaterial: FunctionComponent<TagsInputProp> = (props: TagsInputPro
         freeSolo   
         value={items}    
         onChange={onTagsUpdate}
+      renderOption={(props, option, { selected }) => {
+        return (
+          <li {...props} key={`${option}-li`}>
+            {option}
+          </li>
+        )
+      }}
+      renderTags={(tagValue, getTagProps) => {
+        return tagValue.map((option, index) => (
+          <Chip size='small' {...getTagProps({ index })} key={`${option}-chip`} label={option} />
+        ))
+      }}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -82,7 +94,7 @@ const TagsInputMaterial: FunctionComponent<TagsInputProp> = (props: TagsInputPro
             size="small" 
             label={label}
             placeholder=""
-            helperText={t('tagsInputPlaceholder')} 
+            helperText={t(dict,'tagsInputPlaceholder')} 
           />
         )}
       />

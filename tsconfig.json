@@ -17,10 +17,17 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "downlevelIteration": true,
-    "sourceMap": true,
+    "incremental": true,
     "baseUrl": ".",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     "paths": {
+      "@/*": [
+        "./*"
+      ],
       "@/src/*": [
         "src/*"
       ],
@@ -31,24 +38,14 @@
         "src/components/*"
       ]
     },
-    "types": [
-      "tinymce"
-    ],
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ]
   },
   "include": [
+    "process.d.ts",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src/components/common/HyvorComments.tsx",
-    "src/ErrorBounddary.tsx",
     ".next/types/**/*.ts"
-  ],
+, "src/lib/getApiHandler.js", "app/api/auth/[...nextauth]/route.ts"  ],
   "exclude": [
     "node_modules"
   ]

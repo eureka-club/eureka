@@ -1,10 +1,11 @@
 import { FunctionComponent, SyntheticEvent,MouseEvent, useState, useEffect} from 'react';
-import useUser from '@/src/useUser'
-import { useRouter } from 'next/router';
+import useUser from '@/src/hooks/useUser'
+import { useRouter } from 'next/navigation';
 import styles from './UserAvatar.module.css';
 import LocalImageComponent from '@/src/components/LocalImage'
 import { UserMosaicItem } from '@/src/types/user';
 import slugify from 'slugify'
+
 interface Props {
   user?:UserMosaicItem;
   userId: number;
@@ -70,8 +71,8 @@ const UserAvatar: FunctionComponent<Props> = ({
   return (
     <>
       {user && (
-        <section className={`fs-6 ${styles[size]} cursor-pointer ${className}`}>
-            <a onClick={(e)=>onClick(e,user)} className={`text-secondary ${styles.link} d-flex align-items-center`}>
+        <section className={`fs-6 ${styles[size]} cursor-pointer`}>
+          <a onClick={(e) => onClick(e, user)} className={`text-secondary ${styles.link} d-flex justify-content-center align-items-center`}>
 
                 {(!user?.photos || !user?.photos.length) ?
                 <img

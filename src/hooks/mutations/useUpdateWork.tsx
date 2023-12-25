@@ -1,5 +1,7 @@
+"use client"
+
 import {} from 'react';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { EditWorkClientPayload, WorkMosaicItem } from '@/src/types/work';
 
@@ -8,34 +10,34 @@ const useUpdateWork = ()=>{
   const {data:session} = useSession();
     
   return useMutation(
-    async (payload:EditWorkClientPayload) => {
-      if (session && payload) {
-
-        const formData = new FormData();
-
-        Object.entries(payload).forEach(([key, value]) => {
-          if (value != null) {
-            if(typeof(value) == 'object')
-              formData.append(key, JSON.stringify(value));
-            formData.append(key, value);
-          }
-        });
-
-        const res = await fetch(`/api/work/${payload.id}`, {
-          method: 'PATCH',
-         // headers: { 'Content-Type': 'application/multipart' },
-          body: formData,//JSON.stringify(payload),
-        });
-        return res.json();
-      }
-      return null;
-    },
     {
+      mutationFn:async (payload:EditWorkClientPayload) => {
+        if (session && payload) {
+  
+          const formData = new FormData();
+  
+          Object.entries(payload).forEach(([key, value]) => {
+            if (value != null) {
+              if(typeof(value) == 'object')
+                formData.append(key, JSON.stringify(value));
+              formData.append(key, value);
+            }
+          });
+  
+          const res = await fetch(`/api/work/${payload.id}`, {
+            method: 'PATCH',
+           // headers: { 'Content-Type': 'application/multipart' },
+            body: formData,//JSON.stringify(payload),
+          });
+          return res.json();
+        }
+        return null;
+      },
       onMutate:async (payload: EditWorkClientPayload) => {
         let prevWork = null;
         if (payload && session) {
           const cacheKey = ['WORK',`${payload.id}`];
-          await queryClient.cancelQueries(cacheKey);
+          await queryClient.cancelQueries({queryKey:cacheKey});
           prevWork = queryClient.getQueryData<WorkMosaicItem>(cacheKey);
           queryClient.setQueryData(cacheKey, { ...prevWork, ...payload });
         }
@@ -47,7 +49,7 @@ const useUpdateWork = ()=>{
           if (('prevWork' in context) && context?.prevWork) 
             queryClient.setQueryData(cacheKey, context?.prevWork);
         }
-        queryClient.invalidateQueries(cacheKey);
+        queryClient.invalidateQueries({queryKey:cacheKey});
       },
     },
   );

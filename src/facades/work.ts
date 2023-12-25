@@ -2,9 +2,8 @@ import { Prisma, Work, Edition, User, RatingOnWork, ReadOrWatchedWork } from '@p
 import { Languages, StoredFileUpload } from '../types';
 import { CreateWorkServerFields, CreateWorkServerPayload, EditWorkServerFields, WorkMosaicItem } from '../types/work';
 import { prisma } from '@/src/lib/prisma';
-import { MISSING_FIELD, WORK_ALREADY_EXIST } from '@/src/api_code';
-import { CreateEditionServerPayload } from '../types/edition';
-import { defaultLocale } from 'i18n';
+import { MISSING_FIELD, WORK_ALREADY_EXIST } from '../api_codes';
+// import { CreateEditionServerPayload } from '../types/edition';
 
 const include = {
   localImages: { select: { id:true, storedFile: true } },
@@ -17,36 +16,43 @@ const include = {
   },
   editions: { include: { localImages: { select: { id:true, storedFile: true } } } },
 };
-const editionsToBook = (book: WorkMosaicItem, language: string): WorkMosaicItem | null => {
-  if (book.language == language) {
+const editionsToBook = (book: WorkMosaicItem, languages: string[]): WorkMosaicItem | null => {
+  let idx = languages.findIndex(l=>l==book.language);
+
+  if (idx>=0) {
     return book;
   }
-  let i = 0,
-    count = book.editions?.length;
-  for (; i < count; i++) {
-    const e = book?.editions[i];
-    if (e.language == language) {
-      book.title = e.title;
-      book.contentText = e.contentText;
-      book.publicationYear = e.publicationYear;
-      book.language = e.language;
-      book.countryOfOrigin = e.countryOfOrigin;
-      book.length = e.length;
-      book.ToCheck = e.ToCheck;
-      book.localImages = e.localImages;
-      return book;
+
+  let i = 0;
+  let j = 0;
+  const count = book.editions?.length;
+
+  for( ; j < languages.length; j++)
+    for (; i < count; i++) {
+      const e = book?.editions[i];
+      if (e.language == languages[j]) {
+        book.title = e.title;
+        book.contentText = e.contentText;
+        book.publicationYear = e.publicationYear;
+        book.language = e.language;
+        book.countryOfOrigin = e.countryOfOrigin;
+        book.length = e.length;
+        book.ToCheck = e.ToCheck;
+        book.localImages = e.localImages;
+        return book;
+      }
     }
-  }
   return null;
 };
 
-export const find = async (id: number, language: string): Promise<WorkMosaicItem | null> => {
+export const find = async (id: number, languages: string[]): Promise<WorkMosaicItem | null> => {
   let work = await prisma.work.findUnique({
     where: { id },
     include,
   });
   if (work) {
-    work = editionsToBook(work, language);
+    if(languages?.length)
+      work = editionsToBook(work, languages);
     return work;
   }
   return null;
@@ -63,7 +69,7 @@ export const findWithoutLangRestrict = async (id: number): Promise<WorkMosaicIte
   return null;
 };
 
-export const findAll = async (language: string, props?: Prisma.WorkFindManyArgs): Promise<WorkMosaicItem[]> => {
+export const findAll = async (languages: string[], props?: Prisma.WorkFindManyArgs): Promise<WorkMosaicItem[]> => {
   const { where, include = null, take, skip, cursor } = props || {};
 
   let works = await prisma.work.findMany({
@@ -86,7 +92,7 @@ export const findAll = async (language: string, props?: Prisma.WorkFindManyArgs)
   });
 
   if (works) {
-    works = works.map((w) => editionsToBook(w, language)!);
+    works = works.map((w) => editionsToBook(w, languages)!);
   }
   return works;
 };
@@ -114,14 +120,13 @@ export const findAllWithoutLangRestrict = async (props?: Prisma.WorkFindManyArgs
   });
 
   if (works) {
-    works = works.map((w) => editionsToBook(w, w.language)!);
+    works = works.map((w) => editionsToBook(w, Object.values(Languages))!);
   }
   return works;
 };
 
 export const search = async (query: { [key: string]: string | string[] | undefined }): Promise<Work[]> => {
   const { q, where, include, lang: l } = query;
-  const language = Languages[l?.toString() ?? defaultLocale];
 
   if (where == null && q == null) {
     throw new Error("[412] Invalid invocation! Either 'q' or 'where' query parameter must be provided");
@@ -161,7 +166,7 @@ export const search = async (query: { [key: string]: string | string[] | undefin
       editions: { include: { localImages: { select: { id:true,storedFile: true } } } },
     },
   });
-  if (works) works = works.map((w) => editionsToBook(w, language)!);
+  if (works) works = works.map((w) => editionsToBook(w, Object.values(Languages))!);
   return works;
 };
 
@@ -209,18 +214,14 @@ export const isReadOrWatchedByUser = async (work: Work, user: User): Promise<num
 };
 
 export const createFromServerFields = async (
-  fields: CreateWorkServerFields,
+  payload: CreateWorkServerFields,
   coverImageUpload: StoredFileUpload,
 ): Promise<{ error?: string; work?: Work | Edition | null }> => {
-  const payload = Object.entries(fields).reduce((memo, field) => {
-    const [fieldName, fieldValues] = field;
-
-    if (fieldName === 'publicationYear') {
-      return { ...memo, [fieldName]: new Date(fieldValues[0]) };
-    }
-    return { ...memo, [fieldName]: fieldValues[0] };
-  }, {} as CreateWorkServerPayload);
-
+  // const payload = Object.entries(fields).reduce((memo, field) => {debugger;
+  //   const [fieldName, fieldValues] = field;
+  //   return { ...memo, [fieldName]: fieldValues };
+  // }, {} as CreateWorkServerPayload);
+debugger;
   const existingLocalImage = await prisma.localImage.findFirst({
     where: { contentHash: coverImageUpload.contentHash },
   });
@@ -272,6 +273,7 @@ export const updateFromServerFields = async (
 ): Promise<Work> => {
   const payload = Object.entries(fields).reduce((memo, field) => {
     const [fieldName, fieldValues] = field;
+
     if(fieldName=='creatorId') return {...memo, [fieldName]:parseInt(fieldValues)};
     if (fieldName === 'publicationYear') {
       return { ...memo, [fieldName]: new Date(fieldValues) };
@@ -544,8 +546,26 @@ export const saveSocialInteraction = async (
   return null;
 };
 
-export const remove = async (id: number): Promise<Work> => {
-  return prisma.work.delete({
-    where: { id },
-  });
+export const remove = async (id: number,language?:string): Promise<Work|undefined> => {
+  
+  if(!language){
+    return prisma.work.delete({
+      where: { id },
+    });
+  }
+  else {
+    const work = await findWithoutLangRestrict(id);
+
+    if(work){
+
+      const edition = await prisma.edition.findFirst({where:{workId:id}});
+      if(edition){
+        let res = await prisma.edition.delete({where:{id:edition.id}});
+        if(res)
+          return editionsToBook(work, [language]) as Work;
+      }
+
+    }
+  }
+  return undefined;
 };

@@ -1,18 +1,21 @@
-import useTranslation from 'next-translate/useTranslation';
+"use client"
+
 import { FunctionComponent, useEffect, useState } from 'react';
 import { Card, Badge, Spinner } from 'react-bootstrap';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { CgMediaLive } from 'react-icons/cg';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import isBetween from 'dayjs/plugin/isBetween';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
-import SocialInteraction from '../common/SocialInteraction';
-import { useCycleContext } from '../../useCycleContext';
-import { DATE_FORMAT_SHORT } from '../../constants';
-import useWork from '@/src/useWork';
+import SocialInteraction from '@/src/components/common/SocialInteraction';
+import { useCycleContext } from '@/src/hooks/useCycleContext';
+import { DATE_FORMAT_SHORT } from '@/src/constants';
+import useWork from '@/src/hooks/useWork';
 import { WorkMosaicItem } from '@/src/types/work';
+import { t } from '@/src/get-dictionary';
+import { useDictContext } from '@/src/hooks/useDictContext';
 
 dayjs.extend(isBetween);
 dayjs.extend(utc);
@@ -49,7 +52,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   size,
   className = '',
 }) => {
-  const { t } = useTranslation('common');
+  // const { t } = useTranslation('common');
+  const{dict,langs}=useDictContext()
   const { cycle } = useCycleContext();
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
@@ -96,7 +100,7 @@ const MosaicItem: FunctionComponent<Props> = ({
                   <em style={{ fontSize: '.8em' }}>{`${sd} - ${ed}`}</em>
                 </span>
               );
-              const labelOut = (label: string) => <span className="d-block">{`${t(label)}`}</span>;
+              const labelOut = (label: string) => <span className="d-block">{`${t(dict,label)}`}</span>;
               if (isActive())
                 return (
                   <>
@@ -138,7 +142,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     setLoading(true);
   };
   const renderLocalImageComponent = () => {
-    const localePath = router.locale ? `${router.locale}/`:"";
+      
     const img = localImages ? (
       <LocalImageComponent filePath={localImages[0].storedFile} title={title} alt={title} />
     ) : undefined;
@@ -153,7 +157,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           {!canNavigate() && (
             <Spinner className="position-absolute top-50 start-50" size="sm" animation="grow" variant="info" />
           )}
-          {imageLink ? <a href={`/${localePath}work/${id}`}>{img}</a> : img}
+          {imageLink ? <a href={`/work/${id}`}>{img}</a> : img}
         </div>
       );
     }
@@ -168,7 +172,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         {renderLocalImageComponent()}
         {isActive() && <CgMediaLive className={`${styles.isActiveCircle}`} />}
         <Badge bg="orange" className={`fw-normal fs-6 text-black px-2 rounded-pill ${styles.type}`}>
-          {type ? t(type) : '...'}
+          {type ? t(dict,type) : '...'}
         </Badge>
       </div>
       {renderOngoinOrUpcomingDate()}

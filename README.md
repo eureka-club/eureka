@@ -1,107 +1,109 @@
-# Eureka
+> The example repository is maintained from a [monorepo](https://github.com/nextauthjs/next-auth/tree/main/apps/examples/nextjs). Pull Requests should be opened against [`nextauthjs/next-auth`](https://github.com/nextauthjs/next-auth).
 
-Eureka webapp is build on top of Next.js-10.0 and react-bootstrap-1.5. It is hosted as so called app-service in the Azure cloud. It is using MSSQL server for the database and Prisma 2 for database driver. Almost all images are stored in Azure blob storage and hosted via Azure's Verizon CDN.
+<p align="center">
+   <br/>
+   <a href="https://authjs.dev" target="_blank">
+   <img height="64" src="https://authjs.dev/img/logo/logo-sm.png" />
+   </a>
+   <a href="https://nextjs.org" target="_blank">
+   <img height="64" src="https://nextjs.org/static/favicon/android-chrome-192x192.png" />
+   </a>
+   <h3 align="center"><b>NextAuth.js</b> - Example App</h3>
+   <p align="center">
+   Open Source. Full Stack. Own Your Data.
+   </p>
+   <p align="center" style="align: center;">
+      <a href="https://npm.im/next-auth">
+        <img alt="npm" src="https://img.shields.io/npm/v/next-auth?color=green&label=next-auth&style=flat-square">
+      </a>
+      <a href="https://bundlephobia.com/result?p=next-auth-example">
+        <img src="https://img.shields.io/bundlephobia/minzip/next-auth?label=size&style=flat-square" alt="Bundle Size"/>
+      </a>
+      <a href="https://www.npmtrends.com/next-auth">
+        <img src="https://img.shields.io/npm/dm/next-auth?label=downloads&style=flat-square" alt="Downloads" />
+      </a>
+      <a href="https://npm.im/next-auth">
+        <img src="https://img.shields.io/badge/TypeScript-blue?style=flat-square" alt="TypeScript" />
+      </a>
+   </p>
+</p>
 
-In this document we describe steps necessary for local development and deployment to the Azure cloud.
+## Overview
 
-## Local development
+NextAuth.js is a complete open-source authentication solution.
 
-### Requirements
-- Docker
-- Git
-- Node.js 14+
-- azure-cli v2
-- bash v4+
-- yarn v1
+This is an example application that shows how `next-auth` is applied to a basic Next.js app.
 
+The deployed version can be found at [`next-auth-example.vercel.app`](https://next-auth-example.vercel.app)
 
-### Preparation
-- clone repository into local project folder
-- copy `.env.local [example]` into `.env.local`, adjust values in a new file, make decision about URL for local development (will you use **localhost:3000** as development URL? Maybe you should use something more sophisticated like `eureka-dev.local:3000`, highly recommended), fill that URL into `NEXT_PUBLIC_WEBAPP_URL` & `NEXTAUTH_URL`
-- copy `prisma/.env [example]` into `primsa/.env` and adjust values
+Go to [next-auth.js.org](https://next-auth.js.org) for more information and documentation.
 
-*Remember, values in `.env [examples]` are not real (production ready) values! They are good defaults for local development only.*
+## Getting Started
 
-- install all libraries with `yarn install` command
-- create local MSSQL database for local development via Docker:
-
-  ```
-  docker run \
-      -e ACCEPT_EULA=Y \
-      -e SA_PASSWORD='$3cret123' \
-      -e MSSQL_PID=Express \
-      -p 1433:1433 \
-      -v $HOME/.docker/my_volumes/mssql-eureka:/var/opt/mssql \
-      --name mssql-eureka \
-      --restart on-failure \
-      -d mcr.microsoft.com/mssql/server:2019-latest
-  ```
-
-MSSQL database server is now available at `localhost:1433`. Container will be started automatically with Docker.
-
-You can connect to MSSQL database via [TablePlus](https://tableplus.com/download) or similar app.
-
-- run database migrations with `yarn prisma-pf migrate deploy` to create DB tables
-
-Dynamic images (uploads) in development are handled by Next.js's server and stored locally in `public-assets` folder.
-
-For full funcionality (login, comments) it is needed to populate valid ENVs into `.env.local` for Google, Hyvor and SendGrid. Every developer need to use his/her own Google ID/KEY. Hyvor & SendGrid credentials can be shared.
-
-#### Hyvor comments
-Ask supervisor to add your development URL to [Hyvor console](https://talk.hyvor.com/console).
-
-#### Google sign-in
-To populate `GOOGLE_ID` and `GOOGLE_SECRET` you must navigate to (your own) [console.cloud.google.com](http://console.cloud.google.com/) and create a new project. Then in *APIs & Services* > *Credentials* create a new **OAUTH** credential for webapp. Do not setup project icon! When finished you will be provided with `GOOGLE_ID` and `GOOGLE_SECRET`.
-
-You will need to fill *Authorized redirect URIs* with URL of running apps (development & production). Value(s) should look like:
+### 1. Clone the repository and install dependencies
 
 ```
-http://eureka-dev.local:3000/api/auth/callback/google
+git clone https://github.com/nextauthjs/next-auth-example.git
+cd next-auth-example
+npm install
 ```
 
-### Development
+### 2. Configure your local environment
 
-- run `yarn dev`
-- access website on URL configured in `NEXT_PUBLIC_WEBAPP_URL`
-- make changes to the code
-- **check the code before pushing to the repository: `yarn lt` !!!**
-- if you change `prisma/schema.prisma` file, always follow this steps:
-  - create a new migration: `yarn prisma-pf migrate dev --create-only`
-  - inspect/tweak new migration at `prisma/migrations`
-  - **fist deploy migration do your local DB** - !!!make sure that `prisma/.env` points to local database!!!
-  `yarn prisma-pf migrate deploy`
-  - document changes into database diagram at Google drive!
-  - !!!make note that migration(s) is/are needed for production!!!
-- if you changed `.env.local`, update also `.env.local [example]` and make sure that ENV values will be provisioned by `.azure/.env` and `.azure/99_deploy.sh`!
+Copy the .env.local.example file in this directory to .env.local (which will be ignored by Git):
 
+```
+cp .env.local.example .env.local
+```
 
-## Deployment to Azure cloud
-Application is deployed in Azure as a so-called app-service. It is a Heroku-like service, where deployment is made with simple `git push azure master`. During this step sources are pushed into Azure GIT repository. Then deployment process will run `yarn build` within configured runtime (Node.js v14). After successful build a `yarn start` starts the web-application. All this is happening during that `git push` command and can take some serious time (10-30 mins) to finish.
+Add details for one or more providers (e.g. Google, Twitter, GitHub, Email, etc).
 
-This deployment process is ran on app-service-plan - HW resource for your app-service. App service plan together with app-service are way of abstracting HW (servers) out of sight of developer. All you care is app-service-plan tier (size of your abstracted server) and GIT repository to push to. You can run multiple app-services on top of app-service-plan (same way as single server can serve multiple web-applications in IaaS scenario).
+#### Database
 
-Eureka is also utilizing app-service deployment slot(s). It is a nice way to group couple of app-services into single project. This allows independend deployment of production/staging targets.
+A database is needed to persist user accounts and to support email sign in. However, you can still use NextAuth.js for authentication without a database by using OAuth for authentication. If you do not specify a database, [JSON Web Tokens](https://jwt.io/introduction) will be enabled by default.
 
+You **can** skip configuring a database and come back to it later if you want.
 
-### Preparation
-- login via `azure-cli` - `az login`
-- from the supervisor ask for secrets archive.zip and copy `.azure/.env` into your project
-- create infrastructure in Azure by running `.azure/00_infrastrucure.sh` (command is idempotent, you can run it safely many times)
-- add Git remotes to your environment
-  - `git remote add azure https://EurekaClubDeployer@eurekaclubeureka.scm.azurewebsites.net/eurekaclubeureka.git`
-  - `git remote add azure-staging https://EurekaClubDeployer@eurekaclubeureka-staging.scm.azurewebsites.net/eurekaclubeureka.git`
-- initiate prompt for deployment credentials
-  - `git fetch -v azure` *(provide deployment password - see `.azure/.env`)*
-  - `git fetch -v azure-staging`
+For more information about setting up a database, please check out the following links:
 
-### Cloud deployment
-- run `yarn lt`!!!
-- commit all changes into git!
-- if DB migrations are needed, run them before deployment
-  - change to staging/production database in `prisma/.env`
-  - apply pending migrations `yarn prisma-pf migrate deploy`
-  - change back to development database in `prisma/.env`!
-- run `.azure/99_deploy.sh`
-- apply changes to ENV only if you changed your `.env.local` and prepared/reflected changes in `.azure/.env` & `.azure/99_deploy.sh`
-- wait to finish, do not interrupt running command (take around 18 minutes to finish)
-- it takes around another 3 minutes to deployment to become live at Azure. Click around production website to warm caches on the server.
+- Docs: [next-auth.js.org/adapters/overview](https://next-auth.js.org/adapters/overview)
+
+### 3. Configure Authentication Providers
+
+1. Review and update options in `pages/api/auth/[...nextauth].js` as needed.
+
+2. When setting up OAuth, in the developer admin page for each of your OAuth services, you should configure the callback URL to use a callback path of `{server}/api/auth/callback/{provider}`.
+
+e.g. For Google OAuth you would use: `http://localhost:3000/api/auth/callback/google`
+
+A list of configured providers and their callback URLs is available from the endpoint `/api/auth/providers`. You can find more information at https://next-auth.js.org/configuration/providers/oauth
+
+3. You can also choose to specify an SMTP server for passwordless sign in via email.
+
+### 4. Start the application
+
+To run your site locally, use:
+
+```
+npm run dev
+```
+
+To run it in production mode, use:
+
+```
+npm run build
+npm run start
+```
+
+### 5. Preparing for Production
+
+Follow the [Deployment documentation](https://authjs.dev/guides/basics/deployment) or deploy the example instantly using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-auth-example)
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/nextauthjs/next-auth-example&project-name=next-auth-example&repository-name=next-auth-example)
+
+## Acknowledgements
+
+<a href="https://vercel.com?utm_source=nextauthjs&utm_campaign=oss">
+<img width="170px" src="https://raw.githubusercontent.com/nextauthjs/next-auth/main/docs/static/img/powered-by-vercel.svg" alt="Powered By Vercel" />
+</a>
+<p align="left">Thanks to Vercel sponsoring this project by allowing it to be deployed for free for the entire Auth.js Team</p>

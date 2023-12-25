@@ -1,17 +1,16 @@
-
+'use client'
 import { FunctionComponent, useEffect, useState, lazy, FC, memo } from 'react';
 import Link from 'next/link';
-import useTranslation from 'next-translate/useTranslation';
+//import useTranslation from 'next-translate/useTranslation';
 import { Spinner, Col } from 'react-bootstrap';
 import TagsInput from '@/components/forms/controls/TagsInput';
 import { GetAllByResonse } from '@/src/types';
 import { useInView } from 'react-intersection-observer';
 import { CycleMosaicItem } from '@/src/types/cycle';
 import { UserMosaicItem } from '@/src/types/user';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import slugify from 'slugify'
-import useMyCycles, { myCyclesWhere } from '@/src/useMyCycles';
+//import useMyCycles, { myCyclesWhere } from '@/src/useMyCycles';
 import Prompt from '@/src/components/post/PostPrompt';
 import FeaturedCycles from './FeaturedCycles';
 import FeaturedEurekas from './FeaturedEurekas';
@@ -20,7 +19,10 @@ import CarouselsByTopics from './CarouselsByTopics';
 import CarouselStatic from '../CarouselStatic';
 import FeaturedUsers from './FeaturedUsers';
 import { BsChevronUp, BsChevronDown } from 'react-icons/bs';
-import useItemsByTopic, { getItemsByTopic } from '@/src/useItemsByTopic';
+import useItemsByTopic, { getItemsByTopic } from '@/src/hooks/useItemsByTopic';
+import { useDictContext } from '@/src/hooks/useDictContext';
+import { t } from '@/src/get-dictionary';
+import { Session } from '@/src/types';
 
 const topics = ['gender-feminisms', 'technology', 'environment',
   'racism-discrimination',
@@ -37,51 +39,52 @@ const topics = ['gender-feminisms', 'technology', 'environment',
 // };
 
 interface Props {
-  language:string;
+  session: Session | null;
   // myCycles?:CycleMosaicItem[]
 }
 
-const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
-  const { data: session, status } = useSession();
+const HomeSingIn: FunctionComponent<Props> = ({session}) => {
   const router = useRouter();
-  const { t,lang } = useTranslation('common');
+  //const { t,lang } = useTranslation('common');
+  const { dict, langs } = useDictContext();
+
   const [ref, inView] = useInView({
     triggerOnce: false,
     // rootMargin: '200px 0px',
     // skip: supportsLazyLoading !== false,
   });
   const [users, setUsers] = useState<UserMosaicItem[]>()
-  const { data: dataCycles } = useMyCycles(session?.user.id!)
+  //const { data: dataCycles } = useMyCycles(session?.user.id!)
   const [cycles, setCycles] = useState<CycleMosaicItem[]>()
 
-  useEffect(() => {
-    if (dataCycles) setCycles(dataCycles.cycles)
+  // useEffect(() => {
+  //   if (dataCycles) setCycles(dataCycles.cycles)
 
-  }, [dataCycles])
+  // }, [dataCycles])
 
   const [topicIdx, setTopicIdx] = useState(0);
   const [topicsFetched, setTopicsFetched] = useState(new Set());
   const [showAboutSection, setShowAboutSection] = useState<boolean>(false)
 
-  const {data:itemsByTopic} = useItemsByTopic(0,topics[topicIdx],lang!);
+  //const { data: itemsByTopic } = useItemsByTopic(0, topics[topicIdx], langs!);
 const [gbt, setGBT] = useState<any[]>([]);
-  useEffect(()=>{
+  // useEffect(()=>{
     
-    let isCanceled = false;
-    if(!isCanceled){
-      if(itemsByTopic){
-        const exist = topicsFetched.has(topics[topicIdx]);
-        if(!exist){
-           setGBT((prev)=>[...prev,[topics[topicIdx],itemsByTopic]])
-            topicsFetched.add(topics[topicIdx]);
-            setTopicsFetched(topicsFetched);
-        }
-      }
-    }
-    return () => {
-      isCanceled = true
-    }
-  },[itemsByTopic])
+  //   let isCanceled = false;
+  //   if(!isCanceled){
+  //     if(itemsByTopic){
+  //       const exist = topicsFetched.has(topics[topicIdx]);
+  //       if(!exist){
+  //          setGBT((prev)=>[...prev,[topics[topicIdx],itemsByTopic]])
+  //           topicsFetched.add(topics[topicIdx]);
+  //           setTopicsFetched(topicsFetched);
+  //       }
+  //     }
+  //   }
+  //   return () => {
+  //     isCanceled = true
+  //   }
+  // },[itemsByTopic])
 
   useEffect(() => {
     const idx = topicIdx + 1;
@@ -91,13 +94,13 @@ const [gbt, setGBT] = useState<any[]>([]);
   }, [inView]);
 
   const getTopicsBadgedLinks = () => {
-    return <TagsInput className='d-flex flex-wrap' formatValue={(v: string) => t(`topics:${v}`)} tags={[...topics].join()} readOnly />;
+    return <TagsInput className='d-flex flex-wrap' formatValue={(v: string) => t(dict,`${v}`)} tags={[...topics].join()} readOnly />;
   };
 
-  const renderSpinnerForLoadNextCarousel = () => {
-    if (itemsByTopic?.data.length && topicIdx < topics.length - 1) return <Spinner ref={ref} animation="grow" />
-    return '';
-  }
+  // const renderSpinnerForLoadNextCarousel = () => {
+  //   if (itemsByTopic?.data.length && topicIdx < topics.length - 1) return <Spinner ref={ref} animation="grow" />
+  //   return '';
+  // }
 
   const getMediathequeSlug = (id: number, name: string) => {
     const s = `${name}`
@@ -115,23 +118,23 @@ const [gbt, setGBT] = useState<any[]>([]);
 
 
 
-  const cyclesJoined = () => {
-    if (!session) return <></>
-    const k = JSON.stringify(myCyclesWhere(session?.user.id))
+  // const cyclesJoined = () => {
+  //   if (!session) return <></>
+  //   const k = JSON.stringify(myCyclesWhere(session?.user.id))
 
-    return (cycles && cycles.length)
-      ? <div data-cy="myCycles">
-        <CarouselStatic
-          cacheKey={['CYCLES', k]}
-          onSeeAll={async () => seeAll(cycles, t('myCycles'))}
-          title={t('myCycles')}
-          data={cycles}
-          iconBefore={<></>}
-        // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-        />
-      </div>
-      : <></>;
-  };
+  //   return (cycles && cycles.length)
+  //     ? <div data-cy="myCycles">
+  //       <CarouselStatic
+  //         cacheKey={['CYCLES', k]}
+  //         onSeeAll={async () => seeAll(cycles, t('myCycles'))}
+  //         title={t('myCycles')}
+  //         data={cycles}
+  //         iconBefore={<></>}
+  //       // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+  //       />
+  //     </div>
+  //     : <></>;
+  // };
 
 
   return (
@@ -143,11 +146,11 @@ const [gbt, setGBT] = useState<any[]>([]);
       </section>
       <section className="d-flex flex-column flex-lg-row">
         <Col xs={12} lg={2} className="me-2">
-          <h2 className="text-secondary fw-bold">{t('Trending topics')}</h2>
+          <h2 className="text-secondary fw-bold">{t(dict,'Trending topics')}</h2>
           <aside className="mb-4">{getTopicsBadgedLinks()}</aside>
           <section className="mt-5">
             <h1 className="d-flex flex-row align-items-center text-secondary  fw-bold" style={{ fontSize: '1.25rem' }}>
-              <span>{t('About Eureka')}{' '}</span>
+              <span>{t(dict,'About Eureka')}{' '}</span>
               {!showAboutSection && (
                 <span
                   className={`cursor-pointer d-flex d-lg-none ms-4`}
@@ -170,40 +173,40 @@ const [gbt, setGBT] = useState<any[]>([]);
           </section>
           {showAboutSection && (<div className='d-flex d-lg-none flex-column'>
             <Link href="/about">
-              <a className="text-primary text-decoration-underline text-blue" onClick={() => window.scrollTo(0, 0)}>
-                {t('browserTitleAbout')}{' '}
-              </a>
+              <p className="text-primary text-decoration-underline text-blue" onClick={() => window.scrollTo(0, 0)}>
+                {t(dict,'browserTitleAbout')}{' '}
+              </p>
             </Link>
             <section className="mt-3 p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
-              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox1')}</h4>
+              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t(dict,'aboutBox1')}</h4>
             </section>
             <section className="mt-3 p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
-              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox2')}</h4>
+              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t(dict,'aboutBox2')}</h4>
             </section>
             <section className="mt-3 p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
-              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox3')}</h4>
+              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t(dict,'aboutBox3')}</h4>
             </section>
             <section className="mt-3 p-3 mb-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
-              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox4')}</h4>
+              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t(dict,'aboutBox4')}</h4>
             </section>
           </div>)}
           <div className='d-none d-lg-flex flex-column'>
             <Link href="/about">
-              <a className="text-primary text-decoration-underline text-blue" onClick={() => window.scrollTo(0, 0)}>
-                {t('browserTitleAbout')}{' '}
-              </a>
+              <p className="text-primary text-decoration-underline text-blue" onClick={() => window.scrollTo(0, 0)}>
+                {t(dict,'browserTitleAbout')}{' '}
+              </p>
             </Link>
             <section className="mt-4 p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
-              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox1')}</h4>
+              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t(dict,'aboutBox1')}</h4>
             </section>
             <section className="mt-5 p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
-              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox2')}</h4>
+              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t(dict,'aboutBox2')}</h4>
             </section>
             <section className="mt-5 p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
-              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox3')}</h4>
+              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t(dict,'aboutBox3')}</h4>
             </section>
             <section className="mt-5 p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
-              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox4')}</h4>
+              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t(dict,'aboutBox4')}</h4>
             </section>
           </div>
 
@@ -215,15 +218,14 @@ const [gbt, setGBT] = useState<any[]>([]);
         <Col xs={12} lg={10} className="mt-5 mt-lg-0">
           <section className="ms-0 ms-lg-5">
             <FeaturedWorks />
-            <FeaturedEurekas />
-            <FeaturedCycles />
-            {/*cyclesJoined()*/}
-            <>
+            <FeaturedEurekas session={session}  />
+            <FeaturedCycles session={session} />
+             {/*<>
               <div className="mt-5">
-                <CarouselsByTopics groupedByTopics={gbt} />
+                <CarouselsByTopics groupedByTopics={gbt} /> 
               </div>
               <div className="mb-5">{renderSpinnerForLoadNextCarousel()} </div>
-            </>
+            </>*/}
           </section>
         </Col>
       </section>

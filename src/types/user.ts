@@ -1,4 +1,4 @@
-import { Prisma,User } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
 export interface EditUserClientPayload {
   name?: string;
@@ -11,7 +11,9 @@ export interface EditUserClientPayload {
   photo?:File;
   language?:string|null;
 }
-
+export type EditUserServerPayload = Prisma.UserUpdateInput & {
+  notificationData:string
+}
 type UserFoolow = {
   select: {
     id: true;
@@ -63,77 +65,11 @@ type UserFoolow = {
         };
       };
     };
-    favWorks: {
-      select: {
-        id: true;
-        createdAt: true;
-        title: true;
-        type: true;
-        countryOfOrigin: true;
-        countryOfOrigin2: true;
-        favs: { select: { id: true } };
-        localImages: { select: { storedFile: true } };
-      };
-    };
-    favCycles: {
-      select: {
-        id: true;
-        createdAt: true;
-        creatorId: true;
-        startDate: true;
-        endDate: true;
-        title: true;
-        favs: { select: { id: true } };
-        usersJoined: { select: { userId: true; pending: true } };
-        participants: { select: { id: true } };
-      };
-    };
-    favPosts: {
-      select: {
-        id: true;
-        createdAt: true;
-        favs: { select: { id: true } };
-        localImages: { select: { storedFile: true } };
-      };
-    };
-    // posts:{select:{id:true}},
-    cycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
-    joinedCycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
     ratingCycles:{select:{cycleId:true,qty:true}},
     photos:{select:{storedFile:true}},
     reactions:{select:{postId:true,unified:true,emoji:true}},
-    //language:true,
-    // notifications:{
-    //   select:{
-    //     userId:true,
-    //     notificationId:true,
-    //     notification:{select:{contextURL:true}}
-    //   }
-    // }
+    language:true,
   };
-  // include: {
-  //   cycles: true;
-  //   joinedCycles: true;
-  //   likedCycles: true;
-  //   favCycles: true;
-  //   favPosts:true;
-  //   posts: true;
-  //   likedWorks: true;
-  //   favWorks: true;
-  //   ratingWorks:true;
-  //   ratingCycles:true;
-  //   readOrWatchedWorks: true;
-  //   following: true;
-  //   followedBy: true;
-  //   photos:{select:{storedFile:true}};
-  //   notifications:{
-  //     include:{notification:{
-  //       include:{
-  //         toUsers:true;
-  //       }
-  //     }};
-  //   }
-  // };
 };
 
 export type UserMosaicItem = Prisma.UserGetPayload<UserFoolow> & {

@@ -1,7 +1,8 @@
 import { useAtom } from 'jotai';
-import { useQuery } from 'react-query';
-import { useRouter } from 'next/router';
-import useTranslation from 'next-translate/useTranslation';
+import { useQuery } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation';
+import { t } from '@/src/get-dictionary';
+import { useDictContext } from '@/src/hooks/useDictContext';
 import { FunctionComponent, ChangeEvent, useState, useEffect } from 'react';
 import { Container, Row, Col, Form, OverlayTrigger, Popover, Button } from 'react-bootstrap';
 import TagsInputTypeAhead from './forms/controls/TagsInputTypeAhead';
@@ -20,7 +21,10 @@ const FilterEngine: FunctionComponent<Props> = ({
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
   // const [session] = useSession() as [Session | null | undefined, boolean];
   const router = useRouter();
-  const { t } = useTranslation('searchEngine');
+  //const { t } = useTranslation('searchEngine');
+
+  const { dict } = useDictContext()
+
   const [tags /* , setTags */] = useState<string>('');
   const [items, setItems] = useState<string[]>([]);
   const [filtersChecked, setFiltersChecked] = useState<Record<string, boolean>>({
@@ -35,13 +39,13 @@ const FilterEngine: FunctionComponent<Props> = ({
     setGlobalSearchEngineState({...globalSearchEngineState});
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
-  useEffect(() => {
-    const onlyByCountries = [...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items])];
-    setGlobalSearchEngineState({
-      ...globalSearchEngineState,
-      ...{ onlyByCountries },
-    });
-  }, [tags]);
+  // useEffect(() => {
+  //   const onlyByCountries = [...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items])];
+  //   setGlobalSearchEngineState({
+  //     ...globalSearchEngineState,
+  //     ...{ onlyByCountries },
+  //   });
+  // }, [tags]);
 
   useEffect(() => {
     if (globalSearchEngineState.only.length) {
@@ -83,14 +87,14 @@ const FilterEngine: FunctionComponent<Props> = ({
     const { result = [] } = await res.json();
     const codes = result.map((i: { code: string; label: string }) => ({
       code: i.code,
-      label: t(`countries:${i.code}`),
+      label: t(dict,`${i.code}`),
     }));
     return codes;
   };
 
-  const { data: countries } = useQuery('COUNTRIESALL', fetchCountries, {
-    staleTime: 1000 * 60 * 60,
-  });
+  // const { data: countries } = useQuery('COUNTRIESALL', fetchCountries, {
+  //   staleTime: 1000 * 60 * 60,
+  // });
 
   const handlerComboxesChangeType = (e: ChangeEvent<HTMLInputElement>, type: string) => {
     e.stopPropagation();
@@ -144,13 +148,13 @@ const FilterEngine: FunctionComponent<Props> = ({
       <Popover.Body>
       <div>
       <Form.Label>
-                  <strong>{t('Books')}</strong>
+                  <strong>{t(dict,'Books')}</strong>
                 </Form.Label>
                 <Form.Group className={styles.formGroup}>
                   <Form.Check
                     className={styles.filter}
                     type="checkbox"
-                    label={t('Fiction books')}
+                    label={t(dict,'Fiction books')}
                     checked={filtersChecked['fiction-book']}
                     onChange={(e) => handlerComboxesChangeType(e, 'fiction-book')}
                   />
@@ -159,20 +163,20 @@ const FilterEngine: FunctionComponent<Props> = ({
                   <Form.Check
                     className={styles.filter}
                     type="checkbox"
-                    label={t('Nofictions books')}
+                    label={t(dict,'Nofictions books')}
                     checked={filtersChecked.book}
                     onChange={(e) => handlerComboxesChangeType(e, 'book')}
                   />
                 </Form.Group>
                 <br />
                 <Form.Label>
-                  <strong>{t('Films')}</strong>
+                  <strong>{t(dict,'Films')}</strong>
                 </Form.Label>
                 <Form.Group className={styles.formGroup}>
                   <Form.Check
                     className={styles.filter}
                     type="checkbox"
-                    label={t('Movies')}
+              label={t(dict,'Movies')}
                     checked={filtersChecked.movie}
                     onChange={(e) => handlerComboxesChangeType(e, 'movie')}
                   />
@@ -181,7 +185,7 @@ const FilterEngine: FunctionComponent<Props> = ({
                   <Form.Check
                     className={styles.filter}
                     type="checkbox"
-                    label={t('Documentaries')}
+              label={t(dict,'Documentaries')}
                     checked={filtersChecked.documentary}
                     onChange={(e) => handlerComboxesChangeType(e, 'documentary')}
                   />
@@ -195,13 +199,13 @@ const FilterEngine: FunctionComponent<Props> = ({
     return <Popover id='popover-geography'>
       <Popover.Body>
       <Form.Label>
-                    <strong>{t('Regions')}</strong>
+                    <strong>{t(dict,'Regions')}</strong>
                   </Form.Label>
                   <Form.Group className={styles.formGroup}>
                     <Form.Check
                       className={styles.filter}
                       type="checkbox"
-                      label={`${t('countries:Asia')} `}
+            label={`${t(dict, 'countries:Asia')} `}
                       checked={filtersChecked.Asia}
                       onChange={(e) => handlerComboxesChangeRegion(e, 'Asia')}
                     />
@@ -210,7 +214,7 @@ const FilterEngine: FunctionComponent<Props> = ({
                     <Form.Check
                       className={styles.filter}
                       type="checkbox"
-                      label={`${t('countries:Europe')} `}
+            label={`${t(dict, 'countries:Europe')} `}
                       checked={filtersChecked.Europe}
                       onChange={(e) => handlerComboxesChangeRegion(e, 'Europe')}
                     />
@@ -219,7 +223,7 @@ const FilterEngine: FunctionComponent<Props> = ({
                     <Form.Check
                       className={styles.filter}
                       type="checkbox"
-                      label={`${t('countries:Latin America and the Caribbean')} `}
+            label={`${t(dict, 'Latin America and the Caribbean')} `}
                       checked={filtersChecked['Latin America and the Caribbean']}
                       onChange={(e) => handlerComboxesChangeRegion(e, 'Latin America and the Caribbean')}
                     />
@@ -228,7 +232,7 @@ const FilterEngine: FunctionComponent<Props> = ({
                     <Form.Check
                       className={styles.filter}
                       type="checkbox"
-                      label={`${t('countries:Middle East and North Africa')} `}
+            label={`${t(dict, 'Middle East and North Africa')} `}
                       checked={filtersChecked['Middle East and North Africa']}
                       onChange={(e) => handlerComboxesChangeRegion(e, 'Middle East and North Africa')}
                     />
@@ -237,7 +241,7 @@ const FilterEngine: FunctionComponent<Props> = ({
                     <Form.Check
                       className={styles.filter}
                       type="checkbox"
-                      label={`${t('countries:Northern America')} `}
+            label={`${t(dict, 'Northern America')} `}
                       checked={filtersChecked['Northern America']}
                       onChange={(e) => handlerComboxesChangeRegion(e, 'Northern America')}
                     />
@@ -246,7 +250,7 @@ const FilterEngine: FunctionComponent<Props> = ({
                     <Form.Check
                       className={styles.filter}
                       type="checkbox"
-                      label={`${t('countries:Oceania')}`}
+            label={`${t(dict, 'Oceania')}`}
                       checked={filtersChecked.Oceania}
                       onChange={(e) => handlerComboxesChangeRegion(e, 'Oceania')}
                     />
@@ -255,17 +259,17 @@ const FilterEngine: FunctionComponent<Props> = ({
                     <Form.Check
                       className={styles.filter}
                       type="checkbox"
-                      label={`${t('countries:Sub-Saharan Africa')}`}
+            label={`${t(dict, 'Sub-Saharan Africa')}`}
                       checked={filtersChecked['Sub-Saharan Africa']}
                       onChange={(e) => handlerComboxesChangeRegion(e, 'Sub-Saharan Africa')}
                     />
                   </Form.Group>
                   <br />
                   <Form.Label>
-                    <strong>{t('Countries')}</strong>
+          <strong>{t(dict, 'Countries')}</strong>
                   </Form.Label>
                   {/* <TagsInputTypeAhead data={countries} items={items} tags={tags} setTags={setTags} /> */}
-                  <TagsInputTypeAhead
+                  {/* <TagsInputTypeAhead
                     data={countries}
                     items={items}
                     setItems={setItems}
@@ -291,7 +295,7 @@ const FilterEngine: FunctionComponent<Props> = ({
                         ...{ onlyByCountries },
                       });
                     }}
-                  />
+                  /> */}
       </Popover.Body>
     </Popover>
   };
@@ -306,7 +310,7 @@ const FilterEngine: FunctionComponent<Props> = ({
                 className={styles.filter}
                 inline
                 type="checkbox"
-                label={t('Cycles')}
+                label={t(dict,'Cycles')}
                 checked={filtersChecked.cycle}
                 onChange={(e) => handlerComboxesChangeType(e, 'cycle')}
               />
@@ -316,7 +320,7 @@ const FilterEngine: FunctionComponent<Props> = ({
                 className={styles.filter}
                 inline
                 type="checkbox"
-                label={t('Eurekas')}
+                label={t(dict,'Eurekas')}
                 onChange={(e) => handlerComboxesChangeType(e, 'post')}
               />
             </Form.Group>
@@ -325,7 +329,7 @@ const FilterEngine: FunctionComponent<Props> = ({
                 className={styles.filter}
                 inline
                 type="checkbox"
-                label={t('Films')}
+                label={t(dict, 'Films')}
                 checked={filtersChecked.movie && filtersChecked.documentary}
                 onChange={(e) => handlerComboxesChangeType(e, 'movie|documentary')}
               />
@@ -335,7 +339,7 @@ const FilterEngine: FunctionComponent<Props> = ({
                 className={styles.filter}
                 inline
                 type="checkbox"
-                label={t('Books')}
+                label={t(dict, 'Books')}
                 checked={filtersChecked.book && filtersChecked['fiction-book']}
                 onChange={(e) => handlerComboxesChangeType(e, 'book|fiction-book')}
               />
@@ -347,7 +351,7 @@ const FilterEngine: FunctionComponent<Props> = ({
             {fictionOrNotFilter && (
               <OverlayTrigger rootClose placement="bottom" trigger="click" overlay={getPopoverBooks()}>
                 <span className="d-inline-block">
-                  <Button variant="light">{t('Fiction/nonfiction')}</Button>
+                    <Button variant="light">{t(dict, 'Fiction/nonfiction')}</Button>
                 </span>
               </OverlayTrigger>
             )}
@@ -355,7 +359,7 @@ const FilterEngine: FunctionComponent<Props> = ({
             {geographyFilter && (
               <OverlayTrigger rootClose placement="bottom" trigger="click" overlay={getPopoverGeography()}>
               <span className="d-inline-block">
-                <Button className="ms-3" variant="light">{t('Geography')}</Button>
+                    <Button className="ms-3" variant="light">{t(dict, 'Geography')}</Button>
               </span>
             </OverlayTrigger>
             )}

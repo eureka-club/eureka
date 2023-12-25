@@ -1,4 +1,5 @@
 import { Edition, Prisma } from '@prisma/client';
+import { EditionMosaicItem } from './edition';
 
 // export type WorkDetail = Prisma.WorkGetPayload<{
 //   include: {
@@ -62,21 +63,21 @@ export type WorkWithImages = Prisma.WorkGetPayload<{
 
 export type WorkMosaicItem = Prisma.WorkGetPayload<{
   include: {
-    _count: { select: { ratings: true } };
-    localImages: { select: { id:true, storedFile: true } };
-    favs: { select: { id: true } };
-    ratings: { select: { userId: true; qty: true } };
-    readOrWatchedWorks: { select: { userId: true; workId: true; year: true } };
+    _count: { select: { ratings: true } },
+    localImages: { select: { id:true, storedFile: true } },
+    favs: { select: { id: true } },
+    ratings: { select: { userId: true, qty: true } },
+    readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
     posts: {
       select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
     },
-    editions:{include:{localImages: { select: { id:true, storedFile: true } }}};
-  };
+    editions:{include:{localImages: { select: { id:true, storedFile: true } }}},
+  },
 }> & {
-  currentUserRating?: number;
-  ratingCount?: number;
-  ratingAVG?: number;
-};
+  currentUserRating?: number,
+  ratingCount?: number,
+  ratingAVG?: number,
+}
 
 export interface CreateWorkClientPayload {
   cover: File;
@@ -98,21 +99,21 @@ export interface CreateWorkClientPayload {
 }
 
 export interface CreateWorkServerFields {
-  type: string[];
-  title: string[];
-  author: string[];
-  authorGender?: string[];
-  authorRace?: string[];
-  contentText?: string[];
-  link?: string[];
-  countryOfOrigin?: string[];
-  countryOfOrigin2?: string[];
-  publicationYear?: string[];
-  length?: string[];
-  tags?: string[];
+  type: string;
+  title: string;
+  author: string;
+  authorGender?: string;
+  authorRace?: string;
+  contentText?: string;
+  link?: string;
+  countryOfOrigin?: string;
+  countryOfOrigin2?: string;
+  publicationYear?: Date;
+  length?: string;
+  tags?: string;
   topics?: string;
-  creatorId?: string[];
-  language?: string[];
+  creatorId?: number;
+  language?: string;
 }
 
 export interface CreateWorkServerPayload {
@@ -136,23 +137,24 @@ export interface CreateWorkServerPayload {
 }
 
 export interface EditWorkServerFields {
-  id: string[];
-  type?: string[];
-  title?: string[];
-  author?: string[];
-  authorGender?: string[];
-  authorRace?: string [];
-  contentText?: string[];
-  link?: string[];
-  isbn?:string[];
-  countryOfOrigin?: string [];
-  countryOfOrigin2?: string [];
-  publicationYear?: string [];
-  length?: string[];
-  tags?: string[];
-  topics?: string[];
-  creatorId?: string[];
-  language?: string[];
+  id: number;
+  type?: string;
+  title?: string;
+  author?: string;
+  authorGender?: string;
+  authorRace?: string ;
+  contentText?: string;
+  link?: string;
+  isbn?:string;
+  countryOfOrigin?: string ;
+  countryOfOrigin2?: string ;
+  publicationYear?: string ;
+  length?: number;
+  tags?: string;
+  topics?: string;
+  creatorId?: number;
+  language?: string;
+  editions?:string
 }
 export interface EditWorkServerPayload {
   id: string[];

@@ -1,25 +1,28 @@
-import { useRouter } from 'next/router';
-import useTranslation from 'next-translate/useTranslation';
+"use client"
+
+import { useRouter } from 'next/navigation';
 import React, { FunctionComponent,useRef, useState } from 'react';
 import { Form,InputGroup,Button,Spinner } from 'react-bootstrap';
 
 import { AiOutlineSearch } from 'react-icons/ai';
+import { useDictContext } from '@/src/hooks/useDictContext';
+import { t } from '../get-dictionary';
 
 interface Props {
   className?: string;
   style?: Record<string,string>; 
-
 }
 const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => {
   const router = useRouter();
-  const { t } = useTranslation('common');
   const formRef=useRef<HTMLFormElement>(null)
   const [searching,setSearching] = useState(false)
+  const {dict}=useDictContext()
 
   const onTermKeyUp = (e:React.KeyboardEvent<HTMLInputElement>)=>{
     if(e.code == 'Enter' || e.code == 'NumpadEnter' ){
       setSearching(true)
-      router.push(`/search?q=${e.currentTarget.value}`).then((res)=>{setSearching(false);return res})
+      router.push(`/search/work?q=${e.currentTarget.value}`)
+      //.then((res)=>{setSearching(false);return res})
     }
   }
 
@@ -27,7 +30,8 @@ const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => 
     const form = formRef.current;
     if(form && form.search.value) {
       setSearching(true)
-      router.push(`/search?q=${form.search.value}`).then((res)=>{setSearching(false);return res})
+      router.push(`/search/work?q=${form.search.value}`)
+      //.then((res)=>{setSearching(false);return res})
     }
   }
 
@@ -51,7 +55,7 @@ const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => 
         aria-label="Search Term"
         aria-describedby="basic-search"
         data-cy="search-engine-control"
-        className={`${className} border-start-0`} type="text" placeholder={t('common:search')} onKeyUp={onTermKeyUp}
+        className={`${className} border-start-0`} type="text" placeholder={t(dict,'search')} onKeyUp={onTermKeyUp}
       />
     </InputGroup>
   </div>
@@ -69,7 +73,7 @@ const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => 
             <Form.Control
             aria-label="Username"
             aria-describedby="basic-search"
-            className={`${className} `} type="text" placeholder={t('common:search')} onKeyUp={onTermKeyUp}
+            className={`${className} `} type="text" placeholder={t(dict,'search')} onKeyUp={onTermKeyUp}
 
           />
          </Form.Group>

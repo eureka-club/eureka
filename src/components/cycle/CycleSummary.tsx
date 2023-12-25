@@ -2,14 +2,13 @@ import { Cycle } from '@prisma/client';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import { useState, useEffect, FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 
-import useTranslation from 'next-translate/useTranslation';
 
 import { DATE_FORMAT_SHORT } from '../../constants';
 import { advancedDayjs } from '../../lib/utils';
-import styles from './CycleSummary.module.css';
-// import TagsInput from '../forms/controls/TagsInput';
+import { useDictContext } from '@/src/hooks/useDictContext';
+import { t } from '@/src/get-dictionary';
 
 interface Props {
   cycle: Cycle;
@@ -20,7 +19,8 @@ dayjs.extend(timezone);
 
 const CycleSummary: FunctionComponent<Props> = ({ cycle }) => {
   const now = new Date();
-  const { t } = useTranslation('common');
+  // const { t } = useTranslation('common');
+  const{dict}=useDictContext()
   const startDate = dayjs(cycle.startDate).utc();
   const endDate = dayjs(cycle.endDate).utc();
   // const [tags, setTags] = useState<string>('');
@@ -32,10 +32,10 @@ const CycleSummary: FunctionComponent<Props> = ({ cycle }) => {
       {[
         `${
           advancedDayjs(now).isBetween(dayjs(cycle.startDate), dayjs(cycle.endDate), 'day', '[]')
-            ? t('cycleActiveLabel')
-            : t('cycleNotActiveLabel')
+            ? t(dict,'cycleActiveLabel')
+            : t(dict,'cycleNotActiveLabel')
         } :  ${startDate.format(DATE_FORMAT_SHORT)}—${endDate.format(DATE_FORMAT_SHORT)}`,
-        cycle.countryOfOrigin && `${t('countryLabel')}: ${t(`countries:${cycle.countryOfOrigin}` as string)}`,
+        cycle.countryOfOrigin && `${t(dict,'countryLabel')}: ${t(dict,`countries:${cycle.countryOfOrigin}` as string)}`,
       ]
         .filter((i) => i)
         .join(', ')}

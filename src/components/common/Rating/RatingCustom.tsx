@@ -39,8 +39,8 @@ const Rating:React.FC<Props> = ({stop:s1,qty,onClick:ock,readonly})=>{
                     <GiBrain 
                         role={'button'}
                         className={`fs-6 cursor-pointer ${i<value ? styles.rated : styles.notRated}`} 
-                        onClick={(e)=>onClick(e,i+1)}  
-                        onMouseEnter={(e)=>onMouseEnter(e,i+1)}
+                        onClick={(e:any)=>onClick(e,i+1)}  
+                        onMouseEnter={(e:any)=>onMouseEnter(e,i+1)}
                         onMouseLeave={onMouseLeave}
                         key={i}
                     />

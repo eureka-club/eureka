@@ -1,52 +1,55 @@
+'use client'
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc'
-import { useRouter } from 'next/router';
-import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/navigation';
 import { FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
-import Row from 'react-bootstrap/Row';
-import Spinner from 'react-bootstrap/Spinner';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
+import AsyncTypeaheadType from 'react-bootstrap-typeahead/types/core/Typeahead';
 import { Cycle } from '@prisma/client';
 import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
+import TagsInputTypeAheadMaterial from './controls/TagsInputTypeAheadMaterial';
 import TagsInput from './controls/TagsInput';
-// import i18nConfig from '../../../i18n';
-import useTopics from '../../useTopics';
-
+import useTopics from '@/src/hooks/useTopics';
+import { Spinner, Card, Row, Col, ButtonGroup, Button, Alert } from 'react-bootstrap';
+import { BiArrowBack } from 'react-icons/bi';
 
 import {
   DATE_FORMAT_PROPS,
-} from '../../constants';
+} from '@/src/constants/';
 import {
   CycleMosaicItem,
   // ComplementaryMaterial,
   EditCycleClientPayload,
-} from '../../types/cycle';
+} from '@/src/types/cycle';
 import LanguageSelect from './controls/LanguageSelect';
 import styles from './CreateCycleForm.module.css';
+import { t } from "@/src/get-dictionary";
+import { useDictContext } from "@/src/hooks/useDictContext";
+import { Option } from 'react-bootstrap-typeahead/types/types';
+import { Session } from "@/src/types";
 
 dayjs.extend(utc)
 interface Props {
   className?: string;
   cycle: Cycle;
+  session: Session | null;
 }
 
 // const COMPLEMENTARY_MATERIAL_MAX_SINGLE_FILE_SIZE = 1024 * 1024 * 10;
 
-const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
+const EditCycleForm: FunctionComponent<Props> = ({ className, cycle, session }) => {
   const editorRef = useRef<any>(null);
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
-  const { locale } = useRouter();
+  //const { locale } = useRouter();
 
   const router = useRouter();
-  const typeaheadRefOC = useRef<AsyncTypeahead<{ id: number; code: string; label: string }>>(null);
+  const typeaheadRefOC = useRef<AsyncTypeaheadType>(null);
   const [countryOrigin, setCountryOrigin] = useState<string>();
   const [isCountriesSearchLoading, setIsCountriesSearchLoading] = useState(false);
   const [countrySearchResults, setCountrySearchResults] = useState<{ id: number; code: string; label: string }[]>([]);
@@ -75,7 +78,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
       const pr = cycle.access === 2;
       const secret = cycle.access === 3;
       const payment = cycle.access === 4;
-      setCycleAccessChecked(() => ({ public: pc, private: pr, secret, payment}));
+      setCycleAccessChecked(() => ({ public: pc, private: pr, secret, payment }));
       setAccess(cycle.access);
     }
     if (cycle && cycle.languages) setLanguage(cycle.languages);
@@ -110,20 +113,22 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
     mutate: execEditCycle,
     data: editedCycleData,
     error: editCycleReqError,
-    isLoading: isEditCycleReqLoading,
+    isPending: isEditCycleReqLoading,
     isError: isEditCycleReqError,
     isSuccess: isEditCycleReqSuccess,
-  } = useMutation(async (payload: EditCycleClientPayload) => {
-    const res = await fetch(`/api/cycle/${router.query.id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    return res.json();
-  },{
+  } = useMutation(
+    {
+      mutationFn:async (payload: EditCycleClientPayload) => {
+        const res = await fetch(`/api/cycle/${cycle.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        return res.json();
+      },
     onMutate(vars){
-      const ck = ['CYCLE',`${router.query.id}`];
-      queryClient.cancelQueries(ck)
+      const ck = ['CYCLE', `${cycle.id}`];
+      queryClient.cancelQueries({queryKey:ck})
       const ss = queryClient.getQueryData<CycleMosaicItem>(ck)
       queryClient.setQueryData(ck,{...ss,...vars})
       return {ss,ck}
@@ -134,12 +139,12 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
       if(error){
         queryClient.setQueryData(ck,ss)
       }
-      queryClient.invalidateQueries(['CYCLE',`${router.query.id}`])
+      queryClient.invalidateQueries({ queryKey: ['CYCLE', `${cycle.id}`]})
     }
   });
 
-  const { t } = useTranslation('createCycleForm');
-
+  // const { t } = useTranslation('createCycleForm');
+const{dict}=useDictContext()
   
   const handlerCycleAccessCheckedChange = (val: string) => {
     setCycleAccessChecked(() => ({
@@ -174,6 +179,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
+
     
     const form = ev.currentTarget;
     const payload: EditCycleClientPayload = {
@@ -200,7 +206,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
 
   useEffect(() => {
     if (!isEditCycleReqError && isEditCycleReqSuccess && editedCycleData != null) {
-      router.push(`/cycle/${router.query.id}`);
+      router.push(`/cycle/${cycle.id}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEditCycleReqError, isEditCycleReqSuccess, editedCycleData]);
@@ -211,15 +217,15 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
     const response = await fetch(`/api/taxonomy/countries?q=${query}`);
     const itemsSC: { id: number; code: string; label: string }[] = (await response.json()).result;
     itemsSC.forEach((i, idx: number) => {
-      itemsSC[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
+      itemsSC[idx] = { ...i, label: `${t(dict,`${i.code}`)}` };
     });
     setCountrySearchResults(itemsSC);
     setIsCountriesSearchLoading(false);
   };
 
-  const handleSearchCountrySelect = (selected: { id: number; code: string; label: string }[]): void => {
+  const handleSearchCountrySelect = (selected: Option[]): void => {
     if (selected[0] != null) {
-      setCountryOrigin(selected[0].code);
+      setCountryOrigin((selected[0] as {code:string}).code);
       // setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
       // setAddWorkModalOpened(false);
     }
@@ -231,39 +237,55 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
 
   return (
     <>
-      {cycle && (
+      {cycle && (<>
+        <ButtonGroup className="mt-1 mt-md-3 mb-1">
+          <Button variant="primary text-white" onClick={() => router.back()} size="sm">
+            <BiArrowBack />
+          </Button>
+        </ButtonGroup>
         <Form onSubmit={handleSubmit} ref={formRef} className={className}>
-          <h4 className="mt-2 mb-4">{t('Edit Cycle')}</h4>
+          <h4 className="mt-2 mb-4">{t(dict,'Edit Cycle')}</h4>
 
           <Row className="mb-5">
             
             <Col /* md={{ span: 12 }} */>
               <FormGroup controlId="cycleTitle">
-                <FormLabel>*{t('newCycleTitleLabel')}</FormLabel>
+                <FormLabel>*{t(dict,'newCycleTitleLabel')}</FormLabel>
                 <FormControl type="text" maxLength={80} required defaultValue={cycle.title} />
               </FormGroup>
-              <FormGroup controlId="languages">
-                <FormLabel>*{t('newCycleLanguageLabel')}</FormLabel>
-                <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={language} label={t('newCycleLanguageLabel')} />
+              <FormGroup controlId="languages" className='mt-4'>
+                {/* <FormLabel>*{t(dict,'newCycleLanguageLabel')}</FormLabel> */}
+                <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={language} label={t(dict,'newCycleLanguageLabel')} />
               </FormGroup>
-              <FormGroup controlId="topics">
-                <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel>
-                <TagsInputTypeAhead
+              <FormGroup controlId="topics" className='mt-4'>
+                {/* <FormLabel>{t(dict,'createWorkForm:topicsLabel')}</FormLabel> */}
+                {/* <TagsInputTypeAhead
+                  data={topics as Option[]}
+                  items={items}
+                  setItems={setItems}
+                  labelKey={(res) => t(dict,`${(res as{code:string}).code}`)}
+                  formatValue={(res) => t(dict, `${(res as { code: string }).code}`)}
+                  max={3}
+                /> */}
+                <TagsInputTypeAheadMaterial
                   data={topics}
                   items={items}
                   setItems={setItems}
-                  labelKey={(res) => t(`topics:${res.code}`)}
-                  formatValue={(v: string) => t(`topics:${v}`)} 
+                  formatValue={(v: string) => t(dict, `${v}`)}
                   max={3}
+                  label={t(dict, 'topicsLabel')}
+                  placeholder={`${t(dict, 'Type to add tag')}...`}
                 />
               </FormGroup>
-              <TagsInput tags={tags} setTags={setTags} label={t('newCycleTopicsLabel')} />
+              <FormGroup controlId="tags" className='mt-4'>
+              <TagsInput tags={tags} setTags={setTags} label={t(dict,'newCycleTopicsLabel')} />
+              </FormGroup>
               {/* <FormGroup controlId="topics">
                 <FormLabel>{t('newCycleTopicsLabel')}</FormLabel>
                 <FormControl type="text" />
               </FormGroup> */}
               <FormGroup controlId="startDate">
-                <FormLabel>*{t('newCycleStartDateLabel')}</FormLabel>
+                <FormLabel>*{t(dict,'newCycleStartDateLabel')}</FormLabel>
                 <FormControl
                   type="date"
                   required
@@ -271,7 +293,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
                 />
               </FormGroup>
               <FormGroup controlId="endDate">
-                <FormLabel>*{t('newCycleEndDateLabel')}</FormLabel>
+                <FormLabel>*{t(dict,'newCycleEndDateLabel')}</FormLabel>
                 <FormControl
                   type="date"
                   required
@@ -280,16 +302,16 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
                 />
               </FormGroup>
               <FormGroup>
-                <FormLabel>{t('countryFieldLabel')}</FormLabel>
+                <FormLabel>{t(dict,'countryFieldLabel')}</FormLabel>
                 <AsyncTypeahead
                   id="create-work--search-country"
                   // Bypass client-side filtering. Results are already filtered by the search endpoint
                   filterBy={() => true}
                   // inputProps={{ required: true }}
-                  // placeholder={t('addWrkTypeaheadPlaceholder')}
+                  // placeholder={t(dict,'addWrkTypeaheadPlaceholder')}
                   ref={typeaheadRefOC}
                   isLoading={isCountriesSearchLoading}
-                  labelKey={(res) => `${res.label}`}
+                  labelKey={(res) => `${(res as {label:string}).label}`}
                   minLength={2}
                   onSearch={handleSearchCountry}
                   options={countrySearchResults}
@@ -302,7 +324,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
           <Row>
             <Col xs={12} md={8}>
               <FormGroup controlId="description">
-                <FormLabel>*{t('newCyclePitchLabel')}</FormLabel>
+                <FormLabel>*{t(dict,'newCyclePitchLabel')}</FormLabel>
                 {/* <FormControl defaultValue={cycle.contentText as string} as="textarea" rows={5} required /> */}
                 {/* @ts-ignore*/}
                 <EditorCmp
@@ -310,7 +332,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
                   onInit={(_: any, editor) => {
                     editorRef.current = editor;
                   }}
-                  initialValue={cycle.contentText!}
+                  // initialValue={newEureka.contentText}
                   init={{
                     height: 300,
                     menubar: false,
@@ -321,7 +343,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
                     ],
                     emoticons_database: 'emojiimages',
                     relative_urls: false,
-                    forced_root_block : "div",
+                    forced_root_block: "div",
                     toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link | emoticons  | help',
                     // toolbar:
                     //   'undo redo | formatselect | ' +
@@ -335,35 +357,35 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
             </Col>
             <Col xs={12} md={4}>
               <Form.Group className={`${styles.cycleAccesForGroup}`}>
-                <Form.Label className="h5">{t('Privacy settings')}</Form.Label>
+                <Form.Label className="h5">{t(dict,'Privacy settings')}</Form.Label>
                 <Form.Check
-                  label={t('Public')}
+                  label={t(dict,'Public')}
                   type="radio"
                   onChange={() => handlerCycleAccessCheckedChange('public')}
                   checked={cycleAccessChecked.public}
                 />
-                <small className="ms-3 text-muted">{t('cycleAccesPublicInfo')}.</small>
+                <small className="ms-3 text-muted">{t(dict,'cycleAccesPublicInfo')}.</small>
                 <Form.Check
-                  label={t('Private')}
+                  label={t(dict,'Private')}
                   type="radio"
                   onChange={() => handlerCycleAccessCheckedChange('private')}
                   checked={cycleAccessChecked.private}
                 />
-                <small className="ms-3 text-muted">{t('cycleAccesPrivateInfo')}.</small>
+                <small className="ms-3 text-muted">{t(dict,'cycleAccesPrivateInfo')}.</small>
                 <Form.Check
-                  label={t('Secret')}
+                  label={t(dict,'Secret')}
                   type="radio"
                   onChange={() => handlerCycleAccessCheckedChange('secret')}
                   checked={cycleAccessChecked.secret}
                 />
-                <small className="ms-3 text-muted">{t('cycleAccesSecretInfo')}.</small>
+                <small className="ms-3 text-muted">{t(dict,'cycleAccesSecretInfo')}.</small>
                 <Form.Check
-                  label={t('Payment')}
+                  label={t(dict,'Payment')}
                   type="radio"
                   onChange={() => handlerCycleAccessCheckedChange('payment')}
                   checked={cycleAccessChecked.payment}
                 />
-                {/* <small className="ms-3 text-muted">{t('cycleAccesPaymentInfo')}.</small> */}
+
               </Form.Group>
             </Col>
           </Row>
@@ -375,7 +397,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
                 className="text-white me-3 mt-3"
                 style={{ width: '10em' }}
               >
-                {t('resetBtnLabel')}
+                {t(dict,'resetBtnLabel')}
               </Button>*/}
               <Button
                 disabled={isEditCycleReqLoading}
@@ -384,7 +406,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
                 style={{ width: '10em' }}
               >
                 <>
-                  {t('Edit Cycle')}
+                  {t(dict,'Edit Cycle')}
                   {isEditCycleReqLoading && (
                     <Spinner animation="grow" variant="info" className={styles.loadIndicator} />
                   )}
@@ -394,6 +416,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
             </Col>
           </Row>
         </Form>
+        </>
       )}
     </>
   );

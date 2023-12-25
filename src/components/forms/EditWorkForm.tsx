@@ -1,15 +1,13 @@
+'use client'
 import { useAtom } from 'jotai';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import useTranslation from 'next-translate/useTranslation';
-import { ChangeEvent, FormEvent, useEffect, useState, FunctionComponent, useRef } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState, FC } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import LanguageSelect from './controls/LanguageSelect';
-//import FormControl from 'react-bootstrap/FormControl';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
 import ModalBody from 'react-bootstrap/ModalBody';
@@ -18,26 +16,24 @@ import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
-import { useMutation, useQueryClient } from 'react-query';
-import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
-import TagsInput from './controls/TagsInput';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { EditWorkClientPayload, WorkMosaicItem } from '../../types/work';
 import { Country } from '@/src/types';
-// import ImageFileSelect from './controls/ImageFileSelect';
 import globalModalsAtom from '../../atoms/globalModals';
 import styles from './EditWorkForm.module.css';
-import i18nConfig from '../../../i18n';
-import useTopics from '../../useTopics';
-import useCountries from 'src/useCountries';
-import useWork from '@/src/useWork'
-import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem, FormControlLabel, Switch } from '@mui/material';
+import useTopics from '@/src/hooks/useTopics';
+import useCountries from '@/src/hooks/useCountries';
+import useWork from '@/src/hooks/useWork'
+import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import Textarea from '@mui/joy/Textarea';
-import TagsInputTypeAheadMaterial from '@/components/forms/controls/TagsInputTypeAheadMaterial';
-import TagsInputMaterial from '@/components/forms/controls/TagsInputMaterial';
-import ImageFileSelect from '@/components/forms/controls/ImageFileSelectMUI';
+import TagsInputTypeAheadMaterial from '@/src/components/forms/controls/TagsInputTypeAheadMaterial';
+import TagsInputMaterial from '@/src/components/forms/controls/TagsInputMaterial';
+import ImageFileSelect from '@/src/components/forms/controls/ImageFileSelectMUI';
 import LocalImageComponent from '../LocalImage';
-import { PostMosaicItem } from '@/src/types/post';
+import { t } from "@/src/get-dictionary";
+import { useDictContext } from "@/src/hooks/useDictContext";
+import { Session } from "@/src/types";
+import { BiArrowBack } from "react-icons/bi";
 
 dayjs.extend(utc);
 
@@ -54,11 +50,18 @@ interface FormValues {
   description: string | null;
 }
 
-const EditWorkForm: FunctionComponent = () => {
+interface Props {
+  work: WorkMosaicItem;
+  session: Session | null;
+
+}
+
+const EditWorkForm: FC<Props> = ({work,session}) => {
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { t } = useTranslation('createWorkForm')
+  // const { t } = useTranslation('createWorkForm')
+  const{dict}=useDictContext()
   const [countrySearchResults, setCountrySearchResults] = useState<{ code: string; label: string }[]>([]);
   const [formValues, setFormValues] = useState<FormValues>({
     type: '',
@@ -83,7 +86,7 @@ const EditWorkForm: FunctionComponent = () => {
   const [ck, setCK] = useState<string[]>();
 
   const { data: topics } = useTopics();
-  const { data: work } = useWork(+(router.query?.id?.toString()!), { enabled: !!router.query?.id, notLangRestrict: true })
+  //const { data: work } = useWork(+(router.query?.id?.toString()!), { enabled: !!router.query?.id, notLangRestrict: true })
   const { data: countries } = useCountries();
 
 
@@ -91,11 +94,11 @@ const EditWorkForm: FunctionComponent = () => {
     if (countries) setCountrySearchResults(countries.map((d: Country) => ({ code: d.code, label: d.code })))
   }, [countries])
 
-  useEffect(() => {
-    if (router && router.query?.admin) {
-      setIsAdmin(true);
-    }
-  }, [router])
+  // useEffect(() => {
+  //   if (router && router.query?.admin) {
+  //     setIsAdmin(true);
+  //   }
+  // }, [router])
 
   useEffect(() => {
     //console.log(work, 'work work')
@@ -132,26 +135,26 @@ const EditWorkForm: FunctionComponent = () => {
     switch (fieldName) {
       case 'movie':
         setPublicationLinkLabel('Streaming on')
-        setPublicationYearLabel(t('releaseYearFieldLabel'));
-        setPublicationLengthLabel(`${t('Duration')} (${t('minutes')})`);
+        setPublicationYearLabel(t(dict,'releaseYearFieldLabel'));
+        setPublicationLengthLabel(`${t(dict, 'Duration')} (${t(dict, 'minutes')})`);
         break;
       case 'documentary':
         setPublicationLinkLabel('Streaming on')
-        setPublicationYearLabel(t('releaseYearFieldLabel'));
-        setPublicationLengthLabel(`${t('Duration')} (${t('minutes')})`);
+        setPublicationYearLabel(t(dict, 'releaseYearFieldLabel'));
+        setPublicationLengthLabel(`${t(dict, 'Duration')} (${t(dict, 'minutes')})`);
         break;
       case 'book':
-        setPublicationLinkLabel(t('linkFieldLabel'));
-        setPublicationLengthLabel(t('Length pages'));
-        setPublicationYearLabel(t('Publication year'));
+        setPublicationLinkLabel(t(dict, 'linkFieldLabel'));
+        setPublicationLengthLabel(t(dict, 'Length pages'));
+        setPublicationYearLabel(t(dict, 'Publication year'));
         break;
       case 'fiction-book':
-        setPublicationLinkLabel(t('linkFieldLabel'));
-        setPublicationLengthLabel(t('Length pages'));
-        setPublicationYearLabel(t('Publication year'));
+        setPublicationLinkLabel(t(dict, 'linkFieldLabel'));
+        setPublicationLengthLabel(t(dict, 'Length pages'));
+        setPublicationYearLabel(t(dict, 'Publication year'));
         break;
       default:
-        setPublicationLinkLabel(t('linkFieldLabel'));
+        setPublicationLinkLabel(t(dict, 'linkFieldLabel'));
         setPublicationYearLabel('...');
         setPublicationLengthLabel('...');
     }
@@ -170,26 +173,26 @@ const EditWorkForm: FunctionComponent = () => {
       switch (value) {
         case 'movie':
           setPublicationLinkLabel('Streaming on')
-          setPublicationYearLabel(t('releaseYearFieldLabel'));
-          setPublicationLengthLabel(`${t('Duration')} (${t('minutes')})`);
+          setPublicationYearLabel(t(dict, 'releaseYearFieldLabel'));
+          setPublicationLengthLabel(`${t(dict, 'Duration')} (${t(dict, 'minutes')})`);
           break;
         case 'documentary':
           setPublicationLinkLabel('Streaming on')
-          setPublicationYearLabel(t('releaseYearFieldLabel'));
-          setPublicationLengthLabel(`${t('Duration')} (${t('minutes')})`);
+          setPublicationYearLabel(t(dict, 'releaseYearFieldLabel'));
+          setPublicationLengthLabel(`${t(dict, 'Duration')} (${t(dict, 'minutes')})`);
           break;
         case 'book':
-          setPublicationLinkLabel(t('linkFieldLabel'));
-          setPublicationLengthLabel(t('Length pages'));
-          setPublicationYearLabel(t('Publication year'));
+          setPublicationLinkLabel(t(dict, 'linkFieldLabel'));
+          setPublicationLengthLabel(t(dict, 'Length pages'));
+          setPublicationYearLabel(t(dict, 'Publication year'));
           break;
         case 'fiction-book':
-          setPublicationLinkLabel(t('linkFieldLabel'));
-          setPublicationLengthLabel(t('Length pages'));
-          setPublicationYearLabel(t('Publication year'));
+          setPublicationLinkLabel(t(dict, 'linkFieldLabel'));
+          setPublicationLengthLabel(t(dict, 'Length pages'));
+          setPublicationYearLabel(t(dict, 'Publication year'));
           break;
         default:
-          setPublicationLinkLabel(t('linkFieldLabel'));
+          setPublicationLinkLabel(t(dict, 'linkFieldLabel'));
           setPublicationYearLabel('...');
           setPublicationLengthLabel('...');
       }
@@ -212,30 +215,32 @@ const EditWorkForm: FunctionComponent = () => {
 
   const {
     mutate: execEditWork,
-    isLoading,
+    isPending,
     isSuccess,
-  } = useMutation(async (payload: EditWorkClientPayload) => {
+  } = useMutation(
+    {
+      mutationFn:async (payload: EditWorkClientPayload) => {
 
-    const formData = new FormData();
-
-    Object.entries(payload).forEach(([key, value]) => {
-      if (value != null) {
-        formData.append(key, value);
-      }
-    });
-
-    const res = await fetch(`/api/work/${work!.id}`, {
-      method: 'PATCH',
-     // headers: { 'Content-Type': 'application/json' },
-      body: formData,//JSON.stringify(payload),
-    });
-
-    return res.json();
-  }, {
+        const formData = new FormData();
+    
+        Object.entries(payload).forEach(([key, value]) => {
+          if (value != null) {
+            formData.append(key, value);
+          }
+        });
+    
+        const res = await fetch(`/api/work/${work!.id}`, {
+          method: 'PATCH',
+         // headers: { 'Content-Type': 'application/json' },
+          body: formData,//JSON.stringify(payload),
+        });
+        console.log(await res.json(),'/api/work/${work!.id}')
+        return await res.json();
+      },
     onMutate: async (variables) => {
       if (work) {
         const ck_ = ck || ['WORK', `${work.id}`];
-        await queryClient.cancelQueries(ck_)
+        await queryClient.cancelQueries({queryKey:ck_})
         const snapshot = queryClient.getQueryData<WorkMosaicItem>(ck_)
         const { title, contentText } = variables;
         if (snapshot) {
@@ -247,10 +252,10 @@ const EditWorkForm: FunctionComponent = () => {
     },
     onSettled: (_work, error, _variables, context) => {
       if (error) {
-        queryClient.invalidateQueries(ck);
-        queryClient.invalidateQueries(['WORK', `${work!.id}`]);
+        queryClient.invalidateQueries({queryKey:ck});
+        queryClient.invalidateQueries({queryKey:['WORK', `${work!.id}`]});
       }
-      queryClient.invalidateQueries(ck);
+      queryClient.invalidateQueries({queryKey:ck});
 
     },
   });
@@ -262,7 +267,7 @@ const EditWorkForm: FunctionComponent = () => {
 
 
     const payload: EditWorkClientPayload = {
-      id: router.query.id as string,
+      id: (work.id).toString(),
       type: formValues?.type!,
       title: formValues?.title!,
       language: formValues?.language!,
@@ -279,7 +284,7 @@ const EditWorkForm: FunctionComponent = () => {
       tags,
       topics: items.join(','),
     };
-    //console.log(payload)
+    console.log(payload,'EditWorkClientPayload')
     await execEditWork(payload);
   };
 
@@ -289,7 +294,7 @@ const EditWorkForm: FunctionComponent = () => {
   useEffect(() => {
     if (isSuccess === true) {
       setGlobalModalsState({ ...globalModalsState, ...{ editWorkModalOpened: false } });
-      queryClient.invalidateQueries('works.mosaic');
+      queryClient.invalidateQueries({queryKey:['works.mosaic']});
       if(!isAdmin)
       router.push(`/work/${work!.id}`);
       else
@@ -308,40 +313,42 @@ const EditWorkForm: FunctionComponent = () => {
 
   if (!work) return <></>
   return (
-    work && (
+    work && (<> <Button className='mb-1' variant="primary text-white" onClick={() => router.back()} size="sm">
+                <BiArrowBack />
+            </Button>
       <Form onSubmit={handleSubmit}>
         <ModalHeader>
-          <ModalTitle className='d-flex flex-row justified-content-between mt-sm-0 mt-2 mb-3  w-100'>
-            <h1 className="text-secondary fw-bold w-100">{t('titleEdit')}</h1>
+          <ModalTitle className='d-flex flex-row justified-content-between mt-sm-0 mt-2 mb-3  w-100'>           
+            <h1 className="text-secondary fw-bold w-100">{t(dict,'titleEditWork')}</h1>
           </ModalTitle>
         </ModalHeader>
         <ModalBody>
-          <span className='text-primary fw-bold'>{t('BasicInformation')}</span>
+          <span className='text-primary fw-bold'>{t(dict, 'BasicInformation')}</span>
           <Row className='d-flex flex-column flex-lg-row mt-4'>
             <Col className="">
               <FormGroup controlId="type">
                 <FormControl size="small" fullWidth>
-                  <InputLabel id="type-label">*{t('typeFieldLabel')}</InputLabel>
+                  <InputLabel id="type-label">*{t(dict, 'typeFieldLabel')}</InputLabel>
                   <Select
                     labelId="type-label"
                     id="type"
                     name="type"
                     value={formValues.type}
-                    label={`*${t("typeFieldLabel")}`}
+                    label={`*${t(dict, "typeFieldLabel")}`}
                     onChange={handleChangeSelectField}
                   //disabled={(selectedWork) ? true : false}
                   >
-                    <MenuItem value="">{t('typeFieldPlaceholder')}</MenuItem>
-                    <MenuItem value="book">{t('common:book')}</MenuItem>
-                    <MenuItem value="fiction-book">{t('common:fiction-book')}</MenuItem>
-                    <MenuItem value="documentary">{t('common:documentary')}</MenuItem>
-                    <MenuItem value="movie">{t('common:movie')}</MenuItem>
+                    <MenuItem value="">{t(dict, 'typeFieldPlaceholder')}</MenuItem>
+                    <MenuItem value="book">{t(dict, 'book')}</MenuItem>
+                    <MenuItem value="fiction-book">{t(dict, 'fiction-book')}</MenuItem>
+                    <MenuItem value="documentary">{t(dict, 'documentary')}</MenuItem>
+                    <MenuItem value="movie">{t(dict, 'movie')}</MenuItem>
                   </Select>
                 </FormControl>
               </FormGroup>
             </Col>
             <Col className="mt-4 mt-lg-0">
-              <TextField id="title" className="w-100" label={`*${t('titleFieldLabel')}`}
+              <TextField id="title" className="w-100" label={`*${t(dict, 'titleFieldLabel')}`}
                 variant="outlined" size="small" name="title"
                 value={formValues.title!}
                 type="text"
@@ -368,7 +375,7 @@ const EditWorkForm: FunctionComponent = () => {
             </Col>
             <Col className="mt-4 mt-lg-0">
               <div className='mb-4'>
-                <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={formValues.language} label={t('languageFieldLabel')}/>
+                <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={formValues.language} label={t(dict, 'languageFieldLabel')}/>
               </div>
               <TextField id="link" className="w-100" label={publicationLinkLabel}
                 variant="outlined" size="small" name='link'
@@ -380,10 +387,10 @@ const EditWorkForm: FunctionComponent = () => {
             </Col>
           </Row>
 
-            <span className='text-primary fw-bold'>{t('Authorship')}</span>
+            <span className='text-primary fw-bold'>{t(dict, 'Authorship')}</span>
             <Row className='d-flex flex-column flex-lg-row mt-4 mb-4'>
               <Col className="">
-                <TextField id="author" className="w-100" label={`*${t('authorFieldLabel')}`}
+                <TextField id="author" className="w-100" label={`*${t(dict, 'authorFieldLabel')}`}
                   variant="outlined" size="small" name='author'
                   value={formValues.author}
                   type="text"
@@ -399,9 +406,9 @@ const EditWorkForm: FunctionComponent = () => {
                     data={countrySearchResults}
                     items={countryOrigin}
                     setItems={setCountryOrigin}
-                    formatValue={(v: string) => t(`countries:${v}`)}
+                    formatValue={(v: string) => t(dict, `${v}`)}
                     max={2}
-                    label={`${t('countryFieldLabel')} - 2 max`}
+                    label={`${t(dict, 'countryFieldLabel')} - 2 max`}
                   //placeholder={`${t('Type to add tag')}...`}
                   />
                 </FormGroup>
@@ -411,21 +418,21 @@ const EditWorkForm: FunctionComponent = () => {
               <Col className="">
                 <FormGroup controlId="authorGender">
                   <FormControl size="small" fullWidth>
-                    <InputLabel id="authorGender-label">*{t('authorGenderFieldLabel')}</InputLabel>
+                    <InputLabel id="authorGender-label">*{t(dict, 'authorGenderFieldLabel')}</InputLabel>
                     <Select
                       labelId="authorGender-label"
                       id="authorGender"
                       name='authorGender'
                       value={formValues.authorGender!}
-                      label={`*${t("authorGenderFieldLabel")}`}
+                      label={`*${t(dict, "authorGenderFieldLabel")}`}
                       onChange={handleChangeSelectField}
                     >
-                      <MenuItem value="">{t('authorGenderFieldPlaceholder')}</MenuItem>
-                      <MenuItem value="female">{t('authorGenderFemale')}</MenuItem>
-                      <MenuItem value="male">{t('authorGenderMale')}</MenuItem>
-                      <MenuItem value="non-binary">{t('authorGenderNonbinary')}</MenuItem>
-                      <MenuItem value="trans">{t('authorGenderTrans')}</MenuItem>
-                      <MenuItem value="other">{t('authorGenderOther')}</MenuItem>
+                      <MenuItem value="">{t(dict, 'authorGenderFieldPlaceholder')}</MenuItem>
+                      <MenuItem value="female">{t(dict, 'authorGenderFemale')}</MenuItem>
+                      <MenuItem value="male">{t(dict, 'authorGenderMale')}</MenuItem>
+                      <MenuItem value="non-binary">{t(dict, 'authorGenderNonbinary')}</MenuItem>
+                      <MenuItem value="trans">{t(dict, 'authorGenderTrans')}</MenuItem>
+                      <MenuItem value="other">{t(dict, 'authorGenderOther')}</MenuItem>
                     </Select>
                   </FormControl>
                 </FormGroup>
@@ -434,45 +441,45 @@ const EditWorkForm: FunctionComponent = () => {
               <Col className=" mt-4 mt-lg-0">
                 <FormGroup controlId="authorRace">
                   <FormControl size="small" fullWidth>
-                    <InputLabel id="authorRace-label">*{t('authorEthnicityFieldLabel')}</InputLabel>
+                    <InputLabel id="authorRace-label">*{t(dict, 'authorEthnicityFieldLabel')}</InputLabel>
                     <Select
                       labelId="authorRace-label"
                       id="authorRace"
                       name='authorRace'
                       value={formValues.authorRace!}
-                      label={`*${t("authorEthnicityFieldLabel")}`}
+                      label={`*${t(dict, "authorEthnicityFieldLabel")}`}
                       onChange={handleChangeSelectField}
                     >
-                      <MenuItem value="">{t('authorEthnicityFieldPlaceholder')}</MenuItem>
-                      <MenuItem value="white">{t('authorEthnicityIsWhite')}</MenuItem>
-                      <MenuItem value="non-white">{t('authorEthnicityIsNotWhite')}</MenuItem>
+                      <MenuItem value="">{t(dict, 'authorEthnicityFieldPlaceholder')}</MenuItem>
+                      <MenuItem value="white">{t(dict, 'authorEthnicityIsWhite')}</MenuItem>
+                      <MenuItem value="non-white">{t(dict, 'authorEthnicityIsNotWhite')}</MenuItem>
                     </Select>
                   </FormControl>
                 </FormGroup>
               </Col>
             </Row>
 
-            <span className='text-primary fw-bold'>{t('Content')}</span>
+            <span className='text-primary fw-bold'>{t(dict, 'Content')}</span>
             <Row className='d-flex flex-column flex-lg-row mt-4'>
               <Col className="">
                 <FormGroup controlId="topics">
                   <TagsInputTypeAheadMaterial
-                    data={topics}
+                    data={topics as {code:string,label:string}[]}
                     items={items}
                     setItems={setItems}
-                    formatValue={(v: string) => t(`topics:${v}`)}
+                    formatValue={(v: string) => t(dict, `${v}`)}
                     max={3}
-                    label={t('topicsLabel')}
+                    label={t(dict, 'topicsLabel')}
                    // placeholder={`${t('Type to add tag')}...`}
                   />
                 </FormGroup>
               </Col>
               <Col className="mt-4 mt-lg-0">
-                <TagsInputMaterial tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
+                <TagsInputMaterial tags={tags} setTags={setTags} label={t(dict, 'topicsFieldLabel')} />
 
               </Col>
             </Row>
-            <span className='text-primary fw-bold'>{t('AdditionalInformation')}</span>
+            <span className='text-primary fw-bold'>{t(dict, 'AdditionalInformation')}</span>
             <Row className='d-flex flex-column flex-lg-row mt-4'>
               <Col className="">
                 <TextField id="publicationYear" className="w-100" label={publicationYearLabel}
@@ -494,7 +501,7 @@ const EditWorkForm: FunctionComponent = () => {
             <Row className='d-flex flex-column flex-lg-row mt-4 mb-5'>
               <Col className="">
                 <FormGroup controlId="description">
-                  <FormLabel>{t('workSummaryFieldLabel')}</FormLabel>
+                  <FormLabel>{t(dict, 'workSummaryFieldLabel')}</FormLabel>
                   <Textarea minRows={5} name="description" value={formValues.description!} onChange={handleChangeTextField} />
                 </FormGroup>
               </Col>
@@ -506,10 +513,10 @@ const EditWorkForm: FunctionComponent = () => {
         <ModalFooter>
           <Row>
             <Col className='d-flex justify-content-end mt-4 mb-2'>
-              <Button disabled={isLoading} type="submit" className="mt-3 btn-eureka" style={{ width: '10em' }}>
+              <Button disabled={isPending} type="submit" className="mt-3 btn-eureka" style={{ width: '10em' }}>
                 <>
-                  {t('titleEdit')}
-                  {isLoading && (
+                  {t(dict, 'titleEditWork')}
+                  {isPending && (
                     <Spinner animation="grow" variant="info" className={`ms-2 ${styles.loadIndicator}`} size="sm" />
                   )}
                 </>
@@ -518,6 +525,7 @@ const EditWorkForm: FunctionComponent = () => {
           </Row>
         </ModalFooter>
       </Form>
+    </>
     )
   );
 };

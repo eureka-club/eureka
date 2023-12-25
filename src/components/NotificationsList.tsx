@@ -1,20 +1,23 @@
-// import {Session} from '@/src/types'
+"use client"
+
 import React, { useState, useEffect } from 'react'
 import { ListGroup, Button, } from 'react-bootstrap'
 
 import { IoNotificationsCircleOutline } from 'react-icons/io5'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/router'
-import useTranslation from 'next-translate/useTranslation'
-import { useMutation, useQueryClient } from 'react-query'
+import { useRouter } from 'next/navigation'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { EditNotificationClientPayload, NotificationMosaicItem } from '@/src/types/notification'
-import { useAtom } from 'jotai'
-import globalModals from '@/src/atoms/globalModals'
+// import { useAtom } from 'jotai'
+// import globalModals from '@/src/atoms/globalModals'
 import styles from './NotificationsList.module.css';
 import { getNotificationMessage } from '@/src/lib/utils'
 import MosaicItem from '@/src/components/notification/MosaicItem'
-import { UserMosaicItem } from '../types/user'
-import useNotifications from '../useNotifications'
+import { UserMosaicItem } from '@/src/types/user'
+import useNotifications from '@/src/hooks/useNotifications'
+import { t } from '../get-dictionary'
+import { useDictContext } from '../hooks/useDictContext'
+
 interface Props {
   className?: string;
 }
@@ -23,20 +26,23 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
 
   const { data: session } = useSession();
   const router = useRouter();
-  const { t } = useTranslation('notification');
-  const [globalModalsState, setGlobalModalsState] = useAtom(globalModals)
+  const {dict}=useDictContext();
+  // const { t } = useTranslation('notification');
+  
+
+  // const [globalModalsState, setGlobalModalsState] = useAtom(globalModals)
   const queryClient = useQueryClient();
-  const [userId, setUserId] = useState<number>(0);
-  const [show, setShow] = useState<boolean>(false)
+  // const [userId, setUserId] = useState<number>(0);
+  const [show, setShow] = useState(false)
   // const {data:user,isLoading} = useUser(userId || 0,{
   // enabled:!!userId
   // });
-  useEffect(() => {
-    if (session)
-      setUserId(session.user.id);
-  }, [session])
+  // useEffect(() => {
+  //   if (session)
+  //     setUserId(session.user.id);
+  // }, [session])
 
-  const { data: notifications, isLoading } = useNotifications(userId, { enabled: !!userId })
+  const { data: notifications, isLoading } = useNotifications(session?.user.id!, { enabled: !!session?.user.id! })
 
   const [notVieweds, setNotVieweds] = useState<NotificationMosaicItem[]>([])
   const [AllNotifications, setAllNotifications] = useState<NotificationMosaicItem[]>([])
@@ -52,35 +58,36 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
     mutate: execEditNotification,
     error: editNotificationError,
     isError,
-    isLoading: isLoadingNotification,
+    isPending: isLoadingNotification,
     isSuccess,
   } = useMutation(
-    async (payload: EditNotificationClientPayload) => {
-
-      const res = await fetch(`/api/notification`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) {
-        setGlobalModalsState({
-          ...globalModalsState,
-          showToast: {
-            show: true,
-            type: 'warning',
-            title: t('common:Warning'),
-            message: res.statusText
-          }
-        });
-        return null;
-      }
-      return res.json();
-    },
     {
+      mutationFn:async (payload: EditNotificationClientPayload) => {
+
+        const res = await fetch(`/api/notification`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) {
+          // setGlobalModalsState({
+          //   ...globalModalsState,
+          //   showToast: {
+          //     show: true,
+          //     type: 'warning',
+          //     title: t('common:Warning'),
+          //     message: res.statusText
+          //   }
+          // });
+          alert(res.statusText)
+          return null;
+        }
+        return res.json();
+      },
       onMutate: async (vars) => {
         if (notVieweds) {
-          const ck = ['USER', `${userId}`, 'NOTIFICATIONS'];
-          queryClient.cancelQueries(ck)
+          const ck = ['USER', `${session?.user.id}`, 'NOTIFICATIONS'];
+          queryClient.cancelQueries({queryKey:ck})
           const ss = queryClient.getQueryData(ck);
           const idx = notVieweds.findIndex(n => n.notificationId == vars.notificationId)
           if (idx >= 0) {
@@ -97,7 +104,7 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
           if (error && ck) {
             queryClient.setQueryData(ck, ss);
           }
-          if (context) queryClient.invalidateQueries(ck);
+          if (context) queryClient.invalidateQueries({queryKey:ck});
         }
       },
     },
@@ -107,19 +114,19 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
     mutate: execAllToVieweds,
     error: editExecAllToVieweds,
     isError: isErrorExecAllToVieweds,
-    isLoading: isLoadingExecAllToVieweds,
+    isPending: isLoadingExecAllToVieweds,
     isSuccess: isSuccessExecAllToVieweds,
   } = useMutation(
-    async () => {
-      const res = await fetch(`/api/notification/check-all-vieweds?user=${userId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-      });
-      return res.json();
-    },
     {
+      mutationFn:async () => {
+        const res = await fetch(`/api/notification/check-all-vieweds?user=${session?.user.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+        });
+        return res.json();
+      },
       onMutate: async (vars) => {
-        const ck = ['USER', `${userId}`, 'NOTIFICATIONS'];
+        const ck = ['USER', `${session?.user.id}`, 'NOTIFICATIONS'];
         const ss = queryClient.getQueryData(ck);
         return { ck, ss };
       },
@@ -130,7 +137,7 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
           if (error && ck) {
             queryClient.setQueryData(ck, ss);
           }
-          if (context) queryClient.invalidateQueries(ck);
+          if (context) queryClient.invalidateQueries({queryKey:ck});
         }
       },
     },
@@ -139,7 +146,7 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
 
   const notificationOnClick = (e: React.MouseEvent<Element>, userId: number, notificationId: number, contextURL: string) => {
     e.preventDefault();
-    /*if (notificationId) {
+    if (notificationId) {
        const payload = {
          notificationId,
          userId,
@@ -148,12 +155,12 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
          }
        }
        execEditNotification(payload);
-     }*/
+     }
     router.push(contextURL);
   }
 
   const formatMessage = (message: string) => {
-    return getNotificationMessage(message, (key, payload) => t(key, payload));
+    return getNotificationMessage(message, (key, payload) => t(dict, key, payload));
   }
 
   const viewAllNotificationsHandler = () => {
@@ -192,7 +199,7 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
         })}
           <ListGroup.Item>
             <Button variant="link" className="text-primary" onClick={viewAllNotificationsHandler}>
-              {t('viewAllNotifications')}
+              {t(dict,'viewAllNotifications')}
             </Button>
           </ListGroup.Item>
         </ListGroup>;
@@ -234,7 +241,7 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
             <span className="visually-hidden">unread messages</span>
           </span> || ''}
         </aside>
-        <span className={`d-none d-lg-block ${styles.menuBottomInfo}  ms-1`}>{t('navbar:Notifications')}</span>
+        <span className={`d-none d-lg-block ${styles.menuBottomInfo}  ms-1`}>{t(dict,'Notifications')}</span>
       </div>
     </Button>
     {/* </OverlayTrigger>} */}

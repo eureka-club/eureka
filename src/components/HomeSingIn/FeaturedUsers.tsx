@@ -1,21 +1,24 @@
-import useFeaturedUsers from '@/src/useFeaturedUsers';
+import useFeaturedUsers from '@/src/hooks/useFeaturedUsers';
 import { useState } from 'react';
-import { UserMosaicItem } from '../../types/user';
 import MosaicItemUser from '@/components/user/MosaicItem';
-import CarouselStatic from '../CarouselStatic';
-import useTranslation from 'next-translate/useTranslation';
+//import CarouselStatic from '../CarouselStatic';
 import { BsChevronUp, BsChevronDown } from 'react-icons/bs';
+import { useDictContext } from '@/src/hooks/useDictContext';
+import { t } from '@/src/get-dictionary';
 
 const FeaturedUsers = () => {
-  const { data: users } = useFeaturedUsers();
-  const { t } = useTranslation('common');
-  const [showUsersSection, setShowUsersSection] = useState<boolean>(false)
+  //const { t } = useTranslation('common');
+  const { dict} = useDictContext();
+
+  const {data:users} =   useFeaturedUsers();
+
+  const [showUsersSection, setShowUsersSection] = useState<boolean>(true)
 
   if (users && users.length) {
     return (
       <section className="d-flex flex-column ">
         <h2 className="d-flex flex-row align-items-center text-secondary  fw-bold">
-          <span>{t('Featured users')}{' '}</span>
+          <span>{t(dict,'Featured users')}{' '}</span>
           {!showUsersSection && (
             <span
               className={`cursor-pointer d-flex d-lg-none ms-2`}

@@ -1,6 +1,6 @@
-import { Prisma} from '@prisma/client';
-import { backOfficeData } from '@/src/types/backoffice';
-import {prisma} from '@/src/lib/prisma';
+import { Prisma } from "@prisma/client";
+import { backOfficeData } from "@/src/types/backoffice";
+import { prisma } from "@/src/lib/prisma";
 
 export interface findProps {
   id: number;
@@ -8,28 +8,33 @@ export interface findProps {
   include?: boolean;
 }
 export const find = async (props: findProps) => {
-  const { id , select = undefined, include = true } = props;
+  const { id, select = undefined, include = true } = props;
 
   return prisma.backOfficeSettings.findUnique({
-  where: {
-    id,
-  },
-  include:{
-    sliderImages:{select:{storedFile:true,originalFilename:true}},
-  }
-})
-
-}
-
-export const create = async (id: number, data: Prisma.BackOfficeSettingsCreateInput)=>{
-  return prisma.backOfficeSettings.create({
-    data
+    where: {
+      id,
+    },
+    include: {
+      sliderImages: { select: { storedFile: true, originalFilename: true } },
+    },
   });
 };
 
-export const update = async (id: number, data: Prisma.BackOfficeSettingsUpdateInput)=>{
+export const create = async (
+  id: number,
+  data: Prisma.BackOfficeSettingsCreateInput
+) => {
+  return prisma.backOfficeSettings.create({
+    data,
+  });
+};
+
+export const update = async (
+  id: number,
+  data: Prisma.BackOfficeSettingsUpdateInput
+) => {
   return prisma.backOfficeSettings.update({
     data,
-    where:{id}
+    where: { id },
   });
 };

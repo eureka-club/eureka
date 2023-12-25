@@ -1,28 +1,30 @@
 import { FunctionComponent } from 'react';
 import {Badge} from 'react-bootstrap'
-import { CycleMosaicItem } from '@/types/cycle';
+import { CycleMosaicItem } from '@/src/types/cycle';
 import LocalImageComponent from '@/src/components/LocalImage';
 import CycleSummary from './CycleSummary';
 import styles from './TypeaheadSearchItem.module.css';
-import useTranslation from 'next-translate/useTranslation';
+import { useDictContext } from '@/src/hooks/useDictContext';
+import { t } from '@/src/get-dictionary';
 interface Props {
   cycle: CycleMosaicItem;
 }
 
 const TypeaheadSearchItem: FunctionComponent<Props> = ({ cycle }) => {
-  const { t } = useTranslation('common');
+  // const { t } = useTranslation('common');
+  const{dict}=useDictContext()
   if(!cycle)return <></>
   return (
     <section>
       <aside className="position-relative">
         <LocalImageComponent className='shadow-sm py-2 px-2 bg-body rounded' width={150} height={150} filePath={cycle.localImages[0].storedFile} alt={cycle.title} />
         <Badge bg="primary" className={`position-absolute top-0 start-0 mt-3 ms-3 fw-normal fs-6 text-black px-2 rounded-pill ${styles.type}`}>
-          {t('cycle')}
+          {t(dict,'cycle')}
         </Badge>
       </aside>
       <aside>
         <h3 className="fs-6 fw-bold text-wrap">{cycle.title}</h3>
-        <h4 className="fs-6 text-dark text-decoration-underline fst-italic">{t('by')} {cycle.creator.name}</h4>
+        <h4 className="fs-6 text-dark text-decoration-underline fst-italic">{t(dict,'by')} {cycle.creator.name}</h4>
         <CycleSummary cycle={cycle} />
       </aside>
     </section>

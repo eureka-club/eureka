@@ -1,10 +1,11 @@
-// import classNames from 'classnames';
-import useTranslation from 'next-translate/useTranslation';
+"use client"
 import { FunctionComponent, MouseEvent, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
 
 import styles from './UnclampText.module.css';
+import { useDictContext } from '../hooks/useDictContext';
+import { t } from '../get-dictionary';
 
 interface Props {
   clampHeight?: string;
@@ -14,13 +15,13 @@ interface Props {
 }
 
 const UnclampText: FunctionComponent<Props> = ({ clampHeight, text, showButtomMore = true, isHTML = true }) => {
-  // const textRows = text.split('\n').filter((row) => row.length);
 
   const outerRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
   const [textIsUnclamped, setTextIsUnclamped] = useState(false);
   const [unclampButtonVisible, setUnclampButtonVisible] = useState(false);
-  const { t } = useTranslation('common');
+  // const { t } = useTranslation('common');
+  const {dict}=useDictContext();
 
   const handleExpandContentTextClick = (ev: MouseEvent) => {
     ev.preventDefault();
@@ -46,15 +47,9 @@ const UnclampText: FunctionComponent<Props> = ({ clampHeight, text, showButtomMo
     <>
       <div
         ref={outerRef}
-        // className={classNames(styles.outer, { [styles.contentTextUnclamped]: textIsUnclamped })}
         className={`${unclampButtonVisible ? styles.outer : ''} ${textIsUnclamped ? styles.contentTextUnclamped : ''}`}
         style={{ height: textIsUnclamped ? 'auto' : clampHeight }}
       >
-        {/* <div ref={innerRef}>
-          {textRows.map((row, idx) => (
-            <p key={`${idx + 1}${row[0]}${row[1]}-${row.length}`}>{row}</p>
-          ))}
-        </div> */}
         <div ref={innerRef} className="" dangerouslySetInnerHTML={{ __html: text }} />
       </div>
 
@@ -62,11 +57,11 @@ const UnclampText: FunctionComponent<Props> = ({ clampHeight, text, showButtomMo
         <Button variant="link" onClick={handleExpandContentTextClick} className={styles.unclampButton}>
           {textIsUnclamped === true ? (
             <>
-              {t('unclampTextLess')} <BsChevronUp />
+              {t(dict,'unclampTextLess')} <BsChevronUp />
             </>
           ) : (
             <>
-              {t('unclampTextMore')} <BsChevronDown />
+              {t(dict,'unclampTextMore')} <BsChevronDown />
             </>
           )}
         </Button>

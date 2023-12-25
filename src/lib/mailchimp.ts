@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { on } from 'events';
 
 const instance = axios.create({
     baseURL:`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/mailchimp`
@@ -12,19 +13,9 @@ export interface MailchimpSubscribe{
 export const subscribe_to_segment = async (props:MailchimpSubscribe)=>{
     const {segment='eureka-all-users',email_address,name} = props
     const url =`/segments/add_member`
+    
     try{
-        const fn_subscribe = ()=>{
-            return new Promise<boolean>((resolve,reject)=>{
-                instance.post(url,{segment,email_address})
-                .then(r=>{
-                    resolve(r.status==200/*&&r.data.status!='unsubscribed'*/);
-                })
-                .catch(e=>{
-                    console.error(e);
-                    resolve(false);
-                });
-            });
-        }
+        const fn_subscribe = async ()=>instance.post(url,{segment,email_address})
         const member = await get_member({email_address})
         if(member){
             const res = await fn_subscribe()

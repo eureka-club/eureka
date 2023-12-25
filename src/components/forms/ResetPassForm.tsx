@@ -1,21 +1,24 @@
-import { useSession, signIn, signOut } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import {Form, Spinner} from 'react-bootstrap';
-import useTranslation from 'next-translate/useTranslation';
-import { FormEvent, FunctionComponent,useState,useRef } from 'react';
-import {Alert,Button,Col,Container,Row} from 'react-bootstrap'
+import { FunctionComponent,useState,useRef } from 'react';
+import {Button,Container,} from 'react-bootstrap'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 
 import styles from './ResetPassForm.module.css';
-import { json } from "stream/consumers";
 import { useRouter } from "next/router";
+import { useDictContext } from "@/src/hooks/useDictContext";
+import { t as t_} from "@/src/get-dictionary";
+import { usePathname, useSearchParams } from "next/navigation";
 
 interface Props{
   userId:string;
   email:string;
 }
 const ResetPassForm: FunctionComponent<Props> = ({userId,email}) => {
-  const { t } = useTranslation('PasswordRecovery');
+  // const { t } = useTranslation('PasswordRecovery');
+  const{dict}=useDictContext()
+  const t=(s:string)=>t_(dict,s)
   const router = useRouter();
   const [validated,setValidated] = useState<boolean>(true);
   const formRef = useRef<HTMLFormElement>(null);
@@ -37,6 +40,8 @@ const ResetPassForm: FunctionComponent<Props> = ({userId,email}) => {
   const handlerSubmit = async (e:React.MouseEvent<HTMLButtonElement>)=>{
     const form = formRef.current;    
     const url = `/api/user/${userId}/resetPass`;
+    const searchParams = useSearchParams();
+    const asPath = usePathname();
 
     if(!form)return false;
 
@@ -87,7 +92,9 @@ const ResetPassForm: FunctionComponent<Props> = ({userId,email}) => {
           if(res && r.error)
             toast.error( t('Invalid session'))
           else{
-            router.push(localStorage.getItem('loginRedirect') || '/')
+            const sp = searchParams.toString();
+            localStorage.setItem('loginRedirect',`${asPath}/?${sp}`);
+            router.push(localStorage.getItem('loginRedirect')!);
           }
             
         })

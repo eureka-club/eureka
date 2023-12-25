@@ -1,20 +1,20 @@
-import { useSession, signIn, signOut } from "next-auth/react";
 import {Form, Spinner} from 'react-bootstrap';
-import useTranslation from 'next-translate/useTranslation';
-import { FormEvent, FunctionComponent, MouseEvent,useState } from 'react';
+import { FunctionComponent,useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 
 import styles from './RecoveryLoginForm.module.css';
-import Toast from "../common/Toast";
+import { useDictContext } from '@/src/hooks/useDictContext';
+import { t as t_} from '@/src/get-dictionary';
 
 
 const RecoveryLoginForm: FunctionComponent = () => {
-   const { t } = useTranslation('PasswordRecovery');
+  //  const { t } = useTranslation('PasswordRecovery');
+  const{dict}=useDictContext()
+  const t=(s:string)=>t_(dict,s)
+  
   const [validated,setValidated] = useState<boolean>(false);
   const [loading,setLoading] = useState(false);
 

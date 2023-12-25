@@ -1,46 +1,32 @@
+"use client"
 import { useSession } from 'next-auth/react';
-import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, MouseEvent, FunctionComponent, useEffect, useRef, useState } from 'react';
 import { Button, Col, Row, ButtonGroup, Form, Spinner } from 'react-bootstrap';
 import { Post } from '@prisma/client';
 
-import { BsCheck } from 'react-icons/bs';
 import { ImCancelCircle } from 'react-icons/im';
 
-import { useMutation, useQueryClient } from 'react-query';
 
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import { WorkMosaicItem } from '../../types/work';
 import { CreatePostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
 
-import ImageFileSelect from '../forms/controls/ImageFileSelect';
 import TagsInputTypeAheadMaterial from '../forms/controls/TagsInputTypeAheadMaterial';
 import TagsInputMaterial from '../forms/controls/TagsInputMaterial';
-import stylesImageFileSelect from '../forms/CreatePostForm.module.css';
-import useTopics from '../../useTopics';
-
-import { useNotificationContext } from '@/src/useNotificationProvider';
-import { useRouter } from 'next/router'
+import { useNotificationContext } from '@/src/hooks/useNotificationProvider';
+import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
-import useWork from '@/src/useWork'
-import useUsers from '@/src/useUsers'
-// import {useGlobalEventsContext} from '@/src/useGlobalEventsContext'
+import useWork from '@/src/hooks/useWork'
 import styles from './WorkDetailCreateEurekaForm.module.css';
-import { Switch, TextField, FormControlLabel, Autocomplete } from '@mui/material';
+import { Switch, TextField, FormControlLabel } from '@mui/material';
 import Prompt from '@/src/components/post/PostPrompt';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useDictContext } from '@/src/hooks/useDictContext';
+import useTopics from '@/src/hooks/useTopics';
+import { t } from '@/src/get-dictionary';
+import { LANGUAGES } from '@/src/constants';
 
-
-import useCycles from '@/src/useCycles'
-
-// import { devNull } from 'os';
-// import { isNullOrUndefined } from 'util';
-const languages: Record<string, string> = {
-  es: "spanish",
-  en: 'english',
-  fr: 'french',
-  pt: 'portuguese'
-}
 interface Props {
   cacheKey: string[];
   workItem: WorkMosaicItem;
@@ -57,10 +43,13 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
   setDiscussionItem,
   close
 }) => {
+  const{dict,langs}=useDictContext();
+  const lenguages = langs.split(',').map(l => LANGUAGES[l]).join(',');
+  const l = lenguages[0];
+
   const queryClient = useQueryClient();
   const router = useRouter();
   const { data: session } = useSession();
-  const { t } = useTranslation('cycleDetail');
   const [newEurekaImageFile, setNewEurekaImageFile] = useState<File | null>(null);
   const { data: topics } = useTopics();
   const [eurekaTopics, setEurekaTopics] = useState<string[]>([]);
@@ -76,23 +65,12 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
     selectedWorkId: workItem.id,
     title: '',
     image: null,
-    language: languages[`${router.locale}`],
+    language: l,
     contentText: '',
     isPublic: true,
     topics: eurekaTopics,
     tags: tags
   });
-
-  /*const workItemsWhere = {
-   works:{
-     some:{
-       id:workItem.id
-     }
-   }
- }*/
-
-  //const {data:cycles} = useCycles(workItemsWhere,{enabled:!!workItem.id})
-
 
   const { notifier } = useNotificationContext();
   // const gec = useGlobalEventsContext();
@@ -126,14 +104,8 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
 
 
   const formValidation = (payload: any) => {
-   /*if (!payload.title.length) {
-      toast.error( t('NotTitle'))
-          return false;
-    }else if (!payload.contentText.length) {
-      toast.error( t('NotContentText'))
-      return false;
-    }else*/ if (!newEurekaImageFile) {
-      toast.error(t('requiredEurekaImageError'))
+   if (!newEurekaImageFile) {
+      toast.error(t(dict,'requiredEurekaImageError'))
       return false;
     }
     return true;
@@ -142,87 +114,53 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
 
   const handlerSubmitCreateEureka = async (e: MouseEvent<HTMLButtonElement>): Promise<void> => {
     e.preventDefault();
-
-
     if (newEureka.selectedWorkId) {
       const payload: CreatePostAboutWorkClientPayload = {
         selectedCycleId: null,
         selectedWorkId: newEureka.selectedWorkId,
         title: newEureka.title,
         image: newEurekaImageFile!,
-        language: languages[`${router.locale}`],
+        language: l,
         contentText: (editorRef.current) ? editorRef.current.getContent() : "",
         isPublic: newEureka.isPublic,
         topics: eurekaTopics.join(','),
         tags: tags
       };
       if (formValidation(payload))
-        await execCreateEureka(payload);
+        await mutateExecCreateEureka.mutate(payload);
     }
 
   };
 
-  const { mutate: execCreateEureka, isLoading } = useMutation(
-    async (payload: CreatePostAboutWorkClientPayload): Promise<Post | null> => {
-      const u = session!.user;
-      /* const toUsers = (participants||[]).filter(p=>p.id!==u.id).map(p=>p.id);
-       if(u.id !== cycle.creatorId)
-        toUsers.push(cycle.creatorId);
-      let message = '';
-      let notificationContextURL = router.asPath
-    if (payload.selectedWorkId) {
-        if (works) {
-          const work = works.find(w=>w.id === payload.selectedWorkId);
-          if(work){
-            message = `eurekaCreatedAboutWorkInCycle!|!${JSON.stringify({
-              userName:u.name||'',
-              workTitle:work.title,
-              cycleTitle:cycle.title
-            })}`; 
-            notificationContextURL = `/work/${work.id}/post`         
-          }          
-        }
-      }*/
-
-      const formData = new FormData();
-      Object.entries(payload).forEach(([key, value]) => {
-        if (value != null) {
-          formData.append(key, value);
-        }
-      });
-
-      /*   formData.append('notificationMessage', message);
-         formData.append('notificationContextURL', notificationContextURL);
-         formData.append('notificationToUsers', toUsers.join(','));
-   */
-      const res = await fetch('/api/post', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!res.ok)//TODO add Toast notification to the user
-        return null;
-
-      const json = await res.json();
-
-      if (json) {
-
-        /*  if(notifier){
-            
-              notifier.notify({
-                toUsers,
-                data:{message}
-              });
-              
-          } */
-        toast.success(t('postCreated'))
-        clearPayload();
-        return json.post;
-      }
-
-      return null;
-    },
+  const mutateExecCreateEureka = useMutation(
     {
+      mutationFn:async (payload: CreatePostAboutWorkClientPayload): Promise<Post | null> => {
+        const u = session!.user;
+  
+        const formData = new FormData();
+        Object.entries(payload).forEach(([key, value]) => {
+          if (value != null) {
+            formData.append(key, value);
+          }
+        });
+  
+        const res = await fetch('/api/post', {
+          method: 'POST',
+          body: formData,
+        });
+  
+        if (!res.ok)//TODO add Toast notification to the user
+          return null;
+  
+        const json = await res.json();
+  
+        if (json) {
+          toast.success(t(dict,'postCreated'))
+          clearPayload();
+          return json.post;
+        }
+        return null;
+      },
       onMutate: async () => {
         const previewsItems = queryClient.getQueryData<PostMosaicItem[]>(cacheKey);
         return { previewsItems, cacheKey };
@@ -234,9 +172,9 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
           }
         }
         if (context && session) {
-          queryClient.invalidateQueries(context.cacheKey);
+          queryClient.invalidateQueries({queryKey:context.cacheKey});
           //queryClient.invalidateQueries(['CYCLES',JSON.stringify(workItemsWhere)])
-          queryClient.invalidateQueries(['USER', session.user.id.toString()]);//to get the new notification
+          queryClient.invalidateQueries({queryKey:['USER', `${session.user.id.toString()}`]});//to get the new notification
         }
       },
     },
@@ -298,10 +236,8 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
 
   const handleChangeUseOtherFields = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUseOtherFields(event.target.checked);
-    //setSelectedCycle(null);
     setEurekaTopics([]);
     setTags('');
-
   };
 
   return (
@@ -311,7 +247,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
         <Form.Group className="mt-4 mb-4">
           <FormControlLabel
             control={<Switch checked={useCrop} onChange={handleChangeUseCropSwith} />}
-            label={t('showCrop')}
+            label={t(dict,'showCrop')}
           />
         </Form.Group>
         {useCrop && (
@@ -327,7 +263,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
                   className="btn-eureka w-100"
                   onClick={() => setShowCrop(true)}
                 >
-                  {t('Image')}
+                  {t(dict,'Image')}
                 </Button>
               )}
               {showCrop && (
@@ -348,30 +284,19 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
               id="eureka-title"
               className="w-100 mb-4"
               inputProps={{ maxLength: 80 }}
-              label={t('Title')}
+              label={t(dict,'Title')}
               variant="outlined"
               size="small"
               value={newEureka.title}
               onChange={onChangeFieldEurekaForm}
             ></TextField>
           </Form.Group>
-          {/*<Form.Group controlId="eureka-title" className="mb-3">
-        <Form.Control
-          type="text"
-          maxLength={80}
-          required
-          placeholder={t('Title')}
-          value={newEureka.title}
-          onChange={onChangeFieldEurekaForm}
-        />
-      </Form.Group>
-{/* @ts-ignore*/}
           <EditorCmp
             apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
             onInit={(_: any, editor) => {
               editorRef.current = editor;
             }}
-            initialValue={newEureka.contentText}
+            initialValue={newEureka.contentText!}
             init={{
               height: 300,
               menubar: false,
@@ -380,8 +305,8 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
                 'searchreplace', 'visualblocks', 'code', 'fullscreen',
                 'insertdatetime', 'media', 'table', 'paste', 'code', 'help', 'wordcount', 'emoticons'
               ],
-              relative_urls: false,
               emoticons_database: 'emojiimages',
+              relative_urls: false,
               forced_root_block: "div",
               toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link | emoticons  | help',
               // toolbar:
@@ -392,79 +317,29 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
               content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
             }}
           />
-
-          {/* <Form.Group controlId="eureka-contentText">
-        <Form.Control
-          as="textarea"
-          rows={3}
-          required
-          placeholder="Text"
-          value={newEureka.contentText}
-          onChange={onChangeFieldEurekaForm}
-        />
-      </Form.Group> */}
-          {/*<Form.Group className="mt-3" controlId="eureka-image">
-         <Row className="d-flex justify-content-center flex-column flex-column-reverse flex-lg-row flex-lg-row-reverse">
-            <Col className='mb-4 d-flex justify-content-center justify-content-lg-start'>
-              {<div className={styles.imageContainer}>{renderPhoto()}</div>}
-              </Col>
-            <Col xs={12} md={8} className='mt-2 mb-4'>
-                {!showCrop && (<Button data-cy="image-load" variant="primary" className="btn-eureka w-100" onClick={() => setShowCrop(true)}>
-                  {t('Image')}
-                </Button>
-                )}        
-                { showCrop && (
-                <Col className='d-flex'>
-                  <div className='w-100 border p-3'>  
-                  <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={closeCrop} cropShape='rect' />
-                  </div>  
-                </Col>
-               )}      
-            </Col>  
-            </Row>
-        <ImageFileSelect acceptedFileTypes="image/*" file={newEurekaImageFile} setFile={setNewEurekaImageFile} required>
-          {(imagePreview) => (
-            <Form.Group>
-              <Row className="rounded border border-primary bg-white p-1 m-0">
-                <Col xs={12} md={10}>{newEurekaImageFile != null && imagePreview ? (
-                  <span className={`pt-1`}>{newEurekaImageFile?.name}</span>
-                ) : (
-                  t('Image')
-                )}
-                </Col>
-                <Col xs={12} md={2} className="d-flex justify-content-start justify-content-sm-end align-items-center">
-
-                {imagePreview && <Image layout="fixed" width="57px" height="32px" src={imagePreview} className="float-right" alt="Work cover" />}
-                </Col>
-              </Row>
-            </Form.Group>
-          )}
-        </ImageFileSelect>
-      </Form.Group>*/}
           <Row>
             <Col xs={12} md={8}>
               <Form.Group className="mt-5 mb-4">
                 <FormControlLabel
                   control={<Switch checked={useOtherFields} onChange={handleChangeUseOtherFields} />}
-                  label={t('showOthersFields')}
+                  label={t(dict,'showOthersFields')}
                 />
               </Form.Group>
               {useOtherFields && (<>
                 <Form.Group controlId="topics">
-                  {/* <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel> */}
                   <TagsInputTypeAheadMaterial
                     style={{ background: 'white' }}
-                    data={topics}
+                    data={topics as {code:string,label:string}[]}
                     items={eurekaTopics}
                     setItems={setEurekaTopics}
                     max={3}
-                    label={`${t('Type to add tag')}...`}
-                    formatValue={(v: string) => t(`topics:${v}`)}
+                    label={`${t(dict,'Type to add tag')}...`}
+                    formatValue={(v: string) => t(dict,`${v}`)}
                     className="mt-3"
                   />
                 </Form.Group>
                 <Form.Group controlId="tags" className='mt-4'>
-                  <TagsInputMaterial tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
+                  <TagsInputMaterial tags={tags} setTags={setTags} label={t(dict,'topicsFieldLabel')} />
                 </Form.Group>
                 </>
               )}
@@ -473,7 +348,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
 
           <aside className="d-flex justify-content-end">
             <ButtonGroup size="sm" className="pt-3">
-              <Button variant="warning" className="text-white" onClick={clearCreateEurekaForm} disabled={isLoading}>
+              <Button variant="warning" className="text-white" onClick={clearCreateEurekaForm} disabled={mutateExecCreateEureka.isPending}>
                 <ImCancelCircle />
               </Button>
               <Button
@@ -481,10 +356,10 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
                 onClick={handlerSubmitCreateEureka}
                 className="text-white"
                 style={{ width: '8rem' }}
-                disabled={isLoading}
+                disabled={mutateExecCreateEureka.isPending}
               >
-                <span>{t('Create')}</span>
-                {isLoading && <Spinner size="sm" animation="grow" />}
+                <span>{t(dict,'Create')}</span>
+                {mutateExecCreateEureka.isPending && <Spinner size="sm" animation="grow" />}
               </Button>
             </ButtonGroup>
           </aside>

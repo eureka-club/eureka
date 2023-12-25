@@ -1,5 +1,4 @@
-import { FunctionComponent, useState, useEffect, useRef, Dispatch, SetStateAction, SyntheticEvent } from 'react';
-import useTranslation from 'next-translate/useTranslation';
+import { FunctionComponent, useState, useEffect, SyntheticEvent } from 'react';
 import { Autocomplete, CircularProgress, AutocompleteChangeDetails, AutocompleteChangeReason } from '@mui/material';
 import { TextField } from '@mui/material';
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '@/src/types';
@@ -31,7 +30,7 @@ const AsyncTypeaheadMaterial: FunctionComponent<AsyncTypeaheadMaterialProp> = (p
     setValue((item || null));
     if (workSelected)
       setWork(workSelected)
-    else if(!workSelected)
+    else if (!workSelected)
       setWork(null)
   }, [item, workSelected])
 
@@ -42,32 +41,33 @@ const AsyncTypeaheadMaterial: FunctionComponent<AsyncTypeaheadMaterialProp> = (p
     setValue(value);
     onSelected(value);
     setSearchResults([]);
-
   }
 
   const handleSearchWorkOrCycle = async (query: string) => {
-
-    setIsSearchLoading(true);
-    const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
-    const response = await fetch(`/api/search/works-or-cycles?q=${query}&include=${includeQP}`);
-    const itemsSWC: SearchResult[] = await response.json();
-    setSearchResults(itemsSWC);
-    setIsSearchLoading(false);
+    if (query.length) {
+      setIsSearchLoading(true);
+      //const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
+      const response = await fetch(`/api/search/works-or-cycles?q=${query}`);//&include=${includeQP}
+      const itemsSWC: SearchResult[] = await response.json();
+      setSearchResults(itemsSWC);
+      setIsSearchLoading(false);
+    }
   };
 
-  const handleSearchCycle = async (query: string = " ") => {
-    let criteria = `q=${query}`;
+  const handleSearchCycle = async (query: string = "") => {
     if (query.length) {
+      let criteria;
       if (work != null) {
-        criteria = `where=${JSON.stringify({
-          title: { contains: query },
-          works: { some: { id: work.id } },
-        })}`;
+        criteria = `where=${JSON.stringify({ title: { contains: query }, works: { some: { id: work.id } } })}`;
+        // criteria = `q=${JSON.stringify({
+        //   title: { contains: query },
+        //   works: { some: { id: work.id } },
+        // })}`;
       }
-      const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
+      //const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
 
       setIsSearchLoading(true);
-      const response = await fetch(`/api/search/cycles?${criteria}&include=${includeQP}`);
+      const response = await fetch(`/api/search/cycles?${criteria}`);//&include=${includeQP}
       const itemsCL: CycleMosaicItem[] = await response.json();
       setSearchResults(itemsCL);
       setIsSearchLoading(false);
@@ -88,7 +88,6 @@ const AsyncTypeaheadMaterial: FunctionComponent<AsyncTypeaheadMaterialProp> = (p
         value={value}
         noOptionsText="No options"
         onChange={onTagsUpdate}
-
         onInputChange={(event, newInputValue) => {
           handleSearchWorkOrCycle(newInputValue);
         }}
@@ -131,6 +130,9 @@ const AsyncTypeaheadMaterial: FunctionComponent<AsyncTypeaheadMaterialProp> = (p
         onChange={onTagsUpdate}
         onOpen={(event) => {
           handleSearchCycle();
+        }}
+        onInputChange={(event, newInputValue) => {
+          handleSearchCycle(newInputValue);
         }}
         renderInput={(params) => (
           <TextField {...params} label={label} helperText={helperText} fullWidth

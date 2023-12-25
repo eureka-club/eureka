@@ -1,5 +1,5 @@
 import { CycleMosaicItem } from "../types/cycle";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 interface Type{
     price:number;currency:string
@@ -20,8 +20,21 @@ export const getPrices = async (product_id:string):Promise<Type> => {
     return {price,currency};
   }
 
-  export const useCyclePrice = (cycle?:CycleMosaicItem)=>{
-    return useQuery<Type>(['CYCLE-PRICE', cycle?.product_id], () => getPrices(cycle?.product_id!), {
-        staleTime: 1000 * 60 * 60,
-      });
+  interface Options {
+    staleTime?: number;
+    enabled?: boolean;
+  }
+
+  export const useCyclePrice = (cycle?:CycleMosaicItem,options?: Options)=>{
+    const { staleTime, enabled } = options || {
+      staleTime: 1000 * 60 * 60,
+      enabled: true,
+    };
+    return useQuery<Type>({
+      queryKey:['CYCLE-PRICE', cycle?.product_id],
+      queryFn: () => getPrices(cycle?.product_id!),
+      staleTime,
+      enabled,
+      retry:3
+    });
   }

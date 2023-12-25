@@ -1,16 +1,18 @@
+"use client"
+
 import { useSession} from 'next-auth/react';
-import { useRouter } from 'next/router';
-import useTranslation from 'next-translate/useTranslation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ChangeEvent, FunctionComponent, MouseEvent, useState ,useEffect} from 'react';
 import { Button, Col, Row, ButtonGroup, Form } from 'react-bootstrap';
 import { GiBrain } from 'react-icons/gi';
 import { BiBookHeart } from 'react-icons/bi';
 import { Session } from '../../types';
 import UserAvatar from '../common/UserAvatar';
-import useWork from '@/src/useWork';
+import useWork from '@/src/hooks/useWork';
 import styles from './WorkDetailPost.module.css';
-import {useModalContext} from '@/src/useModal'
+import {useModalContext} from '@/src/hooks/useModal'
 import SignInForm from '../forms/SignInForm';
+import { WorkMosaicItem } from '@/src/types/work';
 
 
 // import globalSearchEngineAtom from '../../atoms/searchEngine';
@@ -20,30 +22,30 @@ import WorkDetailCreateEurekaForm from './WorkDetailCreateEurekaForm';
 // import CommentsList from '../common/CommentsList';
 
 interface Props {
-  workId:number  
+  work: WorkMosaicItem  
   className?: string;
   cacheKey:string[];
+  session: Session;
 }
 
-const WorkDetailPost: FunctionComponent<Props> = ({workId,className, cacheKey }) => {
+const WorkDetailPost: FunctionComponent<Props> = ({ work, className, cacheKey, session }) => {
 
-  const {data:session, status} = useSession();
-  const isSessionLoading = status == 'loading';
+  //const {data:session, status} = useSession();
+  //const isSessionLoading = status == 'loading';
   const {show} = useModalContext()
   const router = useRouter();
-  
-  const { t } = useTranslation('cycleDetail');
+  const searchParams = useSearchParams();
+  const tabKey = searchParams.get('tabKey')
 
-   const {data:work} = useWork(workId,{
-    enabled:!!workId
-  })
+  //  const {data:work} = useWork(workId,{
+  //   enabled:!!workId
+  // })
 
   const [isCreateEureka, setIsCreateEureka] = useState<boolean>(true);
   const [discussionItem, setDiscussionItem] = useState<string | undefined>(undefined); // by default empty but required
-  const query = router.query;
 
    useEffect(()=>{
-       if(query.tabKey && query.tabKey.toString() === 'posts'){ 
+       if(tabKey && tabKey.toString() === 'posts'){ 
           setIsCreateEureka(true);  
        }
   },[])

@@ -1,14 +1,14 @@
 import { Cycle, Post, Prisma, User, Work } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
-import { CreatePostServerFields, CreatePostServerPayload, PostMosaicItem } from '../types/post';
+import { CreatePostServerFields, CreatePostServerPayload, EditPostServerFields, PostMosaicItem } from '../types/post';
 import { prisma } from '@/src/lib/prisma';
 
 export const find = async (id: number): Promise<PostMosaicItem | null> => {
   return prisma.post.findUnique({
     where: { id },
     include: {
-      works: { select: { id: true, title: true, type: true, localImages: { select: { storedFile: true } } } },
+      works: { select: { id: true, title: true,author:true, type: true, localImages: { select: { storedFile: true } } } },
       cycles: {
         select: {
           id: true,
@@ -18,6 +18,8 @@ export const find = async (id: number): Promise<PostMosaicItem | null> => {
           startDate: true,
           endDate: true,
           title: true,
+          access:true,
+          participants:{select:{id:true}}
         },
       },
       favs: { select: { id: true } },
@@ -27,7 +29,6 @@ export const find = async (id: number): Promise<PostMosaicItem | null> => {
     },
   });
 };
-
 export const findAll = async (props?: Prisma.PostFindManyArgs, page?: number): Promise<PostMosaicItem[]> => {
   const { include, where, take, skip, cursor } = props || {};
   return prisma.post.findMany({
@@ -36,7 +37,7 @@ export const findAll = async (props?: Prisma.PostFindManyArgs, page?: number): P
     cursor,
     orderBy: { createdAt: 'desc' },
     include: {
-      works: { select: { id: true, title: true, type: true, localImages: { select: { storedFile: true } } } },
+      works: { select: { id: true, title: true,author:true, type: true, localImages: { select: { storedFile: true } } } },
       cycles: {
         select: {
           id: true,
@@ -46,6 +47,8 @@ export const findAll = async (props?: Prisma.PostFindManyArgs, page?: number): P
           startDate: true,
           endDate: true,
           title: true,
+          access:true,
+          participants:{select:{id:true}}
         },
       },
       favs: { select: { id: true } },
@@ -56,86 +59,51 @@ export const findAll = async (props?: Prisma.PostFindManyArgs, page?: number): P
     where,
   });
 };
-
-export const search = async (query: { [key: string]: string | string[] | undefined }): Promise<Post[]> => {
-  const { q, where /* , include */ } = query;
-  if (where == null && q == null) {
-    throw new Error("[412] Invalid invocation! Either 'q' or 'where' query parameter must be provided");
-  }
-
-  if (q && typeof q === 'string') {
-    return prisma.post.findMany({
-      where: { title: { contains: q } },
-      // ...(typeof include === 'string' && { include: JSON.parse(include) }),
-      include: {
-        creator: true,
-        localImages: true,
-        works: true,
-        cycles: true,
-        favs: true,
-        likes: true,
-        comments: {
-          include: {
-            creator: { select: { id: true, name: true, image: true } },
-            comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
-          },
+export const remove = async (post: PostMosaicItem): Promise<Post> => {
+  if (post.cycles.length) {
+    await prisma.post.update({
+      where: { id: post.id },
+      data: {
+        cycles: {
+          disconnect: post.cycles.map((cycle) => ({
+            id: cycle.id,
+          })),
         },
       },
     });
   }
 
-  return prisma.post.findMany({
-    ...(typeof where === 'string' && { where: JSON.parse(where) }),
-    // ...(typeof include === 'string' && { include: JSON.parse(include) }),
-    include: {
-      creator: true,
-      localImages: true,
-      works: true,
-      cycles: true,
-      favs: true,
-      likes: true,
-      comments: {
-        include: {
-          creator: { select: { id: true, name: true, image: true } },
-          comments: { include: { creator: { select: { id: true, name: true, image: true } } } },
+  if (post.works.length) {
+    await prisma.post.update({
+      where: { id: post.id },
+      data: {
+        works: {
+          disconnect: post.works.map((work) => ({
+            id: work.id,
+          })),
         },
       },
-    },
+    });
+  }
+
+  return prisma.post.delete({
+    where: { id: post.id },
   });
 };
-
-export const isFavoritedByUser = async (post: Post, user: User): Promise<number> => {
-  return prisma.post.count({
-    where: {
-      id: post.id,
-      favs: { some: { id: user.id } },
-    },
-  });
-};
-
-export const isLikedByUser = async (post: Post, user: User): Promise<number> => {
-  return prisma.post.count({
-    where: {
-      id: post.id,
-      likes: { some: { id: user.id } },
-    },
-  });
-};
-
 export const createFromServerFields = async (
   fields: CreatePostServerFields,
   coverImageUpload: StoredFileUpload,
   creatorId: number,
 ): Promise<Post> => {
-  const payload = Object.entries(fields).reduce((memo, [fieldName, fieldValues]) => {
+  const payload = Object.entries(fields).reduce((memo, [fieldName, fieldValue]) => {
     switch (fieldName) {
       case 'selectedCycleId':
       case 'selectedWorkId':
-        return { ...memo, [fieldName]: Number(fieldValues[0]) };
+        return { ...memo, [fieldName]: Number(fieldValue) };
       case 'isPublic':
-        return { ...memo, [fieldName]: fieldValues[0] === 'true' };
+        return { ...memo, [fieldName]: fieldValue === 'true' };
       default:
-        return { ...memo, [fieldName]: fieldValues[0] };
+        return { ...memo, [fieldName]: fieldValue };
     }
   }, {} as CreatePostServerPayload);
 
@@ -179,53 +147,8 @@ export const createFromServerFields = async (
     },
   });
 };
-
-export const saveSocialInteraction = async (
-  post: Post,
-  user: User,
-  socialInteraction: 'fav' | 'like',
-  create: boolean,
-): Promise<Post> => {
-  return prisma.post.update({
-    where: { id: post.id },
-    data: { [`${socialInteraction}s`]: { [create ? 'connect' : 'disconnect']: { id: user.id } } },
-  });
-};
-
-export const remove = async (post: PostMosaicItem): Promise<Post> => {
-  if (post.cycles.length) {
-    await prisma.post.update({
-      where: { id: post.id },
-      data: {
-        cycles: {
-          disconnect: post.cycles.map((cycle) => ({
-            id: cycle.id,
-          })),
-        },
-      },
-    });
-  }
-
-  if (post.works.length) {
-    await prisma.post.update({
-      where: { id: post.id },
-      data: {
-        works: {
-          disconnect: post.works.map((work) => ({
-            id: work.id,
-          })),
-        },
-      },
-    });
-  }
-
-  return prisma.post.delete({
-    where: { id: post.id },
-  });
-};
-
 export const updateFromServerFields = async (
-  fields: CreatePostServerFields,
+  fields: EditPostServerFields,
   coverImageUpload: StoredFileUpload | null,
   postId: number,
 ): Promise<Post> => {
@@ -233,11 +156,11 @@ export const updateFromServerFields = async (
     switch (fieldName) {
       case 'selectedCycleId':
       case 'selectedWorkId':
-        return { ...memo, [fieldName]: Number(fieldValues[0]) };
+        return { ...memo, [fieldName]: Number(fieldValues) };
       case 'isPublic':
-        return { ...memo, [fieldName]: fieldValues[0] === 'true' };
+        return { ...memo, [fieldName]: fieldValues === 'true' };
       default:
-        return { ...memo, [fieldName]: fieldValues[0] };
+        return { ...memo, [fieldName]: fieldValues };
     }
   }, {} as CreatePostServerPayload);
 
@@ -330,5 +253,17 @@ export const updateFromServerFields = async (
       cycles: { set: cycles },
       works: { set: works },
     },
+  });
+};
+
+export const saveSocialInteraction = async (
+  post: Post,
+  user: User,
+  socialInteraction: 'fav' | 'like',
+  create: boolean,
+): Promise<Post> => {
+  return prisma.post.update({
+    where: { id: post.id },
+    data: { [`${socialInteraction}s`]: { [create ? 'connect' : 'disconnect']: { id: user.id } } },
   });
 };

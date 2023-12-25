@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { TMDBVideosProps } from '@/types/work';
+import { TMDBVideosProps } from '@/src/types/work';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';

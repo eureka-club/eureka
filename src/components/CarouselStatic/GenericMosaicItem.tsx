@@ -16,7 +16,6 @@ import { GenericMosaicItemProps } from "./types";
       size,
       userMosaicDetailed
     }) => {
-    
     if (isCycleMosaicItem(item)) {
       return (
         // <CycleContext.Provider key={`cycle-${item.id}`} value={{ cycle: item as CycleMosaicItem }}>

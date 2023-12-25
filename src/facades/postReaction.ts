@@ -5,42 +5,42 @@ import utc from 'dayjs/plugin/utc';
 import { ReactionMosaicItem } from '@/src/types/reaction';
 dayjs.extend(utc);
 
-export const find = async (userId: number,postId:number): Promise<ReactionMosaicItem | null> => {
-  return prisma.postReaction.findFirst({
-    include:{
-      user:{select:{id:true}},
-      post:{select:{id:true}},
-    },
-    where:{
-      userId,
-      postId
-    }
-  });
-};
+// export const find = async (userId: number,postId:number): Promise<ReactionMosaicItem | null> => {
+//   return prisma.postReaction.findFirst({
+//     include:{
+//       user:{select:{id:true}},
+//       post:{select:{id:true}},
+//     },
+//     where:{
+//       userId,
+//       postId
+//     }
+//   });
+// };
 
-export const findAllByUser = async (userId: number): Promise<ReactionMosaicItem[] | null> => {
-  return prisma.postReaction.findMany({
-    orderBy: { updatedAt: 'desc' }, 
-    include:{
-      post:{select:{id:true}},
-    },
-    where:{
-      userId,
-    }
-  });
-};
+// export const findAllByUser = async (userId: number): Promise<ReactionMosaicItem[] | null> => {
+//   return prisma.postReaction.findMany({
+//     orderBy: { updatedAt: 'desc' }, 
+//     include:{
+//       post:{select:{id:true}},
+//     },
+//     where:{
+//       userId,
+//     }
+//   });
+// };
 
-export const findAllByPost = async (postId: number): Promise<ReactionMosaicItem[] | null> => {
-  return prisma.postReaction.findMany({
-    orderBy: { updatedAt: 'desc' }, 
-    include:{
-      user:{select:{id:true}},
-    },
-    where:{
-      postId,
-    }
-  });
-};
+// export const findAllByPost = async (postId: number): Promise<ReactionMosaicItem[] | null> => {
+//   return prisma.postReaction.findMany({
+//     orderBy: { updatedAt: 'desc' }, 
+//     include:{
+//       user:{select:{id:true}},
+//     },
+//     where:{
+//       postId,
+//     }
+//   });
+// };
 
 export const remove = async (userId: number,postId:number,unified:string): Promise<PostReaction> => {
   const pr = await  prisma.postReaction.delete({
@@ -118,7 +118,7 @@ interface CreateProps{
   unified: string,
   emoji:string
 }
-export const create = async (props:CreateProps): Promise<ReactionMosaicItem> => {
+export const create = async (props:CreateProps) => {
   const {postId,userId,unified,emoji} = props;
   const r = await prisma.postReaction.create({data:{
     emoji,

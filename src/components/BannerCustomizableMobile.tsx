@@ -1,11 +1,14 @@
+"use client"
 import { FunctionComponent, useState,useEffect } from 'react';
-import { Button, Container,Carousel } from 'react-bootstrap';
+import { Carousel } from 'react-bootstrap';
 import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
-import useTranslation from 'next-translate/useTranslation';
-import styles from './BannerCustomizable.module.css';
-import useBackOffice from '@/src/useBackOffice';
-import { useRouter } from 'next/router';
+import styles from '@/src/components/BannerCustomizable.module.css';
+import useBackOffice from '@/src/hooks/useBackOffice';
+import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import { Button, Container } from '@mui/material';
+import { useDictContext } from '../hooks/useDictContext';
+import { t } from '../get-dictionary';
 
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
 const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
@@ -18,10 +21,11 @@ const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
   style?: Record<string, string>;
   cacheKey: [string, string];
 };*/
-
-const BannerCustomizableMobile: FunctionComponent = ({
-}) => {
-  const { t } = useTranslation('common');
+interface Props{
+}
+const BannerCustomizableMobile: FunctionComponent<Props> = ({}) => {
+  // const { t } = useTranslation('common');
+  const {dict}=useDictContext()
   const router = useRouter();
   const {data:session, status} = useSession();
   const isLoadingSession = status === "loading"
@@ -38,15 +42,15 @@ const BannerCustomizableMobile: FunctionComponent = ({
   useEffect(() => {
     if (bo && bo.sliderImages.length) {
       if(bo.SlideImage1 !='null'){
-        let storeFile1 = bo.sliderImages.filter(x=> x.originalFilename == bo.SlideImage1)[0].storedFile;
+        let storeFile1 = bo.sliderImages.filter((x:any)=> x.originalFilename == bo.SlideImage1)[0].storedFile;
         setImage1(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile1}`);
       }
       if(bo.SlideImage2 !='null'){
-        let storeFile2 = bo.sliderImages.filter(x=> x.originalFilename == bo.SlideImage2)[0].storedFile;
+        let storeFile2 = bo.sliderImages.filter((x:any)=> x.originalFilename == bo.SlideImage2)[0].storedFile;
         setImage2(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile2}`);
       }
        if(bo.SlideImage3 !='null'){
-        let storeFile3 = bo.sliderImages.filter(x=> x.originalFilename == bo.SlideImage3)[0].storedFile;
+        let storeFile3 = bo.sliderImages.filter((x:any)=> x.originalFilename == bo.SlideImage3)[0].storedFile;
         setImage3(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile3}`);
       }
     }
@@ -59,20 +63,22 @@ const BannerCustomizableMobile: FunctionComponent = ({
         <aside className="d-flex justify-content-end">
           {show && (
             <Button
-              variant="info"
+            color='info'
+              variant="contained"
               onClick={() => setShow(false)}
               className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
             >
-              {t('Close')} <AiOutlineClose />
+              {t(dict,'Close')} <AiOutlineClose />
             </Button>
           )}
           {!show && (
             <Button
-              variant="info"
+            color="info"
+              variant="contained"
               onClick={() => setShow(true)}
               className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
             >
-              {t('Expand')} <AiOutlineDown />
+              {t(dict,'Expand')} <AiOutlineDown />
             </Button>
           )}
         </aside>
@@ -89,7 +95,7 @@ const BannerCustomizableMobile: FunctionComponent = ({
                       <p className="p-0 mx-1 text-wrap fs-6">{bo?.SlideText1}</p>
                        <div className="d-flex  mt-2"> 
                        {(!isLoadingSession && !session) 
-                            ? <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button> 
+                            ? <Button variant="contained" color='primary' className='text-white' onClick={() => router.push("/")} >{t(dict,'JoinEureka')}</Button> 
                             : ''
                           }
                       </div>
@@ -103,7 +109,7 @@ const BannerCustomizableMobile: FunctionComponent = ({
                       <p className="p-0 mx-1 text-wrap fs-6">{bo?.SlideText2}</p>
                        <div className="d-flex mt-2"> 
                        {(!isLoadingSession && !session) 
-                            ? <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button> 
+                            ? <Button variant="contained" color="primary" className='text-white' onClick={() => router.push("/")} >{t(dict,'JoinEureka')}</Button> 
                             : ''
                           }
                       </div>
@@ -117,7 +123,7 @@ const BannerCustomizableMobile: FunctionComponent = ({
                       <p className="p-0 mx-1 text-wrap fs-6">{bo?.SlideText3}</p>
                        <div className="d-flex  mt-2"> 
                        {(!isLoadingSession && !session) 
-                            ? <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button> 
+                            ? <Button variant="contained" color="primary" className='text-white' onClick={() => router.push("/")} >{t(dict,'JoinEureka')}</Button> 
                             : ''
                           }
                       </div>

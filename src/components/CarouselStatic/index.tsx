@@ -1,5 +1,6 @@
+"use client"
+
 import { useAtom } from 'jotai';
-import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useState, useEffect, useMemo } from 'react';
 import { Col, Spinner, CardGroup } from 'react-bootstrap';
 import globalSearchEngineAtom from '../../atoms/searchEngine';
@@ -10,6 +11,8 @@ import { CycleMosaicItem /* , CycleWithImages */ } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
 import { UserMosaicItem } from '../../types/user';
 import Mosaics from './Mosaics';
+import { t } from '@/src/get-dictionary';
+import { useDictContext } from '@/src/hooks/useDictContext';
 
 type Item = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | UserMosaicItem;
 type Props = {
@@ -24,7 +27,7 @@ type Props = {
   className?: string;
   mosaicBoxClassName?: string;
   size?: string;
-  cacheKey: [string, string];
+  cacheKey: string[];
   userMosaicDetailed?: boolean;
 };
 
@@ -42,10 +45,9 @@ const CarouselStatic: FunctionComponent<Props> = ({
   cacheKey,
   userMosaicDetailed = false,
 }) => {
-  const { t } = useTranslation('topics');
   const [dataFiltered, setDataFiltered] = useState<Item[]>([]);
   const [isRedirecting, setIsRedirecting] = useState(false);
-
+  const{dict}=useDictContext();
   const [globalSEState] = useAtom(globalSearchEngineAtom);
   useEffect(() => {
     if (data) {
@@ -89,7 +91,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
                         role="presentation"
                         onClick={handlerSeeAll}
                       >
-                        {t('common:See all')}
+                        {t(dict,'See all')}
                       </span>
                     ) : (
                       <Spinner animation="grow" />

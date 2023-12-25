@@ -1,26 +1,32 @@
+"use client"
+
 import { useState, FunctionComponent, useEffect } from 'react';
-import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { Spinner,Row, Col} from 'react-bootstrap';
-
-import MosaicItem from '@/components/work/MosaicItem'
-
-import useWorks,{getWorks} from '@/src/useWorks'
-
-import useFilterEngineWorks from './useFilterEngineWorks';
-import { useInView } from 'react-intersection-observer';
+import MosaicItem from '@/src/components/work/MosaicItem'
+import useFilterEngineWorks from '@/src/hooks/useFilterEngineWorks';
 import { Prisma } from '@prisma/client';
-import { WorkMosaicItem } from '../types/work';
-import { getWorksProps } from '../types/work';
+import { WorkMosaicItem } from '@/src/types/work';
+import { getWorksProps } from '@/src/types/work';
+import { useSearchParams } from 'next/navigation';
+import { Grid } from '@mui/material';
+
+// import { useRouter } from 'next/router';
+// import useWorks,{getWorks} from '@/src/hooks/useWorks'
+// import { useInView } from 'react-intersection-observer';
 
 const take = 8;
-const SearchTabworks:FunctionComponent = () => {
-  const { t,lang } = useTranslation('common');
-  const router = useRouter();
-  const terms = router?.query.q?.toString()!.split(" ") || [];
-  const cacheKey = `works-search-${router?.query.q?.toString()}`;
+interface Props{
+  works:WorkMosaicItem[]
+}
+const SearchTabWorks:FunctionComponent<Props> = ({works}) => {
+  // const { t,lang } = useTranslation('common');
+  // const {langs}=useDictContext()
+  
+  const searchParams = useSearchParams();
+  const q = searchParams.get('q');
+  const terms = q?.split(" ") || [];
+  // const cacheKey = `works-search-${q}`;
 
-  const {FilterEngineWork,filtersType,filtersCountries} = useFilterEngineWorks()
+  const {FilterEngineWork,filtersType,filtersCountries,hasChangedFiltersType,hasChangedFiltersCountries} = useFilterEngineWorks()
 
   const getProps = ()=>{
     const res:Prisma.WorkWhereInput = {
@@ -40,10 +46,10 @@ const SearchTabworks:FunctionComponent = () => {
         ...res.AND ? res.AND : {},
         OR:[
           {countryOfOrigin:{
-            in:filtersCountries
+            in:(filtersCountries as string[])
         }},
         {countryOfOrigin2:{
-          in:filtersCountries
+          in:(filtersCountries as string[])
       } }
         ]
       }
@@ -51,54 +57,81 @@ const SearchTabworks:FunctionComponent = () => {
     return res;
   };
 
-  const [props,setProps]=useState<Prisma.WorkFindManyArgs>({take,where:{...getProps()}})
+  const [props,setProps]=useState<Prisma.WorkFindManyArgs>({/*take,*/where:{...getProps()}})
 
-  const {data:{total,fetched,works:c}={total:0,fetched:0,works:[]}} = useWorks(props,{cacheKey,enabled:!!router.query?.q});
-  const [works,setWorks] = useState<WorkMosaicItem[]>([])
-  
-  useEffect(()=>{
+  // let {data:{total,fetched,works:worksFiltered}={total:0,fetched:0,works:null}} = useWorks(props,{cacheKey,enabled:!!q});
+  // const [works,setWorks] = useState<WorkMosaicItem[]>([])
+  // worksFiltered = worksFiltered??works;
 
-    let props: Prisma.WorkWhereInput|undefined = undefined;
-    if(router.query.q && (filtersType||(filtersCountries && filtersCountries.length))){
-      props = getProps();
+  let worksFiltered = [...works];
+
+  if(hasChangedFiltersType){
+    const wf = worksFiltered.filter(w=>{
+      return filtersType[w.type];
+    })
+    worksFiltered = wf;
+  }
+
+  if(hasChangedFiltersCountries && filtersCountries){
+    if(filtersCountries.length){
+      worksFiltered = worksFiltered.filter(w=>{
+        return (w.countryOfOrigin && filtersCountries.includes(w.countryOfOrigin)) || (w.countryOfOrigin2 && filtersCountries.includes(w.countryOfOrigin2));
+      })
     }
-    if(props){
-      setProps(s=>({...s,where:{...props}}))
-    }
-  },[filtersType,filtersCountries,router.query.q])
+  }
 
-  useEffect(()=>{
-    if(c)setWorks(c)
-  },[c])
+  // useEffect(()=>{
+  //   if(hasChangedFiltersType){
+  //     let props: Prisma.WorkWhereInput|undefined = undefined;
+  //     if(q && (filtersType||(filtersCountries && filtersCountries.length))){
+  //       props = getProps();
+  //     }
+  //     if(props){
+  //       setProps(s=>({...s,where:{...props}}))
+  //     }
+  //   }
+  // },[hasChangedFiltersType])
 
-  const [ref, inView] = useInView({
-    triggerOnce: false,
-  });
+  // useEffect(()=>{
+  //   if(c)setWorks(c)
+  // },[c])
 
-  useEffect(()=>{
-    if(inView && works.length < total){
-      const fi = async ()=>{
-        const {id} = works.slice(-1)[0]
-        const r = await getWorks(lang,{...props,skip:1,cursor:{id}});
-        setWorks((c: any)=>[...c,...r.works])
-      }
-      fi()
-    }
-  },[inView])
+  // const [ref, inView] = useInView({
+  //   triggerOnce: false,
+  // });
+
+  // useEffect(()=>{
+  //   if(inView && works.length < total){
+  //     const fi = async ()=>{
+  //       const {id} = works.slice(-1)[0]
+  //       // const r = await getWorks(langs,{...props,skip:1,cursor:{id}});
+  //       // setWorks((c: any)=>[...c,...r.works])
+  //       const props = getProps();
+  //       if(props){
+  //         setProps(s=>({...s,where:{...props,skip:1,cursor:{id}}}))
+  //       }
+  //     }
+  //     fi()
+  //   }
+  // },[inView])
 
   const renderWorks=()=>{
     if(works)
       return <>
         <FilterEngineWork/>
-        <Row>
-            {works.map(p=><Col xs={12} sm={6} lg={3} xxl={2} className="mb-5 d-flex justify-content-center  align-items-center" key={p.id}>
-              <MosaicItem work={p} workId={p.id} className="" imageLink={true} cacheKey={['WORK',p.id.toString()]} size={'md'}  /></Col>)}
-        </Row>
-        {works?.length!=total && <Spinner ref={ref} animation="grow" />}
+        <Grid container className='justify-content-center justify-content-sm-between column-gap-4'>
+            {worksFiltered?.map(p=><Grid item  className="mb-5 d-flex justify-content-center  align-items-center" key={p.id} sx={{
+              '@media (min-width: 800px)':{
+                ':last-child':{marginRight:'auto'}
+              }
+            }}>
+              <MosaicItem work={p} workId={p.id} className="" imageLink={true} cacheKey={['WORK',p.id.toString()]} size={'md'}  /></Grid>)}
+        </Grid>
+        {/* {works?.length!=total && <Spinner ref={ref} animation="grow" />} */}
       </>
       return <></>
   }
 
   return renderWorks()
 };
-export default SearchTabworks;
+export default SearchTabWorks;

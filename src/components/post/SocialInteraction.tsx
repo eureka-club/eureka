@@ -1,17 +1,11 @@
-import { useRouter } from 'next/router';
-import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
-// import { GiBrain } from 'react-icons/gi';
-import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
-// import { BiImageAdd } from 'react-icons/bi';
-// import { FaRegSmileBeam } from 'react-icons/fa';
-import classnames from 'classnames';
-import { FiShare2, FiTrash2 } from 'react-icons/fi';
-import { useMutation, useQueryClient } from 'react-query';
-import { useSession } from 'next-auth/react';
-// import Rating from 'react-rating';
+"use client"
 
-// import Rating from '@/src/components/common/Rating';
+import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
+import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
+import classnames from 'classnames';
+import { FiShare2 } from 'react-icons/fi';
+import { useSession } from 'next-auth/react';
+
 
 import { OverlayTrigger, Popover, Button, Spinner } from 'react-bootstrap';
 
@@ -24,10 +18,10 @@ import {
   WhatsappIcon,
 } from 'react-share';
 import { Cycle, Work } from '@prisma/client';
-import { useMosaicContext } from '@/src/useMosaicContext';
+import { useMosaicContext } from '@/src/hooks/useMosaicContext';
 
-import useUser from '@/src/useUser';
-import { WEBAPP_URL } from '@/src/constants';
+import useUser from '@/src/hooks/useUser';
+// import { WEBAPP_URL } from '@/src/constants';
 // import { CycleMosaicItem } from '@/src/types/cycle';
 import { PostMosaicItem } from '@/src/types/post';
 // import { WorkMosaicItem } from '@/src/types/work';
@@ -36,14 +30,19 @@ import {
 } from '../../types';
 import styles from './SocialInteraction.module.css';
 // import { useNotificationContext } from '@/src/useNotificationProvider';
-import { useModalContext } from '@/src/useModal';
+import { useModalContext } from '@/src/hooks/useModal';
 import SignInForm from '@/src/components/forms/SignInForm';
 import _ from 'lodash';
-import PostReactionsDetail from './PostReactionsDetail';
 
-import usePostEmojiPicker from './hooks/usePostEmojiPicker';
-import PostReactionsActions from './PostReactionsActions';
+import usePostEmojiPicker from '@/src/hooks/usePostEmojiPicker';
 import Link from 'next/link';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { t } from '@/src/get-dictionary';
+import PostReactionsDetail from './PostReactionsDetail';
+import PostReactionsActions from '@/src/hooks/PostReactionsActions';
+import { useDictContext } from '@/src/hooks/useDictContext';
+import { usePathname } from 'next/navigation';
+import { useEnvContext } from '@/src/hooks/useEnvContext';
 interface SocialInteractionClientPayload {
   socialInteraction: 'fav' | 'rating';
   doCreate: boolean;
@@ -55,7 +54,7 @@ interface Props {
   parent?: Cycle | Work | null;
   showCounts?: boolean;
   showButtonLabels?: boolean;
-  cacheKey: [string,string];
+  cacheKey: string[];
   showCreateEureka?: boolean;
   showReaction?: boolean;
   showSaveForLater?: boolean;
@@ -77,12 +76,12 @@ const SocialInteraction: FunctionComponent<Props> = ({
   showTitle = true,
   className,
 }) => {
-  const { t } = useTranslation('common');
-  const router = useRouter();
-  // const [session] = useSession() as [Session | null | undefined, boolean];
+  // const { t } = useTranslation('common');
+  const asPath = usePathname();
+  
   const { data: session, status } = useSession();
   const idSession = session ? session.user.id : null;
-
+const{dict}=useDictContext()
   const isLoadingSession = status === 'loading';
   const [qty, setQty] = useState<number>(0);
   const { show } = useModalContext();
@@ -107,7 +106,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
   useEffect(() => {
     if (isSuccessUser && idSession && !user) {
-      queryClient.invalidateQueries(['USER', `${idSession}`]);
+      queryClient.invalidateQueries({queryKey:['USER', `${idSession}`]});
     }
   }, [user, idSession, isSuccessUser]);
 
@@ -127,93 +126,94 @@ const SocialInteraction: FunctionComponent<Props> = ({
     show(<SignInForm />);
   };
 
+  const {NEXT_PUBLIC_WEBAPP_URL} = useEnvContext();
   const shareUrl = (() => {
     if (post) {
       const parentIsWork = post.works ? post.works.length > 0 : false;
       const parentIsCycle = !parentIsWork && post.cycles && post.cycles.length;
-      if (parentIsWork) return `${WEBAPP_URL}/work/${post.works[0].id}/post/${post.id}`;
-      if (parentIsCycle) return `${WEBAPP_URL}/cycle/${post.cycles[0].id}/post/${post.id}`;
+      if (parentIsWork) return `${NEXT_PUBLIC_WEBAPP_URL}/work/${post.works[0].id}/post/${post.id}`;
+      if (parentIsCycle) return `${NEXT_PUBLIC_WEBAPP_URL}/cycle/${post.cycles[0].id}/post/${post.id}`;
     }
-    return `${WEBAPP_URL}/${router.asPath}`;
+    return `${NEXT_PUBLIC_WEBAPP_URL}/${asPath}`;
   })();
 
-  const shareTextDynamicPart = (() => {
+  const shareTextDynamicPart:any = (() => {
     if (post) {
       const p = post.works ? post.works[0] : null || post.cycles ? post.cycles[0] : null;
       const about = post.works[0] ? 'postWorkShare' : 'postCycleShare';
-      return `${t(about)} "${p ? p.title : ''}"`;
+      return `${t(dict,about)} "${p ? p.title : ''}"`;
     }
     return 'post not found';
   })();
 
-  const shareText = `${shareTextDynamicPart}  ${t('complementShare')}`;
+  const shareText = `${shareTextDynamicPart}  ${t(dict,'complementShare')}`;
   const {
     mutate: execSocialInteraction,
     isSuccess,
-    isLoading: loadingSocialInteraction,
+    isPending: loadingSocialInteraction,
   } = useMutation(
-    async ({ socialInteraction, doCreate, ratingQty }: SocialInteractionClientPayload) => {
-      if (session) {
-        //[user that does action] has saved the [title of book/movie/documentary/cycle] for later. Check it out.
-        let translationKey = 'userHasRating';
-        // let notificationContextURL = `/post/${post.id}`;
-        if (socialInteraction == 'fav') {
-          translationKey = 'userHasSaveForLater';
-        }
-
-        // const notificationMessage = `${translationKey}!|!${JSON.stringify({
-        //   userName: user?.name,
-        //   post: 'Post',
-        //   entityTitle: post.title,
-        // })}`;
-
-        // const notificationToUsers = user?.followedBy.map((f) => f.id);
-        const res = await fetch(`/api/post/${post.id}/${socialInteraction}`, {
-          method: doCreate ? 'POST' : 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            qty: ratingQty,
-            doCreate,
-            // ...(doCreate && {
-            //   notificationMessage,
-            //   notificationContextURL,
-            //   notificationToUsers,
-            // }),
-          }),
-        });
-        // if (notifier && notificationToUsers)
-        //   notifier.notify({
-        //     toUsers: notificationToUsers,
-        //     data: { message: notificationMessage },
-        //   });
-        return res.json();
-      }
-      openSignInModal();
-      return null;
-    },
     {
+      mutationFn:async ({ socialInteraction, doCreate, ratingQty }: SocialInteractionClientPayload) => {
+        if (session) {
+          //[user that does action] has saved the [title of book/movie/documentary/cycle] for later. Check it out.
+          let translationKey = 'userHasRating';
+          // let notificationContextURL = `/post/${post.id}`;
+          if (socialInteraction == 'fav') {
+            translationKey = 'userHasSaveForLater';
+          }
+  
+          // const notificationMessage = `${translationKey}!|!${JSON.stringify({
+          //   userName: user?.name,
+          //   post: 'Post',
+          //   entityTitle: post.title,
+          // })}`;
+  
+          // const notificationToUsers = user?.followedBy.map((f) => f.id);
+          const res = await fetch(`/api/post/${post.id}/${socialInteraction}`, {
+            method: doCreate ? 'POST' : 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              qty: ratingQty,
+              doCreate,
+              // ...(doCreate && {
+              //   notificationMessage,
+              //   notificationContextURL,
+              //   notificationToUsers,
+              // }),
+            }),
+          });
+          // if (notifier && notificationToUsers)
+          //   notifier.notify({
+          //     toUsers: notificationToUsers,
+          //     data: { message: notificationMessage },
+          //   });
+          return res.json();
+        }
+        openSignInModal();
+        return null;
+      },
       onMutate: async (payload) => {
         if (session && user && payload.socialInteraction === 'fav') {
-          await queryClient.cancelQueries(['USER', `${session.user.id}`]);
-          await queryClient.cancelQueries(cacheKey);
+          await queryClient.cancelQueries({queryKey:['USER', `${session.user.id}`]});
+          await queryClient.cancelQueries({queryKey:cacheKey});
 
           const prevUser = queryClient.getQueryData(['USER', `${session.user.id}`]);
           const prevEntity = queryClient.getQueryData(cacheKey);
 
-          let favPosts = user.favPosts as { id: number }[];
-          let favs = post.favs;
+          // let favPosts = user.favPosts as { id: number }[];
+          // let favs = post.favs;
 
           setcurrentUserIsFav(() => payload.doCreate);
 
-          if (!payload.doCreate) {
-            favPosts = favPosts.filter((i: { id: number }) => i.id !== post.id);
-            favs = post.favs.filter((i) => i.id != session.user.id);
-          } else {
-            favPosts?.push(post as any);
-            favs.push({ id: +session.user.id });
-          }
-          queryClient.setQueryData(['WORK', `${post.id}`], { ...post, favs });
-          queryClient.setQueryData(['USER', `${session.user.id}`], { ...user, favPosts });
+          // if (!payload.doCreate) {
+          //   favPosts = favPosts.filter((i: { id: number }) => i.id !== post.id);
+          //   favs = post.favs.filter((i) => i.id != session.user.id);
+          // } else {
+          //   favPosts?.push(post as any);
+          //   favs.push({ id: +session.user.id });
+          // }
+          queryClient.setQueryData(['POST', `${post.id}`], { ...post });
+          queryClient.setQueryData(['USER', `${session.user.id}`], { ...user });
 
           return { prevUser, prevEntity };
         }
@@ -223,8 +223,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
           if ('prevUser' in context) queryClient.setQueryData(['USER', `${session?.user.id}`], context?.prevUser);
           if ('prevEntity' in context) queryClient.setQueryData(cacheKey, context?.prevEntity);
         }
-        queryClient.invalidateQueries(['USER', `${session?.user.id}`]);
-        queryClient.invalidateQueries(cacheKey);
+        queryClient.invalidateQueries({queryKey:['USER', `${session?.user.id}`]});
+        queryClient.invalidateQueries({queryKey:cacheKey});
       },
     },
   );
@@ -239,23 +239,23 @@ const SocialInteraction: FunctionComponent<Props> = ({
         <div className="mb-2">
           <TwitterShareButton windowWidth={800} windowHeight={600} url={shareUrl} title={shareText} via="eleurekaclub">
             <TwitterIcon size={30} round />
-            {` ${t('wayShare')} Twitter`}
+            {` ${t(dict,'wayShare')} Twitter`}
           </TwitterShareButton>
         </div>
         <div className="mb-2">
           <FacebookShareButton windowWidth={800} windowHeight={600} url={shareUrl} quote={shareText}>
             <FacebookIcon size={30} round />
-            {` ${t('wayShare')} Facebook`}
+            {` ${t(dict,'wayShare')} Facebook`}
           </FacebookShareButton>
         </div>
         <WhatsappShareButton
           windowWidth={800}
           windowHeight={600}
           url={shareUrl}
-          title={`${shareText} ${t('whatsappComplement')}`}
+          title={`${shareText} ${t(dict,'whatsappComplement')}`}
         >
           <WhatsappIcon size={30} round />
-          {` ${t('wayShare')} Whatsapp`}
+          {` ${t(dict,'wayShare')} Whatsapp`}
         </WhatsappShareButton>
       </Popover.Body>
     </Popover>
@@ -312,7 +312,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
         <Button
           variant="link"
           className={`${styles.buttonSI} p-0 text-primary`}
-          title={t('Save for later')}
+          title={t(dict,'Save for later')}
           onClick={handleFavClick}
           disabled={loadingSocialInteraction}
         >
@@ -320,7 +320,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
           <br />
           {showButtonLabels && (
             <span className={classnames(...[styles.info, ...[currentUserIsFav ? styles.active : '']])}>
-              {t('Save for later')}
+              {t(dict,'Save for later')}
             </span>
           )}
         </Button>
@@ -336,7 +336,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
             ? <div className="flex-grow-1"><h2 className="m-0 p-1 fs-6 text-info" data-cy="parent-title">
             {` `}
             {parentLinkHref != null ? (
-              <Link href={parentLinkHref}>
+              <Link legacyBehavior href={parentLinkHref}>
                 <a title={getParentTitle()} className="text-info">
                   <span>{renderParentTitle()} </span>
                 </a>
@@ -347,7 +347,6 @@ const SocialInteraction: FunctionComponent<Props> = ({
           </h2>
           </div>: <></>
         }
-        
         <div className='ms-auto'>
             <PostReactionsDetail cacheKey={cacheKey} post={post as PostMosaicItem}/>
         </div>
@@ -359,14 +358,14 @@ const SocialInteraction: FunctionComponent<Props> = ({
             <OverlayTrigger trigger="focus" placement="top" overlay={popoverShares}>
               <Button
                 // style={{ fontSize: '.9em' }}
-                title={t('Share')}
+                title={t(dict,'Share')}
                 variant="link"
                 className={`p-0 text-primary`}
                 disabled={loadingSocialInteraction}
               >
                <FiShare2 style={{fontSize: "1.3em",verticalAlign:"bottom"}} />
                 <br />
-                {showButtonLabels && <span className={classnames(styles.info, styles.active)}>{t('Share')}</span>}
+                {showButtonLabels && <span className={classnames(styles.info, styles.active)}>{t(dict,'Share')}</span>}
               </Button>
             </OverlayTrigger>
           </div>

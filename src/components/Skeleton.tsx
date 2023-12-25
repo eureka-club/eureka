@@ -14,10 +14,10 @@ const Skeleton: FunctionComponent<Props> = ({ type, lines, width, className }) =
   return (
     <div
       className={`${styles.skeleton} ${styles[`skeleton-${type}`]} ${className}`}
-      style={{
-        [`${'--lines'}`]: `${lines || 3}`,
-        [`${'--c-w'}`]: `${width || 100}%`,
-      }}
+      // style={{
+      //   [`${'--lines'}`]: `${lines || 3}`,
+      //   [`${'--c-w'}`]: `${width || 100}%`,
+      // }}
     />
   );
 };

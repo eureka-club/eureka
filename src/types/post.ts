@@ -7,8 +7,8 @@ import { Prisma } from '@prisma/client';
 
 export type PostMosaicItem = Prisma.PostGetPayload<{
   include:{
-    works:{select:{id:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
-    cycles:{select:{id:true,localImages:{select:{storedFile:true}},creatorId:true,startDate:true,endDate:true,title:true}},
+    works:{select:{id:true,author:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
+    cycles:{select:{id:true,access:true,localImages:{select:{storedFile:true}},creatorId:true,startDate:true,endDate:true,title:true,participants:{select:{id:true}}}},
     favs:{select:{id:true,}},
     creator: {select:{id:true,name:true,photos:true,countryOfOrigin:true}},
     localImages: {select:{storedFile:true}},
@@ -18,7 +18,6 @@ export type PostMosaicItem = Prisma.PostGetPayload<{
   type?: 'post';
   currentUserIsFav?:boolean;
  };
-
 // export type PostDetail = Prisma.PostGetPayload<{
 //   include: {
 //     creator: true;
@@ -83,24 +82,27 @@ export interface EditPostAboutWorkClientPayload {
 }
 
 export interface CreatePostServerFields {
-  selectedCycleId?: string[];
-  selectedWorkId?: string[];
-  title: string[];
-  language: string[];
-  contentText: string[];
-  isPublic: boolean[];
+  selectedCycleId?: number;
+  selectedWorkId?: number;
+  title: string;
+  language: string;
+  contentText: string;
+  isPublic: boolean;
   topics?: string;
   tags?: string;
+  notificationToUsers:string;
+  notificationMessage:string;
+  notificationContextURL:string;
 }
 
 export interface EditPostServerFields {
-  id: string;
-  selectedCycleId?: string[];
-  selectedWorkId?: string[];
-  title?: string[];
-  language?: string[];
-  contentText?: string[];
-  isPublic?: boolean[];
+  id: number;
+  selectedCycleId?: number
+  selectedWorkId?: number;
+  title?: string;
+  language?: string;
+  contentText?: string;
+  isPublic?: boolean;
   topics?: string;
   tags?: string;
 }

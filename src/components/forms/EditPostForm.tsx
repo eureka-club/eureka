@@ -1,16 +1,14 @@
+"use client"
 import { Post } from '@prisma/client';
 import { useAtom } from 'jotai';
-import { useRouter } from 'next/router';
-import useTranslation from 'next-translate/useTranslation';
-import { FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { FunctionComponent, MouseEvent, RefObject, useDebugValue, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { BsX } from 'react-icons/bs';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
-import FormCheck from 'react-bootstrap/FormCheck';
-import FormControl from 'react-bootstrap/FormControl';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
 import ModalBody from 'react-bootstrap/ModalBody';
@@ -19,45 +17,38 @@ import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
-import { Switch, TextField, FormControlLabel, Autocomplete } from '@mui/material';
-import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import { BsFillXCircleFill } from 'react-icons/bs';
+import { Switch, TextField, FormControlLabel } from '@mui/material';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
-import { useMutation, useQueryClient } from 'react-query';
-import TagsInput from './controls/TagsInput';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import TagsInputMaterial from './controls/TagsInputMaterial';
 import TagsInputTypeAheadMaterial from './controls/TagsInputTypeAheadMaterial';
 import AsyncTypeaheadMaterial from './controls/AsyncTypeaheadMaterial';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
-import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload } from '../../types/post';
-import { CycleMosaicItem } from '../../types/cycle';
-import { WorkMosaicItem } from '../../types/work';
-//import ImageFileSelect from './controls/ImageFileSelect';
+import { CycleMosaicItem } from '@/src/types/cycle';
+import { WorkMosaicItem } from '@/src/types/work';
 import LanguageSelect from './controls/LanguageSelect';
-import CycleTypeaheadSearchItem from '../cycle/TypeaheadSearchItem';
-import WorkTypeaheadSearchItem from '../work/TypeaheadSearchItem';
-import globalModalsAtom from '../../atoms/globalModals';
+import globalModalsAtom from '@/src/atoms/globalModals';
 import styles from './CreatePostForm.module.css';
-import useTopics from '../../useTopics';
-import useWork from '../../useWork';
-// import { Session } from '@/src/types';
+import useTopics from '@/src/hooks/useTopics';
+import useWork from '@/src/hooks/useWork';
 import { useSession } from 'next-auth/react';
-import useUser from '@/src/useUser';
-import useUsers from '@/src/useUsers'
-import { useNotificationContext } from '@/src/useNotificationProvider';
-import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
+import useUser from '@/src/hooks/useUser';
+import { useNotificationContext } from '@/src/hooks/useNotificationProvider';
+import CropImageFileSelect from '@/src/components/forms/controls/CropImageFileSelect';
 import toast from 'react-hot-toast'
-import { ImCancelCircle } from 'react-icons/im';
 import Prompt from '@/src/components/post/PostPrompt';
-import { set } from 'lodash';
-import usePost from '../../usePost';
-import LocalImageComponent from '../LocalImage';
+import usePost from '@/src/hooks/usePost';
 import { EditPostAboutCycleClientPayload, EditPostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
+import { t } from "@/src/get-dictionary";
+import { useDictContext } from "@/src/hooks/useDictContext";
+import { Session } from "@/src/types";
+import { useEnvContext } from '@/src/hooks/useEnvContext';
+import { BiArrowBack } from "react-icons/bi";
+
 interface Props {
-  noModal?: boolean;
-  cacheKey?: string[]
-  id: number;
+  post: PostMosaicItem;
+  session: Session | null;
 }
 
 interface FormValues {
@@ -82,9 +73,13 @@ const whereCycleParticipants = (id: number) => ({
     ],
   }
 });
-const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
-  const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
-  const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
+
+const EditPostForm: FunctionComponent<Props> = ({ post,session }) => {
+  const {
+    NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME,
+    NEXT_PUBLIC_PUBLIC_ASSETS_STORAGE_MECHANISM,
+    NEXT_PUBLIC_AZURE_CDN_ENDPOINT
+  } = useEnvContext();
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
   const [isSearchCycleLoading, setIsSearchCycleLoading] = useState(false);
@@ -101,7 +96,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const editorRef = useRef<any>(null);
-  const { data: session } = useSession();
+  //const { data: session } = useSession();
   const [userId, setUserId] = useState<number>();
   const [workId, setWorkId] = useState<string>('');
   const [postTitle, setPostTitle] = useState<string>('');
@@ -120,7 +115,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
   const [imageChanged, setImageChanged] = useState<string | undefined>();
   const [ck, setCK] = useState<string[]>();
 
-  const { data: post, isLoading, isFetching } = usePost(id);
+  //const { data: post, isLoading, isFetching } = usePost(id);
 
 
   useEffect(() => {
@@ -150,11 +145,6 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
     }
   }, [post])
 
-  /*useEffect(() => {
-    if (router && router.query?.id) {
-      setWorkId(router.query.id.toString());
-    }
-  }, [router])*/
   const { data: work } = useWork(+workId, {
     enabled: !!workId
   });
@@ -163,11 +153,6 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
     enabled: !!userId
   });
 
-  /*const { data: participants, isLoading: isLoadingParticipants } = useUsers(selectedCycle ? whereCycleParticipants(selectedCycle.id) : {},
-    {
-      enabled: !!selectedCycle
-    }
-  )*/
 
   const { notifier } = useNotificationContext();
   useEffect(() => {
@@ -176,30 +161,15 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
       setUserId(user.id);
     }
   }, [session]);
-  // useEffect(() => {
-  //   if (router) {
-  //     const routeValues = router.route.split('/').filter((i) => i);
-  //     if (routeValues.length) {
-  //       if (routeValues[0] === 'work') {
-  //         setWorkId(router.query.id as string);
-  //       }
-  //     }
-  //   }
-  // }, [router, router.query.id]);
-
+  
   useEffect(() => {
     if (work) setSelectedWork(work as WorkMosaicItem);
   }, [work]);
 
-  const { t } = useTranslation('createPostForm');
-
+  const{dict}=useDictContext()
   const { data: topics } = useTopics();
-  //const [tags, setTags] = useState<string>('');
-  //const [postId, setPostId] = useState<number | undefined>();
-
 
   const handleSelectWorkOrCycle = (selected: SearchResult | null): void => {
-    //console.log(selected, 'selected')
 
     const searchResult = selected;
     if (searchResult != null) {
@@ -245,55 +215,40 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
   };
 
 
-  /*const formValidation = (payload: any) => {
-
-    if (!payload.title.length) {
-       toast.error( t('NotTitle'))
-       return false;
-     }else if (!imageFile) {
-       toast.error( t('requiredEurekaImageError'))
-       return false;
-     }else if (!payload.contentText.length) {
-       toast.error( t('NotContentText'))
-       return false;
-     }
-    return true;
-  };*/
-
   const {
     mutate: execEditPost,
     data: editPost,
     error: createPostError,
     isError: isEditPostError,
-    isLoading: isEditPostLoading,
+    isPending: isEditPostLoading,
     isSuccess: isEditPostSuccess,
   } = useMutation(
-    async (payload: EditPostAboutCycleClientPayload | EditPostAboutWorkClientPayload): Promise<Post> => {
-
-      const formData = new FormData();
-
-      Object.entries(payload).forEach(([key, value]) => {
-        if (value != null) {
-          formData.append(key, value);
-        }
-      });
-
-      const res = await fetch(`/api/post/${id}`, {
-        method: 'PATCH',
-        body: formData,//JSON.stringify(payload),
-      });
-      //console.log(res, 'res')
-      if (res.ok) {
-        toast.success(t('PostEdited'));
-        router.push(`/${formValues.selectedCycle ? 'cycle' : 'work'}/${formValues.selectedCycle ? formValues.selectedCycle.id : formValues.selectedWork!.id}/post/${post!.id}`)
-      }
-      return res.json();
-    },
     {
+      mutationFn:async (payload: EditPostAboutCycleClientPayload | EditPostAboutWorkClientPayload): Promise<Post> => {
+
+        const formData = new FormData();
+  
+        Object.entries(payload).forEach(([key, value]) => {
+          if (value != null) {
+            formData.append(key, value);
+          }
+        });
+  
+        const res = await fetch(`/api/post/${post.id}`, {
+          method: 'PATCH',
+          body: formData,//JSON.stringify(payload),
+        });
+        //console.log(res, 'res')
+        if (res.ok) {
+          toast.success(t(dict,'PostEdited'));
+          router.push(`/post/${post.id}`)
+        }
+        return res.json();
+      },
       onMutate: async (variables) => {
         if (post) {
           const ck_ = ck || ['POST', `${post.id}`];
-          await queryClient.cancelQueries(ck_)
+          await queryClient.cancelQueries({queryKey:ck_})
           const snapshot = queryClient.getQueryData<PostMosaicItem[] | PostMosaicItem>(ck_)
           const { title, contentText } = variables;
           if (snapshot) {
@@ -322,11 +277,11 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
       },
       onSettled: (_post, error, _variables, context) => {
         if (error) {
-          queryClient.invalidateQueries(ck);
-          queryClient.invalidateQueries(['POST', `${formValues.id}`]);
+          queryClient.invalidateQueries({queryKey:ck});
+          queryClient.invalidateQueries({queryKey:['POST', `${formValues.id}`]});
         }
         // this make the page to do a refresh
-        queryClient.invalidateQueries(ck);
+        queryClient.invalidateQueries({queryKey:ck});
         // queryClient.invalidateQueries(['POST',postId]);
 
       },
@@ -338,25 +293,25 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
     data: deletePost,
     error: deletePostError,
     isError: isDeletePostError,
-    isLoading: isDeletePostLoading,
+    isPending: isDeletePostLoading,
     isSuccess: isDeletePostSuccess,
   } = useMutation(
-    async (payload: EditPostAboutCycleClientPayload | EditPostAboutWorkClientPayload): Promise<Post> => {
-      const res = await fetch(`/api/post/${id}`, {
-        method: 'DELETE',
-        body: JSON.stringify(payload),
-      });
-      if (res.ok) {
-        toast.success(t('PostRemoved'));
-        router.push(`/${formValues.selectedCycle ? 'cycle' : 'work'}/${formValues.selectedCycle ? formValues.selectedCycle.id : formValues.selectedWork!.id}`)
-      }
-      return res.json();
-    },
     {
+      mutationFn:async (payload: EditPostAboutCycleClientPayload | EditPostAboutWorkClientPayload): Promise<Post> => {
+        const res = await fetch(`/api/post/${post.id}`, {
+          method: 'DELETE',
+          body: JSON.stringify(payload),
+        });
+        if (res.ok) {
+          toast.success(t(dict,'PostRemoved'));
+          router.push(`/${formValues.selectedCycle ? 'cycle' : 'work'}/${formValues.selectedCycle ? formValues.selectedCycle.id : formValues.selectedWork!.id}`)
+        }
+        return res.json();
+      },
       onMutate: async (variables) => {
         if (post) {
           const ck_ = ck || ['POST', `${post.id}`];
-          await queryClient.cancelQueries(ck_)
+          await queryClient.cancelQueries({queryKey:ck_})
           const snapshot = queryClient.getQueryData<PostMosaicItem[] | PostMosaicItem>(ck_)
           const { title, contentText } = variables;
           if (snapshot) {
@@ -387,11 +342,11 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
       },
       onSettled: (_post, error, _variables, context) => {
         if (error) {
-          queryClient.invalidateQueries(ck);
-          queryClient.invalidateQueries(['POST', `${post!.id}`]);
+          queryClient.invalidateQueries({queryKey:ck});
+          queryClient.invalidateQueries({queryKey:['POST', `${post!.id}`]});
         }
         // this make the page to do a refresh
-        queryClient.invalidateQueries(ck);
+        queryClient.invalidateQueries({queryKey:ck});
         // queryClient.invalidateQueries(['POST',postId]);
 
       },
@@ -402,7 +357,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
     ev.preventDefault();
 
     if (!imageFile && !formValues.currentImage) {
-      toast.error(t('requiredEurekaImageError'))
+      toast.error(t(dict,'requiredEurekaImageError'))
       return;
     }
 
@@ -440,7 +395,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
       await execEditPost(payload);
     }
     else
-      toast.error(t('NotAboutItem'))
+      toast.error(t(dict,'NotAboutItem'))
   };
 
   const handleRemove = async (ev: MouseEvent<HTMLButtonElement>) => {
@@ -504,7 +459,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
         <Col className='d-flex flex-column justify-content-center align-items-center  flex-xxl-row justify-content-xxl-start align-items-xxl-start' >
           <img className={styles.selectedPhoto} src={formValues.currentImage} />
           <Button className="btn-eureka ms-0 ms-xxl-3  text-white" onClick={() => handleChangePhoto()}>
-            {t('Change Photo')}
+            {t(dict,'Change Photo')}
           </Button>
         </Col>
       </Row>
@@ -513,7 +468,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
         <Col className='d-flex flex-column justify-content-center align-items-center  flex-xxl-row justify-content-xxl-start align-items-xxl-start' >
           <img className={styles.selectedPhoto} src={imageChanged} />
           <Button className="btn-eureka ms-0 ms-xxl-3  text-white" onClick={() => handleChangePhoto()}>
-            {t('Change Photo')}
+            {t(dict,'Change Photo')}
           </Button>
         </Col>
       </Row>
@@ -581,9 +536,12 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
 
 
   return (
+    <> <Button className='mb-1' variant="primary text-white" onClick={() => router.back()} size="sm">
+      <BiArrowBack />
+    </Button>
     <Form ref={formRef}>
-      <ModalHeader closeButton={!noModal}>
-        <ModalTitle> <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('titleEdit')}</h1></ModalTitle>
+      <ModalHeader >
+        <ModalTitle> <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t(dict,'titleEdit')}</h1></ModalTitle>
       </ModalHeader>
       <ModalBody className=''>
         <section className='my-3'>
@@ -593,11 +551,11 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
             <BsX fontSize='1.5em' />
           </Button></div>{!useCrop && <Prompt onImageSelect={onImageSelect} />}
             <FormGroup className='mt-4 mb-4'>
-              <FormControlLabel control={<Switch checked={useCrop} onChange={handleChangeUseCropSwith} />} label={t('showCrop')} />
+              <FormControlLabel control={<Switch checked={useCrop} onChange={handleChangeUseCropSwith} />} label={t(dict,'showCrop')} />
             </FormGroup>
             {useCrop && <Col className='mb-4'>
               {!showCrop && (<><Button data-cy="image-load" className="btn-eureka w-100 px-2 px-lg-5 text-white" onClick={() => setShowCrop(true)}>
-                {t('imageFieldLabel')}
+                {t(dict,'imageFieldLabel')}
               </Button>
                 {/*currentImg && renderPhoto()*/}
               </>)}
@@ -616,15 +574,15 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
         {!changePhoto && <><Row className='d-flex flex-column px-2 mt-5 '>
           <Col className='mb-4'>
             <AsyncTypeaheadMaterial item={(formValues.selectedWork) ? formValues.selectedWork : formValues.selectedCycle} searchType="all" onSelected={handleSelectWorkOrCycle}
-              label={`*${t('searchCycleOrWorkFieldLabel')}`}
-              helperText={`${t('searchCycleOrWorkFieldPlaceholder')}`} />
+              label={`*${t(dict,'searchCycleOrWorkFieldLabel')}`}
+              helperText={`${t(dict,'searchCycleOrWorkFieldPlaceholder')}`} />
           </Col>
           <Col className='mb-4'>
-            <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={formValues.language} label={t('languageFieldLabel')} />
+            <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={formValues.language} label={t(dict,'languageFieldLabel')} />
           </Col>
           <Col className='mb-4'>
             <FormGroup controlId="postTitle" >
-              <TextField id="postTitle" className="w-100" label={t('titleFieldLabel')}
+              <TextField id="postTitle" className="w-100" label={t(dict,'titleFieldLabel')}
                 variant="outlined" size="small" value={formValues.title}
                 onChange={(e) => handleSetTitle(e.target.value)}>
               </TextField>
@@ -632,14 +590,14 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
           </Col>
         </Row>
           <FormGroup controlId="description" as={Col} className="mb-4 px-2">
-            <FormLabel>{t('descriptionFieldLabel')}</FormLabel>
+            <FormLabel>{t(dict,'descriptionFieldLabel')}</FormLabel>
             {/* @ts-ignore*/}
             <EditorCmp
               apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
               onInit={(_: any, editor) => {
                 editorRef.current = editor;
               }}
-              initialValue={formValues.contentText || ''}
+              initialValue={formValues.contentText || '' }
               init={{
                 height: 300,
                 menubar: false,
@@ -675,7 +633,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
                       id="create-post--search-cycle"
                       filterBy={() => true}
                       inputProps={{ id: 'create-post--search-cycle' }}
-                      placeholder={t('searchCycleFieldPlaceholder')}
+                      placeholder={t(dict,'searchCycleFieldPlaceholder')}
                       isLoading={isSearchCycleLoading}
                       labelKey={labelKeyFn}
                       minLength={2}
@@ -696,26 +654,26 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
                 )*/}
                 <AsyncTypeaheadMaterial item={formValues.selectedCycle} onSelected={handleSelectCycle} searchType="cycles"
                   workSelected={formValues.selectedWork}
-                  label={`${t('searchCycleFieldLabel')}`}
-                  helperText={`${t('searchCycleInfotip')}`} />
+                  label={`${t(dict,'searchCycleFieldLabel')}`}
+                  helperText={`${t(dict,'searchCycleInfotip')}`} />
               </FormGroup>
             </Col>
 
             <Col className="mb-4">
               <FormGroup controlId="topics">
                 <TagsInputTypeAheadMaterial
-                  data={topics}
+                  data={topics as {code:string,label:string}[]}
                   items={formValues.topics}
                   setItems={handleSetTopics}
-                  formatValue={(v: string) => t(`topics:${v}`)}
+                  formatValue={(v: string) => t(dict,v)}
                   max={3}
-                  label={t('topicsPostLabel')}
-                  placeholder={`${t('Type to add tag')}...`}
+                  label={t(dict,'topicsPostLabel')}
+                  placeholder={`${t(dict,'Type to add tag')}...`}
                 />
               </FormGroup>
             </Col>
             <Col className="mb-4">
-              <TagsInputMaterial tags={formValues.tags} setTags={handleSetTags} label={t('topicsFieldLabel')} />
+              <TagsInputMaterial tags={formValues.tags} setTags={handleSetTags} label={t(dict,'topicsFieldLabel')} />
             </Col>
           </Row></>}
       </ModalBody>
@@ -729,14 +687,14 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
                 onClick={handleRemove}
               >
                 <>
-                  {t('resetBtnLabel')}
+                  {t(dict,'resetBtnLabel')}
                   {isDeletePostLoading && (
                     <Spinner size="sm" animation="grow" variant="secondary" className={`ms-2 ${styles.loadIndicator}`} />
                   )}</>
               </Button>
               <Button disabled={isEditPostLoading} onClick={(e) => { handleSubmit(e) }} className="btn-eureka" style={{ width: '10em' }}>
                 <>
-                  {t('titleEdit')}
+                  {t(dict,'titleEdit')}
                   {isEditPostLoading && (
                     <Spinner size="sm" animation="grow" variant="secondary" className={`ms-2 ${styles.loadIndicator}`} />
                   )}
@@ -748,6 +706,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
       </ModalFooter>
 
     </Form>
+    </>
   );
 };
 

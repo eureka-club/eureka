@@ -1,11 +1,12 @@
 import { FunctionComponent, useState, useEffect, ChangeEvent, KeyboardEvent,useRef } from 'react';
 import { Form, InputGroup,Button, Badge, Spinner,Col } from 'react-bootstrap';
-import { TextField,FormGroup,FormControl,InputLabel,Input,FormHelperText,FormControlLabel, Box} from '@mui/material';
-import useTranslation from 'next-translate/useTranslation'; 
+import { TextField,FormControl, Box} from '@mui/material';
 import { useAtom } from 'jotai'; 
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import searchEngine from '@/src/atoms/searchEngine';
 import { BiPlus} from 'react-icons/bi';
+import { useDictContext } from '@/src/hooks/useDictContext';
+import { t } from '@/src/get-dictionary';
 
 export type TagsInputProp = {
   tags: string;
@@ -18,7 +19,8 @@ export type TagsInputProp = {
   formatValue?: (v: string) => string;
 };
 const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
-  const { t } = useTranslation('createWorkForm');
+  // const { t } = useTranslation('createWorkForm');
+  const{dict}=useDictContext()
   const formRef=useRef<HTMLFormElement>(null)
   const { tags, setTags, label = '', readOnly = false,br = false, max = 2, className, formatValue = undefined } = props;
   const [loading, setLoading] = useState<Record<string,boolean>>({});
@@ -72,7 +74,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
     if(loading[v])return;
     setLoading(() => ({[`${v}`]: true}));
     setSearchEngineState((res)=>({...res,itemsFound:[]}))
-    router.push(`/search?q=${v}`);    
+    router.push(`/search/work?q=${v}`);    
   };
   return ( 
     <Form.Group controlId="tags" >
@@ -80,7 +82,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
       <div className={`${className}`}>
         {items.map((v, idx) => {
           return (<Box key={idx}>
-            <span key={`${idx + 1}${t}`} data-cy="tag">
+            <span key={`${idx + 1}${v}`} data-cy="tag">
               <Badge
                 className="fw-light fs-6 cursor-pointer"
                 pill
@@ -102,7 +104,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
         {!readOnly && items.length < max && (<>
           <div className='d-none d-lg-block mt-2'>
               <Form.Group controlId="tag" >
-                 <TextField  className="w-100" label={label} helperText={t('tagsInputPlaceholder')} 
+                 <TextField  className="w-100" label={label} helperText={t(dict,'tagsInputPlaceholder')} 
                  variant="outlined" size="small" value={tagInput} onChange={onChangeInput}
                 onKeyPress={onKeyPressOnInput}> </TextField>
               </Form.Group>

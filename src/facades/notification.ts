@@ -10,25 +10,30 @@ dayjs.extend(utc);
   include?: boolean;
 } */
 export const find = async (notificationId: number): Promise<NotificationMosaicItem | null> => {
-  return prisma.notificationsOnUsers.findFirst({
+  const res = await prisma.notificationsOnUsers.findFirst({
     include:{
-      notification:true
+      notification:true,
+      user:true
     },
     where:{
       notificationId
     }
   });
+  return res;
 };
 
-export const findAll = async (userId: number): Promise<NotificationMosaicItem[] | null> => {
+export const findAll = async (userId?: number): Promise<NotificationMosaicItem[] | null> => {
   return prisma.notificationsOnUsers.findMany({
     orderBy: { notificationId: 'desc' }, 
     include:{
-      notification:true
+      notification:true,
+      user:true
     },
-    where:{
-      userId,
-      //viewed:false,      
+    ... userId && {
+      where:{
+        userId,
+        //viewed:false,      
+      }
     }
   });
 };
@@ -114,7 +119,7 @@ export const create = async (
     contextURL,
     fromUser:{connect:{id:fromUser}},
     toUsers:{createMany:{
-      data: [...new Set(toUsers)].map((id:number)=>({userId:id}))
+      data: Array.from(new Set(toUsers)).map((id:number)=>({userId:id}))
     }},
     createdAt: dayjs.utc().format(),
     updatedAt: dayjs.utc().format()

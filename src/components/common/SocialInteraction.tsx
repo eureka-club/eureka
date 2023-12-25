@@ -1,19 +1,15 @@
-import { useRouter } from 'next/router';
-import useTranslation from 'next-translate/useTranslation';
+"use client"
+
 import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
 import { GiBrain } from 'react-icons/gi';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 import { BiImageAdd } from 'react-icons/bi';
-// import { FaRegSmileBeam } from 'react-icons/fa';
 import classnames from 'classnames';
 import { FiShare2, FiTrash2 } from 'react-icons/fi';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
-// import Rating from 'react-rating';
 import Rating from '@/src/components/common/Rating';
-
 import { OverlayTrigger, Popover, Button, Spinner } from 'react-bootstrap';
-
 import {
   FacebookIcon,
   FacebookShareButton,
@@ -23,9 +19,8 @@ import {
   WhatsappIcon,
 } from 'react-share';
 import { Cycle, Work } from '@prisma/client';
-import { useMosaicContext } from '@/src/useMosaicContext';
-
-import useUser from '@/src/useUser';
+import { useMosaicContext } from '@/src/hooks/useMosaicContext';
+import useUser from '@/src/hooks/useUser';
 import { WEBAPP_URL } from '@/src/constants';
 import { CycleMosaicItem } from '@/src/types/cycle';
 import { PostMosaicItem } from '@/src/types/post';
@@ -38,12 +33,14 @@ import {
   isPostMosaicItem,
   isWorkMosaicItem,
   isCycleMosaicItem,
-} from '../../types';
+} from '@/src/types';
 import styles from './SocialInteraction.module.css';
-// import { useNotificationContext } from '@/src/useNotificationProvider';
-import { useModalContext } from '@/src/useModal';
-import SignInForm from '../forms/SignInForm';
+import { useModalContext } from '@/src/hooks/useModal';
+import SignInForm from '@/src/components/forms/SignInForm';
 import _ from 'lodash';
+import { t } from '@/src/get-dictionary';
+import { useDictContext } from '@/src/hooks/useDictContext';
+import { usePathname, useRouter } from 'next/navigation';
 interface SocialInteractionClientPayload {
   socialInteraction: 'fav' | 'rating';
   doCreate: boolean;
@@ -77,12 +74,13 @@ const SocialInteraction: FunctionComponent<Props> = ({
   showRating = true,
   className,
 }) => {
-  const { t,lang } = useTranslation('common');
   const router = useRouter();
+  const pathname = usePathname();
+  
   // const [session] = useSession() as [Session | null | undefined, boolean];
   const { data: session, status } = useSession();
   const idSession = session ? session.user.id : null;
-
+  const {dict}=useDictContext()
   const isLoadingSession = status === 'loading';
   const [qty, setQty] = useState<number>(0);
   const { show } = useModalContext();
@@ -106,7 +104,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
   useEffect(() => {
     if (isSuccessUser && idSession && !user) {
-      queryClient.invalidateQueries(['USER', `${idSession}`]);
+      queryClient.invalidateQueries({queryKey:['USER', `${idSession}`]});
     }
   }, [user, idSession, isSuccessUser]);
 
@@ -134,7 +132,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
   const openSignInModal = () => {
     setQty(0);
-    show(<SignInForm />);
+    show(<SignInForm/>);
   };
 
   const shareUrl = (() => {
@@ -147,111 +145,101 @@ const SocialInteraction: FunctionComponent<Props> = ({
     }
     if (isWork(entity)) return `${WEBAPP_URL}/work/${entity.id}`;
     if (isCycle(entity)) return `${WEBAPP_URL}/cycle/${entity.id}`;
-    return `${WEBAPP_URL}/${router.asPath}`;
+    return `${WEBAPP_URL}/${pathname}`;
   })();
 
   const shareTextDynamicPart = (() => {
     if (parent != null && isCycle(parent)) {
-      return `${t('postCycleShare')} "${parent.title}"`;
+      return `${t(dict,'postCycleShare')} "${parent.title}"`;
     }
     if (isCycle(entity)) {
-      return `${t('cycleShare')} ${'title' in entity ? `"${entity.title}"` : ''}`;
+      return `${t(dict,'cycleShare')} ${'title' in entity ? `"${entity.title}"` : ''}`;
     }
     if (isWork(entity)) {
-      return `${t('workShare')} ${'title' in entity ? `"${entity.title}"` : ''}`;
+      return `${t(dict,'workShare')} ${'title' in entity ? `"${entity.title}"` : ''}`;
     }
     if (isPostMosaicItem(entity)) {
       const post = entity as PostMosaicItem;
       const p = post.works ? post.works[0] : null || post.cycles ? post.cycles[0] : null;
       const about = post.works[0] ? 'postWorkShare' : 'postCycleShare';
-      return `${t(about)} "${p ? p.title : ''}"`;
+      return `${t(dict,about)} "${p ? p.title : ''}"`;
     }
     return 'entity not found';
   })();
 
-  const shareText = `${shareTextDynamicPart}  ${t('complementShare')}`;
+  const shareText = `${shareTextDynamicPart}  ${t(dict,'complementShare')}`;
   const {
     mutate: execSocialInteraction,
     isSuccess,
-    isLoading: loadingSocialInteraction,
+    isPending: loadingSocialInteraction,
   } = useMutation(
-    async ({ socialInteraction, doCreate, ratingQty }: SocialInteractionClientPayload) => {
-      const entityEndpoint = (() => {
-        if (parent != null) {
-          return 'post';
-        }
-        if (isCycle(entity)) {
-          return 'cycle';
-        }
-        if (isWork(entity)) {
-          return 'work';
-        }
-
-        throw new Error('Unknown entity');
-      })();
-      if (session) {
-        //[user that does action] has saved the [title of book/movie/documentary/cycle] for later. Check it out.
-        let translationKey = 'userHasRating';
-        // let notificationContextURL = `/${entityEndpoint}/${entity.id}`;
-        if (socialInteraction == 'fav') {
-          translationKey = 'userHasSaveForLater';
-        }
-
-        // const notificationMessage = `${translationKey}!|!${JSON.stringify({
-        //   userName: user?.name,
-        //   entity: entityEndpoint.replace(/\w/, (c) => c.toUpperCase()),
-        //   entityTitle: entity.title,
-        // })}`;
-
-        // const notificationToUsers = user?.followedBy.map((f) => f.id);
-        const res = await fetch(`/api/${entityEndpoint}/${entity.id}/${socialInteraction}?lang=${lang}`, {
-          method: doCreate ? 'POST' : 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            qty: ratingQty,
-            doCreate,
-            // ...(doCreate && {
-            //   notificationMessage,
-            //   notificationContextURL,
-            //   notificationToUsers,
-            // }),
-          }),
-        });
-        // if (notifier && notificationToUsers)
-        //   notifier.notify({
-        //     toUsers: notificationToUsers,
-        //     data: { message: notificationMessage },
-        //   });
-        return res.json();
-      }
-      openSignInModal();
-      return null;
-    },
     {
+      mutationFn:async ({ socialInteraction, doCreate, ratingQty }: SocialInteractionClientPayload) => {
+        const entityEndpoint = (() => {
+          if (parent != null) {
+            return 'post';
+          }
+          if (isCycle(entity)) {
+            return 'cycle';
+          }
+          if (isWork(entity)) {
+            return 'work';
+          }
+  
+          throw new Error('Unknown entity');
+        })();
+        if (session) {
+          //[user that does action] has saved the [title of book/movie/documentary/cycle] for later. Check it out.
+          let translationKey = 'userHasRating';
+          // let notificationContextURL = `/${entityEndpoint}/${entity.id}`;
+          if (socialInteraction == 'fav') {
+            translationKey = 'userHasSaveForLater';
+          }
+  
+          // const notificationMessage = `${translationKey}!|!${JSON.stringify({
+          //   userName: user?.name,
+          //   entity: entityEndpoint.replace(/\w/, (c) => c.toUpperCase()),
+          //   entityTitle: entity.title,
+          // })}`;
+  
+          // const notificationToUsers = user?.followedBy.map((f) => f.id);
+          const res = await fetch(`/api/${entityEndpoint}/${entity.id}/${socialInteraction}`, {
+            method: doCreate ? 'POST' : 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              qty: ratingQty,
+              doCreate,
+            }),
+          });
+          return res.json();
+        }
+        openSignInModal();
+        return null;
+      },
       onMutate: async (payload) => {
         if (session && user && payload.socialInteraction === 'fav') {
-          await queryClient.cancelQueries(['USER', `${session.user.id}`]);
-          await queryClient.cancelQueries(cacheKey);
+          await queryClient.cancelQueries({queryKey:['USER', `${session.user.id}`]});
+          await queryClient.cancelQueries({queryKey:[cacheKey]});
 
           const prevUser = queryClient.getQueryData(['USER', `${session.user.id}`]);
-          const prevEntity = queryClient.getQueryData(cacheKey);
+          const prevEntity = queryClient.getQueryData([cacheKey]);
 
-          const entityFavKey = isWork(entity) ? 'favWorks' : isCycle(entity) ? 'favCycles' : 'favPosts';
+          // const entityFavKey = isWork(entity) ? 'favWorks' : isCycle(entity) ? 'favCycles' : 'favPosts';
 
-          let favInUser = user[entityFavKey] as { id: number }[];
-          let favs = entity.favs;
+          // let favInUser = user[entityFavKey] as { id: number }[];
+          // let favs = entity.favs;
 
-          setcurrentUserIsFav(() => payload.doCreate);
+          setcurrentUserIsFav((p) => !p);
 
-          if (!payload.doCreate) {
-            favInUser = favInUser.filter((i: { id: number }) => i.id !== entity.id);
-            favs = entity.favs.filter((i) => i.id != session.user.id);
-          } else {
-            favInUser?.push(entity as any);
-            favs.push({ id: +session.user.id });
-          }
-          queryClient.setQueryData(['WORK', `${entity.id}`], { ...entity, favs });
-          queryClient.setQueryData(['USER', `${session.user.id}`], { ...user, [entityFavKey]: favInUser });
+          // if (!payload.doCreate) {
+          //   favInUser = favInUser.filter((i: { id: number }) => i.id !== entity.id);
+          //   favs = entity.favs.filter((i) => i.id != session.user.id);
+          // } else {
+          //   favInUser?.push(entity as any);
+          //   favs.push({ id: +session.user.id });
+          // }
+          queryClient.setQueryData(['WORK', `${entity.id}`], { ...entity });
+          queryClient.setQueryData(['USER', `${session.user.id}`], { ...user});
 
           return { prevUser, prevEntity };
         }
@@ -259,10 +247,10 @@ const SocialInteraction: FunctionComponent<Props> = ({
       onSettled: (_, error, __, context) => {
         if (error && context) {
           if ('prevUser' in context) queryClient.setQueryData(['USER', `${session?.user.id}`], context?.prevUser);
-          if ('prevEntity' in context) queryClient.setQueryData(cacheKey, context?.prevEntity);
+          if ('prevEntity' in context) queryClient.setQueryData([cacheKey], context?.prevEntity);
         }
-        queryClient.invalidateQueries(['USER', `${session?.user.id}`]);
-        queryClient.invalidateQueries(cacheKey);
+        queryClient.invalidateQueries({queryKey:['USER', `${session?.user.id}`]});
+        queryClient.invalidateQueries({queryKey:[cacheKey]});
       },
     },
   );
@@ -283,8 +271,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
     if (canNavigate()) {
       /*setIsLoadingCreateEureka(true)
         setTimeout(()=>{setIsLoadingCreateEureka(false)},2500)*/
-      if (isWorkMosaicItem(entity)) router.push({ pathname: `/work/${entity.id}`, query: { tabKey: 'posts' } });
-      if (isCycleMosaicItem(entity)) router.push({ pathname: `/cycle/${entity.id}`, query: { tabKey: 'eurekas' } });
+      if (isWorkMosaicItem(entity)) router.push(`/work/${entity.id}?tabKey=posts`);
+      if (isCycleMosaicItem(entity)) router.push(`/cycle/${entity.id}?tabKey=eurekas`);
     }
   };
 
@@ -298,23 +286,23 @@ const SocialInteraction: FunctionComponent<Props> = ({
         <div className="mb-2">
           <TwitterShareButton windowWidth={800} windowHeight={600} url={shareUrl} title={shareText} via="eleurekaclub">
             <TwitterIcon size={30} round />
-            {` ${t('wayShare')} Twitter`}
+            {` ${t(dict,'wayShare')} Twitter`}
           </TwitterShareButton>
         </div>
         <div className="mb-2">
           <FacebookShareButton windowWidth={800} windowHeight={600} url={shareUrl} quote={shareText}>
             <FacebookIcon size={30} round />
-            {` ${t('wayShare')} Facebook`}
+            {` ${t(dict,'wayShare')} Facebook`}
           </FacebookShareButton>
         </div>
         <WhatsappShareButton
           windowWidth={800}
           windowHeight={600}
           url={shareUrl}
-          title={`${shareText} ${t('whatsappComplement')}`}
+          title={`${shareText} ${t(dict,'whatsappComplement')}`}
         >
           <WhatsappIcon size={30} round />
-          {` ${t('wayShare')} Whatsapp`}
+          {` ${t(dict,'wayShare')} Whatsapp`}
         </WhatsappShareButton>
       </Popover.Body>
     </Popover>
@@ -363,7 +351,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
         <Button
           variant="link"
           className={`${styles.buttonSI} p-0 text-primary`}
-          title={t('Save for later')}
+          title={t(dict,'Save for later')}
           onClick={handleFavClick}
           disabled={loadingSocialInteraction}
         >
@@ -371,7 +359,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
           <br />
           {showButtonLabels && (
             <span className={classnames(...[styles.info, ...[currentUserIsFav ? styles.active : '']])}>
-              {t('Save for later')}
+              {t(dict,'Save for later')}
             </span>
           )}
         </Button>
@@ -386,14 +374,14 @@ const SocialInteraction: FunctionComponent<Props> = ({
           <Button
             variant="link"
             className={`${styles.buttonSI} p-0 text-primary`}
-            title={t('Create eureka')}
+            title={t(dict,'Create eureka')}
             onClick={handleCreateEurekaClick}
             disabled={loadingSocialInteraction}
           >
             <div className={`d-flex flex-row`}>
               <BiImageAdd className={styles.active} />
               <span className="d-flex align-items-center text-primary" style={{ fontSize: '0.8em' }}>
-                {t('Create eureka')}
+                {t(dict,'Create eureka')}
               </span>
             </div>
           </Button>
@@ -412,7 +400,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const getRatingLabelInfo = () => {
     if (entity) {
       if (isCycleMosaicItem(entity) || isWorkMosaicItem(entity))
-        return !entity.currentUserRating ? <span className={styles.ratingLabelInfo}>{t('Rate it')}:</span> : '';
+        return !entity.currentUserRating ? <span className={styles.ratingLabelInfo}>{t(dict,'Rate it')}:</span> : '';
     }
     return '';
   };
@@ -444,7 +432,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
             {showTrash && mySocialInfo && mySocialInfo.ratingByMe && (
               <Button
                 type="button"
-                title={t('clearRating')}
+                title={t(dict,'clearRating')}
                 className="text-warning p-0"
                 onClick={clearRating}
                 variant="link"
@@ -468,14 +456,14 @@ const SocialInteraction: FunctionComponent<Props> = ({
             <OverlayTrigger trigger="focus" placement="top" overlay={popoverShares}>
               <Button
                 // style={{ fontSize: '.9em' }}
-                title={t('Share')}
+                title={t(dict,'Share')}
                 variant="link"
                 className={`p-0 text-primary`}
                 disabled={loadingSocialInteraction}
               >
                <FiShare2 style={{fontSize: "1.3em",verticalAlign:"bottom"}} />
                 <br />
-                {showButtonLabels && <span className={classnames(styles.info, styles.active)}>{t('Share')}</span>}
+                {showButtonLabels && <span className={classnames(styles.info, styles.active)}>{t(dict,'Share')}</span>}
               </Button>
             </OverlayTrigger>
          

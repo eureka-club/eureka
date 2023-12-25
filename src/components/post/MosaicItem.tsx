@@ -1,11 +1,9 @@
 import Link from 'next/link';
-import useTranslation from 'next-translate/useTranslation';
 import React, { FunctionComponent, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { Card, Badge,Spinner } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import { DATE_FORMAT_SHORT } from '../../constants';
-import SocialInteraction from './SocialInteraction';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import {  Session } from '../../types';
@@ -15,10 +13,13 @@ import { WorkMosaicItem } from '@/src/types/work';
 import {useAtom} from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
 import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
-import usePost from '@/src/usePost'
+import usePost from '@/src/hooks/usePost'
 import { useSession} from 'next-auth/react';
 import { PostMosaicItem } from '@/src/types/post';
 import { UserMosaicItem } from '@/src/types/user';
+import { t } from '@/src/get-dictionary';
+import SocialInteraction from './SocialInteraction';
+import { useDictContext } from '@/src/hooks/useDictContext';
 interface Props {
   post?:PostMosaicItem;
   postId: number|string;
@@ -30,7 +31,7 @@ interface Props {
   showSaveForLater?: boolean;
   showdetail?: boolean;
   style?: { [k: string]: string };
-  cacheKey?: [string,string];
+  cacheKey?: string[];
   showTrash?: boolean;
   showComments?: boolean;
   linkToPost?: boolean;
@@ -56,19 +57,18 @@ const MosaicItem: FunctionComponent<Props> = ({
 }) => {
   const cacheKey = ck || ['POST',`${postId}`]
   const [gmAtom,setGmAtom] = useAtom(globalModals);
-  const { t } = useTranslation('common');
+  // const { t } = useTranslation('common');
   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
   const [k,setK] = useState<[string,string]>();
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
-  const [postParent,setPostParent] = useState<CycleMosaicItem|WorkMosaicItem>();
+  // const [postParent,setPostParent] = useState<CycleMosaicItem|WorkMosaicItem>();
   const {data:session} = useSession()
-
-  const {data:post} = usePost(+postId,{
-    // enabled:!!postId && !postItem
-    enabled:!!postId
+  const{dict}=useDictContext()
+  const {data:p} = usePost(+postId,{
+    enabled:!!postId && !postItem
   })
-  
+  let post = postItem??p;
   // const [post,setPost] = useState(data)
   // const [post,setPost] = useState(postItem)
   // useEffect(()=>{
@@ -76,84 +76,87 @@ const MosaicItem: FunctionComponent<Props> = ({
   //   if(data)setPost(data)
   // },[data])
 
-  useEffect(()=>{
-    if(post){
-      if(post.works.length)setPostParent(post.works[0] as WorkMosaicItem)
-      if(post.cycles.length)setPostParent(post.cycles[0] as CycleMosaicItem)
-    }
-  },[post])
-   
-   if(!post)return <></>
 
-  const parentLinkHref = ((): string | null => {
-    if(post){
-      if (post.works?.length) {
-        return `/work/${post.works[0].id}`;
-      }
-      else if (post.cycles?.length && post.cycles[0]) {
-        return `/cycle/${post.cycles[0].id}`;
-      }
-    }
-    return null;
-  })();
-  const postLinkHref = ((): string => {
-    if(post){
-      if (post.works.length) {
-        return `/work/${post.works[0].id}/post/${post.id}`;
-      }
-      else if (post.cycles.length) {
-        return `/cycle/${post.cycles[0].id}/post/${post.id}`;
-      }    
+  
+  // useEffect(()=>{
+    //   if(post){
+      //   }
+      // },[post])
+      
+      if(!post)return <></>
+      
+      let postParentCycle = post.cycles?.length ? post.cycles[0] as CycleMosaicItem : null;
+      let postParentWork = post.works?.length ? post.works[0] as WorkMosaicItem: null;
+  
+      // const parentLinkHref = ((): string | null => {
+      //   if(post){
+      //     if (postParentWork) {
+      //       return `/work/${postParentWork.id}`;
+      //     }
+      //     else if (postParentCycle) {
+      //       return `/cycle/${postParentCycle.id}`;
+      //     }
+      //   }
+      //   return null;
+      // })();
+      const postLinkHref = ((): string => {
+        // if(post){
+        //   if (postParentWork) {
+        //     return `/work/${postParentWork.id}/post/${post.id}`;
+        //   }
+        //   else if (postParentCycle) {
+        //     return `/cycle/${postParentCycle.id}/post/${post.id}`;
+        //   }    
+        // }
+        return `/post/${post.id}`;
+      })();
 
-    }
-    return `/post/${post.id}`;
-  })();
-
-  const { /* title, localImages, id, */ type } = post;
+      const { /* title, localImages, id, */ type } = post;
  
-  const canEditPost = ()=>{
-    if(session)
-      return post.creatorId == (session as unknown as Session).user.id
-    return false;
-  }
-  const onEditPost = async (e:React.MouseEvent<HTMLButtonElement>) => {
-    router.push(`/post/${post.id}/edit`)
-  }
+      // const canEditPost = ()=>{
+      //   if(session)
+      //     return post.creatorId == (session as unknown as Session).user.id
+      //   return false;
+      // }
 
-   const onEditSmallScreen = async (e:React.MouseEvent<HTMLButtonElement>) => {
-        setGmAtom(res=>({...res, editPostId:post.id}))
-        setEditPostOnSmallerScreen({ ...editOnSmallerScreens, ...{ value: true } });
-  }
+      // const onEditPost = async (e:React.MouseEvent<HTMLButtonElement>) => {
+      //   router.push(`/post/${post.id}/edit`)
+      // }
+
+      //  const onEditSmallScreen = async (e:React.MouseEvent<HTMLButtonElement>) => {
+      //       setGmAtom(res=>({...res, editPostId:post.id}))
+      //       setEditPostOnSmallerScreen({ ...editOnSmallerScreens, ...{ value: true } });
+      // }
 
   const renderVerticalMosaic = (props: { showDetailedInfo: boolean,specifyDataCy?:boolean,commentSection?:boolean }) => {
   const { showDetailedInfo, specifyDataCy=true,commentSection=false } = props;
 
-  const getParentTitle = () => {
-      let res = '';
-      if (post.works.length) {
-        res = post.works[0].title
-      }
-      else if(post.cycles.length){
-        res = post.cycles[0].title
-      }
-      return res;
-  };
+  // const getParentTitle = () => {
+  //     let res = '';
+  //     if (post.works.length) {
+  //       res = post.works[0].title
+  //     }
+  //     else if(post.cycles.length){
+  //       res = post.cycles[0].title
+  //     }
+  //     return res;
+  // };
    
-    const renderParentTitle = () => {
-      let res = '';
-      let full =''
-      if (post.works.length) {
-        full = post.works[0].title
-        res = full.slice(0, 10);
-      }
-      else if(post.cycles.length){
-        full = post.cycles[0].title
-        res = full.slice(0, 10);
-      }
-      if (res.length + 3 < full.length) res = `${res}...`;
-      else res = full;
-      return res;
-    };
+    // const renderParentTitle = () => {
+    //   let res = '';
+    //   let full =''
+    //   if (post?.works.length) {
+    //     full = post.works[0].title
+    //     res = full.slice(0, 10);
+    //   }
+    //   else if(post?.cycles.length){
+    //     full = post.cycles[0].title
+    //     res = full.slice(0, 10);
+    //   }
+    //   if (res.length + 3 < full.length) res = `${res}...`;
+    //   else res = full;
+    //   return res;
+    // };
 
     const canNavigate = () => {
       return !loading;
@@ -183,7 +186,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     };
 
     return (
-      <Card className={`${size?.length ? `mosaic-${size}` : 'mosaic'}  ${className}`} data-cy={specifyDataCy ? `mosaic-item-post-${post.id}`:''}>
+      <Card className={`${size?.length ? `mosaic-${size}` : 'mosaic'}  ${className}`} data-cy={specifyDataCy ? `mosaic-item-post-${post?.id}`:''}>
         <Card.Body>       
         <div className={`${styles.imageContainer}`}>
           {renderLocalImageComponent()}        
@@ -197,15 +200,15 @@ const MosaicItem: FunctionComponent<Props> = ({
              </div>
             )}
           <Badge bg="success" className={`fw-normal fs-6 text-white px-2 rounded-pill ${styles.type}`}>
-            {t(type || 'post')}
+            {t(dict,type || 'post')}
           </Badge>
         </div>
 
 
-        {showDetailedInfo && (
+        {post && showDetailedInfo && (
           <div className={`${styles.detailedInfo}`}>
             <h6 className="mb-0 px-1 text-center d-flex justify-content-center align-items-center  h-100" data-cy="post-title">
-              <Link href={postLinkHref}>
+              <Link legacyBehavior href={postLinkHref}>
                 <a title={(post.title.length > 45) ? post.title : ''} className={`text-primary ${styles.title}`}>{(post.title.length > 45) ? `${post.title.slice(0,45)}...` : post.title}</a>
               </Link>              
             </h6>
@@ -218,7 +221,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           {/* <h2 className="m-0 p-1 fs-6 text-info" data-cy="parent-title">
             {` `}
             {parentLinkHref != null ? (
-              <Link href={parentLinkHref}>
+              <Link legacyBehavior href={parentLinkHref}>
                 <a title={getParentTitle()} className="text-info">
                   <span>{renderParentTitle()} </span>
                 </a>
@@ -233,7 +236,7 @@ const MosaicItem: FunctionComponent<Props> = ({
               showButtonLabels={false}
               showCounts={false}
               post={post}
-              parent={postParent}
+              parent={postParentWork??postParentCycle}
               showTrash={false}
               showSaveForLater={showSaveForLater}
               className="ms-auto"

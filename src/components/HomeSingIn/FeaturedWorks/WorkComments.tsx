@@ -1,11 +1,11 @@
 import { FunctionComponent } from 'react';
 import{Button} from 'react-bootstrap'
-import useHyvorComments from '@/src/useHyvorComments';
+import useHyvorComments from '@/src/hooks/useHyvorComments';
 import styles from './WorkComments.module.css';
 import dayjs from 'dayjs';
-import { useRouter } from 'next/router';
-import useTranslation from 'next-translate/useTranslation';
-
+import { useRouter } from 'next/navigation';
+import { t } from '@/src/get-dictionary';
+import { useDictContext } from '@/src/hooks/useDictContext';
 interface Props {
   workId: number;
   //workTitle: string;
@@ -14,7 +14,7 @@ interface Props {
 const WorkComments: FunctionComponent<Props> = ({ workId }) => {
   const { data: comments } = useHyvorComments(`work-${workId}`);
   const router = useRouter();
-  const { t } = useTranslation('featuredWorks');
+  const { dict } = useDictContext()
 
   const styleObj = {
     'margin-left': '2rem',
@@ -30,7 +30,7 @@ const WorkComments: FunctionComponent<Props> = ({ workId }) => {
   if (comments && comments.length) {
     return (
       <>
-        <h3 className="text-secondary mt-3 fs-5 mb-2">{t('UsersComments')}</h3>
+        <h3 className="text-secondary mt-3 fs-5 mb-2">{t(dict,'UsersComments')}</h3>
         <section className={`mb-3 ${styles.commentsSection}`}>
           {comments?.map((e, index) => (
             <section key={index} className="d-flex flex-row px-3 py-2">
@@ -58,7 +58,7 @@ const WorkComments: FunctionComponent<Props> = ({ workId }) => {
         </section>
         <section className="mb-3 d-flex justify-content-end">
           <Button className="btn-eureka" onClick={() => router.push(`work/${workId}`)}>
-            {t('Participate')}
+            {t(dict,'Participate')}
           </Button>
         </section>
       </>
@@ -66,9 +66,11 @@ const WorkComments: FunctionComponent<Props> = ({ workId }) => {
   } else return (
     <section className="py-5 d-flex justify-content-end">
       <Button className="btn-eureka" onClick={() => router.push(`work/${workId}`)}>
-        {t('Participate')}
+        {t(dict,'Participate')}
       </Button>
     </section>
   );
+  return <></>
+
 };
 export default WorkComments;

@@ -10,7 +10,7 @@ type Item = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | UserMosaicItem;
 type MosaicProps = {
     data: Item[];
     showSocialInteraction?: boolean;
-    cacheKey:[string,string];
+    cacheKey:string[];
     customMosaicStyle?: { [key: string]: string };
     size?: string,
     userMosaicDetailed?: boolean

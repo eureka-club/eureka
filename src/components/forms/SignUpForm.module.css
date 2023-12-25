@@ -1,7 +1,7 @@
 
 .welcomeSection{
  width: 40%;
- height:auto;
+ height:100vh;
  background-color:var(--color-primary-raised);
 }
 
@@ -9,7 +9,7 @@
  background-color:var(--color-primary-raised);
  width: 105%;
   height:auto;
-}z
+}
 .welcomeSectionText{
 margin-top: 8rem;  
 }
@@ -25,13 +25,13 @@ color: #fdf7f7;
 }
 
 .eurekaImage {
-   width: 30%;
-   height: 100%;
+   width: 40%;
+   height: auto;
 }
 
 .imageContainer{
   margin-top: 3rem;
-  margin-bottom: 6rem;
+ 
 }
 
 .VisitEurekaText{

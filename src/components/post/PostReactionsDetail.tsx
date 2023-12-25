@@ -1,34 +1,28 @@
-import { FunctionComponent, MouseEvent, SyntheticEvent, useMemo } from 'react';
+"use client"
+
+import { FunctionComponent } from 'react';
 import SignInForm from '@/src/components/forms/SignInForm';
 import { Button } from 'react-bootstrap';
 import { PostMosaicItem } from '@/src/types/post';
 import { useSession } from 'next-auth/react';
-
-import { Toast as T } from 'react-bootstrap';
-import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
 import usePostReactionCreateOrEdit from '@/src/hooks/mutations/usePostReactionCreateOrEdit';
-import { useModalContext } from '@/src/useModal';
+import { useModalContext } from '@/src/hooks/useModal';
+import { useDictContext } from '@/src/hooks/useDictContext';
+import { usePathname } from 'next/navigation';
 interface Props {
   post:PostMosaicItem;
-  cacheKey:[string,string];
+  cacheKey:string[];
 }
 const MAX_REACTIONS = 2;
 const PostReactionsDetail: FunctionComponent<Props> = ({post,cacheKey}) => {
+  const{dict}=useDictContext()
   const {data:session} = useSession();
-  const { t } = useTranslation('common');
-  const router = useRouter();
-  // const { setShowEmojisPicker } = usePostEmojiPicker({post,cacheKey});
-  const {mutate,isLoading:isMutating} = usePostReactionCreateOrEdit({post,cacheKey});
+  // const { t } = useTranslation('common');
+  const asPath = usePathname();
+  const {mutate,isPending:isMutating} = usePostReactionCreateOrEdit({post,cacheKey});
   const { show } = useModalContext();
 
-  // const handleReactionClick = (ev: MouseEvent<HTMLButtonElement>) => {
-  //     ev.preventDefault();
-  //     ev.stopPropagation();
-  //     setShowEmojisPicker((r) => !r);
-  // };
   const currentUserCanReact = ()=>{
-    // if(!session?.user)return false;
     const reactionsQty = post.reactions.filter(r=>r.userId==session?.user.id).length;
     return reactionsQty<MAX_REACTIONS;
   }
@@ -49,10 +43,9 @@ const PostReactionsDetail: FunctionComponent<Props> = ({post,cacheKey}) => {
     let reactionsGrouped = Object.values(rgo)
     .sort((a,b)=>{
       if(a.unified<b.unified)return 1;
-      // else if(a.qty==b.qty && a.createdAt < b.createdAt) return 1; 
       return -1;       
     })
-    if(!router.asPath.match(/\/post\//)){
+    if(!asPath.match(/\/post\//)){
       reactionsGrouped = reactionsGrouped.slice(0,2);
     }
 

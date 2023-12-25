@@ -1,5 +1,6 @@
+"use client"
+
 import { WorkMosaicItem } from '@/src/types/work';
-import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useState } from 'react';
 import RemoveRedEyeRoundedIcon from '@mui/icons-material/RemoveRedEyeRounded';
 import VisibilityOffRoundedIcon from '@mui/icons-material/VisibilityOffRounded';
@@ -16,7 +17,7 @@ import ListItemText from '@mui/material/ListItemText';
 import dayjs from 'dayjs';
 import useExecReadOrWatchedWork from '@/src/hooks/mutations/useExecReadOrWatchedWork';
 import { Session } from '@/src/types';
-// import styles from './WorkSummary.module.css';
+import { useDictContext } from '@/src/hooks/useDictContext';
 
 interface Props {
   work: WorkMosaicItem; //Work ID
@@ -26,13 +27,12 @@ interface Props {
 const years = (publicationYear:Date|null)=> {
    const max = dayjs().year();
    const yearsAgo = dayjs(dayjs()).diff(publicationYear||1993,'year');
-   return [...Array(yearsAgo+1).keys()].map(y => `${max-y}`);
+   return Array.from(Array(yearsAgo+1).keys()).map(y => `${max-y}`);
 } 
 
 
 const WorkReadOrWatched: FunctionComponent<Props> = ({ work,session }) => {
-  const { t } = useTranslation('common');
-
+  const{dict}=useDictContext();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('');
 

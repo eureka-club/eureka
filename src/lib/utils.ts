@@ -2,10 +2,21 @@ import dayjs from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import isBetween from 'dayjs/plugin/isBetween';
 import { v4 } from 'uuid';
-import { Area } from 'react-easy-crop/types';
-import { Session } from '../types';
-import { UserMosaicItem } from '../types/user';
-import fs from 'fs'
+import { Area } from 'react-easy-crop';
+import { Session } from '@/src/types';
+import { UserMosaicItem } from '@/src/types/user';
+
+export const slugify = (...args: (string | number)[]): string => {
+  const value = args.join(' ')
+
+  return value
+      .normalize('NFD') // split an accented letter in the base letter and the acent
+      .replace(/[\u0300-\u036f]/g, '') // remove all previously split accents
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9 ]/g, '') // remove all chars not letters, numbers and spaces (to be replaced)
+      .replace(/\s+/g, '-') // separator
+}
 
 export const advancedDayjs = (date: string | number | Date): dayjs.Dayjs => {
   dayjs.extend(advancedFormat);
