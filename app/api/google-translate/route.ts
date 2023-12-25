@@ -29,5 +29,3 @@ export async function GET(req:NextRequest){
   return NextResponse.json({data:translation});
 }
 export const dynamic = 'force-dynamic'
-export const revalidate = 60*60 
-

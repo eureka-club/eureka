@@ -6,10 +6,10 @@ import { Button, Col, Row, ButtonGroup, Form, Spinner } from 'react-bootstrap';
 import { Post } from '@prisma/client';
 import { ImCancelCircle } from 'react-icons/im';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
-import { CycleMosaicItem } from '../../../../../src/types/cycle';
-import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload, PostMosaicItem } from '../../../../../src/types/post';
-import TagsInputTypeAheadMaterial from '../../../../../src/components/forms/controls/TagsInputTypeAheadMaterial';
-import TagsInputMaterial from '../../../../../src/components/forms/controls/TagsInputMaterial';
+import { CycleMosaicItem } from '@/src/types/cycle';
+import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload, PostMosaicItem } from '@/src/types/post';
+import TagsInputTypeAheadMaterial from '@/src/components/forms/controls/TagsInputTypeAheadMaterial';
+import TagsInputMaterial from '@/src/components/forms/controls/TagsInputMaterial';
 import { useNotificationContext } from '@/src/hooks/useNotificationProvider';
 import { useRouter,usePathname, useParams } from 'next/navigation';
 import toast from 'react-hot-toast';
@@ -30,7 +30,6 @@ import {
 import Prompt from '@/src/components/post/PostPrompt';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useTopics from '@/src/hooks/useTopics';
-import { LANGUAGES } from '@/src/constants';
 import { useDictContext } from '@/src/hooks/useDictContext';
 import { t } from '@/src/get-dictionary';
 

@@ -85,7 +85,8 @@ const PostPrompt: FunctionComponent<Props> = ({
     setLoading(true);
     setShowOptions(true);
     setImages([]);
-    const { data: en_text } = await fetch(`/api/google-translate/?text=${text + ', ' + style}&target=en`).then((r) =>
+    const { data: en_text } = await fetch(`/api/google-translate/?text=${text + ', ' + style}&target=en`)
+    .then((r) =>
       r.json(),
     );
 
@@ -95,7 +96,8 @@ const PostPrompt: FunctionComponent<Props> = ({
         'Content-type': 'application/json',
       },
       body: JSON.stringify({ text: en_text }),
-    }).then((r) => r.json());
+    })
+    .then((r) => r.json());
 
     if (data) {
       const promises = (data as { b64_json: string }[]).map((d) => {

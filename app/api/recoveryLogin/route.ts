@@ -73,6 +73,4 @@ export const POST = async (req:NextRequest) => {
     return NextResponse.json({ error: SERVER_ERROR });
   } 
 }
-
 export const dynamic = 'force-dynamic'
-export const revalidate = 60*60 
