@@ -17,7 +17,7 @@ import { SERVER_ERROR } from '@/src/api_codes';
 import { NOTFOUND } from 'dns';
 
 export const POST = async (req:NextRequest) => {
-  try {debugger;
+  try {
     const body = await req.json();
     const {email:em} = body;
     const locale = getLocale(req);
@@ -73,3 +73,6 @@ export const POST = async (req:NextRequest) => {
     return NextResponse.json({ error: SERVER_ERROR });
   } 
 }
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 60*60 

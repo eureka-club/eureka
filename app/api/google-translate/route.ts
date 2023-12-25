@@ -29,3 +29,6 @@ export async function GET(req:NextRequest){
   const [translation] = await translate.translate(text, target);
   return NextResponse.json({data:translation});
 }
+export const dynamic = 'force-dynamic'
+export const revalidate = 60*60 
+
