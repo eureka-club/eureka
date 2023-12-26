@@ -14,12 +14,7 @@ const translate = new Translate({
   credentials,
   projectId
 });
-interface Props{
-  params:{
-    text:string;
-    target:string;
-  }
-}
+
 export async function GET(req:NextRequest){
   const {searchParams}=new URL(req.url);
   const text = searchParams.get('text');
