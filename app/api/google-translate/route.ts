@@ -1,4 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { BAD_REQUEST } from '@/src/api_codes';
 import { NextRequest, NextResponse } from 'next/server';
 const {Translate} = require('@google-cloud/translate').v2;
 
@@ -24,8 +25,11 @@ export async function GET(req:NextRequest){
   const text = searchParams.get('text');
   const target = searchParams.get('target')||'es';
 
-
-  const [translation] = await translate.translate(text, target);
-  return NextResponse.json({data:translation});
+  if(text && target){
+    const [translation] = await translate.translate(text, target);
+    return NextResponse.json({data:translation});
+  }
+  else 
+    return NextResponse.json({error:BAD_REQUEST});
 }
 export const dynamic = 'force-dynamic'
