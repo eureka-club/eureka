@@ -85,15 +85,16 @@ const PostPrompt: FunctionComponent<Props> = ({
     setLoading(true);
     setShowOptions(true);
     setImages([]);
-    const fgtres = await fetch(`/api/google-translate/?text=${text + ', ' + style}&target=en`)
-    if(fgtres.ok){
-      const { data: en_text } = await fgtres.json();
+    // const fgtres = await fetch(`/api/google-translate/?text=${text + ', ' + style}&target=en`)
+    // if(fgtres.ok){
+      // const { data: en_text } = await fgtres.json();
       const fores = await fetch('/api/openai/createImage', {
         method: 'POST',
         headers: {
           'Content-type': 'application/json',
         },
-        body: JSON.stringify({ text: en_text }),
+        body: JSON.stringify({ text }),
+        // body: JSON.stringify({ text: en_text }),
       })
       if(fores.ok){
         const {data,error} = await fores.json();
@@ -112,7 +113,7 @@ const PostPrompt: FunctionComponent<Props> = ({
         } else if (error) toast.error(error);
         setLoading(false);
       }
-    }
+    // }
   }
 
   const renderImages = () => {
