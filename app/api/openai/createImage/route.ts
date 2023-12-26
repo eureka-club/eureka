@@ -18,7 +18,7 @@ export async function POST(req:NextRequest){
 
   const n = n_ ? n_ : 3
   const size = s ? s : '256x256'
-  try{
+  try{debugger;
     const r = await openai.createImage({
       prompt,
       n,

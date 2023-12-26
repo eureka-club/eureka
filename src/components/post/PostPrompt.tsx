@@ -46,12 +46,12 @@ const PostPrompt: FunctionComponent<Props> = ({
   const { data: session, status } = useSession();
   const { show } = useModalContext();
 
-  useEffect(() => {
-    const fetchImages = async () => {
-      await searchImages();
-    };
-    if (text && text.length) fetchImages();
-  },[text]);
+  // useEffect(() => {
+  //   const fetchImages = async () => {
+  //     await searchImages();
+  //   };
+  //   if (text && text.length) fetchImages();
+  // },[text]);
 
   function onStyleChange(e: SelectChangeEvent<HTMLTextAreaElement>) {
     setStyle(e.target.value as string);
@@ -85,34 +85,34 @@ const PostPrompt: FunctionComponent<Props> = ({
     setLoading(true);
     setShowOptions(true);
     setImages([]);
-    const { data: en_text } = await fetch(`/api/google-translate/?text=${text + ', ' + style}&target=en`)
-    .then((r) =>
-      r.json(),
-    );
-
-    const { error, data } = await fetch('/api/openai/createImage', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify({ text: en_text }),
-    })
-    .then((r) => r.json());
-
-    if (data) {
-      const promises = (data as { b64_json: string }[]).map((d) => {
-        return new Promise((resolve, reject) => {
-          const img = new Image();
-          img.onload = function () {
-            setImages((res) => [...res, img]);
-            resolve(true);
-          };
-          img.src = `data:image/webp;base64,${d.b64_json}`;
-        });
-      });
-      await Promise.all(promises);
-    } else if (error) toast.error(error);
-    setLoading(false);
+    const fgtres = await fetch(`/api/google-translate/?text=${text + ', ' + style}&target=en`)
+    if(fgtres.ok){
+      const { data: en_text } = await fgtres.json();
+      const fores = await fetch('/api/openai/createImage', {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify({ text: en_text }),
+      })
+      if(fores.ok){
+        const {data,error} = await fores.json();
+        if (data) {
+          const promises = (data as { b64_json: string }[]).map((d) => {
+            return new Promise((resolve, reject) => {
+              const img = new Image();
+              img.onload = function () {
+                setImages((res) => [...res, img]);
+                resolve(true);
+              };
+              img.src = `data:image/webp;base64,${d.b64_json}`;
+            });
+          });
+          await Promise.all(promises);
+        } else if (error) toast.error(error);
+        setLoading(false);
+      }
+    }
   }
 
   const renderImages = () => {
