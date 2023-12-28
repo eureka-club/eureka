@@ -1,6 +1,6 @@
 import { SERVER_ERROR } from '@/src/api_codes';
 import { NextRequest, NextResponse } from 'next/server';
-import { Configuration, OpenAIApi,ImagesResponseDataInner } from "openai";
+import { Configuration, OpenAIApi } from "openai";
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -18,7 +18,7 @@ export async function POST(req:NextRequest){
 
   const n = n_ ? n_ : 3
   const size = s ? s : '256x256'
-  try{debugger;
+  try{
     const r = await openai.createImage({
       prompt,
       n,
@@ -34,3 +34,4 @@ export async function POST(req:NextRequest){
   }
 
 }
+export const dynamic = 'force-dynamic'

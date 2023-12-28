@@ -6,7 +6,7 @@ import { FC, useState, useEffect, SyntheticEvent, useCallback, MouseEvent } from
 import { Alert, Button, Spinner, Card, Row, Col, ButtonGroup } from "react-bootstrap";
 import { AiOutlineEnvironment } from 'react-icons/ai';
 import toast from 'react-hot-toast';
-import useCycle, { getCycle } from '@/src/hooks/useCycle';
+import useCycle from '@/src/hooks/useCycle';
 import useUsers, { getUsers } from '@/src/hooks/useUsers';
 import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLeaveActions';
 import { useModalContext } from '@/src/hooks/useModal';

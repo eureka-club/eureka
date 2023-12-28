@@ -5,10 +5,10 @@ import auth_config from '@/auth_config';
 import { getDictionary } from '@/src/get-dictionary';
 import { Locale } from '@/i18n-config';
 import { LANGUAGES } from '@/src/constants';
-import { redirect, useSearchParams } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import TransitionToPayCycle from './component/TransitionToPayCycle';
 import { getCycle } from '@/src/hooks/useCycle';
-import { getUsers } from '@/src/hooks/useUsers';
+import { getCyclePaticipants } from '../../cycle/[id]/hooks/useCycleParticipants';
 
 interface Props {
     params: { lang: Locale, id: string }
@@ -41,9 +41,9 @@ const TransitionSignUpToPayCyclePage: NextPage<Props> = async ({ params: { lang,
 
     const wcu = whereCycleParticipants(+id!);
 
-    let cycle = await getCycle(+id!, origin);
+    let cycle = await getCycle(+id!);
 
-    const participants = await getUsers(wcu, origin);
+    const participants = await getCyclePaticipants(+id!);
 
 
     return (

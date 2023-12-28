@@ -1,6 +1,6 @@
 import auth_config from "@/auth_config";
 import { INVALID_FIELD, SERVER_ERROR } from "@/src/api_codes";
-import { find } from "@/src/facades/cycle";
+import { GetParticipants, find } from "@/src/facades/cycle";
 import getLocale from "@/src/getLocale";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
@@ -24,14 +24,14 @@ export const GET = async (req:NextRequest,props:Props) => {
         if (cycle) {
           let ratingCount = cycle.ratings.length;
           const ratingAVG = cycle.ratings.reduce((p,c)=>c.qty+p,0)/ratingCount;
-
+          const participants = await GetParticipants(cycle.id);
           let currentUserIsParticipant = false;
           let currentUserIsCreator = false;
           let currentUserIsPending = false;
           let currentUserRating = 0;
           if(session){
             currentUserIsCreator = cycle.creatorId == session.user.id
-              currentUserIsParticipant =  currentUserIsCreator || cycle.participants.findIndex(p=>p.id==session.user.id) > -1;
+              currentUserIsParticipant =  currentUserIsCreator || participants?.findIndex(p=>p.id==session.user.id) > -1;
               currentUserIsPending = cycle.usersJoined.findIndex(p=>p.userId==session.user.id && p.pending) > -1;
               let r  = cycle.ratings.find(r=>r.userId==session.user.id)
               if(r)currentUserRating = r.qty;

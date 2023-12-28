@@ -32,21 +32,7 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
       },
     },
     usersJoined: { select: { userId: true, pending: true } },
-    participants: { select: { id: true } },
     ratings: { select: { userId: true, qty: true } },
-    works: {
-      include: {
-        _count: { select: { ratings: true } },
-        localImages: { select: { id:true,storedFile: true } },
-        favs: { select: { id: true } },
-        ratings: { select: { userId: true, qty: true } },
-        readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
-        posts: {
-          select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
-        },
-        editions:{include:{localImages: { select: { id:true,storedFile: true } }}},
-      },
-    },
     favs: { select: { id: true } },
     cycleWorksDates: {
       select: {

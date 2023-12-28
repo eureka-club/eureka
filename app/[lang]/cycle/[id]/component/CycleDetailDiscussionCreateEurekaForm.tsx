@@ -34,7 +34,7 @@ import { useDictContext } from '@/src/hooks/useDictContext';
 import { t } from '@/src/get-dictionary';
 
 interface Props {
-  cacheKey: [string,string];
+  cacheKey: string[];
   cycle: CycleMosaicItem;
   discussionItem?: string;
   setDiscussionItem: (val: string | undefined) => void;

@@ -49,7 +49,7 @@ const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false, lo
   }
 
   const handleSubmitSignIn = async (e:React.MouseEvent<HTMLButtonElement>)=>{
-    const form = formRef.current;debugger;
+    const form = formRef.current;
     setLoading(true);
     if(!form!.email.value){
       toast.error(t(dict,'EmailRequired'))

@@ -61,26 +61,62 @@ const MediathequePage: NextPage<Props> = async ({ params: { lang, slug } }) => {
         queryKey:['USER',id.toString(),'POSTS-CREATED'],
         queryFn:()=>pc
     })
+        pc.forEach(p=>{
+            qc.prefetchQuery({
+                queryKey:['POST',p.id.toString()],
+                queryFn:()=>p
+            })  
+        })
     qc.prefetchQuery({
         queryKey:['USER',id.toString(),'CYCLES-JOINED'],
         queryFn:()=>jc
     })
+        jc.forEach(c=>{
+            qc.prefetchQuery({
+                queryKey:['CYCLE',c.id.toString()],
+                queryFn:()=>c
+            })  
+        })
     qc.prefetchQuery({
         queryKey:['USER',id.toString(),'CYCLES-CREATED'],
         queryFn:()=>cc
     })
+        cc.forEach(c=>{
+            qc.prefetchQuery({
+                queryKey:['CYCLE',c.id.toString()],
+                queryFn:()=>c
+            })  
+        })
     qc.prefetchQuery({
         queryKey:['USER',id.toString(),'FAV-CYCLES'],
         queryFn:()=>fc
     })
+        fc.forEach(c=>{
+            qc.prefetchQuery({
+                queryKey:['CYCLE',c.id.toString()],
+                queryFn:()=>c
+            })  
+        })
     qc.prefetchQuery({
         queryKey:['USER',id.toString(),'FAV-POSTS'],
         queryFn:()=>fp
     })
+        fp.forEach(p=>{
+            qc.prefetchQuery({
+                queryKey:['POST',p.id.toString()],
+                queryFn:()=>p
+            })  
+        })
     qc.prefetchQuery({
         queryKey:['USER',id.toString(),'FAV-WORKS'],
         queryFn:()=>fw
     })
+        fw.forEach(w=>{
+            qc.prefetchQuery({
+                queryKey:['WORK',w.id.toString()],
+                queryFn:()=>w
+            })  
+        })
 
     return (
         <Layout dict={dict}>

@@ -25,9 +25,9 @@ const CyclePage: NextPage<Props> = async ({ params: { lang, id } }) => {
     }
 
     const session = await getServerSession(auth_config(lang));
-    const langs = session?.user.language ?? LANGUAGES[lang];
-    const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
-    let cycle = await getCycle(+id, origin);
+    // const langs = session?.user.language ?? LANGUAGES[lang];
+    // const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
+    let cycle = await getCycle(+id);
 
     
     return <Layout dict={dict} showNavBar={false}>

@@ -26,6 +26,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { CycleMosaicItem } from "@/src/types/cycle";
 import { t } from "@/src/get-dictionary";
 import { useDictContext } from "@/src/hooks/useDictContext";
+import useCycleWorks from '@/src/hooks/useCycleWorks';
 
 
 interface Props {
@@ -101,12 +102,12 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ cycle, session }) => 
   //const { data: cycle, isLoading: isLoadingCycle } = useCycle(+cycleId, { enabled: !!cycleId })
 
 
- 
+ const {data:cycleWorks}=useCycleWorks(cycle?.id!)
   const { data: { price, currency } = { currency: '', price: -1 } } = useCyclePrice(cycle);
   
   const works = cycle?.cycleWorksDates?.length
     ? cycle?.cycleWorksDates
-    : cycle?.works.map(w => ({ id: w.id, workId: w.id, work: w, startDate: new Date(), endDate: new Date() }))
+    : cycleWorks?.map(w => ({ id: w.id, workId: w.id, work: w, startDate: new Date(), endDate: new Date() }))
 
   const whereCycleParticipants = {
     where: {

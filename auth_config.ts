@@ -96,7 +96,7 @@ const config =  (locale:Locale,nextauth?:string[],nextAuthCallbackUrl?:string)=>
           });
         }
       },
-      createUser: async ({ user }) => {debugger;
+      createUser: async ({ user }) => {
         const segment = 'eureka-all-users';
         const r = await subscribe_to_segment({
           segment,
@@ -108,7 +108,6 @@ const config =  (locale:Locale,nextauth?:string[],nextAuthCallbackUrl?:string)=>
         if (!r) {
           mailchimpErrorHandler(user.email!, segment);
         }
-        debugger;
         // const {
         //   cookies,
         //   // query: { nextauth },

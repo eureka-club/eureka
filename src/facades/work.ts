@@ -217,11 +217,10 @@ export const createFromServerFields = async (
   payload: CreateWorkServerFields,
   coverImageUpload: StoredFileUpload,
 ): Promise<{ error?: string; work?: Work | Edition | null }> => {
-  // const payload = Object.entries(fields).reduce((memo, field) => {debugger;
+  // const payload = Object.entries(fields).reduce((memo, field) => {
   //   const [fieldName, fieldValues] = field;
   //   return { ...memo, [fieldName]: fieldValues };
   // }, {} as CreateWorkServerPayload);
-debugger;
   const existingLocalImage = await prisma.localImage.findFirst({
     where: { contentHash: coverImageUpload.contentHash },
   });

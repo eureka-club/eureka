@@ -1,10 +1,9 @@
 "use client"
 
 import { useSession } from 'next-auth/react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { FunctionComponent, MouseEvent, useState,useEffect } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import { CycleMosaicItem } from '@/src/types/cycle';
 import UserAvatar from '@/src/components/common/UserAvatar';
 import useWorks from '@/src/hooks/useWorks';
 import useUsers from '@/src/hooks/useUsers'
@@ -19,7 +18,7 @@ import { t } from '@/src/get-dictionary';
 import useCycle from '@/src/hooks/useCycle';
 interface Props {
   className?: string;
-  cacheKey:[string,string];
+  cacheKey:string[];
 }
 const whereCycleParticipants = (id:number)=>({
   where:{OR:[

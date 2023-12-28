@@ -31,6 +31,7 @@ import { useEnvContext } from "@/src/hooks/useEnvContext";
 import MosaicItem from "@/src/components/post/MosaicItemDetail";
 import { BiArrowBack } from 'react-icons/bi';
 import { useRouter } from 'next/navigation';
+import useCycleParticipants from '@/app/[lang]/cycle/[id]/hooks/useCycleParticipants';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -46,9 +47,10 @@ const Post: FC<Props> = ({ post, session }) => {
 
   const cacheKey: [string, string] = ['POST', `${post.id}`];
   const cycle = post.cycles?.length ? post.cycles[0] : null;
+  const {data:participants} = useCycleParticipants(cycle?.id!,{enabled:!!cycle});
   const work = post.works?.length ? post.works[0] : null;
 
-  const currentUserIsParticipant = cycle?.participants.findIndex(c => c.id == session.user.id);
+  const currentUserIsParticipant = participants?.findIndex(c => c.id == session.user.id);
   const isPublicPost = cycle?.access == 1;
 
   const canEditPost = (): boolean => {

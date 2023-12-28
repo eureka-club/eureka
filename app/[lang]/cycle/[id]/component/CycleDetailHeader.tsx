@@ -1,3 +1,4 @@
+"use client"
 import { useSession } from 'next-auth/react';
 import { Cycle, Work } from '@prisma/client';
 import { FunctionComponent, useState,useEffect } from 'react';
@@ -28,6 +29,7 @@ import { useDictContext } from '@/src/hooks/useDictContext';
 import { t } from '@/src/get-dictionary';
 import { useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
+import useCycleWorks from '../../../../../src/hooks/useCycleWorks';
 interface Props {
   post?: PostMosaicItem;
   work?: WorkMosaicItem;
@@ -65,10 +67,11 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   //const {data:cycle,isLoading:isLoadingCycle} = useCycle(cycleId,{enabled:!!cycleId})
   const {id} = useParams<{id:string}>();
   const {data:cycle}=useCycle(+id!);
+  const {data:cycleWorks}=useCycleWorks(+id)
   
   const works = cycle?.cycleWorksDates?.length 
     ? cycle?.cycleWorksDates?.map(c=>c.work)
-    : cycle?.works
+    : cycleWorks
   // const [works,setWorks] = useState(dataWorks?.works)
   // useEffect(()=>{
   //   if(dataWorks)setWorks(dataWorks.works)

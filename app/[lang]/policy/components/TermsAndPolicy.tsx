@@ -5,7 +5,6 @@ import styles from './TermsAndPolicy.module.css';
 import { Container, Grid } from '@mui/material';
 import { useDictContext } from '@/src/hooks/useDictContext';
 import { t as t_} from '@/src/get-dictionary';
-
 interface Props {
 }
 
@@ -49,3 +48,5 @@ const TermsAndPolicy: FunctionComponent<Props> = ({ }) => {
 };
 
 export default TermsAndPolicy;
+
+

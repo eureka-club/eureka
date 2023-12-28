@@ -1,29 +1,28 @@
 import { NextPage } from 'next';
-import { getPosts } from '@/src/hooks/usePosts';
-import { getWorks } from '@/src/hooks/useWorks';
 import { getDictionary } from '@/src/get-dictionary';
 import { getServerSession } from 'next-auth';
 import { Locale } from '@/i18n-config';
-import { getCycle } from '@/src/hooks/useCycle';
-import { getUsers } from '@/src/hooks/useUsers';
-import { LANGUAGES } from '@/src/constants';
 import Layout from '@/src/components/layout/Layout';
 import Cycle from './component/Cycle';
 import auth_config from '@/auth_config';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import GetPosts from '@/src/actions/GetPosts';
+import { getCycle } from '@/src/hooks/useCycle';
+import { getCyclePaticipants } from './hooks/useCycleParticipants';
+import { getCycleWorks } from '../../../../src/hooks/useCycleWorks';
 
-const whereCycleParticipants = (id: number) => ({
-  where: {
-    OR: [
-      { cycles: { some: { id } } }, //creator
-      { joinedCycles: { some: { id } } }, //participants
-    ],
-  },
-});
+// import { findAll } from '@/src/facades/cycle';
+// export async function generateStaticParams(){
+//   const cycles = await findAll();
+//   let paramsArray:{lang:Locale,id:string}[]=[];
 
-const whereCycleWorks = (id: number) => ({ where: { cycles: { some: { id } } } });
-const whereCyclePosts = (id: number) => ({ take: 8, where: { cycles: { some: { id } } } });
+//   return i18n.locales.reduce((p,lang)=>{
+//     const res = cycles.map(({id})=>({lang,id:id.toString()}));
+//     p = [...p,...res];
+//     return p;
+//   },paramsArray);
+// }
+
 
 interface Props {
   params:{lang:Locale,id:string}
@@ -39,46 +38,52 @@ const CyclePage: NextPage<Props> = async ({params:{lang,id}}) => {
     }
 
   const session = await getServerSession(auth_config(lang));
-    const langs = session?.user.language??LANGUAGES[lang];
-
-    const wcu = whereCycleParticipants(+id);
-    const wcp = whereCyclePosts(+id);
-    const wcw = whereCycleWorks(+id);
-
-    const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
-    let cycle = await getCycle(+id, origin);
     let metaTags = null;
+    const cycle = await getCycle(+id);
+    const works = await getCycleWorks(+id);
+
     if (cycle) {
         metaTags = {
         id: cycle?.id,
         title: cycle?.title,
         creator: cycle.creator.name,
-        works: cycle.works.map((x) => `${x.title} - ${x.author}`).join(),
+        works: works?.map((x) => `${x.title} - ${x.author}`).join(),
         storedFile: cycle?.localImages[0].storedFile,
         };
     }
 
-    const { DATE_FORMAT_SHORT } = process.env;
+    const participants = await getCyclePaticipants(+id);
+    const posts = await GetPosts(+id)
 
-    
-    const participants = await getUsers(wcu, origin);
-    const { works } = await getWorks(langs,wcw, origin);
     const qc = new QueryClient();
     qc.prefetchQuery({
       queryKey:['CYCLE',id.toString()],
-      queryFn:()=>getCycle(+id,origin)
+      queryFn: ()=> cycle
     })
     qc.prefetchQuery({
       queryKey:['CYCLE',id.toString(),'POSTS'],
-      queryFn:async ()=> await GetPosts(+id)
+      queryFn: ()=> posts
     })
-    // await queryClient.prefetchQuery(['USERS', JSON.stringify(wcu)], () => participants);
-    // await queryClient.prefetchQuery(['POSTS', JSON.stringify(wcp)], () => getPosts(ctx.locale!,wcp, origin));
-    // await queryClient.prefetchQuery(['WORKS', JSON.stringify(wcw)], () => works);
+      posts.forEach(p=>{
+        qc.prefetchQuery({
+          queryKey:['POST',id.toString()],
+          queryFn: ()=> p
+        })
+      })
+    qc.prefetchQuery({
+      queryKey:['CYCLE',id.toString(),'PARTICIPANTS'],
+      queryFn: ()=> participants
+    })
+      participants.forEach(p=>{
+        qc.prefetchQuery({
+          queryKey:['USER',id.toString()],
+          queryFn: ()=> p
+        })
+      })
 
     return   <Layout dict={dict} >
       <HydrationBoundary state={dehydrate(qc)}>
-        <Cycle participants={participants!} session={session!}/>
+        <Cycle />
       </HydrationBoundary>
     </Layout>
       

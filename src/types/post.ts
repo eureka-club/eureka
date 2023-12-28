@@ -8,7 +8,68 @@ import { Prisma } from '@prisma/client';
 export type PostMosaicItem = Prisma.PostGetPayload<{
   include:{
     works:{select:{id:true,author:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
-    cycles:{select:{id:true,access:true,localImages:{select:{storedFile:true}},creatorId:true,startDate:true,endDate:true,title:true,participants:{select:{id:true}}}},
+    cycles:{
+      include: {
+        creator: {
+          select: { id: true, name: true, email: true, countryOfOrigin: true },
+        },
+        localImages: {
+          select: {
+            storedFile: true,
+          },
+        },
+        guidelines: {
+          select: {
+            title: true,
+            contentText: true,
+          },
+        },
+        usersJoined: { select: { userId: true, pending: true } },
+        ratings: { select: { userId: true, qty: true } },
+        works: {
+          include: {
+            _count: { select: { ratings: true } },
+            localImages: { select: { id:true,storedFile: true } },
+            favs: { select: { id: true } },
+            ratings: { select: { userId: true, qty: true } },
+            readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+            posts: {
+              select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+            },
+            editions:{include:{localImages: { select: { id:true,storedFile: true } }}},
+          },
+        },
+        favs: { select: { id: true } },
+        cycleWorksDates: {
+          select: {
+            id: true,
+            startDate: true,
+            endDate: true,
+            workId: true,
+            work: {
+              include: {
+                _count: { select: { ratings: true } },
+                localImages: { select: { id:true,storedFile: true } },
+                favs: { select: { id: true } },
+                ratings: { select: { userId: true, qty: true } },
+                readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+                posts: {
+                  select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+                },
+                editions:{include:{localImages: { select: { id:true,storedFile: true } }}},
+              },
+            },
+          },
+        },
+        _count: {
+          select: {
+            participants: true,
+            ratings: true,
+          },
+        },
+        complementaryMaterials: true,
+      }
+    },
     favs:{select:{id:true,}},
     creator: {select:{id:true,name:true,photos:true,countryOfOrigin:true}},
     localImages: {select:{storedFile:true}},

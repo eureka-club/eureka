@@ -16,60 +16,60 @@ export type EditUserServerPayload = Prisma.UserUpdateInput & {
 }
 type UserFoolow = {
   select: {
-    id: true;
-    name: true;
-    email: true;
-    image: true;
-    roles: true;
-    createdAt: true;
-    updatedAt: true;
-    countryOfOrigin: true;
-    aboutMe: true;
-    dashboardType: true;
-    tags: true;
-    followedBy: { select: { id: true } };
-    following: { select: { id: true; name: true; image: true; photos: { select: { storedFile: true } } } };
+    id: true,
+    name: true,
+    email: true,
+    image: true,
+    roles: true,
+    createdAt: true,
+    updatedAt: true,
+    countryOfOrigin: true,
+    aboutMe: true,
+    dashboardType: true,
+    tags: true,
+    followedBy: { select: { id: true } },
+    following: { select: { id: true, name: true, image: true, photos: { select: { storedFile: true } } } },
     ratingWorks: {
       select: {
-        workId: true;
-        qty: true;
+        workId: true,
+        qty: true,
         work: {
           select: {
-            id: true;
-            author: true;
-            title: true;
-            type: true;
-            countryOfOrigin: true;
-            countryOfOrigin2: true;
-            favs: { select: { id: true } };
-            localImages: { select: { storedFile: true } };
-          };
-        };
-      };
-    };
+            id: true,
+            author: true,
+            title: true,
+            type: true,
+            countryOfOrigin: true,
+            countryOfOrigin2: true,
+            favs: { select: { id: true } },
+            localImages: { select: { storedFile: true } },
+          },
+        },
+      },
+    },
     readOrWatchedWorks: {
       select: {
-        workId: true;
-        year: true;
+        workId: true,
+        year: true,
         work: {
           select: {
-            id: true;
-            author: true;
-            title: true;
-            type: true;
-            countryOfOrigin: true;
-            countryOfOrigin2: true;
-            favs: { select: { id: true } };
-            localImages: { select: { storedFile: true } };
-          };
-        };
-      };
-    };
+            id: true,
+            author: true,
+            title: true,
+            type: true,
+            countryOfOrigin: true,
+            countryOfOrigin2: true,
+            favs: { select: { id: true } },
+            localImages: { select: { storedFile: true } },
+          },
+        },
+      },
+    },
     ratingCycles:{select:{cycleId:true,qty:true}},
     photos:{select:{storedFile:true}},
     reactions:{select:{postId:true,unified:true,emoji:true}},
     language:true,
-  };
+  },
 };
 
 export type UserMosaicItem = Prisma.UserGetPayload<UserFoolow> & {

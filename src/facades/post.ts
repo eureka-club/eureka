@@ -9,18 +9,67 @@ export const find = async (id: number): Promise<PostMosaicItem | null> => {
     where: { id },
     include: {
       works: { select: { id: true, title: true,author:true, type: true, localImages: { select: { storedFile: true } } } },
-      cycles: {
-        select: {
-          id: true,
-          creator: { select: { name: true } },
-          localImages: { select: { storedFile: true } },
-          creatorId: true,
-          startDate: true,
-          endDate: true,
-          title: true,
-          access:true,
-          participants:{select:{id:true}}
-        },
+      cycles:{
+        include: {
+          creator: {
+            select: { id: true, name: true, email: true, countryOfOrigin: true },
+          },
+          localImages: {
+            select: {
+              storedFile: true,
+            },
+          },
+          guidelines: {
+            select: {
+              title: true,
+              contentText: true,
+            },
+          },
+          usersJoined: { select: { userId: true, pending: true } },
+          ratings: { select: { userId: true, qty: true } },
+          works: {
+            include: {
+              _count: { select: { ratings: true } },
+              localImages: { select: { id:true,storedFile: true } },
+              favs: { select: { id: true } },
+              ratings: { select: { userId: true, qty: true } },
+              readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+              posts: {
+                select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+              },
+              editions:{include:{localImages: { select: { id:true,storedFile: true } }}},
+            },
+          },
+          favs: { select: { id: true } },
+          cycleWorksDates: {
+            select: {
+              id: true,
+              startDate: true,
+              endDate: true,
+              workId: true,
+              work: {
+                include: {
+                  _count: { select: { ratings: true } },
+                  localImages: { select: { id:true,storedFile: true } },
+                  favs: { select: { id: true } },
+                  ratings: { select: { userId: true, qty: true } },
+                  readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+                  posts: {
+                    select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+                  },
+                  editions:{include:{localImages: { select: { id:true,storedFile: true } }}},
+                },
+              },
+            },
+          },
+          _count: {
+            select: {
+              participants: true,
+              ratings: true,
+            },
+          },
+          complementaryMaterials: true,
+        }
       },
       favs: { select: { id: true } },
       creator: { select: { id: true, name: true, photos: true, countryOfOrigin: true } },
@@ -38,18 +87,67 @@ export const findAll = async (props?: Prisma.PostFindManyArgs, page?: number): P
     orderBy: { createdAt: 'desc' },
     include: {
       works: { select: { id: true, title: true,author:true, type: true, localImages: { select: { storedFile: true } } } },
-      cycles: {
-        select: {
-          id: true,
-          creator: { select: { name: true } },
-          localImages: { select: { storedFile: true } },
-          creatorId: true,
-          startDate: true,
-          endDate: true,
-          title: true,
-          access:true,
-          participants:{select:{id:true}}
-        },
+      cycles:{
+        include: {
+          creator: {
+            select: { id: true, name: true, email: true, countryOfOrigin: true },
+          },
+          localImages: {
+            select: {
+              storedFile: true,
+            },
+          },
+          guidelines: {
+            select: {
+              title: true,
+              contentText: true,
+            },
+          },
+          usersJoined: { select: { userId: true, pending: true } },
+          ratings: { select: { userId: true, qty: true } },
+          works: {
+            include: {
+              _count: { select: { ratings: true } },
+              localImages: { select: { id:true,storedFile: true } },
+              favs: { select: { id: true } },
+              ratings: { select: { userId: true, qty: true } },
+              readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+              posts: {
+                select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+              },
+              editions:{include:{localImages: { select: { id:true,storedFile: true } }}},
+            },
+          },
+          favs: { select: { id: true } },
+          cycleWorksDates: {
+            select: {
+              id: true,
+              startDate: true,
+              endDate: true,
+              workId: true,
+              work: {
+                include: {
+                  _count: { select: { ratings: true } },
+                  localImages: { select: { id:true,storedFile: true } },
+                  favs: { select: { id: true } },
+                  ratings: { select: { userId: true, qty: true } },
+                  readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+                  posts: {
+                    select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+                  },
+                  editions:{include:{localImages: { select: { id:true,storedFile: true } }}},
+                },
+              },
+            },
+          },
+          _count: {
+            select: {
+              participants: true,
+              ratings: true,
+            },
+          },
+          complementaryMaterials: true,
+        }
       },
       favs: { select: { id: true } },
       creator: { select: { id: true, name: true, photos: true, countryOfOrigin: true } },

@@ -5,12 +5,9 @@ import { getServerSession } from 'next-auth';
 import { getDictionary } from '@/src/get-dictionary';
 import { Locale } from '@/i18n-config';
 import auth_config from '@/auth_config';
-import { getCycle } from '@/src/hooks/useCycle';
 import Layout from '@/src/components/layout/Layout';
-import { LANGUAGES } from '@/src/constants';
 import { redirect } from 'next/navigation';
-
-
+import { getCycle } from '@/src/hooks/useCycle';
 
 interface Props {
     params: { lang: Locale, id: string }
@@ -28,11 +25,12 @@ const EditCyclePage: NextPage<Props> = async ({ params: { lang, id } }) => {
     const session = await getServerSession(auth_config(lang));
     if (!session?.user) redirect('/');
 
-    const langs = session?.user.language ?? LANGUAGES[lang];
+    // const langs = session?.user.language ?? LANGUAGES[lang];
 
-    const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
+    // const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
 
-    let cycle = await getCycle(+id, origin);
+    let cycle = await getCycle(+id);
+
 
     return (<>
         <Head>

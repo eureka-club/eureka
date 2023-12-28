@@ -9,7 +9,12 @@ import { Locale } from '@/i18n-config';
 import { LANGUAGES } from '@/src/constants';
 import { redirect } from 'next/navigation';
 import { getUser } from '@/src/hooks/useUser';
-import getLocale from '@/src/getLocale';
+
+import {i18n} from '@/i18n-config'
+export function generateStaticParams(){
+  const res= i18n.locales.map((lang:string)=>({lang}));
+  return res;
+}
 
 interface Props {
     params: { lang: Locale }

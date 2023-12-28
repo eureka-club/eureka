@@ -24,7 +24,6 @@ const SavedForLater:FC<Props> = ({goTo}) => {
   const {data:favPosts} = useFavPosts(id!);
   const {data:favCycles} = useFavCycles(id!);
   const {data:favWorks} = useFavWorks(id!);
-debugger;
   const { dict } = useDictContext();
 
   const items = [...favPosts??[],...favCycles??[],...favWorks??[]] as PostMosaicItem[]|CycleMosaicItem[]|WorkMosaicItem[];

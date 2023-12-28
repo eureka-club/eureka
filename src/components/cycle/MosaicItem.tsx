@@ -28,6 +28,7 @@ import { CycleMosaicItem } from '@/src/types/cycle';
 import CycleSocialInteraction from '../common/CycleSocialInteraction';
 import { t } from '@/src/get-dictionary';
 import { useDictContext } from '@/src/hooks/useDictContext';
+import useCycleParticipants from '@/app/[lang]/cycle/[id]/hooks/useCycleParticipants';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -69,47 +70,19 @@ const MosaicItem: FunctionComponent<Props> = ({
   const { data: session, status } = useSession();
   const isLoadingSession = status === "loading"
   const { data: user } = useUser(session?.user.id!, { enabled: !!session?.user.id });
-  const [countParticipants, setCountParticipants] = useState<number>()
   const { dict } = useDictContext()
 
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
-  const { data } = useCycle(cycleId, { enabled: !!cycleId && !cycleItem })
-
-  const [cycle, setCycle] = useState(cycleItem)
-  useEffect(() => {
-    if (!cycleItem && data) setCycle(data)
-  }, [data])
+ 
+  const { data: cycle } = useCycle(cycleId)
+  const {data:participants} = useCycleParticipants(cycleId);
 
   const { show } = useModalContext()
 
-  const whereCycleParticipants = {
-    where: {
-      OR: [
-        { cycles: { some: { id: cycle?.id } } },//creator
-        { joinedCycles: { some: { id: cycle?.id } } },//participants
-      ],
-    }
-  };
-  const { data: participants, isLoading: isLoadingParticipants } = useUsers(whereCycleParticipants,
-    {
-      enabled: !!cycle?.id,
-      from: 'cycle/Mosaic'
-    }
-  )
-
   // const isFetchingParticipants = useIsFetching(['USERS',JSON.stringify(whereCycleParticipants)])
 
-  useEffect(() => {
-    if (cycle && user && participants) {
-      setCountParticipants(participants.length);
-      const idx = participants.findIndex(p => p.id == user.id);
-    }
-  }, [user, cycle, participants, session]);
-
-
-  // const { t } = useTranslation('common');
-  const isFetchingCycle = useIsFetching({ queryKey: ['CYCLE', `${cycle?.id}`] })
+  const isFetchingCycle = useIsFetching({ queryKey: ['CYCLE', `${cycleId}`] })
 
   const isActive = () => cycle ? dayjs().isBetween(cycle.startDate, cycle.endDate, null, '[]') : false;
 
@@ -177,7 +150,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     return !loading;
   };
   const onImgClick = () => {
-    if (canNavigate()) router.push(`/cycle/${cycle?.id}`);
+    if (canNavigate()) router.push(`/cycle/${cycleId}`);
     setLoading(true);
   };
 
@@ -206,7 +179,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           role="presentation"
         >
           {!canNavigate() && <Spinner className="position-absolute top-50 start-50" size="sm" animation="grow" variant="info" style={{ zIndex: '1' }} />}
-          {imageLink ? <a href={`/cycle/${cycle?.id}`}>{img}</a> : img}
+          {imageLink ? <a href={`/cycle/${cycleId}`}>{img}</a> : img}
         </div>
       );
     }
@@ -224,7 +197,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           <span className='fs-6'>{t(dict, 'MyCycle')}</span> {/*MyCycle*/}
         </Button>
 
-      if (cycle.participants.findIndex(p => p.id == session?.user.id) > -1)
+      if (participants && participants.findIndex(p => p.id == session?.user.id) > -1)
         return <Button disabled={isPending()} onClick={handleLeaveCycleClick} variant="button border-primary bg-white text-primary"
           className={`rounded rounded-3  ${(size == 'lg') ? styles.joinButtonContainerlg : styles.joinButtonContainer}`} size='sm' >
           <span className='fs-6'>{t(dict, 'leaveCycleLabel')}</span>
@@ -269,7 +242,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             }
           </Badge>
           <div className={`h-100 d-flex justify-content-center align-items-end`}>
-            {showJoinOrLeaveButton && !(cycle.participants.findIndex(p => p.id == session?.user.id) > -1 && cycle.access == 4) && renderJoinLeaveCycleBtn()}
+            {showJoinOrLeaveButton && !(participants && participants.findIndex(p => p.id == session?.user.id) > -1 && cycle.access == 4) && renderJoinLeaveCycleBtn()}
           </div>
         </div>
 
@@ -278,17 +251,16 @@ const MosaicItem: FunctionComponent<Props> = ({
       {showSocialInteraction && cycle && (
         <Card.Footer className={`${styles.footer}  d-flex justifify-content-between`}>
           <CycleSocialInteraction
-            cacheKey={cacheKey || ['CYCLE', cycle.id.toString()]}
+            cycleId={cycleId}
+            cacheKey={cacheKey || ['CYCLE', cycleId.toString()]}
             showButtonLabels={showButtonLabels}
             showRating={false}
             showCounts
-            entity={cycle}
             showTrash={showTrash}
             showCreateEureka={showCreateEureka}
             showSaveForLater={showSaveForLater}
             className="w-100"
           />
-
         </Card.Footer>
       )}
     </Card>

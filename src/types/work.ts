@@ -1,13 +1,4 @@
 import { Edition, Prisma } from '@prisma/client';
-import { EditionMosaicItem } from './edition';
-
-// export type WorkDetail = Prisma.WorkGetPayload<{
-//   include: {
-//     localImages: true;
-//     favs: true;
-//     ratings: true;
-//   };
-// }>;
 
 export const getWorksProps = (terms:string[])=>{
   return {

@@ -38,7 +38,8 @@ import SignInForm from '@/src/components/forms/SignInForm';
 import _ from 'lodash';
 import { t } from '@/src/get-dictionary';
 import { useDictContext } from '@/src/hooks/useDictContext';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import useCycle from '@/src/hooks/useCycle';
 interface SocialInteractionClientPayload {
   socialInteraction: 'fav' | 'rating';
   doCreate: boolean;
@@ -46,7 +47,7 @@ interface SocialInteractionClientPayload {
 }
 
 interface Props {
-  entity: CycleMosaicItem;
+  cycleId:number;
   showCounts?: boolean;
   showButtonLabels?: boolean;
   cacheKey: string[];
@@ -59,7 +60,7 @@ interface Props {
 }
 
 const CycleSocialInteraction: FunctionComponent<Props> = ({
-  entity,
+  cycleId,
   showCounts = false,
   showButtonLabels = true,
   cacheKey = '',
@@ -71,8 +72,8 @@ const CycleSocialInteraction: FunctionComponent<Props> = ({
   className,
 }) => {
   const router = useRouter();
-  const pathname = usePathname();
-  
+  const {data:cycle}= useCycle(cycleId);
+debugger;
   // const [session] = useSession() as [Session | null | undefined, boolean];
   const { data: session, status } = useSession();
   const idSession = session ? session.user.id : null;
@@ -108,24 +109,24 @@ const CycleSocialInteraction: FunctionComponent<Props> = ({
 
   useEffect(() => {
     let ratingByMe = false;
-    if (session && entity && entity.favs) {
-      const favoritedByMe = entity.favs.findIndex((f) => f.id == session.user.id) > -1;
+    if (session && cycle && cycle?.favs) {
+      const favoritedByMe = cycle?.favs.findIndex((f) => f.id == session.user.id) > -1;
       setcurrentUserIsFav(() => favoritedByMe);
 
-      ratingByMe = !!entity.currentUserRating;
+      ratingByMe = !!cycle?.currentUserRating;
       setMySocialInfo({ favoritedByMe, ratingByMe });
-      setQty(entity.ratingAVG || 0);
+      setQty(cycle?.ratingAVG || 0);
        
     }
-  }, [entity, session]);
+  }, [cycle, session]);
 
   const openSignInModal = () => {
     setQty(0);
     show(<SignInForm/>);
   };
 
-  const shareUrl = `${WEBAPP_URL}/cycle/${entity.id}`
-  const shareTextDynamicPart = `${t(dict,'cycleShare')} ${'title' in entity ? `"${entity.title}"` : ''}`;
+  const shareUrl = `${WEBAPP_URL}/cycle/${cycleId}`
+  const shareTextDynamicPart = `${t(dict,'cycleShare')} ${cycle && 'title' in cycle ? `"${cycle?.title}"` : ''}`;
 
   const shareText = `${shareTextDynamicPart}  ${t(dict,'complementShare')}`;
   const {
@@ -138,7 +139,7 @@ const CycleSocialInteraction: FunctionComponent<Props> = ({
         if (session) {
           //[user that does action] has saved the [title of book/movie/documentary/cycle] for later. Check it out.
           let translationKey = 'userHasRating';
-          // let notificationContextURL = `/${entityEndpoint}/${entity.id}`;
+          // let notificationContextURL = `/${entityEndpoint}/${cycle?.id}`;
           if (socialInteraction == 'fav') {
             translationKey = 'userHasSaveForLater';
           }
@@ -146,11 +147,11 @@ const CycleSocialInteraction: FunctionComponent<Props> = ({
           // const notificationMessage = `${translationKey}!|!${JSON.stringify({
           //   userName: user?.name,
           //   entity: entityEndpoint.replace(/\w/, (c) => c.toUpperCase()),
-          //   entityTitle: entity.title,
+          //   entityTitle: cycle?.title,
           // })}`;
   
           // const notificationToUsers = user?.followedBy.map((f) => f.id);
-          const res = await fetch(`/api/cycle/${entity.id}/${socialInteraction}`, {
+          const res = await fetch(`/api/cycle/${cycle?.id}/${socialInteraction}`, {
             method: doCreate ? 'POST' : 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -164,10 +165,10 @@ const CycleSocialInteraction: FunctionComponent<Props> = ({
         return null;
       },
       onMutate: async (payload) => {
-        if (session && user && payload.socialInteraction === 'fav') {debugger;
+        if (session && user && payload.socialInteraction === 'fav') {
           await queryClient.cancelQueries({queryKey:['USER', `${session.user.id}`]});
           await queryClient.cancelQueries({queryKey:[cacheKey]});
-          await queryClient.cancelQueries({queryKey:['CYCLE',`${entity.id}`]});
+          await queryClient.cancelQueries({queryKey:['CYCLE',`${cycle?.id}`]});
 
           const prevUser = queryClient.getQueryData(['USER', `${session.user.id}`]);
           const prevEntity = queryClient.getQueryData([cacheKey]);
@@ -175,14 +176,14 @@ const CycleSocialInteraction: FunctionComponent<Props> = ({
           setcurrentUserIsFav((p) => !p);
 
           // if (!payload.doCreate) {
-          //   favInUser = favInUser.filter((i: { id: number }) => i.id !== entity.id);
-          //   favs = entity.favs.filter((i) => i.id != session.user.id);
+          //   favInUser = favInUser.filter((i: { id: number }) => i.id !== cycle?.id);
+          //   favs = cycle?.favs.filter((i) => i.id != session.user.id);
           // } else {
           //   favInUser?.push(entity as any);
           //   favs.push({ id: +session.user.id });
           // }
           // queryClient.setQueryData(['USER', `${session.user.id}`], { ...user, [entityFavKey]: favInUser });
-          queryClient.setQueryData(['CYCLE', `${entity.id}`], { ...entity });
+          queryClient.setQueryData(['CYCLE', `${cycle?.id}`], { ...cycle });
           queryClient.setQueryData(['USER', `${session.user.id}`], { ...user });
 
           return { prevUser, prevEntity };
@@ -194,7 +195,7 @@ const CycleSocialInteraction: FunctionComponent<Props> = ({
           if ('prevEntity' in context) queryClient.setQueryData([cacheKey], context?.prevEntity);
         }
         queryClient.invalidateQueries({queryKey:['USER', `${session?.user.id}`]});
-        queryClient.invalidateQueries({queryKey:['CYCLE', `${entity.id}`]});
+        queryClient.invalidateQueries({queryKey:['CYCLE', `${cycle?.id}`]});
         queryClient.invalidateQueries({queryKey:[cacheKey]});
       },
     },
@@ -214,12 +215,12 @@ const CycleSocialInteraction: FunctionComponent<Props> = ({
       return null;
     }
     if (canNavigate()) {
-      router.push(`/cycle/${entity.id}?tabKey=eurekas`);
+      router.push(`/cycle/${cycleId}?tabKey=eurekas`);
     }
   };
 
   const canNavigate = () => {
-    return !(!entity || isLoadingSession);
+    return !(!cycle || isLoadingSession);
   };
 
   const popoverShares = (
@@ -269,26 +270,22 @@ const CycleSocialInteraction: FunctionComponent<Props> = ({
   };
 
   const getFullSymbol = () => {
-    if (entity) {
-      if (isWorkMosaicItem(entity) || isCycleMosaicItem(entity))
-        if (entity.currentUserRating)
+    if (cycle) {
+      if (isWorkMosaicItem(cycle) || isCycleMosaicItem(cycle))
+        if (cycle?.currentUserRating)
           return <GiBrain className="text-secondary" /*  style={{ color: 'var(--eureka-blue)' }} */ />;
     }
     return <GiBrain className="text-primary" /* style={{ color: 'var(--eureka-green)' }} */ />;
   };
 
   const getRatingsCount = () => {
-    let count = 0;
-    if (isWorkMosaicItem(entity)) {
-      count = entity._count.ratings;
-    } else if (isCycleMosaicItem(entity)) count = entity._count.ratings;
-
+    let count = cycle?._count.ratings;
     return <span className={styles.ratingsCount}>{`${count}`}</span>;
   };
 
   const renderSaveForLater = () => {
-    if (!entity || isLoadingSession) return '...';
-    if (entity)
+    if (!cycle || isLoadingSession) return '...';
+    if (cycle)
       return (
         <Button
           variant="link"
@@ -309,8 +306,8 @@ const CycleSocialInteraction: FunctionComponent<Props> = ({
   };
 
   const renderCreateEureka = () => {
-    if (!entity || isLoadingSession) return '...';
-    if (showCreateEureka && (isWork(entity) || isCycle(entity)))
+    if (!cycle || isLoadingSession) return '...';
+    if (showCreateEureka)
       return (
         <>
           <Button
@@ -333,18 +330,10 @@ const CycleSocialInteraction: FunctionComponent<Props> = ({
   };
 
   const getInitialRating = () => {
-    if (entity) {
-      if (isCycleMosaicItem(entity) || isWorkMosaicItem(entity)) {
-        return entity.ratingAVG;
-      }
-    }
+    return cycle?.ratingAVG;
   };
   const getRatingLabelInfo = () => {
-    if (entity) {
-      if (isCycleMosaicItem(entity) || isWorkMosaicItem(entity))
-        return !entity.currentUserRating ? <span className={styles.ratingLabelInfo}>{t(dict,'Rate it')}:</span> : '';
-    }
-    return '';
+    return !cycle?.currentUserRating ? <span className={styles.ratingLabelInfo}>{t(dict,'Rate it')}:</span> : '';
   };
   if (isLoadingSession || isLoadingUser) return <Spinner animation="grow" variant="info" size="sm" />;
   return (

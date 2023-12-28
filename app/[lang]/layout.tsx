@@ -4,17 +4,11 @@ import './globals.css'
 //const inter = Inter({ subsets: ['latin'] })
 import { Locale, i18n } from '@/i18n-config'
 import './scss/custom.scss';
-import { EnvContext } from '@/src/hooks/useEnvContext';
-import Layout from '@/src/components/layout/Layout';
 import { getDictionary } from '@/src/get-dictionary';
-import { LANGUAGES } from '@/src/constants';
-import { getServerSession } from 'next-auth';
-import auth_config from '@/auth_config';
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return i18n.locales.map((locale) => ({ lang: locale }))
 }
-
 
 export default async function RootLayout({
   children,
@@ -23,8 +17,6 @@ export default async function RootLayout({
   children: React.ReactNode,
   params: { lang: Locale }
 }) {
-  // const session = await getServerSession(auth_config(params.lang));
-  // const langs = (session?.user.language ?? params.lang)?.split(',').map(l=>LANGUAGES[l]).join(',');
   
   const dictionary = await getDictionary(params.lang);
   const dict: Record<string, string> = { ...dictionary['meta'], ...dictionary['common'],

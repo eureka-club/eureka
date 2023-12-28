@@ -2,7 +2,7 @@
 
 import dayjs from 'dayjs';
 import { useAtom } from 'jotai';
-import { FunctionComponent, MouseEvent, useState, useRef, useEffect, Suspense, lazy, FC } from 'react';
+import { FunctionComponent, MouseEvent, useState, useRef, Suspense, lazy, FC } from 'react';
 import {
   TabPane,
   TabContent,
@@ -19,31 +19,24 @@ import {
 import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
 import { BiArrowBack } from 'react-icons/bi';
 import { MosaicContext } from '@/src/hooks/useMosaicContext';
-
 import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR /* , HYVOR_WEBSITE_ID, WEBAPP_URL */ } from '@/src/constants';
-
 import HyvorComments from '@/src/components/common/HyvorComments';
 import detailPagesAtom from '@/src/atoms/detailPages';
 import globalModalsAtom from '@/src/atoms/globalModals';
-
 import styles from './CycleDetail.module.css';
 import { useCycleContext } from '@/src/hooks/useCycleContext';
 import CycleDetailHeader from './CycleDetailHeader';
-// import usePosts,{getPosts} from '@/src/hooks/usePosts'
-import useUsers from '@/src/hooks/useUsers'
 import MosaicItemPost from '@/src/components/post/MosaicItem'
 import MosaicItemUser from '@/components/user/MosaicItem'
-// import { useInView } from 'react-intersection-observer';
 import { CycleMosaicItem } from '@/src/types/cycle';
-import { useQueryClient } from '@tanstack/react-query';
 import { t } from '@/src/get-dictionary';
 import { useDictContext } from '@/src/hooks/useDictContext';
 import { Session } from "@/src/types";
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import GetPosts from '../../../../../src/actions/GetPosts';
-import { PostMosaicItem } from '@/src/types/post';
 import useCycle from '@/src/hooks/useCycle';
 import useCyclePosts from '@/src/hooks/useCyclePosts';
+import useCycleParticipants from '../hooks/useCycleParticipants';
+import useCycleWorks from '../../../../../src/hooks/useCycleWorks';
 
 const CycleDetailDiscussion = lazy(() => import ('./CycleDetailDiscussion')) 
 const CycleDetailWorks = lazy(() => import('./CycleDetailWorks'))
@@ -62,12 +55,14 @@ const CycleDetail: FunctionComponent<Props> = ({
   const tk = searchParams.get('tabKey');
 
   const [tabKey,setTabKey] = useState<string|null>(tk);
-  const { dict, langs } = useDictContext();
-  const queryClient = useQueryClient()
+  const { dict } = useDictContext();
   
   const {id} = useParams<{id:string}>();
   const {data:cycle} = useCycle(+id!);
   const {data:posts} = useCyclePosts(+id!);
+  const {data:participants} = useCycleParticipants(+id);
+  const {data:wk} = useCycleWorks(+id);
+
   // const [ref, inView] = useInView({
   //   triggerOnce: false,
   // });
@@ -78,21 +73,8 @@ const CycleDetail: FunctionComponent<Props> = ({
 
   const works = cycle?.cycleWorksDates?.length
     ? cycle?.cycleWorksDates
-    : cycle?.works.map(w=>({id:w.id,workId:w.id,work:w,startDate:new Date(),endDate:new Date()}))
-
-  const whereCycleParticipants = {
-    where:{OR:[
-      {cycles: { some: { id: cycle?.id } }},//creator
-      {joinedCycles: { some: { id: cycle?.id } }},//participants
-    ]} 
-  };
-  const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants,
-    {
-      enabled:!!cycle?.id,
-      from:'CycleDetail'
-    }
-  )
-
+    : wk?.map(w=>({id:w.id,workId:w.id,work:w,startDate:new Date(),endDate:new Date()}))
+  
   const cyclePostsProps = {take:8,where:{cycles:{some:{id:cycle?.id}}}}
   
   // const {data:dataPosts} = usePosts(cyclePostsProps,{enabled:!!cycle.id})
@@ -272,7 +254,7 @@ const CycleDetail: FunctionComponent<Props> = ({
               <HyvorComments entity='cycle' id={`${cycle.id}`} session={session}  />
           </TabPane>
           <TabPane eventKey="eurekas">
-              <CycleDetailDiscussion className="mb-5" cacheKey={['POSTS',JSON.stringify(cyclePostsProps)]} />
+              <CycleDetailDiscussion className="mb-5" cacheKey={['CYCLE',cycle.id.toString(),'POSTS']} />
               <Row>
                 <Col>
                   <MosaicContext.Provider value={{ showShare: true }}>
@@ -324,7 +306,7 @@ const CycleDetail: FunctionComponent<Props> = ({
 
           <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
             <NavLink eventKey="participants">
-              <span className="mb-3">{t(dict,'Participants')} ({cycle.participants.length})</span>
+              <span className="mb-3">{t(dict,'Participants')} ({participants?.length})</span>
             </NavLink>
           </NavItem>
         </>

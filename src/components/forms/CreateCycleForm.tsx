@@ -402,7 +402,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   // const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
   const worksDisscussionsDates = useRef<HTMLDivElement>() as RefObject<HTMLDivElement>;
 
-  const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {debugger;
+  const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
     if (!selectedWorksForCycle.length || !cycleCoverImageFile) {

@@ -4,8 +4,13 @@ import Manifest from './components/Manifest';
 import { Locale } from '@/i18n-config';
 import { getDictionary } from '@/src/get-dictionary';
 import Layout from '@/src/components/layout/Layout';
-import { getServerSession } from 'next-auth';
-import { DictContext } from '@/src/hooks/useDictContext';
+
+import {i18n} from '@/i18n-config'
+export function generateStaticParams(){
+  const res= i18n.locales.map((lang:string)=>({lang}));
+  return res;
+}
+
 
 interface Props {
   params: { lang: Locale }
@@ -24,11 +29,8 @@ export async function generateMetadata(
 }
 
 const ManifestPage: NextPage<Props> = async ({ params: { lang } }) => {
-  // const { t } = useTranslation('manifest');
   const dictionary = await getDictionary(lang);
   const dict: Record<string, string> = { ...dictionary['manifest'], ...dictionary['meta'], ...dictionary['common'], ...dictionary['topics'], ...dictionary['navbar'], ...dictionary['signInForm'] }
-  const session = await getServerSession()
-  const langs = session?.user.language??lang
 
   return (<>
     <Head>
