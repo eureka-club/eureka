@@ -31,6 +31,7 @@ import {
 } from '../../types/cycle';
 import LanguageSelect from './controls/LanguageSelect';
 import styles from './CreateCycleForm.module.css';
+import ImageFileSelect from './controls/ImageFileSelect';
 
 dayjs.extend(utc)
 interface Props {
@@ -44,6 +45,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
   const editorRef = useRef<any>(null);
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
   const { locale } = useRouter();
+  const [cycleCoverImageFile, setCycleCoverImageFile] = useState<File | null>(null);
 
   const router = useRouter();
   const typeaheadRefOC = useRef<AsyncTypeahead<{ id: number; code: string; label: string }>>(null);
@@ -114,10 +116,13 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
     isError: isEditCycleReqError,
     isSuccess: isEditCycleReqSuccess,
   } = useMutation(async (payload: EditCycleClientPayload) => {
+    const formData = new FormData();
+    Object.entries(payload).forEach(([k,v])=>{
+      formData.append(k,v);
+    });
     const res = await fetch(`/api/cycle/${router.query.id}`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      body: formData,
     });
     return res.json();
   },{
@@ -179,18 +184,18 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
     const payload: EditCycleClientPayload = {
       id: cycle.id,
       // includedWorksIds: selectedWorksForCycle.map((work) => work.id),
-      // coverImage: cycleCoverImageFile,
+      ...cycleCoverImageFile && {coverImage: cycleCoverImageFile},
       access: access || 1,
       title: form.cycleTitle.value,
       languages: language,
       startDate: form.startDate.value,
       endDate: form.endDate.value,
-      countryOfOrigin: countryOrigin,
-      // contentText: form.description.value,
+      ... countryOrigin && {countryOfOrigin: countryOrigin},
       contentText: editorRef.current.getContent(), // ;form.description.value,
-      // complementaryMaterials,
       tags,
       topics: items.join(','),
+      // contentText: form.description.value,
+      // complementaryMaterials,
     };
 
     await execEditCycle(payload);
@@ -234,7 +239,35 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
       {cycle && (
         <Form onSubmit={handleSubmit} ref={formRef} className={className}>
           <h4 className="mt-2 mb-4">{t('Edit Cycle')}</h4>
-
+          <Row>
+          <ImageFileSelect
+                  acceptedFileTypes="image/*"
+                  file={cycleCoverImageFile}
+                  setFile={setCycleCoverImageFile}
+                  required={false}
+                >
+                  {(imagePreview) => (
+                    <div className={styles.outlinedBlock}>
+                      {imagePreview == null ? (
+                        <div className={styles.cycleCoverPrompt}>
+                          <h4>*{t('addCoverBtnTitle')}</h4>
+                          <p>{t('addCoverTipLeadLine')}:</p>
+                          <ul>
+                            <li>{t('addCoverTipLine1')}</li>
+                            <li>{t('addCoverTipLine2')}</li>
+                            <li>{t('addCoverTipLine3')}</li>
+                          </ul>
+                        </div>
+                      ) : (
+                        <div
+                          className={styles.cycleCoverPreview}
+                          style={{ backgroundImage: `url('${imagePreview}')` }}
+                        />
+                      )}
+                    </div>
+                  )}
+                </ImageFileSelect>
+          </Row>
           <Row className="mb-5">
             
             <Col /* md={{ span: 12 }} */>

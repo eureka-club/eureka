@@ -122,7 +122,7 @@ export interface CreateCycleClientPayload {
 export interface EditCycleClientPayload {
   id: number;
   includedWorksIds?: number[];
-  coverImage?: File;
+  coverImage?: File|null;
   access: number;
   title?: string;
   languages?: string;
