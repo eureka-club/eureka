@@ -583,6 +583,18 @@
     gud "^1.0.0"
     warning "^4.0.3"
 
+"@hyvor/hyvor-talk-base@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@hyvor/hyvor-talk-base/-/hyvor-talk-base-0.0.3.tgz#58d19f0c0e5e131ec81a93a58825f6fce9625aef"
+  integrity sha512-rC/l/mQ8gk7BR8rKN/6AqWoIjedQDYrSwD/NmMwVZFukEjsrCvvWp3j+TEqfTLIPY1Z0CJZY6u8LJCT1HOLinA==
+
+"@hyvor/hyvor-talk-react@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@hyvor/hyvor-talk-react/-/hyvor-talk-react-0.0.2.tgz#d817c23c800095683cb0549ed43662a66d09602f"
+  integrity sha512-BbgUCEoCQNv9p0jzfV6qeBQd6HvrC644QtcJKSW7aXjXrvE89Rwv3Lum1/1mKboeWaItcXZzUtQ4rxytlAdcIQ==
+  dependencies:
+    "@hyvor/hyvor-talk-base" "^0.0.3"
+
 "@jridgewell/gen-mapping@^0.1.0":
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/@jridgewell/gen-mapping/-/gen-mapping-0.1.1.tgz#e5d2e450306a9491e3bd77e323e38d7aff315996"

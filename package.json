@@ -37,6 +37,7 @@
     "@emotion/styled": "^11.10.5",
     "@formatjs/intl-localematcher": "^0.5.2",
     "@google-cloud/translate": "^7.0.4",
+    "@hyvor/hyvor-talk-react": "^0.0.2",
     "@mailchimp/mailchimp_marketing": "^3.0.80",
     "@mailchimp/mailchimp_transactional": "^1.0.47",
     "@mui/icons-material": "^5.11.0",
