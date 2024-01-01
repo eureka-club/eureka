@@ -32,7 +32,7 @@ const EditWorkPage: NextPage<Props> = async ({ params: { lang, id } }) => {
 
     const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
 
-    let work = await getWork(+id, undefined, origin);  // sin restriccion de idioma para editar undefined (notLangRestrict)
+    let work = await getWork(+id, undefined);  // sin restriccion de idioma para editar undefined (notLangRestrict)
 
     return (<>
         <Head>

@@ -6,8 +6,6 @@ import PMI from '@/src/components/post/MosaicItem'
 import WMI from '@/components/work/MosaicItem';
 import { useParams, useRouter } from 'next/navigation'
 import { BiArrowBack } from 'react-icons/bi';
-import { UserMosaicItem } from '@/src/types/user';
-import { Session } from '@/src/types';
 import { t } from "@/src/get-dictionary";
 import { useDictContext } from "@/src/hooks/useDictContext";
 import getUserIdFromSlug from '@/src/getUserIdFromSlug';
@@ -25,9 +23,9 @@ const MySaved: FC<Props> = () => {
     const { dict } = useDictContext();
     const router = useRouter();
 
-    const {data:favCycles=[]}=useFavCycles(id!,lang);
-    const {data:favPosts=[]}=useFavPosts(id!,lang);
-    const {data:favWorks=[]}=useFavWorks(id!,lang);
+    const {data:favCycles=[]}=useFavCycles(id!);
+    const {data:favPosts}=useFavPosts(id!);
+    const {data:favWorks=[]}=useFavWorks(id!);
 
 
 
@@ -35,7 +33,7 @@ const MySaved: FC<Props> = () => {
 
     const renderPosts = () => {
         return <Row className='mt-5'>
-            {sfl.favPosts.map(i =>
+            {favPosts?.map(i =>
                 <Col key={i.id} xs={12} sm={6} lg={3} xxl={2} className='mb-5 d-flex justify-content-center  align-items-center'>
                     <PMI postId={i.id} size='md' />
                 </Col>
@@ -99,7 +97,7 @@ const MySaved: FC<Props> = () => {
                 id="uncontrolled-tab-example"
                 className="mb-3"
             >
-                {sfl.favPosts.length ? <Tab eventKey="posts" title={t(dict,'posts')}>
+                {favPosts && favPosts.length ? <Tab eventKey="posts" title={t(dict,'posts')}>
                     {renderPosts()}
                 </Tab> : ''}
                 {sfl.favCycles.length ? <Tab eventKey="cycles" title={t(dict,'cycles')}>

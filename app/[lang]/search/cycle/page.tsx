@@ -79,7 +79,7 @@ const SearchPage: NextPage<Props> = async ({ params: { lang, type }, searchParam
       ],
     },
   };
-  const cyclesData = await getCycles(langs, { ...cyclesProps, take }, origin);
+  const cyclesData = await getCycles(langs, { ...cyclesProps, take });
   // qc.prefetchQuery(`cycles-search-${q?.toString()}`, () => cyclesData);
   const hasCycles = cyclesData.total > 0;
 
