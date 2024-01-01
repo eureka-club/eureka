@@ -1,6 +1,6 @@
 import auth_config from "@/auth_config";
 import { INVALID_FIELD, SERVER_ERROR } from "@/src/api_codes";
-import { GetParticipants, find } from "@/src/facades/cycle";
+import { participants as cycleParticipants, find } from "@/src/facades/cycle";
 import getLocale from "@/src/getLocale";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
@@ -9,7 +9,7 @@ interface Props{
     params:{id:string}
 }
 export const GET = async (req:NextRequest,props:Props) => {
-  const locale = getLocale(req);
+  const locale = getLocale(req);debugger;
     const session = await getServerSession(auth_config(locale));
     try {
       const {id} = props.params;
@@ -24,7 +24,7 @@ export const GET = async (req:NextRequest,props:Props) => {
         if (cycle) {
           let ratingCount = cycle.ratings.length;
           const ratingAVG = cycle.ratings.reduce((p,c)=>c.qty+p,0)/ratingCount;
-          const participants = await GetParticipants(cycle.id);
+          const participants = await cycleParticipants(cycle.id);
           let currentUserIsParticipant = false;
           let currentUserIsCreator = false;
           let currentUserIsPending = false;

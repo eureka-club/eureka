@@ -1,3 +1,3 @@
-"use server"
-import { favPosts } from "@/src/facades/user";
-export default favPosts;
+// "use server"
+// import { favPosts } from "@/src/facades/user";
+// export default favPosts;

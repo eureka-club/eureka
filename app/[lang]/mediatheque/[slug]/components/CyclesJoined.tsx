@@ -18,7 +18,7 @@ const CyclesJoined:FC<Props> = ({goTo}) => {
   const id = getUserIdFromSlug(slug);
   
   const { dict } = useDictContext();
-  const {data:cycles} = useCyclesJoined(id,lang);
+  const {data:cycles} = useCyclesJoined(id);
 
   return (cycles && cycles.length) 
     ?<div data-cy="cycles-created-or-joined">

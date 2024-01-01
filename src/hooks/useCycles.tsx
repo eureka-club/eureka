@@ -1,3 +1,4 @@
+"use client"
 import { useQuery } from '@tanstack/react-query';
 import { CycleMosaicItem } from '@/src/types/cycle';
 import { Prisma } from '@prisma/client';
@@ -5,10 +6,9 @@ import { Prisma } from '@prisma/client';
 export const getCycles = async (
   langs:string,
   props?:Prisma.CycleFindManyArgs,
-  origin=''
 ): Promise<{cycles:CycleMosaicItem[],fetched:number,total:number}> => {
   const query = props?`?lang=${langs}&props=${encodeURIComponent(JSON.stringify(props))}`:''
-  const url = `${origin||''}/api/cycle${query}`
+  const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle${query}`
   const res = await fetch(url);
   if (!res.ok) return {cycles:[],fetched:0,total:-1};
   const {data:cycles,fetched,total} = await res.json();

@@ -1,27 +1,32 @@
-"use client"
-import ReactQueryProvider from "@/src/providers/ReactQueryProvider"
 import CycleDetailHeader from "./component/CycleDetailHeader"
-import NextAuthProvider from "@/src/providers/NextAuthProvider"
+import Layout from "@/src/components/layout/Layout";
+import { getDictionary } from "@/src/get-dictionary";
+import { useParams } from "next/navigation";
+import { Locale } from "@/i18n-config";
 
-export default function Layout({
+export default async function layout({
     children, // will be a page or nested layout
+    params
   }: {
-    children: React.ReactNode
+    children: React.ReactNode,
+    params:{lang:Locale,id:string}
   }) {
+    const {lang,id}=params;
+    const dictionary = await getDictionary(lang);
+    const dict: Record<string, string> = { ...dictionary['aboutUs'],
+     ...dictionary['meta'], ...dictionary['common'], 
+     ...dictionary['topics'],...dictionary['navbar'],
+     ...dictionary['signInForm'],
+     ...dictionary['cycleDetail'],
+      ...dictionary['createPostForm'] 
+    }
 
     return (
-      <NextAuthProvider>
-        <ReactQueryProvider>
-          <section style={{margin:'150px 0'}}>
-            {/* Include shared UI here e.g. a header or sidebar */}
-            <CycleDetailHeader
-              onParticipantsAction={async ()=>{}}
-              onCarouselSeeAllAction={async ()=>{}}
-            />
-      
-            {children}
-          </section>
-        </ReactQueryProvider>
-      </NextAuthProvider>
+        <Layout dict={dict} showFooter={false}>
+            <section className="container" style={{margin:'152px 0'}}>
+              <CycleDetailHeader/>
+              {children}
+            </section>
+        </Layout>
     )
   }

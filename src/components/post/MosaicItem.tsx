@@ -168,7 +168,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 
     const renderLocalImageComponent = () => {
       const img = post?.localImages 
-        ? <LocalImageComponent className='post-img-card' filePath={post?.localImages[0].storedFile} title={post?.title} alt={post?.title} />
+        ? <LocalImageComponent className='post-img-card' filePath={post?.localImages[0]?.storedFile} title={post?.title} alt={post?.title} />
         : undefined;
       if (linkToPost) {
         return (

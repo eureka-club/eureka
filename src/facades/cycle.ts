@@ -540,7 +540,7 @@ export const saveSocialInteraction = async (
   return null;
 };
 
-export const GetPosts = async (id: number): Promise<PostMosaicItem[]> => {
+export const posts = async (id: number): Promise<PostMosaicItem[]> => {
   const cycle = await prisma.cycle.findUnique({
     where: { id },
     select:{
@@ -620,7 +620,7 @@ export const GetPosts = async (id: number): Promise<PostMosaicItem[]> => {
   return cycle?.posts??[];
 };
 
-export const GetParticipants = async (id: number): Promise<UserMosaicItem[]> => {
+export const participants = async (id: number): Promise<UserMosaicItem[]> => {
   const cycle = await prisma.cycle.findUnique({
     where: { id },
     select:{
@@ -686,7 +686,7 @@ export const GetParticipants = async (id: number): Promise<UserMosaicItem[]> => 
   return cycle?.participants??[];
 };
 
-export const GetWorks = async (id: number): Promise<WorkMosaicItem[]> => {
+export const works = async (id: number): Promise<WorkMosaicItem[]> => {
   const cycle = await prisma.cycle.findUnique({
     where: { id },
     select:{

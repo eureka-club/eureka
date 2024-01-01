@@ -8,14 +8,15 @@ import { getDictionary } from '@/src/get-dictionary';
 import { Locale } from '@/i18n-config';
 import { LANGUAGES } from '@/src/constants';
 //import { redirect } from 'next/navigation';
-import { getUser } from '@/src/hooks/useUser';
+// import { getUser } from '@/src/hooks/useUser';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
-import postsCreated from './actions/postsCreated';
-import joinedCycles from './actions/joinedCycles';
-import cyclesCreated from './actions/cyclesCreated';
-import favPosts from './actions/favPosts';
-import favCycles from './actions/favCycles';
-import favWorks from './actions/favWorks';
+import { cyclesCreated, favCycles, favPosts, favWorks, find, joinedCycles, posts } from '@/src/facades/user';
+// import postsCreated from './actions/postsCreated';
+// import joinedCycles from './actions/joinedCycles';
+// import cyclesCreated from './actions/cyclesCreated';
+// import favPosts from './actions/favPosts';
+// import favCycles from './actions/favCycles';
+// import favWorks from './actions/favWorks';
 //import getLocale from '@/src/getLocale';
 
 interface Props {
@@ -35,15 +36,16 @@ const MediathequePage: NextPage<Props> = async ({ params: { lang, slug } }) => {
         ...dictionary['signInForm'], ...dictionary['countries'],
          ...dictionary['mediatheque'], ...dictionary['searchEngine'],
     }
+    debugger;
 
     const langs = session?.user.language ?? LANGUAGES[lang];
 
     let id = 0;
     const li = slug.split('-').slice(-1);
     id = parseInt(li[0]);
-    const user = await getUser(id, origin);
-    
-    const pc = await postsCreated(id,lang);
+    const user = await find({where:{id}});
+    const pc = await posts(id,lang);
+    console.log("pc",pc)
     const jc = await joinedCycles(id,lang);
     const cc = await cyclesCreated(id,lang)
     

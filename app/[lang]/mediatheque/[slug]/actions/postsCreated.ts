@@ -1,3 +1,3 @@
-"use server"
-import { postsCreated } from "@/src/facades/user";
-export default postsCreated;
+// "use server"
+// import { postsCreated } from "@/src/facades/user";
+// export default postsCreated;

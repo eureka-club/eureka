@@ -8,7 +8,7 @@ import { LANGUAGES } from '@/src/constants';
 import { redirect } from 'next/navigation';
 import TransitionToPayCycle from './component/TransitionToPayCycle';
 import { getCycle } from '@/src/hooks/useCycle';
-import { getCyclePaticipants } from '../../cycle/[id]/hooks/useCycleParticipants';
+import { getCyclePaticipants } from '../../../../src/hooks/useCycleParticipants';
 
 interface Props {
     params: { lang: Locale, id: string }

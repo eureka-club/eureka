@@ -1,17 +1,21 @@
+"use client"
 import { useQuery } from '@tanstack/react-query';
-import GetCycle from '../actions/GetCycle';
+import { CycleMosaicItem } from '../types/cycle';
+import { BAD_REQUEST } from '../api_codes';
+// import GetCycle from '../actions/GetCycle';
 
-// export const getCycle = async (id: number,origin=''): Promise<CycleMosaicItem | undefined> => {
-//   if (!id) throw new Error('idRequired');
-//   const url = `${origin||''}/api/cycle/${id}`;
+export const getCycle = async (id: number): Promise<CycleMosaicItem|null> => {
+  if (!id) throw new Error(BAD_REQUEST);debugger;
+  const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle/${id}`;
 
-//   const res = await fetch(url);
-//   if (!res.ok) return undefined;
-//   const result = await res.json();
-
-//   return result.cycle ? { ...result.cycle, type: 'cycle' } : undefined;
-// };
-export const getCycle = (id:number) => GetCycle(id);
+  const res = await fetch(url);
+  if (res.ok) {
+    const {cycle} = await res.json();
+    return {...cycle,type:'cycle'};
+  }
+  return null;
+};
+// export const getCycle = (id:number) => GetCycle(id);
 
 interface Options {
   staleTime?: number;

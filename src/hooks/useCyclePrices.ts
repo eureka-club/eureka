@@ -1,3 +1,4 @@
+"use client"
 import { CycleMosaicItem } from "../types/cycle";
 import { useQuery } from "@tanstack/react-query";
 

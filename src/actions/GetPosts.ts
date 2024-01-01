@@ -1,3 +1,3 @@
-"use server"
-import {GetPosts} from '@/src/facades/cycle'
-export default GetPosts;
+// "use server"
+// import {posts as GetPosts} from '@/src/facades/cycle'
+// export default GetPosts;

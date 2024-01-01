@@ -25,7 +25,7 @@ const TransitionPrivateCyclePage: NextPage<Props> = async ({ params: { lang } })
     const langs = session?.user.language ?? LANGUAGES[lang];
 
     return (
-        <Layout dict={dict} showNavBar={false} showFooter={false}>
+        <Layout dict={dict} showNavBar={false}>
             <TransitionPrivateCycle session={session}/>
         </Layout>
     );

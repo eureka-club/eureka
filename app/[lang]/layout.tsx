@@ -5,6 +5,7 @@ import './globals.css'
 import { Locale, i18n } from '@/i18n-config'
 import './scss/custom.scss';
 import { getDictionary } from '@/src/get-dictionary';
+import Footer from '@/src/components/layout/Footer';
 
 export function generateStaticParams() {
   return i18n.locales.map((locale) => ({ lang: locale }))
@@ -40,6 +41,7 @@ export default async function RootLayout({
       </head>
       <body>
           {children}
+          {/* <Footer /> */}
       </body>
     </html>
   )

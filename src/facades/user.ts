@@ -251,7 +251,7 @@ export const cyclesCreated = async (id:number,lang?:string): Promise<CycleMosaic
   })
   ??[];
 };
-export const postsCreated = async (id:number,lang?:string): Promise<PostMosaicItem[]> => {
+export const posts = async (id:number,lang?:string): Promise<PostMosaicItem[]> => {
   let res = await prisma.user.findFirst({
     where:{id},
     select: {

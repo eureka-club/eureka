@@ -3,16 +3,17 @@ import { WorkMosaicItem } from '@/src/types/work';
 import { useDictContext } from './useDictContext';
 import { UseQueryResult, useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
+import { BAD_REQUEST } from '../api_codes';
 
-export const getWork = async (id: number,language:string | undefined,origin=''): Promise<WorkMosaicItem> => {
+export const getWork = async (id: number,language:string | undefined): Promise<WorkMosaicItem> => {
   if (!id) throw new Error('idRequired');
-  let url = `${origin || ''}/api/work/${id}`; // ?lang=${language}
+  let url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/work/${id}`; // ?lang=${language}
   if(language)
     url += `?lang=${language}`;
 
   const res = await fetch(url);
   if (!res.ok) 
-    throw Error('Error');
+    throw Error(BAD_REQUEST);
 
   const w =await  res.json();
   return w;
@@ -31,7 +32,7 @@ const useWork = (id: number, options?: Options): UseQueryResult<WorkMosaicItem,E
   };
   const ck = notLangRestrict ? ['WORK', `${id}`] : ['WORK', `${id}-${lang}`];
   return useQuery<WorkMosaicItem, Error>({
-    queryKey:ck, 
+    queryKey:['WORK',id.toString()], 
     queryFn:() => getWork(id, !notLangRestrict ? lang!:undefined),
     staleTime,
     enabled,

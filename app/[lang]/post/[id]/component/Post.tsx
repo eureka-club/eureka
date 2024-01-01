@@ -31,7 +31,7 @@ import { useEnvContext } from "@/src/hooks/useEnvContext";
 import MosaicItem from "@/src/components/post/MosaicItemDetail";
 import { BiArrowBack } from 'react-icons/bi';
 import { useRouter } from 'next/navigation';
-import useCycleParticipants from '@/app/[lang]/cycle/[id]/hooks/useCycleParticipants';
+import useCycleParticipants from '@/src/hooks/useCycleParticipants';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

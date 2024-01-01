@@ -3,6 +3,8 @@ import { Languages, StoredFileUpload } from '../types';
 import { CreateWorkServerFields, CreateWorkServerPayload, EditWorkServerFields, WorkMosaicItem } from '../types/work';
 import { prisma } from '@/src/lib/prisma';
 import { MISSING_FIELD, WORK_ALREADY_EXIST } from '../api_codes';
+import { CycleMosaicItem } from '../types/cycle';
+import { PostMosaicItem } from '../types/post';
 // import { CreateEditionServerPayload } from '../types/edition';
 
 const include = {
@@ -568,3 +570,145 @@ export const remove = async (id: number,language?:string): Promise<Work|undefine
   }
   return undefined;
 };
+
+export const cycles = async (id:number):Promise<CycleMosaicItem[]> => {
+  const work = await prisma.work.findFirst({
+    where:{id},
+    select:{
+      cycles:{
+        include: {
+          creator: {
+            select: { id: true, name: true, email: true, countryOfOrigin: true },
+          },
+          localImages: {
+            select: {
+              storedFile: true,
+            },
+          },
+          guidelines: {
+            select: {
+              title: true,
+              contentText: true,
+            },
+          },
+          usersJoined: { select: { userId: true, pending: true } },
+          ratings: { select: { userId: true, qty: true } },
+          favs: { select: { id: true } },
+          cycleWorksDates: {
+            select: {
+              id: true,
+              startDate: true,
+              endDate: true,
+              workId: true,
+              work: {
+                include: {
+                  _count: { select: { ratings: true } },
+                  localImages: { select: { id:true,storedFile: true } },
+                  favs: { select: { id: true } },
+                  ratings: { select: { userId: true, qty: true } },
+                  readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+                  posts: {
+                    select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+                  },
+                  editions:{include:{localImages: { select: { id:true,storedFile: true } }}},
+                },
+              },
+            },
+          },
+          _count: {
+            select: {
+              participants: true,
+              ratings: true,
+            },
+          },
+          complementaryMaterials: true,
+        }
+      }
+    }
+  })
+  return work 
+    ? work?.cycles.map(c=>({...c,type:'cycle'})) 
+    : [];
+}
+
+export const posts = async (id:number):Promise<PostMosaicItem[]> => {
+  const work = await prisma.work.findFirst({
+    where:{id},
+    select:{
+      posts:{
+        include: {
+          works: { select: { id: true, title: true,author:true, type: true, localImages: { select: { storedFile: true } } } },
+          cycles:{
+            include: {
+              creator: {
+                select: { id: true, name: true, email: true, countryOfOrigin: true },
+              },
+              localImages: {
+                select: {
+                  storedFile: true,
+                },
+              },
+              guidelines: {
+                select: {
+                  title: true,
+                  contentText: true,
+                },
+              },
+              usersJoined: { select: { userId: true, pending: true } },
+              ratings: { select: { userId: true, qty: true } },
+              works: {
+                include: {
+                  _count: { select: { ratings: true } },
+                  localImages: { select: { id:true,storedFile: true } },
+                  favs: { select: { id: true } },
+                  ratings: { select: { userId: true, qty: true } },
+                  readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+                  posts: {
+                    select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+                  },
+                  editions:{include:{localImages: { select: { id:true,storedFile: true } }}},
+                },
+              },
+              favs: { select: { id: true } },
+              cycleWorksDates: {
+                select: {
+                  id: true,
+                  startDate: true,
+                  endDate: true,
+                  workId: true,
+                  work: {
+                    include: {
+                      _count: { select: { ratings: true } },
+                      localImages: { select: { id:true,storedFile: true } },
+                      favs: { select: { id: true } },
+                      ratings: { select: { userId: true, qty: true } },
+                      readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+                      posts: {
+                        select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+                      },
+                      editions:{include:{localImages: { select: { id:true,storedFile: true } }}},
+                    },
+                  },
+                },
+              },
+              _count: {
+                select: {
+                  participants: true,
+                  ratings: true,
+                },
+              },
+              complementaryMaterials: true,
+            }
+          },
+          favs: { select: { id: true } },
+          creator: { select: { id: true, name: true, photos: true, countryOfOrigin: true } },
+          localImages: { select: { storedFile: true } },
+          reactions: true,
+        }
+      }
+    }
+  })
+  return work 
+    ? work?.posts.map(c=>({...c,type:'post'})) 
+    : [];
+}

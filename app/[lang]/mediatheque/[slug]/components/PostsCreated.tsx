@@ -15,12 +15,11 @@ interface Props{
 }
 const PostsCreated:FC<Props> = ({goTo}) => {
   const {slug,lang} = useParams<{slug:string,lang:string}>();
-
   const { dict } = useDictContext();
   const id = getUserIdFromSlug(slug);
 
   const {data:user} = useUser(id,{enabled:id!=-1});
-  const {data:posts} = usePostsCreated(user?.id!,lang);
+  const {data:posts} = usePostsCreated(user?.id!);
 
     if (user && posts && posts.length) {
       return <div data-cy="my-posts">

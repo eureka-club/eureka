@@ -14,7 +14,7 @@ import { t } from "@/src/get-dictionary";
 import { useDictContext } from "@/src/hooks/useDictContext";
 import CycleDetail from "./CycleDetail";
 import useCycle from "@/src/hooks/useCycle";
-import useCycleParticipants from "../hooks/useCycleParticipants";
+import useCycleParticipants from "../../../../../src/hooks/useCycleParticipants";
 
 interface Props{
     session:Session;

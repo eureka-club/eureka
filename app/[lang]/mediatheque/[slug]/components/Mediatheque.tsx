@@ -253,9 +253,6 @@ const Mediatheque:FC<Props>=({session})=>{
     };
 
 
-
-
-
     return (
         <article data-cy="mediatheque">
             <ButtonGroup className="mt-1 mt-md-3 mb-1">

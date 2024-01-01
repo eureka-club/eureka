@@ -35,7 +35,7 @@ import { Session } from "@/src/types";
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import useCycle from '@/src/hooks/useCycle';
 import useCyclePosts from '@/src/hooks/useCyclePosts';
-import useCycleParticipants from '../hooks/useCycleParticipants';
+import useCycleParticipants from '../../../../../src/hooks/useCycleParticipants';
 import useCycleWorks from '../../../../../src/hooks/useCycleWorks';
 
 const CycleDetailDiscussion = lazy(() => import ('./CycleDetailDiscussion')) 

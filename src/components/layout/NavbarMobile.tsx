@@ -220,24 +220,17 @@ const NavBar: FunctionComponent = () => {
                   </Dropdown.Toggle>
                   <Dropdown.Menu >
                     <Dropdown.Item>
-                      <Link href={`/mediatheque/${getMediathequeSlug()}`}>
-                        <a data-cy="my-mediatheque-link" className={styles.navLink}>
+                      <Link href={`/mediatheque/${getMediathequeSlug()}`} data-cy="my-mediatheque-link" className={styles.navLink}>
                           {t(dict,'My Mediatheque')}
-                        </a>
                       </Link>
 
                     </Dropdown.Item>
                     <Dropdown.Item>
-                      <Link href={`/user/${getMediathequeSlug()}/my-read-or-watched`}>
-                        <a className={styles.navLink}>
+                      <Link href={`/user/${getMediathequeSlug()}/my-read-or-watched`} className={styles.navLink}>
                           {t(dict,"MyReadOrWatched")}
-                        </a>
                       </Link>
-
                     </Dropdown.Item>
-
                   </Dropdown.Menu>
-
                 </Dropdown>
               </Nav>
             )}
@@ -322,16 +315,16 @@ const NavBar: FunctionComponent = () => {
                   </Dropdown.Toggle>
                   <Dropdown.Menu className={styles.dropdownMenu}>
                     {session?.user.roles && session?.user.roles == 'admin' && (
-                      <Link href="/cycle/create">
-                        <a className="dropdown-item">{t(dict, 'cycle')}</a>
+                      <Link href="/cycle/create" className="dropdown-item">
+                        {t(dict, 'cycle')}
                       </Link>
                     )}
-                    <Link href="/post/create">
-                      <a className="dropdown-item">{t(dict,'post')}</a>
+                    <Link href="/post/create" className="dropdown-item">
+                      {t(dict,'post')}
                     </Link>
                     {/* {session?.user.roles && session?.user.roles == 'admin' && ( */}
-                      <Link href="/work/create">
-                        <a className="dropdown-item">{t(dict,'work')}</a>
+                      <Link href="/work/create" className="dropdown-item">
+                        {t(dict,'work')}
                       </Link>
                   {/* )} */}
                   </Dropdown.Menu>

@@ -1,7 +1,5 @@
 import { NextPage } from 'next';
 import Head from "next/head";
-import {getCycles} from '@/src/hooks/useCycles'
-import {getPosts} from '@/src/hooks/usePosts'
 import Work from './component/Work';
 import { getServerSession } from 'next-auth';
 import { getDictionary } from '@/src/get-dictionary';
@@ -10,10 +8,13 @@ import auth_config from '@/auth_config';
 import { getWork } from '@/src/hooks/useWork';
 import Layout from '@/src/components/layout/Layout';
 import { LANGUAGES } from '@/src/constants';
+import { getWorkCycles } from './hooks/useWorkCycles';
+import { HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { getWorkPosts } from './hooks/useWorkPosts';
 
 interface Props{
     params:{lang:Locale,id:string}
-  }
+}
   const WorkPage: NextPage<Props> =async ({params:{lang,id}}) => {
     const dictionary = await getDictionary(lang);
     const dict: Record<string, string> = { ...dictionary['aboutUs'],
@@ -27,21 +28,38 @@ interface Props{
     const session = await getServerSession(auth_config(lang));
     const langs = session?.user.language??LANGUAGES[lang];
 
-    const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
+    const workPostsWhere = {take:8,where:{works:{some:{id:+id}}}}
+      
+    let work = await getWork(+id,langs);
+    let cycles = await getWorkCycles(+id);
+    let posts = await getWorkPosts(+id);
+    
+    const qc = new QueryClient();
 
-    const workCyclesWhere = {
-        where:{
-          works:{
-            some:{
-              id:+id
-            }
-          }
-        }
-      }
-      const workPostsWhere = {take:8,where:{works:{some:{id:+id}}}}
-      let work = await getWork(+id,langs,origin);
-      let {cycles} = await getCycles(langs,workCyclesWhere,origin);
-      let {posts} = await getPosts(workPostsWhere,origin);
+    qc.prefetchQuery({
+      queryKey:['WORK',id.toString()],
+      queryFn:()=>work
+    });
+    qc.prefetchQuery({
+      queryKey:['WORK',id.toString(),'CYCLES'],
+      queryFn:()=>cycles
+    });
+      cycles.forEach(c=>{
+        qc.prefetchQuery({
+          queryKey:['CYCLE',id.toString()],
+          queryFn:()=>c
+        });
+      });
+    qc.prefetchQuery({
+      queryKey:['WORK',id.toString(),'POSTS'],
+      queryFn:()=>posts
+    });
+      posts.forEach(p=>{
+        qc.prefetchQuery({
+          queryKey:['POST',id.toString()],
+          queryFn:()=>p
+        });
+      });
   
     return (<>
       <Head>
@@ -50,7 +68,9 @@ interface Props{
       </Head>
   
       <Layout dict={dict}>
-        <Work session={session!} work={work} workCycles={cycles} workPosts={posts}/>
+        <HydrationBoundary state={qc}>
+          <Work session={session!}/>
+        </HydrationBoundary>
       </Layout>
     </>
     );

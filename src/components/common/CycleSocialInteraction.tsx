@@ -73,7 +73,6 @@ const CycleSocialInteraction: FunctionComponent<Props> = ({
 }) => {
   const router = useRouter();
   const {data:cycle}= useCycle(cycleId);
-debugger;
   // const [session] = useSession() as [Session | null | undefined, boolean];
   const { data: session, status } = useSession();
   const idSession = session ? session.user.id : null;

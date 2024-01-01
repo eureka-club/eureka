@@ -17,8 +17,7 @@ import {
 } from 'react-bootstrap';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
 import { BiArrowBack } from 'react-icons/bi';
-import { useRouter } from 'next/navigation';
-import { PostMosaicItem } from '@/src/types/post';
+import { useParams, useRouter } from 'next/navigation';
 import UnclampText from '@/components/UnclampText';
 import WorkReadOrWatched from '@/src/components/work/WorkReadOrWatched';
 import detailPagesAtom from '@/src/atoms/detailPages';
@@ -28,38 +27,45 @@ import { MosaicContext } from '@/src/hooks/useMosaicContext';
 import WorkDetailPost from '@/src/components/work/WorkDetailPost';
 import CMI from '@/src/components/cycle/MosaicItem';
 import MosaicItemPost from '@/src/components/post/MosaicItem';
-import { useInView } from 'react-intersection-observer';
+// import { useInView } from 'react-intersection-observer';
 import { Session } from '@/src/types';
 import HyvorComments from '@/src/components/common/HyvorComments';
 import useExecRatingWork from '@/src/hooks/mutations/useExecRatingWork';
-import { Box } from '@mui/material';
+import { Alert, Box } from '@mui/material';
 import { FiTrash2 } from 'react-icons/fi';
 import { useDictContext } from '@/src/hooks/useDictContext';
-import { WorkMosaicItem } from '@/src/types/work';
-import { CycleMosaicItem } from '@/src/types/cycle';
 import { t } from '@/src/get-dictionary';
 import { WorkContext } from '@/src/hooks/useWorkContext';
 import WorkSummary from '@/src/components/work/WorkSummary';
 import Rating from '@/src/components/common/Rating';
 import MosaicItem from '@/src/components/work/MosaicItem';
+import useWorkCycles from '../hooks/useWorkCycles';
+import useWork from '@/src/hooks/useWork';
+import useWorkPosts from '../hooks/useWorkPosts';
+import { NOT_FOUND } from '@/src/api_codes';
 
 
 // const PostDetailComponent = lazy(() => import('@/components/post/PostDetail'));
 
 interface Props {
-  work: WorkMosaicItem;
-  workCycles: CycleMosaicItem[];
-  workPosts:PostMosaicItem[];
+  // workPosts:PostMosaicItem[];
 //post?: PostMosaicItem;
   session: Session;
 }
 
-const Work: FunctionComponent<Props> = ({ work,workCycles,workPosts, session }) => {
+const Work: FunctionComponent<Props> = ({session }) => {
   const router = useRouter();
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const {dict}=useDictContext();
-  const [qty, setQty] = useState(work?.ratingAVG || 0);
   const [qtyByUser, setqtyByUser] = useState(0);
+  
+  const {id:id_}=useParams<{id:string,lang:string}>();
+  const id=+id_;
+  const {data:work,isLoading:isLoadingWork}=useWork(id);
+  const {data:workCycles}=useWorkCycles(id);
+  const {data:workPosts}=useWorkPosts(id);
+
+  const [qty, setQty] = useState(work?.ratingAVG || 0);
 
   useEffect(() => {
     if (work && session) {
@@ -129,7 +135,9 @@ const Work: FunctionComponent<Props> = ({ work,workCycles,workPosts, session }) 
     }
     return 0;
   };
-
+  debugger;
+  if(!isLoadingWork && !work)
+    return <Alert variant='filled' severity='error'>{NOT_FOUND}</Alert>
   return (
     <WorkContext.Provider value={{ work, linkToWork: false }}>
       <MosaicContext.Provider value={{ showShare: true }}>
@@ -288,7 +296,7 @@ const Work: FunctionComponent<Props> = ({ work,workCycles,workPosts, session }) 
                           </NavItem>
                           <NavItem>
                             <NavLink eventKey="cycles">
-                              {t(dict,'tabHeaderCycles')} ({workCycles.length})
+                              {t(dict,'tabHeaderCycles')} ({workCycles?.length})
                             </NavLink>
                           </NavItem>
                         </Nav>
@@ -307,7 +315,7 @@ const Work: FunctionComponent<Props> = ({ work,workCycles,workPosts, session }) 
                                 session={session}
                               ></WorkDetailPost>
                               <Row className="mt-5">
-                                {workPosts.map((p) => (
+                                {workPosts?.map((p) => (
                                   <Col
                                     key={p.id}
                                     xs={12}

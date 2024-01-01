@@ -1,3 +1,3 @@
-"use server"
-import { favCycles } from "@/src/facades/user";
-export default favCycles;
+// "use server"
+// import { favCycles } from "@/src/facades/user";
+// export default favCycles;

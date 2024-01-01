@@ -1,3 +1,3 @@
-"use server"
-import {GetParticipants as GetCyclePaticipants} from '@/src/facades/cycle'
-export default GetCyclePaticipants;
+// "use server"
+// import {participants as GetCyclePaticipants} from '@/src/facades/cycle'
+// export default GetCyclePaticipants;

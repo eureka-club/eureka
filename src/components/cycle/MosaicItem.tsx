@@ -28,7 +28,7 @@ import { CycleMosaicItem } from '@/src/types/cycle';
 import CycleSocialInteraction from '../common/CycleSocialInteraction';
 import { t } from '@/src/get-dictionary';
 import { useDictContext } from '@/src/hooks/useDictContext';
-import useCycleParticipants from '@/app/[lang]/cycle/[id]/hooks/useCycleParticipants';
+import useCycleParticipants from '@/src/hooks/useCycleParticipants';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
