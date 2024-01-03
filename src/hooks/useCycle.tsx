@@ -5,7 +5,7 @@ import { BAD_REQUEST } from '../api_codes';
 // import GetCycle from '../actions/GetCycle';
 
 export const getCycle = async (id: number): Promise<CycleMosaicItem|null> => {
-  if (!id) throw new Error(BAD_REQUEST);debugger;
+  if (!id) throw new Error(BAD_REQUEST);
   const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle/${id}`;
 
   const res = await fetch(url);

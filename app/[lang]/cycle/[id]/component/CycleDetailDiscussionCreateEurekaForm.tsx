@@ -32,33 +32,24 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useTopics from '@/src/hooks/useTopics';
 import { useDictContext } from '@/src/hooks/useDictContext';
 import { t } from '@/src/get-dictionary';
+import useCycle from '@/src/hooks/useCycle';
+import useCycleParticipants from '@/src/hooks/useCycleParticipants';
 
 interface Props {
-  cacheKey: string[];
-  cycle: CycleMosaicItem;
   discussionItem?: string;
   setDiscussionItem: (val: string | undefined) => void;
   close: () => void;
 }
 
-const whereCycleParticipants = (id: number) => ({
-  where: {
-    OR: [
-      { cycles: { some: { id } } }, //creator
-      { joinedCycles: { some: { id } } }, //participants
-    ],
-  },
-});
 
 const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
-  cacheKey,
-  cycle,
   discussionItem,
   setDiscussionItem,
   close,
 }) => {
+  const{id}=useParams();
+  const {data:cycle}=useCycle(+id!);
   const queryClient = useQueryClient();
-  const router = useRouter();
   const path = usePathname();
   const {lang}=useParams<{lang:string}>();
   const { data: session } = useSession();
@@ -76,13 +67,13 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   const{dict}=useDictContext();
 
   const [newEureka, setNewEureka] = useState({
-    selectedCycleId: cycle.id,
+    selectedCycleId: +id!,
     selectedWorkId: 0,
     title: '',
     image: null,
     language: lang,
     contentText: '',
-    isPublic: cycle.access === 1,
+    isPublic: cycle?.access === 1,
     topics: eurekaTopics,
     tags: tags
   });
@@ -105,9 +96,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
     if (dataWorks) setWorks(dataWorks.works);
   }, [dataWorks]);
 
-  const { data: participants, isLoading: isLoadingParticipants } = useUsers(whereCycleParticipants(cycle.id), {
-    enabled: !!cycle,
-  });
+  const {data:participants,isLoading: isLoadingParticipants}=useCycleParticipants(+id!);
 
   const clearPayload = () => {
     if (editorRef.current) editorRef.current.setContent('');
@@ -185,7 +174,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
       mutationFn:async (payload: CreatePostAboutCycleClientPayload | CreatePostAboutWorkClientPayload): Promise<Post | null> => {
         const u = session!.user;
         const toUsers = (participants || []).filter((p) => p.id !== u.id).map((p) => p.id);
-        if (u.id !== cycle.creatorId) toUsers.push(cycle.creatorId);
+        if (u.id !== cycle?.creatorId) toUsers.push(cycle?.creatorId!);
         let message = '';
         let notificationContextURL = path;
         if (payload.selectedWorkId) {
@@ -195,7 +184,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
               message = `eurekaCreatedAboutWorkInCycle!|!${JSON.stringify({
                 userName: u.name || '',
                 workTitle: work.title,
-                cycleTitle: cycle.title,
+                cycleTitle: cycle?.title,
               })}`;
               notificationContextURL = `/work/${work.id}/post`;
             }
@@ -203,9 +192,9 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         } else if (payload.selectedCycleId) {
           message = `eurekaCreatedAboutCycle!|!${JSON.stringify({
             userName: u.name || '',
-            cycleTitle: cycle.title,
+            cycleTitle: cycle?.title,
           })}`;
-          notificationContextURL = `/cycle/${cycle.id}/post`;
+          notificationContextURL = `/cycle/${cycle?.id}/post`;
         }
         const formData = new FormData();
         Object.entries(payload).forEach(([key, value]) => {
@@ -244,7 +233,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         return null;
       },
       onMutate: async () => {
-        await queryClient.cancelQueries({queryKey:['CYCLE',cycle.id.toString(),'POSTS']});
+        const cacheKey = ['CYCLE',cycle?.id.toString(),'POSTS'];
         await queryClient.cancelQueries({queryKey:cacheKey});
         const previewsItems = queryClient.getQueryData<PostMosaicItem[]>(cacheKey);
         return { previewsItems, cacheKey };
@@ -258,7 +247,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         }
         if (context && session) {
           queryClient.invalidateQueries({queryKey:context.cacheKey});
-          queryClient.invalidateQueries({queryKey:['CYCLE',cycle.id.toString(),'POSTS']});
+          queryClient.invalidateQueries({queryKey:['CYCLE',id.toString(),'POSTS']});
           queryClient.invalidateQueries({queryKey:['USER', session.user.id.toString()]}); //to get the new notification
         }
       },
@@ -270,7 +259,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
     if (selection === '-1') {
       setNewEureka((res) => ({
         ...res,
-        selectedCycleId: cycle.id,
+        selectedCycleId: +id!,
       }));
     } else {
       const [entity, id] = selection.split('-');
@@ -280,7 +269,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
           selectedWorkId: parseInt(id, 10),
         }));
     }
-  }, [selection, cycle.id]);
+  }, [selection, id]);
 
   const onChangeFieldEurekaForm = (e: ChangeEvent<HTMLInputElement>) => {
     const key: string = e.target.id.split('-')[1];

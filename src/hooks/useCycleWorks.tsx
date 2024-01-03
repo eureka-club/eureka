@@ -19,7 +19,7 @@ export const getCycleWorks =  async (id:number):Promise<WorkMosaicItem[]>=> {
   return [];
 }
 
-const useCycleParticipants = (id: number, options?: Options) => {
+const useCycleWorks = (id: number, options?: Options) => {
   const { staleTime, enabled } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
@@ -32,4 +32,4 @@ const useCycleParticipants = (id: number, options?: Options) => {
   });
 };
 
-export default useCycleParticipants;
+export default useCycleWorks;

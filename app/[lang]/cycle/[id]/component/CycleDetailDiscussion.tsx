@@ -172,8 +172,6 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ className, cacheKey }
               {isCreateEureka && (
                 <div className="mt-3">
                   <CycleDetailDiscussionCreateEurekaForm
-                    cacheKey={cacheKey}
-                    cycle={cycle}
                     discussionItem={discussionItem}
                     setDiscussionItem={setDiscussionItem}
                     close={onClose}

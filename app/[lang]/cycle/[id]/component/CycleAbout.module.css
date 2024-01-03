@@ -1,0 +1,16 @@
+.complementaryMaterials {
+  list-style: none;
+  padding: 0 0 0 1rem;
+}
+.complementaryMaterials a {
+  background: transparent url(/img/ico-document.png) 0 0 no-repeat;
+  background-size: 36px;
+  color: var(--text-color-primary);
+  display: inline-block;
+  font-size: 0.85rem;
+  padding: 0 0 0 56px;
+}
+.complementaryMaterials a h5 {
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+}

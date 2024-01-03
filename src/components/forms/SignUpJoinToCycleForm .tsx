@@ -560,7 +560,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ cycle, session }) => 
             >
               <Box className='d-flex flex-column justify-content-center align-items-center' sx={{ paddingX: { md: '8em', lg: '15em', xl: '25em' }, paddingY: '4em' }}>
                 <Box className="" sx={{ width: '1', paddingX: { xs: '2em', sm: '7em', lg: '2em' }, fontSize: { sx: '.6em', lg: '1.4em' }, display: 'flex', justifyContent: 'center' }}> <span className='text-primary text-center mb-3  '><b>{t(dict, 'CurationText')}</b></span></Box>
-                {works && <CycleDetailWorks size={'md'} cycleWorksDates={works!} showSocialInteraction={false} showHeader={false} /> || ''}
+                {works && <CycleDetailWorks size={'md'} showSocialInteraction={false} showHeader={false} /> || ''}
               </Box>
             </Box>
           </Col>

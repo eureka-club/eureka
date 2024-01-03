@@ -428,7 +428,7 @@ const CycleDetail: FunctionComponent<Props> = ({
                         )}
                         <div ref={cycleWorksRef}>
                           <MosaicContext.Provider value={{ showShare: true }}>                     
-                            {works && <CycleDetailWorks cycleWorksDates={works!} /> || ''}
+                            {works && <CycleDetailWorks /> || ''}
                           </MosaicContext.Provider>
                         </div>
                         {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (

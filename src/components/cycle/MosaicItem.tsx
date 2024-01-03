@@ -150,7 +150,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     return !loading;
   };
   const onImgClick = () => {
-    if (canNavigate()) router.push(`/cycle/${cycleId}`);
+    if (canNavigate()) router.push(`/cycle/${cycleId}/about`);
     setLoading(true);
   };
 

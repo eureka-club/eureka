@@ -6,6 +6,7 @@ import { prisma } from '@/src/lib/prisma';
 import { PostMosaicItem } from '../types/post';
 import { UserMosaicItem } from '../types/user';
 import { WorkMosaicItem } from '../types/work';
+import { CycleWorksDates } from '../types/cycleWorksDates';
 
 export const NEXT_PUBLIC_MOSAIC_ITEMS_COUNT = +(process.env.NEXT_PUBLIC_NEXT_PUBLIC_MOSAIC_ITEMS_COUNT || 10);
 
@@ -706,5 +707,36 @@ export const works = async (id: number): Promise<WorkMosaicItem[]> => {
     }
   });
   return cycle?.works??[];
+};
+
+
+export const cycleWorksDates = async (id: number): Promise<CycleWorksDates[]> => {
+  const cycle = await prisma.cycle.findUnique({
+    where: { id },
+    select:{
+      cycleWorksDates:{
+        select: {
+          id: true,
+          startDate:true,
+          endDate:true,
+          workId:true,
+          work:{
+            include:{
+              localImages: { select: { id:true, storedFile: true } },
+              _count: { select: { ratings: true } },
+              favs: { select: { id: true } },
+              ratings: { select: { userId: true, qty: true } },
+              readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+              posts: {
+                select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+              },
+              editions: { include: { localImages: { select: { id:true, storedFile: true } } } },
+            }
+          },
+        }
+      }
+    }
+  });
+  return cycle?.cycleWorksDates??[];
 };
 
