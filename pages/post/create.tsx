@@ -34,7 +34,7 @@ const CreatePostPage: NextPage<Props> = ({notFound}) => {
          <Col xs={12} lg={2} className="me-4" >
           <section className='mt-5'>
             <h3 className="text-secondary fw-bold">{t('DoubtsAI')}</h3>
-            {/*<Link href="/about"><a className='text-primary text-decoration-underline text-blue' onClick={()=> window.scrollTo(0, 0)}>{t('browserTitleAbout')} </a></Link>*/}
+            {/*<Link legacyBehavior  href="/about"><a className='text-primary text-decoration-underline text-blue' onClick={()=> window.scrollTo(0, 0)}>{t('browserTitleAbout')} </a></Link>*/}
         </section>
           <section  className="mt-4 p-3 rounded overflow-auto bg-secondary text-white" role="presentation" >
               <p className="p-2 m-0 text-wrap text-center fs-6">{t('AIAbout1')}</p>

@@ -1,0 +1,17 @@
+
+
+.fallowsSection a .ti{
+  color: var(--eureka-blue-dark);
+  font-size: 2em;
+  cursor: pointer;
+}
+.fallowsSection a .tiktok{
+  color: var(--eureka-blue-dark);
+  font-size: 1.5em;
+  margin-left: 0.2em ;
+  margin-right: 0.2em ;
+}
+
+/*.fallowsSection a[href^="mailto:"] .ti{
+  font-size: 2em;
+}*/

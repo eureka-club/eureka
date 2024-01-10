@@ -37,11 +37,11 @@ const topics = ['gender-feminisms', 'technology', 'environment',
 // };
 
 interface Props {
-  language:string;
+  // language:string;
   // myCycles?:CycleMosaicItem[]
 }
 
-const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
+const HomeSingIn: FunctionComponent<Props> = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { t,lang } = useTranslation('common');
@@ -169,7 +169,7 @@ const [gbt, setGBT] = useState<any[]>([]);
             </h1>
           </section>
           {showAboutSection && (<div className='d-flex d-lg-none flex-column'>
-            <Link href="/about">
+            <Link legacyBehavior  href="/about">
               <a className="text-primary text-decoration-underline text-blue" onClick={() => window.scrollTo(0, 0)}>
                 {t('browserTitleAbout')}{' '}
               </a>
@@ -188,7 +188,7 @@ const [gbt, setGBT] = useState<any[]>([]);
             </section>
           </div>)}
           <div className='d-none d-lg-flex flex-column'>
-            <Link href="/about">
+            <Link legacyBehavior  href="/about">
               <a className="text-primary text-decoration-underline text-blue" onClick={() => window.scrollTo(0, 0)}>
                 {t('browserTitleAbout')}{' '}
               </a>

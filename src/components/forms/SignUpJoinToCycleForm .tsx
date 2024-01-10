@@ -1,6 +1,4 @@
 import { signIn } from 'next-auth/react';
-import { getSession } from 'next-auth/react';
-
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useState, MouseEvent, ChangeEvent, FormEvent, useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -22,8 +20,6 @@ import Footer from '@/components/layouts/Footer';
 import { TextField, Box } from '@mui/material';
 import { DATE_FORMAT_LARGE } from '../../constants';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
 import { Session } from '@/src/types';
 //import { useSession } from 'next-auth/react';
 import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
@@ -372,10 +368,10 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
 
   const {
     mutate: execJoinCycle,
-    isLoading: isJoinCycleLoading,
+    isPending: isJoinCycleLoading,
     data: mutationResponse,
     // isSuccess: isJoinCycleSuccess,
-  } = useJoinUserToCycleAction(user!, cycle!, participants!, (_data, error) => {
+  } = useJoinUserToCycleAction(session!, cycle!, participants!, (_data:any, error:any) => {
     if (error)
       toast.error(t('Internal Server Error'));
   });
@@ -393,7 +389,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
           <Row className="d-flex justify-content-between">
             <Col className='col-12'>
               <Row className='p-4'>
-                <Link href="/" replace >
+                <Link legacyBehavior  href="/" replace >
                   <a className="d-flex align-items-center">
                     <aside className="d-flex justify-content-around align-items-center">
                       {/*<Image src="/logo.svg" width={45} height={52} alt="Project logo" />*/}
@@ -538,7 +534,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
           <Col className='col-12'>
             <Row className='bg-primary d-flex justify-content-center align-items-center' style={{ height: '5rem' }}>
               <Box sx={{ fontSize: { sx: '.6em', lg: '1.4em' }, display: 'flex', justifyContent: 'center' }}><p className='text-center text-white mt-2'>{t('ManifestoText1').toUpperCase()}<br></br>
-                {t('ManifestoText2')}<Link href="/manifest"><a target="_blank" className='text-white text-decoration-underline' onClick={() => window.scrollTo(0, 0)}>{t('Manifesto')}</a></Link></p>
+                {t('ManifestoText2')}<Link legacyBehavior  href="/manifest"><a target="_blank" className='text-white text-decoration-underline' onClick={() => window.scrollTo(0, 0)}>{t('Manifesto')}</a></Link></p>
               </Box>
             </Row>
           </Col>
@@ -660,13 +656,13 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                         className={`text-center align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
                       >
                         {t('joinedCycleSignInTerms')}
-                        <Link href="/manifest" passHref>
+                        <Link legacyBehavior  href="/manifest" passHref>
                           <span className={` cursor-pointer ms-1 me-1 ${styles.linkText}`}>
                             {t('termsText')}
                           </span>
                         </Link>
                         {t('and')}
-                        <Link href="/policy" passHref>
+                        <Link legacyBehavior  href="/policy" passHref>
                           <span className={`cursor-pointer ms-1 ${styles.linkText}`}>{t('policyText')}</span>
                         </Link>
                       </p>

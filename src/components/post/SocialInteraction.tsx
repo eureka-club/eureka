@@ -336,7 +336,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
             ? <div className="flex-grow-1"><h2 className="m-0 p-1 fs-6 text-info" data-cy="parent-title">
             {` `}
             {parentLinkHref != null ? (
-              <Link href={parentLinkHref}>
+              <Link legacyBehavior  href={parentLinkHref}>
                 <a title={getParentTitle()} className="text-info">
                   <span>{renderParentTitle()} </span>
                 </a>

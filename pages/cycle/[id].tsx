@@ -90,10 +90,10 @@ const CycleDetailPage: NextPage<Props> = (props) => {
 
   const {
     mutate: execJoinCycle,
-    isLoading: isJoinCycleLoading,
+    isPending: isJoinCycleLoading,
     data: mutationResponse,
     isSuccess: isJoined,
-  } = useJoinUserToCycleAction((session as any)?.user, cycle!, participants || [], (_data, error) => {
+  } = useJoinUserToCycleAction((session as any)?.user, cycle!, participants || [], (_data:any, error:any) => {
     if (!error) {
       if (cycle && ![2, 4].includes(cycle?.access))
         toast.success(t('OK'))

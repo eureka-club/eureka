@@ -122,7 +122,7 @@ const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, cl
           <div className="position-relative">
             <Row>
               <Col xs={8} md={9}>
-                  <Link href={`/search?q=${topic}&fields=topics`}>
+                  <Link legacyBehavior  href={`/search?q=${topic}&fields=topics`}>
                     <h2 className=" text-secondary fw-bold cursor-pointer">
                       <span className={styles.iconBefore}>
                         <BsHash className="rounded-circle border border-1 border-gray" />

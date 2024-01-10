@@ -5,9 +5,9 @@ import { } from 'react-query'
 // import {default as EP, EmojiClickData} from 'emoji-picker-react'
 import dynamic from 'next/dynamic';
 import { EmojiClickData } from 'emoji-picker-react';
-import usePostReactionCreateOrEdit from '@/src/hooks/mutations/usePostReactionCreateOrEdit';
 import { useSession } from 'next-auth/react';
 import { isPost } from '@/src/types';
+import usePostReactionCreateOrEdit from '@/src/hooks/mutations/usePostReactionCreateOrEdit';
 const EP = dynamic(
     () => {
         return import('emoji-picker-react');
@@ -28,7 +28,7 @@ const usePostEmojiPicker = (props: Props) => {
     const user = session?.user;
 
     const [showEmojisPicker, setShowEmojisPicker] = useState(false)
-    const { mutate, isLoading: isMutating } = usePostReactionCreateOrEdit({ post, cacheKey });
+    const { mutate, isPending: isMutating } = usePostReactionCreateOrEdit({ post, cacheKey });
 
     const EmojiPicker: React.FC<Props> = () => {
         if (!isPost(post)) return <></>;

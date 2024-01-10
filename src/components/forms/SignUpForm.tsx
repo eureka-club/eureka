@@ -198,14 +198,14 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
               <Container
                 className={`${styles.imageContainer} d-flex flex-column align-items-center justify-content-center`}
               >
-                <Link href="/" replace>
+                <Link legacyBehavior  href="/" replace>
                   <img
                     className={` cursor-pointer ${styles.eurekaImage}`}
                     src="/Eureka-VT-web-white.png"
                     alt="Eureka"
                   />
                 </Link>
-                <Link href="/" replace>
+                <Link legacyBehavior  href="/" replace>
                   <p className={`mt-5 cursor-pointer text-white ${styles.VisitEurekaText}`}>{t('VisitEureka')} </p>
                 </Link>
               </Container>
@@ -217,7 +217,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                 <span className={`xl-ms-3 ${styles.joinEurekaText}`}>{t('JoinEureka')}</span>
                 <p className={`${styles.haveAccounttext}`}>
                   {t('HaveAccounttext')}{' '}
-                  <Link href="/">
+                  <Link legacyBehavior  href="/">
                     <a className="">{t('Login')}</a>
                   </Link>
                 </p>
@@ -291,13 +291,13 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
                           className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
                         >
                           {t('joinedTerms')}
-                          <Link href="/manifest" passHref>
+                          <Link legacyBehavior  href="/manifest" passHref>
                             <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`}>
                               {t('termsText')}
                             </span>
                           </Link>
                           {t('and')}
-                          <Link href="/policy" passHref>
+                          <Link legacyBehavior  href="/policy" passHref>
                             <span className={`d-flex cursor-pointer ms-1 ${styles.linkText}`}>{t('policyText')}</span>
                           </Link>
                         </p>

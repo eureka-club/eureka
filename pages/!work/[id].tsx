@@ -13,6 +13,8 @@ import useWork,{getWork} from '@/src/useWork';
 import {getCycles} from '@/src/useCycles'
 import {getPosts} from '@/src/usePosts'
 import { Session } from '@/src/types';
+import { getServerSession } from 'next-auth';
+import auth_config from 'auth_config';
 
 interface Props{
   workId: number;
@@ -94,8 +96,8 @@ const WorkDetailPage: NextPage<Props> = ({ session, metas, workId }) => {
 };
 
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const session = await getSession(ctx)
+export const getServerSideProps: GetServerSideProps = async (ctx) => {debugger;
+  const session = await getServerSession(auth_config('pt'));
   const { params } = ctx
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
 

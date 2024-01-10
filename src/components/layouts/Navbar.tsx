@@ -132,7 +132,7 @@ const NavBar: FunctionComponent = () => {
         {topics.map((topic) => {
           return (
             <Dropdown.Item key={topic} onClick={() => handlerTopicsLinkClick(topic)}>
-              {/* <Link href="/aboutUs"> */}
+              {/* <Link legacyBehavior  href="/aboutUs"> */}
               {t(`topics:${topic}`)}
               {/* </Link> */}
             </Dropdown.Item>
@@ -148,7 +148,7 @@ const NavBar: FunctionComponent = () => {
       <Navbar collapseOnSelect expand="lg" bg="white" fixed="top" className="border-bottom border-primary">
         <Container className="px-0  d-flex flex-lg-column flex-xxl-row">
           <section className='d-flex flex-row w-100 justify-content-start ms-2 ' >
-          <Link href="/" replace>
+          <Link legacyBehavior  href="/" replace>
             <a className="d-flex align-items-center">
               <Navbar.Brand className="cursor-pointer">
                 <aside className="d-flex justify-content-around align-items-center">
@@ -192,7 +192,7 @@ const NavBar: FunctionComponent = () => {
                       <span className={styles.menuBottomInfo}>{t('My Mediatheque')}</span>
                         <Dropdown.Menu >
                           <Dropdown.Item>
-                            <Link href={`/mediatheque/${getMediathequeSlug()}`}>
+                            <Link legacyBehavior  href={`/mediatheque/${getMediathequeSlug()}`}>
                               <a data-cy="my-mediatheque-link" className={styles.navLink}>
                                 {t('My Mediatheque')}
                               </a>
@@ -200,7 +200,7 @@ const NavBar: FunctionComponent = () => {
 
                           </Dropdown.Item>
                           <Dropdown.Item>
-                            <Link href={`/user/${getMediathequeSlug() }/my-read-or-watched`}>
+                            <Link legacyBehavior  href={`/user/${getMediathequeSlug() }/my-read-or-watched`}>
                               <a className={styles.navLink}>
                                 {t("MyReadOrWatched")}
                               </a>
@@ -212,7 +212,7 @@ const NavBar: FunctionComponent = () => {
 
                     </Dropdown>
                     {/*<Nav.Item>
-                      <Link href={`/mediatheque/${getMediathequeSlug()}`}>
+                      <Link legacyBehavior  href={`/mediatheque/${getMediathequeSlug()}`}>
                         <a data-cy="my-mediatheque-link" className={styles.navLink}>
                           <RiDashboardLine className={styles.navbarIconNav} />
                           <span className={styles.menuBottomInfo}>{t('My Mediatheque')}</span>
@@ -234,7 +234,7 @@ const NavBar: FunctionComponent = () => {
                             active={router.asPath.search(/manifest$/g) !== -1}
                             onClick={() => router.push('/manifest')}
                           >
-                            {/* <Link href="/aboutUs"> */}
+                            {/* <Link legacyBehavior  href="/aboutUs"> */}
                             {t('Manifest')}
                             {/* </Link> */}
                           </Dropdown.Item>
@@ -242,7 +242,7 @@ const NavBar: FunctionComponent = () => {
                             active={router.asPath.search(/about$/g) !== -1}
                             onClick={() => router.push('/about')}
                           >
-                            {/* <Link href="/about"> */}
+                            {/* <Link legacyBehavior  href="/about"> */}
                             {t('About Eureka')}
                             {/* </Link> */}
                           </Dropdown.Item>
@@ -250,7 +250,7 @@ const NavBar: FunctionComponent = () => {
                             active={router.asPath.search(/aboutUs$/g) !== -1}
                             onClick={() => router.push('/aboutUs')}
                           >
-                            {/* <Link href="/aboutUs"> */}
+                            {/* <Link legacyBehavior  href="/aboutUs"> */}
                             {t('About Us')}
                             {/* </Link> */}
                           </Dropdown.Item>
@@ -282,7 +282,7 @@ const NavBar: FunctionComponent = () => {
                           <Dropdown.Menu data-cy="links-language">
                             {router.locales.map((locale) => (
                               <Dropdown.Item key={locale} eventKey={locale} active={locale === router.locale}>
-                                {/* <Link href={router.asPath} locale={locale}> */}
+                                {/* <Link legacyBehavior  href={router.asPath} locale={locale}> */}
                                   <img
                                     className={`m-1 ${styles.navbarIconNav}`}
                                     src={`/img/lang-flags/${locale}.png`}
@@ -350,16 +350,16 @@ const NavBar: FunctionComponent = () => {
                           </Dropdown.Toggle>
                           <Dropdown.Menu>
                             {session?.user.roles && session?.user.roles == 'admin' && (
-                              <Link href="/cycle/create">
+                              <Link legacyBehavior  href="/cycle/create">
                                 <a className="dropdown-item">{t('cycle')}</a>
                               </Link>
                             )}
-                            <Link href="/post/create">
+                            <Link legacyBehavior  href="/post/create">
                               <a className="dropdown-item">{t('post')}</a>
                             </Link>
                             {/*<Dropdown.Item onClick={handleCreatePostClick}>{t('post')}</Dropdown.Item>*/}
                             {/*{session?.user.roles && session?.user.roles == 'admin' && (*/}
-                            <Link href="/work/create">
+                            <Link legacyBehavior  href="/work/create">
                               <a className="dropdown-item">{t('work')}</a>
                             </Link>
                             {/*)}

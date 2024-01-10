@@ -39,7 +39,7 @@ const StripePaymentSuccessPage: NextPage<Props> = ({ session }) => {
           <Row className="d-flex justify-content-between">
             <Col className='col-12'>
               <Row className='p-4'>
-                <Link href="/" replace >
+                <Link legacyBehavior  href="/" replace >
                   <a className="d-flex align-items-center">
                     <aside className="d-flex justify-content-around align-items-center">
                       {/*<Image src="/logo.svg" width={45} height={52} alt="Project logo" />*/}

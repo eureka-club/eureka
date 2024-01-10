@@ -1,13 +1,14 @@
+"use client"
+
 import {} from 'react';
-import { useModalContext } from '@/src/useModal';
+import { useModalContext } from '@/src/hooks/useModal';
 import SignInForm from '@/src/components/forms/SignInForm';
 
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { UserMosaicItem } from '@/src/types/user';
-import useUser from '@/src/useUser';
+import useUser from '@/src/hooks/useUser';
 import { PostMosaicItem } from '@/src/types/post';
-import { PostReaction } from '@prisma/client';
 
 export interface ExecReactionPayload {
   doCreate:boolean;
@@ -24,7 +25,7 @@ interface Props{
 }
 
 const usePostReactionCreateOrEdit = (props:Props)=>{
-  const {post,cacheKey} = props;
+  const {post} = props;
   const queryClient = useQueryClient();
   const {data:session,status} = useSession();
   const { data: user } = useUser(session?.user?.id||0, {
@@ -38,24 +39,24 @@ const usePostReactionCreateOrEdit = (props:Props)=>{
   };
     
   return useMutation(
-    async ({ doCreate, emoji,unified }:ExecReactionPayload) => {
-      if (session && post) {
-        // const doDelete = post.reactions.findIndex(r=>r.userId==session.user.id && r.emoji == emoji) !== -1;
-        const res = await fetch(`/api/post/${post.id}/reaction`, {
-          method: doCreate ? 'POST' : 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            emoji,
-            unified,
-            doCreate,
-          }),
-        });
-        return res.json();
-      }
-      openSignInModal();
-      return null;
-    },
     {
+      mutationFn:async ({ doCreate, emoji,unified }:ExecReactionPayload) => {
+        if (session && post) {
+          // const doDelete = post.reactions.findIndex(r=>r.userId==session.user.id && r.emoji == emoji) !== -1;
+          const res = await fetch(`/api/post/${post.id}/reaction`, {
+            method: doCreate ? 'POST' : 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              emoji,
+              unified,
+              doCreate,
+            }),
+          });
+          return res.json();
+        }
+        openSignInModal();
+        return null;
+      },
       onMutate:async (payload: ExecReactionPayload) => {
         let prevUser =undefined;
         let prevPost =undefined;
@@ -63,8 +64,8 @@ const usePostReactionCreateOrEdit = (props:Props)=>{
           const ck = ['POST',`${post.id}`];
           // const ck = cacheKey || ['POST',`${post.id}`];
           
-          await queryClient.cancelQueries(['USER', `${session.user.id}`]);
-          await queryClient.cancelQueries(ck);
+          await queryClient.cancelQueries({queryKey:['USER', `${session.user.id}`]});
+          await queryClient.cancelQueries({queryKey:ck});
           
           prevUser = queryClient.getQueryData<UserMosaicItem>(['USER', `${session.user.id}`]);
           prevPost = queryClient.getQueryData<PostMosaicItem>(ck);
@@ -93,8 +94,8 @@ const usePostReactionCreateOrEdit = (props:Props)=>{
           if ('prevUser' in context) queryClient.setQueryData(['USER', `${session?.user.id}`], context?.prevUser);
           if ('prevPost' in context) queryClient.setQueryData(ck, context?.prevPost);
         }
-        queryClient.invalidateQueries(['USER', `${session?.user.id}`]);
-        queryClient.invalidateQueries(ck);
+        queryClient.invalidateQueries({queryKey:['USER', `${session?.user.id}`]});
+        queryClient.invalidateQueries({queryKey:ck});
       },
     },
   );

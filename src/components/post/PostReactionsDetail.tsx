@@ -7,8 +7,8 @@ import { useSession } from 'next-auth/react';
 import { Toast as T } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import usePostReactionCreateOrEdit from '@/src/hooks/mutations/usePostReactionCreateOrEdit';
 import { useModalContext } from '@/src/useModal';
+import usePostReactionCreateOrEdit from '@/src/hooks/mutations/usePostReactionCreateOrEdit';
 interface Props {
   post:PostMosaicItem;
   cacheKey:[string,string];
@@ -19,7 +19,7 @@ const PostReactionsDetail: FunctionComponent<Props> = ({post,cacheKey}) => {
   const { t } = useTranslation('common');
   const router = useRouter();
   // const { setShowEmojisPicker } = usePostEmojiPicker({post,cacheKey});
-  const {mutate,isLoading:isMutating} = usePostReactionCreateOrEdit({post,cacheKey});
+  const {mutate,isPending:isMutating} = usePostReactionCreateOrEdit({post,cacheKey});
   const { show } = useModalContext();
 
   // const handleReactionClick = (ev: MouseEvent<HTMLButtonElement>) => {

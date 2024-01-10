@@ -23,7 +23,7 @@ const TermsAndPolicy: FunctionComponent = () => {
 
           <Row>
             <span>{t('AgreeText')}
-              <Link href="/manifest" passHref>
+              <Link legacyBehavior  href="/manifest" passHref>
                   <span className={`cursor-pointer ms-1 ${styles.linkText}`}>{t('Manifesto')}</span>
               </Link>
             </span>

@@ -1,14 +1,12 @@
-import {} from 'react';
-import { useModalContext } from '@/src/useModal';
-import SignInForm from '@/src/components/forms/SignInForm';
+"use client"
 
-import { useMutation, useQueryClient } from 'react-query';
+import { useModalContext } from '@/src/hooks/useModal';
+import SignInForm from '@/src/components/forms/SignInForm';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CycleMosaicItem } from '@/src/types/cycle';
-import { WorkMosaicItem } from '@/src/types/work';
 import { useSession } from 'next-auth/react';
-import { isCycle, isWork } from '@/src/types';
 import { UserMosaicItem } from '@/src/types/user';
-import useUser from '@/src/useUser';
+import useUser from '@/src/hooks/useUser';
 
 export interface ExecRatingPayload {
   doCreate:boolean;
@@ -37,29 +35,29 @@ const useExecRating = (props:Props)=>{
   };
     
   return useMutation(
-    async ({ doCreate, ratingQty }:ExecRatingPayload) => {
-      if (session && cycle) {
-        const res = await fetch(`/api/cycle/${cycle.id}/rating`, {
-          method: doCreate ? 'POST' : 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            qty: ratingQty,
-            doCreate,
-          }),
-        });
-        return res.json();
-      }
-      openSignInModal();
-      return null;
-    },
     {
+      mutationFn:async ({ doCreate, ratingQty }:ExecRatingPayload) => {
+        if (session && cycle) {
+          const res = await fetch(`/api/cycle/${cycle.id}/rating`, {
+            method: doCreate ? 'POST' : 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              qty: ratingQty,
+              doCreate,
+            }),
+          });
+          return res.json();
+        }
+        openSignInModal();
+        return null;
+      },
       onMutate:async (payload: ExecRatingPayload) => {
         let prevUser =undefined;
         let prevCycle =undefined;
         if (cycle && session && user) {
           const cacheKey = ['CYCLE',`${cycle.id}`];
-          await queryClient.cancelQueries(['USER', `${session.user.id}`]);
-          await queryClient.cancelQueries(cacheKey);
+          await queryClient.cancelQueries({queryKey:['USER', `${session.user.id}`]});
+          await queryClient.cancelQueries({queryKey:cacheKey});
           
           prevUser = queryClient.getQueryData<UserMosaicItem>(['USER', `${session.user.id}`]);
           prevCycle = queryClient.getQueryData<CycleMosaicItem>(cacheKey);
@@ -86,8 +84,8 @@ const useExecRating = (props:Props)=>{
           if ('prevUser' in context) queryClient.setQueryData(['USER', `${session?.user.id}`], context?.prevUser);
           if ('prevCycle' in context) queryClient.setQueryData(cacheKey, context?.prevCycle);
         }
-        queryClient.invalidateQueries(['USER', `${session?.user.id}`]);
-        queryClient.invalidateQueries(cacheKey);
+        queryClient.invalidateQueries({queryKey:['USER', `${session?.user.id}`]});
+        queryClient.invalidateQueries({queryKey:cacheKey});
       },
     },
   );

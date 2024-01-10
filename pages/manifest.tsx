@@ -427,7 +427,7 @@ const ManifestPage: NextPage<Props> = ({session}) => {
        <section className="mb-5">
          <Row>
         <span>{t('AgreeText')}
-          <Link href="/policy" passHref>
+          <Link legacyBehavior  href="/policy" passHref>
               <span className={`cursor-pointer ms-1 ${styles.linkText}`}>{t('policyText')}</span>
            </Link>
         </span>

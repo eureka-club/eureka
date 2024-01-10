@@ -55,7 +55,7 @@ const RecoveryLoginForm: FunctionComponent = () => {
   return (
     <Container>
         <Container className={`${styles.headerContainer}`}>
-       <Link href="/" replace>  
+       <Link legacyBehavior  href="/" replace>  
           <img  className={`cursor-pointer ${styles.eurekaImage}`} src="/logo.svg" alt="Eureka" /> 
         </Link>   
         <p className={styles.EurekaText}>EUREKA</p>

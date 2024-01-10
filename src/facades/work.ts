@@ -40,15 +40,17 @@ const editionsToBook = (book: WorkMosaicItem, language: string): WorkMosaicItem 
   return null;
 };
 
-export const find = async (id: number, language: string): Promise<WorkMosaicItem | null> => {
+export const find = async (id: number, language?: string): Promise<WorkMosaicItem | null> => {
   let work = await prisma.work.findUnique({
     where: { id },
     include,
   });
   if (work) {
-    work = editionsToBook(work, language);
+    if(language)
+      work = editionsToBook(work, language);
     return work;
   }
+  
   return null;
 };
 

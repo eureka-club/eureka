@@ -88,9 +88,7 @@ function Loading() {
      <SSRProvider>
         <NextAuthProvider session={session} refetchInterval={5 * 60}>
           <Loading/>  
-          {/* <GlobalEventsContext.Provider value={{...gec}}> 
-          //<Provider initialValues={initialState && [[detailPagesAtom, globalModalsAtom, initialState]]}>*/}
-              <Provider initialValues={initialState && [[detailPagesAtom, initialState]]}>
+              {/* <Provider initialValues={initialState && [[detailPagesAtom, initialState]]}> */}
                 <QueryClientProvider client={queryClient}>
 
                   <Hydrate state={dehydratedState}>
@@ -108,7 +106,6 @@ function Loading() {
                       `,
                     }}
                   />
-                    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                     <ModalProvider>
                       <NotificationProvider>
                        <ErrorBounddary> 
@@ -118,13 +115,10 @@ function Loading() {
                       </NotificationProvider>
                     </ModalProvider>
                     <Toaster position="top-center" reverseOrder={false}/>
-                  
                   </Hydrate>
                   <ReactQueryDevtools />
                 </QueryClientProvider>
-              </Provider>
-          {/* </GlobalEventsContext.Provider> */}
-          
+              {/* </Provider> */}
         </NextAuthProvider>
 
      </SSRProvider>

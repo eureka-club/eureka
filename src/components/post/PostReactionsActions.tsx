@@ -11,6 +11,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import usePostReactionCreateOrEdit from '@/src/hooks/mutations/usePostReactionCreateOrEdit';
 
+
 interface Props {
   post: PostMosaicItem;
   cacheKey: string[] | [string, string];
@@ -21,7 +22,7 @@ const PostReactionsActions: FunctionComponent<Props> = ({ post, cacheKey }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const { EmojiPicker, setShowEmojisPicker } = usePostEmojiPicker({ post, cacheKey });
-  const { mutate, isLoading: isMutating } = usePostReactionCreateOrEdit({ post, cacheKey });
+  const { mutate, isPending: isMutating } = usePostReactionCreateOrEdit({ post, cacheKey });
 
 
   const handleReactionClick = (ev: MouseEvent<HTMLButtonElement>) => {

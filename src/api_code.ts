@@ -2,7 +2,10 @@ export const WORK_ALREADY_EXIST="WORK_ALREADY_EXIST";
 export const EDITION_ALREADY_EXIST="EDITION_ALREADY_EXIST";
 export const NOT_COVER_IMAGE_RECEIVED="NOT_COVER_IMAGE_RECEIVED";
 export const SERVER_ERROR="SERVER_ERROR";
+export const USER_REGISTERED='UserRegistered';
+export const BAD_REQUEST="BAD_REQUEST";
 export const UNAUTHORIZED="UNAUTHORIZED";
+export const NOT_FOUND="NOT_FOUND";
+export const REMOVING_IMG_FAILED="REMOVING_IMG_FAILED";
 export const MISSING_FIELD=(field:string)=>`MISSING_FIELD|${field}`;
-
- 
+export const INVALID_FIELD=(field:string)=>`INVALID_FIELD|${field}`;

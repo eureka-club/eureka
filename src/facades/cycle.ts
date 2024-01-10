@@ -5,6 +5,7 @@ import { CreateCycleServerFields, CreateCycleServerPayload, CycleMosaicItem } fr
 import { prisma } from '@/src/lib/prisma';
 import { subscribe_to_segment, unsubscribe_from_segment } from '@/src/lib/mailchimp';
 import { sendMail } from './mail';
+import { PostMosaicItem } from '../types/post';
 
 export const NEXT_PUBLIC_MOSAIC_ITEMS_COUNT = +(process.env.NEXT_PUBLIC_NEXT_PUBLIC_MOSAIC_ITEMS_COUNT || 10);
 
@@ -629,4 +630,35 @@ export const remove = async (cycle: Cycle): Promise<Cycle> => {
   return prisma.cycle.delete({
     where: { id: cycle.id },
   });
+};
+
+export const posts = async (id: number): Promise<PostMosaicItem[]> => {
+  const cycle = await prisma.cycle.findUnique({
+    where: { id },
+    select:{
+      posts: {
+        include: {
+          works: { select: { id: true, title: true,author:true, type: true, localImages: { select: { storedFile: true } } } },
+          cycles: {
+            select: {
+              id: true,
+              creator: { select: { name: true } },
+              localImages: { select: { storedFile: true } },
+              creatorId: true,
+              startDate: true,
+              endDate: true,
+              title: true,
+              access:true,
+              participants:{select:{id:true}}
+            },
+          },
+          favs: { select: { id: true } },
+          creator: { select: { id: true, name: true, photos: true, countryOfOrigin: true } },
+          localImages: { select: { storedFile: true } },
+          reactions: true,
+        }
+      }
+    },
+  });
+  return cycle?.posts??[];
 };

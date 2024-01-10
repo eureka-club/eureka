@@ -205,7 +205,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         {showDetailedInfo && (
           <div className={`${styles.detailedInfo}`}>
             <h6 className="mb-0 px-1 text-center d-flex justify-content-center align-items-center  h-100" data-cy="post-title">
-              <Link href={postLinkHref}>
+              <Link legacyBehavior  href={postLinkHref}>
                 <a title={(post.title.length > 45) ? post.title : ''} className={`text-primary ${styles.title}`}>{(post.title.length > 45) ? `${post.title.slice(0,45)}...` : post.title}</a>
               </Link>              
             </h6>
@@ -218,7 +218,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           {/* <h2 className="m-0 p-1 fs-6 text-info" data-cy="parent-title">
             {` `}
             {parentLinkHref != null ? (
-              <Link href={parentLinkHref}>
+              <Link legacyBehavior  href={parentLinkHref}>
                 <a title={getParentTitle()} className="text-info">
                   <span>{renderParentTitle()} </span>
                 </a>

@@ -11,11 +11,11 @@ import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import { useRouter } from 'next/router';
 import { Session } from '@/src/types';
 import LinearProgress from '@mui/material/LinearProgress';
-import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLeaveActions';
 import useCycle from '@/src/useCycle';
 import useUser from '@/src/useUser';
 import useUsers from '@/src/useUsers';
 import toast from 'react-hot-toast';
+import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLeaveActions';
 
 interface Props {
   session: Session
@@ -74,13 +74,12 @@ const TransitionSignUpToPayCyclePage: NextPage<Props> = ({ session }) => {
     setLoading(false)
 
   };
-
+  
   const {
     mutate: execJoinCycle,
-    isLoading: isJoinCycleLoading,
     data: mutationResponse,
     // isSuccess: isJoinCycleSuccess,
-  } = useJoinUserToCycleAction(user!, cycle!, participants!, (_data, error) => {
+  } = useJoinUserToCycleAction(session, cycle!, participants!, (_data:any, error:any) => {
     if (error)
       toast.error(t('Internal Server Error'));
   });
@@ -92,7 +91,7 @@ const TransitionSignUpToPayCyclePage: NextPage<Props> = ({ session }) => {
           <Row className="d-flex justify-content-between">
             <Col className='col-12'>
               <Row className='p-4'>
-                <Link href="/" replace >
+                <Link legacyBehavior  href="/" replace >
                   <a className="d-flex align-items-center">
                     <aside className="d-flex justify-content-around align-items-center">
                       {/*<Image src="/logo.svg" width={45} height={52} alt="Project logo" />*/}

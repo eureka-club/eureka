@@ -1,47 +1,51 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-// import { getSession } from 'next-auth/react';
-import getT from 'next-translate/getT';
-import { WEBAPP_URL } from '../../../../src/constants';
-// import { Session } from '../../../../src/types';
-import getApiHandler from '../../../../src/lib/getApiHandler';
-import { addParticipant, find } from '../../../../src/facades/cycle';
+
+import { WEBAPP_URL } from '@/src/constants';
+import { addParticipant, find } from '@/src/facades/cycle';
 import {prisma} from '@/src/lib/prisma';
-import { sendMailRequestJoinCycleResponse } from '../../../../src/facades/mail';
+import { sendMailRequestJoinCycleResponse } from '@/src/facades/mail';
+import { NextRequest, NextResponse } from 'next/server';
+import { BAD_REQUEST, INVALID_FIELD, NOT_FOUND, SERVER_ERROR } from '@/src/api_code';
 import getLocale from '@/src/getLocale';
-import { NextRequest } from 'next/server';
+import { getDictionary, t } from '@/src/get-dictionary';
 
 const bcrypt = require('bcryptjs');
 
-export default getApiHandler()
-.get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
-  // const session = (await getSession({ req })) as unknown as Session;
-  const { id: cycleId } = req.query;
-  const [userId, base64Hash, authorized] = req.query.cycleAuthorizeJoin as string[];
+interface Props{
+  params:{
+    id:string;
+    cycleAuthorizeJoin:string[]
+  }
+}
+export async function GET(req:NextRequest,props:Props) {
+
+  // const { id: cycleId } = req.query;
+  const {id:cycleId,cycleAuthorizeJoin}=props.params;
+  const [userId, base64Hash, authorized] = cycleAuthorizeJoin;
+
   if (typeof cycleId !== 'string') {
-    res.status(404).end();
-    return;
+    return NextResponse.json({error:BAD_REQUEST});
   }
 
   const idNum = parseInt(cycleId, 10);
   if (!Number.isInteger(idNum)) {
-    res.status(404).end();
-    return;
+    return NextResponse.json({error:INVALID_FIELD('id')});
   }
   const hash = Buffer.from(base64Hash, 'base64').toString('binary');
   if (!bcrypt.compareSync(`${cycleId}!|!${userId}`, hash)) {
-    res.status(404).end();
-    return;
+    return NextResponse.json({error:BAD_REQUEST});
   }
+
+  const locale = getLocale(req);
+  const dict = await getDictionary(locale);
 
   try {
     const cycle = await find(idNum);
     if (cycle == null) {
-      res.status(404).end();
-      return;
+      return NextResponse.json({error:NOT_FOUND});
     }
     const user = await prisma.user.findFirst({ where: { id: parseInt(userId, 10) } });
     if (authorized === '1') {
-      await addParticipant(cycle.id, +userId); 
+      await addParticipant(cycle.id, +userId);
       
       let cuj = await prisma.cycleUserJoin.update({
         where:{
@@ -52,23 +56,19 @@ export default getApiHandler()
         },
         data:{pending:false}
       });
-      // res.redirect('/cycle/cycleJoinedSuccefully');
     }
     if (user && user.email) {
-      //const locale = req.cookies.NEXT_LOCALE;
-      const locale = await getLocale(req);
-      const t = await getT(locale, 'cycleJoin');
-      const title = `${t('Hello')} ${user.name}!`;
+      const title = `${t(dict.cycleJoin,'Hello')} ${user.name}!`;
       /// Your request to Join the cycle [name of the cycle] has been approved.
-      const emailReason = `${t('Your request to Join the cycle')} "${cycle.title}" ${t('has been')} ${
-        authorized === '1' ? t('approved') : t('denied')
+      const emailReason = `${t(dict.cycleJoin,'Your request to Join the cycle')} "${cycle.title}" ${t(dict.cycleJoin,'has been')} ${
+        authorized === '1' ? t(dict.cycleJoin,'approved') : t(dict.cycleJoin,'denied')
       }`;
       const cycleURL = `${WEBAPP_URL}/cycle/${cycle.id}`;
-      const visitCycleInfo = t('visitCycleInfo');
-      const thanks = t('thanks');
-      const eurekaTeamThanks = t('eurekaTeamThanks');
-      const ignoreEmailInf = t('ignoreEmailInf');
-      const aboutEureka = t('aboutEureka');
+      const visitCycleInfo = t(dict.cycleJoin,'visitCycleInfo');
+      const thanks = t(dict.cycleJoin,'thanks');
+      const eurekaTeamThanks = t(dict.cycleJoin,'eurekaTeamThanks');
+      const ignoreEmailInf = t(dict.cycleJoin,'ignoreEmailInf');
+      const aboutEureka = t(dict.cycleJoin,'aboutEureka');
       const gotToCycle = {
         ...(authorized === '1' && {
           cycleURL,
@@ -101,13 +101,13 @@ export default getApiHandler()
           eurekaTeamThanks,
           ...gotToCycle,
         });
-        res.redirect(mailRes ? 307 : 404, `/cycle/${cycleId}`);
+        return NextResponse.redirect(cycleURL);
       }
     }
   } catch (exc) {
     console.error(exc); // eslint-disable-line no-console
-    res.status(500).json({ status: 'server error' });
+    return NextResponse.json({ error: SERVER_ERROR });
   } finally {
     //prisma.$disconnect();
   }
-});
+};

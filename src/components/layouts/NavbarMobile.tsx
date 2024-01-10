@@ -130,7 +130,7 @@ const NavBar: FunctionComponent = () => {
         {topics.map((topic) => {
           return (
             <Dropdown.Item key={topic} onClick={() => handlerTopicsLinkClick(topic)}>
-              {/* <Link href="/aboutUs"> */}
+              {/* <Link legacyBehavior  href="/aboutUs"> */}
               {t(`topics:${topic}`)}
               {/* </Link> */}
             </Dropdown.Item>
@@ -144,7 +144,7 @@ const NavBar: FunctionComponent = () => {
     <Container fluid className={styles.container}>
       <Navbar collapseOnSelect expand="lg" variant="light" className="position-relative" style={{ zIndex: 9999 }}>
         {/* <Container> */}
-        <Link href="/">
+        <Link legacyBehavior  href="/">
           <Navbar.Brand className="cursor-pointer">
             <aside className="d-flex justify-content-between align-items-center">
               <img className="eurekaLogo" src="/logo.svg" alt="Project logo" />
@@ -196,7 +196,7 @@ const NavBar: FunctionComponent = () => {
                   </Dropdown.Toggle>
                   <Dropdown.Menu >
                     <Dropdown.Item>
-                      <Link href={`/mediatheque/${getMediathequeSlug()}`}>
+                      <Link legacyBehavior  href={`/mediatheque/${getMediathequeSlug()}`}>
                         <a data-cy="my-mediatheque-link" className={styles.navLink}>
                           {t('My Mediatheque')}
                         </a>
@@ -204,7 +204,7 @@ const NavBar: FunctionComponent = () => {
 
                     </Dropdown.Item>
                     <Dropdown.Item>
-                      <Link href={`/user/${getMediathequeSlug()}/my-read-or-watched`}>
+                      <Link legacyBehavior  href={`/user/${getMediathequeSlug()}/my-read-or-watched`}>
                         <a className={styles.navLink}>
                           {t("MyReadOrWatched")}
                         </a>
@@ -264,7 +264,7 @@ const NavBar: FunctionComponent = () => {
                   <Dropdown.Menu>
                     {router.locales.map((locale) => (
                       <Dropdown.Item key={locale} eventKey={locale} active={locale === router.locale}>
-                        <Link href={router.asPath} locale={locale}>
+                        <Link legacyBehavior  href={router.asPath} locale={locale}>
                           <img
                             className={`m-1 ${styles.navbarIconNav}`}
                             src={`/img/lang-flags/${locale}.png`}
@@ -324,15 +324,15 @@ const NavBar: FunctionComponent = () => {
                   </Dropdown.Toggle>
                   <Dropdown.Menu className={styles.dropdownMenu}>
                     {session?.user.roles && session?.user.roles == 'admin' && (
-                      <Link href="/cycle/create">
+                      <Link legacyBehavior  href="/cycle/create">
                         <a className="dropdown-item">{t('cycle')}</a>
                       </Link>
                     )}
-                    <Link href="/post/create">
+                    <Link legacyBehavior  href="/post/create">
                       <a className="dropdown-item">{t('post')}</a>
                     </Link>
                     {/* {session?.user.roles && session?.user.roles == 'admin' && ( */}
-                      <Link href="/work/create">
+                      <Link legacyBehavior  href="/work/create">
                         <a className="dropdown-item">{t('work')}</a>
                       </Link>
                   {/* )} */}

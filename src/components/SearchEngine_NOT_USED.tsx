@@ -184,7 +184,7 @@
 //                 <Menu {...menuProps}>
 //                   {renderMenuItems(results)}
 //                   {(results.length && (
-//                     // <Link href={`/search?q=${q}`} passHref>
+//                     // <Link legacyBehavior  href={`/search?q=${q}`} passHref>
 //                     //   <Button variant="light" className={styles.seeAllResults}>
 //                     //   <a>
 //                     //   {t('See all results')}

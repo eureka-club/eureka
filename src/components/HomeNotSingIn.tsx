@@ -87,11 +87,11 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                            <Button onClick={()=> window.scrollTo(0, 60)}  className={` btn-eureka ${styles.submitButton}`}>
                                 {t('signInForm:login')} 
                            </Button>
-                           <p className={`mt-1 text-secondary ${styles.dontHaveAccounttext}`}>{t('signInForm:dontHaveAccounttext')} <Link href="/register">
+                           <p className={`mt-1 text-secondary ${styles.dontHaveAccounttext}`}>{t('signInForm:dontHaveAccounttext')} <Link legacyBehavior  href="/register">
                            <a className="text-secondary text-decoration-underline">{t('signInForm:Join')}</a></Link></p>
                         </Col>
                         <Col className="d-flex flex-column justify-content-center align-items-center ">
-                                <Link href='/explore'>
+                                <Link legacyBehavior  href='/explore'>
                                         <Button  data-cy="btn-explore" className={` btn-eureka ${styles.submitButton}`}>
                                                 {t('Explore')} 
                                         </Button>

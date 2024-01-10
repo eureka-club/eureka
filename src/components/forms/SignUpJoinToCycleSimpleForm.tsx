@@ -1,6 +1,4 @@
 import { signIn } from 'next-auth/react';
-import { getSession } from 'next-auth/react';
-
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useState, MouseEvent, ChangeEvent, FormEvent, useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -13,21 +11,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 import styles from './SignUpJoinToCycleForm.module.css';
-import MosaicItem from '@/src/components/cycle/MosaicItem';
-import { CycleContext } from '@/src/useCycleContext';
 import useCycle from '@/src/useCycle';
-import UserAvatar from '@/src/components/common/UserAvatar';
-import CycleDetailWorks from '@/src/components/cycle/CycleDetailWorks';
-import Footer from '@/components/layouts/Footer';
 import { TextField, Box } from '@mui/material';
-import { DATE_FORMAT_LARGE } from '../../constants';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import { Session } from '@/src/types';
-//import { useSession } from 'next-auth/react';
-import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
-import useUser from '@/src/useUser';
 import useUsers from '@/src/useUsers'
 import { useCyclePrice } from '@/src/hooks/useCyclePrices';
 import LinearProgress from '@mui/material/LinearProgress';
@@ -363,7 +348,7 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
           <Row className="d-flex justify-content-between">
             <Col className='col-12'>
               <Row className='p-4'>
-                <Link href="/" replace >
+                <Link legacyBehavior  href="/" replace >
                   <a target='_blank' className="d-flex align-items-center">
                     <aside className="d-flex justify-content-around align-items-center">
                       {/*<Image src="/logo.svg" width={45} height={52} alt="Project logo" />*/}
@@ -468,13 +453,13 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
                         className={`text-center align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
                       >
                         {t('joinedCycleSignInTerms')}
-                        <Link href="/manifest" passHref>
+                        <Link legacyBehavior  href="/manifest" passHref>
                       <a target="_blank"><span className={` cursor-pointer ms-1 me-1 ${styles.linkText}`}>
                             {t('termsText')}
                           </span></a>
                         </Link>
                         {t('and')}
-                        <Link href="/policy" passHref> 
+                        <Link legacyBehavior  href="/policy" passHref> 
                       <a target="_blank"><span className={`cursor-pointer ms-1 ${styles.linkText}`}>{t('policyText')}</span></a>
                         </Link>
                       </p>

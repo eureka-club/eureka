@@ -121,7 +121,7 @@ const handlerRecoveryLogin = ()=>{
       <>
       <ModalHeader className={`position-relative ${styles.modalHeader}`} closeButton={!noModal}>
         {logoImage && (<Container>
-        <Link href="/" replace>  
+        <Link legacyBehavior  href="/" replace>  
         <img  className={`cursor-pointer ${styles.eurekaImage}`} src="/logo.svg" alt="Eureka" /> 
         </Link>
         <p className={styles.EurekaText}>EUREKA</p>
@@ -149,7 +149,7 @@ const handlerRecoveryLogin = ()=>{
                   <Form.Label>{t('emailFieldLabel')}</Form.Label>
                   <Form.Control className='' type="email" required />
                   <div className='d-flex justify-content-between mb-1 mt-2'><div>{t('passwordFieldLabel')}</div>
-                    {/* <Link href="/recoveryLogin" passHref> */}
+                    {/* <Link legacyBehavior  href="/recoveryLogin" passHref> */}
                       <Button onClick={handlerRecoveryLogin} variant="link" className={`btn-link d-flex link align-items-end cursor-pointer ${styles.forgotPassText}`}>{t('forgotPassText')}</Button>
                     {/* </Link> */}
                   </div>

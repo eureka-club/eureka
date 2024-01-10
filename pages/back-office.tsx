@@ -113,7 +113,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   const theme = useTheme();
   const [open, setOpen] = useState<boolean>(false);
 
-  const { mutate: execUpdateWork, data: UpdateWorkResponse, isLoading: isUpdateWorkLoading, isSuccess: isUpdateWorkSuccess, isError: isUpdateWorkError,
+  const { mutate: execUpdateWork, data: UpdateWorkResponse, isPending: isUpdateWorkLoading, isSuccess: isUpdateWorkSuccess, isError: isUpdateWorkError,
   } = useUpdateWork();
 
   const [searchWorksFilter, setSearchWorksFilter] = useState('');

@@ -125,10 +125,10 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   const {
     mutate: execJoinCycle,
-    isLoading: isJoinCycleLoading,
+    isPending: isJoinCycleLoading,
     data: mutationResponse,
     // isSuccess: isJoinCycleSuccess,
-  } = useJoinUserToCycleAction(user!,cycle!,participants!,(_data,error)=>{
+  } = useJoinUserToCycleAction(session!,cycle!,participants!,(_data:any,error:any)=>{
     if(!error) {//para q no salgan dos toast al unirse a ciclo privado
       if (cycle && ![2,4].includes(cycle?.access))
         toast.success(t('OK'));
@@ -139,9 +139,9 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   const {
     mutate: execLeaveCycle,
-    isLoading: isLeaveCycleLoading,
+    isPending: isLeaveCycleLoading,
     // isSuccess: isLeaveCycleSuccess,
-  } = useLeaveUserFromCycleAction(user!,cycle!,participants!,(_data,error)=>{
+  } = useLeaveUserFromCycleAction(user!,cycle!,participants!,(_data:any,error:any)=>{
     if(!error) {
       toast.success(t('OK'));
       if(router.query.join)
