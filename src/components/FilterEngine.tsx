@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
-import { useQuery } from 'react-query';
-import { useRouter } from 'next/router';
+import { useQuery } from '@tanstack/react-query';;
+import { useRouter } from 'next/navigation';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, ChangeEvent, useState, useEffect } from 'react';
 import { Container, Row, Col, Form, OverlayTrigger, Popover, Button } from 'react-bootstrap';
@@ -88,9 +88,12 @@ const FilterEngine: FunctionComponent<Props> = ({
     return codes;
   };
 
-  const { data: countries } = useQuery('COUNTRIESALL', fetchCountries, {
-    staleTime: 1000 * 60 * 60,
-  });
+  const { data: countries } = useQuery(
+    {
+       queryKey:['COUNTRIESALL'],
+       queryFn:fetchCountries,
+      staleTime: 1000 * 60 * 60,
+    });
 
   const handlerComboxesChangeType = (e: ChangeEvent<HTMLInputElement>, type: string) => {
     e.stopPropagation();

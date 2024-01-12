@@ -2,7 +2,7 @@
 // import { useAtom } from 'jotai';
 // import { useSession } from 'next-auth/react';
 // import Link from 'next/link';
-// import { useRouter } from 'next/router';
+// import { useRouter } from 'next/navigation';
 // import useTranslation from 'next-translate/useTranslation';
 // import { setCookie } from 'nookies';
 import { FunctionComponent, ReactElement } from 'react';

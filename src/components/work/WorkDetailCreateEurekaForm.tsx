@@ -7,7 +7,7 @@ import { Post } from '@prisma/client';
 import { BsCheck } from 'react-icons/bs';
 import { ImCancelCircle } from 'react-icons/im';
 
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';;
 
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import { WorkMosaicItem } from '../../types/work';
@@ -162,67 +162,67 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
 
   };
 
-  const { mutate: execCreateEureka, isLoading } = useMutation(
-    async (payload: CreatePostAboutWorkClientPayload): Promise<Post | null> => {
-      const u = session!.user;
-      /* const toUsers = (participants||[]).filter(p=>p.id!==u.id).map(p=>p.id);
-       if(u.id !== cycle.creatorId)
-        toUsers.push(cycle.creatorId);
-      let message = '';
-      let notificationContextURL = router.asPath
-    if (payload.selectedWorkId) {
-        if (works) {
-          const work = works.find(w=>w.id === payload.selectedWorkId);
-          if(work){
-            message = `eurekaCreatedAboutWorkInCycle!|!${JSON.stringify({
-              userName:u.name||'',
-              workTitle:work.title,
-              cycleTitle:cycle.title
-            })}`; 
-            notificationContextURL = `/work/${work.id}/post`         
-          }          
-        }
-      }*/
-
-      const formData = new FormData();
-      Object.entries(payload).forEach(([key, value]) => {
-        if (value != null) {
-          formData.append(key, value);
-        }
-      });
-
-      /*   formData.append('notificationMessage', message);
-         formData.append('notificationContextURL', notificationContextURL);
-         formData.append('notificationToUsers', toUsers.join(','));
-   */
-      const res = await fetch('/api/post', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!res.ok)//TODO add Toast notification to the user
-        return null;
-
-      const json = await res.json();
-
-      if (json) {
-
-        /*  if(notifier){
-            
-              notifier.notify({
-                toUsers,
-                data:{message}
-              });
-              
-          } */
-        toast.success(t('postCreated'))
-        clearPayload();
-        return json.post;
-      }
-
-      return null;
-    },
+  const { mutate: execCreateEureka, isPending } = useMutation(
     {
+      mutationFn:async (payload: CreatePostAboutWorkClientPayload): Promise<Post | null> => {
+        const u = session!.user;
+        /* const toUsers = (participants||[]).filter(p=>p.id!==u.id).map(p=>p.id);
+         if(u.id !== cycle.creatorId)
+          toUsers.push(cycle.creatorId);
+        let message = '';
+        let notificationContextURL = router.asPath
+      if (payload.selectedWorkId) {
+          if (works) {
+            const work = works.find(w=>w.id === payload.selectedWorkId);
+            if(work){
+              message = `eurekaCreatedAboutWorkInCycle!|!${JSON.stringify({
+                userName:u.name||'',
+                workTitle:work.title,
+                cycleTitle:cycle.title
+              })}`; 
+              notificationContextURL = `/work/${work.id}/post`         
+            }          
+          }
+        }*/
+  
+        const formData = new FormData();
+        Object.entries(payload).forEach(([key, value]) => {
+          if (value != null) {
+            formData.append(key, value);
+          }
+        });
+  
+        /*   formData.append('notificationMessage', message);
+           formData.append('notificationContextURL', notificationContextURL);
+           formData.append('notificationToUsers', toUsers.join(','));
+     */
+        const res = await fetch('/api/post', {
+          method: 'POST',
+          body: formData,
+        });
+  
+        if (!res.ok)//TODO add Toast notification to the user
+          return null;
+  
+        const json = await res.json();
+  
+        if (json) {
+  
+          /*  if(notifier){
+              
+                notifier.notify({
+                  toUsers,
+                  data:{message}
+                });
+                
+            } */
+          toast.success(t('postCreated'))
+          clearPayload();
+          return json.post;
+        }
+  
+        return null;
+      },
       onMutate: async () => {
         const previewsItems = queryClient.getQueryData<PostMosaicItem[]>(cacheKey);
         return { previewsItems, cacheKey };
@@ -234,9 +234,9 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
           }
         }
         if (context && session) {
-          queryClient.invalidateQueries(context.cacheKey);
+          queryClient.invalidateQueries({queryKey:context.cacheKey});
           //queryClient.invalidateQueries(['CYCLES',JSON.stringify(workItemsWhere)])
-          queryClient.invalidateQueries(['USER', session.user.id.toString()]);//to get the new notification
+          queryClient.invalidateQueries({queryKey:['USER', session.user.id.toString()]});//to get the new notification
         }
       },
     },
@@ -454,7 +454,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
                   {/* <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel> */}
                   <TagsInputTypeAheadMaterial
                     style={{ background: 'white' }}
-                    data={topics}
+                    data={topics as {code:string,label:string}[]}
                     items={eurekaTopics}
                     setItems={setEurekaTopics}
                     max={3}
@@ -473,7 +473,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
 
           <aside className="d-flex justify-content-end">
             <ButtonGroup size="sm" className="pt-3">
-              <Button variant="warning" className="text-white" onClick={clearCreateEurekaForm} disabled={isLoading}>
+              <Button variant="warning" className="text-white" onClick={clearCreateEurekaForm} disabled={isPending}>
                 <ImCancelCircle />
               </Button>
               <Button
@@ -481,10 +481,10 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
                 onClick={handlerSubmitCreateEureka}
                 className="text-white"
                 style={{ width: '8rem' }}
-                disabled={isLoading}
+                disabled={isPending}
               >
                 <span>{t('Create')}</span>
-                {isLoading && <Spinner size="sm" animation="grow" />}
+                {isPending && <Spinner size="sm" animation="grow" />}
               </Button>
             </ButtonGroup>
           </aside>

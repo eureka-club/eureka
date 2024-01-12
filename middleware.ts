@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+
 import { i18n } from 'i18n-config'
 import getLocale from '@/src/getLocale';
 import { withAuth } from "next-auth/middleware"
@@ -7,11 +8,6 @@ import { withAuth } from "next-auth/middleware"
 export default withAuth(
   // `withAuth` augments your `Request` with the user's token.
   async function middleware(request: NextRequest) {
-debugger;
-    const host = request.headers.get('host');
-    if(host?.match('^eureka.club')){
-      return NextResponse.redirect(`https://www.eureka.club${request.nextUrl.pathname}`, 301);
-    }
     
     const pathname = request.nextUrl.pathname
     const searchParams = request.nextUrl.searchParams;

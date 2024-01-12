@@ -3,7 +3,7 @@ import{Button} from 'react-bootstrap'
 import useHyvorComments from '@/src/useHyvorComments';
 import styles from './WorkComments.module.css';
 import dayjs from 'dayjs';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import useTranslation from 'next-translate/useTranslation';
 
 interface Props {

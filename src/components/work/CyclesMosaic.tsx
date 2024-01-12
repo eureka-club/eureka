@@ -1,7 +1,7 @@
 import {WorkMosaicItem} from '@/src/types/work'
 import { FunctionComponent } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';;
 import useCycles from '@/src/useCycles';
 import { CycleMosaicItem } from '../../types/cycle';
 import Mosaic from '../Mosaic';

@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAtom } from 'jotai';
 import { FunctionComponent, useState, useEffect } from 'react';
 import { Button, Col, Container, Row, Carousel } from 'react-bootstrap';
@@ -22,6 +22,8 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
   const {data:session, status} = useSession();
   const isLoadingSession = status === "loading"
   const router = useRouter();
+  const asPath=usePathname()!;
+
   //const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
 
   useEffect(() => {
@@ -29,7 +31,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
   }, [session]);
 
  const handlerLogin = ()=>{
-    localStorage.setItem('loginRedirect',router.asPath)
+    localStorage.setItem('loginRedirect',asPath)
     router.push('/')
   }
 

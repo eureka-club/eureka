@@ -1,8 +1,8 @@
 import { GetServerSideProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { getSession } from 'next-auth/react';
 import { useState } from 'react';
-import { QueryClient, dehydrate, useQuery } from 'react-query';
+import { QueryClient, dehydrate, useQuery } from '@tanstack/react-query';;
 
 import { Session } from '@/src/types';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
@@ -169,10 +169,10 @@ const getRangeColor = (value:number)=>{
 const IndexPage: NextPage<Props> = (props) => {
   const router = useRouter();
   const [value, setValue] = useState(0);
-  const {data:audiences,isLoading:isLoadingAudiences} = useQuery(['audiences'],fetchDataAudiences)
-  const {data:campaigns,isLoading:isLoadingCampaigns} = useQuery(['campaigns'],fetchDataCampaigns)
-  const {data:automations,isLoading:isLoadingAutomations} = useQuery(['automations'],fetchDataAutomations)
-  const {data:members,isLoading:isLoadingMembers} = useQuery(['members'],fetchDataMembers)
+  const {data:audiences,isLoading:isLoadingAudiences} = useQuery({queryKey:['audiences'],queryFn:fetchDataAudiences})
+  const {data:campaigns,isLoading:isLoadingCampaigns} = useQuery({queryKey:['campaigns'],queryFn:fetchDataCampaigns})
+  const {data:automations,isLoading:isLoadingAutomations} = useQuery({queryKey:['automations'],queryFn:fetchDataAutomations})
+  const {data:members,isLoading:isLoadingMembers} = useQuery({queryKey:['members'],queryFn:fetchDataMembers})
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -264,10 +264,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const qc = new QueryClient()
   const baseAPIPath = '/api/mailchimp'
-  qc.prefetchQuery(['audiences'],()=>fetchDataAudiences())
-  qc.prefetchQuery(['campaigns'],()=>fetchDataCampaigns())
-  qc.prefetchQuery(['automations'],()=>fetchDataAutomations())
-  qc.prefetchQuery(['members'],()=>fetchDataMembers())
+  qc.prefetchQuery({queryKey:['audiences'],queryFn:()=>fetchDataAudiences()})
+  qc.prefetchQuery({queryKey:['campaigns'],queryFn:()=>fetchDataCampaigns()})
+  qc.prefetchQuery({queryKey:['automations'],queryFn:()=>fetchDataAutomations()})
+  qc.prefetchQuery({queryKey:['members'],queryFn:()=>fetchDataMembers()})
 
   return {
     props: {

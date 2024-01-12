@@ -1,6 +1,6 @@
 import { useState, FunctionComponent, useEffect } from 'react';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Spinner,Row, Col, Tab} from 'react-bootstrap';
 
 import MosaicItem from '@/src/components/cycle/MosaicItem'
@@ -19,8 +19,10 @@ interface Props{
 const SearchTabCycles:FunctionComponent<Props> = () => {
   const { t,lang } = useTranslation('common');
   const router = useRouter();
-  const terms = router?.query.q?.toString()!.split(" ") || [];
-  const cacheKey = `cycles-search-${router?.query.q?.toString()}`;
+  const searchParams=useSearchParams();
+  const q=searchParams?.get('q');
+  const terms = q?.toString()!.split(" ") || [];
+  const cacheKey = `cycles-search-${q?.toString()}`;
   const {FilterEngineCycles,filtersType,filtersCountries} = useFilterEngineCycles()
 
   const getProps = ()=>{
@@ -87,17 +89,17 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
 
   const [props,setProps]=useState<Prisma.CycleFindManyArgs>({take,where:{...getProps()}})
 
-  const {data:{total,fetched,cycles:c}={total:0,fetched:0,cycles:[]}} = useCycles(props,{cacheKey,enabled:!!router.query?.q});
+  const {data:{total,fetched,cycles:c}={total:0,fetched:0,cycles:[]}} = useCycles(props,{cacheKey,enabled:!!q});
   const [cycles,setCycles] = useState<CycleMosaicItem[]>([])
 
   useEffect(()=>{
     let props: Prisma.CycleWhereInput|undefined = undefined;
-    if(router.query.q && (filtersType||(filtersCountries && filtersCountries.length))){
+    if(q && (filtersType||(filtersCountries && filtersCountries.length))){
       props = getProps();
     }
     if(props)
       setProps(s=>({...s,where:{...props}}))
-  },[filtersType.public,filtersType.private,filtersCountries,router.query.q])
+  },[filtersType.public,filtersType.private,filtersCountries,q])
 
   useEffect(()=>{
     if(c){

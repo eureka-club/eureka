@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter } from 'next/navigation';
 import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, FormEvent, FunctionComponent, useEffect, useState, useRef, MouseEvent } from 'react';
 import Button from 'react-bootstrap/Button';
@@ -16,7 +16,7 @@ import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';;
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import toast from 'react-hot-toast'
 import useTopics from 'src/useTopics';
@@ -34,7 +34,7 @@ import { APIMediaSearchResult, Country, isBookGoogleBookApi, isVideoTMDB } from 
 import TagsInputTypeAheadMaterial from '@/components/forms/controls/TagsInputTypeAheadMaterial';
 import TagsInputMaterial from '@/components/forms/controls/TagsInputMaterial';
 import styles from './index.module.css';
-import { getImg } from '@/src/lib/utils'
+import { getImg, getLocale_In_NextPages } from '@/src/lib/utils'
 import { decode } from 'base64-arraybuffer'
 import SpinnerComp from '@/src/components/Spinner';
 import Box from '@mui/material/Box';
@@ -69,6 +69,8 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
     const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
     const queryClient = useQueryClient();
     const router = useRouter();
+    const asPath=usePathname()!;
+    const locale=getLocale_In_NextPages(asPath);
     const { t } = useTranslation('createWorkForm')
 
     const [resultWorks, setResultWorks] = useState<APIMediaSearchResult[] | APIMediaSearchResult[]>([]);
@@ -113,44 +115,44 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
         mutate: execCreateWork,
         error: createWorkError,
         isError,
-        isLoading,
+        isPending,
         isSuccess,
     } = useMutation(
-        async (payload: CreateWorkClientPayload) => {
-            const formData = new FormData();
-
-            Object.entries(payload).forEach(([key, value]) => {
-                if (value != null) {
-                    formData.append(key, value);
-                }
-            });
-
-            const res = await fetch('/api/work', {
-                method: 'POST',
-                body: formData,
-            });
-
-
-            if (res.ok) {
-                const json = await res.json();
-                if (!json.error) {
-                    setWorkId(json.work.id);
-                    toast.success(t('WorkSaved'))
-                    return json.work;
-                }
-                else if (json.error && [WORK_ALREADY_EXIST, EDITION_ALREADY_EXIST].includes(json.error)) {
-                    setShowExistingWork(true)
-                    setWorkId(json.work.id)
-                }
-                else if (json.error)
-                    toast.error(t(json.error))
-
-            }
-            return null;
-        },
         {
+            mutationFn:async (payload: CreateWorkClientPayload) => {
+                const formData = new FormData();
+    
+                Object.entries(payload).forEach(([key, value]) => {
+                    if (value != null) {
+                        formData.append(key, value);
+                    }
+                });
+    
+                const res = await fetch('/api/work', {
+                    method: 'POST',
+                    body: formData,
+                });
+    
+    
+                if (res.ok) {
+                    const json = await res.json();
+                    if (!json.error) {
+                        setWorkId(json.work.id);
+                        toast.success(t('WorkSaved'))
+                        return json.work;
+                    }
+                    else if (json.error && [WORK_ALREADY_EXIST, EDITION_ALREADY_EXIST].includes(json.error)) {
+                        setShowExistingWork(true)
+                        setWorkId(json.work.id)
+                    }
+                    else if (json.error)
+                        toast.error(t(json.error))
+    
+                }
+                return null;
+            },
             onSuccess: () => {
-                queryClient.invalidateQueries('WORKS'); // setQueryData could not be used because relations are not returned when the work is created :|
+                queryClient.invalidateQueries({queryKey:['WORKS']}); // setQueryData could not be used because relations are not returned when the work is created :|
             },
         },
     );
@@ -239,17 +241,17 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
     useEffect(() => {
         if (isSuccess === true && !showExistingWork) {
             setGlobalModalsState({ ...globalModalsState, ...{ createWorkModalOpened: false } });
-            queryClient.invalidateQueries('works.mosaic');
+            queryClient.invalidateQueries({queryKey:['works.mosaic']});
             router.push(`/work/${workId}`);
         }
 
-        if (isLoading === true) {
+        if (isPending === true) {
             setLoading(true);
         }
         else
             setLoading(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isSuccess, isLoading]);
+    }, [isSuccess, isPending]);
 
 
     function handleChangeSelectField(ev: SelectChangeEvent) {
@@ -329,7 +331,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                 headers: {
                     'Content-type': 'application/json',
                 },
-                body: JSON.stringify({ type: formValues.type, search: q, language: `${router.locale}` }),
+                body: JSON.stringify({ type: formValues.type, search: q, language: `${locale}` }),
             }).then((r) => r.json());
             if (data && data.length)
                 setResultWorks(data);
@@ -630,7 +632,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                 <Col className="">
                                     <FormGroup controlId="topics">
                                         <TagsInputTypeAheadMaterial
-                                            data={topics}
+                                            data={topics as {code:string,label:string}[]}
                                             items={items}
                                             setItems={setItems}
                                             formatValue={(v: string) => t(`topics:${v}`)}
@@ -688,10 +690,10 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                             >
                                 <ImCancelCircle />
                             </Button>
-                            <Button disabled={isLoading} type="submit" className="btn-eureka">
+                            <Button disabled={isPending} type="submit" className="btn-eureka">
                                 <>
                                     {t('submitButtonLabel')}
-                                    {isLoading && (
+                                    {isPending && (
                                         <Spinner animation="grow" variant="info" className={`ms-2 ${styles.loadIndicator}`} size="sm" />
                                     )}
                                 </>

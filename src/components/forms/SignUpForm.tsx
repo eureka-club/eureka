@@ -4,7 +4,7 @@ import { FunctionComponent, useState, MouseEvent, ChangeEvent, FormEvent, useEff
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';;
 import { Form } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import Link from 'next/link';
@@ -92,29 +92,33 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
     return null;
   };
 
-  const { mutate, isLoading: isMutating } = useMutation(async (props: MutationProps) => {
-    const { identifier, password, fullName } = props;//language,
-    const res = await fetch('/api/userCustomData', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        identifier,
-        password,
-        fullName
-       // language
-      }),
-    });
-    if (res.ok) {
-      const data = await res.json();
-      signIn('email', { email: identifier });
-      // return data;
-    } else {
-      toast.error(t(res.statusText));
+  const { mutate, isPending: isMutating } = useMutation(
+    {
+      mutationFn:async (props: MutationProps) => {
+        const { identifier, password, fullName } = props;//language,
+        const res = await fetch('/api/userCustomData', {
+          method: 'POST',
+          headers: {
+            'Content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            identifier,
+            password,
+            fullName
+           // language
+          }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          signIn('email', { email: identifier });
+          // return data;
+        } else {
+          toast.error(t(res.statusText));
+        }
+        return null;
+        }
     }
-    return null;
-  });
+  );
 
   const validateEmail = (text: string) => {
     const emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;

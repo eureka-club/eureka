@@ -1,6 +1,6 @@
 import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ChangeEvent, FunctionComponent, MouseEvent, useState,useEffect } from 'react';
 
 import { Button, Col, Row, ButtonGroup, Form } from 'react-bootstrap';
@@ -18,6 +18,7 @@ import toast from 'react-hot-toast';
 import CycleDetailDiscussionCreateEurekaForm from './CycleDetailDiscussionCreateEurekaForm';
 import CycleDetailDiscussionSuggestRelatedWork from './CycleDetailDiscussionSuggestRelatedWork';
 import SignInForm from '../forms/SignInForm';
+import { getLocale_In_NextPages } from '@/src/lib/utils';
 interface Props {
   cycle: CycleMosaicItem;
   className?: string;
@@ -35,6 +36,8 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
   const isSessionLoading = status == 'loading';
   const {show} = useModalContext()
   const { t } = useTranslation('cycleDetail');
+  const asPath=usePathname()!;
+  const locale = getLocale_In_NextPages(asPath);
   const { data: dataWorks } = useWorks({where:{cycles: { some: { id: cycle?.id } }} }, {
     enabled:!!cycle?.id
   })
@@ -42,7 +45,8 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
   useEffect(()=>{
     if(dataWorks)setWorks(dataWorks.works)
   },[dataWorks])
-
+  const searchParams=useSearchParams()!;
+  const tabKey=searchParams.get('tabKey')!;
 
   const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants(cycle.id),
     {
@@ -52,7 +56,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
   )
 
    useEffect(()=>{
-       if(router.query.tabKey && router.query.tabKey.toString() === 'eurekas'){ 
+       if(tabKey && tabKey.toString() === 'eurekas'){ 
          if (!session) {
       show(<SignInForm/>)
     } else if(isParticipant()){
@@ -180,6 +184,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
                     discussionItem={discussionItem}
                     setDiscussionItem={setDiscussionItem}
                     close={onClose}
+                    locale={locale}
                   />
                 </div>
               )}

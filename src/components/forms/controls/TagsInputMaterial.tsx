@@ -2,7 +2,7 @@ import { FunctionComponent, useState, useEffect, ChangeEvent, KeyboardEvent,useR
 import { Form, InputGroup,Button, Badge, Spinner,Col } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation'; 
 import { useAtom } from 'jotai'; 
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import searchEngine from '@/src/atoms/searchEngine';
 import { BiPlus} from 'react-icons/bi';
 import { Autocomplete, AutocompleteChangeDetails, AutocompleteChangeReason } from '@mui/material';

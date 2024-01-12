@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import React, { FunctionComponent, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { Card, Badge,Spinner } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import { DATE_FORMAT_SHORT } from '../../constants';

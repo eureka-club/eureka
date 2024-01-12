@@ -6,7 +6,7 @@ import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 import { Row, Col, Badge } from 'react-bootstrap';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { DATE_FORMAT_SHORT } from '../../constants';
 import { WorkMosaicItem } from '../../types/work';
 import MosaicItem from './MosaicItemDetail';
@@ -27,6 +27,7 @@ import { Session } from '@/src/types';
 
 interface Props {
   postId: number;
+  cycleId?:number;
   work?: WorkMosaicItem;
   cacheKey: [string, string];
   showSaveForLater?: boolean;
@@ -37,15 +38,15 @@ interface Props {
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSaveForLater = false, session }) => {
+const PostDetail: FunctionComponent<Props> = ({ postId, work,cycleId, cacheKey, showSaveForLater = false, session }) => {
   const { t } = useTranslation('createPostForm');
   const router = useRouter();
 
   //const { data: session, status } = useSession();
-  const { data: cycle } = useCycle(+router?.query.id!, { enabled: !!router?.query.id! });
+  const { data: cycle } = useCycle(cycleId??0, { enabled: !!cycleId});
   const { data: user } = useUser(session?.user.id!, { enabled: !!session?.user.id });
 
-  const currentUserIsParticipant = user?.cycles.findIndex(c => c.id == +router.query.id!);
+  const currentUserIsParticipant = user?.cycles.findIndex(c => c.id == cycleId);
   const isPublicPost = cycle?.access == 1;
 
   // if(status=='unauthenticated')

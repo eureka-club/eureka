@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import Notifier from '@/src/lib/Notifier'
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';;
 import { useSession } from 'next-auth/react';
 
 export type ContextType = {
@@ -36,7 +36,7 @@ const NotificationProvider: React.FC<Props> = ({children}) => {
       globalThis.addEventListener('notify',()=>{
         console.log('dispatched notify, updating user session');
         if(session){
-          queryClient.invalidateQueries(['USER', user.id.toString()]);
+          queryClient.invalidateQueries({queryKey:['USER', user.id.toString()]});
         }
       });
 

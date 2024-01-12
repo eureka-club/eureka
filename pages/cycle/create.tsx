@@ -2,7 +2,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useEffect } from 'react';
 import { getSession,useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 // import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CreateCycleForm from '../../src/components/forms/CreateCycleForm';

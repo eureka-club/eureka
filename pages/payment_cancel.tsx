@@ -7,7 +7,7 @@ import { Box } from '@mui/material';
 import Link from 'next/link';
 import { Col, Row } from 'react-bootstrap';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout'
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 
 const StripePaymentCancelPage: NextPage = () => {

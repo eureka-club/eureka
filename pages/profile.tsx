@@ -1,6 +1,6 @@
 import { GetServerSideProps,NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import {getSession } from 'next-auth/react';
 import { useEffect } from 'react';
 import { Spinner, ButtonGroup, Button } from 'react-bootstrap';

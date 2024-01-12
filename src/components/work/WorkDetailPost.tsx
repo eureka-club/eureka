@@ -1,5 +1,5 @@
 import { useSession} from 'next-auth/react';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, FunctionComponent, MouseEvent, useState ,useEffect} from 'react';
 import { Button, Col, Row, ButtonGroup, Form } from 'react-bootstrap';
@@ -40,10 +40,10 @@ const WorkDetailPost: FunctionComponent<Props> = ({workId,className, cacheKey })
 
   const [isCreateEureka, setIsCreateEureka] = useState<boolean>(true);
   const [discussionItem, setDiscussionItem] = useState<string | undefined>(undefined); // by default empty but required
-  const query = router.query;
-
+  const searchParams=useSearchParams()
+  const tabKey =searchParams?.get('tabKey');
    useEffect(()=>{
-       if(query.tabKey && query.tabKey.toString() === 'posts'){ 
+       if(tabKey && tabKey === 'posts'){ 
           setIsCreateEureka(true);  
        }
   },[])

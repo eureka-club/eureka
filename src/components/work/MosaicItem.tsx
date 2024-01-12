@@ -1,7 +1,7 @@
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useEffect, useState } from 'react';
 import { Card, Badge, Spinner } from 'react-bootstrap';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter } from 'next/navigation';
 import { CgMediaLive } from 'react-icons/cg';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -13,6 +13,7 @@ import { useCycleContext } from '../../useCycleContext';
 import { DATE_FORMAT_SHORT } from '../../constants';
 import useWork from '@/src/useWork';
 import { WorkMosaicItem } from '@/src/types/work';
+import { getLocale_In_NextPages } from '@/src/lib/utils';
 
 dayjs.extend(isBetween);
 dayjs.extend(utc);
@@ -53,6 +54,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   const { cycle } = useCycleContext();
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
+  const asPath=usePathname()!;
+  const locale=getLocale_In_NextPages(asPath);
   const [work, setWork] = useState(workItem);
 
   const { data } = useWork(workId,{
@@ -138,7 +141,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     setLoading(true);
   };
   const renderLocalImageComponent = () => {
-    const localePath = router.locale ? `${router.locale}/`:"";
+    const localePath = locale ? `${locale}/`:"";
     const img = localImages ? (
       <LocalImageComponent filePath={localImages[0].storedFile} title={title} alt={title} />
     ) : undefined;

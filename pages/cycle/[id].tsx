@@ -2,11 +2,11 @@ import { NextPage, GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { getSession } from 'next-auth/react';
 import { Spinner, Alert, Button } from 'react-bootstrap';
 
-import { dehydrate, QueryClient, useIsFetching } from 'react-query';
+import { dehydrate, QueryClient, useIsFetching } from '@tanstack/react-query';;
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '@/src/components/cycle/CycleDetail';
 import Banner from '@/src/components/Banner';
@@ -47,7 +47,8 @@ const CycleDetailPage: NextPage<Props> = (props) => {
   // const [session, isLoadingSession] = useSession();
   const session = props.session;
   const router = useRouter();
-  const isFetchingCycle = useIsFetching(['CYCLE', `${props.id}`]);
+  const asPath = usePathname();
+  const isFetchingCycle = useIsFetching({queryKey:['CYCLE', `${props.id}`]});
   const { data: cycle, isSuccess, isLoading, isFetching, isError, error } = useCycle(+props.id, { enabled: !!session });
   const { show } = useModalContext();
 
@@ -63,7 +64,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
   const renderCycleDetailComponent = () => {
     if (cycle) {
       const res = <div style={isJoinCycleLoading ? {pointerEvents:'none'}:{}}>
-        <CycleDetailComponent session={session} />
+        <CycleDetailComponent session={session} id={cycle.id} />
         </div>
       if([1,2,4].includes(cycle.access))return res;
       if (cycle.access === 3 && !cycle.currentUserIsParticipant) return <Alert>Not authorized</Alert>;
@@ -102,7 +103,9 @@ const CycleDetailPage: NextPage<Props> = (props) => {
   });
 
   useEffect(() => {
-    const { join } = router.query;
+    const searchParams = useSearchParams();
+    const join = searchParams?.get('join');
+
     if (
       session?.user &&
       join &&
@@ -130,7 +133,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
 
   const getBanner = () => {
     if (cycle && !cycle?.currentUserIsParticipant && router) {
-      if (router.asPath.search(/\/cycle\/21/g) > -1)
+      if (asPath!.search(/\/cycle\/21/g) > -1)
         return (
           <Banner
             cacheKey={['BANNER-CYCLE', `${cycle.id}`]}
@@ -247,15 +250,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  await queryClient.prefetchQuery(['CYCLE', `${id}`], () => cycle || null);
+  await queryClient.prefetchQuery({queryKey:['CYCLE', `${id}`], queryFn:() => cycle || null});
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT, NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
   const participants = await getUsers(wcu, origin);
   const { works } = await getWorks(ctx.locale!, wcw, origin);
 
-  await queryClient.prefetchQuery(['USERS', JSON.stringify(wcu)], () => participants);
-  await queryClient.prefetchQuery(['POSTS', JSON.stringify(wcp)], () => getPosts(ctx.locale!, wcp, origin));
-  await queryClient.prefetchQuery(['WORKS', JSON.stringify(wcw)], () => works);
+  await queryClient.prefetchQuery({queryKey:['USERS', JSON.stringify(wcu)],queryFn: () => participants});
+  await queryClient.prefetchQuery({queryKey:['POSTS', JSON.stringify(wcp)],queryFn: () => getPosts(ctx.locale!, wcp, origin)});
+  await queryClient.prefetchQuery({queryKey:['WORKS', JSON.stringify(wcw)],queryFn: () => works});
 
   participants.map((p) => {
     queryClient.setQueryData(['USER', `${p.id}`], p);

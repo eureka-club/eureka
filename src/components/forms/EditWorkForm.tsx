@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import useTranslation from 'next-translate/useTranslation';
@@ -18,7 +18,7 @@ import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';;
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import TagsInput from './controls/TagsInput';
@@ -38,6 +38,7 @@ import TagsInputMaterial from '@/components/forms/controls/TagsInputMaterial';
 import ImageFileSelect from '@/components/forms/controls/ImageFileSelectMUI';
 import LocalImageComponent from '../LocalImage';
 import { PostMosaicItem } from '@/src/types/post';
+import { useSession } from 'next-auth/react';
 
 dayjs.extend(utc);
 
@@ -75,27 +76,23 @@ const EditWorkForm: FunctionComponent = () => {
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [countryOrigin, setCountryOrigin] = useState<string[]>([]);
   const [tags, setTags] = useState<string>('');
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [items, setItems] = useState<string[]>([]);  //topics
   const [publicationLengthLabel, setPublicationLengthLabel] = useState('...');
   const [publicationYearLabel, setPublicationYearLabel] = useState('...');
   const [publicationLinkLabel, setPublicationLinkLabel] = useState('...');
   const [ck, setCK] = useState<string[]>();
-
+  const searchParams=useSearchParams()!;
+  const id=searchParams.get('id')!;
   const { data: topics } = useTopics();
-  const { data: work } = useWork(+(router.query?.id?.toString()!), { enabled: !!router.query?.id, notLangRestrict: true })
+  const { data: work } = useWork(+id, { enabled: !!id, notLangRestrict: true })
   const { data: countries } = useCountries();
+  const {data:session}=useSession();
+  const [isAdmin, setIsAdmin] = useState<boolean>(session?.user?.roles?.includes('admin')??false);
 
 
   useEffect(() => {
     if (countries) setCountrySearchResults(countries.map((d: Country) => ({ code: d.code, label: d.code })))
   }, [countries])
-
-  useEffect(() => {
-    if (router && router.query?.admin) {
-      setIsAdmin(true);
-    }
-  }, [router])
 
   useEffect(() => {
     //console.log(work, 'work work')
@@ -207,14 +204,13 @@ const EditWorkForm: FunctionComponent = () => {
     });
   }
 
-
-
-
   const {
     mutate: execEditWork,
-    isLoading,
+    isPending,
     isSuccess,
-  } = useMutation(async (payload: EditWorkClientPayload) => {
+  } = useMutation(
+    {
+    mutationFn:async (payload: EditWorkClientPayload) => {
 
     const formData = new FormData();
 
@@ -231,11 +227,11 @@ const EditWorkForm: FunctionComponent = () => {
     });
 
     return res.json();
-  }, {
+    }, 
     onMutate: async (variables) => {
       if (work) {
         const ck_ = ck || ['WORK', `${work.id}`];
-        await queryClient.cancelQueries(ck_)
+        await queryClient.cancelQueries({queryKey:ck_})
         const snapshot = queryClient.getQueryData<WorkMosaicItem>(ck_)
         const { title, contentText } = variables;
         if (snapshot) {
@@ -247,10 +243,10 @@ const EditWorkForm: FunctionComponent = () => {
     },
     onSettled: (_work, error, _variables, context) => {
       if (error) {
-        queryClient.invalidateQueries(ck);
-        queryClient.invalidateQueries(['WORK', `${work!.id}`]);
+        queryClient.invalidateQueries({queryKey:ck});
+        queryClient.invalidateQueries({queryKey:['WORK', `${work!.id}`]});
       }
-      queryClient.invalidateQueries(ck);
+      queryClient.invalidateQueries({queryKey:ck});
 
     },
   });
@@ -262,7 +258,7 @@ const EditWorkForm: FunctionComponent = () => {
 
 
     const payload: EditWorkClientPayload = {
-      id: router.query.id as string,
+      id,
       type: formValues?.type!,
       title: formValues?.title!,
       language: formValues?.language!,
@@ -283,13 +279,10 @@ const EditWorkForm: FunctionComponent = () => {
     await execEditWork(payload);
   };
 
- 
-
-
   useEffect(() => {
     if (isSuccess === true) {
       setGlobalModalsState({ ...globalModalsState, ...{ editWorkModalOpened: false } });
-      queryClient.invalidateQueries('works.mosaic');
+      queryClient.invalidateQueries({queryKey:['works.mosaic']});
       if(!isAdmin)
       router.push(`/work/${work!.id}`);
       else
@@ -457,7 +450,7 @@ const EditWorkForm: FunctionComponent = () => {
               <Col className="">
                 <FormGroup controlId="topics">
                   <TagsInputTypeAheadMaterial
-                    data={topics}
+                    data={topics as {code:string,label:string}[]}
                     items={items}
                     setItems={setItems}
                     formatValue={(v: string) => t(`topics:${v}`)}
@@ -506,10 +499,10 @@ const EditWorkForm: FunctionComponent = () => {
         <ModalFooter>
           <Row>
             <Col className='d-flex justify-content-end mt-4 mb-2'>
-              <Button disabled={isLoading} type="submit" className="mt-3 btn-eureka" style={{ width: '10em' }}>
+              <Button disabled={isPending} type="submit" className="mt-3 btn-eureka" style={{ width: '10em' }}>
                 <>
                   {t('titleEdit')}
-                  {isLoading && (
+                  {isPending && (
                     <Spinner animation="grow" variant="info" className={`ms-2 ${styles.loadIndicator}`} size="sm" />
                   )}
                 </>

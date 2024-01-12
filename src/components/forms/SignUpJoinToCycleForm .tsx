@@ -1,10 +1,10 @@
 import { signIn } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useState, MouseEvent, ChangeEvent, FormEvent, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';;
 import { Form } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import Link from 'next/link';
@@ -47,7 +47,6 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
   const { t } = useTranslation('signUpForm');
   //const { data: session, status } = useSession();
   //const formRef = useRef<HTMLFormElement>(null);
-  const [idSession, setIdSession] = useState<string>('')
   const [formValues, setFormValues] = useState<FormValues>({
     identifier: '',
     password: '',
@@ -80,26 +79,13 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
   }
 
   const router = useRouter();
-  const [cycleId, setCycleId] = useState<string>('')
+  const asPath=usePathname()!;
   const [haveAccount, setHaveAccount] = useState<boolean>(false)
-
-  useEffect(() => {
-    if (router?.query) {
-      if (router.query.cycleId) {
-        setCycleId(router.query.cycleId?.toString())
-      }
-    }
-  }, [router])
-
-  useEffect(() => {
-    const s = session;
-    if (s) {
-      setIdSession(s.user.id.toString());
-    }
-  }, [session]);
+  const searchParams=useSearchParams()
+  const cycleId=searchParams?.get('cycleId');
 
 
-  const { data: cycle, isLoading: isLoadingCycle } = useCycle(+cycleId, { enabled: !!cycleId })
+  const { data: cycle, isLoading: isLoadingCycle } = useCycle(+cycleId!??0, { enabled: !!cycleId })
   const { data: { price, currency } = { currency: '', price: -1 } } = useCyclePrice(cycle);
 
   const works = cycle?.cycleWorksDates?.length
@@ -121,7 +107,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
     }
   )
 
-  const { data: user } = useUser(+idSession, { enabled: !!+idSession });
+  const { data: user } = useUser(+session?.user?.id??0, { enabled: !!+session?.user?.id });
 
   const handleHaveAccountLink = (ev: MouseEvent<HTMLButtonElement>) => {
     setFormValues({
@@ -137,13 +123,13 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
 
   const handleSignUpGoogle = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    let callbackUrl = `/cycle/${router.query.cycleId}?join=true`;
+    let callbackUrl = `/cycle/${cycleId}?join=true`;
 
     if (cycle?.access == 2)
       callbackUrl = `/transitionJoinPrivateCycle`;
 
     if (cycle?.access == 4)
-      callbackUrl = `/transitionSignUpToPayCycle?cycleId=${router.query.cycleId}`;
+      callbackUrl = `/transitionSignUpToPayCycle?cycleId=${cycleId}`;
 
 
     signIn('google', { callbackUrl });
@@ -157,39 +143,43 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
     return null;
   };
 
-  const { mutate, isLoading: isMutating } = useMutation(async (props: MutationProps) => {
-    const { identifier, password, fullName } = props;
-    const res = await fetch('/api/userCustomData', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        identifier,
-        password,
-        fullName,
-      }),
-    });
-    if (res.ok) {
-      const data = await res.json();
-      //const callbackUrl = `/cycle/${router.query.cycleId}?join=true`;
-
-      let callbackUrl = `/cycle/${router.query.cycleId}?join=true`;
-
-      if (cycle?.access == 2)
-        callbackUrl = `/transitionJoinPrivateCycle`;
-
-      if (cycle?.access == 4)
-        callbackUrl = `/transitionSignUpToPayCycle?cycleId=${router.query.cycleId}`;
-
-      signIn('email', { ...callbackUrl && { callbackUrl }, email: identifier });
-      // return data;
-    } else {
-      toast.error(t(res.statusText));
-      setLoading(false);
+  const { mutate, isPending: isMutating } = useMutation(
+    {
+      mutationFn:async (props: MutationProps) => {
+        const { identifier, password, fullName } = props;
+        const res = await fetch('/api/userCustomData', {
+          method: 'POST',
+          headers: {
+            'Content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            identifier,
+            password,
+            fullName,
+          }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          //const callbackUrl = `/cycle/${cycleId}?join=true`;
+    
+          let callbackUrl = `/cycle/${cycleId}?join=true`;
+    
+          if (cycle?.access == 2)
+            callbackUrl = `/transitionJoinPrivateCycle`;
+    
+          if (cycle?.access == 4)
+            callbackUrl = `/transitionSignUpToPayCycle?cycleId=${cycleId}`;
+    
+          signIn('email', { ...callbackUrl && { callbackUrl }, email: identifier });
+          // return data;
+        } else {
+          toast.error(t(res.statusText));
+          setLoading(false);
+        }
+        return null;
+        }
     }
-    return null;
-  });
+  );
 
   const validateEmail = (text: string) => {
     const emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
@@ -261,13 +251,13 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
 
           if (!!joinToCycle && joinToCycle > 0) {
 
-            callbackUrl = `/cycle/${router.query.cycleId}?join=true`;
+            callbackUrl = `/cycle/${cycleId}?join=true`;
 
             if (cycle?.access == 2)
               callbackUrl = `/transitionJoinPrivateCycle`;
 
             if (cycle?.access == 4)
-              callbackUrl = `/transitionSignUpToPayCycle?cycleId=${router.query.cycleId}`;
+              callbackUrl = `/transitionSignUpToPayCycle?cycleId=${cycleId}`;
           }
 
 
@@ -286,10 +276,12 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
               }
               else {
                 close()
-                localStorage.setItem('loginRedirect', router.asPath)
-                router.push(localStorage.getItem('loginRedirect') || '/').then(() => {
-                  localStorage.setItem('loginRedirect', '')
-                })
+                localStorage.setItem('loginRedirect', asPath)
+                router.push(localStorage.getItem('loginRedirect') || '/')
+                localStorage.setItem('loginRedirect', '')
+                // .then(() => {
+                //   localStorage.setItem('loginRedirect', '')
+                // })
               }
             })
         }

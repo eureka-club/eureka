@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';;
 import { WorkMosaicItem } from './types/work';
 import { Prisma } from '@prisma/client';
 import useTranslation from 'next-translate/useTranslation';
@@ -31,9 +31,12 @@ const useWorks = (props?: Prisma.WorkFindManyArgs, options?: Options) => {
     enabled: true,
   };
 
-  let ck = (cacheKey || notLangRestrict) ? `${cacheKey}-${JSON.stringify(props)}` : ['WORKS', `${lang}-${JSON.stringify(props)}`];
+  let ck = (cacheKey || notLangRestrict) ? [`${cacheKey}-${JSON.stringify(props)}`] : ['WORKS', `${lang}-${JSON.stringify(props)}`];
 
-  return useQuery<{ works: WorkMosaicItem[], fetched: number, total: number }>(ck, () => getWorks(!notLangRestrict ? lang : undefined, props), {
+  return useQuery<{ works: WorkMosaicItem[], fetched: number, total: number }>(
+    {
+        queryKey:ck,
+         queryFn:() => getWorks(!notLangRestrict ? lang : undefined, props),
     staleTime,
     enabled
   });

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { useAtom } from 'jotai';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent, useState, useRef, useEffect, Suspense, lazy, FC } from 'react';
 import {
@@ -20,7 +20,7 @@ import {
 import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
 import { BiArrowBack } from 'react-icons/bi';
 import { MosaicContext } from '@/src/useMosaicContext';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';;
 
 import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR /* , HYVOR_WEBSITE_ID, WEBAPP_URL */ } from '@/src/constants';
 import { PostMosaicItem } from '@/src/types/post';
@@ -50,36 +50,28 @@ interface Props {
   post?: PostMosaicItem;
   work?: WorkMosaicItem;
   session:Session
+  id:number;
 }
 
 const CycleDetailComponent: FunctionComponent<Props> = ({
   post,
   work,
-  session
+  session,
+  id:cycleId
 }) => {
   const {lang} = useTranslation();
   const cycleContext = useCycleContext();
   const router = useRouter();
   
-  const queryClient = useQueryClient()
-  const [tabKey, setTabKey] = useState<string>();
+  const searchParams=useSearchParams()!;
+  const [tabKey, setTabKey] = useState<string>(searchParams.get('tabKey')!);
+  const postId=searchParams.get('postId');
 
   const [ref, inView] = useInView({
     triggerOnce: false,
   });
 
-
-  const [cycleId,setCycleId] = useState<string>('')
-  useEffect(()=>{
-    if(router?.query){
-      if(router.query.id){
-        setCycleId(router.query.id?.toString())
-      }
-      if(router.query.tabKey)setTabKey(router.query.tabKey.toString())
-    }
-  },[router])
-
-  const {data:cycle,isLoading} = useCycle(+cycleId,{
+  const {data:cycle,isLoading} = useCycle(cycleId,{
     enabled:!!cycleId
   });
 
@@ -194,7 +186,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    router.push(`/cycle/${router.query.id}/edit`);
+    router.push(`/cycle/${cycleId}/edit`);
   };
 
    /*const handleEditPostOnSmallerScreen = (ev: MouseEvent<HTMLButtonElement>) => {
@@ -411,7 +403,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           <BiArrowBack />
         </Button>
         
-        {!router.query.postId && canEditCycle() && (
+        {!postId && canEditCycle() && (
           <Button variant="warning" onClick={handleEditClick} size="sm">
             {t('Edit')}
           </Button>
@@ -434,7 +426,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       {!post && renderCycleDetailHeader()}
       {post && cycle && (
         <MosaicContext.Provider value={{ showShare: true }}>
-          <PostDetailComponent cacheKey={['POST',post.id.toString()]} postId={post.id} work={work} session={session} />
+          <PostDetailComponent cycleId={cycle.id} cacheKey={['POST',post.id.toString()]} postId={post.id} work={work} session={session} />
         </MosaicContext.Provider>
       )}
       {cycle && post == null && (

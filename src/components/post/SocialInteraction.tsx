@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
 // import { GiBrain } from 'react-icons/gi';
@@ -7,7 +7,7 @@ import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 // import { FaRegSmileBeam } from 'react-icons/fa';
 import classnames from 'classnames';
 import { FiShare2, FiTrash2 } from 'react-icons/fi';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';;
 import { useSession } from 'next-auth/react';
 // import Rating from 'react-rating';
 
@@ -78,7 +78,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   className,
 }) => {
   const { t } = useTranslation('common');
-  const router = useRouter();
+  const asPath = usePathname();
   // const [session] = useSession() as [Session | null | undefined, boolean];
   const { data: session, status } = useSession();
   const idSession = session ? session.user.id : null;
@@ -107,7 +107,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
   useEffect(() => {
     if (isSuccessUser && idSession && !user) {
-      queryClient.invalidateQueries(['USER', `${idSession}`]);
+      queryClient.invalidateQueries({queryKey:['USER', `${idSession}`]});
     }
   }, [user, idSession, isSuccessUser]);
 
@@ -134,7 +134,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
       if (parentIsWork) return `${WEBAPP_URL}/work/${post.works[0].id}/post/${post.id}`;
       if (parentIsCycle) return `${WEBAPP_URL}/cycle/${post.cycles[0].id}/post/${post.id}`;
     }
-    return `${WEBAPP_URL}/${router.asPath}`;
+    return `${WEBAPP_URL}/${asPath}`;
   })();
 
   const shareTextDynamicPart = (() => {
@@ -150,52 +150,53 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const {
     mutate: execSocialInteraction,
     isSuccess,
-    isLoading: loadingSocialInteraction,
+    isPending: loadingSocialInteraction,
   } = useMutation(
-    async ({ socialInteraction, doCreate, ratingQty }: SocialInteractionClientPayload) => {
-      if (session) {
-        //[user that does action] has saved the [title of book/movie/documentary/cycle] for later. Check it out.
-        let translationKey = 'userHasRating';
-        // let notificationContextURL = `/post/${post.id}`;
-        if (socialInteraction == 'fav') {
-          translationKey = 'userHasSaveForLater';
-        }
-
-        // const notificationMessage = `${translationKey}!|!${JSON.stringify({
-        //   userName: user?.name,
-        //   post: 'Post',
-        //   entityTitle: post.title,
-        // })}`;
-
-        // const notificationToUsers = user?.followedBy.map((f) => f.id);
-        const res = await fetch(`/api/post/${post.id}/${socialInteraction}`, {
-          method: doCreate ? 'POST' : 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            qty: ratingQty,
-            doCreate,
-            // ...(doCreate && {
-            //   notificationMessage,
-            //   notificationContextURL,
-            //   notificationToUsers,
-            // }),
-          }),
-        });
-        // if (notifier && notificationToUsers)
-        //   notifier.notify({
-        //     toUsers: notificationToUsers,
-        //     data: { message: notificationMessage },
-        //   });
-        return res.json();
-      }
-      openSignInModal();
-      return null;
-    },
+    
     {
+      mutationFn:async ({ socialInteraction, doCreate, ratingQty }: SocialInteractionClientPayload) => {
+        if (session) {
+          //[user that does action] has saved the [title of book/movie/documentary/cycle] for later. Check it out.
+          let translationKey = 'userHasRating';
+          // let notificationContextURL = `/post/${post.id}`;
+          if (socialInteraction == 'fav') {
+            translationKey = 'userHasSaveForLater';
+          }
+  
+          // const notificationMessage = `${translationKey}!|!${JSON.stringify({
+          //   userName: user?.name,
+          //   post: 'Post',
+          //   entityTitle: post.title,
+          // })}`;
+  
+          // const notificationToUsers = user?.followedBy.map((f) => f.id);
+          const res = await fetch(`/api/post/${post.id}/${socialInteraction}`, {
+            method: doCreate ? 'POST' : 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              qty: ratingQty,
+              doCreate,
+              // ...(doCreate && {
+              //   notificationMessage,
+              //   notificationContextURL,
+              //   notificationToUsers,
+              // }),
+            }),
+          });
+          // if (notifier && notificationToUsers)
+          //   notifier.notify({
+          //     toUsers: notificationToUsers,
+          //     data: { message: notificationMessage },
+          //   });
+          return res.json();
+        }
+        openSignInModal();
+        return null;
+      },
       onMutate: async (payload) => {
         if (session && user && payload.socialInteraction === 'fav') {
-          await queryClient.cancelQueries(['USER', `${session.user.id}`]);
-          await queryClient.cancelQueries(cacheKey);
+          await queryClient.cancelQueries({queryKey:['USER', `${session.user.id}`]});
+          await queryClient.cancelQueries({queryKey:cacheKey});
 
           const prevUser = queryClient.getQueryData(['USER', `${session.user.id}`]);
           const prevEntity = queryClient.getQueryData(cacheKey);
@@ -223,8 +224,8 @@ const SocialInteraction: FunctionComponent<Props> = ({
           if ('prevUser' in context) queryClient.setQueryData(['USER', `${session?.user.id}`], context?.prevUser);
           if ('prevEntity' in context) queryClient.setQueryData(cacheKey, context?.prevEntity);
         }
-        queryClient.invalidateQueries(['USER', `${session?.user.id}`]);
-        queryClient.invalidateQueries(cacheKey);
+        queryClient.invalidateQueries({queryKey:['USER', `${session?.user.id}`]});
+        queryClient.invalidateQueries({queryKey:cacheKey});
       },
     },
   );

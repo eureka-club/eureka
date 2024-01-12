@@ -15,11 +15,11 @@ import { getSession } from 'next-auth/react';
 import { Session } from '@/src/types';
 import useTranslation from 'next-translate/useTranslation';
 import WMI from '@/src/components/work/MosaicItem';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { getUser } from '@/src/useUser';
 import { BiArrowBack } from 'react-icons/bi';
 import { UserMosaicItem } from '@/src/types/user';
-import { QueryClient, dehydrate } from 'react-query';
+import { QueryClient, dehydrate } from '@tanstack/react-query';;
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import slugify from 'slugify';
 import toast from 'react-hot-toast'
@@ -37,23 +37,19 @@ interface Props {
 const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   const { t } = useTranslation('mediatheque');
   const router = useRouter();
-  const query = router.query;
   const user = useMyReadOrWatched(id)
-  const [yearFilter, setYearFilter] = useState<any>(dayjs().year().toString());
   const [booksTotal, setBooksTotal] = useState<number>(0);
   const [moviesTotal, setMoviesTotal] = useState<number>(0);
   const [books, setBooks] = useState<any>(null);
   const [movies, setMovies] = useState<any>(null);
-  const [tabKey, setTabKey] = useState<string>();
+  const params=useSearchParams()!
 
-  useEffect(() => {
-    if (query?.tabKey) {
-      setTabKey(query.tabKey.toString());
-    }
-    if (query?.year) {
-      setYearFilter(query.year.toString());
-    }
-  }, [query]);
+  const tbk=params.get('tabKey')!
+  const [tabKey,setTabKey]=useState(tbk);
+  
+  const yf=params.get('tabKey')!
+  const [yearFilter, setYearFilter] = useState<any>(yf);
+  
 
   useEffect(() => {
     if (user && user.readOrWatchedWorks.length) {
@@ -374,7 +370,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     id = parseInt(li[0]);
     const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
     user = await getUser(id, origin);
-    await qc.prefetchQuery(['USER', id.toString()], () => user);
+    await qc.prefetchQuery({queryKey:['USER', id.toString()], queryFn:() => user});
   }
   return {
     props: {

@@ -9,7 +9,7 @@ import {useRouter} from 'next/router'
 import useUser,{getUser} from '@/src/useUser';
 import { BiArrowBack } from 'react-icons/bi';
 import { UserMosaicItem } from '@/src/types/user';
-import {QueryClient,dehydrate} from 'react-query'
+import {QueryClient,dehydrate} from '@tanstack/react-query';
 
 interface Props{
   id:number
@@ -76,7 +76,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx)=>{
     id = parseInt(li[0])
     const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
     user = await getUser(id,origin)
-    await qc.prefetchQuery(['USER',id.toString()],()=>user)
+    await qc.prefetchQuery({queryKey:['USER',id.toString()],queryFn:()=>user})
   }
   return {
     props:{

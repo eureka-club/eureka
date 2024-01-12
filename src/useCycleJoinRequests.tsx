@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';;
 
 interface Options {
   staleTime?: number;
@@ -65,7 +65,10 @@ const useCycleJoinRequests = (userId:number,options:Options) => {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  return useQuery<UserCycleJoinRequests[]>(['USER', userId, 'cycles-join-requests'], () => getCycleJoinRequests(userId), {
+  return useQuery<UserCycleJoinRequests[]>(
+    {
+        queryKey:['USER', userId, 'cycles-join-requests'],
+         queryFn:() => getCycleJoinRequests(userId),
     staleTime,
     enabled
   });

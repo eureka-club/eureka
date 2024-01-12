@@ -5,12 +5,12 @@ import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import WorkDetailComponent from '@/src/components/work/WorkDetail';
 import useWork,{getWork} from '@/src/useWork';
 import usePost,{getPost} from '@/src/usePost';
-import { QueryClient,dehydrate } from 'react-query';
+import { QueryClient,dehydrate } from '@tanstack/react-query';;
 import { WEBAPP_URL } from '@/src/constants';
 import { getSession } from 'next-auth/react';
 import { Session } from '@/src/types';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 interface Props {
   postId:number;
   workId:number;
@@ -93,8 +93,8 @@ export const getServerSideProps:GetServerSideProps = async (ctx) => {
  };
 
   const queryClient = new QueryClient() 
-   await queryClient.prefetchQuery(['WORK',`${workId}`],()=>work)
-   await queryClient.prefetchQuery(['POST',`${postId}`],()=>post)
+   await queryClient.prefetchQuery({queryKey:['WORK',`${workId}`],queryFn:()=>work})
+   await queryClient.prefetchQuery({queryKey:['POST',`${postId}`],queryFn:()=>post})
 
   return {
     props: {

@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 
 import { Toast as T } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter } from 'next/navigation';
 import { useModalContext } from '@/src/useModal';
 import usePostReactionCreateOrEdit from '@/src/hooks/mutations/usePostReactionCreateOrEdit';
 interface Props {
@@ -17,7 +17,8 @@ const MAX_REACTIONS = 2;
 const PostReactionsDetail: FunctionComponent<Props> = ({post,cacheKey}) => {
   const {data:session} = useSession();
   const { t } = useTranslation('common');
-  const router = useRouter();
+  const asPath = usePathname()!;
+
   // const { setShowEmojisPicker } = usePostEmojiPicker({post,cacheKey});
   const {mutate,isPending:isMutating} = usePostReactionCreateOrEdit({post,cacheKey});
   const { show } = useModalContext();
@@ -52,7 +53,7 @@ const PostReactionsDetail: FunctionComponent<Props> = ({post,cacheKey}) => {
       // else if(a.qty==b.qty && a.createdAt < b.createdAt) return 1; 
       return -1;       
     })
-    if(!router.asPath.match(/\/post\//)){
+    if(!asPath.match(/\/post\//)){
       reactionsGrouped = reactionsGrouped.slice(0,2);
     }
 

@@ -1,15 +1,14 @@
-
-import { FunctionComponent, useEffect, useState, lazy, FC, memo } from 'react';
+'use client'
+import { FunctionComponent, useEffect, useState } from 'react';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { Spinner, Col } from 'react-bootstrap';
 import TagsInput from '@/components/forms/controls/TagsInput';
-import { GetAllByResonse } from '@/src/types';
 import { useInView } from 'react-intersection-observer';
 import { CycleMosaicItem } from '@/src/types/cycle';
 import { UserMosaicItem } from '@/src/types/user';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import slugify from 'slugify'
 import useMyCycles, { myCyclesWhere } from '@/src/useMyCycles';
 import Prompt from '@/src/components/post/PostPrompt';
@@ -20,7 +19,7 @@ import CarouselsByTopics from './CarouselsByTopics';
 import CarouselStatic from '../CarouselStatic';
 import FeaturedUsers from './FeaturedUsers';
 import { BsChevronUp, BsChevronDown } from 'react-icons/bs';
-import useItemsByTopic, { getItemsByTopic } from '@/src/useItemsByTopic';
+import useItemsByTopic from '@/src/useItemsByTopic';
 
 const topics = ['gender-feminisms', 'technology', 'environment',
   'racism-discrimination',

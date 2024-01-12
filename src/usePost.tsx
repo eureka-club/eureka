@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';;
 import { PostMosaicItem } from './types/post';
 
 export const getPost = async (id: number,origin=''): Promise<PostMosaicItem | undefined> => {
@@ -22,7 +22,10 @@ const usePost = (id: number, options?: Options) => {
     staleTime: 1000 * 60 * 60,
     enabled: true, 
   };
-  return useQuery<PostMosaicItem | undefined>(['POST', `${id}`], () => getPost(id), {
+  return useQuery<PostMosaicItem | undefined>(
+    {
+       queryKey:['POST', `${id}`],
+        queryFn:() => getPost(id), 
     staleTime,
     enabled,
     initialData:()=>{

@@ -1,10 +1,10 @@
 import { signIn } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useState, MouseEvent, ChangeEvent, FormEvent, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';;
 import { Form } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import Link from 'next/link';
@@ -67,18 +67,10 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
   }
 
   const router = useRouter();
-  const [cycleId, setCycleId] = useState<string>('')
+  const asPath=usePathname()!;
   const [haveAccount, setHaveAccount] = useState<boolean>(false)
-
-  useEffect(() => {
-    if (router?.query) {
-      if (router.query.cycleId) {
-        setCycleId(router.query.cycleId?.toString())
-      }
-    }
-  }, [router])
-
-
+  const searchParams=useSearchParams();
+  const cycleId=searchParams?.get('cycleId')!;
 
   const { data: cycle, isLoading: isLoadingCycle } = useCycle(+cycleId, { enabled: !!cycleId })
   const { data: { price, currency } = { currency: '', price: -1 } } = useCyclePrice(cycle);
@@ -117,13 +109,13 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
 
   const handleSignUpGoogle = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    let callbackUrl = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/cycle/${router.query.cycleId}?join=true`;
+    let callbackUrl = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/cycle/${cycleId}?join=true`;
 
     if (cycle?.access == 2)
       callbackUrl = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/transitionJoinPrivateCycle`;
 
     if (cycle?.access == 4)
-      callbackUrl = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/transitionSignUpToPayCycle?cycleId=${router.query.cycleId}`;
+      callbackUrl = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/transitionSignUpToPayCycle?cycleId=${cycleId}`;
 
 
     signIn('google', { callbackUrl});
@@ -137,39 +129,43 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
     return null;
   };
 
-  const { mutate, isLoading: isMutating } = useMutation(async (props: MutationProps) => {
-    const { identifier, password, fullName } = props;
-    const res = await fetch('/api/userCustomData', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        identifier,
-        password,
-        fullName,
-      }),
-    });
-    if (res.ok) {
-      const data = await res.json();
-      //const callbackUrl = `/cycle/${router.query.cycleId}?join=true`;
-
-      let callbackUrl = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/cycle/${router.query.cycleId}?join=true`;
-
-      if (cycle?.access == 2)
-        callbackUrl = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/transitionJoinPrivateCycle`;
-
-      if (cycle?.access == 4)
-        callbackUrl = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/transitionSignUpToPayCycle?cycleId=${router.query.cycleId}`;
-
-      signIn('email', { ...callbackUrl && { callbackUrl }, email: identifier });
-      // return data;
-    } else {
-      toast.error(t(res.statusText));
-      setLoading(false);
+  const { mutate, isPending: isMutating } = useMutation(
+    {
+      mutationFn:async (props: MutationProps) => {
+        const { identifier, password, fullName } = props;
+        const res = await fetch('/api/userCustomData', {
+          method: 'POST',
+          headers: {
+            'Content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            identifier,
+            password,
+            fullName,
+          }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          //const callbackUrl = `/cycle/${router.query.cycleId}?join=true`;
+    
+          let callbackUrl = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/cycle/${cycleId}?join=true`;
+    
+          if (cycle?.access == 2)
+            callbackUrl = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/transitionJoinPrivateCycle`;
+    
+          if (cycle?.access == 4)
+            callbackUrl = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/transitionSignUpToPayCycle?cycleId=${cycleId}`;
+    
+          signIn('email', { ...callbackUrl && { callbackUrl }, email: identifier });
+          // return data;
+        } else {
+          toast.error(t(res.statusText));
+          setLoading(false);
+        }
+        return null;
+        }
     }
-    return null;
-  });
+  );
 
   const validateEmail = (text: string) => {
     const emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
@@ -241,13 +237,13 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
 
           if (!!joinToCycle && joinToCycle > 0) {
 
-            callbackUrl = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/cycle/${router.query.cycleId}?join=true`;
+            callbackUrl = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/cycle/${cycleId}?join=true`;
 
             if (cycle?.access == 2)
               callbackUrl = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/transitionJoinPrivateCycle`;
 
             if (cycle?.access == 4)
-              callbackUrl = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/transitionSignUpToPayCycle?cycleId=${router.query.cycleId}`;
+              callbackUrl = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/transitionSignUpToPayCycle?cycleId=${cycleId}`;
           }
 
 
@@ -266,10 +262,11 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
               }
               else {
                 close()
-                localStorage.setItem('loginRedirect', router.asPath)
-                router.push(localStorage.getItem('loginRedirect') || '/').then(() => {
-                  localStorage.setItem('loginRedirect', '')
-                })
+                localStorage.setItem('loginRedirect', asPath)
+                router.push(localStorage.getItem('loginRedirect') || '/')
+                localStorage.setItem('loginRedirect', '')
+                // .then(() => {
+                // })
               }
             })
         }

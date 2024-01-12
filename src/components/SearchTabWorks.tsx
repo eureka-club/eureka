@@ -1,6 +1,6 @@
 import { useState, FunctionComponent, useEffect } from 'react';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Spinner,Row, Col} from 'react-bootstrap';
 
 import MosaicItem from '@/components/work/MosaicItem'
@@ -17,8 +17,11 @@ const take = 8;
 const SearchTabworks:FunctionComponent = () => {
   const { t,lang } = useTranslation('common');
   const router = useRouter();
-  const terms = router?.query.q?.toString()!.split(" ") || [];
-  const cacheKey = `works-search-${router?.query.q?.toString()}`;
+  const searchParams=useSearchParams();
+  const q=searchParams?.get('q');
+  const terms = q?.toString()!.split(" ") || [];
+
+  const cacheKey = `works-search-${q?.toString()}`;
 
   const {FilterEngineWork,filtersType,filtersCountries} = useFilterEngineWorks()
 
@@ -53,19 +56,19 @@ const SearchTabworks:FunctionComponent = () => {
 
   const [props,setProps]=useState<Prisma.WorkFindManyArgs>({take,where:{...getProps()}})
 
-  const {data:{total,fetched,works:c}={total:0,fetched:0,works:[]}} = useWorks(props,{cacheKey,enabled:!!router.query?.q});
+  const {data:{total,fetched,works:c}={total:0,fetched:0,works:[]}} = useWorks(props,{cacheKey,enabled:!!q});
   const [works,setWorks] = useState<WorkMosaicItem[]>([])
   
   useEffect(()=>{
 
     let props: Prisma.WorkWhereInput|undefined = undefined;
-    if(router.query.q && (filtersType||(filtersCountries && filtersCountries.length))){
+    if(q && (filtersType||(filtersCountries && filtersCountries.length))){
       props = getProps();
     }
     if(props){
       setProps(s=>({...s,where:{...props}}))
     }
-  },[filtersType,filtersCountries,router.query.q])
+  },[filtersType,filtersCountries,q])
 
   useEffect(()=>{
     if(c)setWorks(c)

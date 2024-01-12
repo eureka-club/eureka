@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';;
 import { PostMosaicItem } from './types/post';
 
 
@@ -32,7 +32,12 @@ const usePostsPaginated = (cycleId:number,page: number, options?: Options) => {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  return useQuery<{posts:PostMosaicItem[],hasNextPage:boolean}|undefined>(['POSTS', `CYCLE-${cycleId}-PAGE-${page}`], ()=> getRecords(cycleId,page),{ keepPreviousData : true });
+  return useQuery<{posts:PostMosaicItem[],hasNextPage:boolean}|undefined>(
+    {
+       queryKey:['POSTS', `CYCLE-${cycleId}-PAGE-${page}`],
+        queryFn:()=> getRecords(cycleId,page),
+      //  keepPreviousData : true 
+    });
 };
 
 export default usePostsPaginated

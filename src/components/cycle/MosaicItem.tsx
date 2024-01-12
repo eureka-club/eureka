@@ -4,8 +4,8 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useEffect, useState, MouseEvent } from 'react';
-import { useIsFetching } from 'react-query';
-import { useRouter } from 'next/router';
+import { useIsFetching } from '@tanstack/react-query';;
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Card, Button, Spinner, Badge} from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 import { CgMediaLive } from 'react-icons/cg';
@@ -76,7 +76,8 @@ const MosaicItem: FunctionComponent<Props> = ({
   const router = useRouter();
   const {data} = useCycle(cycleId,{enabled:!!cycleId && !cycleItem})
   
-  
+  const searchParams=useSearchParams()!;
+  const join=searchParams.get('join');
   const [cycle,setCycle]=useState(cycleItem)
   useEffect(()=>{
     if(!cycleItem && data)setCycle(data)
@@ -119,7 +120,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   
   const { t } = useTranslation('common');
-  const isFetchingCycle = useIsFetching(['CYCLE',`${cycle?.id}`])
+  const isFetchingCycle = useIsFetching({queryKey:['CYCLE',`${cycle?.id}`]})
   
   const isActive = () => cycle ? dayjs().isBetween(cycle.startDate, cycle.endDate, null, '[]') : false;
 
@@ -144,7 +145,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   } = useLeaveUserFromCycleAction(user!,cycle!,participants!,(_data:any,error:any)=>{
     if(!error) {
       toast.success(t('OK'));
-      if(router.query.join)
+      if(join)
         router.push(`/cycle/${cycle?.id}`);
     }
     else

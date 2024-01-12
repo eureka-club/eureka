@@ -2,7 +2,7 @@ import { FunctionComponent, useState, useEffect } from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import styles from './Header.module.css';
 import { t } from '@/src/get-dictionary';
 import { useDictContext } from '@/src/hooks/useDictContext';

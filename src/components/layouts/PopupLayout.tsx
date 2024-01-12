@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { FunctionComponent, MouseEvent } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { BiArrowBack } from 'react-icons/bi';

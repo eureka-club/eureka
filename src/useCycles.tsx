@@ -1,7 +1,7 @@
-import { useQuery } from 'react-query';
 import { CycleMosaicItem } from './types/cycle';
 import { Prisma } from '@prisma/client';
-import useTranslation from 'next-translate/useTranslation';
+import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'next/navigation';
 
 export const getCycles = async (
   lang:string,
@@ -23,14 +23,19 @@ interface Options {
 }
 
 const useCycles = (props?:Prisma.CycleFindManyArgs, options?: Options) => {
-  const {lang} = useTranslation();
+  const params=useParams<{lang:string}>();
+  const lang = params?.lang!;
+
   const { staleTime, enabled, cacheKey } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  let ck = cacheKey ? `${cacheKey}-${JSON.stringify(props)}` : ['CYCLES', `${JSON.stringify(props)}`];
+  let ck = cacheKey ? [`${cacheKey}-${JSON.stringify(props)}`] : ['CYCLES', `${JSON.stringify(props)}`];
 
-  return useQuery<{cycles:CycleMosaicItem[],fetched:number,total:number}>(ck, () => getCycles(lang,props), {
+  return useQuery<{cycles:CycleMosaicItem[],fetched:number,total:number}>(
+    {
+        queryKey:ck,
+        queryFn: () => getCycles(lang,props),
     staleTime,
     enabled,
     retry:3

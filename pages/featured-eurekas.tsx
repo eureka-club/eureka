@@ -1,7 +1,7 @@
 import { GetServerSideProps,NextPage } from 'next';
 import Head from "next/head";
 import { Button, ButtonGroup, Col, Row } from 'react-bootstrap';
-import { dehydrate, QueryClient } from 'react-query';
+import { dehydrate, QueryClient } from '@tanstack/react-query';;
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import useTranslation from 'next-translate/useTranslation';
 
@@ -65,7 +65,7 @@ export const getServerSideProps:GetServerSideProps= async (ctx)=>{
   const bod = await getbackOfficeData(origin)
   if(bod && bod?.CyclesExplorePage){
     const ids = bod?.CyclesExplorePage.split('').map(i=>+i)
-    await qc.fetchQuery(['CYCLES','INTERESTED'],()=>getFeaturedEurekas(ctx.locale!,ids,8,origin));
+    await qc.fetchQuery({queryKey:['CYCLES','INTERESTED'],queryFn:()=>getFeaturedEurekas(ctx.locale!,ids,8,origin)});
   }
   return {
     props:{

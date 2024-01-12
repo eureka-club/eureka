@@ -1,4 +1,4 @@
-import { useQuery, UseQueryResult } from 'react-query';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';;
 import { WorkMosaicItem } from './types/work';
 import useTranslation from 'next-translate/useTranslation';
 
@@ -28,7 +28,10 @@ const useWork = (id: number, options?: Options): UseQueryResult<WorkMosaicItem,E
     enabled: true,
   };
   const ck = notLangRestrict ? ['WORK', `${id}`] : ['WORK', `${id}-${lang}`];
-  return useQuery<WorkMosaicItem, Error>(ck, () => getWork(id, !notLangRestrict ? lang!:undefined), {
+  return useQuery<WorkMosaicItem, Error>(
+    {
+       queryKey:ck, 
+       queryFn:() => getWork(id, !notLangRestrict ? lang!:undefined),
     staleTime,
     enabled,
   });

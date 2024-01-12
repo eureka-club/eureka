@@ -1,12 +1,11 @@
-// import {Session} from '@/src/types'
+"use client"
 import React, { useState, useEffect } from 'react'
 import { ListGroup, Button, } from 'react-bootstrap'
 
 import { IoNotificationsCircleOutline } from 'react-icons/io5'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import useTranslation from 'next-translate/useTranslation'
-import { useMutation, useQueryClient } from 'react-query'
 import { EditNotificationClientPayload, NotificationMosaicItem } from '@/src/types/notification'
 import { useAtom } from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
@@ -15,6 +14,7 @@ import { getNotificationMessage } from '@/src/lib/utils'
 import MosaicItem from '@/src/components/notification/MosaicItem'
 import { UserMosaicItem } from '../types/user'
 import useNotifications from '../useNotifications'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 interface Props {
   className?: string;
 }
@@ -52,35 +52,35 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
     mutate: execEditNotification,
     error: editNotificationError,
     isError,
-    isLoading: isLoadingNotification,
+    isPending: isLoadingNotification,
     isSuccess,
   } = useMutation(
-    async (payload: EditNotificationClientPayload) => {
-
-      const res = await fetch(`/api/notification`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) {
-        setGlobalModalsState({
-          ...globalModalsState,
-          showToast: {
-            show: true,
-            type: 'warning',
-            title: t('common:Warning'),
-            message: res.statusText
-          }
-        });
-        return null;
-      }
-      return res.json();
-    },
     {
+      mutationFn: async (payload: EditNotificationClientPayload) => {
+
+        const res = await fetch(`/api/notification`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) {
+          setGlobalModalsState({
+            ...globalModalsState,
+            showToast: {
+              show: true,
+              type: 'warning',
+              title: t('common:Warning'),
+              message: res.statusText
+            }
+          });
+          return null;
+        }
+        return res.json();
+      },
       onMutate: async (vars) => {
         if (notVieweds) {
           const ck = ['USER', `${userId}`, 'NOTIFICATIONS'];
-          queryClient.cancelQueries(ck)
+          queryClient.cancelQueries({queryKey:ck})
           const ss = queryClient.getQueryData(ck);
           const idx = notVieweds.findIndex(n => n.notificationId == vars.notificationId)
           if (idx >= 0) {
@@ -97,7 +97,7 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
           if (error && ck) {
             queryClient.setQueryData(ck, ss);
           }
-          if (context) queryClient.invalidateQueries(ck);
+          if (context) queryClient.invalidateQueries({queryKey:ck});
         }
       },
     },
@@ -107,17 +107,18 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
     mutate: execAllToVieweds,
     error: editExecAllToVieweds,
     isError: isErrorExecAllToVieweds,
-    isLoading: isLoadingExecAllToVieweds,
+    isPending: isLoadingExecAllToVieweds,
     isSuccess: isSuccessExecAllToVieweds,
   } = useMutation(
-    async () => {
-      const res = await fetch(`/api/notification/check-all-vieweds?user=${userId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-      });
-      return res.json();
-    },
+    
     {
+      mutationFn:async () => {
+        const res = await fetch(`/api/notification/check-all-vieweds?user=${userId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+        });
+        return res.json();
+      },
       onMutate: async (vars) => {
         const ck = ['USER', `${userId}`, 'NOTIFICATIONS'];
         const ss = queryClient.getQueryData(ck);
@@ -130,7 +131,7 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
           if (error && ck) {
             queryClient.setQueryData(ck, ss);
           }
-          if (context) queryClient.invalidateQueries(ck);
+          if (context) queryClient.invalidateQueries({queryKey:ck});
         }
       },
     },

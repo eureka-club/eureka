@@ -7,7 +7,7 @@ import { DropdownItemProps } from 'react-bootstrap/DropdownItem';
 
 // import { BsCheck } from 'react-icons/bs';
 // import { ImCancelCircle } from 'react-icons/im';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';;
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { useAtom } from 'jotai';
 import { Cycle, Work } from '@prisma/client';
@@ -67,22 +67,22 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
   //   }));
   // };
 
-  const { mutate: addWorkToCycle, isLoading: isAddingWorkToCycle } = useMutation(
-    async (): Promise<Cycle | null> => {
-      const res = await fetch(`/api/cycle/${cycle.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: cycle.id, includedWorksIds }),
-      });
-
-      const json = await res.json();
-      if (json.ok) {
-        return {...json,type:'cycle'};
-      }
-
-      return null;
-    },
+  const { mutate: addWorkToCycle, isPending: isAddingWorkToCycle } = useMutation(
     {
+      mutationFn:async (): Promise<Cycle | null> => {
+        const res = await fetch(`/api/cycle/${cycle.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: cycle.id, includedWorksIds }),
+        });
+  
+        const json = await res.json();
+        if (json.ok) {
+          return {...json,type:'cycle'};
+        }
+  
+        return null;
+      },
       onMutate: async () => {
         const cacheKey = ['CYCLE', `${cycle.id}`];
         // await queryClient.cancelQueries(cacheKey);
@@ -98,8 +98,8 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
             queryClient.setQueryData(context.cacheKey, context.previewsItems);
           }
         }
-        if (context) queryClient.invalidateQueries(context.cacheKey);
-        queryClient.invalidateQueries(['WORKS',JSON.stringify({where:{cycles: { some: { id: cycle?.id } } }})])
+        if (context) queryClient.invalidateQueries({queryKey:context.cacheKey});
+        queryClient.invalidateQueries({queryKey:['WORKS',JSON.stringify({where:{cycles: { some: { id: cycle?.id } } }})]})
       },
     },
   );

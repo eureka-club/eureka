@@ -1,7 +1,7 @@
 import { Modal } from 'react-bootstrap';
 import React, { useState } from 'react'
 import { PostMosaicItem } from '@/src/types/post'
-import { } from 'react-query'
+import { } from '@tanstack/react-query';
 // import {default as EP, EmojiClickData} from 'emoji-picker-react'
 import dynamic from 'next/dynamic';
 import { EmojiClickData } from 'emoji-picker-react';

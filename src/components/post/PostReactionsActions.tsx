@@ -8,7 +8,7 @@ import toast from 'react-hot-toast'
 
 import { Toast as T } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter } from 'next/navigation';
 import usePostReactionCreateOrEdit from '@/src/hooks/mutations/usePostReactionCreateOrEdit';
 
 
@@ -21,6 +21,7 @@ const PostReactionsActions: FunctionComponent<Props> = ({ post, cacheKey }) => {
   const { data: session } = useSession();
   const { t } = useTranslation('common');
   const router = useRouter();
+  const asPath=usePathname()!;
   const { EmojiPicker, setShowEmojisPicker } = usePostEmojiPicker({ post, cacheKey });
   const { mutate, isPending: isMutating } = usePostReactionCreateOrEdit({ post, cacheKey });
 
@@ -53,7 +54,7 @@ const PostReactionsActions: FunctionComponent<Props> = ({ post, cacheKey }) => {
     return reactionsQty >= MAX_REACTIONS;
   }
   const isPostDetailPage = () => {
-    return router.asPath.match(/\/post\//);
+    return asPath.match(/\/post\//);
   }
   const RenderReactionAction = () => {
     if (post && session?.user && (isPostDetailPage() || getReactionsGrouped().length < MAX_REACTIONS))

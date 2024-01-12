@@ -1,9 +1,9 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { UserLanguages } from '@/src/types';
 import { useState, FormEvent, useEffect, useCallback, ChangeEvent, EventHandler } from 'react';
-import { QueryClient, dehydrate, useMutation, useQueryClient } from 'react-query';
+import { QueryClient, dehydrate, useMutation, useQueryClient } from '@tanstack/react-query';;
 import { backOfficePayload } from '@/src/types/backoffice';
 import useBackOffice from '@/src/useBackOffice';
 // import useTranslation from 'next-translate/useTranslation';
@@ -57,6 +57,7 @@ import { EditionMosaicItem } from '@/src/types/edition';
 import { FaSave } from 'react-icons/fa';
 import useUpdateWork from '@/src/hooks/mutations/useUpdateWork';
 import { error } from 'node:console';
+import { usePathname } from 'next/dist/client/components/navigation';
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
 const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 interface Props {
@@ -93,7 +94,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   const [tabKey, setTabKey] = useState<string>();
   const [currentSlider, setCurrentSlider] = useState<number>(0);
   const [showCrop, setShowCrop] = useState<boolean>(false);
-
+  const asPath = usePathname();
   const [imageFile1, setImageFile1] = useState<File | null>(null);
   const [imageFile2, setImageFile2] = useState<File | null>(null);
   const [imageFile3, setImageFile3] = useState<File | null>(null);
@@ -217,27 +218,27 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   const {
     mutate: execUpdateBackOffice,
     error: UpdateBackOfficeError,
-    isLoading: isLoadingBackOffice,
+    isPending: isLoadingBackOffice,
   } = useMutation(
-    async (payload: backOfficePayload) => {
-      const formData = new FormData();
-      //console.log(payload,'payload')
-      Object.entries(payload).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
-      const url = `/api/backoffice`;
-
-      const res = await fetch(url, {
-        method: 'PATCH',
-        //headers: { 'Content-Type': 'application/json' },
-        body: formData,
-      });
-      if (res.ok)
-        toast.success(t('Settings') + '  Saved')
-      else
-        toast.error(res.statusText)
-    },
     {
+      mutationFn: async (payload: backOfficePayload) => {
+        const formData = new FormData();
+        //console.log(payload,'payload')
+        Object.entries(payload).forEach(([key, value]) => {
+          formData.append(key, value);
+        });
+        const url = `/api/backoffice`;
+  
+        const res = await fetch(url, {
+          method: 'PATCH',
+          //headers: { 'Content-Type': 'application/json' },
+          body: formData,
+        });
+        if (res.ok)
+          toast.success(t('Settings') + '  Saved')
+        else
+          toast.error(res.statusText)
+      },
       onMutate: async () => {
         const cacheKey = ['BACKOFFICE', "1"];
         const snapshot = queryClient.getQueryData(cacheKey);
@@ -249,7 +250,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
           if (error && cacheKey) {
             queryClient.setQueryData(cacheKey, snapshot);
           }
-          if (context) queryClient.invalidateQueries(cacheKey);
+          if (context) queryClient.invalidateQueries({queryKey:cacheKey});
         }
       },
     },
@@ -259,18 +260,18 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
     mutate: execClearSlideBackOffice,
     error: ClearSlideBackOffice,
   } = useMutation(
-    async (clearSliderPayload: backOfficeClearSliderPayload) => {
-      const url = `/api/backoffice/${clearSliderPayload.originalName}`;
-      const res = await fetch(url, {
-        method: 'delete',
-      });
-      const data = await res.json();
-      if (res.ok)
-        toast.success(t('Banner Settings') + '  Saved')
-      else
-        toast.error(res.statusText)
-    },
     {
+      mutationFn:async (clearSliderPayload: backOfficeClearSliderPayload) => {
+        const url = `/api/backoffice/${clearSliderPayload.originalName}`;
+        const res = await fetch(url, {
+          method: 'delete',
+        });
+        const data = await res.json();
+        if (res.ok)
+          toast.success(t('Banner Settings') + '  Saved')
+        else
+          toast.error(res.statusText)
+      },
       onMutate: async () => {
         const cacheKey = ['BACKOFFICE', "1"];
         const snapshot = queryClient.getQueryData(cacheKey);
@@ -282,7 +283,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
           if (error && cacheKey) {
             queryClient.setQueryData(cacheKey, snapshot);
           }
-          if (context) queryClient.invalidateQueries(cacheKey);
+          if (context) queryClient.invalidateQueries({queryKey:cacheKey});
         }
       },
     },
@@ -345,16 +346,17 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
 
   //////Para la administracion de obras///////////////////////////
 
-  const { mutate: execDeleteWork, isSuccess: isDeleteWorkSucces } = useMutation(async (work: Work) => {
-    const res = await fetch(`/api/work/${work.id}`, {
-      method: 'delete',
-    });
-    toast.success('Work deleted!!')
-    const data = await res.json();
-
-    return data;
-  },
+  const { mutate: execDeleteWork, isSuccess: isDeleteWorkSucces } = useMutation(
     {
+      mutationFn:async (work: Work) => {
+      const res = await fetch(`/api/work/${work.id}`, {
+        method: 'delete',
+      });
+      toast.success('Work deleted!!')
+      const data = await res.json();
+  
+      return data;
+    },
       onMutate: async () => {
         const cacheKey = [`WORKS-${JSON.stringify(WorkToCheckWhere())}`];
         const snapshot = queryClient.getQueryData(cacheKey);
@@ -366,29 +368,30 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
           if (error && cacheKey) {
             queryClient.setQueryData(cacheKey, snapshot);
           }
-          if (context) queryClient.invalidateQueries(cacheKey);
+          if (context) queryClient.invalidateQueries({queryKey:cacheKey});
         }
       },
     },
   );
 
-  const { mutate: execRevisionWork, isSuccess: isRevisionWorkSucces } = useMutation(async (work: Work) => {
-
-    const formData = new FormData();
-
-    formData.append('id', work.id.toString());
-    formData.append('ToCheck', '0');
-
-    const res = await fetch(`/api/work/${work.id}`, {
-      method: "PATCH",
-      //headers: { "Content-type": "multipart/form-data" },
-      body: formData //JSON.stringify({ id: work.id,ToCheck:false })
-    });
-    toast.success('Work checked!!')
-    const data = await res.json();
-    return data;
-  },
+  const { mutate: execRevisionWork, isSuccess: isRevisionWorkSucces } = useMutation(
     {
+      mutationFn:async (work: Work) => {
+  
+      const formData = new FormData();
+  
+      formData.append('id', work.id.toString());
+      formData.append('ToCheck', '0');
+  
+      const res = await fetch(`/api/work/${work.id}`, {
+        method: "PATCH",
+        //headers: { "Content-type": "multipart/form-data" },
+        body: formData //JSON.stringify({ id: work.id,ToCheck:false })
+      });
+      toast.success('Work checked!!')
+      const data = await res.json();
+      return data;
+      },
       onMutate: async () => {
         const cacheKey = [`WORKS-${JSON.stringify(WorkToCheckWhere())}`];
         const snapshot = queryClient.getQueryData(cacheKey);
@@ -400,7 +403,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
           if (error && cacheKey) {
             queryClient.setQueryData(cacheKey, snapshot);
           }
-          if (context) queryClient.invalidateQueries(cacheKey);
+          if (context) queryClient.invalidateQueries({queryKey:cacheKey});
         }
       },
     },
@@ -427,10 +430,10 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
 
   useEffect(() => {
     if (isDeleteWorkSucces === true) {
-      router.replace(router.asPath);
+      router.replace(asPath!);
     }
     if (isRevisionWorkSucces === true) {
-      router.replace(router.asPath);
+      router.replace(asPath!);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDeleteWorkSucces, isRevisionWorkSucces]);
@@ -1000,7 +1003,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
   const qc = new QueryClient();
   const worksData = await getWorks(undefined, WorkToCheckWhere(), origin);
-  qc.prefetchQuery('list/works', () => worksData);
+  qc.prefetchQuery({queryKey:['list/works'], queryFn:() => worksData});
 
   return {
     props: {

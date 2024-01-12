@@ -24,7 +24,7 @@ import CarouselStatic from '../CarouselStatic';
 import { Box } from '@mui/material';
 import useExecRatingCycle, { ExecRatingPayload } from '@/src/hooks/mutations/useExecRatingCycle';
 import { UserMosaicItem } from '@/src/types/user';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';;
 import useUser from '@/src/useUser';
 import { CycleMosaicItem } from '@/src/types/cycle';
 interface Props {

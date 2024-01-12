@@ -8,7 +8,7 @@ import { Box } from '@mui/material';
 import Link from 'next/link';
 import {Col,Row} from 'react-bootstrap';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Session } from '@/src/types';
 
 interface Props {
@@ -19,18 +19,8 @@ const TransitionJoinPrivateCyclePage: NextPage<Props> = ({ session }) => {
   const { t } = useTranslation('common');
 
   const router = useRouter();
-  const [cycleId, setCycleId] = useState<string>('')
-
-  useEffect(() => {
-    if (router?.query) {
-      if (router.query.cycleId) {
-        setCycleId(router.query.cycleId?.toString())
-      }
-    }
-  }, [router])
-
-  //console.log(session, 'SESSION1 SESSION1 SESSION1')
-
+  // const searchParams=useSearchParams()
+  // const cycleId = searchParams?.get('cycleId')!
 
   return (
     <SimpleLayout title="Welcome" showNavBar={false} showFooter={false}>

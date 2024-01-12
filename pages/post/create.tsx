@@ -1,7 +1,7 @@
 import { GetServerSideProps, NextPage} from 'next';
 import { useEffect } from 'react';
 import { getSession,useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import { useParams, useRouter } from 'next/navigation';
 import useTranslation from 'next-translate/useTranslation';
 // import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
@@ -19,8 +19,8 @@ const CreatePostPage: NextPage<Props> = ({notFound}) => {
   const {data:session, status} = useSession();
   const isLoadingSession = status === "loading"
   const router = useRouter();
-  const query = router.query;
-
+  const params=useParams();
+  
     useEffect(() => {
             if (notFound) 
                 router.push('/login');
@@ -61,7 +61,7 @@ const CreatePostPage: NextPage<Props> = ({notFound}) => {
             <BiArrowBack />
           </Button>
         </ButtonGroup>
-      <CreatePostForm noModal params={query}/></>}
+      <CreatePostForm noModal params={params}/></>}
       </section> 
        </Col>  
      </section>  

@@ -2,12 +2,12 @@ import { Provider,Atom } from 'jotai';
 import { AppProps } from 'next/app';
 import { SessionProvider as NextAuthProvider } from 'next-auth/react';
 import { StrictMode, FunctionComponent, useState,useEffect } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';;
 import { ReactQueryDevtools } from 'react-query/devtools';
 import {SSRProvider} from 'react-bootstrap'
 import { Hydrate } from 'react-query/hydration';
 import { Toaster } from 'react-hot-toast';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -34,20 +34,20 @@ function Loading() {
 
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-      const handleStart = (url: string) => /*(url !== router.asPath) && */ setLoading(true);
-      const handleComplete = (url: string) => /*(url === router.asPath) && */setLoading(false)/*setTimeout(() =>{setLoading(false)},5000)*/;
+  // useEffect(() => {
+  //     const handleStart = (url: string) => /*(url !== router.asPath) && */ setLoading(true);
+  //     const handleComplete = (url: string) => /*(url === router.asPath) && */setLoading(false)/*setTimeout(() =>{setLoading(false)},5000)*/;
 
-      router.events.on('routeChangeStart', handleStart)
-      router.events.on('routeChangeComplete', handleComplete)
-      router.events.on('routeChangeError',  handleComplete)
+  //     router.events.on('routeChangeStart', handleStart)
+  //     router.events.on('routeChangeComplete', handleComplete)
+  //     router.events.on('routeChangeError',  handleComplete)
 
-      return () => {
-          router.events.off('routeChangeStart', handleStart)
-          router.events.off('routeChangeComplete', handleComplete)
-          router.events.off('routeChangeError', handleComplete)
-      }
-  })
+  //     return () => {
+  //         router.events.off('routeChangeStart', handleStart)
+  //         router.events.off('routeChangeComplete', handleComplete)
+  //         router.events.off('routeChangeError', handleComplete)
+  //     }
+  // })
   
   return <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
          open={loading}
@@ -78,7 +78,7 @@ function Loading() {
         defaultOptions: {
           queries: {
             refetchOnWindowFocus: false,
-            notifyOnChangeProps: 'tracked',
+            // notifyOnChangeProps: 'tracked',
           },
         },
       }),

@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';;
 // import { useAtom } from 'jotai';
 // import globalSearchEngineAtom from './atoms/searchEngine';
 
@@ -9,7 +9,10 @@ const getRecords = async () => {
 };
 
 const useTopis = () => {
-  return useQuery('TOPICS', getRecords, {
+  return useQuery(
+    {
+      queryKey:['TOPICS'], 
+      queryFn:getRecords, 
     staleTime: 1000 * 60 * 60,
   });
 };

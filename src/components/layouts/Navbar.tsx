@@ -2,7 +2,7 @@ import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { useAtom } from 'jotai';
 import searchEngine from '@/src/atoms/searchEngine';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter } from 'next/navigation';
 import useTranslation from 'next-translate/useTranslation';
 import { setCookie } from 'nookies';
 import { FunctionComponent, MouseEventHandler, useEffect, useState } from 'react';
@@ -22,7 +22,9 @@ import ChevronToggle from '@/components/ui/dropdown/ChevronToggle';
 import styles from './Navbar.module.css';
 import useUser from '@/src/useUser';
 import slugify from 'slugify';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';import { locales } from 'i18n';
+import { getLocale_In_NextPages } from '@/src/lib/utils';
+;
 
 const topics = [
   'gender-feminisms',
@@ -46,6 +48,8 @@ const NavBar: FunctionComponent = () => {
   const { data: session, status } = useSession();
   const isLoadingSession = status === 'loading';
   const router = useRouter();
+  const asPath=usePathname()!;
+  const locale=getLocale_In_NextPages(asPath);
   const { t } = useTranslation('navbar');
   const [userId, setUserId] = useState(-1);
   const [, setSearchEngineState] = useAtom(searchEngine);
@@ -67,7 +71,7 @@ const NavBar: FunctionComponent = () => {
         maxAge: LOCALE_COOKIE_TTL,
         path: '/',
       });
-      window.location.replace(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/${locale}${router.asPath}`);
+      window.location.replace(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/${locale}${asPath}`);
     }
   };
 
@@ -106,7 +110,7 @@ const NavBar: FunctionComponent = () => {
   const handlerLogin = () => {
     show(<SignInForm />);
 
-    /*localStorage.setItem('loginRedirect',router.asPath);
+    /*localStorage.setItem('loginRedirect',asPath);
     router.push({pathname: `/`}, undefined, { scroll: false });
     window.scrollTo(0, 60);*/
   };
@@ -231,7 +235,7 @@ const NavBar: FunctionComponent = () => {
                         <span className={styles.menuBottomInfo}>{t('About')}</span>
                         <Dropdown.Menu data-cy="links-about">
                           <Dropdown.Item
-                            active={router.asPath.search(/manifest$/g) !== -1}
+                            active={asPath.search(/manifest$/g) !== -1}
                             onClick={() => router.push('/manifest')}
                           >
                             {/* <Link legacyBehavior  href="/aboutUs"> */}
@@ -239,7 +243,7 @@ const NavBar: FunctionComponent = () => {
                             {/* </Link> */}
                           </Dropdown.Item>
                           <Dropdown.Item
-                            active={router.asPath.search(/about$/g) !== -1}
+                            active={asPath.search(/about$/g) !== -1}
                             onClick={() => router.push('/about')}
                           >
                             {/* <Link legacyBehavior  href="/about"> */}
@@ -247,7 +251,7 @@ const NavBar: FunctionComponent = () => {
                             {/* </Link> */}
                           </Dropdown.Item>
                           <Dropdown.Item
-                            active={router.asPath.search(/aboutUs$/g) !== -1}
+                            active={asPath.search(/aboutUs$/g) !== -1}
                             onClick={() => router.push('/aboutUs')}
                           >
                             {/* <Link legacyBehavior  href="/aboutUs"> */}
@@ -255,7 +259,7 @@ const NavBar: FunctionComponent = () => {
                             {/* </Link> */}
                           </Dropdown.Item>
                           <Dropdown.Item
-                            active={router.asPath.search(/policy$/g) !== -1}
+                            active={asPath.search(/policy$/g) !== -1}
                             onClick={() => router.push('/policy')}
                           >
                             {t('policyText')}
@@ -264,7 +268,7 @@ const NavBar: FunctionComponent = () => {
                       </Dropdown>
                     </Nav>
                     <Nav className="me-1">
-                      {router.locales?.length && (
+                      {locales.length && (
                         <Dropdown
                           data-cy="link-language"
                           align="end"
@@ -274,19 +278,19 @@ const NavBar: FunctionComponent = () => {
                           <Dropdown.Toggle as={ChevronToggle} id="langSwitch">
                             <img
                               className={styles.navbarIconNav}
-                              src={`/img/lang-flags/${router.locale}.png`}
-                              alt={`Language flag '${router.locale}'`}
+                              src={`/img/lang-flags/${locale}.png`}
+                              alt={`Language flag '${locale}'`}
                             />
                           </Dropdown.Toggle>
                           <span className={`${styles.menuBottomInfo}`}>{t('Language')}</span>
                           <Dropdown.Menu data-cy="links-language">
-                            {router.locales.map((locale) => (
-                              <Dropdown.Item key={locale} eventKey={locale} active={locale === router.locale}>
-                                {/* <Link legacyBehavior  href={router.asPath} locale={locale}> */}
+                            {locales.map((l) => (
+                              <Dropdown.Item key={l} eventKey={l} active={l === locale}>
+                                {/* <Link legacyBehavior  href={asPath} locale={locale}> */}
                                   <img
                                     className={`m-1 ${styles.navbarIconNav}`}
-                                    src={`/img/lang-flags/${locale}.png`}
-                                    alt={`Language flag '${locale}'`}
+                                    src={`/img/lang-flags/${l}.png`}
+                                    alt={`Language flag '${l}'`}
                                   />
                                 {/* </Link> */}
                               </Dropdown.Item>
@@ -304,14 +308,14 @@ const NavBar: FunctionComponent = () => {
                       <span className={styles.menuBottomInfo}>{t('Account')}</span>
                       <Dropdown.Menu>
                         <Dropdown.Item
-                          active={router.asPath.search(/profile$/g) !== -1}
+                          active={asPath.search(/profile$/g) !== -1}
                           onClick={() => router.push('/profile')}
                         >
                           {t('Profile')}
                         </Dropdown.Item>
                         {session?.user.roles && session?.user.roles == 'admin' && (
                           <Dropdown.Item
-                            active={router.asPath.search(/back-office$/g) !== -1}
+                            active={asPath.search(/back-office$/g) !== -1}
                             onClick={() => router.push('/back-office')}
                           >
                             {t('Admin Panel')}

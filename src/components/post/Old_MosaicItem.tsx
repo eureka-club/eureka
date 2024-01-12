@@ -3,7 +3,7 @@ import { Cycle, Work } from '@prisma/client';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import React, { FunctionComponent, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { Row, Col, Card, Badge,Button,Spinner } from 'react-bootstrap';
 import { FaRegComments, FaRegCompass } from 'react-icons/fa';
 import dayjs from 'dayjs';
@@ -25,7 +25,7 @@ import {useAtom} from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
 import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
 import usePost from '@/src/usePost'
-import {useQueryClient} from 'react-query'
+import {useQueryClient} from '@tanstack/react-query';
 import useCycle from '@/src/useCycle';
 import useWork from '@/src/useWork'
 import { useSession} from 'next-auth/react';

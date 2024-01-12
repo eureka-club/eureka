@@ -1,6 +1,6 @@
 import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter } from 'next/navigation';
 import useTranslation from 'next-translate/useTranslation';
 import { setCookie } from 'nookies';
 import { FunctionComponent, useState, useEffect } from 'react';
@@ -25,6 +25,8 @@ import { useAtom } from 'jotai';
 import searchEngine from '@/src/atoms/searchEngine';
 import { HiOutlineHashtag } from 'react-icons/hi';
 import slugify from 'slugify';
+import { locales } from 'i18n';
+import { getLocale_In_NextPages } from '@/src/lib/utils';
 
 const topics = [
   'gender-feminisms',
@@ -45,6 +47,8 @@ const topics = [
 const NavBar: FunctionComponent = () => {
   const { data: session } = useSession();
   const router = useRouter();
+  const asPath=usePathname()!;
+  const locale=getLocale_In_NextPages(asPath);
   const { t } = useTranslation('navbar');
   const [userId, setUserId] = useState(-1);
   const [showSearch, setShowSearch] = useState<boolean>(false);
@@ -69,10 +73,10 @@ const NavBar: FunctionComponent = () => {
   };
 
   const handlerLogin = () => {
-    localStorage.setItem('loginRedirect', router.asPath);
+    localStorage.setItem('loginRedirect', asPath);
     router.push("/login")
 
-    /*     localStorage.setItem('loginRedirect', router.asPath);
+    /*     localStorage.setItem('loginRedirect', asPath);
      router.push({ pathname: `/` }, undefined, { scroll: false });
      window.scrollTo(0, 200);*/
   };
@@ -226,22 +230,22 @@ const NavBar: FunctionComponent = () => {
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item
-                    active={router.asPath.search(/manifest$/g) !== -1}
+                    active={asPath.search(/manifest$/g) !== -1}
                     onClick={() => router.push('/manifest')}
                   >
                     {t('Manifest')}
                   </Dropdown.Item>
-                  <Dropdown.Item active={router.asPath.search(/about$/g) !== -1} onClick={() => router.push('/about')}>
+                  <Dropdown.Item active={asPath.search(/about$/g) !== -1} onClick={() => router.push('/about')}>
                     {t('About Eureka')}
                   </Dropdown.Item>
                   <Dropdown.Item
-                    active={router.asPath.search(/aboutUs$/g) !== -1}
+                    active={asPath.search(/aboutUs$/g) !== -1}
                     onClick={() => router.push('/aboutUs')}
                   >
                     {t('About Us')}
                   </Dropdown.Item>
                   <Dropdown.Item
-                    active={router.asPath.search(/policy$/g) !== -1}
+                    active={asPath.search(/policy$/g) !== -1}
                     onClick={() => router.push('/policy')}
                   >
                     {t('policyText')}
@@ -250,25 +254,25 @@ const NavBar: FunctionComponent = () => {
               </Dropdown>
             </Nav>
             <Nav className="mx-2">
-              {router.locales?.length && (
+              {locales?.length && (
                 <Dropdown align="end" className={styles.langSwitch} onSelect={handleLanguageSelect}>
                   <Dropdown.Toggle as={ChevronToggle} id="langSwitch">
                     <img
                       className={styles.navbarIconNav}
-                      src={`/img/lang-flags/${router.locale}.png`}
-                      alt={`Language flag '${router.locale}'`}
+                      src={`/img/lang-flags/${locale}.png`}
+                      alt={`Language flag '${locale}'`}
                     />
                     {` `}
                     <span className={styles.menuBottomInfo}>{t('Language')}</span>
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    {router.locales.map((locale) => (
-                      <Dropdown.Item key={locale} eventKey={locale} active={locale === router.locale}>
-                        <Link legacyBehavior  href={router.asPath} locale={locale}>
+                    {locales.map((l) => (
+                      <Dropdown.Item key={l} eventKey={l} active={l === locale}>
+                        <Link legacyBehavior  href={asPath} locale={l}>
                           <img
                             className={`m-1 ${styles.navbarIconNav}`}
-                            src={`/img/lang-flags/${locale}.png`}
-                            alt={`Language flag '${locale}'`}
+                            src={`/img/lang-flags/${l}.png`}
+                            alt={`Language flag '${l}'`}
                           />
                         </Link>
                       </Dropdown.Item>
@@ -287,14 +291,14 @@ const NavBar: FunctionComponent = () => {
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <Dropdown.Item
-                      active={router.asPath.search(/profile$/g) !== -1}
+                      active={asPath.search(/profile$/g) !== -1}
                       onClick={() => router.push('/profile')}
                     >
                       {t('Profile')}
                     </Dropdown.Item>
                     {session?.user.roles && session?.user.roles == 'admin' && (
                       <Dropdown.Item
-                        active={router.asPath.search(/back-office$/g) !== -1}
+                        active={asPath.search(/back-office$/g) !== -1}
                         onClick={() => router.push('/back-office')}
                       >
                         {t('Admin Panel')}

@@ -1,5 +1,5 @@
-import { useQuery } from 'react-query';
 import { backOfficeData } from '@/types/backoffice';
+import { useQuery } from '@tanstack/react-query';
 
 export const getbackOfficeData = async (origin?:string): Promise<backOfficeData|null> => {
     const url = `${origin||''}/api/backoffice`;
@@ -20,7 +20,10 @@ const useBackOffice = (options?: Options) => {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  return useQuery<backOfficeData|null>(['BACKOFFICE', `1`], () => getbackOfficeData(), {
+  return useQuery<backOfficeData|null>(
+    {
+      queryKey:['BACKOFFICE', `1`],
+        queryFn:() => getbackOfficeData(),
     staleTime,
     enabled,
   });

@@ -1,6 +1,6 @@
 import { GetServerSideProps, NextPage} from 'next';
 import { getSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import { useParams, useRouter } from 'next/navigation';
 import useTranslation from 'next-translate/useTranslation';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { Spinner, ButtonGroup, Button, Alert } from 'react-bootstrap';
@@ -15,7 +15,9 @@ interface Props {
 const EditPostPage: NextPage<Props> = ({session}) => {
   const { t } = useTranslation('createPostForm');
   const router = useRouter();
-    
+   const params=useParams<{id:string}>();
+   const id=params?.id!; 
+
   const goTo=()=>{
     const redirect = localStorage.getItem('redirect')
     if(redirect){
@@ -28,14 +30,14 @@ const EditPostPage: NextPage<Props> = ({session}) => {
 
   return <SimpleLayout title={t('title')}>
     {!session ? <Alert>{t('notSession')}</Alert> : <></> }
-    {router && router.query.id 
+    {id 
       ? <>
         <ButtonGroup className="mt-1 mt-md-3 mb-1">
             <Button variant="primary text-white" onClick={goTo} size="sm">
               <BiArrowBack />
             </Button>
           </ButtonGroup>
-        <EditPostForm id={+router.query.id.toString()} noModal/>
+        <EditPostForm id={+id} noModal/>
       </>
       : <Spinner animation="grow" variant="info" />
     }

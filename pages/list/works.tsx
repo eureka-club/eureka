@@ -2,7 +2,7 @@ import { LocalImage, Work } from '@prisma/client';
 import dayjs from 'dayjs';
 import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter } from 'next/navigation';
 import { getSession } from 'next-auth/react';
 import { useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
@@ -10,7 +10,7 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 
 import Table from 'react-bootstrap/Table';
-import { QueryClient, useMutation, dehydrate, useQuery } from 'react-query';
+import { QueryClient, useMutation, dehydrate } from '@tanstack/react-query';;
 
 import { DATE_FORMAT_ONLY_YEAR } from '@/src/constants';
 import { Session } from '@/src/types';
@@ -29,17 +29,21 @@ interface Props {
 
 const ListWorksPage: NextPage<Props> = ({ session }) => {
   const router = useRouter();
+  const asPath =usePathname()!;
   const {data} = useWorks();
   const works = data?.works.filter(x => x.ToCheck)
 
-  const { mutate: execDeleteWork, isSuccess: isDeleteWorkSucces } = useMutation(async (work: Work) => {
-    const res = await fetch(`/api/work/${work.id}`, {
-      method: 'delete',
+  const { mutate: execDeleteWork, isSuccess: isDeleteWorkSucces } = useMutation(
+    {
+      mutationFn:async (work: Work) => {
+        const res = await fetch(`/api/work/${work.id}`, {
+          method: 'delete',
+        });
+        const data = await res.json();
+    
+        return data;
+      }
     });
-    const data = await res.json();
-
-    return data;
-  });
 
   const handleDeleteClick = (work: Work) => {
     execDeleteWork(work);
@@ -47,7 +51,7 @@ const ListWorksPage: NextPage<Props> = ({ session }) => {
 
   useEffect(() => {
     if (isDeleteWorkSucces === true) {
-      router.replace(router.asPath);
+      router.replace(asPath);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDeleteWorkSucces]);
@@ -123,7 +127,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
   const qc = new QueryClient();
   const worksData = await getWorks(ctx.locale!,undefined, origin);
-  qc.prefetchQuery('list/works', () => worksData);
+  qc.prefetchQuery({queryKey:['list/works'], queryFn:() => worksData});
 
   return {
     props: {

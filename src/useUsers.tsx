@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery } from '@tanstack/react-query';;
 import { UserMosaicItem } from './types/user';
 import { buildUrl } from 'build-url-ts';
 
@@ -33,15 +33,17 @@ export const getUsers = async (props?:Prisma.UserFindManyArgs,origin=''):Promise
 };
 
 const useUsers = (where:Prisma.UserFindManyArgs,options?: Options) => {
-  const qc = useQueryClient()
   const { staleTime, enabled,from } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
   
-  return useQuery<UserMosaicItem[]>(['USERS', JSON.stringify(where)], () => getUsers(where), {
-    staleTime,
-    enabled
+  return useQuery<UserMosaicItem[]>(
+    {
+      queryKey:['USERS', JSON.stringify(where)],
+      queryFn:() => getUsers(where),
+      staleTime,
+      enabled
   });
 };
 

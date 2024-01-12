@@ -9,7 +9,7 @@ import { Post } from '@prisma/client';
 import { BsCheck } from 'react-icons/bs';
 import { ImCancelCircle } from 'react-icons/im';
 
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';;
 
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import globalModalsAtom from '../../atoms/globalModals';
@@ -25,7 +25,7 @@ import stylesImageFileSelect from '../forms/CreatePostForm.module.css';
 import useTopics from '../../useTopics';
 
 import { useNotificationContext } from '@/src/useNotificationProvider';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
 import useWorks from '@/src/useWorks';
@@ -44,6 +44,8 @@ import {
 } from '@mui/material';
 import Prompt from '@/src/components/post/PostPrompt';
 import { WorkMosaicItem } from '@/src/types/work';
+import { Locale } from 'i18n-config';
+import { usePathname } from 'next/dist/client/components/navigation';
 
 // import { devNull } from 'os';
 // import { isNullOrUndefined } from 'util';
@@ -54,6 +56,7 @@ interface Props {
   discussionItem?: string;
   setDiscussionItem: (val: string | undefined) => void;
   close: () => void;
+  locale:Locale
 }
 
 const languages: Record<string, string> = {
@@ -78,9 +81,11 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   discussionItem,
   setDiscussionItem,
   close,
+  locale
 }) => {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const asPath=usePathname()!;
   const { data: session } = useSession();
   const { t } = useTranslation('cycleDetail');
   //const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -99,7 +104,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
     selectedWorkId: 0,
     title: '',
     image: null,
-    language: languages[`${router.locale}`],
+    language: languages[`${locale}`],
     contentText: '',
     isPublic: cycle.access === 1,
     topics: eurekaTopics,
@@ -177,7 +182,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         selectedWorkId: newEureka.selectedWorkId,
         title: newEureka.title,
         image: newEurekaImageFile!,
-        language: languages[`${router.locale}`],
+        language: languages[`${locale}`],
         contentText: editorRef.current ? editorRef.current.getContent() : '',
         isPublic: newEureka.isPublic,
         topics: eurekaTopics.join(','),
@@ -190,7 +195,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         selectedWorkId: null,
         title: newEureka.title,
         image: newEurekaImageFile!,
-        language: languages[`${router.locale}`],
+        language: languages[`${locale}`],
         contentText: editorRef.current ? editorRef.current.getContent() : '',
         isPublic: newEureka.isPublic,
         topics: eurekaTopics.join(','),
@@ -200,69 +205,69 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
     }
   };
 
-  const { mutate: execCreateEureka, isLoading } = useMutation(
-    async (payload: CreatePostAboutCycleClientPayload | CreatePostAboutWorkClientPayload): Promise<Post | null> => {
-      const u = session!.user;
-      const toUsers = (participants || []).filter((p) => p.id !== u.id).map((p) => p.id);
-      if (u.id !== cycle.creatorId) toUsers.push(cycle.creatorId);
-      let message = '';
-      let notificationContextURL = router.asPath;
-      if (payload.selectedWorkId) {
-        if (works) {
-          const work = works.find((w) => w.id === payload.selectedWorkId);
-          if (work) {
-            message = `eurekaCreatedAboutWorkInCycle!|!${JSON.stringify({
-              userName: u.name || '',
-              workTitle: work.title,
-              cycleTitle: cycle.title,
-            })}`;
-            notificationContextURL = `/work/${work.id}/post`;
-          }
-        }
-      } else if (payload.selectedCycleId) {
-        message = `eurekaCreatedAboutCycle!|!${JSON.stringify({
-          userName: u.name || '',
-          cycleTitle: cycle.title,
-        })}`;
-        notificationContextURL = `/cycle/${cycle.id}/post`;
-      }
-      const formData = new FormData();
-      Object.entries(payload).forEach(([key, value]) => {
-        if (value != null) {
-          formData.append(key, value);
-        }
-      });
-
-      formData.append('notificationMessage', message);
-      formData.append('notificationContextURL', notificationContextURL);
-      formData.append('notificationToUsers', toUsers.join(','));
-
-      const res = await fetch('/api/post', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!res.ok)
-        //TODO add Toast notification to the user
-        return null;
-
-      const json = await res.json();
-
-      if (json) {
-        if (notifier) {
-          notifier.notify({
-            toUsers,
-            data: { message },
-          });
-        }
-        toast.success(t('postCreated'));
-        clearPayload();
-        return json.post;
-      }
-
-      return null;
-    },
+  const { mutate: execCreateEureka, isPending } = useMutation(
     {
+      mutationFn:async (payload: CreatePostAboutCycleClientPayload | CreatePostAboutWorkClientPayload): Promise<Post | null> => {
+        const u = session!.user;
+        const toUsers = (participants || []).filter((p) => p.id !== u.id).map((p) => p.id);
+        if (u.id !== cycle.creatorId) toUsers.push(cycle.creatorId);
+        let message = '';
+        let notificationContextURL = asPath;
+        if (payload.selectedWorkId) {
+          if (works) {
+            const work = works.find((w) => w.id === payload.selectedWorkId);
+            if (work) {
+              message = `eurekaCreatedAboutWorkInCycle!|!${JSON.stringify({
+                userName: u.name || '',
+                workTitle: work.title,
+                cycleTitle: cycle.title,
+              })}`;
+              notificationContextURL = `/work/${work.id}/post`;
+            }
+          }
+        } else if (payload.selectedCycleId) {
+          message = `eurekaCreatedAboutCycle!|!${JSON.stringify({
+            userName: u.name || '',
+            cycleTitle: cycle.title,
+          })}`;
+          notificationContextURL = `/cycle/${cycle.id}/post`;
+        }
+        const formData = new FormData();
+        Object.entries(payload).forEach(([key, value]) => {
+          if (value != null) {
+            formData.append(key, value);
+          }
+        });
+  
+        formData.append('notificationMessage', message);
+        formData.append('notificationContextURL', notificationContextURL);
+        formData.append('notificationToUsers', toUsers.join(','));
+  
+        const res = await fetch('/api/post', {
+          method: 'POST',
+          body: formData,
+        });
+  
+        if (!res.ok)
+          //TODO add Toast notification to the user
+          return null;
+  
+        const json = await res.json();
+  
+        if (json) {
+          if (notifier) {
+            notifier.notify({
+              toUsers,
+              data: { message },
+            });
+          }
+          toast.success(t('postCreated'));
+          clearPayload();
+          return json.post;
+        }
+  
+        return null;
+      },
       onMutate: async () => {
         // await queryClient.cancelQueries(cacheKey);
         const previewsItems = queryClient.getQueryData<PostMosaicItem[]>(cacheKey);
@@ -276,8 +281,8 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
           // console.error(error);
         }
         if (context && session) {
-          queryClient.invalidateQueries(context.cacheKey);
-          queryClient.invalidateQueries(['USER', session.user.id.toString()]); //to get the new notification
+          queryClient.invalidateQueries({queryKey:context.cacheKey});
+          queryClient.invalidateQueries({queryKey:['USER', session.user.id.toString()]}); //to get the new notification
         }
       },
     },
@@ -545,7 +550,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
                   {/* <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel> */}
                   <TagsInputTypeAheadMaterial
                     style={{ background: 'white' }}
-                    data={topics}
+                    data={topics as {code:string,label:string}[]}
                     items={eurekaTopics}
                     setItems={setEurekaTopics}
                     max={3}
@@ -563,7 +568,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
           </Row>{' '}
           <aside className="d-flex justify-content-end">
             <ButtonGroup size="sm" className="pt-3">
-              <Button variant="warning" className="text-white" onClick={clearCreateEurekaForm} disabled={isLoading}>
+              <Button variant="warning" className="text-white" onClick={clearCreateEurekaForm} disabled={isPending}>
                 <ImCancelCircle />
               </Button>
               <Button
@@ -571,10 +576,10 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
                 onClick={handlerSubmitCreateEureka}
                 className="text-white"
                 style={{ width: '8rem' }}
-                disabled={isLoading}
+                disabled={isPending}
               >
                 <span>{t('Create')}</span>
-                {isLoading && <Spinner size="sm" animation="grow" />}
+                {isPending && <Spinner size="sm" animation="grow" />}
               </Button>
             </ButtonGroup>
           </aside>

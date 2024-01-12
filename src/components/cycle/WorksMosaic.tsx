@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import { FunctionComponent, useEffect, useState } from 'react';
 // import Spinner from 'react-bootstrap/Spinner';
-// import { useQuery } from 'react-query';
+// import { useQuery } from '@tanstack/react-query';;
 
 import { WorkMosaicItem } from '../../types/work';
 import Mosaic from '../Mosaic';

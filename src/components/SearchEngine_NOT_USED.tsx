@@ -2,7 +2,7 @@
 // import dayjs from 'dayjs';
 // import { useAtom } from 'jotai';
 // import Link from 'next/link';
-// import { useRouter } from 'next/router';
+// import { useRouter } from 'next/navigation';
 // import useTranslation from 'next-translate/useTranslation';
 // // import { setCookie } from 'nookies';
 // import { FunctionComponent, useState, useMemo } from 'react';
@@ -11,7 +11,7 @@
 
 // import { AiOutlineSearch } from 'react-icons/ai';
 // // import Fuse from 'fuse.js';
-// import { useQueryClient } from 'react-query';
+// import { useQueryClient } from '@tanstack/react-query';;
 // import { LocalImage, Work } from '@prisma/client';
 // import CycleTypeaheadSearchItem from './cycle/TypeaheadSearchItem';
 // import WorkTypeaheadSearchItem from './work/TypeaheadSearchItem';

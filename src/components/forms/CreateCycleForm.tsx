@@ -1,11 +1,11 @@
 import classNames from 'classnames';
 import dayjs from 'dayjs';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import useTranslation from 'next-translate/useTranslation';
 import Trans from 'next-translate/Trans';
 import { ChangeEvent, FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
 import { Button, Col, Form, ButtonGroup, ListGroup, Modal, Row, Spinner,Container } from 'react-bootstrap';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';;
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BiTrash, BiPlus, BiEdit } from 'react-icons/bi';
 import { GiCancel } from 'react-icons/gi';
@@ -110,66 +110,70 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     mutate: execCreateCycle,
     data: newCycleData,
     error: createCycleReqError,
-    isLoading: isCreateCycleReqLoading,
+    isPending: isCreateCycleReqLoading,
     isError: isCreateCycleReqError,
     isSuccess: isCreateCycleReqSuccess,
-  } = useMutation(async (payload: CreateCycleClientPayload) => {
-    const formData = new FormData();
-
-    Object.entries(payload).forEach(([key, value]) => {
-      if (value != null) {
-        switch (key) {
-          case 'includedWorksIds':
-            value.forEach((val: number) => formData.append(key, String(val)));
-            break;
-          case 'complementaryMaterials':
-            value.forEach((cm: ComplementaryMaterial, idx: number) => {
-              Object.entries(cm).forEach(([cmFieldName, cmFieldValue]) => {
-                if (cmFieldValue != null) {
-                  formData.append(`CM${idx}_${cmFieldName}`, cmFieldValue);
-                }
+  } = useMutation(
+    {
+      mutationFn:async (payload: CreateCycleClientPayload) => {
+      const formData = new FormData();
+  
+      Object.entries(payload).forEach(([key, value]) => {
+        if (value != null) {
+          switch (key) {
+            case 'includedWorksIds':
+              value.forEach((val: number) => formData.append(key, String(val)));
+              break;
+            case 'complementaryMaterials':
+              value.forEach((cm: ComplementaryMaterial, idx: number) => {
+                Object.entries(cm).forEach(([cmFieldName, cmFieldValue]) => {
+                  if (cmFieldValue != null) {
+                    formData.append(`CM${idx}_${cmFieldName}`, cmFieldValue);
+                  }
+                });
               });
-            });
-            break;
-          case 'guidelines':
-            formData.append(key, JSON.stringify(value));
-            break;
-          case 'cycleWorksDates':
-            formData.append(
-              key,
-              JSON.stringify(
-                Object.entries<{ [key: string]: { startDate?: string; endDate?: string } }>(value).map((v) => {
-                  return { workId: v[0], startDate: v[1].startDate, endDate: v[1].endDate };
-                }),
-              ),
-            );
-            break;
-          default:
-            formData.append(key, value);
-            break;
+              break;
+            case 'guidelines':
+              formData.append(key, JSON.stringify(value));
+              break;
+            case 'cycleWorksDates':
+              formData.append(
+                key,
+                JSON.stringify(
+                  Object.entries<{ [key: string]: { startDate?: string; endDate?: string } }>(value).map((v) => {
+                    return { workId: v[0], startDate: v[1].startDate, endDate: v[1].endDate };
+                  }),
+                ),
+              );
+              break;
+            default:
+              formData.append(key, value);
+              break;
+          }
         }
-      }
-    });
-    formData.append('tags', tags);
-    const res = await fetch('/api/cycle', {
-      method: 'POST',
-      body: formData,
-    });
-    const json = await res.json();
-    if(!res.ok){
-      setGlobalModalsState({
-        ...globalModalsState,
-        showToast: {
-          show: true,
-          type: 'warning',
-          title: t(`common:${res.statusText}`),
-          message: json.error,
-        },
       });
-      return null;
+      formData.append('tags', tags);
+      const res = await fetch('/api/cycle', {
+        method: 'POST',
+        body: formData,
+      });
+      const json = await res.json();
+      if(!res.ok){
+        setGlobalModalsState({
+          ...globalModalsState,
+          showToast: {
+            show: true,
+            type: 'warning',
+            title: t(`common:${res.statusText}`),
+            message: json.error,
+          },
+        });
+        return null;
+      }
+      return json;
+      }
     }
-    return json;
-  });
+  );
 
   const router = useRouter();
   const { t } = useTranslation('createCycleForm');
@@ -695,7 +699,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
             <Form.Group controlId="topics">
               <Form.Label>{t('newCycleMainTopicsLabel')}</Form.Label>
               <TagsInputTypeAhead
-                data={topics}
+                data={topics as {code:string,label:string}[]}
                 items={items}
                 setItems={setItems}
                 labelKey={(res) => t(`topics:${res.code}`)}

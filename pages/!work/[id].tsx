@@ -2,13 +2,13 @@ import { NextPage,GetServerSideProps,  } from 'next';
 import Head from "next/head";
 import { getSession } from 'next-auth/react';
 import { ReactElement } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { Spinner, Alert } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import { WEBAPP_URL } from '@/src/constants';
 import WorkDetailComponent from '@/src/components/work/WorkDetail';
-import { dehydrate, QueryClient } from 'react-query';
+import { dehydrate, QueryClient } from '@tanstack/react-query';;
 import useWork,{getWork} from '@/src/useWork';
 import {getCycles} from '@/src/useCycles'
 import {getPosts} from '@/src/usePosts'
@@ -126,9 +126,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {debugger;
   if(work){
     metaTags = { id: work.id, title: work.title, author: work.author, storedFile: work.localImages[0].storedFile };
     const workPostsWhere = {take:8,where:{works:{some:{id}}}}
-    await qc.prefetchQuery(['WORK', `${id}-${lang}`],()=>work)
-    await qc.prefetchQuery(['CYCLES',JSON.stringify(workCyclesWhere)],()=>getCycles(ctx.locale!,workCyclesWhere,origin))
-    await qc.prefetchQuery(['POSTS',JSON.stringify(workPostsWhere)],()=>getPosts(ctx.locale!,workPostsWhere,origin))
+    await qc.prefetchQuery({queryKey:['WORK', `${id}-${lang}`],queryFn:()=>work})
+    await qc.prefetchQuery({queryKey:['CYCLES',JSON.stringify(workCyclesWhere)],queryFn:()=>getCycles(ctx.locale!,workCyclesWhere,origin)})
+    await qc.prefetchQuery({queryKey:['POSTS',JSON.stringify(workPostsWhere)],queryFn:()=>getPosts(ctx.locale!,workPostsWhere,origin)})
   }
   
   return {

@@ -19,7 +19,7 @@ import {
 import { BsBoxArrowUpRight } from 'react-icons/bs';
 import { BiArrowBack } from 'react-icons/bi';
 // import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { PostMosaicItem } from '@/src/types/post';
 import UnclampText from '@/components/UnclampText';
 import WorkSummary from './WorkSummary';
@@ -109,7 +109,9 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
   const [posts, setPosts] = useState(dataPosts?.posts);
   const [cycles, setCycles] = useState(dataCycles?.cycles);
   const [defaultActiveKey, setDefaultActiveKey] = useState<string>('posts');
-
+  const searchParams=useSearchParams()!;
+  const tabKey = searchParams?.get('tabKey');
+  const postId = searchParams?.get('postId');
   const [hasMorePosts, setHasMorePosts] = useState(dataPosts?.fetched);
 
   const { mutate: execRating } = useExecRatingWork({
@@ -129,7 +131,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
       setCycles(dataCycles.cycles);
       if (dataCycles.cycles.length && !posts?.length) setDefaultActiveKey('cycles');
     }
-    if (router.query.tabKey) setDefaultActiveKey(router.query.tabKey.toString());
+    if (tabKey) setDefaultActiveKey(tabKey);
   }, [dataCycles, posts]);
 
   useEffect(() => {
@@ -287,7 +289,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
           <Button variant="primary text-white" onClick={() => router.back()} size="sm">
             <BiArrowBack />
           </Button>
-          {!router.query.postId && canEditWork() && (
+          {!postId && canEditWork() && (
             <Button variant="warning" onClick={handleEditClick} size="sm">
               {t('edit')}
             </Button>

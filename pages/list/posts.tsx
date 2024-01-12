@@ -1,12 +1,12 @@
 import { GetServerSideProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter } from 'next/navigation';
 import { getSession } from 'next-auth/react';
 import { useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import Table from 'react-bootstrap/Table';
-import { QueryClient, dehydrate, useMutation } from 'react-query';
+import { QueryClient, dehydrate, useMutation } from '@tanstack/react-query';;
 
 import { PostMosaicItem } from '@/src/types/post';
 import { Session } from '@/src/types';
@@ -21,14 +21,18 @@ interface Props {
 
 const ListPostsPage: NextPage<Props> = ({ session }) => {
   const router = useRouter();
-  const { mutate: execDeletePost, isSuccess: isDeletePostSuccess } = useMutation(async (post: PostMosaicItem) => {
-    const res = await fetch(`/api/post/${post.id}`, {
-      method: 'delete',
+  const asPath = usePathname()!;
+  const { mutate: execDeletePost, isSuccess: isDeletePostSuccess } = useMutation(
+    {
+      mutationFn:async (post: PostMosaicItem) => {
+        const res = await fetch(`/api/post/${post.id}`, {
+          method: 'delete',
+        });
+        const data = await res.json();
+    
+        return data;
+      }
     });
-    const data = await res.json();
-
-    return data;
-  });
 
   const {data} = usePosts();
   const posts = data?.posts;
@@ -39,7 +43,7 @@ const ListPostsPage: NextPage<Props> = ({ session }) => {
 
   useEffect(() => {
     if (isDeletePostSuccess === true) {
-      router.replace(router.asPath);
+      router.replace(asPath);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDeletePostSuccess]);
@@ -109,7 +113,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
   const qc = new QueryClient();
   const postsData = await getPosts(ctx.locale!,undefined, origin);
-  qc.prefetchQuery('list/cycles', () => postsData);
+  qc.prefetchQuery({queryKey:['list/cycles'],queryFn: () => postsData});
 
   return {
     props: {

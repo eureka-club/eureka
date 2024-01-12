@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { v4 } from 'uuid';
 import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';;
 import { FunctionComponent, useState, memo } from 'react';
 import { Button, Row, Col, Spinner } from 'react-bootstrap';
 import router from 'next/router';

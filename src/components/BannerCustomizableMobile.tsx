@@ -4,7 +4,7 @@ import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
 import useTranslation from 'next-translate/useTranslation';
 import styles from './BannerCustomizable.module.css';
 import useBackOffice from '@/src/useBackOffice';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;

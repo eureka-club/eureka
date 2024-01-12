@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';;
 import { PostMosaicItem } from './types/post';
 import { Prisma } from '@prisma/client';
 import useTranslation from 'next-translate/useTranslation';
@@ -31,9 +31,12 @@ const usePosts = (props?:Prisma.PostFindManyArgs, options?: Options) => {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  let ck = cacheKey ? `${cacheKey}-${JSON.stringify(props)}` : ['POSTS', `${JSON.stringify(props)}`];
+  let ck = cacheKey ? [`${cacheKey}-${JSON.stringify(props)}`] : ['POSTS', `${JSON.stringify(props)}`];
 
-  return useQuery<{posts:PostMosaicItem[],fetched:number,total:number}>(ck, () => getPosts(lang,props), {
+  return useQuery<{posts:PostMosaicItem[],fetched:number,total:number}>(
+    {
+        queryKey:ck,
+         queryFn:() => getPosts(lang,props),
     staleTime,
     enabled,
     retry:3

@@ -3,9 +3,9 @@ import useTranslation from 'next-translate/useTranslation';
 import Head from "next/head";
 import { useEffect, useState } from 'react';
 import { getSession, useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { Spinner } from 'react-bootstrap';
-import { QueryClient,dehydrate } from 'react-query';
+import { QueryClient,dehydrate } from '@tanstack/react-query';;
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '@/src/components/cycle/CycleDetail';
 import { WorkMosaicItem } from '@/src/types/work';
@@ -98,6 +98,7 @@ const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId,metaTags,session
                 post={post}
                 work={post.works.length ? (post.works[0] as WorkMosaicItem) : undefined}
                 session={session}
+                id={cycle.id}
               />
             </CycleContext.Provider>
           )}
@@ -123,9 +124,9 @@ export const getServerSideProps:GetServerSideProps = async (ctx) => {
  let metaTags = {id:post?.id, cycleId:cycle?.id, title:post?.title,cycleTitle:cycle?.title,creator:post?.creator.name, storedFile: post?.localImages[0].storedFile}
 
   const queryClient = new QueryClient() 
-   await queryClient.prefetchQuery(['USERS',JSON.stringify(wcu)],()=>getUsers(wcu,origin))
-   await queryClient.prefetchQuery(['CYCLE',`${cycleId}`],()=>cycle)
-   await queryClient.prefetchQuery(['POST',`${postId}`],()=>post)
+   await queryClient.prefetchQuery({queryKey:['USERS',JSON.stringify(wcu)],queryFn:()=>getUsers(wcu,origin)})
+   await queryClient.prefetchQuery({queryKey:['CYCLE',`${cycleId}`],queryFn:()=>cycle})
+   await queryClient.prefetchQuery({queryKey:['POST',`${postId}`],queryFn:()=>post})
 
   return {
     props: {

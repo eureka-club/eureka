@@ -6,6 +6,8 @@ import { Area } from 'react-easy-crop/types';
 import { Session } from '../types';
 import { UserMosaicItem } from '../types/user';
 import fs from 'fs'
+import { defaultLocale } from 'i18n';
+import { Locale } from 'i18n-config';
 
 export const advancedDayjs = (date: string | number | Date): dayjs.Dayjs => {
   dayjs.extend(advancedFormat);
@@ -313,3 +315,10 @@ export const isAccessAllowed = (
   }
   return false;
 };
+
+
+export const getLocale_In_NextPages=(path:string):Locale=>{
+  const res = path.match(/\/(en|pt|es|fr)/);
+  if(res?.length)return RegExp.$1 as Locale;
+  return defaultLocale as Locale;
+}

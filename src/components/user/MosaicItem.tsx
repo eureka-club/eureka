@@ -2,7 +2,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent,useState, useEffect } from 'react';
 import { Card, Row, Col,Spinner,Button,Tooltip } from 'react-bootstrap';
 import { AiOutlineEnvironment,AiOutlineUserAdd,AiOutlineUserDelete,AiOutlineUser } from 'react-icons/ai';
-import { useQueryClient, useMutation} from 'react-query';
+import { useQueryClient, useMutation} from '@tanstack/react-query';;
 import { useNotificationContext } from '@/src/useNotificationProvider';
 import { User } from '@prisma/client';
 import { useSession } from 'next-auth/react';
@@ -63,47 +63,47 @@ const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = fa
    
   }, [user,tags]);
 
-  const { mutate: mutateFollowing, isLoading: isLoadingMutateFollowing } = useMutation<User>(
-    async () => {
-      const user = session!.user;
-      const action = isFollowedByMe ? 'disconnect' : 'connect';
-
-      const notificationMessage = `userStartFollowing!|!${JSON.stringify({
-        userName:user.name,
-      })}`
-      const form = new FormData()
-      form.append('followedBy',JSON.stringify({
-          [`${action}`]: [{ id: user.id }],
-      }))
-      form.append('notificationData',JSON.stringify({
-        notificationMessage,
-        notificationContextURL:`/mediatheque/${session?.user.id}`,
-        notificationToUsers:[id]
-      }))
-      
-      const res = await fetch(`/api/user/${id}`, {
-        method: 'PATCH',
-        body:form,
-      });
-      if(res.ok){
-        const json = await res.json();
-        if(notifier)
-          notifier.notify({
-            toUsers:[+id],
-            data:{message:notificationMessage}
-          });
-        toast.success( t('OK'));
-        return json;
-      }
-      else{
-        toast.error(res.statusText);
-        return null;
-      }
-    },
+  const { mutate: mutateFollowing, isPending: isLoadingMutateFollowing } = useMutation<User>(
     {
+      mutationFn:async () => {
+        const user = session!.user;
+        const action = isFollowedByMe ? 'disconnect' : 'connect';
+  
+        const notificationMessage = `userStartFollowing!|!${JSON.stringify({
+          userName:user.name,
+        })}`
+        const form = new FormData()
+        form.append('followedBy',JSON.stringify({
+            [`${action}`]: [{ id: user.id }],
+        }))
+        form.append('notificationData',JSON.stringify({
+          notificationMessage,
+          notificationContextURL:`/mediatheque/${session?.user.id}`,
+          notificationToUsers:[id]
+        }))
+        
+        const res = await fetch(`/api/user/${id}`, {
+          method: 'PATCH',
+          body:form,
+        });
+        if(res.ok){
+          const json = await res.json();
+          if(notifier)
+            notifier.notify({
+              toUsers:[+id],
+              data:{message:notificationMessage}
+            });
+          toast.success( t('OK'));
+          return json;
+        }
+        else{
+          toast.error(res.statusText);
+          return null;
+        }
+      },
       onMutate: async () => {
-        await queryClient.cancelQueries(['USER', id]);
-        await queryClient.cancelQueries(['USER', session?.user.id]);
+        await queryClient.cancelQueries({queryKey:['USER', id]});
+        await queryClient.cancelQueries({queryKey:['USER', session?.user.id]});
 
         type UserFollow = User & { followedBy: User[]; following: User[] };
         const followingUser = queryClient.getQueryData<UserFollow>(['USER', id]);
@@ -118,8 +118,8 @@ const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = fa
       },
 
       onSettled: () => {
-        queryClient.invalidateQueries(['USER', id]);
-        queryClient.invalidateQueries(['USER', session?.user.id]);
+        queryClient.invalidateQueries({queryKey:['USER', id]});
+        queryClient.invalidateQueries({queryKey:['USER', session?.user.id]});
       },
     },
   );

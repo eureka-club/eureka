@@ -1,9 +1,9 @@
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, FormEvent, ChangeEvent, useState, useEffect, MouseEvent } from 'react';
-import { Container, Button, Spinner } from 'react-bootstrap';
+import { FunctionComponent, ChangeEvent, useState, useEffect, MouseEvent } from 'react';
+import { Container, Button } from 'react-bootstrap';
 import LinearProgressMUI from '@/components/common/LinearProgressMUI'
 import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import styles from './PostPrompt.module.css';
 import { getImg } from '@/src/lib/utils';
 import { BiArrowBack } from 'react-icons/bi';

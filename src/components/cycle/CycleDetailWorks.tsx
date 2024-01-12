@@ -1,7 +1,7 @@
 import React from 'react'
 import WorkMosaic from '@/src/components/work/MosaicItem'
 import dayjs from 'dayjs';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';;
 import useTranslation from 'next-translate/useTranslation'
 import { WorkMosaicItem } from '@/src/types/work'
 import { Work } from '@prisma/client'

@@ -1,6 +1,6 @@
 import { Post } from '@prisma/client';
 import { useAtom } from 'jotai';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import useTranslation from 'next-translate/useTranslation';
 import { FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
@@ -22,7 +22,7 @@ import { Switch, TextField, FormControlLabel, Autocomplete } from '@mui/material
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BsFillXCircleFill } from 'react-icons/bs';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';;
 import TagsInput from './controls/TagsInput';
 import TagsInputMaterial from './controls/TagsInputMaterial';
 import TagsInputTypeAheadMaterial from './controls/TagsInputTypeAheadMaterial';
@@ -50,6 +50,7 @@ import toast from 'react-hot-toast'
 import { ImCancelCircle } from 'react-icons/im';
 import Prompt from '@/src/components/post/PostPrompt';
 import { set } from 'lodash';
+import { getLocale_In_NextPages } from '@/src/lib/utils';
 
 interface Props {
   noModal?: boolean;
@@ -89,7 +90,11 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
   const editorRef = useRef<any>(null);
   const { data: session } = useSession();
   const [userId, setUserId] = useState<number>();
-  const [workId, setWorkId] = useState<string>('');
+
+  const searchParams=useSearchParams()!;
+  const asPath=usePathname()!;
+  const locale=getLocale_In_NextPages(asPath);
+  const [workId, setWorkId] = useState<string>(searchParams.get('id')!);
   const [postTitle, setPostTitle] = useState<string>('');
   const [isPublic, setIsPublic] = useState<boolean>(true);
   const [useOtherFields, setUseOtherFields] = useState<boolean>(false);
@@ -97,11 +102,6 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
   //const [photo, setPhoto] = useState<File>();
   const [currentImg, setCurrentImg] = useState<string | undefined>();
 
-  useEffect(() => {
-    if (router && router.query?.id) {
-      setWorkId(router.query.id.toString());
-    }
-  }, [router])
   const { data: work } = useWork(+workId, {
     enabled: !!workId
   });
@@ -148,79 +148,79 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
     data: createdPost,
     error: createPostError,
     isError: isCreatePostError,
-    isLoading: isCreatePostLoading,
+    isPending: isCreatePostLoading,
     isSuccess: isCreatePostSuccess,
     status,
   } = useMutation(
-    async (payload: CreatePostAboutCycleClientPayload | CreatePostAboutWorkClientPayload): Promise<Post | null> => {
-      const formData = new FormData();
-      Object.entries(payload).forEach(([key, value]) => {
-        if (value != null) {
-          formData.append(key, value);
-        }
-      });
-
-      let message = "";
-      let notificationContextURL = router.asPath
-      let notificationToUsers: number[];
-      if (user && notifier) {
-        notificationToUsers = user.followedBy.map(u => u.id)
-        if (selectedWork) {
-          notificationContextURL = `/work/${selectedWork.id}/post`
-          if (selectedCycle) {
-            message = `eurekaCreatedAboutWorkInCycle!|!${JSON.stringify({
+    {
+      mutationFn:async (payload: CreatePostAboutCycleClientPayload | CreatePostAboutWorkClientPayload): Promise<Post | null> => {
+        const formData = new FormData();
+        Object.entries(payload).forEach(([key, value]) => {
+          if (value != null) {
+            formData.append(key, value);
+          }
+        });
+  
+        let message = "";
+        let notificationContextURL = asPath
+        let notificationToUsers: number[];
+        if (user && notifier) {
+          notificationToUsers = user.followedBy.map(u => u.id)
+          if (selectedWork) {
+            notificationContextURL = `/work/${selectedWork.id}/post`
+            if (selectedCycle) {
+              message = `eurekaCreatedAboutWorkInCycle!|!${JSON.stringify({
+                userName: user.name || '',
+                workTitle: selectedWork.title,
+                cycleTitle: selectedCycle.title
+              })}`;
+              notificationToUsers = (participants || []).filter(p => p.id !== user.id).map(p => p.id);
+              if (user.id !== selectedCycle.creatorId)
+                notificationToUsers.push(selectedCycle.creatorId)
+            }
+            else {
+              message = `eurekaCreatedAboutWork!|!${JSON.stringify({
+                userName: user.name || '',
+                workTitle: selectedWork.title
+              })}`;
+            }
+          }
+          else if (selectedCycle) {
+            notificationContextURL = `/cycle/${selectedCycle.id}/post`
+            message = `eurekaCreatedAboutCycle!|!${JSON.stringify({
               userName: user.name || '',
-              workTitle: selectedWork.title,
               cycleTitle: selectedCycle.title
             })}`;
             notificationToUsers = (participants || []).filter(p => p.id !== user.id).map(p => p.id);
             if (user.id !== selectedCycle.creatorId)
               notificationToUsers.push(selectedCycle.creatorId)
           }
-          else {
-            message = `eurekaCreatedAboutWork!|!${JSON.stringify({
-              userName: user.name || '',
-              workTitle: selectedWork.title
-            })}`;
-          }
+  
+          formData.append('notificationMessage', message);
+          formData.append('notificationContextURL', notificationContextURL);
+          formData.append('notificationToUsers', notificationToUsers.join(','));
+  
         }
-        else if (selectedCycle) {
-          notificationContextURL = `/cycle/${selectedCycle.id}/post`
-          message = `eurekaCreatedAboutCycle!|!${JSON.stringify({
-            userName: user.name || '',
-            cycleTitle: selectedCycle.title
-          })}`;
-          notificationToUsers = (participants || []).filter(p => p.id !== user.id).map(p => p.id);
-          if (user.id !== selectedCycle.creatorId)
-            notificationToUsers.push(selectedCycle.creatorId)
+  
+        const res = await fetch('/api/post', {
+          method: 'POST',
+          body: formData,
+        });
+  
+        if (res.ok) {
+          const json = await res.json();
+          setPostId(json.id);
+          if (notifier && user)
+            notifier.notify({
+              data: { message },
+              toUsers: user?.followedBy.map(u => u.id)
+            })
+          toast.success(t('postCreated'))
+          return json.post;
         }
-
-        formData.append('notificationMessage', message);
-        formData.append('notificationContextURL', notificationContextURL);
-        formData.append('notificationToUsers', notificationToUsers.join(','));
-
-      }
-
-      const res = await fetch('/api/post', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (res.ok) {
-        const json = await res.json();
-        setPostId(json.id);
-        if (notifier && user)
-          notifier.notify({
-            data: { message },
-            toUsers: user?.followedBy.map(u => u.id)
-          })
-        toast.success(t('postCreated'))
-        return json.post;
-      }
-      //TODO toast with error to the user
-      return null;
-    },
-    {
+        //TODO toast with error to the user
+        return null;
+      },
       onMutate: async () => {
         if (selectedCycle) {
           const cacheKey = ['CYCLE', `${selectedCycle.id}`]
@@ -235,7 +235,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
           if (error && ck) {
             queryClient.setQueryData(ck, snapshot);
           }
-          if (context) queryClient.invalidateQueries(ck);
+          if (context) queryClient.invalidateQueries({queryKey:ck});
         }
       },
     },
@@ -369,7 +369,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
         selectedWorkId: selectedWork.id,
         title: postTitle,
         image: imageFile!,
-        language: languages[`${router.locale}`],
+        language: languages[`${locale}`],
         contentText: editorRef.current.getContent(), // form.description.value.length ? form.description.value : null,
         isPublic: isPublic,//form.isPublic.checked,
         topics: items.join(','),
@@ -385,7 +385,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
         selectedWorkId: null,
         title: postTitle,
         image: imageFile!,
-        language: languages[`${router.locale}`],
+        language: languages[`${locale}`],
         contentText: editorRef.current?.getContent(), // form.description.value.length ? form.description.value : null,
         isPublic: isPublic,//form.isPublic.checked,
         topics: items.join(','),
@@ -399,7 +399,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
   useEffect(() => {
     if (isCreatePostSuccess === true && createdPost != null) {
       setGlobalModalsState({ ...globalModalsState, ...{ createPostModalOpened: false } });
-      queryClient.invalidateQueries('posts.mosaic');
+      queryClient.invalidateQueries({queryKey:['posts.mosaic']});
 
       if (selectedWork != null) {
         router.push(`/work/${selectedWork.id}/post/${createdPost.id || postId}`);
@@ -625,7 +625,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
             <Col className="mb-4">
               <FormGroup controlId="topics">
                 <TagsInputTypeAheadMaterial
-                  data={topics}
+                  data={topics as {code:string,label:string}[]}
                   items={items}
                   setItems={setItems}
                   formatValue={(v: string) => t(`topics:${v}`)}

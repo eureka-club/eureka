@@ -1,6 +1,6 @@
 
 import { FunctionComponent } from 'react';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter } from 'next/navigation';
 import useTranslation from 'next-translate/useTranslation';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -10,10 +10,13 @@ import Link from 'next/link'
 import styles from './HomeNotSingIn.module.css';
 import SignInForm from '@/src/components/forms/SignInForm';
 import { BsChevronDown} from 'react-icons/bs';
+import { getLocale_In_NextPages } from '../lib/utils';
 
 const HomeNotSingIn: FunctionComponent = ({  }) => {
   const { t } = useTranslation('common');
-  const router = useRouter();
+  const asPath=usePathname()!;
+  const locale=getLocale_In_NextPages(asPath);
+
   return  <>
             <div className='pt-2 mt-1 pt-lg-5 mt-lg-5'>
                  <section className='d-flex flex-column justify-content-center align-items-center text-center mt-lg-3'>
@@ -50,14 +53,14 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                         </Col>
                         <Col className={`p-3 p-lg-5 col-12 col-lg-6 border-top border-primary ${styles.WorkSectionImageContainer}`}>
                           <Container className='d-flex justify-content-center '>
-                             <img  className={`ms-0  ${styles.WorkSectionImage}`} src={`/find-works-${router.locale}.webp`} alt="" /> 
+                             <img  className={`ms-0  ${styles.WorkSectionImage}`} src={`/find-works-${locale}.webp`} alt="" /> 
                           </Container>
                         </Col>
                 </Row>
                  <Row className='d-flex flex-column-reverse flex-lg-row justify-content-center'>
                       <Col className={`p-3 p-lg-4 col-12 col-lg-6`}>
                         <Container className='d-flex justify-content-center'>
-                             <img  className={`ms-0 ${styles.CyclesSectionImage}`} src={`/join-cycle-${router.locale}.webp`} alt="" /> 
+                             <img  className={`ms-0 ${styles.CyclesSectionImage}`} src={`/join-cycle-${locale}.webp`} alt="" /> 
                           </Container>
                         </Col>
                         <Col className={`${styles.CyclesSection} col-12 col-lg-6 p-5 d-flex flex-column justify-content-center aling-items-center`}>
@@ -76,7 +79,7 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                         </Col>
                         <Col className={`p-4 col-12 col-lg-6 border-bottom border-secondary`}>
                           <Container className='d-flex justify-content-center'>
-                             <img  className={`ms-0 ${styles.EurekaSectionImage}`} src={`/Eurekas-${router.locale}.webp`} alt="" /> 
+                             <img  className={`ms-0 ${styles.EurekaSectionImage}`} src={`/Eurekas-${locale}.webp`} alt="" /> 
                           </Container>                        
                         </Col>
                 </Row>   

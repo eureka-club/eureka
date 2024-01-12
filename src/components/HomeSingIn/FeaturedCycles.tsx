@@ -1,5 +1,5 @@
 import useTranslation from "next-translate/useTranslation";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { FC } from "react";
 import CarouselStatic from "../CarouselStatic";
 import useInterestedCycles from '@/src/useInterestedCycles';

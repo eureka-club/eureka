@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';;
 import { CycleMosaicItem } from './types/cycle';
 
 export const getCycle = async (id: number,origin=''): Promise<CycleMosaicItem | undefined> => {
@@ -22,7 +22,10 @@ const useCycle = (id: number, options?: Options) => {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  return useQuery<CycleMosaicItem | undefined>(['CYCLE', `${id}`], () => getCycle(id), {
+  return useQuery<CycleMosaicItem | undefined>(
+    {
+       queryKey:['CYCLE', `${id}`],
+        queryFn:() => getCycle(id), 
     staleTime,
     enabled,
   });

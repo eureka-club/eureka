@@ -4,7 +4,7 @@ import { Button, ButtonGroup, Col, Row, Spinner } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { useSession, getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import { dehydrate,QueryClient } from 'react-query';
+import { dehydrate,QueryClient } from '@tanstack/react-query';;
 import UMI from '@/src/components/user/MosaicItem';
 import {useRouter} from 'next/router'
 import useUser,{getUser} from '@/src/useUser';
@@ -83,7 +83,7 @@ export const getServerSideProps:GetServerSideProps= async (ctx)=>{
   if(!session)return res;
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
 
-  await qc.fetchQuery(['USER',id.toString()],()=>getUser(id,origin));
+  await qc.fetchQuery({queryKey:['USER',id.toString()],queryFn:()=>getUser(id,origin)});
   
   res = {
     props:{

@@ -2,7 +2,7 @@
 import { flatten, zip } from 'lodash';
 import { FunctionComponent, useEffect, useState } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';;
 import useCycles from '@/src/useCycles'
 import usePosts from '@/src/usePosts'
 import Mosaic from '../Mosaic';

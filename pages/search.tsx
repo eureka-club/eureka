@@ -2,8 +2,8 @@ import { BiArrowBack } from 'react-icons/bi';
 import { NextPage, GetServerSideProps } from 'next';
 import Head from 'next/head';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import { QueryClient, dehydrate } from 'react-query';
+import { useParams, useRouter } from 'next/navigation';
+import { QueryClient, dehydrate } from '@tanstack/react-query';;
 import { ButtonGroup, Button, Alert } from 'react-bootstrap';
 import { getPosts } from '@/src/usePosts';
 import { getWorks } from '@/src/useWorks';
@@ -43,9 +43,11 @@ interface Props {
 const SearchPage: NextPage<Props> = ({ hasCycles, hasPosts, hasWorks, metas,session }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
+  const params=useParams<{q:string}>();
+  const q=params?.q;
 
-  let qLabel = router.query.q?.toString();
-  if (qLabel && qLabel.match(':')) qLabel = router.query.q as string;
+  let qLabel = q;
+  if (qLabel && qLabel.match(':')) qLabel = q;
 
   const onTermKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.code == 'Enter') {
@@ -137,7 +139,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     },
   };
   const cyclesData = await getCycles(ctx.locale!,{ ... cyclesProps, take }, origin);
-  qc.prefetchQuery(`cycles-search-${q?.toString()}`, () => cyclesData);
+  qc.prefetchQuery({queryKey:[`cycles-search-${q?.toString()}`],queryFn: () => cyclesData});
   const hasCycles = cyclesData.total > 0;
   const postsProps = {
     where: {
@@ -166,12 +168,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     },
   };
   const postsData = await getPosts(ctx.locale!,{ ... postsProps, take }, origin);
-  qc.prefetchQuery(`posts-search-${q?.toString()}`, () => postsData);
+  qc.prefetchQuery({queryKey:[`posts-search-${q?.toString()}`], queryFn:() => postsData});
   const hasPosts = postsData.total > 0;
   
   const worksData = await getWorks(ctx.locale!,{ ... getWorksProps(terms), take }, origin);
 
-  qc.prefetchQuery(`works-search-${q?.toString()}`, () => worksData);
+  qc.prefetchQuery({queryKey:[`works-search-${q?.toString()}`], queryFn:() => worksData});
   const hasWorks = worksData.total > 0;
 
   let metaTags = null;

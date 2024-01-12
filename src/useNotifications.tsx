@@ -1,5 +1,5 @@
-import { useQuery } from 'react-query';
 import { NotificationMosaicItem } from '@/types/notification';
+import { useQuery } from '@tanstack/react-query';
 
 export const getRecord = async (userId: number): Promise<NotificationMosaicItem[]> => {
   
@@ -22,9 +22,12 @@ const useNotifications = (id: number, options?: Options) => {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  return useQuery<NotificationMosaicItem[]>(['USER', `${id}`, 'NOTIFICATIONS'], () => getRecord(id), {
-    staleTime,
-    enabled,
+  return useQuery<NotificationMosaicItem[]>(
+    {
+      queryKey:['USER', `${id}`, 'NOTIFICATIONS'],
+      queryFn:  () => getRecord(id),
+      staleTime,
+      enabled,
   });
 };
 

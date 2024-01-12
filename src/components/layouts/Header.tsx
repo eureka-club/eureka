@@ -3,7 +3,7 @@ import { Button, Col, Container, Row } from 'react-bootstrap';
 import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
 import useTranslation from 'next-translate/useTranslation';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter } from 'next/navigation';
 import withTitle from '../../HOCs/withTitle';
 import styles from './Header.module.css';
 
@@ -19,6 +19,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
   const {data:session, status} = useSession();
   const isLoadingSession = status === "loading"
   const router = useRouter();
+  const asPath=usePathname()!;
 
   useEffect(() => {
     if (session) setShow(false);
@@ -29,7 +30,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
   };*/
 
   const handlerLogin = ()=>{
-    localStorage.setItem('loginRedirect',router.asPath)
+    localStorage.setItem('loginRedirect',asPath)
     router.push('/')
   }
 

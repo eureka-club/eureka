@@ -3,7 +3,7 @@ import { getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { BiArrowBack } from 'react-icons/bi';
 import { ButtonGroup, Button, Spinner } from 'react-bootstrap';
-import { useRouter } from 'next/router';
+import { useParams, useRouter } from 'next/navigation';
 // import { Session } from '../../../src/types';
 import { CycleMosaicItem } from '../../../src/types/cycle';
 import SimpleLayout from '../../../src/components/layouts/SimpleLayout';
@@ -12,7 +12,7 @@ import useCycle,{getCycle} from '@/src/useCycle';
 import { useEffect, useState } from 'react';
 import { Cycle } from '@prisma/client';
 import { Session } from '@/src/types';
-import { dehydrate, QueryClient } from 'react-query';
+import { dehydrate, QueryClient } from '@tanstack/react-query';;
 
 interface Props {
   notFound?: boolean;
@@ -23,10 +23,9 @@ const EditCyclePage: NextPage<Props> = ({session}) => {
   const { t } = useTranslation('createCycleForm');
   const router = useRouter();
 
-  const [id,setId] = useState<string>('')
-  useEffect(()=>{
-    if(router.query?.id)setId(router.query.id?.toString())
-  },[router])
+  const params=useParams<{id:string}>();
+  const id=params?.id!;
+  
   const {data:cycle,isLoading} = useCycle(+id,{enabled:!!id})
 
   if(isLoading)
@@ -66,7 +65,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
  
   const qc = new QueryClient()
-  await qc.fetchQuery(['CYCLE', `${cycleId}`], () => getCycle(cycleId,origin))
+  await qc.fetchQuery({queryKey:['CYCLE', `${cycleId}`], queryFn:() => getCycle(cycleId,origin)})
 
   // const cycle = await find(cycleId);
   // if (session == null || (session.user.id !== cycle?.creatorId && !session.user.roles.includes('admin'))) {

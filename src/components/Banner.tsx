@@ -5,7 +5,7 @@ import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
 import useTranslation from 'next-translate/useTranslation';
 // import { useSession } from 'next-auth/react';
 // import withTitle from '../../HOCs/withTitle';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';;
 import styles from './Banner.module.css';
 // import { Session } from '../types';
 // import globalModalsAtom from '../atoms/globalModals';

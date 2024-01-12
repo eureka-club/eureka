@@ -1,7 +1,7 @@
 import { GetServerSideProps, NextPage} from 'next';
 import { useEffect } from 'react';
 import { getSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import useTranslation from 'next-translate/useTranslation';
 import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';

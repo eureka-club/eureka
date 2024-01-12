@@ -1,6 +1,6 @@
 import React, { useState, FunctionComponent,useEffect } from 'react';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Tab, Tabs} from 'react-bootstrap';
 
 import SearchTabWorks from './SearchTabWorks';
@@ -15,8 +15,8 @@ interface Props{
 
 const SearchTab: FunctionComponent<Props> = ({hasCycles,hasPosts,hasWorks}) => {
   const { t } = useTranslation('common');
-  const router = useRouter();
-  
+  const searchParams = useSearchParams();
+  const q=searchParams?.get('q')!;
   const [key, setKey] = useState<string>('cycles');
 
   useEffect(()=>{
@@ -61,7 +61,7 @@ const SearchTab: FunctionComponent<Props> = ({hasCycles,hasPosts,hasWorks}) => {
                   `}
                 </style>
                 
-        {router.query.q
+        {q
           ? <Tabs  
               defaultActiveKey={key}
               activeKey={key}

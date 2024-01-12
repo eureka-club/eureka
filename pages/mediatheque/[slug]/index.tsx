@@ -1,8 +1,8 @@
 import { GetServerSideProps, NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { getSession } from 'next-auth/react';
-import { useQueryClient, useMutation, dehydrate, QueryClient } from 'react-query';
+import { useQueryClient, useMutation, dehydrate, QueryClient } from '@tanstack/react-query';;
 import { useState, useEffect, SyntheticEvent, useCallback, MouseEvent } from 'react';
 
 import { Spinner, Card, Row, Col, ButtonGroup, Button } from 'react-bootstrap';
@@ -78,65 +78,65 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
         setIsFollowedByMe(ifbm);
       }
       if (isSuccessUser && id && !user) {
-        queryClient.invalidateQueries(['USER', `${id}`]);
+        queryClient.invalidateQueries({queryKey:['USER', `${id}`]});
       }
     }
   }, [dataPosts?.posts, dataCycles?.cycles, user, id, isSuccessUser]);
 
-  const { mutate: mutateFollowing, isLoading: isLoadingMutateFollowing } = useMutation<User>(
-    async () => {
-      const user = session!.user;
-      const action = isFollowedByMe ? 'disconnect' : 'connect';
-
-      const notificationMessage = `userStartFollowing!|!${JSON.stringify({
-        userName: user.name,
-      })}`;
-      const form = new FormData();
-      form.append(
-        'followedBy',
-        JSON.stringify({
-          [`${action}`]: [{ id: user.id }],
-        }),
-      );
-      form.append(
-        'notificationData',
-        JSON.stringify({
-          notificationMessage,
-          notificationContextURL: `/mediatheque/${session.user.id}`,
-          notificationToUsers: [id],
-        }),
-      );
-
-      const res = await fetch(`/api/user/${id}`, {
-        method: 'PATCH',
-        // headers: { 'Content-Type': 'application/json' },
-        body: form,
-        // body: JSON.stringify({
-        //   followedBy: {
-        //     [`${action}`]: [{ id: user.id }],
-        //   },
-        //   ///notificationMessage,
-        //   ///notificationContextURL: router.asPath,
-        //   //notificationToUsers:[id],
-        // }),
-        //"userStartFollowing":"{{userName}} has started following you. Take a look at his/her Mediatheque too!""
-      });
-      if (res.ok) {
-        const json = await res.json();
-        if (notifier)
-          notifier.notify({
-            toUsers: [+id],
-            data: { message: notificationMessage },
-          });
-        return json;
-      } else {
-        return null;
-      }
-    },
+  const { mutate: mutateFollowing, isPending: isLoadingMutateFollowing } = useMutation<User>(
     {
+      mutationFn:async () => {
+        const user = session!.user;
+        const action = isFollowedByMe ? 'disconnect' : 'connect';
+  
+        const notificationMessage = `userStartFollowing!|!${JSON.stringify({
+          userName: user.name,
+        })}`;
+        const form = new FormData();
+        form.append(
+          'followedBy',
+          JSON.stringify({
+            [`${action}`]: [{ id: user.id }],
+          }),
+        );
+        form.append(
+          'notificationData',
+          JSON.stringify({
+            notificationMessage,
+            notificationContextURL: `/mediatheque/${session.user.id}`,
+            notificationToUsers: [id],
+          }),
+        );
+  
+        const res = await fetch(`/api/user/${id}`, {
+          method: 'PATCH',
+          // headers: { 'Content-Type': 'application/json' },
+          body: form,
+          // body: JSON.stringify({
+          //   followedBy: {
+          //     [`${action}`]: [{ id: user.id }],
+          //   },
+          //   ///notificationMessage,
+          //   ///notificationContextURL: router.asPath,
+          //   //notificationToUsers:[id],
+          // }),
+          //"userStartFollowing":"{{userName}} has started following you. Take a look at his/her Mediatheque too!""
+        });
+        if (res.ok) {
+          const json = await res.json();
+          if (notifier)
+            notifier.notify({
+              toUsers: [+id],
+              data: { message: notificationMessage },
+            });
+          return json;
+        } else {
+          return null;
+        }
+      },
       onMutate: async () => {
-        await queryClient.cancelQueries(['USER', id]);
-        await queryClient.cancelQueries(['USER', session.user.id]);
+        await queryClient.cancelQueries({queryKey:['USER', id]});
+        await queryClient.cancelQueries({queryKey:['USER', session.user.id]});
 
         type UserFollow = User & { followedBy: User[]; following: User[] };
         const followingUser = queryClient.getQueryData<UserFollow>(['USER', id]);
@@ -163,8 +163,8 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
       },
 
       onSettled: () => {
-        queryClient.invalidateQueries(['USER', id]);
-        queryClient.invalidateQueries(['USER', session.user.id]);
+        queryClient.invalidateQueries({queryKey:['USER', id]});
+        queryClient.invalidateQueries({queryKey:['USER', session.user.id]});
       },
     },
   );
@@ -415,19 +415,19 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       };
     }
     const { posts } = await getMyPosts(ctx.locale!,id!, 8, origin);
-    await queryClient.prefetchQuery(['MY-POSTS', id], () => posts);
+    await queryClient.prefetchQuery({queryKey:['MY-POSTS', id], queryFn:() => posts});
     posts.forEach((p) => {
       queryClient.setQueryData(['POST', `${p.id}`], () => p);
     });
 
     const { cycles } = await getMyCycles(ctx.locale!,id!, 8, origin);
-    await queryClient.prefetchQuery(['MY-CYCLES'], () => cycles);
+    await queryClient.prefetchQuery({queryKey:['MY-CYCLES'], queryFn:() => cycles});
     cycles.forEach((c) => {
       queryClient.setQueryData(['CYCLE', c.id], () => c);
     });
 
     const user = await getUser(id, origin);
-    await queryClient.prefetchQuery(['USER', id.toString()], () => user);
+    await queryClient.prefetchQuery({queryKey:['USER', id.toString()], queryFn:() => user});
 
     return {
       props: {

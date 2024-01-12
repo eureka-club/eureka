@@ -8,7 +8,7 @@ import { Box } from '@mui/material';
 import Link from 'next/link';
 import {Col,Row} from 'react-bootstrap';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Session } from '@/src/types';
 
 interface Props {
@@ -17,20 +17,9 @@ interface Props {
 
 const StripePaymentSuccessPage: NextPage<Props> = ({ session }) => {
   const { t } = useTranslation('stripe');
-
+  const searchParams=useSearchParams();
+  const cycleId=searchParams?.get('setCycleId');
   const router = useRouter();
-  const [cycleId, setCycleId] = useState<string>('')
-
-  useEffect(() => {
-    if (router?.query) {
-      if (router.query.cycleId) {
-        setCycleId(router.query.cycleId?.toString())
-      }
-    }
-  }, [router])
-
-  //console.log(session, 'SESSION1 SESSION1 SESSION1')
-
 
   return (
     <SimpleLayout title="Payment Success" showNavBar={false} showFooter={false}>

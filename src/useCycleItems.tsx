@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';;
 import { PostMosaicItem } from './types/post';
 import { Prisma } from '@prisma/client';
 
@@ -29,8 +29,13 @@ const useCycleItem = (cycleId:number,page: number,where?:WhereT, options?: Optio
   };
   const w = JSON.stringify(where)
   return useQuery<{items:CycleItem[],total:number}|undefined>(
-    ['ITEMS', `CYCLE-${cycleId}`],
-    ()=> getRecords(cycleId,page,where),{ keepPreviousData : true,staleTime,enabled }
+    {
+      queryKey:['ITEMS', `CYCLE-${cycleId}`],
+      queryFn:()=> getRecords(cycleId,page,where),
+      //  keepPreviousData : true,
+       staleTime,
+       enabled 
+      }
   );
 };
 

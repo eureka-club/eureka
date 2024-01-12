@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';;
 import { EditionMosaicItem } from './types/edition';
 import { Prisma } from '@prisma/client';
 import useTranslation from 'next-translate/useTranslation';
@@ -27,11 +27,14 @@ const useEditions = (props?:Prisma.WorkFindManyArgs,options?: Options) => {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  let ck = cacheKey ? `${cacheKey}-${JSON.stringify(props)}` : ['EDITIONS', `${lang}-${JSON.stringify(props)}`];
+  let ck = cacheKey ? [`${cacheKey}-${JSON.stringify(props)}`] : ['EDITIONS', `${lang}-${JSON.stringify(props)}`];
 
-  return useQuery<{ editions: EditionMosaicItem[], fetched: number, total: number }>(ck, () => getEditions(lang,props), {
-    staleTime,
-    enabled
+  return useQuery<{ editions: EditionMosaicItem[], fetched: number, total: number }>(
+    {
+      queryKey:ck, 
+      queryFn:() => getEditions(lang,props),
+      staleTime,
+      enabled
   });
 };
 

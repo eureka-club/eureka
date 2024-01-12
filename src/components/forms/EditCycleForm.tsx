@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc'
-import { useRouter } from 'next/router';
+import { usePathname, useRouter } from 'next/navigation';
 import useTranslation from 'next-translate/useTranslation';
 import { FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
@@ -12,7 +12,7 @@ import FormLabel from 'react-bootstrap/FormLabel';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';;
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { Cycle } from '@prisma/client';
 import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
@@ -31,6 +31,7 @@ import {
 } from '../../types/cycle';
 import LanguageSelect from './controls/LanguageSelect';
 import styles from './CreateCycleForm.module.css';
+import { getLocale_In_NextPages } from '@/src/lib/utils';
 
 dayjs.extend(utc)
 interface Props {
@@ -43,7 +44,8 @@ interface Props {
 const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
   const editorRef = useRef<any>(null);
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
-  const { locale } = useRouter();
+  const asPath=usePathname()!;
+  const locale = getLocale_In_NextPages(asPath)
 
   const router = useRouter();
   const typeaheadRefOC = useRef<AsyncTypeahead<{ id: number; code: string; label: string }>>(null);
@@ -110,20 +112,22 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
     mutate: execEditCycle,
     data: editedCycleData,
     error: editCycleReqError,
-    isLoading: isEditCycleReqLoading,
+    isPending: isEditCycleReqLoading,
     isError: isEditCycleReqError,
     isSuccess: isEditCycleReqSuccess,
-  } = useMutation(async (payload: EditCycleClientPayload) => {
-    const res = await fetch(`/api/cycle/${router.query.id}`, {
+  } = useMutation(
+    {
+    mutationFn:async (payload: EditCycleClientPayload) => {
+    const res = await fetch(`/api/cycle/${cycle.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
     return res.json();
-  },{
+  },
     onMutate(vars){
-      const ck = ['CYCLE',`${router.query.id}`];
-      queryClient.cancelQueries(ck)
+      const ck = ['CYCLE',`${cycle.id}`];
+      queryClient.cancelQueries({queryKey:ck})
       const ss = queryClient.getQueryData<CycleMosaicItem>(ck)
       queryClient.setQueryData(ck,{...ss,...vars})
       return {ss,ck}
@@ -134,7 +138,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
       if(error){
         queryClient.setQueryData(ck,ss)
       }
-      queryClient.invalidateQueries(['CYCLE',`${router.query.id}`])
+      queryClient.invalidateQueries({queryKey:['CYCLE',`${cycle.id}`]})
     }
   });
 
@@ -200,7 +204,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
 
   useEffect(() => {
     if (!isEditCycleReqError && isEditCycleReqSuccess && editedCycleData != null) {
-      router.push(`/cycle/${router.query.id}`);
+      router.push(`/cycle/${cycle.id}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEditCycleReqError, isEditCycleReqSuccess, editedCycleData]);
@@ -249,7 +253,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
               <FormGroup controlId="topics">
                 <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel>
                 <TagsInputTypeAhead
-                  data={topics}
+                  data={topics as {code:string,label:string}[]}
                   items={items}
                   setItems={setItems}
                   labelKey={(res) => t(`topics:${res.code}`)}

@@ -1,7 +1,7 @@
 import { NextPage, GetServerSideProps } from 'next';
 import Head from "next/head";
 import { Button, ButtonGroup, Col, Row, Spinner,Tab,Tabs } from 'react-bootstrap';
-import { QueryClient, dehydrate } from 'react-query';
+import { QueryClient, dehydrate } from '@tanstack/react-query';;
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
@@ -154,7 +154,7 @@ export const getServerSideProps:GetServerSideProps= async (ctx)=>{
   }
   if(!session)return res;
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
-  await qc.fetchQuery(['USER',id.toString()],()=>getUser(id, origin));
+  await qc.fetchQuery({queryKey:['USER',id.toString()],queryFn:()=>getUser(id, origin)});
   
   res = {
     props:{

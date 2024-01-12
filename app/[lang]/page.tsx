@@ -68,7 +68,7 @@ export default async function IndexPage(props:Props) {
   const dictionary = await getDictionary(lang);
   const dict: Record<string, string> = { ...dictionary['meta'], ...dictionary['common'],
     ...dictionary['topics'], ...dictionary['navbar'], ...dictionary['signInForm'], ...dictionary['createPostForm'] }
-
+debugger;
   const session = await getServerSession(auth_config(lang));
 
   const langs = session?.user.language ?? lang;
@@ -76,9 +76,9 @@ export default async function IndexPage(props:Props) {
   return (
     <>
       <Layout dict={dict} langs={langs} showCustomBaner={(!session) ? true : false}> 
-        <Suspense fallback={<Spinner animation="grow" />}>
+        {/* <Suspense fallback={<Spinner animation="grow" />}> */}
           <HomeSingIn /> 
-        </Suspense>
+        {/* </Suspense> */}
        </Layout> 
     </>
   );

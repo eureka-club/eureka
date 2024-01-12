@@ -1,5 +1,6 @@
-import { useRouter } from 'next/router';
+"use client"
 import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/navigation';
 import React, { FunctionComponent,useRef, useState } from 'react';
 import { Form,InputGroup,Button,Spinner } from 'react-bootstrap';
 
@@ -19,7 +20,9 @@ const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => 
   const onTermKeyUp = (e:React.KeyboardEvent<HTMLInputElement>)=>{
     if(e.code == 'Enter' || e.code == 'NumpadEnter' ){
       setSearching(true)
-      router.push(`/search?q=${e.currentTarget.value}`).then((res)=>{setSearching(false);return res})
+      router.push(`/search?q=${e.currentTarget.value}`)
+      setSearching(false);
+      // .then((res)=>{setSearching(false);return res})
     }
   }
 
@@ -27,7 +30,9 @@ const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => 
     const form = formRef.current;
     if(form && form.search.value) {
       setSearching(true)
-      router.push(`/search?q=${form.search.value}`).then((res)=>{setSearching(false);return res})
+      router.push(`/search?q=${form.search.value}`)
+      setSearching(false);
+      // .then((res)=>{setSearching(false);return res})
     }
   }
 

@@ -1,24 +1,23 @@
 import { Cycle, LocalImage } from '@prisma/client';
 import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter } from 'next/navigation';
 import { getSession } from 'next-auth/react';
 import { useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import Table from 'react-bootstrap/Table';
-import { QueryClient, dehydrate, useMutation } from 'react-query';
+import { QueryClient, dehydrate, useMutation } from '@tanstack/react-query';;
 
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import { DATE_FORMAT_HUMANIC_ADVANCED } from '../../src/constants';
-import { Session } from '../../src/types';
-import { advancedDayjs } from '../../src/lib/utils';
-import SimpleLayout from '../../src/components/layouts/SimpleLayout';
-import LocalImageComponent from '../../src/components/LocalImage';
-import { findAll } from '../../src/facades/cycle';
+import { DATE_FORMAT_HUMANIC_ADVANCED } from '@/src/constants';
+import { Session } from '@/src/types';
+import { advancedDayjs } from '@/src/lib/utils';
+import SimpleLayout from '@/src/components/layouts/SimpleLayout';
+import LocalImageComponent from '@/src/components/LocalImage';
 import useCycles, { getCycles } from '@/src/useCycles';
 
 dayjs.extend(utc);
@@ -30,14 +29,19 @@ interface Props {
 
 const ListCyclesPage: NextPage<Props> = ({ session }) => {
   const router = useRouter();
-  const { mutate: execDeleteCycle, isSuccess: isDeleteCycleSucces } = useMutation(async (cycle: Cycle) => {
-    const res = await fetch(`/api/cycle/${cycle.id}`, {
-      method: 'delete',
-    });
-    const data = await res.json();
-
-    return data;
-  });
+  const asPath = usePathname()!;
+  const { mutate: execDeleteCycle, isSuccess: isDeleteCycleSucces } = useMutation(
+    {
+      mutationFn:async (cycle: Cycle) => {
+        const res = await fetch(`/api/cycle/${cycle.id}`, {
+          method: 'delete',
+        });
+        const data = await res.json();
+    
+        return data;
+      }
+    }
+  );
 
   const {data} = useCycles();
   const cycles = data?.cycles;
@@ -48,7 +52,7 @@ const ListCyclesPage: NextPage<Props> = ({ session }) => {
 
   useEffect(() => {
     if (isDeleteCycleSucces === true) {
-      router.replace(router.asPath);
+      router.replace(asPath);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDeleteCycleSucces]);
@@ -127,7 +131,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
   const qc = new QueryClient();
   const cyclesData = await getCycles(ctx.locale!,undefined, origin);
-  qc.prefetchQuery('list/cycles', () => cyclesData);
+  qc.prefetchQuery({queryKey:['list/cycles'], queryFn:() => cyclesData});
 
 
   return {

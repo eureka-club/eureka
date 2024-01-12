@@ -1,6 +1,6 @@
 import { FunctionComponent } from 'react';
 import LocalImageComponent from '../../LocalImage';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import useTranslation from 'next-translate/useTranslation';
 import { WorkMosaicItem } from '@/src/types/work';
 

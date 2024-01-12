@@ -1,0 +1,28 @@
+
+.title{
+  margin-top: 2rem;
+  font-size: 2rem;
+  color: var(--color-secondary);
+}
+.contentText{
+  margin-top: 2rem;
+  text-align: left;
+  margin-bottom: 5rem;
+}
+.linkText{
+  text-decoration:underline;
+}
+
+.contentText h2 {
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  color: var(--color-secondary);
+}
+
+
+@media screen and (max-width: 1024px) {
+
+
+
+}

@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';;
 // import { buildUrl } from 'build-url-ts';
 // import { Country } from './types';
 
@@ -15,7 +15,10 @@ export const getHyvorComments = async (id: string, origin?: string): Promise<any
 
 
 const useHyvorComments = (id: string) => {
-  return useQuery<any[]>(['HYVOR-COMMENTS', id], () => getHyvorComments(id), {
+  return useQuery<any[]>(
+    {
+      queryKey:['HYVOR-COMMENTS', id], 
+      queryFn:() => getHyvorComments(id), 
     staleTime: 1000 * 60 * 60,
   });
 };

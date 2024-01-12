@@ -1,6 +1,6 @@
 
 import { useAtom } from 'jotai';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter } from 'next/navigation';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import useTranslation from 'next-translate/useTranslation';
@@ -16,7 +16,7 @@ import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 import LocalImageComponent from '@/src/components/LocalImage'
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';;
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { useSession } from 'next-auth/react';
 // import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
@@ -33,6 +33,7 @@ import i18nConfig from '../../../i18n';
 import Toast from '../common/Toast';
 import { Select, FormControl as FormControlMUI, InputLabel, MenuItem } from '@mui/material';
 import Image from 'next/image';
+import { getLocale_In_NextPages } from '@/src/lib/utils';
 // import useTopics from '../../useTopics';
 
 dayjs.extend(utc);
@@ -115,7 +116,8 @@ const EditUserForm: FunctionComponent = () => {
   const [countrySearchResults, setCountrySearchResults] = useState<{ id: number; code: string; label: string }[]>([]);
   const [countryOrigin, setCountryOrigin] = useState<string>();
 
-  const { locale } = useRouter();
+  const asPath=usePathname()!
+  const locale=getLocale_In_NextPages(asPath);
   const [namespace, setNamespace] = useState<Record<string, string>>();
   
   useEffect(() => {
@@ -138,33 +140,33 @@ const EditUserForm: FunctionComponent = () => {
     mutate: execEditUser,
     error: editUserError,
     isError,
-    isLoading: isLoadingUser,
+    isPending: isLoadingUser,
     isSuccess,
   } = useMutation(
-    async (payload: EditUserClientPayload) => {
-      const fd = new FormData();
-      Object.entries(payload).forEach(([key,value])=>{
-        if(value)
-          fd.append(key,value);
-      });
-      const res = await fetch(`/api/user/${id}`, {
-        method: 'PATCH',
-        // headers: { 'Content-Type': 'application/json' },
-        body: fd,
-      });
-      if(res.ok){
-          toast.success( t('ProfileSaved'))
-          router.push(`/mediatheque/${id}`);
-         // return res.json();
-      }    
-      else
-      {
-        toast.error(res.statusText)
-        return null;
-      }
-   
-    },
     {
+      mutationFn:async (payload: EditUserClientPayload) => {
+        const fd = new FormData();
+        Object.entries(payload).forEach(([key,value])=>{
+          if(value)
+            fd.append(key,value);
+        });
+        const res = await fetch(`/api/user/${id}`, {
+          method: 'PATCH',
+          // headers: { 'Content-Type': 'application/json' },
+          body: fd,
+        });
+        if(res.ok){
+            toast.success( t('ProfileSaved'))
+            router.push(`/mediatheque/${id}`);
+           // return res.json();
+        }    
+        else
+        {
+          toast.error(res.statusText)
+          return null;
+        }
+     
+      },
       onMutate: async () => {
         const cacheKey = ['USER',id];
         const snapshot = queryClient.getQueryData(cacheKey);
@@ -228,7 +230,7 @@ const EditUserForm: FunctionComponent = () => {
   useEffect(() => {
     if (isSuccess === true) {
       setGlobalModalsState({ ...globalModalsState, ...{ editUserModalOpened: false } });
-      queryClient.invalidateQueries(['user', id]);
+      queryClient.invalidateQueries({queryKey:['user', id]});
       //router.replace(router.asPath);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -408,7 +410,7 @@ const EditUserForm: FunctionComponent = () => {
                       // inputProps={{ required: true }}
                       // placeholder={t('addWrkTypeaheadPlaceholder')}
                       // ref={typeaheadRef}
-                      isLoading={isCountriesSearchLoading2}
+                      isPending={isCountriesSearchLoading2}
                       labelKey={(res) => `${res.label}`}
                       minLength={2}
                       onSearch={handleSearchCountry2}

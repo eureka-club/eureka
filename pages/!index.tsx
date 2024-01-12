@@ -8,7 +8,7 @@
 // import useTranslation from 'next-translate/useTranslation';
 // import { GetAllByResonse, Session } from '@/src/types';
 // // import {getMyCycles,myCyclesWhere} from '@/src/useMyCycles';
-// import { dehydrate,QueryClient } from 'react-query';
+// import { dehydrate,QueryClient } from '@tanstack/react-query';;
 // import {getbackOfficeData} from '@/src/useBackOffice'
 // import { getFeaturedEurekas } from '@/src/useFeaturedEurekas';
 // import {getInterestedCycles} from '@/src/useInterestedCycles';

@@ -5,7 +5,7 @@ import useTranslation from 'next-translate/useTranslation';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import ResetPassForm from '../src/components/forms/ResetPassForm';
 import {prisma} from '@/src/lib/prisma';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 interface Props{
   userId:string;

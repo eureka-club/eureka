@@ -1,6 +1,5 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';;
 import { UserMosaicItem } from '@/types/user';
-import { useRouter } from 'next/router';
 
 export const getUser = async (id: number,origin='',language?:string): Promise<UserMosaicItem|null> => {
   if (!id) return null;
@@ -21,12 +20,14 @@ interface Options {
 }
 
 const useUser = (id: number, options?: Options) => {
-  const router = useRouter();
   const { staleTime, enabled } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  return useQuery<UserMosaicItem|null>(['USER', `${id}`], () => getUser(id,''), {
+  return useQuery<UserMosaicItem|null>(
+    {
+     queryKey: ['USER', `${id}`],
+      queryFn:() => getUser(id,''),
     staleTime,
     enabled,
   });

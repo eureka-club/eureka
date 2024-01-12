@@ -8,7 +8,7 @@ import { Box } from '@mui/material';
 import Link from 'next/link';
 import {Col,Row} from 'react-bootstrap';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Session } from '@/src/types';
 import LinearProgress from '@mui/material/LinearProgress';
 import useCycle from '@/src/useCycle';
@@ -25,17 +25,9 @@ const TransitionSignUpToPayCyclePage: NextPage<Props> = ({ session }) => {
   const { t } = useTranslation('common');
 
   const router = useRouter();
-  const [cycleId, setCycleId] = useState<string>('');
+  const cycleId=useSearchParams()?.get('cycleId')!;
   const [loading, setLoading] = useState(false);
   const [idSession, setIdSession] = useState<string>('')
-
-  useEffect(() => {
-    if (router?.query) {
-      if (router.query.cycleId) {
-        setCycleId(router.query.cycleId?.toString())
-      }
-    }
-  }, [router])
 
   useEffect(() => {
     const s = session;

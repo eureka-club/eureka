@@ -8,7 +8,7 @@ import Container from 'react-bootstrap/Container';
 import { useMutation } from "react-query";
 import Row from 'react-bootstrap/Row';
 import Link from 'next/link'
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import styles from './TermsAndPolicy.module.css';
 
 const TermsAndPolicy: FunctionComponent = () => {

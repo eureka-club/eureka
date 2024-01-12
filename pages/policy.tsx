@@ -5,7 +5,7 @@ import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import TermsAndPolicy from '@/src/components/TermsAndPolicy';
 import { getSession } from 'next-auth/react';
 import { Session } from '@/src/types';
-//import { useRouter } from 'next/router';
+//import { useRouter } from 'next/navigation';
 
 interface Props{
   session:Session

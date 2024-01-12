@@ -1,6 +1,6 @@
 import { GetServerSideProps,NextPage } from 'next';
 import Head from "next/head";
-import { dehydrate, QueryClient } from 'react-query';
+import { dehydrate, QueryClient } from '@tanstack/react-query';;
 import { Button, ButtonGroup, Col, Row, Spinner } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { getSession, useSession } from 'next-auth/react';
@@ -83,7 +83,7 @@ export const getServerSideProps:GetServerSideProps= async (ctx)=>{
   }
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
 
-  await qc.fetchQuery(['MY-POSTS',id],()=>getMyPosts(ctx.locale!,id,8,origin));
+  await qc.fetchQuery({queryKey:['MY-POSTS',id],queryFn:()=>getMyPosts(ctx.locale!,id,8,origin)});
   
   res = {
     props:{

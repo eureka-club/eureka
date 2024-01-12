@@ -1,6 +1,6 @@
 import { Post } from '@prisma/client';
 import { useAtom } from 'jotai';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import useTranslation from 'next-translate/useTranslation';
 import { FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
@@ -23,7 +23,7 @@ import { Switch, TextField, FormControlLabel, Autocomplete } from '@mui/material
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BsFillXCircleFill } from 'react-icons/bs';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';;
 import TagsInput from './controls/TagsInput';
 import TagsInputMaterial from './controls/TagsInputMaterial';
 import TagsInputTypeAheadMaterial from './controls/TagsInputTypeAheadMaterial';
@@ -120,7 +120,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
   const [imageChanged, setImageChanged] = useState<string | undefined>();
   const [ck, setCK] = useState<string[]>();
 
-  const { data: post, isLoading, isFetching } = usePost(id);
+  const { data: post, isPending, isFetching } = usePost(id);
 
 
   useEffect(() => {
@@ -163,7 +163,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
     enabled: !!userId
   });
 
-  /*const { data: participants, isLoading: isLoadingParticipants } = useUsers(selectedCycle ? whereCycleParticipants(selectedCycle.id) : {},
+  /*const { data: participants, isPending: isLoadingParticipants } = useUsers(selectedCycle ? whereCycleParticipants(selectedCycle.id) : {},
     {
       enabled: !!selectedCycle
     }
@@ -265,35 +265,35 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
     data: editPost,
     error: createPostError,
     isError: isEditPostError,
-    isLoading: isEditPostLoading,
+    isPending: isEditPostLoading,
     isSuccess: isEditPostSuccess,
   } = useMutation(
-    async (payload: EditPostAboutCycleClientPayload | EditPostAboutWorkClientPayload): Promise<Post> => {
-
-      const formData = new FormData();
-
-      Object.entries(payload).forEach(([key, value]) => {
-        if (value != null) {
-          formData.append(key, value);
-        }
-      });
-
-      const res = await fetch(`/api/post/${id}`, {
-        method: 'PATCH',
-        body: formData,//JSON.stringify(payload),
-      });
-      //console.log(res, 'res')
-      if (res.ok) {
-        toast.success(t('PostEdited'));
-        router.push(`/${formValues.selectedCycle ? 'cycle' : 'work'}/${formValues.selectedCycle ? formValues.selectedCycle.id : formValues.selectedWork!.id}/post/${post!.id}`)
-      }
-      return res.json();
-    },
     {
+    mutationFn:  async (payload: EditPostAboutCycleClientPayload | EditPostAboutWorkClientPayload): Promise<Post> => {
+  
+        const formData = new FormData();
+  
+        Object.entries(payload).forEach(([key, value]) => {
+          if (value != null) {
+            formData.append(key, value);
+          }
+        });
+  
+        const res = await fetch(`/api/post/${id}`, {
+          method: 'PATCH',
+          body: formData,//JSON.stringify(payload),
+        });
+        //console.log(res, 'res')
+        if (res.ok) {
+          toast.success(t('PostEdited'));
+          router.push(`/${formValues.selectedCycle ? 'cycle' : 'work'}/${formValues.selectedCycle ? formValues.selectedCycle.id : formValues.selectedWork!.id}/post/${post!.id}`)
+        }
+        return res.json();
+      },
       onMutate: async (variables) => {
         if (post) {
           const ck_ = ck || ['POST', `${post.id}`];
-          await queryClient.cancelQueries(ck_)
+          await queryClient.cancelQueries({queryKey:ck_})
           const snapshot = queryClient.getQueryData<PostMosaicItem[] | PostMosaicItem>(ck_)
           const { title, contentText } = variables;
           if (snapshot) {
@@ -322,11 +322,11 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
       },
       onSettled: (_post, error, _variables, context) => {
         if (error) {
-          queryClient.invalidateQueries(ck);
-          queryClient.invalidateQueries(['POST', `${formValues.id}`]);
+          queryClient.invalidateQueries({queryKey:ck});
+          queryClient.invalidateQueries({queryKey:['POST', `${formValues.id}`]});
         }
         // this make the page to do a refresh
-        queryClient.invalidateQueries(ck);
+        queryClient.invalidateQueries({queryKey:ck});
         // queryClient.invalidateQueries(['POST',postId]);
 
       },
@@ -338,25 +338,25 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
     data: deletePost,
     error: deletePostError,
     isError: isDeletePostError,
-    isLoading: isDeletePostLoading,
+    isPending: isDeletePostLoading,
     isSuccess: isDeletePostSuccess,
   } = useMutation(
-    async (payload: EditPostAboutCycleClientPayload | EditPostAboutWorkClientPayload): Promise<Post> => {
-      const res = await fetch(`/api/post/${id}`, {
-        method: 'DELETE',
-        body: JSON.stringify(payload),
-      });
-      if (res.ok) {
-        toast.success(t('PostRemoved'));
-        router.push(`/${formValues.selectedCycle ? 'cycle' : 'work'}/${formValues.selectedCycle ? formValues.selectedCycle.id : formValues.selectedWork!.id}`)
-      }
-      return res.json();
-    },
     {
+      mutationFn:async (payload: EditPostAboutCycleClientPayload | EditPostAboutWorkClientPayload): Promise<Post> => {
+        const res = await fetch(`/api/post/${id}`, {
+          method: 'DELETE',
+          body: JSON.stringify(payload),
+        });
+        if (res.ok) {
+          toast.success(t('PostRemoved'));
+          router.push(`/${formValues.selectedCycle ? 'cycle' : 'work'}/${formValues.selectedCycle ? formValues.selectedCycle.id : formValues.selectedWork!.id}`)
+        }
+        return res.json();
+      },
       onMutate: async (variables) => {
         if (post) {
           const ck_ = ck || ['POST', `${post.id}`];
-          await queryClient.cancelQueries(ck_)
+          await queryClient.cancelQueries({queryKey:ck_})
           const snapshot = queryClient.getQueryData<PostMosaicItem[] | PostMosaicItem>(ck_)
           const { title, contentText } = variables;
           if (snapshot) {
@@ -387,11 +387,11 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
       },
       onSettled: (_post, error, _variables, context) => {
         if (error) {
-          queryClient.invalidateQueries(ck);
-          queryClient.invalidateQueries(['POST', `${post!.id}`]);
+          queryClient.invalidateQueries({queryKey:ck});
+          queryClient.invalidateQueries({queryKey:['POST', `${post!.id}`]});
         }
         // this make the page to do a refresh
-        queryClient.invalidateQueries(ck);
+        queryClient.invalidateQueries({queryKey:ck});
         // queryClient.invalidateQueries(['POST',postId]);
 
       },
@@ -676,7 +676,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
                       filterBy={() => true}
                       inputProps={{ id: 'create-post--search-cycle' }}
                       placeholder={t('searchCycleFieldPlaceholder')}
-                      isLoading={isSearchCycleLoading}
+                      isPending={isSearchCycleLoading}
                       labelKey={labelKeyFn}
                       minLength={2}
                       useCache={false}
@@ -704,7 +704,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
             <Col className="mb-4">
               <FormGroup controlId="topics">
                 <TagsInputTypeAheadMaterial
-                  data={topics}
+                  data={topics as {code:string,label:string}[]}
                   items={formValues.topics}
                   setItems={handleSetTopics}
                   formatValue={(v: string) => t(`topics:${v}`)}
