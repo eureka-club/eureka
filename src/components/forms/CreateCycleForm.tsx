@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
-import useTranslation from 'next-translate/useTranslation';
+
 import Trans from 'next-translate/Trans';
 import { ChangeEvent, FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
 import { Button, Col, Form, ButtonGroup, ListGroup, Modal, Row, Spinner,Container } from 'react-bootstrap';
@@ -30,6 +30,8 @@ import styles from './CreateCycleForm.module.css';
 import TagsInput from './controls/TagsInput';
 import useTopics from '../../useTopics';
 import { isWeakMap } from 'util/types';
+import { Option } from 'react-bootstrap-typeahead/types/types';
+import { useDictContext } from '@/src/hooks/useDictContext';
 
 interface Props {
   className?: string;
@@ -55,8 +57,8 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     [key: number]: { startDate?: string; endDate?: string; isInvalidStartDate?: boolean; isInvalidEndDate?: boolean };
   }>({});
 
-  const typeaheadRef = useRef<AsyncTypeahead<WorkMosaicItem>>(null);
-  const typeaheadRefOC = useRef<AsyncTypeahead<{ id: number; code: string; label: string }>>(null);
+  const typeaheadRef = useRef(null);
+  const typeaheadRefOC = useRef(null);
   const [countryOrigin, setCountryOrigin] = useState<string>();
   const [language, setLanguage] = useState<string>('');
 
@@ -164,7 +166,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
           showToast: {
             show: true,
             type: 'warning',
-            title: t(`common:${res.statusText}`),
+            title: t(dict,`common:${res.statusText}`),
             message: json.error,
           },
         });
@@ -176,13 +178,15 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   );
 
   const router = useRouter();
-  const { t } = useTranslation('createCycleForm');
+  // const { t } = useTranslation('createCycleForm');
+  const{t,dict}=useDictContext();
 
   const handleAddWorkClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
     setWorkSearchHighlightedOption(null);
     setAddWorkModalOpened(true);
-    setTimeout(() => typeaheadRef.current?.focus());
+    //TODO tsc error
+    //setTimeout(() => typeaheadRef.current.focus());
   };
 
   const handleAddComplementaryContentClick = (ev: MouseEvent<HTMLButtonElement>) => {
@@ -267,9 +271,13 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     }
   };
 
-  const handleSearchWorkSelect = (selected: WorkMosaicItem[]): void => {
+  const handleSearchWorkSelect = (selected: Option[]): void => {
     if (selected[0] != null) {
-      setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
+      //TODO tsc error
+      // setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
+      //TODO
+
+
       // setSelectedWorksForCycleDates((res) => ({
       //   ...res,
       //   [`${selected[0].id}`]: {
@@ -320,8 +328,8 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   const validateWorkDates = (workId: number, startDate?: string, endDate?: string) => {
     const showToast = {
       type: 'warning',
-      title: t('invalidInput'),
-      message: t('cycleStartAndEndRequired'),
+      title: t(dict,'invalidInput'),
+      message: t(dict,'cycleStartAndEndRequired'),
       show: true,
     };
 
@@ -358,7 +366,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
       if (startDate) {
         if (cycleStartDate.isAfter(dayjs(startDate))) {
-          showToast.message = t('Date Range Error');
+          showToast.message = t(dict,'Date Range Error');
           setGlobalModalsState({
             ...globalModalsState,
             showToast,
@@ -367,7 +375,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
           return false;
         }
         if (cycleEndDate.isBefore(dayjs(startDate))) {
-          showToast.message = t('Date Range Error');
+          showToast.message = t(dict,'Date Range Error');
           setGlobalModalsState({
             ...globalModalsState,
             showToast,
@@ -377,7 +385,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
       }
       if (endDate) {
         if (cycleStartDate.isAfter(dayjs(endDate))) {
-          showToast.message = t('Date Range Error');
+          showToast.message = t(dict,'Date Range Error');
           setGlobalModalsState({
             ...globalModalsState,
             showToast,
@@ -386,7 +394,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
           return false;
         }
         if (cycleEndDate.isBefore(dayjs(endDate))) {
-          showToast.message = t('Date Range Error');
+          showToast.message = t(dict,'Date Range Error');
           setGlobalModalsState({
             ...globalModalsState,
             showToast,
@@ -454,15 +462,15 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     const response = await fetch(`/api/taxonomy/countries?q=${query}`);
     const itemsSC: { id: number; code: string; label: string }[] = (await response.json()).result;
     itemsSC.forEach((i, idx: number) => {
-      itemsSC[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
+      itemsSC[idx] = { ...i, label: `${t(dict,`countries:${i.code}`)}` };
     });
     setCountrySearchResults(itemsSC);
     setIsCountriesSearchLoading(false);
   };
 
-  const handleSearchCountrySelect = (selected: { id: number; code: string; label: string }[]): void => {
+  const handleSearchCountrySelect = (selected: Option[]): void => {
     if (selected[0] != null) {
-      setCountryOrigin(selected[0].code);
+      setCountryOrigin((selected[0] as Option&{code:string}).code);
       // setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
       // setAddWorkModalOpened(false);
     }
@@ -543,7 +551,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
   return (
     <>
       <Form onSubmit={handleSubmit} ref={formRef} className={className}>
-       <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('createCycle')}</h1> 
+       <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t(dict,'createCycle')}</h1> 
 
         <Row className="mb-5">
           <Col md={{ span: 8 }}>
@@ -554,8 +562,8 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                   type="button"
                   onClick={handleAddWorkClick}
                 >
-                  <h4>*{t('addWrkBtnTitle')}</h4>
-                  <p>{t('addWrkBtnSubtitle')}</p>
+                  <h4>*{t(dict,'addWrkBtnTitle')}</h4>
+                  <p>{t(dict,'addWrkBtnSubtitle')}</p>
                 </button>
               </Col>
             </Row>
@@ -563,7 +571,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
             <Form.Check
               checked={enableWorksDisscussionsDates}
               name="terms"
-              label={t('addDatesForWork')}
+              label={t(dict,'addDatesForWork')}
               onChange={(e) => {
                 setEnableWorksDisscussionsDates(e.currentTarget.checked);
               }}
@@ -594,7 +602,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                   {enableWorksDisscussionsDates && wm && (
                     <div className={styles.worksDisscussionsDates} ref={worksDisscussionsDates}>
                       <Form.Group className="" controlId={`work${idx}StartDate`}>
-                        <Form.Label>{`${t('Start date of work')}`}</Form.Label>
+                        <Form.Label>{`${t(dict,'Start date of work')}`}</Form.Label>
                         <Form.Control
                           type="date"
                           isInvalid={
@@ -608,7 +616,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                         />
                       </Form.Group>
                       <Form.Group className="" controlId={`work${wm.id}EndDate`}>
-                        <Form.Label>{t('End date of work')}</Form.Label>
+                        <Form.Label>{t(dict,'End date of work')}</Form.Label>
                         <Form.Control
                           type="date"
                           isInvalid={
@@ -638,12 +646,12 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                     <div className={classNames(styles.outlinedBlock)}>
                       {imagePreview == null ? (
                         <div className={styles.cycleCoverPrompt}>
-                          <h4>*{t('addCoverBtnTitle')}</h4>
-                          <p>{t('addCoverTipLeadLine')}:</p>
+                          <h4>*{t(dict,'addCoverBtnTitle')}</h4>
+                          <p>{t(dict,'addCoverTipLeadLine')}:</p>
                           <ul>
-                            <li>{t('addCoverTipLine1')}</li>
-                            <li>{t('addCoverTipLine2')}</li>
-                            <li>{t('addCoverTipLine3')}</li>
+                            <li>{t(dict,'addCoverTipLine1')}</li>
+                            <li>{t(dict,'addCoverTipLine2')}</li>
+                            <li>{t(dict,'addCoverTipLine3')}</li>
                           </ul>
                         </div>
                       ) : (
@@ -663,7 +671,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                   disabled={complementaryMaterials.length >= 5}
                   onClick={handleAddComplementaryContentClick}
                 >
-                  <h4>{t('addComplementaryContentTitle')}</h4>
+                  <h4>{t(dict,'addComplementaryContentTitle')}</h4>
                   {complementaryMaterials.length ? (
                     <ul className={styles.complementaryMaterials}>
                       {complementaryMaterials.map((cm) => (
@@ -685,7 +693,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                       ))}
                     </ul>
                   ) : (
-                    <p>{t('addComplementaryContentDescription')}:</p>
+                    <p>{t(dict,'addComplementaryContentDescription')}:</p>
                   )}
                 </button>
               </Col>
@@ -693,42 +701,42 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
           </Col>
           <Col md={{ span: 4 }}>
             <Form.Group controlId="cycleTitle">
-              <Form.Label>*{t('newCycleTitleLabel')}</Form.Label>
+              <Form.Label>*{t(dict,'newCycleTitleLabel')}</Form.Label>
               <Form.Control type="text" maxLength={80} required />
             </Form.Group>
             <Form.Group controlId="topics">
-              <Form.Label>{t('newCycleMainTopicsLabel')}</Form.Label>
+              <Form.Label>{t(dict,'newCycleMainTopicsLabel')}</Form.Label>
               <TagsInputTypeAhead
                 data={topics as {code:string,label:string}[]}
                 items={items}
                 setItems={setItems}
-                labelKey={(res) => t(`topics:${res.code}`)}
-                formatValue={(v: string) => t(`topics:${v}`)} 
+                labelKey={(res) => t(dict,`topics:${(res as{code:string}).code}`)}
+                formatValue={(v: string) => t(dict,`topics:${v}`)} 
                 max={3}
               />
             </Form.Group>
             <Form.Group controlId="topics">
-              <TagsInput tags={tags} setTags={setTags} label={t('newCycleTopicsLabel')} max={2} />
+              <TagsInput tags={tags} setTags={setTags} label={t(dict,'newCycleTopicsLabel')} max={2} />
             </Form.Group>
             <Form.Group controlId="startDate">
-              <Form.Label>*{t('newCycleStartDateLabel')}</Form.Label>
+              <Form.Label>*{t(dict,'newCycleStartDateLabel')}</Form.Label>
               <Form.Control type="date" required defaultValue={dayjs(new Date()).format(DATE_FORMAT_PROPS)} />
             </Form.Group>
             <Form.Group controlId="endDate">
-              <Form.Label>*{t('newCycleEndDateLabel')}</Form.Label>
+              <Form.Label>*{t(dict,'newCycleEndDateLabel')}</Form.Label>
               <Form.Control type="date" required min={dayjs(new Date()).format(DATE_FORMAT_PROPS)} />
             </Form.Group>
             <Form.Group>
-              <Form.Label>{t('countryFieldLabel')}</Form.Label>
+              <Form.Label>{t(dict,'countryFieldLabel')}</Form.Label>
               <AsyncTypeahead
                 id="create-work--search-country"
                 // Bypass client-side filtering. Results are already filtered by the search endpoint
                 filterBy={() => true}
                 // inputProps={{ required: true }}
-                // placeholder={t('addWrkTypeaheadPlaceholder')}
+                // placeholder={t(dict,'addWrkTypeaheadPlaceholder')}
                 ref={typeaheadRefOC}
                 isLoading={isCountriesSearchLoading}
-                labelKey={(res) => `${res.label}`}
+                labelKey={(res) => `${(res as {label:string}).label}`}
                 minLength={2}
                 onSearch={handleSearchCountry}
                 options={countrySearchResults}
@@ -737,19 +745,19 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
               />
             </Form.Group>
             <Form.Group controlId="languages">
-              <Form.Label>*{t('newCycleLanguageLabel')}</Form.Label>
-              <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={language} label={t('common:Language')}/>
+              <Form.Label>*{t(dict,'newCycleLanguageLabel')}</Form.Label>
+              <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={language} label={t(dict,'common:Language')}/>
             </Form.Group>
           </Col>
         </Row>
         <Row>
           <Col xs={12} md={8}>
             {/* <Form.Group controlId="description">
-              <Form.Label>*{t('newCyclePitchLabel')}</Form.Label>
+              <Form.Label>*{t(dict,'newCyclePitchLabel')}</Form.Label>
               <Form.Control as="textarea" rows={5} required />
             </Form.Group> */}
             <Form.Group controlId="description">
-              <Form.Label>*{t('newCyclePitchLabel')}</Form.Label>
+              <Form.Label>*{t(dict,'newCyclePitchLabel')}</Form.Label>
               {/* @ts-ignore*/}
               <EditorCmp
                 apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
@@ -781,51 +789,51 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
           </Col>
           <Col xs={12} md={4}>
             <Form.Group className={`${styles.cycleAccesForGroup}`}>
-              <Form.Label className="h5">{t('Privacy settings')}</Form.Label>
+              <Form.Label className="h5">{t(dict,'Privacy settings')}</Form.Label>
               <Form.Check
-                label={t('Public')}
+                label={t(dict,'Public')}
                 type="radio"
                 onChange={() => handlerCycleAccessCheckedChange('public')}
                 checked={cycleAccessChecked.public}
               />
-              <small className="ms-3 text-muted">{t('cycleAccesPublicInfo')}.</small>
+              <small className="ms-3 text-muted">{t(dict,'cycleAccesPublicInfo')}.</small>
               <Form.Check
-                label={t('Private')}
+                label={t(dict,'Private')}
                 type="radio"
                 onChange={() => handlerCycleAccessCheckedChange('private')}
                 checked={cycleAccessChecked.private}
               />
-              <small className="ms-3 text-muted">{t('cycleAccesPrivateInfo')}.</small>
+              <small className="ms-3 text-muted">{t(dict,'cycleAccesPrivateInfo')}.</small>
               <Form.Check
-                label={t('Secret')}
+                label={t(dict,'Secret')}
                 type="radio"
                 onChange={() => handlerCycleAccessCheckedChange('secret')}
                 checked={cycleAccessChecked.secret}
               />
-              <small className="ms-3 text-muted">{t('cycleAccesSecretInfo')}.</small>
+              <small className="ms-3 text-muted">{t(dict,'cycleAccesSecretInfo')}.</small>
               <Form.Check
-                label={t('Payment')}
+                label={t(dict,'Payment')}
                 type="radio"
                 onChange={() => handlerCycleAccessCheckedChange('payment')}
                 checked={cycleAccessChecked.payment}
               />
-              {/* <small className="ms-3 text-muted">{t('cycleAccesPaymentInfo')}.</small> */}
+              {/* <small className="ms-3 text-muted">{t(dict,'cycleAccesPaymentInfo')}.</small> */}
             </Form.Group>
           </Col>
         </Row>
         <Row className={`mb-3 ${styles.guidelinesContainer}`}>
           <Col md={6} xs={12}>
-            <h5>{t('Cycle guidelines')}</h5>
+            <h5>{t(dict,'Cycle guidelines')}</h5>
             <p className={`py-1 ${styles.cycleGuidelineInfo}`}>
-              {t('cycleGuidelineInfo')}
+              {t(dict,'cycleGuidelineInfo')}
             </p>
             <p className={`py-1 ${styles.cycleGuidelineInfo}`}>Please write below the guidelines for this cycle.</p>
             <Form.Group>
-              <Form.Label>{t('Title')}</Form.Label>
+              <Form.Label>{t(dict,'Title')}</Form.Label>
               <Form.Control type="text" value={guidelineTitle} onChange={(e) => setGuidelineTitle(e.target.value)} />
             </Form.Group>
             <Form.Group>
-              <Form.Label>{t('Description')}</Form.Label>
+              <Form.Label>{t(dict,'Description')}</Form.Label>
               <Form.Control
                 as="textarea"
                 value={guidelineContentText}
@@ -867,7 +875,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
         </Row>
         {/* <Row>
           <Col>
-            <FormCheck type="checkbox" defaultChecked inline id="isPublic" label={t('isPublicLabel')} />
+            <FormCheck type="checkbox" defaultChecked inline id="isPublic" label={t(dict,'isPublicLabel')} />
           </Col>
           
         </Row>
@@ -888,7 +896,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
               className="text-white btn-eureka"
             >
               <>
-                {t('submitBtnLabel')}
+                {t(dict,'submitBtnLabel')}
                 {isCreateCycleReqLoading && (
                   <Spinner animation="grow" variant="info" size="sm" />
                 )}
@@ -901,13 +909,13 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
       <Modal show={addWorkModalOpened} onHide={handleAddWorkModalClose} animation={false}>
         <Modal.Header closeButton>
-          <Modal.Title>{t('addWrkPopupTitle')}</Modal.Title>
+          <Modal.Title>{t(dict,'addWrkPopupTitle')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Row className="mb-5">
             <Col sm={{ span: 7 }}>
               <Form.Group controlId="cycle">
-                <Form.Label>{t('addWrkTypeaheadLabel')}:</Form.Label>
+                <Form.Label>{t(dict,'addWrkTypeaheadLabel')}:</Form.Label>
 
                 {/* language=CSS */}
                 <style jsx global>{`
@@ -921,15 +929,19 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                   // Bypass client-side filtering. Results are already filtered by the search endpoint
                   filterBy={() => true}
                   inputProps={{ required: true }}
-                  placeholder={t('addWrkTypeaheadPlaceholder')}
+                  placeholder={t(dict,'addWrkTypeaheadPlaceholder')}
                   ref={typeaheadRef}
                   isLoading={isWorkSearchLoading}
-                  labelKey={(res) => `${res.title}`}
+                  labelKey={(res) => `${(res as {title:string}).title}`}
                   minLength={2}
                   onSearch={handleSearchWork}
                   options={workSearchResults}
                   onChange={handleSearchWorkSelect}
-                  renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work} />}
+                  renderMenuItemChildren={(work) => {
+                    //TODO tsc error
+                    // <WorkTypeaheadSearchItem work={work} />
+                    return <>TODO</>;
+                  }}
                 >
                   {/* @ts-ignore*/}
                   {handleSearchWorkHighlightChange}
@@ -944,7 +956,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 type="button"
                 className={styles.addWorkModalButton}
               >
-                {t('addWrkAddBtnLabel')}
+                {t(dict,'addWrkAddBtnLabel')}
               </Button>
             </Col>
           </Row>
@@ -958,25 +970,25 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
         size="lg"
       >
         <Modal.Header closeButton>
-          <Modal.Title>{t('addComplementaryMaterialPopupTitle')}</Modal.Title>
+          <Modal.Title>{t(dict,'addComplementaryMaterialPopupTitle')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleAddComplementaryMaterialFormSubmit}>
             <Row>
               <Form.Group as={Col} controlId="complementaryMaterialTitle">
-                <Form.Label>*{t('complementaryMaterialTitleFieldLabel')}</Form.Label>
+                <Form.Label>*{t(dict,'complementaryMaterialTitleFieldLabel')}</Form.Label>
                 <Form.Control type="text" required />
               </Form.Group>
             </Row>
             <Row>
               <Form.Group as={Col} controlId="complementaryMaterialAuthor">
-                <Form.Label>*{t('complementaryMaterialAuthorFieldLabel')}</Form.Label>
+                <Form.Label>*{t(dict,'complementaryMaterialAuthorFieldLabel')}</Form.Label>
                 <Form.Control type="text" required />
               </Form.Group>
             </Row>
             <Row>
               <Form.Group as={Col} controlId="complementaryMaterialPublicationDate">
-                <Form.Label>*{t('complementaryMaterialPublicationDateFieldLabel')}</Form.Label>
+                <Form.Label>*{t(dict,'complementaryMaterialPublicationDateFieldLabel')}</Form.Label>
                 <Form.Control type="month" required />
               </Form.Group>
             </Row>
@@ -984,7 +996,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
               <Form.Group as={Col} controlId="complementaryMaterialLink">
                 <Form.Label>
                   {complementaryMaterialFile == null && '*'}
-                  {t('complementaryMaterialLinkFieldLabel')}
+                  {t(dict,'complementaryMaterialLinkFieldLabel')}
                 </Form.Label>
                 <Form.Control type="text" placeholder="https://..." required={complementaryMaterialFile == null} />
               </Form.Group>
@@ -994,7 +1006,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                 </p>
               </Col>
               <Form.Group as={Col} controlId="complementaryMaterialFile">
-                <Form.Label>{t('complementaryMaterialFileFieldLabel')}</Form.Label>
+                <Form.Label>{t(dict,'complementaryMaterialFileFieldLabel')}</Form.Label>
                 <Form.Label>
                   {complementaryMaterialFile != null ? (
                     <>
@@ -1011,14 +1023,14 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                   isInvalid={complementaryMaterialFileOversizeError}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {t('complementaryMaterialFileOversizeError')}
+                  {t(dict,'complementaryMaterialFileOversizeError')}
                 </Form.Control.Feedback>
               </Form.Group>
             </Row>
 
             <Row>
               <Col className="d-flex flex-row-reverse">
-                <Button type="submit">{t('complementaryMaterialSubmitBtnLabel')}</Button>
+                <Button type="submit">{t(dict,'complementaryMaterialSubmitBtnLabel')}</Button>
               </Col>
             </Row>
           </Form>

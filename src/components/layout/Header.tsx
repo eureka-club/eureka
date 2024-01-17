@@ -4,7 +4,7 @@ import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import styles from './Header.module.css';
-import { t } from '@/src/get-dictionary';
+
 import { useDictContext } from '@/src/hooks/useDictContext';
 import { usePathname, useSearchParams } from 'next/navigation';
 
@@ -21,7 +21,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
   const router = useRouter();
   const asPath = usePathname();
   const searchParams = useSearchParams();
-  const {dict}=useDictContext()
+  const {t,dict}=useDictContext()
   useEffect(() => {
     if (session) setShow(false);
   }, [session]);

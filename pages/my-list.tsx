@@ -1,6 +1,6 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
-import useTranslation from 'next-translate/useTranslation';
+
 import { flatten, zip } from 'lodash';
 
 import { CycleMosaicItem } from '../src/types/cycle';
@@ -10,13 +10,29 @@ import { search as searchCycles } from '../src/facades/cycle';
 import { search as searchWork } from '../src/facades/work';
 import Mosaic from '../src/components/Mosaic';
 import {Cycle,Work} from '@prisma/client'
+import { getDictionary, t } from '@/src/get-dictionary';
+import { Locale, i18n } from 'i18n-config';
 
 interface Props {
   myListMosaicData: (CycleMosaicItem | WorkMosaicItem)[];
+  dict:any
 }
+
+const MyListPage: NextPage<Props> = ({ myListMosaicData, dict }) => {
+
+  return (
+    <SimpleLayout title={t(dict,'browserTitleMyList')}>
+      <h4 className="mt-4 mb-5">{t(dict,'mosaicHeaderMyCycles')}</h4>
+      <Mosaic cacheKey={['my-list','']} stack={myListMosaicData} />
+    </SimpleLayout>
+  );
+};
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = await getSession(ctx);
+  const dictionary=await getDictionary(ctx.locale as Locale ?? i18n.defaultLocale);
+  const dict = dictionary['common'];
+
   let interleavedResults:(Cycle|Work|undefined)[]=[]
   if (session == null) {
     ctx.res.writeHead(302, { Location: '/' });
@@ -37,27 +53,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     });
   
     interleavedResults = flatten(zip(cycles, works)).filter((workOrCycle) => workOrCycle != null);
-  
-    
   }
   return {
     props: {
+      dict,
       session,
       myListMosaicData: interleavedResults,
     },
   };
 
-};
-
-const MyListPage: NextPage<Props> = ({ myListMosaicData }) => {
-  const { t } = useTranslation('common');
-
-  return (
-    <SimpleLayout title={t('browserTitleMyList')}>
-      <h4 className="mt-4 mb-5">{t('mosaicHeaderMyCycles')}</h4>
-      <Mosaic cacheKey={['my-list','']} stack={myListMosaicData} />
-    </SimpleLayout>
-  );
 };
 
 export default MyListPage;

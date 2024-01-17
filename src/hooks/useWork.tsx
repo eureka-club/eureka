@@ -1,6 +1,7 @@
 import { WorkMosaicItem } from '@/src/types/work';
 import { useDictContext } from './useDictContext';
 import { UseQueryResult, useQuery } from '@tanstack/react-query';
+import { useParams } from 'next/navigation';
 
 export const getWork = async (id: number,language:string | undefined,origin=''): Promise<WorkMosaicItem> => {
   if (!id) throw new Error('idRequired');
@@ -22,15 +23,15 @@ interface Options {
 }
 
 const useWork = (id: number, options?: Options): UseQueryResult<WorkMosaicItem,Error> => {
-  const{langs}=useDictContext()
+  const{lang}=useParams<{lang:string}>()!;
   const { staleTime, enabled, notLangRestrict } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  const ck = notLangRestrict ? ['WORK', `${id}`] : ['WORK', `${id}-${langs}`];
+  const ck = notLangRestrict ? ['WORK', `${id}`] : ['WORK', `${id}-${lang}`];
   return useQuery<WorkMosaicItem, Error>({
     queryKey:ck, 
-    queryFn:() => getWork(id, !notLangRestrict ? langs!:undefined),
+    queryFn:() => getWork(id, !notLangRestrict ? lang!:undefined),
     staleTime,
     enabled,
   });

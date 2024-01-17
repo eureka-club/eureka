@@ -7,8 +7,7 @@ import { FC } from "react";
 interface Props{
 }
 const About:FC<Props> = ({}) => {
-  const{dict}=useDictContext()
-  const t = (s:string)=>t_(dict,s)
+  const{t,dict}=useDictContext()
   return (<>
   
     <Container>
@@ -72,34 +71,34 @@ const About:FC<Props> = ({}) => {
       `}</style>
 
       <div style={{ textAlign: 'center' }}>
-        <h1 className="text-secondary fw-bold">{t('aboutPageHeading')}</h1>
+        <h1 className="text-secondary fw-bold">{t(dict,'aboutPageHeading')}</h1>
       </div>
       <br />
       <hr />
 
       <div className="middle-container">
-        <h2 className="h1 text-secondary">{t('aboutHeading')}</h2>
-        <p className="summary">{t('aboutText')}</p>
+        <h2 className="h1 text-secondary">{t(dict,'aboutHeading')}</h2>
+        <p className="summary">{t(dict,'aboutText')}</p>
 
         <div className="what-is2">
-          <h2 className="h1 text-secondary">{t('whatisCycleHeading')}</h2>
-          <p className="summary">{t('whatisCycleText')}</p>
+          <h2 className="h1 text-secondary">{t(dict,'whatisCycleHeading')}</h2>
+          <p className="summary">{t(dict,'whatisCycleText')}</p>
         </div>
 
         <div className="what-is1">
-          <h2 className="h1 text-secondary">{t('whatisPostHeading')}</h2>
-          <p className="summary">{t('whatisPostText')}</p>
+          <h2 className="h1 text-secondary">{t(dict,'whatisPostHeading')}</h2>
+          <p className="summary">{t(dict,'whatisPostText')}</p>
         </div>
         <hr />
         <br />
 
-        <h3 className="h1 text-secondary">{t('ethicsHeading')}</h3>
+        <h3 className="h1 text-secondary">{t(dict,'ethicsHeading')}</h3>
         <p className="summary">
-          {} <a href="https://www.eureka.club/manifest"> {t('ethicsText1')}</a>
+          {} <a href="https://www.eureka.club/manifest"> {t(dict,'ethicsText1')}</a>
         </p>
-        <p className="summary">{t('ethicsText2')}</p>
+        <p className="summary">{t(dict,'ethicsText2')}</p>
         <p>
-          {t('ethicsText3')}
+          {t(dict,'ethicsText3')}
           <a href="mailto:hola@eureka.club">hola@eureka.club</a>
         </p>
         

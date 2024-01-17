@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import { usePathname, useRouter } from 'next/navigation';
-import useTranslation from 'next-translate/useTranslation';
+
 import { ChangeEvent, FormEvent, FunctionComponent, useEffect, useState, useRef, MouseEvent } from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
@@ -40,9 +40,10 @@ import SpinnerComp from '@/src/components/Spinner';
 import Box from '@mui/material/Box';
 import Image from 'next/image';
 import WMI from '@/src/components/work/MosaicItem';
-import { EDITION_ALREADY_EXIST, WORK_ALREADY_EXIST } from '@/src/api_code';
+import { EDITION_ALREADY_EXIST, WORK_ALREADY_EXIST } from '@/src/response_codes';
 import Link from 'next/link'
 import { LANGUAGES } from '@/src/constants';
+import { useDictContext } from '@/src/hooks/useDictContext';
 
 interface Props {
     noModal?: boolean;
@@ -71,7 +72,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
     const router = useRouter();
     const asPath=usePathname()!;
     const locale=getLocale_In_NextPages(asPath);
-    const { t } = useTranslation('createWorkForm')
+    const { t, dict } = useDictContext();
 
     const [resultWorks, setResultWorks] = useState<APIMediaSearchResult[] | APIMediaSearchResult[]>([]);
     const [countrySearchResults, setCountrySearchResults] = useState<{ code: string; label: string }[]>([]);
@@ -98,7 +99,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
     const [publicationLengthLabel, setPublicationLengthLabel] = useState('...');
     const [publicationYearLabel, setPublicationYearLabel] = useState('...');
     const [publicationLinkLabel, setPublicationLinkLabel] = useState('...');
-    const typeaheadRef = useRef<AsyncTypeahead<{ id: number; code: string; label: string }>>(null);
+    const typeaheadRef = useRef(null);
     const [workId, setWorkId] = useState<number | undefined>();
     const [useApiSearch, setUseApiSearch] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(false);
@@ -138,7 +139,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                     const json = await res.json();
                     if (!json.error) {
                         setWorkId(json.work.id);
-                        toast.success(t('WorkSaved'))
+                        toast.success(t(dict,'WorkSaved'))
                         return json.work;
                     }
                     else if (json.error && [WORK_ALREADY_EXIST, EDITION_ALREADY_EXIST].includes(json.error)) {
@@ -146,7 +147,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                         setWorkId(json.work.id)
                     }
                     else if (json.error)
-                        toast.error(t(json.error))
+                        toast.error(t(dict,json.error))
     
                 }
                 return null;
@@ -268,26 +269,26 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
             switch (value) {
                 case 'movie':
                     setPublicationLinkLabel('Streaming on')
-                    setPublicationYearLabel(t('releaseYearFieldLabel'));
-                    setPublicationLengthLabel(`${t('Duration')} (${t('minutes')})`);
+                    setPublicationYearLabel(t(dict,'releaseYearFieldLabel'));
+                    setPublicationLengthLabel(`${t(dict,'Duration')} (${t(dict,'minutes')})`);
                     break;
                 case 'documentary':
                     setPublicationLinkLabel('Streaming on')
-                    setPublicationYearLabel(t('releaseYearFieldLabel'));
-                    setPublicationLengthLabel(`${t('Duration')} (${t('minutes')})`);
+                    setPublicationYearLabel(t(dict,'releaseYearFieldLabel'));
+                    setPublicationLengthLabel(`${t(dict,'Duration')} (${t(dict,'minutes')})`);
                     break;
                 case 'book':
-                    setPublicationLinkLabel(t('linkFieldLabel'));
-                    setPublicationLengthLabel(t('Length pages'));
-                    setPublicationYearLabel(t('Publication year'));
+                    setPublicationLinkLabel(t(dict,'linkFieldLabel'));
+                    setPublicationLengthLabel(t(dict,'Length pages'));
+                    setPublicationYearLabel(t(dict,'Publication year'));
                     break;
                 case 'fiction-book':
-                    setPublicationLinkLabel(t('linkFieldLabel'));
-                    setPublicationLengthLabel(t('Length pages'));
-                    setPublicationYearLabel(t('Publication year'));
+                    setPublicationLinkLabel(t(dict,'linkFieldLabel'));
+                    setPublicationLengthLabel(t(dict,'Length pages'));
+                    setPublicationYearLabel(t(dict,'Publication year'));
                     break;
                 default:
-                    setPublicationLinkLabel(t('linkFieldLabel'));
+                    setPublicationLinkLabel(t(dict,'linkFieldLabel'));
                     setPublicationYearLabel('...');
                     setPublicationLengthLabel('...');
             }
@@ -336,13 +337,13 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
             if (data && data.length)
                 setResultWorks(data);
             else if (!data || !data.length) {
-                toast.error(t('NoDataError'))
+                toast.error(t(dict,'NoDataError'))
                 setResultWorks([]);
             }
             else if (error)
                 toast.error(error)
         }
-        else toast.error(t('WorkTypeError'));
+        else toast.error(t(dict,'WorkTypeError'));
         setLoading(false);
     }
 
@@ -433,7 +434,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
         }
         setResultWorks([]);
         setLoading(false);
-        toast.success(t('WorkSelected'));
+        toast.success(t(dict,'WorkSelected'));
 
         return;
     }
@@ -454,40 +455,40 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                 <SpinnerComp />
             </Backdrop>
             {!showExistingWork && <><ModalHeader closeButton={!noModal}>
-                <ModalTitle> <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('title')}</h1></ModalTitle>
+                <ModalTitle> <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t(dict,'title')}</h1></ModalTitle>
             </ModalHeader>
 
                 <ModalBody>
                     <FormGroup className='d-flex justify-content-end'>
-                        <FormControlLabel control={<Switch checked={useApiSearch} onChange={handleChangeUseApiSearch} />} label={t('APIUseText')} />
+                        <FormControlLabel control={<Switch checked={useApiSearch} onChange={handleChangeUseApiSearch} />} label={t(dict,'APIUseText')} />
                     </FormGroup>
-                    <span className='text-primary fw-bold'>{t('BasicInformation')}</span>
+                    <span className='text-primary fw-bold'>{t(dict,'BasicInformation')}</span>
                     <Row className='d-flex flex-column flex-lg-row mt-4'>
                         <Col className="">
                             <FormGroup controlId="type">
                                 <FormControl size="small" fullWidth>
-                                    <InputLabel id="type-label">*{t('typeFieldLabel')}</InputLabel>
+                                    <InputLabel id="type-label">*{t(dict,'typeFieldLabel')}</InputLabel>
                                     <Select
                                         labelId="type-label"
                                         id="type"
                                         name="type"
                                         value={formValues.type}
-                                        label={`*${t("typeFieldLabel")}`}
+                                        label={`*${t(dict,"typeFieldLabel")}`}
                                         onChange={handleChangeSelectField}
                                     //disabled={(selectedWork) ? true : false}
                                     >
-                                        <MenuItem value="">{t('typeFieldPlaceholder')}</MenuItem>
-                                        <MenuItem value="book">{t('common:book')}</MenuItem>
-                                        <MenuItem value="fiction-book">{t('common:fiction-book')}</MenuItem>
-                                        <MenuItem value="documentary">{t('common:documentary')}</MenuItem>
-                                        <MenuItem value="movie">{t('common:movie')}</MenuItem>
+                                        <MenuItem value="">{t(dict,'typeFieldPlaceholder')}</MenuItem>
+                                        <MenuItem value="book">{t(dict,'common:book')}</MenuItem>
+                                        <MenuItem value="fiction-book">{t(dict,'common:fiction-book')}</MenuItem>
+                                        <MenuItem value="documentary">{t(dict,'common:documentary')}</MenuItem>
+                                        <MenuItem value="movie">{t(dict,'common:movie')}</MenuItem>
                                     </Select>
                                 </FormControl>
                             </FormGroup>
                         </Col>
                         <Col className="">
                             {(!selectedWork || resultWorks.length > 0) && (useApiSearch) && <SearchWorkInput callback={searchTitles} />}
-                            {((selectedWork && !resultWorks.length) || !useApiSearch) && <TextField id="title" className="w-100  mt-4 mt-lg-0" label={`*${t('titleFieldLabel')}`}
+                            {((selectedWork && !resultWorks.length) || !useApiSearch) && <TextField id="title" className="w-100  mt-4 mt-lg-0" label={`*${t(dict,'titleFieldLabel')}`}
                                 variant="outlined" size="small" name="title"
                                 value={formValues.title!}
                                 type="text"
@@ -533,10 +534,10 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                             </Col>
                         </Row>
 
-                            <span className='text-primary fw-bold'>{t('Authorship')}</span>
+                            <span className='text-primary fw-bold'>{t(dict,'Authorship')}</span>
                             <Row className='d-flex flex-column flex-lg-row mt-4 mb-4'>
                                 <Col className="">
-                                    <TextField id="author" className="w-100" label={`*${t('authorFieldLabel')}`}
+                                    <TextField id="author" className="w-100" label={`*${t(dict,'authorFieldLabel')}`}
                                         variant="outlined" size="small" name='author'
                                         value={formValues.author}
                                         type="text"
@@ -552,10 +553,10 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                             data={countrySearchResults}
                                             items={countryOrigin}
                                             setItems={setCountryOrigin}
-                                            formatValue={(v: string) => t(`countries:${v}`)}
+                                            formatValue={(v: string) => t(dict,`countries:${v}`)}
                                             max={2}
-                                            label={`${t('countryFieldLabel')} - 2 max`}
-                                        //placeholder={`${t('Type to add tag')}...`}
+                                            label={`${t(dict,'countryFieldLabel')} - 2 max`}
+                                        //placeholder={`${t(dict,'Type to add tag')}...`}
                                         />
                                     </FormGroup>
                                 </Col>
@@ -564,13 +565,13 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                 <Col className="">
                                     <FormGroup controlId="language">
                                         <FormControl size="small" fullWidth>
-                                            <InputLabel id="language-label">*{t('languageFieldLabel')}</InputLabel>
+                                            <InputLabel id="language-label">*{t(dict,'languageFieldLabel')}</InputLabel>
                                             <Select
                                                 defaultValue={formValues.language}
                                                 labelId="language-label"
                                                 id="language"
                                                 name='language'
-                                                label={`*${t("languageFieldLabel")}`}
+                                                label={`*${t(dict,"languageFieldLabel")}`}
                                             >
                                                 <MenuItem value={'spanish'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/es.png" alt="Language flag 'es'" /></MenuItem>
                                                 <MenuItem value={'english'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/en.png" alt="Language flag 'en'" /></MenuItem>
@@ -586,21 +587,21 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                 <Col className="">
                                     <FormGroup controlId="authorGender">
                                         <FormControl size="small" fullWidth>
-                                            <InputLabel id="authorGender-label">*{t('authorGenderFieldLabel')}</InputLabel>
+                                            <InputLabel id="authorGender-label">*{t(dict,'authorGenderFieldLabel')}</InputLabel>
                                             <Select
                                                 labelId="authorGender-label"
                                                 id="authorGender"
                                                 name='authorGender'
                                                 value={formValues.authorGender}
-                                                label={`*${t("authorGenderFieldLabel")}`}
+                                                label={`*${t(dict,"authorGenderFieldLabel")}`}
                                                 onChange={handleChangeSelectField}
                                             >
-                                                <MenuItem value="">{t('authorGenderFieldPlaceholder')}</MenuItem>
-                                                <MenuItem value="female">{t('authorGenderFemale')}</MenuItem>
-                                                <MenuItem value="male">{t('authorGenderMale')}</MenuItem>
-                                                <MenuItem value="non-binary">{t('authorGenderNonbinary')}</MenuItem>
-                                                <MenuItem value="trans">{t('authorGenderTrans')}</MenuItem>
-                                                <MenuItem value="other">{t('authorGenderOther')}</MenuItem>
+                                                <MenuItem value="">{t(dict,'authorGenderFieldPlaceholder')}</MenuItem>
+                                                <MenuItem value="female">{t(dict,'authorGenderFemale')}</MenuItem>
+                                                <MenuItem value="male">{t(dict,'authorGenderMale')}</MenuItem>
+                                                <MenuItem value="non-binary">{t(dict,'authorGenderNonbinary')}</MenuItem>
+                                                <MenuItem value="trans">{t(dict,'authorGenderTrans')}</MenuItem>
+                                                <MenuItem value="other">{t(dict,'authorGenderOther')}</MenuItem>
                                             </Select>
                                         </FormControl>
                                     </FormGroup>
@@ -609,25 +610,25 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                 <Col className=" mt-4 mt-lg-0">
                                     <FormGroup controlId="authorRace">
                                         <FormControl size="small" fullWidth>
-                                            <InputLabel id="authorRace-label">*{t('authorEthnicityFieldLabel')}</InputLabel>
+                                            <InputLabel id="authorRace-label">*{t(dict,'authorEthnicityFieldLabel')}</InputLabel>
                                             <Select
                                                 labelId="authorRace-label"
                                                 id="authorRace"
                                                 name='authorRace'
                                                 value={formValues.authorRace}
-                                                label={`*${t("authorEthnicityFieldLabel")}`}
+                                                label={`*${t(dict,"authorEthnicityFieldLabel")}`}
                                                 onChange={handleChangeSelectField}
                                             >
-                                                <MenuItem value="">{t('authorEthnicityFieldPlaceholder')}</MenuItem>
-                                                <MenuItem value="white">{t('authorEthnicityIsWhite')}</MenuItem>
-                                                <MenuItem value="non-white">{t('authorEthnicityIsNotWhite')}</MenuItem>
+                                                <MenuItem value="">{t(dict,'authorEthnicityFieldPlaceholder')}</MenuItem>
+                                                <MenuItem value="white">{t(dict,'authorEthnicityIsWhite')}</MenuItem>
+                                                <MenuItem value="non-white">{t(dict,'authorEthnicityIsNotWhite')}</MenuItem>
                                             </Select>
                                         </FormControl>
                                     </FormGroup>
                                 </Col>
                             </Row>
 
-                            <span className='text-primary fw-bold'>{t('Content')}</span>
+                            <span className='text-primary fw-bold'>{t(dict,'Content')}</span>
                             <Row className='d-flex flex-column flex-lg-row mt-4'>
                                 <Col className="">
                                     <FormGroup controlId="topics">
@@ -635,19 +636,19 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                             data={topics as {code:string,label:string}[]}
                                             items={items}
                                             setItems={setItems}
-                                            formatValue={(v: string) => t(`topics:${v}`)}
+                                            formatValue={(v: string) => t(dict,`topics:${v}`)}
                                             max={3}
-                                            label={t('topicsLabel')}
-                                            placeholder={`${t('Type to add tag')}...`}
+                                            label={t(dict,'topicsLabel')}
+                                            placeholder={`${t(dict,'Type to add tag')}...`}
                                         />
                                     </FormGroup>
                                 </Col>
                                 <Col className=" mt-4 mt-lg-0">
-                                    <TagsInputMaterial tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
+                                    <TagsInputMaterial tags={tags} setTags={setTags} label={t(dict,'topicsFieldLabel')} />
 
                                 </Col>
                             </Row>
-                            <span className='text-primary fw-bold'>{t('AdditionalInformation')}</span>
+                            <span className='text-primary fw-bold'>{t(dict,'AdditionalInformation')}</span>
                             <Row className='d-flex flex-column flex-lg-row mt-4'>
                                 <Col className="">
                                     <TextField id="publicationYear" className="w-100" label={publicationYearLabel}
@@ -669,7 +670,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                             <Row className='d-flex flex-column flex-lg-row mt-4 mb-5'>
                                 <Col className="">
                                     <FormGroup controlId="description">
-                                        <FormLabel>{t('workSummaryFieldLabel')}</FormLabel>
+                                        <FormLabel>{t(dict,'workSummaryFieldLabel')}</FormLabel>
                                         <Textarea minRows={5} name="description" value={formValues.description} onChange={handleChangeTextField} />
 
                                     </FormGroup>
@@ -692,7 +693,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                             </Button>
                             <Button disabled={isPending} type="submit" className="btn-eureka">
                                 <>
-                                    {t('submitButtonLabel')}
+                                    {t(dict,'submitButtonLabel')}
                                     {isPending && (
                                         <Spinner animation="grow" variant="info" className={`ms-2 ${styles.loadIndicator}`} size="sm" />
                                     )}
@@ -705,7 +706,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                 showExistingWork && <Row className="mb-5 d-flex flex-column">
 
                     <Col>
-                        <h1 className="text-secondary text-center  fw-bold mt-sm-0 mb-3 mb-lg-5">{t('ExistingWorktitle')}</h1>
+                        <h1 className="text-secondary text-center  fw-bold mt-sm-0 mb-3 mb-lg-5">{t(dict,'ExistingWorktitle')}</h1>
 
                     </Col>
                     <Col className='d-flex  justify-content-center align-items-center'>
@@ -728,7 +729,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                 onClick={(e) => handleToDoOtherSearch(e)}
                                 style={{ width: '100%', height: '2.5em' }}
                             >
-                                {t('MakeSearchText')}
+                                {t(dict,'MakeSearchText')}
                             </Button></Box> </Col>
                 </Row>
 

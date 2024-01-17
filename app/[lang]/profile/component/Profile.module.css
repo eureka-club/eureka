@@ -1,0 +1,18 @@
+.privacySettings > div{
+  margin-top:1em;
+}
+.privacySettings > div > div{
+  color:gray;
+}
+.privacySettings > div > label{
+  color: var(--text-color-primary)!important;
+}
+ .checkPublic {
+  /* color:gray; */
+}
+.checkProtected div{
+  /* color:gray; */
+}
+.checkPrivate div{
+  /* color:gray; */
+} 

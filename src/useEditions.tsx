@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';;
 import { EditionMosaicItem } from './types/edition';
 import { Prisma } from '@prisma/client';
-import useTranslation from 'next-translate/useTranslation';
+import { useParams } from 'next/navigation';
+
 
 export const getEditions= async (
   lang:string,
@@ -22,7 +23,7 @@ interface Options {
   cacheKey?:string|string[];
 }
 const useEditions = (props?:Prisma.WorkFindManyArgs,options?: Options) => {
-  const {lang} = useTranslation();
+  const {lang} = useParams<{lang:string}>()!;
   const { staleTime, enabled,cacheKey } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,

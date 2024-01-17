@@ -1,16 +1,20 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
-import useTranslation from 'next-translate/useTranslation';
+
 import Container from 'react-bootstrap/Container';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import SignInForm from '../src/components/forms/SignInForm';
+import { getDictionary, t } from '@/src/get-dictionary';
+import { Locale } from 'i18n-config';
+import i18n from 'i18n';
 
-const LoginPage: NextPage = () => {
-  
-  const { t } = useTranslation('signInForm');
+interface Props{
+  dict:any
+}
+const LoginPage: NextPage<Props> = ({dict}) => {
 
   return (
-    <SimpleLayout allPageSize={true} title={t('login')} showNavBar={false} showFooter={false}>
+    <SimpleLayout allPageSize={true} title={t(dict,'login')} showNavBar={false} showFooter={false}>
     <Container className='mt-5'>
           <SignInForm noModal  />
      </Container>
@@ -23,11 +27,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (session != null) {
     return { redirect: { destination: '/', permanent: false } };
   }
+  const dictionary=await getDictionary(ctx.locale as Locale ?? i18n.defaultLocale);
+  const dict = dictionary['signInForm'];
  // if (session != null) {
     //return { redirect: { destination: '/', permanent: false } };
  // }
 
-  return { props: {session} };
+  return { props: {session,dict} };
 };
 
 export default LoginPage;

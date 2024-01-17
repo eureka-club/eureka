@@ -3,7 +3,7 @@
 // import { useAtom } from 'jotai';
 // import Link from 'next/link';
 // import { useRouter } from 'next/navigation';
-// import useTranslation from 'next-translate/useTranslation';
+// 
 // // import { setCookie } from 'nookies';
 // import { FunctionComponent, useState, useMemo } from 'react';
 // import { InputGroup, Form, Button } from 'react-bootstrap';
@@ -47,7 +47,7 @@
 //   // const [session] = useSession() as [Session | null | undefined, boolean];
 //   const queryClient = useQueryClient();
 //   const router = useRouter();
-//   const { t } = useTranslation('searchEngine');
+//   const { t, dict } = useDictContext();
 
 //   // const [isSearchResultsLoading, setIsSearchResultsLoading] = useState(false);
 //   //const [searchResults, setSearchResults] = useState<SearchResult[]>();

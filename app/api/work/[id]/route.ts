@@ -1,4 +1,4 @@
-import { NOT_FOUND, SERVER_ERROR } from "@/src/api_code";
+import { NOT_FOUND, SERVER_ERROR } from "@/src/response_codes";
 import { find } from "@/src/facades/work";
 import { NextRequest, NextResponse } from "next/server";
 import {prisma} from '@/src/lib/prisma';

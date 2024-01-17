@@ -1,4 +1,4 @@
-import { NextPage } from 'next';
+
 import Head from "next/head";
 import EditWorkForm from '@/components/forms/EditWorkForm';
 import { getServerSession } from 'next-auth';
@@ -40,7 +40,7 @@ const EditWorkPage = async ({ params: { lang, id } }:Props) => {
             <meta name="description" content={dict['aboutUsDescription']}></meta>
         </Head>
 
-        <Layout dict={dict} langs={langs} >
+        <Layout dict={dict}>
             <EditWorkForm />
         </Layout>
     </>

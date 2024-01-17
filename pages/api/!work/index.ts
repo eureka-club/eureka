@@ -8,7 +8,7 @@ import { storeUpload } from '@/src/facades/fileUpload';
 import { createFromServerFields, findAll, findAllWithoutLangRestrict } from '@/src/facades/work';
 import { Prisma } from '@prisma/client';
 import { prisma } from '@/src/lib/prisma';
-import { NOT_COVER_IMAGE_RECEIVED, SERVER_ERROR, UNAUTHORIZED } from '@/src/api_code';
+import { NOT_COVER_IMAGE_RECEIVED, SERVER_ERROR, UNAUTHORIZED } from '@/src/response_codes';
 // import redis from '@/src/lib/redis';
 
 export const config = {

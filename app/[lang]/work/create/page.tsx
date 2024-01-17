@@ -1,4 +1,4 @@
-import { NextPage } from 'next';
+
 import Head from "next/head";
 import { getServerSession } from 'next-auth';
 import { getDictionary } from '@/src/get-dictionary';
@@ -37,7 +37,7 @@ interface Props{
         <meta name="description" content={dict['aboutUsDescription']}></meta>
       </Head>
   
-      <Layout dict={dict} langs={langs} >
+      <Layout dict={dict}>
         <WorkCreate/>
       </Layout>
     </>

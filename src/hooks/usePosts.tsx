@@ -1,15 +1,15 @@
 import { PostMosaicItem } from '@/src/types/post';
 import { Prisma } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
+import { WEBAPP_URL } from '../constants';
 // import { buildUrl } from 'build-url-ts';
 
 export const getPosts = async (
   //langs:string,
   props?:Prisma.PostFindManyArgs,
-  origin=''
 ): Promise<{posts:PostMosaicItem[],fetched:number,total:number}> => {
   const query = props?`?props=${encodeURIComponent(JSON.stringify(props))}`:''
-  const url = `${origin||''}/api/post${query}`
+  const url = `${WEBAPP_URL}/api/post${query}`
   const res = await fetch(url);
   if (!res.ok) return {posts:[],fetched:0,total:-1};
   const {data:posts,fetched,total} = await res.json();

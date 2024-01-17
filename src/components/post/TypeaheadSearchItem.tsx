@@ -1,16 +1,17 @@
-import useTranslation from 'next-translate/useTranslation';
+
 import { FunctionComponent } from 'react';
 import { Badge } from 'react-bootstrap'
 import { PostMosaicItem } from '@/types/post';
 import LocalImageComponent from '@/src/components/LocalImage';
 import styles from './TypeaheadSearchItem.module.css';
+import { useDictContext } from '@/src/hooks/useDictContext';
 
 interface Props {
   post: PostMosaicItem;
 }
 
 const TypeaheadSearchItem: FunctionComponent<Props> = ({ post }) => {
-  const { t } = useTranslation('common');
+  const { t, dict } = useDictContext();
 
   return (
     // <Container>
@@ -38,7 +39,7 @@ const TypeaheadSearchItem: FunctionComponent<Props> = ({ post }) => {
       </div>
       <div>
         <Badge bg="orange" className={`fw-normal fs-xs text-black px-2 rounded-pill ${styles.type}`}>
-          {t('post')}
+          {t(dict,'post')}
         </Badge>
         <h3 className="text-wrap text-dark">{post.title}</h3>
         <h4 className="text-wrap text-dark">{post.creator.name}</h4>

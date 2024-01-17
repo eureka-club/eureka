@@ -5,7 +5,7 @@ import { ListGroup, Button, } from 'react-bootstrap'
 import { IoNotificationsCircleOutline } from 'react-icons/io5'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import useTranslation from 'next-translate/useTranslation'
+
 import { EditNotificationClientPayload, NotificationMosaicItem } from '@/src/types/notification'
 import { useAtom } from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
@@ -15,6 +15,8 @@ import MosaicItem from '@/src/components/notification/MosaicItem'
 import { UserMosaicItem } from '../types/user'
 import useNotifications from '../useNotifications'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useDictContext } from '../hooks/useDictContext'
+import { t } from '../get-dictionary'
 interface Props {
   className?: string;
 }
@@ -23,7 +25,7 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
 
   const { data: session } = useSession();
   const router = useRouter();
-  const { t } = useTranslation('notification');
+  const { t, dict } = useDictContext();
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModals)
   const queryClient = useQueryClient();
   const [userId, setUserId] = useState<number>(0);
@@ -69,7 +71,7 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
             showToast: {
               show: true,
               type: 'warning',
-              title: t('common:Warning'),
+              title: t(dict,'common:Warning'),
               message: res.statusText
             }
           });
@@ -154,7 +156,7 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
   }
 
   const formatMessage = (message: string) => {
-    return getNotificationMessage(message, (key, payload) => t(key, payload));
+    return getNotificationMessage(message, (key, payload) => t(dict,key, payload));
   }
 
   const viewAllNotificationsHandler = () => {
@@ -193,7 +195,7 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
         })}
           <ListGroup.Item>
             <Button variant="link" className="text-primary" onClick={viewAllNotificationsHandler}>
-              {t('viewAllNotifications')}
+              {t(dict,'viewAllNotifications')}
             </Button>
           </ListGroup.Item>
         </ListGroup>;
@@ -235,7 +237,7 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
             <span className="visually-hidden">unread messages</span>
           </span> || ''}
         </aside>
-        <span className={`d-none d-lg-block ${styles.menuBottomInfo}  ms-1`}>{t('navbar:Notifications')}</span>
+        <span className={`d-none d-lg-block ${styles.menuBottomInfo}  ms-1`}>{t(dict,'navbar:Notifications')}</span>
       </div>
     </Button>
     {/* </OverlayTrigger>} */}

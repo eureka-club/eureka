@@ -1,5 +1,5 @@
 import { FunctionComponent, useState, useEffect, useRef, Dispatch, SetStateAction, SyntheticEvent } from 'react';
-import useTranslation from 'next-translate/useTranslation';
+
 import { Autocomplete, CircularProgress, AutocompleteChangeDetails, AutocompleteChangeReason } from '@mui/material';
 import { TextField } from '@mui/material';
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '@/src/types';

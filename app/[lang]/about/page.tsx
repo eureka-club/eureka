@@ -20,7 +20,7 @@ const AboutPage = async ({ params: { lang } }:Props) => {
       <meta name="title" content={dict['aboutTitle']}></meta>
       <meta name="description" content={dict['aboutDescription']}></meta>
     </Head>
-    <Layout dict={dict} langs={langs} >
+    <Layout dict={dict}>
       <About />
     </Layout>
   </>

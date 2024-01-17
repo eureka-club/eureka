@@ -1,7 +1,7 @@
 import { FunctionComponent, MouseEvent, useEffect, useState, lazy, Suspense } from 'react';
 import classNames from 'classnames';
 import { useAtom } from 'jotai';
-import useTranslation from 'next-translate/useTranslation';
+
 
 import {
   Nav,
@@ -19,7 +19,7 @@ import {
 import { BsBoxArrowUpRight } from 'react-icons/bs';
 import { BiArrowBack } from 'react-icons/bi';
 // import { useSession } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { PostMosaicItem } from '@/src/types/post';
 import UnclampText from '@/components/UnclampText';
 import WorkSummary from './WorkSummary';
@@ -45,6 +45,7 @@ import useExecRatingWork from '@/src/hooks/mutations/useExecRatingWork';
 import Rating from '../common/Rating';
 import { Box } from '@mui/material';
 import { FiTrash2 } from 'react-icons/fi';
+import { useDictContext } from '@/src/hooks/useDictContext';
 
 
 const PostDetailComponent = lazy(() => import('@/components/post/PostDetail'));
@@ -57,9 +58,11 @@ interface Props {
 
 const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }) => {
   const router = useRouter();
+  const{lang}=useParams<{lang:string}>()!;
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   //const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-  const { t,lang } = useTranslation('workDetail');
+  // const { t,lang } = useTranslation('workDetail');
+  const { t, dict } = useDictContext();
   //const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
   const [ref, inView] = useInView({
     triggerOnce: false,
@@ -291,13 +294,13 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
           </Button>
           {!postId && canEditWork() && (
             <Button variant="warning" onClick={handleEditClick} size="sm">
-              {t('edit')}
+              {t(dict,'edit')}
             </Button>
           )}
           {post && work && canEditPost() && (
             <>
               <Button variant="warning" onClick={handleEditPostClick} size="sm">
-                {t('edit')}
+                {t(dict,'edit')}
               </Button>
             </>
           )}
@@ -327,7 +330,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                         iconColor="var(--bs-danger)"
                       /> { qtyByUser > 0 && <Button
                         type="button"
-                        title={t('common:clearRating')}
+                        title={t(dict,'common:clearRating')}
                         className="text-warning p-0 ms-2"
                         onClick={clearRating}
                         variant="link"
@@ -357,12 +360,12 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                             {' - '}
                             {getRatingQty()}
                           </div>
-                          <span className="ms-1 text-gray">{t('common:ratings')}</span>
+                          <span className="ms-1 text-gray">{t(dict,'common:ratings')}</span>
                         </Box>
                         {work.topics && (
                           <TagsInput
                             className="ms-0 ms-lg-2 d-flex flex-row"
-                            formatValue={(v: string) => t(`topics:${v}`)}
+                            formatValue={(v: string) => t(dict,`topics:${v}`)}
                             tags={work.topics}
                             readOnly
                           />
@@ -376,7 +379,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                           target="_blank"
                           rel="noreferrer"
                         >
-                          {t('workLinkLabel')} <BsBoxArrowUpRight />
+                          {t(dict,'workLinkLabel')} <BsBoxArrowUpRight />
                         </a>
                       )}
                       <div className="container d-sm-block d-lg-none mt-4 mb-4 position-relative">
@@ -398,7 +401,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                             iconColor="var(--bs-danger)"
                           /> {qtyByUser > 0 && <Button
                             type="button"
-                            title={t('common:clearRating')}
+                            title={t(dict,'common:clearRating')}
                             className="text-warning p-0 ms-2"
                             onClick={clearRating}
                             variant="link"
@@ -421,7 +424,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                   {/* <div className='container d-none d-lg-block mt-5'>
                   <CommentsList entity={work} parent={undefined}/>
                 </div>*/}
-                    <HyvorComments entity="work" id={`${work.id}`} session={session} />
+                    <HyvorComments entity="work" id={`${work.id}`} />
                 </Col>
                   {/* <div className='container d-sm-block d-lg-none mt-3'>
                   <CommentsList entity={work} parent={undefined}/>
@@ -435,7 +438,6 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                   postId={post.id}
                   work={work}
                   cacheKey={['POST', `${post.id}`]}
-                  session={session}
                 />
               )}
             </>
@@ -474,17 +476,17 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                         <Nav variant="tabs" className="scrollNav" fill>
                           {/*<NavItem>
                             <NavLink eventKey="discussion">
-                              {t('discussion')}
+                              {t(dict,'discussion')}
                             </NavLink>
                           </NavItem> */}
                           <NavItem>
                             <NavLink eventKey="posts" data-cy="posts">
-                              {t('tabHeaderPosts')} ({dataPosts?.total})
+                              {t(dict,'tabHeaderPosts')} ({dataPosts?.total})
                             </NavLink>
                           </NavItem>
                           <NavItem>
                             <NavLink eventKey="cycles">
-                              {t('tabHeaderCycles')} ({cyclesCount})
+                              {t(dict,'tabHeaderCycles')} ({cyclesCount})
                             </NavLink>
                           </NavItem>
                         </Nav>

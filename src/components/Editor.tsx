@@ -1,7 +1,9 @@
 import React,{useEffect,useState} from 'react'
 import {Form} from 'react-bootstrap'
+import { useDictContext } from '../hooks/useDictContext';
+
 // import Script from 'next/script'
-import useTranslation from 'next-translate/useTranslation';
+
 // declare global {
 //     interface Window {
 //         tinymce:any;
@@ -14,7 +16,7 @@ interface Props {
     disabled?:boolean;
 }
 const Editor: React.FC<Props> = ({onSave,value,onChange,disabled=false})=>{
-    const {t} = useTranslation('common')
+    const {t,dict} = useDictContext()
     return <Form.Control 
         disabled={disabled}
         defaultValue={value}
@@ -23,7 +25,7 @@ const Editor: React.FC<Props> = ({onSave,value,onChange,disabled=false})=>{
         className="border fs-6 rounded-pill bg-light"
         as="textarea"
         rows={2}
-        placeholder={`${t('Write a replay')}...`}        
+        placeholder={`${t(dict,'Write a replay')}...`}        
         onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{
             e.preventDefault()
             onChange(e.target.value);

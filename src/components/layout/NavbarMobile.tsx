@@ -23,7 +23,7 @@ import slugify from 'slugify';
 import { useQueryClient } from '@tanstack/react-query';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { i18n } from 'i18n-config';
-import { t } from '@/src/get-dictionary';
+
 import { useDictContext } from '@/src/hooks/useDictContext';
 import { AiOutlineSearch } from 'react-icons/ai';
 
@@ -45,7 +45,7 @@ const topics = [
 
 const NavBar: FunctionComponent = () => {
   const queryClient = useQueryClient();
-  const { dict } = useDictContext()
+  const { t, dict } = useDictContext()
   const router = useRouter();
   const asPath = usePathname();
   const searchParams = useSearchParams();

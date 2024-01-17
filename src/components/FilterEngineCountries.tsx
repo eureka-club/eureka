@@ -1,12 +1,13 @@
 import React, { useState,ChangeEvent, useEffect,Dispatch,SetStateAction  } from "react"
 import styles from './FilterEngine.module.css';
 import { Country } from "../types";
-import useTranslation from 'next-translate/useTranslation';
+
 
 import { Form, OverlayTrigger, Popover, Button,ButtonGroup} from 'react-bootstrap';
 import TagsInputTypeAhead from './forms/controls/TagsInputTypeAhead';
 import useCountries from '@/src/useCountries'
 import { ImCancelCircle } from 'react-icons/im';
+import { useDictContext } from "../hooks/useDictContext";
 
 interface Props{
   filtersCountries:string[];
@@ -25,7 +26,7 @@ export interface FiltersRegionsType {
 } 
 
 const FilterEngineCountries:React.FC<Props> = ({filtersCountries,setFiltersCountries,filtersRegions,setFiltersRegions})=>{
-    const { t } = useTranslation('searchEngine');
+    const { t, dict } = useDictContext();
 
     const [fc,setFC]=useState<string[]>(filtersCountries)
     const [fr,setFR]=useState<FiltersRegionsType>(filtersRegions)
@@ -57,13 +58,13 @@ const FilterEngineCountries:React.FC<Props> = ({filtersCountries,setFiltersCount
         <Popover.Body>
               <div>
                 <Form.Label>
-                        <strong>{t('Regions')}</strong>
+                        <strong>{t(dict,'Regions')}</strong>
                 </Form.Label>
                 <Form.Group className={styles.formGroup}>
                   <Form.Check
                     className={styles.filter}
                     type="checkbox"
-                    label={`${t('countries:Asia')} `}
+                    label={`${t(dict,'countries:Asia')} `}
                     checked={fr.Asia}
                     onChange={(e) => handlerComboxesChangeRegions(e, 'Asia')}
                   />
@@ -72,7 +73,7 @@ const FilterEngineCountries:React.FC<Props> = ({filtersCountries,setFiltersCount
                   <Form.Check
                     className={styles.filter}
                     type="checkbox"
-                    label={`${t('countries:Europe')} `}
+                    label={`${t(dict,'countries:Europe')} `}
                     checked={fr.Europe}
                     onChange={(e) => handlerComboxesChangeRegions(e, 'Europe')}
                   />
@@ -81,7 +82,7 @@ const FilterEngineCountries:React.FC<Props> = ({filtersCountries,setFiltersCount
                   <Form.Check
                     className={styles.filter}
                     type="checkbox"
-                    label={`${t('countries:Latin America and the Caribbean')} `}
+                    label={`${t(dict,'countries:Latin America and the Caribbean')} `}
                     checked={fr['Latin America and the Caribbean']}
                     data-cy="check-laac"
                     onChange={(e) => handlerComboxesChangeRegions(e, 'Latin America and the Caribbean')}
@@ -91,7 +92,7 @@ const FilterEngineCountries:React.FC<Props> = ({filtersCountries,setFiltersCount
                   <Form.Check
                     className={styles.filter}
                     type="checkbox"
-                    label={`${t('countries:Middle East and North Africa')} `}
+                    label={`${t(dict,'countries:Middle East and North Africa')} `}
                     checked={fr['Middle East and North Africa']}
                     onChange={(e) => handlerComboxesChangeRegions(e, 'Middle East and North Africa')}
                   />
@@ -100,7 +101,7 @@ const FilterEngineCountries:React.FC<Props> = ({filtersCountries,setFiltersCount
                   <Form.Check
                     className={styles.filter}
                     type="checkbox"
-                    label={`${t('countries:Northern America')} `}
+                    label={`${t(dict,'countries:Northern America')} `}
                     checked={fr['Northern America']}
                     onChange={(e) => handlerComboxesChangeRegions(e, 'Northern America')}
                   />
@@ -109,7 +110,7 @@ const FilterEngineCountries:React.FC<Props> = ({filtersCountries,setFiltersCount
                   <Form.Check
                     className={styles.filter}
                     type="checkbox"
-                    label={`${t('countries:Oceania')}`}
+                    label={`${t(dict,'countries:Oceania')}`}
                     checked={fr.Oceania}
                     onChange={(e) => handlerComboxesChangeRegions(e, 'Oceania')}
                   />
@@ -118,7 +119,7 @@ const FilterEngineCountries:React.FC<Props> = ({filtersCountries,setFiltersCount
                   <Form.Check
                     className={styles.filter}
                     type="checkbox"
-                    label={`${t('countries:Sub-Saharan Africa')}`}
+                    label={`${t(dict,'countries:Sub-Saharan Africa')}`}
                     checked={fr['Sub-Saharan Africa']}
                     onChange={(e) => handlerComboxesChangeRegions(e, 'Sub-Saharan Africa')}
                   />
@@ -127,14 +128,14 @@ const FilterEngineCountries:React.FC<Props> = ({filtersCountries,setFiltersCount
               </div>
               <div>
                 <Form.Label>
-                  <strong>{t('Countries')}</strong>
+                  <strong>{t(dict,'Countries')}</strong>
                 </Form.Label>
                 <TagsInputTypeAhead
                   data={countriesAll}
                   items={fc}
                   setItems={setFC}
                   max={50}
-                  labelKey={(res) => `${t(`countries:${res.code}`)}`}
+                  labelKey={(res) => `${t(dict,`countries:${(res as {code:string}).code}`)}`}
                 />
 
               </div>
@@ -150,7 +151,7 @@ const FilterEngineCountries:React.FC<Props> = ({filtersCountries,setFiltersCount
               <Button className="btn-eureka" onClick={()=>{
                 setFiltersCountries(fc)
                 setFiltersRegions(fr)
-                }}>{t('common:select')}
+                }}>{t(dict,'common:select')}
               </Button>
               </ButtonGroup>
               </div>
@@ -163,11 +164,11 @@ const FilterEngineCountries:React.FC<Props> = ({filtersCountries,setFiltersCount
     //       ()=>{
     //         show(getPopoverGeography(),'ver asd')
     //       }
-    //     }>{t('Geography')}</Button>
+    //     }>{t(dict,'Geography')}</Button>
 
     // </>
     return <OverlayTrigger trigger="click" placement="bottom" overlay={getPopoverGeography()}>
-        <Button className="ms-3" data-cy="btn-filters-geography" variant="light">{t('Geography')}</Button>
+        <Button className="ms-3" data-cy="btn-filters-geography" variant="light">{t(dict,'Geography')}</Button>
       </OverlayTrigger>
 
   }

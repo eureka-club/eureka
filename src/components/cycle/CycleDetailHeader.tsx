@@ -1,6 +1,6 @@
 import { useSession } from 'next-auth/react';
 import { Cycle, Work } from '@prisma/client';
-import useTranslation from 'next-translate/useTranslation';
+
 import { FunctionComponent, useState,useEffect } from 'react';
 import { Col, Row,Spinner,Button } from 'react-bootstrap';
 import Rating from '@/src/components/common/Rating'
@@ -27,6 +27,7 @@ import { UserMosaicItem } from '@/src/types/user';
 import { useQueryClient } from '@tanstack/react-query';;
 import useUser from '@/src/useUser';
 import { CycleMosaicItem } from '@/src/types/cycle';
+import { useDictContext } from '@/src/hooks/useDictContext';
 interface Props {
   // cycle: CycleMosaicItem;
   cycleId:number;
@@ -63,7 +64,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   const queryClient = useQueryClient();
 
   const {data:session} = useSession();
-  const { t } = useTranslation('cycleDetail');
+  const { t, dict } = useDictContext();
 
   const {data:cycle,isLoading:isLoadingCycle} = useCycle(cycleId,{enabled:!!cycleId})
   
@@ -199,7 +200,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                 iconColor="var(--bs-danger)"
               />{qtyByUser > 0 && <Button
                 type="button"
-                title={t('common:clearRating')}
+                title={t(dict,'clearRating')}
                 className="text-warning p-0 ms-2"
                 onClick={clearRating}
                 variant="link"
@@ -234,11 +235,11 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
               {' - '}
               {getRatingQty()}
             </div>
-            <span className="ms-1 text-gray">{t('common:ratings')}</span>
+            <span className="ms-1 text-gray">{t(dict,'ratings')}</span>
             {cycle.topics && (
               <section className=" d-flex flex-nowrap ms-2">
                 <TagsInput
-                  formatValue={(v: string) => t(`topics:${v}`)}
+                  formatValue={(v: string) => t(dict,`${v}`)}
                   className="d-flex flex-row"
                   tags={cycle.topics}
                   readOnly
@@ -249,13 +250,13 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           </div>
           <div className="">
             <h2 className="mt-4 mb-1 text-dark" style={{ fontSize: '1.4rem' }}>
-              {t('Content calendar')} ({works && works.length})
+              {t(dict,' calendar')} ({works && works.length})
             </h2>
 
             <CarouselStatic
               cacheKey={['CYCLE', cycle.id.toString()]}
               showSocialInteraction={false}
-              // onSeeAll={async () => seeAll(works as WorkMosaicItem[], t('Eurekas I created'))}
+              // onSeeAll={async () => seeAll(works as WorkMosaicItem[], t(dict,' I created'))}
               onSeeAll={onCarouselSeeAllAction}
               title={<CycleSummary cycle={cycle} />}
               data={getWorksSorted() as WorkMosaicItem[]}
@@ -274,7 +275,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           <Col className="mt-3 col-12  d-flex flex-column justify-content-center d-xl-none">
             <div className="">
               <h4 className="mt-3 mb-1 text-dark">
-                {t('Content calendar')} ({works && works.length})
+                {t(dict,' calendar')} ({works && works.length})
               </h4>
               <CarouselStatic
                 cacheKey={['CYCLE', cycle.id.toString()]}
@@ -315,7 +316,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                   iconColor="var(--bs-danger)"
                 />{qtyByUser > 0 && <Button
                   type="button"
-                  title={t('common:clearRating')}
+                  title={t(dict,'clearRating')}
                   className="text-warning p-0 ms-2"
                   onClick={clearRating}
                   variant="link"
@@ -338,7 +339,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                 onClick={() => setShow(false)}
               >
                 {' '}
-                {t('Close')} <BsX style={{ color: 'var(--eureka-green)' }} />{' '}
+                {t(dict,'Close')} <BsX style={{ color: 'var(--eureka-green)' }} />{' '}
               </span>
             )}
             {!show && (
@@ -348,7 +349,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                 onClick={() => setShow(true)}
               >
                 {' '}
-                {t('Details')} <BsChevronUp style={{ color: 'var(--eureka-green)' }} />{' '}
+                {t(dict,'')} <BsChevronUp style={{ color: 'var(--eureka-green)' }} />{' '}
               </span>
             )}
           </Row>
@@ -358,7 +359,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           {cycle.topics && (
             <aside className="d-flex flex-wrap d-lg-inline-block mb-4">
               <TagsInput
-                formatValue={(v: string) => t(`topics:${v}`)}
+                formatValue={(v: string) => t(dict,`${v}`)}
                 className="d-flex flex-wrap d-lg-inline-block"
                 tags={cycle.topics}
                 readOnly
@@ -389,7 +390,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                   {' - '}
                   {getRatingQty()}
                 </div>
-                <span className="ms-1 text-gray">{t('common:ratings')}</span>
+                <span className="ms-1 text-gray">{t(dict,'ratings')}</span>
               </div>
             </aside>
           )}

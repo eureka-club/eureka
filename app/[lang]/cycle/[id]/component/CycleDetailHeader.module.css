@@ -1,0 +1,38 @@
+
+.customCarouselStaticContainer .imageContainer{
+    height: 16em!important;
+    background-color: brown;
+}
+.customCarouselStaticContainer .card div > a img{
+    height: 16em!important; 
+ }
+.cycleCreator {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+  .cycleCreatorAvatar {
+    border-radius: 50%;
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+  }
+  .seeParticipantsBtn{
+    color: var(--eureka-green);
+  text-decoration: underline;
+  background-color: transparent;
+  border: none;
+  }
+
+  .closeButton {
+    background-color: none;
+    border-radius: 6px;
+    color: var(--eureka-green);
+    padding: 0
+  }
+
+  .closeButton:hover {
+    background-color: none;
+    color: var(--color-primary-raised);
+    text-decoration: underline;
+  }
+  

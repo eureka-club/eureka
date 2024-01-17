@@ -5,13 +5,13 @@ import { getServerSession } from 'next-auth';
 import { getDictionary } from '@/src/get-dictionary';
 
 import { lazy, Suspense } from 'react';
-import { NextPage } from 'next';
+
 // import { GetServerSideProps } from 'next';
 import Head from "next/head";
 import { Spinner } from 'react-bootstrap';
 //import Layout from '@/components/layouts/Layout';
 //import { getSession } from 'next-auth/react';
-//import useTranslation from 'next-translate/useTranslation';
+//
 import { GetAllByResonse, Session } from '@/src/types';
 // import {getMyCycles,myCyclesWhere} from '@/src/useMyCycles';
 import auth_config from 'auth_config';
@@ -75,7 +75,7 @@ debugger;
 
   return (
     <>
-      <Layout dict={dict} langs={langs} showCustomBaner={(!session) ? true : false}> 
+      <Layout dict={dict} showCustomBaner={(!session) ? true : false}> 
         {/* <Suspense fallback={<Spinner animation="grow" />}> */}
           <HomeSingIn /> 
         {/* </Suspense> */}

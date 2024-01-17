@@ -1,7 +1,7 @@
 // import { Post } from '@prisma/client';
 // import { useAtom } from 'jotai';
 // import { useRouter } from 'next/navigation';
-// import useTranslation from 'next-translate/useTranslation';
+// 
 // import { FormEvent, FunctionComponent, MouseEvent, ChangeEvent, RefObject, useEffect, useRef, useState } from 'react';
 // import Button from 'react-bootstrap/Button';
 // import Col from 'react-bootstrap/Col';

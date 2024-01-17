@@ -1,11 +1,10 @@
-import { NextPage, Metadata, ResolvingMetadata } from 'next';
+import { Metadata, ResolvingMetadata } from 'next';
 import Head from "next/head";
 import Manifest from './components/Manifest';
 import { Locale } from 'i18n-config';
 import { getDictionary } from '@/src/get-dictionary';
 import Layout from '@/src/components/layout/Layout';
 import { getServerSession } from 'next-auth';
-import { DictContext } from '@/src/hooks/useDictContext';
 
 interface Props {
   params: { lang: Locale }
@@ -24,18 +23,16 @@ export async function generateMetadata(
 }
 
 const ManifestPage = async ({ params: { lang } }:Props) => {
-  // const { t } = useTranslation('manifest');
   const dictionary = await getDictionary(lang);
   const dict: Record<string, string> = { ...dictionary['manifest'], ...dictionary['meta'], ...dictionary['common'], ...dictionary['topics'], ...dictionary['navbar'], ...dictionary['signInForm'] }
   const session = await getServerSession()
-  const langs = session?.user.language??lang
 
   return (<>
     <Head>
       <meta name="title" content={dict['manifestTitle']}></meta>
       <meta name="description" content={dict['manifestDescription']}></meta>
     </Head>
-    <Layout dict={dict} langs={langs} >
+    <Layout dict={dict}>
       <Manifest />
     </Layout>
   </>

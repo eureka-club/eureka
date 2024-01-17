@@ -1,4 +1,4 @@
-import useTranslation from 'next-translate/useTranslation';
+
 import { FunctionComponent, ChangeEvent, useState, useEffect, MouseEvent } from 'react';
 import { Container, Button } from 'react-bootstrap';
 import LinearProgressMUI from '@/components/common/LinearProgressMUI'
@@ -11,6 +11,7 @@ import toast from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
 import { useModalContext } from '@/src/useModal';
 import SignInForm from '../forms/SignInForm';
+import { useDictContext } from '@/src/hooks/useDictContext';
 interface Props {
   onImageSelect?: (file: File, text: string) => void;
   showTitle?:boolean;
@@ -28,7 +29,8 @@ const PostPrompt: FunctionComponent<Props> = ({
   searchstyle,
   margin = true,
 }) => {
-  const { t } = useTranslation('createPostForm');
+  // const { t } = useTranslation('createPostForm');
+  const { t, dict } = useDictContext();
   const router = useRouter();
   const [text, setText] = useState<any>(searchtext || '');
   const [style, setStyle] = useState<any>(searchstyle || '');
@@ -59,7 +61,7 @@ const PostPrompt: FunctionComponent<Props> = ({
 
   function formValidation() {
     if (session && !text.length) {
-      toast.error(t('NoPromptText'));
+      toast.error(t(dict,'NoPromptText'));
       return false;
     }
     return true;
@@ -114,7 +116,7 @@ const PostPrompt: FunctionComponent<Props> = ({
       return (
         <Container className="my-4">
           <h6 className="my-4">
-            <em>{t('SelectImage')}</em>.
+            <em>{t(dict,'SelectImage')}</em>.
           </h6>
           <section className="d-flex flex-column flex-lg-row justify-content-around">
             {images.map((img, idx) => (
@@ -152,49 +154,49 @@ const PostPrompt: FunctionComponent<Props> = ({
     <>
       {' '}
       <Container className={`w-100 ${styles.container} ${!margin ? 'p-0 m-0' : ''}`}>
-        {showTitle && <h4 className="text-secondary text-center">{t('CreateEureka')}</h4>}
+        {showTitle && <h4 className="text-secondary text-center">{t(dict,'CreateEureka')}</h4>}
         <section className={`mt-3 mx-0 ${margin ? 'mx-lg-3' : ''} `}>
           <div className="d-none d-lg-flex flex-lg-row justify-content-center">
             <TextField
-              label={t('descriptionLabel')}
+              label={t(dict,'descriptionLabel')}
               name="text"
               variant="outlined"
-              helperText={t('descriptionHelperText')}
+              helperText={t(dict,'descriptionHelperText')}
               style={{ width: '60%' }}
               onChange={onTextChange}
               value={text}
             ></TextField>
             <FormControl className="ms-2 me-2 my-0" sx={{ minWidth: 120 }} style={{ width: '20%' }}>
-              <InputLabel id="select-style">{t('Style')}</InputLabel>
+              <InputLabel id="select-style">{t(dict,'Style')}</InputLabel>
               <Select
                 variant="outlined"
                 labelId="select-style"
                 name="style"
                 id="select-style"
-                label={t('Style')}
+                label={t(dict,'Style')}
                 onChange={onStyleChange}
                 value={style}
               >
                 <MenuItem value="None">
-                  <em>{t('None')}</em>
+                  <em>{t(dict,'None')}</em>
                 </MenuItem>
-                <MenuItem value={'3D illustration'}>{t('3D illustration')}</MenuItem>
-                <MenuItem value={'Crayon drawing'}>{t('Crayon drawing')}</MenuItem>
-                <MenuItem value={'Cartoon'}>{t('Cartoon')}</MenuItem>
-                <MenuItem value={'Cyberpunk'}>{t('Cyberpunk')}</MenuItem>
-                <MenuItem value={'Digital art'}>{t('Digital art')}</MenuItem>
-                <MenuItem value={'Geometric'}>{t('Geometric')}</MenuItem>
-                <MenuItem value={'Oil painting'}>{t('Oil painting')}</MenuItem>
-                <MenuItem value={'Monet style'}>{t('Monet style')}</MenuItem>
-                <MenuItem value={'Pop art'}>{t('Pop art')}</MenuItem>
-                <MenuItem value={'Psychedelic'}>{t('Psychedelic')}</MenuItem>
-                <MenuItem value={'Realistic photograph'}>{t('Realistic photograph')}</MenuItem>
-                <MenuItem value={'Salvador Dali style'}>{t('Salvador Dali style')}</MenuItem>
-                <MenuItem value={'Surrealism'}>{t('Surrealism')}</MenuItem>
-                <MenuItem value={'Tim Burton style'}>{t('Tim Burton style')}</MenuItem>
-                <MenuItem value={'Ukiyo-e'}>{t('Ukiyo-e')}</MenuItem>
-                <MenuItem value={'Van Gogh style'}>{t('Van Gogh style')}</MenuItem>
-                <MenuItem value={'Vintage'}>{t('Vintage')}</MenuItem>
+                <MenuItem value={'3D illustration'}>{t(dict,'3D illustration')}</MenuItem>
+                <MenuItem value={'Crayon drawing'}>{t(dict,'Crayon drawing')}</MenuItem>
+                <MenuItem value={'Cartoon'}>{t(dict,'Cartoon')}</MenuItem>
+                <MenuItem value={'Cyberpunk'}>{t(dict,'Cyberpunk')}</MenuItem>
+                <MenuItem value={'Digital art'}>{t(dict,'Digital art')}</MenuItem>
+                <MenuItem value={'Geometric'}>{t(dict,'Geometric')}</MenuItem>
+                <MenuItem value={'Oil painting'}>{t(dict,'Oil painting')}</MenuItem>
+                <MenuItem value={'Monet style'}>{t(dict,'Monet style')}</MenuItem>
+                <MenuItem value={'Pop art'}>{t(dict,'Pop art')}</MenuItem>
+                <MenuItem value={'Psychedelic'}>{t(dict,'Psychedelic')}</MenuItem>
+                <MenuItem value={'Realistic photograph'}>{t(dict,'Realistic photograph')}</MenuItem>
+                <MenuItem value={'Salvador Dali style'}>{t(dict,'Salvador Dali style')}</MenuItem>
+                <MenuItem value={'Surrealism'}>{t(dict,'Surrealism')}</MenuItem>
+                <MenuItem value={'Tim Burton style'}>{t(dict,'Tim Burton style')}</MenuItem>
+                <MenuItem value={'Ukiyo-e'}>{t(dict,'Ukiyo-e')}</MenuItem>
+                <MenuItem value={'Van Gogh style'}>{t(dict,'Van Gogh style')}</MenuItem>
+                <MenuItem value={'Vintage'}>{t(dict,'Vintage')}</MenuItem>
               </Select>
             </FormControl>
             <Button
@@ -203,53 +205,53 @@ const PostPrompt: FunctionComponent<Props> = ({
               disabled={loading}
               style={{ width: '20%', height: '3.5em' }}
             >
-              {t('CreateImage')}
+              {t(dict,'CreateImage')}
             </Button>
           </div>
 
           <div className="d-flex d-lg-none flex-column justify-content-center">
             <TextField
               className="mt-3"
-              label={t('descriptionLabel')}
+              label={t(dict,'descriptionLabel')}
               name="text"
               variant="outlined"
-              helperText={t('descriptionHelperText')}
+              helperText={t(dict,'descriptionHelperText')}
               style={{ width: '100%' }}
               onChange={onTextChange}
               value={text}
             ></TextField>
             <FormControl className="mt-4 mb-4" sx={{ minWidth: 120 }} style={{ width: '100%' }}>
-              <InputLabel id="select-style">{t('Style')}</InputLabel>
+              <InputLabel id="select-style">{t(dict,'Style')}</InputLabel>
               <Select
                 variant="outlined"
                 labelId="select-style"
                 name="style"
                 id="select-style"
-                label={t('Style')}
+                label={t(dict,'Style')}
                 onChange={onStyleChange}
                 value={style}
               >
                 <MenuItem value="None">
-                  <em>{t('None')}</em>
+                  <em>{t(dict,'None')}</em>
                 </MenuItem>
-                <MenuItem value={'3D illustration'}>{t('3D illustration')}</MenuItem>
-                <MenuItem value={'Crayon drawing'}>{t('Crayon drawing')}</MenuItem>
-                <MenuItem value={'Cartoon'}>{t('Cartoon')}</MenuItem>
-                <MenuItem value={'Cyberpunk'}>{t('Cyberpunk')}</MenuItem>
-                <MenuItem value={'Digital art'}>{t('Digital art')}</MenuItem>
-                <MenuItem value={'Geometric'}>{t('Geometric')}</MenuItem>
-                <MenuItem value={'Oil painting'}>{t('Oil painting')}</MenuItem>
-                <MenuItem value={'Monet style'}>{t('Monet style')}</MenuItem>
-                <MenuItem value={'Pop art'}>{t('Pop art')}</MenuItem>
-                <MenuItem value={'Psychedelic'}>{t('Psychedelic')}</MenuItem>
-                <MenuItem value={'Realistic photograph'}>{t('Realistic photograph')}</MenuItem>
-                <MenuItem value={'Salvador Dali style'}>{t('Salvador Dali style')}</MenuItem>
-                <MenuItem value={'Surrealism'}>{t('Surrealism')}</MenuItem>
-                <MenuItem value={'Tim Burton style'}>{t('Tim Burton style')}</MenuItem>
-                <MenuItem value={'Ukiyo-e'}>{t('Ukiyo-e')}</MenuItem>
-                <MenuItem value={'Van Gogh style'}>{t('Van Gogh style')}</MenuItem>
-                <MenuItem value={'Vintage'}>{t('Vintage')}</MenuItem>
-                <MenuItem value={'Vintage'}>{t('Vintage')}</MenuItem>
+                <MenuItem value={'3D illustration'}>{t(dict,'3D illustration')}</MenuItem>
+                <MenuItem value={'Crayon drawing'}>{t(dict,'Crayon drawing')}</MenuItem>
+                <MenuItem value={'Cartoon'}>{t(dict,'Cartoon')}</MenuItem>
+                <MenuItem value={'Cyberpunk'}>{t(dict,'Cyberpunk')}</MenuItem>
+                <MenuItem value={'Digital art'}>{t(dict,'Digital art')}</MenuItem>
+                <MenuItem value={'Geometric'}>{t(dict,'Geometric')}</MenuItem>
+                <MenuItem value={'Oil painting'}>{t(dict,'Oil painting')}</MenuItem>
+                <MenuItem value={'Monet style'}>{t(dict,'Monet style')}</MenuItem>
+                <MenuItem value={'Pop art'}>{t(dict,'Pop art')}</MenuItem>
+                <MenuItem value={'Psychedelic'}>{t(dict,'Psychedelic')}</MenuItem>
+                <MenuItem value={'Realistic photograph'}>{t(dict,'Realistic photograph')}</MenuItem>
+                <MenuItem value={'Salvador Dali style'}>{t(dict,'Salvador Dali style')}</MenuItem>
+                <MenuItem value={'Surrealism'}>{t(dict,'Surrealism')}</MenuItem>
+                <MenuItem value={'Tim Burton style'}>{t(dict,'Tim Burton style')}</MenuItem>
+                <MenuItem value={'Ukiyo-e'}>{t(dict,'Ukiyo-e')}</MenuItem>
+                <MenuItem value={'Van Gogh style'}>{t(dict,'Van Gogh style')}</MenuItem>
+                <MenuItem value={'Vintage'}>{t(dict,'Vintage')}</MenuItem>
+                <MenuItem value={'Vintage'}>{t(dict,'Vintage')}</MenuItem>
               </Select>
             </FormControl>
             <Button
@@ -258,7 +260,7 @@ const PostPrompt: FunctionComponent<Props> = ({
               disabled={loading}
               style={{ width: '100%', height: '3.5em' }}
             >
-              {t('CreateImage')}
+              {t(dict,'CreateImage')}
             </Button>
           </div>
         </section>

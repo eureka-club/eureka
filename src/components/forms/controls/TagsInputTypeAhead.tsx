@@ -1,7 +1,7 @@
 import { FunctionComponent, /* useState, useEffect, */ useRef, Dispatch, SetStateAction } from 'react';
 // import FormControl from 'react-bootstrap/FormControl';
 import { Form, Badge, InputGroup } from 'react-bootstrap';
-import useTranslation from 'next-translate/useTranslation';
+
 import { Typeahead } from 'react-bootstrap-typeahead';
 // import { AiOutlineSearch } from 'react-icons/ai';
 // import { useAtom } from 'jotai';
@@ -9,19 +9,21 @@ import { Typeahead } from 'react-bootstrap-typeahead';
 // import { SearchResult } from '../../../types';
 // import useCountries from '../../../useCountries';
 import styles from './TagsInputTypeAhead.module.css';
+import { useDictContext } from '@/src/hooks/useDictContext';
+import { Option } from 'react-bootstrap-typeahead/types/types';
 // import globalSearchEngineAtom from '../../../atoms/searchEngine';
 
 export type TagsInputProp = {
   // tags: string;
   // setTags?: (value: string) => void;
   label?: string;
-  labelKey?: (res: { code: string }) => string;
+  labelKey?: (res: Option) => string;
   readOnly?: boolean | null;
   data: { code: string; label: string }[];
   items: string[];
   setItems: Dispatch<SetStateAction<string[]>>;
   max?: number;
-  onTagCreated?: (e: { code: string; label: string }) => void;
+  onTagCreated?: (e: Option) => void;
   onTagDeleted?: (code: string) => void;
   placeholder?: string;
   style?: { [key: string]: string };
@@ -32,10 +34,10 @@ export type TagsInputProp = {
 
 const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
   const { data, max = 5, onTagCreated, onTagDeleted, labelKey, placeholder, style, className,formatValue = undefined  } = props;
-  const { t } = useTranslation('createWorkForm');
+  const { t, dict } = useDictContext();
   // const { tags, setTags, label = '', readOnly = false } = props;
   const { items, setItems, label = '', readOnly = false } = props;
-  const ref = useRef<Typeahead<{ code: string; label: string }>>(null);
+  const ref = useRef(null);
   // const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
 
   // const [tagInput, setTagInput] = useState<string>('');
@@ -51,9 +53,9 @@ const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputPr
   //   setTagInput(e.currentTarget.value);
   // };
 
-  const onNewTagAdded = (e: { code: string; label: string }[]) => {
+  const onNewTagAdded = (e: Option[]) => {
     if (e.length) {
-      items.push(e[0].code);
+      items.push((e[0] as {code:string}).code);
       setItems([...new Set(items)]);
       // const onlyByCountries = [...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items])];
       // setGlobalSearchEngineState({
@@ -61,7 +63,10 @@ const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputPr
       //   ...{ onlyByCountries },
       // });
       // if (setTags) setTags(items.join(','));
-      if (ref.current) ref.current.clear();
+
+      //TODO tsc error
+      //if (ref.current) ref.current.clear();
+      
       if (onTagCreated) onTagCreated(e[0]);
     }
   };
@@ -144,7 +149,7 @@ const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputPr
         ref={ref}
         id="TagsInputTypeAhead"
         filterBy={['label']}
-        labelKey={(res: { code: string }) => (labelKey ? labelKey(res) : `${t(`${res.code}`)}`)}
+        labelKey={(res) => (labelKey ? labelKey(res) : `${t(dict,`${(res as {code:string}).code}`)}`)}
         onChange={onNewTagAdded}
         // onKeyPress={onKeyPressOnInput}
         options={data}

@@ -3,10 +3,8 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import Link from 'next/link';
-import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 import { Row, Col, Badge } from 'react-bootstrap';
-import { useRouter } from 'next/navigation';
 import { DATE_FORMAT_SHORT } from '../../constants';
 import { WorkMosaicItem } from '../../types/work';
 import MosaicItem from './MosaicItemDetail';
@@ -14,7 +12,6 @@ import { MosaicContext } from '../../useMosaicContext';
 import UnclampText from '../UnclampText';
 import styles from './PostDetail.module.css';
 import Avatar from '../common/UserAvatar';
-// import { useCycleContext } from '../../useCycleContext';
 import usePost from '@/src/usePost'
 import HyvorComments from '@/src/components/common/HyvorComments';
 import TagsInput from '@/components/forms/controls/TagsInput';
@@ -25,28 +22,29 @@ import { Alert } from '@mui/material';
 import useCycle from '@/src/useCycle';
 import { Session } from '@/src/types';
 
+import { useDictContext } from '@/src/hooks/useDictContext';
+import useCyclesCreated from 'app/[lang]/mediatheque/[slug]/hooks/useCyclesCreated';
+
 interface Props {
   postId: number;
   cycleId?:number;
   work?: WorkMosaicItem;
   cacheKey: [string, string];
   showSaveForLater?: boolean;
-  session: Session
-
 }
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const PostDetail: FunctionComponent<Props> = ({ postId, work,cycleId, cacheKey, showSaveForLater = false, session }) => {
-  const { t } = useTranslation('createPostForm');
-  const router = useRouter();
-
+const PostDetail: FunctionComponent<Props> = ({ postId, work,cycleId, cacheKey, showSaveForLater = false }) => {
+  // const { t } = useTranslation('createPostForm');
+  const{data:session}=useSession();
+  const{t,dict}=useDictContext();
   //const { data: session, status } = useSession();
   const { data: cycle } = useCycle(cycleId??0, { enabled: !!cycleId});
   const { data: user } = useUser(session?.user.id!, { enabled: !!session?.user.id });
-
-  const currentUserIsParticipant = user?.cycles.findIndex(c => c.id == cycleId);
+  const {data:cycles}=useCyclesCreated(user?.id!);
+  const currentUserIsParticipant = (cycles??[]).findIndex(c => c.id == cycleId)>-1;
   const isPublicPost = cycle?.access == 1;
 
   // if(status=='unauthenticated')
@@ -87,7 +85,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cycleId, cacheKey, 
           {work != null && (
             <aside className='me-3' >
               <Badge bg="orange" className="rounded-pill fw-light text-black tagText">
-                {t(`common:${work.type}`)}
+                {t(dict,`common:${work.type}`)}
               </Badge>
               <section className="my-1">
                 <h2 className="mb-0" style={{ fontSize: '1rem' }}>
@@ -104,7 +102,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cycleId, cacheKey, 
           {post.cycles && post.cycles.length > 0 && (
             <aside className=''>
               <Badge bg="primary" className="rounded-pill fw-light text-dark tagText">
-                {t('common:cycle')}
+                {t(dict,'common:cycle')}
               </Badge>
               <section className="my-1">
                 <h2 style={{ fontSize: '1rem' }}>
@@ -123,7 +121,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cycleId, cacheKey, 
           {post.topics && (
             <TagsInput
               className="ms-0 ms-lg-2 d-flex flex-row"
-              formatValue={(v: string) => t(`topics:${v}`)}
+              formatValue={(v: string) => t(dict,`topics:${v}`)}
               tags={post.topics}
               readOnly
             />
@@ -169,7 +167,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cycleId, cacheKey, 
                 {work != null && (
                   <aside className="me-3">
                     <Badge bg="orange" className="rounded-pill py-1 px-2 fw-light text-black tagText">
-                      {t(`common:${work.type}`)}
+                      {t(dict,`common:${work.type}`)}
                     </Badge>
                     <section className="my-1">
                       <h2 className="mb-0" style={{ fontSize: '1rem' }}>
@@ -186,7 +184,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cycleId, cacheKey, 
                 {post.cycles && post.cycles.length > 0 && (
                   <aside className="">
                     <Badge bg="primary" className="rounded-pill py-1 px-2 fw-light text-dark tagText">
-                      {t('common:cycle')}
+                      {t(dict,'common:cycle')}
                     </Badge>
                     <section className="my-1">
                       <h2 style={{ fontSize: '1rem' }}>
@@ -204,7 +202,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cycleId, cacheKey, 
                 {post.topics && (
                   <TagsInput
                     className="ms-0 d-flex flex-row"
-                    formatValue={(v: string) => t(`topics:${v}`)}
+                    formatValue={(v: string) => t(dict,`topics:${v}`)}
                     tags={post.topics}
                     readOnly
                   />
@@ -220,7 +218,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work,cycleId, cacheKey, 
             tity={post} parent={cycle! || work!} cacheKey={['POST', `${post.id}`]} />
           </div>*/}
           </Col>
-          <HyvorComments entity='post' id={`${post.id}`} session={session} />
+          <HyvorComments entity='post' id={`${post.id}`} />
           {/*<div className='container d-sm-block d-lg-none mt-3'>
             <CommentsList entity={post} parent={cycle! || work!} cacheKey={['POST', `${post.id}`]} />
           </div>*/}

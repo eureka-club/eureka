@@ -1,0 +1,58 @@
+
+import Layout from '@/src/components/layout/Layout';
+import { getServerSession } from 'next-auth';
+import auth_config from 'auth_config';
+import { getDictionary } from '@/src/get-dictionary';
+import { Locale } from 'i18n-config';
+import { LANGUAGES } from '@/src/constants';
+import { redirect, useSearchParams } from 'next/navigation';
+import TransitionToPayCycle from './component/TransitionToPayCycle';
+import { getCycle } from '@/src/hooks/useCycle';
+import { getUsers } from '@/src/hooks/useUsers';
+
+interface Props {
+    params: { lang: Locale, id: string }
+}
+
+const TransitionSignUpToPayCyclePage = async ({ params: { lang,id } }:Props) => {
+   
+   
+    const session = await getServerSession(auth_config(lang));
+    if (!session?.user) redirect('/');
+    const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
+
+    const dictionary = await getDictionary(lang);
+    const dict: Record<string, string> = {
+        ...dictionary['common'], ...dictionary['navbar'],
+    }
+
+    const langs = session?.user.language ?? LANGUAGES[lang];
+
+    const whereCycleParticipants = (id: number) => ({
+        where: {
+            OR: [
+                { cycles: { some: { id } } }, //creator
+                { joinedCycles: { some: { id } } }, //participants
+            ],
+        },
+    });
+
+    
+
+    const wcu = whereCycleParticipants(+id!);
+
+    let cycle = await getCycle(+id!, origin);
+
+    const participants = await getUsers(wcu, origin);
+
+
+    return (
+        <Layout dict={dict}  showNavBar={false} showFooter={false}>
+            <TransitionToPayCycle session={session} cycle={cycle!} participants={participants!} ></TransitionToPayCycle>
+        </Layout>
+    );
+};
+
+
+
+export default TransitionSignUpToPayCyclePage;

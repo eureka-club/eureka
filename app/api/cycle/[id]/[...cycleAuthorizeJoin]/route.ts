@@ -4,7 +4,7 @@ import { addParticipant, find } from '@/src/facades/cycle';
 import {prisma} from '@/src/lib/prisma';
 import { sendMailRequestJoinCycleResponse } from '@/src/facades/mail';
 import { NextRequest, NextResponse } from 'next/server';
-import { BAD_REQUEST, INVALID_FIELD, NOT_FOUND, SERVER_ERROR } from '@/src/api_code';
+import { BAD_REQUEST, INVALID_FIELD, NOT_FOUND, SERVER_ERROR } from '@/src/response_codes';
 import getLocale from '@/src/getLocale';
 import { getDictionary, t } from '@/src/get-dictionary';
 

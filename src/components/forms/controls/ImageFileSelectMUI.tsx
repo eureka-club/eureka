@@ -3,7 +3,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { TextField, FormControl } from '@mui/material';
 import { Form } from 'react-bootstrap';
 import { ChangeEvent, FunctionComponent, MouseEvent, ReactNode, RefObject, useEffect, useRef, useState } from 'react';
-import useTranslation from 'next-translate/useTranslation';
+import { useDictContext } from '@/src/hooks/useDictContext';
+
 
 
 
@@ -24,7 +25,7 @@ const ImageFileSelectMUI: FunctionComponent<Props> = ({
   //required,
   //className,
 }) => {
-  const { t } = useTranslation('createWorkForm')
+  const { t, dict } = useDictContext();
   const coverInputRef = useRef<HTMLInputElement>() as RefObject<HTMLInputElement>;
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -72,7 +73,7 @@ const ImageFileSelectMUI: FunctionComponent<Props> = ({
       type="buttton"
       variant="outlined"
       size="small"
-      label={`*${t('createWorkForm:imageCoverFieldLabel')}`}
+      label={`*${t(dict,'createWorkForm:imageCoverFieldLabel')}`}
       onClick={handleTriggerClick}
       value={(file) ? file.name : ""}
       InputProps={{

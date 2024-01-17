@@ -1,6 +1,6 @@
 import { signIn } from "next-auth/react";
 import {Form, Spinner} from 'react-bootstrap';
-import useTranslation from 'next-translate/useTranslation';
+
 import { useState, FunctionComponent, MouseEvent,useRef } from 'react';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -12,6 +12,7 @@ import toast from 'react-hot-toast'
 import styles from './SignInForm.module.css';
 import {useRouter} from 'next/router'
 import {useModalContext} from '@/src/useModal'
+import { useDictContext } from "@/src/hooks/useDictContext";
 interface Props {
   noModal?: boolean;
   logoImage?:boolean;
@@ -20,7 +21,8 @@ interface Props {
 
 const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,logoImage = true }) => {
   const router = useRouter()
-  const { t } = useTranslation('signInForm');
+  // const { t } = useTranslation('signInForm');
+  const{t,dict}=useDictContext();
   const formRef=useRef<HTMLFormElement>(null)
   const [loading,setLoading] = useState(false)
   const handleSignInGoogle = (ev: MouseEvent<HTMLButtonElement>) => {
@@ -46,13 +48,13 @@ const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,log
     const form = formRef.current;
     setLoading(true);
     if(!form!.email.value){
-      toast.error(t('EmailRequired'))
+      toast.error(t(dict,'EmailRequired'))
       setLoading(false)
 
       return false;
     }
     if(!form!.password.value){
-      toast.error(t('PasswordRequired'))
+      toast.error(t(dict,'PasswordRequired'))
       setLoading(false)
 
       return false;
@@ -67,11 +69,11 @@ const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,log
           }
           if(ur.isUser){
            if(!ur.provider && !ur.hasPassword){
-                toast.error(t('RegisterAlert'))
+                toast.error(t(dict,'RegisterAlert'))
                     setLoading(false)
            }
            else if(ur.provider=='google'){
-            toast.error(t('RegisteredUsingGoogleProvider'))
+            toast.error(t(dict,'RegisteredUsingGoogleProvider'))
             setLoading(false)
            }
            else {
@@ -86,7 +88,7 @@ const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,log
             .then(res=>{
               const r = res as unknown as {error:string}
               if(res && r.error){
-                toast.error(t('InvalidSesion'))
+                toast.error(t(dict,'InvalidSesion'))
                 setLoading(false)
               }
               else{
@@ -100,7 +102,7 @@ const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,log
           }
           }
           else{
-            toast.error(t('isNotUser'))
+            toast.error(t(dict,'isNotUser'))
             setLoading(false)
 
           }
@@ -129,28 +131,28 @@ const handlerRecoveryLogin = ()=>{
       </ModalHeader>
       <ModalBody className="pt-0">
         <div>
-         {logoImage && (<p className={`${styles.loginGreeting}`}>{t('loginGreeting')}</p>)}
+         {logoImage && (<p className={`${styles.loginGreeting}`}>{t(dict,'loginGreeting')}</p>)}
          <div className="py-3 border border-1"  style={{ borderRadius: '0.5em'}}>
           <Row>
               <button type="button" onClick={handleSignInGoogle} className={`d-flex justify-content-center fs-6 ${styles.buttonGoogle}`}>
                 <div className={`d-flex justify-content-start justify-content-sm-center aling-items-center flex-row ${styles.gmailLogoAndtext}`}>
                 <img  className={`${styles.gmailLogo} me-1 me-lg-2`} src="/img/logo-google.png" alt="gmail" /> 
-                {t('loginViaGoogle')}
+                {t(dict,'loginViaGoogle')}
                 </div>
               </button>
           </Row>
           <Row>
-              <span className={`${styles.alternativeLabel}`}>{t('alternativeText')}</span>
+              <span className={`${styles.alternativeLabel}`}>{t(dict,'alternativeText')}</span>
           </Row>
           <Row>
             <div className="d-flex justify-content-center">
               <Form ref={formRef} className={`d-flex flex-column fs-6 ${styles.loginForm}`} data-cy="login-form">
                 <Form.Group controlId="email">
-                  <Form.Label>{t('emailFieldLabel')}</Form.Label>
+                  <Form.Label>{t(dict,'emailFieldLabel')}</Form.Label>
                   <Form.Control className='' type="email" required />
-                  <div className='d-flex justify-content-between mb-1 mt-2'><div>{t('passwordFieldLabel')}</div>
+                  <div className='d-flex justify-content-between mb-1 mt-2'><div>{t(dict,'passwordFieldLabel')}</div>
                     {/* <Link legacyBehavior  href="/recoveryLogin" passHref> */}
-                      <Button onClick={handlerRecoveryLogin} variant="link" className={`btn-link d-flex link align-items-end cursor-pointer ${styles.forgotPassText}`}>{t('forgotPassText')}</Button>
+                      <Button onClick={handlerRecoveryLogin} variant="link" className={`btn-link d-flex link align-items-end cursor-pointer ${styles.forgotPassText}`}>{t(dict,'forgotPassText')}</Button>
                     {/* </Link> */}
                   </div>
                 </Form.Group>
@@ -159,7 +161,7 @@ const handlerRecoveryLogin = ()=>{
                 </Form.Group>
                 <div className="d-flex justify-content-center">
                 <Button data-cy='btn-login' disabled={loading} onClick={handleSubmitSignIn} className={`btn-eureka ${styles.submitButton} me-1`}>
-                  {t('login')} {loading && <Spinner animation="grow" size='sm'/>}
+                  {t(dict,'login')} {loading && <Spinner animation="grow" size='sm'/>}
                 </Button>
                 </div>
               </Form>
@@ -167,10 +169,10 @@ const handlerRecoveryLogin = ()=>{
             </div>
           </Row>
           </div>
-          <p className={`mt-2 ${styles.registerNotice}`}>{t('RegisterNotice')}</p>
-          <p className={`fs-6 ${styles.dontHaveAccounttext} mb-0 pb-0`}>{t('dontHaveAccounttext')} 
+          <p className={`mt-2 ${styles.registerNotice}`}>{t(dict,'RegisterNotice')}</p>
+          <p className={`fs-6 ${styles.dontHaveAccounttext} mb-0 pb-0`}>{t(dict,'dontHaveAccounttext')} 
             <Button onClick={handlerJoinLink} className="text-primary fs-5 " variant="link">
-            {t('Join')}
+            {t(dict,'Join')}
             </Button>
           </p>
         </div>

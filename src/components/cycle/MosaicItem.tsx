@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import useTranslation from 'next-translate/useTranslation';
+
 import { FunctionComponent, useEffect, useState, MouseEvent } from 'react';
 import { useIsFetching } from '@tanstack/react-query';;
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -26,6 +26,8 @@ import {useModalContext} from '@/src/useModal'
 import SignInForm from '../forms/SignInForm';
 import { CycleMosaicItem } from '@/src/types/cycle';
 import { useCyclePrice } from '@/src/hooks/useCyclePrices';
+import { useDictContext } from '@/src/hooks/useDictContext';
+import useCycleParticipants from '@/src/hooks/useCycleParticipants';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -84,6 +86,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   },[data])
 
   const {data:{price,currency}={currency:'',price:-1}} =  useCyclePrice(cycle);
+  const {data:participants}=useCycleParticipants(cycleId)
   
   const {show} = useModalContext()
   
@@ -95,12 +98,12 @@ const MosaicItem: FunctionComponent<Props> = ({
       ], 
     }
   };
-  const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants,
-    {
-      enabled:!!cycle?.id,
-      from:'cycle/Mosaic'
-    }
-  )
+  // const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants,
+  //   {
+  //     enabled:!!cycle?.id,
+  //     from:'cycle/Mosaic'
+  //   }
+  // )
 
   // const isFetchingParticipants = useIsFetching(['USERS',JSON.stringify(whereCycleParticipants)])
   
@@ -119,7 +122,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   }, [user, cycle,participants, session]);
 
   
-  const { t } = useTranslation('common');
+  const { t, dict } = useDictContext();
   const isFetchingCycle = useIsFetching({queryKey:['CYCLE',`${cycle?.id}`]})
   
   const isActive = () => cycle ? dayjs().isBetween(cycle.startDate, cycle.endDate, null, '[]') : false;
@@ -132,10 +135,10 @@ const MosaicItem: FunctionComponent<Props> = ({
   } = useJoinUserToCycleAction(session!,cycle!,participants!,(_data:any,error:any)=>{
     if(!error) {//para q no salgan dos toast al unirse a ciclo privado
       if (cycle && ![2,4].includes(cycle?.access))
-        toast.success(t('OK'));
+        toast.success(t(dict,'OK'));
     }
     else
-      toast.error(t('Internal Server Error'));
+      toast.error(t(dict,'Internal Server Error'));
 });
 
   const {
@@ -144,12 +147,12 @@ const MosaicItem: FunctionComponent<Props> = ({
     // isSuccess: isLeaveCycleSuccess,
   } = useLeaveUserFromCycleAction(user!,cycle!,participants!,(_data:any,error:any)=>{
     if(!error) {
-      toast.success(t('OK'));
+      toast.success(t(dict,'OK'));
       if(join)
         router.push(`/cycle/${cycle?.id}`);
     }
     else
-      toast.error(t('Internal Server Error'));
+      toast.error(t(dict,'Internal Server Error'));
 });
 
   const isPending = ()=> isLoadingSession || isFetchingCycle>0 || isJoinCycleLoading || isLeaveCycleLoading;
@@ -176,7 +179,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     ev.preventDefault();
     
     if(cycle?.access==4){
-      const res = confirm(t('abandoningPaidCycleWarning'));
+      const res = confirm(t(dict,'abandoningPaidCycleWarning'));
       if(!res)return;
     }
     execLeaveCycle();
@@ -184,10 +187,10 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   const getCycleAccesLbl = () => {
     if (cycle) {
-      if (cycle.access === 1) return t('public');
-      if (cycle.access === 2) return t('private');
-      if (cycle.access === 3) return t('secret');
-      if (cycle.access === 4) return t('payment');
+      if (cycle.access === 1) return t(dict,'public');
+      if (cycle.access === 2) return t(dict,'private');
+      if (cycle.access === 3) return t(dict,'secret');
+      if (cycle.access === 4) return t(dict,'payment');
     }
     return '';
   };
@@ -240,13 +243,13 @@ const MosaicItem: FunctionComponent<Props> = ({
       if(cycle.creatorId == session?.user.id)
         return   <Button   variant="btn-warning border-warning bg-warning text-white fs-6 disabled"
          className={`rounded rounded-3  ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} size='sm'>
-          <span className='fs-6'>{t('MyCycle')}</span> {/*MyCycle*/}
+          <span className='fs-6'>{t(dict,'MyCycle')}</span> {/*MyCycle*/}
       </Button>
 
-      if(cycle.participants.findIndex(p=>p.id==session?.user.id) > -1 )         
+      if(participants && participants?.findIndex(p=>p.id==session?.user?.id) > -1 )         
           return <Button  disabled={isPending()} onClick={handleLeaveCycleClick} variant="button border-primary bg-white text-primary" 
           className={`rounded rounded-3  ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} size='sm' >
-           <span className='fs-6'>{t('common:leaveCycleLabel')}</span>
+           <span className='fs-6'>{t(dict,'common:leaveCycleLabel')}</span>
             </Button>
 
       if(cycle.usersJoined.findIndex(p=>p.userId==session?.user.id && p.pending) > -1)
@@ -254,14 +257,14 @@ const MosaicItem: FunctionComponent<Props> = ({
             disabled={true}
             className={`rounded rounded-2 text-white ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} 
             size='sm' >
-            <span className='fs-6'>{t('joinCyclePending')}</span>
+            <span className='fs-6'>{t(dict,'joinCyclePending')}</span>
             </Button>
 
           return  <Button 
             disabled={isPending()}
             onClick={handleJoinCycleClick} className={`rounded rounded-3 text-white ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} 
             size='sm'>
-              <span className='fs-6'>{t('joinCycleLabel')}</span> 
+              <span className='fs-6'>{t(dict,'joinCycleLabel')}</span> 
               
               {cycle.access==4 && price!=-1
                 ? <span className="mx-1 fw-bolder">{`$${price} ${currency}`}</span>
@@ -293,7 +296,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           } 
             </Badge>
            <div className={`h-100 d-flex justify-content-center align-items-end`}>
-            {showJoinOrLeaveButton && !(cycle.participants.findIndex(p => p.id == session?.user.id) > -1 && cycle.access == 4) && renderJoinLeaveCycleBtn()}
+            {showJoinOrLeaveButton && participants && !(participants?.findIndex(p => p.id == session?.user.id) > -1 && cycle.access == 4) && renderJoinLeaveCycleBtn()}
            </div> 
          </div>
                 

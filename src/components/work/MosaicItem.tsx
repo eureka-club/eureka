@@ -1,4 +1,4 @@
-import useTranslation from 'next-translate/useTranslation';
+
 import { FunctionComponent, useEffect, useState } from 'react';
 import { Card, Badge, Spinner } from 'react-bootstrap';
 import { usePathname, useRouter } from 'next/navigation';
@@ -14,6 +14,7 @@ import { DATE_FORMAT_SHORT } from '../../constants';
 import useWork from '@/src/useWork';
 import { WorkMosaicItem } from '@/src/types/work';
 import { getLocale_In_NextPages } from '@/src/lib/utils';
+import { useDictContext } from '@/src/hooks/useDictContext';
 
 dayjs.extend(isBetween);
 dayjs.extend(utc);
@@ -50,7 +51,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   size,
   className = '',
 }) => {
-  const { t } = useTranslation('common');
+  const { t, dict } = useDictContext();
   const { cycle } = useCycleContext();
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
@@ -99,7 +100,7 @@ const MosaicItem: FunctionComponent<Props> = ({
                   <em style={{ fontSize: '.8em' }}>{`${sd} - ${ed}`}</em>
                 </span>
               );
-              const labelOut = (label: string) => <span className="d-block">{`${t(label)}`}</span>;
+              const labelOut = (label: string) => <span className="d-block">{`${t(dict,label)}`}</span>;
               if (isActive())
                 return (
                   <>
@@ -171,7 +172,7 @@ const MosaicItem: FunctionComponent<Props> = ({
         {renderLocalImageComponent()}
         {isActive() && <CgMediaLive className={`${styles.isActiveCircle}`} />}
         <Badge bg="orange" className={`fw-normal fs-6 text-black px-2 rounded-pill ${styles.type}`}>
-          {type ? t(type) : '...'}
+          {type ? t(dict,type) : '...'}
         </Badge>
       </div>
       {renderOngoinOrUpcomingDate()}

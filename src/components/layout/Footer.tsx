@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-//import useTranslation from 'next-translate/useTranslation';
+//
 import { FunctionComponent} from 'react';
 import {
   AiOutlineInstagram,
@@ -11,7 +11,7 @@ import {
 import { SiTiktok } from 'react-icons/si';
 import { RiMailLine } from 'react-icons/ri';
 import styles from './Footer.module.css';
-import { t } from '@/src/get-dictionary';
+
 import { useDictContext } from '@/src/hooks/useDictContext';
 
 interface Props {
@@ -19,7 +19,7 @@ interface Props {
 const Footer: FunctionComponent<Props> = ({}) => {
 
   //const { t } = useTranslation('navbar');
-const {dict}=useDictContext()
+const {t,dict}=useDictContext()
   return (
   <footer className=" text-center m-0 mt-4" style={{ background: 'var(--eureka-grey-light'}}>
     <div className="container d-flex flex-column-reverse flex-lg-row justify-content-lg-between align-items-lg-center">

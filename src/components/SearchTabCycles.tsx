@@ -1,6 +1,6 @@
 import { useState, FunctionComponent, useEffect } from 'react';
-import useTranslation from 'next-translate/useTranslation';
-import { useRouter, useSearchParams } from 'next/navigation';
+
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Spinner,Row, Col, Tab} from 'react-bootstrap';
 
 import MosaicItem from '@/src/components/cycle/MosaicItem'
@@ -12,13 +12,16 @@ import { useInView } from 'react-intersection-observer';
 import { Prisma } from '@prisma/client';
 import { CycleMosaicItem } from '../types/cycle';
 import cycle from 'pages/api/cycle';
+import { useDictContext } from '../hooks/useDictContext';
 
 const take = 8;
 interface Props{
 }
 const SearchTabCycles:FunctionComponent<Props> = () => {
-  const { t,lang } = useTranslation('common');
+  const { t, dict } = useDictContext();
   const router = useRouter();
+  const{lang}=useParams<{lang:string}>()!;
+
   const searchParams=useSearchParams();
   const q=searchParams?.get('q');
   const terms = q?.toString()!.split(" ") || [];

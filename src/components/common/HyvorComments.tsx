@@ -6,14 +6,14 @@ import { Comments } from '@hyvor/hyvor-talk-react';
 
 import { HYVOR_SSO_KEY, HYVOR_WEBSITE_ID, WEBAPP_URL } from '@/src/constants';
 import { Session } from '../../types';
+import { useSession } from 'next-auth/react';
 
 interface Props {
   entity: string;
   id: string;
-  session: Session
 }
-const HyvorComments:FC<Props> = ({ entity,id,session })=>{
-  //const {data:session, status} = useSession() ;
+const HyvorComments:FC<Props> = ({ entity,id })=>{
+  const {data:session, status} = useSession() ;
   const isSessionLoading = status == 'loading'
   let hyvorSso = {};
   let hash;

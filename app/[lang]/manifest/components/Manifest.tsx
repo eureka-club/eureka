@@ -13,9 +13,7 @@ import { t as t_} from '@/src/get-dictionary';
 interface Props{
 }
 const Manifest:FC<Props> = ({})=>{
-  // const { t } = useTranslation('manifest');
-  const{dict}=useDictContext()
-  const t=(s:string)=>t_(dict,s)
+  const{t,dict}=useDictContext()
 
     const [show, setShow] = useState<Record<string, boolean>>({});
 
@@ -36,14 +34,14 @@ const Manifest:FC<Props> = ({})=>{
       <Grid container>
         <Grid item xs={12} md={4} className="pe-0 me-0 d-flex flex-column">
           <h1 className="text-primary" style={{ fontSize: '2.5em' }}>
-            {t('manifestLbl')} <br />
+            {t(dict,'manifestLbl')} <br />
             Eureka <BsCircleFill style={{ fontSize: '.2em' }} />{' '}
           </h1>
-          <h2 style={{fontSize:'1rem'}}><em className="d-block text-gray">{t('eurekaPrinciple')}</em></h2>
+          <h2 style={{fontSize:'1rem'}}><em className="d-block text-gray">{t(dict,'eurekaPrinciple')}</em></h2>
         </Grid>
         <Grid item xs={12} md={8} className="ms-0 border-start border-info border-2">
           <p>
-            <span className="text-secondary fw-bold">{t('welcomeEureka')}</span> {t('manifestDesc')}
+            <span className="text-secondary fw-bold">{t(dict,'welcomeEureka')}</span> {t(dict,'manifestDesc')}
           </p>
         </Grid>
       </Grid>
@@ -59,9 +57,9 @@ const Manifest:FC<Props> = ({})=>{
             role="presentation"
           >
             <aside className={`${styles.box} ${styles.bgRow1Box1}`} />
-            <h2 className="h3 text-start">{t('manifestRow1Box1Title')}</h2>
+            <h2 className="h3 text-start">{t(dict,'manifestRow1Box1Title')}</h2>
             <h5 className="cursor-pointer fs-6">
-              {t('learnMore')} <CgArrowLongRight />
+              {t(dict,'learnMore')} <CgArrowLongRight />
             </h5>
           </section>
         )}
@@ -72,8 +70,8 @@ const Manifest:FC<Props> = ({})=>{
             onClick={() => toggleBox(1, 1)}
             role="presentation"
           >
-            <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow1Box1Title')}</h2>
-            <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow1Box1Desc')}</p>
+            <h2 className="fs-6 fw-bolder text-secondary p-2">{t(dict,'manifestRow1Box1Title')}</h2>
+            <p className="p-2 m-0 text-wrap text-start fs-6">{t(dict,'manifestRow1Box1Desc')}</p>
           </aside>
         )}
       </Grid>
@@ -87,9 +85,9 @@ const Manifest:FC<Props> = ({})=>{
             role="presentation"
           >
             <aside className={`${styles.box} ${styles.bgRow1Box2}`} />
-            <h2 className="h3 text-start">{t('manifestRow1Box2Title')}</h2>
+            <h2 className="h3 text-start">{t(dict,'manifestRow1Box2Title')}</h2>
             <h5 className="cursor-pointer fs-6">
-              {t('learnMore')} <CgArrowLongRight />
+              {t(dict,'learnMore')} <CgArrowLongRight />
             </h5>
           </section>
         )}
@@ -100,8 +98,8 @@ const Manifest:FC<Props> = ({})=>{
             onClick={() => toggleBox(1, 2)}
             role="presentation"
           >
-            <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow1Box2Title')}</h2>
-            <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow1Box2Desc')}</p>
+            <h2 className="fs-6 fw-bolder text-secondary p-2">{t(dict,'manifestRow1Box2Title')}</h2>
+            <p className="p-2 m-0 text-wrap text-start fs-6">{t(dict,'manifestRow1Box2Desc')}</p>
           </aside>
         )}
       </Grid>
@@ -115,9 +113,9 @@ const Manifest:FC<Props> = ({})=>{
             role="presentation"
           >
             <aside className={`${styles.box} ${styles.bgRow1Box3}`} />
-            <h2 className="h3 text-start">{t('manifestRow1Box3Title')}</h2>
+            <h2 className="h3 text-start">{t(dict,'manifestRow1Box3Title')}</h2>
             <h5 className="cursor-pointer fs-6">
-              {t('learnMore')} <CgArrowLongRight />
+              {t(dict,'learnMore')} <CgArrowLongRight />
             </h5>
           </section>
         )}
@@ -128,8 +126,8 @@ const Manifest:FC<Props> = ({})=>{
             onClick={() => toggleBox(1, 3)}
             role="presentation"
           >
-            <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow1Box3Title')}</h2>
-            <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow1Box3Desc')}</p>
+            <h2 className="fs-6 fw-bolder text-secondary p-2">{t(dict,'manifestRow1Box3Title')}</h2>
+            <p className="p-2 m-0 text-wrap text-start fs-6">{t(dict,'manifestRow1Box3Desc')}</p>
           </aside>
         )}
       </Grid>
@@ -144,9 +142,9 @@ const Manifest:FC<Props> = ({})=>{
             role="presentation"
           >
             <aside className={`${styles.box} ${styles.bgRow2Box1}`} />
-            <h2 className="h3 text-start">{t('manifestRow2Box1Title')}</h2>
+            <h2 className="h3 text-start">{t(dict,'manifestRow2Box1Title')}</h2>
             <h5 className="cursor-pointer fs-6">
-              {t('learnMore')} <CgArrowLongRight />
+              {t(dict,'learnMore')} <CgArrowLongRight />
             </h5>
           </section>
         )}
@@ -157,8 +155,8 @@ const Manifest:FC<Props> = ({})=>{
             onClick={() => toggleBox(2, 1)}
             role="presentation"
           >
-            <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow2Box1Title')}</h2>
-            <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow2Box1Desc')}</p>
+            <h2 className="fs-6 fw-bolder text-secondary p-2">{t(dict,'manifestRow2Box1Title')}</h2>
+            <p className="p-2 m-0 text-wrap text-start fs-6">{t(dict,'manifestRow2Box1Desc')}</p>
           </aside>
         )}
       </Grid>
@@ -172,9 +170,9 @@ const Manifest:FC<Props> = ({})=>{
             role="presentation"
           >
             <aside className={`${styles.box} ${styles.bgRow2Box2}`} />
-            <h2 className="h3 text-start">{t('manifestRow2Box2Title')}</h2>
+            <h2 className="h3 text-start">{t(dict,'manifestRow2Box2Title')}</h2>
             <h5 className="cursor-pointer fs-6">
-              {t('learnMore')} <CgArrowLongRight />
+              {t(dict,'learnMore')} <CgArrowLongRight />
             </h5>
           </section>
         )}
@@ -185,8 +183,8 @@ const Manifest:FC<Props> = ({})=>{
             onClick={() => toggleBox(2, 2)}
             role="presentation"
           >
-            <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow2Box2Title')}</h2>
-            <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow2Box2Desc')}</p>
+            <h2 className="fs-6 fw-bolder text-secondary p-2">{t(dict,'manifestRow2Box2Title')}</h2>
+            <p className="p-2 m-0 text-wrap text-start fs-6">{t(dict,'manifestRow2Box2Desc')}</p>
           </aside>
         )}
       </Grid>
@@ -200,9 +198,9 @@ const Manifest:FC<Props> = ({})=>{
             role="presentation"
           >
             <aside className={`${styles.box} ${styles.bgRow2Box3}`} />
-            <h2 className="h3 text-start">{t('manifestRow2Box3Title')}</h2>
+            <h2 className="h3 text-start">{t(dict,'manifestRow2Box3Title')}</h2>
             <h5 className="cursor-pointer fs-6">
-              {t('learnMore')} <CgArrowLongRight />
+              {t(dict,'learnMore')} <CgArrowLongRight />
             </h5>
           </section>
         )}
@@ -213,8 +211,8 @@ const Manifest:FC<Props> = ({})=>{
             onClick={() => toggleBox(2, 3)}
             role="presentation"
           >
-            <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow2Box3Title')}</h2>
-            <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow2Box3Desc')}</p>
+            <h2 className="fs-6 fw-bolder text-secondary p-2">{t(dict,'manifestRow2Box3Title')}</h2>
+            <p className="p-2 m-0 text-wrap text-start fs-6">{t(dict,'manifestRow2Box3Desc')}</p>
           </aside>
         )}
       </Grid>
@@ -229,9 +227,9 @@ const Manifest:FC<Props> = ({})=>{
             role="presentation"
           >
             <aside className={`${styles.box} ${styles.bgRow3Box1}`} />
-            <h2 className="h3 text-start">{t('manifestRow3Box1Title')}</h2>
+            <h2 className="h3 text-start">{t(dict,'manifestRow3Box1Title')}</h2>
             <h5 className="cursor-pointer fs-6">
-              {t('learnMore')} <CgArrowLongRight />
+              {t(dict,'learnMore')} <CgArrowLongRight />
             </h5>
           </section>
         )}
@@ -242,8 +240,8 @@ const Manifest:FC<Props> = ({})=>{
             onClick={() => toggleBox(3, 1)}
             role="presentation"
           >
-            <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow3Box1Title')}</h2>
-            <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow3Box1Desc')}</p>
+            <h2 className="fs-6 fw-bolder text-secondary p-2">{t(dict,'manifestRow3Box1Title')}</h2>
+            <p className="p-2 m-0 text-wrap text-start fs-6">{t(dict,'manifestRow3Box1Desc')}</p>
           </aside>
         )}
       </Grid>
@@ -257,9 +255,9 @@ const Manifest:FC<Props> = ({})=>{
             role="presentation"
           >
             <aside className={`${styles.box} ${styles.bgRow3Box2}`} />
-            <h2 className="h3 text-start">{t('manifestRow3Box2Title')}</h2>
+            <h2 className="h3 text-start">{t(dict,'manifestRow3Box2Title')}</h2>
             <h5 className="cursor-pointer fs-6">
-              {t('learnMore')} <CgArrowLongRight />
+              {t(dict,'learnMore')} <CgArrowLongRight />
             </h5>
           </section>
         )}
@@ -270,8 +268,8 @@ const Manifest:FC<Props> = ({})=>{
             onClick={() => toggleBox(3, 2)}
             role="presentation"
           >
-            <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow3Box2Title')}</h2>
-            <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow3Box2Desc')}</p>
+            <h2 className="fs-6 fw-bolder text-secondary p-2">{t(dict,'manifestRow3Box2Title')}</h2>
+            <p className="p-2 m-0 text-wrap text-start fs-6">{t(dict,'manifestRow3Box2Desc')}</p>
           </aside>
         )}
       </Grid>
@@ -285,9 +283,9 @@ const Manifest:FC<Props> = ({})=>{
             role="presentation"
           >
             <aside className={`${styles.box} ${styles.bgRow3Box3}`} />
-            <h2 className="h3 text-start">{t('manifestRow3Box3Title')}</h2>
+            <h2 className="h3 text-start">{t(dict,'manifestRow3Box3Title')}</h2>
             <h5 className="cursor-pointer fs-6">
-              {t('learnMore')} <CgArrowLongRight />
+              {t(dict,'learnMore')} <CgArrowLongRight />
             </h5>
           </section>
         )}
@@ -298,8 +296,8 @@ const Manifest:FC<Props> = ({})=>{
             onClick={() => toggleBox(3, 3)}
             role="presentation"
           >
-            <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow3Box3Title')}</h2>
-            <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow3Box3Desc')}</p>
+            <h2 className="fs-6 fw-bolder text-secondary p-2">{t(dict,'manifestRow3Box3Title')}</h2>
+            <p className="p-2 m-0 text-wrap text-start fs-6">{t(dict,'manifestRow3Box3Desc')}</p>
           </aside>
         )}
       </Grid>
@@ -314,9 +312,9 @@ const Manifest:FC<Props> = ({})=>{
             role="presentation"
           >
             <aside className={`${styles.box} ${styles.bgRow4Box1}`} />
-            <h2 className="h3 text-start">{t('manifestRow4Box1Title')}</h2>
+            <h2 className="h3 text-start">{t(dict,'manifestRow4Box1Title')}</h2>
             <h5 className="cursor-pointer fs-6">
-              {t('learnMore')} <CgArrowLongRight />
+              {t(dict,'learnMore')} <CgArrowLongRight />
             </h5>
           </section>
         )}
@@ -327,14 +325,14 @@ const Manifest:FC<Props> = ({})=>{
             onClick={() => toggleBox(4, 1)}
             role="presentation"
           >
-            <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow4Box1Title')}</h2>
-            <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow4Box1Desc')}</p>
+            <h2 className="fs-6 fw-bolder text-secondary p-2">{t(dict,'manifestRow4Box1Title')}</h2>
+            <p className="p-2 m-0 text-wrap text-start fs-6">{t(dict,'manifestRow4Box1Desc')}</p>
             <ul>
-              <li className="fs-6">{t('manifestRow4Box1Desc1')}</li>
-              <li className="fs-6">{t('manifestRow4Box1Desc2')}</li>
-              <li className="fs-6">{t('manifestRow4Box1Desc3')}</li>
-              <li className="fs-6">{t('manifestRow4Box1Desc4')}</li>
-              <li className="fs-6">{t('manifestRow4Box1Desc5')}</li>
+              <li className="fs-6">{t(dict,'manifestRow4Box1Desc1')}</li>
+              <li className="fs-6">{t(dict,'manifestRow4Box1Desc2')}</li>
+              <li className="fs-6">{t(dict,'manifestRow4Box1Desc3')}</li>
+              <li className="fs-6">{t(dict,'manifestRow4Box1Desc4')}</li>
+              <li className="fs-6">{t(dict,'manifestRow4Box1Desc5')}</li>
             </ul>
           </aside>
         )}
@@ -350,10 +348,10 @@ const Manifest:FC<Props> = ({})=>{
           >
             <aside className={`${styles.box} ${styles.bgRow4Box2}`} />
             <h2 className="h3 text-start">
-              {t('manifestRow4Box2Title')} 
+              {t(dict,'manifestRow4Box2Title')} 
             </h2>
             <h5 className="cursor-pointer fs-6">
-              {t('learnMore')} <CgArrowLongRight />
+              {t(dict,'learnMore')} <CgArrowLongRight />
             </h5>
           </section>
         )}
@@ -364,8 +362,8 @@ const Manifest:FC<Props> = ({})=>{
             onClick={() => toggleBox(4, 2)}
             role="presentation"
           >
-            <h2 className="fs-6 fw-bolder text-secondary p-2">{t('manifestRow4Box2Title')}</h2>
-            <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow4Box2Desc')}</p>
+            <h2 className="fs-6 fw-bolder text-secondary p-2">{t(dict,'manifestRow4Box2Title')}</h2>
+            <p className="p-2 m-0 text-wrap text-start fs-6">{t(dict,'manifestRow4Box2Desc')}</p>
           </aside>
         )}
       </Grid>
@@ -382,22 +380,22 @@ const Manifest:FC<Props> = ({})=>{
             style={{ opacity: '.7', fontSize: '15em', margin: '-.3em -.5em 0 -.3em' }}
           />
           <h2 className="h1 fw-bolder text-secondary mb-5 me-4" style={{ zIndex: 9999 }}>
-            {t('enforcement')}
+            {t(dict,'enforcement')}
           </h2>
         </Grid>
         <Grid item xs={12} md={8} className="ms-0 border-start border-info border-2">
-          <h2 className="h6 fw-bolder">{t('enforcementHeadLbl')}</h2>
+          <h2 className="h6 fw-bolder">{t(dict,'enforcementHeadLbl')}</h2>
           <ol>
-            <li>{t('manifestEnforcement1')}</li>
-            <li>{t('manifestEnforcement2')}</li>
-            <li>{t('manifestEnforcement3')}</li>
-            <li>{t('manifestEnforcement4')}</li>
-            <li>{t('manifestEnforcement5')}</li>
-            <li>{t('manifestEnforcement6')}</li>
-            <li>{t('manifestEnforcement7')}</li>
+            <li>{t(dict,'manifestEnforcement1')}</li>
+            <li>{t(dict,'manifestEnforcement2')}</li>
+            <li>{t(dict,'manifestEnforcement3')}</li>
+            <li>{t(dict,'manifestEnforcement4')}</li>
+            <li>{t(dict,'manifestEnforcement5')}</li>
+            <li>{t(dict,'manifestEnforcement6')}</li>
+            <li>{t(dict,'manifestEnforcement7')}</li>
           </ol>
           <p>
-            {t('enforcementFooterLbl')}
+            {t(dict,'enforcementFooterLbl')}
             <a href="mailto:hola@eureka.club">hola@eureka.club</a>
           </p>
         </Grid>
@@ -405,9 +403,9 @@ const Manifest:FC<Props> = ({})=>{
     </section>
    <section className="mb-5">
      <Grid container>
-    <span>{t('AgreeText')}
+    <span>{t(dict,'AgreeText')}
       <Link href="/policy" passHref>
-          <span className={`cursor-pointer ms-1 ${styles.linkText}`}>{t('policyText')}</span>
+          <span className={`cursor-pointer ms-1 ${styles.linkText}`}>{t(dict,'policyText')}</span>
        </Link>
     </span>
     </Grid>

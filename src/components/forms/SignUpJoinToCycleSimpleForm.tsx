@@ -1,5 +1,5 @@
 import { signIn } from 'next-auth/react';
-import useTranslation from 'next-translate/useTranslation';
+
 import { FunctionComponent, useState, MouseEvent, ChangeEvent, FormEvent, useEffect } from 'react';
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Button from 'react-bootstrap/Button';
@@ -16,6 +16,7 @@ import { TextField, Box } from '@mui/material';
 import useUsers from '@/src/useUsers'
 import { useCyclePrice } from '@/src/hooks/useCyclePrices';
 import LinearProgress from '@mui/material/LinearProgress';
+import { useDictContext } from '@/src/hooks/useDictContext';
 
 
 
@@ -33,7 +34,7 @@ interface FormValues {
 }
 
 const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false}) => {
-  const { t } = useTranslation('signUpForm');
+  const { t, dict } = useDictContext();
  
   const [formValues, setFormValues] = useState<FormValues>({
     identifier: '',
@@ -159,7 +160,7 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
           signIn('email', { ...callbackUrl && { callbackUrl }, email: identifier });
           // return data;
         } else {
-          toast.error(t(res.statusText));
+          toast.error(t(dict,res.statusText));
           setLoading(false);
         }
         return null;
@@ -197,20 +198,20 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
     setLoading(true);
 
     if (!email) {
-      toast.error(t('EmailRequired'))
+      toast.error(t(dict,'EmailRequired'))
       setLoading(false)
 
       return false;
     }
     if (!password) {
-      toast.error(t('PasswordRequired'))
+      toast.error(t(dict,'PasswordRequired'))
       setLoading(false)
       return false;
     }
     if (email && password) {
 
       if (!validateEmail(email)) {
-        toast.error(t('InvalidMail'));
+        toast.error(t(dict,'InvalidMail'));
         return false;
       }
 
@@ -223,11 +224,11 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
       }
       if (ur.isUser) {
         if (!ur.provider && !ur.hasPassword) {
-          toast.error(t('RegisterAlert'))
+          toast.error(t(dict,'RegisterAlert'))
           setLoading(false)
         }
         else if (ur.provider == 'google') {
-          toast.error(t('RegisteredUsingGoogleProvider'))
+          toast.error(t(dict,'RegisteredUsingGoogleProvider'))
           setLoading(false)
         }
         else {
@@ -257,7 +258,7 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
 
 
               if (res && r.error) {
-                toast.error(t('InvalidSesion'))
+                toast.error(t(dict,'InvalidSesion'))
                 //setLoading(false)
               }
               else {
@@ -272,7 +273,7 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
         }
       }
       else {
-        toast.error(t('isNotUser'))
+        toast.error(t(dict,'isNotUser'))
         setLoading(false)
 
       }
@@ -294,20 +295,20 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
 
     if (email && password && fullName) {//&& language
       if (!validateEmail(email)) {
-        toast.error(t('InvalidMail'));
+        toast.error(t(dict,'InvalidMail'));
         setLoading(false)
         return false;
       }
 
       if (!validatePassword(password)) {
-        toast.error(t('InvalidPassword'));
+        toast.error(t(dict,'InvalidPassword'));
         setLoading(false)
         return false;
       }
 
       const ur = await userRegistered(email);
       if (!ur) {
-        toast.error(t('Error'));
+        toast.error(t(dict,'Error'));
         setLoading(false)
         return;
       }
@@ -320,13 +321,13 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
           joinToCycle: cycle!.id || -1
         });
       } else {
-        toast.error(t('UserRegistered'));
+        toast.error(t(dict,'UserRegistered'));
         setLoading(false)
         return;
       }
 
     } else {
-      toast.error(t('emptyFields'));
+      toast.error(t(dict,'emptyFields'));
       setLoading(false)
     }
 
@@ -352,7 +353,7 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
                       <img className="eurekaLogo" src="/logo.svg" alt="Project logo" />
                       <section>
                         <div className={`text-secondary ms-3 h4 mb-0 ${styles.brand}`}>Eureka</div>
-                        <p className="text-secondary my-0 ms-3 font-weight-light" style={{ fontSize: '.7em' }}>{t('navbar:tagline')}</p>
+                        <p className="text-secondary my-0 ms-3 font-weight-light" style={{ fontSize: '.7em' }}>{t(dict,'navbar:tagline')}</p>
                       </section>
                     </aside>
                   </a>
@@ -363,12 +364,12 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
           {/* <Col className='col-12'>
             <Row id='FormContainer' className='bg-secondary d-flex align-items-center' style={{ height: '3rem' }}>
               {cycle.access == 4 && price != -1 ? <Box sx={{ fontSize: { sx: '.6em', lg: '1.4em' }, display: 'flex', justifyContent: 'center' }}>
-                <span className='text-center text-white'>{t('MembershipFee')} {`$${price} ${currency}`}</span> </Box> : <></>}
+                <span className='text-center text-white'>{t(dict,'MembershipFee')} {`$${price} ${currency}`}</span> </Box> : <></>}
             </Row>
           </Col> */}
           <Col className='col-12'>
             <Box  className="mt-2" sx={{ width: '1', paddingX: { xs: '2em', sm: '7em', lg: '2em' }, fontSize: { sx: '.6em', lg: '1.4em' }, display: 'flex', justifyContent: 'center' }}>
-              <span className='text-primary text-center'><b>{t('JoinOurClub')}</b></span>
+              <span className='text-primary text-center'><b>{t(dict,'JoinOurClub')}</b></span>
             </Box>
             <Box className='d-flex justify-content-center'
               sx={{
@@ -391,19 +392,19 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
                       className={`d-flex justify-content-start justify-content-sm-center aling-items-center flex-row ${styles.gmailLogoAndtext}`}
                     >
                       <img className={`${styles.gmailLogo} me-1 me-lg-2`} src="/img/logo-google.png" alt="gmail" />
-                      {t('joinViaGoogle')}
+                      {t(dict,'joinViaGoogle')}
                     </div>
                   </button>
-                    <p className={`my-2 ${styles.alternativeLabelSignUpJoinCycle}`}>{t('alternativeText')}</p>
+                    <p className={`my-2 ${styles.alternativeLabelSignUpJoinCycle}`}>{t(dict,'alternativeText')}</p>
                 {!haveAccount &&  <Form onSubmit={handleSubmitSignUp} className='mt-2'>
-                      <TextField id="name" className="w-100 mb-4 " label={`${t('Name')}`}
+                      <TextField id="name" className="w-100 mb-4 " label={`${t(dict,'Name')}`}
                         variant="outlined" size="small" name="name"
                         value={formValues.name!}
                         type="text"
                         onChange={handleChangeTextField}
                       >
                       </TextField>
-                      <TextField id="lastname" className=" w-100 mb-4" label={`${t('LastName')}`}
+                      <TextField id="lastname" className=" w-100 mb-4" label={`${t(dict,'LastName')}`}
                         variant="outlined" size="small" name="lastname"
                         value={formValues.lastname!}
                         type="text"
@@ -411,7 +412,7 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
                       >
                       </TextField>
 
-                      <TextField id="email" className="w-100 mb-4" label={`${t('emailFieldLabel')}`}
+                      <TextField id="email" className="w-100 mb-4" label={`${t(dict,'emailFieldLabel')}`}
                         variant="outlined" size="small" name="identifier"
                         value={formValues.identifier!}
                         type="text"
@@ -419,12 +420,12 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
                       >
                       </TextField>
 
-                      <TextField id="pass" className="w-100 mb-4" label={`${t('passwordFieldLabel')}`}
+                      <TextField id="pass" className="w-100 mb-4" label={`${t(dict,'passwordFieldLabel')}`}
                         variant="outlined" size="small" name="password"
                         value={formValues.password!}
                         autoComplete="current-password"
                         type="password"
-                        helperText={`(${t('passRequirements')})`}
+                        helperText={`(${t(dict,'passRequirements')})`}
                         onChange={handleChangeTextField}
                       >
                       </TextField>
@@ -433,31 +434,31 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
                         <p
                           className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
                         >
-                          {t('HaveAccounttext')}
+                          {t(dict,'HaveAccounttext')}
                           <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`} onClick={handleHaveAccountLink}>
-                            {t('clic')}
+                            {t(dict,'clic')}
                           </span>
-                          {t('joinClub')}
+                          {t(dict,'joinClub')}
                         </p>
                       </Box>
 
                   <Box >
                         {!loading && <Button type="submit" disabled={loading} className={`mb-4 btn btn-eureka  w-100`}>
-                          {t('I want to register now')}
+                          {t(dict,'I want to register now')}
                         </Button>} {loading && <LinearProgress className='mb-4' />}
                       </Box>
                       <p
                         className={`text-center align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
                       >
-                        {t('joinedCycleSignInTerms')}
+                        {t(dict,'joinedCycleSignInTerms')}
                         <Link legacyBehavior  href="/manifest" passHref>
                       <a target="_blank"><span className={` cursor-pointer ms-1 me-1 ${styles.linkText}`}>
-                            {t('termsText')}
+                            {t(dict,'termsText')}
                           </span></a>
                         </Link>
-                        {t('and')}
+                        {t(dict,'and')}
                         <Link legacyBehavior  href="/policy" passHref> 
-                      <a target="_blank"><span className={`cursor-pointer ms-1 ${styles.linkText}`}>{t('policyText')}</span></a>
+                      <a target="_blank"><span className={`cursor-pointer ms-1 ${styles.linkText}`}>{t(dict,'policyText')}</span></a>
                         </Link>
                       </p>
 
@@ -468,7 +469,7 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
                   
                   <Form onSubmit={handleSubmitSignIn} className='mt-2'>
 
-                  <TextField id="email" className="w-100 mb-2" label={`${t('emailFieldLabel')}`}
+                  <TextField id="email" className="w-100 mb-2" label={`${t(dict,'emailFieldLabel')}`}
                     variant="outlined" size="small" name="identifier"
                     value={formValues.identifier!}
                     type="text"
@@ -476,14 +477,14 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
                   >
                   </TextField>
                   <div className='d-flex justify-content-between mb-1'><div></div>
-                    <Button onClick={handlerRecoveryLogin} variant="link" className={`btn-link d-flex link align-items-end cursor-pointer text-gray`} style={{ fontSize: '.8em' }}>{t('forgotPassText')}</Button>
+                    <Button onClick={handlerRecoveryLogin} variant="link" className={`btn-link d-flex link align-items-end cursor-pointer text-gray`} style={{ fontSize: '.8em' }}>{t(dict,'forgotPassText')}</Button>
                   </div>
-                  <TextField id="pass" className="w-100 mb-4" label={`${t('passwordFieldLabel')}`}
+                  <TextField id="pass" className="w-100 mb-4" label={`${t(dict,'passwordFieldLabel')}`}
                     variant="outlined" size="small" name="password"
                     value={formValues.password!}
                     autoComplete="current-password"
                     type="password"
-                    helperText={`(${t('passRequirements')})`}
+                    helperText={`(${t(dict,'passRequirements')})`}
                     onChange={handleChangeTextField}
                   >
                   </TextField>
@@ -492,18 +493,18 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
                     <p
                       className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
                     >
-                      {t('dontHaveAccounttext')}
+                      {t(dict,'dontHaveAccounttext')}
                       <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`} onClick={handleHaveAccountLink}>
-                        {t('clic')}
+                        {t(dict,'clic')}
                       </span>
-                      {t('joinClub')}
+                      {t(dict,'joinClub')}
                     </p>
                   </Box>
 
 
                   <Box >
                     {!loading && <Button type="submit" disabled={loading} className={`mb-4 btn btn-eureka  w-100`}>
-                      {t('I want to register now')}
+                      {t(dict,'I want to register now')}
                     </Button>} {loading && <LinearProgress className='mb-4' />}
                   </Box>
 

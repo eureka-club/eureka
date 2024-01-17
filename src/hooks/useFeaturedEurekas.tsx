@@ -1,4 +1,4 @@
-//import useTranslation from 'next-translate/useTranslation';
+//
 import usePosts, { getPosts } from '@/src/hooks/usePosts';
 import useBackOffice from '@/src/hooks/useBackOffice';
 
@@ -10,7 +10,7 @@ const backOfficePosts = (ids:number[]) => ({
  
 
 export const getFeaturedEurekas = async (ids:number[],take:number=8,origin?:string)=>{
-  return getPosts({...backOfficePosts(ids),take},origin);
+  return getPosts({...backOfficePosts(ids),take});
 }
 
 const useFeaturedEurekas = () => {

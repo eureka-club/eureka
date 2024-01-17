@@ -1,3 +1,4 @@
+import useReadOrWatchedWorks from '@/src/hooks/useReadOrWatchedWorks';
 import { UserMosaicItem } from './types/user';
 import useUser from './useUser';
 
@@ -11,11 +12,12 @@ const useMyReadOrWatched = (id: number) => {
     photos:null,
     readOrWatchedWorks: [],
   }
+  const{data:readOrWatchedWorks}=useReadOrWatchedWorks(user?.id!)
   const row = {
     userName: user.name,
     image: user.image,
     photos: user.photos,
-    readOrWatchedWorks: user.readOrWatchedWorks,
+    readOrWatchedWorks,
   };
   return row;
 };

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { v4 } from 'uuid';
 import { useAtom } from 'jotai';
-import useTranslation from 'next-translate/useTranslation';
+
 import { useQueryClient } from '@tanstack/react-query';;
 import { FunctionComponent, useState, memo } from 'react';
 import { Button, Row, Col, Spinner } from 'react-bootstrap';
@@ -18,6 +18,8 @@ import { CycleMosaicItem /* , CycleWithImages */ } from '../types/cycle';
 import { CycleContext } from '../useCycleContext';
 import { GetAllByResonse } from '@/src/types';
 import { PostMosaicItem } from '../types/post';
+import { useDictContext } from '../hooks/useDictContext';
+
 
 type Props = {
   // page: number;
@@ -41,7 +43,7 @@ interface ItemType {
 }
 
 const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, className }) => {
-  const { t } = useTranslation('topics');
+  const { t, dict } = useDictContext();
   const [page, setPage] = useState(0);
   const [items, setItems] = useState<ItemType>();
   
@@ -127,14 +129,14 @@ const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, cl
                       <span className={styles.iconBefore}>
                         <BsHash className="rounded-circle border border-1 border-gray" />
                       </span>
-                      {topicLabel || t(`${topic}`)}
+                      {topicLabel || t(dict,`${topic}`)}
                     </h2>
                   </Link>
               </Col>
               <Col xs={4} md={3} className="d-flex justify-content-end">
                 {!isRedirecting ? (
                   <Button variant="link" className="text-decoration-none" onClick={onItemsFound}>
-                    <span className={`cursor-pointer text-primary ${styles.seeAllButton}`}>{t('common:See all')}</span>
+                    <span className={`cursor-pointer text-primary ${styles.seeAllButton}`}>{t(dict,'See all')}</span>
                   </Button>
                 ) : (
                   <Spinner animation="grow" />

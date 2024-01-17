@@ -32,7 +32,6 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
       };
     };
     usersJoined: { select: { userId: true; pending: true } };
-    participants: { select: { id: true } };
     ratings: { select: { userId: true; qty: true } };
     works: {
       include: {

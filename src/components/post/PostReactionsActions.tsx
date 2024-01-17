@@ -7,9 +7,10 @@ import { VscReactions } from 'react-icons/vsc';
 import toast from 'react-hot-toast'
 
 import { Toast as T } from 'react-bootstrap';
-import useTranslation from 'next-translate/useTranslation';
+
 import { usePathname, useRouter } from 'next/navigation';
 import usePostReactionCreateOrEdit from '@/src/hooks/mutations/usePostReactionCreateOrEdit';
+import { useDictContext } from '@/src/hooks/useDictContext';
 
 
 interface Props {
@@ -19,7 +20,7 @@ interface Props {
 const MAX_REACTIONS = 2;
 const PostReactionsActions: FunctionComponent<Props> = ({ post, cacheKey }) => {
   const { data: session } = useSession();
-  const { t } = useTranslation('common');
+  const { t, dict } = useDictContext();
   const router = useRouter();
   const asPath=usePathname()!;
   const { EmojiPicker, setShowEmojisPicker } = usePostEmojiPicker({ post, cacheKey });
@@ -30,7 +31,7 @@ const PostReactionsActions: FunctionComponent<Props> = ({ post, cacheKey }) => {
     ev.preventDefault();
     ev.stopPropagation();
     if (currentUserReachedMaxReactions()) {
-      toast.error(t("max_reactions_reached"));
+      toast.error(t(dict,"max_reactions_reached"));
     }
     else {
       setShowEmojisPicker((r) => !r);
@@ -66,7 +67,7 @@ const PostReactionsActions: FunctionComponent<Props> = ({ post, cacheKey }) => {
           <Button
             variant='link'
             className={`ms-1 p-0 text-primary`}
-            title={t('Add reaction')}
+            title={t(dict,'Add reaction')}
             onClick={handleReactionClick}
 
           // disabled={loadingSocialInteraction}
@@ -75,7 +76,7 @@ const PostReactionsActions: FunctionComponent<Props> = ({ post, cacheKey }) => {
             <VscReactions style={{ fontSize: "1.5em", verticalAlign: "sub" }} />
             {/* <br />
          <span className={classnames(...[styles.info, ...[currentUserIsFav ? styles.active : '']])}> 
-          {t('Add reaction')}
+          {t(dict,'Add reaction')}
         </span> */}
           </Button>
         </div>

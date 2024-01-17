@@ -1,11 +1,12 @@
 import { FunctionComponent, useState, useEffect, ChangeEvent, KeyboardEvent,useRef } from 'react';
 import { Form, InputGroup,Button, Badge, Spinner,Col } from 'react-bootstrap';
 import { TextField,FormGroup,FormControl,InputLabel,Input,FormHelperText,FormControlLabel, Box} from '@mui/material';
-import useTranslation from 'next-translate/useTranslation'; 
+ 
 import { useAtom } from 'jotai'; 
 import { useRouter } from 'next/navigation';
 import searchEngine from '@/src/atoms/searchEngine';
 import { BiPlus} from 'react-icons/bi';
+import { useDictContext } from '@/src/hooks/useDictContext';
 
 export type TagsInputProp = {
   tags: string;
@@ -18,7 +19,7 @@ export type TagsInputProp = {
   formatValue?: (v: string) => string;
 };
 const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
-  const { t } = useTranslation('createWorkForm');
+  const { t, dict } = useDictContext();
   const formRef=useRef<HTMLFormElement>(null)
   const { tags, setTags, label = '', readOnly = false,br = false, max = 2, className, formatValue = undefined } = props;
   const [loading, setLoading] = useState<Record<string,boolean>>({});
@@ -102,7 +103,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
         {!readOnly && items.length < max && (<>
           <div className='d-none d-lg-block mt-2'>
               <Form.Group controlId="tag" >
-                 <TextField  className="w-100" label={label} helperText={t('tagsInputPlaceholder')} 
+                 <TextField  className="w-100" label={label} helperText={t(dict,'tagsInputPlaceholder')} 
                  variant="outlined" size="small" value={tagInput} onChange={onChangeInput}
                 onKeyPress={onKeyPressOnInput}> </TextField>
               </Form.Group>

@@ -3,20 +3,18 @@ import SignInForm from '@/src/components/forms/SignInForm';
 import { Button } from 'react-bootstrap';
 import { PostMosaicItem } from '@/src/types/post';
 import { useSession } from 'next-auth/react';
-
-import { Toast as T } from 'react-bootstrap';
-import useTranslation from 'next-translate/useTranslation';
 import { usePathname, useRouter } from 'next/navigation';
 import { useModalContext } from '@/src/useModal';
 import usePostReactionCreateOrEdit from '@/src/hooks/mutations/usePostReactionCreateOrEdit';
+import { useDictContext } from '@/src/hooks/useDictContext';
 interface Props {
   post:PostMosaicItem;
-  cacheKey:[string,string];
+  cacheKey:string[];
 }
 const MAX_REACTIONS = 2;
 const PostReactionsDetail: FunctionComponent<Props> = ({post,cacheKey}) => {
   const {data:session} = useSession();
-  const { t } = useTranslation('common');
+  const { t, dict } = useDictContext();
   const asPath = usePathname()!;
 
   // const { setShowEmojisPicker } = usePostEmojiPicker({post,cacheKey});

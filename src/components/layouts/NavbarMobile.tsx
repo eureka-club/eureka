@@ -1,7 +1,7 @@
 import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import useTranslation from 'next-translate/useTranslation';
+
 import { setCookie } from 'nookies';
 import { FunctionComponent, useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
@@ -27,6 +27,7 @@ import { HiOutlineHashtag } from 'react-icons/hi';
 import slugify from 'slugify';
 import { locales } from 'i18n';
 import { getLocale_In_NextPages } from '@/src/lib/utils';
+import { useDictContext } from '@/src/hooks/useDictContext';
 
 const topics = [
   'gender-feminisms',
@@ -49,7 +50,8 @@ const NavBar: FunctionComponent = () => {
   const router = useRouter();
   const asPath=usePathname()!;
   const locale=getLocale_In_NextPages(asPath);
-  const { t } = useTranslation('navbar');
+  // const { t } = useTranslation('navbar');
+  const { t, dict } = useDictContext();
   const [userId, setUserId] = useState(-1);
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const [, setSearchEngineState] = useAtom(searchEngine);
@@ -135,7 +137,7 @@ const NavBar: FunctionComponent = () => {
           return (
             <Dropdown.Item key={topic} onClick={() => handlerTopicsLinkClick(topic)}>
               {/* <Link legacyBehavior  href="/aboutUs"> */}
-              {t(`topics:${topic}`)}
+              {t(dict,`topics:${topic}`)}
               {/* </Link> */}
             </Dropdown.Item>
           );
@@ -154,7 +156,7 @@ const NavBar: FunctionComponent = () => {
               <img className="eurekaLogo" src="/logo.svg" alt="Project logo" />
               <section className="me-1">
                 <div className={`text-secondary ms-3 h4 mb-0 ${styles.brand}`}>Eureka</div>
-                <p className=" my-0 text-secondary ms-3 font-weight-light fs-xs">{t('tagline')}</p>
+                <p className=" my-0 text-secondary ms-3 font-weight-light fs-xs">{t(dict,'tagline')}</p>
               </section>
             </aside>
           </Navbar.Brand>
@@ -185,7 +187,7 @@ const NavBar: FunctionComponent = () => {
                     style={{ scale: '90%', padding: '2px' }}
                   />
                   {` `}
-                  <span className={styles.menuBottomInfo}>{t('Topics')}</span>
+                  <span className={styles.menuBottomInfo}>{t(dict,'Topics')}</span>
                 </Dropdown.Toggle>
                 <Dropdown.Menu>{getTopicsLinks()}</Dropdown.Menu>
               </Dropdown>
@@ -196,13 +198,13 @@ const NavBar: FunctionComponent = () => {
                 <Dropdown className={styles.langSwitch}>
                   <Dropdown.Toggle as={ChevronToggle}>
                     <RiDashboardLine className={styles.navbarIconNav} />
-                    <span className={styles.menuBottomInfo}>{t('My Mediatheque')}</span>
+                    <span className={styles.menuBottomInfo}>{t(dict,'My Mediatheque')}</span>
                   </Dropdown.Toggle>
                   <Dropdown.Menu >
                     <Dropdown.Item>
                       <Link legacyBehavior  href={`/mediatheque/${getMediathequeSlug()}`}>
                         <a data-cy="my-mediatheque-link" className={styles.navLink}>
-                          {t('My Mediatheque')}
+                          {t(dict,'My Mediatheque')}
                         </a>
                       </Link>
 
@@ -210,7 +212,7 @@ const NavBar: FunctionComponent = () => {
                     <Dropdown.Item>
                       <Link legacyBehavior  href={`/user/${getMediathequeSlug()}/my-read-or-watched`}>
                         <a className={styles.navLink}>
-                          {t("MyReadOrWatched")}
+                          {t(dict,"MyReadOrWatched")}
                         </a>
                       </Link>
 
@@ -226,29 +228,29 @@ const NavBar: FunctionComponent = () => {
                 <Dropdown.Toggle as={ChevronToggle}>
                   <AiOutlineInfoCircle className={styles.navbarIconNav} />
                   {` `}
-                  <span className={styles.menuBottomInfo}>{t('About')}</span>
+                  <span className={styles.menuBottomInfo}>{t(dict,'About')}</span>
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item
                     active={asPath.search(/manifest$/g) !== -1}
                     onClick={() => router.push('/manifest')}
                   >
-                    {t('Manifest')}
+                    {t(dict,'Manifest')}
                   </Dropdown.Item>
                   <Dropdown.Item active={asPath.search(/about$/g) !== -1} onClick={() => router.push('/about')}>
-                    {t('About Eureka')}
+                    {t(dict,'About Eureka')}
                   </Dropdown.Item>
                   <Dropdown.Item
                     active={asPath.search(/aboutUs$/g) !== -1}
                     onClick={() => router.push('/aboutUs')}
                   >
-                    {t('About Us')}
+                    {t(dict,'About Us')}
                   </Dropdown.Item>
                   <Dropdown.Item
                     active={asPath.search(/policy$/g) !== -1}
                     onClick={() => router.push('/policy')}
                   >
-                    {t('policyText')}
+                    {t(dict,'policyText')}
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
@@ -263,7 +265,7 @@ const NavBar: FunctionComponent = () => {
                       alt={`Language flag '${locale}'`}
                     />
                     {` `}
-                    <span className={styles.menuBottomInfo}>{t('Language')}</span>
+                    <span className={styles.menuBottomInfo}>{t(dict,'Language')}</span>
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     {locales.map((l) => (
@@ -287,26 +289,26 @@ const NavBar: FunctionComponent = () => {
                   <Dropdown.Toggle as={ChevronToggle}>
                     {getAvatar()}
                     {` `}
-                    <span className={styles.menuBottomInfo}>{t('Account')}</span>
+                    <span className={styles.menuBottomInfo}>{t(dict,'Account')}</span>
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <Dropdown.Item
                       active={asPath.search(/profile$/g) !== -1}
                       onClick={() => router.push('/profile')}
                     >
-                      {t('Profile')}
+                      {t(dict,'Profile')}
                     </Dropdown.Item>
                     {session?.user.roles && session?.user.roles == 'admin' && (
                       <Dropdown.Item
                         active={asPath.search(/back-office$/g) !== -1}
                         onClick={() => router.push('/back-office')}
                       >
-                        {t('Admin Panel')}
+                        {t(dict,'Admin Panel')}
                       </Dropdown.Item>
                     )}
                     <Dropdown.Item onClick={handlerLogout}>
                       {/* <Button > */}
-                      {t('logout')}
+                      {t(dict,'logout')}
                       {/* </Button> */}
                     </Dropdown.Item>
                   </Dropdown.Menu>
@@ -316,7 +318,7 @@ const NavBar: FunctionComponent = () => {
             {!session && (
               <Nav className="mx-2 mt-2 mb-2">
                 <Button className="text-white w-100" onClick={handlerLogin}>
-                  {t('login')}
+                  {t(dict,'login')}
                 </Button>
               </Nav>
             )}
@@ -324,20 +326,20 @@ const NavBar: FunctionComponent = () => {
               {session && session.user && (
                 <Dropdown className={`rounded-1 ${styles.actionBtn}`}>
                   <Dropdown.Toggle as={ChevronToggle} id="create">
-                    <span className="text-white">{t('create')}</span>
+                    <span className="text-white">{t(dict,'create')}</span>
                   </Dropdown.Toggle>
                   <Dropdown.Menu className={styles.dropdownMenu}>
                     {session?.user.roles && session?.user.roles == 'admin' && (
                       <Link legacyBehavior  href="/cycle/create">
-                        <a className="dropdown-item">{t('cycle')}</a>
+                        <a className="dropdown-item">{t(dict,'cycle')}</a>
                       </Link>
                     )}
                     <Link legacyBehavior  href="/post/create">
-                      <a className="dropdown-item">{t('post')}</a>
+                      <a className="dropdown-item">{t(dict,'post')}</a>
                     </Link>
                     {/* {session?.user.roles && session?.user.roles == 'admin' && ( */}
                       <Link legacyBehavior  href="/work/create">
-                        <a className="dropdown-item">{t('work')}</a>
+                        <a className="dropdown-item">{t(dict,'work')}</a>
                       </Link>
                   {/* )} */}
                   </Dropdown.Menu>

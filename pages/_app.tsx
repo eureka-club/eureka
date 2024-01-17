@@ -24,14 +24,15 @@ import Script from 'next/script';
 import { Session } from '@/src/types';
 import Spinner from '@/src/components/Spinner';
 import ErrorBounddary from '@/src/ErrorBounddary';
-const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
+import { Locale } from 'i18n-config';
+const App: FunctionComponent<AppProps> = ({ Component, pageProps, router }) => {
   let initialState : Iterable<readonly [Atom<unknown>, unknown]> | undefined = undefined
   let session:  Session | null | undefined = null
   let dehydratedState = null
-
+  const locale = router.locale;
 function Loading() {
   const router = useRouter();
-
+  
   const [loading, setLoading] = useState(false);
 
   // useEffect(() => {
@@ -108,7 +109,7 @@ function Loading() {
                   />
                     <ModalProvider>
                       <NotificationProvider>
-                       <ErrorBounddary> 
+                       <ErrorBounddary locale={locale as Locale}> 
                         
                           <AnyComponent {...pageProps} />
                          </ErrorBounddary> 

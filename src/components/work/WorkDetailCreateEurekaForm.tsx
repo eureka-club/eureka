@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/react';
-import useTranslation from 'next-translate/useTranslation';
+
 import { ChangeEvent, MouseEvent, FunctionComponent, useEffect, useRef, useState } from 'react';
 import { Button, Col, Row, ButtonGroup, Form, Spinner } from 'react-bootstrap';
 import { Post } from '@prisma/client';
@@ -32,6 +32,7 @@ import Prompt from '@/src/components/post/PostPrompt';
 
 
 import useCycles from '@/src/useCycles'
+import { useDictContext } from '@/src/hooks/useDictContext';
 
 // import { devNull } from 'os';
 // import { isNullOrUndefined } from 'util';
@@ -60,7 +61,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
   const queryClient = useQueryClient();
   const router = useRouter();
   const { data: session } = useSession();
-  const { t } = useTranslation('cycleDetail');
+  const { t, dict } = useDictContext();
   const [newEurekaImageFile, setNewEurekaImageFile] = useState<File | null>(null);
   const { data: topics } = useTopics();
   const [eurekaTopics, setEurekaTopics] = useState<string[]>([]);
@@ -127,13 +128,13 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
 
   const formValidation = (payload: any) => {
    /*if (!payload.title.length) {
-      toast.error( t('NotTitle'))
+      toast.error( t(dict,'NotTitle'))
           return false;
     }else if (!payload.contentText.length) {
-      toast.error( t('NotContentText'))
+      toast.error( t(dict,'NotContentText'))
       return false;
     }else*/ if (!newEurekaImageFile) {
-      toast.error(t('requiredEurekaImageError'))
+      toast.error(t(dict,'requiredEurekaImageError'))
       return false;
     }
     return true;
@@ -216,7 +217,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
                 });
                 
             } */
-          toast.success(t('postCreated'))
+          toast.success(t(dict,'postCreated'))
           clearPayload();
           return json.post;
         }
@@ -311,7 +312,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
         <Form.Group className="mt-4 mb-4">
           <FormControlLabel
             control={<Switch checked={useCrop} onChange={handleChangeUseCropSwith} />}
-            label={t('showCrop')}
+            label={t(dict,'showCrop')}
           />
         </Form.Group>
         {useCrop && (
@@ -327,7 +328,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
                   className="btn-eureka w-100"
                   onClick={() => setShowCrop(true)}
                 >
-                  {t('Image')}
+                  {t(dict,'Image')}
                 </Button>
               )}
               {showCrop && (
@@ -348,7 +349,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
               id="eureka-title"
               className="w-100 mb-4"
               inputProps={{ maxLength: 80 }}
-              label={t('Title')}
+              label={t(dict,'Title')}
               variant="outlined"
               size="small"
               value={newEureka.title}
@@ -360,7 +361,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
           type="text"
           maxLength={80}
           required
-          placeholder={t('Title')}
+          placeholder={t(dict,'Title')}
           value={newEureka.title}
           onChange={onChangeFieldEurekaForm}
         />
@@ -410,7 +411,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
               </Col>
             <Col xs={12} md={8} className='mt-2 mb-4'>
                 {!showCrop && (<Button data-cy="image-load" variant="primary" className="btn-eureka w-100" onClick={() => setShowCrop(true)}>
-                  {t('Image')}
+                  {t(dict,'Image')}
                 </Button>
                 )}        
                 { showCrop && (
@@ -429,7 +430,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
                 <Col xs={12} md={10}>{newEurekaImageFile != null && imagePreview ? (
                   <span className={`pt-1`}>{newEurekaImageFile?.name}</span>
                 ) : (
-                  t('Image')
+                  t(dict,'Image')
                 )}
                 </Col>
                 <Col xs={12} md={2} className="d-flex justify-content-start justify-content-sm-end align-items-center">
@@ -446,25 +447,25 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
               <Form.Group className="mt-5 mb-4">
                 <FormControlLabel
                   control={<Switch checked={useOtherFields} onChange={handleChangeUseOtherFields} />}
-                  label={t('showOthersFields')}
+                  label={t(dict,'showOthersFields')}
                 />
               </Form.Group>
               {useOtherFields && (<>
                 <Form.Group controlId="topics">
-                  {/* <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel> */}
+                  {/* <FormLabel>{t(dict,'createWorkForm:topicsLabel')}</FormLabel> */}
                   <TagsInputTypeAheadMaterial
                     style={{ background: 'white' }}
                     data={topics as {code:string,label:string}[]}
                     items={eurekaTopics}
                     setItems={setEurekaTopics}
                     max={3}
-                    label={`${t('Type to add tag')}...`}
-                    formatValue={(v: string) => t(`topics:${v}`)}
+                    label={`${t(dict,'Type to add tag')}...`}
+                    formatValue={(v: string) => t(dict,`topics:${v}`)}
                     className="mt-3"
                   />
                 </Form.Group>
                 <Form.Group controlId="tags" className='mt-4'>
-                  <TagsInputMaterial tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
+                  <TagsInputMaterial tags={tags} setTags={setTags} label={t(dict,'topicsFieldLabel')} />
                 </Form.Group>
                 </>
               )}
@@ -483,7 +484,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
                 style={{ width: '8rem' }}
                 disabled={isPending}
               >
-                <span>{t('Create')}</span>
+                <span>{t(dict,'Create')}</span>
                 {isPending && <Spinner size="sm" animation="grow" />}
               </Button>
             </ButtonGroup>

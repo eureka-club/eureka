@@ -322,3 +322,13 @@ export const getLocale_In_NextPages=(path:string):Locale=>{
   if(res?.length)return RegExp.$1 as Locale;
   return defaultLocale as Locale;
 }
+
+export const t = (dict:Record<string,string>,s:string,p?:Record<string,any>)=>{
+  if(!p)
+    return dict[s];
+  let res = dict[s];
+  Object.entries(p).forEach(([k,v])=>{
+      res = res.replace(`{{${k}}}`,v);
+  }) 
+  return res; 
+}

@@ -1,4 +1,4 @@
-import useTranslation from 'next-translate/useTranslation';
+
 import { FunctionComponent } from 'react';
 import {BsFillCircleFill} from 'react-icons/bs'
 import router from 'next/router';
@@ -7,6 +7,7 @@ import { getNotificationMessage } from '@/src/lib/utils';
 import { NotificationMosaicItem } from '../../types/notification';
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import { useDictContext } from '@/src/hooks/useDictContext';
 
 dayjs.extend(relativeTime)
 
@@ -16,14 +17,14 @@ interface Props {
 }
 
 const MosaicItem: FunctionComponent<Props> = ({ notification, className = '' }) => {
-  const { t } = useTranslation('notification');
-
+  // const { t } = useTranslation('notification');
+  const { t, dict } = useDictContext();
   const notificationOnClick = () => { 
     //router.push(notification.notification.contextURL).then(() => window.scrollTo(0, 0));
   };
 
   const formatMessage = (message:string) => {
-    return getNotificationMessage(message, (key,payload) => t(key,payload));
+    return getNotificationMessage(message, (key,payload) => t(dict,key,payload));
   }
 
   const dateInfo = () => {

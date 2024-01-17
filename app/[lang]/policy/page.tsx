@@ -21,7 +21,7 @@ const PolicyPage = async ({ params: { lang } }:Props) => {
       <meta name="title" content={dict.policyTitle}></meta>
       <meta name="description" content={dict.policyDescription}></meta>
     </Head>
-    <Layout dict={dict} langs={langs} >
+    <Layout dict={dict}>
       <TermsAndPolicy/>
     </Layout>
 

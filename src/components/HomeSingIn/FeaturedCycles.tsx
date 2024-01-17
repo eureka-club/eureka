@@ -1,15 +1,15 @@
-import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/navigation";
 import { FC } from "react";
 import CarouselStatic from "../CarouselStatic";
 import useInterestedCycles from '@/src/useInterestedCycles';
+import { useDictContext } from "@/src/hooks/useDictContext";
 
 interface Props {
 }
 
 const FeaturedCycles:FC<Props> = ({}) => {
     const router = useRouter()
-    const { t } = useTranslation('common');
+    const { t, dict } = useDictContext();
     const {data} = useInterestedCycles()
 
     return (data?.cycles && data?.cycles.length) 
@@ -18,7 +18,7 @@ const FeaturedCycles:FC<Props> = ({}) => {
         cacheKey={['CYCLES','INTERESTED']}
         onSeeAll={()=>router.push('/featured-cycles')}
         data={data?.cycles}
-        title={t('Interest cycles')}
+        title={t(dict,'Interest cycles')}
         //seeAll={cycles.length<dataCycles?.total}
       />
       </div>

@@ -1,4 +1,4 @@
-import useTranslation from 'next-translate/useTranslation';
+
 import { FunctionComponent,useState, useEffect } from 'react';
 import { Card, Row, Col,Spinner,Button,Tooltip } from 'react-bootstrap';
 import { AiOutlineEnvironment,AiOutlineUserAdd,AiOutlineUserDelete,AiOutlineUser } from 'react-icons/ai';
@@ -15,6 +15,7 @@ import LocalImageComponent from '@/src/components/LocalImage';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import toast from 'react-hot-toast'
 import slugify from 'slugify'
+import { useDictContext } from '@/src/hooks/useDictContext';
 
 interface Props {
   user: UserMosaicItem;
@@ -40,7 +41,7 @@ const openUserMediatheque = (user:UserMosaicItem) => {
 
 
 const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = false, className = '',MosaicDetailed = false }) => {
-  const { t } = useTranslation('common');
+  const { t, dict } = useDictContext();
   const { id, name, countryOfOrigin /* image*/  , tags  } = user;
   const {data:session} = useSession();
   const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>(false);
@@ -93,7 +94,7 @@ const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = fa
               toUsers:[+id],
               data:{message:notificationMessage}
             });
-          toast.success( t('OK'));
+          toast.success( t(dict,'OK'));
           return json;
         }
         else{
@@ -148,7 +149,7 @@ const MosaicItem: FunctionComponent<Props> = ({ user, showSocialInteraction = fa
           <h6>{name || 'unknown'}</h6>
           {countryOfOrigin && (
             <em>
-              <AiOutlineEnvironment /> {t(`countries:${countryOfOrigin}`)}
+              <AiOutlineEnvironment /> {t(dict,`countries:${countryOfOrigin}`)}
             </em>
           )}
           {/* <TagsInput tags={tags || ''} readOnly label="" /> */}

@@ -1,8 +1,6 @@
 import dayjs from 'dayjs';
 import { useAtom } from 'jotai';
-import { useSession } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import useTranslation from 'next-translate/useTranslation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { FunctionComponent, MouseEvent, useState, useRef, useEffect, Suspense, lazy, FC } from 'react';
 import {
   TabPane,
@@ -20,7 +18,6 @@ import {
 import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
 import { BiArrowBack } from 'react-icons/bi';
 import { MosaicContext } from '@/src/useMosaicContext';
-import { useQueryClient } from '@tanstack/react-query';;
 
 import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR /* , HYVOR_WEBSITE_ID, WEBAPP_URL */ } from '@/src/constants';
 import { PostMosaicItem } from '@/src/types/post';
@@ -41,31 +38,32 @@ import MosaicItemPost from '@/src/components/post/MosaicItem'
 import MosaicItemUser from '@/components/user/MosaicItem'
 import { useInView } from 'react-intersection-observer';
 import { CycleMosaicItem } from '@/src/types/cycle';
-import { Session } from '@/src/types';
+import { Locale } from 'i18n-config';
+import { useSession } from 'next-auth/react';
 
+import { useDictContext } from '@/src/hooks/useDictContext';
+import useCycleParticipants from '@/src/hooks/useCycleParticipants';
 
 const CycleDetailDiscussion = lazy(() => import ('./CycleDetailDiscussion')) 
 const CycleDetailWorks = lazy(() => import('./CycleDetailWorks'))
 interface Props {
   post?: PostMosaicItem;
   work?: WorkMosaicItem;
-  session:Session
-  id:number;
 }
 
 const CycleDetailComponent: FunctionComponent<Props> = ({
   post,
   work,
-  session,
-  id:cycleId
 }) => {
-  const {lang} = useTranslation();
+  const{data:session}=useSession();
   const cycleContext = useCycleContext();
   const router = useRouter();
-  
+  const{id,lang}=useParams<{id:string,lang:Locale}>()!;
+  const cycleId=+id;
   const searchParams=useSearchParams()!;
   const [tabKey, setTabKey] = useState<string>(searchParams.get('tabKey')!);
   const postId=searchParams.get('postId');
+  const{t,dict}=useDictContext();
 
   const [ref, inView] = useInView({
     triggerOnce: false,
@@ -85,12 +83,14 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       {joinedCycles: { some: { id: cycle?.id } }},//participants
     ]} 
   };
-  const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants,
-    {
-      enabled:!!cycle?.id,
-      from:'CycleDetail'
-    }
-  )
+  const {data:participants} = useCycleParticipants(cycleId);
+
+  // const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants,
+  //   {
+  //     enabled:!!cycle?.id,
+  //     from:'CycleDetail'
+  //   }
+  // )
 
   const cyclePostsProps = {take:8,where:{cycles:{some:{id:+cycleId}}}}
   const {data:dataPosts} = usePosts(cyclePostsProps,{enabled:!!cycleId})
@@ -127,9 +127,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
  // const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
-  
-  //const {data:session, status} = useSession();
-  const { t } = useTranslation('cycleDetail');
   
   const tabContainnerRef = useRef<HTMLDivElement>(null);
   const cycleWorksRef = useRef<HTMLDivElement>(null);
@@ -282,7 +279,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       const res = (
         <Suspense fallback={<Spinner animation="grow"/>}>
           <TabPane eventKey="cycle-discussion">
-            <HyvorComments entity='cycle' id={`${cycle.id}`} session={session}  />
+            <HyvorComments entity='cycle' id={`${cycle.id}`} />
           </TabPane>
           <TabPane eventKey="eurekas">
               <CycleDetailDiscussion cycle={cycle} className="mb-5" cacheKey={['POSTS',JSON.stringify(cyclePostsProps)]} />
@@ -296,7 +293,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           </TabPane>
           <TabPane eventKey="guidelines">
             <section className="text-primary">
-              <h3 className="h5 mt-4 mb-3 fw-bold text-gray-dark">{t('guidelinesMP')}</h3>
+              <h3 className="h5 mt-4 mb-3 fw-bold text-gray-dark">{t(dict,'guidelinesMP')}</h3>
             </section>
             <section className=" pt-3">{cycle.guidelines && renderGuidelines()}</section>
           </TabPane>
@@ -320,12 +317,12 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         <>
           <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
             <NavLink eventKey="cycle-discussion">
-              <span className="mb-3">{t('Discussion')}</span>
+              <span className="mb-3">{t(dict,'Discussion')}</span>
             </NavLink>
           </NavItem>
           <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
             <NavLink eventKey="eurekas">
-              <span className="mb-3">{t('EurekaMoments')} ({dataPosts?.total})</span>
+              <span className="mb-3">{t(dict,'EurekaMoments')} ({dataPosts?.total})</span>
             </NavLink>
           </NavItem>
           {/* <NavItem className={`${styles.tabBtn}`}>
@@ -333,13 +330,13 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           </NavItem> */}
           <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
             <NavLink eventKey="guidelines">
-              <span className="mb-3">{t('Guidelines')}</span>
+              <span className="mb-3">{t(dict,'Guidelines')}</span>
             </NavLink>
           </NavItem>
 
           <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
             <NavLink eventKey="participants">
-              <span className="mb-3">{t('Participants')} ({cycle.participants.length})</span>
+              <span className="mb-3">{t(dict,'Participants')} ({participants?.length})</span>
             </NavLink>
           </NavItem>
         </>
@@ -387,7 +384,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           showToast: {
             show: true,
             type: 'warning',
-            title: t(`common:${res.statusText}`),
+            title: t(dict,`common:${res.statusText}`),
             message: res.statusText,
           },
         });
@@ -405,7 +402,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         
         {!postId && canEditCycle() && (
           <Button variant="warning" onClick={handleEditClick} size="sm">
-            {t('Edit')}
+            {t(dict,'Edit')}
           </Button>
         )}
        
@@ -413,7 +410,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
         {post && cycle && canEditPost() && (<>
           <Button variant="warning" onClick={handleEditPostClick} size="sm">
-            {t('Edit')}
+            {t(dict,'Edit')}
           </Button>
          </>
         )}
@@ -426,7 +423,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       {!post && renderCycleDetailHeader()}
       {post && cycle && (
         <MosaicContext.Provider value={{ showShare: true }}>
-          <PostDetailComponent cycleId={cycle.id} cacheKey={['POST',post.id.toString()]} postId={post.id} work={work} session={session} />
+          <PostDetailComponent cycleId={cycle.id} cacheKey={['POST',post.id.toString()]} postId={post.id} work={work} />
         </MosaicContext.Provider>
       )}
       {cycle && post == null && (
@@ -461,7 +458,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                       <NavItem className={`border-primary border-bottom cursor-pointer ${styles.tabBtn}`}>
                         <NavLink eventKey="cycle-about">
                           <span className="mb-3">
-                            {t('About')}
+                            {t(dict,'About')}
                           </span>
                         </NavLink>
                       </NavItem>
@@ -473,7 +470,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                   <Col>
                     <TabContent>
                       <TabPane eventKey="cycle-about">
-                            <h3 className="h5 mt-4 mb-3 fw-bold text-gray-dark">{t('WhyJoin')}</h3>
+                            <h3 className="h5 mt-4 mb-3 fw-bold text-gray-dark">{t(dict,'WhyJoin')}</h3>
                         {cycle.contentText != null && (
                           <div className="">
                             <div
@@ -491,7 +488,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                         {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (
                           <Row className="mt-5 mb-5">
                             <Col className='col-12'>
-                              <h4 className="h5 mt-5 mb-3 fw-bold text-gray-dark">{t('complementaryMaterialsTitle')}</h4>
+                              <h4 className="h5 mt-5 mb-3 fw-bold text-gray-dark">{t(dict,'complementaryMaterialsTitle')}</h4>
                               <ul className={styles.complementaryMaterials}>
                                 {cycle.complementaryMaterials.map((cm) => (
                                   <li key={cm.id}>

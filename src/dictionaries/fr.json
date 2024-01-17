@@ -1034,5 +1034,23 @@
     "errorExtraText3": "Besoin d'aide ? Nous sommes là pour vous. Contactez-nous à l'adresse ",
     "Try again": "Réessayer",
     "VisitEureka": "Visitez Eureka"
-  }
+  },
+  "PasswordRecovery":{
+    "PasswordRecovery":"Réinitialisation de mot de passe",
+    "forgotPassword":"Mot de passe oublié?",
+    "indicationsText":"Indiquez l'adresse e-mail associée à votre compte et nous vous enverrons un lien pour réinitialiser votre mot de passe",
+    "emailFieldLabel": "E-mail",
+    "sendText":"Envoyer les instructions pour réinitialiser le mot de passe",
+    "resetPassword":"Réinitialisez votre mot de passe",
+    "resetPassword1":"Réinitialiser le mot de passe",
+    "NewpasswordFieldLabel":"Nouveau mot de passe",
+    "ConfirmNewpasswordFieldLabel":"Confirmer le nouveau mot de passe",
+    "InvalidPassword":"Invalide. Le mot de passe doit comporter au moins 8 caractères et doit contenir au moins un chiffre (0-9).",
+    "PasswordsDontMatch":"Invalide. Les mots de passe saisis ne correspondent pas.",
+    "NotEmptyPassword":"Indiquez et confirmez le mot de passe",
+    "RegisterAlert":"Nous avons mis à jour notre système d'inscription. 'Rejoignez' au lieu de vous 'Connecter', afin de définir votre mot de passe. Vous ne perdrez aucune information de votre compte Eureka existant.",
+    "isNotUser":"Compte non enregistré",
+    "RegisteredUsingGoogleProvider":"Inscrit à l'aide du fournisseur Google"
+   
+   }
 }

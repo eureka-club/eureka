@@ -1,4 +1,5 @@
-import useTranslation from 'next-translate/useTranslation';
+
+import { useParams } from 'next/navigation';
 import usePosts,{getPosts} from './usePosts';
 import useBackOffice from '@/src/useBackOffice';
 
@@ -14,7 +15,7 @@ export const getFeaturedEurekas = async (lang:string,ids:number[],take:number=8,
 }
 
 const useFeaturedEurekas = () => {
-  const {lang} = useTranslation();
+  const {lang} = useParams<{lang:string}>()!;
   const {data:bo} = useBackOffice();
   let postsId:number[] = [];
   if(bo && bo.PostExplorePage)

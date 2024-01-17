@@ -8,7 +8,6 @@ interface Props{
   params:{lang:Locale}
 }
 const AboutPage =async ({params:{lang}}:Props) => {
-  // const { t } = useTranslation('aboutUs');
   const dictionary = await getDictionary(lang);
   const dict: Record<string, string> = { ...dictionary['aboutUs'], ...dictionary['meta'], ...dictionary['common'], ...dictionary['topics'], ...dictionary['navbar'], ...dictionary['signInForm'] }
 
@@ -23,7 +22,7 @@ const AboutPage =async ({params:{lang}}:Props) => {
       <meta name="description" content={dict['aboutUsDescription']}></meta>
     </Head>
 
-    <Layout dict={dict} langs={langs} >
+    <Layout dict={dict}>
       <AboutUs
         NEXT_PUBLIC_AZURE_CDN_ENDPOINT={NEXT_PUBLIC_AZURE_CDN_ENDPOINT!}
         NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME={NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME!}

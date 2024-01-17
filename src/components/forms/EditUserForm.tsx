@@ -3,7 +3,7 @@ import { useAtom } from 'jotai';
 import { usePathname, useRouter } from 'next/navigation';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import useTranslation from 'next-translate/useTranslation';
+
 import { ChangeEvent, FormEvent, useEffect, useState, FunctionComponent, useRef,SyntheticEvent } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -34,6 +34,8 @@ import Toast from '../common/Toast';
 import { Select, FormControl as FormControlMUI, InputLabel, MenuItem } from '@mui/material';
 import Image from 'next/image';
 import { getLocale_In_NextPages } from '@/src/lib/utils';
+import { useDictContext } from '@/src/hooks/useDictContext';
+import { Option } from 'react-bootstrap-typeahead/types/types';
 // import useTopics from '../../useTopics';
 
 dayjs.extend(utc);
@@ -42,7 +44,8 @@ const EditUserForm: FunctionComponent = () => {
   const isLoadingSession = status == 'loading'
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const queryClient = useQueryClient();
-  const { t } = useTranslation('profile');
+  // const { t } = useTranslation('profile');
+  const{t,dict}=useDictContext();
   const router = useRouter();
   const [tags, setTags] = useState<string>('');
   const [photo, setPhoto] = useState<File>();
@@ -110,7 +113,7 @@ const EditUserForm: FunctionComponent = () => {
   //  setCurrentImg(() => e.target.value);
   //};
 
-  const typeaheadRef = useRef<AsyncTypeahead<{ id: number; code: string; label: string }>>(null);
+  const typeaheadRef = useRef(null);
   const [isCountriesSearchLoading, setIsCountriesSearchLoading] = useState(false);
 
   const [countrySearchResults, setCountrySearchResults] = useState<{ id: number; code: string; label: string }[]>([]);
@@ -156,7 +159,7 @@ const EditUserForm: FunctionComponent = () => {
           body: fd,
         });
         if(res.ok){
-            toast.success( t('ProfileSaved'))
+            toast.success( t(dict,'ProfileSaved'))
             router.push(`/mediatheque/${id}`);
            // return res.json();
         }    
@@ -188,17 +191,17 @@ const EditUserForm: FunctionComponent = () => {
   //   labelsChange(ev.currentTarget.value);
   //    switch (ev.currentTarget.value) {
   //     case 'book':
-  //       setPublicationLengthLabel(`${t('Length')} (${t('pages')})`);
+  //       setPublicationLengthLabel(`${t(dict,'Length')} (${t(dict,'pages')})`);
   //       break;
   //     case 'movie':
   //     case 'documentary':
-  //       setPublicationYearLabel(t('releaseYearFieldLabel'));
-  //       setPublicationLengthLabel(`${t('Duration')} (${t('minutes')})`);
+  //       setPublicationYearLabel(t(dict,'releaseYearFieldLabel'));
+  //       setPublicationLengthLabel(`${t(dict,'Duration')} (${t(dict,'minutes')})`);
   //       break;
 
   //     default:
-  //       setPublicationYearLabel(t('publicationYearFieldLabel'));
-  //       setPublicationLengthLabel(`${t('Length')} | ${t('Duration')}`);
+  //       setPublicationYearLabel(t(dict,'publicationYearFieldLabel'));
+  //       setPublicationLengthLabel(`${t(dict,'Length')} | ${t(dict,'Duration')}`);
   //   }
   // };
 
@@ -241,15 +244,15 @@ const EditUserForm: FunctionComponent = () => {
     const response = await fetch(`/api/taxonomy/countries?q=${query}`);
     const itemsSC: { id: number; code: string; label: string }[] = (await response.json()).result;
     itemsSC.forEach((i, idx: number) => {
-      itemsSC[idx] = { ...i, label: `${t(`countries:${i.code}`)}` };
+      itemsSC[idx] = { ...i, label: `${t(dict,`countries:${i.code}`)}` };
     });
     setCountrySearchResults(itemsSC);
     setIsCountriesSearchLoading(false);
   };
 
-  const handleSearchCountrySelect = (selected: { id: number; code: string; label: string }[]): void => {
+  const handleSearchCountrySelect = (selected: Option[]): void => {
     if (selected[0] != null) {
-      setCountryOrigin(selected[0].code);
+      setCountryOrigin((selected[0] as {code:string}).code);
     }
   };
 
@@ -312,12 +315,12 @@ const EditUserForm: FunctionComponent = () => {
     <>
       {user && (
         <Form onSubmit={handleSubmit}>
-           <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('Edit Profile')}</h1>
+           <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t(dict,'Edit Profile')}</h1>
               <Row className='d-flex flex-column'>
                 <Col className='d-flex flex-column flex-md-row justify-content-center align-items-center' >
                   {renderAvatar()}
                  {!showCrop && <Button  className="btn-eureka mt-3 ms-0 mt-md-0 ms-md-3 text-white" onClick={() => setShowCrop(true)}>
-                {t('Change Photo')}
+                {t(dict,'Change Photo')}
                </Button>}
                 </Col>
                 { showCrop && (
@@ -332,7 +335,7 @@ const EditUserForm: FunctionComponent = () => {
                 <Col>
                   <FormGroup controlId="image" className="mb-3">
                     <FormLabel>
-                      *{t('Image')}
+                      *{t(dict,'Image')}
                       {` (URL)`}
                     </FormLabel>
                     <Row>
@@ -355,7 +358,7 @@ const EditUserForm: FunctionComponent = () => {
             <Row className="mt-4 d-flex flex-column flex-md-row">
                 <Col>
                   <FormGroup controlId="userName" className="mb-4">
-                    <FormLabel>*{t('Name')}</FormLabel>
+                    <FormLabel>*{t(dict,'Name')}</FormLabel>
                     <FormControl
                       type="text"
                       onChange={onChangeUserName}
@@ -367,7 +370,7 @@ const EditUserForm: FunctionComponent = () => {
                 </Col>
                 <Col>
                   <FormGroup controlId="email" className="mb-4">
-                    <FormLabel>*{t('Email')}</FormLabel>
+                    <FormLabel>*{t(dict,'Email')}</FormLabel>
                     <FormControl type="email" required defaultValue={user.email || undefined} />
                   </FormGroup>
                 </Col>
@@ -375,16 +378,16 @@ const EditUserForm: FunctionComponent = () => {
               <Row>
                 <Col>
                   <FormGroup controlId="countryOfOrigin1" className="mb-4">
-                    <FormLabel>{t('countryFieldLabel')}</FormLabel>
+                    <FormLabel>{t(dict,'countryFieldLabel')}</FormLabel>
                     <AsyncTypeahead
                       id="create-work--search-country"
                       // Bypass client-side filtering. Results are already filtered by the search endpoint
                       filterBy={() => true}
                       // inputProps={{ required: true }}
-                      // placeholder={t('addWrkTypeaheadPlaceholder')}
+                      // placeholder={t(dict,'addWrkTypeaheadPlaceholder')}
                       ref={typeaheadRef}
                       isLoading={isCountriesSearchLoading}
-                      labelKey={(res) => `${res.label}`}
+                      labelKey={(res) => `${(res as {label:string}).label}`}
                       minLength={2}
                       onSearch={handleSearchCountry}
                       options={countrySearchResults}
@@ -394,7 +397,7 @@ const EditUserForm: FunctionComponent = () => {
                     />
                     {/* {!countryOrigin2 && !hasCountryOrigin2 && (
                     <Button className={styles.toogleSecondOriginCountry} onClick={() => toogleCountryOrigin2Handler()}>
-                      {t('Add a second origin country')}
+                      {t(dict,'Add a second origin country')}
                     </Button>
                   )} */}
                   </FormGroup>
@@ -402,13 +405,13 @@ const EditUserForm: FunctionComponent = () => {
                 {/* {(countryOrigin2 || hasCountryOrigin2) && (
                 <Col>
                   <FormGroup controlId="countryOfOrigin2">
-                    <FormLabel>{t('countryFieldLabel')} 2</FormLabel>
+                    <FormLabel>{t(dict,'countryFieldLabel')} 2</FormLabel>
                     <AsyncTypeahead
                       id="create-work--search-country2"
                       // Bypass client-side filtering. Results are already filtered by the search endpoint
                       filterBy={() => true}
                       // inputProps={{ required: true }}
-                      // placeholder={t('addWrkTypeaheadPlaceholder')}
+                      // placeholder={t(dict,'addWrkTypeaheadPlaceholder')}
                       // ref={typeaheadRef}
                       isPending={isCountriesSearchLoading2}
                       labelKey={(res) => `${res.label}`}
@@ -420,7 +423,7 @@ const EditUserForm: FunctionComponent = () => {
                       // renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work} />}
                     />
                     <Button className={styles.toogleSecondOriginCountry} onClick={() => toogleCountryOrigin2Handler(2)}>
-                      {t('Remove the second origin country')}
+                      {t(dict,'Remove the second origin country')}
                     </Button>
                   </FormGroup>
                 </Col>
@@ -429,12 +432,12 @@ const EditUserForm: FunctionComponent = () => {
               <Row>
                 <Col xs={12}>
                 {/* <FormControlMUI fullWidth>
-                  <InputLabel id="user-language-select-label">{t('userLanguage')}</InputLabel>
+                  <InputLabel id="user-language-select-label">{t(dict,'userLanguage')}</InputLabel>
                   <Select
                     labelId="user-language-select-label"
                     id="user-language-select"
                     value={language || user.language}
-                    label={t('userLanguage')}
+                    label={t(dict,'userLanguage')}
                     onChange={(args)=>{setLanguage(args.target.value!);}}
                   >
                     <MenuItem value={'spanish'}><Image width={24} height={24} className="m-0" src="/img/lang-flags/es.png" alt="Language flag 'es'"/></MenuItem>
@@ -444,9 +447,9 @@ const EditUserForm: FunctionComponent = () => {
                   </Select>
                 </FormControlMUI> */}
                   {/* <Form.Group controlId="language" className="mb-5">
-                    <Form.Label>{t('userLanguage')}</Form.Label>
-                    <Form.Select aria-label={t('userLanguage')}>
-                      <option>{t('userLanguage')}</option>
+                    <Form.Label>{t(dict,'userLanguage')}</Form.Label>
+                    <Form.Select aria-label={t(dict,'userLanguage')}>
+                      <option>{t(dict,'userLanguage')}</option>
                       <option value="spanish"><img className="m-1" src="/img/lang-flags/es.png" alt="Language flag 'es'"/></option>
                       <option value="english"><img className="m-1" src="/img/lang-flags/en.png" alt="Language flag 'en'"/></option>
                       <option value="french"><img className="m-1" src="/img/lang-flags/fr.png" alt="Language flag 'fr'"/></option>
@@ -458,21 +461,21 @@ const EditUserForm: FunctionComponent = () => {
               <Row>
                 <Col xs={12}>
                   <Form.Group controlId="aboutMe" className="mb-5">
-                    <Form.Label>{t('About me')}</Form.Label>
+                    <Form.Label>{t(dict,'About me')}</Form.Label>
                     <Form.Control as="textarea" rows={3} defaultValue={user.aboutMe || undefined} />
                   </Form.Group>
                 </Col>
               </Row>
               <Row>
                 <Col>
-                 <TagsInputMaterial tags={tags} max={5} setTags={setTags} label={t('Topics')} className="mb-5"/>
+                 <TagsInputMaterial tags={tags} max={5} setTags={setTags} label={t(dict,'Topics')} className="mb-5"/>
                 </Col>
               </Row>
               <Row>
                 <Col>
                   <Form.Group controlId="privacySettings" className={styles.privacySettings}>
-                    <Form.Label className="d-flex flex-column">{t('Privacy settings')}</Form.Label>
-                    <Form.Text>{t('mediathequeInfo')}.</Form.Text>
+                    <Form.Label className="d-flex flex-column">{t(dict,'Privacy settings')}</Form.Label>
+                    <Form.Text>{t(dict,'mediathequeInfo')}.</Form.Text>
                     <Form.Check type="radio" id="dashboardTypePublic" className={styles.checkPublic}>
                       <Form.Check.Input
                         type="radio"
@@ -480,8 +483,8 @@ const EditUserForm: FunctionComponent = () => {
                         onChange={() => handlerDashboardTypeRadioChange('public')}
                         checked={dashboardTypeChecked.public}
                       />
-                      <Form.Check.Label className="ms-2">{t('My Mediatheque is public')}</Form.Check.Label>
-                      <Form.Control.Feedback type="valid" className="ms-4">{t('Anyone can see my Mediatheque')}</Form.Control.Feedback>
+                      <Form.Check.Label className="ms-2">{t(dict,'My Mediatheque is public')}</Form.Check.Label>
+                      <Form.Control.Feedback type="valid" className="ms-4">{t(dict,'Anyone can see my Mediatheque')}</Form.Control.Feedback>
                     </Form.Check>
 
                     <Form.Check className={styles.checkProtected} type="radio" id="dashboardTypeProtected">
@@ -491,9 +494,9 @@ const EditUserForm: FunctionComponent = () => {
                         onChange={() => handlerDashboardTypeRadioChange('protected')}
                         checked={dashboardTypeChecked.protected}
                       />
-                      <Form.Check.Label className="ms-2">{t('Fallowers can see my Dashboard')}</Form.Check.Label>
+                      <Form.Check.Label className="ms-2">{t(dict,'Fallowers can see my Dashboard')}</Form.Check.Label>
                       <Form.Control.Feedback type="valid" className="ms-4">
-                        {t('Users I fallow or that follow me can see my Dashboard')}
+                        {t(dict,'Users I fallow or that follow me can see my Dashboard')}
                       </Form.Control.Feedback>
                     </Form.Check>
 
@@ -504,8 +507,8 @@ const EditUserForm: FunctionComponent = () => {
                         onChange={() => handlerDashboardTypeRadioChange('private')}
                         checked={dashboardTypeChecked.private}
                       />
-                      <Form.Check.Label className="ms-2">{t('My Dashboard is secret')}</Form.Check.Label>
-                      <Form.Control.Feedback type="valid" className="ms-4">{t('Only I can see my Dashboard')}</Form.Control.Feedback>
+                      <Form.Check.Label className="ms-2">{t(dict,'My Dashboard is secret')}</Form.Check.Label>
+                      <Form.Control.Feedback type="valid" className="ms-4">{t(dict,'Only I can see my Dashboard')}</Form.Control.Feedback>
                     </Form.Check>
                   </Form.Group>
                 </Col>
@@ -514,7 +517,7 @@ const EditUserForm: FunctionComponent = () => {
             <Container className="mt-4 p-0 py-4 d-flex justify-content-end">
               <Button  disabled={isLoadingUser} type="submit" className="btn-eureka">
                 <>
-                  {t('Edit')}
+                  {t(dict,'Edit')}
                   {isLoadingUser ? (
                     <Spinner animation="grow" variant="info" size="sm" className="ms-1" />
                   ) : (

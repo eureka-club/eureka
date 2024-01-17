@@ -1,6 +1,7 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';;
 import { WorkMosaicItem } from './types/work';
-import useTranslation from 'next-translate/useTranslation';
+import { useParams } from 'next/navigation';
+
 
 export const getWork = async (id: number,language:string | undefined,origin=''): Promise<WorkMosaicItem> => {
   if (!id) throw new Error('idRequired');
@@ -22,7 +23,7 @@ interface Options {
 }
 
 const useWork = (id: number, options?: Options): UseQueryResult<WorkMosaicItem,Error> => {
-  const {lang} = useTranslation();
+  const {lang} = useParams<{lang:string}>()!;
   const { staleTime, enabled, notLangRestrict } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,

@@ -1,20 +1,21 @@
 import useFeaturedWorks from '@/src/useFeaturedWorks';
 import useFeaturedWorksPosts from '@/src/useFeaturedWorksPostsImages';
 import { Button, Col,Row, Carousel } from 'react-bootstrap';
-import useTranslation from 'next-translate/useTranslation';
+
 import MosaicItem from '@/components/work/MosaicItem';
 import WorkPostImages from './WorkPostImages';
 import WorkComments from './WorkComments';
+import { useDictContext } from '@/src/hooks/useDictContext';
 //import HyvorComments from '@/src/components/common/HyvorComments';
 
 const FeaturedWorks = () => {
   const { data: dataFeaturedWorks } = useFeaturedWorks();
-  const { t } = useTranslation('featuredWorks');
+  const { t, dict } = useDictContext();
   if (dataFeaturedWorks && dataFeaturedWorks.works.length) {
     return (
       <section className=" mb-4">
         <h2 className="text-secondary fw-bold mb-2" style={{ fontSize: '1.5rem' }}>
-          {t('FeaturedDiscussions')}
+          {t(dict,'FeaturedDiscussions')}
         </h2>
         <div className="d-flex justify-content-center">
           <Carousel

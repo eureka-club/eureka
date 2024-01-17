@@ -8,7 +8,7 @@ import toast from 'react-hot-toast'
 
 import usePostReactionCreateOrEdit from '@/src/hooks/mutations/usePostReactionCreateOrEdit';
 import { useDictContext } from '@/src/hooks/useDictContext';
-import { t } from '../get-dictionary';
+
 import { usePathname } from 'next/navigation';
 
 interface Props {
@@ -18,8 +18,8 @@ interface Props {
 const MAX_REACTIONS = 2;
 const PostReactionsActions: FunctionComponent<Props> = ({ post, cacheKey}) => {
   const { data: session } = useSession();
-  const{dict}=useDictContext()
-  // const { t } = useTranslation('common');
+  const{t,dict}=useDictContext()
+  // const { t, dict } = useDictContext();
   const asPath = usePathname();
   const { EmojiPicker, setShowEmojisPicker } = usePostEmojiPicker({ post, cacheKey });
   const { mutate, isPending: isMutating } = usePostReactionCreateOrEdit({ post, cacheKey });

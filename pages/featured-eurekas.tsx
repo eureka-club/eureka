@@ -3,7 +3,7 @@ import Head from "next/head";
 import { Button, ButtonGroup, Col, Row } from 'react-bootstrap';
 import { dehydrate, QueryClient } from '@tanstack/react-query';;
 import SimpleLayout from '@/components/layouts/SimpleLayout';
-import useTranslation from 'next-translate/useTranslation';
+
 
 import {getbackOfficeData} from '@/src/useBackOffice'
 import useFeaturedEurekas,{ getFeaturedEurekas } from '@/src/useFeaturedEurekas';
@@ -11,12 +11,15 @@ import PMI from '@/src/components/post/MosaicItem';
 import {useRouter} from 'next/router'
 import { BiArrowBack } from 'react-icons/bi';
 import { getSession } from 'next-auth/react';
+import { getDictionary, t } from '@/src/get-dictionary';
+import { Locale } from 'i18n-config';
+import { defaultLocale } from 'i18n';
 
 interface Props{
+  dict:any
 }
 
-const InterestedCycles: NextPage<Props> = () => {
-  const { t } = useTranslation('common');
+const InterestedCycles: NextPage<Props> = ({dict}) => {
   const router = useRouter()
   const {data:dataCycles} = useFeaturedEurekas()
 
@@ -43,7 +46,7 @@ const InterestedCycles: NextPage<Props> = () => {
           </Button>
         </ButtonGroup>
         <>
-          <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('Featured Eurekas')}</h1>
+          <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t(dict,'Featured Eurekas')}</h1>
             <Row>
               {dataCycles?.posts.map(c=>
                 <Col key={c.id} xs={12} sm={6} lg={3} xxl={2} className='mb-5 d-flex justify-content-center  align-items-center'>
@@ -61,7 +64,9 @@ export const getServerSideProps:GetServerSideProps= async (ctx)=>{
   const session = await getSession(ctx);
   const qc = new QueryClient();
   const {NEXT_PUBLIC_WEBAPP_URL:origin}=process.env;
-  
+  const dictionary=await getDictionary(ctx.locale as Locale ?? defaultLocale);
+  const dict = dictionary['common'];
+
   const bod = await getbackOfficeData(origin)
   if(bod && bod?.CyclesExplorePage){
     const ids = bod?.CyclesExplorePage.split('').map(i=>+i)
@@ -70,6 +75,7 @@ export const getServerSideProps:GetServerSideProps= async (ctx)=>{
   return {
     props:{
       session,
+      dict,
       dehydrateState:dehydrate(qc)
     }
   };

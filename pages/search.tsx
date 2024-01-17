@@ -1,7 +1,7 @@
 import { BiArrowBack } from 'react-icons/bi';
 import { NextPage, GetServerSideProps } from 'next';
 import Head from 'next/head';
-import useTranslation from 'next-translate/useTranslation';
+
 import { useParams, useRouter } from 'next/navigation';
 import { QueryClient, dehydrate } from '@tanstack/react-query';;
 import { ButtonGroup, Button, Alert } from 'react-bootstrap';
@@ -15,6 +15,9 @@ import SearchTab from '@/src/components/SearchTab';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import { getSession } from 'next-auth/react';
 import { getWorksProps } from '@/src/types/work';
+import { getDictionary } from '@/src/get-dictionary';
+import { Locale, i18n } from 'i18n-config';
+import { t } from '@/src/lib/utils';
 
 const topics = [
   'gender-feminisms',
@@ -39,13 +42,12 @@ interface Props {
   hasWorks: boolean;
   session: Session;
   metas: any;
+  dict:any;
 }
-const SearchPage: NextPage<Props> = ({ hasCycles, hasPosts, hasWorks, metas,session }) => {
-  const { t } = useTranslation('common');
+const SearchPage: NextPage<Props> = ({ hasCycles, hasPosts, hasWorks, metas,dict }) => {
   const router = useRouter();
   const params=useParams<{q:string}>();
   const q=params?.q;
-
   let qLabel = q;
   if (qLabel && qLabel.match(':')) qLabel = q;
 
@@ -66,17 +68,17 @@ const SearchPage: NextPage<Props> = ({ hasCycles, hasPosts, hasWorks, metas,sess
         <Head>
           <meta
             name="title"
-            content={`${t('meta:topicsTitle')} ${t('topics:' + metas.topic)} ${t('meta:topicsTitle1')}`}
+            content={`${t(dict,'meta:topicsTitle')} ${t(dict,'topics:' + metas.topic)} ${t(dict,'meta:topicsTitle1')}`}
           ></meta>
           <meta
             name="description"
-            content={`${t('meta:topicsDescription')}: ${metas.works}, ${t('meta:topicsDescription1')}:  ${
+            content={`${t(dict,'meta:topicsDescription')}: ${metas.works}, ${t(dict,'meta:topicsDescription1')}:  ${
               metas.cycles
             }.`}
           ></meta>
         </Head>
       )}
-      <SimpleLayout title={t('Results')}>
+      <SimpleLayout title={t(dict,'Results')}>
         <ButtonGroup className="mb-1">
           <Button variant="primary text-white" onClick={() => router.back()} size="sm">
             <BiArrowBack />
@@ -86,7 +88,7 @@ const SearchPage: NextPage<Props> = ({ hasCycles, hasPosts, hasWorks, metas,sess
 
         <>
           {qLabel ? <h1 className="text-secondary fw-bold mb-2">
-            {t('Results about')}: {qLabel && `"${isEurekaTopic(qLabel) ? t('topics:' + qLabel) : qLabel}"`}
+            {t(dict,'Results about')}: {qLabel && `"${isEurekaTopic(qLabel) ? t(dict,'topics:' + qLabel) : qLabel}"`}
           </h1> : ''}
         </>
         {hasCycles || hasPosts || hasWorks ? (
@@ -96,7 +98,7 @@ const SearchPage: NextPage<Props> = ({ hasCycles, hasPosts, hasWorks, metas,sess
         ) : (
           <>
             <Alert className="mt-4" variant="primary">
-              <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
+              <Alert.Heading>{t(dict,'ResultsNotFound')}</Alert.Heading>
             </Alert>
           </>
         )}
@@ -196,6 +198,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         : "",
     };
   }
+  const dictionary=await getDictionary(ctx.locale as Locale ?? i18n.defaultLocale);
+  const dict={...dictionary['common']};
 
   return {
     props: {
@@ -205,6 +209,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       metas: metaTags,
       session,
       dehydratedState: dehydrate(qc),
+      dict,
     },
   };
 };

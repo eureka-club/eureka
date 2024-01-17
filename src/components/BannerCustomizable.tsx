@@ -2,18 +2,20 @@
 import { FunctionComponent, useState,useEffect } from 'react';
 import { Button, Container,Carousel } from 'react-bootstrap';
 import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
-import useTranslation from 'next-translate/useTranslation';
+
 import styles from './BannerCustomizable.module.css';
 import useBackOffice from '@/src/useBackOffice';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import { useDictContext } from '../hooks/useDictContext';
+
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
 const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
 
 const BannerCustomizable: FunctionComponent = ({
 }) => {
-  const { t } = useTranslation('common');
+  const { t, dict } = useDictContext();
   const router = useRouter();
   const {data:session, status} = useSession();
   const isLoadingSession = status === "loading"
@@ -63,7 +65,7 @@ const BannerCustomizable: FunctionComponent = ({
               onClick={() => setShow(false)}
               className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
             >
-              {t('Close')} <AiOutlineClose />
+              {t(dict,'Close')} <AiOutlineClose />
             </Button>
           )}
           {!show && (
@@ -72,7 +74,7 @@ const BannerCustomizable: FunctionComponent = ({
               onClick={() => setShow(true)}
               className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
             >
-              {t('Expand')} <AiOutlineDown />
+              {t(dict,'Expand')} <AiOutlineDown />
             </Button>
           )}
         </aside>
@@ -92,7 +94,7 @@ const BannerCustomizable: FunctionComponent = ({
                       <div className="d-flex  mt-2">
                         {!isLoadingSession && !session ? (
                           <Button className="btn-eureka" onClick={() => router.push('/register')}>
-                            {t('JoinEureka')}
+                            {t(dict,'JoinEureka')}
                           </Button>
                         ) : (
                           ''
@@ -112,7 +114,7 @@ const BannerCustomizable: FunctionComponent = ({
                       <div className="d-flex mt-2">
                         {!isLoadingSession && !session ? (
                           <Button className="btn-eureka" onClick={() => router.push('/register')}>
-                            {t('JoinEureka')}
+                            {t(dict,'JoinEureka')}
                           </Button>
                         ) : (
                           ''
@@ -132,7 +134,7 @@ const BannerCustomizable: FunctionComponent = ({
                       <div className="d-flex  mt-2">
                         {!isLoadingSession && !session ? (
                           <Button className="btn-eureka" onClick={() => router.push('/register')}>
-                            {t('JoinEureka')}
+                            {t(dict,'JoinEureka')}
                           </Button>
                         ) : (
                           ''

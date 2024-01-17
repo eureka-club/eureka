@@ -3,19 +3,20 @@ import { useState } from 'react';
 import { UserMosaicItem } from '../../types/user';
 import MosaicItemUser from '@/components/user/MosaicItem';
 import CarouselStatic from '../CarouselStatic';
-import useTranslation from 'next-translate/useTranslation';
+
 import { BsChevronUp, BsChevronDown } from 'react-icons/bs';
+import { useDictContext } from '@/src/hooks/useDictContext';
 
 const FeaturedUsers = () => {
   const { data: users } = useFeaturedUsers();
-  const { t } = useTranslation('common');
+  const { t, dict } = useDictContext();
   const [showUsersSection, setShowUsersSection] = useState<boolean>(false)
 
   if (users && users.length) {
     return (
       <section className="d-flex flex-column ">
         <h2 className="d-flex flex-row align-items-center text-secondary  fw-bold">
-          <span>{t('Featured users')}{' '}</span>
+          <span>{t(dict,'Featured users')}{' '}</span>
           {!showUsersSection && (
             <span
               className={`cursor-pointer d-flex d-lg-none ms-2`}

@@ -1,5 +1,5 @@
-import { usePathname, useRouter } from 'next/navigation';
-import useTranslation from 'next-translate/useTranslation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
+
 import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
 import { GiBrain } from 'react-icons/gi';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
@@ -44,6 +44,7 @@ import styles from './SocialInteraction.module.css';
 import { useModalContext } from '@/src/useModal';
 import SignInForm from '../forms/SignInForm';
 import _ from 'lodash';
+import { useDictContext } from '@/src/hooks/useDictContext';
 interface SocialInteractionClientPayload {
   socialInteraction: 'fav' | 'rating';
   doCreate: boolean;
@@ -77,8 +78,10 @@ const SocialInteraction: FunctionComponent<Props> = ({
   showRating = true,
   className,
 }) => {
-  const { t,lang } = useTranslation('common');
+  // const { t,lang } = useTranslation('common');
+  const{t,dict}=useDictContext();
   const router = useRouter();
+  const{lang}=useParams<{lang:string}>()!;
   const asPath = usePathname();
   // const [session] = useSession() as [Session | null | undefined, boolean];
   const { data: session, status } = useSession();
@@ -153,24 +156,24 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
   const shareTextDynamicPart = (() => {
     if (parent != null && isCycle(parent)) {
-      return `${t('postCycleShare')} "${parent.title}"`;
+      return `${t(dict,'postCycleShare')} "${parent.title}"`;
     }
     if (isCycle(entity)) {
-      return `${t('cycleShare')} ${'title' in entity ? `"${entity.title}"` : ''}`;
+      return `${t(dict,'cycleShare')} ${'title' in entity ? `"${entity.title}"` : ''}`;
     }
     if (isWork(entity)) {
-      return `${t('workShare')} ${'title' in entity ? `"${entity.title}"` : ''}`;
+      return `${t(dict,'workShare')} ${'title' in entity ? `"${entity.title}"` : ''}`;
     }
     if (isPostMosaicItem(entity)) {
       const post = entity as PostMosaicItem;
       const p = post.works ? post.works[0] : null || post.cycles ? post.cycles[0] : null;
       const about = post.works[0] ? 'postWorkShare' : 'postCycleShare';
-      return `${t(about)} "${p ? p.title : ''}"`;
+      return `${t(dict,about)} "${p ? p.title : ''}"`;
     }
     return 'entity not found';
   })();
 
-  const shareText = `${shareTextDynamicPart}  ${t('complementShare')}`;
+  const shareText = `${shareTextDynamicPart}  ${t(dict,'complementShare')}`;
   const {
     mutate: execSocialInteraction,
     isSuccess,
@@ -240,20 +243,20 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
           const entityFavKey = isWork(entity) ? 'favWorks' : isCycle(entity) ? 'favCycles' : 'favPosts';
 
-          let favInUser = user[entityFavKey] as { id: number }[];
+          // let favInUser = user[entityFavKey] as { id: number }[];
           let favs = entity.favs;
 
           setcurrentUserIsFav(() => payload.doCreate);
 
           if (!payload.doCreate) {
-            favInUser = favInUser.filter((i: { id: number }) => i.id !== entity.id);
+            // favInUser = favInUser.filter((i: { id: number }) => i.id !== entity.id);
             favs = entity.favs.filter((i) => i.id != session.user.id);
           } else {
-            favInUser?.push(entity as any);
+            // favInUser?.push(entity as any);
             favs.push({ id: +session.user.id });
           }
           queryClient.setQueryData(['WORK', `${entity.id}`], { ...entity, favs });
-          queryClient.setQueryData(['USER', `${session.user.id}`], { ...user, [entityFavKey]: favInUser });
+          queryClient.setQueryData(['USER', `${session.user.id}`], { ...user });
 
           return { prevUser, prevEntity };
         }
@@ -300,23 +303,23 @@ const SocialInteraction: FunctionComponent<Props> = ({
         <div className="mb-2">
           <TwitterShareButton windowWidth={800} windowHeight={600} url={shareUrl} title={shareText} via="eleurekaclub">
             <TwitterIcon size={30} round />
-            {` ${t('wayShare')} Twitter`}
+            {` ${t(dict,'wayShare')} Twitter`}
           </TwitterShareButton>
         </div>
         <div className="mb-2">
           <FacebookShareButton windowWidth={800} windowHeight={600} url={shareUrl} quote={shareText}>
             <FacebookIcon size={30} round />
-            {` ${t('wayShare')} Facebook`}
+            {` ${t(dict,'wayShare')} Facebook`}
           </FacebookShareButton>
         </div>
         <WhatsappShareButton
           windowWidth={800}
           windowHeight={600}
           url={shareUrl}
-          title={`${shareText} ${t('whatsappComplement')}`}
+          title={`${shareText} ${t(dict,'whatsappComplement')}`}
         >
           <WhatsappIcon size={30} round />
-          {` ${t('wayShare')} Whatsapp`}
+          {` ${t(dict,'wayShare')} Whatsapp`}
         </WhatsappShareButton>
       </Popover.Body>
     </Popover>
@@ -365,7 +368,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
         <Button
           variant="link"
           className={`${styles.buttonSI} p-0 text-primary`}
-          title={t('Save for later')}
+          title={t(dict,'Save for later')}
           onClick={handleFavClick}
           disabled={loadingSocialInteraction}
         >
@@ -373,7 +376,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
           <br />
           {showButtonLabels && (
             <span className={classnames(...[styles.info, ...[currentUserIsFav ? styles.active : '']])}>
-              {t('Save for later')}
+              {t(dict,'Save for later')}
             </span>
           )}
         </Button>
@@ -388,14 +391,14 @@ const SocialInteraction: FunctionComponent<Props> = ({
           <Button
             variant="link"
             className={`${styles.buttonSI} p-0 text-primary`}
-            title={t('Create eureka')}
+            title={t(dict,'Create eureka')}
             onClick={handleCreateEurekaClick}
             disabled={loadingSocialInteraction}
           >
             <div className={`d-flex flex-row`}>
               <BiImageAdd className={styles.active} />
               <span className="d-flex align-items-center text-primary" style={{ fontSize: '0.8em' }}>
-                {t('Create eureka')}
+                {t(dict,'Create eureka')}
               </span>
             </div>
           </Button>
@@ -414,7 +417,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
   const getRatingLabelInfo = () => {
     if (entity) {
       if (isCycleMosaicItem(entity) || isWorkMosaicItem(entity))
-        return !entity.currentUserRating ? <span className={styles.ratingLabelInfo}>{t('Rate it')}:</span> : '';
+        return !entity.currentUserRating ? <span className={styles.ratingLabelInfo}>{t(dict,'Rate it')}:</span> : '';
     }
     return '';
   };
@@ -446,7 +449,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
             {showTrash && mySocialInfo && mySocialInfo.ratingByMe && (
               <Button
                 type="button"
-                title={t('clearRating')}
+                title={t(dict,'clearRating')}
                 className="text-warning p-0"
                 onClick={clearRating}
                 variant="link"
@@ -470,14 +473,14 @@ const SocialInteraction: FunctionComponent<Props> = ({
             <OverlayTrigger trigger="focus" placement="top" overlay={popoverShares}>
               <Button
                 // style={{ fontSize: '.9em' }}
-                title={t('Share')}
+                title={t(dict,'Share')}
                 variant="link"
                 className={`p-0 text-primary`}
                 disabled={loadingSocialInteraction}
               >
                <FiShare2 style={{fontSize: "1.3em",verticalAlign:"bottom"}} />
                 <br />
-                {showButtonLabels && <span className={classnames(styles.info, styles.active)}>{t('Share')}</span>}
+                {showButtonLabels && <span className={classnames(styles.info, styles.active)}>{t(dict,'Share')}</span>}
               </Button>
             </OverlayTrigger>
          

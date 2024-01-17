@@ -2,11 +2,13 @@
 import { FunctionComponent, useState } from 'react';
 import { Button, Container } from 'react-bootstrap';
 import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
-import useTranslation from 'next-translate/useTranslation';
+
 // import { useSession } from 'next-auth/react';
 // import withTitle from '../../HOCs/withTitle';
 import { useQueryClient } from '@tanstack/react-query';;
 import styles from './Banner.module.css';
+import { useDictContext } from '../hooks/useDictContext';
+
 // import { Session } from '../types';
 // import globalModalsAtom from '../atoms/globalModals';
 
@@ -27,7 +29,7 @@ const Banner: FunctionComponent<Props> = ({
   style,
   cacheKey,
 }) => {
-  const { t } = useTranslation('common');
+  const{t,dict}=useDictContext();
   const queryClient = useQueryClient();
   const ss = typeof queryClient.getQueryData(cacheKey) === 'boolean' ? queryClient.getQueryData(cacheKey) : s;
   const [show, setShow] = useState<boolean>(ss as boolean);
@@ -59,7 +61,7 @@ const Banner: FunctionComponent<Props> = ({
               onClick={close}
               className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
             >
-              {t('Close')} <AiOutlineClose />
+              {t(dict,'Close')} <AiOutlineClose />
             </Button>
           )}
           {!show && (
@@ -68,7 +70,7 @@ const Banner: FunctionComponent<Props> = ({
               onClick={open}
               className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
             >
-              {expandBannerLabel || t('Expand')} <AiOutlineDown />
+              {expandBannerLabel || t(dict,'Expand')} <AiOutlineDown />
             </Button>
           )}
         </aside>

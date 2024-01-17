@@ -1,0 +1,68 @@
+.imgWrapper img {
+  border: 3px solid var(--eureka-green);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  width: 100%;
+}
+
+.cycleCreator {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.cycleCreatorAvatar {
+  border-radius: 50%;
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+}
+
+.socialInfo {
+  color: var(--color-primary-raised);
+  font-size: 1.15rem;
+}
+.socialInfo span {
+  margin-right: 1rem;
+}
+
+.participantsCount {
+  font-size: 0.8rem;
+}
+
+.explanatoryText {
+  color: var(--eureka-green);
+  margin-bottom: 3rem;
+}
+
+.complementaryMaterials {
+  list-style: none;
+  padding: 0 0 0 1rem;
+}
+.complementaryMaterials a {
+  background: transparent url(/img/ico-document.png) 0 0 no-repeat;
+  background-size: 36px;
+  color: var(--text-color-primary);
+  display: inline-block;
+  font-size: 0.85rem;
+  padding: 0 0 0 56px;
+}
+.complementaryMaterials a h5 {
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.actions-container {
+  display: flex;
+  align-items: space-between;
+}
+
+
+.tabBtn a{
+  border: none;
+  border-bottom: solid 1px var(--eureka-green)!important;
+  
+}
+
+.tabBtn a:hover{
+  background-color: var(--eureka-);
+}

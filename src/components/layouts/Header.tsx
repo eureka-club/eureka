@@ -1,11 +1,12 @@
 import { FunctionComponent, useState, useEffect } from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
-import useTranslation from 'next-translate/useTranslation';
+
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import withTitle from '../../HOCs/withTitle';
 import styles from './Header.module.css';
+import { useDictContext } from '@/src/hooks/useDictContext';
 
 type Props = {
   // children: string | JSX.Element | JSX.Element[];
@@ -14,7 +15,7 @@ type Props = {
 };
 
 const Header: FunctionComponent<Props> = ({ show: s = false }) => {
-  const { t } = useTranslation('common');
+  const { t, dict } = useDictContext();
   const [show, setShow] = useState<boolean>(s);
   const {data:session, status} = useSession();
   const isLoadingSession = status === "loading"
@@ -44,7 +45,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
               onClick={() => setShow(false)}
               className="mt-2 py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
             >
-              {t('Close')} <AiOutlineClose />
+              {t(dict,'Close')} <AiOutlineClose />
             </Button>
           )}
           {!show && (
@@ -53,7 +54,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
               onClick={() => setShow(true)}
               className="mt-2 py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
             >
-              {t('openHeaderLabel')} <AiOutlineDown />
+              {t(dict,'openHeaderLabel')} <AiOutlineDown />
             </Button>
           )}
         </aside>
@@ -61,14 +62,14 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
           <Container className={`${styles.grid}`}>
             <Row className="text-white mb-5">
               <Col xs={12} md={4} className="d-flex flex-column">
-                <h1 className="h1 ms-auto">{t('underEurekaLabel')}</h1>
-                {/* <em className="fs-6 ms-auto">{t('underEurekaLabel')}</em> */}
+                <h1 className="h1 ms-auto">{t(dict,'underEurekaLabel')}</h1>
+                {/* <em className="fs-6 ms-auto">{t(dict,'underEurekaLabel')}</em> */}
               </Col>
               <Col xs={12} md={8} className="text-start">
                 <p className="ps-4">
-                  {t('eurekaReasonLabel')}
+                  {t(dict,'eurekaReasonLabel')}
                   <br />
-                  {t('eurekaReasonLabel2')}
+                  {t(dict,'eurekaReasonLabel2')}
                 </p>
               </Col>
             </Row>
@@ -81,8 +82,8 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
               >
                 <div className="p-3 text-white rounded d-flex flex-column align-items-center mb-1 bg-secondary" style={{width:'280px',height:'213px'}}>
                   <aside className={`${styles.bgHeaderLeft}`} />
-                  <h2 className="h6 text-center">{t('headerLeftBoxTitle')}</h2>
-                  <p className="p-0 m-0 text-wrap text-center fs-6 fst-italic">{t('headerLeftBoxText')}</p>
+                  <h2 className="h6 text-center">{t(dict,'headerLeftBoxTitle')}</h2>
+                  <p className="p-0 m-0 text-wrap text-center fs-6 fst-italic">{t(dict,'headerLeftBoxText')}</p>
                 </div>
               </Col>
               <Col
@@ -92,8 +93,8 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
               >
                 <div className="p-3 text-white rounded d-flex flex-column align-items-center mb-1 bg-secondary" style={{width:'280px',height:'213px'}}>
                   <aside className={`${styles.bgHeaderCenter}`} />
-                  <h2 className="h6 text-center">{t('headerCenterBoxTitle')}</h2>
-                  <p className="p-0 m-0 text-wrap text-center fs-6 fst-italic">{t('headerCenterBoxText')}</p>
+                  <h2 className="h6 text-center">{t(dict,'headerCenterBoxTitle')}</h2>
+                  <p className="p-0 m-0 text-wrap text-center fs-6 fst-italic">{t(dict,'headerCenterBoxText')}</p>
                 </div>
               </Col>
               <Col
@@ -103,8 +104,8 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
               >
                 <div className="p-3 text-white rounded d-flex flex-column align-items-center mb-1 bg-secondary" style={{width:'280px',height:'213px'}}>
                   <aside className={`${styles.bgHeaderRight}`} />
-                  <h2 className="h6 text-center">{t('headerRightBoxTitle')}</h2>
-                  <p className="p-0 m-0 text-wrap text-center fs-6 fst-italic">{t('headerRightBoxText')}</p>
+                  <h2 className="h6 text-center">{t(dict,'headerRightBoxTitle')}</h2>
+                  <p className="p-0 m-0 text-wrap text-center fs-6 fst-italic">{t(dict,'headerRightBoxText')}</p>
                 </div>
               </Col>
             </Row>
@@ -115,7 +116,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
         <div className="d-flex justify-content-center align-items-center mt-5 pt-5">
           {!isLoadingSession && !session && (
             <Button onClick={handlerLogin} className="button text-white rounded-pill" variant="primary">
-              {t('headerSessionBtnLabel')}
+              {t(dict,'headerSessionBtnLabel')}
             </Button>
           )}
         </div>

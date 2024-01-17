@@ -3,10 +3,11 @@ import { useAtom } from 'jotai';
 import { FunctionComponent, useState, useEffect } from 'react';
 import { Button, Col, Container, Row, Carousel } from 'react-bootstrap';
 import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
-import useTranslation from 'next-translate/useTranslation';
+
 import { useSession } from 'next-auth/react';
 import withTitle from '../../HOCs/withTitle';
 import styles from './Header.module.css';
+import { useDictContext } from '@/src/hooks/useDictContext';
 // import { Session } from '../../types';
 //import globalModalsAtom from '../../atoms/globalModals';
 
@@ -17,7 +18,7 @@ type Props = {
 };
 
 const Header: FunctionComponent<Props> = ({ show: s = false }) => {
-  const { t } = useTranslation('common');
+  const { t, dict } = useDictContext();
   const [show, setShow] = useState<boolean>(s);
   const {data:session, status} = useSession();
   const isLoadingSession = status === "loading"
@@ -45,7 +46,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
               onClick={() => setShow(false)}
               className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
             >
-              {t('Close')} <AiOutlineClose />
+              {t(dict,'Close')} <AiOutlineClose />
             </Button>
           )}
           {!show && (
@@ -54,18 +55,18 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
               onClick={() => setShow(true)}
               className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
             >
-              {t('openHeaderLabel')} <AiOutlineDown />
+              {t(dict,'openHeaderLabel')} <AiOutlineDown />
             </Button>
           )}
         </aside>
         {show && (
           <>
             <Container className={`${styles.grid} text-white text-center`}>
-              <h1 className="h1 ms-auto mt-3">{t('underEurekaLabel')}</h1>
+              <h1 className="h1 ms-auto mt-3">{t(dict,'underEurekaLabel')}</h1>
               <p className="">
-                {t('eurekaReasonLabel')}
+                {t(dict,'eurekaReasonLabel')}
                 <br />
-                {t('eurekaReasonLabel2')}
+                {t(dict,'eurekaReasonLabel2')}
               </p>
             </Container>
             <Carousel style={{ marginBottom: '-5em' }} nextIcon={<em />} prevIcon={<em />}>
@@ -74,8 +75,8 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
                   <div className="d-flex justify-content-center">
                     <aside className={`${styles.bgHeaderLeft}`} />
                   </div>
-                  <h2 className="h6 text-center">{t('headerLeftBoxTitle')}</h2>
-                  <p className="p-0 m-0 text-wrap text-center fs-6 fst-italic">{t('headerLeftBoxText')}</p>
+                  <h2 className="h6 text-center">{t(dict,'headerLeftBoxTitle')}</h2>
+                  <p className="p-0 m-0 text-wrap text-center fs-6 fst-italic">{t(dict,'headerLeftBoxText')}</p>
                 </aside>
               </Carousel.Item>
               <Carousel.Item className="p-3 text-white mb-1 bg-secondary" style={{ height: '16rem' }}>
@@ -83,8 +84,8 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
                   <div className="d-flex justify-content-center">
                     <aside className={`${styles.bgHeaderCenter}`} />
                   </div>
-                  <h2 className="h6 text-center">{t('headerCenterBoxTitle')}</h2>
-                  <p className="p-0 m-0 text-wrap text-center fs-6 fst-italic">{t('headerCenterBoxText')}</p>
+                  <h2 className="h6 text-center">{t(dict,'headerCenterBoxTitle')}</h2>
+                  <p className="p-0 m-0 text-wrap text-center fs-6 fst-italic">{t(dict,'headerCenterBoxText')}</p>
                 </aside>
               </Carousel.Item>
               <Carousel.Item className="p-3 text-white mb-1 bg-secondary" style={{ height: '16rem' }}>
@@ -92,8 +93,8 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
                   <div className="d-flex justify-content-center">
                     <aside className={`${styles.bgHeaderRight}`} />
                   </div>
-                  <h2 className="h6 text-center">{t('headerRightBoxTitle')}</h2>
-                  <p className="p-0 m-0 text-wrap text-center fs-6 fst-italic">{t('headerRightBoxText')}</p>
+                  <h2 className="h6 text-center">{t(dict,'headerRightBoxTitle')}</h2>
+                  <p className="p-0 m-0 text-wrap text-center fs-6 fst-italic">{t(dict,'headerRightBoxText')}</p>
                 </aside>
               </Carousel.Item>
             </Carousel>
@@ -104,7 +105,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
         <div className="d-flex justify-content-center align-items-center mt-5 pt-5">
           {!isLoadingSession && !session && (
             <Button onClick={handlerLogin} className="button text-white rounded-pill" variant="primary">
-              {t('headerSessionBtnLabel')}
+              {t(dict,'headerSessionBtnLabel')}
             </Button>
           )}
         </div>

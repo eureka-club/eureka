@@ -2,7 +2,7 @@ import { Prisma, Work, Edition, User, RatingOnWork, ReadOrWatchedWork } from '@p
 import { Languages, StoredFileUpload } from '../types';
 import { CreateWorkServerFields, CreateWorkServerPayload, EditWorkServerFields, WorkMosaicItem } from '../types/work';
 import { prisma } from '@/src/lib/prisma';
-import { MISSING_FIELD, WORK_ALREADY_EXIST } from '@/src/api_code';
+import { MISSING_FIELD, WORK_ALREADY_EXIST } from '@/src/response_codes';
 import { CreateEditionServerPayload } from '../types/edition';
 import { defaultLocale } from 'i18n';
 

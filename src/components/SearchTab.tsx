@@ -1,11 +1,12 @@
 import React, { useState, FunctionComponent,useEffect } from 'react';
-import useTranslation from 'next-translate/useTranslation';
+
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Tab, Tabs} from 'react-bootstrap';
 
 import SearchTabWorks from './SearchTabWorks';
 import SearchTabPosts from './SearchTabPosts';
 import SearchTabCycles from './SearchTabCycles';
+import { useDictContext } from '../hooks/useDictContext';
 
 interface Props{
   hasCycles:boolean;
@@ -14,7 +15,7 @@ interface Props{
 }
 
 const SearchTab: FunctionComponent<Props> = ({hasCycles,hasPosts,hasWorks}) => {
-  const { t } = useTranslation('common');
+  const { t, dict } = useDictContext();
   const searchParams = useSearchParams();
   const q=searchParams?.get('q')!;
   const [key, setKey] = useState<string>('cycles');
@@ -69,13 +70,13 @@ const SearchTab: FunctionComponent<Props> = ({hasCycles,hasPosts,hasWorks}) => {
               className="mt-5"
             >
              
-              {hasCycles ? <Tab eventKey="cycles" data-cy="tab-cycles" title={t('cycles')}  className={`cursor-pointer`}>
+              {hasCycles ? <Tab eventKey="cycles" data-cy="tab-cycles" title={t(dict,'cycles')}  className={`cursor-pointer`}>
                     <SearchTabCycles />
               </Tab> : <></>}
-              {hasPosts ? <Tab eventKey="posts" data-cy="tab-posts" title={t('posts')} className={`cursor-pointer`}>
+              {hasPosts ? <Tab eventKey="posts" data-cy="tab-posts" title={t(dict,'posts')} className={`cursor-pointer`}>
                 <SearchTabPosts />
               </Tab> : <></>}
-              {hasWorks ? <Tab eventKey="works" data-cy="tab-works" title={t('works')} className={`cursor-pointer`}>
+              {hasWorks ? <Tab eventKey="works" data-cy="tab-works" title={t(dict,'works')} className={`cursor-pointer`}>
                 <SearchTabWorks />
               </Tab>:<></>}
             </Tabs>

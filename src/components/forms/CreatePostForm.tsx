@@ -1,7 +1,7 @@
 import { Post } from '@prisma/client';
 import { useAtom } from 'jotai';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import useTranslation from 'next-translate/useTranslation';
+
 import { FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
@@ -51,6 +51,7 @@ import { ImCancelCircle } from 'react-icons/im';
 import Prompt from '@/src/components/post/PostPrompt';
 import { set } from 'lodash';
 import { getLocale_In_NextPages } from '@/src/lib/utils';
+import { useDictContext } from '@/src/hooks/useDictContext';
 
 interface Props {
   noModal?: boolean;
@@ -138,7 +139,8 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
     if (work) setSelectedWork(work as WorkMosaicItem);
   }, [work]);
 
-  const { t } = useTranslation('createPostForm');
+  // const { t } = useTranslation('createPostForm');
+  const{t,dict}=useDictContext();
 
   const { data: topics } = useTopics();
   const [tags, setTags] = useState<string>('');
@@ -215,7 +217,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
               data: { message },
               toUsers: user?.followedBy.map(u => u.id)
             })
-          toast.success(t('postCreated'))
+          toast.success(t(dict,'postCreated'))
           return json.post;
         }
         //TODO toast with error to the user
@@ -316,13 +318,13 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
   const formValidation = (payload: any) => {
 
     /*if (!payload.title.length) {
-       toast.error( t('NotTitle'))
+       toast.error( t(dict,'NotTitle'))
        return false;
      }else if (!imageFile) {
-       toast.error( t('requiredEurekaImageError'))
+       toast.error( t(dict,'requiredEurekaImageError'))
        return false;
      }else if (!payload.contentText.length) {
-       toast.error( t('NotContentText'))
+       toast.error( t(dict,'NotContentText'))
        return false;
      }*/
     return true;
@@ -354,11 +356,11 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
     ev.preventDefault();
 
     if (!imageFile) {
-      toast.error(t('requiredEurekaImageError'))
+      toast.error(t(dict,'requiredEurekaImageError'))
       return;
     }
     if (!selectedWork && !selectedCycle) {
-      toast.error(t('requiredDiscussionItemError'))
+      toast.error(t(dict,'requiredDiscussionItemError'))
       return;
     }
 
@@ -460,17 +462,17 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
     <Form ref={formRef}>
 
       <ModalHeader closeButton={!noModal}>
-        <ModalTitle> <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('title')}</h1></ModalTitle>
+        <ModalTitle> <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t(dict,'title')}</h1></ModalTitle>
       </ModalHeader>
       <ModalBody className=''>
         <section className='my-3'>
           {!useCrop && <Prompt onImageSelect={onImageSelect} searchtext={params?.searchtext} searchstyle={params?.searchstyle} />}
           <FormGroup className='mt-4 mb-4'>
-            <FormControlLabel control={<Switch checked={useCrop} onChange={handleChangeUseCropSwith} />} label={t('showCrop')} />
+            <FormControlLabel control={<Switch checked={useCrop} onChange={handleChangeUseCropSwith} />} label={t(dict,'showCrop')} />
           </FormGroup>
           {useCrop && <Col className='mb-4'>
             {!showCrop && (<><Button data-cy="image-load" className="btn-eureka w-100 px-2 px-lg-5 text-white" onClick={() => setShowCrop(true)}>
-              {t('imageFieldLabel')}
+              {t(dict,'imageFieldLabel')}
             </Button>
               {currentImg && renderPhoto()}
             </>)}
@@ -489,7 +491,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
         {imageFile && <><Row className='d-flex flex-column px-2 px-lg-5'>
           <Col className='mb-4'>
             {/*<FormGroup controlId="workOrCycle">
-                <FormLabel>*{t('searchCycleOrWorkFieldLabel')}</FormLabel>
+                <FormLabel>*{t(dict,'searchCycleOrWorkFieldLabel')}</FormLabel>
                 {selectedWork != null ? (
                   <div className={styles.searchResult}>
                     <WorkTypeaheadSearchItem work={selectedWork} />
@@ -516,7 +518,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
                       // Bypass client-side filtering. Results are already filtered by the search endpoint
                       filterBy={() => true}
                       inputProps={{ required: true }}
-                      placeholder={t('searchCycleOrWorkFieldPlaceholder')}
+                      placeholder={t(dict,'searchCycleOrWorkFieldPlaceholder')}
                       isLoading={isSearchWorkOrCycleLoading}
                       labelKey={labelKeyFn}
                       minLength={2}
@@ -537,12 +539,12 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
                 )}
               </FormGroup> */}
             <AsyncTypeaheadMaterial item={(selectedWork) ? selectedWork : selectedCycle} searchType="all" onSelected={handleSelectWorkOrCycle}
-              label={`*${t('searchCycleOrWorkFieldLabel')}`}
-              helperText={`${t('searchCycleOrWorkFieldPlaceholder')}`} />
+              label={`*${t(dict,'searchCycleOrWorkFieldLabel')}`}
+              helperText={`${t(dict,'searchCycleOrWorkFieldPlaceholder')}`} />
           </Col>
           <Col className='mb-4'>
             <FormGroup controlId="postTitle" >
-              <TextField id="postTitle" className="w-100" label={t('titleFieldLabel')}
+              <TextField id="postTitle" className="w-100" label={t(dict,'titleFieldLabel')}
                 variant="outlined" size="small" value={postTitle}
                 onChange={(e) => setPostTitle(e.target.value)}>
               </TextField>
@@ -550,7 +552,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
           </Col>
         </Row>
           <FormGroup controlId="description" as={Col} className="mb-4 px-2 px-lg-5">
-            <FormLabel>{t('descriptionFieldLabel')}</FormLabel>
+            <FormLabel>{t(dict,'descriptionFieldLabel')}</FormLabel>
             {/* @ts-ignore*/}
             <EditorCmp
               apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
@@ -580,7 +582,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
             />
           </FormGroup>
           <FormGroup className='mt-5 mb-4'>
-            <FormControlLabel control={<Switch checked={useOtherFields} onChange={handleChangeUseOtherFields} />} label={t('showOthersFields')} />
+            <FormControlLabel control={<Switch checked={useOtherFields} onChange={handleChangeUseOtherFields} />} label={t(dict,'showOthersFields')} />
           </FormGroup>
           {useOtherFields && <Row className='mt-5 px-2 px-lg-5 d-flex flex-column'>
             <Col className="mb-4">
@@ -596,7 +598,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
                       id="create-post--search-cycle"
                       filterBy={() => true}
                       inputProps={{ id: 'create-post--search-cycle' }}
-                      placeholder={t('searchCycleFieldPlaceholder')}
+                      placeholder={t(dict,'searchCycleFieldPlaceholder')}
                       isLoading={isSearchCycleLoading}
                       labelKey={labelKeyFn}
                       minLength={2}
@@ -617,8 +619,8 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
                 )*/}
                 <AsyncTypeaheadMaterial item={selectedCycle} onSelected={handleSelectCycle} searchType="cycles"
                   workSelected={selectedWork}
-                  label={`${t('searchCycleFieldLabel')}`}
-                  helperText={`${t('searchCycleInfotip')}`} />
+                  label={`${t(dict,'searchCycleFieldLabel')}`}
+                  helperText={`${t(dict,'searchCycleInfotip')}`} />
               </FormGroup>
             </Col>
 
@@ -628,15 +630,15 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
                   data={topics as {code:string,label:string}[]}
                   items={items}
                   setItems={setItems}
-                  formatValue={(v: string) => t(`topics:${v}`)}
+                  formatValue={(v: string) => t(dict,`topics:${v}`)}
                   max={3}
-                  label={t('topicsPostLabel')}
-                  placeholder={`${t('Type to add tag')}...`}
+                  label={t(dict,'topicsPostLabel')}
+                  placeholder={`${t(dict,'Type to add tag')}...`}
                 />
               </FormGroup>
             </Col>
             <Col className="mb-4">
-              <TagsInputMaterial tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
+              <TagsInputMaterial tags={tags} setTags={setTags} label={t(dict,'topicsFieldLabel')} />
             </Col>
           </Row>}  </>}
       </ModalBody>
@@ -653,7 +655,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
               </Button>
               <Button disabled={isCreatePostLoading} onClick={(e) => { handleSubmit(e) }} className="btn-eureka" style={{ width: '12em' }}>
                 <>
-                  {t('submitButtonLabel')}
+                  {t(dict,'submitButtonLabel')}
                   {isCreatePostLoading && (
                     <Spinner className="ms-2" animation="grow" variant="info" size="sm" />
                   )}

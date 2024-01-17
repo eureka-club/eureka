@@ -1,11 +1,12 @@
 import { FunctionComponent, useState,useEffect } from 'react';
 import { Button, Container,Carousel } from 'react-bootstrap';
 import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
-import useTranslation from 'next-translate/useTranslation';
+
 import styles from './BannerCustomizable.module.css';
 import useBackOffice from '@/src/useBackOffice';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import { useDictContext } from '../hooks/useDictContext';
 
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
 const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
@@ -21,7 +22,7 @@ const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
 const BannerCustomizableMobile: FunctionComponent = ({
 }) => {
-  const { t } = useTranslation('common');
+  const { t, dict } = useDictContext();
   const router = useRouter();
   const {data:session, status} = useSession();
   const isLoadingSession = status === "loading"
@@ -63,7 +64,7 @@ const BannerCustomizableMobile: FunctionComponent = ({
               onClick={() => setShow(false)}
               className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
             >
-              {t('Close')} <AiOutlineClose />
+              {t(dict,'Close')} <AiOutlineClose />
             </Button>
           )}
           {!show && (
@@ -72,7 +73,7 @@ const BannerCustomizableMobile: FunctionComponent = ({
               onClick={() => setShow(true)}
               className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
             >
-              {t('Expand')} <AiOutlineDown />
+              {t(dict,'Expand')} <AiOutlineDown />
             </Button>
           )}
         </aside>
@@ -89,7 +90,7 @@ const BannerCustomizableMobile: FunctionComponent = ({
                       <p className="p-0 mx-1 text-wrap fs-6">{bo?.SlideText1}</p>
                        <div className="d-flex  mt-2"> 
                        {(!isLoadingSession && !session) 
-                            ? <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button> 
+                            ? <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t(dict,'JoinEureka')}</Button> 
                             : ''
                           }
                       </div>
@@ -103,7 +104,7 @@ const BannerCustomizableMobile: FunctionComponent = ({
                       <p className="p-0 mx-1 text-wrap fs-6">{bo?.SlideText2}</p>
                        <div className="d-flex mt-2"> 
                        {(!isLoadingSession && !session) 
-                            ? <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button> 
+                            ? <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t(dict,'JoinEureka')}</Button> 
                             : ''
                           }
                       </div>
@@ -117,7 +118,7 @@ const BannerCustomizableMobile: FunctionComponent = ({
                       <p className="p-0 mx-1 text-wrap fs-6">{bo?.SlideText3}</p>
                        <div className="d-flex  mt-2"> 
                        {(!isLoadingSession && !session) 
-                            ? <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button> 
+                            ? <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t(dict,'JoinEureka')}</Button> 
                             : ''
                           }
                       </div>

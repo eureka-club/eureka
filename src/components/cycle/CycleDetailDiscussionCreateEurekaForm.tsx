@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/react';
-import useTranslation from 'next-translate/useTranslation';
+
 import { ChangeEvent, MouseEvent, FunctionComponent, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { Button, Col, Row, ButtonGroup, Form, Spinner } from 'react-bootstrap';
@@ -46,6 +46,7 @@ import Prompt from '@/src/components/post/PostPrompt';
 import { WorkMosaicItem } from '@/src/types/work';
 import { Locale } from 'i18n-config';
 import { usePathname } from 'next/dist/client/components/navigation';
+import { useDictContext } from '@/src/hooks/useDictContext';
 
 // import { devNull } from 'os';
 // import { isNullOrUndefined } from 'util';
@@ -87,7 +88,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   const router = useRouter();
   const asPath=usePathname()!;
   const { data: session } = useSession();
-  const { t } = useTranslation('cycleDetail');
+  const { t, dict } = useDictContext();
   //const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [newEurekaImageFile, setNewEurekaImageFile] = useState<File | null>(null);
   const { data: topics } = useTopics();
@@ -158,16 +159,16 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
 
   const formValidation = (payload: any) => {
     if (!selection) {
-      toast.error(t('requiredDiscussionItemError'));
+      toast.error(t(dict,'requiredDiscussionItemError'));
       return false;
     } else if (!newEurekaImageFile) {
-      toast.error(t('requiredEurekaImageError'));
+      toast.error(t(dict,'requiredEurekaImageError'));
       return false;
     } /*else if (!payload.title.length) {
-      toast.error( t('NotTitle'))
+      toast.error( t(dict,'NotTitle'))
           return false;
     }else if (!payload.contentText.length) {
-      toast.error( t('NotContentText'))
+      toast.error( t(dict,'NotContentText'))
       return false;
     }*/
     return true;
@@ -261,7 +262,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
               data: { message },
             });
           }
-          toast.success(t('postCreated'));
+          toast.success(t(dict,'postCreated'));
           clearPayload();
           return json.post;
         }
@@ -374,7 +375,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         <Form.Group className="mt-4 mb-4">
           <FormControlLabel
             control={<Switch checked={useCrop} onChange={handleChangeUseCropSwith} />}
-            label={t('showCrop')}
+            label={t(dict,'showCrop')}
           />
         </Form.Group>
         {useCrop && (
@@ -390,7 +391,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
                   className="btn-eureka w-100"
                   onClick={() => setShowCrop(true)}
                 >
-                  {t('Image')}
+                  {t(dict,'Image')}
                 </Button>
               )}
               {showCrop && (
@@ -408,18 +409,18 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         <>
           <Form.Group controlId="eureka-title">
             <FormControl className="mb-4 w-100">
-              <InputLabel id="discussionItem">{t('emptyDiscussionItemLbl')}</InputLabel>
+              <InputLabel id="discussionItem">{t(dict,'emptyDiscussionItemLbl')}</InputLabel>
               <Select
                 variant="outlined"
                 labelId="discussionItem"
                 size="small"
                 name="discussionItem"
                 id="discussionItem"
-                label={t('emptyDiscussionItemLbl')}
+                label={t(dict,'emptyDiscussionItemLbl')}
                 onChange={onChangeDiscussionItem}
                 value={selection}
               >
-                <MenuItem value="-1">{t('Cycle itself')}</MenuItem>
+                <MenuItem value="-1">{t(dict,'Cycle itself')}</MenuItem>
                 {getWorksOpt()}
               </Select>
             </FormControl>
@@ -427,7 +428,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
               id="eureka-title"
               className="w-100 mb-4"
               inputProps={{ maxLength: 80 }}
-              label={t('Title')}
+              label={t(dict,'Title')}
               variant="outlined"
               size="small"
               value={newEureka.title}
@@ -439,7 +440,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
           type="text"
           maxLength={80}
           required
-          placeholder={t('Title')}
+          placeholder={t(dict,'Title')}
           value={newEureka.title}
           onChange={onChangeFieldEurekaForm}
         />
@@ -488,7 +489,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
               </Col>
               <Col xs={12} md={8} className='mb-4 mt-2'>
                 {!showCrop && (<Button data-cy="image-load" variant="primary" className="btn-eureka w-100" onClick={() => setShowCrop(true)}>
-                  {t('Image')}
+                  {t(dict,'Image')}
                 </Button>
                 )}        
                 { showCrop && (
@@ -507,7 +508,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
                 <Col xs={12} md={10}>{newEurekaImageFile != null && imagePreview ? (
                   <span className={`pt-1`}>{newEurekaImageFile?.name}</span>
                 ) : (
-                  t('Image')
+                  t(dict,'Image')
                 )}
                 </Col>
                 <Col xs={12} md={2} className="d-flex justify-content-start justify-content-sm-end align-items-center">
@@ -522,16 +523,16 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
           {/*<Row>
         <Col xs={12} md={8}>
           <Form.Group controlId="topics">
-            {/* <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel> 
+            {/* <FormLabel>{t(dict,'createWorkForm:topicsLabel')}</FormLabel> 
             <TagsInputTypeAhead
               style={{ background: 'white' }}
               data={topics}
               items={eurekaTopics}
               setItems={setEurekaTopics}
-              labelKey={(res: { code: string }) => t(`topics:${res.code}`)}
+              labelKey={(res: { code: string }) => t(dict,`topics:${res.code}`)}
               max={3}
-              placeholder={`${t('Type to add tag')}...`}
-              formatValue={(v: string) => t(`topics:${v}`)} 
+              placeholder={`${t(dict,'Type to add tag')}...`}
+              formatValue={(v: string) => t(dict,`topics:${v}`)} 
               className="mt-3 w-100"
             />
           </Form.Group>
@@ -542,26 +543,26 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
               <Form.Group className="mt-5 mb-4">
                 <FormControlLabel
                   control={<Switch checked={useOtherFields} onChange={handleChangeUseOtherFields} />}
-                  label={t('showOthersFields')}
+                  label={t(dict,'showOthersFields')}
                 />
               </Form.Group>
               {useOtherFields && (<>
                 <Form.Group controlId="topics">
-                  {/* <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel> */}
+                  {/* <FormLabel>{t(dict,'createWorkForm:topicsLabel')}</FormLabel> */}
                   <TagsInputTypeAheadMaterial
                     style={{ background: 'white' }}
                     data={topics as {code:string,label:string}[]}
                     items={eurekaTopics}
                     setItems={setEurekaTopics}
                     max={3}
-                    label={t('Type to add tag')}
-                    placeholder={`${t('Type to add tag')}...`}
-                    formatValue={(v: string) => t(`topics:${v}`)}
+                    label={t(dict,'Type to add tag')}
+                    placeholder={`${t(dict,'Type to add tag')}...`}
+                    formatValue={(v: string) => t(dict,`topics:${v}`)}
                     className="mt-3"
                   />
                 </Form.Group>
                 <Form.Group controlId="tags" className='mt-4'>
-                  <TagsInputMaterial tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
+                  <TagsInputMaterial tags={tags} setTags={setTags} label={t(dict,'topicsFieldLabel')} />
                 </Form.Group></>
               )}
             </Col>
@@ -578,7 +579,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
                 style={{ width: '8rem' }}
                 disabled={isPending}
               >
-                <span>{t('Create')}</span>
+                <span>{t(dict,'Create')}</span>
                 {isPending && <Spinner size="sm" animation="grow" />}
               </Button>
             </ButtonGroup>

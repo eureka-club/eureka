@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import useTranslation from 'next-translate/useTranslation';
+
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, Badge,Spinner } from 'react-bootstrap';
@@ -18,6 +18,7 @@ import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
 import usePost from '@/src/usePost'
 import { useSession} from 'next-auth/react';
 import { PostMosaicItem } from '@/src/types/post';
+import { useDictContext } from '@/src/hooks/useDictContext';
 interface Props {
   post?:PostMosaicItem;
   postId: number|string;
@@ -53,7 +54,7 @@ const MosaicItemDetail: FunctionComponent<Props> = ({
 }) => {
   const cacheKey = ck || ['POST',`${postId}`]
   const [gmAtom,setGmAtom] = useAtom(globalModals);
-  const { t } = useTranslation('common');
+  const { t, dict } = useDictContext();
   const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
   const [k,setK] = useState<[string,string]>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -154,7 +155,7 @@ const MosaicItemDetail: FunctionComponent<Props> = ({
              </div>
             )}
           <Badge bg="success" className={`fw-normal fs-6 text-white px-2 rounded-pill ${styles.type}`}>
-            {t(type || 'post')}
+            {t(dict,type || 'post')}
           </Badge>
         </div>
        

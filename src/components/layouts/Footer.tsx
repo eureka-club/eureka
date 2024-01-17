@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import useTranslation from 'next-translate/useTranslation';
+
 import { FunctionComponent} from 'react';
 import {
   AiOutlineInstagram,
@@ -11,21 +11,22 @@ import {
 import { SiTiktok } from 'react-icons/si';
 import { RiMailLine } from 'react-icons/ri';
 import styles from './Footer.module.css';
+import { useDictContext } from '@/src/hooks/useDictContext';
 
 
 const Footer: FunctionComponent = () => {
-  const { t } = useTranslation('navbar');
-
+  // const { t } = useTranslation('navbar');
+  const { t, dict } = useDictContext();
   return (
   <footer className=" text-center m-0 mt-4" style={{ background: 'var(--eureka-grey-light'}}>
     <div className="container d-flex flex-column-reverse flex-xl-row justify-content-xl-between align-items-lg-center">
       <section className="mb-1 mb-xl-0">
         <div className="text-center d-flex flex-column flex-xl-row justify-content-around pt-3 text-secondary fs-6">
-              <Link legacyBehavior  href="/manifest"><a className='text-secondary text-decoration-underline text-blue me-xl-5 mb-1 mb-xl-none' onClick={()=> window.scrollTo(0, 0)}>{t('Manifest')} </a></Link>
-            <Link legacyBehavior  href="/about"><a className='text-secondary text-decoration-underline me-xl-5 mb-1 mb-xl-none' onClick={()=> window.scrollTo(0, 0)}>{t('About Eureka')}</a></Link>
-            <Link legacyBehavior  href="/aboutUs"><a className='text-secondary text-decoration-underline me-xl-5 mb-1 mb-xl-none' onClick={()=> window.scrollTo(0, 0)}>{t('About Us')}</a></Link>
-            <Link legacyBehavior  href="/policy"><a className='text-secondary text-decoration-underline me-xl-5 mb-1 mb-xl-none' onClick={()=> window.scrollTo(0, 0)}>{t('policyText')}</a></Link>
-            <p>{t('common:contact')} <a className='text-decoration-underline text-secondary me-xl-3' href="mailto:hola@eureka.club">hola@eureka.club</a></p>
+              <Link legacyBehavior  href="/manifest"><a className='text-secondary text-decoration-underline text-blue me-xl-5 mb-1 mb-xl-none' onClick={()=> window.scrollTo(0, 0)}>{t(dict,'Manifest')} </a></Link>
+            <Link legacyBehavior  href="/about"><a className='text-secondary text-decoration-underline me-xl-5 mb-1 mb-xl-none' onClick={()=> window.scrollTo(0, 0)}>{t(dict,'About Eureka')}</a></Link>
+            <Link legacyBehavior  href="/aboutUs"><a className='text-secondary text-decoration-underline me-xl-5 mb-1 mb-xl-none' onClick={()=> window.scrollTo(0, 0)}>{t(dict,'About Us')}</a></Link>
+            <Link legacyBehavior  href="/policy"><a className='text-secondary text-decoration-underline me-xl-5 mb-1 mb-xl-none' onClick={()=> window.scrollTo(0, 0)}>{t(dict,'policyText')}</a></Link>
+            <p>{t(dict,'common:contact')} <a className='text-decoration-underline text-secondary me-xl-3' href="mailto:hola@eureka.club">hola@eureka.club</a></p>
         </div>
 
       </section>

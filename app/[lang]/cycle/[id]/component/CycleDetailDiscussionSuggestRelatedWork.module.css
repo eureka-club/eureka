@@ -1,0 +1,14 @@
+.suggestButton{
+    background-color: #FFAFAF;
+    border-color: #FFAFAF;
+    color:white;
+}
+.addButton{
+    background-color: transparent;
+    border-color: #FFAFAF;
+    color:#FFAFAF;
+}
+.addWorkInfo{
+    color:#FFAFAF;
+    font-size: .9em;
+}

@@ -3,7 +3,7 @@
 // import { useSession } from 'next-auth/react';
 // import Link from 'next/link';
 // import { useRouter } from 'next/navigation';
-// import useTranslation from 'next-translate/useTranslation';
+// 
 // import { setCookie } from 'nookies';
 import { FunctionComponent, ReactElement } from 'react';
 import { Button, Popover, OverlayTrigger } from 'react-bootstrap';
@@ -27,7 +27,7 @@ const PopoverContainer: FunctionComponent<Props> = (props) => {
   // const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
   // const [session] = useSession() as [Session | null | undefined, boolean];
   // const router = useRouter();
-  // const { t } = useTranslation('searchEngine');
+  // const { t, dict } = useDictContext();
 
   // const handlerComboxesChange = (e: ChangeEvent<HTMLInputElement>, type: string) => {
   //   let { only } = globalSearchEngineState;

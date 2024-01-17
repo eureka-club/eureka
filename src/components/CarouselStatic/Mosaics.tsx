@@ -1,5 +1,4 @@
 import { FC } from "react";
-import {v1} from 'uuid'
 import GenericMosaicItem from "./GenericMosaicItem";
 import { CycleMosaicItem } from '../../types/cycle';
 import { WorkMosaicItem } from '../../types/work';
@@ -10,7 +9,7 @@ type Item = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | UserMosaicItem;
 type MosaicProps = {
     data: Item[];
     showSocialInteraction?: boolean;
-    cacheKey:[string,string];
+    cacheKey:string[];
     customMosaicStyle?: { [key: string]: string };
     size?: string,
     userMosaicDetailed?: boolean

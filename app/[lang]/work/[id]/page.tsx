@@ -1,4 +1,4 @@
-import { NextPage } from 'next';
+
 import Head from "next/head";
 import {getPosts} from '@/src/hooks/usePosts'
 import Work from './component/Work';
@@ -41,7 +41,7 @@ interface Props{
       const workPostsWhere = {take:8,where:{works:{some:{id:+id}}}}
       let work = await getWork(+id,langs,origin);
       let {cycles} = await getCycles(langs,workCyclesWhere,origin);
-      let {posts} = await getPosts(workPostsWhere,origin);
+      let {posts} = await getPosts(workPostsWhere);
   
     return (<>
       <Head>
@@ -49,7 +49,7 @@ interface Props{
         <meta name="description" content={dict['aboutUsDescription']}></meta>
       </Head>
   
-      <Layout dict={dict} langs={langs} >
+      <Layout dict={dict}>
         <Work session={session!} work={work} workCycles={cycles} workPosts={posts}/>
       </Layout>
     </>

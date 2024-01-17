@@ -5,7 +5,7 @@ import utc from 'dayjs/plugin/utc';
 
 import { Cycle } from '@prisma/client';
 import getApiHandler from '@/src/lib/getApiHandler';
-import { find, remove } from '@/src/facades/cycle';
+import { find, participants as cycleParticipants, remove } from '@/src/facades/cycle';
 import {prisma} from '@/src/lib/prisma';
 import {storeDeleteFile} from '@/src/facades/fileUpload'
 // import redis from '@/src/lib/redis';
@@ -68,7 +68,8 @@ export default getApiHandler()
             currentUserIsCreator = cycle.creatorId == session.user.id
             const c = await find(id)
             if(c){
-              currentUserIsParticipant =  currentUserIsCreator || c.participants.findIndex(p=>p.id==session.user.id) > -1;
+              const participants = await cycleParticipants(c.id);
+              currentUserIsParticipant =  currentUserIsCreator || participants.findIndex(p=>p.id==session.user.id) > -1;
               currentUserIsPending = c.usersJoined.findIndex(p=>p.userId==session.user.id && p.pending) > -1;
               let r  = c.ratings.find(r=>r.userId==session.user.id)
               if(r)currentUserRating = r.qty;

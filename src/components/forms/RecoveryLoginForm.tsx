@@ -1,6 +1,6 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import {Form, Spinner} from 'react-bootstrap';
-import useTranslation from 'next-translate/useTranslation';
+
 import { FormEvent, FunctionComponent, MouseEvent,useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -11,10 +11,12 @@ import toast from 'react-hot-toast'
 
 import styles from './RecoveryLoginForm.module.css';
 import Toast from "../common/Toast";
+import { useDictContext } from "@/src/hooks/useDictContext";
 
 
 const RecoveryLoginForm: FunctionComponent = () => {
-   const { t } = useTranslation('PasswordRecovery');
+  //  const { t } = useTranslation('PasswordRecovery');
+  const{t,dict}=useDictContext();
   const [validated,setValidated] = useState<boolean>(false);
   const [loading,setLoading] = useState(false);
 
@@ -41,14 +43,14 @@ const RecoveryLoginForm: FunctionComponent = () => {
       if(ue.hasOwnProperty('hasPassword') && !ue.hasPassword){
         e.preventDefault();
         e.stopPropagation();
-        toast.error(t('RegisterAlert'))
+        toast.error(t(dict,'RegisterAlert'))
         setLoading(false)
         }
      } else {      
       e.preventDefault();
       e.stopPropagation();  
       setLoading(false)
-      toast.error(t('isNotUser'))
+      toast.error(t(dict,'isNotUser'))
     }
   }
 
@@ -62,19 +64,19 @@ const RecoveryLoginForm: FunctionComponent = () => {
         </Container>
       
         <div className="d-flex flex-column align-items-center justify-content-center">
-        <p className={`${styles.forgotPassword}`}>{t('forgotPassword')}</p>
-        <p className={`${styles.indicationsText}`}>{t('indicationsText')}</p>
+        <p className={`${styles.forgotPassword}`}>{t(dict,'forgotPassword')}</p>
+        <p className={`${styles.indicationsText}`}>{t(dict,'indicationsText')}</p>
           
         </div>
             <div className="mb-5 d-flex justify-content-center">
              <Form className={`d-flex flex-column ${styles.sendForm}`} onSubmit={handlerSubmit} action='/api/recoveryLogin' validated={validated} method='POST'>
                 <Form.Group controlId="email">
-                  <Form.Label>{t('emailFieldLabel')}</Form.Label>
+                  <Form.Label>{t(dict,'emailFieldLabel')}</Form.Label>
                   <Form.Control className='mb-2' name="email" type="email" required />
                  </Form.Group>
                  <div className="d-flex justify-content-center">
                   <Button type='submit' disabled={loading} className={`btn-eureka ${styles.submitButton}`}>
-                  {t('sendText')} {loading && <Spinner animation="grow"/>}
+                  {t(dict,'sendText')} {loading && <Spinner animation="grow"/>}
                 </Button>
                 </div>
               </Form>

@@ -15,6 +15,7 @@ import { DictContext } from '@/src/hooks/useDictContext';
 import { EnvContext } from '@/src/hooks/useEnvContext';
 import {Toaster} from 'react-hot-toast'
 import { ModalProvider } from '@/src/useModal';
+import { t } from '@/src/lib/utils';
 
 interface Props {
   children: React.ReactNode;
@@ -24,11 +25,10 @@ interface Props {
   banner?: React.ReactNode | React.ReactNode[];
   allPageSize?: boolean;
   showFooter?: boolean;
-  langs:string;
   dict:{};
   //env:Record<string,string>;
 }
-const Layout: FC<Props> = ({ dict, langs, children, showHeader = false, banner, showCustomBaner = false, showNavBar = true, showFooter = true, allPageSize = false }) => {
+const Layout: FC<Props> = ({ dict, children, showHeader = false, banner, showCustomBaner = false, showNavBar = true, showFooter = true, allPageSize = false }) => {
   const store = createStore();
 
   //para probar, ver como pasar el "initialState" q viene de cada page/* o app/*
@@ -51,7 +51,7 @@ const Layout: FC<Props> = ({ dict, langs, children, showHeader = false, banner, 
     return ``;
   };
 
-  return <DictContext.Provider value={{dict,langs}}>
+  return <DictContext.Provider value={{dict,t}}>
     <EnvContext.Provider value={{
       NEXT_PUBLIC_AZURE_CDN_ENDPOINT: process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT!,
       NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME: process.env.NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME!,

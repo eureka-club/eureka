@@ -1,6 +1,6 @@
 import { useSession} from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import useTranslation from 'next-translate/useTranslation';
+
 import { ChangeEvent, FunctionComponent, MouseEvent, useState ,useEffect} from 'react';
 import { Button, Col, Row, ButtonGroup, Form } from 'react-bootstrap';
 import { GiBrain } from 'react-icons/gi';
@@ -15,6 +15,7 @@ import SignInForm from '../forms/SignInForm';
 
 // import globalSearchEngineAtom from '../../atoms/searchEngine';
 import WorkDetailCreateEurekaForm from './WorkDetailCreateEurekaForm';
+import { useDictContext } from '@/src/hooks/useDictContext';
 //import CycleDetailDiscussionSuggestRelatedWork from './CycleDetailDiscussionSuggestRelatedWork';
 //import CycleDetailDiscussionCreateCommentForm from './CycleDetailDiscussionCreateCommentForm';
 // import CommentsList from '../common/CommentsList';
@@ -32,7 +33,7 @@ const WorkDetailPost: FunctionComponent<Props> = ({workId,className, cacheKey })
   const {show} = useModalContext()
   const router = useRouter();
   
-  const { t } = useTranslation('cycleDetail');
+  const { t, dict } = useDictContext();
 
    const {data:work} = useWork(workId,{
     enabled:!!workId

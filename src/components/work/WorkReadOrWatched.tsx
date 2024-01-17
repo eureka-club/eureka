@@ -1,5 +1,5 @@
 import { WorkMosaicItem } from '@/src/types/work';
-import useTranslation from 'next-translate/useTranslation';
+
 import { FunctionComponent, useState } from 'react';
 import RemoveRedEyeRoundedIcon from '@mui/icons-material/RemoveRedEyeRounded';
 import VisibilityOffRoundedIcon from '@mui/icons-material/VisibilityOffRounded';
@@ -16,6 +16,7 @@ import ListItemText from '@mui/material/ListItemText';
 import dayjs from 'dayjs';
 import useExecReadOrWatchedWork from '@/src/hooks/mutations/useExecReadOrWatchedWork';
 import { Session } from '@/src/types';
+import { useDictContext } from '@/src/hooks/useDictContext';
 // import styles from './WorkSummary.module.css';
 
 interface Props {
@@ -31,7 +32,7 @@ const years = (publicationYear:Date|null)=> {
 
 
 const WorkReadOrWatched: FunctionComponent<Props> = ({ work,session }) => {
-  const { t } = useTranslation('common');
+  const { t, dict } = useDictContext();
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('');

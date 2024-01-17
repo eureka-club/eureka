@@ -1,8 +1,9 @@
 import React, { useState,ChangeEvent  } from "react"
-import useTranslation from 'next-translate/useTranslation';
+
 import { Form } from 'react-bootstrap';
 
 import FilterEngineCountries,{FiltersRegionsType} from '@/components/FilterEngineCountries'
+import { useDictContext } from "../hooks/useDictContext";
 export interface FiltersType {
   'fiction-book':boolean;
   book:boolean;
@@ -10,7 +11,7 @@ export interface FiltersType {
   documentary:boolean;
 } 
 const useFilterEngineWorks = ()=>{
-  const { t } = useTranslation('searchEngine');
+  const { t, dict } = useDictContext();
     const [filtersType,setFiltersType]=useState<FiltersType>({
       book:true,
       'fiction-book':true,
@@ -39,25 +40,25 @@ const useFilterEngineWorks = ()=>{
     <div className="my-3">
       <Form.Check data-cy="check-fiction-book" inline
       type="checkbox"
-      label={t('Fiction books')}
+      label={t(dict,'Fiction books')}
       checked={filtersType['fiction-book']}
       onChange={(e) => handlerComboxesChangeType(e, 'fiction-book')}
       />
       <Form.Check data-cy="check-book" inline
       type="checkbox"
-      label={t('Nofictions books')}
+      label={t(dict,'Nofictions books')}
       checked={filtersType['book']}
       onChange={(e) => handlerComboxesChangeType(e, 'book')}
       />
       <Form.Check data-cy="check-movie" inline
       type="checkbox"
-      label={t('Movies')}
+      label={t(dict,'Movies')}
       checked={filtersType.movie}
       onChange={(e) => handlerComboxesChangeType(e, 'movie')}
       />
       <Form.Check data-cy="check-documentary" inline
       type="checkbox"
-      label={t('Documentaries')}
+      label={t(dict,'Documentaries')}
       checked={filtersType.documentary}
       onChange={(e) => handlerComboxesChangeType(e, 'documentary')}
       />

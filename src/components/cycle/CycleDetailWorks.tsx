@@ -2,9 +2,10 @@ import React from 'react'
 import WorkMosaic from '@/src/components/work/MosaicItem'
 import dayjs from 'dayjs';
 import { useQueryClient } from '@tanstack/react-query';;
-import useTranslation from 'next-translate/useTranslation'
+
 import { WorkMosaicItem } from '@/src/types/work'
 import { Work } from '@prisma/client'
+import { useDictContext } from '@/src/hooks/useDictContext';
 
 interface Props{
   showSocialInteraction?:boolean,
@@ -21,7 +22,8 @@ interface Props{
 
 const CycleDetailWorks: React.FC<Props> = ({ showSocialInteraction = true, showHeader = true,size = 'md',cycleWorksDates}) => {
   const works = cycleWorksDates.map(c=>c.work!)
-  const {t} = useTranslation('cycleDetail')
+  // const {t} = useTranslation('cycleDetail')
+  const{t,dict}=useDictContext();
   const queryClient = useQueryClient()
   const getWorksSorted = (() => {
     const res: Work[] = [];
@@ -61,7 +63,7 @@ const CycleDetailWorks: React.FC<Props> = ({ showSocialInteraction = true, showH
   
   return <>
       {showHeader && <h4 className="h5 mt-5 mb-3 fw-bold text-gray-dark">
-        {t('worksCountHeader', { count: works.length })} 
+        {t(dict,'worksCountHeader', { count: works.length })} 
       </h4>}
       <section className="d-flex justify-content-center justify-content-lg-start">
       <div className='d-flex flex-wrap flex-column flex-lg-row justify-content-center '>      

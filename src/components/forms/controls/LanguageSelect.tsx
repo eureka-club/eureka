@@ -1,7 +1,8 @@
 import { FunctionComponent, useState, useEffect, ChangeEvent } from 'react';
 //import FormControl from 'react-bootstrap/FormControl';
 import { SelectChangeEvent, Button as ButtonMui, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import useTranslation from 'next-translate/useTranslation';
+import { useDictContext } from '@/src/hooks/useDictContext';
+
 
 
 type Props = {
@@ -12,7 +13,7 @@ type Props = {
 };
 const LanguageSelect: FunctionComponent<Props> = ({ defaultValue, label, onSelectLanguage }) => {
 
-  const { t } = useTranslation('common');
+  const { t, dict } = useDictContext();
   const [language, setLanguage] = useState<string>('');
 
   useEffect(() => {
@@ -45,10 +46,10 @@ const LanguageSelect: FunctionComponent<Props> = ({ defaultValue, label, onSelec
         onChange={handlerSelectLanguage}
         value={language}
       >
-        <MenuItem value='spanish'>{t('hereLinkSPA')}</MenuItem>
-        <MenuItem value='english'>{t('hereLinkENG')}</MenuItem>
-        <MenuItem value='portuguese'>{t('hereLinkPORT')}</MenuItem>
-        <MenuItem value='french'>{t('hereLinkFR')}</MenuItem>
+        <MenuItem value='spanish'>{t(dict,'hereLinkSPA')}</MenuItem>
+        <MenuItem value='english'>{t(dict,'hereLinkENG')}</MenuItem>
+        <MenuItem value='portuguese'>{t(dict,'hereLinkPORT')}</MenuItem>
+        <MenuItem value='french'>{t(dict,'hereLinkFR')}</MenuItem>
 
       </Select>
     </FormControl>

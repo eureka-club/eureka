@@ -1,7 +1,7 @@
 import { Post } from '@prisma/client';
 import { useAtom } from 'jotai';
-import { useRouter } from 'next/navigation';
-import useTranslation from 'next-translate/useTranslation';
+import { useParams, useRouter } from 'next/navigation';
+
 import { FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { BsX } from 'react-icons/bs';
@@ -54,10 +54,10 @@ import { set } from 'lodash';
 import usePost from '../../usePost';
 import LocalImageComponent from '../LocalImage';
 import { EditPostAboutCycleClientPayload, EditPostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
+import { useDictContext } from '@/src/hooks/useDictContext';
 interface Props {
   noModal?: boolean;
   cacheKey?: string[]
-  id: number;
 }
 
 interface FormValues {
@@ -82,7 +82,10 @@ const whereCycleParticipants = (id: number) => ({
     ],
   }
 });
-const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
+const EditPostForm: FunctionComponent<Props> = ({ noModal = false }) => {
+  const{id:id_}=useParams<{id:string}>()!;
+  const id= +id_;
+  const{t,dict}=useDictContext();
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
   const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -191,7 +194,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
     if (work) setSelectedWork(work as WorkMosaicItem);
   }, [work]);
 
-  const { t } = useTranslation('createPostForm');
+  // const { t } = useTranslation('createPostForm');
 
   const { data: topics } = useTopics();
   //const [tags, setTags] = useState<string>('');
@@ -248,13 +251,13 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
   /*const formValidation = (payload: any) => {
 
     if (!payload.title.length) {
-       toast.error( t('NotTitle'))
+       toast.error( t(dict,'NotTitle'))
        return false;
      }else if (!imageFile) {
-       toast.error( t('requiredEurekaImageError'))
+       toast.error( t(dict,'requiredEurekaImageError'))
        return false;
      }else if (!payload.contentText.length) {
-       toast.error( t('NotContentText'))
+       toast.error( t(dict,'NotContentText'))
        return false;
      }
     return true;
@@ -285,7 +288,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
         });
         //console.log(res, 'res')
         if (res.ok) {
-          toast.success(t('PostEdited'));
+          toast.success(t(dict,'PostEdited'));
           router.push(`/${formValues.selectedCycle ? 'cycle' : 'work'}/${formValues.selectedCycle ? formValues.selectedCycle.id : formValues.selectedWork!.id}/post/${post!.id}`)
         }
         return res.json();
@@ -348,7 +351,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
           body: JSON.stringify(payload),
         });
         if (res.ok) {
-          toast.success(t('PostRemoved'));
+          toast.success(t(dict,'PostRemoved'));
           router.push(`/${formValues.selectedCycle ? 'cycle' : 'work'}/${formValues.selectedCycle ? formValues.selectedCycle.id : formValues.selectedWork!.id}`)
         }
         return res.json();
@@ -402,7 +405,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
     ev.preventDefault();
 
     if (!imageFile && !formValues.currentImage) {
-      toast.error(t('requiredEurekaImageError'))
+      toast.error(t(dict,'requiredEurekaImageError'))
       return;
     }
 
@@ -440,7 +443,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
       await execEditPost(payload);
     }
     else
-      toast.error(t('NotAboutItem'))
+      toast.error(t(dict,'NotAboutItem'))
   };
 
   const handleRemove = async (ev: MouseEvent<HTMLButtonElement>) => {
@@ -504,7 +507,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
         <Col className='d-flex flex-column justify-content-center align-items-center  flex-xxl-row justify-content-xxl-start align-items-xxl-start' >
           <img className={styles.selectedPhoto} src={formValues.currentImage} />
           <Button className="btn-eureka ms-0 ms-xxl-3  text-white" onClick={() => handleChangePhoto()}>
-            {t('Change Photo')}
+            {t(dict,'Change Photo')}
           </Button>
         </Col>
       </Row>
@@ -513,7 +516,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
         <Col className='d-flex flex-column justify-content-center align-items-center  flex-xxl-row justify-content-xxl-start align-items-xxl-start' >
           <img className={styles.selectedPhoto} src={imageChanged} />
           <Button className="btn-eureka ms-0 ms-xxl-3  text-white" onClick={() => handleChangePhoto()}>
-            {t('Change Photo')}
+            {t(dict,'Change Photo')}
           </Button>
         </Col>
       </Row>
@@ -583,7 +586,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
   return (
     <Form ref={formRef}>
       <ModalHeader closeButton={!noModal}>
-        <ModalTitle> <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('titleEdit')}</h1></ModalTitle>
+        <ModalTitle> <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t(dict,'titleEdit')}</h1></ModalTitle>
       </ModalHeader>
       <ModalBody className=''>
         <section className='my-3'>
@@ -593,11 +596,11 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
             <BsX fontSize='1.5em' />
           </Button></div>{!useCrop && <Prompt onImageSelect={onImageSelect} />}
             <FormGroup className='mt-4 mb-4'>
-              <FormControlLabel control={<Switch checked={useCrop} onChange={handleChangeUseCropSwith} />} label={t('showCrop')} />
+              <FormControlLabel control={<Switch checked={useCrop} onChange={handleChangeUseCropSwith} />} label={t(dict,'showCrop')} />
             </FormGroup>
             {useCrop && <Col className='mb-4'>
               {!showCrop && (<><Button data-cy="image-load" className="btn-eureka w-100 px-2 px-lg-5 text-white" onClick={() => setShowCrop(true)}>
-                {t('imageFieldLabel')}
+                {t(dict,'imageFieldLabel')}
               </Button>
                 {/*currentImg && renderPhoto()*/}
               </>)}
@@ -616,15 +619,15 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
         {!changePhoto && <><Row className='d-flex flex-column px-2 mt-5 '>
           <Col className='mb-4'>
             <AsyncTypeaheadMaterial item={(formValues.selectedWork) ? formValues.selectedWork : formValues.selectedCycle} searchType="all" onSelected={handleSelectWorkOrCycle}
-              label={`*${t('searchCycleOrWorkFieldLabel')}`}
-              helperText={`${t('searchCycleOrWorkFieldPlaceholder')}`} />
+              label={`*${t(dict,'searchCycleOrWorkFieldLabel')}`}
+              helperText={`${t(dict,'searchCycleOrWorkFieldPlaceholder')}`} />
           </Col>
           <Col className='mb-4'>
-            <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={formValues.language} label={t('languageFieldLabel')} />
+            <LanguageSelect onSelectLanguage={onSelectLanguage} defaultValue={formValues.language} label={t(dict,'languageFieldLabel')} />
           </Col>
           <Col className='mb-4'>
             <FormGroup controlId="postTitle" >
-              <TextField id="postTitle" className="w-100" label={t('titleFieldLabel')}
+              <TextField id="postTitle" className="w-100" label={t(dict,'titleFieldLabel')}
                 variant="outlined" size="small" value={formValues.title}
                 onChange={(e) => handleSetTitle(e.target.value)}>
               </TextField>
@@ -632,7 +635,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
           </Col>
         </Row>
           <FormGroup controlId="description" as={Col} className="mb-4 px-2">
-            <FormLabel>{t('descriptionFieldLabel')}</FormLabel>
+            <FormLabel>{t(dict,'descriptionFieldLabel')}</FormLabel>
             {/* @ts-ignore*/}
             <EditorCmp
               apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
@@ -675,7 +678,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
                       id="create-post--search-cycle"
                       filterBy={() => true}
                       inputProps={{ id: 'create-post--search-cycle' }}
-                      placeholder={t('searchCycleFieldPlaceholder')}
+                      placeholder={t(dict,'searchCycleFieldPlaceholder')}
                       isPending={isSearchCycleLoading}
                       labelKey={labelKeyFn}
                       minLength={2}
@@ -696,8 +699,8 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
                 )*/}
                 <AsyncTypeaheadMaterial item={formValues.selectedCycle} onSelected={handleSelectCycle} searchType="cycles"
                   workSelected={formValues.selectedWork}
-                  label={`${t('searchCycleFieldLabel')}`}
-                  helperText={`${t('searchCycleInfotip')}`} />
+                  label={`${t(dict,'searchCycleFieldLabel')}`}
+                  helperText={`${t(dict,'searchCycleInfotip')}`} />
               </FormGroup>
             </Col>
 
@@ -707,15 +710,15 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
                   data={topics as {code:string,label:string}[]}
                   items={formValues.topics}
                   setItems={handleSetTopics}
-                  formatValue={(v: string) => t(`topics:${v}`)}
+                  formatValue={(v: string) => t(dict,`topics:${v}`)}
                   max={3}
-                  label={t('topicsPostLabel')}
-                  placeholder={`${t('Type to add tag')}...`}
+                  label={t(dict,'topicsPostLabel')}
+                  placeholder={`${t(dict,'Type to add tag')}...`}
                 />
               </FormGroup>
             </Col>
             <Col className="mb-4">
-              <TagsInputMaterial tags={formValues.tags} setTags={handleSetTags} label={t('topicsFieldLabel')} />
+              <TagsInputMaterial tags={formValues.tags} setTags={handleSetTags} label={t(dict,'topicsFieldLabel')} />
             </Col>
           </Row></>}
       </ModalBody>
@@ -729,14 +732,14 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
                 onClick={handleRemove}
               >
                 <>
-                  {t('resetBtnLabel')}
+                  {t(dict,'resetBtnLabel')}
                   {isDeletePostLoading && (
                     <Spinner size="sm" animation="grow" variant="secondary" className={`ms-2 ${styles.loadIndicator}`} />
                   )}</>
               </Button>
               <Button disabled={isEditPostLoading} onClick={(e) => { handleSubmit(e) }} className="btn-eureka" style={{ width: '10em' }}>
                 <>
-                  {t('titleEdit')}
+                  {t(dict,'titleEdit')}
                   {isEditPostLoading && (
                     <Spinner size="sm" animation="grow" variant="secondary" className={`ms-2 ${styles.loadIndicator}`} />
                   )}

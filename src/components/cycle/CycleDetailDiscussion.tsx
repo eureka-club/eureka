@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/react';
-import useTranslation from 'next-translate/useTranslation';
+
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ChangeEvent, FunctionComponent, MouseEvent, useState,useEffect } from 'react';
 
@@ -19,6 +19,7 @@ import CycleDetailDiscussionCreateEurekaForm from './CycleDetailDiscussionCreate
 import CycleDetailDiscussionSuggestRelatedWork from './CycleDetailDiscussionSuggestRelatedWork';
 import SignInForm from '../forms/SignInForm';
 import { getLocale_In_NextPages } from '@/src/lib/utils';
+import { useDictContext } from '@/src/hooks/useDictContext';
 interface Props {
   cycle: CycleMosaicItem;
   className?: string;
@@ -35,7 +36,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
   const router = useRouter();
   const isSessionLoading = status == 'loading';
   const {show} = useModalContext()
-  const { t } = useTranslation('cycleDetail');
+  const { t, dict } = useDictContext();
   const asPath=usePathname()!;
   const locale = getLocale_In_NextPages(asPath);
   const { data: dataWorks } = useWorks({where:{cycles: { some: { id: cycle?.id } }} }, {
@@ -65,7 +66,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
                 setIsCreateEureka(true);
           }
           else
-            toast.error( t('canNotCreatePostJoinToCycle'))
+            toast.error( t(dict,'canNotCreatePostJoinToCycle'))
      }
   },[router])
 
@@ -86,7 +87,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
                 // setGlobalModalsState({ ...globalModalsState, ...{ createPostModalOpened: true } });
           }
           else
-            toast.error( t('canNotCreatePostJoinToCycle'))
+            toast.error( t(dict,'canNotCreatePostJoinToCycle'))
 
     }
   };
@@ -126,7 +127,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
       {cycle && (
         <div className={`${styles.container} ${className}`}>
           {/*<div className='container text-center'>
-          <p className={`${styles.initialText}`}>{t('EurekaMomentsExplain')}</p>
+          <p className={`${styles.initialText}`}>{t(dict,'EurekaMomentsExplain')}</p>
           </div>*/}
           <Row className={`d-flex justify-content-center ${styles.discussionContainer}`}>
             {session && session.user && (
@@ -145,7 +146,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
                   } ${isCreateEureka && styles.optButtonActive}`}
                 >
                   <GiBrain className="mr-1" />
-                  <span className="fs-6">{t('Create an Eureka')}</span>
+                  <span className="fs-6">{t(dict,'Create an Eureka')}</span>
                 </Button>
                
                 {canCreateWork() && (
@@ -155,7 +156,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
                       styles.relatedWorkBtn
                     } ${isSuggestRelatedWork && styles.optButtonActive}`}
                   >
-                    <BiBookHeart className="mr-1" /> <span className="fs-6">{t('Suggest a related work')}</span>
+                    <BiBookHeart className="mr-1" /> <span className="fs-6">{t(dict,'Suggest a related work')}</span>
                   </Button>
                 )}
               </ButtonGroup>*/}
@@ -169,8 +170,8 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
                       value={discussionItem}
                       onChange={onChangeDiscussionItem}
                     >
-                      <option value="">{t('emptyDiscussionItemLbl')}</option>
-                      <option value={-1}>{t('Cycle itself')}</option>
+                      <option value="">{t(dict,'emptyDiscussionItemLbl')}</option>
+                      <option value={-1}>{t(dict,'Cycle itself')}</option>
                       {getWorksOpt()}
                     </Form.Control>
                   </Form.Group>

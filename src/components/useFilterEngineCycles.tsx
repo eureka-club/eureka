@@ -1,14 +1,15 @@
 import React, { useState,ChangeEvent  } from "react"
-import useTranslation from 'next-translate/useTranslation';
+
 import { Form } from 'react-bootstrap';
 
 import FilterEngineCountries,{FiltersRegionsType} from '@/components/FilterEngineCountries'
+import { useDictContext } from "../hooks/useDictContext";
 export interface FiltersType {
   public:boolean;
   private:boolean
 } 
 const useFilterEngineCycles = ()=>{
-  const { t } = useTranslation('searchEngine');
+  const { t, dict } = useDictContext();
     const [filtersType,setFiltersType]=useState<FiltersType>({private:true,public:true})
     
     const [filtersCountries,setFiltersCountries]=useState<string[]>([])
@@ -34,14 +35,14 @@ const useFilterEngineCycles = ()=>{
     <div className="my-3">
       <Form.Check inline
       type="checkbox"
-      label={t('private')}
+      label={t(dict,'private')}
       checked={filtersType['private']}
       data-cy="check-private"
       onChange={(e) => handlerComboxesChangeType(e, 'private')}
       />
       <Form.Check inline
       type="checkbox"
-      label={t('public')}
+      label={t(dict,'public')}
       checked={filtersType['public']}
       data-cy="check-public"
       onChange={(e) => handlerComboxesChangeType(e, 'public')}

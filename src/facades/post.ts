@@ -7,24 +7,14 @@ import { prisma } from '@/src/lib/prisma';
 export const find = async (id: number): Promise<PostMosaicItem | null> => {
   return prisma.post.findUnique({
     where: { id },
-    include: {
-      works: { select: { id: true, title: true, type: true, localImages: { select: { storedFile: true } } } },
-      cycles: {
-        select: {
-          id: true,
-          creator: { select: { name: true } },
-          localImages: { select: { storedFile: true } },
-          creatorId: true,
-          startDate: true,
-          endDate: true,
-          title: true,
-        },
-      },
-      favs: { select: { id: true } },
-      creator: { select: { id: true, name: true, photos: true, countryOfOrigin: true } },
-      localImages: { select: { storedFile: true } },
-      reactions: true,
-    },
+    include:{
+      works:{select:{id:true,author:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
+      cycles:{select:{id:true,access:true,localImages:{select:{storedFile:true}},creatorId:true,startDate:true,endDate:true,title:true}},
+      favs:{select:{id:true,}},
+      creator: {select:{id:true,name:true,photos:true,countryOfOrigin:true}},
+      localImages: {select:{storedFile:true}},
+      reactions:{select:{userId:true,unified:true,emoji:true,createdAt:true}},
+    }
   });
 };
 
@@ -35,23 +25,13 @@ export const findAll = async (props?: Prisma.PostFindManyArgs, page?: number): P
     skip,
     cursor,
     orderBy: { createdAt: 'desc' },
-    include: {
-      works: { select: { id: true, title: true, type: true, localImages: { select: { storedFile: true } } } },
-      cycles: {
-        select: {
-          id: true,
-          creator: { select: { name: true } },
-          localImages: { select: { storedFile: true } },
-          creatorId: true,
-          startDate: true,
-          endDate: true,
-          title: true,
-        },
-      },
-      favs: { select: { id: true } },
-      creator: { select: { id: true, name: true, photos: true, countryOfOrigin: true } },
-      localImages: { select: { storedFile: true } },
-      reactions: true,
+    include:{
+      works:{select:{id:true,author:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
+      cycles:{select:{id:true,access:true,localImages:{select:{storedFile:true}},creatorId:true,startDate:true,endDate:true,title:true}},
+      favs:{select:{id:true,}},
+      creator: {select:{id:true,name:true,photos:true,countryOfOrigin:true}},
+      localImages: {select:{storedFile:true}},
+      reactions:{select:{userId:true,unified:true,emoji:true,createdAt:true}},
     },
     where,
   });

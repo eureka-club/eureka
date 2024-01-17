@@ -37,7 +37,7 @@ import { FiTrash2 } from 'react-icons/fi';
 import { useDictContext } from '@/src/hooks/useDictContext';
 import { WorkMosaicItem } from '@/src/types/work';
 import { CycleMosaicItem } from '@/src/types/cycle';
-import { t } from '@/src/get-dictionary';
+
 import { WorkContext } from '@/src/hooks/useWorkContext';
 import WorkSummary from '@/src/components/work/WorkSummary';
 import Rating from '@/src/components/common/Rating';
@@ -57,7 +57,7 @@ interface Props {
 const Work: FunctionComponent<Props> = ({ work,workCycles,workPosts, session }) => {
   const router = useRouter();
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
-  const {dict}=useDictContext();
+  const {t,dict}=useDictContext();
   const [qty, setQty] = useState(work?.ratingAVG || 0);
   const [qtyByUser, setqtyByUser] = useState(0);
 
@@ -249,7 +249,7 @@ const Work: FunctionComponent<Props> = ({ work,workCycles,workPosts, session }) 
                     )}
                 </Box>
                 </section>
-                <HyvorComments entity="work" id={`${work.id}`} session={session} />
+                <HyvorComments entity="work" id={`${work.id}`} />
             </Col>
         </Row>
 

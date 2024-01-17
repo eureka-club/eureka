@@ -6,7 +6,7 @@ import { UserMosaicItem } from '@/src/types/user';
 import {useNotificationContext} from '@/src/hooks/useNotificationProvider';
 import {setCycleJoinRequests,removeCycleJoinRequest} from '@/src/hooks/useCycleJoinRequests'
 import { subscribe_to_segment, unsubscribe_from_segment } from '@/src/lib/mailchimp';
-import { t } from '@/src/get-dictionary';
+
 import { useDictContext } from '../useDictContext';
 import { Session } from '@/src/types';
 
@@ -16,7 +16,7 @@ type ctx = {
 } | undefined;
 
 const useJoinUserToCycleAction = (session:Session,cycle:CycleMosaicItem,participants:UserMosaicItem[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
-    // const {t} = useTranslation('common');
+    // const {t} = useDictContext();
     const {notifier} = useNotificationContext();
     const queryClient = useQueryClient();
     const whereCycleParticipants = {
@@ -25,7 +25,7 @@ const useJoinUserToCycleAction = (session:Session,cycle:CycleMosaicItem,particip
             {joinedCycles: { some: { id: cycle?.id } }},//participants
         ], 
     };
-    const{dict}=useDictContext()
+    const{t,dict}=useDictContext()
     
     return useMutation(
         {
@@ -99,7 +99,7 @@ const useJoinUserToCycleAction = (session:Session,cycle:CycleMosaicItem,particip
 }
 
 const useLeaveUserFromCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,participants:UserMosaicItem[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
-    // const {t} = useTranslation('common');
+    // const {t} = useDictContext();
     const queryClient = useQueryClient();
     const {notifier} = useNotificationContext();
     const whereCycleParticipants = {

@@ -1,11 +1,11 @@
 // import { lazy,Suspense } from 'react';
-// import { NextPage } from 'next';
+// 
 // import {GetServerSideProps} from 'next';
 // import Head from "next/head";
 // import { Spinner } from 'react-bootstrap';
 // import SimpleLayout from '@/components/layouts/SimpleLayout';
 // import { getSession } from 'next-auth/react';
-// import useTranslation from 'next-translate/useTranslation';
+// 
 // import { GetAllByResonse, Session } from '@/src/types';
 // // import {getMyCycles,myCyclesWhere} from '@/src/useMyCycles';
 // import { dehydrate,QueryClient } from '@tanstack/react-query';;
@@ -41,7 +41,6 @@
 // }
 
 // const IndexPage: NextPage<Props> = ({language,session}) => {
-//   const { t } = useTranslation('common');
 //   // const {data:session,status} = useSession();
 //   // const isLoadingSession = status === "loading"
 //   return (

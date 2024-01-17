@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/react';
-import useTranslation from 'next-translate/useTranslation';
+
 import { MouseEvent, FunctionComponent, useState, useRef } from 'react';
 
 import { Button, Col, Row, Form } from 'react-bootstrap';
@@ -22,6 +22,8 @@ import globalModalsAtom from '../../atoms/globalModals';
 // import stylesImageFileSelect from '../forms/CreatePostForm.module.css';
 
 import WorkTypeaheadSearchItem from '../work/TypeaheadSearchItem';
+import { useDictContext } from '@/src/hooks/useDictContext';
+import { Option } from 'react-bootstrap-typeahead/types/types';
 
 // import styles from './CycleDetailDiscussionCreateEurekaForm.module.css';
 
@@ -32,14 +34,14 @@ interface Props {
 const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle }) => {
   const queryClient = useQueryClient();
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-  const typeaheadRef = useRef<AsyncTypeahead<WorkMosaicItem>>(null);
+  const typeaheadRef = useRef(null);
   const [isWorkSearchLoading, setIsWorkSearchLoading] = useState(false);
   const [workSearchResults, setWorkSearchResults] = useState<WorkMosaicItem[]>([]);
   const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkMosaicItem | null>(null);
   // const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkMosaicItem[]>([]);
   const [includedWorksIds, setIncludedWorksIds] = useState<number[]>();
   const {data:session} = useSession();
-  const { t } = useTranslation('cycleDetail');
+  const { t, dict } = useDictContext();
 
   // const [newEurekaImageFile, setNewEurekaImageFile] = useState<File | null>(null);
   // const { data: topics } = useTopics();
@@ -148,10 +150,11 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
     }
   };
 
-  const handleSearchWorkSelect = (selected: WorkMosaicItem[]): void => {
-    if (selected[0] != null) {
+  const handleSearchWorkSelect = (selected: Option[]): void => {
+    const s = (selected as WorkMosaicItem[]);
+    if (s[0] != null) {
       // setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
-      setIncludedWorksIds(() => [(selected[0] as Work).id]);
+      setIncludedWorksIds(() => [s[0].id]);
       // setAddWorkModalOpened(false);
     }
   };
@@ -177,7 +180,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
       <Form as={Row} className="mb-5">
         <Col sm={{ span: 7 }}>
           <Form.Group controlId="cycle">
-            {/* <Form.Label>{t('Select work')}:</Form.Label> */}
+            {/* <Form.Label>{t(dict,'Select work')}:</Form.Label> */}
 
             {/* language=CSS */}
             <style jsx global>{`
@@ -191,15 +194,15 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
               // Bypass client-side filtering. Results are already filtered by the search endpoint
               filterBy={() => true}
               inputProps={{ required: true }}
-              placeholder={t('Select work')}
+              placeholder={t(dict,'Select work')}
               ref={typeaheadRef}
               isLoading={isWorkSearchLoading}
-              labelKey={(res) => `${res.title}`}
+              labelKey={(res) => `${(res as WorkMosaicItem).title}`}
               minLength={2}
               onSearch={handleSearchWork}
               options={data?.works||[]}
               onChange={handleSearchWorkSelect}
-              renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work} />}
+              renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work as WorkMosaicItem} />}
             >
               {/* @ts-ignore*/}
               {handleSearchWorkHighlightChange}
@@ -214,7 +217,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
             type="button"
             className={styles.suggestButton}
           >
-            {t('Suggest work')}
+            {t(dict,'Suggest work')}
           </Button>
         </Col>
       </Form>
@@ -222,7 +225,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
         <Row>
           <Col>
             <h5 className={styles.addWorkInfo}>
-              <em>{t("Didn't find the work you were looking for? You can add it to our library!")}</em>
+              <em>{t(dict,"Didn't find the work you were looking for? You can add it to our library!")}</em>
             </h5>
           </Col>
           <Col>
@@ -233,7 +236,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
               type="button"
               className={styles.addButton}
             >
-              {t('Create work')}
+              {t(dict,'Create work')}
             </Button>
           </Col>
         </Row>

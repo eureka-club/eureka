@@ -15,12 +15,11 @@ interface Props {
     NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME:string;
 }
 const AboutUs:FC<Props> = ({NEXT_PUBLIC_AZURE_CDN_ENDPOINT,NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}) => {
-  const{dict}=useDictContext()
-  const t=(s:string)=>t_(dict,s)
+  const{t,dict}=useDictContext()
   
   return (<Container>
       <div style={{ textAlign: 'center' }}>
-        <h1 className="text-secondary fw-bold">{t('title')}</h1>
+        <h1 className="text-secondary fw-bold">{t(dict,'title')}</h1>
       </div>
       <br />
       <br />
@@ -41,13 +40,13 @@ const AboutUs:FC<Props> = ({NEXT_PUBLIC_AZURE_CDN_ENDPOINT,NEXT_PUBLIC_AZURE_STO
                   <TiSocialLinkedinCircular className={styles.si} />
                 </a>
               </h2>
-              <h3 className={styles.professionName}>{t('Founder, Director')}</h3>
-              <h4 className={styles.positionName}>{t('Researcher and technologist')}</h4>
-            <Chip size="small" label={t('social justice')} className={`1 ${styles.interest}`}/>
+              <h3 className={styles.professionName}>{t(dict,'Founder, Director')}</h3>
+              <h4 className={styles.positionName}>{t(dict,'Researcher and technologist')}</h4>
+            <Chip size="small" label={t(dict,'social justice')} className={`1 ${styles.interest}`}/>
               <br />
-            <Chip size="small" label={t('intersectional feminism')} className={`1 ${styles.interest}`}/>
+            <Chip size="small" label={t(dict,'intersectional feminism')} className={`1 ${styles.interest}`}/>
               <br />
-            <Chip size="small" label={t('disinformation')} className={`1 ${styles.interest}`}/>
+            <Chip size="small" label={t(dict,'disinformation')} className={`1 ${styles.interest}`}/>
             </Grid>
 
             <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
@@ -68,15 +67,15 @@ const AboutUs:FC<Props> = ({NEXT_PUBLIC_AZURE_CDN_ENDPOINT,NEXT_PUBLIC_AZURE_STO
                   <TiSocialLinkedinCircular className={styles.si} />
                 </a>
               </h2>
-              <h3 className={styles.professionName}>{t('Co-creator from Prosperia')}</h3>
-              <h4 className={styles.positionName}>{t('AI and technology expert')}</h4>
-            <Chip size="small" label={t('artificial intelligence')} className={`1 ${styles.interest}`}/>
+              <h3 className={styles.professionName}>{t(dict,'Co-creator from Prosperia')}</h3>
+              <h4 className={styles.positionName}>{t(dict,'AI and technology expert')}</h4>
+            <Chip size="small" label={t(dict,'artificial intelligence')} className={`1 ${styles.interest}`}/>
                 
               <br />
-            <Chip size="small" label={t('social policies')} className={`1 ${styles.interest}`}/>
+            <Chip size="small" label={t(dict,'social policies')} className={`1 ${styles.interest}`}/>
                 
               <br />
-            <Chip size="small" label={t('public health')} className={`1 ${styles.interest}`}/>
+            <Chip size="small" label={t(dict,'public health')} className={`1 ${styles.interest}`}/>
                 
               
             </Grid>
@@ -95,13 +94,13 @@ const AboutUs:FC<Props> = ({NEXT_PUBLIC_AZURE_CDN_ENDPOINT,NEXT_PUBLIC_AZURE_STO
                   <TiSocialLinkedinCircular className={styles.si} />
                 </a>
               </h2>
-              <h3 className={styles.professionName}>{t('Software Engineer')}</h3>
-              <h4 className={styles.positionName}>{t('Full-stack expert')}</h4>
-            <Chip size="small" label={t('environment')} className={`1 ${styles.interest}`}/>
+              <h3 className={styles.professionName}>{t(dict,'Software Engineer')}</h3>
+              <h4 className={styles.positionName}>{t(dict,'Full-stack expert')}</h4>
+            <Chip size="small" label={t(dict,'environment')} className={`1 ${styles.interest}`}/>
               <br />
-            <Chip size="small" label={t('good cinema')} className={`1 ${styles.interest}`}/>
+            <Chip size="small" label={t(dict,'good cinema')} className={`1 ${styles.interest}`}/>
               <br/>
-            <Chip size="small" label={t('music')} className={`1 ${styles.interest}`}/>
+            <Chip size="small" label={t(dict,'music')} className={`1 ${styles.interest}`}/>
             </Grid>
 
             <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
@@ -118,13 +117,13 @@ const AboutUs:FC<Props> = ({NEXT_PUBLIC_AZURE_CDN_ENDPOINT,NEXT_PUBLIC_AZURE_STO
                   <TiSocialLinkedinCircular className={styles.si} />
                 </a>
               </h2>
-              <h3 className={styles.professionName}>{t('Software Engineer')}</h3>
-              <h4 className={styles.positionName}>{t('Front-end expert')}</h4>
-            <Chip size="small" label={t('History')} className={`1 ${styles.interest}`}/>
+              <h3 className={styles.professionName}>{t(dict,'Software Engineer')}</h3>
+              <h4 className={styles.positionName}>{t(dict,'Front-end expert')}</h4>
+            <Chip size="small" label={t(dict,'History')} className={`1 ${styles.interest}`}/>
               <br />
-            <Chip size="small" label={t('music')} className={`1 ${styles.interest}`}/>
+            <Chip size="small" label={t(dict,'music')} className={`1 ${styles.interest}`}/>
               <br />
-            <Chip size="small" label={t('Nature')} className={`1 ${styles.interest}`}/>
+            <Chip size="small" label={t(dict,'Nature')} className={`1 ${styles.interest}`}/>
             </Grid>
 
             <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
@@ -141,13 +140,13 @@ const AboutUs:FC<Props> = ({NEXT_PUBLIC_AZURE_CDN_ENDPOINT,NEXT_PUBLIC_AZURE_STO
                   <TiSocialLinkedinCircular className={styles.si} />
                 </a>
               </h2>
-              <h3 className={styles.professionName}>{t('Communications Officer')}</h3>
-              <h4 className={styles.positionName}>{t('Graphic design and social media expert')}</h4>
-            <Chip size="small" label={t('Communications')}  className={` ${styles.interest}`}/>
+              <h3 className={styles.professionName}>{t(dict,'Communications Officer')}</h3>
+              <h4 className={styles.positionName}>{t(dict,'Graphic design and social media expert')}</h4>
+            <Chip size="small" label={t(dict,'Communications')}  className={` ${styles.interest}`}/>
               <br />
-            <Chip size="small" label={t('Graphic design')}  className={` ${styles.interest}`}/>
+            <Chip size="small" label={t(dict,'Graphic design')}  className={` ${styles.interest}`}/>
               <br />
-            <Chip size="small" label={t('Social Media')}  className={` ${styles.interest}`}/>
+            <Chip size="small" label={t(dict,'Social Media')}  className={` ${styles.interest}`}/>
             </Grid>
             
             <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
@@ -164,13 +163,13 @@ const AboutUs:FC<Props> = ({NEXT_PUBLIC_AZURE_CDN_ENDPOINT,NEXT_PUBLIC_AZURE_STO
                   <TiSocialLinkedinCircular className={styles.si} />
                 </a>
               </h2>
-              <h3 className={styles.professionName}>{t('Partnerships and Development')}</h3>
-              <h4 className={styles.positionName}>{t('Master in Literature')}</h4>    
-            <Chip size="small" label={t('Gender and feminisms')} className={`1 ${styles.interest}`}/>
+              <h3 className={styles.professionName}>{t(dict,'Partnerships and Development')}</h3>
+              <h4 className={styles.positionName}>{t(dict,'Master in Literature')}</h4>    
+            <Chip size="small" label={t(dict,'Gender and feminisms')} className={`1 ${styles.interest}`}/>
               <br />
-            <Chip size="small" label={t('Brazilian Popular Music')} className={`1 ${styles.interest}`}/>
+            <Chip size="small" label={t(dict,'Brazilian Popular Music')} className={`1 ${styles.interest}`}/>
               <br />
-            <Chip size="small" label={t('Books')} className={`1 ${styles.interest}`}/>
+            <Chip size="small" label={t(dict,'Books')} className={`1 ${styles.interest}`}/>
             </Grid>
 
             <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
@@ -187,13 +186,13 @@ const AboutUs:FC<Props> = ({NEXT_PUBLIC_AZURE_CDN_ENDPOINT,NEXT_PUBLIC_AZURE_STO
                   <TiSocialLinkedinCircular className={styles.si} />
                 </a>
               </h2>
-              <h3 className={styles.professionName}>{t('Advisor')}</h3>
-              <h4 className={styles.positionName}>{t('Cinema and documentary expert')}</h4>
-            <Chip size="small" label={t('anthropology')} className={`1 ${styles.interest}`}/>
+              <h3 className={styles.professionName}>{t(dict,'Advisor')}</h3>
+              <h4 className={styles.positionName}>{t(dict,'Cinema and documentary expert')}</h4>
+            <Chip size="small" label={t(dict,'anthropology')} className={`1 ${styles.interest}`}/>
               <br />
-            <Chip size="small" label={t('cultural heritage and memory')} className={`1 ${styles.interest}`}/>
+            <Chip size="small" label={t(dict,'cultural heritage and memory')} className={`1 ${styles.interest}`}/>
               <br />
-            <Chip size="small" label={t('education')} className={`1 ${styles.interest}`}/>
+            <Chip size="small" label={t(dict,'education')} className={`1 ${styles.interest}`}/>
             </Grid>
 
             <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
@@ -210,13 +209,13 @@ const AboutUs:FC<Props> = ({NEXT_PUBLIC_AZURE_CDN_ENDPOINT,NEXT_PUBLIC_AZURE_STO
                   <TiSocialLinkedinCircular className={styles.si} />
                 </a>
               </h2>
-              <h3 className={styles.professionName}>{t('Advisor')}</h3>
-              <h4 className={styles.positionName}>{t('Narrative and public affairs expert')}</h4>
-            <Chip size="small" label={t('Communication')} className={`1 ${styles.interest}`}/>
+              <h3 className={styles.professionName}>{t(dict,'Advisor')}</h3>
+              <h4 className={styles.positionName}>{t(dict,'Narrative and public affairs expert')}</h4>
+            <Chip size="small" label={t(dict,'Communication')} className={`1 ${styles.interest}`}/>
               <br />
-            <Chip size="small" label={t('Crisis management')} className={`1 ${styles.interest}`}/>
+            <Chip size="small" label={t(dict,'Crisis management')} className={`1 ${styles.interest}`}/>
               <br />
-            <Chip size="small" label={t('Public relations')} className={`1 ${styles.interest}`}/>
+            <Chip size="small" label={t(dict,'Public relations')} className={`1 ${styles.interest}`}/>
             </Grid>
 
             <Grid container className='w-100 d-flex justify-content-center'>
@@ -234,13 +233,13 @@ const AboutUs:FC<Props> = ({NEXT_PUBLIC_AZURE_CDN_ENDPOINT,NEXT_PUBLIC_AZURE_STO
                     <TiSocialLinkedinCircular className={styles.si} />
                   </a>
                 </h2>
-                <h3 className={styles.professionName}>{t('Mastermind')}</h3>
-                <h4 className={styles.positionName}>{t('Napping expert')}</h4>
-              <Chip size="small" label={t('birds')} className={`1 ${styles.interest}`}/>
+                <h3 className={styles.professionName}>{t(dict,'Mastermind')}</h3>
+                <h4 className={styles.positionName}>{t(dict,'Napping expert')}</h4>
+              <Chip size="small" label={t(dict,'birds')} className={`1 ${styles.interest}`}/>
                 <br />
-              <Chip size="small" label={t('sleeping')} className={`1 ${styles.interest}`}/>
+              <Chip size="small" label={t(dict,'sleeping')} className={`1 ${styles.interest}`}/>
                 <br />
-              <Chip size="small" label={t('music')} className={`1 ${styles.interest}`}/>
+              <Chip size="small" label={t(dict,'music')} className={`1 ${styles.interest}`}/>
               </Grid>
             </Grid>
           </Grid>
@@ -249,7 +248,7 @@ const AboutUs:FC<Props> = ({NEXT_PUBLIC_AZURE_CDN_ENDPOINT,NEXT_PUBLIC_AZURE_STO
           <div className={styles.thanks}>
             <hr />
             <h5 className='h4' style={{ color: 'var(--eureka-green)' }}>
-              {t('We are grateful for Eureka’s many friends that support us in a variety of ways!')}
+              {t(dict,'We are grateful for Eureka’s many friends that support us in a variety of ways!')}
             </h5>
             <p>
               Roland Trompette, Giovanna Salazar, Maïssa Hubert Chakour, Amy Shapiro Raikar, Jessie Keating, Jacques
@@ -260,7 +259,7 @@ const AboutUs:FC<Props> = ({NEXT_PUBLIC_AZURE_CDN_ENDPOINT,NEXT_PUBLIC_AZURE_STO
           <div className={styles['contact-me']}>
             <br />
             <hr />
-            <h5 className='h4' style={{ color: 'var(--eureka-green)' }}>{t('common:eurekaSupport')}</h5>
+            <h5 className='h4' style={{ color: 'var(--eureka-green)' }}>{t(dict,'common:eurekaSupport')}</h5>
             <section className='d-flex flex-row justify-content-around align-items-center mt-3'>
               <figure>
                 <Image

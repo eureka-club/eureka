@@ -6,7 +6,7 @@ import { useState, FormEvent, useEffect, useCallback, ChangeEvent, EventHandler 
 import { QueryClient, dehydrate, useMutation, useQueryClient } from '@tanstack/react-query';;
 import { backOfficePayload } from '@/src/types/backoffice';
 import useBackOffice from '@/src/useBackOffice';
-// import useTranslation from 'next-translate/useTranslation';
+// 
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import LocalImageComponent from '@/src/components/LocalImage';
 import { getWorks } from '@/src/useWorks';
@@ -87,7 +87,6 @@ export const WorkToCheckWhere = () => ({
 })
 
 const BackOffice: NextPage<Props> = ({ notFound, session }) => {
-  //let { t } = useTranslation('backOffice');
   //TODO
   const t = (s: string) => s;
   const router = useRouter();

@@ -1,6 +1,7 @@
 //import 'server-only'
 
 import { Locale } from 'i18n-config';
+import { t as t_} from './lib/utils';
 
 // We enumerate all dictionaries here for better linting and typescript support
 // We also get the default import for cleaner types
@@ -14,12 +15,5 @@ const dictionaries = {
 export const getDictionary = async (locale: Locale) =>
   dictionaries[locale]?.() ?? dictionaries.en()
 
-  export const t = (dict:Record<string,string>,s:string,p?:Record<string,any>)=>{
-    if(!p)
-      return dict[s];
-    let res = dict[s];
-    Object.entries(p).forEach(([k,v])=>{
-        res = res.replace(`{{${k}}}`,v);
-    }) 
-    return res; 
-  }
+  export const t = t_
+  

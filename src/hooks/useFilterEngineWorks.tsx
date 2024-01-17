@@ -3,12 +3,13 @@ import { Form } from 'react-bootstrap';
 
 import FilterEngineCountries,{FiltersRegionsType} from '@/src/components/FilterEngineCountries'
 import { useDictContext } from "./useDictContext";
-import { t } from "../get-dictionary";
+import { useParams } from "next/navigation";
+const{lang}=useParams<{lang:string}>()!;
 
 export type WorkFiltersType  = Record<string,boolean>;
 const useFilterEngineWorks = ()=>{
-  // const { t } = useTranslation('searchEngine');
-  const{dict}=useDictContext()
+  // const { t, dict } = useDictContext();
+  const{t,dict}=useDictContext()
     const [filtersType,setFiltersType]=useState<WorkFiltersType>({
       book:true,
       'fiction-book':true,

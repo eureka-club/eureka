@@ -1,10 +1,11 @@
 // import classNames from 'classnames';
-import useTranslation from 'next-translate/useTranslation';
+
 import { FunctionComponent, MouseEvent, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
 
 import styles from './UnclampText.module.css';
+import { useDictContext } from '../hooks/useDictContext';
 
 interface Props {
   clampHeight?: string;
@@ -20,7 +21,7 @@ const UnclampText: FunctionComponent<Props> = ({ clampHeight, text, showButtomMo
   const innerRef = useRef<HTMLDivElement>(null);
   const [textIsUnclamped, setTextIsUnclamped] = useState(false);
   const [unclampButtonVisible, setUnclampButtonVisible] = useState(false);
-  const { t } = useTranslation('common');
+  const { t, dict } = useDictContext();
 
   const handleExpandContentTextClick = (ev: MouseEvent) => {
     ev.preventDefault();
@@ -62,11 +63,11 @@ const UnclampText: FunctionComponent<Props> = ({ clampHeight, text, showButtomMo
         <Button variant="link" onClick={handleExpandContentTextClick} className={styles.unclampButton}>
           {textIsUnclamped === true ? (
             <>
-              {t('unclampTextLess')} <BsChevronUp />
+              {t(dict,'unclampTextLess')} <BsChevronUp />
             </>
           ) : (
             <>
-              {t('unclampTextMore')} <BsChevronDown />
+              {t(dict,'unclampTextMore')} <BsChevronDown />
             </>
           )}
         </Button>

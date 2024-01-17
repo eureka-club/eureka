@@ -1,10 +1,10 @@
 import React, { useState  } from "react"
-// import useTranslation from 'next-translate/useTranslation';
+// 
 
 import FilterEngineCountries,{FiltersRegionsType} from '@/components/FilterEngineCountries'
 
 const useFilterEnginePosts = ()=>{
-  // const { t } = useTranslation('searchEngine');
+  // const { t, dict } = useDictContext();
     
     const [filtersCountries,setFiltersCountries]=useState<string[]>([])
     const [filtersRegions,setFiltersRegions]=useState<FiltersRegionsType>({

@@ -1,5 +1,6 @@
-import { Prisma } from '@prisma/client';
-import usePosts,{getPosts} from './usePosts';
+import { useQuery } from '@tanstack/react-query';
+import { WEBAPP_URL } from '../constants';
+import { PostMosaicItem } from '../types/post';
 
 export const myPostsProps = (id: number)=> ({
   include:{works:true},
@@ -9,14 +10,21 @@ export const myPostsProps = (id: number)=> ({
   }
 });
 
-export const getMyPosts = async (id:number,take:number,origin='')=>{
-  return getPosts({...myPostsProps(id),take},origin);
+export const getMyPosts = async (id:number):Promise<PostMosaicItem[]>=>{
+  const url=`${WEBAPP_URL}/api/user/${id}/postsCreated`;
+  const fr=await fetch(url)
+  if(fr.ok){
+    const{postsCreated}=await fr.json()
+    return postsCreated.map((p:PostMosaicItem)=>({...p,type:'post'}));
+  }
+  return [];
 }
 
 const useMyPosts = (id:number) => {
-  return usePosts(myPostsProps(id),
-    {enabled:!!id}
-  )
+  return useQuery({
+    queryKey:['USER',id.toString(),'POSTS-CREATED'],
+    queryFn:async()=>await getMyPosts(id)
+  });
 };
 
 export default useMyPosts;

@@ -1,12 +1,12 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { UserMosaicItem } from '@/src/types/user';
+import { WEBAPP_URL } from '../constants';
 
-export const getUser = async (id: number,origin='',language?:string): Promise<UserMosaicItem|null> => {
+export const getUser = async (id: number): Promise<UserMosaicItem|null> => {
   if (!id) return null;
   else{
-    const langQ = language ? `language=${language}` : '';
-    const url = `${origin||''}/api/user/${id}?${langQ}`;
+    const url = `${WEBAPP_URL}/api/user/${id}`;
     const res = await fetch(url);
     if (!res.ok) return null;
     const result = await res.json();
@@ -26,7 +26,7 @@ const useUser = (id: number, options?: Options) => {
   };
   return useQuery<UserMosaicItem|null>({
     queryKey:['USER', `${id}`],
-    queryFn:() => getUser(id,''),
+    queryFn:() => getUser(id),
     staleTime,
     enabled,
   });
