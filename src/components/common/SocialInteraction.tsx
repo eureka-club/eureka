@@ -27,7 +27,7 @@ import { useMosaicContext } from '@/src/useMosaicContext';
 
 import useUser from '@/src/useUser';
 import { WEBAPP_URL } from '@/src/constants';
-import { CycleMosaicItem } from '@/src/types/cycle';
+import { CycleDetail } from '@/src/types/cycle';
 import { PostMosaicItem } from '@/src/types/post';
 import { WorkMosaicItem } from '@/src/types/work';
 import {
@@ -52,7 +52,7 @@ interface SocialInteractionClientPayload {
 }
 
 interface Props {
-  entity: CycleMosaicItem | PostMosaicItem | WorkMosaicItem /* | UserMosaicItem */;
+  entity:CycleDetail | PostMosaicItem | WorkMosaicItem /* | UserMosaicItem */;
   parent?: Cycle | Work | null;
   showCounts?: boolean;
   showButtonLabels?: boolean;
@@ -356,7 +356,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
     let count = 0;
     if (isWorkMosaicItem(entity)) {
       count = entity._count.ratings;
-    } else if (isCycleMosaicItem(entity)) count = entity._count.ratings;
+    } else if(isCycleMosaicItem(entity)) count = entity._count.ratings;
 
     return <span className={styles.ratingsCount}>{`${count}`}</span>;
   };
@@ -409,14 +409,14 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
   const getInitialRating = () => {
     if (entity) {
-      if (isCycleMosaicItem(entity) || isWorkMosaicItem(entity)) {
+      if(isCycleMosaicItem(entity) || isWorkMosaicItem(entity)) {
         return entity.ratingAVG;
       }
     }
   };
   const getRatingLabelInfo = () => {
     if (entity) {
-      if (isCycleMosaicItem(entity) || isWorkMosaicItem(entity))
+     if(isCycleMosaicItem(entity) || isWorkMosaicItem(entity))
         return !entity.currentUserRating ? <span className={styles.ratingLabelInfo}>{t(dict,'Rate it')}:</span> : '';
     }
     return '';

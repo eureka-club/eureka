@@ -1,0 +1,83 @@
+.buttonSI svg {
+  font-size: 1.3em;
+}
+/* .socialBtn {
+  background: none;
+  border: none;
+  color: var(--eureka-green);
+  cursor: pointer;
+  
+  align-items: center;
+  font-size: 1em;
+  transition: transform 0.15s;
+  text-decoration: none!important;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.socialBtn .info{
+  display: block;
+  font-size: .5em;
+  color: gray;
+}
+.socialBtn svg {
+  color: var(--eureka-green);
+  font-size: 1.5em;
+}
+
+.socialBtn:hover {
+  transform: scale(1.15);
+} */
+
+.action-like path,
+.action-like span {
+  color: #e3506d;
+}
+
+.toggle-share svg,
+.toggle-share span {
+  color: #13B4BC;
+}
+
+.icon-share svg {
+  margin-right: 12px;
+  color: #13B4BC;
+}
+
+.toggle-share,
+.toggle-share:hover {
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.rating{
+  font-size:1em;
+}
+.rating span{
+}
+.select svg{
+  color: var(--yellow);
+}
+.unselect svg{
+  color: gray;
+}
+.clearRating{
+  font-size: 1.5em;
+    margin: -.3em -.1em 0 0;
+    color: var(--eureka-green); 
+    border: none;
+    padding: 0;
+    background: none;
+}
+.ratingLabelInfo{
+  font-size: .8em;
+  color: var(--eureka-green);  
+  vertical-align: text-center;
+}
+.ratingsCount{
+  color: var(--eureka-grey);
+    font-size: .8em;
+    vertical-align: text-center;
+}
+.ratingSpinner{
+  vertical-align: inherit;
+}

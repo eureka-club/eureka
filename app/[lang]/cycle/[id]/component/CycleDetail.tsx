@@ -30,7 +30,7 @@ import useUsers from '@/src/hooks/useUsers'
 import MosaicItemPost from '@/src/components/post/MosaicItem'
 import MosaicItemUser from '@/components/user/MosaicItem'
 // import { useInView } from 'react-intersection-observer';
-import { CycleMosaicItem } from '@/src/types/cycle';
+import { CycleDetail } from '@/src/types/cycle';
 
 import { useDictContext } from '@/src/hooks/useDictContext';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
@@ -287,7 +287,7 @@ const CycleDetail = ({}) => {
     return '';
   };
 
-  const RenderRestrictTabsHeaders:FC<{cycle:CycleMosaicItem}> = ({cycle}) => {
+  const RenderRestrictTabsHeaders:FC<{cycle:CycleDetail}> = ({cycle}) => {
     if (cycle) {
       const res = (
         <>

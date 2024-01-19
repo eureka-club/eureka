@@ -36,7 +36,7 @@ import { Box } from '@mui/material';
 import { FiTrash2 } from 'react-icons/fi';
 import { useDictContext } from '@/src/hooks/useDictContext';
 import { WorkMosaicItem } from '@/src/types/work';
-import { CycleMosaicItem } from '@/src/types/cycle';
+import { CycleDetail } from '@/src/types/cycle';
 
 import { WorkContext } from '@/src/hooks/useWorkContext';
 import WorkSummary from '@/src/components/work/WorkSummary';
@@ -48,7 +48,7 @@ import MosaicItem from '@/src/components/work/MosaicItem';
 
 interface Props {
   work: WorkMosaicItem;
-  workCycles: CycleMosaicItem[];
+  workCycles: CycleDetail[];
   workPosts:PostMosaicItem[];
 //post?: PostMosaicItem;
   session: Session;

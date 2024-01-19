@@ -6,20 +6,20 @@ import globalSearchEngineAtom from '../../atoms/searchEngine';
 
 import styles from './index.module.css';
 import { WorkMosaicItem /* , WorkWithImages */ } from '../../types/work';
-import { CycleMosaicItem /* , CycleWithImages */ } from '../../types/cycle';
+import { CycleDetail /* , CycleWithImages */ } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
 import { UserMosaicItem } from '../../types/user';
 import Mosaics from './Mosaics';
 import { useDictContext } from '@/src/hooks/useDictContext';
 
-type Item = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | UserMosaicItem;
+type Item = CycleDetail | WorkMosaicItem | PostMosaicItem | UserMosaicItem;
 type Props = {
   title?: string | JSX.Element;
   iconBefore?: JSX.Element;
   iconAfter?: JSX.Element;
   onSeeAll?: () => void;
   seeAll?: boolean;
-  data: Item[]; // ((CycleMosaicItem & { type: string }) | WorkMosaicItem)[];
+  data: Item[]; // ((CycleDetail & { type: string }) | WorkMosaicItem)[];
   showSocialInteraction?: boolean;
   customMosaicStyle?: { [key: string]: string };
   className?: string;

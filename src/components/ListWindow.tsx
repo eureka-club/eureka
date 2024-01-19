@@ -7,7 +7,7 @@
 // import MosaicItemUser from './user/MosaicItem';
 
 // import { v4 } from 'uuid';
-// import { CycleMosaicItem } from '../types/cycle';
+// import { CycleDetail } from '../types/cycle';
 // import { WorkMosaicItem } from '../types/work';
 // import { PostMosaicItem } from '../types/post';
 // import { CycleContext } from '../useCycleContext';
@@ -15,7 +15,7 @@
 // interface Props{
 //     items:MosaicItem[];
 //     cacheKey: string[];
-//     parent?: CycleMosaicItem | WorkMosaicItem;
+//     parent?: CycleDetail | WorkMosaicItem;
 //     itemSize?:number
 //     width?:string,
 //     itemsByRow:number
@@ -39,7 +39,7 @@
 //           const rows = []
 //           for(let item of a){
 //               if (isCycleMosaicItem(item)) {
-//                 rows.push(<CycleContext.Provider value={{ cycle: item as CycleMosaicItem }}>
+//                 rows.push(<CycleContext.Provider value={{ cycle: item as CycleDetail }}>
 //                     <MosaicItemCycle key={`${v4()}`} cycleId={item.id} detailed className="me-3 my-6"/>
 //                   </CycleContext.Provider>)
 //               }
@@ -48,7 +48,7 @@
 //                 // if (!pp) {
 //                 //   const it: PostMosaicItem = item as PostMosaicItem;
 //                 //   if (it.works && it.works.length) pp = it.works[0] as WorkMosaicItem;
-//                 //   else if (it.cycles && it.cycles.length > 0) pp = it.cycles[0] as CycleMosaicItem;
+//                 //   else if (it.cycles && it.cycles.length > 0) pp = it.cycles[0] as CycleDetail;
 //                 // }
 //                 // const cycleId = isCycleMosaicItem(pp!) ? pp.id : undefined;
 //                 // const workId = isWorkMosaicItem(pp!) ? pp.id : undefined;

@@ -1,16 +1,16 @@
 import { createContext, useContext } from 'react';
-import { CycleMosaicItem } from '@/src/types/cycle';
+import { CycleDetail } from '@/src/types/cycle';
 import { UserMosaicItem } from '@/src/types/user';
 
 export type ContextType = {
-  cycle: CycleMosaicItem | null;
+  cycle: CycleDetail | null;
   showShare?: boolean;
   currentUserIsParticipant?: boolean;
   linkToCycle?: boolean;
-  requestJoinCycle?: (cycle: CycleMosaicItem,userName:string,participants:UserMosaicItem[]) => Promise<string>;
+  requestJoinCycle?: (cycle: CycleDetail,userName:string,participants:UserMosaicItem[]) => Promise<string>;
 };
 
-const requestJoinCycle = async (cycle: CycleMosaicItem,userName:string,participants:UserMosaicItem[]) => {
+const requestJoinCycle = async (cycle: CycleDetail,userName:string,participants:UserMosaicItem[]) => {
   let notificationMessage = `userJoinedCycle!|!${JSON.stringify({
     userName,
     cycleTitle: cycle?.title,

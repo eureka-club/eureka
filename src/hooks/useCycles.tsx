@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { CycleMosaicItem } from '@/src/types/cycle';
+import { CycleDetail } from '@/src/types/cycle';
 import { Prisma } from '@prisma/client';
 
 export const getCycles = async (
   langs:string,
   props?:Prisma.CycleFindManyArgs,
   origin=''
-): Promise<{cycles:CycleMosaicItem[],fetched:number,total:number}> => {
+): Promise<{cycles:CycleDetail[],fetched:number,total:number}> => {
   const query = props?`?lang=${langs}&props=${encodeURIComponent(JSON.stringify(props))}`:''
   const url = `${origin||''}/api/cycle${query}`
   const res = await fetch(url);
@@ -28,7 +28,7 @@ const useCycles = (lang: string = 'pt',props?:Prisma.CycleFindManyArgs, options?
   };
   let ck = cacheKey ? [`${cacheKey}-${JSON.stringify(props)}`] : ['CYCLES', `${JSON.stringify(props)}`];
 
-  return useQuery<{cycles:CycleMosaicItem[],fetched:number,total:number}>({
+  return useQuery<{cycles:CycleDetail[],fetched:number,total:number}>({
     queryKey:ck, 
     queryFn:() => getCycles(lang,props), 
     staleTime,

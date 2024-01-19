@@ -1,12 +1,12 @@
 import { FunctionComponent } from 'react';
 // import Spinner from 'react-bootstrap/Spinner';
 import dayjs from 'dayjs'
-import { CycleMosaicItem } from '@/types/cycle';
+import { CycleDetail } from '@/types/cycle';
 import { PostMosaicItem } from '@/types/post';
 import Mosaic from '../Mosaic';
 import { WorkMosaicItem } from '@/src/types/work';
 interface Props {
-  parent?: CycleMosaicItem | WorkMosaicItem;
+  parent?: CycleDetail | WorkMosaicItem;
   posts: PostMosaicItem[];
   display?: 'h' | 'v';
   showComments?: boolean;

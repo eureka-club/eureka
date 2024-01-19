@@ -7,7 +7,7 @@ import useCycles from '@/src/useCycles'
 import usePosts from '@/src/usePosts'
 import Mosaic from '../Mosaic';
 import { MosaicItem } from '../../types';
-import { CycleMosaicItem } from '../../types/cycle';
+import { CycleDetail } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
 import { WorkMosaicItem } from '../../types/work';
 
@@ -20,7 +20,7 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
   //   isLoading: isCyclesLoading,
   //   isSuccess: isCyclesSuccess,
   //   data: cyclesData,
-  // } = useQuery<CycleMosaicItem[]>(['work.mosaic.cycles', work.id], async ({ queryKey: [, workId] }) => {
+  // } = useQuery<CycleDetail[]>(['work.mosaic.cycles', work.id], async ({ queryKey: [, workId] }) => {
   //   const whereQP = encodeURIComponent(JSON.stringify({ works: { some: { id: workId } } }));
   //   const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
   //   const res = await fetch(`/api/search/cycles?where=${whereQP}&include=${includeQP}`);

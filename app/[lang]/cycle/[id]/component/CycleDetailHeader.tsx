@@ -23,7 +23,7 @@ import { Box } from '@mui/material';
 import useExecRatingCycle, { ExecRatingPayload } from '@/src/hooks/mutations/useExecRatingCycle';
 import { UserMosaicItem } from '@/src/types/user';
 import useUser from '@/src/hooks/useUser';
-import { CycleMosaicItem } from '@/src/types/cycle';
+import { CycleDetail } from '@/src/types/cycle';
 import { useDictContext } from '@/src/hooks/useDictContext';
 
 import { useQueryClient } from '@tanstack/react-query';

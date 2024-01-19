@@ -21,7 +21,7 @@
 
 // import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
 // import { EditPostAboutCycleClientPayload, EditPostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
-// import { CycleMosaicItem } from '../../types/cycle';
+// import { CycleDetail } from '../../types/cycle';
 // import { WorkMosaicItem } from '../../types/work';
 // // import ImageFileSelect from './controls/ImageFileSelect';
 // import LanguageSelect from './controls/LanguageSelect';
@@ -45,8 +45,8 @@
 //   const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
 //   const [isSearchCycleLoading, setIsSearchCycleLoading] = useState(false);
 //   const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
-//   const [searchCycleResults, setSearchCycleResults] = useState<CycleMosaicItem[]>([]);
-//   const [selectedCycle, setSelectedCycle] = useState<CycleMosaicItem | null>(null);
+//   const [searchCycleResults, setSearchCycleResults] = useState<CycleDetail[]>([]);
+//   const [selectedCycle, setSelectedCycle] = useState<CycleDetail | null>(null);
 //   const [selectedWork, setSelectedWork] = useState<WorkMosaicItem | null>(null);
 //   const { data: topics } = useTopics();
 
@@ -74,7 +74,7 @@
 //       }
 //     }
 //     if (post && post.works.length) setSelectedWork(post.works[0] as WorkMosaicItem);
-//     if (post && post.cycles.length) setSelectedCycle(post.cycles[0] as CycleMosaicItem);
+//     if (post && post.cycles.length) setSelectedCycle(post.cycles[0] as CycleDetail);
 //     if(post && post.language) setLanguage(post.language);
 //   },[post])
     
@@ -240,7 +240,7 @@
 
 //     setIsSearchCycleLoading(true);
 //     const response = await fetch(`/api/search/cycles?${criteria}&include=${includeQP}`);
-//     const itemsSCL: CycleMosaicItem[] = await response.json();
+//     const itemsSCL: CycleDetail[] = await response.json();
 
 //     setSearchCycleResults(itemsSCL);
 //     setIsSearchCycleLoading(false);
@@ -259,7 +259,7 @@
 //     }
 //   };
 
-//   const handleSelectCycle = (selected: CycleMosaicItem[]): void => {
+//   const handleSelectCycle = (selected: CycleDetail[]): void => {
 //     const searchResult = selected[0];
 //     if (searchResult != null) {
 //       setSelectedCycle(searchResult);

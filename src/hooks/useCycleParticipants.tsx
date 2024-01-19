@@ -2,20 +2,15 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { UserMosaicItem } from '../types/user';
-import { WEBAPP_URL } from '../constants';
 import { useParams } from 'next/navigation';
 import { Locale } from 'i18n-config';
+import { getCycleParticipants } from '../actions/cycle/getParticipants';
 
 interface Options {
   staleTime?: number;
   enabled?: boolean;
 }
-export const getCycleParticipants = async (id:number)=>{
-  const url = `${WEBAPP_URL}/api/cycle/${id}/participants`;
-  const fr = await fetch(url);
-  const posts = fr.ok? await fr.json() as UserMosaicItem[] : [];
-  return posts;
-}
+
 const useCycleParticipants = (id: number, options?: Options) => {
   const{lang}=useParams<{lang:Locale}>()!;
   const { staleTime, enabled } = options || {

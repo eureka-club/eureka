@@ -14,7 +14,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';;
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import globalModalsAtom from '../../atoms/globalModals';
 // import { Session } from '../../types';
-import { CycleMosaicItem } from '../../types/cycle';
+import { CycleDetail } from '../../types/cycle';
 import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
 
 import ImageFileSelect from '../forms/controls/ImageFileSelect';
@@ -53,7 +53,7 @@ import { useDictContext } from '@/src/hooks/useDictContext';
 
 interface Props {
   cacheKey: string[];
-  cycle: CycleMosaicItem;
+  cycle: CycleDetail;
   discussionItem?: string;
   setDiscussionItem: (val: string | undefined) => void;
   close: () => void;

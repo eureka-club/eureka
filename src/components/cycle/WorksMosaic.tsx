@@ -7,12 +7,12 @@ import { FunctionComponent, useEffect, useState } from 'react';
 
 import { WorkMosaicItem } from '../../types/work';
 import Mosaic from '../Mosaic';
-import { CycleMosaicItem } from '../../types/cycle';
+import { CycleDetail } from '../../types/cycle';
 import { Work } from '.prisma/client';
 // import { MosaicItem } from '../types/work';
 import useWorks from '@/src/useWorks'
 interface Props {
-  cycle: CycleMosaicItem;
+  cycle: CycleDetail;
   className?: string;
 }
 dayjs.extend(isBetween);

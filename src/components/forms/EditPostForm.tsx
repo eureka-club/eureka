@@ -31,7 +31,7 @@ import AsyncTypeaheadMaterial from './controls/AsyncTypeaheadMaterial';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
 import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload } from '../../types/post';
-import { CycleMosaicItem } from '../../types/cycle';
+import { CycleDetail } from '../../types/cycle';
 import { WorkMosaicItem } from '../../types/work';
 //import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
@@ -92,8 +92,8 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false }) => {
   const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
   const [isSearchCycleLoading, setIsSearchCycleLoading] = useState(false);
   const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
-  const [searchCycleResults, setSearchCycleResults] = useState<CycleMosaicItem[]>([]);
-  const [selectedCycle, setSelectedCycle] = useState<CycleMosaicItem | null>(null);
+  const [searchCycleResults, setSearchCycleResults] = useState<CycleDetail[]>([]);
+  const [selectedCycle, setSelectedCycle] = useState<CycleDetail | null>(null);
   const [selectedWork, setSelectedWork] = useState<WorkMosaicItem | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   //const [items, setItems] = useState<string[]>([]);
@@ -136,7 +136,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false }) => {
         image: null,
         currentImage: `https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${post.localImages[0].storedFile}`,
         contentText: post.contentText,
-        selectedCycle: post.cycles[0] as CycleMosaicItem | null,
+        selectedCycle: post.cycles[0] as CycleDetail | null,
         selectedWork: post.works[0] as WorkMosaicItem | null,
         isPublic: post.isPublic,
         topics: [] as string[],
@@ -233,7 +233,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false }) => {
   };
 
   const handleSelectCycle = (selected: SearchResult | null): void => {
-    const searchResult = selected as CycleMosaicItem | null
+    const searchResult = selected as CycleDetail | null
     setFormValues({
       ...formValues,
       ['selectedCycle']: searchResult

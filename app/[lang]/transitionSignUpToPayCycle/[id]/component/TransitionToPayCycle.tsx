@@ -12,12 +12,12 @@ import { useDictContext } from "@/src/hooks/useDictContext";
 import LinearProgress from '@mui/material/LinearProgress';
 import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLeaveActions';
 import toast from 'react-hot-toast';
-import { CycleMosaicItem } from "@/src/types/cycle";
+import { CycleDetail } from "@/src/types/cycle";
 import { UserMosaicItem } from "@/src/types/user";
 
 interface Props {
     session: Session;
-    cycle: CycleMosaicItem;
+    cycle: CycleDetail;
     participants: UserMosaicItem[];
 }
 

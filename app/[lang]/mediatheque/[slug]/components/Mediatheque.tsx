@@ -1,24 +1,13 @@
 "use client"
 
 import { Session } from "@/src/types";
-import { useParams, usePathname } from "next/navigation";
-import { FC, useState, useEffect, SyntheticEvent, useCallback, MouseEvent } from "react";
-import { Alert, Button, Spinner, Card, Row, Col, ButtonGroup } from "react-bootstrap";
+import { useParams } from "next/navigation";
+import { FC, useState, SyntheticEvent, useCallback, MouseEvent } from "react";
+import { Button, Spinner, Card, Row, Col, ButtonGroup } from "react-bootstrap";
 import { AiOutlineEnvironment } from 'react-icons/ai';
-import toast from 'react-hot-toast';
-import useCycle, { getCycle } from '@/src/hooks/useCycle';
-import useUsers, { getUsers } from '@/src/hooks/useUsers';
-import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLeaveActions';
-import { useModalContext } from '@/src/hooks/useModal';
-import { CycleMosaicItem } from "@/src/types/cycle";
-import { useIsFetching } from "@tanstack/react-query";
-import { UserMosaicItem } from "@/src/types/user";
 
 import { useDictContext } from "@/src/hooks/useDictContext";
-import useMyPosts, { getMyPosts } from '@/src/hooks/useMyPosts';
-import useMyCycles, { getMyCycles } from '@/src/hooks/useMyCycles';
-import { PostMosaicItem } from "@/src/types/post";
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { User } from '@prisma/client';
 import { useNotificationContext } from '@/src/hooks/useNotificationProvider';
 import dayjs from 'dayjs';
@@ -51,39 +40,7 @@ const Mediatheque:FC<Props>=({session})=>{
     const { notifier } = useNotificationContext();
 
     const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>(false);
-    // const { data: dataPosts } = useMyPosts(user!.id);
     
-    // const [posts, setPosts] = useState<PostMosaicItem[]>();
-    //console.log(dataPosts?.posts, 'posts')
-
-    // const { data: dataCycles } = useMyCycles(session?.user.language || langs,user!.id);
-    // const [cycles, setCycles] = useState<CycleMosaicItem[]>();
-    //console.log(dataCycles?.cycles, 'cycles')
-
-    // useEffect(() => {
-    //     if (dataPosts?.posts) {
-    //         setPosts(dataPosts.posts);
-    //     }
-    // }, [dataPosts?.posts]);
-
-    // useEffect(() => {
-    //     if (dataPosts?.posts && dataCycles?.cycles) {
-    //         setCycles(dataCycles?.cycles);
-    //     }
-    // }, [dataPosts?.posts, dataCycles?.cycles]);
-
-    // useEffect(() => {
-    //     if (dataPosts?.posts && dataCycles?.cycles) {
-    //         if (user) {
-    //             const ifbm =
-    //                 user && user.followedBy ? user.followedBy.findIndex((i) => i.id === session?.user.id) !== -1 : false;
-    //             setIsFollowedByMe(ifbm);
-    //         }
-           
-    //     }
-    // }, [dataPosts?.posts, dataCycles?.cycles, user]);
-
-
     const { mutate: mutateFollowing, isPending: isLoadingMutateFollowing } = useMutation<User>({
         mutationFn: async () => {
             const userSession = session!.user; //user session

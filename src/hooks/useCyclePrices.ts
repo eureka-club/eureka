@@ -1,4 +1,4 @@
-import { CycleMosaicItem } from "../types/cycle";
+import { CycleDetail, CycleSumary } from "../types/cycle";
 import { useQuery } from "@tanstack/react-query";
 
 interface Type{
@@ -25,7 +25,7 @@ export const getPrices = async (product_id:string):Promise<Type> => {
     enabled?: boolean;
   }
 
-  export const useCyclePrice = (cycle?:CycleMosaicItem,options?: Options)=>{
+  export const useCyclePrice = (cycle?:CycleSumary,options?: Options)=>{
     const { staleTime, enabled } = options || {
       staleTime: 1000 * 60 * 60,
       enabled: true,

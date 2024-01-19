@@ -13,12 +13,12 @@ import { PostMosaicItem } from '../../types/post';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import { isCycle, isWork, Session } from '../../types';
-// import { CycleMosaicItem } from '../../types/cycle';
+// import { CycleDetail } from '../../types/cycle';
 // import { WorkMosaicItem } from '../../types/work';
 // import CommentsList from '../common/CommentsList';
 import Avatar from '../common/UserAvatar';
 import UnclampText from '../UnclampText';
-import { CycleMosaicItem } from '@/src/types/cycle';
+import { CycleDetail } from '@/src/types/cycle';
 import { WorkMosaicItem } from '@/src/types/work';
 // import ActionsBar from '@/src/components/common/ActionsBar'
 import {useAtom} from 'jotai'
@@ -67,10 +67,10 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   // const [post,setPost] = useState<PostMosaicItem>();
-  const [postParent,setPostParent] = useState<CycleMosaicItem|WorkMosaicItem>();
+  const [postParent,setPostParent] = useState<CycleDetail|WorkMosaicItem>();
   const {data:session} = useSession()
   //const postFromCache = queryClient.getQueryData<PostMosaicItem>(['POST',postId.toString()]);
-  // const pp = queryClient.getQueryData<CycleMosaicItem|WorkMosaicItem>(cacheKey);
+  // const pp = queryClient.getQueryData<CycleDetail|WorkMosaicItem>(cacheKey);
   const [post,setPost]=useState(postItem)
   const {data} = usePost(+postId,{
     enabled:!!postId && !postItem
@@ -82,7 +82,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   useEffect(()=>{
     if(post){
       if(post.works.length)setPostParent(post.works[0] as WorkMosaicItem)
-      if(post.cycles.length)setPostParent(post.cycles[0] as CycleMosaicItem)
+      if(post.cycles.length)setPostParent(post.cycles[0] as CycleDetail)
     }
   },[post])
   //  const {data:workParent} = useWork(workId,{enabled:!!workId})

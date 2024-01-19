@@ -22,7 +22,7 @@ import { Cycle } from '@prisma/client';
 import { useMosaicContext } from '@/src/hooks/useMosaicContext';
 import useUser from '@/src/hooks/useUser';
 import { WEBAPP_URL } from '@/src/constants';
-import { CycleMosaicItem } from '@/src/types/cycle';
+import { CycleDetail } from '@/src/types/cycle';
 import {
   MySocialInfo,
   isCycle,
@@ -46,7 +46,7 @@ interface SocialInteractionClientPayload {
 }
 
 interface Props {
-  entity: CycleMosaicItem;
+  entity: CycleDetail;
   showCounts?: boolean;
   showButtonLabels?: boolean;
   cacheKey: string[];

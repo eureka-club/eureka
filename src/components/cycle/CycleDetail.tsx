@@ -37,7 +37,7 @@ import useUsers from '@/src/useUsers'
 import MosaicItemPost from '@/src/components/post/MosaicItem'
 import MosaicItemUser from '@/components/user/MosaicItem'
 import { useInView } from 'react-intersection-observer';
-import { CycleMosaicItem } from '@/src/types/cycle';
+import { CycleDetail } from '@/src/types/cycle';
 import { Locale } from 'i18n-config';
 import { useSession } from 'next-auth/react';
 
@@ -311,7 +311,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     return '';
   };
 
-  const RenderRestrictTabsHeaders:FC<{cycle:CycleMosaicItem}> = ({cycle}) => {
+  const RenderRestrictTabsHeaders:FC<{cycle:CycleDetail}> = ({cycle}) => {
     if (cycle) {
       const res = (
         <>

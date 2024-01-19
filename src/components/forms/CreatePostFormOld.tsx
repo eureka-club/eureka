@@ -27,7 +27,7 @@
 // import 'react-bootstrap-typeahead/css/Typeahead.css';
 // import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
 // import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload } from '../../types/post';
-// import { CycleMosaicItem } from '../../types/cycle';
+// import { CycleDetail } from '../../types/cycle';
 // import { WorkMosaicItem } from '../../types/work';
 // //import ImageFileSelect from './controls/ImageFileSelect';
 // import LanguageSelect from './controls/LanguageSelect';
@@ -63,8 +63,8 @@
 //   const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
 //   const [isSearchCycleLoading, setIsSearchCycleLoading] = useState(false);
 //   const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
-//   const [searchCycleResults, setSearchCycleResults] = useState<CycleMosaicItem[]>([]);
-//   const [selectedCycle, setSelectedCycle] = useState<CycleMosaicItem | null>(null);
+//   const [searchCycleResults, setSearchCycleResults] = useState<CycleDetail[]>([]);
+//   const [selectedCycle, setSelectedCycle] = useState<CycleDetail | null>(null);
 //   const [selectedWork, setSelectedWork] = useState<WorkMosaicItem | null>(null);
 //   const [imageFile, setImageFile] = useState<File | null>(null);
 //   const [items, setItems] = useState<string[]>([]);
@@ -247,7 +247,7 @@
 
 //     setIsSearchCycleLoading(true);
 //     const response = await fetch(`/api/search/cycles?${criteria}&include=${includeQP}`);
-//     const itemsCL: CycleMosaicItem[] = await response.json();
+//     const itemsCL: CycleDetail[] = await response.json();
 
 //     setSearchCycleResults(itemsCL);
 //     setIsSearchCycleLoading(false);
@@ -265,7 +265,7 @@
 //     }
 //   };
 
-//   const handleSelectCycle = (selected: CycleMosaicItem[]): void => {
+//   const handleSelectCycle = (selected: CycleDetail[]): void => {
 //     const searchResult = selected[0];
 //     if (searchResult != null) {
 //       setSelectedCycle(searchResult);

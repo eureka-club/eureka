@@ -28,7 +28,7 @@ import { useMosaicContext } from '@/src/useMosaicContext';
 
 import useUser from '@/src/useUser';
 import { WEBAPP_URL } from '@/src/constants';
-// import { CycleMosaicItem } from '@/src/types/cycle';
+// import { CycleDetail } from '@/src/types/cycle';
 import { PostMosaicItem } from '@/src/types/post';
 // import { WorkMosaicItem } from '@/src/types/work';
 import {

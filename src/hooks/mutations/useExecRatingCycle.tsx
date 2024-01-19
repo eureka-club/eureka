@@ -3,7 +3,7 @@
 import { useModalContext } from '@/src/hooks/useModal';
 import SignInForm from '@/src/components/forms/SignInForm';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { CycleMosaicItem } from '@/src/types/cycle';
+import { CycleDetail } from '@/src/types/cycle';
 import { useSession } from 'next-auth/react';
 import { UserMosaicItem } from '@/src/types/user';
 import useUser from '@/src/hooks/useUser';
@@ -14,10 +14,10 @@ export interface ExecRatingPayload {
 }
 interface MutateReturn{
   prevUser:UserMosaicItem|undefined;
-  prevcycle:CycleMosaicItem|undefined;
+  prevcycle:CycleDetail|undefined;
 }
 interface Props{
-  cycle:CycleMosaicItem;
+  cycle:CycleDetail;
 }
 
 const useExecRating = (props:Props)=>{
@@ -60,7 +60,7 @@ const useExecRating = (props:Props)=>{
           await queryClient.cancelQueries({queryKey:cacheKey});
           
           prevUser = queryClient.getQueryData<UserMosaicItem>(['USER', `${session.user.id}`]);
-          prevCycle = queryClient.getQueryData<CycleMosaicItem>(cacheKey);
+          prevCycle = queryClient.getQueryData<CycleDetail>(cacheKey);
       
           let ratingCycles = user.ratingCycles
           let ratings = cycle.ratings;

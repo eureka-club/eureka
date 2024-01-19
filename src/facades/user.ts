@@ -1,8 +1,8 @@
 import { Prisma, User } from '@prisma/client';
-import { UserMosaicItem } from '@/types/user';
+import { UserDetailSpec, UserMosaicItem } from '@/types/user';
 // import { UserDetail } from '../types/user';
 import {prisma} from '@/src/lib/prisma';
-import { CycleMosaicItem } from '../types/cycle';
+import { CycleDetail } from '../types/cycle';
 import { WorkMosaicItem } from '../types/work';
 import { PostMosaicItem } from '../types/post';
 
@@ -86,148 +86,27 @@ const workInclude = {
 
 export const find = async (props: Prisma.UserFindUniqueArgs,language?:string): Promise<UserMosaicItem | null> => {
   const { select = undefined, include = true,where } = props;
-  const user: any = await prisma.user.findFirst({
+  const user = await prisma.user.findFirst({
     where,
-    include: {
-      followedBy: { select: { id: true } },
-      following: { select: { id: true, name: true, image: true, photos: { select: { storedFile: true } } } },
-      ratingWorks: {
-        ...language && {where:{
-          work:{language}
-        }},
-        select: {
-          workId: true,
-          qty: true,
-          work: {
-            select: {
-              id: true,
-              author: true,
-              title: true,
-              type: true,
-              countryOfOrigin: true,
-              countryOfOrigin2: true,
-              favs: { select: { id: true } },
-              localImages: { select: { storedFile: true } },
-            },
-          },
-        },
-      },
-      favWorks: {
-        ...language && {where:{language}},
-        select: {
-          id: true,
-          author: true,
-          createdAt: true,
-          title: true,
-          type: true,
-          countryOfOrigin: true,
-          countryOfOrigin2: true,
-          favs: { select: { id: true } },
-          localImages: { select: { storedFile: true } },
-          language:true
-        },
-      },
-      favPosts: {
-        ...language && {where:{language}},
-        select: {
-          id: true,
-          title: true,
-          createdAt: true,
-          favs: { select: { id: true } },
-          localImages: { select: { storedFile: true } },
-          works: { select: { id: true, title: true } },
-          cycles: { select: { id: true, title: true } },
-          creatorId: true,
-        },
-      },
-      favCycles: {
-        ...language && {where:{languages:{contains:language}}},
-        select: {
-          id: true,
-          createdAt: true,
-          creatorId: true,
-          startDate: true,
-          endDate: true,
-          title: true,
-          favs: { select: { id: true } },
-          participants: { select: { id: true } },
-          usersJoined: { select: { userId: true, pending: true } },
-          localImages: { select: { storedFile: true } },
-        },
-      },
-      cycles: { 
-        select: { id: true, creatorId: true, startDate: true, endDate: true, title: true, },
-        ...language && {where:{languages:{contains:language}}},
-      },
-      joinedCycles: { 
-        select: { id: true, creatorId: true, startDate: true, endDate: true, title: true },
-        ...language && {where:{languages:{contains:language}}},
-       },
-      ratingCycles: { 
-        select: { cycleId: true, qty: true },
-        ...language && {where:{
-          cycle:{languages:{contains:language}}
-        }}
-      },
-      photos: { select: { storedFile: true } },
-    },
-    
+    select: UserDetailSpec.select,
   });
-  user.favWorks.forEach((w:any)=>{
-    w.currentUserIsFav = true
-  })
+  // user.favWorks.forEach((w:any)=>{
+  //   w.currentUserIsFav = true
+  // })
   return user;
 };
 
 export const findAll = async (props?:Prisma.UserFindManyArgs): Promise<UserMosaicItem[]> => {
   const {where,take,skip,cursor} = props||{};
-  return prisma.user.findMany({
+  const users =await prisma.user.findMany({
     take,
     skip,
     cursor,
     ...(where && { where }),
     orderBy: { createdAt: 'desc' },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      image: true,
-      roles: true,
-      createdAt: true,
-      updatedAt: true,
-      countryOfOrigin: true,
-      aboutMe: true,
-      dashboardType: true,
-      tags: true,
-      language:true,
-      followedBy: { select: { id: true } },
-      following: { select: { id: true, name: true, image: true, photos: { select: { storedFile: true } } } },
-      ratingWorks: {
-        select: {
-          workId: true,
-          qty: true,
-          work: {
-            select: {
-              id: true,
-              author: true,
-              title: true,
-              type: true,
-              countryOfOrigin: true,
-              countryOfOrigin2: true,
-              favs: { select: { id: true } },
-              localImages: { select: { storedFile: true } },
-            },
-          },
-        },
-      },
-      cycles: { select: { id: true, creatorId: true, startDate: true, endDate: true, title: true } },
-      joinedCycles: { select: { id: true, creatorId: true, startDate: true, endDate: true, title: true } },
-      ratingCycles: { select: { cycleId: true, qty: true } },
-      photos: { select: { storedFile: true } },
-      reactions: true,
-      // language:true,
-    },
+    select: UserDetailSpec.select,
   });
+  return users;
 };
 
 export const remove = async (id: number): Promise<User> => {
@@ -243,7 +122,7 @@ export const update = async (id: number, data: Prisma.UserUpdateInput)=>{
   });
 };
 
-export const joinedCycles = async (id:number,lang?:string): Promise<CycleMosaicItem[]> => {
+export const joinedCycles = async (id:number,lang?:string): Promise<CycleDetail[]> => {
   const res = await prisma.user.findFirst({
     where:{id},
     select: {
@@ -251,13 +130,13 @@ export const joinedCycles = async (id:number,lang?:string): Promise<CycleMosaicI
     }
   });
   
-  return res?.joinedCycles.map((c:Partial<CycleMosaicItem>)=>{
+  return res?.joinedCycles.map((c:Partial<CycleDetail>)=>{
     c.type='cycle';
-    return c as CycleMosaicItem;
+    return c as CycleDetail;
   })
   ??[];
 };
-export const cyclesCreated = async (id:number,lang?:string): Promise<CycleMosaicItem[]> => {
+export const cyclesCreated = async (id:number,lang?:string): Promise<CycleDetail[]> => {
   const res = await prisma.user.findFirst({
     where:{id},
     select: {
@@ -265,9 +144,9 @@ export const cyclesCreated = async (id:number,lang?:string): Promise<CycleMosaic
     }
   });
   
-  return res?.cycles.map((c:Partial<CycleMosaicItem>)=>{
+  return res?.cycles.map((c:Partial<CycleDetail>)=>{
     c.type='cycle';
-    return c as CycleMosaicItem;
+    return c as CycleDetail;
   })
   ??[];
 };
@@ -317,7 +196,7 @@ export const favPosts = async (id:number,lang?:string): Promise<PostMosaicItem[]
   })
   ??[];
 };
-export const favCycles = async (id:number,lang?:string): Promise<CycleMosaicItem[]> => {
+export const favCycles = async (id:number,lang?:string): Promise<CycleDetail[]> => {
   let res = await prisma.user.findFirst({
     where:{id},
     select: {
@@ -325,9 +204,9 @@ export const favCycles = async (id:number,lang?:string): Promise<CycleMosaicItem
     }
   });
   
-  return res?.favCycles.map((p:Partial<CycleMosaicItem>)=>{
+  return res?.favCycles.map((p:Partial<CycleDetail>)=>{
     p.type='cycle';
-    return p as CycleMosaicItem;
+    return p as CycleDetail;
   })
   ??[];
 };

@@ -14,7 +14,7 @@ import { Cycle, Work } from '@prisma/client';
 import styles from './CycleDetailDiscussionSuggestRelatedWork.module.css';
 // import { Session } from '../../types';
 import { WorkMosaicItem } from '../../types/work';
-import { CycleMosaicItem } from '../../types/cycle';
+import { CycleDetail } from '../../types/cycle';
 import useWorks from '@/src/useWorks';
 import globalModalsAtom from '../../atoms/globalModals';
 // import ImageFileSelect from '../forms/controls/ImageFileSelect';
@@ -28,7 +28,7 @@ import { Option } from 'react-bootstrap-typeahead/types/types';
 // import styles from './CycleDetailDiscussionCreateEurekaForm.module.css';
 
 interface Props {
-  cycle: CycleMosaicItem;
+  cycle: CycleDetail;
 }
 
 const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle }) => {
@@ -88,7 +88,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
       onMutate: async () => {
         const cacheKey = ['CYCLE', `${cycle.id}`];
         // await queryClient.cancelQueries(cacheKey);
-        const previewsItems = queryClient.getQueryData<CycleMosaicItem[]>(cacheKey);
+        const previewsItems = queryClient.getQueryData<CycleDetail[]>(cacheKey);
         // const eureka: Pick<Post, 'title' | 'language' | 'contentText' | 'isPublic'> = newEureka;
 
         // queryClient.setQueryData<Item[]>(cacheKey, (prev) => prev!.concat(eureka));

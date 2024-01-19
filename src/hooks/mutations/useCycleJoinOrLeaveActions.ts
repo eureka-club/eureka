@@ -1,7 +1,7 @@
 import {} from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { CycleMosaicItem } from '@/src/types/cycle';
+import { CycleDetail, CycleSumary } from '@/src/types/cycle';
 import { UserMosaicItem } from '@/src/types/user';
 import {useNotificationContext} from '@/src/hooks/useNotificationProvider';
 import {setCycleJoinRequests,removeCycleJoinRequest} from '@/src/hooks/useCycleJoinRequests'
@@ -15,7 +15,7 @@ type ctx = {
     ck: string[];
 } | undefined;
 
-const useJoinUserToCycleAction = (session:Session,cycle:CycleMosaicItem,participants:UserMosaicItem[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
+const useJoinUserToCycleAction = (session:Session,cycle:CycleDetail|CycleSumary,participants:UserMosaicItem[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
     // const {t} = useDictContext();
     const {notifier} = useNotificationContext();
     const queryClient = useQueryClient();
@@ -98,7 +98,7 @@ const useJoinUserToCycleAction = (session:Session,cycle:CycleMosaicItem,particip
 
 }
 
-const useLeaveUserFromCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,participants:UserMosaicItem[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
+const useLeaveUserFromCycleAction = (user:UserMosaicItem,cycle:CycleDetail|CycleSumary,participants:UserMosaicItem[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
     // const {t} = useDictContext();
     const queryClient = useQueryClient();
     const {notifier} = useNotificationContext();

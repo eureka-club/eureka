@@ -1,4 +1,4 @@
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 
 import { FunctionComponent, useState, MouseEvent, ChangeEvent, FormEvent, useEffect } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -33,7 +33,6 @@ import { useDictContext } from '@/src/hooks/useDictContext';
 
 interface Props {
   noModal?: boolean;
-  session: Session
 }
 
 interface FormValues {
@@ -44,9 +43,9 @@ interface FormValues {
   // language: string
 }
 
-const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, session }) => {
+const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) => {
   const { t, dict } = useDictContext();
-  //const { data: session, status } = useSession();
+  const { data: session } = useSession();
   //const formRef = useRef<HTMLFormElement>(null);
   const [formValues, setFormValues] = useState<FormValues>({
     identifier: '',
@@ -108,7 +107,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
     }
   )
 
-  const { data: user } = useUser(+session?.user?.id??0, { enabled: !!+session?.user?.id });
+  const { data: user } = useUser(+session?.user?.id!??0, { enabled: !!+session?.user?.id! });
 
   const handleHaveAccountLink = (ev: MouseEvent<HTMLButtonElement>) => {
     setFormValues({

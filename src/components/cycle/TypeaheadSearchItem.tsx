@@ -1,13 +1,13 @@
 import { FunctionComponent } from 'react';
 import {Badge} from 'react-bootstrap'
-import { CycleMosaicItem } from '@/types/cycle';
+import { CycleDetail } from '@/types/cycle';
 import LocalImageComponent from '@/src/components/LocalImage';
 import CycleSummary from './CycleSummary';
 import styles from './TypeaheadSearchItem.module.css';
 import { useDictContext } from '@/src/hooks/useDictContext';
 
 interface Props {
-  cycle: CycleMosaicItem;
+  cycle: CycleDetail;
 }
 
 const TypeaheadSearchItem: FunctionComponent<Props> = ({ cycle }) => {

@@ -3,7 +3,7 @@ import { getSession } from 'next-auth/react';
 
 import { flatten, zip } from 'lodash';
 
-import { CycleMosaicItem } from '../src/types/cycle';
+import { CycleDetail } from '../src/types/cycle';
 import { WorkMosaicItem } from '../src/types/work';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import { search as searchCycles } from '../src/facades/cycle';
@@ -14,7 +14,7 @@ import { getDictionary, t } from '@/src/get-dictionary';
 import { Locale, i18n } from 'i18n-config';
 
 interface Props {
-  myListMosaicData: (CycleMosaicItem | WorkMosaicItem)[];
+  myListMosaicData: (CycleDetail | WorkMosaicItem)[];
   dict:any
 }
 

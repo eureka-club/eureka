@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import getApiHandler from '../../src/lib/getApiHandler';
 import {Languages, SearchResult} from '@/src/types'
-import { CycleMosaicItem } from '@/src/types/cycle';
+import { CycleDetail } from '@/src/types/cycle';
 import { WorkMosaicItem } from '@/src/types/work';
 import { PostMosaicItem } from '@/src/types/post';
 import dayjs from 'dayjs';
@@ -86,7 +86,7 @@ export default getApiHandler()
       ]
     };
 
-    const responseCycle = await fac({where: cyclesWhere}) as CycleMosaicItem[];
+    const responseCycle = await fac({where: cyclesWhere}) as CycleDetail[];
 
     const postsWhere = {
         AND:[{

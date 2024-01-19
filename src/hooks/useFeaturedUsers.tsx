@@ -1,4 +1,5 @@
-import useUsers,{getUsers} from './useUsers';
+import { getUsers } from '../actions/user/getUsers';
+import useUsers from './useUsers';
 import useBackOffice from '@/src/hooks/useBackOffice';
 
 const featuredUsersWhere = (ids:number[]) => ({

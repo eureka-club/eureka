@@ -8,7 +8,7 @@ import { useAtom } from 'jotai';
 import { Cycle, Work } from '@prisma/client';
 import styles from './CycleDetailDiscussionSuggestRelatedWork.module.css';
 import { WorkMosaicItem } from '@/src/types/work';
-import { CycleMosaicItem } from '@/src/types/cycle';
+import { CycleDetail } from '@/src/types/cycle';
 import useWorks from '@/src/hooks/useWorks';
 import globalModalsAtom from '@/src/atoms/globalModals';
 import WorkTypeaheadSearchItem from '@/src/components/work/TypeaheadSearchItem';
@@ -19,7 +19,7 @@ import AsyncTypeaheadType from 'react-bootstrap-typeahead/types/core/Typeahead';
 import { Option } from 'react-bootstrap-typeahead/types/types';
 
 interface Props {
-  cycle: CycleMosaicItem;
+  cycle: CycleDetail;
 }
 
 const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle }) => {
@@ -53,7 +53,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
       onMutate: async () => {
         const cacheKey = ['CYCLE', `${cycle.id}`];
         // await queryClient.cancelQueries(cacheKey);
-        const previewsItems = queryClient.getQueryData<CycleMosaicItem[]>(cacheKey);
+        const previewsItems = queryClient.getQueryData<CycleDetail[]>(cacheKey);
         // const eureka: Pick<Post, 'title' | 'language' | 'contentText' | 'isPublic'> = newEureka;
 
         // queryClient.setQueryData<Item[]>(cacheKey, (prev) => prev!.concat(eureka));

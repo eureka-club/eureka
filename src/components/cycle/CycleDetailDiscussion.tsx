@@ -8,7 +8,7 @@ import { SelectChangeEvent,TextField,FormControl,InputLabel, Select, MenuItem} f
 
 import { GiBrain } from 'react-icons/gi';
 import { BiBookHeart } from 'react-icons/bi';
-import { CycleMosaicItem } from '../../types/cycle';
+import { CycleDetail } from '../../types/cycle';
 import UserAvatar from '../common/UserAvatar';
 import useWorks from '@/src/useWorks';
 import useUsers from '@/src/useUsers'
@@ -21,7 +21,7 @@ import SignInForm from '../forms/SignInForm';
 import { getLocale_In_NextPages } from '@/src/lib/utils';
 import { useDictContext } from '@/src/hooks/useDictContext';
 interface Props {
-  cycle: CycleMosaicItem;
+  cycle: CycleDetail;
   className?: string;
   cacheKey:string[];
 }

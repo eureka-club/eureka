@@ -4,7 +4,7 @@ import { getServerSession } from 'next-auth';
 import { getDictionary } from '@/src/get-dictionary';
 import { Locale } from 'i18n-config';
 import auth_config from 'auth_config';
-import { getCycle } from '@/src/hooks/useCycle';
+import { getCycle } from '@/src/actions/cycle/getCycle';
 import Layout from '@/src/components/layout/Layout';
 import { redirect } from 'next/navigation';
 import { QueryClient } from '@tanstack/react-query';
@@ -29,7 +29,7 @@ const EditCyclePage = async ({ params: { lang, id } }:Props) => {
     
     const qc = new QueryClient();
 
-    let cycle = await getCycle(+id, origin);
+    let cycle = await getCycle(+id);
     qc.prefetchQuery({
         queryKey:['CYCLE',id.toString()],
         queryFn:()=>cycle

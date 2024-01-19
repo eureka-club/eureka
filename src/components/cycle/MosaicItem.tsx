@@ -1,3 +1,4 @@
+"use client"
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import utc from 'dayjs/plugin/utc';
@@ -15,7 +16,6 @@ import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import useUser from '@/src/useUser';
 import useUsers from '@/src/useUsers'
-import SocialInteraction from '../common/SocialInteraction';
 import { useCycleContext } from '../../useCycleContext';
 import toast from 'react-hot-toast';
 import useCycle from '@/src/useCycle'
@@ -24,16 +24,18 @@ import Avatar from '../common/UserAvatar';
 import {useJoinUserToCycleAction,useLeaveUserFromCycleAction} from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
 import {useModalContext} from '@/src/useModal'
 import SignInForm from '../forms/SignInForm';
-import { CycleMosaicItem } from '@/src/types/cycle';
+import { CycleDetail, CycleSumary } from '@/src/types/cycle';
 import { useCyclePrice } from '@/src/hooks/useCyclePrices';
 import { useDictContext } from '@/src/hooks/useDictContext';
 import useCycleParticipants from '@/src/hooks/useCycleParticipants';
+import SocialInteraction from './SocialInteraction';
+import Link from 'next/link';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(isBetween);
 interface Props {
-  cycle?:CycleMosaicItem;
+  cycle?:CycleSumary;
   cycleId:number;
   showButtonLabels?: boolean;
   showShare?: boolean;
@@ -284,8 +286,9 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   return (
      <Card className={`${size?.length ? `mosaic-${size}` : 'mosaic'} ${isActive() ? 'my-1 isActive' : ''} ${className}`} data-cy={`mosaic-item-cycle-${cycle.id}`} >
-        <Card.Body>  
-        <div className={`${linkToCycle ? 'cursor-pointer' : ''} ${styles.imageContainer}`} >
+        <Card.Body> 
+          <Link href={`/cycle/${cycle.id}`}>
+            <div className={`${linkToCycle ? 'cursor-pointer' : ''} ${styles.imageContainer}`} >
             {renderLocalImageComponent()}
             {isActive() && <CgMediaLive className={`${styles.isActiveCircle}`} />}
             <Badge bg="primary" className={`d-flex flex-row align-items-center  fw-normal fs-6 text-white rounded-pill px-2 ${styles.type}`}>
@@ -298,8 +301,8 @@ const MosaicItem: FunctionComponent<Props> = ({
            <div className={`h-100 d-flex justify-content-center align-items-end`}>
             {showJoinOrLeaveButton && participants && !(participants?.findIndex(p => p.id == session?.user.id) > -1 && cycle.access == 4) && renderJoinLeaveCycleBtn()}
            </div> 
-         </div>
-                
+            </div>
+          </Link> 
       </Card.Body>    
          {showSocialInteraction && cycle && (
         <Card.Footer className={`${styles.footer}  d-flex justifify-content-between`}>
@@ -308,7 +311,7 @@ const MosaicItem: FunctionComponent<Props> = ({
               showButtonLabels={showButtonLabels}
               showRating={false}
               showCounts
-              entity={cycle}
+              cycle={cycle}
               showTrash={showTrash}
               showCreateEureka={showCreateEureka}
               showSaveForLater={showSaveForLater}

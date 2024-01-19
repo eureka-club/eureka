@@ -26,10 +26,10 @@ import useExecRatingCycle, { ExecRatingPayload } from '@/src/hooks/mutations/use
 import { UserMosaicItem } from '@/src/types/user';
 import { useQueryClient } from '@tanstack/react-query';;
 import useUser from '@/src/useUser';
-import { CycleMosaicItem } from '@/src/types/cycle';
+import { CycleDetail } from '@/src/types/cycle';
 import { useDictContext } from '@/src/hooks/useDictContext';
 interface Props {
-  // cycle: CycleMosaicItem;
+  // cycle: CycleDetail;
   cycleId:number;
   post?: PostMosaicItem;
   work?: WorkMosaicItem;

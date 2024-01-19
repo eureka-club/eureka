@@ -1,17 +1,37 @@
 import { Cycle, CycleComplementaryMaterial, LocalImage, Prisma, User, RatingOnCycle } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
-import { CreateCycleServerFields, CreateCycleServerPayload, CycleMosaicItem } from '../types/cycle';
+import { CreateCycleServerFields, CreateCycleServerPayload, CycleDetail, CycleSumary } from '../types/cycle';
 import { prisma } from '@/src/lib/prisma';
 import { subscribe_to_segment, unsubscribe_from_segment } from '@/src/lib/mailchimp';
 import { sendMail } from './mail';
 import { PostMosaicItem } from '../types/post';
-import { UserMosaicItem } from '../types/user';
+import { UserDetailSpec, UserMosaicItem } from '../types/user';
 
 export const NEXT_PUBLIC_MOSAIC_ITEMS_COUNT = +(process.env.NEXT_PUBLIC_NEXT_PUBLIC_MOSAIC_ITEMS_COUNT || 10);
 
 
-export const find = async (id: number): Promise<CycleMosaicItem | null> => {
+export const findSumary = async (id: number): Promise<CycleSumary | null> => {
+  const cycle = await prisma.cycle.findUnique({
+    where: { id },
+    select:{
+      id:true,
+      title:true,
+      startDate:true,
+      endDate:true,
+      access:true,
+      creatorId:true,
+      product_id:true,
+      localImages:{select:{storedFile:true}},
+      usersJoined:{select:{userId:true,pending:true}},
+      favs:{select:{id:true}},
+      ratings:{select:{userId:true,qty:true}},
+      _count: { select: { ratings: true } },
+    }
+  });
+  return cycle;
+};
+export const find = async (id: number): Promise<CycleDetail | null> => {
   return prisma.cycle.findUnique({
     where: { id },
     include: {
@@ -103,7 +123,7 @@ export const find = async (id: number): Promise<CycleMosaicItem | null> => {
   });
 };
 
-export const findAll = async (props?: Prisma.CycleFindManyArgs): Promise<CycleMosaicItem[]> => {
+export const findAll = async (props?: Prisma.CycleFindManyArgs): Promise<CycleDetail[]> => {
   const { include, where, take, skip, cursor } = props || {};
   return prisma.cycle.findMany({
     take,
@@ -669,78 +689,13 @@ export const participants = async (id: number): Promise<UserMosaicItem[]> => {
     where: { id },
     select:{
       participants:{
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          image: true,
-          roles: true,
-          createdAt: true,
-          updatedAt: true,
-          countryOfOrigin: true,
-          aboutMe: true,
-          dashboardType: true,
-          tags: true,
-          language:true,
-          followedBy: { select: { id: true } },
-          following: { select: { id: true, name: true, image: true, photos: { select: { storedFile: true } } } },
-          ratingWorks: {
-            select: {
-              workId: true,
-              qty: true,
-              work: {
-                select: {
-                  id: true,
-                  author: true,
-                  title: true,
-                  type: true,
-                  countryOfOrigin: true,
-                  countryOfOrigin2: true,
-                  favs: { select: { id: true } },
-                  localImages: { select: { storedFile: true } },
-                },
-              },
-            },
-          },
-          favWorks: {
-            select: {
-              id: true,
-              createdAt: true,
-              title: true,
-              type: true,
-              countryOfOrigin: true,
-              countryOfOrigin2: true,
-              favs: { select: { id: true } },
-              localImages: { select: { storedFile: true } },
-            },
-          },
-          favCycles: {
-            select: {
-              id: true,
-              createdAt: true,
-              creatorId: true,
-              startDate: true,
-              endDate: true,
-              title: true,
-              favs: { select: { id: true } },
-              usersJoined: { select: { userId: true, pending: true } },
-              participants: { select: { id: true } },
-            },
-          },
-          favPosts: {
-            select: {
-              id: true,
-              createdAt: true,
-              favs: { select: { id: true } },
-              localImages: { select: { storedFile: true } },
-            },
-          },
-          ratingCycles:{select:{cycleId:true,qty:true}},
-          photos:{select:{storedFile:true}},
-          reactions:{select:{postId:true,unified:true,emoji:true}},
-        },
+        select: UserDetailSpec.select
+      },
+      creator:{
+        select: UserDetailSpec.select
       }
     },
   });
-  return cycle?.participants??[];
+  const res = [...cycle?.participants??[], cycle?.creator] as UserMosaicItem[];
+  return res;
 };

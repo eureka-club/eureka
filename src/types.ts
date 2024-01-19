@@ -1,6 +1,6 @@
 import { Cycle, Post, User, Work, Prisma } from '@prisma/client';
 
-import { CycleMosaicItem } from './types/cycle';
+import { CycleDetail } from './types/cycle';
 import { PostMosaicItem } from './types/post';
 import { WorkMosaicItem, GoogleBooksProps, TMDBVideosProps } from './types/work';
 import { UserMosaicItem } from '@/src/types/user';
@@ -45,15 +45,15 @@ export interface MySocialInfo {
  */
 
 export type BasicEntity = Cycle | Post | Work | User | Comment;
-export type MosaicItem = CycleMosaicItem | PostMosaicItem | WorkMosaicItem | UserMosaicItem;
-export type SearchResult = CycleMosaicItem | PostMosaicItem | WorkMosaicItem | UserMosaicItem;
+export type MosaicItem = CycleDetail | PostMosaicItem | WorkMosaicItem | UserMosaicItem;
+export type SearchResult = CycleDetail | PostMosaicItem | WorkMosaicItem | UserMosaicItem;
 export type APIMediaSearchResult = GoogleBooksProps | TMDBVideosProps;
 
 export const isCycle = (obj: BasicEntity): obj is Cycle =>
   obj &&
   typeof (obj as Cycle).title === 'string' &&
-  (obj as CycleMosaicItem).startDate !== undefined &&
-  (obj as CycleMosaicItem).endDate !== undefined;
+  (obj as CycleDetail).startDate !== undefined &&
+  (obj as CycleDetail).endDate !== undefined;
 export const isPost = (obj: BasicEntity): obj is Post =>
   obj &&
   typeof (obj as Post).title === 'string' &&
@@ -69,7 +69,7 @@ export const isUser = (obj: BasicEntity): obj is User =>
   typeof (obj as User).roles === 'string' && typeof (obj as User).email === 'string';
 
 // TODO separate type-guards for MosaicItem and SearchResult
-export const isCycleMosaicItem = (obj: MosaicItem | SearchResult): obj is CycleMosaicItem =>
+export const isCycleMosaicItem = (obj: MosaicItem | SearchResult): obj is CycleDetail =>
   obj && 'type' in obj && obj.type == 'cycle';
 
 export const isWorkMosaicItem = (obj: MosaicItem | SearchResult): obj is WorkMosaicItem =>
@@ -98,7 +98,7 @@ export interface NotifierRequest {
 }
 
 export interface GetAllByResonse {
-  data: (WorkMosaicItem | CycleMosaicItem)[];
+  data: (WorkMosaicItem | CycleDetail)[];
   extraCyclesRequired: number;
   extraWorksRequired: number;
   hasMore: boolean;

@@ -9,7 +9,7 @@ import { BiArrowBack } from 'react-icons/bi';
 import { useDictContext } from "@/src/hooks/useDictContext";
 import getUserIdFromSlug from '@/src/getUserIdFromSlug';
 import { WorkMosaicItem } from '@/src/types/work';
-import { CycleMosaicItem } from '@/src/types/cycle';
+import { CycleDetail } from '@/src/types/cycle';
 import { PostMosaicItem } from '@/src/types/post';
 import useFavCycles from '@/src/hooks/useFavCycles';
 import useFavPosts from '@/src/hooks/useFavPosts';
@@ -44,7 +44,7 @@ const MySaved: FC<Props> = () => {
     }
     const renderCycles = () => {
         return <Row className='mt-5'>
-            {sfl.favCycles.map((i:CycleMosaicItem) =>
+            {sfl.favCycles.map((i:CycleDetail) =>
                 <Col key={i.id} xs={12} sm={6} lg={3} xxl={2} className='mb-5 d-flex justify-content-center  align-items-center'>
                     <CMI cycleId={i.id} size='md' />
                 </Col>

@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { WEBAPP_URL } from "../constants";
-import { CycleMosaicItem } from "../types/cycle";
+import { CycleDetail } from "../types/cycle";
 
 // export const myCyclesWhere = (id:number) => ({
 //   where:{
@@ -16,8 +16,8 @@ import { CycleMosaicItem } from "../types/cycle";
 //     ]
 //   }
 // });
-export const getMyCycles = async (id:number):Promise<CycleMosaicItem[]>=>{
-  let res:CycleMosaicItem[] = [];
+export const getMyCycles = async (id:number):Promise<CycleDetail[]>=>{
+  let res:CycleDetail[] = [];
   const url = `${WEBAPP_URL}/api/user/${id}`;
   
   const ccfr=await fetch(`${url}/cyclesCreated`);

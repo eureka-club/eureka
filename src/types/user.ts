@@ -12,47 +12,49 @@ export interface EditUserClientPayload {
   language?:string|null;
 }
 
-type UserFoolow = {
-  select: {
-    id: true,
-    name: true,
-    email: true,
-    image: true,
-    roles: true,
-    createdAt: true,
-    updatedAt: true,
-    countryOfOrigin: true,
-    aboutMe: true,
-    dashboardType: true,
-    tags: true,
-    language:true,
-    followedBy: { select: { id: true } },
-    following: { select: { id: true, name: true, image: true, photos: { select: { storedFile: true } } } },
-    ratingWorks: {
-      select: {
-        workId: true,
-        qty: true,
-        work: {
-          select: {
-            id: true,
-            author: true,
-            title: true,
-            type: true,
-            countryOfOrigin: true,
-            countryOfOrigin2: true,
-            favs: { select: { id: true } },
-            localImages: { select: { storedFile: true } },
-          },
+const userDetail = {
+  id: true,
+  name: true,
+  email: true,
+  image: true,
+  roles: true,
+  createdAt: true,
+  updatedAt: true,
+  countryOfOrigin: true,
+  aboutMe: true,
+  dashboardType: true,
+  tags: true,
+  language:true,
+  followedBy: { select: { id: true } },
+  following: { select: { id: true, name: true, image: true, photos: { select: { storedFile: true } } } },
+  ratingWorks: {
+    select: {
+      workId: true,
+      qty: true,
+      work: {
+        select: {
+          id: true,
+          author: true,
+          title: true,
+          type: true,
+          countryOfOrigin: true,
+          countryOfOrigin2: true,
+          favs: { select: { id: true } },
+          localImages: { select: { storedFile: true } },
         },
       },
     },
-    ratingCycles:{select:{cycleId:true,qty:true}},
-    photos:{select:{storedFile:true}},
-    reactions:{select:{postId:true,unified:true,emoji:true}},
   },
+  ratingCycles:{select:{cycleId:true,qty:true}},
+  photos:{select:{storedFile:true}},
+  reactions:{select:{postId:true,unified:true,emoji:true}},
+}
+
+export const UserDetailSpec = {
+  select:  userDetail
 };
 
-export type UserMosaicItem = Prisma.UserGetPayload<UserFoolow> & {
+export type UserMosaicItem = Prisma.UserGetPayload<typeof UserDetailSpec> & {
   type?: 'user';
 };
 

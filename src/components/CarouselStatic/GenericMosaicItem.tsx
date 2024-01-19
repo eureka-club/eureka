@@ -19,7 +19,7 @@ import { GenericMosaicItemProps } from "./types";
     
     if (isCycleMosaicItem(item)) {
       return (
-        // <CycleContext.Provider key={`cycle-${item.id}`} value={{ cycle: item as CycleMosaicItem }}>
+        // <CycleContext.Provider key={`cycle-${item.id}`} value={{ cycle: item as CycleDetail }}>
           <MosaicItemCycle detailed cycle={item} cycleId={item.id} showSocialInteraction={showSocialInteraction} showButtonLabels={false} size={size}/>
         // </CycleContext.Provider>
       );

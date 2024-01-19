@@ -14,7 +14,7 @@ import MosaicItemPost from './post/Old_MosaicItem';
 import MosaicItemWork from './work/MosaicItem';
 import styles from './Carousel.module.css';
 import { WorkMosaicItem /* , WorkWithImages */ } from '../types/work';
-import { CycleMosaicItem /* , CycleWithImages */ } from '../types/cycle';
+import { CycleDetail /* , CycleWithImages */ } from '../types/cycle';
 import { CycleContext } from '../useCycleContext';
 import { GetAllByResonse } from '@/src/types';
 import { PostMosaicItem } from '../types/post';
@@ -55,14 +55,14 @@ const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, cl
 
   const renderMosaicItem = (
     item: MosaicItem,
-    postsParent?: CycleMosaicItem | WorkMosaicItem,
+    postsParent?: CycleDetail | WorkMosaicItem,
     topic = '',
     page = '',
     showSocialInteraction = true,
   ) => {
     if (isCycleMosaicItem(item)) {
       return (
-        <CycleContext.Provider key={`cycle-${item.id}`} value={{ cycle: item as CycleMosaicItem }}>
+        <CycleContext.Provider key={`cycle-${item.id}`} value={{ cycle: item as CycleDetail }}>
           <MosaicItemCycle
             cycle={item}
             cycleId={item.id}
@@ -99,7 +99,7 @@ const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, cl
   const buildMosaics = () => {
     let result: JSX.Element = <></>;
     if (apiResponse && apiResponse.data) {
-      const mosaics = apiResponse.data.map((i: CycleMosaicItem | WorkMosaicItem, idx:number) => {
+      const mosaics = apiResponse.data.map((i: CycleDetail | WorkMosaicItem, idx:number) => {
         return <div key={`${i.type}-${i.id}`} className="mx-2">
             {renderMosaicItem(i,undefined, topic, page.toString())}
           </div>

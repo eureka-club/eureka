@@ -15,7 +15,7 @@
 // import axios from 'axios';
 // import cycle from '../cycle';
 // import { Cycle } from '@prisma/client';
-// import { CycleMosaicItem } from '@/src/types/cycle';
+// import { CycleDetail } from '@/src/types/cycle';
 // import { defaultLocale } from 'i18n';
 // import { config } from '@/src/auth';
 

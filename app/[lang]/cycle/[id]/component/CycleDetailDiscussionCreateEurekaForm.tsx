@@ -6,7 +6,7 @@ import { Button, Col, Row, ButtonGroup, Form, Spinner } from 'react-bootstrap';
 import { Post } from '@prisma/client';
 import { ImCancelCircle } from 'react-icons/im';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
-import { CycleMosaicItem } from '../../../../../src/types/cycle';
+import { CycleDetail } from '../../../../../src/types/cycle';
 import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload, PostMosaicItem } from '../../../../../src/types/post';
 import TagsInputTypeAheadMaterial from '../../../../../src/components/forms/controls/TagsInputTypeAheadMaterial';
 import TagsInputMaterial from '../../../../../src/components/forms/controls/TagsInputMaterial';
@@ -37,7 +37,7 @@ import { Locale } from 'i18n-config';
 
 interface Props {
   cacheKey: [string,string];
-  cycle: CycleMosaicItem;
+  cycle: CycleDetail;
   discussionItem?: string;
   setDiscussionItem: (val: string | undefined) => void;
   close: () => void;

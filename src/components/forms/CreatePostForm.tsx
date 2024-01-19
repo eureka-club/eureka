@@ -30,7 +30,7 @@ import AsyncTypeaheadMaterial from './controls/AsyncTypeaheadMaterial';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
 import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload } from '../../types/post';
-import { CycleMosaicItem } from '../../types/cycle';
+import { CycleDetail } from '../../types/cycle';
 import { WorkMosaicItem } from '../../types/work';
 //import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
@@ -78,8 +78,8 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
   const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
   const [isSearchCycleLoading, setIsSearchCycleLoading] = useState(false);
   const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
-  const [searchCycleResults, setSearchCycleResults] = useState<CycleMosaicItem[]>([]);
-  const [selectedCycle, setSelectedCycle] = useState<CycleMosaicItem | null>(null);
+  const [searchCycleResults, setSearchCycleResults] = useState<CycleDetail[]>([]);
+  const [selectedCycle, setSelectedCycle] = useState<CycleDetail | null>(null);
   const [selectedWork, setSelectedWork] = useState<WorkMosaicItem | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [items, setItems] = useState<string[]>([]);
@@ -266,7 +266,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
 
     setIsSearchCycleLoading(true);
     const response = await fetch(`/api/search/cycles?${criteria}&include=${includeQP}`);
-    const itemsCL: CycleMosaicItem[] = await response.json();
+    const itemsCL: CycleDetail[] = await response.json();
 
     setSearchCycleResults(itemsCL);
     setIsSearchCycleLoading(false);
@@ -295,7 +295,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
   };
 
   const handleSelectCycle = (selected: SearchResult | null): void => {
-    const searchResult = selected as CycleMosaicItem | null
+    const searchResult = selected as CycleDetail | null
     if (searchResult != null) {
       setSelectedCycle(searchResult);
       if (searchResult.access === 2)

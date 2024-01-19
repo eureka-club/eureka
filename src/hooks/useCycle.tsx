@@ -1,16 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { CycleMosaicItem } from '@/src/types/cycle';
-
-export const getCycle = async (id: number,origin=''): Promise<CycleMosaicItem | undefined> => {
-  if (!id) throw new Error('idRequired');
-  const url = `${origin||''}/api/cycle/${id}`;
-
-  const res = await fetch(url);
-  if (!res.ok) return undefined;
-  const result = await res.json();
-
-  return result.cycle ? { ...result.cycle, type: 'cycle' } : undefined;
-};
+import { CycleDetail } from '@/src/types/cycle';
+import { getCycle } from '@/src/actions/cycle/getCycle';
 
 interface Options {
   staleTime?: number;
@@ -22,9 +12,9 @@ const useCycle = (id: number, options?: Options) => {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  return useQuery<CycleMosaicItem | undefined>({
+  return useQuery<CycleDetail | null>({
     queryKey:['CYCLE', `${id}`], 
-    queryFn:() => getCycle(id),
+    queryFn:async() => await getCycle(id),
     staleTime,
     enabled,
   });
