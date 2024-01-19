@@ -2,7 +2,7 @@ import {} from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { CycleDetail, CycleSumary } from '@/src/types/cycle';
-import { UserMosaicItem } from '@/src/types/user';
+import { UserDetail } from '@/src/types/user';
 import {useNotificationContext} from '@/src/hooks/useNotificationProvider';
 import {setCycleJoinRequests,removeCycleJoinRequest} from '@/src/hooks/useCycleJoinRequests'
 import { subscribe_to_segment, unsubscribe_from_segment } from '@/src/lib/mailchimp';
@@ -11,11 +11,11 @@ import { useDictContext } from '../useDictContext';
 import { Session } from '@/src/types';
 
 type ctx = {
-    ss: UserMosaicItem[] | undefined;
+    ss: UserDetail[] | undefined;
     ck: string[];
 } | undefined;
 
-const useJoinUserToCycleAction = (session:Session,cycle:CycleDetail|CycleSumary,participants:UserMosaicItem[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
+const useJoinUserToCycleAction = (session:Session,cycle:CycleDetail|CycleSumary,participants:UserDetail[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
     // const {t} = useDictContext();
     const {notifier} = useNotificationContext();
     const queryClient = useQueryClient();
@@ -74,11 +74,11 @@ const useJoinUserToCycleAction = (session:Session,cycle:CycleDetail|CycleSumary,
           onMutate: async () => {
             const ck = ['USERS',JSON.stringify(whereCycleParticipants)];
             await queryClient.cancelQueries({queryKey:ck});
-            const ss = queryClient.getQueryData<UserMosaicItem[]>(ck)
+            const ss = queryClient.getQueryData<UserDetail[]>(ck)
             return {ss,ck};    
           },
           onSettled(_data,error,_variable,context) {
-            const {ck,ss} = context as {ss:UserMosaicItem[],ck:string[]}
+            const {ck,ss} = context as {ss:UserDetail[],ck:string[]}
             if(error){
               // setIsCurrentUserJoinedToCycle(false);
               // setCountParticipants(res=>res?res-1:undefined)
@@ -98,7 +98,7 @@ const useJoinUserToCycleAction = (session:Session,cycle:CycleDetail|CycleSumary,
 
 }
 
-const useLeaveUserFromCycleAction = (user:UserMosaicItem,cycle:CycleDetail|CycleSumary,participants:UserMosaicItem[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
+const useLeaveUserFromCycleAction = (user:UserDetail,cycle:CycleDetail|CycleSumary,participants:UserDetail[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
     // const {t} = useDictContext();
     const queryClient = useQueryClient();
     const {notifier} = useNotificationContext();
@@ -150,12 +150,12 @@ const useLeaveUserFromCycleAction = (user:UserMosaicItem,cycle:CycleDetail|Cycle
         onMutate: async () => {
             const ck = ['USERS',JSON.stringify(whereCycleParticipants)];
             await queryClient.cancelQueries({queryKey:ck});
-            const ss = queryClient.getQueryData<UserMosaicItem[]>(ck)
+            const ss = queryClient.getQueryData<UserDetail[]>(ck)
             return {ss,ck}
   
         },
         onSettled(_data,error,_variable,context) {
-            const {ck,ss} = context as {ss:UserMosaicItem[],ck:string[]}
+            const {ck,ss} = context as {ss:UserDetail[],ck:string[]}
             if(error){
             queryClient.setQueryData(ck,ss)
             }

@@ -3,14 +3,14 @@ import { atom } from 'jotai';
 import { CycleDetail } from '../types/cycle';
 import { PostMosaicItem } from '../types/post';
 import { WorkMosaicItem } from '../types/work';
-import { UserMosaicItem } from '../types/user';
+import { UserDetail } from '../types/user';
 import {SearchResult} from "@/src/types"
 /* 
 type Item =
   | (CycleDetail & { type: string })
   | WorkMosaicItem
   | (PostMosaicItem & { type: string })
-  | UserMosaicItem; */
+  | UserDetail; */
 type Filter = {
   only: string[];
   countryQuery?: string[];

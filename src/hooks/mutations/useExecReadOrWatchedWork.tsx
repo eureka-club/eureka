@@ -4,7 +4,7 @@ import { useModalContext } from '@/src/hooks/useModal';
 import SignInForm from '@/src/components/forms/SignInForm';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
-import { UserMosaicItem } from '@/src/types/user';
+import { UserDetail } from '@/src/types/user';
 import useUser from '@/src/hooks/useUser';
 import { WorkMosaicItem } from '@/src/types/work';
 import { useDictContext } from '../useDictContext';
@@ -63,7 +63,7 @@ const useExecReadOrWatchedWork = (props: Props) => {
           await queryClient.cancelQueries({queryKey:['USER', `${session.user.id}`]});
           await queryClient.cancelQueries({queryKey:cacheKey});
 
-          prevUser = queryClient.getQueryData<UserMosaicItem>(['USER', `${session.user.id}`]);
+          prevUser = queryClient.getQueryData<UserDetail>(['USER', `${session.user.id}`]);
           prevWork = queryClient.getQueryData<WorkMosaicItem>(cacheKey);
 
           let readOrWatchedUser = readOrWatchedWorks;

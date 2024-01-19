@@ -13,12 +13,12 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLeaveActions';
 import toast from 'react-hot-toast';
 import { CycleDetail } from "@/src/types/cycle";
-import { UserMosaicItem } from "@/src/types/user";
+import { UserDetail } from "@/src/types/user";
 
 interface Props {
     session: Session;
     cycle: CycleDetail;
-    participants: UserMosaicItem[];
+    participants: UserDetail[];
 }
 
 const TransitionToPayCycle: FC<Props> = ({ session, cycle,participants }) => {

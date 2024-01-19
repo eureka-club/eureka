@@ -18,7 +18,7 @@ import WMI from '@/src/components/work/MosaicItem';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import useUser, { getUser } from '@/src/hooks/useUser';
 import { BiArrowBack } from 'react-icons/bi';
-import { UserMosaicItem } from '@/src/types/user';
+import { UserDetail } from '@/src/types/user';
 import { QueryClient, dehydrate } from "@tanstack/react-query";
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import slugify from 'slugify';
@@ -34,7 +34,7 @@ import { WorkMosaicItem } from '@/src/types/work';
 
 interface Props {
     // session: Session | null;
-    // user: UserMosaicItem | null;
+    // user: UserDetail | null;
 
 }
 const MyReadOrWatched: FC<Props> = ({ }:Props) => {

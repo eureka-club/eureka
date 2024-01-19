@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';;
-import { UserMosaicItem } from './types/user';
+import { UserDetail } from './types/user';
 import { buildUrl } from 'build-url-ts';
 
 // import { useAtom } from 'jotai';
@@ -11,7 +11,7 @@ interface Options {
   enabled?: boolean;
   from?:string
 }
-export const getUsers = async (props?:Prisma.UserFindManyArgs,origin=''):Promise<UserMosaicItem[]> => {
+export const getUsers = async (props?:Prisma.UserFindManyArgs,origin=''):Promise<UserDetail[]> => {
   const {where:w,take,skip,cursor:c} = props || {};
   const where = w ? encodeURIComponent(JSON.stringify(w)) : '';
   const cursor = c ? encodeURIComponent(JSON.stringify(c)) : '';
@@ -38,7 +38,7 @@ const useUsers = (where:Prisma.UserFindManyArgs,options?: Options) => {
     enabled: true,
   };
   
-  return useQuery<UserMosaicItem[]>(
+  return useQuery<UserDetail[]>(
     {
       queryKey:['USERS', JSON.stringify(where)],
       queryFn:() => getUsers(where),

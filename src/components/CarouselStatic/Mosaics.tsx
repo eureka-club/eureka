@@ -3,9 +3,9 @@ import GenericMosaicItem from "./GenericMosaicItem";
 import { CycleDetail } from '../../types/cycle';
 import { WorkMosaicItem } from '../../types/work';
 import { PostMosaicItem } from '../../types/post';
-import { UserMosaicItem } from '../../types/user';
+import { UserDetail } from '../../types/user';
 
-type Item = CycleDetail | WorkMosaicItem | PostMosaicItem | UserMosaicItem;
+type Item = CycleDetail | WorkMosaicItem | PostMosaicItem | UserDetail;
 type MosaicProps = {
     data: Item[];
     showSocialInteraction?: boolean;

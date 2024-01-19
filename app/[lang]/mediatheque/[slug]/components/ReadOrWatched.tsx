@@ -1,11 +1,11 @@
 import CarouselStatic from '@/src/components/CarouselStatic';
-import { UserMosaicItem } from "@/src/types/user";
+import { UserDetail } from "@/src/types/user";
 import { WorkMosaicItem } from "@/src/types/work";
 import { BsEye } from 'react-icons/bs';
 import { FC } from "react";
 
 interface Props{
-    user:UserMosaicItem;
+    user:UserDetail;
     id:string;
     goTo:(path:string)=>void;
     t:(val:string)=>string;

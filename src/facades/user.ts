@@ -1,5 +1,5 @@
 import { Prisma, User } from '@prisma/client';
-import { UserDetailSpec, UserMosaicItem } from '@/types/user';
+import { UserDetailSpec, UserDetail } from '@/types/user';
 // import { UserDetail } from '../types/user';
 import {prisma} from '@/src/lib/prisma';
 import { CycleDetail } from '../types/cycle';
@@ -84,7 +84,7 @@ const workInclude = {
 }
 
 
-export const find = async (props: Prisma.UserFindUniqueArgs,language?:string): Promise<UserMosaicItem | null> => {
+export const find = async (props: Prisma.UserFindUniqueArgs,language?:string): Promise<UserDetail | null> => {
   const { select = undefined, include = true,where } = props;
   const user = await prisma.user.findFirst({
     where,
@@ -96,7 +96,7 @@ export const find = async (props: Prisma.UserFindUniqueArgs,language?:string): P
   return user;
 };
 
-export const findAll = async (props?:Prisma.UserFindManyArgs): Promise<UserMosaicItem[]> => {
+export const findAll = async (props?:Prisma.UserFindManyArgs): Promise<UserDetail[]> => {
   const {where,take,skip,cursor} = props||{};
   const users =await prisma.user.findMany({
     take,

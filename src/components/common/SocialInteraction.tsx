@@ -52,7 +52,7 @@ interface SocialInteractionClientPayload {
 }
 
 interface Props {
-  entity:CycleDetail | PostMosaicItem | WorkMosaicItem /* | UserMosaicItem */;
+  entity:CycleDetail | PostMosaicItem | WorkMosaicItem /* | UserDetail */;
   parent?: Cycle | Work | null;
   showCounts?: boolean;
   showButtonLabels?: boolean;

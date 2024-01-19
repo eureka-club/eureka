@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
-import { UserMosaicItem } from '@/src/types/user';
+import { UserDetail } from '@/src/types/user';
 import { getUsers } from '../actions/user/getUsers';
 
 interface Options {
@@ -15,7 +15,7 @@ const useUsers = (props: Prisma.UserFindManyArgs, options?: Options) => {
     enabled: true,
   };
 
-  return useQuery<UserMosaicItem[]>({
+  return useQuery<UserDetail[]>({
     queryKey:['USERS', JSON.stringify(props)],
     queryFn: () => getUsers(props),
     staleTime,

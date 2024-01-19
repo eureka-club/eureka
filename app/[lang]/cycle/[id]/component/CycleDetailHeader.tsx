@@ -21,7 +21,7 @@ import useCycle from '@/src/hooks/useCycle'
 import CarouselStatic from '@/src/components/CarouselStatic';
 import { Box } from '@mui/material';
 import useExecRatingCycle, { ExecRatingPayload } from '@/src/hooks/mutations/useExecRatingCycle';
-import { UserMosaicItem } from '@/src/types/user';
+import { UserDetail } from '@/src/types/user';
 import useUser from '@/src/hooks/useUser';
 import { CycleDetail } from '@/src/types/cycle';
 import { useDictContext } from '@/src/hooks/useDictContext';

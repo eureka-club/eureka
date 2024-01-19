@@ -6,7 +6,7 @@ import SignInForm from '@/src/components/forms/SignInForm';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
-import { UserMosaicItem } from '@/src/types/user';
+import { UserDetail } from '@/src/types/user';
 import useUser from '@/src/hooks/useUser';
 import { PostMosaicItem } from '@/src/types/post';
 
@@ -16,7 +16,7 @@ export interface ExecReactionPayload {
   unified:string;
 }
 interface MutateReturn{
-  prevUser:UserMosaicItem|undefined;
+  prevUser:UserDetail|undefined;
   prevPost:PostMosaicItem|undefined;
 }
 interface Props{
@@ -67,7 +67,7 @@ const usePostReactionCreateOrEdit = (props:Props)=>{
           await queryClient.cancelQueries({queryKey:['USER', `${session.user.id}`]});
           await queryClient.cancelQueries({queryKey:ck});
           
-          prevUser = queryClient.getQueryData<UserMosaicItem>(['USER', `${session.user.id}`]);
+          prevUser = queryClient.getQueryData<UserDetail>(['USER', `${session.user.id}`]);
           prevPost = queryClient.getQueryData<PostMosaicItem>(ck);
       
           let reactionsPost = user.reactions;

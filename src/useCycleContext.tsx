@@ -1,17 +1,17 @@
 import { createContext, useContext } from 'react';
 import { CycleDetail } from './types/cycle';
 import toast from 'react-hot-toast';
-import { UserMosaicItem } from './types/user';
+import { UserDetail } from './types/user';
 
 export type ContextType = {
   cycle: CycleDetail | null;
   showShare?: boolean;
   currentUserIsParticipant?: boolean;
   linkToCycle?: boolean;
-  requestJoinCycle?: (cycle: CycleDetail,userName:string,participants:UserMosaicItem[]) => Promise<string>;
+  requestJoinCycle?: (cycle: CycleDetail,userName:string,participants:UserDetail[]) => Promise<string>;
 };
 
-const requestJoinCycle = async (cycle: CycleDetail,userName:string,participants:UserMosaicItem[]) => {
+const requestJoinCycle = async (cycle: CycleDetail,userName:string,participants:UserDetail[]) => {
   let notificationMessage = `userJoinedCycle!|!${JSON.stringify({
     userName,
     cycleTitle: cycle?.title,

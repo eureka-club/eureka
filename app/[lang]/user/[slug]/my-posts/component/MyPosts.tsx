@@ -6,7 +6,7 @@ import useMyPosts from '@/src/hooks/useMyPosts';
 import PMI from '@/src/components/post/MosaicItem';
 import { useRouter } from 'next/navigation'
 import { BiArrowBack } from 'react-icons/bi';
-import { UserMosaicItem } from '@/src/types/user';
+import { UserDetail } from '@/src/types/user';
 import { Session } from '@/src/types';
 
 import { useDictContext } from "@/src/hooks/useDictContext";
@@ -14,7 +14,7 @@ import { useDictContext } from "@/src/hooks/useDictContext";
 
 interface Props {
     session: Session | null;
-    user: UserMosaicItem | null;
+    user: UserDetail | null;
 }
 
 const MyPosts: FC<Props> = ({ session, user }) => {

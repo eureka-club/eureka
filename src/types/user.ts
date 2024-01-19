@@ -51,11 +51,24 @@ export const UserDetailSpec = {
     reactions:{select:{postId:true,unified:true,emoji:true}},
   }
 };
-
-export type UserMosaicItem = Prisma.UserGetPayload<typeof UserDetailSpec> & {
+export type UserDetail = Prisma.UserGetPayload<typeof UserDetailSpec> & {
   type?: 'user';
 };
 
+export const UserSumarySpec={
+  select:{
+    id:true,
+    name:true,
+    image:true,
+    countryOfOrigin:true,
+    tags:true,
+    photos:{select:{storedFile:true}},
+    followedBy: { select: { id: true } },
+  }
+}
+export type UserSumary = Prisma.UserGetPayload<typeof UserSumarySpec> & {
+  type?: 'user';
+};
 export type UserWhitPhoto = Prisma.UserGetPayload<{
   include:{photos:true}
 }>;

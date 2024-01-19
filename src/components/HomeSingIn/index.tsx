@@ -6,7 +6,7 @@ import { Spinner, Col } from 'react-bootstrap';
 import TagsInput from '@/components/forms/controls/TagsInput';
 import { useInView } from 'react-intersection-observer';
 import { CycleDetail } from '@/src/types/cycle';
-import { UserMosaicItem } from '@/src/types/user';
+import { UserDetail } from '@/src/types/user';
 import { useSession } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
 import slugify from 'slugify'
@@ -51,7 +51,7 @@ const HomeSingIn: FunctionComponent<Props> = () => {
     // rootMargin: '200px 0px',
     // skip: supportsLazyLoading !== false,
   });
-  const [users, setUsers] = useState<UserMosaicItem[]>()
+  const [users, setUsers] = useState<UserDetail[]>()
   const { data: dataCycles } = useMyCycles(session?.user.id!)
   const [cycles, setCycles] = useState<CycleDetail[]>()
 

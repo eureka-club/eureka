@@ -9,7 +9,7 @@ import { useSession } from 'next-auth/react';
 import router from 'next/router';
 import styles from './MosaicItem.module.css';
 import UserAvatar from '../common/UserAvatar';
-import { UserMosaicItem } from '../../types/user';
+import { UserSumary } from '../../types/user';
 import TagsInput from '../forms/controls/TagsInput';
 import LocalImageComponent from '@/src/components/LocalImage';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
@@ -18,14 +18,14 @@ import slugify from 'slugify'
 import { useDictContext } from '@/src/hooks/useDictContext';
 
 interface Props {
-  user: UserMosaicItem;
+  user: UserSumary;
   showSocialInteraction?: boolean;
   className?:string;
   MosaicDetailed?:boolean
   // showButtonLabels?: boolean;
   // showShare?: boolean;
 }
-const getMediathequeSlug = (user:UserMosaicItem)=>{
+const getMediathequeSlug = (user:UserSumary)=>{
   if(user){
     const s =`${user.name}`
     const slug = `${slugify(s,{lower:true})}-${user.id}` 
@@ -33,7 +33,7 @@ const getMediathequeSlug = (user:UserMosaicItem)=>{
   }
   return ''
 }
-const openUserMediatheque = (user:UserMosaicItem) => {
+const openUserMediatheque = (user:UserSumary) => {
 
   router.push(`/mediatheque/${getMediathequeSlug(user)}`).then(() => window.scrollTo(0, 0));
 };

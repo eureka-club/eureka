@@ -1,9 +1,9 @@
 
 import { useQuery } from '@tanstack/react-query';
-import { UserMosaicItem } from '@/src/types/user';
+import { UserDetail } from '@/src/types/user';
 import { WEBAPP_URL } from '../constants';
 
-export const getUser = async (id: number): Promise<UserMosaicItem|null> => {
+export const getUser = async (id: number): Promise<UserDetail|null> => {
   if (!id) return null;
   else{
     const url = `${WEBAPP_URL}/api/user/${id}`;
@@ -24,7 +24,7 @@ const useUser = (id: number, options?: Options) => {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  return useQuery<UserMosaicItem|null>({
+  return useQuery<UserDetail|null>({
     queryKey:['USER', `${id}`],
     queryFn:() => getUser(id),
     staleTime,

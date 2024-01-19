@@ -2,7 +2,7 @@
 import { FC } from "react";
 import CarouselStatic from '@/src/components/CarouselStatic';
 import { PostMosaicItem } from "@/src/types/post";
-import { UserMosaicItem } from "@/src/types/user";
+import { UserDetail } from "@/src/types/user";
 import { useDictContext } from '@/src/hooks/useDictContext';
 
 import getUserIdFromSlug from "@/src/getUserIdFromSlug";

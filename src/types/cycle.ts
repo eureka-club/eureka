@@ -38,7 +38,12 @@ export type CycleSumary = Prisma.CycleGetPayload<typeof CycleSumarySpec> & {
 export const CycleDetailSpec={
   include: {
     creator: {
-      select: { id: true, name: true, email: true, countryOfOrigin: true },
+      select: { 
+        // id: true, 
+        name: true, 
+        email: true, 
+        // countryOfOrigin: true 
+      },
     },
     localImages: {
       select: {

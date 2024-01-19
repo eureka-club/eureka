@@ -12,7 +12,7 @@ import globalModals from '@/src/atoms/globalModals'
 import styles from './NotificationsList.module.css';
 import { getNotificationMessage } from '@/src/lib/utils'
 import MosaicItem from '@/src/components/notification/MosaicItem'
-import { UserMosaicItem } from '../types/user'
+import { UserDetail } from '../types/user'
 import useNotifications from '../useNotifications'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useDictContext } from '../hooks/useDictContext'
@@ -94,7 +94,7 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
       },
       onSettled: (_user, error, _variables, context) => {
         if (context) {
-          interface ctx { ck: string[], ss: UserMosaicItem }
+          interface ctx { ck: string[], ss: UserDetail }
           const { ck, ss } = context as ctx;
           if (error && ck) {
             queryClient.setQueryData(ck, ss);
@@ -128,7 +128,7 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
       },
       onSettled: (_user, error, _variables, context) => {
         if (context) {
-          interface ctx { ck: string[], ss: UserMosaicItem }
+          interface ctx { ck: string[], ss: UserDetail }
           const { ck, ss } = context as ctx;
           if (error && ck) {
             queryClient.setQueryData(ck, ss);

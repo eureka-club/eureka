@@ -3,7 +3,7 @@ import { Cycle, Post, User, Work, Prisma } from '@prisma/client';
 import { CycleDetail } from './types/cycle';
 import { PostMosaicItem } from './types/post';
 import { WorkMosaicItem, GoogleBooksProps, TMDBVideosProps } from './types/work';
-import { UserMosaicItem } from '@/src/types/user';
+import { UserDetail } from '@/src/types/user';
 import { Session as S } from 'next-auth';
 export interface FileUpload {
   fieldName: string;
@@ -45,8 +45,8 @@ export interface MySocialInfo {
  */
 
 export type BasicEntity = Cycle | Post | Work | User | Comment;
-export type MosaicItem = CycleDetail | PostMosaicItem | WorkMosaicItem | UserMosaicItem;
-export type SearchResult = CycleDetail | PostMosaicItem | WorkMosaicItem | UserMosaicItem;
+export type MosaicItem = CycleDetail | PostMosaicItem | WorkMosaicItem | UserDetail;
+export type SearchResult = CycleDetail | PostMosaicItem | WorkMosaicItem | UserDetail;
 export type APIMediaSearchResult = GoogleBooksProps | TMDBVideosProps;
 
 export const isCycle = (obj: BasicEntity): obj is Cycle =>
@@ -86,7 +86,7 @@ export const isBookGoogleBookApi = (obj: GoogleBooksProps | APIMediaSearchResult
 export const isVideoTMDB = (obj: TMDBVideosProps | APIMediaSearchResult): obj is TMDBVideosProps =>
   obj && 'release_date' in obj;
 
-export const isUserMosaicItem = (obj: MosaicItem | SearchResult): obj is UserMosaicItem =>
+export const isUserMosaicItem = (obj: MosaicItem | SearchResult): obj is UserDetail =>
   obj && 'name' in obj && ('image' in obj || 'photos' in obj);
 
 export interface NotifierResponse {

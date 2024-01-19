@@ -19,7 +19,7 @@ import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 //import { User } from '@prisma/client';
 import TagsInputMaterial from '@/components/forms/controls/TagsInputMaterial';
 import { Country } from '@/src/types';
-import { EditUserClientPayload, UserMosaicItem } from '@/src/types/user';
+import { EditUserClientPayload, UserDetail } from '@/src/types/user';
 import useUser from '@/src/hooks/useUser';
 // import ImageFileSelect from './controls/ImageFileSelect';
 import globalModalsAtom from '@/src/atoms/globalModals';
@@ -38,7 +38,7 @@ import Image from 'next/image';
 // import useTopics from '../../useTopics';
 
 interface Props {
-  user: UserMosaicItem;
+  user: UserDetail;
   session: Session;
 }
 interface FormValues {

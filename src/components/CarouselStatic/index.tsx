@@ -8,11 +8,11 @@ import styles from './index.module.css';
 import { WorkMosaicItem /* , WorkWithImages */ } from '../../types/work';
 import { CycleDetail /* , CycleWithImages */ } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
-import { UserMosaicItem } from '../../types/user';
+import { UserDetail } from '../../types/user';
 import Mosaics from './Mosaics';
 import { useDictContext } from '@/src/hooks/useDictContext';
 
-type Item = CycleDetail | WorkMosaicItem | PostMosaicItem | UserMosaicItem;
+type Item = CycleDetail | WorkMosaicItem | PostMosaicItem | UserDetail;
 type Props = {
   title?: string | JSX.Element;
   iconBefore?: JSX.Element;

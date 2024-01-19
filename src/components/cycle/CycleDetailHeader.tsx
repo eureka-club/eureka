@@ -23,7 +23,7 @@ import useCycle from '@/src/useCycle'
 import CarouselStatic from '../CarouselStatic';
 import { Box } from '@mui/material';
 import useExecRatingCycle, { ExecRatingPayload } from '@/src/hooks/mutations/useExecRatingCycle';
-import { UserMosaicItem } from '@/src/types/user';
+import { UserDetail } from '@/src/types/user';
 import { useQueryClient } from '@tanstack/react-query';;
 import useUser from '@/src/useUser';
 import { CycleDetail } from '@/src/types/cycle';

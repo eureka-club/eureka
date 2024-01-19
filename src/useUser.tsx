@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';;
-import { UserMosaicItem } from '@/types/user';
+import { UserDetail } from '@/types/user';
 
-export const getUser = async (id: number,origin='',language?:string): Promise<UserMosaicItem|null> => {
+export const getUser = async (id: number,origin='',language?:string): Promise<UserDetail|null> => {
   if (!id) return null;
   else{
     const langQ = language ? `language=${language}` : '';
@@ -24,7 +24,7 @@ const useUser = (id: number, options?: Options) => {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  return useQuery<UserMosaicItem|null>(
+  return useQuery<UserDetail|null>(
     {
      queryKey: ['USER', `${id}`],
       queryFn:() => getUser(id,''),
