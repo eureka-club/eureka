@@ -102,7 +102,7 @@ export default getApiHandler()
       if (isNaN(id)) {
         return res.status(200).json({ error: 'invalid id' });
       }
-      const coverImage: FileUpload = files?.cover != null ? files.cover[0] : null;
+      const coverImage: File = files?.cover != null ? files.cover[0] : null;
       try {
         const uploadData = await storeUpload(coverImage);
         delete fields.id;

@@ -98,21 +98,21 @@ export interface CreateWorkClientPayload {
 }
 
 export interface CreateWorkServerFields {
-  type: string[];
-  title: string[];
-  author: string[];
-  authorGender?: string[];
-  authorRace?: string[];
-  contentText?: string[];
-  link?: string[];
-  countryOfOrigin?: string[];
-  countryOfOrigin2?: string[];
-  publicationYear?: string[];
-  length?: string[];
-  tags?: string[];
+  type: string;
+  title: string;
+  author: string;
+  authorGender?: string;
+  authorRace?: string;
+  contentText?: string;
+  link?: string;
+  countryOfOrigin?: string;
+  countryOfOrigin2?: string;
+  publicationYear?: Date;
+  length?: string;
+  tags?: string;
   topics?: string;
-  creatorId?: string[];
-  language?: string[];
+  creatorId?: number;
+  language?: string;
 }
 
 export interface CreateWorkServerPayload {

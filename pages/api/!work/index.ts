@@ -36,7 +36,7 @@ export default getApiHandler()
         return;
       }
 
-      const coverImage: FileUpload = files.cover[0];
+      const coverImage: File = files.cover[0];
       try {
         const uploadData = await storeUpload(coverImage);
         const fieldsA = { ...fields, creatorId: [session.user.id] };

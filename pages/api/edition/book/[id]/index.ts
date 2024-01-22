@@ -133,7 +133,7 @@ export default getApiHandler()
         }  
 
         if(work){
-          const coverImage: FileUpload = files?.cover != null ? files.cover[0] : null;
+          const coverImage: File = files?.cover != null ? files.cover[0] : null;
           const uploadData = await storeUpload(coverImage);
           const fieldsA = { ...fields,ToCheck:false, workId };
           const edition = await createFromServerFields(fieldsA, uploadData);

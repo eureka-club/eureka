@@ -116,7 +116,7 @@ export default getApiHandler()
         return;
       }
 
-      const coverImage: FileUpload = files?.image != null ? files.image[0] : null;
+      const coverImage: File = files?.image != null ? files.image[0] : null;
       try {
         
         const post = await find(idNum);

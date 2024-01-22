@@ -35,7 +35,7 @@ export default getApiHandler()
           return;
         }
 
-        const image: FileUpload = files.image[0];
+        const image: File = files.image[0];
 
         const uploadData = await storeUpload(image);
         const post = await createFromServerFields(fields, uploadData, session.user.id);

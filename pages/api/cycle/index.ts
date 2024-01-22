@@ -41,7 +41,7 @@ export default getApiHandler()
         const complementaryMaterialsUploadData: Record<string, StoredFileUpload> = {};
         await asyncForEach(
           Object.entries(complementaryMaterialsFiles),
-          async ([cmIndexName, cmFile]: [string, FileUpload[]]) => {
+          async ([cmIndexName, cmFile]: [string, File[]]) => {
             complementaryMaterialsUploadData[cmIndexName] = await storeUpload(cmFile[0]);
           },
         );

@@ -1,12 +1,7 @@
 import './globals.css'
-//import type { Metadata } from 'next'
-//import { Inter } from 'next/font/google'
-//const inter = Inter({ subsets: ['latin'] })
-import { Locale, i18n } from 'i18n-config'
+import { Locale } from 'i18n-config'
 import '@/src/scss/custom.scss';
-import Layout from '@/src/components/layout/Layout';
 import { getDictionary } from '@/src/get-dictionary';
-import { LANGUAGES } from '@/src/constants';
 
 // export async function generateStaticParams() {
 //   return i18n.locales.map((locale) => ({ lang: locale }))

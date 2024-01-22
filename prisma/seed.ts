@@ -616,8 +616,6 @@ NotificationsOnUsers.forEach((c) => {
   `));   
 });
 
-
-
 /***backOfficeSettings***/
 const backOfficeSettings = await prismaRemote.backOfficeSettings.findMany({
   include: {
@@ -626,17 +624,18 @@ const backOfficeSettings = await prismaRemote.backOfficeSettings.findMany({
 });  
 
 backOfficeSettings.forEach((c) => {
-  
   transactions.push(
     prismaLocal.$queryRaw(Prisma.sql`
     INSERT INTO dbo.backOfficeSettings(id,SlideTitle1,SlideText1,SlideImage1,SlideTitle2,SlideText2,
-      SlideImage2,SlideTitle3,SlideText3,SlideImage3,CyclesExplorePage,PostExplorePage) 
+      SlideImage2,SlideTitle3,SlideText3,SlideImage3,CyclesExplorePage,PostExplorePage,FeaturedUsers,FeaturedWorks) 
     VALUES(${c.id}
       ,${c.SlideTitle1},${c.SlideText1},${c.SlideImage1}
       ,${c.SlideTitle2},${c.SlideText2},${c.SlideImage2}
       ,${c.SlideTitle3},${c.SlideText3},${c.SlideImage3}
       ,${c.CyclesExplorePage}
       ,${c.PostExplorePage}
+      ,${c.FeaturedUsers}
+      ,${c.FeaturedWorks}
     );
   `));
   
