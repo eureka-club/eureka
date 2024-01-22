@@ -107,14 +107,14 @@ function Loading() {
                       `,
                     }}
                   />
-                    <ModalProvider>
+                    {/* <ModalProvider> */}
                       <NotificationProvider>
                        <ErrorBounddary locale={locale as Locale}> 
                         
                           <AnyComponent {...pageProps} />
                          </ErrorBounddary> 
                       </NotificationProvider>
-                    </ModalProvider>
+                    {/* </ModalProvider> */}
                     <Toaster position="top-center" reverseOrder={false}/>
                   </Hydrate>
                   <ReactQueryDevtools />

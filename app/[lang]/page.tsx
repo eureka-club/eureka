@@ -15,6 +15,7 @@ import { Spinner } from 'react-bootstrap';
 import { GetAllByResonse, Session } from '@/src/types';
 // import {getMyCycles,myCyclesWhere} from '@/src/useMyCycles';
 import auth_config from 'auth_config';
+import HomeNotSingIn from '@/src/components/HomeNotSingIn';
 
 
 const HomeSingIn = lazy(() => import('@/src/components/HomeSingIn'));
@@ -77,7 +78,7 @@ debugger;
     <>
       <Layout dict={dict} showCustomBaner={(!session) ? true : false}> 
         {/* <Suspense fallback={<Spinner animation="grow" />}> */}
-          <HomeSingIn /> 
+          <HomeSingIn />
         {/* </Suspense> */}
        </Layout> 
     </>

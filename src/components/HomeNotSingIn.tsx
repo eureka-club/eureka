@@ -1,6 +1,7 @@
 
+"use client"
 import { FunctionComponent } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';

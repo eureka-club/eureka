@@ -1,18 +1,15 @@
+"use client"
 import { signIn } from "next-auth/react";
 import {Form, Spinner} from 'react-bootstrap';
 
 import { useState, FunctionComponent, MouseEvent,useRef } from 'react';
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import ModalBody from 'react-bootstrap/ModalBody';
-import ModalHeader from 'react-bootstrap/ModalHeader';
-import Row from 'react-bootstrap/Row';
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 import styles from './SignInForm.module.css';
-import {useRouter} from 'next/router'
 import {useModalContext} from '@/src/useModal'
 import { useDictContext } from "@/src/hooks/useDictContext";
+import { Button, Container } from "@mui/material";
+import { usePathname, useRouter } from "next/navigation";
 interface Props {
   noModal?: boolean;
   logoImage?:boolean;
@@ -20,15 +17,16 @@ interface Props {
 }
 
 const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,logoImage = true }) => {
-  const router = useRouter()
   // const { t } = useTranslation('signInForm');
-  const{t,dict}=useDictContext();
+  const{t,dict}=useDictContext();debugger;
+  const asPath=usePathname()!;
+  const router = useRouter();
   const formRef=useRef<HTMLFormElement>(null)
   const [loading,setLoading] = useState(false)
   const handleSignInGoogle = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
     if(!noModal)
-      localStorage.setItem('loginRedirect', router.asPath)
+      localStorage.setItem('loginRedirect', asPath)
     const callbackUrl = !!joinToCycle&&joinToCycle!=-1 
        ? `/cycle/${joinToCycle}?join=true`
        : localStorage.getItem('loginRedirect')?.toString()||'/';
@@ -93,10 +91,12 @@ const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,log
               }
               else{
                 close()
-                localStorage.setItem('loginRedirect',router.asPath)
-                router.push(localStorage.getItem('loginRedirect') || '/').then(()=>{
-                  localStorage.setItem('loginRedirect','')
-                })
+                localStorage.setItem('loginRedirect',asPath)
+                router.push(localStorage.getItem('loginRedirect') || '/',{})
+                // localStorage.setItem('loginRedirect','');
+                // .then(()=>{
+                //   localStorage.setItem('loginRedirect','')
+                // })
               }
             })
           }
@@ -121,30 +121,30 @@ const handlerRecoveryLogin = ()=>{
 
   return (
       <>
-      <ModalHeader className={`position-relative ${styles.modalHeader}`} closeButton={!noModal}>
+      <section className={`position-relative ${styles.modalHeader}`}>
         {logoImage && (<Container>
         <Link legacyBehavior  href="/" replace>  
         <img  className={`cursor-pointer ${styles.eurekaImage}`} src="/logo.svg" alt="Eureka" /> 
         </Link>
         <p className={styles.EurekaText}>EUREKA</p>
         </Container>)}
-      </ModalHeader>
-      <ModalBody className="pt-0">
+      </section>
+      <section className="pt-0">
         <div>
          {logoImage && (<p className={`${styles.loginGreeting}`}>{t(dict,'loginGreeting')}</p>)}
          <div className="py-3 border border-1"  style={{ borderRadius: '0.5em'}}>
-          <Row>
+          <section>
               <button type="button" onClick={handleSignInGoogle} className={`d-flex justify-content-center fs-6 ${styles.buttonGoogle}`}>
                 <div className={`d-flex justify-content-start justify-content-sm-center aling-items-center flex-row ${styles.gmailLogoAndtext}`}>
                 <img  className={`${styles.gmailLogo} me-1 me-lg-2`} src="/img/logo-google.png" alt="gmail" /> 
                 {t(dict,'loginViaGoogle')}
                 </div>
               </button>
-          </Row>
-          <Row>
+          </section>
+          <section>
               <span className={`${styles.alternativeLabel}`}>{t(dict,'alternativeText')}</span>
-          </Row>
-          <Row>
+          </section>
+          <section>
             <div className="d-flex justify-content-center">
               <Form ref={formRef} className={`d-flex flex-column fs-6 ${styles.loginForm}`} data-cy="login-form">
                 <Form.Group controlId="email">
@@ -152,7 +152,7 @@ const handlerRecoveryLogin = ()=>{
                   <Form.Control className='' type="email" required />
                   <div className='d-flex justify-content-between mb-1 mt-2'><div>{t(dict,'passwordFieldLabel')}</div>
                     {/* <Link legacyBehavior  href="/recoveryLogin" passHref> */}
-                      <Button onClick={handlerRecoveryLogin} variant="link" className={`btn-link d-flex link align-items-end cursor-pointer ${styles.forgotPassText}`}>{t(dict,'forgotPassText')}</Button>
+                      <Button onClick={handlerRecoveryLogin}  className={`btn-link d-flex link align-items-end cursor-pointer ${styles.forgotPassText}`}>{t(dict,'forgotPassText')}</Button>
                     {/* </Link> */}
                   </div>
                 </Form.Group>
@@ -167,16 +167,16 @@ const handlerRecoveryLogin = ()=>{
               </Form>
                  
             </div>
-          </Row>
+          </section>
           </div>
           <p className={`mt-2 ${styles.registerNotice}`}>{t(dict,'RegisterNotice')}</p>
           <p className={`fs-6 ${styles.dontHaveAccounttext} mb-0 pb-0`}>{t(dict,'dontHaveAccounttext')} 
-            <Button onClick={handlerJoinLink} className="text-primary fs-5 " variant="link">
+            <Button onClick={handlerJoinLink} className="text-primary fs-5 ">
             {t(dict,'Join')}
             </Button>
           </p>
         </div>
-      </ModalBody>
+      </section>
     </>
   );
 };

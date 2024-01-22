@@ -47,7 +47,7 @@ const NavBar: FunctionComponent = () => {
   const queryClient = useQueryClient();
   
   const { data: session, status } = useSession();
-  const isLoadingSession = status === 'loading';
+  const isLoadingSession = status === 'loading';debugger;
   const router = useRouter();
   const asPath=usePathname()!;
   const locale=getLocale_In_NextPages(asPath);
@@ -109,7 +109,7 @@ const NavBar: FunctionComponent = () => {
     return <BiUser className={styles.navbarIconNav} />;
   };
 
-  const handlerLogin = () => {
+  const handlerLogin = () => {debugger;
     show(<SignInForm />);
 
     /*localStorage.setItem('loginRedirect',asPath);
@@ -340,7 +340,7 @@ const NavBar: FunctionComponent = () => {
                           data-cy="btn-login"
                           onClick={handlerLogin} /*onClick={openSignInModal}*/
                         >
-                          {t(dict,'login')}
+                         123 {t(dict,'login')}
                         </Button>
                       )}
                     </Nav>

@@ -16,6 +16,8 @@ import { EnvContext } from '@/src/hooks/useEnvContext';
 import {Toaster} from 'react-hot-toast'
 import { ModalProvider } from '@/src/useModal';
 import { t } from '@/src/lib/utils';
+import BootstrapProvider from '@/src/providers/BootstrapProvider';
+import { Modal } from '@mui/material';
 
 interface Props {
   children: React.ReactNode;
@@ -61,37 +63,39 @@ const Layout: FC<Props> = ({ dict, children, showHeader = false, banner, showCus
     }}>
       <NextAuthProvider>
         <ReactQueryProvider>
-          <JOTAIProvider store={store}>
-            <ModalProvider>
-              <>
-                <Toaster/>
-                <section>
-                  {showNavBar && <>
-                    <div className="d-none d-lg-block">
-                      <NavBarDestokp />
-                    </div>
-                    <div className="d-lg-none">
-                      <NavbarMobile />
-                    </div>
-                  </>
-                  }
-                </section>
-                <section className={(!showNavBar || allPageSize) ? 'allPageSection' : 'mainSection'}>
-                  {showHeader && <>
-                    <div className="d-none d-lg-block"><Header show={showHeader} /></div>
-                    {/* <div className="d-lg-none"><HeaderMobile show={showHeader} /></div> */}
-                  </>}
-                  {showCustomBaner && <div className="d-none d-lg-block"> <BannerCustomizable /></div>}
-                  {showCustomBaner && <div className="d-block d-lg-none"> <BannerCustomizableMobile /></div>}
-                  {renderBanner()}
-                  {(!showNavBar || allPageSize) ? <div className='m-0'>{children}</div>
-                    : (showHeader || showCustomBaner) ? <Container className='mt-4'>{children}</Container>
-                      : <Container className='mainContainer'>{children}</Container>}
-                </section>
-                {showFooter && (<Footer />)}
-              </>
-            </ModalProvider>
-          </JOTAIProvider>
+              <ModalProvider>
+          <BootstrapProvider>
+            <JOTAIProvider store={store}>
+                <>
+                  <Toaster/>
+                  <section>
+                    {showNavBar && <>
+                      <div className="d-none d-lg-block">
+                        <NavBarDestokp />
+                      </div>
+                      <div className="d-lg-none">
+                        <NavbarMobile />
+                      </div>
+                    </>
+                    }
+                  </section>
+                  <section className={(!showNavBar || allPageSize) ? 'allPageSection' : 'mainSection'}>
+                    {showHeader && <>
+                      <div className="d-none d-lg-block"><Header show={showHeader} /></div>
+                      {/* <div className="d-lg-none"><HeaderMobile show={showHeader} /></div> */}
+                    </>}
+                    {showCustomBaner && <div className="d-none d-lg-block"> <BannerCustomizable /></div>}
+                    {showCustomBaner && <div className="d-block d-lg-none"> <BannerCustomizableMobile /></div>}
+                    {renderBanner()}
+                    {(!showNavBar || allPageSize) ? <div className='m-0'>{children}</div>
+                      : (showHeader || showCustomBaner) ? <Container className='mt-4'>{children}</Container>
+                        : <Container className='mainContainer'>{children}</Container>}
+                  </section>
+                  {showFooter && (<Footer />)}
+                </>
+            </JOTAIProvider>
+          </BootstrapProvider>
+              </ModalProvider>
         </ReactQueryProvider>
       </NextAuthProvider>
     </EnvContext.Provider>

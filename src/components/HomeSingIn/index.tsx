@@ -52,13 +52,7 @@ const HomeSingIn: FunctionComponent<Props> = () => {
     // skip: supportsLazyLoading !== false,
   });
   const [users, setUsers] = useState<UserDetail[]>()
-  const { data: dataCycles } = useMyCycles(session?.user.id!)
-  const [cycles, setCycles] = useState<CycleDetail[]>()
-
-  useEffect(() => {
-    if (dataCycles) setCycles(dataCycles.cycles)
-
-  }, [dataCycles])
+  const { data: cycles } = useMyCycles(session?.user.id!)
 
   const [topicIdx, setTopicIdx] = useState(0);
   const [topicsFetched, setTopicsFetched] = useState(new Set());
@@ -92,7 +86,7 @@ const [gbt, setGBT] = useState<any[]>([]);
   }, [inView]);
 
   const getTopicsBadgedLinks = () => {
-    return <TagsInput className='d-flex flex-wrap' formatValue={(v: string) => t(dict,`topics:${v}`)} tags={[...topics].join()} readOnly />;
+    return <TagsInput className='d-flex flex-wrap' formatValue={(v: string) => t(dict,`${v}`)} tags={[...topics].join()} readOnly />;
   };
 
   const renderSpinnerForLoadNextCarousel = () => {
@@ -114,25 +108,23 @@ const [gbt, setGBT] = useState<any[]>([]);
   };
   //       <h1 className="text-secondary fw-bold">{t(dict,'myCycles')}</h1>
 
+  // const cyclesJoined = () => {
+  //   if (!session) return <></>
+  //   const k = JSON.stringify(myCyclesWhere(session?.user.id))
 
-
-  const cyclesJoined = () => {
-    if (!session) return <></>
-    const k = JSON.stringify(myCyclesWhere(session?.user.id))
-
-    return (cycles && cycles.length)
-      ? <div data-cy="myCycles">
-        <CarouselStatic
-          cacheKey={['CYCLES', k]}
-          onSeeAll={async () => seeAll(cycles, t(dict,'myCycles'))}
-          title={t(dict,'myCycles')}
-          data={cycles}
-          iconBefore={<></>}
-        // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-        />
-      </div>
-      : <></>;
-  };
+  //   return (cycles && cycles.length)
+  //     ? <div data-cy="myCycles">
+  //       <CarouselStatic
+  //         cacheKey={['CYCLES', k]}
+  //         onSeeAll={async () => seeAll(cycles, t(dict,'myCycles'))}
+  //         title={t(dict,'myCycles')}
+  //         data={cycles}
+  //         iconBefore={<></>}
+  //       // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+  //       />
+  //     </div>
+  //     : <></>;
+  // };
 
 
   return (
@@ -219,12 +211,12 @@ const [gbt, setGBT] = useState<any[]>([]);
             <FeaturedEurekas />
             <FeaturedCycles />
             {/*cyclesJoined()*/}
-            <>
+            {/* <>
               <div className="mt-5">
                 <CarouselsByTopics groupedByTopics={gbt} />
               </div>
               <div className="mb-5">{renderSpinnerForLoadNextCarousel()} </div>
-            </>
+            </> */}
           </section>
         </Col>
       </section>
