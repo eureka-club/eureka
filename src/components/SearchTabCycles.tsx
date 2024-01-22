@@ -62,7 +62,7 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
       const access = {
         access:{
           in:[
-            ...filtersType.public ? [1] : [],
+            ...filtersType.public ? [1,4] : [],
             ...filtersType.private ? [2] : [],
           ]
         }
