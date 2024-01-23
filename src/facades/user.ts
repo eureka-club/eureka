@@ -2,7 +2,7 @@ import { Prisma, User } from '@prisma/client';
 import { UserDetailSpec, UserDetail } from '@/types/user';
 // import { UserDetail } from '../types/user';
 import {prisma} from '@/src/lib/prisma';
-import { CycleDetail } from '../types/cycle';
+import { CycleDetail, CycleDetailSpec } from '../types/cycle';
 import { WorkMosaicItem } from '../types/work';
 import { PostMosaicItem } from '../types/post';
 
@@ -126,7 +126,7 @@ export const joinedCycles = async (id:number,lang?:string): Promise<CycleDetail[
   const res = await prisma.user.findFirst({
     where:{id},
     select: {
-      joinedCycles:cycleInclude
+      joinedCycles:{include:CycleDetailSpec.include}
     }
   });
   
@@ -140,7 +140,7 @@ export const cyclesCreated = async (id:number,lang?:string): Promise<CycleDetail
   const res = await prisma.user.findFirst({
     where:{id},
     select: {
-      cycles:cycleInclude
+      cycles:{include:CycleDetailSpec.include}
     }
   });
   
@@ -200,7 +200,9 @@ export const favCycles = async (id:number,lang?:string): Promise<CycleDetail[]> 
   let res = await prisma.user.findFirst({
     where:{id},
     select: {
-      favCycles:cycleInclude
+      favCycles:{
+        include:CycleDetailSpec.include
+      }
     }
   });
   

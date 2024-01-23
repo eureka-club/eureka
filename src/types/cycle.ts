@@ -1,4 +1,5 @@
 import { Prisma } from '@prisma/client';
+import { UserDetailSpec } from './user';
 export interface ComplementaryMaterial {
   author: string;
   title: string;
@@ -37,6 +38,7 @@ export type CycleSumary = Prisma.CycleGetPayload<typeof CycleSumarySpec> & {
 
 export const CycleDetailSpec={
   include: {
+    participants:UserDetailSpec,
     creator: {
       select: { 
         // id: true, 
@@ -147,7 +149,7 @@ export interface CreateCycleClientPayload {
 export interface EditCycleClientPayload {
   id: number;
   includedWorksIds?: number[];
-  coverImage?: File;
+  coverImage?: File|null;
   access: number;
   title?: string;
   languages?: string;

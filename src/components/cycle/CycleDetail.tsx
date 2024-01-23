@@ -55,7 +55,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   post,
   work,
 }) => {
-  const{data:session}=useSession();
+  const{data:session}=useSession()!;
   const cycleContext = useCycleContext();
   const router = useRouter();
   const{id,lang}=useParams<{id:string,lang:Locale}>()!;
@@ -212,7 +212,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           onCarouselSeeAllAction={onCarouselSeeAllAction}
         />
       );
-      if([1,2,4].includes(cycle.access))return res;
+      const allowed = cycle.participants.findIndex(p=>p.id==session?.user.id)>-1
+        || cycle.creatorId == session?.user.id;
+      if(allowed)return res;  
+      else if([1,2,4].includes(cycle.access))return res;
       if (cycle.access === 3) return '';
     }
     return '';
@@ -304,6 +307,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
         
       );
+      const allowed = cycle.participants.findIndex(p=>p.id==session?.user.id)>-1
+        || cycle.creatorId == session?.user.id;
+      if(allowed)return res;
+
       if (cycle.access === 3) return '';
       if (cycle.access === 1) return res;
       if ([2,4].includes(cycle.access) && (cycleContext.cycle?.currentUserIsCreator || cycleContext.cycle?.currentUserIsParticipant)) return res;
@@ -341,6 +348,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           </NavItem>
         </>
       );
+      const allowed = cycle.participants.findIndex(p=>p.id==session?.user.id)>-1
+        || cycle.creatorId == session?.user.id;
+      if(allowed)return res;
       if (cycle.access === 3) return <></>;
       if (cycle.access === 1) return res;
       if ([2, 4].includes(cycle.access) && (cycleContext.cycle?.currentUserIsCreator || cycleContext.cycle?.currentUserIsParticipant)) return res;

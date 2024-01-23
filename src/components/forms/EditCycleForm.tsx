@@ -14,12 +14,10 @@ import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 import { useMutation, useQueryClient } from '@tanstack/react-query';;
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import { Cycle } from '@prisma/client';
 import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import TagsInput from './controls/TagsInput';
 // import i18nConfig from '../../../i18n';
 import useTopics from '../../useTopics';
-
 
 import {
   DATE_FORMAT_PROPS,
@@ -31,11 +29,11 @@ import {
 } from '../../types/cycle';
 import LanguageSelect from './controls/LanguageSelect';
 import styles from './CreateCycleForm.module.css';
-import { getLocale_In_NextPages } from '@/src/lib/utils';
 import useCycle from '@/src/hooks/useCycle';
 
 import { useDictContext } from '@/src/hooks/useDictContext';
 import { Option } from 'react-bootstrap-typeahead/types/types';
+import ImageFileSelect from './controls/ImageFileSelect';
 
 dayjs.extend(utc)
 interface Props {
@@ -53,6 +51,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className }) => {
   const asPath=usePathname()!;
   // const locale = getLocale_In_NextPages(asPath)
   const{t,dict}=useDictContext()
+  const [cycleCoverImageFile, setCycleCoverImageFile] = useState<File | null>(null);
 
   const router = useRouter();
   const typeaheadRefOC = useRef(null);
@@ -190,18 +189,18 @@ const EditCycleForm: FunctionComponent<Props> = ({ className }) => {
     const payload: EditCycleClientPayload = {
       id: cycle?.id!,
       // includedWorksIds: selectedWorksForCycle.map((work) => work.id),
-      // coverImage: cycleCoverImageFile,
+      ...cycleCoverImageFile && {coverImage: cycleCoverImageFile},
       access: access || 1,
       title: form.cycleTitle.value,
       languages: language,
       startDate: form.startDate.value,
       endDate: form.endDate.value,
-      countryOfOrigin: countryOrigin,
-      // contentText: form.description.value,
+      ... countryOrigin && {countryOfOrigin: countryOrigin},
       contentText: editorRef.current.getContent(), // ;form.description.value,
-      // complementaryMaterials,
       tags,
       topics: items.join(','),
+      // contentText: form.description.value,
+      // complementaryMaterials,
     };
 
     await execEditCycle(payload);
@@ -246,6 +245,35 @@ const EditCycleForm: FunctionComponent<Props> = ({ className }) => {
         <Form onSubmit={handleSubmit} ref={formRef} className={className}>
           <h4 className="mt-2 mb-4">{t(dict,'Edit Cycle')}</h4>
 
+          <Row>
+          <ImageFileSelect
+                  acceptedFileTypes="image/*"
+                  file={cycleCoverImageFile}
+                  setFile={setCycleCoverImageFile}
+                  required={false}
+                >
+                  {(imagePreview) => (
+                    <div className={styles.outlinedBlock}>
+                      {imagePreview == null ? (
+                        <div className={styles.cycleCoverPrompt}>
+                          <h4>*{t(dict,'addCoverBtnTitle')}</h4>
+                          <p>{t(dict,'addCoverTipLeadLine')}:</p>
+                          <ul>
+                            <li>{t(dict,'addCoverTipLine1')}</li>
+                            <li>{t(dict,'addCoverTipLine2')}</li>
+                            <li>{t(dict,'addCoverTipLine3')}</li>
+                          </ul>
+                        </div>
+                      ) : (
+                        <div
+                          className={styles.cycleCoverPreview}
+                          style={{ backgroundImage: `url('${imagePreview}')` }}
+                        />
+                      )}
+                    </div>
+                  )}
+                </ImageFileSelect>
+          </Row>
           <Row className="mb-5">
             
             <Col /* md={{ span: 12 }} */>
