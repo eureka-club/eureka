@@ -7,8 +7,7 @@ import { PrismaClient, Prisma, User } from '@prisma/client';
 const prismaRemote = new PrismaClient({
   datasources: {
     db: {
-      url: "sqlserver://eureka-staging-database-server.database.windows.net:1433;database=eureka-staging;user=EurekaDatabaseAdmin@eureka-staging-database-server;password=ZxZQ2j1UwAlfaOnr^0f_0Q4Z_9b5t~0nsGXr",
-      // url:"sqlserver://eureka-database-server.database.windows.net:1433;database=eureka-production;user=EurekaDatabaseAdmin@eureka-database-server;password=bvV^B8KAX-eg.qV~DjN0REmLK^38_VUj53Pn"
+      url: process.env.DATABASE_URL_REMOTE
     },
   },
 });
