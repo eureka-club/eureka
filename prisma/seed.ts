@@ -663,7 +663,7 @@ backOfficeSettings.forEach((c) => {
   console.log('DONE!');
 }
  
-if(0){
+if(1){
   main()
     .catch((e) => {
       console.error(e);
