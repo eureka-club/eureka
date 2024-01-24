@@ -10,8 +10,8 @@ import {
   TabContainer,
   Row,
   Col,
-  ButtonGroup,
   Button,
+  ButtonGroup,
   Nav,
   NavItem,
   NavLink,
@@ -42,6 +42,8 @@ import MosaicItemUser from '@/components/user/MosaicItem'
 import { useInView } from 'react-intersection-observer';
 import { CycleMosaicItem } from '@/src/types/cycle';
 import { Session } from '@/src/types';
+import { ButtonsTopActions } from '../ButtonsTopActions';
+import { Button as MaterialButton } from '@mui/material';
 
 
 const CycleDetailDiscussion = lazy(() => import ('./CycleDetailDiscussion')) 
@@ -254,9 +256,20 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
             <h5 className="h6 fw-bold mb-0 ps-3 py-1 d-flex text-secondary">
               <span className="py-1 fw-bold">{`${IDX}. `}</span>
               <span className="py-1 fw-bold h6 mb-0 ps-3 d-flex">{`${g.title}`}</span>
-              <Button className="ms-auto text-white" size="sm" onClick={() => toggleGuidelineDesc(key)}>
+              <MaterialButton 
+                className="ms-auto text-white" 
+                size="small" 
+                onClick={() => toggleGuidelineDesc(key)}
+                sx={{
+                  backgroundColor:'var(--eureka-green)',
+                  padding:'0',
+                  ":hover":{
+                  backgroundColor:'var(--color-primary-raised)',
+                  }
+              }}
+              >
                 {!gldView[key] ? <RiArrowDownSLine /> : <RiArrowUpSLine />}
-              </Button>
+              </MaterialButton>
             </h5>
             {gldView[key] && <p className="px-3 pt-0 pb-3">{g.contentText}</p>}
           </aside>
@@ -416,27 +429,22 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   return (
     <>
-      <ButtonGroup className="mt-1 mt-md-3 mb-1">
-        <Button variant="primary text-white" onClick={() => router.back()} size="sm">
-          <BiArrowBack />
-        </Button>
-        
-        {!router.query.postId && canEditCycle() && (
-          <Button variant="warning" onClick={handleEditClick} size="sm">
+    <ButtonsTopActions>
+      {
+        !router.query.postId && canEditCycle() 
+        ? <MaterialButton color="warning" onClick={handleEditClick} size="small">
+              {t('Edit')}
+            </MaterialButton>
+        : <></> 
+      }
+      {
+        post && cycle && canEditPost() 
+          ? <MaterialButton color="warning" onClick={handleEditPostClick} size="small">
             {t('Edit')}
-          </Button>
-        )}
-       
-        {/* <Button className="" variant="danger" onClick={e=>{removeCycle(e)}}>Remove Cycle</Button> */}
-
-        {post && cycle && canEditPost() && (<>
-          <Button variant="warning" onClick={handleEditPostClick} size="sm">
-            {t('Edit')}
-          </Button>
-         </>
-        )}
-      </ButtonGroup> 
-     
+          </MaterialButton>
+          : <></>
+      }
+    </ButtonsTopActions>
 
 {
 // (!editPostOnSmallerScreen.value) ? 
