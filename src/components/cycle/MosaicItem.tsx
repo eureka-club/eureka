@@ -10,7 +10,7 @@ import { Card, Button, Spinner, Badge} from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 import { CgMediaLive } from 'react-icons/cg';
 import { MdGroup } from 'react-icons/md';
-import { DATE_FORMAT_SHORT } from '../../constants';
+import { DATE_FORMAT_SHORT, LOCALES } from '../../constants';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import useUser from '@/src/useUser';
@@ -182,13 +182,15 @@ const MosaicItem: FunctionComponent<Props> = ({
   };
 
   const getCycleAccesLbl = () => {
+    let langLbl = `${cycle?.languages.replaceAll(/\s/g,'').split(',').map(l=>LOCALES[l].toUpperCase()).join(', ')}`
+    let res = '';
     if (cycle) {
-      if (cycle.access === 1) return t('public');
-      if (cycle.access === 2) return t('private');
-      if (cycle.access === 3) return t('secret');
-      if (cycle.access === 4) return t('payment');
+      if (cycle.access === 1) res = t('public');
+      if (cycle.access === 2) res = t('private');
+      if (cycle.access === 3) res = t('secret');
+      if (cycle.access === 4) res = t('payment');
     }
-    return '';
+    return <span>{res} (<em>{langLbl}</em>)</span>;
   };
 
   const canNavigate = () => {

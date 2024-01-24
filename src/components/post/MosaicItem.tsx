@@ -4,7 +4,7 @@ import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Card, Badge,Spinner } from 'react-bootstrap';
 import dayjs from 'dayjs';
-import { DATE_FORMAT_SHORT } from '../../constants';
+import { DATE_FORMAT_SHORT, LOCALES } from '../../constants';
 import SocialInteraction from './SocialInteraction';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
@@ -197,8 +197,14 @@ const MosaicItem: FunctionComponent<Props> = ({
              </div>
             )}
           <Badge bg="success" className={`fw-normal fs-6 text-white px-2 rounded-pill ${styles.type}`}>
-            {t(type || 'post')}
+            <span>
+              {t(type || 'post')}
+              <em>
+                {` (${LOCALES[post.language].toUpperCase()})`}
+              </em>
+            </span>
           </Badge>
+          
         </div>
 
 

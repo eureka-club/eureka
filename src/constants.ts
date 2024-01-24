@@ -21,3 +21,10 @@ export const LANGUAGES : Record<string, string> = {
     fr: 'french',
     pt: 'portuguese'
 }
+
+export const LOCALES : Record<string, string> = {
+    "spanish":'es' ,
+    'english':'en' ,
+    'french':'fr' ,
+    'portuguese':'pt' 
+}
