@@ -10,7 +10,7 @@ import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import SocialInteraction from '../common/SocialInteraction';
 import { useCycleContext } from '../../useCycleContext';
-import { DATE_FORMAT_SHORT } from '../../constants';
+import { DATE_FORMAT_SHORT, LOCALES } from '../../constants';
 import useWork from '@/src/useWork';
 import { WorkMosaicItem } from '@/src/types/work';
 import { getLocale_In_NextPages } from '@/src/lib/utils';
@@ -171,9 +171,16 @@ const MosaicItem: FunctionComponent<Props> = ({
       <div className={`${styles.imageContainer}`}>
         {renderLocalImageComponent()}
         {isActive() && <CgMediaLive className={`${styles.isActiveCircle}`} />}
-        <Badge bg="orange" className={`fw-normal fs-6 text-black px-2 rounded-pill ${styles.type}`}>
-          {type ? t(dict,type) : '...'}
-        </Badge>
+        
+          <Badge bg="orange" className={`fw-normal fs-6 text-black px-2 rounded-pill ${styles.type}`}>
+            <span>
+              {type ? t(dict,type) : '...'}
+              <em>
+                {` (${LOCALES[work.language].toUpperCase()})`}
+              </em>
+            </span>
+          </Badge>
+
       </div>
       {renderOngoinOrUpcomingDate()}
       {showSocialInteraction && work && (

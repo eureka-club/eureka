@@ -25,6 +25,7 @@ export const CycleSumarySpec = {
     access:true,
     creatorId:true,
     product_id:true,
+    languages:true,
     localImages:{select:{storedFile:true}},
     usersJoined:{select:{userId:true,pending:true}},
     favs:{select:{id:true}},

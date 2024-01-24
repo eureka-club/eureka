@@ -8,8 +8,6 @@ import {
   TabContainer,
   Row,
   Col,
-  ButtonGroup,
-  Button,
   Nav,
   NavItem,
   NavLink,
@@ -33,13 +31,14 @@ import { useCycleContext } from '@/src/useCycleContext';
 import CycleDetailHeader from './CycleDetailHeader';
 import useCycle from '@/src/useCycle';
 import usePosts,{getPosts} from '@/src/usePosts'
-import useUsers from '@/src/useUsers'
 import MosaicItemPost from '@/src/components/post/MosaicItem'
 import MosaicItemUser from '@/components/user/MosaicItem'
 import { useInView } from 'react-intersection-observer';
 import { CycleDetail } from '@/src/types/cycle';
 import { Locale } from 'i18n-config';
 import { useSession } from 'next-auth/react';
+import { ButtonsTopActions } from '../ButtonsTopActions';
+import { Button as MaterialButton } from '@mui/material';
 
 import { useDictContext } from '@/src/hooks/useDictContext';
 import useCycleParticipants from '@/src/hooks/useCycleParticipants';
@@ -243,9 +242,20 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
             <h5 className="h6 fw-bold mb-0 ps-3 py-1 d-flex text-secondary">
               <span className="py-1 fw-bold">{`${IDX}. `}</span>
               <span className="py-1 fw-bold h6 mb-0 ps-3 d-flex">{`${g.title}`}</span>
-              <Button className="ms-auto text-white" size="sm" onClick={() => toggleGuidelineDesc(key)}>
+              <MaterialButton 
+                className="ms-auto text-white" 
+                size="small" 
+                onClick={() => toggleGuidelineDesc(key)}
+                sx={{
+                  backgroundColor:'var(--eureka-green)',
+                  padding:'0',
+                  ":hover":{
+                  backgroundColor:'var(--color-primary-raised)',
+                  }
+              }}
+              >
                 {!gldView[key] ? <RiArrowDownSLine /> : <RiArrowUpSLine />}
-              </Button>
+              </MaterialButton>
             </h5>
             {gldView[key] && <p className="px-3 pt-0 pb-3">{g.contentText}</p>}
           </aside>
@@ -405,27 +415,22 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   return (
     <>
-      <ButtonGroup className="mt-1 mt-md-3 mb-1">
-        <Button variant="primary text-white" onClick={() => router.back()} size="sm">
-          <BiArrowBack />
-        </Button>
-        
-        {!postId && canEditCycle() && (
-          <Button variant="warning" onClick={handleEditClick} size="sm">
+    <ButtonsTopActions>
+      {
+        canEditCycle() 
+        ? <MaterialButton color="warning" onClick={handleEditClick} size="small">
+              {t(dict,'Edit')}
+            </MaterialButton>
+        : <></> 
+      }
+      {
+        post && cycle && canEditPost() 
+          ? <MaterialButton color="warning" onClick={handleEditPostClick} size="small">
             {t(dict,'Edit')}
-          </Button>
-        )}
-       
-        {/* <Button className="" variant="danger" onClick={e=>{removeCycle(e)}}>Remove Cycle</Button> */}
-
-        {post && cycle && canEditPost() && (<>
-          <Button variant="warning" onClick={handleEditPostClick} size="sm">
-            {t(dict,'Edit')}
-          </Button>
-         </>
-        )}
-      </ButtonGroup> 
-     
+          </MaterialButton>
+          : <></>
+      }
+    </ButtonsTopActions>
 
 {
 // (!editPostOnSmallerScreen.value) ? 

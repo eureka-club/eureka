@@ -7,7 +7,7 @@ import { PrismaClient, Prisma, User } from '@prisma/client';
 const prismaRemote = new PrismaClient({
   datasources: {
     db: {
-      url: process.env.DATABASE_URL_REMOTE,
+      url: process.env.DATABASE_URL_REMOTE
     },
   },
 });

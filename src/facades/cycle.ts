@@ -1,6 +1,6 @@
 import { Cycle, CycleComplementaryMaterial, Prisma, User, RatingOnCycle } from '@prisma/client';
 import { StoredFileUpload } from '../types';
-import { CreateCycleServerFields, CreateCycleServerPayload, CycleDetail, CycleDetailSpec, CycleSumary } from '../types/cycle';
+import { CreateCycleServerFields, CreateCycleServerPayload, CycleDetail, CycleDetailSpec, CycleSumary, CycleSumarySpec } from '../types/cycle';
 import { prisma } from '@/src/lib/prisma';
 import { subscribe_to_segment, unsubscribe_from_segment } from '@/src/lib/mailchimp';
 import { sendMail } from './mail';
@@ -13,20 +13,7 @@ export const NEXT_PUBLIC_MOSAIC_ITEMS_COUNT = +(process.env.NEXT_PUBLIC_NEXT_PUB
 export const findSumary = async (id: number): Promise<CycleSumary | null> => {
   const cycle = await prisma.cycle.findUnique({
     where: { id },
-    select:{
-      id:true,
-      title:true,
-      startDate:true,
-      endDate:true,
-      access:true,
-      creatorId:true,
-      product_id:true,
-      localImages:{select:{storedFile:true}},
-      usersJoined:{select:{userId:true,pending:true}},
-      favs:{select:{id:true}},
-      ratings:{select:{userId:true,qty:true}},
-      _count: { select: { ratings: true } },
-    }
+    select:CycleSumarySpec.select
   });
   return cycle;
 };

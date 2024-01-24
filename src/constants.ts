@@ -1550,3 +1550,9 @@ export interface CountryType {
      //    "phone":"263"
      // }
    ];
+export const LOCALES : Record<string, string> = {
+    "spanish":'es' ,
+    'english':'en' ,
+    'french':'fr' ,
+    'portuguese':'pt' 
+}

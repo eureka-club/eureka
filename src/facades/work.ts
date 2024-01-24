@@ -37,7 +37,7 @@ const editionsToBook = (book: WorkMosaicItem, language: string): WorkMosaicItem 
       return book;
     }
   }
-  return null;
+  return book;
 };
 
 export const find = async (id: number, language?: string): Promise<WorkMosaicItem | null> => {

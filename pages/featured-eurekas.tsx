@@ -1,7 +1,7 @@
 import { GetServerSideProps,NextPage } from 'next';
 import Head from "next/head";
-import { Button, ButtonGroup, Col, Row } from 'react-bootstrap';
 import { dehydrate, QueryClient } from '@tanstack/react-query';;
+import { Col, Row } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 
 
@@ -14,6 +14,10 @@ import { getSession } from 'next-auth/react';
 import { getDictionary, t } from '@/src/get-dictionary';
 import { Locale } from 'i18n-config';
 import { defaultLocale } from 'i18n';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 
 interface Props{
   dict:any
@@ -40,11 +44,9 @@ const InterestedCycles: NextPage<Props> = ({dict}) => {
     </Head>
     <SimpleLayout>
     <article className='mt-4' data-cy="my-cycles">
-      <ButtonGroup className="mt-1 mt-md-3 mb-1">
-          <Button variant="primary text-white" onClick={() => router.back()} size="sm">
-            <BiArrowBack />
-          </Button>
-        </ButtonGroup>
+
+      <ButtonsTopActions/>
+
         <>
           <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t(dict,'Featured Eurekas')}</h1>
             <Row>
