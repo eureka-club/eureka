@@ -16,7 +16,7 @@ const CyclesJoined:FC<Props> = ({cycles,id,goTo,t}) => {
     return (cycles && cycles.length) 
     ?<div data-cy="cycles-created-or-joined">
       <CarouselStatic
-        cacheKey={['MY-CYCLES',id.toString()]}
+        cacheKey={['MY-CYCLES']}
         onSeeAll={()=>goTo('my-cycles')}
         seeAll={!!session}
         title={t('common:myCycles')}

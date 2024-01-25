@@ -24,7 +24,7 @@ type Props = {
   className?: string;
   mosaicBoxClassName?: string;
   size?: string;
-  cacheKey: [string, string];
+  cacheKey: string[];
   userMosaicDetailed?: boolean;
 };
 

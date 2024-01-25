@@ -104,7 +104,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
       },
     },
   });
-  const { data: dataCycles } = useCycles(workCyclessWhere, { enabled: !!workId });
+  const { data: dataCycles } = useCycles('',workCyclessWhere, { enabled: !!workId });
   const { data: dataPosts } = usePosts(workPostsWhere, { enabled: !!workId }); //OJO this trigger just once -load the same data that page does
   const [posts, setPosts] = useState(dataPosts?.posts);
   const [cycles, setCycles] = useState(dataCycles?.cycles);

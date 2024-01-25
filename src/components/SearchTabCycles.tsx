@@ -87,7 +87,7 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
 
   const [props,setProps]=useState<Prisma.CycleFindManyArgs>({take,where:{...getProps()}})
 
-  const {data:{total,fetched,cycles:c}={total:0,fetched:0,cycles:[]}} = useCycles(props,{cacheKey,enabled:!!router.query?.q});
+  const {data:{total,fetched,cycles:c}={total:0,fetched:0,cycles:[]}} = useCycles(lang,props,{cacheKey,enabled:!!router.query?.q});
   const [cycles,setCycles] = useState<CycleMosaicItem[]>([])
 
   useEffect(()=>{

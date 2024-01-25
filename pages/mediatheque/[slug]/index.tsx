@@ -415,7 +415,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       queryClient.setQueryData(['POST', `${p.id}`], () => p);
     });
 
-    const { cycles } = await getMyCycles(ctx.locale!,id!, 8, origin);
+    const { cycles } = await getMyCycles(id!, 8, origin);
     await queryClient.prefetchQuery(['MY-CYCLES'], () => cycles);
     cycles.forEach((c) => {
       queryClient.setQueryData(['CYCLE', c.id], () => c);

@@ -40,7 +40,7 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
   //   return res.json();
   // });
   const [mosaicData, setMosaicData] = useState<MosaicItem[]>([]);
-  const {data:dataCycles,isLoading:isLoadingCycles} = useCycles({
+  const {data:dataCycles,isLoading:isLoadingCycles} = useCycles('',{
     where:{works:{
       some:{
         id:work.id

@@ -14,7 +14,6 @@ export const getPosts = async (
   const res = await fetch(url);
   if (!res.ok) return {posts:[],fetched:0,total:-1};
   const {data:posts,fetched,total} = await res.json();
-  debugger;
   return {posts,fetched,total};
 };
 

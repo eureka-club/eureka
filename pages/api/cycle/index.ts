@@ -76,7 +76,7 @@ export default getApiHandler()
       await middleware(req,res,cors)
       const session = (await getSession({ req })) as unknown as Session;
       const { q = null,props:p=undefined,lang:l } = req.query;
-      const language = Languages[l?.toString()!];
+      const language = l ? Languages[l?.toString()!] : '';
 
       const props:Prisma.CycleFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
       let {where:w,take,cursor,skip} = props;
@@ -85,7 +85,7 @@ export default getApiHandler()
       let where = {...w,
         AND:{
           ... AND && {AND},
-          languages:{contains:language}
+          ... language && {languages:{contains:language}}
         }
         // ... session?.user.language && {languages:{contains:session?.user.language}},
       };

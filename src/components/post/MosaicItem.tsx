@@ -30,7 +30,7 @@ interface Props {
   showSaveForLater?: boolean;
   showdetail?: boolean;
   style?: { [k: string]: string };
-  cacheKey?: [string,string];
+  cacheKey?: string[];
   showTrash?: boolean;
   showComments?: boolean;
   linkToPost?: boolean;
