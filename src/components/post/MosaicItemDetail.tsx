@@ -155,11 +155,15 @@ const MosaicItemDetail: FunctionComponent<Props> = ({
             )}
           <Badge bg="success" className={`fw-normal fs-6 text-white px-2 rounded-pill ${styles.type}`}>
             <span>
-                {t(type || 'post')}
-                <em>
+              {t(type || 'post')}
+              {
+              post.language
+                ?<em>
                   {` (${LOCALES[post.language].toUpperCase()})`}
                 </em>
-              </span>
+                :<></>
+              }
+            </span>
           </Badge>
         </div>
        

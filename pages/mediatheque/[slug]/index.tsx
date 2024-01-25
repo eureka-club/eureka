@@ -31,10 +31,11 @@ import SavedForLater from './SavedForLater';
 import { isAccessAllowed } from '@/src/lib/utils';
 import RenderAccessInfo from './RenderAccessInfo';
 import dayjs from 'dayjs';
+import { PostMosaicItem } from '@/src/types/post';
 
 interface Props {
   id: number;
-  session: Session;
+  session: Session;posts:PostMosaicItem[]
 }
 const Mediatheque: NextPage<Props> = ({ id, session }) => {
   const router = useRouter();
@@ -52,26 +53,20 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
   });
   const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>(false);
 
-  const { data: dataPosts } = useMyPosts(id);
-  const [posts, setPosts] = useState(dataPosts?.posts);
+  const { data: {posts}={posts:[]} } = useMyPosts(id); 
+  // const [posts, setPosts] = useState(dataPosts?.posts);
 
-  const { data: dataCycles } = useMyCycles(id);
-  const [cycles, setCycles] = useState(dataCycles?.cycles);
+  const { data: {cycles}={cycles:[]} } = useMyCycles(id);
+  // const [cycles, setCycles] = useState(dataCycles?.cycles);
 
-  useEffect(() => {
-    if (dataPosts?.posts) {
-      setPosts(dataPosts.posts);
-    }
-  }, [dataPosts?.posts]);
-
-  useEffect(() => {
-    if (dataPosts?.posts && dataCycles?.cycles) {
-      setCycles(dataCycles?.cycles);
-    }
-  }, [dataPosts?.posts, dataCycles?.cycles]);
+  // useEffect(() => {
+  //   if (posts && dataCycles?.cycles) {
+  //     setCycles(dataCycles?.cycles);
+  //   }
+  // }, [posts, dataCycles?.cycles]);
 
   useEffect(() => {
-    if (dataPosts?.posts && dataCycles?.cycles) {
+    if (posts?.length && cycles?.length) {
       if (user) {
         const ifbm =
           user && user.followedBy ? user.followedBy.findIndex((i) => i.id === session?.user.id) !== -1 : false;
@@ -81,7 +76,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
         queryClient.invalidateQueries(['USER', `${id}`]);
       }
     }
-  }, [dataPosts?.posts, dataCycles?.cycles, user, id, isSuccessUser]);
+  }, [posts, cycles, user, id, isSuccessUser]);
 
   const { mutate: mutateFollowing, isLoading: isLoadingMutateFollowing } = useMutation<User>(
     async () => {
@@ -400,7 +395,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const queryClient = new QueryClient();
   const session = await getSession(ctx);
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
-
   let id = 0;
   if (ctx.query && ctx.query.slug) {
     const slug = ctx.query.slug.toString();
@@ -414,8 +408,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
       };
     }
-    const { posts } = await getMyPosts(ctx.locale!,id!, 8, origin);
-    await queryClient.prefetchQuery(['MY-POSTS', id], () => posts);
+    const { posts } = await getMyPosts(id!,session, 8, origin);
+
+    await queryClient.prefetchQuery(['MY-POSTS'], () => posts);
     posts.forEach((p) => {
       queryClient.setQueryData(['POST', `${p.id}`], () => p);
     });
@@ -432,7 +427,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
       props: {
         session,
-        id,
+        id,posts,
         dehydratedState: dehydrate(queryClient),
       },
     };

@@ -1,4 +1,5 @@
 import { Prisma } from '@prisma/client';
+import { Session } from '../types';
 
 // export interface PostWithImages extends Post {
 //   localImages: LocalImage[];
@@ -126,4 +127,47 @@ export interface EditPostServerPayload {
   isPublic?: boolean;
   topics?: string;
   tags?: string;
+}
+
+export const GetPostBySessionFilter = (session:Session|null)=>{
+  if(session){
+    return {
+      OR:[
+        {
+          cycles:{
+            some:{
+              OR:[
+                {access:1},
+                {creatorId:session?.user.id},
+                {participants:{some:{id:session?.user.id}}},  
+              ]
+            }
+          }
+        },
+        {
+          cycles:{
+            none:{}
+          }
+        }
+      ]}
+    }
+  else{
+    return {
+      OR:[
+        {
+          cycles:{
+            some:{
+              access:1,
+            }
+          }
+
+        },
+        {
+          cycles:{
+            none:{}
+          }
+        }
+      ]
+    }
+  }
 }
