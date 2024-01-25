@@ -11,6 +11,30 @@ import { useRouter } from 'next/router';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import { createTheme } from '@mui/material/styles';
+
+const materialTheme = createTheme({
+  palette: {
+    warning: {
+      light: 'blue',
+      main: '#ffafaf',
+      dark: '#e3506d',
+      contrastText: '#fff',
+    },
+    primary: {
+      light: 'blue',
+      main: '#13b4bc',
+      dark: '#13c0c9',
+      contrastText: '#fff',
+    },
+    secondary: {
+      light: 'blue',
+      main: 'rgb(61, 41, 132)',
+      dark: 'rgb(42, 26, 107)',
+      contrastText: '#fff',
+    },
+  },
+});
 
 import detailPagesAtom from '../src/atoms/detailPages';
 // import globalModalsAtom from '../src/atoms/globalModals';
@@ -24,6 +48,7 @@ import Script from 'next/script';
 import { Session } from '@/src/types';
 import Spinner from '@/src/components/Spinner';
 import ErrorBounddary from '@/src/ErrorBounddary';
+import { ThemeProvider } from '@mui/material';
 const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   let initialState : Iterable<readonly [Atom<unknown>, unknown]> | undefined = undefined
   let session:  Session | null | undefined = null
@@ -87,9 +112,10 @@ function Loading() {
     <StrictMode>
      <SSRProvider>
         <NextAuthProvider session={session} refetchInterval={5 * 60}>
-          <Loading/>  
           {/* <GlobalEventsContext.Provider value={{...gec}}> 
           //<Provider initialValues={initialState && [[detailPagesAtom, globalModalsAtom, initialState]]}>*/}
+          <ThemeProvider theme={materialTheme}>
+              <Loading/>  
               <Provider initialValues={initialState && [[detailPagesAtom, initialState]]}>
                 <QueryClientProvider client={queryClient}>
 
@@ -123,8 +149,7 @@ function Loading() {
                   <ReactQueryDevtools />
                 </QueryClientProvider>
               </Provider>
-          {/* </GlobalEventsContext.Provider> */}
-          
+          </ThemeProvider>
         </NextAuthProvider>
 
      </SSRProvider>

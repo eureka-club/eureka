@@ -61,12 +61,13 @@ const CycleDetailPage: NextPage<Props> = (props) => {
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT, NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = props;
 
   const renderCycleDetailComponent = () => {
-    if (cycle) {
+    if (cycle) {debugger;
       const res = <div style={isJoinCycleLoading ? {pointerEvents:'none'}:{}}>
         <CycleDetailComponent session={session} />
         </div>
       if([1,2,4].includes(cycle.access))return res;
-      if (cycle.access === 3 && !cycle.currentUserIsParticipant) return <Alert>Not authorized</Alert>;
+      if (cycle.access === 3 && !cycle.currentUserIsParticipant && cycle.creatorId!=session.user.id) return <Alert>Not authorized</Alert>;
+      else return res;
     }
 
     if (/* isLoadingSession || */ isFetching || isLoading) {

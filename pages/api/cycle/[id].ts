@@ -7,8 +7,15 @@ import { Cycle } from '@prisma/client';
 import getApiHandler from '@/src/lib/getApiHandler';
 import { find, remove } from '@/src/facades/cycle';
 import {prisma} from '@/src/lib/prisma';
-import {storeDeleteFile} from '@/src/facades/fileUpload'
+import {storeDeleteFile, storeUpload} from '@/src/facades/fileUpload'
+import { Form } from 'multiparty';
 // import redis from '@/src/lib/redis';
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
 
 dayjs.extend(utc);
 export default getApiHandler()
@@ -100,47 +107,91 @@ export default getApiHandler()
     const session = await getSession({ req });
     if (session == null || !session.user.roles.includes('admin')) {
       res.status(401).end({ status: 'Unauthorized' });
-      
     }
-    let data = req.body;
-
-    const { id, includedWorksIds } = data;
-
-    try {
-      let r: Cycle;
-      if (includedWorksIds?.length) {
-        r = await prisma.cycle.update({
-          where: { id },
-          data: {
-            updatedAt: dayjs().utc().format(),
-            works: { connect: includedWorksIds.map((workId: number) => ({ id: workId })) },
-            cycleWorksDates: {
-              createMany:{
-                data:includedWorksIds.map((workId: number) => ({ 
-                  workId,
-                  startDate: dayjs().utc().format(),
-                  endDate: dayjs().utc().format()
-                }))
+    new Form().parse(req, async (err, fields, files) => {
+      let cover = null;
+      const id = fields.id.length && +fields.id[0];
+      const access = fields?.access.length && +fields.access[0];
+      const startDate = fields?.startDate.length && dayjs(`${fields.startDate[0]}`, 'YYYY').utc().format();
+      const endDate = fields?.endDate.length && dayjs(`${fields.endDate[0]}`, 'YYYY').utc().format();
+      const includedWorksIds = fields?.includedWorksIds && fields?.includedWorksIds.length && fields.includedWorksIds[0];
+      const cycle = await find(id);
+      let li = null;
+      if (files?.coverImage?.length && cycle) {
+        const storedFile = cycle.localImages[0].storedFile;
+        const deleted = await storeDeleteFile(storedFile);
+        if(deleted){
+          li = await prisma.localImage.findFirst({where:{storedFile}});
+          if(li){
+            await prisma.cycle.update({where:{id},data:{
+              localImages:{disconnect:{id:li.id}}
+            }});
+            await prisma.localImage.delete({where:{id:li.id}});
+            cover = await storeUpload(files?.coverImage[0]);
+          }
+        }
+      }
+      try {
+        let r: Cycle;
+        if (includedWorksIds?.length) {
+          r = await prisma.cycle.update({
+            where: { id },
+            data: {
+              updatedAt: dayjs().utc().format(),
+              works: { connect: includedWorksIds.map((workId: number) => ({ id: workId })) },
+              cycleWorksDates: {
+                createMany:{
+                  data:includedWorksIds.map((workId: number) => ({ 
+                    workId,
+                    startDate: dayjs().utc().format(),
+                    endDate: dayjs().utc().format()
+                  }))
+                }
+              },
+              
+            },
+          });
+        } 
+        else {
+          let title = fields?.title ? fields?.title[0] : undefined;
+          let languages = fields?.languages ? fields?.languages[0] : undefined;
+          let countryOfOrigin = fields?.countryOfOrigin ? fields?.countryOfOrigin[0] : undefined;
+          let contentText = fields?.contentText ? fields?.contentText[0] : undefined;
+          let tags = fields?.tags ? fields?.tags[0] : undefined;
+          let topics = fields?.topics ? fields?.topics[0] : undefined;
+          const data = {
+            ...access && {access:access},
+            ...startDate && {startDate},
+            ...endDate && {endDate},
+            ...title && {title},
+            ...languages && {languages},
+            ...countryOfOrigin && {countryOfOrigin},
+            ...contentText && {contentText},
+            ...tags && {tags},
+            ...topics && {topics},
+            ...cover && {
+              localImages:{
+                create:{
+                  ...cover
+                },
               }
             },
             
-          },
-        });
-      } else {
-        data.startDate = dayjs(`${data.startDate}`, 'YYYY').utc().format();
-        data.endDate = dayjs(`${data.endDate}`, 'YYYY').utc().format();
-        delete data.id;
-        data = {
-          ...data,
-        };
-        r = await prisma.cycle.update({ where: { id }, data });
+          }
+          r = await prisma.cycle.update({ where: { id }, data });
+        }
+        // await redis.flushall();
+        return res.status(200).json({ ...r });
+      } catch (exc) {
+        console.error(exc); // eslint-disable-line no-console
+        res.status(500).json({ status: 'server error' });
+      } finally {
+        ////prisma.$disconnect();
       }
-      // await redis.flushall();
-      res.status(200).json({ ...r });
-    } catch (exc) {
-      console.error(exc); // eslint-disable-line no-console
-      res.status(500).json({ status: 'server error' });
-    } finally {
-      ////prisma.$disconnect();
-    }
+
+    });
+
+
+
+    
   });
