@@ -21,7 +21,8 @@ const useFeaturedEurekas = () => {
     bo.PostExplorePage.split(',').forEach(x=> postsId.push(parseInt(x)));
       
   return usePosts(backOfficePosts(postsId),
-    {enabled:!!postsId,cacheKey:[`eurekas-of-interest-${lang}`]}
+    {enabled:!!postsId,cacheKey:[`eurekas-of-interest-${lang}`]},
+    lang,
   )
 };
 

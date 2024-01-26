@@ -19,7 +19,7 @@ type Data = {
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
-) {debugger;
+) { 
     if(req.method=='POST'){
       const {n:n_,size:s} = req.body
       const n = n_ ? n_ : 3
