@@ -28,7 +28,7 @@ const useCycles = (props?:Prisma.CycleFindManyArgs, options?: Options) => {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  let ck = cacheKey ? `${cacheKey}-${JSON.stringify(props)}` : ['CYCLES', `${JSON.stringify(props)}`];
+  let ck = cacheKey ? `${cacheKey}` : ['CYCLES', `${JSON.stringify(props)}`];
 
   return useQuery<{cycles:CycleMosaicItem[],fetched:number,total:number}>(ck, () => getCycles(lang,props), {
     staleTime,

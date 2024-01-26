@@ -55,7 +55,7 @@ interface Props {
   parent?: Cycle | Work | null;
   showCounts?: boolean;
   showButtonLabels?: boolean;
-  cacheKey: [string,string];
+  cacheKey: string[];
   showCreateEureka?: boolean;
   showReaction?: boolean;
   showSaveForLater?: boolean;

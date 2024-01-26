@@ -11,7 +11,7 @@ import usePostReactionCreateOrEdit from '@/src/hooks/mutations/usePostReactionCr
 import { useModalContext } from '@/src/useModal';
 interface Props {
   post:PostMosaicItem;
-  cacheKey:[string,string];
+  cacheKey:string[];
 }
 const MAX_REACTIONS = 2;
 const PostReactionsDetail: FunctionComponent<Props> = ({post,cacheKey}) => {

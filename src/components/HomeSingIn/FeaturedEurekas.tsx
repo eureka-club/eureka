@@ -9,13 +9,14 @@ interface Props{
   
 const FeaturedEurekas:FC<Props> = ({}) => {
     const router = useRouter()
+    const{lang}=useTranslation()
     const { t } = useTranslation('common');
     const {data} = useFeaturedEurekas()
 
     return (data?.posts && data?.posts.length) 
     ? <div>      
        <CarouselStatic
-        cacheKey={['POSTS','eurekas-of-interest']}
+        cacheKey={[`eurekas-of-interest-${lang}`]}
         onSeeAll={()=>router.push('/featured-eurekas')}
         data={data?.posts}
         title={t('IA Eurekas')}

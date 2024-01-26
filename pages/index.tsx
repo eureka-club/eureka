@@ -128,8 +128,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   await qc.fetchQuery(['ITEMS-BY-TOPIC',`${topics[1]}-${0}`],()=>resolved[1])
 
   await qc.fetchQuery(['BACKOFFICE', `1`], () => bo)
-  await qc.fetchQuery(['POSTS','eurekas-of-interest'],()=>featuredEurekas)
-  await qc.fetchQuery(['CYCLES','cycles-of-interest'],()=>interestedCycles)
+  await qc.fetchQuery([`eurekas-of-interest-${ctx.locale}`],()=>featuredEurekas)
+  await qc.fetchQuery([`cycles-of-interest-${ctx.locale}`],()=>interestedCycles)
   await qc.fetchQuery(['WORKS',`${JSON.stringify(featuredWorksWhere(worksIds))}`],()=>featuredWorks)
   await worksIds.forEach(async (id,idx)=>{
     await qc.fetchQuery(['HYVOR-COMMENTS', `work-${id}`],()=>hyvorComments[idx])
