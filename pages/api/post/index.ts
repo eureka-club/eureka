@@ -75,7 +75,7 @@ export default getApiHandler()
       const { q = null, props:p="",lang:l } = req.query;
       const locale = l?.toString();
       const language = locale ? Languages[locale!] : '';
-
+ 
       const props:Prisma.PostFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
       let {where:w,take,cursor,skip,select} = props;
       const session = await getSession({ req });

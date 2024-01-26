@@ -5,7 +5,7 @@ import useTranslation from 'next-translate/useTranslation';
 // import { buildUrl } from 'build-url-ts';
 
 export const getPosts = async (
-  lang:string,
+  lang?:string,
   props?:Prisma.PostFindManyArgs,
   origin=''
 ): Promise<{posts:PostMosaicItem[],fetched:number,total:number}> => {
@@ -14,7 +14,7 @@ export const getPosts = async (
   const res = await fetch(url);
   if (!res.ok) return {posts:[],fetched:0,total:-1};
   const {data:posts,fetched,total} = await res.json();
-  debugger;
+   
   return {posts,fetched,total};
 };
 
@@ -25,14 +25,13 @@ interface Options {
   cacheKey?:string|string[];
 }
 
-const usePosts = (props?:Prisma.PostFindManyArgs, options?: Options) => {
-  const {lang} = useTranslation();
+const usePosts = (props?:Prisma.PostFindManyArgs, options?: Options,lang?:string) => {
   const { staleTime, enabled, cacheKey } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
   let ck = cacheKey ? cacheKey : ['POSTS', `${JSON.stringify(props)}`];
-debugger;
+ 
   return useQuery<{posts:PostMosaicItem[],fetched:number,total:number}>(ck, () => getPosts(lang,props), {
     staleTime,
     enabled,
