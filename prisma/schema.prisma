@@ -37,7 +37,7 @@ model User {
   favCycles          Cycle[]                @relation("CycleToFavs")
   likedWorks         Work[]                 @relation("WorkToLikes")
   favWorks           Work[]                 @relation("WorkToFavs")
-  readOrWatchedWorks ReadOrWatchedWork[]                
+  readOrWatchedWorks ReadOrWatchedWork[]
   likedPosts         Post[]                 @relation("PostToLikes")
   favPosts           Post[]                 @relation("PostToFavs")
   posts              Post[]
@@ -139,6 +139,7 @@ model LocalImage {
   users        User[]
   editions     Edition[]
   sliderImages BackOfficeSettings[]
+  backOfficeSettingsSlidersImages BackOfficeSettingsSliders[]
 
   @@index([contentHash], name: "local_images_content_hash_index")
   @@map(name: "local_images")
@@ -190,7 +191,7 @@ model Cycle {
 
 model Work {
   id               Int       @id @default(autoincrement())
-  isbn             String?   
+  isbn             String?
   creatorId        Int       @default(1) @map(name: "creator_id")
   type             String
   title            String
@@ -212,7 +213,7 @@ model Work {
   posts           Post[]
   likes           User[]       @relation("WorkToLikes")
   favs            User[]       @relation("WorkToFavs")
-  readOrWatchedWorks ReadOrWatchedWork[]                
+  readOrWatchedWorks ReadOrWatchedWork[]
   tags            String?
 
   terms  Term[]  @relation("TaxonomyTermWork")
@@ -235,11 +236,11 @@ model Work {
 model Edition {
   id                Int       @id @default(autoincrement())
   title             String
-  isbn              String?   
+  isbn              String?
   contentText       String?   @map(name: "content_text") @db.VarChar(4000)
   publicationYear   DateTime? @map(name: "publication_year")
   language          String
-  countryOfOrigin   String?  
+  countryOfOrigin   String?
   length            String?
   work              Work      @relation(fields: [workId], references: [id])
   workId            Int
@@ -505,21 +506,39 @@ model BackOfficeSettings {
   PostExplorePage   String?      @db.VarChar(60)
   FeaturedUsers     String?      @db.VarChar(60)
   FeaturedWorks     String?      @db.VarChar(60)
-
+  sliders           BackOfficeSettingsSliders[]
   @@map("backOfficeSettings")
-  
+
+}
+
+model BackOfficeSettingsSliders {
+  id                    Int             @id @unique @default(1)
+  title                 String?         @db.VarChar(200)
+  text                  String?         @db.VarChar(200)
+  language              String          @default("pt")
+  images                LocalImage[]
+  publishedFrom         DateTime        @default(now())
+  publishedTo           DateTime?
+
+  backOfficeSetting     BackOfficeSettings @relation(fields: [backOfficeSettingId], references: [id])
+  backOfficeSettingId   Int
+
+  createdAt        DateTime  @default(now()) @map(name: "created_at")
+  updatedAt        DateTime  @updatedAt @map(name: "updated_at")
+
+  @@map("backOfficeSettingsSliders")
 }
 
 model PostReaction {
   user             User     @relation(fields: [userId], references: [id])
-  userId           Int      
-  
+  userId           Int
+
   post             Post    @relation(fields: [postId], references: [id])
-  postId           Int      
-  
-  emoji            String 
+  postId           Int
+
+  emoji            String
   unified          String
-  
+
   createdAt        DateTime  @default(now()) @map(name: "created_at")
   updatedAt        DateTime  @updatedAt @map(name: "updated_at")
 
