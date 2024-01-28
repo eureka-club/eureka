@@ -138,7 +138,6 @@ model LocalImage {
   works        Work[]
   users        User[]
   editions     Edition[]
-  sliderImages BackOfficeSettings[]
   backOfficeSettingsSlidersImages BackOfficeSettingsSliders[]
 
   @@index([contentHash], name: "local_images_content_hash_index")
@@ -492,16 +491,6 @@ model NotificationsOnUsers {
 
 model BackOfficeSettings {
   id                Int          @id @unique @default(1)
-  SlideTitle1       String?      @db.VarChar(200)
-  SlideText1        String?      @db.VarChar(200)
-  SlideImage1       String?      @db.VarChar(200)
-  SlideTitle2       String?      @db.VarChar(200)
-  SlideText2        String?      @db.VarChar(200)
-  SlideImage2       String?      @db.VarChar(200)
-  SlideTitle3       String?      @db.VarChar(200)
-  SlideText3        String?      @db.VarChar(200)
-  SlideImage3       String?      @db.VarChar(200)
-  sliderImages      LocalImage[]
   CyclesExplorePage String?      @db.VarChar(60)
   PostExplorePage   String?      @db.VarChar(60)
   FeaturedUsers     String?      @db.VarChar(60)
@@ -512,9 +501,9 @@ model BackOfficeSettings {
 }
 
 model BackOfficeSettingsSliders {
-  id                    Int             @id @unique @default(1)
+  id                    Int    @id @default(autoincrement())
   title                 String?         @db.VarChar(200)
-  text                  String?         @db.VarChar(200)
+  text                  String?         @db.VarChar(4000)
   language              String          @default("pt")
   images                LocalImage[]
   publishedFrom         DateTime        @default(now())

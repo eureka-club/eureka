@@ -620,7 +620,7 @@ NotificationsOnUsers.forEach((c) => {
 /***backOfficeSettings***/
 const backOfficeSettings = await prismaRemote.backOfficeSettings.findMany({
   include: {
-    sliderImages:true,
+    sliders:{include:{images:true}},
   },
 });  
 
@@ -628,30 +628,28 @@ backOfficeSettings.forEach((c) => {
   
   transactions.push(
     prismaLocal.$queryRaw(Prisma.sql`
-    INSERT INTO dbo.backOfficeSettings(id,SlideTitle1,SlideText1,SlideImage1,SlideTitle2,SlideText2,
-      SlideImage2,SlideTitle3,SlideText3,SlideImage3,CyclesExplorePage,PostExplorePage) 
+    INSERT INTO dbo.backOfficeSettings(id,CyclesExplorePage,PostExplorePage,FeaturedUsers) 
     VALUES(${c.id}
-      ,${c.SlideTitle1},${c.SlideText1},${c.SlideImage1}
-      ,${c.SlideTitle2},${c.SlideText2},${c.SlideImage2}
-      ,${c.SlideTitle3},${c.SlideText3},${c.SlideImage3}
       ,${c.CyclesExplorePage}
       ,${c.PostExplorePage}
+      ,${c.FeaturedUsers}
+      ,${c.FeaturedWorks}
     );
   `));
   
-  /**_BackOfficeSettingsToLocalImage */
-  c.sliderImages.forEach(s => {
+  /**backOfficeSettingsSliders */
+  c.sliders.forEach(s => {
     transactions.push(
       prismaLocal.$queryRaw(Prisma.sql`
-      INSERT INTO dbo._BackOfficeSettingsToLocalImage(A,B) 
-      VALUES(${c.id},${s.id});
+    SET IDENTITY_INSERT dbo.backOfficeSettingsSliders ON;
+      INSERT INTO dbo.backOfficeSettingsSliders(id,title,text,language,publishedFrom,publishedTo,backOfficeSettingId,created_at,updated_at) 
+      VALUES(${s.id},${s.title},${s.text},${s.language},${s.publishedFrom},${s.publishedTo},${s.backOfficeSettingId},${s.createdAt},${s.updatedAt});
+    SET IDENTITY_INSERT dbo.backOfficeSettingsSliders OFF;
       `)
     )
   });
   
 });
-
-
 
   try {
     await prismaLocal.$transaction(transactions);

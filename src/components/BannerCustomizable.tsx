@@ -19,29 +19,28 @@ const BannerCustomizable: FunctionComponent = ({
 
   const [show, setShow] = useState<boolean>(true);
   const {data:bo } = useBackOffice();
+  const imgBaseUrl=`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/`;
 
-  const [image1, setImage1] = useState<string | undefined>();
-  const [image2, setImage2] = useState<string | undefined>();
-  const [image3, setImage3] = useState<string | undefined>();
+  // const [image1, setImage1] = useState<string | undefined>();
+  // const [image2, setImage2] = useState<string | undefined>();
+  // const [image3, setImage3] = useState<string | undefined>();
   
-  
-  
-  useEffect(() => {
-    if (bo && bo.sliderImages.length) {
-      if(bo.SlideImage1 !='null'){
-        let storeFile1 = bo.sliderImages.filter(x=> x.originalFilename == bo.SlideImage1)[0].storedFile;
-        setImage1(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile1}`);
-      }
-      if(bo.SlideImage2 !='null'){
-        let storeFile2 = bo.sliderImages.filter(x=> x.originalFilename == bo.SlideImage2)[0].storedFile;
-        setImage2(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile2}`);
-      }
-       if(bo.SlideImage3 !='null'){
-        let storeFile3 = bo.sliderImages.filter(x=> x.originalFilename == bo.SlideImage3)[0].storedFile;
-        setImage3(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile3}`);
-      }
-    }
-  }, [bo]);
+  // useEffect(() => {
+  //   if (bo && bo.sliderImages.length) {
+  //     if(bo.SlideImage1 !='null'){
+  //       let storeFile1 = bo.sliderImages.filter(x=> x.originalFilename == bo.SlideImage1)[0].storedFile;
+  //       setImage1(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile1}`);
+  //     }
+  //     if(bo.SlideImage2 !='null'){
+  //       let storeFile2 = bo.sliderImages.filter(x=> x.originalFilename == bo.SlideImage2)[0].storedFile;
+  //       setImage2(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile2}`);
+  //     }
+  //      if(bo.SlideImage3 !='null'){
+  //       let storeFile3 = bo.sliderImages.filter(x=> x.originalFilename == bo.SlideImage3)[0].storedFile;
+  //       setImage3(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile3}`);
+  //     }
+  //   }
+  // }, [bo]);
 
 
   return (
@@ -80,14 +79,16 @@ const BannerCustomizable: FunctionComponent = ({
             <Container className={`${styles.grid} text-white text-center`} style={{ minHeight: '1em' }}></Container>
             <div className="d-flex justify-content-center">
               <Carousel indicators={true} controls={false} style={{ width: '90%' }}>
-                <Carousel.Item className="text-secondary bg-gray-very-light" style={{ height: '20rem' }}>
+                {bo?.sliders.map(s=>{
+                  return <Carousel.Item className="text-secondary bg-gray-very-light" style={{ height: '20rem' }}>
                   <div className="d-flex flex-row">
                     <div className="">
-                      <img style={{ width: '22em', height: '20em' }} src={image1} alt="" />
+                      <img key={`img-${s.id}`} style={{ width: '22em', height: '20em' }} src={`${imgBaseUrl}${s.images[0].storedFile}`} alt="" />
                     </div>
                     <div className="d-flex flex-column mt-4 px-5 py-3" style={{ minWidth: '65%%' }}>
-                      <h2 className="h1 font-weight-bold fs-2">{bo?.SlideTitle1}</h2>
-                      <p className="p-0 mx-1 text-wrap fs-5">{bo?.SlideText1}</p>
+                      <h2 className="h1 font-weight-bold fs-2">{s?.title}</h2>
+                      <p className="p-0 mx-1 text-wrap fs-5" dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
+                      
                       <div className="d-flex  mt-2">
                         {!isLoadingSession && !session ? (
                           <Button className="btn-eureka" onClick={() => router.push('/register')}>
@@ -100,7 +101,9 @@ const BannerCustomizable: FunctionComponent = ({
                     </div>
                   </div>
                 </Carousel.Item>
-                <Carousel.Item className="text-secondary bg-gray-very-light" style={{ height: '20rem' }}>
+                })}
+                
+                {/* <Carousel.Item className="text-secondary bg-gray-very-light" style={{ height: '20rem' }}>
                   <div className="d-flex flex-row">
                     <div className="">
                       <img style={{ width: '22em', height: '20em' }} src={image2} alt="" />
@@ -139,7 +142,7 @@ const BannerCustomizable: FunctionComponent = ({
                       </div>
                     </div>
                   </div>
-                </Carousel.Item>
+                </Carousel.Item> */}
               </Carousel>
             </div>
           </>
