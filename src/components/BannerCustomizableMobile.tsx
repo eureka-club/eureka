@@ -7,8 +7,8 @@ import useBackOffice from '@/src/useBackOffice';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 
-const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
-const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
+// const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
+// const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
 /*type Props = {
   content: string | JSX.Element | JSX.Element[];
@@ -83,7 +83,7 @@ const BannerCustomizableMobile: FunctionComponent = ({
             <div className='d-flex justify-content-center'>
             <Carousel indicators={true} controls={false}  style={{width: '98%'}} >
               {bo?.sliders.map(s=>{
-                return <Carousel.Item className="text-secondary bg-gray-very-light" style={{ height: '21rem' }}>
+                return <Carousel.Item key={`slide-${s.id}`} className="text-secondary bg-gray-very-light" style={{ height: '21rem' }}>
                 <div className="d-flex flex-row" >
                   <div className="d-flex flex-column mt-2 px-3 py-3" style={{minWidth:'65%%'}}>
                     <h1 className="fs-3">{s?.title}</h1>

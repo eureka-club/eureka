@@ -80,7 +80,7 @@ const BannerCustomizable: FunctionComponent = ({
             <div className="d-flex justify-content-center">
               <Carousel indicators={true} controls={false} style={{ width: '90%' }}>
                 {bo?.sliders.map(s=>{
-                  return <Carousel.Item className="text-secondary bg-gray-very-light" style={{ height: '20rem' }}>
+                  return <Carousel.Item key={`slide-carousel-item-${s.id}`} className="text-secondary bg-gray-very-light" style={{ height: '20rem' }}>
                   <div className="d-flex flex-row">
                     <div className="">
                       <img key={`img-${s.id}`} style={{ width: '22em', height: '20em' }} src={`${imgBaseUrl}${s.images[0].storedFile}`} alt="" />
