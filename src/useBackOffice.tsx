@@ -1,8 +1,10 @@
 import { useQuery } from 'react-query';
 import { backOfficeData } from '@/types/backoffice';
+import { WEBAPP_URL } from './constants';
+import useTranslation from 'next-translate/useTranslation';
 
-export const getbackOfficeData = async (origin?:string): Promise<backOfficeData|null> => {
-    const url = `${origin||''}/api/backoffice`;
+export const getbackOfficeData = async (lang:string): Promise<backOfficeData|null> => {
+    const url = `${WEBAPP_URL||''}/api/backoffice?lang=${lang}`;
     const res = await fetch(url, {method: 'GET'});
     if (!res.ok) return null;
     const result = await res.json();
@@ -16,11 +18,12 @@ interface Options {
 }
 
 const useBackOffice = (options?: Options) => {
+  const {lang}=useTranslation();
   const { staleTime, enabled } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  return useQuery<backOfficeData|null>(['BACKOFFICE', `1`], () => getbackOfficeData(), {
+  return useQuery<backOfficeData|null>(['BACKOFFICE', `1`], () => getbackOfficeData(lang), {
     staleTime,
     enabled,
   });

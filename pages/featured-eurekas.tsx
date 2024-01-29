@@ -64,7 +64,7 @@ export const getServerSideProps:GetServerSideProps= async (ctx)=>{
   const qc = new QueryClient();
   const {NEXT_PUBLIC_WEBAPP_URL:origin}=process.env;
   
-  const bod = await getbackOfficeData(origin)
+  const bod = await getbackOfficeData(ctx.locale!)
   if(bod && bod?.CyclesExplorePage){
     const ids = bod?.CyclesExplorePage.split('').map(i=>+i)
     await qc.fetchQuery(['CYCLES','INTERESTED'],()=>getFeaturedEurekas(ctx.locale!,ids,8,origin));

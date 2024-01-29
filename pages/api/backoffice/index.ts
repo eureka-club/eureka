@@ -7,6 +7,7 @@ import { find,create,update } from '@/src/facades/backoffice';
 import {storeDeleteFile, storeUploadPhoto} from '@/src/facades/fileUpload'
 import { backOfficeData } from '@/src/types/backoffice';
 import {cors,middleware} from '@/src/lib/cors'
+import { i18n } from 'i18n-config';
 
 export const config = {
   api: {
@@ -125,9 +126,10 @@ export default getApiHandler()
  .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
   const session = (await getSession({ req })) as unknown as Session;
   await middleware(req,res,cors)
-
+    const {lang}=req.query;
+    const language = lang ? lang.toString() : i18n.defaultLocale;
     try {
-      const backoffice =  await find({id:1});
+      const backoffice =  await find({id:1},language);
       if (!backoffice ) {
         // res.status(404).end();
         res.status(200).json({ status: 'OK', backoffice: null });

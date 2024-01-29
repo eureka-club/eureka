@@ -7,7 +7,7 @@ export interface findProps {
   select?: Record<string, boolean>;
   include?: boolean;
 }
-export const find = async (props: findProps) => {
+export const find = async (props: findProps,language?:string) => {
   const { id , select = undefined, include = true } = props;
 
   return prisma.backOfficeSettings.findUnique({
@@ -15,7 +15,10 @@ export const find = async (props: findProps) => {
     id,
   },
   include:{
-    sliders:{include:{images:true}}
+    sliders:{
+      include:{images:true},
+      ... language && {where:{language}}
+    }
     // sliderImages:{select:{storedFile:true,originalFilename:true}},
   }
 })

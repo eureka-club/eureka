@@ -45,109 +45,73 @@ const BannerCustomizable: FunctionComponent = ({
 
   return (
     <>
-      <section
-        className="d-block bg-primary p-3"
-        style={{
-          backgroundImage: "url('/img/bg-header.svg')",
-          marginBottom: show ? '8em' : '2em',
-          marginTop: '4.8em',
-          maxHeight: show ? '18em' : '4em',
-        }}
-      >
-        <aside className="d-flex justify-content-end">
+    {
+      bo?.sliders.length  ?
+        <section
+          className="d-block bg-primary p-3"
+          style={{
+            backgroundImage: "url('/img/bg-header.svg')",
+            marginBottom: show ? '8em' : '2em',
+            marginTop: '4.8em',
+            maxHeight: show ? '18em' : '4em',
+          }}
+        >
+          <aside className="d-flex justify-content-end">
+            {show && (
+              <Button
+                variant="info"
+                onClick={() => setShow(false)}
+                className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
+              >
+                {t('Close')} <AiOutlineClose />
+              </Button>
+            )}
+            {!show && (
+              <Button
+                variant="info"
+                onClick={() => setShow(true)}
+                className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
+              >
+                {t('Expand')} <AiOutlineDown />
+              </Button>
+            )}
+          </aside>
           {show && (
-            <Button
-              variant="info"
-              onClick={() => setShow(false)}
-              className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
-            >
-              {t('Close')} <AiOutlineClose />
-            </Button>
+            <>
+              <Container className={`${styles.grid} text-white text-center`} style={{ minHeight: '1em' }}></Container>
+              <div className="d-flex justify-content-center">
+                <Carousel indicators={true} controls={false} style={{ width: '90%' }}>
+                  {bo?.sliders.map(s=>{
+                    return <Carousel.Item key={`slide-carousel-item-${s.id}`} className="text-secondary bg-gray-very-light" style={{ height: '20rem' }}>
+                    <div className="d-flex flex-row">
+                      <div className="">
+                        <img key={`img-${s.id}`} style={{ width: '22em', height: '20em' }} src={`${imgBaseUrl}${s.images[0].storedFile}`} alt="" />
+                      </div>
+                      <div className="d-flex flex-column mt-4 px-5 py-3" style={{ minWidth: '65%%' }}>
+                        <h2 className="h1 font-weight-bold fs-2">{s?.title}</h2>
+                        <p className="p-0 mx-1 text-wrap fs-5" dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
+                        
+                        <div className="d-flex  mt-2">
+                          {!isLoadingSession && !session ? (
+                            <Button className="btn-eureka" onClick={() => router.push('/register')}>
+                              {t('JoinEureka')}
+                            </Button>
+                          ) : (
+                            ''
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </Carousel.Item>
+                  })}
+                  
+                </Carousel>
+              </div>
+            </>
           )}
-          {!show && (
-            <Button
-              variant="info"
-              onClick={() => setShow(true)}
-              className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
-            >
-              {t('Expand')} <AiOutlineDown />
-            </Button>
-          )}
-        </aside>
-        {show && (
-          <>
-            <Container className={`${styles.grid} text-white text-center`} style={{ minHeight: '1em' }}></Container>
-            <div className="d-flex justify-content-center">
-              <Carousel indicators={true} controls={false} style={{ width: '90%' }}>
-                {bo?.sliders.map(s=>{
-                  return <Carousel.Item key={`slide-carousel-item-${s.id}`} className="text-secondary bg-gray-very-light" style={{ height: '20rem' }}>
-                  <div className="d-flex flex-row">
-                    <div className="">
-                      <img key={`img-${s.id}`} style={{ width: '22em', height: '20em' }} src={`${imgBaseUrl}${s.images[0].storedFile}`} alt="" />
-                    </div>
-                    <div className="d-flex flex-column mt-4 px-5 py-3" style={{ minWidth: '65%%' }}>
-                      <h2 className="h1 font-weight-bold fs-2">{s?.title}</h2>
-                      <p className="p-0 mx-1 text-wrap fs-5" dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
-                      
-                      <div className="d-flex  mt-2">
-                        {!isLoadingSession && !session ? (
-                          <Button className="btn-eureka" onClick={() => router.push('/register')}>
-                            {t('JoinEureka')}
-                          </Button>
-                        ) : (
-                          ''
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </Carousel.Item>
-                })}
-                
-                {/* <Carousel.Item className="text-secondary bg-gray-very-light" style={{ height: '20rem' }}>
-                  <div className="d-flex flex-row">
-                    <div className="">
-                      <img style={{ width: '22em', height: '20em' }} src={image2} alt="" />
-                    </div>
-                    <div className="d-flex flex-column mt-4  px-5 py-3" style={{ minWidth: '65%' }}>
-                      <h2 className="h1 font-weight-bold fs-2">{bo?.SlideTitle2}</h2>
-                      <p className="p-0 mx-1 text-wrap fs-5">{bo?.SlideText2}</p>
-                      <div className="d-flex mt-2">
-                        {!isLoadingSession && !session ? (
-                          <Button className="btn-eureka" onClick={() => router.push('/register')}>
-                            {t('JoinEureka')}
-                          </Button>
-                        ) : (
-                          ''
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </Carousel.Item>
-                <Carousel.Item className="text-secondary bg-gray-very-light" style={{ height: '20rem' }}>
-                  <div className="d-flex flex-row">
-                    <div className="">
-                      <img style={{ width: '22em', height: '20em' }} src={image3} alt="" />
-                    </div>
-                    <div className="d-flex flex-column mt-4  px-5 py-3" style={{ minWidth: '65%' }}>
-                      <h2 className="h1 font-weight-bold fs-2">{bo?.SlideTitle3}</h2>
-                      <p className="p-0 mx-1 text-wrap fs-5">{bo?.SlideText3}</p>
-                      <div className="d-flex  mt-2">
-                        {!isLoadingSession && !session ? (
-                          <Button className="btn-eureka" onClick={() => router.push('/register')}>
-                            {t('JoinEureka')}
-                          </Button>
-                        ) : (
-                          ''
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </Carousel.Item> */}
-              </Carousel>
-            </div>
-          </>
-        )}
-      </section>
+        </section>
+        :<></>
+      }
     </>
   );
 };
