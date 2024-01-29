@@ -1,5 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Form } from 'multiparty';
+import {prisma} from '@/src/lib/prisma';
+
 import { getSession } from 'next-auth/react';
 import { Session } from '@/src/types';
 import getApiHandler from '@/src/lib/getApiHandler';
@@ -43,7 +45,6 @@ export default getApiHandler()
           return prev;
         },{});  
         
-debugger;
         const uploadImage = await storeUploadPhoto(imagen,'backoffice');
         const backOfficeSettingsSlider = await prisma?.backOfficeSettingsSliders.create({
           data:{
