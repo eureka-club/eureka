@@ -21,13 +21,13 @@ import { useSession } from 'next-auth/react';
 
 const BannerCustomizableMobile: FunctionComponent = ({
 }) => {
-  const { t } = useTranslation('common');
+  const { t,lang } = useTranslation('common');
   const router = useRouter();
   const {data:session, status} = useSession();
   const isLoadingSession = status === "loading"
 
   const [show, setShow] = useState<boolean>(true);
-  const {data:bo } = useBackOffice();
+  const {data:bo } = useBackOffice(undefined,lang);
 
   // const [image1, setImage1] = useState<string | undefined>();
   // const [image2, setImage2] = useState<string | undefined>();

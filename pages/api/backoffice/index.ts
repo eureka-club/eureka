@@ -127,7 +127,7 @@ export default getApiHandler()
   const session = (await getSession({ req })) as unknown as Session;
   await middleware(req,res,cors)
     const {lang}=req.query;
-    const language = lang ? lang.toString() : i18n.defaultLocale;
+    const language = lang ? lang.toString() : '';
     try {
       const backoffice =  await find({id:1},language);
       if (!backoffice ) {

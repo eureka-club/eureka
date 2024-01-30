@@ -12,13 +12,13 @@ const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
 const BannerCustomizable: FunctionComponent = ({
 }) => {
-  const { t } = useTranslation('common');
+  const { t, lang } = useTranslation('common');
   const router = useRouter();
   const {data:session, status} = useSession();
   const isLoadingSession = status === "loading"
 
   const [show, setShow] = useState<boolean>(true);
-  const {data:bo } = useBackOffice();
+  const {data:bo } = useBackOffice(undefined,lang);
   const imgBaseUrl=`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/`;
 
   // const [image1, setImage1] = useState<string | undefined>();

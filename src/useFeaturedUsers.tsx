@@ -1,3 +1,4 @@
+import useTranslation from 'next-translate/useTranslation';
 import useUsers,{getUsers} from './useUsers';
 import useBackOffice from '@/src/useBackOffice';
 
@@ -12,7 +13,8 @@ export const getFeaturedUsers = async (ids:number[],take:number=8)=>{
 }
 
 const useFeaturedUsers = () => {
-  const {data:bo} = useBackOffice();
+  const{lang}=useTranslation();
+  const {data:bo} = useBackOffice(undefined,lang);
   let usersIds:number[] = [];
   if(bo && bo.FeaturedUsers)
     bo.FeaturedUsers.split(',').forEach(x=> usersIds.push(parseInt(x)));
