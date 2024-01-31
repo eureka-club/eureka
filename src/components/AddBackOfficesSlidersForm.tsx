@@ -53,53 +53,53 @@ export const AddBackOfficesSlidersForm = ({ searchstyle }: Props) => {
     setstate((p) => ({ ...p, [`${fieldName}`]: e.target.value }));
   };
 
-  const renderImages = () => {
-    if (showOptions)
-      return (
-        <Container className="my-4">
-          <h6 className="my-4">
-            <em>{'SelectImage'}</em>.
-          </h6>
-          <section className="d-flex flex-column flex-lg-row justify-content-around">
-            {images.map((img, idx) => (
-              <img
-                width={250}
-                key={idx}
-                className="cursor-pointer mb-4"
-                onClick={() => processSelect(img.src)}
-                src={img.src}
-              />
-            ))}
-          </section>
-        </Container>
-      );
-    else return '';
-  };
+  // const renderImages = () => {
+  //   if (showOptions)
+  //     return (
+  //       <Container className="my-4">
+  //         <h6 className="my-4">
+  //           <em>{'SelectImage'}</em>.
+  //         </h6>
+  //         <section className="d-flex flex-column flex-lg-row justify-content-around">
+  //           {images.map((img, idx) => (
+  //             <img
+  //               width={250}
+  //               key={idx}
+  //               className="cursor-pointer mb-4"
+  //               onClick={() => processSelect(img.src)}
+  //               src={img.src}
+  //             />
+  //           ))}
+  //         </section>
+  //       </Container>
+  //     );
+  //   else return '';
+  // };
 
-  const processSelect = async (src: string) => {
-    const file = await getImg(src);
-    setFile(file!);
-    setstate(p=>({...p,images:[file!]}))
-    setCurrentImg(URL.createObjectURL(file!));
-    setShowOptions(false);
-    // onImageSelect!(file!, text);
-  };
-  function onTextChange(e: ChangeEvent<HTMLTextAreaElement>) {
-    setText(e.target.value);
-  }
-  const renderSelectedPhoto = () => {
-    if (currentImg)
-      return (
-        <section className="mt-4">
-          <Button variant="primary text-white" onClick={() => setShowOptions(true)} size="sm">
-            <BiArrowBack />
-          </Button>
-          <Container className="d-flex justify-content-center">
-            <img style={{ width: '200px' }} src={currentImg} />
-          </Container>
-        </section>
-      );
-  };
+  // const processSelect = async (src: string) => {
+  //   const file = await getImg(src);
+  //   setFile(file!);
+  //   setstate(p=>({...p,images:[file!]}))
+  //   setCurrentImg(URL.createObjectURL(file!));
+  //   setShowOptions(false);
+  //   // onImageSelect!(file!, text);
+  // };
+  // function onTextChange(e: ChangeEvent<HTMLTextAreaElement>) {
+  //   setText(e.target.value);
+  // }
+  // const renderSelectedPhoto = () => {
+  //   if (currentImg)
+  //     return (
+  //       <section className="mt-4">
+  //         <Button variant="primary text-white" onClick={() => setShowOptions(true)} size="sm">
+  //           <BiArrowBack />
+  //         </Button>
+  //         <Container className="d-flex justify-content-center">
+  //           <img style={{ width: '200px' }} src={currentImg} />
+  //         </Container>
+  //       </section>
+  //     );
+  // };
 
   function formValidation() {
     // if (session && !state.text.length) {
@@ -109,46 +109,46 @@ export const AddBackOfficesSlidersForm = ({ searchstyle }: Props) => {
     return true;
   }
 
-  async function handleSearch(e:{stopPropagation:any}) {
-    e.stopPropagation();
-    if (formValidation()) {
-      await searchImages();
-    }
-  }
+  // async function handleSearch(e:{stopPropagation:any}) {
+  //   e.stopPropagation();
+  //   if (formValidation()) {
+  //     await searchImages();
+  //   }
+  // }
 
-  async function searchImages() {
-    setLoading(true);
-    setShowOptions(true);
-    setImages([]);
-    const { data: en_text } = await fetch(`/api/google-translate/?text=${state.text + ', ' + style}&target=en`).then(
-      (r) => r.json(),
-    );
+  // async function searchImages() {
+  //   setLoading(true);
+  //   setShowOptions(true);
+  //   setImages([]);
+  //   const { data: en_text } = await fetch(`/api/google-translate/?text=${state.text + ', ' + style}&target=en`).then(
+  //     (r) => r.json(),
+  //   );
 
-    const { error, data } = await fetch('/api/openai/createImage', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify({ text: en_text }),
-    }).then((r) => r.json());
-    if (data) {
-      const promises = (data as { b64_json: string }[]).map((d) => {
-        return new Promise((resolve, reject) => {
-          const img = new Image();
-          img.onload = function () {debugger;
-            setImages((res) => [...res, img]);
-            resolve(true);
-          };
-          img.src = `data:image/webp;base64,${d.b64_json}`;
-        });
-      });
-      await Promise.all(promises);
-    } else if (error) toast.error(error);
-    setLoading(false);
-  }
-  function onStyleChange(e: SelectChangeEvent<HTMLTextAreaElement>) {
-    setStyle(e.target.value as string);
-  }
+  //   const { error, data } = await fetch('/api/openai/createImage', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ text: en_text }),
+  //   }).then((r) => r.json());
+  //   if (data) {
+  //     const promises = (data as { b64_json: string }[]).map((d) => {
+  //       return new Promise((resolve, reject) => {
+  //         const img = new Image();
+  //         img.onload = function () {debugger;
+  //           setImages((res) => [...res, img]);
+  //           resolve(true);
+  //         };
+  //         img.src = `data:image/webp;base64,${d.b64_json}`;
+  //       });
+  //     });
+  //     await Promise.all(promises);
+  //   } else if (error) toast.error(error);
+  //   setLoading(false);
+  // }
+  // function onStyleChange(e: SelectChangeEvent<HTMLTextAreaElement>) {
+  //   setStyle(e.target.value as string);
+  // }
 
   const resetForm=()=>{
     setstate({text:'',title:'',language:i18n.defaultLocale});
@@ -254,7 +254,7 @@ export const AddBackOfficesSlidersForm = ({ searchstyle }: Props) => {
         </Select>
       </FormControl>
       
-      <Container className='py-3'>
+      {/* <Container className='py-3'>
         <Grid container>
           <Grid item xs={8}>
             <FormControl fullWidth>
@@ -319,7 +319,25 @@ export const AddBackOfficesSlidersForm = ({ searchstyle }: Props) => {
         
       {!loading ? <>{images.length > 0 && renderImages()}</> : <LinearProgressMUI />}
       {!showOptions && renderSelectedPhoto()}
-      </Container>
+      </Container> */}
+      <FormControl>
+        <label>Pick an IMG</label>
+        <input type="file" 
+        onChange={(e)=>{debugger;
+          if(e.target?.files){
+            const file = e.target.files[0];
+            setCurrentImg(URL.createObjectURL(file));
+            setstate(p=>({...p,'images':[file]}));
+            setFile(file);
+          }
+        
+        }}/>
+        {
+          currentImg 
+            ? <img style={{ width: '200px' }} src={currentImg} />
+            :<></>
+        }
+      </FormControl>
       <div className='d-flex justify-content-center'>
         <Button disabled={!currentImg || loading} onClick={handleSubmit} className='text-white' size='lg'>Save</Button>
       </div>

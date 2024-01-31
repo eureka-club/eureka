@@ -547,7 +547,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                 <TableBody>
                   {
                     bo?.sliders.map(s=>{
-                      return <TableRow key={`$tr-slide-{s.id}`}>
+                      return <TableRow key={`$tr-slide-${s.id}`}>
                       <TableCell>
                         <img style={{ width: '10em' }} src={`${imgBaseUrl}${s.images[0].storedFile}`} alt="" />
                       </TableCell>
