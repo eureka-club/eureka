@@ -43,6 +43,7 @@ const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
       : user.image,
       timestamp: Math.floor(Date.now() / 1000),
     };
+     
     userData = Buffer.from(JSON.stringify(userDataObj)).toString('base64');
     hash = crypto.HmacSHA256(userData, HYVOR_SSO_KEY!).toString();
 

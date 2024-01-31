@@ -15,8 +15,6 @@ const featuredWorksPostsWhere = (id: number) => ({
 });
 
 const useFeaturedWorksPostsImages = (id: number) => {
-  const { data: bo } = useBackOffice();
-
   const { data: dataFeaturedWorksPosts } = usePosts(featuredWorksPostsWhere(id), { enabled: !!id });
 
   let images: any[] = [];

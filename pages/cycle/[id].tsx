@@ -61,7 +61,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT, NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = props;
 
   const renderCycleDetailComponent = () => {
-    if (cycle) {debugger;
+    if (cycle) { 
       const res = <div style={isJoinCycleLoading ? {pointerEvents:'none'}:{}}>
         <CycleDetailComponent />
         </div>

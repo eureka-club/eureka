@@ -14,7 +14,7 @@ import useWorks from '@/src/useWorks';
 import { Edition, Work } from '@prisma/client';
 import { Session } from '@/src/types';
 import dayjs from 'dayjs';
-import { DATE_FORMAT_ONLY_YEAR } from '@/src/constants';
+import { DATE_FORMAT_ONLY_YEAR, WEBAPP_URL } from '@/src/constants';
 import FindInPageOutlinedIcon from '@mui/icons-material/FindInPageOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -45,7 +45,7 @@ import MosaicItem from '@/src/components/work/MosaicItem';
 import { debounce } from 'lodash';
 import {
   Box, Fab, Paper, TextField, Typography, Button as MaButton, ButtonGroup, CircularProgress, Table, TableBody,
-  TableFooter, TablePagination, TableCell, TableContainer, TableHead, TableRow, Drawer, IconButton, Divider
+  TableFooter, TablePagination, TableCell, TableContainer, TableHead, TableRow, Drawer, IconButton, Divider, Modal, Dialog, DialogContent
 } from '@mui/material';
 import PaginationActions from '@/src/components/common/MUITablePaginationActions';
 import { styled, useTheme } from '@mui/material/styles';
@@ -58,6 +58,8 @@ import { FaSave } from 'react-icons/fa';
 import useUpdateWork from '@/src/hooks/mutations/useUpdateWork';
 import { error } from 'node:console';
 import { usePathname } from 'next/dist/client/components/navigation';
+import { IoAddCircle, IoTrash } from 'react-icons/io5';
+import { AddBackOfficesSlidersForm } from '@/src/components/AddBackOfficesSlidersForm';
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
 const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 interface Props {
@@ -112,6 +114,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
 
   const theme = useTheme();
   const [open, setOpen] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   const { mutate: execUpdateWork, data: UpdateWorkResponse, isPending: isUpdateWorkLoading, isSuccess: isUpdateWorkSuccess, isError: isUpdateWorkError,
   } = useUpdateWork();
@@ -149,7 +152,10 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   function OnFilterWorksChanged(e: ChangeEvent<HTMLInputElement>) {
     debounceFn(e.target.value);
   }
-
+  const handleClose = ()=>{
+    setOpenModal(false);
+    queryClient.invalidateQueries({queryKey:["BACKOFFICE","1"]});
+  }
   const [workDnD, setWorkDnd] = useState<any>();//:-|
 
   useEffect(() => {
@@ -158,27 +164,27 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
 
   }, [notFound]);
 
-  useEffect(() => {
-    //console.log(bo,'bo data')
-    setImage1(undefined);
-    setImage2(undefined);
-    setImage3(undefined);
+  // useEffect(() => {
+  //   //console.log(bo,'bo data')
+  //   setImage1(undefined);
+  //   setImage2(undefined);
+  //   setImage3(undefined);
 
-    if (bo && bo.sliderImages.length) {
-      if (bo.SlideImage1 != 'null') {
-        let storeFile1 = bo.sliderImages.filter(x => x.originalFilename == bo.SlideImage1)[0].storedFile;
-        setImage1(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile1}`);
-      }
-      if (bo.SlideImage2 != 'null') {
-        let storeFile2 = bo.sliderImages.filter(x => x.originalFilename == bo.SlideImage2)[0].storedFile;
-        setImage2(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile2}`);
-      }
-      if (bo.SlideImage3 != 'null') {
-        let storeFile3 = bo.sliderImages.filter(x => x.originalFilename == bo.SlideImage3)[0].storedFile;
-        setImage3(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile3}`);
-      }
-    }
-  }, [bo]);
+  //   if (bo && bo.sliderImages.length) {
+  //     if (bo.SlideImage1 != 'null') {
+  //       let storeFile1 = bo.sliderImages.filter(x => x.originalFilename == bo.SlideImage1)[0].storedFile;
+  //       setImage1(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile1}`);
+  //     }
+  //     if (bo.SlideImage2 != 'null') {
+  //       let storeFile2 = bo.sliderImages.filter(x => x.originalFilename == bo.SlideImage2)[0].storedFile;
+  //       setImage2(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile2}`);
+  //     }
+  //     if (bo.SlideImage3 != 'null') {
+  //       let storeFile3 = bo.sliderImages.filter(x => x.originalFilename == bo.SlideImage3)[0].storedFile;
+  //       setImage3(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile3}`);
+  //     }
+  //   }
+  // }, [bo]);
 
 
   const handleSubsectionChange = (key: string | null) => {
@@ -196,23 +202,23 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
     setCurrentSlider(n);
   };
 
-  const onGenerateCrop = (photo: File) => {
-    if (currentSlider == 1) {
-      setImageFile1(() => photo);
-      setImage1(URL.createObjectURL(photo));
-    }
-    if (currentSlider == 2) {
-      setImageFile2(() => photo);
-      setImage2(URL.createObjectURL(photo));
-    }
-    if (currentSlider == 3) {
-      setImageFile3(() => photo);
-      setImage3(URL.createObjectURL(photo));
-    }
+  // const onGenerateCrop = (photo: File) => {
+  //   if (currentSlider == 1) {
+  //     setImageFile1(() => photo);
+  //     setImage1(URL.createObjectURL(photo));
+  //   }
+  //   if (currentSlider == 2) {
+  //     setImageFile2(() => photo);
+  //     setImage2(URL.createObjectURL(photo));
+  //   }
+  //   if (currentSlider == 3) {
+  //     setImageFile3(() => photo);
+  //     setImage3(URL.createObjectURL(photo));
+  //   }
 
-    setShowCrop(false);
-    setCurrentSlider(0);
-  };
+  //   setShowCrop(false);
+  //   setCurrentSlider(0);
+  // };
 
   const {
     mutate: execUpdateBackOffice,
@@ -294,18 +300,18 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
 
     const form = ev.currentTarget;
     const payload: backOfficePayload = {
-      SlideTitle1: form.TitleSlider1.value,
-      SlideText1: form.TextSlider1.value,
-      SlideImage1: (imageFile1) ? imageFile1.name : null,
-      Image1: imageFile1,
-      SlideTitle2: form.TitleSlider2.value,
-      SlideText2: form.TextSlider2.value,
-      SlideImage2: (imageFile2) ? imageFile2.name : null,
-      Image2: imageFile2,
-      SlideTitle3: form.TitleSlider3.value,
-      SlideText3: form.TextSlider3.value,
-      SlideImage3: (imageFile3) ? imageFile3.name : null,
-      Image3: imageFile3,
+      // SlideTitle1: form.TitleSlider1.value,
+      // SlideText1: form.TextSlider1.value,
+      // SlideImage1: (imageFile1) ? imageFile1.name : null,
+      // Image1: imageFile1,
+      // SlideTitle2: form.TitleSlider2.value,
+      // SlideText2: form.TextSlider2.value,
+      // SlideImage2: (imageFile2) ? imageFile2.name : null,
+      // Image2: imageFile2,
+      // SlideTitle3: form.TitleSlider3.value,
+      // SlideText3: form.TextSlider3.value,
+      // SlideImage3: (imageFile3) ? imageFile3.name : null,
+      // Image3: imageFile3,
       CyclesExplorePage: form.CyclesToShow.value,
       PostExplorePage: form.PostToShow.value,
       FeaturedUsers: form.UsersToShow.value,
@@ -316,24 +322,24 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   };
 
 
-  const clearSlider = async (n: number) => {
+  // const clearSlider = async (n: number) => {
 
-    let sliderOriginalName;
-    if (n == 1)
-      sliderOriginalName = bo!.SlideImage1;
-    if (n == 2)
-      sliderOriginalName = bo!.SlideImage2;
-    if (n == 3)
-      sliderOriginalName = bo!.SlideImage3;
+  //   let sliderOriginalName;
+  //   if (n == 1)
+  //     sliderOriginalName = bo!.SlideImage1;
+  //   if (n == 2)
+  //     sliderOriginalName = bo!.SlideImage2;
+  //   if (n == 3)
+  //     sliderOriginalName = bo!.SlideImage3;
 
-    //console.log('bo',bo, sliderOriginalName)
+  //   //console.log('bo',bo, sliderOriginalName)
 
-    const clearSliderPayload: backOfficeClearSliderPayload = {
-      originalName: sliderOriginalName || undefined
-    };
-    //console.log(payload,"payload")
-    await execClearSlideBackOffice(clearSliderPayload);
-  };
+  //   const clearSliderPayload: backOfficeClearSliderPayload = {
+  //     originalName: sliderOriginalName || undefined
+  //   };
+  //   //console.log(payload,"payload")
+  //   await execClearSlideBackOffice(clearSliderPayload);
+  // };
 
   const removeNotificationsSinceLastMonth = async () => {
     const url = '/api/notification/remove-since-last-month';
@@ -440,8 +446,8 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
 
 
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - works!.length) : 0;
+  // const emptyRows =
+  //   page > 0 ? Math.max(0, (1 + page) * rowsPerPage - works!.length) : 0;
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -467,6 +473,27 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
     setOpen(false);
     setAllWorks([]);
   };
+
+  const imgBaseUrl=`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/`;
+
+  const OnAddSlide = ()=>{
+    setOpenModal(true);
+  }
+
+  const OnRemoveSlide = async (id:number)=>{
+    const url = `${WEBAPP_URL}/api/backoffice/slide/${id}/remove`;
+    const fr = await fetch(url,{
+      method:'DELETE',
+    });
+    if(fr.ok){
+      const res = await fr.json()
+      if(res.slide){
+        toast.success('done!');
+        queryClient.invalidateQueries({queryKey:["BACKOFFICE","1"]});
+      }
+      else toast.error('error');
+    }
+  }
 
   /////////////////////////////////////////////////////////
   return (
@@ -504,6 +531,11 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
               </NavLink>
             </NavItem>
           }
+          <NavItem className={`border-primary border-bottom cursor-pointer  ${styles.tabBtn}`}>
+            <NavLink eventKey="notifications">
+              <span className="mb-3">Notifications</span>
+            </NavLink>
+          </NavItem>
         </Nav>
 
         <TabContent>
@@ -511,9 +543,31 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
             <h2 className="text-secondary mt-3 mb-3">
               <b>{t('Banner Settings')}</b>
             </h2>
-
+              <Button className='text-white mb-3' onClick={OnAddSlide}><IoAddCircle/></Button>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableBody>
+                  {
+                    bo?.sliders.map(s=>{
+                      return <TableRow key={`$tr-slide-${s.id}`}>
+                      <TableCell>
+                        <img style={{ width: '10em' }} src={`${imgBaseUrl}${s.images[0].storedFile}`} alt="" />
+                      </TableCell>
+                      <TableCell className="p-0 mx-1 text-wrap fs-5">{s.title}</TableCell>
+                      <TableCell>
+                        <p className="p-0 mx-1 text-wrap fs-5" dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
+                      </TableCell>
+                      <TableCell>
+                        <Button className='text-white' variant='danger' onClick={(e)=>OnRemoveSlide(s.id)}><IoTrash/></Button>
+                      </TableCell>
+                    </TableRow>;
+                    })
+                  }
+                </TableBody>
+              </Table>
+            </TableContainer>
             <Form onSubmit={handleSubmit} className={`d-flex flex-column`}>
-              <Row className="col-12 px-4 py-2 d-flex flex-column flex-lg-row justify-content-around">
+              {/* <Row className="col-12 px-4 py-2 d-flex flex-column flex-lg-row justify-content-around">
                 <Col className="col-12 col-lg-4 mb-4">
                   <h5 className="text-secondary mb-2">
                     <b>{t('Slider 1')}</b>
@@ -681,7 +735,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                     </Row>
                   )}
                 </Col>
-              </Row>
+              </Row> */}
 
               <h2 className="text-secondary mt-3 mb-3">
                 <b>{t('Content Page')}</b>
@@ -721,7 +775,6 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                 </Button>
               </div>
             </Form>
-            <Button variant='danger' className='text-white my-1' onClick={removeNotificationsSinceLastMonth}>{t('RemoveOldNotifications')}</Button>
 
           </TabPane>
         </TabContent>
@@ -979,14 +1032,25 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
           </TabPane>
         </TabContent>
 
-
-
-
+                            <TabContent>
+                              <TabPane eventKey='notifications'>
+                                <Button variant='danger' className='text-white my-1' onClick={removeNotificationsSinceLastMonth}>{t('RemoveOldNotifications')}</Button>
+                              </TabPane>
+                            </TabContent>
 
       </TabContainer>
 
 
-
+      <Dialog
+        open={openModal}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <DialogContent>
+          <AddBackOfficesSlidersForm/>
+        </DialogContent>
+      </Dialog>
 
 
     </SimpleLayout>

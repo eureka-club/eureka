@@ -71,10 +71,11 @@ export default getApiHandler()
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
+
       const { q = null, props:p="",lang:l } = req.query;
       const locale = l?.toString();
-      const language = Languages[locale!];
-
+      const language = locale ? Languages[locale!] : '';
+ 
       const props:Prisma.PostFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
       let {where:w,take,cursor,skip,select} = props;
       const session = await getSession({ req });
@@ -82,7 +83,7 @@ export default getApiHandler()
       delete w?.AND;
       let where:Prisma.PostWhereInput = {...w,AND:{
         ... AND && {AND},
-        language
+        ... language && {language}
       }}
       if (typeof q === 'string') {
         const terms = q.split(" ");
@@ -114,79 +115,78 @@ export default getApiHandler()
           ]
         };
       }
-      const prev_and = where.AND;
-      delete where.AND;
-      
-      if(session){
-        const AND = {
-          OR:[
-            {
-              cycles:{
-                some:{
-                  OR:[
-                    {access:1},
-                    {creatorId:session?.user.id},
-                    {participants:{some:{id:session?.user.id}}},  
-                  ]
-                }
-              }
-            },
-            {
-              cycles:{
-                none:{}
-              }
-            }
-          ],
-          // ... session?.user.language && {language:session?.user.language}
-          language
-        }
-        where = {
-          ...where,
-          ...prev_and 
-          ? {
-            AND:{
-              ...prev_and,
-              ...AND
-            }
-          } 
-          : {
-            AND
-          }
+      // const prev_and = where.AND;
+      // delete where.AND;
+      // if(session){
+      //   const AND = {
+      //     OR:[
+      //       {
+      //         cycles:{
+      //           some:{
+      //             OR:[
+      //               {access:1},
+      //               {creatorId:session?.user.id},
+      //               {participants:{some:{id:session?.user.id}}},  
+      //             ]
+      //           }
+      //         }
+      //       },
+      //       {
+      //         cycles:{
+      //           none:{}
+      //         }
+      //       }
+      //     ],
+      //     // ... session?.user.language && {language:session?.user.language}
+      //     ... language && {language}
+      //   }
+      //   where = {
+      //     ...where,
+      //     ...prev_and 
+      //     ? {
+      //       AND:{
+      //         ...prev_and,
+      //         ...AND
+      //       }
+      //     } 
+      //     : {
+      //       AND
+      //     }
           
-        }
-      }
-      else{
-        const AND={
-          OR:[
-            {
-              cycles:{
-                some:{
-                  access:1,
-                }
-              }
+      //   }
+      // }
+      // else{
+      //   const AND={
+      //     OR:[
+      //       {
+      //         cycles:{
+      //           some:{
+      //             access:1,
+      //           }
+      //         }
 
-            },
-            {
-              cycles:{
-                none:{}
-              }
-            }
-          ]
-        }
-        where = {...where,
-          ...prev_and 
-          ? {
-            AND:{
-              ...prev_and,
-              ...AND
-            }
-          } 
-          : {
-            AND
-          }
+      //       },
+      //       {
+      //         cycles:{
+      //           none:{}
+      //         }
+      //       }
+      //     ]
+      //   }
+      //   where = {...where,
+      //     ...prev_and 
+      //     ? {
+      //       AND:{
+      //         ...prev_and,
+      //         ...AND
+      //       }
+      //     } 
+      //     : {
+      //       AND
+      //     }
           
-        }
-      }
+      //   }
+      // }
 
       let cr = await prisma?.post.aggregate({where,_count:true})
       const total = cr?._count;

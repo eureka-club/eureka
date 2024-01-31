@@ -12,8 +12,8 @@ export const myCyclesWhere = (id:number) => ({
     ]
   }
 });
-export const getMyCycles = async (lang:string,id:number,take:number,origin='')=>{
-  const res = await getCycles(lang,{...myCyclesWhere(id),take},origin);
+export const getMyCycles = async (id:number,take:number,origin='')=>{
+  const res = await getCycles('',{...myCyclesWhere(id),take},origin);
   return res;
 }
 

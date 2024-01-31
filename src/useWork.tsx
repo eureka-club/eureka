@@ -28,7 +28,7 @@ const useWork = (id: number, options?: Options): UseQueryResult<WorkMosaicItem,E
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  const ck = notLangRestrict ? ['WORK', `${id}`] : ['WORK', `${id}-${lang}`];
+  const ck =  ['WORK', `${id}`];
   return useQuery<WorkMosaicItem, Error>(
     {
        queryKey:ck, 

@@ -160,7 +160,8 @@ const MosaicItemDetail: FunctionComponent<Props> = ({
                 <em>
                   {` (${LOCALES[post.language].toUpperCase()})`}
                 </em>
-              </span>
+                :<></>
+            </span>
           </Badge>
         </div>
        

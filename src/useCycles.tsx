@@ -4,11 +4,11 @@ import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 
 export const getCycles = async (
-  lang:string,
+  lang?:string,
   props?:Prisma.CycleFindManyArgs,
   origin=''
 ): Promise<{cycles:CycleDetail[],fetched:number,total:number}> => {
-  const query = props?`?lang=${lang}&props=${encodeURIComponent(JSON.stringify(props))}`:''
+  const query = props?`?props=${encodeURIComponent(JSON.stringify(props))}&lang=${lang}`:''
   const url = `${origin||''}/api/cycle${query}`
   const res = await fetch(url);
   if (!res.ok) return {cycles:[],fetched:0,total:-1};

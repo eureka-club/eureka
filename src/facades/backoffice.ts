@@ -7,7 +7,7 @@ export interface findProps {
   select?: Record<string, boolean>;
   include?: boolean;
 }
-export const find = async (props: findProps) => {
+export const find = async (props: findProps,language?:string) => {
   const { id , select = undefined, include = true } = props;
 
   return prisma.backOfficeSettings.findUnique({
@@ -15,7 +15,11 @@ export const find = async (props: findProps) => {
     id,
   },
   include:{
-    sliderImages:{select:{storedFile:true,originalFilename:true}},
+    sliders:{
+      include:{images:true},
+      ... language && {where:{language}}
+    }
+    // sliderImages:{select:{storedFile:true,originalFilename:true}},
   }
 })
 
@@ -31,5 +35,12 @@ export const update = async (id: number, data: Prisma.BackOfficeSettingsUpdateIn
   return prisma.backOfficeSettings.update({
     data,
     where:{id}
+  });
+};
+
+export const removeSlide = async (id: number)=>{
+  return prisma.backOfficeSettingsSliders.delete({
+    where:{id},
+    include:{images:true}
   });
 };

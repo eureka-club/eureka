@@ -7,6 +7,7 @@ import { find,create,update } from '@/src/facades/backoffice';
 import {storeDeleteFile, storeUploadPhoto} from '@/src/facades/fileUpload'
 import { backOfficeData } from '@/src/types/backoffice';
 import {cors,middleware} from '@/src/lib/cors'
+import { i18n } from 'i18n-config';
 
 export const config = {
   api: {
@@ -33,76 +34,76 @@ export default getApiHandler()
      //console.log(files,'files')  
      try{ 
        const bs = await find({id:1});
-       const FileFields = ['Image1','Image2','Image3'];
+      //  const FileFields = ['Image1','Image2','Image3'];
        //const SlidersImagesFields = ['SlideImage1','SlideImage2','SlideImage3'];
 
-       const updateImage = async function(bsData:backOfficeData, originalFilename:string){
+      //  const updateImage = async function(bsData:backOfficeData, originalFilename:string){
        
-          const file = bsData.sliderImages.filter(x=> x.originalFilename == originalFilename);
-          if(file.length){
-            const storedFile = file[0].storedFile;
-            const resImageRemoving = await storeDeleteFile(storedFile,'backoffice');
-            if(!resImageRemoving){
-             console.error('Removing image has failed')
-            }
-            const resPhotoRemoving = await update(1,{
-            sliderImages:{deleteMany:{storedFile: storedFile}}
-            });
-            if(!resPhotoRemoving)
-              console.error('Removing sliders photo  has failed')
-          }
-       }
+      //     const file = bsData.sliderImages.filter(x=> x.originalFilename == originalFilename);
+      //     if(file.length){
+      //       const storedFile = file[0].storedFile;
+      //       const resImageRemoving = await storeDeleteFile(storedFile,'backoffice');
+      //       if(!resImageRemoving){
+      //        console.error('Removing image has failed')
+      //       }
+      //       const resPhotoRemoving = await update(1,{
+      //       sliderImages:{deleteMany:{storedFile: storedFile}}
+      //       });
+      //       if(!resPhotoRemoving)
+      //         console.error('Removing sliders photo  has failed')
+      //     }
+      //  }
         
         let data:Record<string,any> = Object.entries(fields).reduce((prev, curr)=>{
               const [k,v] = curr;
               let val = v[0];
-              if(!FileFields.includes(k))
+              // if(!FileFields.includes(k))
                  prev = {...prev, [`${k}`]: val};
               return prev;
             },{});    
 
-          let Images = []; 
+          // let Images = []; 
 
-          if(Object.entries(files).length){
-               if(bs && bs.sliderImages.length){
+          // if(Object.entries(files).length){
+          //      if(bs && bs.sliderImages.length){
                  
-                  if(bs.SlideImage1 != 'null' && data.SlideImage1 != 'null')
-                      updateImage(bs,bs.SlideImage1 as string);
-                  if(bs.SlideImage2 != 'null' &&  data.SlideImage2 != 'null')
-                      updateImage(bs,bs.SlideImage2 as string);
-                  if(bs.SlideImage3 != 'null' && data.SlideImage3 != 'null')
-                      updateImage(bs,bs.SlideImage3 as string);
-               }
+          //         if(bs.SlideImage1 != 'null' && data.SlideImage1 != 'null')
+          //             updateImage(bs,bs.SlideImage1 as string);
+          //         if(bs.SlideImage2 != 'null' &&  data.SlideImage2 != 'null')
+          //             updateImage(bs,bs.SlideImage2 as string);
+          //         if(bs.SlideImage3 != 'null' && data.SlideImage3 != 'null')
+          //             updateImage(bs,bs.SlideImage3 as string);
+          //      }
 
-              for(let i = 0; i<=FileFields.length-1;i++){
-                  if(files[FileFields[i]] && files[FileFields[i]][0]){
-                    const coverImageUploadData = await storeUploadPhoto(files[FileFields[i]][0],'backoffice');
-                    Images.push(coverImageUploadData);
-                }
-                else{
-                 if(data.SlideImage1 == 'null' && bs && bs.SlideImage1 != 'null')
-                    data.SlideImage1 = bs.SlideImage1;
-                  if(data.SlideImage2 == 'null' && bs && bs.SlideImage2 != 'null')
-                    data.SlideImage2 = bs.SlideImage2;
-                  if(data.SlideImage3 == 'null' && bs && bs.SlideImage3 != 'null')
-                    data.SlideImage3 = bs.SlideImage3;
-                }
-              }    
-             data = {
-                ...data,
-                sliderImages:{
-                create:Images,  
-                },
-              }
-           }
-           else{
-            if(data.SlideImage1 == 'null' && bs && bs.SlideImage1 != 'null')
-              data.SlideImage1 = bs.SlideImage1;
-            if(data.SlideImage2 == 'null' && bs && bs.SlideImage2 != 'null')
-              data.SlideImage2 = bs.SlideImage2;
-            if(data.SlideImage3 == 'null' && bs && bs.SlideImage3 != 'null')
-              data.SlideImage3 = bs.SlideImage3;
-           }
+          //     for(let i = 0; i<=FileFields.length-1;i++){
+          //         if(files[FileFields[i]] && files[FileFields[i]][0]){
+          //           const coverImageUploadData = await storeUploadPhoto(files[FileFields[i]][0],'backoffice');
+          //           Images.push(coverImageUploadData);
+          //       }
+          //       else{
+          //        if(data.SlideImage1 == 'null' && bs && bs.SlideImage1 != 'null')
+          //           data.SlideImage1 = bs.SlideImage1;
+          //         if(data.SlideImage2 == 'null' && bs && bs.SlideImage2 != 'null')
+          //           data.SlideImage2 = bs.SlideImage2;
+          //         if(data.SlideImage3 == 'null' && bs && bs.SlideImage3 != 'null')
+          //           data.SlideImage3 = bs.SlideImage3;
+          //       }
+          //     }    
+          //    data = {
+          //       ...data,
+          //       sliderImages:{
+          //       create:Images,  
+          //       },
+          //     }
+          //  }
+          //  else{
+          //   if(data.SlideImage1 == 'null' && bs && bs.SlideImage1 != 'null')
+          //     data.SlideImage1 = bs.SlideImage1;
+          //   if(data.SlideImage2 == 'null' && bs && bs.SlideImage2 != 'null')
+          //     data.SlideImage2 = bs.SlideImage2;
+          //   if(data.SlideImage3 == 'null' && bs && bs.SlideImage3 != 'null')
+          //     data.SlideImage3 = bs.SlideImage3;
+          //  }
 
          let r;
          if(!bs)
@@ -125,9 +126,10 @@ export default getApiHandler()
  .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
   const session = (await getSession({ req })) as unknown as Session;
   await middleware(req,res,cors)
-
+    const {lang}=req.query;
+    const language = lang ? lang.toString() : '';
     try {
-      const backoffice =  await find({id:1});
+      const backoffice =  await find({id:1},language);
       if (!backoffice ) {
         // res.status(404).end();
         res.status(200).json({ status: 'OK', backoffice: null });

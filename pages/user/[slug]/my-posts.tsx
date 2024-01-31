@@ -1,28 +1,27 @@
 import { GetServerSideProps,NextPage } from 'next';
 import Head from "next/head";
-import { Button, ButtonGroup, Col, Row } from 'react-bootstrap';
-import { dehydrate, QueryClient } from '@tanstack/react-query';;
+import { dehydrate, QueryClient } from 'react-query';
+import { Button, ButtonGroup, Col, Row, Spinner } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
+import { getSession, useSession } from 'next-auth/react';
+import useTranslation from 'next-translate/useTranslation';
 
-
-import {getbackOfficeData} from '@/src/useBackOffice'
-import useInterestCycles, { getInterestedCycles } from '@/src/useInterestedCycles';
-import CMI from '@/src/components/cycle/MosaicItem';
+import useMyPosts,{getMyPosts} from '@/src/useMyPosts';
+import PMI from '@/src/components/post/MosaicItem';
 import {useRouter} from 'next/router'
 import { BiArrowBack } from 'react-icons/bi';
-import { getSession } from 'next-auth/react';
-import { getDictionary, t } from '@/src/get-dictionary';
-import { Locale } from 'i18n-config';
-import { defaultLocale } from 'i18n';
 
 interface Props{
-  dict:any
+  id:number
 }
 
-const InterestedCycles: NextPage<Props> = ({dict}) => {
+const MyPosts: NextPage<Props> = ({id}) => {
+  const { t } = useTranslation('common');
   const router = useRouter()
-  const {data:dataCycles} = useInterestCycles()
-
+  const {data:session,status} = useSession();
+  const isLoadingSession = status === "loading"
+  if(!isLoadingSession && !session)router.push('/')
+  const {data:dataPosts} = useMyPosts(id);
   return <>
     <Head>
         <meta property="og:title" content='Eureka'/>
@@ -39,46 +38,60 @@ const InterestedCycles: NextPage<Props> = ({dict}) => {
         <meta name="twitter:url" content={`${process.env.NEXT_PUBLIC_WEBAPP_URL}`} ></meta>  
     </Head>
     <SimpleLayout>
-    <article className='mt-4' data-cy="my-cycles">
+    <article className='mt-4' data-cy="my-posts">
       <ButtonGroup className="mt-1 mt-md-3 mb-1">
           <Button variant="primary text-white" onClick={() => router.back()} size="sm">
             <BiArrowBack />
           </Button>
-        </ButtonGroup>
-        <>
-          <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t(dict,'Interest cycles')}</h1>
+      </ButtonGroup>
+      {
+      isLoadingSession 
+        ? <Spinner animation="grow"/>
+        : session ? (
+          <>
+          <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('myPosts')}</h1>
             <Row>
-              {dataCycles?.cycles.map(c=>
+              {dataPosts?.posts.map(c=>
                 <Col key={c.id} xs={12} sm={6} lg={3} xxl={2} className='mb-5 d-flex justify-content-center  align-items-center'>
-                  <CMI cycleId={c.id} />
+                  <PMI postId={c.id} size='md' />
                 </Col>
               )}
             </Row>
             </>
-
+        ) : ''
+      }
           </article>
     </SimpleLayout>
   </>
 };
 export const getServerSideProps:GetServerSideProps= async (ctx)=>{
-  const session = await getSession(ctx);
   const qc = new QueryClient();
-  const dictionary=await getDictionary(ctx.locale as Locale ?? defaultLocale)
-  const dict = dictionary['common'];
-  
-  const {NEXT_PUBLIC_WEBAPP_URL:origin}=process.env;
-  const bod = await getbackOfficeData(ctx.locale!)
-  if(bod && bod?.CyclesExplorePage){
-    const ids = bod?.CyclesExplorePage.split('').map(i=>+i)
-    await qc.fetchQuery({queryKey:['CYCLES','INTERESTED'],queryFn:()=>getInterestedCycles(ctx.locale!,ids,8,origin)});
-  }
-  return {
+  const session = await getSession({ctx})
+  let res = {
     props:{
+      id:0,
       session,
-      dict,
-      dehydrateState:dehydrate(qc),
+      dehydrateState:dehydrate(qc)
     }
-  };
-}
+  }
+  if(!session)return res;
+  let id = 0
+  if(ctx.query && ctx.query.slug){
+    const slug = ctx.query.slug.toString()
+    const li = slug.split('-').slice(-1)
+    id = parseInt(li[0])
+  }
+  const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
 
-export default InterestedCycles;
+  await qc.fetchQuery(['MY-POSTS'],()=>getMyPosts(id,session,8,origin));
+  
+  res = {
+    props:{
+      id,
+      session,
+      dehydrateState:dehydrate(qc)
+    }
+  }
+  return res;
+}
+export default MyPosts;

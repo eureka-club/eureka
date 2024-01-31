@@ -69,7 +69,8 @@ export const getServerSideProps:GetServerSideProps= async (ctx)=>{
   const dictionary=await getDictionary(ctx.locale as Locale ?? defaultLocale);
   const dict = dictionary['common'];
 
-  const bod = await getbackOfficeData(origin)
+  
+  const bod = await getbackOfficeData(ctx.locale!)
   if(bod && bod?.CyclesExplorePage){
     const ids = bod?.CyclesExplorePage.split('').map(i=>+i)
     await qc.fetchQuery({queryKey:['CYCLES','INTERESTED'],queryFn:()=>getFeaturedEurekas(ctx.locale!,ids,8,origin)});

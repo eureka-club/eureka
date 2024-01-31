@@ -1,28 +1,27 @@
 import { GetServerSideProps,NextPage } from 'next';
 import Head from "next/head";
-import { Button, ButtonGroup, Col, Row } from 'react-bootstrap';
-import { dehydrate, QueryClient } from '@tanstack/react-query';;
+import { Button, ButtonGroup, Col, Row, Spinner } from 'react-bootstrap';
+import { dehydrate, QueryClient } from 'react-query';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
+import { getSession, useSession } from 'next-auth/react';
+import useTranslation from 'next-translate/useTranslation';
 
-
-import {getbackOfficeData} from '@/src/useBackOffice'
-import useInterestCycles, { getInterestedCycles } from '@/src/useInterestedCycles';
+import useMyCycles, { getMyCycles } from '@/src/useMyCycles';
 import CMI from '@/src/components/cycle/MosaicItem';
 import {useRouter} from 'next/router'
 import { BiArrowBack } from 'react-icons/bi';
-import { getSession } from 'next-auth/react';
-import { getDictionary, t } from '@/src/get-dictionary';
-import { Locale } from 'i18n-config';
-import { defaultLocale } from 'i18n';
 
 interface Props{
-  dict:any
+  id:number;
 }
 
-const InterestedCycles: NextPage<Props> = ({dict}) => {
+const MyCycles: NextPage<Props> = ({id}) => {
+  const { t } = useTranslation('common');
   const router = useRouter()
-  const {data:dataCycles} = useInterestCycles()
-
+  const {data:session,status} = useSession();
+  const isLoadingSession = status === "loading"
+  if(!isLoadingSession && !session)router.push('/')
+  const {data:dataCycles} = useMyCycles(id);
   return <>
     <Head>
         <meta property="og:title" content='Eureka'/>
@@ -45,40 +44,55 @@ const InterestedCycles: NextPage<Props> = ({dict}) => {
             <BiArrowBack />
           </Button>
         </ButtonGroup>
-        <>
-          <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t(dict,'Interest cycles')}</h1>
+      {
+      isLoadingSession 
+        ? <Spinner animation="grow"/>
+        : session ? (
+          <>
+          <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('myCycles')}</h1>
             <Row>
               {dataCycles?.cycles.map(c=>
                 <Col key={c.id} xs={12} sm={6} lg={3} xxl={2} className='mb-5 d-flex justify-content-center  align-items-center'>
-                  <CMI cycleId={c.id} />
+                  <CMI cycleId={c.id} size='md' />
                 </Col>
               )}
             </Row>
             </>
-
+        ) : ''
+      }
           </article>
     </SimpleLayout>
   </>
 };
 export const getServerSideProps:GetServerSideProps= async (ctx)=>{
-  const session = await getSession(ctx);
   const qc = new QueryClient();
-  const dictionary=await getDictionary(ctx.locale as Locale ?? defaultLocale)
-  const dict = dictionary['common'];
-  
-  const {NEXT_PUBLIC_WEBAPP_URL:origin}=process.env;
-  const bod = await getbackOfficeData(ctx.locale!)
-  if(bod && bod?.CyclesExplorePage){
-    const ids = bod?.CyclesExplorePage.split('').map(i=>+i)
-    await qc.fetchQuery({queryKey:['CYCLES','INTERESTED'],queryFn:()=>getInterestedCycles(ctx.locale!,ids,8,origin)});
+  const session = await getSession({ctx})
+  let id = 0
+  if(ctx.query && ctx.query.slug){
+    const slug = ctx.query.slug.toString()
+    const li = slug.split('-').slice(-1)
+    id = parseInt(li[0])
   }
-  return {
+  let res = {
     props:{
+      id,
       session,
-      dict,
-      dehydrateState:dehydrate(qc),
+      dehydrateState:dehydrate(qc)
     }
-  };
+  }
+  if(!session)return res;
+  const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
+
+  await qc.fetchQuery(['MY-CYCLES',id],()=>getMyCycles(id,8,origin));
+  
+  res = {
+    props:{
+      id,
+      session,
+      dehydrateState:dehydrate(qc)
+    }
+  }
+  return res;
 }
 
-export default InterestedCycles;
+export default MyCycles;
