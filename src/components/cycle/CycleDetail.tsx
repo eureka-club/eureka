@@ -225,8 +225,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           onCarouselSeeAllAction={onCarouselSeeAllAction}
         />
       );
-      const allowed = cycle.participants.findIndex(p=>p.id==session.user.id)>-1
-        || cycle.creatorId == session.user.id;
+      const allowed = cycle.participants.findIndex(p=>p.id==session?.user.id)>-1
+        || cycle.creatorId == session?.user.id;
       if(allowed)return res;  
       else if([1,2,4].includes(cycle.access))return res;
       if (cycle.access === 3) return '';
@@ -331,8 +331,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
         
       );
-      const allowed = cycle.participants.findIndex(p=>p.id==session.user.id)>-1
-        || cycle.creatorId == session.user.id;
+      const allowed = cycle.participants.findIndex(p=>p.id==session?.user.id)>-1
+        || cycle.creatorId == session?.user.id;
       if(allowed)return res;
 
       if (cycle.access === 3) return '';
@@ -372,8 +372,8 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           </NavItem>
         </>
       );
-      const allowed = cycle.participants.findIndex(p=>p.id==session.user.id)>-1
-        || cycle.creatorId == session.user.id;
+      const allowed = cycle.participants.findIndex(p=>p.id==session?.user.id)>-1
+        || cycle.creatorId == session?.user.id;
       if(allowed)return res;
       if (cycle.access === 3) return <></>;
       if (cycle.access === 1) return res;
