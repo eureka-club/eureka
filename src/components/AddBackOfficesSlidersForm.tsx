@@ -17,6 +17,7 @@ import { setScheduler } from 'cypress/types/bluebird';
 import { QueryClient } from 'react-query';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import CheckCircleOutline from '@mui/icons-material/CheckCircleOutline';
+import CropImageFileSelect from './forms/controls/CropImageFileSelect';
 
 interface StateProp {
   title: string;
@@ -43,6 +44,8 @@ export const AddBackOfficesSlidersForm = ({ searchstyle }: Props) => {
   const qc = new QueryClient()
   const{t}=useTranslation('common')
   const WYSWYGRef = useRef(null);
+  const [showCrop, setShowCrop] = useState<boolean>(true);
+
   // if (status == 'unauthenticated') router.push(`/`);
 
   const [state, setstate] = useState<StateProp>({
@@ -189,6 +192,25 @@ export const AddBackOfficesSlidersForm = ({ searchstyle }: Props) => {
     }
     setLoading(false)
   }
+  const closeCrop = () => {
+    setShowCrop(false);
+  };
+
+  const openCrop = (n: number) => {
+    setShowCrop(true);
+  };
+  const onGenerateCrop = (photo: File) => {
+    setFile(() => photo);
+    setCurrentImg(URL.createObjectURL(photo));
+    setstate(p=>({...p,'images':[photo]}));
+
+    setShowCrop(false);
+
+    // const file = e.target.files[0];
+            // setCurrentImg(URL.createObjectURL(file));
+            // setstate(p=>({...p,'images':[file]}));
+            // setFile(file);
+  };
   return (
     <form >
       <FormControl fullWidth className='p-3'>
@@ -324,7 +346,7 @@ export const AddBackOfficesSlidersForm = ({ searchstyle }: Props) => {
       {!loading ? <>{images.length > 0 && renderImages()}</> : <LinearProgressMUI />}
       {!showOptions && renderSelectedPhoto()}
       </Container> */}
-      <FormControl>
+      {/* <FormControl>
         <label>Pick an IMG</label>
         <input type="file" 
         onChange={(e)=>{
@@ -335,12 +357,35 @@ export const AddBackOfficesSlidersForm = ({ searchstyle }: Props) => {
             setFile(file);
           }
         }}/>
-        {
+      </FormControl> */}
+      <Grid container>
+          <Grid item>
+          {showCrop && (
+                    <div className="d-flex">
+                      <div className="w-100 border p-3">
+                        <CropImageFileSelect
+                          onGenerateCrop={onGenerateCrop}
+                          onClose={() => closeCrop()}
+                          cropShape="rect"
+                          width={352}
+                          height={320}
+                        />
+                      </div>
+                    </div>
+                  )}
+          </Grid>
+          <Grid item>
+          {
           currentImg 
-            ? <img style={{ width: '200px' }} src={currentImg} />
+            ? <img style={{ width: '200px' }} src={currentImg} onClick={()=>{
+                setShowCrop(true);
+                setCurrentImg(undefined);
+                setFile(undefined)}
+              } />
             :<></>
         }
-      </FormControl>
+          </Grid>
+        </Grid>
       <div className='d-flex justify-content-center'>
         <Button disabled={!currentImg || loading || editorRef.current.getContent().length>=4000} onClick={handleSubmit} className='text-white' size='lg'>Save</Button>
       </div>
