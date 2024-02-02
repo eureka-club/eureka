@@ -497,7 +497,6 @@ model BackOfficeSettings {
   FeaturedWorks     String?      @db.VarChar(60)
   sliders           BackOfficeSettingsSliders[]
   @@map("backOfficeSettings")
-
 }
 
 model BackOfficeSettingsSliders {
