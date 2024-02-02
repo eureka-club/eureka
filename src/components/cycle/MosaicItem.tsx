@@ -188,7 +188,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   };
 
   const getCycleAccesLbl = () => {
-    let langLbl = `${cycle?.languages.replaceAll(/\s/g,'').split(',').map(l=>LOCALES[l].toUpperCase()).join(', ')}`
+    let langLbl = `${cycle?.languages?.replaceAll(/\s/g,'').split(',').map(l=>LOCALES[l].toUpperCase()).join(', ')}`
     let res = '';
     if (cycle) {
       if (cycle.access === 1) res = t(dict,'public');
