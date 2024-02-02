@@ -1,4 +1,4 @@
-import { Container, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
+import { Container, FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
 import { i18n, Locale } from 'i18n-config';
 import { ChangeEvent, LegacyRef, MouseEventHandler, useRef, useState } from 'react';
 import { Languages } from '../types';
@@ -33,6 +33,7 @@ export const AddBackOfficesSlidersForm = ({ searchstyle }: Props) => {
   const [showOptions, setShowOptions] = useState<boolean>(true);
   const [file, setFile] = useState<File>();
   const [text, setText] = useState('');
+  const [textLength, setTextLength] = useState(0);
   const [images, setImages] = useState<HTMLImageElement[]>([]);
   const editorRef = useRef<any>(null);
   const [style, setStyle] = useState<any>(searchstyle || '');
@@ -192,8 +193,8 @@ export const AddBackOfficesSlidersForm = ({ searchstyle }: Props) => {
     <form >
       <FormControl fullWidth className='p-3'>
         <TextField label="Title" value={state.title} onChange={(e) => changeHandler(e, 'title')} variant="standard" />
+        <FormHelperText className={`${state.title.length>=200 ? 'text-danger':''}`}>({200-state.title.length})</FormHelperText>
       </FormControl>
-
       <FormControl fullWidth className='p-3'>
         <label id="wyswyg-text">Text</label>
         <EditorCmp
@@ -203,6 +204,9 @@ export const AddBackOfficesSlidersForm = ({ searchstyle }: Props) => {
             editorRef.current = editor;
           }}
           initialValue={state.text}
+          onEditorChange={(t, editor) => {
+              setTextLength(t.length);
+          }}
           init={{
             height: 300,
             menubar: false,
@@ -236,6 +240,7 @@ export const AddBackOfficesSlidersForm = ({ searchstyle }: Props) => {
             content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
           }}
         />
+        <FormHelperText className={`${textLength>=4000 ? 'text-danger':''}`}>({4000-textLength})</FormHelperText>
       </FormControl>
 
       <FormControl fullWidth className='p-3'>
@@ -316,21 +321,19 @@ export const AddBackOfficesSlidersForm = ({ searchstyle }: Props) => {
             </Button>
           </Grid>
         </Grid>
-        
       {!loading ? <>{images.length > 0 && renderImages()}</> : <LinearProgressMUI />}
       {!showOptions && renderSelectedPhoto()}
       </Container> */}
       <FormControl>
         <label>Pick an IMG</label>
         <input type="file" 
-        onChange={(e)=>{debugger;
+        onChange={(e)=>{
           if(e.target?.files){
             const file = e.target.files[0];
             setCurrentImg(URL.createObjectURL(file));
             setstate(p=>({...p,'images':[file]}));
             setFile(file);
           }
-        
         }}/>
         {
           currentImg 
@@ -339,7 +342,7 @@ export const AddBackOfficesSlidersForm = ({ searchstyle }: Props) => {
         }
       </FormControl>
       <div className='d-flex justify-content-center'>
-        <Button disabled={!currentImg || loading} onClick={handleSubmit} className='text-white' size='lg'>Save</Button>
+        <Button disabled={!currentImg || loading || editorRef.current.getContent().length>=4000} onClick={handleSubmit} className='text-white' size='lg'>Save</Button>
       </div>
     </form>
   );
