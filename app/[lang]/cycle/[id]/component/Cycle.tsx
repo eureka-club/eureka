@@ -27,6 +27,8 @@ const Cycle:FC<Props>=({}:Props)=>{
     const{t,dict}=useDictContext();
     const{data:participants}=useCycleParticipants(+id);
     const asPath=usePathname();
+    const searchParams = useSearchParams();
+    const join = searchParams?.get('join');
     // const { data: participants, isLoading: isLoadingParticipants } = useUsers(whereCycleParticipants(props.id), {
     // enabled: !!props.id,
     // from: 'cycle/[id]',
@@ -67,8 +69,7 @@ const Cycle:FC<Props>=({}:Props)=>{
   });
 
   useEffect(() => {
-    const searchParams = useSearchParams();
-    const join = searchParams?.get('join');
+    
 
     if (
       session?.user &&

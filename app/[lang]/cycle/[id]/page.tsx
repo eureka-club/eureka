@@ -5,7 +5,7 @@ import Layout from '@/src/components/layout/Layout';
 import Cycle from './component/Cycle';
 import auth_config from 'auth_config';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
-import { getCyclePosts } from '@/src/hooks/useCyclePosts';
+import { getCyclePosts } from '@/src/actions/cycle/getCyclePosts';
 import { getCycle } from '@/src/actions/cycle/getCycle';
 import { getCycleParticipants } from '@/src/actions/cycle/getParticipants';
 
