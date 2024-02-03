@@ -37,7 +37,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import useCycle from '@/src/hooks/useCycle';
 import useCyclePosts from '@/src/hooks/useCyclePosts';
 import { useSession } from 'next-auth/react';
-import useCycleParticipants from '@/src/hooks/useCycleParticipants';
+import {useCycleParticipants} from '@/src/hooks/useCycleParticipants';
 
 const CycleDetailDiscussion = lazy(() => import ('./CycleDetailDiscussion')) 
 const CycleDetailWorks = lazy(() => import('./CycleDetailWorks'))

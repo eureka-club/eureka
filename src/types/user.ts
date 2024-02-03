@@ -83,8 +83,8 @@ export type UserWhitPhoto = Prisma.UserGetPayload<{
 //     likedWorks: true;
 //     favWorks: true;
 //     readOrWatchedWorks: true;
-//     following: UserFoolow;
-//     followedBy: UserFoolow;
+//     following: UserDetailSpec;
+//     followedBy: UserDetailSpec;
 //     ratingWorks: true;
 //     ratingCycles: true;
 //     ratingPosts: true;

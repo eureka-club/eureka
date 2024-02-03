@@ -39,9 +39,8 @@ import { Locale } from 'i18n-config';
 import { useSession } from 'next-auth/react';
 import { ButtonsTopActions } from '../ButtonsTopActions';
 import { Button as MaterialButton } from '@mui/material';
-
 import { useDictContext } from '@/src/hooks/useDictContext';
-import useCycleParticipants from '@/src/hooks/useCycleParticipants';
+import {useCycleParticipants} from '@/src/hooks/useCycleParticipants';
 
 const CycleDetailDiscussion = lazy(() => import ('./CycleDetailDiscussion')) 
 const CycleDetailWorks = lazy(() => import('./CycleDetailWorks'))
@@ -71,25 +70,13 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const {data:cycle,isLoading} = useCycle(cycleId,{
     enabled:!!cycleId
   });
+  console.log("cycle ", cycle)
 
   const works = cycle?.cycleWorksDates?.length
     ? cycle?.cycleWorksDates
     : cycle?.works.map(w=>({id:w.id,workId:w.id,work:w,startDate:new Date(),endDate:new Date()}))
 
-  const whereCycleParticipants = {
-    where:{OR:[
-      {cycles: { some: { id: cycle?.id } }},//creator
-      {joinedCycles: { some: { id: cycle?.id } }},//participants
-    ]} 
-  };
-  const {data:participants} = useCycleParticipants(cycleId);
-
-  // const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants,
-  //   {
-  //     enabled:!!cycle?.id,
-  //     from:'CycleDetail'
-  //   }
-  // )
+  const{data:participants}=useCycleParticipants(cycle?.id!,{enabled:!!cycle?.id!});
 
   const cyclePostsProps = {take:8,where:{cycles:{some:{id:+cycleId}}}}
   const {data:dataPosts} = usePosts(cyclePostsProps,{enabled:!!cycleId})
@@ -211,7 +198,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           onCarouselSeeAllAction={onCarouselSeeAllAction}
         />
       );
-      const allowed = cycle.participants.findIndex(p=>p.id==session?.user.id)>-1
+      const allowed = (participants??[]).findIndex(p=>p.id==session?.user.id)>-1
         || cycle.creatorId == session?.user.id;
       if(allowed)return res;  
       else if([1,2,4].includes(cycle.access))return res;

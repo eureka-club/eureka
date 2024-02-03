@@ -13,7 +13,7 @@ import { useDictContext } from "@/src/hooks/useDictContext";
 import CycleDetail from "./CycleDetail";
 import useCycle from "@/src/hooks/useCycle";
 import { useSession } from "next-auth/react";
-import useCycleParticipants from "@/src/hooks/useCycleParticipants";
+import {useCycleParticipants} from "@/src/hooks/useCycleParticipants";
 import { Button, Container } from "@mui/material";
 import Banner from "@/src/components/Banner";
 interface Props{

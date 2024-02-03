@@ -118,7 +118,7 @@ export default getApiHandler()
 
       await addParticipant(cycle.id, userId);
 
-     await prisma.cycleUserJoin.upsert({
+      await prisma.cycleUserJoin.upsert({
         where:{
           cycleId_userId:{
             userId:userId,
@@ -173,6 +173,15 @@ export default getApiHandler()
       }
 
       await removeParticipant(cycle, session.user.id);
+      await prisma.cycleUserJoin.delete({
+        where:{
+          cycleId_userId:{
+            userId:session.user.id,
+            cycleId:cycle.id
+          }
+        },
+      });
+      
       const notification = await create(
         notificationMessage,
         notificationContextURL,

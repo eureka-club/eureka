@@ -20,7 +20,7 @@ import { useRouter } from 'next/navigation';
 import { Session } from '@/src/types';
 import { useDictContext } from '@/src/hooks/useDictContext';
 import { useSession } from 'next-auth/react';
-import useCycleParticipants from '@/src/hooks/useCycleParticipants';
+import {useCycleParticipants} from '@/src/hooks/useCycleParticipants';
 import { DATE_FORMAT_SHORT } from '@/src/constants';
 import HyvorComments from '@/src/components/common/HyvorComments';
 

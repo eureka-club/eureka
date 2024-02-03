@@ -23,6 +23,8 @@ import { useModalContext } from '@/src/useModal';
 import SignInForm from '@/components/forms/SignInForm';
 import { useEffect } from 'react';
 import { Session } from '@/src/types';
+import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
+import { getCycleParticipants } from '@/src/actions/getCycleParticipants';
 
 const whereCycleParticipants = (id: number) => ({
   where: {
@@ -51,10 +53,11 @@ const CycleDetailPage: NextPage<Props> = (props) => {
   const { data: cycle, isSuccess, isLoading, isFetching, isError, error } = useCycle(+props.id, { enabled: !!session });
   const { show } = useModalContext();
 
-  const { data: participants, isLoading: isLoadingParticipants } = useUsers(whereCycleParticipants(props.id), {
-    enabled: !!props.id,
-    from: 'cycle/[id]',
-  });
+  // const { data: participants, isLoading: isLoadingParticipants } = useUsers(whereCycleParticipants(props.id), {
+  //   enabled: !!props.id,
+  //   from: 'cycle/[id]',
+  // });
+  const {data:participants,isLoading:isLoadingParticipants}=useCycleParticipants(cycle?.id!,{enabled:!!cycle?.id!});
 
   const { t } = useTranslation('common');
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -251,10 +254,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   await queryClient.prefetchQuery(['CYCLE', `${id}`], () => cycle || null);
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT, NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
-  const participants = await getUsers(wcu, origin);
+  const participants = await getCycleParticipants(cycle?.id!);
   const { works } = await getWorks(ctx.locale!, wcw, origin);
 
-  await queryClient.prefetchQuery(['USERS', JSON.stringify(wcu)], () => participants);
+  await queryClient.prefetchQuery(['CYCLE', `${id}`, 'PARTICIPANTS'], () => participants);
   await queryClient.prefetchQuery(['POSTS', JSON.stringify(wcp)], () => getPosts(ctx.locale!, wcp, origin));
   await queryClient.prefetchQuery(['WORKS', JSON.stringify(wcw)], () => works);
 

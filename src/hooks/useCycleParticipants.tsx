@@ -4,14 +4,14 @@ import { useQuery } from '@tanstack/react-query';
 import { UserDetail } from '../types/user';
 import { useParams } from 'next/navigation';
 import { Locale } from 'i18n-config';
-import { getCycleParticipants } from '../actions/cycle/getParticipants';
+import { getCycleParticipants } from '@/src/actions/getCycleParticipants';
 
 interface Options {
   staleTime?: number;
   enabled?: boolean;
 }
 
-const useCycleParticipants = (id: number, options?: Options) => {
+export const useCycleParticipants = (id: number, options?: Options) => {
   const{lang}=useParams<{lang:Locale}>()!;
   const { staleTime, enabled } = options || {
     staleTime: 1000 * 60 * 60,
@@ -24,5 +24,3 @@ const useCycleParticipants = (id: number, options?: Options) => {
     enabled,
   });
 };
-
-export default useCycleParticipants;

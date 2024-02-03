@@ -24,10 +24,10 @@ import Avatar from '../common/UserAvatar';
 import {useJoinUserToCycleAction,useLeaveUserFromCycleAction} from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
 import {useModalContext} from '@/src/useModal'
 import SignInForm from '../forms/SignInForm';
-import { CycleDetail, CycleSumary } from '@/src/types/cycle';
+import { CycleSumary } from '@/src/types/cycle';
 import { useCyclePrice } from '@/src/hooks/useCyclePrices';
 import { useDictContext } from '@/src/hooks/useDictContext';
-import useCycleParticipants from '@/src/hooks/useCycleParticipants';
+import {useCycleParticipants} from '@/src/hooks/useCycleParticipants';
 import SocialInteraction from './SocialInteraction';
 import Link from 'next/link';
 
